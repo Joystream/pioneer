@@ -6,6 +6,8 @@
   "repository": "git@github.com:Joystream/pioneer.git",
   "license": "GPL-3.0-only",
   "workspaces": {
-    "packages": ["packages/*"]
+    "packages": [
+      "packages/*"
+    ]
   }
 }
