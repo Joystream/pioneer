@@ -1,0 +1,11 @@
+{
+  "name": "pioneer",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Governance app for Joystream DAO",
+  "repository": "git@github.com:Joystream/pioneer.git",
+  "license": "GPL-3.0-only",
+  "workspaces": {
+    "packages": ["packages/*"]
+  }
+}
