@@ -10,6 +10,14 @@
       "packages/*"
     ]
   },
+  "scripts": {
+    "lint": "wsrun -c lint",
+    "build": "wsrun -e -c build",
+    "test": "wsrun -e -c test"
+  },
+  "dependencies": {
+    "wsrun": "^5.2.4"
+  },
   "devDependencies": {
     "eslint": "^7.17.0"
   }
