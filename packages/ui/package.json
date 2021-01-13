@@ -8,6 +8,7 @@
     "lint:fix": "yarn lint:prettier --write && yarn lint:eslint --fix",
     "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
     "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'",
+    "start": "webpack serve --mode development --progress",
     "test": "mocha"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3",
     "webpack": "4",
-    "webpack-cli": "4"
+    "webpack-cli": "4",
+    "webpack-dev-server": "^3.11.1"
   }
 }
