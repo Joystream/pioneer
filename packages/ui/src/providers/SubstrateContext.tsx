@@ -1,21 +1,17 @@
-import React, { useReducer, useContext, Dispatch, Reducer, createContext, ReactNode } from 'react'
+import React, { createContext, Dispatch, ReactNode, Reducer, useContext, useReducer } from 'react'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp'
-import keyring from '@polkadot/ui-keyring'
+import keyring, { Keyring } from '@polkadot/ui-keyring'
 
 const socket = 'ws://127.0.0.1:9944'
-const RPC = {}
 const types = { Address: 'AccountId', LookupSource: 'AccountId' }
-
-const connectedSocket = socket
-console.log(`Connected socket: ${connectedSocket}`)
 
 interface State {
   socket: string
   jsonrpc: typeof jsonrpc
   types: typeof types
-  keyring?: typeof keyring | null
+  keyring?: Keyring | null
   keyringState?: string | null
   api?: ApiPromise | null
   apiError?: string | null
@@ -23,8 +19,8 @@ interface State {
 }
 
 const INIT_STATE: State = {
-  socket: connectedSocket,
-  jsonrpc: { ...jsonrpc, ...RPC },
+  socket: socket,
+  jsonrpc: jsonrpc,
   types: types,
   keyring: null,
   keyringState: null,
@@ -33,32 +29,21 @@ const INIT_STATE: State = {
   apiState: null,
 }
 
-interface ConnectInit {
-  type: 'CONNECT_INIT'
-}
-
-interface Connect {
-  type: 'CONNECT'
-  payload: ApiPromise
-}
-
-interface ConnectSuccess {
-  type: 'CONNECT_SUCCESS'
-}
-
-interface ConnectError {
-  type: 'CONNECT_ERROR'
-  payload: string
-}
-
-type SubstrateAction<T, P> = {
+interface SubstrateAction<T> {
   type: T
-  payload?: P
 }
 
-type LoadKeyring = SubstrateAction<'LOAD_KEYRING', undefined>
-type SetKeyring = SubstrateAction<'SET_KEYRING', typeof keyring>
-type KeyringError = SubstrateAction<'KEYRING_ERROR', undefined>
+interface SubstrateActionWithPayload<T, P> extends SubstrateAction<T> {
+  payload: P
+}
+
+type Connect = SubstrateActionWithPayload<'CONNECT', ApiPromise>
+type ConnectInit = SubstrateAction<'CONNECT_INIT'>
+type ConnectSuccess = SubstrateAction<'CONNECT_SUCCESS'>
+type ConnectError = SubstrateActionWithPayload<'CONNECT_ERROR', string>
+type LoadKeyring = SubstrateAction<'LOAD_KEYRING'>
+type SetKeyring = SubstrateActionWithPayload<'SET_KEYRING', Keyring>
+type KeyringError = SubstrateAction<'KEYRING_ERROR'>
 
 type Action = ConnectInit | Connect | ConnectSuccess | ConnectError | LoadKeyring | SetKeyring | KeyringError
 
@@ -97,22 +82,20 @@ const connect = (state: State, dispatch: Dispatch<Action>) => {
   dispatch({ type: 'CONNECT_INIT' })
 
   const provider = new WsProvider(socket)
-  const _api = new ApiPromise({ provider, types, rpc: jsonrpc })
+  const apiPromise = new ApiPromise({ provider, types, rpc: jsonrpc })
 
   // Set listeners for disconnection and reconnection event.
-  _api.on('connected', () => {
-    dispatch({ type: 'CONNECT', payload: _api })
+  apiPromise.on('connected', () => {
+    dispatch({ type: 'CONNECT', payload: apiPromise })
     // `ready` event is not emitted upon reconnection and is checked explicitly here.
-    _api.isReady.then((_api) => dispatch({ type: 'CONNECT_SUCCESS' }))
+    apiPromise.isReady.then(() => dispatch({ type: 'CONNECT_SUCCESS' }))
   })
-  _api.on('ready', () => dispatch({ type: 'CONNECT_SUCCESS' }))
-  _api.on('error', (err) => dispatch({ type: 'CONNECT_ERROR', payload: err }))
+  apiPromise.on('ready', () => dispatch({ type: 'CONNECT_SUCCESS' }))
+  apiPromise.on('error', (err) => dispatch({ type: 'CONNECT_ERROR', payload: err }))
 }
 
-///
-// Loading accounts from dev and polkadot-js extension
-
 let loadAccts = false
+
 const loadAccounts = (state: State, dispatch: Dispatch<Action>) => {
   const asyncLoadAccounts = async () => {
     dispatch({ type: 'LOAD_KEYRING' })
@@ -142,7 +125,7 @@ const loadAccounts = (state: State, dispatch: Dispatch<Action>) => {
   asyncLoadAccounts()
 }
 
-const SubstrateContext = createContext<{}>({})
+const SubstrateContext = createContext<State>(INIT_STATE)
 
 interface Props {
   children: ReactNode
