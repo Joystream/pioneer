@@ -1,0 +1,24 @@
+{
+  "name": "pioneer",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Governance app for Joystream DAO",
+  "repository": "git@github.com:Joystream/pioneer.git",
+  "license": "GPL-3.0-only",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "lint": "wsrun -c lint",
+    "build": "wsrun -e -c build",
+    "test": "wsrun -e -c test"
+  },
+  "dependencies": {
+    "wsrun": "^5.2.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.17.0"
+  }
+}

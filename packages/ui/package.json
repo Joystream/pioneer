@@ -1,0 +1,45 @@
+{
+  "name": "ui",
+  "version": "0.0.1",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "build": "webpack --mode production --progress",
+    "lint": "yarn lint:prettier --check && yarn lint:eslint",
+    "lint:fix": "yarn lint:prettier --write && yarn lint:eslint --fix",
+    "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
+    "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'",
+    "start": "webpack serve --mode development --progress",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/styled-components": "^5.1.7",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.2.1"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^11.2.3",
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.2.0",
+    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "@typescript-eslint/parser": "^4.13.0",
+    "chai": "^4.2.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "4",
+    "jsdom": "^16.4.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^8.2.1",
+    "mock-local-storage": "^1.1.15",
+    "prettier": "^2.2.1",
+    "ts-loader": "^8.0.14",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3",
+    "webpack": "^5.14.0",
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
