@@ -1,13 +1,13 @@
 import { Page } from '../../components/page/Page'
 import { Navigation } from '../../components/page/Navigation'
-import { ProfileComponent } from './ProfileComponent'
 import React from 'react'
+import { PageContent } from '../../components/page/PageContent'
 
 export function Profile() {
   return (
     <Page>
       <Navigation />
-      <ProfileComponent />
+      <PageContent>Dashboard</PageContent>
     </Page>
   )
 }
