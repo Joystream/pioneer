@@ -34,7 +34,30 @@ describe('UI: Profile', () => {
         <Profile />
       </SubstrateContext.Provider>
     )
+
+    const [, accountsRowGroup] = [...screen.getAllByRole('rowgroup')]
+    expect(accountsRowGroup.childNodes).to.have.length(8)
+  })
+
+  it('Displays account data', () => {
+    const state: State = {
+      keyringState: 'READY',
+      api: createApiWithAugmentations(),
+      keyring: keyring,
+      socket: 'ws://',
+      apiState: 'READY',
+      jsonrpc: {},
+      types: types,
+    }
+
+    render(
+      <SubstrateContext.Provider value={state}>
+        <Profile />
+      </SubstrateContext.Provider>
+    )
     const alice = aliceSigner().address
-    expect(screen.getByText(alice)).to.not.be.empty
+    const byText = screen.getByText(alice)
+
+    expect(byText?.previousSibling?.textContent).to.equal('alice')
   })
 })
