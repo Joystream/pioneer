@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom'
 import React, { ReactNode } from 'react'
-import { SubstrateContextProvider } from './SubstrateContext'
+import { SubstrateContextProvider } from './substrate/provider'
 
 interface Props {
   children: ReactNode
