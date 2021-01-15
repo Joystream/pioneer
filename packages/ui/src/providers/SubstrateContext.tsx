@@ -12,10 +12,10 @@ interface State {
   jsonrpc: typeof jsonrpc
   types: typeof types
   keyring?: Keyring | null
-  keyringState?: string | null
+  keyringState?: 'LOADING' | 'READY' | 'ERROR' | null
   api?: ApiPromise | null
   apiError?: string | null
-  apiState?: string | null
+  apiState?: 'CONNECT_INIT' | 'CONNECTING' | 'READY' | 'ERROR' | null
 }
 
 const INIT_STATE: State = {
