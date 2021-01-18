@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useKeyring } from './useKeyring'
+import { web3Accounts, web3Enable } from '@polkadot/extension-dapp'
 
 export interface Account {
   name: string | undefined
@@ -32,6 +33,18 @@ export function useAccounts(): UseAccounts {
       setTimeout(() => subscription.unsubscribe(), 0)
     }
   }, [keyring])
+
+  useEffect(() => {
+    web3Enable('Pioneer')
+      .then(() => web3Accounts())
+      .then((injectedAccounts) => {
+        const allAccounts = injectedAccounts.map(({ address, meta }) => ({
+          address,
+          meta: { ...meta, name: `${meta.name} (${meta.source})` },
+        }))
+        keyring.loadAll({ isDevelopment: true }, allAccounts)
+      })
+  }, [])
 
   return state
 }
