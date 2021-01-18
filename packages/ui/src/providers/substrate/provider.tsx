@@ -28,7 +28,7 @@ const connect = (state: State, dispatch: Dispatch<Action>) => {
   apiPromise.on('error', (err) => dispatch({ type: 'CONNECT_ERROR', payload: err }))
 }
 
-let loadAccts = false
+let willLoadAccounts = false
 
 const loadAccounts = (state: State, dispatch: Dispatch<Action>) => {
   const asyncLoadAccounts = async () => {
@@ -51,11 +51,11 @@ const loadAccounts = (state: State, dispatch: Dispatch<Action>) => {
   const { keyringState } = state
   // If `keyringState` is not null `asyncLoadAccounts` is running.
   if (keyringState) return
-  // If `loadAccts` is true, the `asyncLoadAccounts` has been run once.
-  if (loadAccts) return dispatch({ type: 'SET_KEYRING', payload: keyring })
+  // If `willLoadAccounts` is true, the `asyncLoadAccounts` has been run once.
+  if (willLoadAccounts) return dispatch({ type: 'SET_KEYRING', payload: keyring })
 
   // This is the heavy duty work
-  loadAccts = true
+  willLoadAccounts = true
   asyncLoadAccounts()
 }
 
