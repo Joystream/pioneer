@@ -30,7 +30,7 @@ export function useAccounts(): UseAccounts {
     })
 
     return (): void => {
-      setTimeout(() => subscription.unsubscribe(), 0)
+      subscription.unsubscribe()
     }
   }, [keyring])
 
