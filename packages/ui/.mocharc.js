@@ -4,5 +4,5 @@ module.exports = {
   spec: './test/**/*.test.{ts,tsx}',
   require: 'ts-node/register',
   file: './test/setup.ts',
-  timeout: 12000
+  timeout: 12000,
 }
