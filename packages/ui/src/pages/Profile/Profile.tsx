@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { KeyringAddress } from '@polkadot/ui-keyring/types'
+import React from 'react'
 import { Page } from '../../components/page/Page'
 import { Navigation } from '../../components/page/Navigation'
 import { PageContent } from '../../components/page/PageContent'
 import { Accounts } from './Accounts'
-import { useSubstrate } from '../../hooks/useSubstrate'
+import { useAccounts } from '../../hooks/useAccounts'
 
 export function Profile() {
-  const { keyring, keyringState } = useSubstrate()
-  const [accounts, setAccounts] = useState<KeyringAddress[]>([])
+  const { hasAccounts, allAccounts } = useAccounts()
 
-  useEffect(() => {
-    setAccounts(keyring?.getAccounts() ?? [])
-  }, [keyring])
-
-  if (keyringState !== 'READY') {
+  if (!hasAccounts) {
     return <div>Loading...</div>
   }
 
@@ -22,7 +16,7 @@ export function Profile() {
     <Page>
       <Navigation />
       <PageContent>
-        <Accounts keyringAddresses={accounts} />
+        <Accounts accounts={allAccounts} />
       </PageContent>
     </Page>
   )

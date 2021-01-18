@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom'
 import React, { ReactNode } from 'react'
-import { SubstrateContextProvider } from './substrate/provider'
+import { KeyringContextProvider } from './keyring/provider'
 
 interface Props {
   children: ReactNode
@@ -8,8 +8,8 @@ interface Props {
 
 export function Providers(props: Props) {
   return (
-    <SubstrateContextProvider>
+    <KeyringContextProvider>
       <BrowserRouter>{props.children}</BrowserRouter>
-    </SubstrateContextProvider>
+    </KeyringContextProvider>
   )
 }
