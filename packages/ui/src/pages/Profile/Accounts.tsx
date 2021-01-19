@@ -1,11 +1,11 @@
-import { KeyringAddress } from '@polkadot/ui-keyring/types'
 import React from 'react'
+import { Account } from '../../hooks/useAccounts'
 
 interface Props {
-  keyringAddresses: KeyringAddress[]
+  accounts: Account[]
 }
 
-export function Accounts({ keyringAddresses }: Props) {
+export function Accounts({ accounts }: Props) {
   return (
     <table>
       <thead>
@@ -15,10 +15,10 @@ export function Accounts({ keyringAddresses }: Props) {
         </tr>
       </thead>
       <tbody>
-        {keyringAddresses.map((account) => (
+        {accounts.map((account) => (
           <tr key={account.address}>
             <td>
-              <h3>{account.meta.name}</h3>
+              <h3>{account.name}</h3>
               <p>{account.address}</p>
             </td>
             <td>
