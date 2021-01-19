@@ -38,7 +38,8 @@ describe('UI: Profile', () => {
 
       const alice = aliceSigner().address
       expect((await findByText(alice))?.previousSibling?.textContent).to.equal('alice')
-    })
+      expect((await findByText(alice))?.parentNode?.nextSibling?.textContent).to.equal('1000 JOY')
+  })
 
     function renderProfile() {
       return render(

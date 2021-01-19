@@ -2,12 +2,15 @@ import React from 'react'
 import { Account } from '../../hooks/useAccounts'
 import styled from 'styled-components'
 import { Colors } from '../../constants'
+import { useBalances } from '../../hooks/useBalances'
 
 interface Props {
   accounts: Account[]
 }
 
 export function Accounts({ accounts }: Props) {
+  const balances = useBalances(accounts)
+
   return (
     <Table>
       <thead>
@@ -24,7 +27,7 @@ export function Accounts({ accounts }: Props) {
               <p>{account.address}</p>
             </BodyCell>
             <BodyCell>
-              <p>0 JOY</p>
+              <p>{balances[account.address]}</p>
             </BodyCell>
           </BodyRow>
         ))}
