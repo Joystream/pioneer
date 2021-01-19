@@ -17,7 +17,7 @@ describe('UI: Profile', () => {
       sinon.restore()
     })
 
-  it('Shows loading screen', async () => {
+    it('Shows loading screen', async () => {
       sinon.stub(useAccountsModule, 'useAccounts').returns({
         hasAccounts: false,
         allAccounts: [],
@@ -35,6 +35,8 @@ describe('UI: Profile', () => {
           account: {
             multi: (addresses: Address[], cb: any) => {
               cb(addresses.map(() => ({ data: { free: { toHuman: () => '1000 JOY' } } })))
+
+              return Promise.resolve()
             },
           },
         },

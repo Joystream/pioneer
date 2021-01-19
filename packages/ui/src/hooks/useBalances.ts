@@ -22,25 +22,31 @@ export function useBalances(accounts: Account[]): UseBalances {
   const { isConnected, api } = useApi()
 
   useEffect(() => {
+    let unsubscribeAll: any
+
     if (isConnected && api) {
       const addresses = accounts.map((account) => account.address)
 
-      api.query.system.account.multi<AccountInfo>(addresses, (balances) => {
-        const balancesMap = addresses.reduce(
-          (acc, address, index) => ({
-            ...acc,
-            [address]: {
-              total: balances[index].data.free.toHuman(),
-            },
-          }),
-          {}
-        )
+      api.query.system.account
+        .multi<AccountInfo>(addresses, (balances) => {
+          const balancesMap = addresses.reduce(
+            (acc, address, index) => ({
+              ...acc,
+              [address]: {
+                total: balances[index].data.free.toHuman(),
+              },
+            }),
+            {}
+          )
 
-        setBalances(balancesMap)
-        setHasBalances(true)
-      })
+          setBalances(balancesMap)
+          setHasBalances(true)
+        })
+        .then((unsub) => (unsubscribeAll = unsub))
     }
-  }, [isConnected])
+
+    return () => unsubscribeAll && unsubscribeAll()
+  }, [api, isConnected, accounts])
 
   return {
     hasBalances: hasBalances,
