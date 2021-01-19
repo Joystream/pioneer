@@ -11,6 +11,8 @@ interface Props {
 export function Accounts({ accounts }: Props) {
   const balances = useBalances(accounts)
 
+  if (!balances.hasBalances) return <div>...</div>
+
   return (
     <Table>
       <thead>
@@ -27,7 +29,7 @@ export function Accounts({ accounts }: Props) {
               <p>{account.address}</p>
             </BodyCell>
             <BodyCell>
-              <p>{balances[account.address].total}</p>
+              <p>{balances.map[account.address].total}</p>
             </BodyCell>
           </BodyRow>
         ))}
