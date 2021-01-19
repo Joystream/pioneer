@@ -6,6 +6,7 @@ import sinon from 'sinon'
 import { Profile } from '../../src/pages/Profile/Profile'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { aliceSigner } from '../mocks/keyring'
+import * as useAccountsModule from '../../src/hooks/useAccounts'
 
 describe('UI: Profile', () => {
   context('with empty keyring', () => {
@@ -14,8 +15,6 @@ describe('UI: Profile', () => {
     })
 
     it('Shows loading screen', async () => {
-      const useAccountsModule = await import('../../src/hooks/useAccounts')
-
       sinon.stub(useAccountsModule, 'useAccounts').returns({
         hasAccounts: false,
         allAccounts: [],
@@ -27,11 +26,10 @@ describe('UI: Profile', () => {
   })
 
   context('with development accounts', () => {
-
     it('Renders accounts list for known addresses', async () => {
       const { findAllByRole } = renderProfile()
 
-      const [, accountsRowGroup] = [...await findAllByRole('rowgroup')]
+      const [, accountsRowGroup] = [...(await findAllByRole('rowgroup'))]
       expect(accountsRowGroup.childNodes).to.have.length(8)
     })
 
