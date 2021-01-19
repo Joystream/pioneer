@@ -1,2 +1,2 @@
-export { MemoryStore } from './MemoryStore'
 export * from './signers'
+export * from './keyring'

@@ -1,21 +1,17 @@
 import React from 'react'
 import { expect } from 'chai'
 import { render } from '@testing-library/react'
-import keyring, { Keyring } from '@polkadot/ui-keyring'
 import { Profile } from '../../src/pages/Profile/Profile'
-import { aliceSigner, MemoryStore } from '../mocks/keyring'
+import { aliceSigner, createMockKeyring } from '../mocks/keyring'
 import { KeyringContext } from '../../src/providers/keyring/context'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
 
 describe('UI: Profile', () => {
-  before(() => {
-    keyring.loadAll({ isDevelopment: true, store: new MemoryStore() })
-  })
+  before(() => cryptoWaitReady())
 
-  it.skip('Shows loading', () => {
-    const keyring = new Keyring()
-
+  it('Shows loading', () => {
     const profile = render(
-      <KeyringContext.Provider value={keyring}>
+      <KeyringContext.Provider value={createMockKeyring()}>
         <Profile />
       </KeyringContext.Provider>
     )
@@ -26,7 +22,7 @@ describe('UI: Profile', () => {
     const profilePage = renderProfile()
 
     const [, accountsRowGroup] = [...profilePage.getAllByRole('rowgroup')]
-    expect(accountsRowGroup.childNodes).to.have.length(8)
+    expect(accountsRowGroup.childNodes).to.have.length(1)
   })
 
   it("Displays account's data", () => {
@@ -38,7 +34,7 @@ describe('UI: Profile', () => {
 
   function renderProfile() {
     return render(
-      <KeyringContext.Provider value={keyring}>
+      <KeyringContext.Provider value={createMockKeyring({ useMockAddresses: true })}>
         <Profile />
       </KeyringContext.Provider>
     )
