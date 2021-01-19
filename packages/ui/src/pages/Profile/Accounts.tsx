@@ -27,7 +27,7 @@ export function Accounts({ accounts }: Props) {
               <p>{account.address}</p>
             </BodyCell>
             <BodyCell>
-              <p>{balances[account.address]}</p>
+              <p>{balances[account.address].total}</p>
             </BodyCell>
           </BodyRow>
         ))}
