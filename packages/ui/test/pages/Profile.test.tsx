@@ -1,14 +1,11 @@
-import React from 'react'
-import { expect } from 'chai'
-import sinon from 'sinon'
-import { render } from '@testing-library/react'
 import { Keyring } from '@polkadot/ui-keyring'
+import { render } from '@testing-library/react'
+import { expect } from 'chai'
+import React from 'react'
+import sinon from 'sinon'
 import { Profile } from '../../src/pages/Profile/Profile'
-import { aliceSigner, MemoryStore } from '../mocks/keyring'
 import { KeyringContext } from '../../src/providers/keyring/context'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const useAccountsModule = require('../../src/hooks/useAccounts')
+import { aliceSigner } from '../mocks/keyring'
 
 describe('UI: Profile', () => {
   context('with empty keyring', () => {
@@ -16,7 +13,9 @@ describe('UI: Profile', () => {
       sinon.restore()
     })
 
-    it('Shows loading screen', () => {
+    it('Shows loading screen', async () => {
+      const useAccountsModule = await import('../../src/hooks/useAccounts')
+
       sinon.stub(useAccountsModule, 'useAccounts').returns({
         hasAccounts: false,
         allAccounts: [],
@@ -28,30 +27,24 @@ describe('UI: Profile', () => {
   })
 
   context('with development accounts', () => {
-    let keyring: Keyring
 
-    before(() => {
-      keyring = new Keyring()
-      keyring.loadAll({ isDevelopment: true, store: new MemoryStore() })
-    })
+    it('Renders accounts list for known addresses', async () => {
+      const { findAllByRole } = renderProfile()
 
-    it('Renders accounts list for known addresses', () => {
-      const profilePage = renderProfile()
-
-      const [, accountsRowGroup] = [...profilePage.getAllByRole('rowgroup')]
+      const [, accountsRowGroup] = [...await findAllByRole('rowgroup')]
       expect(accountsRowGroup.childNodes).to.have.length(8)
     })
 
-    it("Displays account's data", () => {
-      const profilePage = renderProfile()
+    it("Displays account's data", async () => {
+      const { findByText } = renderProfile()
 
       const alice = aliceSigner().address
-      expect(profilePage.getByText(alice)?.previousSibling?.textContent).to.equal('alice')
+      expect((await findByText(alice))?.previousSibling?.textContent).to.equal('alice')
     })
 
     function renderProfile() {
       return render(
-        <KeyringContext.Provider value={keyring}>
+        <KeyringContext.Provider value={new Keyring()}>
           <Profile />
         </KeyringContext.Provider>
       )
