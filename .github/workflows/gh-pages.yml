@@ -3,7 +3,7 @@ name: Publish GH pages
 on:
   push:
     branches:
-      - deploy-project-to-gh-pages
+      - main
 
 jobs:
   build-and-deploy:
