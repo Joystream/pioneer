@@ -9,7 +9,7 @@ interface Props {
 export function Providers(props: Props) {
   return (
     <KeyringContextProvider>
-      <BrowserRouter>{props.children}</BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>{props.children}</BrowserRouter>
     </KeyringContextProvider>
   )
 }
