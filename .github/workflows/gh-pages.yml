@@ -3,7 +3,7 @@ name: Publish GH pages
 on:
   push:
     branches:
-      - main
+      - deploy-project-to-gh-pages
 
 jobs:
   build-and-deploy:
@@ -18,8 +18,6 @@ jobs:
         run: |
           yarn install --frozen-lockfile
           yarn build
-        env:
-          BASENAME: /pioneer
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1

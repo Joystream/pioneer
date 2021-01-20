@@ -16,7 +16,6 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
-      BASENAME: JSON.stringify(process.env.BASENAME || ''),
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],

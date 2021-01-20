@@ -1,2 +1,2 @@
 // defined by the webpack configuration
-declare const BASENAME: string
+declare const GIT_VERSION: string

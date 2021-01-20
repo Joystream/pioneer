@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import React, { ReactNode } from 'react'
 import { KeyringContextProvider } from './keyring/provider'
 
@@ -9,8 +9,7 @@ interface Props {
 export function Providers(props: Props) {
   return (
     <KeyringContextProvider>
-      {/* eslint-disable-next-line no-undef */}
-      <BrowserRouter basename={BASENAME}>{props.children}</BrowserRouter>
+      <HashRouter>{props.children}</HashRouter>
     </KeyringContextProvider>
   )
 }

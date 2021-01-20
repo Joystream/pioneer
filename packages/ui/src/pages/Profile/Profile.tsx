@@ -19,10 +19,17 @@ export function Profile() {
       <PageContent>
         <Accounts accounts={allAccounts} />
       </PageContent>
+      {/* eslint-disable-next-line no-undef */}
+      <Version>Version: {GIT_VERSION}</Version>
     </Page>
   )
 }
 
 const Loading = styled.div`
   font-size: 2em;
+`
+
+const Version = styled.div`
+  font-size: 0.8em;
+  color: #555;
 `
