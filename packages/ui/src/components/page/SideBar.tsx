@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Colors } from '../../constants'
 
 export const SideBar = styled.nav`
   display: flex;
@@ -9,5 +10,6 @@ export const SideBar = styled.nav`
   height: 100%;
   overflow: hidden;
   z-index: 10;
-  background: #000;
+  background: ${Colors.Black};
+  color: ${Colors.White};
 `
