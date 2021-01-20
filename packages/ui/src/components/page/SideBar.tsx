@@ -1,15 +1,17 @@
-import styled from 'styled-components'
-import { Colors } from '../../constants'
+import { Navigation } from './Navigation'
+import React from 'react'
+import { ProfileComponent } from '../../pages/Profile/ProfileComponent'
+import { Version } from './Version'
 
-export const SideBar = styled.nav`
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  grid-area: navbar;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 10;
-  background: ${Colors.Black};
-  color: ${Colors.White};
-`
+export function SideBar() {
+  return (
+    <Navigation>
+      Logo
+      <ul>
+        <li> My profile</li>
+      </ul>
+      <ProfileComponent />
+      <Version />
+    </Navigation>
+  )
+}

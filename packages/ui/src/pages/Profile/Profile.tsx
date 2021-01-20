@@ -1,6 +1,6 @@
 import React from 'react'
 import { Page } from '../../components/page/Page'
-import { Navigation } from '../../components/page/Navigation'
+import { SideBar } from '../../components/page/SideBar'
 import { PageContent } from '../../components/page/PageContent'
 import { Accounts } from './Accounts'
 import { useAccounts } from '../../hooks/useAccounts'
@@ -15,7 +15,7 @@ export function Profile() {
 
   return (
     <Page>
-      <Navigation />
+      <SideBar />
       <PageContent>
         <Accounts accounts={allAccounts} />
       </PageContent>
