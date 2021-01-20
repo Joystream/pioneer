@@ -7,12 +7,15 @@ interface Props {
   children: ReactNode
 }
 export interface UseApi {
-  isConnected: boolean
   api: ApiPromise | undefined
+  state: ApiState
+  isConnected: boolean
 }
 
+type ApiState = 'CONNECTING' | 'CONNECTED' | 'ERROR'
+
 export const ApiContextProvider = (props: Props) => {
-  const [isConnected, setIsConnected] = useState(false)
+  const [apiState, setApiState] = useState<ApiState>('CONNECTING')
   const [api, setApi] = useState<ApiPromise | undefined>(undefined)
 
   useEffect(() => {
@@ -20,18 +23,19 @@ export const ApiContextProvider = (props: Props) => {
     const apiPromise = new ApiPromise({ provider, rpc: jsonrpc })
 
     apiPromise.on('connected', () => {
-      apiPromise.isReady.then(() => setIsConnected(true))
+      apiPromise.isReady.then(() => setApiState('CONNECTED'))
       setApi(apiPromise)
     })
-    apiPromise.on('ready', () => setIsConnected(true))
+    apiPromise.on('ready', () => setApiState('CONNECTED'))
     apiPromise.on('error', (error) => {
       console.log(error)
-      setIsConnected(false)
+      setApiState('CONNECTED')
     })
   }, [])
 
   const retVal = {
-    isConnected: isConnected,
+    state: apiState,
+    isConnected: apiState === 'CONNECTED',
     api: api,
   }
 

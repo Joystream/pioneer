@@ -1,17 +1,14 @@
 import React from 'react'
-import { Account } from '../../hooks/useAccounts'
+import { useAccounts } from '../../hooks/useAccounts'
 import styled from 'styled-components'
 import { Colors } from '../../constants'
 import { useBalances } from '../../hooks/useBalances'
 
-interface Props {
-  accounts: Account[]
-}
+export function Accounts() {
+  const { allAccounts, hasAccounts } = useAccounts()
+  const balances = useBalances(allAccounts)
 
-export function Accounts({ accounts }: Props) {
-  const balances = useBalances(accounts)
-
-  if (!balances.hasBalances) return <div>...</div>
+  if (!hasAccounts) return <Loading>Loading accounts...</Loading>
 
   return (
     <Table>
@@ -22,7 +19,7 @@ export function Accounts({ accounts }: Props) {
         </tr>
       </thead>
       <tbody>
-        {accounts.map((account) => (
+        {allAccounts.map((account) => (
           <BodyRow key={account.address}>
             <BodyCell>
               <h3>{account.name}</h3>
@@ -58,4 +55,8 @@ const BodyRow = styled.tr`
 
 const BodyCell = styled.td`
   padding: 0.5em;
+`
+
+const Loading = styled.div`
+  font-size: 2em;
 `

@@ -26,7 +26,7 @@ describe('UI: Profile', () => {
       })
 
       const profile = render(<Profile />)
-      expect(profile.getByText('Loading...')).to.exist
+      expect(profile.getByText('Loading accounts...')).to.exist
     })
   })
 
