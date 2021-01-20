@@ -18,6 +18,8 @@ jobs:
         run: |
           yarn install --frozen-lockfile
           yarn build
+        env:
+          PUBLIC_URL: https://joystream.github.io/pioneer/
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1
