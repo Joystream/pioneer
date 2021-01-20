@@ -26,7 +26,7 @@ export function Accounts() {
               <p>{account.address}</p>
             </BodyCell>
             <BodyCell>
-              <p>{balances.map[account.address] ? balances.map[account.address].total : '-'}</p>
+              <p>{balances.map[account.address]?.total || '-'}</p>
             </BodyCell>
           </BodyRow>
         ))}
