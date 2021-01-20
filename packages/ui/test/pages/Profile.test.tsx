@@ -1,15 +1,15 @@
+import React from 'react'
 import { Keyring } from '@polkadot/ui-keyring'
+import { ApiPromise } from '@polkadot/api'
+import { Address } from '@polkadot/types/interfaces'
 import { render } from '@testing-library/react'
 import { expect } from 'chai'
-import React from 'react'
 import sinon from 'sinon'
 import { Profile } from '../../src/pages/Profile/Profile'
 import { KeyringContext } from '../../src/providers/keyring/context'
-import { aliceSigner } from '../mocks/keyring'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { ApiContext } from '../../src/providers/api/context'
-import { ApiPromise } from '@polkadot/api'
-import { Address } from '@polkadot/types/interfaces'
+import { aliceSigner } from '../mocks/keyring'
 
 describe('UI: Profile', () => {
   context('with empty keyring', () => {

@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
-import { ApiContext } from './context'
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
+import { ApiContext } from './context'
 
 interface Props {
   children: ReactNode
