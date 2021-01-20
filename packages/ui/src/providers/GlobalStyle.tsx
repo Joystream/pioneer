@@ -11,7 +11,7 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
     background-color: ${Colors.White};
     font-family: ${Fonts.Body};
-    font-size: 16px;
+    font-size: 14px;
   }
   button {
     font-family: ${Fonts.Body};
