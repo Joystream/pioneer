@@ -10,7 +10,7 @@ export function Providers(props: Props) {
   return (
     <KeyringContextProvider>
       {/* eslint-disable-next-line no-undef */}
-      <BrowserRouter basename={PUBLIC_URL}>{props.children}</BrowserRouter>
+      <BrowserRouter basename={BASENAME}>{props.children}</BrowserRouter>
     </KeyringContextProvider>
   )
 }
