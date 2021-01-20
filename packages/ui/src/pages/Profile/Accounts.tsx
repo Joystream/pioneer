@@ -1,5 +1,7 @@
 import React from 'react'
 import { Account } from '../../hooks/useAccounts'
+import styled from 'styled-components'
+import { Colors } from '../../constants'
 
 interface Props {
   accounts: Account[]
@@ -7,26 +9,48 @@ interface Props {
 
 export function Accounts({ accounts }: Props) {
   return (
-    <table>
+    <Table>
       <thead>
         <tr>
-          <th>Account</th>
-          <th>Total balance</th>
+          <HeaderCell>Account</HeaderCell>
+          <HeaderCell>Total balance</HeaderCell>
         </tr>
       </thead>
       <tbody>
         {accounts.map((account) => (
-          <tr key={account.address}>
-            <td>
+          <BodyRow key={account.address}>
+            <BodyCell>
               <h3>{account.name}</h3>
               <p>{account.address}</p>
-            </td>
-            <td>
+            </BodyCell>
+            <BodyCell>
               <p>0 JOY</p>
-            </td>
-          </tr>
+            </BodyCell>
+          </BodyRow>
         ))}
       </tbody>
-    </table>
+    </Table>
   )
 }
+
+const Table = styled.table`
+  border-collapse: collapse;
+  margin: 0.5em 1em 0;
+`
+
+const HeaderCell = styled.th`
+  color: ${Colors.Grey};
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: normal;
+  text-align: left;
+  text-transform: uppercase;
+`
+
+const BodyRow = styled.tr`
+  border: 1px solid #dde2eb;
+`
+
+const BodyCell = styled.td`
+  padding: 0.5em;
+`
