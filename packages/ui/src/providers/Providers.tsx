@@ -9,7 +9,8 @@ interface Props {
 export function Providers(props: Props) {
   return (
     <KeyringContextProvider>
-      <BrowserRouter basename={process.env.PUBLIC_URL}>{props.children}</BrowserRouter>
+      {/* eslint-disable-next-line no-undef */}
+      <BrowserRouter basename={PUBLIC_URL}>{props.children}</BrowserRouter>
     </KeyringContextProvider>
   )
 }
