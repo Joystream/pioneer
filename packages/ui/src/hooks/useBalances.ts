@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { AccountInfo } from '@polkadot/types/interfaces'
-import { Account } from './useAccounts'
 import { useApi } from './useApi'
+import { Account, Address } from './types'
 
 interface Balance {
   total: string
 }
 
-interface AddressToBalanceMap {
-  [key: string]: Balance
+type AddressToBalanceMap = {
+  [key in Address]: Balance
 }
 
 export interface UseBalances {

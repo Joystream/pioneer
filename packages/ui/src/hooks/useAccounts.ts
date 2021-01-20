@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react'
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp'
 import { useKeyring } from './useKeyring'
-
-export interface Account {
-  name: string | undefined
-  address: string
-}
+import { Account } from './types'
 
 interface UseAccounts {
   allAccounts: Account[]

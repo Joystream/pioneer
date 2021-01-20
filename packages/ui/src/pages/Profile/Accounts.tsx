@@ -1,7 +1,7 @@
 import React from 'react'
-import { useAccounts } from '../../hooks/useAccounts'
 import styled from 'styled-components'
 import { Colors } from '../../constants'
+import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
 
 export function Accounts() {
