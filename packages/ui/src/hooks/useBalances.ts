@@ -11,7 +11,7 @@ interface AddressToBalanceMap {
   [key: string]: Balance
 }
 
-interface UseBalances {
+export interface UseBalances {
   hasBalances: boolean
   map: AddressToBalanceMap
 }

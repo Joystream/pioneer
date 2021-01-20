@@ -1,17 +1,19 @@
 import React from 'react'
 import { Keyring } from '@polkadot/ui-keyring'
-import { ApiPromise } from '@polkadot/api'
-import { Address } from '@polkadot/types/interfaces'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render } from '@testing-library/react'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import { Profile } from '../../src/pages/Profile/Profile'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
-import { ApiContext } from '../../src/providers/api/context'
+import * as useBalancesModule from '../../src/hooks/useBalances'
 import { aliceSigner } from '../mocks/keyring'
+import { UseBalances } from '../../src/hooks/useBalances'
 
 describe('UI: Profile', () => {
+  beforeEach(cryptoWaitReady)
+
   context('with empty keyring', () => {
     after(() => {
       sinon.restore()
@@ -29,19 +31,19 @@ describe('UI: Profile', () => {
   })
 
   context('with development accounts', () => {
-    const mockApi = ({
-      query: {
-        system: {
-          account: {
-            multi: (addresses: Address[], cb: any) => {
-              cb(addresses.map(() => ({ data: { free: { toHuman: () => '1000 JOY' } } })))
+    let balances: UseBalances
 
-              return Promise.resolve()
-            },
-          },
-        },
-      },
-    } as unknown) as ApiPromise
+    beforeEach(() => {
+      balances = {
+        hasBalances: true,
+        map: {},
+      }
+      sinon.stub(useBalancesModule, 'useBalances').returns(balances)
+    })
+
+    afterEach(() => {
+      sinon.restore()
+    })
 
     it('Renders accounts list for known addresses', async () => {
       const { findAllByRole } = renderProfile()
@@ -50,10 +52,22 @@ describe('UI: Profile', () => {
       expect(accountsRowGroup.childNodes).to.have.length(8)
     })
 
-    it("Displays account's data", async () => {
+    it('Renders empty balance when not returned', async () => {
       const { findByText } = renderProfile()
 
       const alice = aliceSigner().address
+      expect((await findByText(alice))?.previousSibling?.textContent).to.equal('alice')
+      expect((await findByText(alice))?.parentNode?.nextSibling?.textContent).to.equal('-')
+    })
+
+    it('Renders balance value', async () => {
+      const alice = aliceSigner().address
+
+      balances.map[alice] = {
+        total: '1000 JOY',
+      }
+
+      const { findByText } = renderProfile()
       expect((await findByText(alice))?.previousSibling?.textContent).to.equal('alice')
       expect((await findByText(alice))?.parentNode?.nextSibling?.textContent).to.equal('1000 JOY')
     })
@@ -61,9 +75,7 @@ describe('UI: Profile', () => {
     function renderProfile() {
       return render(
         <KeyringContext.Provider value={new Keyring()}>
-          <ApiContext.Provider value={{ isConnected: true, api: mockApi }}>
-            <Profile />
-          </ApiContext.Provider>
+          <Profile />
         </KeyringContext.Provider>
       )
     }
