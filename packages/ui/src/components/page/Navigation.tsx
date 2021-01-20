@@ -1,15 +1,15 @@
-import { NavBar } from './NavBar'
+import { SideBar } from './SideBar'
 import React from 'react'
 import { ProfileComponent } from '../../pages/Profile/ProfileComponent'
 
 export function Navigation() {
   return (
-    <NavBar>
+    <SideBar>
       Logo
       <ul>
         <li> My profile</li>
       </ul>
       <ProfileComponent />
-    </NavBar>
+    </SideBar>
   )
 }

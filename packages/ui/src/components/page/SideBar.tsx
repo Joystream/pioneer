@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const NavBar = styled.nav`
+export const SideBar = styled.nav`
   display: flex;
   position: relative;
   flex-direction: column;
@@ -9,4 +9,5 @@ export const NavBar = styled.nav`
   height: 100%;
   overflow: hidden;
   z-index: 10;
+  background: #000;
 `
