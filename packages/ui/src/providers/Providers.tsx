@@ -11,9 +11,9 @@ export function Providers(props: Props) {
   return (
     <KeyringContextProvider>
       <HashRouter>
-          <GlobalStyle />
-          {props.children}
-        </HashRouter>
+        <GlobalStyle />
+        {props.children}
+      </HashRouter>
     </KeyringContextProvider>
   )
 }
