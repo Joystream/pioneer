@@ -6,6 +6,7 @@ import { useApi } from '../hooks/useApi'
 import { useKeyring } from '../hooks/useKeyring'
 import BN from 'bn.js'
 import { BN_TEN } from '@polkadot/util'
+import { Button } from './buttons/ButtonPrimary'
 
 const DECIMALS = new BN(12)
 
@@ -53,23 +54,28 @@ export function TransferButton(props: { from: Account; to: Account }) {
       {isOpen && (
         <Background>
           <ModalContent>
-            <p>From</p>
-
-            <NameLabel>{props.from.name}</NameLabel>
-            <div>{props.from.address}</div>
-
-            <p>Amount</p>
-            <div>{transferAmount} Unit</div>
-
-            <p>Destination account</p>
-            <NameLabel>{props.to.name}</NameLabel>
-            <div>{props.to.address}</div>
-
             <CloseButton onClick={onClose}>close</CloseButton>
 
-            <button onClick={signAndSend} disabled={isSending}>
+            <FormLabel>From</FormLabel>
+
+            <p>
+              {props.from.name}
+              <br />
+              {props.from.address}
+            </p>
+
+            <p>Amount: {transferAmount} Unit</p>
+
+            <FormLabel>Destination account</FormLabel>
+            <p>
+              {props.to.name}
+              <br />
+              {props.to.address}
+            </p>
+
+            <Button onClick={signAndSend} disabled={isSending}>
               {isSending ? 'Sending...' : 'Send'}
-            </button>
+            </Button>
           </ModalContent>
         </Background>
       )}
@@ -77,7 +83,7 @@ export function TransferButton(props: { from: Account; to: Account }) {
   )
 }
 
-const NameLabel = styled.div`
+const FormLabel = styled.div`
   font-weight: bold;
 `
 
