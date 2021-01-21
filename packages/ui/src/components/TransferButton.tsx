@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Colors } from '../constants'
+import { Account } from '../hooks/types'
 
-export type Address = string
-
-export function TransferButton(props: { from: Address; to: Address }) {
+export function TransferButton(props: { from: Account; to: Account }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [transferAmount] = useState(100)
 
   const onClose = () => setIsOpen(false)
 
@@ -15,7 +15,16 @@ export function TransferButton(props: { from: Address; to: Address }) {
       {isOpen && (
         <Background>
           <ModalContent>
-            modal from {props.from} to: {props.to}
+            <p>From</p>
+            <div>{props.from.name}</div>
+            <div>{props.from.address}</div>
+
+            <p>Amount</p>
+            <div>{transferAmount}</div>
+
+            <p>Destination account</p>
+            <div>{props.to.name}</div>
+            <div>{props.to.address}</div>
             <CloseButton onClick={onClose}>close</CloseButton>
           </ModalContent>
         </Background>

@@ -12,7 +12,7 @@ export function Accounts() {
 
   if (!hasAccounts) return <Loading>Loading accounts...</Loading>
 
-  const sendTo = allAccounts[allAccounts.length - 1].address
+  const sendTo = allAccounts[allAccounts.length - 1]
 
   return (
     <MyProfile>
@@ -46,7 +46,7 @@ export function Accounts() {
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
                 <AccountControls>
-                  <TransferButton from={account.address} to={sendTo} />
+                  <TransferButton from={account} to={sendTo} />
                 </AccountControls>
               </AccountItem>
             ))}
