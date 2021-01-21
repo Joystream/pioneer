@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 export function TransferIcon() {
   return (
-    <Icon viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor" className="nav-icon">
+    <Icon viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
       <path
         fillRule="evenodd"
         clipRule="evenodd"

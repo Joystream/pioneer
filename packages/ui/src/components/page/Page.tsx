@@ -2,11 +2,11 @@ import styled from 'styled-components'
 
 export const Page = styled.div`
   display: grid;
-  grid-template-columns: 226px 1fr;
+  grid-template-columns: 226px 1fr 0px;
   grid-template-rows: auto;
   grid-template-areas:
-    'navbar page'
-    'navbar page';
+    'navbar page .'
+    'navbar page .';
   grid-column-gap: 24px;
   width: 100vw;
   height: 100%;

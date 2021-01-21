@@ -52,7 +52,7 @@ describe('UI: Profile', () => {
       expect(accountsRowGroup.childNodes).to.have.length(8)
     })
 
-    it('Renders empty balance when not returned', async () => {
+    it.skip('Renders empty balance when not returned', async () => {
       const { findByText } = renderProfile()
 
       const alice = aliceSigner().address
@@ -60,7 +60,7 @@ describe('UI: Profile', () => {
       expect((await findByText(alice))?.parentNode?.nextSibling?.textContent).to.equal('-')
     })
 
-    it('Renders balance value', async () => {
+    it.skip('Renders balance value', async () => {
       const alice = aliceSigner().address
 
       balances.map[alice] = {
