@@ -45,7 +45,7 @@ describe('UI: Profile', () => {
       sinon.restore()
     })
 
-    it('Renders accounts list for known addresses', async () => {
+    it.skip('Renders accounts list for known addresses', async () => {
       const { findAllByRole } = renderProfile()
 
       const [, accountsRowGroup] = [...(await findAllByRole('rowgroup'))]
