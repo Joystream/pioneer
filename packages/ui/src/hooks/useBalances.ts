@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { AccountInfo } from '@polkadot/types/interfaces'
 import { useApi } from './useApi'
-import { Account, Address } from './types'
+import { Account } from './types'
+import { Address } from '../components/TransferButton'
 
 interface Balance {
   total: string

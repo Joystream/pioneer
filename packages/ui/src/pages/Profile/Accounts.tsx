@@ -1,25 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { CopyButton } from '../../components/buttons/CopyButton'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
-import { Address } from '../../hooks/types'
+import { TransferButton } from '../../components/TransferButton'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
   const balances = useBalances(allAccounts)
-  const [sendFrom, setSendFrom] = useState<Address | undefined>()
-  const [isOpen, setIsOpen] = useState(false)
-
-  const openSendModal = (address: Address) => {
-    setSendFrom(address)
-    setIsOpen(true)
-  }
 
   if (!hasAccounts) return <Loading>Loading accounts...</Loading>
 
   const sendTo = allAccounts[allAccounts.length - 1].address
+
   return (
     <MyProfile>
       <AccountPlaceholder>My profile</AccountPlaceholder>
@@ -52,18 +46,13 @@ export function Accounts() {
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
                 <AccountControls>
-                  <button onClick={() => openSendModal(account.address)}>send</button>
+                  <TransferButton from={account.address} to={sendTo} />
                 </AccountControls>
               </AccountItem>
             ))}
           </AccountsList>
         </AccountsTable>
       </AccountsBoard>
-      {isOpen && (
-        <div>
-          modal from {sendFrom} to: {sendTo}
-        </div>
-      )}
     </MyProfile>
   )
 }

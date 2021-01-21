@@ -1,4 +1,4 @@
-export type Address = string
+import { Address } from '../components/TransferButton'
 
 export interface Account {
   name: string | undefined
