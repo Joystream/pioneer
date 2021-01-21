@@ -4,33 +4,47 @@ import { Colors } from '../constants'
 import { Account } from '../hooks/types'
 import { useApi } from '../hooks/useApi'
 import { useKeyring } from '../hooks/useKeyring'
+import BN from 'bn.js'
+import { BN_TEN } from '@polkadot/util'
+
+const DECIMALS = new BN(12)
 
 export function TransferButton(props: { from: Account; to: Account }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [transferAmount] = useState(100000)
   const { api } = useApi()
   const { keyring } = useKeyring()
+  const [isOpen, setIsOpen] = useState(false)
+  const [isSending, setIsSending] = useState(false)
+
+  const transferAmount = 1234
   const toAddress = props.to.address
 
   if (!api || !keyring) {
     return <></>
   }
 
-  const onClose = () => setIsOpen(false)
+  const formatAmount = (number: number) => new BN(number).mul(BN_TEN.pow(DECIMALS))
+  const onClose = () => {
+    setIsSending(false)
+    setIsOpen(false)
+  }
 
   const signAndSend = async () => {
-    const txHash = await api.tx.balances
-      .transfer(toAddress, transferAmount)
+    setIsSending(true)
+
+    await api.tx.balances
+      .transfer(toAddress, formatAmount(transferAmount))
       .signAndSend(keyring.getPair(props.from.address), (result) => {
         const { status } = result
+
+        if (status.isFinalized) {
+          onClose()
+        }
 
         status.isFinalized
           ? console.log(`Finalized. Block hash: ${status.asFinalized.toString()}`)
           : console.log(`Current transaction status: ${status.type}`)
       })
       .catch((error) => console.log('Error', error))
-
-    console.log(txHash)
   }
 
   return (
@@ -40,23 +54,32 @@ export function TransferButton(props: { from: Account; to: Account }) {
         <Background>
           <ModalContent>
             <p>From</p>
-            <div>{props.from.name}</div>
+
+            <NameLabel>{props.from.name}</NameLabel>
             <div>{props.from.address}</div>
 
             <p>Amount</p>
-            <div>{transferAmount}</div>
+            <div>{transferAmount} Unit</div>
 
             <p>Destination account</p>
-            <div>{props.to.name}</div>
+            <NameLabel>{props.to.name}</NameLabel>
             <div>{props.to.address}</div>
+
             <CloseButton onClick={onClose}>close</CloseButton>
-            <button onClick={signAndSend}>Send</button>
+
+            <button onClick={signAndSend} disabled={isSending}>
+              {isSending ? 'Sending...' : 'Send'}
+            </button>
           </ModalContent>
         </Background>
       )}
     </>
   )
 }
+
+const NameLabel = styled.div`
+  font-weight: bold;
+`
 
 const Background = styled.div`
   z-index: 100000;
