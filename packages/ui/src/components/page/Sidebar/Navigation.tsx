@@ -3,6 +3,7 @@ import { Colors } from '../../../constants'
 
 export const Navigation = styled.nav`
   display: grid;
+  position: relative;
   grid-template-columns: 1fr;
   grid-template-rows: 76px 1fr 196px;
   grid-row-gap: 8px;
