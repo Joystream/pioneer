@@ -69,6 +69,17 @@ describe('UI: Profile', () => {
       expect(aliceBox?.nextSibling?.textContent).to.equal('1000 JOY')
     })
 
+    it('Renders token transfer button', async () => {
+      const alice = aliceSigner().address
+
+      balances.map[alice] = {
+        total: '1000 JOY',
+      }
+
+      const { findByText } = renderProfile()
+      expect((await findByText(alice))?.parentNode?.nextSibling?.nextSibling?.textContent).to.equal('send')
+    })
+
     function renderProfile() {
       return render(
         <KeyringContext.Provider value={new Keyring()}>
