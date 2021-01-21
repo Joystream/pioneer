@@ -2,12 +2,36 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Colors } from '../constants'
 import { Account } from '../hooks/types'
+import { useApi } from '../hooks/useApi'
+import { useKeyring } from '../hooks/useKeyring'
 
 export function TransferButton(props: { from: Account; to: Account }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [transferAmount] = useState(100)
+  const [transferAmount] = useState(100000)
+  const { api } = useApi()
+  const { keyring } = useKeyring()
+  const toAddress = props.to.address
+
+  if (!api || !keyring) {
+    return <></>
+  }
 
   const onClose = () => setIsOpen(false)
+
+  const signAndSend = async () => {
+    const txHash = await api.tx.balances
+      .transfer(toAddress, transferAmount)
+      .signAndSend(keyring.getPair(props.from.address), (result) => {
+        const { status } = result
+
+        status.isFinalized
+          ? console.log(`Finalized. Block hash: ${status.asFinalized.toString()}`)
+          : console.log(`Current transaction status: ${status.type}`)
+      })
+      .catch((error) => console.log('Error', error))
+
+    console.log(txHash)
+  }
 
   return (
     <>
@@ -26,6 +50,7 @@ export function TransferButton(props: { from: Account; to: Account }) {
             <div>{props.to.name}</div>
             <div>{props.to.address}</div>
             <CloseButton onClick={onClose}>close</CloseButton>
+            <button onClick={signAndSend}>Send</button>
           </ModalContent>
         </Background>
       )}
