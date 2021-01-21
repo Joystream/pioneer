@@ -29,6 +29,11 @@ export const Colors = {
   },
 }
 
+export const BorderRad = {
+  s: '2px',
+  full: '1000px',
+}
+
 export const Fonts = {
   Body: 'Ubuntu, Arial, Helvetica, sans-serif',
   Monospace: '"Ubuntu Mono", monospace',
