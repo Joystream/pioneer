@@ -45,22 +45,17 @@ describe('UI: Profile', () => {
       sinon.restore()
     })
 
-    it.skip('Renders accounts list for known addresses', async () => {
-      const { findAllByRole } = renderProfile()
-
-      const [, accountsRowGroup] = [...(await findAllByRole('rowgroup'))]
-      expect(accountsRowGroup.childNodes).to.have.length(8)
-    })
-
-    it.skip('Renders empty balance when not returned', async () => {
+    it('Renders empty balance when not returned', async () => {
       const { findByText } = renderProfile()
 
       const alice = aliceSigner().address
-      expect((await findByText(alice))?.previousSibling?.textContent).to.equal('alice')
-      expect((await findByText(alice))?.parentNode?.nextSibling?.textContent).to.equal('-')
+      const aliceBox = (await findByText(alice))?.parentNode?.parentNode
+      expect(aliceBox).to.exist
+      expect(aliceBox?.querySelector('h5')?.textContent).to.equal('alice')
+      expect(aliceBox?.nextSibling?.textContent).to.equal('-')
     })
 
-    it.skip('Renders balance value', async () => {
+    it('Renders balance value', async () => {
       const alice = aliceSigner().address
 
       balances.map[alice] = {
@@ -68,8 +63,10 @@ describe('UI: Profile', () => {
       }
 
       const { findByText } = renderProfile()
-      expect((await findByText(alice))?.previousSibling?.textContent).to.equal('alice')
-      expect((await findByText(alice))?.parentNode?.nextSibling?.textContent).to.equal('1000 JOY')
+
+      const aliceBox = (await findByText(alice))?.parentNode?.parentNode
+      expect(aliceBox?.querySelector('h5')?.textContent).to.equal('alice')
+      expect(aliceBox?.nextSibling?.textContent).to.equal('1000 JOY')
     })
 
     function renderProfile() {
