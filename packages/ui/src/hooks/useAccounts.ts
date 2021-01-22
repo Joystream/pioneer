@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { web3Accounts, web3Enable } from '@polkadot/extension-dapp'
 import { useKeyring } from './useKeyring'
 import { Account } from './types'
 
@@ -12,7 +11,7 @@ export function useAccounts(): UseAccounts {
   const keyring = useKeyring()
   const [state, setState] = useState<UseAccounts>({ allAccounts: [], hasAccounts: false })
 
-  useEffect((): (() => void) => {
+  useEffect(() => {
     const subscription = keyring.accounts.subject.subscribe((accounts): void => {
       const allAccounts = accounts
         ? Object.values(accounts).map((account) => ({
@@ -25,22 +24,10 @@ export function useAccounts(): UseAccounts {
       setState({ allAccounts, hasAccounts })
     })
 
-    return (): void => {
+    return () => {
       subscription.unsubscribe()
     }
   }, [keyring])
-
-  useEffect(() => {
-    web3Enable('Pioneer')
-      .then(() => web3Accounts())
-      .then((injectedAccounts) => {
-        const allAccounts = injectedAccounts.map(({ address, meta }) => ({
-          address,
-          meta: { ...meta, name: `${meta.name} (${meta.source})` },
-        }))
-        keyring.loadAll({ isDevelopment: true }, allAccounts)
-      })
-  }, [])
 
   return state
 }

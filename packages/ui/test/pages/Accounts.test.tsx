@@ -1,18 +1,36 @@
 import React from 'react'
 import { Keyring } from '@polkadot/ui-keyring'
-import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render } from '@testing-library/react'
+import { cleanup, render } from '@testing-library/react'
 import { expect } from 'chai'
 import sinon from 'sinon'
-import { Profile } from '../../src/pages/Profile/Profile'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import * as useBalancesModule from '../../src/hooks/useBalances'
 import { aliceSigner } from '../mocks/keyring'
 import { UseBalances } from '../../src/hooks/useBalances'
+import { Accounts } from '../../src/pages/Profile/Accounts'
+import { Account } from '../../src/hooks/types'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
 
-describe('UI: Profile', () => {
-  beforeEach(cryptoWaitReady)
+describe('UI: Accounts list', () => {
+  let accounts: {
+    hasAccounts: boolean
+    allAccounts: Account[]
+  }
+  let alice: string
+
+  before(cryptoWaitReady)
+
+  beforeEach(() => {
+    alice = aliceSigner().address
+    accounts = {
+      hasAccounts: false,
+      allAccounts: [],
+    }
+    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
+  })
+
+  afterEach(cleanup)
 
   context('with empty keyring', () => {
     after(() => {
@@ -20,12 +38,11 @@ describe('UI: Profile', () => {
     })
 
     it('Shows loading screen', async () => {
-      sinon.stub(useAccountsModule, 'useAccounts').returns({
-        hasAccounts: false,
-        allAccounts: [],
-      })
-
-      const profile = render(<Profile />)
+      const profile = render(
+        <KeyringContext.Provider value={new Keyring()}>
+          <Accounts />
+        </KeyringContext.Provider>
+      )
       expect(profile.getByText('Loading accounts...')).to.exist
     })
   })
@@ -38,6 +55,11 @@ describe('UI: Profile', () => {
         hasBalances: true,
         map: {},
       }
+      accounts.hasAccounts = true
+      accounts.allAccounts.push({
+        address: alice,
+        name: 'alice',
+      })
       sinon.stub(useBalancesModule, 'useBalances').returns(balances)
     })
 
@@ -46,7 +68,7 @@ describe('UI: Profile', () => {
     })
 
     it('Renders empty balance when not returned', async () => {
-      const { findByText } = renderProfile()
+      const { findByText } = renderAccounts()
 
       const alice = aliceSigner().address
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
@@ -56,25 +78,28 @@ describe('UI: Profile', () => {
     })
 
     it('Renders balance value', async () => {
-      const alice = aliceSigner().address
-
       balances.map[alice] = {
         total: '1000 JOY',
       }
 
-      const { findByText } = renderProfile()
+      const { findByText } = renderAccounts()
 
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
       expect(aliceBox?.querySelector('h5')?.textContent).to.equal('alice')
       expect(aliceBox?.nextSibling?.textContent).to.equal('1000 JOY')
     })
 
-    function renderProfile() {
-      return render(
-        <KeyringContext.Provider value={new Keyring()}>
-          <Profile />
-        </KeyringContext.Provider>
-      )
+    it.skip('Renders token transfer button', async () => {
+      balances.map[alice] = {
+        total: '1000 JOY',
+      }
+
+      const { findByText } = renderAccounts()
+      expect((await findByText(alice))?.parentNode?.nextSibling?.nextSibling?.textContent).to.equal('send')
+    })
+
+    function renderAccounts() {
+      return render(<Accounts />)
     }
   })
 })

@@ -4,12 +4,15 @@ import { CopyButton } from '../../components/buttons/CopyButton'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
+import { TransferButton } from '../../components/TransferButton'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
   const balances = useBalances(allAccounts)
 
   if (!hasAccounts) return <Loading>Loading accounts...</Loading>
+
+  const sendTo = allAccounts[allAccounts.length - 1]
 
   return (
     <MyProfile>
@@ -42,7 +45,9 @@ export function Accounts() {
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
-                <AccountControls></AccountControls>
+                <AccountControls>
+                  <TransferButton from={account} to={sendTo} />
+                </AccountControls>
               </AccountItem>
             ))}
           </AccountsList>
