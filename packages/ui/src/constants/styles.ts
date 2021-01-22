@@ -12,6 +12,7 @@ export const Colors = {
     300: '#C4CCD6',
     200: '#DDE2EB',
     100: '#E8EDF6',
+    75: '#EFF3FA',
     50: '#F6F8FC',
     25: '#F9FAFC',
   },
