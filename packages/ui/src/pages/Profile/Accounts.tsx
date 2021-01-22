@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Identicon from '@polkadot/react-identicon'
 import { CopyButton } from '../../components/buttons/CopyButton'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
@@ -33,7 +34,9 @@ export function Accounts() {
             {allAccounts.map((account) => (
               <AccountItem key={account.address}>
                 <AccountInfo>
-                  <AccountPhoto />
+                  <AccountPhoto>
+                    <Identicon size={40} theme={'beachball'} value={account.address} />
+                  </AccountPhoto>
                   {/*<AccountType>Root account</AccountType>*/}
                   <AccountName>{account.name}</AccountName>
                   <AccountCopyAddress>
