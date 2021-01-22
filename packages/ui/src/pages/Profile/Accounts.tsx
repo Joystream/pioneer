@@ -1,6 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
+import { ButtonGhostMediumSquare } from '../../components/buttons/Buttons'
 import { CopyButton } from '../../components/buttons/CopyButton'
+import { ArrowDownIcon } from '../../components/icons/ArrowDownIcon'
+import { ArrowInsideIcon } from '../../components/icons/ArrowInsideIcon'
+import { ArrowOutsideIcon } from '../../components/icons/ArrowOutsideIcon'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
@@ -42,7 +46,17 @@ export function Accounts() {
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
-                <AccountControls></AccountControls>
+                <AccountControls>
+                  <ControlButton>
+                    <ArrowInsideIcon />
+                  </ControlButton>
+                  <ControlButton>
+                    <ArrowOutsideIcon />
+                  </ControlButton>
+                  <ControlButtonBorderless>
+                    <ArrowDownIcon />
+                  </ControlButtonBorderless>
+                </AccountControls>
               </AccountItem>
             ))}
           </AccountsList>
@@ -224,20 +238,20 @@ const AccountPhoto = styled.div`
   overflow: hidden;
 `
 
-const AccountType = styled.p`
-  display: flex;
-  grid-area: accounttype;
-  justify-content: center;
-  width: fit-content;
-  margin: 0;
-  padding: 0 8px;
-  font-size: 10px;
-  line-height: 16px;
-  border-radius: 8px;
-  color: ${Colors.White};
-  background-color: ${Colors.Blue[200]};
-  text-transform: uppercase;
-`
+// const AccountType = styled.p`
+//   display: flex;
+//   grid-area: accounttype;
+//   justify-content: center;
+//   width: fit-content;
+//   margin: 0;
+//   padding: 0 8px;
+//   font-size: 10px;
+//   line-height: 16px;
+//   border-radius: 8px;
+//   color: ${Colors.White};
+//   background-color: ${Colors.Blue[200]};
+//   text-transform: uppercase;
+// `
 
 const AccountName = styled.h5`
   grid-area: accountname;
@@ -278,6 +292,25 @@ const AccountControls = styled.div`
   grid-template-columns: repeat(3, 40px);
   grid-template-rows: 40px;
   grid-column-gap: 8px;
+`
+
+const ControlButton = styled(ButtonGhostMediumSquare)`
+  svg {
+    color: ${Colors.Black[900]};
+  }
+`
+
+const ControlButtonBorderless = styled(ButtonGhostMediumSquare)`
+  &,
+  &:hover,
+  &:focus,
+  &:active &:disabled {
+    border: 1px solid transparent;
+  }
+
+  svg {
+    color: ${Colors.Black[900]};
+  }
 `
 
 const Loading = styled.div`
