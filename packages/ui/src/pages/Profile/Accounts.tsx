@@ -31,7 +31,7 @@ export function Accounts() {
               <AccountItem key={account.address}>
                 <AccountInfo>
                   <AccountPhoto />
-                  <AccountType>Root account</AccountType>
+                  {/*<AccountType>Root account</AccountType>*/}
                   <AccountName>{account.name}</AccountName>
                   <AccountCopyAddress>
                     <AccountAddress>{account.address}</AccountAddress>
@@ -39,8 +39,8 @@ export function Accounts() {
                   </AccountCopyAddress>
                 </AccountInfo>
                 <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
-                <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
-                <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
+                <AccountBalance>0 Unit</AccountBalance>
+                <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
                 <AccountControls></AccountControls>
               </AccountItem>

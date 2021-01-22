@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, Transitions } from '../../constants/styles'
-import { ProfileComponent } from '../../pages/Profile/ProfileComponent'
+import { Colors, Transitions } from '../../constants'
 import { MyProfileIcon } from './Sidebar/LinksIcons/MyProfileIcon'
 import { LogoLink } from './Sidebar/LogoLink'
 import { Navigation } from './Sidebar/Navigation'
@@ -22,7 +21,7 @@ export function SideBar() {
           </NavigationLink>
         </NavigationLinksItem>
       </NavigationLinks>
-      <ProfileComponent />
+      {/*<ProfileComponent />*/}
       <Version />
     </Navigation>
   )
