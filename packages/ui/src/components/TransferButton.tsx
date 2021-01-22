@@ -6,7 +6,7 @@ import { useApi } from '../hooks/useApi'
 import { useKeyring } from '../hooks/useKeyring'
 import BN from 'bn.js'
 import { BN_TEN } from '@polkadot/util'
-import { Button } from './buttons/ButtonPrimary'
+import { ButtonGhostMedium } from './buttons/Buttons'
 
 const DECIMALS = new BN(12)
 
@@ -73,9 +73,9 @@ export function TransferButton(props: { from: Account; to: Account }) {
               {props.to.address}
             </p>
 
-            <Button onClick={signAndSend} disabled={isSending}>
+            <ButtonGhostMedium onClick={signAndSend} disabled={isSending}>
               {isSending ? 'Sending...' : 'Send'}
-            </Button>
+            </ButtonGhostMedium>
           </ModalContent>
         </Background>
       )}
