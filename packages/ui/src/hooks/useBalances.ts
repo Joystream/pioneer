@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { AccountInfo } from '@polkadot/types/interfaces'
 import { useApi } from './useApi'
 import { Account, Address } from './types'
+import BN from 'bn.js'
 
 interface Balance {
-  total: string
+  total: BN
 }
 
 type AddressToBalanceMap = {
@@ -29,15 +30,16 @@ export function useBalances(accounts: Account[]): UseBalances {
 
       api.query.system.account
         .multi<AccountInfo>(addresses, (balances) => {
-          const balancesMap = addresses.reduce(
-            (acc, address, index) => ({
+          const balancesMap = addresses.reduce((acc, address, index) => {
+            const free = balances[index].data.free
+
+            return {
               ...acc,
               [address]: {
-                total: balances[index].data.free.toHuman(),
+                total: free.toBn(),
               },
-            }),
-            {}
-          )
+            }
+          }, {})
 
           setBalances(balancesMap)
           setHasBalances(true)

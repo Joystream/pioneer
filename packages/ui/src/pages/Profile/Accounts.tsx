@@ -9,6 +9,8 @@ import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
+import BN from 'bn.js'
+import { formatBalance } from '@polkadot/util'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -47,10 +49,14 @@ export function Accounts() {
                     <AccountCopyButton />
                   </AccountCopyAddress>
                 </AccountInfo>
-                <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
+                <AccountBalance>
+                  <Balance value={balances.map[account.address]?.total} />
+                </AccountBalance>
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>0 Unit</AccountBalance>
-                <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
+                <AccountBalance>
+                  <Balance value={balances.map[account.address]?.total} />
+                </AccountBalance>
                 <AccountControls>
                   <ButtonInside>
                     <ArrowInsideIcon />
@@ -67,6 +73,14 @@ export function Accounts() {
       </AccountsBoard>
     </MyProfile>
   )
+}
+
+interface Props {
+  value: BN | undefined
+}
+
+function Balance({ value }: Props) {
+  return <>{value ? formatBalance(value, { decimals: 12, withUnit: 'JOY' }) : '-'}</>
 }
 
 const MyProfile = styled.div`

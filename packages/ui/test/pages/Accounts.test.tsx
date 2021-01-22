@@ -11,6 +11,8 @@ import { UseBalances } from '../../src/hooks/useBalances'
 import { Accounts } from '../../src/pages/Profile/Accounts'
 import { Account } from '../../src/hooks/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
+import BN from 'bn.js'
+import { BN_TEN } from '@polkadot/util'
 
 describe('UI: Accounts list', () => {
   let accounts: {
@@ -18,6 +20,7 @@ describe('UI: Accounts list', () => {
     allAccounts: Account[]
   }
   let alice: string
+  const JOY_1 = new BN(1).mul(BN_TEN.pow(new BN(12)))
 
   before(cryptoWaitReady)
 
@@ -79,19 +82,19 @@ describe('UI: Accounts list', () => {
 
     it('Renders balance value', async () => {
       balances.map[alice] = {
-        total: '1000 JOY',
+        total: JOY_1,
       }
 
       const { findByText } = renderAccounts()
 
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
       expect(aliceBox?.querySelector('h5')?.textContent).to.equal('alice')
-      expect(aliceBox?.nextSibling?.textContent).to.equal('1000 JOY')
+      expect(aliceBox?.nextSibling?.textContent).to.equal('1.0000 JOY')
     })
 
     it.skip('Renders token transfer button', async () => {
       balances.map[alice] = {
-        total: '1000 JOY',
+        total: JOY_1,
       }
 
       const { findByText } = renderAccounts()
