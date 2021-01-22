@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ButtonSquare } from '../../components/buttons/ButtonSquare'
+import { ButtonPrimarySquare } from '../../components/buttons/Buttons'
 import { TransferIcon } from '../../components/icons/TransferIcon'
 import { BorderRad, Colors, Transitions } from '../../constants/styles'
 
@@ -191,7 +191,7 @@ const TotalBalance = styled.span`
   }
 `
 
-const BalanceTransfer = styled(ButtonSquare)`
+const BalanceTransfer = styled(ButtonPrimarySquare)`
   width: 32px;
   height: 32px;
   grid-area: balancetransfer;

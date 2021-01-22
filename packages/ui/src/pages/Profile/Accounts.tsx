@@ -232,20 +232,20 @@ const AccountPhoto = styled.div`
   overflow: hidden;
 `
 
-const AccountType = styled.p`
-  display: flex;
-  grid-area: accounttype;
-  justify-content: center;
-  width: fit-content;
-  margin: 0;
-  padding: 0 8px;
-  font-size: 10px;
-  line-height: 16px;
-  border-radius: 8px;
-  color: ${Colors.White};
-  background-color: ${Colors.Blue[200]};
-  text-transform: uppercase;
-`
+// const AccountType = styled.p`
+//   display: flex;
+//   grid-area: accounttype;
+//   justify-content: center;
+//   width: fit-content;
+//   margin: 0;
+//   padding: 0 8px;
+//   font-size: 10px;
+//   line-height: 16px;
+//   border-radius: 8px;
+//   color: ${Colors.White};
+//   background-color: ${Colors.Blue[200]};
+//   text-transform: uppercase;
+// `
 
 const AccountName = styled.h5`
   grid-area: accountname;
