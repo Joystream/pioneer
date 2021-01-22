@@ -89,7 +89,7 @@ describe('UI: Accounts list', () => {
       expect(aliceBox?.nextSibling?.textContent).to.equal('1000 JOY')
     })
 
-    it('Renders token transfer button', async () => {
+    it.skip('Renders token transfer button', async () => {
       balances.map[alice] = {
         total: '1000 JOY',
       }
