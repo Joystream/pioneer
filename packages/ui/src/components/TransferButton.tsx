@@ -1,12 +1,14 @@
+import { BN_TEN } from '@polkadot/util'
+import BN from 'bn.js'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { ButtonGhostMediumSquare } from '../components/buttons/Buttons'
 import { Colors } from '../constants'
 import { Account } from '../hooks/types'
 import { useApi } from '../hooks/useApi'
 import { useKeyring } from '../hooks/useKeyring'
-import BN from 'bn.js'
-import { BN_TEN } from '@polkadot/util'
 import { ButtonGhostMedium } from './buttons/Buttons'
+import { ArrowOutsideIcon } from './icons/ArrowOutsideIcon'
 
 const DECIMALS = new BN(12)
 
@@ -50,7 +52,9 @@ export function TransferButton(props: { from: Account; to: Account }) {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>send</button>
+      <ButtonForTransfer onClick={() => setIsOpen(true)}>
+        <ArrowOutsideIcon />
+      </ButtonForTransfer>
       {isOpen && (
         <Background>
           <ModalContent>
@@ -82,6 +86,12 @@ export function TransferButton(props: { from: Account; to: Account }) {
     </>
   )
 }
+
+const ButtonForTransfer = styled(ButtonGhostMediumSquare)`
+  svg {
+    color: ${Colors.Black[900]};
+  }
+`
 
 const FormLabel = styled.div`
   font-weight: bold;

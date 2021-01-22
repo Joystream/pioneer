@@ -3,11 +3,7 @@ import styled from 'styled-components'
 import { BorderRad, Colors, Transitions } from '../../constants/styles'
 
 export function Buttons() {
-  return (
-    <>
-      <ButtonPrimary></ButtonPrimary>
-    </>
-  )
+  return <ButtonPrimary></ButtonPrimary>
 }
 
 export const ButtonPrimary = styled.button`
@@ -65,12 +61,21 @@ export const ButtonGhost = styled(ButtonPrimary)`
   &:active {
     border-color: ${Colors.Blue[300]};
     background-color: ${Colors.White};
+    color: ${Colors.Blue[500]};
+
+    svg {
+      color: ${Colors.Blue[400]};
+    }
   }
 
   &:disabled {
     color: ${Colors.Black[300]};
-    border-color: ${Colors.Blue[100]};
+    border-color: ${Colors.Black[100]};
     background-color: ${Colors.White};
+
+    svg {
+      color: ${Colors.Black[300]};
+    }
   }
 `
 

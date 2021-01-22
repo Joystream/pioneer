@@ -1,11 +1,14 @@
+import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
-import Identicon from '@polkadot/react-identicon'
+import { ButtonGhostMediumSquare } from '../../components/buttons/Buttons'
 import { CopyButton } from '../../components/buttons/CopyButton'
+import { ArrowDownIcon } from '../../components/icons/ArrowDownIcon'
+import { ArrowInsideIcon } from '../../components/icons/ArrowInsideIcon'
+import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
-import { TransferButton } from '../../components/TransferButton'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -49,7 +52,13 @@ export function Accounts() {
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
                 <AccountControls>
+                  <ButtonInside>
+                    <ArrowInsideIcon />
+                  </ButtonInside>
                   <TransferButton from={account} to={sendTo} />
+                  <ButtonApply>
+                    <ArrowDownIcon />
+                  </ButtonApply>
                 </AccountControls>
               </AccountItem>
             ))}
@@ -286,6 +295,25 @@ const AccountControls = styled.div`
   grid-template-columns: repeat(3, 40px);
   grid-template-rows: 40px;
   grid-column-gap: 8px;
+`
+
+const ButtonInside = styled(ButtonGhostMediumSquare)`
+  svg {
+    color: ${Colors.Black[900]};
+  }
+`
+const ButtonApply = styled(ButtonGhostMediumSquare)`
+  &,
+  &:hover,
+  &:focus,
+  &:active,
+  &:disabled {
+    border: 1px solid transparent;
+  }
+
+  svg {
+    color: ${Colors.Black[900]};
+  }
 `
 
 const Loading = styled.div`
