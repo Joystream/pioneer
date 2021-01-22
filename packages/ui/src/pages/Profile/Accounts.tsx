@@ -1,10 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ButtonGhostMediumSquare } from '../../components/buttons/Buttons'
 import { CopyButton } from '../../components/buttons/CopyButton'
-import { ArrowDownIcon } from '../../components/icons/ArrowDownIcon'
-import { ArrowInsideIcon } from '../../components/icons/ArrowInsideIcon'
-import { ArrowOutsideIcon } from '../../components/icons/ArrowOutsideIcon'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
@@ -46,17 +42,7 @@ export function Accounts() {
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>0 Unit</AccountBalance>
                 <AccountBalance>{balances.map[account.address]?.total || '-'}</AccountBalance>
-                <AccountControls>
-                  <ControlButton>
-                    <ArrowInsideIcon />
-                  </ControlButton>
-                  <ControlButton>
-                    <ArrowOutsideIcon />
-                  </ControlButton>
-                  <ControlButtonBorderless>
-                    <ArrowDownIcon />
-                  </ControlButtonBorderless>
-                </AccountControls>
+                <AccountControls></AccountControls>
               </AccountItem>
             ))}
           </AccountsList>
@@ -292,25 +278,6 @@ const AccountControls = styled.div`
   grid-template-columns: repeat(3, 40px);
   grid-template-rows: 40px;
   grid-column-gap: 8px;
-`
-
-const ControlButton = styled(ButtonGhostMediumSquare)`
-  svg {
-    color: ${Colors.Black[900]};
-  }
-`
-
-const ControlButtonBorderless = styled(ButtonGhostMediumSquare)`
-  &,
-  &:hover,
-  &:focus,
-  &:active &:disabled {
-    border: 1px solid transparent;
-  }
-
-  svg {
-    color: ${Colors.Black[900]};
-  }
 `
 
 const Loading = styled.div`
