@@ -2,6 +2,7 @@ export const Colors = {
   White: '#FFFFFF',
   Grey: '#8C96A6',
   LogoPurple: '#4038FF',
+
   Black: {
     900: '#000000',
     800: '#131519',
@@ -15,7 +16,11 @@ export const Colors = {
     75: '#EFF3FA',
     50: '#F6F8FC',
     25: '#F9FAFC',
+
+    900.25: '#00000040',
+    700.75: '#1F252EBF',
   },
+
   Blue: {
     900: '#001AE4',
     800: '#0027EA',
@@ -33,6 +38,10 @@ export const Colors = {
 export const BorderRad = {
   s: '2px',
   full: '1000px',
+}
+
+export const Shadows = {
+  common: `0px 12px 28px ${Colors.Black[900.25]}`,
 }
 
 export const Fonts = {

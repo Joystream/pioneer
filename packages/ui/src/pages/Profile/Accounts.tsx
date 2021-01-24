@@ -208,7 +208,7 @@ const AccountItem = styled.li`
   align-items: center;
   width: 100%;
   height: 94px;
-  padding: 17px 0 17px 15px;
+  padding: 16px 0 16px 14px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
 `

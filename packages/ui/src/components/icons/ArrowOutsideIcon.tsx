@@ -3,16 +3,16 @@ import styled from 'styled-components'
 
 export function ArrowOutsideIcon() {
   return (
-    <Icon viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+    <ArrowOutsideStyles viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
       <path
         d="M13.8281 12.1874H2.57812C2.50937 12.1874 2.45312 12.2436 2.45312 12.3124V13.2499C2.45312 13.3186 2.50937 13.3749 2.57812 13.3749H13.8281C13.8969 13.3749 13.9531 13.3186 13.9531 13.2499V12.3124C13.9531 12.2436 13.8969 12.1874 13.8281 12.1874ZM6.25 5.08893H7.40469V10.3749C7.40469 10.4436 7.46094 10.4999 7.52969 10.4999H8.46719C8.53594 10.4999 8.59219 10.4436 8.59219 10.3749V5.08893H9.75C9.85469 5.08893 9.9125 4.96862 9.84844 4.88737L8.09844 2.67174C8.08674 2.6568 8.0718 2.64472 8.05475 2.63641C8.03769 2.6281 8.01897 2.62378 8 2.62378C7.98103 2.62378 7.96231 2.6281 7.94525 2.63641C7.92819 2.64472 7.91326 2.6568 7.90156 2.67174L6.15156 4.8858C6.0875 4.96862 6.14531 5.08893 6.25 5.08893Z"
         fill="currentColor"
       />
-    </Icon>
+    </ArrowOutsideStyles>
   )
 }
 
-const Icon = styled.svg`
+export const ArrowOutsideStyles = styled.svg`
   height: 16px;
   width: 16px;
   position: relative;
