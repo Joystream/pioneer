@@ -8,6 +8,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from './modal'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
 import { Account } from '../hooks/types'
 import { AccountInfo } from './AccountInfo'
+import { useBalances } from '../hooks/useBalances'
 
 interface Props {
   onClose: () => void
@@ -19,6 +20,7 @@ export function TransferModal({ from, to, onClose }: Props) {
   const { api } = useApi()
   const { keyring } = useKeyring()
   const [isSending, setIsSending] = useState(false)
+  const balances = useBalances([from, to])
 
   const transferAmount = toChainTokenValue(1234)
 
@@ -55,7 +57,7 @@ export function TransferModal({ from, to, onClose }: Props) {
             <AccountInfo account={from} />
             <TransactionInfoRow>
               <InfoTitle>Transferable balance</InfoTitle>
-              <InfoValue>9,900.000</InfoValue>
+              <InfoValue>{formatTokenValue(balances?.map[from.address]?.total)}</InfoValue>
             </TransactionInfoRow>
           </FromBlock>
         </Row>
@@ -75,7 +77,7 @@ export function TransferModal({ from, to, onClose }: Props) {
             <AccountInfo account={to} />
             <TransactionInfoRow>
               <InfoTitle>Total balance</InfoTitle>
-              <InfoValue>9,900.000</InfoValue>
+              <InfoValue>{formatTokenValue(balances?.map[to.address]?.total)}</InfoValue>
             </TransactionInfoRow>
           </ToBlock>
         </Row>
