@@ -1,31 +1,28 @@
 import Identicon from '@polkadot/react-identicon'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { ButtonGhostMedium, ButtonGhostMediumSquare } from './buttons/Buttons'
-import { Close } from '../components/buttons/CloseCross'
-import { CopyButton } from '../components/buttons/CopyButton'
-import { BorderRad, Colors, Shadows } from '../constants'
+import { ButtonGhostMediumSquare, ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
+import { CopyButton } from './buttons/CopyButton'
+import { BorderRad, Colors } from '../constants'
 import { Account } from '../hooks/types'
 import { useApi } from '../hooks/useApi'
 import { useKeyring } from '../hooks/useKeyring'
-import { ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
-import { ArrowOutsideIcon, ArrowOutsideStyles } from './icons/ArrowOutsideIcon'
-import { CrossIcon } from './icons/CrossIcon'
+import { ArrowOutsideIcon } from './icons/ArrowOutsideIcon'
 import { formatTokenValue, toChainTokenValue } from '../utils/formatters'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from './modal'
 
-export function TransferButton(props: { from: Account; to: Account; address?: Account }) {
+interface Props {
+  onClose: () => void
+  from: Account
+  to: Account
+}
+
+function TransferModal({ from, to, onClose }: Props) {
   const { api } = useApi()
   const { keyring } = useKeyring()
-  const [isOpen, setIsOpen] = useState(false)
   const [isSending, setIsSending] = useState(false)
 
   const transferAmount = toChainTokenValue(1234)
-  const toAddress = props.to.address
-
-  const onClose = () => {
-    setIsSending(false)
-    setIsOpen(false)
-  }
 
   const signAndSend = async () => {
     setIsSending(true)
@@ -35,8 +32,8 @@ export function TransferButton(props: { from: Account; to: Account; address?: Ac
     }
 
     await api.tx.balances
-      .transfer(toAddress, transferAmount)
-      .signAndSend(keyring.getPair(props.from.address), (result) => {
+      .transfer(to.address, transferAmount)
+      .signAndSend(keyring.getPair(from.address), (result) => {
         const { status } = result
 
         if (status.isFinalized) {
@@ -51,90 +48,88 @@ export function TransferButton(props: { from: Account; to: Account; address?: Ac
   }
 
   return (
+    <Modal>
+      <ModalHeader onClick={onClose} title="Send tokens" />
+      <ModalBody>
+        <Row>
+          <FormLabel>From</FormLabel>
+          <FromBlock>
+            <AccountInfo>
+              <AccountPhoto>
+                <Identicon size={40} theme={'beachball'} value={from.address} />
+              </AccountPhoto>
+              {/*<AccountType>Root account</AccountType>*/}
+              <AccountName>{from.name}</AccountName>
+              <AccountCopyAddress>
+                <AccountAddress>{from.address}</AccountAddress>
+                <AccountCopyButton />
+              </AccountCopyAddress>
+            </AccountInfo>
+            <TransactionInfoRow>
+              <InfoTitle>Transferable balance</InfoTitle>
+              <InfoValue>9,900.000</InfoValue>
+            </TransactionInfoRow>
+          </FromBlock>
+        </Row>
+        <TransactionAmount>
+          <AmountInputBlock>
+            <AmountInputLabel>Number of tokens</AmountInputLabel>
+            <AmountInput>{formatTokenValue(transferAmount)}</AmountInput>
+          </AmountInputBlock>
+          <AmountButtons>
+            <AmountButton>Use half</AmountButton>
+            <AmountButton>Use max</AmountButton>
+          </AmountButtons>
+        </TransactionAmount>
+        <Row>
+          <FormLabel>Destination account</FormLabel>
+          <ToBlock>
+            <AccountInfo>
+              <AccountPhoto>
+                <Identicon size={40} theme={'beachball'} value={to.address} />
+              </AccountPhoto>
+              {/*<AccountType>Root account</AccountType>*/}
+              <AccountName>{to.name}</AccountName>
+              <AccountCopyAddress>
+                <AccountAddress>{to.address}</AccountAddress>
+                <AccountCopyButton />
+              </AccountCopyAddress>
+            </AccountInfo>
+            <TransactionInfoRow>
+              <InfoTitle>Total balance</InfoTitle>
+              <InfoValue>9,900.000</InfoValue>
+            </TransactionInfoRow>
+          </ToBlock>
+        </Row>
+      </ModalBody>
+      <ModalFooter>
+        <TransactionInfo>
+          <TransactionInfoRow>
+            <InfoTitle>Amount:</InfoTitle>
+            <InfoValue>9,900.000</InfoValue>
+          </TransactionInfoRow>
+          <TransactionInfoRow>
+            <InfoTitle>Transaction fee:</InfoTitle>
+            <InfoValue>2.000</InfoValue>
+          </TransactionInfoRow>
+        </TransactionInfo>
+        <ButtonPrimaryMedium onClick={signAndSend} disabled={isSending}>
+          {isSending ? 'Sending...' : 'Send'}
+        </ButtonPrimaryMedium>
+      </ModalFooter>
+    </Modal>
+  )
+}
+
+export function TransferButton(props: { from: Account; to: Account; address?: Account }) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
     <>
       <ButtonForTransfer onClick={() => setIsOpen(true)}>
         <ArrowOutsideIcon />
       </ButtonForTransfer>
-      {isOpen && (
-        <ModalGlass>
-          <Modal>
-            <ModalHeader>
-              <CloseButton onClick={onClose}>
-                <CrossIcon />
-              </CloseButton>
-              <ArrowOutsideIcon />
-              <ModalTitle>Send tokens</ModalTitle>
-            </ModalHeader>
-            <ModalBody>
-              <Row>
-                <FormLabel>From</FormLabel>
-                <FromBlock>
-                  <AccountInfo>
-                    <AccountPhoto>
-                      <Identicon size={40} theme={'beachball'} value={props.from.address} />
-                    </AccountPhoto>
-                    {/*<AccountType>Root account</AccountType>*/}
-                    <AccountName>{props.from.name}</AccountName>
-                    <AccountCopyAddress>
-                      <AccountAddress>{props.from.address}</AccountAddress>
-                      <AccountCopyButton />
-                    </AccountCopyAddress>
-                  </AccountInfo>
-                  <TransactionInfoRow>
-                    <InfoTitle>Transferable balance</InfoTitle>
-                    <InfoValue>9,900.000</InfoValue>
-                  </TransactionInfoRow>
-                </FromBlock>
-              </Row>
-              <TransactionAmount>
-                <AmountInputBlock>
-                  <AmountInputLabel>Number of tokens</AmountInputLabel>
-                  <AmountInput>{formatTokenValue(transferAmount)}</AmountInput>
-                </AmountInputBlock>
-                <AmountButtons>
-                  <AmountButton>Use half</AmountButton>
-                  <AmountButton>Use max</AmountButton>
-                </AmountButtons>
-              </TransactionAmount>
-              <Row>
-                <FormLabel>Destination account</FormLabel>
-                <ToBlock>
-                  <AccountInfo>
-                    <AccountPhoto>
-                      <Identicon size={40} theme={'beachball'} value={props.to.address} />
-                    </AccountPhoto>
-                    {/*<AccountType>Root account</AccountType>*/}
-                    <AccountName>{props.to.name}</AccountName>
-                    <AccountCopyAddress>
-                      <AccountAddress>{props.to.address}</AccountAddress>
-                      <AccountCopyButton />
-                    </AccountCopyAddress>
-                  </AccountInfo>
-                  <TransactionInfoRow>
-                    <InfoTitle>Total balance</InfoTitle>
-                    <InfoValue>9,900.000</InfoValue>
-                  </TransactionInfoRow>
-                </ToBlock>
-              </Row>
-            </ModalBody>
-            <ModalFooter>
-              <TransactionInfo>
-                <TransactionInfoRow>
-                  <InfoTitle>Amount:</InfoTitle>
-                  <InfoValue>9,900.000</InfoValue>
-                </TransactionInfoRow>
-                <TransactionInfoRow>
-                  <InfoTitle>Transaction fee:</InfoTitle>
-                  <InfoValue>2.000</InfoValue>
-                </TransactionInfoRow>
-              </TransactionInfo>
-              <ButtonPrimaryMedium onClick={signAndSend} disabled={isSending}>
-                {isSending ? 'Sending...' : 'Send'}
-              </ButtonPrimaryMedium>
-            </ModalFooter>
-          </Modal>
-        </ModalGlass>
-      )}
+      {isOpen && <TransferModal onClose={() => setIsOpen(false)} from={props.from} to={props.to} />}
     </>
   )
 }
@@ -150,65 +145,6 @@ const FormLabel = styled.div`
   line-height: 20px;
   margin-bottom: 8px;
   font-weight: 700;
-`
-
-const ModalGlass = styled.div`
-  display: grid;
-  grid-template-columns: minmax(80px, 1.2fr) minmax(max-content, 904px) minmax(60px, 1fr);
-  grid-template-rows: 1fr;
-  grid-template-areas: '. modal .';
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  padding-top: 136px;
-  background-color: ${Colors.Black[700.75]};
-  z-index: 100000;
-`
-
-const Modal = styled.section`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 76px auto 72px;
-  grid-template-areas:
-    'modalheader'
-    'modalbody'
-    'modalfooter';
-  grid-area: modal;
-  position: relative;
-  background-color: ${Colors.White};
-  width: 100%;
-  max-width: 904px;
-  height: min-content;
-  border-radius: ${BorderRad.s};
-  box-shadow: ${Shadows.common};
-`
-
-const ModalHeader = styled.header`
-  display: grid;
-  position: relative;
-  grid-auto-flow: column;
-  grid-area: modalheader;
-  justify-content: start;
-  align-items: center;
-  padding: 24px;
-  border-radius: 2px 2px 0px 0px;
-
-  ${ArrowOutsideStyles} {
-    width: 24px;
-    height: 24px;
-    margin-right: 12px;
-  }
-`
-
-const ModalBody = styled.div`
-  display: grid;
-  grid-area: modalbody;
-  grid-row-gap: 24px;
-  padding: 16px 24px 40px;
-  border-top: 1px solid ${Colors.Black[200]};
-  border-bottom: 1px solid ${Colors.Black[200]};
 `
 
 const Row = styled.div`
@@ -307,21 +243,6 @@ const AccountPhoto = styled.div`
   overflow: hidden;
 `
 
-// const AccountType = styled.p`
-//   display: flex;
-//   grid-area: accounttype;
-//   justify-content: center;
-//   width: fit-content;
-//   margin: 0;
-//   padding: 0 8px;
-//   font-size: 10px;
-//   line-height: 16px;
-//   border-radius: 8px;
-//   color: ${Colors.White};
-//   background-color: ${Colors.Blue[200]};
-//   text-transform: uppercase;
-// `
-
 const AccountName = styled.h5`
   grid-area: accountname;
   margin: 0;
@@ -350,18 +271,6 @@ const AccountAddress = styled.span`
 
 const AccountCopyButton = styled(CopyButton)`
   color: ${Colors.Black[400]};
-`
-
-const ModalFooter = styled.footer`
-  display: grid;
-  grid-area: modalfooter;
-  grid-template-rows: 1fr;
-  grid-template-columns: 1fr auto;
-  grid-column-gap: 46px;
-  justify-items: end;
-  align-items: center;
-  padding: 12px 16px;
-  border-radius: 0px 0px 2px 2px;
 `
 
 const TransactionInfo = styled.div`
@@ -393,11 +302,4 @@ const InfoValue = styled.span`
   position: relative;
   text-align: right;
   line-height: 20px;
-`
-
-const ModalTitle = styled.h4``
-
-const CloseButton = styled(Close)`
-  position: absolute;
-  right: 16px;
 `
