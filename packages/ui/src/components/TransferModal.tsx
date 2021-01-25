@@ -39,7 +39,7 @@ export function TransferModal({ from, to, onClose }: Props) {
     }
 
     await api.tx.balances
-      .transfer(to.address, amount)
+      .transfer(to.address, new BN(amount))
       .signAndSend(keyring.getPair(from.address), (result) => {
         const { status } = result
 

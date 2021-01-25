@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import { formatBalance } from '@polkadot/util'
 
-const decimals = 10
+const decimals = 12
 
 export const formatTokenValue = (value: BN | number) => {
   return formatBalance(new BN(value), {
