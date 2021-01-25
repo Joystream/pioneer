@@ -1,14 +1,13 @@
 import styled from 'styled-components'
 import { BorderRad, Colors } from '../constants'
-import { CopyButton } from './buttons/CopyButton'
 import { useApi } from '../hooks/useApi'
 import { useKeyring } from '../hooks/useKeyring'
 import React, { useState } from 'react'
 import { formatTokenValue, toChainTokenValue } from '../utils/formatters'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from './modal'
-import Identicon from '@polkadot/react-identicon'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
 import { Account } from '../hooks/types'
+import { AccountInfo } from './AccountInfo'
 
 interface Props {
   onClose: () => void
@@ -53,17 +52,7 @@ export function TransferModal({ from, to, onClose }: Props) {
         <Row>
           <FormLabel>From</FormLabel>
           <FromBlock>
-            <AccountInfo>
-              <AccountPhoto>
-                <Identicon size={40} theme={'beachball'} value={from.address} />
-              </AccountPhoto>
-              {/*<AccountType>Root account</AccountType>*/}
-              <AccountName>{from.name}</AccountName>
-              <AccountCopyAddress>
-                <AccountAddress>{from.address}</AccountAddress>
-                <AccountCopyButton />
-              </AccountCopyAddress>
-            </AccountInfo>
+            <AccountInfo account={from} />
             <TransactionInfoRow>
               <InfoTitle>Transferable balance</InfoTitle>
               <InfoValue>9,900.000</InfoValue>
@@ -83,17 +72,7 @@ export function TransferModal({ from, to, onClose }: Props) {
         <Row>
           <FormLabel>Destination account</FormLabel>
           <ToBlock>
-            <AccountInfo>
-              <AccountPhoto>
-                <Identicon size={40} theme={'beachball'} value={to.address} />
-              </AccountPhoto>
-              {/*<AccountType>Root account</AccountType>*/}
-              <AccountName>{to.name}</AccountName>
-              <AccountCopyAddress>
-                <AccountAddress>{to.address}</AccountAddress>
-                <AccountCopyButton />
-              </AccountCopyAddress>
-            </AccountInfo>
+            <AccountInfo account={to} />
             <TransactionInfoRow>
               <InfoTitle>Total balance</InfoTitle>
               <InfoValue>9,900.000</InfoValue>
@@ -185,58 +164,7 @@ const AmountButtons = styled.div`
   align-items: center;
 `
 const AmountButton = styled(ButtonSecondarySmall)``
-const AccountInfo = styled.div`
-  display: grid;
-  grid-template-columns: 40px 1fr;
-  grid-template-rows: min-content, 24px 18px;
-  grid-column-gap: 12px;
-  grid-template-areas:
-    'accountphoto accounttype'
-    'accountphoto accountname'
-    'accountphoto accountaddress';
-  align-items: center;
-  width: 100%;
-  justify-self: start;
-`
-const AccountPhoto = styled.div`
-  display: flex;
-  grid-area: accountphoto;
-  justify-content: flex-end;
-  align-items: center;
-  align-content: center;
-  align-self: center;
-  height: 40px;
-  width: 40px;
-  background-color: ${Colors.Blue[500]};
-  border-radius: ${BorderRad.full};
-  overflow: hidden;
-`
-const AccountName = styled.h5`
-  grid-area: accountname;
-  margin: 0;
-  padding: 0;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 700;
-  color: ${Colors.Black[900]};
-`
-const AccountCopyAddress = styled.div`
-  display: flex;
-  grid-area: accountaddress;
-  color: ${Colors.Black[400]};
-`
-const AccountAddress = styled.span`
-  max-width: 152px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 12px;
-  line-height: 18px;
-  color: ${Colors.Black[400]};
-`
-const AccountCopyButton = styled(CopyButton)`
-  color: ${Colors.Black[400]};
-`
+
 const TransactionInfo = styled.div`
   display: flex;
   flex-direction: column;
