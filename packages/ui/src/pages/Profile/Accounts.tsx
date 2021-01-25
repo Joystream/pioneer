@@ -10,11 +10,7 @@ import { BorderRad, Colors, Transitions } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
 import BN from 'bn.js'
-import { formatBalance } from '@polkadot/util'
-
-export function formatNumber(value: BN | number) {
-  return formatBalance(new BN(value), { decimals: 12, withUnit: 'JOY' })
-}
+import { formatTokenValue } from '../../utils/formatters'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -56,8 +52,8 @@ export function Accounts() {
                 <AccountBalance>
                   <Balance value={balances.map[account.address]?.total} />
                 </AccountBalance>
-                <AccountBalance>{formatNumber(0)}</AccountBalance>
-                <AccountBalance>{formatNumber(0)}</AccountBalance>
+                <AccountBalance>{formatTokenValue(0)}</AccountBalance>
+                <AccountBalance>{formatTokenValue(0)}</AccountBalance>
                 <AccountBalance>
                   <Balance value={balances.map[account.address]?.total} />
                 </AccountBalance>
@@ -84,7 +80,7 @@ interface Props {
 }
 
 export function Balance({ value }: Props) {
-  return <>{value ? formatNumber(value) : '-'}</>
+  return <>{value ? formatTokenValue(value) : '-'}</>
 }
 
 const MyProfile = styled.div`

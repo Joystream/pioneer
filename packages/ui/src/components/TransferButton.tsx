@@ -1,9 +1,7 @@
 import Identicon from '@polkadot/react-identicon'
-import { BN_TEN } from '@polkadot/util'
-import BN from 'bn.js'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { ButtonGhostMediumSquare } from './buttons/Buttons'
+import { ButtonGhostMedium, ButtonGhostMediumSquare } from './buttons/Buttons'
 import { Close } from '../components/buttons/CloseCross'
 import { CopyButton } from '../components/buttons/CopyButton'
 import { BorderRad, Colors, Shadows } from '../constants'
@@ -13,9 +11,7 @@ import { useKeyring } from '../hooks/useKeyring'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
 import { ArrowOutsideIcon, ArrowOutsideStyles } from './icons/ArrowOutsideIcon'
 import { CrossIcon } from './icons/CrossIcon'
-import { formatNumber } from '../pages/Profile/Accounts'
-
-const DECIMALS = new BN(12)
+import { formatTokenValue, toChainTokenValue } from '../utils/formatters'
 
 export function TransferButton(props: { from: Account; to: Account; address?: Account }) {
   const { api } = useApi()
@@ -23,10 +19,9 @@ export function TransferButton(props: { from: Account; to: Account; address?: Ac
   const [isOpen, setIsOpen] = useState(false)
   const [isSending, setIsSending] = useState(false)
 
-  const transferAmount = 1234
+  const transferAmount = toChainTokenValue(1234)
   const toAddress = props.to.address
 
-  const toChainValue = (number: number) => new BN(number).mul(BN_TEN.pow(DECIMALS))
   const onClose = () => {
     setIsSending(false)
     setIsOpen(false)
@@ -40,7 +35,7 @@ export function TransferButton(props: { from: Account; to: Account; address?: Ac
     }
 
     await api.tx.balances
-      .transfer(toAddress, toChainValue(transferAmount))
+      .transfer(toAddress, transferAmount)
       .signAndSend(keyring.getPair(props.from.address), (result) => {
         const { status } = result
 
@@ -94,7 +89,7 @@ export function TransferButton(props: { from: Account; to: Account; address?: Ac
               <TransactionAmount>
                 <AmountInputBlock>
                   <AmountInputLabel>Number of tokens</AmountInputLabel>
-                  <AmountInput>{formatNumber(toChainValue(transferAmount))}</AmountInput>
+                  <AmountInput>{formatTokenValue(transferAmount)}</AmountInput>
                 </AmountInputBlock>
                 <AmountButtons>
                   <AmountButton>Use half</AmountButton>
