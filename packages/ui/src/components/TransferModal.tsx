@@ -19,10 +19,9 @@ interface Props {
 export function TransferModal({ from, to, onClose }: Props) {
   const { api } = useApi()
   const { keyring } = useKeyring()
-  const [isSending, setIsSending] = useState(false)
   const balances = useBalances([from, to])
-
-  const transferAmount = toChainTokenValue(1234)
+  const [isSending, setIsSending] = useState(false)
+  const [amount, setAmount] = useState(0)
 
   const signAndSend = async () => {
     setIsSending(true)
@@ -32,7 +31,7 @@ export function TransferModal({ from, to, onClose }: Props) {
     }
 
     await api.tx.balances
-      .transfer(to.address, transferAmount)
+      .transfer(to.address, toChainTokenValue(amount))
       .signAndSend(keyring.getPair(from.address), (result) => {
         const { status } = result
 
@@ -64,7 +63,7 @@ export function TransferModal({ from, to, onClose }: Props) {
         <TransactionAmount>
           <AmountInputBlock>
             <AmountInputLabel>Number of tokens</AmountInputLabel>
-            <AmountInput>{formatTokenValue(transferAmount)}</AmountInput>
+            <AmountInput value={amount} onChange={(event) => setAmount(event.target.valueAsNumber)} type={'number'} />
           </AmountInputBlock>
           <AmountButtons>
             <AmountButton>Use half</AmountButton>
@@ -86,11 +85,11 @@ export function TransferModal({ from, to, onClose }: Props) {
         <TransactionInfo>
           <TransactionInfoRow>
             <InfoTitle>Amount:</InfoTitle>
-            <InfoValue>9,900.000</InfoValue>
+            <InfoValue>{formatTokenValue(0)}</InfoValue>
           </TransactionInfoRow>
           <TransactionInfoRow>
             <InfoTitle>Transaction fee:</InfoTitle>
-            <InfoValue>2.000</InfoValue>
+            <InfoValue>{formatTokenValue(0)}</InfoValue>
           </TransactionInfoRow>
         </TransactionInfo>
         <ButtonPrimaryMedium onClick={signAndSend} disabled={isSending}>
@@ -145,7 +144,7 @@ const AmountInputLabel = styled.span`
   font-weight: 700;
   color: ${Colors.Black[900]};
 `
-const AmountInput = styled.div`
+const AmountInput = styled.input`
   display: flex;
   justify-content: flex-end;
   align-items: center;
