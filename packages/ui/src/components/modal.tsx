@@ -18,7 +18,7 @@ export function ModalHeader({ onClick, title }: { onClick: () => void; title: st
 }
 
 interface ModalProps {
-  children: ReactNode[]
+  children: ReactNode
 }
 
 export const Modal = ({ children }: ModalProps) => {

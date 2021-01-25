@@ -1,16 +1,16 @@
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import BN from 'bn.js'
 import { BorderRad, Colors } from '../constants'
 import { useApi } from '../hooks/useApi'
+import { useBalances } from '../hooks/useBalances'
+import { useNumberInput } from '../hooks/useNumberInput'
 import { useKeyring } from '../hooks/useKeyring'
-import React, { useState } from 'react'
+import { Account } from '../hooks/types'
 import { formatTokenValue } from '../utils/formatters'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from './modal'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
-import { Account } from '../hooks/types'
 import { AccountInfo } from './AccountInfo'
-import { useBalances } from '../hooks/useBalances'
-import { useNumberInput } from '../hooks/useNumberInput'
-import BN from 'bn.js'
 
 interface Props {
   onClose: () => void
@@ -25,12 +25,21 @@ export function TransferModal({ from, to, onClose }: Props) {
   const [isSending, setIsSending] = useState(false)
   const [amount, setAmount] = useNumberInput(0)
 
-  const isSendDisabled = isSending || new BN(amount).lte(new BN(0))
+  if (!balances.hasBalances)
+    return (
+      <Modal>
+        <ModalBody>Loading balances...</ModalBody>
+      </Modal>
+    )
 
   const transferableBalance = balances?.map[from.address]?.total
+
+  const isOverBalance = new BN(amount).gt(transferableBalance)
+  const isZero = new BN(amount).lte(new BN(0))
+  const isSendDisabled = isSending || isZero || isOverBalance
+
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
-
   const signAndSend = async () => {
     setIsSending(true)
 
@@ -71,7 +80,7 @@ export function TransferModal({ from, to, onClose }: Props) {
         <TransactionAmount>
           <AmountInputBlock>
             <AmountInputLabel>Number of tokens</AmountInputLabel>
-            <AmountInput value={amount} onChange={(event) => setAmount(event.target.value)} />
+            <AmountInput value={amount} onChange={(event) => setAmount(event.target.value)} placeholder={'0'} />
           </AmountInputBlock>
           <AmountButtons>
             <AmountButton onClick={setHalf}>Use half</AmountButton>
