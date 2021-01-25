@@ -12,6 +12,10 @@ import { useBalances } from '../../hooks/useBalances'
 import BN from 'bn.js'
 import { formatBalance } from '@polkadot/util'
 
+export function formatNumber(value: BN | number) {
+  return formatBalance(new BN(value), { decimals: 12, withUnit: 'JOY' })
+}
+
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
   const balances = useBalances(allAccounts)
@@ -52,8 +56,8 @@ export function Accounts() {
                 <AccountBalance>
                   <Balance value={balances.map[account.address]?.total} />
                 </AccountBalance>
-                <AccountBalance>0 Unit</AccountBalance>
-                <AccountBalance>0 Unit</AccountBalance>
+                <AccountBalance>{formatNumber(0)}</AccountBalance>
+                <AccountBalance>{formatNumber(0)}</AccountBalance>
                 <AccountBalance>
                   <Balance value={balances.map[account.address]?.total} />
                 </AccountBalance>
@@ -79,8 +83,8 @@ interface Props {
   value: BN | undefined
 }
 
-function Balance({ value }: Props) {
-  return <>{value ? formatBalance(value, { decimals: 12, withUnit: 'JOY' }) : '-'}</>
+export function Balance({ value }: Props) {
+  return <>{value ? formatNumber(value) : '-'}</>
 }
 
 const MyProfile = styled.div`
