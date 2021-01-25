@@ -9,6 +9,7 @@ import { ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
 import { Account } from '../hooks/types'
 import { AccountInfo } from './AccountInfo'
 import { useBalances } from '../hooks/useBalances'
+import { useNumberInput } from '../hooks/useNumberInput'
 
 interface Props {
   onClose: () => void
@@ -21,7 +22,10 @@ export function TransferModal({ from, to, onClose }: Props) {
   const { keyring } = useKeyring()
   const balances = useBalances([from, to])
   const [isSending, setIsSending] = useState(false)
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useNumberInput(0)
+
+  const amountAsNumber = parseInt(amount)
+  const isSendDisabled = isSending || amountAsNumber <= 0
 
   const signAndSend = async () => {
     setIsSending(true)
@@ -31,7 +35,7 @@ export function TransferModal({ from, to, onClose }: Props) {
     }
 
     await api.tx.balances
-      .transfer(to.address, toChainTokenValue(amount))
+      .transfer(to.address, toChainTokenValue(amountAsNumber))
       .signAndSend(keyring.getPair(from.address), (result) => {
         const { status } = result
 
@@ -63,7 +67,7 @@ export function TransferModal({ from, to, onClose }: Props) {
         <TransactionAmount>
           <AmountInputBlock>
             <AmountInputLabel>Number of tokens</AmountInputLabel>
-            <AmountInput value={amount} onChange={(event) => setAmount(event.target.valueAsNumber)} type={'number'} />
+            <AmountInput value={amount} onChange={(event) => setAmount(event.target.value)} />
           </AmountInputBlock>
           <AmountButtons>
             <AmountButton>Use half</AmountButton>
@@ -92,7 +96,7 @@ export function TransferModal({ from, to, onClose }: Props) {
             <InfoValue>{formatTokenValue(0)}</InfoValue>
           </TransactionInfoRow>
         </TransactionInfo>
-        <ButtonPrimaryMedium onClick={signAndSend} disabled={isSending}>
+        <ButtonPrimaryMedium onClick={signAndSend} disabled={isSendDisabled}>
           {isSending ? 'Sending...' : 'Send'}
         </ButtonPrimaryMedium>
       </ModalFooter>
