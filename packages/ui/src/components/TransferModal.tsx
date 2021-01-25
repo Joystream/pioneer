@@ -3,13 +3,14 @@ import { BorderRad, Colors } from '../constants'
 import { useApi } from '../hooks/useApi'
 import { useKeyring } from '../hooks/useKeyring'
 import React, { useState } from 'react'
-import { formatTokenValue, toChainTokenValue } from '../utils/formatters'
+import { formatTokenValue } from '../utils/formatters'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from './modal'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
 import { Account } from '../hooks/types'
 import { AccountInfo } from './AccountInfo'
 import { useBalances } from '../hooks/useBalances'
 import { useNumberInput } from '../hooks/useNumberInput'
+import BN from 'bn.js'
 
 interface Props {
   onClose: () => void
@@ -24,8 +25,11 @@ export function TransferModal({ from, to, onClose }: Props) {
   const [isSending, setIsSending] = useState(false)
   const [amount, setAmount] = useNumberInput(0)
 
-  const amountAsNumber = parseInt(amount)
-  const isSendDisabled = isSending || amountAsNumber <= 0
+  const isSendDisabled = isSending || new BN(amount).lte(new BN(0))
+
+  const transferableBalance = balances?.map[from.address]?.total
+  const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
+  const setMax = () => setAmount(transferableBalance.toString())
 
   const signAndSend = async () => {
     setIsSending(true)
@@ -35,7 +39,7 @@ export function TransferModal({ from, to, onClose }: Props) {
     }
 
     await api.tx.balances
-      .transfer(to.address, toChainTokenValue(amountAsNumber))
+      .transfer(to.address, amount)
       .signAndSend(keyring.getPair(from.address), (result) => {
         const { status } = result
 
@@ -60,7 +64,7 @@ export function TransferModal({ from, to, onClose }: Props) {
             <AccountInfo account={from} />
             <TransactionInfoRow>
               <InfoTitle>Transferable balance</InfoTitle>
-              <InfoValue>{formatTokenValue(balances?.map[from.address]?.total)}</InfoValue>
+              <InfoValue>{formatTokenValue(transferableBalance)}</InfoValue>
             </TransactionInfoRow>
           </FromBlock>
         </Row>
@@ -70,8 +74,8 @@ export function TransferModal({ from, to, onClose }: Props) {
             <AmountInput value={amount} onChange={(event) => setAmount(event.target.value)} />
           </AmountInputBlock>
           <AmountButtons>
-            <AmountButton>Use half</AmountButton>
-            <AmountButton>Use max</AmountButton>
+            <AmountButton onClick={setHalf}>Use half</AmountButton>
+            <AmountButton onClick={setMax}>Use max</AmountButton>
           </AmountButtons>
         </TransactionAmount>
         <Row>

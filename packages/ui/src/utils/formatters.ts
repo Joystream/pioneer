@@ -1,7 +1,7 @@
 import BN from 'bn.js'
-import { BN_TEN, formatBalance } from '@polkadot/util'
+import { formatBalance } from '@polkadot/util'
 
-const decimals = 12
+const decimals = 10
 
 export const formatTokenValue = (value: BN | number) => {
   return formatBalance(new BN(value), {
@@ -9,7 +9,3 @@ export const formatTokenValue = (value: BN | number) => {
     withUnit: 'JOY',
   })
 }
-
-const pow = BN_TEN.pow(new BN(decimals))
-
-export const toChainTokenValue = (number: number) => new BN(number).mul(pow)
