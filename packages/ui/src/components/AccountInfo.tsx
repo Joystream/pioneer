@@ -1,7 +1,7 @@
-import { Account } from '../hooks/types'
 import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
+import { Account } from '../hooks/types'
 import { BorderRad, Colors } from '../constants'
 import { CopyButton } from './buttons/CopyButton'
 
