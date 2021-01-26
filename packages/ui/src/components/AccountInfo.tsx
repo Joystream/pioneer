@@ -11,7 +11,6 @@ export const AccountInfo = ({ account }: { account: Account }) => {
       <AccountPhoto>
         <Identicon size={40} theme={'beachball'} value={account.address} />
       </AccountPhoto>
-      {/*<AccountType>Root account</AccountType>*/}
       <AccountName>{account.name}</AccountName>
       <AccountCopyAddress>
         <AccountAddress>{account.address}</AccountAddress>
@@ -72,18 +71,3 @@ const AccountAddress = styled.span`
 const AccountCopyButton = styled(CopyButton)`
   color: ${Colors.Black[400]};
 `
-
-// const AccountType = styled.p`
-//   display: flex;
-//   grid-area: accounttype;
-//   justify-content: center;
-//   width: fit-content;
-//   margin: 0;
-//   padding: 0 8px;
-//   font-size: 10px;
-//   line-height: 16px;
-//   border-radius: 8px;
-//   color: ${Colors.White};
-//   background-color: ${Colors.Blue[200]};
-//   text-transform: uppercase;
-// `
