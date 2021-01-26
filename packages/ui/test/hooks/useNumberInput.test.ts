@@ -5,13 +5,13 @@ import { useNumberInput } from '../../src/hooks/useNumberInput'
 describe('useNumberInput', () => {
   function render() {
     let decimals = 18
-    const result = renderHook(() => useNumberInput(decimals))
+    const { rerender, result } = renderHook(() => useNumberInput(decimals))
     return {
-      getValue: () => result.result.current[0],
-      setValue: (value: string) => act(() => result.result.current[1](value)),
+      getValue: () => result.current[0],
+      setValue: (value: string) => act(() => result.current[1](value)),
       setDecimals: (value: number) => {
         decimals = value
-        result.rerender()
+        rerender()
       },
     }
   }

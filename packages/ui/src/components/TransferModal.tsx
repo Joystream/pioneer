@@ -25,12 +25,13 @@ export function TransferModal({ from, to, onClose }: Props) {
   const [isSending, setIsSending] = useState(false)
   const [amount, setAmount] = useNumberInput(0)
 
-  if (!balances.hasBalances)
+  if (!balances.hasBalances) {
     return (
       <Modal>
         <ModalBody>Loading balances...</ModalBody>
       </Modal>
     )
+  }
 
   const transferableBalance = balances?.map[from.address]?.total
 
