@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
+import { types } from '@joystream/types'
 import { ApiContext } from './context'
 
 interface Props {
@@ -20,7 +21,7 @@ export const ApiContextProvider = (props: Props) => {
 
   useEffect(() => {
     const provider = new WsProvider('ws://127.0.0.1:9944/')
-    const apiPromise = new ApiPromise({ provider, rpc: jsonrpc })
+    const apiPromise = new ApiPromise({ provider, rpc: jsonrpc, types: (types as unknown) as any })
 
     apiPromise.on('connected', () => {
       apiPromise.isReady.then(() => setApiState('CONNECTED'))

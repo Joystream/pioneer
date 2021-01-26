@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { AccountInfo } from '@polkadot/types/interfaces'
 import { useApi } from './useApi'
 import { Account, Address } from './types'
 import BN from 'bn.js'
+import { AccountInfo } from '@polkadot/types/interfaces'
 
 interface Balance {
   total: BN
@@ -29,9 +29,10 @@ export function useBalances(accounts: Account[]): UseBalances {
       const addresses = accounts.map((account) => account.address)
 
       api.query.system.account
-        .multi<AccountInfo>(addresses, (balances) => {
+        .multi(addresses, (balances) => {
           const balancesMap = addresses.reduce((acc, address, index) => {
-            const free = balances[index].data.free
+            const accountInfo = (balances[index] as unknown) as AccountInfo
+            const free = accountInfo.data.free
 
             return {
               ...acc,
