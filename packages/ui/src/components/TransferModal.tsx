@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import BN from 'bn.js'
 import { BorderRad, Colors } from '../constants'
@@ -41,6 +41,7 @@ export function TransferModal({ from, to, onClose }: Props) {
   const isOverBalance = new BN(amount).gt(transferableBalance)
   const isZero = new BN(amount).lte(new BN(0))
   const isTransferDisabled = isSending || isZero || isOverBalance
+  const title = step === 'SIGN_TRANSACTION' ? 'Authorize transaction' : 'Send tokens'
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
@@ -69,38 +70,67 @@ export function TransferModal({ from, to, onClose }: Props) {
 
   return (
     <Modal>
-      <ModalHeader onClick={onClose} title="Send tokens" />
+      <ModalHeader onClick={onClose} title={title} />
       <ModalBody>
-        <Row>
-          <FormLabel>From</FormLabel>
-          <FromBlock>
-            <AccountInfo account={from} />
-            <TransactionInfoRow>
-              <InfoTitle>Transferable balance</InfoTitle>
-              <InfoValue>{formatTokenValue(transferableBalance)}</InfoValue>
-            </TransactionInfoRow>
-          </FromBlock>
-        </Row>
-        <TransactionAmount>
-          <AmountInputBlock>
-            <AmountInputLabel>Number of tokens</AmountInputLabel>
-            <AmountInput value={amount} onChange={(event) => setAmount(event.target.value)} placeholder={'0'} />
-          </AmountInputBlock>
-          <AmountButtons>
-            <AmountButton onClick={setHalf}>Use half</AmountButton>
-            <AmountButton onClick={setMax}>Use max</AmountButton>
-          </AmountButtons>
-        </TransactionAmount>
-        <Row>
-          <FormLabel>Destination account</FormLabel>
-          <ToBlock>
-            <AccountInfo account={to} />
-            <TransactionInfoRow>
-              <InfoTitle>Total balance</InfoTitle>
-              <InfoValue>{formatTokenValue(balances?.map[to.address]?.total)}</InfoValue>
-            </TransactionInfoRow>
-          </ToBlock>
-        </Row>
+        {step === 'SEND_TOKENS' && (
+          <>
+            <Row>
+              <FormLabel>From</FormLabel>
+              <LockedAccount>
+                <AccountInfo account={from} />
+                <TransactionInfoRow>
+                  <InfoTitle>Transferable balance</InfoTitle>
+                  <InfoValue>{formatTokenValue(transferableBalance)}</InfoValue>
+                </TransactionInfoRow>
+              </LockedAccount>
+            </Row>
+            <TransactionAmount>
+              <AmountInputBlock>
+                <AmountInputLabel>Number of tokens</AmountInputLabel>
+                <AmountInput value={amount} onChange={(event) => setAmount(event.target.value)} placeholder={'0'} />
+              </AmountInputBlock>
+              <AmountButtons>
+                <AmountButton onClick={setHalf}>Use half</AmountButton>
+                <AmountButton onClick={setMax}>Use max</AmountButton>
+              </AmountButtons>
+            </TransactionAmount>
+            <Row>
+              <FormLabel>Destination account</FormLabel>
+              <AccountRow>
+                <AccountInfo account={to} />
+                <TransactionInfoRow>
+                  <InfoTitle>Total balance</InfoTitle>
+                  <InfoValue>{formatTokenValue(balances?.map[to.address]?.total)}</InfoValue>
+                </TransactionInfoRow>
+              </AccountRow>
+            </Row>
+          </>
+        )}
+        {step === 'SIGN_TRANSACTION' && (
+          <>
+            <Row>
+              <FormLabel>From</FormLabel>
+              <AccountRow>
+                <AccountInfo account={from} />
+                <TransactionInfoRow>
+                  <InfoTitle>Transferable balance</InfoTitle>
+                  <InfoValue>{formatTokenValue(transferableBalance)}</InfoValue>
+                </TransactionInfoRow>
+              </AccountRow>
+            </Row>
+            <TransactionAmount>Transferring {formatTokenValue(new BN(amount))}</TransactionAmount>
+            <Row>
+              <FormLabel>Destination account</FormLabel>
+              <AccountRow>
+                <AccountInfo account={to} />
+                <TransactionInfoRow>
+                  <InfoTitle>Total balance</InfoTitle>
+                  <InfoValue>{formatTokenValue(balances?.map[to.address]?.total)}</InfoValue>
+                </TransactionInfoRow>
+              </AccountRow>
+            </Row>
+          </>
+        )}
       </ModalBody>
       <ModalFooter>
         {step === 'SIGN_TRANSACTION' && (
@@ -108,7 +138,7 @@ export function TransferModal({ from, to, onClose }: Props) {
             <TransactionInfo>
               <TransactionInfoRow>
                 <InfoTitle>Amount:</InfoTitle>
-                <InfoValue>{formatTokenValue(0)}</InfoValue>
+                <InfoValue>{formatTokenValue(new BN(amount))}</InfoValue>
               </TransactionInfoRow>
               <TransactionInfoRow>
                 <InfoTitle>Transaction fee:</InfoTitle>
@@ -117,9 +147,14 @@ export function TransferModal({ from, to, onClose }: Props) {
             </TransactionInfo>
           </>
         )}
-        <ButtonPrimaryMedium onClick={signAndSend} disabled={isTransferDisabled}>
-          Transfer tokens
-        </ButtonPrimaryMedium>
+        {step === 'SEND_TOKENS' && (
+          <ButtonPrimaryMedium onClick={() => setStep('SIGN_TRANSACTION')} disabled={isTransferDisabled}>
+            Transfer tokens
+          </ButtonPrimaryMedium>
+        )}
+        {step === 'SIGN_TRANSACTION' && (
+          <ButtonPrimaryMedium onClick={signAndSend}>Sign transaction and Transfer </ButtonPrimaryMedium>
+        )}
       </ModalFooter>
     </Modal>
   )
@@ -137,7 +172,7 @@ const Row = styled.div`
   width: 100%;
   height: auto;
 `
-const FromBlock = styled.div`
+const AccountRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
@@ -146,11 +181,12 @@ const FromBlock = styled.div`
   padding: 16px 132px 16px 14px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
-  background-color: ${Colors.Black[50]};
-`
-const ToBlock = styled(FromBlock)`
   background-color: ${Colors.White};
 `
+const LockedAccount = styled(AccountRow)`
+  background-color: ${Colors.Black[50]};
+`
+
 const TransactionAmount = styled.div`
   display: grid;
   grid-template-columns: 284px auto;
