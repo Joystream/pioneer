@@ -22,10 +22,7 @@ function stripLeadingZeroes(value: string) {
   if (value === '') {
     return value
   }
-  const leadingZeroes = value.match(/^0*/)?.[0].length
-  if (leadingZeroes) {
-    value = value.substring(leadingZeroes)
-  }
+  value = value.replace(/^0*/, '')
   if (value.startsWith('.') || value === '') {
     value = '0' + value
   }
