@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import BN from 'bn.js'
 import { BorderRad, Colors } from '../constants'
@@ -18,12 +18,15 @@ interface Props {
   to: Account
 }
 
+type ModalState = 'SEND_TOKENS' | 'SIGN_TRANSACTION' | 'SENDING'
+
 export function TransferModal({ from, to, onClose }: Props) {
   const { api } = useApi()
   const { keyring } = useKeyring()
   const balances = useBalances([from, to])
   const [isSending, setIsSending] = useState(false)
   const [amount, setAmount] = useNumberInput(0)
+  const [step, setStep] = useState<ModalState>('SEND_TOKENS')
 
   if (!balances.hasBalances) {
     return (
@@ -37,7 +40,7 @@ export function TransferModal({ from, to, onClose }: Props) {
 
   const isOverBalance = new BN(amount).gt(transferableBalance)
   const isZero = new BN(amount).lte(new BN(0))
-  const isSendDisabled = isSending || isZero || isOverBalance
+  const isTransferDisabled = isSending || isZero || isOverBalance
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
@@ -100,18 +103,22 @@ export function TransferModal({ from, to, onClose }: Props) {
         </Row>
       </ModalBody>
       <ModalFooter>
-        <TransactionInfo>
-          <TransactionInfoRow>
-            <InfoTitle>Amount:</InfoTitle>
-            <InfoValue>{formatTokenValue(0)}</InfoValue>
-          </TransactionInfoRow>
-          <TransactionInfoRow>
-            <InfoTitle>Transaction fee:</InfoTitle>
-            <InfoValue>{formatTokenValue(0)}</InfoValue>
-          </TransactionInfoRow>
-        </TransactionInfo>
-        <ButtonPrimaryMedium onClick={signAndSend} disabled={isSendDisabled}>
-          {isSending ? 'Sending...' : 'Send'}
+        {step === 'SIGN_TRANSACTION' && (
+          <>
+            <TransactionInfo>
+              <TransactionInfoRow>
+                <InfoTitle>Amount:</InfoTitle>
+                <InfoValue>{formatTokenValue(0)}</InfoValue>
+              </TransactionInfoRow>
+              <TransactionInfoRow>
+                <InfoTitle>Transaction fee:</InfoTitle>
+                <InfoValue>{formatTokenValue(0)}</InfoValue>
+              </TransactionInfoRow>
+            </TransactionInfo>
+          </>
+        )}
+        <ButtonPrimaryMedium onClick={signAndSend} disabled={isTransferDisabled}>
+          Transfer tokens
         </ButtonPrimaryMedium>
       </ModalFooter>
     </Modal>
