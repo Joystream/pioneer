@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ButtonPrimarySquare } from '../../components/buttons/Buttons'
 import { TransferIcon } from '../../components/icons/TransferIcon'
-import { BorderRad, Colors, Transitions } from '../../constants/styles'
+import { BorderRad, Colors, Transitions } from '../../constants'
 
 export function ProfileComponent() {
   return (
@@ -12,7 +12,7 @@ export function ProfileComponent() {
         <MemberName>Alice</MemberName>
         <MemberPhoto />
         <MemberRoles>
-          <MemberRole></MemberRole>
+          <MemberRole />
         </MemberRoles>
       </MemberAccount>
       <MemberBalance>
