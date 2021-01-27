@@ -21,7 +21,7 @@ export const ApiContextProvider = (props: Props) => {
 
   useEffect(() => {
     const provider = new WsProvider('ws://127.0.0.1:9944/')
-    const apiPromise = new ApiPromise({ provider, rpc: jsonrpc, types: (types as unknown) as any })
+    const apiPromise = new ApiPromise({ provider, rpc: jsonrpc, types })
 
     apiPromise.on('connected', () => {
       apiPromise.isReady.then(() => setApiState('CONNECTED'))

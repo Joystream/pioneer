@@ -29,9 +29,9 @@ export function useBalances(accounts: Account[]): UseBalances {
       const addresses = accounts.map((account) => account.address)
 
       api.query.system.account
-        .multi(addresses, (balances) => {
+        .multi<AccountInfo>(addresses, (balances) => {
           const balancesMap = addresses.reduce((acc, address, index) => {
-            const accountInfo = (balances[index] as unknown) as AccountInfo
+            const accountInfo = balances[index]
             const free = accountInfo.data.free
 
             return {
