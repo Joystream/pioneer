@@ -12,7 +12,6 @@ import { Accounts } from '../../src/pages/Profile/Accounts'
 import { Account } from '../../src/hooks/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import BN from 'bn.js'
-import { BN_TEN } from '@polkadot/util'
 
 describe('UI: Accounts list', () => {
   let accounts: {
@@ -20,7 +19,7 @@ describe('UI: Accounts list', () => {
     allAccounts: Account[]
   }
   let alice: string
-  const JOY_1 = new BN(1).mul(BN_TEN.pow(new BN(12)))
+  const JOY_1 = new BN(1)
 
   before(cryptoWaitReady)
 
