@@ -237,6 +237,7 @@ const AmountInput = styled.input`
   font-size: 14px;
   line-height: 20px;
   font-weight: 700;
+  text-align: right;
 `
 const AmountButtons = styled.div`
   display: inline-grid;
