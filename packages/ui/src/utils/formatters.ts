@@ -1,8 +1,7 @@
 import BN from 'bn.js'
-import { formatBalance } from '@polkadot/util'
+
+const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
 
 export const formatTokenValue = (value: BN | number | undefined) => {
-  return formatBalance(new BN(value || 0), {
-    withUnit: false,
-  })
+  return new BN(value || 0).toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')
 }
