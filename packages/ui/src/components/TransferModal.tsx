@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import BN from 'bn.js'
 import { BorderRad, Colors } from '../constants'
@@ -30,6 +30,14 @@ export function TransferModal({ from, to, onClose }: Props) {
   const [step, setStep] = useState<ModalState>('SEND_TOKENS')
   const [info, setInfo] = useState<RuntimeDispatchInfo | null>(null)
 
+  const submittableExtrinsic = api?.tx.balances.transfer(to.address, new BN(amount))
+
+  useEffect(() => {
+    submittableExtrinsic?.paymentInfo(from.address).then((info) => {
+      setInfo(info)
+    })
+  }, [api, amount])
+
   if (!balances.hasBalances) {
     return (
       <Modal>
@@ -44,12 +52,6 @@ export function TransferModal({ from, to, onClose }: Props) {
   const isZero = new BN(amount).lte(new BN(0))
   const isTransferDisabled = isSending || isZero || isOverBalance
   const title = step === 'SIGN_TRANSACTION' ? 'Authorize transaction' : 'Send tokens'
-  const submittableExtrinsic = api?.tx.balances.transfer(to.address, new BN(amount))
-
-  submittableExtrinsic?.paymentInfo(from.address).then((info) => {
-    console.log(info)
-    setInfo(info)
-  })
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
@@ -174,7 +176,9 @@ export function TransferModal({ from, to, onClose }: Props) {
           </ButtonPrimaryMedium>
         )}
         {step === 'SIGN_TRANSACTION' && (
-          <ButtonPrimaryMedium onClick={signAndSend}>Sign transaction and Transfer </ButtonPrimaryMedium>
+          <ButtonPrimaryMedium onClick={signAndSend} disabled={isTransferDisabled}>
+            Sign transaction and Transfer
+          </ButtonPrimaryMedium>
         )}
       </ModalFooter>
     </Modal>
