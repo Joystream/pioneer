@@ -91,7 +91,7 @@ describe('UI: Accounts list', () => {
       expect(aliceBox?.nextSibling?.textContent).to.equal('1\xa0JOY')
     })
 
-    it.skip('Renders token transfer button', async () => {
+    it.skip('Renders token TransferModal button', async () => {
       balances.map[alice] = {
         total: JOY_1,
       }

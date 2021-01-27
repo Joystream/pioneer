@@ -4,7 +4,7 @@ import { ButtonGhostMediumSquare } from './buttons/Buttons'
 import { Colors } from '../constants'
 import { Account } from '../hooks/types'
 import { ArrowOutsideIcon } from './icons/ArrowOutsideIcon'
-import { TransferModal } from './TransferModal'
+import { TransferModal } from '../modals/TransferModal/TransferModal'
 
 interface Props {
   from: Account

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import BN from 'bn.js'
-import { BorderRad, Colors } from '../constants'
-import { useBalances } from '../hooks/useBalances'
-import { Account } from '../hooks/types'
-import { Modal, ModalBody, ModalHeader } from './modal'
-import { SignTransferModal } from './transfer/SignTransferModal'
-import { TransferDetailsModal } from './transfer/TransferDetailsModal'
+import { BorderRad, Colors } from '../../constants'
+import { useBalances } from '../../hooks/useBalances'
+import { Account } from '../../hooks/types'
+import { Modal, ModalBody, ModalHeader } from '../../components/modal'
+import { SignTransferModal } from './SignTransferModal'
+import { TransferDetailsModal } from './TransferDetailsModal'
 
 interface Props {
   onClose: () => void

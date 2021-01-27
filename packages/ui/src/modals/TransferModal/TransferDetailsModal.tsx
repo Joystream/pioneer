@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import { useBalances } from '../../hooks/useBalances'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { Account } from '../../hooks/types'
-import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../buttons/Buttons'
+import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons/Buttons'
 import { BorderRad, Colors } from '../../constants'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../modal'
-import { AccountInfo } from '../AccountInfo'
-import { TokenValue } from '../TokenValue'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
+import { AccountInfo } from '../../components/AccountInfo'
+import { TokenValue } from '../../components/TokenValue'
 import {
   AccountRow,
   AmountInputBlock,
@@ -19,7 +19,7 @@ import {
   Row,
   TransactionAmount,
   TransactionInfoRow,
-} from '../TransferModal'
+} from './TransferModal'
 
 interface Props {
   from: Account

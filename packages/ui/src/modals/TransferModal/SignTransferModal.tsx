@@ -5,10 +5,10 @@ import { useApi } from '../../hooks/useApi'
 import { useKeyring } from '../../hooks/useKeyring'
 import { useBalances } from '../../hooks/useBalances'
 import { Account } from '../../hooks/types'
-import { ButtonPrimaryMedium } from '../buttons/Buttons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../modal'
-import { AccountInfo } from '../AccountInfo'
-import { TokenValue } from '../TokenValue'
+import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
+import { AccountInfo } from '../../components/AccountInfo'
+import { TokenValue } from '../../components/TokenValue'
 import {
   AccountRow,
   FormLabel,
@@ -18,7 +18,7 @@ import {
   TransactionAmount,
   TransactionInfo,
   TransactionInfoRow,
-} from '../TransferModal'
+} from './TransferModal'
 
 interface Props {
   onClose: () => void
