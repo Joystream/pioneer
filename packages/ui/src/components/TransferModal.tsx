@@ -11,6 +11,7 @@ import { formatTokenValue } from '../utils/formatters'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from './modal'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
 import { AccountInfo } from './AccountInfo'
+import { RuntimeDispatchInfo } from '@polkadot/types/interfaces'
 
 interface Props {
   onClose: () => void
@@ -27,6 +28,7 @@ export function TransferModal({ from, to, onClose }: Props) {
   const [isSending, setIsSending] = useState(false)
   const [amount, setAmount] = useNumberInput(0)
   const [step, setStep] = useState<ModalState>('SEND_TOKENS')
+  const [info, setInfo] = useState<RuntimeDispatchInfo | null>(null)
 
   if (!balances.hasBalances) {
     return (
@@ -42,18 +44,23 @@ export function TransferModal({ from, to, onClose }: Props) {
   const isZero = new BN(amount).lte(new BN(0))
   const isTransferDisabled = isSending || isZero || isOverBalance
   const title = step === 'SIGN_TRANSACTION' ? 'Authorize transaction' : 'Send tokens'
+  const submittableExtrinsic = api?.tx.balances.transfer(to.address, new BN(amount))
+
+  submittableExtrinsic?.paymentInfo(from.address).then((info) => {
+    console.log(info)
+    setInfo(info)
+  })
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
   const signAndSend = async () => {
     setIsSending(true)
 
-    if (!api || !keyring) {
+    if (!submittableExtrinsic) {
       return
     }
 
-    await api.tx.balances
-      .transfer(to.address, new BN(amount))
+    await submittableExtrinsic
       .signAndSend(keyring.getPair(from.address), (result) => {
         const { status } = result
 
@@ -142,7 +149,7 @@ export function TransferModal({ from, to, onClose }: Props) {
               </TransactionInfoRow>
               <TransactionInfoRow>
                 <InfoTitle>Transaction fee:</InfoTitle>
-                <InfoValue>{formatTokenValue(0)}</InfoValue>
+                <InfoValue>{formatTokenValue(info?.partialFee.toBn() || 0)}</InfoValue>
               </TransactionInfoRow>
             </TransactionInfo>
           </>
