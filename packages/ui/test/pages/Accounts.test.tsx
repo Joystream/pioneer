@@ -1,5 +1,5 @@
 import React from 'react'
-import { Keyring } from '@polkadot/ui-keyring'
+import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cleanup, render } from '@testing-library/react'
 import { expect } from 'chai'
 import sinon from 'sinon'

@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect } from 'react'
-import keyring from '@polkadot/ui-keyring'
+import keyring from '@polkadot/ui-keyring/Keyring'
 import { KeyringContext } from './context'
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp'
 
