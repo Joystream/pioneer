@@ -7,11 +7,11 @@ import { useBalances } from '../hooks/useBalances'
 import { useNumberInput } from '../hooks/useNumberInput'
 import { useKeyring } from '../hooks/useKeyring'
 import { Account } from '../hooks/types'
-import { formatTokenValue } from '../utils/formatters'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from './modal'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from './buttons/Buttons'
 import { AccountInfo } from './AccountInfo'
 import { RuntimeDispatchInfo } from '@polkadot/types/interfaces'
+import { TokenValue } from './TokenValue'
 
 interface Props {
   onClose: () => void
@@ -87,7 +87,9 @@ export function TransferModal({ from, to, onClose }: Props) {
                 <AccountInfo account={from} />
                 <TransactionInfoRow>
                   <InfoTitle>Transferable balance</InfoTitle>
-                  <InfoValue>{formatTokenValue(transferableBalance)}</InfoValue>
+                  <InfoValue>
+                    <TokenValue value={transferableBalance} />
+                  </InfoValue>
                 </TransactionInfoRow>
               </LockedAccount>
             </Row>
@@ -107,7 +109,9 @@ export function TransferModal({ from, to, onClose }: Props) {
                 <AccountInfo account={to} />
                 <TransactionInfoRow>
                   <InfoTitle>Total balance</InfoTitle>
-                  <InfoValue>{formatTokenValue(balances?.map[to.address]?.total)}</InfoValue>
+                  <InfoValue>
+                    <TokenValue value={balances?.map[to.address]?.total} />
+                  </InfoValue>
                 </TransactionInfoRow>
               </AccountRow>
             </Row>
@@ -121,18 +125,24 @@ export function TransferModal({ from, to, onClose }: Props) {
                 <AccountInfo account={from} />
                 <TransactionInfoRow>
                   <InfoTitle>Transferable balance</InfoTitle>
-                  <InfoValue>{formatTokenValue(transferableBalance)}</InfoValue>
+                  <InfoValue>
+                    <TokenValue value={transferableBalance} />
+                  </InfoValue>
                 </TransactionInfoRow>
               </AccountRow>
             </Row>
-            <TransactionAmount>Transferring {formatTokenValue(new BN(amount))}</TransactionAmount>
+            <TransactionAmount>
+              Transferring <TokenValue value={new BN(amount)} />
+            </TransactionAmount>
             <Row>
               <FormLabel>Destination account</FormLabel>
               <AccountRow>
                 <AccountInfo account={to} />
                 <TransactionInfoRow>
                   <InfoTitle>Total balance</InfoTitle>
-                  <InfoValue>{formatTokenValue(balances?.map[to.address]?.total)}</InfoValue>
+                  <InfoValue>
+                    <TokenValue value={balances?.map[to.address]?.total} />
+                  </InfoValue>
                 </TransactionInfoRow>
               </AccountRow>
             </Row>
@@ -145,11 +155,15 @@ export function TransferModal({ from, to, onClose }: Props) {
             <TransactionInfo>
               <TransactionInfoRow>
                 <InfoTitle>Amount:</InfoTitle>
-                <InfoValue>{formatTokenValue(new BN(amount))}</InfoValue>
+                <InfoValue>
+                  <TokenValue value={new BN(amount)} />
+                </InfoValue>
               </TransactionInfoRow>
               <TransactionInfoRow>
                 <InfoTitle>Transaction fee:</InfoTitle>
-                <InfoValue>{formatTokenValue(info?.partialFee.toBn() || 0)}</InfoValue>
+                <InfoValue>
+                  <TokenValue value={info?.partialFee.toBn()} />
+                </InfoValue>
               </TransactionInfoRow>
             </TransactionInfo>
           </>
