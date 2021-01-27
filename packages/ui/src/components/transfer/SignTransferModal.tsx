@@ -23,7 +23,7 @@ import {
 interface Props {
   onClose: () => void
   from: Account
-  amount: string
+  amount: BN
   to: Account
 }
 

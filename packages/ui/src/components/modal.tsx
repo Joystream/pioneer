@@ -5,7 +5,12 @@ import { Close } from './buttons/CloseCross'
 import { ArrowOutsideIcon, ArrowOutsideStyles } from './icons/ArrowOutsideIcon'
 import { CrossIcon } from './icons/CrossIcon'
 
-export function ModalHeader({ onClick, title }: { onClick: () => void; title: string }) {
+interface Props {
+  onClick: () => void
+  title: string
+}
+
+export function ModalHeader({ onClick, title }: Props) {
   return (
     <ModalTopBar>
       <CloseButton onClick={onClick}>
