@@ -19,6 +19,7 @@ import {
   TransactionInfo,
   TransactionInfoRow,
 } from './TransferModal'
+import { HelpNotification } from '../../components/notifications/HelpNotification'
 
 interface Props {
   onClose: () => void
@@ -108,6 +109,11 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
             <InfoValue>
               <TokenValue value={info?.partialFee.toBn()} />
             </InfoValue>
+            <HelpNotification
+              helperText={
+                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae.Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
+              }
+            />
           </TransactionInfoRow>
         </TransactionInfo>
         <ButtonPrimaryMedium onClick={signAndSend} disabled={isSending}>

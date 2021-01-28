@@ -38,6 +38,7 @@ export const Colors = {
 export const BorderRad = {
   s: '2px',
   full: '1000px',
+  round: '50%',
 }
 
 export const Shadows = {
