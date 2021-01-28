@@ -16,6 +16,9 @@ import { BorderRad, Colors, Shadows } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
 import { formatTokenValue } from '../../utils/formatters'
+import { WaitForTheExtensionModal } from '../../modals/WaitForTheExtensionModal'
+import { TransactionSuccessModal } from '../../modals/TransactionSuccessModal'
+import { TransactionFailureModal } from '../../modals/TransactionFailureModal'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -124,6 +127,9 @@ export function Accounts() {
           </AccountsList>
         </AccountsTable>
       </AccountsBoard>
+      {/*<WaitForTheExtensionModal />*/}
+      {/*<TransactionSuccessModal />*/}
+      {/*<TransactionFailureModal />*/}
     </MyProfile>
   )
 }
