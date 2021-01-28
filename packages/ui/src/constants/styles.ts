@@ -37,6 +37,7 @@ export const Colors = {
 
 export const BorderRad = {
   s: '2px',
+  m: '4px',
   full: '1000px',
   round: '50%',
 }

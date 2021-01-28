@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from 'react'
 import { RuntimeDispatchInfo } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
-import { useApi } from '../../hooks/useApi'
-import { useKeyring } from '../../hooks/useKeyring'
-import { useBalances } from '../../hooks/useBalances'
-import { Account } from '../../hooks/types'
-import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
+import React, { useEffect, useState } from 'react'
 import { AccountInfo } from '../../components/AccountInfo'
+import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
+import { ArrowDownExpandedIcon } from '../../components/icons/ArrowDownExpandedIcon'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
 import { TokenValue } from '../../components/TokenValue'
+import { Account } from '../../hooks/types'
+import { useApi } from '../../hooks/useApi'
+import { useBalances } from '../../hooks/useBalances'
+import { useKeyring } from '../../hooks/useKeyring'
 import {
   AccountRow,
   FormLabel,
   InfoTitle,
   InfoValue,
   Row,
-  TransactionAmount,
+  TransactionAmountInfo,
+  TransactionAmountInfoText,
   TransactionInfo,
   TransactionInfoRow,
 } from './TransferModal'
@@ -80,9 +82,12 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
             </TransactionInfoRow>
           </AccountRow>
         </Row>
-        <TransactionAmount>
-          Transferring <TokenValue value={new BN(amount)} />
-        </TransactionAmount>
+        <TransactionAmountInfo>
+          <ArrowDownExpandedIcon />
+          <TransactionAmountInfoText>
+            Transferring <TokenValue value={new BN(amount)} />
+          </TransactionAmountInfoText>
+        </TransactionAmountInfo>
         <Row>
           <FormLabel>Destination account</FormLabel>
           <AccountRow>
