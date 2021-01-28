@@ -14,7 +14,6 @@ export const Navigation = styled.nav`
   grid-area: navbar;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   z-index: 10;
   background: ${Colors.Black[900]};
   color: ${Colors.White};
