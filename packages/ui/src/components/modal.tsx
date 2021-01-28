@@ -84,13 +84,15 @@ export const ModalBody = styled.div`
   border-bottom: 1px solid ${Colors.Black[200]};
 `
 export const ModalFooter = styled.footer`
-  display: grid;
+  display: inline-grid;
   grid-area: modalfooter;
   grid-template-rows: 1fr;
-  grid-template-columns: 1fr auto;
+  grid-auto-flow: column;
   grid-column-gap: 46px;
+  justify-self: end;
   justify-items: end;
   align-items: center;
+  width: fit-content;
   padding: 12px 16px;
   border-radius: 0px 0px 2px 2px;
 `
