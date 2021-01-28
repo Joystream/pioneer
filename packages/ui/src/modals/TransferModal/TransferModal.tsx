@@ -86,8 +86,10 @@ export const TransactionInfo = styled.div`
 `
 export const TransactionInfoRow = styled.div`
   display: grid;
+  position: relative;
   grid-template-columns: 1fr 128px;
   grid-template-rows: 1fr;
+  align-items: center;
 
   & + & {
     margin-top: 4px;
