@@ -88,10 +88,10 @@ describe('UI: Accounts list', () => {
 
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
       expect(aliceBox?.querySelector('h5')?.textContent).to.equal('alice')
-      expect(aliceBox?.nextSibling?.textContent).to.equal('1.0000 JOY')
+      expect(aliceBox?.nextSibling?.textContent).to.equal('1\xa0JOY')
     })
 
-    it.skip('Renders token transfer button', async () => {
+    it.skip('Renders token TransferModal button', async () => {
       balances.map[alice] = {
         total: JOY_1,
       }

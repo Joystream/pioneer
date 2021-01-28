@@ -9,7 +9,7 @@ import { AccountInfo } from '../../components/AccountInfo'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
-import { formatTokenValue } from '../../utils/formatters'
+import { TokenValue } from '../../components/TokenValue'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -41,8 +41,12 @@ export function Accounts() {
                 <AccountBalance>
                   <Balance value={balances.map[account.address]?.total} />
                 </AccountBalance>
-                <AccountBalance>{formatTokenValue(0)}</AccountBalance>
-                <AccountBalance>{formatTokenValue(0)}</AccountBalance>
+                <AccountBalance>
+                  <TokenValue value={0} />
+                </AccountBalance>
+                <AccountBalance>
+                  <TokenValue value={0} />
+                </AccountBalance>
                 <AccountBalance>
                   <Balance value={balances.map[account.address]?.total} />
                 </AccountBalance>
@@ -69,7 +73,7 @@ interface Props {
 }
 
 export function Balance({ value }: Props) {
-  return <>{value ? formatTokenValue(value) : '-'}</>
+  return <>{value ? <TokenValue value={value} /> : '-'}</>
 }
 
 const MyProfile = styled.div`
