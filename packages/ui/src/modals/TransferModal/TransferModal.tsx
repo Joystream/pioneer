@@ -1,10 +1,10 @@
+import BN from 'bn.js'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import BN from 'bn.js'
-import { BorderRad, Colors } from '../../constants'
-import { useBalances } from '../../hooks/useBalances'
-import { Account } from '../../hooks/types'
 import { Modal, ModalBody, ModalHeader } from '../../components/modal'
+import { BorderRad, Colors } from '../../constants'
+import { Account } from '../../hooks/types'
+import { useBalances } from '../../hooks/useBalances'
 import { SignTransferModal } from './SignTransferModal'
 import { TransferDetailsModal } from './TransferDetailsModal'
 
@@ -108,4 +108,32 @@ export const InfoValue = styled.span`
   position: relative;
   text-align: right;
   line-height: 20px;
+`
+
+export const TransactionAmountInfo = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 12px;
+  width: fit-content;
+  justify-self: center;
+  align-items: center;
+  color: ${Colors.Black[900]};
+`
+
+export const TransactionAmountInfoText = styled.span`
+  padding: 0 8px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  color: ${Colors.Black[900]};
+  text-transform: uppercase;
+  border-radius: ${BorderRad.m};
+  background-color: ${Colors.Black[75]};
+
+  .TokenValue {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    color: ${Colors.Black[900]};
+  }
 `
