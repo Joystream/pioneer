@@ -48,11 +48,11 @@ describe('UI: TransferModal', () => {
     const { getByLabelText, getByText } = renderModal()
 
     const input = getByLabelText('Number of tokens')
-    expect((getByText('Transfer tokens') as HTMLButtonElement).disabled).to.be.true
+    expect(((getByText('Transfer tokens')) as HTMLButtonElement).disabled).to.be.true
 
     fireEvent.change(input, { target: { value: '50' } })
 
-    const button = getByText('Transfer tokens') as HTMLButtonElement
+    const button = (getByText('Transfer tokens')) as HTMLButtonElement
     expect(button.disabled).to.be.false
 
     fireEvent.click(button)
