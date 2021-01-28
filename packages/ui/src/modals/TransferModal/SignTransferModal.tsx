@@ -65,7 +65,7 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
 
   return (
     <Modal>
-      <ModalHeader onClick={onClose} title={"'Authorize transaction'"} />
+      <ModalHeader onClick={onClose} title="Authorize transaction" />
       <ModalBody>
         <Row>
           <FormLabel>From</FormLabel>
