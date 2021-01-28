@@ -19,7 +19,7 @@ import {
   TransactionAmountInfo,
   TransactionAmountInfoText,
   TransactionInfo,
-  TransactionInfoRow
+  TransactionInfoRow,
 } from './TransferModal'
 import { HelpNotification } from '../../components/notifications/HelpNotification'
 
