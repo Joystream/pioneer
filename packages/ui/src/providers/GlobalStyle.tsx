@@ -19,6 +19,7 @@ export const GlobalStyle = createGlobalStyle`
     border: none;
     outline: none;
     background-color: transparent;
+    padding: 0;
   }
   ul {
     list-style: none;

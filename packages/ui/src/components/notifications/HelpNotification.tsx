@@ -46,7 +46,7 @@ const NotificationPopup = styled.p`
   }
 `
 
-const HelpNotificationComponent = styled.div`
+const HelpNotificationComponent = styled.button`
   display: flex;
   position: absolute;
   right: -8px;
