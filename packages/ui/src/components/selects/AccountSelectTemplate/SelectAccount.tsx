@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Transitions } from '../../../constants/styles'
-import { OptionListYieldMethod } from './OptionListYieldMethod'
-import { YieldMethod } from './OptionYieldMethod'
+import { Transitions } from '../../../constants'
+import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
+import { YieldMethod } from './OptionAccount'
+import { AccountRow, InfoTitle, InfoValue, TransactionInfoRow } from '../../../modals/TransferModal/TransferModal'
+import { AccountInfo } from '../../AccountInfo'
+import { TokenValue } from '../../TokenValue'
+import { useBalances } from '../../../hooks/useBalances'
 
-export function SelectYieldMethod({ options, onChange }: OptionListYieldMethod) {
+export function SelectAccount({ options, onChange }: OptionListAccountProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<YieldMethod>(options[0])
+  const balances = useBalances(selectedOption ? [selectedOption.account] : [])
 
   const onOptionClick = (option: YieldMethod) => {
     setIsOpen(false)
@@ -17,16 +22,20 @@ export function SelectYieldMethod({ options, onChange }: OptionListYieldMethod) 
   return (
     <SelectComponent>
       <SelectButton onClick={() => setIsOpen(!isOpen)}>
-        <SelectedImageWrapper>
-          <SelectedImage src={selectedOption.logoURI} />
-        </SelectedImageWrapper>
-        <SelectedName>{selectedOption.symbol}</SelectedName>
-        <SelectedValue>
-          {selectedOption.value}
-          {selectedOption.emptyValue !== true && <SelectedValueInfo>% APY</SelectedValueInfo>}
-        </SelectedValue>
+        {selectedOption && (
+          <AccountRow>
+            <AccountInfo account={selectedOption.account} />
+            <TransactionInfoRow>
+              <InfoTitle>Total balance</InfoTitle>
+              <InfoValue>
+                <TokenValue value={balances?.map[selectedOption.account.address]?.total} />
+              </InfoValue>
+            </TransactionInfoRow>
+          </AccountRow>
+        )}
+        {!selectedOption && <AccountRow>Select account</AccountRow>}
       </SelectButton>
-      {isOpen && <OptionListYieldMethod onChange={onOptionClick} options={options} />}
+      {isOpen && <OptionListAccount onChange={onOptionClick} options={options} />}
     </SelectComponent>
   )
 }
@@ -41,7 +50,7 @@ const SelectComponent = styled.div`
 
 const SelectButton = styled.button`
   display: grid;
-  grid-template-columns: 1.5em 1fr auto;
+  grid-template-columns: auto;
   grid-template-rows: 1fr;
   grid-column-gap: 0.5em;
   align-items: center;

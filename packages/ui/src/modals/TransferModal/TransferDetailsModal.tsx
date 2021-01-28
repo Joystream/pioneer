@@ -20,6 +20,9 @@ import {
   TransactionAmount,
   TransactionInfoRow,
 } from './TransferModal'
+import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
+import { YieldMethod } from '../../components/selects/AccountSelectTemplate/OptionAccount'
+import { useAccounts } from '../../hooks/useAccounts'
 
 interface Props {
   from: Account
@@ -29,6 +32,7 @@ interface Props {
 }
 
 export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
+  const accounts = useAccounts()
   const balances = useBalances([from, to])
   const [amount, setAmount] = useNumberInput(0)
   const isZero = new BN(amount).lte(new BN(0))
@@ -39,6 +43,10 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
+
+  const options: YieldMethod[] = accounts.allAccounts.map(
+    (account) => (({ account: account } as unknown) as YieldMethod)
+  )
 
   return (
     <Modal>
@@ -73,15 +81,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
         </TransactionAmount>
         <Row>
           <FormLabel>Destination account</FormLabel>
-          <AccountRow>
-            <AccountInfo account={to} />
-            <TransactionInfoRow>
-              <InfoTitle>Total balance</InfoTitle>
-              <InfoValue>
-                <TokenValue value={balances?.map[to.address]?.total} />
-              </InfoValue>
-            </TransactionInfoRow>
-          </AccountRow>
+          <SelectAccount options={options} onChange={(option) => console.log('change', option)} />
         </Row>
       </ModalBody>
       <ModalFooter>

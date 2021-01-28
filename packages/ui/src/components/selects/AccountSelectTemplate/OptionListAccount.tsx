@@ -1,18 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, Transitions } from '../../../constants/styles'
-import { OptionYieldMethod, YieldMethod } from './OptionYieldMethod'
+import { Colors, Transitions } from '../../../constants'
+import { OptionAccount, YieldMethod } from './OptionAccount'
 
-export interface OptionListYieldMethod {
+export interface OptionListAccountProps {
   options: Array<YieldMethod>
   onChange: (option: YieldMethod) => void
 }
 
-export function OptionListYieldMethod({ options, onChange }: OptionListYieldMethod) {
+export function OptionListAccount({ options, onChange }: OptionListAccountProps) {
   return (
     <OptionsListComponent>
       {options.map((option, index) => (
-        <OptionYieldMethod key={index} option={option} onChange={onChange} />
+        <OptionAccount key={index} option={option} onChange={onChange} />
       ))}
     </OptionsListComponent>
   )
@@ -21,8 +21,6 @@ export function OptionListYieldMethod({ options, onChange }: OptionListYieldMeth
 const OptionsListComponent = styled.ul`
   display: grid;
   grid-template-columns: 1fr;
-  grid-auto-rows: 1.5em;
-  grid-row-gap: 1.25em;
   position: absolute;
   left: 0;
   top: calc(100% + 0.25em);
