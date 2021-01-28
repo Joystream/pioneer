@@ -21,6 +21,7 @@ import {
   TransactionInfo,
   TransactionInfoRow,
 } from './TransferModal'
+import { web3FromAddress } from '@polkadot/extension-dapp'
 import { HelpNotification } from '../../components/notifications/HelpNotification'
 
 interface Props {
@@ -50,6 +51,8 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
     if (!submittableExtrinsic) {
       return
     }
+
+    const injector = await web3FromAddress(from.address)
 
     await submittableExtrinsic
       .signAndSend(keyring.getPair(from.address), (result) => {
