@@ -6,3 +6,9 @@ export function aliceSigner(): KeyringPair {
 
   return keyring.addFromUri('//Alice')
 }
+
+export function bobSigner(): KeyringPair {
+  const keyring = new Keyring({ type: 'sr25519' })
+
+  return keyring.addFromUri('//Bob')
+}
