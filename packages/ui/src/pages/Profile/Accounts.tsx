@@ -15,8 +15,8 @@ import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
-import { formatTokenValue } from '../../utils/formatters'
 import { Account } from '../../hooks/types'
+import { formatTokenValue } from '../../utils/formatters'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()

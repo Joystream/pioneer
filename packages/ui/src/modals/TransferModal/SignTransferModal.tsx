@@ -1,10 +1,14 @@
-import { RuntimeDispatchInfo } from '@polkadot/types/interfaces'
-import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
+import { RuntimeDispatchInfo } from '@polkadot/types/interfaces'
+import { ISubmittableResult } from '@polkadot/types/types'
+import { web3FromAddress } from '@polkadot/extension-dapp'
+import BN from 'bn.js'
+
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
 import { ArrowDownExpandedIcon } from '../../components/icons/ArrowDownExpandedIcon'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
+import { HelpNotification } from '../../components/notifications/HelpNotification'
 import { TokenValue } from '../../components/TokenValue'
 import { Account } from '../../hooks/types'
 import { useApi } from '../../hooks/useApi'
@@ -21,9 +25,6 @@ import {
   TransactionInfo,
   TransactionInfoRow,
 } from './TransferModal'
-import { web3FromAddress } from '@polkadot/extension-dapp'
-import { HelpNotification } from '../../components/notifications/HelpNotification'
-import { ISubmittableResult } from '@polkadot/types/types'
 
 interface Props {
   onClose: () => void
@@ -55,16 +56,14 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
 
     const keyringPair = keyring.getPair(from.address)
 
-    const statusCallback = (result: ISubmittableResult) => {
-      const { status } = result
-
-      if (status.isInBlock) {
-        onClose()
+    const statusCallback = ({ status }: ISubmittableResult) => {
+      if (!status.isInBlock) {
+        console.log(`Current transaction status: ${status.type}`)
+        return
       }
 
-      status.isInBlock
-        ? console.log(`In Block. Block hash: ${status.asInBlock.toString()}`)
-        : console.log(`Current transaction status: ${status.type}`)
+      console.log(`In Block. Block hash: ${status.asInBlock.toString()}`)
+      onClose()
     }
 
     if (keyringPair.meta.isInjected) {
