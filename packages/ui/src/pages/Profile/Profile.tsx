@@ -7,7 +7,12 @@ import { Accounts } from './Accounts'
 export function Profile() {
   return (
     <Page>
-      <SideBar />
+      <SideBar
+        crumbs={[
+          { href: '#', text: 'My Profile' },
+          { href: '#', text: 'My Accounts' },
+        ]}
+      />
       <PageContent>
         <Accounts />
       </PageContent>
