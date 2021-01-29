@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, Transitions, BorderRad } from '../../constants/styles'
+import { BorderRad, Colors, Transitions } from '../../constants/styles'
 import { QuestionIcon } from '../icons/QuestionIcon'
 
 interface HelpNotificationProps {
@@ -35,6 +35,7 @@ const NotificationPopup = styled.p`
   animation: showHelperNotificationText 0.25s ease;
   animation-delay: 0.25s;
   animation-fill-mode: forwards;
+  z-index: 15;
 
   @keyframes showHelperNotificationText {
     from { opacity: 0;
@@ -60,6 +61,7 @@ const HelpNotificationComponent = styled.button`
   cursor: pointer;
   transform: translate(100%);
   transition: ${Transitions.all};
+  z-index: 10;
 
   svg {
     width: 100%;

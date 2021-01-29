@@ -44,6 +44,7 @@ export const BorderRad = {
 
 export const Shadows = {
   common: `0px 12px 28px ${Colors.Black[900.25]}`,
+  light: `0px 0px 28px #D6D8E780`,
 }
 
 export const Fonts = {
