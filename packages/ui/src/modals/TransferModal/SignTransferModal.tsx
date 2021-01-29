@@ -45,7 +45,7 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
     })
   }, [api, amount])
 
-  const submittableExtrinsic = api?.tx.balances.transfer(to.address, amount)
+  const submittableExtrinsic = api?.tx?.balances?.transfer(to.address, amount)
   const signAndSend = async () => {
     setIsSending(true)
 

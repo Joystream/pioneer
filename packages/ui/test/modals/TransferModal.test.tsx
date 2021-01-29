@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import BN from 'bn.js'
@@ -15,23 +15,25 @@ import { UseApi } from '../../src/providers/api/provider'
 describe('UI: TransferModal', () => {
   before(cryptoWaitReady)
 
-  const from: Account = {
-    address: aliceSigner().address,
-    name: 'alice',
-  }
-  const to: Account = {
-    address: bobSigner().address,
-    name: 'bob',
-  }
   const api: UseApi = {
     api: ({} as unknown) as ApiPromise,
     state: 'CONNECTED',
     isConnected: true,
   }
+  let from: Account
+  let to: Account
 
   beforeEach(() => {
+    from = {
+      address: aliceSigner().address,
+      name: 'alice',
+    }
+    to = {
+      address: bobSigner().address,
+      name: 'bob',
+    }
     set(api, 'api.query.system.account.multi', (accounts: any, callback: any) => {
-      callback(accounts.map(() => set({}, 'data.free.toBn', () => new BN(100))))
+      callback(accounts.map(() => set({}, 'data.free.toBn', () => new BN(10_000))))
       return Promise.resolve()
     })
   })
@@ -44,5 +46,25 @@ describe('UI: TransferModal', () => {
     )
 
     expect(await getByText('Send tokens')).to.exist
+  })
+
+  it('Renders an Authorize transaction step', async () => {
+    const { getByLabelText, getByText } = render(
+      <ApiContext.Provider value={api}>
+        <TransferModal onClose={sinon.spy()} from={from} to={to} />
+      </ApiContext.Provider>
+    )
+
+    const input = await getByLabelText('Number of tokens')
+    expect(((await getByText('Transfer tokens')) as HTMLButtonElement).disabled).to.be.true
+
+    fireEvent.change(input, { target: { value: '50' } })
+
+    const button = (await getByText('Transfer tokens')) as HTMLButtonElement
+    expect(button.disabled).to.be.false
+
+    fireEvent.click(button)
+
+    expect(await getByText('Authorize transaction')).to.exist
   })
 })
