@@ -15,6 +15,7 @@ import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
+import { WaitForTheExtensionModal } from '../../modals/WaitForTheExtensionModal'
 import { formatTokenValue } from '../../utils/formatters'
 
 export function Accounts() {
@@ -124,6 +125,9 @@ export function Accounts() {
           </AccountsList>
         </AccountsTable>
       </AccountsBoard>
+      {/*<WaitForTheExtensionModal />*/}
+      {/*<TransactionSuccessModal />*/}
+      {/*<TransactionFailureModal />*/}
     </MyProfile>
   )
 }
