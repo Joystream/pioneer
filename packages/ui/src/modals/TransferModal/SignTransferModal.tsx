@@ -23,6 +23,7 @@ import {
 } from './TransferModal'
 import { web3FromAddress } from '@polkadot/extension-dapp'
 import { HelpNotification } from '../../components/notifications/HelpNotification'
+import { ISubmittableResult } from '@polkadot/types/types'
 
 interface Props {
   onClose: () => void
@@ -52,21 +53,27 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
       return
     }
 
-    const injector = await web3FromAddress(from.address)
+    const keyringPair = keyring.getPair(from.address)
 
-    await submittableExtrinsic
-      .signAndSend(keyring.getPair(from.address), (result) => {
-        const { status } = result
+    const statusCallback = (result: ISubmittableResult) => {
+      const { status } = result
 
-        if (status.isFinalized) {
-          onClose()
-        }
+      if (status.isInBlock) {
+        onClose()
+      }
 
-        status.isFinalized
-          ? console.log(`Finalized. Block hash: ${status.asFinalized.toString()}`)
-          : console.log(`Current transaction status: ${status.type}`)
-      })
-      .catch((error) => console.log('Error', error))
+      status.isInBlock
+        ? console.log(`In Block. Block hash: ${status.asInBlock.toString()}`)
+        : console.log(`Current transaction status: ${status.type}`)
+    }
+
+    if (keyringPair.meta.isInjected) {
+      const { signer } = await web3FromAddress(from.address)
+
+      await submittableExtrinsic.signAndSend(from.address, { signer: signer }, statusCallback).catch(console.log)
+    } else {
+      await submittableExtrinsic.signAndSend(keyringPair, statusCallback).catch(console.log)
+    }
   }
 
   return (
