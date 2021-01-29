@@ -15,6 +15,7 @@ import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
+import { formatTokenValue } from '../../utils/formatters'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -41,7 +42,7 @@ export function Accounts() {
                 </StatsInfo>
               </StatsHeader>
               <StatsContent>
-                <ValueInJoys>109,821.242</ValueInJoys>
+                <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
               </StatsContent>
             </StatsItem>
             <StatsItem>
@@ -52,7 +53,7 @@ export function Accounts() {
                 </StatsInfo>
               </StatsHeader>
               <StatsContent>
-                <ValueInJoys>80,000.000</ValueInJoys>
+                <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
               </StatsContent>
             </StatsItem>
             <StatsItem>
@@ -63,7 +64,7 @@ export function Accounts() {
                 </StatsInfo>
               </StatsHeader>
               <StatsContent>
-                <ValueInJoys>50,000.000</ValueInJoys>
+                <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
               </StatsContent>
             </StatsItem>
             <StatsItem className={'statsItemWide'}>
@@ -72,10 +73,10 @@ export function Accounts() {
                   Total recoverable
                   <HelpNotification helperText={'Lorem fishy'} />
                 </StatsInfo>
-                <StatsButton>Recover all</StatsButton>
+                <StatsButton disabled={true}>Recover all</StatsButton>
               </StatsHeader>
               <StatsContent>
-                <ValueInJoys>5,080.000</ValueInJoys>
+                <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
               </StatsContent>
             </StatsItem>
           </Stats>
