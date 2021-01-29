@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { LoaderComponent } from '../components/icons/Loader'
-import { Modal, ModalBody } from '../components/modal'
-import { Text } from '../components/page/Typography/Text'
+import { LoaderComponent } from '../../components/icons/Loader'
+import { Modal, ModalBody } from '../../components/modal'
+import { Text } from '../../components/page/Typography/Text'
 
 export function WaitForTheExtensionModal() {
   return (
