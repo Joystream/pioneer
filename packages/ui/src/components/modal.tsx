@@ -47,7 +47,7 @@ const ModalGlass = styled.div`
   background-color: ${Colors.Black[700.75]};
   z-index: 100000;
 `
-const ModalWrap = styled.section`
+export const ModalWrap = styled.section`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 76px auto 72px;
