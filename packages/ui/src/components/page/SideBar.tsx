@@ -7,6 +7,7 @@ import { LogoLink } from './Sidebar/LogoLink'
 import { Navigation } from './Sidebar/Navigation'
 import { NavigationHeader } from './Sidebar/NavigationHeader'
 import { Version } from './Version'
+import { NetworkSwitch } from './NetworkSwitch'
 
 export function SideBar() {
   return (
@@ -29,6 +30,7 @@ export function SideBar() {
         </NavigationLinksItem>
       </NavigationLinks>
       {/*<ProfileComponent />*/}
+      <NetworkSwitch />
       <Version />
     </Navigation>
   )

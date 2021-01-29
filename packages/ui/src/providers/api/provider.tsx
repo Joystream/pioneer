@@ -3,6 +3,7 @@ import { ApiPromise, WsProvider } from '@polkadot/api'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
 import { types } from '@joystream/types'
 import { ApiContext } from './context'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 interface Props {
   children: ReactNode
@@ -14,13 +15,16 @@ export interface UseApi {
 }
 
 type ApiState = 'CONNECTING' | 'CONNECTED' | 'ERROR'
+export type Network = 'DEV' | 'TESTNET'
 
 export const ApiContextProvider = (props: Props) => {
   const [apiState, setApiState] = useState<ApiState>('CONNECTING')
   const [api, setApi] = useState<ApiPromise | undefined>(undefined)
+  const [network] = useLocalStorage<Network>('network')
 
   useEffect(() => {
-    const provider = new WsProvider('ws://127.0.0.1:9944/')
+    const endpoint = network === 'DEV' ? 'ws://127.0.0.1:9944/' : 'wss://rome-rpc-endpoint.joystream.org:9944'
+    const provider = new WsProvider(endpoint)
     const apiPromise = new ApiPromise({ provider, rpc: jsonrpc, types })
 
     apiPromise.on('connected', () => {
