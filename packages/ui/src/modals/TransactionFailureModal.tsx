@@ -1,7 +1,7 @@
 import React from 'react'
+import { ButtonPrimaryMedium } from '../components/buttons/Buttons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../components/modal'
 import { TokenValue } from '../components/TokenValue'
-import { ButtonPrimaryMedium } from '../components/buttons/Buttons'
 
 export function TransactionFailureModal() {
   return (
@@ -10,7 +10,8 @@ export function TransactionFailureModal() {
         onClick={() => {
           /**/
         }}
-        title="Recover failure"
+        title="Fail"
+        icon={'FailIcon'}
       />
       <ModalBody>
         You have not transferred <TokenValue value={100} /> balance...
