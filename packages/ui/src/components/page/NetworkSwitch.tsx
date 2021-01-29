@@ -17,16 +17,16 @@ export function NetworkSwitch() {
   }
 
   return (
-    <ButtonForTransfer
+    <SwitchNetworkButton
       onClick={switchNetwork}
       title={`Switch to ${network === 'DEV' ? 'joystream testnet' : 'local dev'}`}
     >
       Network: {(network || 'TESTNET').toLowerCase()}
-    </ButtonForTransfer>
+    </SwitchNetworkButton>
   )
 }
 
-const ButtonForTransfer = styled.a`
+const SwitchNetworkButton = styled.a`
   cursor: pointer;
   position: absolute;
   bottom: 36px;
