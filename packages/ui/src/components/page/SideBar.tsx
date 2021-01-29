@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Colors, Transitions } from '../../constants'
+import { Breadcrumbs } from './Sidebar/Breadcrumbs/Breadcrumbs'
 import { MyProfileIcon } from './Sidebar/LinksIcons/MyProfileIcon'
 import { LogoLink } from './Sidebar/LogoLink'
 import { Navigation } from './Sidebar/Navigation'
@@ -10,6 +11,12 @@ import { Version } from './Version'
 export function SideBar() {
   return (
     <Navigation>
+      <Breadcrumbs
+        crumbs={[
+          { href: '#', text: 'My Profile' },
+          { href: '#', text: 'My Accounts' },
+        ]}
+      />
       <NavigationHeader>
         <LogoLink />
       </NavigationHeader>

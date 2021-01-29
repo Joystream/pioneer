@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Colors, Transitions } from '../../../constants/styles'
+import { Transitions } from '../../../constants/styles'
 import { OptionListYieldMethod } from './OptionListYieldMethod'
-import { useState } from 'react'
 import { YieldMethod } from './OptionYieldMethod'
 
 export function SelectYieldMethod({ options, onChange }: OptionListYieldMethod) {
