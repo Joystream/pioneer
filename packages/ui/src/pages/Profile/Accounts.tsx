@@ -125,7 +125,7 @@ export function Accounts() {
           </AccountsList>
         </AccountsTable>
       </AccountsBoard>
-      <WaitForTheExtensionModal />
+      {/*<WaitForTheExtensionModal />*/}
       {/*<TransactionSuccessModal />*/}
       {/*<TransactionFailureModal />*/}
     </MyProfile>
