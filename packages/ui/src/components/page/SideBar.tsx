@@ -13,8 +13,8 @@ export function SideBar() {
     <Navigation>
       <Breadcrumbs
         crumbs={[
-          { href: '#', text: 'Working Groups' },
-          { href: '#', text: 'Working Groups' },
+          { href: '#', text: 'My Profile' },
+          { href: '#', text: 'My Accounts' },
         ]}
       />
       <NavigationHeader>
