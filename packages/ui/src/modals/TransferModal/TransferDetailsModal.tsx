@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import BN from 'bn.js'
 import styled from 'styled-components'
 import { useNumberInput } from '../../hooks/useNumberInput'
+import { useAccounts } from '../../hooks/useAccounts'
+import { useBalance } from '../../hooks/useBalance'
 import { Account } from '../../hooks/types'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons/Buttons'
 import { BorderRad, Colors } from '../../constants'
@@ -19,7 +21,6 @@ import {
   TransactionAmount,
 } from './TransferModal'
 import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
-import { useAccounts } from '../../hooks/useAccounts'
 
 interface Props {
   from: Account
@@ -32,9 +33,10 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
   const accounts = useAccounts()
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [amount, setAmount] = useNumberInput(0)
+  const balance = useBalance(from)
   const isZero = new BN(amount).lte(new BN(0))
 
-  const transferableBalance = new BN(1000)
+  const transferableBalance = balance?.transferable ?? new BN(0)
 
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
   const isTransferDisabled = isZero || isOverBalance || !recipient
@@ -57,15 +59,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
       <ModalBody>
         <Row>
           <FormLabel>From</FormLabel>
-          <LockedAccount>
-            <AccountInfo account={from} />
-            <BalanceInfo>
-              <InfoTitle>Transferable balance</InfoTitle>
-              <InfoValue>
-                <TokenValue value={transferableBalance} />
-              </InfoValue>
-            </BalanceInfo>
-          </LockedAccount>
+          <SelectedAccount account={from} />
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
@@ -85,15 +79,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
         <Row>
           <FormLabel>Destination account</FormLabel>
           {to ? (
-            <LockedAccount>
-              <AccountInfo account={to} />
-              <BalanceInfo>
-                <InfoTitle>Transferable balance</InfoTitle>
-                <InfoValue>
-                  <TokenValue value={transferableBalance} />
-                </InfoValue>
-              </BalanceInfo>
-            </LockedAccount>
+            <SelectedAccount account={to} />
           ) : (
             <SelectAccount options={options} onChange={({ account }) => setRecipient(account)} />
           )}
@@ -105,6 +91,27 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
         </ButtonPrimaryMedium>
       </ModalFooter>
     </Modal>
+  )
+}
+
+interface SelectedAccountProps {
+  account: Account
+  useTotal?: boolean
+}
+
+const SelectedAccount = ({ account, useTotal }: SelectedAccountProps) => {
+  const balance = useBalance(account)
+
+  return (
+    <LockedAccount>
+      <AccountInfo account={account} />
+      <BalanceInfo>
+        <InfoTitle>{useTotal ? 'Total balance' : 'Transferable balance'}</InfoTitle>
+        <InfoValue>
+          <TokenValue value={useTotal ? balance?.total : balance?.transferable} />
+        </InfoValue>
+      </BalanceInfo>
+    </LockedAccount>
   )
 }
 

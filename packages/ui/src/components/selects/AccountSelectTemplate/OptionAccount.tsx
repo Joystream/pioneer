@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Account } from '../../../hooks/types'
-import { useBalances } from '../../../hooks/useBalances'
+import { useBalance } from '../../../hooks/useBalance'
 import { BorderRad, Colors, Transitions } from '../../../constants'
 import { AccountInfo } from '../../AccountInfo'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/TransferModal/TransferModal'
@@ -18,7 +18,7 @@ interface Props {
 
 export function OptionAccount({ option, onChange }: Props) {
   const { account } = option
-  const balances = useBalances([account])
+  const balance = useBalance(account)
 
   return (
     <OptionComponentContainer>
@@ -27,7 +27,7 @@ export function OptionAccount({ option, onChange }: Props) {
         <BalanceInfo>
           <InfoTitle>Total balance</InfoTitle>
           <InfoValue>
-            <TokenValue value={balances?.map[account.address]?.total} />
+            <TokenValue value={balance?.total} />
           </InfoValue>
         </BalanceInfo>
       </OptionComponent>

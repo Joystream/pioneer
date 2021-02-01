@@ -6,14 +6,14 @@ import { SelectAccountOption } from './OptionAccount'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/TransferModal/TransferModal'
 import { AccountInfo } from '../../AccountInfo'
 import { TokenValue } from '../../TokenValue'
-import { useBalances } from '../../../hooks/useBalances'
+import { useBalance } from '../../../hooks/useBalance'
 import { ArrowDownIcon } from '../../icons/ArrowDownIcon'
 import { ButtonApply } from '../../../pages/Profile/Accounts'
 
 export function SelectAccount({ options, onChange }: OptionListAccountProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<SelectAccountOption>(options[0])
-  const balances = useBalances(selectedOption ? [selectedOption.account] : [])
+  const balance = useBalance(selectedOption?.account)
 
   const onOptionClick = (option: SelectAccountOption) => {
     setIsOpen(false)
@@ -30,7 +30,7 @@ export function SelectAccount({ options, onChange }: OptionListAccountProps) {
             <BalanceInfo>
               <InfoTitle>Total balance</InfoTitle>
               <InfoValue>
-                <TokenValue value={balances?.map[selectedOption.account.address]?.total} />
+                <TokenValue value={balance?.total} />
               </InfoValue>
             </BalanceInfo>
           </SelectedOption>

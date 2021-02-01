@@ -12,7 +12,7 @@ import { HelpNotification } from '../../components/notifications/HelpNotificatio
 import { TokenValue } from '../../components/TokenValue'
 import { Account } from '../../hooks/types'
 import { useApi } from '../../hooks/useApi'
-import { useBalances } from '../../hooks/useBalances'
+import { useBalance } from '../../hooks/useBalance'
 import { useKeyring } from '../../hooks/useKeyring'
 import {
   AccountRow,
@@ -36,7 +36,8 @@ interface Props {
 export function SignTransferModal({ onClose, from, amount, to }: Props) {
   const { api } = useApi()
   const { keyring } = useKeyring()
-  const balances = useBalances([from, to])
+  const balanceFrom = useBalance(from)
+  const balanceTo = useBalance(to)
   const [isSending, setIsSending] = useState(false)
   const [info, setInfo] = useState<RuntimeDispatchInfo | null>(null)
 
@@ -86,7 +87,7 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
             <BalanceInfo>
               <InfoTitle>Transferable balance</InfoTitle>
               <InfoValue>
-                <TokenValue value={balances?.map[from.address]?.total} />
+                <TokenValue value={balanceFrom?.transferable} />
               </InfoValue>
             </BalanceInfo>
           </AccountRow>
@@ -104,7 +105,7 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
             <BalanceInfo>
               <InfoTitle>Total balance</InfoTitle>
               <InfoValue>
-                <TokenValue value={balances?.map[to.address]?.total} />
+                <TokenValue value={balanceTo?.total} />
               </InfoValue>
             </BalanceInfo>
           </AccountRow>

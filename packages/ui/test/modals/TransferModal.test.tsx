@@ -37,8 +37,11 @@ describe('UI: TransferModal', () => {
       address: bobSigner().address,
       name: 'bob',
     }
-    set(api, 'api.query.system.account.multi', (accounts: any, callback: any) => {
-      callback(accounts.map(() => set({}, 'data.free.toBn', () => new BN(10_000))))
+    set(api, 'api.derive.balances.all', (account: any, callback: any) => {
+      callback({
+        freeBalance: new BN(1000),
+        lockedBalance: new BN(0),
+      })
       return Promise.resolve()
     })
 
@@ -63,11 +66,11 @@ describe('UI: TransferModal', () => {
     const { getByLabelText, getByText } = renderModal()
 
     const input = getByLabelText('Number of tokens')
-    expect(((getByText('Transfer tokens')) as HTMLButtonElement).disabled).to.be.true
+    expect((getByText('Transfer tokens') as HTMLButtonElement).disabled).to.be.true
 
     fireEvent.change(input, { target: { value: '50' } })
 
-    const button = (getByText('Transfer tokens')) as HTMLButtonElement
+    const button = getByText('Transfer tokens') as HTMLButtonElement
     expect(button.disabled).to.be.false
 
     fireEvent.click(button)

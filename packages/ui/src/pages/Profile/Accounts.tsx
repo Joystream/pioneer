@@ -14,12 +14,12 @@ import { TokenValue } from '../../components/TokenValue'
 import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
-import { useBalances } from '../../hooks/useBalances'
+import { useBalance } from '../../hooks/useBalance'
 import { formatTokenValue } from '../../utils/formatters'
+import { Account } from '../../hooks/types'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
-  const balances = useBalances(allAccounts)
 
   if (!hasAccounts) return <Loading>Loading accounts...</Loading>
 
@@ -94,30 +94,7 @@ export function Accounts() {
           </AccountsTableHeaders>
           <AccountsList>
             {allAccounts.map((account) => (
-              <AccountItem key={account.address}>
-                <AccountInfo account={account} />
-                <AccountBalance>
-                  <Balance value={balances.map[account.address]?.total} />
-                </AccountBalance>
-                <AccountBalance>
-                  <TokenValue value={0} />
-                </AccountBalance>
-                <AccountBalance>
-                  <TokenValue value={0} />
-                </AccountBalance>
-                <AccountBalance>
-                  <Balance value={balances.map[account.address]?.total} />
-                </AccountBalance>
-                <AccountControls>
-                  <ButtonInside>
-                    <ArrowInsideIcon />
-                  </ButtonInside>
-                  <TransferButton from={account} />
-                  <ButtonApply>
-                    <ArrowDownIcon />
-                  </ButtonApply>
-                </AccountControls>
-              </AccountItem>
+              <AccountItemData key={account.address} account={account} />
             ))}
           </AccountsList>
         </AccountsTable>
@@ -135,6 +112,41 @@ interface Props {
 
 export function Balance({ value }: Props) {
   return <>{value ? <TokenValue value={value} /> : '-'}</>
+}
+
+interface AccountItemDataProps {
+  account: Account
+}
+
+const AccountItemData = ({ account }: AccountItemDataProps) => {
+  const balance = useBalance(account)
+
+  return (
+    <AccountItem key={account.address}>
+      <AccountInfo account={account} />
+      <AccountBalance>
+        <Balance value={balance?.total} />
+      </AccountBalance>
+      <AccountBalance>
+        <TokenValue value={balance?.locked} />
+      </AccountBalance>
+      <AccountBalance>
+        <TokenValue value={balance?.recoverable} />
+      </AccountBalance>
+      <AccountBalance>
+        <Balance value={balance?.transferable} />
+      </AccountBalance>
+      <AccountControls>
+        <ButtonInside>
+          <ArrowInsideIcon />
+        </ButtonInside>
+        <TransferButton from={account} />
+        <ButtonApply>
+          <ArrowDownIcon />
+        </ButtonApply>
+      </AccountControls>
+    </AccountItem>
+  )
 }
 
 const MyProfile = styled.div`
