@@ -67,7 +67,7 @@ const SelectComponent = styled.div`
   align-items: center;
 `
 
-const SelectButton = styled.button`
+const SelectButton = styled.div`
   display: grid;
   grid-template-columns: 1fr 40px;
   grid-template-rows: 1fr;

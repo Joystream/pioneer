@@ -11,6 +11,7 @@ import { Account } from '../../src/hooks/types'
 import { aliceSigner, bobSigner } from '../mocks/keyring'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
+import * as useAccountsModule from '../../src/hooks/useAccounts'
 
 describe('UI: TransferModal', () => {
   before(cryptoWaitReady)
@@ -22,6 +23,10 @@ describe('UI: TransferModal', () => {
   }
   let from: Account
   let to: Account
+  let accounts: {
+    hasAccounts: boolean
+    allAccounts: Account[]
+  }
 
   beforeEach(() => {
     from = {
@@ -36,6 +41,16 @@ describe('UI: TransferModal', () => {
       callback(accounts.map(() => set({}, 'data.free.toBn', () => new BN(10_000))))
       return Promise.resolve()
     })
+
+    accounts = {
+      hasAccounts: true,
+      allAccounts: [from, to],
+    }
+    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
+  })
+
+  afterEach(() => {
+    sinon.restore()
   })
 
   it('Renders a modal', () => {
