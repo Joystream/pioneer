@@ -39,21 +39,13 @@ describe('UI: TransferModal', () => {
   })
 
   it('Renders a modal', () => {
-    const { getByText } = render(
-      <ApiContext.Provider value={api}>
-        <TransferModal onClose={sinon.spy()} from={from} to={to} />
-      </ApiContext.Provider>
-    )
+    const { getByText } = renderModal()
 
     expect(getByText('Send tokens')).to.exist
   })
 
   it('Renders an Authorize transaction step', () => {
-    const { getByLabelText, getByText } = render(
-      <ApiContext.Provider value={api}>
-        <TransferModal onClose={sinon.spy()} from={from} to={to} />
-      </ApiContext.Provider>
-    )
+    const { getByLabelText, getByText } = renderModal()
 
     const input = getByLabelText('Number of tokens')
     expect((getByText('Transfer tokens') as HTMLButtonElement).disabled).to.be.true
@@ -67,4 +59,12 @@ describe('UI: TransferModal', () => {
 
     expect(getByText('Authorize transaction')).to.exist
   })
+
+  function renderModal() {
+    return render(
+      <ApiContext.Provider value={api}>
+        <TransferModal onClose={sinon.spy()} from={from} to={to} />
+      </ApiContext.Provider>
+    )
+  }
 })
