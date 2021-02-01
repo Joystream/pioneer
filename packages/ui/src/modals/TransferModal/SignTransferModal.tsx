@@ -1,10 +1,14 @@
-import { RuntimeDispatchInfo } from '@polkadot/types/interfaces'
-import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
+import { RuntimeDispatchInfo } from '@polkadot/types/interfaces'
+import { ISubmittableResult } from '@polkadot/types/types'
+import { web3FromAddress } from '@polkadot/extension-dapp'
+import BN from 'bn.js'
+
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
 import { ArrowDownExpandedIcon } from '../../components/icons/ArrowDownExpandedIcon'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
+import { HelpNotification } from '../../components/notifications/HelpNotification'
 import { TokenValue } from '../../components/TokenValue'
 import { Account } from '../../hooks/types'
 import { useApi } from '../../hooks/useApi'
@@ -21,7 +25,6 @@ import {
   TransactionInfo,
   TransactionInfoRow,
 } from './TransferModal'
-import { HelpNotification } from '../../components/notifications/HelpNotification'
 
 interface Props {
   onClose: () => void
@@ -43,7 +46,7 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
     })
   }, [api, amount])
 
-  const submittableExtrinsic = api?.tx.balances.transfer(to.address, amount)
+  const submittableExtrinsic = api?.tx?.balances?.transfer(to.address, amount)
   const signAndSend = async () => {
     setIsSending(true)
 
@@ -51,19 +54,25 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
       return
     }
 
-    await submittableExtrinsic
-      .signAndSend(keyring.getPair(from.address), (result) => {
-        const { status } = result
+    const keyringPair = keyring.getPair(from.address)
 
-        if (status.isFinalized) {
-          onClose()
-        }
+    const statusCallback = ({ status }: ISubmittableResult) => {
+      if (!status.isInBlock) {
+        console.log(`Current transaction status: ${status.type}`)
+        return
+      }
 
-        status.isFinalized
-          ? console.log(`Finalized. Block hash: ${status.asFinalized.toString()}`)
-          : console.log(`Current transaction status: ${status.type}`)
-      })
-      .catch((error) => console.log('Error', error))
+      console.log(`In Block. Block hash: ${status.asInBlock.toString()}`)
+      onClose()
+    }
+
+    if (keyringPair.meta.isInjected) {
+      const { signer } = await web3FromAddress(from.address)
+
+      await submittableExtrinsic.signAndSend(from.address, { signer: signer }, statusCallback).catch(console.error)
+    } else {
+      await submittableExtrinsic.signAndSend(keyringPair, statusCallback).catch(console.error)
+    }
   }
 
   return (

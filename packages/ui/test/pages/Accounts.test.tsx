@@ -1,17 +1,17 @@
 import React from 'react'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { cleanup, render } from '@testing-library/react'
+import BN from 'bn.js'
 import { expect } from 'chai'
 import sinon from 'sinon'
+import { aliceSigner } from '../mocks/keyring'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import * as useBalancesModule from '../../src/hooks/useBalances'
-import { aliceSigner } from '../mocks/keyring'
 import { UseBalances } from '../../src/hooks/useBalances'
 import { Accounts } from '../../src/pages/Profile/Accounts'
 import { Account } from '../../src/hooks/types'
-import { cryptoWaitReady } from '@polkadot/util-crypto'
-import BN from 'bn.js'
 
 describe('UI: Accounts list', () => {
   let accounts: {

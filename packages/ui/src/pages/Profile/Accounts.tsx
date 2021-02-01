@@ -15,7 +15,7 @@ import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
-import { WaitForTheExtensionModal } from '../../modals/WaitForTheExtensionModal'
+import { Account } from '../../hooks/types'
 import { formatTokenValue } from '../../utils/formatters'
 
 export function Accounts() {
@@ -24,7 +24,10 @@ export function Accounts() {
 
   if (!hasAccounts) return <Loading>Loading accounts...</Loading>
 
-  const sendTo = allAccounts[allAccounts.length - 1]
+  const sendTo = (from: Account) => {
+    const to = allAccounts[allAccounts.length - 1]
+    return to === from ? allAccounts[0] : to
+  }
 
   return (
     <MyProfile>
@@ -115,7 +118,7 @@ export function Accounts() {
                   <ButtonInside>
                     <ArrowInsideIcon />
                   </ButtonInside>
-                  <TransferButton from={account} to={sendTo} />
+                  <TransferButton from={account} to={sendTo(account)} />
                   <ButtonApply>
                     <ArrowDownIcon />
                   </ButtonApply>

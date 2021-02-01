@@ -58,8 +58,13 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
-            <AmountInputLabel>Number of tokens</AmountInputLabel>
-            <AmountInput value={amount} onChange={(event) => setAmount(event.target.value)} placeholder={'0'} />
+            <AmountInputLabel htmlFor={'amount-input'}>Number of tokens</AmountInputLabel>
+            <AmountInput
+              id="amount-input"
+              value={amount}
+              onChange={(event) => setAmount(event.target.value)}
+              placeholder="0"
+            />
           </AmountInputBlock>
           <AmountButtons>
             <AmountButton onClick={setHalf}>Use half</AmountButton>
@@ -88,7 +93,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
   )
 }
 
-const AmountInputLabel = styled.span`
+const AmountInputLabel = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   line-height: 20px;

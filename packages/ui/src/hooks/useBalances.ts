@@ -21,6 +21,7 @@ export function useBalances(accounts: Account[]): UseBalances {
   const [balances, setBalances] = useState<AddressToBalanceMap>({})
   const [hasBalances, setHasBalances] = useState(false)
   const { isConnected, api } = useApi()
+  const addresses = accounts.map(({ address }) => address).join()
 
   useEffect(() => {
     let unsubscribeAll: any
@@ -49,7 +50,7 @@ export function useBalances(accounts: Account[]): UseBalances {
     }
 
     return () => unsubscribeAll && unsubscribeAll()
-  }, [api, isConnected, accounts])
+  }, [api, isConnected, addresses])
 
   return {
     hasBalances: hasBalances,

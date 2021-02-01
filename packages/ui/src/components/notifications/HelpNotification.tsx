@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Transitions } from '../../constants/styles'
+import { BorderRad, Colors, Transitions } from '../../constants'
 import { QuestionIcon } from '../icons/QuestionIcon'
 
 interface HelpNotificationProps {
