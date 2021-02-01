@@ -69,9 +69,9 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
     if (keyringPair.meta.isInjected) {
       const { signer } = await web3FromAddress(from.address)
 
-      await submittableExtrinsic.signAndSend(from.address, { signer: signer }, statusCallback).catch(console.log)
+      await submittableExtrinsic.signAndSend(from.address, { signer: signer }, statusCallback).catch(console.error)
     } else {
-      await submittableExtrinsic.signAndSend(keyringPair, statusCallback).catch(console.log)
+      await submittableExtrinsic.signAndSend(keyringPair, statusCallback).catch(console.error)
     }
   }
 
