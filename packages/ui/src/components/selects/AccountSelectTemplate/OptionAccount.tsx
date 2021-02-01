@@ -1,28 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Account } from '../../../hooks/types'
+import { useBalances } from '../../../hooks/useBalances'
 import { Transitions } from '../../../constants'
 import { AccountInfo } from '../../AccountInfo'
 import { AccountRow, InfoTitle, InfoValue, TransactionInfoRow } from '../../../modals/TransferModal/TransferModal'
-import { Account } from '../../../hooks/types'
-import { useBalances } from '../../../hooks/useBalances'
 import { TokenValue } from '../../TokenValue'
 
-export interface YieldMethod {
+export interface SelectAccountOption {
   account: Account
 }
 
-export interface OptionYieldMethodProps {
-  option: YieldMethod
-  onChange: (option: YieldMethod) => void
+interface Props {
+  option: SelectAccountOption
+  onChange?: (option: SelectAccountOption) => void
 }
 
-export function OptionAccount({ option, onChange }: OptionYieldMethodProps) {
+export function OptionAccount({ option, onChange }: Props) {
   const { account } = option
   const balances = useBalances([account])
 
   return (
     <OptionComponentContainer>
-      <OptionComponent onClick={() => onChange(option)}>
+      <OptionComponent onClick={() => onChange && onChange(option)}>
         <AccountRow>
           <AccountInfo account={account} />
           <TransactionInfoRow>
@@ -37,13 +37,13 @@ export function OptionAccount({ option, onChange }: OptionYieldMethodProps) {
   )
 }
 
-const OptionComponentContainer = styled.li`
+export const OptionComponentContainer = styled.li`
   display: flex;
   widht: 100%;
   height: 100%;
 `
 
-const OptionComponent = styled.button`
+export const OptionComponent = styled.button`
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;

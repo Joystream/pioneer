@@ -10,7 +10,6 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/mod
 import { AccountInfo } from '../../components/AccountInfo'
 import { TokenValue } from '../../components/TokenValue'
 import {
-  AccountRow,
   AmountInputBlock,
   FormLabel,
   InfoTitle,
@@ -21,7 +20,6 @@ import {
   TransactionInfoRow,
 } from './TransferModal'
 import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
-import { YieldMethod } from '../../components/selects/AccountSelectTemplate/OptionAccount'
 import { useAccounts } from '../../hooks/useAccounts'
 
 interface Props {
@@ -44,9 +42,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
 
-  const options: YieldMethod[] = accounts.allAccounts.map(
-    (account) => (({ account: account } as unknown) as YieldMethod)
-  )
+  const options = accounts.allAccounts.map((account) => ({ account: account }))
 
   return (
     <Modal>

@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Colors, Transitions } from '../../../constants'
-import { OptionAccount, YieldMethod } from './OptionAccount'
+import { OptionAccount, SelectAccountOption } from './OptionAccount'
 
 export interface OptionListAccountProps {
-  options: Array<YieldMethod>
-  onChange: (option: YieldMethod) => void
+  options: Array<SelectAccountOption>
+  onChange: (option: SelectAccountOption) => void
 }
 
 export function OptionListAccount({ options, onChange }: OptionListAccountProps) {

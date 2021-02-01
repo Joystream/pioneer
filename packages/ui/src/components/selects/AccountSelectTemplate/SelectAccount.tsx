@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Transitions } from '../../../constants'
 import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
-import { YieldMethod } from './OptionAccount'
+import { SelectAccountOption } from './OptionAccount'
 import { AccountRow, InfoTitle, InfoValue, TransactionInfoRow } from '../../../modals/TransferModal/TransferModal'
 import { AccountInfo } from '../../AccountInfo'
 import { TokenValue } from '../../TokenValue'
@@ -10,10 +10,10 @@ import { useBalances } from '../../../hooks/useBalances'
 
 export function SelectAccount({ options, onChange }: OptionListAccountProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState<YieldMethod>(options[0])
+  const [selectedOption, setSelectedOption] = useState<SelectAccountOption>(options[0])
   const balances = useBalances(selectedOption ? [selectedOption.account] : [])
 
-  const onOptionClick = (option: YieldMethod) => {
+  const onOptionClick = (option: SelectAccountOption) => {
     setIsOpen(false)
     setSelectedOption(option)
     onChange(option)
@@ -89,29 +89,4 @@ const SelectButton = styled.button`
       transform: translateY(-50%) scaleY(-1);
     }
   }
-`
-
-const SelectedImageWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 1.5em;
-  height: 1.5em;
-`
-
-const SelectedImage = styled.img`
-  width: 1.1em;
-  height: 1.1em;
-`
-
-const SelectedName = styled.span`
-  text-align: left;
-`
-
-const SelectedValue = styled.span`
-  text-align: right;
-`
-
-const SelectedValueInfo = styled.span`
-  text-align: right;
 `

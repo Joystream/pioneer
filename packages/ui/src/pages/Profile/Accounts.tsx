@@ -342,7 +342,7 @@ const ButtonInside = styled(ButtonGhostMediumSquare)`
     color: ${Colors.Black[900]};
   }
 `
-const ButtonApply = styled(ButtonGhostMediumSquare)`
+export const ButtonApply = styled(ButtonGhostMediumSquare)`
   &,
   &:hover,
   &:focus,
