@@ -42,9 +42,9 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
   const [info, setInfo] = useState<RuntimeDispatchInfo | null>(null)
 
   useEffect(() => {
-    submittableExtrinsic?.paymentInfo(from.address).then((info) => {
-      setInfo(info)
-    })
+    const subscription = submittableExtrinsic?.paymentInfo(from.address).subscribe(setInfo)
+
+    return () => subscription && subscription.unsubscribe()
   }, [api, amount])
 
   const submittableExtrinsic = api?.tx?.balances?.transfer(to.address, amount)
@@ -70,9 +70,12 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
     if (keyringPair.meta.isInjected) {
       const { signer } = await web3FromAddress(from.address)
 
-      await submittableExtrinsic.signAndSend(from.address, { signer: signer }, statusCallback).catch(console.error)
+      await submittableExtrinsic
+        .signAndSend(from.address, { signer: signer }, statusCallback)
+        .toPromise()
+        .catch(console.error)
     } else {
-      await submittableExtrinsic.signAndSend(keyringPair, statusCallback).catch(console.error)
+      await submittableExtrinsic.signAndSend(keyringPair, statusCallback).toPromise().catch(console.error)
     }
   }
 
