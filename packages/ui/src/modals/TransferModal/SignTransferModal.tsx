@@ -16,6 +16,7 @@ import { useBalances } from '../../hooks/useBalances'
 import { useKeyring } from '../../hooks/useKeyring'
 import {
   AccountRow,
+  BalanceInfo,
   FormLabel,
   InfoTitle,
   InfoValue,
@@ -23,7 +24,6 @@ import {
   TransactionAmountInfo,
   TransactionAmountInfoText,
   TransactionInfo,
-  TransactionInfoRow,
 } from './TransferModal'
 
 interface Props {
@@ -83,12 +83,12 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
           <FormLabel>From</FormLabel>
           <AccountRow>
             <AccountInfo account={from} />
-            <TransactionInfoRow>
+            <BalanceInfo>
               <InfoTitle>Transferable balance</InfoTitle>
               <InfoValue>
                 <TokenValue value={balances?.map[from.address]?.total} />
               </InfoValue>
-            </TransactionInfoRow>
+            </BalanceInfo>
           </AccountRow>
         </Row>
         <TransactionAmountInfo>
@@ -101,24 +101,24 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
           <FormLabel>Destination account</FormLabel>
           <AccountRow>
             <AccountInfo account={to} />
-            <TransactionInfoRow>
+            <BalanceInfo>
               <InfoTitle>Total balance</InfoTitle>
               <InfoValue>
                 <TokenValue value={balances?.map[to.address]?.total} />
               </InfoValue>
-            </TransactionInfoRow>
+            </BalanceInfo>
           </AccountRow>
         </Row>
       </ModalBody>
       <ModalFooter>
         <TransactionInfo>
-          <TransactionInfoRow>
+          <BalanceInfo>
             <InfoTitle>Amount:</InfoTitle>
             <InfoValue>
               <TokenValue value={new BN(amount)} />
             </InfoValue>
-          </TransactionInfoRow>
-          <TransactionInfoRow>
+          </BalanceInfo>
+          <BalanceInfo>
             <InfoTitle>Transaction fee:</InfoTitle>
             <InfoValue>
               <TokenValue value={info?.partialFee.toBn()} />
@@ -128,7 +128,7 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
                 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae.Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
               }
             />
-          </TransactionInfoRow>
+          </BalanceInfo>
         </TransactionInfo>
         <ButtonPrimaryMedium onClick={signAndSend} disabled={isSending}>
           Sign transaction and Transfer

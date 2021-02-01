@@ -84,7 +84,7 @@ export const TransactionInfo = styled.div`
   display: flex;
   flex-direction: column;
 `
-export const TransactionInfoRow = styled.div`
+export const BalanceInfo = styled.div`
   display: grid;
   position: relative;
   grid-template-columns: 1fr 128px;

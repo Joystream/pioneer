@@ -11,13 +11,13 @@ import { AccountInfo } from '../../components/AccountInfo'
 import { TokenValue } from '../../components/TokenValue'
 import {
   AmountInputBlock,
+  BalanceInfo,
   FormLabel,
   InfoTitle,
   InfoValue,
   LockedAccount,
   Row,
   TransactionAmount,
-  TransactionInfoRow,
 } from './TransferModal'
 import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
 import { useAccounts } from '../../hooks/useAccounts'
@@ -52,12 +52,12 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
           <FormLabel>From</FormLabel>
           <LockedAccount>
             <AccountInfo account={from} />
-            <TransactionInfoRow>
+            <BalanceInfo>
               <InfoTitle>Transferable balance</InfoTitle>
               <InfoValue>
                 <TokenValue value={transferableBalance} />
               </InfoValue>
-            </TransactionInfoRow>
+            </BalanceInfo>
           </LockedAccount>
         </Row>
         <TransactionAmount>
