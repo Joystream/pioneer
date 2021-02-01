@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Shadows } from '../constants'
-import { Close } from './buttons/CloseCross'
+import { Close } from './buttons/CloseButton'
 import { ArrowOutsideIcon, ArrowOutsideStyles } from './icons/ArrowOutsideIcon'
 import { CrossIcon } from './icons/CrossIcon'
 
@@ -13,9 +13,9 @@ interface Props {
 export function ModalHeader({ onClick, title }: Props) {
   return (
     <ModalTopBar>
-      <CloseButton onClick={onClick}>
+      <CloseModalButton onClick={onClick}>
         <CrossIcon />
-      </CloseButton>
+      </CloseModalButton>
       <ArrowOutsideIcon />
       <ModalTitle>{title}</ModalTitle>
     </ModalTopBar>
@@ -102,7 +102,8 @@ export const ModalFooter = styled.footer`
   border-radius: 0px 0px 2px 2px;
 `
 const ModalTitle = styled.h4``
-const CloseButton = styled(Close)`
+
+const CloseModalButton = styled(Close)`
   position: absolute;
   right: 16px;
 `
