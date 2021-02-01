@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BN from 'bn.js'
 import styled from 'styled-components'
-import { useBalances } from '../../hooks/useBalances'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { Account } from '../../hooks/types'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons/Buttons'
@@ -24,25 +23,33 @@ import { useAccounts } from '../../hooks/useAccounts'
 
 interface Props {
   from: Account
-  to: Account
+  to?: Account
   onClose: () => void
-  onAccept: (amount: BN) => void
+  onAccept: (amount: BN, to: Account) => void
 }
 
 export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
   const accounts = useAccounts()
-  const balances = useBalances([from, to])
+  const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [amount, setAmount] = useNumberInput(0)
   const isZero = new BN(amount).lte(new BN(0))
-  const transferableBalance = balances?.map[from.address]?.total
+
+  const transferableBalance = new BN(1000)
 
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
-  const isTransferDisabled = isZero || isOverBalance
+  const isTransferDisabled = isZero || isOverBalance || !recipient
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
+  const onClick = () => {
+    if (amount && recipient) {
+      onAccept(new BN(amount), recipient)
+    }
+  }
 
-  const options = accounts.allAccounts.map((account) => ({ account: account }))
+  const options = accounts.allAccounts
+    .filter((account) => account.address !== from.address)
+    .map((account) => ({ account: account }))
 
   return (
     <Modal>
@@ -77,11 +84,23 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
         </TransactionAmount>
         <Row>
           <FormLabel>Destination account</FormLabel>
-          <SelectAccount options={options} onChange={(option) => console.log('change', option)} />
+          {to ? (
+            <LockedAccount>
+              <AccountInfo account={to} />
+              <BalanceInfo>
+                <InfoTitle>Transferable balance</InfoTitle>
+                <InfoValue>
+                  <TokenValue value={transferableBalance} />
+                </InfoValue>
+              </BalanceInfo>
+            </LockedAccount>
+          ) : (
+            <SelectAccount options={options} onChange={({ account }) => setRecipient(account)} />
+          )}
         </Row>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimaryMedium onClick={() => onAccept(new BN(amount))} disabled={isTransferDisabled}>
+        <ButtonPrimaryMedium onClick={onClick} disabled={isTransferDisabled}>
           Transfer tokens
         </ButtonPrimaryMedium>
       </ModalFooter>

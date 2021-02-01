@@ -15,7 +15,6 @@ import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalances } from '../../hooks/useBalances'
-import { Account } from '../../hooks/types'
 import { formatTokenValue } from '../../utils/formatters'
 
 export function Accounts() {
@@ -23,11 +22,6 @@ export function Accounts() {
   const balances = useBalances(allAccounts)
 
   if (!hasAccounts) return <Loading>Loading accounts...</Loading>
-
-  const sendTo = (from: Account) => {
-    const to = allAccounts[allAccounts.length - 1]
-    return to === from ? allAccounts[0] : to
-  }
 
   return (
     <MyProfile>
@@ -118,7 +112,7 @@ export function Accounts() {
                   <ButtonInside>
                     <ArrowInsideIcon />
                   </ButtonInside>
-                  <TransferButton from={account} to={sendTo(account)} />
+                  <TransferButton from={account} />
                   <ButtonApply>
                     <ArrowDownIcon />
                   </ButtonApply>
