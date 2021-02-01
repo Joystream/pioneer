@@ -38,33 +38,33 @@ describe('UI: TransferModal', () => {
     })
   })
 
-  it('Renders a modal', async () => {
+  it('Renders a modal', () => {
     const { getByText } = render(
       <ApiContext.Provider value={api}>
         <TransferModal onClose={sinon.spy()} from={from} to={to} />
       </ApiContext.Provider>
     )
 
-    expect(await getByText('Send tokens')).to.exist
+    expect(getByText('Send tokens')).to.exist
   })
 
-  it('Renders an Authorize transaction step', async () => {
+  it('Renders an Authorize transaction step', () => {
     const { getByLabelText, getByText } = render(
       <ApiContext.Provider value={api}>
         <TransferModal onClose={sinon.spy()} from={from} to={to} />
       </ApiContext.Provider>
     )
 
-    const input = await getByLabelText('Number of tokens')
-    expect(((await getByText('Transfer tokens')) as HTMLButtonElement).disabled).to.be.true
+    const input = getByLabelText('Number of tokens')
+    expect((getByText('Transfer tokens') as HTMLButtonElement).disabled).to.be.true
 
     fireEvent.change(input, { target: { value: '50' } })
 
-    const button = (await getByText('Transfer tokens')) as HTMLButtonElement
+    const button = getByText('Transfer tokens') as HTMLButtonElement
     expect(button.disabled).to.be.false
 
     fireEvent.click(button)
 
-    expect(await getByText('Authorize transaction')).to.exist
+    expect(getByText('Authorize transaction')).to.exist
   })
 })
