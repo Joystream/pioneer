@@ -44,7 +44,7 @@ export const OptionComponentContainer = styled.li`
   background-color: ${Colors.White};
 `
 
-export const OptionComponent = styled.button`
+export const OptionComponent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
