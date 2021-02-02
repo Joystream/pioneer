@@ -8,11 +8,11 @@ import { TokenValue } from '../../components/TokenValue'
 import { useAccounts } from '../../hooks/useAccounts'
 import {
   AccountRow,
+  BalanceInfo,
   InfoTitle,
   InfoValue,
   TransactionAmountInfo,
   TransactionAmountInfoText,
-  TransactionInfoRow,
 } from './TransferModal'
 
 export function TransactionSuccessModal() {
@@ -37,7 +37,7 @@ export function TransactionSuccessModal() {
         <Text>You have just successfully transferred balance from:</Text>
         <AccountSuccessRow>
           <AccountInfo account={from} />
-          <TransactionInfoRow>
+          <BalanceInfo>
             <InfoTitle>Transferable balance before</InfoTitle>
             <InfoValue>
               <TokenValue value={100_000_000} />
@@ -46,7 +46,7 @@ export function TransactionSuccessModal() {
             <InfoValue>
               <TokenValue value={0} />
             </InfoValue>
-          </TransactionInfoRow>
+          </BalanceInfo>
         </AccountSuccessRow>
         <TransactionAmountInfo>
           <ArrowDownExpandedIcon />
@@ -56,7 +56,7 @@ export function TransactionSuccessModal() {
         </TransactionAmountInfo>
         <AccountSuccessRow>
           <AccountInfo account={to} />
-          <TransactionInfoRow>
+          <BalanceInfo>
             <InfoTitle>Transferable balance before</InfoTitle>
             <InfoValue>
               <TokenValue value={0} />
@@ -65,7 +65,7 @@ export function TransactionSuccessModal() {
             <InfoValue>
               <TokenValue value={50_000_000} />
             </InfoValue>
-          </TransactionInfoRow>
+          </BalanceInfo>
         </AccountSuccessRow>
       </ModalSuccessBody>
     </Modal>
