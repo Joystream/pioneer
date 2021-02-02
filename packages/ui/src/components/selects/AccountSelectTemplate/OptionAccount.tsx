@@ -1,90 +1,68 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Transitions } from '../../../constants/styles'
+import { Account } from '../../../hooks/types'
+import { useBalance } from '../../../hooks/useBalance'
+import { BorderRad, Colors, Transitions } from '../../../constants'
+import { AccountInfo } from '../../AccountInfo'
+import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/TransferModal/TransferModal'
+import { TokenValue } from '../../TokenValue'
 
-export interface YieldMethod {
-  logoURI: string
-  symbol: string
-  value: string
-  emptyValue?: boolean
+export interface SelectAccountOption {
+  account: Account
 }
 
-export interface OptionYieldMethodProps {
-  option: YieldMethod
-  onChange: (option: YieldMethod) => void
+interface Props {
+  option: SelectAccountOption
+  onChange?: (option: SelectAccountOption) => void
 }
 
-export function OptionYieldMethod({ option, onChange }: OptionYieldMethodProps) {
-  const { logoURI, symbol, value } = option
+export function OptionAccount({ option, onChange }: Props) {
+  const { account } = option
+  const balance = useBalance(account)
 
   return (
     <OptionComponentContainer>
-      <OptionComponent onClick={() => onChange(option)}>
-        <TokenImageWrapper>
-          <TokenImage src={logoURI} />
-        </TokenImageWrapper>
-        <TokenName>{symbol}</TokenName>
-        <TokenValue>
-          {value}
-          {option.emptyValue !== true && <TokenValueInfo>% APY</TokenValueInfo>}
-        </TokenValue>
+      <OptionComponent onClick={() => onChange && onChange(option)}>
+        <AccountInfo account={account} />
+        <BalanceInfo>
+          <InfoTitle>Total balance</InfoTitle>
+          <InfoValue>
+            <TokenValue value={balance?.total} />
+          </InfoValue>
+        </BalanceInfo>
       </OptionComponent>
     </OptionComponentContainer>
   )
 }
 
-const OptionComponentContainer = styled.li`
+export const OptionComponentContainer = styled.li`
   display: flex;
-  widht: 100%;
+  width: 100%;
   height: 100%;
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
+  background-color: ${Colors.White};
 `
 
-const OptionComponent = styled.button`
+export const OptionComponent = styled.div`
   display: grid;
-  grid-template-columns: 1.5em 1fr auto;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   grid-column-gap: 0.5em;
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 0;
   font-size: 1em;
   border: none;
   background: transparent;
   cursor: pointer;
   border-radius: 0.25em;
   transition: ${Transitions.all};
+  min-height: 94px;
+  padding: 16px 132px 16px 14px;
 
-  &:hover,
-  &:focus {
-  }
   &:active,
   &:focus {
     outline: none;
   }
-`
-
-const TokenImageWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 1.5em;
-  height: 1.5em;
-`
-
-const TokenImage = styled.img`
-  width: 1.1em;
-  height: 1.1em;
-`
-
-const TokenName = styled.span`
-  text-align: left;
-`
-
-const TokenValue = styled.span`
-  text-align: right;
-`
-
-const TokenValueInfo = styled.span`
-  text-align: right;
 `

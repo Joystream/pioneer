@@ -8,7 +8,7 @@ import { TransferModal } from '../modals/TransferModal/TransferModal'
 
 interface Props {
   from: Account
-  to: Account
+  to?: Account
 }
 
 export function TransferButton({ from, to }: Props) {

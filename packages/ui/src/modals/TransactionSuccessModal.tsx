@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal, ModalBody, ModalHeader } from '../components/modal'
 import { useAccounts } from '../hooks/useAccounts'
 import { AccountInfo } from '../components/AccountInfo'
-import { AccountRow, InfoTitle, InfoValue, TransactionAmount, TransactionInfoRow } from './TransferModal/TransferModal'
+import { AccountRow, BalanceInfo, InfoTitle, InfoValue, TransactionAmount } from './TransferModal/TransferModal'
 import { TokenValue } from '../components/TokenValue'
 import BN from 'bn.js'
 
@@ -26,7 +26,7 @@ export function TransactionSuccessModal() {
       <ModalBody>
         <AccountRow>
           <AccountInfo account={from} />
-          <TransactionInfoRow>
+          <BalanceInfo>
             <InfoTitle>Transferable balance before</InfoTitle>
             <InfoValue>
               <TokenValue value={100_000_000} />
@@ -35,14 +35,14 @@ export function TransactionSuccessModal() {
             <InfoValue>
               <TokenValue value={0} />
             </InfoValue>
-          </TransactionInfoRow>
+          </BalanceInfo>
         </AccountRow>
         <TransactionAmount>
           Transferred <TokenValue value={new BN(10_000)} />
         </TransactionAmount>
         <AccountRow>
           <AccountInfo account={to} />
-          <TransactionInfoRow>
+          <BalanceInfo>
             <InfoTitle>Transferable balance before</InfoTitle>
             <InfoValue>
               <TokenValue value={0} />
@@ -51,7 +51,7 @@ export function TransactionSuccessModal() {
             <InfoValue>
               <TokenValue value={50_000_000} />
             </InfoValue>
-          </TransactionInfoRow>
+          </BalanceInfo>
         </AccountRow>
       </ModalBody>
     </Modal>

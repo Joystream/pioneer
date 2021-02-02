@@ -1,10 +1,5 @@
-import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Transitions } from '../../constants/styles'
-
-export function Buttons() {
-  return <ButtonPrimary></ButtonPrimary>
-}
+import { BorderRad, Colors, Transitions } from '../../constants'
 
 export const ButtonPrimary = styled.button`
   display: inline-grid;

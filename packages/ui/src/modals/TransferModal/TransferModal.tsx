@@ -1,45 +1,35 @@
 import BN from 'bn.js'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Modal, ModalBody, ModalHeader } from '../../components/modal'
 import { BorderRad, Colors } from '../../constants'
 import { Account } from '../../hooks/types'
-import { useBalances } from '../../hooks/useBalances'
 import { SignTransferModal } from './SignTransferModal'
 import { TransferDetailsModal } from './TransferDetailsModal'
 
 interface Props {
   onClose: () => void
   from: Account
-  to: Account
+  to?: Account
 }
 
 type ModalState = 'SEND_TOKENS' | 'SIGN_TRANSACTION' | 'SENDING'
 
 export function TransferModal({ from, to, onClose }: Props) {
-  const { hasBalances } = useBalances([from, to])
   const [step, setStep] = useState<ModalState>('SEND_TOKENS')
   const [amount, setAmount] = useState<BN>(new BN(0))
+  const [transferTo, setTransferTo] = useState<Account | undefined>(to)
 
-  const onAccept = (amount: BN) => {
+  const onAccept = (amount: BN, to: Account) => {
     setAmount(amount)
+    setTransferTo(to)
     setStep('SIGN_TRANSACTION')
   }
 
-  if (!hasBalances) {
-    return (
-      <Modal>
-        <ModalHeader onClick={onClose} title={''} />
-        <ModalBody>Loading balances...</ModalBody>
-      </Modal>
-    )
+  if (step === 'SEND_TOKENS' || !transferTo) {
+    return <TransferDetailsModal onClose={onClose} from={from} to={transferTo} onAccept={onAccept} />
   }
 
-  if (step === 'SEND_TOKENS') {
-    return <TransferDetailsModal onClose={onClose} from={from} to={to} onAccept={onAccept} />
-  }
-
-  return <SignTransferModal onClose={onClose} from={from} amount={amount} to={to} />
+  return <SignTransferModal onClose={onClose} from={from} amount={amount} to={transferTo} />
 }
 
 export const FormLabel = styled.div`
@@ -84,7 +74,7 @@ export const TransactionInfo = styled.div`
   display: flex;
   flex-direction: column;
 `
-export const TransactionInfoRow = styled.div`
+export const BalanceInfo = styled.div`
   display: grid;
   position: relative;
   grid-template-columns: 1fr 128px;

@@ -8,8 +8,7 @@ import sinon from 'sinon'
 import { aliceSigner } from '../mocks/keyring'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
-import * as useBalancesModule from '../../src/hooks/useBalances'
-import { UseBalances } from '../../src/hooks/useBalances'
+import * as useBalanceModule from '../../src/hooks/useBalance'
 import { Accounts } from '../../src/pages/Profile/Accounts'
 import { Account } from '../../src/hooks/types'
 
@@ -19,7 +18,6 @@ describe('UI: Accounts list', () => {
     allAccounts: Account[]
   }
   let alice: string
-  const JOY_1 = new BN(1)
 
   before(cryptoWaitReady)
 
@@ -50,19 +48,12 @@ describe('UI: Accounts list', () => {
   })
 
   context('with development accounts', () => {
-    let balances: UseBalances
-
     beforeEach(() => {
-      balances = {
-        hasBalances: true,
-        map: {},
-      }
       accounts.hasAccounts = true
       accounts.allAccounts.push({
         address: alice,
         name: 'alice',
       })
-      sinon.stub(useBalancesModule, 'useBalances').returns(balances)
     })
 
     afterEach(() => {
@@ -71,6 +62,7 @@ describe('UI: Accounts list', () => {
 
     it('Renders empty balance when not returned', async () => {
       const { findByText } = renderAccounts()
+      sinon.stub(useBalanceModule, 'useBalance').returns(null)
 
       const alice = aliceSigner().address
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
@@ -80,24 +72,18 @@ describe('UI: Accounts list', () => {
     })
 
     it('Renders balance value', async () => {
-      balances.map[alice] = {
-        total: JOY_1,
-      }
+      sinon.stub(useBalanceModule, 'useBalance').returns({
+        total: new BN(1000),
+        locked: new BN(0),
+        transferable: new BN(1000),
+        recoverable: new BN(0),
+      })
 
       const { findByText } = renderAccounts()
 
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
       expect(aliceBox?.querySelector('h5')?.textContent).to.equal('alice')
-      expect(aliceBox?.nextSibling?.textContent).to.equal('1\xa0JOY')
-    })
-
-    it.skip('Renders token TransferModal button', async () => {
-      balances.map[alice] = {
-        total: JOY_1,
-      }
-
-      const { findByText } = renderAccounts()
-      expect((await findByText(alice))?.parentNode?.nextSibling?.nextSibling?.textContent).to.equal('send')
+      expect(aliceBox?.nextSibling?.textContent).to.equal('1,000\xa0JOY')
     })
 
     function renderAccounts() {

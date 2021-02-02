@@ -17,11 +17,10 @@ export const Button = styled.button`
   width: 16px;
   height: 16px;
   padding: 0;
-  margin: 0;
   border: none;
   color: inherit;
   outline: none;
   background-color: transparent;
   cursor: pointer;
-  margin-left: 8px;
+  margin: 0 0 0 8px;
 `

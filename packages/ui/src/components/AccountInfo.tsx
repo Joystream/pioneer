@@ -22,7 +22,7 @@ export const AccountInfo = ({ account }: { account: Account }) => {
 const AccountInfoWrap = styled.div`
   display: grid;
   grid-template-columns: 40px 1fr;
-  grid-template-rows: min-content, 24px 18px;
+  grid-template-rows: min-content 24px 18px;
   grid-column-gap: 12px;
   grid-template-areas:
     'accountphoto accounttype'

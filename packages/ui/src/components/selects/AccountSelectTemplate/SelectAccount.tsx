@@ -1,14 +1,21 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Transitions } from '../../../constants/styles'
-import { OptionListYieldMethod } from './OptionListYieldMethod'
-import { YieldMethod } from './OptionYieldMethod'
+import { BorderRad, Colors, Transitions } from '../../../constants'
+import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
+import { SelectAccountOption } from './OptionAccount'
+import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/TransferModal/TransferModal'
+import { AccountInfo } from '../../AccountInfo'
+import { TokenValue } from '../../TokenValue'
+import { useBalance } from '../../../hooks/useBalance'
+import { ArrowDownIcon } from '../../icons/ArrowDownIcon'
+import { ButtonApply } from '../../../pages/Profile/Accounts'
 
-export function SelectYieldMethod({ options, onChange }: OptionListYieldMethod) {
+export function SelectAccount({ options, onChange }: OptionListAccountProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState<YieldMethod>(options[0])
+  const [selectedOption, setSelectedOption] = useState<SelectAccountOption>(options[0])
+  const balance = useBalance(selectedOption?.account)
 
-  const onOptionClick = (option: YieldMethod) => {
+  const onOptionClick = (option: SelectAccountOption) => {
     setIsOpen(false)
     setSelectedOption(option)
     onChange(option)
@@ -17,19 +24,40 @@ export function SelectYieldMethod({ options, onChange }: OptionListYieldMethod) 
   return (
     <SelectComponent>
       <SelectButton onClick={() => setIsOpen(!isOpen)}>
-        <SelectedImageWrapper>
-          <SelectedImage src={selectedOption.logoURI} />
-        </SelectedImageWrapper>
-        <SelectedName>{selectedOption.symbol}</SelectedName>
-        <SelectedValue>
-          {selectedOption.value}
-          {selectedOption.emptyValue !== true && <SelectedValueInfo>% APY</SelectedValueInfo>}
-        </SelectedValue>
+        {selectedOption && (
+          <SelectedOption>
+            <AccountInfo account={selectedOption.account} />
+            <BalanceInfo>
+              <InfoTitle>Total balance</InfoTitle>
+              <InfoValue>
+                <TokenValue value={balance?.total} />
+              </InfoValue>
+            </BalanceInfo>
+          </SelectedOption>
+        )}
+        {!selectedOption && <Empty>Select account</Empty>}
+        <ButtonApply>
+          <ArrowDownIcon />
+        </ButtonApply>
       </SelectButton>
-      {isOpen && <OptionListYieldMethod onChange={onOptionClick} options={options} />}
+      {isOpen && <OptionListAccount onChange={onOptionClick} options={options} />}
     </SelectComponent>
   )
 }
+
+const SelectedOption = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  align-items: center;
+  min-height: 94px;
+  padding: 16px 132px 16px 14px;
+`
+
+const Empty = styled.p`
+  padding: 16px 14px;
+  text-align: left;
+`
 
 const SelectComponent = styled.div`
   display: flex;
@@ -39,21 +67,24 @@ const SelectComponent = styled.div`
   align-items: center;
 `
 
-const SelectButton = styled.button`
+const SelectButton = styled.div`
   display: grid;
-  grid-template-columns: 1.5em 1fr auto;
+  grid-template-columns: 1fr 40px;
   grid-template-rows: 1fr;
   grid-column-gap: 0.5em;
   align-items: center;
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: 0.5em 2em 0.5em 0.75em;
-  border-radius: 0.25em;
-  background: transparent;
+  padding: 0;
   font-size: 1em;
   cursor: pointer;
   transition: ${Transitions.all};
+
+  min-height: 94px;
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
+  background-color: ${Colors.White};
 
   &::after {
     content: '';
@@ -80,29 +111,4 @@ const SelectButton = styled.button`
       transform: translateY(-50%) scaleY(-1);
     }
   }
-`
-
-const SelectedImageWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 1.5em;
-  height: 1.5em;
-`
-
-const SelectedImage = styled.img`
-  width: 1.1em;
-  height: 1.1em;
-`
-
-const SelectedName = styled.span`
-  text-align: left;
-`
-
-const SelectedValue = styled.span`
-  text-align: right;
-`
-
-const SelectedValueInfo = styled.span`
-  text-align: right;
 `
