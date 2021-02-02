@@ -5,7 +5,7 @@ import { ArrowDownExpandedIcon } from '../../components/icons/ArrowDownExpandedI
 import { Modal, ModalBody, ModalHeader } from '../../components/modal'
 import { Text } from '../../components/page/Typography/Text'
 import { TokenValue } from '../../components/TokenValue'
-import { useAccounts } from '../../hooks/useAccounts'
+import { Account } from '../../hooks/types'
 import {
   AccountRow,
   BalanceInfo,
@@ -13,26 +13,22 @@ import {
   InfoValue,
   TransactionAmountInfo,
   TransactionAmountInfoText,
-} from './TransferModal'
+} from '../common'
 
-export function TransactionSuccessModal() {
-  const accounts = useAccounts()
+interface Props {
+  onClose: () => void
+  from?: Account
+  to?: Account
+}
 
-  if (!accounts.hasAccounts) {
+export function TransactionSuccessModal({ onClose, from, to }: Props) {
+  if (!from || !to) {
     return <></>
   }
 
-  const [from, to] = accounts.allAccounts
-
   return (
     <Modal>
-      <ModalHeader
-        onClick={() => {
-          /**/
-        }}
-        title="Success"
-        icon={'🎉'}
-      />
+      <ModalHeader onClick={onClose} title="Success" icon={'🎉'} />
       <ModalSuccessBody>
         <Text>You have just successfully transferred balance from:</Text>
         <AccountSuccessRow>

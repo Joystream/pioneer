@@ -19,7 +19,7 @@ import {
   LockedAccount,
   Row,
   TransactionAmount,
-} from './TransferModal'
+} from '../common'
 import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
 
 interface Props {

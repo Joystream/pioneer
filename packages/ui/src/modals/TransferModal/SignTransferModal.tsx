@@ -25,7 +25,7 @@ import {
   TransactionAmountInfo,
   TransactionAmountInfoText,
   TransactionInfo,
-} from './TransferModal'
+} from '../common'
 
 interface Props {
   onClose: () => void
