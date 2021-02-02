@@ -25,6 +25,7 @@ import {
   TransactionAmountInfoText,
   TransactionInfo,
 } from './TransferModal'
+import { Subscription } from 'rxjs'
 
 interface Props {
   onClose: () => void
@@ -41,17 +42,20 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
   const [isSending, setIsSending] = useState(false)
   const [info, setInfo] = useState<RuntimeDispatchInfo | null>(null)
 
+  const transfer = api?.tx?.balances?.transfer(to.address, amount)
+
   useEffect(() => {
-    const subscription = submittableExtrinsic?.paymentInfo(from.address).subscribe(setInfo)
+    const subscription = transfer?.paymentInfo(from.address).subscribe(setInfo)
 
     return () => subscription && subscription.unsubscribe()
   }, [api, amount])
 
-  const submittableExtrinsic = api?.tx?.balances?.transfer(to.address, amount)
-  const signAndSend = async () => {
-    setIsSending(true)
+  useEffect(() => {
+    if (!isSending) {
+      return
+    }
 
-    if (!submittableExtrinsic) {
+    if (!transfer) {
       return
     }
 
@@ -67,17 +71,20 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
       onClose()
     }
 
-    if (keyringPair.meta.isInjected) {
-      const { signer } = await web3FromAddress(from.address)
+    let subscription: Subscription
 
-      await submittableExtrinsic
-        .signAndSend(from.address, { signer: signer }, statusCallback)
-        .toPromise()
-        .catch(console.error)
+    if (keyringPair.meta.isInjected) {
+      web3FromAddress(from.address).then(({ signer }) => {
+        subscription = transfer.signAndSend(from.address, { signer: signer }).subscribe(statusCallback)
+      })
     } else {
-      await submittableExtrinsic.signAndSend(keyringPair, statusCallback).toPromise().catch(console.error)
+      subscription = transfer.signAndSend(keyringPair).subscribe(statusCallback)
     }
-  }
+
+    return () => {
+      subscription && subscription.unsubscribe()
+    }
+  }, [api, isSending])
 
   return (
     <Modal>
@@ -134,7 +141,7 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
             />
           </BalanceInfo>
         </TransactionInfo>
-        <ButtonPrimaryMedium onClick={signAndSend} disabled={isSending}>
+        <ButtonPrimaryMedium onClick={() => setIsSending(true)} disabled={isSending}>
           Sign transaction and Transfer
         </ButtonPrimaryMedium>
       </ModalFooter>
