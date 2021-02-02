@@ -1,8 +1,11 @@
+import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Observable, Subscription } from 'rxjs'
 import styled from 'styled-components'
 import { BorderRad, Colors } from '../../constants'
 import { Account } from '../../hooks/types'
+import { WaitModal } from '../WaitModal'
 import { SignTransferModal } from './SignTransferModal'
 import { TransferDetailsModal } from './TransferDetailsModal'
 
@@ -18,6 +21,13 @@ export function TransferModal({ from, to, onClose }: Props) {
   const [step, setStep] = useState<ModalState>('SEND_TOKENS')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [transferTo, setTransferTo] = useState<Account | undefined>(to)
+  const [subscription, setSubscription] = useState<Subscription | undefined>(undefined)
+
+  useEffect(() => {
+    if (subscription) {
+      return () => subscription.unsubscribe()
+    }
+  }, [subscription])
 
   const onAccept = (amount: BN, to: Account) => {
     setAmount(amount)
@@ -25,11 +35,36 @@ export function TransferModal({ from, to, onClose }: Props) {
     setStep('SIGN_TRANSACTION')
   }
 
+  const onSign = (transaction: Observable<ISubmittableResult>) => {
+    const statusCallback = (result: ISubmittableResult) => {
+      const { status } = result
+
+      console.log(result.toHuman())
+
+      if (!status.isInBlock) {
+        console.log(`Current transaction status: ${status.type}`)
+        return
+      }
+
+      console.log(`In Block. Block hash: ${status.asInBlock.toString()}`)
+      onClose()
+    }
+
+    const subscription = transaction.subscribe(statusCallback)
+
+    setSubscription(subscription)
+    setStep('SENDING')
+  }
+
   if (step === 'SEND_TOKENS' || !transferTo) {
     return <TransferDetailsModal onClose={onClose} from={from} to={transferTo} onAccept={onAccept} />
   }
 
-  return <SignTransferModal onClose={onClose} from={from} amount={amount} to={transferTo} />
+  if (step === 'SIGN_TRANSACTION') {
+    return <SignTransferModal onClose={onClose} from={from} amount={amount} to={transferTo} onSign={onSign} />
+  }
+
+  return <WaitModal title="Wait for the transaction" description="..." />
 }
 
 export const FormLabel = styled.div`
