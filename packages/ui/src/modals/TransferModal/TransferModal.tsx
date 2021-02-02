@@ -5,9 +5,11 @@ import { Observable, Subscription } from 'rxjs'
 import styled from 'styled-components'
 import { BorderRad, Colors } from '../../constants'
 import { Account } from '../../hooks/types'
+import { useKeyring } from '../../hooks/useKeyring'
 import { WaitModal } from '../WaitModal'
 import { SignTransferModal } from './SignTransferModal'
 import { TransferDetailsModal } from './TransferDetailsModal'
+import { WaitForTheExtensionModal } from './WaitForTheExtensionModal'
 
 interface Props {
   onClose: () => void
@@ -15,9 +17,10 @@ interface Props {
   to?: Account
 }
 
-type ModalState = 'SEND_TOKENS' | 'SIGN_TRANSACTION' | 'SENDING'
+type ModalState = 'SEND_TOKENS' | 'SIGN_TRANSACTION' | 'EXTENSION_SIGN' | 'SENDING'
 
 export function TransferModal({ from, to, onClose }: Props) {
+  const keyring = useKeyring()
   const [step, setStep] = useState<ModalState>('SEND_TOKENS')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [transferTo, setTransferTo] = useState<Account | undefined>(to)
@@ -39,21 +42,28 @@ export function TransferModal({ from, to, onClose }: Props) {
     const statusCallback = (result: ISubmittableResult) => {
       const { status } = result
 
-      console.log(result.toHuman())
+      console.log(`Current transaction status: ${status.type}`)
+
+      if (status.isReady) {
+        setStep('SENDING')
+      }
 
       if (!status.isInBlock) {
-        console.log(`Current transaction status: ${status.type}`)
         return
       }
 
       console.log(`In Block. Block hash: ${status.asInBlock.toString()}`)
+
       onClose()
     }
 
-    const subscription = transaction.subscribe(statusCallback)
+    setSubscription(transaction.subscribe(statusCallback))
 
-    setSubscription(subscription)
-    setStep('SENDING')
+    if (keyring.getPair(from.address).meta.isInjected) {
+      setStep('EXTENSION_SIGN')
+    } else {
+      setStep('SENDING')
+    }
   }
 
   if (step === 'SEND_TOKENS' || !transferTo) {
@@ -62,6 +72,10 @@ export function TransferModal({ from, to, onClose }: Props) {
 
   if (step === 'SIGN_TRANSACTION') {
     return <SignTransferModal onClose={onClose} from={from} amount={amount} to={transferTo} onSign={onSign} />
+  }
+
+  if (step === 'EXTENSION_SIGN') {
+    return <WaitForTheExtensionModal />
   }
 
   return <WaitModal title="Wait for the transaction" description="..." />

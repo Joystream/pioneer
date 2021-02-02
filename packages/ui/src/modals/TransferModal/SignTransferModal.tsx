@@ -26,7 +26,6 @@ import {
   TransactionAmountInfoText,
   TransactionInfo,
 } from './TransferModal'
-import { WaitForTheExtensionModal } from './WaitForTheExtensionModal'
 
 interface Props {
   onClose: () => void
@@ -42,7 +41,6 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
   const balanceFrom = useBalance(from)
   const balanceTo = useBalance(to)
   const [isSending, setIsSending] = useState(false)
-  const [isWaiting, setIsWaiting] = useState(false)
   const transfer = api?.tx?.balances?.transfer(to.address, amount)
   const info = useObservable(transfer?.paymentInfo(from.address), [api])
 
@@ -54,9 +52,6 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
     const keyringPair = keyring.getPair(from.address)
 
     if (keyringPair.meta.isInjected) {
-      // TODO: signing happen on send not when waiting on promise below...
-      setIsWaiting(true)
-
       web3FromAddress(from.address).then(({ signer }) => {
         onSign(transfer.signAndSend(from.address, { signer: signer }))
       })
@@ -64,10 +59,6 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
       onSign(transfer.signAndSend(keyringPair))
     }
   }, [api, isSending])
-
-  if (isWaiting) {
-    return <WaitForTheExtensionModal />
-  }
 
   return (
     <Modal>
