@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { RuntimeDispatchInfo } from '@polkadot/types/interfaces'
+import { Subscription } from 'rxjs'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
 import BN from 'bn.js'
@@ -14,6 +14,7 @@ import { Account } from '../../hooks/types'
 import { useApi } from '../../hooks/useApi'
 import { useBalance } from '../../hooks/useBalance'
 import { useKeyring } from '../../hooks/useKeyring'
+import { useObservable } from '../../hooks/useObservable'
 import {
   AccountRow,
   BalanceInfo,
@@ -25,7 +26,6 @@ import {
   TransactionAmountInfoText,
   TransactionInfo,
 } from './TransferModal'
-import { Subscription } from 'rxjs'
 
 interface Props {
   onClose: () => void
@@ -40,22 +40,11 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
   const balanceFrom = useBalance(from)
   const balanceTo = useBalance(to)
   const [isSending, setIsSending] = useState(false)
-  const [info, setInfo] = useState<RuntimeDispatchInfo | null>(null)
-
   const transfer = api?.tx?.balances?.transfer(to.address, amount)
+  const [info] = useObservable(transfer?.paymentInfo(from.address), [api])
 
   useEffect(() => {
-    const subscription = transfer?.paymentInfo(from.address).subscribe(setInfo)
-
-    return () => subscription && subscription.unsubscribe()
-  }, [api, amount])
-
-  useEffect(() => {
-    if (!isSending) {
-      return
-    }
-
-    if (!transfer) {
+    if (!isSending || !transfer) {
       return
     }
 
