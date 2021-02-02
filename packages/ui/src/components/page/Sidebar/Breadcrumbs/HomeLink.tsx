@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { HomeSymbol } from '../../../../components/icons/symbols/HomeSymbol'
-import { Colors } from '../../../../constants/styles'
+import { HomeSymbol } from '../../../icons/symbols/HomeSymbol'
+import { Colors } from '../../../../constants'
 
 export function HomeLink() {
   return (

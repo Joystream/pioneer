@@ -77,7 +77,6 @@ const SelectButton = styled.div`
   height: 100%;
   margin: 0;
   padding: 0;
-  background: transparent;
   font-size: 1em;
   cursor: pointer;
   transition: ${Transitions.all};

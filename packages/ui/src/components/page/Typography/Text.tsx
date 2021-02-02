@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Colors } from '../../../constants/styles'
+import { Colors } from '../../../constants'
 
 interface TextProps {
   size?: number

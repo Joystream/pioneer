@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors } from '../../../constants/styles'
+import { Colors } from '../../../constants'
 
 export function Logo() {
   return (

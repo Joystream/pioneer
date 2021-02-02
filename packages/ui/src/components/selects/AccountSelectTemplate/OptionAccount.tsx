@@ -37,7 +37,7 @@ export function OptionAccount({ option, onChange }: Props) {
 
 export const OptionComponentContainer = styled.li`
   display: flex;
-  widht: 100%;
+  width: 100%;
   height: 100%;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
@@ -52,7 +52,6 @@ export const OptionComponent = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 0;
   font-size: 1em;
   border: none;
   background: transparent;
@@ -61,9 +60,7 @@ export const OptionComponent = styled.div`
   transition: ${Transitions.all};
   min-height: 94px;
   padding: 16px 132px 16px 14px;
-  &:hover,
-  &:focus {
-  }
+
   &:active,
   &:focus {
     outline: none;
