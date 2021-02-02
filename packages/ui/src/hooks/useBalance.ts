@@ -1,7 +1,8 @@
-import { useApi } from './useApi'
-import { Account } from './types'
 import BN from 'bn.js'
+
+import { useApi } from './useApi'
 import { useObservable } from './useObservable'
+import { Account } from './types'
 
 export interface UseBalance {
   total: BN

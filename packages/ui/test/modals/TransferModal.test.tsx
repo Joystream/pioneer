@@ -1,18 +1,19 @@
 import React from 'react'
+import { from } from 'rxjs'
+import { ApiRx } from '@polkadot/api'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
+import { set } from 'lodash'
 import { fireEvent, render } from '@testing-library/react'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import BN from 'bn.js'
-import { ApiRx } from '@polkadot/api'
-import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { set } from 'lodash'
-import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
-import { Account } from '../../src/hooks/types'
+
 import { aliceSigner, bobSigner } from '../mocks/keyring'
+import { Account } from '../../src/hooks/types'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
+import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
-import { from } from 'rxjs'
 
 describe('UI: TransferModal', () => {
   before(cryptoWaitReady)
@@ -63,7 +64,7 @@ describe('UI: TransferModal', () => {
     expect(getByText('Send tokens')).to.exist
   })
 
-  it.skip('Renders an Authorize transaction step', () => {
+  it('Renders an Authorize transaction step', () => {
     const { getByLabelText, getByText } = renderModal()
 
     const input = getByLabelText('Number of tokens')
