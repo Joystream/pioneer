@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { RuntimeDispatchInfo } from '@polkadot/types/interfaces'
+import { Subscription } from 'rxjs'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
 import BN from 'bn.js'
@@ -14,6 +14,7 @@ import { Account } from '../../hooks/types'
 import { useApi } from '../../hooks/useApi'
 import { useBalance } from '../../hooks/useBalance'
 import { useKeyring } from '../../hooks/useKeyring'
+import { useObservable } from '../../hooks/useObservable'
 import {
   AccountRow,
   BalanceInfo,
@@ -39,19 +40,11 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
   const balanceFrom = useBalance(from)
   const balanceTo = useBalance(to)
   const [isSending, setIsSending] = useState(false)
-  const [info, setInfo] = useState<RuntimeDispatchInfo | null>(null)
+  const transfer = api?.tx?.balances?.transfer(to.address, amount)
+  const info = useObservable(transfer?.paymentInfo(from.address), [api])
 
   useEffect(() => {
-    submittableExtrinsic?.paymentInfo(from.address).then((info) => {
-      setInfo(info)
-    })
-  }, [api, amount])
-
-  const submittableExtrinsic = api?.tx?.balances?.transfer(to.address, amount)
-  const signAndSend = async () => {
-    setIsSending(true)
-
-    if (!submittableExtrinsic) {
+    if (!isSending || !transfer) {
       return
     }
 
@@ -67,14 +60,20 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
       onClose()
     }
 
-    if (keyringPair.meta.isInjected) {
-      const { signer } = await web3FromAddress(from.address)
+    let subscription: Subscription
 
-      await submittableExtrinsic.signAndSend(from.address, { signer: signer }, statusCallback).catch(console.error)
+    if (keyringPair.meta.isInjected) {
+      web3FromAddress(from.address).then(({ signer }) => {
+        subscription = transfer.signAndSend(from.address, { signer: signer }).subscribe(statusCallback)
+      })
     } else {
-      await submittableExtrinsic.signAndSend(keyringPair, statusCallback).catch(console.error)
+      subscription = transfer.signAndSend(keyringPair).subscribe(statusCallback)
     }
-  }
+
+    return () => {
+      subscription && subscription.unsubscribe()
+    }
+  }, [api, isSending])
 
   return (
     <Modal>
@@ -131,7 +130,7 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
             />
           </BalanceInfo>
         </TransactionInfo>
-        <ButtonPrimaryMedium onClick={signAndSend} disabled={isSending}>
+        <ButtonPrimaryMedium onClick={() => setIsSending(true)} disabled={isSending}>
           Sign transaction and Transfer
         </ButtonPrimaryMedium>
       </ModalFooter>

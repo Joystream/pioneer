@@ -1,6 +1,9 @@
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
+
+import { useAccounts } from '../../hooks/useAccounts'
+import { useBalance } from '../../hooks/useBalance'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonGhostMediumSquare, ButtonPrimarySmall } from '../../components/buttons/Buttons'
 import { ArrowDownIcon } from '../../components/icons/ArrowDownIcon'
@@ -13,8 +16,6 @@ import { ValueInJoys } from '../../components/page/Typography/ValueInJoys'
 import { TokenValue } from '../../components/TokenValue'
 import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Shadows } from '../../constants'
-import { useAccounts } from '../../hooks/useAccounts'
-import { useBalance } from '../../hooks/useBalance'
 import { formatTokenValue } from '../../utils/formatters'
 import { Account } from '../../hooks/types'
 

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
-import { useApi } from './useApi'
-import { Account } from './types'
 import BN from 'bn.js'
+
+import { useApi } from './useApi'
+import { useObservable } from './useObservable'
+import { Account } from './types'
 
 export interface UseBalance {
   total: BN
@@ -11,27 +12,19 @@ export interface UseBalance {
 }
 
 export function useBalance(account: Account): UseBalance | null {
-  const [balance, setBalance] = useState<UseBalance | null>(null)
-  const { isConnected, api } = useApi()
+  const { api } = useApi()
+  const balances = useObservable(api?.derive.balances.all(account?.address), [api, account])
 
-  useEffect(() => {
-    let unsubscribeAll: any
+  if (balances === undefined) {
+    return null
+  }
 
-    if (isConnected && api) {
-      const address = account?.address
+  const { freeBalance, lockedBalance } = balances
 
-      api.derive.balances.all(address, ({ freeBalance, lockedBalance }) => {
-        setBalance({
-          total: freeBalance.add(lockedBalance),
-          transferable: freeBalance,
-          locked: lockedBalance,
-          recoverable: new BN(0),
-        })
-      })
-    }
-
-    return () => unsubscribeAll && unsubscribeAll()
-  }, [api, isConnected, account])
-
-  return balance
+  return {
+    total: freeBalance.add(lockedBalance),
+    transferable: freeBalance,
+    locked: lockedBalance,
+    recoverable: new BN(0),
+  }
 }
