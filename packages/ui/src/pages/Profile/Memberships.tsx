@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ButtonGhostMediumSquare, ButtonPrimary } from '../../components/buttons/Buttons'
 import { Close } from '../../components/buttons/CloseButton'
 import { CrossIcon } from '../../components/icons/CrossIcon'
+import { Modal, ModalHeader } from '../../components/modal'
 
 const bob = ({
   handle: 'Bob member',
@@ -25,7 +26,8 @@ const alice = ({
 } as unknown) as Membership
 
 export function Memberships() {
-  const hasMemberships = true
+  const [isCreateOpen, setCreateOpen] = useState(false)
+  const hasMemberships = false
 
   if (!hasMemberships) {
     return (
@@ -35,7 +37,8 @@ export function Memberships() {
           Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
           velit mollit. Exercitation veniam consequat sunt nostrud amet.
         </p>
-        <ButtonPrimary>Create membership</ButtonPrimary>
+        <ButtonPrimary onClick={() => setCreateOpen(true)}>Create membership</ButtonPrimary>
+        {isCreateOpen && <AddMembershipModal onClose={() => setCreateOpen(false)} />}
       </>
     )
   }
@@ -117,3 +120,15 @@ const Avatar = styled.img`
 const MembershipsList = styled.div``
 const MembershipsListHeader = styled.div``
 const MembershipsListItems = styled.div``
+
+interface MembershipModalProps {
+  onClose: () => void
+}
+
+const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
+  return (
+    <Modal>
+      <ModalHeader onClick={onClose} title="Add membership" />
+    </Modal>
+  )
+}
