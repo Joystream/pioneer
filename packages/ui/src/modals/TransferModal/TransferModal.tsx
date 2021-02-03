@@ -8,7 +8,6 @@ import { SignTransferModal } from './SignTransferModal'
 import { TransactionFailureModal } from './TransactionFailureModal'
 import { TransactionSuccessModal } from './TransactionSuccessModal'
 import { TransferDetailsModal } from './TransferDetailsModal'
-import { WaitForTheExtensionModal } from './WaitForTheExtensionModal'
 import { WaitModal } from '../WaitModal'
 
 interface Props {
@@ -74,12 +73,17 @@ export function TransferModal({ from, to, onClose }: Props) {
     return <SignTransferModal onClose={onClose} from={from} amount={amount} to={transferTo} onSign={onSign} />
   }
 
+  const loremDescription =
+    'Lorem ipsum dolor sit amet consectetur adipisicing elit. ' +
+    'Minus, a saepe ducimus qui quo optio totam explicabo delectus recusandae officia tenetur molestias,' +
+    ' excepturi, amet corrupti reiciendis quam nulla magni esse?'
+
   if (step === 'EXTENSION_SIGN') {
-    return <WaitForTheExtensionModal />
+    return <WaitModal title="Waiting for the extension" description={loremDescription} />
   }
 
   if (step === 'SENDING') {
-    return <WaitModal title="Wait for the transaction" description="..." />
+    return <WaitModal title="Wait for the transaction" description={loremDescription} />
   }
 
   if (step === 'SUCCESS') {
