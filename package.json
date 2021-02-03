@@ -13,7 +13,8 @@
   "scripts": {
     "lint": "wsrun -c lint",
     "build": "wsrun -e -c build",
-    "test": "wsrun -e -c test"
+    "test": "wsrun -e -c test",
+    "start": "wsrun -p ui -c start"
   },
   "dependencies": {
     "wsrun": "^5.2.4"
