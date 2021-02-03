@@ -5,7 +5,6 @@ import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonGhostMediumSquare } from '../../components/buttons/Buttons'
 import { ArrowDownIcon } from '../../components/icons/ArrowDownIcon'
 import { PageTab, PageTabs } from '../../components/page/PageTabs'
-import { PageTitle } from '../../components/page/PageTitle'
 import { TokenValue } from '../../components/typography'
 import { TransferButton } from '../../components/TransferButton'
 import { BorderRad, Colors, Sizes } from '../../constants'
@@ -20,37 +19,25 @@ export function Accounts() {
   if (!hasAccounts) return <Loading>Loading accounts...</Loading>
 
   return (
-    <MyProfile>
-      <AccountHead>
-        <PageTitle>My profile</PageTitle>
-        <ProfileSummary>
-          <PageTabs>
-            <PageTab>My accounts</PageTab>
-            <PageTab>My memberships</PageTab>
-          </PageTabs>
-          <TotalBalances />
-        </ProfileSummary>
-      </AccountHead>
-      <AccountsBoard>
-        <AccountsTabs>
-          <AccountTab>All accounts</AccountTab>
-        </AccountsTabs>
-        <AccountsTable>
-          <AccountsTableHeaders>
-            <TableColumnTitle>Account</TableColumnTitle>
-            <TableColumnTitle>Total balance</TableColumnTitle>
-            <TableColumnTitle>Locked balance</TableColumnTitle>
-            <TableColumnTitle>Recoverable balance</TableColumnTitle>
-            <TableColumnTitle>Transferable balance</TableColumnTitle>
-          </AccountsTableHeaders>
-          <AccountsList>
-            {allAccounts.map((account) => (
-              <AccountItemData key={account.address} account={account} />
-            ))}
-          </AccountsList>
-        </AccountsTable>
-      </AccountsBoard>
-    </MyProfile>
+    <>
+      <AccountsTabs>
+        <AccountTab>All accounts</AccountTab>
+      </AccountsTabs>
+      <AccountsTable>
+        <AccountsTableHeaders>
+          <TableColumnTitle>Account</TableColumnTitle>
+          <TableColumnTitle>Total balance</TableColumnTitle>
+          <TableColumnTitle>Locked balance</TableColumnTitle>
+          <TableColumnTitle>Recoverable balance</TableColumnTitle>
+          <TableColumnTitle>Transferable balance</TableColumnTitle>
+        </AccountsTableHeaders>
+        <AccountsList>
+          {allAccounts.map((account) => (
+            <AccountItemData key={account.address} account={account} />
+          ))}
+        </AccountsList>
+      </AccountsTable>
+    </>
   )
 }
 

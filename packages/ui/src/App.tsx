@@ -1,13 +1,13 @@
 import React from 'react'
-import { Membership } from './pages/Profile/Membership'
-import { Profile } from './pages/Profile/Profile'
+import { MyMemberships } from './pages/Profile/MyMemberships'
+import { MyAccounts } from './pages/Profile/MyAccounts'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
 export function App() {
   return (
     <Switch>
-      <Route exact path="/profile" component={Profile} />
-      <Route exact path="/profile/memberships" component={Membership} />
+      <Route exact path="/profile" component={MyAccounts} />
+      <Route exact path="/profile/memberships" component={MyMemberships} />
       <Redirect exact from="/" to="/profile" />
     </Switch>
   )

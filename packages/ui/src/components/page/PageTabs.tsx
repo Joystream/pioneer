@@ -25,7 +25,7 @@ export const PageTabs = styled.nav`
 export const PageTab = styled.button`
   display: inline-grid;
   grid-auto-flow: column;
-  grid-rcolumn-gap: 8px;
+  grid-column-gap: 8px;
   position: relative;
   align-items: center;
   width: fit-content;
@@ -36,7 +36,8 @@ export const PageTab = styled.button`
   text-transform: capitalize;
   cursor: pointer;
   transition: ${Transitions.all};
-
+`
+export const PageTabActive = styled(PageTab)`
   &:before {
     content: '';
     position: absolute;

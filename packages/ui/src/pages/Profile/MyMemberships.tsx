@@ -2,7 +2,10 @@ import React from 'react'
 import { ButtonPrimary } from '../../components/buttons/Buttons'
 import { Page } from '../../components/page/Page'
 import { PageContent } from '../../components/page/PageContent'
+import { PageTab, PageTabActive, PageTabs } from '../../components/page/PageTabs'
+import { PageTitle } from '../../components/page/PageTitle'
 import { SideBar } from '../../components/page/SideBar'
+import { MyProfile, MyProfileContent, MyProfileHead, ProfileSummary } from './Profile'
 
 function Memberships() {
   return (
@@ -17,7 +20,7 @@ function Memberships() {
   )
 }
 
-export function Membership() {
+export function MyMemberships() {
   return (
     <Page>
       <SideBar
@@ -27,7 +30,20 @@ export function Membership() {
         ]}
       />
       <PageContent>
-        <Memberships />
+        <MyProfile>
+          <MyProfileHead>
+            <PageTitle>My profile</PageTitle>
+            <ProfileSummary>
+              <PageTabs>
+                <PageTab>My accounts</PageTab>
+                <PageTabActive>My memberships</PageTabActive>
+              </PageTabs>
+            </ProfileSummary>
+          </MyProfileHead>
+          <MyProfileContent>
+            <Memberships />
+          </MyProfileContent>
+        </MyProfile>
       </PageContent>
     </Page>
   )
