@@ -87,26 +87,37 @@ describe('UI: TransferModal', () => {
     expect(getByText('Authorize transaction')).to.exist
   })
 
-  it('Renders wait for transaction step', async () => {
-    set(api, 'api.tx.balances.transfer', () => ({
-      paymentInfo: () => of(set({}, 'partialFee.toBn', () => new BN(0))),
-      signAndSend: () => of(set({}, 'status.isReady', true)),
-    }))
+  context('Signed transaction', () => {
+    let transfer: any
 
-    const { getByLabelText, getByText } = renderModal()
+    beforeEach(() => {
+      transfer = {}
+      set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(0))))
+      set(api, 'api.tx.balances.transfer', () => transfer)
+    })
 
-    fireEvent.change(getByLabelText('Number of tokens'), { target: { value: '50' } })
-    fireEvent.click(getByText('Transfer tokens') as HTMLButtonElement)
-    fireEvent.click(getByText(/^sign transaction and transfer$/i))
+    function renderAndSign() {
+      const rendered = renderModal()
+      const { getByLabelText, getByText } = rendered
 
-    expect(getByText('Wait for the transaction')).to.exist
-  })
+      fireEvent.change(getByLabelText('Number of tokens'), { target: { value: '50' } })
+      fireEvent.click(getByText('Transfer tokens') as HTMLButtonElement)
+      fireEvent.click(getByText(/^sign transaction and transfer$/i))
 
-  it('Renders transaction success', async () => {
-    set(api, 'api.tx.balances.transfer', () => ({
-      paymentInfo: () => of(set({}, 'partialFee.toBn', () => new BN(0))),
-      signAndSend: () => {
-        return from([
+      return rendered
+    }
+
+    it('Renders wait for transaction step', async () => {
+      set(transfer, 'signAndSend', () => of(set({}, 'status.isReady', true)))
+
+      const { getByText } = renderAndSign()
+
+      expect(getByText('Wait for the transaction')).to.exist
+    })
+
+    it('Renders transaction success', async () => {
+      set(transfer, 'signAndSend', () =>
+        from([
           set({}, 'status.isReady', true),
           {
             status: {
@@ -117,16 +128,12 @@ describe('UI: TransferModal', () => {
             },
           },
         ])
-      },
-    }))
+      )
 
-    const { getByLabelText, getByText } = renderModal()
+      const { getByText } = renderAndSign()
 
-    fireEvent.change(getByLabelText('Number of tokens'), { target: { value: '50' } })
-    fireEvent.click(getByText('Transfer tokens') as HTMLButtonElement)
-    fireEvent.click(getByText(/^sign transaction and transfer$/i))
-
-    expect(getByText('Success')).to.exist
+      expect(getByText('Success')).to.exist
+    })
   })
 
   function renderModal() {
