@@ -1,5 +1,6 @@
+import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import React from 'react'
-import { from } from 'rxjs'
+import { from, of } from 'rxjs'
 import { ApiRx } from '@polkadot/api'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { set } from 'lodash'
@@ -7,6 +8,7 @@ import { fireEvent, render } from '@testing-library/react'
 import { expect } from 'chai'
 import sinon from 'sinon'
 import BN from 'bn.js'
+import { KeyringContext } from '../../src/providers/keyring/context'
 
 import { aliceSigner, bobSigner } from '../mocks/keyring'
 import { Account } from '../../src/hooks/types'
@@ -16,7 +18,12 @@ import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 
 describe('UI: TransferModal', () => {
-  before(cryptoWaitReady)
+  const keyring = new Keyring()
+
+  before(async () => {
+    await cryptoWaitReady()
+    keyring.loadAll({ isDevelopment: true })
+  })
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,
@@ -80,11 +87,42 @@ describe('UI: TransferModal', () => {
     expect(getByText('Authorize transaction')).to.exist
   })
 
+  it('Renders wait for transaction step', async () => {
+    set(api, 'api.tx.balances.transfer', () => ({
+      paymentInfo: () => {
+        return of({
+          partialFee: {
+            toBn: () => new BN(0),
+          },
+        })
+      },
+      signAndSend: () => {
+        return of({
+          status: {
+            isReady: true,
+          },
+        })
+      },
+    }))
+
+    const { getByLabelText, getByText, findByText } = renderModal()
+
+    fireEvent.change(getByLabelText('Number of tokens'), { target: { value: '50' } })
+    fireEvent.click(getByText('Transfer tokens') as HTMLButtonElement)
+    const byText = getByText(/^sign transaction and transfer$/i)
+    expect(byText).to.exist
+    fireEvent.click(byText)
+
+    expect(await findByText('Wait for the transaction')).to.exist
+  })
+
   function renderModal() {
     return render(
-      <ApiContext.Provider value={api}>
-        <TransferModal onClose={sinon.spy()} from={fromAccount} to={to} />
-      </ApiContext.Provider>
+      <KeyringContext.Provider value={keyring}>
+        <ApiContext.Provider value={api}>
+          <TransferModal onClose={sinon.spy()} from={fromAccount} to={to} />
+        </ApiContext.Provider>
+      </KeyringContext.Provider>
     )
   }
 })
