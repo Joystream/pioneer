@@ -26,6 +26,7 @@ export function Accounts() {
         <ProfileSummary>
           <PageTabs>
             <PageTab>My accounts</PageTab>
+            <PageTab>My memberships</PageTab>
           </PageTabs>
           <TotalBalances />
         </ProfileSummary>
