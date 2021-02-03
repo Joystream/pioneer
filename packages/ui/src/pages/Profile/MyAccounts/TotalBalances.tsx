@@ -1,11 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import BN from 'bn.js'
-import { ButtonPrimarySmall } from '../../components/buttons/Buttons'
-import { HelpNotification } from '../../components/notifications/HelpNotification'
-import { Label } from '../../components/typography'
-import { TokenValue } from '../../components/typography'
-import { BorderRad, Colors, Shadows } from '../../constants'
+import { ButtonPrimarySmall } from '../../../components/buttons/Buttons'
+import { HelpNotification } from '../../../components/notifications/HelpNotification'
+import { Label, TokenValue } from '../../components/typography'
+import { BorderRad, Colors, Shadows } from '../../../constants'
 import { useTotalBalances } from '../../hooks/useTotalBalances'
 
 export const TotalBalances = () => {

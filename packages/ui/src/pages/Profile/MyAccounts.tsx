@@ -1,12 +1,13 @@
 import React from 'react'
 import { Page } from '../../components/page/Page'
 import { PageContent } from '../../components/page/PageContent'
+import { PageHeader } from '../../components/page/PageHeader'
 import { PageTab, PageTabActive, PageTabs } from '../../components/page/PageTabs'
 import { PageTitle } from '../../components/page/PageTitle'
 import { SideBar } from '../../components/page/SideBar'
-import { Accounts } from './Accounts'
-import { MyProfile, MyProfileContent, MyProfileHead, ProfileSummary } from './Profile'
-import { TotalBalances } from './TotalBalances'
+import { Accounts } from './MyAccounts/Accounts'
+import { MyProfile, MyProfileContent, ProfileSummary } from './Profile'
+import { TotalBalances } from './MyAccounts/TotalBalances'
 
 export function MyAccounts() {
   return (
@@ -19,16 +20,16 @@ export function MyAccounts() {
       />
       <PageContent>
         <MyProfile>
-          <MyProfileHead>
+          <PageHeader>
             <PageTitle>My profile</PageTitle>
+            <PageTabs>
+              <PageTabActive to="/profile">My accounts</PageTabActive>
+              <PageTab to="/profile/memberships">My memberships</PageTab>
+            </PageTabs>
             <ProfileSummary>
-              <PageTabs>
-                <PageTabActive>My accounts</PageTabActive>
-                <PageTab>My memberships</PageTab>
-              </PageTabs>
               <TotalBalances />
             </ProfileSummary>
-          </MyProfileHead>
+          </PageHeader>
           <MyProfileContent>
             <Accounts />
           </MyProfileContent>

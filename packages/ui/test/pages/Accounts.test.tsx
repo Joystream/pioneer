@@ -9,7 +9,7 @@ import { aliceSigner } from '../mocks/keyring'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import * as useBalanceModule from '../../src/hooks/useBalance'
-import { Accounts } from '../../src/pages/Profile/Accounts'
+import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'
 import { Account } from '../../src/hooks/types'
 
 describe('UI: Accounts list', () => {

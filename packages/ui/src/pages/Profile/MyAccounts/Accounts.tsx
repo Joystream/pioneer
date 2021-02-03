@@ -1,17 +1,16 @@
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
-import { AccountInfo } from '../../components/AccountInfo'
-import { ButtonGhostMediumSquare } from '../../components/buttons/Buttons'
-import { ArrowDownIcon } from '../../components/icons/ArrowDownIcon'
-import { PageTab, PageTabs } from '../../components/page/PageTabs'
-import { TokenValue } from '../../components/typography'
-import { TransferButton } from '../../components/TransferButton'
-import { BorderRad, Colors, Sizes } from '../../constants'
-import { Account } from '../../hooks/types'
-import { useAccounts } from '../../hooks/useAccounts'
-import { useBalance } from '../../hooks/useBalance'
-import { TotalBalances } from './TotalBalances'
+import { AccountInfo } from '../../../components/AccountInfo'
+import { ButtonGhostMediumSquare } from '../../../components/buttons/Buttons'
+import { ArrowDownIcon } from '../../../components/icons/ArrowDownIcon'
+import { PageTab, PageTabs } from '../../../components/page/PageTabs'
+import { TokenValue } from '../../../components/typography'
+import { TransferButton } from '../../../components/TransferButton'
+import { BorderRad, Colors, Sizes } from '../../../constants'
+import { Account } from '../../../hooks/types'
+import { useAccounts } from '../../../hooks/useAccounts'
+import { useBalance } from '../../../hooks/useBalance'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -21,7 +20,7 @@ export function Accounts() {
   return (
     <>
       <AccountsTabs>
-        <AccountTab>All accounts</AccountTab>
+        <AccountTab to="#">All accounts</AccountTab>
       </AccountsTabs>
       <AccountsTable>
         <AccountsTableHeaders>

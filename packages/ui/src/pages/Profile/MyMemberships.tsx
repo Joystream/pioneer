@@ -2,10 +2,11 @@ import React from 'react'
 import { ButtonPrimary } from '../../components/buttons/Buttons'
 import { Page } from '../../components/page/Page'
 import { PageContent } from '../../components/page/PageContent'
+import { PageHeader } from '../../components/page/PageHeader'
 import { PageTab, PageTabActive, PageTabs } from '../../components/page/PageTabs'
 import { PageTitle } from '../../components/page/PageTitle'
 import { SideBar } from '../../components/page/SideBar'
-import { MyProfile, MyProfileContent, MyProfileHead, ProfileSummary } from './Profile'
+import { MyProfile, MyProfileContent } from './Profile'
 
 function Memberships() {
   return (
@@ -26,20 +27,18 @@ export function MyMemberships() {
       <SideBar
         crumbs={[
           { href: '#', text: 'My Profile' },
-          { href: '#', text: 'My Mmeberships' },
+          { href: '#', text: 'My Memberships' },
         ]}
       />
       <PageContent>
         <MyProfile>
-          <MyProfileHead>
+          <PageHeader>
             <PageTitle>My profile</PageTitle>
-            <ProfileSummary>
-              <PageTabs>
-                <PageTab>My accounts</PageTab>
-                <PageTabActive>My memberships</PageTabActive>
-              </PageTabs>
-            </ProfileSummary>
-          </MyProfileHead>
+            <PageTabs>
+              <PageTab to="/profile">My Accounts</PageTab>
+              <PageTabActive to="/profile/memberships">My memberships </PageTabActive>
+            </PageTabs>
+          </PageHeader>
           <MyProfileContent>
             <Memberships />
           </MyProfileContent>
