@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
@@ -6,6 +7,7 @@ import { Modal, ModalBody, ModalHeader } from '../../components/modal'
 import { Text } from '../../components/page/Typography/Text'
 import { TokenValue } from '../../components/TokenValue'
 import { Account } from '../../hooks/types'
+import { useBalance } from '../../hooks/useBalance'
 import {
   AccountRow,
   BalanceInfo,
@@ -17,14 +19,24 @@ import {
 
 interface Props {
   onClose: () => void
-  from?: Account
-  to?: Account
+  from: Account
+  to: Account
+  amount: BN
 }
 
-export function TransactionSuccessModal({ onClose, from, to }: Props) {
-  if (!from || !to) {
+export function TransactionSuccessModal({ onClose, from, to, amount }: Props) {
+  const fromBalance = useBalance(from as Account)
+  const toBalance = useBalance(to as Account)
+
+  if (!fromBalance || !toBalance) {
     return <></>
   }
+
+  const fromNow = fromBalance.transferable
+  const fromBefore = fromNow.add(amount)
+
+  const toNow = toBalance.total
+  const toBefore = toNow.sub(amount)
 
   return (
     <Modal>
@@ -34,32 +46,32 @@ export function TransactionSuccessModal({ onClose, from, to }: Props) {
         <AccountSuccessRow>
           <AccountInfo account={from} />
           <BalanceInfo>
-            <InfoTitle>Transferable balance before</InfoTitle>
+            <InfoTitle>Transferable balance before:</InfoTitle>
             <InfoValue>
-              <TokenValue value={100_000_000} />
+              <TokenValue value={fromBefore} />
             </InfoValue>
-            <InfoTitle>Transferable balance after</InfoTitle>
+            <InfoTitle>Transferable balance after:</InfoTitle>
             <InfoValue>
-              <TokenValue value={0} />
+              <TokenValue value={fromNow} />
             </InfoValue>
           </BalanceInfo>
         </AccountSuccessRow>
         <TransactionAmountInfo>
           <ArrowDownExpandedIcon />
           <TransactionAmountInfoText>
-            {/* Transferred <TokenValue value={new BN(amount)} /> */}
+            Transferred <TokenValue value={amount} />
           </TransactionAmountInfoText>
         </TransactionAmountInfo>
         <AccountSuccessRow>
           <AccountInfo account={to} />
           <BalanceInfo>
-            <InfoTitle>Transferable balance before</InfoTitle>
+            <InfoTitle>Transferable balance before:</InfoTitle>
             <InfoValue>
-              <TokenValue value={0} />
+              <TokenValue value={toBefore} />
             </InfoValue>
-            <InfoTitle>Transferable balance after</InfoTitle>
+            <InfoTitle>Transferable balance after:</InfoTitle>
             <InfoValue>
-              <TokenValue value={50_000_000} />
+              <TokenValue value={toNow} />
             </InfoValue>
           </BalanceInfo>
         </AccountSuccessRow>
