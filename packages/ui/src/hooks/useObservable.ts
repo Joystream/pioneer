@@ -9,5 +9,5 @@ export function useObservable<T>(observable: Observable<T> | undefined, deps: re
     return () => subscription && subscription.unsubscribe()
   }, deps)
 
-  return [data]
+  return data
 }

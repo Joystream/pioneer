@@ -7,7 +7,7 @@ import { useObservable } from '../../src/hooks/useObservable'
 describe('useObservable', () => {
   it('Returns undefined for undefined observable', () => {
     const { result } = renderHook(() => useObservable<undefined>(undefined, []))
-    expect(result.current).to.deep.equal([undefined])
+    expect(result.current).to.be.undefined
   })
 
   it('Returns observed values', () => {
@@ -17,12 +17,12 @@ describe('useObservable', () => {
     act(() => {
       subject.next(1)
     })
-    expect(result.current).to.deep.equal([1])
+    expect(result.current).to.equal(1)
 
     act(() => {
       subject.next(2)
     })
-    expect(result.current).to.deep.equal([2])
+    expect(result.current).to.equal(2)
   })
 
   it('Returns observed values', () => {
@@ -32,11 +32,11 @@ describe('useObservable', () => {
     act(() => {
       subject.next(1)
     })
-    expect(result.current).to.deep.equal([1])
+    expect(result.current).to.equal(1)
 
     act(() => {
       subject.next(2)
     })
-    expect(result.current).to.deep.equal([2])
+    expect(result.current).to.equal(2)
   })
 })

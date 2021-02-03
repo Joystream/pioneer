@@ -13,7 +13,7 @@ export interface UseBalance {
 
 export function useBalance(account: Account): UseBalance | null {
   const { api } = useApi()
-  const [balances] = useObservable(api?.derive.balances.all(account?.address), [api, account])
+  const balances = useObservable(api?.derive.balances.all(account?.address), [api, account])
 
   if (balances === undefined) {
     return null

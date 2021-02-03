@@ -41,7 +41,7 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
   const balanceTo = useBalance(to)
   const [isSending, setIsSending] = useState(false)
   const transfer = api?.tx?.balances?.transfer(to.address, amount)
-  const [info] = useObservable(transfer?.paymentInfo(from.address), [api])
+  const info = useObservable(transfer?.paymentInfo(from.address), [api])
 
   useEffect(() => {
     if (!isSending || !transfer) {
