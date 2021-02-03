@@ -4,6 +4,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { cleanup, render } from '@testing-library/react'
 import BN from 'bn.js'
 import { expect } from 'chai'
+import { HashRouter } from 'react-router-dom'
 import sinon from 'sinon'
 import { aliceSigner } from '../mocks/keyring'
 import { KeyringContext } from '../../src/providers/keyring/context'
@@ -87,7 +88,11 @@ describe('UI: Accounts list', () => {
     })
 
     function renderAccounts() {
-      return render(<Accounts />)
+      return render(
+        <HashRouter>
+          <Accounts />
+        </HashRouter>
+      )
     }
   })
 })
