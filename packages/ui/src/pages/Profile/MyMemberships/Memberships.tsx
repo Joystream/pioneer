@@ -1,10 +1,10 @@
-import { Membership } from '@joystream/types/members'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { ButtonGhostMediumSquare, ButtonPrimary } from '../../components/buttons/Buttons'
-import { Close } from '../../components/buttons/CloseButton'
-import { CrossIcon } from '../../components/icons/CrossIcon'
-import { Modal, ModalHeader } from '../../components/modal'
+import { Membership } from '@joystream/types/members'
+
+import { ButtonPrimary } from '../../../components/buttons/Buttons'
+import { AddMembershipModal } from './AddMembershipModal'
+import { Member } from './Member'
 
 const bob = ({
   handle: 'Bob member',
@@ -77,58 +77,6 @@ export function Memberships() {
   )
 }
 
-interface MemberProps {
-  member: Membership
-}
-
-const Member = ({ member }: MemberProps) => {
-  const [isAboutOpen, setAboutOpen] = useState(false)
-
-  return (
-    <div>
-      <Avatar src={member.avatar_uri.toString()} />
-      <p>{member.handle}</p>
-      <p>0 times</p>
-      <ButtonGhostMediumSquare onClick={() => setAboutOpen(true)}>Edit</ButtonGhostMediumSquare>
-      {isAboutOpen && <MembershipAbout member={member} onClose={() => setAboutOpen(false)} />}
-    </div>
-  )
-}
-
-interface MembershipAboutProps extends MemberProps {
-  onClose: () => void
-}
-
-const MembershipAbout = ({ member, onClose }: MembershipAboutProps) => {
-  return (
-    <div>
-      <Close onClick={onClose}>
-        <CrossIcon />
-      </Close>
-      <Avatar src={member.avatar_uri.toString()} />
-      <p>{member.handle}</p>
-      <h5>About</h5>
-      <div>{member.about}</div>
-    </div>
-  )
-}
-
-const Avatar = styled.img`
-  border-radius: 50%;
-`
-
 const MembershipsList = styled.div``
 const MembershipsListHeader = styled.div``
 const MembershipsListItems = styled.div``
-
-interface MembershipModalProps {
-  onClose: () => void
-}
-
-const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
-  return (
-    <Modal>
-      <ModalHeader onClick={onClose} title="Add membership" />
-    </Modal>
-  )
-}
