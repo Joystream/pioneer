@@ -2,21 +2,21 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Shadows } from '../constants'
 import { Close } from './buttons/CloseButton'
-import { ArrowOutsideIcon, ArrowOutsideStyles } from './icons/ArrowOutsideIcon'
 import { CrossIcon } from './icons/CrossIcon'
 
 interface Props {
   onClick: () => void
   title: string
+  icon?: React.ReactElement | string
 }
 
-export function ModalHeader({ onClick, title }: Props) {
+export function ModalHeader({ onClick, title, icon }: Props) {
   return (
     <ModalTopBar>
       <CloseModalButton onClick={onClick}>
         <CrossIcon />
       </CloseModalButton>
-      <ArrowOutsideIcon />
+      <ModalHeaderIcon>{icon ? icon : null}</ModalHeaderIcon>
       <ModalTitle>{title}</ModalTitle>
     </ModalTopBar>
   )
@@ -64,21 +64,32 @@ export const ModalWrap = styled.section`
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
 `
+
+export const ModalHeaderIcon = styled.div`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 28px;
+  line-height: 28px;
+
+  svg {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+`
+
 const ModalTopBar = styled.header`
   display: grid;
   position: relative;
   grid-auto-flow: column;
   grid-area: modalheader;
   justify-content: start;
+  grid-column-gap: 12px;
   align-items: center;
   padding: 24px;
   border-radius: 2px 2px 0px 0px;
-
-  ${ArrowOutsideStyles} {
-    width: 24px;
-    height: 24px;
-    margin-right: 12px;
-  }
 `
 export const ModalBody = styled.div`
   display: grid;
