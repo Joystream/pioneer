@@ -57,13 +57,13 @@ export function TransferModal({ from, to, onClose }: Props) {
       setStep('SUCCESS')
     }
 
-    setSubscription(transaction.subscribe(statusCallback))
-
     if (keyring.getPair(from.address).meta.isInjected) {
       setStep('EXTENSION_SIGN')
     } else {
       setStep('SENDING')
     }
+
+    setSubscription(transaction.subscribe(statusCallback))
   }
 
   if (step === 'SEND_TOKENS' || !transferTo) {

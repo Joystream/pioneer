@@ -1,21 +1,21 @@
+import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
+import { fireEvent, render } from '@testing-library/react'
+import BN from 'bn.js'
+import { expect } from 'chai'
+import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
-import { ApiRx } from '@polkadot/api'
-import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { set } from 'lodash'
-import { fireEvent, render } from '@testing-library/react'
-import { expect } from 'chai'
 import sinon from 'sinon'
-import BN from 'bn.js'
+import { Account } from '../../src/hooks/types'
+import * as useAccountsModule from '../../src/hooks/useAccounts'
+import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
+import { ApiContext } from '../../src/providers/api/context'
+import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 
 import { aliceSigner, bobSigner } from '../mocks/keyring'
-import { Account } from '../../src/hooks/types'
-import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
-import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
 
 describe('UI: TransferModal', () => {
   const keyring = new Keyring()
@@ -89,31 +89,44 @@ describe('UI: TransferModal', () => {
 
   it('Renders wait for transaction step', async () => {
     set(api, 'api.tx.balances.transfer', () => ({
-      paymentInfo: () => {
-        return of({
-          partialFee: {
-            toBn: () => new BN(0),
-          },
-        })
-      },
-      signAndSend: () => {
-        return of({
-          status: {
-            isReady: true,
-          },
-        })
-      },
+      paymentInfo: () => of(set({}, 'partialFee.toBn', () => new BN(0))),
+      signAndSend: () => of(set({}, 'status.isReady', true)),
     }))
 
-    const { getByLabelText, getByText, findByText } = renderModal()
+    const { getByLabelText, getByText } = renderModal()
 
     fireEvent.change(getByLabelText('Number of tokens'), { target: { value: '50' } })
     fireEvent.click(getByText('Transfer tokens') as HTMLButtonElement)
-    const byText = getByText(/^sign transaction and transfer$/i)
-    expect(byText).to.exist
-    fireEvent.click(byText)
+    fireEvent.click(getByText(/^sign transaction and transfer$/i))
 
-    expect(await findByText('Wait for the transaction')).to.exist
+    expect(getByText('Wait for the transaction')).to.exist
+  })
+
+  it('Renders transaction success', async () => {
+    set(api, 'api.tx.balances.transfer', () => ({
+      paymentInfo: () => of(set({}, 'partialFee.toBn', () => new BN(0))),
+      signAndSend: () => {
+        return from([
+          set({}, 'status.isReady', true),
+          {
+            status: {
+              isInBlock: true,
+              asInBlock: {
+                toString: () => '0x93XXX',
+              },
+            },
+          },
+        ])
+      },
+    }))
+
+    const { getByLabelText, getByText } = renderModal()
+
+    fireEvent.change(getByLabelText('Number of tokens'), { target: { value: '50' } })
+    fireEvent.click(getByText('Transfer tokens') as HTMLButtonElement)
+    fireEvent.click(getByText(/^sign transaction and transfer$/i))
+
+    expect(getByText('Success')).to.exist
   })
 
   function renderModal() {
