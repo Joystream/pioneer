@@ -16,7 +16,7 @@ export function ModalHeader({ onClick, title, icon }: Props) {
       <CloseModalButton onClick={onClick}>
         <CrossIcon />
       </CloseModalButton>
-      <ModalHeaderIcon>{icon ? icon : null}</ModalHeaderIcon>
+      {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
       <ModalTitle>{title}</ModalTitle>
     </ModalTopBar>
   )
@@ -43,7 +43,7 @@ const ModalGlass = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  padding-top: 136px;
+  padding-top: 15vh;
   background-color: ${Colors.Black[700.75]};
   z-index: 100000;
 `
@@ -66,10 +66,13 @@ export const ModalWrap = styled.section`
 `
 
 export const ModalHeaderIcon = styled.div`
-  display: inline-flex;
-  justify-content: center;
+  display: grid;
+  justify-items: center;
   align-items: center;
+  width: fit-content;
+  min-width: 28px;
   height: 100%;
+  min-height: 28px;
   font-size: 28px;
   line-height: 28px;
 

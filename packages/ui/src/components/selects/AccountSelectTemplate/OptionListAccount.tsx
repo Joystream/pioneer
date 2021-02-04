@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, Transitions } from '../../../constants'
+import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
 import { OptionAccount, SelectAccountOption } from './OptionAccount'
 
 export interface OptionListAccountProps {
@@ -23,18 +23,23 @@ const OptionsListComponent = styled.ul`
   grid-template-columns: 1fr;
   position: absolute;
   left: 0;
-  top: calc(100% + 0.25em);
+  top: 100%;
   width: 100%;
   height: auto;
+  max-height: calc(${Sizes.accountSelect} * 2.5);
   margin: 0;
-  padding: 1em 0.75em;
-  border-radius: 0.25em;
+  border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
-  box-shadow: 0px 20px 30px rgba(217, 224, 235, 0.6);
+  overflow-y: scroll;
   transition: ${Transitions.all};
   animation: showOptions 0.25s ease;
   cursor: auto;
   z-index: 10;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   @keyframes showOptions {
     from {

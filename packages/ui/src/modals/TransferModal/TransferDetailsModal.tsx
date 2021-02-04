@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
 import BN from 'bn.js'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useNumberInput } from '../../hooks/useNumberInput'
+import { AccountInfo } from '../../components/AccountInfo'
+import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons/Buttons'
+import { ArrowOutsideIcon } from '../../components/icons/ArrowOutsideIcon'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
+import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
+import { TokenValue } from '../../components/TokenValue'
+import { BorderRad, Colors } from '../../constants'
+import { Account } from '../../hooks/types'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
-import { Account } from '../../hooks/types'
-import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons/Buttons'
-import { BorderRad, Colors } from '../../constants'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
-import { AccountInfo } from '../../components/AccountInfo'
-import { TokenValue } from '../../components/TokenValue'
+import { useNumberInput } from '../../hooks/useNumberInput'
 import {
   AmountInputBlock,
   BalanceInfo,
@@ -20,7 +22,6 @@ import {
   Row,
   TransactionAmount,
 } from '../common'
-import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
 
 interface Props {
   from: Account
@@ -55,7 +56,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
 
   return (
     <Modal>
-      <ModalHeader onClick={onClose} title={'Send tokens'} />
+      <ModalHeader onClick={onClose} title={'Send tokens'} icon={<ArrowOutsideIcon />} />
       <ModalBody>
         <Row>
           <FormLabel>From</FormLabel>

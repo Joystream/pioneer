@@ -3,10 +3,10 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { Observable } from 'rxjs'
-
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
 import { ArrowDownExpandedIcon } from '../../components/icons/ArrowDownExpandedIcon'
+import { ArrowOutsideIcon } from '../../components/icons/ArrowOutsideIcon'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
 import { HelpNotification } from '../../components/notifications/HelpNotification'
 import { TokenValue } from '../../components/TokenValue'
@@ -62,7 +62,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
 
   return (
     <Modal>
-      <ModalHeader onClick={onClose} title="Authorize transaction" />
+      <ModalHeader onClick={onClose} title="Authorize transaction" icon={<ArrowOutsideIcon />} />
       <ModalBody>
         <Row>
           <FormLabel>From</FormLabel>
