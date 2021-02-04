@@ -8,10 +8,8 @@ export function Version() {
 }
 
 const VersionText = styled.div`
-  position: absolute;
-  bottom: 12px;
-  left: 24px;
-  display: flex;
+  display: grid;
+  grid-area: barversion;
   justify-content: center;
   align-items: center;
 `
