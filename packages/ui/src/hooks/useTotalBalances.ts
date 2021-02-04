@@ -7,7 +7,7 @@ export interface UseBalance {
   transferable: BN
 }
 
-export function useTotalBalances(): UseBalance | null {
+export function useTotalBalances(): UseBalance {
   return {
     total: new BN(0),
     transferable: new BN(0),

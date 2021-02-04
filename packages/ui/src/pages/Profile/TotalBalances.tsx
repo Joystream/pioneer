@@ -5,57 +5,62 @@ import { HelpNotification } from '../../components/notifications/HelpNotificatio
 import { Label } from '../../components/page/Typography/Label'
 import { ValueInJoys } from '../../components/page/Typography/ValueInJoys'
 import { BorderRad, Colors, Shadows } from '../../constants'
+import { useTotalBalances } from '../../hooks/useTotalBalances'
 import { formatTokenValue } from '../../utils/formatters'
 
-export const TotalBalances = () => (
-  <Stats>
-    <StatsItem>
-      <StatsHeader>
-        <StatsInfo>
-          Total balance
-          <HelpNotification helperText={'Lorem fishy'} />
-        </StatsInfo>
-      </StatsHeader>
-      <StatsContent>
-        <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
-      </StatsContent>
-    </StatsItem>
-    <StatsItem>
-      <StatsHeader>
-        <StatsInfo>
-          Total transferable balance
-          <HelpNotification helperText={'Lorem fishy'} />
-        </StatsInfo>
-      </StatsHeader>
-      <StatsContent>
-        <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
-      </StatsContent>
-    </StatsItem>
-    <StatsItem>
-      <StatsHeader>
-        <StatsInfo>
-          Total locked balance
-          <HelpNotification helperText={'Lorem fishy'} />
-        </StatsInfo>
-      </StatsHeader>
-      <StatsContent>
-        <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
-      </StatsContent>
-    </StatsItem>
-    <StatsItem className={'statsItemWide'}>
-      <StatsHeader>
-        <StatsInfo>
-          Total recoverable
-          <HelpNotification helperText={'Lorem fishy'} />
-        </StatsInfo>
-        <StatsButton disabled={true}>Recover all</StatsButton>
-      </StatsHeader>
-      <StatsContent>
-        <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
-      </StatsContent>
-    </StatsItem>
-  </Stats>
-)
+export const TotalBalances = () => {
+  const { total, transferable, locked, recoverable } = useTotalBalances()
+
+  return (
+    <Stats>
+      <StatsItem>
+        <StatsHeader>
+          <StatsInfo>
+            Total balance
+            <HelpNotification helperText={'Lorem fishy'} />
+          </StatsInfo>
+        </StatsHeader>
+        <StatsContent>
+          <ValueInJoys>{formatTokenValue(total)}</ValueInJoys>
+        </StatsContent>
+      </StatsItem>
+      <StatsItem>
+        <StatsHeader>
+          <StatsInfo>
+            Total transferable balance
+            <HelpNotification helperText={'Lorem fishy'} />
+          </StatsInfo>
+        </StatsHeader>
+        <StatsContent>
+          <ValueInJoys>{formatTokenValue(transferable)}</ValueInJoys>
+        </StatsContent>
+      </StatsItem>
+      <StatsItem>
+        <StatsHeader>
+          <StatsInfo>
+            Total locked balance
+            <HelpNotification helperText={'Lorem fishy'} />
+          </StatsInfo>
+        </StatsHeader>
+        <StatsContent>
+          <ValueInJoys>{formatTokenValue(locked)}</ValueInJoys>
+        </StatsContent>
+      </StatsItem>
+      <StatsItem className={'statsItemWide'}>
+        <StatsHeader>
+          <StatsInfo>
+            Total recoverable
+            <HelpNotification helperText={'Lorem fishy'} />
+          </StatsInfo>
+          <StatsButton disabled={true}>Recover all</StatsButton>
+        </StatsHeader>
+        <StatsContent>
+          <ValueInJoys>{formatTokenValue(recoverable)}</ValueInJoys>
+        </StatsContent>
+      </StatsItem>
+    </Stats>
+  )
+}
 const Stats = styled.ul`
   display: flex;
   width: 100%;
