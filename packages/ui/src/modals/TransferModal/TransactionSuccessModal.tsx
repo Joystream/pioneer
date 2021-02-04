@@ -42,7 +42,7 @@ export function TransactionSuccessModal({ onClose, from, to, amount }: Props) {
     <Modal>
       <ModalHeader onClick={onClose} title="Success" icon={'🎉'} />
       <ModalSuccessBody>
-        <Text>You have just successfully transferred balance from:</Text>
+        <Text>You have just successfully transferred tokens:</Text>
         <AccountSuccessRow>
           <AccountInfo account={from} />
           <BalanceInfo>
