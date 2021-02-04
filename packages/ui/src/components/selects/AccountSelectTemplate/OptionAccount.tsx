@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
+import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
 import { Account } from '../../../hooks/types'
 import { useBalance } from '../../../hooks/useBalance'
-import { BorderRad, Colors, Transitions } from '../../../constants'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { TokenValue } from '../../TokenValue'
@@ -58,7 +58,7 @@ export const OptionComponent = styled.div`
   cursor: pointer;
   border-radius: 0.25em;
   transition: ${Transitions.all};
-  min-height: 94px;
+  min-height: ${Sizes.accountSelect};
   padding: 16px 132px 16px 14px;
 
   &:active,

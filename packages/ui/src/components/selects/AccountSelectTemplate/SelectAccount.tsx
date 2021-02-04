@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Transitions } from '../../../constants'
-import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
-import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
-import { SelectAccountOption } from './OptionAccount'
-import { AccountInfo } from '../../AccountInfo'
-import { TokenValue } from '../../TokenValue'
+import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
 import { useBalance } from '../../../hooks/useBalance'
-import { ArrowDownIcon } from '../../icons/ArrowDownIcon'
+import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { ButtonApply } from '../../../pages/Profile/Accounts'
+import { AccountInfo } from '../../AccountInfo'
+import { ArrowDownIcon } from '../../icons/ArrowDownIcon'
+import { TokenValue } from '../../TokenValue'
+import { SelectAccountOption } from './OptionAccount'
+import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
 
 export function SelectAccount({ options, onChange }: OptionListAccountProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -50,7 +50,7 @@ const SelectedOption = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   align-items: center;
-  min-height: 94px;
+  min-height: ${Sizes.accountSelect};
   padding: 16px 132px 16px 14px;
 `
 
@@ -81,7 +81,7 @@ const SelectButton = styled.div`
   cursor: pointer;
   transition: ${Transitions.all};
 
-  min-height: 94px;
+  min-height: ${Sizes.accountSelect};
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
