@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Colors, Transitions } from '../../constants'
+import { ProfileComponent } from '../../pages/Profile/ProfileComponent'
 import { NetworkSwitch } from './NetworkSwitch'
 import { Breadcrumbs, BreadcrumbsNavProps } from './Sidebar/Breadcrumbs/Breadcrumbs'
 import { MyProfileIcon } from './Sidebar/LinksIcons/MyProfileIcon'
@@ -24,7 +25,7 @@ export function SideBar({ crumbs }: BreadcrumbsNavProps) {
           </NavigationLink>
         </NavigationLinksItem>
       </NavigationLinks>
-      {/*<ProfileComponent />*/}
+      <ProfileComponent />
       <NetworkSwitch />
       <Version />
     </Navigation>
@@ -46,7 +47,7 @@ const NavigationLinksItem = styled.li`
   flex-direction: column;
   flex-basis: 48px;
   flex-shrink: 0;
-  width: 100;
+  width: 100%;
 `
 
 const NavigationLink = styled.a`

@@ -28,10 +28,8 @@ export function NetworkSwitch() {
 
 const SwitchNetworkButton = styled.a`
   cursor: pointer;
-  position: absolute;
-  bottom: 36px;
-  left: 24px;
-  display: flex;
+  display: grid;
+  grid-area: barnetwork;
   justify-content: center;
   align-items: center;
 `
