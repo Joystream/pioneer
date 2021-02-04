@@ -20,7 +20,7 @@ export function Accounts() {
   return (
     <>
       <AccountsTabs>
-        <AccountTab to="#">All accounts</AccountTab>
+        <AccountTab to="/">All accounts</AccountTab>
       </AccountsTabs>
       <AccountsTable>
         <AccountsTableHeaders>
