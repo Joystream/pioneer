@@ -1,8 +1,8 @@
 import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
-import { Account } from '../hooks/types'
 import { BorderRad, Colors } from '../constants'
+import { Account } from '../hooks/types'
 import { CopyButton } from './buttons/CopyButton'
 
 export const AccountInfo = ({ account }: { account: Account }) => {
@@ -47,12 +47,16 @@ const AccountPhoto = styled.div`
 `
 const AccountName = styled.h5`
   grid-area: accountname;
+  max-width: 100%;
   margin: 0;
   padding: 0;
   font-size: 16px;
   line-height: 24px;
   font-weight: 700;
   color: ${Colors.Black[900]};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 const AccountCopyAddress = styled.div`
   display: flex;
