@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonGhostMediumSquare } from '../../components/buttons/Buttons'
 import { ArrowDownIcon } from '../../components/icons/ArrowDownIcon'
-import { ArrowInsideIcon } from '../../components/icons/ArrowInsideIcon'
 import { PageTab, PageTabs } from '../../components/page/PageTabs'
 import { PageTitle } from '../../components/page/PageTitle'
 import { TokenValue } from '../../components/TokenValue'
@@ -85,9 +84,7 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
         <Balance value={balance?.transferable} />
       </AccountBalance>
       <AccountControls>
-        <ButtonInside>
-          <ArrowInsideIcon />
-        </ButtonInside>
+        <TransferButton to={account} />
         <TransferButton from={account} />
         <ButtonApply>
           <ArrowDownIcon />
@@ -240,11 +237,6 @@ const AccountControls = styled.div`
   grid-column-gap: 8px;
 `
 
-const ButtonInside = styled(ButtonGhostMediumSquare)`
-  svg {
-    color: ${Colors.Black[900]};
-  }
-`
 export const ButtonApply = styled(ButtonGhostMediumSquare)`
   &,
   &:hover,

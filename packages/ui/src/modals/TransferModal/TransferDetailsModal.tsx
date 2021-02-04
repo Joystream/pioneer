@@ -24,20 +24,21 @@ import {
 } from '../common'
 
 interface Props {
-  from: Account
+  from?: Account
   to?: Account
   onClose: () => void
-  onAccept: (amount: BN, to: Account) => void
+  onAccept: (amount: BN, from: Account, to: Account) => void
 }
 
 export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
   const accounts = useAccounts()
   const [recipient, setRecipient] = useState<Account | undefined>(to)
+  const [sender, setSender] = useState<Account | undefined>(from)
   const [amount, setAmount] = useNumberInput(0)
-  const balance = useBalance(from)
+  const senderBalance = useBalance(sender)
   const isZero = new BN(amount).lte(new BN(0))
 
-  const transferableBalance = balance?.transferable ?? new BN(0)
+  const transferableBalance = senderBalance?.transferable ?? new BN(0)
 
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
   const isTransferDisabled = isZero || isOverBalance || !recipient
@@ -45,13 +46,16 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
   const onClick = () => {
-    if (amount && recipient) {
-      onAccept(new BN(amount), recipient)
+    if (amount && recipient && sender) {
+      onAccept(new BN(amount), sender, recipient)
     }
   }
 
-  const options = accounts.allAccounts
-    .filter((account) => account.address !== from.address)
+  const toOptions = accounts.allAccounts
+    .filter((account) => !from || account.address !== from.address)
+    .map((account) => ({ account: account }))
+  const fromOptions = accounts.allAccounts
+    .filter((account) => !to || account.address !== to.address)
     .map((account) => ({ account: account }))
 
   return (
@@ -60,7 +64,11 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
       <ModalBody>
         <Row>
           <FormLabel>From</FormLabel>
-          <SelectedAccount account={from} />
+          {from ? (
+            <SelectedAccount account={from} />
+          ) : (
+            <SelectAccount options={fromOptions} onChange={({ account }) => setSender(account)} />
+          )}
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
@@ -82,7 +90,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
           {to ? (
             <SelectedAccount account={to} />
           ) : (
-            <SelectAccount options={options} onChange={({ account }) => setRecipient(account)} />
+            <SelectAccount options={toOptions} onChange={({ account }) => setRecipient(account)} />
           )}
         </Row>
       </ModalBody>

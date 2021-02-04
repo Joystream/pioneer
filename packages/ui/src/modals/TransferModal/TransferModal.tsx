@@ -12,7 +12,7 @@ import { TransferDetailsModal } from './TransferDetailsModal'
 
 interface Props {
   onClose: () => void
-  from: Account
+  from?: Account
   to?: Account
 }
 
@@ -22,6 +22,7 @@ export function TransferModal({ from, to, onClose }: Props) {
   const keyring = useKeyring()
   const [step, setStep] = useState<ModalState>('SEND_TOKENS')
   const [amount, setAmount] = useState<BN>(new BN(0))
+  const [transferFrom, setTransferFrom] = useState(from)
   const [transferTo, setTransferTo] = useState<Account | undefined>(to)
   const [subscription, setSubscription] = useState<Subscription | undefined>(undefined)
 
@@ -31,13 +32,18 @@ export function TransferModal({ from, to, onClose }: Props) {
     }
   }, [subscription])
 
-  const onAccept = (amount: BN, to: Account) => {
+  const onAccept = (amount: BN, from: Account, to: Account) => {
     setAmount(amount)
     setTransferTo(to)
+    setTransferFrom(from)
     setStep('SIGN_TRANSACTION')
   }
 
   const onSign = (transaction: Observable<ISubmittableResult>) => {
+    if (!transferFrom) {
+      return
+    }
+
     const statusCallback = (result: ISubmittableResult) => {
       const { status } = result
 
@@ -56,7 +62,7 @@ export function TransferModal({ from, to, onClose }: Props) {
       setStep('SUCCESS')
     }
 
-    if (keyring.getPair(from.address).meta.isInjected) {
+    if (keyring.getPair(transferFrom.address).meta.isInjected) {
       setStep('EXTENSION_SIGN')
     } else {
       setStep('SENDING')
@@ -65,12 +71,12 @@ export function TransferModal({ from, to, onClose }: Props) {
     setSubscription(transaction.subscribe(statusCallback))
   }
 
-  if (step === 'SEND_TOKENS' || !transferTo) {
-    return <TransferDetailsModal onClose={onClose} from={from} to={transferTo} onAccept={onAccept} />
+  if (step === 'SEND_TOKENS' || !transferTo || !transferFrom) {
+    return <TransferDetailsModal onClose={onClose} from={transferFrom} to={transferTo} onAccept={onAccept} />
   }
 
   if (step === 'SIGN_TRANSACTION') {
-    return <SignTransferModal onClose={onClose} from={from} amount={amount} to={transferTo} onSign={onSign} />
+    return <SignTransferModal onClose={onClose} from={transferFrom} amount={amount} to={transferTo} onSign={onSign} />
   }
 
   const loremDescription =
@@ -87,7 +93,7 @@ export function TransferModal({ from, to, onClose }: Props) {
   }
 
   if (step === 'SUCCESS') {
-    return <TransactionSuccessModal onClose={onClose} from={from} to={transferTo} amount={amount} />
+    return <TransactionSuccessModal onClose={onClose} from={transferFrom} to={transferTo} amount={amount} />
   }
 
   return <TransactionFailureModal onClose={onClose} />
