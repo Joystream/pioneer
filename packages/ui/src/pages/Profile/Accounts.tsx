@@ -355,7 +355,7 @@ export const ButtonApply = styled(ButtonGhostMediumSquare)`
   }
 
   svg {
-    color: ${Colors.Black[900]};
+    color: ${Colors.Black[600]};
   }
 `
 

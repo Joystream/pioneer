@@ -49,6 +49,7 @@ export const Sizes = {
 export const Shadows = {
   common: `0px 12px 28px ${Colors.Black[900.25]}`,
   light: `0px 0px 28px #D6D8E780`,
+  select: `0px 20px 28px ${Colors.Black[900.25]}`,
 }
 
 export const Fonts = {

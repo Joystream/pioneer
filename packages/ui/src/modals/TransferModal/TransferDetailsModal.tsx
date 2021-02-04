@@ -117,10 +117,11 @@ const SelectedAccount = ({ account, useTotal }: SelectedAccountProps) => {
 }
 
 const AmountInputLabel = styled.label`
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-size: 14px;
-  line-height: 20px;
+  line-height: 24px;
   font-weight: 700;
+  vertical-align: middle;
   color: ${Colors.Black[900]};
 `
 const AmountInput = styled.input`
@@ -129,7 +130,7 @@ const AmountInput = styled.input`
   align-items: center;
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid ${Colors.Black[900]};
+  border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.s};
   font-size: 14px;
   line-height: 20px;
@@ -144,4 +145,7 @@ const AmountButtons = styled.div`
   height: 46px;
   align-items: center;
 `
-const AmountButton = styled(ButtonSecondarySmall)``
+const AmountButton = styled(ButtonSecondarySmall)`
+  background-color: transparent;
+  border: 1px solid ${Colors.Black[300]};
+`

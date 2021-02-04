@@ -23,7 +23,7 @@ export function SelectAccount({ options, onChange }: OptionListAccountProps) {
 
   return (
     <SelectComponent>
-      <SelectButton onClick={() => setIsOpen(!isOpen)}>
+      <SelectButton onClick={() => setIsOpen(!isOpen)} isListOpen={isOpen}>
         {selectedOption && (
           <SelectedOption>
             <AccountInfo account={selectedOption.account} />
@@ -35,7 +35,7 @@ export function SelectAccount({ options, onChange }: OptionListAccountProps) {
             </BalanceInfo>
           </SelectedOption>
         )}
-        {!selectedOption && <Empty>Select account</Empty>}
+        {!selectedOption && <Empty type={'text'} placeholder={'Select account or paste account address'} />}
         <ButtonApply>
           <ArrowDownIcon />
         </ButtonApply>
@@ -54,9 +54,23 @@ const SelectedOption = styled.div`
   padding: 16px 132px 16px 14px;
 `
 
-const Empty = styled.p`
-  padding: 16px 14px;
-  text-align: left;
+const Empty = styled.input`
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  color: ${Colors.Black[900]};
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  border: none;
+  outline: none;
+
+  &::placeholder {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: ${Colors.Black[400]};
+  }
 `
 
 const SelectComponent = styled.div`
@@ -67,7 +81,11 @@ const SelectComponent = styled.div`
   align-items: center;
 `
 
-const SelectButton = styled.div`
+interface OpenListProps {
+  isListOpen: boolean
+}
+
+const SelectButton = styled.div<OpenListProps>`
   display: grid;
   grid-template-columns: 1fr 40px;
   grid-template-rows: 1fr;
@@ -75,40 +93,28 @@ const SelectButton = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  min-height: ${Sizes.accountSelect};
   margin: 0;
   padding: 0;
+  border: 1px solid ${Colors.Black[300]};
+  border-radius: ${BorderRad.s};
+  background-color: ${Colors.White};
   font-size: 1em;
   cursor: pointer;
   transition: ${Transitions.all};
 
-  min-height: ${Sizes.accountSelect};
-  border: 1px solid ${Colors.Black[100]};
-  border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 0.75em;
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    transform: translateY(-50%) scaleY(1);
+  ${ButtonApply} svg {
     transition: ${Transitions.all};
+    transform: scaleY(${(props) => (props.isListOpen ? '-1' : '1')});
   }
 
-  &:hover,
-  &:active,
-  &:focus {
+  &:hover {
+    border-color: ${Colors.Blue[200]};
   }
 
+  &:focus-within,
   &:active,
   &:focus {
-    outline: none;
-    &::after {
-      transform: translateY(-50%) scaleY(-1);
-    }
+    border-color: ${Colors.Blue[300]};
   }
 `

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
+import { BorderRad, Shadows, Sizes, Transitions } from '../../../constants'
 import { OptionAccount, SelectAccountOption } from './OptionAccount'
 
 export interface OptionListAccountProps {
@@ -29,7 +29,8 @@ const OptionsListComponent = styled.ul`
   max-height: calc(${Sizes.accountSelect} * 2.5);
   margin: 0;
   border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
+  background-color: transparent;
+  box-shadow: ${Shadows.select};
   overflow-y: scroll;
   transition: ${Transitions.all};
   animation: showOptions 0.25s ease;
@@ -43,9 +44,8 @@ const OptionsListComponent = styled.ul`
 
   @keyframes showOptions {
     from {
-      transform: translateY(-2em);
       opacity: 0;
-      box-shadow: 0px 0px 0px rgba(217, 224, 235, 0);
+      max-height: 0;
     }
   }
 `

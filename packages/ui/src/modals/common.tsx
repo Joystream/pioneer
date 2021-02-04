@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 import { BorderRad, Colors } from '../constants'
 
-export const FormLabel = styled.div`
+export const FormLabel = styled.span`
   font-size: 14px;
   line-height: 20px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-weight: 700;
 `
 export const Row = styled.div`
@@ -20,16 +20,17 @@ export const AccountRow = styled.div`
   align-items: center;
   min-height: 94px;
   padding: 16px 132px 16px 14px;
-  border: 1px solid ${Colors.Black[100]};
+  border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
 `
 export const LockedAccount = styled(AccountRow)`
-  background-color: ${Colors.Black[50]};
+  background-color: ${Colors.Black[75]};
+  border: 1px solid ${Colors.Black[200]};
 `
 export const TransactionAmount = styled.div`
   display: grid;
-  grid-template-columns: 284px auto;
+  grid-template-columns: 320px auto;
   grid-template-rows: 1fr;
   grid-column-gap: 24px;
   align-items: end;

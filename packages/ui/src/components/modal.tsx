@@ -43,7 +43,7 @@ const ModalGlass = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  padding-top: 15vh;
+  padding-top: 64px;
   background-color: ${Colors.Black[700.75]};
   z-index: 100000;
 `
@@ -97,8 +97,9 @@ const ModalTopBar = styled.header`
 export const ModalBody = styled.div`
   display: grid;
   grid-area: modalbody;
-  grid-row-gap: 24px;
-  padding: 16px 24px 40px;
+  grid-row-gap: 18px;
+  padding: 24px 24px 28px;
+  background-color: ${Colors.Black[50]};
   border-top: 1px solid ${Colors.Black[200]};
   border-bottom: 1px solid ${Colors.Black[200]};
 `
