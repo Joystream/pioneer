@@ -266,8 +266,8 @@ const AccountsTableHeaders = styled.div`
   display: grid;
   grid-area: accountstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 236px 0.9fr 0.7fr 0.7fr 0.65fr 154px;
-  grid-column-gap: 14px;
+  grid-template-columns: 276px repeat(4, 128px) 154px;
+  justify-content: space-between;
   width: 100%;
   padding-left: 16px;
 `
@@ -317,9 +317,9 @@ const AccountsList = styled.ul`
 
 const AccountItem = styled.li`
   display: grid;
-  grid-template-columns: 236px 0.9fr 0.7fr 0.7fr 0.65fr 154px;
+  grid-template-columns: 276px repeat(4, 128px) 154px;
   grid-template-rows: 1fr;
-  grid-column-gap: 14px;
+  justify-content: space-between;
   justify-items: end;
   align-items: center;
   width: 100%;
