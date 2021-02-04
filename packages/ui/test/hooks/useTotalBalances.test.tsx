@@ -13,24 +13,27 @@ import { KeyringContext } from '../../src/providers/keyring/context'
 
 describe('useTotalBalances', () => {
   const keyring = new Keyring()
+  const useApi: UseApi = {
+    isConnected: false,
+    api: ({} as unknown) as ApiRx,
+  }
 
   before(async () => {
     await cryptoWaitReady()
     keyring.loadAll({ isDevelopment: true })
   })
 
-  it('Returns zero balances when no accounts', () => {
-    const useApi: UseApi = {
-      isConnected: false,
-      api: ({} as unknown) as ApiRx,
-    }
-
+  function renderUseTotalBalances() {
     const wrapper = ({ children }: { children: ReactNode }) => (
       <KeyringContext.Provider value={keyring}>
         <ApiContext.Provider value={useApi}>{children}</ApiContext.Provider>
       </KeyringContext.Provider>
     )
-    const { result } = renderHook(() => useTotalBalances(), { wrapper })
+    return renderHook(() => useTotalBalances(), { wrapper })
+  }
+
+  it('Returns zero balances when API not ready', () => {
+    const { result } = renderUseTotalBalances()
 
     expect(result.current).to.be.deep.equal({
       total: new BN(0),
