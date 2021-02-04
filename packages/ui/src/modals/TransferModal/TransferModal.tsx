@@ -1,6 +1,6 @@
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { Observable, Subscription } from 'rxjs'
 import { Account } from '../../hooks/types'
 import { useKeyring } from '../../hooks/useKeyring'
@@ -14,17 +14,20 @@ interface Props {
   onClose: () => void
   from?: Account
   to?: Account
+  icon: ReactElement
 }
 
 type ModalState = 'SEND_TOKENS' | 'SIGN_TRANSACTION' | 'EXTENSION_SIGN' | 'SENDING' | 'SUCCESS' | 'ERROR'
 
-export function TransferModal({ from, to, onClose }: Props) {
+export function TransferModal({ from, to, onClose, icon }: Props) {
   const keyring = useKeyring()
   const [step, setStep] = useState<ModalState>('SEND_TOKENS')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [transferFrom, setTransferFrom] = useState(from)
   const [transferTo, setTransferTo] = useState<Account | undefined>(to)
   const [subscription, setSubscription] = useState<Subscription | undefined>(undefined)
+  const isSend = !!from
+  const title = isSend ? 'Send tokens' : 'Receive tokens'
 
   useEffect(() => {
     if (subscription) {
@@ -72,7 +75,16 @@ export function TransferModal({ from, to, onClose }: Props) {
   }
 
   if (step === 'SEND_TOKENS' || !transferTo || !transferFrom) {
-    return <TransferDetailsModal onClose={onClose} from={transferFrom} to={transferTo} onAccept={onAccept} />
+    return (
+      <TransferDetailsModal
+        onClose={onClose}
+        from={transferFrom}
+        to={transferTo}
+        onAccept={onAccept}
+        title={title}
+        icon={icon}
+      />
+    )
   }
 
   if (step === 'SIGN_TRANSACTION') {

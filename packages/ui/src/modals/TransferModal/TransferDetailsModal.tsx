@@ -1,9 +1,8 @@
 import BN from 'bn.js'
-import React, { useState } from 'react'
+import React, { ReactElement, useState } from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons/Buttons'
-import { ArrowOutsideIcon } from '../../components/icons/ArrowOutsideIcon'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
 import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
 import { TokenValue } from '../../components/TokenValue'
@@ -28,9 +27,11 @@ interface Props {
   to?: Account
   onClose: () => void
   onAccept: (amount: BN, from: Account, to: Account) => void
+  title: string
+  icon: ReactElement
 }
 
-export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
+export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon }: Props) {
   const accounts = useAccounts()
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
@@ -60,7 +61,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept }: Props) {
 
   return (
     <Modal>
-      <ModalHeader onClick={onClose} title={'Send tokens'} icon={<ArrowOutsideIcon />} />
+      <ModalHeader onClick={onClose} title={title} icon={icon} />
       <ModalBody>
         <Row>
           <FormLabel>From</FormLabel>

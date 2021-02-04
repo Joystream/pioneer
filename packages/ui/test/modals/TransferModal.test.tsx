@@ -8,6 +8,7 @@ import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
+import { ArrowInsideIcon } from '../../src/components/icons/ArrowInsideIcon'
 import { Account } from '../../src/hooks/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
@@ -140,7 +141,7 @@ describe.skip('UI: TransferModal', () => {
     return render(
       <KeyringContext.Provider value={keyring}>
         <ApiContext.Provider value={api}>
-          <TransferModal onClose={sinon.spy()} from={fromAccount} to={to} />
+          <TransferModal onClose={sinon.spy()} from={fromAccount} to={to} icon={<ArrowInsideIcon />} />
         </ApiContext.Provider>
       </KeyringContext.Provider>
     )

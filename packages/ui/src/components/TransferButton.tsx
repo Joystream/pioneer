@@ -14,14 +14,13 @@ interface Props {
 
 export function TransferButton({ from, to }: Props) {
   const [isOpen, setIsOpen] = useState(false)
-  const isFrom = from && !to
+  const isSend = !!from
+  const icon = isSend ? <ArrowOutsideIcon /> : <ArrowInsideIcon />
 
   return (
     <>
-      <ButtonForTransfer onClick={() => setIsOpen(true)}>
-        {isFrom ? <ArrowInsideIcon /> : <ArrowOutsideIcon />}
-      </ButtonForTransfer>
-      {isOpen && <TransferModal onClose={() => setIsOpen(false)} from={from} to={to} />}
+      <ButtonForTransfer onClick={() => setIsOpen(true)}>{icon}</ButtonForTransfer>
+      {isOpen && <TransferModal onClose={() => setIsOpen(false)} from={from} to={to} icon={icon} />}
     </>
   )
 }
