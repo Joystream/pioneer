@@ -20,7 +20,7 @@ import {
   InfoValue,
   LockedAccount,
   Row,
-  TransactionAmount
+  TransactionAmount,
 } from '../common'
 
 interface Props {
