@@ -28,7 +28,7 @@ describe('useTotalBalances', () => {
   beforeEach(() => {
     set(useApi, 'api.derive.balances.all', () =>
       of({
-        freeBalance: new BN(100),
+        availableBalance: new BN(100),
         lockedBalance: new BN(10),
       })
     )

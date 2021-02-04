@@ -12,11 +12,11 @@ export interface UseBalance {
 }
 
 export function toBalances(balances: DeriveBalancesAll): UseBalance {
-  const { freeBalance, lockedBalance } = balances
+  const { lockedBalance, availableBalance } = balances
 
   return {
-    total: freeBalance.add(lockedBalance),
-    transferable: freeBalance,
+    total: availableBalance.add(lockedBalance),
+    transferable: availableBalance,
     locked: lockedBalance,
     recoverable: new BN(0),
   }
