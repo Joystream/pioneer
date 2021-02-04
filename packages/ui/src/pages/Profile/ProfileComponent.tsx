@@ -185,7 +185,7 @@ const TotalBalance = styled.span`
     content: 'joy';
     margin-left: 4px;
     font-size: 14px;
-    line-height 20px;
+    line-height: 20px;
     color: ${Colors.Black[400]};
     text-transform: uppercase;
   }

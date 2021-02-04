@@ -5,7 +5,7 @@ import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { ButtonApply } from '../../../pages/Profile/Accounts'
 import { AccountInfo } from '../../AccountInfo'
-import { ArrowDownIcon } from '../../icons/ArrowDownIcon'
+import { ArrowDownIcon, Icon } from '../../icons/ArrowDownIcon'
 import { TokenValue } from '../../TokenValue'
 import { SelectAccountOption } from './OptionAccount'
 import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
@@ -50,8 +50,8 @@ const SelectedOption = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   align-items: center;
-  min-height: ${Sizes.accountSelect};
-  padding: 16px 132px 16px 14px;
+  min-height: ${Sizes.accountSelectHeight};
+  padding: 10px 28px 10px 16px;
 `
 
 const Empty = styled.input`
@@ -89,11 +89,11 @@ const SelectButton = styled.div<OpenListProps>`
   display: grid;
   grid-template-columns: 1fr 40px;
   grid-template-rows: 1fr;
-  grid-column-gap: 0.5em;
+  grid-column-gap: 4px;
   align-items: center;
   width: 100%;
   height: 100%;
-  min-height: ${Sizes.accountSelect};
+  min-height: ${Sizes.accountSelectHeight};
   margin: 0;
   padding: 0;
   border: 1px solid ${Colors.Black[300]};
@@ -103,7 +103,7 @@ const SelectButton = styled.div<OpenListProps>`
   cursor: pointer;
   transition: ${Transitions.all};
 
-  ${ButtonApply} svg {
+  ${ButtonApply} ${Icon} {
     transition: ${Transitions.all};
     transform: scaleY(${(props) => (props.isListOpen ? '-1' : '1')});
   }

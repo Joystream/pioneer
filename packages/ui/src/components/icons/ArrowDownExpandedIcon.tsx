@@ -13,7 +13,7 @@ export function ArrowDownExpandedIcon() {
   )
 }
 
-const Icon = styled.svg`
+export const Icon = styled.svg`
   height: 24px;
   width: 24px;
   position: relative;

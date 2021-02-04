@@ -48,18 +48,16 @@ export const OptionComponent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
-  grid-column-gap: 0.5em;
   align-items: center;
   width: 100%;
   height: 100%;
-  font-size: 1em;
   border: none;
   background: ${Colors.White};
   cursor: pointer;
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
-  min-height: ${Sizes.accountSelect};
-  padding: 16px 132px 16px 14px;
+  min-height: ${Sizes.accountSelectHeight};
+  padding: 10px 72px 10px 16px;
 
   &:active,
   &:focus {

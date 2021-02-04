@@ -43,7 +43,8 @@ export const BorderRad = {
 }
 
 export const Sizes = {
-  accountSelect: '94px',
+  accountSelectHeight: '80px',
+  accountHeight: '94px',
 }
 
 export const Shadows = {
