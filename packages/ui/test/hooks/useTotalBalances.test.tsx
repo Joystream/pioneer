@@ -1,10 +1,10 @@
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import React, { ReactNode } from 'react'
 import { renderHook } from '@testing-library/react-hooks'
 import BN from 'bn.js'
 import { expect } from 'chai'
+import React, { ReactNode } from 'react'
 
 import { useTotalBalances } from '../../src/hooks/useTotalBalances'
 import { ApiContext } from '../../src/providers/api/context'
@@ -39,6 +39,19 @@ describe('useTotalBalances', () => {
       total: new BN(0),
       transferable: new BN(0),
       locked: new BN(0),
+      recoverable: new BN(0),
+    })
+  })
+
+  it('Returns total balances', () => {
+    useApi.isConnected = true
+
+    const { result } = renderUseTotalBalances()
+
+    expect(result.current).to.be.deep.equal({
+      total: new BN(100_000),
+      transferable: new BN(50_000),
+      locked: new BN(50_000),
       recoverable: new BN(0),
     })
   })
