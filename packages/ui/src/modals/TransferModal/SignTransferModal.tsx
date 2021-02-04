@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Subscription } from 'rxjs'
-import { ISubmittableResult } from '@polkadot/types/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
+import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
+import React, { useEffect, useState } from 'react'
+import { Observable } from 'rxjs'
 
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
@@ -25,16 +25,17 @@ import {
   TransactionAmountInfo,
   TransactionAmountInfoText,
   TransactionInfo,
-} from './TransferModal'
+} from '../common'
 
 interface Props {
   onClose: () => void
   from: Account
   amount: BN
   to: Account
+  onSign: (transaction: Observable<ISubmittableResult>) => void
 }
 
-export function SignTransferModal({ onClose, from, amount, to }: Props) {
+export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) {
   const { api } = useApi()
   const { keyring } = useKeyring()
   const balanceFrom = useBalance(from)
@@ -50,28 +51,12 @@ export function SignTransferModal({ onClose, from, amount, to }: Props) {
 
     const keyringPair = keyring.getPair(from.address)
 
-    const statusCallback = ({ status }: ISubmittableResult) => {
-      if (!status.isInBlock) {
-        console.log(`Current transaction status: ${status.type}`)
-        return
-      }
-
-      console.log(`In Block. Block hash: ${status.asInBlock.toString()}`)
-      onClose()
-    }
-
-    let subscription: Subscription
-
     if (keyringPair.meta.isInjected) {
       web3FromAddress(from.address).then(({ signer }) => {
-        subscription = transfer.signAndSend(from.address, { signer: signer }).subscribe(statusCallback)
+        onSign(transfer.signAndSend(from.address, { signer: signer }))
       })
     } else {
-      subscription = transfer.signAndSend(keyringPair).subscribe(statusCallback)
-    }
-
-    return () => {
-      subscription && subscription.unsubscribe()
+      onSign(transfer.signAndSend(keyringPair))
     }
   }, [api, isSending])
 

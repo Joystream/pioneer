@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { Account } from '../../../hooks/types'
 import { useBalance } from '../../../hooks/useBalance'
 import { BorderRad, Colors, Transitions } from '../../../constants'
+import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
-import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/TransferModal/TransferModal'
 import { TokenValue } from '../../TokenValue'
 
 export interface SelectAccountOption {

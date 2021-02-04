@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Transitions } from '../../../constants'
+import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
 import { SelectAccountOption } from './OptionAccount'
-import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/TransferModal/TransferModal'
 import { AccountInfo } from '../../AccountInfo'
 import { TokenValue } from '../../TokenValue'
 import { useBalance } from '../../../hooks/useBalance'
@@ -91,8 +91,8 @@ const SelectButton = styled.div`
     position: absolute;
     top: 50%;
     right: 0.75em;
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     transform: translateY(-50%) scaleY(1);
