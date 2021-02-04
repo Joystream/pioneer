@@ -2,21 +2,18 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
-import { ButtonGhostMediumSquare, ButtonPrimarySmall } from '../../components/buttons/Buttons'
+import { ButtonGhostMediumSquare } from '../../components/buttons/Buttons'
 import { ArrowDownIcon } from '../../components/icons/ArrowDownIcon'
 import { ArrowInsideIcon } from '../../components/icons/ArrowInsideIcon'
-import { HelpNotification } from '../../components/notifications/HelpNotification'
 import { PageTab, PageTabs } from '../../components/page/PageTabs'
 import { PageTitle } from '../../components/page/PageTitle'
-import { Label } from '../../components/page/Typography/Label'
-import { ValueInJoys } from '../../components/page/Typography/ValueInJoys'
 import { TokenValue } from '../../components/TokenValue'
 import { TransferButton } from '../../components/TransferButton'
-import { BorderRad, Colors, Shadows, Sizes } from '../../constants'
+import { BorderRad, Colors, Sizes } from '../../constants'
 import { Account } from '../../hooks/types'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
-import { formatTokenValue } from '../../utils/formatters'
+import { TotalBalances } from './TotalBalances'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -31,53 +28,7 @@ export function Accounts() {
           <PageTabs>
             <PageTab>My accounts</PageTab>
           </PageTabs>
-          <Stats>
-            <StatsItem>
-              <StatsHeader>
-                <StatsInfo>
-                  Total balance
-                  <HelpNotification helperText={'Lorem fishy'} />
-                </StatsInfo>
-              </StatsHeader>
-              <StatsContent>
-                <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
-              </StatsContent>
-            </StatsItem>
-            <StatsItem>
-              <StatsHeader>
-                <StatsInfo>
-                  Total transferable balance
-                  <HelpNotification helperText={'Lorem fishy'} />
-                </StatsInfo>
-              </StatsHeader>
-              <StatsContent>
-                <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
-              </StatsContent>
-            </StatsItem>
-            <StatsItem>
-              <StatsHeader>
-                <StatsInfo>
-                  Total locked balance
-                  <HelpNotification helperText={'Lorem fishy'} />
-                </StatsInfo>
-              </StatsHeader>
-              <StatsContent>
-                <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
-              </StatsContent>
-            </StatsItem>
-            <StatsItem className={'statsItemWide'}>
-              <StatsHeader>
-                <StatsInfo>
-                  Total recoverable
-                  <HelpNotification helperText={'Lorem fishy'} />
-                </StatsInfo>
-                <StatsButton disabled={true}>Recover all</StatsButton>
-              </StatsHeader>
-              <StatsContent>
-                <ValueInJoys>{formatTokenValue(0)}</ValueInJoys>
-              </StatsContent>
-            </StatsItem>
-          </Stats>
+          <TotalBalances />
         </ProfileSummary>
       </AccountHead>
       <AccountsBoard>
@@ -173,49 +124,6 @@ const ProfileSummary = styled.div`
   }
 `
 
-const Stats = styled.ul`
-  display: flex;
-  width: 100%;
-  justify-items: flex-start;
-`
-
-const StatsItem = styled.li`
-  display: inline-grid;
-  position: relative;
-  grid-template-columns: 1fr;
-  grid-template-rows: 16px 28px;
-  grid-row-gap: 24px;
-  flex-basis: 240px;
-  flex-grow: 0;
-  height: clamp(100%, 100px, 100px);
-  padding: 12px 16px 20px;
-  border-radius: ${BorderRad.m};
-  background-color: ${Colors.White};
-  box-shadow: ${Shadows.light};
-
-  & + & {
-    margin-left: 24px;
-  }
-
-  &.statsItemWide {
-    flex-basis: 302px;
-  }
-`
-
-const StatsHeader = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  width: 100%;
-  justify-content: space-between;
-  align-items: start;
-`
-
-const StatsButton = styled(ButtonPrimarySmall)`
-  position: absolute;
-  top: 8px;
-  right: 8px;
-`
-
 const AccountsBoard = styled.section`
   display: grid;
   grid-template-columns: 1fr;
@@ -233,14 +141,6 @@ const AccountsTabs = styled(PageTabs)`
   &:after {
     display: none;
   }
-`
-
-const StatsInfo = styled(Label)`
-  position: relative;
-`
-
-const StatsContent = styled.div`
-  margin-top: auto;
 `
 
 const AccountTab = styled(PageTab)`
@@ -266,8 +166,8 @@ const AccountsTableHeaders = styled.div`
   display: grid;
   grid-area: accountstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 236px 0.9fr 0.7fr 0.7fr 0.65fr 154px;
-  grid-column-gap: 14px;
+  grid-template-columns: 276px repeat(4, 128px) 154px;
+  justify-content: space-between;
   width: 100%;
   padding-left: 16px;
 `
@@ -317,9 +217,9 @@ const AccountsList = styled.ul`
 
 const AccountItem = styled.li`
   display: grid;
-  grid-template-columns: 236px 0.9fr 0.7fr 0.7fr 0.65fr 154px;
+  grid-template-columns: 276px repeat(4, 128px) 154px;
   grid-template-rows: 1fr;
-  grid-column-gap: 14px;
+  justify-content: space-between;
   justify-items: end;
   align-items: center;
   width: 100%;
