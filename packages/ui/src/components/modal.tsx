@@ -53,6 +53,7 @@ export const ModalGlass = styled.div`
   height: 100%;
   padding-top: 64px;
   background-color: ${Colors.Black[700.75]};
+  color: ${Colors.Black[900]};
   z-index: 100000;
 `
 export const ResultModalGlass = styled(ModalGlass)`

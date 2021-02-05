@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { TokenValue } from '../../components/typography'
+import { TransferButton } from '../../components/TransferButton'
 import { Colors } from '../../constants'
 import { useTotalBalances } from '../../hooks/useTotalBalances'
 
@@ -14,9 +15,7 @@ export function ProfileComponent() {
         <TotalBalance>
           <TokenValue value={total} />
         </TotalBalance>
-        {/*<BalanceTransfer>*/}
-        {/*  <TransferIcon />*/}
-        {/*</BalanceTransfer>*/}
+        <TransferButton />
       </MemberBalance>
     </Profile>
   )

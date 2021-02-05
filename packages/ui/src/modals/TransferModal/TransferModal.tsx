@@ -26,9 +26,10 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
   const [transferFrom, setTransferFrom] = useState(from)
   const [transferTo, setTransferTo] = useState<Account | undefined>(to)
   const [subscription, setSubscription] = useState<Subscription | undefined>(undefined)
+  const isTransfer = !from && !to
   const isSend = !!from
-  const title = isSend ? 'Send tokens' : 'Receive tokens'
-
+  const title = isTransfer ? 'Transfer tokens' : isSend ? 'Send tokens' : 'Receive tokens'
+  console.log(title)
   useEffect(() => {
     if (subscription) {
       return () => subscription.unsubscribe()
