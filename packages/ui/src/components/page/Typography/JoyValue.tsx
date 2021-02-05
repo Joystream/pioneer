@@ -8,20 +8,7 @@ interface Props {
   value: BN | number | undefined
 }
 
-export const TokenValue = React.memo(({ value }: Props) => (
-  <TokenValueWrap>
-    {formatTokenValue(value)}&nbsp;<TokenSymbol className="TokenValue">JOY</TokenSymbol>
-  </TokenValueWrap>
-))
-
-export const TokenValueWrap = styled.span`
-  font-weight: 700;
-`
-
-export const TokenSymbol = styled.span`
-  color: ${Colors.Black['400']};
-  font-weight: 400;
-`
+export const TokenValue = React.memo(({ value }: Props) => <ValueInJoys>{formatTokenValue(value)}</ValueInJoys>)
 
 export const ValueInJoys = styled.span`
   display: inline-grid;
