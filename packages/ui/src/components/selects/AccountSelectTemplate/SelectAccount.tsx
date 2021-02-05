@@ -67,7 +67,7 @@ const Empty = styled.input`
 
   &::placeholder {
     font-size: 14px;
-    line-height: 20px;
+    line-height: 45px;
     font-weight: 400;
     color: ${Colors.Black[400]};
   }
