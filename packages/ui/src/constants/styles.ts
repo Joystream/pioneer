@@ -54,8 +54,8 @@ export const Shadows = {
 }
 
 export const Fonts = {
-  Body: 'Ubuntu, Arial, Helvetica, sans-serif',
-  Monospace: '"Ubuntu Mono", monospace',
+  Title: '"Grotesk", sans-serif',
+  Body: '"Inter", sans-serif',
 }
 
 export const Transitions = {

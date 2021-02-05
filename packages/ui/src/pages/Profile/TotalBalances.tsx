@@ -73,7 +73,7 @@ const StatsItem = styled.li`
   grid-template-rows: 16px 28px;
   grid-row-gap: 24px;
   flex-basis: 240px;
-  flex-grow: 0;
+  flex-grow: 1;
   height: clamp(100%, 100px, 100px);
   padding: 12px 16px 20px;
   border-radius: ${BorderRad.m};

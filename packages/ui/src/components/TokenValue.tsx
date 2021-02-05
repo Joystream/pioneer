@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
-import { Colors } from '../constants'
+import { Colors, Fonts } from '../constants'
 import { formatTokenValue } from '../utils/formatters'
 
 interface props {
@@ -16,6 +16,7 @@ export const TokenValue = React.memo(({ value }: props) => (
 
 export const TokenValueWrap = styled.span`
   font-weight: 700;
+  font-family: ${Fonts.Title};
 `
 
 export const TokenSymbol = styled.span`
