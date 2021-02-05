@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
+import { Text } from '../components/page/Typography/Text'
 import { BorderRad, Colors, Shadows } from '../constants'
 import { Close } from './buttons/CloseButton'
 import { CrossIcon } from './icons/CrossIcon'
@@ -33,6 +34,13 @@ export const Modal = ({ children }: ModalProps) => {
     </ModalGlass>
   )
 }
+export const ResultModal = ({ children }: ModalProps) => {
+  return (
+    <ResultModalGlass>
+      <ResultModalWrap>{children}</ResultModalWrap>
+    </ResultModalGlass>
+  )
+}
 export const ModalGlass = styled.div`
   display: grid;
   grid-template-columns: minmax(80px, 1.2fr) minmax(max-content, 904px) minmax(60px, 1fr);
@@ -46,6 +54,9 @@ export const ModalGlass = styled.div`
   padding-top: 64px;
   background-color: ${Colors.Black[700.75]};
   z-index: 100000;
+`
+export const ResultModalGlass = styled(ModalGlass)`
+  padding-top: 224px;
 `
 export const ModalWrap = styled.section`
   display: grid;
@@ -64,7 +75,17 @@ export const ModalWrap = styled.section`
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
 `
-
+export const ResultModalWrap = styled(ModalWrap)`
+  justify-self: center;
+  grid-template-rows: 76px auto;
+  background-color: ${Colors.White};
+`
+export const ExtensionModalWrap = styled(ModalWrap)`
+  justify-self: center;
+  grid-template-rows: auto;
+  max-width: 534px;
+  background-color: ${Colors.White};
+`
 export const ModalHeaderIcon = styled.div`
   display: grid;
   justify-items: center;
@@ -82,7 +103,6 @@ export const ModalHeaderIcon = styled.div`
     object-fit: contain;
   }
 `
-
 const ModalTopBar = styled.header`
   display: grid;
   position: relative;
@@ -103,7 +123,19 @@ export const ModalBody = styled.div`
   border-top: 1px solid ${Colors.Black[200]};
   border-bottom: 1px solid ${Colors.Black[200]};
 `
-
+export const ResultModalBody = styled(ModalBody)`
+  grid-row-gap: 24px;
+  padding: 40px;
+  justify-items: center;
+  border: none;
+  background-color: ${Colors.White};
+  min-height: 350px;
+`
+export const SuccessModalBody = styled(ResultModalBody)`
+  grid-row-gap: 8px;
+  padding: 8px 24px 40px;
+  text-align: left;
+`
 export const SignTransferContainer = styled.div`
   display: grid;
   grid-row-gap: 8px;
@@ -124,8 +156,10 @@ export const ModalFooter = styled.footer`
   border-radius: 0px 0px 2px 2px;
 `
 export const ModalTitle = styled.h4``
-
 const CloseModalButton = styled(Close)`
   position: absolute;
   right: 16px;
+`
+export const ResultText = styled(Text)`
+  text-align: center;
 `
