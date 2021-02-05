@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react'
 import { Observable, Subscription } from 'rxjs'
 import { Account } from '../../hooks/types'
 import { useKeyring } from '../../hooks/useKeyring'
+import { WaitModal } from '../WaitModal'
 import { SignTransferModal } from './SignTransferModal'
 import { TransactionFailureModal } from './TransactionFailureModal'
 import { TransactionSuccessModal } from './TransactionSuccessModal'
 import { TransferDetailsModal } from './TransferDetailsModal'
-import { WaitModal } from '../WaitModal'
 
 interface Props {
   onClose: () => void

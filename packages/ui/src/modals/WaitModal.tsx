@@ -1,8 +1,9 @@
-import { Modal, ModalBody } from '../components/modal'
-import { Text } from '../components/page/Typography/Text'
 import React from 'react'
 import styled from 'styled-components'
-import { LoaderComponent } from '../components/icons/Loader'
+import { Loader } from '../components/icons/Loader'
+import { ModalBody, ModalGlass, ModalTitle, ModalWrap } from '../components/modal'
+import { Text } from '../components/page/Typography/Text'
+import { Colors } from '../constants/styles'
 
 interface Props {
   title: string
@@ -10,24 +11,35 @@ interface Props {
 }
 
 export const WaitModal = ({ title, description }: Props) => (
-  <Modal>
-    <ExtensionModalBody>
-      <Loader />
-      <ModalTitle>{title}</ModalTitle>
-      <Text size={1}>{description}</Text>
-    </ExtensionModalBody>
-  </Modal>
+  <WaitModalGlass>
+    <WaitModalWrap>
+      <WaitModalBody>
+        <Loader />
+        <ModalTitle>{title}</ModalTitle>
+        <ExtensionText size={2}>{description}</ExtensionText>
+      </WaitModalBody>
+    </WaitModalWrap>
+  </WaitModalGlass>
 )
 
-const ExtensionModalBody = styled(ModalBody)`
+const WaitModalGlass = styled(ModalGlass)`
+  padding-top: 224px;
+`
+
+const WaitModalWrap = styled(ModalWrap)`
+  justify-self: center;
+  grid-template-rows: auto;
+  max-width: 534px;
+  background-color: ${Colors.White};
+`
+
+const WaitModalBody = styled(ModalBody)`
+  grid-row-gap: 24px;
+  padding: 40px;
   justify-items: center;
   border: none;
 `
 
-const Loader = styled(LoaderComponent)`
-  margin-bottom: 24px;
-`
-
-const ModalTitle = styled.h4`
-  margin-bottom: 16px;
+const ExtensionText = styled(Text)`
+  text-align: center;
 `

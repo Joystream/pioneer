@@ -223,7 +223,7 @@ const AccountItem = styled.li`
   justify-items: end;
   align-items: center;
   width: 100%;
-  height: ${Sizes.accountSelect};
+  height: ${Sizes.accountHeight};
   padding: 16px 0 16px 14px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
@@ -255,7 +255,7 @@ export const ButtonApply = styled(ButtonGhostMediumSquare)`
   }
 
   svg {
-    color: ${Colors.Black[900]};
+    color: ${Colors.Black[600]};
   }
 `
 

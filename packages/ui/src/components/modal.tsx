@@ -33,7 +33,7 @@ export const Modal = ({ children }: ModalProps) => {
     </ModalGlass>
   )
 }
-const ModalGlass = styled.div`
+export const ModalGlass = styled.div`
   display: grid;
   grid-template-columns: minmax(80px, 1.2fr) minmax(max-content, 904px) minmax(60px, 1fr);
   grid-template-rows: 1fr;
@@ -43,7 +43,7 @@ const ModalGlass = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  padding-top: 15vh;
+  padding-top: 64px;
   background-color: ${Colors.Black[700.75]};
   z-index: 100000;
 `
@@ -97,10 +97,18 @@ const ModalTopBar = styled.header`
 export const ModalBody = styled.div`
   display: grid;
   grid-area: modalbody;
-  grid-row-gap: 24px;
-  padding: 16px 24px 40px;
+  grid-row-gap: 16px;
+  padding: 24px 24px 48px;
+  background-color: ${Colors.Black[50]};
   border-top: 1px solid ${Colors.Black[200]};
   border-bottom: 1px solid ${Colors.Black[200]};
+`
+
+export const SignTransferContainer = styled.div`
+  display: grid;
+  grid-row-gap: 8px;
+  width: 100%;
+  height: 100%;
 `
 export const ModalFooter = styled.footer`
   display: inline-grid;
@@ -115,7 +123,7 @@ export const ModalFooter = styled.footer`
   padding: 12px 16px;
   border-radius: 0px 0px 2px 2px;
 `
-const ModalTitle = styled.h4``
+export const ModalTitle = styled.h4``
 
 const CloseModalButton = styled(Close)`
   position: absolute;

@@ -6,8 +6,7 @@ import { Observable } from 'rxjs'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
 import { ArrowDownExpandedIcon } from '../../components/icons/ArrowDownExpandedIcon'
-import { ArrowOutsideIcon } from '../../components/icons/ArrowOutsideIcon'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/modal'
 import { HelpNotification } from '../../components/notifications/HelpNotification'
 import { TokenValue } from '../../components/TokenValue'
 import { Account } from '../../hooks/types'
@@ -16,15 +15,15 @@ import { useBalance } from '../../hooks/useBalance'
 import { useKeyring } from '../../hooks/useKeyring'
 import { useObservable } from '../../hooks/useObservable'
 import {
-  AccountRow,
   BalanceInfo,
-  FormLabel,
   InfoTitle,
   InfoValue,
+  LockedAccount,
   Row,
   TransactionAmountInfo,
   TransactionAmountInfoText,
   TransactionInfo,
+  TransactionInfoLabel,
 } from '../common'
 
 interface Props {
@@ -62,38 +61,42 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
 
   return (
     <Modal>
-      <ModalHeader onClick={onClose} title="Authorize transaction" icon={<ArrowOutsideIcon />} />
+      <ModalHeader onClick={onClose} title="Authorize transaction" />
       <ModalBody>
-        <Row>
-          <FormLabel>From</FormLabel>
-          <AccountRow>
-            <AccountInfo account={from} />
-            <BalanceInfo>
-              <InfoTitle>Transferable balance</InfoTitle>
-              <InfoValue>
-                <TokenValue value={balanceFrom?.transferable} />
-              </InfoValue>
-            </BalanceInfo>
-          </AccountRow>
-        </Row>
-        <TransactionAmountInfo>
-          <ArrowDownExpandedIcon />
-          <TransactionAmountInfoText>
-            Transferring <TokenValue value={new BN(amount)} />
-          </TransactionAmountInfoText>
-        </TransactionAmountInfo>
-        <Row>
-          <FormLabel>Destination account</FormLabel>
-          <AccountRow>
-            <AccountInfo account={to} />
-            <BalanceInfo>
-              <InfoTitle>Total balance</InfoTitle>
-              <InfoValue>
-                <TokenValue value={balanceTo?.total} />
-              </InfoValue>
-            </BalanceInfo>
-          </AccountRow>
-        </Row>
+        <SignTransferContainer>
+          <Row>
+            <TransactionInfoLabel>
+              You are Transfering <TokenValue value={new BN(amount)} /> stake from {from.name} account to {to.name}{' '}
+              destination.
+            </TransactionInfoLabel>
+            <LockedAccount>
+              <AccountInfo account={from} />
+              <BalanceInfo>
+                <InfoTitle>Transferable balance</InfoTitle>
+                <InfoValue>
+                  <TokenValue value={balanceFrom?.transferable} />
+                </InfoValue>
+              </BalanceInfo>
+            </LockedAccount>
+          </Row>
+          <TransactionAmountInfo>
+            <ArrowDownExpandedIcon />
+            <TransactionAmountInfoText>
+              Transferring <TokenValue value={new BN(amount)} />
+            </TransactionAmountInfoText>
+          </TransactionAmountInfo>
+          <Row>
+            <LockedAccount>
+              <AccountInfo account={to} />
+              <BalanceInfo>
+                <InfoTitle>Transferable balance</InfoTitle>
+                <InfoValue>
+                  <TokenValue value={balanceTo?.total} />
+                </InfoValue>
+              </BalanceInfo>
+            </LockedAccount>
+          </Row>
+        </SignTransferContainer>
       </ModalBody>
       <ModalFooter>
         <TransactionInfo>

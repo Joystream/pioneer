@@ -14,7 +14,7 @@ export function ArrowDownIcon() {
   )
 }
 
-const Icon = styled.svg`
+export const Icon = styled.svg`
   height: 16px;
   width: 16px;
   position: relative;

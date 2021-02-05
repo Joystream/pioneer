@@ -14,11 +14,11 @@ export const TokenValue = React.memo(({ value }: props) => (
   </TokenValueWrap>
 ))
 
-const TokenValueWrap = styled.span`
+export const TokenValueWrap = styled.span`
   font-weight: 700;
 `
 
-const TokenSymbol = styled.span`
+export const TokenSymbol = styled.span`
   color: ${Colors.Black['400']};
-  font-weight: normal;
+  font-weight: 400;
 `
