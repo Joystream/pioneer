@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ButtonPrimarySquare } from '../../components/buttons/Buttons'
 import { TransferIcon } from '../../components/icons/TransferIcon'
-import { TokenValue } from '../../components/TokenValue'
+import { TokenValue } from '../../components/page/Typography/JoyValue'
 import { Colors } from '../../constants'
 import { useTotalBalances } from '../../hooks/useTotalBalances'
 

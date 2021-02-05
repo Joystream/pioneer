@@ -5,7 +5,7 @@ import { Account } from '../../../hooks/types'
 import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
-import { TokenValue } from '../../TokenValue'
+import { TokenValue } from '../../page/Typography/JoyValue'
 
 export interface SelectAccountOption {
   account: Account
