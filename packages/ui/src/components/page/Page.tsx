@@ -8,7 +8,7 @@ export const Page = styled.div`
     'navbar page .'
     'navbar page .';
   grid-column-gap: 24px;
-  width: 98vw;
+  width: 100vw;
   height: 100%;
   min-height: 100vh;
 `
