@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { BorderRad, Colors, Sizes } from '../constants'
 import { Icon } from '../components/icons/ArrowDownExpandedIcon'
+import { BorderRad, Colors, Sizes } from '../constants'
 
 export const FormLabel = styled.span`
   font-size: 14px;
@@ -28,6 +28,7 @@ export const AccountRow = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   align-items: center;
+  width: 100%;
   min-height: ${Sizes.accountHeight};
   padding: 8px 72px 8px 14px;
   border: 1px solid ${Colors.Black[300]};
@@ -90,6 +91,11 @@ export const TransactionAmountInfo = styled.div`
   justify-self: center;
   align-items: center;
   color: ${Colors.Black[700]};
+
+  ${Icon} {
+    width: 16px;
+    height: 16px;
+  }
 `
 export const TransactionAmountInfoText = styled.span`
   padding: 4px 6px;
@@ -106,9 +112,5 @@ export const TransactionAmountInfoText = styled.span`
     line-height: 16px;
     font-weight: 700;
     color: ${Colors.Black[700]};
-  }
-  ${Icon} {
-    width: 16px;
-    height: 16px;
   }
 `

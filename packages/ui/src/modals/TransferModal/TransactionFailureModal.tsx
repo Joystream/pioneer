@@ -1,28 +1,44 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
-import { Text } from '../../components/page/Typography/Text'
+import { ArrowDownIcon, Icon } from '../../components/icons/ArrowDownIcon'
+import { SuccessIcon } from '../../components/icons/SuccessIcon'
+import { ModalHeader, ResultModal, SuccessModalBody } from '../../components/modal'
+import { TokenValue } from '../../components/TokenValue'
+import { Account } from '../../hooks/types'
+import { TransactionInfoLabel } from '../common'
 
 interface Props {
   onClose: () => void
+  from: Account
+  amount: BN
+  to: Account
 }
 
-export function TransactionFailureModal({ onClose }: Props) {
+export function TransactionFailureModal({ onClose, from, amount, to }: Props) {
   return (
-    <Modal>
-      <ModalHeader onClick={onClose} title="Recovering failure" icon={'😡'} />
-      <ModalFailureBody>
-        <Text>You have not transferred 'VALUE' balance from 'From acount name' to 'To account name'</Text>
-      </ModalFailureBody>
-      <ModalFooter>
-        <ButtonPrimaryMedium>Accept and close</ButtonPrimaryMedium>
-      </ModalFooter>
-    </Modal>
+    <ResultModal>
+      <ModalHeader onClick={onClose} title="Failure" icon={<SuccessIcon />} />
+      <SuccessModalBody>
+        <TransactionInfoLabel>
+          You haven’t transferred <TokenValue value={new BN(amount)} /> stake from {from.name} account to {to.name}{' '}
+          destination, because of a lorem ipsum dolor sit amet enim probem.
+        </TransactionInfoLabel>
+        <AcceptFailure onClick={onClose}>
+          Accept and close <ArrowDownIcon />
+        </AcceptFailure>
+      </SuccessModalBody>
+    </ResultModal>
   )
 }
 
-const ModalFailureBody = styled(ModalBody)`
-  border: none;
-  padding-bottom: 132px;
+const AcceptFailure = styled(ButtonPrimaryMedium)`
+  align-self: end;
+  justify-self: end;
+  margin-bottom: -24px;
+
+  ${Icon} {
+    transform: rotate(-90deg);
+  }
 `
