@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { TokenValue } from '../../components/typography'
-import { TransferButtonStyled } from '../../components/TransferButton'
-import { Colors } from '../../constants'
-import { useTotalBalances } from '../../hooks/useTotalBalances'
+import { TokenValue } from '../../typography'
+import { TransferButtonStyled } from '../../TransferButton'
+import { Colors } from '../../../constants'
+import { useTotalBalances } from '../../../hooks/useTotalBalances'
 
 export function ProfileComponent() {
   const { total } = useTotalBalances()

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
-import { Network } from '../../providers/api/provider'
+import { useLocalStorage } from '../../../hooks/useLocalStorage'
+import { Network } from '../../../providers/api/provider'
 
 export function NetworkSwitch() {
   const [network, setNetwork] = useLocalStorage<Network>('network')
