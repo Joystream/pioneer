@@ -5,7 +5,7 @@ import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
 import { ArrowDownIcon, Icon } from '../../components/icons/ArrowDownIcon'
 import { SuccessIcon } from '../../components/icons/SuccessIcon'
 import { ModalHeader, ResultModal, SuccessModalBody } from '../../components/modal'
-import { TokenValue } from '../../components/TokenValue'
+import { TokenValue } from '../../components/page/Typography/JoyValue'
 import { Account } from '../../hooks/types'
 import { TransactionInfoLabel } from '../common'
 
@@ -22,8 +22,8 @@ export function TransactionFailureModal({ onClose, from, amount, to }: Props) {
       <ModalHeader onClick={onClose} title="Failure" icon={<SuccessIcon />} />
       <SuccessModalBody>
         <TransactionInfoLabel>
-          You haven’t transferred <TokenValue value={new BN(amount)} /> stake from {from.name} account to {to.name}{' '}
-          destination, because of a lorem ipsum dolor sit amet enim probem.
+          You haven’t transferred <TokenValue value={amount} /> stake from {from.name} account to {to.name} destination,
+          because of a lorem ipsum dolor sit amet enim probem.
         </TransactionInfoLabel>
         <AcceptFailure onClick={onClose}>
           Accept and close <ArrowDownIcon />
