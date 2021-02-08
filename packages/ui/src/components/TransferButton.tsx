@@ -2,11 +2,9 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Colors } from '../constants'
 import { Account } from '../hooks/types'
-import { ButtonGhostMediumSquare, ButtonPrimarySquare } from './buttons'
-import { ArrowInsideIcon } from './icons/ArrowInsideIcon'
-import { ArrowOutsideIcon } from './icons/ArrowOutsideIcon'
 import { TransferModal } from '../modals/TransferModal/TransferModal'
-import { TransferIcon } from './icons/TransferIcon'
+import { ButtonGhostMediumSquare, ButtonPrimarySquare } from './buttons'
+import { ArrowInsideIcon, ArrowOutsideIcon, TransferIcon } from './icons'
 
 interface Props {
   from?: Account

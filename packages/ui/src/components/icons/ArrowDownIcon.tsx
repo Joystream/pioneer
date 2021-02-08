@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
+import { Icon } from './Icon'
 
 export function ArrowDownIcon() {
   return (
-    <Icon viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+    <Icon size="16" viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -13,9 +13,3 @@ export function ArrowDownIcon() {
     </Icon>
   )
 }
-
-export const Icon = styled.svg`
-  height: 16px;
-  width: 16px;
-  position: relative;
-`

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Colors, Transitions } from '../../constants'
-import { CrossIcon } from '../icons/CrossIcon'
+import { CrossIcon } from '../icons'
 
 export function CloseButton() {
   return (

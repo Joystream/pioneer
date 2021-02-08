@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
+import { Icon } from './Icon'
 
 export function CrossIcon() {
   return (
-    <Icon viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+    <Icon size="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -13,9 +13,3 @@ export function CrossIcon() {
     </Icon>
   )
 }
-
-const Icon = styled.svg`
-  height: 24px;
-  width: 24px;
-  position: relative;
-`

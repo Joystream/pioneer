@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Membership } from '@joystream/types/members'
 import { Close } from '../../../components/buttons'
-import { CrossIcon } from '../../../components/icons/CrossIcon'
+import { CrossIcon } from '../../../components/icons'
 import { Avatar } from './Member'
 
 interface MembershipAboutProps {

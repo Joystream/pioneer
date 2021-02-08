@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
+import { Icon } from './Icon'
 
 export function ArrowInsideIcon() {
   return (
-    <Icon viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+    <Icon size="16" viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
       <path
         d="M13.8281 12.1874H2.57812C2.50937 12.1874 2.45312 12.2436 2.45312 12.3124V13.2499C2.45312 13.3186 2.50937 13.3749 2.57812 13.3749H13.8281C13.8969 13.3749 13.9531 13.3186 13.9531 13.2499V12.3124C13.9531 12.2436 13.8969 12.1874 13.8281 12.1874ZM6.25 8.03472H7.40469V2.74878C7.40469 2.68003 7.46094 2.62378 7.52969 2.62378H8.46719C8.53594 2.62378 8.59219 2.68003 8.59219 2.74878V8.03472H9.75C9.85469 8.03472 9.9125 8.15503 9.84844 8.23628L8.09844 10.4519C8.08674 10.4668 8.07181 10.4789 8.05475 10.4872C8.03769 10.4955 8.01897 10.4999 8 10.4999C7.98103 10.4999 7.96231 10.4955 7.94525 10.4872C7.92819 10.4789 7.91326 10.4668 7.90156 10.4519L6.15156 8.23784C6.0875 8.15503 6.14531 8.03472 6.25 8.03472Z"
         fill="currentColor"
@@ -11,9 +11,3 @@ export function ArrowInsideIcon() {
     </Icon>
   )
 }
-
-const Icon = styled.svg`
-  height: 16px;
-  width: 16px;
-  position: relative;
-`

@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react'
 import styled, { ThemedStyledProps } from 'styled-components'
-import { Text } from './typography'
 import { BorderRad, Colors, Shadows } from '../constants'
 import { Close } from './buttons'
-import { CrossIcon } from './icons/CrossIcon'
+import { CrossIcon } from './icons'
+import { Text } from './typography'
 
 interface Props {
   onClick: () => void
