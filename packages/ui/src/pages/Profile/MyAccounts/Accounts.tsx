@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../../components/AccountInfo'
-import { ButtonGhostMediumSquare } from '../../../components/buttons'
 import { PageTab, PageTabs } from '../../../components/page/PageTabs'
-import { TokenValue } from '../../../components/typography'
 import { TransferButton } from '../../../components/TransferButton'
+import { TokenValue } from '../../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../../constants'
 import { Account } from '../../../hooks/types'
 import { useAccounts } from '../../../hooks/useAccounts'
@@ -169,20 +168,6 @@ const AccountControls = styled.div`
   grid-template-columns: repeat(3, 40px);
   grid-template-rows: 40px;
   grid-column-gap: 8px;
-`
-
-export const ButtonApply = styled(ButtonGhostMediumSquare)`
-  &,
-  &:hover,
-  &:focus,
-  &:active,
-  &:disabled {
-    border: 1px solid transparent;
-  }
-
-  svg {
-    color: ${Colors.Black[600]};
-  }
 `
 
 const Loading = styled.div`

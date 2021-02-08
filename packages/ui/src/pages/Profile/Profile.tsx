@@ -8,6 +8,7 @@ export const MyProfile = styled.div`
   grid-row-gap: 24px;
   width: 100%;
 `
+
 export const ProfileSummary = styled.div`
   display: flex;
   flex-direction: column;
@@ -16,6 +17,7 @@ export const ProfileSummary = styled.div`
     margin-bottom: 24px;
   }
 `
+
 export const MyProfileContent = styled.section`
   display: grid;
   grid-template-columns: 1fr;
