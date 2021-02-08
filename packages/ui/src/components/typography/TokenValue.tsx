@@ -3,15 +3,15 @@ import React from 'react'
 import styled from 'styled-components'
 import { Colors, Fonts } from '../../constants'
 import { formatTokenValue } from '../../utils/formatters'
+import { Text } from './Text'
 
 interface Props {
   value: BN | number | undefined
   className?: string
 }
 
-export const TokenValue = ({ className, value }: Props) => (
-  <ValueInJoys className={className}>{formatTokenValue(value)}</ValueInJoys>
-)
+export const TokenValue = ({ className, value }: Props) =>
+  value ? <ValueInJoys className={className}>{formatTokenValue(value)}</ValueInJoys> : <Text>-</Text>
 
 const ValueInJoys = styled.span`
   display: inline-grid;

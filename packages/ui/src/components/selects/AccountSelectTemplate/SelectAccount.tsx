@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
+import { Colors, Sizes } from '../../../constants'
 import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
-import { ButtonApply } from '../../../pages/Profile/MyAccounts/Accounts'
 import { AccountInfo } from '../../AccountInfo'
-import { ArrowDownIcon, Icon } from '../../icons/ArrowDownIcon'
+import { Toggle, ToggleButton } from '../../buttons/Toggle'
+import { ArrowDownIcon } from '../../icons/ArrowDownIcon'
 import { TokenValue } from '../../typography'
 import { SelectAccountOption } from './OptionAccount'
 import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
@@ -23,7 +23,7 @@ export function SelectAccount({ options, onChange }: OptionListAccountProps) {
 
   return (
     <SelectComponent>
-      <SelectButton onClick={() => setIsOpen(!isOpen)} isListOpen={isOpen}>
+      <Toggle onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
         {selectedOption && (
           <SelectedOption>
             <AccountInfo account={selectedOption.account} />
@@ -36,10 +36,10 @@ export function SelectAccount({ options, onChange }: OptionListAccountProps) {
           </SelectedOption>
         )}
         {!selectedOption && <Empty type={'text'} placeholder={'Select account or paste account address'} />}
-        <ButtonApply>
+        <ToggleButton>
           <ArrowDownIcon />
-        </ButtonApply>
-      </SelectButton>
+        </ToggleButton>
+      </Toggle>
       {isOpen && <OptionListAccount onChange={onOptionClick} options={options} />}
     </SelectComponent>
   )
@@ -79,42 +79,4 @@ const SelectComponent = styled.div`
   width: 100%;
   height: 100%;
   align-items: center;
-`
-
-interface OpenListProps {
-  isListOpen: boolean
-}
-
-const SelectButton = styled.div<OpenListProps>`
-  display: grid;
-  grid-template-columns: 1fr 40px;
-  grid-template-rows: 1fr;
-  grid-column-gap: 4px;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  min-height: ${Sizes.accountSelectHeight};
-  margin: 0;
-  padding: 0;
-  border: 1px solid ${Colors.Black[300]};
-  border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
-  font-size: 1em;
-  cursor: pointer;
-  transition: ${Transitions.all};
-
-  ${ButtonApply} ${Icon} {
-    transition: ${Transitions.all};
-    transform: scaleY(${(props) => (props.isListOpen ? '-1' : '1')});
-  }
-
-  &:hover {
-    border-color: ${Colors.Blue[200]};
-  }
-
-  &:focus-within,
-  &:active,
-  &:focus {
-    border-color: ${Colors.Blue[300]};
-  }
 `

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Membership } from '@joystream/types/members'
 
-import { ButtonPrimary } from '../../../components/buttons/Buttons'
+import { ButtonPrimary } from '../../../components/buttons'
 import { AddMembershipModal } from './AddMembershipModal'
 import { Member } from './Member'
 

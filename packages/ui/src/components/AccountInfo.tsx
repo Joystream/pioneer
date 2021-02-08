@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors } from '../constants'
 import { Account } from '../hooks/types'
-import { CopyButton } from './buttons/CopyButton'
+import { CopyButton } from './buttons'
 
 export const AccountInfo = ({ account }: { account: Account }) => {
   return (

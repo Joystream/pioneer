@@ -1,7 +1,7 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
-import BN from 'bn.js'
-import { ButtonPrimarySmall } from '../../../components/buttons/Buttons'
+import { ButtonPrimarySmall } from '../../../components/buttons'
 import { HelpNotification } from '../../../components/notifications/HelpNotification'
 import { Label, TokenValue } from '../../../components/typography'
 import { BorderRad, Colors, Shadows } from '../../../constants'
@@ -53,7 +53,7 @@ export const TotalBalances = () => {
             Total recoverable
             <HelpNotification helperText={'Lorem fishy'} />
           </StatsInfo>
-          {hasRecoverable && <StatsButton disabled={true}>Recover all</StatsButton>}
+          {hasRecoverable && <StatsButton>Recover all</StatsButton>}
         </StatsHeader>
         <StatsContent>
           <TotalValue value={recoverable} />
@@ -73,6 +73,7 @@ const Stats = styled.ul`
   width: 100%;
   justify-items: flex-start;
 `
+
 const StatsItem = styled.li`
   display: inline-grid;
   position: relative;
@@ -95,6 +96,7 @@ const StatsItem = styled.li`
     flex-basis: 302px;
   }
 `
+
 const StatsHeader = styled.div`
   display: grid;
   grid-auto-flow: column;
@@ -102,14 +104,17 @@ const StatsHeader = styled.div`
   justify-content: space-between;
   align-items: start;
 `
+
 const StatsButton = styled(ButtonPrimarySmall)`
   position: absolute;
   top: 8px;
   right: 8px;
 `
+
 const StatsInfo = styled(Label)`
   position: relative;
 `
+
 const StatsContent = styled.div`
   margin-top: auto;
 `
