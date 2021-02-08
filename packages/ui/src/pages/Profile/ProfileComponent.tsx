@@ -13,7 +13,7 @@ export function ProfileComponent() {
       <MemberBalance>
         <BalanceTitle>Total Balance</BalanceTitle>
         <TotalBalance>
-          <TokenValue value={total} />
+          <TotalTokenValue value={total} />
         </TotalBalance>
         <TransferButtonStyled />
       </MemberBalance>
@@ -70,4 +70,8 @@ const TotalBalance = styled.span`
   line-height: 24px;
   color: ${Colors.White};
   font-weight: 700;
+`
+
+const TotalTokenValue = styled(TokenValue)`
+  color: ${Colors.White};
 `
