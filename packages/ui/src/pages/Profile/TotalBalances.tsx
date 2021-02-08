@@ -3,10 +3,9 @@ import styled from 'styled-components'
 import { ButtonPrimarySmall } from '../../components/buttons/Buttons'
 import { HelpNotification } from '../../components/notifications/HelpNotification'
 import { Label } from '../../components/page/Typography/Label'
-import { ValueInJoys } from '../../components/page/Typography/JoyValue'
+import { TokenValue } from '../../components/page/Typography/JoyValue'
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { useTotalBalances } from '../../hooks/useTotalBalances'
-import { formatTokenValue } from '../../utils/formatters'
 
 export const TotalBalances = () => {
   const { total, transferable, locked, recoverable } = useTotalBalances()
@@ -21,7 +20,7 @@ export const TotalBalances = () => {
           </StatsInfo>
         </StatsHeader>
         <StatsContent>
-          <ValueInJoys>{formatTokenValue(total)}</ValueInJoys>
+          <TotalValue value={total} />
         </StatsContent>
       </StatsItem>
       <StatsItem>
@@ -32,7 +31,7 @@ export const TotalBalances = () => {
           </StatsInfo>
         </StatsHeader>
         <StatsContent>
-          <ValueInJoys>{formatTokenValue(transferable)}</ValueInJoys>
+          <TotalValue value={transferable} />
         </StatsContent>
       </StatsItem>
       <StatsItem>
@@ -43,7 +42,7 @@ export const TotalBalances = () => {
           </StatsInfo>
         </StatsHeader>
         <StatsContent>
-          <ValueInJoys>{formatTokenValue(locked)}</ValueInJoys>
+          <TotalValue value={locked} />
         </StatsContent>
       </StatsItem>
       <StatsItem className={'statsItemWide'}>
@@ -55,12 +54,18 @@ export const TotalBalances = () => {
           <StatsButton disabled={true}>Recover all</StatsButton>
         </StatsHeader>
         <StatsContent>
-          <ValueInJoys>{formatTokenValue(recoverable)}</ValueInJoys>
+          <TotalValue value={recoverable} />
         </StatsContent>
       </StatsItem>
     </Stats>
   )
 }
+
+const TotalValue = styled(TokenValue)`
+  font-size: 20px;
+  line-height: 28px;
+`
+
 const Stats = styled.ul`
   display: flex;
   width: 100%;
