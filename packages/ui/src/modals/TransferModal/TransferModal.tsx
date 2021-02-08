@@ -29,7 +29,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
   const isTransfer = !from && !to
   const isSend = !!from
   const title = isTransfer ? 'Transfer tokens' : isSend ? 'Send tokens' : 'Receive tokens'
-  console.log(title)
+
   useEffect(() => {
     if (subscription) {
       return () => subscription.unsubscribe()
