@@ -1,6 +1,6 @@
 import React from 'react'
 import { Loader } from '../components/icons/Loader'
-import { ExtensionModalWrap, ModalTitle, ResultModalBody, ResultModalGlass, ResultText } from '../components/modal'
+import { ExtensionModalWrap, ModalTitle, ResultModalBody, ResultModalGlass, ResultText } from '../components/Modal'
 
 interface Props {
   title: string
