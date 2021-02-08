@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Colors, Transitions } from '../../constants'
 
@@ -22,10 +23,10 @@ export const PageTabs = styled.nav`
     z-index: -1;
   }
 `
-export const PageTab = styled.button`
+export const PageTab = styled(Link)`
   display: inline-grid;
   grid-auto-flow: column;
-  grid-rcolumn-gap: 8px;
+  grid-column-gap: 8px;
   position: relative;
   align-items: center;
   width: fit-content;
@@ -36,7 +37,9 @@ export const PageTab = styled.button`
   text-transform: capitalize;
   cursor: pointer;
   transition: ${Transitions.all};
-
+  text-decoration: none;
+`
+export const PageTabActive = styled(PageTab)`
   &:before {
     content: '';
     position: absolute;

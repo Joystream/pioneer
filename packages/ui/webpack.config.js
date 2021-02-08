@@ -6,7 +6,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 
-module.exports = {
+module.exports = (env, argv) => ({
   entry: './src',
   devtool: 'source-map',
   plugins: [
@@ -16,6 +16,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
+      IS_DEVELOPMENT: argv.mode ==='development',
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
@@ -53,4 +54,4 @@ module.exports = {
     stats: 'errors-only',
     overlay: true,
   },
-}
+})

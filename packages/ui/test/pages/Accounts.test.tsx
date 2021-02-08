@@ -4,12 +4,13 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { cleanup, render } from '@testing-library/react'
 import BN from 'bn.js'
 import { expect } from 'chai'
+import { HashRouter } from 'react-router-dom'
 import sinon from 'sinon'
 import { aliceSigner } from '../mocks/keyring'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import * as useBalanceModule from '../../src/hooks/useBalance'
-import { Accounts } from '../../src/pages/Profile/Accounts'
+import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'
 import { Account } from '../../src/hooks/types'
 
 describe('UI: Accounts list', () => {
@@ -87,7 +88,11 @@ describe('UI: Accounts list', () => {
     })
 
     function renderAccounts() {
-      return render(<Accounts />)
+      return render(
+        <HashRouter>
+          <Accounts />
+        </HashRouter>
+      )
     }
   })
 })

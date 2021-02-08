@@ -1,21 +1,28 @@
-import React from 'react'
-import { Page } from '../../components/page/Page'
-import { PageContent } from '../../components/page/PageContent'
-import { SideBar } from '../../components/page/SideBar'
-import { Accounts } from './Accounts'
+import styled from 'styled-components'
+import { PageTabs } from '../../components/page/PageTabs'
 
-export function Profile() {
-  return (
-    <Page>
-      <SideBar
-        crumbs={[
-          { href: '#', text: 'My Profile' },
-          { href: '#', text: 'My Accounts' },
-        ]}
-      />
-      <PageContent>
-        <Accounts />
-      </PageContent>
-    </Page>
-  )
-}
+export const MyProfile = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-row-gap: 24px;
+  width: 100%;
+`
+export const ProfileSummary = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  ${PageTabs} {
+    margin-bottom: 24px;
+  }
+`
+export const MyProfileContent = styled.section`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 20px auto;
+  grid-template-areas:
+    'accountstabs'
+    'accountstable';
+  grid-row-gap: 18px;
+  width: 100%;
+`
