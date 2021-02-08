@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { AddMembershipModal } from '../pages/Profile/MyMemberships/AddMembershipModal'
+import { AddMembershipModal } from '../modals/AddMembershipModal'
 import { ButtonPrimary } from './buttons'
 
-export const CreateMembershipButton = () => {
+export const AddMembershipButton = () => {
   const [isCreateOpen, setCreateOpen] = useState(false)
 
   return (
