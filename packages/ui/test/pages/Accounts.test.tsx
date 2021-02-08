@@ -83,7 +83,7 @@ describe('UI: Accounts list', () => {
 
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
       expect(aliceBox?.querySelector('h5')?.textContent).to.equal('alice')
-      expect(aliceBox?.nextSibling?.textContent).to.equal('1,000\xa0JOY')
+      expect(aliceBox?.nextSibling?.textContent).to.equal('1,000')
     })
 
     function renderAccounts() {
