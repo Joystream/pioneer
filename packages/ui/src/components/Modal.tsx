@@ -1,8 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled, { ThemedStyledProps } from 'styled-components'
 import { BorderRad, Colors, Shadows } from '../constants'
-import { Close } from './buttons'
-import { CrossIcon } from './icons'
+import { CloseButton } from './buttons'
 import { Text } from './typography'
 
 interface Props {
@@ -16,9 +15,7 @@ export function ModalHeader({ onClick, title, icon }: Props) {
     <ModalTopBar columns={icon ? 3 : 2}>
       {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
       <ModalTitle>{title}</ModalTitle>
-      <CloseModalButton onClick={onClick}>
-        <CrossIcon />
-      </CloseModalButton>
+      <CloseModalButton onClick={onClick} />
     </ModalTopBar>
   )
 }
@@ -164,7 +161,7 @@ export const ModalFooter = styled.footer`
   border-radius: 0 0 2px 2px;
 `
 export const ModalTitle = styled.h4``
-const CloseModalButton = styled(Close)`
+const CloseModalButton = styled(CloseButton)`
   position: absolute;
   right: 16px;
 `
