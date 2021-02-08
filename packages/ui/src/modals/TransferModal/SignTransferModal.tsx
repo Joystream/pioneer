@@ -91,7 +91,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
               <BalanceInfo>
                 <InfoTitle>Transferable balance</InfoTitle>
                 <InfoValue>
-                  <TokenValue value={balanceTo?.total} />
+                  <TokenValue value={balanceTo?.transferable} />
                 </InfoValue>
               </BalanceInfo>
             </LockedAccount>

@@ -106,19 +106,18 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
 
 interface SelectedAccountProps {
   account: Account
-  useTotal?: boolean
 }
 
-const SelectedAccount = ({ account, useTotal }: SelectedAccountProps) => {
-  const balance = useBalance(account)
+const SelectedAccount = ({ account }: SelectedAccountProps) => {
+  const { transferable } = useBalance(account) || {}
 
   return (
     <LockedAccount>
       <AccountInfo account={account} />
       <BalanceInfo>
-        <InfoTitle>{useTotal ? 'Total balance' : 'Transferable balance'}</InfoTitle>
+        <InfoTitle>Transferable balance</InfoTitle>
         <InfoValue>
-          <TokenValue value={useTotal ? balance?.total : balance?.transferable} />
+          <TokenValue value={transferable} />
         </InfoValue>
       </BalanceInfo>
     </LockedAccount>

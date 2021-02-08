@@ -28,9 +28,9 @@ export function SelectAccount({ options, onChange }: OptionListAccountProps) {
           <SelectedOption>
             <AccountInfo account={selectedOption.account} />
             <BalanceInfo>
-              <InfoTitle>Total balance</InfoTitle>
+              <InfoTitle>Transferable balance</InfoTitle>
               <InfoValue>
-                <TokenValue value={balance?.total} />
+                <TokenValue value={balance?.transferable} />
               </InfoValue>
             </BalanceInfo>
           </SelectedOption>

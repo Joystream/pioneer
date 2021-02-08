@@ -25,9 +25,9 @@ export function OptionAccount({ option, onChange }: Props) {
       <OptionComponent onClick={() => onChange && onChange(option)}>
         <AccountInfo account={account} />
         <BalanceInfo>
-          <InfoTitle>Total balance</InfoTitle>
+          <InfoTitle>Transferable balance</InfoTitle>
           <InfoValue>
-            <TokenValue value={balance?.total} />
+            <TokenValue value={balance?.transferable} />
           </InfoValue>
         </BalanceInfo>
       </OptionComponent>

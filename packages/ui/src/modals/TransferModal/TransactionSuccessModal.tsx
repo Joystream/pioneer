@@ -35,7 +35,7 @@ export function TransactionSuccessModal({ onClose, from, to, amount }: Props) {
   const fromNow = fromBalance.transferable
   const fromBefore = fromNow.add(amount)
 
-  const toNow = toBalance.total
+  const toNow = toBalance.transferable
   const toBefore = toNow.sub(amount)
 
   return (
