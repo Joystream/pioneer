@@ -1,20 +1,20 @@
 import BN from 'bn.js'
 import React from 'react'
-import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ArrowDownExpandedIcon } from '../../components/icons/ArrowDownExpandedIcon'
-import { Modal, ModalBody, ModalHeader } from '../../components/modal'
+import { SuccessIcon } from '../../components/icons/SuccessIcon'
+import { ModalHeader, ResultModal, SuccessModalBody } from '../../components/modal'
 import { TokenValue } from '../../components/page/Typography/JoyValue'
-import { Text } from '../../components/page/Typography/Text'
 import { Account } from '../../hooks/types'
 import { useBalance } from '../../hooks/useBalance'
 import {
-  AccountRow,
   BalanceInfo,
   InfoTitle,
   InfoValue,
+  LockedAccount,
   TransactionAmountInfo,
   TransactionAmountInfoText,
+  TransactionInfoLabel,
 } from '../common'
 
 interface Props {
@@ -39,11 +39,13 @@ export function TransactionSuccessModal({ onClose, from, to, amount }: Props) {
   const toBefore = toNow.sub(amount)
 
   return (
-    <Modal>
-      <ModalHeader onClick={onClose} title="Success" icon={'🎉'} />
-      <ModalSuccessBody>
-        <Text>You have just successfully transferred tokens:</Text>
-        <AccountSuccessRow>
+    <ResultModal>
+      <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
+      <SuccessModalBody>
+        <TransactionInfoLabel style={{ marginBottom: '28px', justifySelf: 'start' }}>
+          You have just successfully transferred balance from
+        </TransactionInfoLabel>
+        <LockedAccount>
           <AccountInfo account={from} />
           <BalanceInfo>
             <InfoTitle>Transferable balance before:</InfoTitle>
@@ -55,14 +57,14 @@ export function TransactionSuccessModal({ onClose, from, to, amount }: Props) {
               <TokenValue value={fromNow} />
             </InfoValue>
           </BalanceInfo>
-        </AccountSuccessRow>
+        </LockedAccount>
         <TransactionAmountInfo>
           <ArrowDownExpandedIcon />
           <TransactionAmountInfoText>
             Transferred <TokenValue value={amount} />
           </TransactionAmountInfoText>
         </TransactionAmountInfo>
-        <AccountSuccessRow>
+        <LockedAccount>
           <AccountInfo account={to} />
           <BalanceInfo>
             <InfoTitle>Transferable balance before:</InfoTitle>
@@ -74,16 +76,8 @@ export function TransactionSuccessModal({ onClose, from, to, amount }: Props) {
               <TokenValue value={toNow} />
             </InfoValue>
           </BalanceInfo>
-        </AccountSuccessRow>
-      </ModalSuccessBody>
-    </Modal>
+        </LockedAccount>
+      </SuccessModalBody>
+    </ResultModal>
   )
 }
-
-const ModalSuccessBody = styled(ModalBody)`
-  border: none;
-`
-
-const AccountSuccessRow = styled(AccountRow)`
-  padding: 16px 14px;
-`

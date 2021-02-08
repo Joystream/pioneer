@@ -58,8 +58,10 @@ const NavigationLink = styled.a`
   height: 100%;
   padding: 12px 12px 12px 24px;
   font-size: 16px;
+  font-weight: 700;
   line-height: 1.5;
   color: ${Colors.Black[200]};
+  text-transform: capitalize;
   text-decoration: none;
   transition: ${Transitions.all};
 

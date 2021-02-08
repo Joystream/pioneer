@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonGhostMediumSquare } from '../../components/buttons/Buttons'
 import { ArrowDownIcon } from '../../components/icons/ArrowDownIcon'
-import { ArrowInsideIcon } from '../../components/icons/ArrowInsideIcon'
 import { PageTab, PageTabs } from '../../components/page/PageTabs'
 import { PageTitle } from '../../components/page/PageTitle'
 import { TokenValue } from '../../components/page/Typography/JoyValue'
@@ -85,9 +84,7 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
         <Balance value={balance?.transferable} />
       </AccountBalance>
       <AccountControls>
-        <ButtonInside>
-          <ArrowInsideIcon />
-        </ButtonInside>
+        <TransferButton to={account} />
         <TransferButton from={account} />
         <ButtonApply>
           <ArrowDownIcon />
@@ -131,7 +128,7 @@ const AccountsBoard = styled.section`
   grid-template-areas:
     'accountstabs'
     'accountstable';
-  grid-row-gap: 18px;
+  grid-row-gap: 16px;
   width: 100%;
 `
 
@@ -166,7 +163,7 @@ const AccountsTableHeaders = styled.div`
   display: grid;
   grid-area: accountstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 276px repeat(4, 128px) 154px;
+  grid-template-columns: 276px repeat(4, 128px) 136px;
   justify-content: space-between;
   width: 100%;
   padding-left: 16px;
@@ -217,7 +214,7 @@ const AccountsList = styled.ul`
 
 const AccountItem = styled.li`
   display: grid;
-  grid-template-columns: 276px repeat(4, 128px) 154px;
+  grid-template-columns: 276px repeat(4, 128px) 136px;
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: end;
@@ -240,11 +237,6 @@ const AccountControls = styled.div`
   grid-column-gap: 8px;
 `
 
-const ButtonInside = styled(ButtonGhostMediumSquare)`
-  svg {
-    color: ${Colors.Black[900]};
-  }
-`
 export const ButtonApply = styled(ButtonGhostMediumSquare)`
   &,
   &:hover,
