@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import BN from 'bn.js'
 import { ButtonPrimarySmall } from '../../components/buttons/Buttons'
 import { HelpNotification } from '../../components/notifications/HelpNotification'
 import { Label } from '../../components/page/Typography/Label'
@@ -10,6 +11,8 @@ import { formatTokenValue } from '../../utils/formatters'
 
 export const TotalBalances = () => {
   const { total, transferable, locked, recoverable } = useTotalBalances()
+
+  const hasRecoverable = recoverable.gt(new BN(0))
 
   return (
     <Stats>
@@ -46,13 +49,13 @@ export const TotalBalances = () => {
           <ValueInJoys>{formatTokenValue(locked)}</ValueInJoys>
         </StatsContent>
       </StatsItem>
-      <StatsItem className={'statsItemWide'}>
+      <StatsItem className={hasRecoverable ? 'statsItemWide' : ''}>
         <StatsHeader>
           <StatsInfo>
             Total recoverable
             <HelpNotification helperText={'Lorem fishy'} />
           </StatsInfo>
-          <StatsButton disabled={true}>Recover all</StatsButton>
+          {hasRecoverable && <StatsButton disabled={true}>Recover all</StatsButton>}
         </StatsHeader>
         <StatsContent>
           <ValueInJoys>{formatTokenValue(recoverable)}</ValueInJoys>
@@ -73,7 +76,7 @@ const StatsItem = styled.li`
   grid-template-rows: 16px 28px;
   grid-row-gap: 24px;
   flex-basis: 240px;
-  flex-grow: 0;
+  flex-grow: 1;
   height: clamp(100%, 100px, 100px);
   padding: 12px 16px 20px;
   border-radius: ${BorderRad.m};

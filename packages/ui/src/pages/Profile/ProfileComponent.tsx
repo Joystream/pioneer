@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ButtonPrimarySquare } from '../../components/buttons/Buttons'
-import { TransferIcon } from '../../components/icons/TransferIcon'
 import { TokenValue } from '../../components/TokenValue'
 import { Colors } from '../../constants'
 import { useTotalBalances } from '../../hooks/useTotalBalances'
@@ -16,9 +14,9 @@ export function ProfileComponent() {
         <TotalBalance>
           <TokenValue value={total} />
         </TotalBalance>
-        <BalanceTransfer>
-          <TransferIcon />
-        </BalanceTransfer>
+        {/*<BalanceTransfer>*/}
+        {/*  <TransferIcon />*/}
+        {/*</BalanceTransfer>*/}
       </MemberBalance>
     </Profile>
   )
@@ -73,10 +71,4 @@ const TotalBalance = styled.span`
   line-height: 24px;
   color: ${Colors.White};
   font-weight: 700;
-`
-
-const BalanceTransfer = styled(ButtonPrimarySquare)`
-  width: 32px;
-  height: 32px;
-  grid-area: balancetransfer;
 `

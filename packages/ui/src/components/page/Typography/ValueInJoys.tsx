@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Colors } from '../../../constants'
+import { Colors, Fonts } from '../../../constants'
 
 export const ValueInJoys = styled.span`
   display: inline-grid;
@@ -12,6 +12,7 @@ export const ValueInJoys = styled.span`
   line-height: 28px;
   font-weight: 700;
   color: ${Colors.Black[900]};
+  font-family: ${Fonts.Title};
 
   &:after {
     content: 'joy';
@@ -21,5 +22,6 @@ export const ValueInJoys = styled.span`
     font-weight: 400;
     color: ${Colors.Black[400]};
     text-transform: uppercase;
+    font-family: ${Fonts.Title};
   }
 `

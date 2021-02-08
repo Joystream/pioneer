@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
-import styled from 'styled-components'
-import { Text } from '../components/page/Typography/Text'
+import styled, { ThemedStyledProps } from 'styled-components'
+import { Text } from './page/Typography/Text'
 import { BorderRad, Colors, Shadows } from '../constants'
 import { Close } from './buttons/CloseButton'
 import { CrossIcon } from './icons/CrossIcon'
@@ -13,12 +13,12 @@ interface Props {
 
 export function ModalHeader({ onClick, title, icon }: Props) {
   return (
-    <ModalTopBar>
+    <ModalTopBar columns={icon ? 3 : 2}>
+      {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
+      <ModalTitle>{title}</ModalTitle>
       <CloseModalButton onClick={onClick}>
         <CrossIcon />
       </CloseModalButton>
-      {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
-      <ModalTitle>{title}</ModalTitle>
     </ModalTopBar>
   )
 }
@@ -103,16 +103,23 @@ export const ModalHeaderIcon = styled.div`
     object-fit: contain;
   }
 `
-const ModalTopBar = styled.header`
+interface TopBarProps extends ThemedStyledProps<any, any> {
+  columns: number
+}
+
+const ModalTopBar = styled.header.attrs((props: TopBarProps) => ({
+  columns: props.columns,
+}))`
   display: grid;
   position: relative;
   grid-auto-flow: column;
   grid-area: modalheader;
+  grid-template-columns: ${(props) => (props.columns > 2 ? '40px 1fr 40px' : '1fr 40px')};
   justify-content: start;
   grid-column-gap: 12px;
   align-items: center;
   padding: 24px;
-  border-radius: 2px 2px 0px 0px;
+  border-radius: 2px 2px 0 0;
 `
 export const ModalBody = styled.div`
   display: grid;
@@ -153,7 +160,7 @@ export const ModalFooter = styled.footer`
   align-items: center;
   width: fit-content;
   padding: 12px 16px;
-  border-radius: 0px 0px 2px 2px;
+  border-radius: 0 0 2px 2px;
 `
 export const ModalTitle = styled.h4``
 const CloseModalButton = styled(Close)`
