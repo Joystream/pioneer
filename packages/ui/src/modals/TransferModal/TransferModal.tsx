@@ -108,5 +108,5 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     return <TransactionSuccessModal onClose={onClose} from={transferFrom} to={transferTo} amount={amount} />
   }
 
-  return <TransactionFailureModal onClose={onClose} from={from} amount={amount} to={transferTo} />
+  return <TransactionFailureModal onClose={onClose} from={transferFrom} amount={amount} to={transferTo} />
 }
