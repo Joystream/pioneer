@@ -1,8 +1,8 @@
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, Fonts } from '../../../constants'
-import { formatTokenValue } from '../../../utils/formatters'
+import { Colors, Fonts } from '../../constants'
+import { formatTokenValue } from '../../utils/formatters'
 
 interface Props {
   value: BN | number | undefined

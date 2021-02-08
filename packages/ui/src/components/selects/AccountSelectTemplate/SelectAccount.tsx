@@ -6,7 +6,7 @@ import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { ButtonApply } from '../../../pages/Profile/Accounts'
 import { AccountInfo } from '../../AccountInfo'
 import { ArrowDownIcon, Icon } from '../../icons/ArrowDownIcon'
-import { TokenValue } from '../../page/Typography/JoyValue'
+import { TokenValue } from '../../typography'
 import { SelectAccountOption } from './OptionAccount'
 import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
 
