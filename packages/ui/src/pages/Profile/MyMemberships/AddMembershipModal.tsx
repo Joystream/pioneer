@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, ModalHeader } from '../../../components/modal'
+import { Modal, ModalHeader } from '../../../components/Modal'
 
 interface MembershipModalProps {
   onClose: () => void

@@ -24,7 +24,7 @@ export function MyAccounts() {
             <PageTitle>My profile</PageTitle>
             <PageTabs>
               <PageTabActive to="/profile">My accounts</PageTabActive>
-              <PageTab to="/profile/memberships">My memberships</PageTab>
+              {IS_DEVELOPMENT && <PageTab to="/profile/memberships">My memberships</PageTab>}
             </PageTabs>
             <ProfileSummary>
               <TotalBalances />

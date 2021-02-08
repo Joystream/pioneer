@@ -81,44 +81,6 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
   )
 }
 
-const MyProfile = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
-  grid-template-areas:
-    'profilesetings'
-    'accountsboard';
-  grid-row-gap: 24px;
-  width: 100%;
-`
-
-const AccountHead = styled.section`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 40px auto;
-  grid-row-gap: 16px;
-`
-
-const ProfileSummary = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  ${PageTabs} {
-    margin-bottom: 24px;
-  }
-`
-
-const AccountsBoard = styled.section`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 20px auto;
-  grid-template-areas:
-    'accountstabs'
-    'accountstable';
-  grid-row-gap: 16px;
-  width: 100%;
-`
-
 const AccountsTabs = styled(PageTabs)`
   grid-area: accountstabs;
 
