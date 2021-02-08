@@ -1,7 +1,7 @@
 import { Membership } from '@joystream/types/members'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { ButtonGhostMediumSquare } from '../../../components/buttons/Buttons'
+import { ButtonGhostMediumSquare } from '../../../components/buttons'
 import { MembershipAbout } from './MembershipAbout'
 
 interface MemberProps {

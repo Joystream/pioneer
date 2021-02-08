@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
-import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
+import { ButtonPrimaryMedium } from '../../components/buttons'
 import { ArrowDownIcon, Icon } from '../../components/icons/ArrowDownIcon'
 import { SuccessIcon } from '../../components/icons/SuccessIcon'
 import { ModalHeader, ResultModal, SuccessModalBody } from '../../components/Modal'

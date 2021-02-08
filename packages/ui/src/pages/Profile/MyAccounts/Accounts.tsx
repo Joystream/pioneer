@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../../components/AccountInfo'
-import { ButtonGhostMediumSquare } from '../../../components/buttons/Buttons'
+import { ButtonGhostMediumSquare } from '../../../components/buttons'
 import { PageTab, PageTabs } from '../../../components/page/PageTabs'
 import { TokenValue } from '../../../components/typography'
 import { TransferButton } from '../../../components/TransferButton'

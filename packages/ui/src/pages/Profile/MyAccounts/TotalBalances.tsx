@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import BN from 'bn.js'
-import { ButtonPrimarySmall } from '../../../components/buttons/Buttons'
+import { ButtonPrimarySmall } from '../../../components/buttons'
 import { HelpNotification } from '../../../components/notifications/HelpNotification'
 import { Label, TokenValue } from '../../../components/typography'
 import { BorderRad, Colors, Shadows } from '../../../constants'
