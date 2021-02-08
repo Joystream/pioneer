@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons/Buttons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { TokenValue } from '../../components/typography'
 import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
+import { TokenValue } from '../../components/typography'
 import { BorderRad, Colors } from '../../constants'
 import { Account } from '../../hooks/types'
 import { useAccounts } from '../../hooks/useAccounts'
@@ -31,6 +31,11 @@ interface Props {
   icon: ReactElement
 }
 
+const getFilteredOptions = (allAccounts: Account[], toFilterOut: Account | undefined) =>
+  allAccounts
+    .filter((account) => !toFilterOut || account.address !== toFilterOut.address)
+    .map((account) => ({ account: account }))
+
 export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon }: Props) {
   const accounts = useAccounts()
   const [recipient, setRecipient] = useState<Account | undefined>(to)
@@ -52,12 +57,8 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
     }
   }
 
-  const toOptions = accounts.allAccounts
-    .filter((account) => !from || account.address !== from.address)
-    .map((account) => ({ account: account }))
-  const fromOptions = accounts.allAccounts
-    .filter((account) => !to || account.address !== to.address)
-    .map((account) => ({ account: account }))
+  const toOptions = getFilteredOptions(accounts.allAccounts, sender)
+  const fromOptions = getFilteredOptions(accounts.allAccounts, recipient)
 
   return (
     <Modal>
