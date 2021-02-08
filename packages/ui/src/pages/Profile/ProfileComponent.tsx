@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { TokenValue } from '../../components/TokenValue'
+import { TokenValue } from '../../components/typography'
 import { Colors } from '../../constants'
 import { useTotalBalances } from '../../hooks/useTotalBalances'
 
