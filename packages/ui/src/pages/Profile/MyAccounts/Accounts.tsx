@@ -1,9 +1,7 @@
-import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../../components/AccountInfo'
 import { ButtonGhostMediumSquare } from '../../../components/buttons/Buttons'
-import { ArrowDownIcon } from '../../../components/icons/ArrowDownIcon'
 import { PageTab, PageTabs } from '../../../components/page/PageTabs'
 import { TokenValue } from '../../../components/typography'
 import { TransferButton } from '../../../components/TransferButton'
@@ -22,30 +20,22 @@ export function Accounts() {
       <AccountsTabs>
         <AccountTab to="/">All accounts</AccountTab>
       </AccountsTabs>
-      <AccountsTable>
-        <AccountsTableHeaders>
-          <TableColumnTitle>Account</TableColumnTitle>
-          <TableColumnTitle>Total balance</TableColumnTitle>
-          <TableColumnTitle>Locked balance</TableColumnTitle>
-          <TableColumnTitle>Recoverable balance</TableColumnTitle>
-          <TableColumnTitle>Transferable balance</TableColumnTitle>
-        </AccountsTableHeaders>
+      <AccountsWrap>
+        <ListHeaders>
+          <ListHeader>Account</ListHeader>
+          <ListHeader>Total balance</ListHeader>
+          <ListHeader>Locked balance</ListHeader>
+          <ListHeader>Recoverable balance</ListHeader>
+          <ListHeader>Transferable balance</ListHeader>
+        </ListHeaders>
         <AccountsList>
           {allAccounts.map((account) => (
             <AccountItemData key={account.address} account={account} />
           ))}
         </AccountsList>
-      </AccountsTable>
+      </AccountsWrap>
     </>
   )
-}
-
-interface Props {
-  value: BN | undefined
-}
-
-export function Balance({ value }: Props) {
-  return <>{value ? <TokenValue value={value} /> : '-'}</>
 }
 
 interface AccountItemDataProps {
@@ -59,7 +49,7 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
     <AccountItem key={account.address}>
       <AccountInfo account={account} />
       <AccountBalance>
-        <Balance value={balance?.total} />
+        <TokenValue value={balance?.total} />
       </AccountBalance>
       <AccountBalance>
         <TokenValue value={balance?.locked} />
@@ -68,14 +58,11 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
         <TokenValue value={balance?.recoverable} />
       </AccountBalance>
       <AccountBalance>
-        <Balance value={balance?.transferable} />
+        <TokenValue value={balance?.transferable} />
       </AccountBalance>
       <AccountControls>
         <TransferButton to={account} />
         <TransferButton from={account} />
-        <ButtonApply>
-          <ArrowDownIcon />
-        </ButtonApply>
       </AccountControls>
     </AccountItem>
   )
@@ -96,7 +83,7 @@ const AccountTab = styled(PageTab)`
   line-height: 20px;
 `
 
-const AccountsTable = styled.div`
+const AccountsWrap = styled.div`
   display: grid;
   grid-area: accountstable;
   grid-template-columns: 1fr;
@@ -108,7 +95,7 @@ const AccountsTable = styled.div`
   width: 100%;
 `
 
-const AccountsTableHeaders = styled.div`
+const ListHeaders = styled.div`
   display: grid;
   grid-area: accountstablenav;
   grid-template-rows: 1fr;
@@ -118,7 +105,7 @@ const AccountsTableHeaders = styled.div`
   padding-left: 16px;
 `
 
-const TableColumnTitle = styled.span`
+const ListHeader = styled.span`
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -175,9 +162,7 @@ const AccountItem = styled.li`
   border-radius: ${BorderRad.s};
 `
 
-const AccountBalance = styled.p`
-  display: grid;
-`
+const AccountBalance = styled.p``
 
 const AccountControls = styled.div`
   display: grid;
