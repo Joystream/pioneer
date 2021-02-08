@@ -3,7 +3,7 @@ import React from 'react'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ArrowDownExpandedIcon } from '../../components/icons/ArrowDownExpandedIcon'
 import { SuccessIcon } from '../../components/icons/SuccessIcon'
-import { ModalHeader, ResultModal, SuccessModalBody } from '../../components/modal'
+import { ModalHeader, ResultModal, SuccessModalBody } from '../../components/Modal'
 import { TokenValue } from '../../components/typography'
 import { Account } from '../../hooks/types'
 import { useBalance } from '../../hooks/useBalance'
@@ -35,7 +35,7 @@ export function TransactionSuccessModal({ onClose, from, to, amount }: Props) {
   const fromNow = fromBalance.transferable
   const fromBefore = fromNow.add(amount)
 
-  const toNow = toBalance.total
+  const toNow = toBalance.transferable
   const toBefore = toNow.sub(amount)
 
   return (

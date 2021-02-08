@@ -3,9 +3,9 @@ import React, { ReactElement, useState } from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons/Buttons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/modal'
-import { TokenValue } from '../../components/typography'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
+import { TokenValue } from '../../components/typography'
 import { BorderRad, Colors } from '../../constants'
 import { Account } from '../../hooks/types'
 import { useAccounts } from '../../hooks/useAccounts'
@@ -31,6 +31,11 @@ interface Props {
   icon: ReactElement
 }
 
+const getFilteredOptions = (allAccounts: Account[], toFilterOut: Account | undefined) =>
+  allAccounts
+    .filter((account) => !toFilterOut || account.address !== toFilterOut.address)
+    .map((account) => ({ account: account }))
+
 export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon }: Props) {
   const accounts = useAccounts()
   const [recipient, setRecipient] = useState<Account | undefined>(to)
@@ -52,12 +57,8 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
     }
   }
 
-  const toOptions = accounts.allAccounts
-    .filter((account) => !from || account.address !== from.address)
-    .map((account) => ({ account: account }))
-  const fromOptions = accounts.allAccounts
-    .filter((account) => !to || account.address !== to.address)
-    .map((account) => ({ account: account }))
+  const toOptions = getFilteredOptions(accounts.allAccounts, sender)
+  const fromOptions = getFilteredOptions(accounts.allAccounts, recipient)
 
   return (
     <Modal>
@@ -106,19 +107,18 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
 
 interface SelectedAccountProps {
   account: Account
-  useTotal?: boolean
 }
 
-const SelectedAccount = ({ account, useTotal }: SelectedAccountProps) => {
-  const balance = useBalance(account)
+const SelectedAccount = ({ account }: SelectedAccountProps) => {
+  const { transferable } = useBalance(account) || {}
 
   return (
     <LockedAccount>
       <AccountInfo account={account} />
       <BalanceInfo>
-        <InfoTitle>{useTotal ? 'Total balance' : 'Transferable balance'}</InfoTitle>
+        <InfoTitle>Transferable balance</InfoTitle>
         <InfoValue>
-          <TokenValue value={useTotal ? balance?.total : balance?.transferable} />
+          <TokenValue value={transferable} />
         </InfoValue>
       </BalanceInfo>
     </LockedAccount>

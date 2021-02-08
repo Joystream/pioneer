@@ -6,7 +6,7 @@ import { Observable } from 'rxjs'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium } from '../../components/buttons/Buttons'
 import { ArrowDownExpandedIcon } from '../../components/icons/ArrowDownExpandedIcon'
-import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/Modal'
 import { HelpNotification } from '../../components/notifications/HelpNotification'
 import { TokenValue } from '../../components/typography'
 import { Account } from '../../hooks/types'
@@ -91,7 +91,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
               <BalanceInfo>
                 <InfoTitle>Transferable balance</InfoTitle>
                 <InfoValue>
-                  <TokenValue value={balanceTo?.total} />
+                  <TokenValue value={balanceTo?.transferable} />
                 </InfoValue>
               </BalanceInfo>
             </LockedAccount>

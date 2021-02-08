@@ -76,9 +76,8 @@ export const InfoTitle = styled.span`
   text-align: right;
   color: ${Colors.Black[400]};
 `
+
 export const InfoValue = styled.span`
-  display: grid;
-  position: relative;
   text-align: right;
   line-height: 20px;
 `

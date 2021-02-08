@@ -35,7 +35,7 @@ const NotificationPopup = styled.p`
   animation: showHelperNotificationText 0.25s ease;
   animation-delay: 0.25s;
   animation-fill-mode: forwards;
-  z-index: 15;
+  z-index: 10;
 
   @keyframes showHelperNotificationText {
     from { opacity: 0;
@@ -61,7 +61,7 @@ const HelpNotificationComponent = styled.button`
   cursor: pointer;
   transform: translate(100%);
   transition: ${Transitions.all};
-  z-index: 10;
+  z-index: 5;
 
   svg {
     width: 100%;

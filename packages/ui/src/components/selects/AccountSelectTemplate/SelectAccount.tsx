@@ -28,9 +28,9 @@ export function SelectAccount({ options, onChange }: OptionListAccountProps) {
           <SelectedOption>
             <AccountInfo account={selectedOption.account} />
             <BalanceInfo>
-              <InfoTitle>Total balance</InfoTitle>
+              <InfoTitle>Transferable balance</InfoTitle>
               <InfoValue>
-                <TokenValue value={balance?.total} />
+                <TokenValue value={balance?.transferable} />
               </InfoValue>
             </BalanceInfo>
           </SelectedOption>
@@ -67,7 +67,7 @@ const Empty = styled.input`
 
   &::placeholder {
     font-size: 14px;
-    line-height: 20px;
+    line-height: 45px;
     font-weight: 400;
     color: ${Colors.Black[400]};
   }

@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Colors } from '../constants'
 import { Account } from '../hooks/types'
-import { ButtonGhostMediumSquare } from './buttons/Buttons'
+import { ButtonGhostMediumSquare, ButtonPrimarySquare } from './buttons/Buttons'
 import { ArrowInsideIcon } from './icons/ArrowInsideIcon'
 import { ArrowOutsideIcon } from './icons/ArrowOutsideIcon'
 import { TransferModal } from '../modals/TransferModal/TransferModal'
+import { TransferIcon } from './icons/TransferIcon'
 
 interface Props {
   from?: Account
@@ -14,8 +15,9 @@ interface Props {
 
 export function TransferButton({ from, to }: Props) {
   const [isOpen, setIsOpen] = useState(false)
-  const isSend = !!from
-  const icon = isSend ? <ArrowOutsideIcon /> : <ArrowInsideIcon />
+  const isTransfer = !from && !to
+  const isSend = !!from && !isTransfer
+  const icon = isTransfer ? <TransferIcon /> : isSend ? <ArrowOutsideIcon /> : <ArrowInsideIcon />
 
   return (
     <>
@@ -25,8 +27,26 @@ export function TransferButton({ from, to }: Props) {
   )
 }
 
+export function TransferButtonStyled() {
+  const [isOpen, setIsOpen] = useState(false)
+  const icon = <TransferIcon />
+
+  return (
+    <>
+      <ButtonForTransferStyled onClick={() => setIsOpen(true)}>{icon}</ButtonForTransferStyled>
+      {isOpen && <TransferModal onClose={() => setIsOpen(false)} icon={icon} />}
+    </>
+  )
+}
+
 const ButtonForTransfer = styled(ButtonGhostMediumSquare)`
   svg {
     color: ${Colors.Black[900]};
   }
+`
+
+const ButtonForTransferStyled = styled(ButtonPrimarySquare)`
+  width: 32px;
+  height: 32px;
+  grid-area: balancetransfer;
 `
