@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Icon } from '../components/icons/ArrowDownExpandedIcon'
+import { Icon } from '../components/icons'
 import { BorderRad, Colors, Sizes } from '../constants'
 
 export const FormLabel = styled.span`

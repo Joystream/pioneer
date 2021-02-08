@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { CopyIcon } from '../icons/CopyIcon'
+import { CopyIcon } from '../icons'
 
 export function CopyButton() {
   return (

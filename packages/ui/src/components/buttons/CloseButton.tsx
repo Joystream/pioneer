@@ -1,15 +1,13 @@
-import React from 'react'
+import React, { ButtonHTMLAttributes } from 'react'
 import styled from 'styled-components'
 import { Colors, Transitions } from '../../constants'
-import { CrossIcon } from '../icons/CrossIcon'
+import { CrossIcon } from '../icons'
 
-export function CloseButton() {
-  return (
-    <Close>
-      <CrossIcon />
-    </Close>
-  )
-}
+export const CloseButton = (props: ButtonHTMLAttributes<HTMLButtonElement>) => (
+  <Close {...props}>
+    <CrossIcon />
+  </Close>
+)
 
 export const Close = styled.button`
   display: flex;

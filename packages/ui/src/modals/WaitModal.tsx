@@ -1,5 +1,5 @@
 import React from 'react'
-import { Loader } from '../components/icons/Loader'
+import { Loader } from '../components/icons'
 import { ExtensionModalWrap, ModalTitle, ResultModalBody, ResultModalGlass, ResultText } from '../components/Modal'
 
 interface Props {
