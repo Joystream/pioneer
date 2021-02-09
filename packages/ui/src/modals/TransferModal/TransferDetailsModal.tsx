@@ -3,24 +3,16 @@ import React, { ReactElement, useState } from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons'
+import { NumberInput, Label } from '../../components/Form'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
 import { TokenValue } from '../../components/typography'
-import { BorderRad, Colors } from '../../constants'
+import { Colors } from '../../constants'
 import { Account } from '../../hooks/types'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
-import {
-  AmountInputBlock,
-  BalanceInfo,
-  FormLabel,
-  InfoTitle,
-  InfoValue,
-  LockedAccount,
-  Row,
-  TransactionAmount,
-} from '../common'
+import { AmountInputBlock, BalanceInfo, InfoTitle, InfoValue, LockedAccount, Row, TransactionAmount } from '../common'
 
 interface Props {
   from?: Account
@@ -65,7 +57,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
       <ModalHeader onClick={onClose} title={title} icon={icon} />
       <ModalBody>
         <Row>
-          <FormLabel>From</FormLabel>
+          <Label>From</Label>
           {from ? (
             <SelectedAccount account={from} />
           ) : (
@@ -74,8 +66,8 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
-            <AmountInputLabel htmlFor={'amount-input'}>Number of tokens</AmountInputLabel>
-            <AmountInput
+            <Label htmlFor={'amount-input'}>Number of tokens</Label>
+            <NumberInput
               id="amount-input"
               value={amount}
               onChange={(event) => setAmount(event.target.value)}
@@ -88,7 +80,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
           </AmountButtons>
         </TransactionAmount>
         <Row>
-          <FormLabel>Destination account</FormLabel>
+          <Label>Destination account</Label>
           {to ? (
             <SelectedAccount account={to} />
           ) : (
@@ -125,27 +117,6 @@ const SelectedAccount = ({ account }: SelectedAccountProps) => {
   )
 }
 
-const AmountInputLabel = styled.label`
-  margin-bottom: 4px;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 700;
-  vertical-align: middle;
-  color: ${Colors.Black[900]};
-`
-const AmountInput = styled.input`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid ${Colors.Black[300]};
-  border-radius: ${BorderRad.s};
-  font-size: 14px;
-  line-height: 22px;
-  font-weight: 700;
-  text-align: right;
-`
 const AmountButtons = styled.div`
   display: inline-grid;
   grid-auto-flow: column;

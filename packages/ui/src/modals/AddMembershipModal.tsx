@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../components/Modal'
+import { TextInput, Label } from '../components/Form'
+import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { SelectAccount } from '../components/selects/AccountSelectTemplate/SelectAccount'
 import { Row } from './common'
 
@@ -21,47 +22,47 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
     return (
       <Modal>
         <ModalHeader onClick={onClose} title="Add membership" />
-        <ModalBody>
+        <ScrolledModalBody>
           <Row>
-            <label>I was referred by a member Yes/No</label>
-            <input type="text" value="Select Member or type a member" />
+            <Label>I was referred by a member Yes/No</Label>
+            <TextInput type="text" value="Select Member or type a member" />
             <p>Please fill in all the details below.</p>
           </Row>
 
           <Row>
-            <label>Root account (?) *</label>
+            <Label>Root account (?) *</Label>
             <SelectAccount options={[]} onChange={console.log} />
           </Row>
 
           <Row>
-            <label>Controller account (?) *</label>
+            <Label>Controller account (?) *</Label>
             <SelectAccount options={[]} onChange={console.log} />
           </Row>
 
           <Row>
-            <label>Member Name (?) *</label>
-            <input type="text" />
+            <Label>Member Name (?) *</Label>
+            <TextInput type="text" />
           </Row>
 
           <Row>
-            <label>Membership handle (?) *</label>
-            <input type="text" />
+            <Label>Membership handle (?) *</Label>
+            <TextInput type="text" />
           </Row>
 
           <Row>
-            <label>About Member *</label>
-            <input type="text" />
+            <Label>About Member *</Label>
+            <TextInput type="text" />
           </Row>
 
           <Row>
-            <label>Member Avatar *</label>
-            <input type="text" />
+            <Label>Member Avatar *</Label>
+            <TextInput type="text" />
           </Row>
-        </ModalBody>
+        </ScrolledModalBody>
         <ModalFooter>
-          <label>
-            <input type="checkbox" />I agree to our Terms of Service and Privacy Policy.
-          </label>
+          <Label>
+            <TextInput type="checkbox" />I agree to our Terms of Service and Privacy Policy.
+          </Label>
           <ButtonPrimaryMedium onClick={onClick} disabled>
             Create a Membership
           </ButtonPrimaryMedium>
