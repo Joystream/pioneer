@@ -51,7 +51,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
           {from ? (
             <SelectedAccount account={from} />
           ) : (
-            <SelectAccount filter={filterAccount(recipient)} onChange={({ account }) => setSender(account)} />
+            <SelectAccount filter={filterAccount(recipient)} onChange={setSender} />
           )}
         </Row>
         <TransactionAmount>
@@ -74,7 +74,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
           {to ? (
             <SelectedAccount account={to} />
           ) : (
-            <SelectAccount filter={filterAccount(sender)} onChange={({ account }) => setRecipient(account)} />
+            <SelectAccount filter={filterAccount(sender)} onChange={setRecipient} />
           )}
         </Row>
       </ModalBody>

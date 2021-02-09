@@ -9,11 +9,10 @@ import { AccountInfo } from '../../AccountInfo'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
 import { TokenValue } from '../../typography'
-import { SelectAccountOption } from './OptionAccount'
 import { OptionListAccount } from './OptionListAccount'
 
 interface Props {
-  onChange: (option: SelectAccountOption) => void
+  onChange: (account: Account) => void
   filter?: (account: Account) => boolean
 }
 
@@ -23,12 +22,12 @@ export const filterAccount = (filterOut: Account | undefined) => {
 
 export function SelectAccount({ onChange, filter }: Props) {
   const { allAccounts } = useAccounts()
-  const options = allAccounts.filter(filter || (() => true)).map((account) => ({ account: account }))
+  const options = allAccounts.filter(filter || (() => true))
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState<SelectAccountOption>(options[0])
-  const balance = useBalance(selectedOption?.account)
+  const [selectedOption, setSelectedOption] = useState<Account>(options[0])
+  const balance = useBalance(selectedOption)
 
-  const onOptionClick = (option: SelectAccountOption) => {
+  const onOptionClick = (option: Account) => {
     setIsOpen(false)
     setSelectedOption(option)
     onChange(option)
@@ -39,7 +38,7 @@ export function SelectAccount({ onChange, filter }: Props) {
       <Toggle onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
         {selectedOption && (
           <SelectedOption>
-            <AccountInfo account={selectedOption.account} />
+            <AccountInfo account={selectedOption} />
             <BalanceInfo>
               <InfoTitle>Transferable balance</InfoTitle>
               <InfoValue>

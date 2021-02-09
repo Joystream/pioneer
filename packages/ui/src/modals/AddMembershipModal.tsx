@@ -34,18 +34,12 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
 
           <Row>
             <Label>Root account (?) *</Label>
-            <SelectAccount
-              filter={filterAccount(controllerAccount)}
-              onChange={({ account }) => setRootAccount(account)}
-            />
+            <SelectAccount filter={filterAccount(controllerAccount)} onChange={setRootAccount} />
           </Row>
 
           <Row>
             <Label>Controller account (?) *</Label>
-            <SelectAccount
-              filter={filterAccount(rootAccount)}
-              onChange={({ account }) => setControllerAccount(account)}
-            />
+            <SelectAccount filter={filterAccount(rootAccount)} onChange={setControllerAccount} />
           </Row>
 
           <Row>

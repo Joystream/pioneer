@@ -7,22 +7,17 @@ import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { TokenValue } from '../../typography'
 
-export interface SelectAccountOption {
-  account: Account
-}
-
 interface Props {
-  option: SelectAccountOption
-  onChange?: (option: SelectAccountOption) => void
+  account: Account
+  onChange?: (account: Account) => void
 }
 
-export function OptionAccount({ option, onChange }: Props) {
-  const { account } = option
+export function OptionAccount({ account, onChange }: Props) {
   const balance = useBalance(account)
 
   return (
     <OptionComponentContainer>
-      <OptionComponent onClick={() => onChange && onChange(option)}>
+      <OptionComponent onClick={() => onChange && onChange(account)}>
         <AccountInfo account={account} />
         <BalanceInfo>
           <InfoTitle>Transferable balance</InfoTitle>

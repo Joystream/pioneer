@@ -1,18 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Shadows, Sizes, Transitions } from '../../../constants'
-import { OptionAccount, SelectAccountOption } from './OptionAccount'
+import { Account } from '../../../hooks/types'
+import { OptionAccount } from './OptionAccount'
 
 interface Props {
-  options: Array<SelectAccountOption>
-  onChange: (option: SelectAccountOption) => void
+  options: Array<Account>
+  onChange: (account: Account) => void
 }
 
 export function OptionListAccount({ options, onChange }: Props) {
   return (
     <OptionsListComponent>
-      {options.map((option, index) => (
-        <OptionAccount key={index} option={option} onChange={onChange} />
+      {options.map((account, index) => (
+        <OptionAccount key={index} account={account} onChange={onChange} />
       ))}
     </OptionsListComponent>
   )
