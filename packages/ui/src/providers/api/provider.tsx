@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ApiRx, WsProvider } from '@polkadot/api'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
-import { types } from '@joystream/types'
+import { registry } from '@joystream/types'
 import { ApiContext } from './context'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 
@@ -24,13 +24,11 @@ export const ApiContextProvider = (props: Props) => {
     const endpoint = network === 'DEV' ? 'ws://127.0.0.1:9944/' : 'wss://rome-rpc-endpoint.joystream.org:9944'
     const provider = new WsProvider(endpoint)
 
-    ApiRx.create({ provider, rpc: jsonrpc, types })
+    ApiRx.create({ provider, rpc: jsonrpc, types: {}, registry })
       .toPromise()
       .then((api) => {
         setApi(api)
         setIsConnected(true)
-
-        api.isConnected.subscribe(setIsConnected)
       })
   }, [])
 
