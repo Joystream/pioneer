@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
-import { Label, Switch, TextInput } from '../components/Form'
+import { Label, Switch, TextInput } from '../components/forms'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { filterAccount, SelectAccount } from '../components/selects/AccountSelectTemplate/SelectAccount'
 import { Account } from '../hooks/types'

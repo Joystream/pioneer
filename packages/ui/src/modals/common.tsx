@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Label } from '../components/Form'
+import { Label } from '../components/forms'
 import { Icon } from '../components/icons'
 import { BorderRad, Colors, Sizes } from '../constants'
 
