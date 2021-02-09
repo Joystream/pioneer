@@ -4,6 +4,7 @@
   "description": "Types for Joystream Substrate Runtime - Babylon release",
   "main": "index.js",
   "types": "index.d.ts",
+  "private": true,
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc --build tsconfig.json",

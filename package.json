@@ -11,9 +11,9 @@
     ]
   },
   "scripts": {
-    "lint": "wsrun -c lint",
+    "lint": "wsrun -c --exclude @joystream/types lint",
     "build": "wsrun -e -c build",
-    "test": "wsrun -e -c test",
+    "test": "wsrun -e -c --exclude @joystream/types test",
     "start": "wsrun -p ui -c start"
   },
   "dependencies": {
