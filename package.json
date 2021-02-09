@@ -12,7 +12,7 @@
   },
   "scripts": {
     "lint": "wsrun -c --exclude @joystream/types lint",
-    "build": "wsrun -e -c build",
+    "build": "wsrun -e -c --stages build",
     "test": "wsrun -e -c --exclude @joystream/types test",
     "start": "wsrun -p ui -c start"
   },
