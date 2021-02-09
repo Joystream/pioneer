@@ -3,13 +3,12 @@ import React, { ReactElement, useState } from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons'
-import { NumberInput, Label } from '../../components/Form'
+import { Label, NumberInput } from '../../components/Form'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
+import { filterAccount, SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
 import { TokenValue } from '../../components/typography'
 import { Colors } from '../../constants'
 import { Account } from '../../hooks/types'
-import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { AmountInputBlock, BalanceInfo, InfoTitle, InfoValue, LockedAccount, Row, TransactionAmount } from '../common'
@@ -23,13 +22,7 @@ interface Props {
   icon: ReactElement
 }
 
-const getFilteredOptions = (allAccounts: Account[], toFilterOut: Account | undefined) =>
-  allAccounts
-    .filter((account) => !toFilterOut || account.address !== toFilterOut.address)
-    .map((account) => ({ account: account }))
-
 export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon }: Props) {
-  const accounts = useAccounts()
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
   const [amount, setAmount] = useNumberInput(0)
@@ -49,9 +42,6 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
     }
   }
 
-  const toOptions = getFilteredOptions(accounts.allAccounts, sender)
-  const fromOptions = getFilteredOptions(accounts.allAccounts, recipient)
-
   return (
     <Modal>
       <ModalHeader onClick={onClose} title={title} icon={icon} />
@@ -61,7 +51,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
           {from ? (
             <SelectedAccount account={from} />
           ) : (
-            <SelectAccount options={fromOptions} onChange={({ account }) => setSender(account)} />
+            <SelectAccount filter={filterAccount(recipient)} onChange={({ account }) => setSender(account)} />
           )}
         </Row>
         <TransactionAmount>
@@ -84,7 +74,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
           {to ? (
             <SelectedAccount account={to} />
           ) : (
-            <SelectAccount options={toOptions} onChange={({ account }) => setRecipient(account)} />
+            <SelectAccount filter={filterAccount(sender)} onChange={({ account }) => setRecipient(account)} />
           )}
         </Row>
       </ModalBody>

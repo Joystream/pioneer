@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import { BorderRad, Shadows, Sizes, Transitions } from '../../../constants'
 import { OptionAccount, SelectAccountOption } from './OptionAccount'
 
-export interface OptionListAccountProps {
+interface Props {
   options: Array<SelectAccountOption>
   onChange: (option: SelectAccountOption) => void
 }
 
-export function OptionListAccount({ options, onChange }: OptionListAccountProps) {
+export function OptionListAccount({ options, onChange }: Props) {
   return (
     <OptionsListComponent>
       {options.map((option, index) => (

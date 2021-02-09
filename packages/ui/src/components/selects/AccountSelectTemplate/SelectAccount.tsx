@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Colors, Sizes } from '../../../constants'
+import { Account } from '../../../hooks/types'
+import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
@@ -8,9 +10,20 @@ import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
 import { TokenValue } from '../../typography'
 import { SelectAccountOption } from './OptionAccount'
-import { OptionListAccount, OptionListAccountProps } from './OptionListAccount'
+import { OptionListAccount } from './OptionListAccount'
 
-export function SelectAccount({ options, onChange }: OptionListAccountProps) {
+interface Props {
+  onChange: (option: SelectAccountOption) => void
+  filter?: (account: Account) => boolean
+}
+
+export const filterAccount = (filterOut: Account | undefined) => {
+  return filterOut ? (account: Account) => account.address !== filterOut.address : () => true
+}
+
+export function SelectAccount({ onChange, filter }: Props) {
+  const { allAccounts } = useAccounts()
+  const options = allAccounts.filter(filter || (() => true)).map((account) => ({ account: account }))
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<SelectAccountOption>(options[0])
   const balance = useBalance(selectedOption?.account)

@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
 import { TextInput, Label } from '../components/Form'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
-import { SelectAccount } from '../components/selects/AccountSelectTemplate/SelectAccount'
+import { filterAccount, SelectAccount } from '../components/selects/AccountSelectTemplate/SelectAccount'
+import { Account } from '../hooks/types'
 import { Row } from './common'
 
 interface MembershipModalProps {
@@ -13,6 +14,8 @@ type ModalState = 'Create' | 'Authorize'
 
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [state] = useState<ModalState>('Create')
+  const [rootAccount, setRootAccount] = useState<Account | undefined>()
+  const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
 
   const onClick = () => {
     /**/
@@ -31,12 +34,18 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
 
           <Row>
             <Label>Root account (?) *</Label>
-            <SelectAccount options={[]} onChange={console.log} />
+            <SelectAccount
+              filter={filterAccount(controllerAccount)}
+              onChange={({ account }) => setRootAccount(account)}
+            />
           </Row>
 
           <Row>
             <Label>Controller account (?) *</Label>
-            <SelectAccount options={[]} onChange={console.log} />
+            <SelectAccount
+              filter={filterAccount(rootAccount)}
+              onChange={({ account }) => setControllerAccount(account)}
+            />
           </Row>
 
           <Row>
