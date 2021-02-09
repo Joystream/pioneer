@@ -5,18 +5,18 @@ import { CloseButton } from '../../../components/buttons'
 import { Avatar } from './Member'
 
 interface MembershipAboutProps {
-  member: Membership
+  member?: Membership
   onClose: () => void
 }
 
-export const MembershipAbout = ({ member, onClose }: MembershipAboutProps) => {
+export const MembershipAbout = ({ onClose }: MembershipAboutProps) => {
   return (
     <SidePane>
       <CloseButton onClick={onClose} />
-      <Avatar src={member.avatar_uri.toString()} />
-      <p>{member.handle}</p>
+      <Avatar src={''} />
+      <p>{''}</p>
       <h5>About</h5>
-      <div>{member.about}</div>
+      <div>{''}</div>
     </SidePane>
   )
 }

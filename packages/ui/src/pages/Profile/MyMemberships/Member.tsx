@@ -13,8 +13,8 @@ export const Member = ({ member }: MemberProps) => {
 
   return (
     <div>
-      <Avatar src={member.avatar_uri.toString()} />
-      <MemberHandle onClick={() => setAboutOpen(true)}>{member.handle}</MemberHandle>
+      <Avatar src={member.handle_hash.toString()} />
+      <MemberHandle onClick={() => setAboutOpen(true)}>{member.handle_hash}</MemberHandle>
       <p>0 times</p>
       <ButtonGhostMediumSquare>Edit</ButtonGhostMediumSquare>
       {isAboutOpen && <MembershipAbout member={member} onClose={() => setAboutOpen(false)} />}

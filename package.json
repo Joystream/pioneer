@@ -11,9 +11,9 @@
     ]
   },
   "scripts": {
-    "lint": "wsrun -c lint",
-    "build": "wsrun -e -c build",
-    "test": "wsrun -e -c test",
+    "lint": "wsrun -c --exclude @joystream/types lint",
+    "build": "wsrun -e -c --stages build",
+    "test": "wsrun -e -c --exclude @joystream/types test",
     "start": "wsrun -p ui -c start"
   },
   "dependencies": {
@@ -21,5 +21,21 @@
   },
   "devDependencies": {
     "eslint": "^7.17.0"
+  },
+  "resolutions": {
+    "@polkadot/api": "2.4.1",
+    "@polkadot/api-derive": "2.4.1",
+    "@polkadot/api-contract": "2.4.1",
+    "@polkadot/keyring": "3.6.1",
+    "@polkadot/networks": "3.6.1",
+    "@polkadot/types": "2.4.1",
+    "@polkadot/types-known": "2.4.1",
+    "@polkadot/util": "3.6.1",
+    "@polkadot/util-crypto": "3.6.1",
+    "@polkadot/wasm-crypto": "1.4.1",
+    "@polkadot/rpc-core": "2.4.1",
+    "@polkadot/rpc-provider": "2.4.1",
+    "@polkadot/metadata": "2.4.1",
+    "bn.js": "^5.1.2"
   }
 }

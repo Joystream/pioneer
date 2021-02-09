@@ -12,11 +12,11 @@
     "test": "mocha"
   },
   "dependencies": {
-    "@joystream/types": "^0.14.0",
-    "@polkadot/api": "1.26.1",
-    "@polkadot/extension-dapp": "^0.32.0-beta.10",
+    "@joystream/types": "^0.15.0",
+    "@polkadot/api": "2.4.1",
+    "@polkadot/extension-dapp": "^0.32.1",
     "@polkadot/react-identicon": "^0.57.3",
-    "@polkadot/types": "1.26.1",
+    "@polkadot/types": "2.4.1",
     "@polkadot/ui-keyring": "^0.57.3",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",

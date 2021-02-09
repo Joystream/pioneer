@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { Colors, Fonts } from '../../constants'
 import { formatTokenValue } from '../../utils/formatters'
-import { Text } from './Text'
 
 interface Props {
   value: BN | number | undefined
@@ -11,7 +10,7 @@ interface Props {
 }
 
 export const TokenValue = ({ className, value }: Props) =>
-  value ? <ValueInJoys className={className}>{formatTokenValue(value)}</ValueInJoys> : <Text>-</Text>
+  value ? <ValueInJoys className={className}>{formatTokenValue(value)}</ValueInJoys> : <span>-</span>
 
 const ValueInJoys = styled.span`
   display: inline-grid;
