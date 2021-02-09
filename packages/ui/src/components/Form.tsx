@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors } from '../constants'
 
@@ -26,3 +27,29 @@ export const TextInput = styled.input`
 export const NumberInput = styled(TextInput)`
   text-align: right;
 `
+
+interface SwitchProps {
+  textOn: string
+  textOff: string
+  initialState: boolean
+  onChange: (isOn: boolean) => void
+}
+
+export const Switch = ({ initialState, textOff, textOn, onChange }: SwitchProps) => {
+  const [isOn, setIsOn] = useState(initialState)
+
+  return (
+    <span>
+      {textOn}
+      <input
+        type="checkbox"
+        checked={isOn}
+        onChange={(event) => {
+          setIsOn(event.target.checked)
+          onChange(event.target.checked)
+        }}
+      />
+      {textOff}
+    </span>
+  )
+}

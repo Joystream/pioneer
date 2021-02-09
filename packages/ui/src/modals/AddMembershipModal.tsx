@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
-import { TextInput, Label } from '../components/Form'
+import { Label, Switch, TextInput } from '../components/Form'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { filterAccount, SelectAccount } from '../components/selects/AccountSelectTemplate/SelectAccount'
 import { Account } from '../hooks/types'
@@ -20,6 +20,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [handle, setHandle] = useState('')
   const [about, setAbout] = useState('')
   const [avatar, setAvatar] = useState('')
+  const [isReferred, setIsReferred] = useState(true)
 
   const onClick = () => {
     /**/
@@ -31,8 +32,11 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         <ModalHeader onClick={onClose} title="Add membership" />
         <ScrolledModalBody>
           <Row>
-            <Label>I was referred by a member Yes/No</Label>
-            <TextInput type="text" value="Select Member or type a member" />
+            <Label>
+              I was referred by a member:{' '}
+              <Switch initialState={isReferred} textOff="No" textOn={'Yes'} onChange={setIsReferred} />
+            </Label>
+            <TextInput type="text" value="Select Member or type a member" disabled={!isReferred} />
             <p>Please fill in all the details below.</p>
           </Row>
 
