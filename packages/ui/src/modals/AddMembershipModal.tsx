@@ -16,6 +16,10 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [state] = useState<ModalState>('Create')
   const [rootAccount, setRootAccount] = useState<Account | undefined>()
   const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
+  const [name, setName] = useState('')
+  const [handle, setHandle] = useState('')
+  const [about, setAbout] = useState('')
+  const [avatar, setAvatar] = useState('')
 
   const onClick = () => {
     /**/
@@ -44,22 +48,22 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
 
           <Row>
             <Label>Member Name (?) *</Label>
-            <TextInput type="text" />
+            <TextInput type="text" value={name} onChange={(event) => setName(event.target.value)} />
           </Row>
 
           <Row>
             <Label>Membership handle (?) *</Label>
-            <TextInput type="text" />
+            <TextInput type="text" value={handle} onChange={(event) => setHandle(event.target.value)} />
           </Row>
 
           <Row>
             <Label>About Member *</Label>
-            <TextInput type="text" />
+            <TextInput type="text" value={about} onChange={(event) => setAbout(event.target.value)} />
           </Row>
 
           <Row>
             <Label>Member Avatar *</Label>
-            <TextInput type="text" />
+            <TextInput type="text" value={avatar} onChange={(event) => setAvatar(event.target.value)} />
           </Row>
         </ScrolledModalBody>
         <ModalFooter>
