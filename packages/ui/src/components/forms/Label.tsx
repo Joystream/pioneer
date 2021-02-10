@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Colors } from '../../constants'
+import { HelpComponent } from '../notifications/Help'
 
 export const Label = styled.label`
   margin-bottom: 4px;
@@ -8,4 +9,12 @@ export const Label = styled.label`
   font-weight: 700;
   vertical-align: middle;
   color: ${Colors.Black[900]};
+  position: relative;
+
+  ${HelpComponent} {
+    position: relative;
+    display: inline;
+    transform: unset;
+    right: unset;
+  }
 `

@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 import { ButtonPrimarySmall } from '../../../components/buttons'
-import { HelpNotification } from '../../../components/notifications/HelpNotification'
+import { Help } from '../../../components/notifications/Help'
 import { Label, TokenValue } from '../../../components/typography'
 import { BorderRad, Colors, Shadows } from '../../../constants'
 import { useTotalBalances } from '../../../hooks/useTotalBalances'
@@ -18,7 +18,7 @@ export const TotalBalances = () => {
         <StatsHeader>
           <StatsInfo>
             Total balance
-            <HelpNotification helperText={'Lorem fishy'} />
+            <Help helperText={'Lorem fishy'} />
           </StatsInfo>
         </StatsHeader>
         <StatsContent>
@@ -29,7 +29,7 @@ export const TotalBalances = () => {
         <StatsHeader>
           <StatsInfo>
             Total transferable balance
-            <HelpNotification helperText={'Lorem fishy'} />
+            <Help helperText={'Lorem fishy'} />
           </StatsInfo>
         </StatsHeader>
         <StatsContent>
@@ -40,7 +40,7 @@ export const TotalBalances = () => {
         <StatsHeader>
           <StatsInfo>
             Total locked balance
-            <HelpNotification helperText={'Lorem fishy'} />
+            <Help helperText={'Lorem fishy'} />
           </StatsInfo>
         </StatsHeader>
         <StatsContent>
@@ -51,7 +51,7 @@ export const TotalBalances = () => {
         <StatsHeader>
           <StatsInfo>
             Total recoverable
-            <HelpNotification helperText={'Lorem fishy'} />
+            <Help helperText={'Lorem fishy'} />
           </StatsInfo>
           {hasRecoverable && <StatsButton>Recover all</StatsButton>}
         </StatsHeader>

@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
 import { Label, Switch, TextInput } from '../components/forms'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
+import { Help } from '../components/notifications/Help'
 import { filterAccount, SelectAccount } from '../components/selects/AccountSelectTemplate/SelectAccount'
+import { TokenValue } from '../components/typography'
 import { Account } from '../hooks/types'
-import { Row } from './common'
+import { BalanceInfo, InfoTitle, InfoValue, Row } from './common'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -41,22 +43,26 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
           </Row>
 
           <Row>
-            <Label>Root account (?) *</Label>
+            <Label>
+              Root account <Help helperText={'Lorem'} /> *
+            </Label>
             <SelectAccount filter={filterAccount(controllerAccount)} onChange={setRootAccount} />
           </Row>
 
           <Row>
-            <Label>Controller account (?) *</Label>
+            <Label>
+              Controller account <Help helperText={'Lorem'} /> *
+            </Label>
             <SelectAccount filter={filterAccount(rootAccount)} onChange={setControllerAccount} />
           </Row>
 
           <Row>
-            <Label>Member Name (?) *</Label>
+            <Label>Member Name *</Label>
             <TextInput type="text" value={name} onChange={(event) => setName(event.target.value)} />
           </Row>
 
           <Row>
-            <Label>Membership handle (?) *</Label>
+            <Label>Membership handle *</Label>
             <TextInput type="text" value={handle} onChange={(event) => setHandle(event.target.value)} />
           </Row>
 
@@ -74,6 +80,17 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
           <Label>
             <TextInput type="checkbox" />I agree to our Terms of Service and Privacy Policy.
           </Label>
+          <BalanceInfo>
+            <InfoTitle>Creation fee:</InfoTitle>
+            <InfoValue>
+              <TokenValue value={100_000} />
+            </InfoValue>
+            <Help
+              helperText={
+                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae.Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
+              }
+            />
+          </BalanceInfo>
           <ButtonPrimaryMedium onClick={onClick} disabled>
             Create a Membership
           </ButtonPrimaryMedium>
