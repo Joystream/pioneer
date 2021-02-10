@@ -44,14 +44,14 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
 
           <Row>
             <Label>
-              Root account <Help helperText={'Lorem'} /> *
+              Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
             </Label>
             <SelectAccount filter={filterAccount(controllerAccount)} onChange={setRootAccount} />
           </Row>
 
           <Row>
             <Label>
-              Controller account <Help helperText={'Lorem'} /> *
+              ` Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
             </Label>
             <SelectAccount filter={filterAccount(rootAccount)} onChange={setControllerAccount} />
           </Row>
@@ -85,11 +85,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
             <InfoValue>
               <TokenValue value={100_000} />
             </InfoValue>
-            <Help
-              helperText={
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae.Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
-              }
-            />
+            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </BalanceInfo>
           <ButtonPrimaryMedium onClick={onClick} disabled>
             Create a Membership
