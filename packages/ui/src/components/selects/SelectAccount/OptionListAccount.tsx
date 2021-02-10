@@ -1,22 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Shadows, Sizes, Transitions } from '../../../constants'
-import { OptionAccount, SelectAccountOption } from './OptionAccount'
+import { Account } from '../../../hooks/types'
+import { OptionAccount } from './OptionAccount'
 
-export interface OptionListAccountProps {
-  options: Array<SelectAccountOption>
-  onChange: (option: SelectAccountOption) => void
+interface Props {
+  options: Array<Account>
+  onChange: (account: Account) => void
 }
 
-export function OptionListAccount({ options, onChange }: OptionListAccountProps) {
-  return (
-    <OptionsListComponent>
-      {options.map((option, index) => (
-        <OptionAccount key={index} option={option} onChange={onChange} />
-      ))}
-    </OptionsListComponent>
-  )
-}
+export const OptionListAccount = React.memo(({ options, onChange }: Props) => (
+  <OptionsListComponent>
+    {options.map((account) => (
+      <OptionAccount key={account.address} account={account} onChange={onChange} />
+    ))}
+  </OptionsListComponent>
+))
 
 const OptionsListComponent = styled.ul`
   display: grid;

@@ -10,15 +10,13 @@ interface Props {
   icon?: React.ReactElement | string
 }
 
-export function ModalHeader({ onClick, title, icon }: Props) {
-  return (
-    <ModalTopBar columns={icon ? 3 : 2}>
-      {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
-      <ModalTitle>{title}</ModalTitle>
-      <CloseModalButton onClick={onClick} />
-    </ModalTopBar>
-  )
-}
+export const ModalHeader = React.memo(({ onClick, title, icon }: Props) => (
+  <ModalTopBar columns={icon ? 3 : 2}>
+    {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
+    <ModalTitle>{title}</ModalTitle>
+    <CloseModalButton onClick={onClick} />
+  </ModalTopBar>
+))
 
 interface ModalProps {
   children: ReactNode
@@ -31,6 +29,7 @@ export const Modal = ({ children }: ModalProps) => {
     </ModalGlass>
   )
 }
+
 export const ResultModal = ({ children }: ModalProps) => {
   return (
     <ResultModalGlass>
@@ -38,6 +37,7 @@ export const ResultModal = ({ children }: ModalProps) => {
     </ResultModalGlass>
   )
 }
+
 export const ModalGlass = styled.div`
   display: grid;
   grid-template-columns: minmax(80px, 1.2fr) minmax(max-content, 904px) minmax(60px, 1fr);
@@ -53,9 +53,11 @@ export const ModalGlass = styled.div`
   color: ${Colors.Black[900]};
   z-index: 100000;
 `
+
 export const ResultModalGlass = styled(ModalGlass)`
   padding-top: 224px;
 `
+
 export const ModalWrap = styled.section`
   display: grid;
   grid-template-columns: 1fr;
@@ -73,17 +75,20 @@ export const ModalWrap = styled.section`
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
 `
+
 export const ResultModalWrap = styled(ModalWrap)`
   justify-self: center;
   grid-template-rows: 76px auto;
   background-color: ${Colors.White};
 `
+
 export const ExtensionModalWrap = styled(ModalWrap)`
   justify-self: center;
   grid-template-rows: auto;
   max-width: 534px;
   background-color: ${Colors.White};
 `
+
 export const ModalHeaderIcon = styled.div`
   display: grid;
   justify-items: center;
@@ -101,6 +106,7 @@ export const ModalHeaderIcon = styled.div`
     object-fit: contain;
   }
 `
+
 interface TopBarProps extends ThemedStyledProps<any, any> {
   columns: number
 }
@@ -119,6 +125,7 @@ const ModalTopBar = styled.header.attrs((props: TopBarProps) => ({
   padding: 24px;
   border-radius: 2px 2px 0 0;
 `
+
 export const ModalBody = styled.div`
   display: grid;
   grid-area: modalbody;
@@ -128,6 +135,12 @@ export const ModalBody = styled.div`
   border-top: 1px solid ${Colors.Black[200]};
   border-bottom: 1px solid ${Colors.Black[200]};
 `
+
+export const ScrolledModalBody = styled(ModalBody)`
+  max-height: 70vh;
+  overflow-y: auto;
+`
+
 export const ResultModalBody = styled(ModalBody)`
   grid-row-gap: 24px;
   padding: 40px;
@@ -160,11 +173,14 @@ export const ModalFooter = styled.footer`
   padding: 12px 16px;
   border-radius: 0 0 2px 2px;
 `
+
 export const ModalTitle = styled.h4``
+
 const CloseModalButton = styled(CloseButton)`
   position: absolute;
   right: 16px;
 `
+
 export const ResultText = styled(Text)`
   text-align: center;
 `

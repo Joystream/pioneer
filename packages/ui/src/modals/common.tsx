@@ -1,14 +1,9 @@
 import styled from 'styled-components'
+import { Label } from '../components/forms'
 import { Icon } from '../components/icons'
 import { BorderRad, Colors, Sizes } from '../constants'
 
-export const FormLabel = styled.span`
-  font-size: 14px;
-  line-height: 20px;
-  margin-bottom: 4px;
-  font-weight: 700;
-`
-export const TransactionInfoLabel = styled(FormLabel)`
+export const TransactionInfoLabel = styled(Label)`
   margin-bottom: 32px;
   font-weight: 400;
 

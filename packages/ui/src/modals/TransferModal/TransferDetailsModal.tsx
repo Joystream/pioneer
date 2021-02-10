@@ -1,26 +1,17 @@
 import BN from 'bn.js'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons'
+import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
+import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
 import { TokenValue } from '../../components/typography'
-import { BorderRad, Colors } from '../../constants'
+import { Colors } from '../../constants'
 import { Account } from '../../hooks/types'
-import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
-import {
-  AmountInputBlock,
-  BalanceInfo,
-  FormLabel,
-  InfoTitle,
-  InfoValue,
-  LockedAccount,
-  Row,
-  TransactionAmount,
-} from '../common'
+import { AmountInputBlock, BalanceInfo, InfoTitle, InfoValue, LockedAccount, Row, TransactionAmount } from '../common'
 
 interface Props {
   from?: Account
@@ -31,21 +22,16 @@ interface Props {
   icon: ReactElement
 }
 
-const getFilteredOptions = (allAccounts: Account[], toFilterOut: Account | undefined) =>
-  allAccounts
-    .filter((account) => !toFilterOut || account.address !== toFilterOut.address)
-    .map((account) => ({ account: account }))
-
 export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon }: Props) {
-  const accounts = useAccounts()
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
   const [amount, setAmount] = useNumberInput(0)
   const senderBalance = useBalance(sender)
-  const isZero = new BN(amount).lte(new BN(0))
-
+  const filterSender = useCallback(filterAccount(recipient), [recipient])
   const transferableBalance = senderBalance?.transferable ?? new BN(0)
+  const filterRecipient = useCallback(filterAccount(sender), [sender])
 
+  const isZero = new BN(amount).lte(new BN(0))
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
   const isTransferDisabled = isZero || isOverBalance || !recipient
 
@@ -57,25 +43,18 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
     }
   }
 
-  const toOptions = getFilteredOptions(accounts.allAccounts, sender)
-  const fromOptions = getFilteredOptions(accounts.allAccounts, recipient)
-
   return (
     <Modal>
       <ModalHeader onClick={onClose} title={title} icon={icon} />
       <ModalBody>
         <Row>
-          <FormLabel>From</FormLabel>
-          {from ? (
-            <SelectedAccount account={from} />
-          ) : (
-            <SelectAccount options={fromOptions} onChange={({ account }) => setSender(account)} />
-          )}
+          <Label>From</Label>
+          {from ? <SelectedAccount account={from} /> : <SelectAccount filter={filterSender} onChange={setSender} />}
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
-            <AmountInputLabel htmlFor={'amount-input'}>Number of tokens</AmountInputLabel>
-            <AmountInput
+            <Label htmlFor={'amount-input'}>Number of tokens</Label>
+            <NumberInput
               id="amount-input"
               value={amount}
               onChange={(event) => setAmount(event.target.value)}
@@ -88,12 +67,8 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
           </AmountButtons>
         </TransactionAmount>
         <Row>
-          <FormLabel>Destination account</FormLabel>
-          {to ? (
-            <SelectedAccount account={to} />
-          ) : (
-            <SelectAccount options={toOptions} onChange={({ account }) => setRecipient(account)} />
-          )}
+          <Label>Destination account</Label>
+          {to ? <SelectedAccount account={to} /> : <SelectAccount filter={filterRecipient} onChange={setRecipient} />}
         </Row>
       </ModalBody>
       <ModalFooter>
@@ -125,27 +100,6 @@ const SelectedAccount = ({ account }: SelectedAccountProps) => {
   )
 }
 
-const AmountInputLabel = styled.label`
-  margin-bottom: 4px;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 700;
-  vertical-align: middle;
-  color: ${Colors.Black[900]};
-`
-const AmountInput = styled.input`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid ${Colors.Black[300]};
-  border-radius: ${BorderRad.s};
-  font-size: 14px;
-  line-height: 22px;
-  font-weight: 700;
-  text-align: right;
-`
 const AmountButtons = styled.div`
   display: inline-grid;
   grid-auto-flow: column;

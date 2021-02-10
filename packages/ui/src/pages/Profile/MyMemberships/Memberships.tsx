@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
 import { Membership } from '@joystream/types/members'
-
-import { ButtonPrimary } from '../../../components/buttons'
-import { AddMembershipModal } from './AddMembershipModal'
+import React from 'react'
+import styled from 'styled-components'
+import { AddMembershipButton } from '../../../components/AddMembershipButton'
 import { Member } from './Member'
 
 const bob = ({
@@ -26,7 +24,6 @@ const alice = ({
 } as unknown) as Membership
 
 export function Memberships() {
-  const [isCreateOpen, setCreateOpen] = useState(false)
   const hasMemberships = false
 
   if (!hasMemberships) {
@@ -37,8 +34,7 @@ export function Memberships() {
           Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
           velit mollit. Exercitation veniam consequat sunt nostrud amet.
         </p>
-        <ButtonPrimary onClick={() => setCreateOpen(true)}>Create membership</ButtonPrimary>
-        {isCreateOpen && <AddMembershipModal onClose={() => setCreateOpen(false)} />}
+        <AddMembershipButton />
       </>
     )
   }

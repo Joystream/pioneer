@@ -1,22 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Transitions } from '../../constants'
-import { QuestionIcon } from '../icons'
+import { BorderRad, Colors, Transitions } from '../constants'
+import { QuestionIcon } from './icons'
 
 interface HelpNotificationProps {
   helperText: string
 }
 
-export function HelpNotification({ helperText }: HelpNotificationProps) {
-  return (
-    <HelpNotificationComponent>
-      <QuestionIcon />
-      <NotificationPopup>{helperText}</NotificationPopup>
-    </HelpNotificationComponent>
-  )
-}
+export const Help = React.memo(({ helperText }: HelpNotificationProps) => (
+  <HelpComponent>
+    <QuestionIcon />
+    <HelpPopup>{helperText}</HelpPopup>
+  </HelpComponent>
+))
 
-const NotificationPopup = styled.p`
+const HelpPopup = styled.p`
   display: none;
   position: absolute;
   left: calc(100% + 8px);
@@ -47,7 +45,7 @@ const NotificationPopup = styled.p`
   }
 `
 
-const HelpNotificationComponent = styled.button`
+export const HelpComponent = styled.button`
   display: flex;
   position: absolute;
   right: -8px;
@@ -73,7 +71,7 @@ const HelpNotificationComponent = styled.button`
   &:focus {
     color: ${Colors.Blue[400]};
 
-    ${NotificationPopup} {
+    ${HelpPopup} {
       display: flex;
     }
   }

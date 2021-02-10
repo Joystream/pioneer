@@ -5,7 +5,7 @@ import { BorderRad, Colors } from '../constants'
 import { Account } from '../hooks/types'
 import { CopyButton } from './buttons'
 
-export const AccountInfo = ({ account }: { account: Account }) => {
+export const AccountInfo = React.memo(({ account }: { account: Account }) => {
   return (
     <AccountInfoWrap>
       <AccountPhoto>
@@ -18,7 +18,8 @@ export const AccountInfo = ({ account }: { account: Account }) => {
       </AccountCopyAddress>
     </AccountInfoWrap>
   )
-}
+})
+
 const AccountInfoWrap = styled.div`
   display: grid;
   grid-template-columns: 40px 1fr;

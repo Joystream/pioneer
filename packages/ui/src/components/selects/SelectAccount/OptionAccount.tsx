@@ -7,22 +7,17 @@ import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { TokenValue } from '../../typography'
 
-export interface SelectAccountOption {
-  account: Account
-}
-
 interface Props {
-  option: SelectAccountOption
-  onChange?: (option: SelectAccountOption) => void
+  account: Account
+  onChange?: (account: Account) => void
 }
 
-export function OptionAccount({ option, onChange }: Props) {
-  const { account } = option
+export function OptionAccount({ account, onChange }: Props) {
   const balance = useBalance(account)
 
   return (
     <OptionComponentContainer>
-      <OptionComponent onClick={() => onChange && onChange(option)}>
+      <OptionComponent onClick={() => onChange && onChange(account)}>
         <AccountInfo account={account} />
         <BalanceInfo>
           <InfoTitle>Transferable balance</InfoTitle>
@@ -35,7 +30,7 @@ export function OptionAccount({ option, onChange }: Props) {
   )
 }
 
-export const OptionComponentContainer = styled.li`
+const OptionComponentContainer = styled.li`
   display: flex;
   width: 100%;
   height: 100%;
@@ -44,7 +39,7 @@ export const OptionComponentContainer = styled.li`
   background-color: transparent;
 `
 
-export const OptionComponent = styled.div`
+const OptionComponent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
