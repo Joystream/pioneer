@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import { UseBalance } from './useBalance'
+import { Balances } from './types'
 import { useBalances } from './useBalances'
 
 export const zeroBalance = () => ({
@@ -9,14 +9,14 @@ export const zeroBalance = () => ({
   total: new BN(0),
 })
 
-const addBalances = (a: UseBalance, b: UseBalance) => ({
+const addBalances = (a: Balances, b: Balances) => ({
   recoverable: a.recoverable.add(b.recoverable),
   locked: a.locked.add(b.locked),
   transferable: a.transferable.add(b.transferable),
   total: a.total.add(b.total),
 })
 
-export function useTotalBalances(): UseBalance {
+export function useTotalBalances(): Balances {
   const balances = useBalances()
 
   return [...Object.values(balances)].reduce(addBalances, zeroBalance())

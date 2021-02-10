@@ -1,13 +1,13 @@
 import { combineLatest } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Address } from './types'
+import { Address, Balances } from './types'
 import { useAccounts } from './useAccounts'
 import { useApi } from './useApi'
-import { toBalances, UseBalance } from './useBalance'
+import { toBalances } from './useBalance'
 import { useObservable } from './useObservable'
 
 type AddressToBalanceMap = {
-  [key in Address]: UseBalance
+  [key in Address]: Balances
 }
 
 export function useBalances() {
