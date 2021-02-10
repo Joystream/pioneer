@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../../components/AccountInfo'
 import { PageTab, PageTabs } from '../../../components/page/PageTabs'
@@ -12,16 +12,21 @@ import { useBalance } from '../../../hooks/useBalance'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
+  const [isDisplayAll, setIsDisplayAll] = useState(true)
 
-  if (!hasAccounts) return <Loading>Loading accounts...</Loading>
+  if (!hasAccounts) {
+    return <Loading>Loading accounts...</Loading>
+  }
 
   return (
     <>
       <AccountsTabs>
-        <AccountTab to="/" active>
+        <AccountTab active={isDisplayAll} onClick={() => !isDisplayAll && setIsDisplayAll(true)}>
           All accounts
         </AccountTab>
-        <AccountTab to="/">Transferable balance</AccountTab>
+        <AccountTab active={!isDisplayAll} onClick={() => isDisplayAll && setIsDisplayAll(false)}>
+          Transferable balance
+        </AccountTab>
       </AccountsTabs>
       <AccountsWrap>
         <ListHeaders>

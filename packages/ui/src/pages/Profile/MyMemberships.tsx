@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../../components/page/Page'
 import { PageContent } from '../../components/page/PageContent'
 import { PageHeader } from '../../components/page/PageHeader'
@@ -9,6 +10,8 @@ import { Memberships } from './MyMemberships/Memberships'
 import { MyProfile, MyProfileContent } from './Profile'
 
 export function MyMemberships() {
+  const history = useHistory()
+
   return (
     <Page>
       <SideBar
@@ -22,10 +25,8 @@ export function MyMemberships() {
           <PageHeader>
             <PageTitle>My profile</PageTitle>
             <PageTabs>
-              <PageTab to="/profile">My Accounts</PageTab>
-              <PageTab to="/profile/memberships" active>
-                My memberships
-              </PageTab>
+              <PageTab onClick={() => history.push('/profile')}>My accounts</PageTab>
+              <PageTab active>My memberships</PageTab>
             </PageTabs>
           </PageHeader>
           <MyProfileContent>

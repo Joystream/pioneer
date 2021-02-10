@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../../components/page/Page'
 import { PageContent } from '../../components/page/PageContent'
 import { PageHeader } from '../../components/page/PageHeader'
@@ -10,6 +11,8 @@ import { MyProfile, MyProfileContent, ProfileSummary } from './Profile'
 import { TotalBalances } from './MyAccounts/TotalBalances'
 
 export function MyAccounts() {
+  const history = useHistory()
+
   return (
     <Page>
       <SideBar
@@ -23,10 +26,10 @@ export function MyAccounts() {
           <PageHeader>
             <PageTitle>My profile</PageTitle>
             <PageTabs>
-              <PageTab to="/profile" active>
+              <PageTab active onClick={() => history.push('/profile')}>
                 My accounts
               </PageTab>
-              {IS_DEVELOPMENT && <PageTab to="/profile/memberships">My memberships</PageTab>}
+              {IS_DEVELOPMENT && <PageTab onClick={() => history.push('/profile/memberships')}>My memberships</PageTab>}
             </PageTabs>
             <ProfileSummary>
               <TotalBalances />

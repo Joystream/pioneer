@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import { Colors, Transitions } from '../../constants'
 
@@ -28,7 +27,7 @@ interface PageTabProps {
   active?: boolean
 }
 
-export const PageTab = styled(Link)`
+export const PageTab = styled.a`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
