@@ -1,18 +1,15 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import { Page } from '../../components/page/Page'
 import { PageContent } from '../../components/page/PageContent'
 import { PageHeader } from '../../components/page/PageHeader'
-import { PageTab, PageTabs } from '../../components/page/PageTabs'
 import { PageTitle } from '../../components/page/PageTitle'
 import { SideBar } from '../../components/page/SideBar'
 import { Accounts } from './MyAccounts/Accounts'
-import { MyProfile, MyProfileContent, ProfileSummary } from './Profile'
 import { TotalBalances } from './MyAccounts/TotalBalances'
+import { MyProfileTabs } from './MyProfileTabs'
+import { MyProfile, MyProfileContent, ProfileSummary } from './Profile'
 
 export function MyAccounts() {
-  const history = useHistory()
-
   return (
     <Page>
       <SideBar
@@ -25,12 +22,7 @@ export function MyAccounts() {
         <MyProfile>
           <PageHeader>
             <PageTitle>My profile</PageTitle>
-            <PageTabs>
-              <PageTab active onClick={() => history.push('/profile')}>
-                My accounts
-              </PageTab>
-              {IS_DEVELOPMENT && <PageTab onClick={() => history.push('/profile/memberships')}>My memberships</PageTab>}
-            </PageTabs>
+            <MyProfileTabs />
             <ProfileSummary>
               <TotalBalances />
             </ProfileSummary>
