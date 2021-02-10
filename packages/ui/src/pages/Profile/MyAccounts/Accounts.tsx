@@ -18,7 +18,10 @@ export function Accounts() {
   return (
     <>
       <AccountsTabs>
-        <AccountTab to="/">All accounts</AccountTab>
+        <AccountTab to="/" active>
+          All accounts
+        </AccountTab>
+        <AccountTab to="/">Transferable balance</AccountTab>
       </AccountsTabs>
       <AccountsWrap>
         <ListHeaders>

@@ -2,7 +2,7 @@ import React from 'react'
 import { Page } from '../../components/page/Page'
 import { PageContent } from '../../components/page/PageContent'
 import { PageHeader } from '../../components/page/PageHeader'
-import { PageTab, PageTabActive, PageTabs } from '../../components/page/PageTabs'
+import { PageTab, PageTabs } from '../../components/page/PageTabs'
 import { PageTitle } from '../../components/page/PageTitle'
 import { SideBar } from '../../components/page/SideBar'
 import { Accounts } from './MyAccounts/Accounts'
@@ -23,7 +23,9 @@ export function MyAccounts() {
           <PageHeader>
             <PageTitle>My profile</PageTitle>
             <PageTabs>
-              <PageTabActive to="/profile">My accounts</PageTabActive>
+              <PageTab to="/profile" active>
+                My accounts
+              </PageTab>
               {IS_DEVELOPMENT && <PageTab to="/profile/memberships">My memberships</PageTab>}
             </PageTabs>
             <ProfileSummary>
