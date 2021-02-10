@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Transitions } from '../../constants'
-import { QuestionIcon } from '../icons'
+import { BorderRad, Colors, Transitions } from '../constants'
+import { QuestionIcon } from './icons'
 
 interface HelpNotificationProps {
   helperText: string

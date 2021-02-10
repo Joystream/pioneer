@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Colors } from '../../constants'
-import { HelpComponent } from '../notifications/Help'
+import { HelpComponent } from '../Help'
 
 export const Label = styled.label`
   margin-bottom: 4px;
