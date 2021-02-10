@@ -7,7 +7,7 @@ export const AddMembershipButton = () => {
 
   return (
     <>
-      <ButtonPrimary onClick={() => setCreateOpen(true)}>Create membership</ButtonPrimary>
+      <ButtonPrimary onClick={() => setCreateOpen(true)}>Create a membership</ButtonPrimary>
       {isCreateOpen && <AddMembershipModal onClose={() => setCreateOpen(false)} />}
     </>
   )
