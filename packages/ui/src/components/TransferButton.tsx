@@ -9,17 +9,21 @@ import { ArrowInsideIcon, ArrowOutsideIcon, TransferIcon } from './icons'
 interface Props {
   from?: Account
   to?: Account
+  disabled?: boolean
 }
 
-export function TransferButton({ from, to }: Props) {
+export function TransferButton({ from, to, disabled }: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const isTransfer = !from && !to
   const isSend = !!from && !isTransfer
   const icon = isTransfer ? <TransferIcon /> : isSend ? <ArrowOutsideIcon /> : <ArrowInsideIcon />
-
+  const isDisabled = !!disabled
+  console.log(isDisabled, from?.address)
   return (
     <>
-      <ButtonForTransfer onClick={() => setIsOpen(true)}>{icon}</ButtonForTransfer>
+      <ButtonForTransfer onClick={() => setIsOpen(true)} disabled={isDisabled}>
+        {icon}
+      </ButtonForTransfer>
       {isOpen && <TransferModal onClose={() => setIsOpen(false)} from={from} to={to} icon={icon} />}
     </>
   )

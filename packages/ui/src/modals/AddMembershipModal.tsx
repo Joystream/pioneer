@@ -53,7 +53,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
 
           <Row>
             <Label>
-              ` Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
+              Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
             </Label>
             <SelectAccount filter={filterController} onChange={setControllerAccount} />
           </Row>

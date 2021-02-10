@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../../components/AccountInfo'
@@ -44,6 +45,8 @@ interface AccountItemDataProps {
 const AccountItemData = ({ account }: AccountItemDataProps) => {
   const balance = useBalance(account)
 
+  const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
+
   return (
     <AccountItem key={account.address}>
       <AccountInfo account={account} />
@@ -61,7 +64,7 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
       </AccountBalance>
       <AccountControls>
         <TransferButton to={account} />
-        <TransferButton from={account} />
+        <TransferButton from={account} disabled={isSendDisabled} />
       </AccountControls>
     </AccountItem>
   )
