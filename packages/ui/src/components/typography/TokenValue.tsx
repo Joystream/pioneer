@@ -9,8 +9,9 @@ interface Props {
   className?: string
 }
 
-export const TokenValue = ({ className, value }: Props) =>
-  value ? <ValueInJoys className={className}>{formatTokenValue(value)}</ValueInJoys> : <span>-</span>
+export const TokenValue = React.memo(({ className, value }: Props) => {
+  return value ? <ValueInJoys className={className}>{formatTokenValue(value)}</ValueInJoys> : <span>-</span>
+})
 
 const ValueInJoys = styled.span`
   display: inline-grid;

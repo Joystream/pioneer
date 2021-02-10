@@ -7,14 +7,12 @@ interface HelpNotificationProps {
   helperText: string
 }
 
-export function Help({ helperText }: HelpNotificationProps) {
-  return (
-    <HelpComponent>
-      <QuestionIcon />
-      <HelpPopup>{helperText}</HelpPopup>
-    </HelpComponent>
-  )
-}
+export const Help = React.memo(({ helperText }: HelpNotificationProps) => (
+  <HelpComponent>
+    <QuestionIcon />
+    <HelpPopup>{helperText}</HelpPopup>
+  </HelpComponent>
+))
 
 const HelpPopup = styled.p`
   display: none;

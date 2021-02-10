@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
 import { Label, Switch, TextInput } from '../components/forms'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { Help } from '../components/Help'
-import { filterAccount, SelectAccount } from '../components/selects/AccountSelectTemplate/SelectAccount'
+import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
 import { TokenValue } from '../components/typography'
 import { Account } from '../hooks/types'
 import { BalanceInfo, InfoTitle, InfoValue, Row } from './common'
@@ -23,6 +23,8 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [about, setAbout] = useState('')
   const [avatar, setAvatar] = useState('')
   const [isReferred, setIsReferred] = useState(true)
+  const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
+  const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
   const onClick = () => {
     /**/
@@ -46,14 +48,14 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
             <Label>
               Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
             </Label>
-            <SelectAccount filter={filterAccount(controllerAccount)} onChange={setRootAccount} />
+            <SelectAccount filter={filterRoot} onChange={setRootAccount} />
           </Row>
 
           <Row>
             <Label>
               ` Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
             </Label>
-            <SelectAccount filter={filterAccount(rootAccount)} onChange={setControllerAccount} />
+            <SelectAccount filter={filterController} onChange={setControllerAccount} />
           </Row>
 
           <Row>

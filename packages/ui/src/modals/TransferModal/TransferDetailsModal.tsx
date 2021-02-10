@@ -1,11 +1,11 @@
 import BN from 'bn.js'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons'
 import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { filterAccount, SelectAccount } from '../../components/selects/AccountSelectTemplate/SelectAccount'
+import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
 import { TokenValue } from '../../components/typography'
 import { Colors } from '../../constants'
 import { Account } from '../../hooks/types'
@@ -27,10 +27,11 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
   const [sender, setSender] = useState<Account | undefined>(from)
   const [amount, setAmount] = useNumberInput(0)
   const senderBalance = useBalance(sender)
-  const isZero = new BN(amount).lte(new BN(0))
-
+  const filterSender = useCallback(filterAccount(recipient), [recipient])
   const transferableBalance = senderBalance?.transferable ?? new BN(0)
+  const filterRecipient = useCallback(filterAccount(sender), [sender])
 
+  const isZero = new BN(amount).lte(new BN(0))
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
   const isTransferDisabled = isZero || isOverBalance || !recipient
 
@@ -48,11 +49,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
       <ModalBody>
         <Row>
           <Label>From</Label>
-          {from ? (
-            <SelectedAccount account={from} />
-          ) : (
-            <SelectAccount filter={filterAccount(recipient)} onChange={setSender} />
-          )}
+          {from ? <SelectedAccount account={from} /> : <SelectAccount filter={filterSender} onChange={setSender} />}
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
@@ -71,11 +68,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
         </TransactionAmount>
         <Row>
           <Label>Destination account</Label>
-          {to ? (
-            <SelectedAccount account={to} />
-          ) : (
-            <SelectAccount filter={filterAccount(sender)} onChange={setRecipient} />
-          )}
+          {to ? <SelectedAccount account={to} /> : <SelectAccount filter={filterRecipient} onChange={setRecipient} />}
         </Row>
       </ModalBody>
       <ModalFooter>

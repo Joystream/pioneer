@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { Colors, Sizes } from '../../../constants'
 import { Account } from '../../../hooks/types'
@@ -20,18 +20,21 @@ export const filterAccount = (filterOut: Account | undefined) => {
   return filterOut ? (account: Account) => account.address !== filterOut.address : () => true
 }
 
-export function SelectAccount({ onChange, filter }: Props) {
+export const SelectAccount = React.memo(({ onChange, filter }: Props) => {
   const { allAccounts } = useAccounts()
   const options = allAccounts.filter(filter || (() => true))
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<Account>(options[0])
   const balance = useBalance(selectedOption)
 
-  const onOptionClick = (option: Account) => {
-    setIsOpen(false)
-    setSelectedOption(option)
-    onChange(option)
-  }
+  const onOptionClick = useCallback(
+    (option: Account) => {
+      setIsOpen(false)
+      setSelectedOption(option)
+      onChange(option)
+    },
+    [filter]
+  )
 
   return (
     <SelectComponent>
@@ -55,7 +58,7 @@ export function SelectAccount({ onChange, filter }: Props) {
       {isOpen && <OptionListAccount onChange={onOptionClick} options={options} />}
     </SelectComponent>
   )
-}
+})
 
 const SelectedOption = styled.div`
   display: grid;

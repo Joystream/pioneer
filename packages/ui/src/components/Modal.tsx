@@ -10,15 +10,13 @@ interface Props {
   icon?: React.ReactElement | string
 }
 
-export function ModalHeader({ onClick, title, icon }: Props) {
-  return (
-    <ModalTopBar columns={icon ? 3 : 2}>
-      {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
-      <ModalTitle>{title}</ModalTitle>
-      <CloseModalButton onClick={onClick} />
-    </ModalTopBar>
-  )
-}
+export const ModalHeader = React.memo(({ onClick, title, icon }: Props) => (
+  <ModalTopBar columns={icon ? 3 : 2}>
+    {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
+    <ModalTitle>{title}</ModalTitle>
+    <CloseModalButton onClick={onClick} />
+  </ModalTopBar>
+))
 
 interface ModalProps {
   children: ReactNode

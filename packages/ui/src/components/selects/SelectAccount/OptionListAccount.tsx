@@ -9,15 +9,13 @@ interface Props {
   onChange: (account: Account) => void
 }
 
-export function OptionListAccount({ options, onChange }: Props) {
-  return (
-    <OptionsListComponent>
-      {options.map((account, index) => (
-        <OptionAccount key={index} account={account} onChange={onChange} />
-      ))}
-    </OptionsListComponent>
-  )
-}
+export const OptionListAccount = React.memo(({ options, onChange }: Props) => (
+  <OptionsListComponent>
+    {options.map((account) => (
+      <OptionAccount key={account.address} account={account} onChange={onChange} />
+    ))}
+  </OptionsListComponent>
+))
 
 const OptionsListComponent = styled.ul`
   display: grid;
