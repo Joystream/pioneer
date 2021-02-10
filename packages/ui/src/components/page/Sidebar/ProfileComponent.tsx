@@ -4,12 +4,14 @@ import { TokenValue } from '../../typography'
 import { TransferButtonStyled } from '../../TransferButton'
 import { Colors } from '../../../constants'
 import { useTotalBalances } from '../../../hooks/useTotalBalances'
+import { CurrentMember } from './CurrentMember'
 
 export function ProfileComponent() {
   const { total } = useTotalBalances()
 
   return (
     <Profile>
+      <CurrentMember />
       <MemberBalance>
         <BalanceTitle>Total Balance</BalanceTitle>
         <TotalBalance>
