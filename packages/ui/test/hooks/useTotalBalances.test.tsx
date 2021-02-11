@@ -3,7 +3,6 @@ import { expect } from 'chai'
 import React, { ReactNode } from 'react'
 import { of } from 'rxjs'
 import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { renderHook } from '@testing-library/react-hooks'
 import set from 'lodash/set'
@@ -12,9 +11,10 @@ import { useTotalBalances } from '../../src/hooks/useTotalBalances'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
+import { mockKeyring } from '../mocks/keyring'
 
 describe('useTotalBalances', () => {
-  const keyring = new Keyring()
+  const keyring = mockKeyring()
   const useApi: UseApi = {
     isConnected: false,
     api: ({} as unknown) as ApiRx,
