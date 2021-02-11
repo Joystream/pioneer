@@ -16,14 +16,11 @@ import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 
-import { aliceSigner, bobSigner } from '../mocks/keyring'
+import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
-describe.skip('UI: TransferModal', () => {
-  const keyring = new Keyring()
-
+describe('UI: TransferModal', () => {
   before(async () => {
     await cryptoWaitReady()
-    keyring.loadAll({ isDevelopment: true })
   })
 
   const api: UseApi = {
@@ -36,8 +33,11 @@ describe.skip('UI: TransferModal', () => {
     hasAccounts: boolean
     allAccounts: Account[]
   }
+  let transfer: any
+  let keyring: Keyring
 
   beforeEach(() => {
+    keyring = mockKeyring()
     fromAccount = {
       address: aliceSigner().address,
       name: 'alice',
@@ -54,6 +54,9 @@ describe.skip('UI: TransferModal', () => {
         },
       ])
     )
+    transfer = {}
+    set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
+    set(api, 'api.tx.balances.transfer', () => transfer)
 
     accounts = {
       hasAccounts: true,
@@ -86,17 +89,10 @@ describe.skip('UI: TransferModal', () => {
     fireEvent.click(button)
 
     expect(getByText('Authorize transaction')).to.exist
+    expect(getByText(/Transaction fee:/i)?.parentNode?.textContent).to.match(/^Transaction fee:25/)
   })
 
   context('Signed transaction', () => {
-    let transfer: any
-
-    beforeEach(() => {
-      transfer = {}
-      set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(0))))
-      set(api, 'api.tx.balances.transfer', () => transfer)
-    })
-
     function renderAndSign() {
       const rendered = renderModal()
       const { getByLabelText, getByText } = rendered
@@ -116,24 +112,39 @@ describe.skip('UI: TransferModal', () => {
       expect(getByText('Wait for the transaction')).to.exist
     })
 
-    it('Renders transaction success', async () => {
-      set(transfer, 'signAndSend', () =>
-        from([
-          set({}, 'status.isReady', true),
-          {
-            status: {
-              isInBlock: true,
-              asInBlock: {
-                toString: () => '0x93XXX',
+    context('Success', () => {
+      beforeEach(() => {
+        set(transfer, 'signAndSend', () =>
+          from([
+            set({}, 'status.isReady', true),
+            {
+              status: {
+                isInBlock: true,
+                asInBlock: {
+                  toString: () => '0x93XXX',
+                },
               },
             },
-          },
-        ])
-      )
+          ])
+        )
+      })
 
-      const { getByText } = renderAndSign()
+      it('Renders transaction success', async () => {
+        const { getByText } = renderAndSign()
 
-      expect(getByText('Success')).to.exist
+        expect(getByText('Success')).to.exist
+      })
+
+      it('Calculates balances before & after', async () => {
+        const { getAllByText } = renderAndSign()
+
+        const [alice, bob] = getAllByText('Transferable balance before:')
+
+        expect(alice?.parentNode?.textContent).to.match(/Transferable balance before:1,075/)
+        expect(bob?.parentNode?.textContent).to.match(/Transferable balance before:950/)
+        expect(alice?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
+        expect(bob?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
+      })
     })
   })
 

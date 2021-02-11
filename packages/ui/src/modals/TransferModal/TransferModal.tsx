@@ -23,6 +23,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
   const keyring = useKeyring()
   const [step, setStep] = useState<ModalState>('SEND_TOKENS')
   const [amount, setAmount] = useState<BN>(new BN(0))
+  const [fee, setFee] = useState<BN>(new BN(0))
   const [transferFrom, setTransferFrom] = useState(from)
   const [transferTo, setTransferTo] = useState<Account | undefined>(to)
   const [subscription, setSubscription] = useState<Subscription | undefined>(undefined)
@@ -43,7 +44,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     setStep('SIGN_TRANSACTION')
   }
 
-  const onSign = (transaction: Observable<ISubmittableResult>) => {
+  const onSign = (transaction: Observable<ISubmittableResult>, fee: BN) => {
     if (!transferFrom) {
       return
     }
@@ -72,6 +73,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
       setStep('SENDING')
     }
 
+    setFee(fee)
     setSubscription(transaction.subscribe(statusCallback))
   }
 
@@ -106,7 +108,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
   }
 
   if (step === 'SUCCESS') {
-    return <TransactionSuccessModal onClose={onClose} from={transferFrom} to={transferTo} amount={amount} />
+    return <TransactionSuccessModal onClose={onClose} from={transferFrom} to={transferTo} amount={amount} fee={fee} />
   }
 
   return <TransactionFailureModal onClose={onClose} from={transferFrom} amount={amount} to={transferTo} />

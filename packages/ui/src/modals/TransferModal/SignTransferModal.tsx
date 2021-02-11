@@ -31,7 +31,7 @@ interface Props {
   from: Account
   amount: BN
   to: Account
-  onSign: (transaction: Observable<ISubmittableResult>) => void
+  onSign: (transaction: Observable<ISubmittableResult>, fee: BN) => void
 }
 
 export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) {
@@ -44,18 +44,19 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
   const info = useObservable(transfer?.paymentInfo(from.address), [api])
 
   useEffect(() => {
-    if (!isSending || !transfer) {
+    if (!isSending || !transfer || !info) {
       return
     }
 
     const keyringPair = keyring.getPair(from.address)
+    const fee = info.partialFee.toBn()
 
     if (keyringPair.meta.isInjected) {
       web3FromAddress(from.address).then(({ signer }) => {
-        onSign(transfer.signAndSend(from.address, { signer: signer }))
+        onSign(transfer.signAndSend(from.address, { signer: signer }), fee)
       })
     } else {
-      onSign(transfer.signAndSend(keyringPair))
+      onSign(transfer.signAndSend(keyringPair), fee)
     }
   }, [api, isSending])
 
@@ -66,7 +67,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
         <SignTransferContainer>
           <Row>
             <TransactionInfoLabel>
-              You are Transfering <TokenValue value={new BN(amount)} /> stake from {from.name} account to {to.name}{' '}
+              You are transferring <TokenValue value={amount} /> stake from {from.name} account to {to.name}{' '}
               destination.
             </TransactionInfoLabel>
             <LockedAccount>
@@ -82,7 +83,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
           <TransactionAmountInfo>
             <ArrowDownExpandedIcon />
             <TransactionAmountInfoText>
-              Transferring <TokenValue value={new BN(amount)} />
+              Transferring <TokenValue value={amount} />
             </TransactionAmountInfoText>
           </TransactionAmountInfo>
           <Row>
@@ -103,7 +104,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
           <BalanceInfo>
             <InfoTitle>Amount:</InfoTitle>
             <InfoValue>
-              <TokenValue value={new BN(amount)} />
+              <TokenValue value={amount} />
             </InfoValue>
           </BalanceInfo>
           <BalanceInfo>

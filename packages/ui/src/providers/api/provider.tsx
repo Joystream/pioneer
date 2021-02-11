@@ -1,7 +1,10 @@
+import '@joystream/types/augment/augment-api'
+import '@joystream/types/augment/augment-types'
+
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ApiRx, WsProvider } from '@polkadot/api'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
-import { registry } from '@joystream/types'
+import { registry, types } from '@joystream/types'
 import { ApiContext } from './context'
 
 interface Props {
@@ -23,7 +26,7 @@ export const ApiContextProvider = (props: Props) => {
     const endpoint = network === 'DEV' ? 'ws://127.0.0.1:9944/' : 'wss://rome-rpc-endpoint.joystream.org:9944'
     const provider = new WsProvider(endpoint)
 
-    ApiRx.create({ provider, rpc: jsonrpc, types: {}, registry })
+    ApiRx.create({ provider, rpc: jsonrpc, types: types, registry })
       .toPromise()
       .then((api) => {
         setApi(api)
