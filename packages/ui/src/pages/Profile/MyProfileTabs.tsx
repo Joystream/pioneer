@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { PageTab, PageTabs } from '../../components/page/PageTabs'
+import { PageTab, PageTabsNav, PageTabs } from '../../components/page/PageTabs'
 
 export function MyProfileTabs() {
   const history = useHistory()
@@ -12,14 +12,16 @@ export function MyProfileTabs() {
 
   return (
     <PageTabs>
-      <PageTab active={isProfile} onClick={() => history.push('/profile')}>
-        My accounts
-      </PageTab>
-      {IS_DEVELOPMENT && (
-        <PageTab active={isMembers} onClick={() => history.push('/profile/memberships')}>
-          My memberships
+      <PageTabsNav>
+        <PageTab active={isProfile} onClick={() => history.push('/profile')}>
+          My accounts
         </PageTab>
-      )}
+        {IS_DEVELOPMENT && (
+          <PageTab active={isMembers} onClick={() => history.push('/profile/memberships')}>
+            My memberships
+          </PageTab>
+        )}
+      </PageTabsNav>
     </PageTabs>
   )
 }
