@@ -1,5 +1,6 @@
 import React from 'react'
 import { Page } from '../../components/page/Page'
+import { PageHeader } from '../../components/page/PageHeader'
 import { PageContent } from '../../components/page/PageContent'
 import { PageTitle } from '../../components/page/PageTitle'
 import { SideBar } from '../../components/page/SideBar'
@@ -17,8 +18,10 @@ export const MyMemberships = () => (
     />
     <PageContent>
       <MyProfile>
-        <PageTitle>My profile</PageTitle>
-        <MyProfileTabs />
+        <PageHeader>
+          <PageTitle>My profile</PageTitle>
+          <MyProfileTabs />
+        </PageHeader>
         <MyProfileContent>
           <Memberships />
         </MyProfileContent>

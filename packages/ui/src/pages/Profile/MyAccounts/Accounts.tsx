@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../../components/AccountInfo'
-import { PageTab, PageTabs } from '../../../components/page/PageTabs'
+import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
 import { TransferButton } from '../../../components/TransferButton'
 import { TokenValue } from '../../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../../constants'
@@ -84,7 +84,7 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
   )
 }
 
-const AccountsTabs = styled(PageTabs)`
+const AccountsTabs = styled(PageTabsNav)`
   grid-area: accountstabs;
 
   &:after {
