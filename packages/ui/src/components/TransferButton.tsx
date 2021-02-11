@@ -18,7 +18,7 @@ export function TransferButton({ from, to, disabled }: Props) {
   const isSend = !!from && !isTransfer
   const icon = isTransfer ? <TransferIcon /> : isSend ? <ArrowOutsideIcon /> : <ArrowInsideIcon />
   const isDisabled = !!disabled
-  console.log(isDisabled, from?.address)
+
   return (
     <>
       <ButtonForTransfer onClick={() => setIsOpen(true)} disabled={isDisabled}>

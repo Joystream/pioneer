@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Colors, Transitions } from '../../constants'
 
 export const PageTabs = styled.nav`
@@ -23,7 +22,12 @@ export const PageTabs = styled.nav`
     z-index: -1;
   }
 `
-export const PageTab = styled(Link)`
+
+interface PageTabProps {
+  active?: boolean
+}
+
+export const PageTab = styled.a`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
@@ -38,15 +42,18 @@ export const PageTab = styled(Link)`
   cursor: pointer;
   transition: ${Transitions.all};
   text-decoration: none;
-`
-export const PageTabActive = styled(PageTab)`
-  &:before {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    width: 100%;
-    height: 2px;
-    background-color: ${Colors.Blue[500]};
-    transition: ${Transitions.all};
-  }
+
+  ${({ active }: PageTabProps) =>
+    active &&
+    css`
+      &:before {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        width: 100%;
+        height: 2px;
+        background-color: ${Colors.Blue[500]};
+        transition: ${Transitions.all};
+      }
+    `}
 `

@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { AccountInfo } from '../../../components/AccountInfo'
 import { PageTab, PageTabs } from '../../../components/page/PageTabs'
@@ -9,16 +9,30 @@ import { BorderRad, Colors, Sizes } from '../../../constants'
 import { Account } from '../../../hooks/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
+import { useBalances } from '../../../hooks/useBalances'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
+  const [isDisplayAll, setIsDisplayAll] = useState(true)
+  const balances = useBalances()
 
-  if (!hasAccounts) return <Loading>Loading accounts...</Loading>
+  if (!hasAccounts) {
+    return <Loading>Loading accounts...</Loading>
+  }
+
+  const accounts = isDisplayAll
+    ? allAccounts
+    : allAccounts.filter(({ address }) => balances[address] && balances[address].total.gt(new BN(0)))
 
   return (
     <>
       <AccountsTabs>
-        <AccountTab to="/">All accounts</AccountTab>
+        <AccountTab active={isDisplayAll} onClick={() => !isDisplayAll && setIsDisplayAll(true)}>
+          All accounts
+        </AccountTab>
+        <AccountTab active={!isDisplayAll} onClick={() => isDisplayAll && setIsDisplayAll(false)}>
+          Transferable balance
+        </AccountTab>
       </AccountsTabs>
       <AccountsWrap>
         <ListHeaders>
@@ -29,7 +43,7 @@ export function Accounts() {
           <ListHeader>Transferable balance</ListHeader>
         </ListHeaders>
         <AccountsList>
-          {allAccounts.map((account) => (
+          {accounts.map((account) => (
             <AccountItemData key={account.address} account={account} />
           ))}
         </AccountsList>
