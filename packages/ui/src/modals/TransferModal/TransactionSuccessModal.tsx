@@ -21,9 +21,10 @@ interface Props {
   from: Account
   to: Account
   amount: BN
+  fee: BN
 }
 
-export function TransactionSuccessModal({ onClose, from, to, amount }: Props) {
+export function TransactionSuccessModal({ onClose, from, to, amount, fee }: Props) {
   const fromBalance = useBalance(from as Account)
   const toBalance = useBalance(to as Account)
 
@@ -32,7 +33,7 @@ export function TransactionSuccessModal({ onClose, from, to, amount }: Props) {
   }
 
   const fromNow = fromBalance.transferable
-  const fromBefore = fromNow.add(amount)
+  const fromBefore = fromNow.add(amount).add(fee)
 
   const toNow = toBalance.transferable
   const toBefore = toNow.sub(amount)

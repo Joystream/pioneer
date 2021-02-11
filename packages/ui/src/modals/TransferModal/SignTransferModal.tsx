@@ -31,7 +31,7 @@ interface Props {
   from: Account
   amount: BN
   to: Account
-  onSign: (transaction: Observable<ISubmittableResult>) => void
+  onSign: (transaction: Observable<ISubmittableResult>, fee: BN) => void
 }
 
 export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) {
@@ -44,18 +44,19 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
   const info = useObservable(transfer?.paymentInfo(from.address), [api])
 
   useEffect(() => {
-    if (!isSending || !transfer) {
+    if (!isSending || !transfer || !info) {
       return
     }
 
     const keyringPair = keyring.getPair(from.address)
+    const fee = info.partialFee.toBn()
 
     if (keyringPair.meta.isInjected) {
       web3FromAddress(from.address).then(({ signer }) => {
-        onSign(transfer.signAndSend(from.address, { signer: signer }))
+        onSign(transfer.signAndSend(from.address, { signer: signer }), fee)
       })
     } else {
-      onSign(transfer.signAndSend(keyringPair))
+      onSign(transfer.signAndSend(keyringPair), fee)
     }
   }, [api, isSending])
 
@@ -117,7 +118,6 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
               }
             />
           </BalanceInfo>
-          f
         </TransactionInfo>
         <ButtonPrimaryMedium onClick={() => setIsSending(true)} disabled={isSending}>
           Sign transaction and Transfer

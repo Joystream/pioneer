@@ -55,7 +55,7 @@ describe('UI: TransferModal', () => {
       ])
     )
     transfer = {}
-    set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(123))))
+    set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
     set(api, 'api.tx.balances.transfer', () => transfer)
 
     accounts = {
@@ -89,7 +89,7 @@ describe('UI: TransferModal', () => {
     fireEvent.click(button)
 
     expect(getByText('Authorize transaction')).to.exist
-    expect(getByText(/Transaction fee:/i)?.parentNode?.textContent).to.match(/^Transaction fee:123/)
+    expect(getByText(/Transaction fee:/i)?.parentNode?.textContent).to.match(/^Transaction fee:25/)
   })
 
   context('Signed transaction', () => {
@@ -127,9 +127,15 @@ describe('UI: TransferModal', () => {
         ])
       )
 
-      const { getByText } = renderAndSign()
+      const { getByText, getAllByText } = renderAndSign()
 
       expect(getByText('Success')).to.exist
+      const [alice, bob] = getAllByText('Transferable balance before:')
+
+      expect(alice?.parentNode?.textContent).to.match(/Transferable balance before:1,075/)
+      expect(bob?.parentNode?.textContent).to.match(/Transferable balance before:950/)
+      expect(alice?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
+      expect(bob?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
     })
   })
 
