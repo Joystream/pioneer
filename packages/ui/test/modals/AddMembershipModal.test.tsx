@@ -55,7 +55,7 @@ describe('UI: AddMembershipModal', () => {
     )
     query = {}
 
-    set(query, 'members.membershipPrice', () => of(set({}, 'toBn', () => new BN(25))))
+    set(query, 'members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query', query)
 
     accounts = {
@@ -73,6 +73,7 @@ describe('UI: AddMembershipModal', () => {
     const { getByText } = renderModal()
 
     expect(getByText('Add membership')).to.exist
+    expect(getByText('Creation fee:')?.parentNode?.textContent).to.match(/^Creation fee:100/i)
   })
 
   function renderModal() {
