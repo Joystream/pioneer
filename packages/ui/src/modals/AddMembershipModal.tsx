@@ -6,6 +6,8 @@ import { Help } from '../components/Help'
 import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
 import { TokenValue } from '../components/typography'
 import { Account } from '../hooks/types'
+import { useApi } from '../hooks/useApi'
+import { useObservable } from '../hooks/useObservable'
 import { BalanceInfo, InfoTitle, InfoValue, Row } from './common'
 
 interface MembershipModalProps {
@@ -15,6 +17,8 @@ interface MembershipModalProps {
 type ModalState = 'Create' | 'Authorize'
 
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
+  const { api } = useApi()
+  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
   const [state] = useState<ModalState>('Create')
   const [rootAccount, setRootAccount] = useState<Account | undefined>()
   const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
@@ -26,9 +30,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
-  const onClick = () => {
-    /**/
-  }
+  const stubHandler = () => undefined
 
   if (state === 'Create') {
     return (
@@ -40,7 +42,12 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
               I was referred by a member:{' '}
               <Switch initialState={isReferred} textOff="No" textOn={'Yes'} onChange={setIsReferred} />
             </Label>
-            <TextInput type="text" value="Select Member or type a member" disabled={!isReferred} />
+            <TextInput
+              type="text"
+              value="Select Member or type a member"
+              disabled={!isReferred}
+              onChange={stubHandler}
+            />
             <p>Please fill in all the details below.</p>
           </Row>
 
@@ -85,11 +92,11 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
           <BalanceInfo>
             <InfoTitle>Creation fee:</InfoTitle>
             <InfoValue>
-              <TokenValue value={100_000} />
+              <TokenValue value={membershipPrice?.toBn()} />
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </BalanceInfo>
-          <ButtonPrimaryMedium onClick={onClick} disabled>
+          <ButtonPrimaryMedium onClick={stubHandler} disabled>
             Create a Membership
           </ButtonPrimaryMedium>
         </ModalFooter>
