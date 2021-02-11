@@ -112,30 +112,39 @@ describe('UI: TransferModal', () => {
       expect(getByText('Wait for the transaction')).to.exist
     })
 
-    it('Renders transaction success', async () => {
-      set(transfer, 'signAndSend', () =>
-        from([
-          set({}, 'status.isReady', true),
-          {
-            status: {
-              isInBlock: true,
-              asInBlock: {
-                toString: () => '0x93XXX',
+    context('Success', () => {
+      beforeEach(() => {
+        set(transfer, 'signAndSend', () =>
+          from([
+            set({}, 'status.isReady', true),
+            {
+              status: {
+                isInBlock: true,
+                asInBlock: {
+                  toString: () => '0x93XXX',
+                },
               },
             },
-          },
-        ])
-      )
+          ])
+        )
+      })
 
-      const { getByText, getAllByText } = renderAndSign()
+      it('Renders transaction success', async () => {
+        const { getByText } = renderAndSign()
 
-      expect(getByText('Success')).to.exist
-      const [alice, bob] = getAllByText('Transferable balance before:')
+        expect(getByText('Success')).to.exist
+      })
 
-      expect(alice?.parentNode?.textContent).to.match(/Transferable balance before:1,075/)
-      expect(bob?.parentNode?.textContent).to.match(/Transferable balance before:950/)
-      expect(alice?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
-      expect(bob?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
+      it('Calculates balances before & after', async () => {
+        const { getAllByText } = renderAndSign()
+
+        const [alice, bob] = getAllByText('Transferable balance before:')
+
+        expect(alice?.parentNode?.textContent).to.match(/Transferable balance before:1,075/)
+        expect(bob?.parentNode?.textContent).to.match(/Transferable balance before:950/)
+        expect(alice?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
+        expect(bob?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
+      })
     })
   })
 
