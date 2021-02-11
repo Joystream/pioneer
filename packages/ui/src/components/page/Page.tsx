@@ -10,6 +10,8 @@ export const Page = styled.div`
     'navbar page .';
   grid-column-gap: 24px;
   width: 100vw;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: 100%;
   min-height: 100vh;
 `
