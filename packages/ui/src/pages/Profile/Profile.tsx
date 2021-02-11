@@ -28,3 +28,9 @@ export const MyProfileContent = styled.section`
   grid-row-gap: 18px;
   width: 100%;
 `
+
+export const MyMembershipsContent = styled.section`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`
