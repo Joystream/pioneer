@@ -33,6 +33,7 @@ describe('UI: TransferModal', () => {
     hasAccounts: boolean
     allAccounts: Account[]
   }
+  let transfer: any
   let keyring: Keyring
 
   beforeEach(() => {
@@ -53,6 +54,9 @@ describe('UI: TransferModal', () => {
         },
       ])
     )
+    transfer = {}
+    set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(123))))
+    set(api, 'api.tx.balances.transfer', () => transfer)
 
     accounts = {
       hasAccounts: true,
@@ -85,17 +89,10 @@ describe('UI: TransferModal', () => {
     fireEvent.click(button)
 
     expect(getByText('Authorize transaction')).to.exist
+    expect(getByText(/Transaction fee:/i)?.parentNode?.textContent).to.match(/^Transaction fee:123/)
   })
 
   context('Signed transaction', () => {
-    let transfer: any
-
-    beforeEach(() => {
-      transfer = {}
-      set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(0))))
-      set(api, 'api.tx.balances.transfer', () => transfer)
-    })
-
     function renderAndSign() {
       const rendered = renderModal()
       const { getByLabelText, getByText } = rendered

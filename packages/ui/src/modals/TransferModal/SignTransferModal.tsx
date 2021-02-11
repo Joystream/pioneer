@@ -66,7 +66,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
         <SignTransferContainer>
           <Row>
             <TransactionInfoLabel>
-              You are Transfering <TokenValue value={new BN(amount)} /> stake from {from.name} account to {to.name}{' '}
+              You are transferring <TokenValue value={amount} /> stake from {from.name} account to {to.name}{' '}
               destination.
             </TransactionInfoLabel>
             <LockedAccount>
@@ -82,7 +82,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
           <TransactionAmountInfo>
             <ArrowDownExpandedIcon />
             <TransactionAmountInfoText>
-              Transferring <TokenValue value={new BN(amount)} />
+              Transferring <TokenValue value={amount} />
             </TransactionAmountInfoText>
           </TransactionAmountInfo>
           <Row>
@@ -103,7 +103,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
           <BalanceInfo>
             <InfoTitle>Amount:</InfoTitle>
             <InfoValue>
-              <TokenValue value={new BN(amount)} />
+              <TokenValue value={amount} />
             </InfoValue>
           </BalanceInfo>
           <BalanceInfo>
@@ -117,6 +117,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
               }
             />
           </BalanceInfo>
+          f
         </TransactionInfo>
         <ButtonPrimaryMedium onClick={() => setIsSending(true)} disabled={isSending}>
           Sign transaction and Transfer
