@@ -3,6 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { AddMembershipButton } from '../../../components/AddMembershipButton'
 import { Member } from './Member'
+import { Text } from '../../../components/typography/Text'
 
 const bob = ({
   handle: 'Bob member',
@@ -28,14 +29,16 @@ export function Memberships() {
 
   if (!hasMemberships) {
     return (
-      <>
-        <h2>You have no active membership</h2>
-        <p>
-          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
-          velit mollit. Exercitation veniam consequat sunt nostrud amet.
-        </p>
+      <NoMemberships>
+        <NoMembershipsInfo>
+          <h3>You have no active membership</h3>
+          <Text size={2}>
+            Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
+            velit mollit. Exercitation veniam consequat sunt nostrud amet.
+          </Text>
+        </NoMembershipsInfo>
         <AddMembershipButton />
-      </>
+      </NoMemberships>
     )
   }
 
@@ -72,6 +75,20 @@ export function Memberships() {
     </>
   )
 }
+
+const NoMemberships = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 48px;
+`
+
+const NoMembershipsInfo = styled.div`
+  width: 100%;
+
+  ${Text} {
+    margin-top: 16px;
+  }
+`
 
 const MembershipsList = styled.div``
 const MembershipsListHeader = styled.div``
