@@ -16,9 +16,8 @@ export function Breadcrumbs({ crumbs }: BreadcrumbsNavProps) {
 
 const BreadcrumbsNavigation = styled.nav`
   display: inline-flex;
+  align-items: center;
   position: absolute;
   top: 6px;
-  right: -24px;
-  align-items: center;
-  transform: translateX(100%);
+  left: 0;
 `

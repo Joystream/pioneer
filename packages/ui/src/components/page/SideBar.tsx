@@ -1,17 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Colors, Transitions } from '../../constants'
-import { ProfileComponent } from './Sidebar/ProfileComponent'
-import { Breadcrumbs, BreadcrumbsNavProps } from './Sidebar/Breadcrumbs/Breadcrumbs'
 import { MyProfileIcon } from './Sidebar/LinksIcons/MyProfileIcon'
 import { LogoLink } from './Sidebar/LogoLink'
 import { Navigation } from './Sidebar/Navigation'
 import { NavigationHeader } from './Sidebar/NavigationHeader'
+import { ProfileComponent } from './Sidebar/ProfileComponent'
 import { Version } from './Sidebar/Version'
 
-export const SideBar = ({ crumbs }: BreadcrumbsNavProps) => (
+export const SideBar = () => (
   <Navigation>
-    <Breadcrumbs crumbs={crumbs} />
     <NavigationHeader>
       <LogoLink />
     </NavigationHeader>
