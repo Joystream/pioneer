@@ -78,8 +78,13 @@ export function Memberships() {
 
 const NoMemberships = styled.div`
   display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 48px;
+  grid-template-columns: 1fr;
+  grid-row-gap: 24px;
+  justify-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 420px;
+  margin: 124px auto 0;
 `
 
 const NoMembershipsInfo = styled.div`

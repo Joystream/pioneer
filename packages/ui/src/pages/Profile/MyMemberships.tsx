@@ -7,7 +7,7 @@ import { SideBar } from '../../components/page/SideBar'
 import { Breadcrumbs } from '../../components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { Memberships } from './MyMemberships/Memberships'
 import { MyProfileTabs } from './MyProfileTabs'
-import { MyProfile, MyProfileContent } from './Profile'
+import { MyProfile, MyMembershipsContent } from './Profile'
 
 export const MyMemberships = () => (
   <Page>
@@ -24,9 +24,9 @@ export const MyMemberships = () => (
           <PageTitle>My profile</PageTitle>
           <MyProfileTabs />
         </PageHeader>
-        <MyProfileContent>
+        <MyMembershipsContent>
           <Memberships />
-        </MyProfileContent>
+        </MyMembershipsContent>
       </MyProfile>
     </PageContent>
   </Page>
