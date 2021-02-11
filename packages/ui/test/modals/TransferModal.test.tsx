@@ -16,14 +16,11 @@ import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 
-import { aliceSigner, bobSigner } from '../mocks/keyring'
+import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
-describe.skip('UI: TransferModal', () => {
-  const keyring = new Keyring()
-
+describe('UI: TransferModal', () => {
   before(async () => {
     await cryptoWaitReady()
-    keyring.loadAll({ isDevelopment: true })
   })
 
   const api: UseApi = {
@@ -36,8 +33,10 @@ describe.skip('UI: TransferModal', () => {
     hasAccounts: boolean
     allAccounts: Account[]
   }
+  let keyring: Keyring
 
   beforeEach(() => {
+    keyring = mockKeyring()
     fromAccount = {
       address: aliceSigner().address,
       name: 'alice',
