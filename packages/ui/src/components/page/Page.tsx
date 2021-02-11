@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const Page = styled.div`
   display: grid;
+  position: relative;
   grid-template-columns: 226px 1fr 0;
   grid-template-rows: auto;
   grid-template-areas:
