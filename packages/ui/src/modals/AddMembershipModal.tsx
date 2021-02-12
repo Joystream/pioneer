@@ -1,14 +1,17 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
 import { Label, Switch, TextInput } from '../components/forms'
-import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
+import { Checkbox } from '../components/forms/Checkbox'
+import { LabelLink } from '../components/forms/LabelLink'
 import { Help } from '../components/Help'
+import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
 import { TokenValue } from '../components/typography'
+import { Text } from '../components/typography/Text'
 import { Account } from '../hooks/types'
 import { useApi } from '../hooks/useApi'
 import { useObservable } from '../hooks/useObservable'
-import { BalanceInfo, InfoTitle, InfoValue, Row } from './common'
+import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from './common'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -87,15 +90,26 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         </ScrolledModalBody>
         <ModalFooter>
           <Label>
-            <TextInput type="checkbox" />I agree to our Terms of Service and Privacy Policy.
+            <Checkbox id={'privacy-policy-agreement'}>
+              <Text size={2} dark={true}>
+                I agree to our{' '}
+                <LabelLink href={'http://example.com/'} target="_blank">
+                  Terms of Service
+                </LabelLink>{' '}
+                and{' '}
+                <LabelLink href={'http://example.com/'} target="_blank">
+                  Privacy Policy.
+                </LabelLink>
+              </Text>
+            </Checkbox>
           </Label>
-          <BalanceInfo>
+          <BalanceInfoNarrow>
             <InfoTitle>Creation fee:</InfoTitle>
             <InfoValue>
               <TokenValue value={membershipPrice?.toBn()} />
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-          </BalanceInfo>
+          </BalanceInfoNarrow>
           <ButtonPrimaryMedium onClick={stubHandler} disabled>
             Create a Membership
           </ButtonPrimaryMedium>

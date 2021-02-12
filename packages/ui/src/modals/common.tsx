@@ -53,8 +53,9 @@ export const TransactionInfo = styled.div`
   flex-direction: column;
 `
 export const BalanceInfo = styled.div`
-  display: grid;
+  display: inline-grid;
   position: relative;
+  width: fit-content;
   grid-template-columns: 1fr 168px;
   grid-template-rows: 1fr;
   align-items: center;
@@ -63,6 +64,11 @@ export const BalanceInfo = styled.div`
     margin-top: 4px;
   }
 `
+
+export const BalanceInfoNarrow = styled(BalanceInfo)`
+  grid-template-columns: 1fr 128px;
+`
+
 export const InfoTitle = styled.span`
   font-size: 10px;
   line-height: 16px;
