@@ -1,17 +1,16 @@
-import React, { useCallback, useState } from 'react'
-import { ButtonPrimaryMedium } from '../components/buttons'
-import { Label, Switch, TextInput } from '../components/forms'
-import { Checkbox } from '../components/forms/Checkbox'
-import { LabelLink } from '../components/forms/LabelLink'
-import { Help } from '../components/Help'
-import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
-import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
-import { TokenValue } from '../components/typography'
-import { Text } from '../components/typography/Text'
-import { Account } from '../hooks/types'
-import { useApi } from '../hooks/useApi'
-import { useObservable } from '../hooks/useObservable'
-import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from './common'
+import React, {useCallback, useState} from 'react'
+import {ButtonPrimaryMedium} from '../components/buttons'
+import {Label, Switch, TextInput} from '../components/forms'
+import {Checkbox} from '../components/forms/Checkbox'
+import {LabelLink} from '../components/forms/LabelLink'
+import {Help} from '../components/Help'
+import {Modal, ModalFooter, ModalHeader, ScrolledModalBody} from '../components/Modal'
+import {filterAccount, SelectAccount} from '../components/selects/SelectAccount'
+import {Text, TokenValue} from '../components/typography'
+import {Account} from '../hooks/types'
+import {useApi} from '../hooks/useApi'
+import {useObservable} from '../hooks/useObservable'
+import {BalanceInfoNarrow, InfoTitle, InfoValue, Row} from './common'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -22,7 +21,7 @@ type ModalState = 'Create' | 'Authorize'
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
-  const [state] = useState<ModalState>('Create')
+  const [state, setState] = useState<ModalState>('Create')
   const [rootAccount, setRootAccount] = useState<Account | undefined>()
   const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
   const [name, setName] = useState('')
@@ -32,8 +31,21 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [isReferred, setIsReferred] = useState(true)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
+  const isValid = !isReferred && rootAccount && controllerAccount && name && handle && about && avatar
 
   const stubHandler = () => undefined
+
+  const memberData = {
+    name,
+    handle,
+    about,
+    avatar,
+  }
+
+  const onSubmit = () => {
+    console.log('submit', memberData)
+    setState('Authorize')
+  }
 
   if (state === 'Create') {
     return (
@@ -110,7 +122,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </BalanceInfoNarrow>
-          <ButtonPrimaryMedium onClick={stubHandler} disabled>
+          <ButtonPrimaryMedium onClick={onSubmit} disabled={!isValid}>
             Create a Membership
           </ButtonPrimaryMedium>
         </ModalFooter>
