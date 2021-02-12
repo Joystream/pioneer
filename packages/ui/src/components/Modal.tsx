@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
 import { BorderRad, Colors, Shadows } from '../constants'
 import { CloseButton } from './buttons'
@@ -23,18 +24,20 @@ interface ModalProps {
 }
 
 export const Modal = ({ children }: ModalProps) => {
-  return (
+  return ReactDOM.createPortal(
     <ModalGlass>
       <ModalWrap>{children}</ModalWrap>
-    </ModalGlass>
+    </ModalGlass>,
+    document.body
   )
 }
 
 export const ResultModal = ({ children }: ModalProps) => {
-  return (
+  return ReactDOM.createPortal(
     <ResultModalGlass>
       <ResultModalWrap>{children}</ResultModalWrap>
-    </ResultModalGlass>
+    </ResultModalGlass>,
+    document.body
   )
 }
 
