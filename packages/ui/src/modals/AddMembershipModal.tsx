@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import * as Yup from 'yup'
 import { ButtonPrimaryMedium } from '../components/buttons'
 import { Checkbox, InlineToggleWrap, Label, LabelLink, TextInput, ToggleCheckbox } from '../components/forms'
 import { Help } from '../components/Help'
@@ -30,7 +31,22 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [hasTermsAgreed, setTerms] = useState(false)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
-  const isValid = !isReferred && rootAccount && controllerAccount && name && handle && about && avatar && hasTermsAgreed
+  const [isValid, setValid] = useState(false)
+
+  const avatarSchema = Yup.string().url()
+
+  useEffect(() => {
+    const isNotEmpty =
+      !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && !!about && !!avatar && hasTermsAgreed
+
+    if (avatar) {
+      avatarSchema.isValid(avatar).then((isAvatarValid) => {
+        setValid(isNotEmpty && isAvatarValid)
+      })
+    } else {
+      setValid(isNotEmpty)
+    }
+  }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
 
   const stubHandler = () => undefined
 
