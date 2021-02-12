@@ -7,8 +7,7 @@ import { LabelLink } from '../components/forms/LabelLink'
 import { Help } from '../components/Help'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
-import { TokenValue } from '../components/typography'
-import { Text } from '../components/typography/Text'
+import { Text, TokenValue } from '../components/typography'
 import { Account } from '../hooks/types'
 import { useApi } from '../hooks/useApi'
 import { useObservable } from '../hooks/useObservable'
@@ -23,18 +22,24 @@ type ModalState = 'Create' | 'Authorize'
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
-  const [state] = useState<ModalState>('Create')
+  const [state, setState] = useState<ModalState>('Create')
   const [rootAccount, setRootAccount] = useState<Account | undefined>()
   const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
   const [name, setName] = useState('')
   const [handle, setHandle] = useState('')
   const [about, setAbout] = useState('')
   const [avatar, setAvatar] = useState('')
-  const [isReferred, setIsReferred] = useState(true)
+  const [isReferred, setIsReferred] = useState(false)
+  const [hasTermsAgreed, setTerms] = useState(false)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
+  const isValid = !isReferred && rootAccount && controllerAccount && name && handle && about && avatar && hasTermsAgreed
 
   const stubHandler = () => undefined
+
+  const onSubmit = () => {
+    setState('Authorize')
+  }
 
   if (state === 'Create') {
     return (
@@ -92,7 +97,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         </ScrolledModalBody>
         <ModalFooter>
           <Label>
-            <Checkbox id={'privacy-policy-agreement'}>
+            <Checkbox id={'privacy-policy-agreement'} onChange={(value) => setTerms(value)}>
               <Text size={2} dark={true}>
                 I agree to our{' '}
                 <LabelLink href={'http://example.com/'} target="_blank">
@@ -100,8 +105,9 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
                 </LabelLink>{' '}
                 and{' '}
                 <LabelLink href={'http://example.com/'} target="_blank">
-                  Privacy Policy.
+                  Privacy Policy
                 </LabelLink>
+                .
               </Text>
             </Checkbox>
           </Label>
@@ -112,7 +118,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </BalanceInfoNarrow>
-          <ButtonPrimaryMedium onClick={stubHandler} disabled>
+          <ButtonPrimaryMedium onClick={onSubmit} disabled={!isValid}>
             Create a Membership
           </ButtonPrimaryMedium>
         </ModalFooter>
