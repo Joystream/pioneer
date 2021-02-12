@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Fonts, Transitions } from '../../constants/styles'
+import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 import { CheckboxIcon, CheckboxIconStyles } from '../icons/CheckboxIcon'
 
 interface CheckboxProps {
@@ -9,9 +9,10 @@ interface CheckboxProps {
   children?: React.ReactElement
   enabled?: boolean
   isChecked?: boolean
+  onChange?: (value: boolean) => void
 }
 
-export function Checkbox({ id, isRequired, children, enabled = true, isChecked = false }: CheckboxProps) {
+export function Checkbox({ id, isRequired, children, enabled = true, isChecked = false, onChange }: CheckboxProps) {
   const [isStateChecked, setStateChecked] = useState(isChecked)
 
   return (
@@ -21,7 +22,7 @@ export function Checkbox({ id, isRequired, children, enabled = true, isChecked =
         event.preventDefault()
         if (enabled !== false) {
           setStateChecked(!isStateChecked)
-          console.log(isStateChecked)
+          onChange && onChange(!isStateChecked)
         }
       }}
       isLabelEnabled={enabled}
@@ -33,6 +34,7 @@ export function Checkbox({ id, isRequired, children, enabled = true, isChecked =
         required={isRequired}
         checked={isStateChecked}
         disabled={!enabled}
+        onChange={(event) => setStateChecked(event.target.checked)}
       />
       <CheckboxStyled>
         <CheckboxIcon />
