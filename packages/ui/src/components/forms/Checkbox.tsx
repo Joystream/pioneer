@@ -21,7 +21,6 @@ export function Checkbox({ id, isRequired, children, enabled = true, isChecked =
         event.preventDefault()
         if (enabled !== false) {
           setStateChecked(!isStateChecked)
-          console.log(isStateChecked)
         }
       }}
       isLabelEnabled={enabled}

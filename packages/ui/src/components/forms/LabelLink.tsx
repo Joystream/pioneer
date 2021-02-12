@@ -10,13 +10,7 @@ interface LabelLinkProps {
 
 export function LabelLink({ href, target, children }: LabelLinkProps) {
   return (
-    <Link
-      onClick={(event) => {
-        event.stopPropagation()
-      }}
-      href={href}
-      target={target}
-    >
+    <Link onClick={(event) => event.stopPropagation()} href={href} target={target}>
       {children}
     </Link>
   )
