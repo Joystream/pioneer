@@ -11,7 +11,7 @@ import { Text } from '../components/typography/Text'
 import { Account } from '../hooks/types'
 import { useApi } from '../hooks/useApi'
 import { useObservable } from '../hooks/useObservable'
-import { BalanceInfo, InfoTitle, InfoValue, Row } from './common'
+import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from './common'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -93,23 +93,23 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
             <Checkbox id={'privacy-policy-agreement'}>
               <Text size={2} dark={true}>
                 I agree to our{' '}
-                <LabelLink href={'https://www.youtube.com/feed/subscriptions'} target="_blank">
+                <LabelLink href={'http://example.com/'} target="_blank">
                   Terms of Service
                 </LabelLink>{' '}
                 and{' '}
-                <LabelLink href={'https://www.youtube.com/feed/subscriptions'} target="_blank">
+                <LabelLink href={'http://example.com/'} target="_blank">
                   Privacy Policy.
                 </LabelLink>
               </Text>
             </Checkbox>
           </Label>
-          <BalanceInfo>
+          <BalanceInfoNarrow>
             <InfoTitle>Creation fee:</InfoTitle>
             <InfoValue>
               <TokenValue value={membershipPrice?.toBn()} />
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-          </BalanceInfo>
+          </BalanceInfoNarrow>
           <ButtonPrimaryMedium onClick={stubHandler} disabled>
             Create a Membership
           </ButtonPrimaryMedium>

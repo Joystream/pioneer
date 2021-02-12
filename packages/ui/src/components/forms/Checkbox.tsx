@@ -79,6 +79,7 @@ export const CheckboxLabel = styled.label<CheckboxLabelProps>`
   position: relative;
   grid-auto-flow: column;
   grid-column-gap: 10px;
+  align-items: center;
   width: fit-content;
   color: ${Colors.Black[900]};
   font-size: 14px;
