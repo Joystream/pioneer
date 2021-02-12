@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
 import { Label, Switch, TextInput } from '../components/forms'
-import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
+import { Checkbox } from '../components/forms/Checkbox'
 import { Help } from '../components/Help'
+import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
 import { TokenValue } from '../components/typography'
 import { Account } from '../hooks/types'
@@ -87,7 +88,12 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         </ScrolledModalBody>
         <ModalFooter>
           <Label>
-            <TextInput type="checkbox" />I agree to our Terms of Service and Privacy Policy.
+            <Checkbox
+              id={'privacy-policy-agreement'}
+              label={'I agree to our Terms of Service and Privacy Policy.'}
+              isChecked={false}
+              enabled={false}
+            />
           </Label>
           <BalanceInfo>
             <InfoTitle>Creation fee:</InfoTitle>
