@@ -2,10 +2,12 @@ import React, { useCallback, useState } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
 import { Label, Switch, TextInput } from '../components/forms'
 import { Checkbox } from '../components/forms/Checkbox'
+import { LabelLink } from '../components/forms/LabelLink'
 import { Help } from '../components/Help'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
 import { TokenValue } from '../components/typography'
+import { Text } from '../components/typography/Text'
 import { Account } from '../hooks/types'
 import { useApi } from '../hooks/useApi'
 import { useObservable } from '../hooks/useObservable'
@@ -88,12 +90,18 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         </ScrolledModalBody>
         <ModalFooter>
           <Label>
-            <Checkbox
-              id={'privacy-policy-agreement'}
-              label={'I agree to our Terms of Service and Privacy Policy.'}
-              isChecked={false}
-              enabled={false}
-            />
+            <Checkbox id={'privacy-policy-agreement'}>
+              <Text size={2} dark={true}>
+                I agree to our{' '}
+                <LabelLink href={'https://www.youtube.com/feed/subscriptions'} target="_blank">
+                  Terms of Service
+                </LabelLink>{' '}
+                and{' '}
+                <LabelLink href={'https://www.youtube.com/feed/subscriptions'} target="_blank">
+                  Privacy Policy.
+                </LabelLink>
+              </Text>
+            </Checkbox>
           </Label>
           <BalanceInfo>
             <InfoTitle>Creation fee:</InfoTitle>

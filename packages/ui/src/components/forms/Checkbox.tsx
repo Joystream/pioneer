@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { BorderRad, Colors, Fonts, Transitions } from '../../constants/styles'
 import { CheckboxIcon, CheckboxIconStyles } from '../icons/CheckboxIcon'
-import { Colors, Transitions, Fonts, BorderRad } from '../../constants/styles'
 
 interface CheckboxProps {
   id: string
   isRequired?: boolean
-  label?: string
+  children?: React.ReactElement
   enabled?: boolean
   isChecked?: boolean
 }
 
-export function Checkbox({ id, isRequired, label, enabled = true, isChecked = false }: CheckboxProps) {
+export function Checkbox({ id, isRequired, children, enabled = true, isChecked = false }: CheckboxProps) {
   const [isStateChecked, setStateChecked] = useState(isChecked)
 
   return (
@@ -37,7 +37,7 @@ export function Checkbox({ id, isRequired, label, enabled = true, isChecked = fa
       <CheckboxStyled>
         <CheckboxIcon />
       </CheckboxStyled>
-      <CheckboxSideText>{label}</CheckboxSideText>
+      <CheckboxSideText>{children}</CheckboxSideText>
     </CheckboxLabel>
   )
 }
