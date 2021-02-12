@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Loader } from '../components/icons'
-import { ExtensionModalWrap, ModalTitle, ResultModalBody, ResultModalGlass, ResultText } from '../components/Modal'
+import { Modal, ModalTitle, ResultModalBody, ResultText } from '../components/Modal'
 
 interface Props {
   title: string
@@ -10,14 +10,12 @@ interface Props {
 
 export const WaitModal = ({ title, description }: Props) =>
   ReactDOM.createPortal(
-    <ResultModalGlass>
-      <ExtensionModalWrap>
-        <ResultModalBody>
-          <Loader />
-          <ModalTitle>{title}</ModalTitle>
-          <ResultText size={2}>{description}</ResultText>
-        </ResultModalBody>
-      </ExtensionModalWrap>
-    </ResultModalGlass>,
+    <Modal modalSize={'s'} modalHeight={'s'}>
+      <ResultModalBody>
+        <Loader />
+        <ModalTitle>{title}</ModalTitle>
+        <ResultText size={2}>{description}</ResultText>
+      </ResultModalBody>
+    </Modal>,
     document.body
   )

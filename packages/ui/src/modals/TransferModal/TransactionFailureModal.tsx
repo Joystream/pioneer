@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import { ArrowDownIcon, Icon, SuccessIcon } from '../../components/icons'
-import { ModalHeader, ResultModal, SuccessModalBody } from '../../components/Modal'
+import { ModalHeader, Modal, SuccessModalBody } from '../../components/Modal'
 import { TokenValue } from '../../components/typography'
 import { Account } from '../../hooks/types'
 import { TransactionInfoLabel } from '../common'
@@ -17,7 +17,7 @@ interface Props {
 
 export function TransactionFailureModal({ onClose, from, amount, to }: Props) {
   return (
-    <ResultModal>
+    <Modal modalSize={'s'}>
       <ModalHeader onClick={onClose} title="Failure" icon={<SuccessIcon />} />
       <SuccessModalBody>
         <TransactionInfoLabel>
@@ -28,7 +28,7 @@ export function TransactionFailureModal({ onClose, from, amount, to }: Props) {
           Accept and close <ArrowDownIcon />
         </AcceptFailure>
       </SuccessModalBody>
-    </ResultModal>
+    </Modal>
   )
 }
 

@@ -34,7 +34,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
 
   if (state === 'Create') {
     return (
-      <Modal>
+      <Modal modalSize={'m'}>
         <ModalHeader onClick={onClose} title="Add membership" />
         <ScrolledModalBody>
           <Row>
@@ -105,7 +105,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   }
 
   return (
-    <Modal>
+    <Modal modalSize={'xs'} modalHeight={'s'}>
       <ModalHeader onClick={onClose} title="Authorize transaction" />
     </Modal>
   )
