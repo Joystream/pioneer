@@ -1,16 +1,16 @@
-import React, {useCallback, useState} from 'react'
-import {ButtonPrimaryMedium} from '../components/buttons'
-import {Label, Switch, TextInput} from '../components/forms'
-import {Checkbox} from '../components/forms/Checkbox'
-import {LabelLink} from '../components/forms/LabelLink'
-import {Help} from '../components/Help'
-import {Modal, ModalFooter, ModalHeader, ScrolledModalBody} from '../components/Modal'
-import {filterAccount, SelectAccount} from '../components/selects/SelectAccount'
-import {Text, TokenValue} from '../components/typography'
-import {Account} from '../hooks/types'
-import {useApi} from '../hooks/useApi'
-import {useObservable} from '../hooks/useObservable'
-import {BalanceInfoNarrow, InfoTitle, InfoValue, Row} from './common'
+import React, { useCallback, useState } from 'react'
+import { ButtonPrimaryMedium } from '../components/buttons'
+import { Label, Switch, TextInput } from '../components/forms'
+import { Checkbox } from '../components/forms/Checkbox'
+import { LabelLink } from '../components/forms/LabelLink'
+import { Help } from '../components/Help'
+import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
+import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
+import { Text, TokenValue } from '../components/typography'
+import { Account } from '../hooks/types'
+import { useApi } from '../hooks/useApi'
+import { useObservable } from '../hooks/useObservable'
+import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from './common'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -28,22 +28,15 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [handle, setHandle] = useState('')
   const [about, setAbout] = useState('')
   const [avatar, setAvatar] = useState('')
-  const [isReferred, setIsReferred] = useState(true)
+  const [isReferred, setIsReferred] = useState(false)
+  const [hasTermsAgreed, setTerms] = useState(false)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
-  const isValid = !isReferred && rootAccount && controllerAccount && name && handle && about && avatar
+  const isValid = !isReferred && rootAccount && controllerAccount && name && handle && about && avatar && hasTermsAgreed
 
   const stubHandler = () => undefined
 
-  const memberData = {
-    name,
-    handle,
-    about,
-    avatar,
-  }
-
   const onSubmit = () => {
-    console.log('submit', memberData)
     setState('Authorize')
   }
 
@@ -102,7 +95,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         </ScrolledModalBody>
         <ModalFooter>
           <Label>
-            <Checkbox id={'privacy-policy-agreement'}>
+            <Checkbox id={'privacy-policy-agreement'} onChange={(value) => setTerms(value)}>
               <Text size={2} dark={true}>
                 I agree to our{' '}
                 <LabelLink href={'http://example.com/'} target="_blank">
@@ -110,8 +103,9 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
                 </LabelLink>{' '}
                 and{' '}
                 <LabelLink href={'http://example.com/'} target="_blank">
-                  Privacy Policy.
+                  Privacy Policy
                 </LabelLink>
+                .
               </Text>
             </Checkbox>
           </Label>
