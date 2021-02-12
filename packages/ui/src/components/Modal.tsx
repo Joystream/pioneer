@@ -20,48 +20,51 @@ export const ModalHeader = React.memo(({ onClick, title, icon }: Props) => (
 ))
 
 interface ModalProps {
+  modalSize: string
+  modalHeight?: string
   children: ReactNode
 }
 
-export const Modal = ({ children }: ModalProps) => {
+export const Modal = ({ modalHeight = 'm', children, modalSize }: ModalProps) => {
   return ReactDOM.createPortal(
-    <ModalGlass>
-      <ModalWrap>{children}</ModalWrap>
+    <ModalGlass modalHeight={modalHeight} modalSize={modalSize}>
+      <ModalWrap modalMaxSize={modalSize}>{children}</ModalWrap>
     </ModalGlass>,
     document.body
   )
 }
-
-export const ResultModal = ({ children }: ModalProps) => {
-  return ReactDOM.createPortal(
-    <ResultModalGlass>
-      <ResultModalWrap>{children}</ResultModalWrap>
-    </ResultModalGlass>,
-    document.body
-  )
-}
-
-export const ModalGlass = styled.div`
-  display: grid;
-  grid-template-columns: minmax(80px, 1.2fr) minmax(max-content, 904px) minmax(60px, 1fr);
-  grid-template-rows: 1fr;
-  grid-template-areas: '. modal .';
+export const ModalGlass = styled.div<ModalProps>`
+  display: flex;
+  justify-content: center;
+  align-items: ${({ modalHeight }) => {
+    switch (modalHeight) {
+      case 's':
+        return 'center'
+    }
+  }};
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  padding-top: 64px;
+  padding: ${({ modalHeight }) => {
+    switch (modalHeight) {
+      case 's':
+        return '0px'
+      case 'm':
+        return '64px'
+      case 'l':
+        return '48px'
+    }
+  }};
   background-color: ${Colors.Black[700.75]};
   color: ${Colors.Black[900]};
   z-index: 100000;
 `
-
-export const ResultModalGlass = styled(ModalGlass)`
-  padding-top: 224px;
-`
-
-export const ModalWrap = styled.section`
+interface ModalWrapProps {
+  modalMaxSize: string
+}
+export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 76px auto 72px;
@@ -73,23 +76,21 @@ export const ModalWrap = styled.section`
   position: relative;
   background-color: ${Colors.White};
   width: 100%;
-  max-width: 904px;
+  max-width: ${({ modalMaxSize }) => {
+    switch (modalMaxSize) {
+      case 'xs':
+        return '400px'
+      case 's':
+        return '720px'
+      case 'm':
+        return '904px'
+      case 'l':
+        return '1240px'
+    }
+  }};
   height: min-content;
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
-`
-
-export const ResultModalWrap = styled(ModalWrap)`
-  justify-self: center;
-  grid-template-rows: 76px auto;
-  background-color: ${Colors.White};
-`
-
-export const ExtensionModalWrap = styled(ModalWrap)`
-  justify-self: center;
-  grid-template-rows: auto;
-  max-width: 534px;
-  background-color: ${Colors.White};
 `
 
 export const ModalHeaderIcon = styled.div`

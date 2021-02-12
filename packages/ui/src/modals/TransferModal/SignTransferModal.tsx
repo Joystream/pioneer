@@ -61,7 +61,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
   }, [api, isSending])
 
   return (
-    <Modal>
+    <Modal modalSize={'m'}>
       <ModalHeader onClick={onClose} title="Authorize transaction" />
       <ModalBody>
         <SignTransferContainer>

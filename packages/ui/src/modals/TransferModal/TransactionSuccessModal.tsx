@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ArrowDownExpandedIcon, SuccessIcon } from '../../components/icons'
-import { ModalHeader, ResultModal, SuccessModalBody } from '../../components/Modal'
+import { ModalHeader, Modal, SuccessModalBody } from '../../components/Modal'
 import { TokenValue } from '../../components/typography'
 import { Account } from '../../hooks/types'
 import { useBalance } from '../../hooks/useBalance'
@@ -39,7 +39,7 @@ export function TransactionSuccessModal({ onClose, from, to, amount, fee }: Prop
   const toBefore = toNow.sub(amount)
 
   return (
-    <ResultModal>
+    <Modal modalSize={'m'} modalHeight={'s'}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <SuccessModalBody>
         <TransactionInfoLabel style={{ marginBottom: '28px', justifySelf: 'start' }}>
@@ -78,6 +78,6 @@ export function TransactionSuccessModal({ onClose, from, to, amount, fee }: Prop
           </BalanceInfo>
         </LockedAccount>
       </SuccessModalBody>
-    </ResultModal>
+    </Modal>
   )
 }
