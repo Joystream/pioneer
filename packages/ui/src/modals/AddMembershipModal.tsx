@@ -17,6 +17,8 @@ interface MembershipModalProps {
 
 type ModalState = 'Create' | 'Authorize'
 
+const AvatarSchema = Yup.string().url()
+
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
@@ -31,20 +33,17 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [hasTermsAgreed, setTerms] = useState(false)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
-  const [isValid, setValid] = useState(false)
-
-  const avatarSchema = Yup.string().url()
+  const [isFormValid, setFormValid] = useState(false)
+  const isNotEmpty =
+    !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && !!about && !!avatar && hasTermsAgreed
 
   useEffect(() => {
-    const isNotEmpty =
-      !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && !!about && !!avatar && hasTermsAgreed
-
     if (avatar) {
-      avatarSchema.isValid(avatar).then((isAvatarValid) => {
-        setValid(isNotEmpty && isAvatarValid)
+      AvatarSchema.isValid(avatar).then((isAvatarValid) => {
+        setFormValid(isNotEmpty && isAvatarValid)
       })
     } else {
-      setValid(isNotEmpty)
+      setFormValid(isNotEmpty)
     }
   }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
 
@@ -130,7 +129,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </BalanceInfoNarrow>
-          <ButtonPrimaryMedium onClick={onSubmit} disabled={!isValid}>
+          <ButtonPrimaryMedium onClick={onSubmit} disabled={!isFormValid}>
             Create a Membership
           </ButtonPrimaryMedium>
         </ModalFooter>
