@@ -1,8 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { ButtonPrimaryMedium } from '../components/buttons'
-import { Label, Switch, TextInput } from '../components/forms'
-import { Checkbox } from '../components/forms/Checkbox'
-import { LabelLink } from '../components/forms/LabelLink'
+import { Checkbox, InlineToggleWrap, Label, LabelLink, TextInput, ToggleCheckbox } from '../components/forms'
 import { Help } from '../components/Help'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
@@ -46,10 +44,10 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         <ModalHeader onClick={onClose} title="Add membership" />
         <ScrolledModalBody>
           <Row>
-            <Label>
-              I was referred by a member:{' '}
-              <Switch initialState={isReferred} textOff="No" textOn={'Yes'} onChange={setIsReferred} />
-            </Label>
+            <InlineToggleWrap>
+              <Label>I was referred by a member: </Label>
+              <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} disabled />
+            </InlineToggleWrap>
             <TextInput
               type="text"
               value="Select Member or type a member"

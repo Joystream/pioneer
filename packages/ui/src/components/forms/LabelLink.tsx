@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, Transitions } from '../../constants/styles'
+import { Colors, Transitions } from '../../constants'
 
 interface LabelLinkProps {
   href: string
@@ -10,13 +10,7 @@ interface LabelLinkProps {
 
 export function LabelLink({ href, target, children }: LabelLinkProps) {
   return (
-    <Link
-      onClick={(event) => {
-        event.stopPropagation()
-      }}
-      href={href}
-      target={target}
-    >
+    <Link onClick={(event) => event.stopPropagation()} href={href} target={target}>
       {children}
     </Link>
   )
