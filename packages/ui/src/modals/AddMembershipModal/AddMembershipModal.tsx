@@ -3,6 +3,9 @@ import React, { useState } from 'react'
 import { Observable, Subscription } from 'rxjs'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
+import { WaitModal } from '../WaitModal'
+import { AddMembershipFailureModal } from './AddMembershipFailureModal'
+import { AddMembershipSuccessModal } from './AddMembershipSuccessModal'
 import { MembershipFormModal, Params } from './MembershipFormModal'
 import { SignTransactionModal } from './SignTransactionModal'
 
@@ -10,7 +13,7 @@ interface MembershipModalProps {
   onClose: () => void
 }
 
-type ModalState = 'Create' | 'Authorize' | 'SENDING' | 'SUCCESS'
+type ModalState = 'Create' | 'Authorize' | 'SENDING' | 'SUCCESS' | 'EXTENSION_SIGN'
 
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
@@ -61,5 +64,19 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
     )
   }
 
-  return null
+  const loremDescription = 'Lorem'
+
+  if (state === 'EXTENSION_SIGN') {
+    return <WaitModal title="Waiting for the extension" description={loremDescription} />
+  }
+
+  if (state === 'SENDING') {
+    return <WaitModal title="Wait for the transaction" description={loremDescription} />
+  }
+
+  if (state === 'SUCCESS') {
+    return <AddMembershipSuccessModal onClose={onClose} params={transactionParams} />
+  }
+
+  return <AddMembershipFailureModal onClose={onClose} params={transactionParams} />
 }
