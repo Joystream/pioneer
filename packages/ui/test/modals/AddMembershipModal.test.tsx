@@ -96,6 +96,33 @@ describe('UI: AddMembershipModal', () => {
     expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
   })
 
+  context('Authorize step', () => {
+    const renderAuthorizeStep = async () => {
+      const rendered = renderModal()
+      const { findByText, getByText, getAllByRole } = rendered
+      const [, termsCheckbox] = getAllByRole('checkbox')
+      const [, name, handle, about, avatar] = getAllByRole('textbox')
+
+      selectAccount('Root account', 'bob', getByText)
+      selectAccount('Controller account', 'alice', getByText)
+      fireEvent.change(name, { target: { value: 'Bobby Bob' } })
+      fireEvent.change(handle, { target: { value: 'bob' } })
+      fireEvent.change(about, { target: { value: "I'm Bob" } })
+      fireEvent.change(avatar, { target: { value: 'http://example.com/example.jpg' } })
+      fireEvent.click(termsCheckbox)
+
+      fireEvent.click(await findByText(/^Create a membership$/i))
+
+      return rendered
+    }
+
+    it('Renders authorize transaction', async () => {
+      const { getByText } = await renderAuthorizeStep()
+
+      expect(getByText('Authorize transaction')).to.exist
+    })
+  })
+
   function renderModal() {
     return render(
       <KeyringContext.Provider value={keyring}>
