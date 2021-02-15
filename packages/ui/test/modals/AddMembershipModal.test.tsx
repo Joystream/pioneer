@@ -1,7 +1,8 @@
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
+import { Matcher } from '@testing-library/dom/types/matches'
 import BN from 'bn.js'
 import { expect } from 'chai'
 import { set } from 'lodash'
@@ -75,6 +76,40 @@ describe('UI: AddMembershipModal', () => {
     expect(getByText('Add membership')).to.exist
     expect(getByText('Creation fee:')?.parentNode?.textContent).to.match(/^Creation fee:100/i)
   })
+
+  it('Enables button when valid form', async () => {
+    const { findByText, getByText, getAllByRole } = renderModal()
+
+    const button = getByText(/^Create a membership$/i) as HTMLButtonElement
+    expect(button.disabled).to.be.true
+    const [, termsCheckbox] = getAllByRole('checkbox')
+    const [, name, handle, about, avatar] = getAllByRole('textbox')
+
+    selectAccount('Root account', 'bob', getByText)
+    selectAccount('Controller account', 'alice', getByText)
+    fireEvent.change(name, { target: { value: 'Bobby Bob' } })
+    fireEvent.change(handle, { target: { value: 'bob' } })
+    fireEvent.change(about, { target: { value: "I'm Bob" } })
+    fireEvent.change(avatar, { target: { value: 'http://example.com/example.jpg' } })
+    fireEvent.click(termsCheckbox)
+
+    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
+  })
+
+  function selectAccount(label: string, name: string, getByText: (text: Matcher) => HTMLElement) {
+    const labelElement = getByText(new RegExp(`${label}`, 'i'))
+    const parentNode = labelElement.parentNode
+    const button = parentNode?.querySelector('div > button')
+
+    expect(button).to.exist
+    button && fireEvent.click(button)
+
+    const accountTitles = parentNode?.querySelectorAll('ul > li')
+    const found = accountTitles && Array.from(accountTitles).find((li) => li.textContent?.match(name))
+
+    expect(found).to.exist
+    found && fireEvent.click(found)
+  }
 
   function renderModal() {
     return render(
