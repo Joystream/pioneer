@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
+import { Label } from './Label'
 
 interface Props {
   isRequired?: boolean
@@ -12,17 +13,15 @@ interface Props {
 }
 
 export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLabel, falseLabel }: Props) {
+  const onClick = (setValue: boolean) => () => {
+    if (disabled !== true) {
+      onChange(setValue)
+    }
+  }
+
   return (
     <ToggleContainer groupDisabled={disabled}>
-      <ToggleLabel
-        onClick={() => {
-          if (disabled !== true) {
-            onChange(true)
-          }
-        }}
-      >
-        {trueLabel}
-      </ToggleLabel>
+      <ToggleLabel onClick={onClick(true)}>{trueLabel}</ToggleLabel>
       <ToggleStyledInput isChecked={checked}>
         <ToggleInput
           type="checkbox"
@@ -32,15 +31,7 @@ export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLa
           required={isRequired}
         />
       </ToggleStyledInput>
-      <ToggleLabel
-        onClick={() => {
-          if (disabled !== true) {
-            onChange(false)
-          }
-        }}
-      >
-        {falseLabel}
-      </ToggleLabel>
+      <ToggleLabel onClick={onClick(false)}>{falseLabel}</ToggleLabel>
     </ToggleContainer>
   )
 }
@@ -130,4 +121,17 @@ const ToggleContainer = styled.div<ToggleBoxContainerProps>`
   align-items: center;
   width: fit-content;
   ${(props) => props.groupDisabled && disabledToggleGroupStyles};
+`
+
+export const InlineToggleWrap = styled.div`
+  display: flex;
+
+  ${Label} {
+    line-height: 24px;
+  }
+
+  ${ToggleContainer} {
+    padding-left: 10px;
+    margin-bottom: 4px;
+  }
 `
