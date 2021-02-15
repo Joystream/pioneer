@@ -3,13 +3,14 @@ import * as Yup from 'yup'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import { Checkbox, InlineToggleWrap, Label, LabelLink, TextInput, ToggleCheckbox } from '../../components/forms'
 import { Help } from '../../components/Help'
-import { Modal, ModalBody, ModalFooter, ModalHeader, ScrolledModalBody } from '../../components/Modal'
+import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../../components/Modal'
 import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
 import { Text, TokenValue } from '../../components/typography'
 import { Account } from '../../hooks/types'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
+import { SignTransactionModal } from './SignTransactionModal'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -139,39 +140,5 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
     )
   }
 
-  const transactionFee = 0
-
-  return (
-    <Modal modalSize="m" modalHeight="s">
-      <ModalHeader onClick={onClose} title="Authorize transaction" />
-      <ModalBody>
-        <Text>You are intend to create a new membership</Text>
-        <Text>
-          The creation of the new membership costs <TokenValue value={membershipPrice} />
-        </Text>
-        <Text>
-          Fees of <TokenValue value={transactionFee} /> will be applied to the transaction
-        </Text>
-        <Row>
-          <Label>Sending from account</Label>
-          <SelectAccount onChange={() => undefined} />
-        </Row>
-      </ModalBody>
-      <ModalFooter>
-        <BalanceInfoNarrow>
-          <InfoTitle>Creation fee:</InfoTitle>
-          <InfoValue>
-            <TokenValue value={membershipPrice?.toBn()} />
-          </InfoValue>
-          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-          <InfoTitle>Transaction fee:</InfoTitle>
-          <InfoValue>
-            <TokenValue value={transactionFee} />
-          </InfoValue>
-          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-        </BalanceInfoNarrow>
-        <ButtonPrimaryMedium>Sign and create a member</ButtonPrimaryMedium>
-      </ModalFooter>
-    </Modal>
-  )
+  return <SignTransactionModal onClose={onClose} membershipPrice={membershipPrice} />
 }
