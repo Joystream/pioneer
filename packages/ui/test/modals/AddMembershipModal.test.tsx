@@ -1,7 +1,7 @@
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
 import { expect } from 'chai'
 import { set } from 'lodash'
@@ -14,6 +14,7 @@ import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
+import { selectAccount } from '../helpers/selectAccount'
 
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
@@ -74,6 +75,25 @@ describe('UI: AddMembershipModal', () => {
 
     expect(getByText('Add membership')).to.exist
     expect(getByText('Creation fee:')?.parentNode?.textContent).to.match(/^Creation fee:100/i)
+  })
+
+  it('Enables button when valid form', async () => {
+    const { findByText, getByText, getAllByRole } = renderModal()
+
+    const button = getByText(/^Create a membership$/i) as HTMLButtonElement
+    expect(button.disabled).to.be.true
+    const [, termsCheckbox] = getAllByRole('checkbox')
+    const [, name, handle, about, avatar] = getAllByRole('textbox')
+
+    selectAccount('Root account', 'bob', getByText)
+    selectAccount('Controller account', 'alice', getByText)
+    fireEvent.change(name, { target: { value: 'Bobby Bob' } })
+    fireEvent.change(handle, { target: { value: 'bob' } })
+    fireEvent.change(about, { target: { value: "I'm Bob" } })
+    fireEvent.change(avatar, { target: { value: 'http://example.com/example.jpg' } })
+    fireEvent.click(termsCheckbox)
+
+    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
   })
 
   function renderModal() {

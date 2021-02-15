@@ -16,8 +16,8 @@ export function OptionAccount({ account, onChange }: Props) {
   const balance = useBalance(account)
 
   return (
-    <OptionComponentContainer>
-      <OptionComponent onClick={() => onChange && onChange(account)}>
+    <OptionComponentContainer onClick={() => onChange && onChange(account)}>
+      <OptionComponent>
         <AccountInfo account={account} />
         <BalanceInfo>
           <InfoTitle>Transferable balance</InfoTitle>

@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import * as Yup from 'yup'
 import { ButtonPrimaryMedium } from '../components/buttons'
 import { Checkbox, InlineToggleWrap, Label, LabelLink, TextInput, ToggleCheckbox } from '../components/forms'
 import { Help } from '../components/Help'
@@ -16,6 +17,8 @@ interface MembershipModalProps {
 
 type ModalState = 'Create' | 'Authorize'
 
+const AvatarSchema = Yup.string().url()
+
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
@@ -30,7 +33,19 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [hasTermsAgreed, setTerms] = useState(false)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
-  const isValid = !isReferred && rootAccount && controllerAccount && name && handle && about && avatar && hasTermsAgreed
+  const [isFormValid, setFormValid] = useState(false)
+  const isNotEmpty =
+    !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && !!about && !!avatar && hasTermsAgreed
+
+  useEffect(() => {
+    if (avatar) {
+      AvatarSchema.isValid(avatar).then((isAvatarValid) => {
+        setFormValid(isNotEmpty && isAvatarValid)
+      })
+    } else {
+      setFormValid(isNotEmpty)
+    }
+  }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
 
   const stubHandler = () => undefined
 
@@ -114,7 +129,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </BalanceInfoNarrow>
-          <ButtonPrimaryMedium onClick={onSubmit} disabled={!isValid}>
+          <ButtonPrimaryMedium onClick={onSubmit} disabled={!isFormValid}>
             Create a Membership
           </ButtonPrimaryMedium>
         </ModalFooter>
