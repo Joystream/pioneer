@@ -1,5 +1,9 @@
+import { web3FromAddress } from '@polkadot/extension-dapp'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
-import React, { useState } from 'react'
+import { ISubmittableResult } from '@polkadot/types/types'
+import BN from 'bn.js'
+import React, { useEffect, useState } from 'react'
+import { Observable } from 'rxjs'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
@@ -7,6 +11,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Mod
 import { SelectAccount } from '../../components/selects/SelectAccount'
 import { Text, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
+import { useKeyring } from '../../hooks/useKeyring'
 import { useObservable } from '../../hooks/useObservable'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { Params } from './MembershipFormModal'
@@ -15,10 +20,12 @@ interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
   transactionParams: Params
+  onSign: (transaction: Observable<ISubmittableResult>, fee: BN) => void
 }
 
-export const SignTransactionModal = ({ onClose, membershipPrice, transactionParams }: SignProps) => {
+export const SignTransactionModal = ({ onClose, membershipPrice, transactionParams, onSign }: SignProps) => {
   const { api } = useApi()
+  const keyring = useKeyring()
   const [from, setFrom] = useState(transactionParams.controllerAccount)
   const transfer = api?.tx?.members?.buyMembership({
     root_account: transactionParams.rootAccount.address,
@@ -29,7 +36,24 @@ export const SignTransactionModal = ({ onClose, membershipPrice, transactionPara
     about: transactionParams.about,
   })
   const info = useObservable(transfer?.paymentInfo(from.address), [api, from])
+  const [isSending, setSending] = useState(false)
 
+  useEffect(() => {
+    if (!isSending || !transfer || !info) {
+      return
+    }
+
+    const keyringPair = keyring.getPair(from.address)
+    const fee = info.partialFee.toBn()
+
+    if (keyringPair.meta.isInjected) {
+      web3FromAddress(from.address).then(({ signer }) => {
+        onSign(transfer.signAndSend(from.address, { signer: signer }), fee)
+      })
+    } else {
+      onSign(transfer.signAndSend(keyringPair), fee)
+    }
+  }, [api, isSending])
   const transactionFee = info?.partialFee
 
   return (
@@ -61,7 +85,14 @@ export const SignTransactionModal = ({ onClose, membershipPrice, transactionPara
           </InfoValue>
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
         </BalanceInfoNarrow>
-        <ButtonPrimaryMedium>Sign and create a member</ButtonPrimaryMedium>
+        <ButtonPrimaryMedium
+          onClick={() => {
+            setSending(true)
+          }}
+          disabled={isSending}
+        >
+          Sign and create a member
+        </ButtonPrimaryMedium>
       </ModalFooter>
     </Modal>
   )
