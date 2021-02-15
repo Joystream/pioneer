@@ -12,9 +12,18 @@ import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 
 const AvatarSchema = Yup.string().url()
 
+export interface Params {
+  name: string
+  handle: string
+  about: string
+  avatar: string
+  rootAccount: Account
+  controllerAccount: Account
+}
+
 interface CreateProps {
   onClose: () => void
-  onSubmit: () => void
+  onSubmit: (params: Params) => void
   membershipPrice?: BalanceOf
 }
 
@@ -117,7 +126,14 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           </InfoValue>
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
         </BalanceInfoNarrow>
-        <ButtonPrimaryMedium onClick={onSubmit} disabled={!isFormValid}>
+        <ButtonPrimaryMedium
+          onClick={() => {
+            controllerAccount &&
+              rootAccount &&
+              onSubmit({ about, name, handle, avatar, controllerAccount, rootAccount })
+          }}
+          disabled={!isFormValid}
+        >
           Create a Membership
         </ButtonPrimaryMedium>
       </ModalFooter>

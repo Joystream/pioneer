@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
-import { MembershipFormModal } from './MembershipFormModal'
+import { MembershipFormModal, Params } from './MembershipFormModal'
 import { SignTransactionModal } from './SignTransactionModal'
 
 interface MembershipModalProps {
@@ -14,14 +14,18 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
   const [state, setState] = useState<ModalState>('Create')
+  const [transactionParams, setParams] = useState<Params>()
 
-  const onSubmit = () => {
+  const onSubmit = (params: Params) => {
     setState('Authorize')
+    setParams(params)
   }
 
-  if (state === 'Create') {
+  if (state === 'Create' || !transactionParams) {
     return <MembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
-  return <SignTransactionModal onClose={onClose} membershipPrice={membershipPrice} />
+  return (
+    <SignTransactionModal onClose={onClose} membershipPrice={membershipPrice} transactionParams={transactionParams} />
+  )
 }
