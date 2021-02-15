@@ -37,7 +37,6 @@ export const SignTransactionModal = ({ onClose, membershipPrice, transactionPara
   })
   const info = useObservable(transfer?.paymentInfo(from.address), [api, from])
   const [isSending, setSending] = useState(false)
-
   useEffect(() => {
     if (!isSending || !transfer || !info) {
       return
@@ -54,7 +53,8 @@ export const SignTransactionModal = ({ onClose, membershipPrice, transactionPara
       onSign(transfer.signAndSend(keyringPair), fee)
     }
   }, [api, isSending])
-  const transactionFee = info?.partialFee
+
+  const transactionFee = info?.partialFee.toBn()
 
   return (
     <Modal modalSize="m" modalHeight="s">
@@ -62,7 +62,7 @@ export const SignTransactionModal = ({ onClose, membershipPrice, transactionPara
       <ModalBody>
         <Text>You are intend to create a new membership</Text>
         <Text>
-          The creation of the new membership costs <TokenValue value={membershipPrice} />
+          The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />
         </Text>
         <Text>
           Fees of <TokenValue value={transactionFee} /> will be applied to the transaction
@@ -76,7 +76,7 @@ export const SignTransactionModal = ({ onClose, membershipPrice, transactionPara
         <BalanceInfoNarrow>
           <InfoTitle>Creation fee:</InfoTitle>
           <InfoValue>
-            <TokenValue value={membershipPrice} />
+            <TokenValue value={membershipPrice?.toBn()} />
           </InfoValue>
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           <InfoTitle>Transaction fee:</InfoTitle>

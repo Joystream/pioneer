@@ -33,6 +33,7 @@ describe('UI: AddMembershipModal', () => {
     hasAccounts: boolean
     allAccounts: Account[]
   }
+  let transaction: any
   let query: any
   let keyring: Keyring
 
@@ -58,6 +59,9 @@ describe('UI: AddMembershipModal', () => {
 
     set(query, 'members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query', query)
+    transaction = {}
+    set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
+    set(api, 'api.tx.members.buyMembership', () => transaction)
 
     accounts = {
       hasAccounts: true,
