@@ -1,8 +1,8 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { BorderRad, Colors, Fonts, Transitions } from '../../constants/styles'
+import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
-interface ToggleboxProps {
+interface Props {
   isRequired?: boolean
   disabled?: boolean
   checked: boolean
@@ -11,7 +11,7 @@ interface ToggleboxProps {
   falseLabel: string
 }
 
-export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLabel, falseLabel }: ToggleboxProps) {
+export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLabel, falseLabel }: Props) {
   return (
     <ToggleContainer groupDisabled={disabled}>
       <ToggleLabel
