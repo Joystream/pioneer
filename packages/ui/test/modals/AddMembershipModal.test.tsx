@@ -2,7 +2,6 @@ import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
-import { Matcher } from '@testing-library/dom/types/matches'
 import BN from 'bn.js'
 import { expect } from 'chai'
 import { set } from 'lodash'
@@ -15,6 +14,7 @@ import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
+import { selectAccount } from '../helpers/selectAccount'
 
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
@@ -95,21 +95,6 @@ describe('UI: AddMembershipModal', () => {
 
     expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
   })
-
-  function selectAccount(label: string, name: string, getByText: (text: Matcher) => HTMLElement) {
-    const labelElement = getByText(new RegExp(`${label}`, 'i'))
-    const parentNode = labelElement.parentNode
-    const button = parentNode?.querySelector('div > button')
-
-    expect(button).to.exist
-    button && fireEvent.click(button)
-
-    const accountTitles = parentNode?.querySelectorAll('ul > li')
-    const found = accountTitles && Array.from(accountTitles).find((li) => li.textContent?.match(name))
-
-    expect(found).to.exist
-    found && fireEvent.click(found)
-  }
 
   function renderModal() {
     return render(
