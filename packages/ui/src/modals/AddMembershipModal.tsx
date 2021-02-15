@@ -3,7 +3,7 @@ import * as Yup from 'yup'
 import { ButtonPrimaryMedium } from '../components/buttons'
 import { Checkbox, InlineToggleWrap, Label, LabelLink, TextInput, ToggleCheckbox } from '../components/forms'
 import { Help } from '../components/Help'
-import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader, ScrolledModalBody } from '../components/Modal'
 import { filterAccount, SelectAccount } from '../components/selects/SelectAccount'
 import { Text, TokenValue } from '../components/typography'
 import { Account } from '../hooks/types'
@@ -25,10 +25,12 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const [state, setState] = useState<ModalState>('Create')
   const [rootAccount, setRootAccount] = useState<Account | undefined>()
   const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
-  const [name, setName] = useState('')
-  const [handle, setHandle] = useState('')
-  const [about, setAbout] = useState('')
-  const [avatar, setAvatar] = useState('')
+  const [name, setName] = useState('Bobby bob')
+  const [handle, setHandle] = useState('bob')
+  const [about, setAbout] = useState('I am bob')
+  const [avatar, setAvatar] = useState(
+    'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=200&r=pg&d=404'
+  )
   const [isReferred, setIsReferred] = useState(false)
   const [hasTermsAgreed, setTerms] = useState(false)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
@@ -55,7 +57,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
 
   if (state === 'Create') {
     return (
-      <Modal modalSize={'m'}>
+      <Modal modalSize="m">
         <ModalHeader onClick={onClose} title="Add membership" />
         <ScrolledModalBody>
           <Row>
@@ -137,9 +139,39 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
     )
   }
 
+  const transactionFee = 0
+
   return (
-    <Modal modalSize={'xs'} modalHeight={'s'}>
+    <Modal modalSize="m" modalHeight="s">
       <ModalHeader onClick={onClose} title="Authorize transaction" />
+      <ModalBody>
+        <Text>You are intend to create a new membership</Text>
+        <Text>
+          The creation of the new membership costs <TokenValue value={membershipPrice} />
+        </Text>
+        <Text>
+          Fees of <TokenValue value={transactionFee} /> will be applied to the transaction
+        </Text>
+        <Row>
+          <Label>Sending from account</Label>
+          <SelectAccount onChange={() => undefined} />
+        </Row>
+      </ModalBody>
+      <ModalFooter>
+        <BalanceInfoNarrow>
+          <InfoTitle>Creation fee:</InfoTitle>
+          <InfoValue>
+            <TokenValue value={membershipPrice?.toBn()} />
+          </InfoValue>
+          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+          <InfoTitle>Transaction fee:</InfoTitle>
+          <InfoValue>
+            <TokenValue value={transactionFee} />
+          </InfoValue>
+          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+        </BalanceInfoNarrow>
+        <ButtonPrimaryMedium>Sign and create a member</ButtonPrimaryMedium>
+      </ModalFooter>
     </Modal>
   )
 }
