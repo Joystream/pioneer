@@ -1,6 +1,5 @@
 export * from './Input'
 export * from './Label'
 export * from './LabelLink'
-export * from './Switch'
 export * from './Checkbox'
 export * from './ToggleCheckbox'

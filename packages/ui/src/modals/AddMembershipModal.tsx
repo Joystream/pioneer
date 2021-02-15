@@ -47,7 +47,6 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
             <Label>
               I was referred by a member:{' '}
               <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} disabled />
-              {/* <Switch initialState={isReferred} textOff="No" textOn={'Yes'} onChange={setIsReferred} /> */}
             </Label>
             <TextInput
               type="text"

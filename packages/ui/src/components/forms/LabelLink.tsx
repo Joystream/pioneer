@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, Transitions } from '../../constants/styles'
+import { Colors, Transitions } from '../../constants'
 
 interface LabelLinkProps {
   href: string
