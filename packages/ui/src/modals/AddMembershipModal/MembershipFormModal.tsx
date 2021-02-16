@@ -2,7 +2,15 @@ import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useCallback, useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import { ButtonPrimaryMedium } from '../../components/buttons'
-import { Checkbox, InlineToggleWrap, Label, LabelLink, TextInput, ToggleCheckbox } from '../../components/forms'
+import {
+  Checkbox,
+  InlineToggleWrap,
+  Label,
+  LabelLink,
+  TextArea,
+  TextInput,
+  ToggleCheckbox,
+} from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../../components/Modal'
 import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
@@ -89,22 +97,32 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
 
         <Row>
           <Label>Member Name *</Label>
-          <TextInput type="text" value={name} onChange={(event) => setName(event.target.value)} />
+          <TextInput type="text" placeholder="Type" value={name} onChange={(event) => setName(event.target.value)} />
         </Row>
 
         <Row>
           <Label>Membership handle *</Label>
-          <TextInput type="text" value={handle} onChange={(event) => setHandle(event.target.value)} />
+          <TextInput
+            type="text"
+            placeholder="Type"
+            value={handle}
+            onChange={(event) => setHandle(event.target.value)}
+          />
         </Row>
 
         <Row>
           <Label>About Member</Label>
-          <TextInput type="text" value={about} onChange={(event) => setAbout(event.target.value)} />
+          <TextArea value={about} placeholder="Type" rows={4} onChange={(event) => setAbout(event.target.value)} />
         </Row>
 
         <Row>
           <Label>Member Avatar</Label>
-          <TextInput type="text" value={avatar} onChange={(event) => setAvatar(event.target.value)} />
+          <TextInput
+            type="text"
+            placeholder="Image URL"
+            value={avatar}
+            onChange={(event) => setAvatar(event.target.value)}
+          />
           <Text size={3} italic={true}>
             Paste an URL of your avatar image. Text lorem ipsum.
           </Text>
