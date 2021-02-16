@@ -30,19 +30,16 @@ interface CreateProps {
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const [rootAccount, setRootAccount] = useState<Account | undefined>()
   const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
-  const [name, setName] = useState('Bobby bob')
-  const [handle, setHandle] = useState('bob')
-  const [about, setAbout] = useState('I am bob')
-  const [avatar, setAvatar] = useState(
-    'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=200&r=pg&d=404'
-  )
+  const [name, setName] = useState('')
+  const [handle, setHandle] = useState('')
+  const [about, setAbout] = useState('')
+  const [avatar, setAvatar] = useState('')
   const [isReferred, setIsReferred] = useState(false)
   const [hasTermsAgreed, setTerms] = useState(false)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
   const [isFormValid, setFormValid] = useState(false)
-  const isNotEmpty =
-    !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && !!about && !!avatar && hasTermsAgreed
+  const isNotEmpty = !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && hasTermsAgreed
 
   useEffect(() => {
     if (avatar) {
@@ -54,6 +51,13 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
     }
   }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
 
+  const onCreate = () => {
+    if (!controllerAccount || !rootAccount) {
+      return
+    }
+
+    onSubmit({ about, name, handle, avatar, controllerAccount, rootAccount })
+  }
   const stubHandler = () => undefined
 
   return (
@@ -94,13 +98,16 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         </Row>
 
         <Row>
-          <Label>About Member *</Label>
+          <Label>About Member</Label>
           <TextInput type="text" value={about} onChange={(event) => setAbout(event.target.value)} />
         </Row>
 
         <Row>
-          <Label>Member Avatar *</Label>
+          <Label>Member Avatar</Label>
           <TextInput type="text" value={avatar} onChange={(event) => setAvatar(event.target.value)} />
+          <Text size={3} italic={true}>
+            Paste an URL of your avatar image. Text lorem ipsum.
+          </Text>
         </Row>
       </ScrolledModalBody>
       <ModalFooter>
@@ -126,14 +133,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           </InfoValue>
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
         </BalanceInfoNarrow>
-        <ButtonPrimaryMedium
-          onClick={() => {
-            controllerAccount &&
-              rootAccount &&
-              onSubmit({ about, name, handle, avatar, controllerAccount, rootAccount })
-          }}
-          disabled={!isFormValid}
-        >
+        <ButtonPrimaryMedium onClick={onCreate} disabled={!isFormValid}>
           Create a Membership
         </ButtonPrimaryMedium>
       </ModalFooter>
