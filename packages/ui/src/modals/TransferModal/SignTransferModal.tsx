@@ -11,7 +11,7 @@ import { TokenValue } from '../../components/typography'
 import { Account } from '../../hooks/types'
 import { useApi } from '../../hooks/useApi'
 import { useBalance } from '../../hooks/useBalance'
-import { useSignAndSendTransaction } from '../AddMembershipModal/SignTransactionModal'
+import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import {
   BalanceInfo,
   InfoTitle,
@@ -37,7 +37,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
   const balanceTo = useBalance(to)
   const { api } = useApi()
   const transfer = api?.tx?.balances?.transfer(to.address, amount)
-  const { isSending, paymentInfo, send } = useSignAndSendTransaction(transfer, from, onSign)
+  const { isSending, paymentInfo, send } = useSignAndSendTransaction({ transfer, from, onSign })
 
   return (
     <Modal modalSize="m">

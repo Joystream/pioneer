@@ -7,7 +7,7 @@ import { WaitModal } from '../WaitModal'
 import { AddMembershipFailureModal } from './AddMembershipFailureModal'
 import { AddMembershipSuccessModal } from './AddMembershipSuccessModal'
 import { MembershipFormModal, Params } from './MembershipFormModal'
-import { SignTransactionModal } from './SignTransactionModal'
+import { SignCreateMemberModal } from './SignCreateMemberModal'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -55,7 +55,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
 
   if (state === 'Authorize') {
     return (
-      <SignTransactionModal
+      <SignCreateMemberModal
         onClose={onClose}
         membershipPrice={membershipPrice}
         transactionParams={transactionParams}
