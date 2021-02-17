@@ -1,32 +1,26 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Member } from '../common/types'
-import { MembershipAbout } from '../pages/Profile/MyMemberships/MembershipAbout'
+import { Avatar } from './Avatar'
+import { Text } from './typography'
 
 interface Props {
   member: Member
 }
 
 export const MemberInfo = ({ member }: Props) => {
-  const [isAboutOpen, setAboutOpen] = useState(false)
-
   return (
     <>
       <div>
-        <Avatar src={member.avatarURI} />
-        <MemberHandle onClick={() => setAboutOpen(true)}>{member.handle}</MemberHandle>
+        <Avatar avatarURI={member.avatarURI} />
+        <MemberHandle>{member.handle}</MemberHandle>
+        <Text size={2}>{member.name}</Text>
       </div>
-      {isAboutOpen && <MembershipAbout member={member} onClose={() => setAboutOpen(false)} />}
     </>
   )
 }
 
-export const Avatar = styled.img`
-  border-radius: 50%;
-`
-
-const MemberHandle = styled.a`
+const MemberHandle = styled.p`
   font-weight: bold;
-  text-decoration: underline;
   cursor: pointer;
 `
