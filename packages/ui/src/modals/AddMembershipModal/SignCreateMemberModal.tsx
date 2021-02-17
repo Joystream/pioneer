@@ -24,7 +24,7 @@ interface SignProps {
 export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionParams, onSign }: SignProps) => {
   const { api } = useApi()
   const [from, setFrom] = useState(transactionParams.controllerAccount)
-  const transfer = api?.tx?.members?.buyMembership({
+  const transaction = api?.tx?.members?.buyMembership({
     root_account: transactionParams.rootAccount.address,
     controller_account: transactionParams.controllerAccount.address,
     name: transactionParams.name,
@@ -32,7 +32,7 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
     avatar_uri: transactionParams.avatar,
     about: transactionParams.about,
   })
-  const { paymentInfo, isSending, send } = useSignAndSendTransaction({ transaction: transfer, from, onSign })
+  const { paymentInfo, isSending, send } = useSignAndSendTransaction({ transaction, from, onSign })
 
   return (
     <Modal modalSize="m" modalHeight="s">

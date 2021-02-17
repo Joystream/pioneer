@@ -36,8 +36,8 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
   const balanceFrom = useBalance(from)
   const balanceTo = useBalance(to)
   const { api } = useApi()
-  const transfer = api?.tx?.balances?.transfer(to.address, amount)
-  const { isSending, paymentInfo, send } = useSignAndSendTransaction({ transaction: transfer, from, onSign })
+  const transaction = api?.tx?.balances?.transfer(to.address, amount)
+  const { isSending, paymentInfo, send } = useSignAndSendTransaction({ transaction, from, onSign })
 
   return (
     <Modal modalSize="m">
