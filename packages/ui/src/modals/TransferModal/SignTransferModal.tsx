@@ -1,19 +1,17 @@
-import { web3FromAddress } from '@polkadot/extension-dapp'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Observable } from 'rxjs'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium } from '../../components/buttons'
+import { Help } from '../../components/Help'
 import { ArrowDownExpandedIcon } from '../../components/icons'
 import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/Modal'
-import { Help } from '../../components/Help'
 import { TokenValue } from '../../components/typography'
 import { Account } from '../../hooks/types'
 import { useApi } from '../../hooks/useApi'
 import { useBalance } from '../../hooks/useBalance'
-import { useKeyring } from '../../hooks/useKeyring'
-import { useObservable } from '../../hooks/useObservable'
+import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import {
   BalanceInfo,
   InfoTitle,
@@ -35,33 +33,14 @@ interface Props {
 }
 
 export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) {
-  const { api } = useApi()
-  const { keyring } = useKeyring()
   const balanceFrom = useBalance(from)
   const balanceTo = useBalance(to)
-  const [isSending, setIsSending] = useState(false)
-  const transfer = api?.tx?.balances?.transfer(to.address, amount)
-  const info = useObservable(transfer?.paymentInfo(from.address), [api])
-
-  useEffect(() => {
-    if (!isSending || !transfer || !info) {
-      return
-    }
-
-    const keyringPair = keyring.getPair(from.address)
-    const fee = info.partialFee.toBn()
-
-    if (keyringPair.meta.isInjected) {
-      web3FromAddress(from.address).then(({ signer }) => {
-        onSign(transfer.signAndSend(from.address, { signer: signer }), fee)
-      })
-    } else {
-      onSign(transfer.signAndSend(keyringPair), fee)
-    }
-  }, [api, isSending])
+  const { api } = useApi()
+  const transaction = api?.tx?.balances?.transfer(to.address, amount)
+  const { isSending, paymentInfo, send } = useSignAndSendTransaction({ transaction, from, onSign })
 
   return (
-    <Modal modalSize={'m'}>
+    <Modal modalSize="m">
       <ModalHeader onClick={onClose} title="Authorize transaction" />
       <ModalBody>
         <SignTransferContainer>
@@ -110,7 +89,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
           <BalanceInfo>
             <InfoTitle>Transaction fee:</InfoTitle>
             <InfoValue>
-              <TokenValue value={info?.partialFee.toBn()} />
+              <TokenValue value={paymentInfo?.partialFee.toBn()} />
             </InfoValue>
             <Help
               helperText={
@@ -119,7 +98,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
             />
           </BalanceInfo>
         </TransactionInfo>
-        <ButtonPrimaryMedium onClick={() => setIsSending(true)} disabled={isSending}>
+        <ButtonPrimaryMedium onClick={send} disabled={isSending}>
           Sign transaction and Transfer
         </ButtonPrimaryMedium>
       </ModalFooter>

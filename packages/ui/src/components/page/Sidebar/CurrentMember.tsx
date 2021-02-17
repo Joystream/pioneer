@@ -1,13 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Transitions } from '../../../constants'
+import { useMembership } from '../../../hooks/useMembership'
 import { AddMembershipButton } from '../../AddMembershipButton'
-
-const useMembership = () => {
-  return {
-    count: 0,
-  }
-}
 
 export const CurrentMember = () => {
   const { count } = useMembership()

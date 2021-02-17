@@ -33,6 +33,7 @@ describe('UI: AddMembershipModal', () => {
     hasAccounts: boolean
     allAccounts: Account[]
   }
+  let transaction: any
   let query: any
   let keyring: Keyring
 
@@ -58,6 +59,9 @@ describe('UI: AddMembershipModal', () => {
 
     set(query, 'members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query', query)
+    transaction = {}
+    set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
+    set(api, 'api.tx.members.buyMembership', () => transaction)
 
     accounts = {
       hasAccounts: true,
@@ -94,6 +98,33 @@ describe('UI: AddMembershipModal', () => {
     fireEvent.click(termsCheckbox)
 
     expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
+  })
+
+  context('Authorize step', () => {
+    const renderAuthorizeStep = async () => {
+      const rendered = renderModal()
+      const { findByText, getByText, getAllByRole } = rendered
+      const [, termsCheckbox] = getAllByRole('checkbox')
+      const [, name, handle, about, avatar] = getAllByRole('textbox')
+
+      selectAccount('Root account', 'bob', getByText)
+      selectAccount('Controller account', 'alice', getByText)
+      fireEvent.change(name, { target: { value: 'Bobby Bob' } })
+      fireEvent.change(handle, { target: { value: 'bob' } })
+      fireEvent.change(about, { target: { value: "I'm Bob" } })
+      fireEvent.change(avatar, { target: { value: 'http://example.com/example.jpg' } })
+      fireEvent.click(termsCheckbox)
+
+      fireEvent.click(await findByText(/^Create a membership$/i))
+
+      return rendered
+    }
+
+    it('Renders authorize transaction', async () => {
+      const { getByText } = await renderAuthorizeStep()
+
+      expect(getByText('Authorize transaction')).to.exist
+    })
   })
 
   function renderModal() {
