@@ -32,7 +32,7 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
     avatar_uri: transactionParams.avatar,
     about: transactionParams.about,
   })
-  const { paymentInfo, isSending, send } = useSignAndSendTransaction({ transfer, from, onSign })
+  const { paymentInfo, isSending, send } = useSignAndSendTransaction({ transaction: transfer, from, onSign })
 
   return (
     <Modal modalSize="m" modalHeight="s">

@@ -10,19 +10,19 @@ import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
 
 interface UseSignAndSendTransactionParams {
-  transfer: SubmittableExtrinsic<'rxjs'> | undefined
+  transaction: SubmittableExtrinsic<'rxjs'> | undefined
   from: Account
   onSign: (transaction: Observable<ISubmittableResult>, fee: BN) => void
 }
 
-export const useSignAndSendTransaction = ({ transfer, from, onSign }: UseSignAndSendTransactionParams) => {
+export const useSignAndSendTransaction = ({ transaction, from, onSign }: UseSignAndSendTransactionParams) => {
   const [isSending, setIsSending] = useState(false)
   const keyring = useKeyring()
   const { api } = useApi()
-  const paymentInfo = useObservable(transfer?.paymentInfo(from.address), [from])
+  const paymentInfo = useObservable(transaction?.paymentInfo(from.address), [from])
 
   useEffect(() => {
-    if (!isSending || !transfer || !paymentInfo) {
+    if (!isSending || !transaction || !paymentInfo) {
       return
     }
 
@@ -31,10 +31,10 @@ export const useSignAndSendTransaction = ({ transfer, from, onSign }: UseSignAnd
 
     if (keyringPair.meta.isInjected) {
       web3FromAddress(from.address).then(({ signer }) => {
-        onSign(transfer.signAndSend(from.address, { signer: signer }), fee)
+        onSign(transaction.signAndSend(from.address, { signer: signer }), fee)
       })
     } else {
-      onSign(transfer.signAndSend(keyringPair), fee)
+      onSign(transaction.signAndSend(keyringPair), fee)
     }
   }, [api, isSending])
 
