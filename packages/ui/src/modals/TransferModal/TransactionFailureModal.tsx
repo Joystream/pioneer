@@ -5,7 +5,7 @@ import { ButtonPrimaryMedium } from '../../components/buttons'
 import { ArrowDownIcon, Icon, SuccessIcon } from '../../components/icons'
 import { ModalHeader, Modal, SuccessModalBody } from '../../components/Modal'
 import { TokenValue } from '../../components/typography'
-import { Account } from '../../hooks/types'
+import { Account } from '../../common/types'
 import { TransactionInfoLabel } from '../common'
 
 interface Props {

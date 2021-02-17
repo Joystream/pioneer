@@ -2,7 +2,7 @@ import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors } from '../constants'
-import { Account } from '../hooks/types'
+import { Account } from '../common/types'
 import { CopyButton } from './buttons'
 
 export const AccountInfo = React.memo(({ account }: { account: Account }) => {

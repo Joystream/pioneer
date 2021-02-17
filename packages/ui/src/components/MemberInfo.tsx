@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Member } from '../modals/AddMembershipModal/MembershipFormModal'
+import { Member } from '../common/types'
 import { MembershipAbout } from '../pages/Profile/MyMemberships/MembershipAbout'
 
 interface Props {

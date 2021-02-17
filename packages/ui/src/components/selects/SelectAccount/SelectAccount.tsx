@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { Colors, Sizes } from '../../../constants'
-import { Account } from '../../../hooks/types'
+import { Account } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'

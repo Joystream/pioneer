@@ -1,12 +1,13 @@
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useState } from 'react'
 import { Observable, Subscription } from 'rxjs'
+import { Member } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
 import { WaitModal } from '../WaitModal'
 import { AddMembershipFailureModal } from './AddMembershipFailureModal'
 import { AddMembershipSuccessModal } from './AddMembershipSuccessModal'
-import { MembershipFormModal, Member } from './MembershipFormModal'
+import { MembershipFormModal } from './MembershipFormModal'
 import { SignCreateMemberModal } from './SignCreateMemberModal'
 
 interface MembershipModalProps {

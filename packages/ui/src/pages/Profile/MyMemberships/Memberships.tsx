@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Member } from '../../../common/types'
 import { AddMembershipButton } from '../../../components/AddMembershipButton'
 import { Text } from '../../../components/typography'
-import { Member } from '../../../modals/AddMembershipModal/MembershipFormModal'
 import { MemberItem } from './MemberItem'
 
 const bob = ({

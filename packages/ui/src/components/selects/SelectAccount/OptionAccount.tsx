@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
-import { Account } from '../../../hooks/types'
+import { Account } from '../../../common/types'
 import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'

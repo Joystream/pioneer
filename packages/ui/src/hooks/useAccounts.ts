@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useKeyring } from './useKeyring'
-import { Account } from './types'
+import { Account } from '../common/types'
 
 interface UseAccounts {
   allAccounts: Account[]

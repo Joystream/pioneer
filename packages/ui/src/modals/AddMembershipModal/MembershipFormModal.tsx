@@ -1,6 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useCallback, useEffect, useState } from 'react'
 import * as Yup from 'yup'
+import { Account, Member } from '../../common/types'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import {
   Checkbox,
@@ -15,19 +16,9 @@ import { Help } from '../../components/Help'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../../components/Modal'
 import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
 import { Text, TokenValue } from '../../components/typography'
-import { Account } from '../../hooks/types'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 
 const AvatarSchema = Yup.string().url()
-
-export interface Member {
-  name: string
-  rootAccount: Account
-  controllerAccount: Account
-  handle: string
-  avatarURI?: string
-  about?: string
-}
 
 interface CreateProps {
   onClose: () => void

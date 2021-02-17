@@ -1,9 +1,9 @@
 import React from 'react'
+import { Member } from '../../common/types'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/MemberInfo'
 import { ModalHeader, Modal, SuccessModalBody } from '../../components/Modal'
 import { Text } from '../../components/typography'
-import { Member } from './MembershipFormModal'
 
 interface Props {
   onClose: () => void

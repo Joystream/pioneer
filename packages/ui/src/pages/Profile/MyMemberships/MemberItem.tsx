@@ -1,7 +1,7 @@
 import React from 'react'
+import { Member } from '../../../common/types'
 import { ButtonGhostMediumSquare } from '../../../components/buttons'
 import { MemberInfo } from '../../../components/MemberInfo'
-import { Member } from '../../../modals/AddMembershipModal/MembershipFormModal'
 
 interface MemberProps {
   member: Member

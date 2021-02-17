@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Colors } from '../constants'
-import { Account } from '../hooks/types'
+import { Account } from '../common/types'
 import { TransferModal } from '../modals/TransferModal/TransferModal'
 import { ButtonGhostMediumSquare, ButtonPrimarySquare } from './buttons'
 import { ArrowInsideIcon, ArrowOutsideIcon, TransferIcon } from './icons'
