@@ -1,8 +1,8 @@
 import React from 'react'
 import { SuccessIcon } from '../../components/icons'
+import { MemberInfo } from '../../components/MemberInfo'
 import { ModalHeader, Modal, SuccessModalBody } from '../../components/Modal'
 import { Text } from '../../components/typography'
-import { MemberInfo } from '../../pages/Profile/MyMemberships/MemberItem'
 import { Member } from './MembershipFormModal'
 
 interface Props {

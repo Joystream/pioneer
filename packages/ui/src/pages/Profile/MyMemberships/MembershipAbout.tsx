@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { CloseButton } from '../../../components/buttons'
+import { Avatar } from '../../../components/MemberInfo'
 import { Member } from '../../../modals/AddMembershipModal/MembershipFormModal'
-import { Avatar } from './MemberItem'
 
 interface MembershipAboutProps {
   member?: Member
