@@ -1,28 +1,28 @@
-import { Membership } from '@joystream/types/members'
 import React from 'react'
 import styled from 'styled-components'
 import { AddMembershipButton } from '../../../components/AddMembershipButton'
-import { Member } from './Member'
-import { Text } from '../../../components/typography/Text'
+import { Text } from '../../../components/typography'
+import { Member } from '../../../modals/AddMembershipModal/MembershipFormModal'
+import { MemberItem } from './MemberItem'
 
 const bob = ({
   handle: 'Bob member',
-  avatar_uri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
+  avatarUri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
   about:
     'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @bob on both.',
-} as unknown) as Membership
+} as unknown) as Member
 const dave = ({
   handle: 'Dave member',
-  avatar_uri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
+  avatarUri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
   about:
     'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @dave on both.',
-} as unknown) as Membership
+} as unknown) as Member
 const alice = ({
   handle: 'Alice member',
-  avatar_uri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
+  avatarUri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
   about:
     'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @alice on both.',
-} as unknown) as Membership
+} as unknown) as Member
 
 export function Memberships() {
   const hasMemberships = false
@@ -56,7 +56,7 @@ export function Memberships() {
           Memberships | Roles | Slashed | Terminated | Invitations | Invited
         </MembershipsListHeader>
         <MembershipsListItems>
-          <Member member={memberships.active} />
+          <MemberItem member={memberships.active} />
         </MembershipsListItems>
       </MembershipsList>
 
@@ -68,7 +68,7 @@ export function Memberships() {
         </MembershipsListHeader>
         <MembershipsListItems>
           {memberships.all.map((member) => (
-            <Member member={member} />
+            <MemberItem member={member} />
           ))}
         </MembershipsListItems>
       </MembershipsList>

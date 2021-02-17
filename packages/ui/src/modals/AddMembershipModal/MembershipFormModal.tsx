@@ -20,18 +20,18 @@ import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 
 const AvatarSchema = Yup.string().url()
 
-export interface Params {
+export interface Member {
   name: string
-  handle: string
-  about: string
-  avatar: string
   rootAccount: Account
   controllerAccount: Account
+  handle: string
+  avatarURI?: string
+  about?: string
 }
 
 interface CreateProps {
   onClose: () => void
-  onSubmit: (params: Params) => void
+  onSubmit: (params: Member) => void
   membershipPrice?: BalanceOf
 }
 
@@ -64,7 +64,14 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
       return
     }
 
-    onSubmit({ about, name, handle, avatar, controllerAccount, rootAccount })
+    onSubmit({
+      about,
+      name,
+      handle,
+      avatarURI: avatar,
+      controllerAccount: controllerAccount,
+      rootAccount: rootAccount,
+    })
   }
   const stubHandler = () => undefined
 

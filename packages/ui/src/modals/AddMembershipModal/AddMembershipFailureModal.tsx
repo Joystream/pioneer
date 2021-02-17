@@ -2,11 +2,11 @@ import React from 'react'
 import { SuccessIcon } from '../../components/icons'
 import { Modal, ModalHeader, SuccessModalBody } from '../../components/Modal'
 
-import { Params } from './MembershipFormModal'
+import { Member } from './MembershipFormModal'
 
 interface Props {
   onClose: () => void
-  params: Params
+  params: Member
 }
 
 export function AddMembershipFailureModal({ onClose }: Props) {

@@ -1,22 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Membership } from '@joystream/types/members'
 import { CloseButton } from '../../../components/buttons'
-import { Avatar } from './Member'
+import { Member } from '../../../modals/AddMembershipModal/MembershipFormModal'
+import { Avatar } from './MemberItem'
 
 interface MembershipAboutProps {
-  member?: Membership
+  member?: Member
   onClose: () => void
 }
 
-export const MembershipAbout = ({ onClose }: MembershipAboutProps) => {
+export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
   return (
     <SidePane>
       <CloseButton onClick={onClose} />
-      <Avatar src={''} />
+      <Avatar src={member?.avatarURI} />
       <p>{''}</p>
       <h5>About</h5>
-      <div>{''}</div>
+      <div>{member?.about || ''}</div>
     </SidePane>
   )
 }

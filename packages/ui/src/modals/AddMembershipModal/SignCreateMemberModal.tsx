@@ -12,12 +12,12 @@ import { Text, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
-import { Params } from './MembershipFormModal'
+import { Member } from './MembershipFormModal'
 
 interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
-  transactionParams: Params
+  transactionParams: Member
   onSign: (transaction: Observable<ISubmittableResult>, fee: BN) => void
 }
 
@@ -29,7 +29,7 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
     controller_account: transactionParams.controllerAccount.address,
     name: transactionParams.name,
     handle: transactionParams.handle,
-    avatar_uri: transactionParams.avatar,
+    avatar_uri: transactionParams.avatarURI,
     about: transactionParams.about,
   })
   const { paymentInfo, isSending, send } = useSignAndSendTransaction({ transaction, from, onSign })
