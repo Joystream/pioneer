@@ -34,6 +34,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
   const isZero = new BN(amount).lte(new BN(0))
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
   const isTransferDisabled = isZero || isOverBalance || !recipient
+  const isValueDisabled = !sender
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())
@@ -59,11 +60,16 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
               value={amount}
               onChange={(event) => setAmount(event.target.value)}
               placeholder="0"
+              disabled={isValueDisabled}
             />
           </AmountInputBlock>
           <AmountButtons>
-            <AmountButton onClick={setHalf}>Use half</AmountButton>
-            <AmountButton onClick={setMax}>Use max</AmountButton>
+            <AmountButton onClick={setHalf} disabled={isValueDisabled}>
+              Use half
+            </AmountButton>
+            <AmountButton onClick={setMax} disabled={isValueDisabled}>
+              Use max
+            </AmountButton>
           </AmountButtons>
         </TransactionAmount>
         <Row>

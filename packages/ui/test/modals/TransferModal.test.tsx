@@ -15,6 +15,7 @@ import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
+import { selectAccount } from '../helpers/selectAccount'
 
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
@@ -25,7 +26,7 @@ describe('UI: TransferModal', () => {
     api: ({} as unknown) as ApiRx,
     isConnected: true,
   }
-  let fromAccount: Account
+  let sender: Account
   let to: Account
   let accounts: {
     hasAccounts: boolean
@@ -36,7 +37,7 @@ describe('UI: TransferModal', () => {
 
   beforeEach(() => {
     keyring = mockKeyring()
-    fromAccount = {
+    sender = {
       address: aliceSigner().address,
       name: 'alice',
     }
@@ -58,7 +59,7 @@ describe('UI: TransferModal', () => {
 
     accounts = {
       hasAccounts: true,
-      allAccounts: [fromAccount, to],
+      allAccounts: [sender, to],
     }
     sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
   })
@@ -68,13 +69,31 @@ describe('UI: TransferModal', () => {
   })
 
   it('Renders a modal', () => {
-    const { getByText } = renderModal()
+    const { getByText } = renderModal({ sender, to })
 
     expect(getByText('Send tokens')).to.exist
   })
 
+  it('Enables value input', () => {
+    const { getByLabelText, getByText, getByRole } = renderModal({})
+
+    const input = getByLabelText(/number of tokens/i) as HTMLInputElement
+    const useHalfButton = getByRole('button', { name: /use half/i }) as HTMLButtonElement
+    const useMaxButton = getByRole('button', { name: /use max/i }) as HTMLButtonElement
+
+    expect(input.disabled).to.be.true
+    expect(useHalfButton.disabled).to.be.true
+    expect(useMaxButton.disabled).to.be.true
+
+    selectAccount('From', 'alice', getByText)
+
+    expect(input.disabled).to.be.false
+    expect(useHalfButton.disabled).to.be.false
+    expect(useMaxButton.disabled).to.be.false
+  })
+
   it('Renders an Authorize transaction step', () => {
-    const { getByLabelText, getByText } = renderModal()
+    const { getByLabelText, getByText } = renderModal({ sender, to })
 
     const input = getByLabelText('Number of tokens')
     expect((getByText('Transfer tokens') as HTMLButtonElement).disabled).to.be.true
@@ -92,7 +111,7 @@ describe('UI: TransferModal', () => {
 
   context('Signed transaction', () => {
     function renderAndSign() {
-      const rendered = renderModal()
+      const rendered = renderModal({ sender, to })
       const { getByLabelText, getByText } = rendered
 
       fireEvent.change(getByLabelText('Number of tokens'), { target: { value: '50' } })
@@ -146,11 +165,11 @@ describe('UI: TransferModal', () => {
     })
   })
 
-  function renderModal() {
+  function renderModal({ sender, to }: { sender?: Account; to?: Account }) {
     return render(
       <KeyringContext.Provider value={keyring}>
         <ApiContext.Provider value={api}>
-          <TransferModal onClose={sinon.spy()} from={fromAccount} to={to} icon={<ArrowInsideIcon />} />
+          <TransferModal onClose={sinon.spy()} from={sender} to={to} icon={<ArrowInsideIcon />} />
         </ApiContext.Provider>
       </KeyringContext.Provider>
     )
