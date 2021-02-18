@@ -1,15 +1,23 @@
 import styled from 'styled-components'
 import { Label } from '../components/forms'
 import { Icon } from '../components/icons'
-import { BorderRad, Colors, Sizes } from '../constants'
+import { ValueInJoys } from '../components/typography/TokenValue'
+import { BorderRad, Colors, Fonts, Sizes } from '../constants'
 
 export const TransactionInfoLabel = styled(Label)`
   margin-bottom: 32px;
   font-weight: 400;
+  font-family: ${Fonts.Body};
 
-  .TokenValue {
+  ${ValueInJoys} {
+    font-family: ${Fonts.Body};
     font-weight: 700;
     color: ${Colors.Black[700]};
+    &:after {
+      font-family: ${Fonts.Body};
+      font-weight: 700;
+      color: ${Colors.Black[700]};
+    }
   }
 `
 export const Row = styled.div`
@@ -49,8 +57,7 @@ export const AmountInputBlock = styled.div`
   flex-direction: column;
 `
 export const TransactionInfo = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
 `
 export const BalanceInfo = styled.div`
   display: inline-grid;
@@ -64,8 +71,13 @@ export const BalanceInfo = styled.div`
   }
 `
 
+export const BalanceInfoInRow = styled(BalanceInfo)`
+  justify-self: end;
+`
+
 export const BalanceInfoNarrow = styled(BalanceInfo)`
   grid-template-columns: 1fr 128px;
+  width: auto;
 `
 
 export const InfoTitle = styled.span`
@@ -106,7 +118,7 @@ export const TransactionAmountInfoText = styled.span`
   border-radius: ${BorderRad.m};
   background-color: ${Colors.Blue[100]};
 
-  .TokenValue {
+  ${ValueInJoys}, ${ValueInJoys}:after {
     font-size: 10px;
     line-height: 16px;
     font-weight: 700;

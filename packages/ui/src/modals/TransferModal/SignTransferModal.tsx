@@ -13,7 +13,8 @@ import { useApi } from '../../hooks/useApi'
 import { useBalance } from '../../hooks/useBalance'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import {
-  BalanceInfo,
+  BalanceInfoInRow,
+  BalanceInfoNarrow,
   InfoTitle,
   InfoValue,
   LockedAccount,
@@ -40,23 +41,23 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
   const { isSending, paymentInfo, send } = useSignAndSendTransaction({ transaction, from, onSign })
 
   return (
-    <Modal modalSize="m">
-      <ModalHeader onClick={onClose} title="Authorize transaction" />
+    <Modal modalSize={'m'}>
+      <ModalHeader onClick={onClose} title="Authorize Transaction" />
       <ModalBody>
         <SignTransferContainer>
           <Row>
             <TransactionInfoLabel>
-              You are transferring <TokenValue value={amount} /> stake from {from.name} account to {to.name}{' '}
+              You are transferring <TokenValue value={amount} /> stake from “{from.name}” account to “{to.name}”{' '}
               destination.
             </TransactionInfoLabel>
             <LockedAccount>
               <AccountInfo account={from} />
-              <BalanceInfo>
+              <BalanceInfoInRow>
                 <InfoTitle>Transferable balance</InfoTitle>
                 <InfoValue>
                   <TokenValue value={balanceFrom?.transferable} />
                 </InfoValue>
-              </BalanceInfo>
+              </BalanceInfoInRow>
             </LockedAccount>
           </Row>
           <TransactionAmountInfo>
@@ -68,25 +69,25 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
           <Row>
             <LockedAccount>
               <AccountInfo account={to} />
-              <BalanceInfo>
+              <BalanceInfoInRow>
                 <InfoTitle>Transferable balance</InfoTitle>
                 <InfoValue>
                   <TokenValue value={balanceTo?.transferable} />
                 </InfoValue>
-              </BalanceInfo>
+              </BalanceInfoInRow>
             </LockedAccount>
           </Row>
         </SignTransferContainer>
       </ModalBody>
       <ModalFooter>
         <TransactionInfo>
-          <BalanceInfo>
+          <BalanceInfoNarrow>
             <InfoTitle>Amount:</InfoTitle>
             <InfoValue>
               <TokenValue value={amount} />
             </InfoValue>
-          </BalanceInfo>
-          <BalanceInfo>
+          </BalanceInfoNarrow>
+          <BalanceInfoNarrow>
             <InfoTitle>Transaction fee:</InfoTitle>
             <InfoValue>
               <TokenValue value={paymentInfo?.partialFee.toBn()} />
@@ -96,7 +97,7 @@ export function SignTransferModal({ onClose, from, amount, to, onSign }: Props) 
                 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae.Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
               }
             />
-          </BalanceInfo>
+          </BalanceInfoNarrow>
         </TransactionInfo>
         <ButtonPrimaryMedium onClick={send} disabled={isSending}>
           Sign transaction and Transfer

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
 import { Account } from '../../../common/types'
 import { useBalance } from '../../../hooks/useBalance'
-import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
+import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { TokenValue } from '../../typography'
 
@@ -19,12 +19,12 @@ export function OptionAccount({ account, onChange }: Props) {
     <OptionComponentContainer onClick={() => onChange && onChange(account)}>
       <OptionComponent>
         <AccountInfo account={account} />
-        <BalanceInfo>
+        <BalanceInfoInRow>
           <InfoTitle>Transferable balance</InfoTitle>
           <InfoValue>
             <TokenValue value={balance?.transferable} />
           </InfoValue>
-        </BalanceInfo>
+        </BalanceInfoInRow>
       </OptionComponent>
     </OptionComponentContainer>
   )

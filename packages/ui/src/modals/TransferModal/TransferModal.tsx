@@ -94,17 +94,24 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     return <SignTransferModal onClose={onClose} from={transferFrom} amount={amount} to={transferTo} onSign={onSign} />
   }
 
-  const loremDescription =
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. ' +
-    'Minus, a saepe ducimus qui quo optio totam explicabo delectus recusandae officia tenetur molestias,' +
-    ' excepturi, amet corrupti reiciendis quam nulla magni esse?'
-
   if (step === 'EXTENSION_SIGN') {
-    return <WaitModal title="Waiting for the extension" description={loremDescription} />
+    return (
+      <WaitModal
+        title="Waiting for the extension"
+        description={'Please, sign the transaction using external signer app.'}
+      />
+    )
   }
 
   if (step === 'SENDING') {
-    return <WaitModal title="Wait for the transaction" description={loremDescription} />
+    return (
+      <WaitModal
+        title="Pending transaction"
+        description={
+          'We are waiting for your trasaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim.'
+        }
+      />
+    )
   }
 
   if (step === 'SUCCESS') {

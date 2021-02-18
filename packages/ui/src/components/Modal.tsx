@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
-import { BorderRad, Colors, Shadows } from '../constants'
+import { ValueInJoys } from '../components/typography/TokenValue'
+import { BorderRad, Colors, Fonts, Shadows } from '../constants'
 import { CloseButton } from './buttons'
 import { Text } from './typography'
 
@@ -23,12 +24,15 @@ interface ModalProps {
   modalSize: string
   modalHeight?: string
   children: ReactNode
+  modalBlack?: boolean
 }
 
-export const Modal = ({ modalHeight = 'm', children, modalSize }: ModalProps) => {
+export const Modal = ({ modalHeight = 'm', children, modalSize, modalBlack }: ModalProps) => {
   return ReactDOM.createPortal(
-    <ModalGlass modalHeight={modalHeight} modalSize={modalSize}>
-      <ModalWrap modalMaxSize={modalSize}>{children}</ModalWrap>
+    <ModalGlass modalHeight={modalHeight} modalSize={modalSize} modalBlack={modalBlack}>
+      <ModalWrap modalMaxSize={modalSize} modalBlack={modalBlack}>
+        {children}
+      </ModalWrap>
     </ModalGlass>,
     document.body
   )
@@ -47,7 +51,7 @@ export const ModalGlass = styled.div<ModalProps>`
   top: 0;
   width: 100%;
   height: 100%;
-  padding: ${({ modalHeight }) => {
+  padding-top: ${({ modalHeight }) => {
     switch (modalHeight) {
       case 's':
         return '0px'
@@ -57,17 +61,35 @@ export const ModalGlass = styled.div<ModalProps>`
         return '48px'
     }
   }};
+  padding-left: ${({ modalHeight }) => {
+    switch (modalHeight) {
+      case 'm':
+        return '44px'
+    }
+  }};
   background-color: ${Colors.Black[700.75]};
   color: ${Colors.Black[900]};
   z-index: 100000;
 `
+
+export const ModalBody = styled.div`
+  display: grid;
+  grid-area: modalbody;
+  grid-row-gap: 16px;
+  padding: 24px 24px 48px;
+  background-color: ${Colors.Black[50]};
+  border-top: 1px solid ${Colors.Black[200]};
+  border-bottom: 1px solid ${Colors.Black[200]};
+`
+
 interface ModalWrapProps {
   modalMaxSize: string
+  modalBlack?: boolean
 }
 export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 76px auto 72px;
+  grid-template-rows: auto auto auto;
   grid-template-areas:
     'modalheader'
     'modalbody'
@@ -91,6 +113,18 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   height: min-content;
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
+
+  ${ModalBody} {
+    ${({ modalBlack }) => {
+      switch (modalBlack) {
+        case true:
+          return `
+          background-color: ${Colors.Black[800]};
+          color: ${Colors.White};
+          `
+      }
+    }};
+  }
 `
 
 export const ModalHeaderIcon = styled.div`
@@ -98,11 +132,8 @@ export const ModalHeaderIcon = styled.div`
   justify-items: center;
   align-items: center;
   width: fit-content;
-  min-width: 28px;
-  height: 100%;
-  min-height: 28px;
-  font-size: 28px;
-  line-height: 28px;
+  height: 24px;
+  width: 24px;
 
   svg {
     height: 100%;
@@ -122,22 +153,13 @@ const ModalTopBar = styled.header.attrs((props: TopBarProps) => ({
   position: relative;
   grid-auto-flow: column;
   grid-area: modalheader;
-  grid-template-columns: ${(props) => (props.columns > 2 ? '40px 1fr 40px' : '1fr 40px')};
+  grid-template-columns: ${(props) => (props.columns > 2 ? 'auto 1fr 40px' : '1fr 40px')};
   justify-content: start;
-  grid-column-gap: 12px;
+  grid-column-gap: 16px;
   align-items: center;
+  height: 76px;
   padding: 24px;
   border-radius: 2px 2px 0 0;
-`
-
-export const ModalBody = styled.div`
-  display: grid;
-  grid-area: modalbody;
-  grid-row-gap: 16px;
-  padding: 24px 24px 48px;
-  background-color: ${Colors.Black[50]};
-  border-top: 1px solid ${Colors.Black[200]};
-  border-bottom: 1px solid ${Colors.Black[200]};
 `
 
 export const ScrolledModalBody = styled(ModalBody)`
@@ -146,17 +168,19 @@ export const ScrolledModalBody = styled(ModalBody)`
 `
 
 export const ResultModalBody = styled(ModalBody)`
-  grid-row-gap: 24px;
-  padding: 40px;
+  position: relative;
+  grid-row-gap: 16px;
+  padding: 48px 44px;
   justify-items: center;
   border: none;
   background-color: ${Colors.White};
-  min-height: 350px;
+  min-height: 312px;
 `
-export const SuccessModalBody = styled(ResultModalBody)`
+export const SuccessModalBody = styled(ModalBody)`
   grid-row-gap: 8px;
-  padding: 8px 24px 40px;
-  text-align: left;
+  background-color: ${Colors.White};
+  border: none;
+  padding: 12px 24px 40px;
 `
 export const SignTransferContainer = styled.div`
   display: grid;
@@ -174,17 +198,42 @@ export const ModalFooter = styled.footer`
   justify-items: end;
   align-items: center;
   width: fit-content;
+  height: 72px;
   padding: 12px 16px;
   border-radius: 0 0 2px 2px;
 `
 
-export const ModalTitle = styled.h4``
+export const ModalTitle = styled.h4`
+  .red-title {
+    color: ${Colors.Red[400]};
+  }
+`
 
 const CloseModalButton = styled(CloseButton)`
   position: absolute;
   right: 16px;
 `
+export const CloseSmallModalButton = styled(CloseModalButton)`
+  position: absolute;
+  top: 24px;
+  right: 24px;
+`
 
 export const ResultText = styled(Text)`
   text-align: center;
+
+  ${ValueInJoys} {
+    font-family: ${Fonts.Body};
+    font-weight: 700;
+    color: ${Colors.Black[700]};
+    &:after {
+      font-family: ${Fonts.Body};
+      font-weight: 700;
+      color: ${Colors.Black[700]};
+    }
+  }
+`
+
+export const ResultTextWhite = styled(ResultText)`
+  color: ${Colors.Black[400]};
 `

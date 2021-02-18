@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ArrowDownExpandedIcon, SuccessIcon } from '../../components/icons'
-import { ModalHeader, Modal, SuccessModalBody } from '../../components/Modal'
+import { Modal, ModalHeader, SuccessModalBody } from '../../components/Modal'
 import { TokenValue } from '../../components/typography'
 import { Account } from '../../common/types'
 import { useBalance } from '../../hooks/useBalance'
@@ -43,7 +43,7 @@ export function TransactionSuccessModal({ onClose, from, to, amount, fee }: Prop
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <SuccessModalBody>
         <TransactionInfoLabel style={{ marginBottom: '28px', justifySelf: 'start' }}>
-          You have just successfully transferred balance from
+          You have just successfully Transferred balance from
         </TransactionInfoLabel>
         <LockedAccount>
           <AccountInfo account={from} />

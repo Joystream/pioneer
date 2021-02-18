@@ -13,7 +13,7 @@ export const TokenValue = React.memo(({ className, value }: Props) => {
   return value ? <ValueInJoys className={className}>{formatTokenValue(value)}</ValueInJoys> : <span>-</span>
 })
 
-const ValueInJoys = styled.span`
+export const ValueInJoys = styled.span`
   display: inline-grid;
   position: relative;
   grid-auto-flow: column;
@@ -33,5 +33,16 @@ const ValueInJoys = styled.span`
     color: ${Colors.Black[400]};
     text-transform: uppercase;
     font-family: ${Fonts.Title};
+  }
+`
+
+export const ValueInJoysInText = styled(ValueInJoys)`
+  font-family: ${Fonts.Body};
+  font-weight: 700;
+  color: ${Colors.Black[700]};
+  &:after {
+    font-family: ${Fonts.Body};
+    font-weight: 700;
+    color: ${Colors.Black[700]};
   }
 `

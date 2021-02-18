@@ -4,7 +4,7 @@ import { Account } from '../../../common/types'
 import { Colors, Sizes } from '../../../constants'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
-import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
+import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
@@ -66,12 +66,12 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
         {selectedOption && (
           <SelectedOption>
             <AccountInfo account={selectedOption} />
-            <BalanceInfo>
+            <BalanceInfoInRow>
               <InfoTitle>Transferable balance</InfoTitle>
               <InfoValue>
                 <TokenValue value={balance?.transferable} />
               </InfoValue>
-            </BalanceInfo>
+            </BalanceInfoInRow>
           </SelectedOption>
         )}
         {!selectedOption && <Empty type={'text'} placeholder={'Select account or paste account address'} />}
