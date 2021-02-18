@@ -64,8 +64,12 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
             />
           </AmountInputBlock>
           <AmountButtons>
-            <AmountButton onClick={setHalf}>Use half</AmountButton>
-            <AmountButton onClick={setMax}>Use max</AmountButton>
+            <AmountButton onClick={setHalf} disabled={isValueDisabled}>
+              Use half
+            </AmountButton>
+            <AmountButton onClick={setMax} disabled={isValueDisabled}>
+              Use max
+            </AmountButton>
           </AmountButtons>
         </TransactionAmount>
         <Row>

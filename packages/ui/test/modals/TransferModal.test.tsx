@@ -75,16 +75,22 @@ describe('UI: TransferModal', () => {
   })
 
   it('Enables value input', () => {
-    const { getByLabelText, getByText } = renderModal({})
+    const { getByLabelText, getByText, getByRole } = renderModal({})
 
     const input = getByLabelText(/number of tokens/i) as HTMLInputElement
+    const useHalfButton = getByRole('button', { name: /use half/i }) as HTMLButtonElement
+    const useMaxButton = getByRole('button', { name: /use max/i }) as HTMLButtonElement
 
     expect(input.disabled).to.be.true
+    expect(useHalfButton.disabled).to.be.true
+    expect(useMaxButton.disabled).to.be.true
 
     selectAccount('From', 'alice', getByText)
     selectAccount('Destination account', 'bob', getByText)
 
     expect(input.disabled).to.be.false
+    expect(useHalfButton.disabled).to.be.false
+    expect(useMaxButton.disabled).to.be.false
   })
 
   it('Renders an Authorize transaction step', () => {
