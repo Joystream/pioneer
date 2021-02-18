@@ -19,9 +19,7 @@ import { KeyringContext } from '../../src/providers/keyring/context'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
 describe('UI: TransferModal', () => {
-  before(async () => {
-    await cryptoWaitReady()
-  })
+  before(cryptoWaitReady)
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,

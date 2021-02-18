@@ -19,9 +19,7 @@ import { selectAccount } from '../helpers/selectAccount'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
 describe('UI: AddMembershipModal', () => {
-  before(async () => {
-    await cryptoWaitReady()
-  })
+  before(cryptoWaitReady)
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,
