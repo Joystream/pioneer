@@ -1,6 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useCallback, useEffect, useState } from 'react'
 import * as Yup from 'yup'
+import { Account, Member } from '../../common/types'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import {
   Checkbox,
@@ -15,23 +16,13 @@ import { Help } from '../../components/Help'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../../components/Modal'
 import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
 import { Text, TokenValue } from '../../components/typography'
-import { Account } from '../../hooks/types'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 
 const AvatarSchema = Yup.string().url()
 
-export interface Params {
-  name: string
-  handle: string
-  about: string
-  avatar: string
-  rootAccount: Account
-  controllerAccount: Account
-}
-
 interface CreateProps {
   onClose: () => void
-  onSubmit: (params: Params) => void
+  onSubmit: (params: Member) => void
   membershipPrice?: BalanceOf
 }
 
@@ -64,7 +55,14 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
       return
     }
 
-    onSubmit({ about, name, handle, avatar, controllerAccount, rootAccount })
+    onSubmit({
+      about,
+      name,
+      handle,
+      avatarURI: avatar,
+      controllerAccount: controllerAccount,
+      rootAccount: rootAccount,
+    })
   }
   const stubHandler = () => undefined
 
@@ -96,13 +94,20 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         </Row>
 
         <Row>
-          <Label>Member Name *</Label>
-          <TextInput type="text" placeholder="Type" value={name} onChange={(event) => setName(event.target.value)} />
+          <Label htmlFor="member-name">Member Name *</Label>
+          <TextInput
+            id="member-name"
+            type="text"
+            placeholder="Type"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
         </Row>
 
         <Row>
-          <Label>Membership handle *</Label>
+          <Label htmlFor="member-handle">Membership handle *</Label>
           <TextInput
+            id="member-handle"
             type="text"
             placeholder="Type"
             value={handle}
@@ -111,13 +116,20 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         </Row>
 
         <Row>
-          <Label>About Member</Label>
-          <TextArea value={about} placeholder="Type" rows={4} onChange={(event) => setAbout(event.target.value)} />
+          <Label htmlFor="member-about">About Member</Label>
+          <TextArea
+            id="member-about"
+            value={about}
+            placeholder="Type"
+            rows={4}
+            onChange={(event) => setAbout(event.target.value)}
+          />
         </Row>
 
         <Row>
-          <Label>Member Avatar</Label>
+          <Label htmlFor="member-avatar">Member Avatar</Label>
           <TextInput
+            id="member-avatar"
             type="text"
             placeholder="Image URL"
             value={avatar}

@@ -1,8 +1,15 @@
 import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import BN from 'bn.js'
-import { Account, Balances } from './types'
+import { Account } from '../common/types'
 import { useApi } from './useApi'
 import { useObservable } from './useObservable'
+
+export interface Balances {
+  total: BN
+  locked: BN
+  recoverable: BN
+  transferable: BN
+}
 
 export function toBalances(balances: DeriveBalancesAll): Balances {
   const { lockedBalance, availableBalance } = balances

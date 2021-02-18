@@ -3,6 +3,7 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { useState } from 'react'
 import { Observable } from 'rxjs'
+import { Member } from '../../common/types'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
@@ -12,24 +13,24 @@ import { Text, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
-import { Params } from './MembershipFormModal'
 
 interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
-  transactionParams: Params
+  transactionParams: Member
   onSign: (transaction: Observable<ISubmittableResult>, fee: BN) => void
 }
 
 export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionParams, onSign }: SignProps) => {
   const { api } = useApi()
   const [from, setFrom] = useState(transactionParams.controllerAccount)
+
   const transaction = api?.tx?.members?.buyMembership({
     root_account: transactionParams.rootAccount.address,
     controller_account: transactionParams.controllerAccount.address,
     name: transactionParams.name,
     handle: transactionParams.handle,
-    avatar_uri: transactionParams.avatar,
+    avatar_uri: transactionParams.avatarURI,
     about: transactionParams.about,
   })
   const { paymentInfo, isSending, send } = useSignAndSendTransaction({ transaction, from, onSign })
@@ -38,16 +39,16 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
     <Modal modalSize="m" modalHeight="s">
       <ModalHeader onClick={onClose} title="Authorize transaction" />
       <ModalBody>
-        <Text>You are intend to create a new membership</Text>
+        <Text>You are intend to create a new membership.</Text>
         <Text>
-          The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />
+          The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
         </Text>
         <Text>
-          Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction
+          Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </Text>
         <Row>
           <Label>Sending from account</Label>
-          <SelectAccount onChange={(account) => setFrom(account)} />
+          <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
         </Row>
       </ModalBody>
       <ModalFooter>

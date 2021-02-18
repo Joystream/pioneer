@@ -1,30 +1,28 @@
-import { Membership } from '@joystream/types/members'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { Member } from '../../../common/types'
+import { Avatar } from '../../../components/Avatar'
 import { ButtonGhostMediumSquare } from '../../../components/buttons'
 import { MembershipAbout } from './MembershipAbout'
 
 interface MemberProps {
-  member: Membership
+  member: Member
 }
 
-export const Member = ({ member }: MemberProps) => {
+export const MemberItem = ({ member }: MemberProps) => {
   const [isAboutOpen, setAboutOpen] = useState(false)
 
   return (
     <div>
-      <Avatar src={member.handle_hash.toString()} />
-      <MemberHandle onClick={() => setAboutOpen(true)}>{member.handle_hash}</MemberHandle>
-      <p>0 times</p>
+      <div>
+        <Avatar avatarURI={member.avatarURI} />
+        <MemberHandle onClick={() => setAboutOpen(true)}>{member.handle}</MemberHandle>
+      </div>
       <ButtonGhostMediumSquare>Edit</ButtonGhostMediumSquare>
       {isAboutOpen && <MembershipAbout member={member} onClose={() => setAboutOpen(false)} />}
     </div>
   )
 }
-
-export const Avatar = styled.img`
-  border-radius: 50%;
-`
 
 const MemberHandle = styled.a`
   font-weight: bold;

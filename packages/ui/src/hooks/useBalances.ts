@@ -1,9 +1,9 @@
 import { combineLatest } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Address, Balances } from './types'
+import { Address } from '../common/types'
 import { useAccounts } from './useAccounts'
 import { useApi } from './useApi'
-import { toBalances } from './useBalance'
+import { Balances, toBalances } from './useBalance'
 import { useObservable } from './useObservable'
 
 type AddressToBalanceMap = {

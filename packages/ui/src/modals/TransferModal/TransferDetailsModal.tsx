@@ -8,7 +8,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Mod
 import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
 import { TokenValue } from '../../components/typography'
 import { Colors } from '../../constants'
-import { Account } from '../../hooks/types'
+import { Account } from '../../common/types'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { AmountInputBlock, BalanceInfo, InfoTitle, InfoValue, LockedAccount, Row, TransactionAmount } from '../common'

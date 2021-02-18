@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import { Balances } from './types'
+import { Balances } from './useBalance'
 import { useBalances } from './useBalances'
 
 export const zeroBalance = () => ({

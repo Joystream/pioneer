@@ -1,12 +1,13 @@
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useState } from 'react'
 import { Observable, Subscription } from 'rxjs'
+import { Member } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
 import { WaitModal } from '../WaitModal'
 import { AddMembershipFailureModal } from './AddMembershipFailureModal'
 import { AddMembershipSuccessModal } from './AddMembershipSuccessModal'
-import { MembershipFormModal, Params } from './MembershipFormModal'
+import { MembershipFormModal } from './MembershipFormModal'
 import { SignCreateMemberModal } from './SignCreateMemberModal'
 
 interface MembershipModalProps {
@@ -19,10 +20,10 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
   const [state, setState] = useState<ModalState>('Create')
-  const [transactionParams, setParams] = useState<Params>()
+  const [transactionParams, setParams] = useState<Member>()
   const [, setSubscription] = useState<Subscription | undefined>(undefined)
 
-  const onSubmit = (params: Params) => {
+  const onSubmit = (params: Member) => {
     setState('Authorize')
     setParams(params)
   }
@@ -75,7 +76,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   }
 
   if (state === 'SUCCESS') {
-    return <AddMembershipSuccessModal onClose={onClose} params={transactionParams} />
+    return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} />
   }
 
   return <AddMembershipFailureModal onClose={onClose} params={transactionParams} />

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { Colors, Sizes } from '../../../constants'
-import { Account } from '../../../hooks/types'
+import { Account } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
@@ -14,17 +14,18 @@ import { OptionListAccount } from './OptionListAccount'
 interface Props {
   onChange: (account: Account) => void
   filter?: (account: Account) => boolean
+  selected?: Account
 }
 
 export const filterAccount = (filterOut: Account | undefined) => {
   return filterOut ? (account: Account) => account.address !== filterOut.address : () => true
 }
 
-export const SelectAccount = React.memo(({ onChange, filter }: Props) => {
+export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
   const { allAccounts } = useAccounts()
   const options = allAccounts.filter(filter || (() => true))
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState<Account>(options[0])
+  const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
 
   const onOptionClick = useCallback(

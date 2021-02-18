@@ -9,7 +9,7 @@ import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
 import { ArrowInsideIcon } from '../../src/components/icons'
-import { Account } from '../../src/hooks/types'
+import { Account } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
@@ -19,9 +19,7 @@ import { KeyringContext } from '../../src/providers/keyring/context'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
 describe('UI: TransferModal', () => {
-  before(async () => {
-    await cryptoWaitReady()
-  })
+  before(cryptoWaitReady)
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,

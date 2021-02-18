@@ -8,7 +8,7 @@ import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
-import { Account } from '../../src/hooks/types'
+import { Account } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
@@ -19,9 +19,7 @@ import { selectAccount } from '../helpers/selectAccount'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
 describe('UI: AddMembershipModal', () => {
-  before(async () => {
-    await cryptoWaitReady()
-  })
+  before(cryptoWaitReady)
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,
@@ -82,38 +80,51 @@ describe('UI: AddMembershipModal', () => {
   })
 
   it('Enables button when valid form', async () => {
-    const { findByText, getByText, getAllByRole } = renderModal()
+    const { findByText, getByText, getByLabelText } = renderModal()
 
     const button = getByText(/^Create a membership$/i) as HTMLButtonElement
     expect(button.disabled).to.be.true
-    const [, termsCheckbox] = getAllByRole('checkbox')
-    const [, name, handle, about, avatar] = getAllByRole('textbox')
 
     selectAccount('Root account', 'bob', getByText)
     selectAccount('Controller account', 'alice', getByText)
-    fireEvent.change(name, { target: { value: 'Bobby Bob' } })
-    fireEvent.change(handle, { target: { value: 'bob' } })
-    fireEvent.change(about, { target: { value: "I'm Bob" } })
-    fireEvent.change(avatar, { target: { value: 'http://example.com/example.jpg' } })
-    fireEvent.click(termsCheckbox)
+    fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+    fireEvent.click(getByLabelText(/I agree to our terms/i))
 
+    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
+  })
+
+  it('Disables button when invalid avatar URL', async () => {
+    const { findByText, getByText, getByLabelText } = renderModal()
+
+    const button = getByText(/^Create a membership$/i) as HTMLButtonElement
+    expect(button.disabled).to.be.true
+
+    selectAccount('Root account', 'bob', getByText)
+    selectAccount('Controller account', 'alice', getByText)
+    fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+    fireEvent.click(getByLabelText(/I agree to our terms/i))
+
+    fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
+    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.true
+
+    fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
     expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
   })
 
   context('Authorize step', () => {
     const renderAuthorizeStep = async () => {
       const rendered = renderModal()
-      const { findByText, getByText, getAllByRole } = rendered
-      const [, termsCheckbox] = getAllByRole('checkbox')
-      const [, name, handle, about, avatar] = getAllByRole('textbox')
+      const { findByText, getByText, getByLabelText } = rendered
 
       selectAccount('Root account', 'bob', getByText)
       selectAccount('Controller account', 'alice', getByText)
-      fireEvent.change(name, { target: { value: 'Bobby Bob' } })
-      fireEvent.change(handle, { target: { value: 'bob' } })
-      fireEvent.change(about, { target: { value: "I'm Bob" } })
-      fireEvent.change(avatar, { target: { value: 'http://example.com/example.jpg' } })
-      fireEvent.click(termsCheckbox)
+      fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+      fireEvent.change(getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
+      fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
+      fireEvent.click(getByLabelText(/I agree to our terms/i))
 
       fireEvent.click(await findByText(/^Create a membership$/i))
 
@@ -121,9 +132,41 @@ describe('UI: AddMembershipModal', () => {
     }
 
     it('Renders authorize transaction', async () => {
-      const { getByText } = await renderAuthorizeStep()
+      const { getByText, getByRole } = await renderAuthorizeStep()
 
       expect(getByText('Authorize transaction')).to.exist
+      expect(getByText(/^Creation fee:/i)?.nextSibling?.textContent).to.equal('100')
+      expect(getByText(/^Transaction fee:/i)?.nextSibling?.textContent).to.equal('25')
+      expect(getByRole('heading', { name: /alice/i })).to.exist
+    })
+
+    context('Success', () => {
+      beforeEach(() => {
+        set(transaction, 'signAndSend', () =>
+          from([
+            set({}, 'status.isReady', true),
+            {
+              status: {
+                isInBlock: true,
+                asInBlock: {
+                  toString: () => '0x93XXX',
+                },
+              },
+            },
+          ])
+        )
+      })
+
+      it('Renders transaction success', async () => {
+        const { getByText } = await renderAuthorizeStep()
+        fireEvent.click(getByText(/^sign and create a member$/i))
+
+        const byText = getByText('Success')
+        console.log(byText.parentElement?.parentElement?.outerHTML)
+        expect(byText).to.exist
+        expect(getByText(/^bobby bob/i)).to.exist
+        expect(getByText(/^realbobbybob/i)).to.exist
+      })
     })
   })
 
