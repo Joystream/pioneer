@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const cp = require('child_process')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 
@@ -16,12 +17,18 @@ module.exports = (env, argv) => ({
     }),
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
-      IS_DEVELOPMENT: argv.mode ==='development',
+      IS_DEVELOPMENT: argv.mode === 'development',
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
       process: 'process/browser.js',
     }),
+    new CopyPlugin({patterns: [
+      {
+        from: 'src/assets/favicon.svg',
+        to: ''
+      }
+    ]})
   ],
   module: {
     rules: [
