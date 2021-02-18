@@ -30,6 +30,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
   const filterSender = useCallback(filterAccount(recipient), [recipient])
   const transferableBalance = senderBalance?.transferable ?? new BN(0)
   const filterRecipient = useCallback(filterAccount(sender), [sender])
+  const isValueDisabled = !sender || !recipient
 
   const isZero = new BN(amount).lte(new BN(0))
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
@@ -59,6 +60,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
               value={amount}
               onChange={(event) => setAmount(event.target.value)}
               placeholder="0"
+              disabled={isValueDisabled}
             />
           </AmountInputBlock>
           <AmountButtons>
