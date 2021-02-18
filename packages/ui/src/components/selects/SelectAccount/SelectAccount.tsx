@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { Colors, Sizes } from '../../../constants'
 import { Account } from '../../../common/types'
@@ -27,6 +27,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
+  const selectNode = useRef<HTMLDivElement>(null)
 
   const onOptionClick = useCallback(
     (option: Account) => {
@@ -37,8 +38,19 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     [filter]
   )
 
+  useEffect(() => {
+    const clickListener = (event: MouseEvent) => {
+      if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', clickListener)
+
+    return () => document.removeEventListener('mousedown', clickListener)
+  }, [isOpen])
+
   return (
-    <SelectComponent>
+    <SelectComponent ref={selectNode}>
       <Toggle onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
         {selectedOption && (
           <SelectedOption>
