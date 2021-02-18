@@ -30,11 +30,11 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
   const filterSender = useCallback(filterAccount(recipient), [recipient])
   const transferableBalance = senderBalance?.transferable ?? new BN(0)
   const filterRecipient = useCallback(filterAccount(sender), [sender])
-  const isValueDisabled = !sender || !recipient
 
   const isZero = new BN(amount).lte(new BN(0))
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
   const isTransferDisabled = isZero || isOverBalance || !recipient
+  const isValueDisabled = !sender
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => setAmount(transferableBalance.toString())

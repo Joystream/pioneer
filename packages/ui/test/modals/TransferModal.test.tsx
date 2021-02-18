@@ -86,7 +86,6 @@ describe('UI: TransferModal', () => {
     expect(useMaxButton.disabled).to.be.true
 
     selectAccount('From', 'alice', getByText)
-    selectAccount('Destination account', 'bob', getByText)
 
     expect(input.disabled).to.be.false
     expect(useHalfButton.disabled).to.be.false
