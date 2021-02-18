@@ -41,12 +41,17 @@ export const GlobalStyle = createGlobalStyle`
   body, html {
     margin: 0;
     width: 100%;
-    min-height: 100%;
-    height: auto;
+    height: 100%;
     background-color: ${Colors.White};
     font-family: ${Fonts.Title};
     font-size: 14px;
     color: ${Colors.Black[900]};
+    overscroll-behavior-y: none;
+    overflow: hidden;
+  }
+  body > #app {
+    height: 100%;
+    overflow-y: scroll;
   }
   button {
     font-family: ${Fonts.Title};
