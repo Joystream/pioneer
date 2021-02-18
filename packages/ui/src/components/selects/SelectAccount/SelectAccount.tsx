@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { Colors, Sizes } from '../../../constants'
 import { Account } from '../../../common/types'
+import { Colors, Sizes } from '../../../constants'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfo, InfoTitle, InfoValue } from '../../../modals/common'
@@ -27,6 +27,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
+  const selectNode = useRef<HTMLDivElement>(null)
 
   const onOptionClick = useCallback(
     (option: Account) => {
@@ -37,8 +38,30 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     [filter]
   )
 
+  useEffect(() => {
+    const clickListener = (event: MouseEvent) => {
+      if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', clickListener)
+
+    return () => document.removeEventListener('mousedown', clickListener)
+  }, [isOpen])
+
+  useEffect(() => {
+    const escListener = (event: KeyboardEvent) => {
+      if (isOpen && event.key === 'Escape') {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('keydown', escListener)
+
+    return () => document.removeEventListener('keydown', escListener)
+  }, [isOpen])
+
   return (
-    <SelectComponent>
+    <SelectComponent ref={selectNode}>
       <Toggle onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
         {selectedOption && (
           <SelectedOption>
