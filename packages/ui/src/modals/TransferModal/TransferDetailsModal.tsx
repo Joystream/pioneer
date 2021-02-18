@@ -1,6 +1,7 @@
 import BN from 'bn.js'
-import React, { ReactElement, useState, useCallback } from 'react'
+import React, { ReactElement, useCallback, useState } from 'react'
 import styled from 'styled-components'
+import { Account } from '../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons'
 import { Label, NumberInput } from '../../components/forms'
@@ -8,9 +9,9 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Mod
 import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
 import { TokenValue } from '../../components/typography'
 import { Colors } from '../../constants'
-import { Account } from '../../common/types'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
+import { formatTokenValue } from '../../utils/formatters'
 import { AmountInputBlock, BalanceInfo, InfoTitle, InfoValue, LockedAccount, Row, TransactionAmount } from '../common'
 
 interface Props {
@@ -21,6 +22,8 @@ interface Props {
   title: string
   icon: ReactElement
 }
+
+const cleanInputValue = (value: string) => value.replace(/,/g, '')
 
 export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon }: Props) {
   const [recipient, setRecipient] = useState<Account | undefined>(to)
@@ -43,7 +46,6 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
       onAccept(new BN(amount), sender, recipient)
     }
   }
-
   return (
     <Modal modalSize={'m'}>
       <ModalHeader onClick={onClose} title={title} icon={icon} />
@@ -57,8 +59,8 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
             <Label htmlFor={'amount-input'}>Number of tokens</Label>
             <NumberInput
               id="amount-input"
-              value={amount}
-              onChange={(event) => setAmount(event.target.value)}
+              value={formatTokenValue(new BN(amount))}
+              onChange={(event) => setAmount(cleanInputValue(event.target.value))}
               placeholder="0"
               disabled={isValueDisabled}
             />
