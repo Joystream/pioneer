@@ -176,6 +176,10 @@ const AccountItem = styled.li`
   padding: 16px 0 16px 14px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
+
+  & + & {
+    margin-top: -1px;
+  }
 `
 
 const AccountBalance = styled.p``

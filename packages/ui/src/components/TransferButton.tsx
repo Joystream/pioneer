@@ -51,4 +51,5 @@ const ButtonForTransferStyled = styled(ButtonPrimarySquare)`
   width: 32px;
   height: 32px;
   grid-area: balancetransfer;
+  justify-self: end;
 `

@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Shadows, Sizes, Transitions } from '../../../constants'
+import { BorderRad, Shadows, Sizes, Transitions, Colors } from '../../../constants'
 import { Account } from '../../../common/types'
-import { OptionAccount } from './OptionAccount'
+import { OptionAccount, OptionComponentContainer, OptionComponent } from './OptionAccount'
 
 interface Props {
   options: Array<Account>
@@ -27,8 +27,10 @@ const OptionsListComponent = styled.ul`
   height: auto;
   max-height: calc(${Sizes.accountSelectHeight} * 2.5);
   margin: 0;
+  margin-top: -1px;
   border-radius: ${BorderRad.s};
-  background-color: transparent;
+  border: 1px solid ${Colors.Black[300]};
+  background-color: ${Colors.White};
   box-shadow: ${Shadows.select};
   overflow-y: scroll;
   transition: ${Transitions.all};
@@ -46,5 +48,24 @@ const OptionsListComponent = styled.ul`
       opacity: 0;
       max-height: 0;
     }
+  }
+
+  ${OptionComponentContainer} {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+
+    &:first-child {
+      border-top: none;
+    }
+    &:last-child {
+      border-bottom: none;
+    }
+    ${OptionComponent} {
+      border-radius: 0;
+    }
+  }
+  ${OptionComponentContainer} + ${OptionComponentContainer} {
+    margin-top: -1px;
   }
 `

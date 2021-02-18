@@ -30,7 +30,7 @@ export function OptionAccount({ account, onChange }: Props) {
   )
 }
 
-const OptionComponentContainer = styled.li`
+export const OptionComponentContainer = styled.li`
   display: flex;
   width: 100%;
   height: 100%;
@@ -39,7 +39,7 @@ const OptionComponentContainer = styled.li`
   background-color: transparent;
 `
 
-const OptionComponent = styled.div`
+export const OptionComponent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
