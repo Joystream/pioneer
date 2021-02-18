@@ -94,13 +94,20 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         </Row>
 
         <Row>
-          <Label>Member Name *</Label>
-          <TextInput type="text" placeholder="Type" value={name} onChange={(event) => setName(event.target.value)} />
+          <Label htmlFor="member-name">Member Name *</Label>
+          <TextInput
+            id="member-name"
+            type="text"
+            placeholder="Type"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
         </Row>
 
         <Row>
-          <Label>Membership handle *</Label>
+          <Label htmlFor="member-handle">Membership handle *</Label>
           <TextInput
+            id="member-handle"
             type="text"
             placeholder="Type"
             value={handle}
@@ -109,13 +116,20 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         </Row>
 
         <Row>
-          <Label>About Member</Label>
-          <TextArea value={about} placeholder="Type" rows={4} onChange={(event) => setAbout(event.target.value)} />
+          <Label htmlFor="member-about">About Member</Label>
+          <TextArea
+            id="member-about"
+            value={about}
+            placeholder="Type"
+            rows={4}
+            onChange={(event) => setAbout(event.target.value)}
+          />
         </Row>
 
         <Row>
-          <Label>Member Avatar</Label>
+          <Label htmlFor="member-avatar">Member Avatar</Label>
           <TextInput
+            id="member-avatar"
             type="text"
             placeholder="Image URL"
             value={avatar}

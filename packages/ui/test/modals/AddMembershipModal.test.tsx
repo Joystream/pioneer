@@ -82,20 +82,18 @@ describe('UI: AddMembershipModal', () => {
   })
 
   it('Enables button when valid form', async () => {
-    const { findByText, getByText, getAllByRole } = renderModal()
+    const { findByText, getByText, getByLabelText } = renderModal()
 
     const button = getByText(/^Create a membership$/i) as HTMLButtonElement
     expect(button.disabled).to.be.true
-    const [, termsCheckbox] = getAllByRole('checkbox')
-    const [, name, handle, about, avatar] = getAllByRole('textbox')
 
     selectAccount('Root account', 'bob', getByText)
     selectAccount('Controller account', 'alice', getByText)
-    fireEvent.change(name, { target: { value: 'Bobby Bob' } })
-    fireEvent.change(handle, { target: { value: 'bob' } })
-    fireEvent.change(about, { target: { value: "I'm Bob" } })
-    fireEvent.change(avatar, { target: { value: 'http://example.com/example.jpg' } })
-    fireEvent.click(termsCheckbox)
+    fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+    fireEvent.change(getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
+    fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
+    fireEvent.click(getByLabelText(/I agree to our terms/i))
 
     expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
   })
@@ -103,17 +101,15 @@ describe('UI: AddMembershipModal', () => {
   context('Authorize step', () => {
     const renderAuthorizeStep = async () => {
       const rendered = renderModal()
-      const { findByText, getByText, getAllByRole } = rendered
-      const [, termsCheckbox] = getAllByRole('checkbox')
-      const [, name, handle, about, avatar] = getAllByRole('textbox')
+      const { findByText, getByText, getByLabelText } = rendered
 
       selectAccount('Root account', 'bob', getByText)
       selectAccount('Controller account', 'alice', getByText)
-      fireEvent.change(name, { target: { value: 'Bobby Bob' } })
-      fireEvent.change(handle, { target: { value: 'bob' } })
-      fireEvent.change(about, { target: { value: "I'm Bob" } })
-      fireEvent.change(avatar, { target: { value: 'http://example.com/example.jpg' } })
-      fireEvent.click(termsCheckbox)
+      fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+      fireEvent.change(getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
+      fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
+      fireEvent.click(getByLabelText(/I agree to our terms/i))
 
       fireEvent.click(await findByText(/^Create a membership$/i))
 
@@ -150,7 +146,11 @@ describe('UI: AddMembershipModal', () => {
         const { getByText } = await renderAuthorizeStep()
         fireEvent.click(getByText(/^sign and create a member$/i))
 
-        expect(getByText('Success')).to.exist
+        const byText = getByText('Success')
+        console.log(byText.parentElement?.parentElement?.outerHTML)
+        expect(byText).to.exist
+        expect(getByText(/^bobby bob/i)).to.exist
+        expect(getByText(/^realbobbybob/i)).to.exist
       })
     })
   })

@@ -4,7 +4,7 @@ import { Member } from '../../common/types'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/MemberInfo'
-import { Modal, ModalFooter, ModalHeader, SuccessModalBody } from '../../components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Text } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
 
@@ -17,15 +17,15 @@ export function AddMembershipSuccessModal({ onClose, member }: Props) {
   return (
     <Modal modalSize="m" modalHeight="s">
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
-      <SuccessModalBody>
+      <ModalBody>
         <Text>You have just successfully create a new membership</Text>
         <MemberRow>
           <MemberInfo member={member} />
         </MemberRow>
-        <ModalFooter>
-          <ButtonPrimaryMedium disabled>View my profile</ButtonPrimaryMedium>
-        </ModalFooter>
-      </SuccessModalBody>
+      </ModalBody>
+      <ModalFooter>
+        <ButtonPrimaryMedium disabled>View my profile</ButtonPrimaryMedium>
+      </ModalFooter>
     </Modal>
   )
 }
