@@ -125,6 +125,31 @@ describe('UI: AddMembershipModal', () => {
 
       expect(getByText('Authorize transaction')).to.exist
     })
+
+    context('Success', () => {
+      beforeEach(() => {
+        set(transaction, 'signAndSend', () =>
+          from([
+            set({}, 'status.isReady', true),
+            {
+              status: {
+                isInBlock: true,
+                asInBlock: {
+                  toString: () => '0x93XXX',
+                },
+              },
+            },
+          ])
+        )
+      })
+
+      it('Renders transaction success', async () => {
+        const { getByText } = await renderAuthorizeStep()
+        fireEvent.click(getByText(/^sign and create a member$/i))
+
+        expect(getByText('Success')).to.exist
+      })
+    })
   })
 
   function renderModal() {
