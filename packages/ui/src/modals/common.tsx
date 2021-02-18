@@ -55,7 +55,6 @@ export const TransactionInfo = styled.div`
 export const BalanceInfo = styled.div`
   display: inline-grid;
   position: relative;
-  width: fit-content;
   grid-template-columns: 1fr 168px;
   grid-template-rows: 1fr;
   align-items: center;
