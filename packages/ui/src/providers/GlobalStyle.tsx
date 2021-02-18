@@ -51,6 +51,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   body > #app {
     height: 100%;
+    overflow-x: hidden;
     overflow-y: scroll;
   }
   button {
