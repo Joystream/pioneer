@@ -49,6 +49,17 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     return () => document.removeEventListener('mousedown', clickListener)
   }, [isOpen])
 
+  useEffect(() => {
+    const escListener = (event: KeyboardEvent) => {
+      if (isOpen && event.key === 'Escape') {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('keydown', escListener)
+
+    return () => document.removeEventListener('keydown', escListener)
+  }, [isOpen])
+
   return (
     <SelectComponent ref={selectNode}>
       <Toggle onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
