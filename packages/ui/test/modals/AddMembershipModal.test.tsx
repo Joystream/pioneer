@@ -121,9 +121,12 @@ describe('UI: AddMembershipModal', () => {
     }
 
     it('Renders authorize transaction', async () => {
-      const { getByText } = await renderAuthorizeStep()
+      const { getByText, getByRole } = await renderAuthorizeStep()
 
       expect(getByText('Authorize transaction')).to.exist
+      expect(getByText(/^Creation fee:/i)?.nextSibling?.textContent).to.equal('100')
+      expect(getByText(/^Transaction fee:/i)?.nextSibling?.textContent).to.equal('25')
+      expect(getByRole('heading', { name: /alice/i })).to.exist
     })
 
     context('Success', () => {

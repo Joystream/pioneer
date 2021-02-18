@@ -14,17 +14,18 @@ import { OptionListAccount } from './OptionListAccount'
 interface Props {
   onChange: (account: Account) => void
   filter?: (account: Account) => boolean
+  selected?: Account
 }
 
 export const filterAccount = (filterOut: Account | undefined) => {
   return filterOut ? (account: Account) => account.address !== filterOut.address : () => true
 }
 
-export const SelectAccount = React.memo(({ onChange, filter }: Props) => {
+export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
   const { allAccounts } = useAccounts()
   const options = allAccounts.filter(filter || (() => true))
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState<Account>(options[0])
+  const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
 
   const onOptionClick = useCallback(

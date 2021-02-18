@@ -24,6 +24,7 @@ interface SignProps {
 export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionParams, onSign }: SignProps) => {
   const { api } = useApi()
   const [from, setFrom] = useState(transactionParams.controllerAccount)
+
   const transaction = api?.tx?.members?.buyMembership({
     root_account: transactionParams.rootAccount.address,
     controller_account: transactionParams.controllerAccount.address,
@@ -38,16 +39,16 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
     <Modal modalSize="m" modalHeight="s">
       <ModalHeader onClick={onClose} title="Authorize transaction" />
       <ModalBody>
-        <Text>You are intend to create a new membership</Text>
+        <Text>You are intend to create a new membership.</Text>
         <Text>
-          The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />
+          The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
         </Text>
         <Text>
-          Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction
+          Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </Text>
         <Row>
           <Label>Sending from account</Label>
-          <SelectAccount onChange={(account) => setFrom(account)} />
+          <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
         </Row>
       </ModalBody>
       <ModalFooter>
