@@ -13,7 +13,7 @@ export const TokenValue = React.memo(({ className, value }: Props) => {
   return value ? <ValueInJoys className={className}>{formatTokenValue(value)}</ValueInJoys> : <span>-</span>
 })
 
-const ValueInJoys = styled.span`
+export const ValueInJoys = styled.span`
   display: inline-grid;
   position: relative;
   grid-auto-flow: column;

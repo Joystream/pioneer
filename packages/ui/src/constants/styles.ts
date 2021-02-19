@@ -33,6 +33,27 @@ export const Colors = {
     100: '#D3DAFF',
     50: '#E7EBFF',
   },
+
+  Green: {
+    900: '#061612',
+    800: '#0A2C24',
+    700: '#105746',
+    600: '#12836A',
+    500: '#4DCAB1',
+    400: '#6FDFCB',
+    300: '#8EE6D6',
+    200: '#B0EFE4',
+    100: '#CEF5EE',
+    50: '#DDF9F4',
+  },
+
+  Red: {
+    400: '#FF3960',
+    300: '#FF6D87',
+    200: '#F695A4',
+    100: '#FFCBD9',
+    50: '#FEEAF1',
+  },
 }
 
 export const BorderRad = {

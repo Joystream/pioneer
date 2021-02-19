@@ -12,7 +12,15 @@ import { Colors } from '../../constants'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
-import { AmountInputBlock, BalanceInfo, InfoTitle, InfoValue, LockedAccount, Row, TransactionAmount } from '../common'
+import {
+  AmountInputBlock,
+  BalanceInfoInRow,
+  InfoTitle,
+  InfoValue,
+  LockedAccount,
+  Row,
+  TransactionAmount,
+} from '../common'
 
 interface Props {
   from?: Account
@@ -98,12 +106,12 @@ const SelectedAccount = ({ account }: SelectedAccountProps) => {
   return (
     <LockedAccount>
       <AccountInfo account={account} />
-      <BalanceInfo>
+      <BalanceInfoInRow>
         <InfoTitle>Transferable balance</InfoTitle>
         <InfoValue>
           <TokenValue value={transferable} />
         </InfoValue>
-      </BalanceInfo>
+      </BalanceInfoInRow>
     </LockedAccount>
   )
 }

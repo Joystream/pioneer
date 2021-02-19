@@ -105,7 +105,7 @@ describe('UI: TransferModal', () => {
 
     fireEvent.click(button)
 
-    expect(getByText('Authorize transaction')).to.exist
+    expect(getByText('Authorize Transaction')).to.exist
     expect(getByText(/Transaction fee:/i)?.parentNode?.textContent).to.match(/^Transaction fee:25/)
   })
 
@@ -126,7 +126,7 @@ describe('UI: TransferModal', () => {
 
       const { getByText } = renderAndSign()
 
-      expect(getByText('Wait for the transaction')).to.exist
+      expect(getByText('Pending transaction')).to.exist
     })
 
     context('Success', () => {
