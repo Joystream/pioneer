@@ -1,10 +1,9 @@
 import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
-import { ValueInJoys } from '../components/typography/TokenValue'
 import { BorderRad, Colors, Fonts, Shadows } from '../constants'
 import { CloseButton } from './buttons'
-import { Text } from './typography'
+import { Text, ValueInJoys } from './typography'
 
 interface Props {
   onClick: () => void
@@ -24,19 +23,20 @@ interface ModalProps {
   modalSize: string
   modalHeight?: string
   children: ReactNode
-  modalBlack?: boolean
+  isDark?: boolean
 }
 
-export const Modal = ({ modalHeight = 'm', children, modalSize, modalBlack }: ModalProps) => {
+export const Modal = ({ modalHeight = 'm', children, modalSize, isDark }: ModalProps) => {
   return ReactDOM.createPortal(
-    <ModalGlass modalHeight={modalHeight} modalSize={modalSize} modalBlack={modalBlack}>
-      <ModalWrap modalMaxSize={modalSize} modalBlack={modalBlack}>
+    <ModalGlass modalHeight={modalHeight} modalSize={modalSize} isDark={isDark}>
+      <ModalWrap modalMaxSize={modalSize} isDark={isDark}>
         {children}
       </ModalWrap>
     </ModalGlass>,
     document.body
   )
 }
+
 export const ModalGlass = styled.div<ModalProps>`
   display: flex;
   justify-content: center;
@@ -84,8 +84,9 @@ export const ModalBody = styled.div`
 
 interface ModalWrapProps {
   modalMaxSize: string
-  modalBlack?: boolean
+  isDark?: boolean
 }
+
 export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
   grid-template-columns: 1fr;
@@ -115,8 +116,8 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   box-shadow: ${Shadows.common};
 
   ${ModalBody} {
-    ${({ modalBlack }) => {
-      switch (modalBlack) {
+    ${({ isDark }) => {
+      switch (isDark) {
         case true:
           return `
           background-color: ${Colors.Black[800]};
@@ -176,18 +177,21 @@ export const ResultModalBody = styled(ModalBody)`
   background-color: ${Colors.White};
   min-height: 312px;
 `
+
 export const SuccessModalBody = styled(ModalBody)`
   grid-row-gap: 8px;
   background-color: ${Colors.White};
   border: none;
   padding: 12px 24px 40px;
 `
+
 export const SignTransferContainer = styled.div`
   display: grid;
   grid-row-gap: 8px;
   width: 100%;
   height: 100%;
 `
+
 export const ModalFooter = styled.footer`
   display: inline-grid;
   grid-area: modalfooter;
