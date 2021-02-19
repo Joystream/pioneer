@@ -45,6 +45,7 @@
     "html-webpack-plugin": "4",
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
+    "miragejs": "^0.1.41",
     "mocha": "^8.2.1",
     "mock-local-storage": "^1.1.15",
     "prettier": "^2.2.1",
