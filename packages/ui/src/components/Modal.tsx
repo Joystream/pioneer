@@ -91,7 +91,7 @@ interface ModalWrapProps {
 export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: ${(props) => (props.modalHeight === 'm') ? 'auto 66vh auto' : 'auto auto auto'};
+  grid-template-rows: ${(props) => (props.modalHeight === 'm' ? 'auto 66vh auto' : 'auto auto auto')};
   grid-template-areas:
     'modalheader'
     'modalbody'
