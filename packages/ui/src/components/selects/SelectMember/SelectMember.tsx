@@ -1,36 +1,32 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { Account } from '../../../common/types'
+import { Member } from '../../../common/types'
 import { Colors, Sizes } from '../../../constants'
-import { useAccounts } from '../../../hooks/useAccounts'
-import { useBalance } from '../../../hooks/useBalance'
-import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../modals/common'
-import { AccountInfo } from '../../AccountInfo'
+import { MemberInfo } from '../../MemberInfo'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
-import { TokenValue } from '../../typography'
-import { OptionListAccount } from './OptionListAccount'
+import { OptionListMember } from './OptionListMember'
+import { useMembers } from '../../../hooks/useMembers'
 
 interface Props {
-  onChange: (account: Account) => void
-  filter?: (account: Account) => boolean
-  selected?: Account
+  onChange: (member: Member) => void
+  filter?: (member: Member) => boolean
+  selected?: Member
+  enable?: boolean
 }
 
-export const filterAccount = (filterOut: Account | undefined) => {
-  return filterOut ? (account: Account) => account.address !== filterOut.address : () => true
+export const filterMember = (filterOut: Member | undefined) => {
+  return filterOut ? (member: Member) => member.handle !== filterOut.handle : () => true
 }
 
-export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
-  const { allAccounts } = useAccounts()
-  const options = allAccounts.filter(filter || (() => true))
+export const SelectMember = React.memo(({ onChange, filter, selected, enable }: Props) => {
+  const options = useMembers()
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
-  const balance = useBalance(selectedOption)
+  const [selectedOption, setSelectedOption] = useState<Member | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
 
   const onOptionClick = useCallback(
-    (option: Account) => {
+    (option: Member) => {
       setIsOpen(false)
       setSelectedOption(option)
       onChange(option)
@@ -62,26 +58,33 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
 
   return (
     <SelectComponent ref={selectNode}>
-      <Toggle onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
+      <Toggle
+        onClick={() => {
+          if (enable !== false) {
+            setIsOpen(!isOpen)
+          }
+        }}
+        isOpen={isOpen}
+        enable={enable}
+      >
         {selectedOption && (
           <SelectedOption>
-            <AccountInfo account={selectedOption} />
-            <BalanceInfoInRow>
-              <InfoTitle>Transferable balance</InfoTitle>
-              <InfoValue>
-                <TokenValue value={balance?.transferable} />
-              </InfoValue>
-            </BalanceInfoInRow>
+            <MemberInfo member={selectedOption} />
           </SelectedOption>
         )}
         {!selectedOption && (
-          <Empty type={'text'} placeholder={'Select account or paste account address'} autoComplete="off" />
+          <Empty
+            type={'text'}
+            placeholder={'Select member or paste member handle'}
+            autoComplete="off"
+            disabled={!enable}
+          />
         )}
-        <ToggleButton>
+        <ToggleButton disabled={!enable}>
           <ArrowDownIcon />
         </ToggleButton>
       </Toggle>
-      {isOpen && <OptionListAccount onChange={onOptionClick} options={options} />}
+      {isOpen && <OptionListMember onChange={onOptionClick} options={options} />}
     </SelectComponent>
   )
 })
@@ -105,12 +108,16 @@ const Empty = styled.input`
   padding: 16px;
   border: none;
   outline: none;
+  background-color: transparent;
 
   &::placeholder {
     font-size: 14px;
     line-height: 45px;
     font-weight: 400;
     color: ${Colors.Black[400]};
+  }
+  &:disabled {
+    cursor: not-allowed;
   }
 `
 

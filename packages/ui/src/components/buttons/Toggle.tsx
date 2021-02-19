@@ -4,14 +4,18 @@ import { Icon } from '../icons'
 import { ButtonGhostMediumSquare } from './Buttons'
 
 export const ToggleButton = styled(ButtonGhostMediumSquare)`
+  background-color: transparent;
   &,
   &:hover,
   &:focus,
   &:active,
   &:disabled {
+    background-color: transparent;
     border: 1px solid transparent;
   }
-
+  &:disabled {
+    cursor: not-allowed;
+  }
   svg {
     color: ${Colors.Black[600]};
   }
@@ -19,6 +23,7 @@ export const ToggleButton = styled(ButtonGhostMediumSquare)`
 
 interface Props {
   isOpen: boolean
+  enable?: boolean
 }
 
 export const Toggle = styled.div<Props>`
@@ -32,11 +37,11 @@ export const Toggle = styled.div<Props>`
   min-height: ${Sizes.accountSelectHeight};
   margin: 0;
   padding: 0;
-  border: 1px solid ${Colors.Black[300]};
+  border: 1px solid ${(props) => (props.enable !== false ? Colors.Black[300] : Colors.Black[200])};
   border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
+  background-color: ${(props) => (props.enable !== false ? Colors.White : Colors.Black[75])};
   font-size: 1em;
-  cursor: pointer;
+  cursor: ${(props) => (props.enable !== false ? 'pointer' : 'not-allowed')};
   transition: ${Transitions.all};
 
   ${ToggleButton} ${Icon} {
@@ -45,7 +50,7 @@ export const Toggle = styled.div<Props>`
   }
 
   &:hover {
-    border-color: ${Colors.Blue[200]};
+    border-color: ${(props) => (props.enable !== false ? Colors.Blue[200] : Colors.Black[200])};
   }
 
   &:focus-within,

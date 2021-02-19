@@ -15,6 +15,7 @@ import {
 import { Help } from '../../components/Help'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../../components/Modal'
 import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
+import { SelectMember } from '../../components/selects/SelectMember'
 import { Text, TokenValue } from '../../components/typography'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 
@@ -73,9 +74,9 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         <Row>
           <InlineToggleWrap>
             <Label>I was referred by a member: </Label>
-            <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} disabled />
+            <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
           </InlineToggleWrap>
-          <TextInput type="text" value="Select Member or type a member" disabled={!isReferred} onChange={stubHandler} />
+          <SelectMember onChange={stubHandler} enable={isReferred} />
           <p>Please fill in all the details below.</p>
         </Row>
 
