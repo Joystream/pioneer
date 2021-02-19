@@ -52,6 +52,7 @@ export const OptionComponent = styled.div`
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
   min-height: ${Sizes.accountSelectHeight};
+  max-height: ${Sizes.accountSelectHeight};
   padding: 10px 72px 10px 16px;
 
   &:active,

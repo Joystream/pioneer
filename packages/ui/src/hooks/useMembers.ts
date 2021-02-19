@@ -38,5 +38,41 @@ export function useMembers(): Member[] {
         address: 'address3',
       },
     },
+    {
+      name: 'Alice4',
+      handle: 'alice',
+      rootAccount: {
+        name: 'Alice',
+        address: 'address4',
+      },
+      controllerAccount: {
+        name: 'alice',
+        address: 'address4',
+      },
+    },
+    {
+      name: 'Rob5',
+      handle: 'rob',
+      rootAccount: {
+        name: 'rob',
+        address: 'address5',
+      },
+      controllerAccount: {
+        name: 'rob',
+        address: 'address5',
+      },
+    },
+    {
+      name: 'Alice6',
+      handle: 'alice',
+      rootAccount: {
+        name: 'Alice',
+        address: 'address6',
+      },
+      controllerAccount: {
+        name: 'alice',
+        address: 'address6',
+      },
+    }
   ]
 }

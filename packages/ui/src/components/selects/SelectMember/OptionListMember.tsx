@@ -25,7 +25,7 @@ const OptionsListComponent = styled.ul`
   top: 100%;
   width: 100%;
   height: auto;
-  max-height: calc(${Sizes.accountSelectHeight} * 2.5);
+  max-height: calc(${Sizes.memberSelectHeight} * 4.5);
   margin: -1px 0 0;
   border-radius: ${BorderRad.s};
   border: 1px solid ${Colors.Black[300]};

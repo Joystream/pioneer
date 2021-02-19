@@ -35,6 +35,7 @@ export const Toggle = styled.div<Props>`
   width: 100%;
   height: 100%;
   min-height: ${Sizes.accountSelectHeight};
+  max-height: ${Sizes.accountSelectHeight};
   margin: 0;
   padding: 0;
   border: 1px solid ${(props) => (props.enable !== false ? Colors.Black[300] : Colors.Black[200])};

@@ -24,9 +24,10 @@ export const MemberInfo = React.memo(({ member }: Props) => {
 
 const MemberInfoWrap = styled.div`
   display: grid;
-  grid-template-columns: 40px 1fr;
-  grid-template-rows: min-content 24px;
-  grid-column-gap: 12px;
+  grid-template-columns: 40px auto;
+  grid-template-rows: 20px 16px;
+  grid-column-gap: 8px;
+  grid-row-gap: 4px;
   grid-template-areas:
     'memberphoto memberhandle'
     'memberphoto membername';

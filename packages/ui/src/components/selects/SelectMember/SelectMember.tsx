@@ -90,6 +90,7 @@ const SelectedOption = styled.div`
   grid-template-rows: 1fr;
   align-items: center;
   min-height: ${Sizes.accountSelectHeight};
+  max-height: ${Sizes.accountSelectHeight};
   padding: 10px 28px 10px 16px;
 `
 
