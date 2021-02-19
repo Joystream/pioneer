@@ -68,7 +68,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   const stubHandler = () => undefined
 
   return (
-    <Modal modalSize="m">
+    <Modal modalSize="m" modalHeight="m">
       <ModalHeader onClick={onClose} title="Add membership" />
       <ScrolledModalBody>
         <Row>

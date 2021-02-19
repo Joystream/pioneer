@@ -35,6 +35,7 @@ export const TextArea = styled.textarea`
   font-size: 14px;
   line-height: 22px;
   font-weight: 700;
+  resize: none;
 
   &::placeholder {
     font-weight: 400;
