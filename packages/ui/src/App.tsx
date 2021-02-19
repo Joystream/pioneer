@@ -3,7 +3,7 @@ import { MyMemberships } from './pages/Profile/MyMemberships'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-import './mocks/hydra'
+import './mocks/server'
 
 export function App() {
   return (

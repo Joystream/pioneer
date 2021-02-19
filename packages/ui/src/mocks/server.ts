@@ -1,7 +1,7 @@
 import { createServer } from 'miragejs'
 import { createGraphQLHandler } from '@miragejs/graphql'
 
-import schema from './hydra.graphql'
+import schema from '../api/schemas/query-node.graphql'
 
 createServer({
   routes() {

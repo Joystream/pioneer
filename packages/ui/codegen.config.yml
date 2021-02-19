@@ -1,6 +1,6 @@
 overwrite: true
 
-schema: './src/mocks/*.graphql'
+schema: './src/api/schemas/*.graphql'
 
 config:
   scalars:
@@ -9,7 +9,7 @@ config:
   nonOptionalTypename: true
 
 generates:
-  src/mocks/queries/__generated__/baseTypes.generated.ts:
+  src/api/queries/__generated__/baseTypes.generated.ts:
     hooks:
       afterOneFileWrite:
         - prettier --write
