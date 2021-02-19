@@ -46,7 +46,7 @@ const Memberships = styled.span`
     right: -24px;
     width: 16px;
     height: 16px;
-    border-radius: 50%;
+    border-radius: ${BorderRad.round};
     background-color: ${Colors.Black[500]};
     font-size: 10px;
     line-height: 16px;
