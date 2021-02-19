@@ -1,0 +1,18 @@
+overwrite: true
+
+schema: './src/mocks/*.graphql'
+
+config:
+  scalars:
+    Date: Date
+  preResolveTypes: true # avoid using Pick
+  nonOptionalTypename: true
+
+generates:
+  src/mocks/queries/__generated__/baseTypes.generated.ts:
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+        - eslint --fix
+    plugins:
+      - typescript
