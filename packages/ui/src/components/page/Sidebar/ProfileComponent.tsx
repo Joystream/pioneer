@@ -41,7 +41,7 @@ const Profile = styled.div`
 const MemberBalance = styled.div`
   display: grid;
   grid-area: memberbalance;
-  grid-template-columns: 1fr 54px;
+  grid-template-columns: 1fr 32px;
   grid-template-rows: 16px 24px;
   grid-template-areas:
     'balancetitle balancetransfer'
