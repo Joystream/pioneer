@@ -26,8 +26,7 @@ const OptionsListComponent = styled.ul`
   width: 100%;
   height: auto;
   max-height: calc(${Sizes.accountSelectHeight} * 2.5);
-  margin: 0;
-  margin-top: -1px;
+  margin: -1px 0 0;
   border-radius: ${BorderRad.s};
   border: 1px solid ${Colors.Black[300]};
   background-color: ${Colors.White};
@@ -58,13 +57,16 @@ const OptionsListComponent = styled.ul`
     &:first-child {
       border-top: none;
     }
+
     &:last-child {
       border-bottom: none;
     }
+
     ${OptionComponent} {
       border-radius: 0;
     }
   }
+
   ${OptionComponentContainer} + ${OptionComponentContainer} {
     margin-top: -1px;
   }

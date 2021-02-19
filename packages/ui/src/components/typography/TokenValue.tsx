@@ -35,14 +35,3 @@ export const ValueInJoys = styled.span`
     font-family: ${Fonts.Title};
   }
 `
-
-export const ValueInJoysInText = styled(ValueInJoys)`
-  font-family: ${Fonts.Body};
-  font-weight: 700;
-  color: ${Colors.Black[700]};
-  &:after {
-    font-family: ${Fonts.Body};
-    font-weight: 700;
-    color: ${Colors.Black[700]};
-  }
-`

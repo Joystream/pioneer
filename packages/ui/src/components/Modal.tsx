@@ -132,7 +132,6 @@ export const ModalHeaderIcon = styled.div`
   display: grid;
   justify-items: center;
   align-items: center;
-  width: fit-content;
   height: 24px;
   width: 24px;
 

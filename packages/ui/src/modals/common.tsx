@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Label } from '../components/forms'
 import { Icon } from '../components/icons'
-import { ValueInJoys } from '../components/typography/TokenValue'
+import { ValueInJoys } from '../components/typography'
 import { BorderRad, Colors, Fonts, Sizes } from '../constants'
 
 export const TransactionInfoLabel = styled(Label)`

@@ -108,7 +108,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
       <WaitModal
         title="Pending transaction"
         description={
-          'We are waiting for your trasaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim.'
+          'We are waiting for your transaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim.'
         }
       />
     )
