@@ -73,6 +73,6 @@ export function useMembers(): Member[] {
         name: 'alice',
         address: 'address6',
       },
-    }
+    },
   ]
 }
