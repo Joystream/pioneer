@@ -73,12 +73,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, enable }: 
           </SelectedOption>
         )}
         {!selectedOption && (
-          <Empty
-            type={'text'}
-            placeholder={'Select member or paste member handle'}
-            autoComplete="off"
-            disabled={!enable}
-          />
+          <Empty type={'text'} placeholder={'Select Member or type a member'} autoComplete="off" disabled={!enable} />
         )}
         <ToggleButton disabled={!enable}>
           <ArrowDownIcon />

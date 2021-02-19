@@ -77,25 +77,32 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
             <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
           </InlineToggleWrap>
           <SelectMember onChange={stubHandler} enable={isReferred} />
-          <p>Please fill in all the details below.</p>
         </Row>
 
         <Row>
-          <Label>
-            Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
+          <Text size={2} dark>
+            Please fill in all the details below.
+          </Text>
+        </Row>
+
+        <Row>
+          <Label isRequired>
+            Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </Label>
           <SelectAccount filter={filterRoot} onChange={setRootAccount} />
         </Row>
 
         <Row>
-          <Label>
-            Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
+          <Label isRequired>
+            Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </Label>
           <SelectAccount filter={filterController} onChange={setControllerAccount} />
         </Row>
 
         <Row>
-          <Label htmlFor="member-name">Member Name *</Label>
+          <Label htmlFor="member-name" isRequired>
+            Member Name
+          </Label>
           <TextInput
             id="member-name"
             type="text"
@@ -106,7 +113,9 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         </Row>
 
         <Row>
-          <Label htmlFor="member-handle">Membership handle *</Label>
+          <Label htmlFor="member-handle" isRequired>
+            Membership handle
+          </Label>
           <TextInput
             id="member-handle"
             type="text"
