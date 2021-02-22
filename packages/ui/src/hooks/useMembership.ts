@@ -1,17 +1,11 @@
-import { gql, useQuery } from '@apollo/client'
+import { useGetMembersQuery } from '../api/queries'
 
 interface UseMembership {
   count: number
 }
 
-const query = gql`
-  query GetMemberships {
-    id
-  }
-`
-
 export function useMembership(): UseMembership {
-  useQuery(query)
+  const { data } = useGetMembersQuery()
 
-  return { count: 0 }
+  return { count: data?.members.length ?? 0 }
 }
