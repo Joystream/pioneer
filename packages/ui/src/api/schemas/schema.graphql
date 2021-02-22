@@ -645,3 +645,19 @@ type MembershipSystem {
 
 }
 
+input MemberWhereUniqueInput {
+  id: ID!
+}
+
+input MemberWhereInput {
+  rootAccount_in: [String]
+  id_in: [ID!]
+}
+
+type Query {
+  # Lookup a member by its ID
+  member(where: MemberWhereUniqueInput!): Member
+
+  # Lookup members by where params
+  members(where: MemberWhereInput): [Member!]!
+}

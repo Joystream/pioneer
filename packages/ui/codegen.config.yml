@@ -2,6 +2,9 @@ overwrite: true
 
 schema: './src/api/schemas/*.graphql'
 
+documents:
+  - './src/api/queries/**/*.graphql'
+
 config:
   scalars:
     Date: Date
@@ -16,3 +19,16 @@ generates:
         - eslint --fix
     plugins:
       - typescript
+  src/api/queries/__generated__/:
+    preset: near-operation-file
+    presetConfig:
+      baseTypesPath: baseTypes.generated.ts
+      folder: __generated__
+      extension: .generated.tsx
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+        - eslint --fix
+    plugins:
+      - typescript-operations
+      - typescript-react-apollo

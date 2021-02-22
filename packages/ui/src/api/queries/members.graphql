@@ -1,0 +1,14 @@
+fragment MemberFields on Member {
+  id
+  rootAccount
+  controllerAccount
+  handle
+  about
+  avatarURI
+}
+
+query GetMembers {
+  members {
+    ...MemberFields
+  }
+}

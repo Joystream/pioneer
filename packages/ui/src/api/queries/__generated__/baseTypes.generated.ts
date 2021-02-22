@@ -427,3 +427,26 @@ export type MembershipSystem = {
   /** The initial, locked, balance credited to controller account of invitee. */
   invitedInitialBalance: Scalars['BigInt']
 }
+
+export type MemberWhereUniqueInput = {
+  id: Scalars['ID']
+}
+
+export type MemberWhereInput = {
+  rootAccount_in?: Maybe<Array<Maybe<Scalars['String']>>>
+  id_in?: Maybe<Array<Scalars['ID']>>
+}
+
+export type Query = {
+  __typename: 'Query'
+  member?: Maybe<Member>
+  members: Array<Member>
+}
+
+export type QueryMemberArgs = {
+  where: MemberWhereUniqueInput
+}
+
+export type QueryMembersArgs = {
+  where?: Maybe<MemberWhereInput>
+}
