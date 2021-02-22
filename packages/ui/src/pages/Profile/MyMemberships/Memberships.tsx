@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Member } from '../../../common/types'
 import { AddMembershipButton } from '../../../components/AddMembershipButton'
 import { Text } from '../../../components/typography'
+import { useMembership } from '../../../hooks/useMembership'
 import { MemberItem } from './MemberItem'
 
 const bob = ({
@@ -25,7 +26,8 @@ const alice = ({
 } as unknown) as Member
 
 export function Memberships() {
-  const hasMemberships = false
+  const { count } = useMembership()
+  const hasMemberships = !!count
 
   if (!hasMemberships) {
     return (
