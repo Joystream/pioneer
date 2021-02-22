@@ -29,7 +29,7 @@ interface ModalProps {
 export const Modal = ({ modalHeight = 'm', children, modalSize, isDark }: ModalProps) => {
   return ReactDOM.createPortal(
     <ModalGlass modalHeight={modalHeight} modalSize={modalSize} isDark={isDark}>
-      <ModalWrap modalMaxSize={modalSize} isDark={isDark}>
+      <ModalWrap modalMaxSize={modalSize} modalHeight={modalHeight} isDark={isDark}>
         {children}
       </ModalWrap>
     </ModalGlass>,
@@ -85,12 +85,13 @@ export const ModalBody = styled.div`
 interface ModalWrapProps {
   modalMaxSize: string
   isDark?: boolean
+  modalHeight?: string
 }
 
 export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: ${(props) => (props.modalHeight === 'm' ? 'auto 66vh auto' : 'auto auto auto')};
   grid-template-areas:
     'modalheader'
     'modalbody'
@@ -163,8 +164,9 @@ const ModalTopBar = styled.header.attrs((props: TopBarProps) => ({
 `
 
 export const ScrolledModalBody = styled(ModalBody)`
-  max-height: 70vh;
-  overflow-y: auto;
+  height: 100%;
+  padding: 24px 24px 20px;
+  overflow-y: scroll;
 `
 
 export const ResultModalBody = styled(ModalBody)`

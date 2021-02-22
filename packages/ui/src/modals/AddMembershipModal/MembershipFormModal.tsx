@@ -15,6 +15,7 @@ import {
 import { Help } from '../../components/Help'
 import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../../components/Modal'
 import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
+import { SelectMember } from '../../components/selects/SelectMember'
 import { Text, TokenValue } from '../../components/typography'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 
@@ -67,34 +68,41 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   const stubHandler = () => undefined
 
   return (
-    <Modal modalSize="m">
+    <Modal modalSize="m" modalHeight="m">
       <ModalHeader onClick={onClose} title="Add membership" />
       <ScrolledModalBody>
         <Row>
           <InlineToggleWrap>
             <Label>I was referred by a member: </Label>
-            <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} disabled />
+            <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
           </InlineToggleWrap>
-          <TextInput type="text" value="Select Member or type a member" disabled={!isReferred} onChange={stubHandler} />
-          <p>Please fill in all the details below.</p>
+          <SelectMember onChange={stubHandler} enable={isReferred} />
         </Row>
 
         <Row>
-          <Label>
-            Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
+          <Text size={2} dark>
+            Please fill in all the details below.
+          </Text>
+        </Row>
+
+        <Row>
+          <Label isRequired>
+            Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </Label>
           <SelectAccount filter={filterRoot} onChange={setRootAccount} />
         </Row>
 
         <Row>
-          <Label>
-            Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} /> *
+          <Label isRequired>
+            Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </Label>
           <SelectAccount filter={filterController} onChange={setControllerAccount} />
         </Row>
 
         <Row>
-          <Label htmlFor="member-name">Member Name *</Label>
+          <Label htmlFor="member-name" isRequired>
+            Member Name
+          </Label>
           <TextInput
             id="member-name"
             type="text"
@@ -105,7 +113,9 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         </Row>
 
         <Row>
-          <Label htmlFor="member-handle">Membership handle *</Label>
+          <Label htmlFor="member-handle" isRequired>
+            Membership handle
+          </Label>
           <TextInput
             id="member-handle"
             type="text"

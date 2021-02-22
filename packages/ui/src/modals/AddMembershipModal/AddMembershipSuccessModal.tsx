@@ -37,6 +37,7 @@ const MemberRow = styled.div`
   align-items: center;
   width: 100%;
   min-height: ${Sizes.accountHeight};
+  max-height: ${Sizes.accountHeight};
   padding: 8px 72px 8px 14px;
   border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.s};

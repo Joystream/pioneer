@@ -125,13 +125,15 @@ const ToggleContainer = styled.div<ToggleBoxContainerProps>`
 
 export const InlineToggleWrap = styled.div`
   display: flex;
+  align-items: center;
+  margin-bottom: 4px;
 
   ${Label} {
-    line-height: 24px;
+    line-height: 20px;
+    margin-bottom: 0;
   }
 
   ${ToggleContainer} {
-    padding-left: 10px;
-    margin-bottom: 4px;
+    margin-left: 12px;
   }
 `
