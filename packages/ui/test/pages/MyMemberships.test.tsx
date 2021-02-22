@@ -1,7 +1,7 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import { beforeAll, expect } from '@jest/globals'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render } from '@testing-library/react'
-import { expect } from 'chai'
+import { render, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 import sinon from 'sinon'
@@ -19,9 +19,9 @@ describe('UI: Memberships list', () => {
   let alice: string
   let bob: string
 
-  before(cryptoWaitReady)
+  beforeAll(cryptoWaitReady)
 
-  before(() => {
+  beforeAll(() => {
     alice = aliceSigner().address
     bob = bobSigner().address
 
@@ -35,23 +35,33 @@ describe('UI: Memberships list', () => {
     sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
   })
 
-  context('with no memberships', () => {
-    it('Shows Create Membership button', () => {
+  describe('with no memberships', () => {
+    it('Shows Create Membership button', async () => {
       const server = makeServer('test')
 
-      const { getByRole } = renderMemberships()
+      const { findByRole } = renderMemberships()
 
-      expect(getByRole('button', { name: /create a membership/i })).to.exist
+      expect(await findByRole('button', { name: /create a membership/i })).toBeDefined()
+
+      server.shutdown()
     })
   })
 
-  context('with memberships', () => {
-    it('Shows list of memberships', () => {
+  describe('with memberships', () => {
+    it('Shows list of  memberships', async () => {
       const server = makeServer('test')
+      server.create('Member', ({
+        name: 'Alice Member',
+        handle: 'alice_handle',
+        rootAccount: 'aa',
+        controllerAccount: 'bb',
+      } as unknown) as any)
 
-      const { getByRole } = renderMemberships()
+      const { getByText } = renderMemberships()
 
-      expect(getByRole('button', { name: /create a membership/i })).to.not.exist
+      await waitForElementToBeRemoved(() => getByText('Loading...'))
+
+      expect(getByText(/Alice Member/i)).toBeDefined()
 
       server.shutdown()
     })

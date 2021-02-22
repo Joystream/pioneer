@@ -26,8 +26,12 @@ const alice = ({
 } as unknown) as Member
 
 export function Memberships() {
-  const { count } = useMembership()
+  const { count, loading } = useMembership()
   const hasMemberships = !!count
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   if (!hasMemberships) {
     return (
