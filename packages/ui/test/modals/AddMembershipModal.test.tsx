@@ -1,9 +1,9 @@
+import { beforeAll, expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
-import { expect } from 'chai'
 import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
@@ -15,11 +15,10 @@ import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { selectAccount } from '../helpers/selectAccount'
-
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
 describe('UI: AddMembershipModal', () => {
-  before(cryptoWaitReady)
+  beforeAll(cryptoWaitReady)
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,
@@ -75,15 +74,15 @@ describe('UI: AddMembershipModal', () => {
   it('Renders a modal', () => {
     const { getByText } = renderModal()
 
-    expect(getByText('Add membership')).to.exist
-    expect(getByText('Creation fee:')?.parentNode?.textContent).to.match(/^Creation fee:100/i)
+    expect(getByText('Add membership')).toBeDefined()
+    expect(getByText('Creation fee:')?.parentNode?.textContent).toMatch(/^Creation fee:100/i)
   })
 
   it('Enables button when valid form', async () => {
     const { findByText, getByText, getByLabelText } = renderModal()
 
     const button = getByText(/^Create a membership$/i) as HTMLButtonElement
-    expect(button.disabled).to.be.true
+    expect(button.disabled).toBe(true)
 
     selectAccount('Root account', 'bob', getByText)
     selectAccount('Controller account', 'alice', getByText)
@@ -91,14 +90,14 @@ describe('UI: AddMembershipModal', () => {
     fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
     fireEvent.click(getByLabelText(/I agree to our terms/i))
 
-    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
+    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(false)
   })
 
   it('Disables button when invalid avatar URL', async () => {
     const { findByText, getByText, getByLabelText } = renderModal()
 
     const button = getByText(/^Create a membership$/i) as HTMLButtonElement
-    expect(button.disabled).to.be.true
+    expect(button.disabled).toBe(true)
 
     selectAccount('Root account', 'bob', getByText)
     selectAccount('Controller account', 'alice', getByText)
@@ -107,13 +106,13 @@ describe('UI: AddMembershipModal', () => {
     fireEvent.click(getByLabelText(/I agree to our terms/i))
 
     fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
-    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.true
+    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(true)
 
     fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).to.be.false
+    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(false)
   })
 
-  context('Authorize step', () => {
+  describe('Authorize step', () => {
     const renderAuthorizeStep = async () => {
       const rendered = renderModal()
       const { findByText, getByText, getByLabelText } = rendered
@@ -134,13 +133,13 @@ describe('UI: AddMembershipModal', () => {
     it('Renders authorize transaction', async () => {
       const { getByText, getByRole } = await renderAuthorizeStep()
 
-      expect(getByText('Authorize transaction')).to.exist
-      expect(getByText(/^Creation fee:/i)?.nextSibling?.textContent).to.equal('100')
-      expect(getByText(/^Transaction fee:/i)?.nextSibling?.textContent).to.equal('25')
-      expect(getByRole('heading', { name: /alice/i })).to.exist
+      expect(getByText('Authorize transaction')).toBeDefined()
+      expect(getByText(/^Creation fee:/i)?.nextSibling?.textContent).toBe('100')
+      expect(getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+      expect(getByRole('heading', { name: /alice/i })).toBeDefined()
     })
 
-    context('Success', () => {
+    describe('Success', () => {
       beforeEach(() => {
         set(transaction, 'signAndSend', () =>
           from([
@@ -163,9 +162,9 @@ describe('UI: AddMembershipModal', () => {
 
         const byText = getByText('Success')
         console.log(byText.parentElement?.parentElement?.outerHTML)
-        expect(byText).to.exist
-        expect(getByText(/^bobby bob/i)).to.exist
-        expect(getByText(/^realbobbybob/i)).to.exist
+        expect(byText).toBeDefined()
+        expect(getByText(/^bobby bob/i)).toBeDefined()
+        expect(getByText(/^realbobbybob/i)).toBeDefined()
       })
     })
   })

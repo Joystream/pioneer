@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks'
-import { expect } from 'chai'
 import { useLocalStorage } from '../../src/hooks/useLocalStorage'
+import { expect } from '@jest/globals'
 
 describe('useLocalStorage', () => {
   beforeEach(() => {
@@ -22,66 +22,66 @@ describe('useLocalStorage', () => {
 
   it('returns undefined for empty storage', () => {
     const { getValue } = render()
-    expect(getValue()).to.equal(undefined)
+    expect(getValue()).toBeUndefined()
   })
 
   it('parses existing values', () => {
     window.localStorage.setItem('foo', JSON.stringify({ a: 1 }))
     const { getValue } = render()
-    expect(getValue()).to.deep.equal({ a: 1 })
+    expect(getValue()).toEqual({ a: 1 })
   })
 
   it('caches results', () => {
     window.localStorage.setItem('foo', JSON.stringify({ a: 1 }))
     const { getValue } = render()
-    expect(getValue()).to.deep.equal({ a: 1 })
+    expect(getValue()).toEqual({ a: 1 })
     window.localStorage.setItem('foo', JSON.stringify({ a: 2 }))
-    expect(getValue()).to.deep.equal({ a: 1 })
+    expect(getValue()).toEqual({ a: 1 })
   })
 
   it('returns undefined when cannot parse', () => {
     window.localStorage.setItem('foo', 'x{}y')
     const { getValue } = render()
-    expect(getValue()).to.equal(undefined)
+    expect(getValue()).toBeUndefined()
   })
 
   it('modifies the localStorage and returns a the new value', () => {
     const { getValue, setValue } = render()
-    expect(getValue()).to.equal(undefined)
+    expect(getValue()).toBeUndefined()
     setValue({ a: 1 })
-    expect(window.localStorage.getItem('foo')).to.equal('{"a":1}')
-    expect(getValue()).to.deep.equal({ a: 1 })
+    expect(window.localStorage.getItem('foo')).toBe('{"a":1}')
+    expect(getValue()).toEqual({ a: 1 })
   })
 
   it('can remove the item by setting undefined', () => {
     window.localStorage.setItem('foo', 'true')
     const { getValue, setValue } = render()
-    expect(getValue()).to.equal(true)
+    expect(getValue()).toBe(true)
     setValue(undefined)
-    expect(getValue()).to.equal(undefined)
-    expect(window.localStorage.getItem('foo')).to.equal(null)
+    expect(getValue()).toBeUndefined()
+    expect(window.localStorage.getItem('foo')).toBe(null)
   })
 
   it('can change keys', () => {
     window.localStorage.setItem('foo', 'true')
     const { getValue, setKey } = render()
-    expect(getValue()).to.equal(true)
+    expect(getValue()).toBe(true)
     setKey('bar')
-    expect(getValue()).to.equal(undefined)
-    expect(window.localStorage.getItem('foo')).to.equal('true')
-    expect(window.localStorage.getItem('bar')).to.equal(null)
+    expect(getValue()).toBeUndefined()
+    expect(window.localStorage.getItem('foo')).toBe('true')
+    expect(window.localStorage.getItem('bar')).toBe(null)
   })
 
   it('can change keys and modify the other value', () => {
     window.localStorage.setItem('foo', 'true')
     window.localStorage.setItem('bar', 'false')
     const { getValue, setValue, setKey } = render()
-    expect(getValue()).to.equal(true)
+    expect(getValue()).toBe(true)
     setValue(123)
     setKey('bar')
-    expect(getValue()).to.equal(false)
+    expect(getValue()).toBe(false)
     setValue(456)
-    expect(window.localStorage.getItem('foo')).to.equal('123')
-    expect(window.localStorage.getItem('bar')).to.equal('456')
+    expect(window.localStorage.getItem('foo')).toBe('123')
+    expect(window.localStorage.getItem('bar')).toBe('456')
   })
 })

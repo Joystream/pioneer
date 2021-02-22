@@ -1,11 +1,11 @@
 import BN from 'bn.js'
-import { expect } from 'chai'
 import React, { ReactNode } from 'react'
 import { of } from 'rxjs'
 import { ApiRx } from '@polkadot/api'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { renderHook } from '@testing-library/react-hooks'
 import set from 'lodash/set'
+import { expect, beforeAll } from '@jest/globals'
 
 import { useTotalBalances } from '../../src/hooks/useTotalBalances'
 import { ApiContext } from '../../src/providers/api/context'
@@ -20,7 +20,7 @@ describe('useTotalBalances', () => {
     api: ({} as unknown) as ApiRx,
   }
 
-  before(async () => {
+  beforeAll(async () => {
     await cryptoWaitReady()
     keyring.loadAll({ isDevelopment: true })
   })
@@ -46,7 +46,7 @@ describe('useTotalBalances', () => {
   it('Returns zero balances when API not ready', () => {
     const { result } = renderUseTotalBalances()
 
-    expect(result.current).to.be.deep.equal({
+    expect(result.current).toEqual({
       total: new BN(0),
       transferable: new BN(0),
       locked: new BN(0),
@@ -59,7 +59,7 @@ describe('useTotalBalances', () => {
 
     const { result } = renderUseTotalBalances()
 
-    expect(result.current).to.be.deep.equal({
+    expect(result.current).toEqual({
       total: new BN(880),
       transferable: new BN(800),
       locked: new BN(80),
