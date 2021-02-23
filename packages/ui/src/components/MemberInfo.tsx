@@ -1,21 +1,23 @@
 import React from 'react'
 import styled from 'styled-components'
+import { MemberFieldsFragment } from '../api/queries'
 import { Member } from '../common/types'
 import { Avatar } from './Avatar'
 import { Text } from './typography'
 
 interface Props {
-  member: Member
+  member: Member | MemberFieldsFragment
+  onClick?: () => void
 }
 
-export const MemberInfo = React.memo(({ member }: Props) => {
+export const MemberInfo = React.memo(({ member, onClick }: Props) => {
   return (
     <>
       <MemberInfoWrap>
         <MemberPhoto>
           <Avatar avatarURI={member.avatarURI} />
         </MemberPhoto>
-        <MemberHandle>{member.handle}</MemberHandle>
+        <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
         <MemberName size={2}>{member.name}</MemberName>
       </MemberInfoWrap>
     </>

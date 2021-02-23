@@ -399,6 +399,8 @@ export type Member = {
   controllerAccount: Scalars['String']
   /** The unique handle chosen by member */
   handle?: Maybe<Scalars['String']>
+  /** A human readable mutable string */
+  name?: Maybe<Scalars['String']>
   /** Avatar of member */
   avatarURI?: Maybe<Scalars['String']>
   /** Short text chosen by member to share information about themselves */

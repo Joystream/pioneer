@@ -88,7 +88,7 @@ const ListHeaders = styled.div`
   display: grid;
   grid-area: accountstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 170px 170px repeat(5, 60px);
+  grid-template-columns: 260px 120px repeat(5, 80px);
   justify-content: space-between;
   width: 100%;
   padding-left: 16px;
@@ -96,7 +96,7 @@ const ListHeaders = styled.div`
 
 const ListHeader = styled.span`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   align-content: center;
   font-size: 10px;
