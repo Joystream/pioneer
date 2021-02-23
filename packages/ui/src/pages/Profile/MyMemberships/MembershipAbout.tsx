@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Member } from '../../../common/types'
+import { MemberFieldsFragment } from '../../../api/queries'
 import { Avatar } from '../../../components/Avatar'
 import { CloseButton } from '../../../components/buttons'
 import { Colors } from '../../../constants'
 
 interface MembershipAboutProps {
-  member?: Member
+  member?: MemberFieldsFragment
   onClose: () => void
 }
 

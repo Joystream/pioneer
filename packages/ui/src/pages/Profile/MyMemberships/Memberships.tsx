@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Member } from '../../../common/types'
 import { AddMembershipButton } from '../../../components/AddMembershipButton'
 import { Text } from '../../../components/typography'
 import { Colors } from '../../../constants'
@@ -46,7 +45,7 @@ export function Memberships() {
 
         <MembershipsList>
           {members.map((member) => (
-            <MemberItem member={(member as unknown) as Member} key={member.handle} />
+            <MemberItem member={member} key={member.handle} />
           ))}
         </MembershipsList>
       </MembershipsGroup>

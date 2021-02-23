@@ -5,6 +5,9 @@ fragment MemberFields on Member {
   handle
   about
   avatarURI
+  isFoundingMember
+  isVerified
+  inviteCount
 }
 
 query GetMembers {

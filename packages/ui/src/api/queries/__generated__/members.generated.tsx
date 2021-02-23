@@ -10,6 +10,9 @@ export type MemberFieldsFragment = {
   handle?: Types.Maybe<string>
   about?: Types.Maybe<string>
   avatarURI?: Types.Maybe<string>
+  isFoundingMember: boolean
+  isVerified: boolean
+  inviteCount: any
 }
 
 export type GetMembersQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -24,6 +27,9 @@ export const MemberFieldsFragmentDoc = gql`
     handle
     about
     avatarURI
+    isFoundingMember
+    isVerified
+    inviteCount
   }
 `
 export const GetMembersDocument = gql`

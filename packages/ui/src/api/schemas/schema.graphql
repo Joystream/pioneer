@@ -4,6 +4,7 @@ enum Network {
   Sumer
   # Mainnet
 }
+
 """GraphQL representation of BigInt"""
 scalar BigInt
 
@@ -132,10 +133,7 @@ type Extrinsic {
 
 }
 
-
-
 # ----------------------
-
 
 type BoughtMemberEvent implements Event {
 
@@ -540,12 +538,7 @@ type StakingAccountConfirmedEvent implements Event {
   account: String!
 }
 
-
-
 # -----------------------
-
-
-
 
 "Membership creation genesis configuration."
 type GenesisConfiguredMember  {
@@ -587,7 +580,6 @@ type Member {
   handle: String
 
   "Avatar of member"
-  #avatar: StorageAssetStatus!
   avatarURI: String
 
   "Short text chosen by member to share information about themselves"
@@ -625,7 +617,6 @@ type Member {
   # proposalsSubmitted
   # uploadsInitiated:
   # ..
-
 }
 
 "State of the membership system. NB: There should only be one instance of this entity."
@@ -642,7 +633,6 @@ type MembershipSystem {
 
   "The initial, locked, balance credited to controller account of invitee."
   invitedInitialBalance: BigInt!
-
 }
 
 input MemberWhereUniqueInput {

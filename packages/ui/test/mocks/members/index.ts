@@ -12,6 +12,9 @@ export const aliceMember = {
   handle: 'alice_handle',
   rootAccount: 'aa',
   controllerAccount: 'bb',
+  isVerified: true,
+  isFoundingMember: true,
+  inviteCount: 4,
 }
 
 export const bobMember = {
@@ -19,4 +22,7 @@ export const bobMember = {
   handle: 'bob_handle',
   rootAccount: 'aa',
   controllerAccount: 'bb',
+  inviteCount: 4,
+  isVerified: true,
+  isFoundingMember: true,
 }

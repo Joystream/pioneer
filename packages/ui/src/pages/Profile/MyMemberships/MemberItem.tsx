@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Member } from '../../../common/types'
+import { MemberFieldsFragment } from '../../../api/queries'
 import { Avatar } from '../../../components/Avatar'
 import { ButtonGhostMediumSquare, ButtonGhostSmallSquare } from '../../../components/buttons'
 import { CrossIcon, TransferIcon } from '../../../components/icons'
@@ -8,7 +8,7 @@ import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
 import { MembershipAbout } from './MembershipAbout'
 
 interface MemberProps {
-  member: Member
+  member: MemberFieldsFragment
 }
 
 export const MemberItem = ({ member }: MemberProps) => {
@@ -25,10 +25,10 @@ export const MemberItem = ({ member }: MemberProps) => {
         <CountInfo>0 times</CountInfo>
       </MemberInfo>
       <MemberInfo>
-        <CountInfo>1 times</CountInfo>
+        <CountInfo>0 times</CountInfo>
       </MemberInfo>
       <MemberInfo>
-        <CountInfo>2</CountInfo>
+        <CountInfo>{member.inviteCount}</CountInfo>
         <ButtonGhostSmallSquare>
           <TransferIcon />
         </ButtonGhostSmallSquare>
