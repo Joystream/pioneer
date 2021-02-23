@@ -1,28 +1,28 @@
 import { Server } from 'miragejs/server'
+import { MemberFieldsFragment } from '../../../src/api/queries'
 
-export const createMember = (
-  server: Server,
-  member: { name: string; handle: string; rootAccount: string; controllerAccount: string }
-) => {
-  server.create('Member', (member as unknown) as any)
+type MockMember = Omit<MemberFieldsFragment, '__typename' | 'id'>
+
+export const createMember = (server: Server, member: MockMember) => {
+  server.create('Member', member as any)
 }
 
-export const aliceMember = {
+export const aliceMember: MockMember = {
   name: 'Alice Member',
   handle: 'alice_handle',
   rootAccount: 'aa',
   controllerAccount: 'bb',
-  isVerified: true,
   isFoundingMember: true,
-  inviteCount: 4,
+  isVerified: true,
+  inviteCount: 5,
 }
 
-export const bobMember = {
+export const bobMember: MockMember = {
   name: 'Bob Member',
   handle: 'bob_handle',
   rootAccount: 'aa',
   controllerAccount: 'bb',
-  inviteCount: 4,
-  isVerified: true,
-  isFoundingMember: true,
+  isFoundingMember: false,
+  isVerified: false,
+  inviteCount: 5,
 }
