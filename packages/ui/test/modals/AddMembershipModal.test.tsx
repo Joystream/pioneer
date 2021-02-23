@@ -1,3 +1,4 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { beforeAll, expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
@@ -5,11 +6,13 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
+import { Server } from 'miragejs/server'
 import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
 import { Account } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
+import { makeServer } from '../../src/mocks/server'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
@@ -19,6 +22,15 @@ import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
 describe('UI: AddMembershipModal', () => {
   beforeAll(cryptoWaitReady)
+  let server: Server
+
+  beforeEach(() => {
+    server = makeServer('test')
+  })
+
+  afterEach(() => {
+    server.shutdown()
+  })
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,
@@ -171,11 +183,13 @@ describe('UI: AddMembershipModal', () => {
 
   function renderModal() {
     return render(
-      <KeyringContext.Provider value={keyring}>
-        <ApiContext.Provider value={api}>
-          <AddMembershipModal onClose={sinon.spy()} />
-        </ApiContext.Provider>
-      </KeyringContext.Provider>
+      <ApolloProvider client={new ApolloClient({ uri: '/query-node', cache: new InMemoryCache() })}>
+        <KeyringContext.Provider value={keyring}>
+          <ApiContext.Provider value={api}>
+            <AddMembershipModal onClose={sinon.spy()} />
+          </ApiContext.Provider>
+        </KeyringContext.Provider>
+      </ApolloProvider>
     )
   }
 })
