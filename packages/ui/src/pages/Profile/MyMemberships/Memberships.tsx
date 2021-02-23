@@ -6,27 +6,8 @@ import { Text } from '../../../components/typography'
 import { useMembership } from '../../../hooks/useMembership'
 import { MemberItem } from './MemberItem'
 
-const bob = ({
-  handle: 'Bob member',
-  avatarUri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
-  about:
-    'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @bob on both.',
-} as unknown) as Member
-const dave = ({
-  handle: 'Dave member',
-  avatarUri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
-  about:
-    'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @dave on both.',
-} as unknown) as Member
-const alice = ({
-  handle: 'Alice member',
-  avatarUri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
-  about:
-    'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @alice on both.',
-} as unknown) as Member
-
 export function Memberships() {
-  const { count, loading } = useMembership()
+  const { count, loading, members } = useMembership()
   const hasMemberships = !!count
 
   if (loading) {
@@ -48,24 +29,8 @@ export function Memberships() {
     )
   }
 
-  const memberships = {
-    active: bob,
-    all: [dave, alice],
-  }
-
   return (
     <>
-      <h3>Active membership</h3>
-
-      <MembershipsList>
-        <MembershipsListHeader>
-          Memberships | Roles | Slashed | Terminated | Invitations | Invited
-        </MembershipsListHeader>
-        <MembershipsListItems>
-          <MemberItem member={memberships.active} key={memberships.active.handle} />
-        </MembershipsListItems>
-      </MembershipsList>
-
       <h3>Other memberships</h3>
 
       <MembershipsList>
@@ -73,8 +38,8 @@ export function Memberships() {
           Memberships | Roles | Slashed | Terminated | Invitations | Invited
         </MembershipsListHeader>
         <MembershipsListItems>
-          {memberships.all.map((member) => (
-            <MemberItem member={member} key={member.handle} />
+          {members.map((member) => (
+            <MemberItem member={(member as unknown) as Member} key={member.handle} />
           ))}
         </MembershipsListItems>
       </MembershipsList>

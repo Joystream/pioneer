@@ -1,7 +1,7 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-import { beforeAll, expect } from '@jest/globals'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, waitForElementToBeRemoved } from '@testing-library/react'
+import { Server } from 'miragejs/server'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 import sinon from 'sinon'
@@ -10,6 +10,7 @@ import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { makeServer } from '../../src/mocks/server'
 import { Memberships } from '../../src/pages/Profile/MyMemberships/Memberships'
 import { aliceSigner, bobSigner } from '../mocks/keyring'
+import { aliceMember, bobMember, createMember } from '../mocks/members'
 
 describe('UI: Memberships list', () => {
   let accounts: {
@@ -18,6 +19,7 @@ describe('UI: Memberships list', () => {
   }
   let alice: string
   let bob: string
+  let server: Server
 
   beforeAll(cryptoWaitReady)
 
@@ -35,35 +37,32 @@ describe('UI: Memberships list', () => {
     sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
   })
 
+  beforeEach(() => {
+    server = makeServer('test')
+  })
+
+  afterEach(() => {
+    server.shutdown()
+  })
+
   describe('with no memberships', () => {
     it('Shows Create Membership button', async () => {
-      const server = makeServer('test')
-
       const { findByRole } = renderMemberships()
 
       expect(await findByRole('button', { name: /create a membership/i })).toBeDefined()
-
-      server.shutdown()
     })
   })
 
   describe('with memberships', () => {
-    it('Shows list of  memberships', async () => {
-      const server = makeServer('test')
-      server.create('Member', ({
-        name: 'Alice Member',
-        handle: 'alice_handle',
-        rootAccount: 'aa',
-        controllerAccount: 'bb',
-      } as unknown) as any)
-
+    it('Shows list of memberships', async () => {
+      createMember(server, aliceMember)
+      createMember(server, bobMember)
       const { getByText } = renderMemberships()
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))
 
-      expect(getByText(/Alice Member/i)).toBeDefined()
-
-      server.shutdown()
+      expect(getByText(/alice_handle/i)).toBeDefined()
+      expect(getByText(/bob_handle/i)).toBeDefined()
     })
   })
 
