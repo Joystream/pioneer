@@ -56,7 +56,7 @@ export function Memberships() {
           Memberships | Roles | Slashed | Terminated | Invitations | Invited
         </MembershipsListHeader>
         <MembershipsListItems>
-          <MemberItem member={memberships.active} />
+          <MemberItem member={memberships.active} key={memberships.active.handle} />
         </MembershipsListItems>
       </MembershipsList>
 
@@ -68,7 +68,7 @@ export function Memberships() {
         </MembershipsListHeader>
         <MembershipsListItems>
           {memberships.all.map((member) => (
-            <MemberItem member={member} />
+            <MemberItem member={member} key={member.handle} />
           ))}
         </MembershipsListItems>
       </MembershipsList>

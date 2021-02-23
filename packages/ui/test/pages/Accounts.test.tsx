@@ -1,17 +1,17 @@
-import React from 'react'
+import { afterAll, beforeAll, expect } from '@jest/globals'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { cleanup, render } from '@testing-library/react'
 import BN from 'bn.js'
-import { expect } from 'chai'
+import React from 'react'
 import { HashRouter } from 'react-router-dom'
 import sinon from 'sinon'
-import { aliceSigner } from '../mocks/keyring'
-import { KeyringContext } from '../../src/providers/keyring/context'
+import { Account } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import * as useBalanceModule from '../../src/hooks/useBalance'
 import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'
-import { Account } from '../../src/common/types'
+import { KeyringContext } from '../../src/providers/keyring/context'
+import { aliceSigner } from '../mocks/keyring'
 
 describe('UI: Accounts list', () => {
   let accounts: {
@@ -20,7 +20,7 @@ describe('UI: Accounts list', () => {
   }
   let alice: string
 
-  before(cryptoWaitReady)
+  beforeAll(cryptoWaitReady)
 
   beforeEach(() => {
     alice = aliceSigner().address
@@ -33,8 +33,8 @@ describe('UI: Accounts list', () => {
 
   afterEach(cleanup)
 
-  context('with empty keyring', () => {
-    after(() => {
+  describe('with empty keyring', () => {
+    afterAll(() => {
       sinon.restore()
     })
 
@@ -44,11 +44,11 @@ describe('UI: Accounts list', () => {
           <Accounts />
         </KeyringContext.Provider>
       )
-      expect(profile.getByText('Loading accounts...')).to.exist
+      expect(profile.getByText('Loading accounts...')).toBeDefined()
     })
   })
 
-  context('with development accounts', () => {
+  describe('with development accounts', () => {
     beforeEach(() => {
       accounts.hasAccounts = true
       accounts.allAccounts.push({
@@ -67,9 +67,9 @@ describe('UI: Accounts list', () => {
 
       const alice = aliceSigner().address
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
-      expect(aliceBox).to.exist
-      expect(aliceBox?.querySelector('h5')?.textContent).to.equal('alice')
-      expect(aliceBox?.nextSibling?.textContent).to.equal('-')
+      expect(aliceBox).toBeDefined()
+      expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
+      expect(aliceBox?.nextSibling?.textContent).toBe('-')
     })
 
     it('Renders balance value', async () => {
@@ -83,8 +83,8 @@ describe('UI: Accounts list', () => {
       const { findByText } = renderAccounts()
 
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
-      expect(aliceBox?.querySelector('h5')?.textContent).to.equal('alice')
-      expect(aliceBox?.nextSibling?.textContent).to.equal('1,000')
+      expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
+      expect(aliceBox?.nextSibling?.textContent).toBe('1,000')
     })
 
     function renderAccounts() {

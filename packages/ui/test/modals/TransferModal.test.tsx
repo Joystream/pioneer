@@ -1,15 +1,15 @@
+import { beforeAll, expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
-import { expect } from 'chai'
 import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
-import { ArrowInsideIcon } from '../../src/components/icons'
 import { Account } from '../../src/common/types'
+import { ArrowInsideIcon } from '../../src/components/icons'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
@@ -20,7 +20,7 @@ import { selectAccount } from '../helpers/selectAccount'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
 describe('UI: TransferModal', () => {
-  before(cryptoWaitReady)
+  beforeAll(cryptoWaitReady)
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,
@@ -71,7 +71,7 @@ describe('UI: TransferModal', () => {
   it('Renders a modal', () => {
     const { getByText } = renderModal({ sender, to })
 
-    expect(getByText('Send tokens')).to.exist
+    expect(getByText('Send tokens')).toBeDefined()
   })
 
   it('Enables value input', () => {
@@ -81,35 +81,35 @@ describe('UI: TransferModal', () => {
     const useHalfButton = getByRole('button', { name: /use half/i }) as HTMLButtonElement
     const useMaxButton = getByRole('button', { name: /use max/i }) as HTMLButtonElement
 
-    expect(input.disabled).to.be.true
-    expect(useHalfButton.disabled).to.be.true
-    expect(useMaxButton.disabled).to.be.true
+    expect(input.disabled).toBe(true)
+    expect(useHalfButton.disabled).toBe(true)
+    expect(useMaxButton.disabled).toBe(true)
 
     selectAccount('From', 'alice', getByText)
 
-    expect(input.disabled).to.be.false
-    expect(useHalfButton.disabled).to.be.false
-    expect(useMaxButton.disabled).to.be.false
+    expect(input.disabled).toBe(false)
+    expect(useHalfButton.disabled).toBe(false)
+    expect(useMaxButton.disabled).toBe(false)
   })
 
   it('Renders an Authorize transaction step', () => {
     const { getByLabelText, getByText } = renderModal({ sender, to })
 
     const input = getByLabelText('Number of tokens')
-    expect((getByText('Transfer tokens') as HTMLButtonElement).disabled).to.be.true
+    expect((getByText('Transfer tokens') as HTMLButtonElement).disabled).toBe(true)
 
     fireEvent.change(input, { target: { value: '50' } })
 
     const button = getByText('Transfer tokens') as HTMLButtonElement
-    expect(button.disabled).to.be.false
+    expect(button.disabled).toBe(false)
 
     fireEvent.click(button)
 
-    expect(getByText('Authorize Transaction')).to.exist
-    expect(getByText(/Transaction fee:/i)?.parentNode?.textContent).to.match(/^Transaction fee:25/)
+    expect(getByText('Authorize Transaction')).toBeDefined()
+    expect(getByText(/Transaction fee:/i)?.parentNode?.textContent).toMatch(/^Transaction fee:25/)
   })
 
-  context('Signed transaction', () => {
+  describe('Signed transaction', () => {
     function renderAndSign() {
       const rendered = renderModal({ sender, to })
       const { getByLabelText, getByText } = rendered
@@ -126,10 +126,10 @@ describe('UI: TransferModal', () => {
 
       const { getByText } = renderAndSign()
 
-      expect(getByText('Pending transaction')).to.exist
+      expect(getByText('Pending transaction')).toBeDefined()
     })
 
-    context('Success', () => {
+    describe('Success', () => {
       beforeEach(() => {
         set(transfer, 'signAndSend', () =>
           from([
@@ -149,7 +149,7 @@ describe('UI: TransferModal', () => {
       it('Renders transaction success', async () => {
         const { getByText } = renderAndSign()
 
-        expect(getByText('Success')).to.exist
+        expect(getByText('Success')).toBeDefined()
       })
 
       it('Calculates balances before & after', async () => {
@@ -157,10 +157,10 @@ describe('UI: TransferModal', () => {
 
         const [alice, bob] = getAllByText('Transferable balance before:')
 
-        expect(alice?.parentNode?.textContent).to.match(/Transferable balance before:1,075/)
-        expect(bob?.parentNode?.textContent).to.match(/Transferable balance before:950/)
-        expect(alice?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
-        expect(bob?.parentNode?.textContent).to.match(/Transferable balance after:1,000/)
+        expect(alice?.parentNode?.textContent).toMatch(/Transferable balance before:1,075/)
+        expect(bob?.parentNode?.textContent).toMatch(/Transferable balance before:950/)
+        expect(alice?.parentNode?.textContent).toMatch(/Transferable balance after:1,000/)
+        expect(bob?.parentNode?.textContent).toMatch(/Transferable balance after:1,000/)
       })
     })
   })

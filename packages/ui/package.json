@@ -10,7 +10,7 @@
     "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
     "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'",
     "start": "webpack serve --mode development --progress",
-    "test": "mocha"
+    "test": "jest"
   },
   "dependencies": {
     "@apollo/client": "^3.3.11",
@@ -36,6 +36,10 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@babel/core": "7.12.17",
+    "@babel/preset-env": "7.12.17",
+    "@babel/preset-react": "7.12.13",
+    "@babel/preset-typescript": "7.12.17",
     "@graphql-codegen/cli": "^1.20.1",
     "@graphql-codegen/near-operation-file-preset": "^1.17.13",
     "@graphql-codegen/typescript": "^1.21.0",
@@ -49,13 +53,15 @@
     "@types/sinon": "^9.0.10",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
+    "babel-jest": "26.6.3",
+    "babel-plugin-import-graphql": "^2.8.1",
     "chai": "^4.2.0",
     "clean-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "4",
+    "jest": "^26.6.3",
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
     "miragejs": "^0.1.41",
-    "mocha": "^8.2.1",
     "mock-local-storage": "^1.1.15",
     "prettier": "^2.2.1",
     "sinon": "^9.2.3",
