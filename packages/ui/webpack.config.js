@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-env node */
-
 const path = require('path')
 const webpack = require('webpack')
 const cp = require('child_process')
