@@ -576,11 +576,11 @@ type Member {
   "Member controller in SS58 encoding."
   controllerAccount: String!
 
-  "The unique handle chosen by member"
-  handle: String
-
   "A human readable mutable string"
   name: String
+
+  "The unique handle chosen by member"
+  handle: String
 
   "Avatar of member"
   avatarURI: String

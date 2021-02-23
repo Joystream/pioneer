@@ -172,9 +172,7 @@ describe('UI: AddMembershipModal', () => {
         const { getByText } = await renderAuthorizeStep()
         fireEvent.click(getByText(/^sign and create a member$/i))
 
-        const byText = getByText('Success')
-        console.log(byText.parentElement?.parentElement?.outerHTML)
-        expect(byText).toBeDefined()
+        expect(getByText('Success')).toBeDefined()
         expect(getByText(/^bobby bob/i)).toBeDefined()
         expect(getByText(/^realbobbybob/i)).toBeDefined()
       })

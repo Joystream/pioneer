@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const MemberInfo = React.memo(({ member, onClick }: Props) => {
-  console.log(member)
   return (
     <>
       <MemberInfoWrap>

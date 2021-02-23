@@ -397,10 +397,10 @@ export type Member = {
   rootAccount: Scalars['String']
   /** Member controller in SS58 encoding. */
   controllerAccount: Scalars['String']
-  /** The unique handle chosen by member */
-  handle?: Maybe<Scalars['String']>
   /** A human readable mutable string */
   name?: Maybe<Scalars['String']>
+  /** The unique handle chosen by member */
+  handle?: Maybe<Scalars['String']>
   /** Avatar of member */
   avatarURI?: Maybe<Scalars['String']>
   /** Short text chosen by member to share information about themselves */

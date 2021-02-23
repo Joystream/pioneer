@@ -8,7 +8,6 @@ export type MemberFieldsFragment = {
   rootAccount: string
   controllerAccount: string
   handle?: Types.Maybe<string>
-  name?: Types.Maybe<string>
   about?: Types.Maybe<string>
   avatarURI?: Types.Maybe<string>
   isFoundingMember: boolean
@@ -26,7 +25,6 @@ export const MemberFieldsFragmentDoc = gql`
     rootAccount
     controllerAccount
     handle
-    name
     about
     avatarURI
     isFoundingMember
