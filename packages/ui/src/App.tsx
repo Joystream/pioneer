@@ -4,9 +4,7 @@ import { MyMemberships } from './pages/Profile/MyMemberships'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-const server = makeServer()
-
-console.log(server)
+makeServer()
 
 export function App() {
   return (
