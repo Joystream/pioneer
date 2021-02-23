@@ -1,0 +1,663 @@
+"A blockchain genesis block."
+enum Network {
+  Babylon
+  Sumer
+  # Mainnet
+}
+"""GraphQL representation of BigInt"""
+scalar BigInt
+
+"An event interface."
+interface Event {
+
+  "Concatenation of block hash and index in block."
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  # Is there an index in extrinsic field worth adding?
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int
+}
+
+"A block in the blockchain."
+type Block {
+
+  "Hash of block in hex encoding."
+  id: ID!
+
+  "Network in which block occurred."
+  network: Network!
+
+  "Height at which block is committed."
+  height: BigInt!
+
+  "Is block finalized. Note: we can have richer consensus information here in the future, like who signed, but its not a priority now."
+  isFinalized: Boolean!
+
+  "Timestamp in block."
+  timestamp: BigInt!
+
+  "Hash of block in hex encoding."
+  hash: String!
+
+  "Hash of parent block in hex encoding."
+  parentHash: String!
+
+  "State root hash in hex encoding."
+  stateRoot: String!
+
+  "Extrinsics merkle root in hex encoding."
+  extrinsicRoot: String!
+
+  "Time since last block."
+  blockTime: BigInt!
+
+  # All events triggered in block.
+  extrinsics: [Extrinsic!]
+
+  # All events triggered in block.
+  #events: [Event!]
+
+}
+
+"Substrate Root origin type."
+type RootOrigin  {
+
+  "No meaning, only here because GraphQL cannot support empty types."
+  phantomField: Int
+}
+
+"Substrate signed origin type."
+type SignedOrigin  {
+
+  "Signing account in SS58 encoding."
+  signingAccount: String!
+}
+
+"Substrate none origin type."
+type NoneOrigin  {
+
+  "No meaning, only here because GraphQL cannot support empty types."
+  phantomField: Int
+}
+
+"Substrate extrinsic origin."
+union ExtrinsicOrigin = RootOrigin | SignedOrigin | NoneOrigin
+
+"A general blockchain extrinsic."
+type Extrinsic {
+
+  "Hash in hex encoding."
+  id: ID!
+
+  "Name of runtime module to which extrinsic was targeted."
+  moduleName: String!
+
+  "Name of extrinsic, including module prefix."
+  call: String!
+
+  "Nonce"
+  Nonce: BigInt!
+
+  "Fee charged."
+  fee: BigInt!
+
+  "Tip provided."
+  tip: BigInt!
+
+  "Origin for extrinsic."
+  origin: ExtrinsicOrigin!
+
+  "Call parameters, unknown encoding currently."
+  parameters: String
+
+  "Index of extrinsic in block."
+  indexInBlock: Int!
+
+  "Block in which this extrinsic was included."
+  inBlock: Block!
+
+  "Whether extrinsic was successful."
+  successful: Boolean!
+
+  # All events triggered by this extrinsic.
+  # Note that any on-chain event which does not have an entity implementing `Event` interface will be omitted here.
+  #events: [Event!]
+
+}
+
+
+
+# ----------------------
+
+
+type BoughtMemberEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "New membership created."
+  newMember: Member!
+
+  "New member root account in SS58 encoding."
+  rootAccount: String!
+
+  "New member controller in SS58 encoding."
+  controllerAccount: String!
+
+  "New member user name."
+  name: String!
+
+  "New member handle."
+  handle: String!
+
+  "New member avatar asset."
+  #avatar: StorageAssetStatus!
+  avatarURI: String
+
+  "New member 'about' text."
+  about: String!
+
+  "Referrer member."
+  referrer: Member
+}
+
+type InvitedMemberEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Inviting member created."
+  invitingMember: Member!
+
+  "New membership created."
+  newMember: Member!
+
+  "New member root account in SS58 encoding."
+  rootAccount: String!
+
+  "New member controller in SS58 encoding."
+  controllerAccount: String!
+
+  "New member user name."
+  name: String!
+
+  "New member handle."
+  handle: String!
+
+  "New member avatar asset."
+  # avatar: StorageAssetStatus!
+  avatarURI: String
+
+  "New member 'about' text."
+  about: String!
+}
+
+type MemberProfileUpdatedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Membership being updated."
+  member: Member!
+
+  "New member root account in SS58 encoding. Null means no new value was provided."
+  newRootAccount: String
+
+  "New member controller in SS58 encoding. Null means no new value was provided."
+  newControllerAccount: String
+
+  "New member user name. Null means no new value was provided."
+  newName: String
+
+  "New member handle. Null means no new value was provided."
+  newHandle: String
+
+  "New avatar asset. Null means no new value was provided."
+  newAvatarURI: String
+
+  "New member about text. Null means no new value was provided."
+  newAbout: String!
+}
+
+type MemberAccountsUpdatedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Membership in question."
+  member: Member!
+
+  "New member root account in SS58 encoding. Null means no new value was provided."
+  newRootAccount: String
+
+  "New member controller in SS58 encoding. Null means no new value was provided."
+  newControllerAccount: String
+}
+
+type MemberVerificationStatusUpdatedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Membership in question."
+  member: Member!
+
+  #"Worker updating status"
+  #worker: Worker!
+
+  "New status."
+  isVerified: Boolean!
+}
+
+type ReferralCutUpdatedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Membership in question."
+  member: Member!
+
+  "New cut value."
+  newValue: BigInt!
+}
+
+type InvitesTransferredEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Membership sending invites."
+  sourceMember: Member!
+
+  "Membership receiving invites."
+  targetMember: Member!
+
+  "Number of invites transferred."
+  numberOfInvites: BigInt!
+}
+
+type MembershipPriceUpdatedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "The new membership price."
+  newPrice: BigInt!
+}
+
+type InitialInvitationBalanceUpdatedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "New initial invitation balance."
+  newInitialBalance: BigInt!
+}
+
+type LeaderInvitationQuotaUpdatedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Membership in question."
+  member: Member!
+
+  "New quota."
+  newInvitationQuota: Int!
+}
+
+type InitialInvitationCountUpdatedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Initial invitation count for members."
+  newInitialInvitationCount: Int!
+}
+
+type StakingAccountAddedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Membership in question."
+  member: Member!
+
+  "New staking account in SS58 encoding."
+  account: String!
+}
+
+type StakingAccountRemovedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Membership in question."
+  member: Member!
+
+  "New staking account in SS58 encoding."
+  account: String!
+}
+
+type StakingAccountConfirmedEvent implements Event {
+
+  # ------ Event <interface> ------
+
+  "Event identifier"
+  id: ID!
+
+  "Possible extrinsic in which"
+  inExtrinsic: Extrinsic
+
+  "Block in which event was emitted."
+  inBlock: Block!
+
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+
+  # ------ Event <interface> ------
+
+  "Membership in question."
+  member: Member!
+
+  "New staking account in SS58 encoding."
+  account: String!
+}
+
+
+
+# -----------------------
+
+
+
+
+"Membership creation genesis configuration."
+type GenesisConfiguredMember  {
+
+  "Network genesis at which a membership was established."
+  network: Network!
+}
+
+"Membership creation via an invitation."
+type MemberInvitation  {
+
+  "Event corresponding to invitation of a membership."
+  event: InvitedMemberEvent!
+}
+
+"A membership originating fro a purchase."
+type MemberPurchase  {
+
+  "Event corresponding to buying of a membership."
+  event: BoughtMemberEvent!
+}
+
+"From which a membership can originate."
+union MemberSource = GenesisConfiguredMember | MemberInvitation | MemberPurchase
+
+"A membership."
+type Member {
+
+  "Runtime id of membership"
+  id: ID!
+
+  "Root account in SS58 encoding."
+  rootAccount: String!
+
+  "Member controller in SS58 encoding."
+  controllerAccount: String!
+
+  "The unique handle chosen by member"
+  handle: String
+
+  "Avatar of member"
+  #avatar: StorageAssetStatus!
+  avatarURI: String
+
+  "Short text chosen by member to share information about themselves"
+  about: String
+
+  "Whether member is verified."
+  isVerified: Boolean!
+
+  "Whether member is founding member."
+  isFoundingMember: Boolean!
+
+  "Number of invites member has."
+  inviteCount: BigInt!
+
+  "Accounts bounded to membership."
+  boundAccounts: [String!]
+
+  #"The member which invited this member if the latter originated from an invitation.
+  #This redundant field is introduced in order to facilitate the convenient reverse lookup field invitees, which cannot inspect union fields currently."
+  #invitor: Member
+
+  #"All members invited by this member."
+  #invitees: [Member!]
+
+  #"All worker roles corresponding to this member."
+  #workers: [Worker!]
+
+  "Where membership came from."
+  source : MemberSource!
+
+  # Possible reverse lookups
+  # threadsCreated: [Thread!]
+  # postsCreated: [Post!]
+  # applicationsSubmitted:
+  # proposalsSubmitted
+  # uploadsInitiated:
+  # ..
+
+}
+
+"State of the membership system. NB: There should only be one instance of this entity."
+type MembershipSystem {
+
+  "Current price to buy a membership."
+  membershipPrice: BigInt!
+
+  "Amount of tokens diverted to invitor."
+  referralCut: BigInt!
+
+  "Initial invitation count of a new member."
+  defaultInviteCount: BigInt!
+
+  "The initial, locked, balance credited to controller account of invitee."
+  invitedInitialBalance: BigInt!
+
+}
+
+input MemberWhereUniqueInput {
+  id: ID!
+}
+
+input MemberWhereInput {
+  rootAccount_in: [String]
+  id_in: [ID!]
+}
+
+type Query {
+  # Lookup a member by its ID
+  member(where: MemberWhereUniqueInput!): Member
+
+  # Lookup members by where params
+  members(where: MemberWhereInput): [Member!]!
+}

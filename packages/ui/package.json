@@ -4,6 +4,7 @@
   "license": "GPL-3.0-only",
   "scripts": {
     "build": "webpack --mode production --progress",
+    "queries:generate": "graphql-codegen --config codegen.config.yml",
     "lint": "yarn lint:prettier --check && yarn lint:eslint",
     "lint:fix": "yarn lint:prettier --write && yarn lint:eslint --fix",
     "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
@@ -12,6 +13,7 @@
     "test": "mocha"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.11",
     "@joystream/types": "^0.15.0",
     "@polkadot/api": "2.4.1",
     "@polkadot/extension-dapp": "^0.32.1",
@@ -25,6 +27,7 @@
     "copy-webpack-plugin": "^7.0.0",
     "crypto-browserify": "^3.12.0",
     "file-loader": "^6.2.0",
+    "graphql-tag": "^2.11.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
@@ -33,6 +36,12 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.20.1",
+    "@graphql-codegen/near-operation-file-preset": "^1.17.13",
+    "@graphql-codegen/typescript": "^1.21.0",
+    "@graphql-codegen/typescript-operations": "^1.17.14",
+    "@graphql-codegen/typescript-react-apollo": "^2.2.1",
+    "@miragejs/graphql": "^0.1.10",
     "@testing-library/react": "^11.2.3",
     "@testing-library/react-hooks": "^5.0.3",
     "@types/chai": "^4.2.14",
@@ -45,6 +54,7 @@
     "html-webpack-plugin": "4",
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
+    "miragejs": "^0.1.41",
     "mocha": "^8.2.1",
     "mock-local-storage": "^1.1.15",
     "prettier": "^2.2.1",

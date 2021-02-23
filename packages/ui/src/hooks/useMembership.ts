@@ -1,7 +1,11 @@
+import { useGetMembersQuery } from '../api/queries'
+
 interface UseMembership {
   count: number
 }
 
 export function useMembership(): UseMembership {
-  return { count: 0 }
+  const { data } = useGetMembersQuery()
+
+  return { count: data?.members.length ?? 0 }
 }

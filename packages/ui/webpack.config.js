@@ -23,12 +23,14 @@ module.exports = (env, argv) => ({
       Buffer: ['buffer', 'Buffer'],
       process: 'process/browser.js',
     }),
-    new CopyPlugin({patterns: [
-      {
-        from: 'src/assets/favicon.svg',
-        to: ''
-      }
-    ]})
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'src/assets/favicon.svg',
+          to: '',
+        },
+      ],
+    }),
   ],
   module: {
     rules: [
@@ -40,6 +42,11 @@ module.exports = (env, argv) => ({
       {
         test: /\.(png|svg|jpg|gif|woff|woff2|eot|ttf|otf)$/,
         use: ['file-loader'],
+      },
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        loader: 'graphql-tag/loader',
       },
     ],
   },
