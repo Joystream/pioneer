@@ -1,32 +1,32 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { Member } from '../../../common/types'
+import { MemberFieldsFragment } from '../../../api/queries'
 import { Colors, Sizes } from '../../../constants'
+import { useMembership } from '../../../hooks/useMembership'
 import { MemberInfo } from '../../MemberInfo'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
 import { OptionListMember } from './OptionListMember'
-import { useMembers } from '../../../hooks/useMembers'
 
 interface Props {
-  onChange: (member: Member) => void
-  filter?: (member: Member) => boolean
-  selected?: Member
+  onChange: (member: MemberFieldsFragment) => void
+  filter?: (member: MemberFieldsFragment) => boolean
+  selected?: MemberFieldsFragment
   enable?: boolean
 }
 
-export const filterMember = (filterOut: Member | undefined) => {
-  return filterOut ? (member: Member) => member.handle !== filterOut.handle : () => true
+export const filterMember = (filterOut: MemberFieldsFragment | undefined) => {
+  return filterOut ? (member: MemberFieldsFragment) => member.handle !== filterOut.handle : () => true
 }
 
 export const SelectMember = React.memo(({ onChange, filter, selected, enable }: Props) => {
-  const options = useMembers()
+  const { loading, members } = useMembership()
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState<Member | undefined>(selected)
+  const [selectedOption, setSelectedOption] = useState<MemberFieldsFragment | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
 
   const onOptionClick = useCallback(
-    (option: Member) => {
+    (option: MemberFieldsFragment) => {
       setIsOpen(false)
       setSelectedOption(option)
       onChange(option)
@@ -79,7 +79,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, enable }: 
           <ArrowDownIcon />
         </ToggleButton>
       </Toggle>
-      {isOpen && <OptionListMember onChange={onOptionClick} options={options} />}
+      {!loading && isOpen && <OptionListMember onChange={onOptionClick} options={members} />}
     </SelectComponent>
   )
 })
