@@ -22,7 +22,7 @@ export const MemberInfo = React.memo(({ member, onClick }: Props) => {
           {member.isVerified && <VerifiedMemberIcon />}
           {member.isFoundingMember && <FoundingMemberIcon />}
         </MemberHandle>
-        <MemberName size={2}>{member.name}</MemberName>
+        <MemberName size={2}>{member?.name}</MemberName>
       </MemberInfoWrap>
     </>
   )

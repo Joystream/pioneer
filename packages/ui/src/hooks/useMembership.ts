@@ -7,7 +7,11 @@ interface UseMembership {
 }
 
 export function useMembership(): UseMembership {
-  const { data, loading } = useGetMembersQuery()
+  const { data, loading, error } = useGetMembersQuery()
+
+  if (error) {
+    console.error(error)
+  }
 
   const count = data?.members.length ?? 0
   const members = data?.members ?? []

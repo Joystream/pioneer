@@ -3,7 +3,7 @@ fragment MemberFields on Member {
   rootAccount
   controllerAccount
   handle
-#  name TODO - can't stub this field
+  name
   about
   avatarURI
   isFoundingMember

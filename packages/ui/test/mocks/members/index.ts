@@ -4,7 +4,10 @@ import { MemberFieldsFragment } from '../../../src/api/queries'
 type MockMember = Omit<MemberFieldsFragment, '__typename' | 'id'>
 
 export const createMember = (server: Server, member: MockMember) => {
-  server.create('Member', member as any)
+  server.schema.create('Member', {
+    ...member,
+    __typename: 'Member',
+  } as any)
 }
 
 export const aliceMember: MockMember = {

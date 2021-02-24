@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, waitForElementToBeRemoved } from '@testing-library/react'
 import { Server } from 'miragejs/server'
@@ -67,9 +67,17 @@ describe('UI: Memberships list', () => {
   })
 
   function renderMemberships() {
+    const link = new HttpLink({
+      uri: '/query-node',
+      fetch: (uri, options) => {
+        return fetch(uri, options).then((result) => {
+          return result
+        })
+      },
+    })
     return render(
       <HashRouter>
-        <ApolloProvider client={new ApolloClient({ uri: '/query-node', cache: new InMemoryCache() })}>
+        <ApolloProvider client={new ApolloClient({ link, cache: new InMemoryCache() })}>
           <Memberships />
         </ApolloProvider>
       </HashRouter>

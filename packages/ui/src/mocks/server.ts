@@ -1,5 +1,5 @@
-import { createServer } from 'miragejs'
 import { createGraphQLHandler } from '@miragejs/graphql'
+import { createServer } from 'miragejs'
 
 import schema from '../api/schemas/schema.graphql'
 import { mockMembers } from './data'

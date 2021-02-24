@@ -173,7 +173,6 @@ describe('UI: AddMembershipModal', () => {
         fireEvent.click(getByText(/^sign and create a member$/i))
 
         expect(getByText('Success')).toBeDefined()
-        expect(getByText(/^bobby bob/i)).toBeDefined()
         expect(getByText(/^realbobbybob/i)).toBeDefined()
       })
     })
