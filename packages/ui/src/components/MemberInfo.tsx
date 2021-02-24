@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { MemberFieldsFragment } from '../api/queries'
 import { Colors } from '../constants'
 import { Avatar } from './Avatar'
-import { Text } from './typography'
 
 interface Props {
   member: MemberFieldsFragment
@@ -22,7 +21,7 @@ export const MemberInfo = React.memo(({ member, onClick }: Props) => {
           {member.isVerified && <VerifiedMemberIcon />}
           {member.isFoundingMember && <FoundingMemberIcon />}
         </MemberHandle>
-        <MemberName size={2}>{member?.name}</MemberName>
+        <MemberRoles />
       </MemberInfoWrap>
     </>
   )
@@ -36,7 +35,7 @@ const MemberInfoWrap = styled.div`
   grid-row-gap: 4px;
   grid-template-areas:
     'memberphoto memberhandle'
-    'memberphoto membername';
+    'memberphoto memberroles';
   align-items: center;
   width: 100%;
   justify-self: start;
@@ -48,8 +47,8 @@ const MemberHandle = styled.p`
   grid-area: memberhandle;
 `
 
-const MemberName = styled(Text)`
-  grid-area: membername;
+const MemberRoles = styled.div`
+  grid-area: memberroles;
 `
 
 const MemberPhoto = styled.div`

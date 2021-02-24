@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Transitions } from '../../../constants'
+import { BorderRad, Colors } from '../../../constants'
 import { useMembership } from '../../../hooks/useMembership'
 import { AddMembershipButton } from '../../AddMembershipButton'
+import { MemberInfo } from '../../MemberInfo'
 
 export const CurrentMember = () => {
-  const { count } = useMembership()
+  const { count, members } = useMembership()
 
   if (count < 1) {
     return <AddMembershipButton />
@@ -16,13 +17,9 @@ export const CurrentMember = () => {
       <Memberships>
         Memberships <MembershipsBadge>{count}</MembershipsBadge>
       </Memberships>
-      <MemberAccount>
-        <MemberName>Alice</MemberName>
-        <MemberPhoto />
-        <MemberRoles>
-          <MemberRole />
-        </MemberRoles>
-      </MemberAccount>
+      <SwitchMember>
+        <MemberInfo member={members[0]} />
+      </SwitchMember>
     </>
   )
 }
@@ -56,77 +53,9 @@ const MembershipsBadge = styled.span`
   color: ${Colors.White};
 `
 
-const MemberAccount = styled.a`
-  display: grid;
-  position: relative;
-  grid-template-columns: 40px 1fr;
-  grid-template-rows: 20px 16px;
-  grid-column-gap: 8px;
-  grid-row-gap: 4px;
-  grid-template-areas:
-    'memberphoto membername'
-    'memberphoto memberroles';
-  align-items: center;
+const SwitchMember = styled.div`
+  background-color: ${Colors.Black[700]};
   padding: 10px 8px;
   border-radius: ${BorderRad.s};
-  background-color: ${Colors.Black[700]};
-
-  &:after {
-    content: '';
-    position: absolute;
-    right: 12px;
-    width: 6px;
-    height: 6px;
-    border: 1px solid ${Colors.Black[300]};
-    border-bottom: 1px solid transparent;
-    border-left: 1px solid transparent;
-    transform: rotate(45deg);
-    transition: ${Transitions.all};
-  }
-`
-
-const MemberName = styled.span`
-  grid-area: membername;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 700;
-  color: ${Colors.White};
-`
-
-const MemberPhoto = styled.img`
-  display: flex;
-  grid-area: memberphoto;
-  height: 100%;
-  width: auto;
-  object-fit: contain;
-  border-radius: ${BorderRad.full};
-`
-
-const MemberRoles = styled.ul`
-  display: flex;
-  grid-area: memberroles;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-`
-
-const MemberRole = styled.li`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  padding: 2px;
-  font-size: 4px;
-  line-height: 4px;
-  text-align: center;
-  border-radius: ${BorderRad.full};
-  color: ${Colors.Black[100]};
-  background-color: ${Colors.Black[600]};
-
-  & + & {
-    margin-left: 4px;
-  }
+  grid-area: memberaccount;
 `

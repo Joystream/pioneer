@@ -26,15 +26,30 @@ describe('UI: Memberships component', () => {
   })
 
   describe('with memberships', () => {
-    it('Displays memberships count', async () => {
+    beforeEach(() => {
       createMember(server, aliceMember)
       createMember(server, bobMember)
+    })
 
-      const { getByRole, getByText } = renderComponent()
+    async function renderAndWait() {
+      const renderResult = renderComponent()
+      const { getByRole } = renderResult
 
       await waitForElementToBeRemoved(() => getByRole('button', { name: /create a membership/i }))
 
+      return renderResult
+    }
+
+    it('Displays memberships count', async () => {
+      const { getByText } = await renderAndWait()
+
       expect(getByText(/memberships/i)?.parentElement?.textContent).toMatch(/^memberships 2/i)
+    })
+
+    it('Displays active member', async () => {
+      const { getByText } = await renderAndWait()
+
+      expect(getByText(/alice/i)).toBeDefined()
     })
   })
 
