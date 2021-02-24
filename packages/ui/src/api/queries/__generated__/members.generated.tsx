@@ -8,8 +8,12 @@ export type MemberFieldsFragment = {
   rootAccount: string
   controllerAccount: string
   handle?: Types.Maybe<string>
+  name?: Types.Maybe<string>
   about?: Types.Maybe<string>
   avatarURI?: Types.Maybe<string>
+  isFoundingMember: boolean
+  isVerified: boolean
+  inviteCount: any
 }
 
 export type GetMembersQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -22,8 +26,12 @@ export const MemberFieldsFragmentDoc = gql`
     rootAccount
     controllerAccount
     handle
+    name
     about
     avatarURI
+    isFoundingMember
+    isVerified
+    inviteCount
   }
 `
 export const GetMembersDocument = gql`

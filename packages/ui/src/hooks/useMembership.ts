@@ -1,11 +1,20 @@
-import { useGetMembersQuery } from '../api/queries'
+import { MemberFieldsFragment, useGetMembersQuery } from '../api/queries'
 
 interface UseMembership {
   count: number
+  members: MemberFieldsFragment[]
+  loading: boolean
 }
 
 export function useMembership(): UseMembership {
-  const { data } = useGetMembersQuery()
+  const { data, loading, error } = useGetMembersQuery()
 
-  return { count: data?.members.length ?? 0 }
+  if (error) {
+    console.error(error)
+  }
+
+  const count = data?.members.length ?? 0
+  const members = data?.members ?? []
+
+  return { count, members, loading }
 }

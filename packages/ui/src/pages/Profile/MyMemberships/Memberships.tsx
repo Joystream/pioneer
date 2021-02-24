@@ -1,31 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Member } from '../../../common/types'
 import { AddMembershipButton } from '../../../components/AddMembershipButton'
 import { Text } from '../../../components/typography'
+import { Colors } from '../../../constants'
+import { useMembership } from '../../../hooks/useMembership'
 import { MemberItem } from './MemberItem'
 
-const bob = ({
-  handle: 'Bob member',
-  avatarUri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
-  about:
-    'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @bob on both.',
-} as unknown) as Member
-const dave = ({
-  handle: 'Dave member',
-  avatarUri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
-  about:
-    'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @dave on both.',
-} as unknown) as Member
-const alice = ({
-  handle: 'Alice member',
-  avatarUri: 'https://www.gravatar.com/avatar/50284e458f1aa6862cc23a26fdcc3db1?s=46',
-  about:
-    'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @alice on both.',
-} as unknown) as Member
-
 export function Memberships() {
-  const hasMemberships = false
+  const { count, loading, members } = useMembership()
+  const hasMemberships = !!count
+
+  if (loading) {
+    return <Loading>Loading...</Loading>
+  }
 
   if (!hasMemberships) {
     return (
@@ -42,36 +29,26 @@ export function Memberships() {
     )
   }
 
-  const memberships = {
-    active: bob,
-    all: [dave, alice],
-  }
-
   return (
     <>
-      <h3>Active membership</h3>
+      <h6>Other memberships</h6>
 
-      <MembershipsList>
-        <MembershipsListHeader>
-          Memberships | Roles | Slashed | Terminated | Invitations | Invited
-        </MembershipsListHeader>
-        <MembershipsListItems>
-          <MemberItem member={memberships.active} key={memberships.active.handle} />
-        </MembershipsListItems>
-      </MembershipsList>
+      <MembershipsGroup>
+        <ListHeaders>
+          <ListHeader>Memberships</ListHeader>
+          <ListHeader>Roles</ListHeader>
+          <ListHeader>Slashed</ListHeader>
+          <ListHeader>Terminated</ListHeader>
+          <ListHeader>Invitations</ListHeader>
+          <ListHeader>Invited</ListHeader>
+        </ListHeaders>
 
-      <h3>Other memberships</h3>
-
-      <MembershipsList>
-        <MembershipsListHeader>
-          Memberships | Roles | Slashed | Terminated | Invitations | Invited
-        </MembershipsListHeader>
-        <MembershipsListItems>
-          {memberships.all.map((member) => (
+        <MembershipsList>
+          {members.map((member) => (
             <MemberItem member={member} key={member.handle} />
           ))}
-        </MembershipsListItems>
-      </MembershipsList>
+        </MembershipsList>
+      </MembershipsGroup>
     </>
   )
 }
@@ -95,6 +72,75 @@ const NoMembershipsInfo = styled.div`
   }
 `
 
-const MembershipsList = styled.div``
-const MembershipsListHeader = styled.div``
-const MembershipsListItems = styled.div``
+const MembershipsGroup = styled.div`
+  display: grid;
+  grid-area: memberstable;
+  grid-template-columns: 1fr;
+  grid-template-rows: 16px auto;
+  grid-template-areas:
+    'accountstablenav'
+    'accountslist';
+  grid-row-gap: 6px;
+  width: 100%;
+`
+
+const ListHeaders = styled.div`
+  display: grid;
+  grid-area: accountstablenav;
+  grid-template-rows: 1fr;
+  grid-template-columns: 260px 120px repeat(5, 80px);
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 16px;
+`
+
+const ListHeader = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  font-size: 10px;
+  line-height: 16px;
+  font-weight: 700;
+  color: ${Colors.Black[400]};
+  text-transform: uppercase;
+  text-align: center;
+
+  &:first-child {
+    justify-content: flex-start;
+    text-align: left;
+  }
+  &:nth-child(2) {
+    justify-content: flex-start;
+    text-align: left;
+  }
+  &:last-child {
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      right: -15px;
+      width: 4px;
+      height: 4px;
+      border: 1px solid ${Colors.Black[600]};
+      border-left: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+      transform: rotate(-45deg);
+    }
+  }
+`
+
+const MembershipsList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`
+
+const Loading = styled.div`
+  font-size: 2em;
+`

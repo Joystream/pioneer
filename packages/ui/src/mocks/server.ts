@@ -1,11 +1,13 @@
-import { createServer } from 'miragejs'
 import { createGraphQLHandler } from '@miragejs/graphql'
+import { createServer } from 'miragejs'
 
 import schema from '../api/schemas/schema.graphql'
 import { mockMembers } from './data'
 
-export const makeServer = () => {
+export const makeServer = (environment = 'development') => {
   return createServer({
+    environment,
+
     routes() {
       this.post('/query-node', createGraphQLHandler(schema, this.schema))
     },

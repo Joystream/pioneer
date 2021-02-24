@@ -1,22 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Member } from '../common/types'
+import { MemberFieldsFragment } from '../api/queries'
+import { Colors } from '../constants'
 import { Avatar } from './Avatar'
 import { Text } from './typography'
 
 interface Props {
-  member: Member
+  member: MemberFieldsFragment
+  onClick?: () => void
 }
 
-export const MemberInfo = React.memo(({ member }: Props) => {
+export const MemberInfo = React.memo(({ member, onClick }: Props) => {
   return (
     <>
       <MemberInfoWrap>
         <MemberPhoto>
           <Avatar avatarURI={member.avatarURI} />
         </MemberPhoto>
-        <MemberHandle>{member.handle}</MemberHandle>
-        <MemberName size={2}>{member.name}</MemberName>
+        <MemberHandle onClick={onClick}>
+          {member.handle}
+          {member.isVerified && <VerifiedMemberIcon />}
+          {member.isFoundingMember && <FoundingMemberIcon />}
+        </MemberHandle>
+        <MemberName size={2}>{member?.name}</MemberName>
       </MemberInfoWrap>
     </>
   )
@@ -49,3 +55,21 @@ const MemberName = styled(Text)`
 const MemberPhoto = styled.div`
   grid-area: memberphoto;
 `
+
+const TempIcon = styled.span`
+  width: 20px;
+  height: 20px;
+  margin: 0 0 0 4px;
+  border-radius: 50%;
+  border: 1px solid ${Colors.Blue[50]};
+  color: ${Colors.LogoPurple};
+  padding: 0;
+  line-height: 17px;
+  display: inline-block;
+  font-size: 14px;
+  text-align: center;
+`
+
+const VerifiedMemberIcon = () => <TempIcon>✓</TempIcon>
+
+const FoundingMemberIcon = () => <TempIcon>⚑</TempIcon>

@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Shadows, Sizes, Transitions, Colors } from '../../../constants'
-import { Member } from '../../../common/types'
-import { OptionMember, OptionComponentContainer, OptionComponent } from './OptionMember'
+import { MemberFieldsFragment } from '../../../api/queries'
+import { BorderRad, Colors, Shadows, Sizes, Transitions } from '../../../constants'
+import { OptionComponent, OptionComponentContainer, OptionMember } from './OptionMember'
 
 interface Props {
-  options: Array<Member>
-  onChange: (member: Member) => void
+  options: Array<MemberFieldsFragment>
+  onChange: (member: MemberFieldsFragment) => void
 }
 
 export const OptionListMember = React.memo(({ options, onChange }: Props) => (

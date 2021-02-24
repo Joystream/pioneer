@@ -3,8 +3,12 @@ fragment MemberFields on Member {
   rootAccount
   controllerAccount
   handle
+  name
   about
   avatarURI
+  isFoundingMember
+  isVerified
+  inviteCount
 }
 
 query GetMembers {
