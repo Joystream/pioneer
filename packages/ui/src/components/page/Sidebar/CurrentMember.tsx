@@ -13,7 +13,9 @@ export const CurrentMember = () => {
 
   return (
     <>
-      <Memberships>Memberships</Memberships>
+      <Memberships>
+        Memberships <MembershipsBadge>{count}</MembershipsBadge>
+      </Memberships>
       <MemberAccount>
         <MemberName>Alice</MemberName>
         <MemberPhoto />
@@ -36,23 +38,22 @@ const Memberships = styled.span`
   line-height: 16px;
   font-weight: 700;
   color: ${Colors.Black[400]};
+`
 
-  &:after {
-    content: '3';
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    right: -24px;
-    width: 16px;
-    height: 16px;
-    border-radius: ${BorderRad.round};
-    background-color: ${Colors.Black[500]};
-    font-size: 10px;
-    line-height: 16px;
-    font-weight: 700;
-    color: ${Colors.White};
-  }
+const MembershipsBadge = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: -24px;
+  width: 16px;
+  height: 16px;
+  border-radius: ${BorderRad.round};
+  background-color: ${Colors.Black[500]};
+  font-size: 10px;
+  line-height: 16px;
+  font-weight: 700;
+  color: ${Colors.White};
 `
 
 const MemberAccount = styled.a`
