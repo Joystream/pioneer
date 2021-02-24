@@ -1,9 +1,9 @@
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client'
 import { render, waitForElementToBeRemoved } from '@testing-library/react'
 import { Server } from 'miragejs/server'
 import React from 'react'
 import { CurrentMember } from '../../src/components/page/Sidebar/CurrentMember'
 import { makeServer } from '../../src/mocks/server'
+import { MockApolloProvider } from '../helpers/providers'
 import { aliceMember, bobMember, createMember } from '../mocks/members'
 
 describe('UI: Memberships component', () => {
@@ -31,15 +31,6 @@ describe('UI: Memberships component', () => {
       createMember(server, bobMember)
     })
 
-    async function renderAndWait() {
-      const renderResult = renderComponent()
-      const { getByRole } = renderResult
-
-      await waitForElementToBeRemoved(() => getByRole('button', { name: /create a membership/i }))
-
-      return renderResult
-    }
-
     it('Displays memberships count', async () => {
       const { getByText } = await renderAndWait()
 
@@ -54,15 +45,19 @@ describe('UI: Memberships component', () => {
   })
 
   function renderComponent() {
-    const link = new HttpLink({
-      uri: '/query-node',
-      fetch: (uri, options) => fetch(uri, options),
-    })
-
     return render(
-      <ApolloProvider client={new ApolloClient({ link, cache: new InMemoryCache() })}>
+      <MockApolloProvider>
         <CurrentMember />
-      </ApolloProvider>
+      </MockApolloProvider>
     )
+  }
+
+  async function renderAndWait() {
+    const renderResult = renderComponent()
+    const { getByRole } = renderResult
+
+    await waitForElementToBeRemoved(() => getByRole('button', { name: /create a membership/i }))
+
+    return renderResult
   }
 })

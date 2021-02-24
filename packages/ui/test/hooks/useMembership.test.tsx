@@ -1,11 +1,16 @@
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client'
 import { expect } from '@jest/globals'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { act, renderHook } from '@testing-library/react-hooks'
 import { Server } from 'miragejs/server'
 import React, { ReactNode } from 'react'
 import { useMembership } from '../../src/hooks/useMembership'
 import { makeServer } from '../../src/mocks/server'
+import { MockApolloProvider } from '../helpers/providers'
 import { aliceMember, createMember } from '../mocks/members'
+
+const renderUseMembership = () => {
+  const wrapper = ({ children }: { children: ReactNode }) => <MockApolloProvider>{children}</MockApolloProvider>
+  return renderHook(() => useMembership(), { wrapper })
+}
 
 describe('useMembership', () => {
   let server: Server
@@ -17,17 +22,6 @@ describe('useMembership', () => {
   afterEach(() => {
     server.shutdown()
   })
-
-  function renderUseMembership() {
-    const link = new HttpLink({
-      uri: '/query-node',
-      fetch: (uri, options) => fetch(uri, options),
-    })
-    const wrapper = ({ children }: { children: ReactNode }) => (
-      <ApolloProvider client={new ApolloClient({ link, cache: new InMemoryCache() })}>{children}</ApolloProvider>
-    )
-    return renderHook(() => useMembership(), { wrapper })
-  }
 
   it('Returns loading state', () => {
     const { result } = renderUseMembership()
