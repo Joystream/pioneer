@@ -69,11 +69,7 @@ describe('UI: Memberships list', () => {
   function renderMemberships() {
     const link = new HttpLink({
       uri: '/query-node',
-      fetch: (uri, options) => {
-        return fetch(uri, options).then((result) => {
-          return result
-        })
-      },
+      fetch: (uri, options) => fetch(uri, options),
     })
     return render(
       <HashRouter>
