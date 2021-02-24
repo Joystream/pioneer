@@ -7,10 +7,10 @@ import { useMembership } from '../../../hooks/useMembership'
 import { MemberItem } from './MemberItem'
 
 export function Memberships() {
-  const { count, loading, members } = useMembership()
+  const { count, isLoading, members } = useMembership()
   const hasMemberships = !!count
 
-  if (loading) {
+  if (isLoading) {
     return <Loading>Loading...</Loading>
   }
 
