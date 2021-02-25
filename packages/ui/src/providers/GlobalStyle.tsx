@@ -43,7 +43,7 @@ export const GlobalStyle = createGlobalStyle`
     width: 100%;
     height: 100%;
     background-color: ${Colors.White};
-    font-family: ${Fonts.Title};
+    font-family: ${Fonts.Grotesk};
     font-size: 14px;
     color: ${Colors.Black[900]};
     overscroll-behavior-y: none;
@@ -55,7 +55,7 @@ export const GlobalStyle = createGlobalStyle`
     overflow-y: scroll;
   }
   button {
-    font-family: ${Fonts.Title};
+    font-family: ${Fonts.Grotesk};
     font-size: 1rem;
     border: none;
     outline: none;
@@ -70,11 +70,11 @@ export const GlobalStyle = createGlobalStyle`
   p {
     margin: 0;
     padding: 0;
-    font-family: ${Fonts.Body};
+    font-family: ${Fonts.Inter};
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: ${Fonts.Title};
+    font-family: ${Fonts.Grotesk};
     margin: 0;
     padding: 0;
     font-weight: 700;
@@ -106,13 +106,13 @@ export const GlobalStyle = createGlobalStyle`
   }
   a {
     text-decoration: none;
-    font-family: ${Fonts.Title};
+    font-family: ${Fonts.Grotesk};
   }
   input {
-    font-family: ${Fonts.Title};
+    font-family: ${Fonts.Grotesk};
     
     &::placeholder {
-      font-family: ${Fonts.Body};
+      font-family: ${Fonts.Inter};
     }
   }
 `

@@ -46,7 +46,7 @@ export const MemberItem = ({ member }: MemberProps) => {
 }
 
 const CountInfo = styled.span`
-  font-family: ${Fonts.Title};
+  font-family: ${Fonts.Grotesk};
   font-weight: 700;
 `
 

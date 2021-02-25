@@ -38,7 +38,7 @@ export function ToggleCheckbox({ isRequired, disabled, checked, onChange, trueLa
 
 const ToggleLabel = styled.button`
   outline: none;
-  font-family: ${Fonts.Body};
+  font-family: ${Fonts.Inter};
   font-size: 14px;
   line-height: 20px;
   color: ${Colors.Black[900]};
