@@ -29,7 +29,7 @@ interface ModalProps {
 export const Modal = ({ modalHeight = 'm', children, modalSize, isDark }: ModalProps) => {
   return ReactDOM.createPortal(
     <ModalGlass modalHeight={modalHeight} modalSize={modalSize} isDark={isDark}>
-      <ModalWrap modalMaxSize={modalSize} modalHeight={modalHeight} isDark={isDark}>
+      <ModalWrap modalMaxSize={modalSize} modalHeight={modalHeight} isDark={isDark} role="modal">
         {children}
       </ModalWrap>
     </ModalGlass>,

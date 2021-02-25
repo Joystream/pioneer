@@ -1,4 +1,4 @@
-import { fireEvent, render, waitForElementToBeRemoved } from '@testing-library/react'
+import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import { Server } from 'miragejs/server'
 import React from 'react'
 import { CurrentMember } from '../../src/components/page/Sidebar/CurrentMember'
@@ -44,15 +44,26 @@ describe('UI: Memberships component', () => {
       expect(getByText(/alice_handle/i)).toBeDefined()
     })
 
-    it('Switches active member', async () => {
-      const { getByText, queryByText } = await renderAndWait()
+    it('Shows switcher on click', async () => {
+      const { getByText, getByRole } = await renderAndWait()
 
       const button = getByText(/alice_handle/i)
       fireEvent.click(button)
 
-      const bobSwitcher = getByText(/bob_handle/i)
-      expect(bobSwitcher).toBeDefined()
-      fireEvent.click(bobSwitcher)
+      const modal = getByRole('modal')
+      expect(modal).toBeDefined()
+
+      expect(within(modal).getByText(/alice_handle/i)).toBeDefined()
+      expect(within(modal).getByText(/bob_handle/i)).toBeDefined()
+    })
+
+    it('Switches active member', async () => {
+      const { getByText, queryByText, getByRole } = await renderAndWait()
+
+      const button = getByText(/alice_handle/i)
+      fireEvent.click(button)
+
+      fireEvent.click(within(getByRole('modal')).getByText(/bob_handle/i))
 
       expect(queryByText(/alice_handle/i)).toBeFalsy()
       expect(getByText(/bob_handle/i)).toBeDefined()
