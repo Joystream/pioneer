@@ -91,7 +91,7 @@ interface ModalWrapProps {
 export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: ${(props) => (props.modalHeight === 'm' ? 'auto 66vh auto' : 'auto auto auto')};
+  grid-template-rows: auto auto auto;
   grid-template-areas:
     'modalheader'
     'modalbody'
@@ -165,6 +165,7 @@ const ModalTopBar = styled.header.attrs((props: TopBarProps) => ({
 
 export const ScrolledModalBody = styled(ModalBody)`
   height: 100%;
+  max-height: 66vh;
   padding: 24px 24px 20px;
   overflow-y: scroll;
 `

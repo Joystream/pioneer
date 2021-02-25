@@ -5,6 +5,7 @@ import { ValueInJoys } from '../components/typography'
 import { BorderRad, Colors, Fonts, Sizes } from '../constants'
 
 export const TransactionInfoLabel = styled(Label)`
+  display: block;
   margin-bottom: 32px;
   font-weight: 400;
   font-family: ${Fonts.Inter};
