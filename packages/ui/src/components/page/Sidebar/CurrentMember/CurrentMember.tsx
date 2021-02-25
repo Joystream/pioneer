@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors } from '../../../../constants'
+import { ArrowDownExpandedIcon, ArrowIcon } from '../../../../components/icons/ArrowDownExpandedIcon'
+import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMembership } from '../../../../hooks/useMembership'
 import { AddMembershipButton } from '../../../AddMembershipButton'
-import { MemberInfo } from '../../../MemberInfo'
+import { MemberHandle, MemberIcons, MemberInfo, MemberRole } from '../../../MemberInfo'
 import { Badge } from '../../../typography'
 import { SwitchMemberModal } from './SwitchMemberModal'
 
@@ -22,6 +23,9 @@ export const CurrentMember = () => {
       </Memberships>
       <SwitchMember onClick={() => setIsOpen(true)}>
         <MemberInfo member={active || members[0]} />
+        <SwitchArrow>
+          <ArrowDownExpandedIcon />
+        </SwitchArrow>
       </SwitchMember>
       {isOpen && <SwitchMemberModal onClose={() => setIsOpen(false)} />}
     </>
@@ -47,13 +51,69 @@ const MembershipsBadge = styled(Badge)`
 `
 
 const SwitchMember = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 16px;
+  grid-template-rows: 1fr;
+  grid-column-gap: 8px;
+  align-items: center;
   background-color: ${Colors.Black[700]};
-  padding: 10px 8px;
+  padding: 12px 8px;
   border-radius: ${BorderRad.s};
   grid-area: memberaccount;
   cursor: pointer;
+  transition: ${Transitions.all};
+
+  ${MemberHandle} {
+    color: ${Colors.Black[75]};
+  }
+  ${MemberIcons} {
+    .memberCircle {
+      stroke: ${Colors.Blue[500]};
+      transition: ${Transitions.all};
+    }
+    .memberInner {
+      fill: ${Colors.Blue[500]};
+      transition: ${Transitions.all};
+    }
+  }
+  ${MemberRole} {
+    color: ${Colors.Black[300]};
+    background-color: ${Colors.Black[600]};
+    transition: ${Transitions.all};
+  }
 
   &:hover {
     background: ${Colors.Black[600]};
+    ${MemberHandle} {
+      color: ${Colors.Black[50]};
+    }
+    ${MemberIcons} {
+      .memberCircle {
+        stroke: ${Colors.Blue[400]};
+      }
+      .memberInner {
+        fill: ${Colors.Blue[400]};
+      }
+    }
+    ${MemberRole} {
+      color: ${Colors.Black[200]};
+      background-color: ${Colors.Black[500]};
+    }
+    ${ArrowIcon} {
+      color: ${Colors.Black[75]};
+    }
+  }
+`
+
+const SwitchArrow = styled.span`
+  width: 16px;
+  height: 16px;
+
+  ${ArrowIcon} {
+    width: 100%;
+    height: 100%;
+    color: ${Colors.Black[400]};
+    transform: rotate(-90deg);
+    transition: ${Transitions.all};
   }
 `

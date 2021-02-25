@@ -24,7 +24,7 @@ export const NumberInput = styled(TextInput)`
 `
 
 export const TextArea = styled.textarea`
-  font-family: ${Fonts.Body};
+  font-family: ${Fonts.Inter};
   display: flex;
   justify-content: flex-end;
   align-items: center;

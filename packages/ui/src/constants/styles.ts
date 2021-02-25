@@ -76,8 +76,8 @@ export const Shadows = {
 }
 
 export const Fonts = {
-  Title: '"Grotesk", sans-serif',
-  Body: '"Inter", sans-serif',
+  Grotesk: '"Grotesk", sans-serif',
+  Inter: '"Inter", sans-serif',
 }
 
 export const Transitions = {

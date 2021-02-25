@@ -21,7 +21,7 @@ const BreadcrumbsItemLink = styled.a`
   color: ${Colors.Black[500]};
   transition: ${Transitions.all};
   text-decoration: none;
-  font-family: ${Fonts.Body};
+  font-family: ${Fonts.Inter};
 
   &:hover {
     color: ${Colors.Blue[500]};

@@ -22,7 +22,7 @@ export const ValueInJoys = styled.span`
   width: fit-content;
   font-weight: 700;
   color: ${Colors.Black[900]};
-  font-family: ${Fonts.Title};
+  font-family: ${Fonts.Grotesk};
 
   &:after {
     content: 'JOY';
@@ -32,6 +32,6 @@ export const ValueInJoys = styled.span`
     font-weight: 400;
     color: ${Colors.Black[400]};
     text-transform: uppercase;
-    font-family: ${Fonts.Title};
+    font-family: ${Fonts.Grotesk};
   }
 `

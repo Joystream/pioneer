@@ -228,11 +228,11 @@ export const ResultText = styled(Text)`
   text-align: center;
 
   ${ValueInJoys} {
-    font-family: ${Fonts.Body};
+    font-family: ${Fonts.Inter};
     font-weight: 700;
     color: ${Colors.Black[700]};
     &:after {
-      font-family: ${Fonts.Body};
+      font-family: ${Fonts.Inter};
       font-weight: 700;
       color: ${Colors.Black[700]};
     }

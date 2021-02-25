@@ -7,14 +7,14 @@ import { BorderRad, Colors, Fonts, Sizes } from '../constants'
 export const TransactionInfoLabel = styled(Label)`
   margin-bottom: 32px;
   font-weight: 400;
-  font-family: ${Fonts.Body};
+  font-family: ${Fonts.Inter};
 
   ${ValueInJoys} {
-    font-family: ${Fonts.Body};
+    font-family: ${Fonts.Inter};
     font-weight: 700;
     color: ${Colors.Black[700]};
     &:after {
-      font-family: ${Fonts.Body};
+      font-family: ${Fonts.Inter};
       font-weight: 700;
       color: ${Colors.Black[700]};
     }

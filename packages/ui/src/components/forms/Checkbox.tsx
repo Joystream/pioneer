@@ -87,7 +87,7 @@ export const CheckboxLabel = styled.label<CheckboxLabelProps>`
   font-size: 14px;
   line-height: 20px;
   font-weight: 600;
-  font-family: ${Fonts.Body};
+  font-family: ${Fonts.Inter};
   opacity: ${(props) => (props.isLabelEnabled == false ? '0.5' : '1')};
   cursor: ${(props) => (props.isLabelEnabled == false ? 'not-allowed' : 'pointer')};
   user-select: none;
