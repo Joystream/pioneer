@@ -39,11 +39,11 @@ export function TransactionSuccessModal({ onClose, from, to, amount, fee }: Prop
   const toBefore = toNow.sub(amount)
 
   return (
-    <Modal modalSize={'m'} modalHeight={'s'}>
+    <Modal modalSize="m" modalHeight="s">
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <SuccessModalBody>
         <TransactionInfoLabel style={{ marginBottom: '28px', justifySelf: 'start' }}>
-          You have just successfully Transferred balance from
+          You have just successfully transferred balance from
         </TransactionInfoLabel>
         <LockedAccount>
           <AccountInfo account={from} />

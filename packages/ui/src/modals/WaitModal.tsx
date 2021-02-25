@@ -11,7 +11,7 @@ interface Props {
 
 export const WaitModal = ({ title, description }: Props) =>
   ReactDOM.createPortal(
-    <Modal modalSize={'xs'} modalHeight={'s'} isDark>
+    <Modal modalSize="xs" modalHeight="s" isDark>
       <ResultModalBody>
         <Loader />
         <WaitingIcon />

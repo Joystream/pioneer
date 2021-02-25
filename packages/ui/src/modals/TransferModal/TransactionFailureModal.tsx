@@ -15,7 +15,7 @@ interface Props {
 
 export const TransactionFailureModal = ({ from, to, amount, onClose }: Props) =>
   ReactDOM.createPortal(
-    <Modal modalSize={'xs'} modalHeight={'s'}>
+    <Modal modalSize="xs" modalHeight="s">
       <ResultModalBody>
         <CloseSmallModalButton onClick={onClose} />
         <FailureIcon />
