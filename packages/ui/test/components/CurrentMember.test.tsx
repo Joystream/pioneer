@@ -1,4 +1,4 @@
-import { render, waitForElementToBeRemoved } from '@testing-library/react'
+import { fireEvent, render, waitForElementToBeRemoved } from '@testing-library/react'
 import { Server } from 'miragejs/server'
 import React from 'react'
 import { CurrentMember } from '../../src/components/page/Sidebar/CurrentMember'
@@ -37,10 +37,25 @@ describe('UI: Memberships component', () => {
       expect(getByText(/memberships/i)?.parentElement?.textContent).toMatch(/^memberships 2/i)
     })
 
-    it('Displays active member', async () => {
+    it('Displays button when no active member', async () => {
       const { getByText } = await renderAndWait()
 
-      expect(getByText(/alice/i)).toBeDefined()
+      expect(getByText(/alice_handle/i)).toBeDefined()
+    })
+
+    it('Switches active member', async () => {
+      const { getByText, getByRole } = await renderAndWait()
+      console.log('open')
+      const button = getByText(/alice_handle/i)
+      fireEvent.click(button)
+
+      const bobSwitcher = getByText(/bob_handle/i)
+      expect(bobSwitcher).toBeDefined()
+      console.log('switch...')
+      fireEvent.click(bobSwitcher)
+
+      expect(getByText(/alice_handle/i)).not.toBeDefined()
+      expect(getByText(/bob_handle/i)).toBeDefined()
     })
   })
 

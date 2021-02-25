@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { MemberFieldsFragment } from '../../../api/queries'
 import { BorderRad, Colors } from '../../../constants'
 import { useMembership } from '../../../hooks/useMembership'
 import { AddMembershipButton } from '../../AddMembershipButton'
 import { MemberInfo } from '../../MemberInfo'
+import { Modal, ModalBody } from '../../Modal'
 
 export const CurrentMember = () => {
-  const { count, members } = useMembership()
+  const { count, members, active } = useMembership()
+  const [isOpen, setIsOpen] = useState(false)
+
+  console.log('render', !!active && active.handle)
 
   if (count < 1) {
     return <AddMembershipButton />
@@ -18,9 +23,37 @@ export const CurrentMember = () => {
         Memberships <MembershipsBadge>{count}</MembershipsBadge>
       </Memberships>
       <SwitchMember>
-        <MemberInfo member={members[0]} />
+        <MemberInfo member={active || members[0]} onClick={() => setIsOpen(true)} />
       </SwitchMember>
+      {isOpen && <SwitchMemberModal onClose={() => setIsOpen(false)} />}
     </>
+  )
+}
+
+interface Props {
+  onClose: () => void
+}
+
+const SwitchMemberModal = ({ onClose }: Props) => {
+  const { count, members, setActive } = useMembership()
+  const switchMember = (member: MemberFieldsFragment) => {
+    setActive(member)
+    onClose()
+  }
+
+  return (
+    <Modal modalSize={'s'} modalHeight={'s'} isDark>
+      <ModalBody>
+        <Memberships>
+          My memberships: <MembershipsBadge>{count}</MembershipsBadge>
+        </Memberships>
+        {members.map((member) => (
+          <div key={member.handle}>
+            <MemberInfo member={member} onClick={() => switchMember(member)} />
+          </div>
+        ))}
+      </ModalBody>
+    </Modal>
   )
 }
 
