@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MemberFieldsFragment } from '../api/queries'
-import { Colors, Fonts, BorderRad } from '../constants'
-import { Avatar, AvatarImg } from './Avatar'
-import { VerifiedMemberIcon } from '../components/icons/VerifiedMemberIcon'
 import { FounderMemberIcon } from '../components/icons/FounderMemberIcon'
+import { VerifiedMemberIcon } from '../components/icons/VerifiedMemberIcon'
+import { BorderRad, Colors, Fonts, Transitions } from '../constants'
+import { Avatar, AvatarImg } from './Avatar'
 
 interface Props {
   member: MemberFieldsFragment
@@ -39,24 +39,30 @@ const MemberInfoWrap = styled.div`
     'memberphoto memberhandle membericons'
     'memberphoto memberroles memberroles';
   align-items: center;
-  width: 100%;
+  width: fit-content;
   justify-self: start;
 `
 
-const MemberHandle = styled.span`
+export const MemberHandle = styled.span`
   grid-area: memberhandle;
+  max-width: 100%;
   font-size: 14px;
   line-height: 20px;
   font-weight: 700;
   font-family: ${Fonts.Grotesk};
-  max-width: 1fr;
+  color: ${Colors.Black[900]};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
+  transition: ${Transitions.all};
+
+  &:hover {
+    color: ${Colors.Black[700]};
+  }
 `
 
-const MemberIcons = styled.div`
+export const MemberIcons = styled.div`
   display: grid;
   grid-area: membericons;
   grid-auto-flow: column;
@@ -75,7 +81,7 @@ const MemberRoles = styled.div`
   width: fit-content;
 `
 
-const MemberRole = styled.span`
+export const MemberRole = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
