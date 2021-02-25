@@ -55,7 +55,9 @@ const SwitchMember = styled.div`
   transition: ${Transitions.all};
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus {
+    outline: none;
     background: ${Colors.Black[600]};
 
     ${ArrowIcon} {

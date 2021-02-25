@@ -75,7 +75,9 @@ const AddMemberships = styled.button`
   transition: ${Transitions.all};
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus {
+    outline: none;
     background-color: ${Colors.Black[600]};
 
     ${AddMembershipImage} {
