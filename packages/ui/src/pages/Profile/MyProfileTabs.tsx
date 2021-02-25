@@ -16,11 +16,9 @@ export function MyProfileTabs() {
         <PageTab active={isProfile} onClick={() => history.push('/profile')}>
           My accounts
         </PageTab>
-        {IS_DEVELOPMENT && (
-          <PageTab active={isMembers} onClick={() => history.push('/profile/memberships')}>
-            My memberships
-          </PageTab>
-        )}
+        <PageTab active={isMembers} onClick={() => history.push('/profile/memberships')}>
+          My memberships
+        </PageTab>
       </PageTabsNav>
     </PageTabs>
   )
