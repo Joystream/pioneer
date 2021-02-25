@@ -15,12 +15,15 @@ import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
+import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
 
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
+import { setupMockServer } from '../mocks/server'
 
 describe('UI: TransferModal', () => {
   beforeAll(cryptoWaitReady)
+  setupMockServer()
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,
@@ -35,14 +38,14 @@ describe('UI: TransferModal', () => {
   let transfer: any
   let keyring: Keyring
 
-  beforeEach(() => {
+  beforeEach(async () => {
     keyring = mockKeyring()
     sender = {
-      address: aliceSigner().address,
+      address: (await aliceSigner()).address,
       name: 'alice',
     }
     to = {
-      address: bobSigner().address,
+      address: (await bobSigner()).address,
       name: 'bob',
     }
     set(api, 'api.derive.balances.all', () =>
@@ -169,7 +172,9 @@ describe('UI: TransferModal', () => {
     return render(
       <KeyringContext.Provider value={keyring}>
         <ApiContext.Provider value={api}>
-          <TransferModal onClose={sinon.spy()} from={sender} to={to} icon={<ArrowInsideIcon />} />
+          <MockQueryNodeProviders>
+            <TransferModal onClose={sinon.spy()} from={sender} to={to} icon={<ArrowInsideIcon />} />
+          </MockQueryNodeProviders>
         </ApiContext.Provider>
       </KeyringContext.Provider>
     )

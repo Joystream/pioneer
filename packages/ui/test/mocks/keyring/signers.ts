@@ -1,14 +1,20 @@
-import { KeyringPair } from '@polkadot/keyring/types'
 import { Keyring } from '@polkadot/keyring'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
 
-export function aliceSigner(): KeyringPair {
+const getFromUri = async (uri: string) => {
+  await cryptoWaitReady()
   const keyring = new Keyring({ type: 'sr25519' })
 
-  return keyring.addFromUri('//Alice')
+  return keyring.addFromUri(uri)
 }
 
-export function bobSigner(): KeyringPair {
-  const keyring = new Keyring({ type: 'sr25519' })
+export const aliceSigner = async () => getFromUri('//Alice')
+export const aliceStashSigner = async () => getFromUri('//Alice//stash')
 
-  return keyring.addFromUri('//Bob')
-}
+export const bobSigner = async () => getFromUri('//Bob')
+export const bobStashSigner = async () => getFromUri('//Bob//stash')
+
+export const charlieSigner = async () => getFromUri('//Charlie')
+export const daveSigner = async () => getFromUri('//Dave')
+export const eveSigner = async () => getFromUri('//Eve')
+export const ferdieSigner = async () => getFromUri('//Ferdie')

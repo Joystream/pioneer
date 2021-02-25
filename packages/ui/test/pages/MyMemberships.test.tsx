@@ -1,18 +1,16 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, waitForElementToBeRemoved, within } from '@testing-library/react'
-import { Server } from 'miragejs/server'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 import sinon from 'sinon'
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
-import { makeServer } from '../../src/mocks/server'
 import { Memberships } from '../../src/pages/Profile/MyMemberships/Memberships'
 import { MembershipContext } from '../../src/providers/membership/context'
 import { MockApolloProvider } from '../helpers/providers'
 import { aliceSigner, bobSigner } from '../mocks/keyring'
-import { aliceMember, bobMember, createMember } from '../mocks/members'
+import { setupMockServer } from '../mocks/server'
 
 describe('UI: Memberships list', () => {
   let accounts: {
@@ -21,13 +19,12 @@ describe('UI: Memberships list', () => {
   }
   let alice: string
   let bob: string
-  let server: Server
 
   beforeAll(cryptoWaitReady)
 
-  beforeAll(() => {
-    alice = aliceSigner().address
-    bob = bobSigner().address
+  beforeAll(async () => {
+    alice = (await aliceSigner()).address
+    bob = (await bobSigner()).address
 
     accounts = {
       hasAccounts: true,
@@ -39,13 +36,7 @@ describe('UI: Memberships list', () => {
     sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
   })
 
-  beforeEach(() => {
-    server = makeServer('test')
-  })
-
-  afterEach(() => {
-    server.shutdown()
-  })
+  const mockServer = setupMockServer()
 
   describe('with no memberships', () => {
     it('Shows Create Membership button', async () => {
@@ -57,8 +48,8 @@ describe('UI: Memberships list', () => {
 
   describe('with memberships', () => {
     it('Shows list of memberships', async () => {
-      createMember(server, aliceMember)
-      createMember(server, bobMember)
+      await mockServer.createMember('Alice')
+      await mockServer.createMember('Bob')
       const { getByText } = renderMemberships()
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))
@@ -68,8 +59,8 @@ describe('UI: Memberships list', () => {
     })
 
     it('Shows active membership', async () => {
-      createMember(server, aliceMember)
-      const bob = createMember(server, bobMember)
+      await mockServer.createMember('Alice')
+      const bob = await mockServer.createMember('Bob')
       const { getByText } = renderMemberships((bob.attrs as unknown) as MemberFieldsFragment)
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))
