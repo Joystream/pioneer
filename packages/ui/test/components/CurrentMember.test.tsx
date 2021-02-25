@@ -3,6 +3,7 @@ import { Server } from 'miragejs/server'
 import React from 'react'
 import { CurrentMember } from '../../src/components/page/Sidebar/CurrentMember'
 import { makeServer } from '../../src/mocks/server'
+import { MembershipContextProvider } from '../../src/providers/membership/provider'
 import { MockApolloProvider } from '../helpers/providers'
 import { aliceMember, bobMember, createMember } from '../mocks/members'
 
@@ -44,17 +45,16 @@ describe('UI: Memberships component', () => {
     })
 
     it('Switches active member', async () => {
-      const { getByText, getByRole } = await renderAndWait()
-      console.log('open')
+      const { getByText, queryByText } = await renderAndWait()
+
       const button = getByText(/alice_handle/i)
       fireEvent.click(button)
 
       const bobSwitcher = getByText(/bob_handle/i)
       expect(bobSwitcher).toBeDefined()
-      console.log('switch...')
       fireEvent.click(bobSwitcher)
 
-      expect(getByText(/alice_handle/i)).not.toBeDefined()
+      expect(queryByText(/alice_handle/i)).toBeFalsy()
       expect(getByText(/bob_handle/i)).toBeDefined()
     })
   })
@@ -62,7 +62,9 @@ describe('UI: Memberships component', () => {
   function renderComponent() {
     return render(
       <MockApolloProvider>
-        <CurrentMember />
+        <MembershipContextProvider>
+          <CurrentMember />
+        </MembershipContextProvider>
       </MockApolloProvider>
     )
   }

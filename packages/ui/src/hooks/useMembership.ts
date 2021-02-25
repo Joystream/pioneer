@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import { MemberFieldsFragment, useGetMembersQuery } from '../api/queries'
+import { MembershipContext } from '../providers/membership/context'
 
 interface UseMembership {
   count: number
@@ -11,7 +12,7 @@ interface UseMembership {
 
 export function useMembership(): UseMembership {
   const { data, loading, error } = useGetMembersQuery()
-  const [active, setActive] = useState<MemberFieldsFragment>()
+  const { active, setActive } = useContext(MembershipContext)
 
   if (error) {
     console.error(error)
