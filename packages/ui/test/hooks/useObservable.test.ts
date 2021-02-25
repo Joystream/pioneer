@@ -24,19 +24,4 @@ describe('useObservable', () => {
     })
     expect(result.current).toBe(2)
   })
-
-  it('Returns observed values', () => {
-    const subject = new Subject<number>()
-    const { result } = renderHook(() => useObservable(subject.asObservable(), []))
-
-    act(() => {
-      subject.next(1)
-    })
-    expect(result.current).toBe(1)
-
-    act(() => {
-      subject.next(2)
-    })
-    expect(result.current).toBe(2)
-  })
 })

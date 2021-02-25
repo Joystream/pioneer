@@ -20,7 +20,7 @@ export const filterMember = (filterOut: MemberFieldsFragment | undefined) => {
 }
 
 export const SelectMember = React.memo(({ onChange, filter, selected, enable }: Props) => {
-  const { loading, members } = useMembership()
+  const { isLoading, members } = useMembership()
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<MemberFieldsFragment | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
@@ -79,7 +79,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, enable }: 
           <ArrowDownIcon />
         </ToggleButton>
       </Toggle>
-      {!loading && isOpen && <OptionListMember onChange={onOptionClick} options={members} />}
+      {!isLoading && isOpen && <OptionListMember onChange={onOptionClick} options={members} />}
     </SelectComponent>
   )
 })

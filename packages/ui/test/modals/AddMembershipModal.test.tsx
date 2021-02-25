@@ -1,4 +1,3 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { beforeAll, expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
@@ -17,6 +16,7 @@ import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
+import { MockApolloProvider } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 
@@ -180,13 +180,13 @@ describe('UI: AddMembershipModal', () => {
 
   function renderModal() {
     return render(
-      <ApolloProvider client={new ApolloClient({ uri: '/query-node', cache: new InMemoryCache() })}>
+      <MockApolloProvider>
         <KeyringContext.Provider value={keyring}>
           <ApiContext.Provider value={api}>
             <AddMembershipModal onClose={sinon.spy()} />
           </ApiContext.Provider>
         </KeyringContext.Provider>
-      </ApolloProvider>
+      </MockApolloProvider>
     )
   }
 })

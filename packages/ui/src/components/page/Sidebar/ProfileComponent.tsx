@@ -33,7 +33,6 @@ const Profile = styled.div`
     'memberbalance';
   grid-row-gap: 16px;
   grid-area: barmember;
-  justify-items: center;
   width: 100%;
   padding: 0 8px;
 `

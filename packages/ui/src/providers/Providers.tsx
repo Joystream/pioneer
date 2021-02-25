@@ -1,9 +1,10 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-import { HashRouter } from 'react-router-dom'
 import React, { ReactNode } from 'react'
-import { KeyringContextProvider } from './keyring/provider'
-import { GlobalStyle } from './GlobalStyle'
+import { HashRouter } from 'react-router-dom'
 import { ApiContextProvider } from './api/provider'
+import { GlobalStyle } from './GlobalStyle'
+import { KeyringContextProvider } from './keyring/provider'
+import { MembershipContextProvider } from './membership/provider'
 
 interface Props {
   children: ReactNode
@@ -14,17 +15,17 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-export function Providers(props: Props) {
-  return (
-    <KeyringContextProvider>
-      <ApiContextProvider>
-        <ApolloProvider client={client}>
+export const Providers = (props: Props) => (
+  <KeyringContextProvider>
+    <ApiContextProvider>
+      <ApolloProvider client={client}>
+        <MembershipContextProvider>
           <HashRouter>
             <GlobalStyle />
             {props.children}
           </HashRouter>
-        </ApolloProvider>
-      </ApiContextProvider>
-    </KeyringContextProvider>
-  )
-}
+        </MembershipContextProvider>
+      </ApolloProvider>
+    </ApiContextProvider>
+  </KeyringContextProvider>
+)
