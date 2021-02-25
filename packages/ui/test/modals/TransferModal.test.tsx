@@ -5,16 +5,19 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
+import { Server } from 'miragejs/server'
 import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
 import { Account } from '../../src/common/types'
 import { ArrowInsideIcon } from '../../src/components/icons'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
+import { makeServer } from '../../src/mocks/server'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
+import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
 
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
@@ -62,6 +65,16 @@ describe('UI: TransferModal', () => {
       allAccounts: [sender, to],
     }
     sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
+  })
+
+  let server: Server
+
+  beforeEach(() => {
+    server = makeServer('test')
+  })
+
+  afterEach(() => {
+    server.shutdown()
   })
 
   afterEach(() => {
@@ -169,7 +182,9 @@ describe('UI: TransferModal', () => {
     return render(
       <KeyringContext.Provider value={keyring}>
         <ApiContext.Provider value={api}>
-          <TransferModal onClose={sinon.spy()} from={sender} to={to} icon={<ArrowInsideIcon />} />
+          <MockQueryNodeProviders>
+            <TransferModal onClose={sinon.spy()} from={sender} to={to} icon={<ArrowInsideIcon />} />
+          </MockQueryNodeProviders>
         </ApiContext.Provider>
       </KeyringContext.Provider>
     )
