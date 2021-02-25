@@ -1,6 +1,6 @@
 import { Server } from 'miragejs/server'
 import { MemberFieldsFragment } from '../../../src/api/queries'
-import { aliceSigner, bobSigner } from '../keyring'
+import { aliceSigner, aliceStashSigner, bobSigner, bobStashSigner } from '../keyring'
 
 type MockMember = Omit<MemberFieldsFragment, '__typename' | 'id'>
 
@@ -8,10 +8,18 @@ type Members = 'Alice' | 'Bob'
 
 export const getMember = async (name: Members) => {
   if (name === 'Alice') {
-    return { ...aliceMember, rootAccount: (await aliceSigner()).address }
+    return {
+      ...aliceMember,
+      rootAccount: (await aliceSigner()).address,
+      controllerAccount: (await aliceStashSigner()).address,
+    }
   }
 
-  return { ...bobMember, rootAccount: (await bobSigner()).address }
+  return {
+    ...bobMember,
+    rootAccount: (await bobSigner()).address,
+    controllerAccount: (await bobStashSigner()).address,
+  }
 }
 
 export const createMember = async (server: Server, memberOrName: MemberFieldsFragment | Members) => {
