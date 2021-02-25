@@ -1,19 +1,25 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { MemberFieldsFragment } from '../api/queries'
 import { FounderMemberIcon } from '../components/icons/FounderMemberIcon'
 import { VerifiedMemberIcon } from '../components/icons/VerifiedMemberIcon'
 import { BorderRad, Colors, Fonts, Transitions } from '../constants'
 import { Avatar, AvatarImg } from './Avatar'
 
-interface Props {
+type MemberInfoProps = MemberInfoContainerProps & MemberOnDarkProps
+
+interface MemberInfoContainerProps {
   member: MemberFieldsFragment
   onClick?: () => void
 }
 
-export const MemberInfo = React.memo(({ member, onClick }: Props) => {
+interface MemberOnDarkProps {
+  isOnDark?: boolean
+}
+
+export const MemberInfo = React.memo(({ member, onClick, isOnDark }: MemberInfoProps) => {
   return (
-    <MemberInfoWrap>
+    <MemberInfoWrap isOnDark={isOnDark}>
       <MemberPhoto>
         <Avatar avatarURI={member.avatarURI} />
       </MemberPhoto>
@@ -28,20 +34,6 @@ export const MemberInfo = React.memo(({ member, onClick }: Props) => {
     </MemberInfoWrap>
   )
 })
-
-const MemberInfoWrap = styled.div`
-  display: grid;
-  grid-template-columns: 40px 1fr auto;
-  grid-template-rows: 20px 16px;
-  grid-column-gap: 8px;
-  grid-row-gap: 4px;
-  grid-template-areas:
-    'memberphoto memberhandle membericons'
-    'memberphoto memberroles memberroles';
-  align-items: center;
-  width: fit-content;
-  justify-self: start;
-`
 
 export const MemberHandle = styled.span`
   grid-area: memberhandle;
@@ -110,5 +102,64 @@ const MemberPhoto = styled.div`
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+`
+
+const MemberOnDarkStyles = css`
+  ${MemberHandle} {
+    color: ${Colors.Black[75]};
+  }
+  ${MemberIcons} {
+    .memberCircle {
+      stroke: ${Colors.Blue[500]};
+      transition: ${Transitions.all};
+    }
+    .memberInner {
+      fill: ${Colors.Blue[500]};
+      transition: ${Transitions.all};
+    }
+  }
+  ${MemberRole} {
+    color: ${Colors.Black[300]};
+    background-color: ${Colors.Black[600]};
+    transition: ${Transitions.all};
+  }
+`
+
+export const MemberInfoWrap = styled.div<MemberOnDarkProps>`
+  display: grid;
+  grid-template-columns: 40px auto 1fr;
+  grid-template-rows: 20px 16px;
+  grid-column-gap: 8px;
+  grid-row-gap: 4px;
+  grid-template-areas:
+    'memberphoto memberhandle membericons'
+    'memberphoto memberroles memberroles';
+  align-items: center;
+  width: 100%;
+  justify-self: start;
+  border-radius: ${BorderRad.s};
+  transition: ${Transitions.all};
+
+  ${(props) => props.isOnDark === true && MemberOnDarkStyles}
+`
+
+export const MemberDarkHover = css`
+  ${MemberInfoWrap} {
+    ${MemberHandle} {
+      color: ${Colors.Black[50]};
+    }
+    ${MemberIcons} {
+      .memberCircle {
+        stroke: ${Colors.Blue[400]};
+      }
+      .memberInner {
+        fill: ${Colors.Blue[400]};
+      }
+    }
+    ${MemberRole} {
+      color: ${Colors.Black[200]};
+      background-color: ${Colors.Black[500]};
+    }
   }
 `

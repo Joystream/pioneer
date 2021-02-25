@@ -72,6 +72,26 @@ export const ModalGlass = styled.div<ModalProps>`
   z-index: 100000;
 `
 
+interface TopBarProps extends ThemedStyledProps<any, any> {
+  columns: number
+}
+
+export const ModalTopBar = styled.header.attrs((props: TopBarProps) => ({
+  columns: props.columns,
+}))`
+  display: grid;
+  position: relative;
+  grid-auto-flow: column;
+  grid-area: modalheader;
+  grid-template-columns: ${(props) => (props.columns > 2 ? 'auto 1fr 40px' : '1fr 40px')};
+  justify-content: start;
+  grid-column-gap: 16px;
+  align-items: center;
+  height: 76px;
+  padding: 24px;
+  border-radius: 2px 2px 0 0;
+`
+
 export const ModalBody = styled.div`
   display: grid;
   grid-area: modalbody;
@@ -80,6 +100,21 @@ export const ModalBody = styled.div`
   background-color: ${Colors.Black[50]};
   border-top: 1px solid ${Colors.Black[200]};
   border-bottom: 1px solid ${Colors.Black[200]};
+`
+
+export const ModalFooter = styled.footer`
+  display: inline-grid;
+  grid-area: modalfooter;
+  grid-template-rows: 1fr;
+  grid-auto-flow: column;
+  grid-column-gap: 46px;
+  justify-self: end;
+  justify-items: end;
+  align-items: center;
+  width: fit-content;
+  height: 72px;
+  padding: 12px 16px;
+  border-radius: 0 0 2px 2px;
 `
 
 interface ModalWrapProps {
@@ -115,14 +150,24 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   height: min-content;
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
-
-  ${ModalBody} {
+  &,
+  ${ModalBody}, ${ModalTopBar}, ${ModalFooter} {
     ${({ isDark }) => {
       switch (isDark) {
         case true:
           return `
           background-color: ${Colors.Black[800]};
           color: ${Colors.White};
+          `
+      }
+    }};
+  }
+  ${ModalBody} {
+    ${({ isDark }) => {
+      switch (isDark) {
+        case true:
+          return `
+          border-color: ${Colors.Black[800]};
           `
       }
     }};
@@ -141,26 +186,6 @@ export const ModalHeaderIcon = styled.div`
     width: auto;
     object-fit: contain;
   }
-`
-
-interface TopBarProps extends ThemedStyledProps<any, any> {
-  columns: number
-}
-
-const ModalTopBar = styled.header.attrs((props: TopBarProps) => ({
-  columns: props.columns,
-}))`
-  display: grid;
-  position: relative;
-  grid-auto-flow: column;
-  grid-area: modalheader;
-  grid-template-columns: ${(props) => (props.columns > 2 ? 'auto 1fr 40px' : '1fr 40px')};
-  justify-content: start;
-  grid-column-gap: 16px;
-  align-items: center;
-  height: 76px;
-  padding: 24px;
-  border-radius: 2px 2px 0 0;
 `
 
 export const ScrolledModalBody = styled(ModalBody)`
@@ -192,21 +217,6 @@ export const SignTransferContainer = styled.div`
   grid-row-gap: 8px;
   width: 100%;
   height: 100%;
-`
-
-export const ModalFooter = styled.footer`
-  display: inline-grid;
-  grid-area: modalfooter;
-  grid-template-rows: 1fr;
-  grid-auto-flow: column;
-  grid-column-gap: 46px;
-  justify-self: end;
-  justify-items: end;
-  align-items: center;
-  width: fit-content;
-  height: 72px;
-  padding: 12px 16px;
-  border-radius: 0 0 2px 2px;
 `
 
 export const ModalTitle = styled.h4`

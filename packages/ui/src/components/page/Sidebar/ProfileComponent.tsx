@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { TokenValue } from '../../typography'
-import { TransferButtonStyled } from '../../TransferButton'
 import { Colors } from '../../../constants'
 import { useTotalBalances } from '../../../hooks/useTotalBalances'
+import { Memberships } from '../../MembershipCount'
+import { TransferButtonStyled } from '../../TransferButton'
+import { TokenValue } from '../../typography'
 import { CurrentMember } from './CurrentMember'
 
 export function ProfileComponent() {
@@ -35,6 +36,10 @@ const Profile = styled.div`
   grid-area: barmember;
   width: 100%;
   padding: 0 8px;
+
+  ${Memberships} {
+    margin-left: 8px;
+  }
 `
 
 const MemberBalance = styled.div`
