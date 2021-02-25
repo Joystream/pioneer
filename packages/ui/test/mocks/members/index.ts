@@ -4,7 +4,7 @@ import { aliceSigner, aliceStashSigner, bobSigner, bobStashSigner } from '../key
 
 export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'id'>
 
-type Members = 'Alice' | 'Bob'
+export type Members = 'Alice' | 'Bob'
 
 export const getMember = async (name: Members): Promise<MockMember> => {
   if (name === 'Alice') {

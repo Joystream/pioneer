@@ -5,13 +5,11 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { Server } from 'miragejs/server'
 import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
 import { Account } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
-import { makeServer } from '../../src/mocks/server'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
@@ -19,18 +17,12 @@ import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
+import { setupMockServer } from '../mocks/server'
 
 describe('UI: AddMembershipModal', () => {
   beforeAll(cryptoWaitReady)
-  let server: Server
 
-  beforeEach(() => {
-    server = makeServer('test')
-  })
-
-  afterEach(() => {
-    server.shutdown()
-  })
+  setupMockServer()
 
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,

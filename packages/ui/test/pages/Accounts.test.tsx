@@ -3,7 +3,6 @@ import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { cleanup, render, within } from '@testing-library/react'
 import BN from 'bn.js'
-import { Server } from 'miragejs/server'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 import sinon from 'sinon'
@@ -11,16 +10,18 @@ import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import * as useBalanceModule from '../../src/hooks/useBalance'
-import { makeServer } from '../../src/mocks/server'
 import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MembershipContext } from '../../src/providers/membership/context'
 import { MockApolloProvider } from '../helpers/providers'
 import { aliceSigner } from '../mocks/keyring'
 import { KnownAccounts, knownAccounts } from '../mocks/keyring/accounts'
-import { createMember, getMember } from '../mocks/members'
+import { getMember } from '../mocks/members'
+import { setupMockServer } from '../mocks/server'
 
 describe('UI: Accounts list', () => {
+  const mockServer = setupMockServer()
+
   let accountsMock: {
     hasAccounts: boolean
     allAccounts: Account[]
@@ -39,16 +40,6 @@ describe('UI: Accounts list', () => {
       allAccounts: [],
     }
     sinon.stub(useAccountsModule, 'useAccounts').returns(accountsMock)
-  })
-
-  let server: Server
-
-  beforeEach(() => {
-    server = makeServer('test')
-  })
-
-  afterEach(() => {
-    server.shutdown()
   })
 
   afterEach(cleanup)
@@ -117,7 +108,7 @@ describe('UI: Accounts list', () => {
     })
 
     it("Annotate active member's accounts", async () => {
-      await createMember(server, 'Alice')
+      await mockServer.createMember('Alice')
       const alice = await getMember('Alice')
       const { findByText } = renderAccounts(alice as MemberFieldsFragment)
 

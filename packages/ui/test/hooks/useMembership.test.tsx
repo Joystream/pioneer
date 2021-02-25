@@ -1,11 +1,10 @@
 import { expect } from '@jest/globals'
 import { act, renderHook } from '@testing-library/react-hooks'
-import { Server } from 'miragejs/server'
 import React from 'react'
 import { useMembership } from '../../src/hooks/useMembership'
-import { makeServer } from '../../src/mocks/server'
 import { MockQueryNodeProviders } from '../helpers/providers'
-import { createMember, getMember } from '../mocks/members'
+import { getMember } from '../mocks/members'
+import { setupMockServer } from '../mocks/server'
 
 const renderUseMembership = () => {
   return renderHook(() => useMembership(), {
@@ -14,15 +13,7 @@ const renderUseMembership = () => {
 }
 
 describe('useMembership', () => {
-  let server: Server
-
-  beforeEach(() => {
-    server = makeServer('test')
-  })
-
-  afterEach(() => {
-    server.shutdown()
-  })
+  const mockServer = setupMockServer()
 
   it('Returns loading state', () => {
     const { result } = renderUseMembership()
@@ -49,7 +40,7 @@ describe('useMembership', () => {
   })
 
   it('Returns matched members', async () => {
-    await createMember(server, 'Alice')
+    await mockServer.createMember('Alice')
     const aliceMember = await getMember('Alice')
 
     const { result, waitForNextUpdate } = renderUseMembership()
@@ -64,7 +55,7 @@ describe('useMembership', () => {
   })
 
   it('Allows to set active member', async () => {
-    await createMember(server, 'Alice')
+    await mockServer.createMember('Alice')
     const aliceMember = await getMember('Alice')
 
     const { result, waitForNextUpdate } = renderUseMembership()
