@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Colors } from '../constants'
 import { Account } from '../common/types'
 import { TransferModal } from '../modals/TransferModal/TransferModal'
-import { ButtonGhostSmallSquare, ButtonPrimarySmallSquare } from './buttons'
+import { ButtonGhostMediumSquare, ButtonPrimarySmallSquare } from './buttons'
 import { ArrowInsideIcon, ArrowOutsideIcon, TransferIcon } from './icons'
 
 interface Props {
@@ -41,7 +41,7 @@ export function TransferButtonStyled() {
   )
 }
 
-const ButtonForTransfer = styled(ButtonGhostSmallSquare)`
+const ButtonForTransfer = styled(ButtonGhostMediumSquare)`
   svg {
     color: ${Colors.Black[900]};
   }
