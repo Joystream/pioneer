@@ -3,8 +3,7 @@ import { Server } from 'miragejs/server'
 import React from 'react'
 import { CurrentMember } from '../../src/components/page/Sidebar/CurrentMember'
 import { makeServer } from '../../src/mocks/server'
-import { MembershipContextProvider } from '../../src/providers/membership/provider'
-import { MockApolloProvider } from '../helpers/providers'
+import { MockQueryNodeProviders } from '../helpers/providers'
 import { aliceMember, bobMember, createMember } from '../mocks/members'
 
 describe('UI: Memberships component', () => {
@@ -72,11 +71,9 @@ describe('UI: Memberships component', () => {
 
   function renderComponent() {
     return render(
-      <MockApolloProvider>
-        <MembershipContextProvider>
-          <CurrentMember />
-        </MembershipContextProvider>
-      </MockApolloProvider>
+      <MockQueryNodeProviders>
+        <CurrentMember />
+      </MockQueryNodeProviders>
     )
   }
 

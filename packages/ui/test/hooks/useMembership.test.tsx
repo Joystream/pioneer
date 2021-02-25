@@ -1,15 +1,16 @@
 import { expect } from '@jest/globals'
 import { act, renderHook } from '@testing-library/react-hooks'
 import { Server } from 'miragejs/server'
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { useMembership } from '../../src/hooks/useMembership'
 import { makeServer } from '../../src/mocks/server'
-import { MockApolloProvider } from '../helpers/providers'
+import { MockQueryNodeProviders } from '../helpers/providers'
 import { aliceMember, createMember } from '../mocks/members'
 
 const renderUseMembership = () => {
-  const wrapper = ({ children }: { children: ReactNode }) => <MockApolloProvider>{children}</MockApolloProvider>
-  return renderHook(() => useMembership(), { wrapper })
+  return renderHook(() => useMembership(), {
+    wrapper: ({ children }) => <MockQueryNodeProviders>{children}</MockQueryNodeProviders>,
+  })
 }
 
 describe('useMembership', () => {
