@@ -165,6 +165,7 @@ const ModalTopBar = styled.header.attrs((props: TopBarProps) => ({
 
 export const ScrolledModalBody = styled(ModalBody)`
   height: 100%;
+  max-height: 66vh;
   padding: 24px 24px 20px;
   overflow-y: scroll;
 `
