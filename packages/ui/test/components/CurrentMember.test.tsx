@@ -1,13 +1,17 @@
+import { beforeAll } from '@jest/globals'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import { Server } from 'miragejs/server'
 import React from 'react'
 import { CurrentMember } from '../../src/components/page/Sidebar/CurrentMember'
 import { makeServer } from '../../src/mocks/server'
 import { MockQueryNodeProviders } from '../helpers/providers'
-import { aliceMember, bobMember, createMember } from '../mocks/members'
+import { createMember } from '../mocks/members'
 
 describe('UI: Memberships component', () => {
   let server: Server
+
+  beforeAll(cryptoWaitReady)
 
   beforeEach(() => {
     server = makeServer('test')
@@ -26,9 +30,9 @@ describe('UI: Memberships component', () => {
   })
 
   describe('with memberships', () => {
-    beforeEach(() => {
-      createMember(server, aliceMember)
-      createMember(server, bobMember)
+    beforeEach(async () => {
+      await createMember(server, 'Alice')
+      await createMember(server, 'Bob')
     })
 
     it('Displays memberships count', async () => {

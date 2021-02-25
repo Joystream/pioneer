@@ -12,7 +12,7 @@ import { Memberships } from '../../src/pages/Profile/MyMemberships/Memberships'
 import { MembershipContext } from '../../src/providers/membership/context'
 import { MockApolloProvider } from '../helpers/providers'
 import { aliceSigner, bobSigner } from '../mocks/keyring'
-import { aliceMember, bobMember, createMember } from '../mocks/members'
+import { createMember } from '../mocks/members'
 
 describe('UI: Memberships list', () => {
   let accounts: {
@@ -25,9 +25,9 @@ describe('UI: Memberships list', () => {
 
   beforeAll(cryptoWaitReady)
 
-  beforeAll(() => {
-    alice = aliceSigner().address
-    bob = bobSigner().address
+  beforeAll(async () => {
+    alice = (await aliceSigner()).address
+    bob = (await bobSigner()).address
 
     accounts = {
       hasAccounts: true,
@@ -57,8 +57,8 @@ describe('UI: Memberships list', () => {
 
   describe('with memberships', () => {
     it('Shows list of memberships', async () => {
-      createMember(server, aliceMember)
-      createMember(server, bobMember)
+      await createMember(server, 'Alice')
+      await createMember(server, 'Bob')
       const { getByText } = renderMemberships()
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))
@@ -68,8 +68,8 @@ describe('UI: Memberships list', () => {
     })
 
     it('Shows active membership', async () => {
-      createMember(server, aliceMember)
-      const bob = createMember(server, bobMember)
+      await createMember(server, 'Alice')
+      const bob = await createMember(server, 'Bob')
       const { getByText } = renderMemberships((bob.attrs as unknown) as MemberFieldsFragment)
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))

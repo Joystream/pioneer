@@ -5,7 +5,7 @@ import React from 'react'
 import { useMembership } from '../../src/hooks/useMembership'
 import { makeServer } from '../../src/mocks/server'
 import { MockQueryNodeProviders } from '../helpers/providers'
-import { aliceMember, createMember } from '../mocks/members'
+import { createMember, getMember } from '../mocks/members'
 
 const renderUseMembership = () => {
   return renderHook(() => useMembership(), {
@@ -49,7 +49,8 @@ describe('useMembership', () => {
   })
 
   it('Returns matched members', async () => {
-    createMember(server, aliceMember)
+    await createMember(server, 'Alice')
+    const aliceMember = await getMember('Alice')
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
@@ -63,7 +64,9 @@ describe('useMembership', () => {
   })
 
   it('Allows to set active member', async () => {
-    createMember(server, aliceMember)
+    await createMember(server, 'Alice')
+    const aliceMember = await getMember('Alice')
+
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
 

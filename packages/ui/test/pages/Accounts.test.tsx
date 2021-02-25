@@ -22,8 +22,8 @@ describe('UI: Accounts list', () => {
 
   beforeAll(cryptoWaitReady)
 
-  beforeEach(() => {
-    alice = aliceSigner().address
+  beforeEach(async () => {
+    alice = (await aliceSigner()).address
     accounts = {
       hasAccounts: false,
       allAccounts: [],
@@ -65,7 +65,7 @@ describe('UI: Accounts list', () => {
       const { findByText } = renderAccounts()
       sinon.stub(useBalanceModule, 'useBalance').returns(null)
 
-      const alice = aliceSigner().address
+      const alice = (await aliceSigner()).address
       const aliceBox = (await findByText(alice))?.parentNode?.parentNode
       expect(aliceBox).toBeDefined()
       expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')

@@ -1,13 +1,15 @@
-import { KeyringPair } from '@polkadot/keyring/types'
 import { Keyring } from '@polkadot/keyring'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
 
-export function aliceSigner(): KeyringPair {
+export async function aliceSigner() {
+  await cryptoWaitReady()
   const keyring = new Keyring({ type: 'sr25519' })
 
   return keyring.addFromUri('//Alice')
 }
 
-export function bobSigner(): KeyringPair {
+export async function bobSigner() {
+  await cryptoWaitReady()
   const keyring = new Keyring({ type: 'sr25519' })
 
   return keyring.addFromUri('//Bob')

@@ -35,14 +35,14 @@ describe('UI: TransferModal', () => {
   let transfer: any
   let keyring: Keyring
 
-  beforeEach(() => {
+  beforeEach(async () => {
     keyring = mockKeyring()
     sender = {
-      address: aliceSigner().address,
+      address: (await aliceSigner()).address,
       name: 'alice',
     }
     to = {
-      address: bobSigner().address,
+      address: (await bobSigner()).address,
       name: 'bob',
     }
     set(api, 'api.derive.balances.all', () =>
