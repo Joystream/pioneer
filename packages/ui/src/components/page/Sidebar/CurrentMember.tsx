@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../api/queries'
 import { BorderRad, Colors } from '../../../constants'
 import { useMembership } from '../../../hooks/useMembership'
+import { Row } from '../../../modals/common'
 import { AddMembershipButton } from '../../AddMembershipButton'
 import { MemberInfo } from '../../MemberInfo'
 import { Modal, ModalBody } from '../../Modal'
@@ -44,14 +45,16 @@ const SwitchMemberModal = ({ onClose }: Props) => {
   return (
     <Modal modalSize={'s'} modalHeight={'s'} isDark>
       <ModalBody>
-        <Memberships>
-          My memberships: <MembershipsBadge>{count}</MembershipsBadge>
-        </Memberships>
-        {members.map((member) => (
-          <div key={member.handle}>
-            <MemberInfo member={member} onClick={() => switchMember(member)} />
-          </div>
-        ))}
+        <h3>
+          My memberships: <Badge>{count}</Badge>
+        </h3>
+        <div>
+          {members.map((member) => (
+            <Row key={member.handle} onClick={() => switchMember(member)}>
+              <MemberInfo member={member} />
+            </Row>
+          ))}
+        </div>
       </ModalBody>
     </Modal>
   )
@@ -70,12 +73,10 @@ const Memberships = styled.span`
   color: ${Colors.Black[400]};
 `
 
-const MembershipsBadge = styled.span`
-  display: flex;
+const Badge = styled.span`
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  right: -24px;
   width: 16px;
   height: 16px;
   border-radius: ${BorderRad.round};
@@ -84,6 +85,11 @@ const MembershipsBadge = styled.span`
   line-height: 16px;
   font-weight: 700;
   color: ${Colors.White};
+`
+
+const MembershipsBadge = styled(Badge)`
+  position: absolute;
+  right: -24px;
 `
 
 const SwitchMember = styled.div`
