@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { MemberFieldsFragment } from '../../../api/queries'
 import { AddMembershipButton } from '../../../components/AddMembershipButton'
 import { Text } from '../../../components/typography'
 import { Colors } from '../../../constants'
@@ -7,7 +8,7 @@ import { useMembership } from '../../../hooks/useMembership'
 import { MemberItem } from './MemberItem'
 
 export function Memberships() {
-  const { count, isLoading, members } = useMembership()
+  const { count, isLoading, members, active } = useMembership()
   const hasMemberships = !!count
 
   if (isLoading) {
@@ -29,29 +30,43 @@ export function Memberships() {
     )
   }
 
+  const otherMemberships = members.filter((member) => !active || active.handle !== member.handle)
+
   return (
     <>
-      <h6>Other memberships</h6>
-
-      <MembershipsGroup>
-        <ListHeaders>
-          <ListHeader>Memberships</ListHeader>
-          <ListHeader>Roles</ListHeader>
-          <ListHeader>Slashed</ListHeader>
-          <ListHeader>Terminated</ListHeader>
-          <ListHeader>Invitations</ListHeader>
-          <ListHeader>Invited</ListHeader>
-        </ListHeaders>
-
-        <MembershipsList>
-          {members.map((member) => (
-            <MemberItem member={member} key={member.handle} />
-          ))}
-        </MembershipsList>
-      </MembershipsGroup>
+      {!!active && <MembersSection title="Active membership" members={[active]} />}
+      {!!otherMemberships.length && <MembersSection title="Other memberships" members={otherMemberships} />}
     </>
   )
 }
+
+interface MembersSectionProps {
+  title: string
+  members: MemberFieldsFragment[]
+}
+
+const MembersSection = ({ title, members }: MembersSectionProps) => (
+  <>
+    <h6>{title}</h6>
+
+    <MembershipsGroup>
+      <ListHeaders>
+        <ListHeader>Memberships</ListHeader>
+        <ListHeader>Roles</ListHeader>
+        <ListHeader>Slashed</ListHeader>
+        <ListHeader>Terminated</ListHeader>
+        <ListHeader>Invitations</ListHeader>
+        <ListHeader>Invited</ListHeader>
+      </ListHeaders>
+
+      <MembershipsList>
+        {members.map((member) => (
+          <MemberItem member={member} key={member.handle} />
+        ))}
+      </MembershipsList>
+    </MembershipsGroup>
+  </>
+)
 
 const NoMemberships = styled.div`
   display: grid;
