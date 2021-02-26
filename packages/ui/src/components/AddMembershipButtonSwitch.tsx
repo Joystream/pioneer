@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Text } from '../components/typography/Text'
-import { BorderRad, Colors, Transitions } from '../constants/styles'
+import { Text } from './typography'
+import { BorderRad, Colors, Transitions } from '../constants'
 import { AddMembershipModal } from '../modals/AddMembershipModal'
 import { MyProfileIcon } from './page/Sidebar/LinksIcons/MyProfileIcon'
 
