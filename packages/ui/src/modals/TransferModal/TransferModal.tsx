@@ -17,11 +17,11 @@ interface Props {
   icon: ReactElement
 }
 
-type ModalState = 'SEND_TOKENS' | 'SIGN_TRANSACTION' | 'EXTENSION_SIGN' | 'SENDING' | 'SUCCESS' | 'ERROR'
+type ModalState = 'PREPARE' | 'AUTHORIZE' | 'EXTENSION_SIGN' | 'SENDING' | 'SUCCESS' | 'ERROR'
 
 export function TransferModal({ from, to, onClose, icon }: Props) {
   const keyring = useKeyring()
-  const [step, setStep] = useState<ModalState>('SEND_TOKENS')
+  const [step, setStep] = useState<ModalState>('PREPARE')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [fee, setFee] = useState<BN>(new BN(0))
   const [transferFrom, setTransferFrom] = useState(from)
@@ -41,7 +41,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     setAmount(amount)
     setTransferTo(to)
     setTransferFrom(from)
-    setStep('SIGN_TRANSACTION')
+    setStep('AUTHORIZE')
   }
 
   const onSign = (transaction: Observable<ISubmittableResult>, fee: BN) => {
@@ -50,7 +50,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     }
 
     const statusCallback = (result: ISubmittableResult) => {
-      const { status } = result
+      const { status, events } = result
 
       console.log(`Current transaction status: ${status.type}`)
 
@@ -58,11 +58,32 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
         setStep('SENDING')
       }
 
-      if (!status.isInBlock) {
+      if (status.isInBlock) {
+        console.log('Included at block hash', status.asInBlock.toHex())
+        console.log('Events:')
+
+        events.forEach(({ event: { data, method, section }, phase }) => {
+          console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
+        })
+      }
+
+      if (!status.isFinalized) {
         return
       }
 
-      console.log(`In Block. Block hash: ${status.asInBlock.toString()}`)
+      const isSuccess = events.find(({ event }) => {
+        const { method } = event
+        return method === 'ExtrinsicSuccess'
+      })
+
+      const isError = events.find(({ event }) => {
+        const { method } = event
+        return method === 'ExtrinsicFailed'
+      })
+
+      console.log(
+        `Finalized. Block hash: ${status.asFinalized.toString()}\n\t- success: ${isSuccess}\n\t- error: ${isError}`
+      )
 
       setStep('SUCCESS')
     }
@@ -77,7 +98,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     setSubscription(transaction.subscribe(statusCallback))
   }
 
-  if (step === 'SEND_TOKENS' || !transferTo || !transferFrom) {
+  if (step === 'PREPARE' || !transferTo || !transferFrom) {
     return (
       <TransferDetailsModal
         onClose={onClose}
@@ -90,7 +111,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     )
   }
 
-  if (step === 'SIGN_TRANSACTION') {
+  if (step === 'AUTHORIZE') {
     return <SignTransferModal onClose={onClose} from={transferFrom} amount={amount} to={transferTo} onSign={onSign} />
   }
 
