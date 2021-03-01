@@ -173,12 +173,20 @@ describe('UI: TransferModal', () => {
           event: {
             index: '0x0001',
             data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
+            section: 'system',
+            method: 'ExtrinsicFailed',
           },
         },
       ]
 
       beforeEach(() => {
         set(transfer, 'signAndSend', () => stubTransactionResult(events))
+      })
+
+      it('Renders transaction failure', async () => {
+        const { findByText } = renderAndSign()
+
+        expect(await findByText('Failure')).toBeDefined()
       })
     })
   })

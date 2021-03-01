@@ -1,3 +1,4 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { ReactElement, useEffect, useState } from 'react'
@@ -18,6 +19,8 @@ interface Props {
 }
 
 type ModalState = 'PREPARE' | 'AUTHORIZE' | 'EXTENSION_SIGN' | 'SENDING' | 'SUCCESS' | 'ERROR'
+
+const isError = (events: EventRecord[]) => events.find(({ event: { method } }) => method === 'ExtrinsicFailed')
 
 export function TransferModal({ from, to, onClose, icon }: Props) {
   const keyring = useKeyring()
@@ -72,21 +75,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
         return
       }
 
-      const isSuccess = events.find(({ event }) => {
-        const { method } = event
-        return method === 'ExtrinsicSuccess'
-      })
-
-      const isError = events.find(({ event }) => {
-        const { method } = event
-        return method === 'ExtrinsicFailed'
-      })
-
-      console.log(
-        `Finalized. Block hash: ${JSON.stringify(status.asFinalized)}\n\t- success: ${isSuccess}\n\t- error: ${isError}`
-      )
-
-      setStep('SUCCESS')
+      setStep(isError(events) ? 'ERROR' : 'SUCCESS')
     }
 
     if (keyring.getPair(transferFrom.address).meta.isInjected) {
