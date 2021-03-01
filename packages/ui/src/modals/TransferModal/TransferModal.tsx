@@ -59,12 +59,13 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
       }
 
       if (status.isInBlock) {
-        console.log('Included at block hash', status.asInBlock.toHex())
+        console.log('Included at block hash', JSON.stringify(status.asInBlock))
         console.log('Events:')
 
         events.forEach(({ event: { data, method, section }, phase }) => {
-          console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
+          console.log('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
         })
+        console.log(JSON.stringify(events))
       }
 
       if (!status.isFinalized) {
@@ -82,7 +83,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
       })
 
       console.log(
-        `Finalized. Block hash: ${status.asFinalized.toString()}\n\t- success: ${isSuccess}\n\t- error: ${isError}`
+        `Finalized. Block hash: ${JSON.stringify(status.asFinalized)}\n\t- success: ${isSuccess}\n\t- error: ${isError}`
       )
 
       setStep('SUCCESS')
