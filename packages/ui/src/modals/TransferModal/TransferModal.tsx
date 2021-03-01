@@ -19,7 +19,6 @@ interface Props {
 }
 
 type ModalState = 'PREPARE' | 'AUTHORIZE' | 'EXTENSION_SIGN' | 'SENDING' | 'SUCCESS' | 'ERROR'
-
 const isError = (events: EventRecord[]) => events.find(({ event: { method } }) => method === 'ExtrinsicFailed')
 
 export function TransferModal({ from, to, onClose, icon }: Props) {

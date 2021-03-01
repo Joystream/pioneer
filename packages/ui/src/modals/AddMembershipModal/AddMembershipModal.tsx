@@ -1,3 +1,4 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useState } from 'react'
 import { Observable, Subscription } from 'rxjs'
@@ -14,7 +15,8 @@ interface MembershipModalProps {
   onClose: () => void
 }
 
-type ModalState = 'PREPARE' | 'AUTHORIZE' | 'SENDING' | 'EXTENSION_SIGN' | 'SUCCESS' | 'ERROR'
+type ModalState = 'PREPARE' | 'AUTHORIZE' | 'EXTENSION_SIGN' | 'SENDING' | 'SUCCESS' | 'ERROR'
+const isError = (events: EventRecord[]) => events.find(({ event: { method } }) => method === 'ExtrinsicFailed')
 
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
@@ -39,32 +41,20 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
       }
 
       if (status.isInBlock) {
-        console.log('Included at block hash', status.asInBlock.toHex())
+        console.log('Included at block hash', JSON.stringify(status.asInBlock))
         console.log('Events:')
 
         events.forEach(({ event: { data, method, section }, phase }) => {
-          console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
+          console.log('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
         })
+        console.log(JSON.stringify(events))
       }
 
       if (!status.isFinalized) {
         return
       }
 
-      const isSuccess = events.find(({ event }) => {
-        const { method } = event
-        return method === 'ExtrinsicSuccess'
-      })
-
-      const isError = events.find(({ event }) => {
-        const { method } = event
-        return method === 'ExtrinsicFailed'
-      })
-
-      console.log(
-        `Finalized. Block hash: ${status.asFinalized.toString()}\n\t- success: ${isSuccess}\n\t- error: ${isError}`
-      )
-      setStep('SUCCESS')
+      setStep(isError(events) ? 'ERROR' : 'SUCCESS')
     }
 
     setSubscription(transaction.subscribe(statusCallback))

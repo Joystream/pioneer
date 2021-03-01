@@ -20,6 +20,7 @@ import { selectAccount } from '../helpers/selectAccount'
 
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
+import { stubTransactionResult } from '../mocks/stubTransactionResult'
 
 describe('UI: TransferModal', () => {
   beforeAll(cryptoWaitReady)
@@ -201,21 +202,5 @@ describe('UI: TransferModal', () => {
         </ApiContext.Provider>
       </KeyringContext.Provider>
     )
-  }
-
-  function stubTransactionResult(events: any[]) {
-    return from([
-      {
-        status: { isReady: true, type: 'Ready' },
-      },
-      {
-        status: { type: 'InBlock', isInBlock: true, asInBlock: '0x93XXX' },
-        events: [...events],
-      },
-      {
-        status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
-        events: [...events],
-      },
-    ])
   }
 })
