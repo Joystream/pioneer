@@ -3,6 +3,8 @@ import { AddressToBalanceMap } from 'src/hooks/useBalances'
 import BN from 'bn.js'
 import { Balances } from 'src/hooks/useBalance'
 
+export type sortKey = keyof Balances | 'name'
+
 const Comparator = {
   name: (_a: Account, _b: Account) => {
     const a = _a.name || ''
@@ -19,6 +21,6 @@ const Comparator = {
   },
 }
 
-export function sortAccounts(accounts: Account[], balanceMap: AddressToBalanceMap, key: keyof Balances | 'name') {
+export function sortAccounts(accounts: Account[], balanceMap: AddressToBalanceMap, key: sortKey) {
   return key === 'name' ? accounts.sort(Comparator.name) : accounts.sort(Comparator.balance(balanceMap, key))
 }
