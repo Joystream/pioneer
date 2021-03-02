@@ -5,12 +5,12 @@ export function setOrder(
   sortBy: SortKey,
   setSortBy: (k: SortKey) => void,
   reversed: boolean,
-  setReversed: (r: boolean) => void
+  setDescending: (d: boolean) => void
 ) {
   if (key === sortBy) {
-    setReversed(!reversed)
+    setDescending(!reversed)
   } else {
-    setReversed(false)
+    setDescending(key !== 'name')
     setSortBy(key)
   }
 }

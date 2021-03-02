@@ -19,17 +19,18 @@ export function Accounts() {
   const balances = useBalances()
   const [sortBy, setSortBy] = useState<SortKey>('name')
   const [isDescending, setDescending] = useState(false)
-  const accounts = useMemo(() => {
-    if (!hasAccounts) {
-      return []
-    }
-    const _accounts = isDisplayAll
-      ? allAccounts
-      : allAccounts.filter(({ address }) => balances[address] && balances[address].total.gt(new BN(0)))
-    return isDescending
-      ? sortAccounts(_accounts, balances, sortBy).reverse()
-      : sortAccounts(_accounts, balances, sortBy)
-  }, [allAccounts, hasAccounts, isDisplayAll, sortBy, isDescending])
+  const visibleAccounts = useMemo(
+    () =>
+      isDisplayAll
+        ? allAccounts
+        : allAccounts.filter(({ address }) => balances[address] && balances[address].total.gt(new BN(0))),
+    [allAccounts, isDisplayAll, hasAccounts]
+  )
+  const sortedAccounts = useMemo(() => sortAccounts(visibleAccounts, balances, sortBy, isDescending), [
+    visibleAccounts,
+    sortBy,
+    isDescending,
+  ])
 
   if (!hasAccounts) {
     return <Loading>Loading accounts...</Loading>
@@ -56,7 +57,7 @@ export function Accounts() {
           <ListHeader onClick={getOnSort('transferable')}>Transferable balance</ListHeader>
         </ListHeaders>
         <AccountsList>
-          {accounts.map((account) => (
+          {sortedAccounts.map((account) => (
             <AccountItemData key={account.address} account={account} />
           ))}
         </AccountsList>
