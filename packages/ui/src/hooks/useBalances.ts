@@ -6,7 +6,7 @@ import { useApi } from './useApi'
 import { Balances, toBalances } from './useBalance'
 import { useObservable } from './useObservable'
 
-type AddressToBalanceMap = {
+export type AddressToBalanceMap = {
   [key in Address]: Balances
 }
 
