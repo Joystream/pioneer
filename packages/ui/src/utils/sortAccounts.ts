@@ -1,7 +1,6 @@
-import { Account } from 'src/common/types'
-import { AddressToBalanceMap } from 'src/hooks/useBalances'
+import { Account, AddressToBalanceMap } from 'src/common/types'
 import BN from 'bn.js'
-import { Balances } from 'src/hooks/useBalance'
+import { Balances } from '../common/types'
 
 export type SortKey = keyof Balances | 'name'
 
