@@ -3,9 +3,11 @@ import BN from 'bn.js'
 
 describe('sortAccounts', () => {
   const emptyMap = {}
+
   it('empty list', () => {
     expect(sortAccounts([], emptyMap, 'name')).toEqual([])
   })
+
   describe('by name', () => {
     it('ascending', () => {
       const accounts = [
@@ -15,6 +17,7 @@ describe('sortAccounts', () => {
       ]
       expect(sortAccounts([...accounts], emptyMap, 'name')).toEqual([...accounts].reverse())
     })
+
     it('undefined is considered smaller', () => {
       const accounts = [
         { name: 'Anna', address: '' },
@@ -22,6 +25,7 @@ describe('sortAccounts', () => {
       ]
       expect(sortAccounts([...accounts], emptyMap, 'name')).toEqual([...accounts].reverse())
     })
+
     it('stable sort', () => {
       const accounts = [
         { name: 'Bob', address: '0' },
@@ -40,6 +44,7 @@ describe('sortAccounts', () => {
         { name: 'Zardoz', address: '' },
       ])
     })
+
     it('stable sort of undefined names', () => {
       const accounts = [
         { name: undefined, address: '0' },
@@ -59,6 +64,7 @@ describe('sortAccounts', () => {
       ])
     })
   })
+
   describe('by balance', () => {
     const balances = {
       '0': {
@@ -91,18 +97,23 @@ describe('sortAccounts', () => {
     const zardoz = { name: 'Zardoz', address: '2' }
     const dwayne = { name: 'Dwayne', address: '3' }
     const accounts = [anna, bob, zardoz, dwayne]
+
     it('total', () => {
       expect(sortAccounts([...accounts], balances, 'total')).toEqual([anna, zardoz, dwayne, bob])
     })
+
     it('locked', () => {
       expect(sortAccounts([...accounts], balances, 'locked')).toEqual([zardoz, bob, anna, dwayne])
     })
+
     it('recoverable', () => {
       expect(sortAccounts([...accounts], balances, 'recoverable')).toEqual([bob, anna, zardoz, dwayne])
     })
+
     it('transferable', () => {
       expect(sortAccounts([...accounts], balances, 'transferable')).toEqual([zardoz, dwayne, anna, bob])
     })
+
     it('with missing balances', () => {
       const jason = { name: 'Jason', address: 'a' }
       const luke = { name: 'Luke', address: 'b' }
