@@ -1,11 +1,10 @@
 import { Account } from 'src/common/types'
 import { AddressToBalanceMap } from 'src/hooks/useBalances'
 import BN from 'bn.js'
+import { Balances } from 'src/hooks/useBalance'
 
-type Comparator = (balanceMap: AddressToBalanceMap) => (a: Account, b: Account) => number
-
-export const accountComparator = {
-  name: () => (_a: Account, _b: Account) => {
+const Comparator = {
+  name: (_a: Account, _b: Account) => {
     const a = _a.name || ''
     const b = _b.name || ''
     if (a < b) {
@@ -13,13 +12,13 @@ export const accountComparator = {
     }
     return a > b ? 1 : 0
   },
-  totalBalance: (balanceMap: AddressToBalanceMap) => (_a: Account, _b: Account) => {
-    const a = balanceMap[_a.address]?.total || new BN(0)
-    const b = balanceMap[_b.address]?.total || new BN(0)
+  balance: (balanceMap: AddressToBalanceMap, key: keyof Balances) => (_a: Account, _b: Account) => {
+    const a = balanceMap[_a.address]?.[key] || new BN(0)
+    const b = balanceMap[_b.address]?.[key] || new BN(0)
     return a.cmp(b)
   },
 }
 
-export function sortAccounts(accounts: Account[], balanceMap: AddressToBalanceMap, comparator: Comparator) {
-  return accounts.sort(comparator(balanceMap))
+export function sortAccounts(accounts: Account[], balanceMap: AddressToBalanceMap, key: keyof Balances | 'name') {
+  return key === 'name' ? accounts.sort(Comparator.name) : accounts.sort(Comparator.balance(balanceMap, key))
 }
