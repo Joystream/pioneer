@@ -4,12 +4,12 @@ import BN from 'bn.js'
 describe('sortAccounts', () => {
   const emptyMap = {}
 
-  it('empty list', () => {
+  it('Empty list', () => {
     expect(sortAccounts([], emptyMap, 'name')).toEqual([])
   })
 
   describe('by name', () => {
-    it('ascending', () => {
+    it('Ascending', () => {
       const accounts = [
         { name: 'Zardoz', address: '' },
         { name: 'Bob', address: '' },
@@ -18,7 +18,7 @@ describe('sortAccounts', () => {
       expect(sortAccounts([...accounts], emptyMap, 'name')).toEqual([...accounts].reverse())
     })
 
-    it('undefined is considered smaller', () => {
+    it('Undefined is considered smaller', () => {
       const accounts = [
         { name: 'Anna', address: '' },
         { name: undefined, address: '' },
@@ -26,7 +26,7 @@ describe('sortAccounts', () => {
       expect(sortAccounts([...accounts], emptyMap, 'name')).toEqual([...accounts].reverse())
     })
 
-    it('stable sort', () => {
+    it('Stable sort', () => {
       const accounts = [
         { name: 'Bob', address: '0' },
         { name: 'Zardoz', address: '' },
@@ -45,7 +45,7 @@ describe('sortAccounts', () => {
       ])
     })
 
-    it('stable sort of undefined names', () => {
+    it('Stable sort of undefined names', () => {
       const accounts = [
         { name: undefined, address: '0' },
         { name: 'Zardoz', address: '' },
@@ -98,23 +98,23 @@ describe('sortAccounts', () => {
     const dwayne = { name: 'Dwayne', address: '3' }
     const accounts = [anna, bob, zardoz, dwayne]
 
-    it('total', () => {
+    it('Total', () => {
       expect(sortAccounts([...accounts], balances, 'total')).toEqual([anna, zardoz, dwayne, bob])
     })
 
-    it('locked', () => {
+    it('Locked', () => {
       expect(sortAccounts([...accounts], balances, 'locked')).toEqual([zardoz, bob, anna, dwayne])
     })
 
-    it('recoverable', () => {
+    it('Recoverable', () => {
       expect(sortAccounts([...accounts], balances, 'recoverable')).toEqual([bob, anna, zardoz, dwayne])
     })
 
-    it('transferable', () => {
+    it('Transferable', () => {
       expect(sortAccounts([...accounts], balances, 'transferable')).toEqual([zardoz, dwayne, anna, bob])
     })
 
-    it('with missing balances', () => {
+    it('With missing balances', () => {
       const jason = { name: 'Jason', address: 'a' }
       const luke = { name: 'Luke', address: 'b' }
       const accountsWithSomeMissing = [anna, bob, jason, zardoz, dwayne, luke]
