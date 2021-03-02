@@ -6,17 +6,17 @@ import { Balances } from 'src/hooks/useBalance'
 export type sortKey = keyof Balances | 'name'
 
 const Comparator = {
-  name: (_a: Account, _b: Account) => {
-    const a = _a.name || ''
-    const b = _b.name || ''
+  name: (accountA: Account, accountB: Account) => {
+    const a = accountA.name || ''
+    const b = accountB.name || ''
     if (a < b) {
       return -1
     }
     return a > b ? 1 : 0
   },
-  balance: (balanceMap: AddressToBalanceMap, key: keyof Balances) => (_a: Account, _b: Account) => {
-    const a = balanceMap[_a.address]?.[key] || new BN(0)
-    const b = balanceMap[_b.address]?.[key] || new BN(0)
+  balance: (balanceMap: AddressToBalanceMap, key: keyof Balances) => (accountA: Account, accountB: Account) => {
+    const a = balanceMap[accountA.address]?.[key] || new BN(0)
+    const b = balanceMap[accountB.address]?.[key] || new BN(0)
     return a.cmp(b)
   },
 }
