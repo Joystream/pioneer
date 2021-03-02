@@ -10,15 +10,15 @@ import { Account } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
 import { useBalances } from '../../../hooks/useBalances'
-import { sortAccounts, sortKey } from '../../../utils/sortAccounts'
+import { sortAccounts, SortKey } from '../../../utils/sortAccounts'
 import { setOrder } from './helpers'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
   const [isDisplayAll, setIsDisplayAll] = useState(true)
   const balances = useBalances()
-  const [sortBy, setSortBy] = useState<sortKey>('name')
-  const [reversed, setReversed] = useState(false)
+  const [sortBy, setSortBy] = useState<SortKey>('name')
+  const [isDescending, setDescending] = useState(false)
   const accounts = useMemo(() => {
     if (!hasAccounts) {
       return []
@@ -26,12 +26,17 @@ export function Accounts() {
     const _accounts = isDisplayAll
       ? allAccounts
       : allAccounts.filter(({ address }) => balances[address] && balances[address].total.gt(new BN(0)))
-    return reversed ? sortAccounts(_accounts, balances, sortBy).reverse() : sortAccounts(_accounts, balances, sortBy)
-  }, [allAccounts, hasAccounts, isDisplayAll, sortBy, reversed])
+    return isDescending
+      ? sortAccounts(_accounts, balances, sortBy).reverse()
+      : sortAccounts(_accounts, balances, sortBy)
+  }, [allAccounts, hasAccounts, isDisplayAll, sortBy, isDescending])
 
   if (!hasAccounts) {
     return <Loading>Loading accounts...</Loading>
   }
+
+  const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
+
   return (
     <>
       <AccountsTabs>
@@ -44,19 +49,11 @@ export function Accounts() {
       </AccountsTabs>
       <AccountsWrap>
         <ListHeaders>
-          <ListHeader onClick={() => setOrder('name', sortBy, setSortBy, reversed, setReversed)}>Account</ListHeader>
-          <ListHeader onClick={() => setOrder('total', sortBy, setSortBy, reversed, setReversed)}>
-            Total balance
-          </ListHeader>
-          <ListHeader onClick={() => setOrder('locked', sortBy, setSortBy, reversed, setReversed)}>
-            Locked balance
-          </ListHeader>
-          <ListHeader onClick={() => setOrder('recoverable', sortBy, setSortBy, reversed, setReversed)}>
-            Recoverable balance
-          </ListHeader>
-          <ListHeader onClick={() => setOrder('transferable', sortBy, setSortBy, reversed, setReversed)}>
-            Transferable balance
-          </ListHeader>
+          <ListHeader onClick={getOnSort('name')}>Account</ListHeader>
+          <ListHeader onClick={getOnSort('total')}>Total balance</ListHeader>
+          <ListHeader onClick={getOnSort('locked')}>Locked balance</ListHeader>
+          <ListHeader onClick={getOnSort('recoverable')}>Recoverable balance</ListHeader>
+          <ListHeader onClick={getOnSort('transferable')}>Transferable balance</ListHeader>
         </ListHeaders>
         <AccountsList>
           {accounts.map((account) => (

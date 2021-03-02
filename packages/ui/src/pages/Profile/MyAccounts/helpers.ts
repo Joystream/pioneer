@@ -1,9 +1,9 @@
-import { sortKey } from '../../../utils/sortAccounts'
+import { SortKey } from '../../../utils/sortAccounts'
 
 export function setOrder(
-  key: sortKey,
-  sortBy: sortKey,
-  setSortBy: (k: sortKey) => void,
+  key: SortKey,
+  sortBy: SortKey,
+  setSortBy: (k: SortKey) => void,
   reversed: boolean,
   setReversed: (r: boolean) => void
 ) {
