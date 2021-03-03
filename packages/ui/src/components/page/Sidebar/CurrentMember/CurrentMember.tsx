@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { ArrowDownExpandedIcon, ArrowIcon } from '../../../../components/icons/ArrowDownExpandedIcon'
-import { MembershipsCount } from '../../../../components/MembershipCount'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMembership } from '../../../../hooks/useMembership'
+import { AddMembershipModal } from '../../../../modals/AddMembershipModal'
 import { AddMembershipButton } from '../../../AddMembershipButton'
+import { ArrowDownExpandedIcon, ArrowIcon } from '../../../icons'
 import { MemberDarkHover, MemberInfo } from '../../../MemberInfo'
+import { MembershipsCount } from '../../../MembershipCount'
 import { SwitchMemberModal } from './SwitchMemberModal'
 
 export const CurrentMember = () => {
   const { count, members, active } = useMembership()
   const [isOpen, setIsOpen] = useState(false)
+  const [isCreateOpen, setIsCreateOpen] = useState(false)
 
   if (count < 1) {
     return <AddMembershipButton />
@@ -25,7 +27,8 @@ export const CurrentMember = () => {
           <ArrowDownExpandedIcon />
         </SwitchArrow>
       </SwitchMember>
-      {isOpen && <SwitchMemberModal onClose={() => setIsOpen(false)} />}
+      {isOpen && <SwitchMemberModal onClose={() => setIsOpen(false)} onCreateMember={() => setIsCreateOpen(true)} />}
+      {isCreateOpen && <AddMembershipModal onClose={() => setIsCreateOpen(false)} />}
     </>
   )
 }

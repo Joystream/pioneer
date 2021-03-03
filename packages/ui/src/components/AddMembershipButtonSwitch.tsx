@@ -1,23 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { Text } from './typography'
 import { BorderRad, Colors, Transitions } from '../constants'
-import { AddMembershipModal } from '../modals/AddMembershipModal'
 import { MyProfileIcon } from './page/Sidebar/LinksIcons/MyProfileIcon'
+import { Text } from './typography'
 
-export const AddMembershipButtonSwitch = () => {
-  const [isCreateOpen, setCreateOpen] = useState(false)
+interface Props {
+  onClick: () => void
+}
 
+export const AddMembershipButtonSwitch = ({ onClick }: Props) => {
   return (
     <>
-      <AddMemberships onClick={() => setCreateOpen(true)}>
+      <AddMemberships onClick={onClick}>
         <AddMembershipImage>
           <MyProfileIcon />
         </AddMembershipImage>
         <AddMembershipTitle>New Member</AddMembershipTitle>
         <AddMembershipText size={3}>Create a New Membership</AddMembershipText>
       </AddMemberships>
-      {isCreateOpen && <AddMembershipModal onClose={() => setCreateOpen(false)} />}
     </>
   )
 }
