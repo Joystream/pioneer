@@ -1,27 +1,29 @@
-import { Account, AddressToBalanceMap } from 'src/common/types'
 import BN from 'bn.js'
+import { Account, AddressToBalanceMap } from 'src/common/types'
 import { Balances } from '../common/types'
 
 export type SortKey = keyof Balances | 'name'
 
+const applyOrder = (order: number, isDescending: boolean) => order * (isDescending ? -1 : 1)
+
 const Comparator = {
-  name: (descending: boolean) => (accountA: Account, accountB: Account) => {
+  name: (isDescending: boolean) => (accountA: Account, accountB: Account) => {
     const a = accountA.name || ''
     const b = accountB.name || ''
-    return a.localeCompare(b) * (descending ? -1 : 1)
+    return applyOrder(a.localeCompare(b), isDescending)
   },
-  balance: (balanceMap: AddressToBalanceMap, key: keyof Balances, descending: boolean) => (
+  balance: (balanceMap: AddressToBalanceMap, key: keyof Balances, isDescending: boolean) => (
     accountA: Account,
     accountB: Account
   ) => {
     const a = balanceMap[accountA.address]?.[key] || new BN(0)
     const b = balanceMap[accountB.address]?.[key] || new BN(0)
-    return a.cmp(b) * (descending ? -1 : 1)
+    return applyOrder(a.cmp(b), isDescending)
   },
 }
 
-export function sortAccounts(accounts: Account[], balanceMap: AddressToBalanceMap, key: SortKey, descending = false) {
+export function sortAccounts(accounts: Account[], balanceMap: AddressToBalanceMap, key: SortKey, isDescending = false) {
   return key === 'name'
-    ? accounts.sort(Comparator.name(descending))
-    : accounts.sort(Comparator.balance(balanceMap, key, descending))
+    ? accounts.sort(Comparator.name(isDescending))
+    : accounts.sort(Comparator.balance(balanceMap, key, isDescending))
 }
