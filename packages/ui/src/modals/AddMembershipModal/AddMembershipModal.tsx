@@ -1,6 +1,6 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Observable, Subscription } from 'rxjs'
 import { Member } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
@@ -21,9 +21,15 @@ const isError = (events: EventRecord[]) => events.find(({ event: { method } }) =
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
-  const [state, setStep] = useState<ModalState>('PREPARE')
+  const [step, setStep] = useState<ModalState>('PREPARE')
   const [transactionParams, setParams] = useState<Member>()
-  const [, setSubscription] = useState<Subscription | undefined>(undefined)
+  const [subscription, setSubscription] = useState<Subscription | undefined>(undefined)
+
+  useEffect(() => {
+    if (subscription) {
+      return () => subscription.unsubscribe()
+    }
+  }, [subscription])
 
   const onSubmit = (params: Member) => {
     setStep('AUTHORIZE')
@@ -60,11 +66,11 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
     setSubscription(transaction.subscribe(statusCallback))
   }
 
-  if (state === 'PREPARE' || !transactionParams) {
+  if (step === 'PREPARE' || !transactionParams) {
     return <MembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
-  if (state === 'AUTHORIZE') {
+  if (step === 'AUTHORIZE') {
     return (
       <SignCreateMemberModal
         onClose={onClose}
@@ -75,17 +81,27 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
     )
   }
 
-  const loremDescription = 'Lorem'
-
-  if (state === 'EXTENSION_SIGN') {
-    return <WaitModal title="Waiting for the extension" description={loremDescription} />
+  if (step === 'EXTENSION_SIGN') {
+    return (
+      <WaitModal
+        title="Waiting for the extension"
+        description={'Please, sign the transaction using external signer app.'}
+      />
+    )
   }
 
-  if (state === 'SENDING') {
-    return <WaitModal title="Wait for the transaction" description={loremDescription} />
+  if (step === 'SENDING') {
+    return (
+      <WaitModal
+        title="Pending transaction"
+        description={
+          'We are waiting for your transaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim.'
+        }
+      />
+    )
   }
 
-  if (state === 'SUCCESS') {
+  if (step === 'SUCCESS') {
     return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} />
   }
 
