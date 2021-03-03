@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useMemo, useState } from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../../common/types'
 import { AccountInfo } from '../../../components/AccountInfo'
@@ -27,6 +27,7 @@ export function Accounts() {
   ])
   const sortedAccounts = useMemo(() => sortAccounts(visibleAccounts, balances, sortBy, isDescending), [
     visibleAccounts,
+    balances,
     sortBy,
     isDescending,
   ])
@@ -36,6 +37,17 @@ export function Accounts() {
   }
 
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
+
+  const Header = ({ children, sortKey }: HeaderProps) => {
+    return (
+      <ListHeader onClick={getOnSort(sortKey)}>
+        <HeaderText>
+          {children}
+          {sortBy === sortKey && (isDescending ? <ArrowDown /> : <ArrowUp />)}
+        </HeaderText>
+      </ListHeader>
+    )
+  }
 
   return (
     <>
@@ -49,11 +61,11 @@ export function Accounts() {
       </AccountsTabs>
       <AccountsWrap>
         <ListHeaders>
-          <ListHeader onClick={getOnSort('name')}>Account</ListHeader>
-          <ListHeader onClick={getOnSort('total')}>Total balance</ListHeader>
-          <ListHeader onClick={getOnSort('locked')}>Locked balance</ListHeader>
-          <ListHeader onClick={getOnSort('recoverable')}>Recoverable balance</ListHeader>
-          <ListHeader onClick={getOnSort('transferable')}>Transferable balance</ListHeader>
+          <Header sortKey="name">Account</Header>
+          <Header sortKey="total">Total balance</Header>
+          <Header sortKey="locked">Locked balance</Header>
+          <Header sortKey="recoverable">Recoverable balance</Header>
+          <Header sortKey="transferable">Transferable balance</Header>
         </ListHeaders>
         <AccountsList>
           {sortedAccounts.map((account) => (
@@ -95,6 +107,11 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
       </AccountControls>
     </AccountItem>
   )
+}
+
+interface HeaderProps {
+  children: ReactNode
+  sortKey: SortKey
 }
 
 const AccountsTabs = styled(PageTabsNav)`
@@ -145,27 +162,38 @@ const ListHeader = styled.span`
   color: ${Colors.Black[400]};
   text-transform: uppercase;
   text-align: right;
+  user-select: none;
+  cursor: pointer;
 
   &:first-child {
     justify-content: flex-start;
     text-align: left;
   }
-  &:last-child {
-    position: relative;
+`
 
-    &:before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      right: -15px;
-      width: 4px;
-      height: 4px;
-      border: 1px solid ${Colors.Black[600]};
-      border-left: 1px solid transparent;
-      border-bottom: 1px solid transparent;
-      transform: rotate(-45deg);
-    }
-  }
+const HeaderText = styled.span`
+  position: relative;
+`
+
+const Arrow = styled.span`
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 5px;
+  width: 4px;
+  height: 4px;
+  border: 1px solid ${Colors.Black[600]};
+  transform: rotate(-45deg);
+`
+
+const ArrowUp = styled(Arrow)`
+  border-left: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+`
+
+const ArrowDown = styled(Arrow)`
+  border-right: 1px solid transparent;
+  border-top: 1px solid transparent;
 `
 
 const AccountsList = styled.ul`
