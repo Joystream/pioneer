@@ -89,5 +89,5 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
     return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} />
   }
 
-  return <AddMembershipFailureModal onClose={onClose} params={transactionParams} />
+  return <AddMembershipFailureModal onClose={onClose} member={transactionParams} />
 }

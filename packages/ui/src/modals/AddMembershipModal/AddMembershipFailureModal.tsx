@@ -1,18 +1,22 @@
 import React from 'react'
 import { Member } from '../../common/types'
-import { SuccessIcon } from '../../components/icons'
-import { Modal, ModalHeader, SuccessModalBody } from '../../components/Modal'
+import { FailureIcon } from '../../components/icons/FailureIcon'
+import { CloseSmallModalButton, Modal, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
 
 interface Props {
   onClose: () => void
-  params: Member
+  member: Member
 }
 
-export function AddMembershipFailureModal({ onClose }: Props) {
-  return (
-    <Modal modalSize={'s'}>
-      <ModalHeader onClick={onClose} title="Failure" icon={<SuccessIcon />} />
-      <SuccessModalBody>NOT OK</SuccessModalBody>
-    </Modal>
-  )
-}
+export const AddMembershipFailureModal = ({ onClose, member }: Props) => (
+  <Modal modalSize="xs" modalHeight="s">
+    <ResultModalBody>
+      <CloseSmallModalButton onClick={onClose} />
+      <FailureIcon />
+      <ModalTitle>
+        <span className="red-title">Oh no!</span> Failure
+      </ModalTitle>
+      <ResultText size={2}>There was a problem with crating a membership for {member.name}.</ResultText>
+    </ResultModalBody>
+  </Modal>
+)
