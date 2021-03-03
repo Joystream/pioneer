@@ -1,15 +1,16 @@
 import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
+import { Account } from '../../../common/types'
 import { AccountInfo } from '../../../components/AccountInfo'
 import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
 import { TransferButton } from '../../../components/TransferButton'
 import { TokenValue } from '../../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../../constants'
-import { Account } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
 import { useBalances } from '../../../hooks/useBalances'
+import { filterAccounts } from '../../../utils/filterAccounts'
 import { sortAccounts, SortKey } from '../../../utils/sortAccounts'
 import { setOrder } from './helpers'
 
@@ -19,13 +20,11 @@ export function Accounts() {
   const balances = useBalances()
   const [sortBy, setSortBy] = useState<SortKey>('name')
   const [isDescending, setDescending] = useState(false)
-  const visibleAccounts = useMemo(
-    () =>
-      isDisplayAll
-        ? allAccounts
-        : allAccounts.filter(({ address }) => balances[address] && balances[address].total.gt(new BN(0))),
-    [allAccounts, isDisplayAll, hasAccounts]
-  )
+  const visibleAccounts = useMemo(() => filterAccounts(allAccounts, isDisplayAll, balances), [
+    allAccounts,
+    isDisplayAll,
+    hasAccounts,
+  ])
   const sortedAccounts = useMemo(() => sortAccounts(visibleAccounts, balances, sortBy, isDescending), [
     visibleAccounts,
     sortBy,
