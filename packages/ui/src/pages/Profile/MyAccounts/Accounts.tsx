@@ -38,11 +38,11 @@ export function Accounts() {
 
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
 
-  const Header = ({ text, sortKey }: HeaderProps) => {
+  const Header = ({ children, sortKey }: HeaderProps) => {
     return (
       <ListHeader onClick={getOnSort(sortKey)}>
         <HeaderText>
-          {text}
+          {children}
           {sortBy === sortKey && (isDescending ? <ArrowDown /> : <ArrowUp />)}
         </HeaderText>
       </ListHeader>
@@ -61,11 +61,11 @@ export function Accounts() {
       </AccountsTabs>
       <AccountsWrap>
         <ListHeaders>
-          <Header text="Account" sortKey="name" />
-          <Header text="Total balance" sortKey="total" />
-          <Header text="Locked balance" sortKey="locked" />
-          <Header text="Recoverable balance" sortKey="recoverable" />
-          <Header text="Transferable balance" sortKey="transferable" />
+          <Header sortKey="name">Account</Header>
+          <Header sortKey="total">Total balance</Header>
+          <Header sortKey="locked">Locked balance</Header>
+          <Header sortKey="recoverable">Recoverable balance</Header>
+          <Header sortKey="transferable">Transferable balance</Header>
         </ListHeaders>
         <AccountsList>
           {sortedAccounts.map((account) => (
@@ -110,7 +110,7 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
 }
 
 interface HeaderProps {
-  text: string
+  children: ReactNode
   sortKey: SortKey
 }
 
