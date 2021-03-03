@@ -8,10 +8,7 @@ const Comparator = {
   name: (descending: boolean) => (accountA: Account, accountB: Account) => {
     const a = accountA.name || ''
     const b = accountB.name || ''
-    if (a === b) {
-      return 0
-    }
-    return (a < b ? -1 : 1) * (descending ? -1 : 1)
+    return a.localeCompare(b) * (descending ? -1 : 1)
   },
   balance: (balanceMap: AddressToBalanceMap, key: keyof Balances, descending: boolean) => (
     accountA: Account,
