@@ -37,6 +37,15 @@ export function Accounts() {
 
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
 
+  const Header = ({ text, sortKey }: HeaderProps) => {
+    return (
+      <ListHeader onClick={getOnSort(sortKey)}>
+        {text}
+        {sortBy === sortKey && (isDescending ? <ArrowDown /> : <ArrowUp />)}
+      </ListHeader>
+    )
+  }
+
   return (
     <>
       <AccountsTabs>
@@ -49,11 +58,11 @@ export function Accounts() {
       </AccountsTabs>
       <AccountsWrap>
         <ListHeaders>
-          <ListHeader onClick={getOnSort('name')}>Account</ListHeader>
-          <ListHeader onClick={getOnSort('total')}>Total balance</ListHeader>
-          <ListHeader onClick={getOnSort('locked')}>Locked balance</ListHeader>
-          <ListHeader onClick={getOnSort('recoverable')}>Recoverable balance</ListHeader>
-          <ListHeader onClick={getOnSort('transferable')}>Transferable balance</ListHeader>
+          <Header text="Account" sortKey="name" />
+          <Header text="Total balance" sortKey="total" />
+          <Header text="Locked balance" sortKey="locked" />
+          <Header text="Recoverable balance" sortKey="recoverable" />
+          <Header text="Transferable balance" sortKey="transferable" />
         </ListHeaders>
         <AccountsList>
           {sortedAccounts.map((account) => (
@@ -95,6 +104,11 @@ const AccountItemData = ({ account }: AccountItemDataProps) => {
       </AccountControls>
     </AccountItem>
   )
+}
+
+interface HeaderProps {
+  text: string
+  sortKey: SortKey
 }
 
 const AccountsTabs = styled(PageTabsNav)`
@@ -145,6 +159,10 @@ const ListHeader = styled.span`
   color: ${Colors.Black[400]};
   text-transform: uppercase;
   text-align: right;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  cursor: pointer;
 
   &:first-child {
     justify-content: flex-start;
@@ -152,20 +170,27 @@ const ListHeader = styled.span`
   }
   &:last-child {
     position: relative;
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      right: -15px;
-      width: 4px;
-      height: 4px;
-      border: 1px solid ${Colors.Black[600]};
-      border-left: 1px solid transparent;
-      border-bottom: 1px solid transparent;
-      transform: rotate(-45deg);
-    }
   }
+`
+
+const Arrow = styled.span`
+  content: '';
+  position: relative;
+  left: 10px;
+  width: 4px;
+  height: 4px;
+  border: 1px solid ${Colors.Black[600]};
+  transform: rotate(-45deg);
+`
+
+const ArrowUp = styled(Arrow)`
+  border-left: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+`
+
+const ArrowDown = styled(Arrow)`
+  border-right: 1px solid transparent;
+  border-top: 1px solid transparent;
 `
 
 const AccountsList = styled.ul`
