@@ -20,7 +20,7 @@ describe('formatters', () => {
     const address = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'
 
     it('Shortens addresses', () => {
-      expect(shortenAddress(address)).toEqual('5FHneW46...jJM694ty')
+      expect(shortenAddress(address)).toEqual('5FHneW46x...hjJM694ty')
     })
 
     it('Shortens to specified length', () => {
