@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useMemo, useState } from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../../common/types'
 import { AccountInfo } from '../../../components/AccountInfo'
@@ -27,6 +27,7 @@ export function Accounts() {
   ])
   const sortedAccounts = useMemo(() => sortAccounts(visibleAccounts, balances, sortBy, isDescending), [
     visibleAccounts,
+    balances,
     sortBy,
     isDescending,
   ])
