@@ -40,8 +40,10 @@ export function Accounts() {
   const Header = ({ text, sortKey }: HeaderProps) => {
     return (
       <ListHeader onClick={getOnSort(sortKey)}>
-        {text}
-        {sortBy === sortKey && (isDescending ? <ArrowDown /> : <ArrowUp />)}
+        <HeaderText>
+          {text}
+          {sortBy === sortKey && (isDescending ? <ArrowDown /> : <ArrowUp />)}
+        </HeaderText>
       </ListHeader>
     )
   }
@@ -168,15 +170,17 @@ const ListHeader = styled.span`
     justify-content: flex-start;
     text-align: left;
   }
-  &:last-child {
-    position: relative;
-  }
+`
+
+const HeaderText = styled.span`
+  position: relative;
 `
 
 const Arrow = styled.span`
   content: '';
-  position: relative;
-  left: 10px;
+  position: absolute;
+  left: -10px;
+  top: 5px;
   width: 4px;
   height: 4px;
   border: 1px solid ${Colors.Black[600]};
