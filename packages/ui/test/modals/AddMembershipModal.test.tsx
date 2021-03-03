@@ -168,6 +168,31 @@ describe('UI: AddMembershipModal', () => {
         expect(getByText(/^realbobbybob/i)).toBeDefined()
       })
     })
+
+    describe('Failure', () => {
+      const events = [
+        {
+          phase: { ApplyExtrinsic: 2 },
+          event: { index: '0x0502', data: [1] },
+        },
+        {
+          phase: { ApplyExtrinsic: 2 },
+          event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
+        },
+      ]
+
+      beforeEach(() => {
+        set(transaction, 'signAndSend', () => stubTransactionResult(events))
+      })
+
+      it('Renders transaction success', async () => {
+        const { getByText, findByText } = await renderAuthorizeStep()
+        fireEvent.click(getByText(/^sign and create a member$/i))
+
+        expect(await findByText('Success')).toBeDefined()
+        expect(getByText(/^realbobbybob/i)).toBeDefined()
+      })
+    })
   })
 
   function renderModal() {
