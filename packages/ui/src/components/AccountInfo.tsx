@@ -6,6 +6,7 @@ import { BorderRad, Colors } from '../constants'
 import { Account, Address } from '../common/types'
 import { useMembership } from '../hooks/useMembership'
 import { CopyButton } from './buttons'
+import { shortenAddress } from '../utils/formatters'
 
 export const AccountInfo = React.memo(({ account }: { account: Account }) => {
   const { active } = useMembership()
@@ -18,7 +19,7 @@ export const AccountInfo = React.memo(({ account }: { account: Account }) => {
       {active && <OptionalAccountType active={active} address={account.address} />}
       <AccountName>{account.name}</AccountName>
       <AccountCopyAddress>
-        <AccountAddress>{account.address}</AccountAddress>
+        <AccountAddress>{shortenAddress(account.address)}</AccountAddress>
         <AccountCopyButton />
       </AccountCopyAddress>
     </AccountInfoWrap>

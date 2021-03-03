@@ -6,6 +6,7 @@ import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 import sinon from 'sinon'
+import { shortenAddress } from '../../src/utils/formatters'
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
@@ -77,7 +78,7 @@ describe('UI: Accounts list', () => {
       sinon.stub(useBalanceModule, 'useBalance').returns(null)
 
       const alice = (await aliceSigner()).address
-      const aliceBox = (await findByText(alice))?.parentNode?.parentNode
+      const aliceBox = (await findByText(shortenAddress(alice)))?.parentNode?.parentNode
       expect(aliceBox).toBeDefined()
       expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
       expect(aliceBox?.nextSibling?.textContent).toBe('-')
@@ -92,7 +93,7 @@ describe('UI: Accounts list', () => {
       })
       const { findByText } = renderAccounts()
 
-      const aliceBox = (await findByText(known.alice.address))?.parentNode?.parentNode
+      const aliceBox = (await findByText(shortenAddress(known.alice.address)))?.parentNode?.parentNode
       expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
       expect(aliceBox?.nextSibling?.textContent).toBe('1,000')
     })
@@ -112,10 +113,10 @@ describe('UI: Accounts list', () => {
       const alice = await getMember('Alice')
       const { findByText } = renderAccounts(alice as MemberFieldsFragment)
 
-      const aliceBox = (await findByText(known.alice.address))!.parentElement!.parentElement!
+      const aliceBox = (await findByText(shortenAddress(known.alice.address)))!.parentElement!.parentElement!
       expect(await within(aliceBox).findByText(/root account/i)).toBeDefined()
 
-      const aliceStashBox = (await findByText(known.aliceStash.address))!.parentElement!.parentElement!
+      const aliceStashBox = (await findByText(shortenAddress(known.aliceStash.address)))!.parentElement!.parentElement!
       expect(await within(aliceStashBox).findByText(/controller account/i)).toBeDefined()
     })
   })
