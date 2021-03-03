@@ -162,9 +162,7 @@ const ListHeader = styled.span`
   color: ${Colors.Black[400]};
   text-transform: uppercase;
   text-align: right;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -khtml-user-select: none;
+  user-select: none;
   cursor: pointer;
 
   &:first-child {
