@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useDebounce } from '../../../hooks/useDebounce'
 import styled from 'styled-components'
 import { Account } from '../../../common/types'
 import { Colors, Sizes } from '../../../constants'
@@ -10,6 +11,7 @@ import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
 import { TokenValue } from '../../typography'
 import { OptionListAccount } from './OptionListAccount'
+import { filterByText } from './helpers'
 
 interface Props {
   onChange: (account: Account) => void
@@ -23,7 +25,7 @@ export const filterAccount = (filterOut: Account | undefined) => {
 
 export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
   const { allAccounts } = useAccounts()
-  const options = allAccounts.filter(filter || (() => true))
+  const available = allAccounts.filter(filter || (() => true))
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
@@ -60,6 +62,10 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     return () => document.removeEventListener('keydown', escListener)
   }, [isOpen])
 
+  const [searchText, setSearchText] = useState('')
+  const searchFilter = useDebounce(searchText, 500)
+  const options = useMemo(() => filterByText(available, searchFilter), [searchFilter, available])
+
   return (
     <SelectComponent ref={selectNode}>
       <Toggle onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
@@ -75,7 +81,13 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
           </SelectedOption>
         )}
         {!selectedOption && (
-          <Empty type={'text'} placeholder={'Select account or paste account address'} autoComplete="off" />
+          <Empty
+            type={'text'}
+            placeholder={'Select account or paste account address'}
+            autoComplete="off"
+            value={searchText}
+            onChange={(t) => setSearchText(t.target.value)}
+          />
         )}
         <ToggleButton>
           <ArrowDownIcon />
