@@ -5,6 +5,7 @@ import { FounderMemberIcon } from '../components/icons/FounderMemberIcon'
 import { VerifiedMemberIcon } from '../components/icons/VerifiedMemberIcon'
 import { BorderRad, Colors, Fonts, Transitions } from '../constants'
 import { Avatar, AvatarImg } from './Avatar'
+import { Text } from '../components/typography/Text'
 
 type MemberInfoProps = MemberInfoContainerProps & MemberOnDarkProps
 
@@ -15,9 +16,10 @@ interface MemberInfoContainerProps {
 
 interface MemberOnDarkProps {
   isOnDark?: boolean
+  showId?: boolean
 }
 
-export const MemberInfo = React.memo(({ member, onClick, isOnDark }: MemberInfoProps) => {
+export const MemberInfo = React.memo(({ member, onClick, isOnDark, showId }: MemberInfoProps) => {
   return (
     <MemberInfoWrap isOnDark={isOnDark}>
       <MemberPhoto>
@@ -28,9 +30,12 @@ export const MemberInfo = React.memo(({ member, onClick, isOnDark }: MemberInfoP
         {member.isVerified && <VerifiedMemberIcon />}
         {member.isFoundingMember && <FounderMemberIcon />}
       </MemberIcons>
-      <MemberRoles>
-        <MemberRole>LI</MemberRole>
-      </MemberRoles>
+      {!showId && (
+        <MemberRoles>
+          <MemberRole>LI</MemberRole>
+        </MemberRoles>
+      )}
+      {showId && <MemberId size={3}>Worker ID: {member.id}</MemberId>}
     </MemberInfoWrap>
   )
 })
@@ -64,7 +69,7 @@ export const MemberIcons = styled.div`
   margin-left: -4px;
 `
 
-const MemberRoles = styled.div`
+export const MemberRoles = styled.div`
   display: grid;
   grid-area: memberroles;
   grid-auto-flow: column;
@@ -87,6 +92,11 @@ export const MemberRole = styled.span`
   font-weight: 700;
   color: ${Colors.Black[600]};
   text-transform: uppercase;
+`
+
+const MemberId = styled(Text)`
+  grid-area: memberroles;
+  color: ${Colors.Black[400]};
 `
 
 const MemberPhoto = styled.div`

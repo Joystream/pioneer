@@ -137,7 +137,7 @@ const AccountsWrap = styled.div`
   grid-template-areas:
     'accountstablenav'
     'accountslist';
-  grid-row-gap: 6px;
+  grid-row-gap: 5px;
   width: 100%;
 `
 
@@ -156,6 +156,8 @@ const ListHeader = styled.span`
   justify-content: flex-end;
   align-items: center;
   align-content: center;
+  justify-self: end;
+  width: fit-content;
   font-size: 10px;
   line-height: 16px;
   font-weight: 700;
@@ -166,8 +168,8 @@ const ListHeader = styled.span`
   cursor: pointer;
 
   &:first-child {
-    justify-content: flex-start;
     text-align: left;
+    justify-self: start;
   }
 `
 
