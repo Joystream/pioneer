@@ -144,6 +144,18 @@ const ListHeader = styled.span`
   text-align: left;
   user-select: none;
   cursor: pointer;
+
+  &:first-child {
+    justify-content: flex-start;
+    text-align: left;
+  }
+  &:nth-child(2) {
+    justify-content: flex-start;
+    text-align: left;
+  }
+  &:last-child {
+    position: relative;
+  }
 `
 
 const MembershipsList = styled.ul`
