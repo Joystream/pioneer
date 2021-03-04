@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../../api/queries'
 import { AddMembershipButtonSwitch } from '../../../../components/AddMembershipButtonSwitch'
@@ -14,21 +14,29 @@ interface Props {
 }
 
 export const SwitchMemberModal = ({ onClose }: Props) => {
-  const { members, setActive } = useMembership()
+  const { members, setActive, active } = useMembership()
   const switchMember = (member: MemberFieldsFragment) => {
     setActive(member)
     onClose()
   }
+  const activeMemberRef = useRef<HTMLLIElement>(null)
+  // const activeMemberElement = members.find((member) => active?.handle === member.handle)
 
   return (
     <Modal modalSize="xs" modalHeight="s" isDark>
       <SwitchModalBody>
         <CloseSmallModalButton onClick={onClose} />
-        <SwitchModalTitle>Select Membership</SwitchModalTitle>
+        <SwitchModalTitle></SwitchModalTitle>
         <MembershipsCount />
-        <MembersList>
+        <MembersList
+        // memberIndicatorOffset={activeMemberIndicatorOffset}
+        >
           {members.map((member) => (
-            <MemberItem key={member.handle} onClick={() => switchMember(member)}>
+            <MemberItem
+              key={member.handle}
+              onClick={() => switchMember(member)}
+              ref={active?.handle === member.handle ? activeMemberRef : null}
+            >
               <MemberInfo member={member} isOnDark={true} />
               <Notification />
             </MemberItem>
@@ -69,18 +77,30 @@ const SwitchModalFooter = styled(ModalFooter)`
   padding: 16px;
 `
 
-const MembersList = styled.ul`
+const MembersList = styled.ul<{ memberIndicatorOffset?: string }>`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% + 16px);
   height: 100%;
   max-height: 192px;
+  margin-left: -16px;
+  padding-left: 16px;
   overflow: hidden;
   overflow-y: scroll;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: ${({ memberIndicatorOffset }) => memberIndicatorOffset};
+    width: 4px;
+    height: 64px;
+    background-color: ${Colors.Blue[500]};
   }
 `
 

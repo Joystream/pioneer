@@ -36,12 +36,14 @@ const HelpPopup = styled.p`
   z-index: 10;
 
   @keyframes showHelperNotificationText {
-    from { opacity: 0;
-    transform: translateX(-8px);
-    visibility: hidden;
-  }
-  to {
-    visibility: visible;
+    from {
+      opacity: 0;
+      transform: translateX(-8px);
+      visibility: hidden;
+    }
+    to {
+      visibility: visible;
+    }
   }
 `
 
