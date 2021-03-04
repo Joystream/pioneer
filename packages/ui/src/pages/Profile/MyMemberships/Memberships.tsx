@@ -1,4 +1,5 @@
 import React from 'react'
+import { ButtonPrimaryMedium, ButtonGhostMedium, ButtonsGroup } from '../../../components/buttons/Buttons'
 import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../api/queries'
 import { AddMembershipButton } from '../../../components/AddMembershipButton'
@@ -33,10 +34,14 @@ export function Memberships() {
   const otherMemberships = members.filter((member) => !active || active.handle !== member.handle)
 
   return (
-    <>
+    <MembershipsTables>
+      <NewMembers>
+        <ButtonGhostMedium>Invite a member</ButtonGhostMedium>
+        <ButtonPrimaryMedium>Add Membership</ButtonPrimaryMedium>
+      </NewMembers>
       {!!active && <MembersSection title="Active membership" members={[active]} />}
       {!!otherMemberships.length && <MembersSection title="Other memberships" members={otherMemberships} />}
-    </>
+    </MembershipsTables>
   )
 }
 
@@ -47,11 +52,11 @@ interface MembersSectionProps {
 
 const MembersSection = ({ title, members }: MembersSectionProps) => (
   <>
-    <h6>{title}</h6>
+    <MembershipsTableTitle>{title}</MembershipsTableTitle>
 
     <MembershipsGroup>
       <ListHeaders>
-        <ListHeader>Memberships</ListHeader>
+        <ListHeader>Memeberships</ListHeader>
         <ListHeader>Roles</ListHeader>
         <ListHeader>Slashed</ListHeader>
         <ListHeader>Terminated</ListHeader>
@@ -87,15 +92,32 @@ const NoMembershipsInfo = styled.div`
   }
 `
 
+const MembershipsTables = styled.div`
+  display: grid;
+  position: relative;
+  grid-row-gap: 26px;
+  width: 100%;
+  padding-top: 12px;
+`
+
+const NewMembers = styled(ButtonsGroup)`
+  position: absolute;
+  right: 0;
+  top: 0;
+`
+
+const MembershipsTableTitle = styled.h6`
+  margin-top: 4px;
+`
+
 const MembershipsGroup = styled.div`
   display: grid;
-  grid-area: memberstable;
   grid-template-columns: 1fr;
   grid-template-rows: 16px auto;
   grid-template-areas:
     'accountstablenav'
     'accountslist';
-  grid-row-gap: 6px;
+  grid-row-gap: 5px;
   width: 100%;
 `
 
@@ -103,7 +125,7 @@ const ListHeaders = styled.div`
   display: grid;
   grid-area: accountstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 260px 120px repeat(5, 80px);
+  grid-template-columns: 194px 200px 76px 76px 96px 76px 54px;
   justify-content: space-between;
   width: 100%;
   padding-left: 16px;
@@ -111,40 +133,17 @@ const ListHeaders = styled.div`
 
 const ListHeader = styled.span`
   display: flex;
-  justify-content: center;
   align-items: center;
   align-content: center;
+  width: fit-content;
   font-size: 10px;
   line-height: 16px;
   font-weight: 700;
   color: ${Colors.Black[400]};
   text-transform: uppercase;
-  text-align: center;
-
-  &:first-child {
-    justify-content: flex-start;
-    text-align: left;
-  }
-  &:nth-child(2) {
-    justify-content: flex-start;
-    text-align: left;
-  }
-  &:last-child {
-    position: relative;
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      right: -15px;
-      width: 4px;
-      height: 4px;
-      border: 1px solid ${Colors.Black[600]};
-      border-left: 1px solid transparent;
-      border-bottom: 1px solid transparent;
-      transform: rotate(-45deg);
-    }
-  }
+  text-align: left;
+  user-select: none;
+  cursor: pointer;
 `
 
 const MembershipsList = styled.ul`

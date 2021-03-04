@@ -15,7 +15,6 @@ export const ButtonPrimary = styled.button`
   border: 1px solid ${Colors.Blue[500]};
   border-radius: ${BorderRad.s};
   font-size: 16px;
-  line-height: 24px;
   font-weight: 700;
   text-transform: capitalize;
   color: ${Colors.White};
@@ -63,7 +62,6 @@ export const ButtonPrimarySmall = styled(ButtonPrimary)`
   grid-column-gap: 4px;
   min-width: 32px;
   font-size: 14px;
-  line-height: 20px;
 `
 
 export const ButtonPrimarySmallSquare = styled(ButtonPrimarySmall)`
@@ -129,7 +127,6 @@ export const ButtonSecondarySmall = styled(ButtonSecondary)`
   grid-column-gap: 4px;
   min-width: 32px;
   font-size: 14px;
-  line-height: 20px;
 `
 
 export const ButtonSecondarySmallSquare = styled(ButtonSecondarySmall)`
@@ -195,10 +192,17 @@ export const ButtonGhostSmall = styled(ButtonGhost)`
   grid-column-gap: 4px;
   min-width: 32px;
   font-size: 14px;
-  line-height: 20px;
 `
 
 export const ButtonGhostSmallSquare = styled(ButtonGhostSmall)`
   max-width: 32px;
   padding: 6px;
+`
+
+export const ButtonsGroup = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  align-items: center;
+  width: fit-content;
 `
