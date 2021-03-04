@@ -25,7 +25,7 @@ export const filterAccount = (filterOut: Account | undefined) => {
 
 export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
   const { allAccounts } = useAccounts()
-  const available = allAccounts.filter(filter || (() => true))
+  const options = allAccounts.filter(filter || (() => true))
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
@@ -62,9 +62,9 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     return () => document.removeEventListener('keydown', escListener)
   }, [isOpen])
 
-  const [searchText, setSearchText] = useState('')
-  const searchFilter = useDebounce(searchText, 500)
-  const options = useMemo(() => filterByText(available, searchFilter), [searchFilter, available])
+  const [filterInput, setFilterInput] = useState('')
+  const filterText = useDebounce(filterInput, 500)
+  const filteredOptions = useMemo(() => filterByText(options, filterText), [filterText, options])
 
   return (
     <SelectComponent ref={selectNode}>
@@ -85,15 +85,15 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
             type={'text'}
             placeholder={'Select account or paste account address'}
             autoComplete="off"
-            value={searchText}
-            onChange={(t) => setSearchText(t.target.value)}
+            value={filterInput}
+            onChange={(t) => setFilterInput(t.target.value)}
           />
         )}
         <ToggleButton>
           <ArrowDownIcon />
         </ToggleButton>
       </Toggle>
-      {isOpen && <OptionListAccount onChange={onOptionClick} options={options} />}
+      {isOpen && <OptionListAccount onChange={onOptionClick} options={filteredOptions} />}
     </SelectComponent>
   )
 })
