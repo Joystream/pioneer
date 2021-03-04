@@ -63,6 +63,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
       setStep(isError(events) ? 'ERROR' : 'SUCCESS')
     }
 
+    setStep('EXTENSION_SIGN')
     setSubscription(transaction.subscribe(statusCallback))
   }
 

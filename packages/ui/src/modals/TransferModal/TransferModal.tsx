@@ -4,7 +4,6 @@ import BN from 'bn.js'
 import React, { ReactElement, useEffect, useState } from 'react'
 import { Observable, Subscription } from 'rxjs'
 import { Account } from '../../common/types'
-import { useKeyring } from '../../hooks/useKeyring'
 import { WaitModal } from '../WaitModal'
 import { SignTransferModal } from './SignTransferModal'
 import { TransactionFailureModal } from './TransactionFailureModal'
@@ -22,7 +21,6 @@ type ModalState = 'PREPARE' | 'AUTHORIZE' | 'EXTENSION_SIGN' | 'SENDING' | 'SUCC
 const isError = (events: EventRecord[]) => events.find(({ event: { method } }) => method === 'ExtrinsicFailed')
 
 export function TransferModal({ from, to, onClose, icon }: Props) {
-  const keyring = useKeyring()
   const [step, setStep] = useState<ModalState>('PREPARE')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [fee, setFee] = useState<BN>(new BN(0))
@@ -77,12 +75,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
       setStep(isError(events) ? 'ERROR' : 'SUCCESS')
     }
 
-    if (keyring.getPair(transferFrom.address).meta.isInjected) {
-      setStep('EXTENSION_SIGN')
-    } else {
-      setStep('SENDING')
-    }
-
+    setStep('EXTENSION_SIGN')
     setFee(fee)
     setSubscription(transaction.subscribe(statusCallback))
   }
