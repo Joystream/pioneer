@@ -16,7 +16,7 @@ interface Props {
 
 export function AddMembershipSuccessModal({ onClose, member }: Props) {
   return (
-    <Modal modalSize="m" modalHeight="s">
+    <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
         <Text>You have just successfully create a new membership</Text>

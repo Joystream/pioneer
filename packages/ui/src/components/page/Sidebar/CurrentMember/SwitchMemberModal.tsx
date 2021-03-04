@@ -21,7 +21,7 @@ export const SwitchMemberModal = ({ onClose }: Props) => {
   }
 
   return (
-    <Modal modalSize="xs" modalHeight="s" isDark>
+    <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
       <SwitchModalBody>
         <CloseSmallModalButton onClick={onClose} />
         <SwitchModalTitle>Select Membership</SwitchModalTitle>

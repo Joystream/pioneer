@@ -5,13 +5,14 @@ import { WaitingIcon } from '../components/icons/WaitingIcon'
 import { Modal, ModalTitle, ResultModalBody, ResultTextWhite } from '../components/Modal'
 
 interface Props {
+  onClose: () => void
   title: string
   description: string
 }
 
-export const WaitModal = ({ title, description }: Props) =>
+export const WaitModal = ({ onClose, title, description }: Props) =>
   ReactDOM.createPortal(
-    <Modal modalSize="xs" modalHeight="s" isDark>
+    <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
       <ResultModalBody>
         <Loader />
         <WaitingIcon />

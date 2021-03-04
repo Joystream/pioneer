@@ -68,11 +68,11 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const loremDescription = 'Lorem'
 
   if (state === 'EXTENSION_SIGN') {
-    return <WaitModal title="Waiting for the extension" description={loremDescription} />
+    return <WaitModal title="Waiting for the extension" description={loremDescription} onClose={onClose} />
   }
 
   if (state === 'SENDING') {
-    return <WaitModal title="Wait for the transaction" description={loremDescription} />
+    return <WaitModal title="Wait for the transaction" description={loremDescription} onClose={onClose} />
   }
 
   if (state === 'SUCCESS') {
