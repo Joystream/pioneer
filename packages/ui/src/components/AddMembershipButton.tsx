@@ -1,15 +1,16 @@
+import React from 'react'
 import styled from 'styled-components'
-import React, { useState } from 'react'
+import { useToggle } from '../hooks/useToggle'
 import { AddMembershipModal } from '../modals/AddMembershipModal'
 import { ButtonPrimary } from './buttons'
 
 export const AddMembershipButton = () => {
-  const [isCreateOpen, setCreateOpen] = useState(false)
+  const [isOpen, toggleIsOpen] = useToggle()
 
   return (
     <>
-      <AddMemberships onClick={() => setCreateOpen(true)}>Create a membership</AddMemberships>
-      {isCreateOpen && <AddMembershipModal onClose={() => setCreateOpen(false)} />}
+      <AddMemberships onClick={toggleIsOpen}>Create a membership</AddMemberships>
+      {isOpen && <AddMembershipModal onClose={toggleIsOpen} />}
     </>
   )
 }

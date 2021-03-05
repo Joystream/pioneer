@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../api/queries'
 import { ButtonGhostMediumSquare, ButtonGhostSmallSquare } from '../../../components/buttons'
 import { CrossIcon, TransferIcon } from '../../../components/icons'
 import { MemberInfo } from '../../../components/MemberInfo'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
+import { useToggle } from '../../../hooks/useToggle'
 import { MembershipAbout } from './MembershipAbout'
 
 interface MemberProps {
@@ -12,13 +13,13 @@ interface MemberProps {
 }
 
 export const MemberItem = ({ member }: MemberProps) => {
-  const [isAboutOpen, setAboutOpen] = useState(false)
+  const [isAboutOpen, toggleAboutOpen] = useToggle()
 
   return (
     <MemberItemWrap>
       <MemberColumn>
-        <MemberInfo member={member} onClick={() => setAboutOpen(true)} />
-        {isAboutOpen && <MembershipAbout member={member} onClose={() => setAboutOpen(false)} />}
+        <MemberInfo member={member} onClick={toggleAboutOpen} />
+        {isAboutOpen && <MembershipAbout member={member} onClose={toggleAboutOpen} />}
       </MemberColumn>
       <MemberColumn />
       <MemberColumn>

@@ -2,12 +2,13 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { Account } from '../common/types'
 import { useApi } from './useApi'
 import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
+import { useToggle } from './useToggle'
 
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
@@ -16,7 +17,7 @@ interface UseSignAndSendTransactionParams {
 }
 
 export const useSignAndSendTransaction = ({ transaction, from, onSign }: UseSignAndSendTransactionParams) => {
-  const [isSending, setIsSending] = useState(false)
+  const [isSending, toggleSending] = useToggle()
   const keyring = useKeyring()
   const { api } = useApi()
   const paymentInfo = useObservable(transaction?.paymentInfo(from.address), [from])
@@ -38,5 +39,5 @@ export const useSignAndSendTransaction = ({ transaction, from, onSign }: UseSign
     }
   }, [api, isSending])
 
-  return { isSending, send: () => setIsSending(true), paymentInfo }
+  return { isSending, send: toggleSending, paymentInfo }
 }

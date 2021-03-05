@@ -4,6 +4,7 @@ import { Account } from '../../../common/types'
 import { Colors, Sizes } from '../../../constants'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
+import { useToggle } from '../../../hooks/useToggle'
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
@@ -24,14 +25,14 @@ export const filterAccount = (filterOut: Account | undefined) => {
 export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
   const { allAccounts } = useAccounts()
   const options = allAccounts.filter(filter || (() => true))
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, toggleOpen] = useToggle()
   const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
   const selectNode = useRef<HTMLDivElement>(null)
 
   const onOptionClick = useCallback(
     (option: Account) => {
-      setIsOpen(false)
+      toggleOpen()
       setSelectedOption(option)
       onChange(option)
     },
@@ -41,7 +42,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   useEffect(() => {
     const clickListener = (event: MouseEvent) => {
       if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
-        setIsOpen(false)
+        toggleOpen()
       }
     }
     document.addEventListener('mousedown', clickListener)
@@ -52,7 +53,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   useEffect(() => {
     const escListener = (event: KeyboardEvent) => {
       if (isOpen && event.key === 'Escape') {
-        setIsOpen(false)
+        toggleOpen()
       }
     }
     document.addEventListener('keydown', escListener)
@@ -62,7 +63,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
 
   return (
     <SelectComponent ref={selectNode}>
-      <Toggle onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
+      <Toggle onClick={toggleOpen} isOpen={isOpen}>
         {selectedOption && (
           <SelectedOption>
             <AccountInfo account={selectedOption} />

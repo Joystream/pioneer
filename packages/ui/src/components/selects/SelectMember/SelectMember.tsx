@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../api/queries'
 import { Colors, Sizes } from '../../../constants'
 import { useMembership } from '../../../hooks/useMembership'
+import { useToggle } from '../../../hooks/useToggle'
 import { MemberInfo } from '../../MemberInfo'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
@@ -21,13 +22,13 @@ export const filterMember = (filterOut: MemberFieldsFragment | undefined) => {
 
 export const SelectMember = React.memo(({ onChange, filter, selected, enable }: Props) => {
   const { isLoading, members } = useMembership()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, toggleOpen] = useToggle()
   const [selectedOption, setSelectedOption] = useState<MemberFieldsFragment | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
 
   const onOptionClick = useCallback(
     (option: MemberFieldsFragment) => {
-      setIsOpen(false)
+      toggleOpen()
       setSelectedOption(option)
       onChange(option)
     },
@@ -37,7 +38,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, enable }: 
   useEffect(() => {
     const clickListener = (event: MouseEvent) => {
       if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
-        setIsOpen(false)
+        toggleOpen()
       }
     }
     document.addEventListener('mousedown', clickListener)
@@ -48,7 +49,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, enable }: 
   useEffect(() => {
     const escListener = (event: KeyboardEvent) => {
       if (isOpen && event.key === 'Escape') {
-        setIsOpen(false)
+        toggleOpen()
       }
     }
     document.addEventListener('keydown', escListener)
@@ -61,7 +62,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, enable }: 
       <Toggle
         onClick={() => {
           if (enable !== false) {
-            setIsOpen(!isOpen)
+            toggleOpen()
           }
         }}
         isOpen={isOpen}
