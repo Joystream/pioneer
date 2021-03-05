@@ -1,16 +1,51 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { CopyIcon } from '../icons'
+import { Colors, Transitions, Animations } from '../../constants/styles'
+import { FailureSymbol } from '../../components/icons/symbols/FailureSymbol'
+import { SuccessSymbol } from '../../components/icons/symbols/SuccessSymbol'
 
-export function CopyButton() {
+interface CopyButtonProps {
+  textToCopy: string
+}
+
+export function CopyButton({ textToCopy }: CopyButtonProps) {
+  const [isSuccessfullyCopied, setSuccessfullyCopied] = useState(false)
+  const [isCopyFailure, setCopyFailure] = useState(false)
+
   return (
-    <Button>
-      <CopyIcon />
-    </Button>
+    <CopyButtonIcon
+      onClick={() => {
+        try {
+          navigator.clipboard.writeText(textToCopy)
+          setSuccessfullyCopied(!isSuccessfullyCopied)
+        } catch (error) {
+          setCopyFailure(!isCopyFailure)
+        }
+      }}
+    >
+      {!isSuccessfullyCopied && !isCopyFailure && <CopyIcon />}
+      {isSuccessfullyCopied &&
+        setTimeout(function () {
+          setSuccessfullyCopied(!isSuccessfullyCopied)
+        }, 1000) && (
+          <ResultSymbol>
+            <SuccessSymbol />
+          </ResultSymbol>
+        )}
+      {isCopyFailure &&
+        setTimeout(function () {
+          setCopyFailure(!isCopyFailure)
+        }, 1000) && (
+          <ResultSymbol>
+            <FailureSymbol />
+          </ResultSymbol>
+        )}
+    </CopyButtonIcon>
   )
 }
 
-export const Button = styled.button`
+export const CopyButtonIcon = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,9 +53,26 @@ export const Button = styled.button`
   height: 16px;
   padding: 0;
   border: none;
-  color: inherit;
+  color: ${Colors.Black[400]};
   outline: none;
   background-color: transparent;
-  cursor: pointer;
-  margin: 0 0 0 8px;
+  cursor: copy;
+  transition: ${Transitions.all};
+
+  &:hover,
+  &:focus {
+    color: ${Colors.Blue[500]};
+  }
+  &:active {
+    color: ${Colors.Blue[600]};
+  }
+`
+
+const ResultSymbol = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+  ${Animations.showResultSymbol};
 `

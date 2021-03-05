@@ -5,8 +5,8 @@ import { MemberFieldsFragment } from '../api/queries'
 import { BorderRad, Colors } from '../constants'
 import { Account, Address } from '../common/types'
 import { useMembership } from '../hooks/useMembership'
-import { CopyButton } from './buttons'
 import { shortenAddress } from '../utils/formatters'
+import { CopyComponent } from '../components/CopyComponent'
 
 export const AccountInfo = React.memo(({ account }: { account: Account }) => {
   const { active } = useMembership()
@@ -18,10 +18,7 @@ export const AccountInfo = React.memo(({ account }: { account: Account }) => {
       </AccountPhoto>
       {active && <OptionalAccountType active={active} address={account.address} />}
       <AccountName>{account.name}</AccountName>
-      <AccountCopyAddress>
-        <AccountAddress>{shortenAddress(account.address)}</AccountAddress>
-        <AccountCopyButton />
-      </AccountCopyAddress>
+      <AccountCopyAddress altText={shortenAddress(account.address)} copyText={account.address} />
     </AccountInfoWrap>
   )
 })
@@ -96,22 +93,6 @@ const AccountType = styled.p`
   text-transform: uppercase;
 `
 
-const AccountCopyAddress = styled.div`
-  display: flex;
+const AccountCopyAddress = styled(CopyComponent)`
   grid-area: accountaddress;
-  color: ${Colors.Black[400]};
-`
-
-const AccountAddress = styled.span`
-  max-width: 152px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 12px;
-  line-height: 18px;
-  color: ${Colors.Black[400]};
-`
-
-const AccountCopyButton = styled(CopyButton)`
-  color: ${Colors.Black[400]};
 `
