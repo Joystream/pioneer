@@ -83,4 +83,38 @@ export const Fonts = {
 export const Transitions = {
   all: 'all 0.25s ease',
   duration: '0.25s',
+  showResult: '1s',
+}
+
+export const Animations = {
+  showSymbol: `
+    animation: showSymbol ${Transitions.duration} ease;
+
+    @keyframes showSymbol {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  `,
+  showResultSymbol: `
+    animation: showSymbol ${Transitions.showResult} ease;
+
+    @keyframes showSymbol {
+      0% {
+        opacity: 0;
+      }
+      25% {
+        opacity: 1;
+      }
+      75% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+  `,
 }

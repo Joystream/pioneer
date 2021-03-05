@@ -15,21 +15,25 @@ interface Props {
 }
 
 export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
-  const { members, setActive } = useMembership()
+  const { members, setActive, active } = useMembership()
   const switchMember = (member: MemberFieldsFragment) => {
     setActive(member)
     onClose()
   }
 
   return (
-    <Modal modalSize="xs" modalHeight="s" isDark>
+    <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
       <SwitchModalBody>
         <CloseSmallModalButton onClick={onClose} />
-        <SwitchModalTitle>Select Membership</SwitchModalTitle>
+        <SwitchModalTitle></SwitchModalTitle>
         <MembershipsCount />
         <MembersList>
           {members.map((member) => (
-            <MemberItem key={member.handle} onClick={() => switchMember(member)}>
+            <MemberItem
+              key={member.handle}
+              onClick={() => switchMember(member)}
+              isMemberActive={active?.handle === member.handle}
+            >
               <MemberInfo member={member} isOnDark={true} />
               <Notification />
             </MemberItem>
@@ -75,12 +79,14 @@ const SwitchModalFooter = styled(ModalFooter)`
   padding: 16px;
 `
 
-const MembersList = styled.ul`
+const MembersList = styled.ul<{ memberIndicatorOffset?: string }>`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% + 16px);
   height: 100%;
   max-height: 192px;
+  margin-left: -16px;
+  padding-left: 16px;
   overflow: hidden;
   overflow-y: scroll;
   scrollbar-width: none;
@@ -90,8 +96,9 @@ const MembersList = styled.ul`
   }
 `
 
-const MemberItem = styled.li`
+const MemberItem = styled.li<{ isMemberActive: boolean }>`
   display: grid;
+  position: relative;
   grid-template-columns: 1fr 16px;
   grid-column-gap: 8px;
   align-items: center;
@@ -112,5 +119,17 @@ const MemberItem = styled.li`
       color: ${Colors.White};
     }
     ${MemberDarkHover}
+  }
+
+  &:before {
+    content: '';
+    display: ${({ isMemberActive }) => (isMemberActive ? 'block' : 'none')};
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: ${Colors.Blue[500]};
+    transform: translateX(-16px);
   }
 `

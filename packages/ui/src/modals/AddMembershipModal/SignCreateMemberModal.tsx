@@ -36,7 +36,7 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
   const { paymentInfo, isSending, send } = useSignAndSendTransaction({ transaction, from, onSign })
 
   return (
-    <Modal modalSize="m" modalHeight="s">
+    <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Authorize transaction" />
       <ModalBody>
         <Text>You are intend to create a new membership.</Text>

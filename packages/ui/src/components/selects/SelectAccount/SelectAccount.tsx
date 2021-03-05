@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useDebounce } from '../../../hooks/useDebounce'
 import styled from 'styled-components'
 import { Account } from '../../../common/types'
 import { Colors, Sizes } from '../../../constants'
@@ -11,6 +12,7 @@ import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
 import { TokenValue } from '../../typography'
 import { OptionListAccount } from './OptionListAccount'
+import { filterByText } from './helpers'
 
 interface Props {
   onChange: (account: Account) => void
@@ -29,12 +31,18 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
   const selectNode = useRef<HTMLDivElement>(null)
+  const textInput = useRef<HTMLInputElement>(null)
+
+  const [filterInput, setFilterInput] = useState('')
+  const filterText = useDebounce(filterInput, 500)
+  const filteredOptions = useMemo(() => filterByText(options, filterText), [filterText, options])
 
   const onOptionClick = useCallback(
     (option: Account) => {
       toggleOpen()
       setSelectedOption(option)
       onChange(option)
+      setFilterInput('')
     },
     [filter]
   )
@@ -43,6 +51,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     const clickListener = (event: MouseEvent) => {
       if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
         toggleOpen()
+        setFilterInput('')
       }
     }
     document.addEventListener('mousedown', clickListener)
@@ -54,11 +63,16 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     const escListener = (event: KeyboardEvent) => {
       if (isOpen && event.key === 'Escape') {
         toggleOpen()
+        setFilterInput('')
       }
     }
     document.addEventListener('keydown', escListener)
 
     return () => document.removeEventListener('keydown', escListener)
+  }, [isOpen])
+
+  useEffect(() => {
+    textInput.current?.focus()
   }, [isOpen])
 
   return (
@@ -75,14 +89,21 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
             </BalanceInfoInRow>
           </SelectedOption>
         )}
-        {!selectedOption && (
-          <Empty type={'text'} placeholder={'Select account or paste account address'} autoComplete="off" />
+        {(!selectedOption || isOpen) && (
+          <Empty
+            ref={textInput}
+            type={'text'}
+            placeholder={'Select account or paste account address'}
+            autoComplete="off"
+            value={filterInput}
+            onChange={(t) => setFilterInput(t.target.value)}
+          />
         )}
         <ToggleButton>
           <ArrowDownIcon />
         </ToggleButton>
       </Toggle>
-      {isOpen && <OptionListAccount onChange={onOptionClick} options={options} />}
+      {isOpen && <OptionListAccount onChange={onOptionClick} options={filteredOptions} />}
     </SelectComponent>
   )
 })

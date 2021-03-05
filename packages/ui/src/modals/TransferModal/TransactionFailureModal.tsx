@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const TransactionFailureModal = ({ from, to, amount, onClose }: Props) => (
-  <Modal modalSize="xs" modalHeight="s">
+  <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
     <ResultModalBody>
       <CloseSmallModalButton onClick={onClose} />
       <FailureIcon />

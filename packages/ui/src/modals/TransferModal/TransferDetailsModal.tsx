@@ -55,7 +55,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
     }
   }
   return (
-    <Modal modalSize={'m'}>
+    <Modal modalSize={'m'} onClose={onClose}>
       <ModalHeader onClick={onClose} title={title} icon={icon} />
       <ModalBody>
         <Row>

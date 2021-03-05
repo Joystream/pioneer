@@ -6,13 +6,15 @@ import { AccountInfo } from '../../../components/AccountInfo'
 import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
 import { TransferButton } from '../../../components/TransferButton'
 import { TokenValue } from '../../../components/typography'
-import { BorderRad, Colors, Sizes } from '../../../constants'
+import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
 import { useBalances } from '../../../hooks/useBalances'
 import { filterAccounts } from '../../../utils/filterAccounts'
 import { sortAccounts, SortKey } from '../../../utils/sortAccounts'
 import { setOrder } from './helpers'
+import { ArrowDownIcon } from '../../../components/icons/ArrowDownIcon'
+import { Icon } from '../../../components/icons/Icon'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -41,9 +43,18 @@ export function Accounts() {
   const Header = ({ children, sortKey }: HeaderProps) => {
     return (
       <ListHeader onClick={getOnSort(sortKey)}>
-        <HeaderText>
+        <HeaderText isDescending={isDescending} sortBy={sortBy} sortKey={sortKey}>
           {children}
-          {sortBy === sortKey && (isDescending ? <ArrowDown /> : <ArrowUp />)}
+          {sortBy === sortKey &&
+            (isDescending ? (
+              <SortIconDown>
+                <ArrowDownIcon />
+              </SortIconDown>
+            ) : (
+              <SortIconUp>
+                <ArrowDownIcon />
+              </SortIconUp>
+            ))}
         </HeaderText>
       </ListHeader>
     )
@@ -137,7 +148,7 @@ const AccountsWrap = styled.div`
   grid-template-areas:
     'accountstablenav'
     'accountslist';
-  grid-row-gap: 6px;
+  grid-row-gap: 5px;
   width: 100%;
 `
 
@@ -156,6 +167,8 @@ const ListHeader = styled.span`
   justify-content: flex-end;
   align-items: center;
   align-content: center;
+  justify-self: end;
+  width: fit-content;
   font-size: 10px;
   line-height: 16px;
   font-weight: 700;
@@ -166,34 +179,50 @@ const ListHeader = styled.span`
   cursor: pointer;
 
   &:first-child {
-    justify-content: flex-start;
     text-align: left;
+    justify-self: start;
   }
 `
 
-const HeaderText = styled.span`
+const HeaderText = styled.span<{ isDescending?: boolean; sortBy: SortKey; sortKey: SortKey }>`
+  display: inline-flex;
   position: relative;
+  align-items: center;
+  width: fit-content;
 `
 
-const Arrow = styled.span`
-  content: '';
+const SortIconDown = styled.span`
+  display: inline-flex;
   position: absolute;
-  left: -10px;
-  top: 5px;
-  width: 4px;
-  height: 4px;
-  border: 1px solid ${Colors.Black[600]};
-  transform: rotate(-45deg);
+  left: calc(100% + 4px);
+  width: fit-content;
+  height: fit-content;
+  transition: ${Transitions.all};
+
+  ${Icon} {
+    width: 12px;
+    height: 12px;
+    color: ${Colors.Black[600]};
+    animation: sortArrowFlip ${Transitions.duration} ease;
+
+    @keyframes sortArrowFlip {
+      from {
+        opacity: 0;
+        transform: scaleY(-1);
+      }
+      to {
+        opacity: 1;
+        transform: scaleY(1);
+      }
+    }
+  }
 `
 
-const ArrowUp = styled(Arrow)`
-  border-left: 1px solid transparent;
-  border-bottom: 1px solid transparent;
-`
+const SortIconUp = styled(SortIconDown)`
+  transform: rotate(180deg);
 
-const ArrowDown = styled(Arrow)`
-  border-right: 1px solid transparent;
-  border-top: 1px solid transparent;
+  ${Icon} {
+  }
 `
 
 const AccountsList = styled.ul`

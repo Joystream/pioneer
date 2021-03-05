@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
 import { useKeyring } from './useKeyring'
 import { Account } from '../common/types'
+import { useObservable } from './useObservable'
 
 interface UseAccounts {
   allAccounts: Account[]
@@ -9,25 +9,20 @@ interface UseAccounts {
 
 export function useAccounts(): UseAccounts {
   const keyring = useKeyring()
-  const [state, setState] = useState<UseAccounts>({ allAccounts: [], hasAccounts: false })
+  const accounts = useObservable(keyring.accounts.subject.asObservable(), [keyring])
 
-  useEffect(() => {
-    const subscription = keyring.accounts.subject.subscribe((accounts): void => {
-      const allAccounts = accounts
-        ? Object.values(accounts).map((account) => ({
-            address: account.json.address,
-            name: account.json.meta.name,
-          }))
-        : []
-      const hasAccounts = allAccounts.length !== 0
+  const allAccounts: Account[] = []
 
-      setState({ allAccounts, hasAccounts })
-    })
+  if (accounts) {
+    allAccounts.push(
+      ...Object.values(accounts).map((account) => ({
+        address: account.json.address,
+        name: account.json.meta.name,
+      }))
+    )
+  }
 
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [keyring])
+  const hasAccounts = allAccounts.length !== 0
 
-  return state
+  return { allAccounts, hasAccounts }
 }

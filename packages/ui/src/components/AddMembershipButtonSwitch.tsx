@@ -83,15 +83,6 @@ const AddMemberships = styled.button`
     ${AddMembershipImage} {
       background-color: ${Colors.Black[500]};
       color: ${Colors.Black[50]};
-
-      .nav-icon {
-        .primaryPart {
-          fill: ${Colors.Black[50]};
-        }
-        .whitePart {
-          fill: ${Colors.Blue[500]};
-        }
-      }
     }
     ${AddMembershipTitle} {
       color: ${Colors.Black[50]};
