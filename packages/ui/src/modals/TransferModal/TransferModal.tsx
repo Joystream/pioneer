@@ -99,6 +99,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
       <WaitModal
         title="Waiting for the extension"
         description={'Please, sign the transaction using external signer app.'}
+        onClose={onClose}
       />
     )
   }
@@ -110,6 +111,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
         description={
           'We are waiting for your transaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim.'
         }
+        onClose={onClose}
       />
     )
   }

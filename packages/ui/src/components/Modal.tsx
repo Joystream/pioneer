@@ -20,15 +20,28 @@ export const ModalHeader = React.memo(({ onClick, title, icon }: Props) => (
 ))
 
 interface ModalProps {
+  onClose: () => void
   modalSize: string
   modalHeight?: string
   children: ReactNode
   isDark?: boolean
 }
 
-export const Modal = ({ modalHeight = 'm', children, modalSize, isDark }: ModalProps) => {
+export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark }: ModalProps) => {
+  function onBackgroundClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (e.target === e.currentTarget) {
+      onClose()
+    }
+  }
+
   return ReactDOM.createPortal(
-    <ModalGlass modalHeight={modalHeight} modalSize={modalSize} isDark={isDark}>
+    <ModalGlass
+      modalHeight={modalHeight}
+      modalSize={modalSize}
+      isDark={isDark}
+      onClick={onBackgroundClick}
+      onClose={onClose}
+    >
       <ModalWrap modalMaxSize={modalSize} modalHeight={modalHeight} isDark={isDark} role="modal">
         {children}
       </ModalWrap>

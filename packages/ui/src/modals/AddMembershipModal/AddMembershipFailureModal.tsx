@@ -10,7 +10,7 @@ interface Props {
 
 export function AddMembershipFailureModal({ onClose }: Props) {
   return (
-    <Modal modalSize={'s'}>
+    <Modal modalSize={'s'} onClose={onClose}>
       <ModalHeader onClick={onClose} title="Failure" icon={<SuccessIcon />} />
       <SuccessModalBody>NOT OK</SuccessModalBody>
     </Modal>
