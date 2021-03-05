@@ -74,7 +74,6 @@ export const ModalGlass = styled.div<ModalProps>`
         return '48px'
     }
   }};
-  border: 10px solid red;
   padding-left: ${({ modalHeight }) => {
     switch (modalHeight) {
       case 'm':
