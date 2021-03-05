@@ -1,9 +1,8 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
-import BN from 'bn.js'
-import { useEffect } from 'react'
-import { Observable } from 'rxjs'
+import { useEffect, useState } from 'react'
 import { Account } from '../common/types'
 import { useApi } from './useApi'
 import { useKeyring } from './useKeyring'
@@ -13,14 +12,50 @@ import { useToggle } from './useToggle'
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
   from: Account
-  onSign: (transaction: Observable<ISubmittableResult>, fee: BN) => void
 }
 
-export const useSignAndSendTransaction = ({ transaction, from, onSign }: UseSignAndSendTransactionParams) => {
+type TransactionStep = 'READY' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'
+
+const isError = (events: EventRecord[]) => events.find(({ event: { method } }) => method === 'ExtrinsicFailed')
+
+const statusCallback = (setStep: (step: TransactionStep) => void) => (result: ISubmittableResult) => {
+  const { status, events } = result
+
+  console.log(`Current transaction status: ${status.type}`)
+
+  if (status.isReady) {
+    setStep('PENDING')
+  }
+
+  if (status.isInBlock) {
+    console.log('Included at block hash', JSON.stringify(status.asInBlock))
+    console.log('Events:')
+
+    events.forEach(({ event: { data, method, section }, phase }) => {
+      console.log('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
+    })
+    console.log(JSON.stringify(events))
+  }
+
+  if (!status.isFinalized) {
+    return
+  }
+
+  setStep(isError(events) ? 'ERROR' : 'SUCCESS')
+}
+
+export const useSignAndSendTransaction = ({ transaction, from }: UseSignAndSendTransactionParams) => {
   const [isSending, toggleSending] = useToggle()
   const keyring = useKeyring()
   const { api } = useApi()
   const paymentInfo = useObservable(transaction?.paymentInfo(from.address), [from])
+  const [step, setStep] = useState<TransactionStep>('READY')
+
+  const sendTransaction = () => {
+    if (step === 'READY') {
+      toggleSending()
+    }
+  }
 
   useEffect(() => {
     if (!isSending || !transaction || !paymentInfo) {
@@ -28,16 +63,21 @@ export const useSignAndSendTransaction = ({ transaction, from, onSign }: UseSign
     }
 
     const keyringPair = keyring.getPair(from.address)
-    const fee = paymentInfo.partialFee.toBn()
 
     if (keyringPair.meta.isInjected) {
+      setStep('EXTENSION')
       web3FromAddress(from.address).then(({ signer }) => {
-        onSign(transaction.signAndSend(from.address, { signer: signer }), fee)
+        transaction.signAndSend(from.address, { signer: signer }).subscribe(statusCallback(setStep))
       })
     } else {
-      onSign(transaction.signAndSend(keyringPair), fee)
+      setStep('PENDING')
+      transaction.signAndSend(keyringPair).subscribe(statusCallback(setStep))
     }
   }, [api, isSending])
 
-  return { isSending, send: toggleSending, paymentInfo }
+  return {
+    send: sendTransaction,
+    paymentInfo,
+    status: step,
+  }
 }
