@@ -1,0 +1,27 @@
+import { expect } from '@jest/globals'
+import { act, renderHook } from '@testing-library/react-hooks'
+import { useToggle } from '../../src/hooks/useToggle'
+
+describe('useToggle', () => {
+  it('Has default state', () => {
+    const { result } = renderHook(() => useToggle())
+
+    const [isActive] = result.current
+
+    expect(isActive).toBeFalsy()
+  })
+
+  it('Toggles value', () => {
+    const { result } = renderHook(() => useToggle())
+
+    const [, toggle] = result.current
+
+    act(() => {
+      toggle()
+    })
+
+    const [isActive] = result.current
+
+    expect(isActive).toBeTruthy()
+  })
+})
