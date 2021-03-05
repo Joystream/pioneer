@@ -24,4 +24,12 @@ describe('useToggle', () => {
 
     expect(isActive).toBeTruthy()
   })
+
+  it('Accepts default value', () => {
+    const { result } = renderHook(() => useToggle(true))
+
+    const [isActive] = result.current
+
+    expect(isActive).toBeTruthy()
+  })
 })
