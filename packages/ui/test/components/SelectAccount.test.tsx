@@ -12,7 +12,7 @@ jest.mock('../../src/hooks/useAccounts', () => {
       hasAccounts: false,
       allAccounts: [
         { name: 'Alice', address: '1' },
-        { name: 'Bob', address: '2' },
+        { name: 'Bob', address: '5222' },
         { name: 'Dave', address: '3' },
         { name: 'Eve', address: '4' },
       ],
@@ -57,6 +57,17 @@ describe('UI: SelectAccount component', () => {
     jest.runAllTimers()
 
     expect(queryByText(/bob/i)).toBeNull()
+  })
+
+  it('Clears input after hitting Escape', () => {
+    const { getByRole } = renderComponent()
+    const textBox = getByRole('textbox')
+    fireEvent.click(textBox)
+    fireEvent.change(textBox, { target: { value: 'bob' } })
+    expect(textBox.getAttribute('value')).toEqual('bob')
+    fireEvent.keyDown(textBox, { key: 'Escape', code: 'Escape' })
+    expect(textBox.getAttribute('value')).toEqual('')
+    jest.runAllTimers()
   })
 
   function renderComponent() {
