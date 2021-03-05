@@ -53,7 +53,7 @@ export const KeyringContextProvider = (props: Props) => {
       return
     }
 
-    loadKeysFromExtension()
+    loadKeysFromExtension().catch(console.error)
   }, [isLoaded])
 
   return <KeyringContext.Provider value={keyring}>{props.children}</KeyringContext.Provider>
