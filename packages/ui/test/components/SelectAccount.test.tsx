@@ -33,7 +33,7 @@ describe('UI: SelectAccount component', () => {
     expect(getByRole('textbox')).toBeDefined()
   })
 
-  it('Displays search', () => {
+  it('Displays options', () => {
     const { getByRole, getByText } = renderComponent()
 
     const textBox = getByRole('textbox')
@@ -44,30 +44,58 @@ describe('UI: SelectAccount component', () => {
     expect(getByText(/alice/i)).toBeDefined()
   })
 
-  it('Narrows search results', () => {
-    const { getByRole, getByText, queryByText } = renderComponent()
+  describe('Options open', () => {
+    const renderOpenedComponent = () => {
+      const renderResult = renderComponent()
+      const { getByRole } = renderResult
+      const textBox = getByRole('textbox')
+      act(() => {
+        fireEvent.click(textBox)
+      })
 
-    const textBox = getByRole('textbox')
-    fireEvent.click(textBox)
+      return renderResult
+    }
 
-    fireEvent.change(textBox, { target: { value: 'Ali' } })
+    it('Narrows search results', () => {
+      const { getByRole, getByText, queryByText } = renderOpenedComponent()
+      fireEvent.change(getByRole('textbox'), { target: { value: 'Ali' } })
 
-    expect(getByText(/bob/i)).toBeDefined()
+      expect(getByText(/bob/i)).toBeDefined()
 
-    jest.runAllTimers()
+      act(() => {
+        jest.runAllTimers()
+      })
+      expect(queryByText(/bob/i)).toBeNull()
+    })
 
-    expect(queryByText(/bob/i)).toBeNull()
-  })
+    it('Clears input after hitting Escape', () => {
+      const { getByRole } = renderOpenedComponent()
+      const textBox = getByRole('textbox')
+      act(() => {
+        fireEvent.change(textBox, { target: { value: 'bob' } })
+        jest.runAllTimers()
+      })
 
-  it('Clears input after hitting Escape', () => {
-    const { getByRole } = renderComponent()
-    const textBox = getByRole('textbox')
-    fireEvent.click(textBox)
-    fireEvent.change(textBox, { target: { value: 'bob' } })
-    expect(textBox.getAttribute('value')).toEqual('bob')
-    fireEvent.keyDown(textBox, { key: 'Escape', code: 'Escape' })
-    expect(textBox.getAttribute('value')).toEqual('')
-    jest.runAllTimers()
+      expect(textBox.getAttribute('value')).toEqual('bob')
+
+      fireEvent.keyDown(textBox, { key: 'Escape', code: 'Escape' })
+
+      expect(textBox.getAttribute('value')).toEqual('')
+    })
+
+    it('Clears input after clicking outside', () => {
+      const { getByRole } = renderOpenedComponent()
+      const textBox = getByRole('textbox')
+      act(() => {
+        fireEvent.change(textBox, { target: { value: 'bob' } })
+        jest.runAllTimers()
+      })
+      expect(textBox.getAttribute('value')).toEqual('bob')
+
+      fireEvent.mouseDown(document.body)
+
+      expect(textBox.getAttribute('value')).toEqual('')
+    })
   })
 
   function renderComponent() {
