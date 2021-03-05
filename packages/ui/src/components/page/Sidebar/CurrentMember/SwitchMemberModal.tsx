@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../../api/queries'
 import { AddMembershipButtonSwitch } from '../../../../components/AddMembershipButtonSwitch'
@@ -19,8 +19,6 @@ export const SwitchMemberModal = ({ onClose }: Props) => {
     setActive(member)
     onClose()
   }
-  const activeMemberRef = useRef<HTMLLIElement>(null)
-  // const activeMemberElement = members.find((member) => active?.handle === member.handle)
 
   return (
     <Modal modalSize="xs" modalHeight="s" isDark>
@@ -28,14 +26,12 @@ export const SwitchMemberModal = ({ onClose }: Props) => {
         <CloseSmallModalButton onClick={onClose} />
         <SwitchModalTitle></SwitchModalTitle>
         <MembershipsCount />
-        <MembersList
-        // memberIndicatorOffset={activeMemberIndicatorOffset}
-        >
+        <MembersList>
           {members.map((member) => (
             <MemberItem
               key={member.handle}
               onClick={() => switchMember(member)}
-              ref={active?.handle === member.handle ? activeMemberRef : null}
+              isMemberActive={active?.handle === member.handle}
             >
               <MemberInfo member={member} isOnDark={true} />
               <Notification />
@@ -92,20 +88,11 @@ const MembersList = styled.ul<{ memberIndicatorOffset?: string }>`
   &::-webkit-scrollbar {
     display: none;
   }
-
-  &:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: ${({ memberIndicatorOffset }) => memberIndicatorOffset};
-    width: 4px;
-    height: 64px;
-    background-color: ${Colors.Blue[500]};
-  }
 `
 
-const MemberItem = styled.li`
+const MemberItem = styled.li<{ isMemberActive: boolean }>`
   display: grid;
+  position: relative;
   grid-template-columns: 1fr 16px;
   grid-column-gap: 8px;
   align-items: center;
@@ -126,5 +113,17 @@ const MemberItem = styled.li`
       color: ${Colors.White};
     }
     ${MemberDarkHover}
+  }
+
+  &:before {
+    content: '';
+    display: ${({ isMemberActive }) => (isMemberActive ? 'block' : 'none')};
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: ${Colors.Blue[500]};
+    transform: translateX(-16px);
   }
 `
