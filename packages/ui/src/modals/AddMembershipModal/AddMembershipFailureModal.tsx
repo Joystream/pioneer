@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const AddMembershipFailureModal = ({ onClose, member }: Props) => (
-  <Modal modalSize="xs" modalHeight="s">
+  <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
     <ResultModalBody>
       <CloseSmallModalButton onClick={onClose} />
       <FailureIcon />

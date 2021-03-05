@@ -85,6 +85,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   if (step === 'EXTENSION_SIGN') {
     return (
       <WaitModal
+        onClose={onClose}
         title="Waiting for the extension"
         description={'Please, sign the transaction using external signer app.'}
       />
@@ -94,6 +95,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   if (step === 'SENDING') {
     return (
       <WaitModal
+        onClose={onClose}
         title="Pending transaction"
         description={
           'We are waiting for your transaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim.'
