@@ -30,6 +30,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
   const selectNode = useRef<HTMLDivElement>(null)
+  const textInput = useRef<HTMLInputElement>(null)
 
   const [filterInput, setFilterInput] = useState('')
   const filterText = useDebounce(filterInput, 500)
@@ -69,6 +70,10 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     return () => document.removeEventListener('keydown', escListener)
   }, [isOpen])
 
+  useEffect(() => {
+    textInput.current?.focus()
+  }, [isOpen])
+
   return (
     <SelectComponent ref={selectNode}>
       <Toggle onClick={() => !isOpen && setIsOpen(true)} isOpen={isOpen}>
@@ -85,6 +90,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
         )}
         {(!selectedOption || isOpen) && (
           <Empty
+            ref={textInput}
             type={'text'}
             placeholder={'Select account or paste account address'}
             autoComplete="off"
