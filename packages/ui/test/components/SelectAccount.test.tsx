@@ -23,6 +23,8 @@ jest.mock('../../src/hooks/useAccounts', () => {
 describe('UI: SelectAccount component', () => {
   setupMockServer()
 
+  jest.useFakeTimers()
+
   beforeAll(cryptoWaitReady)
 
   it('Displays component', () => {
@@ -40,6 +42,21 @@ describe('UI: SelectAccount component', () => {
     })
 
     expect(getByText(/alice/i)).toBeDefined()
+  })
+
+  it('Narrows search results', () => {
+    const { getByRole, getByText, queryByText } = renderComponent()
+
+    const textBox = getByRole('textbox')
+    fireEvent.click(textBox)
+
+    fireEvent.change(textBox, { target: { value: 'Ali' } })
+
+    expect(getByText(/bob/i)).toBeDefined()
+
+    jest.runAllTimers()
+
+    expect(queryByText(/bob/i)).toBeNull()
   })
 
   function renderComponent() {
