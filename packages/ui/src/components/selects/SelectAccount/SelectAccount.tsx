@@ -30,12 +30,18 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
   const balance = useBalance(selectedOption)
   const selectNode = useRef<HTMLDivElement>(null)
+  const textInput = useRef<HTMLInputElement>(null)
+
+  const [filterInput, setFilterInput] = useState('')
+  const filterText = useDebounce(filterInput, 500)
+  const filteredOptions = useMemo(() => filterByText(options, filterText), [filterText, options])
 
   const onOptionClick = useCallback(
     (option: Account) => {
       setIsOpen(false)
       setSelectedOption(option)
       onChange(option)
+      setFilterInput('')
     },
     [filter]
   )
@@ -44,6 +50,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     const clickListener = (event: MouseEvent) => {
       if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
         setIsOpen(false)
+        setFilterInput('')
       }
     }
     document.addEventListener('mousedown', clickListener)
@@ -55,6 +62,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     const escListener = (event: KeyboardEvent) => {
       if (isOpen && event.key === 'Escape') {
         setIsOpen(false)
+        setFilterInput('')
       }
     }
     document.addEventListener('keydown', escListener)
@@ -62,14 +70,14 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     return () => document.removeEventListener('keydown', escListener)
   }, [isOpen])
 
-  const [filterInput, setFilterInput] = useState('')
-  const filterText = useDebounce(filterInput, 500)
-  const filteredOptions = useMemo(() => filterByText(options, filterText), [filterText, options])
+  useEffect(() => {
+    textInput.current?.focus()
+  }, [isOpen])
 
   return (
     <SelectComponent ref={selectNode}>
-      <Toggle onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>
-        {selectedOption && (
+      <Toggle onClick={() => !isOpen && setIsOpen(true)} isOpen={isOpen}>
+        {selectedOption && !isOpen && (
           <SelectedOption>
             <AccountInfo account={selectedOption} />
             <BalanceInfoInRow>
@@ -80,8 +88,9 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
             </BalanceInfoInRow>
           </SelectedOption>
         )}
-        {!selectedOption && (
+        {(!selectedOption || isOpen) && (
           <Empty
+            ref={textInput}
             type={'text'}
             placeholder={'Select account or paste account address'}
             autoComplete="off"
