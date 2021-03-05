@@ -232,7 +232,7 @@ const CloseModalButton = styled(CloseButton)`
 export const CloseSmallModalButton = styled(CloseModalButton)`
   position: absolute;
   top: 24px;
-  right: 24px;
+  right: 16px;
 `
 
 export const ResultText = styled(Text)`
