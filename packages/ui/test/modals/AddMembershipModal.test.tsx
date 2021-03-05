@@ -173,11 +173,12 @@ describe('UI: AddMembershipModal', () => {
       const events = [
         {
           phase: { ApplyExtrinsic: 2 },
-          event: { index: '0x0502', data: [1] },
-        },
-        {
-          phase: { ApplyExtrinsic: 2 },
-          event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
+          event: {
+            index: '0x0001',
+            data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
+            section: 'system',
+            method: 'ExtrinsicFailed',
+          },
         },
       ]
 
@@ -185,12 +186,11 @@ describe('UI: AddMembershipModal', () => {
         set(transaction, 'signAndSend', () => stubTransactionResult(events))
       })
 
-      it('Renders transaction success', async () => {
+      it('Renders transaction failure', async () => {
         const { getByText, findByText } = await renderAuthorizeStep()
         fireEvent.click(getByText(/^sign and create a member$/i))
 
-        expect(await findByText('Success')).toBeDefined()
-        expect(getByText(/^realbobbybob/i)).toBeDefined()
+        expect(await findByText('Failure')).toBeDefined()
       })
     })
   })
