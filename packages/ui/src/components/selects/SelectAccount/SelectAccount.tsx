@@ -44,7 +44,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
       onChange(option)
       setFilterInput('')
     },
-    [filter]
+    [filter, toggleOpen]
   )
 
   useEffect(() => {
