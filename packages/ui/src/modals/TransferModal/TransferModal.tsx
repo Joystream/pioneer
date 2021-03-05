@@ -1,9 +1,9 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { ReactElement, useEffect, useState } from 'react'
 import { Observable, Subscription } from 'rxjs'
 import { Account } from '../../common/types'
-import { useKeyring } from '../../hooks/useKeyring'
 import { WaitModal } from '../WaitModal'
 import { SignTransferModal } from './SignTransferModal'
 import { TransactionFailureModal } from './TransactionFailureModal'
@@ -17,11 +17,11 @@ interface Props {
   icon: ReactElement
 }
 
-type ModalState = 'SEND_TOKENS' | 'SIGN_TRANSACTION' | 'EXTENSION_SIGN' | 'SENDING' | 'SUCCESS' | 'ERROR'
+type ModalState = 'PREPARE' | 'AUTHORIZE' | 'EXTENSION_SIGN' | 'SENDING' | 'SUCCESS' | 'ERROR'
+const isError = (events: EventRecord[]) => events.find(({ event: { method } }) => method === 'ExtrinsicFailed')
 
 export function TransferModal({ from, to, onClose, icon }: Props) {
-  const keyring = useKeyring()
-  const [step, setStep] = useState<ModalState>('SEND_TOKENS')
+  const [step, setStep] = useState<ModalState>('PREPARE')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [fee, setFee] = useState<BN>(new BN(0))
   const [transferFrom, setTransferFrom] = useState(from)
@@ -41,7 +41,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     setAmount(amount)
     setTransferTo(to)
     setTransferFrom(from)
-    setStep('SIGN_TRANSACTION')
+    setStep('AUTHORIZE')
   }
 
   const onSign = (transaction: Observable<ISubmittableResult>, fee: BN) => {
@@ -50,7 +50,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     }
 
     const statusCallback = (result: ISubmittableResult) => {
-      const { status } = result
+      const { status, events } = result
 
       console.log(`Current transaction status: ${status.type}`)
 
@@ -58,26 +58,29 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
         setStep('SENDING')
       }
 
-      if (!status.isInBlock) {
+      if (status.isInBlock) {
+        console.log('Included at block hash', JSON.stringify(status.asInBlock))
+        console.log('Events:')
+
+        events.forEach(({ event: { data, method, section }, phase }) => {
+          console.log('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
+        })
+        console.log(JSON.stringify(events))
+      }
+
+      if (!status.isFinalized) {
         return
       }
 
-      console.log(`In Block. Block hash: ${status.asInBlock.toString()}`)
-
-      setStep('SUCCESS')
+      setStep(isError(events) ? 'ERROR' : 'SUCCESS')
     }
 
-    if (keyring.getPair(transferFrom.address).meta.isInjected) {
-      setStep('EXTENSION_SIGN')
-    } else {
-      setStep('SENDING')
-    }
-
+    setStep('EXTENSION_SIGN')
     setFee(fee)
     setSubscription(transaction.subscribe(statusCallback))
   }
 
-  if (step === 'SEND_TOKENS' || !transferTo || !transferFrom) {
+  if (step === 'PREPARE' || !transferTo || !transferFrom) {
     return (
       <TransferDetailsModal
         onClose={onClose}
@@ -90,7 +93,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     )
   }
 
-  if (step === 'SIGN_TRANSACTION') {
+  if (step === 'AUTHORIZE') {
     return <SignTransferModal onClose={onClose} from={transferFrom} amount={amount} to={transferTo} onSign={onSign} />
   }
 

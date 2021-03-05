@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { Colors } from '../constants'
 import { Account } from '../common/types'
+import { Colors } from '../constants'
+import { useToggle } from '../hooks/useToggle'
 import { TransferModal } from '../modals/TransferModal/TransferModal'
 import { ButtonGhostMediumSquare, ButtonPrimarySmallSquare } from './buttons'
 import { ArrowInsideIcon, ArrowOutsideIcon, TransferIcon } from './icons'
@@ -13,7 +14,7 @@ interface Props {
 }
 
 export function TransferButton({ from, to, disabled }: Props) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, toggleOpen] = useToggle()
   const isTransfer = !from && !to
   const isSend = !!from && !isTransfer
   const icon = isTransfer ? <TransferIcon /> : isSend ? <ArrowOutsideIcon /> : <ArrowInsideIcon />
@@ -21,22 +22,22 @@ export function TransferButton({ from, to, disabled }: Props) {
 
   return (
     <>
-      <ButtonForTransfer onClick={() => setIsOpen(true)} disabled={isDisabled}>
+      <ButtonForTransfer onClick={toggleOpen} disabled={isDisabled}>
         {icon}
       </ButtonForTransfer>
-      {isOpen && <TransferModal onClose={() => setIsOpen(false)} from={from} to={to} icon={icon} />}
+      {isOpen && <TransferModal onClose={toggleOpen} from={from} to={to} icon={icon} />}
     </>
   )
 }
 
 export function TransferButtonStyled() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, toggleOpen] = useToggle()
   const icon = <TransferIcon />
 
   return (
     <>
-      <ButtonForTransferStyled onClick={() => setIsOpen(true)}>{icon}</ButtonForTransferStyled>
-      {isOpen && <TransferModal onClose={() => setIsOpen(false)} icon={icon} />}
+      <ButtonForTransferStyled onClick={toggleOpen}>{icon}</ButtonForTransferStyled>
+      {isOpen && <TransferModal onClose={toggleOpen} icon={icon} />}
     </>
   )
 }

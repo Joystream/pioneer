@@ -1,19 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../../api/queries'
-import { AddMembershipButtonSwitch } from '../../../../components/AddMembershipButtonSwitch'
-import { MembershipsCount } from '../../../../components/MembershipCount'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMembership } from '../../../../hooks/useMembership'
+import { AddMembershipButtonSwitch } from '../../../AddMembershipButtonSwitch'
 import { MemberDarkHover, MemberInfo } from '../../../MemberInfo'
+import { MembershipsCount } from '../../../MembershipCount'
 import { CloseSmallModalButton, Modal, ModalBody, ModalFooter, ModalTitle } from '../../../Modal'
 import { Notification, NotificationComponent } from '../../../Notification'
 
 interface Props {
   onClose: () => void
+  onCreateMember: () => void
 }
 
-export const SwitchMemberModal = ({ onClose }: Props) => {
+export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
   const { members, setActive, active } = useMembership()
   const switchMember = (member: MemberFieldsFragment) => {
     setActive(member)
@@ -24,7 +25,7 @@ export const SwitchMemberModal = ({ onClose }: Props) => {
     <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
       <SwitchModalBody>
         <CloseSmallModalButton onClick={onClose} />
-        <SwitchModalTitle></SwitchModalTitle>
+        <SwitchModalTitle>Select Membership</SwitchModalTitle>
         <MembershipsCount />
         <MembersList>
           {members.map((member) => (
@@ -40,7 +41,12 @@ export const SwitchMemberModal = ({ onClose }: Props) => {
         </MembersList>
       </SwitchModalBody>
       <SwitchModalFooter>
-        <AddMembershipButtonSwitch />
+        <AddMembershipButtonSwitch
+          onClick={() => {
+            onClose()
+            onCreateMember()
+          }}
+        />
       </SwitchModalFooter>
     </Modal>
   )

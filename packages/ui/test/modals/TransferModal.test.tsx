@@ -20,6 +20,7 @@ import { selectAccount } from '../helpers/selectAccount'
 
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
+import { stubTransactionResult } from '../mocks/stubTransactionResult'
 
 describe('UI: TransferModal', () => {
   beforeAll(cryptoWaitReady)
@@ -134,25 +135,24 @@ describe('UI: TransferModal', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        set(transfer, 'signAndSend', () =>
-          from([
-            set({}, 'status.isReady', true),
-            {
-              status: {
-                isInBlock: true,
-                asInBlock: {
-                  toString: () => '0x93XXX',
-                },
-              },
-            },
-          ])
-        )
+        const events = [
+          {
+            phase: { ApplyExtrinsic: 2 },
+            event: { index: '0x0502', data: [sender.address, to.address, 50] },
+          },
+          {
+            phase: { ApplyExtrinsic: 2 },
+            event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
+          },
+        ]
+
+        set(transfer, 'signAndSend', () => stubTransactionResult(events))
       })
 
       it('Renders transaction success', async () => {
-        const { getByText } = renderAndSign()
+        const { findByText } = renderAndSign()
 
-        expect(getByText('Success')).toBeDefined()
+        expect(await findByText('Success')).toBeDefined()
       })
 
       it('Calculates balances before & after', async () => {
@@ -164,6 +164,30 @@ describe('UI: TransferModal', () => {
         expect(bob?.parentNode?.textContent).toMatch(/Transferable balance before:950/)
         expect(alice?.parentNode?.textContent).toMatch(/Transferable balance after:1,000/)
         expect(bob?.parentNode?.textContent).toMatch(/Transferable balance after:1,000/)
+      })
+    })
+
+    describe('Failure', () => {
+      const events = [
+        {
+          phase: { ApplyExtrinsic: 2 },
+          event: {
+            index: '0x0001',
+            data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
+            section: 'system',
+            method: 'ExtrinsicFailed',
+          },
+        },
+      ]
+
+      beforeEach(() => {
+        set(transfer, 'signAndSend', () => stubTransactionResult(events))
+      })
+
+      it('Renders transaction failure', async () => {
+        const { findByText } = renderAndSign()
+
+        expect(await findByText('Failure')).toBeDefined()
       })
     })
   })

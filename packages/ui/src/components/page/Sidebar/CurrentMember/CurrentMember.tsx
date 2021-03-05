@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { ArrowDownExpandedIcon, ArrowIcon } from '../../../../components/icons/ArrowDownExpandedIcon'
-import { MembershipsCount } from '../../../../components/MembershipCount'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMembership } from '../../../../hooks/useMembership'
+import { useToggle } from '../../../../hooks/useToggle'
+import { AddMembershipModal } from '../../../../modals/AddMembershipModal'
 import { AddMembershipButton } from '../../../AddMembershipButton'
+import { ArrowDownExpandedIcon, ArrowIcon } from '../../../icons'
 import { MemberDarkHover, MemberInfo } from '../../../MemberInfo'
+import { MembershipsCount } from '../../../MembershipCount'
 import { SwitchMemberModal } from './SwitchMemberModal'
 
 export const CurrentMember = () => {
   const { count, members, active } = useMembership()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, toggleOpen] = useToggle()
+  const [isCreateOpen, toggleCreateOpen] = useToggle()
 
   if (count < 1) {
     return <AddMembershipButton />
@@ -19,13 +22,14 @@ export const CurrentMember = () => {
   return (
     <>
       <MembershipsCount />
-      <SwitchMember onClick={() => setIsOpen(true)}>
+      <SwitchMember onClick={toggleOpen}>
         <MemberInfo member={active || members[0]} isOnDark={true} />
         <SwitchArrow>
           <ArrowDownExpandedIcon />
         </SwitchArrow>
       </SwitchMember>
-      {isOpen && <SwitchMemberModal onClose={() => setIsOpen(false)} />}
+      {isOpen && <SwitchMemberModal onClose={toggleOpen} onCreateMember={toggleCreateOpen} />}
+      {isCreateOpen && <AddMembershipModal onClose={toggleCreateOpen} />}
     </>
   )
 }

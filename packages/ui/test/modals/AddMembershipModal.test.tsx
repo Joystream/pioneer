@@ -18,6 +18,7 @@ import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
+import { stubTransactionResult } from '../mocks/stubTransactionResult'
 
 describe('UI: AddMembershipModal', () => {
   beforeAll(cryptoWaitReady)
@@ -144,28 +145,52 @@ describe('UI: AddMembershipModal', () => {
     })
 
     describe('Success', () => {
+      const events = [
+        {
+          phase: { ApplyExtrinsic: 2 },
+          event: { index: '0x0502', data: [1] },
+        },
+        {
+          phase: { ApplyExtrinsic: 2 },
+          event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
+        },
+      ]
+
       beforeEach(() => {
-        set(transaction, 'signAndSend', () =>
-          from([
-            set({}, 'status.isReady', true),
-            {
-              status: {
-                isInBlock: true,
-                asInBlock: {
-                  toString: () => '0x93XXX',
-                },
-              },
-            },
-          ])
-        )
+        set(transaction, 'signAndSend', () => stubTransactionResult(events))
       })
 
       it('Renders transaction success', async () => {
-        const { getByText } = await renderAuthorizeStep()
+        const { getByText, findByText } = await renderAuthorizeStep()
         fireEvent.click(getByText(/^sign and create a member$/i))
 
-        expect(getByText('Success')).toBeDefined()
+        expect(await findByText('Success')).toBeDefined()
         expect(getByText(/^realbobbybob/i)).toBeDefined()
+      })
+    })
+
+    describe('Failure', () => {
+      const events = [
+        {
+          phase: { ApplyExtrinsic: 2 },
+          event: {
+            index: '0x0001',
+            data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
+            section: 'system',
+            method: 'ExtrinsicFailed',
+          },
+        },
+      ]
+
+      beforeEach(() => {
+        set(transaction, 'signAndSend', () => stubTransactionResult(events))
+      })
+
+      it('Renders transaction failure', async () => {
+        const { getByText, findByText } = await renderAuthorizeStep()
+        fireEvent.click(getByText(/^sign and create a member$/i))
+
+        expect(await findByText('Failure')).toBeDefined()
       })
     })
   })
