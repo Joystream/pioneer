@@ -13,7 +13,13 @@ import {
   ToggleCheckbox,
 } from '../../components/forms'
 import { Help } from '../../components/Help'
-import { Modal, ModalFooter, ModalHeader, ScrolledModalBody } from '../../components/Modal'
+import {
+  ModalFooter,
+  ModalHeader,
+  ScrolledModalBody,
+  ScrolledModalContainer,
+  ScrolledModal,
+} from '../../components/Modal'
 import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
 import { SelectMember } from '../../components/selects/SelectMember'
 import { Text, TokenValue } from '../../components/typography'
@@ -68,87 +74,89 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   const stubHandler = () => undefined
 
   return (
-    <Modal modalSize="m" modalHeight="m" onClose={onClose}>
+    <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Add membership" />
       <ScrolledModalBody>
-        <Row>
-          <InlineToggleWrap>
-            <Label>I was referred by a member: </Label>
-            <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
-          </InlineToggleWrap>
-          <SelectMember onChange={stubHandler} enable={isReferred} />
-        </Row>
+        <ScrolledModalContainer>
+          <Row>
+            <InlineToggleWrap>
+              <Label>I was referred by a member: </Label>
+              <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
+            </InlineToggleWrap>
+            <SelectMember onChange={stubHandler} enable={isReferred} />
+          </Row>
 
-        <Row>
-          <Text size={2} dark>
-            Please fill in all the details below.
-          </Text>
-        </Row>
+          <Row>
+            <Text size={2} dark>
+              Please fill in all the details below.
+            </Text>
+          </Row>
 
-        <Row>
-          <Label isRequired>
-            Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-          </Label>
-          <SelectAccount filter={filterRoot} onChange={setRootAccount} />
-        </Row>
+          <Row>
+            <Label isRequired>
+              Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+            </Label>
+            <SelectAccount filter={filterRoot} onChange={setRootAccount} />
+          </Row>
 
-        <Row>
-          <Label isRequired>
-            Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-          </Label>
-          <SelectAccount filter={filterController} onChange={setControllerAccount} />
-        </Row>
+          <Row>
+            <Label isRequired>
+              Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+            </Label>
+            <SelectAccount filter={filterController} onChange={setControllerAccount} />
+          </Row>
 
-        <Row>
-          <Label htmlFor="member-name" isRequired>
-            Member Name
-          </Label>
-          <TextInput
-            id="member-name"
-            type="text"
-            placeholder="Type"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </Row>
+          <Row>
+            <Label htmlFor="member-name" isRequired>
+              Member Name
+            </Label>
+            <TextInput
+              id="member-name"
+              type="text"
+              placeholder="Type"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+          </Row>
 
-        <Row>
-          <Label htmlFor="member-handle" isRequired>
-            Membership handle
-          </Label>
-          <TextInput
-            id="member-handle"
-            type="text"
-            placeholder="Type"
-            value={handle}
-            onChange={(event) => setHandle(event.target.value)}
-          />
-        </Row>
+          <Row>
+            <Label htmlFor="member-handle" isRequired>
+              Membership handle
+            </Label>
+            <TextInput
+              id="member-handle"
+              type="text"
+              placeholder="Type"
+              value={handle}
+              onChange={(event) => setHandle(event.target.value)}
+            />
+          </Row>
 
-        <Row>
-          <Label htmlFor="member-about">About Member</Label>
-          <TextArea
-            id="member-about"
-            value={about}
-            placeholder="Type"
-            rows={4}
-            onChange={(event) => setAbout(event.target.value)}
-          />
-        </Row>
+          <Row>
+            <Label htmlFor="member-about">About Member</Label>
+            <TextArea
+              id="member-about"
+              value={about}
+              placeholder="Type"
+              rows={4}
+              onChange={(event) => setAbout(event.target.value)}
+            />
+          </Row>
 
-        <Row>
-          <Label htmlFor="member-avatar">Member Avatar</Label>
-          <TextInput
-            id="member-avatar"
-            type="text"
-            placeholder="Image URL"
-            value={avatar}
-            onChange={(event) => setAvatar(event.target.value)}
-          />
-          <Text size={3} italic={true}>
-            Paste an URL of your avatar image. Text lorem ipsum.
-          </Text>
-        </Row>
+          <Row>
+            <Label htmlFor="member-avatar">Member Avatar</Label>
+            <TextInput
+              id="member-avatar"
+              type="text"
+              placeholder="Image URL"
+              value={avatar}
+              onChange={(event) => setAvatar(event.target.value)}
+            />
+            <Text size={3} italic={true}>
+              Paste an URL of your avatar image. Text lorem ipsum.
+            </Text>
+          </Row>
+        </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
         <Label>
@@ -177,6 +185,6 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           Create a Membership
         </ButtonPrimaryMedium>
       </ModalFooter>
-    </Modal>
+    </ScrolledModal>
   )
 }

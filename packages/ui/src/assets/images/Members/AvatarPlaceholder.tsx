@@ -2,9 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { Colors, BorderRad } from '../../../constants'
 
-export function AvatarPlaceholder() {
+interface AvatarPlaceholderProps {
+  className?: any
+}
+
+export function AvatarPlaceholder({ className }: AvatarPlaceholderProps) {
   return (
-    <AvatarImage width="40" height="40" viewBox="0 0 40 40" fill="none">
+    <AvatarImage width="40" height="40" viewBox="0 0 40 40" fill="none" className={className}>
       <circle fill={Colors.Blue[50]} cx="20" cy="20" r="19.5" />
       <path
         fill={Colors.Black[200]}

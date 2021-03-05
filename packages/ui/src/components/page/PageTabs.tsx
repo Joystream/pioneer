@@ -20,21 +20,11 @@ export const PageTabs = styled.div`
   }
 `
 
-export const PageTabsNav = styled.nav`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 40px;
-  width: fit-content;
-  align-items: center;
-  justify-items: start;
-  z-index: 1;
-`
-
 interface PageTabProps {
-  active?: boolean
+  active: boolean
 }
 
-export const PageTab = styled.a`
+export const PageTab = styled.a<PageTabProps>`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
@@ -72,7 +62,7 @@ export const PageTab = styled.a`
     }
   }
 
-  ${({ active }: PageTabProps) =>
+  ${({ active }) =>
     active &&
     css`
       &:before {
@@ -97,4 +87,40 @@ export const PageTab = styled.a`
         }
       }
     `}
+`
+
+export enum PageTabSize {
+  xs = 'xs',
+  s = 's',
+}
+
+export const PageTabsNav = styled.nav<{ tabsSize?: PageTabSize }>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 40px;
+  width: fit-content;
+  align-items: center;
+  justify-items: start;
+  z-index: 1;
+
+  ${PageTab} {
+    font-size: ${({ tabsSize }) => {
+      switch (tabsSize) {
+        case PageTabSize.xs:
+          return '14px'
+        case PageTabSize.s:
+        default:
+          return '16px'
+      }
+    }};
+    line-height: ${({ tabsSize }) => {
+      switch (tabsSize) {
+        case PageTabSize.xs:
+          return '20px'
+        case PageTabSize.s:
+        default:
+          return '24px'
+      }
+    }};
+  }
 `

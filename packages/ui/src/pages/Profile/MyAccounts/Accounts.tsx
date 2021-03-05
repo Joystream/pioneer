@@ -3,7 +3,7 @@ import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../../common/types'
 import { AccountInfo } from '../../../components/AccountInfo'
-import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
+import { PageTab, PageTabsNav, PageTabSize } from '../../../components/page/PageTabs'
 import { TransferButton } from '../../../components/TransferButton'
 import { TokenValue } from '../../../components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
@@ -62,13 +62,13 @@ export function Accounts() {
 
   return (
     <>
-      <AccountsTabs>
-        <AccountTab active={isDisplayAll} onClick={() => !isDisplayAll && setIsDisplayAll(true)}>
+      <AccountsTabs tabsSize={PageTabSize.xs}>
+        <PageTab active={isDisplayAll} onClick={() => !isDisplayAll && setIsDisplayAll(true)}>
           All accounts
-        </AccountTab>
-        <AccountTab active={!isDisplayAll} onClick={() => isDisplayAll && setIsDisplayAll(false)}>
+        </PageTab>
+        <PageTab active={!isDisplayAll} onClick={() => isDisplayAll && setIsDisplayAll(false)}>
           Transferable balance
-        </AccountTab>
+        </PageTab>
       </AccountsTabs>
       <AccountsWrap>
         <ListHeaders>
@@ -127,17 +127,6 @@ interface HeaderProps {
 
 const AccountsTabs = styled(PageTabsNav)`
   grid-area: accountstabs;
-
-  &:after {
-    display: none;
-  }
-`
-
-const AccountTab = styled(PageTab)`
-  display: inline-flex;
-  width: fit-content;
-  font-size: 14px;
-  line-height: 20px;
 `
 
 const AccountsWrap = styled.div`
