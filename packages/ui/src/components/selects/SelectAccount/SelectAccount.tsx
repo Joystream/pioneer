@@ -11,7 +11,8 @@ import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
 import { TokenValue } from '../../typography'
 import { OptionListAccount } from './OptionListAccount'
-import { filterByText } from './helpers'
+import { filterByText, isValidAddress } from './helpers'
+import { useKeyring } from '../../../hooks/useKeyring'
 
 interface Props {
   onChange: (account: Account) => void
@@ -35,6 +36,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   const [filterInput, setFilterInput] = useState('')
   const filterText = useDebounce(filterInput, 500)
   const filteredOptions = useMemo(() => filterByText(options, filterText), [filterText, options])
+  const keyring = useKeyring()
 
   const onOptionClick = useCallback(
     (option: Account) => {
@@ -73,6 +75,14 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   useEffect(() => {
     textInput.current?.focus()
   }, [isOpen])
+
+  useEffect(
+    () =>
+      filteredOptions.length === 0 && isValidAddress(filterText, keyring)
+        ? onOptionClick({ name: 'Unsaved Account', address: filterText })
+        : undefined,
+    [filteredOptions]
+  )
 
   return (
     <SelectComponent ref={selectNode}>

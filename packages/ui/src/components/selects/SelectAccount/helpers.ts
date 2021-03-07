@@ -1,4 +1,5 @@
 import { KeyringInstance } from '@polkadot/keyring/types'
+import { KeyringStruct } from '@polkadot/ui-keyring/types'
 import { Account, Address } from '../../../common/types'
 
 export function filterByText(accounts: Account[], text: string) {
@@ -7,7 +8,7 @@ export function filterByText(accounts: Account[], text: string) {
   )
 }
 
-export function isValidAddress(address: Address, keyring: KeyringInstance) {
+export function isValidAddress(address: Address, keyring: KeyringInstance | KeyringStruct) {
   try {
     keyring.encodeAddress(keyring.decodeAddress(address))
   } catch (e) {
