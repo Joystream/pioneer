@@ -73,16 +73,14 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   }, [isOpen])
 
   useEffect(() => {
-    textInput.current?.focus()
+    isOpen && textInput.current?.focus()
   }, [isOpen])
 
-  useEffect(
-    () =>
-      filteredOptions.length === 0 && isValidAddress(filterText, keyring)
-        ? onOptionClick({ name: 'Unsaved Account', address: filterText })
-        : undefined,
-    [filteredOptions]
-  )
+  useEffect(() => {
+    filteredOptions.length === 0 &&
+      isValidAddress(filterText, keyring) &&
+      onOptionClick({ name: 'Unsaved Account', address: filterText })
+  }, [filteredOptions])
 
   return (
     <SelectComponent ref={selectNode}>
