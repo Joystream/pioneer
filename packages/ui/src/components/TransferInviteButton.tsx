@@ -19,7 +19,7 @@ export function TransferInviteButton({ member }: Props) {
       <ButtonSecondarySmallSquare disabled={disabled} onClick={toggleOpen}>
         {icon}
       </ButtonSecondarySmallSquare>
-      {isOpen && <TransferInviteModal onClose={toggleOpen} icon={icon} />}
+      {isOpen && <TransferInviteModal onClose={toggleOpen} icon={icon} member={member} />}
     </>
   )
 }
