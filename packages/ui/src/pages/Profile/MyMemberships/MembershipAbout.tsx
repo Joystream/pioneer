@@ -27,6 +27,31 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
     }
   }
 
+  const hired = 3
+  const applied = 10
+  const leader = 4
+  const councilMember = 3
+  const slashed = 0
+  const terminated = 2
+  const blogPosts = 42
+  const InitiatingLeaving = 10
+  const registeredDate = '01/07/2020, 10:00am CET'
+  const registeredBlock = '389,829'
+  const registeredNetwork = 'on Babylon network'
+  const invited: MemberFieldsFragment[] = [
+    {
+      __typename: 'Member',
+      id: '123',
+      name: 'Doe_J',
+      handle: 'doj',
+      rootAccount: 'foo',
+      controllerAccount: 'bar',
+      isFoundingMember: false,
+      isVerified: false,
+      inviteCount: 0,
+    },
+  ]
+
   return (
     <SidePaneGlass member={member} onClick={onBackgroundClick} onClose={onClose}>
       <SidePane>
@@ -55,11 +80,11 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
             <AboutRow>
               <MembershipLabel text="Registered on" />
               <AboutDateColumn>
-                <AboutText size={2}>01/07/2020, 10:00am CET</AboutText>
+                <AboutText size={2}>{registeredDate}</AboutText>
                 <BabylonInfo>
                   <BabylonIcon />
-                  <BabylonCount href="#">389,829</BabylonCount>
-                  <BabylonText size={3}>on Babylon network</BabylonText>
+                  <BabylonCount href="#">{registeredBlock}</BabylonCount>
+                  <BabylonText size={3}>{registeredNetwork}</BabylonText>
                 </BabylonInfo>
               </AboutDateColumn>
             </AboutRow>
@@ -78,36 +103,44 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
               </AboutInvite>
             </AboutRow>
             <AboutRow>
+              <MembershipLabel text="Invited" />
+              <AboutDateColumn>
+                {invited.map((member) => {
+                  return <MemberInfo member={member} />
+                })}
+              </AboutDateColumn>
+            </AboutRow>
+            <AboutRow>
               <MembershipLabel text="Hired" />
-              <AboutText size={2}>3 times</AboutText>
+              <AboutText size={2}>{hired} times</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Applied" />
-              <AboutText size={2}>10 times</AboutText>
+              <AboutText size={2}>{applied} times</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Being A leader" />
-              <AboutText size={2}>4 times</AboutText>
+              <AboutText size={2}>{leader} times</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Being Council Member" />
-              <AboutText size={2}>3 times</AboutText>
+              <AboutText size={2}>{councilMember} times</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Slashed" />
-              <AboutText size={2}>0 times</AboutText>
+              <AboutText size={2}>{slashed} times</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Terminated" />
-              <AboutText size={2}>2 times</AboutText>
+              <AboutText size={2}>{terminated} times</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Initiating leaving" />
-              <AboutText size={2}>10</AboutText>
+              <AboutText size={2}>{InitiatingLeaving}</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>42</AboutText>
+              <AboutText size={2}>{blogPosts}</AboutText>
             </AboutRow>
           </AboutTable>
         </SidePaneBody>
