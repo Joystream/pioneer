@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../api/queries'
 import { ButtonGhostMedium, ButtonGhostSmall } from '../../../components/buttons'
@@ -12,6 +12,7 @@ import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
 import { Text } from '../../../components/typography'
 import { MembershipLabel } from '../../../components/typography/MembershipLabel'
 import { Animations, Colors } from '../../../constants'
+import { useToggle } from '../../../hooks/useToggle'
 
 interface MembershipAboutProps {
   member: MemberFieldsFragment
@@ -19,12 +20,12 @@ interface MembershipAboutProps {
 }
 
 export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
-  function onBackgroundClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  const [isAboutMemberActive, toggleAboutMemberActive] = useToggle(true)
+  const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
       onClose()
     }
   }
-  const [isAboutMemberActive, setAboutMemberActive] = useState(false)
 
   return (
     <SidePaneGlass member={member} onClick={onBackgroundClick} onClose={onClose}>
@@ -34,28 +35,13 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
           <SidePaneTitle>My Profile</SidePaneTitle>
           <MemberInfo member={member} memberSize="l" />
           <PageTabsNav>
-            <PageTab
-              active={true}
-              onClick={() => {
-                setAboutMemberActive(!isAboutMemberActive)
-              }}
-            >
+            <PageTab active={isAboutMemberActive} onClick={toggleAboutMemberActive}>
               Member details
             </PageTab>
-            <PageTab
-              active={false}
-              onClick={() => {
-                setAboutMemberActive(!isAboutMemberActive)
-              }}
-            >
+            <PageTab active={false} onClick={toggleAboutMemberActive}>
               Accounts
             </PageTab>
-            <PageTab
-              active={false}
-              onClick={() => {
-                setAboutMemberActive(!isAboutMemberActive)
-              }}
-            >
+            <PageTab active={false} onClick={toggleAboutMemberActive}>
               Roles
             </PageTab>
           </PageTabsNav>
