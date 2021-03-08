@@ -18,7 +18,7 @@ export const Colors = {
     25: '#F9FAFC',
 
     900.25: '#00000040',
-    700.75: '#1F252EBF',
+    700.85: '#1F252ED9',
   },
 
   Blue: {
@@ -115,6 +115,43 @@ export const Animations = {
       100% {
         opacity: 0;
       }
+    }
+  `,
+  showSidePane: `
+    animation: showSidePane ${Transitions.duration} ease;
+
+    @keyframes showSidePane {
+      0% {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      25% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(0%);
+      }
+    }
+  `,
+  showModalBackground: `
+    animation: showModalBackground ${Transitions.duration} ease;
+
+    @keyframes showModalBackground {
+      from {
+        background-color: transparent;
+      }
+      to {}
+    }
+  `,
+  showModalBlock: `
+    animation: showModalBlock ${Transitions.duration} ease;
+
+    @keyframes showModalBlock {
+      from {
+        opacity: 0;
+        transform: translateY(-24px);
+      }
+      to {}
     }
   `,
 }

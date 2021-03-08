@@ -90,6 +90,7 @@ const MemberRolesColumn = styled(MemberColumn)`
   grid-auto-flow: dense;
   grid-column-gap: 4px;
   grid-row-gap: 4px;
+  width: 100%;
   max-width: 164px;
   max-height: 52px;
   overflow: hidden;
@@ -98,7 +99,6 @@ const MemberRolesColumn = styled(MemberColumn)`
     width: 24px;
     height: 24px;
     font-size: 10px;
-    line-height: 10px;
   }
 `
 

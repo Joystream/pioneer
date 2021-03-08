@@ -1,27 +1,30 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { MemberFieldsFragment } from '../api/queries'
-import { FounderMemberIcon } from '../components/icons/FounderMemberIcon'
-import { VerifiedMemberIcon } from '../components/icons/VerifiedMemberIcon'
 import { BorderRad, Colors, Fonts, Transitions } from '../constants'
 import { Avatar, AvatarImg } from './Avatar'
-import { Text } from '../components/typography/Text'
+import { FounderMemberIcon } from './icons/FounderMemberIcon'
+import { VerifiedMemberIcon } from './icons/VerifiedMemberIcon'
+import { Text } from './typography'
 
-type MemberInfoProps = MemberInfoContainerProps & MemberOnDarkProps
+type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps
 
 interface MemberInfoContainerProps {
   member: MemberFieldsFragment
   onClick?: () => void
 }
 
-interface MemberOnDarkProps {
+interface MemberInfoWrapProps {
   isOnDark?: boolean
   showId?: boolean
+  memberSize?: MemberSize
 }
 
-export const MemberInfo = React.memo(({ member, onClick, isOnDark, showId }: MemberInfoProps) => {
+export type MemberSize = 'm' | 'l'
+
+export const MemberInfo = React.memo(({ member, onClick, isOnDark, showId, memberSize }: MemberInfoProps) => {
   return (
-    <MemberInfoWrap isOnDark={isOnDark}>
+    <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize}>
       <MemberPhoto>
         <Avatar avatarURI={member.avatarURI} />
       </MemberPhoto>
@@ -66,6 +69,7 @@ export const MemberIcons = styled.div`
   grid-column-gap: 4px;
   align-items: center;
   width: fit-content;
+  height: fit-content;
   margin-left: -4px;
 `
 
@@ -87,7 +91,7 @@ export const MemberRole = styled.span`
   border-radius: ${BorderRad.round};
   background-color: ${Colors.Black[100]};
   font-size: 6px;
-  line-height: 6px;
+  line-height: 1;
   font-family: ${Fonts.Inter};
   font-weight: 700;
   color: ${Colors.Black[600]};
@@ -136,12 +140,23 @@ const MemberOnDarkStyles = css`
   }
 `
 
-export const MemberInfoWrap = styled.div<MemberOnDarkProps>`
-  display: grid;
+const MemberLargeElements = css`
+  grid-template-columns: 80px auto 1fr;
+  grid-template-rows: 36px 38px;
+  grid-column-gap: 12px;
+  grid-row-gap: 6px;
+`
+
+const MemberMediumElements = css`
   grid-template-columns: 40px auto 1fr;
   grid-template-rows: 20px 16px;
   grid-column-gap: 8px;
   grid-row-gap: 4px;
+`
+
+export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
+  display: grid;
+
   grid-template-areas:
     'memberphoto memberhandle membericons'
     'memberphoto memberroles memberroles';
@@ -151,7 +166,131 @@ export const MemberInfoWrap = styled.div<MemberOnDarkProps>`
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
 
-  ${(props) => props.isOnDark === true && MemberOnDarkStyles}
+  ${MemberPhoto} {
+    width: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return '80px'
+        case 'm':
+        default:
+          return '40px'
+      }
+    }};
+    height: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return '80px'
+        case 'm':
+        default:
+          return '40px'
+      }
+    }};
+  }
+
+  ${MemberRoles} {
+    align-self: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return 'start'
+        case 'm':
+        default:
+          return 'center'
+      }
+    }};
+  }
+
+  ${MemberRole} {
+    width: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return '24px'
+        case 'm':
+        default:
+          return '16px'
+      }
+    }};
+    height: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return '24px'
+        case 'm':
+        default:
+          return '16px'
+      }
+    }};
+    font-size: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return '10px'
+        case 'm':
+        default:
+          return '6px'
+      }
+    }};
+  }
+
+  ${MemberHandle} {
+    font-size: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return '20px'
+        case 'm':
+        default:
+          return '14px'
+      }
+    }};
+    align-self: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return 'end'
+        case 'm':
+        default:
+          return 'center'
+      }
+    }};
+  }
+
+  ${MemberIcons} {
+    align-self: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return 'end'
+        case 'm':
+        default:
+          return 'center'
+      }
+    }};
+    padding: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return '4px 0'
+        case 'm':
+        default:
+          return '0'
+      }
+    }};
+    margin-left: ${({ memberSize }) => {
+      switch (memberSize) {
+        case 'l':
+          return '-6px'
+        case 'm':
+        default:
+          return '-4px'
+      }
+    }};
+  }
+
+  ${({ isOnDark }) => isOnDark === true && MemberOnDarkStyles}
+
+  ${({ memberSize }) => {
+    switch (memberSize) {
+      case 'l':
+        return MemberLargeElements
+      case 'm':
+      default:
+        return MemberMediumElements
+    }
+  }}
 `
 
 export const MemberDarkHover = css`

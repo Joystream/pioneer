@@ -3,6 +3,7 @@ import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../../common/types'
 import { AccountInfo } from '../../../components/AccountInfo'
+import { ArrowDownIcon, Icon } from '../../../components/icons'
 import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
 import { TransferButton } from '../../../components/TransferButton'
 import { TokenValue } from '../../../components/typography'
@@ -13,8 +14,6 @@ import { useBalances } from '../../../hooks/useBalances'
 import { filterAccounts } from '../../../utils/filterAccounts'
 import { sortAccounts, SortKey } from '../../../utils/sortAccounts'
 import { setOrder } from './helpers'
-import { ArrowDownIcon } from '../../../components/icons/ArrowDownIcon'
-import { Icon } from '../../../components/icons/Icon'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -62,13 +61,13 @@ export function Accounts() {
 
   return (
     <>
-      <AccountsTabs>
-        <AccountTab active={isDisplayAll} onClick={() => !isDisplayAll && setIsDisplayAll(true)}>
+      <AccountsTabs tabsSize="xs">
+        <PageTab active={isDisplayAll} onClick={() => !isDisplayAll && setIsDisplayAll(true)}>
           All accounts
-        </AccountTab>
-        <AccountTab active={!isDisplayAll} onClick={() => isDisplayAll && setIsDisplayAll(false)}>
+        </PageTab>
+        <PageTab active={!isDisplayAll} onClick={() => isDisplayAll && setIsDisplayAll(false)}>
           Transferable balance
-        </AccountTab>
+        </PageTab>
       </AccountsTabs>
       <AccountsWrap>
         <ListHeaders>
@@ -127,17 +126,6 @@ interface HeaderProps {
 
 const AccountsTabs = styled(PageTabsNav)`
   grid-area: accountstabs;
-
-  &:after {
-    display: none;
-  }
-`
-
-const AccountTab = styled(PageTab)`
-  display: inline-flex;
-  width: fit-content;
-  font-size: 14px;
-  line-height: 20px;
 `
 
 const AccountsWrap = styled.div`

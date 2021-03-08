@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
-import { BorderRad, Colors, Fonts, Shadows } from '../constants'
+import { BorderRad, Colors, Fonts, Shadows, Animations } from '../constants'
 import { CloseButton } from './buttons'
 import { Text, ValueInJoys } from './typography'
 
@@ -19,15 +19,19 @@ export const ModalHeader = React.memo(({ onClick, title, icon }: Props) => (
   </ModalTopBar>
 ))
 
+type ModalSize = 'xs' | 's' | 'm' | 'l'
+type ModalHeight = 's' | 'm' | 'l'
+
 interface ModalProps {
   onClose: () => void
-  modalSize: string
-  modalHeight?: string
+  modalSize: ModalSize
+  modalHeight?: ModalHeight
   children: ReactNode
   isDark?: boolean
+  className?: any
 }
 
-export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark }: ModalProps) => {
+export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark, className }: ModalProps) => {
   function onBackgroundClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (e.target === e.currentTarget) {
       onClose()
@@ -42,7 +46,7 @@ export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark 
       onClick={onBackgroundClick}
       onClose={onClose}
     >
-      <ModalWrap modalMaxSize={modalSize} modalHeight={modalHeight} isDark={isDark} role="modal">
+      <ModalWrap modalMaxSize={modalSize} modalHeight={modalHeight} isDark={isDark} role="modal" className={className}>
         {children}
       </ModalWrap>
     </ModalGlass>,
@@ -80,9 +84,10 @@ export const ModalGlass = styled.div<ModalProps>`
         return '44px'
     }
   }};
-  background-color: ${Colors.Black[700.75]};
+  background-color: ${Colors.Black[700.85]};
   color: ${Colors.Black[900]};
   z-index: 100000;
+  ${Animations.showModalBackground};
 `
 
 interface TopBarProps extends ThemedStyledProps<any, any> {
@@ -163,6 +168,7 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   height: min-content;
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
+  ${Animations.showModalBlock};
   &,
   ${ModalBody}, ${ModalTopBar}, ${ModalFooter} {
     ${({ isDark }) => {
@@ -201,11 +207,43 @@ export const ModalHeaderIcon = styled.div`
   }
 `
 
+export const ScrolledModal = styled(Modal)`
+  &${ModalWrap} {
+    max-height: calc(100% - 128px);
+    grid-template-rows: auto 1fr auto;
+  }
+`
+
 export const ScrolledModalBody = styled(ModalBody)`
+  display: flex;
+  flex-direction: column;
+  grid-row-gap: 0;
+  width: 100%;
   height: 100%;
-  max-height: 66vh;
-  padding: 24px 24px 20px;
+  max-height: 100%;
+  padding: 0;
   overflow-y: scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+
+export const ScrolledModalContainer = styled.div`
+  display: grid;
+  grid-row-gap: 16px;
+  width: 100%;
+  height: 100%;
+  padding: 24px 24px 20px;
+
+  &:after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    visibility: hidden;
+  }
 `
 
 export const ResultModalBody = styled(ModalBody)`
