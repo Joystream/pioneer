@@ -19,10 +19,13 @@ export const ModalHeader = React.memo(({ onClick, title, icon }: Props) => (
   </ModalTopBar>
 ))
 
+type ModalSize = 'xs' | 's' | 'm' | 'l'
+type ModalHeight = 's' | 'm' | 'l'
+
 interface ModalProps {
   onClose: () => void
-  modalSize: string
-  modalHeight?: string
+  modalSize: ModalSize
+  modalHeight?: ModalHeight
   children: ReactNode
   isDark?: boolean
   className?: any
