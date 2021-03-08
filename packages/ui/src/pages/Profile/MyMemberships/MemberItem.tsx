@@ -1,13 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../api/queries'
-import { ButtonGhostMediumSquare, ButtonSecondarySmallSquare } from '../../../components/buttons'
-import { ArrowOutsideIcon, TransferIcon } from '../../../components/icons'
+import { ButtonGhostMediumSquare } from '../../../components/buttons'
+import { ArrowOutsideIcon } from '../../../components/icons'
 import { MemberInfo } from '../../../components/MemberInfo'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
 import { useToggle } from '../../../hooks/useToggle'
 import { MembershipAbout } from './MembershipAbout'
 import { MemberRole } from '../../../components/MemberInfo'
+import { TransferInviteButton } from '../../../components/TransferInviteButton'
 
 interface MemberProps {
   member: MemberFieldsFragment
@@ -37,9 +38,7 @@ export const MemberItem = ({ member }: MemberProps) => {
       </MemberColumn>
       <MemberColumn>
         <CountInfo>{member.inviteCount}</CountInfo>
-        <ButtonSecondarySmallSquare>
-          <TransferIcon />
-        </ButtonSecondarySmallSquare>
+        <TransferInviteButton member={member} />
       </MemberColumn>
       <MemberColumn>
         <CountInfo>0</CountInfo>
