@@ -12,13 +12,14 @@ interface Props {
 export function TransferInviteButton({ member }: Props) {
   const disabled = member.inviteCount <= 0
   const [isOpen, toggleOpen] = useToggle()
+  const icon = <TransferIcon />
 
   return (
     <>
       <ButtonSecondarySmallSquare disabled={disabled} onClick={toggleOpen}>
-        <TransferIcon />
+        {icon}
       </ButtonSecondarySmallSquare>
-      {isOpen && <TransferInviteModal onClose={toggleOpen} />}
+      {isOpen && <TransferInviteModal onClose={toggleOpen} icon={icon} />}
     </>
   )
 }
