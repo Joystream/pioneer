@@ -82,8 +82,12 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
               <AboutText size={2}>3 times</AboutText>
             </AboutRow>
             <AboutRow>
+              <MembershipLabel text="Applied" />
+              <AboutText size={2}>10 times</AboutText>
+            </AboutRow>
+            <AboutRow>
               <MembershipLabel text="Being A leader" />
-              <AboutText size={2}>3 times</AboutText>
+              <AboutText size={2}>4 times</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Being Council Member" />
@@ -91,11 +95,11 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Slashed" />
-              <AboutText size={2}>3 times</AboutText>
+              <AboutText size={2}>0 times</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Terminated" />
-              <AboutText size={2}>3 times</AboutText>
+              <AboutText size={2}>2 times</AboutText>
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Initiating leaving" />
@@ -103,36 +107,7 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
             </AboutRow>
             <AboutRow>
               <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>3</AboutText>
-            </AboutRow>
-
-            <AboutRow>
-              <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>3</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>3</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>3</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>3</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>3</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>3</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>3</AboutText>
+              <AboutText size={2}>42</AboutText>
             </AboutRow>
           </AboutTable>
         </SidePaneBody>
