@@ -16,3 +16,9 @@ query GetMembers {
     ...MemberFields
   }
 }
+
+query GetMember($id: ID!) {
+  member (where: {id: $id}) {
+    ...MemberFields
+  }
+}

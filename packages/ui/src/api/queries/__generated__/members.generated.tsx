@@ -20,6 +20,15 @@ export type GetMembersQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetMembersQuery = { __typename: 'Query'; members: Array<{ __typename: 'Member' } & MemberFieldsFragment> }
 
+export type GetMemberQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetMemberQuery = {
+  __typename: 'Query'
+  member?: Types.Maybe<{ __typename: 'Member' } & MemberFieldsFragment>
+}
+
 export const MemberFieldsFragmentDoc = gql`
   fragment MemberFields on Member {
     id
@@ -69,3 +78,39 @@ export function useGetMembersLazyQuery(
 export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>
 export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>
+export const GetMemberDocument = gql`
+  query GetMember($id: ID!) {
+    member(where: { id: $id }) {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+
+/**
+ * __useGetMemberQuery__
+ *
+ * To run a query within a React component, call `useGetMemberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetMemberQuery(baseOptions: Apollo.QueryHookOptions<GetMemberQuery, GetMemberQueryVariables>) {
+  return Apollo.useQuery<GetMemberQuery, GetMemberQueryVariables>(GetMemberDocument, baseOptions)
+}
+export function useGetMemberLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberQuery, GetMemberQueryVariables>
+) {
+  return Apollo.useLazyQuery<GetMemberQuery, GetMemberQueryVariables>(GetMemberDocument, baseOptions)
+}
+export type GetMemberQueryHookResult = ReturnType<typeof useGetMemberQuery>
+export type GetMemberLazyQueryHookResult = ReturnType<typeof useGetMemberLazyQuery>
+export type GetMemberQueryResult = Apollo.QueryResult<GetMemberQuery, GetMemberQueryVariables>

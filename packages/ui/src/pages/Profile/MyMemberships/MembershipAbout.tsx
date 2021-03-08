@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MemberFieldsFragment } from '../../../api/queries'
+import { MemberFieldsFragment, useGetMemberQuery } from '../../../api/queries'
 import { ButtonGhostMedium, ButtonGhostSmall } from '../../../components/buttons'
 import { LabelLink } from '../../../components/forms'
 import { BabylonIcon } from '../../../components/icons/BabylonIcon'
@@ -21,6 +21,10 @@ interface MembershipAboutProps {
 
 export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
   const [isAboutMemberActive, toggleAboutMemberActive] = useToggle(true)
+  const { data, loading } = useGetMemberQuery({
+    variables: { id: member.id },
+  })
+
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
       onClose()
@@ -72,77 +76,81 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
           </PageTabsNav>
         </SidePaneHeader>
         <SidePaneBody>
-          <AboutTable>
-            <AboutColumn>
-              <MembershipLabel text="About" />
-              <AboutText size={2}>{member?.about || ''}</AboutText>
-            </AboutColumn>
-            <AboutRow>
-              <MembershipLabel text="Registered on" />
-              <AboutDateColumn>
-                <AboutText size={2}>{registeredDate}</AboutText>
-                <BabylonInfo>
-                  <BabylonIcon />
-                  <BabylonCount href="#">{registeredBlock}</BabylonCount>
-                  <BabylonText size={3}>{registeredNetwork}</BabylonText>
-                </BabylonInfo>
-              </AboutDateColumn>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Member ID" />
-              <AboutText size={2}>{member?.id}</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Invitations Left" />
-              <AboutInvite>
-                <AboutText size={2}>{member?.inviteCount}</AboutText>
-                <ButtonGhostSmall>
-                  <TransferSymbol />
-                  Transfer Invites
-                </ButtonGhostSmall>
-              </AboutInvite>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Invited" />
-              <AboutDateColumn>
-                {invited.map((member) => {
-                  return <MemberInfo member={member} />
-                })}
-              </AboutDateColumn>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Hired" />
-              <AboutText size={2}>{hired} times</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Applied" />
-              <AboutText size={2}>{applied} times</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Being A leader" />
-              <AboutText size={2}>{leader} times</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Being Council Member" />
-              <AboutText size={2}>{councilMember} times</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Slashed" />
-              <AboutText size={2}>{slashed} times</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Terminated" />
-              <AboutText size={2}>{terminated} times</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Initiating leaving" />
-              <AboutText size={2}>{InitiatingLeaving}</AboutText>
-            </AboutRow>
-            <AboutRow>
-              <MembershipLabel text="Blog posts" />
-              <AboutText size={2}>{blogPosts}</AboutText>
-            </AboutRow>
-          </AboutTable>
+          {loading || !data ? (
+            <>Loading...</>
+          ) : (
+            <AboutTable>
+              <AboutColumn>
+                <MembershipLabel text="About" />
+                <AboutText size={2}>{member?.about || ''}</AboutText>
+              </AboutColumn>
+              <AboutRow>
+                <MembershipLabel text="Registered on" />
+                <AboutDateColumn>
+                  <AboutText size={2}>{registeredDate}</AboutText>
+                  <BabylonInfo>
+                    <BabylonIcon />
+                    <BabylonCount href="#">{registeredBlock}</BabylonCount>
+                    <BabylonText size={3}>{registeredNetwork}</BabylonText>
+                  </BabylonInfo>
+                </AboutDateColumn>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Member ID" />
+                <AboutText size={2}>{member?.id}</AboutText>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Invitations Left" />
+                <AboutInvite>
+                  <AboutText size={2}>{member?.inviteCount}</AboutText>
+                  <ButtonGhostSmall>
+                    <TransferSymbol />
+                    Transfer Invites
+                  </ButtonGhostSmall>
+                </AboutInvite>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Invited" />
+                <AboutDateColumn>
+                  {invited.map((member) => (
+                    <MemberInfo member={member} key={member.handle} />
+                  ))}
+                </AboutDateColumn>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Hired" />
+                <AboutText size={2}>{hired} times</AboutText>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Applied" />
+                <AboutText size={2}>{applied} times</AboutText>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Being A leader" />
+                <AboutText size={2}>{leader} times</AboutText>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Being Council Member" />
+                <AboutText size={2}>{councilMember} times</AboutText>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Slashed" />
+                <AboutText size={2}>{slashed} times</AboutText>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Terminated" />
+                <AboutText size={2}>{terminated} times</AboutText>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Initiating leaving" />
+                <AboutText size={2}>{InitiatingLeaving}</AboutText>
+              </AboutRow>
+              <AboutRow>
+                <MembershipLabel text="Blog posts" />
+                <AboutText size={2}>{blogPosts}</AboutText>
+              </AboutRow>
+            </AboutTable>
+          )}
         </SidePaneBody>
         <SidePaneFooter>
           <ButtonGhostMedium>
