@@ -6,7 +6,7 @@ import { LabelLink } from '../../../components/forms'
 import { BabylonIcon } from '../../../components/icons/BabylonIcon'
 import { EditSymbol } from '../../../components/icons/symbols/EditSymbol'
 import { TransferSymbol } from '../../../components/icons/symbols/TransferSymbol'
-import { MemberInfo, MemberSize } from '../../../components/MemberInfo'
+import { MemberInfo } from '../../../components/MemberInfo'
 import { CloseSmallModalButton } from '../../../components/Modal'
 import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
 import { Text } from '../../../components/typography'
@@ -32,7 +32,7 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
         <SidePaneHeader>
           <CloseSmallModalButton onClick={onClose} />
           <SidePaneTitle>My Profile</SidePaneTitle>
-          <MemberInfo member={member} memberSize={MemberSize.l} />
+          <MemberInfo member={member} memberSize="l" />
           <PageTabsNav>
             <PageTab
               active={true}

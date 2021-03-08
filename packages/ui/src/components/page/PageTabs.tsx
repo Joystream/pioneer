@@ -89,10 +89,7 @@ export const PageTab = styled.a<PageTabProps>`
     `}
 `
 
-export enum PageTabSize {
-  xs = 'xs',
-  s = 's',
-}
+export type PageTabSize = 'xs' | 's'
 
 export const PageTabsNav = styled.nav<{ tabsSize?: PageTabSize }>`
   display: grid;
@@ -106,18 +103,18 @@ export const PageTabsNav = styled.nav<{ tabsSize?: PageTabSize }>`
   ${PageTab} {
     font-size: ${({ tabsSize }) => {
       switch (tabsSize) {
-        case PageTabSize.xs:
+        case 'xs':
           return '14px'
-        case PageTabSize.s:
+        case 's':
         default:
           return '16px'
       }
     }};
     line-height: ${({ tabsSize }) => {
       switch (tabsSize) {
-        case PageTabSize.xs:
+        case 'xs':
           return '20px'
-        case PageTabSize.s:
+        case 's':
         default:
           return '24px'
       }

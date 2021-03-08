@@ -1,11 +1,11 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { MemberFieldsFragment } from '../api/queries'
-import { FounderMemberIcon } from '../components/icons/FounderMemberIcon'
-import { VerifiedMemberIcon } from '../components/icons/VerifiedMemberIcon'
 import { BorderRad, Colors, Fonts, Transitions } from '../constants'
 import { Avatar, AvatarImg } from './Avatar'
-import { Text } from '../components/typography/Text'
+import { FounderMemberIcon } from './icons/FounderMemberIcon'
+import { VerifiedMemberIcon } from './icons/VerifiedMemberIcon'
+import { Text } from './typography'
 
 type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps
 
@@ -20,10 +20,7 @@ interface MemberInfoWrapProps {
   memberSize?: MemberSize
 }
 
-export enum MemberSize {
-  m = 'm',
-  l = 'l',
-}
+export type MemberSize = 'm' | 'l'
 
 export const MemberInfo = React.memo(({ member, onClick, isOnDark, showId, memberSize }: MemberInfoProps) => {
   return (
@@ -172,18 +169,18 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   ${MemberPhoto} {
     width: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return '80px'
-        case MemberSize.m:
+        case 'm':
         default:
           return '40px'
       }
     }};
     height: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return '80px'
-        case MemberSize.m:
+        case 'm':
         default:
           return '40px'
       }
@@ -193,9 +190,9 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   ${MemberRoles} {
     align-self: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return 'start'
-        case MemberSize.m:
+        case 'm':
         default:
           return 'center'
       }
@@ -205,27 +202,27 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   ${MemberRole} {
     width: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return '24px'
-        case MemberSize.m:
+        case 'm':
         default:
           return '16px'
       }
     }};
     height: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return '24px'
-        case MemberSize.m:
+        case 'm':
         default:
           return '16px'
       }
     }};
     font-size: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return '10px'
-        case MemberSize.m:
+        case 'm':
         default:
           return '6px'
       }
@@ -235,18 +232,18 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   ${MemberHandle} {
     font-size: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return '20px'
-        case MemberSize.m:
+        case 'm':
         default:
           return '14px'
       }
     }};
     align-self: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return 'end'
-        case MemberSize.m:
+        case 'm':
         default:
           return 'center'
       }
@@ -256,27 +253,27 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   ${MemberIcons} {
     align-self: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return 'end'
-        case MemberSize.m:
+        case 'm':
         default:
           return 'center'
       }
     }};
     padding: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return '4px 0'
-        case MemberSize.m:
+        case 'm':
         default:
           return '0'
       }
     }};
     margin-left: ${({ memberSize }) => {
       switch (memberSize) {
-        case MemberSize.l:
+        case 'l':
           return '-6px'
-        case MemberSize.m:
+        case 'm':
         default:
           return '-4px'
       }
@@ -287,9 +284,9 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
 
   ${({ memberSize }) => {
     switch (memberSize) {
-      case MemberSize.l:
+      case 'l':
         return MemberLargeElements
-      case MemberSize.m:
+      case 'm':
       default:
         return MemberMediumElements
     }
