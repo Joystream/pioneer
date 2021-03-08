@@ -12,7 +12,6 @@ export function isValidAddress(address: Address, keyring: KeyringInstance | Keyr
   try {
     keyring.encodeAddress(keyring.decodeAddress(address))
   } catch (e) {
-    console.log(e)
     return false
   }
   return true
