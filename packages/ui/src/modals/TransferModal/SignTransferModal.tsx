@@ -39,10 +39,8 @@ export function SignTransferModal({ onClose, from, amount, to, onDone }: Props) 
   const transaction = api?.tx?.balances?.transfer(to.address, amount)
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from })
 
-  // TODO: move onDone to useSignAndSend?
   useEffect(() => {
     const isDone = status === 'SUCCESS' || status === 'ERROR'
-
     isDone && onDone(status === 'SUCCESS', paymentInfo?.partialFee?.toBn() || new BN(0))
   })
 

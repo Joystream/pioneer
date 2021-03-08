@@ -7,24 +7,23 @@ import { Account } from '../common/types'
 import { useApi } from './useApi'
 import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
-import { useToggle } from './useToggle'
 
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
   from: Account
 }
 
-type TransactionStep = 'READY' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'
+type TransactionStatus = 'READY' | 'SIGN' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'
 
 const isError = (events: EventRecord[]) => events.find(({ event: { method } }) => method === 'ExtrinsicFailed')
 
-const statusCallback = (setStep: (step: TransactionStep) => void) => (result: ISubmittableResult) => {
+const statusCallback = (setStatus: (status: TransactionStatus) => void) => (result: ISubmittableResult) => {
   const { status, events } = result
 
   console.log(`Current transaction status: ${status.type}`)
 
   if (status.isReady) {
-    setStep('PENDING')
+    setStatus('PENDING')
   }
 
   if (status.isInBlock) {
@@ -41,43 +40,36 @@ const statusCallback = (setStep: (step: TransactionStep) => void) => (result: IS
     return
   }
 
-  setStep(isError(events) ? 'ERROR' : 'SUCCESS')
+  setStatus(isError(events) ? 'ERROR' : 'SUCCESS')
 }
 
 export const useSignAndSendTransaction = ({ transaction, from }: UseSignAndSendTransactionParams) => {
-  const [isSending, toggleSending] = useToggle()
   const keyring = useKeyring()
   const { api } = useApi()
   const paymentInfo = useObservable(transaction?.paymentInfo(from.address), [from])
-  const [step, setStep] = useState<TransactionStep>('READY')
-
-  const sendTransaction = () => {
-    if (step === 'READY') {
-      toggleSending()
-    }
-  }
+  const [status, setStatus] = useState<TransactionStatus>('READY')
 
   useEffect(() => {
-    if (!isSending || !transaction || !paymentInfo) {
+    if (status !== 'SIGN' || !transaction || !paymentInfo) {
       return
     }
 
     const keyringPair = keyring.getPair(from.address)
 
     if (keyringPair.meta.isInjected) {
-      setStep('EXTENSION')
+      setStatus('EXTENSION')
       web3FromAddress(from.address).then(({ signer }) => {
-        transaction.signAndSend(from.address, { signer: signer }).subscribe(statusCallback(setStep))
+        transaction.signAndSend(from.address, { signer: signer }).subscribe(statusCallback(setStatus))
       })
     } else {
-      setStep('PENDING')
-      transaction.signAndSend(keyringPair).subscribe(statusCallback(setStep))
+      setStatus('PENDING')
+      transaction.signAndSend(keyringPair).subscribe(statusCallback(setStatus))
     }
-  }, [api, isSending])
+  }, [api, status])
 
   return {
-    send: sendTransaction,
+    send: () => setStatus('SIGN'),
     paymentInfo,
-    status: step,
+    status,
   }
 }

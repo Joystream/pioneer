@@ -35,8 +35,8 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from })
 
   useEffect(() => {
-    const isDONE = status === 'SUCCESS' || status === 'ERROR'
-    isDONE && onDone(status === 'SUCCESS', paymentInfo?.partialFee?.toBn() || new BN(0))
+    const isDone = status === 'SUCCESS' || status === 'ERROR'
+    isDone && onDone(status === 'SUCCESS', paymentInfo?.partialFee?.toBn() || new BN(0))
   })
 
   if (status === 'READY') {
