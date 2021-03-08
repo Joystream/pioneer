@@ -2,6 +2,7 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
+import BN from 'bn.js'
 import { useEffect, useState } from 'react'
 import { Account } from '../common/types'
 import { useApi } from './useApi'
@@ -11,6 +12,7 @@ import { useObservable } from './useObservable'
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
   from: Account
+  onDone: (success: boolean, fee: BN) => void
 }
 
 type TransactionStatus = 'READY' | 'SIGN' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'
@@ -43,7 +45,7 @@ const statusCallback = (setStatus: (status: TransactionStatus) => void) => (resu
   setStatus(isError(events) ? 'ERROR' : 'SUCCESS')
 }
 
-export const useSignAndSendTransaction = ({ transaction, from }: UseSignAndSendTransactionParams) => {
+export const useSignAndSendTransaction = ({ transaction, from, onDone }: UseSignAndSendTransactionParams) => {
   const keyring = useKeyring()
   const { api } = useApi()
   const paymentInfo = useObservable(transaction?.paymentInfo(from.address), [from])
@@ -66,6 +68,12 @@ export const useSignAndSendTransaction = ({ transaction, from }: UseSignAndSendT
       transaction.signAndSend(keyringPair).subscribe(statusCallback(setStatus))
     }
   }, [api, status])
+
+  useEffect(() => {
+    if (status === 'SUCCESS' || status === 'ERROR') {
+      onDone(status === 'SUCCESS', paymentInfo?.partialFee.toBn() || new BN(0))
+    }
+  })
 
   return {
     send: () => setStatus('SIGN'),

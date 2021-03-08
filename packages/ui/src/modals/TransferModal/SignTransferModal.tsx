@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Account } from '../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium } from '../../components/buttons'
@@ -37,12 +37,7 @@ export function SignTransferModal({ onClose, from, amount, to, onDone }: Props) 
   const balanceTo = useBalance(to)
   const { api } = useApi()
   const transaction = api?.tx?.balances?.transfer(to.address, amount)
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from })
-
-  useEffect(() => {
-    const isDone = status === 'SUCCESS' || status === 'ERROR'
-    isDone && onDone(status === 'SUCCESS', paymentInfo?.partialFee?.toBn() || new BN(0))
-  })
+  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
 
   if (status === 'READY') {
     return (

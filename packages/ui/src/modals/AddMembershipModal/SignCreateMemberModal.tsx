@@ -1,6 +1,6 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Member } from '../../common/types'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import { Label } from '../../components/forms'
@@ -32,12 +32,7 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
     about: transactionParams.about,
   })
 
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from })
-
-  useEffect(() => {
-    const isDone = status === 'SUCCESS' || status === 'ERROR'
-    isDone && onDone(status === 'SUCCESS', paymentInfo?.partialFee?.toBn() || new BN(0))
-  })
+  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
 
   if (status === 'READY') {
     return (
