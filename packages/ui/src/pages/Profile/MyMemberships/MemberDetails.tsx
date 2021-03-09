@@ -9,6 +9,7 @@ import { MemberInfo } from '../../../components/MemberInfo'
 import { Text } from '../../../components/typography'
 import { MembershipLabel } from '../../../components/typography/MembershipLabel'
 import { Colors } from '../../../constants'
+import { EmptyBody } from './MembershipAbout'
 
 interface MemberDetailsProps {
   member: MemberFieldsFragment
@@ -47,7 +48,7 @@ export const MemberDetails = ({ member }: MemberDetailsProps) => {
   ]
 
   if (loading || !data) {
-    return <>Loading...</>
+    return <EmptyBody>Loading...</EmptyBody>
   }
 
   return (

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { MemberFieldsFragment } from '../../../api/queries'
 import { ButtonGhostMedium } from '../../../components/buttons'
@@ -7,7 +7,6 @@ import { MemberInfo } from '../../../components/MemberInfo'
 import { CloseSmallModalButton } from '../../../components/Modal'
 import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
 import { Animations, Colors } from '../../../constants'
-import { useToggle } from '../../../hooks/useToggle'
 import { MemberDetails } from './MemberDetails'
 
 interface MembershipAboutProps {
@@ -15,8 +14,10 @@ interface MembershipAboutProps {
   onClose: () => void
 }
 
+type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
+
 export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
-  const [isAboutMemberActive, toggleAboutMemberActive] = useToggle(true)
+  const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -32,19 +33,21 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
           <SidePaneTitle>My Profile</SidePaneTitle>
           <MemberInfo member={member} memberSize="l" />
           <PageTabsNav>
-            <PageTab active={isAboutMemberActive} onClick={toggleAboutMemberActive}>
+            <PageTab active={activeTab === 'DETAILS'} onClick={() => setActiveTab('DETAILS')}>
               Member details
             </PageTab>
-            <PageTab active={false} onClick={toggleAboutMemberActive}>
+            <PageTab active={activeTab === 'ACCOUNTS'} onClick={() => setActiveTab('ACCOUNTS')}>
               Accounts
             </PageTab>
-            <PageTab active={false} onClick={toggleAboutMemberActive}>
+            <PageTab active={activeTab === 'ROLES'} onClick={() => setActiveTab('ROLES')}>
               Roles
             </PageTab>
           </PageTabsNav>
         </SidePaneHeader>
         <SidePaneBody>
-          <MemberDetails member={member} />
+          {activeTab === 'DETAILS' && <MemberDetails member={member} />}
+          {activeTab === 'ACCOUNTS' && <EmptyBody>Accounts</EmptyBody>}
+          {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
         <SidePaneFooter>
           <ButtonGhostMedium>
@@ -121,6 +124,10 @@ const SidePaneBody = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`
+
+export const EmptyBody = styled.div`
+  padding: 24px;
 `
 
 const SidePaneFooter = styled.div`
