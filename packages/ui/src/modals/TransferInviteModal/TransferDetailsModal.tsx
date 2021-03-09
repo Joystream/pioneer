@@ -18,12 +18,12 @@ interface Props {
 }
 
 export function TransferDetailsModal({ onClose, icon, member }: Props) {
-  const [, setFrom] = useState<BaseMember | undefined>(member)
-  const [, setTo] = useState<BaseMember>()
+  const [from, setFrom] = useState<BaseMember | undefined>(member)
+  const [to, setTo] = useState<BaseMember>()
   const [amount, setAmount] = useNumberInput(0)
 
   const isAmountValid = !member || parseInt(amount) < member.inviteCount
-  const isDisabled = !amount || !isAmountValid
+  const isDisabled = !amount || !isAmountValid || !from || !to
   const isShowError = amount && !isAmountValid
 
   return (
@@ -39,7 +39,7 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
-            <Label htmlFor={'amount-input'}>Number of tokens</Label>
+            <Label htmlFor={'amount-input'}>Number of invites</Label>
             <NumberInput
               id="amount-input"
               value={formatTokenValue(new BN(amount))}
