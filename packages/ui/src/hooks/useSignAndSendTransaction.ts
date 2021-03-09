@@ -1,9 +1,11 @@
+import React from 'react'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { useEffect, useState } from 'react'
+import { Observable } from 'rxjs'
 import { Account } from '../common/types'
 import { useApi } from './useApi'
 import { useKeyring } from './useKeyring'
@@ -19,30 +21,39 @@ type TransactionStatus = 'READY' | 'SIGN' | 'EXTENSION' | 'PENDING' | 'SUCCESS' 
 
 const isError = (events: EventRecord[]) => events.find(({ event: { method } }) => method === 'ExtrinsicFailed')
 
-const statusCallback = (setStatus: (status: TransactionStatus) => void) => (result: ISubmittableResult) => {
-  const { status, events } = result
+const observeTransaction = (
+  transaction: Observable<ISubmittableResult>,
+  setStatus: React.Dispatch<TransactionStatus>
+) => {
+  const statusCallback = (result: ISubmittableResult) => {
+    const { status, events } = result
 
-  console.log(`Current transaction status: ${status.type}`)
+    console.log(`Current transaction status: ${status.type}`)
 
-  if (status.isReady) {
-    setStatus('PENDING')
+    if (status.isReady) {
+      setStatus('PENDING')
+    }
+
+    if (status.isInBlock) {
+      console.log('Included at block hash', JSON.stringify(status.asInBlock))
+      console.log('Events:')
+
+      events.forEach(({ event: { data, method, section }, phase }) => {
+        console.log('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
+      })
+      console.log(JSON.stringify(events))
+    }
+
+    if (!status.isFinalized) {
+      return
+    }
+
+    setStatus(isError(events) ? 'ERROR' : 'SUCCESS')
   }
 
-  if (status.isInBlock) {
-    console.log('Included at block hash', JSON.stringify(status.asInBlock))
-    console.log('Events:')
+  const errorHandler = () => setStatus('ERROR')
 
-    events.forEach(({ event: { data, method, section }, phase }) => {
-      console.log('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
-    })
-    console.log(JSON.stringify(events))
-  }
-
-  if (!status.isFinalized) {
-    return
-  }
-
-  setStatus(isError(events) ? 'ERROR' : 'SUCCESS')
+  transaction.subscribe(statusCallback, errorHandler)
 }
 
 export const useSignAndSendTransaction = ({ transaction, from, onDone }: UseSignAndSendTransactionParams) => {
@@ -61,11 +72,11 @@ export const useSignAndSendTransaction = ({ transaction, from, onDone }: UseSign
     if (keyringPair.meta.isInjected) {
       setStatus('EXTENSION')
       web3FromAddress(from.address).then(({ signer }) => {
-        transaction.signAndSend(from.address, { signer: signer }).subscribe(statusCallback(setStatus))
+        observeTransaction(transaction.signAndSend(from.address, { signer: signer }), setStatus)
       })
     } else {
       setStatus('PENDING')
-      transaction.signAndSend(keyringPair).subscribe(statusCallback(setStatus))
+      observeTransaction(transaction.signAndSend(keyringPair), setStatus)
     }
   }, [api, status])
 
