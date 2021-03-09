@@ -31,6 +31,8 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
     }
   }
 
+  const registeredAtBlock = data?.member?.registeredAtBlock
+
   const hired = 3
   const applied = 10
   const leader = 4
@@ -39,9 +41,9 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
   const terminated = 2
   const blogPosts = 42
   const initiatingLeaving = 10
-  const registeredDate = '01/07/2020, 10:00am CET'
-  const registeredBlock = '389,829'
-  const registeredNetwork = 'on Babylon network'
+  const registeredDate = registeredAtBlock?.timestamp
+  const registeredBlock = registeredAtBlock?.height
+  const registeredNetwork = `on ${registeredAtBlock?.network} network`
   const invited: MemberFieldsFragment[] = [
     {
       __typename: 'Member',
