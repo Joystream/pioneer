@@ -31,6 +31,7 @@ export type GetMembersQuery = { __typename: 'Query'; members: Array<{ __typename
 export type MemberWithDetailsFragment = {
   __typename: 'Member'
   registeredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
+  invitees?: Types.Maybe<Array<{ __typename: 'Member' } & MemberFieldsFragment>>
 } & MemberFieldsFragment
 
 export type GetMemberQueryVariables = Types.Exact<{
@@ -69,6 +70,9 @@ export const MemberWithDetailsFragmentDoc = gql`
     ...MemberFields
     registeredAtBlock {
       ...BlockFields
+    }
+    invitees {
+      ...MemberFields
     }
   }
   ${MemberFieldsFragmentDoc}

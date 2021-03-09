@@ -29,6 +29,9 @@ fragment MemberWithDetails on Member{
   registeredAtBlock {
     ...BlockFields
   }
+  invitees {
+    ...MemberFields
+  }
 }
 
 query GetMember($id: ID!) {

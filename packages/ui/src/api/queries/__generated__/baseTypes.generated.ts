@@ -415,6 +415,7 @@ export type Member = {
   boundAccounts?: Maybe<Array<Scalars['String']>>
   /** Block at which membership was created. */
   registeredAtBlock: Block
+  invitees?: Maybe<Array<Member>>
   /** Where membership came from. */
   source: MemberSource
 }

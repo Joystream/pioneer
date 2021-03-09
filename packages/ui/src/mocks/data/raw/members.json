@@ -5,11 +5,14 @@
     "controllerAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
     "name": "Alice Member",
     "handle": "alice",
-    "about": "I'm Alice",
+    "about": "Pudding muffin toffee bear claw cake. Jelly-o lemon drops icing dessert powder chocolate biscuit. Soufflé jujubes cake powder.",
     "isVerified": true,
     "isFoundingMember": true,
     "inviteCount": 3,
-    "registeredAtBlock": "block-1"
+    "registeredAtBlock": "block-1",
+    "invitees": [
+      "2", "3"
+    ]
   },
   {
     "id": "2",

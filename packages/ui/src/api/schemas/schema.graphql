@@ -607,7 +607,7 @@ type Member {
   #invitor: Member
 
   #"All members invited by this member."
-  #invitees: [Member!]
+  invitees: [Member!]
 
   #"All worker roles corresponding to this member."
   #workers: [Worker!]
