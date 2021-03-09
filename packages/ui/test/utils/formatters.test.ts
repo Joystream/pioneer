@@ -45,7 +45,7 @@ describe('formatters', () => {
     const dateString = '1983-10-01T06:42:00.155Z'
 
     it('Default format', () => {
-      expect(formatDateString(dateString)).toEqual('10/01/1983, 07:42 AM GMT+1')
+      expect(formatDateString(dateString)).toMatch(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}, [0-9]{2}:[0-9]{2} (AM|PM) [A-Z]+/)
     })
   })
 })
