@@ -31,8 +31,6 @@ interface Props {
   icon: ReactElement
 }
 
-const cleanInputValue = (value: string) => value.replace(/,/g, '')
-
 export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon }: Props) {
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
@@ -68,7 +66,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
             <NumberInput
               id="amount-input"
               value={formatTokenValue(new BN(amount))}
-              onChange={(event) => setAmount(cleanInputValue(event.target.value))}
+              onChange={(event) => setAmount(event.target.value)}
               placeholder="0"
               disabled={isValueDisabled}
             />
