@@ -36,18 +36,7 @@ export const MemberDetails = ({ member }: Props) => {
   const terminated = 2
   const blogPosts = 42
   const initiatingLeaving = 10
-  const invited: BaseMember[] = [
-    {
-      id: '123',
-      name: 'Doe_J',
-      handle: 'doj',
-      rootAccount: 'foo',
-      controllerAccount: 'bar',
-      isFoundingMember: false,
-      isVerified: false,
-      inviteCount: 0,
-    },
-  ]
+  const invitees = data.member.invitees || []
 
   return (
     <AboutTable>
@@ -83,7 +72,7 @@ export const MemberDetails = ({ member }: Props) => {
       <AboutRow>
         <MembershipLabel text="Invited" />
         <AboutDateColumn>
-          {invited.map((member) => (
+          {invitees.map((member) => (
             <MemberInfo member={member} key={member.handle} />
           ))}
         </AboutDateColumn>
