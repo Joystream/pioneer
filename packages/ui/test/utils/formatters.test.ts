@@ -1,6 +1,6 @@
 import { expect } from '@jest/globals'
 import BN from 'bn.js'
-import { formatTokenValue, shortenAddress } from '../../src/utils/formatters'
+import { formatDateString, formatTokenValue, shortenAddress } from '../../src/utils/formatters'
 
 describe('formatters', () => {
   describe('formatTokenValue', () => {
@@ -38,6 +38,14 @@ describe('formatters', () => {
 
     it('Specified length equal to address length', () => {
       expect(shortenAddress(address, address.length)).toEqual(address)
+    })
+  })
+
+  describe('formatDateString', () => {
+    const dateString = '1983-10-01T06:42:00.155Z'
+
+    it('Default format', () => {
+      expect(formatDateString(dateString)).toEqual('10/01/1983, 07:42 AM GMT+1')
     })
   })
 })

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useGetMemberQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
 import { Colors } from '../../../constants'
-import { formatTokenValue } from '../../../utils/formatters'
+import { formatDateString, formatTokenValue } from '../../../utils/formatters'
 import { ButtonGhostSmall } from '../../buttons'
 import { LabelLink } from '../../forms'
 import { BlockIcon } from '../../icons/BlockIcon'
@@ -47,7 +47,7 @@ export const MemberDetails = ({ member }: Props) => {
       <AboutRow>
         <MembershipLabel text="Registered on" />
         <AboutDateColumn>
-          <AboutText size={2}>{registeredAtBlock.timestamp}</AboutText>
+          <AboutText size={2}>{formatDateString(registeredAtBlock.timestamp)}</AboutText>
           <BlockInfo>
             <BlockIcon />
             <BlockNumber>{formatTokenValue(registeredAtBlock.height)}</BlockNumber>

@@ -9,3 +9,4 @@ ReactDOM.render(
   </Providers>,
   document.getElementById('app')
 )
+export { formatDateString } from './utils/formatters'
