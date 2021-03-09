@@ -16,9 +16,22 @@ export type MemberFieldsFragment = {
   inviteCount: any
 }
 
+export type BlockFieldsFragment = {
+  __typename: 'Block'
+  id: string
+  height: any
+  timestamp: any
+  network: Types.Network
+}
+
 export type GetMembersQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetMembersQuery = { __typename: 'Query'; members: Array<{ __typename: 'Member' } & MemberFieldsFragment> }
+
+export type MemberWithDetailsFragment = {
+  __typename: 'Member'
+  registeredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
+} & MemberFieldsFragment
 
 export type GetMemberQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']
@@ -26,7 +39,7 @@ export type GetMemberQueryVariables = Types.Exact<{
 
 export type GetMemberQuery = {
   __typename: 'Query'
-  member?: Types.Maybe<{ __typename: 'Member' } & MemberFieldsFragment>
+  member?: Types.Maybe<{ __typename: 'Member' } & MemberWithDetailsFragment>
 }
 
 export const MemberFieldsFragmentDoc = gql`
@@ -42,6 +55,24 @@ export const MemberFieldsFragmentDoc = gql`
     isVerified
     inviteCount
   }
+`
+export const BlockFieldsFragmentDoc = gql`
+  fragment BlockFields on Block {
+    id
+    height
+    timestamp
+    network
+  }
+`
+export const MemberWithDetailsFragmentDoc = gql`
+  fragment MemberWithDetails on Member {
+    ...MemberFields
+    registeredAtBlock {
+      ...BlockFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+  ${BlockFieldsFragmentDoc}
 `
 export const GetMembersDocument = gql`
   query GetMembers {
@@ -81,10 +112,10 @@ export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembe
 export const GetMemberDocument = gql`
   query GetMember($id: ID!) {
     member(where: { id: $id }) {
-      ...MemberFields
+      ...MemberWithDetails
     }
   }
-  ${MemberFieldsFragmentDoc}
+  ${MemberWithDetailsFragmentDoc}
 `
 
 /**

@@ -2,7 +2,7 @@ import { createGraphQLHandler, mirageGraphQLFieldResolver } from '@miragejs/grap
 import { createServer } from 'miragejs'
 
 import schema from '../api/schemas/schema.graphql'
-import { mockMembers } from './data'
+import { mockBlocks, mockMembers } from './data'
 
 export const makeServer = (environment = 'development') => {
   return createServer({
@@ -30,9 +30,14 @@ export const makeServer = (environment = 'development') => {
 
     // TODO - better server type
     seeds(server: any) {
+      const blocksMap = mockBlocks.reduce((map, block) => {
+        return map.set(block.id, server.schema.create('Block', { ...block }))
+      }, new Map())
+
       mockMembers.map((member) => {
         return server.schema.create('Member', {
           ...member,
+          registeredAtBlock: blocksMap.get(member.registeredAtBlock),
         })
       })
     },

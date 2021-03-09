@@ -8,7 +8,8 @@
     "about": "I'm Alice",
     "isVerified": true,
     "isFoundingMember": true,
-    "inviteCount": 3
+    "inviteCount": 3,
+    "registeredAtBlock": "block-1"
   },
   {
     "id": "2",
@@ -19,7 +20,8 @@
     "about": "Oat cake sesame snaps jelly-o jelly-o. Pudding muffin toffee bear claw cake. Croissant muffin bear claw biscuit danish. Jelly beans donut pastry sugar plum lollipop dragée. Jelly-o lemon drops icing dessert powder chocolate biscuit. Soufflé jujubes cake powder.",
     "isVerified": true,
     "isFoundingMember": false,
-    "inviteCount":  2
+    "inviteCount":  2,
+    "registeredAtBlock": "block-2"
   },
   {
     "id": "3",
@@ -30,6 +32,7 @@
     "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice.",
     "isVerified": false,
     "isFoundingMember": false,
-    "inviteCount":  5
+    "inviteCount":  5,
+    "registeredAtBlock": "block-3"
   }
 ]

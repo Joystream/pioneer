@@ -38,7 +38,7 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
   const slashed = 0
   const terminated = 2
   const blogPosts = 42
-  const InitiatingLeaving = 10
+  const initiatingLeaving = 10
   const registeredDate = '01/07/2020, 10:00am CET'
   const registeredBlock = '389,829'
   const registeredNetwork = 'on Babylon network'
@@ -143,7 +143,7 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
               </AboutRow>
               <AboutRow>
                 <MembershipLabel text="Initiating leaving" />
-                <AboutText size={2}>{InitiatingLeaving}</AboutText>
+                <AboutText size={2}>{initiatingLeaving}</AboutText>
               </AboutRow>
               <AboutRow>
                 <MembershipLabel text="Blog posts" />

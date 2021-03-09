@@ -413,6 +413,8 @@ export type Member = {
   inviteCount: Scalars['BigInt']
   /** Accounts bounded to membership. */
   boundAccounts?: Maybe<Array<Scalars['String']>>
+  /** Block at which membership was created. */
+  registeredAtBlock: Block
   /** Where membership came from. */
   source: MemberSource
 }
