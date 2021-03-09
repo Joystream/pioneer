@@ -1,22 +1,22 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
-import { ButtonGhostMedium } from '../../../components/buttons'
-import { EditSymbol } from '../../../components/icons/symbols/EditSymbol'
-import { MemberInfo } from '../../../components/MemberInfo'
-import { CloseSmallModalButton } from '../../../components/Modal'
-import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
 import { Animations, Colors } from '../../../constants'
+import { ButtonGhostMedium } from '../../buttons'
+import { EditSymbol } from '../../icons/symbols/EditSymbol'
+import { CloseSmallModalButton } from '../../Modal'
+import { PageTab, PageTabsNav } from '../../page/PageTabs'
+import { MemberInfo } from '../MemberInfo'
 import { MemberDetails } from './MemberDetails'
 
-interface MembershipAboutProps {
+interface Props {
   member: BaseMember
   onClose: () => void
 }
 
 type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
-export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
+export const MemberProfile = ({ onClose, member }: Props) => {
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -60,7 +60,7 @@ export const MembershipAbout = ({ onClose, member }: MembershipAboutProps) => {
   )
 }
 
-export const SidePaneGlass = styled.div<MembershipAboutProps>`
+export const SidePaneGlass = styled.div<Props>`
   display: flex;
   justify-content: flex-end;
   position: fixed;

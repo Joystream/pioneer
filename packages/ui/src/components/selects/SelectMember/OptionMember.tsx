@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
-import { MemberInfo } from '../../MemberInfo'
+import { MemberInfo } from '../../membership/MemberInfo'
 
 interface Props {
   member: BaseMember

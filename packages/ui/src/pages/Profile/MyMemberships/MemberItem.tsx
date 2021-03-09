@@ -3,23 +3,23 @@ import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { ButtonGhostMediumSquare, ButtonSecondarySmallSquare } from '../../../components/buttons'
 import { ArrowOutsideIcon, TransferIcon } from '../../../components/icons'
-import { MemberInfo, MemberRole } from '../../../components/MemberInfo'
+import { MemberInfo, MemberRole } from '../../../components/membership/MemberInfo'
+import { MemberProfile } from '../../../components/membership/MemberProfile'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
 import { useToggle } from '../../../hooks/useToggle'
-import { MembershipAbout } from './MembershipAbout'
 
-interface MemberProps {
+interface Props {
   member: BaseMember
 }
 
-export const MemberItem = ({ member }: MemberProps) => {
+export const MemberItem = ({ member }: Props) => {
   const [isAboutOpen, toggleAboutOpen] = useToggle()
 
   return (
     <MemberItemWrap>
       <MemberColumn>
         <MemberInfo member={member} onClick={toggleAboutOpen} showId />
-        {isAboutOpen && <MembershipAbout member={member} onClose={toggleAboutOpen} />}
+        {isAboutOpen && <MemberProfile member={member} onClose={toggleAboutOpen} />}
       </MemberColumn>
       <MemberRolesColumn>
         <MemberRole>SL</MemberRole>

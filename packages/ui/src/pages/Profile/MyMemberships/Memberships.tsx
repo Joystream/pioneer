@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
-import { AddMembershipButton } from '../../../components/AddMembershipButton'
+import { AddMembershipButton } from '../../../components/membership/AddMembershipButton'
 import { ButtonGhostMedium, ButtonPrimaryMedium, ButtonsGroup } from '../../../components/buttons'
 import { Text } from '../../../components/typography'
 import { Colors } from '../../../constants'

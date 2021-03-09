@@ -2,22 +2,22 @@ import React from 'react'
 import styled from 'styled-components'
 import { useGetMemberQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
-import { ButtonGhostSmall } from '../../../components/buttons'
-import { LabelLink } from '../../../components/forms'
-import { BlockIcon } from '../../../components/icons/BlockIcon'
-import { TransferSymbol } from '../../../components/icons/symbols/TransferSymbol'
-import { MemberInfo } from '../../../components/MemberInfo'
-import { Text } from '../../../components/typography'
-import { MembershipLabel } from '../../../components/typography/MembershipLabel'
 import { Colors } from '../../../constants'
 import { formatTokenValue } from '../../../utils/formatters'
-import { EmptyBody } from './MembershipAbout'
+import { ButtonGhostSmall } from '../../buttons'
+import { LabelLink } from '../../forms'
+import { BlockIcon } from '../../icons/BlockIcon'
+import { TransferSymbol } from '../../icons/symbols/TransferSymbol'
+import { Text } from '../../typography'
+import { MembershipLabel } from '../../typography/MembershipLabel'
+import { MemberInfo } from '../MemberInfo'
+import { EmptyBody } from './MemberProfile'
 
-interface MemberDetailsProps {
+interface Props {
   member: BaseMember
 }
 
-export const MemberDetails = ({ member }: MemberDetailsProps) => {
+export const MemberDetails = ({ member }: Props) => {
   const { data, loading } = useGetMemberQuery({
     variables: { id: member.id },
   })

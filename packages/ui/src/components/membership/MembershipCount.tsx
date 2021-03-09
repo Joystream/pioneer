@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors } from '../constants'
-import { useMembership } from '../hooks/useMembership'
-import { Badge } from './typography'
+import { Colors } from '../../constants'
+import { useMembership } from '../../hooks/useMembership'
+import { Badge } from '../typography'
 
-export function MembershipsCount() {
+export const MembershipsCount = () => {
   const { count } = useMembership()
+
   return (
     <Memberships>
       Memberships <MembershipsBadge>{count}</MembershipsBadge>
