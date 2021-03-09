@@ -58,4 +58,12 @@ describe('useNumberInput', () => {
     setValue('')
     expect(getValue()).toBe('')
   })
+
+  it('cleans the input of thousands separators', () => {
+    const { getValue, setValue } = render()
+    setValue('1,000,000.1')
+    expect(getValue()).toBe('1000000.1')
+    setValue('1,000.99999')
+    expect(getValue()).toBe('1000.99999')
+  })
 })

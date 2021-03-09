@@ -6,6 +6,7 @@ export function useNumberInput(decimals = 6) {
   const [value, setValue] = useState('')
 
   function set(value: string) {
+    value = cleanInputValue(value)
     if (NUMBER_REGEX.test(value)) {
       setValue(truncateDecimals(stripLeadingZeroes(value), decimals))
     }
@@ -37,4 +38,8 @@ function truncateDecimals(value: string, decimals: number) {
   } else {
     return value
   }
+}
+
+function cleanInputValue(value: string) {
+  return value.replace(/,/g, '')
 }
