@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Colors, Transitions } from '../constants'
-import { MyProfileIcon } from './page/Sidebar/LinksIcons/MyProfileIcon'
-import { Text } from './typography'
+import { BorderRad, Colors, Transitions } from '../../constants'
+import { MyProfileIcon } from '../page/Sidebar/LinksIcons/MyProfileIcon'
+import { Text } from '../typography'
 
 interface Props {
   onClick: () => void

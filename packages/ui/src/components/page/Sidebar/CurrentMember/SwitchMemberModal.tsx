@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MemberFieldsFragment } from '../../../../api/queries'
+import { BaseMember } from '../../../../common/types'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMembership } from '../../../../hooks/useMembership'
-import { AddMembershipButtonSwitch } from '../../../AddMembershipButtonSwitch'
-import { MemberDarkHover, MemberInfo } from '../../../MemberInfo'
-import { MembershipsCount } from '../../../MembershipCount'
+import { AddMembershipButtonSwitch } from '../../../membership/AddMembershipButtonSwitch'
+import { MemberDarkHover, MemberInfo } from '../../../membership/MemberInfo'
+import { MembershipsCount } from '../../../membership/MembershipCount'
 import { CloseSmallModalButton, Modal, ModalBody, ModalFooter, ModalTitle } from '../../../Modal'
 import { Notification, NotificationComponent } from '../../../Notification'
 
@@ -16,7 +16,7 @@ interface Props {
 
 export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
   const { members, setActive, active } = useMembership()
-  const switchMember = (member: MemberFieldsFragment) => {
+  const switchMember = (member: BaseMember) => {
     setActive(member)
     onClose()
   }

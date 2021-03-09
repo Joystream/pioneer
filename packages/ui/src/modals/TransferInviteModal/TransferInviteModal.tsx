@@ -1,11 +1,11 @@
 import React, { ReactElement, useState } from 'react'
-import { MemberFieldsFragment } from '../../api/queries'
+import { BaseMember } from '../../common/types'
 import { TransferDetailsModal } from './TransferDetailsModal'
 
 interface Props {
   onClose: () => void
   icon: ReactElement
-  member?: MemberFieldsFragment
+  member?: BaseMember
 }
 
 type ModalState = 'PREPARE'

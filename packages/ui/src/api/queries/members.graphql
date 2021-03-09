@@ -11,8 +11,31 @@ fragment MemberFields on Member {
   inviteCount
 }
 
+fragment BlockFields on Block {
+  id
+  height
+  timestamp
+  network
+}
+
 query GetMembers {
   members {
     ...MemberFields
+  }
+}
+
+fragment MemberWithDetails on Member{
+  ...MemberFields
+  registeredAtBlock {
+    ...BlockFields
+  }
+  invitees {
+    ...MemberFields
+  }
+}
+
+query GetMember($id: ID!) {
+  member (where: {id: $id}) {
+    ...MemberWithDetails
   }
 }

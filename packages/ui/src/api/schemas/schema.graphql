@@ -64,7 +64,6 @@ type Block {
 
   # All events triggered in block.
   #events: [Event!]
-
 }
 
 "Substrate Root origin type."
@@ -600,12 +599,15 @@ type Member {
   "Accounts bounded to membership."
   boundAccounts: [String!]
 
+  "Block at which membership was created."
+  registeredAtBlock: Block!
+
   #"The member which invited this member if the latter originated from an invitation.
   #This redundant field is introduced in order to facilitate the convenient reverse lookup field invitees, which cannot inspect union fields currently."
   #invitor: Member
 
   #"All members invited by this member."
-  #invitees: [Member!]
+  invitees: [Member!]
 
   #"All worker roles corresponding to this member."
   #workers: [Worker!]

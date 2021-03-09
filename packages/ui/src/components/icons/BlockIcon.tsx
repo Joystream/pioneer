@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon } from './Icon'
 
-export function BabylonIcon() {
+export function BlockIcon() {
   return (
     <Icon size="16" viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
       <path

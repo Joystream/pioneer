@@ -1,16 +1,16 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { MemberFieldsFragment } from '../api/queries'
-import { BorderRad, Colors, Fonts, Transitions } from '../constants'
-import { Avatar, AvatarImg } from './Avatar'
-import { FounderMemberIcon } from './icons/FounderMemberIcon'
-import { VerifiedMemberIcon } from './icons/VerifiedMemberIcon'
-import { Text } from './typography'
+import { BaseMember } from '../../common/types'
+import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
+import { Avatar, AvatarImg } from '../Avatar'
+import { FounderMemberIcon } from '../icons/FounderMemberIcon'
+import { VerifiedMemberIcon } from '../icons/VerifiedMemberIcon'
+import { Text } from '../typography'
 
 type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps
 
 interface MemberInfoContainerProps {
-  member: MemberFieldsFragment
+  member: BaseMember
   onClick?: () => void
 }
 

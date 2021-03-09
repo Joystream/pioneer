@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Colors, Transitions } from '../../constants'
 
 interface LabelLinkProps {
-  href: string
+  href?: string
   target?: string
   children?: string | React.ReactElement
 }
