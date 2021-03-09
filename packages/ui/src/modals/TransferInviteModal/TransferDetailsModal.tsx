@@ -1,7 +1,8 @@
 import BN from 'bn.js'
-import React, { ReactElement } from 'react'
 import { BaseMember } from '../../common/types'
 import { ButtonPrimaryMedium } from '../../components/buttons'
+import React, { ReactElement, useState } from 'react'
+import styled from 'styled-components'
 import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { SelectMember } from '../../components/selects/SelectMember'
@@ -17,8 +18,13 @@ interface Props {
 }
 
 export function TransferDetailsModal({ onClose, icon, member }: Props) {
-  const stubHandler = () => undefined
+  const [, setFrom] = useState<BaseMember | undefined>(member)
+  const [, setTo] = useState<BaseMember>()
   const [amount, setAmount] = useNumberInput(0)
+
+  const isAmountValid = !member || parseInt(amount) < member.inviteCount
+  const isDisabled = !amount || !isAmountValid
+  const isShowError = amount && !isAmountValid
 
   return (
     <Modal onClose={onClose} modalSize="m">
@@ -29,7 +35,7 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </Row>
         <Row>
           <Label>From</Label>
-          <SelectMember onChange={stubHandler} enable={!member} selected={member} />
+          <SelectMember onChange={setFrom} enable={!member} selected={member} />
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
@@ -40,18 +46,24 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
               onChange={(event) => setAmount(event.target.value)}
               placeholder="0"
             />
+            {isShowError && <ValidationErrorInfo>Foo bar</ValidationErrorInfo>}
           </AmountInputBlock>
         </TransactionAmount>
         <Row>
           <Label>To</Label>
-          <SelectMember onChange={stubHandler} enable={true} />
+          <SelectMember onChange={setTo} enable={true} />
         </Row>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimaryMedium onClick={() => null} disabled={true}>
+        <ButtonPrimaryMedium onClick={() => null} disabled={isDisabled}>
           Transfer Invites
         </ButtonPrimaryMedium>
       </ModalFooter>
     </Modal>
   )
 }
+
+const ValidationErrorInfo = styled.span`
+  color: red;
+  padding: 4px 0;
+`
