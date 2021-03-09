@@ -16,8 +16,6 @@ interface Props {
   member?: MemberFieldsFragment
 }
 
-const cleanInputValue = (value: string) => value.replace(/,/g, '')
-
 export function TransferDetailsModal({ onClose, icon, member }: Props) {
   const stubHandler = () => undefined
   const [amount, setAmount] = useNumberInput(0)
@@ -39,7 +37,7 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
             <NumberInput
               id="amount-input"
               value={formatTokenValue(new BN(amount))}
-              onChange={(event) => setAmount(cleanInputValue(event.target.value))}
+              onChange={(event) => setAmount(event.target.value)}
               placeholder="0"
             />
           </AmountInputBlock>
