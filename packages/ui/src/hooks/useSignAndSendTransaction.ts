@@ -84,7 +84,7 @@ export const useSignAndSendTransaction = ({ transaction, from, onDone }: UseSign
     if (status === 'SUCCESS' || status === 'ERROR') {
       onDone(status === 'SUCCESS', paymentInfo?.partialFee.toBn() || new BN(0))
     }
-  })
+  }, [status])
 
   return {
     send: () => setStatus('SIGN'),
