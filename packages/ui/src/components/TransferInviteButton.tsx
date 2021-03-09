@@ -1,12 +1,12 @@
 import React from 'react'
+import { BaseMember } from '../common/types'
 import { useToggle } from '../hooks/useToggle'
-import { MemberFieldsFragment } from '../api/queries'
+import { TransferInviteModal } from '../modals/TransferInviteModal'
 import { ButtonSecondarySmallSquare } from './buttons'
 import { TransferIcon } from './icons'
-import { TransferInviteModal } from '../modals/TransferInviteModal'
 
 interface Props {
-  member: MemberFieldsFragment
+  member: BaseMember
 }
 
 export function TransferInviteButton({ member }: Props) {

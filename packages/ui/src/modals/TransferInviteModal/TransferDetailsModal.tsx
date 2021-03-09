@@ -1,19 +1,19 @@
+import BN from 'bn.js'
 import React, { ReactElement } from 'react'
-import { MemberFieldsFragment } from '../../api/queries'
+import { BaseMember } from '../../common/types'
+import { ButtonPrimaryMedium } from '../../components/buttons'
 import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { AmountInputBlock, Row, TransactionAmount } from '../common'
 import { SelectMember } from '../../components/selects/SelectMember'
-import { formatTokenValue } from '../../utils/formatters'
-import BN from 'bn.js'
-import { useNumberInput } from '../../hooks/useNumberInput'
-import { ButtonPrimaryMedium } from '../../components/buttons'
 import { Text } from '../../components/typography'
+import { useNumberInput } from '../../hooks/useNumberInput'
+import { formatTokenValue } from '../../utils/formatters'
+import { AmountInputBlock, Row, TransactionAmount } from '../common'
 
 interface Props {
   onClose: () => void
   icon: ReactElement
-  member?: MemberFieldsFragment
+  member?: BaseMember
 }
 
 export function TransferDetailsModal({ onClose, icon, member }: Props) {
