@@ -1,12 +1,11 @@
 import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
-import { MemberFieldsFragment } from '../api/queries'
+import { Account, Address, BaseMember } from '../common/types'
+import { CopyComponent } from './CopyComponent'
 import { BorderRad, Colors } from '../constants'
-import { Account, Address } from '../common/types'
 import { useMembership } from '../hooks/useMembership'
 import { shortenAddress } from '../utils/formatters'
-import { CopyComponent } from '../components/CopyComponent'
 
 export const AccountInfo = React.memo(({ account }: { account: Account }) => {
   const { active } = useMembership()
@@ -66,7 +65,7 @@ const AccountName = styled.h5`
 `
 
 interface OptionalAccountTypeParams {
-  active: MemberFieldsFragment
+  active: BaseMember
   address: Address
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MemberFieldsFragment } from '../../../../api/queries'
+import { BaseMember } from '../../../../common/types'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMembership } from '../../../../hooks/useMembership'
 import { AddMembershipButtonSwitch } from '../../../AddMembershipButtonSwitch'
@@ -16,7 +16,7 @@ interface Props {
 
 export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
   const { members, setActive, active } = useMembership()
-  const switchMember = (member: MemberFieldsFragment) => {
+  const switchMember = (member: BaseMember) => {
     setActive(member)
     onClose()
   }

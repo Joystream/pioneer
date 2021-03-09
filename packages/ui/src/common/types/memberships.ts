@@ -1,3 +1,4 @@
+import { MemberFieldsFragment } from '../../api/queries'
 import { Account } from './index'
 
 export interface Member {
@@ -8,3 +9,5 @@ export interface Member {
   avatarURI?: string
   about?: string
 }
+
+export type BaseMember = Omit<MemberFieldsFragment, '__typename'>

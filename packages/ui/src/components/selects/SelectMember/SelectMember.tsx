@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { MemberFieldsFragment } from '../../../api/queries'
+import { BaseMember } from '../../../common/types'
 import { Colors, Sizes } from '../../../constants'
 import { useMembership } from '../../../hooks/useMembership'
 import { useToggle } from '../../../hooks/useToggle'
@@ -10,24 +10,24 @@ import { ArrowDownIcon } from '../../icons'
 import { OptionListMember } from './OptionListMember'
 
 interface Props {
-  onChange: (member: MemberFieldsFragment) => void
-  filter?: (member: MemberFieldsFragment) => boolean
-  selected?: MemberFieldsFragment
+  onChange: (member: BaseMember) => void
+  filter?: (member: BaseMember) => boolean
+  selected?: BaseMember
   enable?: boolean
 }
 
-export const filterMember = (filterOut: MemberFieldsFragment | undefined) => {
-  return filterOut ? (member: MemberFieldsFragment) => member.handle !== filterOut.handle : () => true
+export const filterMember = (filterOut: BaseMember | undefined) => {
+  return filterOut ? (member: BaseMember) => member.handle !== filterOut.handle : () => true
 }
 
 export const SelectMember = React.memo(({ onChange, filter, selected, enable }: Props) => {
   const { isLoading, members } = useMembership()
   const [isOpen, toggleOpen] = useToggle()
-  const [selectedOption, setSelectedOption] = useState<MemberFieldsFragment | undefined>(selected)
+  const [selectedOption, setSelectedOption] = useState<BaseMember | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
 
   const onOptionClick = useCallback(
-    (option: MemberFieldsFragment) => {
+    (option: BaseMember) => {
       toggleOpen()
       setSelectedOption(option)
       onChange(option)

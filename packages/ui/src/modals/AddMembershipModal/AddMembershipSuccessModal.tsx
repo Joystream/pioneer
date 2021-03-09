@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MemberFieldsFragment } from '../../api/queries'
-import { Member } from '../../common/types'
+import { BaseMember, Member } from '../../common/types'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/MemberInfo'
@@ -21,7 +20,7 @@ export function AddMembershipSuccessModal({ onClose, member }: Props) {
       <ModalBody>
         <Text>You have just successfully create a new membership</Text>
         <MemberRow>
-          <MemberInfo member={(member as unknown) as MemberFieldsFragment} />
+          <MemberInfo member={(member as unknown) as BaseMember} />
         </MemberRow>
       </ModalBody>
       <ModalFooter>

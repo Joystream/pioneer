@@ -1,13 +1,14 @@
 import { useContext } from 'react'
-import { MemberFieldsFragment, useGetMembersQuery } from '../api/queries'
+import { useGetMembersQuery } from '../api/queries'
+import { BaseMember } from '../common/types'
 import { MembershipContext } from '../providers/membership/context'
 
 interface UseMembership {
   count: number
-  members: MemberFieldsFragment[]
+  members: BaseMember[]
   isLoading: boolean
-  active: MemberFieldsFragment | undefined
-  setActive: (member: MemberFieldsFragment) => void
+  active: BaseMember | undefined
+  setActive: (member: BaseMember) => void
 }
 
 export function useMembership(): UseMembership {

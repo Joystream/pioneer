@@ -1,17 +1,17 @@
 import React, { ReactNode, useState } from 'react'
-import { MemberFieldsFragment } from '../../api/queries'
+import { BaseMember } from '../../common/types'
 import { MembershipContext } from './context'
 
 interface Props {
   children: ReactNode
 }
 export interface UseMembership {
-  active?: MemberFieldsFragment
-  setActive: (member: MemberFieldsFragment) => void
+  active?: BaseMember
+  setActive: (member: BaseMember) => void
 }
 
 export const MembershipContextProvider = (props: Props) => {
-  const [active, setActive] = useState<MemberFieldsFragment>()
+  const [active, setActive] = useState<BaseMember>()
 
   const value = {
     active,

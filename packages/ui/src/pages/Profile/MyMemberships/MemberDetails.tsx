@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MemberFieldsFragment, useGetMemberQuery } from '../../../api/queries'
+import { useGetMemberQuery } from '../../../api/queries'
+import { BaseMember } from '../../../common/types'
 import { ButtonGhostSmall } from '../../../components/buttons'
 import { LabelLink } from '../../../components/forms'
 import { BabylonIcon } from '../../../components/icons/BabylonIcon'
@@ -12,7 +13,7 @@ import { Colors } from '../../../constants'
 import { EmptyBody } from './MembershipAbout'
 
 interface MemberDetailsProps {
-  member: MemberFieldsFragment
+  member: BaseMember
 }
 
 export const MemberDetails = ({ member }: MemberDetailsProps) => {
@@ -33,9 +34,8 @@ export const MemberDetails = ({ member }: MemberDetailsProps) => {
   const registeredDate = registeredAtBlock?.timestamp
   const registeredBlock = registeredAtBlock?.height
   const registeredNetwork = `on ${registeredAtBlock?.network} network`
-  const invited: MemberFieldsFragment[] = [
+  const invited: BaseMember[] = [
     {
-      __typename: 'Member',
       id: '123',
       name: 'Doe_J',
       handle: 'doj',

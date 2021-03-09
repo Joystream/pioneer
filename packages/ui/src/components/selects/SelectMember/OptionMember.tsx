@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MemberFieldsFragment } from '../../../api/queries'
+import { BaseMember } from '../../../common/types'
 import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
 import { MemberInfo } from '../../MemberInfo'
 
 interface Props {
-  member: MemberFieldsFragment
-  onChange?: (member: MemberFieldsFragment) => void
+  member: BaseMember
+  onChange?: (member: BaseMember) => void
 }
 
 export function OptionMember({ member, onChange }: Props) {

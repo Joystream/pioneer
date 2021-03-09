@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { MemberFieldsFragment } from '../../../api/queries'
+import { BaseMember } from '../../../common/types'
 import { ButtonGhostMedium } from '../../../components/buttons'
 import { EditSymbol } from '../../../components/icons/symbols/EditSymbol'
 import { MemberInfo } from '../../../components/MemberInfo'
@@ -10,7 +10,7 @@ import { Animations, Colors } from '../../../constants'
 import { MemberDetails } from './MemberDetails'
 
 interface MembershipAboutProps {
-  member: MemberFieldsFragment
+  member: BaseMember
   onClose: () => void
 }
 

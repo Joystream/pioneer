@@ -1,8 +1,8 @@
 import React from 'react'
-import { ButtonPrimaryMedium, ButtonGhostMedium, ButtonsGroup } from '../../../components/buttons/Buttons'
 import styled from 'styled-components'
-import { MemberFieldsFragment } from '../../../api/queries'
+import { BaseMember } from '../../../common/types'
 import { AddMembershipButton } from '../../../components/AddMembershipButton'
+import { ButtonGhostMedium, ButtonPrimaryMedium, ButtonsGroup } from '../../../components/buttons'
 import { Text } from '../../../components/typography'
 import { Colors } from '../../../constants'
 import { useMembership } from '../../../hooks/useMembership'
@@ -47,7 +47,7 @@ export function Memberships() {
 
 interface MembersSectionProps {
   title: string
-  members: MemberFieldsFragment[]
+  members: BaseMember[]
 }
 
 const MembersSection = ({ title, members }: MembersSectionProps) => (
