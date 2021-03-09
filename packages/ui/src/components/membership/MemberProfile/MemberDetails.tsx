@@ -28,15 +28,14 @@ export const MemberDetails = ({ member }: Props) => {
 
   const registeredAtBlock = data.member.registeredAtBlock
 
-  const hired = 3
-  const applied = 10
-  const leader = 4
-  const councilMember = 3
-  const slashed = 0
-  const terminated = 2
-  const blogPosts = 42
-  const initiatingLeaving = 10
-  const invitees = data.member.invitees || []
+  const hired = '-'
+  const applied = '-'
+  const leader = '-'
+  const councilMember = '-'
+  const slashed = '-'
+  const terminated = '-'
+  const blogPosts = '-'
+  const initiatingLeaving = '-'
 
   return (
     <AboutTable>
@@ -51,7 +50,7 @@ export const MemberDetails = ({ member }: Props) => {
           <BlockInfo>
             <BlockIcon />
             <BlockNumber>{formatTokenValue(registeredAtBlock.height)}</BlockNumber>
-            <BlockNetworkInfo size={3}>on ${registeredAtBlock.network} network</BlockNetworkInfo>
+            <BlockNetworkInfo size={3}>on {registeredAtBlock.network} network</BlockNetworkInfo>
           </BlockInfo>
         </AboutDateColumn>
       </AboutRow>
@@ -72,7 +71,7 @@ export const MemberDetails = ({ member }: Props) => {
       <AboutRow>
         <MembershipLabel text="Invited" />
         <AboutDateColumn>
-          {invitees.map((member) => (
+          {(data.member.invitees || []).map((member) => (
             <MemberInfo member={member} key={member.handle} />
           ))}
         </AboutDateColumn>
