@@ -2,19 +2,19 @@
   {
     "id": "block-1",
     "network": "Babylon",
-    "height": "1",
+    "height": "321001",
     "timestamp": "2021-03-09T10:18:04.155Z"
   },
   {
     "id": "block-2",
     "network": "Babylon",
-    "height": "2",
+    "height": "321002",
     "timestamp": "2021-03-09T10:28:04.155Z"
   },
   {
     "id": "block-3",
     "network": "Babylon",
-    "height": "3",
+    "height": "321003",
     "timestamp": "2021-03-09T10:38:04.155Z"
   }
 ]

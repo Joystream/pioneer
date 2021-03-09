@@ -4,12 +4,13 @@ import { useGetMemberQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
 import { ButtonGhostSmall } from '../../../components/buttons'
 import { LabelLink } from '../../../components/forms'
-import { BabylonIcon } from '../../../components/icons/BabylonIcon'
+import { BlockIcon } from '../../../components/icons/BlockIcon'
 import { TransferSymbol } from '../../../components/icons/symbols/TransferSymbol'
 import { MemberInfo } from '../../../components/MemberInfo'
 import { Text } from '../../../components/typography'
 import { MembershipLabel } from '../../../components/typography/MembershipLabel'
 import { Colors } from '../../../constants'
+import { formatTokenValue } from '../../../utils/formatters'
 import { EmptyBody } from './MembershipAbout'
 
 interface MemberDetailsProps {
@@ -21,7 +22,11 @@ export const MemberDetails = ({ member }: MemberDetailsProps) => {
     variables: { id: member.id },
   })
 
-  const registeredAtBlock = data?.member?.registeredAtBlock
+  if (loading || !data || !data.member) {
+    return <EmptyBody>Loading...</EmptyBody>
+  }
+
+  const registeredAtBlock = data.member.registeredAtBlock
 
   const hired = 3
   const applied = 10
@@ -31,9 +36,6 @@ export const MemberDetails = ({ member }: MemberDetailsProps) => {
   const terminated = 2
   const blogPosts = 42
   const initiatingLeaving = 10
-  const registeredDate = registeredAtBlock?.timestamp
-  const registeredBlock = registeredAtBlock?.height
-  const registeredNetwork = `on ${registeredAtBlock?.network} network`
   const invited: BaseMember[] = [
     {
       id: '123',
@@ -47,10 +49,6 @@ export const MemberDetails = ({ member }: MemberDetailsProps) => {
     },
   ]
 
-  if (loading || !data) {
-    return <EmptyBody>Loading...</EmptyBody>
-  }
-
   return (
     <AboutTable>
       <AboutColumn>
@@ -60,12 +58,12 @@ export const MemberDetails = ({ member }: MemberDetailsProps) => {
       <AboutRow>
         <MembershipLabel text="Registered on" />
         <AboutDateColumn>
-          <AboutText size={2}>{registeredDate}</AboutText>
-          <BabylonInfo>
-            <BabylonIcon />
-            <BabylonCount href="#">{registeredBlock}</BabylonCount>
-            <BabylonText size={3}>{registeredNetwork}</BabylonText>
-          </BabylonInfo>
+          <AboutText size={2}>{registeredAtBlock.timestamp}</AboutText>
+          <BlockInfo>
+            <BlockIcon />
+            <BlockNumber>{formatTokenValue(registeredAtBlock.height)}</BlockNumber>
+            <BlockNetworkInfo size={3}>on ${registeredAtBlock.network} network</BlockNetworkInfo>
+          </BlockInfo>
         </AboutDateColumn>
       </AboutRow>
       <AboutRow>
@@ -160,7 +158,7 @@ const AboutDateColumn = styled.div`
   width: 100%;
   height: fit-content;
 `
-const BabylonInfo = styled.span`
+const BlockInfo = styled.span`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 4px;
@@ -169,10 +167,10 @@ const BabylonInfo = styled.span`
   height: fit-content;
   color: ${Colors.Black[400]};
 `
-const BabylonText = styled(Text)`
+const BlockNetworkInfo = styled(Text)`
   color: ${Colors.Black[400]};
 `
-const BabylonCount = styled(LabelLink)`
+const BlockNumber = styled(LabelLink)`
   font-size: inherit;
   line-height: inherit;
 `
