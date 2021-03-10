@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import { Account, Address, BaseMember } from '../common/types'
 import { CopyComponent } from './CopyComponent'
 import { BorderRad, Colors } from '../constants'
-import { useMembership } from '../hooks/useMembership'
+import { useMyMemberships } from '../hooks/useMyMemberships'
 import { shortenAddress } from '../utils/formatters'
 
 export const AccountInfo = React.memo(({ account }: { account: Account }) => {
-  const { active } = useMembership()
+  const { active } = useMyMemberships()
 
   return (
     <AccountInfoWrap>

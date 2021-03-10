@@ -1,8 +1,9 @@
-import { createGraphQLHandler, mirageGraphQLFieldResolver } from '@miragejs/graphql'
+import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer } from 'miragejs'
 
 import schema from '../api/schemas/schema.graphql'
 import { mockBlocks, mockMembers } from './data'
+import { getMemberResolver, getMembersResolver } from './resolvers'
 
 export const makeServer = (environment = 'development') => {
   return createServer({
@@ -16,12 +17,8 @@ export const makeServer = (environment = 'development') => {
           root: undefined,
           resolvers: {
             Query: {
-              member: (obj: any, args: any, context: any, info: any) => {
-                const resolverArgs = {
-                  id: args.where.id,
-                }
-                return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
-              },
+              member: getMemberResolver,
+              members: getMembersResolver,
             },
           },
         })

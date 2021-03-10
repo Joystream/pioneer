@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { BaseMember } from '../../../common/types'
-import { useMembership } from '../../../hooks/useMembership'
+import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { useToggle } from '../../../hooks/useToggle'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
@@ -13,7 +13,7 @@ export const filterMember = (filterOut: BaseMember | undefined) => {
 }
 
 export const SelectMember = React.memo(({ onChange, filter, selected, disabled }: SelectProps<BaseMember>) => {
-  const { isLoading, members } = useMembership()
+  const { isLoading, members } = useMyMemberships()
   const [isOpen, toggleOpen] = useToggle()
   const [selectedOption, setSelectedOption] = useState<BaseMember | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)

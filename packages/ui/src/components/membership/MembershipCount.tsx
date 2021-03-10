@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Colors } from '../../constants'
-import { useMembership } from '../../hooks/useMembership'
+import { useMyMemberships } from '../../hooks/useMyMemberships'
 import { Badge } from '../typography'
 
 export const MembershipsCount = () => {
-  const { count } = useMembership()
+  const { count } = useMyMemberships()
 
   return (
     <Memberships>
