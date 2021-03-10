@@ -1,11 +1,11 @@
 import BN from 'bn.js'
 import { BaseMember } from '../../common/types'
 import { ButtonPrimaryMedium } from '../../components/buttons'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { SelectMember } from '../../components/selects/SelectMember'
+import { filterMember, SelectMember } from '../../components/selects/SelectMember'
 import { Text } from '../../components/typography'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
@@ -21,8 +21,9 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
   const [from, setFrom] = useState<BaseMember | undefined>(member)
   const [to, setTo] = useState<BaseMember>()
   const [amount, setAmount] = useNumberInput(0)
+  const filterRecipient = useCallback(filterMember(from), [from])
 
-  const isAmountValid = !member || parseInt(amount) < member.inviteCount
+  const isAmountValid = !from || parseInt(amount) < from.inviteCount
   const isDisabled = !amount || !isAmountValid || !from || !to
   const isShowError = amount && !isAmountValid
 
@@ -51,7 +52,7 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </TransactionAmount>
         <Row>
           <Label>To</Label>
-          <SelectMember onChange={setTo} enable={true} />
+          <SelectMember onChange={setTo} filter={filterRecipient} />
         </Row>
       </ModalBody>
       <ModalFooter>
