@@ -4,7 +4,7 @@ import { BaseMember } from '../../common/types'
 import { ButtonPrimaryMedium } from '../../components/buttons'
 import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { SelectMember } from '../../components/selects/SelectMember'
+import { SelectMember } from '../../components/membership/SelectMember'
 import { Text } from '../../components/typography'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
@@ -29,7 +29,7 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </Row>
         <Row>
           <Label>From</Label>
-          <SelectMember onChange={stubHandler} enable={!member} selected={member} />
+          <SelectMember onChange={stubHandler} disabled={!!member} selected={member} />
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
@@ -44,11 +44,11 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </TransactionAmount>
         <Row>
           <Label>To</Label>
-          <SelectMember onChange={stubHandler} enable={true} />
+          <SelectMember onChange={stubHandler} />
         </Row>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimaryMedium onClick={() => null} disabled={true}>
+        <ButtonPrimaryMedium onClick={() => null} disabled>
           Transfer Invites
         </ButtonPrimaryMedium>
       </ModalFooter>

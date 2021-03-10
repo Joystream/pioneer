@@ -41,9 +41,9 @@ export const AccountRow = styled.div`
   background-color: ${Colors.White};
 `
 export const LockedAccount = styled(AccountRow)`
-  height: ${Sizes.accountSelectHeight};
-  min-height: ${Sizes.accountSelectHeight};
-  max-height: ${Sizes.accountSelectHeight};
+  height: ${Sizes.selectHeight};
+  min-height: ${Sizes.selectHeight};
+  max-height: ${Sizes.selectHeight};
   background-color: ${Colors.Black[75]};
   border: 1px solid ${Colors.Black[200]};
 `
