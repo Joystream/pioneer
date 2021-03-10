@@ -32,7 +32,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, enable }: 
       setSelectedOption(option)
       onChange(option)
     },
-    [filter]
+    [filter, toggleOpen]
   )
 
   useEffect(() => {
@@ -59,22 +59,14 @@ export const SelectMember = React.memo(({ onChange, filter, selected, enable }: 
 
   return (
     <SelectComponent ref={selectNode}>
-      <Toggle
-        onClick={() => {
-          if (enable !== false) {
-            toggleOpen()
-          }
-        }}
-        isOpen={isOpen}
-        enable={enable}
-      >
+      <Toggle onClick={toggleOpen} isOpen={isOpen} enable={enable}>
         {selectedOption && (
           <SelectedOption>
             <MemberInfo member={selectedOption} />
           </SelectedOption>
         )}
-        {!selectedOption && (
-          <Empty type={'text'} placeholder={'Select Member or type a member'} autoComplete="off" disabled={!enable} />
+        {(!selectedOption || isOpen) && (
+          <Empty type="text" placeholder="Select Member or type a member" autoComplete="off" disabled={!enable} />
         )}
         <ToggleButton disabled={!enable}>
           <ArrowDownIcon />
