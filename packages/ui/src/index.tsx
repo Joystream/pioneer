@@ -9,7 +9,3 @@ ReactDOM.render(
   </Providers>,
   document.getElementById('app')
 )
-export { SelectComponent } from './components/selects/components'
-export { EmptyOption } from './components/selects/components'
-export { SelectedOption } from './components/selects/components'
-export { SelectProps } from './components/selects/types'
