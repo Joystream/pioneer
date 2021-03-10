@@ -34,8 +34,8 @@ export const Toggle = styled.div<Props>`
   align-items: center;
   width: 100%;
   height: 100%;
-  min-height: ${Sizes.accountSelectHeight};
-  max-height: ${Sizes.accountSelectHeight};
+  min-height: ${Sizes.selectHeight};
+  max-height: ${Sizes.selectHeight};
   margin: 0;
   padding: 0;
   border: 1px solid ${({ disabled }) => (disabled ? Colors.Black[200] : Colors.Black[300])};
