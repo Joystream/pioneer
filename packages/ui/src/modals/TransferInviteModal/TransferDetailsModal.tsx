@@ -5,11 +5,12 @@ import React, { ReactElement, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
+import { AmountInputBlock, LockedAccount, Row, TransactionAmount } from '../common'
 import { filterMember, SelectMember } from '../../components/selects/SelectMember'
 import { Text } from '../../components/typography'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
-import { AmountInputBlock, Row, TransactionAmount } from '../common'
+import { MemberInfo } from '../../components/membership/MemberInfo'
 
 interface Props {
   onClose: () => void
@@ -36,18 +37,18 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </Row>
         <Row>
           <Label>From</Label>
-          <SelectMember onChange={setFrom} enable={!member} selected={member} />
+          {member ? <SelectedMember member={member} /> : <SelectMember onChange={setFrom} enable={!member} selected={from} />}
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
-            <Label htmlFor={'amount-input'}>Number of invites</Label>
+            <Label htmlFor={'amount-input'}>Number of Invites</Label>
             <NumberInput
               id="amount-input"
               value={formatTokenValue(new BN(amount))}
               onChange={(event) => setAmount(event.target.value)}
               placeholder="0"
             />
-            {isShowError && <ValidationErrorInfo>Foo bar</ValidationErrorInfo>}
+            {isShowError && <ValidationErrorInfo>You only have {from?.inviteCount} invites left.</ValidationErrorInfo>}
           </AmountInputBlock>
         </TransactionAmount>
         <Row>
@@ -68,3 +69,7 @@ const ValidationErrorInfo = styled.span`
   color: red;
   padding: 4px 0;
 `
+
+function SelectedMember({ member }: { member: BaseMember }) {
+  return <LockedAccount><MemberInfo member={member} /></LockedAccount>
+}
