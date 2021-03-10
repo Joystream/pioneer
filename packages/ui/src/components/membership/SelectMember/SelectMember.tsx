@@ -17,6 +17,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, disabled }
   const [isOpen, toggleOpen] = useToggle()
   const [selectedOption, setSelectedOption] = useState<BaseMember | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
+  const options = members.filter(filter || (() => true))
 
   const onOptionClick = useCallback(
     (option: BaseMember) => {
@@ -69,7 +70,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, disabled }
           <ArrowDownIcon />
         </ToggleButton>
       </Toggle>
-      {!isLoading && isOpen && <OptionListMember onChange={onOptionClick} options={members} />}
+      {!isLoading && isOpen && <OptionListMember onChange={onOptionClick} options={options} />}
     </SelectComponent>
   )
 })
