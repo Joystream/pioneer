@@ -23,7 +23,7 @@ export const ToggleButton = styled(ButtonGhostMediumSquare)`
 
 interface Props {
   isOpen: boolean
-  enable?: boolean
+  disabled?: boolean
 }
 
 export const Toggle = styled.div<Props>`
@@ -34,24 +34,24 @@ export const Toggle = styled.div<Props>`
   align-items: center;
   width: 100%;
   height: 100%;
-  min-height: ${Sizes.accountSelectHeight};
-  max-height: ${Sizes.accountSelectHeight};
+  min-height: ${Sizes.selectHeight};
+  max-height: ${Sizes.selectHeight};
   margin: 0;
   padding: 0;
-  border: 1px solid ${(props) => (props.enable !== false ? Colors.Black[300] : Colors.Black[200])};
+  border: 1px solid ${({ disabled }) => (disabled ? Colors.Black[200] : Colors.Black[300])};
   border-radius: ${BorderRad.s};
-  background-color: ${(props) => (props.enable !== false ? Colors.White : Colors.Black[75])};
+  background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : Colors.White)};
   font-size: 1em;
-  cursor: ${(props) => (props.enable !== false ? 'pointer' : 'not-allowed')};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: ${Transitions.all};
 
   ${ToggleButton} ${Icon} {
     transition: ${Transitions.all};
-    transform: scaleY(${(props) => (props.isOpen ? '-1' : '1')});
+    transform: scaleY(${({ isOpen }) => (isOpen ? '-1' : '1')});
   }
 
   &:hover {
-    border-color: ${(props) => (props.enable !== false ? Colors.Blue[200] : Colors.Black[200])};
+    border-color: ${({ disabled }) => (disabled ? Colors.Black[200] : Colors.Blue[200])};
   }
 
   &:focus-within,

@@ -18,17 +18,11 @@ import { setupMockServer } from '../mocks/server'
 
 const selectMember = (label: string, name: string, getByText: (text: Matcher) => HTMLElement) => {
   const labelElement = getByText(/^to$/i)
-  const parentNode = labelElement.parentNode
+  const parentNode = labelElement.parentElement
   const button = parentNode?.querySelector('div > button')
 
   expect(button).toBeDefined()
   button && fireEvent.click(button)
-
-  const elements = Array.from(parentNode?.querySelectorAll('ul > li'))
-  const found = parentNode?.querySelectorAll('ul > li') && elements.find((li) => li.textContent?.match(name))
-
-  expect(found).toBeDefined()
-  found && fireEvent.click(found)
 }
 
 const members: MemberFieldsFragment[] = []

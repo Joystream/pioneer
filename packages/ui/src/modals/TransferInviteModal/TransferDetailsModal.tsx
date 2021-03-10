@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { AmountInputBlock, LockedAccount, Row, TransactionAmount } from '../common'
-import { filterMember, SelectMember } from '../../components/selects/SelectMember'
+import { filterMember, SelectMember } from '../../components/membership/SelectMember'
 import { Text } from '../../components/typography'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
@@ -40,7 +40,7 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
           {member ? (
             <SelectedMember member={member} />
           ) : (
-            <SelectMember onChange={setFrom} enable={!member} selected={from} />
+            <SelectMember onChange={setFrom} disabled={!!member} selected={from} />
           )}
         </Row>
         <TransactionAmount>

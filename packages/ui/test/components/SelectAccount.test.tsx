@@ -2,7 +2,7 @@ import { beforeAll, expect } from '@jest/globals'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
-import { SelectAccount } from '../../src/components/selects/SelectAccount'
+import { SelectAccount } from '../../src/components/account/SelectAccount'
 import { MockQueryNodeProviders } from '../helpers/providers'
 import { setupMockServer } from '../mocks/server'
 

@@ -1,4 +1,4 @@
-import { filterByText } from '../../src/components/selects/SelectAccount/helpers'
+import { filterByText } from '../../src/components/account/SelectAccount/helpers'
 
 describe('filterByText', () => {
   const mary = { name: 'Mary', address: '5tyW46xGFHne2UhjJM694Xgs5mUiveU4sbTyGBzmstUspZC9' }
