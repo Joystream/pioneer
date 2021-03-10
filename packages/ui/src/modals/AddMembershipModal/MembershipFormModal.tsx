@@ -83,7 +83,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               <Label>I was referred by a member: </Label>
               <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
             </InlineToggleWrap>
-            <SelectMember onChange={stubHandler} enable={isReferred} />
+            <SelectMember onChange={stubHandler} disabled={!isReferred} />
           </Row>
 
           <Row>

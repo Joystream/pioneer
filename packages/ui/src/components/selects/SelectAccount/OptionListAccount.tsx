@@ -1,15 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad, Shadows, Sizes, Transitions, Colors } from '../../../constants'
 import { Account } from '../../../common/types'
-import { OptionAccount, OptionComponentContainer, OptionComponent } from './OptionAccount'
+import { BorderRad, Colors, Shadows, Sizes, Transitions } from '../../../constants'
+import { OptionListProps } from '../types'
+import { OptionAccount, OptionComponent, OptionComponentContainer } from './OptionAccount'
 
-interface Props {
-  options: Array<Account>
-  onChange: (account: Account) => void
-}
-
-export const OptionListAccount = React.memo(({ options, onChange }: Props) => (
+export const OptionListAccount = React.memo(({ options, onChange }: OptionListProps<Account>) => (
   <OptionsListComponent>
     {options.map((account) => (
       <OptionAccount key={account.address} account={account} onChange={onChange} />

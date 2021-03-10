@@ -12,3 +12,4 @@ ReactDOM.render(
 export { SelectComponent } from './components/selects/selects'
 export { EmptyOption } from './components/selects/selects'
 export { SelectedOption } from './components/selects/selects'
+export { SelectProps } from './components/selects/types'

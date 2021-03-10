@@ -29,7 +29,7 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </Row>
         <Row>
           <Label>From</Label>
-          <SelectMember onChange={stubHandler} enable={!member} selected={member} />
+          <SelectMember onChange={stubHandler} disabled={!!member} selected={member} />
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
@@ -44,11 +44,11 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </TransactionAmount>
         <Row>
           <Label>To</Label>
-          <SelectMember onChange={stubHandler} enable={true} />
+          <SelectMember onChange={stubHandler} />
         </Row>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimaryMedium onClick={() => null} disabled={true}>
+        <ButtonPrimaryMedium onClick={() => null} disabled>
           Transfer Invites
         </ButtonPrimaryMedium>
       </ModalFooter>

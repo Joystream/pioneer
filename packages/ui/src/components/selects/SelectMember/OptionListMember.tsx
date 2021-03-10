@@ -2,14 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { BorderRad, Colors, Shadows, Sizes, Transitions } from '../../../constants'
+import { OptionListProps } from '../types'
 import { OptionComponent, OptionComponentContainer, OptionMember } from './OptionMember'
 
-interface Props {
-  options: BaseMember[]
-  onChange: (member: BaseMember) => void
-}
-
-export const OptionListMember = React.memo(({ options, onChange }: Props) => (
+export const OptionListMember = React.memo(({ options, onChange }: OptionListProps<BaseMember>) => (
   <OptionsListComponent>
     {options.map((member) => (
       <OptionMember key={member.handle} member={member} onChange={onChange} />

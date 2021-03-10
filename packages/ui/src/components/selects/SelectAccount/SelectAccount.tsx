@@ -11,20 +11,15 @@ import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
 import { TokenValue } from '../../typography'
 import { EmptyOption, SelectComponent, SelectedOption } from '../selects'
+import { SelectProps } from '../types'
 import { filterByText, isValidAddress } from './helpers'
 import { OptionListAccount } from './OptionListAccount'
-
-interface Props {
-  onChange: (account: Account) => void
-  filter?: (account: Account) => boolean
-  selected?: Account
-}
 
 export const filterAccount = (filterOut: Account | undefined) => {
   return filterOut ? (account: Account) => account.address !== filterOut.address : () => true
 }
 
-export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
+export const SelectAccount = React.memo(({ onChange, filter, selected }: SelectProps<Account>) => {
   const { allAccounts } = useAccounts()
   const options = allAccounts.filter(filter || (() => true))
   const [isOpen, toggleOpen] = useToggle()

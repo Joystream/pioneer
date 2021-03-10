@@ -6,20 +6,14 @@ import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
 import { MemberInfo } from '../../membership/MemberInfo'
 import { EmptyOption, SelectComponent, SelectedOption } from '../selects'
+import { SelectProps } from '../types'
 import { OptionListMember } from './OptionListMember'
-
-interface Props {
-  onChange: (member: BaseMember) => void
-  filter?: (member: BaseMember) => boolean
-  selected?: BaseMember
-  enable?: boolean
-}
 
 export const filterMember = (filterOut: BaseMember | undefined) => {
   return filterOut ? (member: BaseMember) => member.handle !== filterOut.handle : () => true
 }
 
-export const SelectMember = React.memo(({ onChange, filter, selected, enable }: Props) => {
+export const SelectMember = React.memo(({ onChange, filter, selected, disabled }: SelectProps<BaseMember>) => {
   const { isLoading, members } = useMembership()
   const [isOpen, toggleOpen] = useToggle()
   const [selectedOption, setSelectedOption] = useState<BaseMember | undefined>(selected)
@@ -58,16 +52,21 @@ export const SelectMember = React.memo(({ onChange, filter, selected, enable }: 
 
   return (
     <SelectComponent ref={selectNode}>
-      <Toggle onClick={toggleOpen} isOpen={isOpen} enable={enable}>
+      <Toggle onClick={toggleOpen} isOpen={isOpen} disabled={disabled}>
         {selectedOption && (
           <SelectedOption>
             <MemberInfo member={selectedOption} />
           </SelectedOption>
         )}
         {(!selectedOption || isOpen) && (
-          <EmptyOption type="text" placeholder="Select Member or type a member" autoComplete="off" disabled={!enable} />
+          <EmptyOption
+            type="text"
+            placeholder="Select Member or type a member"
+            autoComplete="off"
+            disabled={disabled}
+          />
         )}
-        <ToggleButton disabled={!enable}>
+        <ToggleButton disabled={disabled}>
           <ArrowDownIcon />
         </ToggleButton>
       </Toggle>
