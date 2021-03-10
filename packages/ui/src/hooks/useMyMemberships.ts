@@ -1,5 +1,5 @@
-import { useContext, useEffect } from 'react'
-import { useGetMembersLazyQuery } from '../api/queries'
+import { useContext } from 'react'
+import { useGetMembersQuery } from '../api/queries'
 import { BaseMember } from '../common/types'
 import { MembershipContext } from '../providers/membership/context'
 import { useAccounts } from './useAccounts'
@@ -16,14 +16,8 @@ export function useMyMemberships(): UseMembership {
   const { hasAccounts, allAccounts } = useAccounts()
   const addresses = allAccounts.map((account) => account.address)
   const options = hasAccounts ? { variables: { rootAccount_in: addresses } } : undefined
-  const [load, { called, data, loading, error }] = useGetMembersLazyQuery(options)
+  const { data, loading, error } = useGetMembersQuery(options)
   const { active, setActive } = useContext(MembershipContext)
-
-  console.log('useMyMemberships', hasAccounts)
-
-  useEffect(() => {
-    hasAccounts && !called && load()
-  }, [hasAccounts])
 
   if (error) {
     console.error(error)
@@ -32,5 +26,5 @@ export function useMyMemberships(): UseMembership {
   const count = data?.members.length ?? 0
   const members = data?.members ?? []
 
-  return { count, members, isLoading: !called || loading, active, setActive }
+  return { count, members, isLoading: loading, active, setActive }
 }

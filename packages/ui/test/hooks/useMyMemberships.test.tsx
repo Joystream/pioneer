@@ -23,7 +23,7 @@ jest.mock('../../src/hooks/useAccounts', () => {
   }
 })
 
-describe.skip('useMyMemberships', () => {
+describe('useMyMemberships', () => {
   const mockServer = setupMockServer()
 
   afterEach(() => {
@@ -43,12 +43,9 @@ describe.skip('useMyMemberships', () => {
   })
 
   it('No matches returns empty state', async () => {
-    const { result, rerender } = renderUseMembership()
+    const { result, waitForNextUpdate } = renderUseMembership()
 
-    act(() => {
-      useAccounts.hasAccounts = true
-      rerender()
-    })
+    await waitForNextUpdate()
 
     expect(result.current).toMatchObject({
       active: undefined,
