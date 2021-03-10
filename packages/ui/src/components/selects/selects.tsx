@@ -1,5 +1,19 @@
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Shadows, Sizes, Transitions } from '../../constants'
+
+interface Props {
+  children: ReactNode
+  onClick: () => void
+}
+
+export const Option = ({ children, onClick }: Props) => {
+  return (
+    <OptionComponentContainer onClick={onClick}>
+      <OptionComponent>{children}</OptionComponent>
+    </OptionComponentContainer>
+  )
+}
 
 export const SelectedOption = styled.div`
   display: grid;
@@ -10,6 +24,7 @@ export const SelectedOption = styled.div`
   max-height: ${Sizes.selectHeight};
   padding: 10px 28px 10px 16px;
 `
+
 export const EmptyOption = styled.input`
   font-size: 16px;
   line-height: 24px;
@@ -32,6 +47,7 @@ export const EmptyOption = styled.input`
     cursor: not-allowed;
   }
 `
+
 export const SelectComponent = styled.div`
   display: flex;
   position: relative;
@@ -39,6 +55,7 @@ export const SelectComponent = styled.div`
   height: 100%;
   align-items: center;
 `
+
 export const OptionComponentContainer = styled.li`
   display: flex;
   width: 100%;
@@ -47,6 +64,7 @@ export const OptionComponentContainer = styled.li`
   border-radius: ${BorderRad.s};
   background-color: transparent;
 `
+
 export const OptionComponent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -68,6 +86,7 @@ export const OptionComponent = styled.div`
     outline: none;
   }
 `
+
 export const OptionsListComponent = styled.ul`
   display: grid;
   grid-template-columns: 1fr;
