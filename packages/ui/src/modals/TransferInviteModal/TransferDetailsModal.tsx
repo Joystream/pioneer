@@ -37,7 +37,11 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </Row>
         <Row>
           <Label>From</Label>
-          {member ? <SelectedMember member={member} /> : <SelectMember onChange={setFrom} enable={!member} selected={from} />}
+          {member ? (
+            <SelectedMember member={member} />
+          ) : (
+            <SelectMember onChange={setFrom} enable={!member} selected={from} />
+          )}
         </Row>
         <TransactionAmount>
           <AmountInputBlock>
@@ -70,6 +74,8 @@ const ValidationErrorInfo = styled.span`
   padding: 4px 0;
 `
 
-function SelectedMember({ member }: { member: BaseMember }) {
-  return <LockedAccount><MemberInfo member={member} /></LockedAccount>
-}
+const SelectedMember = ({ member }: { member: BaseMember }) => (
+  <LockedAccount>
+    <MemberInfo member={member} />
+  </LockedAccount>
+)
