@@ -7,13 +7,11 @@ interface Props {
   onClick: () => void
 }
 
-export const Option = ({ children, onClick }: Props) => {
-  return (
-    <OptionComponentContainer onClick={onClick}>
-      <OptionComponent>{children}</OptionComponent>
-    </OptionComponentContainer>
-  )
-}
+export const Option = ({ children, onClick }: Props) => (
+  <OptionComponentContainer onClick={onClick}>
+    <OptionComponent>{children}</OptionComponent>
+  </OptionComponentContainer>
+)
 
 export const SelectedOption = styled.div`
   display: grid;

@@ -1,6 +1,6 @@
 import React from 'react'
 import { BaseMember } from '../../../common/types'
-import { MemberInfo } from '../../membership/MemberInfo'
+import { MemberInfo } from '../MemberInfo'
 
 interface Props {
   member: BaseMember

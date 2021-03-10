@@ -1,7 +1,6 @@
 import React from 'react'
 import { BaseMember } from '../../../common/types'
-import { Option, OptionsListComponent } from '../selects'
-import { OptionListProps } from '../types'
+import { Option, OptionListProps, OptionsListComponent } from '../../selects'
 import { OptionMember } from './OptionMember'
 
 export const OptionListMember = React.memo(({ options, onChange }: OptionListProps<BaseMember>) => (

@@ -4,9 +4,8 @@ import { useMembership } from '../../../hooks/useMembership'
 import { useToggle } from '../../../hooks/useToggle'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
-import { MemberInfo } from '../../membership/MemberInfo'
-import { EmptyOption, SelectComponent, SelectedOption } from '../selects'
-import { SelectProps } from '../types'
+import { EmptyOption, SelectComponent, SelectedOption, SelectProps } from '../../selects'
+import { MemberInfo } from '../MemberInfo'
 import { OptionListMember } from './OptionListMember'
 
 export const filterMember = (filterOut: BaseMember | undefined) => {

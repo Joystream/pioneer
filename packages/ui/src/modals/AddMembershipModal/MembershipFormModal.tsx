@@ -20,8 +20,8 @@ import {
   ScrolledModalContainer,
   ScrolledModal,
 } from '../../components/Modal'
-import { filterAccount, SelectAccount } from '../../components/selects/SelectAccount'
-import { SelectMember } from '../../components/selects/SelectMember'
+import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
+import { SelectMember } from '../../components/membership/SelectMember'
 import { Text, TokenValue } from '../../components/typography'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 
