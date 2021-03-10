@@ -9,3 +9,6 @@ ReactDOM.render(
   </Providers>,
   document.getElementById('app')
 )
+export { SelectComponent } from './components/selects/selects'
+export { EmptyOption } from './components/selects/selects'
+export { SelectedOption } from './components/selects/selects'

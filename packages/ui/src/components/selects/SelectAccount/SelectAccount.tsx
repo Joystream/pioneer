@@ -1,19 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useDebounce } from '../../../hooks/useDebounce'
-import styled from 'styled-components'
 import { Account } from '../../../common/types'
-import { Colors, Sizes } from '../../../constants'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
+import { useDebounce } from '../../../hooks/useDebounce'
+import { useKeyring } from '../../../hooks/useKeyring'
 import { useToggle } from '../../../hooks/useToggle'
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
 import { TokenValue } from '../../typography'
-import { OptionListAccount } from './OptionListAccount'
+import { EmptyOption, SelectComponent, SelectedOption } from '../selects'
 import { filterByText, isValidAddress } from './helpers'
-import { useKeyring } from '../../../hooks/useKeyring'
+import { OptionListAccount } from './OptionListAccount'
 
 interface Props {
   onChange: (account: Account) => void
@@ -98,10 +97,10 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
           </SelectedOption>
         )}
         {(!selectedOption || isOpen) && (
-          <Empty
+          <EmptyOption
             ref={textInput}
-            type={'text'}
-            placeholder={'Select account or paste account address'}
+            type="text"
+            placeholder="Select account or paste account address"
             autoComplete="off"
             value={filterInput}
             onChange={(t) => setFilterInput(t.target.value)}
@@ -115,40 +114,3 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     </SelectComponent>
   )
 })
-
-const SelectedOption = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  align-items: center;
-  min-height: ${Sizes.accountSelectHeight};
-  max-height: ${Sizes.accountSelectHeight};
-  padding: 10px 28px 10px 16px;
-`
-
-const Empty = styled.input`
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 700;
-  color: ${Colors.Black[900]};
-  width: 100%;
-  height: 100%;
-  padding: 16px;
-  border: none;
-  outline: none;
-
-  &::placeholder {
-    font-size: 14px;
-    line-height: 45px;
-    font-weight: 400;
-    color: ${Colors.Black[400]};
-  }
-`
-
-const SelectComponent = styled.div`
-  display: flex;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-`
