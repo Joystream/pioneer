@@ -58,7 +58,7 @@ export function SignTransferModal({ onClose, sourceMember, targetMember, amount,
       <WaitModal
         onClose={onClose}
         title="Waiting for the extension"
-        description="Please, sign the transaction using external signer app."
+        description="Please sign the transaction using external signer app."
       />
     )
   }

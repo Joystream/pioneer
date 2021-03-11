@@ -3,6 +3,8 @@ import { Account, BaseMember } from '../../common/types'
 import { TransferDetailsModal } from './TransferDetailsModal'
 import BN from 'bn.js'
 import { SignTransferModal } from './SignTransferModal'
+import { TransferSuccessModal } from './TransferSuccessModal'
+import { TransferFailureModal } from './TransferFailureModal'
 
 interface Props {
   onClose: () => void
@@ -18,7 +20,6 @@ export function TransferInviteModal({ onClose, icon, member }: Props) {
   const [sourceMember, setSourceMember] = useState(member)
   const [targetMember, setTargetMember] = useState<BaseMember>()
   const [signer, setSigner] = useState<Account>()
-  const [, setFee] = useState<BN>(new BN(0))
 
   const onAccept = (amount: BN, from: BaseMember, to: BaseMember, signer: Account) => {
     setAmount(amount)
@@ -28,9 +29,8 @@ export function TransferInviteModal({ onClose, icon, member }: Props) {
     setStep('AUTHORIZE')
   }
 
-  const onDone = (result: boolean, fee: BN) => {
+  const onDone = (result: boolean) => {
     setStep(result ? 'SUCCESS' : 'ERROR')
-    setFee(fee)
   }
 
   if (step === 'PREPARE' || !sourceMember || !targetMember || !signer) {
@@ -49,5 +49,10 @@ export function TransferInviteModal({ onClose, icon, member }: Props) {
       />
     )
   }
-  return <></>
+
+  if (step === 'SUCCESS') {
+    return <TransferSuccessModal onClose={onClose} recipient={targetMember} amount={amount} />
+  }
+
+  return <TransferFailureModal onClose={onClose} />
 }
