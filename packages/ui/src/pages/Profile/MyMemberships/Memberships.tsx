@@ -16,7 +16,7 @@ export function Memberships() {
     return <Loading>Loading...</Loading>
   }
 
-  if (hasMemberships) {
+  if (!hasMemberships) {
     return (
       <NoMemberships>
         <NoMembershipsInfo>
