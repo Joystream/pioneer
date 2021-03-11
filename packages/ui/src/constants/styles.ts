@@ -153,4 +153,20 @@ export const Animations = {
       to {}
     }
   `,
+  showHelperTooltip: `
+    animation: showHelperTooltip 0.25s ease;
+    animation-delay: 0.25s;
+    animation-fill-mode: forwards;
+
+    @keyframes showHelperTooltip {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+        visibility: hidden;
+      }
+      to {
+        visibility: visible;
+      }
+    }
+  `,
 }

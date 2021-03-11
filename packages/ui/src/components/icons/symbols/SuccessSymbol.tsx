@@ -13,7 +13,7 @@ export function SuccessSymbol() {
       <path
         className="primaryPart"
         d="M17.734 8.60827L10.4977 16.6497L6.26367 12.5797L7.54306 11.2487L10.4016 13.9965L16.3616 7.37335L17.734 8.60827Z"
-        fill={Colors.Black[900]}
+        fill={Colors.Blue[500]}
       />
     </Symbol>
   )
