@@ -14,11 +14,12 @@ import { MemberInfo } from '../../components/membership/MemberInfo'
 
 interface Props {
   onClose: () => void
+  onAccept: (amount: BN, from: BaseMember, to: BaseMember) => void
   icon: ReactElement
   member?: BaseMember
 }
 
-export function TransferDetailsModal({ onClose, icon, member }: Props) {
+export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props) {
   const [from, setFrom] = useState<BaseMember | undefined>(member)
   const [to, setTo] = useState<BaseMember>()
   const [amount, setAmount] = useNumberInput(0)
@@ -61,7 +62,7 @@ export function TransferDetailsModal({ onClose, icon, member }: Props) {
         </Row>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimaryMedium onClick={() => null} disabled={isDisabled}>
+        <ButtonPrimaryMedium onClick={() => from && to && onAccept(new BN(amount), from, to)} disabled={isDisabled}>
           Transfer Invites
         </ButtonPrimaryMedium>
       </ModalFooter>
