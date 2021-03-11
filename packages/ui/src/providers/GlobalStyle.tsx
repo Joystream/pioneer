@@ -38,6 +38,11 @@ export const GlobalStyle = createGlobalStyle`
   *, *:before, *:after {
     box-sizing: border-box;
   }
+  *::selection, *:before::selection, *:after::selection {
+    color: ${Colors.Blue[50]};
+    background-color: ${Colors.Blue[500]};
+  }
+
   body, html {
     margin: 0;
     width: 100%;
@@ -113,6 +118,13 @@ export const GlobalStyle = createGlobalStyle`
     
     &::placeholder {
       font-family: ${Fonts.Inter};
+    }
+  }
+
+  h1, h2, h3, h4, h5, h6, p, span, ul, ol, li, a, div, i, button, input {
+    &::selection {
+      color: ${Colors.Blue[50]};
+      background-color: ${Colors.Blue[500]};
     }
   }
 `
