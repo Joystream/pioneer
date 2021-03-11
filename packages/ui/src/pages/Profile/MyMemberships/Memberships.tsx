@@ -16,7 +16,7 @@ export function Memberships() {
     return <Loading>Loading...</Loading>
   }
 
-  if (!hasMemberships) {
+  if (hasMemberships) {
     return (
       <NoMemberships>
         <NoMembershipsInfo>
@@ -26,7 +26,7 @@ export function Memberships() {
             velit mollit. Exercitation veniam consequat sunt nostrud amet.
           </Text>
         </NoMembershipsInfo>
-        <AddMembershipButton />
+        <NoMembershipButton />
       </NoMemberships>
     )
   }
@@ -73,12 +73,15 @@ const MembersSection = ({ title, members }: MembersSectionProps) => (
   </>
 )
 
+const NoMembershipButton = styled(AddMembershipButton)`
+  grid-area: none;
+  margin-top: 24px;
+`
+
 const NoMemberships = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-row-gap: 24px;
-  justify-items: center;
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   max-width: 420px;
   margin: 124px auto 0;

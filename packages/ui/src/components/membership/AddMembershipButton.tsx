@@ -4,12 +4,18 @@ import { useToggle } from '../../hooks/useToggle'
 import { AddMembershipModal } from '../../modals/AddMembershipModal'
 import { ButtonPrimary } from '../buttons'
 
-export const AddMembershipButton = () => {
+interface AddMembershipButtonProps {
+  className?: string
+}
+
+export const AddMembershipButton = ({ className }: AddMembershipButtonProps) => {
   const [isOpen, toggleIsOpen] = useToggle()
 
   return (
     <>
-      <AddMemberships onClick={toggleIsOpen}>Create a membership</AddMemberships>
+      <AddMemberships onClick={toggleIsOpen} className={className}>
+        Create a membership
+      </AddMemberships>
       {isOpen && <AddMembershipModal onClose={toggleIsOpen} />}
     </>
   )
