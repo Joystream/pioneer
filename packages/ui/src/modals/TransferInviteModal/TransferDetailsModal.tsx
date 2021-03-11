@@ -27,7 +27,7 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
   const filterRecipient = useCallback(filterMember(from), [from])
   const accounts = useAccounts()
 
-  const signer = accounts.allAccounts.filter((a) => a.address === from?.rootAccount)[0]
+  const signer = accounts.allAccounts.find((a) => a.address === from?.controllerAccount)
   const isAmountValid = !from || parseInt(amount) <= from.inviteCount
   const isDisabled = !amount || !isAmountValid || !from || !to
   const isShowError = amount && !isAmountValid
@@ -66,7 +66,7 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
       </ModalBody>
       <ModalFooter>
         <ButtonPrimaryMedium
-          onClick={() => from && to && onAccept(new BN(amount), from, to, signer)}
+          onClick={() => from && to && signer && onAccept(new BN(amount), from, to, signer)}
           disabled={isDisabled}
         >
           Transfer Invites

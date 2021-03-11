@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "id": "0",
     "rootAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "controllerAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
     "name": "Alice Member",
@@ -11,11 +11,11 @@
     "inviteCount": 3,
     "registeredAtBlock": "block-1",
     "invitees": [
-      "2", "3"
+      "1", "2"
     ]
   },
   {
-    "id": "2",
+    "id": "1",
     "rootAccount": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
     "controllerAccount": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
     "name": "Bob Member",
@@ -27,7 +27,7 @@
     "registeredAtBlock": "block-2"
   },
   {
-    "id": "3",
+    "id": "2",
     "rootAccount": "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw",
     "controllerAccount": "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL",
     "name": "Landon Jimenez The Third",
@@ -39,7 +39,7 @@
     "registeredAtBlock": "block-3"
   },
   {
-    "id": "4",
+    "id": "3",
     "rootAccount": "54xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxR",
     "controllerAccount": "54xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxC",
     "name": "Some Member 4",
@@ -51,7 +51,7 @@
     "registeredAtBlock": "block-3"
   },
   {
-    "id": "5",
+    "id": "4",
     "rootAccount": "55xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxR",
     "controllerAccount": "55xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxC",
     "name": "Some Member 5",
@@ -63,7 +63,7 @@
     "registeredAtBlock": "block-4"
   },
   {
-    "id": "6",
+    "id": "5",
     "rootAccount": "56xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxR",
     "controllerAccount": "56xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxC",
     "name": "Some Member 6",
@@ -75,7 +75,7 @@
     "registeredAtBlock": "block-4"
   },
   {
-    "id": "7",
+    "id": "6",
     "rootAccount": "57xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxR",
     "controllerAccount": "57xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxC",
     "name": "Some Member 7",
@@ -87,7 +87,7 @@
     "registeredAtBlock": "block-4"
   },
   {
-    "id": "8",
+    "id": "7",
     "rootAccount": "58xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxR",
     "controllerAccount": "58xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxC",
     "name": "Some Member 8",
@@ -99,7 +99,7 @@
     "registeredAtBlock": "block-4"
   },
   {
-    "id": "9",
+    "id": "8",
     "rootAccount": "59xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxR",
     "controllerAccount": "59xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxC",
     "name": "Some Member 9",
@@ -111,7 +111,7 @@
     "registeredAtBlock": "block-4"
   },
   {
-    "id": "10",
+    "id": "9",
     "rootAccount": "510xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxR",
     "controllerAccount": "510xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxC",
     "name": "Some Member 10",

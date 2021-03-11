@@ -42,13 +42,9 @@ const observeTransaction = (
         console.log('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
       })
       console.log(JSON.stringify(events))
-    }
 
-    if (!status.isFinalized) {
-      return
+      setStatus(isError(events) ? 'ERROR' : 'SUCCESS')
     }
-
-    setStatus(isError(events) ? 'ERROR' : 'SUCCESS')
   }
 
   const errorHandler = () => setStatus('ERROR')
