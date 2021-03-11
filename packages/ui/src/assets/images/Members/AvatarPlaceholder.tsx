@@ -6,7 +6,7 @@ interface AvatarPlaceholderProps {
   className?: string
 }
 
-export const AvatarPlaceholder = ({className}: AvatarPlaceholderProps) => (
+export const AvatarPlaceholder = ({ className }: AvatarPlaceholderProps) => (
   <AvatarImage width="40" height="40" viewBox="0 0 40 40" fill="none" className={className}>
     <circle fill={Colors.Blue[50]} cx="20" cy="20" r="19.5" />
     <path
