@@ -1,4 +1,4 @@
-import { beforeAll, expect } from '@jest/globals'
+import { afterAll, beforeAll, expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
@@ -23,7 +23,15 @@ import { setupMockServer } from '../mocks/server'
 import { stubTransactionResult } from '../mocks/stubTransactionResult'
 
 describe('UI: TransferModal', () => {
-  beforeAll(cryptoWaitReady)
+  beforeAll(async () => {
+    await cryptoWaitReady()
+    jest.spyOn(console, 'log').mockImplementation()
+  })
+
+  afterAll(() => {
+    jest.restoreAllMocks()
+  })
+
   setupMockServer()
 
   const api: UseApi = {

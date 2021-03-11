@@ -18,13 +18,13 @@ fragment BlockFields on Block {
   network
 }
 
-query GetMembers {
-  members {
+query GetMembers($rootAccount_in: [String!]) {
+  members (where: {rootAccount_in: $rootAccount_in}) {
     ...MemberFields
   }
 }
 
-fragment MemberWithDetails on Member{
+fragment MemberWithDetails on Member {
   ...MemberFields
   registeredAtBlock {
     ...BlockFields

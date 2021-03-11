@@ -28,7 +28,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: SelectP
   const textInput = useRef<HTMLInputElement>(null)
 
   const [filterInput, setFilterInput] = useState('')
-  const filterText = useDebounce(filterInput, 500)
+  const filterText = useDebounce(filterInput, 200)
   const filteredOptions = useMemo(() => filterByText(options, filterText), [filterText, options])
   const keyring = useKeyring()
 
@@ -78,8 +78,8 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: SelectP
 
   return (
     <SelectComponent ref={selectNode}>
-      <Toggle onClick={toggleOpen} isOpen={isOpen}>
-        {selectedOption && (
+      <Toggle onClick={() => !isOpen && toggleOpen()} isOpen={isOpen}>
+        {selectedOption && !isOpen && (
           <SelectedOption>
             <AccountInfo account={selectedOption} />
             <BalanceInfoInRow>

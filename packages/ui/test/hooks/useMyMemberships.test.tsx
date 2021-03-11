@@ -1,19 +1,35 @@
 import { expect } from '@jest/globals'
 import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
-import { useMembership } from '../../src/hooks/useMembership'
+import { useMyMemberships } from '../../src/hooks/useMyMemberships'
 import { MockQueryNodeProviders } from '../helpers/providers'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
 
 const renderUseMembership = () => {
-  return renderHook(() => useMembership(), {
+  return renderHook(() => useMyMemberships(), {
     wrapper: ({ children }) => <MockQueryNodeProviders>{children}</MockQueryNodeProviders>,
   })
 }
 
-describe('useMembership', () => {
+const useAccounts = {
+  hasAccounts: false,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
+
+describe('useMyMemberships', () => {
   const mockServer = setupMockServer()
+
+  afterEach(() => {
+    useAccounts.hasAccounts = false
+    useAccounts.allAccounts.splice(0)
+  })
 
   it('Returns loading state', () => {
     const { result } = renderUseMembership()

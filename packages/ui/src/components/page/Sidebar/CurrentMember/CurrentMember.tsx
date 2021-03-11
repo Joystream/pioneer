@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
-import { useMembership } from '../../../../hooks/useMembership'
+import { useMyMemberships } from '../../../../hooks/useMyMemberships'
 import { useToggle } from '../../../../hooks/useToggle'
 import { AddMembershipModal } from '../../../../modals/AddMembershipModal'
 import { AddMembershipButton } from '../../../membership/AddMembershipButton'
@@ -11,7 +11,7 @@ import { MembershipsCount } from '../../../membership/MembershipCount'
 import { SwitchMemberModal } from './SwitchMemberModal'
 
 export const CurrentMember = () => {
-  const { count, members, active } = useMembership()
+  const { count, members, active } = useMyMemberships()
   const [isOpen, toggleOpen] = useToggle()
   const [isCreateOpen, toggleCreateOpen] = useToggle()
 

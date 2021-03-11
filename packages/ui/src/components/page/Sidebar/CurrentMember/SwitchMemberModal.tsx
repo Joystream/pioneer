@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../../common/types'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
-import { useMembership } from '../../../../hooks/useMembership'
+import { useMyMemberships } from '../../../../hooks/useMyMemberships'
 import { AddMembershipButtonSwitch } from '../../../membership/AddMembershipButtonSwitch'
 import { MemberDarkHover, MemberInfo } from '../../../membership/MemberInfo'
 import { MembershipsCount } from '../../../membership/MembershipCount'
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
-  const { members, setActive, active } = useMembership()
+  const { members, setActive, active } = useMyMemberships()
   const switchMember = (member: BaseMember) => {
     setActive(member)
     onClose()

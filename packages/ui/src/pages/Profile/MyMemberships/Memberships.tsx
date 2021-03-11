@@ -5,11 +5,11 @@ import { AddMembershipButton } from '../../../components/membership/AddMembershi
 import { ButtonGhostMedium, ButtonPrimaryMedium, ButtonsGroup } from '../../../components/buttons'
 import { Text } from '../../../components/typography'
 import { Colors } from '../../../constants'
-import { useMembership } from '../../../hooks/useMembership'
+import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { MemberItem } from './MemberItem'
 
 export function Memberships() {
-  const { count, isLoading, members, active } = useMembership()
+  const { count, isLoading, members, active } = useMyMemberships()
   const hasMemberships = !!count
 
   if (isLoading) {

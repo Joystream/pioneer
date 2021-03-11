@@ -24,7 +24,9 @@ export type BlockFieldsFragment = {
   network: Types.Network
 }
 
-export type GetMembersQueryVariables = Types.Exact<{ [key: string]: never }>
+export type GetMembersQueryVariables = Types.Exact<{
+  rootAccount_in?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
+}>
 
 export type GetMembersQuery = { __typename: 'Query'; members: Array<{ __typename: 'Member' } & MemberFieldsFragment> }
 
@@ -79,8 +81,8 @@ export const MemberWithDetailsFragmentDoc = gql`
   ${BlockFieldsFragmentDoc}
 `
 export const GetMembersDocument = gql`
-  query GetMembers {
-    members {
+  query GetMembers($rootAccount_in: [String!]) {
+    members(where: { rootAccount_in: $rootAccount_in }) {
       ...MemberFields
     }
   }
@@ -99,6 +101,7 @@ export const GetMembersDocument = gql`
  * @example
  * const { data, loading, error } = useGetMembersQuery({
  *   variables: {
+ *      rootAccount_in: // value for 'rootAccount_in'
  *   },
  * });
  */
