@@ -6,11 +6,12 @@ interface LabelLinkProps {
   href?: string
   target?: string
   children?: string | React.ReactElement
+  className?: string
 }
 
-export function LabelLink({ href, target, children }: LabelLinkProps) {
+export function LabelLink({ href, target, children, className }: LabelLinkProps) {
   return (
-    <Link onClick={(event) => event.stopPropagation()} href={href} target={target}>
+    <Link onClick={(event) => event.stopPropagation()} href={href} target={target} className={className}>
       {children}
     </Link>
   )
