@@ -62,6 +62,10 @@ export const PageTab = styled.a<PageTabProps>`
     }
   }
 
+  &:hover {
+    color: ${Colors.Blue[500]};
+  }
+
   ${({ active }) =>
     active &&
     css`
