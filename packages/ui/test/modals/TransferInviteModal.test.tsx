@@ -27,9 +27,9 @@ const selectMember = (label: string, name: string, getByText: (text: Matcher) =>
 
 const members: MemberFieldsFragment[] = []
 
-jest.mock('../../src/hooks/useMembership', () => {
+jest.mock('../../src/hooks/useMyMemberships', () => {
   return {
-    useMembership: () => ({
+    useMyMemberships: () => ({
       isLoading: false,
       members: members,
     }),

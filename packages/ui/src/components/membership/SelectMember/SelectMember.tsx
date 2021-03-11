@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useGetMembersQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { useToggle } from '../../../hooks/useToggle'
@@ -14,10 +15,13 @@ export const filterMember = (filterOut: BaseMember | undefined) => {
 
 export const SelectMember = React.memo(({ onChange, filter, selected, disabled }: SelectProps<BaseMember>) => {
   const { isLoading, members } = useMyMemberships()
+  const myMembersHandles = members.map(({ handle }) => handle)
+  const { data } = useGetMembersQuery()
+  const foundMembers = (data?.members || []).filter(({ handle }) => !myMembersHandles.includes(handle))
   const [isOpen, toggleOpen] = useToggle()
   const [selectedOption, setSelectedOption] = useState<BaseMember | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
-  const options = members.filter(filter || (() => true))
+  const options = [...members, ...foundMembers].filter(filter || (() => true))
 
   const onOptionClick = useCallback(
     (option: BaseMember) => {
