@@ -40,7 +40,7 @@ export function SignTransferModal({ onClose, sourceMember, targetMember, amount,
             <Text size={1}>
               You intend to transfer {amount.toString()} invite{plural && 's'} to {name}.
             </Text>
-            <Text size={1}>A fee of {formatTokenValue(fee)} JOY will be applied o the transaction.</Text>
+            <Text size={1}>A fee of {formatTokenValue(fee)} JOY will be applied to the transaction.</Text>
             <Label>Fee paid by account</Label>
             <SelectedAccount account={signer} />
           </SignTransferContainer>
