@@ -13,6 +13,16 @@ export const Option = ({ children, onClick }: Props) => (
   </OptionComponentContainer>
 )
 
+interface OptionSectionHeaderProps {
+  children: ReactNode
+}
+
+export const OptionSectionHeader = ({ children }: OptionSectionHeaderProps) => (
+  <OptionComponentContainer>
+    <OptionHeaderComponent>{children}</OptionHeaderComponent>
+  </OptionComponentContainer>
+)
+
 export const SelectedOption = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -83,6 +93,10 @@ export const OptionComponent = styled.div`
   &:focus {
     outline: none;
   }
+`
+
+export const OptionHeaderComponent = styled(OptionComponent)`
+  min-height: auto;
 `
 
 export const OptionsListComponent = styled.ul`
