@@ -34,7 +34,6 @@ export function Accounts() {
   ])
 
   if (!hasAccounts) {
-    console.log(allAccounts)
     return <Loading>Loading accounts...</Loading>
   }
 
