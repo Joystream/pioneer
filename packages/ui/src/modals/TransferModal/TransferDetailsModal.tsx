@@ -2,25 +2,15 @@ import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../common/types'
-import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons'
 import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
-import { TokenValue } from '../../components/typography'
+import { filterAccount, SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
 import { Colors } from '../../constants'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
-import {
-  AmountInputBlock,
-  BalanceInfoInRow,
-  InfoTitle,
-  InfoValue,
-  LockedAccount,
-  Row,
-  TransactionAmount,
-} from '../common'
+import { AmountInputBlock, Row, TransactionAmount } from '../common'
 
 interface Props {
   from?: Account
@@ -91,26 +81,6 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
         </ButtonPrimaryMedium>
       </ModalFooter>
     </Modal>
-  )
-}
-
-interface SelectedAccountProps {
-  account: Account
-}
-
-const SelectedAccount = ({ account }: SelectedAccountProps) => {
-  const { transferable } = useBalance(account) || {}
-
-  return (
-    <LockedAccount>
-      <AccountInfo account={account} />
-      <BalanceInfoInRow>
-        <InfoTitle>Transferable balance</InfoTitle>
-        <InfoValue>
-          <TokenValue value={transferable} />
-        </InfoValue>
-      </BalanceInfoInRow>
-    </LockedAccount>
   )
 }
 
