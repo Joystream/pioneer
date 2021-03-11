@@ -35,10 +35,11 @@ const HelpPopup = styled.div`
   top: 24px;
   left: -16px;
   width: max-content;
-  max-width: 250px;
+  min-width: 160px;
+  max-width: 304px;
   padding: 16px 24px;
-  border: 1px solid ${Colors.Black[300]};
-  background-color: ${Colors.Black[75]};
+  border: 1px solid ${Colors.Black[900]};
+  background-color: ${Colors.Black[700]};
   border-radius: ${BorderRad.m};
   transition: ${Transitions.all};
   visibility: hidden;
@@ -52,8 +53,8 @@ const HelpPopup = styled.div`
     top: -4px;
     width: 8px;
     height: 8px;
-    background-color: ${Colors.Black[75]};
-    border: 1px solid ${Colors.Black[300]};
+    background-color: ${Colors.Black[700]};
+    border: 1px solid ${Colors.Black[900]};
     transform: rotate(45deg);
     clip-path: polygon(100% 0, 0 0, 0 100%);
   }
@@ -62,13 +63,16 @@ const HelpPopup = styled.div`
 export const HelpPopupTitle = styled.h6`
   color: ${Colors.Black[900]};
   margin-bottom: 10px;
+  color: ${Colors.White};
 `
 
 export const HelperText = styled.p`
   font-weight: 400;
-  font-size: 10px;
-  line-height: 14px;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
   color: ${Colors.Black[500]};
+  color: ${Colors.Black[400]};
 `
 
 export const HelperLink = styled.a`
@@ -81,11 +85,16 @@ export const HelperLink = styled.a`
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;
-  color: ${Colors.Black[500]};
+  color: ${Colors.Black[400]};
+  transition: ${Transitions.all};
 
   ${LinkSymbolStyle} {
     width: 12px;
     height: 12px;
+    .blackPart,
+    .primaryPart {
+      fill: ${Colors.Black[300]};
+    }
   }
 
   &:hover {
@@ -94,7 +103,7 @@ export const HelperLink = styled.a`
     ${LinkSymbolStyle} {
       .blackPart,
       .primaryPart {
-        color: ${Colors.Blue[500]};
+        fill: ${Colors.Blue[500]};
       }
     }
   }

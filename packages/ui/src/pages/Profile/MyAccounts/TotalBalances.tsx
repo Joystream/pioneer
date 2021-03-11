@@ -18,7 +18,7 @@ export const TotalBalances = () => {
         <StatsHeader>
           <StatsInfo>
             Total balance
-            <Help helperText={'Lorem fishy'} />
+            <Help helperText="Lorem fishy" />
           </StatsInfo>
         </StatsHeader>
         <StatsContent>
