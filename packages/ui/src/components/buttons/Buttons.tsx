@@ -144,7 +144,7 @@ export const ButtonGhost = styled(ButtonPrimary)`
   }
 
   &:hover {
-    border-color: ${Colors.Blue[200]};
+    border-color: ${Colors.Blue[300]};
     background-color: ${Colors.White};
   }
 
