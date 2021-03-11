@@ -9,6 +9,10 @@ import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, TransactionInfo } from '../common'
 import { WaitModal } from '../WaitModal'
+import { Text } from '../../components/typography'
+import { formatTokenValue } from '../../utils/formatters'
+import { SelectedAccount } from '../../components/account/SelectAccount'
+import { Label } from '../../components/forms'
 
 interface Props {
   onClose: () => void
@@ -23,20 +27,30 @@ export function SignTransferModal({ onClose, sourceMember, targetMember, amount,
   const { api } = useApi()
   const transaction = api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount)
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: signer, onDone })
+  const plural = amount.gt(new BN(1))
+  const name = targetMember.name
+  const fee = paymentInfo?.partialFee.toBn()
 
   if (status === 'READY') {
     return (
-      <Modal modalSize="m" onClose={onClose}>
+      <Modal modalSize="m" modalHeight="s" onClose={onClose}>
         <ModalHeader onClick={onClose} title="Authorize Transaction" />
         <ModalBody>
-          <SignTransferContainer></SignTransferContainer>
+          <SignTransferContainer>
+            <Text size={1}>
+              You intend to transfer {amount.toString()} invite{plural && 's'} to {name}.
+            </Text>
+            <Text size={1}>A fee of {formatTokenValue(fee)} JOY will be applied o the transaction.</Text>
+            <Label>Fee paid by account</Label>
+            <SelectedAccount account={signer} />
+          </SignTransferContainer>
         </ModalBody>
         <ModalFooter>
           <TransactionInfo>
             <BalanceInfoNarrow>
               <InfoTitle>Transaction fee:</InfoTitle>
               <InfoValue>
-                <TokenValue value={paymentInfo?.partialFee.toBn()} />
+                <TokenValue value={fee} />
               </InfoValue>
               <Help
                 helperText={
@@ -46,7 +60,7 @@ export function SignTransferModal({ onClose, sourceMember, targetMember, amount,
             </BalanceInfoNarrow>
           </TransactionInfo>
           <ButtonPrimaryMedium onClick={send} disabled={status !== 'READY'}>
-            Sign transaction and Transfer
+            Sign and Send
           </ButtonPrimaryMedium>
         </ModalFooter>
       </Modal>
