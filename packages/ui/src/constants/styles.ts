@@ -169,4 +169,18 @@ export const Animations = {
       }
     }
   `,
+  showNotification: `
+    animation: showNotification ${Transitions.duration} ease;
+
+    @keyframes showNotification {
+      from {
+        opacity: 0;
+        transform: translateX(120%);
+      }
+      to {
+        opactiy: 1;
+        transform: translateX(0%);
+      }
+    }
+  `,
 }
