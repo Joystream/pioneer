@@ -6,18 +6,9 @@ import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { useToggle } from '../../../hooks/useToggle'
 import { Toggle, ToggleButton } from '../../buttons/Toggle'
 import { ArrowDownIcon } from '../../icons'
-import {
-  EmptyOption,
-  Option,
-  OptionSectionHeader,
-  OptionsListComponent,
-  SelectComponent,
-  SelectedOption,
-  SelectProps,
-} from '../../selects'
-import { Text } from '../../typography'
+import { EmptyOption, SelectComponent, SelectedOption, SelectProps } from '../../selects'
 import { MemberInfo } from '../MemberInfo'
-import { OptionMember } from './OptionMember'
+import { OptionsListMember } from './OptionsListMember'
 
 export const filterMember = (filterOut: BaseMember | undefined) => {
   return filterOut ? (member: BaseMember) => member.handle !== filterOut.handle : () => true
@@ -115,31 +106,7 @@ export const SelectMember = React.memo(({ onChange, filter, selected, disabled }
         </ToggleButton>
       </Toggle>
       {isOpen && (
-        <OptionsListComponent>
-          {!!filteredMembers.length && (
-            <OptionSectionHeader>
-              <Text>Your memberships</Text>
-            </OptionSectionHeader>
-          )}
-
-          {filteredMembers.map((option) => (
-            <Option key={option.handle} onClick={() => onOptionClick(option)}>
-              <OptionMember member={option} />
-            </Option>
-          ))}
-
-          {!!filteredFoundMembers.length && (
-            <OptionSectionHeader key="$$all-memberships">
-              <Text>All memberships</Text>
-            </OptionSectionHeader>
-          )}
-
-          {filteredFoundMembers.map((option) => (
-            <Option key={option.handle} onClick={() => onOptionClick(option)}>
-              <OptionMember member={option} />
-            </Option>
-          ))}
-        </OptionsListComponent>
+        <OptionsListMember myMembers={filteredMembers} allMembers={filteredFoundMembers} onChange={onOptionClick} />
       )}
     </SelectComponent>
   )
