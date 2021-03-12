@@ -26,7 +26,7 @@ export const ConnectionStatus = () => {
         (isConnected ? (
           <SideNotification onClick={() => setShowNotification(false)} title={'Connected to network'} />
         ) : (
-          <SideNotification onClick={() => setShowNotification(false)} title={'Disconnected from network'} />
+          <SideNotification isError onClick={() => setShowNotification(false)} title={'Disconnected from network'} />
         ))}
     </>
   )

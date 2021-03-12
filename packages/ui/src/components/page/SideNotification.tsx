@@ -2,8 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import { BorderRad, Colors, Shadows, Animations } from '../../constants'
-import { CloseButton } from '../../components/buttons'
-import { Text } from '../../components/typography'
+import { CloseButton } from '..//buttons'
+import { Text } from '..//typography'
 
 interface NotificationProps {
   title: string
@@ -11,13 +11,14 @@ interface NotificationProps {
   message?: string | React.ReactElement | React.ReactNode
   link?: string
   onClick: () => void
+  isError?: boolean
 }
 
-export const SideNotification = ({ title, icon, message, link, onClick }: NotificationProps) => {
+export const SideNotification = ({ title, icon, message, link, onClick, isError }: NotificationProps) => {
   return ReactDOM.createPortal(
-    <NotificationComponent>
+    <NotificationComponent isError={isError}>
       <CloseNotificationButton onClick={onClick} />
-      <NotificationHeader>
+      <NotificationHeader isError={isError}>
         {icon}
         <NotificationTitle>{title}</NotificationTitle>
       </NotificationHeader>
@@ -30,7 +31,7 @@ export const SideNotification = ({ title, icon, message, link, onClick }: Notifi
   )
 }
 
-const NotificationComponent = styled.div`
+const NotificationComponent = styled.div<{ isError?: boolean }>`
   display: flex;
   position: absolute;
   flex-direction: column;
@@ -40,19 +41,19 @@ const NotificationComponent = styled.div`
   max-width: 438px;
   padding: 16px 24px 20px 20px;
   background-color: ${Colors.Black[800]};
-  border-left: 4px solid ${Colors.Blue[500]};
+  border-left: 4px solid ${({ isError }) => (isError ? Colors.Red[400] : Colors.Blue[500])};
   border-radius: ${BorderRad.m};
   box-shadow: ${Shadows.common};
   ${Animations.showNotification};
 `
 
-const NotificationHeader = styled.div`
+const NotificationHeader = styled.div<{ isError?: boolean }>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
   align-items: center;
   width: fit-content;
-  color: ${Colors.White};
+  color: ${({ isError }) => (isError ? Colors.Red[400] : Colors.White)};
   margin-bottom: 16px;
 `
 
