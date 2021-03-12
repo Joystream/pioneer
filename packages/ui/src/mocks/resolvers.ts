@@ -1,6 +1,11 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { MockMember } from '../../test/mocks/members'
-import { GetMembersQueryResult, GetMembersQueryVariables, SearchMembersQueryResult } from '../api/queries'
+import {
+  GetMembersQueryResult,
+  GetMembersQueryVariables,
+  MemberFieldsFragment,
+  SearchMembersQueryResult,
+} from '../api/queries'
 
 type QueryResolver<ArgsType extends Record<string, unknown>, ReturnType = unknown> = (
   obj: unknown,
@@ -31,19 +36,20 @@ export const getMembersResolver: QueryResolver<{ where: GetMembersQueryVariables
   return models
 }
 
+const getMatcher = (text: string) => {
+  const regExp = new RegExp(text, 'i')
+  return (check: string | null | undefined) => regExp.test(check || '')
+}
+
 export const searchMembersResolver: QueryResolver<{ text: string; limit?: number }, SearchMembersQueryResult[]> = (
   obj,
-  args,
+  { text },
   { mirageSchema: schema }
 ) => {
-  const text = args.text
+  const isMatch = getMatcher(text)
 
-  console.log('search by', text)
-
-  const { models } = schema.where('Member', (member: MockMember) => {
-    const match = member.handle?.match(text)
-    console.log('match?', member.handle, text, match)
-    return match
+  const { models } = schema.where('Member', (member: MemberFieldsFragment) => {
+    return isMatch(member.handle) || isMatch(member.name) || isMatch(member.id)
   })
 
   return models
