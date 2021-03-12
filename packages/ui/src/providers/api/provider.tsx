@@ -1,10 +1,9 @@
+import { registry, types } from '@joystream/types'
 import '@joystream/types/augment/augment-api'
 import '@joystream/types/augment/augment-types'
-
-import React, { ReactNode, useEffect, useState } from 'react'
 import { ApiRx, WsProvider } from '@polkadot/api'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
-import { registry, types } from '@joystream/types'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { ApiContext } from './context'
 
 interface Props {
@@ -26,18 +25,14 @@ export const ApiContextProvider = (props: Props) => {
     const endpoint = network === 'DEV' ? 'ws://127.0.0.1:9944/' : 'wss://rome-rpc-endpoint.joystream.org:9944'
     const provider = new WsProvider(endpoint)
 
-    ApiRx.create({ provider, rpc: jsonrpc, types: types, registry })
-      .toPromise()
-      .then((api) => {
-        setApi(api)
-        setIsConnected(true)
-      })
+    ApiRx.create({ provider, rpc: jsonrpc, types: types, registry }).subscribe((api) => {
+      setApi(api)
+      setIsConnected(true)
+
+      api.on('connected', () => setIsConnected(true))
+      api.on('disconnected', () => setIsConnected(false))
+    })
   }, [])
 
-  const retVal = {
-    isConnected: isConnected,
-    api: api,
-  }
-
-  return <ApiContext.Provider value={retVal}>{props.children}</ApiContext.Provider>
+  return <ApiContext.Provider value={{ isConnected, api }}>{props.children}</ApiContext.Provider>
 }

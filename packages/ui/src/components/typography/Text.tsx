@@ -6,6 +6,7 @@ interface TextProps {
   bold?: boolean
   italic?: boolean
   dark?: boolean
+  className?: string
 }
 
 export const Text = styled.p<TextProps>`
