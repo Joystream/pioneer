@@ -6,23 +6,27 @@ import { FailureSymbol } from '../../components/icons/symbols/FailureSymbol'
 import { SuccessSymbol } from '../../components/icons/symbols/SuccessSymbol'
 
 interface CopyButtonProps {
-  textToCopy: string
+  textToCopy?: string
+  className?: string
 }
 
-export function CopyButton({ textToCopy }: CopyButtonProps) {
+export function CopyButton({ textToCopy, className }: CopyButtonProps) {
   const [isSuccessfullyCopied, setSuccessfullyCopied] = useState(false)
   const [isCopyFailure, setCopyFailure] = useState(false)
 
   return (
     <CopyButtonIcon
       onClick={() => {
-        try {
-          navigator.clipboard.writeText(textToCopy)
-          setSuccessfullyCopied(!isSuccessfullyCopied)
-        } catch (error) {
-          setCopyFailure(!isCopyFailure)
+        if (textToCopy) {
+          try {
+            navigator.clipboard.writeText(textToCopy)
+            setSuccessfullyCopied(!isSuccessfullyCopied)
+          } catch (error) {
+            setCopyFailure(!isCopyFailure)
+          }
         }
       }}
+      className={className}
     >
       {!isSuccessfullyCopied && !isCopyFailure && <CopyIcon />}
       {isSuccessfullyCopied &&

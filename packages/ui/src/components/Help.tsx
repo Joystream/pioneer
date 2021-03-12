@@ -7,7 +7,7 @@ import { LinkSymbol, LinkSymbolStyle } from './icons/symbols/LinkSymbol'
 interface HelpNotificationProps {
   helperText: string
   helperTitle?: string
-  helperLinkText?: string | React.ReactElement | React.ReactNode
+  helperLinkText?: React.ReactElement
   helperLinkURL?: string
 }
 

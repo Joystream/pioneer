@@ -2,9 +2,19 @@ import React from 'react'
 import styled from 'styled-components'
 import { Colors, Transitions } from '../../../constants'
 
-export function EditSymbol() {
+interface SymbolProps {
+  className?: string
+}
+
+export function EditSymbol({ className }: SymbolProps) {
   return (
-    <Symbol viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+    <Symbol
+      viewBox="0 0 16 16"
+      preserveAspectRatio="xMidYMid meet"
+      fill="none"
+      color="currentColor"
+      className={className}
+    >
       <path
         className="primaryPart"
         d="M10.9564 8.37713L7.62305 5.0438L8.37729 4.28955L11.7106 7.62288L10.9564 8.37713Z"

@@ -2,9 +2,19 @@ import React from 'react'
 import styled from 'styled-components'
 import { Colors, Transitions } from '../../../constants'
 
-export function SuccessSymbol() {
+interface SymbolProps {
+  className?: string
+}
+
+export function SuccessSymbol({ className }: SymbolProps) {
   return (
-    <Symbol viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+    <Symbol
+      viewBox="0 0 24 24"
+      preserveAspectRatio="xMidYMid meet"
+      fill="none"
+      color="currentColor"
+      className={className}
+    >
       <path
         className="blackPart"
         d="M12 1.84615C6.39216 1.84615 1.84615 6.39216 1.84615 12C1.84615 17.6078 6.39216 22.1538 12 22.1538C17.6078 22.1538 22.1538 17.6078 22.1538 12C22.1538 6.39216 17.6078 1.84615 12 1.84615ZM0 12C0 5.37256 5.37256 0 12 0C18.6274 0 23.9999 5.37256 23.9999 12C23.9999 18.6274 18.6274 23.9999 12 23.9999C5.37256 23.9999 0 18.6274 0 12Z"

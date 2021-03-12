@@ -32,6 +32,7 @@ export const Colors = {
     200: '#A7AAFF',
     100: '#D3DAFF',
     50: '#E7EBFF',
+    300.4: '#817EFF66',
   },
 
   Green: {
@@ -69,6 +70,7 @@ export const Sizes = {
 }
 
 export const Shadows = {
+  focus: `0px 0px 8px ${Colors.Blue[300.4]}`,
   common: `0px 12px 28px ${Colors.Black[900.25]}`,
   light: `0px 0px 28px #D6D8E780`,
   select: `0px 20px 28px ${Colors.Black[900.25]}`,
