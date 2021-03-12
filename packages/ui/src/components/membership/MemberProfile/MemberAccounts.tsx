@@ -4,7 +4,7 @@ import { BaseMember } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { AccountRow } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
-import { Label } from '../../typography'
+import { MembershipLabel } from '../../typography/MembershipLabel'
 
 interface Props {
   member: BaseMember
@@ -16,13 +16,13 @@ export const MemberAccounts = ({ member }: Props) => {
 
   return (
     <AccountsDisplay>
-      <AccountLabel>Root account</AccountLabel>
+      <MembershipLabel text="Root account" />
       {!!rootAccount && (
         <AccountRow>
           <AccountInfo account={rootAccount} />
         </AccountRow>
       )}
-      <AccountLabel>Controller account</AccountLabel>
+      <MembershipLabel text="Controller account" />
       {!!controllerAccount && (
         <AccountRow>
           <AccountInfo account={controllerAccount} />
@@ -33,10 +33,7 @@ export const MemberAccounts = ({ member }: Props) => {
 }
 
 const AccountsDisplay = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-const AccountLabel = styled(Label)`
-  margin: 16px 14px 6px;
+  display: grid;
+  grid-row-gap: 16px;
+  padding: 24px;
 `
