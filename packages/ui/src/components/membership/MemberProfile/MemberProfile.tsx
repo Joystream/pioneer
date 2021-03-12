@@ -7,6 +7,7 @@ import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
 import { MemberInfo } from '../MemberInfo'
+import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
 
 interface Props {
@@ -46,7 +47,7 @@ export const MemberProfile = ({ onClose, member }: Props) => {
         </SidePaneHeader>
         <SidePaneBody>
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}
-          {activeTab === 'ACCOUNTS' && <EmptyBody>Accounts</EmptyBody>}
+          {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
         <SidePaneFooter>
