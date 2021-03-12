@@ -446,6 +446,7 @@ export type Query = {
   __typename: 'Query'
   member?: Maybe<Member>
   members: Array<Member>
+  searchMember: Array<Member>
 }
 
 export type QueryMemberArgs = {
@@ -454,4 +455,9 @@ export type QueryMemberArgs = {
 
 export type QueryMembersArgs = {
   where?: Maybe<MemberWhereInput>
+}
+
+export type QuerySearchMemberArgs = {
+  text: Scalars['String']
+  limit?: Maybe<Scalars['Int']>
 }

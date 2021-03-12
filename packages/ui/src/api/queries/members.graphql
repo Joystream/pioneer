@@ -39,3 +39,9 @@ query GetMember($id: ID!) {
     ...MemberWithDetails
   }
 }
+
+query SearchMember($text: String!) {
+  searchMember(text: $text) {
+    ...MemberFields
+  }
+}
