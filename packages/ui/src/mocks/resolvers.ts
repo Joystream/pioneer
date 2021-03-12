@@ -43,7 +43,7 @@ const getMatcher = (text: string) => {
 
 export const searchMembersResolver: QueryResolver<{ text: string; limit?: number }, SearchMembersQueryResult[]> = (
   obj,
-  { text },
+  { text, limit },
   { mirageSchema: schema }
 ) => {
   const isMatch = getMatcher(text)
@@ -52,5 +52,5 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
     return isMatch(member.handle) || isMatch(member.name) || isMatch(member.id)
   })
 
-  return models
+  return limit ? models.slice(0, limit) : models
 }

@@ -40,8 +40,8 @@ query GetMember($id: ID!) {
   }
 }
 
-query SearchMembers($text: String!) {
-  searchMembers(text: $text) {
+query SearchMembers($text: String!, $limit: Int) {
+  searchMembers(text: $text, limit: $limit) {
     ...MemberFields
   }
 }
