@@ -657,5 +657,5 @@ type Query {
   members(where: MemberWhereInput): [Member!]!
 
   # Lookup members by free-text search
-  searchMember(text: String!, limit: Int) : [Member!]!
+  searchMembers(text: String!, limit: Int) : [Member!]!
 }

@@ -19,7 +19,7 @@ fragment BlockFields on Block {
 }
 
 query GetMembers($rootAccount_in: [String!]) {
-  members (where: {rootAccount_in: $rootAccount_in}) {
+  members(where: {rootAccount_in: $rootAccount_in}) {
     ...MemberFields
   }
 }
@@ -35,13 +35,13 @@ fragment MemberWithDetails on Member {
 }
 
 query GetMember($id: ID!) {
-  member (where: {id: $id}) {
+  member(where: {id: $id}) {
     ...MemberWithDetails
   }
 }
 
-query SearchMember($text: String!) {
-  searchMember(text: $text) {
+query SearchMembers($text: String!) {
+  searchMembers(text: $text) {
     ...MemberFields
   }
 }
