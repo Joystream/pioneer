@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
-import { useAccounts } from '../../../hooks/useAccounts'
 import { AccountRow } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { MembershipLabel } from '../../typography/MembershipLabel'
@@ -10,9 +9,8 @@ interface Props {
   member: BaseMember
 }
 export const MemberAccounts = ({ member }: Props) => {
-  const { allAccounts } = useAccounts()
-  const rootAccount = allAccounts.find((a) => a.address === member.rootAccount)
-  const controllerAccount = allAccounts.find((a) => a.address === member.controllerAccount)
+  const rootAccount = { address: member.rootAccount, name: 'Root Account' }
+  const controllerAccount = { address: member.controllerAccount, name: 'Controller Account' }
 
   return (
     <AccountsDisplay>
