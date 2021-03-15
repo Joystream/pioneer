@@ -4,10 +4,10 @@ import { Comparator } from './Comparator'
 export type SortKey = keyof BaseMember
 
 export function sortMemberships(members: BaseMember[], key: SortKey, isDescending = false) {
-  if (['handle'].includes(key)) {
+  if (key === 'handle') {
     return members.sort(Comparator<BaseMember>(isDescending, key).string)
   }
-  if (['inviteCount'].includes(key)) {
+  if (key === 'inviteCount') {
     return members.sort(Comparator<BaseMember>(isDescending, key).bigNumber)
   }
   return members
