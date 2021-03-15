@@ -1,13 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Account } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
-import { useBalance } from '../../../hooks/useBalance'
 import { useKeyring } from '../../../hooks/useKeyring'
-import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../modals/common'
-import { AccountInfo } from '../../AccountInfo'
 import { Select } from '../../selects'
-import { TokenValue } from '../../typography'
 import { filterByText, isValidAddress } from './helpers'
+import { OptionAccount } from './OptionAccount'
 import { OptionListAccount } from './OptionListAccount'
 
 export const filterAccount = (filterOut: Account | undefined) => {
@@ -25,8 +22,6 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   const { allAccounts } = useAccounts()
   const options = allAccounts.filter(filter || (() => true))
   const [selectedOption, setSelectedOption] = useState(selected)
-  const balance = useBalance(selectedOption)
-
   const [search, setSearch] = useState('')
 
   const filteredOptions = useMemo(() => filterByText(options, search), [search, options])
@@ -44,17 +39,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
       selected={selectedOption}
       onChange={onChange}
       disabled={false}
-      renderSelected={(option) => (
-        <>
-          <AccountInfo account={option} />
-          <BalanceInfoInRow>
-            <InfoTitle>Transferable balance</InfoTitle>
-            <InfoValue>
-              <TokenValue value={balance?.transferable} />
-            </InfoValue>
-          </BalanceInfoInRow>
-        </>
-      )}
+      renderSelected={(option) => <OptionAccount option={option} />}
       placeholder="Select account or paste account address"
       renderList={(onOptionClick) => <OptionListAccount onChange={onOptionClick} options={filteredOptions} />}
       onSearch={(search) => setSearch(search)}

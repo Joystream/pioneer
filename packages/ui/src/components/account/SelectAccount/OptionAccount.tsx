@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Account } from '../../../common/types'
 import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../modals/common'
@@ -6,15 +6,15 @@ import { AccountInfo } from '../../AccountInfo'
 import { TokenValue } from '../../typography'
 
 interface Props {
-  account: Account
+  option: Account
 }
 
-export const OptionAccount = ({ account }: Props) => {
-  const balance = useBalance(account)
+export const OptionAccount: FC<Props> = ({ option }: Props) => {
+  const balance = useBalance(option)
 
   return (
     <>
-      <AccountInfo account={account} />
+      <AccountInfo account={option} />
       <BalanceInfoInRow>
         <InfoTitle>Transferable balance</InfoTitle>
         <InfoValue>

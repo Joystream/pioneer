@@ -12,7 +12,7 @@ export const OptionListAccount = React.memo(({ options, onChange }: Props) => (
   <OptionsListComponent>
     {options.map((option) => (
       <Option key={option.address} onClick={() => onChange && onChange(option)}>
-        <OptionAccount account={option} />
+        <OptionAccount option={option} />
       </Option>
     ))}
   </OptionsListComponent>
