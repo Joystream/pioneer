@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
-import { ButtonGhostMediumSquare } from '../../../components/buttons'
+import { Button } from '../../../components/buttons'
 import { ArrowOutsideIcon } from '../../../components/icons'
 import { MemberInfo, MemberRole } from '../../../components/membership/MemberInfo'
 import { MemberProfile } from '../../../components/membership/MemberProfile'
@@ -43,7 +43,7 @@ export const MemberItem = ({ member }: Props) => {
         <CountInfo>0</CountInfo>
       </MemberColumn>
       <MemberControls>
-        <ButtonForTransfer>
+        <ButtonForTransfer variant="ghost" size="medium" square>
           <ArrowOutsideIcon />
         </ButtonForTransfer>
       </MemberControls>
@@ -102,7 +102,7 @@ const MemberRolesColumn = styled(MemberColumn)`
 
 const MemberControls = styled.div``
 
-const ButtonForTransfer = styled(ButtonGhostMediumSquare)`
+const ButtonForTransfer = styled(Button)`
   svg {
     color: ${Colors.Black[900]};
   }

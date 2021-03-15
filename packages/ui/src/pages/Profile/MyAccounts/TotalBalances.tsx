@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
-import { ButtonPrimarySmall } from '../../../components/buttons'
+import { Button } from '../../../components/buttons'
 import { Help } from '../../../components/Help'
 import { Label, TokenValue } from '../../../components/typography'
 import { BorderRad, Colors, Shadows } from '../../../constants'
@@ -53,7 +53,7 @@ export const TotalBalances = () => {
             Total recoverable
             <Help helperText={'Lorem fishy'} />
           </StatsInfo>
-          {hasRecoverable && <StatsButton>Recover all</StatsButton>}
+          {hasRecoverable && <StatsButton size="small">Recover all</StatsButton>}
         </StatsHeader>
         <StatsContent>
           <TotalValue value={recoverable} />
@@ -105,7 +105,7 @@ const StatsHeader = styled.div`
   align-items: start;
 `
 
-const StatsButton = styled(ButtonPrimarySmall)`
+const StatsButton = styled(Button)`
   position: absolute;
   top: 8px;
   right: 8px;

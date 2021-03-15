@@ -16,7 +16,7 @@ export const CurrentMember = () => {
   const [isCreateOpen, toggleCreateOpen] = useToggle()
 
   if (count < 1) {
-    return <AddMembershipButton />
+    return <AddMembershipButton>Create a membership</AddMembershipButton>
   }
 
   return (
