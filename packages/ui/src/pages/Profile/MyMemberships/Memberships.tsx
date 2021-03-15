@@ -39,7 +39,7 @@ export function Memberships() {
         <Button variant="ghost" size="medium">
           Invite a member
         </Button>
-        <AddMembershipButton>Add Membership</AddMembershipButton>
+        <AddMembershipButton size="medium">Add Membership</AddMembershipButton>
       </NewMembers>
       {!!active && <MembersSection title="Active membership" members={[active]} />}
       {!!otherMemberships.length && <MembersSection title="Other memberships" members={otherMemberships} />}

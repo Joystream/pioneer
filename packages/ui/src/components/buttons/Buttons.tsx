@@ -2,10 +2,10 @@ import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../constants'
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost'
-type ButtonSize = 'small' | 'medium' | 'large'
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
+export type ButtonSize = 'small' | 'medium' | 'large'
 
-interface Props {
+interface ButtonProps {
   variant?: ButtonVariant
   size?: ButtonSize
   square?: boolean
@@ -17,9 +17,9 @@ const height: { [key in ButtonSize]: string } = {
   small: '32px',
 }
 
-const getHeight = (props: Props) => height[props.size || 'large']
-const getFontSize = (props: Props) => (props.size === 'small' ? '14px' : '16px')
-const getPadding = (props: Props) => {
+const getHeight = (props: ButtonProps) => height[props.size || 'large']
+const getFontSize = (props: ButtonProps) => (props.size === 'small' ? '14px' : '16px')
+const getPadding = (props: ButtonProps) => {
   if (props.size == 'small') {
     return props.square ? '6px' : '4px 8px'
   }
@@ -31,7 +31,15 @@ const getPadding = (props: Props) => {
   return props.square ? '8px' : '8px 16px'
 }
 
-export const Button = styled.button<Props>`
+export const ButtonsGroup = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  align-items: center;
+  width: fit-content;
+`
+
+export const Button = styled.button<ButtonProps>`
   display: inline-grid;
   grid-auto-flow: column;
 
@@ -159,12 +167,4 @@ export const Button = styled.button<Props>`
       `
     }
   }}
-`
-
-export const ButtonsGroup = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 8px;
-  align-items: center;
-  width: fit-content;
 `
