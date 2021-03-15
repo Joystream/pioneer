@@ -53,11 +53,7 @@ export const TotalBalances = () => {
             Total recoverable
             <Help helperText={'Lorem fishy'} />
           </StatsInfo>
-          {hasRecoverable && (
-            <StatsButton size="small" variant="primary">
-              Recover all
-            </StatsButton>
-          )}
+          {hasRecoverable && <StatsButton size="small">Recover all</StatsButton>}
         </StatsHeader>
         <StatsContent>
           <TotalValue value={recoverable} />

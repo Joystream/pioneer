@@ -99,7 +99,7 @@ export function SignTransferModal({ onClose, from, amount, to, onDone }: Props) 
               />
             </BalanceInfoNarrow>
           </TransactionInfo>
-          <Button variant="primary" size="medium" onClick={send} disabled={status !== 'READY'}>
+          <Button size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign transaction and Transfer
           </Button>
         </ModalFooter>

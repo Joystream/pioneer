@@ -24,7 +24,7 @@ export function AddMembershipSuccessModal({ onClose, member }: Props) {
         </MemberRow>
       </ModalBody>
       <ModalFooter>
-        <Button variant="primary" size="medium" disabled>
+        <Button size="medium" disabled>
           View my profile
         </Button>
       </ModalFooter>

@@ -64,7 +64,7 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </BalanceInfoNarrow>
-          <Button variant="primary" size="medium" onClick={send} disabled={status !== 'READY'}>
+          <Button size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign and create a member
           </Button>
         </ModalFooter>

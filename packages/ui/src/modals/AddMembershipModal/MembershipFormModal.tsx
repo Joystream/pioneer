@@ -181,7 +181,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           </InfoValue>
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
         </BalanceInfoNarrow>
-        <Button variant="primary" size="medium" onClick={onCreate} disabled={!isFormValid}>
+        <Button size="medium" onClick={onCreate} disabled={!isFormValid}>
           Create a Membership
         </Button>
       </ModalFooter>

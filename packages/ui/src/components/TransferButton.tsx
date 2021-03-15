@@ -36,7 +36,7 @@ export function TransferButtonStyled() {
 
   return (
     <>
-      <ButtonForTransferStyled variant="primary" size="small" square onClick={toggleOpen}>
+      <ButtonForTransferStyled size="small" square onClick={toggleOpen}>
         {icon}
       </ButtonForTransferStyled>
       {isOpen && <TransferModal onClose={toggleOpen} icon={icon} />}

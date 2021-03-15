@@ -76,7 +76,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
         </Row>
       </ModalBody>
       <ModalFooter>
-        <Button variant="primary" size="medium" onClick={onClick} disabled={isTransferDisabled}>
+        <Button size="medium" onClick={onClick} disabled={isTransferDisabled}>
           Transfer tokens
         </Button>
       </ModalFooter>

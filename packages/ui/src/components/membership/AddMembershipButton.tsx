@@ -15,7 +15,7 @@ export const AddMembershipButton = ({ className, children, size }: AddMembership
 
   return (
     <>
-      <AddMemberships size={size} variant="primary" onClick={toggleIsOpen} className={className}>
+      <AddMemberships size={size} onClick={toggleIsOpen} className={className}>
         {children}
       </AddMemberships>
       {isOpen && <AddMembershipModal onClose={toggleIsOpen} />}

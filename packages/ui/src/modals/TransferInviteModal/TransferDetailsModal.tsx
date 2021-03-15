@@ -66,7 +66,6 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
       </ModalBody>
       <ModalFooter>
         <Button
-          variant="primary"
           size="medium"
           onClick={() => from && to && signer && onAccept(new BN(amount), from, to, signer)}
           disabled={isDisabled}
