@@ -2,25 +2,44 @@ import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../constants'
 
+type ButtonVariant = 'primary' | 'secondary' | 'ghost'
+type ButtonSize = 'small' | 'medium' | 'large'
+
 interface Props {
-  variant?: 'primary' | 'secondary' | 'ghost'
-  size?: 'small' | 'medium' | 'large'
+  variant?: ButtonVariant
+  size?: ButtonSize
   square?: boolean
+}
+
+const height: { [key in ButtonSize]: string } = {
+  large: '48px',
+  medium: '40px',
+  small: '32px',
+}
+
+const getHeight = (props: Props) => height[props.size || 'large']
+const getFontSize = (props: Props) => (props.size === 'small' ? '14px' : '16px')
+const getPadding = (props: Props) => {
+  if (props.size == 'small') {
+    return props.square ? '6px' : '4px 8px'
+  }
+
+  if (props.size == 'medium') {
+    return props.square ? '8px' : '4px 16px'
+  }
+
+  return props.square ? '8px' : '8px 16px'
 }
 
 export const Button = styled.button<Props>`
   display: inline-grid;
   grid-auto-flow: column;
-  grid-column-gap: 8px;
+
   justify-items: center;
   align-items: center;
   width: fit-content;
-  min-width: 48px;
-  height: 48px;
-  padding: 8px 16px;
   border: 1px solid ${Colors.Blue[500]};
   border-radius: ${BorderRad.s};
-  font-size: 16px;
   font-weight: 700;
   text-transform: capitalize;
   color: ${Colors.White};
@@ -29,48 +48,17 @@ export const Button = styled.button<Props>`
   transition: ${Transitions.all};
   cursor: pointer;
 
+  min-width: ${getHeight};
+  height: ${getHeight};
+  font-size: ${getFontSize};
+  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
+  padding: ${getPadding};
+
   ${(props) => {
-    if (!props.size && props.square) {
+    if (props.square)
       return css`
-        padding: 8px;
-        max-width: 48px;
+        max-width: ${getHeight(props)};
       `
-    }
-
-    if (props.size == 'medium' && !props.square) {
-      return css`
-        height: 40px;
-        padding: 4px 16px;
-        min-width: 40px;
-      `
-    }
-
-    if (props.size == 'medium' && props.square) {
-      return css`
-        height: 40px;
-        padding: 4px 16px;
-        min-width: 40px;
-        max-width: 40px;
-        padding: 8px;
-      `
-    }
-
-    if (props.size == 'small' && props.square) {
-      return css`
-        height: 32px;
-        padding: 4px 8px;
-        grid-column-gap: 4px;
-        min-width: 32px;
-        font-size: 14px;
-      `
-    }
-
-    if (props.size == 'small' && !props.square) {
-      return css`
-        max-width: 32px;
-        padding: 6px;
-      `
-    }
   }}
 
   ${(props) => {
