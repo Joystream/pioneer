@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import { Account, AddressToBalanceMap } from 'src/common/types'
-import { Balances } from '../common/types'
+import { Balances } from '../../common/types'
 
 export type SortKey = keyof Balances | 'name'
 

@@ -12,7 +12,7 @@ import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
 import { useBalances } from '../../../hooks/useBalances'
 import { filterAccounts } from '../../../utils/filterAccounts'
-import { sortAccounts, SortKey } from '../../../utils/sortAccounts'
+import { sortAccounts, SortKey } from '../../../utils/sorting/sortAccounts'
 import { setOrder } from './helpers'
 
 export function Accounts() {

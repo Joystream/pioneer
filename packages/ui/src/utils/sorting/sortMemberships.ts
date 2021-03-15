@@ -1,4 +1,4 @@
-import { BaseMember } from '../common/types'
+import { BaseMember } from '../../common/types'
 import BN from 'bn.js'
 
 export type SortKey = keyof BaseMember
