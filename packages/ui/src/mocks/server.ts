@@ -3,7 +3,7 @@ import { createServer } from 'miragejs'
 
 import schema from '../api/schemas/schema.graphql'
 import { mockBlocks, mockMembers } from './data'
-import { getMemberResolver, getMembersResolver } from './resolvers'
+import { getMemberResolver, getMembersResolver, searchMembersResolver } from './resolvers'
 
 export const makeServer = (environment = 'development') => {
   return createServer({
@@ -19,6 +19,7 @@ export const makeServer = (environment = 'development') => {
             Query: {
               member: getMemberResolver,
               members: getMembersResolver,
+              searchMembers: searchMembersResolver,
             },
           },
         })
