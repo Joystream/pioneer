@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useGetMembersQuery } from '../../../api/queries'
+import { useSearchMembersQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
 import { useDebounce } from '../../../hooks/useDebounce'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
@@ -28,19 +28,19 @@ const filterByText = (options: BaseMember[], text: string) => {
 }
 
 export const SelectMember = React.memo(({ onChange, filter, selected, disabled }: SelectProps<BaseMember>) => {
-  const { members } = useMyMemberships()
-  const myMembersHandles = members.map(({ handle }) => handle)
-  const { data } = useGetMembersQuery()
   const baseFilter = filter || (() => true)
+  const { members } = useMyMemberships()
+  const [filterInput, setFilterInput] = useState('')
+  const search = useDebounce(filterInput, 500)
+  const myMembersHandles = members.map(({ handle }) => handle)
   const filterOutMyMemberships = ({ handle }: BaseMember) => !myMembersHandles.includes(handle)
-  const allMembers = (data?.members || []).filter(filterOutMyMemberships)
+  const { data } = useSearchMembersQuery({ variables: { text: search, limit: 10 } })
+  const foundMembers = data?.searchMembers || []
+  const allMembers = foundMembers.filter(filterOutMyMemberships)
   const [isOpen, toggleOpen] = useToggle()
   const [selectedOption, setSelectedOption] = useState<BaseMember | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
   const textInput = useRef<HTMLInputElement>(null)
-
-  const [filterInput, setFilterInput] = useState('')
-  const search = useDebounce(filterInput, 200)
 
   const filteredMembers = useMemo(() => filterByText(members.filter(baseFilter), search), [search, members])
   const filteredFoundMembers = useMemo(() => filterByText(allMembers.filter(baseFilter), search), [search, allMembers])
