@@ -70,7 +70,9 @@ export const Button = styled.button<ButtonProps>`
   }}
 
   ${(props) => {
-    if (props.variant == 'primary') {
+    const variant = props.variant ?? 'primary'
+
+    if (variant == 'primary') {
       return css`
         &:hover {
           border-color: ${Colors.Blue[600]};
@@ -91,7 +93,7 @@ export const Button = styled.button<ButtonProps>`
       `
     }
 
-    if (props.variant == 'ghost') {
+    if (variant == 'ghost') {
       return css`
         border-color: ${Colors.Black[200]};
         color: ${Colors.Black[900]};
@@ -129,7 +131,7 @@ export const Button = styled.button<ButtonProps>`
       `
     }
 
-    if (props.variant == 'secondary') {
+    if (variant == 'secondary') {
       return css`
         border-color: ${Colors.Black[75]};
         color: ${Colors.Black[900]};
