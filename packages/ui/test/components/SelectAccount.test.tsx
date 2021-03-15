@@ -57,14 +57,9 @@ describe('UI: SelectAccount component', () => {
     }
 
     it('Narrows search results', () => {
-      const { getByRole, getByText, queryByText } = renderOpenedComponent()
+      const { getByRole, queryByText } = renderOpenedComponent()
       fireEvent.change(getByRole('textbox'), { target: { value: 'Ali' } })
 
-      expect(getByText(/bob/i)).toBeDefined()
-
-      act(() => {
-        jest.runAllTimers()
-      })
       expect(queryByText(/bob/i)).toBeNull()
     })
 

@@ -5,7 +5,7 @@ import { useBalance } from '../../../hooks/useBalance'
 import { useKeyring } from '../../../hooks/useKeyring'
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
-import { Select, SelectProps } from '../../selects'
+import { Select } from '../../selects'
 import { TokenValue } from '../../typography'
 import { filterByText, isValidAddress } from './helpers'
 import { OptionListAccount } from './OptionListAccount'
@@ -14,10 +14,17 @@ export const filterAccount = (filterOut: Account | undefined) => {
   return filterOut ? (account: Account) => account.address !== filterOut.address : () => true
 }
 
-export const SelectAccount = React.memo(({ onChange, filter, selected }: SelectProps<Account>) => {
+interface Props {
+  onChange: (selected: Account) => void
+  filter?: (option: Account) => boolean
+  selected?: Account
+  disabled?: boolean
+}
+
+export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
   const { allAccounts } = useAccounts()
   const options = allAccounts.filter(filter || (() => true))
-  const [selectedOption, setSelectedOption] = useState<Account | undefined>(selected)
+  const [selectedOption, setSelectedOption] = useState(selected)
   const balance = useBalance(selectedOption)
 
   const [search, setSearch] = useState('')

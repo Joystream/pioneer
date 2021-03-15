@@ -3,7 +3,7 @@ import { useSearchMembersQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
 import { useDebounce } from '../../../hooks/useDebounce'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
-import { Select, SelectProps } from '../../selects'
+import { Select } from '../../selects'
 import { MemberInfo } from '../MemberInfo'
 import { OptionsListMember } from './OptionsListMember'
 
@@ -24,7 +24,14 @@ const filterByText = (options: BaseMember[], text: string) => {
   )
 }
 
-export const SelectMember = ({ onChange, filter, selected, disabled }: SelectProps<BaseMember>) => {
+interface Props {
+  onChange: (selected: BaseMember) => void
+  filter?: (option: BaseMember) => boolean
+  selected?: BaseMember
+  disabled?: boolean
+}
+
+export const SelectMember = ({ onChange, filter, selected, disabled }: Props) => {
   const baseFilter = filter || (() => true)
   const [search, setSearch] = useState('')
   const searchDebounced = useDebounce(search, 400)
