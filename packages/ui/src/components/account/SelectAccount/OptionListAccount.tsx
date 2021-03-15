@@ -1,13 +1,18 @@
 import React from 'react'
 import { Account } from '../../../common/types'
-import { Option, OptionListProps, OptionsListComponent } from '../../selects'
+import { Option, OptionsListComponent } from '../../selects'
 import { OptionAccount } from './OptionAccount'
 
-export const OptionListAccount = React.memo(({ options, onChange }: OptionListProps<Account>) => (
+interface Props {
+  options: Account[]
+  onChange: (option: Account) => void
+}
+
+export const OptionListAccount = React.memo(({ options, onChange }: Props) => (
   <OptionsListComponent>
     {options.map((option) => (
       <Option key={option.address} onClick={() => onChange && onChange(option)}>
-        <OptionAccount account={option} />
+        <OptionAccount option={option} />
       </Option>
     ))}
   </OptionsListComponent>
