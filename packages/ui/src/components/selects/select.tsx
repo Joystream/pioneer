@@ -70,9 +70,13 @@ export const Select = <T extends any>({
     isOpen && textInput.current?.focus()
   }, [isOpen])
 
+  const onToggleClick = () => {
+    !isOpen && !disabled && toggleOpen()
+  }
+
   return (
     <SelectComponent ref={selectNode}>
-      <Toggle onClick={() => !isOpen && toggleOpen()} isOpen={isOpen} disabled={disabled}>
+      <Toggle onClick={onToggleClick} isOpen={isOpen} disabled={disabled}>
         {selectedOption && !isOpen && <SelectedOption>{renderSelected(selectedOption)}</SelectedOption>}
         {(!selectedOption || isOpen) && (
           <EmptyOption
@@ -81,6 +85,7 @@ export const Select = <T extends any>({
             placeholder={placeholder}
             autoComplete="off"
             value={filterInput}
+            disabled={disabled}
             onChange={(t) => setFilterInput(t.target.value)}
           />
         )}
