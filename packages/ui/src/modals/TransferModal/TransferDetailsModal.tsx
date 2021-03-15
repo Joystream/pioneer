@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../common/types'
-import { ButtonPrimaryMedium, ButtonSecondarySmall } from '../../components/buttons'
+import { Button } from '../../components/buttons'
 import { Label, NumberInput } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
@@ -62,10 +62,10 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
             />
           </AmountInputBlock>
           <AmountButtons>
-            <AmountButton onClick={setHalf} disabled={isValueDisabled}>
+            <AmountButton variant="secondary" size="small" onClick={setHalf} disabled={isValueDisabled}>
               Use half
             </AmountButton>
-            <AmountButton onClick={setMax} disabled={isValueDisabled}>
+            <AmountButton variant="secondary" size="small" onClick={setMax} disabled={isValueDisabled}>
               Use max
             </AmountButton>
           </AmountButtons>
@@ -76,9 +76,9 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
         </Row>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimaryMedium onClick={onClick} disabled={isTransferDisabled}>
+        <Button variant="primary" size="medium" onClick={onClick} disabled={isTransferDisabled}>
           Transfer tokens
-        </ButtonPrimaryMedium>
+        </Button>
       </ModalFooter>
     </Modal>
   )
@@ -92,7 +92,7 @@ const AmountButtons = styled.div`
   height: 46px;
   align-items: center;
 `
-const AmountButton = styled(ButtonSecondarySmall)`
+const AmountButton = styled(Button)`
   height: 26px;
   padding: 4px 6px;
   font-size: 10px;

@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
+import { Button, ButtonsGroup } from '../../../components/buttons'
 import { AddMembershipButton } from '../../../components/membership/AddMembershipButton'
-import { ButtonGhostMedium, ButtonPrimaryMedium, ButtonsGroup } from '../../../components/buttons'
 import { Text } from '../../../components/typography'
 import { Colors } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
@@ -26,7 +26,7 @@ export function Memberships() {
             velit mollit. Exercitation veniam consequat sunt nostrud amet.
           </Text>
         </NoMembershipsInfo>
-        <NoMembershipButton />
+        <NoMembershipButton>Create a membership</NoMembershipButton>
       </NoMemberships>
     )
   }
@@ -36,8 +36,10 @@ export function Memberships() {
   return (
     <MembershipsTables>
       <NewMembers>
-        <ButtonGhostMedium>Invite a member</ButtonGhostMedium>
-        <ButtonPrimaryMedium>Add Membership</ButtonPrimaryMedium>
+        <Button variant="ghost" size="medium">
+          Invite a member
+        </Button>
+        <AddMembershipButton>Add Membership</AddMembershipButton>
       </NewMembers>
       {!!active && <MembersSection title="Active membership" members={[active]} />}
       {!!otherMemberships.length && <MembersSection title="Other memberships" members={otherMemberships} />}

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
-import { ButtonGhostMedium } from '../../buttons'
+import { Button } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
@@ -51,10 +51,10 @@ export const MemberProfile = ({ onClose, member }: Props) => {
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
         <SidePaneFooter>
-          <ButtonGhostMedium>
+          <Button variant="ghost" size="medium">
             <EditSymbol />
             Edit My Profile
-          </ButtonGhostMedium>
+          </Button>
         </SidePaneFooter>
       </SidePane>
     </SidePaneGlass>

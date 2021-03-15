@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { BorderRad, Colors, Sizes, Transitions } from '../../constants'
 import { Icon } from '../icons'
-import { ButtonGhostMediumSquare } from './Buttons'
+import { Button } from './Buttons'
 
-export const ToggleButton = styled(ButtonGhostMediumSquare)`
+export const ToggleButton = styled(Button)`
   background-color: transparent;
   &,
   &:hover,

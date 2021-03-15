@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 import { Account, BaseMember } from '../../common/types'
-import { ButtonPrimaryMedium } from '../../components/buttons'
+import { Button } from '../../components/buttons'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/Modal'
 import { TokenValue } from '../../components/typography'
@@ -59,9 +59,9 @@ export function SignTransferModal({ onClose, sourceMember, targetMember, amount,
               />
             </BalanceInfoNarrow>
           </TransactionInfo>
-          <ButtonPrimaryMedium onClick={send} disabled={status !== 'READY'}>
+          <Button variant="primary" size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign and Send
-          </ButtonPrimaryMedium>
+          </Button>
         </ModalFooter>
       </Modal>
     )

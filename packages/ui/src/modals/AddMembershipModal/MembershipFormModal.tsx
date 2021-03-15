@@ -2,7 +2,8 @@ import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useCallback, useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import { Account, Member } from '../../common/types'
-import { ButtonPrimaryMedium } from '../../components/buttons'
+import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
+import { Button } from '../../components/buttons'
 import {
   Checkbox,
   InlineToggleWrap,
@@ -13,15 +14,14 @@ import {
   ToggleCheckbox,
 } from '../../components/forms'
 import { Help } from '../../components/Help'
+import { SelectMember } from '../../components/membership/SelectMember'
 import {
   ModalFooter,
   ModalHeader,
+  ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
-  ScrolledModal,
 } from '../../components/Modal'
-import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
-import { SelectMember } from '../../components/membership/SelectMember'
 import { Text, TokenValue } from '../../components/typography'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 
@@ -181,9 +181,9 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           </InfoValue>
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
         </BalanceInfoNarrow>
-        <ButtonPrimaryMedium onClick={onCreate} disabled={!isFormValid}>
+        <Button variant="primary" size="medium" onClick={onCreate} disabled={!isFormValid}>
           Create a Membership
-        </ButtonPrimaryMedium>
+        </Button>
       </ModalFooter>
     </ScrolledModal>
   )
