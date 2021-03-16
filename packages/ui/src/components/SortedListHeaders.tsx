@@ -54,7 +54,4 @@ const IconDown = styled.span`
 
 const IconUp = styled(IconDown)`
   transform: rotate(180deg);
-
-  ${Icon} {
-  }
 `
