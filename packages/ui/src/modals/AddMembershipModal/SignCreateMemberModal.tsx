@@ -30,6 +30,7 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
     handle: transactionParams.handle,
     avatar_uri: transactionParams.avatarURI,
     about: transactionParams.about,
+    referrer_id: transactionParams.referrer?.id,
   })
 
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
