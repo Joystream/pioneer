@@ -1,8 +1,8 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect, useState } from 'react'
-import { ValidationError } from 'yup'
 import * as Yup from 'yup'
+import { ValidationError } from 'yup'
 import { Account, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
@@ -14,8 +14,8 @@ import {
   TextArea,
   TextInput,
   ToggleCheckbox,
-  ValidationErrorInfo,
 } from '../../components/forms'
+import { FieldError, hasError } from '../../components/forms/FieldError'
 import { Help } from '../../components/Help'
 import { SelectMember } from '../../components/membership/SelectMember'
 import {
@@ -38,11 +38,6 @@ interface CreateProps {
   membershipPrice?: BalanceOf
 }
 
-const getError = (field: string, errors: ValidationError[]) => {
-  return errors.find((error) => error.path === field)
-}
-const hasError = (field: string, errors: ValidationError[]) => !(!getError(field, errors)?.value ?? true)
-
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
   const [rootAccount, setRootAccount] = useState<Account | undefined>()
@@ -56,7 +51,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
   const [isFormValid, setFormValid] = useState(false)
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState<ValidationError[]>([])
   const handleHash = blake2AsHex(handle)
 
   const potentialMemberId = useObservable(api?.query.members.memberIdByHandleHash(handleHash), [handle])
@@ -171,7 +166,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               onChange={(event) => setHandle(event.target.value)}
               invalid={hasError('handle', errors)}
             />
-            <InvalidFieldError field={'handle'} errors={errors} />
+            <FieldError name="handle" errors={errors} />
           </Row>
 
           <Row>
@@ -198,7 +193,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
             <Text size={3} italic={true}>
               Paste an URL of your avatar image. Text lorem ipsum.
             </Text>
-            <InvalidFieldError field={'avatar'} errors={errors} />
+            <FieldError name="avatar" errors={errors} />
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
@@ -231,23 +226,4 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
       </ModalFooter>
     </ScrolledModal>
   )
-}
-
-interface Props {
-  field: string
-  errors: ValidationError[]
-}
-
-const InvalidFieldError = ({ field, errors }: Props) => {
-  const error = getError(field, errors)
-
-  if (error && error.value) {
-    return (
-      <>
-        <ValidationErrorInfo>{error.message}</ValidationErrorInfo>
-      </>
-    )
-  }
-
-  return null
 }
