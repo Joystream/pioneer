@@ -42,3 +42,7 @@ export const TextArea = styled.textarea`
     color: ${Colors.Black[400]};
   }
 `
+export const ValidationErrorInfo = styled.span`
+  color: red;
+  padding: 4px 0;
+`

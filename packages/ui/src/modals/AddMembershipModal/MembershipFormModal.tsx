@@ -1,4 +1,5 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
+import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import { Account, Member } from '../../common/types'
@@ -12,6 +13,7 @@ import {
   TextArea,
   TextInput,
   ToggleCheckbox,
+  ValidationErrorInfo,
 } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { SelectMember } from '../../components/membership/SelectMember'
@@ -23,6 +25,8 @@ import {
   ScrolledModalContainer,
 } from '../../components/Modal'
 import { Text, TokenValue } from '../../components/typography'
+import { useApi } from '../../hooks/useApi'
+import { useObservable } from '../../hooks/useObservable'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 
 const AvatarSchema = Yup.string().url()
@@ -46,14 +50,20 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
   const [isFormValid, setFormValid] = useState(false)
   const isNotEmpty = !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && hasTermsAgreed
+  const { api } = useApi()
+  const handleHash = blake2AsHex(handle)
+
+  const potentialMemberId = useObservable(api?.query.members.memberIdByHandleHash(handleHash), [handle])
+  const existingMember = useObservable(api?.query.members.membershipById(potentialMemberId || 0), [potentialMemberId])
+  const isHandleTaken = existingMember?.handle_hash.toJSON() === handleHash
 
   useEffect(() => {
     if (avatar) {
       AvatarSchema.isValid(avatar).then((isAvatarValid) => {
-        setFormValid(isNotEmpty && isAvatarValid)
+        setFormValid(isNotEmpty && isAvatarValid && !isHandleTaken)
       })
     } else {
-      setFormValid(isNotEmpty)
+      setFormValid(isNotEmpty && !isHandleTaken)
     }
   }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
 
@@ -130,6 +140,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               value={handle}
               onChange={(event) => setHandle(event.target.value)}
             />
+            {isHandleTaken && <ValidationErrorInfo>This handle is already taken.</ValidationErrorInfo>}
           </Row>
 
           <Row>
