@@ -4,12 +4,12 @@ import { BaseMember } from '../../../common/types'
 import { Button, ButtonsGroup } from '../../../components/buttons'
 import { AddMembershipButton } from '../../../components/membership/AddMembershipButton'
 import { Text } from '../../../components/typography'
-import { Colors, Transitions } from '../../../constants'
+import { Colors } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { MemberItem } from './MemberItem'
 import { SortKey, sortMemberships } from '../../../utils/sorting/sortMemberships'
-import { ArrowDownIcon, Icon } from '../../../components/icons'
 import { setOrder } from './helpers'
+import { HeaderText, SortIconDown, SortIconUp } from '../../../components/SortedListHeaders'
 
 export function Memberships() {
   const { count, isLoading, members, active } = useMyMemberships()
@@ -67,18 +67,9 @@ const MembersSection = ({ title, members }: MembersSectionProps) => {
   const Header = ({ children, sortKey }: HeaderProps) => {
     return (
       <ListHeader onClick={getOnSort(sortKey)}>
-        <HeaderText isDescending={isDescending} sortBy={sortBy} sortKey={sortKey}>
+        <HeaderText>
           {children}
-          {sortBy === sortKey &&
-            (isDescending ? (
-              <SortIconDown>
-                <ArrowDownIcon />
-              </SortIconDown>
-            ) : (
-              <SortIconUp>
-                <ArrowDownIcon />
-              </SortIconUp>
-            ))}
+          {sortBy === sortKey && (isDescending ? <SortIconDown /> : <SortIconUp />)}
         </HeaderText>
       </ListHeader>
     )
@@ -201,13 +192,6 @@ const ListHeader = styled.span`
   }
 `
 
-const HeaderText = styled.span<{ isDescending?: boolean; sortBy: SortKey; sortKey: SortKey }>`
-  display: inline-flex;
-  position: relative;
-  align-items: center;
-  width: fit-content;
-`
-
 const MembershipsList = styled.ul`
   display: flex;
   flex-direction: column;
@@ -219,38 +203,4 @@ const MembershipsList = styled.ul`
 
 const Loading = styled.div`
   font-size: 2em;
-`
-
-const SortIconDown = styled.span`
-  display: inline-flex;
-  position: absolute;
-  left: calc(100% + 4px);
-  width: fit-content;
-  height: fit-content;
-  transition: ${Transitions.all};
-
-  ${Icon} {
-    width: 12px;
-    height: 12px;
-    color: ${Colors.Black[600]};
-    animation: sortArrowFlip ${Transitions.duration} ease;
-
-    @keyframes sortArrowFlip {
-      from {
-        opacity: 0;
-        transform: scaleY(-1);
-      }
-      to {
-        opacity: 1;
-        transform: scaleY(1);
-      }
-    }
-  }
-`
-
-const SortIconUp = styled(SortIconDown)`
-  transform: rotate(180deg);
-
-  ${Icon} {
-  }
 `
