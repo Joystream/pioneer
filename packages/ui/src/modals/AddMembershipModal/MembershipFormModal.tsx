@@ -1,6 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect, useState } from 'react'
+import { ValidationError } from 'yup'
 import * as Yup from 'yup'
 import { Account, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
@@ -37,7 +38,13 @@ interface CreateProps {
   membershipPrice?: BalanceOf
 }
 
+const getError = (field: string, errors: ValidationError[]) => {
+  return errors.find((error) => error.path === field)
+}
+const hasError = (field: string, errors: ValidationError[]) => !(!getError(field, errors)?.value ?? true)
+
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
+  const { api } = useApi()
   const [rootAccount, setRootAccount] = useState<Account | undefined>()
   const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
   const [name, setName] = useState('')
@@ -49,22 +56,45 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
   const [isFormValid, setFormValid] = useState(false)
-  const isNotEmpty = !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && hasTermsAgreed
-  const { api } = useApi()
+  const [errors, setErrors] = useState([])
   const handleHash = blake2AsHex(handle)
 
   const potentialMemberId = useObservable(api?.query.members.memberIdByHandleHash(handleHash), [handle])
   const existingMember = useObservable(api?.query.members.membershipById(potentialMemberId || 0), [potentialMemberId])
   const isHandleTaken = existingMember?.handle_hash.toJSON() === handleHash
 
+  const Schema = Yup.object().shape({
+    rootAccount: Yup.object().required(),
+    controllerAccount: Yup.object().required(),
+    avatar: AvatarSchema,
+    name: Yup.string().required(),
+    handle: Yup.string()
+      .test('handle', 'This handle is already taken', () => !isHandleTaken)
+      .required(),
+    hasTermsAgreed: Yup.boolean().required().oneOf([true]),
+  })
+
   useEffect(() => {
-    if (avatar) {
-      AvatarSchema.isValid(avatar).then((isAvatarValid) => {
-        setFormValid(isNotEmpty && isAvatarValid && !isHandleTaken)
+    setFormValid(false)
+    Schema.validate(
+      {
+        avatar,
+        rootAccount,
+        controllerAccount,
+        handle,
+        name,
+        hasTermsAgreed,
+      },
+      { abortEarly: false }
+    )
+      .then(() => {
+        setFormValid(true)
+        setErrors([])
       })
-    } else {
-      setFormValid(isNotEmpty && !isHandleTaken)
-    }
+      .catch((error) => {
+        setFormValid(false)
+        setErrors(error.inner)
+      })
   }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
 
   const onCreate = () => {
@@ -139,8 +169,9 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               placeholder="Type"
               value={handle}
               onChange={(event) => setHandle(event.target.value)}
+              invalid={hasError('handle', errors)}
             />
-            {isHandleTaken && <ValidationErrorInfo>This handle is already taken.</ValidationErrorInfo>}
+            <InvalidFieldError field={'handle'} errors={errors} />
           </Row>
 
           <Row>
@@ -162,10 +193,12 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               placeholder="Image URL"
               value={avatar}
               onChange={(event) => setAvatar(event.target.value)}
+              invalid={hasError('avatar', errors)}
             />
             <Text size={3} italic={true}>
               Paste an URL of your avatar image. Text lorem ipsum.
             </Text>
+            <InvalidFieldError field={'avatar'} errors={errors} />
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
@@ -198,4 +231,23 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
       </ModalFooter>
     </ScrolledModal>
   )
+}
+
+interface Props {
+  field: string
+  errors: ValidationError[]
+}
+
+const InvalidFieldError = ({ field, errors }: Props) => {
+  const error = getError(field, errors)
+
+  if (error && error.value) {
+    return (
+      <>
+        <ValidationErrorInfo>{error.message}</ValidationErrorInfo>
+      </>
+    )
+  }
+
+  return null
 }
