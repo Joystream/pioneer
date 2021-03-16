@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Button, ButtonsGroup } from '../../../components/buttons'
 import { AddMembershipButton } from '../../../components/membership/AddMembershipButton'
 import { Text } from '../../../components/typography'
-import { Colors } from '../../../constants'
+import { Colors, Transitions } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { MemberItem } from './MemberItem'
+import { SortKey, sortMemberships } from '../../../utils/sorting/sortMemberships'
+import { ArrowDownIcon, Icon } from '../../../components/icons'
+import { setOrder } from './helpers'
 
 export function Memberships() {
   const { count, isLoading, members, active } = useMyMemberships()
@@ -52,28 +55,63 @@ interface MembersSectionProps {
   members: BaseMember[]
 }
 
-const MembersSection = ({ title, members }: MembersSectionProps) => (
-  <>
-    <MembershipsTableTitle>{title}</MembershipsTableTitle>
+const MembersSection = ({ title, members }: MembersSectionProps) => {
+  const [sortBy, setSortBy] = useState<SortKey>('handle')
+  const [isDescending, setDescending] = useState(false)
+  const sortedMemberships = useMemo(() => sortMemberships(members, sortBy, isDescending), [
+    members,
+    sortBy,
+    isDescending,
+  ])
+  const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
+  const Header = ({ children, sortKey }: HeaderProps) => {
+    return (
+      <ListHeader onClick={getOnSort(sortKey)}>
+        <HeaderText isDescending={isDescending} sortBy={sortBy} sortKey={sortKey}>
+          {children}
+          {sortBy === sortKey &&
+            (isDescending ? (
+              <SortIconDown>
+                <ArrowDownIcon />
+              </SortIconDown>
+            ) : (
+              <SortIconUp>
+                <ArrowDownIcon />
+              </SortIconUp>
+            ))}
+        </HeaderText>
+      </ListHeader>
+    )
+  }
 
-    <MembershipsGroup>
-      <ListHeaders>
-        <ListHeader>Memeberships</ListHeader>
-        <ListHeader>Roles</ListHeader>
-        <ListHeader>Slashed</ListHeader>
-        <ListHeader>Terminated</ListHeader>
-        <ListHeader>Invitations</ListHeader>
-        <ListHeader>Invited</ListHeader>
-      </ListHeaders>
+  return (
+    <>
+      <MembershipsTableTitle>{title}</MembershipsTableTitle>
 
-      <MembershipsList>
-        {members.map((member) => (
-          <MemberItem member={member} key={member.handle} />
-        ))}
-      </MembershipsList>
-    </MembershipsGroup>
-  </>
-)
+      <MembershipsGroup>
+        <ListHeaders>
+          <Header sortKey={'handle'}>Memeberships</Header>
+          <ListHeader>Roles</ListHeader>
+          <ListHeader>Slashed</ListHeader>
+          <ListHeader>Terminated</ListHeader>
+          <Header sortKey={'inviteCount'}>Invitations</Header>
+          <ListHeader>Invited</ListHeader>
+        </ListHeaders>
+
+        <MembershipsList>
+          {sortedMemberships.map((member) => (
+            <MemberItem member={member} key={member.handle} />
+          ))}
+        </MembershipsList>
+      </MembershipsGroup>
+    </>
+  )
+}
+
+interface HeaderProps {
+  children: ReactNode
+  sortKey: SortKey
+}
 
 const NoMembershipButton = styled(AddMembershipButton)`
   grid-area: none;
@@ -163,6 +201,13 @@ const ListHeader = styled.span`
   }
 `
 
+const HeaderText = styled.span<{ isDescending?: boolean; sortBy: SortKey; sortKey: SortKey }>`
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  width: fit-content;
+`
+
 const MembershipsList = styled.ul`
   display: flex;
   flex-direction: column;
@@ -174,4 +219,38 @@ const MembershipsList = styled.ul`
 
 const Loading = styled.div`
   font-size: 2em;
+`
+
+const SortIconDown = styled.span`
+  display: inline-flex;
+  position: absolute;
+  left: calc(100% + 4px);
+  width: fit-content;
+  height: fit-content;
+  transition: ${Transitions.all};
+
+  ${Icon} {
+    width: 12px;
+    height: 12px;
+    color: ${Colors.Black[600]};
+    animation: sortArrowFlip ${Transitions.duration} ease;
+
+    @keyframes sortArrowFlip {
+      from {
+        opacity: 0;
+        transform: scaleY(-1);
+      }
+      to {
+        opacity: 1;
+        transform: scaleY(1);
+      }
+    }
+  }
+`
+
+const SortIconUp = styled(SortIconDown)`
+  transform: rotate(180deg);
+
+  ${Icon} {
+  }
 `
