@@ -66,7 +66,7 @@ const MembersSection = ({ title, members }: MembersSectionProps) => {
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
   const Header = ({ children, sortKey }: HeaderProps) => {
     return (
-      <ListHeader onClick={getOnSort(sortKey)}>
+      <ListHeader onClick={sortKey && getOnSort(sortKey)}>
         <HeaderText>
           {children}
           {sortBy === sortKey && (isDescending ? <SortIconDown /> : <SortIconUp />)}
@@ -74,6 +74,7 @@ const MembersSection = ({ title, members }: MembersSectionProps) => {
       </ListHeader>
     )
   }
+  const canSort = sortedMemberships.length > 1
 
   return (
     <>
@@ -81,11 +82,11 @@ const MembersSection = ({ title, members }: MembersSectionProps) => {
 
       <MembershipsGroup>
         <ListHeaders>
-          <Header sortKey={'handle'}>Memeberships</Header>
+          <Header sortKey={canSort ? 'handle' : undefined}>Memeberships</Header>
           <ListHeader>Roles</ListHeader>
           <ListHeader>Slashed</ListHeader>
           <ListHeader>Terminated</ListHeader>
-          <Header sortKey={'inviteCount'}>Invitations</Header>
+          <Header sortKey={canSort ? 'inviteCount' : undefined}>Invitations</Header>
           <ListHeader>Invited</ListHeader>
         </ListHeaders>
 
@@ -101,7 +102,7 @@ const MembersSection = ({ title, members }: MembersSectionProps) => {
 
 interface HeaderProps {
   children: ReactNode
-  sortKey: SortKey
+  sortKey?: SortKey
 }
 
 const NoMembershipButton = styled(AddMembershipButton)`

@@ -56,10 +56,10 @@ describe('sortMemberships', () => {
   })
 
   describe('By invite number', () => {
-    const alice: BaseMember = { ...template, inviteCount: new BN(1) }
-    const bob: BaseMember = { ...template, inviteCount: new BN(2) }
-    const charlie: BaseMember = { ...template, inviteCount: new BN(2) }
-    const david: BaseMember = { ...template, inviteCount: new BN(3) }
+    const alice: BaseMember = { ...template, inviteCount: 1 }
+    const bob: BaseMember = { ...template, inviteCount: 2 }
+    const charlie: BaseMember = { ...template, inviteCount: 2 }
+    const david: BaseMember = { ...template, inviteCount: 3 }
 
     it('Ascending', () => {
       expect(sortMemberships([david, alice, charlie, bob], 'inviteCount', false)).toEqual([alice, charlie, bob, david])
