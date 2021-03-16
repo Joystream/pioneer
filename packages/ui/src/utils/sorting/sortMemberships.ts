@@ -8,7 +8,7 @@ export function sortMemberships(members: BaseMember[], key: SortKey, isDescendin
     return members.sort(Comparator<BaseMember>(isDescending, key).string)
   }
   if (key === 'inviteCount') {
-    return members.sort(Comparator<BaseMember>(isDescending, key).bigNumber)
+    return members.sort(Comparator<BaseMember>(isDescending, key).number)
   }
   return members
 }
