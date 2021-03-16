@@ -70,7 +70,9 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   })
 
   useEffect(() => {
+    let stillWaiting = true
     setFormValid(false)
+
     Schema.validate(
       {
         avatar,
@@ -83,13 +85,21 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
       { abortEarly: false }
     )
       .then(() => {
-        setFormValid(true)
-        setErrors([])
+        if (stillWaiting) {
+          setFormValid(true)
+          setErrors([])
+        }
       })
       .catch((error) => {
-        setFormValid(false)
-        setErrors(error.inner)
+        if (stillWaiting) {
+          setFormValid(false)
+          setErrors(error.inner)
+        }
       })
+
+    return () => {
+      stillWaiting = false
+    }
   }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
 
   const onCreate = () => {
