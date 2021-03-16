@@ -41,7 +41,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   const [about, setAbout] = useState('')
   const [avatar, setAvatar] = useState('')
   const [isReferred, setIsReferred] = useState(false)
-  const [referrer, setReferrrer] = useState<BaseMember>()
+  const [referrer, setReferrer] = useState<BaseMember>()
   const [hasTermsAgreed, setTerms] = useState(false)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
@@ -58,6 +58,10 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
       setFormValid(isNotEmpty && isReferralValid)
     }
   }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
+
+  useEffect(() => {
+    !isReferred && setReferrer(undefined)
+  }, [isReferred])
 
   const onCreate = () => {
     if (!controllerAccount || !rootAccount) {
@@ -85,7 +89,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               <Label>I was referred by a member: </Label>
               <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
             </InlineToggleWrap>
-            {isReferred && <SelectMember onChange={setReferrrer} disabled={!isReferred} selected={referrer} />}
+            {isReferred && <SelectMember onChange={setReferrer} disabled={!isReferred} selected={referrer} />}
           </Row>
 
           <Row>
