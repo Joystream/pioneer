@@ -2,7 +2,6 @@ import { expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { Matcher } from '@testing-library/dom/types/matches'
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
 import { MemberFieldsFragment } from '../../src/api/queries'
@@ -12,18 +11,10 @@ import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
+import { selectMember } from '../helpers/selectMember'
 import { mockKeyring } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
-
-const selectMember = (label: string, name: string, getByText: (text: Matcher) => HTMLElement) => {
-  const labelElement = getByText(/^to$/i)
-  const parentNode = labelElement.parentElement
-  const button = parentNode?.querySelector('div > button')
-
-  expect(button).toBeDefined()
-  button && fireEvent.click(button)
-}
 
 const members: MemberFieldsFragment[] = []
 
@@ -61,22 +52,23 @@ describe('UI: TransferInviteModal', () => {
     expect(findByText(/transfer invites/i)).toBeDefined()
   })
 
-  xit('Validates form', async () => {
+  it('Validates form', async () => {
     const aliceMember = await getMember('Alice')
     const bobMember = await getMember('Bob')
 
     members.push((aliceMember as unknown) as MemberFieldsFragment)
     members.push((bobMember as unknown) as MemberFieldsFragment)
 
-    const { getByLabelText, getByRole, getByText } = renderModal((aliceMember as unknown) as MemberFieldsFragment)
+    const { findByLabelText, findByRole, findByText } = renderModal((aliceMember as unknown) as MemberFieldsFragment)
 
-    const button = getByRole('button', { name: /transfer invites/i }) as HTMLButtonElement
+    const button = (await findByRole('button', { name: /transfer invites/i })) as HTMLButtonElement
     expect(button.disabled).toBeTruthy()
 
-    const input = getByLabelText(/number of invites/i)
+    const input = await findByLabelText(/number of invites/i)
     expect(input).toBeDefined()
     fireEvent.change(input, { target: { value: '1' } })
-    selectMember('to', 'bob', getByText)
+
+    await selectMember('to', 'bob', findByText)
 
     expect(button.disabled).toBeFalsy()
   })
