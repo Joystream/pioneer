@@ -1,8 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useCallback, useEffect, useReducer, useState } from 'react'
+import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
-import { AnyObjectSchema, ValidationError } from 'yup'
 import { Account, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
@@ -29,42 +28,13 @@ import { Text, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
+import { FormFields, formReducer } from './formReducer'
+import { useFormValidation } from './useFormValidation'
 
 interface CreateProps {
   onClose: () => void
   onSubmit: (params: Member) => void
   membershipPrice?: BalanceOf
-}
-
-interface FormFields {
-  rootAccount: Account | undefined
-  controllerAccount: Account | undefined
-  name: string
-  handle: string
-  about: string
-  avatarURI: string
-  isReferred: boolean
-  hasTerms: boolean
-}
-
-type Action = { type: keyof FormFields; value: string | Account | boolean }
-
-const formReducer = (state: FormFields, action: Action): FormFields => {
-  switch (action.type) {
-    case 'name':
-    case 'handle':
-    case 'about':
-    case 'avatarURI':
-      return { ...state, [action.type]: action.value as string }
-    case 'rootAccount':
-    case 'controllerAccount':
-      return { ...state, [action.type]: action.value as Account }
-    case 'hasTerms':
-    case 'isReferred':
-      return { ...state, [action.type]: action.value as boolean }
-    default:
-      return { ...state }
-  }
 }
 
 const CreateMemberSchema = Yup.object().shape({
@@ -80,47 +50,6 @@ const CreateMemberSchema = Yup.object().shape({
     .required(),
   hasTerms: Yup.boolean().required().oneOf([true]),
 })
-
-const useFormValidation = <T extends any>(schema: AnyObjectSchema) => {
-  const [isValid, setValid] = useState(false)
-  const [errors, setErrors] = useState<ValidationError[]>([])
-
-  const [data, setData] = useState<T>()
-  const [context, setContext] = useState()
-
-  useEffect(() => {
-    let stillWaiting = true
-    setValid(false)
-
-    schema
-      .validate(data, { abortEarly: false, stripUnknown: true, context: context })
-      .then(() => {
-        if (stillWaiting) {
-          setValid(true)
-          setErrors([])
-        }
-      })
-      .catch((error) => {
-        if (stillWaiting) {
-          setValid(false)
-          setErrors(error.inner)
-        }
-      })
-
-    return () => {
-      stillWaiting = false
-    }
-  }, [data, context])
-
-  return {
-    isValid,
-    errors,
-    validate: (data: any, context: any) => {
-      setData(data)
-      setContext(context)
-    },
-  }
-}
 
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
