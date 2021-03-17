@@ -1,5 +1,5 @@
 import React from 'react'
-import { SelectAccount } from '../../components/account/SelectAccount'
+import { EnterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
 import { Checkbox, Label, LabelLink, TextArea, TextInput } from '../../components/forms'
 import { Help } from '../../components/Help'
@@ -40,14 +40,14 @@ export const InviteFormModal = ({ onClose }: InviteProps) => {
             <Label isRequired>
               Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
-            <SelectAccount onChange={() => null} />
+            <EnterAccount onChange={() => null} name="Root account" />
           </Row>
 
           <Row>
             <Label isRequired>
               Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
-            <SelectAccount onChange={() => null} />
+            <EnterAccount onChange={() => null} name="Controller account" />
           </Row>
 
           <Row>
