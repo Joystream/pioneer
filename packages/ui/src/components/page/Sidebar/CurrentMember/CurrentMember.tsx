@@ -4,10 +4,9 @@ import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMyMemberships } from '../../../../hooks/useMyMemberships'
 import { useToggle } from '../../../../hooks/useToggle'
 import { AddMembershipModal } from '../../../../modals/AddMembershipModal'
-import { AddMembershipButton } from '../../../membership/AddMembershipButton'
 import { ArrowDownExpandedIcon, ArrowIcon } from '../../../icons'
-import { MemberDarkHover, MemberInfo } from '../../../membership/MemberInfo'
-import { MembershipsCount } from '../../../membership/MembershipCount'
+import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../../membership'
+import { AddMembershipButton } from '../../../membership/AddMembershipButton'
 import { SwitchMemberModal } from './SwitchMemberModal'
 
 export const CurrentMember = () => {
