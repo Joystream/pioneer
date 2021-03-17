@@ -16,7 +16,13 @@ import {
 import { MemberInfoWrapProps } from '../types'
 import { Action, MemberUpdateForm } from './MemberProfile'
 
-type Props = MemberInfoWrapProps & { member: BaseMember; state: MemberUpdateForm; dispatch: Dispatch<Action> }
+export type EditProfileProps = {
+  isEdit?: boolean
+  state: MemberUpdateForm
+  dispatch: Dispatch<Action>
+}
+
+type Props = MemberInfoWrapProps & { member: BaseMember } & EditProfileProps
 
 export const EditMemberInfo = React.memo(({ member, isOnDark, showId, memberSize, state, dispatch }: Props) => {
   return (

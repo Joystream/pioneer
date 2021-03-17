@@ -84,7 +84,9 @@ export const MemberProfile = ({ onClose, member }: Props) => {
           </PageTabsNav>
         </SidePaneHeader>
         <SidePaneBody>
-          {activeTab === 'DETAILS' && <MemberDetails member={member} />}
+          {activeTab === 'DETAILS' && (
+            <MemberDetails member={member} isEdit={isEdit} state={state} dispatch={dispatch} />
+          )}
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
