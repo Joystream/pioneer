@@ -1,6 +1,6 @@
 import { beforeAll } from '@jest/globals'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
+import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 import { CurrentMember } from '../../src/components/page/Sidebar/CurrentMember'
 import { KeyringContext } from '../../src/providers/keyring/context'
@@ -45,17 +45,12 @@ describe('UI: CurrentMember component', () => {
       expect(getByText(/alice_handle/i)).toBeDefined()
     })
 
-    it.skip('Shows switcher on click', async () => {
-      const { getByText, getByRole } = await renderAndWait()
+    it('Shows switcher on click', async () => {
+      const { findByText, findByRole } = await renderAndWait()
 
-      const button = getByText(/alice_handle/i)
+      fireEvent.click(await findByText(/alice_handle/i))
 
-      act(() => {
-        fireEvent.click(button)
-        jest.runAllTimers()
-      })
-
-      const modal = getByRole('modal')
+      const modal = await findByRole('modal')
       expect(modal).toBeDefined()
 
       expect(within(modal).getByText(/alice_handle/i)).toBeDefined()

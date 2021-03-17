@@ -1,7 +1,11 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { BorderRad, Colors, Fonts } from '../../constants'
 
-export const TextInput = styled.input`
+interface InputProps {
+  invalid?: boolean
+}
+
+export const TextInput = styled.input<InputProps>`
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -17,6 +21,17 @@ export const TextInput = styled.input`
     font-weight: 400;
     color: ${Colors.Black[400]};
   }
+
+  ${({ invalid }) => {
+    if (invalid) {
+      return css`
+        border-color: red;
+        /* Simulate outline on FF */
+        box-shadow: 0 0 0 3px red;
+        outline: none;
+      `
+    }
+  }}
 `
 
 export const NumberInput = styled(TextInput)`
@@ -41,4 +56,8 @@ export const TextArea = styled.textarea`
     font-weight: 400;
     color: ${Colors.Black[400]};
   }
+`
+export const ValidationErrorInfo = styled.span`
+  color: red;
+  padding: 4px 0;
 `

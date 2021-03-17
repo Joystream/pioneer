@@ -1,9 +1,8 @@
 import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
-import styled from 'styled-components'
 import { Account, BaseMember } from '../../common/types'
 import { Button } from '../../components/buttons'
-import { Label, NumberInput } from '../../components/forms'
+import { Label, NumberInput, ValidationErrorInfo } from '../../components/forms'
 import { MemberInfo } from '../../components/membership/MemberInfo'
 import { filterMember, SelectMember } from '../../components/membership/SelectMember'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
@@ -76,11 +75,6 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
     </Modal>
   )
 }
-
-const ValidationErrorInfo = styled.span`
-  color: red;
-  padding: 4px 0;
-`
 
 const SelectedMember = ({ member }: { member: BaseMember }) => (
   <LockedAccount>

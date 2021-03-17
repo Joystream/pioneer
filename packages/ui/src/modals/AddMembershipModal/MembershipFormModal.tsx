@@ -1,6 +1,8 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
-import React, { useCallback, useEffect, useState } from 'react'
+import { blake2AsHex } from '@polkadot/util-crypto'
+import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
+import { AnySchema } from 'yup'
 import { Account, BaseMember, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
@@ -13,6 +15,7 @@ import {
   TextInput,
   ToggleCheckbox,
 } from '../../components/forms'
+import { FieldError, hasError } from '../../components/forms/FieldError'
 import { Help } from '../../components/Help'
 import { SelectMember } from '../../components/membership/SelectMember'
 import {
@@ -23,9 +26,11 @@ import {
   ScrolledModalContainer,
 } from '../../components/Modal'
 import { Text, TokenValue } from '../../components/typography'
+import { useApi } from '../../hooks/useApi'
+import { useObservable } from '../../hooks/useObservable'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
-
-const AvatarSchema = Yup.string().url()
+import { FormFields, formReducer } from './formReducer'
+import { useFormValidation } from './useFormValidation'
 
 interface CreateProps {
   onClose: () => void
@@ -33,50 +38,61 @@ interface CreateProps {
   membershipPrice?: BalanceOf
 }
 
+const CreateMemberSchema = Yup.object().shape({
+  rootAccount: Yup.object().required(),
+  controllerAccount: Yup.object().required(),
+  avatarURI: Yup.string().url(),
+  name: Yup.string().required(),
+  handle: Yup.string()
+    .test('handle', 'This handle is already taken', (value, testContext) => {
+      const existingMember = testContext?.options?.context?.existingMember
+      return existingMember?.handle_hash.toJSON() !== blake2AsHex(value || '')
+    })
+    .required(),
+  hasTerms: Yup.boolean().required().oneOf([true]),
+  isReferred: Yup.boolean(),
+  referrer: Yup.object().when('isReferred', (isReferred: boolean, schema: AnySchema) => {
+    return isReferred ? schema.required() : schema
+  }),
+})
+
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
-  const [rootAccount, setRootAccount] = useState<Account | undefined>()
-  const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
-  const [name, setName] = useState('')
-  const [handle, setHandle] = useState('')
-  const [about, setAbout] = useState('')
-  const [avatar, setAvatar] = useState('')
-  const [isReferred, setIsReferred] = useState(false)
-  const [referrer, setReferrer] = useState<BaseMember>()
-  const [hasTermsAgreed, setTerms] = useState(false)
+  const { api } = useApi()
+  const [state, dispatch] = useReducer(formReducer, {
+    name: '',
+    rootAccount: undefined,
+    controllerAccount: undefined,
+    handle: '',
+    about: '',
+    avatarURI: '',
+    isReferred: false,
+    referrer: undefined,
+    hasTerms: false,
+  })
+  const { rootAccount, controllerAccount, handle, name, isReferred, avatarURI, about, referrer } = state
+
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
-  const [isFormValid, setFormValid] = useState(false)
-  const isReferralValid = isReferred ? !!referrer : true
-  const isNotEmpty = !!rootAccount && !!controllerAccount && !!name && !!handle && hasTermsAgreed
+
+  const handleHash = blake2AsHex(handle)
+  const potentialMemberId = useObservable(api?.query.members.memberIdByHandleHash(handleHash), [handle])
+  const existingMember = useObservable(api?.query.members.membershipById(potentialMemberId || 0), [potentialMemberId])
+  const { isValid, errors, validate } = useFormValidation<FormFields>(CreateMemberSchema)
 
   useEffect(() => {
-    if (avatar) {
-      AvatarSchema.isValid(avatar).then((isAvatarValid) => {
-        setFormValid(isNotEmpty && isReferralValid && isAvatarValid)
-      })
-    } else {
-      setFormValid(isNotEmpty && isReferralValid)
-    }
-  }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
+    validate(state, { existingMember })
+  }, [state])
 
-  useEffect(() => {
-    !isReferred && setReferrer(undefined)
-  }, [isReferred])
+  const changeField = (type: keyof FormFields, value: string | Account | BaseMember | boolean) => {
+    dispatch({ type, value })
+  }
 
   const onCreate = () => {
     if (!controllerAccount || !rootAccount) {
       return
     }
 
-    onSubmit({
-      about,
-      name,
-      handle,
-      avatarURI: avatar,
-      controllerAccount: controllerAccount,
-      rootAccount: rootAccount,
-      referrer: isReferred ? referrer : undefined,
-    })
+    onSubmit(state as Member)
   }
 
   return (
@@ -87,9 +103,20 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           <Row>
             <InlineToggleWrap>
               <Label>I was referred by a member: </Label>
-              <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
+              <ToggleCheckbox
+                trueLabel="Yes"
+                falseLabel="No"
+                onChange={(isSet) => changeField('isReferred', isSet)}
+                checked={isReferred}
+              />
             </InlineToggleWrap>
-            {isReferred && <SelectMember onChange={setReferrer} disabled={!isReferred} selected={referrer} />}
+            {isReferred && (
+              <SelectMember
+                onChange={(member) => changeField('referrer', member)}
+                disabled={!isReferred}
+                selected={referrer}
+              />
+            )}
           </Row>
 
           <Row>
@@ -102,14 +129,17 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
             <Label isRequired>
               Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
-            <SelectAccount filter={filterRoot} onChange={setRootAccount} />
+            <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account)} />
           </Row>
 
           <Row>
             <Label isRequired>
               Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
-            <SelectAccount filter={filterController} onChange={setControllerAccount} />
+            <SelectAccount
+              filter={filterController}
+              onChange={(account) => changeField('controllerAccount', account)}
+            />
           </Row>
 
           <Row>
@@ -121,7 +151,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               type="text"
               placeholder="Type"
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => changeField('name', event.target.value)}
             />
           </Row>
 
@@ -134,8 +164,10 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               type="text"
               placeholder="Type"
               value={handle}
-              onChange={(event) => setHandle(event.target.value)}
+              onChange={(event) => changeField('handle', event.target.value)}
+              invalid={hasError('handle', errors)}
             />
+            <FieldError name="handle" errors={errors} />
           </Row>
 
           <Row>
@@ -145,7 +177,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               value={about}
               placeholder="Type"
               rows={4}
-              onChange={(event) => setAbout(event.target.value)}
+              onChange={(event) => changeField('about', event.target.value)}
             />
           </Row>
 
@@ -155,18 +187,20 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               id="member-avatar"
               type="text"
               placeholder="Image URL"
-              value={avatar}
-              onChange={(event) => setAvatar(event.target.value)}
+              value={avatarURI}
+              onChange={(event) => changeField('avatarURI', event.target.value)}
+              invalid={hasError('avatarURI', errors)}
             />
             <Text size={3} italic={true}>
               Paste an URL of your avatar image. Text lorem ipsum.
             </Text>
+            <FieldError name="avatarURI" errors={errors} />
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
         <Label>
-          <Checkbox id={'privacy-policy-agreement'} onChange={(value) => setTerms(value)}>
+          <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
             <Text size={2} dark={true}>
               I agree to the{' '}
               <LabelLink href={'http://example.com/'} target="_blank">
@@ -187,7 +221,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           </InfoValue>
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
         </BalanceInfoNarrow>
-        <Button size="medium" onClick={onCreate} disabled={!isFormValid}>
+        <Button size="medium" onClick={onCreate} disabled={!isValid}>
           Create a Membership
         </Button>
       </ModalFooter>
