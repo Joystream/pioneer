@@ -1,8 +1,11 @@
-import React, { useReducer, useState } from 'react'
+import { blake2AsHex } from '@polkadot/util-crypto'
+import React, { useEffect, useReducer, useState } from 'react'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 import { Animations, Colors } from '../../../constants'
 import { useFormValidation } from '../../../hooks/useFormValidation'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
+import { useFormValidation } from '../../../modals/AddMembershipModal/useFormValidation'
 import { Button } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
@@ -32,6 +35,16 @@ export type Action = {
   value: string | undefined
 }
 
+const UpdateMemberSchema = Yup.object().shape({
+  avatarURI: Yup.string().url(),
+  handle: Yup.string()
+    .test('handle', 'This handle is already taken', (value, testContext) => {
+      const existingMember = testContext?.options?.context?.existingMember
+      return existingMember?.handle_hash.toJSON() !== blake2AsHex(value || '')
+    })
+    .required(),
+})
+
 const updateReducer = (state: MemberUpdateFormData, action: Action): MemberUpdateFormData => {
   return {
     ...state,
@@ -44,8 +57,10 @@ export const MemberProfile = React.memo(({ onClose, member }: Props) => {
   const [isEdit, setIsEdit] = useState(false)
   const { members, isLoading } = useMyMemberships()
   const isMyMember = !isLoading && !!members.find((m) => m.id == member.id)
-  const isValid = false
-
+  const { isValid, validate } = useFormValidation(UpdateMemberSchema)
+  useEffect(() => {
+    validate(state, {})
+  })
   const saveChanges = () => {
     setIsEdit(false)
   }
