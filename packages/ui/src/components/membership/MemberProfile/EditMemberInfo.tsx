@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Dispatch } from 'react'
 import { BaseMember } from '../../../common/types'
 import { Avatar } from '../../Avatar'
 import { TextInput } from '../../forms'
@@ -14,18 +14,27 @@ import {
   MemberRoles,
 } from '../components'
 import { MemberInfoWrapProps } from '../types'
+import { Action, MemberUpdateForm } from './MemberProfile'
 
-type Props = MemberInfoWrapProps & { member: BaseMember }
+type Props = MemberInfoWrapProps & { member: BaseMember; state: MemberUpdateForm; dispatch: Dispatch<Action> }
 
-export const EditMemberInfo = React.memo(({ member, isOnDark, showId, memberSize }: Props) => {
+export const EditMemberInfo = React.memo(({ member, isOnDark, showId, memberSize, state, dispatch }: Props) => {
   return (
     <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize}>
       <MemberPhoto>
         <Avatar avatarURI={member.avatarURI} />
       </MemberPhoto>
       <MemberHandle>
-        <TextInput type="text" value={member.handle || ''} />
-        <TextInput type="text" value={member.name || ''} />
+        <TextInput
+          type="text"
+          value={state.handle || ''}
+          onChange={(event) => dispatch({ value: event.target.value, type: 'handle' })}
+        />
+        <TextInput
+          type="text"
+          value={state.name || ''}
+          onChange={(event) => dispatch({ value: event.target.value, type: 'name' })}
+        />
       </MemberHandle>
       <MemberIcons>
         {member.isVerified && <VerifiedMemberIcon />}

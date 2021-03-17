@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useReducer, useState } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
@@ -20,11 +20,39 @@ interface Props {
 
 type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
+export interface MemberUpdateForm {
+  memberId: string
+  name?: string | null
+  handle?: string | null
+  avatarURI?: string | null
+  about?: string | null
+}
+
+export type Action = {
+  type: keyof MemberUpdateForm
+  value: string | undefined
+}
+
+const updateReducer = (state: MemberUpdateForm, action: Action): MemberUpdateForm => {
+  return {
+    ...state,
+    [action.type]: action.value as string,
+  }
+}
+
 export const MemberProfile = ({ onClose, member }: Props) => {
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
   const [isEdit, setIsEdit] = useState(false)
   const { members, isLoading } = useMyMemberships()
   const isMyMember = !isLoading && !!members.find((m) => m.id == member.id)
+
+  const [state, dispatch] = useReducer(updateReducer, {
+    memberId: member.id,
+    name: member.name,
+    handle: member.handle,
+    avatarURI: member.avatarURI,
+    about: member.about,
+  })
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -38,7 +66,11 @@ export const MemberProfile = ({ onClose, member }: Props) => {
         <SidePaneHeader>
           <CloseSmallModalButton onClick={onClose} />
           <SidePaneTitle>My Profile</SidePaneTitle>
-          {isEdit ? <EditMemberInfo member={member} memberSize="l" /> : <MemberInfo member={member} memberSize="l" />}
+          {isEdit ? (
+            <EditMemberInfo member={member} state={state} dispatch={dispatch} memberSize="l" />
+          ) : (
+            <MemberInfo member={member} memberSize="l" />
+          )}
           <PageTabsNav>
             <PageTab active={activeTab === 'DETAILS'} onClick={() => setActiveTab('DETAILS')}>
               Member details
