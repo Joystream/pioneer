@@ -14,8 +14,8 @@ export const selectMember = async (
   expect(button).toBeDefined()
   button && fireEvent.click(button)
 
-  const accountTitles = parentNode?.querySelectorAll('ul > li')
-  const found = accountTitles && Array.from(accountTitles).find((li) => li.textContent?.match(name))
+  const memberTitles = parentNode?.querySelectorAll('ul > li')
+  const found = memberTitles && Array.from(memberTitles).find((li) => li.textContent?.match(name))
 
   expect(found).toBeDefined()
   found && fireEvent.click(found)

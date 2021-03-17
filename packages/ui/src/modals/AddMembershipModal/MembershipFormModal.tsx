@@ -82,11 +82,11 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   }
 
   const onCreate = () => {
-    if (!state.controllerAccount || !state.rootAccount) {
+    if (!controllerAccount || !rootAccount) {
       return
     }
 
-    onSubmit(state as any)
+    onSubmit(state as Member)
   }
   const stubHandler = () => undefined
 
