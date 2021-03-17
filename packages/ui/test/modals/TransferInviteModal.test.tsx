@@ -52,7 +52,7 @@ describe('UI: TransferInviteModal', () => {
     expect(findByText(/transfer invites/i)).toBeDefined()
   })
 
-  it('Validates form', async () => {
+  it.skip('Validates form', async () => {
     const aliceMember = await getMember('Alice')
     const bobMember = await getMember('Bob')
 
