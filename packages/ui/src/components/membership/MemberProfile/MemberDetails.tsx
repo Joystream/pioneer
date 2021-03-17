@@ -5,19 +5,20 @@ import { BaseMember } from '../../../common/types'
 import { Colors } from '../../../constants'
 import { formatDateString, formatTokenValue } from '../../../utils/formatters'
 import { Button } from '../../buttons'
-import { LabelLink } from '../../forms'
+import { LabelLink, TextArea } from '../../forms'
 import { BlockIcon } from '../../icons/BlockIcon'
 import { TransferSymbol } from '../../icons/symbols/TransferSymbol'
 import { Text } from '../../typography'
 import { MembershipLabel } from '../../typography/MembershipLabel'
 import { MemberInfo } from '../MemberInfo'
+import { EditProfileProps } from './EditMemberInfo'
 import { EmptyBody } from './MemberProfile'
 
-interface Props {
+type Props = EditProfileProps & {
   member: BaseMember
 }
 
-export const MemberDetails = ({ member }: Props) => {
+export const MemberDetails = ({ member, state, isEdit, dispatch }: Props) => {
   const { data, loading } = useGetMemberQuery({
     variables: { id: member.id },
   })
@@ -41,7 +42,19 @@ export const MemberDetails = ({ member }: Props) => {
     <AboutTable>
       <AboutColumn>
         <MembershipLabel text="About" />
-        <AboutText size={2}>{member?.about || ''}</AboutText>
+        {isEdit ? (
+          <TextArea
+            value={state.about || ''}
+            onChange={(event) =>
+              dispatch({
+                type: 'about',
+                value: event.target.value,
+              })
+            }
+          />
+        ) : (
+          <AboutText size={2}>{member?.about || ''}</AboutText>
+        )}
       </AboutColumn>
       <AboutRow>
         <MembershipLabel text="Registered on" />
