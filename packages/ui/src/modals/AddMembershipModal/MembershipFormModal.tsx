@@ -67,6 +67,20 @@ const formReducer = (state: Form, action: Action): Form => {
   }
 }
 
+const CreateMemberSchema = Yup.object().shape({
+  rootAccount: Yup.object().required(),
+  controllerAccount: Yup.object().required(),
+  avatarURI: Yup.string().url(),
+  name: Yup.string().required(),
+  handle: Yup.string()
+    .test('handle', 'This handle is already taken', (value, testContext) => {
+      const existingMember = testContext?.options?.context?.handle
+      return existingMember?.handle_hash.toJSON() !== blake2AsHex(value || '')
+    })
+    .required(),
+  hasTerms: Yup.boolean().required().oneOf([true]),
+})
+
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
   const [state, dispatch] = useReducer(formReducer, {
@@ -92,24 +106,12 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
 
   const potentialMemberId = useObservable(api?.query.members.memberIdByHandleHash(handleHash), [handle])
   const existingMember = useObservable(api?.query.members.membershipById(potentialMemberId || 0), [potentialMemberId])
-  const isHandleTaken = existingMember?.handle_hash.toJSON() === handleHash
-
-  const Schema = Yup.object().shape({
-    rootAccount: Yup.object().required(),
-    controllerAccount: Yup.object().required(),
-    avatarURI: Yup.string().url(),
-    name: Yup.string().required(),
-    handle: Yup.string()
-      .test('handle', 'This handle is already taken', () => !isHandleTaken)
-      .required(),
-    hasTerms: Yup.boolean().required().oneOf([true]),
-  })
 
   useEffect(() => {
     let stillWaiting = true
     setFormValid(false)
 
-    Schema.validate(state, { abortEarly: false, stripUnknown: true })
+    CreateMemberSchema.validate(state, { abortEarly: false, stripUnknown: true, context: { handle: existingMember } })
       .then(() => {
         if (stillWaiting) {
           setFormValid(true)
