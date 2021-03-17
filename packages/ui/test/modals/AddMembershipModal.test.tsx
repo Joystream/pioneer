@@ -64,8 +64,7 @@ describe('UI: AddMembershipModal', () => {
       ])
     )
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
-    set(api, 'api.query.members.memberIdByHandleHash', () => of(new BN(0)))
-    set(api, 'api.query.members.membershipById', () => of({ handle_hash: { toJSON: () => 'xx' } }))
+    set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     transaction = {}
     set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
     set(api, 'api.tx.members.buyMembership', () => transaction)

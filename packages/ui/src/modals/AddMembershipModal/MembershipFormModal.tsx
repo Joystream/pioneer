@@ -1,5 +1,6 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
+import BN from 'bn.js'
 import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
@@ -45,8 +46,7 @@ const CreateMemberSchema = Yup.object().shape({
   name: Yup.string().required(),
   handle: Yup.string()
     .test('handle', 'This handle is already taken', (value, testContext) => {
-      const existingMember = testContext?.options?.context?.existingMember
-      return existingMember?.handle_hash.toJSON() !== blake2AsHex(value || '')
+      return testContext?.options?.context?.size?.lte(new BN(0)) ?? false
     })
     .required(),
   hasTerms: Yup.boolean().required().oneOf([true]),
@@ -75,13 +75,12 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
   const handleHash = blake2AsHex(handle)
-  const potentialMemberId = useObservable(api?.query.members.memberIdByHandleHash(handleHash), [handle])
-  const existingMember = useObservable(api?.query.members.membershipById(potentialMemberId || 0), [potentialMemberId])
+  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
   const { isValid, errors, validate } = useFormValidation<FormFields>(CreateMemberSchema)
 
   useEffect(() => {
-    validate(state, { existingMember })
-  }, [state])
+    validate(state, { size: potentialMemberIdSize })
+  }, [state, potentialMemberIdSize])
 
   const changeField = (type: keyof FormFields, value: string | Account | BaseMember | boolean) => {
     dispatch({ type, value })
