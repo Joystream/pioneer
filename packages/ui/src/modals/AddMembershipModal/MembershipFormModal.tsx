@@ -2,7 +2,7 @@ import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import * as Yup from 'yup'
-import { ValidationError } from 'yup'
+import { AnyObjectSchema, ValidationError } from 'yup'
 import { Account, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
@@ -36,7 +36,7 @@ interface CreateProps {
   membershipPrice?: BalanceOf
 }
 
-interface Form {
+interface FormFields {
   rootAccount: Account | undefined
   controllerAccount: Account | undefined
   name: string
@@ -47,9 +47,9 @@ interface Form {
   hasTerms: boolean
 }
 
-type Action = { type: keyof Form; value: string | Account | boolean }
+type Action = { type: keyof FormFields; value: string | Account | boolean }
 
-const formReducer = (state: Form, action: Action): Form => {
+const formReducer = (state: FormFields, action: Action): FormFields => {
   switch (action.type) {
     case 'name':
     case 'handle':
@@ -74,12 +74,53 @@ const CreateMemberSchema = Yup.object().shape({
   name: Yup.string().required(),
   handle: Yup.string()
     .test('handle', 'This handle is already taken', (value, testContext) => {
-      const existingMember = testContext?.options?.context?.handle
+      const existingMember = testContext?.options?.context?.existingMember
       return existingMember?.handle_hash.toJSON() !== blake2AsHex(value || '')
     })
     .required(),
   hasTerms: Yup.boolean().required().oneOf([true]),
 })
+
+const useFormValidation = <T extends any>(schema: AnyObjectSchema) => {
+  const [isValid, setValid] = useState(false)
+  const [errors, setErrors] = useState<ValidationError[]>([])
+
+  const [data, setData] = useState<T>()
+  const [context, setContext] = useState()
+
+  useEffect(() => {
+    let stillWaiting = true
+    setValid(false)
+
+    schema
+      .validate(data, { abortEarly: false, stripUnknown: true, context: context })
+      .then(() => {
+        if (stillWaiting) {
+          setValid(true)
+          setErrors([])
+        }
+      })
+      .catch((error) => {
+        if (stillWaiting) {
+          setValid(false)
+          setErrors(error.inner)
+        }
+      })
+
+    return () => {
+      stillWaiting = false
+    }
+  }, [data, context])
+
+  return {
+    isValid,
+    errors,
+    validate: (data: any, context: any) => {
+      setData(data)
+      setContext(context)
+    },
+  }
+}
 
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
@@ -97,38 +138,19 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
-  const [isFormValid, setFormValid] = useState(false)
-  const [errors, setErrors] = useState<ValidationError[]>([])
-  const handleHash = blake2AsHex(handle)
-  const changeField = (type: keyof Form, value: string | Account | boolean) => {
-    dispatch({ type, value })
-  }
 
+  const handleHash = blake2AsHex(handle)
   const potentialMemberId = useObservable(api?.query.members.memberIdByHandleHash(handleHash), [handle])
   const existingMember = useObservable(api?.query.members.membershipById(potentialMemberId || 0), [potentialMemberId])
+  const { isValid, errors, validate } = useFormValidation<FormFields>(CreateMemberSchema)
 
   useEffect(() => {
-    let stillWaiting = true
-    setFormValid(false)
-
-    CreateMemberSchema.validate(state, { abortEarly: false, stripUnknown: true, context: { handle: existingMember } })
-      .then(() => {
-        if (stillWaiting) {
-          setFormValid(true)
-          setErrors([])
-        }
-      })
-      .catch((error) => {
-        if (stillWaiting) {
-          setFormValid(false)
-          setErrors(error.inner)
-        }
-      })
-
-    return () => {
-      stillWaiting = false
-    }
+    validate(state, { existingMember })
   }, [state])
+
+  const changeField = (type: keyof FormFields, value: string | Account | boolean) => {
+    dispatch({ type, value })
+  }
 
   const onCreate = () => {
     if (!state.controllerAccount || !state.rootAccount) {
@@ -259,7 +281,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           </InfoValue>
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
         </BalanceInfoNarrow>
-        <Button size="medium" onClick={onCreate} disabled={!isFormValid}>
+        <Button size="medium" onClick={onCreate} disabled={!isValid}>
           Create a Membership
         </Button>
       </ModalFooter>
