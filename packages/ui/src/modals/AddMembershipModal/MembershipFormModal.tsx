@@ -2,6 +2,7 @@ import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
+import { AnySchema } from 'yup'
 import { Account, BaseMember, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
@@ -49,6 +50,10 @@ const CreateMemberSchema = Yup.object().shape({
     })
     .required(),
   hasTerms: Yup.boolean().required().oneOf([true]),
+  isReferred: Yup.boolean(),
+  referrer: Yup.object().when('isReferred', (isReferred: boolean, schema: AnySchema) => {
+    return isReferred ? schema.required() : schema
+  }),
 })
 
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
@@ -64,7 +69,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
     referrer: undefined,
     hasTerms: false,
   })
-  const { rootAccount, controllerAccount, handle, name, isReferred, avatarURI, about } = state
+  const { rootAccount, controllerAccount, handle, name, isReferred, avatarURI, about, referrer } = state
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
@@ -78,7 +83,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
     validate(state, { existingMember })
   }, [state])
 
-  const changeField = (type: keyof FormFields, value: string | Account | boolean) => {
+  const changeField = (type: keyof FormFields, value: string | Account | BaseMember | boolean) => {
     dispatch({ type, value })
   }
 
@@ -105,7 +110,13 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
                 checked={isReferred}
               />
             </InlineToggleWrap>
-            {isReferred && <SelectMember onChange={setReferrer} disabled={!isReferred} selected={referrer} />}
+            {isReferred && (
+              <SelectMember
+                onChange={(member) => changeField('referrer', member)}
+                disabled={!isReferred}
+                selected={referrer}
+              />
+            )}
           </Row>
 
           <Row>

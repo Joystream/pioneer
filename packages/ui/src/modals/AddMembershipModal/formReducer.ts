@@ -1,17 +1,19 @@
-import { Account } from '../../common/types'
+import { Account, BaseMember } from '../../common/types'
 
 export interface FormFields {
-  rootAccount: Account | undefined
-  controllerAccount: Account | undefined
+  rootAccount?: Account
+  controllerAccount?: Account
   name: string
   handle: string
   about: string
   avatarURI: string
   isReferred: boolean
+  referrer?: BaseMember
   hasTerms: boolean
 }
 
-type Action = { type: keyof FormFields; value: string | Account | boolean }
+type Action = { type: keyof FormFields; value: string | Account | BaseMember | boolean }
+
 export const formReducer = (state: FormFields, action: Action): FormFields => {
   switch (action.type) {
     case 'name':
@@ -25,6 +27,8 @@ export const formReducer = (state: FormFields, action: Action): FormFields => {
     case 'hasTerms':
     case 'isReferred':
       return { ...state, [action.type]: action.value as boolean }
+    case 'referrer':
+      return { ...state, [action.type]: action.value as BaseMember }
     default:
       return { ...state }
   }
