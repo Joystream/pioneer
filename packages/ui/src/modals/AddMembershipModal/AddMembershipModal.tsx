@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Member } from '../../common/types'
+import { Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
 import { AddMembershipFailureModal } from './AddMembershipFailureModal'
@@ -10,8 +10,6 @@ import { SignCreateMemberModal } from './SignCreateMemberModal'
 interface MembershipModalProps {
   onClose: () => void
 }
-
-type ModalState = 'PREPARE' | 'AUTHORIZE' | 'SUCCESS' | 'ERROR'
 
 export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const { api } = useApi()
