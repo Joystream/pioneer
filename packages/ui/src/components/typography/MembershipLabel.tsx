@@ -6,13 +6,13 @@ interface AboutMemberProps {
   className?: any
 }
 
-export const MembershipLabel = ({ text, className }: AboutMemberProps) => {
+export const MembershipLabel = React.memo(({ text, className }: AboutMemberProps) => {
   return (
     <AboutLabel title={text} className={className}>
       {text}
     </AboutLabel>
   )
-}
+})
 
 export const AboutLabel = styled.h6`
   width: fit-content;

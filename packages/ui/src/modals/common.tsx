@@ -105,7 +105,7 @@ export const TransactionAmountInfo = styled.div`
   align-items: center;
   color: ${Colors.Black[700]};
 
-  ${Icon} {
+  ${Icon.type} {
     width: 16px;
     height: 16px;
   }

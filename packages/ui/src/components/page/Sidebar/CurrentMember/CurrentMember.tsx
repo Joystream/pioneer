@@ -4,7 +4,7 @@ import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMyMemberships } from '../../../../hooks/useMyMemberships'
 import { useToggle } from '../../../../hooks/useToggle'
 import { AddMembershipModal } from '../../../../modals/AddMembershipModal'
-import { ArrowDownExpandedIcon, ArrowIcon } from '../../../icons'
+import { ArrowDownExpandedIcon, Icon } from '../../../icons'
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../../membership'
 import { AddMembershipButton } from '../../../membership/AddMembershipButton'
 import { SwitchMemberModal } from './SwitchMemberModal'
@@ -37,7 +37,7 @@ const SwitchArrow = styled.span`
   width: 16px;
   height: 16px;
 
-  ${ArrowIcon} {
+  ${Icon.type} {
     width: 100%;
     height: 100%;
     color: ${Colors.Black[400]};
@@ -63,7 +63,7 @@ const SwitchMember = styled.div`
     outline: none;
     background: ${Colors.Black[600]};
 
-    ${ArrowIcon} {
+    ${Icon.type} {
       color: ${Colors.Black[75]};
     }
     ${MemberDarkHover}

@@ -33,7 +33,7 @@ const IconDown = styled.span`
   height: fit-content;
   transition: ${Transitions.all};
 
-  ${Icon} {
+  ${Icon.type} {
     width: 12px;
     height: 12px;
     color: ${Colors.Black[600]};

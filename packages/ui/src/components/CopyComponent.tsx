@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import React from 'react'
-import { CopyButton } from '../components/buttons/CopyButton'
-import { Colors, Fonts, Transitions } from '../constants/styles'
+import { CopyButton } from './buttons'
+import { Colors, Fonts, Transitions } from '../constants'
 
 interface CopyComponentText {
   altText?: string
@@ -9,7 +9,7 @@ interface CopyComponentText {
   className?: any
 }
 
-export const CopyComponent = ({ altText, copyText, className }: CopyComponentText) => {
+export const CopyComponent = React.memo(({ altText, copyText, className }: CopyComponentText) => {
   return (
     <CopyGroup className={className}>
       <CopyText>
@@ -19,7 +19,7 @@ export const CopyComponent = ({ altText, copyText, className }: CopyComponentTex
       <CopyButton textToCopy={copyText} />
     </CopyGroup>
   )
-}
+})
 
 export const CopyGroup = styled.div`
   display: grid;

@@ -8,9 +8,9 @@ interface Props {
   className?: any
 }
 
-export const Avatar = ({ avatarURI, className }: Props) => {
+export const Avatar = React.memo(({ avatarURI, className }: Props) => {
   return avatarURI ? <AvatarImg src={avatarURI} className={className} /> : <AvatarPlaceholderImage />
-}
+})
 
 export const AvatarImg = styled.img`
   border-radius: ${BorderRad.round};
