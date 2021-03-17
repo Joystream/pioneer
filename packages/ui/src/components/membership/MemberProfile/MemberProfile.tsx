@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
-import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { useFormValidation } from '../../../hooks/useFormValidation'
+import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { Button } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
 import { MemberInfo } from '../MemberInfo'
+import { EditMemberInfo } from './EditMemberInfo'
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
 
@@ -21,6 +22,9 @@ type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
 export const MemberProfile = ({ onClose, member }: Props) => {
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
+  const [isEdit, setIsEdit] = useState(false)
+  const { members, isLoading } = useMyMemberships()
+  const isMyMember = !isLoading && !!members.find((m) => m.id == member.id)
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -34,7 +38,7 @@ export const MemberProfile = ({ onClose, member }: Props) => {
         <SidePaneHeader>
           <CloseSmallModalButton onClick={onClose} />
           <SidePaneTitle>My Profile</SidePaneTitle>
-          <MemberInfo member={member} memberSize="l" />
+          {isEdit ? <EditMemberInfo member={member} memberSize="l" /> : <MemberInfo member={member} memberSize="l" />}
           <PageTabsNav>
             <PageTab active={activeTab === 'DETAILS'} onClick={() => setActiveTab('DETAILS')}>
               Member details
@@ -53,10 +57,12 @@ export const MemberProfile = ({ onClose, member }: Props) => {
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
         <SidePaneFooter>
-          <Button variant="ghost" size="medium">
-            <EditSymbol />
-            Edit My Profile
-          </Button>
+          {isMyMember && activeTab === 'DETAILS' && (
+            <Button variant="ghost" size="medium" onClick={() => setIsEdit(true)}>
+              <EditSymbol />
+              Edit My Profile
+            </Button>
+          )}
         </SidePaneFooter>
       </SidePane>
     </SidePaneGlass>
