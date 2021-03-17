@@ -1,9 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
-import BN from 'bn.js'
 import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
-import { AnySchema } from 'yup'
 import { Account, BaseMember, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
@@ -28,10 +26,11 @@ import {
 } from '../../components/Modal'
 import { Text, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
+import { useFormValidation } from '../../hooks/useFormValidation'
 import { useObservable } from '../../hooks/useObservable'
+import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../membership/data/validation'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { FormFields, formReducer } from './formReducer'
-import { useFormValidation } from './useFormValidation'
 
 interface CreateProps {
   onClose: () => void
@@ -40,20 +39,14 @@ interface CreateProps {
 }
 
 const CreateMemberSchema = Yup.object().shape({
-  rootAccount: Yup.object().required(),
-  controllerAccount: Yup.object().required(),
-  avatarURI: Yup.string().url(),
+  rootAccount: AccountSchema.required(),
+  controllerAccount: AccountSchema.required(),
+  avatarURI: AvatarURISchema,
   name: Yup.string().required(),
-  handle: Yup.string()
-    .test('handle', 'This handle is already taken', (value, testContext) => {
-      return testContext?.options?.context?.size?.lte(new BN(0)) ?? false
-    })
-    .required(),
+  handle: HandleSchema.required(),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
-  referrer: Yup.object().when('isReferred', (isReferred: boolean, schema: AnySchema) => {
-    return isReferred ? schema.required() : schema
-  }),
+  referrer: ReferrerSchema,
 })
 
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
