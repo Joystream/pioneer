@@ -1,6 +1,5 @@
 import React, { useReducer, useState } from 'react'
 import styled from 'styled-components'
-import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
 import { useFormValidation } from '../../../hooks/useFormValidation'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
@@ -12,15 +11,15 @@ import { MemberInfo } from '../MemberInfo'
 import { EditMemberInfo } from './EditMemberInfo'
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
+import { WithMember } from './types'
 
-interface Props {
-  member: BaseMember
+type Props = WithMember & {
   onClose: () => void
 }
 
 type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
-export interface MemberUpdateForm {
+export interface MemberUpdateFormData {
   memberId: string
   name?: string | null
   handle?: string | null
@@ -29,11 +28,11 @@ export interface MemberUpdateForm {
 }
 
 export type Action = {
-  type: keyof MemberUpdateForm
+  type: keyof MemberUpdateFormData
   value: string | undefined
 }
 
-const updateReducer = (state: MemberUpdateForm, action: Action): MemberUpdateForm => {
+const updateReducer = (state: MemberUpdateFormData, action: Action): MemberUpdateFormData => {
   return {
     ...state,
     [action.type]: action.value as string,
@@ -67,7 +66,7 @@ export const MemberProfile = ({ onClose, member }: Props) => {
           <CloseSmallModalButton onClick={onClose} />
           <SidePaneTitle>My Profile</SidePaneTitle>
           {isEdit ? (
-            <EditMemberInfo member={member} state={state} dispatch={dispatch} memberSize="l" />
+            <EditMemberInfo member={member} formData={state} dispatch={dispatch} memberSize="l" />
           ) : (
             <MemberInfo member={member} memberSize="l" />
           )}
@@ -85,7 +84,7 @@ export const MemberProfile = ({ onClose, member }: Props) => {
         </SidePaneHeader>
         <SidePaneBody>
           {activeTab === 'DETAILS' && (
-            <MemberDetails member={member} isEdit={isEdit} state={state} dispatch={dispatch} />
+            <MemberDetails member={member} isEdit={isEdit} formData={state} dispatch={dispatch} />
           )}
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}

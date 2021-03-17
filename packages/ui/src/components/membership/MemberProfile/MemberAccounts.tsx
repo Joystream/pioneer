@@ -1,14 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BaseMember } from '../../../common/types'
 import { AccountRow } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { MembershipLabel } from '../../typography/MembershipLabel'
+import { WithMember } from './types'
 
-interface Props {
-  member: BaseMember
-}
-export const MemberAccounts = ({ member }: Props) => {
+export const MemberAccounts = ({ member }: WithMember) => {
   const rootAccount = { address: member.rootAccount, name: 'Root Account' }
   const controllerAccount = { address: member.controllerAccount, name: 'Controller Account' }
 

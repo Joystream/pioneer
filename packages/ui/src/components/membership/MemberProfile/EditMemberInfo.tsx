@@ -1,5 +1,4 @@
-import React, { Dispatch } from 'react'
-import { BaseMember } from '../../../common/types'
+import React from 'react'
 import { Avatar } from '../../Avatar'
 import { TextInput } from '../../forms'
 import { FounderMemberIcon } from '../../icons/FounderMemberIcon'
@@ -14,17 +13,11 @@ import {
   MemberRoles,
 } from '../components'
 import { MemberInfoWrapProps } from '../types'
-import { Action, MemberUpdateForm } from './MemberProfile'
+import { EditProfileProps, WithMember } from './types'
 
-export type EditProfileProps = {
-  isEdit?: boolean
-  state: MemberUpdateForm
-  dispatch: Dispatch<Action>
-}
+type Props = MemberInfoWrapProps & WithMember & EditProfileProps
 
-type Props = MemberInfoWrapProps & { member: BaseMember } & EditProfileProps
-
-export const EditMemberInfo = React.memo(({ member, isOnDark, showId, memberSize, state, dispatch }: Props) => {
+export const EditMemberInfo = React.memo(({ member, isOnDark, showId, memberSize, formData, dispatch }: Props) => {
   return (
     <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize}>
       <MemberPhoto>
@@ -33,12 +26,12 @@ export const EditMemberInfo = React.memo(({ member, isOnDark, showId, memberSize
       <MemberHandle>
         <TextInput
           type="text"
-          value={state.handle || ''}
+          value={formData.handle || ''}
           onChange={(event) => dispatch({ value: event.target.value, type: 'handle' })}
         />
         <TextInput
           type="text"
-          value={state.name || ''}
+          value={formData.name || ''}
           onChange={(event) => dispatch({ value: event.target.value, type: 'name' })}
         />
       </MemberHandle>

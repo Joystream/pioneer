@@ -11,14 +11,14 @@ import { TransferSymbol } from '../../icons/symbols/TransferSymbol'
 import { Text } from '../../typography'
 import { MembershipLabel } from '../../typography/MembershipLabel'
 import { MemberInfo } from '../MemberInfo'
-import { EditProfileProps } from './EditMemberInfo'
 import { EmptyBody } from './MemberProfile'
+import { EditProfileProps } from './types'
 
 type Props = EditProfileProps & {
   member: BaseMember
 }
 
-export const MemberDetails = ({ member, state, isEdit, dispatch }: Props) => {
+export const MemberDetails = ({ member, formData, isEdit, dispatch }: Props) => {
   const { data, loading } = useGetMemberQuery({
     variables: { id: member.id },
   })
@@ -44,7 +44,7 @@ export const MemberDetails = ({ member, state, isEdit, dispatch }: Props) => {
         <MembershipLabel text="About" />
         {isEdit ? (
           <TextArea
-            value={state.about || ''}
+            value={formData.about || ''}
             onChange={(event) =>
               dispatch({
                 type: 'about',
