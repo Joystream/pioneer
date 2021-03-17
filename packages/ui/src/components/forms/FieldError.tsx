@@ -6,7 +6,7 @@ const getError = <T extends any>(field: keyof T, errors: ValidationError[]) =>
   errors.find((error) => error.path === field)
 
 export const hasError = <T extends any>(field: keyof T, errors: ValidationError[]) =>
-  !(!getError<T>(field, errors)?.value ?? true)
+  !!getError<T>(field, errors)?.value
 
 interface Props<T> {
   name: keyof T
