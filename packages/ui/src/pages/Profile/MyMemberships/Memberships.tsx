@@ -1,7 +1,7 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
-import { Button, ButtonsGroup } from '../../../components/buttons'
+import { ButtonsGroup } from '../../../components/buttons'
 import { AddMembershipButton } from '../../../components/membership/AddMembershipButton'
 import { Text } from '../../../components/typography'
 import { Colors } from '../../../constants'
@@ -10,6 +10,7 @@ import { MemberItem } from './MemberItem'
 import { SortKey, sortMemberships } from '../../../utils/sorting/sortMemberships'
 import { setOrder } from './helpers'
 import { HeaderText, SortIconDown, SortIconUp } from '../../../components/SortedListHeaders'
+import { InviteMemberButton } from '../../../components/membership/InviteMemberButton'
 
 export function Memberships() {
   const { count, isLoading, members, active } = useMyMemberships()
@@ -39,9 +40,7 @@ export function Memberships() {
   return (
     <MembershipsTables>
       <NewMembers>
-        <Button variant="ghost" size="medium">
-          Invite a member
-        </Button>
+        <InviteMemberButton size="medium">Invite a member</InviteMemberButton>
         <AddMembershipButton size="medium">Add Membership</AddMembershipButton>
       </NewMembers>
       {!!active && <MembersSection title="Active membership" members={[active]} />}
