@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react'
 import { AnyObjectSchema, ValidationError } from 'yup'
 
-export const useFormValidation = <T extends any>(schema: AnyObjectSchema) => {
+interface UseFormValidation<T> {
+  isValid: boolean
+  errors: ValidationError[]
+  validate: (data: T, context: any) => void
+}
+
+export const useFormValidation = <T extends any>(schema: AnyObjectSchema): UseFormValidation<T> => {
   const [isValid, setValid] = useState(false)
   const [errors, setErrors] = useState<ValidationError[]>([])
 
@@ -35,7 +41,7 @@ export const useFormValidation = <T extends any>(schema: AnyObjectSchema) => {
   return {
     isValid,
     errors,
-    validate: (data: any, context: any) => {
+    validate: (data, context) => {
       setData(data)
       setContext(context)
     },
