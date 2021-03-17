@@ -18,7 +18,7 @@ type Props = EditProfileProps & {
   member: BaseMember
 }
 
-export const MemberDetails = ({ member, formData, isEdit, dispatch }: Props) => {
+export const MemberDetails = React.memo(({ member, formData, isEdit, dispatch }: Props) => {
   const { data, loading } = useGetMemberQuery({
     variables: { id: member.id },
   })
@@ -60,11 +60,7 @@ export const MemberDetails = ({ member, formData, isEdit, dispatch }: Props) => 
         <MembershipLabel text="Registered on" />
         <AboutDateColumn>
           <AboutText size={2}>{formatDateString(registeredAtBlock.timestamp)}</AboutText>
-          <BlockInfo>
-            <BlockIcon />
-            <BlockNumber>{formatTokenValue(registeredAtBlock.height)}</BlockNumber>
-            <BlockNetworkInfo size={3}>on {registeredAtBlock.network} network</BlockNetworkInfo>
-          </BlockInfo>
+          <Block height={registeredAtBlock.height} network={registeredAtBlock.network} />
         </AboutDateColumn>
       </AboutRow>
       <AboutRow>
@@ -123,7 +119,20 @@ export const MemberDetails = ({ member, formData, isEdit, dispatch }: Props) => 
       </AboutRow>
     </AboutTable>
   )
+})
+
+interface BlockInfoProps {
+  height: number
+  network: string
 }
+
+const Block = React.memo(({ height, network }: BlockInfoProps) => (
+  <BlockInfo>
+    <BlockIcon />
+    <BlockNumber>{formatTokenValue(height)}</BlockNumber>
+    <BlockNetworkInfo size={3}>on {network} network</BlockNetworkInfo>
+  </BlockInfo>
+))
 
 const AboutTable = styled.ul`
   display: grid;

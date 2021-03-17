@@ -39,11 +39,16 @@ const updateReducer = (state: MemberUpdateFormData, action: Action): MemberUpdat
   }
 }
 
-export const MemberProfile = ({ onClose, member }: Props) => {
+export const MemberProfile = React.memo(({ onClose, member }: Props) => {
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
   const [isEdit, setIsEdit] = useState(false)
   const { members, isLoading } = useMyMemberships()
   const isMyMember = !isLoading && !!members.find((m) => m.id == member.id)
+  const isValid = false
+
+  const saveChanges = () => {
+    setIsEdit(false)
+  }
 
   const [state, dispatch] = useReducer(updateReducer, {
     memberId: member.id,
@@ -60,7 +65,7 @@ export const MemberProfile = ({ onClose, member }: Props) => {
   }
 
   return (
-    <SidePaneGlass member={member} onClick={onBackgroundClick} onClose={onClose}>
+    <SidePaneGlass onClick={onBackgroundClick} onClose={onClose}>
       <SidePane>
         <SidePaneHeader>
           <CloseSmallModalButton onClick={onClose} />
@@ -90,19 +95,25 @@ export const MemberProfile = ({ onClose, member }: Props) => {
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
         <SidePaneFooter>
-          {isMyMember && activeTab === 'DETAILS' && (
-            <Button variant="ghost" size="medium" onClick={() => setIsEdit(true)}>
-              <EditSymbol />
-              Edit My Profile
-            </Button>
-          )}
+          {isMyMember &&
+            activeTab === 'DETAILS' &&
+            (isEdit ? (
+              <Button variant="primary" size="medium" onClick={saveChanges} disabled={!isValid}>
+                Save changes
+              </Button>
+            ) : (
+              <Button variant="ghost" size="medium" onClick={() => setIsEdit(true)}>
+                <EditSymbol />
+                Edit My Profile
+              </Button>
+            ))}
         </SidePaneFooter>
       </SidePane>
     </SidePaneGlass>
   )
-}
+})
 
-export const SidePaneGlass = styled.div<Props>`
+export const SidePaneGlass = styled.div<Omit<Props, 'member'>>`
   display: flex;
   justify-content: flex-end;
   position: fixed;
