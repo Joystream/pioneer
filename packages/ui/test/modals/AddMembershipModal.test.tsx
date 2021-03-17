@@ -100,7 +100,7 @@ describe('UI: AddMembershipModal', () => {
     selectAccount('Controller account', 'alice', getByText)
     fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-    fireEvent.click(getByLabelText(/I agree to our terms/i))
+    fireEvent.click(getByLabelText(/I agree to the terms/i))
 
     expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(false)
   })
@@ -115,7 +115,7 @@ describe('UI: AddMembershipModal', () => {
     selectAccount('Controller account', 'alice', getByText)
     fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-    fireEvent.click(getByLabelText(/I agree to our terms/i))
+    fireEvent.click(getByLabelText(/I agree to the terms/i))
 
     fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
     expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(true)
@@ -135,7 +135,7 @@ describe('UI: AddMembershipModal', () => {
       fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
       fireEvent.change(getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
       fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-      fireEvent.click(getByLabelText(/I agree to our terms/i))
+      fireEvent.click(getByLabelText(/I agree to the terms/i))
 
       fireEvent.click(await findByText(/^Create a membership$/i))
 

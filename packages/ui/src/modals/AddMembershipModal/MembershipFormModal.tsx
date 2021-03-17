@@ -1,7 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useCallback, useEffect, useState } from 'react'
 import * as Yup from 'yup'
-import { Account, Member } from '../../common/types'
+import { Account, BaseMember, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
 import {
@@ -41,21 +41,27 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
   const [about, setAbout] = useState('')
   const [avatar, setAvatar] = useState('')
   const [isReferred, setIsReferred] = useState(false)
+  const [referrer, setReferrer] = useState<BaseMember>()
   const [hasTermsAgreed, setTerms] = useState(false)
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
   const [isFormValid, setFormValid] = useState(false)
-  const isNotEmpty = !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && hasTermsAgreed
+  const isReferralValid = isReferred ? !!referrer : true
+  const isNotEmpty = !!rootAccount && !!controllerAccount && !!name && !!handle && hasTermsAgreed
 
   useEffect(() => {
     if (avatar) {
       AvatarSchema.isValid(avatar).then((isAvatarValid) => {
-        setFormValid(isNotEmpty && isAvatarValid)
+        setFormValid(isNotEmpty && isReferralValid && isAvatarValid)
       })
     } else {
-      setFormValid(isNotEmpty)
+      setFormValid(isNotEmpty && isReferralValid)
     }
   }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
+
+  useEffect(() => {
+    !isReferred && setReferrer(undefined)
+  }, [isReferred])
 
   const onCreate = () => {
     if (!controllerAccount || !rootAccount) {
@@ -69,9 +75,9 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
       avatarURI: avatar,
       controllerAccount: controllerAccount,
       rootAccount: rootAccount,
+      referrer: isReferred ? referrer : undefined,
     })
   }
-  const stubHandler = () => undefined
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -83,7 +89,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               <Label>I was referred by a member: </Label>
               <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
             </InlineToggleWrap>
-            <SelectMember onChange={stubHandler} disabled={!isReferred} />
+            {isReferred && <SelectMember onChange={setReferrer} disabled={!isReferred} selected={referrer} />}
           </Row>
 
           <Row>
@@ -162,7 +168,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         <Label>
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => setTerms(value)}>
             <Text size={2} dark={true}>
-              I agree to our{' '}
+              I agree to the{' '}
               <LabelLink href={'http://example.com/'} target="_blank">
                 Terms of Service
               </LabelLink>{' '}
