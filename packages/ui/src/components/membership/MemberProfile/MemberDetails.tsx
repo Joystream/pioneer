@@ -111,6 +111,7 @@ export const MemberDetails = ({ member }: Props) => {
     </AboutTable>
   )
 }
+
 const AboutTable = styled.ul`
   display: grid;
   grid-row-gap: 24px;

@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Button } from '../../../components/buttons'
 import { ArrowOutsideIcon } from '../../../components/icons'
-import { MemberInfo, MemberRole } from '../../../components/membership/MemberInfo'
+import { MemberInfo, MemberRole } from '../../../components/membership'
 import { MemberProfile } from '../../../components/membership/MemberProfile'
+import { TransferInviteButton } from '../../../components/TransferInviteButton'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
 import { useToggle } from '../../../hooks/useToggle'
-import { TransferInviteButton } from '../../../components/TransferInviteButton'
 
 interface Props {
   member: BaseMember
