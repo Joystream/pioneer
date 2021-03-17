@@ -3,11 +3,11 @@ import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../../common/types'
 import { AccountInfo } from '../../../components/AccountInfo'
-import { ArrowDownIcon, Icon } from '../../../components/icons'
 import { PageTab, PageTabsNav } from '../../../components/page/PageTabs'
+import { HeaderText, SortIconDown, SortIconUp } from '../../../components/SortedListHeaders'
 import { TransferButton } from '../../../components/TransferButton'
 import { TokenValue } from '../../../components/typography'
-import { BorderRad, Colors, Sizes, Transitions } from '../../../constants'
+import { BorderRad, Colors, Sizes } from '../../../constants'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useBalance } from '../../../hooks/useBalance'
 import { useBalances } from '../../../hooks/useBalances'
@@ -42,18 +42,9 @@ export function Accounts() {
   const Header = ({ children, sortKey }: HeaderProps) => {
     return (
       <ListHeader onClick={getOnSort(sortKey)}>
-        <HeaderText isDescending={isDescending} sortBy={sortBy} sortKey={sortKey}>
+        <HeaderText>
           {children}
-          {sortBy === sortKey &&
-            (isDescending ? (
-              <SortIconDown>
-                <ArrowDownIcon />
-              </SortIconDown>
-            ) : (
-              <SortIconUp>
-                <ArrowDownIcon />
-              </SortIconUp>
-            ))}
+          {sortBy === sortKey && (isDescending ? <SortIconDown /> : <SortIconUp />)}
         </HeaderText>
       </ListHeader>
     )
@@ -169,47 +160,6 @@ const ListHeader = styled.span`
   &:first-child {
     text-align: left;
     justify-self: start;
-  }
-`
-
-const HeaderText = styled.span<{ isDescending?: boolean; sortBy: SortKey; sortKey: SortKey }>`
-  display: inline-flex;
-  position: relative;
-  align-items: center;
-  width: fit-content;
-`
-
-const SortIconDown = styled.span`
-  display: inline-flex;
-  position: absolute;
-  left: calc(100% + 4px);
-  width: fit-content;
-  height: fit-content;
-  transition: ${Transitions.all};
-
-  ${Icon} {
-    width: 12px;
-    height: 12px;
-    color: ${Colors.Black[600]};
-    animation: sortArrowFlip ${Transitions.duration} ease;
-
-    @keyframes sortArrowFlip {
-      from {
-        opacity: 0;
-        transform: scaleY(-1);
-      }
-      to {
-        opacity: 1;
-        transform: scaleY(1);
-      }
-    }
-  }
-`
-
-const SortIconUp = styled(SortIconDown)`
-  transform: rotate(180deg);
-
-  ${Icon} {
   }
 `
 

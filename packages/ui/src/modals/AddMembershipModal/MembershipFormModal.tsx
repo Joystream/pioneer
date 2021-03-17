@@ -2,7 +2,7 @@ import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
-import { Account, Member } from '../../common/types'
+import { Account, BaseMember, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
 import {
@@ -61,6 +61,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
     about: '',
     avatarURI: '',
     isReferred: false,
+    referrer: undefined,
     hasTerms: false,
   })
   const { rootAccount, controllerAccount, handle, name, isReferred, avatarURI, about } = state
@@ -88,7 +89,6 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
 
     onSubmit(state as Member)
   }
-  const stubHandler = () => undefined
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -105,7 +105,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
                 checked={isReferred}
               />
             </InlineToggleWrap>
-            <SelectMember onChange={stubHandler} disabled={!isReferred} />
+            {isReferred && <SelectMember onChange={setReferrer} disabled={!isReferred} selected={referrer} />}
           </Row>
 
           <Row>
@@ -191,7 +191,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
         <Label>
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
             <Text size={2} dark={true}>
-              I agree to our{' '}
+              I agree to the{' '}
               <LabelLink href={'http://example.com/'} target="_blank">
                 Terms of Service
               </LabelLink>{' '}

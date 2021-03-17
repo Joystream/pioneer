@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Button, ButtonsGroup } from '../../../components/buttons'
@@ -7,6 +7,9 @@ import { Text } from '../../../components/typography'
 import { Colors } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { MemberItem } from './MemberItem'
+import { SortKey, sortMemberships } from '../../../utils/sorting/sortMemberships'
+import { setOrder } from './helpers'
+import { HeaderText, SortIconDown, SortIconUp } from '../../../components/SortedListHeaders'
 
 export function Memberships() {
   const { count, isLoading, members, active } = useMyMemberships()
@@ -52,28 +55,55 @@ interface MembersSectionProps {
   members: BaseMember[]
 }
 
-const MembersSection = ({ title, members }: MembersSectionProps) => (
-  <>
-    <MembershipsTableTitle>{title}</MembershipsTableTitle>
+const MembersSection = ({ title, members }: MembersSectionProps) => {
+  const [sortBy, setSortBy] = useState<SortKey>('handle')
+  const [isDescending, setDescending] = useState(false)
+  const sortedMemberships = useMemo(() => sortMemberships(members, sortBy, isDescending), [
+    members,
+    sortBy,
+    isDescending,
+  ])
+  const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
+  const Header = ({ children, sortKey }: HeaderProps) => {
+    return (
+      <ListHeader onClick={sortKey && getOnSort(sortKey)}>
+        <HeaderText>
+          {children}
+          {sortBy === sortKey && (isDescending ? <SortIconDown /> : <SortIconUp />)}
+        </HeaderText>
+      </ListHeader>
+    )
+  }
+  const canSort = sortedMemberships.length > 1
 
-    <MembershipsGroup>
-      <ListHeaders>
-        <ListHeader>Memeberships</ListHeader>
-        <ListHeader>Roles</ListHeader>
-        <ListHeader>Slashed</ListHeader>
-        <ListHeader>Terminated</ListHeader>
-        <ListHeader>Invitations</ListHeader>
-        <ListHeader>Invited</ListHeader>
-      </ListHeaders>
+  return (
+    <>
+      <MembershipsTableTitle>{title}</MembershipsTableTitle>
 
-      <MembershipsList>
-        {members.map((member) => (
-          <MemberItem member={member} key={member.handle} />
-        ))}
-      </MembershipsList>
-    </MembershipsGroup>
-  </>
-)
+      <MembershipsGroup>
+        <ListHeaders>
+          <Header sortKey={canSort ? 'handle' : undefined}>Memeberships</Header>
+          <ListHeader>Roles</ListHeader>
+          <ListHeader>Slashed</ListHeader>
+          <ListHeader>Terminated</ListHeader>
+          <Header sortKey={canSort ? 'inviteCount' : undefined}>Invitations</Header>
+          <ListHeader>Invited</ListHeader>
+        </ListHeaders>
+
+        <MembershipsList>
+          {sortedMemberships.map((member) => (
+            <MemberItem member={member} key={member.handle} />
+          ))}
+        </MembershipsList>
+      </MembershipsGroup>
+    </>
+  )
+}
+
+interface HeaderProps {
+  children: ReactNode
+  sortKey?: SortKey
+}
 
 const NoMembershipButton = styled(AddMembershipButton)`
   grid-area: none;

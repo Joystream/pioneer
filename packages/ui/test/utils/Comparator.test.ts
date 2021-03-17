@@ -3,6 +3,7 @@ import BN from 'bn.js'
 
 type WrappedString = { name?: string; other?: number }
 type WrappedBN = { bn?: BN; other?: number }
+type WrappedNumber = { num?: number; other?: number }
 
 describe('Comparator', () => {
   describe('By string', () => {
@@ -114,6 +115,66 @@ describe('Comparator', () => {
       it('Descending', () => {
         const array = [one_other2, one, four, one_other1, three, two]
         expect(array.sort(Comparator<WrappedBN>(true, 'bn').bigNumber)).toEqual([
+          four,
+          three,
+          two,
+          one_other2,
+          one,
+          one_other1,
+        ])
+      })
+    })
+  })
+
+  describe('By number', () => {
+    const one = { num: 1 }
+    const two = { num: 2 }
+    const three = { num: 3 }
+    const four = { num: 4 }
+
+    it('Ascending', () => {
+      const array = [one, four, three, two]
+      expect(array.sort(Comparator<WrappedNumber>(false, 'num').number)).toEqual([one, two, three, four])
+    })
+
+    it('Descending', () => {
+      const array = [one, four, three, two]
+      expect(array.sort(Comparator<WrappedNumber>(true, 'num').number)).toEqual([four, three, two, one])
+    })
+
+    describe('With undefined values', () => {
+      const empty = {}
+
+      it('Ascending', () => {
+        const array = [one, four, empty, three, two]
+        expect(array.sort(Comparator<WrappedNumber>(false, 'num').number)).toEqual([empty, one, two, three, four])
+      })
+
+      it('Descending', () => {
+        const array = [one, four, three, empty, two]
+        expect(array.sort(Comparator<WrappedNumber>(true, 'num').number)).toEqual([four, three, two, one, empty])
+      })
+    })
+
+    describe('Stable sort', () => {
+      const one_other1 = { ...one, other: 1 }
+      const one_other2 = { ...one, other: 2 }
+
+      it('Ascending', () => {
+        const array = [one_other2, one, four, one_other1, three, two]
+        expect(array.sort(Comparator<WrappedNumber>(false, 'num').number)).toEqual([
+          one_other2,
+          one,
+          one_other1,
+          two,
+          three,
+          four,
+        ])
+      })
+
+      it('Descending', () => {
+        const array = [one_other2, one, four, one_other1, three, two]
+        expect(array.sort(Comparator<WrappedNumber>(true, 'num').number)).toEqual([
           four,
           three,
           two,
