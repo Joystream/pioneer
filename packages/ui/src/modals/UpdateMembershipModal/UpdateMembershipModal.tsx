@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Member } from '../../common/types'
+import { BaseMember } from '../../common/types'
 import { SignUpdateMembershipModal } from './SignUpdateMembershipModal'
 import { UpdateMembershipFailureModal } from './UpdateMembershipFailureModal'
 import { UpdateMemberForm, UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 interface MembershipModalProps {
-  member: Member
+  member: BaseMember
   onClose: () => void
 }
 

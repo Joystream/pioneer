@@ -2,7 +2,7 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
-import { Member } from '../../common/types'
+import { BaseMember } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { Label, TextArea, TextInput } from '../../components/forms'
 import { FieldError, hasError } from '../../components/forms/FieldError'
@@ -23,7 +23,7 @@ import { Row } from '../common'
 interface Props {
   onClose: () => void
   onSubmit: (params: UpdateMemberForm) => void
-  member: Member
+  member: BaseMember
 }
 
 export interface UpdateMemberForm {
@@ -65,7 +65,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const { api } = useApi()
 
   const [state, dispatch] = useReducer(updateReducer, {
-    id: '',
+    id: member.id,
     name: member.name || '',
     handle: member.handle || '',
     about: member.about || '',

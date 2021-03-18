@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BaseMember, Member } from '../../common/types'
+import { BaseMember } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership'
@@ -10,7 +10,7 @@ import { BorderRad, Colors, Sizes } from '../../constants'
 
 interface Props {
   onClose: () => void
-  member: Member
+  member: BaseMember
 }
 
 export function UpdateMembershipSuccessModal({ onClose, member }: Props) {

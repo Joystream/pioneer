@@ -1,11 +1,11 @@
 import React from 'react'
-import { Member } from '../../common/types'
+import { BaseMember } from '../../common/types'
 import { FailureIcon } from '../../components/icons/FailureIcon'
 import { CloseSmallModalButton, Modal, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
 
 interface Props {
   onClose: () => void
-  member: Member
+  member: BaseMember
 }
 
 export const UpdateMembershipFailureModal = ({ onClose, member }: Props) => (

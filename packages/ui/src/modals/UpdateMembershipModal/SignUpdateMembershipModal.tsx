@@ -1,7 +1,7 @@
 import BN from 'bn.js'
-import React, { useState } from 'react'
-import { Member } from '../../common/types'
-import { SelectAccount } from '../../components/account/SelectAccount'
+import React from 'react'
+import { Account, Address, BaseMember } from '../../common/types'
+import { SelectedAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
@@ -17,21 +17,24 @@ interface SignProps {
   onClose: () => void
   transactionParams: UpdateMemberForm
   onDone: (result: boolean, fee: BN) => void
-  member: Member
+  member: BaseMember
 }
 
 export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, onDone }: SignProps) => {
   const { api } = useApi()
-  const [from, setFrom] = useState(member.controllerAccount)
   const transaction = api?.tx?.members?.updateProfile(
-    0, //TODO Member
+    member.id,
     transactionParams.name as string,
     transactionParams.handle as string,
     transactionParams.avatarURI as string,
     transactionParams.about as string
   )
 
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
+  const signer: Account = {
+    address: member.controllerAccount as Address,
+    name: '',
+  }
+  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: signer, onDone })
 
   if (status === 'READY') {
     return (
@@ -44,7 +47,7 @@ export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, 
           </Text>
           <Row>
             <Label>Sending from account</Label>
-            <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
+            <SelectedAccount account={signer} />
           </Row>
         </ModalBody>
         <ModalFooter>
