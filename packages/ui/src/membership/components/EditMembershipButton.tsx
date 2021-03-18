@@ -1,15 +1,12 @@
 import React, { ReactNode } from 'react'
-import styled from 'styled-components'
 import { BaseMember } from '../../common/types'
-import { Button, ButtonSize, ButtonVariant } from '../../components/buttons'
+import { Button, ButtonProps } from '../../components/buttons'
 import { useToggle } from '../../hooks/useToggle'
 import { UpdateMembershipModal } from '../../modals/UpdateMembershipModal'
 
-interface Props {
+interface Props extends ButtonProps {
   className?: string
   children: ReactNode
-  size?: ButtonSize
-  variant?: ButtonVariant
   member: BaseMember
 }
 
@@ -18,15 +15,10 @@ export const EditMembershipButton = ({ className, children, size, member, varian
 
   return (
     <>
-      <EditMembership size={size} variant={variant} onClick={toggleIsOpen} className={className}>
+      <Button size={size} variant={variant} onClick={toggleIsOpen} className={className}>
         {children}
-      </EditMembership>
+      </Button>
       {isOpen && <UpdateMembershipModal onClose={toggleIsOpen} member={member} />}
     </>
   )
 }
-
-const EditMembership = styled(Button)`
-  justify-self: center;
-  align-self: center;
-`

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
-import { Button } from '../../buttons'
+import { EditMembershipButton } from '../../../membership/components/EditMembershipButton'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
@@ -54,10 +54,10 @@ export const MemberProfile = React.memo(({ onClose, member }: Props) => {
         </SidePaneBody>
         <SidePaneFooter>
           {isMyMember && activeTab === 'DETAILS' && (
-            <Button variant="ghost" size="medium">
+            <EditMembershipButton member={member} variant="ghost" size="medium">
               <EditSymbol />
               Edit My Profile
-            </Button>
+            </EditMembershipButton>
           )}
         </SidePaneFooter>
       </SidePane>
