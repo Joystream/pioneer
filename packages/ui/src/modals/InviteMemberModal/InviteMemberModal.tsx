@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Member, ModalState } from '../../common/types'
+import { AddMembershipFailureModal } from '../AddMembershipModal/AddMembershipFailureModal'
 import { InviteFormModal } from './InviteFormModal'
 
 interface MembershipModalProps {
@@ -6,5 +8,14 @@ interface MembershipModalProps {
 }
 
 export function InviteMemberModal({ onClose }: MembershipModalProps) {
-  return <InviteFormModal onClose={onClose} />
+  const [step, setStep] = useState<ModalState>('PREPARE')
+  const [transactionParams, setParams] = useState<Member>()
+  const onSubmit = (params: Member) => {
+    setStep('AUTHORIZE')
+    setParams(params)
+  }
+  if (step == 'PREPARE' || !transactionParams) {
+    return <InviteFormModal onClose={onClose} onSubmit={onSubmit} />
+  }
+  return <AddMembershipFailureModal onClose={onClose} member={transactionParams} />
 }
