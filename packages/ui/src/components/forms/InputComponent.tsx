@@ -34,10 +34,12 @@ interface InputProps {
   units?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
   inputType?: 'text' | 'textarea' | 'number'
+  inputSize?: 'm' | 'l' | undefined
 }
 
 interface InputElementProps {
-  size?: 'm' | 'l'
+  disabled?: boolean
+  inputSize?: 'm' | 'l' | undefined
   icon?: React.ReactElement
   copy?: boolean
   units?: string
@@ -57,7 +59,7 @@ export const InputComponent = ({
   disabled,
   value,
   placeholder,
-  size,
+  inputSize,
   icon,
   copy,
   textToCopy,
@@ -70,7 +72,7 @@ export const InputComponent = ({
   className,
 }: InputComponentProps) => {
   return (
-    <InputElement className={className} size={size}>
+    <InputElement className={className} inputSize={inputSize}>
       {label && (
         <InputLabel htmlFor={id} isRequired={required} disabled={disabled}>
           {label}
@@ -84,8 +86,15 @@ export const InputComponent = ({
           )}
         </InputLabel>
       )}
-      <InputContainer copy={copy} units={units} icon={icon} validation={validation}>
-        {icon && <InputIcon disabled={disabled}>{icon}</InputIcon>}
+      <InputContainer
+        copy={copy}
+        units={units}
+        icon={icon}
+        validation={validation}
+        disabled={disabled}
+        inputSize={inputSize}
+      >
+        {icon && <InputIcon>{icon}</InputIcon>}
         <InputArea>
           {inputType === 'textarea' ? (
             <InputTextarea
@@ -99,6 +108,7 @@ export const InputComponent = ({
               icon={icon}
               copy={copy}
               units={units}
+              inputSize={inputSize}
             />
           ) : (
             <Input
@@ -113,13 +123,14 @@ export const InputComponent = ({
               icon={icon}
               copy={copy}
               units={units}
+              inputSize={inputSize}
             />
           )}
         </InputArea>
         {(units || copy) && (
-          <InputRightSide disabled={disabled}>
+          <InputRightSide>
             {units && <InputUnits>{units}</InputUnits>}
-            {copy && <InputCopy textToCopy={textToCopy ? textToCopy : value} />}
+            {copy && <InputCopy textToCopy={textToCopy ? textToCopy : value} disabled={disabled} />}
           </InputRightSide>
         )}
       </InputContainer>
@@ -144,16 +155,16 @@ export const InputComponent = ({
 }
 
 const InputWithNothing = css<InputProps>`
-  padding: 0 16px;
+  padding: 0 16px 1px 16px;
 `
 const InputWithIcon = css<InputProps>`
-  padding: 0 16px 0 36px;
+  padding: 0 16px 1px 36px;
 `
 const InputWithRight = css<InputProps>`
-  padding: 0 0 0 16px;
+  padding: 0 0 1px 16px;
 `
 const InputWithBoth = css<InputProps>`
-  padding: 0 0 0 36px;
+  padding: 0 0 1px 36px;
 `
 
 const InputStyles = css<InputProps>`
@@ -161,6 +172,8 @@ const InputStyles = css<InputProps>`
   height: 100%;
   outline: none;
   border: none;
+  background-color: transparent;
+  border-radius: ${BorderRad.s};
   font-family: ${Fonts.Inter};
   font-size: 14px;
   line-height: 20px;
@@ -182,11 +195,20 @@ const Input = styled.input`
   ${InputStyles}
   &[type="number"] {
     text-align: right;
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 `
 
 const InputTextarea = styled.textarea`
   ${InputStyles}
+  padding-top: 16px;
+  padding-bottom: 16px;
   resize: none;
 `
 
@@ -200,6 +222,7 @@ const InputElement = styled.div<InputElementProps>`
 
 const InputLabel = styled(Label)<DisabledInputProps>`
   margin-bottom: 0;
+  color: ${({ disabled }) => (disabled ? Colors.Black[500] : Colors.Black[900])};
 `
 
 const InputContainer = styled.div<InputElementProps>`
@@ -208,8 +231,8 @@ const InputContainer = styled.div<InputElementProps>`
   grid-template-columns: ${(props) => (props.copy || props.units ? '1fr auto' : '1fr')};
   align-items: center;
   width: 100%;
-  height: ${({ size }) => {
-    switch (size) {
+  height: ${({ inputSize }) => {
+    switch (inputSize) {
       case 'l':
         return '80px'
       case 'm':
@@ -231,7 +254,13 @@ const InputContainer = styled.div<InputElementProps>`
           return Colors.Black[200]
       }
     }};
+  border-color: ${({ disabled }) => {
+    if (disabled) {
+      return Colors.Black[75]
+    }
+  }};
   border-radius: ${BorderRad.s};
+  background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : 'transparent')};
   box-shadow: ${Shadows.transparent};
   transition: ${Transitions.all};
 
@@ -246,9 +275,13 @@ const InputContainer = styled.div<InputElementProps>`
           return Colors.Green[500]
         case 'warning':
           return Colors.Orange[500]
-        case undefined:
         default:
           return Colors.Blue[400]
+      }
+    }};
+    border-color: ${({ disabled }) => {
+      if (disabled) {
+        return Colors.Black[75]
       }
     }};
     box-shadow: ${({ validation }) => {
@@ -259,9 +292,13 @@ const InputContainer = styled.div<InputElementProps>`
           return Shadows.focusValid
         case 'warning':
           return Shadows.focusWarning
-        case undefined:
         default:
           return Shadows.focusDefault
+      }
+    }};
+    box-shadow: ${({ disabled }) => {
+      if (disabled) {
+        return 'none'
       }
     }};
   }
@@ -300,13 +337,13 @@ const InputCopy = styled(CopyButton)`
   width: 24px;
   height: 24px;
   padding: 0 4px;
-  color: ${Colors.Black[900]};
+  color: ${({ disabled }) => (disabled ? Colors.Black[400] : Colors.Black[900])};
 `
 
 const InputUnits = styled.span`
   font-family: ${Fonts.Grotesk};
   font-size: 14px;
-  line-height: 20px;
+  line-height: 1.5;
   font-weight: 700;
   color: ${Colors.Black[400]};
   text-transform: uppercase;

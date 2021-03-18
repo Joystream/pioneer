@@ -6,18 +6,20 @@ import { FailureSymbol } from '../../components/icons/symbols/FailureSymbol'
 import { SuccessSymbol } from '../../components/icons/symbols/SuccessSymbol'
 
 interface CopyButtonProps {
+  disabled?: boolean
   textToCopy?: string
   className?: string
 }
 
-export function CopyButton({ textToCopy, className }: CopyButtonProps) {
+export function CopyButton({ textToCopy, className, disabled }: CopyButtonProps) {
   const [isSuccessfullyCopied, setSuccessfullyCopied] = useState(false)
   const [isCopyFailure, setCopyFailure] = useState(false)
 
   return (
     <CopyButtonIcon
+      disabled={disabled}
       onClick={() => {
-        if (textToCopy) {
+        if (textToCopy && !disabled) {
           try {
             navigator.clipboard.writeText(textToCopy)
             setSuccessfullyCopied(!isSuccessfullyCopied)
@@ -60,7 +62,7 @@ export const CopyButtonIcon = styled.button`
   color: ${Colors.Black[400]};
   outline: none;
   background-color: transparent;
-  cursor: copy;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'copy')};
   transition: ${Transitions.all};
 
   &:hover,
