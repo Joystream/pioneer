@@ -12,30 +12,25 @@ import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 
 interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
   transactionParams: Member
   onDone: (result: boolean, fee: BN) => void
+  transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
 }
 
-export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionParams, onDone }: SignProps) => {
-  const { api } = useApi()
+export const SignCreateMemberModal = ({
+  onClose,
+  membershipPrice,
+  transactionParams,
+  onDone,
+  transaction,
+}: SignProps) => {
   const [from, setFrom] = useState(transactionParams.controllerAccount)
-  const transaction = useMemo(
-    () =>
-      api?.tx?.members?.buyMembership({
-        root_account: transactionParams.rootAccount.address,
-        controller_account: transactionParams.controllerAccount.address,
-        name: transactionParams.name,
-        handle: transactionParams.handle,
-        avatar_uri: transactionParams.avatarURI,
-        about: transactionParams.about,
-        referrer_id: transactionParams.referrer?.id,
-      }),
-    [JSON.stringify(transactionParams)]
-  )
 
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
 

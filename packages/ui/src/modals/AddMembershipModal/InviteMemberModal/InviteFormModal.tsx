@@ -1,27 +1,27 @@
 import React, { useEffect, useReducer } from 'react'
-import { EnterAccount } from '../../components/account/SelectAccount'
-import { Button } from '../../components/buttons'
-import { Checkbox, Label, LabelLink, TextArea, TextInput } from '../../components/forms'
-import { Help } from '../../components/Help'
-import { SelectMember } from '../../components/membership/SelectMember'
+import { EnterAccount } from '../../../components/account/SelectAccount'
+import { Button } from '../../../components/buttons'
+import { Checkbox, Label, LabelLink, TextArea, TextInput } from '../../../components/forms'
+import { Help } from '../../../components/Help'
+import { SelectMember } from '../../../components/membership/SelectMember'
 import {
   ModalFooter,
   ModalHeader,
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
-} from '../../components/Modal'
-import { Text } from '../../components/typography'
-import { useFormValidation } from '../../hooks/useFormValidation'
-import { FormFields, formReducer } from '../AddMembershipModal/formReducer'
-import { Row } from '../common'
+} from '../../../components/Modal'
+import { Text } from '../../../components/typography'
+import { useFormValidation } from '../../../hooks/useFormValidation'
+import { FormFields, formReducer } from '../formReducer'
+import { Row } from '../../common'
 import * as Yup from 'yup'
-import { AccountSchema, AvatarURISchema, HandleSchema, MemberSchema } from '../../membership/data/validation'
+import { AccountSchema, AvatarURISchema, HandleSchema, MemberSchema } from '../../../membership/data/validation'
 import { blake2AsHex } from '@polkadot/util-crypto'
-import { useObservable } from '../../hooks/useObservable'
-import { useApi } from '../../hooks/useApi'
-import { Account, BaseMember, Member } from '../../common/types'
-import { FieldError, hasError } from '../../components/forms/FieldError'
+import { useObservable } from '../../../hooks/useObservable'
+import { useApi } from '../../../hooks/useApi'
+import { Account, BaseMember, Member } from '../../../common/types'
+import { FieldError, hasError } from '../../../components/forms/FieldError'
 
 interface InviteProps {
   onClose: () => void
