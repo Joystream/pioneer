@@ -5,20 +5,17 @@ import { BaseMember } from '../../../common/types'
 import { Colors } from '../../../constants'
 import { formatDateString, formatTokenValue } from '../../../utils/formatters'
 import { Button } from '../../buttons'
-import { LabelLink, TextArea } from '../../forms'
+import { LabelLink } from '../../forms'
 import { BlockIcon } from '../../icons/BlockIcon'
 import { TransferSymbol } from '../../icons/symbols/TransferSymbol'
 import { Text } from '../../typography'
 import { MembershipLabel } from '../../typography/MembershipLabel'
 import { MemberInfo } from '../MemberInfo'
 import { EmptyBody } from './MemberProfile'
-import { EditProfileProps } from './types'
 
-type Props = EditProfileProps & {
-  member: BaseMember
-}
+type Props = { member: BaseMember }
 
-export const MemberDetails = React.memo(({ member, formData, isEdit, dispatch }: Props) => {
+export const MemberDetails = React.memo(({ member }: Props) => {
   const { data, loading } = useGetMemberQuery({
     variables: { id: member.id },
   })
@@ -42,19 +39,7 @@ export const MemberDetails = React.memo(({ member, formData, isEdit, dispatch }:
     <AboutTable>
       <AboutColumn>
         <MembershipLabel text="About" />
-        {isEdit ? (
-          <TextArea
-            value={formData.about || ''}
-            onChange={(event) =>
-              dispatch({
-                type: 'about',
-                value: event.target.value,
-              })
-            }
-          />
-        ) : (
-          <AboutText size={2}>{member?.about || ''}</AboutText>
-        )}
+        <AboutText size={2}>{member?.about || ''}</AboutText>
       </AboutColumn>
       <AboutRow>
         <MembershipLabel text="Registered on" />

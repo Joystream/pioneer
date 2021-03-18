@@ -1,96 +1,26 @@
-import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import * as Yup from 'yup'
-import { AnySchema } from 'yup'
+import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
-import { useApi } from '../../../hooks/useApi'
-import { useFormValidation } from '../../../hooks/useFormValidation'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
-import { useObservable } from '../../../hooks/useObservable'
-import { AvatarURISchema, HandleSchema } from '../../../membership/data/validation'
 import { Button } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
 import { MemberInfo } from '../MemberInfo'
-import { EditMemberInfo } from './EditMemberInfo'
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
-import { WithMember } from './types'
 
-type Props = WithMember & {
+type Props = { member: BaseMember } & {
   onClose: () => void
 }
 
 type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
-export interface MemberUpdateFormData {
-  id: string
-  name?: string | null
-  handle?: string | null
-  avatarURI?: string | null
-  about?: string | null
-}
-
-export type Action = {
-  type: keyof MemberUpdateFormData
-  value: string | undefined
-}
-
-const UpdateMemberSchema = Yup.object().shape({
-  avatarURI: AvatarURISchema.nullable(),
-  handle: Yup.string().when('$isHandleChanged', (isHandleChanged: boolean, schema: AnySchema) =>
-    isHandleChanged ? HandleSchema : schema
-  ),
-})
-
-const updateReducer = (state: MemberUpdateFormData, action: Action): MemberUpdateFormData => {
-  return {
-    ...state,
-    [action.type]: action.value as string,
-  }
-}
-
-const checkEdits = (formData: any, member: any) => {
-  for (const key of Object.keys(formData)) {
-    if (member[key] !== formData[key]) return true
-  }
-
-  return false
-}
-
 export const MemberProfile = React.memo(({ onClose, member }: Props) => {
-  const { api } = useApi()
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
-  const [isEdit, setIsEdit] = useState(false)
   const { members, isLoading } = useMyMemberships()
   const isMyMember = !isLoading && !!members.find((m) => m.id == member.id)
-  const [state, dispatch] = useReducer(updateReducer, {
-    id: member.id,
-    name: member.name,
-    handle: member.handle,
-    avatarURI: member.avatarURI,
-    about: member.about,
-  })
-  const { handle } = state
-  const isHandleChanged = handle !== member.handle
-
-  const handleHash = blake2AsHex(handle || '')
-  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
-    handle,
-    isHandleChanged,
-  ])
-  const { isValid, validate } = useFormValidation<MemberUpdateFormData>(UpdateMemberSchema)
-  const hasEdits = isEdit && checkEdits(state, member)
-
-  useEffect(() => {
-    hasEdits && validate(state, { size: potentialMemberIdSize, isHandleChanged })
-  }, [state, potentialMemberIdSize, hasEdits])
-
-  const saveChanges = () => {
-    setIsEdit(false)
-  }
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -104,11 +34,7 @@ export const MemberProfile = React.memo(({ onClose, member }: Props) => {
         <SidePaneHeader>
           <CloseSmallModalButton onClick={onClose} />
           <SidePaneTitle>My Profile</SidePaneTitle>
-          {isEdit ? (
-            <EditMemberInfo member={member} formData={state} dispatch={dispatch} memberSize="l" />
-          ) : (
-            <MemberInfo member={member} memberSize="l" />
-          )}
+          <MemberInfo member={member} memberSize="l" />
           <PageTabsNav>
             <PageTab active={activeTab === 'DETAILS'} onClick={() => setActiveTab('DETAILS')}>
               Member details
@@ -122,25 +48,17 @@ export const MemberProfile = React.memo(({ onClose, member }: Props) => {
           </PageTabsNav>
         </SidePaneHeader>
         <SidePaneBody>
-          {activeTab === 'DETAILS' && (
-            <MemberDetails member={member} isEdit={isEdit} formData={state} dispatch={dispatch} />
-          )}
+          {activeTab === 'DETAILS' && <MemberDetails member={member} />}
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
         <SidePaneFooter>
-          {isMyMember &&
-            activeTab === 'DETAILS' &&
-            (isEdit ? (
-              <Button variant="primary" size="medium" onClick={saveChanges} disabled={!hasEdits || !isValid}>
-                Save changes
-              </Button>
-            ) : (
-              <Button variant="ghost" size="medium" onClick={() => setIsEdit(true)}>
-                <EditSymbol />
-                Edit My Profile
-              </Button>
-            ))}
+          {isMyMember && activeTab === 'DETAILS' && (
+            <Button variant="ghost" size="medium">
+              <EditSymbol />
+              Edit My Profile
+            </Button>
+          )}
         </SidePaneFooter>
       </SidePane>
     </SidePaneGlass>
