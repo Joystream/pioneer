@@ -36,12 +36,9 @@ export const Colors = {
   },
 
   Green: {
-    900: '#061612',
-    800: '#0A2C24',
-    700: '#105746',
-    600: '#12836A',
-    500: '#4DCAB1',
-    400: '#6FDFCB',
+    500: '#3DCFB3',
+    400: '#62E1CA',
+    400.4: '#62E1CA66',
     300: '#8EE6D6',
     200: '#B0EFE4',
     100: '#CEF5EE',
@@ -49,11 +46,23 @@ export const Colors = {
   },
 
   Red: {
+    500: '#F42E55',
     400: '#FF3960',
+    400.4: '#FF396066',
     300: '#FF6D87',
     200: '#F695A4',
     100: '#FFCBD9',
     50: '#FEEAF1',
+  },
+
+  Orange: {
+    500: '#FFAA02',
+    400: '#FFBB33',
+    400.4: '#FFBB3366',
+    300: '#FFC654',
+    200: '#FFDC98',
+    100: '#FFEFCE',
+    50: '#FFFAF0',
   },
 }
 
@@ -70,7 +79,11 @@ export const Sizes = {
 }
 
 export const Shadows = {
-  focus: `0px 0px 8px ${Colors.Blue[300.4]}`,
+  transparent: `0px 0px 0px rgba(0, 0, 0, 0)`,
+  focusDefault: `0px 0px 8px ${Colors.Blue[300.4]}`,
+  focusInvalid: `0px 0px 8px ${Colors.Red[400.4]}`,
+  focusWarning: `0px 0px 8px ${Colors.Orange[400.4]}`,
+  focusValid: `0px 0px 8px ${Colors.Green[400.4]}`,
   common: `0px 12px 28px ${Colors.Black[900.25]}`,
   light: `0px 0px 28px #D6D8E780`,
   select: `0px 20px 28px ${Colors.Black[900.25]}`,

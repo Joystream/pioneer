@@ -13,7 +13,7 @@ export function AlertSymbol({ className }: SymbolProps) {
       preserveAspectRatio="xMidYMid meet"
       fill="none"
       color="currentColor"
-      className={className}
+      className={className || 'symbol'}
     >
       <path
         className="blackPart"
@@ -31,7 +31,7 @@ export function AlertSymbol({ className }: SymbolProps) {
   )
 }
 
-const Symbol = styled.svg`
+export const Symbol = styled.svg`
   height: 16px;
   width: 16px;
   position: relative;

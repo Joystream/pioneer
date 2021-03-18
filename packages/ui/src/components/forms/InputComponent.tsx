@@ -29,7 +29,10 @@ type InputComponentProps = InputProps &
   }
 
 interface InputProps {
-  validation?: 'invalid' | 'valid' | undefined
+  icon?: React.ReactElement
+  copy?: boolean
+  units?: string
+  validation?: 'invalid' | 'valid' | 'warning' | undefined
   inputType?: 'text' | 'textarea' | 'number'
 }
 
@@ -38,6 +41,7 @@ interface InputElementProps {
   icon?: React.ReactElement
   copy?: boolean
   units?: string
+  validation?: 'invalid' | 'valid' | 'warning' | undefined
 }
 
 interface DisabledInputProps {
@@ -80,7 +84,7 @@ export const InputComponent = ({
           )}
         </InputLabel>
       )}
-      <InputContainer>
+      <InputContainer copy={copy} units={units} icon={icon} validation={validation}>
         {icon && <InputIcon disabled={disabled}>{icon}</InputIcon>}
         <InputArea>
           {inputType === 'textarea' ? (
@@ -92,6 +96,9 @@ export const InputComponent = ({
               validation={validation}
               placeholder={placeholder}
               disabled={disabled}
+              icon={icon}
+              copy={copy}
+              units={units}
             />
           ) : (
             <Input
@@ -103,6 +110,9 @@ export const InputComponent = ({
               validation={validation}
               placeholder={placeholder}
               disabled={disabled}
+              icon={icon}
+              copy={copy}
+              units={units}
             />
           )}
         </InputArea>
@@ -115,11 +125,12 @@ export const InputComponent = ({
       </InputContainer>
       {message && (
         <InputNotification validation={validation}>
-          {validation === 'invalid' && (
-            <InputNotificationIcon>
-              <AlertSymbol />
-            </InputNotificationIcon>
-          )}
+          {validation === 'invalid' ||
+            (validation === 'warning' && (
+              <InputNotificationIcon>
+                <AlertSymbol />
+              </InputNotificationIcon>
+            ))}
           {validation === 'valid' && (
             <InputNotificationIcon>
               <SuccessSymbol />
@@ -132,14 +143,24 @@ export const InputComponent = ({
   )
 }
 
+const InputWithNothing = css<InputProps>`
+  padding: 0 16px;
+`
+const InputWithIcon = css<InputProps>`
+  padding: 0 16px 0 36px;
+`
+const InputWithRight = css<InputProps>`
+  padding: 0 0 0 16px;
+`
+const InputWithBoth = css<InputProps>`
+  padding: 0 0 0 36px;
+`
+
 const InputStyles = css<InputProps>`
   width: 100%;
   height: 100%;
-  padding: 0 16px;
-  border: 1px solid ${Colors.Black[200]};
-  border-radius: ${BorderRad.s};
-  box-shadow: 0px 0px 0px transparent;
   outline: none;
+  border: none;
   font-family: ${Fonts.Inter};
   font-size: 14px;
   line-height: 20px;
@@ -151,12 +172,10 @@ const InputStyles = css<InputProps>`
     font-weight: 400;
     color: ${Colors.Black[400]};
   }
-
-  &:hover,
-  &:focus {
-    border-color: ${Colors.Blue[400]};
-    box-shadow: ${Shadows.focus};
-  }
+  ${(props) => (!props.icon && !props.units && !props.copy ? InputWithNothing : null)}
+  ${(props) => (props.icon && !props.units && !props.copy ? InputWithIcon : null)}
+  ${(props) => ((props.units || props.copy) && !props.icon ? InputWithRight : null)}
+  ${(props) => ((props.units || props.copy) && props.icon ? InputWithBoth : null)}
 `
 
 const Input = styled.input`
@@ -184,12 +203,11 @@ const InputLabel = styled(Label)<DisabledInputProps>`
 `
 
 const InputContainer = styled.div<InputElementProps>`
-  display: flex;
+  display: grid;
   position: relative;
+  grid-template-columns: ${(props) => (props.copy || props.units ? '1fr auto' : '1fr')};
   align-items: center;
   width: 100%;
-  height: 100%;
-
   height: ${({ size }) => {
     switch (size) {
       case 'l':
@@ -199,6 +217,54 @@ const InputContainer = styled.div<InputElementProps>`
         return '48px'
     }
   }};
+  border: 1px solid
+    ${({ validation }) => {
+      switch (validation) {
+        case 'invalid':
+          return Colors.Red[400]
+        case 'valid':
+          return Colors.Green[500]
+        case 'warning':
+          return Colors.Orange[500]
+        case undefined:
+        default:
+          return Colors.Black[200]
+      }
+    }};
+  border-radius: ${BorderRad.s};
+  box-shadow: ${Shadows.transparent};
+  transition: ${Transitions.all};
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: ${({ validation }) => {
+      switch (validation) {
+        case 'invalid':
+          return Colors.Red[400]
+        case 'valid':
+          return Colors.Green[500]
+        case 'warning':
+          return Colors.Orange[500]
+        case undefined:
+        default:
+          return Colors.Blue[400]
+      }
+    }};
+    box-shadow: ${({ validation }) => {
+      switch (validation) {
+        case 'invalid':
+          return Shadows.focusInvalid
+        case 'valid':
+          return Shadows.focusValid
+        case 'warning':
+          return Shadows.focusWarning
+        case undefined:
+        default:
+          return Shadows.focusDefault
+      }
+    }};
+  }
 `
 
 const InputIcon = styled.div<DisabledInputProps>`
@@ -222,18 +288,19 @@ const InputArea = styled.div`
 
 const InputRightSide = styled.div<DisabledInputProps>`
   display: grid;
-  position: absolute;
-  right: 16px;
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
   width: fit-content;
   height: 100%;
+  padding: 0 12px 0 8px;
 `
 
 const InputCopy = styled(CopyButton)`
-  width: 100%;
-  height: 100%;
+  width: 24px;
+  height: 24px;
+  padding: 0 4px;
+  color: ${Colors.Black[900]};
 `
 
 const InputUnits = styled.span`
@@ -251,7 +318,19 @@ const InputNotification = styled.div<InputProps>`
   grid-column-gap: 4px;
   align-items: center;
   width: fit-content;
-  color: ${Colors.Black[400]};
+  color: ${({ validation }) => {
+    switch (validation) {
+      case 'invalid':
+        return Colors.Red[400]
+      case 'valid':
+        return Colors.Green[500]
+      case 'warning':
+        return Colors.Orange[500]
+      case undefined:
+      default:
+        return Colors.Black[400]
+    }
+  }};
 `
 
 const InputNotificationIcon = styled.div`
@@ -264,7 +343,7 @@ const InputNotificationIcon = styled.div`
 
   .blackPart,
   .primaryPart {
-    color: inherit;
+    fill: currentColor;
   }
 `
 

@@ -7,8 +7,6 @@ import { Text } from '../../../components/typography'
 import { Colors } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { MemberItem } from './MemberItem'
-import { InputComponent } from '../../../components/forms/InputComponent'
-import { TransferIcon } from '../../../components/icons'
 
 export function Memberships() {
   const { count, isLoading, members, active } = useMyMemberships()
@@ -43,18 +41,6 @@ export function Memberships() {
       </NewMembers>
       {!!active && <MembersSection title="Active membership" members={[active]} />}
       {!!otherMemberships.length && <MembersSection title="Other memberships" members={otherMemberships} />}
-
-      <InputComponent
-        inputType="text"
-        id="testId"
-        label="Some label"
-        required
-        placeholder="Placeholder text"
-        icon={<TransferIcon />}
-        copy
-        units="Joy"
-        message="Some text under input"
-      />
     </MembershipsTables>
   )
 }
