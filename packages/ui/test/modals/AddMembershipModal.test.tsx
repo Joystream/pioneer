@@ -43,7 +43,6 @@ describe('UI: AddMembershipModal', () => {
     allAccounts: Account[]
   }
   let transaction: any
-  let query: any
   let keyring: Keyring
 
   beforeEach(async () => {
@@ -64,10 +63,8 @@ describe('UI: AddMembershipModal', () => {
         },
       ])
     )
-    query = {}
-
-    set(query, 'members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
-    set(api, 'api.query', query)
+    set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
+    set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     transaction = {}
     set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
     set(api, 'api.tx.members.buyMembership', () => transaction)
@@ -83,11 +80,11 @@ describe('UI: AddMembershipModal', () => {
     sinon.restore()
   })
 
-  it('Renders a modal', () => {
-    const { getByText } = renderModal()
+  it('Renders a modal', async () => {
+    const { findByText } = renderModal()
 
-    expect(getByText('Add membership')).toBeDefined()
-    expect(getByText('Creation fee:')?.parentNode?.textContent).toMatch(/^Creation fee:100/i)
+    expect(await findByText('Add membership')).toBeDefined()
+    expect((await findByText('Creation fee:'))?.parentNode?.textContent).toMatch(/^Creation fee:100/i)
   })
 
   it('Enables button when valid form', async () => {
@@ -100,7 +97,7 @@ describe('UI: AddMembershipModal', () => {
     selectAccount('Controller account', 'alice', getByText)
     fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-    fireEvent.click(getByLabelText(/I agree to our terms/i))
+    fireEvent.click(getByLabelText(/I agree to the terms/i))
 
     expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(false)
   })
@@ -115,7 +112,7 @@ describe('UI: AddMembershipModal', () => {
     selectAccount('Controller account', 'alice', getByText)
     fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-    fireEvent.click(getByLabelText(/I agree to our terms/i))
+    fireEvent.click(getByLabelText(/I agree to the terms/i))
 
     fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
     expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(true)
@@ -135,7 +132,7 @@ describe('UI: AddMembershipModal', () => {
       fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
       fireEvent.change(getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
       fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-      fireEvent.click(getByLabelText(/I agree to our terms/i))
+      fireEvent.click(getByLabelText(/I agree to the terms/i))
 
       fireEvent.click(await findByText(/^Create a membership$/i))
 

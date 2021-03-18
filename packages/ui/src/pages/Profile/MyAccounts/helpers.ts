@@ -1,4 +1,4 @@
-import { SortKey } from '../../../utils/sortAccounts'
+import { SortKey } from '../../../utils/sorting/sortAccounts'
 
 export function setOrder(
   key: SortKey,

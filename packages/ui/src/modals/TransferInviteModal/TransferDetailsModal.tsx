@@ -1,17 +1,16 @@
 import BN from 'bn.js'
-import { BaseMember, Account } from '../../common/types'
-import { ButtonPrimaryMedium } from '../../components/buttons'
 import React, { ReactElement, useCallback, useState } from 'react'
-import styled from 'styled-components'
-import { Label, NumberInput } from '../../components/forms'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { AmountInputBlock, LockedAccount, Row, TransactionAmount } from '../common'
+import { Account, BaseMember } from '../../common/types'
+import { Button } from '../../components/buttons'
+import { Label, NumberInput, ValidationErrorInfo } from '../../components/forms'
+import { MemberInfo } from '../../components/membership/MemberInfo'
 import { filterMember, SelectMember } from '../../components/membership/SelectMember'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Text } from '../../components/typography'
+import { useAccounts } from '../../hooks/useAccounts'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
-import { MemberInfo } from '../../components/membership/MemberInfo'
-import { useAccounts } from '../../hooks/useAccounts'
+import { AmountInputBlock, LockedAccount, Row, TransactionAmount } from '../common'
 
 interface Props {
   onClose: () => void
@@ -65,21 +64,17 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
         </Row>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimaryMedium
+        <Button
+          size="medium"
           onClick={() => from && to && signer && onAccept(new BN(amount), from, to, signer)}
           disabled={isDisabled}
         >
           Transfer Invites
-        </ButtonPrimaryMedium>
+        </Button>
       </ModalFooter>
     </Modal>
   )
 }
-
-const ValidationErrorInfo = styled.span`
-  color: red;
-  padding: 4px 0;
-`
 
 const SelectedMember = ({ member }: { member: BaseMember }) => (
   <LockedAccount>

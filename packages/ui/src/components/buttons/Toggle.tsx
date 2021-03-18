@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { BorderRad, Colors, Sizes, Transitions } from '../../constants'
 import { Icon } from '../icons'
-import { ButtonGhostMediumSquare } from './Buttons'
+import { Button } from './Buttons'
 
-export const ToggleButton = styled(ButtonGhostMediumSquare)`
+export const ToggleButton = styled(Button)`
   background-color: transparent;
   &,
   &:hover,
@@ -45,7 +45,7 @@ export const Toggle = styled.div<Props>`
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: ${Transitions.all};
 
-  ${ToggleButton} ${Icon} {
+  ${ToggleButton} ${Icon.type} {
     transition: ${Transitions.all};
     transform: scaleY(${({ isOpen }) => (isOpen ? '-1' : '1')});
   }

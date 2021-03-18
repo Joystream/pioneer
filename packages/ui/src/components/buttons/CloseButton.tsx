@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { Colors, Transitions } from '../../constants'
 import { CrossIcon } from '../icons'
 
-export const CloseButton = (props: ButtonHTMLAttributes<HTMLButtonElement>) => (
+export const CloseButton = React.memo((props: ButtonHTMLAttributes<HTMLButtonElement>) => (
   <Close {...props}>
     <CrossIcon />
   </Close>
-)
+))
 
 export const Close = styled.button`
   display: flex;

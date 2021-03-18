@@ -6,15 +6,15 @@ import { AccountInfo } from '../../AccountInfo'
 import { TokenValue } from '../../typography'
 
 interface Props {
-  account: Account
+  option: Account
 }
 
-export const OptionAccount = ({ account }: Props) => {
-  const balance = useBalance(account)
+export const OptionAccount = ({ option }: Props) => {
+  const balance = useBalance(option)
 
   return (
     <>
-      <AccountInfo account={account} />
+      <AccountInfo account={option} />
       <BalanceInfoInRow>
         <InfoTitle>Transferable balance</InfoTitle>
         <InfoValue>

@@ -1,4 +1,4 @@
-import { sortAccounts } from '../../src/utils/sortAccounts'
+import { sortAccounts } from '../../src/utils/sorting/sortAccounts'
 import BN from 'bn.js'
 
 describe('sortAccounts', () => {

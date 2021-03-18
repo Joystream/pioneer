@@ -1,11 +1,11 @@
-export interface SelectProps<T> {
-  onChange: (selected: T) => void
-  filter?: (option: T) => boolean
-  selected?: T
-  disabled?: boolean
-}
+import { ReactNode } from 'react'
 
-export interface OptionListProps<T> {
-  options: T[]
-  onChange: (option: T) => void
+export interface SelectProps<T> {
+  disabled?: boolean
+  placeholder: string
+  selected?: T
+  onChange: (selected: T) => void
+  onSearch: (search: string) => void
+  renderSelected: (option: T) => ReactNode
+  renderList: (onOptionClick: (option: T) => void) => ReactNode
 }

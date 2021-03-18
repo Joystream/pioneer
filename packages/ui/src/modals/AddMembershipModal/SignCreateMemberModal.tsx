@@ -2,7 +2,7 @@ import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
 import React, { useState } from 'react'
 import { Member } from '../../common/types'
-import { ButtonPrimaryMedium } from '../../components/buttons'
+import { Button } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
@@ -30,6 +30,7 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
     handle: transactionParams.handle,
     avatar_uri: transactionParams.avatarURI,
     about: transactionParams.about,
+    referrer_id: transactionParams.referrer?.id,
   })
 
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
@@ -64,9 +65,9 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
           </BalanceInfoNarrow>
-          <ButtonPrimaryMedium onClick={send} disabled={status !== 'READY'}>
+          <Button size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign and create a member
-          </ButtonPrimaryMedium>
+          </Button>
         </ModalFooter>
       </Modal>
     )

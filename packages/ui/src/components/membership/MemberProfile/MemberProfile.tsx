@@ -2,11 +2,14 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
-import { ButtonGhostMedium } from '../../buttons'
+import { useMyMemberships } from '../../../hooks/useMyMemberships'
+import { useFormValidation } from '../../../hooks/useFormValidation'
+import { Button } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
 import { MemberInfo } from '../MemberInfo'
+import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
 
 interface Props {
@@ -46,14 +49,14 @@ export const MemberProfile = ({ onClose, member }: Props) => {
         </SidePaneHeader>
         <SidePaneBody>
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}
-          {activeTab === 'ACCOUNTS' && <EmptyBody>Accounts</EmptyBody>}
+          {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
         <SidePaneFooter>
-          <ButtonGhostMedium>
+          <Button variant="ghost" size="medium">
             <EditSymbol />
             Edit My Profile
-          </ButtonGhostMedium>
+          </Button>
         </SidePaneFooter>
       </SidePane>
     </SidePaneGlass>

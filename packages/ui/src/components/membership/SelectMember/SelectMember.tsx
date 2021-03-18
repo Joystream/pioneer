@@ -1,12 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useGetMembersQuery } from '../../../api/queries'
+import React, { useMemo, useState } from 'react'
+import { useSearchMembersQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
 import { useDebounce } from '../../../hooks/useDebounce'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
-import { useToggle } from '../../../hooks/useToggle'
-import { Toggle, ToggleButton } from '../../buttons/Toggle'
-import { ArrowDownIcon } from '../../icons'
-import { EmptyOption, SelectComponent, SelectedOption, SelectProps } from '../../selects'
+import { Select } from '../../selects'
 import { MemberInfo } from '../MemberInfo'
 import { OptionsListMember } from './OptionsListMember'
 
@@ -27,87 +24,43 @@ const filterByText = (options: BaseMember[], text: string) => {
   )
 }
 
-export const SelectMember = React.memo(({ onChange, filter, selected, disabled }: SelectProps<BaseMember>) => {
+interface Props {
+  onChange: (selected: BaseMember) => void
+  filter?: (option: BaseMember) => boolean
+  selected?: BaseMember
+  disabled?: boolean
+}
+
+export const SelectMember = ({ onChange, filter, selected, disabled }: Props) => {
+  const baseFilter = filter || (() => true)
+  const [search, setSearch] = useState('')
+  const searchDebounced = useDebounce(search, 400)
   const { members } = useMyMemberships()
   const myMembersHandles = members.map(({ handle }) => handle)
-  const { data } = useGetMembersQuery()
-  const baseFilter = filter || (() => true)
   const filterOutMyMemberships = ({ handle }: BaseMember) => !myMembersHandles.includes(handle)
-  const allMembers = (data?.members || []).filter(filterOutMyMemberships)
-  const [isOpen, toggleOpen] = useToggle()
-  const [selectedOption, setSelectedOption] = useState<BaseMember | undefined>(selected)
-  const selectNode = useRef<HTMLDivElement>(null)
-  const textInput = useRef<HTMLInputElement>(null)
-
-  const [filterInput, setFilterInput] = useState('')
-  const search = useDebounce(filterInput, 200)
-
-  const filteredMembers = useMemo(() => filterByText(members.filter(baseFilter), search), [search, members])
-  const filteredFoundMembers = useMemo(() => filterByText(allMembers.filter(baseFilter), search), [search, allMembers])
-
-  const onOptionClick = useCallback(
-    (option: BaseMember) => {
-      toggleOpen()
-      setSelectedOption(option)
-      onChange(option)
-      setFilterInput('')
-    },
-    [filter, toggleOpen]
-  )
-
-  useEffect(() => {
-    const clickListener = (event: MouseEvent) => {
-      if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
-        toggleOpen()
-        setFilterInput('')
-      }
-    }
-    document.addEventListener('mousedown', clickListener)
-
-    return () => document.removeEventListener('mousedown', clickListener)
-  }, [isOpen])
-
-  useEffect(() => {
-    const escListener = (event: KeyboardEvent) => {
-      if (isOpen && event.key === 'Escape') {
-        toggleOpen()
-        setFilterInput('')
-      }
-    }
-    document.addEventListener('keydown', escListener)
-
-    return () => document.removeEventListener('keydown', escListener)
-  }, [isOpen])
-
-  useEffect(() => {
-    isOpen && textInput.current?.focus()
-  }, [isOpen])
+  const { data } = useSearchMembersQuery({ variables: { text: searchDebounced, limit: 10 } })
+  const foundMembers = data?.searchMembers || []
+  const allMembers = foundMembers.filter(filterOutMyMemberships)
+  const filteredMembers = useMemo(() => filterByText(members.filter(baseFilter), searchDebounced), [
+    searchDebounced,
+    members,
+  ])
+  const filteredFoundMembers = useMemo(() => filterByText(allMembers.filter(baseFilter), searchDebounced), [
+    searchDebounced,
+    allMembers,
+  ])
 
   return (
-    <SelectComponent ref={selectNode}>
-      <Toggle onClick={() => !isOpen && toggleOpen()} isOpen={isOpen} disabled={disabled}>
-        {selectedOption && !isOpen && (
-          <SelectedOption>
-            <MemberInfo member={selectedOption} />
-          </SelectedOption>
-        )}
-        {(!selectedOption || isOpen) && (
-          <EmptyOption
-            ref={textInput}
-            type="text"
-            placeholder="Select Member or type a member"
-            autoComplete="off"
-            value={filterInput}
-            onChange={(t) => setFilterInput(t.target.value)}
-          />
-        )}
-        <ToggleButton disabled={disabled}>
-          <ArrowDownIcon />
-        </ToggleButton>
-      </Toggle>
-      {isOpen && (
+    <Select
+      selected={selected}
+      onChange={onChange}
+      disabled={disabled}
+      renderSelected={(option) => <MemberInfo member={option} />}
+      placeholder="Select Member or type a member"
+      renderList={(onOptionClick) => (
         <OptionsListMember myMembers={filteredMembers} allMembers={filteredFoundMembers} onChange={onOptionClick} />
       )}
-    </SelectComponent>
+      onSearch={(search) => setSearch(search)}
+    />
   )
-})
+}

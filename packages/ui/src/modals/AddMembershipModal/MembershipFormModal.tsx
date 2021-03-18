@@ -1,8 +1,10 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
-import React, { useCallback, useEffect, useState } from 'react'
+import { blake2AsHex } from '@polkadot/util-crypto'
+import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
-import { Account, Member } from '../../common/types'
-import { ButtonPrimaryMedium } from '../../components/buttons'
+import { Account, BaseMember, Member } from '../../common/types'
+import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
+import { Button } from '../../components/buttons'
 import {
   Checkbox,
   InlineToggleWrap,
@@ -12,20 +14,23 @@ import {
   TextInput,
   ToggleCheckbox,
 } from '../../components/forms'
+import { FieldError, hasError } from '../../components/forms/FieldError'
 import { Help } from '../../components/Help'
+import { SelectMember } from '../../components/membership/SelectMember'
 import {
   ModalFooter,
   ModalHeader,
+  ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
-  ScrolledModal,
 } from '../../components/Modal'
-import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
-import { SelectMember } from '../../components/membership/SelectMember'
 import { Text, TokenValue } from '../../components/typography'
+import { useApi } from '../../hooks/useApi'
+import { useFormValidation } from '../../hooks/useFormValidation'
+import { useObservable } from '../../hooks/useObservable'
+import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../membership/data/validation'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
-
-const AvatarSchema = Yup.string().url()
+import { FormFields, formReducer } from './formReducer'
 
 interface CreateProps {
   onClose: () => void
@@ -33,45 +38,54 @@ interface CreateProps {
   membershipPrice?: BalanceOf
 }
 
+const CreateMemberSchema = Yup.object().shape({
+  rootAccount: AccountSchema.required(),
+  controllerAccount: AccountSchema.required(),
+  avatarURI: AvatarURISchema,
+  name: Yup.string().required(),
+  handle: HandleSchema.required(),
+  hasTerms: Yup.boolean().required().oneOf([true]),
+  isReferred: Yup.boolean(),
+  referrer: ReferrerSchema,
+})
+
 export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
-  const [rootAccount, setRootAccount] = useState<Account | undefined>()
-  const [controllerAccount, setControllerAccount] = useState<Account | undefined>()
-  const [name, setName] = useState('')
-  const [handle, setHandle] = useState('')
-  const [about, setAbout] = useState('')
-  const [avatar, setAvatar] = useState('')
-  const [isReferred, setIsReferred] = useState(false)
-  const [hasTermsAgreed, setTerms] = useState(false)
+  const { api } = useApi()
+  const [state, dispatch] = useReducer(formReducer, {
+    name: '',
+    rootAccount: undefined,
+    controllerAccount: undefined,
+    handle: '',
+    about: '',
+    avatarURI: '',
+    isReferred: false,
+    referrer: undefined,
+    hasTerms: false,
+  })
+  const { rootAccount, controllerAccount, handle, name, isReferred, avatarURI, about, referrer } = state
+
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
-  const [isFormValid, setFormValid] = useState(false)
-  const isNotEmpty = !isReferred && !!rootAccount && !!controllerAccount && !!name && !!handle && hasTermsAgreed
+
+  const handleHash = blake2AsHex(handle)
+  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
+  const { isValid, errors, validate } = useFormValidation<FormFields>(CreateMemberSchema)
 
   useEffect(() => {
-    if (avatar) {
-      AvatarSchema.isValid(avatar).then((isAvatarValid) => {
-        setFormValid(isNotEmpty && isAvatarValid)
-      })
-    } else {
-      setFormValid(isNotEmpty)
-    }
-  }, [rootAccount, controllerAccount, name, handle, about, avatar, isReferred, hasTermsAgreed])
+    validate(state, { size: potentialMemberIdSize })
+  }, [state, potentialMemberIdSize])
+
+  const changeField = (type: keyof FormFields, value: string | Account | BaseMember | boolean) => {
+    dispatch({ type, value })
+  }
 
   const onCreate = () => {
     if (!controllerAccount || !rootAccount) {
       return
     }
 
-    onSubmit({
-      about,
-      name,
-      handle,
-      avatarURI: avatar,
-      controllerAccount: controllerAccount,
-      rootAccount: rootAccount,
-    })
+    onSubmit(state as Member)
   }
-  const stubHandler = () => undefined
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -81,9 +95,20 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           <Row>
             <InlineToggleWrap>
               <Label>I was referred by a member: </Label>
-              <ToggleCheckbox trueLabel="Yes" falseLabel="No" onChange={setIsReferred} checked={isReferred} />
+              <ToggleCheckbox
+                trueLabel="Yes"
+                falseLabel="No"
+                onChange={(isSet) => changeField('isReferred', isSet)}
+                checked={isReferred}
+              />
             </InlineToggleWrap>
-            <SelectMember onChange={stubHandler} disabled={!isReferred} />
+            {isReferred && (
+              <SelectMember
+                onChange={(member) => changeField('referrer', member)}
+                disabled={!isReferred}
+                selected={referrer}
+              />
+            )}
           </Row>
 
           <Row>
@@ -96,14 +121,17 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
             <Label isRequired>
               Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
-            <SelectAccount filter={filterRoot} onChange={setRootAccount} />
+            <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account)} />
           </Row>
 
           <Row>
             <Label isRequired>
               Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
-            <SelectAccount filter={filterController} onChange={setControllerAccount} />
+            <SelectAccount
+              filter={filterController}
+              onChange={(account) => changeField('controllerAccount', account)}
+            />
           </Row>
 
           <Row>
@@ -115,7 +143,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               type="text"
               placeholder="Type"
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => changeField('name', event.target.value)}
             />
           </Row>
 
@@ -128,8 +156,10 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               type="text"
               placeholder="Type"
               value={handle}
-              onChange={(event) => setHandle(event.target.value)}
+              onChange={(event) => changeField('handle', event.target.value)}
+              invalid={hasError('handle', errors)}
             />
+            <FieldError name="handle" errors={errors} />
           </Row>
 
           <Row>
@@ -139,7 +169,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               value={about}
               placeholder="Type"
               rows={4}
-              onChange={(event) => setAbout(event.target.value)}
+              onChange={(event) => changeField('about', event.target.value)}
             />
           </Row>
 
@@ -149,20 +179,22 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               id="member-avatar"
               type="text"
               placeholder="Image URL"
-              value={avatar}
-              onChange={(event) => setAvatar(event.target.value)}
+              value={avatarURI}
+              onChange={(event) => changeField('avatarURI', event.target.value)}
+              invalid={hasError('avatarURI', errors)}
             />
             <Text size={3} italic={true}>
               Paste an URL of your avatar image. Text lorem ipsum.
             </Text>
+            <FieldError name="avatarURI" errors={errors} />
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
         <Label>
-          <Checkbox id={'privacy-policy-agreement'} onChange={(value) => setTerms(value)}>
+          <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
             <Text size={2} dark={true}>
-              I agree to our{' '}
+              I agree to the{' '}
               <LabelLink href={'http://example.com/'} target="_blank">
                 Terms of Service
               </LabelLink>{' '}
@@ -181,9 +213,9 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           </InfoValue>
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
         </BalanceInfoNarrow>
-        <ButtonPrimaryMedium onClick={onCreate} disabled={!isFormValid}>
+        <Button size="medium" onClick={onCreate} disabled={!isValid}>
           Create a Membership
-        </ButtonPrimaryMedium>
+        </Button>
       </ModalFooter>
     </ScrolledModal>
   )

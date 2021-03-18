@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BaseMember, Member } from '../../common/types'
-import { ButtonPrimaryMedium } from '../../components/buttons'
+import { Button } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership/MemberInfo'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
@@ -24,7 +24,9 @@ export function AddMembershipSuccessModal({ onClose, member }: Props) {
         </MemberRow>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimaryMedium disabled>View my profile</ButtonPrimaryMedium>
+        <Button size="medium" disabled>
+          View my profile
+        </Button>
       </ModalFooter>
     </Modal>
   )

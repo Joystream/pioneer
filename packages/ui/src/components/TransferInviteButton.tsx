@@ -2,7 +2,7 @@ import React from 'react'
 import { BaseMember } from '../common/types'
 import { useToggle } from '../hooks/useToggle'
 import { TransferInviteModal } from '../modals/TransferInviteModal'
-import { ButtonSecondarySmallSquare } from './buttons'
+import { Button } from './buttons'
 import { TransferIcon } from './icons'
 
 interface Props {
@@ -16,9 +16,9 @@ export function TransferInviteButton({ member }: Props) {
 
   return (
     <>
-      <ButtonSecondarySmallSquare disabled={disabled} onClick={toggleOpen}>
+      <Button variant="secondary" size="small" square disabled={disabled} onClick={toggleOpen}>
         {icon}
-      </ButtonSecondarySmallSquare>
+      </Button>
       {isOpen && <TransferInviteModal onClose={toggleOpen} icon={icon} member={member} />}
     </>
   )

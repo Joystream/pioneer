@@ -4,7 +4,7 @@ import { useGetMemberQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
 import { Colors } from '../../../constants'
 import { formatDateString, formatTokenValue } from '../../../utils/formatters'
-import { ButtonGhostSmall } from '../../buttons'
+import { Button } from '../../buttons'
 import { LabelLink } from '../../forms'
 import { BlockIcon } from '../../icons/BlockIcon'
 import { TransferSymbol } from '../../icons/symbols/TransferSymbol'
@@ -62,10 +62,10 @@ export const MemberDetails = ({ member }: Props) => {
         <MembershipLabel text="Invitations Left" />
         <AboutInvite>
           <AboutText size={2}>{member?.inviteCount}</AboutText>
-          <ButtonGhostSmall>
+          <Button variant="ghost" size="small">
             <TransferSymbol />
             Transfer Invites
-          </ButtonGhostSmall>
+          </Button>
         </AboutInvite>
       </AboutRow>
       <AboutRow>
@@ -111,6 +111,7 @@ export const MemberDetails = ({ member }: Props) => {
     </AboutTable>
   )
 }
+
 const AboutTable = styled.ul`
   display: grid;
   grid-row-gap: 24px;

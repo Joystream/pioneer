@@ -1,13 +1,13 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../common/types'
-import { ButtonPrimaryMedium } from '../../components/buttons'
+import { Button } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership/MemberInfo'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Text } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
-import BN from 'bn.js'
 
 interface Props {
   onClose: () => void
@@ -31,7 +31,9 @@ export function TransferSuccessModal({ onClose, recipient, amount }: Props) {
         </MemberRow>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimaryMedium disabled>View my profile</ButtonPrimaryMedium>
+        <Button size="medium" disabled>
+          View my profile
+        </Button>
       </ModalFooter>
     </Modal>
   )
