@@ -4,6 +4,8 @@ import { AnySchema } from 'yup'
 
 export const AccountSchema = Yup.object()
 
+export const MemberSchema = Yup.object()
+
 export const AvatarURISchema = Yup.string().url()
 
 export const HandleSchema = Yup.string().test('handle', 'This handle is already taken', (value, testContext) => {
