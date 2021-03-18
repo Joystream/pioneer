@@ -53,6 +53,10 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         <AboutText size={2}>{member?.id}</AboutText>
       </AboutRow>
       <AboutRow>
+        <MembershipLabel text="Member Name" />
+        <AboutText size={2}>{member?.name}</AboutText>
+      </AboutRow>
+      <AboutRow>
         <MembershipLabel text="Invitations Left" />
         <AboutInvite>
           <AboutText size={2}>{member?.inviteCount}</AboutText>
