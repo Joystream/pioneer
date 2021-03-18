@@ -2,10 +2,13 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect, useReducer, useState } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
+import { AnySchema } from 'yup'
 import { Animations, Colors } from '../../../constants'
+import { useApi } from '../../../hooks/useApi'
 import { useFormValidation } from '../../../hooks/useFormValidation'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
-import { useFormValidation } from '../../../modals/AddMembershipModal/useFormValidation'
+import { useObservable } from '../../../hooks/useObservable'
+import { AvatarURISchema, HandleSchema } from '../../../membership/data/validation'
 import { Button } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
@@ -23,7 +26,7 @@ type Props = WithMember & {
 type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
 export interface MemberUpdateFormData {
-  memberId: string
+  id: string
   name?: string | null
   handle?: string | null
   avatarURI?: string | null
@@ -36,13 +39,10 @@ export type Action = {
 }
 
 const UpdateMemberSchema = Yup.object().shape({
-  avatarURI: Yup.string().url(),
-  handle: Yup.string()
-    .test('handle', 'This handle is already taken', (value, testContext) => {
-      const existingMember = testContext?.options?.context?.existingMember
-      return existingMember?.handle_hash.toJSON() !== blake2AsHex(value || '')
-    })
-    .required(),
+  avatarURI: AvatarURISchema.nullable(),
+  handle: Yup.string().when('$isHandleChanged', (isHandleChanged: boolean, schema: AnySchema) =>
+    isHandleChanged ? HandleSchema : schema
+  ),
 })
 
 const updateReducer = (state: MemberUpdateFormData, action: Action): MemberUpdateFormData => {
@@ -52,26 +52,45 @@ const updateReducer = (state: MemberUpdateFormData, action: Action): MemberUpdat
   }
 }
 
+const checkEdits = (formData: any, member: any) => {
+  for (const key of Object.keys(formData)) {
+    if (member[key] !== formData[key]) return true
+  }
+
+  return false
+}
+
 export const MemberProfile = React.memo(({ onClose, member }: Props) => {
+  const { api } = useApi()
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
   const [isEdit, setIsEdit] = useState(false)
   const { members, isLoading } = useMyMemberships()
   const isMyMember = !isLoading && !!members.find((m) => m.id == member.id)
-  const { isValid, validate } = useFormValidation(UpdateMemberSchema)
-  useEffect(() => {
-    validate(state, {})
-  })
-  const saveChanges = () => {
-    setIsEdit(false)
-  }
-
   const [state, dispatch] = useReducer(updateReducer, {
-    memberId: member.id,
+    id: member.id,
     name: member.name,
     handle: member.handle,
     avatarURI: member.avatarURI,
     about: member.about,
   })
+  const { handle } = state
+  const isHandleChanged = handle !== member.handle
+
+  const handleHash = blake2AsHex(handle || '')
+  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
+    handle,
+    isHandleChanged,
+  ])
+  const { isValid, validate } = useFormValidation<MemberUpdateFormData>(UpdateMemberSchema)
+  const hasEdits = isEdit && checkEdits(state, member)
+
+  useEffect(() => {
+    hasEdits && validate(state, { size: potentialMemberIdSize, isHandleChanged })
+  }, [state, potentialMemberIdSize, hasEdits])
+
+  const saveChanges = () => {
+    setIsEdit(false)
+  }
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -113,7 +132,7 @@ export const MemberProfile = React.memo(({ onClose, member }: Props) => {
           {isMyMember &&
             activeTab === 'DETAILS' &&
             (isEdit ? (
-              <Button variant="primary" size="medium" onClick={saveChanges} disabled={!isValid}>
+              <Button variant="primary" size="medium" onClick={saveChanges} disabled={!hasEdits || !isValid}>
                 Save changes
               </Button>
             ) : (
