@@ -1,12 +1,12 @@
-import React, { ReactElement, ReactHTMLElement, ReactNode, ReactNodeArray } from 'react'
+import React from 'react'
 import styled, { css } from 'styled-components'
-import { Colors, Transitions, Fonts, BorderRad, Shadows } from '../../constants'
+import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
 import { CopyButton } from '../buttons'
-import { Text } from '../typography'
-import { Label } from './'
+import { Help } from '../Help'
 import { AlertSymbol } from '../icons/symbols/AlertSymbol'
 import { SuccessSymbol } from '../icons/symbols/SuccessSymbol'
-import { Help } from '../Help'
+import { Text } from '../typography'
+import { Label } from './'
 
 type InputComponentProps = InputProps &
   InputElementProps &
@@ -15,7 +15,6 @@ type InputComponentProps = InputProps &
     label?: string
     required?: boolean
     value?: string
-    placeholder?: string
     icon?: React.ReactElement
     copy?: boolean
     textToCopy?: string
@@ -26,16 +25,17 @@ type InputComponentProps = InputProps &
     helperLinkText?: React.ReactElement
     helperLinkURL?: string
     className?: string
-    children: ReactNode
+    children: React.ReactNode
   }
 
 interface InputProps {
-  icon?: React.ReactElement
-  copy?: boolean
-  units?: string
+  id?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
-  inputType?: 'text' | 'textarea' | 'number'
-  inputSize?: 'm' | 'l' | undefined
+  required?: boolean
+  value?: string
+  placeholder?: string
+  disabled?: boolean
+  onChange?: (event: any) => void
 }
 
 interface InputElementProps {
@@ -52,14 +52,12 @@ interface DisabledInputProps {
 }
 
 export const InputComponent = ({
-  inputType,
   id,
   label,
   required,
   validation,
   disabled,
   value,
-  placeholder,
   inputSize,
   icon,
   copy,
@@ -107,12 +105,16 @@ export const InputComponent = ({
       </InputContainer>
       {message && (
         <InputNotification validation={validation}>
-          {validation === 'invalid' ||
-            (validation === 'warning' && (
-              <InputNotificationIcon>
-                <AlertSymbol />
-              </InputNotificationIcon>
-            ))}
+          {validation === 'invalid' && (
+            <InputNotificationIcon>
+              <AlertSymbol />
+            </InputNotificationIcon>
+          )}
+          {validation === 'warning' && (
+            <InputNotificationIcon>
+              <AlertSymbol />
+            </InputNotificationIcon>
+          )}
           {validation === 'valid' && (
             <InputNotificationIcon>
               <SuccessSymbol />
@@ -125,36 +127,53 @@ export const InputComponent = ({
   )
 }
 
-// {inputType === 'textarea' ? (
-//   <InputTextarea
-//     id={id}
-//     inputType={inputType}
-//     value={value}
-//     required={required}
-//     validation={validation}
-//     placeholder={placeholder}
-//     disabled={disabled}
-//     icon={icon}
-//     copy={copy}
-//     units={units}
-//     inputSize={inputSize}
-//   />
-// ) : (
-//   <Input
-//     id={id}
-//     type={inputType}
-//     inputType={inputType}
-//     value={value}
-//     required={required}
-//     validation={validation}
-//     placeholder={placeholder}
-//     disabled={disabled}
-//     icon={icon}
-//     copy={copy}
-//     units={units}
-//     inputSize={inputSize}
-//   />
-// )}
+export const InputText = ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
+  return (
+    <Input
+      id={id}
+      name={id}
+      type="text"
+      value={value}
+      required={required}
+      validation={validation}
+      placeholder={placeholder}
+      disabled={disabled}
+      onChange={onChange}
+      autoComplete="off"
+    />
+  )
+}
+export const InputNumber = ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
+  return (
+    <Input
+      id={id}
+      name={id}
+      type="number"
+      value={value}
+      required={required}
+      validation={validation}
+      placeholder={placeholder}
+      disabled={disabled}
+      onChange={onChange}
+      autoComplete="off"
+    />
+  )
+}
+export const InputTextarea = ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
+  return (
+    <Textarea
+      id={id}
+      name={id}
+      value={value}
+      required={required}
+      validation={validation}
+      placeholder={placeholder}
+      disabled={disabled}
+      onChange={onChange}
+      autoComplete="off"
+    />
+  )
+}
 
 const InputWithNothing = css<InputProps>`
   padding: 0 16px 1px 16px;
@@ -187,10 +206,6 @@ const InputStyles = css<InputProps>`
     font-weight: 400;
     color: ${Colors.Black[400]};
   }
-  ${(props) => (!props.icon && !props.units && !props.copy ? InputWithNothing : null)}
-  ${(props) => (props.icon && !props.units && !props.copy ? InputWithIcon : null)}
-  ${(props) => ((props.units || props.copy) && !props.icon ? InputWithRight : null)}
-  ${(props) => ((props.units || props.copy) && props.icon ? InputWithBoth : null)}
 `
 
 export const Input = styled.input`
@@ -207,10 +222,8 @@ export const Input = styled.input`
   }
 `
 
-const InputTextarea = styled.textarea`
+const Textarea = styled.textarea`
   ${InputStyles}
-  padding-top: 16px;
-  padding-bottom: 16px;
   resize: none;
 `
 
@@ -218,7 +231,7 @@ const InputElement = styled.div<InputElementProps>`
   display: grid;
   grid-row-gap: 4px;
   align-items: center;
-  width: fit-content;
+  width: 100%;
   min-width: 400px;
 `
 
@@ -262,9 +275,20 @@ const InputContainer = styled.div<InputElementProps>`
     }
   }};
   border-radius: ${BorderRad.s};
-  background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : 'transparent')};
+  background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : Colors.White)};
   box-shadow: ${Shadows.transparent};
   transition: ${Transitions.all};
+  & input,
+  & textarea {
+    ${(props) => (!props.icon && !props.units && !props.copy ? InputWithNothing : null)}
+    ${(props) => (props.icon && !props.units && !props.copy ? InputWithIcon : null)}
+    ${(props) => ((props.units || props.copy) && !props.icon ? InputWithRight : null)}
+    ${(props) => ((props.units || props.copy) && props.icon ? InputWithBoth : null)}
+  }
+  & textarea {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
 
   &:hover,
   &:focus,

@@ -28,8 +28,8 @@ export const SelectedOption = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   align-items: center;
-  min-height: ${Sizes.selectHeight};
-  max-height: ${Sizes.selectHeight};
+  /* min-height: ${Sizes.selectHeight}; */
+  /* max-height: ${Sizes.selectHeight}; */
   padding: 10px 28px 10px 16px;
 `
 
@@ -103,17 +103,18 @@ export const OptionsListComponent = styled.ul`
   display: grid;
   grid-template-columns: 1fr;
   position: absolute;
-  left: 0;
+  left: 50%;
   top: 100%;
-  width: 100%;
+  width: calc(100% + 2px);
   height: auto;
   max-height: calc(${Sizes.selectHeight} * 2.5);
-  margin: -1px 0 0;
+  margin: 0;
   border-radius: ${BorderRad.s};
   border: 1px solid ${Colors.Black[300]};
   background-color: ${Colors.White};
   box-shadow: ${Shadows.select};
   overflow-y: scroll;
+  transform: translateX(-50%);
   transition: ${Transitions.all};
   animation: showOptions 0.25s ease;
   cursor: auto;
