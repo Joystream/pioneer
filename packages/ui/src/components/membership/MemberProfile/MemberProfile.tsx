@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
-import { useMyMemberships } from '../../../hooks/useMyMemberships'
-import { useFormValidation } from '../../../hooks/useFormValidation'
 import { Button } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
@@ -11,6 +9,8 @@ import { PageTab, PageTabsNav } from '../../page/PageTabs'
 import { MemberInfo } from '../MemberInfo'
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
+import { useMyMemberships } from '../../../hooks/useMyMemberships'
+import { useFormValidation } from '../../../hooks/useFormValidation'
 
 interface Props {
   member: BaseMember
@@ -34,7 +34,7 @@ export const MemberProfile = ({ onClose, member }: Props) => {
         <SidePaneHeader>
           <CloseSmallModalButton onClick={onClose} />
           <SidePaneTitle>My Profile</SidePaneTitle>
-          <MemberInfo member={member} memberSize="l" />
+          <MemberInfo member={member} memberSize="l" size="l" />
           <PageTabsNav>
             <PageTab active={activeTab === 'DETAILS'} onClick={() => setActiveTab('DETAILS')}>
               Member details
