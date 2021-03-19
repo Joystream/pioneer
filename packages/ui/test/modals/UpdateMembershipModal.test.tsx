@@ -1,8 +1,7 @@
 import { ApiRx } from '@polkadot/api'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import '@testing-library/jest-dom'
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -16,10 +15,10 @@ import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
+import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 import { getMember, MockMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
-import { stubTransactionResult } from '../mocks/stubTransactionResult'
 
 describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {
@@ -68,9 +67,7 @@ describe('UI: UpdatedMembershipModal', () => {
     )
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
-    transaction = {}
-    set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
-    set(api, 'api.tx.members.updateProfile', () => transaction)
+    transaction = stubTransaction(api, 'api.tx.members.updateProfile')
 
     member = await getMember('Alice')
 
@@ -124,60 +121,38 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   describe('Authorize - member field', () => {
-    const renderAuthorizeStep = async () => {
-      const rendered = renderModal(member)
-      const { findByText, getByLabelText } = rendered
+    beforeEach(async () => {
+      renderModal(member)
+    })
 
-      fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-
-      fireEvent.click(await findByText(/^Save changes$/i))
-
-      return rendered
+    async function changeNameAndSave() {
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      fireEvent.click(await screen.findByText(/^Save changes$/i))
     }
 
     it('Authorize step', async () => {
-      const { findByText } = await renderAuthorizeStep()
+      await changeNameAndSave()
 
-      expect(await findByText('Authorize transaction')).toBeDefined()
-      expect((await findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      expect(await screen.findByText('Authorize transaction')).toBeDefined()
+      expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
     })
 
     it('Success step', async () => {
-      const events = [
-        {
-          phase: { ApplyExtrinsic: 2 },
-          event: { index: '0x0502', data: [1] },
-        },
-        {
-          phase: { ApplyExtrinsic: 2 },
-          event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
-        },
-      ]
-      set(transaction, 'signAndSend', () => stubTransactionResult(events))
+      stubTransactionSuccess(transaction, [1])
+      await changeNameAndSave()
 
-      const { getByText, findByText } = await renderAuthorizeStep()
-      fireEvent.click(getByText(/^sign and update a member$/i))
+      fireEvent.click(screen.getByText(/^sign and update a member$/i))
 
-      expect(await findByText('Success')).toBeDefined()
+      expect(await screen.findByText('Success')).toBeDefined()
     })
 
     it('Failure step', async () => {
-      const events = [
-        {
-          phase: { ApplyExtrinsic: 2 },
-          event: {
-            index: '0x0001',
-            data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
-            section: 'system',
-            method: 'ExtrinsicFailed',
-          },
-        },
-      ]
-      set(transaction, 'signAndSend', () => stubTransactionResult(events))
-      const { getByText, findByText } = await renderAuthorizeStep()
-      fireEvent.click(getByText(/^sign and update a member$/i))
+      stubTransactionFailure(transaction)
+      await changeNameAndSave()
 
-      expect(await findByText('Failure')).toBeDefined()
+      fireEvent.click(screen.getByText(/^sign and update a member$/i))
+
+      expect(await screen.findByText('Failure')).toBeDefined()
     })
   })
 
