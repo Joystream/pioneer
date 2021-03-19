@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { Account } from '../common/types'
 import { useApi } from '../hooks/useApi'
 import { useMyMemberships } from '../hooks/useMyMemberships'
+import { useObservable } from '../hooks/useObservable'
 import { useSignAndSendTransaction } from '../hooks/useSignAndSendTransaction'
 
 export function useMockMembers() {
@@ -32,10 +33,17 @@ export function useMockMembers() {
     onDone: (success) => console.log(success ? '✅ Members created' : '❗️Error processing batch transaction'),
   })
 
+  const hasCreatedMember = useObservable(api?.query?.members.membershipById.size(0), [isConnected])?.toNumber()
+
   useEffect(() => {
-    if (api && members.length) {
-      console.log('🌱 Creating members on chain using mocks')
-      send()
+    if (api && isConnected && members.length) {
+      if (hasCreatedMember === undefined) return
+      if (!hasCreatedMember) {
+        console.log('🌱 Creating members on chain using mocks')
+        send()
+      } else {
+        console.log('✅ Member with id (0) already created')
+      }
     }
-  }, [isConnected, members.length])
+  }, [isConnected, members.length, hasCreatedMember])
 }
