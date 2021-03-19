@@ -91,7 +91,7 @@ describe('UI: UpdatedMembershipModal', () => {
     expect(await findByText('Edit membership')).toBeDefined()
   })
 
-  it('Enables button on fields changes', async () => {
+  it('Enables button on member field change', async () => {
     const { getByLabelText, findByRole } = renderModal(member)
 
     const button = await findByRole('button', { name: /^Save changes$/i })
@@ -102,7 +102,7 @@ describe('UI: UpdatedMembershipModal', () => {
     expect(await findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
   })
 
-  it('Enables button on accounts changes', async () => {
+  it('Enables button on account change', async () => {
     const { getByText, findByRole } = renderModal(member)
 
     const button = await findByRole('button', { name: /^Save changes$/i })
@@ -123,7 +123,7 @@ describe('UI: UpdatedMembershipModal', () => {
     expect(await findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
   })
 
-  describe('Authorize step', () => {
+  describe('Authorize - member field', () => {
     const renderAuthorizeStep = async () => {
       const rendered = renderModal(member)
       const { findByText, getByLabelText } = rendered
@@ -135,14 +135,14 @@ describe('UI: UpdatedMembershipModal', () => {
       return rendered
     }
 
-    it('Renders authorize transaction', async () => {
+    it('Authorize step', async () => {
       const { findByText } = await renderAuthorizeStep()
 
       expect(await findByText('Authorize transaction')).toBeDefined()
       expect((await findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
     })
 
-    describe('Success', () => {
+    it('Success step', async () => {
       const events = [
         {
           phase: { ApplyExtrinsic: 2 },
@@ -153,20 +153,15 @@ describe('UI: UpdatedMembershipModal', () => {
           event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
         },
       ]
+      set(transaction, 'signAndSend', () => stubTransactionResult(events))
 
-      beforeEach(() => {
-        set(transaction, 'signAndSend', () => stubTransactionResult(events))
-      })
+      const { getByText, findByText } = await renderAuthorizeStep()
+      fireEvent.click(getByText(/^sign and update a member$/i))
 
-      it('Renders transaction success', async () => {
-        const { getByText, findByText } = await renderAuthorizeStep()
-        fireEvent.click(getByText(/^sign and update a member$/i))
-
-        expect(await findByText('Success')).toBeDefined()
-      })
+      expect(await findByText('Success')).toBeDefined()
     })
 
-    describe('Failure', () => {
+    it('Failure step', async () => {
       const events = [
         {
           phase: { ApplyExtrinsic: 2 },
@@ -178,17 +173,11 @@ describe('UI: UpdatedMembershipModal', () => {
           },
         },
       ]
+      set(transaction, 'signAndSend', () => stubTransactionResult(events))
+      const { getByText, findByText } = await renderAuthorizeStep()
+      fireEvent.click(getByText(/^sign and update a member$/i))
 
-      beforeEach(() => {
-        set(transaction, 'signAndSend', () => stubTransactionResult(events))
-      })
-
-      it('Renders transaction failure', async () => {
-        const { getByText, findByText } = await renderAuthorizeStep()
-        fireEvent.click(getByText(/^sign and update a member$/i))
-
-        expect(await findByText('Failure')).toBeDefined()
-      })
+      expect(await findByText('Failure')).toBeDefined()
     })
   })
 
