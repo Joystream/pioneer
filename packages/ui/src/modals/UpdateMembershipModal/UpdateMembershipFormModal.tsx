@@ -53,7 +53,7 @@ const updateReducer = (state: UpdateMemberForm, action: Action): UpdateMemberFor
   }
 }
 
-const checkEdits = (formData: any, member: any) => {
+const checkEdits = (formData: Record<string, any>, member: Record<string, any>) => {
   for (const key of Object.keys(formData)) {
     if (member[key] !== formData[key]) {
       return true
