@@ -1,6 +1,6 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { Member } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { Label } from '../../components/forms'

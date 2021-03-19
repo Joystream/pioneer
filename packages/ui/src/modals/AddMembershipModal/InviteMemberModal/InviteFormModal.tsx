@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react'
 import { EnterAccount } from '../../../components/account/SelectAccount'
 import { Button } from '../../../components/buttons'
-import { Checkbox, Label, LabelLink, TextArea, TextInput } from '../../../components/forms'
+import { Label, TextArea, TextInput } from '../../../components/forms'
 import { Help } from '../../../components/Help'
 import { SelectMember } from '../../../components/membership/SelectMember'
 import {
@@ -137,7 +137,7 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
               type="text"
               placeholder="Image URL"
               value={avatarURI}
-              onChange={() => null}
+              onChange={(event) => changeField('avatarURI', event.target.value)}
               invalid={hasError('avatarURI', errors)}
             />
             <Text size={3} italic={true}>
@@ -148,21 +148,6 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
-        <Label>
-          <Checkbox id={'privacy-policy-agreement'} onChange={() => null}>
-            <Text size={2} dark={true}>
-              I agree to the{' '}
-              <LabelLink href={'http://example.com/'} target="_blank">
-                Terms of Service
-              </LabelLink>{' '}
-              and{' '}
-              <LabelLink href={'http://example.com/'} target="_blank">
-                Privacy Policy
-              </LabelLink>
-              .
-            </Text>
-          </Checkbox>
-        </Label>
         <Button size="medium" onClick={onCreate} disabled={!isValid}>
           Invite a Member
         </Button>
