@@ -14,7 +14,8 @@ import {
   TextInput,
   ToggleCheckbox,
 } from '../../components/forms'
-import { FieldError, hasError } from '../../components/forms/FieldError'
+import { FieldError, getErrorMessage, hasError } from '../../components/forms/FieldError'
+import { Input, InputComponent } from '../../components/forms/InputComponent'
 import { Help } from '../../components/Help'
 import { SelectMember } from '../../components/membership/SelectMember'
 import {
@@ -124,6 +125,10 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
             <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account)} />
           </Row>
 
+          <InputComponent label="Root account" required>
+            <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account)} />
+          </InputComponent>
+
           <Row>
             <Label isRequired>
               Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
@@ -173,21 +178,26 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
             />
           </Row>
 
-          <Row>
-            <Label htmlFor="member-avatar">Member Avatar</Label>
-            <TextInput
+          <InputComponent
+            label="Member Avatar"
+            required
+            inputType="text"
+            value={avatarURI}
+            validation={hasError('avatarURI', errors) ? 'invalid' : undefined}
+            message={
+              hasError('avatarURI', errors)
+                ? getErrorMessage('avatarURI', errors)
+                : 'Paste an URL of your avatar image. Text lorem ipsum.'
+            }
+            placeholder="Image URL"
+            id="member-avatar"
+          >
+            <Input
               id="member-avatar"
-              type="text"
-              placeholder="Image URL"
               value={avatarURI}
               onChange={(event) => changeField('avatarURI', event.target.value)}
-              invalid={hasError('avatarURI', errors)}
             />
-            <Text size={3} italic={true}>
-              Paste an URL of your avatar image. Text lorem ipsum.
-            </Text>
-            <FieldError name="avatarURI" errors={errors} />
-          </Row>
+          </InputComponent>
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>

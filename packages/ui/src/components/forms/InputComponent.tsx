@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactElement, ReactHTMLElement, ReactNode, ReactNodeArray } from 'react'
 import styled, { css } from 'styled-components'
 import { Colors, Transitions, Fonts, BorderRad, Shadows } from '../../constants'
 import { CopyButton } from '../buttons'
@@ -26,6 +26,7 @@ type InputComponentProps = InputProps &
     helperLinkText?: React.ReactElement
     helperLinkURL?: string
     className?: string
+    children: ReactNode
   }
 
 interface InputProps {
@@ -70,6 +71,7 @@ export const InputComponent = ({
   helperLinkText,
   helperLinkURL,
   className,
+  children,
 }: InputComponentProps) => {
   return (
     <InputElement className={className} inputSize={inputSize}>
@@ -95,38 +97,7 @@ export const InputComponent = ({
         inputSize={inputSize}
       >
         {icon && <InputIcon>{icon}</InputIcon>}
-        <InputArea>
-          {inputType === 'textarea' ? (
-            <InputTextarea
-              id={id}
-              inputType={inputType}
-              value={value}
-              required={required}
-              validation={validation}
-              placeholder={placeholder}
-              disabled={disabled}
-              icon={icon}
-              copy={copy}
-              units={units}
-              inputSize={inputSize}
-            />
-          ) : (
-            <Input
-              id={id}
-              type={inputType}
-              inputType={inputType}
-              value={value}
-              required={required}
-              validation={validation}
-              placeholder={placeholder}
-              disabled={disabled}
-              icon={icon}
-              copy={copy}
-              units={units}
-              inputSize={inputSize}
-            />
-          )}
-        </InputArea>
+        <InputArea>{children}</InputArea>
         {(units || copy) && (
           <InputRightSide>
             {units && <InputUnits>{units}</InputUnits>}
@@ -153,6 +124,37 @@ export const InputComponent = ({
     </InputElement>
   )
 }
+
+// {inputType === 'textarea' ? (
+//   <InputTextarea
+//     id={id}
+//     inputType={inputType}
+//     value={value}
+//     required={required}
+//     validation={validation}
+//     placeholder={placeholder}
+//     disabled={disabled}
+//     icon={icon}
+//     copy={copy}
+//     units={units}
+//     inputSize={inputSize}
+//   />
+// ) : (
+//   <Input
+//     id={id}
+//     type={inputType}
+//     inputType={inputType}
+//     value={value}
+//     required={required}
+//     validation={validation}
+//     placeholder={placeholder}
+//     disabled={disabled}
+//     icon={icon}
+//     copy={copy}
+//     units={units}
+//     inputSize={inputSize}
+//   />
+// )}
 
 const InputWithNothing = css<InputProps>`
   padding: 0 16px 1px 16px;
@@ -191,7 +193,7 @@ const InputStyles = css<InputProps>`
   ${(props) => ((props.units || props.copy) && props.icon ? InputWithBoth : null)}
 `
 
-const Input = styled.input`
+export const Input = styled.input`
   ${InputStyles}
   &[type="number"] {
     text-align: right;
