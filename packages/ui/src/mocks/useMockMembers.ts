@@ -36,6 +36,9 @@ export function useMockMembers() {
   const hasCreatedMember = useObservable(api?.query?.members.membershipById.size(0), [isConnected])?.toNumber()
 
   useEffect(() => {
+    if (!IS_DEVELOPMENT) {
+      return
+    }
     if (api && isConnected && members.length) {
       if (hasCreatedMember === undefined) return
       if (!hasCreatedMember) {
