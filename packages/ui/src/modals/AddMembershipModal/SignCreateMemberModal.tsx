@@ -1,6 +1,6 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Member } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { Label } from '../../components/forms'
@@ -23,15 +23,19 @@ interface SignProps {
 export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionParams, onDone }: SignProps) => {
   const { api } = useApi()
   const [from, setFrom] = useState(transactionParams.controllerAccount)
-  const transaction = api?.tx?.members?.buyMembership({
-    root_account: transactionParams.rootAccount.address,
-    controller_account: transactionParams.controllerAccount.address,
-    name: transactionParams.name,
-    handle: transactionParams.handle,
-    avatar_uri: transactionParams.avatarURI,
-    about: transactionParams.about,
-    referrer_id: transactionParams.referrer?.id,
-  })
+  const transaction = useMemo(
+    () =>
+      api?.tx?.members?.buyMembership({
+        root_account: transactionParams.rootAccount.address,
+        controller_account: transactionParams.controllerAccount.address,
+        name: transactionParams.name,
+        handle: transactionParams.handle,
+        avatar_uri: transactionParams.avatarURI,
+        about: transactionParams.about,
+        referrer_id: transactionParams.referrer?.id,
+      }),
+    [JSON.stringify(transactionParams)]
+  )
 
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
 
