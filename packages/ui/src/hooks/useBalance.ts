@@ -17,7 +17,8 @@ export function toBalances(balances: DeriveBalancesAll): Balances {
 
 export function useBalance(account: Account | undefined): Balances | null {
   const { api } = useApi()
-  const balances = useObservable(account && api?.derive.balances.all(account?.address), [api, account])
+  const address = account?.address
+  const balances = useObservable(address ? api?.derive.balances.all(address) : undefined, [api, address])
 
   if (balances === undefined) {
     return null
