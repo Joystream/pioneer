@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react'
-import { EnterAccount } from '../../../components/account/SelectAccount'
 import { Button } from '../../../components/buttons'
 import { Label, TextArea, TextInput } from '../../../components/forms'
 import { Help } from '../../../components/Help'
@@ -16,12 +15,13 @@ import { useFormValidation } from '../../../hooks/useFormValidation'
 import { FormFields, formReducer } from '../formReducer'
 import { Row } from '../../common'
 import * as Yup from 'yup'
-import { AccountSchema, AvatarURISchema, HandleSchema, MemberSchema } from '../../../membership/data/validation'
+import { AvatarURISchema, HandleSchema, MemberSchema, NewAddressSchema } from '../../../membership/data/validation'
 import { blake2AsHex } from '@polkadot/util-crypto'
 import { useObservable } from '../../../hooks/useObservable'
 import { useApi } from '../../../hooks/useApi'
 import { Account, BaseMember, Member } from '../../../common/types'
 import { FieldError, hasError } from '../../../components/forms/FieldError'
+import { useKeyring } from '../../../hooks/useKeyring'
 
 interface InviteProps {
   onClose: () => void
@@ -30,8 +30,8 @@ interface InviteProps {
 
 const InviteMemberSchema = Yup.object().shape({
   invitor: MemberSchema.required(),
-  rootAccount: AccountSchema.required(),
-  controllerAccount: AccountSchema.required(),
+  rootAccount: NewAddressSchema('rootAccount'),
+  controllerAccount: NewAddressSchema('controllerAccount'),
   avatarURI: AvatarURISchema,
   name: Yup.string().required(),
   handle: HandleSchema.required(),
@@ -39,6 +39,7 @@ const InviteMemberSchema = Yup.object().shape({
 
 export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
+  const keyring = useKeyring()
   const [state, dispatch] = useReducer(formReducer, {
     name: '',
     rootAccount: undefined,
@@ -49,13 +50,13 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
     hasTerms: false,
     invitor: undefined,
   })
-  const { handle, name, avatarURI, about } = state
+  const { rootAccount, controllerAccount, handle, name, avatarURI, about } = state
   const onCreate = () => onSubmit(state as Member)
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
   const { isValid, errors, validate } = useFormValidation<FormFields>(InviteMemberSchema)
   useEffect(() => {
-    validate(state, { size: potentialMemberIdSize })
+    validate(state, { size: potentialMemberIdSize, keyring })
   }, [state, potentialMemberIdSize])
   const changeField = (type: keyof FormFields, value: string | Account | BaseMember | boolean) => {
     dispatch({ type, value })
@@ -81,14 +82,30 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
             <Label isRequired>
               Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
-            <EnterAccount onChange={(account) => changeField('rootAccount', account)} name="Root account" />
+            <TextInput
+              id="root-account"
+              type="text"
+              placeholder="Type"
+              value={rootAccount?.address ?? ''}
+              onChange={(event) => changeField('rootAccount', { name: undefined, address: event.target.value })}
+              invalid={hasError('rootAccount', errors)}
+            />
+            <FieldError name="rootAccount" errors={errors} />
           </Row>
 
           <Row>
             <Label isRequired>
               Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
-            <EnterAccount onChange={(account) => changeField('controllerAccount', account)} name="Controller account" />
+            <TextInput
+              id="controller-account"
+              type="text"
+              placeholder="Type"
+              value={controllerAccount?.address ?? ''}
+              onChange={(event) => changeField('controllerAccount', { name: undefined, address: event.target.value })}
+              invalid={hasError('controllerAccount', errors)}
+            />
+            <FieldError name="controllerAccount" errors={errors} />
           </Row>
 
           <Row>
