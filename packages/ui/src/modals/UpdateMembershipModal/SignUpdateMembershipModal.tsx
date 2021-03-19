@@ -41,7 +41,7 @@ export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, 
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
         <ModalHeader onClick={onClose} title="Authorize transaction" />
         <ModalBody>
-          <Text>You are intend to update your membership.</Text>
+          <Text>You intend to update your membership.</Text>
           <Text>
             Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
           </Text>

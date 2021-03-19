@@ -55,7 +55,9 @@ const updateReducer = (state: UpdateMemberForm, action: Action): UpdateMemberFor
 
 const checkEdits = (formData: any, member: any) => {
   for (const key of Object.keys(formData)) {
-    if (member[key] !== formData[key]) return true
+    if (member[key] !== formData[key]) {
+      return true
+    }
   }
 
   return false
@@ -95,7 +97,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Add membership" />
+      <ModalHeader onClick={onClose} title="Edit membership" />
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <Row>
@@ -156,7 +158,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       </ScrolledModalBody>
       <ModalFooter>
         <Button size="medium" onClick={onCreate} disabled={!canUpdate}>
-          Updated a Membership
+          Save changes
         </Button>
       </ModalFooter>
     </ScrolledModal>

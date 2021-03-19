@@ -18,7 +18,7 @@ export function UpdateMembershipSuccessModal({ onClose, member }: Props) {
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
-        <Text>You have just successfully created a new membership</Text>
+        <Text>You have just successfully updated your membership</Text>
         <MemberRow>
           <MemberInfo member={(member as unknown) as BaseMember} />
         </MemberRow>
