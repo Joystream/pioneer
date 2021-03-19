@@ -15,6 +15,7 @@ import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
+import { selectAccount } from '../helpers/selectAccount'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 import { getMember, MockMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
@@ -97,6 +98,17 @@ describe('UI: UpdatedMembershipModal', () => {
     expect(button).toBeDisabled()
 
     fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+
+    expect(await findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
+  })
+
+  it('Enables button on accounts changes', async () => {
+    const { getByText, findByRole } = renderModal(member)
+
+    const button = await findByRole('button', { name: /^Save changes$/i })
+    expect(button).toBeDisabled()
+
+    selectAccount('Root account', 'bob', getByText)
 
     expect(await findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
   })

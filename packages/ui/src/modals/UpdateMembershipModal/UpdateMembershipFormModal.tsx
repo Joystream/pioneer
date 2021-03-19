@@ -1,11 +1,13 @@
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useEffect, useReducer } from 'react'
+import React, { Reducer, useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
-import { BaseMember } from '../../common/types'
+import { Address, BaseMember } from '../../common/types'
+import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
 import { Label, TextArea, TextInput } from '../../components/forms'
 import { FieldError, hasError } from '../../components/forms/FieldError'
+import { Help } from '../../components/Help'
 import {
   ModalFooter,
   ModalHeader,
@@ -29,14 +31,16 @@ interface Props {
 export interface UpdateMemberForm {
   id: string
   name?: string
+  rootAccount?: Address
+  controllerAccount?: Address
   handle?: string
   avatarURI?: string
   about?: string
 }
 
-export type Action = {
-  type: keyof UpdateMemberForm
-  value: string | undefined
+export type Action<T> = {
+  type: keyof T
+  value?: T[keyof T]
 }
 
 const UpdateMemberSchema = Yup.object().shape({
@@ -46,11 +50,10 @@ const UpdateMemberSchema = Yup.object().shape({
   ),
 })
 
-const updateReducer = (state: UpdateMemberForm, action: Action): UpdateMemberForm => {
-  return {
-    ...state,
-    [action.type]: action.value as string,
-  }
+type FormReducer<T> = Reducer<T, Action<T>>
+
+const updateReducer: FormReducer<UpdateMemberForm> = (state, action): UpdateMemberForm => {
+  return { ...state, [action.type]: action.value }
 }
 
 const checkEdits = (formData: Record<string, any>, member: Record<string, any>) => {
@@ -72,8 +75,10 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     handle: member.handle || '',
     about: member.about || '',
     avatarURI: member.avatarURI || '',
+    rootAccount: member.rootAccount || '',
+    controllerAccount: member.controllerAccount || '',
   })
-  const { handle, name, avatarURI, about } = state
+  const { handle, name, rootAccount, controllerAccount, avatarURI, about } = state
 
   const handleHash = blake2AsHex(handle || '')
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
@@ -81,11 +86,14 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
 
   const canUpdate = isValid && checkEdits(state, member)
 
+  const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
+  const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
+
   useEffect(() => {
     validate(state, { size: potentialMemberIdSize })
   }, [state, potentialMemberIdSize])
 
-  const changeField = (type: keyof UpdateMemberForm, value: string) => {
+  const changeField = (type: keyof UpdateMemberForm, value: string | Address) => {
     dispatch({ type, value })
   }
 
@@ -100,6 +108,22 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       <ModalHeader onClick={onClose} title="Edit membership" />
       <ScrolledModalBody>
         <ScrolledModalContainer>
+          <Row>
+            <Label>
+              Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+            </Label>
+            <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account.address)} />
+          </Row>
+          <Row>
+            <Label>
+              Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+            </Label>
+            <SelectAccount
+              filter={filterController}
+              onChange={(account) => changeField('controllerAccount', account.address)}
+            />
+          </Row>
+
           <Row>
             <Label htmlFor="member-name" isRequired>
               Member Name
