@@ -20,6 +20,7 @@ interface SignProps {
   transactionParams: Member
   onDone: (result: boolean, fee: BN) => void
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
+  isInvite?: boolean
 }
 
 export const SignCreateMemberModal = ({
@@ -28,6 +29,7 @@ export const SignCreateMemberModal = ({
   transactionParams,
   onDone,
   transaction,
+  isInvite,
 }: SignProps) => {
   const [from, setFrom] = useState(transactionParams.controllerAccount)
 
@@ -38,10 +40,16 @@ export const SignCreateMemberModal = ({
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
         <ModalHeader onClick={onClose} title="Authorize transaction" />
         <ModalBody>
-          <Text>You are intend to create a new membership.</Text>
-          <Text>
-            The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
-          </Text>
+          <Text>You intend to create a new membership.</Text>
+          {isInvite ? (
+            <Text>
+              You are inviting this member. You have {transactionParams.invitor?.inviteCount.toString()} invites left.
+            </Text>
+          ) : (
+            <Text>
+              The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
+            </Text>
+          )}
           <Text>
             Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
           </Text>

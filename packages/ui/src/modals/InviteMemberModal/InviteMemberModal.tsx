@@ -48,6 +48,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
         transactionParams={transactionParams}
         onDone={onDone}
         transaction={transaction}
+        isInvite
       />
     )
   }
