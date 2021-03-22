@@ -1,7 +1,7 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
 import React, { useState } from 'react'
-import { Member } from '../../common/types'
+import { Account, Member } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
@@ -20,6 +20,7 @@ interface SignProps {
   transactionParams: Member
   onDone: (result: boolean, fee: BN) => void
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
+  initialSigner: Account
   isInvite?: boolean
 }
 
@@ -29,9 +30,10 @@ export const SignCreateMemberModal = ({
   transactionParams,
   onDone,
   transaction,
+  initialSigner,
   isInvite,
 }: SignProps) => {
-  const [from, setFrom] = useState(transactionParams.controllerAccount)
+  const [from, setFrom] = useState(initialSigner)
 
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
 

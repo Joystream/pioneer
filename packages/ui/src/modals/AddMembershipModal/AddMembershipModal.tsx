@@ -52,6 +52,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         transactionParams={transactionParams}
         onDone={onDone}
         transaction={transaction}
+        initialSigner={transactionParams.controllerAccount}
       />
     )
   }

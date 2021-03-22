@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Member, ModalState } from '../../common/types'
+import { useAccounts } from '../../hooks/useAccounts'
 import { useApi } from '../../hooks/useApi'
 import { AddMembershipFailureModal } from '../AddMembershipModal/AddMembershipFailureModal'
 import { AddMembershipSuccessModal } from '../AddMembershipModal/AddMembershipSuccessModal'
@@ -12,6 +13,7 @@ interface MembershipModalProps {
 
 export function InviteMemberModal({ onClose }: MembershipModalProps) {
   const { api } = useApi()
+  const { allAccounts } = useAccounts()
   const [step, setStep] = useState<ModalState>('PREPARE')
   const [transactionParams, setParams] = useState<Member>()
   const onSubmit = (params: Member) => {
@@ -40,6 +42,9 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }
 
   const onDone = (result: boolean) => setStep(result ? 'SUCCESS' : 'ERROR')
+  const initialSigner =
+    allAccounts.find((a) => a.address == transactionParams.invitor?.controllerAccount) ||
+    transactionParams.controllerAccount
 
   if (step === 'AUTHORIZE') {
     return (
@@ -48,6 +53,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
         transactionParams={transactionParams}
         onDone={onDone}
         transaction={transaction}
+        initialSigner={initialSigner}
         isInvite
       />
     )
