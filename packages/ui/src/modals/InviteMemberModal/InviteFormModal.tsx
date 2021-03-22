@@ -64,7 +64,7 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Add membership" />
+      <ModalHeader onClick={onClose} title="Invite a member" />
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <Row>
