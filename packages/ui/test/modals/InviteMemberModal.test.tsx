@@ -7,6 +7,7 @@ import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
+import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
@@ -14,11 +15,24 @@ import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
+import { selectMember } from '../helpers/selectMember'
 import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
+import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
 
-describe('UI: InviteMembershipModal', () => {
+const members: MemberFieldsFragment[] = []
+
+jest.mock('../../src/hooks/useMyMemberships', () => {
+  return {
+    useMyMemberships: () => ({
+      isLoading: false,
+      members: members,
+    }),
+  }
+})
+
+describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
@@ -26,6 +40,10 @@ describe('UI: InviteMembershipModal', () => {
 
   afterAll(() => {
     jest.restoreAllMocks()
+  })
+
+  afterEach(() => {
+    members.splice(0)
   })
 
   setupMockServer()
@@ -82,12 +100,25 @@ describe('UI: InviteMembershipModal', () => {
     expect(await screen.findByText('Invite a member')).toBeDefined()
   })
 
-  it.skip('Enables button', async () => {
+  it('Enables button', async () => {
+    const aliceMember = await getMember('Alice')
+    const bobMember = await getMember('Bob')
+    members.push((aliceMember as unknown) as MemberFieldsFragment)
+    members.push((bobMember as unknown) as MemberFieldsFragment)
+
     renderModal()
 
     expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
 
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    await selectMember('Inviting member', 'bob')
+    await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
+      target: { value: '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc' },
+    })
+    await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
+      target: { value: '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc' },
+    })
+    await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
 
     expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeEnabled()
   })

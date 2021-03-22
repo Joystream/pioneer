@@ -79,7 +79,7 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
           </Row>
 
           <Row>
-            <Label isRequired>
+            <Label isRequired htmlFor="root-account">
               Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
             <TextInput
@@ -94,7 +94,7 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
           </Row>
 
           <Row>
-            <Label isRequired>
+            <Label isRequired htmlFor="controller-account">
               Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
             <TextInput
