@@ -1,10 +1,9 @@
-import React from 'react'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Observable } from 'rxjs'
 import { Account } from '../common/types'
 import { useApi } from './useApi'
@@ -55,20 +54,23 @@ const observeTransaction = (
 export const useSignAndSendTransaction = ({ transaction, from, onDone }: UseSignAndSendTransactionParams) => {
   const keyring = useKeyring()
   const { api } = useApi()
-  const paymentInfo = useObservable(transaction?.paymentInfo(from.address), [from])
+
+  const signerAddress = from.address
+
+  const paymentInfo = useObservable(transaction?.paymentInfo(signerAddress), [transaction, signerAddress])
   const [status, setStatus] = useState<TransactionStatus>('READY')
 
   useEffect(() => {
-    if (status !== 'SIGN' || !transaction || !paymentInfo) {
+    if (status !== 'SIGN' || !transaction) {
       return
     }
 
-    const keyringPair = keyring.getPair(from.address)
+    const keyringPair = keyring.getPair(signerAddress)
 
     if (keyringPair.meta.isInjected) {
       setStatus('EXTENSION')
-      web3FromAddress(from.address).then(({ signer }) => {
-        observeTransaction(transaction.signAndSend(from.address, { signer: signer }), setStatus)
+      web3FromAddress(signerAddress).then(({ signer }) => {
+        observeTransaction(transaction.signAndSend(signerAddress, { signer: signer }), setStatus)
       })
     } else {
       setStatus('PENDING')

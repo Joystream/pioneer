@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
-import { Button } from '../../../components/buttons'
-import { ArrowOutsideIcon } from '../../../components/icons'
+import { EditSymbol } from '../../../components/icons/symbols/EditSymbol'
 import { MemberInfo, MemberRoleHelp } from '../../../components/membership'
 import { MemberProfile } from '../../../components/membership/MemberProfile'
 import { TransferInviteButton } from '../../../components/TransferInviteButton'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
 import { useToggle } from '../../../hooks/useToggle'
+import { EditMembershipButton } from '../../../membership/components/EditMembershipButton'
 
 interface Props {
   member: BaseMember
@@ -43,9 +43,9 @@ export const MemberItem = ({ member }: Props) => {
         <CountInfo>0</CountInfo>
       </MemberColumn>
       <MemberControls>
-        <ButtonForTransfer variant="ghost" size="medium" square>
-          <ArrowOutsideIcon />
-        </ButtonForTransfer>
+        <EditMembershipButton member={member} variant="ghost" size="small">
+          <EditSymbol />
+        </EditMembershipButton>
       </MemberControls>
     </MemberItemWrap>
   )
@@ -94,9 +94,3 @@ const MemberRolesColumn = styled(MemberColumn)`
 `
 
 const MemberControls = styled.div``
-
-const ButtonForTransfer = styled(Button)`
-  svg {
-    color: ${Colors.Black[900]};
-  }
-`

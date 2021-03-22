@@ -3,8 +3,10 @@ import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 import { useMyMemberships } from '../../src/hooks/useMyMemberships'
 import { MockQueryNodeProviders } from '../helpers/providers'
+import { alice } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
+import { Account } from '../../src/common/types'
 
 const renderUseMembership = () => {
   return renderHook(() => useMyMemberships(), {
@@ -12,7 +14,7 @@ const renderUseMembership = () => {
   })
 }
 
-const useAccounts = {
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: false,
   allAccounts: [],
 }
@@ -58,6 +60,8 @@ describe('useMyMemberships', () => {
   it('Returns matched members', async () => {
     await mockServer.createMember('Alice')
     const aliceMember = await getMember('Alice')
+    useAccounts.hasAccounts = true
+    useAccounts.allAccounts.push(alice)
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
@@ -73,6 +77,8 @@ describe('useMyMemberships', () => {
   it('Allows to set active member', async () => {
     await mockServer.createMember('Alice')
     const aliceMember = await getMember('Alice')
+    useAccounts.hasAccounts = true
+    useAccounts.allAccounts.push(alice)
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()

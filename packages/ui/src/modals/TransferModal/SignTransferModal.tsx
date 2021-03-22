@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Account } from '../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { Button } from '../../components/buttons'
@@ -36,7 +36,7 @@ export function SignTransferModal({ onClose, from, amount, to, onDone }: Props) 
   const balanceFrom = useBalance(from)
   const balanceTo = useBalance(to)
   const { api } = useApi()
-  const transaction = api?.tx?.balances?.transfer(to.address, amount)
+  const transaction = useMemo(() => api?.tx?.balances?.transfer(to.address, amount), [to.address, amount])
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
 
   if (status === 'READY') {
