@@ -59,7 +59,7 @@ describe('UI: TransferInviteModal', () => {
     members.push((aliceMember as unknown) as MemberFieldsFragment)
     members.push((bobMember as unknown) as MemberFieldsFragment)
 
-    const { findByLabelText, findByRole, findByText } = renderModal((aliceMember as unknown) as MemberFieldsFragment)
+    const { findByLabelText, findByRole } = renderModal((aliceMember as unknown) as MemberFieldsFragment)
 
     const button = (await findByRole('button', { name: /transfer invites/i })) as HTMLButtonElement
     expect(button.disabled).toBeTruthy()
@@ -68,7 +68,7 @@ describe('UI: TransferInviteModal', () => {
     expect(input).toBeDefined()
     fireEvent.change(input, { target: { value: '1' } })
 
-    await selectMember('to', 'bob', findByText)
+    await selectMember('to', 'bob')
 
     expect(button.disabled).toBeFalsy()
   })
