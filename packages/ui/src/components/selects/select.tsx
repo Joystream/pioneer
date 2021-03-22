@@ -89,7 +89,7 @@ export const Select = <T extends any>({
             onChange={(t) => setFilterInput(t.target.value)}
           />
         )}
-        <ToggleButton disabled={disabled}>
+        <ToggleButton className="ui-toggle" disabled={disabled}>
           <ArrowDownIcon />
         </ToggleButton>
       </Toggle>

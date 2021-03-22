@@ -93,8 +93,8 @@ describe('UI: AddMembershipModal', () => {
     const button = getByText(/^Create a membership$/i) as HTMLButtonElement
     expect(button.disabled).toBe(true)
 
-    selectAccount('Root account', 'bob', getByText)
-    selectAccount('Controller account', 'alice', getByText)
+    await selectAccount('Root account', 'bob')
+    await selectAccount('Controller account', 'alice')
     fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
     fireEvent.click(getByLabelText(/I agree to the terms/i))
@@ -108,8 +108,8 @@ describe('UI: AddMembershipModal', () => {
     const button = getByText(/^Create a membership$/i) as HTMLButtonElement
     expect(button.disabled).toBe(true)
 
-    selectAccount('Root account', 'bob', getByText)
-    selectAccount('Controller account', 'alice', getByText)
+    await selectAccount('Root account', 'bob')
+    await selectAccount('Controller account', 'alice')
     fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
     fireEvent.click(getByLabelText(/I agree to the terms/i))
@@ -124,10 +124,10 @@ describe('UI: AddMembershipModal', () => {
   describe('Authorize step', () => {
     const renderAuthorizeStep = async () => {
       const rendered = renderModal()
-      const { findByText, getByText, getByLabelText } = rendered
+      const { findByText, getByLabelText } = rendered
 
-      selectAccount('Root account', 'bob', getByText)
-      selectAccount('Controller account', 'alice', getByText)
+      await selectAccount('Root account', 'bob')
+      await selectAccount('Controller account', 'alice')
       fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
       fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
       fireEvent.change(getByLabelText(/about member/i), { target: { value: "I'm Bob" } })

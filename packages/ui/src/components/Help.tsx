@@ -153,7 +153,7 @@ export const HelperLink = styled.a`
   }
 `
 
-export const HelpComponent = styled.button<{ size?: 'm' | 'l'; memberRole?: string }>`
+export const HelpComponent = styled.span<{ size?: 'm' | 'l'; memberRole?: string }>`
   display: flex;
   position: relative;
   justify-content: center;
