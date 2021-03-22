@@ -17,7 +17,7 @@ interface NotificationProps {
 export const SideNotification = ({ title, icon, message, link, onClick, isError }: NotificationProps) => {
   return ReactDOM.createPortal(
     <NotificationComponent isError={isError}>
-      <CloseNotificationButton onClick={onClick} />
+      <NotificationCloseButton onClick={onClick} />
       <NotificationHeader isError={isError}>
         {icon}
         <NotificationTitle>{title}</NotificationTitle>
@@ -61,7 +61,7 @@ const NotificationTitle = styled.h4`
   color: ${Colors.White};
 `
 
-const CloseNotificationButton = styled(CloseButton)`
+const NotificationCloseButton = styled(CloseButton)`
   position: absolute;
   top: 8px;
   right: 8px;

@@ -13,8 +13,8 @@ export const Close = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   padding: 0;
   margin: 0;
   border: none;
@@ -25,12 +25,12 @@ export const Close = styled.button`
   transition: ${Transitions.all};
 
   &:hover {
-    color: ${Colors.Blue[200]};
+    color: ${Colors.Blue[500]};
   }
 
   &:focus,
   &:active {
-    color: ${Colors.Blue[400]};
+    color: ${Colors.Blue[600]};
   }
 
   &:disabled {

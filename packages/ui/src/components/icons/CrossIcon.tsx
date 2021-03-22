@@ -1,8 +1,15 @@
 import React from 'react'
 import { Icon } from './Icon'
 
-export const CrossIcon = React.memo(() => (
-  <Icon size="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+export const CrossIcon = React.memo(({ className }: { className?: string }) => (
+  <Icon
+    size="20"
+    viewBox="0 0 24 24"
+    preserveAspectRatio="xMidYMid meet"
+    fill="none"
+    color="currentColor"
+    className={className}
+  >
     <path
       fillRule="evenodd"
       clipRule="evenodd"

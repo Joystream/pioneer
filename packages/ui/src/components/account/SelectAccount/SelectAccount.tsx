@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Account } from '../../../common/types'
+import { Account, Address } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useKeyring } from '../../../hooks/useKeyring'
 import { Select } from '../../selects'
@@ -8,8 +8,9 @@ import { isValidAddress } from '../../../utils/isValidAddress'
 import { OptionAccount } from './OptionAccount'
 import { OptionListAccount } from './OptionListAccount'
 
-export const filterAccount = (filterOut: Account | undefined) => {
-  return filterOut ? (account: Account) => account.address !== filterOut.address : () => true
+export const filterAccount = (filterOut: Account | Address | undefined) => {
+  const filterOutAddress = typeof filterOut === 'string' ? filterOut : filterOut?.address
+  return filterOut ? (account: Account) => account.address !== filterOutAddress : () => true
 }
 
 interface Props {
