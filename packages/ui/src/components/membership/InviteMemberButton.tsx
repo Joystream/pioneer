@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { useToggle } from '../../hooks/useToggle'
-import { InviteMemberModal } from '../../modals/AddMembershipModal/InviteMemberModal'
+import { InviteMemberModal } from '../../modals/InviteMemberModal'
 import { Button, ButtonSize } from '../buttons'
 
 interface InviteMemberButtonProps {

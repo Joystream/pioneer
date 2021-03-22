@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react'
-import { Member, ModalState } from '../../../common/types'
-import { useApi } from '../../../hooks/useApi'
-import { AddMembershipFailureModal } from '../AddMembershipFailureModal'
-import { AddMembershipSuccessModal } from '../AddMembershipSuccessModal'
-import { SignCreateMemberModal } from '../SignCreateMemberModal'
+import { Member, ModalState } from '../../common/types'
+import { useApi } from '../../hooks/useApi'
+import { AddMembershipFailureModal } from '../AddMembershipModal/AddMembershipFailureModal'
+import { AddMembershipSuccessModal } from '../AddMembershipModal/AddMembershipSuccessModal'
+import { SignCreateMemberModal } from '../AddMembershipModal/SignCreateMemberModal'
 import { InviteFormModal } from './InviteFormModal'
 
 interface MembershipModalProps {
