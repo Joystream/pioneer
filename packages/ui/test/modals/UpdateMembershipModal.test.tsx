@@ -10,10 +10,12 @@ import sinon from 'sinon'
 import { Account, BaseMember } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
+import { hasAnyEdits } from '../../src/modals/UpdateMembershipModal/UpdateMembershipFormModal';
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
+import { selectAccount } from '../helpers/selectAccount';
 import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 import { getMember, MockMember } from '../mocks/members'
@@ -97,6 +99,14 @@ describe('UI: UpdatedMembershipModal', () => {
     expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
   })
 
+  it('Enables save button on account change', async () => {
+    renderModal(member)
+
+    await selectAccount('root account', 'bob')
+
+    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
+  });
+
   it('Disables button when invalid avatar URL', async () => {
     renderModal(member)
 
@@ -141,6 +151,38 @@ describe('UI: UpdatedMembershipModal', () => {
       expect(await screen.findByText('Failure')).toBeDefined()
     })
   })
+
+  describe('checkEdits', () => {
+    it('nothing changed for accounts', () => {
+      const result = hasAnyEdits({
+        "id": "0",
+        "name": "Alice Member",
+        "handle": "alice_handle",
+        "about": "",
+        "avatarURI": "",
+        "rootAccount": {
+          "address": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+          "name": ""
+        },
+        "controllerAccount": {
+          "address": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+          "name": ""
+        }
+      }, {
+        "id": "0",
+        "name": "Alice Member",
+        "handle": "alice_handle",
+        "about": "",
+        "avatarURI": "",
+        "rootAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+        "controllerAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+        "isFoundingMember": true,
+        "isVerified": true,
+        "inviteCount": 5
+      })
+      expect(result).toBeFalsy()
+    });
+  });
 
   function renderModal(member: MockMember) {
     render(
