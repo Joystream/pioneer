@@ -2,7 +2,7 @@ import { Server } from 'miragejs/server'
 import { MemberFieldsFragment } from '../../../src/api/queries'
 import { aliceSigner, aliceStashSigner, bobSigner, bobStashSigner } from '../keyring'
 
-export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'id'>
+export type MockMember = Omit<MemberFieldsFragment, '__typename'>
 
 export type Members = 'Alice' | 'Bob'
 
@@ -38,8 +38,11 @@ export const createMember = async (server: Server, memberOrName: MemberFieldsFra
 }
 
 const aliceMember: MockMember = {
+  id: '0',
   name: 'Alice Member',
   handle: 'alice_handle',
+  about: '',
+  avatarURI: '',
   rootAccount: '',
   controllerAccount: '',
   isFoundingMember: true,
@@ -48,8 +51,11 @@ const aliceMember: MockMember = {
 }
 
 const bobMember: MockMember = {
+  id: '1',
   name: 'Bob Member',
   handle: 'bob_handle',
+  about: '',
+  avatarURI: '',
   rootAccount: '',
   controllerAccount: '',
   isFoundingMember: false,

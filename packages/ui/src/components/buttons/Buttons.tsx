@@ -5,7 +5,7 @@ import { BorderRad, Colors, Transitions } from '../../constants'
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 export type ButtonSize = 'small' | 'medium' | 'large'
 
-interface ButtonProps {
+export interface ButtonProps {
   variant?: ButtonVariant
   size?: ButtonSize
   square?: boolean
