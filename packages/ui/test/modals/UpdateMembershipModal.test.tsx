@@ -14,7 +14,6 @@ import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
-import { selectAccount } from '../helpers/selectAccount'
 import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 import { getMember, MockMember } from '../mocks/members'
@@ -42,7 +41,7 @@ describe('UI: UpdatedMembershipModal', () => {
     hasAccounts: boolean
     allAccounts: Account[]
   }
-  let transaction: any
+  let updateProfileTx: any
   let keyring: Keyring
 
   let member: MockMember
@@ -67,7 +66,7 @@ describe('UI: UpdatedMembershipModal', () => {
     )
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
-    transaction = stubTransaction(api, 'api.tx.members.updateProfile')
+    updateProfileTx = stubTransaction(api, 'api.tx.members.updateProfile')
 
     member = await getMember('Alice')
 
@@ -83,49 +82,36 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   it('Renders a modal', async () => {
-    const { findByText } = renderModal(member)
+    renderModal(member)
 
-    expect(await findByText('Edit membership')).toBeDefined()
+    expect(await screen.findByText('Edit membership')).toBeDefined()
   })
 
   it('Enables button on member field change', async () => {
-    const { getByLabelText, findByRole } = renderModal(member)
+    renderModal(member)
 
-    const button = await findByRole('button', { name: /^Save changes$/i })
-    expect(button).toBeDisabled()
+    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeDisabled()
 
-    fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
 
-    expect(await findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
-  })
-
-  it('Enables button on account change', async () => {
-    const { getByText, findByRole } = renderModal(member)
-
-    const button = await findByRole('button', { name: /^Save changes$/i })
-    expect(button).toBeDisabled()
-
-    selectAccount('Root account', 'bob', getByText)
-
-    expect(await findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
+    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
   })
 
   it('Disables button when invalid avatar URL', async () => {
-    const { findByRole, findByLabelText } = renderModal(member)
+    renderModal(member)
 
-    fireEvent.change(await findByLabelText(/member avatar/i), { target: { value: 'avatar' } })
-    expect(await findByRole('button', { name: /^Save changes$/i })).toBeDisabled()
+    fireEvent.change(await screen.findByLabelText(/member avatar/i), { target: { value: 'avatar' } })
+    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeDisabled()
 
-    fireEvent.change(await findByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-    expect(await findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
+    fireEvent.change(await screen.findByLabelText(/member avatar/i), {
+      target: { value: 'http://example.com/example.jpg' },
+    })
+    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
   })
 
   describe('Authorize - member field', () => {
-    beforeEach(async () => {
-      renderModal(member)
-    })
-
     async function changeNameAndSave() {
+      renderModal(member)
       fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
       fireEvent.click(await screen.findByText(/^Save changes$/i))
     }
@@ -138,7 +124,7 @@ describe('UI: UpdatedMembershipModal', () => {
     })
 
     it('Success step', async () => {
-      stubTransactionSuccess(transaction, [1])
+      stubTransactionSuccess(updateProfileTx, [1])
       await changeNameAndSave()
 
       fireEvent.click(screen.getByText(/^sign and update a member$/i))
@@ -147,7 +133,7 @@ describe('UI: UpdatedMembershipModal', () => {
     })
 
     it('Failure step', async () => {
-      stubTransactionFailure(transaction)
+      stubTransactionFailure(updateProfileTx)
       await changeNameAndSave()
 
       fireEvent.click(screen.getByText(/^sign and update a member$/i))
@@ -157,7 +143,7 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   function renderModal(member: MockMember) {
-    return render(
+    render(
       <MockQueryNodeProviders>
         <KeyringContext.Provider value={keyring}>
           <ApiContext.Provider value={api}>

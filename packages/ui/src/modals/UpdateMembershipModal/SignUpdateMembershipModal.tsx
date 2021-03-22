@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Account, Address, BaseMember } from '../../common/types'
 import { SelectedAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
@@ -22,19 +22,27 @@ interface SignProps {
 
 export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, onDone }: SignProps) => {
   const { api } = useApi()
-  const transaction = api?.tx?.members?.updateProfile(
-    member.id,
-    transactionParams.name as string,
-    transactionParams.handle as string,
-    transactionParams.avatarURI as string,
-    transactionParams.about as string
+  const updateProfileTransaction = useMemo(
+    () =>
+      api?.tx?.members?.updateProfile(
+        member.id,
+        transactionParams.name as string,
+        transactionParams.handle as string,
+        transactionParams.avatarURI as string,
+        transactionParams.about as string
+      ),
+    [member.id]
   )
 
   const signer: Account = {
     address: member.controllerAccount as Address,
     name: '',
   }
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: signer, onDone })
+  const { paymentInfo, send, status } = useSignAndSendTransaction({
+    transaction: updateProfileTransaction,
+    from: signer,
+    onDone,
+  })
 
   if (status === 'READY') {
     return (

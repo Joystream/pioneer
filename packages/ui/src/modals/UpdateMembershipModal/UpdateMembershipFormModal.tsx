@@ -1,13 +1,11 @@
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { Reducer, useCallback, useEffect, useReducer } from 'react'
+import React, { Reducer, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
 import { Address, BaseMember } from '../../common/types'
-import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
 import { Label, TextArea, TextInput } from '../../components/forms'
 import { FieldError, hasError } from '../../components/forms/FieldError'
-import { Help } from '../../components/Help'
 import {
   ModalFooter,
   ModalHeader,
@@ -78,16 +76,13 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     rootAccount: member.rootAccount || '',
     controllerAccount: member.controllerAccount || '',
   })
-  const { handle, name, rootAccount, controllerAccount, avatarURI, about } = state
+  const { handle, name, avatarURI, about } = state
 
   const handleHash = blake2AsHex(handle || '')
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
   const { isValid, errors, validate } = useFormValidation<UpdateMemberForm>(UpdateMemberSchema)
 
   const canUpdate = isValid && checkEdits(state, member)
-
-  const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
-  const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
   useEffect(() => {
     validate(state, { size: potentialMemberIdSize })
@@ -108,22 +103,6 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       <ModalHeader onClick={onClose} title="Edit membership" />
       <ScrolledModalBody>
         <ScrolledModalContainer>
-          <Row>
-            <Label>
-              Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-            </Label>
-            <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account.address)} />
-          </Row>
-          <Row>
-            <Label>
-              Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-            </Label>
-            <SelectAccount
-              filter={filterController}
-              onChange={(account) => changeField('controllerAccount', account.address)}
-            />
-          </Row>
-
           <Row>
             <Label htmlFor="member-name" isRequired>
               Member Name
