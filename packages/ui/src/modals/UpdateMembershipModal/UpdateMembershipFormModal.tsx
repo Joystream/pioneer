@@ -41,9 +41,9 @@ export type Action<T> = {
 
 const UpdateMemberSchema = Yup.object().shape({
   avatarURI: AvatarURISchema.nullable(),
-  handle: Yup.string().when('$isHandleChanged', (isHandleChanged: boolean, schema: AnySchema) =>
-    isHandleChanged ? HandleSchema : schema
-  ),
+  handle: Yup.string().when('$isHandleChanged', (isHandleChanged: boolean, schema: AnySchema) => {
+    return isHandleChanged ? HandleSchema : schema
+  }),
 })
 
 type FormReducer<T> = Reducer<T, Action<T>>
@@ -81,7 +81,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const canUpdate = isValid && checkEdits(state, member)
 
   useEffect(() => {
-    validate(state, { size: potentialMemberIdSize })
+    validate(state, { size: potentialMemberIdSize, isHandleChanged: state.handle !== member.handle })
   }, [state, potentialMemberIdSize])
 
   const changeField = (type: keyof UpdateMemberForm, value: string | Address) => {
