@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
-import { useFormValidation } from '../../../hooks/useFormValidation'
-import { Button } from '../../buttons'
+import { EditMembershipButton } from '../../../membership/components/EditMembershipButton'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { CloseSmallModalButton } from '../../Modal'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
@@ -12,15 +11,16 @@ import { MemberInfo } from '../MemberInfo'
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
 
-interface Props {
-  member: BaseMember
+type Props = { member: BaseMember } & {
   onClose: () => void
 }
 
 type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
-export const MemberProfile = ({ onClose, member }: Props) => {
+export const MemberProfile = React.memo(({ onClose, member }: Props) => {
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
+  const { members, isLoading } = useMyMemberships()
+  const isMyMember = !isLoading && !!members.find((m) => m.id == member.id)
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -29,7 +29,7 @@ export const MemberProfile = ({ onClose, member }: Props) => {
   }
 
   return (
-    <SidePaneGlass member={member} onClick={onBackgroundClick} onClose={onClose}>
+    <SidePaneGlass onClick={onBackgroundClick} onClose={onClose}>
       <SidePane>
         <SidePaneHeader>
           <CloseSmallModalButton onClick={onClose} />
@@ -53,17 +53,19 @@ export const MemberProfile = ({ onClose, member }: Props) => {
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
         <SidePaneFooter>
-          <Button variant="ghost" size="medium">
-            <EditSymbol />
-            Edit My Profile
-          </Button>
+          {isMyMember && activeTab === 'DETAILS' && (
+            <EditMembershipButton member={member} variant="ghost" size="medium">
+              <EditSymbol />
+              Edit My Profile
+            </EditMembershipButton>
+          )}
         </SidePaneFooter>
       </SidePane>
     </SidePaneGlass>
   )
-}
+})
 
-export const SidePaneGlass = styled.div<Props>`
+export const SidePaneGlass = styled.div<Omit<Props, 'member'>>`
   display: flex;
   justify-content: flex-end;
   position: fixed;
