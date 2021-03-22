@@ -60,11 +60,15 @@ export const SignCreateMemberModal = ({
         </ModalBody>
         <ModalFooter>
           <BalanceInfoNarrow>
-            <InfoTitle>Creation fee:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={membershipPrice?.toBn()} />
-            </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+            {!isInvite && (
+              <>
+                <InfoTitle>Creation fee:</InfoTitle>
+                <InfoValue>
+                  <TokenValue value={membershipPrice?.toBn()} />
+                </InfoValue>
+                <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+              </>
+            )}
             <InfoTitle>Transaction fee:</InfoTitle>
             <InfoValue>
               <TokenValue value={paymentInfo?.partialFee.toBn()} />
