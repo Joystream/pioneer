@@ -1,16 +1,18 @@
 import { expect } from '@jest/globals'
-import { Matcher } from '@testing-library/dom/types/matches'
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, screen, within } from '@testing-library/react'
 
-export function selectAccount(label: string, name: string, getByText: (text: Matcher) => HTMLElement) {
-  const labelElement = getByText(new RegExp(`${label}`, 'i'))
-  const parentNode = labelElement.parentNode
-  const button = parentNode?.querySelector('div > button')
+export async function selectAccount(label: string, name: string) {
+  const labelElement = await screen.findByText(new RegExp(`${label}`, 'i'))
+  const parentElement = labelElement.parentElement
 
-  expect(button).toBeDefined()
-  button && fireEvent.click(button)
+  if (!parentElement) {
+    return
+  }
 
-  const accountTitles = parentNode?.querySelectorAll('ul > li')
+  const toggle = await within(parentElement).findByRole('button')
+  toggle && fireEvent.click(toggle)
+
+  const accountTitles = parentElement?.querySelectorAll('ul > li')
   const found = accountTitles && Array.from(accountTitles).find((li) => li.textContent?.match(name))
 
   expect(found).toBeDefined()

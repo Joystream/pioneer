@@ -3,6 +3,7 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 import { AvatarImg } from '../Avatar'
 import { Text } from '../typography'
 import { MemberInfoWrapProps } from './types'
+import { Help } from '../Help'
 
 export const MemberHandle = styled.span`
   grid-area: memberhandle;
@@ -43,22 +44,6 @@ export const MemberRoles = styled.div`
   width: fit-content;
 `
 
-export const MemberRole = styled.span`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 16px;
-  height: 16px;
-  border-radius: ${BorderRad.round};
-  background-color: ${Colors.Black[100]};
-  font-size: 6px;
-  line-height: 1;
-  font-family: ${Fonts.Inter};
-  font-weight: 700;
-  color: ${Colors.Black[600]};
-  text-transform: uppercase;
-`
-
 export const MemberId = styled(Text)`
   grid-area: memberroles;
   color: ${Colors.Black[400]};
@@ -80,39 +65,29 @@ export const MemberPhoto = styled.div`
   }
 `
 
-const MemberOnDarkStyles = css`
-  ${MemberHandle} {
-    color: ${Colors.Black[75]};
-  }
-  ${MemberIcons} {
-    .memberCircle {
-      stroke: ${Colors.Blue[500]};
-      transition: ${Transitions.all};
-    }
-    .memberInner {
-      fill: ${Colors.Blue[500]};
-      transition: ${Transitions.all};
-    }
-  }
-  ${MemberRole} {
-    color: ${Colors.Black[300]};
-    background-color: ${Colors.Black[600]};
-    transition: ${Transitions.all};
+export const MemberStatusHelp = styled(Help)`
+  background-color: transparent;
+  color: ${Colors.Blue[500]};
+
+  &:hover,
+  &:focus {
+    background-color: ${Colors.Blue[500]};
+    border-color: ${Colors.Blue[500]};
+    color: ${Colors.Black[25]};
   }
 `
 
-const MemberLargeElements = css`
-  grid-template-columns: 80px auto 1fr;
-  grid-template-rows: 36px 38px;
-  grid-column-gap: 12px;
-  grid-row-gap: 6px;
-`
+export const MemberRoleHelp = styled(Help)`
+  background-color: ${Colors.Black[100]};
+  color: ${Colors.Black[600]};
+  border-color: ${Colors.Black[100]};
 
-const MemberMediumElements = css`
-  grid-template-columns: 40px auto 1fr;
-  grid-template-rows: 20px 16px;
-  grid-column-gap: 8px;
-  grid-row-gap: 4px;
+  &:hover,
+  &:focus {
+    background-color: ${Colors.Blue[500]};
+    border-color: ${Colors.Blue[500]};
+    color: ${Colors.Black[25]};
+  }
 `
 
 export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
@@ -156,36 +131,6 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
         case 'm':
         default:
           return 'center'
-      }
-    }};
-  }
-
-  ${MemberRole} {
-    width: ${({ memberSize }) => {
-      switch (memberSize) {
-        case 'l':
-          return '24px'
-        case 'm':
-        default:
-          return '16px'
-      }
-    }};
-    height: ${({ memberSize }) => {
-      switch (memberSize) {
-        case 'l':
-          return '24px'
-        case 'm':
-        default:
-          return '16px'
-      }
-    }};
-    font-size: ${({ memberSize }) => {
-      switch (memberSize) {
-        case 'l':
-          return '10px'
-        case 'm':
-        default:
-          return '6px'
       }
     }};
   }
@@ -259,17 +204,71 @@ export const MemberDarkHover = css`
     ${MemberHandle} {
       color: ${Colors.Black[50]};
     }
-    ${MemberIcons} {
-      .memberCircle {
-        stroke: ${Colors.Blue[400]};
-      }
-      .memberInner {
-        fill: ${Colors.Blue[400]};
+    ${MemberStatusHelp} {
+      border-color: ${Colors.Blue[400]};
+      color: ${Colors.Blue[400]};
+      background-color: transparent;
+
+      &:hover,
+      &:focus {
+        background-color: ${Colors.Blue[500]};
+        border-color: ${Colors.Blue[500]};
+        color: ${Colors.Black[300]};
       }
     }
-    ${MemberRole} {
+    ${MemberRoleHelp} {
       color: ${Colors.Black[200]};
       background-color: ${Colors.Black[500]};
+      border-color: ${Colors.Black[500]};
+
+      &:hover,
+      &:focus {
+        background-color: ${Colors.Blue[500]};
+        border-color: ${Colors.Blue[500]};
+        color: ${Colors.Black[300]};
+      }
     }
   }
+`
+
+const MemberOnDarkStyles = css`
+  ${MemberHandle} {
+    color: ${Colors.Black[75]};
+  }
+  ${MemberStatusHelp} {
+    color: ${Colors.Blue[500]};
+    background-color: transparent;
+    border-color: ${Colors.Blue[500]};
+
+    &:hover {
+      color: ${Colors.Black[300]};
+      background-color: ${Colors.Blue[500]};
+      border-color: ${Colors.Blue[500]};
+    }
+  }
+  ${MemberRoleHelp} {
+    color: ${Colors.Black[300]};
+    background-color: ${Colors.Black[600]};
+    border-color: ${Colors.Black[600]};
+
+    &:hover {
+      color: ${Colors.Black[300]};
+      background-color: ${Colors.Blue[500]};
+      border-color: ${Colors.Blue[500]};
+    }
+  }
+`
+
+const MemberLargeElements = css`
+  grid-template-columns: 80px auto 1fr;
+  grid-template-rows: 36px 38px;
+  grid-column-gap: 12px;
+  grid-row-gap: 6px;
+`
+
+const MemberMediumElements = css`
+  grid-template-columns: 40px auto 1fr;
+  grid-template-rows: 20px 16px;
+  grid-column-gap: 8px;
+  grid-row-gap: 4px;
 `

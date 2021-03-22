@@ -34,7 +34,7 @@ export const MemberProfile = React.memo(({ onClose, member }: Props) => {
         <SidePaneHeader>
           <CloseSmallModalButton onClick={onClose} />
           <SidePaneTitle>My Profile</SidePaneTitle>
-          <MemberInfo member={member} memberSize="l" />
+          <MemberInfo member={member} memberSize="l" size="l" />
           <PageTabsNav>
             <PageTab active={activeTab === 'DETAILS'} onClick={() => setActiveTab('DETAILS')}>
               Member details

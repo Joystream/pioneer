@@ -63,9 +63,9 @@ const SwitchMember = styled.div`
     outline: none;
     background: ${Colors.Black[600]};
 
-    ${Icon.type} {
+    /* ${Icon.type} {
       color: ${Colors.Black[75]};
-    }
+    } */
     ${MemberDarkHover}
   }
 `

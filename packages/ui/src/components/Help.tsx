@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Animations, BorderRad, Colors, Transitions } from '../constants'
+import { Animations, BorderRad, Colors, Transitions, Fonts } from '../constants'
 import { QuestionIcon } from './icons'
 import { LinkSymbol, LinkSymbolStyle } from './icons/symbols/LinkSymbol'
 
@@ -9,31 +9,75 @@ interface HelpNotificationProps {
   helperTitle?: string
   helperLinkText?: string | React.ReactElement | React.ReactNode
   helperLinkURL?: string
+  size?: 'm' | 'l'
+  icon?: React.ReactElement
+  memberRole?: string
+  className?: string
 }
 
-export const Help = React.memo(({ helperText, helperTitle, helperLinkText, helperLinkURL }: HelpNotificationProps) => (
-  <HelpComponent>
-    <QuestionIcon />
-    <HelpPopup>
-      {helperTitle && <HelpPopupTitle>{helperTitle}</HelpPopupTitle>}
-      <HelperText>{helperText}</HelperText>
-      {helperLinkURL && (
-        <HelperLink href={helperLinkURL} target="_blank">
-          {helperLinkText ? helperLinkText : 'Link'}
-          <LinkSymbol />
-        </HelperLink>
-      )}
-    </HelpPopup>
-  </HelpComponent>
-))
+export const Help = React.memo(
+  ({
+    helperText,
+    helperTitle,
+    helperLinkText,
+    helperLinkURL,
+    icon,
+    memberRole,
+    size,
+    className,
+  }: HelpNotificationProps) => (
+    <HelpContainer>
+      <HelpComponent size={size} className={className} memberRole={memberRole}>
+        {!memberRole && icon && icon}
+        {!memberRole && !icon && <QuestionIcon />}
+        {memberRole && !icon && memberRole}
+      </HelpComponent>
+      <HelpPopup size={size}>
+        {helperTitle && <HelpPopupTitle>{helperTitle}</HelpPopupTitle>}
+        <HelperText>{helperText}</HelperText>
+        {helperLinkURL && (
+          <HelperLink href={helperLinkURL} target="_blank">
+            {helperLinkText ? helperLinkText : 'Link'}
+            <LinkSymbol />
+          </HelperLink>
+        )}
+      </HelpPopup>
+    </HelpContainer>
+  )
+)
 
-const HelpPopup = styled.div`
+const HelpContainer = styled.div`
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+`
+
+const HelpPopup = styled.div<{ size?: 'm' | 'l' }>`
   display: none;
   flex-direction: column;
   align-items: flex-start;
   position: absolute;
-  top: 24px;
-  left: -16px;
+  top: ${({ size }) => {
+    switch (size) {
+      case 'l':
+        return '28px'
+      case 'm':
+      default:
+        return '20px'
+    }
+  }};
+  left: ${({ size }) => {
+    switch (size) {
+      case 'l':
+        return '-12px'
+      case 'm':
+      default:
+        return '-16px'
+    }
+  }};
   width: max-content;
   min-width: 160px;
   max-width: 304px;
@@ -43,7 +87,7 @@ const HelpPopup = styled.div`
   border-radius: ${BorderRad.m};
   transition: ${Transitions.all};
   visibility: hidden;
-  z-index: 10;
+  z-index: 55;
   ${Animations.showHelperTooltip};
 
   &:after {
@@ -109,19 +153,46 @@ export const HelperLink = styled.a`
   }
 `
 
-export const HelpComponent = styled.button`
+export const HelpComponent = styled.span<{ size?: 'm' | 'l'; memberRole?: string }>`
   display: flex;
-  position: absolute;
-  right: -8px;
+  position: relative;
   justify-content: center;
   align-items: center;
-  width: 16px;
-  height: 16px;
+  width: ${({ size }) => {
+    switch (size) {
+      case 'l':
+        return '24px'
+      case 'm':
+      default:
+        return '16px'
+    }
+  }};
+  height: ${({ size }) => {
+    switch (size) {
+      case 'l':
+        return '24px'
+      case 'm':
+      default:
+        return '16px'
+    }
+  }};
+  border: 1px solid ${({ memberRole }) => (memberRole ? 'transparent' : Colors.Black[300])};
   border-radius: ${BorderRad.round};
-  background-color: ${Colors.Black[75]};
+  background-color: transparent;
   color: ${Colors.Black[500]};
+  font-size: ${({ size }) => {
+    switch (size) {
+      case 'l':
+        return '10px'
+      case 'm':
+      default:
+        return '6px'
+    }
+  }};
+  line-height: 1;
+  font-family: ${Fonts.Inter};
+  font-weight: 700;
   cursor: pointer;
-  transform: translate(100%);
   transition: ${Transitions.all};
   z-index: 5;
 
@@ -134,8 +205,8 @@ export const HelpComponent = styled.button`
   &:hover,
   &:focus {
     color: ${Colors.Blue[500]};
-
-    ${HelpPopup} {
+    background-color: ${Colors.Black[100]};
+    & ~ ${HelpPopup} {
       display: flex;
     }
   }
