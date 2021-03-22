@@ -29,8 +29,6 @@ interface Props {
 export interface UpdateMemberForm {
   id: string
   name?: string
-  rootAccount?: Address
-  controllerAccount?: Address
   handle?: string
   avatarURI?: string
   about?: string
@@ -56,7 +54,7 @@ const updateReducer: FormReducer<UpdateMemberForm> = (state, action): UpdateMemb
 
 const checkEdits = (formData: Record<string, any>, member: Record<string, any>) => {
   for (const key of Object.keys(formData)) {
-    if (member[key] !== formData[key]) {
+    if ((member[key] || '') !== (formData[key] || '')) {
       return true
     }
   }
@@ -73,8 +71,6 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     handle: member.handle || '',
     about: member.about || '',
     avatarURI: member.avatarURI || '',
-    rootAccount: member.rootAccount || '',
-    controllerAccount: member.controllerAccount || '',
   })
   const { handle, name, avatarURI, about } = state
 
