@@ -6,9 +6,7 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
-import sinon from 'sinon'
-import { BaseMember } from '../../src/common/types'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
+import { Account, BaseMember } from '../../src/common/types'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
 import {
   changedOrNull,
@@ -25,10 +23,22 @@ import { alice, aliceStash, bob, bobStash, mockKeyring } from '../mocks/keyring'
 import { getMember, MockMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
 
+const allAccounts: Account[] = []
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => ({
+      hasAccounts: true,
+      allAccounts: allAccounts,
+    }),
+  }
+})
+
 describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+    allAccounts.push(alice, aliceStash, bob, bobStash)
   })
 
   afterAll(() => {
@@ -42,10 +52,6 @@ describe('UI: UpdatedMembershipModal', () => {
     isConnected: true,
   }
 
-  const accounts = {
-    hasAccounts: true,
-    allAccounts: [alice, aliceStash, bob, bobStash],
-  }
   let batchTx: any
   let keyring: Keyring
 
@@ -67,11 +73,6 @@ describe('UI: UpdatedMembershipModal', () => {
     stubTransaction(api, 'api.tx.members.updateAccounts')
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     member = await getMember('Alice')
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
-  })
-
-  afterEach(() => {
-    sinon.restore()
   })
 
   it('Renders a modal', async () => {
@@ -272,7 +273,7 @@ describe('UI: UpdatedMembershipModal', () => {
       <MockQueryNodeProviders>
         <KeyringContext.Provider value={keyring}>
           <ApiContext.Provider value={api}>
-            <UpdateMembershipModal onClose={sinon.spy()} member={member as BaseMember} />
+            <UpdateMembershipModal onClose={() => undefined} member={member as BaseMember} />
           </ApiContext.Provider>
         </KeyringContext.Provider>
       </MockQueryNodeProviders>
