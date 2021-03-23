@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Account, BaseMember } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { Help } from '../../components/Help'
@@ -25,7 +25,11 @@ interface Props {
 
 export function SignTransferModal({ onClose, sourceMember, targetMember, amount, onDone, signer }: Props) {
   const { api } = useApi()
-  const transaction = api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount)
+  const transaction = useMemo(() => api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount), [
+    sourceMember.id,
+    targetMember.id,
+    amount,
+  ])
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: signer, onDone })
   const plural = amount.gt(new BN(1))
   const name = targetMember.name

@@ -5,10 +5,7 @@ import { AccountRow } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'
 import { MembershipLabel } from '../../typography/MembershipLabel'
 
-interface Props {
-  member: BaseMember
-}
-export const MemberAccounts = ({ member }: Props) => {
+export const MemberAccounts = ({ member }: { member: BaseMember }) => {
   const rootAccount = { address: member.rootAccount, name: 'Root Account' }
   const controllerAccount = { address: member.controllerAccount, name: 'Controller Account' }
 

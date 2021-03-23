@@ -13,11 +13,9 @@ import { MembershipLabel } from '../../typography/MembershipLabel'
 import { MemberInfo } from '../MemberInfo'
 import { EmptyBody } from './MemberProfile'
 
-interface Props {
-  member: BaseMember
-}
+type Props = { member: BaseMember }
 
-export const MemberDetails = ({ member }: Props) => {
+export const MemberDetails = React.memo(({ member }: Props) => {
   const { data, loading } = useGetMemberQuery({
     variables: { id: member.id },
   })
@@ -47,16 +45,16 @@ export const MemberDetails = ({ member }: Props) => {
         <MembershipLabel text="Registered on" />
         <AboutDateColumn>
           <AboutText size={2}>{formatDateString(registeredAtBlock.timestamp)}</AboutText>
-          <BlockInfo>
-            <BlockIcon />
-            <BlockNumber>{formatTokenValue(registeredAtBlock.height)}</BlockNumber>
-            <BlockNetworkInfo size={3}>on {registeredAtBlock.network} network</BlockNetworkInfo>
-          </BlockInfo>
+          <Block height={registeredAtBlock.height} network={registeredAtBlock.network} />
         </AboutDateColumn>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Member ID" />
         <AboutText size={2}>{member?.id}</AboutText>
+      </AboutRow>
+      <AboutRow>
+        <MembershipLabel text="Member Name" />
+        <AboutText size={2}>{member?.name}</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Invitations Left" />
@@ -110,7 +108,20 @@ export const MemberDetails = ({ member }: Props) => {
       </AboutRow>
     </AboutTable>
   )
+})
+
+interface BlockInfoProps {
+  height: number
+  network: string
 }
+
+const Block = React.memo(({ height, network }: BlockInfoProps) => (
+  <BlockInfo>
+    <BlockIcon />
+    <BlockNumber>{formatTokenValue(height)}</BlockNumber>
+    <BlockNetworkInfo size={3}>on {network} network</BlockNetworkInfo>
+  </BlockInfo>
+))
 
 const AboutTable = styled.ul`
   display: grid;

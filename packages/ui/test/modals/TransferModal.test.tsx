@@ -86,8 +86,8 @@ describe('UI: TransferModal', () => {
     expect(getByText('Send tokens')).toBeDefined()
   })
 
-  it('Enables value input', () => {
-    const { getByLabelText, getByText, getByRole } = renderModal({})
+  it('Enables value input', async () => {
+    const { getByLabelText, getByRole } = renderModal({})
 
     const input = getByLabelText(/number of tokens/i) as HTMLInputElement
     const useHalfButton = getByRole('button', { name: /use half/i }) as HTMLButtonElement
@@ -97,7 +97,7 @@ describe('UI: TransferModal', () => {
     expect(useHalfButton.disabled).toBe(true)
     expect(useMaxButton.disabled).toBe(true)
 
-    selectAccount('From', 'alice', getByText)
+    await selectAccount('From', 'alice')
 
     expect(input.disabled).toBe(false)
     expect(useHalfButton.disabled).toBe(false)
