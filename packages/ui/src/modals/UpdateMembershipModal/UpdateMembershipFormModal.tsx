@@ -3,12 +3,18 @@ import React, { Reducer, useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
 import { Account, BaseMember } from '../../common/types'
-import { filterAccount, SelectAccount } from '../../components/account/SelectAccount';
+import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
 import { Label, TextArea, TextInput } from '../../components/forms'
 import { FieldError, hasError } from '../../components/forms/FieldError'
-import { Help } from '../../components/Help';
-import { ModalFooter, ModalHeader, ScrolledModal, ScrolledModalBody, ScrolledModalContainer } from '../../components/Modal'
+import { Help } from '../../components/Help'
+import {
+  ModalFooter,
+  ModalHeader,
+  ScrolledModal,
+  ScrolledModalBody,
+  ScrolledModalContainer,
+} from '../../components/Modal'
 import { Text } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useFormValidation } from '../../hooks/useFormValidation'
@@ -51,15 +57,21 @@ const updateReducer: FormReducer<UpdateMemberForm> = (state, action): UpdateMemb
 }
 
 export const hasAnyEdits = (formData: Record<string, any>, member: Record<string, any>) => {
-  for (const key of Object.keys(formData)) {
-    const memberValue = member[key] || '';
-    const formValue = formData[key].address ?? (formData[key] || '')
+  return !!getChangedFields(formData, member).length
+}
+
+export const getChangedFields = (form: Record<string, any>, initial: Record<string, any>) => {
+  const changedFields = []
+
+  for (const key of Object.keys(form)) {
+    const memberValue = initial[key] || ''
+    const formValue = form[key]?.address ?? (form[key] || '')
     if (memberValue !== formValue) {
-      return true
+      changedFields.push(key)
     }
   }
 
-  return false
+  return changedFields
 }
 
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
@@ -71,8 +83,8 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     handle: member.handle || '',
     about: member.about || '',
     avatarURI: member.avatarURI || '',
-    rootAccount: {address: member.rootAccount, name: ''},
-    controllerAccount: {address: member.controllerAccount, name: ''}
+    rootAccount: { address: member.rootAccount, name: '' },
+    controllerAccount: { address: member.controllerAccount, name: '' },
   })
   const { handle, name, avatarURI, about, controllerAccount, rootAccount } = state
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
@@ -107,7 +119,11 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
             <Label isRequired>
               Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
             </Label>
-            <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account)} selected={rootAccount} />
+            <SelectAccount
+              filter={filterRoot}
+              onChange={(account) => changeField('rootAccount', account)}
+              selected={rootAccount}
+            />
           </Row>
 
           <Row>

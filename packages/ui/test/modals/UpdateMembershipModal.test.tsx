@@ -10,7 +10,7 @@ import sinon from 'sinon'
 import { Account, BaseMember } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
-import { hasAnyEdits } from '../../src/modals/UpdateMembershipModal/UpdateMembershipFormModal'
+import { getChangedFields, hasAnyEdits } from '../../src/modals/UpdateMembershipModal/UpdateMembershipFormModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
@@ -153,38 +153,109 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  describe('checkEdits', () => {
-    it('nothing changed for accounts', () => {
-      const result = hasAnyEdits(
-        {
-          id: '0',
-          name: 'Alice Member',
-          handle: 'alice_handle',
-          about: '',
-          avatarURI: '',
-          rootAccount: {
-            address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-            name: '',
+  describe('helpers', () => {
+    const member = {
+      id: '0',
+      name: 'Alice Member',
+      handle: 'alice_handle',
+      about: '',
+      avatarURI: '',
+      rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+      controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+      isFoundingMember: true,
+      isVerified: true,
+      inviteCount: 5,
+    }
+    const form = {
+      id: '0',
+      name: 'Alice Member',
+      handle: 'alice_handle',
+      about: '',
+      avatarURI: '',
+      rootAccount: {
+        address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+        name: '',
+      },
+      controllerAccount: {
+        address: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+        name: '',
+      },
+    }
+
+    describe('getChangedFields', () => {
+      it('nothing changed', () => {
+        expect(getChangedFields(form, member)).toEqual([])
+      })
+
+      it('account changed', () => {
+        const changed = {
+          ...form,
+          ...{
+            rootAccount: { name: '', address: 'foo-bar' },
           },
-          controllerAccount: {
-            address: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-            name: '',
-          },
-        },
-        {
-          id: '0',
-          name: 'Alice Member',
-          handle: 'alice_handle',
-          about: '',
-          avatarURI: '',
-          rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-          controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-          isFoundingMember: true,
-          isVerified: true,
-          inviteCount: 5,
         }
-      )
-      expect(result).toBeFalsy()
+        expect(getChangedFields(changed, member)).toEqual(['rootAccount'])
+      })
+
+      it('name changed', () => {
+        const changed = {
+          ...form,
+          ...{
+            name: 'Foo Bar',
+          },
+        }
+        expect(getChangedFields(changed, member)).toEqual(['name'])
+      })
+
+      it('multiple fields changed', () => {
+        const changed = {
+          ...form,
+          ...{
+            controllerAccount: { name: '', account: 'foo-bar' },
+            handle: 'bax',
+            name: 'Foo Bar',
+          },
+        }
+        expect(getChangedFields(changed, member)).toEqual(['name', 'handle', 'controllerAccount'])
+      })
+    })
+
+    describe('hasAnyEdits', () => {
+      it('nothing changed', () => {
+        expect(hasAnyEdits(form, member)).toBeFalsy()
+      })
+
+      it('account changed', () => {
+        const changed = {
+          ...form,
+          ...{
+            rootAccount: { name: '', address: 'foo-bar' },
+          },
+        }
+        expect(hasAnyEdits(changed, member)).toBeTruthy()
+      })
+
+      it('name changed', () => {
+        const changed = {
+          ...form,
+          ...{
+            name: 'Foo bar',
+          },
+        }
+        expect(hasAnyEdits(changed, member)).toBeTruthy()
+      })
+
+      it('multiple fields changed', () => {
+        const changed = {
+          ...form,
+          ...{
+            controllerAccount: { name: '', account: 'foo-bar' },
+            handle: 'bax',
+            name: 'Foo Bar',
+          },
+        }
+        expect(hasAnyEdits(changed, member)).toBeTruthy()
+      })
     })
   })
 
