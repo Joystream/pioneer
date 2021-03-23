@@ -9,7 +9,6 @@ import { from, of } from 'rxjs'
 import sinon from 'sinon'
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
@@ -17,7 +16,7 @@ import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectMember } from '../helpers/selectMember'
 import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
-import { aliceSigner, aliceStashSigner, mockKeyring } from '../mocks/keyring'
+import { alice, aliceStash, mockKeyring } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
 
@@ -32,10 +31,22 @@ jest.mock('../../src/hooks/useMyMemberships', () => {
   }
 })
 
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: false,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
+
 describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+    useAccounts.allAccounts.push(alice, aliceStash)
   })
 
   afterAll(() => {
@@ -52,26 +63,12 @@ describe('UI: InviteMemberModal', () => {
     api: ({} as unknown) as ApiRx,
     isConnected: true,
   }
-  let aliceAccount: Account
-  let aliceStash: Account
-  let accounts: {
-    hasAccounts: boolean
-    allAccounts: Account[]
-  }
   let inviteMemberTx: any
   let keyring: Keyring
   let transaction: any
 
   beforeEach(async () => {
     keyring = mockKeyring()
-    aliceAccount = {
-      address: (await aliceSigner()).address,
-      name: 'alice',
-    }
-    aliceStash = {
-      address: (await aliceStashSigner()).address,
-      name: 'alice',
-    }
     set(api, 'api.derive.balances.all', () =>
       from([
         {
@@ -86,12 +83,6 @@ describe('UI: InviteMemberModal', () => {
     set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
     set(api, 'api.tx.members.inviteMember', () => transaction)
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
-
-    accounts = {
-      hasAccounts: true,
-      allAccounts: [aliceAccount, aliceStash],
-    }
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
   })
 
   afterEach(() => {

@@ -6,27 +6,32 @@ import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 import sinon from 'sinon'
-import { shortenAddress } from '../../src/utils/formatters'
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
 import * as useBalanceModule from '../../src/hooks/useBalance'
 import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MembershipContext } from '../../src/providers/membership/context'
+import { shortenAddress } from '../../src/utils/formatters'
 import { MockApolloProvider } from '../helpers/providers'
-import { aliceSigner } from '../mocks/keyring'
+import { alice, aliceSigner, aliceStash, bob, bobStash } from '../mocks/keyring'
 import { KnownAccounts, knownAccounts } from '../mocks/keyring/accounts'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
 
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: false,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
+
 describe('UI: Accounts list', () => {
   const mockServer = setupMockServer()
-
-  let accountsMock: {
-    hasAccounts: boolean
-    allAccounts: Account[]
-  }
   let known: KnownAccounts
 
   beforeAll(async () => {
@@ -36,11 +41,8 @@ describe('UI: Accounts list', () => {
   beforeAll(cryptoWaitReady)
 
   beforeEach(async () => {
-    accountsMock = {
-      hasAccounts: false,
-      allAccounts: [],
-    }
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accountsMock)
+    useAccounts.hasAccounts = false
+    useAccounts.allAccounts.splice(0)
   })
 
   afterEach(cleanup)
@@ -62,11 +64,8 @@ describe('UI: Accounts list', () => {
 
   describe('with development accounts', () => {
     beforeEach(() => {
-      accountsMock.hasAccounts = true
-      accountsMock.allAccounts.push({
-        address: known.alice.address,
-        name: 'alice',
-      })
+      useAccounts.hasAccounts = true
+      useAccounts.allAccounts.push(alice)
     })
 
     afterEach(() => {
@@ -101,11 +100,8 @@ describe('UI: Accounts list', () => {
 
   describe('with active membership', () => {
     beforeEach(() => {
-      accountsMock.hasAccounts = true
-      accountsMock.allAccounts.push(known.alice)
-      accountsMock.allAccounts.push(known.aliceStash)
-      accountsMock.allAccounts.push(known.bob)
-      accountsMock.allAccounts.push(known.bobStash)
+      useAccounts.hasAccounts = true
+      useAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
     })
 
     it("Annotate active member's accounts", async () => {

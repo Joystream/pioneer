@@ -10,7 +10,6 @@ import { from, of } from 'rxjs'
 import sinon from 'sinon'
 import { Account } from '../../src/common/types'
 import { ArrowInsideIcon } from '../../src/components/icons'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
@@ -18,14 +17,26 @@ import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
 
-import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
+import { alice, bob, mockKeyring } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
 import { stubTransactionResult } from '../mocks/stubTransactionResult'
+
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: true,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
 
 describe('UI: TransferModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+    useAccounts.allAccounts.push(alice, bob)
   })
 
   afterAll(() => {
@@ -38,25 +49,11 @@ describe('UI: TransferModal', () => {
     api: ({} as unknown) as ApiRx,
     isConnected: true,
   }
-  let sender: Account
-  let to: Account
-  let accounts: {
-    hasAccounts: boolean
-    allAccounts: Account[]
-  }
   let transfer: any
   let keyring: Keyring
 
   beforeEach(async () => {
     keyring = mockKeyring()
-    sender = {
-      address: (await aliceSigner()).address,
-      name: 'alice',
-    }
-    to = {
-      address: (await bobSigner()).address,
-      name: 'bob',
-    }
     set(api, 'api.derive.balances.all', () =>
       from([
         {
@@ -68,12 +65,6 @@ describe('UI: TransferModal', () => {
     transfer = {}
     set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
     set(api, 'api.tx.balances.transfer', () => transfer)
-
-    accounts = {
-      hasAccounts: true,
-      allAccounts: [sender, to],
-    }
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
   })
 
   afterEach(() => {
@@ -81,7 +72,7 @@ describe('UI: TransferModal', () => {
   })
 
   it('Renders a modal', () => {
-    const { getByText } = renderModal({ sender, to })
+    const { getByText } = renderModal({ sender: alice, to: bob })
 
     expect(getByText('Send tokens')).toBeDefined()
   })
@@ -105,7 +96,7 @@ describe('UI: TransferModal', () => {
   })
 
   it('Renders an Authorize transaction step', () => {
-    const { getByLabelText, getByText } = renderModal({ sender, to })
+    const { getByLabelText, getByText } = renderModal({ sender: alice, to: bob })
 
     const input = getByLabelText('Number of tokens')
     expect((getByText('Transfer tokens') as HTMLButtonElement).disabled).toBe(true)
@@ -123,7 +114,7 @@ describe('UI: TransferModal', () => {
 
   describe('Signed transaction', () => {
     function renderAndSign() {
-      const rendered = renderModal({ sender, to })
+      const rendered = renderModal({ sender: alice, to: bob })
       const { getByLabelText, getByText } = rendered
 
       fireEvent.change(getByLabelText('Number of tokens'), { target: { value: '50' } })
@@ -146,7 +137,7 @@ describe('UI: TransferModal', () => {
         const events = [
           {
             phase: { ApplyExtrinsic: 2 },
-            event: { index: '0x0502', data: [sender.address, to.address, 50] },
+            event: { index: '0x0502', data: [alice.address, bob.address, 50] },
           },
           {
             phase: { ApplyExtrinsic: 2 },

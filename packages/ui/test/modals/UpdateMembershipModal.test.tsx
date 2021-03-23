@@ -8,21 +8,32 @@ import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
 import { Account, BaseMember } from '../../src/common/types'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
 import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
-import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
+import { alice, bob, mockKeyring } from '../mocks/keyring'
 import { getMember, MockMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
+
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: true,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
 
 describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+    useAccounts.allAccounts.push(alice, bob)
   })
 
   afterAll(() => {
@@ -35,12 +46,6 @@ describe('UI: UpdatedMembershipModal', () => {
     api: ({} as unknown) as ApiRx,
     isConnected: true,
   }
-  let fromAccount: Account
-  let to: Account
-  let accounts: {
-    hasAccounts: boolean
-    allAccounts: Account[]
-  }
   let updateProfileTx: any
   let keyring: Keyring
 
@@ -48,14 +53,7 @@ describe('UI: UpdatedMembershipModal', () => {
 
   beforeEach(async () => {
     keyring = mockKeyring()
-    fromAccount = {
-      address: (await aliceSigner()).address,
-      name: 'alice',
-    }
-    to = {
-      address: (await bobSigner()).address,
-      name: 'bob',
-    }
+
     set(api, 'api.derive.balances.all', () =>
       from([
         {
@@ -69,12 +67,6 @@ describe('UI: UpdatedMembershipModal', () => {
     updateProfileTx = stubTransaction(api, 'api.tx.members.updateProfile')
 
     member = await getMember('Alice')
-
-    accounts = {
-      hasAccounts: true,
-      allAccounts: [fromAccount, to],
-    }
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
   })
 
   afterEach(() => {

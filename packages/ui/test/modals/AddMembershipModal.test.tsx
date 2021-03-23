@@ -9,21 +9,32 @@ import React from 'react'
 import { from, of } from 'rxjs'
 import sinon from 'sinon'
 import { Account } from '../../src/common/types'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
-import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
+import { alice, bob, mockKeyring } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
 import { stubTransactionResult } from '../mocks/stubTransactionResult'
+
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: false,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
 
 describe('UI: AddMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+    useAccounts.allAccounts.push(alice, bob)
   })
 
   afterAll(() => {
@@ -36,25 +47,12 @@ describe('UI: AddMembershipModal', () => {
     api: ({} as unknown) as ApiRx,
     isConnected: true,
   }
-  let fromAccount: Account
-  let to: Account
-  let accounts: {
-    hasAccounts: boolean
-    allAccounts: Account[]
-  }
+
   let transaction: any
   let keyring: Keyring
 
   beforeEach(async () => {
     keyring = mockKeyring()
-    fromAccount = {
-      address: (await aliceSigner()).address,
-      name: 'alice',
-    }
-    to = {
-      address: (await bobSigner()).address,
-      name: 'bob',
-    }
     set(api, 'api.derive.balances.all', () =>
       from([
         {
@@ -68,12 +66,6 @@ describe('UI: AddMembershipModal', () => {
     transaction = {}
     set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
     set(api, 'api.tx.members.buyMembership', () => transaction)
-
-    accounts = {
-      hasAccounts: true,
-      allAccounts: [fromAccount, to],
-    }
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
   })
 
   afterEach(() => {
