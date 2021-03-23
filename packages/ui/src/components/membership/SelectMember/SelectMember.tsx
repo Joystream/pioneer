@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react'
 import { useSearchMembersQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
 import { useDebounce } from '../../../hooks/useDebounce'
-import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { Select } from '../../selects'
 import { MemberInfo } from '../MemberInfo'
 import { OptionsListMember } from './OptionsListMember'
@@ -35,19 +34,11 @@ export const SelectMember = ({ onChange, filter, selected, disabled }: Props) =>
   const baseFilter = filter || (() => true)
   const [search, setSearch] = useState('')
   const searchDebounced = useDebounce(search, 400)
-  const { members } = useMyMemberships()
-  const myMembersHandles = members.map(({ handle }) => handle)
-  const filterOutMyMemberships = ({ handle }: BaseMember) => !myMembersHandles.includes(handle)
   const { data } = useSearchMembersQuery({ variables: { text: searchDebounced, limit: 10 } })
   const foundMembers = data?.searchMembers || []
-  const allMembers = foundMembers.filter(filterOutMyMemberships)
-  const filteredMembers = useMemo(() => filterByText(members.filter(baseFilter), searchDebounced), [
+  const filteredFoundMembers = useMemo(() => filterByText(foundMembers.filter(baseFilter), searchDebounced), [
     searchDebounced,
-    members,
-  ])
-  const filteredFoundMembers = useMemo(() => filterByText(allMembers.filter(baseFilter), searchDebounced), [
-    searchDebounced,
-    allMembers,
+    foundMembers,
   ])
 
   return (
@@ -57,9 +48,7 @@ export const SelectMember = ({ onChange, filter, selected, disabled }: Props) =>
       disabled={disabled}
       renderSelected={(option) => <MemberInfo member={option} />}
       placeholder="Select Member or type a member"
-      renderList={(onOptionClick) => (
-        <OptionsListMember myMembers={filteredMembers} allMembers={filteredFoundMembers} onChange={onOptionClick} />
-      )}
+      renderList={(onOptionClick) => <OptionsListMember allMembers={filteredFoundMembers} onChange={onOptionClick} />}
       onSearch={(search) => setSearch(search)}
     />
   )
