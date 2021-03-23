@@ -223,8 +223,9 @@ export const Input = styled.input`
 `
 
 const Textarea = styled.textarea`
-  ${InputStyles}
-  resize: none;
+  ${InputStyles} {
+    resize: none;
+  }
 `
 
 const InputElement = styled.div<InputElementProps>`

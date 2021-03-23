@@ -28,8 +28,6 @@ export const SelectedOption = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   align-items: center;
-  /* min-height: ${Sizes.selectHeight}; */
-  /* max-height: ${Sizes.selectHeight}; */
   padding: 10px 28px 10px 16px;
 `
 
