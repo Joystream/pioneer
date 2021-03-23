@@ -17,7 +17,7 @@ import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectMember } from '../helpers/selectMember'
 import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
-import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
+import { aliceSigner, aliceStashSigner, mockKeyring } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
 
@@ -52,24 +52,25 @@ describe('UI: InviteMemberModal', () => {
     api: ({} as unknown) as ApiRx,
     isConnected: true,
   }
-  let fromAccount: Account
-  let to: Account
+  let aliceAccount: Account
+  let aliceStash: Account
   let accounts: {
     hasAccounts: boolean
     allAccounts: Account[]
   }
-  let updateProfileTx: any
+  let inviteMemberTx: any
   let keyring: Keyring
+  let transaction: any
 
   beforeEach(async () => {
     keyring = mockKeyring()
-    fromAccount = {
+    aliceAccount = {
       address: (await aliceSigner()).address,
       name: 'alice',
     }
-    to = {
-      address: (await bobSigner()).address,
-      name: 'bob',
+    aliceStash = {
+      address: (await aliceStashSigner()).address,
+      name: 'alice',
     }
     set(api, 'api.derive.balances.all', () =>
       from([
@@ -81,11 +82,14 @@ describe('UI: InviteMemberModal', () => {
     )
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
-    updateProfileTx = stubTransaction(api, 'api.tx.members.updateProfile')
+    transaction = {}
+    set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
+    set(api, 'api.tx.members.inviteMember', () => transaction)
+    inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
 
     accounts = {
       hasAccounts: true,
-      allAccounts: [fromAccount, to],
+      allAccounts: [aliceAccount, aliceStash],
     }
     sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
   })
@@ -100,6 +104,9 @@ describe('UI: InviteMemberModal', () => {
     expect(await screen.findByText('Invite a member')).toBeDefined()
   })
 
+  const rootAddress = '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc'
+  const controllerAddress = '5CrJ2ZegUykhPP9h2YkwDQUBi7AcmafFiu8m5DFU2Qh8XuPR'
+
   it('Enables button', async () => {
     const aliceMember = await getMember('Alice')
     const bobMember = await getMember('Bob')
@@ -110,12 +117,12 @@ describe('UI: InviteMemberModal', () => {
 
     expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
 
-    await selectMember('Inviting member', 'bob')
+    await selectMember('Inviting member', 'alice')
     await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
-      target: { value: '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc' },
+      target: { value: rootAddress },
     })
     await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
-      target: { value: '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc' },
+      target: { value: controllerAddress },
     })
     await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
@@ -123,46 +130,68 @@ describe('UI: InviteMemberModal', () => {
     expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeEnabled()
   })
 
-  it.skip('Disables button when invalid avatar URL', async () => {
+  it('Disables button when one of addresses is invalid', async () => {
+    const aliceMember = await getMember('Alice')
+    const bobMember = await getMember('Bob')
+    members.push((aliceMember as unknown) as MemberFieldsFragment)
+    members.push((bobMember as unknown) as MemberFieldsFragment)
+
     renderModal()
 
-    fireEvent.change(await screen.findByLabelText(/member avatar/i), { target: { value: 'avatar' } })
-    expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
-
-    fireEvent.change(await screen.findByLabelText(/member avatar/i), {
-      target: { value: 'http://example.com/example.jpg' },
+    await selectMember('Inviting member', 'alice')
+    await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
+      target: { value: rootAddress },
     })
-    expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeEnabled()
+    await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
+      target: { value: 'AAa' },
+    })
+    await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+
+    expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
   })
 
-  describe.skip('Authorize', () => {
-    async function changeNameAndSave() {
+  describe('Authorize', () => {
+    async function fillFormAndProceed() {
+      const aliceMember = await getMember('Alice')
+      const bobMember = await getMember('Bob')
+      members.push((aliceMember as unknown) as MemberFieldsFragment)
+      members.push((bobMember as unknown) as MemberFieldsFragment)
       renderModal()
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-      fireEvent.click(await screen.findByText(/^Invite a member$/i))
+      await selectMember('Inviting member', 'alice')
+      await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
+        target: { value: rootAddress },
+      })
+      await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
+        target: { value: controllerAddress },
+      })
+      await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+      fireEvent.click(await screen.findByRole('button', { name: /^Invite a member$/i }))
     }
 
     it('Authorize step', async () => {
-      await changeNameAndSave()
+      await fillFormAndProceed()
 
       expect(await screen.findByText('Authorize transaction')).toBeDefined()
+      expect(await screen.findByText('You are inviting this member. You have 5 invites left.')).toBeDefined()
       expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
     })
 
     it('Success step', async () => {
-      stubTransactionSuccess(updateProfileTx, [1])
-      await changeNameAndSave()
+      stubTransactionSuccess(inviteMemberTx, [1])
+      await fillFormAndProceed()
 
-      fireEvent.click(screen.getByText(/^sign and update a member$/i))
+      fireEvent.click(screen.getByText(/^sign and create a member$/i))
 
       expect(await screen.findByText('Success')).toBeDefined()
     })
 
     it('Failure step', async () => {
-      stubTransactionFailure(updateProfileTx)
-      await changeNameAndSave()
+      stubTransactionFailure(inviteMemberTx)
+      await fillFormAndProceed()
 
-      fireEvent.click(screen.getByText(/^sign and update a member$/i))
+      fireEvent.click(screen.getByText(/^sign and create a member$/i))
 
       expect(await screen.findByText('Failure')).toBeDefined()
     })
