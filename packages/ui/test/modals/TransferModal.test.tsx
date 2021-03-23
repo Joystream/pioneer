@@ -18,7 +18,7 @@ import { selectAccount } from '../helpers/selectAccount'
 
 import { alice, bob, mockKeyring } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
-import { stubTransactionResult } from '../mocks/stubTransactionResult'
+import { stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
@@ -129,18 +129,7 @@ describe('UI: TransferModal', () => {
 
     describe('Success', () => {
       beforeEach(() => {
-        const events = [
-          {
-            phase: { ApplyExtrinsic: 2 },
-            event: { index: '0x0502', data: [alice.address, bob.address, 50] },
-          },
-          {
-            phase: { ApplyExtrinsic: 2 },
-            event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
-          },
-        ]
-
-        set(transfer, 'signAndSend', () => stubTransactionResult(events))
+        stubTransactionSuccess(transfer, [alice.address, bob.address, 50])
       })
 
       it('Renders transaction success', async () => {
@@ -162,23 +151,8 @@ describe('UI: TransferModal', () => {
     })
 
     describe('Failure', () => {
-      const events = [
-        {
-          phase: { ApplyExtrinsic: 2 },
-          event: {
-            index: '0x0001',
-            data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
-            section: 'system',
-            method: 'ExtrinsicFailed',
-          },
-        },
-      ]
-
-      beforeEach(() => {
-        set(transfer, 'signAndSend', () => stubTransactionResult(events))
-      })
-
       it('Renders transaction failure', async () => {
+        stubTransactionFailure(transfer)
         const { findByText } = renderAndSign()
 
         expect(await findByText('Failure')).toBeDefined()

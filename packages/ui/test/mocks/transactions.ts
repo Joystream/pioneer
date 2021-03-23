@@ -1,8 +1,7 @@
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { of } from 'rxjs'
+import { from, of } from 'rxjs'
 import { UseApi } from '../../src/providers/api/provider'
-import { stubTransactionResult } from '../mocks/stubTransactionResult'
 
 const getSuccessEvents = (data: number[]) => [
   {
@@ -25,12 +24,30 @@ const getErrorEvents = () => [
     },
   },
 ]
+
+export const stubTransactionResult = (events: any[]) =>
+  from([
+    {
+      status: { isReady: true, type: 'Ready' },
+    },
+    {
+      status: { type: 'InBlock', isInBlock: true, asInBlock: '0x93XXX' },
+      events: [...events],
+    },
+    {
+      status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
+      events: [...events],
+    },
+  ])
+
 export const stubTransactionFailure = (transaction: any) => {
   set(transaction, 'signAndSend', () => stubTransactionResult(getErrorEvents()))
 }
-export const stubTransactionSuccess = (transaction: any, data: number[]) => {
+
+export const stubTransactionSuccess = (transaction: any, data: any) => {
   set(transaction, 'signAndSend', () => stubTransactionResult(getSuccessEvents(data)))
 }
+
 export const stubTransaction = (api: UseApi, transactionPath: string) => {
   const transaction = {}
   set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
