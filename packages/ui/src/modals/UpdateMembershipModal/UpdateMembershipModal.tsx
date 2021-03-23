@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { BaseMember } from '../../common/types'
 import { useAccounts } from '../../hooks/useAccounts'
 import { SignUpdateMembershipModal } from './SignUpdateMembershipModal'
+import { Nullable, UpdateMemberForm } from './types'
 import { UpdateMembershipFailureModal } from './UpdateMembershipFailureModal'
-import { Nullable, UpdateMemberForm, UpdateMembershipFormModal } from './UpdateMembershipFormModal'
+import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 interface MembershipModalProps {

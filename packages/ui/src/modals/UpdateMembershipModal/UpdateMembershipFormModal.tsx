@@ -1,5 +1,5 @@
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { Reducer, useCallback, useEffect, useReducer } from 'react'
+import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
 import { Account, BaseMember } from '../../common/types'
@@ -21,26 +21,12 @@ import { useFormValidation } from '../../hooks/useFormValidation'
 import { useObservable } from '../../hooks/useObservable'
 import { AvatarURISchema, HandleSchema } from '../../membership/data/validation'
 import { Row } from '../common'
+import { FormReducer, Nullable, UpdateMemberForm } from './types'
 
 interface Props {
   onClose: () => void
   onSubmit: (params: Nullable<UpdateMemberForm>) => void
   member: BaseMember
-}
-
-export interface UpdateMemberForm {
-  id: string
-  name?: string
-  handle?: string
-  avatarURI?: string
-  about?: string
-  rootAccount?: Account
-  controllerAccount?: Account
-}
-
-export type Action<T> = {
-  type: keyof T
-  value?: T[keyof T]
 }
 
 const UpdateMemberSchema = Yup.object().shape({
@@ -49,8 +35,6 @@ const UpdateMemberSchema = Yup.object().shape({
     return isHandleChanged ? HandleSchema : schema
   }),
 })
-
-type FormReducer<T> = Reducer<T, Action<T>>
 
 const updateReducer: FormReducer<UpdateMemberForm> = (state, action): UpdateMemberForm => {
   return { ...state, [action.type]: action.value }
@@ -73,8 +57,6 @@ export const getChangedFields = (form: Record<string, any>, initial: Record<stri
 
   return changedFields
 }
-
-export type Nullable<T> = { [P in keyof T]: T[P] | null }
 
 export const changedOrNull = <T extends any>(form: Record<string, any>, initial: Record<string, any>): Nullable<T> => {
   const changedFields = getChangedFields(form, initial)

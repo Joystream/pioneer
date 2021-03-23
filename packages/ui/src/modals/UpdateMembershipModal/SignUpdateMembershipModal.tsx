@@ -13,7 +13,7 @@ import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
-import { Nullable, UpdateMemberForm } from './UpdateMembershipFormModal'
+import { Nullable, UpdateMemberForm } from './types'
 
 interface SignProps {
   onClose: () => void
