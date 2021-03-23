@@ -646,6 +646,7 @@ input MemberWhereUniqueInput {
 
 input MemberWhereInput {
   rootAccount_in: [String]
+  controllerAccount_in: [String]
   id_in: [ID!]
 }
 

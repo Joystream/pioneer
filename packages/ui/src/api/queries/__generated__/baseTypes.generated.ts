@@ -439,6 +439,7 @@ export type MemberWhereUniqueInput = {
 
 export type MemberWhereInput = {
   rootAccount_in?: Maybe<Array<Maybe<Scalars['String']>>>
+  controllerAccount_in?: Maybe<Array<Maybe<Scalars['String']>>>
   id_in?: Maybe<Array<Scalars['ID']>>
 }
 
