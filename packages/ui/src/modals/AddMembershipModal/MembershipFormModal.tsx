@@ -99,7 +99,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
                 trueLabel="Yes"
                 falseLabel="No"
                 onChange={(isSet) => changeField('isReferred', isSet)}
-                checked={isReferred}
+                checked={isReferred ?? false}
               />
             </InlineToggleWrap>
             {isReferred && (
