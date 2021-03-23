@@ -45,7 +45,7 @@ export const EmptyOption = styled.input`
 
   &::placeholder {
     font-size: 14px;
-    line-height: 45px;
+    line-height: 78px;
     font-weight: 400;
     color: ${Colors.Black[400]};
   }
