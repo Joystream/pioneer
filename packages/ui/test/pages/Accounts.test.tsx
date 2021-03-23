@@ -14,8 +14,7 @@ import { KeyringContext } from '../../src/providers/keyring/context'
 import { MembershipContext } from '../../src/providers/membership/context'
 import { shortenAddress } from '../../src/utils/formatters'
 import { MockApolloProvider } from '../helpers/providers'
-import { alice, aliceSigner, aliceStash, bob, bobStash } from '../mocks/keyring'
-import { KnownAccounts, knownAccounts } from '../mocks/keyring/accounts'
+import { alice, aliceStash, bob, bobStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
 
@@ -32,11 +31,6 @@ jest.mock('../../src/hooks/useAccounts', () => {
 
 describe('UI: Accounts list', () => {
   const mockServer = setupMockServer()
-  let known: KnownAccounts
-
-  beforeAll(async () => {
-    known = await knownAccounts()
-  })
 
   beforeAll(cryptoWaitReady)
 
@@ -76,8 +70,8 @@ describe('UI: Accounts list', () => {
       const { findByText } = renderAccounts()
       sinon.stub(useBalanceModule, 'useBalance').returns(null)
 
-      const alice = (await aliceSigner()).address
-      const aliceBox = (await findByText(shortenAddress(alice)))?.parentNode?.parentNode
+      const aliceAddress = alice.address
+      const aliceBox = (await findByText(shortenAddress(aliceAddress)))?.parentNode?.parentNode
       expect(aliceBox).toBeDefined()
       expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
       expect(aliceBox?.nextSibling?.textContent).toBe('-')
@@ -92,7 +86,7 @@ describe('UI: Accounts list', () => {
       })
       const { findByText } = renderAccounts()
 
-      const aliceBox = (await findByText(shortenAddress(known.alice.address)))?.parentNode?.parentNode
+      const aliceBox = (await findByText(shortenAddress(alice.address)))?.parentNode?.parentNode
       expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
       expect(aliceBox?.nextSibling?.textContent).toBe('1,000')
     })
@@ -106,13 +100,13 @@ describe('UI: Accounts list', () => {
 
     it("Annotate active member's accounts", async () => {
       await mockServer.createMember('Alice')
-      const alice = await getMember('Alice')
-      const { findByText } = renderAccounts(alice as MemberFieldsFragment)
+      const aliceMember = await getMember('Alice')
+      const { findByText } = renderAccounts(aliceMember as MemberFieldsFragment)
 
-      const aliceBox = (await findByText(shortenAddress(known.alice.address)))!.parentElement!.parentElement!
+      const aliceBox = (await findByText(shortenAddress(alice.address)))!.parentElement!.parentElement!
       expect(await within(aliceBox).findByText(/root account/i)).toBeDefined()
 
-      const aliceStashBox = (await findByText(shortenAddress(known.aliceStash.address)))!.parentElement!.parentElement!
+      const aliceStashBox = (await findByText(shortenAddress(aliceStash.address)))!.parentElement!.parentElement!
       expect(await within(aliceStashBox).findByText(/controller account/i)).toBeDefined()
     })
   })
