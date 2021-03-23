@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
-import { from, of } from 'rxjs'
+import { of } from 'rxjs'
 import { Account } from '../../src/common/types'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
@@ -11,7 +11,13 @@ import { selectAccount } from '../helpers/selectAccount'
 import { alice, bob } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../mocks/transactions'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: false,
@@ -42,14 +48,7 @@ describe('UI: AddMembershipModal', () => {
   let transaction: any
 
   beforeEach(async () => {
-    set(api, 'api.derive.balances.all', () =>
-      from([
-        {
-          availableBalance: new BN(1000),
-          lockedBalance: new BN(0),
-        },
-      ])
-    )
+    stubDefaultBalances(api)
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     transaction = stubTransaction(api, 'api.tx.members.buyMembership')

@@ -1,9 +1,8 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
-import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
-import { from, of } from 'rxjs'
+import { of } from 'rxjs'
 import { Account } from '../../src/common/types'
 import { ArrowInsideIcon } from '../../src/components/icons'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
@@ -13,7 +12,13 @@ import { selectAccount } from '../helpers/selectAccount'
 import { alice, bob } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../mocks/transactions'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
@@ -43,14 +48,7 @@ describe('UI: TransferModal', () => {
   let transfer: any
 
   beforeEach(async () => {
-    set(api, 'api.derive.balances.all', () =>
-      from([
-        {
-          availableBalance: new BN(1000),
-          lockedBalance: new BN(0),
-        },
-      ])
-    )
+    stubDefaultBalances(api)
     transfer = stubTransaction(api, 'api.tx.balances.transfer')
   })
 

@@ -1,4 +1,3 @@
-import { ApiRx } from '@polkadot/api'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { renderHook } from '@testing-library/react-hooks'
 import BN from 'bn.js'
@@ -8,14 +7,11 @@ import { of } from 'rxjs'
 
 import { useTotalBalances } from '../../src/hooks/useTotalBalances'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
 import { MockKeyringProvider } from '../mocks/providers'
+import { stubApi } from '../mocks/transactions'
 
 describe('useTotalBalances', () => {
-  const useApi: UseApi = {
-    isConnected: false,
-    api: ({} as unknown) as ApiRx,
-  }
+  const useApi = stubApi()
 
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -40,6 +36,7 @@ describe('useTotalBalances', () => {
   }
 
   it('Returns zero balances when API not ready', () => {
+    useApi.isConnected = false
     const { result } = renderUseTotalBalances()
 
     expect(result.current).toEqual({

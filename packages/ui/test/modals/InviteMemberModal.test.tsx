@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
-import { from, of } from 'rxjs'
+import { of } from 'rxjs'
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
@@ -13,7 +13,13 @@ import { alice, aliceStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../mocks/transactions'
 
 const members: MemberFieldsFragment[] = []
 
@@ -58,14 +64,7 @@ describe('UI: InviteMemberModal', () => {
   let inviteMemberTx: any
 
   beforeEach(async () => {
-    set(api, 'api.derive.balances.all', () =>
-      from([
-        {
-          availableBalance: new BN(1000),
-          lockedBalance: new BN(0),
-        },
-      ])
-    )
+    stubDefaultBalances(api)
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
