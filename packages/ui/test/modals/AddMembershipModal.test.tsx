@@ -13,7 +13,7 @@ import { selectAccount } from '../helpers/selectAccount'
 import { alice, bob } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
+import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: false,
@@ -57,9 +57,7 @@ describe('UI: AddMembershipModal', () => {
     )
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
-    transaction = {}
-    set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
-    set(api, 'api.tx.members.buyMembership', () => transaction)
+    transaction = stubTransaction(api, 'api.tx.members.buyMembership')
   })
 
   it('Renders a modal', async () => {

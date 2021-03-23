@@ -61,7 +61,6 @@ describe('UI: InviteMemberModal', () => {
     isConnected: true,
   }
   let inviteMemberTx: any
-  let transaction: any
 
   beforeEach(async () => {
     set(api, 'api.derive.balances.all', () =>
@@ -74,9 +73,6 @@ describe('UI: InviteMemberModal', () => {
     )
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
-    transaction = {}
-    set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
-    set(api, 'api.tx.members.inviteMember', () => transaction)
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
   })
 

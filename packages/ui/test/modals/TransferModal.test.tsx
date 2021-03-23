@@ -15,7 +15,7 @@ import { selectAccount } from '../helpers/selectAccount'
 
 import { alice, bob } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
-import { stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
+import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
@@ -56,9 +56,7 @@ describe('UI: TransferModal', () => {
         },
       ])
     )
-    transfer = {}
-    set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
-    set(api, 'api.tx.balances.transfer', () => transfer)
+    transfer = stubTransaction(api, 'api.tx.balances.transfer')
   })
 
   it('Renders a modal', () => {
