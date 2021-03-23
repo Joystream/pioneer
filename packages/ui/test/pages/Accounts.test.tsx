@@ -1,4 +1,3 @@
-import { beforeAll, expect } from '@jest/globals'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { cleanup, render, within } from '@testing-library/react'
@@ -11,9 +10,9 @@ import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MembershipContext } from '../../src/providers/membership/context'
 import { shortenAddress } from '../../src/utils/formatters'
-import { MockApolloProvider } from '../mocks/providers'
 import { alice, aliceStash, bob, bobStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
+import { MockApolloProvider } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {

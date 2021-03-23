@@ -1,4 +1,3 @@
-import { beforeAll } from '@jest/globals'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'

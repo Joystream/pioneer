@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 import { useMyMemberships } from '../../src/hooks/useMyMemberships'
