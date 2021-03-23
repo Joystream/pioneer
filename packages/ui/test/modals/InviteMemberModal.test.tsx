@@ -6,7 +6,6 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
-import sinon from 'sinon'
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
@@ -83,10 +82,6 @@ describe('UI: InviteMemberModal', () => {
     set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
     set(api, 'api.tx.members.inviteMember', () => transaction)
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
-  })
-
-  afterEach(() => {
-    sinon.restore()
   })
 
   it('Renders a modal', async () => {
@@ -193,7 +188,7 @@ describe('UI: InviteMemberModal', () => {
       <MockQueryNodeProviders>
         <KeyringContext.Provider value={keyring}>
           <ApiContext.Provider value={api}>
-            <InviteMemberModal onClose={sinon.spy()} />
+            <InviteMemberModal onClose={() => undefined} />
           </ApiContext.Provider>
         </KeyringContext.Provider>
       </MockQueryNodeProviders>

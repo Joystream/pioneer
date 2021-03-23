@@ -6,7 +6,6 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
-import sinon from 'sinon'
 import { Account, BaseMember } from '../../src/common/types'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
@@ -67,10 +66,6 @@ describe('UI: UpdatedMembershipModal', () => {
     updateProfileTx = stubTransaction(api, 'api.tx.members.updateProfile')
 
     member = await getMember('Alice')
-  })
-
-  afterEach(() => {
-    sinon.restore()
   })
 
   it('Renders a modal', async () => {
@@ -139,7 +134,7 @@ describe('UI: UpdatedMembershipModal', () => {
       <MockQueryNodeProviders>
         <KeyringContext.Provider value={keyring}>
           <ApiContext.Provider value={api}>
-            <UpdateMembershipModal onClose={sinon.spy()} member={member as BaseMember} />
+            <UpdateMembershipModal onClose={() => undefined} member={member as BaseMember} />
           </ApiContext.Provider>
         </KeyringContext.Provider>
       </MockQueryNodeProviders>

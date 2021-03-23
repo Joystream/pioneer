@@ -7,7 +7,6 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
-import sinon from 'sinon'
 import { Account } from '../../src/common/types'
 import { ArrowInsideIcon } from '../../src/components/icons'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
@@ -65,10 +64,6 @@ describe('UI: TransferModal', () => {
     transfer = {}
     set(transfer, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
     set(api, 'api.tx.balances.transfer', () => transfer)
-  })
-
-  afterEach(() => {
-    sinon.restore()
   })
 
   it('Renders a modal', () => {
@@ -196,7 +191,7 @@ describe('UI: TransferModal', () => {
       <KeyringContext.Provider value={keyring}>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
-            <TransferModal onClose={sinon.spy()} from={sender} to={to} icon={<ArrowInsideIcon />} />
+            <TransferModal onClose={() => undefined} from={sender} to={to} icon={<ArrowInsideIcon />} />
           </MockQueryNodeProviders>
         </ApiContext.Provider>
       </KeyringContext.Provider>

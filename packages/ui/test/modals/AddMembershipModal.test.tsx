@@ -7,7 +7,6 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
-import sinon from 'sinon'
 import { Account } from '../../src/common/types'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
@@ -66,10 +65,6 @@ describe('UI: AddMembershipModal', () => {
     transaction = {}
     set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
     set(api, 'api.tx.members.buyMembership', () => transaction)
-  })
-
-  afterEach(() => {
-    sinon.restore()
   })
 
   it('Renders a modal', async () => {
@@ -196,7 +191,7 @@ describe('UI: AddMembershipModal', () => {
       <MockQueryNodeProviders>
         <KeyringContext.Provider value={keyring}>
           <ApiContext.Provider value={api}>
-            <AddMembershipModal onClose={sinon.spy()} />
+            <AddMembershipModal onClose={() => undefined} />
           </ApiContext.Provider>
         </KeyringContext.Provider>
       </MockQueryNodeProviders>

@@ -1,14 +1,12 @@
-import { afterAll, beforeAll, expect } from '@jest/globals'
+import { beforeAll, expect } from '@jest/globals'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { cleanup, render, within } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
-import sinon from 'sinon'
 import { MemberFieldsFragment } from '../../src/api/queries'
-import { Account } from '../../src/common/types'
-import * as useBalanceModule from '../../src/hooks/useBalance'
+import { Account, Balances } from '../../src/common/types'
 import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MembershipContext } from '../../src/providers/membership/context'
@@ -29,6 +27,14 @@ jest.mock('../../src/hooks/useAccounts', () => {
   }
 })
 
+let balances: Balances | null = null
+
+const useBalance = {
+  useBalance: () => balances,
+}
+
+jest.mock('../../src/hooks/useBalance', () => useBalance)
+
 describe('UI: Accounts list', () => {
   const mockServer = setupMockServer()
 
@@ -42,10 +48,6 @@ describe('UI: Accounts list', () => {
   afterEach(cleanup)
 
   describe('with empty keyring', () => {
-    afterAll(() => {
-      sinon.restore()
-    })
-
     it('Shows loading screen', async () => {
       const profile = render(
         <KeyringContext.Provider value={new Keyring()}>
@@ -62,13 +64,8 @@ describe('UI: Accounts list', () => {
       useAccounts.allAccounts.push(alice)
     })
 
-    afterEach(() => {
-      sinon.restore()
-    })
-
     it('Renders empty balance when not returned', async () => {
       const { findByText } = renderAccounts()
-      sinon.stub(useBalanceModule, 'useBalance').returns(null)
 
       const aliceAddress = alice.address
       const aliceBox = (await findByText(shortenAddress(aliceAddress)))?.parentNode?.parentNode
@@ -78,12 +75,12 @@ describe('UI: Accounts list', () => {
     })
 
     it('Renders balance value', async () => {
-      sinon.stub(useBalanceModule, 'useBalance').returns({
+      balances = {
         total: new BN(1000),
         locked: new BN(0),
         transferable: new BN(1000),
         recoverable: new BN(0),
-      })
+      }
       const { findByText } = renderAccounts()
 
       const aliceBox = (await findByText(shortenAddress(alice.address)))?.parentNode?.parentNode
@@ -99,6 +96,12 @@ describe('UI: Accounts list', () => {
     })
 
     it("Annotate active member's accounts", async () => {
+      balances = {
+        total: new BN(1000),
+        locked: new BN(0),
+        transferable: new BN(1000),
+        recoverable: new BN(0),
+      }
       await mockServer.createMember('Alice')
       const aliceMember = await getMember('Alice')
       const { findByText } = renderAccounts(aliceMember as MemberFieldsFragment)
