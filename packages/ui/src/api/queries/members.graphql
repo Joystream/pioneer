@@ -18,8 +18,8 @@ fragment BlockFields on Block {
   network
 }
 
-query GetMembers($rootAccount_in: [String!]) {
-  members(where: {rootAccount_in: $rootAccount_in}) {
+query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!]) {
+  members(where: {rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in}) {
     ...MemberFields
   }
 }
