@@ -11,7 +11,7 @@ import { ArrowInsideIcon } from '../../src/components/icons'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../helpers/providers'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { selectAccount } from '../helpers/selectAccount'
 
 import { alice, bob } from '../mocks/keyring'

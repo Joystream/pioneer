@@ -6,7 +6,7 @@ import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import { Memberships } from '../../src/pages/Profile/MyMemberships/Memberships'
 import { MembershipContext } from '../../src/providers/membership/context'
-import { MockApolloProvider } from '../helpers/providers'
+import { MockApolloProvider } from '../mocks/providers'
 import { alice, bob } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
 

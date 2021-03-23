@@ -10,7 +10,7 @@ import { of } from 'rxjs'
 import { useTotalBalances } from '../../src/hooks/useTotalBalances'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import { MockKeyringProvider } from '../helpers/providers'
+import { MockKeyringProvider } from '../mocks/providers'
 
 describe('useTotalBalances', () => {
   const useApi: UseApi = {

@@ -3,7 +3,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
 import { SelectAccount } from '../../src/components/account/SelectAccount'
-import { MockQueryNodeProviders } from '../helpers/providers'
+import { MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 
 jest.mock('../../src/hooks/useAccounts', () => {

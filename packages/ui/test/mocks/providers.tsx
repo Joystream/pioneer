@@ -2,7 +2,7 @@ import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/c
 import React, { ReactNode } from 'react'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MembershipContextProvider } from '../../src/providers/membership/provider'
-import { mockKeyring } from '../mocks/keyring'
+import { mockKeyring } from './keyring'
 
 const link = new HttpLink({
   uri: '/query-node',
