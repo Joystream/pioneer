@@ -24,7 +24,7 @@ import { Row } from '../common'
 
 interface Props {
   onClose: () => void
-  onSubmit: (params: UpdateMemberForm) => void
+  onSubmit: (params: Nullable<UpdateMemberForm>) => void
   member: BaseMember
 }
 
@@ -74,6 +74,19 @@ export const getChangedFields = (form: Record<string, any>, initial: Record<stri
   return changedFields
 }
 
+export type Nullable<T> = { [P in keyof T]: T[P] | null }
+
+export const changedOrNull = <T extends any>(form: Record<string, any>, initial: Record<string, any>): Nullable<T> => {
+  const changedFields = getChangedFields(form, initial)
+
+  return Object.entries(form).reduce((prev, [key, value]) => {
+    return {
+      ...prev,
+      [key]: changedFields.includes(key) ? value : null,
+    }
+  }, {} as Nullable<T>)
+}
+
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
   const { api } = useApi()
 
@@ -106,7 +119,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
 
   const onCreate = () => {
     if (canUpdate) {
-      onSubmit(state)
+      onSubmit(changedOrNull<UpdateMemberForm>(state, member))
     }
   }
 

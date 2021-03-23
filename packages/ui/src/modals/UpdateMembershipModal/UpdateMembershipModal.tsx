@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { BaseMember } from '../../common/types'
 import { SignUpdateMembershipModal } from './SignUpdateMembershipModal'
 import { UpdateMembershipFailureModal } from './UpdateMembershipFailureModal'
-import { UpdateMemberForm, UpdateMembershipFormModal } from './UpdateMembershipFormModal'
+import { Nullable, UpdateMemberForm, UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 interface MembershipModalProps {
@@ -14,9 +14,9 @@ type ModalState = 'PREPARE' | 'AUTHORIZE' | 'SUCCESS' | 'ERROR'
 
 export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps) => {
   const [step, setStep] = useState<ModalState>('PREPARE')
-  const [transactionParams, setParams] = useState<UpdateMemberForm>()
+  const [transactionParams, setParams] = useState<Nullable<UpdateMemberForm>>()
 
-  const onSubmit = (params: UpdateMemberForm) => {
+  const onSubmit = (params: Nullable<UpdateMemberForm>) => {
     setStep('AUTHORIZE')
     setParams(params)
   }

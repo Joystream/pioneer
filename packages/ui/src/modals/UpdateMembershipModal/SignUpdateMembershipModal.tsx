@@ -11,11 +11,11 @@ import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
-import { UpdateMemberForm } from './UpdateMembershipFormModal'
+import { Nullable, UpdateMemberForm } from './UpdateMembershipFormModal'
 
 interface SignProps {
   onClose: () => void
-  transactionParams: UpdateMemberForm
+  transactionParams: Nullable<UpdateMemberForm>
   onDone: (result: boolean, fee: BN) => void
   member: BaseMember
 }
@@ -32,7 +32,7 @@ export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, 
     )
 
     const updateAccounts = api?.tx.members.updateAccounts(
-      transactionParams.id,
+      member.id,
       transactionParams.rootAccount?.address || null,
       transactionParams.controllerAccount?.address || null
     )

@@ -10,7 +10,11 @@ import sinon from 'sinon'
 import { Account, BaseMember } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
-import { getChangedFields, hasAnyEdits } from '../../src/modals/UpdateMembershipModal/UpdateMembershipFormModal'
+import {
+  changedOrNull,
+  getChangedFields,
+  hasAnyEdits,
+} from '../../src/modals/UpdateMembershipModal/UpdateMembershipFormModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
@@ -181,6 +185,26 @@ describe('UI: UpdatedMembershipModal', () => {
         name: '',
       },
     }
+    const changedAccount = {
+      ...form,
+      ...{
+        rootAccount: { name: '', address: 'foo-bar' },
+      },
+    }
+    const changedName = {
+      ...form,
+      ...{
+        name: 'Foo Bar',
+      },
+    }
+    const changedMultiple = {
+      ...form,
+      ...{
+        controllerAccount: { name: '', account: 'foo-bar' },
+        handle: 'bax',
+        name: 'Foo Bar',
+      },
+    }
 
     describe('getChangedFields', () => {
       it('nothing changed', () => {
@@ -188,35 +212,15 @@ describe('UI: UpdatedMembershipModal', () => {
       })
 
       it('account changed', () => {
-        const changed = {
-          ...form,
-          ...{
-            rootAccount: { name: '', address: 'foo-bar' },
-          },
-        }
-        expect(getChangedFields(changed, member)).toEqual(['rootAccount'])
+        expect(getChangedFields(changedAccount, member)).toEqual(['rootAccount'])
       })
 
       it('name changed', () => {
-        const changed = {
-          ...form,
-          ...{
-            name: 'Foo Bar',
-          },
-        }
-        expect(getChangedFields(changed, member)).toEqual(['name'])
+        expect(getChangedFields(changedName, member)).toEqual(['name'])
       })
 
       it('multiple fields changed', () => {
-        const changed = {
-          ...form,
-          ...{
-            controllerAccount: { name: '', account: 'foo-bar' },
-            handle: 'bax',
-            name: 'Foo Bar',
-          },
-        }
-        expect(getChangedFields(changed, member)).toEqual(['name', 'handle', 'controllerAccount'])
+        expect(getChangedFields(changedMultiple, member)).toEqual(['name', 'handle', 'controllerAccount'])
       })
     })
 
@@ -226,35 +230,53 @@ describe('UI: UpdatedMembershipModal', () => {
       })
 
       it('account changed', () => {
-        const changed = {
-          ...form,
-          ...{
-            rootAccount: { name: '', address: 'foo-bar' },
-          },
-        }
-        expect(hasAnyEdits(changed, member)).toBeTruthy()
+        expect(hasAnyEdits(changedAccount, member)).toBeTruthy()
       })
 
       it('name changed', () => {
-        const changed = {
-          ...form,
-          ...{
-            name: 'Foo bar',
-          },
-        }
-        expect(hasAnyEdits(changed, member)).toBeTruthy()
+        expect(hasAnyEdits(changedName, member)).toBeTruthy()
       })
 
       it('multiple fields changed', () => {
-        const changed = {
-          ...form,
-          ...{
-            controllerAccount: { name: '', account: 'foo-bar' },
-            handle: 'bax',
-            name: 'Foo Bar',
-          },
-        }
-        expect(hasAnyEdits(changed, member)).toBeTruthy()
+        expect(hasAnyEdits(changedMultiple, member)).toBeTruthy()
+      })
+    })
+
+    describe('changedOrNull', () => {
+      it('name changed', () => {
+        expect(changedOrNull(changedName, member)).toEqual({
+          name: 'Foo Bar',
+          id: null,
+          handle: null,
+          about: null,
+          avatarURI: null,
+          rootAccount: null,
+          controllerAccount: null,
+        })
+      })
+
+      it('account changed', () => {
+        expect(changedOrNull(changedAccount, member)).toEqual({
+          id: null,
+          handle: null,
+          name: null,
+          about: null,
+          avatarURI: null,
+          rootAccount: { name: '', address: 'foo-bar' },
+          controllerAccount: null,
+        })
+      })
+
+      it('multiple changed', () => {
+        expect(changedOrNull(changedMultiple, member)).toEqual({
+          id: null,
+          handle: 'bax',
+          name: 'Foo Bar',
+          about: null,
+          avatarURI: null,
+          rootAccount: null,
+          controllerAccount: { name: '', account: 'foo-bar' },
+        })
       })
     })
   })
