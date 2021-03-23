@@ -41,12 +41,12 @@ export function useMockMembers() {
     }
     if (api && isConnected && members.length) {
       if (hasCreatedMember === undefined) return
-      if (!hasCreatedMember) {
+      //if (hasCreatedMember) {
         console.log('🌱 Creating members on chain using mocks')
         send()
-      } else {
-        console.log('✅ Member with id (0) already created')
-      }
+      //} else {
+      //  console.log('✅ Member with id (0) already created')
+     //}
     }
   }, [isConnected, members.length, hasCreatedMember])
 }

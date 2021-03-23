@@ -22,17 +22,29 @@ interface SignProps {
 
 export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, onDone }: SignProps) => {
   const { api } = useApi()
-  const updateProfileTransaction = useMemo(
-    () =>
-      api?.tx?.members?.updateProfile(
-        member.id,
-        transactionParams.name as string,
-        transactionParams.handle as string,
-        transactionParams.avatarURI as string,
-        transactionParams.about as string
-      ),
-    [member.id]
-  )
+  const updateProfileTransaction = useMemo(() => {
+    const updateProfile = api?.tx?.members?.updateProfile(
+      member.id,
+      transactionParams.name || null,
+      transactionParams.handle || null,
+      transactionParams.avatarURI || null,
+      transactionParams.about || null
+    )
+
+    const updateAccounts = api?.tx.members.updateAccounts(
+      transactionParams.id,
+      transactionParams.rootAccount?.address || null,
+      transactionParams.controllerAccount?.address || null
+    )
+
+    if (updateProfile && updateAccounts) {
+      return api?.tx.utility.batch([updateProfile, updateAccounts])
+    } else if (updateProfile) {
+      return api?.tx.utility.batch([updateProfile])
+    } else if (updateAccounts) {
+      return api?.tx.utility.batch([updateAccounts])
+    }
+  }, [member.id])
 
   const signer: Account = {
     address: member.controllerAccount as Address,

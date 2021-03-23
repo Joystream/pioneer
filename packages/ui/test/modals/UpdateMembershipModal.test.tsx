@@ -10,13 +10,13 @@ import sinon from 'sinon'
 import { Account, BaseMember } from '../../src/common/types'
 import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
-import { hasAnyEdits } from '../../src/modals/UpdateMembershipModal/UpdateMembershipFormModal';
+import { hasAnyEdits } from '../../src/modals/UpdateMembershipModal/UpdateMembershipFormModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MockQueryNodeProviders } from '../helpers/providers'
-import { selectAccount } from '../helpers/selectAccount';
-import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
+import { selectAccount } from '../helpers/selectAccount'
+import { stubBatchTransactionFailure, stubBatchTransactionSuccess, stubTransaction } from '../helpers/transactions'
 import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
 import { getMember, MockMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
@@ -43,7 +43,7 @@ describe('UI: UpdatedMembershipModal', () => {
     hasAccounts: boolean
     allAccounts: Account[]
   }
-  let updateProfileTx: any
+  let batchTx: any
   let keyring: Keyring
 
   let member: MockMember
@@ -68,8 +68,9 @@ describe('UI: UpdatedMembershipModal', () => {
     )
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
-    updateProfileTx = stubTransaction(api, 'api.tx.members.updateProfile')
-
+    stubTransaction(api, 'api.tx.members.updateProfile')
+    stubTransaction(api, 'api.tx.members.updateAccounts')
+    batchTx = stubTransaction(api, 'api.tx.utility.batch')
     member = await getMember('Alice')
 
     accounts = {
@@ -105,7 +106,7 @@ describe('UI: UpdatedMembershipModal', () => {
     await selectAccount('root account', 'bob')
 
     expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
-  });
+  })
 
   it('Disables button when invalid avatar URL', async () => {
     renderModal(member)
@@ -134,7 +135,7 @@ describe('UI: UpdatedMembershipModal', () => {
     })
 
     it('Success step', async () => {
-      stubTransactionSuccess(updateProfileTx, [1])
+      stubBatchTransactionSuccess(batchTx)
       await changeNameAndSave()
 
       fireEvent.click(screen.getByText(/^sign and update a member$/i))
@@ -143,7 +144,7 @@ describe('UI: UpdatedMembershipModal', () => {
     })
 
     it('Failure step', async () => {
-      stubTransactionFailure(updateProfileTx)
+      stubBatchTransactionFailure(batchTx)
       await changeNameAndSave()
 
       fireEvent.click(screen.getByText(/^sign and update a member$/i))
@@ -154,35 +155,38 @@ describe('UI: UpdatedMembershipModal', () => {
 
   describe('checkEdits', () => {
     it('nothing changed for accounts', () => {
-      const result = hasAnyEdits({
-        "id": "0",
-        "name": "Alice Member",
-        "handle": "alice_handle",
-        "about": "",
-        "avatarURI": "",
-        "rootAccount": {
-          "address": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-          "name": ""
+      const result = hasAnyEdits(
+        {
+          id: '0',
+          name: 'Alice Member',
+          handle: 'alice_handle',
+          about: '',
+          avatarURI: '',
+          rootAccount: {
+            address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+            name: '',
+          },
+          controllerAccount: {
+            address: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+            name: '',
+          },
         },
-        "controllerAccount": {
-          "address": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-          "name": ""
+        {
+          id: '0',
+          name: 'Alice Member',
+          handle: 'alice_handle',
+          about: '',
+          avatarURI: '',
+          rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+          controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+          isFoundingMember: true,
+          isVerified: true,
+          inviteCount: 5,
         }
-      }, {
-        "id": "0",
-        "name": "Alice Member",
-        "handle": "alice_handle",
-        "about": "",
-        "avatarURI": "",
-        "rootAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-        "controllerAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-        "isFoundingMember": true,
-        "isVerified": true,
-        "inviteCount": 5
-      })
+      )
       expect(result).toBeFalsy()
-    });
-  });
+    })
+  })
 
   function renderModal(member: MockMember) {
     render(
