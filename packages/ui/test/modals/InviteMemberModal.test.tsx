@@ -1,5 +1,4 @@
 import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
@@ -11,13 +10,12 @@ import { Account } from '../../src/common/types'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../helpers/providers'
 import { selectMember } from '../helpers/selectMember'
-import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
-import { alice, aliceStash, mockKeyring } from '../mocks/keyring'
+import { alice, aliceStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
+import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
 const members: MemberFieldsFragment[] = []
 
@@ -63,11 +61,9 @@ describe('UI: InviteMemberModal', () => {
     isConnected: true,
   }
   let inviteMemberTx: any
-  let keyring: Keyring
   let transaction: any
 
   beforeEach(async () => {
-    keyring = mockKeyring()
     set(api, 'api.derive.balances.all', () =>
       from([
         {
@@ -186,11 +182,11 @@ describe('UI: InviteMemberModal', () => {
   function renderModal() {
     render(
       <MockQueryNodeProviders>
-        <KeyringContext.Provider value={keyring}>
+        <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <InviteMemberModal onClose={() => undefined} />
           </ApiContext.Provider>
-        </KeyringContext.Provider>
+        </MockKeyringProvider>
       </MockQueryNodeProviders>
     )
   }

@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
@@ -11,12 +10,11 @@ import { Account } from '../../src/common/types'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
-import { stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
-import { alice, bob, mockKeyring } from '../mocks/keyring'
+import { alice, bob } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
+import { stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: false,
@@ -48,10 +46,8 @@ describe('UI: AddMembershipModal', () => {
   }
 
   let transaction: any
-  let keyring: Keyring
 
   beforeEach(async () => {
-    keyring = mockKeyring()
     set(api, 'api.derive.balances.all', () =>
       from([
         {
@@ -162,11 +158,11 @@ describe('UI: AddMembershipModal', () => {
   function renderModal() {
     return render(
       <MockQueryNodeProviders>
-        <KeyringContext.Provider value={keyring}>
+        <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <AddMembershipModal onClose={() => undefined} />
           </ApiContext.Provider>
-        </KeyringContext.Provider>
+        </MockKeyringProvider>
       </MockQueryNodeProviders>
     )
   }

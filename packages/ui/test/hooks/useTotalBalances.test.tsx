@@ -1,20 +1,18 @@
-import BN from 'bn.js'
-import React, { ReactNode } from 'react'
-import { of } from 'rxjs'
+import { beforeAll, expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { renderHook } from '@testing-library/react-hooks'
+import BN from 'bn.js'
 import set from 'lodash/set'
-import { expect, beforeAll } from '@jest/globals'
+import React, { ReactNode } from 'react'
+import { of } from 'rxjs'
 
 import { useTotalBalances } from '../../src/hooks/useTotalBalances'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { mockKeyring } from '../mocks/keyring'
+import { MockKeyringProvider } from '../helpers/providers'
 
 describe('useTotalBalances', () => {
-  const keyring = mockKeyring()
   const useApi: UseApi = {
     isConnected: false,
     api: ({} as unknown) as ApiRx,
@@ -22,7 +20,6 @@ describe('useTotalBalances', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    keyring.loadAll({ isDevelopment: true })
   })
 
   beforeEach(() => {
@@ -36,9 +33,9 @@ describe('useTotalBalances', () => {
 
   function renderUseTotalBalances() {
     const wrapper = ({ children }: { children: ReactNode }) => (
-      <KeyringContext.Provider value={keyring}>
+      <MockKeyringProvider>
         <ApiContext.Provider value={useApi}>{children}</ApiContext.Provider>
-      </KeyringContext.Provider>
+      </MockKeyringProvider>
     )
     return renderHook(() => useTotalBalances(), { wrapper })
   }

@@ -1,5 +1,4 @@
 import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
@@ -10,12 +9,11 @@ import { Account, BaseMember } from '../../src/common/types'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
-import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
-import { alice, bob, mockKeyring } from '../mocks/keyring'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../helpers/providers'
+import { alice, bob } from '../mocks/keyring'
 import { getMember, MockMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
+import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
@@ -46,13 +44,9 @@ describe('UI: UpdatedMembershipModal', () => {
     isConnected: true,
   }
   let updateProfileTx: any
-  let keyring: Keyring
-
   let member: MockMember
 
   beforeEach(async () => {
-    keyring = mockKeyring()
-
     set(api, 'api.derive.balances.all', () =>
       from([
         {
@@ -132,11 +126,11 @@ describe('UI: UpdatedMembershipModal', () => {
   function renderModal(member: MockMember) {
     render(
       <MockQueryNodeProviders>
-        <KeyringContext.Provider value={keyring}>
+        <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <UpdateMembershipModal onClose={() => undefined} member={member as BaseMember} />
           </ApiContext.Provider>
-        </KeyringContext.Provider>
+        </MockKeyringProvider>
       </MockQueryNodeProviders>
     )
   }

@@ -1,6 +1,5 @@
 import { expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
@@ -9,10 +8,8 @@ import { TransferIcon } from '../../src/components/icons'
 import { TransferInviteModal } from '../../src/modals/TransferInviteModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../helpers/providers'
 import { selectMember } from '../helpers/selectMember'
-import { mockKeyring } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
 
@@ -36,12 +33,6 @@ describe('UI: TransferInviteModal', () => {
     api: ({} as unknown) as ApiRx,
     isConnected: true,
   }
-
-  let keyring: Keyring
-
-  beforeEach(async () => {
-    keyring = mockKeyring()
-  })
 
   afterEach(() => {
     members.splice(0)
@@ -76,11 +67,11 @@ describe('UI: TransferInviteModal', () => {
   function renderModal(member: MemberFieldsFragment | undefined = undefined) {
     return render(
       <MockQueryNodeProviders>
-        <KeyringContext.Provider value={keyring}>
+        <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <TransferInviteModal onClose={() => null} icon={<TransferIcon />} member={member} />
           </ApiContext.Provider>
-        </KeyringContext.Provider>
+        </MockKeyringProvider>
       </MockQueryNodeProviders>
     )
   }

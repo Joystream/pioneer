@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, expect } from '@jest/globals'
 import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
@@ -12,11 +11,10 @@ import { ArrowInsideIcon } from '../../src/components/icons'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
 
-import { alice, bob, mockKeyring } from '../mocks/keyring'
+import { alice, bob } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
 import { stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
@@ -49,10 +47,8 @@ describe('UI: TransferModal', () => {
     isConnected: true,
   }
   let transfer: any
-  let keyring: Keyring
 
   beforeEach(async () => {
-    keyring = mockKeyring()
     set(api, 'api.derive.balances.all', () =>
       from([
         {
@@ -162,13 +158,13 @@ describe('UI: TransferModal', () => {
 
   function renderModal({ sender, to }: { sender?: Account; to?: Account }) {
     return render(
-      <KeyringContext.Provider value={keyring}>
+      <MockKeyringProvider>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
             <TransferModal onClose={() => undefined} from={sender} to={to} icon={<ArrowInsideIcon />} />
           </MockQueryNodeProviders>
         </ApiContext.Provider>
-      </KeyringContext.Provider>
+      </MockKeyringProvider>
     )
   }
 })
