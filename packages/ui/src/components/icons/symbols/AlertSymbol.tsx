@@ -17,8 +17,8 @@ export function AlertSymbol({ className }: SymbolProps) {
     >
       <path
         className="blackPart"
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M10.9515 1.57408L12.5286 1.55859L23.7844 21.5586L23.0001 22.9H1.00011L0.207275 21.5741L10.9515 1.57408ZM11.7626 3.86763L2.50525 21.1H21.4609L11.7626 3.86763Z"
         fill={Colors.Black[900]}
       />
