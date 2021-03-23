@@ -1,11 +1,11 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
-import { MockMember } from '../../test/mocks/members'
 import {
   GetMembersQueryResult,
   GetMembersQueryVariables,
   MemberFieldsFragment,
   SearchMembersQueryResult,
 } from '../api/queries'
+import { MockMember } from './data'
 
 type QueryResolver<ArgsType extends Record<string, unknown>, ReturnType = unknown> = (
   obj: unknown,
