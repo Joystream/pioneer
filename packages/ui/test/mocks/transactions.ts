@@ -1,3 +1,4 @@
+import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
@@ -53,4 +54,12 @@ export const stubTransaction = (api: UseApi, transactionPath: string) => {
   set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
   set(api, transactionPath, () => transaction)
   return transaction
+}
+
+export const stubApi = () => {
+  const api: UseApi = {
+    api: ({} as unknown) as ApiRx,
+    isConnected: true,
+  }
+  return api
 }

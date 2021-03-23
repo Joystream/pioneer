@@ -1,4 +1,3 @@
-import { ApiRx } from '@polkadot/api'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
@@ -9,12 +8,11 @@ import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account, BaseMember } from '../../src/common/types'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
 import { alice, bob } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
+import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
@@ -40,10 +38,7 @@ describe('UI: UpdatedMembershipModal', () => {
 
   setupMockServer()
 
-  const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
-    isConnected: true,
-  }
+  const api = stubApi()
   let updateProfileTx: any
   let member: MemberFieldsFragment
 

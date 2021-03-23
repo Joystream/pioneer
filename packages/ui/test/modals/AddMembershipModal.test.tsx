@@ -1,4 +1,3 @@
-import { ApiRx } from '@polkadot/api'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
@@ -8,12 +7,11 @@ import { from, of } from 'rxjs'
 import { Account } from '../../src/common/types'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
 import { selectAccount } from '../helpers/selectAccount'
 import { alice, bob } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
+import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: false,
@@ -39,10 +37,7 @@ describe('UI: AddMembershipModal', () => {
 
   setupMockServer()
 
-  const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
-    isConnected: true,
-  }
+  const api = stubApi()
 
   let transaction: any
 

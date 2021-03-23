@@ -1,4 +1,3 @@
-import { ApiRx } from '@polkadot/api'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
@@ -6,11 +5,11 @@ import { MemberFieldsFragment } from '../../src/api/queries'
 import { TransferIcon } from '../../src/components/icons'
 import { TransferInviteModal } from '../../src/modals/TransferInviteModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { selectMember } from '../helpers/selectMember'
 import { getMember } from '../mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
+import { stubApi } from '../mocks/transactions'
 
 const members: MemberFieldsFragment[] = []
 
@@ -28,10 +27,7 @@ describe('UI: TransferInviteModal', () => {
 
   setupMockServer()
 
-  const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
-    isConnected: true,
-  }
+  const api = stubApi()
 
   afterEach(() => {
     members.splice(0)

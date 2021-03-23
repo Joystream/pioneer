@@ -1,4 +1,3 @@
-import { ApiRx } from '@polkadot/api'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
@@ -9,13 +8,12 @@ import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { selectMember } from '../helpers/selectMember'
 import { alice, aliceStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
+import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
 const members: MemberFieldsFragment[] = []
 
@@ -56,10 +54,7 @@ describe('UI: InviteMemberModal', () => {
 
   setupMockServer()
 
-  const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
-    isConnected: true,
-  }
+  const api = stubApi()
   let inviteMemberTx: any
 
   beforeEach(async () => {
