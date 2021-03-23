@@ -22,9 +22,9 @@ describe('UI: CurrentMember component', () => {
   })
 
   describe('with memberships', () => {
-    beforeEach(async () => {
-      await mockServer.createMember('Alice')
-      await mockServer.createMember('Bob')
+    beforeEach(() => {
+      mockServer.createMember('Alice')
+      mockServer.createMember('Bob')
     })
 
     it('Displays memberships count', async () => {

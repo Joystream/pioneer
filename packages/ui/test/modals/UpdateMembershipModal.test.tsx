@@ -5,13 +5,14 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { from, of } from 'rxjs'
+import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account, BaseMember } from '../../src/common/types'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { alice, bob } from '../mocks/keyring'
-import { getMember, MockMember } from '../mocks/members'
+import { getMember } from '../mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../mocks/transactions'
 
@@ -44,9 +45,9 @@ describe('UI: UpdatedMembershipModal', () => {
     isConnected: true,
   }
   let updateProfileTx: any
-  let member: MockMember
+  let member: MemberFieldsFragment
 
-  beforeEach(async () => {
+  beforeEach(() => {
     set(api, 'api.derive.balances.all', () =>
       from([
         {
@@ -59,7 +60,7 @@ describe('UI: UpdatedMembershipModal', () => {
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     updateProfileTx = stubTransaction(api, 'api.tx.members.updateProfile')
 
-    member = await getMember('Alice')
+    member = getMember('Alice')
   })
 
   it('Renders a modal', async () => {
@@ -123,7 +124,7 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  function renderModal(member: MockMember) {
+  function renderModal(member: MemberFieldsFragment) {
     render(
       <MockQueryNodeProviders>
         <MockKeyringProvider>

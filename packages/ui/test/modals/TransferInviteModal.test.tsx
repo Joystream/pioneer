@@ -43,13 +43,13 @@ describe('UI: TransferInviteModal', () => {
   })
 
   it.skip('Validates form', async () => {
-    const aliceMember = await getMember('Alice')
-    const bobMember = await getMember('Bob')
+    const aliceMember = getMember('Alice')
+    const bobMember = getMember('Bob')
 
-    members.push((aliceMember as unknown) as MemberFieldsFragment)
-    members.push((bobMember as unknown) as MemberFieldsFragment)
+    members.push(aliceMember)
+    members.push(bobMember)
 
-    const { findByLabelText, findByRole } = renderModal((aliceMember as unknown) as MemberFieldsFragment)
+    const { findByLabelText, findByRole } = renderModal(aliceMember)
 
     const button = (await findByRole('button', { name: /transfer invites/i })) as HTMLButtonElement
     expect(button.disabled).toBeTruthy()

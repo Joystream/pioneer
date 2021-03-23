@@ -2,11 +2,9 @@ import { Server } from 'miragejs/server'
 import { MemberFieldsFragment } from '../../../src/api/queries'
 import { alice, aliceStash, bob, bobStash } from '../keyring'
 
-export type MockMember = Omit<MemberFieldsFragment, '__typename'>
-
 export type Members = 'Alice' | 'Bob'
 
-export const getMember = async (name: Members): Promise<MockMember> => {
+export const getMember = (name: Members): MemberFieldsFragment => {
   if (name === 'Alice') {
     return {
       ...aliceMember,
@@ -22,13 +20,13 @@ export const getMember = async (name: Members): Promise<MockMember> => {
   }
 }
 
-export const createMember = async (server: Server, memberOrName: MemberFieldsFragment | Members) => {
-  let member: MockMember
+export const createMember = (server: Server, memberOrName: MemberFieldsFragment | Members) => {
+  let member: MemberFieldsFragment
 
   if (typeof memberOrName !== 'string') {
     member = memberOrName
   } else {
-    member = await getMember(memberOrName)
+    member = getMember(memberOrName)
   }
 
   return server.schema.create('Member', {
@@ -37,7 +35,8 @@ export const createMember = async (server: Server, memberOrName: MemberFieldsFra
   } as any)
 }
 
-const aliceMember: MockMember = {
+const aliceMember: MemberFieldsFragment = {
+  __typename: 'Member',
   id: '0',
   name: 'Alice Member',
   handle: 'alice_handle',
@@ -50,7 +49,8 @@ const aliceMember: MockMember = {
   inviteCount: 5,
 }
 
-const bobMember: MockMember = {
+const bobMember: MemberFieldsFragment = {
+  __typename: 'Member',
   id: '1',
   name: 'Bob Member',
   handle: 'bob_handle',

@@ -101,9 +101,9 @@ describe('UI: Accounts list', () => {
         transferable: new BN(1000),
         recoverable: new BN(0),
       }
-      await mockServer.createMember('Alice')
-      const aliceMember = await getMember('Alice')
-      const { findByText } = renderAccounts(aliceMember as MemberFieldsFragment)
+      mockServer.createMember('Alice')
+      const aliceMember = getMember('Alice')
+      const { findByText } = renderAccounts(aliceMember)
 
       const aliceBox = (await findByText(shortenAddress(alice.address)))!.parentElement!.parentElement!
       expect(await within(aliceBox).findByText(/root account/i)).toBeDefined()

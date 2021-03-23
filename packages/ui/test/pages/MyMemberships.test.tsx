@@ -6,6 +6,7 @@ import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import { Memberships } from '../../src/pages/Profile/MyMemberships/Memberships'
 import { MembershipContext } from '../../src/providers/membership/context'
+import { getMember } from '../mocks/members'
 import { MockApolloProvider } from '../mocks/providers'
 import { alice, bob } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
@@ -39,8 +40,8 @@ describe('UI: Memberships list', () => {
 
   describe('with memberships', () => {
     it('Shows list of memberships', async () => {
-      await mockServer.createMember('Alice')
-      await mockServer.createMember('Bob')
+      mockServer.createMember('Alice')
+      mockServer.createMember('Bob')
       const { getByText } = renderMemberships()
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))
@@ -50,9 +51,9 @@ describe('UI: Memberships list', () => {
     })
 
     it('Shows active membership', async () => {
-      await mockServer.createMember('Alice')
-      const bob = await mockServer.createMember('Bob')
-      const { getByText } = renderMemberships((bob.attrs as unknown) as MemberFieldsFragment)
+      mockServer.createMember('Alice')
+      mockServer.createMember('Bob')
+      const { getByText } = renderMemberships(getMember('Bob'))
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))
 

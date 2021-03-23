@@ -90,10 +90,10 @@ describe('UI: InviteMemberModal', () => {
   const controllerAddress = '5CrJ2ZegUykhPP9h2YkwDQUBi7AcmafFiu8m5DFU2Qh8XuPR'
 
   it('Enables button', async () => {
-    const aliceMember = await getMember('Alice')
-    const bobMember = await getMember('Bob')
-    members.push((aliceMember as unknown) as MemberFieldsFragment)
-    members.push((bobMember as unknown) as MemberFieldsFragment)
+    const aliceMember = getMember('Alice')
+    const bobMember = getMember('Bob')
+    members.push(aliceMember)
+    members.push(bobMember)
 
     renderModal()
 
@@ -113,10 +113,10 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Disables button when one of addresses is invalid', async () => {
-    const aliceMember = await getMember('Alice')
-    const bobMember = await getMember('Bob')
-    members.push((aliceMember as unknown) as MemberFieldsFragment)
-    members.push((bobMember as unknown) as MemberFieldsFragment)
+    const aliceMember = getMember('Alice')
+    const bobMember = getMember('Bob')
+    members.push(aliceMember)
+    members.push(bobMember)
 
     renderModal()
 
@@ -135,10 +135,10 @@ describe('UI: InviteMemberModal', () => {
 
   describe('Authorize', () => {
     async function fillFormAndProceed() {
-      const aliceMember = await getMember('Alice')
-      const bobMember = await getMember('Bob')
-      members.push((aliceMember as unknown) as MemberFieldsFragment)
-      members.push((bobMember as unknown) as MemberFieldsFragment)
+      const aliceMember = getMember('Alice')
+      const bobMember = getMember('Bob')
+      members.push(aliceMember)
+      members.push(bobMember)
       renderModal()
       await selectMember('Inviting member', 'alice')
       await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
