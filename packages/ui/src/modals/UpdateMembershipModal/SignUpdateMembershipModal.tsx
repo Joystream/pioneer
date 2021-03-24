@@ -13,11 +13,11 @@ import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
-import { Nullable, UpdateMemberForm } from './types'
+import { WithNullableValues, UpdateMemberForm } from './types'
 
 interface SignProps {
   onClose: () => void
-  transactionParams: Nullable<UpdateMemberForm>
+  transactionParams: WithNullableValues<UpdateMemberForm>
   onDone: (result: boolean, fee: BN) => void
   member: BaseMember
   signer: Account
@@ -27,7 +27,11 @@ const hasEdits = (object: Record<string, any>, fields: string[]) => {
   return fields.some((field) => !!object[field])
 }
 
-function createBatch(transactionParams: Nullable<UpdateMemberForm>, api: ApiRx | undefined, member: BaseMember) {
+function createBatch(
+  transactionParams: WithNullableValues<UpdateMemberForm>,
+  api: ApiRx | undefined,
+  member: BaseMember
+) {
   const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarURI', 'name'])
   const hasAccountsEdits = hasEdits(transactionParams, ['rootAccount', 'controllerAccount'])
 

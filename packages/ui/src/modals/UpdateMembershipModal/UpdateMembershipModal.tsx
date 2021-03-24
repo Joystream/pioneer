@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { BaseMember } from '../../common/types'
 import { useAccounts } from '../../hooks/useAccounts'
 import { SignUpdateMembershipModal } from './SignUpdateMembershipModal'
-import { Nullable, UpdateMemberForm } from './types'
+import { WithNullableValues, UpdateMemberForm } from './types'
 import { UpdateMembershipFailureModal } from './UpdateMembershipFailureModal'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
@@ -16,11 +16,11 @@ type ModalState = 'PREPARE' | 'AUTHORIZE' | 'SUCCESS' | 'ERROR'
 
 export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps) => {
   const [step, setStep] = useState<ModalState>('PREPARE')
-  const [transactionParams, setParams] = useState<Nullable<UpdateMemberForm>>()
+  const [transactionParams, setParams] = useState<WithNullableValues<UpdateMemberForm>>()
   const { allAccounts } = useAccounts()
   const signer = allAccounts.find((account) => member.controllerAccount === account.address)
 
-  const onSubmit = (params: Nullable<UpdateMemberForm>) => {
+  const onSubmit = (params: WithNullableValues<UpdateMemberForm>) => {
     setStep('AUTHORIZE')
     setParams(params)
   }

@@ -17,4 +17,4 @@ export type Action<T> = {
 }
 export type FormReducer<T> = Reducer<T, Action<T>>
 
-export type Nullable<T> = { [P in keyof T]: T[P] | null }
+export type WithNullableValues<T> = { [P in keyof T]: T[P] | null }

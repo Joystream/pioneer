@@ -1,4 +1,4 @@
-import { Nullable } from './types'
+import { WithNullableValues } from './types'
 
 export const hasAnyEdits = (form: Record<string, any>, initial: Record<string, any>) => {
   return !!getChangedFields(form, initial).length
@@ -18,7 +18,10 @@ export const getChangedFields = (form: Record<string, any>, initial: Record<stri
   return changedFields
 }
 
-export const changedOrNull = <T extends any>(form: Record<string, any>, initial: Record<string, any>): Nullable<T> => {
+export const changedOrNull = <T extends any>(
+  form: Record<string, any>,
+  initial: Record<string, any>
+): WithNullableValues<T> => {
   const changedFields = getChangedFields(form, initial)
 
   return Object.entries(form).reduce((prev, [key, value]) => {
@@ -26,5 +29,5 @@ export const changedOrNull = <T extends any>(form: Record<string, any>, initial:
       ...prev,
       [key]: changedFields.includes(key) ? value : null,
     }
-  }, {} as Nullable<T>)
+  }, {} as WithNullableValues<T>)
 }

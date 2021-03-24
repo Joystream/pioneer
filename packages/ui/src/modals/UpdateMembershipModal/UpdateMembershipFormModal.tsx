@@ -21,12 +21,12 @@ import { useFormValidation } from '../../hooks/useFormValidation'
 import { useObservable } from '../../hooks/useObservable'
 import { AvatarURISchema, HandleSchema } from '../../membership/data/validation'
 import { Row } from '../common'
-import { FormReducer, Nullable, UpdateMemberForm } from './types'
+import { FormReducer, WithNullableValues, UpdateMemberForm } from './types'
 import { changedOrNull, hasAnyEdits } from './utils'
 
 interface Props {
   onClose: () => void
-  onSubmit: (params: Nullable<UpdateMemberForm>) => void
+  onSubmit: (params: WithNullableValues<UpdateMemberForm>) => void
   member: BaseMember
 }
 
