@@ -42,7 +42,6 @@ export const stubTransactionResult = (events: any[]) =>
     },
   ])
 
-
 const getBatchSuccessEvents = () => [
   {
     phase: { ApplyExtrinsic: 2 },
