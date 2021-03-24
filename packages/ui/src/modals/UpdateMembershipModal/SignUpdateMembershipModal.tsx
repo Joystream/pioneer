@@ -33,7 +33,7 @@ function createBatch(transactionParams: Nullable<UpdateMemberForm>, api: ApiRx |
 
   const transactions: SubmittableExtrinsic<'rxjs'>[] = []
 
-  if (!api || (!hasProfileEdits && !hasAccountsEdits)) {
+  if (!api || !(hasProfileEdits || hasAccountsEdits)) {
     return
   }
   if (hasProfileEdits) {
