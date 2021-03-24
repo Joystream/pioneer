@@ -4,6 +4,7 @@ import { HelpComponent } from '../Help'
 
 interface LabelProps {
   isRequired?: boolean
+  className?: string
 }
 
 export const Label = styled.label<LabelProps>`

@@ -1,22 +1,16 @@
-import { beforeAll } from '@jest/globals'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 import { CurrentMember } from '../../src/components/page/Sidebar/CurrentMember'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
-import { mockKeyring } from '../mocks/keyring'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 
 describe('UI: CurrentMember component', () => {
   const mockServer = setupMockServer()
-  const keyring = mockKeyring()
-
   jest.useFakeTimers()
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    keyring.loadAll({ isDevelopment: true })
   })
 
   describe('with no memberships', () => {
@@ -28,9 +22,9 @@ describe('UI: CurrentMember component', () => {
   })
 
   describe('with memberships', () => {
-    beforeEach(async () => {
-      await mockServer.createMember('Alice')
-      await mockServer.createMember('Bob')
+    beforeEach(() => {
+      mockServer.createMember('Alice')
+      mockServer.createMember('Bob')
     })
 
     it('Displays memberships count', async () => {
@@ -72,11 +66,11 @@ describe('UI: CurrentMember component', () => {
 
   function renderComponent() {
     return render(
-      <KeyringContext.Provider value={keyring}>
+      <MockKeyringProvider>
         <MockQueryNodeProviders>
           <CurrentMember />
         </MockQueryNodeProviders>
-      </KeyringContext.Provider>
+      </MockKeyringProvider>
     )
   }
 

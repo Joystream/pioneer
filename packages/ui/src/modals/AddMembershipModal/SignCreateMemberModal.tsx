@@ -1,41 +1,39 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
-import React, { useMemo, useState } from 'react'
-import { Member } from '../../common/types'
+import React, { useState } from 'react'
+import { Account, Member } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { SelectAccount } from '../../components/account/SelectAccount'
 import { Text, TokenValue } from '../../components/typography'
-import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 
 interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
   transactionParams: Member
   onDone: (result: boolean, fee: BN) => void
+  transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
+  initialSigner: Account
+  isInvite?: boolean
 }
 
-export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionParams, onDone }: SignProps) => {
-  const { api } = useApi()
-  const [from, setFrom] = useState(transactionParams.controllerAccount)
-  const transaction = useMemo(
-    () =>
-      api?.tx?.members?.buyMembership({
-        root_account: transactionParams.rootAccount.address,
-        controller_account: transactionParams.controllerAccount.address,
-        name: transactionParams.name,
-        handle: transactionParams.handle,
-        avatar_uri: transactionParams.avatarURI,
-        about: transactionParams.about,
-        referrer_id: transactionParams.referrer?.id,
-      }),
-    [JSON.stringify(transactionParams)]
-  )
+export const SignCreateMemberModal = ({
+  onClose,
+  membershipPrice,
+  transactionParams,
+  onDone,
+  transaction,
+  initialSigner,
+  isInvite,
+}: SignProps) => {
+  const [from, setFrom] = useState(initialSigner)
 
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
 
@@ -44,10 +42,16 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
         <ModalHeader onClick={onClose} title="Authorize transaction" />
         <ModalBody>
-          <Text>You are intend to create a new membership.</Text>
-          <Text>
-            The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
-          </Text>
+          <Text>You intend to create a new membership.</Text>
+          {isInvite ? (
+            <Text>
+              You are inviting this member. You have {transactionParams.invitor?.inviteCount.toString()} invites left.
+            </Text>
+          ) : (
+            <Text>
+              The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
+            </Text>
+          )}
           <Text>
             Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
           </Text>
@@ -58,11 +62,15 @@ export const SignCreateMemberModal = ({ onClose, membershipPrice, transactionPar
         </ModalBody>
         <ModalFooter>
           <BalanceInfoNarrow>
-            <InfoTitle>Creation fee:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={membershipPrice?.toBn()} />
-            </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+            {!isInvite && (
+              <>
+                <InfoTitle>Creation fee:</InfoTitle>
+                <InfoValue>
+                  <TokenValue value={membershipPrice?.toBn()} />
+                </InfoValue>
+                <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+              </>
+            )}
             <InfoTitle>Transaction fee:</InfoTitle>
             <InfoValue>
               <TokenValue value={paymentInfo?.partialFee.toBn()} />

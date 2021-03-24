@@ -1,4 +1,4 @@
-import { isValidAddress } from '../../src/components/account/SelectAccount/helpers'
+import { isValidAddress } from '../../src/utils/isValidAddress'
 import testKeyring from '@polkadot/keyring/testing'
 
 describe('isValidAddress', () => {

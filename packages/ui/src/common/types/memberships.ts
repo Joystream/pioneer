@@ -9,6 +9,7 @@ export interface Member {
   avatarURI?: string
   about?: string
   referrer?: BaseMember
+  invitor?: BaseMember
 }
 
 export type BaseMember = Omit<MemberFieldsFragment, '__typename'>

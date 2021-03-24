@@ -1,6 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import { Subject } from 'rxjs'
-import { expect } from '@jest/globals'
 
 import { useObservable } from '../../src/hooks/useObservable'
 

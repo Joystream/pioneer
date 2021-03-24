@@ -1,13 +1,7 @@
-import { expect } from '@jest/globals'
-import { Matcher } from '@testing-library/dom/types/matches'
-import { fireEvent } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
 
-export const selectMember = async (
-  label: string,
-  name: string,
-  findByText: (text: Matcher) => Promise<HTMLElement>
-) => {
-  const labelElement = await findByText(/^to$/i)
+export const selectMember = async (label: string, name: string) => {
+  const labelElement = await screen.findByText(new RegExp(`${label}`, 'i'))
   const parentNode = labelElement.parentElement
   const button = parentNode?.querySelector('div > button')
 

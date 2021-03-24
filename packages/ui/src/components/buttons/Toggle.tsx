@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { BorderRad, Colors, Sizes, Transitions } from '../../constants'
+import { BorderRad, Colors, Transitions } from '../../constants'
 import { Icon } from '../icons'
 import { Button } from './Buttons'
 
@@ -34,11 +34,8 @@ export const Toggle = styled.div<Props>`
   align-items: center;
   width: 100%;
   height: 100%;
-  min-height: ${Sizes.selectHeight};
-  max-height: ${Sizes.selectHeight};
   margin: 0;
   padding: 0;
-  border: 1px solid ${({ disabled }) => (disabled ? Colors.Black[200] : Colors.Black[300])};
   border-radius: ${BorderRad.s};
   background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : Colors.White)};
   font-size: 1em;
@@ -48,10 +45,6 @@ export const Toggle = styled.div<Props>`
   ${ToggleButton} ${Icon.type} {
     transition: ${Transitions.all};
     transform: scaleY(${({ isOpen }) => (isOpen ? '-1' : '1')});
-  }
-
-  &:hover {
-    border-color: ${({ disabled }) => (disabled ? Colors.Black[200] : Colors.Blue[200])};
   }
 
   &:focus-within,

@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { ReactElement, useState } from 'react'
-import { Account } from '../../common/types'
+import { Account, ModalState } from '../../common/types'
 import { SignTransferModal } from './SignTransferModal'
 import { TransactionFailureModal } from './TransactionFailureModal'
 import { TransactionSuccessModal } from './TransactionSuccessModal'
@@ -12,8 +12,6 @@ interface Props {
   to?: Account
   icon: ReactElement
 }
-
-type ModalState = 'PREPARE' | 'AUTHORIZE' | 'SUCCESS' | 'ERROR'
 
 export function TransferModal({ from, to, onClose, icon }: Props) {
   const [step, setStep] = useState<ModalState>('PREPARE')

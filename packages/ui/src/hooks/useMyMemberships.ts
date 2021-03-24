@@ -15,7 +15,7 @@ interface UseMembership {
 export function useMyMemberships(): UseMembership {
   const { allAccounts } = useAccounts()
   const addresses = allAccounts.map((account) => account.address)
-  const options = { variables: { rootAccount_in: addresses } }
+  const options = { variables: { rootAccount_in: addresses, controllerAccount_in: addresses } }
   const { data, loading, error } = useGetMembersQuery(options)
   const { active, setActive } = useContext(MembershipContext)
 

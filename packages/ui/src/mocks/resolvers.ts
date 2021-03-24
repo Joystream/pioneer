@@ -1,11 +1,11 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
-import { MockMember } from '../../test/mocks/members'
 import {
   GetMembersQueryResult,
   GetMembersQueryVariables,
   MemberFieldsFragment,
   SearchMembersQueryResult,
 } from '../api/queries'
+import { MockMember } from './data'
 
 type QueryResolver<ArgsType extends Record<string, unknown>, ReturnType = unknown> = (
   obj: unknown,
@@ -28,9 +28,14 @@ export const getMembersResolver: QueryResolver<{ where: GetMembersQueryVariables
   { mirageSchema: schema }
 ) => {
   const rootAccountIn = args.where.rootAccount_in
+  const controllerAccountIn = args.where.controllerAccount_in
 
   const { models } = rootAccountIn
-    ? schema.where('Member', (member: MockMember) => rootAccountIn?.includes(member.rootAccount))
+    ? schema.where(
+        'Member',
+        (member: MockMember) =>
+          rootAccountIn?.includes(member.rootAccount) || controllerAccountIn?.includes(member.controllerAccount)
+      )
     : schema.all('Member')
 
   return models

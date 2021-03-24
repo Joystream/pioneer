@@ -1,8 +1,8 @@
+import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { of } from 'rxjs'
+import { from, of } from 'rxjs'
 import { UseApi } from '../../src/providers/api/provider'
-import { stubTransactionResult } from '../mocks/stubTransactionResult'
 
 const getSuccessEvents = (data: number[]) => [
   {
@@ -26,6 +26,22 @@ const getErrorEvents = () => [
     },
   },
 ]
+
+export const stubTransactionResult = (events: any[]) =>
+  from([
+    {
+      status: { isReady: true, type: 'Ready' },
+    },
+    {
+      status: { type: 'InBlock', isInBlock: true, asInBlock: '0x93XXX' },
+      events: [...events],
+    },
+    {
+      status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
+      events: [...events],
+    },
+  ])
+
 
 const getBatchSuccessEvents = () => [
   {
@@ -75,4 +91,23 @@ export const stubTransaction = (api: UseApi, transactionPath: string) => {
   set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
   set(api, transactionPath, () => transaction)
   return transaction
+}
+
+export const stubApi = () => {
+  const api: UseApi = {
+    api: ({} as unknown) as ApiRx,
+    isConnected: true,
+  }
+  return api
+}
+
+export const stubDefaultBalances = (api: UseApi) => {
+  set(api, 'api.derive.balances.all', () =>
+    from([
+      {
+        availableBalance: new BN(1000),
+        lockedBalance: new BN(0),
+      },
+    ])
+  )
 }

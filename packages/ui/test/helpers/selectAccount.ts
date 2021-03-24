@@ -1,8 +1,7 @@
-import { expect } from '@jest/globals'
 import { fireEvent, screen } from '@testing-library/react'
 
 export async function selectAccount(label: string, name: string) {
-  const labelElement = await screen.findByText(new RegExp(`${label}`, 'i'))
+  const labelElement = await screen.findByText(new RegExp(`^${label}$`, 'i'))
   const parentElement = labelElement.parentElement
 
   if (!parentElement) {

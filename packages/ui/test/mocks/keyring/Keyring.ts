@@ -18,6 +18,8 @@ export const mockKeyring = () => {
     keyring: keyring,
     loadAll: () => undefined,
     getPair: (address: string) => keyring.getPair(address),
+    decodeAddress: (address: string) => keyring.decodeAddress(address),
+    encodeAddress: (address: string) => keyring.encodeAddress(address),
     accounts: accountsSubject,
   } as unknown) as Keyring
 }

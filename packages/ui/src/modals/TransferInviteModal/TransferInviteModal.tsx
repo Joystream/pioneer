@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react'
-import { Account, BaseMember } from '../../common/types'
+import { Account, BaseMember, ModalState } from '../../common/types'
 import { TransferDetailsModal } from './TransferDetailsModal'
 import BN from 'bn.js'
 import { SignTransferModal } from './SignTransferModal'
@@ -11,8 +11,6 @@ interface Props {
   icon: ReactElement
   member?: BaseMember
 }
-
-type ModalState = 'PREPARE' | 'AUTHORIZE' | 'SUCCESS' | 'ERROR'
 
 export function TransferInviteModal({ onClose, icon, member }: Props) {
   const [step, setStep] = useState<ModalState>('PREPARE')

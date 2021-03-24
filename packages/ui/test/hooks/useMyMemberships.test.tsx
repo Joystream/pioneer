@@ -1,9 +1,8 @@
-import { expect } from '@jest/globals'
 import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 import { useMyMemberships } from '../../src/hooks/useMyMemberships'
-import { MockQueryNodeProviders } from '../helpers/providers'
-import { alice } from '../mocks/keyring'
+import { MockQueryNodeProviders } from '../mocks/providers'
+import { alice, bobStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
 import { Account } from '../../src/common/types'
@@ -57,9 +56,9 @@ describe('useMyMemberships', () => {
     })
   })
 
-  it('Returns matched members', async () => {
-    await mockServer.createMember('Alice')
-    const aliceMember = await getMember('Alice')
+  it('Matched rootAccount', async () => {
+    mockServer.createMember('Alice')
+    const aliceMember = getMember('Alice')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(alice)
 
@@ -74,9 +73,26 @@ describe('useMyMemberships', () => {
     })
   })
 
+  it('Matched controllerAccount', async () => {
+    mockServer.createMember('Bob')
+    const bobMember = getMember('Bob')
+    useAccounts.hasAccounts = true
+    useAccounts.allAccounts.push(bobStash)
+
+    const { result, waitForNextUpdate } = renderUseMembership()
+    await waitForNextUpdate()
+
+    expect(result.current).toMatchObject({
+      active: undefined,
+      count: 1,
+      isLoading: false,
+      members: [bobMember],
+    })
+  })
+
   it('Allows to set active member', async () => {
-    await mockServer.createMember('Alice')
-    const aliceMember = await getMember('Alice')
+    mockServer.createMember('Alice')
+    const aliceMember = getMember('Alice')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(alice)
 

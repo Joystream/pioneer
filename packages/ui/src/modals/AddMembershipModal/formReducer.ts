@@ -7,9 +7,10 @@ export interface FormFields {
   handle: string
   about: string
   avatarURI: string
-  isReferred: boolean
+  isReferred?: boolean
   referrer?: BaseMember
-  hasTerms: boolean
+  hasTerms?: boolean
+  invitor?: BaseMember
 }
 
 type Action = { type: keyof FormFields; value: string | Account | BaseMember | boolean }
@@ -28,6 +29,8 @@ export const formReducer = (state: FormFields, action: Action): FormFields => {
     case 'isReferred':
       return { ...state, [action.type]: action.value as boolean }
     case 'referrer':
+      return { ...state, [action.type]: action.value as BaseMember }
+    case 'invitor':
       return { ...state, [action.type]: action.value as BaseMember }
     default:
       return { ...state }

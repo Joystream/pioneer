@@ -1,31 +1,34 @@
-import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
-import { from, of } from 'rxjs'
+import { of } from 'rxjs'
+import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account, BaseMember } from '../../src/common/types'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
-import { stubBatchTransactionFailure, stubBatchTransactionSuccess, stubTransaction } from '../helpers/transactions'
-import { alice, aliceStash, bob, bobStash, mockKeyring } from '../mocks/keyring'
-import { getMember, MockMember } from '../mocks/members'
+import { alice, aliceStash, bob, bobStash } from '../mocks/keyring'
+import { getMember } from '../mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
+import {
+  stubApi,
+  stubBatchTransactionFailure,
+  stubBatchTransactionSuccess,
+  stubDefaultBalances,
+  stubTransaction,
+} from '../mocks/transactions'
 
-const allAccounts: Account[] = []
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: true,
+  allAccounts: [],
+}
 
 jest.mock('../../src/hooks/useAccounts', () => {
   return {
-    useAccounts: () => ({
-      hasAccounts: true,
-      allAccounts: allAccounts,
-    }),
+    useAccounts: () => useAccounts,
   }
 })
 
@@ -33,7 +36,7 @@ describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    allAccounts.push(alice, aliceStash, bob, bobStash)
+    useAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
   })
 
   afterAll(() => {
@@ -42,32 +45,18 @@ describe('UI: UpdatedMembershipModal', () => {
 
   setupMockServer()
 
-  const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
-    isConnected: true,
-  }
-
+  const api = stubApi()
   let batchTx: any
-  let keyring: Keyring
+  let member: MemberFieldsFragment
 
-  let member: MockMember
-
-  beforeEach(async () => {
-    keyring = mockKeyring()
-    set(api, 'api.derive.balances.all', () =>
-      from([
-        {
-          availableBalance: new BN(1000),
-          lockedBalance: new BN(0),
-        },
-      ])
-    )
+  beforeEach(() => {
+    stubDefaultBalances(api)
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     stubTransaction(api, 'api.tx.members.updateProfile')
     stubTransaction(api, 'api.tx.members.updateAccounts')
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
-    member = await getMember('Alice')
+    member = getMember('Alice')
   })
 
   it('Renders a modal', async () => {
@@ -139,14 +128,14 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  function renderModal(member: MockMember) {
+  function renderModal(member: MemberFieldsFragment) {
     render(
       <MockQueryNodeProviders>
-        <KeyringContext.Provider value={keyring}>
+        <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <UpdateMembershipModal onClose={() => undefined} member={member as BaseMember} />
           </ApiContext.Provider>
-        </KeyringContext.Provider>
+        </MockKeyringProvider>
       </MockQueryNodeProviders>
     )
   }
