@@ -2,15 +2,14 @@ import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
 import { Account, BaseMember } from '../../common/types'
 import { Button } from '../../components/buttons'
-import { Label, NumberInput, ValidationErrorInfo } from '../../components/forms'
-import { MemberInfo } from '../../components/membership/MemberInfo'
+import { InputComponent, Label, NumberInput, ValidationErrorInfo } from '../../components/forms'
 import { filterMember, SelectMember } from '../../components/membership/SelectMember'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Text } from '../../components/typography'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
-import { AmountInputBlock, LockedAccount, Row, TransactionAmount } from '../common'
+import { AmountInputBlock, Row, TransactionAmount } from '../common'
 
 interface Props {
   onClose: () => void
@@ -38,14 +37,9 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
         <Row>
           <Text size={1}>Transfer Invites to a member.</Text>
         </Row>
-        <Row>
-          <Label>From</Label>
-          {member ? (
-            <SelectedMember member={member} />
-          ) : (
-            <SelectMember onChange={setFrom} disabled={!!member} selected={from} />
-          )}
-        </Row>
+        <InputComponent label="From" inputSize="l">
+          <SelectMember onChange={setFrom} disabled={!!member} selected={from} />
+        </InputComponent>
         <TransactionAmount>
           <AmountInputBlock>
             <Label htmlFor={'amount-input'}>Number of Invites</Label>
@@ -58,10 +52,9 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
             {isShowError && <ValidationErrorInfo>You only have {from?.inviteCount} invites left.</ValidationErrorInfo>}
           </AmountInputBlock>
         </TransactionAmount>
-        <Row>
-          <Label>To</Label>
+        <InputComponent label="To" inputSize="l">
           <SelectMember onChange={setTo} filter={filterRecipient} />
-        </Row>
+        </InputComponent>
       </ModalBody>
       <ModalFooter>
         <Button
@@ -75,9 +68,3 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
     </Modal>
   )
 }
-
-const SelectedMember = ({ member }: { member: BaseMember }) => (
-  <LockedAccount>
-    <MemberInfo member={member} />
-  </LockedAccount>
-)
