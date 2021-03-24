@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react'
 import { Button } from '../../components/buttons'
-import { Label, TextArea, TextInput } from '../../components/forms'
+import { InputComponent, Label, TextArea, TextInput } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { SelectMember } from '../../components/membership/SelectMember'
 import {
@@ -67,10 +67,9 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
       <ModalHeader onClick={onClose} title="Invite a member" />
       <ScrolledModalBody>
         <ScrolledModalContainer>
-          <Row>
-            <Label>Inviting member</Label>
+          <InputComponent label="Inviting member" inputSize="l">
             <SelectMember onChange={(member) => changeField('invitor', member)} />
-          </Row>
+          </InputComponent>
 
           <Row>
             <Text size={2} dark>

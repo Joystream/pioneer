@@ -4,13 +4,11 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
-import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectMember } from '../helpers/selectMember'
 import { alice, aliceStash } from '../mocks/keyring'
-import { getMember } from '../mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 import {
@@ -20,17 +18,6 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../mocks/transactions'
-
-const members: MemberFieldsFragment[] = []
-
-jest.mock('../../src/hooks/useMyMemberships', () => {
-  return {
-    useMyMemberships: () => ({
-      isLoading: false,
-      members: members,
-    }),
-  }
-})
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: false,
@@ -54,11 +41,7 @@ describe('UI: InviteMemberModal', () => {
     jest.restoreAllMocks()
   })
 
-  afterEach(() => {
-    members.splice(0)
-  })
-
-  setupMockServer()
+  const server = setupMockServer()
 
   const api = stubApi()
   let inviteMemberTx: any
@@ -80,10 +63,8 @@ describe('UI: InviteMemberModal', () => {
   const controllerAddress = '5CrJ2ZegUykhPP9h2YkwDQUBi7AcmafFiu8m5DFU2Qh8XuPR'
 
   it('Enables button', async () => {
-    const aliceMember = getMember('Alice')
-    const bobMember = getMember('Bob')
-    members.push(aliceMember)
-    members.push(bobMember)
+    server.createMember('Alice')
+    server.createMember('Bob')
 
     renderModal()
 
@@ -103,10 +84,8 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Disables button when one of addresses is invalid', async () => {
-    const aliceMember = getMember('Alice')
-    const bobMember = getMember('Bob')
-    members.push(aliceMember)
-    members.push(bobMember)
+    server.createMember('Alice')
+    server.createMember('Bob')
 
     renderModal()
 
@@ -125,10 +104,8 @@ describe('UI: InviteMemberModal', () => {
 
   describe('Authorize', () => {
     async function fillFormAndProceed() {
-      const aliceMember = getMember('Alice')
-      const bobMember = getMember('Bob')
-      members.push(aliceMember)
-      members.push(bobMember)
+      server.createMember('Alice')
+      server.createMember('Bob')
       renderModal()
       await selectMember('Inviting member', 'alice')
       await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
