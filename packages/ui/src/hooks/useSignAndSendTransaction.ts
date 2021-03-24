@@ -18,7 +18,11 @@ interface UseSignAndSendTransactionParams {
 
 type TransactionStatus = 'READY' | 'SIGN' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'
 
-const isError = (events: EventRecord[]) => events.find(({ event: { method } }) => method === 'ExtrinsicFailed')
+const isError = (events: EventRecord[]) => {
+  return events.find(({ event: { method } }) => {
+    return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
+  })
+}
 
 const observeTransaction = (
   transaction: Observable<ISubmittableResult>,

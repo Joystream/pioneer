@@ -1,6 +1,8 @@
+import { ApiRx } from '@polkadot/api'
+import { SubmittableExtrinsic } from '@polkadot/api/types'
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
-import { Account, Address, BaseMember } from '../../common/types'
+import { Account, BaseMember } from '../../common/types'
 import { SelectedAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
 import { Label } from '../../components/forms'
@@ -11,33 +13,60 @@ import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
-import { UpdateMemberForm } from './UpdateMembershipFormModal'
+import { WithNullableValues, UpdateMemberForm } from './types'
 
 interface SignProps {
   onClose: () => void
-  transactionParams: UpdateMemberForm
+  transactionParams: WithNullableValues<UpdateMemberForm>
   onDone: (result: boolean, fee: BN) => void
   member: BaseMember
+  signer: Account
 }
 
-export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, onDone }: SignProps) => {
-  const { api } = useApi()
-  const updateProfileTransaction = useMemo(
-    () =>
-      api?.tx?.members?.updateProfile(
-        member.id,
-        transactionParams.name as string,
-        transactionParams.handle as string,
-        transactionParams.avatarURI as string,
-        transactionParams.about as string
-      ),
-    [member.id]
-  )
+const hasEdits = (object: Record<string, any>, fields: string[]) => {
+  return fields.some((field) => !!object[field])
+}
 
-  const signer: Account = {
-    address: member.controllerAccount as Address,
-    name: '',
+function createBatch(
+  transactionParams: WithNullableValues<UpdateMemberForm>,
+  api: ApiRx | undefined,
+  member: BaseMember
+) {
+  const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarURI', 'name'])
+  const hasAccountsEdits = hasEdits(transactionParams, ['rootAccount', 'controllerAccount'])
+
+  const transactions: SubmittableExtrinsic<'rxjs'>[] = []
+
+  if (!api || !(hasProfileEdits || hasAccountsEdits)) {
+    return
   }
+  if (hasProfileEdits) {
+    const updateProfile = api.tx.members.updateProfile(
+      member.id,
+      transactionParams.name || null,
+      transactionParams.handle || null,
+      transactionParams.avatarURI || null,
+      transactionParams.about || null
+    )
+    transactions.push(updateProfile)
+  }
+
+  if (hasAccountsEdits) {
+    const updateAccounts = api.tx.members.updateAccounts(
+      member.id,
+      transactionParams.rootAccount?.address || null,
+      transactionParams.controllerAccount?.address || null
+    )
+    transactions.push(updateAccounts)
+  }
+
+  return api.tx.utility.batch(transactions)
+}
+
+export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, signer, onDone }: SignProps) => {
+  const { api } = useApi()
+  const updateProfileTransaction = useMemo(() => createBatch(transactionParams, api, member), [member.id])
+
   const { paymentInfo, send, status } = useSignAndSendTransaction({
     transaction: updateProfileTransaction,
     from: signer,

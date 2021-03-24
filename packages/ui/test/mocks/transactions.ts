@@ -14,6 +14,7 @@ const getSuccessEvents = (data: number[]) => [
     event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
   },
 ]
+
 const getErrorEvents = () => [
   {
     phase: { ApplyExtrinsic: 2 },
@@ -41,12 +42,47 @@ export const stubTransactionResult = (events: any[]) =>
     },
   ])
 
+const getBatchSuccessEvents = () => [
+  {
+    phase: { ApplyExtrinsic: 2 },
+    event: {
+      section: 'utility',
+      method: 'BatchCompleted',
+      index: '0x0502',
+    },
+  },
+  {
+    phase: { ApplyExtrinsic: 2 },
+    event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
+  },
+]
+
+const getBatchErrorEvents = () => [
+  {
+    phase: { ApplyExtrinsic: 2 },
+    event: {
+      index: '0x0001',
+      data: [{ Module: { index: 20, error: 5 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
+      section: 'utility',
+      method: 'BatchInterrupted',
+    },
+  },
+]
+
 export const stubTransactionFailure = (transaction: any) => {
   set(transaction, 'signAndSend', () => stubTransactionResult(getErrorEvents()))
 }
 
 export const stubTransactionSuccess = (transaction: any, data: any) => {
   set(transaction, 'signAndSend', () => stubTransactionResult(getSuccessEvents(data)))
+}
+
+export const stubBatchTransactionFailure = (transaction: any) => {
+  set(transaction, 'signAndSend', () => stubTransactionResult(getBatchErrorEvents()))
+}
+
+export const stubBatchTransactionSuccess = (transaction: any) => {
+  set(transaction, 'signAndSend', () => stubTransactionResult(getBatchSuccessEvents()))
 }
 
 export const stubTransaction = (api: UseApi, transactionPath: string) => {

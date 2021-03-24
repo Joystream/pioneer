@@ -36,17 +36,15 @@ export function useMockMembers() {
   const hasCreatedMember = useObservable(api?.query?.members.membershipById.size(0), [isConnected])?.toNumber()
 
   useEffect(() => {
-    if (!IS_DEVELOPMENT) {
+    if (!IS_DEVELOPMENT || !(api && isConnected && members.length) || hasCreatedMember === undefined) {
       return
     }
-    if (api && isConnected && members.length) {
-      if (hasCreatedMember === undefined) return
-      if (!hasCreatedMember) {
-        console.log('🌱 Creating members on chain using mocks')
-        send()
-      } else {
-        console.log('✅ Member with id (0) already created')
-      }
+
+    if (!hasCreatedMember) {
+      console.log('🌱 Creating members on chain using mocks')
+      send()
+    } else {
+      console.log('✅ Member with id (0) already created')
     }
   }, [isConnected, members.length, hasCreatedMember])
 }
