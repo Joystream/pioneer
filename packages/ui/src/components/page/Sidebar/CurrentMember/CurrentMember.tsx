@@ -18,6 +18,8 @@ export const CurrentMember = () => {
     return <AddMembershipButton>Create a membership</AddMembershipButton>
   }
 
+  !active && !isOpen && toggleOpen()
+
   return (
     <>
       <MembershipsCount />
