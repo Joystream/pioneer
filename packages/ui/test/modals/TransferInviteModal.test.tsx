@@ -1,6 +1,3 @@
-import { expect } from '@jest/globals'
-import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
@@ -8,13 +5,11 @@ import { MemberFieldsFragment } from '../../src/api/queries'
 import { TransferIcon } from '../../src/components/icons'
 import { TransferInviteModal } from '../../src/modals/TransferInviteModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectMember } from '../helpers/selectMember'
-import { mockKeyring } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
+import { stubApi } from '../mocks/transactions'
 
 const members: MemberFieldsFragment[] = []
 
@@ -32,16 +27,7 @@ describe('UI: TransferInviteModal', () => {
 
   setupMockServer()
 
-  const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
-    isConnected: true,
-  }
-
-  let keyring: Keyring
-
-  beforeEach(async () => {
-    keyring = mockKeyring()
-  })
+  const api = stubApi()
 
   afterEach(() => {
     members.splice(0)
@@ -53,13 +39,13 @@ describe('UI: TransferInviteModal', () => {
   })
 
   it.skip('Validates form', async () => {
-    const aliceMember = await getMember('Alice')
-    const bobMember = await getMember('Bob')
+    const aliceMember = getMember('Alice')
+    const bobMember = getMember('Bob')
 
-    members.push((aliceMember as unknown) as MemberFieldsFragment)
-    members.push((bobMember as unknown) as MemberFieldsFragment)
+    members.push(aliceMember)
+    members.push(bobMember)
 
-    const { findByLabelText, findByRole } = renderModal((aliceMember as unknown) as MemberFieldsFragment)
+    const { findByLabelText, findByRole } = renderModal(aliceMember)
 
     const button = (await findByRole('button', { name: /transfer invites/i })) as HTMLButtonElement
     expect(button.disabled).toBeTruthy()
@@ -76,11 +62,11 @@ describe('UI: TransferInviteModal', () => {
   function renderModal(member: MemberFieldsFragment | undefined = undefined) {
     return render(
       <MockQueryNodeProviders>
-        <KeyringContext.Provider value={keyring}>
+        <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <TransferInviteModal onClose={() => null} icon={<TransferIcon />} member={member} />
           </ApiContext.Provider>
-        </KeyringContext.Provider>
+        </MockKeyringProvider>
       </MockQueryNodeProviders>
     )
   }

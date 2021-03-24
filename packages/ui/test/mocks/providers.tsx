@@ -1,6 +1,8 @@
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client'
 import React, { ReactNode } from 'react'
+import { KeyringContext } from '../../src/providers/keyring/context'
 import { MembershipContextProvider } from '../../src/providers/membership/provider'
+import { mockKeyring } from './keyring'
 
 const link = new HttpLink({
   uri: '/query-node',
@@ -21,4 +23,10 @@ export const MockQueryNodeProviders = ({ children }: Props) => {
       <MembershipContextProvider>{children}</MembershipContextProvider>
     </MockApolloProvider>
   )
+}
+
+export const MockKeyringProvider = ({ children }: Props) => {
+  const keyring = mockKeyring()
+
+  return <KeyringContext.Provider value={keyring}>{children}</KeyringContext.Provider>
 }

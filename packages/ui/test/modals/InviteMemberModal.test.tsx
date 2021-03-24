@@ -1,25 +1,25 @@
-import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
-import { from, of } from 'rxjs'
-import sinon from 'sinon'
+import { of } from 'rxjs'
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectMember } from '../helpers/selectMember'
-import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
-import { aliceSigner, aliceStashSigner, mockKeyring } from '../mocks/keyring'
+import { alice, aliceStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../mocks/transactions'
 
 const members: MemberFieldsFragment[] = []
 
@@ -32,10 +32,22 @@ jest.mock('../../src/hooks/useMyMemberships', () => {
   }
 })
 
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: false,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
+
 describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+    useAccounts.allAccounts.push(alice, aliceStash)
   })
 
   afterAll(() => {
@@ -48,54 +60,14 @@ describe('UI: InviteMemberModal', () => {
 
   setupMockServer()
 
-  const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
-    isConnected: true,
-  }
-  let aliceAccount: Account
-  let aliceStash: Account
-  let accounts: {
-    hasAccounts: boolean
-    allAccounts: Account[]
-  }
+  const api = stubApi()
   let inviteMemberTx: any
-  let keyring: Keyring
-  let transaction: any
 
   beforeEach(async () => {
-    keyring = mockKeyring()
-    aliceAccount = {
-      address: (await aliceSigner()).address,
-      name: 'alice',
-    }
-    aliceStash = {
-      address: (await aliceStashSigner()).address,
-      name: 'alice',
-    }
-    set(api, 'api.derive.balances.all', () =>
-      from([
-        {
-          availableBalance: new BN(1000),
-          lockedBalance: new BN(0),
-        },
-      ])
-    )
+    stubDefaultBalances(api)
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
-    transaction = {}
-    set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
-    set(api, 'api.tx.members.inviteMember', () => transaction)
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
-
-    accounts = {
-      hasAccounts: true,
-      allAccounts: [aliceAccount, aliceStash],
-    }
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
-  })
-
-  afterEach(() => {
-    sinon.restore()
   })
 
   it('Renders a modal', async () => {
@@ -108,10 +80,10 @@ describe('UI: InviteMemberModal', () => {
   const controllerAddress = '5CrJ2ZegUykhPP9h2YkwDQUBi7AcmafFiu8m5DFU2Qh8XuPR'
 
   it('Enables button', async () => {
-    const aliceMember = await getMember('Alice')
-    const bobMember = await getMember('Bob')
-    members.push((aliceMember as unknown) as MemberFieldsFragment)
-    members.push((bobMember as unknown) as MemberFieldsFragment)
+    const aliceMember = getMember('Alice')
+    const bobMember = getMember('Bob')
+    members.push(aliceMember)
+    members.push(bobMember)
 
     renderModal()
 
@@ -131,10 +103,10 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Disables button when one of addresses is invalid', async () => {
-    const aliceMember = await getMember('Alice')
-    const bobMember = await getMember('Bob')
-    members.push((aliceMember as unknown) as MemberFieldsFragment)
-    members.push((bobMember as unknown) as MemberFieldsFragment)
+    const aliceMember = getMember('Alice')
+    const bobMember = getMember('Bob')
+    members.push(aliceMember)
+    members.push(bobMember)
 
     renderModal()
 
@@ -153,10 +125,10 @@ describe('UI: InviteMemberModal', () => {
 
   describe('Authorize', () => {
     async function fillFormAndProceed() {
-      const aliceMember = await getMember('Alice')
-      const bobMember = await getMember('Bob')
-      members.push((aliceMember as unknown) as MemberFieldsFragment)
-      members.push((bobMember as unknown) as MemberFieldsFragment)
+      const aliceMember = getMember('Alice')
+      const bobMember = getMember('Bob')
+      members.push(aliceMember)
+      members.push(bobMember)
       renderModal()
       await selectMember('Inviting member', 'alice')
       await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
@@ -200,11 +172,11 @@ describe('UI: InviteMemberModal', () => {
   function renderModal() {
     render(
       <MockQueryNodeProviders>
-        <KeyringContext.Provider value={keyring}>
+        <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <InviteMemberModal onClose={sinon.spy()} />
+            <InviteMemberModal onClose={() => undefined} />
           </ApiContext.Provider>
-        </KeyringContext.Provider>
+        </MockKeyringProvider>
       </MockQueryNodeProviders>
     )
   }

@@ -1,29 +1,40 @@
-import { afterAll, beforeAll, expect } from '@jest/globals'
-import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
-import { from, of } from 'rxjs'
-import sinon from 'sinon'
+import { of } from 'rxjs'
 import { Account } from '../../src/common/types'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
 import { selectAccount } from '../helpers/selectAccount'
-import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
+import { alice, bob } from '../mocks/keyring'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubTransactionResult } from '../mocks/stubTransactionResult'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../mocks/transactions'
+
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: false,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
 
 describe('UI: AddMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+    useAccounts.allAccounts.push(alice, bob)
   })
 
   afterAll(() => {
@@ -32,52 +43,15 @@ describe('UI: AddMembershipModal', () => {
 
   setupMockServer()
 
-  const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
-    isConnected: true,
-  }
-  let fromAccount: Account
-  let to: Account
-  let accounts: {
-    hasAccounts: boolean
-    allAccounts: Account[]
-  }
+  const api = stubApi()
+
   let transaction: any
-  let keyring: Keyring
 
   beforeEach(async () => {
-    keyring = mockKeyring()
-    fromAccount = {
-      address: (await aliceSigner()).address,
-      name: 'alice',
-    }
-    to = {
-      address: (await bobSigner()).address,
-      name: 'bob',
-    }
-    set(api, 'api.derive.balances.all', () =>
-      from([
-        {
-          availableBalance: new BN(1000),
-          lockedBalance: new BN(0),
-        },
-      ])
-    )
+    stubDefaultBalances(api)
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
-    transaction = {}
-    set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
-    set(api, 'api.tx.members.buyMembership', () => transaction)
-
-    accounts = {
-      hasAccounts: true,
-      allAccounts: [fromAccount, to],
-    }
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
-  })
-
-  afterEach(() => {
-    sinon.restore()
+    transaction = stubTransaction(api, 'api.tx.members.buyMembership')
   })
 
   it('Renders a modal', async () => {
@@ -149,23 +123,10 @@ describe('UI: AddMembershipModal', () => {
     })
 
     describe('Success', () => {
-      const events = [
-        {
-          phase: { ApplyExtrinsic: 2 },
-          event: { index: '0x0502', data: [1] },
-        },
-        {
-          phase: { ApplyExtrinsic: 2 },
-          event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
-        },
-      ]
-
-      beforeEach(() => {
-        set(transaction, 'signAndSend', () => stubTransactionResult(events))
-      })
-
       it('Renders transaction success', async () => {
+        stubTransactionSuccess(transaction, [1])
         const { getByText, findByText } = await renderAuthorizeStep()
+
         fireEvent.click(getByText(/^sign and create a member$/i))
 
         expect(await findByText('Success')).toBeDefined()
@@ -174,24 +135,10 @@ describe('UI: AddMembershipModal', () => {
     })
 
     describe('Failure', () => {
-      const events = [
-        {
-          phase: { ApplyExtrinsic: 2 },
-          event: {
-            index: '0x0001',
-            data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
-            section: 'system',
-            method: 'ExtrinsicFailed',
-          },
-        },
-      ]
-
-      beforeEach(() => {
-        set(transaction, 'signAndSend', () => stubTransactionResult(events))
-      })
-
       it('Renders transaction failure', async () => {
+        stubTransactionFailure(transaction)
         const { getByText, findByText } = await renderAuthorizeStep()
+
         fireEvent.click(getByText(/^sign and create a member$/i))
 
         expect(await findByText('Failure')).toBeDefined()
@@ -202,11 +149,11 @@ describe('UI: AddMembershipModal', () => {
   function renderModal() {
     return render(
       <MockQueryNodeProviders>
-        <KeyringContext.Provider value={keyring}>
+        <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <AddMembershipModal onClose={sinon.spy()} />
+            <AddMembershipModal onClose={() => undefined} />
           </ApiContext.Provider>
-        </KeyringContext.Provider>
+        </MockKeyringProvider>
       </MockQueryNodeProviders>
     )
   }

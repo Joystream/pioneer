@@ -1,55 +1,52 @@
-import { afterAll, beforeAll, expect } from '@jest/globals'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { cleanup, render, within } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
-import sinon from 'sinon'
-import { shortenAddress } from '../../src/utils/formatters'
 import { MemberFieldsFragment } from '../../src/api/queries'
-import { Account } from '../../src/common/types'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
-import * as useBalanceModule from '../../src/hooks/useBalance'
+import { Account, Balances } from '../../src/common/types'
 import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'
 import { KeyringContext } from '../../src/providers/keyring/context'
 import { MembershipContext } from '../../src/providers/membership/context'
-import { MockApolloProvider } from '../helpers/providers'
-import { aliceSigner } from '../mocks/keyring'
-import { KnownAccounts, knownAccounts } from '../mocks/keyring/accounts'
+import { shortenAddress } from '../../src/utils/formatters'
+import { alice, aliceStash, bob, bobStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
+import { MockApolloProvider } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
+
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: false,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
+
+let balances: Balances | null = null
+
+const useBalance = {
+  useBalance: () => balances,
+}
+
+jest.mock('../../src/hooks/useBalance', () => useBalance)
 
 describe('UI: Accounts list', () => {
   const mockServer = setupMockServer()
 
-  let accountsMock: {
-    hasAccounts: boolean
-    allAccounts: Account[]
-  }
-  let known: KnownAccounts
-
-  beforeAll(async () => {
-    known = await knownAccounts()
-  })
-
   beforeAll(cryptoWaitReady)
 
   beforeEach(async () => {
-    accountsMock = {
-      hasAccounts: false,
-      allAccounts: [],
-    }
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accountsMock)
+    useAccounts.hasAccounts = false
+    useAccounts.allAccounts.splice(0)
   })
 
   afterEach(cleanup)
 
   describe('with empty keyring', () => {
-    afterAll(() => {
-      sinon.restore()
-    })
-
     it('Shows loading screen', async () => {
       const profile = render(
         <KeyringContext.Provider value={new Keyring()}>
@@ -62,38 +59,30 @@ describe('UI: Accounts list', () => {
 
   describe('with development accounts', () => {
     beforeEach(() => {
-      accountsMock.hasAccounts = true
-      accountsMock.allAccounts.push({
-        address: known.alice.address,
-        name: 'alice',
-      })
-    })
-
-    afterEach(() => {
-      sinon.restore()
+      useAccounts.hasAccounts = true
+      useAccounts.allAccounts.push(alice)
     })
 
     it('Renders empty balance when not returned', async () => {
       const { findByText } = renderAccounts()
-      sinon.stub(useBalanceModule, 'useBalance').returns(null)
 
-      const alice = (await aliceSigner()).address
-      const aliceBox = (await findByText(shortenAddress(alice)))?.parentNode?.parentNode
+      const aliceAddress = alice.address
+      const aliceBox = (await findByText(shortenAddress(aliceAddress)))?.parentNode?.parentNode
       expect(aliceBox).toBeDefined()
       expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
       expect(aliceBox?.nextSibling?.textContent).toBe('-')
     })
 
     it('Renders balance value', async () => {
-      sinon.stub(useBalanceModule, 'useBalance').returns({
+      balances = {
         total: new BN(1000),
         locked: new BN(0),
         transferable: new BN(1000),
         recoverable: new BN(0),
-      })
+      }
       const { findByText } = renderAccounts()
 
-      const aliceBox = (await findByText(shortenAddress(known.alice.address)))?.parentNode?.parentNode
+      const aliceBox = (await findByText(shortenAddress(alice.address)))?.parentNode?.parentNode
       expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
       expect(aliceBox?.nextSibling?.textContent).toBe('1,000')
     })
@@ -101,22 +90,25 @@ describe('UI: Accounts list', () => {
 
   describe('with active membership', () => {
     beforeEach(() => {
-      accountsMock.hasAccounts = true
-      accountsMock.allAccounts.push(known.alice)
-      accountsMock.allAccounts.push(known.aliceStash)
-      accountsMock.allAccounts.push(known.bob)
-      accountsMock.allAccounts.push(known.bobStash)
+      useAccounts.hasAccounts = true
+      useAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
     })
 
     it("Annotate active member's accounts", async () => {
-      await mockServer.createMember('Alice')
-      const alice = await getMember('Alice')
-      const { findByText } = renderAccounts(alice as MemberFieldsFragment)
+      balances = {
+        total: new BN(1000),
+        locked: new BN(0),
+        transferable: new BN(1000),
+        recoverable: new BN(0),
+      }
+      mockServer.createMember('Alice')
+      const aliceMember = getMember('Alice')
+      const { findByText } = renderAccounts(aliceMember)
 
-      const aliceBox = (await findByText(shortenAddress(known.alice.address)))!.parentElement!.parentElement!
+      const aliceBox = (await findByText(shortenAddress(alice.address)))!.parentElement!.parentElement!
       expect(await within(aliceBox).findByText(/root account/i)).toBeDefined()
 
-      const aliceStashBox = (await findByText(shortenAddress(known.aliceStash.address)))!.parentElement!.parentElement!
+      const aliceStashBox = (await findByText(shortenAddress(aliceStash.address)))!.parentElement!.parentElement!
       expect(await within(aliceStashBox).findByText(/controller account/i)).toBeDefined()
     })
   })

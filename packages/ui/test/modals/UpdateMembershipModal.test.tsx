@@ -1,28 +1,41 @@
-import { ApiRx } from '@polkadot/api'
-import { Keyring } from '@polkadot/ui-keyring/Keyring'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
-import { from, of } from 'rxjs'
-import sinon from 'sinon'
+import { of } from 'rxjs'
+import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account, BaseMember } from '../../src/common/types'
-import * as useAccountsModule from '../../src/hooks/useAccounts'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { UseApi } from '../../src/providers/api/provider'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MockQueryNodeProviders } from '../helpers/providers'
-import { stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../helpers/transactions'
-import { aliceSigner, bobSigner, mockKeyring } from '../mocks/keyring'
-import { getMember, MockMember } from '../mocks/members'
+import { alice, bob } from '../mocks/keyring'
+import { getMember } from '../mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../mocks/transactions'
+
+const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+  hasAccounts: true,
+  allAccounts: [],
+}
+
+jest.mock('../../src/hooks/useAccounts', () => {
+  return {
+    useAccounts: () => useAccounts,
+  }
+})
 
 describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+    useAccounts.allAccounts.push(alice, bob)
   })
 
   afterAll(() => {
@@ -31,54 +44,17 @@ describe('UI: UpdatedMembershipModal', () => {
 
   setupMockServer()
 
-  const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
-    isConnected: true,
-  }
-  let fromAccount: Account
-  let to: Account
-  let accounts: {
-    hasAccounts: boolean
-    allAccounts: Account[]
-  }
+  const api = stubApi()
   let updateProfileTx: any
-  let keyring: Keyring
+  let member: MemberFieldsFragment
 
-  let member: MockMember
-
-  beforeEach(async () => {
-    keyring = mockKeyring()
-    fromAccount = {
-      address: (await aliceSigner()).address,
-      name: 'alice',
-    }
-    to = {
-      address: (await bobSigner()).address,
-      name: 'bob',
-    }
-    set(api, 'api.derive.balances.all', () =>
-      from([
-        {
-          availableBalance: new BN(1000),
-          lockedBalance: new BN(0),
-        },
-      ])
-    )
+  beforeEach(() => {
+    stubDefaultBalances(api)
     set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     updateProfileTx = stubTransaction(api, 'api.tx.members.updateProfile')
 
-    member = await getMember('Alice')
-
-    accounts = {
-      hasAccounts: true,
-      allAccounts: [fromAccount, to],
-    }
-    sinon.stub(useAccountsModule, 'useAccounts').returns(accounts)
-  })
-
-  afterEach(() => {
-    sinon.restore()
+    member = getMember('Alice')
   })
 
   it('Renders a modal', async () => {
@@ -142,14 +118,14 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  function renderModal(member: MockMember) {
+  function renderModal(member: MemberFieldsFragment) {
     render(
       <MockQueryNodeProviders>
-        <KeyringContext.Provider value={keyring}>
+        <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <UpdateMembershipModal onClose={sinon.spy()} member={member as BaseMember} />
+            <UpdateMembershipModal onClose={() => undefined} member={member as BaseMember} />
           </ApiContext.Provider>
-        </KeyringContext.Provider>
+        </MockKeyringProvider>
       </MockQueryNodeProviders>
     )
   }

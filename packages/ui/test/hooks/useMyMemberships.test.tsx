@@ -1,8 +1,7 @@
-import { expect } from '@jest/globals'
 import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 import { useMyMemberships } from '../../src/hooks/useMyMemberships'
-import { MockQueryNodeProviders } from '../helpers/providers'
+import { MockQueryNodeProviders } from '../mocks/providers'
 import { alice, bobStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { setupMockServer } from '../mocks/server'
@@ -58,8 +57,8 @@ describe('useMyMemberships', () => {
   })
 
   it('Matched rootAccount', async () => {
-    await mockServer.createMember('Alice')
-    const aliceMember = await getMember('Alice')
+    mockServer.createMember('Alice')
+    const aliceMember = getMember('Alice')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(alice)
 
@@ -75,8 +74,8 @@ describe('useMyMemberships', () => {
   })
 
   it('Matched controllerAccount', async () => {
-    await mockServer.createMember('Bob')
-    const bobMember = await getMember('Bob')
+    mockServer.createMember('Bob')
+    const bobMember = getMember('Bob')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(bobStash)
 
@@ -92,8 +91,8 @@ describe('useMyMemberships', () => {
   })
 
   it('Allows to set active member', async () => {
-    await mockServer.createMember('Alice')
-    const aliceMember = await getMember('Alice')
+    mockServer.createMember('Alice')
+    const aliceMember = getMember('Alice')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(alice)
 

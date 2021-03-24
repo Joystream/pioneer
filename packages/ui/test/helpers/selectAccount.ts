@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import { fireEvent, screen, within } from '@testing-library/react'
 
 export async function selectAccount(label: string, name: string) {
