@@ -1,16 +1,16 @@
 import { Nullable } from './types'
 
-export const hasAnyEdits = (formData: Record<string, any>, member: Record<string, any>) => {
-  return !!getChangedFields(formData, member).length
+export const hasAnyEdits = (form: Record<string, any>, initial: Record<string, any>) => {
+  return !!getChangedFields(form, initial).length
 }
 
 export const getChangedFields = (form: Record<string, any>, initial: Record<string, any>) => {
   const changedFields = []
 
   for (const key of Object.keys(form)) {
-    const memberValue = initial[key] || ''
+    const initialValue = initial[key] || ''
     const formValue = form[key]?.address ?? (form[key] || '')
-    if (memberValue !== formValue) {
+    if (initialValue !== formValue) {
       changedFields.push(key)
     }
   }
