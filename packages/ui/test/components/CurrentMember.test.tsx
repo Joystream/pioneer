@@ -33,12 +33,6 @@ describe('UI: CurrentMember component', () => {
       expect(getAllByText(/memberships/i)[0]?.parentElement?.textContent).toMatch(/^memberships 2/i)
     })
 
-    xit('Displays button when no active member', async () => {
-      const { getByText } = await renderAndWait()
-
-      expect(getByText(/alice_handle/i)).toBeDefined()
-    })
-
     it('Shows switcher on open', async () => {
       const { findByRole } = await renderAndWait()
 
@@ -69,6 +63,18 @@ describe('UI: CurrentMember component', () => {
       fireEvent.click(within(getByRole('modal')).getByText(/alice_handle/i))
 
       expect(queryByText(/bob_handle/i)).toBeFalsy()
+      expect(getByText(/alice_handle/i)).toBeDefined()
+    })
+  })
+
+  describe('with one membership', () => {
+    beforeEach(() => {
+      mockServer.createMember('Alice')
+    })
+
+    it('Automatically picks the membership', async () => {
+      const { getByText } = await renderAndWait()
+
       expect(getByText(/alice_handle/i)).toBeDefined()
     })
   })
