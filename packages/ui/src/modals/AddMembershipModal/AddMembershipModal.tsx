@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
+import { ServerContext } from '../../providers/server/context'
 import { AddMembershipFailureModal } from './AddMembershipFailureModal'
 import { AddMembershipSuccessModal } from './AddMembershipSuccessModal'
 import { MembershipFormModal } from './MembershipFormModal'
@@ -16,6 +17,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
   const [step, setStep] = useState<ModalState>('PREPARE')
   const [transactionParams, setParams] = useState<Member>()
+  const server = useContext(ServerContext)
 
   const onSubmit = (params: Member) => {
     setStep('AUTHORIZE')
@@ -58,6 +60,20 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   }
 
   if (step === 'SUCCESS') {
+    if (server) {
+      server.schema.create('Member', {
+        id: '13',
+        rootAccount: transactionParams.rootAccount.address,
+        controllerAccount: transactionParams.controllerAccount.address,
+        name: transactionParams.name,
+        handle: transactionParams.handle,
+        avatarURI: transactionParams.avatarURI,
+        about: transactionParams.about,
+        isVerified: false,
+        isFoundingMember: false,
+        inviteCount: '5',
+      })
+    }
     return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} />
   }
 
