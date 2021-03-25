@@ -13,7 +13,11 @@ export const CurrentMember = () => {
   const { count, members, active, setActive } = useMyMemberships()
   const [isOpen, toggleOpen] = useToggle()
   const [isCreateOpen, toggleCreateOpen] = useToggle()
-  const forceInitialSelect = () => count > 1 && !active && !isOpen && toggleOpen()
+  const forceInitialSelect = () => {
+    if (count > 1 && !active && !isOpen) {
+      toggleOpen()
+    }
+  }
   useEffect(() => {
     count == 1 && setActive(members[0])
     forceInitialSelect()
