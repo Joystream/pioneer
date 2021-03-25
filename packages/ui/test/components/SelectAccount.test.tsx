@@ -67,7 +67,7 @@ describe('UI: SelectAccount component', () => {
       const textBox = getByRole('textbox')
       act(() => {
         fireEvent.change(textBox, { target: { value: 'bob' } })
-        jest.runAllTimers()
+        jest.runOnlyPendingTimers()
       })
 
       expect(textBox.getAttribute('value')).toEqual('bob')
@@ -82,7 +82,7 @@ describe('UI: SelectAccount component', () => {
       const textBox = getByRole('textbox')
       act(() => {
         fireEvent.change(textBox, { target: { value: 'bob' } })
-        jest.runAllTimers()
+        jest.runOnlyPendingTimers()
       })
       expect(textBox.getAttribute('value')).toEqual('bob')
 
