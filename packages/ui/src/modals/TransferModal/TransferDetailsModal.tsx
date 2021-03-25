@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Account } from '../../common/types'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
-import { InputComponent, InputNumber } from '../../components/forms/InputComponent'
+import { InputComponent, InputNumber } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Colors } from '../../constants'
 import { useBalance } from '../../hooks/useBalance'
@@ -52,19 +52,20 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
             inputSize="l"
             label="From"
             id="transfer-from-input"
-            disabled={from ? true : false}
-            borderless={from ? true : false}
+            disabled={!!from}
+            borderless={!!from}
           >
             {from ? <SelectedAccount account={from} /> : <SelectAccount filter={filterSender} onChange={setSender} />}
           </InputComponent>
         </Row>
         <TransactionAmount>
           <InputComponent
-            label="Number of tokenssss"
+            label="Number of tokens"
             id="amount-input"
             disabled={isValueDisabled}
             required
             inputWidth="s"
+            units="JOY"
           >
             <InputNumber
               id="amount-input"
@@ -89,8 +90,8 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
             inputSize="l"
             label="Destination account"
             id="transfer-to-input"
-            disabled={to ? true : false}
-            borderless={to ? true : false}
+            disabled={!!to}
+            borderless={!!to}
           >
             {to ? <SelectedAccount account={to} /> : <SelectAccount filter={filterRecipient} onChange={setRecipient} />}
           </InputComponent>

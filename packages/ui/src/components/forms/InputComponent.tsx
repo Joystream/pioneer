@@ -148,12 +148,13 @@ export const InputText = ({ id, value, required, validation, placeholder, disabl
     />
   )
 }
+
 export const InputNumber = ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
   return (
-    <Input
+    <StyledNumberInput
       id={id}
       name={id}
-      type="number"
+      type="text"
       value={value}
       required={required}
       validation={validation}
@@ -164,6 +165,7 @@ export const InputNumber = ({ id, value, required, validation, placeholder, disa
     />
   )
 }
+
 export const InputTextarea = ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
   return (
     <Textarea
@@ -225,6 +227,10 @@ export const Input = styled.input`
       margin: 0;
     }
   }
+`
+
+const StyledNumberInput = styled(Input)`
+  text-align: right;
 `
 
 const Textarea = styled.textarea`
