@@ -1,5 +1,6 @@
 import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { EventRecord } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { Account, BaseMember } from '../../common/types'
@@ -18,7 +19,7 @@ import { WithNullableValues, UpdateMemberForm } from './types'
 interface SignProps {
   onClose: () => void
   transactionParams: WithNullableValues<UpdateMemberForm>
-  onDone: (result: boolean, fee: BN) => void
+  onDone: (result: boolean, events: EventRecord[], fee: BN) => void
   member: BaseMember
   signer: Account
 }

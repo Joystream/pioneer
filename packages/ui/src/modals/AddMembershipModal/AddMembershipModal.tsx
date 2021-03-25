@@ -1,3 +1,4 @@
+import { EventRecord } from '@polkadot/types/interfaces'
 import React, { useContext, useMemo, useState } from 'react'
 import { Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
@@ -40,10 +41,27 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
     [JSON.stringify(transactionParams)]
   )
 
-  const onDone = (result: boolean) => setStep(result ? 'SUCCESS' : 'ERROR')
-
   if (step === 'PREPARE' || !transactionParams) {
     return <MembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
+  }
+
+  const onDone = (result: boolean, events: EventRecord[]) => {
+    const memberId = events.find((event) => event.event.method === 'MemberRegistered')?.event.data[0].toString()
+    if (server && memberId) {
+      server.schema.create('Member', {
+        id: memberId,
+        rootAccount: transactionParams.rootAccount.address,
+        controllerAccount: transactionParams.controllerAccount.address,
+        name: transactionParams.name,
+        handle: transactionParams.handle,
+        avatarURI: transactionParams.avatarURI,
+        about: transactionParams.about,
+        isVerified: false,
+        isFoundingMember: false,
+        inviteCount: '5',
+      })
+    }
+    setStep(result ? 'SUCCESS' : 'ERROR')
   }
 
   if (step === 'AUTHORIZE') {
@@ -60,20 +78,6 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   }
 
   if (step === 'SUCCESS') {
-    if (server) {
-      server.schema.create('Member', {
-        id: '13',
-        rootAccount: transactionParams.rootAccount.address,
-        controllerAccount: transactionParams.controllerAccount.address,
-        name: transactionParams.name,
-        handle: transactionParams.handle,
-        avatarURI: transactionParams.avatarURI,
-        about: transactionParams.about,
-        isVerified: false,
-        isFoundingMember: false,
-        inviteCount: '5',
-      })
-    }
     return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} />
   }
 

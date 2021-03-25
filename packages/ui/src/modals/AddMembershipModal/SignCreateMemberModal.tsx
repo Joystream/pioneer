@@ -13,12 +13,13 @@ import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
+import { EventRecord } from '@polkadot/types/interfaces'
 
 interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
   transactionParams: Member
-  onDone: (result: boolean, fee: BN) => void
+  onDone: (result: boolean, events: EventRecord[], fee: BN) => void
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   initialSigner: Account
   isInvite?: boolean
