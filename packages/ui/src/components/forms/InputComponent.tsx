@@ -45,6 +45,8 @@ interface InputElementProps {
   copy?: boolean
   units?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
+  borderless?: boolean
+  inputWidth?: 's' | undefined
 }
 
 interface DisabledInputProps {
@@ -59,6 +61,7 @@ export const InputComponent = ({
   disabled,
   value,
   inputSize,
+  inputWidth,
   icon,
   copy,
   textToCopy,
@@ -70,9 +73,10 @@ export const InputComponent = ({
   helperLinkURL,
   className,
   children,
+  borderless,
 }: InputComponentProps) => {
   return (
-    <InputElement className={className} inputSize={inputSize}>
+    <InputElement className={className} inputSize={inputSize} inputWidth={inputWidth}>
       {label && (
         <InputLabel htmlFor={id} isRequired={required} disabled={disabled}>
           {label}
@@ -93,6 +97,7 @@ export const InputComponent = ({
         validation={validation}
         disabled={disabled}
         inputSize={inputSize}
+        borderless={borderless}
       >
         {icon && <InputIcon>{icon}</InputIcon>}
         <InputArea>{children}</InputArea>
@@ -192,7 +197,7 @@ const InputStyles = css<InputProps>`
   width: 100%;
   height: 100%;
   outline: none;
-  border: none;
+  border: 1px solid transparent;
   background-color: transparent;
   border-radius: ${BorderRad.s};
   font-family: ${Fonts.Inter};
@@ -209,8 +214,8 @@ const InputStyles = css<InputProps>`
 `
 
 export const Input = styled.input`
-  ${InputStyles}
-  &[type="number"] {
+  ${InputStyles};
+  &[type='number'] {
     text-align: right;
     -moz-appearance: textfield;
 
@@ -233,7 +238,7 @@ const InputElement = styled.div<InputElementProps>`
   grid-row-gap: 4px;
   align-items: center;
   width: 100%;
-  min-width: 400px;
+  min-width: ${({ inputWidth }) => (inputWidth === 's' ? '320px' : '400px')};
 `
 
 const InputLabel = styled(Label)<DisabledInputProps>`
@@ -270,9 +275,14 @@ const InputContainer = styled.div<InputElementProps>`
           return Colors.Black[200]
       }
     }};
+  border: ${({ borderless }) => {
+    if (borderless) {
+      return 'none'
+    }
+  }};
   border-color: ${({ disabled }) => {
     if (disabled) {
-      return Colors.Black[75]
+      return Colors.Black[200]
     }
   }};
   border-radius: ${BorderRad.s};
@@ -308,7 +318,7 @@ const InputContainer = styled.div<InputElementProps>`
     }};
     border-color: ${({ disabled }) => {
       if (disabled) {
-        return Colors.Black[75]
+        return Colors.Black[200]
       }
     }};
     box-shadow: ${({ validation }) => {

@@ -2,14 +2,14 @@ import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
 import { Account, BaseMember } from '../../common/types'
 import { Button } from '../../components/buttons'
-import { InputComponent, Label, NumberInput, ValidationErrorInfo } from '../../components/forms'
+import { InputComponent, InputNumber } from '../../components/forms'
 import { filterMember, SelectMember } from '../../components/membership/SelectMember'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Text } from '../../components/typography'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
-import { AmountInputBlock, Row, TransactionAmount } from '../common'
+import { Row, TransactionAmount } from '../common'
 
 interface Props {
   onClose: () => void
@@ -35,24 +35,35 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
       <ModalHeader onClick={onClose} title="Transfer invites" icon={icon} />
       <ModalBody>
         <Row>
-          <Text size={1}>Transfer Invites to a member.</Text>
+          <Text size={2} margin="s">
+            Transfer Invites to a member.
+          </Text>
         </Row>
-        <InputComponent label="From" inputSize="l">
+        <InputComponent label="From" inputSize="l" disabled={!!member}>
           <SelectMember onChange={setFrom} disabled={!!member} selected={from} />
         </InputComponent>
         <TransactionAmount>
-          <AmountInputBlock>
-            <Label htmlFor={'amount-input'}>Number of Invites</Label>
-            <NumberInput
+          <InputComponent
+            id="amount-input"
+            label="Number of Invites"
+            required
+            validation={isShowError ? 'invalid' : undefined}
+            message={
+              isShowError
+                ? `You only have ${from?.inviteCount} invites left.`
+                : `You have ${from?.inviteCount} invites.`
+            }
+            inputWidth="s"
+          >
+            <InputNumber
               id="amount-input"
               value={formatTokenValue(new BN(amount))}
-              onChange={(event) => setAmount(event.target.value)}
               placeholder="0"
+              onChange={(event) => setAmount(event.target.value)}
             />
-            {isShowError && <ValidationErrorInfo>You only have {from?.inviteCount} invites left.</ValidationErrorInfo>}
-          </AmountInputBlock>
+          </InputComponent>
         </TransactionAmount>
-        <InputComponent label="To" inputSize="l">
+        <InputComponent label="To" inputSize="l" required>
           <SelectMember onChange={setTo} filter={filterRecipient} />
         </InputComponent>
       </ModalBody>
