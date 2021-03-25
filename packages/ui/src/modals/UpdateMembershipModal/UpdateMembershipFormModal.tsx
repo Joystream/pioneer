@@ -5,9 +5,8 @@ import { AnySchema } from 'yup'
 import { Account, BaseMember } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
-import { Label, TextArea, TextInput } from '../../components/forms'
-import { FieldError, hasError } from '../../components/forms/FieldError'
-import { Help } from '../../components/Help'
+import { InputComponent, InputText, InputTextarea } from '../../components/forms'
+import { getErrorMessage, hasError } from '../../components/forms/FieldError'
 import {
   ModalFooter,
   ModalHeader,
@@ -21,7 +20,7 @@ import { useFormValidation } from '../../hooks/useFormValidation'
 import { useObservable } from '../../hooks/useObservable'
 import { AvatarURISchema, HandleSchema } from '../../membership/data/validation'
 import { Row } from '../common'
-import { FormReducer, WithNullableValues, UpdateMemberForm } from './types'
+import { FormReducer, UpdateMemberForm, WithNullableValues } from './types'
 import { changedOrNull, hasAnyEdits } from './utils'
 
 interface Props {
@@ -83,80 +82,100 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <Row>
-            <Label isRequired>
-              Root account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-            </Label>
-            <SelectAccount
-              filter={filterRoot}
-              onChange={(account) => changeField('rootAccount', account)}
-              selected={rootAccount}
-            />
-          </Row>
-
-          <Row>
-            <Label isRequired>
-              Controller account <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
-            </Label>
-            <SelectAccount
-              filter={filterController}
-              onChange={(account) => changeField('controllerAccount', account)}
-              selected={controllerAccount}
-            />
-          </Row>
-
-          <Row>
-            <Label htmlFor="member-name" isRequired>
-              Member Name
-            </Label>
-            <TextInput
-              id="member-name"
-              type="text"
-              placeholder="Type"
-              value={name}
-              onChange={(event) => changeField('name', event.target.value)}
-            />
-          </Row>
-
-          <Row>
-            <Label htmlFor="member-handle" isRequired>
-              Membership handle
-            </Label>
-            <TextInput
-              id="member-handle"
-              type="text"
-              placeholder="Type"
-              value={handle}
-              onChange={(event) => changeField('handle', event.target.value)}
-              invalid={hasError('handle', errors)}
-            />
-            <FieldError name="handle" errors={errors} />
-          </Row>
-
-          <Row>
-            <Label htmlFor="member-about">About Member</Label>
-            <TextArea
-              id="member-about"
-              value={about}
-              placeholder="Type"
-              rows={4}
-              onChange={(event) => changeField('about', event.target.value)}
-            />
-          </Row>
-
-          <Row>
-            <Label htmlFor="member-avatar">Member Avatar</Label>
-            <TextInput
-              id="member-avatar"
-              type="text"
-              placeholder="Image URL"
-              value={avatarURI}
-              onChange={(event) => changeField('avatarURI', event.target.value)}
-              invalid={hasError('avatarURI', errors)}
-            />
-            <Text size={3} italic={true}>
-              Paste an URL of your avatar image. Text lorem ipsum.
+            <Text size={2} dark>
+              Please fill in all the details below.
             </Text>
-            <FieldError name="avatarURI" errors={errors} />
+          </Row>
+
+          <Row>
+            <InputComponent
+              label="Root account"
+              helperText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+              required
+              inputSize="l"
+            >
+              <SelectAccount
+                filter={filterRoot}
+                onChange={(account) => changeField('rootAccount', account)}
+                selected={rootAccount}
+              />
+            </InputComponent>
+          </Row>
+
+          <Row>
+            <InputComponent
+              label="Controller account"
+              helperText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+              required
+              inputSize="l"
+            >
+              <SelectAccount
+                filter={filterController}
+                onChange={(account) => changeField('controllerAccount', account)}
+                selected={controllerAccount}
+              />
+            </InputComponent>
+          </Row>
+
+          <Row>
+            <InputComponent id="member-name" label="Member Name" required>
+              <InputText
+                id="member-name"
+                placeholder="Type"
+                value={name}
+                onChange={(event) => changeField('name', event.target.value)}
+              />
+            </InputComponent>
+          </Row>
+
+          <Row>
+            <InputComponent
+              id="member-handle"
+              label="Membership handle"
+              required
+              validation={hasError('handle', errors) ? 'invalid' : undefined}
+              message={hasError('handle', errors) ? getErrorMessage('handle', errors) : 'Do not use same handles'}
+            >
+              <InputText
+                id="member-handle"
+                placeholder="Type"
+                value={handle}
+                onChange={(event) => changeField('handle', event.target.value)}
+              />
+            </InputComponent>
+          </Row>
+
+          <Row>
+            <InputComponent id="member-about" label="About member" inputSize="l">
+              <InputTextarea
+                id="member-about"
+                value={about}
+                placeholder="Type"
+                onChange={(event) => changeField('about', event.target.value)}
+              />
+            </InputComponent>
+          </Row>
+
+          <Row>
+            <InputComponent
+              id="member-avatar"
+              label="Member Avatar"
+              required
+              value={avatarURI}
+              validation={hasError('avatarURI', errors) ? 'invalid' : undefined}
+              message={
+                hasError('avatarURI', errors)
+                  ? getErrorMessage('avatarURI', errors)
+                  : 'Paste an URL of your avatar image. Text lorem ipsum.'
+              }
+              placeholder="Image URL"
+            >
+              <InputText
+                id="member-avatar"
+                value={avatarURI}
+                onChange={(event) => changeField('avatarURI', event.target.value)}
+              />
+            </InputComponent>
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
