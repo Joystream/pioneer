@@ -4,8 +4,8 @@ import { BaseMember } from '../../../common/types'
 import { Animations, Colors } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { EditMembershipButton } from '../../../membership/components/EditMembershipButton'
+import { CloseButton } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
-import { CloseSmallModalButton } from '../../Modal'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
 import { MemberInfo } from '../MemberInfo'
 import { MemberAccounts } from './MemberAccounts'
@@ -32,7 +32,7 @@ export const MemberProfile = React.memo(({ onClose, member }: Props) => {
     <SidePaneGlass onClick={onBackgroundClick} onClose={onClose}>
       <SidePane>
         <SidePaneHeader>
-          <CloseSmallModalButton onClick={onClose} />
+          <CloseButton onClick={onClose} />
           <SidePaneTitle>My Profile</SidePaneTitle>
           <MemberInfo member={member} memberSize="l" size="l" />
           <PageTabsNav>

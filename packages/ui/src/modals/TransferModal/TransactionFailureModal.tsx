@@ -1,9 +1,10 @@
 import BN from 'bn.js'
 import React from 'react'
-import { FailureIcon } from '../../components/icons/FailureIcon'
-import { CloseSmallModalButton, Modal, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
-import { TokenValue } from '../../components/typography'
 import { Account } from '../../common/types'
+import { CloseButton } from '../../components/buttons'
+import { FailureIcon } from '../../components/icons/FailureIcon'
+import { Modal, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
+import { TokenValue } from '../../components/typography'
 
 interface Props {
   onClose: () => void
@@ -15,7 +16,7 @@ interface Props {
 export const TransactionFailureModal = ({ from, to, amount, onClose }: Props) => (
   <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
     <ResultModalBody>
-      <CloseSmallModalButton onClick={onClose} />
+      <CloseButton onClick={onClose} />
       <FailureIcon />
       <ModalTitle>
         <span className="red-title">Oh no!</span> Failure

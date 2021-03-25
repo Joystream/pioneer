@@ -1,7 +1,8 @@
 import React from 'react'
 import { Member } from '../../common/types'
+import { CloseButton } from '../../components/buttons'
 import { FailureIcon } from '../../components/icons/FailureIcon'
-import { CloseSmallModalButton, Modal, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
+import { Modal, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
 
 interface Props {
   onClose: () => void
@@ -11,7 +12,7 @@ interface Props {
 export const AddMembershipFailureModal = ({ onClose, member }: Props) => (
   <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
     <ResultModalBody>
-      <CloseSmallModalButton onClick={onClose} />
+      <CloseButton onClick={onClose} />
       <FailureIcon />
       <ModalTitle>
         <span className="red-title">Oh no!</span> Failure

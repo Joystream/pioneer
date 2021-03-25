@@ -5,7 +5,7 @@ import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMyMemberships } from '../../../../hooks/useMyMemberships'
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../../membership'
 import { AddMembershipButtonSwitch } from '../../../membership/AddMembershipButtonSwitch'
-import { CloseSmallModalButton, Modal, ModalBody, ModalFooter, ModalTitle } from '../../../Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../Modal'
 import { Notification, NotificationComponent } from '../../../Notification'
 
 interface Props {
@@ -22,9 +22,8 @@ export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
 
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
+      <SwitchModalHeader title="Select Membership" onClick={onClose} modalHeaderSize="s" />
       <SwitchModalBody>
-        <CloseSmallModalButton onClick={onClose} />
-        <SwitchModalTitle>Select Membership</SwitchModalTitle>
         <MembershipsCount />
         <MembersList>
           {members.map((member) => (
@@ -51,6 +50,10 @@ export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
   )
 }
 
+const SwitchModalHeader = styled(ModalHeader)`
+  padding: 16px 16px 0px;
+`
+
 const SwitchModalBody = styled(ModalBody)`
   position: relative;
   padding: 16px;
@@ -66,10 +69,6 @@ const SwitchModalBody = styled(ModalBody)`
     background-color: ${Colors.Black[700]};
     transform: translateX(-50%);
   }
-`
-
-const SwitchModalTitle = styled(ModalTitle)`
-  line-height: 40px;
 `
 
 const SwitchModalFooter = styled(ModalFooter)`

@@ -1,21 +1,23 @@
 import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
-import { BorderRad, Colors, Fonts, Shadows, Animations } from '../constants'
+import { Animations, BorderRad, Colors, Fonts, Shadows } from '../constants'
 import { CloseButton } from './buttons'
 import { Text, ValueInJoys } from './typography'
 
-interface Props {
+interface ModalHeaderProps {
   onClick: () => void
   title: string
   icon?: React.ReactElement | string
+  modalHeaderSize?: 's' | 'm' | undefined
+  className?: string
 }
 
-export const ModalHeader = React.memo(({ onClick, title, icon }: Props) => (
-  <ModalTopBar columns={icon ? 3 : 2}>
+export const ModalHeader = React.memo(({ onClick, title, icon, modalHeaderSize, className }: ModalHeaderProps) => (
+  <ModalTopBar columns={icon ? 3 : 2} modalHeaderSize={modalHeaderSize} className={className}>
     {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
     <ModalTitle>{title}</ModalTitle>
-    <CloseModalButton onClick={onClick} />
+    <CloseButton onClick={onClick} />
   </ModalTopBar>
 ))
 
@@ -92,21 +94,39 @@ export const ModalGlass = styled.div<ModalProps>`
 
 interface TopBarProps extends ThemedStyledProps<any, any> {
   columns: number
+  modalHeaderProps?: 's' | 'm' | undefined
+  className?: string
 }
 
-export const ModalTopBar = styled.header.attrs((props: TopBarProps) => ({
-  columns: props.columns,
-}))`
+export const ModalTopBar = styled.header<TopBarProps>`
   display: grid;
   position: relative;
   grid-auto-flow: column;
   grid-area: modalheader;
-  grid-template-columns: ${(props) => (props.columns > 2 ? 'auto 1fr 40px' : '1fr 40px')};
+  grid-template-columns: ${(props) => (props.columns > 2 ? '24px 1fr 20px' : '1fr 20px')};
   justify-content: start;
-  grid-column-gap: 16px;
+  grid-column-gap: 8px;
   align-items: center;
-  height: 76px;
-  padding: 24px;
+  height: ${({ modalHeaderSize }) => {
+    switch (modalHeaderSize) {
+      case 's':
+        return '48px'
+      case 'm':
+      case undefined:
+      default:
+        return '56px'
+    }
+  }};
+  padding: ${({ modalHeaderSize }) => {
+    switch (modalHeaderSize) {
+      case 's':
+        return '24px 24px 0px'
+      case 'm':
+      case undefined:
+      default:
+        return '16px 24px'
+    }
+  }};
   border-radius: 2px 2px 0 0;
 `
 
@@ -270,20 +290,10 @@ export const SignTransferContainer = styled.div`
   height: 100%;
 `
 
-export const ModalTitle = styled.h4`
+export const ModalTitle = styled.h5`
   .red-title {
     color: ${Colors.Red[400]};
   }
-`
-
-const CloseModalButton = styled(CloseButton)`
-  position: absolute;
-  right: 16px;
-`
-export const CloseSmallModalButton = styled(CloseModalButton)`
-  position: absolute;
-  top: 24px;
-  right: 16px;
 `
 
 export const ResultText = styled(Text)`
