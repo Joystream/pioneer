@@ -1,18 +1,17 @@
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { Account, BaseMember } from '../../common/types'
+import { SelectedAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
+import { InputComponent } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/Modal'
-import { TokenValue } from '../../components/typography'
+import { Text, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
+import { formatTokenValue } from '../../utils/formatters'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, TransactionInfo } from '../common'
 import { WaitModal } from '../WaitModal'
-import { Text } from '../../components/typography'
-import { formatTokenValue } from '../../utils/formatters'
-import { SelectedAccount } from '../../components/account/SelectAccount'
-import { Label } from '../../components/forms'
 
 interface Props {
   onClose: () => void
@@ -41,12 +40,13 @@ export function SignTransferModal({ onClose, sourceMember, targetMember, amount,
         <ModalHeader onClick={onClose} title="Authorize Transaction" />
         <ModalBody>
           <SignTransferContainer>
-            <Text size={1}>
-              You intend to transfer {amount.toString()} invite{plural && 's'} to {name}.
+            <Text size={2} margin="m">
+              You intend to transfer {amount.toString()} invite{plural && 's'} to {name}. A fee of{' '}
+              {formatTokenValue(fee)} JOY will be applied to the transaction.
             </Text>
-            <Text size={1}>A fee of {formatTokenValue(fee)} JOY will be applied to the transaction.</Text>
-            <Label>Fee paid by account</Label>
-            <SelectedAccount account={signer} />
+            <InputComponent required inputSize="l" label="Fee paid by account" disabled borderless>
+              <SelectedAccount account={signer} />
+            </InputComponent>
           </SignTransferContainer>
         </ModalBody>
         <ModalFooter>
@@ -60,6 +60,7 @@ export function SignTransferModal({ onClose, sourceMember, targetMember, amount,
                 helperText={
                   'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae.Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
                 }
+                absolute
               />
             </BalanceInfoNarrow>
           </TransactionInfo>

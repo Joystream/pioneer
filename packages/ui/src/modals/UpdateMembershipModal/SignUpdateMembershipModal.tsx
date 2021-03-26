@@ -13,7 +13,7 @@ import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
-import { WithNullableValues, UpdateMemberForm } from './types'
+import { UpdateMemberForm, WithNullableValues } from './types'
 
 interface SignProps {
   onClose: () => void
@@ -78,9 +78,9 @@ export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, 
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
         <ModalHeader onClick={onClose} title="Authorize transaction" />
         <ModalBody>
-          <Text>You intend to update your membership.</Text>
-          <Text>
-            Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
+          <Text size={2}>
+            You intend to update your membership. Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be
+            applied to the transaction.
           </Text>
           <Row>
             <Label>Sending from account</Label>
@@ -93,7 +93,7 @@ export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, 
             <InfoValue>
               <TokenValue value={paymentInfo?.partialFee.toBn()} />
             </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
           </BalanceInfoNarrow>
           <Button size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign and update a member

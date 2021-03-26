@@ -2,15 +2,15 @@ import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../common/types'
-import { Button } from '../../components/buttons'
-import { Label, NumberInput } from '../../components/forms'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
+import { Button } from '../../components/buttons'
+import { InputComponent, InputNumber } from '../../components/forms'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Colors } from '../../constants'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
-import { AmountInputBlock, Row, TransactionAmount } from '../common'
+import { Row, TransactionAmount } from '../common'
 
 interface Props {
   from?: Account
@@ -47,20 +47,34 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
       <ModalHeader onClick={onClose} title={title} icon={icon} />
       <ModalBody>
         <Row>
-          <Label>From</Label>
-          {from ? <SelectedAccount account={from} /> : <SelectAccount filter={filterSender} onChange={setSender} />}
+          <InputComponent
+            required
+            inputSize="l"
+            label="From"
+            id="transfer-from-input"
+            disabled={!!from}
+            borderless={!!from}
+          >
+            {from ? <SelectedAccount account={from} /> : <SelectAccount filter={filterSender} onChange={setSender} />}
+          </InputComponent>
         </Row>
         <TransactionAmount>
-          <AmountInputBlock>
-            <Label htmlFor={'amount-input'}>Number of tokens</Label>
-            <NumberInput
+          <InputComponent
+            label="Number of tokens"
+            id="amount-input"
+            disabled={isValueDisabled}
+            required
+            inputWidth="s"
+            units="JOY"
+          >
+            <InputNumber
               id="amount-input"
               value={formatTokenValue(new BN(amount))}
               onChange={(event) => setAmount(event.target.value)}
-              placeholder="0"
               disabled={isValueDisabled}
+              placeholder="0"
             />
-          </AmountInputBlock>
+          </InputComponent>
           <AmountButtons>
             <AmountButton variant="secondary" size="small" onClick={setHalf} disabled={isValueDisabled}>
               Use half
@@ -71,8 +85,16 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
           </AmountButtons>
         </TransactionAmount>
         <Row>
-          <Label>Destination account</Label>
-          {to ? <SelectedAccount account={to} /> : <SelectAccount filter={filterRecipient} onChange={setRecipient} />}
+          <InputComponent
+            required
+            inputSize="l"
+            label="Destination account"
+            id="transfer-to-input"
+            disabled={!!to}
+            borderless={!!to}
+          >
+            {to ? <SelectedAccount account={to} /> : <SelectAccount filter={filterRecipient} onChange={setRecipient} />}
+          </InputComponent>
         </Row>
       </ModalBody>
       <ModalFooter>

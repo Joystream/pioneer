@@ -1,18 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Colors } from '../../constants'
-import { useMyMemberships } from '../../hooks/useMyMemberships'
 import { Badge } from '../typography'
 
-export const MembershipsCount = () => {
-  const { count } = useMyMemberships()
-
-  return (
-    <Memberships>
-      Memberships <MembershipsBadge>{count}</MembershipsBadge>
-    </Memberships>
-  )
+interface Props {
+  count: number
 }
+
+export const MembershipsCount = React.memo(({ count }: Props) => (
+  <Memberships>
+    Memberships <MembershipsBadge>{count}</MembershipsBadge>
+  </Memberships>
+))
 
 export const Memberships = styled.span`
   display: inline-flex;

@@ -13,6 +13,7 @@ interface HelpNotificationProps {
   icon?: React.ReactElement
   memberRole?: string
   className?: string
+  absolute?: boolean
 }
 
 export const Help = React.memo(
@@ -25,8 +26,9 @@ export const Help = React.memo(
     memberRole,
     size,
     className,
+    absolute,
   }: HelpNotificationProps) => (
-    <HelpContainer>
+    <HelpContainer absolute={absolute}>
       <HelpComponent size={size} className={className} memberRole={memberRole}>
         {!memberRole && icon && icon}
         {!memberRole && !icon && <QuestionIcon />}
@@ -46,9 +48,10 @@ export const Help = React.memo(
   )
 )
 
-const HelpContainer = styled.div`
+const HelpContainer = styled.div<{ absolute?: boolean }>`
   display: flex;
-  position: relative;
+  position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
+  right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};
   justify-content: center;
   align-items: center;
   width: fit-content;
