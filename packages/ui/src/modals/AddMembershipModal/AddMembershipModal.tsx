@@ -2,6 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces'
 import React, { useContext, useMemo, useState } from 'react'
 import { Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
+import { useModal } from '../../hooks/useModal'
 import { useObservable } from '../../hooks/useObservable'
 import { ServerContext } from '../../providers/server/context'
 import { AddMembershipFailureModal } from './AddMembershipFailureModal'
@@ -9,11 +10,9 @@ import { AddMembershipSuccessModal } from './AddMembershipSuccessModal'
 import { MembershipFormModal } from './MembershipFormModal'
 import { SignCreateMemberModal } from './SignCreateMemberModal'
 
-interface MembershipModalProps {
-  onClose: () => void
-}
-
-export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
+export const AddMembershipModal = () => {
+  const { hideModal } = useModal()
+  const onClose = hideModal
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
   const [step, setStep] = useState<ModalState>('PREPARE')

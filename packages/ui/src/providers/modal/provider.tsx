@@ -5,10 +5,12 @@ interface Props {
   children: ReactNode
 }
 
+type ModalName = 'member' | 'addMembership'
+
 export interface ModalApi {
   modal: string | null
   modalData: any | null
-  showModal: (name: string, data?: any) => void
+  showModal: (name: ModalName, data?: any) => void
   hideModal: () => void
 }
 

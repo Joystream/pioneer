@@ -151,7 +151,7 @@ describe('UI: AddMembershipModal', () => {
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <AddMembershipModal onClose={() => undefined} />
+            <AddMembershipModal />
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockQueryNodeProviders>

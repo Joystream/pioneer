@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
+import { useModal } from '../../../../hooks/useModal'
 import { useMyMemberships } from '../../../../hooks/useMyMemberships'
 import { useToggle } from '../../../../hooks/useToggle'
-import { AddMembershipModal } from '../../../../modals/AddMembershipModal'
 import { ArrowDownExpandedIcon, Icon } from '../../../icons'
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../../membership'
 import { AddMembershipButton } from '../../../membership/AddMembershipButton'
@@ -12,7 +12,7 @@ import { SwitchMemberModal } from './SwitchMemberModal'
 export const CurrentMember = () => {
   const { count, active } = useMyMemberships()
   const [isOpen, toggleOpen] = useToggle()
-  const [isCreateOpen, toggleCreateOpen] = useToggle()
+  const { showModal } = useModal()
 
   if (count < 1) {
     return <AddMembershipButton>Create membership</AddMembershipButton>
@@ -28,8 +28,7 @@ export const CurrentMember = () => {
           <ArrowDownExpandedIcon />
         </SwitchArrow>
       </SwitchMember>
-      {isOpen && <SwitchMemberModal onClose={toggleOpen} onCreateMember={toggleCreateOpen} />}
-      {isCreateOpen && <AddMembershipModal onClose={toggleCreateOpen} />}
+      {isOpen && <SwitchMemberModal onClose={toggleOpen} onCreateMember={() => showModal('addMembership')} />}
     </>
   )
 }

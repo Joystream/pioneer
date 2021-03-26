@@ -28,9 +28,9 @@ export const Providers = (props: Props) => (
           <MembershipContextProvider>
             <HashRouter>
               <ModalContextProvider>
-              <GlobalStyle />
-              {props.children}
-            </ModalContextProvider>
+                <GlobalStyle />
+                {props.children}
+              </ModalContextProvider>
             </HashRouter>
           </MembershipContextProvider>
         </ApolloProvider>

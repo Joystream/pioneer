@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { useToggle } from '../../hooks/useToggle'
-import { AddMembershipModal } from '../../modals/AddMembershipModal'
+import { useModal } from '../../hooks/useModal'
 import { Button, ButtonSize } from '../buttons'
 
 interface AddMembershipButtonProps {
@@ -11,15 +10,12 @@ interface AddMembershipButtonProps {
 }
 
 export const AddMembershipButton = ({ className, children, size }: AddMembershipButtonProps) => {
-  const [isOpen, toggleIsOpen] = useToggle()
+  const { showModal } = useModal()
 
   return (
-    <>
-      <AddMemberships size={size} onClick={toggleIsOpen} className={className}>
-        {children}
-      </AddMemberships>
-      {isOpen && <AddMembershipModal onClose={toggleIsOpen} />}
-    </>
+    <AddMemberships size={size} onClick={() => showModal('addMembership')} className={className}>
+      {children}
+    </AddMemberships>
   )
 }
 
