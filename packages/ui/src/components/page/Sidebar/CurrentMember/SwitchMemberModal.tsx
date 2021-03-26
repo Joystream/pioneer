@@ -24,7 +24,7 @@ export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
     <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
       <SwitchModalHeader title="Select Membership" onClick={onClose} modalHeaderSize="s" />
       <SwitchModalBody>
-        <MembershipsCount />
+        <MembershipsCount count={count} />
         <MembersList>
           {members.map((member) => (
             <MemberItem
