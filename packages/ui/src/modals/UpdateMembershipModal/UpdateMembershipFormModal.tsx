@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { AnySchema } from 'yup'
 import { Account, BaseMember } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
-import { Button } from '../../components/buttons'
+import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent, InputText, InputTextarea } from '../../components/forms'
 import { getErrorMessage, hasError } from '../../components/forms/FieldError'
 import {
@@ -180,9 +180,9 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
-        <Button size="medium" onClick={onCreate} disabled={!canUpdate}>
+        <ButtonPrimary size="medium" onClick={onCreate} disabled={!canUpdate}>
           Save changes
-        </Button>
+        </ButtonPrimary>
       </ModalFooter>
     </ScrolledModal>
   )

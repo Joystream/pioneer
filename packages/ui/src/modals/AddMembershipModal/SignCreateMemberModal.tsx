@@ -1,17 +1,17 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
+import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useState } from 'react'
 import { Account, Member, onTransactionDone } from '../../common/types'
-import { Button } from '../../components/buttons'
+import { SelectAccount } from '../../components/account/SelectAccount'
+import { ButtonPrimary } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { SelectAccount } from '../../components/account/SelectAccount'
 import { Text, TokenValue } from '../../components/typography'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
-import { SubmittableExtrinsic } from '@polkadot/api/types'
-import { ISubmittableResult } from '@polkadot/types/types'
 
 interface SignProps {
   onClose: () => void
@@ -76,9 +76,9 @@ export const SignCreateMemberModal = ({
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
           </BalanceInfoNarrow>
-          <Button size="medium" onClick={send} disabled={status !== 'READY'}>
+          <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign and create a member
-          </Button>
+          </ButtonPrimary>
         </ModalFooter>
       </Modal>
     )

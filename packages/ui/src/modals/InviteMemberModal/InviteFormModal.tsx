@@ -2,7 +2,7 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 import { Account, BaseMember, Member } from '../../common/types'
-import { Button } from '../../components/buttons'
+import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent, InputText, InputTextarea } from '../../components/forms'
 import { getErrorMessage, hasError } from '../../components/forms/FieldError'
 import { SelectMember } from '../../components/membership/SelectMember'
@@ -175,9 +175,9 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>
-        <Button size="medium" onClick={onCreate} disabled={!isValid}>
+        <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
           Invite a Member
-        </Button>
+        </ButtonPrimary>
       </ModalFooter>
     </ScrolledModal>
   )

@@ -43,7 +43,7 @@ export const MemberItem = ({ member }: Props) => {
         <CountInfo>0</CountInfo>
       </MemberColumn>
       <MemberControls>
-        <EditMembershipButton member={member} variant="ghost" size="small">
+        <EditMembershipButton member={member} size="small">
           <EditSymbol />
         </EditMembershipButton>
       </MemberControls>

@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
-import { Button } from '../../../components/buttons'
+import { ButtonPrimary } from '../../../components/buttons'
 import { Help } from '../../../components/Help'
 import { Label, TokenValue } from '../../../components/typography'
 import { BorderRad, Colors, Shadows } from '../../../constants'
@@ -105,7 +105,7 @@ const StatsHeader = styled.div`
   align-items: start;
 `
 
-const StatsButton = styled(Button)`
+const StatsButton = styled(ButtonPrimary)`
   position: absolute;
   top: 8px;
   right: 8px;
