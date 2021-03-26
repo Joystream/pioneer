@@ -68,14 +68,14 @@ export const SignCreateMemberModal = ({
                 <InfoValue>
                   <TokenValue value={membershipPrice?.toBn()} />
                 </InfoValue>
-                <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+                <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
               </>
             )}
             <InfoTitle>Transaction fee:</InfoTitle>
             <InfoValue>
               <TokenValue value={paymentInfo?.partialFee.toBn()} />
             </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
           </BalanceInfoNarrow>
           <Button size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign and create a member
