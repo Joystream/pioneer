@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { EditSymbol } from '../../../components/icons/symbols/EditSymbol'
 import { MemberInfo, MemberRoleHelp } from '../../../components/membership'
-import { MemberProfile } from '../../../components/membership/MemberProfile'
 import { TransferInviteButton } from '../../../components/TransferInviteButton'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
-import { useToggle } from '../../../hooks/useToggle'
+import { useModal } from '../../../hooks/useModal'
 import { EditMembershipButton } from '../../../membership/components/EditMembershipButton'
 
 interface Props {
@@ -14,13 +13,16 @@ interface Props {
 }
 
 export const MemberItem = ({ member }: Props) => {
-  const [isAboutOpen, toggleAboutOpen] = useToggle()
+  const { showModal } = useModal()
+
+  const showMemberModal = useCallback(() => {
+    showModal('member', { id: member.id })
+  }, [member.id])
 
   return (
     <MemberItemWrap>
       <MemberColumn>
-        <MemberInfo member={member} onClick={toggleAboutOpen} showId />
-        {isAboutOpen && <MemberProfile member={member} onClose={toggleAboutOpen} />}
+        <MemberInfo member={member} onClick={showMemberModal} showId />
       </MemberColumn>
       <MemberRolesColumn>
         <MemberRoleHelp memberRole="SL" size="l" helperText="Lorem fishy" />
