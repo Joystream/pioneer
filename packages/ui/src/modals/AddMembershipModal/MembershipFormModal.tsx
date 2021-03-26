@@ -217,7 +217,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           <InfoValue>
             <TokenValue value={membershipPrice?.toBn()} />
           </InfoValue>
-          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
         </BalanceInfoNarrow>
         <Button size="medium" onClick={onCreate} disabled={!isValid}>
           Create a Membership

@@ -93,7 +93,7 @@ export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, 
             <InfoValue>
               <TokenValue value={paymentInfo?.partialFee.toBn()} />
             </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} />
+            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
           </BalanceInfoNarrow>
           <Button size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign and update a member

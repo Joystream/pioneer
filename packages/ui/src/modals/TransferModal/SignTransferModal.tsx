@@ -95,6 +95,7 @@ export function SignTransferModal({ onClose, from, amount, to, onDone }: Props) 
                 helperText={
                   'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae.Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
                 }
+                absolute
               />
             </BalanceInfoNarrow>
           </TransactionInfo>
