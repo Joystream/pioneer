@@ -20,7 +20,7 @@ export const CurrentMember = () => {
 
   return (
     <>
-      <MembershipsCount />
+      <MembershipsCount count={count} />
       <SwitchMember onClick={toggleOpen}>
         {active && <MemberInfo member={active} isOnDark={true} />}
         {!active && <>Select membership</>}
