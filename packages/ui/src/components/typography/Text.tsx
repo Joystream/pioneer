@@ -7,6 +7,7 @@ interface TextProps {
   italic?: boolean
   dark?: boolean
   className?: string
+  margin?: 's' | 'm' | 'l' | 'xl' | undefined
 }
 
 export const Text = styled.p<TextProps>`
@@ -16,4 +17,19 @@ export const Text = styled.p<TextProps>`
   font-weight: ${(props) => (props.bold ? '700' : '400')};
   font-style: ${(props) => (props.italic ? 'italic' : 'normal')};
   color: ${(props) => (props.dark === true ? Colors.Black[700] : Colors.Black[500])};
+  margin-bottom: ${({ margin }) => {
+    switch (margin) {
+      case 's':
+        return '8px'
+      case 'm':
+        return '16px'
+      case 'l':
+        return '24px'
+      case 'xl':
+        return '32px'
+      case undefined:
+      default:
+        return '0px'
+    }
+  }};
 `

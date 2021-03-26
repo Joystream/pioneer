@@ -41,8 +41,13 @@ export const AccountRow = styled.div`
   background-color: ${Colors.White};
 `
 export const LockedAccount = styled(AccountRow)`
+  padding: 8px 0 8px 16px;
+  grid-template-columns: 1fr 1fr 48px;
   height: ${Sizes.selectHeight};
+  min-height: ${Sizes.selectHeight};
+  max-height: ${Sizes.selectHeight};
   background-color: ${Colors.Black[75]};
+  border: 1px solid ${Colors.Black[200]};
 `
 export const TransactionAmount = styled.div`
   display: grid;
@@ -51,10 +56,7 @@ export const TransactionAmount = styled.div`
   grid-column-gap: 12px;
   align-items: end;
 `
-export const AmountInputBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-`
+
 export const TransactionInfo = styled.div`
   display: grid;
 `

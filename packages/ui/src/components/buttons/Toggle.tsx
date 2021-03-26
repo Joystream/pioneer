@@ -5,6 +5,7 @@ import { Button } from './Buttons'
 
 export const ToggleButton = styled(Button)`
   background-color: transparent;
+  color: ${Colors.Black[900]};
   &,
   &:hover,
   &:focus,
@@ -15,9 +16,7 @@ export const ToggleButton = styled(Button)`
   }
   &:disabled {
     cursor: not-allowed;
-  }
-  svg {
-    color: ${Colors.Black[600]};
+    color: ${Colors.Black[400]};
   }
 `
 
@@ -28,7 +27,7 @@ interface Props {
 
 export const Toggle = styled.div<Props>`
   display: grid;
-  grid-template-columns: 1fr 40px;
+  grid-template-columns: 1fr 48px;
   grid-template-rows: 1fr;
   grid-column-gap: 4px;
   align-items: center;

@@ -7,7 +7,6 @@ import { setupMockServer } from '../mocks/server'
 
 describe('UI: CurrentMember component', () => {
   const mockServer = setupMockServer()
-  jest.useFakeTimers()
 
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -17,7 +16,7 @@ describe('UI: CurrentMember component', () => {
     it('Displays create button', () => {
       const { getByRole } = renderComponent()
 
-      expect(getByRole('button', { name: /create a membership/i })).toBeDefined()
+      expect(getByRole('button', { name: /create membership/i })).toBeDefined()
     })
   })
 
@@ -33,36 +32,19 @@ describe('UI: CurrentMember component', () => {
       expect(getAllByText(/memberships/i)[0]?.parentElement?.textContent).toMatch(/^memberships 2/i)
     })
 
-    it('Shows switcher on open', async () => {
-      const { findByRole } = await renderAndWait()
+    it('Renders select member button', async () => {
+      const { getByText } = await renderAndWait()
 
-      const modal = await findByRole('modal')
-      expect(modal).toBeDefined()
-
-      expect(within(modal).getByText(/alice_handle/i)).toBeDefined()
-      expect(within(modal).getByText(/bob_handle/i)).toBeDefined()
+      expect(getByText(/select membership/i)).toBeDefined()
     })
 
-    it('Picks active member', async () => {
-      const { getByText, queryByText, getByRole } = await renderAndWait()
+    it('Sets active member', async () => {
+      const { getByText, getByRole } = await renderAndWait()
 
-      fireEvent.click(within(getByRole('modal')).getByText(/bob_handle/i))
-
-      expect(queryByText(/alice_handle/i)).toBeFalsy()
-      expect(getByText(/bob_handle/i)).toBeDefined()
-    })
-
-    it('Switches active member', async () => {
-      const { getByText, queryByText, getByRole } = await renderAndWait()
-
-      fireEvent.click(within(getByRole('modal')).getByText(/bob_handle/i))
-
-      const button = getByText(/bob_handle/i)
-      fireEvent.click(button)
+      fireEvent.click(getByText(/select membership/i))
 
       fireEvent.click(within(getByRole('modal')).getByText(/alice_handle/i))
 
-      expect(queryByText(/bob_handle/i)).toBeFalsy()
       expect(getByText(/alice_handle/i)).toBeDefined()
     })
   })
@@ -72,10 +54,10 @@ describe('UI: CurrentMember component', () => {
       mockServer.createMember('Alice')
     })
 
-    it('Automatically picks the membership', async () => {
+    it('Renders select member button', async () => {
       const { getByText } = await renderAndWait()
 
-      expect(getByText(/alice_handle/i)).toBeDefined()
+      expect(getByText(/select membership/i)).toBeDefined()
     })
   })
 
@@ -93,7 +75,7 @@ describe('UI: CurrentMember component', () => {
     const renderResult = renderComponent()
     const { getByRole } = renderResult
 
-    await waitForElementToBeRemoved(() => getByRole('button', { name: /create a membership/i }))
+    await waitForElementToBeRemoved(() => getByRole('button', { name: /create membership/i }))
 
     return renderResult
   }

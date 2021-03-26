@@ -23,7 +23,7 @@ export function TransferSuccessModal({ onClose, recipient, amount }: Props) {
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
-        <Text>
+        <Text size={2} margin="s">
           You have just successfully transfered {amount.toString()} invitation{plural && 's'} to {name}.
         </Text>
         <MemberRow>
