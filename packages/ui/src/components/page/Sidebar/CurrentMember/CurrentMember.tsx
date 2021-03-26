@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMyMemberships } from '../../../../hooks/useMyMemberships'
@@ -10,21 +10,12 @@ import { AddMembershipButton } from '../../../membership/AddMembershipButton'
 import { SwitchMemberModal } from './SwitchMemberModal'
 
 export const CurrentMember = () => {
-  const { count, members, active, setActive } = useMyMemberships()
+  const { count, active } = useMyMemberships()
   const [isOpen, toggleOpen] = useToggle()
   const [isCreateOpen, toggleCreateOpen] = useToggle()
-  const forceInitialSelect = () => {
-    if (count > 1 && !active && !isOpen) {
-      toggleOpen()
-    }
-  }
-  useEffect(() => {
-    count == 1 && setActive(members[0])
-    forceInitialSelect()
-  }, [count, isOpen])
 
   if (count < 1) {
-    return <AddMembershipButton>Create a membership</AddMembershipButton>
+    return <AddMembershipButton>Create membership</AddMembershipButton>
   }
 
   return (
@@ -32,6 +23,7 @@ export const CurrentMember = () => {
       <MembershipsCount />
       <SwitchMember onClick={toggleOpen}>
         {active && <MemberInfo member={active} isOnDark={true} />}
+        {!active && <>Select membership</>}
         <SwitchArrow>
           <ArrowDownExpandedIcon />
         </SwitchArrow>
