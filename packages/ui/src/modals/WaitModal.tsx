@@ -1,7 +1,7 @@
 import React from 'react'
 import { Loader } from '../components/icons'
 import { WaitingIcon } from '../components/icons/WaitingIcon'
-import { Modal, ModalTitle, ResultModalBody, ResultTextWhite } from '../components/Modal'
+import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultTextWhite } from '../components/Modal'
 
 interface Props {
   onClose: () => void
@@ -11,10 +11,10 @@ interface Props {
 
 export const WaitModal = ({ onClose, title, description }: Props) => (
   <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
+    <ModalHeader icon={<Loader />} title="" onClick={onClose} modalHeaderSize="s" />
     <ResultModalBody>
-      <Loader />
       <WaitingIcon />
-      <ModalTitle>{title}</ModalTitle>
+      <ModalTitle as="h4">{title}</ModalTitle>
       <ResultTextWhite size={2}>{description}</ResultTextWhite>
     </ResultModalBody>
   </Modal>

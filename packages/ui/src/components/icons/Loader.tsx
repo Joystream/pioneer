@@ -43,9 +43,6 @@ export function Loader() {
 }
 
 export const LoaderComponent = styled.svg`
-  position: absolute;
-  top: 16px;
-  left: 16px;
   width: 24px;
   height: 24px;
   border-radius: ${BorderRad.round};

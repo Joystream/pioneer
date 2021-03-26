@@ -1,8 +1,8 @@
-import InterRegular from '../assets/fonts/Inter-Regular.woff2'
-import InterBold from '../assets/fonts/Inter-Bold.woff2'
-import GroteskRegular from '../assets/fonts/Px-Grotesk-Regular.woff2'
-import GroteskBold from '../assets/fonts/Px-Grotesk-Bold.woff2'
 import { createGlobalStyle } from 'styled-components'
+import InterBold from '../assets/fonts/Inter-Bold.woff2'
+import InterRegular from '../assets/fonts/Inter-Regular.woff2'
+import GroteskBold from '../assets/fonts/Px-Grotesk-Bold.woff2'
+import GroteskRegular from '../assets/fonts/Px-Grotesk-Regular.woff2'
 import { Colors, Fonts } from '../constants'
 
 export const GlobalStyle = createGlobalStyle`
@@ -103,7 +103,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   h5 {
     font-size: 16px;
-    line-height: 424px
+    line-height: 24px
   }
   h6 {
     font-size: 14px;

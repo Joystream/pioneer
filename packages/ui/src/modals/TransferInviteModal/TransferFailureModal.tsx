@@ -1,6 +1,6 @@
 import React from 'react'
 import { FailureIcon } from '../../components/icons/FailureIcon'
-import { CloseSmallModalButton, Modal, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
+import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
 
 interface Props {
   onClose: () => void
@@ -8,10 +8,10 @@ interface Props {
 
 export const TransferFailureModal = ({ onClose }: Props) => (
   <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
+    <ModalHeader title="" onClick={onClose} modalHeaderSize="s" />
     <ResultModalBody>
-      <CloseSmallModalButton onClick={onClose} />
       <FailureIcon />
-      <ModalTitle>
+      <ModalTitle as="h4">
         <span className="red-title">Oh no!</span> Failure
       </ModalTitle>
       <ResultText size={2}>There was a problem transfering your invites.</ResultText>
