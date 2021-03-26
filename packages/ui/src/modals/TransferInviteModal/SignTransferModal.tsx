@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
-import { Account, BaseMember } from '../../common/types'
+import { Account, BaseMember, onTransactionDone } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/Modal'
@@ -13,7 +13,6 @@ import { Text } from '../../components/typography'
 import { formatTokenValue } from '../../utils/formatters'
 import { SelectedAccount } from '../../components/account/SelectAccount'
 import { Label } from '../../components/forms'
-import { EventRecord } from '@polkadot/types/interfaces'
 
 interface Props {
   onClose: () => void
@@ -21,7 +20,7 @@ interface Props {
   targetMember: BaseMember
   signer: Account
   amount: BN
-  onDone: (result: boolean, events: EventRecord[], fee: BN) => void
+  onDone: onTransactionDone
 }
 
 export function SignTransferModal({ onClose, sourceMember, targetMember, amount, onDone, signer }: Props) {

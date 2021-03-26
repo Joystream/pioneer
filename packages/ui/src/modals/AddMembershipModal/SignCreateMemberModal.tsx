@@ -1,7 +1,6 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
-import BN from 'bn.js'
 import React, { useState } from 'react'
-import { Account, Member } from '../../common/types'
+import { Account, Member, onTransactionDone } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
@@ -13,13 +12,12 @@ import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import { EventRecord } from '@polkadot/types/interfaces'
 
 interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
   transactionParams: Member
-  onDone: (result: boolean, events: EventRecord[], fee: BN) => void
+  onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   initialSigner: Account
   isInvite?: boolean

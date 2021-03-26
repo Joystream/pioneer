@@ -5,7 +5,7 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { Observable } from 'rxjs'
-import { Account } from '../common/types'
+import { Account, onTransactionDone } from '../common/types'
 import { useApi } from './useApi'
 import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
@@ -13,7 +13,7 @@ import { useObservable } from './useObservable'
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
   from: Account
-  onDone: (success: boolean, events: EventRecord[], fee: BN) => void
+  onDone: onTransactionDone
 }
 
 type TransactionStatus = 'READY' | 'SIGN' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'

@@ -1,7 +1,6 @@
-import { EventRecord } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
-import { Account } from '../../common/types'
+import { Account, onTransactionDone } from '../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { Button } from '../../components/buttons'
 import { Help } from '../../components/Help'
@@ -30,7 +29,7 @@ interface Props {
   from: Account
   amount: BN
   to: Account
-  onDone: (result: boolean, events: EventRecord[], fee: BN) => void
+  onDone: onTransactionDone
 }
 
 export function SignTransferModal({ onClose, from, amount, to, onDone }: Props) {
