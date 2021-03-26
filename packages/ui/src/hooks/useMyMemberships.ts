@@ -4,6 +4,8 @@ import { BaseMember } from '../common/types'
 import { MembershipContext } from '../providers/membership/context'
 import { useAccounts } from './useAccounts'
 
+const POLL_INTERVAL = 5000
+
 interface UseMembership {
   count: number
   members: BaseMember[]
@@ -15,7 +17,10 @@ interface UseMembership {
 export function useMyMemberships(): UseMembership {
   const { allAccounts } = useAccounts()
   const addresses = allAccounts.map((account) => account.address)
-  const options = { variables: { rootAccount_in: addresses, controllerAccount_in: addresses } }
+  const options = {
+    variables: { rootAccount_in: addresses, controllerAccount_in: addresses },
+    pollInterval: POLL_INTERVAL,
+  }
   const { data, loading, error } = useGetMembersQuery(options)
   const { active, setActive } = useContext(MembershipContext)
 

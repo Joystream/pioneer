@@ -5,7 +5,7 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { Observable } from 'rxjs'
-import { Account } from '../common/types'
+import { Account, onTransactionDone } from '../common/types'
 import { useApi } from './useApi'
 import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
@@ -13,7 +13,7 @@ import { useObservable } from './useObservable'
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
   from: Account
-  onDone: (success: boolean, fee: BN) => void
+  onDone: onTransactionDone
 }
 
 type TransactionStatus = 'READY' | 'SIGN' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'
@@ -26,7 +26,8 @@ const isError = (events: EventRecord[]) => {
 
 const observeTransaction = (
   transaction: Observable<ISubmittableResult>,
-  setStatus: React.Dispatch<TransactionStatus>
+  setStatus: React.Dispatch<TransactionStatus>,
+  setEvents: React.Dispatch<EventRecord[]>
 ) => {
   const statusCallback = (result: ISubmittableResult) => {
     const { status, events } = result
@@ -46,6 +47,7 @@ const observeTransaction = (
       })
       console.log(JSON.stringify(events))
 
+      setEvents(events)
       setStatus(isError(events) ? 'ERROR' : 'SUCCESS')
     }
   }
@@ -63,6 +65,7 @@ export const useSignAndSendTransaction = ({ transaction, from, onDone }: UseSign
 
   const paymentInfo = useObservable(transaction?.paymentInfo(signerAddress), [transaction, signerAddress])
   const [status, setStatus] = useState<TransactionStatus>('READY')
+  const [events, setEvents] = useState<EventRecord[]>([])
 
   useEffect(() => {
     if (status !== 'SIGN' || !transaction) {
@@ -74,17 +77,17 @@ export const useSignAndSendTransaction = ({ transaction, from, onDone }: UseSign
     if (keyringPair.meta.isInjected) {
       setStatus('EXTENSION')
       web3FromAddress(signerAddress).then(({ signer }) => {
-        observeTransaction(transaction.signAndSend(signerAddress, { signer: signer }), setStatus)
+        observeTransaction(transaction.signAndSend(signerAddress, { signer: signer }), setStatus, setEvents)
       })
     } else {
       setStatus('PENDING')
-      observeTransaction(transaction.signAndSend(keyringPair), setStatus)
+      observeTransaction(transaction.signAndSend(keyringPair), setStatus, setEvents)
     }
   }, [api, status])
 
   useEffect(() => {
     if (status === 'SUCCESS' || status === 'ERROR') {
-      onDone(status === 'SUCCESS', paymentInfo?.partialFee.toBn() || new BN(0))
+      onDone(status === 'SUCCESS', events, paymentInfo?.partialFee.toBn() || new BN(0))
     }
   }, [status])
 

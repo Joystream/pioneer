@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
-import { Account, BaseMember } from '../../common/types'
+import { Account, BaseMember, onTransactionDone } from '../../common/types'
 import { SelectedAccount } from '../../components/account/SelectAccount'
 import { Button } from '../../components/buttons'
 import { InputComponent } from '../../components/forms'
@@ -19,7 +19,7 @@ interface Props {
   targetMember: BaseMember
   signer: Account
   amount: BN
-  onDone: (result: boolean, fee: BN) => void
+  onDone: onTransactionDone
 }
 
 export function SignTransferModal({ onClose, sourceMember, targetMember, amount, onDone, signer }: Props) {

@@ -1,7 +1,6 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
-import BN from 'bn.js'
 import React, { useState } from 'react'
-import { Account, Member } from '../../common/types'
+import { Account, Member, onTransactionDone } from '../../common/types'
 import { Button } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
@@ -18,7 +17,7 @@ interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
   transactionParams: Member
-  onDone: (result: boolean, fee: BN) => void
+  onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   initialSigner: Account
   isInvite?: boolean

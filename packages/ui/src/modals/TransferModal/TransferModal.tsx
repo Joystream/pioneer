@@ -1,3 +1,4 @@
+import { EventRecord } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 import React, { ReactElement, useState } from 'react'
 import { Account, ModalState } from '../../common/types'
@@ -31,7 +32,7 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
     setStep('AUTHORIZE')
   }
 
-  const onDone = (result: boolean, fee: BN) => {
+  const onDone = (result: boolean, events: EventRecord[], fee: BN) => {
     setStep(result ? 'SUCCESS' : 'ERROR')
     setFee(fee)
   }
