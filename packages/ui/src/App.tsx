@@ -1,5 +1,6 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { GlobalModals } from './app/GlobalModals'
 import { ConnectionStatus } from './components/ConnectionStatus'
 import { useMockMembers } from './mocks/useMockMembers'
 import { MyAccounts } from './pages/Profile/MyAccounts'
@@ -16,6 +17,7 @@ export function App() {
         <Redirect exact from="/" to="/profile" />
       </Switch>
       <ConnectionStatus />
+      <GlobalModals />
     </>
   )
 }
