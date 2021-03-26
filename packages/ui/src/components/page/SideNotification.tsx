@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
-import { BorderRad, Colors, Shadows, Animations } from '../../constants'
-import { CloseButton } from '..//buttons'
-import { Text } from '..//typography'
+import { Animations, BorderRad, Colors, Shadows } from '../../constants'
+import { CloseButton } from '../buttons'
+import { Text } from '../typography'
 
 interface NotificationProps {
   title: string

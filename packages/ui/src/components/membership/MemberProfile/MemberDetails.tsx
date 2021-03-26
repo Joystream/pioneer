@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useGetMemberQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
-import { Colors } from '../../../constants'
+import { Colors, Transitions } from '../../../constants'
 import { formatDateString, formatTokenValue } from '../../../utils/formatters'
 import { Button } from '../../buttons'
 import { LabelLink } from '../../forms'
@@ -173,6 +173,7 @@ const BlockNetworkInfo = styled(Text)`
 const BlockNumber = styled(LabelLink)`
   font-size: inherit;
   line-height: inherit;
+  transition: ${Transitions.all};
 `
 const AboutInvite = styled.div`
   display: flex;
