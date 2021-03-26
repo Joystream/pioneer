@@ -41,27 +41,33 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
     [JSON.stringify(transactionParams)]
   )
 
+  const onDone = useMemo(
+    () =>
+      transactionParams
+        ? (result: boolean, events: EventRecord[]) => {
+            const memberId = events.find((event) => event.event.method === 'MemberRegistered')?.event.data[0].toString()
+            if (server && memberId) {
+              server.schema.create('Member', {
+                id: memberId,
+                rootAccount: transactionParams.rootAccount.address,
+                controllerAccount: transactionParams.controllerAccount.address,
+                name: transactionParams.name,
+                handle: transactionParams.handle,
+                avatarURI: transactionParams.avatarURI,
+                about: transactionParams.about,
+                isVerified: false,
+                isFoundingMember: false,
+                inviteCount: '5',
+              })
+            }
+            setStep(result ? 'SUCCESS' : 'ERROR')
+          }
+        : () => null,
+    [transactionParams]
+  )
+
   if (step === 'PREPARE' || !transactionParams) {
     return <MembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
-  }
-
-  const onDone = (result: boolean, events: EventRecord[]) => {
-    const memberId = events.find((event) => event.event.method === 'MemberRegistered')?.event.data[0].toString()
-    if (server && memberId) {
-      server.schema.create('Member', {
-        id: memberId,
-        rootAccount: transactionParams.rootAccount.address,
-        controllerAccount: transactionParams.controllerAccount.address,
-        name: transactionParams.name,
-        handle: transactionParams.handle,
-        avatarURI: transactionParams.avatarURI,
-        about: transactionParams.about,
-        isVerified: false,
-        isFoundingMember: false,
-        inviteCount: '5',
-      })
-    }
-    setStep(result ? 'SUCCESS' : 'ERROR')
   }
 
   if (step === 'AUTHORIZE') {
