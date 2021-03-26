@@ -80,12 +80,6 @@ export const ModalGlass = styled.div<ModalProps>`
         return '48px'
     }
   }};
-  padding-left: ${({ modalHeight }) => {
-    switch (modalHeight) {
-      case 'm':
-        return '44px'
-    }
-  }};
   background-color: ${Colors.Black[700.85]};
   color: ${Colors.Black[900]};
   z-index: 100000;
