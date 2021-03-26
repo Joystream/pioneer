@@ -18,6 +18,7 @@ export const AddMembershipModal = () => {
   const [step, setStep] = useState<ModalState>('PREPARE')
   const [transactionParams, setParams] = useState<Member>()
   const server = useContext(ServerContext)
+  const [id, setId] = useState<string>()
 
   const onSubmit = (params: Member) => {
     setStep('AUTHORIZE')
@@ -45,9 +46,10 @@ export const AddMembershipModal = () => {
       transactionParams
         ? (result: boolean, events: EventRecord[]) => {
             const memberId = events.find((event) => event.event.method === 'MemberRegistered')?.event.data[0].toString()
+            setId(memberId)
             if (server && memberId) {
               server.schema.create('Member', {
-                id: memberId,
+                id: id,
                 rootAccount: transactionParams.rootAccount.address,
                 controllerAccount: transactionParams.controllerAccount.address,
                 name: transactionParams.name,
@@ -83,7 +85,7 @@ export const AddMembershipModal = () => {
   }
 
   if (step === 'SUCCESS') {
-    return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} />
+    return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} memberId={id} />
   }
 
   return <AddMembershipFailureModal onClose={onClose} member={transactionParams} />
