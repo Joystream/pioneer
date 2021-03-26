@@ -18,7 +18,6 @@ export const ModalContextProvider = (props: Props) => {
 
   const modalApi = {
     showModal: (name: string, data: any) => {
-      console.log(`show modal:${name}, data: `, data)
       setModal(name)
       setModalData(data)
     },
