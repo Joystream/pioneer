@@ -26,6 +26,7 @@ export function Checkbox({ id, isRequired, children, enabled = true, isChecked =
         }
       }}
       isLabelEnabled={enabled}
+      isCheckboxChecked={isStateChecked}
     >
       <CheckboxNative
         type="checkbox"
@@ -36,7 +37,7 @@ export function Checkbox({ id, isRequired, children, enabled = true, isChecked =
         disabled={!enabled}
         onChange={(event) => setStateChecked(event.target.checked)}
       />
-      <CheckboxStyled>
+      <CheckboxStyled disabled={!enabled}>
         <CheckboxIcon />
       </CheckboxStyled>
       <CheckboxSideText>{children}</CheckboxSideText>
@@ -51,21 +52,25 @@ export const CheckboxSideText = styled.span`
   font-weight: inherit;
 `
 
-export const CheckboxStyled = styled.span`
+export const CheckboxStyled = styled.span<{ disabled?: boolean }>`
   display: flex;
   position: relative;
   justify-content: center;
   align-items: center;
-  width: 24px;
-  height: 24px;
-  border: 2px solid ${Colors.Black[400]};
+  width: 16px;
+  height: 16px;
+  margin: 4px;
+  border: 2px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.m};
-  color: ${Colors.Black[400]};
+  background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : 'transparent')};
+  color: ${Colors.Black[300]};
   transition: ${Transitions.all};
   pointer-events: none;
   overflow: hidden;
 
   ${CheckboxIconStyles} {
+    width: 16px;
+    height: 16px;
     position: absolute;
     transform: translateY(-100%);
     transition: transform ${Transitions.duration} ease;
@@ -74,25 +79,38 @@ export const CheckboxStyled = styled.span`
 
 interface CheckboxLabelProps {
   isLabelEnabled?: boolean
+  isCheckboxChecked?: boolean
 }
 
 export const CheckboxLabel = styled.label<CheckboxLabelProps>`
   display: inline-grid;
   position: relative;
   grid-auto-flow: column;
-  grid-column-gap: 10px;
+  grid-column-gap: 4px;
   align-items: center;
   width: fit-content;
-  color: ${Colors.Black[900]};
+  color: ${(props) => {
+    if (props.isCheckboxChecked === false) {
+      return Colors.Black[600]
+    } else if (props.isCheckboxChecked === true) {
+      return Colors.Black[900]
+    } else {
+      return props.isLabelEnabled == false ? Colors.Black[600] : Colors.Black[900]
+    }
+  }};
   font-size: 14px;
   line-height: 20px;
   font-weight: 600;
   font-family: ${Fonts.Inter};
-  opacity: ${(props) => (props.isLabelEnabled == false ? '0.5' : '1')};
+  opacity: ${(props) => (props.isLabelEnabled == false ? '0.4' : '1')};
   cursor: ${(props) => (props.isLabelEnabled == false ? 'not-allowed' : 'pointer')};
   user-select: none;
+  transition: ${Transitions.all};
 
-  &:hover {
+  &:hover,
+  &:focus-within {
+    color: ${(props) => (props.isLabelEnabled == false ? Colors.Black[600] : Colors.Blue[500])};
+
     ${CheckboxStyled} {
       border: 2px solid ${Colors.Blue[400]};
       color: ${Colors.Blue[500]};
@@ -125,6 +143,9 @@ export const CheckboxNative = styled.input`
   &:checked&:focus + ${CheckboxStyled}, &:checked&:hover + ${CheckboxStyled} {
     border: 2px solid ${Colors.Blue[400]};
     color: ${Colors.Blue[500]};
+  }
+  &:focus + ${CheckboxStyled}, &:hover + ${CheckboxStyled} {
+    border: 2px solid ${Colors.Blue[400]};
   }
   &:disabled&:focus + ${CheckboxStyled}, &:disabled&:hover + ${CheckboxStyled} {
     border: 2px solid ${Colors.Black[300]};

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, Transitions } from '../../constants'
+import { Colors } from '../../constants'
 
 interface LabelLinkProps {
   href?: string
@@ -26,7 +26,6 @@ export const Link = styled.a`
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
-  transition: ${Transitions.all};
 
   &:hover {
     color: ${Colors.Blue[500]};

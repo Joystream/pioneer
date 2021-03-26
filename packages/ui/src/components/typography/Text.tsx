@@ -8,6 +8,7 @@ interface TextProps {
   dark?: boolean
   className?: string
   margin?: 's' | 'm' | 'l' | 'xl' | undefined
+  colorInherit?: boolean
 }
 
 export const Text = styled.p<TextProps>`
@@ -16,7 +17,13 @@ export const Text = styled.p<TextProps>`
     props.size === 1 ? '24px' : props.size === 2 ? '20px' : props.size === 3 ? '18px' : '24px'};
   font-weight: ${(props) => (props.bold ? '700' : '400')};
   font-style: ${(props) => (props.italic ? 'italic' : 'normal')};
-  color: ${(props) => (props.dark === true ? Colors.Black[700] : Colors.Black[500])};
+  color: ${(props) => {
+    if (props.colorInherit === true) {
+      return 'inherit'
+    } else {
+      return props.dark === true ? Colors.Black[700] : Colors.Black[500]
+    }
+  }};
   margin-bottom: ${({ margin }) => {
     switch (margin) {
       case 's':
