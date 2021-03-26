@@ -134,7 +134,7 @@ export const ModalBody = styled.div`
   display: grid;
   grid-area: modalbody;
   grid-row-gap: 16px;
-  padding: 24px 24px 48px;
+  padding: 24px 24px 24px;
   background-color: ${Colors.Black[50]};
   border-top: 1px solid ${Colors.Black[200]};
   border-bottom: 1px solid ${Colors.Black[200]};
@@ -145,13 +145,13 @@ export const ModalFooter = styled.footer`
   grid-area: modalfooter;
   grid-template-rows: 1fr;
   grid-auto-flow: column;
-  grid-column-gap: 46px;
+  grid-column-gap: 40px;
   justify-self: end;
   justify-items: end;
   align-items: center;
   width: fit-content;
-  height: 72px;
-  padding: 12px 16px;
+  height: 64px;
+  padding: 8px 24px;
   border-radius: 0 0 2px 2px;
 `
 
@@ -269,11 +269,10 @@ export const ScrolledModalContainer = styled.div`
 export const ResultModalBody = styled(ModalBody)`
   position: relative;
   grid-row-gap: 16px;
-  padding: 48px 44px;
+  padding: 8px 40px 40px;
   justify-items: center;
   border: none;
   background-color: ${Colors.White};
-  min-height: 312px;
 `
 
 export const SuccessModalBody = styled(ModalBody)`

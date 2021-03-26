@@ -1,9 +1,8 @@
 import BN from 'bn.js'
 import React from 'react'
 import { Account } from '../../common/types'
-import { CloseButton } from '../../components/buttons'
 import { FailureIcon } from '../../components/icons/FailureIcon'
-import { Modal, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
+import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
 import { TokenValue } from '../../components/typography'
 
 interface Props {
@@ -15,10 +14,10 @@ interface Props {
 
 export const TransactionFailureModal = ({ from, to, amount, onClose }: Props) => (
   <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
+    <ModalHeader title="" onClick={onClose} modalHeaderSize="s" />
     <ResultModalBody>
-      <CloseButton onClick={onClose} />
       <FailureIcon />
-      <ModalTitle>
+      <ModalTitle as="h4">
         <span className="red-title">Oh no!</span> Failure
       </ModalTitle>
       <ResultText size={2}>
