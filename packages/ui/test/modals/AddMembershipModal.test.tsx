@@ -30,6 +30,17 @@ jest.mock('../../src/hooks/useAccounts', () => {
   }
 })
 
+const mockCallback = jest.fn()
+
+jest.mock('../../src/hooks/useModal', () => {
+  return {
+    useModal: () => ({
+      showModal: mockCallback,
+      hideModal: () => null,
+    }),
+  }
+})
+
 describe('UI: AddMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -124,13 +135,26 @@ describe('UI: AddMembershipModal', () => {
 
     describe('Success', () => {
       it('Renders transaction success', async () => {
-        stubTransactionSuccess(transaction, [1])
+        stubTransactionSuccess(transaction, [1], 'members', 'MemberRegistered')
         const { getByText, findByText } = await renderAuthorizeStep()
 
         fireEvent.click(getByText(/^sign and create a member$/i))
 
         expect(await findByText('Success')).toBeDefined()
         expect(getByText(/^realbobbybob/i)).toBeDefined()
+      })
+
+      it('Enables the View My Profile button', async () => {
+        stubTransactionSuccess(transaction, [12], 'members', 'MemberRegistered')
+        const { getByText, findByText, findByRole } = await renderAuthorizeStep()
+
+        fireEvent.click(getByText(/^sign and create a member$/i))
+
+        expect(await findByText('Success')).toBeDefined()
+        const button = await findByRole('button', { name: 'View my profile' })
+        expect(button).toBeEnabled()
+        fireEvent.click(button)
+        expect(mockCallback.mock.calls[0]).toEqual(['member', { id: '12' }])
       })
     })
 
@@ -151,7 +175,7 @@ describe('UI: AddMembershipModal', () => {
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <AddMembershipModal onClose={() => undefined} />
+            <AddMembershipModal />
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockQueryNodeProviders>

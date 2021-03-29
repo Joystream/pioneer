@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { BaseMember } from '../../../common/types'
+import { useGetMemberQuery } from '../../../api/queries'
 import { Animations, Colors } from '../../../constants'
+import { useModal } from '../../../hooks/useModal'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { EditMembershipButton } from '../../../membership/components/EditMembershipButton'
 import { CloseButton } from '../../buttons'
@@ -11,30 +12,42 @@ import { MemberInfo } from '../MemberInfo'
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
 
-type Props = { member: BaseMember } & {
-  onClose: () => void
-}
-
 type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
-export const MemberProfile = React.memo(({ onClose, member }: Props) => {
+export const MemberProfile = React.memo(() => {
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
   const { members, isLoading } = useMyMemberships()
-  const isMyMember = !isLoading && !!members.find((m) => m.id == member.id)
+  const { modalData, hideModal } = useModal()
+  const { data, loading } = useGetMemberQuery({ variables: { id: modalData.id } })
+
+  const member = data?.member
+  const isMyMember = !isLoading && !!members.find((m) => m.id == member?.id)
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
-      onClose()
+      hideModal()
     }
   }
 
+  if (loading || !member) {
+    return (
+      <SidePaneGlass onClick={onBackgroundClick}>
+        <SidePane>
+          <SidePaneBody>
+            <EmptyBody>Loading...</EmptyBody>
+          </SidePaneBody>
+        </SidePane>
+      </SidePaneGlass>
+    )
+  }
+
   return (
-    <SidePaneGlass onClick={onBackgroundClick} onClose={onClose}>
+    <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane>
         <SidePaneHeader>
           <SidePanelTop>
             <SidePaneTitle>My Profile</SidePaneTitle>
-            <CloseButton onClick={onClose} />
+            <CloseButton onClick={hideModal} />
           </SidePanelTop>
           <MemberInfo member={member} memberSize="l" size="l" />
           <PageTabsNav>
@@ -67,7 +80,7 @@ export const MemberProfile = React.memo(({ onClose, member }: Props) => {
   )
 })
 
-export const SidePaneGlass = styled.div<Omit<Props, 'member'>>`
+export const SidePaneGlass = styled.div`
   display: flex;
   justify-content: flex-end;
   position: fixed;
