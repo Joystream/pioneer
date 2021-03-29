@@ -4,10 +4,10 @@ import { set } from 'lodash'
 import { from, of } from 'rxjs'
 import { UseApi } from '../../src/providers/api/provider'
 
-const getSuccessEvents = (data: number[]) => [
+const getSuccessEvents = (data: number[], section: string, method: string) => [
   {
     phase: { ApplyExtrinsic: 2 },
-    event: { index: '0x0502', data: data, method: 'MemberRegistered', section: 'members' },
+    event: { index: '0x0502', data, method, section },
   },
   {
     phase: { ApplyExtrinsic: 2 },
@@ -73,8 +73,8 @@ export const stubTransactionFailure = (transaction: any) => {
   set(transaction, 'signAndSend', () => stubTransactionResult(getErrorEvents()))
 }
 
-export const stubTransactionSuccess = (transaction: any, data: any) => {
-  set(transaction, 'signAndSend', () => stubTransactionResult(getSuccessEvents(data)))
+export const stubTransactionSuccess = (transaction: any, data: any, section = '', method = '') => {
+  set(transaction, 'signAndSend', () => stubTransactionResult(getSuccessEvents(data, section, method)))
 }
 
 export const stubBatchTransactionFailure = (transaction: any) => {

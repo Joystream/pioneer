@@ -7,7 +7,6 @@ import { of } from 'rxjs'
 import { Account } from '../../src/common/types'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
-import { ModalContextProvider } from '../../src/providers/modal/provider'
 import { selectAccount } from '../helpers/selectAccount'
 import { alice, bob } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
@@ -136,7 +135,7 @@ describe('UI: AddMembershipModal', () => {
 
     describe('Success', () => {
       it('Renders transaction success', async () => {
-        stubTransactionSuccess(transaction, [1])
+        stubTransactionSuccess(transaction, [1], 'members', 'MemberRegistered')
         const { getByText, findByText } = await renderAuthorizeStep()
 
         fireEvent.click(getByText(/^sign and create a member$/i))
@@ -146,7 +145,7 @@ describe('UI: AddMembershipModal', () => {
       })
 
       it('Enables the View My Profile button', async () => {
-        stubTransactionSuccess(transaction, [12])
+        stubTransactionSuccess(transaction, [12], 'members', 'MemberRegistered')
         const { getByText, findByText, findByRole } = await renderAuthorizeStep()
 
         fireEvent.click(getByText(/^sign and create a member$/i))

@@ -23,10 +23,9 @@ export const MemberProfile = React.memo(() => {
   const member = data?.member
   const isMyMember = !isLoading && !!members.find((m) => m.id == member?.id)
 
-  const onClose = hideModal
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
-      onClose()
+      hideModal()
     }
   }
 
@@ -46,7 +45,7 @@ export const MemberProfile = React.memo(() => {
     <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane>
         <SidePaneHeader>
-          <CloseButton onClick={onClose} />
+          <CloseButton onClick={hideModal} />
           <SidePaneTitle>My Profile</SidePaneTitle>
           <MemberInfo member={member} memberSize="l" size="l" />
           <PageTabsNav>
