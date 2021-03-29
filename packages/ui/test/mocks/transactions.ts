@@ -7,7 +7,7 @@ import { UseApi } from '../../src/providers/api/provider'
 const getSuccessEvents = (data: number[]) => [
   {
     phase: { ApplyExtrinsic: 2 },
-    event: { index: '0x0502', data: data },
+    event: { index: '0x0502', data: data, method: 'MemberRegistered', section: 'members' },
   },
   {
     phase: { ApplyExtrinsic: 2 },

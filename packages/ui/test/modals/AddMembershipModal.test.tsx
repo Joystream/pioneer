@@ -7,6 +7,7 @@ import { of } from 'rxjs'
 import { Account } from '../../src/common/types'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
+import { ModalContextProvider } from '../../src/providers/modal/provider'
 import { selectAccount } from '../helpers/selectAccount'
 import { alice, bob } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
@@ -27,6 +28,17 @@ const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
 jest.mock('../../src/hooks/useAccounts', () => {
   return {
     useAccounts: () => useAccounts,
+  }
+})
+
+const mockCallback = jest.fn()
+
+jest.mock('../../src/hooks/useModal', () => {
+  return {
+    useModal: () => ({
+      showModal: mockCallback,
+      hideModal: () => null,
+    }),
   }
 })
 
@@ -131,6 +143,19 @@ describe('UI: AddMembershipModal', () => {
 
         expect(await findByText('Success')).toBeDefined()
         expect(getByText(/^realbobbybob/i)).toBeDefined()
+      })
+
+      it('Enables the View My Profile button', async () => {
+        stubTransactionSuccess(transaction, [12])
+        const { getByText, findByText, findByRole } = await renderAuthorizeStep()
+
+        fireEvent.click(getByText(/^sign and create a member$/i))
+
+        expect(await findByText('Success')).toBeDefined()
+        const button = await findByRole('button', { name: 'View my profile' })
+        expect(button).toBeEnabled()
+        fireEvent.click(button)
+        expect(mockCallback.mock.calls[0]).toEqual(['member', { id: '12' }])
       })
     })
 
