@@ -3,7 +3,7 @@ import React, { ReactElement, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../common/types'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
-import { ButtonGhost, ButtonInner, ButtonPrimary } from '../../components/buttons'
+import { ButtonGhost, ButtonPrimary } from '../../components/buttons'
 import { InputComponent, InputNumber } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { useBalance } from '../../hooks/useBalance'
@@ -113,13 +113,11 @@ const AmountButtons = styled.div`
   height: 46px;
   align-items: center;
 `
+
 const AmountButton = styled(ButtonGhost)`
   height: 26px;
   padding: 4px 6px;
-
-  ${ButtonInner} {
-    font-size: 10px;
-    line-height: 16px;
-    text-transform: uppercase;
-  }
+  font-size: 10px;
+  line-height: 16px;
+  text-transform: uppercase;
 `

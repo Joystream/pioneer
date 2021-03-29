@@ -37,7 +37,7 @@ const getPadding = (props: ButtonProps) => {
 export function ButtonPrimary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonPrimaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      <ButtonInner size={size}>{children}</ButtonInner>
+      {children}
     </ButtonPrimaryStyles>
   )
 }
@@ -45,7 +45,7 @@ export function ButtonPrimary({ className, children, size, square, disabled, onC
 export function ButtonSecondary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      <ButtonInner size={size}>{children}</ButtonInner>
+      {children}
     </ButtonSecondaryStyles>
   )
 }
@@ -53,7 +53,7 @@ export function ButtonSecondary({ className, children, size, square, disabled, o
 export function ButtonGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      <ButtonInner size={size}>{children}</ButtonInner>
+      {children}
     </ButtonGhostStyles>
   )
 }
@@ -80,6 +80,22 @@ const BasicButtonStyles = css<ButtonProps>`
   overflow: hidden;
   transition: ${Transitions.all};
 
+  grid-auto-flow: column;
+  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
+
+  font-family: ${Fonts.Grotesk};
+  font-size: ${getFontSize};
+  line-height: ${getLineHeight};
+  font-weight: 700;
+  text-transform: capitalize;
+  transform: translateY(1px);
+
+  & > svg {
+    z-index: 2;
+    transform: translateY(-1px);
+    transition: ${Transitions.all};
+  }
+
   &:before,
   &:after {
     content: '';
@@ -91,7 +107,7 @@ const BasicButtonStyles = css<ButtonProps>`
     border-radius: ${BorderRad.full};
     transform: translate(-150%, -50%);
     transition: ${Transitions.all};
-    z-index: 1;
+    z-index: -1;
     pointer-events: none;
   }
 
@@ -122,35 +138,14 @@ const BasicButtonStyles = css<ButtonProps>`
   }
 `
 
-export const ButtonInner = styled.span<ButtonProps>`
-  display: inline-grid;
-  grid-auto-flow: column;
-  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
-  justify-items: center;
-  align-items: center;
-  width: 100%;
-  height: fit-content;
-  font-family: ${Fonts.Grotesk};
-  font-size: ${getFontSize};
-  line-height: ${getLineHeight};
-  font-weight: 700;
-  text-transform: capitalize;
-  transform: translateY(1px);
-  z-index: 2;
-
-  & > svg {
-    transform: translateY(-1px);
-    transition: ${Transitions.all};
-  }
-`
-
 export const ButtonPrimaryStyles = styled.button<ButtonProps>`
-  ${BasicButtonStyles}
+  ${BasicButtonStyles};
+
   color: ${Colors.White};
   border-color: ${Colors.Blue[500]};
   background-color: ${Colors.Blue[500]};
 
-  ${ButtonInner} > svg {
+  & > svg {
     color: ${Colors.White};
   }
 
@@ -177,11 +172,12 @@ export const ButtonPrimaryStyles = styled.button<ButtonProps>`
 `
 
 export const ButtonSecondaryStyles = styled.button<ButtonProps>`
-  ${BasicButtonStyles}
+  ${BasicButtonStyles};
+
   border-color: ${Colors.Black[75]};
   background-color: ${Colors.Black[75]};
 
-  ${ButtonInner} > svg {
+  & > svg {
     color: ${Colors.Black[400]};
   }
 
@@ -197,7 +193,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
     border-color: ${Colors.Black[50]};
     color: ${Colors.Blue[500]};
 
-    ${ButtonInner} > svg {
+    & > svg {
       color: ${Colors.Blue[500]};
     }
   }
@@ -207,7 +203,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
   }
 
   &:disabled {
-    ${ButtonInner} > svg {
+    & > svg {
       color: ${Colors.Black[300]};
     }
     color: ${Colors.Black[300]};
@@ -217,12 +213,13 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
 `
 
 export const ButtonGhostStyles = styled.button<ButtonProps>`
-  ${BasicButtonStyles}
+  ${BasicButtonStyles};
+
   color: ${Colors.Black[900]};
   border-color: ${Colors.Black[200]};
   background-color: ${Colors.White};
 
-  ${ButtonInner} > svg {
+  & > svg {
     color: ${Colors.Black[400]};
   }
 
@@ -238,7 +235,7 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   &:focus {
     border-color: ${Colors.Blue[100]};
     color: ${Colors.Blue[500]};
-    ${ButtonInner} > svg {
+    & > svg {
       color: ${Colors.Blue[500]};
     }
   }
@@ -248,7 +245,7 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   }
 
   &:disabled {
-    ${ButtonInner} > svg {
+    & > svg {
       color: ${Colors.Black[300]};
     }
     color: ${Colors.Black[300]};
