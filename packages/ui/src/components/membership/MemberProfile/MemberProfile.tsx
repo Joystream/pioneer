@@ -45,8 +45,10 @@ export const MemberProfile = React.memo(() => {
     <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane>
         <SidePaneHeader>
-          <CloseButton onClick={hideModal} />
-          <SidePaneTitle>My Profile</SidePaneTitle>
+          <SidePanelTop>
+            <SidePaneTitle>My Profile</SidePaneTitle>
+            <CloseButton onClick={hideModal} />
+          </SidePanelTop>
           <MemberInfo member={member} memberSize="l" size="l" />
           <PageTabsNav>
             <PageTab active={activeTab === 'DETAILS'} onClick={() => setActiveTab('DETAILS')}>
@@ -67,7 +69,7 @@ export const MemberProfile = React.memo(() => {
         </SidePaneBody>
         <SidePaneFooter>
           {isMyMember && activeTab === 'DETAILS' && (
-            <EditMembershipButton member={member} variant="ghost" size="medium">
+            <EditMembershipButton member={member} size="medium">
               <EditSymbol />
               Edit My Profile
             </EditMembershipButton>
@@ -95,7 +97,7 @@ export const SidePaneGlass = styled.div`
 const SidePane = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: minmax(auto, 200px) 1fr 72px;
+  grid-template-rows: minmax(auto, 192px) 1fr 72px;
   grid-template-areas:
     'sidepaneheader'
     'sidepanebody'
@@ -118,13 +120,18 @@ const SidePaneHeader = styled.div`
   width: 100%;
   height: 100%;
   max-height: 200px;
-  padding: 24px 24px 0;
+  padding: 16px 24px 0;
   background-color: ${Colors.White};
 `
 
-const SidePaneTitle = styled.h4`
-  line-height: 24px;
+const SidePanelTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
 `
+
+const SidePaneTitle = styled.h5``
 
 const SidePaneBody = styled.div`
   display: flex;

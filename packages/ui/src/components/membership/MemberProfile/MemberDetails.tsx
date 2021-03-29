@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { useGetMemberQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
-import { Colors } from '../../../constants'
+import { Colors, Transitions } from '../../../constants'
 import { formatDateString, formatTokenValue } from '../../../utils/formatters'
-import { Button } from '../../buttons'
+import { ButtonGhost } from '../../buttons'
 import { LabelLink } from '../../forms'
 import { BlockIcon } from '../../icons/BlockIcon'
 import { TransferSymbol } from '../../icons/symbols/TransferSymbol'
@@ -60,10 +60,10 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         <MembershipLabel text="Invitations Left" />
         <AboutInvite>
           <AboutText size={2}>{member?.inviteCount}</AboutText>
-          <Button variant="ghost" size="small">
+          <ButtonGhost size="small">
             <TransferSymbol />
             Transfer Invites
-          </Button>
+          </ButtonGhost>
         </AboutInvite>
       </AboutRow>
       <AboutRow>
@@ -173,6 +173,7 @@ const BlockNetworkInfo = styled(Text)`
 const BlockNumber = styled(LabelLink)`
   font-size: inherit;
   line-height: inherit;
+  transition: ${Transitions.all};
 `
 const AboutInvite = styled.div`
   display: flex;

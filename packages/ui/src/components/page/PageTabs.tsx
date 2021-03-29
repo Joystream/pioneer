@@ -33,9 +33,11 @@ export const PageTab = styled.a<PageTabProps>`
   width: fit-content;
   font-size: 16px;
   line-height: 24px;
-  font-weight: 700;
-  color: ${Colors.Black[900]};
+  font-weight: 400;
+  color: ${({ active }) => (active ? Colors.Black[900] : Colors.Black[500])};
   text-transform: capitalize;
+  -webkit-text-stroke: 0.05em;
+  -webkit-text-stroke-color: ${({ active }) => (active ? Colors.Black[900] : 'transparent')};
   cursor: pointer;
   transition: ${Transitions.all};
   text-decoration: none;
@@ -64,6 +66,7 @@ export const PageTab = styled.a<PageTabProps>`
 
   &:hover {
     color: ${Colors.Blue[500]};
+    -webkit-text-stroke-color: ${({ active }) => (active ? Colors.Blue[500] : 'transparent')};
   }
 
   ${({ active }) =>

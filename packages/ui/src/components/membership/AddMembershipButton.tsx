@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { useModal } from '../../hooks/useModal'
-import { Button, ButtonSize } from '../buttons'
+import { ButtonPrimary, ButtonSize } from '../buttons'
 
 interface AddMembershipButtonProps {
   className?: string
@@ -19,7 +19,7 @@ export const AddMembershipButton = ({ className, children, size }: AddMembership
   )
 }
 
-const AddMemberships = styled(Button)`
+const AddMemberships = styled(ButtonPrimary)`
   justify-self: center;
   align-self: center;
 `

@@ -134,19 +134,33 @@ export const ModalBody = styled.div`
   border-bottom: 1px solid ${Colors.Black[200]};
 `
 
-export const ModalFooter = styled.footer`
+export const ModalFooter = styled.footer<{ twoColumns?: boolean }>`
   display: inline-grid;
   grid-area: modalfooter;
+  grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto' : '1fr')};
   grid-template-rows: 1fr;
   grid-auto-flow: column;
   grid-column-gap: 40px;
   justify-self: end;
   justify-items: end;
+  justify-content: end;
   align-items: center;
-  width: fit-content;
+  width: 100%;
   height: 64px;
   padding: 8px 24px;
   border-radius: 0 0 2px 2px;
+`
+
+export const ModalFooterGroup = styled.div<{ left?: boolean }>`
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  width: fit-content;
+  height: 100%;
+  justify-self: ${({ left }) => (left ? 'start' : 'end')};
+  grid-column-gap: 40px;
+  justify-items: ${({ left }) => (left ? 'start' : 'end')};
+  justify-content: ${({ left }) => (left ? 'start' : 'end')};
 `
 
 interface ModalWrapProps {

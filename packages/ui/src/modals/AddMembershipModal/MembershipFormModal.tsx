@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 import { Account, BaseMember, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
-import { Button } from '../../components/buttons'
+import { ButtonPrimary } from '../../components/buttons'
 import {
   Checkbox,
   InlineToggleWrap,
@@ -20,6 +20,7 @@ import { Help } from '../../components/Help'
 import { SelectMember } from '../../components/membership/SelectMember'
 import {
   ModalFooter,
+  ModalFooterGroup,
   ModalHeader,
   ScrolledModal,
   ScrolledModalBody,
@@ -196,10 +197,10 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <Label>
+      <ModalFooter twoColumns>
+        <ModalFooterGroup left>
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
-            <Text size={2} dark={true}>
+            <Text size={2} colorInherit>
               I agree to the{' '}
               <LabelLink href={'http://example.com/'} target="_blank">
                 Terms of Service
@@ -211,17 +212,19 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               .
             </Text>
           </Checkbox>
-        </Label>
-        <BalanceInfoNarrow>
-          <InfoTitle>Creation fee:</InfoTitle>
-          <InfoValue>
-            <TokenValue value={membershipPrice?.toBn()} />
-          </InfoValue>
-          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-        </BalanceInfoNarrow>
-        <Button size="medium" onClick={onCreate} disabled={!isValid}>
-          Create a Membership
-        </Button>
+        </ModalFooterGroup>
+        <ModalFooterGroup>
+          <BalanceInfoNarrow>
+            <InfoTitle>Creation fee:</InfoTitle>
+            <InfoValue>
+              <TokenValue value={membershipPrice?.toBn()} />
+            </InfoValue>
+            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
+          </BalanceInfoNarrow>
+          <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
+            Create a Membership
+          </ButtonPrimary>
+        </ModalFooterGroup>
       </ModalFooter>
     </ScrolledModal>
   )
