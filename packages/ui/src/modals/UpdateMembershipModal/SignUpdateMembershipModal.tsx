@@ -40,13 +40,11 @@ function createBatch(
     return
   }
   if (hasProfileEdits) {
-    const updateProfile = api.tx.members.updateProfile(
-      member.id,
-      transactionParams.name || null,
-      transactionParams.handle || null,
-      transactionParams.avatarURI || null,
-      transactionParams.about || null
-    )
+    const updateProfile = api.tx.members.updateProfile(member.id, transactionParams.handle || null, {
+      name: transactionParams.name || null,
+      avatar_uri: transactionParams.avatarURI || null,
+      about: transactionParams.about || null,
+    })
     transactions.push(updateProfile)
   }
 

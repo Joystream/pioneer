@@ -31,10 +31,12 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         ? api?.tx?.members?.buyMembership({
             root_account: transactionParams.rootAccount.address,
             controller_account: transactionParams.controllerAccount.address,
-            name: transactionParams.name,
-            handle: transactionParams.handle,
-            avatar_uri: transactionParams.avatarURI,
-            about: transactionParams.about,
+            metadata: {
+              name: transactionParams.name,
+              handle: transactionParams.handle,
+              avatar_uri: transactionParams.avatarURI,
+              about: transactionParams.about,
+            },
             referrer_id: transactionParams.referrer?.id,
           })
         : undefined,
