@@ -59,6 +59,7 @@ export const AddMembershipModal = () => {
                 isVerified: false,
                 isFoundingMember: false,
                 inviteCount: '5',
+                registeredAtBlockId: 'block-3',
               })
             }
             setStep(result ? 'SUCCESS' : 'ERROR')
