@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
 import { Account, BaseMember } from '../../common/types'
-import { Button } from '../../components/buttons'
+import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent, InputNumber } from '../../components/forms'
 import { filterMember, SelectMember } from '../../components/membership/SelectMember'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
@@ -68,13 +68,13 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
         </InputComponent>
       </ModalBody>
       <ModalFooter>
-        <Button
+        <ButtonPrimary
           size="medium"
           onClick={() => from && to && signer && onAccept(new BN(amount), from, to, signer)}
           disabled={isDisabled}
         >
           Transfer Invites
-        </Button>
+        </ButtonPrimary>
       </ModalFooter>
     </Modal>
   )

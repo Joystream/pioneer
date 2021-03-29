@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { Account, onTransactionDone } from '../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
-import { Button } from '../../components/buttons'
+import { ButtonPrimary } from '../../components/buttons'
 import { Help } from '../../components/Help'
 import { ArrowDownExpandedIcon } from '../../components/icons'
 import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/Modal'
@@ -99,9 +99,9 @@ export function SignTransferModal({ onClose, from, amount, to, onDone }: Props) 
               />
             </BalanceInfoNarrow>
           </TransactionInfo>
-          <Button size="medium" onClick={send} disabled={status !== 'READY'}>
+          <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign transaction and Transfer
-          </Button>
+          </ButtonPrimary>
         </ModalFooter>
       </Modal>
     )

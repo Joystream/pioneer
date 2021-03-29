@@ -4,7 +4,7 @@ import { Account } from '../common/types'
 import { Colors } from '../constants'
 import { useToggle } from '../hooks/useToggle'
 import { TransferModal } from '../modals/TransferModal/TransferModal'
-import { Button } from './buttons'
+import { ButtonGhost, ButtonPrimary } from './buttons'
 import { ArrowInsideIcon, ArrowOutsideIcon, TransferIcon } from './icons'
 
 interface Props {
@@ -22,7 +22,7 @@ export function TransferButton({ from, to, disabled }: Props) {
 
   return (
     <>
-      <ButtonForTransfer variant="ghost" size="medium" square onClick={toggleOpen} disabled={isDisabled}>
+      <ButtonForTransfer size="medium" square onClick={toggleOpen} disabled={isDisabled}>
         {icon}
       </ButtonForTransfer>
       {isOpen && <TransferModal onClose={toggleOpen} from={from} to={to} icon={icon} />}
@@ -44,13 +44,13 @@ export function TransferButtonStyled() {
   )
 }
 
-const ButtonForTransfer = styled(Button)`
+const ButtonForTransfer = styled(ButtonGhost)`
   svg {
     color: ${Colors.Black[900]};
   }
 `
 
-const ButtonForTransferStyled = styled(Button)`
+const ButtonForTransferStyled = styled(ButtonPrimary)`
   width: 32px;
   height: 32px;
   grid-area: balancetransfer;

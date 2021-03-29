@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { useToggle } from '../../hooks/useToggle'
 import { InviteMemberModal } from '../../modals/InviteMemberModal'
-import { Button, ButtonSize } from '../buttons'
+import { ButtonGhost, ButtonSize } from '../buttons'
 
 interface InviteMemberButtonProps {
   className?: string
@@ -14,9 +14,9 @@ export const InviteMemberButton = ({ className, children, size }: InviteMemberBu
 
   return (
     <>
-      <Button variant="ghost" size={size} onClick={toggleIsOpen} className={className}>
+      <ButtonGhost size={size} onClick={toggleIsOpen} className={className}>
         {children}
-      </Button>
+      </ButtonGhost>
       {isOpen && <InviteMemberModal onClose={toggleIsOpen} />}
     </>
   )

@@ -56,7 +56,7 @@ export const MemberProfile = React.memo(({ onClose, member }: Props) => {
         </SidePaneBody>
         <SidePaneFooter>
           {isMyMember && activeTab === 'DETAILS' && (
-            <EditMembershipButton member={member} variant="ghost" size="medium">
+            <EditMembershipButton member={member} size="medium">
               <EditSymbol />
               Edit My Profile
             </EditMembershipButton>

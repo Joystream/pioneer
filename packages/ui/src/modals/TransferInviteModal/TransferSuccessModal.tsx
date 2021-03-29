@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 import { BaseMember } from '../../common/types'
-import { Button } from '../../components/buttons'
+import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership/MemberInfo'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
@@ -31,9 +31,9 @@ export function TransferSuccessModal({ onClose, recipient, amount }: Props) {
         </MemberRow>
       </ModalBody>
       <ModalFooter>
-        <Button size="medium" disabled>
+        <ButtonPrimary size="medium" disabled>
           View my profile
-        </Button>
+        </ButtonPrimary>
       </ModalFooter>
     </Modal>
   )
