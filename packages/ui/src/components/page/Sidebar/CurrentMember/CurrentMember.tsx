@@ -28,7 +28,9 @@ export const CurrentMember = () => {
           <ArrowDownExpandedIcon />
         </SwitchArrow>
       </SwitchMember>
-      {isOpen && <SwitchMemberModal onClose={toggleOpen} onCreateMember={() => showModal('addMembership')} />}
+      {isOpen && (
+        <SwitchMemberModal onClose={toggleOpen} onCreateMember={() => showModal({ modal: 'AddMembership' })} />
+      )}
     </>
   )
 }

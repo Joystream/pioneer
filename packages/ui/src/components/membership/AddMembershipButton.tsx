@@ -13,7 +13,7 @@ export const AddMembershipButton = ({ className, children, size }: AddMembership
   const { showModal } = useModal()
 
   return (
-    <AddMemberships size={size} onClick={() => showModal('addMembership')} className={className}>
+    <AddMemberships size={size} onClick={() => showModal({ modal: 'AddMembership' })} className={className}>
       {children}
     </AddMemberships>
   )

@@ -16,7 +16,7 @@ export const MemberItem = ({ member }: Props) => {
   const { showModal } = useModal()
 
   const showMemberModal = useCallback(() => {
-    showModal('member', { id: member.id })
+    showModal({ modal: 'Member', data: { id: member.id } })
   }, [member.id])
 
   return (

@@ -5,23 +5,40 @@ interface Props {
   children: ReactNode
 }
 
-type ModalName = 'member' | 'addMembership' | 'TransferInvites'
+interface Modal<M> {
+  modal: M
+}
+interface ModalWithData<M, D> extends Modal<M> {
+  data: D
+}
+
+type AddMembershipModal = Modal<'AddMembership'>
+type MemberModal = ModalWithData<'Member', { id: string }>
+type TransferInvitesModal = ModalWithData<'TransferInvites', { memberId: string }>
+
+type ModalCall = MemberModal | AddMembershipModal | TransferInvitesModal
 
 export interface ModalApi {
   modal: string | null
   modalData: any | null
-  showModal: (name: ModalName, data?: any) => void
+  showModal: (action: ModalCall) => void
   hideModal: () => void
+}
+
+function isModalWithData(a: any): a is ModalWithData<any, any> {
+  return !!a.data
 }
 
 export const ModalContextProvider = (props: Props) => {
   const [modal, setModal] = useState<string | null>(null)
   const [modalData, setModalData] = useState<any>()
+  const modalApi: ModalApi = {
+    showModal: (modalCall) => {
+      setModal(modalCall.modal)
 
-  const modalApi = {
-    showModal: (name: string, data: any) => {
-      setModal(name)
-      setModalData(data)
+      if (isModalWithData(modalCall)) {
+        setModalData(modalCall.data)
+      }
     },
     hideModal: () => {
       setModal(null)

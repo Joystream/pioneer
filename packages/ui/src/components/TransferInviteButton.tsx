@@ -12,7 +12,7 @@ interface Props extends Pick<ButtonProps, 'square'> {
 export function TransferInviteButton({ member, square, children }: Props) {
   const disabled = member.inviteCount <= 0
   const { showModal } = useModal()
-  const onClick = () => showModal('TransferInvites', { memberId: member.id })
+  const onClick = () => showModal({ modal: 'TransferInvites', data: { memberId: member.id } })
 
   return (
     <ButtonSecondary size="small" square={square ?? true} disabled={disabled} onClick={onClick}>
