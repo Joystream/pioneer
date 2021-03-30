@@ -20,11 +20,11 @@ export const MemberDetails = React.memo(({ member }: Props) => {
     variables: { id: member.id },
   })
 
-  if (loading || !data || !data.member) {
+  if (loading || !data || !data.membership) {
     return <EmptyBody>Loading...</EmptyBody>
   }
 
-  const registeredAtBlock = data.member.registeredAtBlock
+  const registeredAtBlock = data.membership.registeredAtBlock
 
   const hired = '-'
   const applied = '-'
@@ -44,8 +44,8 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       <AboutRow>
         <MembershipLabel text="Registered on" />
         <AboutDateColumn>
-          <AboutText size={2}>{formatDateString(registeredAtBlock.timestamp)}</AboutText>
-          <Block height={registeredAtBlock.height} network={registeredAtBlock.network} />
+          <AboutText size={2}>{formatDateString(data.membership.registeredAtTime)}</AboutText>
+          <Block height={registeredAtBlock.block} network={registeredAtBlock.network} />
         </AboutDateColumn>
       </AboutRow>
       <AboutRow>
@@ -69,7 +69,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       <AboutRow>
         <MembershipLabel text="Invited" />
         <AboutDateColumn>
-          {(data.member.invitees || []).map((member) => (
+          {(data.membership.invitees || []).map((member) => (
             <MemberInfo member={member} key={member.handle} />
           ))}
         </AboutDateColumn>

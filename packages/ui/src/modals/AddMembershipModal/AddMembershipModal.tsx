@@ -34,7 +34,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
             handle: transactionParams.handle,
             metadata: {
               name: transactionParams.name,
-              avatar_uri: transactionParams.avatarURI,
+              avatar_uri: transactionParams.avatarUri,
               about: transactionParams.about,
             },
             referrer_id: transactionParams.referrer?.id,
@@ -55,7 +55,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
                 controllerAccount: transactionParams.controllerAccount.address,
                 name: transactionParams.name,
                 handle: transactionParams.handle,
-                avatarURI: transactionParams.avatarURI,
+                avatarUri: transactionParams.avatarUri,
                 about: transactionParams.about,
                 isVerified: false,
                 isFoundingMember: false,

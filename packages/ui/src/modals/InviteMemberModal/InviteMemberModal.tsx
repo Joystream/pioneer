@@ -30,7 +30,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
             controller_account: transactionParams.controllerAccount.address,
             metadata: {
               name: transactionParams.name,
-              avatar_uri: transactionParams.avatarURI,
+              avatar_uri: transactionParams.avatarUri,
               about: transactionParams.about,
             },
             handle: transactionParams.handle,

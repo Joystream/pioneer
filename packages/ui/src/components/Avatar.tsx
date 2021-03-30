@@ -4,12 +4,12 @@ import { BorderRad } from '../constants'
 import { AvatarPlaceholder } from '../assets/images/Members/AvatarPlaceholder'
 
 interface Props {
-  avatarURI?: string | null
+  avatarUri?: string | null
   className?: any
 }
 
-export const Avatar = React.memo(({ avatarURI, className }: Props) => {
-  return avatarURI ? <AvatarImg src={avatarURI} className={className} /> : <AvatarPlaceholderImage />
+export const Avatar = React.memo(({ avatarUri, className }: Props) => {
+  return avatarUri ? <AvatarImg src={avatarUri} className={className} /> : <AvatarPlaceholderImage />
 })
 
 export const AvatarImg = styled.img`

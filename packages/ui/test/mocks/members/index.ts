@@ -31,34 +31,34 @@ export const createMember = (server: Server, memberOrName: MemberFieldsFragment 
 
   return server.schema.create('Member', {
     ...member,
-    __typename: 'Member',
+    __typename: 'Membership',
   } as any)
 }
 
 const aliceMember: MemberFieldsFragment = {
-  __typename: 'Member',
+  __typename: 'Membership',
   id: '0',
   name: 'Alice Member',
   handle: 'alice_handle',
   about: '',
-  avatarURI: '',
+  avatarUri: '',
   rootAccount: '',
   controllerAccount: '',
-  isFoundingMember: true,
+  // isFoundingMember: true,
   isVerified: true,
   inviteCount: 5,
 }
 
 const bobMember: MemberFieldsFragment = {
-  __typename: 'Member',
+  __typename: 'Membership',
   id: '1',
   name: 'Bob Member',
   handle: 'bob_handle',
   about: '',
-  avatarURI: '',
+  avatarUri: '',
   rootAccount: '',
   controllerAccount: '',
-  isFoundingMember: false,
+  // isFoundingMember: false,
   isVerified: false,
   inviteCount: 5,
 }

@@ -31,7 +31,7 @@ const InviteMemberSchema = Yup.object().shape({
   invitor: MemberSchema.required(),
   rootAccount: NewAddressSchema('rootAccount'),
   controllerAccount: NewAddressSchema('controllerAccount'),
-  avatarURI: AvatarURISchema,
+  avatarUri: AvatarURISchema,
   name: Yup.string().required(),
   handle: HandleSchema.required(),
 })
@@ -45,11 +45,11 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
     controllerAccount: undefined,
     handle: '',
     about: '',
-    avatarURI: '',
+    avatarUri: '',
     hasTerms: false,
     invitor: undefined,
   })
-  const { rootAccount, controllerAccount, handle, name, avatarURI, about } = state
+  const { rootAccount, controllerAccount, handle, name, avatarUri, about } = state
   const onCreate = () => onSubmit(state as Member)
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
@@ -156,19 +156,19 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
               id="member-avatar"
               label="Member Avatar"
               required
-              value={avatarURI}
-              validation={hasError('avatarURI', errors) ? 'invalid' : undefined}
+              value={avatarUri}
+              validation={hasError('avatarUri', errors) ? 'invalid' : undefined}
               message={
-                hasError('avatarURI', errors)
-                  ? getErrorMessage('avatarURI', errors)
+                hasError('avatarUri', errors)
+                  ? getErrorMessage('avatarUri', errors)
                   : 'Paste an URL of your avatar image. Text lorem ipsum.'
               }
               placeholder="Image URL"
             >
               <InputText
                 id="member-avatar"
-                value={avatarURI}
-                onChange={(event) => changeField('avatarURI', event.target.value)}
+                value={avatarUri}
+                onChange={(event) => changeField('avatarUri', event.target.value)}
               />
             </InputComponent>
           </Row>

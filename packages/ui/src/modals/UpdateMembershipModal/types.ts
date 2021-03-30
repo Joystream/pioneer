@@ -5,7 +5,7 @@ export interface UpdateMemberForm {
   id: string
   name?: string
   handle?: string
-  avatarURI?: string
+  avatarUri?: string
   about?: string
   rootAccount?: Account
   controllerAccount?: Account

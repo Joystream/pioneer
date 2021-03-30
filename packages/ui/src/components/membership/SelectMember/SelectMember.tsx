@@ -35,7 +35,7 @@ export const SelectMember = ({ onChange, filter, selected, disabled }: Props) =>
   const [search, setSearch] = useState('')
   const searchDebounced = useDebounce(search, 400)
   const { data } = useSearchMembersQuery({ variables: { text: searchDebounced, limit: 10 } })
-  const foundMembers = data?.searchMembers || []
+  const foundMembers = data?.memberships || []
   const filteredFoundMembers = useMemo(() => filterByText(foundMembers.filter(baseFilter), searchDebounced), [
     searchDebounced,
     foundMembers,
