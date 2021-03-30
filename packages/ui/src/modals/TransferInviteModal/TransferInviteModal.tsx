@@ -5,19 +5,22 @@ import BN from 'bn.js'
 import { SignTransferModal } from './SignTransferModal'
 import { TransferSuccessModal } from './TransferSuccessModal'
 import { TransferFailureModal } from './TransferFailureModal'
+import { useTransactionFee } from '../../hooks/useTransactionFee'
+import { WaitModal } from '../WaitModal'
 
 interface Props {
   onClose: () => void
   icon: ReactElement
-  member?: BaseMember
+  member: BaseMember
 }
 
 export function TransferInviteModal({ onClose, icon, member }: Props) {
-  const [step, setStep] = useState<ModalState>('PREPARE')
+  const [step, setStep] = useState<ModalState>('VALIDATE')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [sourceMember, setSourceMember] = useState(member)
   const [targetMember, setTargetMember] = useState<BaseMember>()
   const [signer, setSigner] = useState<Account>()
+  const canAfford = useTransactionFee(member)
 
   const onAccept = (amount: BN, from: BaseMember, to: BaseMember, signer: Account) => {
     setAmount(amount)
@@ -29,6 +32,14 @@ export function TransferInviteModal({ onClose, icon, member }: Props) {
 
   const onDone = (result: boolean) => {
     setStep(result ? 'SUCCESS' : 'ERROR')
+  }
+
+  if (step === 'VALIDATE') {
+    if(typeof canAfford != 'boolean'){
+      return <WaitModal onClose={onClose} title="Loading..." description="" />
+    } else {
+      setStep(canAfford ? 'PREPARE' : 'ERROR')
+    }
   }
 
   if (step === 'PREPARE' || !sourceMember || !targetMember || !signer) {
