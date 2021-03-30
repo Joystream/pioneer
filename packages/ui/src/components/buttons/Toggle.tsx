@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { Icon } from '../icons'
-import { Button } from './Buttons'
+import { ButtonPrimary } from './Buttons'
 
-export const ToggleButton = styled(Button)`
+export const ToggleButton = styled(ButtonPrimary)`
   background-color: transparent;
   color: ${Colors.Black[900]};
   &,
@@ -17,6 +17,10 @@ export const ToggleButton = styled(Button)`
   &:disabled {
     cursor: not-allowed;
     color: ${Colors.Black[400]};
+  }
+  &:before,
+  &:after {
+    display: none;
   }
 `
 

@@ -1,15 +1,16 @@
 import { useEffect, useMemo } from 'react'
+import { useGetMembersQuery } from '../api/queries'
 import { Account } from '../common/types'
 import { useApi } from '../hooks/useApi'
-import { useMyMemberships } from '../hooks/useMyMemberships'
 import { useObservable } from '../hooks/useObservable'
 import { useSignAndSendTransaction } from '../hooks/useSignAndSendTransaction'
 
 export function useMockMembers() {
   const { api, isConnected } = useApi()
-  const { members } = useMyMemberships()
+  const { data, loading } = useGetMembersQuery()
+  const members = data?.members
   const transaction = useMemo(() => {
-    if (!members.length || !api) {
+    if (!members || !api) {
       return
     }
 
@@ -26,7 +27,7 @@ export function useMockMembers() {
       })
     })
     return api.tx.utility.batch(createMembers)
-  }, [api, members.length])
+  }, [api, members, loading])
 
   const from: Account = { address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', name: 'signer' }
   const { send } = useSignAndSendTransaction({
@@ -38,7 +39,7 @@ export function useMockMembers() {
   const hasCreatedMember = useObservable(api?.query?.members.membershipById.size(0), [isConnected])?.toNumber()
 
   useEffect(() => {
-    if (!IS_DEVELOPMENT || !(api && isConnected && members.length) || hasCreatedMember === undefined) {
+    if (!IS_DEVELOPMENT || !(api && isConnected && members) || hasCreatedMember === undefined) {
       return
     }
 
@@ -48,5 +49,5 @@ export function useMockMembers() {
     } else {
       console.log('✅ Member with id (0) already created')
     }
-  }, [isConnected, members.length, hasCreatedMember])
+  }, [isConnected, members, hasCreatedMember])
 }

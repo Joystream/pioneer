@@ -3,10 +3,9 @@ import React, { ReactElement, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../common/types'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
-import { Button } from '../../components/buttons'
+import { ButtonGhost, ButtonPrimary } from '../../components/buttons'
 import { InputComponent, InputNumber } from '../../components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { Colors } from '../../constants'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
@@ -76,10 +75,10 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
             />
           </InputComponent>
           <AmountButtons>
-            <AmountButton variant="secondary" size="small" onClick={setHalf} disabled={isValueDisabled}>
+            <AmountButton size="small" onClick={setHalf} disabled={isValueDisabled}>
               Use half
             </AmountButton>
-            <AmountButton variant="secondary" size="small" onClick={setMax} disabled={isValueDisabled}>
+            <AmountButton size="small" onClick={setMax} disabled={isValueDisabled}>
               Use max
             </AmountButton>
           </AmountButtons>
@@ -98,9 +97,9 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
         </Row>
       </ModalBody>
       <ModalFooter>
-        <Button size="medium" onClick={onClick} disabled={isTransferDisabled}>
+        <ButtonPrimary size="medium" onClick={onClick} disabled={isTransferDisabled}>
           Transfer tokens
-        </Button>
+        </ButtonPrimary>
       </ModalFooter>
     </Modal>
   )
@@ -114,12 +113,11 @@ const AmountButtons = styled.div`
   height: 46px;
   align-items: center;
 `
-const AmountButton = styled(Button)`
+
+const AmountButton = styled(ButtonGhost)`
   height: 26px;
   padding: 4px 6px;
   font-size: 10px;
   line-height: 16px;
   text-transform: uppercase;
-  background-color: transparent;
-  border: 1px solid ${Colors.Black[300]};
 `

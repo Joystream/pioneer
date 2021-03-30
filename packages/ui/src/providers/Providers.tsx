@@ -6,6 +6,7 @@ import { ApiContextProvider } from './api/provider'
 import { GlobalStyle } from './GlobalStyle'
 import { KeyringContextProvider } from './keyring/provider'
 import { MembershipContextProvider } from './membership/provider'
+import { ModalContextProvider } from './modal/provider'
 import { ServerContextProvider } from './server/provider'
 
 interface Props {
@@ -26,8 +27,10 @@ export const Providers = (props: Props) => (
         <ApolloProvider client={client}>
           <MembershipContextProvider>
             <HashRouter>
-              <GlobalStyle />
-              {props.children}
+              <ModalContextProvider>
+                <GlobalStyle />
+                {props.children}
+              </ModalContextProvider>
             </HashRouter>
           </MembershipContextProvider>
         </ApolloProvider>

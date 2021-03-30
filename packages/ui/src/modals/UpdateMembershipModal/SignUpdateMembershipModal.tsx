@@ -3,7 +3,7 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React, { useMemo } from 'react'
 import { Account, BaseMember, onTransactionDone } from '../../common/types'
 import { SelectedAccount } from '../../components/account/SelectAccount'
-import { Button } from '../../components/buttons'
+import { ButtonPrimary } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
@@ -92,9 +92,9 @@ export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, 
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
           </BalanceInfoNarrow>
-          <Button size="medium" onClick={send} disabled={status !== 'READY'}>
+          <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
             Sign and update a member
-          </Button>
+          </ButtonPrimary>
         </ModalFooter>
       </Modal>
     )

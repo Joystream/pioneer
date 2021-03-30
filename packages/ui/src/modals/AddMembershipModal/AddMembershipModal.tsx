@@ -2,6 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces'
 import React, { useContext, useMemo, useState } from 'react'
 import { Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
+import { useModal } from '../../hooks/useModal'
 import { useObservable } from '../../hooks/useObservable'
 import { ServerContext } from '../../providers/server/context'
 import { AddMembershipFailureModal } from './AddMembershipFailureModal'
@@ -9,16 +10,15 @@ import { AddMembershipSuccessModal } from './AddMembershipSuccessModal'
 import { MembershipFormModal } from './MembershipFormModal'
 import { SignCreateMemberModal } from './SignCreateMemberModal'
 
-interface MembershipModalProps {
-  onClose: () => void
-}
-
-export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
+export const AddMembershipModal = () => {
+  const { hideModal } = useModal()
+  const onClose = hideModal
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
   const [step, setStep] = useState<ModalState>('PREPARE')
   const [transactionParams, setParams] = useState<Member>()
   const server = useContext(ServerContext)
+  const [id, setId] = useState<string>()
 
   const onSubmit = (params: Member) => {
     setStep('AUTHORIZE')
@@ -48,9 +48,10 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
       transactionParams
         ? (result: boolean, events: EventRecord[]) => {
             const memberId = events.find((event) => event.event.method === 'MemberRegistered')?.event.data[0].toString()
+            setId(memberId)
             if (server && memberId) {
               server.schema.create('Membership', {
-                id: memberId,
+                id: id,
                 rootAccount: transactionParams.rootAccount.address,
                 controllerAccount: transactionParams.controllerAccount.address,
                 name: transactionParams.name,
@@ -60,6 +61,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
                 isVerified: false,
                 isFoundingMember: false,
                 inviteCount: '5',
+                registeredAtBlockId: 'block-3',
               })
             }
             setStep(result ? 'SUCCESS' : 'ERROR')
@@ -86,7 +88,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
   }
 
   if (step === 'SUCCESS') {
-    return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} />
+    return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} memberId={id} />
   }
 
   return <AddMembershipFailureModal onClose={onClose} member={transactionParams} />

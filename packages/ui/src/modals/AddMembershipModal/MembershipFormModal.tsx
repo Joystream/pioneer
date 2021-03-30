@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 import { Account, BaseMember, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
-import { Button } from '../../components/buttons'
+import { ButtonPrimary } from '../../components/buttons'
 import {
   Checkbox,
   InlineToggleWrap,
@@ -221,9 +221,9 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
           </BalanceInfoNarrow>
-          <Button size="medium" onClick={onCreate} disabled={!isValid}>
+          <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
             Create a Membership
-          </Button>
+          </ButtonPrimary>
         </ModalFooterGroup>
       </ModalFooter>
     </ScrolledModal>

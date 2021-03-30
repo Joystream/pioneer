@@ -1,19 +1,26 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BaseMember, Member } from '../../common/types'
-import { Button } from '../../components/buttons'
+import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership/MemberInfo'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Text } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
+import { useModal } from '../../hooks/useModal'
 
 interface Props {
   onClose: () => void
   member: Member
+  memberId?: string
 }
 
-export function AddMembershipSuccessModal({ onClose, member }: Props) {
+export function AddMembershipSuccessModal({ onClose, member, memberId }: Props) {
+  const { showModal } = useModal()
+  const viewMember = () => {
+    onClose()
+    showModal('member', { id: memberId })
+  }
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
@@ -24,9 +31,9 @@ export function AddMembershipSuccessModal({ onClose, member }: Props) {
         </MemberRow>
       </ModalBody>
       <ModalFooter>
-        <Button size="medium" disabled>
+        <ButtonPrimary size="medium" disabled={!memberId} onClick={viewMember}>
           View my profile
-        </Button>
+        </ButtonPrimary>
       </ModalFooter>
     </Modal>
   )
