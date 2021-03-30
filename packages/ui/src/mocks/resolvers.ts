@@ -29,7 +29,7 @@ export const getMembersResolver: QueryResolver<{ where: GetMembersQueryVariables
 ) => {
   const rootAccountIn = args.where.rootAccount_in
   const controllerAccountIn = args.where.controllerAccount_in
-  console.log(args)
+
   const { models } = rootAccountIn
     ? schema.where(
         'Membership',

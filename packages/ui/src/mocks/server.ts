@@ -6,13 +6,12 @@ import { mockBlocks, mockMembers } from './data'
 import { getMemberResolver, getMembersResolver, searchMembersResolver } from './resolvers'
 
 export const makeServer = (environment = 'development') => {
-  return
   return createServer({
     environment,
 
     routes() {
       this.post(
-        '/query-node',
+        'http://localhost:8081/graphql',
         createGraphQLHandler(schema, this.schema, {
           context: undefined,
           root: undefined,
