@@ -6,6 +6,7 @@ import { mockBlocks, mockMembers } from './data'
 import { getMemberResolver, getMembersResolver, searchMembersResolver } from './resolvers'
 
 export const makeServer = (environment = 'development') => {
+  return
   return createServer({
     environment,
 
