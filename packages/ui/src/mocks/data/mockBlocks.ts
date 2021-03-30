@@ -6,7 +6,7 @@ export type MockBlock = BlockFieldsFragment
 export const mockBlocks: MockBlock[] = rawBlocks.map((rawBlock) => {
   return {
     ...rawBlock,
-    network: Network.Babylon,
+    network: Network.Olympia,
     __typename: 'Block',
   }
 })

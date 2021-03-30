@@ -17,9 +17,9 @@ export const makeServer = (environment = 'development') => {
           root: undefined,
           resolvers: {
             Query: {
-              member: getMemberResolver,
-              members: getMembersResolver,
-              searchMembers: searchMembersResolver,
+              membership: getMemberResolver,
+              memberships: getMembersResolver,
+              searchMemberships: searchMembersResolver,
             },
           },
         })
@@ -42,16 +42,16 @@ export const makeServer = (environment = 'development') => {
           delete temporary.invitees
         }
 
-        return server.schema.create('Member', {
+        return server.schema.create('Membership', {
           ...temporary,
           registeredAtBlock: blocksMap.get(member.registeredAtBlock),
         })
       })
 
       for (const [invitor, invitees] of inviteeMap) {
-        const member = server.schema.find('Member', invitor)
-        member.invitees = invitees.map((id) => server.schema.find('Member', id))
-        member.save()
+        const member = server.schema.find('Membership', invitor)
+        //member.invitees = invitees.map((id) => server.schema.find('Membership', id))
+        //member.save()
       }
     },
   })

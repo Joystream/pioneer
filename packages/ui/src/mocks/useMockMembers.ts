@@ -17,7 +17,7 @@ export function useMockMembers() {
       return api?.tx.members.buyMembership({
         handle: member.handle,
         metadata: {
-          avatar_uri: member.avatarURI,
+          avatar_uri: member.avatarUri,
           name: member.name,
           about: member.about,
         },

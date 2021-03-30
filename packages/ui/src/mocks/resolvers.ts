@@ -29,14 +29,14 @@ export const getMembersResolver: QueryResolver<{ where: GetMembersQueryVariables
 ) => {
   const rootAccountIn = args.where.rootAccount_in
   const controllerAccountIn = args.where.controllerAccount_in
-
+  console.log(args)
   const { models } = rootAccountIn
     ? schema.where(
-        'Member',
+        'Membership',
         (member: MockMember) =>
           rootAccountIn?.includes(member.rootAccount) || controllerAccountIn?.includes(member.controllerAccount)
       )
-    : schema.all('Member')
+    : schema.all('Membership')
 
   return models
 }
@@ -53,7 +53,7 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
 ) => {
   const isMatch = getMatcher(text)
 
-  const { models } = schema.where('Member', (member: MemberFieldsFragment) => {
+  const { models } = schema.where('Membership', (member: MemberFieldsFragment) => {
     return isMatch(member.handle) || isMatch(member.name) || isMatch(member.id)
   })
 
