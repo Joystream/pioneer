@@ -1,662 +1,560 @@
-"A blockchain genesis block."
-enum Network {
-  Babylon
-  Sumer
-  # Mainnet
+interface BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+}
+
+type BaseModel implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+}
+
+type BaseModelUUID implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+}
+
+input BaseWhereInput {
+  id_eq: String
+  id_in: [String!]
+  createdAt_eq: String
+  createdAt_lt: String
+  createdAt_lte: String
+  createdAt_gt: String
+  createdAt_gte: String
+  createdById_eq: String
+  updatedAt_eq: String
+  updatedAt_lt: String
+  updatedAt_lte: String
+  updatedAt_gt: String
+  updatedAt_gte: String
+  updatedById_eq: String
+  deletedAt_all: Boolean
+  deletedAt_eq: String
+  deletedAt_lt: String
+  deletedAt_lte: String
+  deletedAt_gt: String
+  deletedAt_gte: String
+  deletedById_eq: String
 }
 
 """GraphQL representation of BigInt"""
 scalar BigInt
 
-"An event interface."
-interface Event {
-
-  "Concatenation of block hash and index in block."
+type Block implements BaseGraphQLObject {
   id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  # Is there an index in extrinsic field worth adding?
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int
-}
-
-"A block in the blockchain."
-type Block {
-
-  "Hash of block in hex encoding."
-  id: ID!
-
-  "Network in which block occurred."
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  block: Int!
+  executedAt: DateTime!
   network: Network!
-
-  "Height at which block is committed."
-  height: BigInt!
-
-  "Is block finalized. Note: we can have richer consensus information here in the future, like who signed, but its not a priority now."
-  isFinalized: Boolean!
-
-  "Timestamp in block."
-  timestamp: BigInt!
-
-  "Hash of block in hex encoding."
-  hash: String!
-
-  "Hash of parent block in hex encoding."
-  parentHash: String!
-
-  "State root hash in hex encoding."
-  stateRoot: String!
-
-  "Extrinsics merkle root in hex encoding."
-  extrinsicRoot: String!
-
-  "Time since last block."
-  blockTime: BigInt!
-
-  # All events triggered in block.
-  extrinsics: [Extrinsic!]
-
-  # All events triggered in block.
-  #events: [Event!]
+  membershipregisteredAtBlock: [Membership!]
 }
 
-"Substrate Root origin type."
-type RootOrigin  {
-
-  "No meaning, only here because GraphQL cannot support empty types."
-  phantomField: Int
+type BlockConnection {
+  totalCount: Int!
+  edges: [BlockEdge!]!
+  pageInfo: PageInfo!
 }
 
-"Substrate signed origin type."
-type SignedOrigin  {
-
-  "Signing account in SS58 encoding."
-  signingAccount: String!
-}
-
-"Substrate none origin type."
-type NoneOrigin  {
-
-  "No meaning, only here because GraphQL cannot support empty types."
-  phantomField: Int
-}
-
-"Substrate extrinsic origin."
-union ExtrinsicOrigin = RootOrigin | SignedOrigin | NoneOrigin
-
-"A general blockchain extrinsic."
-type Extrinsic {
-
-  "Hash in hex encoding."
-  id: ID!
-
-  "Name of runtime module to which extrinsic was targeted."
-  moduleName: String!
-
-  "Name of extrinsic, including module prefix."
-  call: String!
-
-  "Nonce"
-  Nonce: BigInt!
-
-  "Fee charged."
-  fee: BigInt!
-
-  "Tip provided."
-  tip: BigInt!
-
-  "Origin for extrinsic."
-  origin: ExtrinsicOrigin!
-
-  "Call parameters, unknown encoding currently."
-  parameters: String
-
-  "Index of extrinsic in block."
-  indexInBlock: Int!
-
-  "Block in which this extrinsic was included."
-  inBlock: Block!
-
-  "Whether extrinsic was successful."
-  successful: Boolean!
-
-  # All events triggered by this extrinsic.
-  # Note that any on-chain event which does not have an entity implementing `Event` interface will be omitted here.
-  #events: [Event!]
-
-}
-
-# ----------------------
-
-type BoughtMemberEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "New membership created."
-  newMember: Member!
-
-  "New member root account in SS58 encoding."
-  rootAccount: String!
-
-  "New member controller in SS58 encoding."
-  controllerAccount: String!
-
-  "New member user name."
-  name: String!
-
-  "New member handle."
-  handle: String!
-
-  "New member avatar asset."
-  #avatar: StorageAssetStatus!
-  avatarURI: String
-
-  "New member 'about' text."
-  about: String!
-
-  "Referrer member."
-  referrer: Member
-}
-
-type InvitedMemberEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Inviting member created."
-  invitingMember: Member!
-
-  "New membership created."
-  newMember: Member!
-
-  "New member root account in SS58 encoding."
-  rootAccount: String!
-
-  "New member controller in SS58 encoding."
-  controllerAccount: String!
-
-  "New member user name."
-  name: String!
-
-  "New member handle."
-  handle: String!
-
-  "New member avatar asset."
-  # avatar: StorageAssetStatus!
-  avatarURI: String
-
-  "New member 'about' text."
-  about: String!
-}
-
-type MemberProfileUpdatedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Membership being updated."
-  member: Member!
-
-  "New member root account in SS58 encoding. Null means no new value was provided."
-  newRootAccount: String
-
-  "New member controller in SS58 encoding. Null means no new value was provided."
-  newControllerAccount: String
-
-  "New member user name. Null means no new value was provided."
-  newName: String
-
-  "New member handle. Null means no new value was provided."
-  newHandle: String
-
-  "New avatar asset. Null means no new value was provided."
-  newAvatarURI: String
-
-  "New member about text. Null means no new value was provided."
-  newAbout: String!
-}
-
-type MemberAccountsUpdatedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Membership in question."
-  member: Member!
-
-  "New member root account in SS58 encoding. Null means no new value was provided."
-  newRootAccount: String
-
-  "New member controller in SS58 encoding. Null means no new value was provided."
-  newControllerAccount: String
-}
-
-type MemberVerificationStatusUpdatedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Membership in question."
-  member: Member!
-
-  #"Worker updating status"
-  #worker: Worker!
-
-  "New status."
-  isVerified: Boolean!
-}
-
-type ReferralCutUpdatedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Membership in question."
-  member: Member!
-
-  "New cut value."
-  newValue: BigInt!
-}
-
-type InvitesTransferredEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Membership sending invites."
-  sourceMember: Member!
-
-  "Membership receiving invites."
-  targetMember: Member!
-
-  "Number of invites transferred."
-  numberOfInvites: BigInt!
-}
-
-type MembershipPriceUpdatedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "The new membership price."
-  newPrice: BigInt!
-}
-
-type InitialInvitationBalanceUpdatedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "New initial invitation balance."
-  newInitialBalance: BigInt!
-}
-
-type LeaderInvitationQuotaUpdatedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Membership in question."
-  member: Member!
-
-  "New quota."
-  newInvitationQuota: Int!
-}
-
-type InitialInvitationCountUpdatedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Initial invitation count for members."
-  newInitialInvitationCount: Int!
-}
-
-type StakingAccountAddedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Membership in question."
-  member: Member!
-
-  "New staking account in SS58 encoding."
-  account: String!
-}
-
-type StakingAccountRemovedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Membership in question."
-  member: Member!
-
-  "New staking account in SS58 encoding."
-  account: String!
-}
-
-type StakingAccountConfirmedEvent implements Event {
-
-  # ------ Event <interface> ------
-
-  "Event identifier"
-  id: ID!
-
-  "Possible extrinsic in which"
-  inExtrinsic: Extrinsic
-
-  "Block in which event was emitted."
-  inBlock: Block!
-
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-
-  # ------ Event <interface> ------
-
-  "Membership in question."
-  member: Member!
-
-  "New staking account in SS58 encoding."
-  account: String!
-}
-
-# -----------------------
-
-"Membership creation genesis configuration."
-type GenesisConfiguredMember  {
-
-  "Network genesis at which a membership was established."
+input BlockCreateInput {
+  block: Float!
+  executedAt: DateTime!
   network: Network!
 }
 
-"Membership creation via an invitation."
-type MemberInvitation  {
-
-  "Event corresponding to invitation of a membership."
-  event: InvitedMemberEvent!
+type BlockEdge {
+  node: Block!
+  cursor: String!
 }
 
-"A membership originating fro a purchase."
-type MemberPurchase  {
-
-  "Event corresponding to buying of a membership."
-  event: BoughtMemberEvent!
+enum BlockOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  block_ASC
+  block_DESC
+  executedAt_ASC
+  executedAt_DESC
+  network_ASC
+  network_DESC
 }
 
-"From which a membership can originate."
-union MemberSource = GenesisConfiguredMember | MemberInvitation | MemberPurchase
+input BlockUpdateInput {
+  block: Float
+  executedAt: DateTime
+  network: Network
+}
 
-"A membership."
-type Member {
+input BlockWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  block_eq: Int
+  block_gt: Int
+  block_gte: Int
+  block_lt: Int
+  block_lte: Int
+  block_in: [Int!]
+  executedAt_eq: DateTime
+  executedAt_lt: DateTime
+  executedAt_lte: DateTime
+  executedAt_gt: DateTime
+  executedAt_gte: DateTime
+  network_eq: Network
+  network_in: [Network!]
+}
 
-  "Runtime id of membership"
+input BlockWhereUniqueInput {
   id: ID!
+}
 
-  "Root account in SS58 encoding."
-  rootAccount: String!
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
 
-  "Member controller in SS58 encoding."
-  controllerAccount: String!
+interface DeleteResponse {
+  id: ID!
+}
 
-  "A human readable mutable string"
+type MembersByHandleFTSOutput {
+  item: MembersByHandleSearchResult!
+  rank: Float!
+  isTypeOf: String!
+  highlight: String!
+}
+
+union MembersByHandleSearchResult = Membership
+
+"""Stored information about a registered user"""
+type Membership implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """The unique handle chosen by member"""
+  handle: String!
+
+  """Member's name"""
   name: String
 
-  "The unique handle chosen by member"
-  handle: String
+  """A Url to member's Avatar image"""
+  avatarUri: String
 
-  "Avatar of member"
-  avatarURI: String
-
-  "Short text chosen by member to share information about themselves"
+  """Short text chosen by member to share information about themselves"""
   about: String
 
-  "Whether member is verified."
+  """Member's controller account id"""
+  controllerAccount: String!
+
+  """Member's root account id"""
+  rootAccount: String!
+  registeredAtBlock: Block!
+  registeredAtBlockId: String!
+
+  """Timestamp when member was registered"""
+  registeredAtTime: DateTime!
+
+  """How the member was registered"""
+  entry: MembershipEntryMethod!
+
+  """Whether member has been verified by membership working group."""
   isVerified: Boolean!
 
-  "Whether member is founding member."
-  isFoundingMember: Boolean!
+  """Staking accounts bounded to membership."""
+  boundAccounts: [String!]!
 
-  "Number of invites member has."
-  inviteCount: BigInt!
-
-  "Accounts bounded to membership."
-  boundAccounts: [String!]
-
-  "Block at which membership was created."
-  registeredAtBlock: Block!
-
-  #"The member which invited this member if the latter originated from an invitation.
-  #This redundant field is introduced in order to facilitate the convenient reverse lookup field invitees, which cannot inspect union fields currently."
-  #invitor: Member
-
-  #"All members invited by this member."
-  invitees: [Member!]
-
-  #"All worker roles corresponding to this member."
-  #workers: [Worker!]
-
-  "Where membership came from."
-  source : MemberSource!
-
-  # Possible reverse lookups
-  # threadsCreated: [Thread!]
-  # postsCreated: [Post!]
-  # applicationsSubmitted:
-  # proposalsSubmitted
-  # uploadsInitiated:
-  # ..
+  """Current count of invites left to send."""
+  inviteCount: Int!
+  invitees: [Membership!]!
+  invitedBy: Membership
+  invitedById: String
+  referredMembers: [Membership!]!
+  referredBy: Membership
+  referredById: String
 }
 
-"State of the membership system. NB: There should only be one instance of this entity."
-type MembershipSystem {
+type MembershipConnection {
+  totalCount: Int!
+  edges: [MembershipEdge!]!
+  pageInfo: PageInfo!
+}
 
-  "Current price to buy a membership."
+input MembershipCreateInput {
+  handle: String!
+  name: String
+  avatarUri: String
+  about: String
+  controllerAccount: String!
+  rootAccount: String!
+  registeredAtBlockId: ID!
+  registeredAtTime: DateTime!
+  entry: MembershipEntryMethod!
+  isVerified: Boolean!
+  boundAccounts: [String!]!
+  inviteCount: Float!
+  invitedById: ID
+  referredById: ID
+}
+
+type MembershipEdge {
+  node: Membership!
+  cursor: String!
+}
+
+enum MembershipEntryMethod {
+  PAID
+  INVITED
+  GENESIS
+}
+
+enum MembershipOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  handle_ASC
+  handle_DESC
+  name_ASC
+  name_DESC
+  avatarUri_ASC
+  avatarUri_DESC
+  about_ASC
+  about_DESC
+  controllerAccount_ASC
+  controllerAccount_DESC
+  rootAccount_ASC
+  rootAccount_DESC
+  registeredAtBlockId_ASC
+  registeredAtBlockId_DESC
+  registeredAtTime_ASC
+  registeredAtTime_DESC
+  entry_ASC
+  entry_DESC
+  isVerified_ASC
+  isVerified_DESC
+  inviteCount_ASC
+  inviteCount_DESC
+  invitedById_ASC
+  invitedById_DESC
+  referredById_ASC
+  referredById_DESC
+}
+
+type MembershipSystem implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """Initial invitation count of a new member."""
+  defaultInviteCount: Int!
+
+  """Current price to buy a membership."""
   membershipPrice: BigInt!
 
-  "Amount of tokens diverted to invitor."
+  """Amount of tokens diverted to invitor."""
   referralCut: BigInt!
 
-  "Initial invitation count of a new member."
-  defaultInviteCount: BigInt!
-
-  "The initial, locked, balance credited to controller account of invitee."
+  """
+  The initial, locked, balance credited to controller account of invitee.
+  """
   invitedInitialBalance: BigInt!
 }
 
-input MemberWhereUniqueInput {
+type MembershipSystemConnection {
+  totalCount: Int!
+  edges: [MembershipSystemEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MembershipSystemCreateInput {
+  defaultInviteCount: Float!
+  membershipPrice: BigInt!
+  referralCut: BigInt!
+  invitedInitialBalance: BigInt!
+}
+
+type MembershipSystemEdge {
+  node: MembershipSystem!
+  cursor: String!
+}
+
+enum MembershipSystemOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  defaultInviteCount_ASC
+  defaultInviteCount_DESC
+  membershipPrice_ASC
+  membershipPrice_DESC
+  referralCut_ASC
+  referralCut_DESC
+  invitedInitialBalance_ASC
+  invitedInitialBalance_DESC
+}
+
+input MembershipSystemUpdateInput {
+  defaultInviteCount: Float
+  membershipPrice: BigInt
+  referralCut: BigInt
+  invitedInitialBalance: BigInt
+}
+
+input MembershipSystemWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  defaultInviteCount_eq: Int
+  defaultInviteCount_gt: Int
+  defaultInviteCount_gte: Int
+  defaultInviteCount_lt: Int
+  defaultInviteCount_lte: Int
+  defaultInviteCount_in: [Int!]
+  membershipPrice_eq: BigInt
+  membershipPrice_gt: BigInt
+  membershipPrice_gte: BigInt
+  membershipPrice_lt: BigInt
+  membershipPrice_lte: BigInt
+  membershipPrice_in: [BigInt!]
+  referralCut_eq: BigInt
+  referralCut_gt: BigInt
+  referralCut_gte: BigInt
+  referralCut_lt: BigInt
+  referralCut_lte: BigInt
+  referralCut_in: [BigInt!]
+  invitedInitialBalance_eq: BigInt
+  invitedInitialBalance_gt: BigInt
+  invitedInitialBalance_gte: BigInt
+  invitedInitialBalance_lt: BigInt
+  invitedInitialBalance_lte: BigInt
+  invitedInitialBalance_in: [BigInt!]
+}
+
+input MembershipSystemWhereUniqueInput {
   id: ID!
 }
 
-input MemberWhereInput {
-  rootAccount_in: [String]
-  controllerAccount_in: [String]
+input MembershipUpdateInput {
+  handle: String
+  name: String
+  avatarUri: String
+  about: String
+  controllerAccount: String
+  rootAccount: String
+  registeredAtBlockId: ID
+  registeredAtTime: DateTime
+  entry: MembershipEntryMethod
+  isVerified: Boolean
+  boundAccounts: [String!]
+  inviteCount: Float
+  invitedById: ID
+  referredById: ID
+}
+
+input MembershipWhereInput {
+  id_eq: ID
   id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  handle_eq: String
+  handle_contains: String
+  handle_startsWith: String
+  handle_endsWith: String
+  handle_in: [String!]
+  name_eq: String
+  name_contains: String
+  name_startsWith: String
+  name_endsWith: String
+  name_in: [String!]
+  avatarUri_eq: String
+  avatarUri_contains: String
+  avatarUri_startsWith: String
+  avatarUri_endsWith: String
+  avatarUri_in: [String!]
+  about_eq: String
+  about_contains: String
+  about_startsWith: String
+  about_endsWith: String
+  about_in: [String!]
+  controllerAccount_eq: String
+  controllerAccount_contains: String
+  controllerAccount_startsWith: String
+  controllerAccount_endsWith: String
+  controllerAccount_in: [String!]
+  rootAccount_eq: String
+  rootAccount_contains: String
+  rootAccount_startsWith: String
+  rootAccount_endsWith: String
+  rootAccount_in: [String!]
+  registeredAtBlockId_eq: ID
+  registeredAtBlockId_in: [ID!]
+  registeredAtTime_eq: DateTime
+  registeredAtTime_lt: DateTime
+  registeredAtTime_lte: DateTime
+  registeredAtTime_gt: DateTime
+  registeredAtTime_gte: DateTime
+  entry_eq: MembershipEntryMethod
+  entry_in: [MembershipEntryMethod!]
+  isVerified_eq: Boolean
+  isVerified_in: [Boolean!]
+  inviteCount_eq: Int
+  inviteCount_gt: Int
+  inviteCount_gte: Int
+  inviteCount_lt: Int
+  inviteCount_lte: Int
+  inviteCount_in: [Int!]
+  invitedById_eq: ID
+  invitedById_in: [ID!]
+  referredById_eq: ID
+  referredById_in: [ID!]
+}
+
+input MembershipWhereUniqueInput {
+  id: ID
+  handle: String
+}
+
+enum Network {
+  BABYLON
+  ALEXANDRIA
+  ROME
+  OLYMPIA
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type ProcessorState {
+  lastCompleteBlock: Float!
+  lastProcessedEvent: String!
+  indexerHead: Float!
+  chainHead: Float!
 }
 
 type Query {
-  # Lookup a member by its ID
-  member(where: MemberWhereUniqueInput!): Member
+  blocks(offset: Int, limit: Int = 50, where: BlockWhereInput, orderBy: BlockOrderByInput): [Block!]!
+  block(where: BlockWhereUniqueInput!): Block
+  blocksConnection(first: Int, after: String, last: Int, before: String, where: BlockWhereInput, orderBy: BlockOrderByInput): BlockConnection!
+  membershipSystems(offset: Int, limit: Int = 50, where: MembershipSystemWhereInput, orderBy: MembershipSystemOrderByInput): [MembershipSystem!]!
+  membershipSystem(where: MembershipSystemWhereUniqueInput!): MembershipSystem
+  membershipSystemsConnection(first: Int, after: String, last: Int, before: String, where: MembershipSystemWhereInput, orderBy: MembershipSystemOrderByInput): MembershipSystemConnection!
+  memberships(offset: Int, limit: Int = 50, where: MembershipWhereInput, orderBy: MembershipOrderByInput): [Membership!]!
+  membership(where: MembershipWhereUniqueInput!): Membership
+  membershipsConnection(first: Int, after: String, last: Int, before: String, where: MembershipWhereInput, orderBy: MembershipOrderByInput): MembershipConnection!
+  membersByHandle(whereMembership: MembershipWhereInput, skip: Int = 0, limit: Int = 5, text: String!): [MembersByHandleFTSOutput!]!
+}
 
-  # Lookup members by where params
-  members(where: MemberWhereInput): [Member!]!
+type StandardDeleteResponse {
+  id: ID!
+}
 
-  # Lookup members by free-text search
-  searchMembers(text: String!, limit: Int) : [Member!]!
+type Subscription {
+  stateSubscription: ProcessorState!
 }
