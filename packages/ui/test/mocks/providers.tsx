@@ -5,7 +5,7 @@ import { MembershipContextProvider } from '../../src/providers/membership/provid
 import { mockKeyring } from './keyring'
 
 const link = new HttpLink({
-  uri: '/query-node',
+  uri: 'http://localhost:8081/graphql',
   fetch: (uri, options) => fetch(uri, options),
 })
 

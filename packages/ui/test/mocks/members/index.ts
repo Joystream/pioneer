@@ -29,7 +29,7 @@ export const createMember = (server: Server, memberOrName: MemberFieldsFragment 
     member = getMember(memberOrName)
   }
 
-  return server.schema.create('Member', {
+  return server.schema.create('Membership', {
     ...member,
     __typename: 'Membership',
   } as any)

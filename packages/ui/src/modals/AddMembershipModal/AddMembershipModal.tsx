@@ -49,7 +49,7 @@ export const AddMembershipModal = ({ onClose }: MembershipModalProps) => {
         ? (result: boolean, events: EventRecord[]) => {
             const memberId = events.find((event) => event.event.method === 'MemberRegistered')?.event.data[0].toString()
             if (server && memberId) {
-              server.schema.create('Member', {
+              server.schema.create('Membership', {
                 id: memberId,
                 rootAccount: transactionParams.rootAccount.address,
                 controllerAccount: transactionParams.controllerAccount.address,
