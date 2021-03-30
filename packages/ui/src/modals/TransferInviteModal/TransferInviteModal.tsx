@@ -35,11 +35,15 @@ export function TransferInviteModal({ onClose, icon, member }: Props) {
   }
 
   if (step === 'VALIDATE') {
-    if(typeof canAfford != 'boolean'){
+    if (typeof canAfford != 'boolean') {
       return <WaitModal onClose={onClose} title="Loading..." description="" />
     } else {
-      setStep(canAfford ? 'PREPARE' : 'ERROR')
+      setStep(canAfford ? 'PREPARE' : 'VALIDATION_ERROR')
     }
+  }
+
+  if (step === 'VALIDATION_ERROR') {
+    return <TransferFailureModal onClose={onClose} />
   }
 
   if (step === 'PREPARE' || !sourceMember || !targetMember || !signer) {

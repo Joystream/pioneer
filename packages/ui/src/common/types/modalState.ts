@@ -1,1 +1,1 @@
-export type ModalState = 'VALIDATE' | 'PREPARE' | 'AUTHORIZE' | 'SUCCESS' | 'ERROR'
+export type ModalState = 'VALIDATE' | 'VALIDATION_ERROR' | 'PREPARE' | 'AUTHORIZE' | 'SUCCESS' | 'ERROR'
