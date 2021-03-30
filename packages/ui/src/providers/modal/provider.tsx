@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode
 }
 
-type ModalName = 'member' | 'addMembership'
+type ModalName = 'member' | 'addMembership' | 'TransferInvites'
 
 export interface ModalApi {
   modal: string | null

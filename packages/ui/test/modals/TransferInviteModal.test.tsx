@@ -1,23 +1,18 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
-import { MemberFieldsFragment } from '../../src/api/queries'
-import { TransferIcon } from '../../src/components/icons'
+import { seedMembers } from '../../src/mocks/data'
 import { TransferInviteModal } from '../../src/modals/TransferInviteModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectMember } from '../helpers/selectMember'
-import { getMember } from '../mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 import { stubApi } from '../mocks/transactions'
 
-const members: MemberFieldsFragment[] = []
-
-jest.mock('../../src/hooks/useMyMemberships', () => {
+jest.mock('../../src/hooks/useModal', () => {
   return {
-    useMyMemberships: () => ({
-      isLoading: false,
-      members: members,
+    useModal: () => ({
+      modalData: { memberId: '0' },
     }),
   }
 })
@@ -25,46 +20,39 @@ jest.mock('../../src/hooks/useMyMemberships', () => {
 describe('UI: TransferInviteModal', () => {
   beforeAll(cryptoWaitReady)
 
-  setupMockServer()
-
+  const mockServer = setupMockServer()
   const api = stubApi()
 
-  afterEach(() => {
-    members.splice(0)
+  it('Renders a modal', async () => {
+    seedMembers(mockServer.server)
+
+    const { findByRole } = renderModal()
+
+    expect(await findByRole('button', { name: /transfer invites/i })).toBeDefined()
   })
 
-  it('Renders a modal', () => {
-    const { findByText } = renderModal()
-    expect(findByText(/transfer invites/i)).toBeDefined()
-  })
+  it('Validates form', async () => {
+    seedMembers(mockServer.server)
 
-  it.skip('Validates form', async () => {
-    const aliceMember = getMember('Alice')
-    const bobMember = getMember('Bob')
+    const { findByLabelText, findByRole } = renderModal()
 
-    members.push(aliceMember)
-    members.push(bobMember)
-
-    const { findByLabelText, findByRole } = renderModal(aliceMember)
-
-    const button = (await findByRole('button', { name: /transfer invites/i })) as HTMLButtonElement
-    expect(button.disabled).toBeTruthy()
+    expect(await findByRole('button', { name: /transfer invites/i })).toBeDisabled()
 
     const input = await findByLabelText(/number of invites/i)
     expect(input).toBeDefined()
     fireEvent.change(input, { target: { value: '1' } })
 
-    await selectMember('to', 'bob')
+    await selectMember('^to', 'bob')
 
-    expect(button.disabled).toBeFalsy()
+    expect(await findByRole('button', { name: /transfer invites/i })).toBeEnabled()
   })
 
-  function renderModal(member: MemberFieldsFragment | undefined = undefined) {
+  function renderModal() {
     return render(
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <TransferInviteModal onClose={() => null} icon={<TransferIcon />} member={member} />
+            <TransferInviteModal />
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockQueryNodeProviders>
