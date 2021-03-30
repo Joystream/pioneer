@@ -5,8 +5,8 @@ import BN from 'bn.js'
 import { SignTransferModal } from './SignTransferModal'
 import { TransferSuccessModal } from './TransferSuccessModal'
 import { TransferFailureModal } from './TransferFailureModal'
-import { useTransactionFee } from '../../hooks/useTransactionFee'
 import { WaitModal } from '../WaitModal'
+import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
 
 interface Props {
   onClose: () => void
@@ -20,7 +20,7 @@ export function TransferInviteModal({ onClose, icon, member }: Props) {
   const [sourceMember, setSourceMember] = useState(member)
   const [targetMember, setTargetMember] = useState<BaseMember>()
   const [signer, setSigner] = useState<Account>()
-  const canAfford = useTransactionFee(member)
+  const canAfford = useTransferInviteFee(member)
 
   const onAccept = (amount: BN, from: BaseMember, to: BaseMember, signer: Account) => {
     setAmount(amount)

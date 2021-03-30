@@ -1,14 +1,15 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import { useMemo } from 'react'
-import { BaseMember } from '../common/types'
-import { useApi } from './useApi'
 import { useBalance } from './useBalance'
 import { useObservable } from './useObservable'
 
-export function useTransactionFee(member: BaseMember) {
-  const { api } = useApi()
-  const transaction = useMemo(() => api?.tx?.members?.transferInvites(member.id, member.id, 1), [member])
-  const paymentInfo = useObservable(transaction?.paymentInfo(member.controllerAccount), [transaction, member])
-  const balance = useBalance({ name: '', address: member.controllerAccount })
+export function useTransactionFee(
+  address: string,
+  transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
+) {
+  const paymentInfo = useObservable(transaction?.paymentInfo(address), [transaction, address])
+  const balance = useBalance({ name: '', address })
   return useMemo(() => balance && paymentInfo && balance.transferable.gte(paymentInfo.partialFee), [
     balance,
     paymentInfo,
