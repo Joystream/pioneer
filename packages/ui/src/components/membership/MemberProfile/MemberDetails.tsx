@@ -4,10 +4,10 @@ import { useGetMemberQuery } from '../../../api/queries'
 import { BaseMember } from '../../../common/types'
 import { Colors, Transitions } from '../../../constants'
 import { formatDateString, formatTokenValue } from '../../../utils/formatters'
-import { ButtonGhost } from '../../buttons'
 import { LabelLink } from '../../forms'
 import { BlockIcon } from '../../icons/BlockIcon'
 import { TransferSymbol } from '../../icons/symbols/TransferSymbol'
+import { TransferInviteButton } from '../../TransferInviteButton'
 import { Text } from '../../typography'
 import { MembershipLabel } from '../../typography/MembershipLabel'
 import { MemberInfo } from '../MemberInfo'
@@ -60,10 +60,10 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         <MembershipLabel text="Invitations Left" />
         <AboutInvite>
           <AboutText size={2}>{member?.inviteCount}</AboutText>
-          <ButtonGhost size="small">
+          <TransferInviteButton member={member} square={false}>
             <TransferSymbol />
             Transfer Invites
-          </ButtonGhost>
+          </TransferInviteButton>
         </AboutInvite>
       </AboutRow>
       <AboutRow>

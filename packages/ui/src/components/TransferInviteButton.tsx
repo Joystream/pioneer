@@ -1,23 +1,22 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { BaseMember } from '../common/types'
 import { useModal } from '../hooks/useModal'
-import { ButtonSecondary } from './buttons'
+import { ButtonProps, ButtonSecondary } from './buttons'
 import { TransferIcon } from './icons'
 
-interface Props {
+interface Props extends Pick<ButtonProps, 'square'> {
   member: BaseMember
+  children?: ReactNode
 }
 
-export function TransferInviteButton({ member }: Props) {
+export function TransferInviteButton({ member, square, children }: Props) {
   const disabled = member.inviteCount <= 0
   const { showModal } = useModal()
   const onClick = () => showModal('TransferInvites', { memberId: member.id })
 
   return (
-    <>
-      <ButtonSecondary size="small" square disabled={disabled} onClick={onClick}>
-        <TransferIcon />
-      </ButtonSecondary>
-    </>
+    <ButtonSecondary size="small" square={square ?? true} disabled={disabled} onClick={onClick}>
+      {children ? children : <TransferIcon />}
+    </ButtonSecondary>
   )
 }
