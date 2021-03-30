@@ -8,7 +8,7 @@ import { useSignAndSendTransaction } from '../hooks/useSignAndSendTransaction'
 export function useMockMembers() {
   const { api, isConnected } = useApi()
   const { data, loading } = useGetMembersQuery()
-  const members = data?.members
+  const members = data?.memberships
   const transaction = useMemo(() => {
     if (!members || !api) {
       return
