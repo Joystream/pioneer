@@ -32,27 +32,26 @@ export const makeServer = (environment = 'development') => {
         return map.set(block.id, server.schema.create('Block', { ...block }))
       }, new Map())
 
-      const inviteeMap = new Map<string, string[]>()
+      const membersMap = new Map<string, string[]>()
 
       mockMembers.map((member) => {
-        const temporary = { ...member }
+        const temporary: any = { ...member }
 
-        if (temporary?.invitees?.length) {
-          inviteeMap.set(member.id, temporary.invitees)
-          delete temporary.invitees
+        if (temporary.invitedById) {
+          // TODO: Mirage: The membership model has multiple possible inverse associations for the membership.invitedBy association.
+          // temporary.invitedBy = membersMap.get(temporary.invitedById)
+          delete temporary.invitedById
         }
 
-        return server.schema.create('Membership', {
+        const membership = server.schema.create('Membership', {
           ...temporary,
           registeredAtBlock: blocksMap.get(member.registeredAtBlock),
         })
-      })
 
-      for (const [invitor, invitees] of inviteeMap) {
-        const member = server.schema.find('Membership', invitor)
-        //member.invitees = invitees.map((id) => server.schema.find('Membership', id))
-        //member.save()
-      }
+        membersMap.set(member.id, membership)
+
+        return membership
+      })
     },
   })
 }

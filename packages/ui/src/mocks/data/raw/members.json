@@ -10,9 +10,7 @@
     "isFoundingMember": true,
     "inviteCount": 3,
     "registeredAtBlock": "block-1",
-    "invitees": [
-      "1", "2"
-    ]
+    "registeredAtTime":"2021-03-29 18:21:06.000000"
   },
   {
     "id": "1",
@@ -24,7 +22,9 @@
     "isVerified": true,
     "isFoundingMember": false,
     "inviteCount":  2,
-    "registeredAtBlock": "block-2"
+    "registeredAtBlock": "block-2",
+    "registeredAtTime": "2021-03-29 18:21:06.000000",
+    "invitedById": "0"
   },
   {
     "id": "2",
@@ -36,7 +36,9 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlock": "block-3"
+    "registeredAtBlock": "block-3",
+    "registeredAtTime": "2021-03-29 18:21:06.000000",
+    "invitedById": "0"
   },
   {
     "id": "3",
@@ -48,7 +50,8 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlock": "block-3"
+    "registeredAtBlock": "block-3",
+    "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
     "id": "4",
@@ -60,7 +63,8 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlock": "block-4"
+    "registeredAtBlock": "block-4",
+    "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
     "id": "5",
@@ -72,7 +76,8 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlock": "block-4"
+    "registeredAtBlock": "block-4",
+    "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
     "id": "6",
@@ -84,7 +89,8 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlock": "block-4"
+    "registeredAtBlock": "block-4",
+    "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
     "id": "7",
@@ -96,7 +102,8 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlock": "block-4"
+    "registeredAtBlock": "block-4",
+    "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
     "id": "8",
@@ -108,7 +115,8 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlock": "block-4"
+    "registeredAtBlock": "block-4",
+    "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
     "id": "9",
@@ -120,6 +128,7 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlock": "block-4"
+    "registeredAtBlock": "block-4",
+    "registeredAtTime": "2021-03-29 18:21:06.000000"
   }
 ]
