@@ -27,12 +27,12 @@ export const MemberInfo = React.memo(({ member, onClick, isOnDark, showId, membe
   return (
     <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize}>
       <MemberPhoto>
-        <Avatar avatarURI={member.avatarURI} />
+        <Avatar avatarUri={member.avatarUri} />
       </MemberPhoto>
       <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
       <MemberIcons>
         {member.isVerified && <MemberStatusHelp icon={<VerifiedMemberIcon />} helperText="Lorem fishy" />}
-        {member.isFoundingMember && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
+        {false && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
       </MemberIcons>
       {!showId && (
         <MemberRoles>

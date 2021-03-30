@@ -8,7 +8,7 @@ import { useSignAndSendTransaction } from '../hooks/useSignAndSendTransaction'
 export function useMockMembers() {
   const { api, isConnected } = useApi()
   const { data, loading } = useGetMembersQuery()
-  const members = data?.members
+  const members = data?.memberships
   const transaction = useMemo(() => {
     if (!members || !api) {
       return
@@ -17,9 +17,11 @@ export function useMockMembers() {
     const createMembers = members.map((member) => {
       return api?.tx.members.buyMembership({
         handle: member.handle,
-        avatar_uri: member.avatarURI,
-        name: member.name,
-        about: member.about,
+        metadata: {
+          avatar_uri: member.avatarUri,
+          name: member.name,
+          about: member.about,
+        },
         root_account: member.rootAccount,
         controller_account: member.controllerAccount,
       })

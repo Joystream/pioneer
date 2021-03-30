@@ -1,31 +1,30 @@
-fragment MemberFields on Member {
+fragment MemberFields on Membership {
   id
   rootAccount
   controllerAccount
   handle
   name
   about
-  avatarURI
-  isFoundingMember
+  avatarUri
   isVerified
   inviteCount
 }
 
 fragment BlockFields on Block {
   id
-  height
-  timestamp
+  block
   network
 }
 
 query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!]) {
-  members(where: {rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in}) {
+  memberships(where: {rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in}) {
     ...MemberFields
   }
 }
 
-fragment MemberWithDetails on Member {
+fragment MemberWithDetails on Membership {
   ...MemberFields
+  registeredAtTime
   registeredAtBlock {
     ...BlockFields
   }
@@ -35,13 +34,16 @@ fragment MemberWithDetails on Member {
 }
 
 query GetMember($id: ID!) {
-  member(where: {id: $id}) {
+  membership(where: {id: $id}) {
     ...MemberWithDetails
   }
 }
 
 query SearchMembers($text: String!, $limit: Int) {
-  searchMembers(text: $text, limit: $limit) {
+  memberships(where: {
+    name_contains: $text
+    handle_contains: $text
+  }, limit: $limit) {
     ...MemberFields
   }
 }

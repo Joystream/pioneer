@@ -20,7 +20,7 @@ export const MemberProfile = React.memo(() => {
   const { modalData, hideModal } = useModal()
   const { data, loading } = useGetMemberQuery({ variables: { id: modalData.id } })
 
-  const member = data?.member
+  const member = data?.membership
   const isMyMember = !isLoading && !!members.find((m) => m.id == member?.id)
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

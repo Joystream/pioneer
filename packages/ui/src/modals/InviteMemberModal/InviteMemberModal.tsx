@@ -28,10 +28,12 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
             inviting_member_id: transactionParams.invitor?.id,
             root_account: transactionParams.rootAccount.address,
             controller_account: transactionParams.controllerAccount.address,
-            name: transactionParams.name,
+            metadata: {
+              name: transactionParams.name,
+              avatar_uri: transactionParams.avatarUri,
+              about: transactionParams.about,
+            },
             handle: transactionParams.handle,
-            avatar_uri: transactionParams.avatarURI,
-            about: transactionParams.about,
           })
         : undefined,
     [JSON.stringify(transactionParams)]

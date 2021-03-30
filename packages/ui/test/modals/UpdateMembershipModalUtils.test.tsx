@@ -6,7 +6,7 @@ describe('UI: UpdatedMembershipModal - helpers', () => {
     name: 'Alice Member',
     handle: 'alice_handle',
     about: '',
-    avatarURI: '',
+    avatarUri: '',
     rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
     isFoundingMember: true,
@@ -18,7 +18,7 @@ describe('UI: UpdatedMembershipModal - helpers', () => {
     name: 'Alice Member',
     handle: 'alice_handle',
     about: '',
-    avatarURI: '',
+    avatarUri: '',
     rootAccount: {
       address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
       name: '',
@@ -92,7 +92,7 @@ describe('UI: UpdatedMembershipModal - helpers', () => {
         id: null,
         handle: null,
         about: null,
-        avatarURI: null,
+        avatarUri: null,
         rootAccount: null,
         controllerAccount: null,
       })
@@ -104,7 +104,7 @@ describe('UI: UpdatedMembershipModal - helpers', () => {
         handle: null,
         name: null,
         about: null,
-        avatarURI: null,
+        avatarUri: null,
         rootAccount: { name: '', address: 'foo-bar' },
         controllerAccount: null,
       })
@@ -116,7 +116,7 @@ describe('UI: UpdatedMembershipModal - helpers', () => {
         handle: 'bax',
         name: 'Foo Bar',
         about: null,
-        avatarURI: null,
+        avatarUri: null,
         rootAccount: null,
         controllerAccount: { name: '', account: 'foo-bar' },
       })

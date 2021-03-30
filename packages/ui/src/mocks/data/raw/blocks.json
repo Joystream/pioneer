@@ -2,25 +2,25 @@
   {
     "id": "block-1",
     "network": "Babylon",
-    "height": "321001",
+    "block": 321001,
     "timestamp": "2021-03-09T10:18:04.155Z"
   },
   {
     "id": "block-2",
     "network": "Babylon",
-    "height": "321002",
+    "block": 321002,
     "timestamp": "2021-03-09T10:28:04.155Z"
   },
   {
     "id": "block-3",
     "network": "Babylon",
-    "height": "321003",
+    "block": 321003,
     "timestamp": "2021-03-09T10:38:04.155Z"
   },
   {
     "id": "block-4",
     "network": "Babylon",
-    "height": "321004",
+    "block": 321004,
     "timestamp": "2021-03-10T10:38:04.155Z"
   }
 ]

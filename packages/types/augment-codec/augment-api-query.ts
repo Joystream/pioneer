@@ -4,7 +4,7 @@
 import { AnyNumber, ITuple, Observable } from '@polkadot/types/types';
 import { Option, Vec } from '@polkadot/types/codec';
 import { Bytes, bool, u32, u64 } from '@polkadot/types/primitive';
-import { Application, ApplicationId, Candidate, CastVoteOf, Category, CategoryId, ClassId, ClassOf, ConstitutionInfo, ContentId, CouncilMemberOf, CouncilStageUpdate, CuratorGroup, CuratorGroupId, DataObject, DataObjectStorageRelationship, DataObjectStorageRelationshipId, DataObjectType, DataObjectTypeId, DiscussionPost, DiscussionThread, EntityController, EntityCreationVoucher, EntityId, EntityOf, MemberId, Membership, MemoText, ModeratorId, Opening, OpeningId, Post, PostId, PropertyId, ProposalDetailsOf, ProposalId, ProposalOf, ReferendumStage, ServiceProviderRecord, StakingAccountMemberBinding, StorageProviderId, Thread, ThreadId, Url, VoteKind, Worker, WorkerId } from './all';
+import { Application, ApplicationId, Candidate, CastVoteOf, Category, CategoryId, ClassId, ClassOf, ConstitutionInfo, ContentId, CouncilMemberOf, CouncilStageUpdate, CuratorGroup, CuratorGroupId, DataObject, DataObjectStorageRelationship, DataObjectStorageRelationshipId, DataObjectType, DataObjectTypeId, DiscussionPost, DiscussionThread, EntityController, EntityCreationVoucher, EntityId, EntityOf, MemberId, Membership, MemoText, ModeratorId, Opening, OpeningId, Post, PostId, PropertyId, ProposalId, ProposalOf, ReferendumStage, Reply, ReplyId, ServiceProviderRecord, StakingAccountMemberBinding, StorageProviderId, ThreadId, ThreadOf, Url, VoteKind, Worker, WorkerId } from './all';
 import { UncleEntryItem } from '@polkadot/types/interfaces/authorship';
 import { BabeAuthorityWeight, MaybeRandomness, NextConfigDescriptor, Randomness } from '@polkadot/types/interfaces/babe';
 import { AccountData, BalanceLock } from '@polkadot/types/interfaces/balances';
@@ -127,6 +127,21 @@ declare module '@polkadot/api/types/storage' {
        **/
       totalIssuance: AugmentedQuery<ApiType, () => Observable<Balance>>;
     };
+    blog: {
+      /**
+       * Post by unique blog and post identificators
+       **/
+      postById: AugmentedQuery<ApiType, (arg: PostId | AnyNumber | Uint8Array) => Observable<Post>>;
+      /**
+       * Maps, representing id => item relationship for blogs, posts and replies related structures
+       * Post count
+       **/
+      postCount: AugmentedQuery<ApiType, () => Observable<PostId>>;
+      /**
+       * Reply by unique blog, post and reply identificators
+       **/
+      replyById: AugmentedQueryDoubleMap<ApiType, (key1: PostId | AnyNumber | Uint8Array, key2: ReplyId | AnyNumber | Uint8Array) => Observable<Reply>>;
+    };
     constitution: {
       constitution: AugmentedQuery<ApiType, () => Observable<ConstitutionInfo>>;
     };
@@ -208,6 +223,10 @@ declare module '@polkadot/api/types/storage' {
        **/
       budget: AugmentedQuery<ApiType, () => Observable<Balance>>;
       /**
+       * Amount of balance to be refilled every budget period
+       **/
+      budgetIncrement: AugmentedQuery<ApiType, () => Observable<Balance>>;
+      /**
        * Map of all candidates that ever candidated and haven't unstake yet.
        **/
       candidates: AugmentedQuery<ApiType, (arg: MemberId | AnyNumber | Uint8Array) => Observable<Candidate>>;
@@ -215,6 +234,10 @@ declare module '@polkadot/api/types/storage' {
        * Current council members
        **/
       councilMembers: AugmentedQuery<ApiType, () => Observable<Vec<CouncilMemberOf>>>;
+      /**
+       * Councilor reward per block
+       **/
+      councilorReward: AugmentedQuery<ApiType, () => Observable<Balance>>;
       /**
        * The next block in which the budget will be increased.
        **/
@@ -314,13 +337,9 @@ declare module '@polkadot/api/types/storage' {
        **/
       nextThreadId: AugmentedQuery<ApiType, () => Observable<ThreadId>>;
       /**
-       * Map post identifier to corresponding post.
-       **/
-      postById: AugmentedQueryDoubleMap<ApiType, (key1: ThreadId | AnyNumber | Uint8Array, key2: PostId | AnyNumber | Uint8Array) => Observable<Post>>;
-      /**
        * Map thread identifier to corresponding thread.
        **/
-      threadById: AugmentedQueryDoubleMap<ApiType, (key1: CategoryId | AnyNumber | Uint8Array, key2: ThreadId | AnyNumber | Uint8Array) => Observable<Thread>>;
+      threadById: AugmentedQueryDoubleMap<ApiType, (key1: CategoryId | AnyNumber | Uint8Array, key2: ThreadId | AnyNumber | Uint8Array) => Observable<ThreadOf>>;
     };
     forumWorkingGroup: {
       /**
@@ -433,14 +452,6 @@ declare module '@polkadot/api/types/storage' {
        **/
       memberIdByHandleHash: AugmentedQuery<ApiType, (arg: Bytes | string | Uint8Array) => Observable<MemberId>>;
       /**
-       * Mapping of a controller account id to vector of member ids it controls.
-       **/
-      memberIdsByControllerAccountId: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Vec<MemberId>>>;
-      /**
-       * Mapping of a root account id to vector of member ids it controls.
-       **/
-      memberIdsByRootAccountId: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Vec<MemberId>>>;
-      /**
        * Mapping of member's id to their membership profile.
        **/
       membershipById: AugmentedQuery<ApiType, (arg: MemberId | AnyNumber | Uint8Array) => Observable<Membership>>;
@@ -534,10 +545,6 @@ declare module '@polkadot/api/types/storage' {
     };
     proposalsCodex: {
       /**
-       * Map proposal id to proposal details
-       **/
-      proposalDetailsByProposalId: AugmentedQuery<ApiType, (arg: ProposalId | AnyNumber | Uint8Array) => Observable<ProposalDetailsOf>>;
-      /**
        * Map proposal id to its discussion thread id
        **/
       threadIdByProposalId: AugmentedQuery<ApiType, (arg: ProposalId | AnyNumber | Uint8Array) => Observable<ThreadId>>;
@@ -596,9 +603,11 @@ declare module '@polkadot/api/types/storage' {
        **/
       stage: AugmentedQuery<ApiType, () => Observable<ReferendumStage>>;
       /**
-       * Votes cast in the referendum. A new record is added to this map when a user casts a sealed vote.
+       * Votes cast in the referendum. A new record is added to this map when a user casts a
+       * sealed vote.
        * It is modified when a user reveals the vote's commitment proof.
-       * A record is finally removed when the user unstakes, which can happen during a voting stage or after the current cycle ends.
+       * A record is finally removed when the user unstakes, which can happen during a voting
+       * stage or after the current cycle ends.
        * A stake for a vote can be reused in future referendum cycles.
        **/
       votes: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<CastVoteOf>>;

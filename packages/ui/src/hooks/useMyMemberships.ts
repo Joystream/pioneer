@@ -28,8 +28,8 @@ export function useMyMemberships(): UseMembership {
     console.error(error)
   }
 
-  const count = data?.members.length ?? 0
-  const members = data?.members ?? []
+  const count = data?.memberships.length ?? 0
+  const members = data?.memberships ?? []
 
   return { count, members, isLoading: loading, active, setActive }
 }

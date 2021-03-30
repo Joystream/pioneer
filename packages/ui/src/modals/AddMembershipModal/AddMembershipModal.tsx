@@ -31,10 +31,12 @@ export const AddMembershipModal = () => {
         ? api?.tx?.members?.buyMembership({
             root_account: transactionParams.rootAccount.address,
             controller_account: transactionParams.controllerAccount.address,
-            name: transactionParams.name,
             handle: transactionParams.handle,
-            avatar_uri: transactionParams.avatarURI,
-            about: transactionParams.about,
+            metadata: {
+              name: transactionParams.name,
+              avatar_uri: transactionParams.avatarUri,
+              about: transactionParams.about,
+            },
             referrer_id: transactionParams.referrer?.id,
           })
         : undefined,
@@ -48,13 +50,13 @@ export const AddMembershipModal = () => {
             const memberId = events.find((event) => event.event.method === 'MemberRegistered')?.event.data[0].toString()
             setId(memberId)
             if (server && memberId) {
-              server.schema.create('Member', {
+              server.schema.create('Membership', {
                 id: id,
                 rootAccount: transactionParams.rootAccount.address,
                 controllerAccount: transactionParams.controllerAccount.address,
                 name: transactionParams.name,
                 handle: transactionParams.handle,
-                avatarURI: transactionParams.avatarURI,
+                avatarUri: transactionParams.avatarUri,
                 about: transactionParams.about,
                 isVerified: false,
                 isFoundingMember: false,

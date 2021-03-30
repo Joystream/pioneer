@@ -43,7 +43,7 @@ interface CreateProps {
 const CreateMemberSchema = Yup.object().shape({
   rootAccount: AccountSchema.required(),
   controllerAccount: AccountSchema.required(),
-  avatarURI: AvatarURISchema,
+  avatarUri: AvatarURISchema,
   name: Yup.string().required(),
   handle: HandleSchema.required(),
   hasTerms: Yup.boolean().required().oneOf([true]),
@@ -59,12 +59,12 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
     controllerAccount: undefined,
     handle: '',
     about: '',
-    avatarURI: '',
+    avatarUri: '',
     isReferred: false,
     referrer: undefined,
     hasTerms: false,
   })
-  const { rootAccount, controllerAccount, handle, name, isReferred, avatarURI, about, referrer } = state
+  const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = state
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
@@ -179,19 +179,19 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
               id="member-avatar"
               label="Member Avatar"
               required
-              value={avatarURI}
-              validation={hasError('avatarURI', errors) ? 'invalid' : undefined}
+              value={avatarUri}
+              validation={hasError('avatarUri', errors) ? 'invalid' : undefined}
               message={
-                hasError('avatarURI', errors)
-                  ? getErrorMessage('avatarURI', errors)
+                hasError('avatarUri', errors)
+                  ? getErrorMessage('avatarUri', errors)
                   : 'Paste an URL of your avatar image. Text lorem ipsum.'
               }
               placeholder="Image URL"
             >
               <InputText
                 id="member-avatar"
-                value={avatarURI}
-                onChange={(event) => changeField('avatarURI', event.target.value)}
+                value={avatarUri}
+                onChange={(event) => changeField('avatarUri', event.target.value)}
               />
             </InputComponent>
           </Row>

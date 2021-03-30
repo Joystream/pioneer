@@ -6,7 +6,7 @@ export interface Member {
   rootAccount: Account
   controllerAccount: Account
   handle: string
-  avatarURI?: string
+  avatarUri?: string
   about?: string
   referrer?: BaseMember
   invitor?: BaseMember

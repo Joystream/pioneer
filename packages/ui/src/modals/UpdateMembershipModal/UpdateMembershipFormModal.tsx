@@ -30,7 +30,7 @@ interface Props {
 }
 
 const UpdateMemberSchema = Yup.object().shape({
-  avatarURI: AvatarURISchema.nullable(),
+  avatarUri: AvatarURISchema.nullable(),
   handle: Yup.string().when('$isHandleChanged', (isHandleChanged: boolean, schema: AnySchema) => {
     return isHandleChanged ? HandleSchema : schema
   }),
@@ -48,11 +48,11 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     name: member.name || '',
     handle: member.handle || '',
     about: member.about || '',
-    avatarURI: member.avatarURI || '',
+    avatarUri: member.avatarUri || '',
     rootAccount: { address: member.rootAccount, name: '' },
     controllerAccount: { address: member.controllerAccount, name: '' },
   })
-  const { handle, name, avatarURI, about, controllerAccount, rootAccount } = state
+  const { handle, name, avatarUri, about, controllerAccount, rootAccount } = state
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
@@ -161,19 +161,19 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
               id="member-avatar"
               label="Member Avatar"
               required
-              value={avatarURI}
-              validation={hasError('avatarURI', errors) ? 'invalid' : undefined}
+              value={avatarUri}
+              validation={hasError('avatarUri', errors) ? 'invalid' : undefined}
               message={
-                hasError('avatarURI', errors)
-                  ? getErrorMessage('avatarURI', errors)
+                hasError('avatarUri', errors)
+                  ? getErrorMessage('avatarUri', errors)
                   : 'Paste an URL of your avatar image. Text lorem ipsum.'
               }
               placeholder="Image URL"
             >
               <InputText
                 id="member-avatar"
-                value={avatarURI}
-                onChange={(event) => changeField('avatarURI', event.target.value)}
+                value={avatarUri}
+                onChange={(event) => changeField('avatarUri', event.target.value)}
               />
             </InputComponent>
           </Row>

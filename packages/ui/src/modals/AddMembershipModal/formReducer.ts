@@ -6,7 +6,7 @@ export interface FormFields {
   name: string
   handle: string
   about: string
-  avatarURI: string
+  avatarUri: string
   isReferred?: boolean
   referrer?: BaseMember
   hasTerms?: boolean
@@ -20,7 +20,7 @@ export const formReducer = (state: FormFields, action: Action): FormFields => {
     case 'name':
     case 'handle':
     case 'about':
-    case 'avatarURI':
+    case 'avatarUri':
       return { ...state, [action.type]: action.value as string }
     case 'rootAccount':
     case 'controllerAccount':

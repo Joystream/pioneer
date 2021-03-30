@@ -16,7 +16,7 @@ interface Props {
 const server = makeServer()
 
 const client = new ApolloClient({
-  uri: '/query-node',
+  uri: 'http://localhost:8081/graphql',
   cache: new InMemoryCache(),
 })
 
