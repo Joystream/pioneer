@@ -9,7 +9,7 @@ import { selectMember } from '../helpers/selectMember'
 import { getMember } from '../mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubApi } from '../mocks/transactions'
+import { stubApi, stubDefaultBalances, stubTransaction } from '../mocks/transactions'
 
 const members: MemberFieldsFragment[] = []
 
@@ -29,12 +29,18 @@ describe('UI: TransferInviteModal', () => {
 
   const api = stubApi()
 
+  beforeEach(async () => {
+    stubDefaultBalances(api)
+    stubTransaction(api, 'api.tx.members.transferInvites')
+  })
+
   afterEach(() => {
     members.splice(0)
   })
 
   it('Renders a modal', () => {
-    const { findByText } = renderModal()
+    const aliceMember = getMember('Alice')
+    const { findByText } = renderModal(aliceMember)
     expect(findByText(/transfer invites/i)).toBeDefined()
   })
 
@@ -59,7 +65,7 @@ describe('UI: TransferInviteModal', () => {
     expect(button.disabled).toBeFalsy()
   })
 
-  function renderModal(member: MemberFieldsFragment | undefined = undefined) {
+  function renderModal(member: MemberFieldsFragment) {
     return render(
       <MockQueryNodeProviders>
         <MockKeyringProvider>
