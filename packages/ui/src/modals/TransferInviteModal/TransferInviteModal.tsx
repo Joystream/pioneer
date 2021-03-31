@@ -11,6 +11,7 @@ import { TransferFailureModal } from './TransferFailureModal'
 import { TransferSuccessModal } from './TransferSuccessModal'
 import { WaitModal } from '../WaitModal'
 import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
+import { RequirementFailedModal } from './RequirementFailedModal'
 
 export function TransferInviteModal() {
   const { hideModal, modalData } = useModal<TransferInvitesModalCall>()
@@ -47,7 +48,7 @@ export function TransferInviteModal() {
   }
 
   if (step === 'REQUIREMENTS_FAIL') {
-    return <TransferFailureModal onClose={hideModal} />
+    return <RequirementFailedModal onClose={hideModal} address={data.membership.controllerAccount} amount={new BN(0)} />
   }
 
   if (step === 'PREPARE' || !targetMember || !signer) {

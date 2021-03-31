@@ -1,5 +1,4 @@
 import { BaseMember } from '../../src/common/types'
-import BN from 'bn.js'
 import { sortMemberships } from '../../src/utils/sorting/sortMemberships'
 
 describe('sortMemberships', () => {
