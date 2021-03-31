@@ -5,7 +5,7 @@ import { useApi } from '../hooks/useApi'
 import { useObservable } from '../hooks/useObservable'
 import { useSignAndSendTransaction } from '../hooks/useSignAndSendTransaction'
 
-const BUDGET = 1000
+const BUDGET = 100
 
 export function useSudoBudget() {
   const { api, isConnected } = useApi()
