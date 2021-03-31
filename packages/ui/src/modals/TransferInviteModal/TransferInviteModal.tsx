@@ -1,6 +1,6 @@
 import BN from 'bn.js'
-import React, { useState } from 'react'
-import { useEffect, useGetMemberQuery } from '../../api/queries'
+import React, { useEffect, useState } from 'react'
+import { useGetMemberQuery } from '../../api/queries'
 import { Account, BaseMember, ModalState } from '../../common/types'
 import { TransferIcon } from '../../components/icons'
 import { useModal } from '../../hooks/useModal'
@@ -15,11 +15,12 @@ import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
 export function TransferInviteModal() {
   const { hideModal, modalData } = useModal<TransferInvitesModalCall>()
   const { data, loading } = useGetMemberQuery({ variables: { id: modalData.memberId } })
-  const [step, setStep] = useState<ModalState>('PREPARE')
+  const [step, setStep] = useState<ModalState>('REQUIREMENTS_CHECK')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [targetMember, setTargetMember] = useState<BaseMember>()
   const [signer, setSigner] = useState<Account>()
-  const canAfford = useTransferInviteFee(data?.membership)
+  const canAfford = useTransferInviteFee(data?.membership as BaseMember)
+
   useEffect(() => {
     if (step === 'REQUIREMENTS_CHECK' && typeof canAfford === 'boolean') {
       setStep(canAfford ? 'PREPARE' : 'REQUIREMENTS_FAIL')
@@ -47,12 +48,6 @@ export function TransferInviteModal() {
 
   if (step === 'REQUIREMENTS_FAIL') {
     return <TransferFailureModal onClose={hideModal} />
-  }
-
-  if (step === 'PREPARE' || !targetMember || !signer) {
-    return <TransferDetailsModal onClose={hideModal} onAccept={onAccept} icon={icon} member={member} />
-  if (loading || !data?.membership) {
-    return null
   }
 
   if (step === 'PREPARE' || !targetMember || !signer) {
