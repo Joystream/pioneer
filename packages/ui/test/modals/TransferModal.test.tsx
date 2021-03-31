@@ -4,7 +4,6 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 import { Account } from '../../src/common/types'
-import { ArrowInsideIcon } from '../../src/components/icons'
 import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectAccount } from '../helpers/selectAccount'
@@ -151,7 +150,7 @@ describe('UI: TransferModal', () => {
       <MockKeyringProvider>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
-            <TransferModal onClose={() => undefined} from={sender} to={to} icon={<ArrowInsideIcon />} />
+            <TransferModal />
           </MockQueryNodeProviders>
         </ApiContext.Provider>
       </MockKeyringProvider>

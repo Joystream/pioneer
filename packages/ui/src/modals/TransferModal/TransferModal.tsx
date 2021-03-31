@@ -1,24 +1,22 @@
 import { EventRecord } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
-import React, { ReactElement, useState } from 'react'
+import React, { useState } from 'react'
 import { Account, ModalState } from '../../common/types'
+import { TransferIcons } from '../../components/icons/TransferIcons'
+import { useModal } from '../../hooks/useModal'
 import { SignTransferModal } from './SignTransferModal'
 import { TransactionFailureModal } from './TransactionFailureModal'
 import { TransactionSuccessModal } from './TransactionSuccessModal'
 import { TransferDetailsModal } from './TransferDetailsModal'
+import { TransferModalCall } from './types'
 
-interface Props {
-  onClose: () => void
-  from?: Account
-  to?: Account
-  icon: ReactElement
-}
-
-export function TransferModal({ from, to, onClose, icon }: Props) {
+export function TransferModal() {
+  const { hideModal, modalData } = useModal<TransferModalCall>()
+  const { from, to, iconName } = modalData
   const [step, setStep] = useState<ModalState>('PREPARE')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [fee, setFee] = useState<BN>(new BN(0))
-  const [transferFrom, setTransferFrom] = useState(from)
+  const [transferFrom, setTransferFrom] = useState<Account | undefined>(from)
   const [transferTo, setTransferTo] = useState<Account | undefined>(to)
 
   const isTransfer = !from && !to
@@ -40,23 +38,23 @@ export function TransferModal({ from, to, onClose, icon }: Props) {
   if (step === 'PREPARE' || !transferTo || !transferFrom) {
     return (
       <TransferDetailsModal
-        onClose={onClose}
+        onClose={hideModal}
         from={transferFrom}
         to={transferTo}
         onAccept={onAccept}
         title={title}
-        icon={icon}
+        icon={TransferIcons[iconName]}
       />
     )
   }
 
   if (step === 'AUTHORIZE') {
-    return <SignTransferModal onClose={onClose} from={transferFrom} amount={amount} to={transferTo} onDone={onDone} />
+    return <SignTransferModal onClose={hideModal} from={transferFrom} amount={amount} to={transferTo} onDone={onDone} />
   }
 
   if (step === 'SUCCESS') {
-    return <TransactionSuccessModal onClose={onClose} from={transferFrom} to={transferTo} amount={amount} fee={fee} />
+    return <TransactionSuccessModal onClose={hideModal} from={transferFrom} to={transferTo} amount={amount} fee={fee} />
   }
 
-  return <TransactionFailureModal onClose={onClose} from={transferFrom} amount={amount} to={transferTo} />
+  return <TransactionFailureModal onClose={hideModal} from={transferFrom} amount={amount} to={transferTo} />
 }
