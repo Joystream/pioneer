@@ -1,38 +1,21 @@
 import React, { ReactNode, useState } from 'react'
 import { ModalContext } from './context'
+import { AnyModalCall, ModalCall, UseModal, ModalWithDataCall } from './types'
 
 interface Props {
   children: ReactNode
 }
 
-interface Modal<M> {
-  modal: M
-}
-interface ModalWithData<M, D> extends Modal<M> {
-  data: D
-}
+export type BuyMembershipModal = ModalCall<'BuyMembership'>
+export type MemberModal = ModalWithDataCall<'Member', { id: string }>
+export type TransferInvitesModal = ModalWithDataCall<'TransferInvites', { memberId: string }>
 
-type AddMembershipModal = Modal<'AddMembership'>
-type MemberModal = ModalWithData<'Member', { id: string }>
-type TransferInvitesModal = ModalWithData<'TransferInvites', { memberId: string }>
-
-type ModalCall = MemberModal | AddMembershipModal | TransferInvitesModal
-
-export interface ModalApi {
-  modal: string | null
-  modalData: any | null
-  showModal: (action: ModalCall) => void
-  hideModal: () => void
-}
-
-function isModalWithData(a: any): a is ModalWithData<any, any> {
-  return !!a.data
-}
+const isModalWithData = (a: any): a is ModalWithDataCall<any, any> => !!a.data
 
 export const ModalContextProvider = (props: Props) => {
   const [modal, setModal] = useState<string | null>(null)
   const [modalData, setModalData] = useState<any>()
-  const modalApi: ModalApi = {
+  const modalApi: UseModal<AnyModalCall> = {
     showModal: (modalCall) => {
       setModal(modalCall.modal)
 

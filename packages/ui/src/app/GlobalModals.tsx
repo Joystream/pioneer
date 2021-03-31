@@ -10,7 +10,7 @@ export const GlobalModals = () => {
   switch (modal) {
     case 'member':
       return <MemberProfile />
-    case 'addMembership':
+    case 'BuyMembership':
       return <AddMembershipModal />
     case 'TransferInvites':
       return <TransferInviteModal />

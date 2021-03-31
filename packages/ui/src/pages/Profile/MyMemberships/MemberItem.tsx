@@ -7,6 +7,7 @@ import { TransferInviteButton } from '../../../components/TransferInviteButton'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
 import { useModal } from '../../../hooks/useModal'
 import { EditMembershipButton } from '../../../membership/components/EditMembershipButton'
+import { MemberModal } from '../../../providers/modal/provider'
 
 interface Props {
   member: BaseMember
@@ -16,7 +17,7 @@ export const MemberItem = ({ member }: Props) => {
   const { showModal } = useModal()
 
   const showMemberModal = useCallback(() => {
-    showModal({ modal: 'Member', data: { id: member.id } })
+    showModal<MemberModal>({ modal: 'Member', data: { id: member.id } })
   }, [member.id])
 
   return (

@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { BaseMember } from '../common/types'
 import { useModal } from '../hooks/useModal'
+import { TransferInvitesModal } from '../providers/modal/provider'
 import { ButtonProps, ButtonSecondary } from './buttons'
 import { TransferIcon } from './icons'
 
@@ -12,7 +13,7 @@ interface Props extends Pick<ButtonProps, 'square'> {
 export function TransferInviteButton({ member, square, children }: Props) {
   const disabled = member.inviteCount <= 0
   const { showModal } = useModal()
-  const onClick = () => showModal({ modal: 'TransferInvites', data: { memberId: member.id } })
+  const onClick = () => showModal<TransferInvitesModal>({ modal: 'TransferInvites', data: { memberId: member.id } })
 
   return (
     <ButtonSecondary size="small" square={square ?? true} disabled={disabled} onClick={onClick}>

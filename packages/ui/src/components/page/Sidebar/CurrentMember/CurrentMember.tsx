@@ -4,6 +4,7 @@ import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useModal } from '../../../../hooks/useModal'
 import { useMyMemberships } from '../../../../hooks/useMyMemberships'
 import { useToggle } from '../../../../hooks/useToggle'
+import { BuyMembershipModal } from '../../../../providers/modal/provider'
 import { ArrowDownExpandedIcon, Icon } from '../../../icons'
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../../membership'
 import { AddMembershipButton } from '../../../membership/AddMembershipButton'
@@ -29,7 +30,10 @@ export const CurrentMember = () => {
         </SwitchArrow>
       </SwitchMember>
       {isOpen && (
-        <SwitchMemberModal onClose={toggleOpen} onCreateMember={() => showModal({ modal: 'AddMembership' })} />
+        <SwitchMemberModal
+          onClose={toggleOpen}
+          onCreateMember={() => showModal<BuyMembershipModal>({ modal: 'BuyMembership' })}
+        />
       )}
     </>
   )

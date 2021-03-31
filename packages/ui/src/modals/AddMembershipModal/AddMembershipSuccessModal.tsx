@@ -3,11 +3,12 @@ import styled from 'styled-components'
 import { BaseMember, Member } from '../../common/types'
 import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
-import { MemberInfo } from '../../components/membership/MemberInfo'
+import { MemberInfo } from '../../components/membership'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Text } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
 import { useModal } from '../../hooks/useModal'
+import { MemberModal } from '../../providers/modal/provider'
 
 interface Props {
   onClose: () => void
@@ -19,7 +20,10 @@ export function AddMembershipSuccessModal({ onClose, member, memberId }: Props) 
   const { showModal } = useModal()
   const viewMember = () => {
     onClose()
-    showModal('member', { id: memberId })
+
+    if (memberId) {
+      showModal<MemberModal>({ modal: 'Member', data: { id: memberId } })
+    }
   }
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>

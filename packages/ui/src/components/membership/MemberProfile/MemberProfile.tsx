@@ -5,6 +5,7 @@ import { Animations, Colors } from '../../../constants'
 import { useModal } from '../../../hooks/useModal'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { EditMembershipButton } from '../../../membership/components/EditMembershipButton'
+import { MemberModal } from '../../../providers/modal/provider'
 import { CloseButton } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
@@ -17,7 +18,7 @@ type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 export const MemberProfile = React.memo(() => {
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
   const { members, isLoading } = useMyMemberships()
-  const { modalData, hideModal } = useModal()
+  const { modalData, hideModal } = useModal<MemberModal>()
   const { data, loading } = useGetMemberQuery({ variables: { id: modalData.id } })
 
   const member = data?.membership
