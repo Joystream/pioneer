@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { EditSymbol } from '../../../components/icons/symbols/EditSymbol'
 import { MemberInfo, MemberRoleHelp } from '../../../components/membership'
+import { MemberModalCall } from '../../../components/membership/MemberProfile'
 import { TransferInviteButton } from '../../../components/TransferInviteButton'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
 import { useModal } from '../../../hooks/useModal'
@@ -16,7 +17,7 @@ export const MemberItem = ({ member }: Props) => {
   const { showModal } = useModal()
 
   const showMemberModal = useCallback(() => {
-    showModal('member', { id: member.id })
+    showModal<MemberModalCall>({ modal: 'Member', data: { id: member.id } })
   }, [member.id])
 
   return (

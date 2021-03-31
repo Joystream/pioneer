@@ -1,25 +1,23 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { BaseMember } from '../common/types'
-import { useToggle } from '../hooks/useToggle'
-import { TransferInviteModal } from '../modals/TransferInviteModal'
-import { ButtonSecondary } from './buttons'
+import { useModal } from '../hooks/useModal'
+import { TransferInvitesModalCall } from '../modals/TransferInviteModal'
+import { ButtonProps, ButtonSecondary } from './buttons'
 import { TransferIcon } from './icons'
 
-interface Props {
+interface Props extends Pick<ButtonProps, 'square'> {
   member: BaseMember
+  children?: ReactNode
 }
 
-export function TransferInviteButton({ member }: Props) {
+export function TransferInviteButton({ member, square, children }: Props) {
   const disabled = member.inviteCount <= 0
-  const [isOpen, toggleOpen] = useToggle()
-  const icon = <TransferIcon />
+  const { showModal } = useModal()
+  const onClick = () => showModal<TransferInvitesModalCall>({ modal: 'TransferInvites', data: { memberId: member.id } })
 
   return (
-    <>
-      <ButtonSecondary size="small" square disabled={disabled} onClick={toggleOpen}>
-        {icon}
-      </ButtonSecondary>
-      {isOpen && <TransferInviteModal onClose={toggleOpen} icon={icon} member={member} />}
-    </>
+    <ButtonSecondary size="small" square={square ?? true} disabled={disabled} onClick={onClick}>
+      {children ? children : <TransferIcon />}
+    </ButtonSecondary>
   )
 }

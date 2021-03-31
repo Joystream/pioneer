@@ -1,27 +1,23 @@
 import React, { ReactNode, useState } from 'react'
 import { ModalContext } from './context'
+import { AnyModalCall, ModalWithDataCall, UseModal } from './types'
 
 interface Props {
   children: ReactNode
 }
 
-type ModalName = 'member' | 'addMembership'
-
-export interface ModalApi {
-  modal: string | null
-  modalData: any | null
-  showModal: (name: ModalName, data?: any) => void
-  hideModal: () => void
-}
+const isModalWithData = (a: any): a is ModalWithDataCall<any, any> => !!a.data
 
 export const ModalContextProvider = (props: Props) => {
   const [modal, setModal] = useState<string | null>(null)
   const [modalData, setModalData] = useState<any>()
+  const modalApi: UseModal<AnyModalCall> = {
+    showModal: (modalCall) => {
+      setModal(modalCall.modal)
 
-  const modalApi = {
-    showModal: (name: string, data: any) => {
-      setModal(name)
-      setModalData(data)
+      if (isModalWithData(modalCall)) {
+        setModalData(modalCall.data)
+      }
     },
     hideModal: () => {
       setModal(null)

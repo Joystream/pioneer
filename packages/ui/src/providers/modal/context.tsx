@@ -1,7 +1,7 @@
 import { createContext } from 'react'
-import { ModalApi } from './provider'
+import { UseModal } from './types'
 
-export const ModalContext = createContext<ModalApi>({
+export const ModalContext = createContext<UseModal<any>>({
   modal: null,
   modalData: null,
   showModal: () => undefined,

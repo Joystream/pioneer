@@ -1,4 +1,5 @@
 import { Server } from 'miragejs/server'
+import { seedBlocks } from '../../../src/mocks/data'
 import { makeServer } from '../../../src/mocks/server'
 import { createMember, Members } from '../members'
 
@@ -14,6 +15,7 @@ export function setupMockServer(): MockServer {
 
   beforeEach(() => {
     mock.server = makeServer('test')
+    seedBlocks(mock.server)
   })
 
   afterEach(() => {

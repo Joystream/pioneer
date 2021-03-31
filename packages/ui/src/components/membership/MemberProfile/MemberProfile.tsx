@@ -11,13 +11,14 @@ import { PageTab, PageTabsNav } from '../../page/PageTabs'
 import { MemberInfo } from '../MemberInfo'
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
+import { MemberModalCall } from './types'
 
 type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
 export const MemberProfile = React.memo(() => {
   const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
   const { members, isLoading } = useMyMemberships()
-  const { modalData, hideModal } = useModal()
+  const { modalData, hideModal } = useModal<MemberModalCall>()
   const { data, loading } = useGetMemberQuery({ variables: { id: modalData.id } })
 
   const member = data?.membership

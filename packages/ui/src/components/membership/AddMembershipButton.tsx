@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { useModal } from '../../hooks/useModal'
+import { BuyMembershipModalCall } from '../../modals/AddMembershipModal'
 import { ButtonPrimary, ButtonSize } from '../buttons'
 
 interface AddMembershipButtonProps {
@@ -13,7 +14,11 @@ export const AddMembershipButton = ({ className, children, size }: AddMembership
   const { showModal } = useModal()
 
   return (
-    <AddMemberships size={size} onClick={() => showModal('addMembership')} className={className}>
+    <AddMemberships
+      size={size}
+      onClick={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
+      className={className}
+    >
       {children}
     </AddMemberships>
   )
