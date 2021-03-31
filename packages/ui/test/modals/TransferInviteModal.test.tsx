@@ -7,7 +7,7 @@ import { ApiContext } from '../../src/providers/api/context'
 import { selectMember } from '../helpers/selectMember'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { stubApi } from '../mocks/transactions'
+import { stubApi, stubDefaultBalances, stubTransaction } from '../mocks/transactions'
 
 jest.mock('../../src/hooks/useModal', () => {
   return {
@@ -22,6 +22,11 @@ describe('UI: TransferInviteModal', () => {
 
   const mockServer = setupMockServer()
   const api = stubApi()
+
+  beforeEach(async () => {
+    stubDefaultBalances(api)
+    stubTransaction(api, 'api.tx.members.transferInvites')
+  })
 
   it('Renders a modal', async () => {
     seedMembers(mockServer.server)
