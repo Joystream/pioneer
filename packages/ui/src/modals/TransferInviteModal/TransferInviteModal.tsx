@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function TransferInviteModal({ onClose, icon, member }: Props) {
-  const [step, setStep] = useState<ModalState>('VALIDATE')
+  const [step, setStep] = useState<ModalState>('REQUIREMENTS_CHECK')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [sourceMember, setSourceMember] = useState(member)
   const [targetMember, setTargetMember] = useState<BaseMember>()
@@ -34,15 +34,15 @@ export function TransferInviteModal({ onClose, icon, member }: Props) {
     setStep(result ? 'SUCCESS' : 'ERROR')
   }
 
-  if (step === 'VALIDATE') {
+  if (step === 'REQUIREMENTS_CHECK') {
     if (typeof canAfford != 'boolean') {
       return <WaitModal onClose={onClose} title="Loading..." description="" />
     } else {
-      setStep(canAfford ? 'PREPARE' : 'VALIDATION_ERROR')
+      setStep(canAfford ? 'PREPARE' : 'REQUIREMENTS_FAIL')
     }
   }
 
-  if (step === 'VALIDATION_ERROR') {
+  if (step === 'REQUIREMENTS_FAIL') {
     return <TransferFailureModal onClose={onClose} />
   }
 
