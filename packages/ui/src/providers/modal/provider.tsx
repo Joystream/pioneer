@@ -1,14 +1,10 @@
 import React, { ReactNode, useState } from 'react'
 import { ModalContext } from './context'
-import { AnyModalCall, ModalCall, UseModal, ModalWithDataCall } from './types'
+import { AnyModalCall, ModalWithDataCall, UseModal } from './types'
 
 interface Props {
   children: ReactNode
 }
-
-export type BuyMembershipModal = ModalCall<'BuyMembership'>
-export type MemberModal = ModalWithDataCall<'Member', { id: string }>
-export type TransferInvitesModal = ModalWithDataCall<'TransferInvites', { memberId: string }>
 
 const isModalWithData = (a: any): a is ModalWithDataCall<any, any> => !!a.data
 

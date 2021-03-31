@@ -4,13 +4,14 @@ import { useGetMemberQuery } from '../../api/queries'
 import { Account, BaseMember, ModalState } from '../../common/types'
 import { TransferIcon } from '../../components/icons'
 import { useModal } from '../../hooks/useModal'
+import { TransferInvitesModalCall } from './index'
 import { SignTransferModal } from './SignTransferModal'
 import { TransferDetailsModal } from './TransferDetailsModal'
 import { TransferFailureModal } from './TransferFailureModal'
 import { TransferSuccessModal } from './TransferSuccessModal'
 
 export function TransferInviteModal() {
-  const { hideModal, modalData } = useModal()
+  const { hideModal, modalData } = useModal<TransferInvitesModalCall>()
   const { data, loading } = useGetMemberQuery({ variables: { id: modalData.memberId } })
   const [step, setStep] = useState<ModalState>('PREPARE')
   const [amount, setAmount] = useState<BN>(new BN(0))

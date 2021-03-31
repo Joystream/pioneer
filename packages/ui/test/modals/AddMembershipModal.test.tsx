@@ -154,7 +154,7 @@ describe('UI: AddMembershipModal', () => {
         const button = await findByRole('button', { name: 'View my profile' })
         expect(button).toBeEnabled()
         fireEvent.click(button)
-        expect(mockCallback.mock.calls[0]).toEqual(['member', { id: '12' }])
+        expect(mockCallback.mock.calls[0][0]).toEqual({ modal: 'Member', data: { id: '12' } })
       })
     })
 

@@ -4,11 +4,11 @@ import { BaseMember, Member } from '../../common/types'
 import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership'
+import { MemberModalCall } from '../../components/membership/MemberProfile'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Text } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
 import { useModal } from '../../hooks/useModal'
-import { MemberModal } from '../../providers/modal/provider'
 
 interface Props {
   onClose: () => void
@@ -22,7 +22,7 @@ export function AddMembershipSuccessModal({ onClose, member, memberId }: Props) 
     onClose()
 
     if (memberId) {
-      showModal<MemberModal>({ modal: 'Member', data: { id: memberId } })
+      showModal<MemberModalCall>({ modal: 'Member', data: { id: memberId } })
     }
   }
   return (

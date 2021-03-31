@@ -1,12 +1,11 @@
 import React from 'react'
-import { MemberProfile } from '../components/membership/MemberProfile'
+import { MemberModalCall, MemberProfile } from '../components/membership/MemberProfile'
 import { useModal } from '../hooks/useModal'
-import { AddMembershipModal } from '../modals/AddMembershipModal'
-import { TransferInviteModal } from '../modals/TransferInviteModal'
-import { BuyMembershipModal, MemberModal, TransferInvitesModal } from '../providers/modal/provider'
+import { AddMembershipModal, BuyMembershipModalCall } from '../modals/AddMembershipModal'
+import { TransferInviteModal, TransferInvitesModalCall } from '../modals/TransferInviteModal'
 import { ModalName } from '../providers/modal/types'
 
-type ModalNames = ModalName<TransferInvitesModal> | ModalName<MemberModal> | ModalName<BuyMembershipModal>
+type ModalNames = ModalName<TransferInvitesModalCall> | ModalName<MemberModalCall> | ModalName<BuyMembershipModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
