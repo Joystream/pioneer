@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { Account, BaseMember, ModalState } from '../../common/types'
 import { TransferDetailsModal } from './TransferDetailsModal'
 import BN from 'bn.js'
@@ -21,6 +21,11 @@ export function TransferInviteModal({ onClose, icon, member }: Props) {
   const [targetMember, setTargetMember] = useState<BaseMember>()
   const [signer, setSigner] = useState<Account>()
   const canAfford = useTransferInviteFee(member)
+  useEffect(() => {
+    if (step === 'REQUIREMENTS_CHECK' && typeof canAfford === 'boolean') {
+      setStep(canAfford ? 'PREPARE' : 'REQUIREMENTS_FAIL')
+    }
+  }, [canAfford])
 
   const onAccept = (amount: BN, from: BaseMember, to: BaseMember, signer: Account) => {
     setAmount(amount)
@@ -35,11 +40,7 @@ export function TransferInviteModal({ onClose, icon, member }: Props) {
   }
 
   if (step === 'REQUIREMENTS_CHECK') {
-    if (typeof canAfford != 'boolean') {
-      return <WaitModal onClose={onClose} title="Loading..." description="" />
-    } else {
-      setStep(canAfford ? 'PREPARE' : 'REQUIREMENTS_FAIL')
-    }
+    return <WaitModal onClose={onClose} title="Loading..." description="" />
   }
 
   if (step === 'REQUIREMENTS_FAIL') {
