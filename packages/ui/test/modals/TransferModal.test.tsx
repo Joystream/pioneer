@@ -4,7 +4,7 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 import { Account } from '../../src/common/types'
-import { TransferModal } from '../../src/modals/TransferModal/TransferModal'
+import { TransferModal } from '../../src/modals/TransferModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { ModalContext } from '../../src/providers/modal/context'
 import { selectAccount } from '../helpers/selectAccount'
@@ -31,7 +31,7 @@ jest.mock('../../src/hooks/useAccounts', () => {
   }
 })
 
-describe.skip('UI: TransferModal', () => {
+describe('UI: TransferModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
@@ -59,65 +59,65 @@ describe.skip('UI: TransferModal', () => {
     transfer = stubTransaction(api, 'api.tx.balances.transfer')
   })
 
-  it('Renders a modal', () => {
-    const { findByText } = renderModal({})
+  it('Renders a modal', async () => {
+    const { findByRole } = renderModal({})
 
-    expect(findByText('Transfer tokens')).toBeDefined()
+    expect(await findByRole('heading', { name: 'Transfer tokens' })).toBeDefined()
   })
 
   it('Enables value input', async () => {
-    const { getByLabelText, getByRole } = renderModal({})
+    const { findByLabelText, findByRole } = renderModal({})
 
-    const input = getByLabelText(/number of tokens/i) as HTMLInputElement
-    const useHalfButton = getByRole('button', { name: /use half/i }) as HTMLButtonElement
-    const useMaxButton = getByRole('button', { name: /use max/i }) as HTMLButtonElement
+    const input = await findByLabelText(/number of tokens/i)
+    const useHalfButton = await findByRole('button', { name: /use half/i })
+    const useMaxButton = await findByRole('button', { name: /use max/i })
 
-    expect(input.disabled).toBe(true)
-    expect(useHalfButton.disabled).toBe(true)
-    expect(useMaxButton.disabled).toBe(true)
+    expect(input).toBeDisabled()
+    expect(useHalfButton).toBeDisabled()
+    expect(useMaxButton).toBeDisabled()
 
     await selectAccount('From', 'alice')
 
-    expect(input.disabled).toBe(false)
-    expect(useHalfButton.disabled).toBe(false)
-    expect(useMaxButton.disabled).toBe(false)
+    expect(input).not.toBeDisabled()
+    expect(useHalfButton).not.toBeDisabled()
+    expect(useMaxButton).not.toBeDisabled()
   })
 
   it('Renders an Authorize transaction step', async () => {
-    const { getByLabelText, getByText, getByRole } = renderModal({ from: alice, to: bob })
+    const { findByLabelText, findByText, findByRole } = renderModal({ from: alice, to: bob })
 
-    const input = getByLabelText('Number of tokens')
-    expect((getByText('Transfer tokens') as HTMLButtonElement).disabled).toBe(true)
+    const input = await findByLabelText('Number of tokens')
+    expect(await findByText('Transfer tokens')).toBeDisabled()
 
     await fireEvent.change(input, { target: { value: '50' } })
 
-    const button = getByRole('button', { name: /transfer tokens/i }) as HTMLButtonElement
-    expect(button.disabled).toBe(false)
+    const button = await findByRole('button', { name: /transfer tokens/i })
+    expect(button).not.toBeDisabled()
 
     fireEvent.click(button)
 
-    expect(getByText('Authorize Transaction')).toBeDefined()
-    expect(getByText(/Transaction fee:/i)?.parentNode?.textContent).toMatch(/^Transaction fee:25/)
+    expect(await findByText('Authorize Transaction')).toBeDefined()
+    expect((await findByText(/Transaction fee:/i))?.parentNode?.textContent).toMatch(/^Transaction fee:25/)
   })
 
   describe('Signed transaction', () => {
-    function renderAndSign() {
+    async function renderAndSign() {
       const rendered = renderModal({ from: alice, to: bob })
-      const { getByLabelText, getByText } = rendered
+      const { findByLabelText, findByText } = rendered
 
-      fireEvent.change(getByLabelText('Number of tokens'), { target: { value: '50' } })
-      fireEvent.click(getByText('Transfer tokens') as HTMLButtonElement)
-      fireEvent.click(getByText(/^sign transaction and transfer$/i))
+      fireEvent.change(await findByLabelText('Number of tokens'), { target: { value: '50' } })
+      fireEvent.click(await findByText('Transfer tokens'))
+      fireEvent.click(await findByText(/^sign transaction and transfer$/i))
 
       return rendered
     }
 
-    it('Renders wait for transaction step', async () => {
+    it.skip('Renders wait for transaction step', async () => {
       set(transfer, 'signAndSend', () => of(set({}, 'status.isReady', true)))
 
-      const { getByText } = renderAndSign()
+      const { findByText } = await renderAndSign()
 
-      expect(getByText('Pending transaction')).toBeDefined()
+      expect(await findByText('Pending transaction')).toBeDefined()
     })
 
     describe('Success', () => {
@@ -126,13 +126,13 @@ describe.skip('UI: TransferModal', () => {
       })
 
       it('Renders transaction success', async () => {
-        const { findByText } = renderAndSign()
+        const { findByText } = await renderAndSign()
 
         expect(await findByText('Success')).toBeDefined()
       })
 
       it('Calculates balances before & after', async () => {
-        const { getAllByText } = renderAndSign()
+        const { getAllByText } = await renderAndSign()
 
         const [alice, bob] = getAllByText('Transferable balance before:')
 
@@ -146,7 +146,7 @@ describe.skip('UI: TransferModal', () => {
     describe('Failure', () => {
       it('Renders transaction failure', async () => {
         stubTransactionFailure(transfer)
-        const { findByText } = renderAndSign()
+        const { findByText } = await renderAndSign()
 
         expect(await findByText('Failure')).toBeDefined()
       })
