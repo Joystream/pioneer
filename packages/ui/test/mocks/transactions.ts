@@ -93,6 +93,10 @@ export const stubTransaction = (api: UseApi, transactionPath: string) => {
   return transaction
 }
 
+export const stubQuery = (api: UseApi, querySubPath: string, response: unknown) => {
+  return set(api, `api.query.${querySubPath}`, () => of(response))
+}
+
 export const stubApi = () => {
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,

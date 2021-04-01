@@ -15,6 +15,7 @@ import { setupMockServer } from '../mocks/server'
 import {
   stubApi,
   stubDefaultBalances,
+  stubQuery,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
@@ -48,16 +49,15 @@ describe('UI: InviteMemberModal', () => {
   let inviteMemberTx: any
 
   beforeEach(async () => {
-    const number = 1000
     stubDefaultBalances(api)
-    set(api, 'api.query.membershipWorkingGroup.budget', () => of(toBalanceOf(number)))
-    set(api, 'api.query.members.membershipPrice', () => of(toBalanceOf(100)))
+    stubQuery(api, 'membershipWorkingGroup.budget', toBalanceOf(1000))
+    stubQuery(api, 'members.membershipPrice', toBalanceOf(100))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
   })
 
   it('Validate Working Group Budget', async () => {
-    set(api, 'api.query.membershipWorkingGroup.budget', () => of(toBalanceOf(0)))
+    stubQuery(api, 'membershipWorkingGroup.budget', toBalanceOf(0))
 
     renderModal()
 
