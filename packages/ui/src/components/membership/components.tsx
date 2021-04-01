@@ -57,6 +57,9 @@ export const MemberPhoto = styled.div`
   width: 40px;
   height: 40px;
   grid-area: memberphoto;
+  border-radius: ${BorderRad.round};
+  overflow: hidden;
+  border: 1px solid ${Colors.Black[200]};
 
   ${AvatarImg} {
     width: 100%;

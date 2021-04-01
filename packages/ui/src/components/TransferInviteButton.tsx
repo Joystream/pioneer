@@ -1,8 +1,10 @@
 import React, { ReactNode } from 'react'
+import { Colors } from '../constants'
+import styled from 'styled-components'
 import { BaseMember } from '../common/types'
 import { useModal } from '../hooks/useModal'
 import { TransferInvitesModalCall } from '../modals/TransferInviteModal'
-import { ButtonProps, ButtonSecondary } from './buttons'
+import { ButtonGhost, ButtonProps } from './buttons'
 import { TransferIcon } from './icons'
 
 interface Props extends Pick<ButtonProps, 'square'> {
@@ -16,8 +18,17 @@ export function TransferInviteButton({ member, square, children }: Props) {
   const onClick = () => showModal<TransferInvitesModalCall>({ modal: 'TransferInvites', data: { memberId: member.id } })
 
   return (
-    <ButtonSecondary size="small" square={square ?? true} disabled={disabled} onClick={onClick}>
-      {children ? children : <TransferIcon />}
-    </ButtonSecondary>
+    <ButtonGhost size="small" square={square ?? true} disabled={disabled} onClick={onClick}>
+      {children ? children : <TransferIconAlt />}
+    </ButtonGhost>
   )
 }
+
+const TransferIconAlt = styled(TransferIcon)`
+  & > .blackPart {
+    fill: ${Colors.Black[900]};
+  }
+  & > .primaryPart {
+    fill: ${Colors.Blue[500]};
+  }
+`
