@@ -8,7 +8,7 @@ import { ButtonPrimary } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { Text, TokenValue } from '../../components/typography'
+import { TextMedium, TokenValue } from '../../components/typography'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
@@ -46,19 +46,19 @@ export const SignCreateMemberModal = ({
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
         <ModalHeader onClick={onClose} title="Authorize transaction" />
         <ModalBody>
-          <Text>You intend to create a new membership.</Text>
+          <TextMedium>You intend to create a new membership.</TextMedium>
           {isInvite ? (
-            <Text>
+            <TextMedium>
               You are inviting this member. You have {transactionParams.invitor?.inviteCount.toString()} invites left.
-            </Text>
+            </TextMedium>
           ) : (
-            <Text>
+            <TextMedium>
               The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
-            </Text>
+            </TextMedium>
           )}
-          <Text>
+          <TextMedium>
             Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
-          </Text>
+          </TextMedium>
           <Row>
             <Label>Sending from account</Label>
             {initialSigner ? (

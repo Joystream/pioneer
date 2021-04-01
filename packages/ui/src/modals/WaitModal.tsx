@@ -15,7 +15,7 @@ export const WaitModal = ({ onClose, title, description }: Props) => (
     <ResultModalBody>
       <WaitingIcon />
       <ModalTitle as="h4">{title}</ModalTitle>
-      <ResultTextWhite size={2}>{description}</ResultTextWhite>
+      <ResultTextWhite>{description}</ResultTextWhite>
     </ResultModalBody>
   </Modal>
 )

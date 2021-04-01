@@ -5,7 +5,7 @@ import { CopyButton } from '../buttons'
 import { Help } from '../Help'
 import { AlertSymbol } from '../icons/symbols/AlertSymbol'
 import { SuccessSymbol } from '../icons/symbols/SuccessSymbol'
-import { Text } from '../typography'
+import { TextSmall } from '../typography'
 import { Label } from './'
 
 type InputComponentProps = InputProps &
@@ -125,7 +125,7 @@ export const InputComponent = ({
               <SuccessSymbol />
             </InputNotificationIcon>
           )}
-          <InputNotificationMessage size={3}>{message}</InputNotificationMessage>
+          <InputNotificationMessage>{message}</InputNotificationMessage>
         </InputNotification>
       )}
     </InputElement>
@@ -427,7 +427,7 @@ const InputNotificationIcon = styled.div`
   }
 `
 
-const InputNotificationMessage = styled(Text)`
+const InputNotificationMessage = styled(TextSmall)`
   font-size: 12px;
   line-height: 18px;
   color: inherit;

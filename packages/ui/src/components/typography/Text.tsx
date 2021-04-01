@@ -1,8 +1,7 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Colors } from '../../constants'
 
 interface TextProps {
-  size?: number
   bold?: boolean
   italic?: boolean
   dark?: boolean
@@ -11,19 +10,19 @@ interface TextProps {
   colorInherit?: boolean
 }
 
-export const Text = styled.p<TextProps>`
-  font-size: ${(props) => (props.size === 1 ? '16px' : props.size === 2 ? '14px' : props.size === 3 ? '12px' : '16px')};
-  line-height: ${(props) =>
-    props.size === 1 ? '24px' : props.size === 2 ? '20px' : props.size === 3 ? '18px' : '24px'};
-  font-weight: ${(props) => (props.bold ? '700' : '400')};
-  font-style: ${(props) => (props.italic ? 'italic' : 'normal')};
-  color: ${(props) => {
-    if (props.colorInherit === true) {
-      return 'inherit'
-    } else {
-      return props.dark === true ? Colors.Black[700] : Colors.Black[500]
-    }
-  }};
+const TextBoldStyle = css`
+  font-weight: 700;
+`
+
+const TextItalicStyle = css`
+  font-weight: 700;
+`
+
+const TextDarkStyle = css`
+  color: ${Colors.Black[700]};
+`
+
+const TextMargins = css<TextProps>`
   margin-bottom: ${({ margin }) => {
     switch (margin) {
       case 's':
@@ -39,4 +38,39 @@ export const Text = styled.p<TextProps>`
         return '0px'
     }
   }};
+`
+
+const TextAllStyles = css<TextProps>`
+  ${(props) => {
+    if (props.bold === true) {
+      return TextBoldStyle
+    }
+  }};
+  ${(props) => {
+    if (props.italic === true) {
+      return TextItalicStyle
+    }
+  }};
+  ${(props) => {
+    if (props.dark === true) {
+      return TextDarkStyle
+    }
+  }};
+  ${TextMargins};
+`
+
+export const TextSmall = styled.p<TextProps>`
+  font-size: 12px;
+  line-height: 18px;
+  ${TextAllStyles}
+`
+export const TextMedium = styled.p<TextProps>`
+  font-size: 14px;
+  line-height: 20px;
+  ${TextAllStyles}
+`
+export const TextBig = styled.p<TextProps>`
+  font-size: 16px;
+  line-height: 24px;
+  ${TextAllStyles}
 `

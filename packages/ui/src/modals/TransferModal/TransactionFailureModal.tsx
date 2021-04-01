@@ -20,7 +20,7 @@ export const TransactionFailureModal = ({ from, to, amount, onClose }: Props) =>
       <ModalTitle as="h4">
         <span className="red-title">Oh no!</span> Failure
       </ModalTitle>
-      <ResultText size={2}>
+      <ResultText>
         You haven’t transferred <TokenValue value={amount} /> stake from “{from.name}” account to “{to.name}”
         destination, because of a lorem ipsum dolor sit amet enim probem.
       </ResultText>

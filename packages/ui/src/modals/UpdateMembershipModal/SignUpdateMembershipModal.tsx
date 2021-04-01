@@ -7,7 +7,7 @@ import { ButtonPrimary } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { Text, TokenValue } from '../../components/typography'
+import { TextMedium, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
@@ -75,10 +75,10 @@ export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, 
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
         <ModalHeader onClick={onClose} title="Authorize transaction" />
         <ModalBody>
-          <Text size={2}>
+          <TextMedium>
             You intend to update your membership. Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be
             applied to the transaction.
-          </Text>
+          </TextMedium>
           <Row>
             <Label>Sending from account</Label>
             <SelectedAccount account={signer} />

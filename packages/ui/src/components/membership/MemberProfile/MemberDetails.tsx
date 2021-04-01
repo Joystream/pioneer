@@ -8,7 +8,7 @@ import { LabelLink } from '../../forms'
 import { BlockIcon } from '../../icons/BlockIcon'
 import { TransferSymbol } from '../../icons/symbols/TransferSymbol'
 import { TransferInviteButton } from '../../TransferInviteButton'
-import { Text } from '../../typography'
+import { TextSmall, TextMedium } from '../../typography'
 import { MembershipLabel } from '../../typography/MembershipLabel'
 import { MemberInfo } from '../MemberInfo'
 import { EmptyBody } from './MemberProfile'
@@ -39,27 +39,27 @@ export const MemberDetails = React.memo(({ member }: Props) => {
     <AboutTable>
       <AboutColumn>
         <MembershipLabel text="About" />
-        <AboutText size={2}>{member?.about || ''}</AboutText>
+        <AboutText>{member?.about || ''}</AboutText>
       </AboutColumn>
       <AboutRow>
         <MembershipLabel text="Registered on" />
         <AboutDateColumn>
-          <AboutText size={2}>{formatDateString(data.membership.registeredAtTime)}</AboutText>
+          <AboutText>{formatDateString(data.membership.registeredAtTime)}</AboutText>
           <Block height={registeredAtBlock.block} network={registeredAtBlock.network} />
         </AboutDateColumn>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Member ID" />
-        <AboutText size={2}>{member?.id}</AboutText>
+        <AboutText>{member?.id}</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Member Name" />
-        <AboutText size={2}>{member?.name}</AboutText>
+        <AboutText>{member?.name}</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Invitations Left" />
         <AboutInvite>
-          <AboutText size={2}>{member?.inviteCount}</AboutText>
+          <AboutText>{member?.inviteCount}</AboutText>
           <TransferInviteButton member={member} square={false}>
             <TransferSymbol />
             Transfer Invites
@@ -76,35 +76,35 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Hired" />
-        <AboutText size={2}>{hired} times</AboutText>
+        <AboutText>{hired} times</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Applied" />
-        <AboutText size={2}>{applied} times</AboutText>
+        <AboutText>{applied} times</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Being A leader" />
-        <AboutText size={2}>{leader} times</AboutText>
+        <AboutText>{leader} times</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Being Council Member" />
-        <AboutText size={2}>{councilMember} times</AboutText>
+        <AboutText>{councilMember} times</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Slashed" />
-        <AboutText size={2}>{slashed} times</AboutText>
+        <AboutText>{slashed} times</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Terminated" />
-        <AboutText size={2}>{terminated} times</AboutText>
+        <AboutText>{terminated} times</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Initiating leaving" />
-        <AboutText size={2}>{initiatingLeaving}</AboutText>
+        <AboutText>{initiatingLeaving}</AboutText>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Blog posts" />
-        <AboutText size={2}>{blogPosts}</AboutText>
+        <AboutText>{blogPosts}</AboutText>
       </AboutRow>
     </AboutTable>
   )
@@ -119,7 +119,7 @@ const Block = React.memo(({ height, network }: BlockInfoProps) => (
   <BlockInfo>
     <BlockIcon />
     <BlockNumber>{formatTokenValue(height)}</BlockNumber>
-    <BlockNetworkInfo size={3}>on {network} network</BlockNetworkInfo>
+    <BlockNetworkInfo>on {network} network</BlockNetworkInfo>
   </BlockInfo>
 ))
 
@@ -149,7 +149,7 @@ const AboutRow = styled.li`
   grid-template-columns: 168px 1fr;
   grid-column-gap: 24px;
 `
-const AboutText = styled(Text)`
+const AboutText = styled(TextMedium)`
   color: ${Colors.Black[600]};
 `
 const AboutDateColumn = styled.div`
@@ -167,7 +167,7 @@ const BlockInfo = styled.span`
   height: fit-content;
   color: ${Colors.Black[400]};
 `
-const BlockNetworkInfo = styled(Text)`
+const BlockNetworkInfo = styled(TextSmall)`
   color: ${Colors.Black[400]};
 `
 const BlockNumber = styled(LabelLink)`

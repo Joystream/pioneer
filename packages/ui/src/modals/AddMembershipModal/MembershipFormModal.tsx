@@ -26,7 +26,7 @@ import {
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '../../components/Modal'
-import { Text, TokenValue } from '../../components/typography'
+import { TextMedium, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useFormValidation } from '../../hooks/useFormValidation'
 import { useObservable } from '../../hooks/useObservable'
@@ -116,9 +116,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
           </Row>
 
           <Row>
-            <Text size={2} dark>
-              Please fill in all the details below.
-            </Text>
+            <TextMedium dark>Please fill in all the details below.</TextMedium>
           </Row>
 
           <Row>
@@ -200,7 +198,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
       <ModalFooter twoColumns>
         <ModalFooterGroup left>
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
-            <Text size={2} colorInherit>
+            <TextMedium colorInherit>
               I agree to the{' '}
               <LabelLink href={'http://example.com/'} target="_blank">
                 Terms of Service
@@ -210,7 +208,7 @@ export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: Crea
                 Privacy Policy
               </LabelLink>
               .
-            </Text>
+            </TextMedium>
           </Checkbox>
         </ModalFooterGroup>
         <ModalFooterGroup>

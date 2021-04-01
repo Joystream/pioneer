@@ -4,7 +4,7 @@ import { Account } from '../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ArrowDownExpandedIcon, SuccessIcon } from '../../components/icons'
 import { Modal, ModalHeader, SuccessModalBody } from '../../components/Modal'
-import { Text, TokenValue } from '../../components/typography'
+import { TextMedium, TokenValue } from '../../components/typography'
 import { useBalance } from '../../hooks/useBalance'
 import {
   BalanceInfo,
@@ -41,9 +41,7 @@ export function TransactionSuccessModal({ onClose, from, to, amount, fee }: Prop
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <SuccessModalBody>
-        <Text size={2} margin="l">
-          You have just successfully transferred balance from
-        </Text>
+        <TextMedium margin="l">You have just successfully transferred balance from</TextMedium>
         <LockedAccount>
           <AccountInfo account={from} />
           <BalanceInfo>

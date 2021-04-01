@@ -6,7 +6,7 @@ import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { Text } from '../../components/typography'
+import { TextMedium } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
 
 interface Props {
@@ -23,9 +23,9 @@ export function TransferSuccessModal({ onClose, recipient, amount }: Props) {
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
-        <Text size={2} margin="s">
+        <TextMedium margin="s">
           You have just successfully transferred {amount.toString()} invitation{plural && 's'} to {name}.
-        </Text>
+        </TextMedium>
         <MemberRow>
           <MemberInfo member={recipient} />
         </MemberRow>

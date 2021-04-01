@@ -5,7 +5,7 @@ import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { Text } from '../../components/typography'
+import { TextMedium } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
 
 interface Props {
@@ -18,7 +18,7 @@ export function UpdateMembershipSuccessModal({ onClose, member }: Props) {
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
-        <Text size={2}>You have just successfully updated your membership</Text>
+        <TextMedium>You have just successfully updated your membership</TextMedium>
         <MemberRow>
           <MemberInfo member={(member as unknown) as BaseMember} />
         </MemberRow>

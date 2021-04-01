@@ -6,7 +6,7 @@ import { ButtonPrimary } from '../../components/buttons'
 import { Help } from '../../components/Help'
 import { ArrowDownExpandedIcon } from '../../components/icons'
 import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/Modal'
-import { Text, TokenValue } from '../../components/typography'
+import { TextMedium, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useBalance } from '../../hooks/useBalance'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
@@ -45,10 +45,10 @@ export function SignTransferModal({ onClose, from, amount, to, onDone }: Props) 
         <ModalBody>
           <SignTransferContainer>
             <Row>
-              <Text size={2} margin="xl">
+              <TextMedium margin="xl">
                 You are transferring <TokenValue value={amount} /> stake from “{from.name}” account to “{to.name}”{' '}
                 destination.
-              </Text>
+              </TextMedium>
               <LockedAccount>
                 <AccountInfo account={from} />
                 <BalanceInfoInRow>

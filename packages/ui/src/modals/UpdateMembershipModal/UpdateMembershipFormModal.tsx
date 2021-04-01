@@ -14,7 +14,7 @@ import {
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '../../components/Modal'
-import { Text } from '../../components/typography'
+import { TextMedium } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useFormValidation } from '../../hooks/useFormValidation'
 import { useObservable } from '../../hooks/useObservable'
@@ -82,9 +82,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <Row>
-            <Text size={2} dark>
-              Please fill in all the details below.
-            </Text>
+            <TextMedium dark>Please fill in all the details below.</TextMedium>
           </Row>
 
           <Row>
