@@ -199,3 +199,18 @@ export const Animations = {
     }
   `,
 }
+
+export const Overflow = {
+  DotsTwoLine: `
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    overflow: hidden;
+  `,
+  Dots: `
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  `,
+}

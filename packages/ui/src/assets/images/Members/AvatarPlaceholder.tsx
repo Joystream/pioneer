@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, BorderRad } from '../../../constants'
+import { Colors } from '../../../constants'
 
 interface AvatarPlaceholderProps {
   className?: string
@@ -8,11 +8,7 @@ interface AvatarPlaceholderProps {
 
 export const AvatarPlaceholder = ({ className }: AvatarPlaceholderProps) => (
   <AvatarImage width="40" height="40" viewBox="0 0 40 40" fill="none" className={className}>
-    <circle fill={Colors.Blue[50]} cx="20" cy="20" r="19.5" />
-    <path
-      fill={Colors.Black[200]}
-      d="M20,1c10.4934101,0,19,8.5065899,19,19s-8.5065899,19-19,19S1,30.4934101,1,20S9.5065899,1,20,1 M20,0 C8.9719601,0,0,8.9719601,0,20s8.9719601,20,20,20s20-8.9719601,20-20S31.0280399,0,20,0L20,0z"
-    />
+    <rect fill={Colors.Blue[50]} x="0" y="0" width="40" height="40" />
     <rect
       x="0"
       y="19.5"
@@ -46,8 +42,8 @@ export const AvatarPlaceholder = ({ className }: AvatarPlaceholderProps) => (
 )
 
 const AvatarImage = styled.svg`
-  width: 40px;
-  height: 40px;
-  border-radius: ${BorderRad.round};
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  object-fit: contain;
 `
