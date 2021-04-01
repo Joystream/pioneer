@@ -8,6 +8,7 @@ import { Account } from '../../src/common/types'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectMember } from '../helpers/selectMember'
+import { toBalanceOf } from '../mocks/chainTypes'
 import { alice, aliceStash, bobStash } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
@@ -47,15 +48,16 @@ describe('UI: InviteMemberModal', () => {
   let inviteMemberTx: any
 
   beforeEach(async () => {
+    const number = 1000
     stubDefaultBalances(api)
-    set(api, 'api.query.membershipWorkingGroup.budget', () => of({ toBn: () => new BN(1000) }))
-    set(api, 'api.query.members.membershipPrice', () => of({ toBn: () => new BN(100) }))
+    set(api, 'api.query.membershipWorkingGroup.budget', () => of(toBalanceOf(number)))
+    set(api, 'api.query.members.membershipPrice', () => of(toBalanceOf(100)))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
   })
 
   it('Validate Working Group Budget', async () => {
-    set(api, 'api.query.membershipWorkingGroup.budget', () => of({ toBn: () => new BN(0) }))
+    set(api, 'api.query.membershipWorkingGroup.budget', () => of(toBalanceOf(0)))
 
     renderModal()
 

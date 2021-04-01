@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
 import { UseApi } from '../../src/providers/api/provider'
+import { toRuntimeDispatchInfo } from './chainTypes'
 
 const getSuccessEvents = (data: number[], section: string, method: string) => [
   {
@@ -87,7 +88,7 @@ export const stubBatchTransactionSuccess = (transaction: any) => {
 
 export const stubTransaction = (api: UseApi, transactionPath: string) => {
   const transaction = {}
-  set(transaction, 'paymentInfo', () => of(set({}, 'partialFee.toBn', () => new BN(25))))
+  set(transaction, 'paymentInfo', () => of(toRuntimeDispatchInfo(25)))
   set(api, transactionPath, () => transaction)
   return transaction
 }

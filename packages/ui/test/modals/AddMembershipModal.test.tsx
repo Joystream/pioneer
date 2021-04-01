@@ -8,6 +8,7 @@ import { Account } from '../../src/common/types'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectAccount } from '../helpers/selectAccount'
+import { toBalanceOf } from '../mocks/chainTypes'
 import { alice, bob } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
@@ -60,7 +61,7 @@ describe('UI: AddMembershipModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    set(api, 'api.query.members.membershipPrice', () => of({ toBn: () => new BN(100) }))
+    set(api, 'api.query.members.membershipPrice', () => of(toBalanceOf(100)))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     transaction = stubTransaction(api, 'api.tx.members.buyMembership')
   })
