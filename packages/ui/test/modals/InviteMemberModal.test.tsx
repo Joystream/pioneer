@@ -48,7 +48,8 @@ describe('UI: InviteMemberModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
+    set(api, 'api.query.membershipWorkingGroup.budget', () => of({ toBn: () => new BN(1000) }))
+    set(api, 'api.query.members.membershipPrice', () => of({ toBn: () => new BN(100) }))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
   })
