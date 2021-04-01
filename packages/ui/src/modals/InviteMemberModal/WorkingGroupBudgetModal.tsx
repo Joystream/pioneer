@@ -21,10 +21,10 @@ export const WorkingGroupBudgetModal = ({ onClose }: Props) => {
           Unfortunately, the Membership Working group budget is Lorem ipsum dolor sit enim. Please try again later.
         </Text>
         <Text>
-          Current budget: <TokenValue value={workingGroupBudget} />
+          Current budget: <TokenValue value={workingGroupBudget?.toBn()} />
         </Text>
         <Text>
-          Working Group Dept: <TokenValue value={membershipPrice} />
+          Working Group Dept: <TokenValue value={membershipPrice?.toBn()} />
         </Text>
       </ModalBody>
     </Modal>
