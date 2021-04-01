@@ -8,6 +8,7 @@ import { EditMembershipButton } from '../../../membership/components/EditMembers
 import { CloseButton } from '../../buttons'
 import { EditSymbol } from '../../icons/symbols/EditSymbol'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
+import { MemberInfoWrap } from '../components'
 import { MemberInfo } from '../MemberInfo'
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
@@ -48,6 +49,11 @@ export const MemberProfile = React.memo(() => {
         <SidePaneHeader>
           <SidePanelTop>
             <SidePaneTitle>My Profile</SidePaneTitle>
+            {isMyMember && activeTab === 'DETAILS' && (
+              <EditMembershipButton member={member}>
+                <EditSymbol />
+              </EditMembershipButton>
+            )}
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
           <MemberInfo member={member} memberSize="l" size="l" />
@@ -68,14 +74,6 @@ export const MemberProfile = React.memo(() => {
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
           {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
         </SidePaneBody>
-        <SidePaneFooter>
-          {isMyMember && activeTab === 'DETAILS' && (
-            <EditMembershipButton member={member} size="medium">
-              <EditSymbol />
-              Edit My Profile
-            </EditMembershipButton>
-          )}
-        </SidePaneFooter>
       </SidePane>
     </SidePaneGlass>
   )
@@ -98,11 +96,10 @@ export const SidePaneGlass = styled.div`
 const SidePane = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: minmax(auto, 192px) 1fr 72px;
+  grid-template-rows: minmax(auto, 192px) 1fr;
   grid-template-areas:
     'sidepaneheader'
-    'sidepanebody'
-    'sidepanefooter';
+    'sidepanebody';
   grid-area: modal;
   position: relative;
   background-color: ${Colors.White};
@@ -116,19 +113,24 @@ const SidePane = styled.div`
 const SidePaneHeader = styled.div`
   display: grid;
   grid-area: sidepaneheader;
-  grid-row-gap: 24px;
+  grid-row-gap: 20px;
   position: relative;
   width: 100%;
   height: 100%;
   max-height: 200px;
-  padding: 16px 24px 0;
+  padding: 12px 24px 0;
   background-color: ${Colors.White};
+
+  ${MemberInfoWrap} {
+    padding-bottom: 4px;
+  }
 `
 
 const SidePanelTop = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 32px 20px;
+  grid-column-gap: 14px;
+  align-items: center;
   width: 100%;
 `
 
@@ -154,17 +156,4 @@ const SidePaneBody = styled.div`
 
 export const EmptyBody = styled.div`
   padding: 24px;
-`
-
-const SidePaneFooter = styled.div`
-  display: grid;
-  grid-area: sidepanefooter;
-  position: relative;
-  justify-items: end;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  max-height: 72px;
-  padding: 16px 24px;
-  background-color: ${Colors.White};
 `

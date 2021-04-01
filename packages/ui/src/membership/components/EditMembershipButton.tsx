@@ -10,12 +10,12 @@ interface Props extends ButtonProps {
   member: BaseMember
 }
 
-export const EditMembershipButton = ({ className, children, size, member }: Props) => {
+export const EditMembershipButton = ({ className, children, member }: Props) => {
   const [isOpen, toggleIsOpen] = useToggle()
 
   return (
     <>
-      <ButtonGhost size={size} onClick={toggleIsOpen} className={className}>
+      <ButtonGhost size="small" onClick={toggleIsOpen} className={className} square>
         {children}
       </ButtonGhost>
       {isOpen && <UpdateMembershipModal onClose={toggleIsOpen} member={member} />}
