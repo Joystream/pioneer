@@ -7,6 +7,8 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Mod
 import { Text, TokenValue } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
+import { useModal } from '../../hooks/useModal'
+import { TransferModalCall } from '../TransferModal'
 
 interface Props {
   onClose: () => void
@@ -15,11 +17,13 @@ interface Props {
 }
 
 export function RequirementFailedModal({ onClose, address, amount }: Props) {
+  const { showModal } = useModal()
   const { allAccounts } = useAccounts()
   const account = useMemo(
     () => allAccounts.find((acc) => acc.address == address) || { name: 'Controller account', address },
     [allAccounts]
   )
+  const iconName = 'TransferIcon'
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
@@ -34,7 +38,10 @@ export function RequirementFailedModal({ onClose, address, amount }: Props) {
         </MemberRow>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" disabled>
+        <ButtonPrimary
+          size="medium"
+          onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { to: account, iconName } })}
+        >
           Add JOY to Controller Account
         </ButtonPrimary>
       </ModalFooter>
