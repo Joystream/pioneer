@@ -88,7 +88,6 @@ const BasicButtonStyles = css<ButtonProps>`
   line-height: ${getLineHeight};
   font-weight: 700;
   text-transform: capitalize;
-  transform: translateY(1px);
 
   & > svg {
     z-index: 2;
