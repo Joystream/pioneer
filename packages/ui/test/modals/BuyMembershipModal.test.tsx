@@ -6,7 +6,7 @@ import React from 'react'
 import { of } from 'rxjs'
 
 import { Account } from '../../src/common/types'
-import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
+import { BuyMembershipModal } from '../../src/modals/BuyMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectAccount } from '../helpers/selectAccount'
 import { toBalanceOf } from '../mocks/chainTypes'
@@ -43,7 +43,7 @@ jest.mock('../../src/hooks/useModal', () => {
   }
 })
 
-describe('UI: AddMembershipModal', () => {
+describe('UI: BuyMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
@@ -175,7 +175,7 @@ describe('UI: AddMembershipModal', () => {
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <AddMembershipModal />
+            <BuyMembershipModal />
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockQueryNodeProviders>

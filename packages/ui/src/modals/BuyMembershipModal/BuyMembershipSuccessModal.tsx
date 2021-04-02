@@ -17,7 +17,7 @@ interface Props {
   memberId?: string
 }
 
-export function AddMembershipSuccessModal({ onClose, member, memberId }: Props) {
+export function BuyMembershipSuccessModal({ onClose, member, memberId }: Props) {
   const { showModal } = useModal()
   const viewMember = () => {
     onClose()

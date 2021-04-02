@@ -3,11 +3,11 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
-import { AddMembershipFailureModal } from '../AddMembershipModal/AddMembershipFailureModal'
-import { SignCreateMemberModal } from '../AddMembershipModal/SignCreateMemberModal'
+import { BuyMembershipFailureModal } from '../BuyMembershipModal/BuyMembershipFailureModal'
+import { BuyMembershipSignModal } from '../BuyMembershipModal/BuyMembershipSignModal'
+import { BuyMembershipSuccessModal } from '../BuyMembershipModal/BuyMembershipSuccessModal'
 import { WaitModal } from '../WaitModal'
 import { InviteFormModal } from './InviteFormModal'
-import { InviteSuccessModal } from './InviteSuccessModal'
 import { WorkingGroupBudgetModal } from './WorkingGroupBudgetModal'
 
 interface MembershipModalProps {
@@ -66,7 +66,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
 
   if (step === 'AUTHORIZE') {
     return (
-      <SignCreateMemberModal
+      <BuyMembershipSignModal
         onClose={onClose}
         transactionParams={transactionParams}
         onDone={onDone}
@@ -77,7 +77,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }
 
   if (step === 'SUCCESS') {
-    return <InviteSuccessModal onClose={onClose} member={transactionParams} />
+    return <BuyMembershipSuccessModal onClose={onClose} member={transactionParams} />
   }
-  return <AddMembershipFailureModal onClose={onClose} member={transactionParams} />
+  return <BuyMembershipFailureModal onClose={onClose} member={transactionParams} />
 }

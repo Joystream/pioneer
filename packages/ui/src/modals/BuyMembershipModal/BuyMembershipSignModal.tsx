@@ -24,7 +24,7 @@ interface SignProps {
   isInvite?: boolean
 }
 
-export const SignCreateMemberModal = ({
+export const BuyMembershipSignModal = ({
   onClose,
   membershipPrice,
   transactionParams,

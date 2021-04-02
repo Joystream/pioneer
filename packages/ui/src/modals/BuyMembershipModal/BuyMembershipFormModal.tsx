@@ -52,7 +52,7 @@ const CreateMemberSchema = Yup.object().shape({
   referrer: ReferrerSchema,
 })
 
-export const MembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
+export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
   const [state, dispatch] = useReducer(formReducer, {
     name: '',
