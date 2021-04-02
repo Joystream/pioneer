@@ -22,6 +22,10 @@ export const ToggleButton = styled(ButtonPrimary)`
   &:after {
     display: none;
   }
+
+  & > svg {
+    color: inherit;
+  }
 `
 
 interface Props {
