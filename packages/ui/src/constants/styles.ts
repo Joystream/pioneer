@@ -18,6 +18,7 @@ export const Colors = {
     25: '#F9FAFC',
 
     900.25: '#00000040',
+    900.1: '#0000001A',
     700.85: '#1F252ED9',
   },
 
@@ -86,7 +87,7 @@ export const Shadows = {
   focusValid: `0px 0px 8px ${Colors.Green[400.4]}`,
   common: `0px 12px 28px ${Colors.Black[900.25]}`,
   light: `0px 0px 28px #D6D8E780`,
-  select: `0px 20px 28px ${Colors.Black[900.25]}`,
+  select: `0px 8px 16px ${Colors.Black[900.1]}`,
 }
 
 export const Fonts = {

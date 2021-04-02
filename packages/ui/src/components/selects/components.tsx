@@ -108,7 +108,7 @@ export const OptionsListComponent = styled.ul`
   max-height: calc(${Sizes.selectHeight} * 2.5);
   margin: 0;
   border-radius: ${BorderRad.s};
-  border: 1px solid ${Colors.Black[300]};
+  /* border: 1px solid ${Colors.Black[300]}; */
   background-color: ${Colors.White};
   box-shadow: ${Shadows.select};
   overflow-y: scroll;
