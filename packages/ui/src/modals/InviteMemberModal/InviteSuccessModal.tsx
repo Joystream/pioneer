@@ -15,7 +15,7 @@ interface Props {
 
 export function InviteSuccessModal({ onClose, member }: Props) {
   const invitorId = member.invitor?.id || ''
-  const invitor = useGetMemberQuery({ variables: { id: invitorId } }).data
+  const { data: invitor, loading } = useGetMemberQuery({ variables: { id: invitorId } })
   const inviteCount = invitor?.membership?.inviteCount ?? 0
   const name = invitor?.membership?.name
   const plural = inviteCount > 1
@@ -28,7 +28,8 @@ export function InviteSuccessModal({ onClose, member }: Props) {
         <MemberRow>
           <MemberInfo member={(member as unknown) as BaseMember} />
         </MemberRow>
-        {inviteCount > 0 ? (
+        {loading && <TextMedium>Loading...</TextMedium>}
+        {!loading && inviteCount > 0 ? (
           <TextMedium>
             You still have {inviteCount} invitation{plural && 's'} left on the "{name}" membership.
           </TextMedium>
