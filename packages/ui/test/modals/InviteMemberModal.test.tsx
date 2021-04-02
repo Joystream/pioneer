@@ -8,12 +8,14 @@ import { Account } from '../../src/common/types'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectMember } from '../helpers/selectMember'
-import { alice, aliceStash } from '../mocks/keyring'
+import { toBalanceOf } from '../mocks/chainTypes'
+import { alice, aliceStash, bobStash } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 import {
   stubApi,
   stubDefaultBalances,
+  stubQuery,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
@@ -41,16 +43,25 @@ describe('UI: InviteMemberModal', () => {
     jest.restoreAllMocks()
   })
 
+  const controllerAddress = '5CrJ2ZegUykhPP9h2YkwDQUBi7AcmafFiu8m5DFU2Qh8XuPR'
   const server = setupMockServer()
-
   const api = stubApi()
   let inviteMemberTx: any
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
+    stubQuery(api, 'membershipWorkingGroup.budget', toBalanceOf(1000))
+    stubQuery(api, 'members.membershipPrice', toBalanceOf(100))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
+  })
+
+  it('Validate Working Group Budget', async () => {
+    stubQuery(api, 'membershipWorkingGroup.budget', toBalanceOf(0))
+
+    renderModal()
+
+    expect(await screen.findByText('Insufficient Working Group budget')).toBeDefined()
   })
 
   it('Renders a modal', async () => {
@@ -58,9 +69,6 @@ describe('UI: InviteMemberModal', () => {
 
     expect(await screen.findByText('Invite a member')).toBeDefined()
   })
-
-  const rootAddress = '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc'
-  const controllerAddress = '5CrJ2ZegUykhPP9h2YkwDQUBi7AcmafFiu8m5DFU2Qh8XuPR'
 
   it('Enables button', async () => {
     server.createMember('Alice')
@@ -72,7 +80,7 @@ describe('UI: InviteMemberModal', () => {
 
     await selectMember('Inviting member', 'alice')
     await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
-      target: { value: rootAddress },
+      target: { value: bobStash.address },
     })
     await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
       target: { value: controllerAddress },
@@ -91,7 +99,7 @@ describe('UI: InviteMemberModal', () => {
 
     await selectMember('Inviting member', 'alice')
     await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
-      target: { value: rootAddress },
+      target: { value: bobStash.address },
     })
     await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
       target: { value: 'AAa' },
@@ -109,7 +117,7 @@ describe('UI: InviteMemberModal', () => {
       renderModal()
       await selectMember('Inviting member', 'alice')
       await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
-        target: { value: rootAddress },
+        target: { value: bobStash.address },
       })
       await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
         target: { value: controllerAddress },

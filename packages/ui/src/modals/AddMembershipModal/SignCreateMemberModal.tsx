@@ -3,7 +3,7 @@ import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useState } from 'react'
 import { Account, Member, onTransactionDone } from '../../common/types'
-import { SelectAccount } from '../../components/account/SelectAccount'
+import { SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
 import { ButtonPrimary } from '../../components/buttons'
 import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
@@ -19,7 +19,7 @@ interface SignProps {
   transactionParams: Member
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
-  initialSigner: Account
+  initialSigner?: Account
   isInvite?: boolean
 }
 
@@ -29,12 +29,17 @@ export const SignCreateMemberModal = ({
   transactionParams,
   onDone,
   transaction,
-  initialSigner,
   isInvite,
+  initialSigner,
 }: SignProps) => {
-  const [from, setFrom] = useState(initialSigner)
-
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
+  const [from, setFrom] = useState(
+    initialSigner ??
+      ({
+        name: 'Controller account',
+        address: transactionParams.invitor?.controllerAccount,
+      } as Account)
+  )
+  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: from, onDone })
 
   if (status === 'READY') {
     return (
@@ -56,7 +61,11 @@ export const SignCreateMemberModal = ({
           </Text>
           <Row>
             <Label>Sending from account</Label>
-            <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
+            {initialSigner ? (
+              <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
+            ) : (
+              <SelectedAccount account={from} />
+            )}
           </Row>
         </ModalBody>
         <ModalFooter>

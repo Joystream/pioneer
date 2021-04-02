@@ -1,12 +1,12 @@
-import { isValidAddress } from '../../src/utils/isValidAddress'
 import testKeyring from '@polkadot/keyring/testing'
+import { isValidAddress } from '../../src/utils/isValidAddress'
+import { bobStash } from '../mocks/keyring'
 
 describe('isValidAddress', () => {
   const keyring = testKeyring()
 
   it('Valid: Correct address', () => {
-    const address = '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc'
-    expect(isValidAddress(address, keyring)).toBeTruthy()
+    expect(isValidAddress(bobStash.address, keyring)).toBeTruthy()
   })
 
   it('Invalid: Too short', () => {

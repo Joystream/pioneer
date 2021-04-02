@@ -8,6 +8,7 @@ import { Account } from '../../src/common/types'
 import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectAccount } from '../helpers/selectAccount'
+import { toBalanceOf } from '../mocks/chainTypes'
 import { alice, bob } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
@@ -60,7 +61,7 @@ describe('UI: AddMembershipModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    set(api, 'api.query.members.membershipPrice', () => of(set({}, 'toBn', () => new BN(100))))
+    set(api, 'api.query.members.membershipPrice', () => of(toBalanceOf(100)))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     transaction = stubTransaction(api, 'api.tx.members.buyMembership')
   })
@@ -75,8 +76,7 @@ describe('UI: AddMembershipModal', () => {
   it('Enables button when valid form', async () => {
     const { findByText, getByText, getByLabelText } = renderModal()
 
-    const button = getByText(/^Create a membership$/i) as HTMLButtonElement
-    expect(button.disabled).toBe(true)
+    expect(getByText(/^Create a membership$/i)).toBeDisabled()
 
     await selectAccount('Root account', 'bob')
     await selectAccount('Controller account', 'alice')
@@ -84,14 +84,13 @@ describe('UI: AddMembershipModal', () => {
     fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
     fireEvent.click(getByLabelText(/I agree to the terms/i))
 
-    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(false)
+    expect(await findByText(/^Create a membership$/i)).not.toBeDisabled()
   })
 
   it('Disables button when invalid avatar URL', async () => {
     const { findByText, getByText, getByLabelText } = renderModal()
 
-    const button = getByText(/^Create a membership$/i) as HTMLButtonElement
-    expect(button.disabled).toBe(true)
+    expect(getByText(/^Create a membership$/i)).toBeDisabled()
 
     await selectAccount('Root account', 'bob')
     await selectAccount('Controller account', 'alice')
@@ -100,10 +99,10 @@ describe('UI: AddMembershipModal', () => {
     fireEvent.click(getByLabelText(/I agree to the terms/i))
 
     fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
-    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(true)
+    expect(await findByText(/^Create a membership$/i)).toBeDisabled()
 
     fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-    expect(((await findByText(/^Create a membership$/i)) as HTMLButtonElement).disabled).toBe(false)
+    expect(await findByText(/^Create a membership$/i)).not.toBeDisabled()
   })
 
   describe('Authorize step', () => {

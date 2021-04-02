@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { BaseMember } from '../../common/types'
 import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
-import { MemberInfo } from '../../components/membership/MemberInfo'
+import { MemberInfo } from '../../components/membership'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { Text } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
@@ -24,7 +24,7 @@ export function TransferSuccessModal({ onClose, recipient, amount }: Props) {
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
         <Text size={2} margin="s">
-          You have just successfully transfered {amount.toString()} invitation{plural && 's'} to {name}.
+          You have just successfully transferred {amount.toString()} invitation{plural && 's'} to {name}.
         </Text>
         <MemberRow>
           <MemberInfo member={recipient} />
