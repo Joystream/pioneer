@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Colors, Transitions } from '../../constants'
 import { MyProfileIcon } from './Sidebar/LinksIcons/MyProfileIcon'
 import { WorkingGroupsIcon } from './Sidebar/LinksIcons/WorkingGroupsIcon'
 import { LogoLink } from './Sidebar/LogoLink'
 import { Navigation } from './Sidebar/Navigation'
 import { NavigationHeader } from './Sidebar/NavigationHeader'
+import { NavigationLink } from './Sidebar/NavigationLink'
 import { ProfileComponent } from './Sidebar/ProfileComponent'
 import { Version } from './Sidebar/Version'
 
@@ -16,11 +16,13 @@ export const SideBar = () => (
     </NavigationHeader>
     <NavigationLinks>
       <NavigationLinksItem>
-        <NavigationLink href="#" className="active">
+        <NavigationLink to="/profile">
           <MyProfileIcon />
           My profile
         </NavigationLink>
-        <NavigationLink href="#/groups">
+      </NavigationLinksItem>
+      <NavigationLinksItem>
+        <NavigationLink to="/groups">
           <WorkingGroupsIcon />
           Working Groups
         </NavigationLink>
@@ -47,49 +49,4 @@ const NavigationLinksItem = styled.li`
   flex-basis: 48px;
   flex-shrink: 0;
   width: 100%;
-`
-
-const NavigationLink = styled.a`
-  display: flex;
-  position: relative;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 12px 12px 12px 24px;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.5;
-  color: ${Colors.Black[200]};
-  text-transform: capitalize;
-  text-decoration: none;
-  transition: ${Transitions.all};
-
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background-color: transparent;
-    transition: ${Transitions.all};
-  }
-
-  .nav-icon {
-    margin-right: 12px;
-    color: ${Colors.Black[300]};
-    transition: ${Transitions.all};
-  }
-
-  &.active {
-    color: ${Colors.White};
-    background-color: ${Colors.Black[700]};
-
-    &:before {
-      background-color: ${Colors.Blue[500]};
-    }
-  }
-  &.active .nav-icon {
-    color: ${Colors.White};
-  }
 `
