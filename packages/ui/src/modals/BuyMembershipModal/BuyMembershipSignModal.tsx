@@ -1,7 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Account, Member, onTransactionDone } from '../../common/types'
 import { SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
@@ -10,6 +10,7 @@ import { Label } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { TextMedium, TokenValue } from '../../components/typography'
+import { useBalance } from '../../hooks/useBalance'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
@@ -41,6 +42,18 @@ export const BuyMembershipSignModal = ({
       } as Account)
   )
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: from, onDone })
+  const [hasFunds, setHasFunds] = useState(false)
+  const balance = useBalance(from)
+
+  useEffect(() => {
+    if (balance?.transferable && paymentInfo?.partialFee && membershipPrice) {
+      const requiredBalance = paymentInfo.partialFee.add(membershipPrice)
+      const hasFunds = balance.transferable.gte(requiredBalance)
+      setHasFunds(hasFunds)
+    }
+  }, [from.address, balance])
+
+  const signDisabled = status !== 'READY' || !hasFunds
 
   if (status === 'READY') {
     return (
@@ -86,7 +99,7 @@ export const BuyMembershipSignModal = ({
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
           </BalanceInfoNarrow>
-          <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
+          <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>
             Sign and create a member
           </ButtonPrimary>
         </ModalFooter>

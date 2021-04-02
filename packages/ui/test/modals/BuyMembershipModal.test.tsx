@@ -15,6 +15,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 import {
   stubApi,
+  stubBalances,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
@@ -44,21 +45,16 @@ jest.mock('../../src/hooks/useModal', () => {
 })
 
 describe('UI: BuyMembershipModal', () => {
+  const api = stubApi()
+  let transaction: any
+
+  setupMockServer()
+
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
     useAccounts.allAccounts.push(alice, bob)
   })
-
-  afterAll(() => {
-    jest.restoreAllMocks()
-  })
-
-  setupMockServer()
-
-  const api = stubApi()
-
-  let transaction: any
 
   beforeEach(async () => {
     stubDefaultBalances(api)
@@ -131,6 +127,14 @@ describe('UI: BuyMembershipModal', () => {
       expect(getByText(/^Creation fee:/i)?.nextSibling?.textContent).toBe('100')
       expect(getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
       expect(getByRole('heading', { name: /alice/i })).toBeDefined()
+    })
+
+    it('Without required balance', async () => {
+      stubBalances(api, { available: 0, locked: 0 })
+
+      const { findByRole } = await renderAuthorizeStep()
+
+      expect(await findByRole('button', { name: /^sign and/i })).toBeDisabled()
     })
 
     describe('Success', () => {
