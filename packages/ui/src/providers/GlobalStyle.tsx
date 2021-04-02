@@ -125,6 +125,7 @@ export const GlobalStyle = createGlobalStyle`
     &::selection {
       color: ${Colors.Blue[50]};
       background-color: ${Colors.Blue[500]};
+      -webkit-text-stroke-color: ${Colors.Blue[50]};
     }
   }
 `
