@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { PageTabs } from '../../components/page/PageTabs'
 
 export const MyProfile = styled.div`
   display: grid;
@@ -12,10 +11,7 @@ export const MyProfile = styled.div`
 export const ProfileSummary = styled.div`
   display: flex;
   flex-direction: column;
-
-  ${PageTabs} {
-    margin-bottom: 24px;
-  }
+  margin-top: 8px;
 `
 
 export const MyProfileContent = styled.section`

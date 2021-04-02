@@ -1,7 +1,43 @@
+import React from 'react'
 import styled, { css } from 'styled-components'
 import { Colors, Transitions } from '../../constants'
 
-export const PageTabs = styled.div`
+interface TabActiveProps {
+  active: boolean
+}
+
+interface TabProps extends TabActiveProps {
+  onClick: () => void
+  inner?: string
+  className?: string
+}
+
+export const Tab = ({ active, onClick, inner }: TabProps) => {
+  return (
+    <PageTab active={active} onClick={onClick}>
+      {inner}
+    </PageTab>
+  )
+}
+
+interface TabsProps {
+  tabs: Array<TabProps>
+  className?: string
+}
+
+export const Tabs = ({ tabs, className }: TabsProps) => {
+  return (
+    <PageTabsContainer className={className}>
+      <PageTabsNav>
+        {tabs.map(({ active, onClick, inner }) => (
+          <Tab key={inner} active={active} onClick={onClick} inner={inner} />
+        ))}
+      </PageTabsNav>
+    </PageTabsContainer>
+  )
+}
+
+export const PageTabsContainer = styled.div`
   display: flex;
   position: relative;
   align-items: center;
@@ -20,11 +56,7 @@ export const PageTabs = styled.div`
   }
 `
 
-interface PageTabProps {
-  active: boolean
-}
-
-export const PageTab = styled.a<PageTabProps>`
+export const PageTab = styled.a<TabActiveProps>`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
@@ -109,22 +141,22 @@ export const PageTabsNav = styled.nav<{ tabsSize?: PageTabSize }>`
 
   ${PageTab} {
     font-size: ${({ tabsSize }) => {
-      switch (tabsSize) {
-        case 'xs':
-          return '14px'
-        case 's':
-        default:
-          return '16px'
-      }
-    }};
+    switch (tabsSize) {
+      case 'xs':
+        return '14px'
+      case 's':
+      default:
+        return '16px'
+    }
+  }};
     line-height: ${({ tabsSize }) => {
-      switch (tabsSize) {
-        case 'xs':
-          return '20px'
-        case 's':
-        default:
-          return '24px'
-      }
-    }};
+    switch (tabsSize) {
+      case 'xs':
+        return '20px'
+      case 's':
+      default:
+        return '24px'
+    }
+  }};
   }
 `

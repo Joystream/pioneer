@@ -4,7 +4,7 @@ import { GlobalModals } from './app/GlobalModals'
 import { ConnectionStatus } from './components/ConnectionStatus'
 import { useMockMembers } from './mocks/useMockMembers'
 import { useSudoBudget } from './mocks/useSudoBudget'
-import { WorkingGroups } from './pages/Groups/WorkingGroups'
+import { WorkingGroups } from './pages/WorkingGroups/WorkingGroups'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
 
