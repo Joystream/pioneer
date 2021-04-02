@@ -7,3 +7,9 @@ export const GroupsContainer = styled.div`
   grid-row-gap: 24px;
   width: 100%;
 `
+
+export const GroupContent = styled.div`
+  display: grid;
+  grid-row-gap: 24px;
+  width: 100%;
+`

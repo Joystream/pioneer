@@ -25,7 +25,7 @@ export function WorkingGroups() {
         <GroupsContainer>
           <PageHeader>
             <PageTitle>Working Groups</PageTitle>
-            <Tabs tabs={[{ inner: 'Working Groups', active: true, onClick: () => history.push('/grups') }]} />
+            <Tabs tabs={[{ inner: 'Working Groups', active: true, onClick: () => history.push('/groups') }]} />
           </PageHeader>
           <WorkingGroupsList
             groups={[

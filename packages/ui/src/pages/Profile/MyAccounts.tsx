@@ -9,7 +9,7 @@ import { Statistics } from '../../components/statistics/Stats'
 import { useTotalBalances } from '../../hooks/useTotalBalances'
 import { Accounts } from './MyAccounts/Accounts'
 import { MyProfileTabs } from './MyProfileTabs'
-import { MyProfile, MyProfileContent, ProfileSummary } from './Profile'
+import { MyProfile, MyProfileContent } from './Profile'
 
 export function MyAccounts() {
   const { total, transferable, locked, recoverable } = useTotalBalances()
@@ -28,16 +28,14 @@ export function MyAccounts() {
           <PageHeader>
             <PageTitle>My profile</PageTitle>
             <MyProfileTabs />
-            <ProfileSummary>
-              <Statistics
-                stats={[
-                  { title: 'Total balance', helperText: 'Lorem fishy', value: total },
-                  { title: 'Total transferable balance', helperText: 'Lorem fishy', value: transferable },
-                  { title: 'Total locked balance', helperText: 'Lorem fishy', value: locked },
-                  { title: 'Total recoverable', helperText: 'Lorem fishy', value: recoverable },
-                ]}
-              />
-            </ProfileSummary>
+            <Statistics
+              stats={[
+                { title: 'Total balance', helperText: 'Lorem fishy', value: total },
+                { title: 'Total transferable balance', helperText: 'Lorem fishy', value: transferable },
+                { title: 'Total locked balance', helperText: 'Lorem fishy', value: locked },
+                { title: 'Total recoverable', helperText: 'Lorem fishy', value: recoverable },
+              ]}
+            />
           </PageHeader>
           <MyProfileContent>
             <Accounts />

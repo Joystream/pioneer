@@ -20,11 +20,11 @@ export function WorkingGroup({ groupImage, groupTitle, groupContent, leaderAddre
 
   return (
     <GroupItem>
-      <GroupImageContainer onClick={() => history.push(`/groups/${leaderAddress}`)}>
+      <GroupImageContainer onClick={() => history.push('/groups/grouppreview')}>
         {groupImage ? <GroupImage src={groupImage} /> : <GroupAvatarPlaceholderImage />}
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle onClick={() => history.push(`/groups/${leaderAddress}`)}>{groupTitle}</GroupTitle>
+        <GroupTitle onClick={() => history.push('/groups/grouppreview')}>{groupTitle}</GroupTitle>
         {groupContent && <GroupContent>{groupContent}</GroupContent>}
       </GroupContentBlock>
       <GroupStats>
