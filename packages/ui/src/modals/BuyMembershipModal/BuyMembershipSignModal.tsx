@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { Account, Member, onTransactionDone } from '../../common/types'
 import { SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
 import { ButtonPrimary } from '../../components/buttons'
-import { Label } from '../../components/forms'
+import { InputComponent } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { TextMedium, TokenValue } from '../../components/typography'
@@ -74,12 +74,13 @@ export const BuyMembershipSignModal = ({
             Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
           </TextMedium>
           <Row>
-            <Label>Sending from account</Label>
-            {initialSigner ? (
-              <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
-            ) : (
-              <SelectedAccount account={from} />
-            )}
+            <InputComponent label="Sending from account" inputSize="l">
+              {initialSigner ? (
+                <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
+              ) : (
+                <SelectedAccount account={from} />
+              )}
+            </InputComponent>
           </Row>
         </ModalBody>
         <ModalFooter>
