@@ -61,6 +61,8 @@ export function ButtonGhost({ className, children, size, square, disabled, onCli
 const BasicButtonStyles = css<ButtonProps>`
   display: inline-grid;
   position: relative;
+  grid-auto-flow: column;
+  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
   justify-items: center;
   align-items: center;
   width: fit-content;
@@ -70,24 +72,21 @@ const BasicButtonStyles = css<ButtonProps>`
       return css`
         max-width: ${getHeight(props)};
       `
-  }}
+  }};
   height: ${getHeight};
   padding: ${getPadding};
   border: 1px solid transparent;
   border-radius: ${BorderRad.s};
-  outline: none;
-  cursor: pointer;
-  overflow: hidden;
-  transition: ${Transitions.all};
-
-  grid-auto-flow: column;
-  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
-
   font-family: ${Fonts.Grotesk};
   font-size: ${getFontSize};
   line-height: ${getLineHeight};
   font-weight: 700;
   text-transform: capitalize;
+  outline: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: ${Transitions.all};
+  z-index: 1;
 
   & > svg {
     z-index: 2;
