@@ -107,11 +107,18 @@ export const stubApi = () => {
 }
 
 export const stubDefaultBalances = (api: UseApi) => {
+  stubBalances(api, {
+    available: 1000,
+    locked: 0,
+  })
+}
+
+export const stubBalances = (api: UseApi, balances: { available?: number; locked?: number }) => {
   set(api, 'api.derive.balances.all', () =>
     from([
       {
-        availableBalance: new BN(1000),
-        lockedBalance: new BN(0),
+        availableBalance: new BN(balances.available ?? 0),
+        lockedBalance: new BN(balances.locked ?? 0),
       },
     ])
   )
