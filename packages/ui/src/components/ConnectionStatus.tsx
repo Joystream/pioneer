@@ -14,19 +14,17 @@ export const ConnectionStatus = () => {
     }
 
     const onConnected = () => {
-      api.off('connected', onConnected)
-      api.on('disconnected', onDisconnected)
+      api.once('disconnected', onDisconnected)
       setShowNotification(true)
     }
 
     const onDisconnected = () => {
-      api.on('connected', onConnected)
-      api.off('disconnected', onDisconnected)
+      api.once('connected', onConnected)
       setShowNotification(true)
     }
 
-    api.on('disconnected', onDisconnected)
-    api.on('connected', onConnected)
+    api.once('disconnected', onDisconnected)
+    api.once('connected', onConnected)
 
     return () => {
       api.off('connected', onConnected)
