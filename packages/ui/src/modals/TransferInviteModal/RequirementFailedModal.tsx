@@ -7,7 +7,9 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Mod
 import { Text, TokenValue } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
+import { useBalance } from '../../hooks/useBalance'
 import { useModal } from '../../hooks/useModal'
+import { BalanceInfoInRow, InfoTitle, InfoValue } from '../common'
 import { TransferModalCall } from '../TransferModal'
 
 interface Props {
@@ -23,6 +25,7 @@ export function RequirementFailedModal({ onClose, address, amount }: Props) {
     () => allAccounts.find((acc) => acc.address == address) || { name: 'Controller account', address },
     [allAccounts]
   )
+  const { transferable } = useBalance(account) || {}
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
@@ -34,6 +37,12 @@ export function RequirementFailedModal({ onClose, address, amount }: Props) {
         </Text>
         <MemberRow>
           <AccountInfo account={account} />
+          <BalanceInfoInRow>
+            <InfoTitle>Transferable balance</InfoTitle>
+            <InfoValue>
+              <TokenValue value={transferable} />
+            </InfoValue>
+          </BalanceInfoInRow>
         </MemberRow>
       </ModalBody>
       <ModalFooter>
