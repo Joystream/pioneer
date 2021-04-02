@@ -141,22 +141,22 @@ export const PageTabsNav = styled.nav<{ tabsSize?: PageTabSize }>`
 
   ${PageTab} {
     font-size: ${({ tabsSize }) => {
-    switch (tabsSize) {
-      case 'xs':
-        return '14px'
-      case 's':
-      default:
-        return '16px'
-    }
-  }};
+      switch (tabsSize) {
+        case 'xs':
+          return '14px'
+        case 's':
+        default:
+          return '16px'
+      }
+    }};
     line-height: ${({ tabsSize }) => {
-    switch (tabsSize) {
-      case 'xs':
-        return '20px'
-      case 's':
-      default:
-        return '24px'
-    }
-  }};
+      switch (tabsSize) {
+        case 'xs':
+          return '20px'
+        case 's':
+        default:
+          return '24px'
+      }
+    }};
   }
 `
