@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 import { AvatarImg } from '../Avatar'
-import { Text } from '../typography'
+import { TextSmall } from '../typography'
 import { MemberInfoWrapProps } from './types'
 import { Help } from '../Help'
 
@@ -44,7 +44,7 @@ export const MemberRoles = styled.div`
   width: fit-content;
 `
 
-export const MemberId = styled(Text)`
+export const MemberId = styled(TextSmall)`
   grid-area: memberroles;
   color: ${Colors.Black[400]};
 `

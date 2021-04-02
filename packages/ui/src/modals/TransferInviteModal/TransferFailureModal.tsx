@@ -14,7 +14,7 @@ export const TransferFailureModal = ({ onClose }: Props) => (
       <ModalTitle as="h4">
         <span className="red-title">Oh no!</span> Failure
       </ModalTitle>
-      <ResultText size={2}>There was a problem transfering your invites.</ResultText>
+      <ResultText>There was a problem transfering your invites.</ResultText>
     </ResultModalBody>
   </Modal>
 )

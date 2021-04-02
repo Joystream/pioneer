@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { BorderRad, Colors, Transitions } from '../../constants'
 import { MyProfileIcon } from '../page/Sidebar/LinksIcons/MyProfileIcon'
-import { Text } from '../typography'
+import { TextSmall } from '../typography'
 
 interface Props {
   onClick: () => void
@@ -16,7 +16,7 @@ export const AddMembershipButtonSwitch = ({ onClick }: Props) => {
           <MyProfileIcon />
         </AddMembershipImage>
         <AddMembershipTitle>New Member</AddMembershipTitle>
-        <AddMembershipText size={3}>Create a New Membership</AddMembershipText>
+        <AddMembershipText>Create a New Membership</AddMembershipText>
       </AddMemberships>
     </>
   )
@@ -51,7 +51,7 @@ const AddMembershipTitle = styled.h6`
   transition: ${Transitions.all};
 `
 
-const AddMembershipText = styled(Text)`
+const AddMembershipText = styled(TextSmall)`
   grid-area: createtext;
   color: ${Colors.Black[400]};
   transition: ${Transitions.all};

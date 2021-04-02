@@ -13,7 +13,7 @@ import {
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '../../components/Modal'
-import { Text } from '../../components/typography'
+import { TextMedium } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useFormValidation } from '../../hooks/useFormValidation'
 import { useKeyring } from '../../hooks/useKeyring'
@@ -71,9 +71,7 @@ export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
           </InputComponent>
 
           <Row>
-            <Text size={2} dark>
-              To invite a member please fill in all the details below.
-            </Text>
+            <TextMedium dark>To invite a member please fill in all the details below.</TextMedium>
           </Row>
 
           <Row>

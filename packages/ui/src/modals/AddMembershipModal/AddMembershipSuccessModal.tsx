@@ -6,7 +6,7 @@ import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership'
 import { MemberModalCall } from '../../components/membership/MemberProfile'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { Text } from '../../components/typography'
+import { TextMedium } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
 import { useModal } from '../../hooks/useModal'
 
@@ -29,7 +29,7 @@ export function AddMembershipSuccessModal({ onClose, member, memberId }: Props) 
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
-        <Text size={2}>You have just successfully created a new membership</Text>
+        <TextMedium>You have just successfully created a new membership</TextMedium>
         <MemberRow>
           <MemberInfo member={(member as unknown) as BaseMember} />
         </MemberRow>

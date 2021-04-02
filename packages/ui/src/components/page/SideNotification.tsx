@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import { Animations, BorderRad, Colors, Shadows } from '../../constants'
 import { CloseButton } from '../buttons'
-import { Text } from '../typography'
+import { TextMedium } from '../typography'
 
 interface NotificationProps {
   title: string
@@ -22,7 +22,7 @@ export const SideNotification = ({ title, icon, message, link, onClick, isError 
         {icon}
         <NotificationTitle>{title}</NotificationTitle>
       </NotificationHeader>
-      <NotificationMessage size={2}>
+      <NotificationMessage>
         {message}
         {link}
       </NotificationMessage>
@@ -69,6 +69,6 @@ const NotificationCloseButton = styled(CloseButton)`
   height: 16px;
 `
 
-const NotificationMessage = styled(Text)`
+const NotificationMessage = styled(TextMedium)`
   color: ${Colors.Black[400]};
 `

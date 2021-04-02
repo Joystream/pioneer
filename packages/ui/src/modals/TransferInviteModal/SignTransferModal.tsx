@@ -6,7 +6,7 @@ import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader, SignTransferContainer } from '../../components/Modal'
-import { Text, TokenValue } from '../../components/typography'
+import { TextMedium, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { formatTokenValue } from '../../utils/formatters'
@@ -40,10 +40,10 @@ export function SignTransferModal({ onClose, sourceMember, targetMember, amount,
         <ModalHeader onClick={onClose} title="Authorize Transaction" />
         <ModalBody>
           <SignTransferContainer>
-            <Text size={2} margin="m">
+            <TextMedium margin="m">
               You intend to transfer {amount.toString()} invite{plural && 's'} to {name}. A fee of{' '}
               {formatTokenValue(fee)} JOY will be applied to the transaction.
-            </Text>
+            </TextMedium>
             <InputComponent required inputSize="l" label="Fee paid by account" disabled borderless>
               <SelectedAccount account={signer} />
             </InputComponent>

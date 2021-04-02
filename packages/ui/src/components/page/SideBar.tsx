@@ -16,11 +16,11 @@ export const SideBar = () => (
     </NavigationHeader>
     <NavigationLinks>
       <NavigationLinksItem>
-        <NavigationLink href="#" className={'active'}>
+        <NavigationLink href="#" className="active">
           <MyProfileIcon />
           My profile
         </NavigationLink>
-        <NavigationLink href="#/groups" className={'active'}>
+        <NavigationLink href="#/groups">
           <WorkingGroupsIcon />
           Working Groups
         </NavigationLink>

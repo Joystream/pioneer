@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { BaseMember } from '../../../common/types'
 import { ButtonsGroup } from '../../../components/buttons'
 import { AddMembershipButton } from '../../../components/membership/AddMembershipButton'
-import { Text } from '../../../components/typography'
+import { TextMedium } from '../../../components/typography'
 import { Colors } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
 import { MemberItem } from './MemberItem'
@@ -25,10 +25,10 @@ export function Memberships() {
       <NoMemberships>
         <NoMembershipsInfo>
           <h3>You have no active membership</h3>
-          <Text size={2}>
+          <TextMedium>
             Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
             velit mollit. Exercitation veniam consequat sunt nostrud amet.
-          </Text>
+          </TextMedium>
         </NoMembershipsInfo>
         <NoMembershipButton>Create a membership</NoMembershipButton>
       </NoMemberships>
@@ -121,7 +121,7 @@ const NoMemberships = styled.div`
 const NoMembershipsInfo = styled.div`
   width: 100%;
 
-  ${Text} {
+  ${TextMedium} {
     margin-top: 16px;
   }
 `

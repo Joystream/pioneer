@@ -16,7 +16,7 @@ export const AddMembershipFailureModal = ({ onClose, member }: Props) => (
       <ModalTitle as="h4">
         <span className="red-title">Oh no!</span> Failure
       </ModalTitle>
-      <ResultText size={2}>There was a problem with creating a membership for {member.name}.</ResultText>
+      <ResultText>There was a problem with creating a membership for {member.name}.</ResultText>
     </ResultModalBody>
   </Modal>
 )

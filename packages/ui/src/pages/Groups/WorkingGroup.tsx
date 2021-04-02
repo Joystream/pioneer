@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { AvatarPlaceholderImage } from '../../components/Avatar'
 import { ValueInJoys } from '../../components/typography'
 import { Subscription } from '../../components/typography/Subscription'
-import { Text } from '../../components/typography/Text'
+import { TextMedium } from '../../components/typography/Text'
 import { BorderRad, Colors, Fonts, Overflow } from '../../constants'
 
 interface WorkingGroupProps {
@@ -21,7 +21,7 @@ export const WorkingGroup = ({ groupImage, groupTitle, groupContent, leaderAddre
     </GroupImageContainer>
     <GroupContentBlock>
       <GroupTitle>{groupTitle}</GroupTitle>
-      {groupContent && <GroupContent size={2}>{groupContent}</GroupContent>}
+      {groupContent && <GroupContent>{groupContent}</GroupContent>}
     </GroupContentBlock>
     <GroupStats>
       <StatsColumn>
@@ -62,6 +62,7 @@ const GroupItem = styled.section`
   width: 100%;
   height: 100%;
   max-height: 108px;
+  align-items: center;
   padding-right: 32px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
@@ -89,11 +90,8 @@ const GroupImage = styled.img`
 
 const GroupContentBlock = styled.article`
   display: grid;
-  grid-template-rows: 24px auto;
+  grid-template-rows: 24px 40px;
   grid-row-gap: 8px;
-  padding: 16px 24px 16px 0;
-  height: 100%;
-  max-height: 100%;
   width: 100%;
 `
 
@@ -102,10 +100,12 @@ const GroupTitle = styled.h5`
   ${Overflow.Dots};
 `
 
-const GroupContent = styled(Text)`
+const GroupContent = styled(TextMedium)`
   hyphens: auto;
+  height: fit-content;
   max-height: 100%;
   max-width: 100%;
+  color: ${Colors.Black[500]};
   ${Overflow.DotsTwoLine};
 `
 
@@ -115,7 +115,6 @@ const GroupStats = styled.div`
   justify-content: space-between;
   width: 100%;
   grid-column-gap: 8px;
-  padding: 28px 0;
 `
 
 const StatsColumn = styled.div`

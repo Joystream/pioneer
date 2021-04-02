@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
 import { Animations, BorderRad, Colors, Fonts, Shadows } from '../constants'
 import { CloseButton } from './buttons'
-import { Text, ValueInJoys } from './typography'
+import { TextMedium, ValueInJoys } from './typography'
 
 interface ModalHeaderProps {
   onClick: () => void
@@ -303,7 +303,7 @@ export const ModalTitle = styled.h5`
   }
 `
 
-export const ResultText = styled(Text)`
+export const ResultText = styled(TextMedium)`
   text-align: center;
 
   ${ValueInJoys} {

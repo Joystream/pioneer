@@ -5,7 +5,7 @@ import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent, InputNumber } from '../../components/forms'
 import { filterMember, SelectMember } from '../../components/membership/SelectMember'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { Text } from '../../components/typography'
+import { TextMedium } from '../../components/typography'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useNumberInput } from '../../hooks/useNumberInput'
 import { formatTokenValue } from '../../utils/formatters'
@@ -35,9 +35,7 @@ export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props)
       <ModalHeader onClick={onClose} title="Transfer invites" icon={icon} />
       <ModalBody>
         <Row>
-          <Text size={2} margin="s">
-            Transfer Invites to a member.
-          </Text>
+          <TextMedium margin="s">Transfer Invites to a member.</TextMedium>
         </Row>
         <InputComponent label="From" inputSize="l" disabled={!!member}>
           <SelectMember onChange={setFrom} disabled={!!member} selected={from} />

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimary } from '../../components/buttons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
-import { Text, TokenValue } from '../../components/typography'
+import { TextMedium, TokenValue } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
@@ -31,10 +31,10 @@ export function RequirementFailedModal({ onClose, address, amount }: Props) {
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Insufficient Funds" />
       <ModalBody>
-        <Text size={2} margin="s">
+        <TextMedium margin="s">
           Unfortunately, you don't have enough Tokens on your Controller account. You need at least{' '}
           <TokenValue value={amount} /> for the transaction fee.
-        </Text>
+        </TextMedium>
         <MemberRow>
           <AccountInfo account={account} />
           <BalanceInfoInRow>

@@ -41,7 +41,7 @@ export const MemberInfo = React.memo(
             <MemberRoleHelp memberRole="LI" helperText="Lorem fishy" size={size} />
           </MemberRoles>
         )}
-        {showId && <MemberId size={3}>Worker ID: {member.id}</MemberId>}
+        {showId && <MemberId>Worker ID: {member.id}</MemberId>}
       </MemberInfoWrap>
     )
   }

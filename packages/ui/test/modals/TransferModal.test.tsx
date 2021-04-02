@@ -112,7 +112,7 @@ describe('UI: TransferModal', () => {
       return rendered
     }
 
-    it.skip('Renders wait for transaction step', async () => {
+    it('Renders wait for transaction step', async () => {
       set(transfer, 'signAndSend', () => of(set({}, 'status.isReady', true)))
 
       const { findByText } = await renderAndSign()
