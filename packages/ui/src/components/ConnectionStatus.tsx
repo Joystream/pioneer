@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useApi } from '../hooks/useApi'
 import { SideNotification } from './page/SideNotification'
 
+const HIDE_NOTIFICATION_TIMEOUT = 5000
+
 export const ConnectionStatus = () => {
   const { isConnected, api } = useApi()
   const [showNotification, setShowNotification] = useState(false)
@@ -11,23 +13,42 @@ export const ConnectionStatus = () => {
       return
     }
 
-    api.on('connected', () => {
+    const onConnected = () => {
+      api.once('disconnected', onDisconnected)
       setShowNotification(true)
-    })
+    }
 
-    api.on('disconnected', () => {
+    const onDisconnected = () => {
+      api.once('connected', onConnected)
       setShowNotification(true)
-    })
+    }
+
+    api.once('disconnected', onDisconnected)
+    api.once('connected', onConnected)
+
+    return () => {
+      api.off('connected', onConnected)
+      api.off('disconnected', onDisconnected)
+    }
   }, [api])
 
-  return (
-    <>
-      {showNotification &&
-        (isConnected ? (
-          <SideNotification onClick={() => setShowNotification(false)} title={'Connected to network'} />
-        ) : (
-          <SideNotification isError onClick={() => setShowNotification(false)} title={'Disconnected from network'} />
-        ))}
-    </>
-  )
+  useEffect(() => {
+    if (!showNotification) {
+      return
+    }
+
+    const timeout = setTimeout(() => setShowNotification(false), HIDE_NOTIFICATION_TIMEOUT)
+
+    return () => clearTimeout(timeout)
+  }, [showNotification])
+
+  if (!showNotification) {
+    return null
+  }
+
+  if (isConnected) {
+    return <SideNotification onClick={() => setShowNotification(false)} title={'Connected to network'} />
+  }
+
+  return <SideNotification isError onClick={() => setShowNotification(false)} title={'Disconnected from network'} />
 }
