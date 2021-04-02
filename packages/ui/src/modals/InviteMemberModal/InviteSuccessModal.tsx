@@ -28,12 +28,12 @@ export function InviteSuccessModal({ onClose, member }: Props) {
         <MemberRow>
           <MemberInfo member={(member as unknown) as BaseMember} />
         </MemberRow>
-        {inviteCount ? (
-          <TextMedium>You have no invitations left on the "{name}" membership.</TextMedium>
-        ) : (
+        {inviteCount > 0 ? (
           <TextMedium>
             You still have {inviteCount} invitation{plural && 's'} left on the "{name}" membership.
           </TextMedium>
+        ) : (
+          <TextMedium>You have no invitations left on the "{name}" membership.</TextMedium>
         )}
       </ModalBody>
       <ModalFooter />
