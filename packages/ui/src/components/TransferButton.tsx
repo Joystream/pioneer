@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { Account } from '../common/types'
 import { Colors } from '../constants'
-import { useToggle } from '../hooks/useToggle'
-import { TransferModal } from '../modals/TransferModal/TransferModal'
+import { useModal } from '../hooks/useModal'
+import { TransferModalCall } from '../modals/TransferModal'
 import { ButtonGhost, ButtonPrimary } from './buttons'
-import { ArrowInsideIcon, ArrowOutsideIcon, TransferIcon } from './icons'
+import { TransferType, PickedTransferIcon } from './icons/TransferIcons'
 
 interface Props {
   from?: Account
@@ -14,33 +14,36 @@ interface Props {
 }
 
 export function TransferButton({ from, to, disabled }: Props) {
-  const [isOpen, toggleOpen] = useToggle()
+  const { showModal } = useModal()
   const isTransfer = !from && !to
   const isSend = !!from && !isTransfer
-  const icon = isTransfer ? <TransferIcon /> : isSend ? <ArrowOutsideIcon /> : <ArrowInsideIcon />
+  const iconType: TransferType = isTransfer ? 'transfer' : isSend ? 'send' : 'receive'
   const isDisabled = !!disabled
 
   return (
-    <>
-      <ButtonForTransfer size="medium" square onClick={toggleOpen} disabled={isDisabled}>
-        {icon}
-      </ButtonForTransfer>
-      {isOpen && <TransferModal onClose={toggleOpen} from={from} to={to} icon={icon} />}
-    </>
+    <ButtonForTransfer
+      size="medium"
+      square
+      onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { from, to } })}
+      disabled={isDisabled}
+    >
+      <PickedTransferIcon type={iconType} />
+    </ButtonForTransfer>
   )
 }
 
 export function TransferButtonStyled() {
-  const [isOpen, toggleOpen] = useToggle()
-  const icon = <TransferIcon />
+  const { showModal } = useModal()
+  const iconType = 'transfer'
 
   return (
-    <>
-      <ButtonForTransferStyled size="small" square onClick={toggleOpen}>
-        {icon}
-      </ButtonForTransferStyled>
-      {isOpen && <TransferModal onClose={toggleOpen} icon={icon} />}
-    </>
+    <ButtonForTransferStyled
+      size="small"
+      square
+      onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: {} })}
+    >
+      <PickedTransferIcon type={iconType} />
+    </ButtonForTransferStyled>
   )
 }
 

@@ -11,6 +11,7 @@ import { TransferFailureModal } from './TransferFailureModal'
 import { TransferSuccessModal } from './TransferSuccessModal'
 import { WaitModal } from '../WaitModal'
 import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
+import { RequirementFailedModal } from './RequirementFailedModal'
 
 export function TransferInviteModal() {
   const { hideModal, modalData } = useModal<TransferInvitesModalCall>()
@@ -19,13 +20,13 @@ export function TransferInviteModal() {
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [targetMember, setTargetMember] = useState<BaseMember>()
   const [signer, setSigner] = useState<Account>()
-  const canAfford = useTransferInviteFee(data?.membership as BaseMember)
+  const transactionFeeInfo = useTransferInviteFee(data?.membership as BaseMember)
 
   useEffect(() => {
-    if (step === 'REQUIREMENTS_CHECK' && typeof canAfford === 'boolean') {
-      setStep(canAfford ? 'PREPARE' : 'REQUIREMENTS_FAIL')
+    if (step === 'REQUIREMENTS_CHECK' && transactionFeeInfo) {
+      setStep(transactionFeeInfo.canAfford ? 'PREPARE' : 'REQUIREMENTS_FAIL')
     }
-  }, [canAfford])
+  }, [transactionFeeInfo])
 
   const onAccept = (amount: BN, from: BaseMember, to: BaseMember, signer: Account) => {
     setAmount(amount)
@@ -46,8 +47,14 @@ export function TransferInviteModal() {
     return <WaitModal onClose={hideModal} title="Loading..." description="" />
   }
 
-  if (step === 'REQUIREMENTS_FAIL') {
-    return <TransferFailureModal onClose={hideModal} />
+  if (step === 'REQUIREMENTS_FAIL' && transactionFeeInfo) {
+    return (
+      <RequirementFailedModal
+        onClose={hideModal}
+        address={data.membership.controllerAccount}
+        amount={transactionFeeInfo.transactionFee}
+      />
+    )
   }
 
   if (step === 'PREPARE' || !targetMember || !signer) {

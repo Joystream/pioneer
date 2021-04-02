@@ -9,8 +9,14 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
   const paymentInfo = useObservable(transaction?.paymentInfo(address || ''), [transaction, address])
   const balance = useBalance({ name: '', address: address || '' })
 
-  return useMemo(() => balance && paymentInfo && balance.transferable.gte(paymentInfo.partialFee), [
-    balance,
-    paymentInfo,
-  ])
+  return useMemo(
+    () =>
+      balance && paymentInfo
+        ? {
+            transactionFee: paymentInfo.partialFee,
+            canAfford: balance.transferable.gte(paymentInfo.partialFee),
+          }
+        : undefined,
+    [balance, paymentInfo]
+  )
 }
