@@ -5,7 +5,7 @@ import { Colors } from '../constants'
 import { useModal } from '../hooks/useModal'
 import { TransferModalCall } from '../modals/TransferModal'
 import { ButtonGhost, ButtonPrimary } from './buttons'
-import { TransferIconName, TransferIcons } from './icons/TransferIcons'
+import { TransferType, PickedTransferIcon } from './icons/TransferIcons'
 
 interface Props {
   from?: Account
@@ -17,34 +17,32 @@ export function TransferButton({ from, to, disabled }: Props) {
   const { showModal } = useModal()
   const isTransfer = !from && !to
   const isSend = !!from && !isTransfer
-  const iconName: TransferIconName = isTransfer ? 'TransferIcon' : isSend ? 'SendIcon' : 'ReceiveIcon'
-  const icon = TransferIcons[iconName]
+  const iconType: TransferType = isTransfer ? 'transfer' : isSend ? 'send' : 'receive'
   const isDisabled = !!disabled
 
   return (
     <ButtonForTransfer
       size="medium"
       square
-      onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { from, to, iconName } })}
+      onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { from, to } })}
       disabled={isDisabled}
     >
-      {icon}
+      <PickedTransferIcon type={iconType} />
     </ButtonForTransfer>
   )
 }
 
 export function TransferButtonStyled() {
   const { showModal } = useModal()
-  const iconName: TransferIconName = 'TransferIcon'
-  const icon = TransferIcons[iconName]
+  const iconType = 'transfer'
 
   return (
     <ButtonForTransferStyled
       size="small"
       square
-      onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { iconName } })}
+      onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: {} })}
     >
-      {icon}
+      <PickedTransferIcon type={iconType} />
     </ButtonForTransferStyled>
   )
 }

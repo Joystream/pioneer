@@ -1,10 +1,11 @@
 import BN from 'bn.js'
-import React, { ReactElement, useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Account } from '../../common/types'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
 import { ButtonGhost, ButtonPrimary } from '../../components/buttons'
 import { InputComponent, InputNumber } from '../../components/forms'
+import { PickedTransferIcon } from '../../components/icons/TransferIcons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { useBalance } from '../../hooks/useBalance'
 import { useNumberInput } from '../../hooks/useNumberInput'
@@ -17,10 +18,9 @@ interface Props {
   onClose: () => void
   onAccept: (amount: BN, from: Account, to: Account) => void
   title: string
-  icon: ReactElement
 }
 
-export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon }: Props) {
+export function TransferDetailsModal({ from, to, onClose, onAccept, title }: Props) {
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
   const [amount, setAmount] = useNumberInput(0)
@@ -28,6 +28,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
   const filterSender = useCallback(filterAccount(recipient), [recipient])
   const transferableBalance = senderBalance?.transferable ?? new BN(0)
   const filterRecipient = useCallback(filterAccount(sender), [sender])
+  const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
   const isZero = new BN(amount).lte(new BN(0))
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
@@ -43,7 +44,7 @@ export function TransferDetailsModal({ from, to, onClose, onAccept, title, icon 
   }
   return (
     <Modal modalSize={'m'} onClose={onClose}>
-      <ModalHeader onClick={onClose} title={title} icon={icon} />
+      <ModalHeader onClick={onClose} title={title} icon={<PickedTransferIcon type={getIconType()} />} />
       <ModalBody>
         <Row>
           <InputComponent

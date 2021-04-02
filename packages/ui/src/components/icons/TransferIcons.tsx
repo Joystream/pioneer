@@ -1,10 +1,21 @@
 import React from 'react'
 import { TransferIcon, ArrowOutsideIcon, ArrowInsideIcon } from '.'
 
-export const TransferIcons = {
-  TransferIcon: <TransferIcon />,
-  SendIcon: <ArrowOutsideIcon />,
-  ReceiveIcon: <ArrowInsideIcon />,
+interface Props {
+  type: TransferType
 }
 
-export type TransferIconName = keyof typeof TransferIcons
+export function PickedTransferIcon({ type }: Props) {
+  switch (type) {
+    case 'transfer':
+      return <TransferIcon />
+    case 'send':
+      return <ArrowOutsideIcon />
+    case 'receive':
+      return <ArrowInsideIcon />
+    default:
+      return null
+  }
+}
+
+export type TransferType = 'send' | 'receive' | 'transfer'

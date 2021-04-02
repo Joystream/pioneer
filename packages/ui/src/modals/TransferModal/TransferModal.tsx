@@ -2,7 +2,6 @@ import { EventRecord } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 import React, { useState } from 'react'
 import { Account, ModalState } from '../../common/types'
-import { TransferIcons } from '../../components/icons/TransferIcons'
 import { useModal } from '../../hooks/useModal'
 import { SignTransferModal } from './SignTransferModal'
 import { TransactionFailureModal } from './TransactionFailureModal'
@@ -12,7 +11,7 @@ import { TransferModalCall } from './types'
 
 export function TransferModal() {
   const { hideModal, modalData } = useModal<TransferModalCall>()
-  const { from, to, iconName } = modalData
+  const { from, to } = modalData
   const [step, setStep] = useState<ModalState>('PREPARE')
   const [amount, setAmount] = useState<BN>(new BN(0))
   const [fee, setFee] = useState<BN>(new BN(0))
@@ -37,14 +36,7 @@ export function TransferModal() {
 
   if (step === 'PREPARE' || !transferTo || !transferFrom) {
     return (
-      <TransferDetailsModal
-        onClose={hideModal}
-        from={transferFrom}
-        to={transferTo}
-        onAccept={onAccept}
-        title={title}
-        icon={TransferIcons[iconName]}
-      />
+      <TransferDetailsModal onClose={hideModal} from={transferFrom} to={transferTo} onAccept={onAccept} title={title} />
     )
   }
 

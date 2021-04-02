@@ -49,7 +49,7 @@ describe('UI: TransferModal', () => {
 
   const mockModalContext = (data: { from?: Account; to?: Account }) => ({
     hideModal: () => null,
-    modalData: { ...data, iconName: 'TransferIcon' },
+    modalData: data,
     modal: null,
     showModal: () => null,
   })

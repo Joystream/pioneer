@@ -23,7 +23,6 @@ export function RequirementFailedModal({ onClose, address, amount }: Props) {
     () => allAccounts.find((acc) => acc.address == address) || { name: 'Controller account', address },
     [allAccounts]
   )
-  const iconName = 'TransferIcon'
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
@@ -40,7 +39,7 @@ export function RequirementFailedModal({ onClose, address, amount }: Props) {
       <ModalFooter>
         <ButtonPrimary
           size="medium"
-          onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { to: account, iconName } })}
+          onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { to: account } })}
         >
           Add JOY to Controller Account
         </ButtonPrimary>
