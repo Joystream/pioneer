@@ -69,10 +69,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
       <InviteMemberSignModal
         onClose={onClose}
         transactionParams={transactionParams}
-        signer={{
-          address: transactionParams.invitor?.controllerAccount as Address,
-          name: 'Controller account',
-        }}
+        signer={transactionParams.invitor?.controllerAccount as Address}
         onDone={onDone}
         transaction={transaction}
       />

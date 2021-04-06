@@ -3,13 +3,15 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 
-import { Account, Member, onTransactionDone } from '../../common/types'
+import { Address, Member, onTransactionDone } from '../../common/types'
 import { SelectedAccount } from '../../components/account/SelectAccount'
 import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent } from '../../components/forms'
 import { Help } from '../../components/Help'
+import { accountOrNamed } from '../../components/membership/MemberProfile/MemberAccounts'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { TextMedium, TokenValue } from '../../components/typography'
+import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
@@ -20,7 +22,7 @@ interface SignProps {
   transactionParams: Member
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
-  signer: Account
+  signer: Address
 }
 
 const getMessage = (fee?: BN) => {
@@ -29,14 +31,15 @@ Please choose different member.`
 }
 
 export const InviteMemberSignModal = ({ onClose, transactionParams, onDone, transaction, signer }: SignProps) => {
-  const signerAddress = signer.address
+  const { allAccounts } = useAccounts()
+  const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
   const { paymentInfo, send, status } = useSignAndSendTransaction({
     transaction,
-    signer: signerAddress,
+    signer: signer,
     onDone,
   })
   const [hasFunds, setHasFunds] = useState(false)
-  const balance = useBalance(signerAddress)
+  const balance = useBalance(signer)
   const transferable = balance?.transferable
   const partialFee = paymentInfo?.partialFee
 
@@ -67,7 +70,7 @@ export const InviteMemberSignModal = ({ onClose, transactionParams, onDone, tran
               validation={hasFunds ? undefined : 'invalid'}
               message={hasFunds ? undefined : getMessage(partialFee)}
             >
-              <SelectedAccount account={signer} />
+              <SelectedAccount account={signerAccount} />
             </InputComponent>
           </Row>
         </ModalBody>
