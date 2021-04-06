@@ -14,7 +14,7 @@ interface Props {
   member: Member
 }
 
-export function InviteSuccessModal({ onClose, member }: Props) {
+export function InviteMemberSuccessModal({ onClose, member }: Props) {
   const invitorId = member.invitor?.id || ''
   const { data: invitor, loading } = useGetMemberQuery({ variables: { id: invitorId } })
   const inviteCount = invitor?.membership?.inviteCount ?? 0

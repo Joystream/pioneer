@@ -7,7 +7,7 @@ import { BuyMembershipFailureModal } from '../BuyMembershipModal/BuyMembershipFa
 import { BuyMembershipSignModal } from '../BuyMembershipModal/BuyMembershipSignModal'
 import { BuyMembershipSuccessModal } from '../BuyMembershipModal/BuyMembershipSuccessModal'
 import { WaitModal } from '../WaitModal'
-import { InviteFormModal } from './InviteFormModal'
+import { InviteMemberFormModal } from './InviteMemberFormModal'
 import { WorkingGroupBudgetModal } from './WorkingGroupBudgetModal'
 
 interface MembershipModalProps {
@@ -61,7 +61,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }
 
   if (step == 'PREPARE' || !transactionParams) {
-    return <InviteFormModal onClose={onClose} onSubmit={onSubmit} />
+    return <InviteMemberFormModal onClose={onClose} onSubmit={onSubmit} />
   }
 
   if (step === 'AUTHORIZE') {

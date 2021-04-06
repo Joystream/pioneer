@@ -37,7 +37,7 @@ const InviteMemberSchema = Yup.object().shape({
   handle: HandleSchema.required(),
 })
 
-export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
+export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
   const keyring = useKeyring()
   const [state, dispatch] = useReducer(formReducer, {
