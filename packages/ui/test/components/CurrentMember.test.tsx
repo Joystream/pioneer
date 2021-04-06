@@ -3,6 +3,7 @@ import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-l
 import React from 'react'
 
 import { CurrentMember } from '../../src/components/page/Sidebar/CurrentMember'
+import { AccountsContextProvider } from '../../src/providers/accounts/provider'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 
@@ -65,9 +66,11 @@ describe('UI: CurrentMember component', () => {
   function renderComponent() {
     return render(
       <MockKeyringProvider>
-        <MockQueryNodeProviders>
-          <CurrentMember />
-        </MockQueryNodeProviders>
+        <AccountsContextProvider>
+          <MockQueryNodeProviders>
+            <CurrentMember />
+          </MockQueryNodeProviders>
+        </AccountsContextProvider>
       </MockKeyringProvider>
     )
   }
