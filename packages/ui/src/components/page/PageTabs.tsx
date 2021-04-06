@@ -68,7 +68,7 @@ export const PageTab = styled.a<TabActiveProps>`
   font-weight: 400;
   color: ${({ active }) => (active ? Colors.Black[900] : Colors.Black[500])};
   text-transform: capitalize;
-  -webkit-text-stroke: 0.05em;
+  -webkit-text-stroke-width: 0.05em;
   -webkit-text-stroke-color: ${({ active }) => (active ? Colors.Black[900] : 'transparent')};
   cursor: pointer;
   transition: ${Transitions.all};
