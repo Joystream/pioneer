@@ -1,42 +1,38 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
-import { BaseMember, Member } from '../../common/types'
+import { BaseMember } from '../../common/types'
 import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership'
-import { MemberModalCall } from '../../components/membership/MemberProfile'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { TextMedium } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
-import { useModal } from '../../hooks/useModal'
 
 interface Props {
   onClose: () => void
-  member: Member
-  memberId?: string
+  recipient: BaseMember
+  amount: BN
 }
 
-export function AddMembershipSuccessModal({ onClose, member, memberId }: Props) {
-  const { showModal } = useModal()
-  const viewMember = () => {
-    onClose()
+export function TransferInviteSuccessModal({ onClose, recipient, amount }: Props) {
+  const plural = amount.gt(new BN(1))
+  const name = recipient.name
 
-    if (memberId) {
-      showModal<MemberModalCall>({ modal: 'Member', data: { id: memberId } })
-    }
-  }
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
-        <TextMedium>You have just successfully created a new membership</TextMedium>
+        <TextMedium margin="s">
+          You have just successfully transferred {amount.toString()} invitation{plural && 's'} to {name}.
+        </TextMedium>
         <MemberRow>
-          <MemberInfo member={(member as unknown) as BaseMember} />
+          <MemberInfo member={recipient} />
         </MemberRow>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" disabled={!memberId} onClick={viewMember}>
+        <ButtonPrimary size="medium" disabled>
           View my profile
         </ButtonPrimary>
       </ModalFooter>

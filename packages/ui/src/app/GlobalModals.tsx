@@ -2,7 +2,7 @@ import React from 'react'
 
 import { MemberModalCall, MemberProfile } from '../components/membership/MemberProfile'
 import { useModal } from '../hooks/useModal'
-import { AddMembershipModal, BuyMembershipModalCall } from '../modals/AddMembershipModal'
+import { BuyMembershipModal, BuyMembershipModalCall } from '../modals/BuyMembershipModal'
 import { TransferInviteModal, TransferInvitesModalCall } from '../modals/TransferInviteModal'
 import { TransferModal, TransferModalCall } from '../modals/TransferModal'
 import { ModalName } from '../providers/modal/types'
@@ -20,7 +20,7 @@ export const GlobalModals = () => {
     case 'Member':
       return <MemberProfile />
     case 'BuyMembership':
-      return <AddMembershipModal />
+      return <BuyMembershipModal />
     case 'TransferInvites':
       return <TransferInviteModal />
     case 'TransferTokens':

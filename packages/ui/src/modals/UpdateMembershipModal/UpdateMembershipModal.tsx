@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 
 import { BaseMember } from '../../common/types'
 import { useAccounts } from '../../hooks/useAccounts'
-import { SignUpdateMembershipModal } from './SignUpdateMembershipModal'
 import { WithNullableValues, UpdateMemberForm } from './types'
 import { UpdateMembershipFailureModal } from './UpdateMembershipFailureModal'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
+import { UpdateMembershipSignModal } from './UpdateMembershipSignModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 interface MembershipModalProps {
@@ -34,7 +34,7 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
 
   if (step === 'AUTHORIZE') {
     return (
-      <SignUpdateMembershipModal
+      <UpdateMembershipSignModal
         onClose={onClose}
         transactionParams={transactionParams}
         member={member}

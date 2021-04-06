@@ -6,7 +6,7 @@ import React from 'react'
 import { of } from 'rxjs'
 
 import { Account } from '../../src/common/types'
-import { AddMembershipModal } from '../../src/modals/AddMembershipModal'
+import { BuyMembershipModal } from '../../src/modals/BuyMembershipModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectAccount } from '../helpers/selectAccount'
 import { toBalanceOf } from '../mocks/chainTypes'
@@ -15,6 +15,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 import {
   stubApi,
+  stubBalances,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
@@ -43,22 +44,17 @@ jest.mock('../../src/hooks/useModal', () => {
   }
 })
 
-describe('UI: AddMembershipModal', () => {
+describe('UI: BuyMembershipModal', () => {
+  const api = stubApi()
+  let transaction: any
+
+  setupMockServer()
+
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
     useAccounts.allAccounts.push(alice, bob)
   })
-
-  afterAll(() => {
-    jest.restoreAllMocks()
-  })
-
-  setupMockServer()
-
-  const api = stubApi()
-
-  let transaction: any
 
   beforeEach(async () => {
     stubDefaultBalances(api)
@@ -133,6 +129,14 @@ describe('UI: AddMembershipModal', () => {
       expect(getByRole('heading', { name: /alice/i })).toBeDefined()
     })
 
+    it('Without required balance', async () => {
+      stubBalances(api, { available: 0, locked: 0 })
+
+      const { findByRole } = await renderAuthorizeStep()
+
+      expect(await findByRole('button', { name: /^sign and/i })).toBeDisabled()
+    })
+
     describe('Success', () => {
       it('Renders transaction success', async () => {
         stubTransactionSuccess(transaction, [1], 'members', 'MemberRegistered')
@@ -175,7 +179,7 @@ describe('UI: AddMembershipModal', () => {
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <AddMembershipModal />
+            <BuyMembershipModal />
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockQueryNodeProviders>

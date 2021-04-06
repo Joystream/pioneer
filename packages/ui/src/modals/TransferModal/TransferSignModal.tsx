@@ -32,7 +32,7 @@ interface Props {
   onDone: onTransactionDone
 }
 
-export function SignTransferModal({ onClose, from, amount, to, onDone }: Props) {
+export function TransferSignModal({ onClose, from, amount, to, onDone }: Props) {
   const balanceFrom = useBalance(from)
   const balanceTo = useBalance(to)
   const { api } = useApi()

@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { Member, ModalState } from '../../common/types'
+import { Address, Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
-import { AddMembershipFailureModal } from '../AddMembershipModal/AddMembershipFailureModal'
-import { SignCreateMemberModal } from '../AddMembershipModal/SignCreateMemberModal'
+import { BuyMembershipFailureModal } from '../BuyMembershipModal/BuyMembershipFailureModal'
 import { WaitModal } from '../WaitModal'
-import { InviteFormModal } from './InviteFormModal'
-import { InviteSuccessModal } from './InviteSuccessModal'
-import { WorkingGroupBudgetModal } from './WorkingGroupBudgetModal'
+import { InviteMemberFormModal } from './InviteMemberFormModal'
+import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
+import { InviteMemberSignModal } from './InviteMemberSignModal'
+import { InviteMemberSuccessModal } from './InviteMemberSuccessModal'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -57,27 +57,30 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }
 
   if (step === 'REQUIREMENTS_FAIL') {
-    return <WorkingGroupBudgetModal onClose={onClose} />
+    return <InviteMemberRequirementsModal onClose={onClose} />
   }
 
   if (step == 'PREPARE' || !transactionParams) {
-    return <InviteFormModal onClose={onClose} onSubmit={onSubmit} />
+    return <InviteMemberFormModal onClose={onClose} onSubmit={onSubmit} />
   }
 
   if (step === 'AUTHORIZE') {
     return (
-      <SignCreateMemberModal
+      <InviteMemberSignModal
         onClose={onClose}
         transactionParams={transactionParams}
+        signer={{
+          address: transactionParams.invitor?.controllerAccount as Address,
+          name: 'Controller account',
+        }}
         onDone={onDone}
         transaction={transaction}
-        isInvite
       />
     )
   }
 
   if (step === 'SUCCESS') {
-    return <InviteSuccessModal onClose={onClose} member={transactionParams} />
+    return <InviteMemberSuccessModal onClose={onClose} member={transactionParams} />
   }
-  return <AddMembershipFailureModal onClose={onClose} member={transactionParams} />
+  return <BuyMembershipFailureModal onClose={onClose} member={transactionParams} />
 }

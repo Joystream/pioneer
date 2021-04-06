@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { useModal } from '../../hooks/useModal'
-import { BuyMembershipModalCall } from '../../modals/AddMembershipModal'
+import { BuyMembershipModalCall } from '../../modals/BuyMembershipModal'
 import { ButtonPrimary, ButtonSize } from '../buttons'
 
 interface AddMembershipButtonProps {

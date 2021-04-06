@@ -21,7 +21,7 @@ interface Props {
   title: string
 }
 
-export function TransferDetailsModal({ from, to, onClose, onAccept, title }: Props) {
+export function TransferFormModal({ from, to, onClose, onAccept, title }: Props) {
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
   const [amount, setAmount] = useNumberInput(0)

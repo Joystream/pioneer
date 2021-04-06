@@ -20,7 +20,7 @@ import { useFormValidation } from '../../hooks/useFormValidation'
 import { useKeyring } from '../../hooks/useKeyring'
 import { useObservable } from '../../hooks/useObservable'
 import { AvatarURISchema, HandleSchema, MemberSchema, NewAddressSchema } from '../../membership/data/validation'
-import { FormFields, formReducer } from '../AddMembershipModal/formReducer'
+import { FormFields, formReducer } from '../BuyMembershipModal/formReducer'
 import { Row } from '../common'
 
 interface InviteProps {
@@ -37,7 +37,7 @@ const InviteMemberSchema = Yup.object().shape({
   handle: HandleSchema.required(),
 })
 
-export const InviteFormModal = ({ onClose, onSubmit }: InviteProps) => {
+export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
   const keyring = useKeyring()
   const [state, dispatch] = useReducer(formReducer, {

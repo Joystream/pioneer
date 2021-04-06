@@ -1,9 +1,8 @@
-import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
-import { BaseMember } from '../../common/types'
-import { ButtonPrimary } from '../../components/buttons'
+import { useGetMemberQuery } from '../../api/queries'
+import { BaseMember, Member } from '../../common/types'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
@@ -12,30 +11,34 @@ import { BorderRad, Colors, Sizes } from '../../constants'
 
 interface Props {
   onClose: () => void
-  recipient: BaseMember
-  amount: BN
+  member: Member
 }
 
-export function TransferSuccessModal({ onClose, recipient, amount }: Props) {
-  const plural = amount.gt(new BN(1))
-  const name = recipient.name
+export function InviteMemberSuccessModal({ onClose, member }: Props) {
+  const invitorId = member.invitor?.id || ''
+  const { data: invitor, loading } = useGetMemberQuery({ variables: { id: invitorId } })
+  const inviteCount = invitor?.membership?.inviteCount ?? 0
+  const name = invitor?.membership?.name
+  const plural = inviteCount > 1
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
-        <TextMedium margin="s">
-          You have just successfully transferred {amount.toString()} invitation{plural && 's'} to {name}.
-        </TextMedium>
+        <TextMedium>You have just successfully invited a member.</TextMedium>
         <MemberRow>
-          <MemberInfo member={recipient} />
+          <MemberInfo member={(member as unknown) as BaseMember} />
         </MemberRow>
+        {loading && <TextMedium>Loading...</TextMedium>}
+        {!loading && inviteCount > 0 ? (
+          <TextMedium>
+            You still have {inviteCount} invitation{plural && 's'} left on the "{name}" membership.
+          </TextMedium>
+        ) : (
+          <TextMedium>You have no invitations left on the "{name}" membership.</TextMedium>
+        )}
       </ModalBody>
-      <ModalFooter>
-        <ButtonPrimary size="medium" disabled>
-          View my profile
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalFooter />
     </Modal>
   )
 }

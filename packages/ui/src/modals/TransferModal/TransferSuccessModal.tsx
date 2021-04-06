@@ -24,7 +24,7 @@ interface Props {
   fee: BN
 }
 
-export function TransactionSuccessModal({ onClose, from, to, amount, fee }: Props) {
+export function TransferSuccessModal({ onClose, from, to, amount, fee }: Props) {
   const fromBalance = useBalance(from as Account)
   const toBalance = useBalance(to as Account)
 

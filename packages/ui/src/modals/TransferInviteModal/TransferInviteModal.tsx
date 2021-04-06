@@ -8,11 +8,11 @@ import { TransferIcon } from '../../components/icons'
 import { useModal } from '../../hooks/useModal'
 import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
 import { WaitModal } from '../WaitModal'
-import { RequirementFailedModal } from './RequirementFailedModal'
-import { SignTransferModal } from './SignTransferModal'
-import { TransferDetailsModal } from './TransferDetailsModal'
-import { TransferFailureModal } from './TransferFailureModal'
-import { TransferSuccessModal } from './TransferSuccessModal'
+import { TransferInviteFailureModal } from './TransferInviteFailureModal'
+import { TransferInviteFormModal } from './TransferInviteFormModal'
+import { TransferInviteRequirementsModal } from './TransferInviteRequirementsModal'
+import { TransferInviteSignModal } from './TransferInviteSignModal'
+import { TransferInviteSuccessModal } from './TransferInviteSuccessModal'
 
 export function TransferInviteModal() {
   const { hideModal, modalData } = useModal<TransferInvitesModalCall>()
@@ -50,7 +50,7 @@ export function TransferInviteModal() {
 
   if (step === 'REQUIREMENTS_FAIL' && transactionFeeInfo) {
     return (
-      <RequirementFailedModal
+      <TransferInviteRequirementsModal
         onClose={hideModal}
         address={data.membership.controllerAccount}
         amount={transactionFeeInfo.transactionFee}
@@ -60,13 +60,18 @@ export function TransferInviteModal() {
 
   if (step === 'PREPARE' || !targetMember || !signer) {
     return (
-      <TransferDetailsModal onClose={hideModal} onAccept={onAccept} icon={<TransferIcon />} member={data.membership} />
+      <TransferInviteFormModal
+        onClose={hideModal}
+        onAccept={onAccept}
+        icon={<TransferIcon />}
+        member={data.membership}
+      />
     )
   }
 
   if (step === 'AUTHORIZE') {
     return (
-      <SignTransferModal
+      <TransferInviteSignModal
         onClose={hideModal}
         sourceMember={data.membership}
         targetMember={targetMember}
@@ -78,8 +83,8 @@ export function TransferInviteModal() {
   }
 
   if (step === 'SUCCESS') {
-    return <TransferSuccessModal onClose={hideModal} recipient={targetMember} amount={amount} />
+    return <TransferInviteSuccessModal onClose={hideModal} recipient={targetMember} amount={amount} />
   }
 
-  return <TransferFailureModal onClose={hideModal} />
+  return <TransferInviteFailureModal onClose={hideModal} />
 }

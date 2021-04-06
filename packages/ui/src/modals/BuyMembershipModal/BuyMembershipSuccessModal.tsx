@@ -1,44 +1,46 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useGetMemberQuery } from '../../api/queries'
 import { BaseMember, Member } from '../../common/types'
+import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'
 import { MemberInfo } from '../../components/membership'
+import { MemberModalCall } from '../../components/membership/MemberProfile'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { TextMedium } from '../../components/typography'
 import { BorderRad, Colors, Sizes } from '../../constants'
+import { useModal } from '../../hooks/useModal'
 
 interface Props {
   onClose: () => void
   member: Member
+  memberId?: string
 }
 
-export function InviteSuccessModal({ onClose, member }: Props) {
-  const invitorId = member.invitor?.id || ''
-  const { data: invitor, loading } = useGetMemberQuery({ variables: { id: invitorId } })
-  const inviteCount = invitor?.membership?.inviteCount ?? 0
-  const name = invitor?.membership?.name
-  const plural = inviteCount > 1
+export const BuyMembershipSuccessModal = ({ onClose, member, memberId }: Props) => {
+  const { showModal } = useModal()
+  const viewMember = () => {
+    onClose()
+
+    if (memberId) {
+      showModal<MemberModalCall>({ modal: 'Member', data: { id: memberId } })
+    }
+  }
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
-        <TextMedium>You have just successfully invited a member.</TextMedium>
+        <TextMedium>You have just successfully created a new membership</TextMedium>
         <MemberRow>
           <MemberInfo member={(member as unknown) as BaseMember} />
         </MemberRow>
-        {loading && <TextMedium>Loading...</TextMedium>}
-        {!loading && inviteCount > 0 ? (
-          <TextMedium>
-            You still have {inviteCount} invitation{plural && 's'} left on the "{name}" membership.
-          </TextMedium>
-        ) : (
-          <TextMedium>You have no invitations left on the "{name}" membership.</TextMedium>
-        )}
       </ModalBody>
-      <ModalFooter />
+      <ModalFooter>
+        <ButtonPrimary size="medium" disabled={!memberId} onClick={viewMember}>
+          View my profile
+        </ButtonPrimary>
+      </ModalFooter>
     </Modal>
   )
 }

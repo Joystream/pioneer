@@ -1,19 +1,15 @@
-import BN from 'bn.js'
 import React from 'react'
 
-import { Account } from '../../common/types'
+import { Member } from '../../common/types'
 import { FailureIcon } from '../../components/icons/FailureIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
-import { TokenValue } from '../../components/typography'
 
 interface Props {
   onClose: () => void
-  from: Account
-  amount: BN
-  to: Account
+  member: Member
 }
 
-export const TransactionFailureModal = ({ from, to, amount, onClose }: Props) => (
+export const BuyMembershipFailureModal = ({ onClose, member }: Props) => (
   <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
     <ModalHeader title="" onClick={onClose} modalHeaderSize="s" />
     <ResultModalBody>
@@ -21,10 +17,7 @@ export const TransactionFailureModal = ({ from, to, amount, onClose }: Props) =>
       <ModalTitle as="h4">
         <span className="red-title">Oh no!</span> Failure
       </ModalTitle>
-      <ResultText>
-        You haven’t transferred <TokenValue value={amount} /> stake from “{from.name}” account to “{to.name}”
-        destination, because of a lorem ipsum dolor sit amet enim probem.
-      </ResultText>
+      <ResultText>There was a problem with creating a membership for {member.name}.</ResultText>
     </ResultModalBody>
   </Modal>
 )

@@ -9,7 +9,7 @@ interface Props {
   onClose: () => void
 }
 
-export const WorkingGroupBudgetModal = ({ onClose }: Props) => {
+export const InviteMemberRequirementsModal = ({ onClose }: Props) => {
   const { api } = useApi()
   const workingGroupBudget = useObservable(api?.query.membershipWorkingGroup.budget(), [])
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])

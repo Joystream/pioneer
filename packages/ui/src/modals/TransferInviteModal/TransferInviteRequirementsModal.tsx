@@ -19,7 +19,7 @@ interface Props {
   amount: BN
 }
 
-export function RequirementFailedModal({ onClose, address, amount }: Props) {
+export function TransferInviteRequirementsModal({ onClose, address, amount }: Props) {
   const { showModal } = useModal()
   const { allAccounts } = useAccounts()
   const account = useMemo(

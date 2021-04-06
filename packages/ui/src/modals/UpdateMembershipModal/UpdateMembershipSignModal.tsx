@@ -61,7 +61,7 @@ function createBatch(
   return api.tx.utility.batch(transactions)
 }
 
-export const SignUpdateMembershipModal = ({ onClose, transactionParams, member, signer, onDone }: SignProps) => {
+export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, signer, onDone }: SignProps) => {
   const { api } = useApi()
   const updateProfileTransaction = useMemo(() => createBatch(transactionParams, api, member), [member.id])
 

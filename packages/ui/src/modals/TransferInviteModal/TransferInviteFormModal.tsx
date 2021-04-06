@@ -19,7 +19,7 @@ interface Props {
   member?: BaseMember
 }
 
-export function TransferDetailsModal({ onClose, onAccept, icon, member }: Props) {
+export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Props) {
   const [from, setFrom] = useState<BaseMember | undefined>(member)
   const [to, setTo] = useState<BaseMember>()
   const [amount, setAmount] = useNumberInput(0)

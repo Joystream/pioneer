@@ -6,12 +6,12 @@ import { useApi } from '../../hooks/useApi'
 import { useModal } from '../../hooks/useModal'
 import { useObservable } from '../../hooks/useObservable'
 import { ServerContext } from '../../providers/server/context'
-import { AddMembershipFailureModal } from './AddMembershipFailureModal'
-import { AddMembershipSuccessModal } from './AddMembershipSuccessModal'
-import { MembershipFormModal } from './MembershipFormModal'
-import { SignCreateMemberModal } from './SignCreateMemberModal'
+import { BuyMembershipFailureModal } from './BuyMembershipFailureModal'
+import { BuyMembershipFormModal } from './BuyMembershipFormModal'
+import { BuyMembershipSignModal } from './BuyMembershipSignModal'
+import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
 
-export const AddMembershipModal = () => {
+export const BuyMembershipModal = () => {
   const { hideModal } = useModal()
   const onClose = hideModal
   const { api } = useApi()
@@ -72,12 +72,12 @@ export const AddMembershipModal = () => {
   )
 
   if (step === 'PREPARE' || !transactionParams) {
-    return <MembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
+    return <BuyMembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
   if (step === 'AUTHORIZE') {
     return (
-      <SignCreateMemberModal
+      <BuyMembershipSignModal
         onClose={onClose}
         membershipPrice={membershipPrice}
         transactionParams={transactionParams}
@@ -89,8 +89,8 @@ export const AddMembershipModal = () => {
   }
 
   if (step === 'SUCCESS') {
-    return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} memberId={id} />
+    return <BuyMembershipSuccessModal onClose={onClose} member={transactionParams} memberId={id} />
   }
 
-  return <AddMembershipFailureModal onClose={onClose} member={transactionParams} />
+  return <BuyMembershipFailureModal onClose={onClose} member={transactionParams} />
 }
