@@ -11,8 +11,9 @@ export const getErrorMessage = <T extends any>(field: keyof T, errors: Validatio
   return error?.message
 }
 
-export const hasError = <T extends any>(field: keyof T, errors: ValidationError[]) =>
-  !!getError<T>(field, errors)?.value
+export const hasError = <T extends any>(field: keyof T, errors: ValidationError[]) => {
+  return !!getError<T>(field, errors)?.message
+}
 
 interface Props<T> {
   name: keyof T
