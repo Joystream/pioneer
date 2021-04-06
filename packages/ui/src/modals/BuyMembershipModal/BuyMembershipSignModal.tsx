@@ -10,8 +10,10 @@ import { InputComponent } from '../../components/forms'
 import { Help } from '../../components/Help'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { TextMedium, TokenValue } from '../../components/typography'
+import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
+import { accountOrNamed } from '../../utils/accountOrNamed'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
 
@@ -32,16 +34,15 @@ export const BuyMembershipSignModal = ({
   transaction,
   initialSigner,
 }: SignProps) => {
+  const { allAccounts } = useAccounts()
   const [from, setFrom] = useState(
     initialSigner ??
-      ({
-        name: 'Controller account',
-        address: transactionParams.invitor?.controllerAccount,
-      } as Account)
+      accountOrNamed(allAccounts, transactionParams.invitor?.controllerAccount || '', 'Controller account')
   )
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: from, onDone })
+  const fromAddress = from.address
+  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, signer: fromAddress, onDone })
   const [hasFunds, setHasFunds] = useState(false)
-  const balance = useBalance(from)
+  const balance = useBalance(fromAddress)
 
   useEffect(() => {
     if (balance?.transferable && paymentInfo?.partialFee && membershipPrice) {
@@ -49,7 +50,7 @@ export const BuyMembershipSignModal = ({
       const hasFunds = balance.transferable.gte(requiredBalance)
       setHasFunds(hasFunds)
     }
-  }, [from.address, balance])
+  }, [fromAddress, balance])
 
   const signDisabled = status !== 'READY' || !hasFunds
 

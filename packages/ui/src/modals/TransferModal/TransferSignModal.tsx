@@ -33,11 +33,13 @@ interface Props {
 }
 
 export function TransferSignModal({ onClose, from, amount, to, onDone }: Props) {
-  const balanceFrom = useBalance(from)
-  const balanceTo = useBalance(to)
+  const toAddress = to.address
+  const fromAddress = from.address
+  const balanceFrom = useBalance(fromAddress)
+  const balanceTo = useBalance(toAddress)
   const { api } = useApi()
-  const transaction = useMemo(() => api?.tx?.balances?.transfer(to.address, amount), [to.address, amount])
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from, onDone })
+  const transaction = useMemo(() => api?.tx?.balances?.transfer(toAddress, amount), [toAddress, amount])
+  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, signer: fromAddress, onDone })
 
   if (status === 'READY') {
     return (

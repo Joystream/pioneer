@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Account, Address } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useKeyring } from '../../../hooks/useKeyring'
+import { accountOrNamed } from '../../../utils/accountOrNamed'
 import { isValidAddress } from '../../../utils/isValidAddress'
 import { Select } from '../../selects'
 import { filterByText } from './helpers'
@@ -34,7 +35,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
     filteredOptions.length === 0 &&
       isValidAddress(search, keyring) &&
       (!selectedOption || selectedOption.address !== search) &&
-      setSelectedOption({ name: 'Unsaved Account', address: search })
+      setSelectedOption(accountOrNamed(allAccounts, search, 'Unsaved account'))
   }, [filteredOptions, search, selectedOption])
 
   return (

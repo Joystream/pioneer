@@ -6,14 +6,14 @@ import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { Observable } from 'rxjs'
 
-import { Account, onTransactionDone } from '../common/types'
+import { Address, onTransactionDone } from '../common/types'
 import { useApi } from './useApi'
 import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
 
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
-  from: Account
+  signer: Address
   onDone: onTransactionDone
 }
 
@@ -58,13 +58,11 @@ const observeTransaction = (
   transaction.subscribe(statusCallback, errorHandler)
 }
 
-export const useSignAndSendTransaction = ({ transaction, from, onDone }: UseSignAndSendTransactionParams) => {
+export const useSignAndSendTransaction = ({ transaction, signer, onDone }: UseSignAndSendTransactionParams) => {
   const keyring = useKeyring()
   const { api } = useApi()
 
-  const signerAddress = from.address
-
-  const paymentInfo = useObservable(transaction?.paymentInfo(signerAddress), [transaction, signerAddress])
+  const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const [status, setStatus] = useState<TransactionStatus>('READY')
   const [events, setEvents] = useState<EventRecord[]>([])
 
@@ -73,12 +71,12 @@ export const useSignAndSendTransaction = ({ transaction, from, onDone }: UseSign
       return
     }
 
-    const keyringPair = keyring.getPair(signerAddress)
+    const keyringPair = keyring.getPair(signer)
 
     if (keyringPair.meta.isInjected) {
       setStatus('EXTENSION')
-      web3FromAddress(signerAddress).then(({ signer }) => {
-        observeTransaction(transaction.signAndSend(signerAddress, { signer: signer }), setStatus, setEvents)
+      web3FromAddress(signer).then((extension) => {
+        observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), setStatus, setEvents)
       })
     } else {
       setStatus('PENDING')

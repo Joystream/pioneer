@@ -67,7 +67,7 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
 
   const { paymentInfo, send, status } = useSignAndSendTransaction({
     transaction: updateProfileTransaction,
-    from: signer,
+    signer: signer.address,
     onDone,
   })
 

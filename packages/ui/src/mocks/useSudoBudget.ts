@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react'
 
-import { Account } from '../common/types'
 import { useAccounts } from '../hooks/useAccounts'
 import { useApi } from '../hooks/useApi'
 import { useObservable } from '../hooks/useObservable'
@@ -22,11 +21,9 @@ export function useSudoBudget() {
     return api.tx.sudo.sudo(api.tx.membershipWorkingGroup.setBudget(BUDGET))
   }, [api])
 
-  const from: Account = { address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', name: 'signer' }
-
   const { send: sendBudget } = useSignAndSendTransaction({
     transaction: budgetTransaction,
-    from,
+    signer: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     onDone: (success) => {
       console.log(success ? `💰 Budget increased to: ${BUDGET} JOY` : '❗️Error processing sudo transaction')
     },

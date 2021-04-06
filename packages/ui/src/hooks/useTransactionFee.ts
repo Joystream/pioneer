@@ -8,7 +8,7 @@ import { useObservable } from './useObservable'
 
 export function useTransactionFee(address?: Address, transaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>) {
   const paymentInfo = useObservable(transaction?.paymentInfo(address || ''), [transaction, address])
-  const balance = useBalance({ name: '', address: address || '' })
+  const balance = useBalance(address)
 
   return useMemo(
     () =>

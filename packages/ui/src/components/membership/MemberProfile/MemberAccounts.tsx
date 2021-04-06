@@ -2,13 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BaseMember } from '../../../common/types'
+import { useAccounts } from '../../../hooks/useAccounts'
 import { AccountRow } from '../../../modals/common'
+import { accountOrNamed } from '../../../utils/accountOrNamed'
 import { AccountInfo } from '../../AccountInfo'
 import { MembershipLabel } from '../../typography/MembershipLabel'
 
 export const MemberAccounts = ({ member }: { member: BaseMember }) => {
-  const rootAccount = { address: member.rootAccount, name: 'Root Account' }
-  const controllerAccount = { address: member.controllerAccount, name: 'Controller Account' }
+  const { allAccounts } = useAccounts()
+
+  const rootAccount = accountOrNamed(allAccounts, member.rootAccount, 'Root Account')
+  const controllerAccount = accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account')
 
   return (
     <AccountsDisplay>
