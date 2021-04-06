@@ -16,12 +16,15 @@ import {
   ScrolledModalContainer,
 } from '../../components/Modal'
 import { TextMedium } from '../../components/typography'
+import { useAccounts } from '../../hooks/useAccounts'
 import { useApi } from '../../hooks/useApi'
 import { useFormValidation } from '../../hooks/useFormValidation'
 import { useObservable } from '../../hooks/useObservable'
 import { AvatarURISchema, HandleSchema } from '../../membership/data/validation'
+import { accountOrNamed } from '../../utils/accountOrNamed'
 import { Row } from '../common'
-import { FormReducer, UpdateMemberForm, WithNullableValues } from './types'
+import { updateReducer } from './formReducer'
+import { UpdateMemberForm, WithNullableValues } from './types'
 import { changedOrNull, hasAnyEdits } from './utils'
 
 interface Props {
@@ -37,12 +40,9 @@ const UpdateMemberSchema = Yup.object().shape({
   }),
 })
 
-const updateReducer: FormReducer<UpdateMemberForm> = (state, action): UpdateMemberForm => {
-  return { ...state, [action.type]: action.value }
-}
-
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
   const { api } = useApi()
+  const { allAccounts } = useAccounts()
 
   const [state, dispatch] = useReducer(updateReducer, {
     id: member.id,
@@ -50,8 +50,8 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     handle: member.handle || '',
     about: member.about || '',
     avatarUri: member.avatarUri || '',
-    rootAccount: { address: member.rootAccount, name: '' },
-    controllerAccount: { address: member.controllerAccount, name: '' },
+    rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
+    controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
   })
   const { handle, name, avatarUri, about, controllerAccount, rootAccount } = state
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])

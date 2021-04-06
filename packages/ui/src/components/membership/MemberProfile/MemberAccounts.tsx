@@ -1,17 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Account, Address, BaseMember } from '../../../common/types'
+import { BaseMember } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { AccountRow } from '../../../modals/common'
+import { accountOrNamed } from '../../../utils/accountOrNamed'
 import { AccountInfo } from '../../AccountInfo'
 import { MembershipLabel } from '../../typography/MembershipLabel'
-
-export const accountOrNamed = (allAccounts: Account[], address: Address | string, name: string) => {
-  const existing = allAccounts.find((account) => account.address === address)
-
-  return existing ?? { address: address, name: name }
-}
 
 export const MemberAccounts = ({ member }: { member: BaseMember }) => {
   const { allAccounts } = useAccounts()

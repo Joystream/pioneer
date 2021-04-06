@@ -8,12 +8,12 @@ import { SelectAccount, SelectedAccount } from '../../components/account/SelectA
 import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent } from '../../components/forms'
 import { Help } from '../../components/Help'
-import { accountOrNamed } from '../../components/membership/MemberProfile/MemberAccounts'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { TextMedium, TokenValue } from '../../components/typography'
 import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
+import { accountOrNamed } from '../../utils/accountOrNamed'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
 import { WaitModal } from '../WaitModal'
 
