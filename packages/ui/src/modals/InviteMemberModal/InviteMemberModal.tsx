@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { Member, ModalState } from '../../common/types'
+import { Address, Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
 import { BuyMembershipFailureModal } from '../BuyMembershipModal/BuyMembershipFailureModal'
-import { BuyMembershipSignModal } from '../BuyMembershipModal/BuyMembershipSignModal'
-import { BuyMembershipSuccessModal } from '../BuyMembershipModal/BuyMembershipSuccessModal'
 import { WaitModal } from '../WaitModal'
 import { InviteMemberFormModal } from './InviteMemberFormModal'
 import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
+import { InviteMemberSignModal } from './InviteMemberSignModal'
+import { InviteMemberSuccessModal } from './InviteMemberSuccessModal'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -66,18 +66,21 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
 
   if (step === 'AUTHORIZE') {
     return (
-      <BuyMembershipSignModal
+      <InviteMemberSignModal
         onClose={onClose}
         transactionParams={transactionParams}
+        signer={{
+          address: transactionParams.invitor?.controllerAccount as Address,
+          name: 'Controller account',
+        }}
         onDone={onDone}
         transaction={transaction}
-        isInvite
       />
     )
   }
 
   if (step === 'SUCCESS') {
-    return <BuyMembershipSuccessModal onClose={onClose} member={transactionParams} />
+    return <InviteMemberSuccessModal onClose={onClose} member={transactionParams} />
   }
   return <BuyMembershipFailureModal onClose={onClose} member={transactionParams} />
 }

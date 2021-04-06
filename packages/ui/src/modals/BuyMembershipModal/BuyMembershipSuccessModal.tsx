@@ -17,7 +17,7 @@ interface Props {
   memberId?: string
 }
 
-export function BuyMembershipSuccessModal({ onClose, member, memberId }: Props) {
+export const BuyMembershipSuccessModal = ({ onClose, member, memberId }: Props) => {
   const { showModal } = useModal()
   const viewMember = () => {
     onClose()
@@ -26,6 +26,7 @@ export function BuyMembershipSuccessModal({ onClose, member, memberId }: Props) 
       showModal<MemberModalCall>({ modal: 'Member', data: { id: memberId } })
     }
   }
+
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />

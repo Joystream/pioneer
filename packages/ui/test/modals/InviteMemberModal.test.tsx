@@ -144,7 +144,7 @@ describe('UI: InviteMemberModal', () => {
       await fireEvent.click(screen.getByText(/^sign and create a member$/i))
 
       expect(await screen.findByText('Success')).toBeDefined()
-      expect(await screen.findByText(/3 invitations left on the "/i)).toBeDefined()
+      expect(await screen.findByText(/invitations left on the "/i)).toBeDefined()
     })
 
     it('Failure step', async () => {

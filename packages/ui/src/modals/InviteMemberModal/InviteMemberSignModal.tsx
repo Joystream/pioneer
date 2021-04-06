@@ -1,10 +1,9 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
-import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useEffect, useState } from 'react'
 
 import { Account, Member, onTransactionDone } from '../../common/types'
-import { SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
+import { SelectedAccount } from '../../components/account/SelectAccount'
 import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent } from '../../components/forms'
 import { Help } from '../../components/Help'
@@ -17,39 +16,24 @@ import { WaitModal } from '../WaitModal'
 
 interface SignProps {
   onClose: () => void
-  membershipPrice?: BalanceOf
   transactionParams: Member
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
-  initialSigner?: Account
+  signer: Account
 }
 
-export const BuyMembershipSignModal = ({
-  onClose,
-  membershipPrice,
-  transactionParams,
-  onDone,
-  transaction,
-  initialSigner,
-}: SignProps) => {
-  const [from, setFrom] = useState(
-    initialSigner ??
-      ({
-        name: 'Controller account',
-        address: transactionParams.invitor?.controllerAccount,
-      } as Account)
-  )
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: from, onDone })
+export const InviteMemberSignModal = ({ onClose, transactionParams, onDone, transaction, signer }: SignProps) => {
+  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: signer, onDone })
   const [hasFunds, setHasFunds] = useState(false)
-  const balance = useBalance(from)
+  const balance = useBalance(signer)
+  const transferable = balance?.transferable
+  const partialFee = paymentInfo?.partialFee
 
   useEffect(() => {
-    if (balance?.transferable && paymentInfo?.partialFee && membershipPrice) {
-      const requiredBalance = paymentInfo.partialFee.add(membershipPrice)
-      const hasFunds = balance.transferable.gte(requiredBalance)
-      setHasFunds(hasFunds)
+    if (transferable && partialFee) {
+      setHasFunds(transferable.gte(partialFee))
     }
-  }, [from.address, balance])
+  }, [partialFee?.toString(), transferable?.toString()])
 
   const signDisabled = status !== 'READY' || !hasFunds
 
@@ -60,31 +44,22 @@ export const BuyMembershipSignModal = ({
         <ModalBody>
           <TextMedium>You intend to create a new membership.</TextMedium>
           <TextMedium>
-            The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
+            You are inviting this member. You have {transactionParams.invitor?.inviteCount.toString()} invites left.
           </TextMedium>
           <TextMedium>
-            Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
+            Fees of <TokenValue value={partialFee?.toBn()} /> will be applied to the transaction.
           </TextMedium>
           <Row>
             <InputComponent label="Sending from account" inputSize="l">
-              {initialSigner ? (
-                <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
-              ) : (
-                <SelectedAccount account={from} />
-              )}
+              <SelectedAccount account={signer} />
             </InputComponent>
           </Row>
         </ModalBody>
         <ModalFooter>
           <BalanceInfoNarrow>
-            <InfoTitle>Creation fee:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={membershipPrice?.toBn()} />
-            </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
             <InfoTitle>Transaction fee:</InfoTitle>
             <InfoValue>
-              <TokenValue value={paymentInfo?.partialFee.toBn()} />
+              <TokenValue value={partialFee?.toBn()} />
             </InfoValue>
             <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
           </BalanceInfoNarrow>
