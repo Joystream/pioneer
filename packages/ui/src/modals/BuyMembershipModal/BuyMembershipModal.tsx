@@ -7,9 +7,9 @@ import { useModal } from '../../hooks/useModal'
 import { useObservable } from '../../hooks/useObservable'
 import { ServerContext } from '../../providers/server/context'
 import { BuyMembershipFailureModal } from './BuyMembershipFailureModal'
-import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
 import { BuyMembershipFormModal } from './BuyMembershipFormModal'
 import { BuyMembershipSignModal } from './BuyMembershipSignModal'
+import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
 
 export const BuyMembershipModal = () => {
   const { hideModal } = useModal()
