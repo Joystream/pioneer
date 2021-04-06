@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { makeServer } from '../mocks/server'
+import { AccountsContextProvider } from './accounts/provider'
 import { ApiContextProvider } from './api/provider'
 import { GlobalStyle } from './GlobalStyle'
 import { KeyringContextProvider } from './keyring/provider'
@@ -23,19 +24,21 @@ const client = new ApolloClient({
 
 export const Providers = (props: Props) => (
   <KeyringContextProvider>
-    <ApiContextProvider>
-      <ServerContextProvider value={server}>
-        <ApolloProvider client={client}>
-          <MembershipContextProvider>
-            <HashRouter>
-              <ModalContextProvider>
-                <GlobalStyle />
-                {props.children}
-              </ModalContextProvider>
-            </HashRouter>
-          </MembershipContextProvider>
-        </ApolloProvider>
-      </ServerContextProvider>
-    </ApiContextProvider>
+    <AccountsContextProvider>
+      <ApiContextProvider>
+        <ServerContextProvider value={server}>
+          <ApolloProvider client={client}>
+            <MembershipContextProvider>
+              <HashRouter>
+                <ModalContextProvider>
+                  <GlobalStyle />
+                  {props.children}
+                </ModalContextProvider>
+              </HashRouter>
+            </MembershipContextProvider>
+          </ApolloProvider>
+        </ServerContextProvider>
+      </ApiContextProvider>
+    </AccountsContextProvider>
   </KeyringContextProvider>
 )
