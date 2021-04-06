@@ -8,8 +8,10 @@ import { SelectAccount, SelectedAccount } from '../../components/account/SelectA
 import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent } from '../../components/forms'
 import { Help } from '../../components/Help'
+import { accountOrNamed } from '../../components/membership/MemberProfile/MemberAccounts'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'
 import { TextMedium, TokenValue } from '../../components/typography'
+import { useAccounts } from '../../hooks/useAccounts'
 import { useBalance } from '../../hooks/useBalance'
 import { useSignAndSendTransaction } from '../../hooks/useSignAndSendTransaction'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../common'
@@ -32,12 +34,10 @@ export const BuyMembershipSignModal = ({
   transaction,
   initialSigner,
 }: SignProps) => {
+  const { allAccounts } = useAccounts()
   const [from, setFrom] = useState(
     initialSigner ??
-      ({
-        name: 'Controller account',
-        address: transactionParams.invitor?.controllerAccount,
-      } as Account)
+      accountOrNamed(allAccounts, transactionParams.invitor?.controllerAccount || '', 'Controller account')
   )
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: from, onDone })
   const [hasFunds, setHasFunds] = useState(false)
