@@ -1,5 +1,6 @@
 import { EventRecord } from '@polkadot/types/interfaces'
 import React, { useContext, useMemo, useState } from 'react'
+
 import { Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
 import { useModal } from '../../hooks/useModal'

@@ -4,6 +4,7 @@ import { cleanup, render, within } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
+
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account, Balances } from '../../src/common/types'
 import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'

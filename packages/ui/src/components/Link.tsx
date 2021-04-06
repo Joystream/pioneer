@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { Colors, Transitions } from '../constants/styles'
+
+import { Colors, Transitions } from '../constants'
 
 export const Link = styled.a`
   color: ${Colors.Blue[400]};

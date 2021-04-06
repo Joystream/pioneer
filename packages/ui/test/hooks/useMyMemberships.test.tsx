@@ -1,11 +1,12 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
+
+import { Account } from '../../src/common/types'
 import { useMyMemberships } from '../../src/hooks/useMyMemberships'
-import { MockQueryNodeProviders } from '../mocks/providers'
 import { alice, bobStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
+import { MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
-import { Account } from '../../src/common/types'
 
 const renderUseMembership = () => {
   return renderHook(() => useMyMemberships(), {

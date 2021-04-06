@@ -1,7 +1,8 @@
+import React from 'react'
 import styled from 'styled-components'
+
 import { Colors, Transitions } from '../constants'
 import { ArrowDownIcon, Icon } from './icons'
-import React from 'react'
 
 export function SortIconDown() {
   return (

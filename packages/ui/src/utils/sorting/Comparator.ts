@@ -1,4 +1,5 @@
 import BN from 'bn.js'
+
 import { Account, AddressToBalanceMap, Balances } from '../../common/types'
 
 const applyOrder = (order: number, isDescending: boolean) => order * (isDescending ? -1 : 1)

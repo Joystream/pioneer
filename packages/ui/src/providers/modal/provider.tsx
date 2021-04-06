@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from 'react'
+
 import { ModalContext } from './context'
 import { AnyModalCall, ModalWithDataCall, UseModal } from './types'
 

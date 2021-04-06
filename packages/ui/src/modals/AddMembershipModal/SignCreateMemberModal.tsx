@@ -2,6 +2,7 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useState } from 'react'
+
 import { Account, Member, onTransactionDone } from '../../common/types'
 import { SelectAccount, SelectedAccount } from '../../components/account/SelectAccount'
 import { ButtonPrimary } from '../../components/buttons'

@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React from 'react'
+
 import { Account } from '../../common/types'
 import { FailureIcon } from '../../components/icons/FailureIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'

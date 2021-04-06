@@ -1,6 +1,7 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import React, { ReactNode } from 'react'
 import { HashRouter } from 'react-router-dom'
+
 import { makeServer } from '../mocks/server'
 import { ApiContextProvider } from './api/provider'
 import { GlobalStyle } from './GlobalStyle'

@@ -1,7 +1,44 @@
+import React from 'react'
 import styled, { css } from 'styled-components'
+
 import { Colors, Transitions } from '../../constants'
 
-export const PageTabs = styled.div`
+interface TabActiveProps {
+  active: boolean
+}
+
+interface TabProps extends TabActiveProps {
+  onClick: () => void
+  inner?: string
+  className?: string
+}
+
+export const Tab = ({ active, onClick, inner }: TabProps) => {
+  return (
+    <PageTab active={active} onClick={onClick}>
+      {inner}
+    </PageTab>
+  )
+}
+
+interface TabsProps {
+  tabs: Array<TabProps>
+  className?: string
+}
+
+export const Tabs = ({ tabs, className }: TabsProps) => {
+  return (
+    <PageTabsContainer className={className}>
+      <PageTabsNav>
+        {tabs.map(({ active, onClick, inner }) => (
+          <Tab key={inner} active={active} onClick={onClick} inner={inner} />
+        ))}
+      </PageTabsNav>
+    </PageTabsContainer>
+  )
+}
+
+export const PageTabsContainer = styled.div`
   display: flex;
   position: relative;
   align-items: center;
@@ -20,11 +57,7 @@ export const PageTabs = styled.div`
   }
 `
 
-interface PageTabProps {
-  active: boolean
-}
-
-export const PageTab = styled.a<PageTabProps>`
+export const PageTab = styled.a<TabActiveProps>`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
@@ -36,7 +69,7 @@ export const PageTab = styled.a<PageTabProps>`
   font-weight: 400;
   color: ${({ active }) => (active ? Colors.Black[900] : Colors.Black[500])};
   text-transform: capitalize;
-  -webkit-text-stroke: 0.05em;
+  -webkit-text-stroke-width: 0.05em;
   -webkit-text-stroke-color: ${({ active }) => (active ? Colors.Black[900] : 'transparent')};
   cursor: pointer;
   transition: ${Transitions.all};

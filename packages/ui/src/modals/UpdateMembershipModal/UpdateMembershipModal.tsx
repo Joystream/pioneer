@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import { BaseMember } from '../../common/types'
 import { useAccounts } from '../../hooks/useAccounts'
 import { SignUpdateMembershipModal } from './SignUpdateMembershipModal'

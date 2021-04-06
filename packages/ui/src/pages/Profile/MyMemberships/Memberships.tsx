@@ -1,16 +1,17 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
+
 import { BaseMember } from '../../../common/types'
 import { ButtonsGroup } from '../../../components/buttons'
 import { AddMembershipButton } from '../../../components/membership/AddMembershipButton'
+import { InviteMemberButton } from '../../../components/membership/InviteMemberButton'
+import { HeaderText, SortIconDown, SortIconUp } from '../../../components/SortedListHeaders'
 import { TextMedium } from '../../../components/typography'
 import { Colors } from '../../../constants'
 import { useMyMemberships } from '../../../hooks/useMyMemberships'
-import { MemberItem } from './MemberItem'
 import { SortKey, sortMemberships } from '../../../utils/sorting/sortMemberships'
 import { setOrder } from './helpers'
-import { HeaderText, SortIconDown, SortIconUp } from '../../../components/SortedListHeaders'
-import { InviteMemberButton } from '../../../components/membership/InviteMemberButton'
+import { MemberItem } from './MemberItem'
 
 export function Memberships() {
   const { count, isLoading, members, active } = useMyMemberships()

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { BaseMember } from '../../../../common/types'
 import { BorderRad, Colors, Transitions } from '../../../../constants'
 import { useMyMemberships } from '../../../../hooks/useMyMemberships'
@@ -51,7 +52,7 @@ export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
 }
 
 const SwitchModalHeader = styled(ModalHeader)`
-  padding: 16px 16px 0px;
+  padding: 16px 16px 0;
 `
 
 const SwitchModalBody = styled(ModalBody)`

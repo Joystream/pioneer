@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { BaseMember } from '../../../common/types'
 import { AccountRow } from '../../../modals/common'
 import { AccountInfo } from '../../AccountInfo'

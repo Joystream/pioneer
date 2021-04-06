@@ -1,5 +1,5 @@
-import { useKeyring } from './useKeyring'
 import { Account } from '../common/types'
+import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
 
 interface UseAccounts {

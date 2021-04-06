@@ -1,9 +1,10 @@
 import styled, { css } from 'styled-components'
+
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 import { AvatarImg } from '../Avatar'
+import { Help } from '../Help'
 import { TextSmall } from '../typography'
 import { MemberInfoWrapProps } from './types'
-import { Help } from '../Help'
 
 export const MemberHandle = styled.span`
   grid-area: memberhandle;

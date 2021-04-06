@@ -1,4 +1,5 @@
 import BN from 'bn.js'
+
 import { Account, AddressToBalanceMap } from '../common/types'
 
 export const filterAccounts = (allAccounts: Account[], isDisplayAll: boolean, balances: AddressToBalanceMap) =>

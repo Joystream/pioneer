@@ -80,13 +80,13 @@ export const Sizes = {
 }
 
 export const Shadows = {
-  transparent: `0px 0px 0px rgba(0, 0, 0, 0)`,
+  transparent: '0px 0px 0px rgba(0, 0, 0, 0)',
   focusDefault: `0px 0px 8px ${Colors.Blue[300.4]}`,
   focusInvalid: `0px 0px 8px ${Colors.Red[400.4]}`,
   focusWarning: `0px 0px 8px ${Colors.Orange[400.4]}`,
   focusValid: `0px 0px 8px ${Colors.Green[400.4]}`,
   common: `0px 12px 28px ${Colors.Black[900.25]}`,
-  light: `0px 0px 28px #D6D8E780`,
+  light: '0px 0px 28px #D6D8E780',
   select: `0px 8px 16px ${Colors.Black[900.1]}`,
 }
 

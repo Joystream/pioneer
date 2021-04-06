@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
+
 import { Animations, BorderRad, Colors, Shadows } from '../../constants'
 import { CloseButton } from '../buttons'
 import { TextMedium } from '../typography'

@@ -1,17 +1,18 @@
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
+
+import { TransferInvitesModalCall } from '.'
 import { useGetMemberQuery } from '../../api/queries'
 import { Account, BaseMember, ModalState } from '../../common/types'
 import { TransferIcon } from '../../components/icons'
 import { useModal } from '../../hooks/useModal'
-import { TransferInvitesModalCall } from './index'
+import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
+import { WaitModal } from '../WaitModal'
+import { RequirementFailedModal } from './RequirementFailedModal'
 import { SignTransferModal } from './SignTransferModal'
 import { TransferDetailsModal } from './TransferDetailsModal'
 import { TransferFailureModal } from './TransferFailureModal'
 import { TransferSuccessModal } from './TransferSuccessModal'
-import { WaitModal } from '../WaitModal'
-import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
-import { RequirementFailedModal } from './RequirementFailedModal'
 
 export function TransferInviteModal() {
   const { hideModal, modalData } = useModal<TransferInvitesModalCall>()

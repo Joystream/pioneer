@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { MyProfileIcon } from './Sidebar/LinksIcons/MyProfileIcon'
 import { WorkingGroupsIcon } from './Sidebar/LinksIcons/WorkingGroupsIcon'
 import { LogoLink } from './Sidebar/LogoLink'

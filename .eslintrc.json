@@ -7,7 +7,13 @@
   },
   "extends": [
     "plugin:@typescript-eslint/recommended",
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
+  "plugins": [
+    "import"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -15,14 +21,43 @@
     "sourceType": "module"
   },
   "globals": {
-    "GIT_VERSION" : true,
+    "GIT_VERSION": true,
     "IS_DEVELOPMENT": true
   },
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "no-redeclare": "off",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
+    "import/no-unresolved": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "import/no-useless-path-segments": [
+      "error",
+      {
+        "noUselessIndex": true
+      }
+    ]
   },
   "overrides": [
     {
@@ -32,6 +67,14 @@
       "rules": {
         "@typescript-eslint/no-non-null-assertion": "off",
         "no-unused-expressions": "off"
+      }
+    },
+    {
+      "files": [
+        "**/__generated__/**/*.{js,ts,tsx}"
+      ],
+      "rules": {
+        "import/order": "off"
       }
     }
   ]

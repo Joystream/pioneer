@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 import React, { useState } from 'react'
+
 import { Account, ModalState } from '../../common/types'
 import { useModal } from '../../hooks/useModal'
 import { SignTransferModal } from './SignTransferModal'

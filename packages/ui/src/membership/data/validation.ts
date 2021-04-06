@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
+
 import { isValidAddress } from '../../utils/isValidAddress'
 
 export const AccountSchema = Yup.object()

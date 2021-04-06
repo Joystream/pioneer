@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { BaseMember } from '../../../common/types'
 import { Option, OptionsListComponent } from '../../selects'
 import { OptionMember } from './OptionMember'

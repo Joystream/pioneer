@@ -1,5 +1,6 @@
 import { combineLatest } from 'rxjs'
 import { map } from 'rxjs/operators'
+
 import { AddressToBalanceMap } from '../common/types'
 import { useAccounts } from './useAccounts'
 import { useApi } from './useApi'

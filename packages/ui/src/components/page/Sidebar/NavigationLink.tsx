@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
+
 import { BorderRad, Colors, Transitions } from '../../../constants'
 
 interface NavigationLinkProps {
@@ -32,7 +33,7 @@ const NavigationItemLink = styled(NavLink)`
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
-  -webkit-text-stroke: 0.05em;
+  -webkit-text-stroke-width: 0.05em;
   -webkit-text-stroke-color: transparent;
   color: ${Colors.Black[200]};
   text-transform: capitalize;

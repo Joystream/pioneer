@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { PageTabs } from '../../components/page/PageTabs'
 
 export const MyProfile = styled.div`
   display: grid;
@@ -7,15 +6,6 @@ export const MyProfile = styled.div`
   grid-template-rows: auto;
   grid-row-gap: 24px;
   width: 100%;
-`
-
-export const ProfileSummary = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  ${PageTabs} {
-    margin-bottom: 24px;
-  }
 `
 
 export const MyProfileContent = styled.section`

@@ -2,6 +2,7 @@ import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
+
 import { UseApi } from '../../src/providers/api/provider'
 import { toRuntimeDispatchInfo } from './chainTypes'
 

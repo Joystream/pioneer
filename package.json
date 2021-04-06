@@ -17,6 +17,7 @@
     "start": "wsrun -p ui -c start"
   },
   "dependencies": {
+    "eslint-plugin-import": "^2.22.1",
     "wsrun": "^5.2.4"
   },
   "devDependencies": {

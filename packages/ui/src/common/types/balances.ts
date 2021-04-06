@@ -1,4 +1,5 @@
 import BN from 'bn.js'
+
 import { Address } from '.'
 
 export interface Balances {

@@ -4,6 +4,7 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
+
 import { Account } from '../../src/common/types'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
 import { ApiContext } from '../../src/providers/api/context'
