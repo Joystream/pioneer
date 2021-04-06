@@ -30,7 +30,12 @@ export function TransferInviteSignModal({ onClose, sourceMember, targetMember, a
     targetMember.id,
     amount,
   ])
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: signer, onDone })
+  const signerAddress = signer.address
+  const { paymentInfo, send, status } = useSignAndSendTransaction({
+    transaction,
+    signer: signerAddress,
+    onDone,
+  })
   const plural = amount.gt(new BN(1))
   const name = targetMember.name
   const fee = paymentInfo?.partialFee.toBn()

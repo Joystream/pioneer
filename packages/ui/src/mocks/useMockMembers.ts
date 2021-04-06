@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react'
 
 import { useGetMembersQuery } from '../api/queries'
-import { Account } from '../common/types'
 import { useApi } from '../hooks/useApi'
 import { useObservable } from '../hooks/useObservable'
 import { useSignAndSendTransaction } from '../hooks/useSignAndSendTransaction'
@@ -30,10 +29,9 @@ export function useMockMembers() {
     return api.tx.utility.batch(createMembers)
   }, [api, members, loading])
 
-  const from: Account = { address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', name: 'signer' }
   const { send } = useSignAndSendTransaction({
     transaction,
-    from,
+    signer: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     onDone: (success) => console.log(success ? '✅ Members created' : '❗️Error processing batch transaction'),
   })
 

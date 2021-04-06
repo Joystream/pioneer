@@ -39,9 +39,9 @@ export const BuyMembershipSignModal = ({
     initialSigner ??
       accountOrNamed(allAccounts, transactionParams.invitor?.controllerAccount || '', 'Controller account')
   )
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: from, onDone })
-  const [hasFunds, setHasFunds] = useState(false)
   const fromAddress = from.address
+  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, signer: fromAddress, onDone })
+  const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(fromAddress)
 
   useEffect(() => {
