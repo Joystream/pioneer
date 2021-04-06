@@ -8,7 +8,7 @@ import { BuyMembershipSignModal } from '../BuyMembershipModal/BuyMembershipSignM
 import { BuyMembershipSuccessModal } from '../BuyMembershipModal/BuyMembershipSuccessModal'
 import { WaitModal } from '../WaitModal'
 import { InviteMemberFormModal } from './InviteMemberFormModal'
-import { WorkingGroupBudgetModal } from './WorkingGroupBudgetModal'
+import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -57,7 +57,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }
 
   if (step === 'REQUIREMENTS_FAIL') {
-    return <WorkingGroupBudgetModal onClose={onClose} />
+    return <InviteMemberRequirementsModal onClose={onClose} />
   }
 
   if (step == 'PREPARE' || !transactionParams) {
