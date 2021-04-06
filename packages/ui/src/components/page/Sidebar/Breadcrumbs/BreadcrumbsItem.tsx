@@ -48,6 +48,8 @@ const BreadcrumbsItemComponent = styled.li`
   }
 
   &:last-child {
-    color: ${Colors.Black[400]};
+    ${BreadcrumbsItemLink} {
+      color: ${Colors.Black[400]};
+    }
   }
 `
