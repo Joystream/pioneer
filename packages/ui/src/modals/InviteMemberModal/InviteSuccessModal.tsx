@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { useGetMemberQuery } from '../../api/queries'
 import { BaseMember, Member } from '../../common/types'
 import { SuccessIcon } from '../../components/icons'
