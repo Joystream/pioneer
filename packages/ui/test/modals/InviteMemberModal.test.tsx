@@ -6,6 +6,7 @@ import React from 'react'
 import { of } from 'rxjs'
 
 import { Account } from '../../src/common/types'
+import { seedMembers } from '../../src/mocks/data'
 import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
 import { ApiContext } from '../../src/providers/api/context'
 import { selectMember } from '../helpers/selectMember'
@@ -112,19 +113,19 @@ describe('UI: InviteMemberModal', () => {
   })
 
   describe('Authorize', () => {
-    async function fillFormAndProceed() {
-      server.createMember('Alice')
-      server.createMember('Bob')
+    async function fillFormAndProceed(invitor = 'alice') {
+      seedMembers(server.server)
       renderModal()
-      await selectMember('Inviting member', 'alice')
-      await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
+      await screen.findAllByRole('button')
+      await selectMember('Inviting member', invitor)
+      fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
         target: { value: bobStash.address },
       })
-      await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
+      fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
         target: { value: controllerAddress },
       })
-      await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-      await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
       fireEvent.click(await screen.findByRole('button', { name: /^Invite a member$/i }))
     }
 
@@ -132,7 +133,7 @@ describe('UI: InviteMemberModal', () => {
       await fillFormAndProceed()
 
       expect(await screen.findByText('Authorize transaction')).toBeDefined()
-      expect(await screen.findByText('You are inviting this member. You have 5 invites left.')).toBeDefined()
+      expect(await screen.findByText('You are inviting this member. You have 3 invites left.')).toBeDefined()
       expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
     })
 
@@ -140,9 +141,10 @@ describe('UI: InviteMemberModal', () => {
       stubTransactionSuccess(inviteMemberTx, [1])
       await fillFormAndProceed()
 
-      fireEvent.click(screen.getByText(/^sign and create a member$/i))
+      await fireEvent.click(screen.getByText(/^sign and create a member$/i))
 
       expect(await screen.findByText('Success')).toBeDefined()
+      expect(await screen.findByText(/3 invitations left on the "/i)).toBeDefined()
     })
 
     it('Failure step', async () => {

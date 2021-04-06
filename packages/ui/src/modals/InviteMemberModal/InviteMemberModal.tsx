@@ -4,10 +4,10 @@ import { Member, ModalState } from '../../common/types'
 import { useApi } from '../../hooks/useApi'
 import { useObservable } from '../../hooks/useObservable'
 import { AddMembershipFailureModal } from '../AddMembershipModal/AddMembershipFailureModal'
-import { AddMembershipSuccessModal } from '../AddMembershipModal/AddMembershipSuccessModal'
 import { SignCreateMemberModal } from '../AddMembershipModal/SignCreateMemberModal'
 import { WaitModal } from '../WaitModal'
 import { InviteFormModal } from './InviteFormModal'
+import { InviteSuccessModal } from './InviteSuccessModal'
 import { WorkingGroupBudgetModal } from './WorkingGroupBudgetModal'
 
 interface MembershipModalProps {
@@ -77,7 +77,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }
 
   if (step === 'SUCCESS') {
-    return <AddMembershipSuccessModal onClose={onClose} member={transactionParams} />
+    return <InviteSuccessModal onClose={onClose} member={transactionParams} />
   }
   return <AddMembershipFailureModal onClose={onClose} member={transactionParams} />
 }
