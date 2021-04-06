@@ -4,10 +4,10 @@ import React, { useState } from 'react'
 
 import { Account, ModalState } from '../../common/types'
 import { useModal } from '../../hooks/useModal'
-import { SignTransferModal } from './SignTransferModal'
-import { TransactionFailureModal } from './TransactionFailureModal'
-import { TransactionSuccessModal } from './TransactionSuccessModal'
-import { TransferDetailsModal } from './TransferDetailsModal'
+import { TransferFailureModal } from './TransferFailureModal'
+import { TransferFormModal } from './TransferFormModal'
+import { TransferSignModal } from './TransferSignModal'
+import { TransferSuccessModal } from './TransferSuccessModal'
 import { TransferModalCall } from './types'
 
 export function TransferModal() {
@@ -37,17 +37,17 @@ export function TransferModal() {
 
   if (step === 'PREPARE' || !transferTo || !transferFrom) {
     return (
-      <TransferDetailsModal onClose={hideModal} from={transferFrom} to={transferTo} onAccept={onAccept} title={title} />
+      <TransferFormModal onClose={hideModal} from={transferFrom} to={transferTo} onAccept={onAccept} title={title} />
     )
   }
 
   if (step === 'AUTHORIZE') {
-    return <SignTransferModal onClose={hideModal} from={transferFrom} amount={amount} to={transferTo} onDone={onDone} />
+    return <TransferSignModal onClose={hideModal} from={transferFrom} amount={amount} to={transferTo} onDone={onDone} />
   }
 
   if (step === 'SUCCESS') {
-    return <TransactionSuccessModal onClose={hideModal} from={transferFrom} to={transferTo} amount={amount} fee={fee} />
+    return <TransferSuccessModal onClose={hideModal} from={transferFrom} to={transferTo} amount={amount} fee={fee} />
   }
 
-  return <TransactionFailureModal onClose={hideModal} from={transferFrom} amount={amount} to={transferTo} />
+  return <TransferFailureModal onClose={hideModal} from={transferFrom} amount={amount} to={transferTo} />
 }

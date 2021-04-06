@@ -13,7 +13,7 @@ interface Props {
   to: Account
 }
 
-export const TransactionFailureModal = ({ from, to, amount, onClose }: Props) => (
+export const TransferFailureModal = ({ from, to, amount, onClose }: Props) => (
   <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
     <ModalHeader title="" onClick={onClose} modalHeaderSize="s" />
     <ResultModalBody>
