@@ -23,7 +23,7 @@ interface Props {
   onDone: onTransactionDone
 }
 
-export function SignTransferModal({ onClose, sourceMember, targetMember, amount, onDone, signer }: Props) {
+export function TransferInviteSignModal({ onClose, sourceMember, targetMember, amount, onDone, signer }: Props) {
   const { api } = useApi()
   const transaction = useMemo(() => api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount), [
     sourceMember.id,

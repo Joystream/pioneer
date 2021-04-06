@@ -16,7 +16,7 @@ interface Props {
   amount: BN
 }
 
-export function TransferSuccessModal({ onClose, recipient, amount }: Props) {
+export function TransferInviteSuccessModal({ onClose, recipient, amount }: Props) {
   const plural = amount.gt(new BN(1))
   const name = recipient.name
 

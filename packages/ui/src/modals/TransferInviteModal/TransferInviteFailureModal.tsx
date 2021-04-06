@@ -7,7 +7,7 @@ interface Props {
   onClose: () => void
 }
 
-export const TransferFailureModal = ({ onClose }: Props) => (
+export const TransferInviteFailureModal = ({ onClose }: Props) => (
   <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
     <ModalHeader title="" onClick={onClose} modalHeaderSize="s" />
     <ResultModalBody>
