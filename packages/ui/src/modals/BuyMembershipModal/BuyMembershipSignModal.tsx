@@ -41,7 +41,8 @@ export const BuyMembershipSignModal = ({
   )
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: from, onDone })
   const [hasFunds, setHasFunds] = useState(false)
-  const balance = useBalance(from)
+  const fromAddress = from.address
+  const balance = useBalance(fromAddress)
 
   useEffect(() => {
     if (balance?.transferable && paymentInfo?.partialFee && membershipPrice) {
@@ -49,7 +50,7 @@ export const BuyMembershipSignModal = ({
       const hasFunds = balance.transferable.gte(requiredBalance)
       setHasFunds(hasFunds)
     }
-  }, [from.address, balance])
+  }, [fromAddress, balance])
 
   const signDisabled = status !== 'READY' || !hasFunds
 

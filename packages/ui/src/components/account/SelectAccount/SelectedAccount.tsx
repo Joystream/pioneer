@@ -12,7 +12,7 @@ interface SelectedAccountProps {
   account: Account
 }
 export const SelectedAccount = ({ account }: SelectedAccountProps) => {
-  const { transferable } = useBalance(account) || {}
+  const { transferable } = useBalance(account.address) || {}
 
   return (
     <LockedAccount>

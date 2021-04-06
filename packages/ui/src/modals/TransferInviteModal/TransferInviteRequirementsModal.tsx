@@ -26,7 +26,7 @@ export function TransferInviteRequirementsModal({ onClose, address, amount }: Pr
     () => allAccounts.find((acc) => acc.address == address) || { name: 'Controller account', address },
     [allAccounts]
   )
-  const { transferable } = useBalance(account) || {}
+  const { transferable } = useBalance(account.address) || {}
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>

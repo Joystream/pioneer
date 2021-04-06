@@ -84,12 +84,13 @@ interface AccountItemDataProps {
 }
 
 const AccountItemData = ({ account }: AccountItemDataProps) => {
-  const balance = useBalance(account)
+  const address = account.address
+  const balance = useBalance(address)
 
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
   return (
-    <AccountItem key={account.address}>
+    <AccountItem key={address}>
       <AccountInfo account={account} />
       <AccountBalance>
         <TokenValue value={balance?.total} />

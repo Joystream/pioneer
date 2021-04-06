@@ -25,8 +25,8 @@ interface Props {
 }
 
 export function TransferSuccessModal({ onClose, from, to, amount, fee }: Props) {
-  const fromBalance = useBalance(from as Account)
-  const toBalance = useBalance(to as Account)
+  const fromBalance = useBalance(from.address)
+  const toBalance = useBalance(to.address)
 
   if (!fromBalance || !toBalance) {
     return <></>

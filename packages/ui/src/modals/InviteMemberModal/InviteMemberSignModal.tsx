@@ -31,7 +31,7 @@ Please choose different member.`
 export const InviteMemberSignModal = ({ onClose, transactionParams, onDone, transaction, signer }: SignProps) => {
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, from: signer, onDone })
   const [hasFunds, setHasFunds] = useState(false)
-  const balance = useBalance(signer)
+  const balance = useBalance(signer.address)
   const transferable = balance?.transferable
   const partialFee = paymentInfo?.partialFee
 

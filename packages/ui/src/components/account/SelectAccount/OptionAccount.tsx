@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const OptionAccount = ({ option }: Props) => {
-  const balance = useBalance(option)
+  const balance = useBalance(option.address)
 
   return (
     <>
