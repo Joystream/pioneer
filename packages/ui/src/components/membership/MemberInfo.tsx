@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { BaseMember } from '../../common/types'
 import { Avatar } from '../Avatar'
 import { FounderMemberIcon } from '../icons/FounderMemberIcon'

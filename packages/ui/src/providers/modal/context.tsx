@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+
 import { UseModal } from './types'
 
 export const ModalContext = createContext<UseModal<any>>({

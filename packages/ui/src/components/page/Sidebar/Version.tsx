@@ -1,5 +1,5 @@
-import styled from 'styled-components'
 import React from 'react'
+import styled from 'styled-components'
 
 export function Version() {
   return <VersionText>Version: {GIT_VERSION}&nbsp;</VersionText>

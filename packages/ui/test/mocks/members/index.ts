@@ -1,4 +1,5 @@
-import { Server } from 'miragejs/server'
+import { Server } from 'miragejs'
+
 import { MemberFieldsFragment } from '../../../src/api/queries'
 import { alice, aliceStash, bob, bobStash } from '../keyring'
 

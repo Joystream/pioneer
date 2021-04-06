@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
+
 import { BaseMember } from '../../common/types'
 import { ButtonPrimary } from '../../components/buttons'
 import { SuccessIcon } from '../../components/icons'

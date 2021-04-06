@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
+
 import { Account, BaseMember } from '../../common/types'
 import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent, InputNumber } from '../../components/forms'

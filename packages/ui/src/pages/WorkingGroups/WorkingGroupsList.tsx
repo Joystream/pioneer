@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { WorkingGroup, WorkingGroupProps } from './WorkingGroup'
 
 interface WorkingGroupsListProps {

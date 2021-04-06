@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Loader } from '../components/icons'
 import { WaitingIcon } from '../components/icons/WaitingIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultTextWhite } from '../components/Modal'

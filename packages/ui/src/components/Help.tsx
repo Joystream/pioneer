@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { Animations, BorderRad, Colors, Transitions, Fonts } from '../constants'
 import { QuestionIcon } from './icons'
-import { LinkSymbol, LinkSymbolStyle } from './icons/symbols/LinkSymbol'
+import { LinkSymbol, LinkSymbolStyle } from './icons/symbols'
 
 interface HelpNotificationProps {
   helperText: string

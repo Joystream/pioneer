@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Account } from '../../../common/types'
 import { useBalance } from '../../../hooks/useBalance'
 import { BalanceInfoInRow, InfoTitle, InfoValue, LockedAccount } from '../../../modals/common'

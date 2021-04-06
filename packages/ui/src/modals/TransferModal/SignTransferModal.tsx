@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
+
 import { Account, onTransactionDone } from '../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimary } from '../../components/buttons'

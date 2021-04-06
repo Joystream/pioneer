@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
+import { Colors, Transitions, Animations } from '../../constants'
 import { CopyIcon } from '../icons'
-import { Colors, Transitions, Animations } from '../../constants/styles'
-import { FailureSymbol } from '../../components/icons/symbols/FailureSymbol'
-import { SuccessSymbol } from '../../components/icons/symbols/SuccessSymbol'
+import { FailureSymbol, SuccessSymbol } from '../icons/symbols'
 
 interface CopyButtonProps {
   disabled?: boolean

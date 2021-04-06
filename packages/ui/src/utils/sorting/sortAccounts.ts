@@ -1,5 +1,4 @@
-import { Account, AddressToBalanceMap } from 'src/common/types'
-import { Balances } from '../../common/types'
+import { Account, AddressToBalanceMap, Balances } from '../../common/types'
 import { BalanceComparator, Comparator } from './Comparator'
 
 export type SortKey = keyof Balances | 'name'

@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
+
 import { AccountInfo } from '../../components/AccountInfo'
 import { ButtonPrimary } from '../../components/buttons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../components/Modal'

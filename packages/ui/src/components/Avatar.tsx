@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BorderRad } from '../constants'
+
 import { AvatarPlaceholder } from '../assets/images/Members/AvatarPlaceholder'
+import { BorderRad } from '../constants'
 
 interface Props {
   avatarUri?: string | null

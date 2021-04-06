@@ -4,6 +4,7 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
+
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account, BaseMember } from '../../src/common/types'
 import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'

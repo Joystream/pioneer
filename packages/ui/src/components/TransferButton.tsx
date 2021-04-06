@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { Account } from '../common/types'
 import { Colors } from '../constants'
 import { useModal } from '../hooks/useModal'

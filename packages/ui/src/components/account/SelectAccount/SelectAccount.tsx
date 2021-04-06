@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
+
 import { Account, Address } from '../../../common/types'
 import { useAccounts } from '../../../hooks/useAccounts'
 import { useKeyring } from '../../../hooks/useKeyring'
+import { isValidAddress } from '../../../utils/isValidAddress'
 import { Select } from '../../selects'
 import { filterByText } from './helpers'
-import { isValidAddress } from '../../../utils/isValidAddress'
 import { OptionAccount } from './OptionAccount'
 import { OptionListAccount } from './OptionListAccount'
 

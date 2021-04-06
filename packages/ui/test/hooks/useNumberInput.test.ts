@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks'
+
 import { useNumberInput } from '../../src/hooks/useNumberInput'
 
 describe('useNumberInput', () => {

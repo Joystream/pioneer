@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
+
 import { useModal } from '../../hooks/useModal'
 import { BuyMembershipModalCall } from '../../modals/AddMembershipModal'
 import { ButtonPrimary, ButtonSize } from '../buttons'

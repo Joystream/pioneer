@@ -1,5 +1,5 @@
 import React from 'react'
-import { Label } from '../../components/typography'
+
 import { Page } from '../../components/page/Page'
 import { PageContent, ContentWithSidepanel, SidePanel } from '../../components/page/PageContent'
 import { PageHeader } from '../../components/page/PageHeader'
@@ -7,6 +7,7 @@ import { PageTitle } from '../../components/page/PageTitle'
 import { SideBar } from '../../components/page/SideBar'
 import { Breadcrumbs } from '../../components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { Statistics } from '../../components/statistics/Stats'
+import { Label } from '../../components/typography'
 import { GroupContent } from './GroupsComponents'
 import { GroupStorageTabs } from './GroupStorageTabs'
 import { OpeningsCategories, OpeningsCategory, OpeningsList, OpeningItem } from './Openings/OpeningsComponents'
@@ -39,13 +40,13 @@ export function GroupStorage() {
                 <OpeningsCategory>
                   <Label>Upcoming openings</Label>
                   <OpeningsList>
-                    <OpeningItem></OpeningItem>
+                    <OpeningItem />
                   </OpeningsList>
                 </OpeningsCategory>
                 <OpeningsCategory>
                   <Label>Openings</Label>
                   <OpeningsList>
-                    <OpeningItem></OpeningItem>
+                    <OpeningItem />
                   </OpeningsList>
                 </OpeningsCategory>
               </OpeningsCategories>

@@ -1,4 +1,5 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
+
 import {
   GetMembersQueryResult,
   GetMembersQueryVariables,

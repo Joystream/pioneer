@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+
 import InterBold from '../assets/fonts/Inter-Bold.woff2'
 import InterRegular from '../assets/fonts/Inter-Regular.woff2'
 import GroteskBold from '../assets/fonts/Px-Grotesk-Bold.woff2'

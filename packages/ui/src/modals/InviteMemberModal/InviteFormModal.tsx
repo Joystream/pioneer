@@ -1,6 +1,7 @@
 import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
+
 import { Account, BaseMember, Member } from '../../common/types'
 import { ButtonPrimary } from '../../components/buttons'
 import { InputComponent, InputText, InputTextarea } from '../../components/forms'

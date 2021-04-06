@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Modal, ModalBody, ModalHeader } from '../../components/Modal'
 import { TextMedium, TokenValue } from '../../components/typography'
 import { useApi } from '../../hooks/useApi'

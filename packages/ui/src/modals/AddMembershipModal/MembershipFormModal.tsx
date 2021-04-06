@@ -2,6 +2,7 @@ import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
+
 import { Account, BaseMember, Member } from '../../common/types'
 import { filterAccount, SelectAccount } from '../../components/account/SelectAccount'
 import { ButtonPrimary } from '../../components/buttons'

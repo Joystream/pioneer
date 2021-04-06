@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { Colors } from '../../../constants'
 import { useTotalBalances } from '../../../hooks/useTotalBalances'
-import { Memberships } from '../../membership/MembershipCount'
+import { Memberships } from '../../membership'
 import { TransferButtonStyled } from '../../TransferButton'
 import { TokenValue } from '../../typography'
 import { CurrentMember } from './CurrentMember'

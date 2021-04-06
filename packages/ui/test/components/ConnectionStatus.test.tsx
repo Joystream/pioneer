@@ -1,10 +1,11 @@
 import { ApiRx } from '@polkadot/api'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import EventEmitter from 'eventemitter3'
 import React from 'react'
+
 import { ConnectionStatus } from '../../src/components/ConnectionStatus'
 import { ApiContext } from '../../src/providers/api/context'
 import { UseApi } from '../../src/providers/api/provider'
-import EventEmitter from 'eventemitter3'
 
 describe('UI: Connection status component', () => {
   let eventEmitter: EventEmitter

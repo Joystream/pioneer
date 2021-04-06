@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+
 import { useGetMembersQuery } from '../api/queries'
 import { BaseMember } from '../common/types'
 import { MembershipContext } from '../providers/membership/context'

@@ -1,11 +1,12 @@
 import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
+
 import { Account, Address, BaseMember } from '../common/types'
-import { CopyComponent } from './CopyComponent'
 import { BorderRad, Colors } from '../constants'
 import { useMyMemberships } from '../hooks/useMyMemberships'
 import { shortenAddress } from '../utils/formatters'
+import { CopyComponent } from './CopyComponent'
 
 export const AccountInfo = React.memo(({ account }: { account: Account }) => {
   const { active } = useMyMemberships()

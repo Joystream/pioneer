@@ -1,7 +1,8 @@
-import styled from 'styled-components'
 import React from 'react'
-import { CopyButton } from './buttons'
+import styled from 'styled-components'
+
 import { Colors, Fonts, Transitions } from '../constants'
+import { CopyButton } from './buttons'
 
 interface CopyComponentText {
   altText?: string

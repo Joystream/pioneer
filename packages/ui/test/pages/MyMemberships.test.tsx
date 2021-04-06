@@ -2,13 +2,14 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
+
 import { MemberFieldsFragment } from '../../src/api/queries'
 import { Account } from '../../src/common/types'
 import { Memberships } from '../../src/pages/Profile/MyMemberships/Memberships'
 import { MembershipContext } from '../../src/providers/membership/context'
+import { alice, bob } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { MockApolloProvider } from '../mocks/providers'
-import { alice, bob } from '../mocks/keyring'
 import { setupMockServer } from '../mocks/server'
 
 const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {

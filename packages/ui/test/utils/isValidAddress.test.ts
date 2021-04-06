@@ -1,4 +1,5 @@
 import testKeyring from '@polkadot/keyring/testing'
+
 import { isValidAddress } from '../../src/utils/isValidAddress'
 import { bobStash } from '../mocks/keyring'
 

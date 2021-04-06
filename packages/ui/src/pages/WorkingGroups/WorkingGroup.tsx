@@ -2,10 +2,10 @@ import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
+
 import { AvatarPlaceholderImage } from '../../components/Avatar'
-import { ValueInJoys } from '../../components/typography'
+import { ValueInJoys, TextMedium } from '../../components/typography'
 import { Subscription } from '../../components/typography/Subscription'
-import { TextMedium } from '../../components/typography/Text'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../constants'
 
 export interface WorkingGroupProps {

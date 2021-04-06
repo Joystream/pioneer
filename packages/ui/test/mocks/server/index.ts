@@ -1,4 +1,5 @@
-import { Server } from 'miragejs/server'
+import { Server } from 'miragejs'
+
 import { seedBlocks } from '../../../src/mocks/data'
 import { makeServer } from '../../../src/mocks/server'
 import { createMember, Members } from '../members'

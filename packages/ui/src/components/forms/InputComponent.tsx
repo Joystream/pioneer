@@ -1,12 +1,12 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
+
+import { Label } from '.'
 import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
 import { CopyButton } from '../buttons'
 import { Help } from '../Help'
-import { AlertSymbol } from '../icons/symbols/AlertSymbol'
-import { SuccessSymbol } from '../icons/symbols/SuccessSymbol'
+import { AlertSymbol, SuccessSymbol } from '../icons/symbols'
 import { TextSmall } from '../typography'
-import { Label } from './'
 
 type InputComponentProps = InputProps &
   InputElementProps &

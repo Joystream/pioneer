@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react'
-import { Colors } from '../constants'
 import styled from 'styled-components'
+
 import { BaseMember } from '../common/types'
+import { Colors } from '../constants'
 import { useModal } from '../hooks/useModal'
 import { TransferInvitesModalCall } from '../modals/TransferInviteModal'
 import { ButtonGhost, ButtonProps } from './buttons'

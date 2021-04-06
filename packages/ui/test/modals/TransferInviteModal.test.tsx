@@ -1,6 +1,7 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
+
 import { seedMembers } from '../../src/mocks/data'
 import { TransferInviteModal } from '../../src/modals/TransferInviteModal'
 import { ApiContext } from '../../src/providers/api/context'

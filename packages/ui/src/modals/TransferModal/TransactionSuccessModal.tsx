@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React from 'react'
+
 import { Account } from '../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { ArrowDownExpandedIcon, SuccessIcon } from '../../components/icons'

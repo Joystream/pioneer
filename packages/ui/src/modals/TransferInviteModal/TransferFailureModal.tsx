@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { FailureIcon } from '../../components/icons/FailureIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from '../../components/Modal'
 

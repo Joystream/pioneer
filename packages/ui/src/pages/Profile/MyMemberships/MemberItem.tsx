@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
+
 import { BaseMember } from '../../../common/types'
-import { EditSymbol } from '../../../components/icons/symbols/EditSymbol'
+import { EditSymbol } from '../../../components/icons/symbols'
 import { MemberInfo, MemberRoleHelp } from '../../../components/membership'
 import { MemberModalCall } from '../../../components/membership/MemberProfile'
 import { TransferInviteButton } from '../../../components/TransferInviteButton'

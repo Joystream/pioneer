@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Icon } from './Icon'
 
 export const TransferIcon = React.memo(({ className }: { className?: string }) => (

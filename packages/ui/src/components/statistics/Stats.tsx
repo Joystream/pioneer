@@ -1,9 +1,10 @@
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
-import { Help } from '../../components/Help'
-import { Label, TokenValue } from '../../components/typography'
+
 import { BorderRad, Colors, Shadows } from '../../constants'
+import { Help } from '../Help'
+import { Label, TokenValue } from '../typography'
 
 interface StatisticItemProps {
   title?: string

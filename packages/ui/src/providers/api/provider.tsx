@@ -4,6 +4,7 @@ import '@joystream/types/augment/augment-types'
 import { ApiRx, WsProvider } from '@polkadot/api'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
 import React, { ReactNode, useEffect, useState } from 'react'
+
 import { ApiContext } from './context'
 
 interface Props {

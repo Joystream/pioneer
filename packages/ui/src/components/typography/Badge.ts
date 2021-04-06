@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { BorderRad, Colors } from '../../constants'
 
 export const Badge = styled.span`
