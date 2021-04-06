@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-import { Tabs } from '../../components/page/PageTabs'
+import { Tabs } from '../../../components/page/PageTabs'
 
-export function GroupStorageTabs() {
+export function WorkingGroupTabs() {
   const [isOpeningActive, setOpeningsActive] = useState(false)
   return (
     <Tabs

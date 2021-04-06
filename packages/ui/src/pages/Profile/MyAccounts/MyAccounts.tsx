@@ -1,16 +1,16 @@
 import React from 'react'
 
-import { Page } from '../../components/page/Page'
-import { PageContent } from '../../components/page/PageContent'
-import { PageHeader } from '../../components/page/PageHeader'
-import { PageTitle } from '../../components/page/PageTitle'
-import { SideBar } from '../../components/page/SideBar'
-import { Breadcrumbs } from '../../components/page/Sidebar/Breadcrumbs/Breadcrumbs'
-import { Statistics } from '../../components/statistics/Stats'
-import { useTotalBalances } from '../../hooks/useTotalBalances'
-import { Accounts } from './MyAccounts/Accounts'
-import { MyProfileTabs } from './MyProfileTabs'
-import { MyProfile, MyProfileContent } from './Profile'
+import { Page } from '../../../components/page/Page'
+import { PageContent } from '../../../components/page/PageContent'
+import { PageHeader } from '../../../components/page/PageHeader'
+import { PageTitle } from '../../../components/page/PageTitle'
+import { SideBar } from '../../../components/page/SideBar'
+import { Breadcrumbs } from '../../../components/page/Sidebar/Breadcrumbs/Breadcrumbs'
+import { Statistics } from '../../../components/statistics/Stats'
+import { useTotalBalances } from '../../../hooks/useTotalBalances'
+import { MyProfile, MyProfileContent } from '../Components'
+import { MyProfileTabs } from '../MyProfileTabs'
+import { Accounts } from './Accounts'
 
 export function MyAccounts() {
   const { total, transferable, locked, recoverable } = useTotalBalances()

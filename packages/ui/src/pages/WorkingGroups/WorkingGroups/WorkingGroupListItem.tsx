@@ -3,10 +3,10 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { AvatarPlaceholderImage } from '../../components/Avatar'
-import { ValueInJoys, TextMedium } from '../../components/typography'
-import { Subscription } from '../../components/typography/Subscription'
-import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../constants'
+import { AvatarPlaceholderImage } from '../../../components/Avatar'
+import { ValueInJoys, TextMedium } from '../../../components/typography'
+import { Subscription } from '../../../components/typography/Subscription'
+import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../../constants'
 
 export interface WorkingGroupProps {
   groupImage?: string
@@ -15,7 +15,7 @@ export interface WorkingGroupProps {
   leaderAddress?: string
 }
 
-export function WorkingGroup({ groupImage, groupTitle, groupContent, leaderAddress }: WorkingGroupProps) {
+export function WorkingGroupListItem({ groupImage, groupTitle, groupContent, leaderAddress }: WorkingGroupProps) {
   const history = useHistory()
 
   return (

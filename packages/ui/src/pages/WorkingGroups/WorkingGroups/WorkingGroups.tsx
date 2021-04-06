@@ -1,14 +1,14 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { Page } from '../../components/page/Page'
-import { PageContent } from '../../components/page/PageContent'
-import { PageHeader } from '../../components/page/PageHeader'
-import { Tabs } from '../../components/page/PageTabs'
-import { PageTitle } from '../../components/page/PageTitle'
-import { SideBar } from '../../components/page/SideBar'
-import { Breadcrumbs } from '../../components/page/Sidebar/Breadcrumbs/Breadcrumbs'
-import { GroupsContainer } from './GroupsComponents'
+import { Page } from '../../../components/page/Page'
+import { PageContent } from '../../../components/page/PageContent'
+import { PageHeader } from '../../../components/page/PageHeader'
+import { Tabs } from '../../../components/page/PageTabs'
+import { PageTitle } from '../../../components/page/PageTitle'
+import { SideBar } from '../../../components/page/SideBar'
+import { Breadcrumbs } from '../../../components/page/Sidebar/Breadcrumbs/Breadcrumbs'
+import { GroupsContainer } from '../Components'
 import { WorkingGroupsList } from './WorkingGroupsList'
 
 export function WorkingGroups() {

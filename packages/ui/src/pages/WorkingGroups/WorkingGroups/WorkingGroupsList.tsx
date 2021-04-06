@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { WorkingGroup, WorkingGroupProps } from './WorkingGroup'
+import { WorkingGroupListItem, WorkingGroupProps } from './WorkingGroupListItem'
 
 interface WorkingGroupsListProps {
   groups: Array<WorkingGroupProps>
@@ -11,7 +11,7 @@ export const WorkingGroupsList = ({ groups }: WorkingGroupsListProps) => {
   return (
     <Groups>
       {groups.map(({ groupImage, groupTitle, groupContent, leaderAddress }) => (
-        <WorkingGroup
+        <WorkingGroupListItem
           key={leaderAddress}
           leaderAddress={leaderAddress}
           groupImage={groupImage}
