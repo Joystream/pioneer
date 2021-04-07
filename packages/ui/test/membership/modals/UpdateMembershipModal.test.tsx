@@ -5,10 +5,11 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
+import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { ApiContext } from '../../../src/common/providers/api/context'
-import { Account, BaseMember } from '../../../src/common/types'
 import { UpdateMembershipModal } from '../../../src/membership/modals/UpdateMembershipModal'
 import { MemberFieldsFragment } from '../../../src/membership/queries'
+import { BaseMember } from '../../../src/membership/types'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
@@ -23,7 +24,7 @@ import {
   stubTransaction,
 } from '../../_mocks/transactions'
 
-const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+const useAccounts: UseAccounts = {
   hasAccounts: true,
   allAccounts: [],
 }

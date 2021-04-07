@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Colors, Fonts, Transitions } from '../../app/constants'
+import { Colors, Fonts, Transitions } from '../constants'
 
 import { CopyButton } from './buttons'
 

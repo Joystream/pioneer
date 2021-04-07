@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { Balances } from '../../common/types'
+import { Balances } from '../types'
 
 import { useBalances } from './useBalances'
 

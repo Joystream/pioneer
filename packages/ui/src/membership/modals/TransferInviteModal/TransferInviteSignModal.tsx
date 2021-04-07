@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import React, { useMemo } from 'react'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
+import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent } from '../../../common/components/forms'
 import { Help } from '../../../common/components/Help'
@@ -12,7 +13,8 @@ import { WaitModal } from '../../../common/components/WaitModal'
 import { useApi } from '../../../common/hooks/useApi'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { formatTokenValue } from '../../../common/model/formatters'
-import { Account, BaseMember, onTransactionDone } from '../../../common/types'
+import { onTransactionDone } from '../../../common/types'
+import { BaseMember } from '../../types'
 
 interface Props {
   onClose: () => void

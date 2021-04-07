@@ -2,15 +2,16 @@ import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
 
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
+import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
-import { filterMember, SelectMember } from '../../../common/components/membership/SelectMember'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { Row, TransactionAmount } from '../../../common/components/Modals'
 import { TextMedium } from '../../../common/components/typography'
 import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
-import { Account, BaseMember } from '../../../common/types'
+import { filterMember, SelectMember } from '../../components/SelectMember'
+import { BaseMember } from '../../types'
 
 interface Props {
   onClose: () => void

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BorderRad, Colors } from '../../../app/constants'
+import { BorderRad, Colors } from '../../constants'
 
 export function Loader() {
   return (

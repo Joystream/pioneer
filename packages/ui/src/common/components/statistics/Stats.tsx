@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Shadows } from '../../../app/constants'
+import { BorderRad, Colors, Shadows } from '../../constants'
 import { Help } from '../Help'
 import { Label, TokenValue } from '../typography'
 

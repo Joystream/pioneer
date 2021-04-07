@@ -2,7 +2,7 @@ import React from 'react'
 
 import { FailureIcon } from '../../../common/components/icons/FailureIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from '../../../common/components/Modal'
-import { Member } from '../../../common/types'
+import { Member } from '../../types'
 
 interface Props {
   onClose: () => void

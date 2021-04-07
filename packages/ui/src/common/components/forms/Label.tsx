@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Colors } from '../../../app/constants'
+import { Colors } from '../../constants'
 import { HelpComponent } from '../Help'
 
 interface LabelProps {

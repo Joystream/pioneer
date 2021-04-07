@@ -2,8 +2,8 @@ import React from 'react'
 
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../common/components/Modals'
 import { TokenValue } from '../../../common/components/typography'
-import { Account } from '../../../common/types'
 import { useBalance } from '../../hooks/useBalance'
+import { Account } from '../../types'
 import { AccountInfo } from '../AccountInfo'
 
 interface Props {

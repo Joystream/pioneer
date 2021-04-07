@@ -1,10 +1,10 @@
 import { createGlobalStyle } from 'styled-components'
 
+import { Colors, Fonts } from '../../common/constants'
 import InterBold from '../assets/fonts/Inter-Bold.woff2'
 import InterRegular from '../assets/fonts/Inter-Regular.woff2'
 import GroteskBold from '../assets/fonts/Px-Grotesk-Bold.woff2'
 import GroteskRegular from '../assets/fonts/Px-Grotesk-Regular.woff2'
-import { Colors, Fonts } from '../constants'
 
 export const GlobalStyle = createGlobalStyle`
   @font-face {

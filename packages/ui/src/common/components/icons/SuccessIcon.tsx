@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Colors } from '../../../app/constants'
+import { Colors } from '../../constants'
 
 import { Icon } from './Icon'
 

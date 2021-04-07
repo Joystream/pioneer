@@ -1,4 +1,5 @@
-import { Account, BaseMember } from '../../../common/types'
+import { Account } from '../../../accounts/types'
+import { BaseMember } from '../../types'
 
 export interface FormFields {
   rootAccount?: Account

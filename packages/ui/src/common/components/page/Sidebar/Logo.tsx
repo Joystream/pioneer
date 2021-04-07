@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Colors } from '../../../../app/constants'
+import { Colors } from '../../../constants'
 
 export const Logo = () => (
   <LogoIcon viewBox="0 0 114 24" preserveAspectRatio="xMidYMid meet">

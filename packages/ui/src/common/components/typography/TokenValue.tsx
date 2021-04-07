@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
-import { Colors, Fonts } from '../../../app/constants'
+import { Colors, Fonts } from '../../constants'
 import { formatTokenValue } from '../../model/formatters'
 
 interface Props {

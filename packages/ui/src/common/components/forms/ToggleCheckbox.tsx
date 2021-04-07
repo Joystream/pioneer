@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Fonts, Transitions } from '../../../app/constants'
+import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
 import { Label } from './Label'
 

@@ -1,4 +1,4 @@
-import { Account } from '../../../common/types'
+import { Account } from '../../types'
 
 export function filterByText(accounts: Account[], text: string) {
   return accounts.filter(

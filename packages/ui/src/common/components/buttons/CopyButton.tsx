@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { Colors, Transitions, Animations } from '../../../app/constants'
+import { Colors, Transitions, Animations } from '../../constants'
 import { CopyIcon } from '../icons'
 import { FailureSymbol, SuccessSymbol } from '../icons/symbols'
 

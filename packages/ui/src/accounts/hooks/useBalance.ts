@@ -3,7 +3,8 @@ import BN from 'bn.js'
 
 import { useApi } from '../../common/hooks/useApi'
 import { useObservable } from '../../common/hooks/useObservable'
-import { Address, Balances } from '../../common/types'
+import { Address } from '../../common/types'
+import { Balances } from '../types'
 
 export function toBalances(balances: DeriveBalancesAll): Balances {
   const { lockedBalance, availableBalance } = balances

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Colors, Transitions, Fonts } from '../../../../../app/constants'
+import { Colors, Transitions, Fonts } from '../../../../constants'
 
 export interface BreadcrumbsItemProps {
   href: string

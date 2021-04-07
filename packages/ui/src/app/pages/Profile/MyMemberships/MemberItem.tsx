@@ -2,13 +2,13 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { EditSymbol } from '../../../../common/components/icons/symbols'
-import { MemberInfo, MemberRoleHelp } from '../../../../common/components/membership'
-import { MemberModalCall } from '../../../../common/components/membership/MemberProfile'
-import { TransferInviteButton } from '../../../../common/components/TransferInviteButton'
+import { BorderRad, Colors, Fonts, Sizes } from '../../../../common/constants'
 import { useModal } from '../../../../common/hooks/useModal'
-import { BaseMember } from '../../../../common/types'
+import { MemberInfo, MemberRoleHelp } from '../../../../membership/components'
 import { EditMembershipButton } from '../../../../membership/components/EditMembershipButton'
-import { BorderRad, Colors, Fonts, Sizes } from '../../../constants'
+import { MemberModalCall } from '../../../../membership/components/MemberProfile'
+import { TransferInviteButton } from '../../../../membership/components/TransferInviteButton'
+import { BaseMember } from '../../../../membership/types'
 
 interface Props {
   member: BaseMember

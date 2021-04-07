@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes } from 'react'
 import styled from 'styled-components'
 
-import { Colors, Transitions } from '../../../app/constants'
+import { Colors, Transitions } from '../../constants'
 import { CrossIcon } from '../icons'
 
 export const CloseButton = React.memo((props: ButtonHTMLAttributes<HTMLButtonElement>) => (

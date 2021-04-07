@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Colors } from '../../../constants'
+import { Colors } from '../../../../common/constants'
 
 interface AvatarPlaceholderProps {
   className?: string

@@ -9,9 +9,9 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/comp
 import { Row, TransactionAmount } from '../../../common/components/Modals'
 import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
-import { Account } from '../../../common/types'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/SelectAccount'
 import { useBalance } from '../../hooks/useBalance'
+import { Account } from '../../types'
 
 interface Props {
   from?: Account

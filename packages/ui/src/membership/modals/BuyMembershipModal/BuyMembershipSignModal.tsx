@@ -7,6 +7,7 @@ import { SelectAccount, SelectedAccount } from '../../../accounts/components/Sel
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
 import { useBalance } from '../../../accounts/hooks/useBalance'
 import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
+import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent } from '../../../common/components/forms'
 import { Help } from '../../../common/components/Help'
@@ -15,7 +16,8 @@ import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../../../common/co
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { WaitModal } from '../../../common/components/WaitModal'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
-import { Account, Member, onTransactionDone } from '../../../common/types'
+import { onTransactionDone } from '../../../common/types'
+import { Member } from '../../types'
 
 interface SignProps {
   onClose: () => void

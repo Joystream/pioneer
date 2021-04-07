@@ -1,6 +1,6 @@
 import { Reducer } from 'react'
 
-import { Account } from '../../../common/types'
+import { Account } from '../../../accounts/types'
 
 export interface UpdateMemberForm {
   id: string

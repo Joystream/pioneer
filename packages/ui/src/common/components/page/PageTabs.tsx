@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { Colors, Transitions } from '../../../app/constants'
+import { Colors, Transitions } from '../../constants'
 
 interface TabActiveProps {
   active: boolean

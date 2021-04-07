@@ -3,7 +3,8 @@ import BN from 'bn.js'
 import React, { useState } from 'react'
 
 import { useModal } from '../../../common/hooks/useModal'
-import { Account, ModalState } from '../../../common/types'
+import { ModalState } from '../../../common/types'
+import { Account } from '../../types'
 
 import { TransferFailureModal } from './TransferFailureModal'
 import { TransferFormModal } from './TransferFormModal'

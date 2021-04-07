@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Colors } from '../../../app/constants'
+import { Colors } from '../../constants'
 
 export const Subscription = styled.span`
   font-size: 12px;

@@ -1,5 +1,5 @@
 import { Comparator } from '../../common/model/Comparator'
-import { BaseMember } from '../../common/types'
+import { BaseMember } from '../types'
 
 export type SortKey = keyof BaseMember
 

@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Sizes } from '../../../app/constants'
 import { SuccessIcon } from '../../../common/components/icons'
-import { MemberInfo } from '../../../common/components/membership'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { TextMedium } from '../../../common/components/typography'
-import { BaseMember, Member } from '../../../common/types'
+import { BorderRad, Colors, Sizes } from '../../../common/constants'
+import { MemberInfo } from '../../components'
 import { useGetMemberQuery } from '../../queries'
+import { BaseMember, Member } from '../../types'
 
 interface Props {
   onClose: () => void

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Fonts, Transitions } from '../../../app/constants'
+import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 import { CheckboxIcon, CheckboxIconStyles } from '../icons/CheckboxIcon'
 
 interface CheckboxProps {

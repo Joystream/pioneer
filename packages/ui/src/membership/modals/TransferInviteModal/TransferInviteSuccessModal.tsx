@@ -2,13 +2,13 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Sizes } from '../../../app/constants'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { SuccessIcon } from '../../../common/components/icons'
-import { MemberInfo } from '../../../common/components/membership'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { TextMedium } from '../../../common/components/typography'
-import { BaseMember } from '../../../common/types'
+import { BorderRad, Colors, Sizes } from '../../../common/constants'
+import { MemberInfo } from '../../components'
+import { BaseMember } from '../../types'
 
 interface Props {
   onClose: () => void

@@ -3,6 +3,7 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React, { useMemo } from 'react'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
+import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { Label } from '../../../common/components/forms'
 import { Help } from '../../../common/components/Help'
@@ -12,7 +13,8 @@ import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { WaitModal } from '../../../common/components/WaitModal'
 import { useApi } from '../../../common/hooks/useApi'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
-import { Account, BaseMember, onTransactionDone } from '../../../common/types'
+import { onTransactionDone } from '../../../common/types'
+import { BaseMember } from '../../types'
 
 import { UpdateMemberForm, WithNullableValues } from './types'
 

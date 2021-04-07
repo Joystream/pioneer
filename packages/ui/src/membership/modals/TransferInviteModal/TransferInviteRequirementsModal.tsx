@@ -6,11 +6,11 @@ import { AccountInfo } from '../../../accounts/components/AccountInfo'
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
 import { useBalance } from '../../../accounts/hooks/useBalance'
 import { TransferModalCall } from '../../../accounts/modals/TransferModal'
-import { BorderRad, Colors, Sizes } from '../../../app/constants'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../common/components/Modals'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
+import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
 
 interface Props {

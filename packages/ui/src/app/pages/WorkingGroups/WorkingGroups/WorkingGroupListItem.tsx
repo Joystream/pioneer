@@ -3,10 +3,10 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { WorkingGroup } from '../../../common/types'
-import { Avatar, AvatarPlaceholderImage } from '../../../../common/components/Avatar'
 import { ValueInJoys, TextMedium } from '../../../../common/components/typography'
 import { Subscription } from '../../../../common/components/typography/Subscription'
-import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../../constants'
+import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../../../common/constants'
+import { Avatar, AvatarPlaceholderImage } from '../../../../membership/components/Avatar'
 
 export interface WorkingGroupProps {
   group: WorkingGroup

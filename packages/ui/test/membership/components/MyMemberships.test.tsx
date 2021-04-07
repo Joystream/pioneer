@@ -3,8 +3,8 @@ import { render, waitForElementToBeRemoved, within } from '@testing-library/reac
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
+import { Account } from '../../../src/accounts/types'
 import { Memberships } from '../../../src/app/pages/Profile/MyMemberships/Memberships'
-import { Account } from '../../../src/common/types'
 import { MembershipContext } from '../../../src/membership/providers/membership/context'
 import { MemberFieldsFragment } from '../../../src/membership/queries'
 import { alice, bob } from '../../_mocks/keyring'

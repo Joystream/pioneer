@@ -1,15 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Sizes } from '../../../app/constants'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { SuccessIcon } from '../../../common/components/icons'
-import { MemberInfo } from '../../../common/components/membership'
-import { MemberModalCall } from '../../../common/components/membership/MemberProfile'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { TextMedium } from '../../../common/components/typography'
+import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
-import { BaseMember, Member } from '../../../common/types'
+import { MemberInfo } from '../../components'
+import { MemberModalCall } from '../../components/MemberProfile'
+import { BaseMember, Member } from '../../types'
 
 interface Props {
   onClose: () => void

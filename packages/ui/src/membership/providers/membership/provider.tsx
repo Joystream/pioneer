@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react'
 
-import { BaseMember } from '../../../common/types'
+import { BaseMember } from '../../types'
 
 import { MembershipContext } from './context'
 

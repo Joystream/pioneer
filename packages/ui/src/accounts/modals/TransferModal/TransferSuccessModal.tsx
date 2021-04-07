@@ -12,9 +12,9 @@ import {
   TransactionAmountInfoText,
 } from '../../../common/components/Modals'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { Account } from '../../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { useBalance } from '../../hooks/useBalance'
+import { Account } from '../../types'
 
 interface Props {
   onClose: () => void

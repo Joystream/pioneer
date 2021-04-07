@@ -1,5 +1,5 @@
-import { BaseMember } from '../../../src/common/types'
 import { sortMemberships } from '../../../src/membership/model/sortMemberships'
+import { BaseMember } from '../../../src/membership/types'
 
 describe('sortMemberships', () => {
   const template = {

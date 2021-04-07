@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Transitions } from '../../../constants'
+import { BorderRad, Colors, Transitions } from '../../../../common/constants'
 
 export const OpeningsCategories = styled.div`
   display: grid;

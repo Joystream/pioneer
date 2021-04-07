@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Fonts } from '../../../app/constants'
+import { BorderRad, Colors, Fonts } from '../../constants'
 
 interface InputProps {
   invalid?: boolean

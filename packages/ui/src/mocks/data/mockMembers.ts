@@ -1,4 +1,4 @@
-import { BaseMember } from '../../common/types'
+import { BaseMember } from '../../membership/types'
 
 import rawMembers from './raw/members.json'
 

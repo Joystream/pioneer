@@ -20,9 +20,10 @@ import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { WaitModal } from '../../../common/components/WaitModal'
 import { useApi } from '../../../common/hooks/useApi'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
-import { Account, onTransactionDone } from '../../../common/types'
+import { onTransactionDone } from '../../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { useBalance } from '../../hooks/useBalance'
+import { Account } from '../../types'
 
 interface Props {
   onClose: () => void

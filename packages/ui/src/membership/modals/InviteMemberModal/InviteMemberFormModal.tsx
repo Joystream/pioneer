@@ -2,10 +2,10 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 
+import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '../../../common/components/forms'
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
-import { SelectMember } from '../../../common/components/membership/SelectMember'
 import {
   ModalFooter,
   ModalHeader,
@@ -19,8 +19,9 @@ import { useApi } from '../../../common/hooks/useApi'
 import { useFormValidation } from '../../../common/hooks/useFormValidation'
 import { useKeyring } from '../../../common/hooks/useKeyring'
 import { useObservable } from '../../../common/hooks/useObservable'
-import { Account, BaseMember, Member } from '../../../common/types'
+import { SelectMember } from '../../components/SelectMember'
 import { AvatarURISchema, HandleSchema, MemberSchema, NewAddressSchema } from '../../model/validation'
+import { BaseMember, Member } from '../../types'
 import { FormFields, formReducer } from '../BuyMembershipModal/formReducer'
 
 interface InviteProps {

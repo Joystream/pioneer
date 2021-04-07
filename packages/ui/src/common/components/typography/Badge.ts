@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { BorderRad, Colors } from '../../../app/constants'
+import { BorderRad, Colors } from '../../constants'
 
 export const Badge = styled.span`
   display: inline-flex;

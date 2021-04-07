@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useReducer } from 'react'
 import * as Yup from 'yup'
 
 import { filterAccount, SelectAccount } from '../../../accounts/components/SelectAccount'
+import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import {
   Checkbox,
@@ -17,7 +18,6 @@ import {
 } from '../../../common/components/forms'
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
 import { Help } from '../../../common/components/Help'
-import { SelectMember } from '../../../common/components/membership/SelectMember'
 import {
   ModalFooter,
   ModalFooterGroup,
@@ -31,8 +31,9 @@ import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
 import { useFormValidation } from '../../../common/hooks/useFormValidation'
 import { useObservable } from '../../../common/hooks/useObservable'
-import { Account, BaseMember, Member } from '../../../common/types'
+import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
+import { BaseMember, Member } from '../../types'
 
 import { FormFields, formReducer } from './formReducer'
 

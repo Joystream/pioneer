@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../../app/constants'
+import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
 import { CopyButton } from '../buttons'
 import { Help } from '../Help'
 import { AlertSymbol, SuccessSymbol } from '../icons/symbols'

@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 
+import { useTransactionFee } from '../../accounts/hooks/useTransactionFee'
 import { useApi } from '../../common/hooks/useApi'
-import { useTransactionFee } from '../../common/hooks/useTransactionFee'
-import { BaseMember } from '../../common/types'
+import { BaseMember } from '../types'
 
 export function useTransferInviteFee(member?: BaseMember) {
   const { api } = useApi()

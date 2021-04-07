@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { Colors } from '../../../app/constants'
+import { Colors } from '../../constants'
 
 interface TextProps {
   bold?: boolean

@@ -15,7 +15,8 @@ import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../../../common/co
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { WaitModal } from '../../../common/components/WaitModal'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
-import { Address, Member, onTransactionDone } from '../../../common/types'
+import { Address, onTransactionDone } from '../../../common/types'
+import { Member } from '../../types'
 
 interface SignProps {
   onClose: () => void

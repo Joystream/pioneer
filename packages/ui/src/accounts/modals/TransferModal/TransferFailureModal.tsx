@@ -4,7 +4,7 @@ import React from 'react'
 import { FailureIcon } from '../../../common/components/icons/FailureIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from '../../../common/components/Modal'
 import { TokenValue } from '../../../common/components/typography'
-import { Account } from '../../../common/types'
+import { Account } from '../../types'
 
 interface Props {
   onClose: () => void

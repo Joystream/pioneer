@@ -1,4 +1,5 @@
-import { Account, Address } from '../../common/types'
+import { Address } from '../../common/types'
+import { Account } from '../types'
 
 export const accountOrNamed = (allAccounts: Account[], address: Address | string, name: string) => {
   const existing = allAccounts.find((account) => account.address === address)

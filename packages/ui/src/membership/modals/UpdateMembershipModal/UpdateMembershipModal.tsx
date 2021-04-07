@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
-import { BaseMember } from '../../../common/types'
+import { BaseMember } from '../../types'
 
 import { WithNullableValues, UpdateMemberForm } from './types'
 import { UpdateMembershipFailureModal } from './UpdateMembershipFailureModal'
