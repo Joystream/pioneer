@@ -549,6 +549,7 @@ type Query {
   membership(where: MembershipWhereUniqueInput!): Membership
   membershipsConnection(first: Int, after: String, last: Int, before: String, where: MembershipWhereInput, orderBy: MembershipOrderByInput): MembershipConnection!
   membersByHandle(whereMembership: MembershipWhereInput, skip: Int = 0, limit: Int = 5, text: String!): [MembersByHandleFTSOutput!]!
+  workingGroups(offset: Int, limit: Int = 50): [WorkingGroup!]!
 }
 
 type StandardDeleteResponse {

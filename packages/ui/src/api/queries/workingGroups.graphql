@@ -1,0 +1,10 @@
+fragment WorkingGroupFields on WorkingGroup {
+  id
+  name
+}
+
+query getWorkingGroups {
+  workingGroups {
+    ...WorkingGroupFields
+  }
+}

@@ -556,6 +556,7 @@ export type Query = {
   membership?: Maybe<Membership>
   membershipsConnection: MembershipConnection
   membersByHandle: Array<MembersByHandleFtsOutput>
+  workingGroups: Array<WorkingGroup>
 }
 
 export type QueryBlocksArgs = {
@@ -623,6 +624,11 @@ export type QueryMembersByHandleArgs = {
   skip?: Maybe<Scalars['Int']>
   limit?: Maybe<Scalars['Int']>
   text: Scalars['String']
+}
+
+export type QueryWorkingGroupsArgs = {
+  offset?: Maybe<Scalars['Int']>
+  limit?: Maybe<Scalars['Int']>
 }
 
 export type StandardDeleteResponse = {
