@@ -5,8 +5,9 @@ import {
   GetMembersQueryVariables,
   MemberFieldsFragment,
   SearchMembersQueryResult,
-} from '../api/queries'
-import { GetWorkingGroupsQueryResult } from '../api/queries/__generated__/workingGroups.generated'
+} from '../memberships/queries'
+import { GetWorkingGroupsQueryResult } from '../working-groups/queries'
+
 import { MockMember } from './data'
 
 type QueryResolver<ArgsType extends Record<string, unknown>, ReturnType = unknown> = (

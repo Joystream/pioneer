@@ -1,4 +1,5 @@
-import { BaseMember } from '../../common/types'
+import { BaseMember } from '../../memberships/types'
+
 import rawMembers from './raw/members.json'
 
 export type MockMember = BaseMember & { registeredAtBlockId: string; invitedById?: string; registeredAtTime: string }

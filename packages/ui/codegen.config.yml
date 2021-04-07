@@ -1,9 +1,9 @@
 overwrite: true
 
-schema: './src/api/schemas/*.graphql'
+schema: './src/**/schemas/*.graphql'
 
 documents:
-  - './src/api/queries/**/*.graphql'
+  - './src/**/queries/**/*.graphql'
 
 config:
   scalars:
@@ -12,14 +12,14 @@ config:
   nonOptionalTypename: true
 
 generates:
-  src/api/queries/__generated__/baseTypes.generated.ts:
+  src/common/api/queries/__generated__/baseTypes.generated.ts:
     hooks:
       afterOneFileWrite:
         - prettier --write
         - eslint --fix
     plugins:
       - typescript
-  src/api/queries/__generated__/:
+  src/common/api/queries/__generated__/:
     preset: near-operation-file
     presetConfig:
       baseTypesPath: baseTypes.generated.ts

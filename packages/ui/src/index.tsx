@@ -1,13 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { App } from './App'
-import { Providers } from './providers'
+import { App } from './app'
 
-ReactDOM.render(
-  <Providers>
-    <App />
-  </Providers>,
-  document.getElementById('app')
-)
-export { useWorkingGroups } from './hooks/useWorkingGroups'
+ReactDOM.render(<App />, document.getElementById('app'))
