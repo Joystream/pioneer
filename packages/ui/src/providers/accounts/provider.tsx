@@ -10,6 +10,7 @@ import { AccountsContext } from './context'
 export interface UseAccounts {
   allAccounts: Account[]
   hasAccounts: boolean
+  extensionUnavailable: boolean
 }
 
 interface Props {
@@ -38,13 +39,22 @@ const loadKeysFromExtension = async (keyring: Keyring) => {
 }
 
 // Extensions is not always ready on application load, hence the check
-const onExtensionLoaded = (callback: () => void) => () => {
+const onExtensionLoaded = (onSuccess: () => void, onFail: () => void) => () => {
+  const interval = 20
+  const timeout = 2000
+  let timeElapsed = 0
   const intervalId = setInterval(() => {
     if (Object.keys((window as any).injectedWeb3).length) {
       clearInterval(intervalId)
-      callback()
+      onSuccess()
+    } else {
+      timeElapsed += interval
+      if (timeElapsed >= timeout) {
+        clearInterval(intervalId)
+        onFail()
+      }
     }
-  }, 20)
+  }, interval)
 
   return () => clearInterval(intervalId)
 }
@@ -52,9 +62,13 @@ const onExtensionLoaded = (callback: () => void) => () => {
 export const AccountsContextProvider = (props: Props) => {
   const keyring = useKeyring()
   const [isLoaded, setIsLoaded] = useState(false)
+  const [extensionUnavailable, setExtensionUnavailable] = useState(false)
 
   useEffect(
-    onExtensionLoaded(() => setIsLoaded(true)),
+    onExtensionLoaded(
+      () => setIsLoaded(true),
+      () => setExtensionUnavailable(true)
+    ),
     []
   )
 
@@ -81,7 +95,7 @@ export const AccountsContextProvider = (props: Props) => {
 
   const hasAccounts = allAccounts.length !== 0
 
-  const value = { allAccounts, hasAccounts, extensionUnavailable: undefined }
+  const value = { allAccounts, hasAccounts, extensionUnavailable }
 
   return <AccountsContext.Provider value={value}>{props.children}</AccountsContext.Provider>
 }
