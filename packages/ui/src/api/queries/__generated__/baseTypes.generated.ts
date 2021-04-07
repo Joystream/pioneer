@@ -634,3 +634,115 @@ export type Subscription = {
   __typename: 'Subscription'
   stateSubscription: ProcessorState
 }
+
+export type Worker = {
+  __typename: 'Worker'
+  group: WorkingGroup
+  membership: Membership
+}
+
+export type WorkingGroupStatus = {
+  __typename: 'WorkingGroupStatus'
+  /** Status name */
+  name: Scalars['String']
+  /** Status message */
+  message?: Maybe<Scalars['String']>
+  /** Status about text */
+  about?: Maybe<Scalars['String']>
+  /** Status description text */
+  description?: Maybe<Scalars['String']>
+  /** The block at which status was set */
+  setAtBlock: Block
+  /** The time at which status was set */
+  setAtTime: Scalars['DateTime']
+}
+
+export type WorkingGroup = {
+  __typename: 'WorkingGroup'
+  /** Working group runtime id */
+  id: Scalars['ID']
+  /** Working group name */
+  name: Scalars['String']
+  /** Working group current status */
+  status?: Maybe<WorkingGroupStatus>
+  workers?: Maybe<Array<Worker>>
+  openings?: Maybe<Array<WorkingGroupOpening>>
+}
+
+export type OpeningStatusCancelled = {
+  __typename: 'OpeningStatusCancelled'
+  reason?: Maybe<Scalars['String']>
+}
+
+export type OpeningStatusOpen = {
+  __typename: 'OpeningStatusOpen'
+  reason?: Maybe<Scalars['String']>
+}
+
+export type OpeningStatusFilled = {
+  __typename: 'OpeningStatusFilled'
+  reason?: Maybe<Scalars['String']>
+}
+
+export type WorkingGroupOpeningStatus = OpeningStatusOpen | OpeningStatusFilled | OpeningStatusCancelled
+
+export enum WorkingGroupOpeningType {
+  Regular = 'REGULAR',
+  Leader = 'LEADER',
+}
+
+export type WorkingGroupOpeningMetadata = {
+  __typename: 'WorkingGroupOpeningMetadata'
+  applicationFormQuestions?: Maybe<Array<ApplicationFormQuestion>>
+}
+
+export type WorkingGroupOpening = {
+  __typename: 'WorkingGroupOpening'
+  /** Opening runtime id */
+  id: Scalars['ID']
+  /** Related working group */
+  group: WorkingGroup
+  /** List of opening applications */
+  applications?: Maybe<Array<WorkingGroupApplication>>
+  /** Type of the opening (Leader/Regular) */
+  type: WorkingGroupOpeningType
+  status: WorkingGroupOpeningStatus
+  metadata: WorkingGroupOpeningMetadata
+}
+
+export type WorkingGroupApplication = {
+  __typename: 'WorkingGroupApplication'
+  /** Related working group opening */
+  opening: WorkingGroupOpening
+  /** Applicant's membership */
+  applicant: Membership
+  /** Application form questions answers */
+  answers?: Maybe<Array<ApplicationFormQuestionAnswer>>
+}
+
+export type ApplicationFormQuestionAnswer = {
+  __typename: 'ApplicationFormQuestionAnswer'
+  /** Related application */
+  application: WorkingGroupApplication
+  /** The question beeing answered */
+  question: ApplicationFormQuestion
+  /** Applicant's answer */
+  answer: Scalars['String']
+}
+
+export enum ApplicationFormQuestionType {
+  Text = 'TEXT',
+  Textarea = 'TEXTAREA',
+}
+
+export type ApplicationFormQuestion = {
+  __typename: 'ApplicationFormQuestion'
+  /** Related opening */
+  opening: WorkingGroupOpening
+  /** The question itself */
+  question: Scalars['String']
+  /** Type of the question (UI answer input type) */
+  type: ApplicationFormQuestionType
+  /** Index of the question */
+  index: Scalars['Int']
+}

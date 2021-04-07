@@ -558,3 +558,120 @@ type StandardDeleteResponse {
 type Subscription {
   stateSubscription: ProcessorState!
 }
+
+type Worker {
+  group: WorkingGroup!
+  membership: Membership!
+  # ...
+}
+
+type WorkingGroupStatus {
+  "Status name"
+  name: String!
+  "Status message"
+  message: String
+  "Status about text"
+  about: String
+  "Status description text"
+  description: String
+  "The block at which status was set"
+  setAtBlock: Block!
+  "The time at which status was set"
+  setAtTime: DateTime!
+}
+
+type WorkingGroup {
+  "Working group runtime id"
+  id: ID!
+  "Working group name"
+  name: String!
+  "Working group current status"
+  status: WorkingGroupStatus
+
+  workers: [Worker!]
+
+  openings: [WorkingGroupOpening!]
+
+  # ...
+}
+
+
+type OpeningStatusCancelled {
+  reason: String
+  # ...
+}
+
+type OpeningStatusOpen {
+  reason: String
+  # ...
+}
+
+type OpeningStatusFilled {
+  reason: String
+  # ...
+}
+
+
+union WorkingGroupOpeningStatus = OpeningStatusOpen | OpeningStatusFilled | OpeningStatusCancelled
+
+enum WorkingGroupOpeningType {
+  REGULAR
+  LEADER
+}
+
+type WorkingGroupOpeningMetadata {
+  applicationFormQuestions: [ApplicationFormQuestion!]
+  # ...
+}
+
+type WorkingGroupOpening {
+  "Opening runtime id"
+  id: ID!
+
+  "Related working group"
+  group: WorkingGroup!
+
+  "List of opening applications"
+  applications: [WorkingGroupApplication!]
+
+  "Type of the opening (Leader/Regular)"
+  type: WorkingGroupOpeningType!
+
+  status: WorkingGroupOpeningStatus!
+
+  metadata: WorkingGroupOpeningMetadata!
+}
+
+type WorkingGroupApplication {
+  "Related working group opening"
+  opening: WorkingGroupOpening!
+  "Applicant's membership"
+  applicant: Membership!
+  "Application form questions answers"
+  answers: [ApplicationFormQuestionAnswer!]
+}
+
+type ApplicationFormQuestionAnswer {
+  "Related application"
+  application: WorkingGroupApplication!
+  "The question beeing answered"
+  question: ApplicationFormQuestion!
+  "Applicant's answer"
+  answer: String!
+}
+
+enum ApplicationFormQuestionType {
+  TEXT
+  TEXTAREA
+}
+
+type ApplicationFormQuestion {
+  "Related opening"
+  opening: WorkingGroupOpening!
+  "The question itself"
+  question: String!
+  "Type of the question (UI answer input type)"
+  type: ApplicationFormQuestionType!
+  "Index of the question"
+  index: Int!
+}
