@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { Comparator } from '../../src/utils/sorting/Comparator'
+import { Comparator } from '../../src/common/model/Comparator'
 
 type WrappedString = { name?: string; other?: number }
 type WrappedBN = { bn?: BN; other?: number }

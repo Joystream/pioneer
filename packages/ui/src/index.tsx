@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { App } from './App'
-import { Providers } from './providers'
+import { Providers } from './app/providers'
 
 ReactDOM.render(
   <Providers>
@@ -10,4 +10,3 @@ ReactDOM.render(
   </Providers>,
   document.getElementById('app')
 )
-export { useWorkingGroups } from './hooks/useWorkingGroups'

@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import { Subject } from 'rxjs'
 
-import { useObservable } from '../../src/hooks/useObservable'
+import { useObservable } from '../../src/common/hooks/useObservable'
 
 describe('useObservable', () => {
   it('Returns undefined for undefined observable', () => {

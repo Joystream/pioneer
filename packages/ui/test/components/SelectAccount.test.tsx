@@ -2,11 +2,11 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
 
-import { SelectAccount } from '../../src/components/account/SelectAccount'
+import { SelectAccount } from '../../src/accounts/components/SelectAccount'
 import { MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 
-jest.mock('../../src/hooks/useAccounts', () => {
+jest.mock('../../src/accounts/hooks/useAccounts', () => {
   return {
     useAccounts: () => ({
       hasAccounts: false,

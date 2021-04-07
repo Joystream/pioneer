@@ -1,4 +1,5 @@
-import { BlockFieldsFragment, Network } from '../../api/queries'
+import { Network } from '../../common/api/queries'
+import { BlockFieldsFragment } from '../../membership/queries'
 import rawBlocks from './raw/blocks.json'
 
 export type MockBlock = BlockFieldsFragment

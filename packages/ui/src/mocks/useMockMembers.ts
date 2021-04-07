@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from 'react'
 
-import { useGetMembersQuery } from '../api/queries'
-import { useApi } from '../hooks/useApi'
-import { useObservable } from '../hooks/useObservable'
-import { useSignAndSendTransaction } from '../hooks/useSignAndSendTransaction'
+import { useApi } from '../common/hooks/useApi'
+import { useObservable } from '../common/hooks/useObservable'
+import { useSignAndSendTransaction } from '../common/hooks/useSignAndSendTransaction'
+import { useGetMembersQuery } from '../membership/queries'
 
 export function useMockMembers() {
   const { api, isConnected } = useApi()

@@ -5,9 +5,9 @@ import set from 'lodash/set'
 import React, { ReactNode } from 'react'
 import { of } from 'rxjs'
 
-import { useTotalBalances } from '../../src/hooks/useTotalBalances'
-import { AccountsContextProvider } from '../../src/providers/accounts/provider'
-import { ApiContext } from '../../src/providers/api/context'
+import { useTotalBalances } from '../../src/accounts/hooks/useTotalBalances'
+import { AccountsContextProvider } from '../../src/app/providers/accounts/provider'
+import { ApiContext } from '../../src/app/providers/api/context'
 import { MockKeyringProvider } from '../mocks/providers'
 import { stubApi } from '../mocks/transactions'
 

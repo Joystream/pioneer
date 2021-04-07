@@ -3,10 +3,10 @@ import { render, waitForElementToBeRemoved, within } from '@testing-library/reac
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
-import { MemberFieldsFragment } from '../../src/api/queries'
+import { Memberships } from '../../src/app/pages/Profile/MyMemberships/Memberships'
+import { MembershipContext } from '../../src/app/providers/membership/context'
 import { Account } from '../../src/common/types'
-import { Memberships } from '../../src/pages/Profile/MyMemberships/Memberships'
-import { MembershipContext } from '../../src/providers/membership/context'
+import { MemberFieldsFragment } from '../../src/membership/queries'
 import { alice, bob } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { MockApolloProvider } from '../mocks/providers'
@@ -17,7 +17,7 @@ const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../src/hooks/useAccounts', () => {
+jest.mock('../../src/accounts/hooks/useAccounts', () => {
   return {
     useAccounts: () => useAccounts,
   }

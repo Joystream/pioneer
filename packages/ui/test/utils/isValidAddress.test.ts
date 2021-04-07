@@ -1,6 +1,6 @@
 import testKeyring from '@polkadot/keyring/testing'
 
-import { isValidAddress } from '../../src/utils/isValidAddress'
+import { isValidAddress } from '../../src/accounts/model/isValidAddress'
 import { bobStash } from '../mocks/keyring'
 
 describe('isValidAddress', () => {

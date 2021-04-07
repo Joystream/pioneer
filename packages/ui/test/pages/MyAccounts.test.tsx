@@ -5,12 +5,12 @@ import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
-import { MemberFieldsFragment } from '../../src/api/queries'
+import { Accounts } from '../../src/app/pages/Profile/MyAccounts/Accounts'
+import { KeyringContext } from '../../src/app/providers/keyring/context'
+import { MembershipContext } from '../../src/app/providers/membership/context'
+import { shortenAddress } from '../../src/common/model/formatters'
 import { Account, Balances } from '../../src/common/types'
-import { Accounts } from '../../src/pages/Profile/MyAccounts/Accounts'
-import { KeyringContext } from '../../src/providers/keyring/context'
-import { MembershipContext } from '../../src/providers/membership/context'
-import { shortenAddress } from '../../src/utils/formatters'
+import { MemberFieldsFragment } from '../../src/membership/queries'
 import { alice, aliceStash, bob, bobStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { MockApolloProvider } from '../mocks/providers'
@@ -21,7 +21,7 @@ const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../src/hooks/useAccounts', () => {
+jest.mock('../../src/accounts/hooks/useAccounts', () => {
   return {
     useAccounts: () => useAccounts,
   }
@@ -33,7 +33,7 @@ const useBalance = {
   useBalance: () => balances,
 }
 
-jest.mock('../../src/hooks/useBalance', () => useBalance)
+jest.mock('../../src/accounts/hooks/useBalance', () => useBalance)
 
 describe('UI: Accounts list', () => {
   const mockServer = setupMockServer()

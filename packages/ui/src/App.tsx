@@ -2,14 +2,14 @@ import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
 import { GlobalModals } from './app/GlobalModals'
-import { ConnectionStatus } from './components/ConnectionStatus'
-import { ExtensionWarning } from './components/ExtensionWarning'
+import { MyAccounts } from './app/pages/Profile/MyAccounts'
+import { MyMemberships } from './app/pages/Profile/MyMemberships'
+import { WorkingGroup } from './app/pages/WorkingGroups/WorkingGroup'
+import { WorkingGroups } from './app/pages/WorkingGroups/WorkingGroups'
+import { ConnectionStatus } from './common/components/ConnectionStatus'
 import { useMockMembers } from './mocks/useMockMembers'
 import { useSudoBudget } from './mocks/useSudoBudget'
-import { MyAccounts } from './pages/Profile/MyAccounts'
-import { MyMemberships } from './pages/Profile/MyMemberships'
-import { WorkingGroup } from './pages/WorkingGroups/WorkingGroup'
-import { WorkingGroups } from './pages/WorkingGroups/WorkingGroups'
+import { ExtensionWarning } from './components/ExtensionWarning'
 
 export function App() {
   useMockMembers()

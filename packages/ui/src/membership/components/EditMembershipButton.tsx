@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react'
 
+import { ButtonGhost, ButtonProps } from '../../common/components/buttons'
+import { useToggle } from '../../common/hooks/useToggle'
 import { BaseMember } from '../../common/types'
-import { ButtonGhost, ButtonProps } from '../../components/buttons'
-import { useToggle } from '../../hooks/useToggle'
-import { UpdateMembershipModal } from '../../modals/UpdateMembershipModal'
+import { UpdateMembershipModal } from '../modals/UpdateMembershipModal'
 
 interface Props extends ButtonProps {
   className?: string

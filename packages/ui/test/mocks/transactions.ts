@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
 
-import { UseApi } from '../../src/providers/api/provider'
+import { UseApi } from '../../src/app/providers/api/provider'
 import { toRuntimeDispatchInfo } from './chainTypes'
 
 const getSuccessEvents = (data: number[], section: string, method: string) => [

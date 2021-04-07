@@ -5,10 +5,10 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
+import { ApiContext } from '../../src/app/providers/api/context'
 import { Account } from '../../src/common/types'
+import { InviteMemberModal } from '../../src/membership/modals/InviteMemberModal'
 import { seedMembers } from '../../src/mocks/data'
-import { InviteMemberModal } from '../../src/modals/InviteMemberModal'
-import { ApiContext } from '../../src/providers/api/context'
 import { selectMember } from '../helpers/selectMember'
 import { toBalanceOf } from '../mocks/chainTypes'
 import { alice, aliceStash, bobStash } from '../mocks/keyring'
@@ -29,7 +29,7 @@ const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../src/hooks/useAccounts', () => {
+jest.mock('../../src/accounts/hooks/useAccounts', () => {
   return {
     useAccounts: () => useAccounts,
   }

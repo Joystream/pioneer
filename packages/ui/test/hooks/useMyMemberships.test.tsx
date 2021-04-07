@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
 import { Account } from '../../src/common/types'
-import { useMyMemberships } from '../../src/hooks/useMyMemberships'
+import { useMyMemberships } from '../../src/membership/hooks/useMyMemberships'
 import { alice, bobStash } from '../mocks/keyring'
 import { getMember } from '../mocks/members'
 import { MockQueryNodeProviders } from '../mocks/providers'
@@ -19,7 +19,7 @@ const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../src/hooks/useAccounts', () => {
+jest.mock('../../src/accounts/hooks/useAccounts', () => {
   return {
     useAccounts: () => useAccounts,
   }

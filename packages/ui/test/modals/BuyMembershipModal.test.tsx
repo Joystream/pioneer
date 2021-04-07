@@ -5,9 +5,9 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
+import { ApiContext } from '../../src/app/providers/api/context'
 import { Account } from '../../src/common/types'
-import { BuyMembershipModal } from '../../src/modals/BuyMembershipModal'
-import { ApiContext } from '../../src/providers/api/context'
+import { BuyMembershipModal } from '../../src/membership/modals/BuyMembershipModal'
 import { selectAccount } from '../helpers/selectAccount'
 import { toBalanceOf } from '../mocks/chainTypes'
 import { alice, bob } from '../mocks/keyring'
@@ -27,7 +27,7 @@ const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../src/hooks/useAccounts', () => {
+jest.mock('../../src/accounts/hooks/useAccounts', () => {
   return {
     useAccounts: () => useAccounts,
   }
@@ -35,7 +35,7 @@ jest.mock('../../src/hooks/useAccounts', () => {
 
 const mockCallback = jest.fn()
 
-jest.mock('../../src/hooks/useModal', () => {
+jest.mock('../../src/common/hooks/useModal', () => {
   return {
     useModal: () => ({
       showModal: mockCallback,

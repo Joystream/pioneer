@@ -5,10 +5,10 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { MemberFieldsFragment } from '../../src/api/queries'
+import { ApiContext } from '../../src/app/providers/api/context'
 import { Account, BaseMember } from '../../src/common/types'
-import { UpdateMembershipModal } from '../../src/modals/UpdateMembershipModal'
-import { ApiContext } from '../../src/providers/api/context'
+import { UpdateMembershipModal } from '../../src/membership/modals/UpdateMembershipModal'
+import { MemberFieldsFragment } from '../../src/membership/queries'
 import { selectAccount } from '../helpers/selectAccount'
 import { toBalanceOf } from '../mocks/chainTypes'
 import { alice, aliceStash, bob, bobStash } from '../mocks/keyring'
@@ -28,7 +28,7 @@ const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../src/hooks/useAccounts', () => {
+jest.mock('../../src/accounts/hooks/useAccounts', () => {
   return {
     useAccounts: () => useAccounts,
   }

@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 
-import { useNumberInput } from '../../src/hooks/useNumberInput'
+import { useNumberInput } from '../../src/common/hooks/useNumberInput'
 
 describe('useNumberInput', () => {
   function render() {

@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { formatDateString, formatTokenValue, shortenAddress } from '../../src/utils/formatters'
+import { formatDateString, formatTokenValue, shortenAddress } from '../../src/common/model/formatters'
 
 describe('formatters', () => {
   describe('formatTokenValue', () => {

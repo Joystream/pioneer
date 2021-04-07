@@ -1,5 +1,5 @@
 import { Account } from '.'
-import { MemberFieldsFragment } from '../../api/queries'
+import { MemberFieldsFragment } from '../../membership/queries'
 
 export interface Member {
   name: string

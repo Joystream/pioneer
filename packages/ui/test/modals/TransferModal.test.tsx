@@ -4,10 +4,10 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
+import { TransferModal } from '../../src/accounts/modals/TransferModal'
+import { ApiContext } from '../../src/app/providers/api/context'
+import { ModalContext } from '../../src/app/providers/modal/context'
 import { Account } from '../../src/common/types'
-import { TransferModal } from '../../src/modals/TransferModal'
-import { ApiContext } from '../../src/providers/api/context'
-import { ModalContext } from '../../src/providers/modal/context'
 import { selectAccount } from '../helpers/selectAccount'
 import { alice, bob } from '../mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
@@ -25,7 +25,7 @@ const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../src/hooks/useAccounts', () => {
+jest.mock('../../src/accounts/hooks/useAccounts', () => {
   return {
     useAccounts: () => useAccounts,
   }

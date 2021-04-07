@@ -5,7 +5,7 @@ import {
   GetMembersQueryVariables,
   MemberFieldsFragment,
   SearchMembersQueryResult,
-} from '../api/queries'
+} from '../membership/queries'
 import { GetWorkingGroupsQueryResult } from '../api/queries/__generated__/workingGroups.generated'
 import { MockMember } from './data'
 

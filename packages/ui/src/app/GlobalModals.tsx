@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { MemberModalCall, MemberProfile } from '../components/membership/MemberProfile'
-import { useModal } from '../hooks/useModal'
-import { BuyMembershipModal, BuyMembershipModalCall } from '../modals/BuyMembershipModal'
-import { TransferInviteModal, TransferInvitesModalCall } from '../modals/TransferInviteModal'
-import { TransferModal, TransferModalCall } from '../modals/TransferModal'
-import { ModalName } from '../providers/modal/types'
+import { TransferModal, TransferModalCall } from '../accounts/modals/TransferModal'
+import { MemberModalCall, MemberProfile } from '../common/components/membership/MemberProfile'
+import { useModal } from '../common/hooks/useModal'
+import { BuyMembershipModal, BuyMembershipModalCall } from '../membership/modals/BuyMembershipModal'
+import { TransferInviteModal, TransferInvitesModalCall } from '../membership/modals/TransferInviteModal'
+import { ModalName } from './providers/modal/types'
 
 type ModalNames =
   | ModalName<TransferInvitesModalCall>

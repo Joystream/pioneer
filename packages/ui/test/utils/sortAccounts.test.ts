@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { sortAccounts } from '../../src/utils/sorting/sortAccounts'
+import { sortAccounts } from '../../src/accounts/model/sortAccounts'
 
 describe('sortAccounts', () => {
   const emptyMap = {}

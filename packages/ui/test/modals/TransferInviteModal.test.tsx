@@ -2,15 +2,15 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
 
+import { ApiContext } from '../../src/app/providers/api/context'
+import { TransferInviteModal } from '../../src/membership/modals/TransferInviteModal'
 import { seedMembers } from '../../src/mocks/data'
-import { TransferInviteModal } from '../../src/modals/TransferInviteModal'
-import { ApiContext } from '../../src/providers/api/context'
 import { selectMember } from '../helpers/selectMember'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../mocks/providers'
 import { setupMockServer } from '../mocks/server'
 import { stubApi, stubDefaultBalances, stubTransaction } from '../mocks/transactions'
 
-jest.mock('../../src/hooks/useModal', () => {
+jest.mock('../../src/common/hooks/useModal', () => {
   return {
     useModal: () => ({
       modalData: { memberId: '0' },

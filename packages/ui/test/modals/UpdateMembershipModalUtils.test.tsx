@@ -1,4 +1,4 @@
-import { changedOrNull, getChangedFields, hasAnyEdits } from '../../src/modals/UpdateMembershipModal/utils'
+import { changedOrNull, getChangedFields, hasAnyEdits } from '../../src/membership/modals/UpdateMembershipModal/utils'
 
 describe('UI: UpdatedMembershipModal - helpers', () => {
   const member = {

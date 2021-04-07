@@ -1,9 +1,10 @@
-const path = require('path')
-const webpack = require('webpack')
 const cp = require('child_process')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
+
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 
@@ -26,7 +27,7 @@ module.exports = (env, argv) => ({
     new CopyPlugin({
       patterns: [
         {
-          from: 'src/assets/favicon.svg',
+          from: 'src/app/assets/favicon.svg',
           to: '',
         },
       ],
