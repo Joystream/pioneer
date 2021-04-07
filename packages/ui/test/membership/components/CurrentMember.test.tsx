@@ -2,7 +2,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 
-import { AccountsContextProvider } from '../../../src/app/providers/accounts/provider'
+import { AccountsContextProvider } from '../../../src/accounts/providers/accounts/provider'
 import { CurrentMember } from '../../../src/common/components/page/Sidebar/CurrentMember'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'

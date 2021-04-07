@@ -4,6 +4,7 @@ import { BaseMember } from '../../types'
 import { Avatar } from '../Avatar'
 import { FounderMemberIcon } from '../icons/FounderMemberIcon'
 import { VerifiedMemberIcon } from '../icons/VerifiedMemberIcon'
+
 import {
   MemberHandle,
   MemberIcons,

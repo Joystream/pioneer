@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 
 import { useAccounts } from '../../accounts/hooks/useAccounts'
-import { MembershipContext } from '../../app/providers/membership/context'
 import { BaseMember } from '../../common/types'
+import { MembershipContext } from '../providers/membership/context'
 import { useGetMembersQuery } from '../queries'
 
 const POLL_INTERVAL = 5000

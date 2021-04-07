@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators'
 import { useApi } from '../../common/hooks/useApi'
 import { useObservable } from '../../common/hooks/useObservable'
 import { AddressToBalanceMap } from '../../common/types'
+
 import { useAccounts } from './useAccounts'
 import { toBalances } from './useBalance'
 

@@ -6,8 +6,8 @@ import React, { ReactNode } from 'react'
 import { of } from 'rxjs'
 
 import { useTotalBalances } from '../../../src/accounts/hooks/useTotalBalances'
-import { AccountsContextProvider } from '../../../src/app/providers/accounts/provider'
-import { ApiContext } from '../../../src/app/providers/api/context'
+import { AccountsContextProvider } from '../../../src/accounts/providers/accounts/provider'
+import { ApiContext } from '../../../src/common/providers/api/context'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi } from '../../_mocks/transactions'
 

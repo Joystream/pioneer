@@ -6,6 +6,7 @@ import { Colors } from '../../../../app/constants'
 import { Memberships } from '../../membership'
 import { TransferButtonStyled } from '../../TransferButton'
 import { TokenValue } from '../../typography'
+
 import { CurrentMember } from './CurrentMember'
 
 export function ProfileComponent() {

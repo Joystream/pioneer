@@ -9,6 +9,7 @@ import { useToggle } from '../../../../hooks/useToggle'
 import { ArrowDownExpandedIcon, Icon } from '../../../icons'
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../../membership'
 import { AddMembershipButton } from '../../../membership/AddMembershipButton'
+
 import { SwitchMemberModal } from './SwitchMemberModal'
 
 export const CurrentMember = () => {

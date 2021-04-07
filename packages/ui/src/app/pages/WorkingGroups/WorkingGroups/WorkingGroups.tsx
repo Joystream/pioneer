@@ -10,6 +10,7 @@ import { SideBar } from '../../../../common/components/page/SideBar'
 import { Breadcrumbs } from '../../../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { useWorkingGroups } from '../../../../common/hooks/useWorkingGroups'
 import { GroupsContainer } from '../Components'
+
 import { WorkingGroupsList } from './WorkingGroupsList'
 
 export const WorkingGroups = () => {

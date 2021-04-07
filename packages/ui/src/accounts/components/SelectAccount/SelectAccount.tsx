@@ -6,6 +6,7 @@ import { Account, Address } from '../../../common/types'
 import { useAccounts } from '../../hooks/useAccounts'
 import { accountOrNamed } from '../../model/accountOrNamed'
 import { isValidAddress } from '../../model/isValidAddress'
+
 import { filterByText } from './helpers'
 import { OptionAccount } from './OptionAccount'
 import { OptionListAccount } from './OptionListAccount'

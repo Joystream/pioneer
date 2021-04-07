@@ -1,13 +1,14 @@
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 
-import { TransferInvitesModalCall } from '.'
 import { TransferIcon } from '../../../common/components/icons'
 import { WaitModal } from '../../../common/components/WaitModal'
 import { useModal } from '../../../common/hooks/useModal'
 import { Account, BaseMember, ModalState } from '../../../common/types'
 import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
 import { useGetMemberQuery } from '../../queries'
+
+import { TransferInvitesModalCall } from '.'
 import { TransferInviteFailureModal } from './TransferInviteFailureModal'
 import { TransferInviteFormModal } from './TransferInviteFormModal'
 import { TransferInviteRequirementsModal } from './TransferInviteRequirementsModal'

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Colors } from '../../../app/constants'
+
 import { Icon } from './Icon'
 
 export function SuccessIcon() {

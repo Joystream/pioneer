@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from 'react'
 
-import { useAccounts } from '../accounts/hooks/useAccounts'
-import { useApi } from '../common/hooks/useApi'
-import { useObservable } from '../common/hooks/useObservable'
-import { useSignAndSendTransaction } from '../common/hooks/useSignAndSendTransaction'
+import { useAccounts } from '../../accounts/hooks/useAccounts'
+import { useApi } from '../../common/hooks/useApi'
+import { useObservable } from '../../common/hooks/useObservable'
+import { useSignAndSendTransaction } from '../../common/hooks/useSignAndSendTransaction'
 
 const BUDGET = 100
 

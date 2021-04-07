@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 
 import { useModal } from '../../../common/hooks/useModal'
 import { Account, ModalState } from '../../../common/types'
+
 import { TransferFailureModal } from './TransferFailureModal'
 import { TransferFormModal } from './TransferFormModal'
 import { TransferSignModal } from './TransferSignModal'

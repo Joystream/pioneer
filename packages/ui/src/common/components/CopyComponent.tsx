@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Colors, Fonts, Transitions } from '../../app/constants'
+
 import { CopyButton } from './buttons'
 
 interface CopyComponentText {

@@ -4,6 +4,7 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../../app/constants'
 import { AvatarImg } from '../Avatar'
 import { Help } from '../Help'
 import { TextSmall } from '../typography'
+
 import { MemberInfoWrapProps } from './types'
 
 export const MemberHandle = styled.span`

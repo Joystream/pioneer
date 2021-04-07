@@ -2,7 +2,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
 
-import { ApiContext } from '../../../src/app/providers/api/context'
+import { ApiContext } from '../../../src/common/providers/api/context'
 import { TransferInviteModal } from '../../../src/membership/modals/TransferInviteModal'
 import { seedMembers } from '../../../src/mocks/data'
 import { selectMember } from '../../_helpers/selectMember'

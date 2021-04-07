@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useToggle } from '../../hooks/useToggle'
 import { Toggle, ToggleButton } from '../buttons/Toggle'
 import { ArrowDownIcon } from '../icons'
+
 import { EmptyOption, SelectComponent, SelectedOption } from './components'
 import { SelectProps } from './types'
 

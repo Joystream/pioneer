@@ -1,11 +1,12 @@
 import { EventRecord } from '@polkadot/types/interfaces'
 import React, { useContext, useMemo, useState } from 'react'
 
-import { ServerContext } from '../../../app/providers/server/context'
 import { useApi } from '../../../common/hooks/useApi'
 import { useModal } from '../../../common/hooks/useModal'
 import { useObservable } from '../../../common/hooks/useObservable'
+import { ServerContext } from '../../../common/providers/server/context'
 import { Member, ModalState } from '../../../common/types'
+
 import { BuyMembershipFailureModal } from './BuyMembershipFailureModal'
 import { BuyMembershipFormModal } from './BuyMembershipFormModal'
 import { BuyMembershipSignModal } from './BuyMembershipSignModal'

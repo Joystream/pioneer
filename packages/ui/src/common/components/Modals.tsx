@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Sizes } from '../../app/constants'
+
 import { Label } from './forms'
 import { Icon } from './icons'
 import { ValueInJoys } from './typography'

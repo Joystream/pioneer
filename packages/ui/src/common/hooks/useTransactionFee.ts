@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 
 import { useBalance } from '../../accounts/hooks/useBalance'
 import { Address } from '../types'
+
 import { useObservable } from './useObservable'
 
 export function useTransactionFee(address?: Address, transaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>) {

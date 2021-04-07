@@ -13,6 +13,7 @@ import { WaitModal } from '../../../common/components/WaitModal'
 import { useApi } from '../../../common/hooks/useApi'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { Account, BaseMember, onTransactionDone } from '../../../common/types'
+
 import { UpdateMemberForm, WithNullableValues } from './types'
 
 interface SignProps {

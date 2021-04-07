@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { useApi } from '../hooks/useApi'
+
 import { SideNotification } from './page/SideNotification'
 
 const HIDE_NOTIFICATION_TIMEOUT = 5000

@@ -6,6 +6,7 @@ import {
   MemberFieldsFragment,
   SearchMembersQueryResult,
 } from '../membership/queries'
+
 import { GetWorkingGroupsQueryResult } from '../api/queries/__generated__/workingGroups.generated'
 import { MockMember } from './data'
 

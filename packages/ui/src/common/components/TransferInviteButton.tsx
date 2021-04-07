@@ -5,6 +5,7 @@ import { Colors } from '../../app/constants'
 import { TransferInvitesModalCall } from '../../membership/modals/TransferInviteModal'
 import { useModal } from '../hooks/useModal'
 import { BaseMember } from '../types'
+
 import { ButtonGhost, ButtonProps } from './buttons'
 import { TransferIcon } from './icons'
 

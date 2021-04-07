@@ -33,6 +33,7 @@ import { useFormValidation } from '../../../common/hooks/useFormValidation'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { Account, BaseMember, Member } from '../../../common/types'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
+
 import { FormFields, formReducer } from './formReducer'
 
 interface CreateProps {

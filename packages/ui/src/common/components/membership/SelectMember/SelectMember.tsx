@@ -5,6 +5,7 @@ import { useDebounce } from '../../../hooks/useDebounce'
 import { BaseMember } from '../../../types'
 import { Select } from '../../selects'
 import { MemberInfo } from '../MemberInfo'
+
 import { OptionsListMember } from './OptionsListMember'
 
 export const filterMember = (filterOut: BaseMember | undefined) => {

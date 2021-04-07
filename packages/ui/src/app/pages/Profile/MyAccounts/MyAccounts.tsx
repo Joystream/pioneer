@@ -10,6 +10,7 @@ import { Breadcrumbs } from '../../../../common/components/page/Sidebar/Breadcru
 import { Statistics } from '../../../../common/components/statistics/Stats'
 import { MyProfile, MyProfileContent } from '../Components'
 import { MyProfileTabs } from '../MyProfileTabs'
+
 import { Accounts } from './Accounts'
 
 export function MyAccounts() {

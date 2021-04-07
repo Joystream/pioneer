@@ -8,6 +8,7 @@ import { SideBar } from '../../../../common/components/page/SideBar'
 import { Breadcrumbs } from '../../../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { MyProfile, MyMembershipsContent } from '../Components'
 import { MyProfileTabs } from '../MyProfileTabs'
+
 import { Memberships } from './Memberships'
 
 export const MyMemberships = () => (

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
 
 import { Animations, BorderRad, Colors, Fonts, Shadows } from '../../app/constants'
+
 import { CloseButton } from './buttons'
 import { TextMedium, ValueInJoys } from './typography'
 

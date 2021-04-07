@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../app/constants'
+
 import { NotificationIcon } from './icons/NotificationIcon'
 
 interface NotificationProps {

@@ -2,6 +2,7 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer } from 'miragejs'
 
 import schema from '../common/api/schemas/schema.graphql'
+
 import { seedBlocks, seedMembers } from './data'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
 import { getMemberResolver, getMembersResolver, getWorkingGroupsResolver, searchMembersResolver } from './resolvers'

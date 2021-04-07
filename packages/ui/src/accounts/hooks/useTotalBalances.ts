@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 
 import { Balances } from '../../common/types'
+
 import { useBalances } from './useBalances'
 
 export const zeroBalance = () => ({

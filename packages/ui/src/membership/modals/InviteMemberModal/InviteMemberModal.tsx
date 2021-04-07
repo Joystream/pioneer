@@ -5,6 +5,7 @@ import { useApi } from '../../../common/hooks/useApi'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { Address, Member, ModalState } from '../../../common/types'
 import { BuyMembershipFailureModal } from '../BuyMembershipModal/BuyMembershipFailureModal'
+
 import { InviteMemberFormModal } from './InviteMemberFormModal'
 import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
 import { InviteMemberSignModal } from './InviteMemberSignModal'

@@ -5,6 +5,7 @@ import { TransferModalCall } from '../../accounts/modals/TransferModal'
 import { Colors } from '../../app/constants'
 import { useModal } from '../hooks/useModal'
 import { Account } from '../types'
+
 import { ButtonGhost, ButtonPrimary } from './buttons'
 import { TransferType, PickedTransferIcon } from './icons/TransferIcons'
 

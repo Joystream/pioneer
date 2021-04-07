@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Colors } from '../../../app/constants'
+
 import { Icon } from './Icon'
 
 export function FailureIcon() {

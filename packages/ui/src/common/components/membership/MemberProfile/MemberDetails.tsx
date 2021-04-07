@@ -12,6 +12,7 @@ import { TransferInviteButton } from '../../TransferInviteButton'
 import { TextSmall, TextMedium } from '../../typography'
 import { MembershipLabel } from '../../typography/MembershipLabel'
 import { MemberInfo } from '../MemberInfo'
+
 import { EmptyBody } from './MemberProfile'
 
 type Props = { member: BaseMember }

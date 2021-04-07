@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../../app/constants'
 import { Icon } from '../icons'
+
 import { ButtonPrimary } from './Buttons'
 
 export const ToggleButton = styled(ButtonPrimary)`

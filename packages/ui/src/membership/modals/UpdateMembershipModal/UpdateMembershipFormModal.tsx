@@ -23,6 +23,7 @@ import { useFormValidation } from '../../../common/hooks/useFormValidation'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { Account, BaseMember } from '../../../common/types'
 import { AvatarURISchema, HandleSchema } from '../../model/validation'
+
 import { updateReducer } from './formReducer'
 import { UpdateMemberForm, WithNullableValues } from './types'
 import { changedOrNull, hasAnyEdits } from './utils'

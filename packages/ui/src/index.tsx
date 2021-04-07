@@ -1,12 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { App } from './App'
-import { Providers } from './app/providers'
+import { App } from './app'
 
-ReactDOM.render(
-  <Providers>
-    <App />
-  </Providers>,
-  document.getElementById('app')
-)
+ReactDOM.render(<App />, document.getElementById('app'))

@@ -2,6 +2,7 @@ import React from 'react'
 
 import { BaseMember } from '../../../types'
 import { Option, OptionsListComponent } from '../../selects'
+
 import { OptionMember } from './OptionMember'
 
 interface Props {

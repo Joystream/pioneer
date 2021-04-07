@@ -2,14 +2,16 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import React, { ReactNode } from 'react'
 import { HashRouter } from 'react-router-dom'
 
-import { makeServer } from '../../mocks/server'
-import { AccountsContextProvider } from './accounts/provider'
-import { ApiContextProvider } from './api/provider'
-import { GlobalStyle } from './GlobalStyle'
-import { KeyringContextProvider } from './keyring/provider'
-import { MembershipContextProvider } from './membership/provider'
-import { ModalContextProvider } from './modal/provider'
-import { ServerContextProvider } from './server/provider'
+import { AccountsContextProvider } from '../accounts/providers/accounts/provider'
+import { ApiContextProvider } from '../common/providers/api/provider'
+import { KeyringContextProvider } from '../common/providers/keyring/provider'
+import { ModalContextProvider } from '../common/providers/modal/provider'
+import { ServerContextProvider } from '../common/providers/server/provider'
+import { MembershipContextProvider } from '../membership/providers/membership/provider'
+import { Mocks } from '../mocks/Mocks'
+import { makeServer } from '../mocks/server'
+
+import { GlobalStyle } from './providers/GlobalStyle'
 
 interface Props {
   children: ReactNode
@@ -31,6 +33,7 @@ export const Providers = (props: Props) => (
             <MembershipContextProvider>
               <HashRouter>
                 <ModalContextProvider>
+                  <Mocks />
                   <GlobalStyle />
                   {props.children}
                 </ModalContextProvider>

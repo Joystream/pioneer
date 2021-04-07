@@ -10,6 +10,7 @@ import { Statistics } from '../../../../common/components/statistics/Stats'
 import { Label } from '../../../../common/components/typography'
 import { GroupContent } from '../Components'
 import { OpeningsCategories, OpeningsCategory, OpeningsList, OpeningItem } from '../Openings/OpeningsComponents'
+
 import { WorkingGroupTabs } from './WorkingGroupTabs'
 
 export function WorkingGroup() {

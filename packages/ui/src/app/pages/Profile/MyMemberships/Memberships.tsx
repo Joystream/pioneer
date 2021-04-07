@@ -10,6 +10,7 @@ import { BaseMember } from '../../../../common/types'
 import { useMyMemberships } from '../../../../membership/hooks/useMyMemberships'
 import { SortKey, sortMemberships } from '../../../../membership/model/sortMemberships'
 import { Colors } from '../../../constants'
+
 import { setOrder } from './helpers'
 import { MemberItem } from './MemberItem'
 

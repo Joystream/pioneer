@@ -14,6 +14,7 @@ import { TransferButton } from '../../../../common/components/TransferButton'
 import { TokenValue } from '../../../../common/components/typography'
 import { Account } from '../../../../common/types'
 import { BorderRad, Colors, Sizes } from '../../../constants'
+
 import { setOrder } from './helpers'
 
 export function Accounts() {

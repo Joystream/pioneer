@@ -5,7 +5,7 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { ApiContext } from '../../../src/app/providers/api/context'
+import { ApiContext } from '../../../src/common/providers/api/context'
 import { Account } from '../../../src/common/types'
 import { InviteMemberModal } from '../../../src/membership/modals/InviteMemberModal'
 import { seedMembers } from '../../../src/mocks/data'

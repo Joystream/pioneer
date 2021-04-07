@@ -11,6 +11,7 @@ import { EditSymbol } from '../../icons/symbols'
 import { PageTab, PageTabsNav } from '../../page/PageTabs'
 import { MemberInfoWrap } from '../components'
 import { MemberInfo } from '../MemberInfo'
+
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
 import { MemberModalCall } from './types'
