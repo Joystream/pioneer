@@ -1,5 +1,5 @@
 import { Network } from '../../common/api/queries'
-import { BlockFieldsFragment } from '../../membership/queries'
+import { BlockFieldsFragment } from '../../memberships/queries'
 
 import rawBlocks from './raw/blocks.json'
 

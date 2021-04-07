@@ -6,8 +6,8 @@ import { CopyComponent } from '../../common/components/CopyComponent'
 import { BorderRad, Colors } from '../../common/constants'
 import { shortenAddress } from '../../common/model/formatters'
 import { Address } from '../../common/types'
-import { useMyMemberships } from '../../membership/hooks/useMyMemberships'
-import { BaseMember } from '../../membership/types'
+import { useMyMemberships } from '../../memberships/hooks/useMyMemberships'
+import { BaseMember } from '../../memberships/types'
 import { Account } from '../types'
 
 export const AccountInfo = React.memo(({ account }: { account: Account }) => {

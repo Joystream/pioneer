@@ -7,7 +7,7 @@ import { ApiContextProvider } from '../common/providers/api/provider'
 import { KeyringContextProvider } from '../common/providers/keyring/provider'
 import { ModalContextProvider } from '../common/providers/modal/provider'
 import { ServerContextProvider } from '../common/providers/server/provider'
-import { MembershipContextProvider } from '../membership/providers/membership/provider'
+import { MembershipContextProvider } from '../memberships/providers/membership/provider'
 import { Mocks } from '../mocks/Mocks'
 import { makeServer } from '../mocks/server'
 

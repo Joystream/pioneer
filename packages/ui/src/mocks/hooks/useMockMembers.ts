@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { useApi } from '../../common/hooks/useApi'
 import { useObservable } from '../../common/hooks/useObservable'
 import { useSignAndSendTransaction } from '../../common/hooks/useSignAndSendTransaction'
-import { useGetMembersQuery } from '../../membership/queries'
+import { useGetMembersQuery } from '../../memberships/queries'
 
 export function useMockMembers() {
   const { api, isConnected } = useApi()

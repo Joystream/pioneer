@@ -3,9 +3,9 @@ import React from 'react'
 import { TransferModal, TransferModalCall } from '../accounts/modals/TransferModal'
 import { useModal } from '../common/hooks/useModal'
 import { ModalName } from '../common/providers/modal/types'
-import { MemberModalCall, MemberProfile } from '../membership/components/MemberProfile'
-import { BuyMembershipModal, BuyMembershipModalCall } from '../membership/modals/BuyMembershipModal'
-import { TransferInviteModal, TransferInvitesModalCall } from '../membership/modals/TransferInviteModal'
+import { MemberModalCall, MemberProfile } from '../memberships/components/MemberProfile'
+import { BuyMembershipModal, BuyMembershipModalCall } from '../memberships/modals/BuyMembershipModal'
+import { TransferInviteModal, TransferInvitesModalCall } from '../memberships/modals/TransferInviteModal'
 
 type ModalNames =
   | ModalName<TransferInvitesModalCall>

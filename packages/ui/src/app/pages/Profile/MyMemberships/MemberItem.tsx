@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import { EditSymbol } from '../../../../common/components/icons/symbols'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../../common/constants'
 import { useModal } from '../../../../common/hooks/useModal'
-import { MemberInfo, MemberRoleHelp } from '../../../../membership/components'
-import { EditMembershipButton } from '../../../../membership/components/EditMembershipButton'
-import { MemberModalCall } from '../../../../membership/components/MemberProfile'
-import { TransferInviteButton } from '../../../../membership/components/TransferInviteButton'
-import { BaseMember } from '../../../../membership/types'
+import { MemberInfo, MemberRoleHelp } from '../../../../memberships/components'
+import { EditMembershipButton } from '../../../../memberships/components/EditMembershipButton'
+import { MemberModalCall } from '../../../../memberships/components/MemberProfile'
+import { TransferInviteButton } from '../../../../memberships/components/TransferInviteButton'
+import { BaseMember } from '../../../../memberships/types'
 
 interface Props {
   member: BaseMember

@@ -2,7 +2,7 @@ import {
   changedOrNull,
   getChangedFields,
   hasAnyEdits,
-} from '../../../src/membership/modals/UpdateMembershipModal/utils'
+} from '../../../src/memberships/modals/UpdateMembershipModal/utils'
 
 describe('UI: UpdatedMembershipModal - helpers', () => {
   const member = {

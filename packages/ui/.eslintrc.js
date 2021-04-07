@@ -4,7 +4,7 @@ const config = {
   ...baseConfig,
 }
 
-const domains = ['accounts', 'membership', 'working-groups']
+const domains = ['accounts', 'memberships', 'working-groups']
 
 function* generateZones(domains) {
   yield { target: './src/common', from: './src/app' }

@@ -1,4 +1,4 @@
-import { SortKey } from '../../../../membership/model/sortMemberships'
+import { SortKey } from '../../../../memberships/model/sortMemberships'
 
 export function setOrder(
   key: SortKey,

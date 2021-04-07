@@ -1,6 +1,6 @@
 import { Server } from 'miragejs'
 
-import { MemberFieldsFragment } from '../../../src/membership/queries'
+import { MemberFieldsFragment } from '../../../src/memberships/queries'
 import { alice, aliceStash, bob, bobStash } from '../keyring'
 
 export type Members = 'Alice' | 'Bob'

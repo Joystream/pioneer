@@ -2,7 +2,7 @@ import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/c
 import React, { ReactNode } from 'react'
 
 import { KeyringContext } from '../../src/common/providers/keyring/context'
-import { MembershipContextProvider } from '../../src/membership/providers/membership/provider'
+import { MembershipContextProvider } from '../../src/memberships/providers/membership/provider'
 
 import { mockKeyring } from './keyring'
 

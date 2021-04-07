@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
 import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
-import { useMyMemberships } from '../../../src/membership/hooks/useMyMemberships'
+import { useMyMemberships } from '../../../src/memberships/hooks/useMyMemberships'
 import { alice, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockQueryNodeProviders } from '../../_mocks/providers'

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { ValueInJoys, TextMedium } from '../../../../common/components/typography'
 import { Subscription } from '../../../../common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../../../common/constants'
-import { Avatar, AvatarPlaceholderImage } from '../../../../membership/components/Avatar'
+import { Avatar, AvatarPlaceholderImage } from '../../../../memberships/components/Avatar'
 import { WorkingGroup } from '../../../../working-groups/types'
 
 export interface WorkingGroupProps {

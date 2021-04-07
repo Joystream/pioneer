@@ -8,7 +8,7 @@ import { Navigation } from '../../common/components/page/Sidebar/Navigation'
 import { NavigationHeader } from '../../common/components/page/Sidebar/NavigationHeader'
 import { NavigationLink } from '../../common/components/page/Sidebar/NavigationLink'
 import { Version } from '../../common/components/page/Sidebar/Version'
-import { ProfileComponent } from '../../membership/components/ProfileComponent'
+import { ProfileComponent } from '../../memberships/components/ProfileComponent'
 
 export const SideBar = () => (
   <Navigation>

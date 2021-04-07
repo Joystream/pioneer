@@ -7,7 +7,7 @@ import { of } from 'rxjs'
 
 import { Account } from '../../../src/accounts/types'
 import { ApiContext } from '../../../src/common/providers/api/context'
-import { BuyMembershipModal } from '../../../src/membership/modals/BuyMembershipModal'
+import { BuyMembershipModal } from '../../../src/memberships/modals/BuyMembershipModal'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, bob } from '../../_mocks/keyring'

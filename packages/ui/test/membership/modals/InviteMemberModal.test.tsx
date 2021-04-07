@@ -7,7 +7,7 @@ import { of } from 'rxjs'
 
 import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { ApiContext } from '../../../src/common/providers/api/context'
-import { InviteMemberModal } from '../../../src/membership/modals/InviteMemberModal'
+import { InviteMemberModal } from '../../../src/memberships/modals/InviteMemberModal'
 import { seedMembers } from '../../../src/mocks/data'
 import { selectMember } from '../../_helpers/selectMember'
 import { toBalanceOf } from '../../_mocks/chainTypes'

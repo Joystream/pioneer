@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
 
 import { ApiContext } from '../../../src/common/providers/api/context'
-import { TransferInviteModal } from '../../../src/membership/modals/TransferInviteModal'
+import { TransferInviteModal } from '../../../src/memberships/modals/TransferInviteModal'
 import { seedMembers } from '../../../src/mocks/data'
 import { selectMember } from '../../_helpers/selectMember'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'

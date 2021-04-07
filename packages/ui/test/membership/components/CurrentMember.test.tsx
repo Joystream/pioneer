@@ -3,7 +3,7 @@ import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-l
 import React from 'react'
 
 import { AccountsContextProvider } from '../../../src/accounts/providers/accounts/provider'
-import { CurrentMember } from '../../../src/membership/components/CurrentMember'
+import { CurrentMember } from '../../../src/memberships/components/CurrentMember'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
