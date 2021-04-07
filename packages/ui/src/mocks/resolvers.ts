@@ -6,6 +6,7 @@ import {
   MemberFieldsFragment,
   SearchMembersQueryResult,
 } from '../api/queries'
+import { GetWorkingGroupsQueryResult } from '../api/queries/__generated__/workingGroups.generated'
 import { MockMember } from './data'
 
 type QueryResolver<ArgsType extends Record<string, unknown>, ReturnType = unknown> = (
@@ -59,4 +60,13 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
   })
 
   return limit ? models.slice(0, limit) : models
+}
+
+export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryResult[]> = (
+  obj,
+  args,
+  { mirageSchema: schema }
+) => {
+  const { models } = schema.all('WorkingGroup')
+  return models
 }

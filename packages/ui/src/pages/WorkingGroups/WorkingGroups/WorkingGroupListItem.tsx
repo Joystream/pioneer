@@ -1,31 +1,28 @@
-import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { AvatarPlaceholderImage } from '../../../components/Avatar'
+import { WorkingGroup } from '../../../common/types'
+import { Avatar, AvatarPlaceholderImage } from '../../../components/Avatar'
 import { ValueInJoys, TextMedium } from '../../../components/typography'
 import { Subscription } from '../../../components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../../constants'
 
 export interface WorkingGroupProps {
-  groupImage?: string
-  groupTitle: string | React.ReactElement
-  groupContent?: string
-  leaderAddress?: string
+  group: WorkingGroup
 }
 
-export function WorkingGroupListItem({ groupImage, groupTitle, groupContent, leaderAddress }: WorkingGroupProps) {
+export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const history = useHistory()
 
   return (
     <GroupItem>
       <GroupImageContainer onClick={() => history.push('/groups/grouppreview')}>
-        {groupImage ? <GroupImage src={groupImage} /> : <GroupAvatarPlaceholderImage />}
+        {group.image ? <GroupImage src={group.image} /> : <GroupAvatarPlaceholderImage />}
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle onClick={() => history.push('/groups/grouppreview')}>{groupTitle}</GroupTitle>
-        {groupContent && <GroupContent>{groupContent}</GroupContent>}
+        <GroupTitle onClick={() => history.push('/groups/grouppreview')}>{group.name}</GroupTitle>
+        {group.about && <GroupContent>{group.about}</GroupContent>}
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
@@ -44,9 +41,9 @@ export function WorkingGroupListItem({ groupImage, groupTitle, groupContent, lea
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            {leaderAddress ? (
+            {group.leader ? (
               <WGLeaderImage>
-                <Identicon size={24} theme={'beachball'} value={leaderAddress} />
+                <Avatar avatarUri={group.leader.avatarUri} />
               </WGLeaderImage>
             ) : (
               'None'
