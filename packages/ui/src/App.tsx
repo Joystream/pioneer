@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 
 import { GlobalModals } from './app/GlobalModals'
 import { ConnectionStatus } from './components/ConnectionStatus'
+import { ExtensionWarning } from './components/ExtensionWarning'
 import { useMockMembers } from './mocks/useMockMembers'
 import { useSudoBudget } from './mocks/useSudoBudget'
 import { MyAccounts } from './pages/Profile/MyAccounts'
@@ -24,6 +25,7 @@ export function App() {
         <Redirect exact from="/" to="/profile" />
       </Switch>
       <ConnectionStatus />
+      <ExtensionWarning />
       <GlobalModals />
     </>
   )
