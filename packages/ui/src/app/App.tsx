@@ -10,18 +10,16 @@ import { WorkingGroup } from './pages/WorkingGroups/WorkingGroup'
 import { WorkingGroups } from './pages/WorkingGroups/WorkingGroups'
 import { Providers } from './Providers'
 
-export function App() {
-  return (
-    <Providers>
-      <Switch>
-        <Route exact path="/profile" component={MyAccounts} />
-        <Route exact path="/profile/memberships" component={MyMemberships} />
-        <Route exact path="/groups" component={WorkingGroups} />
-        <Route exact path="/groups/grouppreview" component={WorkingGroup} />
-        <Redirect exact from="/" to="/profile" />
-      </Switch>
-      <ConnectionStatus />
-      <GlobalModals />
-    </Providers>
-  )
-}
+export const App = () => (
+  <Providers>
+    <Switch>
+      <Route exact path="/profile" component={MyAccounts} />
+      <Route exact path="/profile/memberships" component={MyMemberships} />
+      <Route exact path="/groups" component={WorkingGroups} />
+      <Route exact path="/groups/grouppreview" component={WorkingGroup} />
+      <Redirect exact from="/" to="/profile" />
+    </Switch>
+    <ConnectionStatus />
+    <GlobalModals />
+  </Providers>
+)

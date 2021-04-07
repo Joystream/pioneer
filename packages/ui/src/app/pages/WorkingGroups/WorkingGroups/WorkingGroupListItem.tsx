@@ -2,11 +2,11 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { WorkingGroup } from '../../../common/types'
 import { ValueInJoys, TextMedium } from '../../../../common/components/typography'
 import { Subscription } from '../../../../common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../../../common/constants'
 import { Avatar, AvatarPlaceholderImage } from '../../../../membership/components/Avatar'
+import { WorkingGroup } from '../../../../working-groups/types'
 
 export interface WorkingGroupProps {
   group: WorkingGroup

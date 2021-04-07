@@ -1,6 +1,5 @@
-import { useGetWorkingGroupsQuery } from '../api/queries/__generated__/workingGroups.generated'
-import { WorkingGroup } from '../common/types'
-
+import { useGetWorkingGroupsQuery } from '../queries'
+import { WorkingGroup } from '../types'
 interface UseWorkingGroups {
   isLoading: boolean
   groups: WorkingGroup[]

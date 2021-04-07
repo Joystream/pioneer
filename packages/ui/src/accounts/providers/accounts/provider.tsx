@@ -8,10 +8,12 @@ import { Account } from '../../types'
 
 import { AccountsContext } from './context'
 
+type Error = 'EXTENSION'
+
 export interface UseAccounts {
   allAccounts: Account[]
   hasAccounts: boolean
-  extensionUnavailable: boolean
+  error?: Error
 }
 
 interface Props {
@@ -96,7 +98,11 @@ export const AccountsContextProvider = (props: Props) => {
 
   const hasAccounts = allAccounts.length !== 0
 
-  const value = { allAccounts, hasAccounts, extensionUnavailable }
+  const value: UseAccounts = { allAccounts, hasAccounts }
+
+  if (extensionUnavailable) {
+    value.error = 'EXTENSION'
+  }
 
   return <AccountsContext.Provider value={value}>{props.children}</AccountsContext.Provider>
 }

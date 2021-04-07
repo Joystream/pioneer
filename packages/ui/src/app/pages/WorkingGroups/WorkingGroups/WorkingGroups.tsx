@@ -7,7 +7,7 @@ import { PageHeader } from '../../../../common/components/page/PageHeader'
 import { Tabs } from '../../../../common/components/page/PageTabs'
 import { PageTitle } from '../../../../common/components/page/PageTitle'
 import { Breadcrumbs } from '../../../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
-import { useWorkingGroups } from '../../../../common/hooks/useWorkingGroups'
+import { useWorkingGroups } from '../../../../working-groups/hooks/useWorkingGroups'
 import { SideBar } from '../../../components/SideBar'
 import { GroupsContainer } from '../Components'
 

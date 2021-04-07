@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { WorkingGroup } from '../../../common/types'
+import { WorkingGroup } from '../../../../working-groups/types'
+
 import { WorkingGroupListItem } from './WorkingGroupListItem'
 
 interface WorkingGroupsListProps {

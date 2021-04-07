@@ -4,16 +4,25 @@ const config = {
   ...baseConfig,
 }
 
+const domains = ['accounts', 'membership', 'working-groups']
+
+function* generateZones(domains) {
+  yield { target: './src/common', from: './src/app' }
+
+  for (const domain of domains) {
+    const domainSrc = `./src/${domain}`
+
+    yield { target: domainSrc, from: './src/app' }
+    yield { target: './src/common', from: domainSrc }
+  }
+}
+
+const zones = [...generateZones(domains)]
+
 config.rules['import/no-restricted-paths'] = [
   'error',
   {
-    zones: [
-      { target: './src/common', from: './src/app' },
-      { target: './src/accounts', from: './src/app' },
-      { target: './src/common', from: './src/accounts' },
-      { target: './src/membership', from: './src/app' },
-      { target: './src/common', from: './src/membership' },
-    ],
+    zones: zones,
   },
 ]
 

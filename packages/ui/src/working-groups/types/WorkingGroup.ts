@@ -1,4 +1,4 @@
-import { BaseMember } from '.'
+import { BaseMember } from '../../membership/types'
 
 export interface WorkingGroup {
   name: string
