@@ -3,7 +3,8 @@ import { createServer } from 'miragejs'
 
 import schema from '../api/schemas/schema.graphql'
 import { seedBlocks, seedMembers } from './data'
-import { getMemberResolver, getMembersResolver, searchMembersResolver } from './resolvers'
+import { seedWorkingGroups } from './data/mockWorkingGroups'
+import { getMemberResolver, getMembersResolver, getWorkingGroupsResolver, searchMembersResolver } from './resolvers'
 
 export const makeServer = (environment = 'development') => {
   return createServer({
@@ -20,6 +21,7 @@ export const makeServer = (environment = 'development') => {
               membership: getMemberResolver,
               memberships: getMembersResolver,
               searchMemberships: searchMembersResolver,
+              workingGroups: getWorkingGroupsResolver,
             },
           },
         })
@@ -30,6 +32,7 @@ export const makeServer = (environment = 'development') => {
     seeds(server: any) {
       seedBlocks(server)
       seedMembers(server)
+      seedWorkingGroups(server)
     },
   })
 }

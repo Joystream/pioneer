@@ -10,3 +10,4 @@ ReactDOM.render(
   </Providers>,
   document.getElementById('app')
 )
+export { useWorkingGroups } from './hooks/useWorkingGroups'
