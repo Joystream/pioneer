@@ -41,7 +41,7 @@ const loadKeysFromExtension = async (keyring: Keyring) => {
 // Extensions is not always ready on application load, hence the check
 const onExtensionLoaded = (onSuccess: () => void, onFail: () => void) => () => {
   const interval = 20
-  const timeout = 2000
+  const timeout = 1000
   let timeElapsed = 0
   const intervalId = setInterval(() => {
     if (Object.keys((window as any).injectedWeb3).length) {
