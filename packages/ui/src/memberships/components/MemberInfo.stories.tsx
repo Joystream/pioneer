@@ -6,9 +6,17 @@ import { MemberInfo, MemberInfoProps } from './MemberInfo'
 export default {
   title: 'Member/MemberInfo',
   component: MemberInfo,
+  argTypes: {
+    memberSize: { table: { disable: true } },
+  },
 } as Meta
 
-const Template: Story<MemberInfoProps> = (args) => <MemberInfo {...args} />
+const Template: Story<MemberInfoProps> = (args) => (
+  <>
+    <MemberInfo {...args} memberSize="m" />
+    <MemberInfo {...args} memberSize="l" />
+  </>
+)
 
 export const Default = Template.bind({})
 Default.args = {
