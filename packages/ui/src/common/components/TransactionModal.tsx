@@ -5,7 +5,7 @@ import { TransactionStatus } from '../hooks/useSignAndSendTransaction'
 import { Modal, ModalHeader } from './Modal'
 import { WaitModal } from './WaitModal'
 
-interface TransactionModalProps {
+export interface TransactionModalProps {
   children: ReactNode
   status: TransactionStatus
   onClose: () => void
