@@ -155,7 +155,7 @@ export const InputNumber = ({ id, value, required, validation, placeholder, disa
     <StyledNumberInput
       id={id}
       name={id}
-      type="text"
+      type="number"
       value={value}
       required={required}
       validation={validation}
