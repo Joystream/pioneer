@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces'
 import React, { useContext, useMemo, useState } from 'react'
 
+import { FailureModal } from '../../../common/components/FailureModal'
 import { useApi } from '../../../common/hooks/useApi'
 import { useModal } from '../../../common/hooks/useModal'
 import { useObservable } from '../../../common/hooks/useObservable'
@@ -8,7 +9,6 @@ import { ServerContext } from '../../../common/providers/server/context'
 import { ModalState } from '../../../common/types'
 import { Member } from '../../types'
 
-import { BuyMembershipFailureModal } from './BuyMembershipFailureModal'
 import { BuyMembershipFormModal } from './BuyMembershipFormModal'
 import { BuyMembershipSignModal } from './BuyMembershipSignModal'
 import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
@@ -94,5 +94,10 @@ export const BuyMembershipModal = () => {
     return <BuyMembershipSuccessModal onClose={onClose} member={transactionParams} memberId={id} />
   }
 
-  return <BuyMembershipFailureModal onClose={onClose} member={transactionParams} />
+  return (
+    <FailureModal
+      message={`There was a problem with creating a membership for ${transactionParams.name}.`}
+      onClose={onClose}
+    />
+  )
 }
