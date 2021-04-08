@@ -13,15 +13,15 @@ export const decorators = [stylesWrapperDecorator]
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   backgrounds: {
-    default: 'black',
+    default: 'white',
     values: [
       {
         name: 'black',
         value: '#000000',
       },
       {
-        name: 'gray',
-        value: '#272D33',
+        name: 'white',
+        value: '#ffffff',
       },
     ],
   },
