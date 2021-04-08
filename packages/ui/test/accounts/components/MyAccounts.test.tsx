@@ -10,8 +10,10 @@ import { Accounts } from '../../../src/app/pages/Profile/MyAccounts/Accounts'
 import { shortenAddress } from '../../../src/common/model/formatters'
 import { KeyringContext } from '../../../src/common/providers/keyring/context'
 import { MembershipContext } from '../../../src/memberships/providers/membership/context'
-import { MockMember, mockMembers, seedMember } from '../../../src/mocks/data'
+import { MemberFieldsFragment } from '../../../src/memberships/queries'
+import { seedMembers } from '../../../src/mocks/data'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
+import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -101,8 +103,8 @@ describe('UI: Accounts list', () => {
         transferable: new BN(1000),
         recoverable: new BN(0),
       }
-      const aliceMember = mockMembers.find((m) => m.handle == 'alice')!
-      seedMember(aliceMember, mockServer.server)
+      const aliceMember = getMember('alice')
+      seedMembers(mockServer.server)
       const { findByText } = renderAccounts(aliceMember)
 
       const aliceBox = (await findByText(shortenAddress(alice.address)))!.parentElement!.parentElement!
@@ -113,7 +115,7 @@ describe('UI: Accounts list', () => {
     })
   })
 
-  function renderAccounts(active?: MockMember) {
+  function renderAccounts(active?: MemberFieldsFragment) {
     return render(
       <HashRouter>
         <MockApolloProvider>

@@ -6,8 +6,10 @@ import { HashRouter } from 'react-router-dom'
 import { Account } from '../../../src/accounts/types'
 import { Memberships } from '../../../src/app/pages/Profile/MyMemberships/Memberships'
 import { MembershipContext } from '../../../src/memberships/providers/membership/context'
-import { MockMember, mockMembers, seedMembers } from '../../../src/mocks/data'
+import { MemberFieldsFragment } from '../../../src/memberships/queries'
+import { seedMembers } from '../../../src/mocks/data'
 import { alice, bob } from '../../_mocks/keyring'
+import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -51,7 +53,7 @@ describe('UI: Memberships list', () => {
 
     it('Shows active membership', async () => {
       seedMembers(mockServer.server)
-      const { getByText } = renderMemberships(mockMembers.find((m) => m.handle == 'bob'))
+      const { getByText } = renderMemberships(getMember('bob'))
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))
 
@@ -65,7 +67,7 @@ describe('UI: Memberships list', () => {
     })
   })
 
-  function renderMemberships(active?: MockMember) {
+  function renderMemberships(active?: MemberFieldsFragment) {
     return render(
       <HashRouter>
         <MockApolloProvider>

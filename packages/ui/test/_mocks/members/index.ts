@@ -1,24 +1,17 @@
 import { Server } from 'miragejs'
 
 import { MemberFieldsFragment } from '../../../src/memberships/queries'
-import { alice, aliceStash, bob, bobStash } from '../keyring'
+import { mockMembers } from '../../../src/mocks/data'
 
-export type Members = 'Alice' | 'Bob'
+export type Members = 'alice' | 'bob'
 
-export const getMember = (name: Members): MemberFieldsFragment => {
-  if (name === 'Alice') {
-    return {
-      ...aliceMember,
-      rootAccount: alice.address,
-      controllerAccount: aliceStash.address,
-    }
-  }
-
-  return {
-    ...bobMember,
-    rootAccount: bob.address,
-    controllerAccount: bobStash.address,
-  }
+export const getMember = (handle: Members): MemberFieldsFragment => {
+  const member = { ...(mockMembers.find((m) => m.handle == handle) || mockMembers[0]) } as any
+  delete member.registeredAtBlockId
+  delete member.registeredAtTime
+  delete member.isFoundingMember
+  delete member.invitedById
+  return member
 }
 
 export const createMember = (server: Server, memberOrName: MemberFieldsFragment | Members) => {
@@ -34,32 +27,4 @@ export const createMember = (server: Server, memberOrName: MemberFieldsFragment 
     ...member,
     __typename: 'Membership',
   } as any)
-}
-
-const aliceMember: MemberFieldsFragment = {
-  __typename: 'Membership',
-  id: '0',
-  name: 'Alice Member',
-  handle: 'alice_handle',
-  about: '',
-  avatarUri: '',
-  rootAccount: '',
-  controllerAccount: '',
-  // isFoundingMember: true,
-  isVerified: true,
-  inviteCount: 5,
-}
-
-const bobMember: MemberFieldsFragment = {
-  __typename: 'Membership',
-  id: '1',
-  name: 'Bob Member',
-  handle: 'bob_handle',
-  about: '',
-  avatarUri: '',
-  rootAccount: '',
-  controllerAccount: '',
-  // isFoundingMember: false,
-  isVerified: false,
-  inviteCount: 5,
 }

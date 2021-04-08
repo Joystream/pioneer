@@ -3,6 +3,7 @@ import React from 'react'
 
 import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { useMyMemberships } from '../../../src/memberships/hooks/useMyMemberships'
+import { seedMembers } from '../../../src/mocks/data'
 import { alice, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
@@ -58,8 +59,8 @@ describe('useMyMemberships', () => {
   })
 
   it('Matched rootAccount', async () => {
-    mockServer.createMember('Alice')
-    const aliceMember = getMember('Alice')
+    seedMembers(mockServer.server)
+    const aliceMember = getMember('alice')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(alice)
 
@@ -75,8 +76,8 @@ describe('useMyMemberships', () => {
   })
 
   it('Matched controllerAccount', async () => {
-    mockServer.createMember('Bob')
-    const bobMember = getMember('Bob')
+    seedMembers(mockServer.server)
+    const bobMember = getMember('bob')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(bobStash)
 
@@ -92,8 +93,8 @@ describe('useMyMemberships', () => {
   })
 
   it('Allows to set active member', async () => {
-    mockServer.createMember('Alice')
-    const aliceMember = getMember('Alice')
+    seedMembers(mockServer.server)
+    const aliceMember = getMember('alice')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(alice)
 
