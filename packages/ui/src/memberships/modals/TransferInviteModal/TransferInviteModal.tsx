@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 
 import { Account } from '../../../accounts/types'
+import { FailureModal } from '../../../common/components/FailureModal'
 import { TransferIcon } from '../../../common/components/icons'
 import { WaitModal } from '../../../common/components/WaitModal'
 import { useModal } from '../../../common/hooks/useModal'
@@ -11,7 +12,6 @@ import { useGetMemberQuery } from '../../queries'
 import { BaseMember } from '../../types'
 
 import { TransferInvitesModalCall } from '.'
-import { TransferInviteFailureModal } from './TransferInviteFailureModal'
 import { TransferInviteFormModal } from './TransferInviteFormModal'
 import { TransferInviteRequirementsModal } from './TransferInviteRequirementsModal'
 import { TransferInviteSignModal } from './TransferInviteSignModal'
@@ -89,5 +89,5 @@ export function TransferInviteModal() {
     return <TransferInviteSuccessModal onClose={hideModal} recipient={targetMember} amount={amount} />
   }
 
-  return <TransferInviteFailureModal onClose={hideModal} />
+  return <FailureModal message="There was a problem transferring your invites." onClose={hideModal} />
 }
