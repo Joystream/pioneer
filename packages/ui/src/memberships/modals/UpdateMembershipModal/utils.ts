@@ -1,4 +1,4 @@
-import { WithNullableValues } from './types'
+import { WithNullableValues } from '../../../common/types/form'
 
 export const hasAnyEdits = (form: Record<string, any>, initial: Record<string, any>) => {
   return !!getChangedFields(form, initial).length

@@ -14,9 +14,10 @@ import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { onTransactionDone } from '../../../common/types'
+import { WithNullableValues } from '../../../common/types/form'
 import { BaseMember } from '../../types'
 
-import { UpdateMemberForm, WithNullableValues } from './types'
+import { UpdateMemberForm } from './types'
 
 interface SignProps {
   onClose: () => void

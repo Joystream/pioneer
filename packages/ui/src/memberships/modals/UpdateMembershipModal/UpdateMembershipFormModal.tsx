@@ -1,5 +1,5 @@
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useCallback, useEffect, useReducer } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
 
@@ -20,13 +20,13 @@ import {
 import { Row } from '../../../common/components/Modals'
 import { TextMedium } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
-import { useFormValidation } from '../../../common/hooks/useFormValidation'
+import { useForm } from '../../../common/hooks/useForm'
 import { useObservable } from '../../../common/hooks/useObservable'
+import { WithNullableValues } from '../../../common/types/form'
 import { AvatarURISchema, HandleSchema } from '../../model/validation'
 import { BaseMember } from '../../types'
 
-import { updateReducer } from './formReducer'
-import { UpdateMemberForm, WithNullableValues } from './types'
+import { UpdateMemberForm } from './types'
 import { changedOrNull, hasAnyEdits } from './utils'
 
 interface Props {
@@ -46,7 +46,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const { api } = useApi()
   const { allAccounts } = useAccounts()
 
-  const [state, dispatch] = useReducer(updateReducer, {
+  const { state, dispatch, isValid, errors, validate } = useForm<UpdateMemberForm>(UpdateMemberSchema, {
     id: member.id,
     name: member.name || '',
     handle: member.handle || '',
@@ -55,13 +55,13 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
     controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
   })
+
   const { handle, name, avatarUri, about, controllerAccount, rootAccount } = state
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
   const handleHash = blake2AsHex(handle || '')
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
-  const { isValid, errors, validate } = useFormValidation<UpdateMemberForm>(UpdateMemberSchema)
 
   const canUpdate = isValid && hasAnyEdits(state, member)
 

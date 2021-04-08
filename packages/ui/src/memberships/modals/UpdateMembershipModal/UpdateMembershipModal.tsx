@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
 import { FailureModal } from '../../../common/components/FailureModal'
+import { WithNullableValues } from '../../../common/types/form'
 import { BaseMember } from '../../types'
 
-import { UpdateMemberForm, WithNullableValues } from './types'
+import { UpdateMemberForm } from './types'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSignModal } from './UpdateMembershipSignModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
