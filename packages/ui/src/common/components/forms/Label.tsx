@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { Colors } from '../../constants'
-import { HelpComponent } from '../Help'
+import { HelpContainer } from '../Help'
 
 interface LabelProps {
   isRequired?: boolean
@@ -37,7 +37,7 @@ export const Label = styled.label<LabelProps>`
     }};
   }
 
-  ${HelpComponent} {
+  ${HelpContainer} {
     position: relative;
     display: inline;
     transform: unset;

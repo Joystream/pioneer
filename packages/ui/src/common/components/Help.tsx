@@ -50,7 +50,7 @@ export const Help = React.memo(
   )
 )
 
-const HelpContainer = styled.div<{ absolute?: boolean }>`
+export const HelpContainer = styled.div<{ absolute?: boolean }>`
   display: flex;
   position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
   right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};
@@ -106,6 +106,19 @@ const HelpPopup = styled.div<{ size?: 'm' | 'l' }>`
     border: 1px solid ${Colors.Black[900]};
     transform: rotate(45deg);
     clip-path: polygon(100% 0, 0 0, 0 100%);
+    z-index: 1;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: -20px;
+    width: calc(100% + 16px);
+    height: calc(100% + 32px);
+    z-index: -1;
+  }
+  &:hover {
+    display: flex;
   }
 `
 
