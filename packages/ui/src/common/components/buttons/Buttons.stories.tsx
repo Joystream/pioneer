@@ -1,10 +1,8 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-
 import { TransferIcon } from '../icons'
 import { Row, TemplateBlock } from '../storybookParts/previewStyles'
-
-import { ButtonProps, ButtonPrimary, ButtonSecondary, ButtonGhost } from './Buttons'
+import { ButtonGhost, ButtonPrimary, ButtonProps, ButtonSecondary } from './Buttons'
 
 export default {
   title: 'Common/Buttons',
