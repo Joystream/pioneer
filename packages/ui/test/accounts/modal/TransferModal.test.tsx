@@ -96,7 +96,7 @@ describe('UI: TransferModal', () => {
 
     fireEvent.click(button)
 
-    expect(await findByText('Authorize Transaction')).toBeDefined()
+    expect(await findByText(/Authorize transaction/i)).toBeDefined()
     expect((await findByText(/Transaction fee:/i))?.parentNode?.textContent).toMatch(/^Transaction fee:25/)
   })
 
