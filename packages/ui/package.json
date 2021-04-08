@@ -10,7 +10,8 @@
     "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
     "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'",
     "start": "webpack serve --mode development --progress",
-    "test": "jest"
+    "test": "jest",
+    "storybook": "start-storybook -p 6006 -s public --no-manager-cache"
   },
   "dependencies": {
     "@apollo/client": "^3.3.12",
@@ -48,6 +49,12 @@
     "@graphql-codegen/typescript-react-apollo": "^2.2.3",
     "@jest/types": "^26.6.2",
     "@miragejs/graphql": "^0.1.11",
+    "@storybook/addon-actions": "^6.2.5",
+    "@storybook/addon-essentials": "^6.2.5",
+    "@storybook/addon-links": "^6.2.5",
+    "@storybook/addons": "^6.2.5",
+    "@storybook/react": "^6.2.5",
+    "@storybook/theming": "^6.2.5",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/react-hooks": "^5.1.0",

@@ -24,7 +24,7 @@ interface MemberInfoContainerProps {
   className?: string
 }
 
-type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps
+export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps
 
 export const MemberInfo = React.memo(
   ({ member, onClick, isOnDark, showId, memberSize, size, className }: MemberInfoProps) => {

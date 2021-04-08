@@ -5,7 +5,7 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
 import { Label } from './Label'
 
-interface Props {
+export interface Props {
   isRequired?: boolean
   disabled?: boolean
   checked: boolean
