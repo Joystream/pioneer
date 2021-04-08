@@ -1,31 +1,21 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { Row, Column, TemplateBlock } from '../storybookParts/previewStyles'
+import { Row, TemplateBlock } from '../storybookParts/previewStyles'
 
-import { CopyButton, CopyButtonProps } from './CopyButton'
+import { CloseButton } from './CloseButton'
 
 export default {
-  title: 'Common/CopyButton',
-  component: CopyButton,
+  title: 'Common/CloseButton',
+  component: CloseButton,
 } as Meta
 
-const Template: Story<CopyButtonProps> = (args) => (
+const Template: Story = () => (
   <TemplateBlock>
-    <Column>
-      <Row>
-        Enabled
-        <CopyButton {...args} textToCopy="Text to copy 1" />
-      </Row>
-      <Row>
-        Disabled
-        <CopyButton {...args} textToCopy="Text to copy 2" disabled />
-      </Row>
-      <Row>
-        With error
-        <CopyButton {...args} textToCopy={undefined} />
-      </Row>
-    </Column>
+    <Row>
+      <CloseButton />
+      <CloseButton disabled />
+    </Row>
   </TemplateBlock>
 )
 
