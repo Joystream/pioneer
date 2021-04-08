@@ -5,7 +5,7 @@ import { Colors, Transitions, Animations } from '../../constants'
 import { CopyIcon } from '../icons'
 import { FailureSymbol, SuccessSymbol } from '../icons/symbols'
 
-interface CopyButtonProps {
+export interface CopyButtonProps {
   disabled?: boolean
   textToCopy?: string
   className?: string
@@ -26,6 +26,8 @@ export function CopyButton({ textToCopy, className, disabled }: CopyButtonProps)
           } catch (error) {
             setCopyFailure(!isCopyFailure)
           }
+        } else if (textToCopy == undefined) {
+          setCopyFailure(!isCopyFailure)
         }
       }}
       className={className}
@@ -71,6 +73,10 @@ export const CopyButtonIcon = styled.button`
   }
   &:active {
     color: ${Colors.Blue[600]};
+  }
+  &:disabled {
+    color: ${Colors.Black[300]};
+    border-color: ${Colors.Black[50]};
   }
 `
 

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 import { CheckboxIcon, CheckboxIconStyles } from '../icons/CheckboxIcon'
 
-interface CheckboxProps {
+export interface CheckboxProps {
   id: string
   isRequired?: boolean
   children?: React.ReactElement
