@@ -16,10 +16,11 @@ interface Props {
 
 type SuccessModalProps = { onClose: () => void; children: ReactNode }
 
-const SuccessModal = ({ onClose }: SuccessModalProps) => {
+const SuccessModal = ({ onClose, children }: SuccessModalProps) => {
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
+      {children}
     </Modal>
   )
 }
