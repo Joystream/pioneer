@@ -10,9 +10,8 @@ import { Accounts } from '../../../src/app/pages/Profile/MyAccounts/Accounts'
 import { shortenAddress } from '../../../src/common/model/formatters'
 import { KeyringContext } from '../../../src/common/providers/keyring/context'
 import { MembershipContext } from '../../../src/memberships/providers/membership/context'
-import { MemberFieldsFragment } from '../../../src/memberships/queries'
+import { MockMember, mockMembers, seedMember } from '../../../src/mocks/data'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
-import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -102,19 +101,19 @@ describe('UI: Accounts list', () => {
         transferable: new BN(1000),
         recoverable: new BN(0),
       }
-      mockServer.createMember('Alice')
-      const aliceMember = getMember('Alice')
+      const aliceMember = mockMembers.find((m) => m.handle == 'alice')!
+      seedMember(aliceMember, mockServer.server)
       const { findByText } = renderAccounts(aliceMember)
 
       const aliceBox = (await findByText(shortenAddress(alice.address)))!.parentElement!.parentElement!
-      expect(await within(aliceBox).findByText(/root account/i)).toBeDefined()
+      expect(await within(aliceBox).findByText(/controller account/i)).toBeDefined()
 
       const aliceStashBox = (await findByText(shortenAddress(aliceStash.address)))!.parentElement!.parentElement!
-      expect(await within(aliceStashBox).findByText(/controller account/i)).toBeDefined()
+      expect(await within(aliceStashBox).findByText(/root account/i)).toBeDefined()
     })
   })
 
-  function renderAccounts(active?: MemberFieldsFragment) {
+  function renderAccounts(active?: MockMember) {
     return render(
       <HashRouter>
         <MockApolloProvider>
