@@ -13,6 +13,7 @@
   "scripts": {
     "lint": "wsrun -c --exclude @joystream/types lint",
     "build": "wsrun -e -c --stages build",
+    "build-storybook": "wsrun -e -c --stages --exclude ui build && wsrun -e -c --exclude @joystream/types build:storybook ",
     "test": "wsrun -e -c --exclude @joystream/types test",
     "start": "wsrun -p ui -c start"
   },
