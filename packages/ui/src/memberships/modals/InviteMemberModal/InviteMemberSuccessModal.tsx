@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { SuccessIcon } from '../../../common/components/icons'
@@ -14,6 +14,17 @@ interface Props {
   member: Member
 }
 
+type SuccessModalProps = { onClose: () => void; children: ReactNode }
+
+const SuccessModal = ({ onClose, children }: SuccessModalProps) => {
+  return (
+    <Modal modalSize="m" modalHeight="s" onClose={onClose}>
+      <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
+      {children}
+    </Modal>
+  )
+}
+
 export function InviteMemberSuccessModal({ onClose, member }: Props) {
   const invitorId = member.invitor?.id || ''
   const { data: invitor, loading } = useGetMemberQuery({ variables: { id: invitorId } })
@@ -22,8 +33,7 @@ export function InviteMemberSuccessModal({ onClose, member }: Props) {
   const plural = inviteCount > 1
 
   return (
-    <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
+    <SuccessModal onClose={onClose}>
       <ModalBody>
         <TextMedium>You have just successfully invited a member.</TextMedium>
         <MemberRow>
@@ -39,7 +49,7 @@ export function InviteMemberSuccessModal({ onClose, member }: Props) {
         )}
       </ModalBody>
       <ModalFooter />
-    </Modal>
+    </SuccessModal>
   )
 }
 

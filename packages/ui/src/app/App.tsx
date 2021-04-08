@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 
 import { ConnectionStatus } from '../common/components/ConnectionStatus'
 
+import { ExtensionWarning } from './components/ExtensionWarning'
 import { GlobalModals } from './GlobalModals'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
@@ -20,6 +21,7 @@ export const App = () => (
       <Redirect exact from="/" to="/profile" />
     </Switch>
     <ConnectionStatus />
+    <ExtensionWarning />
     <GlobalModals />
   </Providers>
 )

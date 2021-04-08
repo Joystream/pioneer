@@ -2,11 +2,12 @@ import { EventRecord } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 import React, { useState } from 'react'
 
+import { FailureModal } from '../../../common/components/FailureModal'
+import { TokenValue } from '../../../common/components/typography'
 import { useModal } from '../../../common/hooks/useModal'
 import { ModalState } from '../../../common/types'
 import { Account } from '../../types'
 
-import { TransferFailureModal } from './TransferFailureModal'
 import { TransferFormModal } from './TransferFormModal'
 import { TransferSignModal } from './TransferSignModal'
 import { TransferSuccessModal } from './TransferSuccessModal'
@@ -51,5 +52,10 @@ export function TransferModal() {
     return <TransferSuccessModal onClose={hideModal} from={transferFrom} to={transferTo} amount={amount} fee={fee} />
   }
 
-  return <TransferFailureModal onClose={hideModal} from={transferFrom} amount={amount} to={transferTo} />
+  return (
+    <FailureModal onClose={hideModal}>
+      You haven’t transferred <TokenValue value={amount} /> stake from “{transferFrom.name}” account to “
+      {transferTo.name}” destination.
+    </FailureModal>
+  )
 }

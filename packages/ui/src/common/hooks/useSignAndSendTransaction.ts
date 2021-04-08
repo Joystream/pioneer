@@ -18,7 +18,7 @@ interface UseSignAndSendTransactionParams {
   onDone: onTransactionDone
 }
 
-type TransactionStatus = 'READY' | 'SIGN' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'
+export type TransactionStatus = 'READY' | 'SIGN' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'
 
 const isError = (events: EventRecord[]) => {
   return events.find(({ event: { method } }) => {

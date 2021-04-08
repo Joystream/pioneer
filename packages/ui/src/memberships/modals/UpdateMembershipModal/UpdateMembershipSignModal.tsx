@@ -7,16 +7,17 @@ import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { Label } from '../../../common/components/forms'
 import { Help } from '../../../common/components/Help'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
+import { ModalBody, ModalFooter } from '../../../common/components/Modal'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../../../common/components/Modals'
+import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { WaitModal } from '../../../common/components/WaitModal'
 import { useApi } from '../../../common/hooks/useApi'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { onTransactionDone } from '../../../common/types'
+import { WithNullableValues } from '../../../common/types/form'
 import { BaseMember } from '../../types'
 
-import { UpdateMemberForm, WithNullableValues } from './types'
+import { UpdateMemberForm } from './types'
 
 interface SignProps {
   onClose: () => void
@@ -43,6 +44,7 @@ function createBatch(
   if (!api || !(hasProfileEdits || hasAccountsEdits)) {
     return
   }
+
   if (hasProfileEdits) {
     const updateProfile = api.tx.members.updateProfile(member.id, transactionParams.handle || null, {
       name: transactionParams.name || null,
@@ -74,55 +76,30 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
     onDone,
   })
 
-  if (status === 'READY') {
-    return (
-      <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-        <ModalHeader onClick={onClose} title="Authorize transaction" />
-        <ModalBody>
-          <TextMedium>
-            You intend to update your membership. Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be
-            applied to the transaction.
-          </TextMedium>
-          <Row>
-            <Label>Sending from account</Label>
-            <SelectedAccount account={signer} />
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <BalanceInfoNarrow>
-            <InfoTitle>Transaction fee:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={paymentInfo?.partialFee.toBn()} />
-            </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-          </BalanceInfoNarrow>
-          <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
-            Sign and update a member
-          </ButtonPrimary>
-        </ModalFooter>
-      </Modal>
-    )
-  }
-
-  if (status === 'EXTENSION') {
-    return (
-      <WaitModal
-        onClose={onClose}
-        title="Waiting for the extension"
-        description="Please, sign the transaction using external signer app."
-      />
-    )
-  }
-
-  if (status === 'PENDING') {
-    return (
-      <WaitModal
-        onClose={onClose}
-        title="Pending transaction"
-        description="We are waiting for your transaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim."
-      />
-    )
-  }
-
-  return null
+  return (
+    <TransactionModal status={status} onClose={onClose}>
+      <ModalBody>
+        <TextMedium>
+          You intend to update your membership. Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be
+          applied to the transaction.
+        </TextMedium>
+        <Row>
+          <Label>Sending from account</Label>
+          <SelectedAccount account={signer} />
+        </Row>
+      </ModalBody>
+      <ModalFooter>
+        <BalanceInfoNarrow>
+          <InfoTitle>Transaction fee:</InfoTitle>
+          <InfoValue>
+            <TokenValue value={paymentInfo?.partialFee.toBn()} />
+          </InfoValue>
+          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
+        </BalanceInfoNarrow>
+        <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
+          Sign and update a member
+        </ButtonPrimary>
+      </ModalFooter>
+    </TransactionModal>
+  )
 }

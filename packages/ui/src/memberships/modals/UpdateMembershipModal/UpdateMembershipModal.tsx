@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
+import { FailureModal } from '../../../common/components/FailureModal'
+import { WithNullableValues } from '../../../common/types/form'
 import { BaseMember } from '../../types'
 
-import { WithNullableValues, UpdateMemberForm } from './types'
-import { UpdateMembershipFailureModal } from './UpdateMembershipFailureModal'
+import { UpdateMemberForm } from './types'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSignModal } from './UpdateMembershipSignModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
@@ -49,5 +50,5 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
     return <UpdateMembershipSuccessModal onClose={onClose} member={member} />
   }
 
-  return <UpdateMembershipFailureModal onClose={onClose} member={member} />
+  return <FailureModal onClose={onClose}>There was a problem updating membership for {member.name}.</FailureModal>
 }

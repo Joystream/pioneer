@@ -1,6 +1,6 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useCallback, useEffect, useReducer } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import * as Yup from 'yup'
 
 import { filterAccount, SelectAccount } from '../../../accounts/components/SelectAccount'
@@ -29,13 +29,11 @@ import {
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../../../common/components/Modals'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
-import { useFormValidation } from '../../../common/hooks/useFormValidation'
+import { useForm } from '../../../common/hooks/useForm'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
 import { BaseMember, Member } from '../../types'
-
-import { FormFields, formReducer } from './formReducer'
 
 interface CreateProps {
   onClose: () => void
@@ -54,9 +52,25 @@ const CreateMemberSchema = Yup.object().shape({
   referrer: ReferrerSchema,
 })
 
+export interface FormFields {
+  rootAccount?: Account
+  controllerAccount?: Account
+  name: string
+  handle: string
+  about: string
+  avatarUri: string
+  isReferred?: boolean
+  referrer?: BaseMember
+  hasTerms?: boolean
+  invitor?: BaseMember
+}
+
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
-  const [state, dispatch] = useReducer(formReducer, {
+  // 1. Handling async validations
+  // 2. Debounce - useDebounce
+
+  const { state, dispatch, isValid, errors, validate } = useForm<FormFields>(CreateMemberSchema, {
     name: '',
     rootAccount: undefined,
     controllerAccount: undefined,
@@ -74,7 +88,6 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
 
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
-  const { isValid, errors, validate } = useFormValidation<FormFields>(CreateMemberSchema)
 
   useEffect(() => {
     validate(state, { size: potentialMemberIdSize })
@@ -149,6 +162,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
                 placeholder="Type"
                 value={name}
                 onChange={(event) => changeField('name', event.target.value)}
+                // changeField('name')
               />
             </InputComponent>
           </Row>

@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { FailureModal } from '../../../common/components/FailureModal'
 import { WaitModal } from '../../../common/components/WaitModal'
 import { useApi } from '../../../common/hooks/useApi'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { Address, ModalState } from '../../../common/types'
 import { Member } from '../../types'
-import { BuyMembershipFailureModal } from '../BuyMembershipModal/BuyMembershipFailureModal'
 
 import { InviteMemberFormModal } from './InviteMemberFormModal'
 import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
@@ -81,5 +81,10 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   if (step === 'SUCCESS') {
     return <InviteMemberSuccessModal onClose={onClose} member={transactionParams} />
   }
-  return <BuyMembershipFailureModal onClose={onClose} member={transactionParams} />
+
+  return (
+    <FailureModal onClose={onClose}>
+      There was a problem with creating a membership for {transactionParams.name}.
+    </FailureModal>
+  )
 }
