@@ -74,8 +74,7 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Enables button', async () => {
-    server.createMember('Alice')
-    server.createMember('Bob')
+    seedMembers(server.server)
 
     renderModal()
 
@@ -95,8 +94,7 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Disables button when one of addresses is invalid', async () => {
-    server.createMember('Alice')
-    server.createMember('Bob')
+    seedMembers(server.server)
 
     renderModal()
 
