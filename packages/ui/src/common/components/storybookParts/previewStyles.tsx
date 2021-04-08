@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Colors } from '../../constants'
+import { BorderRad, Colors } from '../../constants'
 
 export const TemplateBlock = styled.div`
   display: grid;
@@ -24,21 +24,23 @@ export const Column = styled.div`
 `
 
 export const WhiteBlock = styled.div`
+  padding: 16px;
+  border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
 `
 
-export const BlackBlock = styled.div`
+export const BlackBlock = styled(WhiteBlock)`
   background-color: ${Colors.Black[900]};
 `
 
-export const GrayBlock = styled.div`
+export const GrayBlock = styled(WhiteBlock)`
   background-color: ${Colors.Black[50]};
 `
 
-export const DarkBlock = styled.div`
+export const DarkBlock = styled(WhiteBlock)`
   background-color: ${Colors.Black[100]};
 `
 
-export const DisabledBlock = styled.div`
+export const DisabledBlock = styled(WhiteBlock)`
   background-color: ${Colors.Black[75]};
 `

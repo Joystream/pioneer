@@ -9,7 +9,7 @@ import { TextSmall } from '../typography'
 
 import { Label } from '.'
 
-type InputComponentProps = InputProps &
+export type InputComponentProps = InputProps &
   InputElementProps &
   DisabledInputProps & {
     id?: string
