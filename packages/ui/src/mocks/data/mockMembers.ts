@@ -10,7 +10,7 @@ export const mockMembers: MockMember[] = rawMembers.map((rawMember) => {
   }
 })
 
-const seedMember = (
+export const seedMember = (
   member: BaseMember & { registeredAtBlockId: string; invitedById?: string; registeredAtTime: string },
   server: any
 ) => {
