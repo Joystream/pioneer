@@ -1,5 +1,3 @@
-import { Server } from 'miragejs'
-
 import { MemberFieldsFragment } from '../../../src/memberships/queries'
 import { mockMembers } from '../../../src/mocks/data'
 
@@ -12,19 +10,4 @@ export const getMember = (handle: Members): MemberFieldsFragment => {
   delete member.isFoundingMember
   delete member.invitedById
   return member
-}
-
-export const createMember = (server: Server, memberOrName: MemberFieldsFragment | Members) => {
-  let member: MemberFieldsFragment
-
-  if (typeof memberOrName !== 'string') {
-    member = memberOrName
-  } else {
-    member = getMember(memberOrName)
-  }
-
-  return server.schema.create('Membership', {
-    ...member,
-    __typename: 'Membership',
-  } as any)
 }
