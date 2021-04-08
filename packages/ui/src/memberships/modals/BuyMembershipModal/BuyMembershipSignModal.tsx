@@ -36,7 +36,12 @@ interface TransactionModalProps {
 
 const TransactionModal = ({ status, onClose, children }: TransactionModalProps) => {
   if (status === 'READY') {
-    return <>{children}</>
+    return (
+      <Modal modalSize="m" modalHeight="s" onClose={onClose}>
+        <ModalHeader onClick={onClose} title="Authorize transaction" />
+        {children}
+      </Modal>
+    )
   }
 
   if (status === 'EXTENSION') {
@@ -92,44 +97,41 @@ export const BuyMembershipSignModal = ({
 
   return (
     <TransactionModal status={status} onClose={onClose}>
-      <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-        <ModalHeader onClick={onClose} title="Authorize transaction" />
-        <ModalBody>
-          <TextMedium>You intend to create a new membership.</TextMedium>
-          <TextMedium>
-            The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
-          </TextMedium>
-          <TextMedium>
-            Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
-          </TextMedium>
-          <Row>
-            <InputComponent label="Sending from account" inputSize="l">
-              {initialSigner ? (
-                <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
-              ) : (
-                <SelectedAccount account={from} />
-              )}
-            </InputComponent>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <BalanceInfoNarrow>
-            <InfoTitle>Creation fee:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={membershipPrice?.toBn()} />
-            </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-            <InfoTitle>Transaction fee:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={paymentInfo?.partialFee.toBn()} />
-            </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-          </BalanceInfoNarrow>
-          <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>
-            Sign and create a member
-          </ButtonPrimary>
-        </ModalFooter>
-      </Modal>
+      <ModalBody>
+        <TextMedium>You intend to create a new membership.</TextMedium>
+        <TextMedium>
+          The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
+        </TextMedium>
+        <TextMedium>
+          Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
+        </TextMedium>
+        <Row>
+          <InputComponent label="Sending from account" inputSize="l">
+            {initialSigner ? (
+              <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
+            ) : (
+              <SelectedAccount account={from} />
+            )}
+          </InputComponent>
+        </Row>
+      </ModalBody>
+      <ModalFooter>
+        <BalanceInfoNarrow>
+          <InfoTitle>Creation fee:</InfoTitle>
+          <InfoValue>
+            <TokenValue value={membershipPrice?.toBn()} />
+          </InfoValue>
+          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
+          <InfoTitle>Transaction fee:</InfoTitle>
+          <InfoValue>
+            <TokenValue value={paymentInfo?.partialFee.toBn()} />
+          </InfoValue>
+          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
+        </BalanceInfoNarrow>
+        <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>
+          Sign and create a member
+        </ButtonPrimary>
+      </ModalFooter>
     </TransactionModal>
   )
 }

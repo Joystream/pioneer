@@ -56,6 +56,11 @@ const CreateMemberSchema = Yup.object().shape({
 
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
+  // 1. Handling async validations
+  // 2. Debounce - useDebounce
+  // 3. Extract form hook
+  // const [from, changeField, validation] = useForm<FormFields>({}, Validations)
+  // validations.isValid
   const [state, dispatch] = useReducer(formReducer, {
     name: '',
     rootAccount: undefined,
@@ -149,6 +154,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
                 placeholder="Type"
                 value={name}
                 onChange={(event) => changeField('name', event.target.value)}
+                // changeField('name')
               />
             </InputComponent>
           </Row>
