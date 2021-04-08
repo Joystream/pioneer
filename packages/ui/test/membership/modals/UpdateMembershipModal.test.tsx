@@ -59,7 +59,7 @@ describe('UI: UpdatedMembershipModal', () => {
     stubTransaction(api, 'api.tx.members.updateProfile')
     stubTransaction(api, 'api.tx.members.updateAccounts')
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
-    member = getMember('Alice')
+    member = getMember('alice')
   })
 
   it('Renders a modal', async () => {
