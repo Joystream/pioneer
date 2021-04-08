@@ -11,11 +11,11 @@
     ]
   },
   "scripts": {
-    "lint": "wsrun -c --exclude @joystream/types lint",
-    "build": "wsrun -e -c --stages build",
-    "build-storybook": "wsrun -e -c --stages --exclude ui build && wsrun -e -c --exclude @joystream/types build:storybook ",
-    "test": "wsrun -e -c --exclude @joystream/types test",
-    "start": "wsrun -p ui -c start"
+    "lint": "wsrun --exclude @joystream/types -c lint",
+    "build": "wsrun --fast-exit --stages -c build",
+    "build:storybook": "wsrun --package @joystream/types -c build && wsrun --package ui -c build:storybook",
+    "test": "wsrun --fast-exit --exclude @joystream/types -c test",
+    "start": "wsrun --package ui -c start"
   },
   "dependencies": {
     "eslint-plugin-import": "^2.22.1",
