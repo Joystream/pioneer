@@ -8,9 +8,9 @@ export default {
   component: FailureModal,
 } as Meta
 
-const Template: Story<FailureModalProps> = (args) => <FailureModal {...args} />
+const Template: Story<FailureModalProps> = (args) => <FailureModal {...args}>{args.children}</FailureModal>
 
 export const Default = Template.bind({})
 Default.args = {
-  message: 'This is a failure',
+  children: 'This is a failure',
 }

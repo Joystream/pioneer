@@ -49,5 +49,5 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
     return <UpdateMembershipSuccessModal onClose={onClose} member={member} />
   }
 
-  return <FailureModal message={`There was a problem updating membership for ${member.name}.`} onClose={onClose} />
+  return <FailureModal onClose={onClose}>There was a problem updating membership for {member.name}.</FailureModal>
 }

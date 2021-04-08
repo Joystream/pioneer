@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { FailureIcon } from './icons/FailureIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from './Modal'
 
 export interface FailureModalProps {
-  message: string
+  children: ReactNode
   onClose: () => void
 }
 
-export const FailureModal = ({ message, onClose }: FailureModalProps) => {
+export const FailureModal = ({ children, onClose }: FailureModalProps) => {
   return (
     <Modal modalSize="xs" modalHeight="s" onClose={onClose}>
       <ModalHeader title="" onClick={onClose} modalHeaderSize="s" />
@@ -17,7 +17,7 @@ export const FailureModal = ({ message, onClose }: FailureModalProps) => {
         <ModalTitle as="h4">
           <span className="red-title">Oh no!</span> Failure
         </ModalTitle>
-        <ResultText>{message}</ResultText>
+        <ResultText>{children}</ResultText>
       </ResultModalBody>
     </Modal>
   )

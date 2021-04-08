@@ -83,9 +83,8 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }
 
   return (
-    <FailureModal
-      message={`There was a problem with creating a membership for ${transactionParams.name}.`}
-      onClose={onClose}
-    />
+    <FailureModal onClose={onClose}>
+      There was a problem with creating a membership for {transactionParams.name}.
+    </FailureModal>
   )
 }

@@ -89,5 +89,5 @@ export function TransferInviteModal() {
     return <TransferInviteSuccessModal onClose={hideModal} recipient={targetMember} amount={amount} />
   }
 
-  return <FailureModal message="There was a problem transferring your invites." onClose={hideModal} />
+  return <FailureModal onClose={hideModal}>There was a problem transferring your invites.</FailureModal>
 }
