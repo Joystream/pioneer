@@ -11,7 +11,8 @@
     "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'",
     "start": "webpack serve --mode development --progress",
     "test": "jest",
-    "storybook": "start-storybook -p 6006 -s public --no-manager-cache"
+    "storybook": "start-storybook -p 6006 -s public --no-manager-cache",
+    "build:storybook": "build-storybook -o build-storybook"
   },
   "dependencies": {
     "@apollo/client": "^3.3.12",
