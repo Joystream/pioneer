@@ -1,7 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { SelectAccount, SelectedAccount } from '../../../accounts/components/SelectAccount'
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
@@ -11,11 +11,11 @@ import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent } from '../../../common/components/forms'
 import { Help } from '../../../common/components/Help'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
+import { ModalBody, ModalFooter } from '../../../common/components/Modal'
 import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../../../common/components/Modals'
+import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { WaitModal } from '../../../common/components/WaitModal'
-import { TransactionStatus, useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
+import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { onTransactionDone } from '../../../common/types'
 import { Member } from '../../types'
 
@@ -26,45 +26,6 @@ interface SignProps {
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   initialSigner?: Account
-}
-
-interface TransactionModalProps {
-  children: ReactNode
-  status: TransactionStatus
-  onClose: () => void
-}
-
-const TransactionModal = ({ status, onClose, children }: TransactionModalProps) => {
-  if (status === 'READY') {
-    return (
-      <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-        <ModalHeader onClick={onClose} title="Authorize transaction" />
-        {children}
-      </Modal>
-    )
-  }
-
-  if (status === 'EXTENSION') {
-    return (
-      <WaitModal
-        onClose={onClose}
-        title="Waiting for the extension"
-        description="Please, sign the transaction using external signer app."
-      />
-    )
-  }
-
-  if (status === 'PENDING') {
-    return (
-      <WaitModal
-        onClose={onClose}
-        title="Pending transaction"
-        description="We are waiting for your transaction to be mined. It can takes Lorem ipsum deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim."
-      />
-    )
-  }
-
-  return null
 }
 
 export const BuyMembershipSignModal = ({
