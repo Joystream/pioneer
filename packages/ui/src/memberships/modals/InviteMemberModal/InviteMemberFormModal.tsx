@@ -1,8 +1,7 @@
 import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect } from 'react'
 import * as Yup from 'yup'
 
-import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '../../../common/components/forms'
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
@@ -16,13 +15,13 @@ import {
 import { Row } from '../../../common/components/Modals'
 import { TextMedium } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
-import { useFormValidation } from '../../../common/hooks/useFormValidation'
+import { useForm } from '../../../common/hooks/useForm'
 import { useKeyring } from '../../../common/hooks/useKeyring'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { SelectMember } from '../../components/SelectMember'
 import { AvatarURISchema, HandleSchema, MemberSchema, NewAddressSchema } from '../../model/validation'
-import { BaseMember, Member } from '../../types'
-import { FormFields, formReducer } from '../BuyMembershipModal/formReducer'
+import { Member } from '../../types'
+import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 interface InviteProps {
   onClose: () => void
@@ -41,7 +40,8 @@ const InviteMemberSchema = Yup.object().shape({
 export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
   const keyring = useKeyring()
-  const [state, dispatch] = useReducer(formReducer, {
+
+  const { state, dispatch, isValid, errors, validate } = useForm<FormFields>(InviteMemberSchema, {
     name: '',
     rootAccount: undefined,
     controllerAccount: undefined,
@@ -51,17 +51,14 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
     hasTerms: false,
     invitor: undefined,
   })
+
   const { rootAccount, controllerAccount, handle, name, avatarUri, about } = state
   const onCreate = () => onSubmit(state as Member)
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
-  const { isValid, errors, validate } = useFormValidation<FormFields>(InviteMemberSchema)
   useEffect(() => {
     validate(state, { size: potentialMemberIdSize, keyring })
   }, [state, potentialMemberIdSize])
-  const changeField = (type: keyof FormFields, value: string | Account | BaseMember | boolean) => {
-    dispatch({ type, value })
-  }
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -69,7 +66,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <InputComponent label="Inviting member" inputSize="l">
-            <SelectMember onChange={(member) => changeField('invitor', member)} />
+            <SelectMember onChange={(member) => dispatch({ type: 'invitor', value: member })} />
           </InputComponent>
 
           <Row>
@@ -89,7 +86,12 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="root-account"
                 placeholder="Type"
                 value={rootAccount?.address ?? ''}
-                onChange={(event) => changeField('rootAccount', { name: undefined, address: event.target.value })}
+                onChange={(event) =>
+                  dispatch({
+                    type: 'rootAccount',
+                    value: { name: undefined, address: event.target.value },
+                  })
+                }
               />
             </InputComponent>
           </Row>
@@ -107,7 +109,12 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="controller-account"
                 placeholder="Type"
                 value={controllerAccount?.address ?? ''}
-                onChange={(event) => changeField('controllerAccount', { name: undefined, address: event.target.value })}
+                onChange={(event) =>
+                  dispatch({
+                    type: 'controllerAccount',
+                    value: { name: undefined, address: event.target.value },
+                  })
+                }
               />
             </InputComponent>
           </Row>
@@ -118,7 +125,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="member-name"
                 placeholder="Type"
                 value={name}
-                onChange={(event) => changeField('name', event.target.value)}
+                onChange={(event) => dispatch({ type: 'name', value: event.target.value })}
               />
             </InputComponent>
           </Row>
@@ -135,7 +142,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="member-handle"
                 placeholder="Type"
                 value={handle}
-                onChange={(event) => changeField('handle', event.target.value)}
+                onChange={(event) => dispatch({ type: 'handle', value: event.target.value })}
               />
             </InputComponent>
           </Row>
@@ -146,7 +153,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="member-about"
                 value={about}
                 placeholder="Type"
-                onChange={(event) => changeField('about', event.target.value)}
+                onChange={(event) => dispatch({ type: 'about', value: event.target.value })}
               />
             </InputComponent>
           </Row>
@@ -168,7 +175,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               <InputText
                 id="member-avatar"
                 value={avatarUri}
-                onChange={(event) => changeField('avatarUri', event.target.value)}
+                onChange={(event) => dispatch({ type: 'avatarUri', value: event.target.value })}
               />
             </InputComponent>
           </Row>

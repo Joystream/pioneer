@@ -55,8 +55,8 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
     controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
   })
-
   const { handle, name, avatarUri, about, controllerAccount, rootAccount } = state
+
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
