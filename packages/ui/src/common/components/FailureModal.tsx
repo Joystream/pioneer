@@ -3,7 +3,7 @@ import React from 'react'
 import { FailureIcon } from './icons/FailureIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from './Modal'
 
-interface FailureModalProps {
+export interface FailureModalProps {
   message: string
   onClose: () => void
 }
