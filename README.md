@@ -19,6 +19,7 @@ Tools/libraries:
 - GraphQL to access Hydra query-node
   - [Mirage JS](https://miragejs.com/) for mocking query-node data
   - [Apollo Client](https://www.apollographql.com/docs/react/) for accessing GraphQL
+- Storybook
 
 ### Code generation
 
