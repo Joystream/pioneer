@@ -4,6 +4,7 @@ import { Page } from '../../../../common/components/page/Page'
 import { PageContent, ContentWithSidepanel, SidePanel } from '../../../../common/components/page/PageContent'
 import { PageHeader } from '../../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../../common/components/page/PageTitle'
+import { PreviousPage } from '../../../../common/components/page/PreviousPage'
 import { Breadcrumbs } from '../../../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { Statistics } from '../../../../common/components/statistics/Stats'
 import { Label } from '../../../../common/components/typography'
@@ -26,7 +27,9 @@ export function WorkingGroup() {
           ]}
         />
         <PageHeader>
-          <PageTitle>Storage</PageTitle>
+          <PreviousPage>
+            <PageTitle>Storage</PageTitle>
+          </PreviousPage>
           <WorkingGroupTabs />
           <ContentWithSidepanel>
             <GroupContent>
