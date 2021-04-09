@@ -24,6 +24,7 @@ export const Column = styled.div`
 `
 
 export const WhiteBlock = styled.div`
+  display: flex;
   padding: 16px;
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};

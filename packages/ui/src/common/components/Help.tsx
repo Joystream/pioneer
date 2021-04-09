@@ -9,7 +9,7 @@ import { LinkSymbol, LinkSymbolStyle } from './icons/symbols'
 interface HelpNotificationProps {
   helperText: string
   helperTitle?: string
-  helperLinkText?: React.ReactElement
+  helperLinkText?: React.ReactNode
   helperLinkURL?: string
   size?: 'm' | 'l'
   icon?: React.ReactElement
@@ -58,6 +58,7 @@ export const HelpContainer = styled.div<{ absolute?: boolean }>`
   align-items: center;
   width: fit-content;
   height: fit-content;
+  text-transform: none;
 `
 
 const HelpPopup = styled.div<{ size?: 'm' | 'l' }>`
