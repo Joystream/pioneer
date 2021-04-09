@@ -15,8 +15,8 @@ export const WorkingGroups = () => {
   }
 
   const tabs = [
-    { title: 'Working Groups', active: true, onClick: () => history.push('/working-groups/list') },
-    { title: 'Openings', active: false, onClick: () => history.push('/working-groups/openings') },
+    { title: 'Openings', active: false, onClick: () => history.push('/working-groups') },
+    { title: 'Working Groups', active: true, onClick: () => history.push('/working-groups/working-groups') },
   ]
 
   const crumbs = [

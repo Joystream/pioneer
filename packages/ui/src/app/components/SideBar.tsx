@@ -23,7 +23,7 @@ export const SideBar = () => (
         </NavigationLink>
       </NavigationLinksItem>
       <NavigationLinksItem>
-        <NavigationLink to="/groups">
+        <NavigationLink to="/working-groups">
           <WorkingGroupsIcon />
           Working Groups
         </NavigationLink>
