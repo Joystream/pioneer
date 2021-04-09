@@ -21,7 +21,7 @@ export const Tab = ({ active, onClick, inner }: TabProps) => {
   )
 }
 
-interface TabsProps {
+export interface TabsProps {
   tabs: Array<TabProps>
   className?: string
 }
@@ -131,7 +131,11 @@ export const PageTab = styled.a<TabActiveProps>`
 
 export type PageTabSize = 'xs' | 's'
 
-export const PageTabsNav = styled.nav<{ tabsSize?: PageTabSize }>`
+export interface TabsSize {
+  tabsSize?: PageTabSize
+}
+
+export const PageTabsNav = styled.nav<TabsSize>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 40px;
