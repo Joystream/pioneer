@@ -7,7 +7,7 @@ interface TabActiveProps {
   active: boolean
 }
 
-interface TabProps extends TabActiveProps {
+export interface TabProps extends TabActiveProps {
   onClick: () => void
   title: string
   className?: string
