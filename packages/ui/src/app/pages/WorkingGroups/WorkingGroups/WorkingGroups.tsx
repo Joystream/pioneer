@@ -1,15 +1,8 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { Page } from '../../../../common/components/page/Page'
-import { PageContent } from '../../../../common/components/page/PageContent'
-import { PageHeader } from '../../../../common/components/page/PageHeader'
-import { PageTabs } from '../../../../common/components/page/PageTabs'
-import { PageTitle } from '../../../../common/components/page/PageTitle'
-import { Breadcrumbs } from '../../../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { useWorkingGroups } from '../../../../working-groups/hooks/useWorkingGroups'
-import { SideBar } from '../../../components/SideBar'
-import { GroupsContainer } from '../Components'
+import { AppPage } from '../../../components/AppPage'
 
 import { WorkingGroupsList } from './WorkingGroupsList'
 
@@ -26,24 +19,16 @@ export const WorkingGroups = () => {
     { title: 'Openings', active: false, onClick: () => history.push('/working-groups/openings') },
   ]
 
+  const crumbs = [
+    { href: '#', text: 'Working Groups' },
+    { href: '#', text: 'Working Groups' },
+  ]
+
+  const pageTitle = 'Working Groups'
+
   return (
-    <Page>
-      <SideBar />
-      <PageContent>
-        <Breadcrumbs
-          crumbs={[
-            { href: '#', text: 'Working Groups' },
-            { href: '#', text: 'Working Groups' },
-          ]}
-        />
-        <GroupsContainer>
-          <PageHeader>
-            <PageTitle>Working Groups</PageTitle>
-            <PageTabs tabs={tabs} />
-          </PageHeader>
-          <WorkingGroupsList groups={groups} />
-        </GroupsContainer>
-      </PageContent>
-    </Page>
+    <AppPage crumbs={crumbs} pageTitle={pageTitle} tabs={tabs}>
+      <WorkingGroupsList groups={groups} />
+    </AppPage>
   )
 }
