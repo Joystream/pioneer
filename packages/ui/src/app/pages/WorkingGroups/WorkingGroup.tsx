@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import { ContentWithSidepanel, SidePanel } from '../../../common/components/page/PageContent'
 import { Statistics } from '../../../common/components/statistics/Stats'
 import { Label } from '../../../common/components/typography'
-import { OpeningsList, WorkingGroupOpening } from '../../../working-groups/components/OpeningsList'
+import { OpeningsList } from '../../../working-groups/components/OpeningsList'
+import { WorkingGroupOpening } from '../../../working-groups/types'
 import { AppPage } from '../../components/AppPage'
 
 export function WorkingGroup() {
