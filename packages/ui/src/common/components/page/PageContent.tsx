@@ -15,6 +15,8 @@ export const ContentWithSidepanel = styled.div`
   width: 100%;
 `
 
+export const MainPanel = styled.div``
+
 export const SidePanel = styled.aside`
   display: grid;
   grid-template-columns: 1fr;
