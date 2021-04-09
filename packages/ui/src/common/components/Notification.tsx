@@ -5,7 +5,7 @@ import { BorderRad, Colors, Transitions } from '../constants'
 
 import { NotificationIcon } from './icons/NotificationIcon'
 
-interface NotificationProps {
+export interface NotificationProps {
   hasNotification?: boolean
 }
 
@@ -34,6 +34,7 @@ export const NotificationComponent = styled.div<NotificationProps>`
     height: 6px;
     border-radius: ${BorderRad.round};
     background-color: ${Colors.Red[400]};
+    transform: ${(props) => (props.hasNotification === true ? 'translateY(0)' : 'translateY(-6px)')};
     opacity: ${(props) => (props.hasNotification === true ? '1' : '0')};
     transition: ${Transitions.all};
   }
