@@ -4,28 +4,31 @@ import styled from 'styled-components'
 
 import { Animations, BorderRad, Colors, Shadows } from '../../constants'
 import { CloseButton } from '../buttons'
+import { SuccessIcon } from '../icons'
+import { FailureSymbol } from '../icons/symbols'
+import { Link } from '../Link'
 import { TextMedium } from '../typography'
 
-interface NotificationProps {
+export interface NotificationProps {
   title: string
-  icon?: React.ReactElement | React.ReactNode
   message?: string | React.ReactElement | React.ReactNode
   link?: string
   onClick: () => void
   isError?: boolean
 }
 
-export const SideNotification = ({ title, icon, message, link, onClick, isError }: NotificationProps) => {
+export const SideNotification = ({ title, message, link, onClick, isError }: NotificationProps) => {
   return ReactDOM.createPortal(
     <NotificationComponent isError={isError}>
       <NotificationCloseButton onClick={onClick} />
       <NotificationHeader isError={isError}>
-        {icon}
+        {isError ? <NotificationFailureSymbol /> : <NotificationSuccessIcon />}
         <NotificationTitle>{title}</NotificationTitle>
       </NotificationHeader>
       <NotificationMessage>
         {message}
-        {link}
+        {link && ' '}
+        {link && <Link href={link}>See details</Link>}
       </NotificationMessage>
     </NotificationComponent>,
     document.body
@@ -58,7 +61,7 @@ const NotificationHeader = styled.div<{ isError?: boolean }>`
   margin-bottom: 16px;
 `
 
-const NotificationTitle = styled.h4`
+const NotificationTitle = styled.h5`
   color: ${Colors.White};
 `
 
@@ -72,4 +75,23 @@ const NotificationCloseButton = styled(CloseButton)`
 
 const NotificationMessage = styled(TextMedium)`
   color: ${Colors.Black[400]};
+`
+
+const NotificationFailureSymbol = styled(FailureSymbol)`
+  width: 24px;
+  height: 24px;
+
+  .blackPart,
+  .primaryPart {
+    fill: ${Colors.Red[400]};
+  }
+`
+
+const NotificationSuccessIcon = styled(SuccessIcon)`
+  width: 24px;
+  height: 24px;
+
+  .blackPart {
+    fill: ${Colors.White};
+  }
 `

@@ -33,14 +33,14 @@ export const BlackBlock = styled(WhiteBlock)`
   background-color: ${Colors.Black[900]};
 `
 
-export const GrayBlock = styled(WhiteBlock)`
+export const ModalBlock = styled(WhiteBlock)`
   background-color: ${Colors.Black[50]};
-`
-
-export const DarkBlock = styled(WhiteBlock)`
-  background-color: ${Colors.Black[100]};
 `
 
 export const DisabledBlock = styled(WhiteBlock)`
   background-color: ${Colors.Black[75]};
+`
+
+export const ModalGlassBlock = styled(WhiteBlock)`
+  background-color: ${Colors.Black[700.85]};
 `
