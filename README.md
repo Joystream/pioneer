@@ -5,6 +5,7 @@ Governance app for Joystream DAO
 ## Preview build
 
 The preview build, deployed from the main branch, is available on [https://joystream.github.io/pioneer/](https://joystream.github.io/pioneer/).
+Components preview and testing from main branch, is available on [https://pioneer-2-storybook.netlify.app/](https://pioneer-2-storybook.netlify.app/).
 
 You can connect to a local development node (should be reachable on `127.0.0.1:9444`).
 
