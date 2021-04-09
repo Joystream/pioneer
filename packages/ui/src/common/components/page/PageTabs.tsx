@@ -9,34 +9,32 @@ interface TabActiveProps {
 
 interface TabProps extends TabActiveProps {
   onClick: () => void
-  inner?: string
+  title: string
   className?: string
 }
 
-export const Tab = ({ active, onClick, inner }: TabProps) => {
+export const Tab = ({ active, onClick, title }: TabProps) => {
   return (
     <PageTab active={active} onClick={onClick}>
-      {inner}
+      {title}
     </PageTab>
   )
 }
 
-interface TabsProps {
+export interface PageTabsProps {
   tabs: Array<TabProps>
   className?: string
 }
 
-export const Tabs = ({ tabs, className }: TabsProps) => {
-  return (
-    <PageTabsContainer className={className}>
-      <PageTabsNav>
-        {tabs.map(({ active, onClick, inner }) => (
-          <Tab key={inner} active={active} onClick={onClick} inner={inner} />
-        ))}
-      </PageTabsNav>
-    </PageTabsContainer>
-  )
-}
+export const PageTabs = ({ tabs, className }: PageTabsProps) => (
+  <PageTabsContainer className={className}>
+    <PageTabsNav>
+      {tabs.map(({ active, onClick, title }) => (
+        <Tab key={title} active={active} onClick={onClick} title={title} />
+      ))}
+    </PageTabsNav>
+  </PageTabsContainer>
+)
 
 export const PageTabsContainer = styled.div`
   display: flex;

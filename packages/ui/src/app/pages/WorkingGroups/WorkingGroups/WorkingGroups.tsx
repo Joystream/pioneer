@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { Page } from '../../../../common/components/page/Page'
 import { PageContent } from '../../../../common/components/page/PageContent'
 import { PageHeader } from '../../../../common/components/page/PageHeader'
-import { Tabs } from '../../../../common/components/page/PageTabs'
+import { PageTabs } from '../../../../common/components/page/PageTabs'
 import { PageTitle } from '../../../../common/components/page/PageTitle'
 import { Breadcrumbs } from '../../../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { useWorkingGroups } from '../../../../working-groups/hooks/useWorkingGroups'
@@ -21,6 +21,11 @@ export const WorkingGroups = () => {
     return null
   }
 
+  const tabs = [
+    { title: 'Working Groups', active: true, onClick: () => history.push('/working-groups/list') },
+    { title: 'Openings', active: false, onClick: () => history.push('/working-groups/openings') },
+  ]
+
   return (
     <Page>
       <SideBar />
@@ -34,7 +39,7 @@ export const WorkingGroups = () => {
         <GroupsContainer>
           <PageHeader>
             <PageTitle>Working Groups</PageTitle>
-            <Tabs tabs={[{ inner: 'Working Groups', active: true, onClick: () => history.push('/groups') }]} />
+            <PageTabs tabs={tabs} />
           </PageHeader>
           <WorkingGroupsList groups={groups} />
         </GroupsContainer>

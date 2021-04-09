@@ -1,7 +1,7 @@
 import React from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 
-import { Tabs } from '../../../common/components/page/PageTabs'
+import { PageTabs } from '../../../common/components/page/PageTabs'
 
 export function MyProfileTabs() {
   const history = useHistory()
@@ -12,10 +12,10 @@ export function MyProfileTabs() {
   const isMembers = !!useRouteMatch('/profile/memberships')
 
   return (
-    <Tabs
+    <PageTabs
       tabs={[
-        { inner: 'My accounts', active: isProfile, onClick: () => history.push('/profile') },
-        { inner: 'My memberships', active: isMembers, onClick: () => history.push('/profile/memberships') },
+        { title: 'My accounts', active: isProfile, onClick: () => history.push('/profile') },
+        { title: 'My memberships', active: isMembers, onClick: () => history.push('/profile/memberships') },
       ]}
     />
   )
