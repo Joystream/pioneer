@@ -1,10 +1,9 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { useWorkingGroups } from '../../../../working-groups/hooks/useWorkingGroups'
-import { AppPage } from '../../../components/AppPage'
-
-import { WorkingGroupsList } from './WorkingGroupsList'
+import { WorkingGroupsList } from '../../../working-groups/components/WorkingGroupsList'
+import { useWorkingGroups } from '../../../working-groups/hooks/useWorkingGroups'
+import { AppPage } from '../../components/AppPage'
 
 export const WorkingGroups = () => {
   const history = useHistory()
@@ -24,10 +23,8 @@ export const WorkingGroups = () => {
     { href: '#', text: 'Working Groups' },
   ]
 
-  const pageTitle = 'Working Groups'
-
   return (
-    <AppPage crumbs={crumbs} pageTitle={pageTitle} tabs={tabs}>
+    <AppPage pageTitle="Working Groups" crumbs={crumbs} tabs={tabs}>
       <WorkingGroupsList groups={groups} />
     </AppPage>
   )

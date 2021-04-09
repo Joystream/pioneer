@@ -11,7 +11,7 @@ import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
 import { WorkingGroup } from './pages/WorkingGroups/WorkingGroup'
 import { WorkingGroups } from './pages/WorkingGroups/WorkingGroups'
-import { Openings } from './pages/WorkingGroups/WorkingGroups/Openings'
+import { WorkingGroupsOpenings } from './pages/WorkingGroups/WorkingGroupsOpenings'
 import { Providers } from './Providers'
 
 export const App = () => (
@@ -21,7 +21,7 @@ export const App = () => (
       <Switch>
         <Route exact path="/profile" component={MyAccounts} />
         <Route exact path="/profile/memberships" component={MyMemberships} />
-        <Route exact path="/working-groups" component={Openings} />
+        <Route exact path="/working-groups" component={WorkingGroupsOpenings} />
         <Route exact path="/working-groups/working-groups" component={WorkingGroups} />
         <Route exact path="/working-groups/grouppreview" component={WorkingGroup} />
         <Redirect exact from="/" to="/profile" />

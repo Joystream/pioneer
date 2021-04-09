@@ -1,11 +1,11 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { ContentWithSidepanel } from '../../../../common/components/page/PageContent'
-import { Statistics } from '../../../../common/components/statistics/Stats'
-import { AppPage } from '../../../components/AppPage'
+import { ContentWithSidepanel } from '../../../common/components/page/PageContent'
+import { Statistics } from '../../../common/components/statistics/Stats'
+import { AppPage } from '../../components/AppPage'
 
-export const Openings = () => {
+export const WorkingGroupsOpenings = () => {
   const history = useHistory()
 
   const tabs = [
