@@ -11,6 +11,7 @@ import { shortenAddress } from '../../../src/common/model/formatters'
 import { KeyringContext } from '../../../src/common/providers/keyring/context'
 import { MembershipContext } from '../../../src/memberships/providers/membership/context'
 import { MemberFieldsFragment } from '../../../src/memberships/queries'
+import { seedMembers } from '../../../src/mocks/data'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
@@ -102,15 +103,15 @@ describe('UI: Accounts list', () => {
         transferable: new BN(1000),
         recoverable: new BN(0),
       }
-      mockServer.createMember('Alice')
-      const aliceMember = getMember('Alice')
+      const aliceMember = getMember('alice')
+      seedMembers(mockServer.server)
       const { findByText } = renderAccounts(aliceMember)
 
       const aliceBox = (await findByText(shortenAddress(alice.address)))!.parentElement!.parentElement!
-      expect(await within(aliceBox).findByText(/root account/i)).toBeDefined()
+      expect(await within(aliceBox).findByText(/controller account/i)).toBeDefined()
 
       const aliceStashBox = (await findByText(shortenAddress(aliceStash.address)))!.parentElement!.parentElement!
-      expect(await within(aliceStashBox).findByText(/controller account/i)).toBeDefined()
+      expect(await within(aliceStashBox).findByText(/root account/i)).toBeDefined()
     })
   })
 

@@ -7,6 +7,7 @@ import { Account } from '../../../src/accounts/types'
 import { Memberships } from '../../../src/app/pages/Profile/MyMemberships/Memberships'
 import { MembershipContext } from '../../../src/memberships/providers/membership/context'
 import { MemberFieldsFragment } from '../../../src/memberships/queries'
+import { seedMembers } from '../../../src/mocks/data'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
@@ -41,30 +42,28 @@ describe('UI: Memberships list', () => {
 
   describe('with memberships', () => {
     it('Shows list of memberships', async () => {
-      mockServer.createMember('Alice')
-      mockServer.createMember('Bob')
+      seedMembers(mockServer.server)
       const { getByText } = renderMemberships()
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))
 
-      expect(getByText(/alice_handle/i)).toBeDefined()
-      expect(getByText(/bob_handle/i)).toBeDefined()
+      expect(getByText(/alice/i)).toBeDefined()
+      expect(getByText(/bob/i)).toBeDefined()
     })
 
     it('Shows active membership', async () => {
-      mockServer.createMember('Alice')
-      mockServer.createMember('Bob')
-      const { getByText } = renderMemberships(getMember('Bob'))
+      seedMembers(mockServer.server)
+      const { getByText } = renderMemberships(getMember('bob'))
 
       await waitForElementToBeRemoved(() => getByText('Loading...'))
 
       const activeMemberships = getByText(/active membership/i).parentElement!
       expect(activeMemberships).toBeDefined()
-      expect(within(activeMemberships).getByText(/bob_handle/i)).toBeDefined()
+      expect(within(activeMemberships).getByText(/bob/i)).toBeDefined()
 
       const otherMemberships = getByText(/other memberships/i).parentElement!
       expect(otherMemberships).toBeDefined()
-      expect(within(otherMemberships).getByText(/alice_handle/i)).toBeDefined()
+      expect(within(otherMemberships).getByText(/alice/i)).toBeDefined()
     })
   })
 

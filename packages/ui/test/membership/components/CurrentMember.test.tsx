@@ -4,6 +4,7 @@ import React from 'react'
 
 import { AccountsContextProvider } from '../../../src/accounts/providers/accounts/provider'
 import { CurrentMember } from '../../../src/memberships/components/CurrentMember'
+import { seedMembers, seedMember, mockMembers } from '../../../src/mocks/data'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -24,14 +25,13 @@ describe('UI: CurrentMember component', () => {
 
   describe('with multiple memberships', () => {
     beforeEach(() => {
-      mockServer.createMember('Alice')
-      mockServer.createMember('Bob')
+      seedMembers(mockServer.server)
     })
 
     it('Displays memberships count', async () => {
       const { getAllByText } = await renderAndWait()
 
-      expect(getAllByText(/memberships/i)[0]?.parentElement?.textContent).toMatch(/^memberships 2/i)
+      expect(getAllByText(/memberships/i)[0]?.parentElement?.textContent).toMatch(/^memberships 3/i)
     })
 
     it('Renders select member button', async () => {
@@ -45,15 +45,15 @@ describe('UI: CurrentMember component', () => {
 
       fireEvent.click(getByText(/select membership/i))
 
-      fireEvent.click(within(getByRole('modal')).getByText(/alice_handle/i))
+      fireEvent.click(within(getByRole('modal')).getByText(/alice/i))
 
-      expect(getByText(/alice_handle/i)).toBeDefined()
+      expect(getByText(/alice/i)).toBeDefined()
     })
   })
 
   describe('with one membership', () => {
     beforeEach(() => {
-      mockServer.createMember('Alice')
+      seedMember(mockMembers.find((m) => m.handle == 'alice')!, mockServer.server)
     })
 
     it('Renders select member button', async () => {
