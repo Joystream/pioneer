@@ -67,7 +67,12 @@ export const BuyMembershipSignModal = ({
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>
         <Row>
-          <InputComponent label="Sending from account" inputSize="l">
+          <InputComponent
+            label="Sending from account"
+            inputSize="l"
+            validation={hasFunds ? undefined : 'invalid'}
+            message={hasFunds ? undefined : 'Insufficient funds on this account. Please choose other.'}
+          >
             {initialSigner ? (
               <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
             ) : (
