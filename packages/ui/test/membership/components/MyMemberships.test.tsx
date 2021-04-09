@@ -4,7 +4,7 @@ import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { Account } from '../../../src/accounts/types'
-import { Memberships } from '../../../src/app/pages/Profile/MyMemberships/Memberships'
+import { Memberships } from '../../../src/app/pages/Profile/components/Memberships'
 import { MembershipContext } from '../../../src/memberships/providers/membership/context'
 import { MemberFieldsFragment } from '../../../src/memberships/queries'
 import { seedMembers } from '../../../src/mocks/data'

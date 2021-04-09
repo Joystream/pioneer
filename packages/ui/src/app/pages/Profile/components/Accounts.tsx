@@ -8,14 +8,12 @@ import { useAccounts } from '../../../../accounts/hooks/useAccounts'
 import { useBalance } from '../../../../accounts/hooks/useBalance'
 import { useBalances } from '../../../../accounts/hooks/useBalances'
 import { filterAccounts } from '../../../../accounts/model/filterAccounts'
-import { sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
+import { setOrder, sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
 import { Account } from '../../../../accounts/types'
 import { PageTab, PageTabsNav } from '../../../../common/components/page/PageTabs'
 import { HeaderText, SortIconDown, SortIconUp } from '../../../../common/components/SortedListHeaders'
 import { TokenValue } from '../../../../common/components/typography'
 import { BorderRad, Colors, Sizes } from '../../../../common/constants'
-
-import { setOrder } from './helpers'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -118,13 +116,10 @@ interface HeaderProps {
   sortKey: SortKey
 }
 
-const AccountsTabs = styled(PageTabsNav)`
-  grid-area: accountstabs;
-`
+const AccountsTabs = styled(PageTabsNav)``
 
 const AccountsWrap = styled.div`
   display: grid;
-  grid-area: accountstable;
   grid-template-columns: 1fr;
   grid-template-rows: 16px auto;
   grid-template-areas:

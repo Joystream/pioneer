@@ -1,9 +1,9 @@
 import React from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 
-import { AppPage } from '../../../components/AppPage'
+import { AppPage } from '../../components/AppPage'
 
-import { Memberships } from './Memberships'
+import { Memberships } from './components/Memberships'
 
 export const MyMemberships = () => {
   const history = useHistory()

@@ -6,7 +6,7 @@ import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { Account, Balances } from '../../../src/accounts/types'
-import { Accounts } from '../../../src/app/pages/Profile/MyAccounts/Accounts'
+import { Accounts } from '../../../src/app/pages/Profile/components/Accounts'
 import { shortenAddress } from '../../../src/common/model/formatters'
 import { KeyringContext } from '../../../src/common/providers/keyring/context'
 import { MembershipContext } from '../../../src/memberships/providers/membership/context'

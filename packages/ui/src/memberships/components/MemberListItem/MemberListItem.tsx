@@ -1,20 +1,20 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { EditSymbol } from '../../../../common/components/icons/symbols'
-import { BorderRad, Colors, Fonts, Sizes } from '../../../../common/constants'
-import { useModal } from '../../../../common/hooks/useModal'
-import { MemberInfo, MemberRoleHelp } from '../../../../memberships/components'
-import { EditMembershipButton } from '../../../../memberships/components/EditMembershipButton'
-import { MemberModalCall } from '../../../../memberships/components/MemberProfile'
-import { TransferInviteButton } from '../../../../memberships/components/TransferInviteButton'
-import { BaseMember } from '../../../../memberships/types'
+import { MemberInfo, MemberRoleHelp } from '..'
+import { EditSymbol } from '../../../common/components/icons/symbols'
+import { BorderRad, Colors, Fonts, Sizes } from '../../../common/constants'
+import { useModal } from '../../../common/hooks/useModal'
+import { BaseMember } from '../../types'
+import { EditMembershipButton } from '../EditMembershipButton'
+import { MemberModalCall } from '../MemberProfile'
+import { TransferInviteButton } from '../TransferInviteButton'
 
 interface Props {
   member: BaseMember
 }
 
-export const MemberItem = ({ member }: Props) => {
+export const MemberListItem = ({ member }: Props) => {
   const { showModal } = useModal()
 
   const showMemberModal = useCallback(() => {
