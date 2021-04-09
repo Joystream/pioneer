@@ -1,9 +1,22 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { Colors, Transitions } from '../../constants'
+import { Colors, Transitions } from '../constants'
+
+import { BadgeViolet } from './BadgeViolet'
 
 export type PageTabSize = 'xs' | 's'
+
+interface TabActiveProps {
+  active: boolean
+}
+
+export interface TabProps extends TabActiveProps {
+  onClick: () => void
+  title: string
+  className?: string
+  count?: number
+}
 
 export interface TabsSize {
   tabsSize?: PageTabSize
@@ -18,26 +31,17 @@ export interface TabsProps {
 export const Tabs = ({ tabs, className, tabsSize }: TabsProps) => (
   <TabsContainer className={className}>
     <TabsNav tabsSize={tabsSize}>
-      {tabs.map(({ active, onClick, title }) => (
-        <Tab key={title} active={active} onClick={onClick} title={title} />
+      {tabs.map(({ active, onClick, title, count }) => (
+        <Tab key={title} active={active} onClick={onClick} title={title} count={count} />
       ))}
     </TabsNav>
   </TabsContainer>
 )
 
-interface TabActiveProps {
-  active: boolean
-}
-
-export interface TabProps extends TabActiveProps {
-  onClick: () => void
-  title: string
-  className?: string
-}
-
-const Tab = ({ active, onClick, title }: TabProps) => (
+const Tab = ({ active, onClick, title, count }: TabProps) => (
   <TabContainer active={active} onClick={onClick}>
     {title}
+    {count !== undefined && <BadgeViolet>{count}</BadgeViolet>}
   </TabContainer>
 )
 

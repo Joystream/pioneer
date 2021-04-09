@@ -1,8 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { TemplateBlock } from '../storybookParts/previewStyles'
-
+import { TemplateBlock } from './storybookParts/previewStyles'
 import { Tabs, TabsProps } from './Tabs'
 
 export default {
@@ -32,10 +31,22 @@ const Template: Story<TabsProps> = (args) => {
 }
 
 export const Default = Template.bind({})
+
 Default.args = {
   tabs: ['Page 1', 'Page 2', 'Page 3', 'Page 4', 'Page 5'].map((title) => ({
     title,
     active: false,
     onClick: () => undefined,
+  })),
+}
+
+export const WithCount = Template.bind({})
+
+WithCount.args = {
+  tabs: ['Page 1', 'Page 2', 'Page 3', 'Page 4', 'Page 5'].map((title, index) => ({
+    title,
+    active: false,
+    onClick: () => undefined,
+    count: index,
   })),
 }

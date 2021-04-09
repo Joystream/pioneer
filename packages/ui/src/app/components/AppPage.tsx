@@ -5,7 +5,7 @@ import { PageContent } from '../../common/components/page/PageContent'
 import { PageHeader } from '../../common/components/page/PageHeader'
 import { PageTitle } from '../../common/components/page/PageTitle'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
-import { Tabs, TabProps } from '../../common/components/page/Tabs'
+import { Tabs, TabProps } from '../../common/components/Tabs'
 
 interface AppPageProps {
   crumbs: { href: string; text: string }[]

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { CloseButton } from '../../../common/components/buttons'
 import { EditSymbol } from '../../../common/components/icons/symbols'
-import { Tabs } from '../../../common/components/page/Tabs'
+import { Tabs } from '../../../common/components/Tabs'
 import { Animations, Colors } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
