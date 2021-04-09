@@ -1,10 +1,11 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
 import { ContentWithSidepanel, SidePanel } from '../../../common/components/page/PageContent'
 import { Statistics } from '../../../common/components/statistics/Stats'
 import { Label } from '../../../common/components/typography'
-import { BorderRad, Colors, Transitions } from '../../../common/constants'
+import { OpeningsList, WorkingGroupOpening } from '../../../working-groups/components/OpeningsList'
 import { AppPage } from '../../components/AppPage'
 
 export function WorkingGroup() {
@@ -20,6 +21,27 @@ export function WorkingGroup() {
     { title: 'History', active: false, onClick: () => undefined },
   ]
 
+  const openings: WorkingGroupOpening[] = [
+    {
+      id: '123',
+      title: 'Storage working group leader',
+      duration: [123, 'days'],
+      type: 'LEADER',
+      reward: { value: new BN(1000), interval: 3600 },
+      applicants: { current: 2, total: 10 },
+      hiring: { current: 0, total: 1 },
+    },
+    {
+      id: '221',
+      title: 'Storage working group worker',
+      duration: [12, 'days'],
+      type: 'LEADER',
+      reward: { value: new BN(1000), interval: 3600 },
+      applicants: { current: 2, total: 10 },
+      hiring: { current: 0, total: 1 },
+    },
+  ]
+
   return (
     <AppPage pageTitle="Storage" crumbs={crumbs} tabs={tabs}>
       <ContentWithSidepanel>
@@ -33,15 +55,11 @@ export function WorkingGroup() {
         <OpeningsCategories>
           <OpeningsCategory>
             <Label>Upcoming openings</Label>
-            <OpeningsList>
-              <OpeningItem />
-            </OpeningsList>
+            <OpeningsList openings={openings} />
           </OpeningsCategory>
           <OpeningsCategory>
             <Label>Openings</Label>
-            <OpeningsList>
-              <OpeningItem />
-            </OpeningsList>
+            <OpeningsList openings={openings} />
           </OpeningsCategory>
         </OpeningsCategories>
         <SidePanel>Some content</SidePanel>
@@ -60,25 +78,4 @@ export const OpeningsCategory = styled.div`
   display: grid;
   grid-row-gap: 16px;
   width: 100%;
-`
-
-export const OpeningsList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`
-
-export const OpeningItem = styled.li`
-  display: grid;
-  grid-template-columns: 1fr 1fr 16px;
-  grid-column-gap: 24px;
-  padding: 16px;
-  border: 1px solid ${Colors.Black[100]};
-  border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
-  transition: ${Transitions.all};
-
-  & + & {
-    margin-top: -1px;
-  }
 `
