@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { GrayBlock, Row, TemplateBlock } from '../storybookParts/previewStyles'
+import { ModalBlock, Row, TemplateBlock } from '../storybookParts/previewStyles'
 
 import { InputComponent, InputComponentProps, InputNumber, InputText } from './InputComponent'
 
@@ -11,7 +11,7 @@ export default {
 } as Meta
 
 const Template: Story<InputComponentProps> = (args) => (
-  <GrayBlock>
+  <ModalBlock>
     <TemplateBlock>
       <Row>
         <InputComponent {...args}>
@@ -30,7 +30,7 @@ const Template: Story<InputComponentProps> = (args) => (
         </InputComponent>
       </Row>
     </TemplateBlock>
-  </GrayBlock>
+  </ModalBlock>
 )
 
 export const InputComponentComponent = Template.bind({})
