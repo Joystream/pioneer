@@ -5,25 +5,26 @@ import { Colors, Fonts, Transitions } from '../constants'
 
 import { CopyButton } from './buttons'
 
-interface CopyComponentText {
+export interface CopyComponentProps {
   altText?: string
-  copyText: string
+  copyText?: string
+  disabled?: boolean
   className?: any
 }
 
-export const CopyComponent = React.memo(({ altText, copyText, className }: CopyComponentText) => {
+export const CopyComponent = React.memo(({ altText, copyText, disabled, className }: CopyComponentProps) => {
   return (
-    <CopyGroup className={className}>
+    <CopyGroup className={className} disabled={disabled}>
       <CopyText>
         {!altText && copyText}
         {altText && altText}
       </CopyText>
-      <CopyButton textToCopy={copyText} />
+      <CopyButton textToCopy={copyText} disabled={disabled} />
     </CopyGroup>
   )
 })
 
-export const CopyGroup = styled.div`
+export const CopyGroup = styled.div<{ disabled?: boolean }>`
   display: grid;
   grid-auto-flow: column;
   align-items: center;
@@ -33,12 +34,12 @@ export const CopyGroup = styled.div`
   font-family: ${Fonts.Inter};
   font-size: 12px;
   line-height: 18px;
-  color: ${Colors.Black[400]};
+  color: ${({ disabled }) => (disabled ? Colors.Black[300] : Colors.Black[400])};
   transition: ${Transitions.all};
 `
 
 export const CopyText = styled.span`
-  max-width: 152px;
+  max-width: 100%;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -46,4 +47,5 @@ export const CopyText = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-feature-settings: 'tnum';
 `

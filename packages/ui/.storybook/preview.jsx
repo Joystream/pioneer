@@ -1,5 +1,6 @@
 import React from 'react'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
+import { Colors } from '../src/common/constants'
 
 const stylesWrapperDecorator = (styleFn) => (
   <div>
@@ -13,15 +14,27 @@ export const decorators = [stylesWrapperDecorator]
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   backgrounds: {
-    default: 'white',
+    default: 'White',
     values: [
       {
-        name: 'black',
-        value: '#000000',
+        name: 'White',
+        value: Colors.White,
       },
       {
-        name: 'white',
-        value: '#ffffff',
+        name: 'Black',
+        value: Colors.Black[900],
+      },
+      {
+        name: 'Modal',
+        value: Colors.Black[50],
+      },
+      {
+        name: 'Disabled',
+        value: Colors.Black[75],
+      },
+      {
+        name: 'Around modal glass',
+        value: Colors.Black[700.85]
       },
     ],
   },

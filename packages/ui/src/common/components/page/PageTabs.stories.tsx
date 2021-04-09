@@ -1,7 +1,9 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { PageTabs, PageTabsProps } from './PageTabs'
+import { TemplateBlock } from '../storybookParts/previewStyles'
+
+import { PageTabsNav, PageTabs, PageTabsProps } from './PageTabs'
 
 export default {
   title: 'Common/PageTabs',
@@ -18,7 +20,19 @@ const Template: Story<PageTabsProps> = (args) => {
     onClick: handleClick(index),
   }))
 
-  return <PageTabs {...args} />
+  return (
+    <TemplateBlock>
+      <h2>S</h2>
+      <PageTabsNav tabsSize="s">
+        <PageTabs {...args} />
+      </PageTabsNav>
+
+      <h2>XS</h2>
+      <PageTabsNav tabsSize="xs">
+        <PageTabs {...args} />
+      </PageTabsNav>
+    </TemplateBlock>
+  )
 }
 
 export const Default = Template.bind({})

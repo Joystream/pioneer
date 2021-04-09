@@ -129,7 +129,11 @@ export const PageTab = styled.a<TabActiveProps>`
 
 export type PageTabSize = 'xs' | 's'
 
-export const PageTabsNav = styled.nav<{ tabsSize?: PageTabSize }>`
+export interface TabsSize {
+  tabsSize?: PageTabSize
+}
+
+export const PageTabsNav = styled.nav<TabsSize>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 40px;
