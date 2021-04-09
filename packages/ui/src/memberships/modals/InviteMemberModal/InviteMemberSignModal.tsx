@@ -1,6 +1,5 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
@@ -17,6 +16,7 @@ import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { Address, onTransactionDone } from '../../../common/types'
 import { Member } from '../../types'
+import { getMessage } from '../utils'
 
 interface SignProps {
   onClose: () => void
@@ -24,11 +24,6 @@ interface SignProps {
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   signer: Address
-}
-
-const getMessage = (fee?: BN) => {
-  return `Insufficient funds to cover the membership creation. You need at least ${fee?.toString()} JOY on your controller account for this action.
-Please choose different member.`
 }
 
 export const InviteMemberSignModal = ({ onClose, transactionParams, onDone, transaction, signer }: SignProps) => {
