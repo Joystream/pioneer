@@ -2,6 +2,7 @@ import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
 
+import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { CopyComponent } from '../../common/components/CopyComponent'
 import { BorderRad, Colors } from '../../common/constants'
 import { shortenAddress } from '../../common/model/formatters'
@@ -37,6 +38,10 @@ const AccountInfoWrap = styled.div`
   align-items: center;
   width: 100%;
   justify-self: start;
+
+  & ${BadgeViolet} {
+    grid-area: accounttype;
+  }
 `
 
 const AccountPhoto = styled.div`
@@ -74,26 +79,11 @@ interface OptionalAccountTypeParams {
 
 const OptionalAccountType = ({ active, address }: OptionalAccountTypeParams) => {
   if ((active && active.rootAccount === address) || active.controllerAccount === address) {
-    return <AccountType>{active.rootAccount === address ? 'Root account' : 'Controller account'}</AccountType>
+    return <BadgeViolet>{active.rootAccount === address ? 'Root account' : 'Controller account'}</BadgeViolet>
   }
 
   return null
 }
-
-const AccountType = styled.p`
-  display: flex;
-  grid-area: accounttype;
-  justify-content: center;
-  width: fit-content;
-  margin: 0;
-  padding: 0 8px;
-  font-size: 10px;
-  line-height: 16px;
-  border-radius: 8px;
-  color: ${Colors.White};
-  background-color: ${Colors.Blue[200]};
-  text-transform: uppercase;
-`
 
 const AccountCopyAddress = styled(CopyComponent)`
   grid-area: accountaddress;

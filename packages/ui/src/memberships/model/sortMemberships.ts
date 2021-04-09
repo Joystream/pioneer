@@ -12,3 +12,18 @@ export function sortMemberships(members: BaseMember[], key: SortKey, isDescendin
   }
   return members
 }
+
+export function setOrder(
+  key: SortKey,
+  sortBy: SortKey,
+  setSortBy: (k: SortKey) => void,
+  reversed: boolean,
+  setDescending: (d: boolean) => void
+) {
+  if (key === sortBy) {
+    setDescending(!reversed)
+  } else {
+    setDescending(key !== 'handle')
+    setSortBy(key)
+  }
+}

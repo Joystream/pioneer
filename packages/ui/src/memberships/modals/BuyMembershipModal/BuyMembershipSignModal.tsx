@@ -18,6 +18,7 @@ import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { onTransactionDone } from '../../../common/types'
 import { Member } from '../../types'
+import { getMessage } from '../utils'
 
 interface SignProps {
   onClose: () => void
@@ -67,7 +68,12 @@ export const BuyMembershipSignModal = ({
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>
         <Row>
-          <InputComponent label="Sending from account" inputSize="l">
+          <InputComponent
+            label="Sending from account"
+            inputSize="l"
+            validation={hasFunds ? undefined : 'invalid'}
+            message={hasFunds ? undefined : getMessage(paymentInfo?.partialFee)}
+          >
             {initialSigner ? (
               <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
             ) : (

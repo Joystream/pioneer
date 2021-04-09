@@ -1,44 +1,51 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { Colors, Transitions } from '../../constants'
+import { Colors, Transitions } from '../constants'
+
+import { BadgeViolet } from './BadgeViolet'
+
+export type PageTabSize = 'xs' | 's'
 
 interface TabActiveProps {
   active: boolean
 }
 
-interface TabProps extends TabActiveProps {
+export interface TabProps extends TabActiveProps {
   onClick: () => void
-  inner?: string
+  title: string
   className?: string
+  count?: number
 }
 
-export const Tab = ({ active, onClick, inner }: TabProps) => {
-  return (
-    <PageTab active={active} onClick={onClick}>
-      {inner}
-    </PageTab>
-  )
+export interface TabsSize {
+  tabsSize?: PageTabSize
 }
 
 export interface TabsProps {
   tabs: Array<TabProps>
   className?: string
+  tabsSize?: PageTabSize
 }
 
-export const Tabs = ({ tabs, className }: TabsProps) => {
-  return (
-    <PageTabsContainer className={className}>
-      <PageTabsNav>
-        {tabs.map(({ active, onClick, inner }) => (
-          <Tab key={inner} active={active} onClick={onClick} inner={inner} />
-        ))}
-      </PageTabsNav>
-    </PageTabsContainer>
-  )
-}
+export const Tabs = ({ tabs, className, tabsSize }: TabsProps) => (
+  <TabsContainer className={className}>
+    <TabsNav tabsSize={tabsSize}>
+      {tabs.map(({ active, onClick, title, count }) => (
+        <Tab key={title} active={active} onClick={onClick} title={title} count={count} />
+      ))}
+    </TabsNav>
+  </TabsContainer>
+)
 
-export const PageTabsContainer = styled.div`
+const Tab = ({ active, onClick, title, count }: TabProps) => (
+  <TabContainer active={active} onClick={onClick}>
+    {title}
+    {count !== undefined && <BadgeViolet>{count}</BadgeViolet>}
+  </TabContainer>
+)
+
+const TabsContainer = styled.div`
   display: flex;
   position: relative;
   align-items: center;
@@ -57,7 +64,7 @@ export const PageTabsContainer = styled.div`
   }
 `
 
-export const PageTab = styled.a<TabActiveProps>`
+const TabContainer = styled.a<TabActiveProps>`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
@@ -129,13 +136,7 @@ export const PageTab = styled.a<TabActiveProps>`
     `}
 `
 
-export type PageTabSize = 'xs' | 's'
-
-export interface TabsSize {
-  tabsSize?: PageTabSize
-}
-
-export const PageTabsNav = styled.nav<TabsSize>`
+const TabsNav = styled.nav<TabsSize>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 40px;
@@ -144,7 +145,7 @@ export const PageTabsNav = styled.nav<TabsSize>`
   justify-items: start;
   z-index: 1;
 
-  ${PageTab} {
+  ${TabContainer} {
     font-size: ${({ tabsSize }) => {
       switch (tabsSize) {
         case 'xs':

@@ -10,3 +10,18 @@ export function sortAccounts(accounts: Account[], balanceMap: AddressToBalanceMa
     ? accounts.sort(Comparator<Account>(isDescending, key).string)
     : accounts.sort(BalanceComparator(balanceMap, key, isDescending))
 }
+
+export function setOrder(
+  key: SortKey,
+  sortBy: SortKey,
+  setSortBy: (k: SortKey) => void,
+  reversed: boolean,
+  setDescending: (d: boolean) => void
+) {
+  if (key === sortBy) {
+    setDescending(!reversed)
+  } else {
+    setDescending(key !== 'name')
+    setSortBy(key)
+  }
+}

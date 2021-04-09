@@ -2,11 +2,11 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { ValueInJoys, TextMedium } from '../../../../common/components/typography'
-import { Subscription } from '../../../../common/components/typography/Subscription'
-import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../../../common/constants'
-import { Avatar, AvatarPlaceholderImage } from '../../../../memberships/components/Avatar'
-import { WorkingGroup } from '../../../../working-groups/types'
+import { ValueInJoys, TextMedium } from '../../common/components/typography'
+import { Subscription } from '../../common/components/typography/Subscription'
+import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../common/constants'
+import { Avatar, AvatarPlaceholderImage } from '../../memberships/components/Avatar'
+import { WorkingGroup } from '../types'
 
 export interface WorkingGroupProps {
   group: WorkingGroup
@@ -17,11 +17,11 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
 
   return (
     <GroupItem>
-      <GroupImageContainer onClick={() => history.push('/groups/grouppreview')}>
+      <GroupImageContainer onClick={() => history.push('/working-groups/grouppreview')}>
         {group.image ? <GroupImage src={group.image} /> : <GroupAvatarPlaceholderImage />}
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle onClick={() => history.push('/groups/grouppreview')}>{group.name}</GroupTitle>
+        <GroupTitle onClick={() => history.push('/working-groups/grouppreview')}>{group.name}</GroupTitle>
         {group.about && <GroupContent>{group.about}</GroupContent>}
       </GroupContentBlock>
       <GroupStats>
