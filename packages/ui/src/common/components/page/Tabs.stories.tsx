@@ -3,14 +3,14 @@ import React, { useState } from 'react'
 
 import { TemplateBlock } from '../storybookParts/previewStyles'
 
-import { PageTabsNav, PageTabs, PageTabsProps } from './PageTabs'
+import { Tabs, TabsProps } from './Tabs'
 
 export default {
-  title: 'Common/PageTabs',
-  component: PageTabs,
+  title: 'Common/Tabs',
+  component: Tabs,
 } as Meta
 
-const Template: Story<PageTabsProps> = (args) => {
+const Template: Story<TabsProps> = (args) => {
   const [which, setWhich] = useState(0)
   const handleClick = (which: number) => () => setWhich(which)
 
@@ -23,14 +23,10 @@ const Template: Story<PageTabsProps> = (args) => {
   return (
     <TemplateBlock>
       <h2>S</h2>
-      <PageTabsNav tabsSize="s">
-        <PageTabs {...args} />
-      </PageTabsNav>
+      <Tabs {...args} tabsSize="s" />
 
       <h2>XS</h2>
-      <PageTabsNav tabsSize="xs">
-        <PageTabs {...args} />
-      </PageTabsNav>
+      <Tabs {...args} tabsSize="xs" />
     </TemplateBlock>
   )
 }

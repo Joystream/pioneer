@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { PageContent } from '../../common/components/page/PageContent'
 import { PageHeader } from '../../common/components/page/PageHeader'
-import { PageTabs, TabProps } from '../../common/components/page/PageTabs'
 import { PageTitle } from '../../common/components/page/PageTitle'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
+import { Tabs, TabProps } from '../../common/components/page/Tabs'
 
 interface AppPageProps {
   crumbs: { href: string; text: string }[]
@@ -20,7 +20,7 @@ export const AppPage = ({ children, crumbs, pageTitle, tabs }: AppPageProps) => 
     <PageContainer>
       <PageHeader>
         <PageTitle>{pageTitle}</PageTitle>
-        <PageTabs tabs={tabs} />
+        <Tabs tabs={tabs} />
       </PageHeader>
       {children}
     </PageContainer>

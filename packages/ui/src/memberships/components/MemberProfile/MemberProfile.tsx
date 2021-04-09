@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { CloseButton } from '../../../common/components/buttons'
 import { EditSymbol } from '../../../common/components/icons/symbols'
-import { PageTab, PageTabsNav } from '../../../common/components/page/PageTabs'
+import { Tabs } from '../../../common/components/page/Tabs'
 import { Animations, Colors } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
@@ -16,10 +16,10 @@ import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
 import { MemberModalCall } from './types'
 
-type Tabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
+type ProfileTabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
 export const MemberProfile = React.memo(() => {
-  const [activeTab, setActiveTab] = useState<Tabs>('DETAILS')
+  const [activeTab, setActiveTab] = useState<ProfileTabs>('DETAILS')
   const { members, isLoading } = useMyMemberships()
   const { modalData, hideModal } = useModal<MemberModalCall>()
   const { data, loading } = useGetMemberQuery({ variables: { id: modalData.id } })
@@ -59,17 +59,14 @@ export const MemberProfile = React.memo(() => {
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
           <MemberInfo member={member} memberSize="l" size="l" />
-          <PageTabsNav>
-            <PageTab active={activeTab === 'DETAILS'} onClick={() => setActiveTab('DETAILS')}>
-              Member details
-            </PageTab>
-            <PageTab active={activeTab === 'ACCOUNTS'} onClick={() => setActiveTab('ACCOUNTS')}>
-              Accounts
-            </PageTab>
-            <PageTab active={activeTab === 'ROLES'} onClick={() => setActiveTab('ROLES')}>
-              Roles
-            </PageTab>
-          </PageTabsNav>
+          <Tabs
+            tabs={[
+              { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },
+              { title: 'Accounts', active: activeTab === 'ACCOUNTS', onClick: () => setActiveTab('ACCOUNTS') },
+              { title: 'Roles', active: activeTab === 'ROLES', onClick: () => setActiveTab('ROLES') },
+            ]}
+            tabsSize="xs"
+          />
         </SidePaneHeader>
         <SidePaneBody>
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}

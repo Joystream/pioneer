@@ -10,7 +10,7 @@ import { useBalances } from '../../../../accounts/hooks/useBalances'
 import { filterAccounts } from '../../../../accounts/model/filterAccounts'
 import { setOrder, sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
 import { Account } from '../../../../accounts/types'
-import { PageTab, PageTabsNav } from '../../../../common/components/page/PageTabs'
+import { Tabs } from '../../../../common/components/page/Tabs'
 import { HeaderText, SortIconDown, SortIconUp } from '../../../../common/components/SortedListHeaders'
 import { TokenValue } from '../../../../common/components/typography'
 import { BorderRad, Colors, Sizes } from '../../../../common/constants'
@@ -50,16 +50,14 @@ export function Accounts() {
     )
   }
 
+  const tabs = [
+    { title: 'All accounts', onClick: () => !isDisplayAll && setIsDisplayAll(true), active: isDisplayAll },
+    { title: 'Transferable balance', onClick: () => isDisplayAll && setIsDisplayAll(false), active: !isDisplayAll },
+  ]
+
   return (
     <>
-      <AccountsTabs tabsSize="xs">
-        <PageTab active={isDisplayAll} onClick={() => !isDisplayAll && setIsDisplayAll(true)}>
-          All accounts
-        </PageTab>
-        <PageTab active={!isDisplayAll} onClick={() => isDisplayAll && setIsDisplayAll(false)}>
-          Transferable balance
-        </PageTab>
-      </AccountsTabs>
+      <Tabs tabsSize="xs" tabs={tabs} />
       <AccountsWrap>
         <ListHeaders>
           <Header sortKey="name">Account</Header>
@@ -115,8 +113,6 @@ interface HeaderProps {
   children: ReactNode
   sortKey: SortKey
 }
-
-const AccountsTabs = styled(PageTabsNav)``
 
 const AccountsWrap = styled.div`
   display: grid;

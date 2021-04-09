@@ -3,6 +3,28 @@ import styled, { css } from 'styled-components'
 
 import { Colors, Transitions } from '../../constants'
 
+export type PageTabSize = 'xs' | 's'
+
+export interface TabsSize {
+  tabsSize?: PageTabSize
+}
+
+export interface TabsProps {
+  tabs: Array<TabProps>
+  className?: string
+  tabsSize?: PageTabSize
+}
+
+export const Tabs = ({ tabs, className, tabsSize }: TabsProps) => (
+  <TabsContainer className={className}>
+    <TabsNav tabsSize={tabsSize}>
+      {tabs.map(({ active, onClick, title }) => (
+        <Tab key={title} active={active} onClick={onClick} title={title} />
+      ))}
+    </TabsNav>
+  </TabsContainer>
+)
+
 interface TabActiveProps {
   active: boolean
 }
@@ -13,30 +35,13 @@ export interface TabProps extends TabActiveProps {
   className?: string
 }
 
-export const Tab = ({ active, onClick, title }: TabProps) => {
-  return (
-    <PageTab active={active} onClick={onClick}>
-      {title}
-    </PageTab>
-  )
-}
-
-export interface PageTabsProps {
-  tabs: Array<TabProps>
-  className?: string
-}
-
-export const PageTabs = ({ tabs, className }: PageTabsProps) => (
-  <PageTabsContainer className={className}>
-    <PageTabsNav>
-      {tabs.map(({ active, onClick, title }) => (
-        <Tab key={title} active={active} onClick={onClick} title={title} />
-      ))}
-    </PageTabsNav>
-  </PageTabsContainer>
+const Tab = ({ active, onClick, title }: TabProps) => (
+  <TabContainer active={active} onClick={onClick}>
+    {title}
+  </TabContainer>
 )
 
-export const PageTabsContainer = styled.div`
+const TabsContainer = styled.div`
   display: flex;
   position: relative;
   align-items: center;
@@ -55,7 +60,7 @@ export const PageTabsContainer = styled.div`
   }
 `
 
-export const PageTab = styled.a<TabActiveProps>`
+const TabContainer = styled.a<TabActiveProps>`
   display: inline-grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
@@ -127,13 +132,7 @@ export const PageTab = styled.a<TabActiveProps>`
     `}
 `
 
-export type PageTabSize = 'xs' | 's'
-
-export interface TabsSize {
-  tabsSize?: PageTabSize
-}
-
-export const PageTabsNav = styled.nav<TabsSize>`
+const TabsNav = styled.nav<TabsSize>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 40px;
@@ -142,7 +141,7 @@ export const PageTabsNav = styled.nav<TabsSize>`
   justify-items: start;
   z-index: 1;
 
-  ${PageTab} {
+  ${TabContainer} {
     font-size: ${({ tabsSize }) => {
       switch (tabsSize) {
         case 'xs':
