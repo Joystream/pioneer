@@ -2,9 +2,16 @@ import React from 'react'
 
 import { Icon } from './Icon'
 
-export function ArrowDownIcon() {
+export function ArrowDownIcon({ className }: { className?: string }) {
   return (
-    <Icon size="16" viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+    <Icon
+      size="16"
+      viewBox="0 0 16 16"
+      preserveAspectRatio="xMidYMid meet"
+      fill="none"
+      color="currentColor"
+      className={className}
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"

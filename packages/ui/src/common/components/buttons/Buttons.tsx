@@ -91,7 +91,6 @@ const BasicButtonStyles = css<ButtonProps>`
 
   & > svg {
     z-index: 2;
-    transform: translateY(-1px);
     transition: ${Transitions.all};
   }
 

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Tabs } from '../../../../common/components/page/PageTabs'
 
 export function WorkingGroupTabs() {
-  const [isOpeningActive, setOpeningsActive] = useState(false)
+  const [isOpeningActive, setOpeningsActive] = useState(true)
   return (
     <Tabs
       tabs={[
