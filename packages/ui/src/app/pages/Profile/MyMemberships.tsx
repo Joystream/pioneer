@@ -1,30 +1,24 @@
 import React from 'react'
-import { useHistory, useRouteMatch } from 'react-router-dom'
 
+import { PageHeader } from '../../../common/components/page/PageHeader'
+import { PageTitle } from '../../../common/components/page/PageTitle'
 import { AppPage } from '../../components/AppPage'
 
 import { Memberships } from './components/Memberships'
+import { MyProfileTabs } from './components/MyProfileTabs'
 
 export const MyMemberships = () => {
-  const history = useHistory()
-  const isProfile = !!useRouteMatch({
-    exact: true,
-    path: '/profile',
-  })
-  const isMembers = !!useRouteMatch('/profile/memberships')
-
-  const tabs = [
-    { title: 'My accounts', active: isProfile, onClick: () => history.push('/profile') },
-    { title: 'My memberships', active: isMembers, onClick: () => history.push('/profile/memberships') },
-  ]
-
   const crumbs = [
     { href: '#', text: 'My Profile' },
     { href: '#', text: 'My Memberships' },
   ]
 
   return (
-    <AppPage pageTitle="My Profile" crumbs={crumbs} tabs={tabs}>
+    <AppPage crumbs={crumbs}>
+      <PageHeader>
+        <PageTitle>My Profile</PageTitle>
+        <MyProfileTabs active="My Memberships" />
+      </PageHeader>
       <Memberships />
     </AppPage>
   )

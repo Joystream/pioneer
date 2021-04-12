@@ -9,6 +9,8 @@ import { SideBar } from './components/SideBar'
 import { GlobalModals } from './GlobalModals'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
+import { MyApplications } from './pages/WorkingGroups/MyApplications'
+import { MyRoles } from './pages/WorkingGroups/MyRoles'
 import { WorkingGroup } from './pages/WorkingGroups/WorkingGroup'
 import { WorkingGroups } from './pages/WorkingGroups/WorkingGroups'
 import { WorkingGroupsOpenings } from './pages/WorkingGroups/WorkingGroupsOpenings'
@@ -23,6 +25,8 @@ export const App = () => (
         <Route exact path="/profile/memberships" component={MyMemberships} />
         <Route exact path="/working-groups" component={WorkingGroupsOpenings} />
         <Route exact path="/working-groups/working-groups" component={WorkingGroups} />
+        <Route exact path="/working-groups/my-applications" component={MyApplications} />
+        <Route exact path="/working-groups/my-roles" component={MyRoles} />
         <Route exact path="/working-groups/grouppreview" component={WorkingGroup} />
         <Redirect exact from="/" to="/profile" />
       </Switch>
