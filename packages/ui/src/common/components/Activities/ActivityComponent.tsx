@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
-import { IActivity } from './Activities'
-import { ActivityIcon } from './ActivityIcon'
+import { ActivityIcon, ActivityIconType, ActivityIconVariant } from './ActivityIcon'
 
-export const ActivityComponent = ({ activity }: { activity: IActivity }) => {
-  return (
-    <div>
-      <ActivityIcon iconName="up" />
-      <div>{activity.time}</div>
-      <div>{activity.text}</div>
-    </div>
-  )
+export interface ActivityComponentProps {
+  timestamp: string
+  icon: ActivityIconType
+  variant?: ActivityIconVariant
+  children: ReactNode
 }
+
+export const ActivityComponent = ({ timestamp, icon, variant, children }: ActivityComponentProps) => (
+  <div>
+    <ActivityIcon icon={icon} variant={variant} />
+    <div>{timestamp}</div>
+    <div>{children}</div>
+  </div>
+)

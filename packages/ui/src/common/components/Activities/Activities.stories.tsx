@@ -21,13 +21,29 @@ Default.args = {
   activities: [
     {
       id: '1',
-      time: '3 hours ago',
+      time: '2021-03-09T10:28:04.155Z',
       text: 'Opening "Became a Forum Moderator has been closed by the Working Group Leader',
+      type: 'up',
     },
     {
       id: '2',
-      time: '3 hours ago',
+      time: '2021-03-09T10:28:04.155Z',
       text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
+      type: 'down',
+    },
+    {
+      id: '3',
+      time: '2021-03-09T10:28:04.155Z',
+      text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
+      type: 'up',
+      variant: 'error',
+    },
+    {
+      id: '4',
+      time: '2021-03-09T10:28:04.155Z',
+      text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
+      type: 'down',
+      variant: 'ok',
     },
   ],
 }
