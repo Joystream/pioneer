@@ -1,25 +1,16 @@
 import React from 'react'
-import { useHistory, useRouteMatch } from 'react-router-dom'
 
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
+import { PageHeader } from '../../../common/components/page/PageHeader'
+import { PageTitle } from '../../../common/components/page/PageTitle'
 import { Statistics } from '../../../common/components/statistics/Stats'
 import { AppPage } from '../../components/AppPage'
 
 import { Accounts } from './components/Accounts'
+import { MyProfileTabs } from './components/MyProfileTabs'
 
 export function MyAccounts() {
   const { total, transferable, locked, recoverable } = useTotalBalances()
-  const history = useHistory()
-  const isProfile = !!useRouteMatch({
-    exact: true,
-    path: '/profile',
-  })
-  const isMembers = !!useRouteMatch('/profile/memberships')
-
-  const tabs = [
-    { title: 'My accounts', active: isProfile, onClick: () => history.push('/profile') },
-    { title: 'My memberships', active: isMembers, onClick: () => history.push('/profile/memberships') },
-  ]
 
   const crumbs = [
     { href: '#', text: 'My Profile' },
@@ -27,7 +18,11 @@ export function MyAccounts() {
   ]
 
   return (
-    <AppPage pageTitle="My profile" crumbs={crumbs} tabs={tabs}>
+    <AppPage crumbs={crumbs}>
+      <PageHeader>
+        <PageTitle>My Profile</PageTitle>
+        <MyProfileTabs />
+      </PageHeader>
       <Statistics
         stats={[
           { title: 'Total balance', helperText: 'Lorem fishy', value: total },

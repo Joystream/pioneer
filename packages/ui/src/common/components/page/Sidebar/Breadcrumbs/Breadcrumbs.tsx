@@ -6,14 +6,12 @@ import { HomeLink } from './HomeLink'
 
 export type BreadcrumbsNavProps = BreadcrumbsListProps
 
-export function Breadcrumbs({ crumbs }: BreadcrumbsNavProps) {
-  return (
-    <BreadcrumbsNavigation>
-      <HomeLink />
-      <BreadcrumbsList crumbs={crumbs} />
-    </BreadcrumbsNavigation>
-  )
-}
+export const Breadcrumbs = React.memo(({ crumbs }: BreadcrumbsNavProps) => (
+  <BreadcrumbsNavigation>
+    <HomeLink />
+    <BreadcrumbsList crumbs={crumbs} />
+  </BreadcrumbsNavigation>
+))
 
 const BreadcrumbsNavigation = styled.nav`
   display: inline-flex;

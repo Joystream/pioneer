@@ -1,30 +1,29 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useMemo, useState } from 'react'
 
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
+import { PageHeader } from '../../../common/components/page/PageHeader'
+import { PageTitle } from '../../../common/components/page/PageTitle'
 import { Statistics } from '../../../common/components/statistics/Stats'
 import { Tabs } from '../../../common/components/Tabs'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../working-groups/hooks/useWorkingGroups'
 import { AppPage } from '../../components/AppPage'
 
+import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
+
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const history = useHistory()
   const openings = useOpenings()
   const upcomingOpenings = openings.slice(0, 1)
 
-  const tabs = [
-    { title: 'Openings', active: true, onClick: () => history.push('/working-groups') },
-    { title: 'Working Groups', active: false, onClick: () => history.push('/working-groups/working-groups') },
-  ]
-
-  const crumbs = [
-    { href: '#', text: 'Working Groups' },
-    { href: '#', text: 'Openings' },
-  ]
-
+  const crumbs = useMemo(
+    () => [
+      { href: '#', text: 'Working Groups' },
+      { href: '#', text: 'Openings' },
+    ],
+    []
+  )
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
 
   const openingsTabs = [
@@ -43,7 +42,11 @@ export const WorkingGroupsOpenings = () => {
   ]
 
   return (
-    <AppPage pageTitle="Working Groups" crumbs={crumbs} tabs={tabs}>
+    <AppPage crumbs={crumbs}>
+      <PageHeader>
+        <PageTitle>Working Groups</PageTitle>
+        <WorkingGroupsTabs />
+      </PageHeader>
       <ContentWithSidepanel>
         <MainPanel>
           <Statistics

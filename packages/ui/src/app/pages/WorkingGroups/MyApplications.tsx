@@ -2,26 +2,19 @@ import React, { useMemo } from 'react'
 
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
-import { WorkingGroupsList } from '../../../working-groups/components/WorkingGroupsList'
-import { useWorkingGroups } from '../../../working-groups/hooks/useWorkingGroups'
+import { TextBig } from '../../../common/components/typography'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 
-export const WorkingGroups = () => {
-  const { isLoading, groups } = useWorkingGroups()
-
+export const MyApplications = () => {
   const crumbs = useMemo(
     () => [
       { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'Working Groups' },
+      { href: '#', text: 'My Applications' },
     ],
     []
   )
-
-  if (isLoading) {
-    return null
-  }
 
   return (
     <AppPage crumbs={crumbs}>
@@ -29,7 +22,7 @@ export const WorkingGroups = () => {
         <PageTitle>Working Groups</PageTitle>
         <WorkingGroupsTabs />
       </PageHeader>
-      <WorkingGroupsList groups={groups} />
+      <TextBig>My Applications</TextBig>
     </AppPage>
   )
 }
