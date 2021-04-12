@@ -1,8 +1,9 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
+import { TemplateBlock } from '../storybookParts/previewStyles'
+
 import { Activities, ActivitiesProps } from './Activities'
-import { TemplateBlock } from './storybookParts/previewStyles'
 
 export default {
   title: 'Common/Activities',
