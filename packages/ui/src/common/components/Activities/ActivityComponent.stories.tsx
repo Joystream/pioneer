@@ -26,21 +26,21 @@ const Template: Story<ActivityComponentProps> = (args) => (
 
 export const Default = Template.bind({})
 Default.args = {
-  variant: 'ok',
-  icon: 'up',
+  type: 'ok',
+  category: 'closed',
   timestamp: '2021-03-09T10:28:04.155Z',
 }
 
 export const VariantOk = Template.bind({})
 VariantOk.args = {
-  variant: 'ok',
-  icon: 'up',
+  type: 'ok',
+  category: 'closed',
   timestamp: '2021-03-09T10:28:04.155Z',
 }
 
 export const VariantError = Template.bind({})
 VariantError.args = {
-  variant: 'error',
-  icon: 'up',
+  type: 'error',
+  category: 'closed',
   timestamp: '2021-03-09T10:28:04.155Z',
 }

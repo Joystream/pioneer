@@ -1,19 +1,17 @@
 import React from 'react'
 
+import { ActivityCategory, ActivityType } from '../../types/Activity'
 import { ArrowInsideIcon, CopyIcon } from '../icons'
 
-export type ActivityIconType = 'up' | 'down'
-export type ActivityIconVariant = 'error' | 'ok' | 'default'
-
 export interface ActivityIconProps {
-  icon: ActivityIconType
-  variant?: ActivityIconVariant
+  icon: ActivityCategory
+  variant?: ActivityType
 }
 
 export const ActivityIcon = ({ icon, variant }: ActivityIconProps) => {
-  const type: ActivityIconVariant = variant ?? 'default'
+  const type: ActivityType = variant ?? 'default'
 
-  if (icon === 'up') {
+  if (icon === 'closed') {
     return <ArrowInsideIcon />
   }
 
