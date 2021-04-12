@@ -17,7 +17,7 @@ export const MyRoles = () => {
     <AppPage crumbs={crumbs}>
       <PageHeader>
         <PageTitle>Working Groups</PageTitle>
-        <WorkingGroupsTabs active="My Roles" />
+        <WorkingGroupsTabs />
       </PageHeader>
       <TextBig>My roles</TextBig>
     </AppPage>

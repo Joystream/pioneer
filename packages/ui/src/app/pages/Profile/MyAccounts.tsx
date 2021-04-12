@@ -21,7 +21,7 @@ export function MyAccounts() {
     <AppPage crumbs={crumbs}>
       <PageHeader>
         <PageTitle>My Profile</PageTitle>
-        <MyProfileTabs active="My Accounts" />
+        <MyProfileTabs />
       </PageHeader>
       <Statistics
         stats={[

@@ -17,7 +17,7 @@ export const MyMemberships = () => {
     <AppPage crumbs={crumbs}>
       <PageHeader>
         <PageTitle>My Profile</PageTitle>
-        <MyProfileTabs active="My Memberships" />
+        <MyProfileTabs />
       </PageHeader>
       <Memberships />
     </AppPage>

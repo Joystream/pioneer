@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
@@ -17,11 +17,13 @@ export const WorkingGroupsOpenings = () => {
   const openings = useOpenings()
   const upcomingOpenings = openings.slice(0, 1)
 
-  const crumbs = [
-    { href: '#', text: 'Working Groups' },
-    { href: '#', text: 'Openings' },
-  ]
-
+  const crumbs = useMemo(
+    () => [
+      { href: '#', text: 'Working Groups' },
+      { href: '#', text: 'Openings' },
+    ],
+    []
+  )
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
 
   const openingsTabs = [
@@ -43,7 +45,7 @@ export const WorkingGroupsOpenings = () => {
     <AppPage crumbs={crumbs}>
       <PageHeader>
         <PageTitle>Working Groups</PageTitle>
-        <WorkingGroupsTabs active="Openings" />
+        <WorkingGroupsTabs />
       </PageHeader>
       <ContentWithSidepanel>
         <MainPanel>
