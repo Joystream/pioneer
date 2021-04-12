@@ -26,7 +26,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
-          <StatsValue>6</StatsValue>
+          <StatsValue>{group.workers?.length ?? 0}</StatsValue>
           <Subscription>Workers</Subscription>
         </StatsColumn>
         <StatsColumn>

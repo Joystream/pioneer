@@ -1,4 +1,5 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
+import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
 
 import {
   GetMembersQueryResult,
@@ -63,11 +64,9 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
   return limit ? models.slice(0, limit) : models
 }
 
-export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryResult[]> = (
-  obj,
-  args,
-  { mirageSchema: schema }
-) => {
-  const { models } = schema.all('WorkingGroup')
-  return models
+export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryResult[]> = (obj, args, context) => {
+  const all = context.mirageSchema.all('WorkingGroup')
+  const records = adaptRecords(all.models)
+  console.log('RECORDS-\n\n\n', records, all)
+  return records
 }

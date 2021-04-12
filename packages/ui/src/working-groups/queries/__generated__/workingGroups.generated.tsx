@@ -8,7 +8,12 @@ import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
-export type WorkingGroupFieldsFragment = { __typename: 'WorkingGroup'; id: string; name: string }
+export type WorkingGroupFieldsFragment = {
+  __typename: 'WorkingGroup'
+  id: string
+  name: string
+  workers?: Types.Maybe<Array<{ __typename: 'Worker'; id: string }>>
+}
 
 export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never }>
 
@@ -33,6 +38,9 @@ export const WorkingGroupFieldsFragmentDoc = gql`
   fragment WorkingGroupFields on WorkingGroup {
     id
     name
+    workers {
+      id
+    }
   }
 `
 export const WorkerFieldsFragmentDoc = gql`

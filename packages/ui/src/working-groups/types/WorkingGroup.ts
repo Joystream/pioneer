@@ -7,6 +7,7 @@ export interface WorkingGroup {
   image?: string
   about?: string
   leader?: Pick<BaseMember, 'id' | 'avatarUri'>
+  workers?: Pick<{ __typename: string; id: string }, 'id'>[] | null
 }
 
 export interface WorkingGroupOpening {
