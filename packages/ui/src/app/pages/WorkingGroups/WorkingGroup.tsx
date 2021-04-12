@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
+import { PreviousPage } from '../../../common/components/page/PreviousPage'
 import { Statistics } from '../../../common/components/statistics/Stats'
 import { Tabs } from '../../../common/components/Tabs'
 import { Label } from '../../../common/components/typography'
@@ -29,7 +30,9 @@ export function WorkingGroup() {
   return (
     <AppPage crumbs={crumbs}>
       <PageHeader>
-        <PageTitle>Storage</PageTitle>
+        <PreviousPage>
+          <PageTitle>Storage</PageTitle>
+        </PreviousPage>
         <Tabs tabs={tabs} />
       </PageHeader>
       <ContentWithSidepanel>
