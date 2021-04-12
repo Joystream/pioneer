@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { ArrowInsideIcon, CopyIcon } from './icons'
+
 interface IActivity {
   id: string
   time: string
@@ -10,10 +12,27 @@ export interface ActivitiesProps {
   activities: IActivity[]
 }
 
+interface ActivityIconProps {
+  iconName: 'up' | 'down'
+  variant?: 'error' | 'ok' | 'default'
+}
+
+const ActivityIcon = ({ iconName, variant }: ActivityIconProps) => {
+  const type = variant ?? 'default'
+
+  if (iconName === 'up') {
+    return <ArrowInsideIcon />
+  }
+
+  return <CopyIcon />
+}
+
 const Activity = ({ activity }: { activity: IActivity }) => {
   return (
     <div>
-      {activity.time} - {activity.text}
+      <ActivityIcon iconName="up" />
+      <div>{activity.time}</div>
+      <div>{activity.text}</div>
     </div>
   )
 }
