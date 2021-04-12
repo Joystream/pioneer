@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ActivityCategory, ActivityType } from '../../types/Activity'
+import { ActivityCategory, ActivityType } from '../../types'
 import { ArrowInsideIcon, CopyIcon } from '../icons'
 
 export interface ActivityIconProps {

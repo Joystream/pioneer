@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 
-import { ActivityCategory, ActivityType } from '../../types/Activity'
+import { ActivityCategory, ActivityType } from '../../types'
 
 import { ActivityIcon } from './ActivityIcon'
 
