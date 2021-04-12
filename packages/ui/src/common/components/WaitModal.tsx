@@ -4,13 +4,13 @@ import { Loader } from './icons'
 import { WaitingIcon } from './icons/WaitingIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultTextWhite } from './Modal'
 
-interface Props {
+export interface WaitModalProps {
   onClose: () => void
   title: string
   description: string
 }
 
-export const WaitModal = ({ onClose, title, description }: Props) => (
+export const WaitModal = ({ onClose, title, description }: WaitModalProps) => (
   <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
     <ModalHeader icon={<Loader />} title="" onClick={onClose} modalHeaderSize="s" />
     <ResultModalBody>
