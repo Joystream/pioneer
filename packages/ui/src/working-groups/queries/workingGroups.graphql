@@ -8,3 +8,14 @@ query getWorkingGroups {
     ...WorkingGroupFields
   }
 }
+
+fragment WorkerFields on Worker {
+  group {...WorkingGroupFields}
+  membership {...MemberFields}
+}
+
+query getWorkers ($id: ID) {
+  workers(where: {group_eq: $id}) {
+    ...WorkerFields
+  }
+}

@@ -516,6 +516,10 @@ export type MembershipWhereInput = {
   referredById_in?: Maybe<Array<Scalars['ID']>>
 }
 
+export type WorkersWhereInput = {
+  group_eq?: Maybe<Scalars['ID']>
+}
+
 export type MembershipWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
   handle?: Maybe<Scalars['String']>
@@ -557,6 +561,7 @@ export type Query = {
   membershipsConnection: MembershipConnection
   membersByHandle: Array<MembersByHandleFtsOutput>
   workingGroups: Array<WorkingGroup>
+  workers: Array<Worker>
 }
 
 export type QueryBlocksArgs = {
@@ -629,6 +634,12 @@ export type QueryMembersByHandleArgs = {
 export type QueryWorkingGroupsArgs = {
   offset?: Maybe<Scalars['Int']>
   limit?: Maybe<Scalars['Int']>
+}
+
+export type QueryWorkersArgs = {
+  offset?: Maybe<Scalars['Int']>
+  limit?: Maybe<Scalars['Int']>
+  where?: Maybe<WorkersWhereInput>
 }
 
 export type StandardDeleteResponse = {

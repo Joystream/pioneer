@@ -512,6 +512,10 @@ input MembershipWhereInput {
   referredById_in: [ID!]
 }
 
+input WorkersWhereInput {
+  group_eq: ID
+}
+
 input MembershipWhereUniqueInput {
   id: ID
   handle: String
@@ -550,6 +554,7 @@ type Query {
   membershipsConnection(first: Int, after: String, last: Int, before: String, where: MembershipWhereInput, orderBy: MembershipOrderByInput): MembershipConnection!
   membersByHandle(whereMembership: MembershipWhereInput, skip: Int = 0, limit: Int = 5, text: String!): [MembersByHandleFTSOutput!]!
   workingGroups(offset: Int, limit: Int = 50): [WorkingGroup!]!
+  workers(offset: Int, limit: Int = 50, where: WorkersWhereInput): [Worker!]!
 }
 
 type StandardDeleteResponse {
