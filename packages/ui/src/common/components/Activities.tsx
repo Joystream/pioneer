@@ -6,7 +6,7 @@ interface IActivity {
   text: string
 }
 
-interface Props {
+export interface ActivitiesProps {
   activities: IActivity[]
 }
 
@@ -18,7 +18,7 @@ const Activity = ({ activity }: { activity: IActivity }) => {
   )
 }
 
-export const Activities = ({ activities }: Props) => {
+export const Activities = ({ activities }: ActivitiesProps) => {
   return (
     <div>
       {activities.map((activity) => (
