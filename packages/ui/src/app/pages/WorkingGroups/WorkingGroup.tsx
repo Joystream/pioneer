@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { Activities } from '../../../common/components/Activities'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
@@ -8,12 +9,14 @@ import { PreviousPage } from '../../../common/components/page/PreviousPage'
 import { Statistics } from '../../../common/components/statistics/Stats'
 import { Tabs } from '../../../common/components/Tabs'
 import { Label } from '../../../common/components/typography'
+import { useActivities } from '../../../common/hooks/useActivities'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../working-groups/hooks/useWorkingGroups'
 import { AppPage } from '../../components/AppPage'
 
 export function WorkingGroup() {
   const openings = useOpenings()
+  const activities = useActivities()
 
   const crumbs = [
     { href: '#', text: 'Working Groups' },
@@ -55,7 +58,10 @@ export function WorkingGroup() {
             </OpeningsCategory>
           </OpeningsCategories>
         </MainPanel>
-        <SidePanel>Activities</SidePanel>
+        <SidePanel>
+          <Label>Working group activities</Label>
+          <Activities activities={activities} />
+        </SidePanel>
       </ContentWithSidepanel>
     </AppPage>
   )

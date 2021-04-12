@@ -10,7 +10,7 @@ export default {
   title: 'Common/ActivityComponent',
   component: ActivityComponent,
   argTypes: {
-    icon: {
+    category: {
       control: { type: 'select' },
     },
   },
