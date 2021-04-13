@@ -1,5 +1,7 @@
+import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
+import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { Activities } from '../../../common/components/Activities'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
@@ -23,6 +25,11 @@ export const WorkingGroupsOpenings = () => {
   const upcomingOpenings = openings.slice(0, 1)
   const activities = useActivities()
   const { active } = useMyMemberships()
+  const { locked } = useTotalBalances()
+  const earnings = {
+    day: new BN(200),
+    month: new BN(102_000),
+  }
 
   const crumbs = useMemo(
     () => [
@@ -60,15 +67,15 @@ export const WorkingGroupsOpenings = () => {
             <StatisticItem title="My Roles">
               {active ? <MemberRoles member={active} size="l" max={5} /> : <TextMedium>Select membership</TextMedium>}
             </StatisticItem>
-            <TokenValueStat title="Currently staking" value={200_000} />
+            <TokenValueStat title="Currently staking" value={locked} />
             <StatisticItem title="Earned in past">
               <TextSmall>
                 24 hours
-                <TotalValue value={200} />
+                <TotalValue value={earnings.day} />
               </TextSmall>
               <TextSmall>
                 <span>Month</span>
-                <TotalValue value={102_000} />
+                <TotalValue value={earnings.month} />
               </TextSmall>
             </StatisticItem>
           </Statistics>
