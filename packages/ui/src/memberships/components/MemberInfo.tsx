@@ -5,16 +5,8 @@ import { VerifiedMemberIcon } from '../../common/components/icons/VerifiedMember
 import { BaseMember } from '../types'
 
 import { Avatar } from './Avatar'
-import {
-  MemberHandle,
-  MemberIcons,
-  MemberId,
-  MemberInfoWrap,
-  MemberPhoto,
-  MemberRoleHelp,
-  MemberRoles,
-  MemberStatusHelp,
-} from './components'
+import { MemberHandle, MemberIcons, MemberId, MemberInfoWrap, MemberPhoto, MemberStatusHelp } from './components'
+import { MemberRoles } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
@@ -22,12 +14,13 @@ interface MemberInfoContainerProps {
   onClick?: () => void
   size?: 'm' | 'l'
   className?: string
+  maxRoles?: number
 }
 
 export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps
 
 export const MemberInfo = React.memo(
-  ({ member, onClick, isOnDark, showId, memberSize, size, className }: MemberInfoProps) => {
+  ({ member, onClick, isOnDark, showId, memberSize, size, className, maxRoles }: MemberInfoProps) => {
     return (
       <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize} className={className}>
         <MemberPhoto>
@@ -36,13 +29,9 @@ export const MemberInfo = React.memo(
         <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
         <MemberIcons>
           {member.isVerified && <MemberStatusHelp icon={<VerifiedMemberIcon />} helperText="Lorem fishy" />}
-          {false && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
+          {(member as any)?.isFounder && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
         </MemberIcons>
-        {!showId && (
-          <MemberRoles>
-            <MemberRoleHelp memberRole="LI" helperText="Lorem fishy" size={size} />
-          </MemberRoles>
-        )}
+        {!showId && <MemberRoles member={member} size={size} max={maxRoles} />}
         {showId && <MemberId>Worker ID: {member.id}</MemberId>}
       </MemberInfoWrap>
     )

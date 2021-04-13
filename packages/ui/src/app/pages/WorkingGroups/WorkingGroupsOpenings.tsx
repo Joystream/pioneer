@@ -1,13 +1,17 @@
+import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
+import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { Activities } from '../../../common/components/Activities'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
-import { Statistics, TokenValueStat } from '../../../common/components/statistics'
+import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
-import { Label } from '../../../common/components/typography'
+import { Label, TextMedium } from '../../../common/components/typography'
 import { useActivities } from '../../../common/hooks/useActivities'
+import { MemberRoles } from '../../../memberships/components/MemberRoles'
+import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
@@ -20,6 +24,12 @@ export const WorkingGroupsOpenings = () => {
   const openings = useOpenings()
   const upcomingOpenings = openings.slice(0, 1)
   const activities = useActivities()
+  const { active } = useMyMemberships()
+  const { locked } = useTotalBalances()
+  const earnings = {
+    day: new BN(200),
+    month: new BN(102_000),
+  }
 
   const crumbs = useMemo(
     () => [
@@ -54,9 +64,17 @@ export const WorkingGroupsOpenings = () => {
       <ContentWithSidepanel>
         <MainPanel>
           <Statistics>
-            <TokenValueStat title="My Roles" helperText="Lorem ipsum..." value={5} />
-            <TokenValueStat title="Currently staking" helperText="Lorem ipsum..." value={5} />
-            <TokenValueStat title="Earned in past" helperText="Lorem ipsum..." value={5} />
+            <StatisticItem title="My Roles">
+              {active ? <MemberRoles member={active} size="l" max={5} /> : <TextMedium>Select membership</TextMedium>}
+            </StatisticItem>
+            <TokenValueStat title="Currently staking" value={locked} />
+            <MultiTokenValueStat
+              title="Earned in past"
+              values={[
+                { label: '24 hours', value: earnings.day },
+                { label: 'month', value: earnings.month },
+              ]}
+            />
           </Statistics>
           <Tabs tabsSize="xs" tabs={openingsTabs} />
           <OpeningsList openings={activeTab === 'OPENINGS' ? openings : upcomingOpenings} />
