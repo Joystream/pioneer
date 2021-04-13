@@ -6,9 +6,9 @@ import { Activities } from '../../../common/components/Activities'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
-import { StatisticItem, Statistics, TokenValueStat, TotalValue } from '../../../common/components/statistics'
+import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
-import { Label, TextMedium, TextSmall } from '../../../common/components/typography'
+import { Label, TextMedium } from '../../../common/components/typography'
 import { useActivities } from '../../../common/hooks/useActivities'
 import { MemberRoles } from '../../../memberships/components/MemberRoles'
 import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
@@ -68,16 +68,12 @@ export const WorkingGroupsOpenings = () => {
               {active ? <MemberRoles member={active} size="l" max={5} /> : <TextMedium>Select membership</TextMedium>}
             </StatisticItem>
             <TokenValueStat title="Currently staking" value={locked} />
-            <StatisticItem title="Earned in past">
-              <TextSmall>
-                24 hours
-                <TotalValue value={earnings.day} />
-              </TextSmall>
-              <TextSmall>
-                <span>Month</span>
-                <TotalValue value={earnings.month} />
-              </TextSmall>
-            </StatisticItem>
+            <MultiTokenValueStat
+              values={[
+                { label: '24 hours', value: earnings.day },
+                { label: 'month', value: earnings.month },
+              ]}
+            />
           </Statistics>
           <Tabs tabsSize="xs" tabs={openingsTabs} />
           <OpeningsList openings={activeTab === 'OPENINGS' ? openings : upcomingOpenings} />
