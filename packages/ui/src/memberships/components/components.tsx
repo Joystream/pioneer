@@ -5,6 +5,7 @@ import { TextSmall } from '../../common/components/typography'
 import { BorderRad, Colors, Fonts, Transitions } from '../../common/constants'
 
 import { AvatarImg } from './Avatar'
+import { MemberRoleHelp, MemberRolesWrapper } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 export const MemberHandle = styled.span`
@@ -37,15 +38,6 @@ export const MemberIcons = styled.div`
   margin-left: -4px;
 `
 
-export const MemberRoles = styled.div`
-  display: grid;
-  grid-area: memberroles;
-  grid-auto-flow: column;
-  grid-column-gap: 4px;
-  align-items: center;
-  width: fit-content;
-`
-
 export const MemberId = styled(TextSmall)`
   grid-area: memberroles;
   color: ${Colors.Black[400]};
@@ -73,19 +65,6 @@ export const MemberPhoto = styled.div`
 export const MemberStatusHelp = styled(Help)`
   background-color: transparent;
   color: ${Colors.Blue[500]};
-
-  &:hover,
-  &:focus {
-    background-color: ${Colors.Blue[500]};
-    border-color: ${Colors.Blue[500]};
-    color: ${Colors.Black[25]};
-  }
-`
-
-export const MemberRoleHelp = styled(Help)`
-  background-color: ${Colors.Black[100]};
-  color: ${Colors.Black[600]};
-  border-color: ${Colors.Black[100]};
 
   &:hover,
   &:focus {
@@ -128,7 +107,7 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
     }};
   }
 
-  ${MemberRoles} {
+  ${MemberRolesWrapper} {
     align-self: ${({ memberSize }) => {
       switch (memberSize) {
         case 'l':

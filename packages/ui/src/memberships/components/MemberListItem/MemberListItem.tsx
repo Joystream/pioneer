@@ -1,13 +1,14 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { MemberInfo, MemberRoleHelp } from '..'
+import { MemberInfo } from '..'
 import { EditSymbol } from '../../../common/components/icons/symbols'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
 import { BaseMember } from '../../types'
 import { EditMembershipButton } from '../EditMembershipButton'
 import { MemberModalCall } from '../MemberProfile'
+import { MemberRoles } from '../MemberRoles'
 import { TransferInviteButton } from '../TransferInviteButton'
 
 interface Props {
@@ -27,11 +28,7 @@ export const MemberListItem = ({ member }: Props) => {
         <MemberInfo member={member} onClick={showMemberModal} showId />
       </MemberColumn>
       <MemberRolesColumn>
-        <MemberRoleHelp memberRole="SL" size="l" helperText="Lorem fishy" />
-        <MemberRoleHelp memberRole="SP" size="l" helperText="Lorem fishy" />
-        <MemberRoleHelp memberRole="RL" size="l" helperText="Lorem fishy" />
-        <MemberRoleHelp memberRole="LI" size="l" helperText="Lorem fishy" />
-        <MemberRoleHelp memberRole="SR" size="l" helperText="Lorem fishy" />
+        <MemberRoles member={member} size="l" />
       </MemberRolesColumn>
       <MemberColumn>
         <CountInfo>0 times</CountInfo>
@@ -88,10 +85,6 @@ const MemberColumn = styled.div`
 `
 
 const MemberRolesColumn = styled(MemberColumn)`
-  grid-template-columns: repeat(auto-fill, 24px);
-  grid-auto-flow: dense;
-  grid-column-gap: 4px;
-  grid-row-gap: 4px;
   width: 100%;
   max-width: 164px;
   max-height: 52px;

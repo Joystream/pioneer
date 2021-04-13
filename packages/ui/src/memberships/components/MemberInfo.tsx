@@ -5,16 +5,8 @@ import { VerifiedMemberIcon } from '../../common/components/icons/VerifiedMember
 import { BaseMember } from '../types'
 
 import { Avatar } from './Avatar'
-import {
-  MemberHandle,
-  MemberIcons,
-  MemberId,
-  MemberInfoWrap,
-  MemberPhoto,
-  MemberRoleHelp,
-  MemberRoles,
-  MemberStatusHelp,
-} from './components'
+import { MemberHandle, MemberIcons, MemberId, MemberInfoWrap, MemberPhoto, MemberStatusHelp } from './components'
+import { MemberRoles } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
@@ -36,13 +28,9 @@ export const MemberInfo = React.memo(
         <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
         <MemberIcons>
           {member.isVerified && <MemberStatusHelp icon={<VerifiedMemberIcon />} helperText="Lorem fishy" />}
-          {false && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
+          {(member as any)?.isFounder && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
         </MemberIcons>
-        {!showId && (
-          <MemberRoles>
-            <MemberRoleHelp memberRole="LI" helperText="Lorem fishy" size={size} />
-          </MemberRoles>
-        )}
+        {!showId && <MemberRoles member={member} size={size} />}
         {showId && <MemberId>Worker ID: {member.id}</MemberId>}
       </MemberInfoWrap>
     )

@@ -6,9 +6,10 @@ import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { StatisticItem, Statistics, TokenValueStat, TotalValue } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
-import { Label, TextSmall } from '../../../common/components/typography'
+import { Label, TextMedium, TextSmall } from '../../../common/components/typography'
 import { useActivities } from '../../../common/hooks/useActivities'
-import { MemberRoleHelp, MemberRoles } from '../../../memberships/components'
+import { MemberRoles } from '../../../memberships/components/MemberRoles'
+import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
@@ -21,6 +22,7 @@ export const WorkingGroupsOpenings = () => {
   const openings = useOpenings()
   const upcomingOpenings = openings.slice(0, 1)
   const activities = useActivities()
+  const { active } = useMyMemberships()
 
   const crumbs = useMemo(
     () => [
@@ -56,12 +58,7 @@ export const WorkingGroupsOpenings = () => {
         <MainPanel>
           <Statistics>
             <StatisticItem title="My Roles">
-              <MemberRoles>
-                <MemberRoleHelp memberRole="SP" helperText="Lorem fishy" size="l" />
-                <MemberRoleHelp memberRole="FM" helperText="Lorem fishy" size="l" />
-                <MemberRoleHelp memberRole="FL" helperText="Lorem fishy" size="l" />
-                <MemberRoleHelp memberRole="CC" helperText="Lorem fishy" size="l" />
-              </MemberRoles>
+              {active ? <MemberRoles member={active} size="l" max={5} /> : <TextMedium>Select membership</TextMedium>}
             </StatisticItem>
             <TokenValueStat title="Currently staking" value={200_000} />
             <StatisticItem title="Earned in past">
