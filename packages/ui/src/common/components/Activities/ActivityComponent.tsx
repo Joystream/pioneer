@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 
+import { relativeTime } from '../../model/relativeTime'
 import { ActivityCategory, ActivityType } from '../../types'
 
 import { ActivityIcon } from './ActivityIcon'
@@ -14,7 +15,7 @@ export interface ActivityComponentProps {
 export const ActivityComponent = ({ timestamp, category, type, children }: ActivityComponentProps) => (
   <div>
     <ActivityIcon icon={category} variant={type} />
-    <div>{timestamp}</div>
+    <div>{relativeTime(timestamp)}</div>
     <div>{children}</div>
   </div>
 )
