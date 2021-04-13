@@ -19,7 +19,7 @@ export const TokenValueStat = (props: TokenValueStatProps) => {
   )
 }
 
-const TotalValue = styled(TokenValue)`
+export const TotalValue = styled(TokenValue)`
   font-size: 20px;
   line-height: 28px;
 `

@@ -4,10 +4,11 @@ import { Activities } from '../../../common/components/Activities'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
-import { Statistics, TokenValueStat } from '../../../common/components/statistics'
+import { StatisticItem, Statistics, TokenValueStat, TotalValue } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
-import { Label } from '../../../common/components/typography'
+import { Label, TextSmall } from '../../../common/components/typography'
 import { useActivities } from '../../../common/hooks/useActivities'
+import { MemberRoleHelp, MemberRoles } from '../../../memberships/components'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
@@ -54,9 +55,25 @@ export const WorkingGroupsOpenings = () => {
       <ContentWithSidepanel>
         <MainPanel>
           <Statistics>
-            <TokenValueStat title="My Roles" helperText="Lorem ipsum..." value={5} />
-            <TokenValueStat title="Currently staking" helperText="Lorem ipsum..." value={5} />
-            <TokenValueStat title="Earned in past" helperText="Lorem ipsum..." value={5} />
+            <StatisticItem title="My Roles">
+              <MemberRoles>
+                <MemberRoleHelp memberRole="SP" helperText="Lorem fishy" size="l" />
+                <MemberRoleHelp memberRole="FM" helperText="Lorem fishy" size="l" />
+                <MemberRoleHelp memberRole="FL" helperText="Lorem fishy" size="l" />
+                <MemberRoleHelp memberRole="CC" helperText="Lorem fishy" size="l" />
+              </MemberRoles>
+            </StatisticItem>
+            <TokenValueStat title="Currently staking" value={200_000} />
+            <StatisticItem title="Earned in past">
+              <TextSmall>
+                24 hours
+                <TotalValue value={200} />
+              </TextSmall>
+              <TextSmall>
+                <span>Month</span>
+                <TotalValue value={102_000} />
+              </TextSmall>
+            </StatisticItem>
           </Statistics>
           <Tabs tabsSize="xs" tabs={openingsTabs} />
           <OpeningsList openings={activeTab === 'OPENINGS' ? openings : upcomingOpenings} />
