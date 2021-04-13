@@ -55,7 +55,10 @@ export function WorkingGroup() {
             </OpeningsCategory>
           </OpeningsCategories>
         </MainPanel>
-        <SidePanel>Activities</SidePanel>
+        <SidePanel>
+          <Label>Leader</Label>
+          <Label>Workers</Label>
+        </SidePanel>
       </ContentWithSidepanel>
     </AppPage>
   )
