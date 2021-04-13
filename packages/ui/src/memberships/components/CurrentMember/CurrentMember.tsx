@@ -25,7 +25,7 @@ export const CurrentMember = () => {
     <>
       <MembershipsCount count={count} />
       <SwitchMember onClick={toggleOpen}>
-        {active && <MemberInfo member={active} isOnDark={true} />}
+        {active && <MemberInfo member={active} isOnDark={true} maxRoles={4} />}
         {!active && <>Select membership</>}
         <SwitchArrow>
           <ArrowDownExpandedIcon />

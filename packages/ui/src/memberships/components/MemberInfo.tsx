@@ -14,12 +14,13 @@ interface MemberInfoContainerProps {
   onClick?: () => void
   size?: 'm' | 'l'
   className?: string
+  maxRoles?: number
 }
 
 export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps
 
 export const MemberInfo = React.memo(
-  ({ member, onClick, isOnDark, showId, memberSize, size, className }: MemberInfoProps) => {
+  ({ member, onClick, isOnDark, showId, memberSize, size, className, maxRoles }: MemberInfoProps) => {
     return (
       <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize} className={className}>
         <MemberPhoto>
@@ -30,7 +31,7 @@ export const MemberInfo = React.memo(
           {member.isVerified && <MemberStatusHelp icon={<VerifiedMemberIcon />} helperText="Lorem fishy" />}
           {(member as any)?.isFounder && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
         </MemberIcons>
-        {!showId && <MemberRoles member={member} size={size} />}
+        {!showId && <MemberRoles member={member} size={size} max={maxRoles} />}
         {showId && <MemberId>Worker ID: {member.id}</MemberId>}
       </MemberInfoWrap>
     )
