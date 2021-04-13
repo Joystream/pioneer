@@ -33,7 +33,7 @@ import { useForm } from '../../../common/hooks/useForm'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
-import { MemberInternal } from '../../types'
+import { Member } from '../../types'
 
 interface CreateProps {
   onClose: () => void
@@ -60,9 +60,9 @@ export interface FormFields {
   about: string
   avatarUri: string
   isReferred?: boolean
-  referrer?: MemberInternal
+  referrer?: Member
   hasTerms?: boolean
-  invitor?: MemberInternal
+  invitor?: Member
 }
 
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
@@ -93,7 +93,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
     validate(state, { size: potentialMemberIdSize })
   }, [state, potentialMemberIdSize])
 
-  const changeField = (type: keyof FormFields, value: string | Account | MemberInternal | boolean) => {
+  const changeField = (type: keyof FormFields, value: string | Account | Member | boolean) => {
     dispatch({ type, value })
   }
 

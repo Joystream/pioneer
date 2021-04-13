@@ -3,16 +3,16 @@ import { useContext } from 'react'
 import { useAccounts } from '../../accounts/hooks/useAccounts'
 import { MembershipContext } from '../providers/membership/context'
 import { useGetMembersQuery } from '../queries'
-import { asMember, MemberInternal } from '../types'
+import { asMember, Member } from '../types'
 
 const POLL_INTERVAL = 5000
 
 interface UseMembership {
   count: number
-  members: MemberInternal[]
+  members: Member[]
   isLoading: boolean
-  active: MemberInternal | undefined
-  setActive: (member: MemberInternal) => void
+  active: Member | undefined
+  setActive: (member: Member) => void
 }
 
 export function useMyMemberships(): UseMembership {

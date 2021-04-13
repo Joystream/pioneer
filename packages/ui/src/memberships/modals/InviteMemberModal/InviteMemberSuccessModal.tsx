@@ -7,7 +7,7 @@ import { TextMedium } from '../../../common/components/typography'
 import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { MemberInfo } from '../../components'
 import { useGetMemberQuery } from '../../queries'
-import { MemberInternal } from '../../types'
+import { Member } from '../../types'
 import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 interface Props {
@@ -39,7 +39,7 @@ export function InviteMemberSuccessModal({ onClose, formData }: Props) {
       <ModalBody>
         <TextMedium>You have just successfully invited a member.</TextMedium>
         <MemberRow>
-          <MemberInfo member={(formData as unknown) as MemberInternal} />
+          <MemberInfo member={(formData as unknown) as Member} />
         </MemberRow>
         {loading && <TextMedium>Loading...</TextMedium>}
         {!loading && inviteCount > 0 ? (

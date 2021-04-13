@@ -1,17 +1,17 @@
 import BN from 'bn.js'
 
-import { MemberInternal } from '../../memberships/types'
+import { Member } from '../../memberships/types'
 import { WorkerFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
 interface Worker {
-  membership: Pick<MemberInternal, 'id'>
+  membership: Pick<Member, 'id'>
 }
 
 export interface WorkingGroup {
   name: string
   image?: string
   about?: string
-  leader?: Pick<MemberInternal, 'id' | 'avatar'>
+  leader?: Pick<Member, 'id' | 'avatar'>
   workers?: Worker[]
   status?: any
 }

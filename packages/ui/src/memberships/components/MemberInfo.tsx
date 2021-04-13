@@ -2,7 +2,7 @@ import React from 'react'
 
 import { FounderMemberIcon } from '../../common/components/icons/FounderMemberIcon'
 import { VerifiedMemberIcon } from '../../common/components/icons/VerifiedMemberIcon'
-import { MemberInternal } from '../types'
+import { Member } from '../types'
 
 import { Avatar } from './Avatar'
 import { MemberHandle, MemberIcons, MemberId, MemberInfoWrap, MemberPhoto, MemberStatusHelp } from './components'
@@ -10,7 +10,7 @@ import { MemberRoles } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
-  member: MemberInternal
+  member: Member
   onClick?: () => void
   size?: 'm' | 'l'
   className?: string

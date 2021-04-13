@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react'
 
-import { MemberInternal } from '../../types'
+import { Member } from '../../types'
 
 import { MembershipContext } from './context'
 
@@ -9,12 +9,12 @@ interface Props {
 }
 
 export interface UseMembership {
-  active?: MemberInternal
-  setActive: (member: MemberInternal) => void
+  active?: Member
+  setActive: (member: Member) => void
 }
 
 export const MembershipContextProvider = (props: Props) => {
-  const [active, setActive] = useState<MemberInternal>()
+  const [active, setActive] = useState<Member>()
 
   const value = {
     active,

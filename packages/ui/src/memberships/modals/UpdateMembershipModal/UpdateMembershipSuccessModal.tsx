@@ -7,11 +7,11 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/comp
 import { TextMedium } from '../../../common/components/typography'
 import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { MemberInfo } from '../../components'
-import { MemberInternal } from '../../types'
+import { Member } from '../../types'
 
 interface Props {
   onClose: () => void
-  member: MemberInternal
+  member: Member
 }
 
 export function UpdateMembershipSuccessModal({ onClose, member }: Props) {
@@ -21,7 +21,7 @@ export function UpdateMembershipSuccessModal({ onClose, member }: Props) {
       <ModalBody>
         <TextMedium>You have just successfully updated your membership</TextMedium>
         <MemberRow>
-          <MemberInfo member={(member as unknown) as MemberInternal} />
+          <MemberInfo member={(member as unknown) as Member} />
         </MemberRow>
       </ModalBody>
       <ModalFooter>

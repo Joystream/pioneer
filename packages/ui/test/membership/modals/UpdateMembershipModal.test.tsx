@@ -8,7 +8,7 @@ import { of } from 'rxjs'
 import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { ApiContext } from '../../../src/common/providers/api/context'
 import { UpdateMembershipModal } from '../../../src/memberships/modals/UpdateMembershipModal'
-import { MemberInternal } from '../../../src/memberships/types'
+import { Member } from '../../../src/memberships/types'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
@@ -49,7 +49,7 @@ describe('UI: UpdatedMembershipModal', () => {
 
   const api = stubApi()
   let batchTx: any
-  let member: MemberInternal
+  let member: Member
 
   beforeEach(() => {
     stubDefaultBalances(api)
@@ -130,7 +130,7 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  function renderModal(member: MemberInternal) {
+  function renderModal(member: Member) {
     render(
       <MockQueryNodeProviders>
         <MockKeyringProvider>

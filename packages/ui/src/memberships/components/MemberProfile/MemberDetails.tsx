@@ -9,13 +9,13 @@ import { MembershipLabel } from '../../../common/components/typography/Membershi
 import { Colors, Transitions } from '../../../common/constants'
 import { formatDateString, formatTokenValue } from '../../../common/model/formatters'
 import { useMember } from '../../hooks/useMembership'
-import { MemberInternal } from '../../types'
+import { Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'
 import { TransferInviteButton } from '../TransferInviteButton'
 
 import { EmptyBody } from './MemberProfile'
 
-type Props = { member: MemberInternal }
+type Props = { member: Member }
 
 export const MemberDetails = React.memo(({ member }: Props) => {
   const { member: memberDetails, isLoading } = useMember(member.id)

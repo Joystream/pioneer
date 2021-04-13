@@ -9,7 +9,7 @@ import { useModal } from '../../../common/hooks/useModal'
 import { ModalState } from '../../../common/types'
 import { useMember } from '../../hooks/useMembership'
 import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
-import { MemberInternal } from '../../types'
+import { Member } from '../../types'
 
 import { TransferInvitesModalCall } from '.'
 import { TransferInviteFormModal } from './TransferInviteFormModal'
@@ -22,7 +22,7 @@ export function TransferInviteModal() {
   const { isLoading, member } = useMember(modalData.memberId)
   const [step, setStep] = useState<ModalState>('REQUIREMENTS_CHECK')
   const [amount, setAmount] = useState<BN>(new BN(0))
-  const [targetMember, setTargetMember] = useState<MemberInternal>()
+  const [targetMember, setTargetMember] = useState<Member>()
   const [signer, setSigner] = useState<Account>()
   const transactionFeeInfo = useTransferInviteFee(member)
 
@@ -32,7 +32,7 @@ export function TransferInviteModal() {
     }
   }, [transactionFeeInfo])
 
-  const onAccept = (amount: BN, from: MemberInternal, to: MemberInternal, signer: Account) => {
+  const onAccept = (amount: BN, from: Member, to: Member, signer: Account) => {
     setAmount(amount)
     setTargetMember(to)
     setSigner(signer)

@@ -1,8 +1,8 @@
-import { MemberInternal } from '../../memberships/types'
+import { Member } from '../../memberships/types'
 
 import rawMembers from './raw/members.json'
 
-export type MockMember = MemberInternal & {
+export type MockMember = Member & {
   registeredAtBlockId: string
   invitedById?: string
   registeredAtTime: string
@@ -16,7 +16,7 @@ export const mockMembers: MockMember[] = rawMembers.map((rawMember) => {
 })
 
 export const seedMember = (
-  member: MemberInternal & { registeredAtBlockId: string; invitedById?: string; registeredAtTime: string },
+  member: Member & { registeredAtBlockId: string; invitedById?: string; registeredAtTime: string },
   server: any
 ) => {
   const temporary: any = { ...member }

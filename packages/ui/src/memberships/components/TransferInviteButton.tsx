@@ -6,10 +6,10 @@ import { TransferIcon } from '../../common/components/icons'
 import { Colors } from '../../common/constants'
 import { useModal } from '../../common/hooks/useModal'
 import { TransferInvitesModalCall } from '../modals/TransferInviteModal'
-import { MemberInternal } from '../types'
+import { Member } from '../types'
 
 interface Props extends Pick<ButtonProps, 'square'> {
-  member: MemberInternal
+  member: Member
   children?: ReactNode
 }
 

@@ -3,16 +3,16 @@ import React, { useMemo, useState } from 'react'
 import { Select } from '../../../common/components/selects'
 import { useDebounce } from '../../../common/hooks/useDebounce'
 import { useSearchMembersQuery } from '../../queries'
-import { asMember, MemberInternal } from '../../types'
+import { asMember, Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'
 
 import { OptionsListMember } from './OptionsListMember'
 
-export const filterMember = (filterOut: MemberInternal | undefined) => {
-  return filterOut ? (member: MemberInternal) => member.handle !== filterOut.handle : () => true
+export const filterMember = (filterOut: Member | undefined) => {
+  return filterOut ? (member: Member) => member.handle !== filterOut.handle : () => true
 }
 
-const filterByText = (options: MemberInternal[], text: string) => {
+const filterByText = (options: Member[], text: string) => {
   if (!text.length) {
     return options
   }
@@ -26,9 +26,9 @@ const filterByText = (options: MemberInternal[], text: string) => {
 }
 
 interface Props {
-  onChange: (selected: MemberInternal) => void
-  filter?: (option: MemberInternal) => boolean
-  selected?: MemberInternal
+  onChange: (selected: Member) => void
+  filter?: (option: Member) => boolean
+  selected?: Member
   disabled?: boolean
 }
 

@@ -8,11 +8,11 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/comp
 import { TextMedium } from '../../../common/components/typography'
 import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { MemberInfo } from '../../components'
-import { MemberInternal } from '../../types'
+import { Member } from '../../types'
 
 interface Props {
   onClose: () => void
-  recipient: MemberInternal
+  recipient: Member
   amount: BN
 }
 

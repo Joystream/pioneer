@@ -1,14 +1,14 @@
 import { Comparator } from '../../common/model/Comparator'
-import { MemberInternal } from '../types'
+import { Member } from '../types'
 
-export type SortKey = keyof MemberInternal
+export type SortKey = keyof Member
 
-export function sortMemberships(members: MemberInternal[], key: SortKey, isDescending = false) {
+export function sortMemberships(members: Member[], key: SortKey, isDescending = false) {
   if (key === 'handle') {
-    return members.sort(Comparator<MemberInternal>(isDescending, key).string)
+    return members.sort(Comparator<Member>(isDescending, key).string)
   }
   if (key === 'inviteCount') {
-    return members.sort(Comparator<MemberInternal>(isDescending, key).number)
+    return members.sort(Comparator<Member>(isDescending, key).number)
   }
   return members
 }

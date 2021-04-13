@@ -6,7 +6,7 @@ import { HashRouter } from 'react-router-dom'
 import { Account } from '../../../src/accounts/types'
 import { Memberships } from '../../../src/app/pages/Profile/components/Memberships'
 import { MembershipContext } from '../../../src/memberships/providers/membership/context'
-import { MemberInternal } from '../../../src/memberships/types'
+import { Member } from '../../../src/memberships/types'
 import { seedMembers } from '../../../src/mocks/data'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -67,7 +67,7 @@ describe('UI: Memberships list', () => {
     })
   })
 
-  function renderMemberships(active?: MemberInternal) {
+  function renderMemberships(active?: Member) {
     return render(
       <HashRouter>
         <MockApolloProvider>

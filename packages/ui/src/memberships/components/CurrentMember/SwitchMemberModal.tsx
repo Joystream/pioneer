@@ -6,7 +6,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/comp
 import { Notification, NotificationComponent } from '../../../common/components/Notification'
 import { BorderRad, Colors, Transitions } from '../../../common/constants'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
-import { MemberInternal } from '../../types'
+import { Member } from '../../types'
 import { AddMembershipButtonSwitch } from '../AddMembershipButtonSwitch'
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 
 export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
   const { count, members, setActive, active } = useMyMemberships()
-  const switchMember = (member: MemberInternal) => {
+  const switchMember = (member: Member) => {
     setActive(member)
     onClose()
   }

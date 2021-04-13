@@ -11,7 +11,7 @@ export interface Block {
 
 type MemberRole = 'SL' | 'SP' | 'FL'
 
-export interface MemberInternal {
+export interface Member {
   id: ID
   handle: string
   rootAccount: Address
@@ -26,9 +26,9 @@ export interface MemberInternal {
   referredBy?: ID
 }
 
-export interface DetailedMember extends MemberInternal {
+export interface DetailedMember extends Member {
   about?: string
   registeredAtBlock: Block
   registeredAtTime: 'string'
-  invitees: MemberInternal[]
+  invitees: Member[]
 }

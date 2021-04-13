@@ -3,12 +3,12 @@ import React, { ReactNode } from 'react'
 import { ButtonGhost, ButtonProps } from '../../common/components/buttons'
 import { useToggle } from '../../common/hooks/useToggle'
 import { UpdateMembershipModal } from '../modals/UpdateMembershipModal'
-import { MemberInternal } from '../types'
+import { Member } from '../types'
 
 interface Props extends ButtonProps {
   className?: string
   children: ReactNode
-  member: MemberInternal
+  member: Member
 }
 
 export const EditMembershipButton = ({ className, children, member }: Props) => {
