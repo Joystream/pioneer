@@ -9,7 +9,7 @@ import { Statistics } from '../../../common/components/statistics/Stats'
 import { Tabs } from '../../../common/components/Tabs'
 import { Label } from '../../../common/components/typography'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
-import { useOpenings } from '../../../working-groups/hooks/useWorkingGroups'
+import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
 
 export function WorkingGroup() {

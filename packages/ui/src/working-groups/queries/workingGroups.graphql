@@ -1,10 +1,33 @@
+fragment WorkingGroupStatusFields on WorkingGroupStatus {
+  name
+  about
+  description
+  message
+}
+
+fragment WorkerFields on Worker {
+  membership {
+    ...MemberFields
+  }
+}
+
 fragment WorkingGroupFields on WorkingGroup {
   id
   name
+  status { ...WorkingGroupStatusFields }
+  workers {
+    ...WorkerFields
+  }
 }
 
 query getWorkingGroups {
   workingGroups {
-    ...WorkingGroupFields
+    ...WorkingGroupFields,
+  }
+}
+
+query getWorkers ($id: ID) {
+  workers(where: {group_eq: $id}) {
+    ...WorkerFields
   }
 }

@@ -9,7 +9,7 @@ import { Tabs } from '../../../common/components/Tabs'
 import { Label } from '../../../common/components/typography'
 import { useActivities } from '../../../common/hooks/useActivities'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
-import { useOpenings } from '../../../working-groups/hooks/useWorkingGroups'
+import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
