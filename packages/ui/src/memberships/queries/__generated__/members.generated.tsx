@@ -13,6 +13,7 @@ export type MemberFieldsFragment = {
   about?: Types.Maybe<string>
   avatarUri?: Types.Maybe<string>
   isVerified: boolean
+  isFoundingMember: boolean
   inviteCount: number
 }
 
@@ -64,6 +65,7 @@ export const MemberFieldsFragmentDoc = gql`
     about
     avatarUri
     isVerified
+    isFoundingMember
     inviteCount
   }
 `

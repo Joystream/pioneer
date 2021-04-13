@@ -1,13 +1,13 @@
 import React from 'react'
 
 import { Option, OptionsListComponent } from '../../../common/components/selects'
-import { BaseMember } from '../../types'
+import { Member } from '../../types'
 
 import { OptionMember } from './OptionMember'
 
 interface Props {
-  allMembers: BaseMember[]
-  onChange: (option: BaseMember) => void
+  allMembers: Member[]
+  onChange: (option: Member) => void
 }
 
 export const OptionsListMember = React.memo(({ allMembers, onChange }: Props) => (

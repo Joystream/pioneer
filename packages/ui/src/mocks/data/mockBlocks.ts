@@ -12,6 +12,7 @@ export const mockBlocks: MockBlock[] = rawBlocks.map((rawBlock) => {
     __typename: 'Block',
   }
 })
+
 export const seedBlocks = (server: any) => {
   return mockBlocks.reduce((map, block) => {
     return map.set(block.id, server.schema.create('Block', { ...block }))

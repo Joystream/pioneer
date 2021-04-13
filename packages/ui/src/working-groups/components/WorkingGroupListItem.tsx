@@ -43,7 +43,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <StatsValue>
             {group.leader ? (
               <WGLeaderImage>
-                <Avatar avatarUri={group.leader.avatarUri} />
+                <Avatar avatarUri={group.leader.avatar} />
               </WGLeaderImage>
             ) : (
               'None'

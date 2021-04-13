@@ -7,9 +7,8 @@ import { useModal } from '../../../common/hooks/useModal'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { ServerContext } from '../../../common/providers/server/context'
 import { ModalState } from '../../../common/types'
-import { Member } from '../../types'
 
-import { BuyMembershipFormModal } from './BuyMembershipFormModal'
+import { BuyMembershipFormModal, FormFields } from './BuyMembershipFormModal'
 import { BuyMembershipSignModal } from './BuyMembershipSignModal'
 import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
 
@@ -19,48 +18,48 @@ export const BuyMembershipModal = () => {
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
   const [step, setStep] = useState<ModalState>('PREPARE')
-  const [transactionParams, setParams] = useState<Member>()
+  const [formData, setParams] = useState<FormFields>()
   const server = useContext(ServerContext)
   const [id, setId] = useState<string>()
 
-  const onSubmit = (params: Member) => {
+  const onSubmit = (params: FormFields) => {
     setStep('AUTHORIZE')
     setParams(params)
   }
 
   const transaction = useMemo(
     () =>
-      transactionParams
+      formData
         ? api?.tx?.members?.buyMembership({
-            root_account: transactionParams.rootAccount.address,
-            controller_account: transactionParams.controllerAccount.address,
-            handle: transactionParams.handle,
+            root_account: formData.rootAccount?.address,
+            controller_account: formData.controllerAccount?.address,
+            handle: formData.handle,
             metadata: {
-              name: transactionParams.name,
-              avatar_uri: transactionParams.avatarUri,
-              about: transactionParams.about,
+              name: formData.name,
+              avatar_uri: formData.avatarUri,
+              about: formData.about,
             },
-            referrer_id: transactionParams.referrer?.id,
+            referrer_id: formData.referrer?.id,
           })
         : undefined,
-    [JSON.stringify(transactionParams)]
+    [JSON.stringify(formData)]
   )
 
   const onDone = useMemo(
     () =>
-      transactionParams
+      formData
         ? (result: boolean, events: EventRecord[]) => {
             const memberId = events.find((event) => event.event.method === 'MemberRegistered')?.event.data[0].toString()
             setId(memberId)
             if (server && memberId) {
               server.schema.create('Membership', {
                 id: id,
-                rootAccount: transactionParams.rootAccount.address,
-                controllerAccount: transactionParams.controllerAccount.address,
-                name: transactionParams.name,
-                handle: transactionParams.handle,
-                avatarUri: transactionParams.avatarUri,
-                about: transactionParams.about,
+                rootAccount: formData.rootAccount?.address,
+                controllerAccount: formData.controllerAccount?.address,
+                name: formData.name,
+                handle: formData.handle,
+                avatarUri: formData.avatarUri,
+                about: formData.about,
                 isVerified: false,
                 isFoundingMember: false,
                 inviteCount: '5',
@@ -70,10 +69,10 @@ export const BuyMembershipModal = () => {
             setStep(result ? 'SUCCESS' : 'ERROR')
           }
         : () => null,
-    [transactionParams]
+    [formData]
   )
 
-  if (step === 'PREPARE' || !transactionParams) {
+  if (step === 'PREPARE' || !formData) {
     return <BuyMembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
@@ -82,21 +81,19 @@ export const BuyMembershipModal = () => {
       <BuyMembershipSignModal
         onClose={onClose}
         membershipPrice={membershipPrice}
-        transactionParams={transactionParams}
+        formData={formData}
         onDone={onDone}
         transaction={transaction}
-        initialSigner={transactionParams.controllerAccount}
+        initialSigner={formData.controllerAccount}
       />
     )
   }
 
   if (step === 'SUCCESS') {
-    return <BuyMembershipSuccessModal onClose={onClose} member={transactionParams} memberId={id} />
+    return <BuyMembershipSuccessModal onClose={onClose} member={formData} memberId={id} />
   }
 
   return (
-    <FailureModal onClose={onClose}>
-      There was a problem with creating a membership for {transactionParams.name}.
-    </FailureModal>
+    <FailureModal onClose={onClose}>There was a problem with creating a membership for {formData.name}.</FailureModal>
   )
 }

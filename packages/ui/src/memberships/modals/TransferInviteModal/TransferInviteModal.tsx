@@ -7,9 +7,9 @@ import { TransferIcon } from '../../../common/components/icons'
 import { WaitModal } from '../../../common/components/WaitModal'
 import { useModal } from '../../../common/hooks/useModal'
 import { ModalState } from '../../../common/types'
+import { useMember } from '../../hooks/useMembership'
 import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
-import { useGetMemberQuery } from '../../queries'
-import { BaseMember } from '../../types'
+import { Member } from '../../types'
 
 import { TransferInvitesModalCall } from '.'
 import { TransferInviteFormModal } from './TransferInviteFormModal'
@@ -19,12 +19,12 @@ import { TransferInviteSuccessModal } from './TransferInviteSuccessModal'
 
 export function TransferInviteModal() {
   const { hideModal, modalData } = useModal<TransferInvitesModalCall>()
-  const { data, loading } = useGetMemberQuery({ variables: { id: modalData.memberId } })
+  const { isLoading, member } = useMember(modalData.memberId)
   const [step, setStep] = useState<ModalState>('REQUIREMENTS_CHECK')
   const [amount, setAmount] = useState<BN>(new BN(0))
-  const [targetMember, setTargetMember] = useState<BaseMember>()
+  const [targetMember, setTargetMember] = useState<Member>()
   const [signer, setSigner] = useState<Account>()
-  const transactionFeeInfo = useTransferInviteFee(data?.membership as BaseMember)
+  const transactionFeeInfo = useTransferInviteFee(member)
 
   useEffect(() => {
     if (step === 'REQUIREMENTS_CHECK' && transactionFeeInfo) {
@@ -32,7 +32,7 @@ export function TransferInviteModal() {
     }
   }, [transactionFeeInfo])
 
-  const onAccept = (amount: BN, from: BaseMember, to: BaseMember, signer: Account) => {
+  const onAccept = (amount: BN, from: Member, to: Member, signer: Account) => {
     setAmount(amount)
     setTargetMember(to)
     setSigner(signer)
@@ -43,7 +43,7 @@ export function TransferInviteModal() {
     setStep(result ? 'SUCCESS' : 'ERROR')
   }
 
-  if (loading || !data?.membership) {
+  if (isLoading || !member) {
     return null
   }
 
@@ -55,28 +55,21 @@ export function TransferInviteModal() {
     return (
       <TransferInviteRequirementsModal
         onClose={hideModal}
-        address={data.membership.controllerAccount}
+        address={member.controllerAccount}
         amount={transactionFeeInfo.transactionFee}
       />
     )
   }
 
   if (step === 'PREPARE' || !targetMember || !signer) {
-    return (
-      <TransferInviteFormModal
-        onClose={hideModal}
-        onAccept={onAccept}
-        icon={<TransferIcon />}
-        member={data.membership}
-      />
-    )
+    return <TransferInviteFormModal onClose={hideModal} onAccept={onAccept} icon={<TransferIcon />} member={member} />
   }
 
   if (step === 'AUTHORIZE') {
     return (
       <TransferInviteSignModal
         onClose={hideModal}
-        sourceMember={data.membership}
+        sourceMember={member}
         targetMember={targetMember}
         signer={signer}
         amount={amount}

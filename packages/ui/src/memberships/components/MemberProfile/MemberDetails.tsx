@@ -4,29 +4,27 @@ import styled from 'styled-components'
 import { LabelLink } from '../../../common/components/forms'
 import { BlockIcon } from '../../../common/components/icons/BlockIcon'
 import { TransferSymbol } from '../../../common/components/icons/symbols'
-import { TextSmall, TextMedium } from '../../../common/components/typography'
+import { TextMedium, TextSmall } from '../../../common/components/typography'
 import { MembershipLabel } from '../../../common/components/typography/MembershipLabel'
 import { Colors, Transitions } from '../../../common/constants'
 import { formatDateString, formatTokenValue } from '../../../common/model/formatters'
-import { useGetMemberQuery } from '../../queries'
-import { BaseMember } from '../../types'
+import { useMember } from '../../hooks/useMembership'
+import { Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'
 import { TransferInviteButton } from '../TransferInviteButton'
 
 import { EmptyBody } from './MemberProfile'
 
-type Props = { member: BaseMember }
+type Props = { member: Member }
 
 export const MemberDetails = React.memo(({ member }: Props) => {
-  const { data, loading } = useGetMemberQuery({
-    variables: { id: member.id },
-  })
+  const { member: memberDetails, isLoading } = useMember(member.id)
 
-  if (loading || !data || !data.membership) {
+  if (isLoading || !memberDetails) {
     return <EmptyBody>Loading...</EmptyBody>
   }
 
-  const registeredAtBlock = data.membership.registeredAtBlock
+  const registeredAtBlock = memberDetails.registeredAtBlock
 
   const hired = '-'
   const applied = '-'
@@ -41,12 +39,12 @@ export const MemberDetails = React.memo(({ member }: Props) => {
     <AboutTable>
       <AboutColumn>
         <MembershipLabel text="About" />
-        <AboutText>{member?.about || ''}</AboutText>
+        <AboutText>{memberDetails?.about || ''}</AboutText>
       </AboutColumn>
       <AboutRow>
         <MembershipLabel text="Registered on" />
         <AboutDateColumn>
-          <AboutText>{formatDateString(data.membership.registeredAtTime)}</AboutText>
+          <AboutText>{formatDateString(memberDetails.registeredAtTime)}</AboutText>
           <Block height={registeredAtBlock.block} network={registeredAtBlock.network} />
         </AboutDateColumn>
       </AboutRow>
@@ -71,7 +69,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       <AboutRow>
         <MembershipLabel text="Invited" />
         <AboutDateColumn>
-          {(data.membership.invitees || []).map((member) => (
+          {(memberDetails.invitees || []).map((member) => (
             <MemberInfo member={member} key={member.handle} />
           ))}
         </AboutDateColumn>

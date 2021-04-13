@@ -1,23 +1,25 @@
 import { sortMemberships } from '../../../src/memberships/model/sortMemberships'
-import { BaseMember } from '../../../src/memberships/types'
+import { Member } from '../../../src/memberships/types'
 
 describe('sortMemberships', () => {
-  const template = {
+  const template: Member = {
+    handle: '',
     id: '1',
+    name: '',
     rootAccount: '',
     controllerAccount: '',
-    name: '',
-    about: '',
+    isFoundingMember: false,
+    roles: [],
     isVerified: true,
     inviteCount: 0,
   }
 
   describe('By handle', () => {
-    const alice: BaseMember = { ...template, handle: 'alice' }
-    const bob: BaseMember = { ...template, handle: 'bob' }
-    const bob2: BaseMember = { ...template, handle: 'bob', inviteCount: 10 }
-    const charlie: BaseMember = { ...template, handle: 'charlie' }
-    const david: BaseMember = { ...template, handle: 'david' }
+    const alice: Member = { ...template, handle: 'alice' }
+    const bob: Member = { ...template, handle: 'bob' }
+    const bob2: Member = { ...template, handle: 'bob', inviteCount: 10 }
+    const charlie: Member = { ...template, handle: 'charlie' }
+    const david: Member = { ...template, handle: 'david' }
 
     it('Alphabetical order', () => {
       expect(sortMemberships([david, bob, alice, bob2, charlie], 'handle', false)).toEqual([
@@ -41,10 +43,10 @@ describe('sortMemberships', () => {
   })
 
   describe('By invite number', () => {
-    const alice: BaseMember = { ...template, inviteCount: 1, handle: 'alice' }
-    const bob: BaseMember = { ...template, inviteCount: 2, handle: 'bob' }
-    const charlie: BaseMember = { ...template, inviteCount: 2, handle: 'charlie' }
-    const david: BaseMember = { ...template, inviteCount: 3, handle: 'david' }
+    const alice: Member = { ...template, inviteCount: 1, handle: 'alice' }
+    const bob: Member = { ...template, inviteCount: 2, handle: 'bob' }
+    const charlie: Member = { ...template, inviteCount: 2, handle: 'charlie' }
+    const david: Member = { ...template, inviteCount: 3, handle: 'david' }
 
     it('Ascending', () => {
       expect(sortMemberships([david, alice, charlie, bob], 'inviteCount', false)).toEqual([alice, charlie, bob, david])

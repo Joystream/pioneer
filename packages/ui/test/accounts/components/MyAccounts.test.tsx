@@ -10,7 +10,7 @@ import { Accounts } from '../../../src/app/pages/Profile/components/Accounts'
 import { shortenAddress } from '../../../src/common/model/formatters'
 import { KeyringContext } from '../../../src/common/providers/keyring/context'
 import { MembershipContext } from '../../../src/memberships/providers/membership/context'
-import { MemberFieldsFragment } from '../../../src/memberships/queries'
+import { Member } from '../../../src/memberships/types'
 import { seedMembers } from '../../../src/mocks/data'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -115,7 +115,7 @@ describe('UI: Accounts list', () => {
     })
   })
 
-  function renderAccounts(active?: MemberFieldsFragment) {
+  function renderAccounts(active?: Member) {
     return render(
       <HashRouter>
         <MockApolloProvider>

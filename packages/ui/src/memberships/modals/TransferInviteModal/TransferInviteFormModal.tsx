@@ -11,18 +11,18 @@ import { TextMedium } from '../../../common/components/typography'
 import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
 import { filterMember, SelectMember } from '../../components/SelectMember'
-import { BaseMember } from '../../types'
+import { Member } from '../../types'
 
 interface Props {
   onClose: () => void
-  onAccept: (amount: BN, from: BaseMember, to: BaseMember, signer: Account) => void
+  onAccept: (amount: BN, from: Member, to: Member, signer: Account) => void
   icon: ReactElement
-  member?: BaseMember
+  member?: Member
 }
 
 export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Props) {
-  const [from, setFrom] = useState<BaseMember | undefined>(member)
-  const [to, setTo] = useState<BaseMember>()
+  const [from, setFrom] = useState<Member | undefined>(member)
+  const [to, setTo] = useState<Member>()
   const [amount, setAmount] = useNumberInput(0)
   const filterRecipient = useCallback(filterMember(from), [from])
   const accounts = useAccounts()

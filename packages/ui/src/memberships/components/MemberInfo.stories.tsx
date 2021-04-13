@@ -27,6 +27,8 @@ Default.args = {
     controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     handle: 'alice',
     isVerified: false,
+    isFoundingMember: false,
+    roles: [],
     inviteCount: 0,
   },
 }
@@ -40,8 +42,10 @@ WithAvatar.args = {
     controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     handle: 'alice',
     isVerified: false,
+    isFoundingMember: false,
+    roles: [],
     inviteCount: 0,
-    avatarUri: 'http://www.example.com',
+    avatar: 'http://www.example.com',
   },
 }
 
@@ -54,6 +58,8 @@ Verified.args = {
     controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     handle: 'alice',
     isVerified: true,
+    isFoundingMember: true,
+    roles: [],
     inviteCount: 0,
   },
 }

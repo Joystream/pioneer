@@ -15,18 +15,18 @@ import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { Address, onTransactionDone } from '../../../common/types'
-import { Member } from '../../types'
+import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 import { getMessage } from '../utils'
 
 interface SignProps {
   onClose: () => void
-  transactionParams: Member
+  formData: FormFields
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   signer: Address
 }
 
-export const InviteMemberSignModal = ({ onClose, transactionParams, onDone, transaction, signer }: SignProps) => {
+export const InviteMemberSignModal = ({ onClose, formData, onDone, transaction, signer }: SignProps) => {
   const { allAccounts } = useAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
   const { paymentInfo, send, status } = useSignAndSendTransaction({
@@ -52,7 +52,7 @@ export const InviteMemberSignModal = ({ onClose, transactionParams, onDone, tran
       <ModalBody>
         <TextMedium>You intend to create a new membership.</TextMedium>
         <TextMedium>
-          You are inviting this member. You have {transactionParams.invitor?.inviteCount.toString()} invites left.
+          You are inviting this member. You have {formData.invitor?.inviteCount.toString()} invites left.
         </TextMedium>
         <TextMedium>
           Fees of <TokenValue value={partialFee?.toBn()} /> will be applied to the transaction.

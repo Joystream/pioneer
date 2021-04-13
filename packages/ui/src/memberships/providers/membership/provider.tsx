@@ -1,19 +1,20 @@
 import React, { ReactNode, useState } from 'react'
 
-import { BaseMember } from '../../types'
+import { Member } from '../../types'
 
 import { MembershipContext } from './context'
 
 interface Props {
   children: ReactNode
 }
+
 export interface UseMembership {
-  active?: BaseMember
-  setActive: (member: BaseMember) => void
+  active?: Member
+  setActive: (member: Member) => void
 }
 
 export const MembershipContextProvider = (props: Props) => {
-  const [active, setActive] = useState<BaseMember>()
+  const [active, setActive] = useState<Member>()
 
   const value = {
     active,

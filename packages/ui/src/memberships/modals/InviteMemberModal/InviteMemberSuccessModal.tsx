@@ -6,12 +6,13 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/comp
 import { TextMedium } from '../../../common/components/typography'
 import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { MemberInfo } from '../../components'
-import { useGetMemberQuery } from '../../queries'
-import { BaseMember, Member } from '../../types'
+import { useMember } from '../../hooks/useMembership'
+import { Member } from '../../types'
+import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 interface Props {
   onClose: () => void
-  member: Member
+  formData: FormFields
 }
 
 type SuccessModalProps = { onClose: () => void; children: ReactNode }
@@ -25,11 +26,12 @@ const SuccessModal = ({ onClose, children }: SuccessModalProps) => {
   )
 }
 
-export function InviteMemberSuccessModal({ onClose, member }: Props) {
-  const invitorId = member.invitor?.id || ''
-  const { data: invitor, loading } = useGetMemberQuery({ variables: { id: invitorId } })
-  const inviteCount = invitor?.membership?.inviteCount ?? 0
-  const name = invitor?.membership?.name
+export function InviteMemberSuccessModal({ onClose, formData }: Props) {
+  const invitorId = formData.invitor?.id || ''
+
+  const { member: invitor, isLoading } = useMember(invitorId)
+  const inviteCount = invitor?.inviteCount ?? 0
+  const name = invitor?.name
   const plural = inviteCount > 1
 
   return (
@@ -37,10 +39,10 @@ export function InviteMemberSuccessModal({ onClose, member }: Props) {
       <ModalBody>
         <TextMedium>You have just successfully invited a member.</TextMedium>
         <MemberRow>
-          <MemberInfo member={(member as unknown) as BaseMember} />
+          <MemberInfo member={(formData as unknown) as Member} />
         </MemberRow>
-        {loading && <TextMedium>Loading...</TextMedium>}
-        {!loading && inviteCount > 0 ? (
+        {isLoading && <TextMedium>Loading...</TextMedium>}
+        {!isLoading && inviteCount > 0 ? (
           <TextMedium>
             You still have {inviteCount} invitation{plural && 's'} left on the "{name}" membership.
           </TextMedium>

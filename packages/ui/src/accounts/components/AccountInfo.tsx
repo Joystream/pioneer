@@ -8,7 +8,7 @@ import { BorderRad, Colors } from '../../common/constants'
 import { shortenAddress } from '../../common/model/formatters'
 import { Address } from '../../common/types'
 import { useMyMemberships } from '../../memberships/hooks/useMyMemberships'
-import { BaseMember } from '../../memberships/types'
+import { Member } from '../../memberships/types'
 import { Account } from '../types'
 
 export const AccountInfo = React.memo(({ account }: { account: Account }) => {
@@ -73,7 +73,7 @@ const AccountName = styled.h5`
 `
 
 interface OptionalAccountTypeParams {
-  active: BaseMember
+  active: Member
   address: Address
 }
 

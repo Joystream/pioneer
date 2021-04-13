@@ -8,8 +8,7 @@ import { of } from 'rxjs'
 import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { ApiContext } from '../../../src/common/providers/api/context'
 import { UpdateMembershipModal } from '../../../src/memberships/modals/UpdateMembershipModal'
-import { MemberFieldsFragment } from '../../../src/memberships/queries'
-import { BaseMember } from '../../../src/memberships/types'
+import { Member } from '../../../src/memberships/types'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
@@ -50,7 +49,7 @@ describe('UI: UpdatedMembershipModal', () => {
 
   const api = stubApi()
   let batchTx: any
-  let member: MemberFieldsFragment
+  let member: Member
 
   beforeEach(() => {
     stubDefaultBalances(api)
@@ -131,12 +130,12 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  function renderModal(member: MemberFieldsFragment) {
+  function renderModal(member: Member) {
     render(
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <UpdateMembershipModal onClose={() => undefined} member={member as BaseMember} />
+            <UpdateMembershipModal onClose={() => undefined} member={member} />
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockQueryNodeProviders>

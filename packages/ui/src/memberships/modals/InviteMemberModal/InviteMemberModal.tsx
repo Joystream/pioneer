@@ -5,7 +5,7 @@ import { WaitModal } from '../../../common/components/WaitModal'
 import { useApi } from '../../../common/hooks/useApi'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { Address, ModalState } from '../../../common/types'
-import { Member } from '../../types'
+import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 import { InviteMemberFormModal } from './InviteMemberFormModal'
 import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
@@ -19,29 +19,29 @@ interface MembershipModalProps {
 export function InviteMemberModal({ onClose }: MembershipModalProps) {
   const { api } = useApi()
   const [step, setStep] = useState<ModalState>('REQUIREMENTS_CHECK')
-  const [transactionParams, setParams] = useState<Member>()
-  const onSubmit = (params: Member) => {
+  const [formData, setFormData] = useState<FormFields>()
+  const onSubmit = (params: FormFields) => {
     setStep('AUTHORIZE')
-    setParams(params)
+    setFormData(params)
   }
   const onDone = (result: boolean) => setStep(result ? 'SUCCESS' : 'ERROR')
 
   const transaction = useMemo(
     () =>
-      transactionParams
+      formData
         ? api?.tx?.members?.inviteMember({
-            inviting_member_id: transactionParams.invitor?.id,
-            root_account: transactionParams.rootAccount.address,
-            controller_account: transactionParams.controllerAccount.address,
+            inviting_member_id: formData.invitor?.id,
+            root_account: formData.rootAccount?.address,
+            controller_account: formData.controllerAccount?.address,
             metadata: {
-              name: transactionParams.name,
-              avatar_uri: transactionParams.avatarUri,
-              about: transactionParams.about,
+              name: formData.name,
+              avatar_uri: formData.avatarUri,
+              about: formData.about,
             },
-            handle: transactionParams.handle,
+            handle: formData.handle,
           })
         : undefined,
-    [JSON.stringify(transactionParams)]
+    [JSON.stringify(formData)]
   )
   const workingGroupBudget = useObservable(api?.query.membershipWorkingGroup.budget(), [])
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
@@ -62,7 +62,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
     return <InviteMemberRequirementsModal onClose={onClose} />
   }
 
-  if (step == 'PREPARE' || !transactionParams) {
+  if (step == 'PREPARE' || !formData) {
     return <InviteMemberFormModal onClose={onClose} onSubmit={onSubmit} />
   }
 
@@ -70,8 +70,8 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
     return (
       <InviteMemberSignModal
         onClose={onClose}
-        transactionParams={transactionParams}
-        signer={transactionParams.invitor?.controllerAccount as Address}
+        formData={formData}
+        signer={formData.invitor?.controllerAccount as Address}
         onDone={onDone}
         transaction={transaction}
       />
@@ -79,12 +79,10 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }
 
   if (step === 'SUCCESS') {
-    return <InviteMemberSuccessModal onClose={onClose} member={transactionParams} />
+    return <InviteMemberSuccessModal onClose={onClose} formData={formData} />
   }
 
   return (
-    <FailureModal onClose={onClose}>
-      There was a problem with creating a membership for {transactionParams.name}.
-    </FailureModal>
+    <FailureModal onClose={onClose}>There was a problem with creating a membership for {formData.name}.</FailureModal>
   )
 }

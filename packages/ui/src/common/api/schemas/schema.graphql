@@ -213,6 +213,9 @@ type Membership implements BaseGraphQLObject {
   """Whether member has been verified by membership working group."""
   isVerified: Boolean!
 
+  """Whether member has been verified by membership working group."""
+  isFoundingMember: Boolean!
+
   """Staking accounts bounded to membership."""
   boundAccounts: [String!]!
 

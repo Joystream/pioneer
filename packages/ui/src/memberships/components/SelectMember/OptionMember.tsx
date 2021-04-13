@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { BaseMember } from '../../types'
+import { Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'
 
 interface Props {
-  member: BaseMember
+  member: Member
 }
 
 export const OptionMember = ({ member }: Props) => <MemberInfo member={member} />

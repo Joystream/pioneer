@@ -6,9 +6,9 @@ import { useAccounts } from '../../../accounts/hooks/useAccounts'
 import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
 import { AccountRow } from '../../../common/components/Modals'
 import { MembershipLabel } from '../../../common/components/typography/MembershipLabel'
-import { BaseMember } from '../../types'
+import { Member } from '../../types'
 
-export const MemberAccounts = ({ member }: { member: BaseMember }) => {
+export const MemberAccounts = ({ member }: { member: Member }) => {
   const { allAccounts } = useAccounts()
 
   const rootAccount = accountOrNamed(allAccounts, member.rootAccount, 'Root Account')

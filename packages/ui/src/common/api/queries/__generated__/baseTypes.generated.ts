@@ -219,6 +219,8 @@ export type Membership = BaseGraphQlObject & {
   entry: MembershipEntryMethod
   /** Whether member has been verified by membership working group. */
   isVerified: Scalars['Boolean']
+  /** Whether member has been verified by membership working group. */
+  isFoundingMember: Scalars['Boolean']
   /** Staking accounts bounded to membership. */
   boundAccounts: Array<Scalars['String']>
   /** Current count of invites left to send. */

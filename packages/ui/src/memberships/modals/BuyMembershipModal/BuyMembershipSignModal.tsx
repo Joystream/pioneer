@@ -17,13 +17,14 @@ import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { onTransactionDone } from '../../../common/types'
-import { Member } from '../../types'
 import { getMessage } from '../utils'
+
+import { FormFields } from './BuyMembershipFormModal'
 
 interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
-  transactionParams: Member
+  formData: FormFields
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   initialSigner?: Account
@@ -32,15 +33,14 @@ interface SignProps {
 export const BuyMembershipSignModal = ({
   onClose,
   membershipPrice,
-  transactionParams,
+  formData,
   onDone,
   transaction,
   initialSigner,
 }: SignProps) => {
   const { allAccounts } = useAccounts()
   const [from, setFrom] = useState(
-    initialSigner ??
-      accountOrNamed(allAccounts, transactionParams.invitor?.controllerAccount || '', 'Controller account')
+    initialSigner ?? accountOrNamed(allAccounts, formData.invitor?.controllerAccount || '', 'Controller account')
   )
   const fromAddress = from.address
   const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, signer: fromAddress, onDone })

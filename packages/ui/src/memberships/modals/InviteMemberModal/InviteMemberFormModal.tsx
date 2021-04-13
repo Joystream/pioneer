@@ -20,12 +20,11 @@ import { useKeyring } from '../../../common/hooks/useKeyring'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { SelectMember } from '../../components/SelectMember'
 import { AvatarURISchema, HandleSchema, MemberSchema, NewAddressSchema } from '../../model/validation'
-import { Member } from '../../types'
 import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 interface InviteProps {
   onClose: () => void
-  onSubmit: (params: Member) => void
+  onSubmit: (params: FormFields) => void
 }
 
 const InviteMemberSchema = Yup.object().shape({
@@ -53,7 +52,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   })
 
   const { rootAccount, controllerAccount, handle, name, avatarUri, about } = state
-  const onCreate = () => onSubmit(state as Member)
+  const onCreate = () => onSubmit(state)
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
   useEffect(() => {
