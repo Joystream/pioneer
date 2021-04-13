@@ -24,9 +24,9 @@ const Template: Story<TokenValueStatProps> = (args) => (
   </TemplateBlock>
 )
 
-export const StatisticItemComponent = Template.bind({})
+export const TokenValue = Template.bind({})
 
-StatisticItemComponent.args = {
+TokenValue.args = {
   title: 'Statistic title',
   helperText: 'Text to help',
   value: 100000,

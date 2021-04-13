@@ -69,6 +69,7 @@ export const WorkingGroupsOpenings = () => {
             </StatisticItem>
             <TokenValueStat title="Currently staking" value={locked} />
             <MultiTokenValueStat
+              title="Earned in past"
               values={[
                 { label: '24 hours', value: earnings.day },
                 { label: 'month', value: earnings.month },
