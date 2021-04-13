@@ -7,11 +7,12 @@ import { TextMedium } from '../../../common/components/typography'
 import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { MemberInfo } from '../../components'
 import { useGetMemberQuery } from '../../queries'
-import { BaseMember, Member } from '../../types'
+import { MemberInternal } from '../../types'
+import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 interface Props {
   onClose: () => void
-  member: Member
+  formData: FormFields
 }
 
 type SuccessModalProps = { onClose: () => void; children: ReactNode }
@@ -25,8 +26,9 @@ const SuccessModal = ({ onClose, children }: SuccessModalProps) => {
   )
 }
 
-export function InviteMemberSuccessModal({ onClose, member }: Props) {
-  const invitorId = member.invitor?.id || ''
+export function InviteMemberSuccessModal({ onClose, formData }: Props) {
+  const invitorId = '' // member.invitor?.id || ''
+
   const { data: invitor, loading } = useGetMemberQuery({ variables: { id: invitorId } })
   const inviteCount = invitor?.membership?.inviteCount ?? 0
   const name = invitor?.membership?.name
@@ -37,7 +39,7 @@ export function InviteMemberSuccessModal({ onClose, member }: Props) {
       <ModalBody>
         <TextMedium>You have just successfully invited a member.</TextMedium>
         <MemberRow>
-          <MemberInfo member={(member as unknown) as BaseMember} />
+          <MemberInfo member={(formData as unknown) as MemberInternal} />
         </MemberRow>
         {loading && <TextMedium>Loading...</TextMedium>}
         {!loading && inviteCount > 0 ? (

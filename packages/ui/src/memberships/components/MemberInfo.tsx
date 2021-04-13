@@ -2,7 +2,7 @@ import React from 'react'
 
 import { FounderMemberIcon } from '../../common/components/icons/FounderMemberIcon'
 import { VerifiedMemberIcon } from '../../common/components/icons/VerifiedMemberIcon'
-import { BaseMember } from '../types'
+import { MemberInternal } from '../types'
 
 import { Avatar } from './Avatar'
 import { MemberHandle, MemberIcons, MemberId, MemberInfoWrap, MemberPhoto, MemberStatusHelp } from './components'
@@ -10,7 +10,7 @@ import { MemberRoles } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
-  member: BaseMember
+  member: MemberInternal
   onClick?: () => void
   size?: 'm' | 'l'
   className?: string
@@ -24,7 +24,7 @@ export const MemberInfo = React.memo(
     return (
       <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize} className={className}>
         <MemberPhoto>
-          <Avatar avatarUri={member.avatarUri} />
+          <Avatar avatarUri={member.avatar} />
         </MemberPhoto>
         <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
         <MemberIcons>

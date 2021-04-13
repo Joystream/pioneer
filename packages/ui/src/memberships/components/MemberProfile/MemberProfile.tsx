@@ -6,8 +6,8 @@ import { EditSymbol } from '../../../common/components/icons/symbols'
 import { Tabs } from '../../../common/components/Tabs'
 import { Animations, Colors } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
+import { useMember } from '../../hooks/useMembership'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
-import { useGetMemberQuery } from '../../queries'
 import { MemberInfoWrap } from '../components'
 import { EditMembershipButton } from '../EditMembershipButton'
 import { MemberInfo } from '../MemberInfo'
@@ -22,9 +22,8 @@ export const MemberProfile = React.memo(() => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>('DETAILS')
   const { members, isLoading } = useMyMemberships()
   const { modalData, hideModal } = useModal<MemberModalCall>()
-  const { data, loading } = useGetMemberQuery({ variables: { id: modalData.id } })
+  const { isLoading: loading, member } = useMember(modalData.id)
 
-  const member = data?.membership
   const isMyMember = !isLoading && !!members.find((m) => m.id == member?.id)
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

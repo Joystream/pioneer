@@ -15,7 +15,7 @@ import { useApi } from '../../../common/hooks/useApi'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { onTransactionDone } from '../../../common/types'
 import { WithNullableValues } from '../../../common/types/form'
-import { BaseMember } from '../../types'
+import { MemberInternal } from '../../types'
 
 import { UpdateMemberForm } from './types'
 
@@ -23,7 +23,7 @@ interface SignProps {
   onClose: () => void
   transactionParams: WithNullableValues<UpdateMemberForm>
   onDone: onTransactionDone
-  member: BaseMember
+  member: MemberInternal
   signer: Account
 }
 
@@ -34,7 +34,7 @@ const hasEdits = (object: Record<string, any>, fields: string[]) => {
 function createBatch(
   transactionParams: WithNullableValues<UpdateMemberForm>,
   api: ApiRx | undefined,
-  member: BaseMember
+  member: MemberInternal
 ) {
   const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarUri', 'name'])
   const hasAccountsEdits = hasEdits(transactionParams, ['rootAccount', 'controllerAccount'])

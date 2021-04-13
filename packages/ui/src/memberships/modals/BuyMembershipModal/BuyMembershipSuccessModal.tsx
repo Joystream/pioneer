@@ -9,11 +9,13 @@ import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
 import { MemberInfo } from '../../components'
 import { MemberModalCall } from '../../components/MemberProfile'
-import { BaseMember, Member } from '../../types'
+import { MemberInternal } from '../../types'
+
+import { FormFields } from './BuyMembershipFormModal'
 
 interface Props {
   onClose: () => void
-  member: Member
+  member: FormFields
   memberId?: string
 }
 
@@ -33,7 +35,7 @@ export const BuyMembershipSuccessModal = ({ onClose, member, memberId }: Props) 
       <ModalBody>
         <TextMedium>You have just successfully created a new membership</TextMedium>
         <MemberRow>
-          <MemberInfo member={(member as unknown) as BaseMember} />
+          <MemberInfo member={(member as unknown) as MemberInternal} />
         </MemberRow>
       </ModalBody>
       <ModalFooter>

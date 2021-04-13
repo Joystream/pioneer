@@ -24,7 +24,7 @@ import { useForm } from '../../../common/hooks/useForm'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { WithNullableValues } from '../../../common/types/form'
 import { AvatarURISchema, HandleSchema } from '../../model/validation'
-import { BaseMember } from '../../types'
+import { MemberInternal } from '../../types'
 
 import { UpdateMemberForm } from './types'
 import { changedOrNull, hasAnyEdits } from './utils'
@@ -32,7 +32,7 @@ import { changedOrNull, hasAnyEdits } from './utils'
 interface Props {
   onClose: () => void
   onSubmit: (params: WithNullableValues<UpdateMemberForm>) => void
-  member: BaseMember
+  member: MemberInternal
 }
 
 const UpdateMemberSchema = Yup.object().shape({
@@ -50,8 +50,8 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     id: member.id,
     name: member.name || '',
     handle: member.handle || '',
-    about: member.about || '',
-    avatarUri: member.avatarUri || '',
+    about: '',
+    avatarUri: member.avatar || '',
     rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
     controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
   })

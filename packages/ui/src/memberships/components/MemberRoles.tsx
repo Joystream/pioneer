@@ -3,12 +3,12 @@ import styled from 'styled-components'
 
 import { Help } from '../../common/components/Help'
 import { Colors } from '../../common/constants'
-import { BaseMember } from '../types'
+import { MemberInternal } from '../types'
 
 interface MemberRolesProps {
   max?: number
   size?: 'l' | 'm'
-  member: BaseMember
+  member: MemberInternal
 }
 
 export const MemberRoles = ({ size, max }: MemberRolesProps) => {

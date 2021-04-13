@@ -4,13 +4,13 @@ import styled from 'styled-components'
 import { HeaderText, SortIconDown, SortIconUp } from '../../common/components/SortedListHeaders'
 import { Colors } from '../../common/constants'
 import { setOrder, SortKey, sortMemberships } from '../model/sortMemberships'
-import { BaseMember } from '../types'
+import { MemberInternal } from '../types'
 
 import { MemberListItem } from './MemberListItem/MemberListItem'
 
 interface MembersSectionProps {
   title: string
-  members: BaseMember[]
+  members: MemberInternal[]
 }
 
 export const MembersSection = ({ title, members }: MembersSectionProps) => {

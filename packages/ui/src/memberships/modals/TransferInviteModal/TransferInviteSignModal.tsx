@@ -14,12 +14,12 @@ import { useApi } from '../../../common/hooks/useApi'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { formatTokenValue } from '../../../common/model/formatters'
 import { onTransactionDone } from '../../../common/types'
-import { BaseMember } from '../../types'
+import { MemberInternal } from '../../types'
 
 interface Props {
   onClose: () => void
-  sourceMember: BaseMember
-  targetMember: BaseMember
+  sourceMember: MemberInternal
+  targetMember: MemberInternal
   signer: Account
   amount: BN
   onDone: onTransactionDone

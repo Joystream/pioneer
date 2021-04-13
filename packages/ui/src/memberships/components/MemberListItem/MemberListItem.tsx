@@ -5,14 +5,14 @@ import { MemberInfo } from '..'
 import { EditSymbol } from '../../../common/components/icons/symbols'
 import { BorderRad, Colors, Fonts, Sizes } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
-import { BaseMember } from '../../types'
+import { MemberInternal } from '../../types'
 import { EditMembershipButton } from '../EditMembershipButton'
 import { MemberModalCall } from '../MemberProfile'
 import { MemberRoles } from '../MemberRoles'
 import { TransferInviteButton } from '../TransferInviteButton'
 
 interface Props {
-  member: BaseMember
+  member: MemberInternal
 }
 
 export const MemberListItem = ({ member }: Props) => {
