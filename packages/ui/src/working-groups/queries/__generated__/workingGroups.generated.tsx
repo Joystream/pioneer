@@ -1,16 +1,11 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { MemberFieldsFragment, MemberFieldsFragmentDoc } from '../../../memberships/queries'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
-export type WorkingGroupFieldsFragment = {
-  __typename: 'WorkingGroup'
-  id: string
-  name: string
-  workers?: Types.Maybe<Array<{ __typename: 'Worker'; id: string }>>
-}
+export type WorkingGroupFieldsFragment = { __typename: 'WorkingGroup'; id: string; name: string }
 
 export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never }>
 
@@ -19,6 +14,7 @@ export type GetWorkingGroupsQuery = {
   workingGroups: Array<
     {
       __typename: 'WorkingGroup'
+      status?: Types.Maybe<{ __typename: 'WorkingGroupStatus'; name: string }>
       workers?: Types.Maybe<Array<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>>
     } & WorkingGroupFieldsFragment
   >
@@ -40,9 +36,6 @@ export const WorkingGroupFieldsFragmentDoc = gql`
   fragment WorkingGroupFields on WorkingGroup {
     id
     name
-    workers {
-      id
-    }
   }
 `
 export const WorkerFieldsFragmentDoc = gql`
@@ -61,6 +54,9 @@ export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {
     workingGroups {
       ...WorkingGroupFields
+      status {
+        name
+      }
       workers {
         membership {
           id

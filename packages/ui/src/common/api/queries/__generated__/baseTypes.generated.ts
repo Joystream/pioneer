@@ -654,7 +654,6 @@ export type Subscription = {
 
 export type Worker = {
   __typename: 'Worker'
-  id: Scalars['ID']
   group: WorkingGroup
   membership: Membership
 }

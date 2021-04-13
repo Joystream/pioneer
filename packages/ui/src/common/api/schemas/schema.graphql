@@ -566,7 +566,6 @@ type Subscription {
 }
 
 type Worker {
-  id: ID!
   group: WorkingGroup!
   membership: Membership!
   # ...
