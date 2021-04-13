@@ -1,21 +1,29 @@
-import { WorkingGroup } from '../../working-groups/types'
-
 import rawWorkingGroups from './raw/workingGroups.json'
 
-export const mockWorkingGroups: WorkingGroup[] = rawWorkingGroups.map((rawGroup) => ({ ...rawGroup }))
-
-const seedWorkingGroup = (group: WorkingGroup, server: any) => {
-  const wg = server.schema.create('WorkingGroup', group)
-
-  server.schema.create('Worker', {
-    group: wg,
-    membership: server.schema.find('Membership', 0),
-  })
-
-  return wg
+interface RawWorkingGroupMock {
+  id: string
+  name: string
+  about: string
+  workers?: number[]
 }
 
-export const seedWorkingGroups = (server: any) =>
-  mockWorkingGroups.map((group) => {
-    return seedWorkingGroup(group, server)
-  })
+export const mockWorkingGroups = rawWorkingGroups.map((rawGroup) => ({ ...rawGroup }))
+
+const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
+  const groupData = { ...group, workers: null }
+
+  const workingGroup = server.schema.create('WorkingGroup', groupData)
+
+  for (const membershipId of group.workers ?? []) {
+    const membership = server.schema.find('Membership', membershipId)
+
+    server.schema.create('Worker', {
+      group: workingGroup,
+      membership,
+    })
+  }
+
+  return workingGroup
+}
+
+export const seedWorkingGroups = (server: any) => mockWorkingGroups.map((group) => seedWorkingGroup(group, server))

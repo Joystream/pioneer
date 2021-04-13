@@ -2,12 +2,16 @@ import BN from 'bn.js'
 
 import { BaseMember } from '../../memberships/types'
 
+interface Worker {
+  membership: Pick<BaseMember, 'id'>
+}
+
 export interface WorkingGroup {
   name: string
   image?: string
   about?: string
   leader?: Pick<BaseMember, 'id' | 'avatarUri'>
-  workers?: Pick<{ __typename: string; id: string }, 'id'>[] | null
+  workers?: Worker[]
 }
 
 export interface WorkingGroupOpening {
