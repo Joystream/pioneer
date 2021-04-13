@@ -9,7 +9,6 @@ import { Label, TokenValue } from '../typography'
 export interface StatisticItemProps {
   title?: string
   helperText?: string
-  value: number | BN
   className?: string
   children?: React.ReactNode
   helperTitle?: string
@@ -17,7 +16,11 @@ export interface StatisticItemProps {
   helperLinkURL?: string
 }
 
-export const TokenValueStat = (props: StatisticItemProps) => {
+export interface TokenValueStatProps extends StatisticItemProps {
+  value: number | BN
+}
+
+export const TokenValueStat = (props: TokenValueStatProps) => {
   return (
     <StatisticItem {...props}>
       <TotalValue value={props.value} />
