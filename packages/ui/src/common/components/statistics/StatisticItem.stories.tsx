@@ -3,23 +3,23 @@ import React from 'react'
 
 import { BlackBlock, ModalBlock, TemplateBlock, WhiteBlock } from '../storybookParts/previewStyles'
 
-import { StatisticItem, StatisticItemProps } from './Stats'
+import { TokenValueStat, TokenValueStatProps } from './TokenValueStat'
 
 export default {
   title: 'Common/Statistics',
-  component: StatisticItem,
+  component: TokenValueStat,
 } as Meta
 
-const Template: Story<StatisticItemProps> = (args) => (
+const Template: Story<TokenValueStatProps> = (args) => (
   <TemplateBlock>
     <WhiteBlock>
-      <StatisticItem {...args} />
+      <TokenValueStat {...args} />
     </WhiteBlock>
     <ModalBlock>
-      <StatisticItem {...args} />
+      <TokenValueStat {...args} />
     </ModalBlock>
     <BlackBlock>
-      <StatisticItem {...args} />
+      <TokenValueStat {...args} />
     </BlackBlock>
   </TemplateBlock>
 )

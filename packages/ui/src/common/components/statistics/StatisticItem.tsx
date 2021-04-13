@@ -1,17 +1,15 @@
-import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { Help } from '../Help'
-import { Label, TokenValue } from '../typography'
+import { Label } from '../typography'
 
 export interface StatisticItemProps {
   title?: string
   helperText?: string
-  value: number | BN
   className?: string
-  children?: React.ReactElement
+  children?: React.ReactNode
   helperTitle?: string
   helperLinkText?: React.ReactNode
   helperLinkURL?: string
@@ -20,7 +18,6 @@ export interface StatisticItemProps {
 export const StatisticItem = ({
   title,
   helperText,
-  value,
   className,
   children,
   helperTitle,
@@ -42,39 +39,10 @@ export const StatisticItem = ({
           )}
         </StatsInfo>
       </StatsHeader>
-      <StatsContent>
-        <TotalValue value={value} />
-        {children}
-      </StatsContent>
+      <StatsContent>{children}</StatsContent>
     </StatsItem>
   )
 }
-
-interface StatisticsProps {
-  stats: Array<StatisticItemProps>
-}
-
-export const Statistics = ({ stats }: StatisticsProps) => {
-  return (
-    <Stats>
-      {stats.map(({ title, helperText, value, className }) => (
-        <StatisticItem title={title} helperText={helperText} value={value} className={className} />
-      ))}
-    </Stats>
-  )
-}
-
-const TotalValue = styled(TokenValue)`
-  font-size: 20px;
-  line-height: 28px;
-`
-
-const Stats = styled.ul`
-  display: flex;
-  width: 100%;
-  justify-items: flex-start;
-  margin-top: 8px;
-`
 
 const StatsItem = styled.li`
   display: inline-grid;
