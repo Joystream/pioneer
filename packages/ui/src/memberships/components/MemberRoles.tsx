@@ -18,7 +18,6 @@ export const MemberRoles = ({ size, max }: MemberRolesProps) => {
     { abbreviation: 'FL', help: 'Lorem ipsum...' },
     { abbreviation: 'CC', help: 'Lorem ipsum...' },
     { abbreviation: 'SL', help: 'Lorem ipsum...' },
-    { abbreviation: 'FL', help: 'Lorem ipsum...' },
     { abbreviation: 'AA', help: 'Lorem ipsum...' },
     { abbreviation: 'BB', help: 'Lorem ipsum...' },
   ]
@@ -29,7 +28,7 @@ export const MemberRoles = ({ size, max }: MemberRolesProps) => {
   return (
     <MemberRolesWrapper>
       {rolesToDisplay.map(({ abbreviation, help }) => (
-        <MemberRoleHelp memberRole={abbreviation} helperText={help} size={size} />
+        <MemberRoleHelp key={abbreviation} memberRole={abbreviation} helperText={help} size={size} />
       ))}
       {hiddenRoles > 0 && <MemberRoleHelp memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
     </MemberRolesWrapper>
