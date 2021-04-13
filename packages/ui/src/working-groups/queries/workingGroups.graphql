@@ -6,7 +6,13 @@ fragment WorkingGroupFields on WorkingGroup {
 
 query getWorkingGroups {
   workingGroups {
-    ...WorkingGroupFields
+    ...WorkingGroupFields,
+    status {name}
+    workers {
+      membership {
+        id
+      }
+    }
   }
 }
 

@@ -1,9 +1,6 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
@@ -19,7 +16,12 @@ export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never 
 
 export type GetWorkingGroupsQuery = {
   __typename: 'Query'
-  workingGroups: Array<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
+  workingGroups: Array<
+    {
+      __typename: 'WorkingGroup'
+      workers?: Types.Maybe<Array<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>>
+    } & WorkingGroupFieldsFragment
+  >
 }
 
 export type WorkerFieldsFragment = {
@@ -59,6 +61,11 @@ export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {
     workingGroups {
       ...WorkingGroupFields
+      workers {
+        membership {
+          id
+        }
+      }
     }
   }
   ${WorkingGroupFieldsFragmentDoc}

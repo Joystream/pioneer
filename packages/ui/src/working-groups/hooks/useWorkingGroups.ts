@@ -11,6 +11,9 @@ interface UseWorkingGroups {
 export const useWorkingGroups = (): UseWorkingGroups => {
   const { data, loading } = useGetWorkingGroupsQuery()
   const groups = data?.workingGroups ?? []
+
+  console.log('HOOOOK', groups)
+
   return {
     isLoading: loading,
     groups,
