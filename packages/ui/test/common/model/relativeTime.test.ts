@@ -1,4 +1,4 @@
-import { relativeTime } from '../../../src/accounts/model/relativeTime'
+import { relativeTime } from '../../../src/common/model/relativeTime'
 
 describe('relativeTime', () => {
   const now = new Date('2021-04-13T12:00:00.329Z').valueOf()
