@@ -1,4 +1,5 @@
 import { Address } from '../../common/types'
+
 type ID = string
 
 export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'OLYMPIA'
