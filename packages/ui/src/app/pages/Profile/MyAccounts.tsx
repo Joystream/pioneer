@@ -3,7 +3,7 @@ import React from 'react'
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
-import { Statistics } from '../../../common/components/statistics/Stats'
+import { Statistics } from '../../../common/components/statistics'
 import { AppPage } from '../../components/AppPage'
 
 import { Accounts } from './components/Accounts'

@@ -5,7 +5,7 @@ import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/comp
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { PreviousPage } from '../../../common/components/page/PreviousPage'
-import { Statistics } from '../../../common/components/statistics/Stats'
+import { Statistics } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
 import { Label } from '../../../common/components/typography'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'

@@ -3,7 +3,7 @@ import React from 'react'
 
 import { BlackBlock, ModalBlock, TemplateBlock, WhiteBlock } from '../storybookParts/previewStyles'
 
-import { StatisticItem, StatisticItemProps } from './Stats'
+import { StatisticItem, StatisticItemProps } from '.'
 
 export default {
   title: 'Common/Statistics',

@@ -56,11 +56,11 @@ interface StatisticsProps {
 
 export const Statistics = ({ stats }: StatisticsProps) => {
   return (
-    <Stats>
+    <Index>
       {stats.map(({ title, helperText, value, className }) => (
         <StatisticItem title={title} helperText={helperText} value={value} className={className} />
       ))}
-    </Stats>
+    </Index>
   )
 }
 
@@ -69,7 +69,7 @@ const TotalValue = styled(TokenValue)`
   line-height: 28px;
 `
 
-const Stats = styled.ul`
+const Index = styled.ul`
   display: flex;
   width: 100%;
   justify-items: flex-start;
