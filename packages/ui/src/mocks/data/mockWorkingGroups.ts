@@ -3,14 +3,23 @@ import rawWorkingGroups from './raw/workingGroups.json'
 interface RawWorkingGroupMock {
   id: string
   name: string
-  about: string
   workers?: number[]
+  status: {
+    name: string
+    message: string
+    about: string
+    description: string
+  }
 }
 
 export const mockWorkingGroups = rawWorkingGroups.map((rawGroup) => ({ ...rawGroup }))
 
 const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
-  const groupData = { ...group, workers: null }
+  const groupData = {
+    ...group,
+    workers: null,
+    status: server.schema.create('WorkingGroupStatus', group.status),
+  }
 
   const workingGroup = server.schema.create('WorkingGroup', groupData)
 

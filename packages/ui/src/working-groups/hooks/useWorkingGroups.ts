@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 
 import { useGetWorkingGroupsQuery } from '../queries'
-import { WorkingGroup, WorkingGroupOpening } from '../types'
+import { asWorkingGroup, WorkingGroup, WorkingGroupOpening } from '../types'
 
 interface UseWorkingGroups {
   isLoading: boolean
@@ -12,11 +12,9 @@ export const useWorkingGroups = (): UseWorkingGroups => {
   const { data, loading } = useGetWorkingGroupsQuery()
   const groups = data?.workingGroups ?? []
 
-  console.log('HOOOOK', groups)
-
   return {
     isLoading: loading,
-    groups,
+    groups: groups.map(asWorkingGroup),
   }
 }
 

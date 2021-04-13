@@ -5,25 +5,32 @@ import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
-export type WorkingGroupFieldsFragment = { __typename: 'WorkingGroup'; id: string; name: string }
+export type WorkingGroupStatusFieldsFragment = {
+  __typename: 'WorkingGroupStatus'
+  name: string
+  about?: Types.Maybe<string>
+  description?: Types.Maybe<string>
+  message?: Types.Maybe<string>
+}
+
+export type WorkerFieldsFragment = {
+  __typename: 'Worker'
+  membership: { __typename: 'Membership' } & MemberFieldsFragment
+}
+
+export type WorkingGroupFieldsFragment = {
+  __typename: 'WorkingGroup'
+  id: string
+  name: string
+  status?: Types.Maybe<{ __typename: 'WorkingGroupStatus' } & WorkingGroupStatusFieldsFragment>
+  workers?: Types.Maybe<Array<{ __typename: 'Worker' } & WorkerFieldsFragment>>
+}
 
 export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetWorkingGroupsQuery = {
   __typename: 'Query'
-  workingGroups: Array<
-    {
-      __typename: 'WorkingGroup'
-      status?: Types.Maybe<{ __typename: 'WorkingGroupStatus'; name: string }>
-      workers?: Types.Maybe<Array<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>>
-    } & WorkingGroupFieldsFragment
-  >
-}
-
-export type WorkerFieldsFragment = {
-  __typename: 'Worker'
-  group: { __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment
-  membership: { __typename: 'Membership' } & MemberFieldsFragment
+  workingGroups: Array<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
 }
 
 export type GetWorkersQueryVariables = Types.Exact<{
@@ -32,36 +39,40 @@ export type GetWorkersQueryVariables = Types.Exact<{
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
 
-export const WorkingGroupFieldsFragmentDoc = gql`
-  fragment WorkingGroupFields on WorkingGroup {
-    id
+export const WorkingGroupStatusFieldsFragmentDoc = gql`
+  fragment WorkingGroupStatusFields on WorkingGroupStatus {
     name
+    about
+    description
+    message
   }
 `
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
-    group {
-      ...WorkingGroupFields
-    }
     membership {
       ...MemberFields
     }
   }
-  ${WorkingGroupFieldsFragmentDoc}
   ${MemberFieldsFragmentDoc}
+`
+export const WorkingGroupFieldsFragmentDoc = gql`
+  fragment WorkingGroupFields on WorkingGroup {
+    id
+    name
+    status {
+      ...WorkingGroupStatusFields
+    }
+    workers {
+      ...WorkerFields
+    }
+  }
+  ${WorkingGroupStatusFieldsFragmentDoc}
+  ${WorkerFieldsFragmentDoc}
 `
 export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {
     workingGroups {
       ...WorkingGroupFields
-      status {
-        name
-      }
-      workers {
-        membership {
-          id
-        }
-      }
     }
   }
   ${WorkingGroupFieldsFragmentDoc}
