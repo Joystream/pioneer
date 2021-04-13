@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { StatisticItem, StatisticItemProps } from './StatisticItem'
+import { TokenValueStat, StatisticItemProps } from './StatisticItem'
 
 interface StatisticsProps {
   stats: Array<StatisticItemProps>
@@ -11,7 +11,7 @@ export const Statistics = ({ stats }: StatisticsProps) => {
   return (
     <Stats>
       {stats.map(({ title, helperText, value, className }) => (
-        <StatisticItem title={title} helperText={helperText} value={value} className={className} />
+        <TokenValueStat title={title} helperText={helperText} value={value} className={className} />
       ))}
     </Stats>
   )

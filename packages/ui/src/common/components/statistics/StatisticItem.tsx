@@ -11,16 +11,24 @@ export interface StatisticItemProps {
   helperText?: string
   value: number | BN
   className?: string
-  children?: React.ReactElement
+  children?: React.ReactNode
   helperTitle?: string
   helperLinkText?: React.ReactNode
   helperLinkURL?: string
 }
 
-export const StatisticItem = ({
+export const TokenValueStat = (props: StatisticItemProps) => {
+  return (
+    <StatisticItem {...props}>
+      <TotalValue value={props.value} />
+      {props.children}
+    </StatisticItem>
+  )
+}
+
+const StatisticItem = ({
   title,
   helperText,
-  value,
   className,
   children,
   helperTitle,
@@ -42,10 +50,7 @@ export const StatisticItem = ({
           )}
         </StatsInfo>
       </StatsHeader>
-      <StatsContent>
-        <TotalValue value={value} />
-        {children}
-      </StatsContent>
+      <StatsContent>{children}</StatsContent>
     </StatsItem>
   )
 }
