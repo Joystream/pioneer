@@ -5,7 +5,7 @@ import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/comp
 import { Statistics } from '../../../common/components/statistics/Stats'
 import { Label } from '../../../common/components/typography'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
-import { useOpenings } from '../../../working-groups/hooks/useWorkingGroups'
+import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
 
 export function WorkingGroup() {
