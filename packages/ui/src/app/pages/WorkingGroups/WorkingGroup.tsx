@@ -5,7 +5,7 @@ import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/comp
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { PreviousPage } from '../../../common/components/page/PreviousPage'
-import { Statistics } from '../../../common/components/statistics'
+import { Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
 import { Label } from '../../../common/components/typography'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
@@ -37,13 +37,11 @@ export function WorkingGroup() {
       </PageHeader>
       <ContentWithSidepanel>
         <MainPanel>
-          <Statistics
-            stats={[
-              { title: 'Current budget', helperText: 'Lorem fishy', value: 150200 },
-              { title: 'Working Group Debt', helperText: 'Lorem fishy', value: -200 },
-              { title: 'Avg Stake', helperText: 'Lorem fishy', value: 100000 },
-            ]}
-          />
+          <Statistics>
+            <TokenValueStat title="Current budget" helperText="Lorem ipsum..." value={150_200} />
+            <TokenValueStat title="Working Group dept" helperText="Lorem ipsum..." value={-200} />
+            <TokenValueStat title="Avg stake" helperText="Lorem ipsum..." value={100_000} />
+          </Statistics>
           <OpeningsCategories>
             <OpeningsCategory>
               <Label>Upcoming openings</Label>

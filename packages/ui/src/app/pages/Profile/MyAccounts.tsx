@@ -3,7 +3,7 @@ import React from 'react'
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
-import { Statistics } from '../../../common/components/statistics'
+import { Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { AppPage } from '../../components/AppPage'
 
 import { Accounts } from './components/Accounts'
@@ -23,14 +23,12 @@ export function MyAccounts() {
         <PageTitle>My Profile</PageTitle>
         <MyProfileTabs />
       </PageHeader>
-      <Statistics
-        stats={[
-          { title: 'Total balance', helperText: 'Lorem fishy', value: total },
-          { title: 'Total transferable balance', helperText: 'Lorem fishy', value: transferable },
-          { title: 'Total locked balance', helperText: 'Lorem fishy', value: locked },
-          { title: 'Total recoverable', helperText: 'Lorem fishy', value: recoverable },
-        ]}
-      />
+      <Statistics>
+        <TokenValueStat title="Total balance" helperText="Lorem ipsum..." value={total} />
+        <TokenValueStat title="Total transferable balance" helperText="Lorem ipsum..." value={transferable} />
+        <TokenValueStat title="Total locked balance" helperText="Lorem ipsum..." value={locked} />
+        <TokenValueStat title="Total recoverable" helperText="Lorem ipsum..." value={recoverable} />
+      </Statistics>
       <Accounts />
     </AppPage>
   )

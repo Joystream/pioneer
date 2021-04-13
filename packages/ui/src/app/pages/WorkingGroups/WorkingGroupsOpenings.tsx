@@ -4,7 +4,7 @@ import { Activities } from '../../../common/components/Activities'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
-import { Statistics } from '../../../common/components/statistics'
+import { Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
 import { Label } from '../../../common/components/typography'
 import { useActivities } from '../../../common/hooks/useActivities'
@@ -53,22 +53,11 @@ export const WorkingGroupsOpenings = () => {
       </PageHeader>
       <ContentWithSidepanel>
         <MainPanel>
-          <Statistics
-            stats={[
-              {
-                title: 'MyRoles',
-                value: 5,
-              },
-              {
-                title: 'Currently staking',
-                value: 5,
-              },
-              {
-                title: 'Earned in past',
-                value: 5,
-              },
-            ]}
-          />
+          <Statistics>
+            <TokenValueStat title="My Roles" helperText="Lorem ipsum..." value={5} />
+            <TokenValueStat title="Currently staking" helperText="Lorem ipsum..." value={5} />
+            <TokenValueStat title="Earned in past" helperText="Lorem ipsum..." value={5} />
+          </Statistics>
           <Tabs tabsSize="xs" tabs={openingsTabs} />
           <OpeningsList openings={activeTab === 'OPENINGS' ? openings : upcomingOpenings} />
         </MainPanel>
