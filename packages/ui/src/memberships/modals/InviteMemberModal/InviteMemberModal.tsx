@@ -31,8 +31,8 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
       formData
         ? api?.tx?.members?.inviteMember({
             inviting_member_id: formData.invitor?.id,
-            root_account: formData.rootAccount,
-            controller_account: formData.controllerAccount,
+            root_account: formData.rootAccount?.address,
+            controller_account: formData.controllerAccount?.address,
             metadata: {
               name: formData.name,
               avatar_uri: formData.avatarUri,

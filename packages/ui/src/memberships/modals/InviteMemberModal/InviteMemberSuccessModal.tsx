@@ -6,7 +6,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/comp
 import { TextMedium } from '../../../common/components/typography'
 import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { MemberInfo } from '../../components'
-import { useGetMemberQuery } from '../../queries'
+import { useMember } from '../../hooks/useMembership'
 import { Member } from '../../types'
 import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
@@ -27,11 +27,11 @@ const SuccessModal = ({ onClose, children }: SuccessModalProps) => {
 }
 
 export function InviteMemberSuccessModal({ onClose, formData }: Props) {
-  const invitorId = '' // member.invitor?.id || ''
+  const invitorId = formData.invitor?.id || ''
 
-  const { data: invitor, loading } = useGetMemberQuery({ variables: { id: invitorId } })
-  const inviteCount = invitor?.membership?.inviteCount ?? 0
-  const name = invitor?.membership?.name
+  const { member: invitor, isLoading } = useMember(invitorId)
+  const inviteCount = invitor?.inviteCount ?? 0
+  const name = invitor?.name
   const plural = inviteCount > 1
 
   return (
@@ -41,8 +41,8 @@ export function InviteMemberSuccessModal({ onClose, formData }: Props) {
         <MemberRow>
           <MemberInfo member={(formData as unknown) as Member} />
         </MemberRow>
-        {loading && <TextMedium>Loading...</TextMedium>}
-        {!loading && inviteCount > 0 ? (
+        {isLoading && <TextMedium>Loading...</TextMedium>}
+        {!isLoading && inviteCount > 0 ? (
           <TextMedium>
             You still have {inviteCount} invitation{plural && 's'} left on the "{name}" membership.
           </TextMedium>

@@ -31,8 +31,8 @@ export const BuyMembershipModal = () => {
     () =>
       formData
         ? api?.tx?.members?.buyMembership({
-            root_account: formData.rootAccount,
-            controller_account: formData.controllerAccount,
+            root_account: formData.rootAccount?.address,
+            controller_account: formData.controllerAccount?.address,
             handle: formData.handle,
             metadata: {
               name: formData.name,
@@ -54,8 +54,8 @@ export const BuyMembershipModal = () => {
             if (server && memberId) {
               server.schema.create('Membership', {
                 id: id,
-                rootAccount: formData.rootAccount,
-                controllerAccount: formData.controllerAccount,
+                rootAccount: formData.rootAccount?.address,
+                controllerAccount: formData.controllerAccount?.address,
                 name: formData.name,
                 handle: formData.handle,
                 avatarUri: formData.avatarUri,
