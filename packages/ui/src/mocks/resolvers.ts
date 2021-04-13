@@ -7,7 +7,7 @@ import {
   MemberFieldsFragment,
   SearchMembersQueryResult,
 } from '../memberships/queries'
-import { GetWorkersQueryResult, GetWorkingGroupsQueryResult } from '../working-groups/queries'
+import { GetWorkingGroupsQueryResult } from '../working-groups/queries'
 
 import { MockMember } from './data'
 
@@ -71,11 +71,7 @@ export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryR
 ) => {
   const { models } = schema.all('WorkingGroup')
 
-  const records = adaptRecords(models)
-
-  console.warn('records', records, 'models', models)
-
-  return records
+  return adaptRecords(models)
 }
 
 export const getWorkerResolver: QueryResolver<any, any> = (parent, args, context, info) => {
