@@ -1,10 +1,9 @@
-import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { Help } from '../Help'
-import { Label, TokenValue } from '../typography'
+import { Label } from '../typography'
 
 export interface StatisticItemProps {
   title?: string
@@ -16,20 +15,7 @@ export interface StatisticItemProps {
   helperLinkURL?: string
 }
 
-export interface TokenValueStatProps extends StatisticItemProps {
-  value: number | BN
-}
-
-export const TokenValueStat = (props: TokenValueStatProps) => {
-  return (
-    <StatisticItem {...props}>
-      <TotalValue value={props.value} />
-      {props.children}
-    </StatisticItem>
-  )
-}
-
-const StatisticItem = ({
+export const StatisticItem = ({
   title,
   helperText,
   className,
@@ -57,11 +43,6 @@ const StatisticItem = ({
     </StatsItem>
   )
 }
-
-const TotalValue = styled(TokenValue)`
-  font-size: 20px;
-  line-height: 28px;
-`
 
 const StatsItem = styled.li`
   display: inline-grid;

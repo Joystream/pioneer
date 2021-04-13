@@ -3,7 +3,7 @@ import React from 'react'
 
 import { BlackBlock, ModalBlock, TemplateBlock, WhiteBlock } from '../storybookParts/previewStyles'
 
-import { TokenValueStat, TokenValueStatProps } from './StatisticItem'
+import { TokenValueStat, TokenValueStatProps } from './TokenValueStat'
 
 export default {
   title: 'Common/Statistics',

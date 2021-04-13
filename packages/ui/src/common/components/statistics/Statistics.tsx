@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TokenValueStat, TokenValueStatProps } from './StatisticItem'
+import { TokenValueStat, TokenValueStatProps } from './TokenValueStat'
 
 interface StatisticsProps {
   stats: Array<TokenValueStatProps>
