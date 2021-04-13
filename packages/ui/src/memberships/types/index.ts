@@ -17,7 +17,7 @@ export const asMember = (data: MemberFieldsFragment): MemberInternal => {
     name: data.name ?? undefined,
     avatar: data.avatarUri ?? undefined,
     inviteCount: data.inviteCount,
-    isFoundingMember: data.isVerified,
+    isFoundingMember: data.isFoundingMember,
     isVerified: data.isVerified,
     rootAccount: data.rootAccount,
     controllerAccount: data.controllerAccount,
