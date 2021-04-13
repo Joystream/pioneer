@@ -1,19 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { PreviousPage } from '../../../common/components/page/PreviousPage'
-import { Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
-import { Label } from '../../../common/components/typography'
-import { OpeningsList } from '../../../working-groups/components/OpeningsList'
-import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
 
+import { OpeningsTab } from './OpeningsTab'
+
+type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
+
 export function WorkingGroup() {
-  const openings = useOpenings()
+  const [currentTab, setCurrentTab] = useState<Tab>('OPENINGS')
 
   const crumbs = [
     { href: '#', text: 'Working Groups' },
@@ -22,8 +21,8 @@ export function WorkingGroup() {
   ]
 
   const tabs = [
-    { title: 'Openings', active: true, onClick: () => undefined },
-    { title: 'About', active: false, onClick: () => undefined },
+    { title: 'Openings', active: currentTab === 'OPENINGS', onClick: () => setCurrentTab('OPENINGS') },
+    { title: 'About', active: currentTab === 'ABOUT', onClick: () => setCurrentTab('ABOUT') },
     { title: 'History', active: false, onClick: () => undefined },
   ]
 
@@ -35,29 +34,7 @@ export function WorkingGroup() {
         </PreviousPage>
         <Tabs tabs={tabs} />
       </PageHeader>
-      <ContentWithSidepanel>
-        <MainPanel>
-          <Statistics>
-            <TokenValueStat title="Current budget" helperText="Lorem ipsum..." value={150_200} />
-            <TokenValueStat title="Working Group dept" helperText="Lorem ipsum..." value={-200} />
-            <TokenValueStat title="Avg stake" helperText="Lorem ipsum..." value={100_000} />
-          </Statistics>
-          <OpeningsCategories>
-            <OpeningsCategory>
-              <Label>Upcoming openings</Label>
-              <OpeningsList openings={openings} />
-            </OpeningsCategory>
-            <OpeningsCategory>
-              <Label>Openings</Label>
-              <OpeningsList openings={openings} />
-            </OpeningsCategory>
-          </OpeningsCategories>
-        </MainPanel>
-        <SidePanel>
-          <Label>Leader</Label>
-          <Label>Workers</Label>
-        </SidePanel>
-      </ContentWithSidepanel>
+      {currentTab === 'OPENINGS' ? <OpeningsTab /> : <></>}
     </AppPage>
   )
 }
