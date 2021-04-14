@@ -17,11 +17,11 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
 
   return (
     <GroupItem>
-      <GroupImageContainer onClick={() => history.push('/working-groups/grouppreview')}>
+      <GroupImageContainer onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>
         {group.image ? <GroupImage src={group.image} /> : <GroupAvatarPlaceholderImage />}
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle onClick={() => history.push('/working-groups/grouppreview')}>{group.name}</GroupTitle>
+        <GroupTitle onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>{group.name}</GroupTitle>
         {group.about && <GroupContent>{group.about}</GroupContent>}
       </GroupContentBlock>
       <GroupStats>

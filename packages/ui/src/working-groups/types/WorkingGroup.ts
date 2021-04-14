@@ -8,6 +8,7 @@ interface Worker {
 }
 
 export interface WorkingGroup {
+  id: string
   name: string
   image?: string
   about?: string
@@ -43,6 +44,7 @@ const asWorker = (worker: WorkerFields) => ({
 
 export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup => {
   return {
+    id: group.id,
     image: undefined,
     name: group.name,
     about: group.status?.about ?? '',
