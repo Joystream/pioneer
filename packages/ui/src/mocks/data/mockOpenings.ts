@@ -47,8 +47,6 @@ const seedOpening = (openingData: RawOpeningMock, server: any) => {
     status: getOpeningStatus(openingData.status as OpeningStatusType, server),
   }
 
-  console.warn(server)
-
   return server.schema.create('WorkingGroupOpening', opening)
 }
 

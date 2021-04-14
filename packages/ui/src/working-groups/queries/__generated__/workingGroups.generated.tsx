@@ -24,6 +24,7 @@ export type WorkingGroupFieldsFragment = {
   name: string
   status?: Types.Maybe<{ __typename: 'WorkingGroupStatus' } & WorkingGroupStatusFieldsFragment>
   workers?: Types.Maybe<Array<{ __typename: 'Worker' } & WorkerFieldsFragment>>
+  leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
 }
 
 export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -64,6 +65,11 @@ export const WorkingGroupFieldsFragmentDoc = gql`
     }
     workers {
       ...WorkerFields
+    }
+    leader {
+      membership {
+        id
+      }
     }
   }
   ${WorkingGroupStatusFieldsFragmentDoc}

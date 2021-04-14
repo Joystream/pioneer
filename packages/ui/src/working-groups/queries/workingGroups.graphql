@@ -18,6 +18,11 @@ fragment WorkingGroupFields on WorkingGroup {
   workers {
     ...WorkerFields
   }
+  leader {
+    membership {
+      id
+    }
+  }
 }
 
 query getWorkingGroups {

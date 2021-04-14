@@ -2,7 +2,8 @@
   {
     "id": "0",
     "name": "Distribution",
-    "workers": [ 0, 1, 2 ],
+    "workers": [ "0", "1", "2" ],
+    "leaderId": "0",
     "status": {
       "name": "Status name",
       "message": "Status message",
@@ -16,7 +17,7 @@
     "id": "1",
     "image": "https://s.gitcoin.co/static/v2/card/thumb.0a0be2e5841a.jpg",
     "name": "Storage",
-    "workers": [ 2 ],
+    "workers": [ "2" ],
     "status": {
       "name": "Status name",
       "message": "Status message",
@@ -29,7 +30,8 @@
   {
     "id": "2",
     "name": "Forum",
-    "workers": [ 4, 5, 6, 7, 8 ],
+    "workers": [ "4", "5", "6", "7", "8" ],
+    "leaderId": "6",
     "status": {
       "name": "Status name",
       "message": "Status message",

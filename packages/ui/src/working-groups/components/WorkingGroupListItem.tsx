@@ -6,6 +6,7 @@ import { ValueInJoys, TextMedium } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../common/constants'
 import { Avatar, AvatarPlaceholderImage } from '../../memberships/components/Avatar'
+import { useMember } from '../../memberships/hooks/useMembership'
 import { WorkingGroup } from '../types'
 
 export interface WorkingGroupProps {
@@ -14,6 +15,8 @@ export interface WorkingGroupProps {
 
 export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const history = useHistory()
+
+  const { member: leader } = useMember(group.leaderId)
 
   return (
     <GroupItem>
@@ -41,9 +44,9 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            {group.leader ? (
+            {leader ? (
               <WGLeaderImage>
-                <Avatar avatarUri={group.leader.avatar} />
+                <Avatar avatarUri={leader.avatar} />
               </WGLeaderImage>
             ) : (
               'None'
