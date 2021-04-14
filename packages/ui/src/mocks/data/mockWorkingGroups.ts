@@ -3,7 +3,8 @@ import rawWorkingGroups from './raw/workingGroups.json'
 interface RawWorkingGroupMock {
   id: string
   name: string
-  workers?: number[]
+  workers?: string[]
+  leaderId?: string
   status: {
     name: string
     message: string
@@ -19,17 +20,27 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
     ...group,
     workers: null,
     status: server.schema.create('WorkingGroupStatus', group.status),
+    leaderId: null,
   }
 
   const workingGroup = server.schema.create('WorkingGroup', groupData)
 
+  const memberToWorker = new Map()
+
   for (const membershipId of group.workers ?? []) {
     const membership = server.schema.find('Membership', membershipId)
 
-    server.schema.create('Worker', {
+    const worker = server.schema.create('Worker', {
       group: workingGroup,
       membership,
     })
+
+    memberToWorker.set(membershipId, worker.id)
+  }
+
+  if (group.leaderId) {
+    workingGroup.leaderId = memberToWorker.get(group.leaderId)
+    workingGroup.save()
   }
 
   return workingGroup

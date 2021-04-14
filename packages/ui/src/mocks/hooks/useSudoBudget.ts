@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { useAccounts } from '../../accounts/hooks/useAccounts'
 import { useApi } from '../../common/hooks/useApi'
@@ -12,7 +12,11 @@ export function useSudoBudget() {
   const { hasAccounts } = useAccounts()
   const budget = useObservable(api?.query.membershipWorkingGroup.budget(), [isConnected])
 
-  console.log(`💸 Current Membership WG budget: ${budget} JOY`)
+  useMemo(() => {
+    if (budget !== undefined) {
+      console.log(`💸 Current Membership WG budget: ${budget} JOY`)
+    }
+  }, [JSON.stringify(budget)])
 
   const budgetTransaction = useMemo(() => {
     if (!api) {
@@ -29,7 +33,7 @@ export function useSudoBudget() {
     },
   })
 
-  useEffect(() => {
+  useMemo(() => {
     if (!IS_DEVELOPMENT || !(api && isConnected && hasAccounts)) {
       return
     }

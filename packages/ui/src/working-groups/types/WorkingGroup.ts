@@ -12,7 +12,7 @@ export interface WorkingGroup {
   name: string
   image?: string
   about?: string
-  leader?: Pick<Member, 'id' | 'avatar'>
+  leaderId?: string
   workers?: Worker[]
   status?: any
   description?: string
@@ -53,5 +53,6 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     description: group.status?.description ?? '',
     statusMessage: group.status?.message ?? '',
     workers: group.workers?.map(asWorker) ?? [],
+    leaderId: group.leader?.membership.id,
   }
 }
