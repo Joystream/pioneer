@@ -7,7 +7,7 @@ import {
   MemberFieldsFragment,
   SearchMembersQueryResult,
 } from '../memberships/queries'
-import { GetWorkingGroupsQueryResult } from '../working-groups/queries'
+import { GetWorkingGroupOpeningsQueryResult, GetWorkingGroupsQueryResult } from '../working-groups/queries'
 
 import { MockMember } from './data'
 
@@ -55,6 +55,7 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
   { text, limit },
   { mirageSchema: schema }
 ) => {
+  console.warn('RESOLVER searchMembersResolver')
   const isMatch = getMatcher(text)
 
   const { models } = schema.where('Membership', (member: MemberFieldsFragment) => {
@@ -69,8 +70,24 @@ export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryR
   args,
   { mirageSchema: schema }
 ) => {
+  console.warn('RESOLVER getWorkingGroupsResolver')
   const { models } = schema.all('WorkingGroup')
 
+  return adaptRecords(models)
+}
+
+export const getWorkingGroupOpeningsResolver: QueryResolver<any, GetWorkingGroupOpeningsQueryResult[]> = (
+  obj,
+  args,
+  { mirageSchema: schema }
+) => {
+  console.group('RESOLVER getWorkingGroupOpeningsResolver')
+  console.log('schema', schema)
+  const { models } = schema.all('WorkingGroupOpening')
+
+  console.log('models', models)
+
+  console.groupEnd()
   return adaptRecords(models)
 }
 

@@ -7,7 +7,13 @@ import schema from '../common/api/schemas/schema.graphql'
 import { seedBlocks, seedMembers } from './data'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
-import { getMemberResolver, getMembersResolver, getWorkingGroupsResolver, searchMembersResolver } from './resolvers'
+import {
+  getMemberResolver,
+  getMembersResolver,
+  getWorkingGroupOpeningsResolver,
+  getWorkingGroupsResolver,
+  searchMembersResolver,
+} from './resolvers'
 
 export const makeServer = (environment = 'development') => {
   return createServer({
@@ -25,6 +31,7 @@ export const makeServer = (environment = 'development') => {
               memberships: getMembersResolver,
               searchMemberships: searchMembersResolver,
               workingGroups: getWorkingGroupsResolver,
+              workingGroupOpenings: getWorkingGroupOpeningsResolver,
             },
           },
         })

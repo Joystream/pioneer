@@ -518,6 +518,10 @@ export type MembershipWhereInput = {
   referredById_in?: Maybe<Array<Scalars['ID']>>
 }
 
+export type WorkingGroupOpeningsWhereInput = {
+  group_eq?: Maybe<Scalars['ID']>
+}
+
 export type WorkersWhereInput = {
   group_eq?: Maybe<Scalars['ID']>
 }
@@ -564,6 +568,7 @@ export type Query = {
   membersByHandle: Array<MembersByHandleFtsOutput>
   workingGroups: Array<WorkingGroup>
   workers: Array<Worker>
+  workingGroupOpenings?: Maybe<Array<WorkingGroupOpening>>
 }
 
 export type QueryBlocksArgs = {
@@ -642,6 +647,12 @@ export type QueryWorkersArgs = {
   offset?: Maybe<Scalars['Int']>
   limit?: Maybe<Scalars['Int']>
   where?: Maybe<WorkersWhereInput>
+}
+
+export type QueryWorkingGroupOpeningsArgs = {
+  offset?: Maybe<Scalars['Int']>
+  limit?: Maybe<Scalars['Int']>
+  where?: Maybe<WorkingGroupOpeningsWhereInput>
 }
 
 export enum EventType {

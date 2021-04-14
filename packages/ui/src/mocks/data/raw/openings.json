@@ -1,7 +1,7 @@
 [
   {
     "groupId": 0,
-    "type": "regular",
+    "type": "REGULAR",
     "status": "open",
     "stakeAmount": 2000,
     "metadata": {
@@ -19,7 +19,7 @@
   },
   {
     "groupId": 0,
-    "type": "leader",
+    "type": "LEADER",
     "status": "open",
     "stakeAmount": 2000,
     "metadata": {
@@ -37,7 +37,7 @@
   },
   {
     "groupId": 0,
-    "type": "leader",
+    "type": "LEADER",
     "status": "filled",
     "stakeAmount": 2000,
     "metadata": {
@@ -55,7 +55,7 @@
   },
   {
     "groupId": 0,
-    "type": "regular",
+    "type": "REGULAR",
     "status": "cancelled",
     "stakeAmount": 2000,
     "metadata": {
