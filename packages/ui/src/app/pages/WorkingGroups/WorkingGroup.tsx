@@ -7,6 +7,7 @@ import { PreviousPage } from '../../../common/components/page/PreviousPage'
 import { Tabs } from '../../../common/components/Tabs'
 import { AppPage } from '../../components/AppPage'
 
+import { AboutTab } from './AboutTab'
 import { OpeningsTab } from './OpeningsTab'
 
 type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
@@ -34,7 +35,7 @@ export function WorkingGroup() {
         </PreviousPage>
         <Tabs tabs={tabs} />
       </PageHeader>
-      {currentTab === 'OPENINGS' ? <OpeningsTab /> : <></>}
+      {currentTab === 'OPENINGS' ? <OpeningsTab /> : <AboutTab />}
     </AppPage>
   )
 }
