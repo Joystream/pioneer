@@ -1,5 +1,6 @@
 import { createGraphQLHandler } from '@miragejs/graphql'
-import { createServer } from 'miragejs'
+import { createServer, Server } from 'miragejs'
+import { AnyRegistry } from 'miragejs/-types'
 
 import schema from '../common/api/schemas/schema.graphql'
 
@@ -29,8 +30,13 @@ export const makeServer = (environment = 'development') => {
       )
     },
 
-    // TODO - better server type
-    seeds(server: any) {
+    seeds(server: Server<AnyRegistry>) {
+      // Fix for "model has multiple possible inverse associations" error.
+      // See: https://github.com/miragejs/ember-cli-mirage/issues/996#issuecomment-315011890
+      const schema = server.schema as any // Schema.modelFor is a hidden API.
+      const groupModel = schema.modelFor('workingGroup')
+      groupModel.class.prototype.associations.workers.opts.inverse = null
+      groupModel.class.prototype.associations.leader.opts.inverse = null
       seedBlocks(server)
       seedMembers(server)
       seedWorkingGroups(server)

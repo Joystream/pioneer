@@ -560,6 +560,47 @@ type Query {
   workers(offset: Int, limit: Int = 50, where: WorkersWhereInput): [Worker!]!
 }
 
+enum EventType {
+  MembershipBought,
+  MemberInvited,
+  MemberProfileUpdated,
+  MemberAccountsUpdated,
+  MemberVerificationStatusUpdated,
+  ReferralCutUpdated,
+  InvitesTransferred,
+  MembershipPriceUpdated,
+  InitialInvitationBalanceUpdated,
+  LeaderInvitationQuotaUpdated,
+  InitialInvitationCountUpdated,
+  StakingAccountAddedEvent,
+  StakingAccountConfirmed,
+  StakingAccountRemoved,
+}
+
+type Event {
+  "{blockNumber}-{indexInBlock}"
+  id: ID!
+  "Hash of the extrinsic which caused the event to be emitted"
+  inExtrinsic: String
+  "Blocknumber of a block in which the event was emitted."
+  inBlock: Int!
+  "Index of event in block from which it was emitted."
+  indexInBlock: Int!
+  "Type of the event"
+  type: EventType!
+}
+
+interface WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+}
+
+interface MembershipEvent {
+  "Generic event data"
+  event: Event!
+}
+
+
 type StandardDeleteResponse {
   id: ID!
 }
@@ -568,10 +609,49 @@ type Subscription {
   stateSubscription: ProcessorState!
 }
 
+type WorkerStatusActive {
+  # No additional information needed
+  _phantom: Int
+}
+
+type WorkerStatusLeft {
+  workerExitedEventId: ID!
+}
+
+type WorkerStatusTerminated {
+  terminatedWorkerEventId: ID!
+}
+
+union WorkerStatus = WorkerStatusActive | WorkerStatusLeft | WorkerStatusTerminated
+
 type Worker {
+  "The group that the worker belongs to"
   group: WorkingGroup!
+  leaderGroups: [WorkingGroup!]
+  "Worker membership"
   membership: Membership!
-  # ...
+  "Worker's role account"
+  roleAccount: String!
+  "Worker's reward account"
+  rewardAccount: String!
+  "Worker's staking account"
+  stakeAccount: String!
+  "Current worker status"
+  status: WorkerStatus!
+  "Whether the worker is also the working group lead"
+  isLead: Boolean!
+  "Current role stake (in JOY)"
+  stake: BigInt!
+  "All related reward payouts @derivedFrom(field: worker)"
+  payouts: [WorkerPayoutEvent!]
+  "Blocknumber of the block the worker was hired at"
+  hiredAtBlock: Int!
+  "Time the worker was hired at"
+  hiredAtTime: DateTime!
+  "Related worker entry application"
+  application: WorkingGroupApplication!
+  "Worker's storage data"
+  storage: String
 }
 
 type WorkingGroupStatus {
@@ -596,30 +676,26 @@ type WorkingGroup {
   name: String!
   "Working group current status"
   status: WorkingGroupStatus
-
+  "Current working group leader"
+  leader: Worker
+  "Workers that currently belong to the group or belonged to the group in the past @derivedFrom(field: group)"
   workers: [Worker!]
-
+  "All openings related to this group @derivedFrom(field: group)"
   openings: [WorkingGroupOpening!]
-
-  # ...
+  "Current working group budget (JOY)"
+  budget: BigInt!
 }
-
 
 type OpeningStatusCancelled {
-  reason: String
-  # ...
+  openingCancelledEventId: ID!
 }
-
 type OpeningStatusOpen {
-  reason: String
-  # ...
+  # No additional information needed
+  _phantom: Int
 }
-
 type OpeningStatusFilled {
-  reason: String
-  # ...
+  openingFilledEventId: ID!
 }
-
 
 union WorkingGroupOpeningStatus = OpeningStatusOpen | OpeningStatusFilled | OpeningStatusCancelled
 
@@ -629,35 +705,81 @@ enum WorkingGroupOpeningType {
 }
 
 type WorkingGroupOpeningMetadata {
+  "Opening short description"
+  shortDescription: String!
+  "Opening description (md-formatted)"
+  description: String!
+  "Expected max. number of applicants that will be hired"
+  hiringLimit: Int!
+  "Expected time when the opening will close"
+  expectedEnding: DateTime!
+  "Md-formatted text explaining the application process"
+  applicationDetails: String!
+  "List of questions that should be answered during application @derivedFrom(field: openingMetadata)"
   applicationFormQuestions: [ApplicationFormQuestion!]
-  # ...
 }
 
 type WorkingGroupOpening {
   "Opening runtime id"
   id: ID!
-
   "Related working group"
   group: WorkingGroup!
-
-  "List of opening applications"
+  "List of opening applications  @derivedFrom(field: opening)"
   applications: [WorkingGroupApplication!]
-
   "Type of the opening (Leader/Regular)"
   type: WorkingGroupOpeningType!
-
+  "Current opening status"
   status: WorkingGroupOpeningStatus!
-
+  "Opening metadata"
   metadata: WorkingGroupOpeningMetadata!
+  "Role stake amount"
+  stakeAmount: BigInt!
+  "Role stake unstaking period in blocks"
+  unstakingPeriod: Int!
+  "Initial workers' reward per block"
+  rewardPerBlock: BigInt!
+  "Blocknumber of opening creation block"
+  createdAtBlock: Int!
+  "Time of opening creation"
+  createdAtTime: DateTime!
+}
+type ApplicationStatusPending {
+  # No additional information needed
+  _phantom: Int
+}
+type ApplicationStatusAccepted {
+  openingFilledEventId: ID!
+}
+type ApplicationStatusRejected {
+  openingFilledEventId: ID!
+}
+type ApplicationStatusWithdrawn {
+  applicationWithdrawnEventId: ID!
 }
 
+union WorkingGroupApplicationStatus = ApplicationStatusPending | ApplicationStatusAccepted | ApplicationStatusRejected | ApplicationStatusWithdrawn
+
 type WorkingGroupApplication {
+  "Application runtime id"
+  id: ID!
   "Related working group opening"
   opening: WorkingGroupOpening!
   "Applicant's membership"
   applicant: Membership!
-  "Application form questions answers"
+  "Applicant's initial role account"
+  roleAccount: String!
+  "Applicant's initial reward account"
+  rewardAccount: String!
+  "Applicant's initial staking account"
+  stakingAccount: String!
+  "Answers to application form questions @derivedFrom(field: application)"
   answers: [ApplicationFormQuestionAnswer!]
+  "Current application status"
+  status: WorkingGroupApplicationStatus!
+  "Blocknumber of application creation block"
+  createdAtBlock: Int!
+  "Time of application creation"
+  createdAtTime: DateTime!
 }
 
 type ApplicationFormQuestionAnswer {
@@ -675,8 +797,8 @@ enum ApplicationFormQuestionType {
 }
 
 type ApplicationFormQuestion {
-  "Related opening"
-  opening: WorkingGroupOpening!
+  "Related opening metadata"
+  openingMetadata: WorkingGroupOpeningMetadata!
   "The question itself"
   question: String!
   "Type of the question (UI answer input type)"
@@ -684,3 +806,224 @@ type ApplicationFormQuestion {
   "Index of the question"
   index: Int!
 }
+
+type OpeningAddedEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related opening"
+  opening: WorkingGroupOpening!
+  # Other opening data like: metadata, type, staking policy, reward etc. is immutable, so can be read directly from Opening entity
+}
+
+type AppliedOnOpeningEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related opening"
+  opening: WorkingGroupOpening!
+  "The application that was created"
+  application: WorkingGroupApplication!
+  # Same as with opening - application parameters are immutable and can be fetched from Application entity
+}
+
+type OpeningFilledEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related opening"
+  opening: WorkingGroupOpening!
+  # Otherwise we would need a field like "acceptedIn" filed in application or a separate table to make OneToMany
+}
+
+type LeaderSetEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related Lead worker"
+  worker: Worker!
+}
+
+type WorkerRoleAccountUpdatedEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related worker"
+  worker: Worker!
+  "New role account"
+  newRoleAccount: String!
+}
+
+type LeaderUnsetEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+}
+
+type WorkerExitedEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related worker"
+  worker: Worker!
+}
+
+type TerminatedWorkerEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related worker"
+  worker: Worker!
+  "Slash amount (if any)"
+  penalty: BigInt
+  "Optional rationale"
+  rationale: String
+}
+
+type TerminatedLeaderEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related worker"
+  worker: Worker!
+  "Slash amount (if any)"
+  penalty: BigInt
+  "Optional rationale"
+  rationale: String
+}
+
+type StakeSlashedEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related worker"
+  worker: Worker!
+  "Balance that was requested to be slashed"
+  requestedAmount: BigInt!
+  "Balance that was actually slashed"
+  slashedAmount: BigInt!
+  "Optional rationale"
+  rationale: String
+}
+
+type StakeDecreasedEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related worker"
+  worker: Worker!
+  "The amount of JOY the stake was decreased by"
+  amount: BigInt!
+}
+
+type StakeIncreasedEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related worker"
+  worker: Worker!
+  "The amount of JOY the stake was increased by"
+  amount: BigInt!
+}
+
+type ApplicationWithdrawnEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related application"
+  application: WorkingGroupApplication!
+}
+
+type OpeningCanceledEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related opening"
+  opening: WorkingGroupOpening!
+}
+
+type BudgetSetEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "New working group budget"
+  newBudget: BigInt!
+}
+
+type WorkerRewardAccountUpdatedEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related worker"
+  worker: Worker!
+  "New reward account"
+  newRewardAccount: String!
+}
+
+type WorkerRewardAmountUpdatedEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Related worker"
+  worker: Worker!
+  "New worker reward per block"
+  newRewardPerBlock: BigInt!
+}
+
+type StatusTextChangedEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "New status metadata"
+  status: WorkingGroupStatus!
+}
+
+type BudgetSpendingEvent implements WorkingGroupsEvent {
+  "Generic event data"
+  event: Event!
+  "Related group"
+  group: WorkingGroup!
+  "Reciever account address"
+  reciever: String!
+  "Amount beeing spent"
+  amount: BigInt!
+  "Optional rationale"
+  rationale: String
+}
+
+enum PayoutType {
+  "Standard reward payout"
+  STANDARD_REWARD
+  "Return of the previously missed reward"
+  RETURN_MISSED
+}
+
+type WorkerPayoutEvent {
+  "Type of the worker payout"
+  type: PayoutType
+  "Related worker"
+  worker: Worker!
+  "Amount recieved"
+  recieved: BigInt!
+  "Amount missed (due to, for example, empty working group budget)"
+  missed: BigInt!
+}
+
