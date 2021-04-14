@@ -5,7 +5,7 @@ interface UseOpeningsParams {
   groupId?: string
 }
 
-export const useOpenings = ({ groupId }: UseOpeningsParams) => {
+export const useOpenings = ({ groupId }: UseOpeningsParams = {}) => {
   const { loading, data } = useGetWorkingGroupOpeningsQuery({ variables: { groupId: groupId } })
 
   const groups = data?.workingGroupOpenings ?? []

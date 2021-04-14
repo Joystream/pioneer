@@ -2,7 +2,10 @@ import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { MemberFieldsFragment, MemberFieldsFragmentDoc } from '../../../memberships/queries'
+import {
+  MemberFieldsFragment,
+  MemberFieldsFragmentDoc,
+} from '../../../memberships/queries/__generated__/members.generated'
 
 const defaultOptions = {}
 export type WorkingGroupStatusFieldsFragment = {
@@ -40,7 +43,7 @@ export type GetWorkersQueryVariables = Types.Exact<{
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
 
-export type MetadataFieldsFragment = {
+export type WorkingGroupOpeningMetadataFieldsFragment = {
   __typename: 'WorkingGroupOpeningMetadata'
   applicationDetails: string
   shortDescription: string
@@ -54,7 +57,7 @@ export type WorkingGroupOpeningFieldsFragment = {
   type: Types.WorkingGroupOpeningType
   stakeAmount: any
   rewardPerBlock: any
-  metadata: { __typename: 'WorkingGroupOpeningMetadata' } & MetadataFieldsFragment
+  metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
   applications?: Types.Maybe<
     Array<{
       __typename: 'WorkingGroupApplication'
@@ -112,8 +115,8 @@ export const WorkingGroupFieldsFragmentDoc = gql`
   ${WorkingGroupStatusFieldsFragmentDoc}
   ${WorkerFieldsFragmentDoc}
 `
-export const MetadataFieldsFragmentDoc = gql`
-  fragment MetadataFields on WorkingGroupOpeningMetadata {
+export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
+  fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
     applicationDetails
     shortDescription
     hiringLimit
@@ -127,7 +130,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     stakeAmount
     rewardPerBlock
     metadata {
-      ...MetadataFields
+      ...WorkingGroupOpeningMetadataFields
     }
     applications {
       id
@@ -136,7 +139,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
       }
     }
   }
-  ${MetadataFieldsFragmentDoc}
+  ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
 export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {

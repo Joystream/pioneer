@@ -37,7 +37,7 @@ query getWorkers ($id: ID) {
   }
 }
 
-fragment MetadataFields on WorkingGroupOpeningMetadata {
+fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
   applicationDetails
   shortDescription
   hiringLimit
@@ -50,7 +50,7 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   stakeAmount
   rewardPerBlock
   metadata {
-    ... MetadataFields
+    ... WorkingGroupOpeningMetadataFields
   }
   applications {
     id

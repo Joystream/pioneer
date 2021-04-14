@@ -21,7 +21,7 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const { isLoading, openings } = useOpenings({})
+  const { isLoading, openings } = useOpenings()
   const activities = useActivities()
   const { active } = useMyMemberships()
   const { locked } = useTotalBalances()
