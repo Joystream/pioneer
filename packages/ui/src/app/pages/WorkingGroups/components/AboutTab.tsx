@@ -5,12 +5,14 @@ import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/c
 import { useMember } from '../../../../memberships/hooks/useMembership'
 import { WorkersList } from '../../../../working-groups/components/WorkersList'
 import { useWorkingGroup } from '../../../../working-groups/hooks/useWorkingGroup'
+import { useWorkers } from '../../../hooks/useWorkers'
 
 export function AboutTab() {
   const { id } = useParams<{ id: string }>()
   const group = useWorkingGroup(id)
 
-  const { member: leader } = useMember('1')
+  const { member: leader } = useMember(group?.leaderId ?? '')
+  const { workers } = useWorkers(group?.id ?? '')
 
   return (
     <ContentWithSidepanel>
@@ -23,7 +25,7 @@ export function AboutTab() {
         <div>{group?.about}</div>
       </MainPanel>
       <SidePanel>
-        <WorkersList leader={leader} />
+        <WorkersList leader={leader} workers={workers} />
       </SidePanel>
     </ContentWithSidepanel>
   )

@@ -1,3 +1,5 @@
+import { Worker } from '@joystream/types/working-group'
+
 import rawWorkingGroups from './raw/workingGroups.json'
 
 interface RawWorkingGroupMock {
@@ -12,6 +14,8 @@ interface RawWorkingGroupMock {
     description: string
   }
 }
+
+export type MockWorker = Worker & { groupId: string; memberId: string }
 
 export const mockWorkingGroups = rawWorkingGroups.map((rawGroup) => ({ ...rawGroup }))
 
