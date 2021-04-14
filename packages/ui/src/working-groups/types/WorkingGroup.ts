@@ -8,12 +8,15 @@ interface Worker {
 }
 
 export interface WorkingGroup {
+  id: string
   name: string
   image?: string
   about?: string
   leader?: Pick<Member, 'id' | 'avatar'>
   workers?: Worker[]
   status?: any
+  description?: string
+  statusMessage?: string
 }
 
 export interface WorkingGroupOpening {
@@ -43,9 +46,12 @@ const asWorker = (worker: WorkerFields) => ({
 
 export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup => {
   return {
+    id: group.id,
     image: undefined,
     name: group.name,
     about: group.status?.about ?? '',
+    description: group.status?.description ?? '',
+    statusMessage: group.status?.message ?? '',
     workers: group.workers?.map(asWorker) ?? [],
   }
 }
