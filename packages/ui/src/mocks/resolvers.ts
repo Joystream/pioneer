@@ -55,7 +55,6 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
   { text, limit },
   { mirageSchema: schema }
 ) => {
-  console.warn('RESOLVER searchMembersResolver')
   const isMatch = getMatcher(text)
 
   const { models } = schema.where('Membership', (member: MemberFieldsFragment) => {
@@ -70,28 +69,22 @@ export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryR
   args,
   { mirageSchema: schema }
 ) => {
-  console.warn('RESOLVER getWorkingGroupsResolver')
   const { models } = schema.all('WorkingGroup')
 
   return adaptRecords(models)
 }
 
 export const getWorkingGroupOpeningsResolver: QueryResolver<any, GetWorkingGroupOpeningsQueryResult[]> = (
-  obj,
+  parent,
   args,
   { mirageSchema: schema }
 ) => {
-  console.group('RESOLVER getWorkingGroupOpeningsResolver')
-  console.log('schema', schema)
-  const { models } = schema.all('WorkingGroupOpening')
+  const { models } = args.where.group_eq
+    ? schema.where('WorkingGroupOpening', { groupId: args.where.group_eq })
+    : schema.all('WorkingGroupOpening')
 
-  console.log('models', models)
-
-  console.groupEnd()
   return adaptRecords(models)
 }
 
-export const getWorkerResolver: QueryResolver<any, any> = (parent, args, context, info) => {
-  console.error("WORKER'", parent, args, context, info)
-  return mirageGraphQLFieldResolver(parent, {}, context, info)
-}
+export const getWorkerResolver: QueryResolver<any, any> = (parent, args, context, info) =>
+  mirageGraphQLFieldResolver(parent, {}, context, info)

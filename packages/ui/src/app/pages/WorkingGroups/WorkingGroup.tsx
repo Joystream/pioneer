@@ -39,7 +39,7 @@ export function WorkingGroup() {
         </PreviousPage>
         <Tabs tabs={tabs} />
       </PageHeader>
-      {currentTab === 'OPENINGS' ? <OpeningsTab /> : <AboutTab />}
+      {currentTab === 'OPENINGS' ? <OpeningsTab workingGroup={group} /> : <AboutTab />}
     </AppPage>
   )
 }
