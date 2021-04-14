@@ -15,6 +15,8 @@ export interface WorkingGroup {
   leader?: Pick<BaseMember, 'id' | 'avatarUri'>
   workers?: Worker[]
   status?: any
+  description?: string
+  statusMessage?: string
 }
 
 export interface WorkingGroupOpening {
@@ -48,6 +50,8 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     image: undefined,
     name: group.name,
     about: group.status?.about ?? '',
+    description: group.status?.description ?? '',
+    statusMessage: group.status?.message ?? '',
     workers: group.workers?.map(asWorker) ?? [],
   }
 }
