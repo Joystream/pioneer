@@ -1,7 +1,5 @@
-import BN from 'bn.js'
-
 import { Member } from '../../memberships/types'
-import { WorkerFieldsFragment, WorkingGroupFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
+import { WorkerFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
 interface Worker {
   membership: Pick<Member, 'id'>
@@ -18,43 +16,6 @@ export interface WorkingGroup {
   description?: string
   statusMessage?: string
 }
-
-type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
-
-export interface WorkingGroupOpening {
-  id: string
-  duration: [number, string]
-  title: string
-  type: WorkingGroupOpeningType
-  reward: {
-    value: BN
-    interval: number
-  }
-  applicants: {
-    current: number
-    total: number
-  }
-  hiring: {
-    current: number
-    total: number
-  }
-}
-
-export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
-  id: fields.id,
-  applicants: {
-    current: 0,
-    total: fields.applications?.length || 0,
-  },
-  type: fields.type as WorkingGroupOpeningType,
-  reward: fields.rewardPerBlock,
-  duration: fields.metadata.expectedEnding,
-  hiring: {
-    current: 0,
-    total: fields.metadata.hiringLimit,
-  },
-  title: fields.metadata.shortDescription,
-})
 
 type WorkerFields = { __typename: 'Worker' } & WorkerFieldsFragment
 
