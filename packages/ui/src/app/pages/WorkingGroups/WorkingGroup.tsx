@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { PreviousPage } from '../../../common/components/page/PreviousPage'
 import { Tabs } from '../../../common/components/Tabs'
+import { useWorkingGroup } from '../../../working-groups/hooks/useWorkingGroup'
 import { AppPage } from '../../components/AppPage'
 
 import { AboutTab } from './AboutTab'
@@ -14,11 +16,13 @@ type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
 
 export function WorkingGroup() {
   const [currentTab, setCurrentTab] = useState<Tab>('OPENINGS')
+  const { id } = useParams<{ id: string }>()
+  const group = useWorkingGroup(id)
 
   const crumbs = [
     { href: '#', text: 'Working Groups' },
     { href: '#', text: 'Working Groups' },
-    { href: '#', text: 'Storage' },
+    { href: '#', text: group?.name ?? 'Group' },
   ]
 
   const tabs = [
@@ -31,7 +35,7 @@ export function WorkingGroup() {
     <AppPage crumbs={crumbs}>
       <PageHeader>
         <PreviousPage>
-          <PageTitle>Storage</PageTitle>
+          <PageTitle>{group?.name}</PageTitle>
         </PreviousPage>
         <Tabs tabs={tabs} />
       </PageHeader>
