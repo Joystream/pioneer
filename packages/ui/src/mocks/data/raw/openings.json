@@ -5,11 +5,65 @@
     "status": "open",
     "stakeAmount": 2000,
     "metadata": {
-      "shortDescription": "Opening...",
-      "description": "Opening...",
-      "hiringLimit": 10,
+      "shortDescription": "Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.",
+      "description": "Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
-      "applicationDetails": "Some opening details",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": []
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlock": 5,
+    "createdAtTime": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": 0,
+    "type": "leader",
+    "status": "open",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.",
+      "description": "Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": []
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlock": 5,
+    "createdAtTime": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": 0,
+    "type": "leader",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.",
+      "description": "Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": []
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlock": 5,
+    "createdAtTime": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": 0,
+    "type": "regular",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.",
+      "description": "Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
       "applicationFormQuestions": []
     },
     "unstakingPeriod": 5,
