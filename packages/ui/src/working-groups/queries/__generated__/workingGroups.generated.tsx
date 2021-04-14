@@ -1,6 +1,6 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { MemberFieldsFragment, MemberFieldsFragmentDoc } from '../../../memberships/queries'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
