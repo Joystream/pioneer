@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
-import { Label } from '../../../../common/components/typography'
+import { WorkersList } from '../../../../working-groups/components/WorkersList'
 import { useWorkingGroup } from '../../../../working-groups/hooks/useWorkingGroup'
 
 export function AboutTab() {
@@ -20,8 +20,7 @@ export function AboutTab() {
         <div>{group?.about}</div>
       </MainPanel>
       <SidePanel>
-        <Label>Leader</Label>
-        <Label>Workers</Label>
+        <WorkersList />
       </SidePanel>
     </ContentWithSidepanel>
   )
