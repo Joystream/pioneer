@@ -30,10 +30,6 @@ export function OpeningsTab({ workingGroup }: Props) {
         ) : (
           <OpeningsCategories>
             <OpeningsCategory>
-              <Label>Upcoming openings</Label>
-              <OpeningsList openings={openings} />
-            </OpeningsCategory>
-            <OpeningsCategory>
               <Label>Openings</Label>
               <OpeningsList openings={openings} />
             </OpeningsCategory>

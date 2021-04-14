@@ -25,7 +25,7 @@ const Opening = ({ opening }: { opening: WorkingGroupOpening }) => {
   return (
     <OpeningWrap>
       <div>id: {opening.id}</div>
-      <div>Duration: {relativeTime(opening.expectedEnding)}</div>
+      <div>Ends in {relativeTime(opening.expectedEnding)}</div>
       {opening.type === 'LEADER' ? <BadgeViolet>LEAD</BadgeViolet> : null}
       <h4>{opening.title}</h4>
       <div>
