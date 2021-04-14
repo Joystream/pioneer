@@ -5,6 +5,7 @@ import { AnyRegistry } from 'miragejs/-types'
 import schema from '../common/api/schemas/schema.graphql'
 
 import { seedBlocks, seedMembers } from './data'
+import { seedOpenings } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
 import { getMemberResolver, getMembersResolver, getWorkingGroupsResolver, searchMembersResolver } from './resolvers'
 
@@ -40,6 +41,7 @@ export const makeServer = (environment = 'development') => {
       seedBlocks(server)
       seedMembers(server)
       seedWorkingGroups(server)
+      seedOpenings(server)
     },
   })
 }
