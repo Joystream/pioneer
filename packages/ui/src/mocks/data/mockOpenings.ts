@@ -52,7 +52,17 @@ const seedOpening = (openingData: RawOpeningMock, server: any) => {
   return server.schema.create('WorkingGroupOpening', opening)
 }
 
-export const seedOpenings = (server: any) => openingsData.map((openingData) => seedOpening(openingData, server))
+export const seedOpenings = (server: any) => {
+  const workingGroups = server.schema.all('WorkingGroup')
+
+  const ids = workingGroups.models.map(({ id }: any) => id)
+
+  openingsData.map((openingData) => {
+    for (const id of ids) {
+      seedOpening({ ...openingData, groupId: id }, server)
+    }
+  })
+}
 
 export const seedOpeningStatuses = (server: any) => {
   server.schema.create('OpeningStatusCancelled', {
