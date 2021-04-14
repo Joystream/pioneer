@@ -9,8 +9,8 @@ import { Tabs } from '../../../common/components/Tabs'
 import { useWorkingGroup } from '../../../working-groups/hooks/useWorkingGroup'
 import { AppPage } from '../../components/AppPage'
 
-import { AboutTab } from './AboutTab'
-import { OpeningsTab } from './OpeningsTab'
+import { AboutTab } from './components/AboutTab'
+import { OpeningsTab } from './components/OpeningsTab'
 
 type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
 

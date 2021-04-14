@@ -1,12 +1,11 @@
 import React from 'react'
 
-import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
-import { Statistics, TokenValueStat } from '../../../common/components/statistics'
-import { Label } from '../../../common/components/typography'
-import { OpeningsList } from '../../../working-groups/components/OpeningsList'
-import { useOpenings } from '../../../working-groups/hooks/useOpenings'
-
-import { OpeningsCategories, OpeningsCategory } from './WorkingGroup'
+import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
+import { Statistics, TokenValueStat } from '../../../../common/components/statistics'
+import { Label } from '../../../../common/components/typography'
+import { OpeningsList } from '../../../../working-groups/components/OpeningsList'
+import { useOpenings } from '../../../../working-groups/hooks/useOpenings'
+import { OpeningsCategories, OpeningsCategory } from '../WorkingGroup'
 
 export function OpeningsTab() {
   const openings = useOpenings()
