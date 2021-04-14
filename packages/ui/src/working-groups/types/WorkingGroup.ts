@@ -44,7 +44,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   id: fields.id,
   applicants: {
     current: 0,
-    total: 0,
+    total: fields.applications?.length || 0,
   },
   type: fields.type as WorkingGroupOpeningType,
   reward: fields.rewardPerBlock,

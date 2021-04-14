@@ -1,9 +1,9 @@
+import * as Apollo from '@apollo/client'
+import { gql } from '@apollo/client'
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
 import { MemberFieldsFragment, MemberFieldsFragmentDoc } from '../../../memberships/queries'
-import { gql } from '@apollo/client'
 
-import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type WorkingGroupStatusFieldsFragment = {
   __typename: 'WorkingGroupStatus'
@@ -55,6 +55,17 @@ export type WorkingGroupOpeningFieldsFragment = {
   stakeAmount: any
   rewardPerBlock: any
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & MetadataFieldsFragment
+  applications?: Types.Maybe<
+    Array<{
+      __typename: 'WorkingGroupApplication'
+      id: string
+      status:
+        | { __typename: 'ApplicationStatusPending' }
+        | { __typename: 'ApplicationStatusAccepted' }
+        | { __typename: 'ApplicationStatusRejected' }
+        | { __typename: 'ApplicationStatusWithdrawn' }
+    }>
+  >
 }
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
@@ -117,6 +128,12 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     rewardPerBlock
     metadata {
       ...MetadataFields
+    }
+    applications {
+      id
+      status {
+        __typename
+      }
     }
   }
   ${MetadataFieldsFragmentDoc}

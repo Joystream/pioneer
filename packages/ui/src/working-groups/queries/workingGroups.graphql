@@ -52,6 +52,12 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   metadata {
     ... MetadataFields
   }
+  applications {
+    id
+    status {
+      __typename
+    }
+  }
 }
 
 query getWorkingGroupOpenings($groupId: ID) {
