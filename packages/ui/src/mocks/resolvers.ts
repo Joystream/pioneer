@@ -7,7 +7,12 @@ import {
   MemberFieldsFragment,
   SearchMembersQueryResult,
 } from '../memberships/queries'
-import { GetWorkersQueryResult, GetWorkersQueryVariables, GetWorkingGroupsQueryResult } from '../working-groups/queries'
+import {
+  GetWorkersQueryResult,
+  GetWorkersQueryVariables,
+  GetWorkingGroupOpeningsQueryResult,
+  GetWorkingGroupsQueryResult,
+} from '../working-groups/queries'
 
 import { MockMember } from './data'
 import { MockWorker } from './data/mockWorkingGroups'
