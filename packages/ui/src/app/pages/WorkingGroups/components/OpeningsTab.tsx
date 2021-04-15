@@ -10,7 +10,7 @@ import { WorkersList } from '../../../../working-groups/components/WorkersList'
 import { useOpenings } from '../../../../working-groups/hooks/useOpenings'
 import { WorkingGroup } from '../../../../working-groups/types'
 import { useWorkers } from '../../../hooks/useWorkers'
-import { OpeningsCategories, OpeningsCategory } from '../WorkingGroup'
+import { OpeningsCategories, OpeningsCategory } from '../WorkingGroup/WorkingGroup'
 
 interface Props {
   workingGroup?: WorkingGroup
