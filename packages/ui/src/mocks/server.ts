@@ -14,6 +14,7 @@ import {
   getWorkersResolver,
   getWorkingGroupsResolver,
   searchMembersResolver,
+  getWorkingGroupResolver,
 } from './resolvers'
 
 export const makeServer = (environment = 'development') => {
@@ -32,6 +33,7 @@ export const makeServer = (environment = 'development') => {
               memberships: getMembersResolver,
               searchMemberships: searchMembersResolver,
               workingGroups: getWorkingGroupsResolver,
+              workingGroup: getWorkingGroupResolver,
               workingGroupOpenings: getWorkingGroupOpeningsResolver,
               workers: getWorkersResolver,
             },
