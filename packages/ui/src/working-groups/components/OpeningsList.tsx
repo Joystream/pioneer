@@ -46,4 +46,5 @@ const Opening = ({ opening }: { opening: WorkingGroupOpening }) => {
 const OpeningWrap = styled.div`
   grid-template-columns: 1fr 1fr 16px;
   grid-column-gap: 24px;
+  padding: 16px;
 `
