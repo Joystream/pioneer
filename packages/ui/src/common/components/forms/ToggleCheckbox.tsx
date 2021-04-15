@@ -104,7 +104,7 @@ const ToggleStyledInput = styled.label<ToggleStyledInputProps>`
   ${(props) => props.isChecked && checkedBoxStyles};
 `
 
-interface ToggleBoxContainerProps {
+interface ToggleCheckBoxContainerProps {
   groupDisabled?: boolean
 }
 
@@ -118,7 +118,7 @@ const disabledToggleGroupStyles = css`
   }
 `
 
-const ToggleContainer = styled.div<ToggleBoxContainerProps>`
+const ToggleContainer = styled.div<ToggleCheckBoxContainerProps>`
   display: flex;
   align-items: center;
   width: fit-content;

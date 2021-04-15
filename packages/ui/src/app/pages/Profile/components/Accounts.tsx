@@ -1,19 +1,16 @@
-import BN from 'bn.js'
 import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { AccountInfo } from '../../../../accounts/components/AccountInfo'
-import { TransferButton } from '../../../../accounts/components/TransferButton'
 import { useAccounts } from '../../../../accounts/hooks/useAccounts'
-import { useBalance } from '../../../../accounts/hooks/useBalance'
 import { useBalances } from '../../../../accounts/hooks/useBalances'
 import { filterAccounts } from '../../../../accounts/model/filterAccounts'
 import { setOrder, sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
-import { Account } from '../../../../accounts/types'
+import { List, ListItem } from '../../../../common/components/List'
 import { HeaderText, SortIconDown, SortIconUp } from '../../../../common/components/SortedListHeaders'
 import { Tabs } from '../../../../common/components/Tabs'
-import { TokenValue } from '../../../../common/components/typography'
-import { BorderRad, Colors, Sizes } from '../../../../common/constants'
+import { Colors } from '../../../../common/constants'
+
+import { AccountItem } from './AccountItem'
 
 export function Accounts() {
   const { allAccounts, hasAccounts } = useAccounts()
@@ -66,46 +63,15 @@ export function Accounts() {
           <Header sortKey="recoverable">Recoverable balance</Header>
           <Header sortKey="transferable">Transferable balance</Header>
         </ListHeaders>
-        <AccountsList>
+        <List>
           {sortedAccounts.map((account) => (
-            <AccountItemData key={account.address} account={account} />
+            <ListItem key={account.address}>
+              <AccountItem account={account} />
+            </ListItem>
           ))}
-        </AccountsList>
+        </List>
       </AccountsWrap>
     </>
-  )
-}
-
-interface AccountItemDataProps {
-  account: Account
-}
-
-const AccountItemData = ({ account }: AccountItemDataProps) => {
-  const address = account.address
-  const balance = useBalance(address)
-
-  const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
-
-  return (
-    <AccountItem key={address}>
-      <AccountInfo account={account} />
-      <AccountBalance>
-        <TokenValue value={balance?.total} />
-      </AccountBalance>
-      <AccountBalance>
-        <TokenValue value={balance?.locked} />
-      </AccountBalance>
-      <AccountBalance>
-        <TokenValue value={balance?.recoverable} />
-      </AccountBalance>
-      <AccountBalance>
-        <TokenValue value={balance?.transferable} />
-      </AccountBalance>
-      <AccountControls>
-        <TransferButton to={account} />
-        <TransferButton from={account} disabled={isSendDisabled} />
-      </AccountControls>
-    </AccountItem>
   )
 }
 
@@ -155,42 +121,6 @@ const ListHeader = styled.span`
     text-align: left;
     justify-self: start;
   }
-`
-
-const AccountsList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-`
-
-const AccountItem = styled.li`
-  display: grid;
-  grid-template-columns: 276px repeat(4, 128px) 136px;
-  grid-template-rows: 1fr;
-  justify-content: space-between;
-  justify-items: end;
-  align-items: center;
-  width: 100%;
-  height: ${Sizes.accountHeight};
-  padding: 16px 0 16px 14px;
-  border: 1px solid ${Colors.Black[100]};
-  border-radius: ${BorderRad.s};
-
-  & + & {
-    margin-top: -1px;
-  }
-`
-
-const AccountBalance = styled.p``
-
-const AccountControls = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 40px);
-  grid-template-rows: 40px;
-  grid-column-gap: 8px;
 `
 
 const Loading = styled.div`
