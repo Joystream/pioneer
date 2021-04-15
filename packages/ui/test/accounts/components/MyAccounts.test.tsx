@@ -55,7 +55,7 @@ describe('UI: Accounts list', () => {
           <Accounts />
         </KeyringContext.Provider>
       )
-      expect(profile.getByText('Loading accounts...')).toBeDefined()
+      expect(profile.getByText(/^Loading/i)).toBeDefined()
     })
   })
 
