@@ -21,8 +21,7 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const openings = useOpenings()
-  const upcomingOpenings = openings.slice(0, 1)
+  const { isLoading, openings } = useOpenings()
   const activities = useActivities()
   const { active } = useMyMemberships()
   const { locked } = useTotalBalances()
@@ -51,7 +50,7 @@ export const WorkingGroupsOpenings = () => {
       title: 'Upcoming openings',
       active: activeTab === 'UPCOMING',
       onClick: () => setActiveTab('UPCOMING'),
-      count: upcomingOpenings.length,
+      count: 0,
     },
   ]
 
@@ -77,7 +76,7 @@ export const WorkingGroupsOpenings = () => {
             />
           </Statistics>
           <Tabs tabsSize="xs" tabs={openingsTabs} />
-          <OpeningsList openings={activeTab === 'OPENINGS' ? openings : upcomingOpenings} />
+          {isLoading ? null : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
         </MainPanel>
         <SidePanel>
           <Label>Working group activities</Label>

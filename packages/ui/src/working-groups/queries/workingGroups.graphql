@@ -36,3 +36,32 @@ query getWorkers ($id: ID) {
     ...WorkerFields
   }
 }
+
+fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
+  applicationDetails
+  shortDescription
+  hiringLimit
+  expectedEnding
+}
+
+fragment WorkingGroupOpeningFields on WorkingGroupOpening {
+  id
+  type
+  stakeAmount
+  rewardPerBlock
+  metadata {
+    ... WorkingGroupOpeningMetadataFields
+  }
+  applications {
+    id
+    status {
+      __typename
+    }
+  }
+}
+
+query getWorkingGroupOpenings($groupId: ID) {
+  workingGroupOpenings(where: {group_eq: $groupId}) {
+    ... WorkingGroupOpeningFields
+  }
+}

@@ -1,5 +1,3 @@
-import BN from 'bn.js'
-
 import { Member } from '../../memberships/types'
 import { WorkerFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
@@ -17,25 +15,6 @@ export interface WorkingGroup {
   status?: any
   description?: string
   statusMessage?: string
-}
-
-export interface WorkingGroupOpening {
-  id: string
-  duration: [number, string]
-  title: string
-  type: 'LEADER' | 'REGULAR'
-  reward: {
-    value: BN
-    interval: number
-  }
-  applicants: {
-    current: number
-    total: number
-  }
-  hiring: {
-    current: number
-    total: number
-  }
 }
 
 type WorkerFields = { __typename: 'Worker' } & WorkerFieldsFragment

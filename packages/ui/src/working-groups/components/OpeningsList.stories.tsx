@@ -18,7 +18,7 @@ Default.args = {
     {
       id: '123',
       title: 'Storage working group leader',
-      duration: [123, 'days'],
+      expectedEnding: '2021-03-09T10:18:04.155Z',
       type: 'LEADER',
       reward: { value: new BN(1000), interval: 3600 },
       applicants: { current: 2, total: 10 },
@@ -27,7 +27,7 @@ Default.args = {
     {
       id: '221',
       title: 'Storage working group worker',
-      duration: [124, 'minutes'],
+      expectedEnding: '2021-03-09T10:18:04.155Z',
       type: 'REGULAR',
       reward: { value: new BN(800), interval: 76 },
       applicants: { current: 8, total: 10 },

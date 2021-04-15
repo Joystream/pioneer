@@ -7,7 +7,7 @@ import {
   MemberFieldsFragment,
   SearchMembersQueryResult,
 } from '../memberships/queries'
-import { GetWorkingGroupsQueryResult } from '../working-groups/queries'
+import { GetWorkingGroupOpeningsQueryResult, GetWorkingGroupsQueryResult } from '../working-groups/queries'
 
 import { MockMember } from './data'
 
@@ -74,7 +74,17 @@ export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryR
   return adaptRecords(models)
 }
 
-export const getWorkerResolver: QueryResolver<any, any> = (parent, args, context, info) => {
-  console.error("WORKER'", parent, args, context, info)
-  return mirageGraphQLFieldResolver(parent, {}, context, info)
+export const getWorkingGroupOpeningsResolver: QueryResolver<any, GetWorkingGroupOpeningsQueryResult[]> = (
+  parent,
+  args,
+  { mirageSchema: schema }
+) => {
+  const { models } = args.where.group_eq
+    ? schema.where('WorkingGroupOpening', { groupId: args.where.group_eq })
+    : schema.all('WorkingGroupOpening')
+
+  return adaptRecords(models)
 }
+
+export const getWorkerResolver: QueryResolver<any, any> = (parent, args, context, info) =>
+  mirageGraphQLFieldResolver(parent, {}, context, info)

@@ -1,9 +1,12 @@
+import * as Apollo from '@apollo/client'
+import { gql } from '@apollo/client'
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { MemberFieldsFragment, MemberFieldsFragmentDoc } from '../../../memberships/queries'
-import { gql } from '@apollo/client'
+import {
+  MemberFieldsFragment,
+  MemberFieldsFragmentDoc,
+} from '../../../memberships/queries/__generated__/members.generated'
 
-import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type WorkingGroupStatusFieldsFragment = {
   __typename: 'WorkingGroupStatus'
@@ -40,6 +43,43 @@ export type GetWorkersQueryVariables = Types.Exact<{
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
 
+export type WorkingGroupOpeningMetadataFieldsFragment = {
+  __typename: 'WorkingGroupOpeningMetadata'
+  applicationDetails: string
+  shortDescription: string
+  hiringLimit: number
+  expectedEnding: any
+}
+
+export type WorkingGroupOpeningFieldsFragment = {
+  __typename: 'WorkingGroupOpening'
+  id: string
+  type: Types.WorkingGroupOpeningType
+  stakeAmount: any
+  rewardPerBlock: any
+  metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
+  applications?: Types.Maybe<
+    Array<{
+      __typename: 'WorkingGroupApplication'
+      id: string
+      status:
+        | { __typename: 'ApplicationStatusPending' }
+        | { __typename: 'ApplicationStatusAccepted' }
+        | { __typename: 'ApplicationStatusRejected' }
+        | { __typename: 'ApplicationStatusWithdrawn' }
+    }>
+  >
+}
+
+export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
+  groupId?: Types.Maybe<Types.Scalars['ID']>
+}>
+
+export type GetWorkingGroupOpeningsQuery = {
+  __typename: 'Query'
+  workingGroupOpenings?: Types.Maybe<Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>>
+}
+
 export const WorkingGroupStatusFieldsFragmentDoc = gql`
   fragment WorkingGroupStatusFields on WorkingGroupStatus {
     name
@@ -74,6 +114,32 @@ export const WorkingGroupFieldsFragmentDoc = gql`
   }
   ${WorkingGroupStatusFieldsFragmentDoc}
   ${WorkerFieldsFragmentDoc}
+`
+export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
+  fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
+    applicationDetails
+    shortDescription
+    hiringLimit
+    expectedEnding
+  }
+`
+export const WorkingGroupOpeningFieldsFragmentDoc = gql`
+  fragment WorkingGroupOpeningFields on WorkingGroupOpening {
+    id
+    type
+    stakeAmount
+    rewardPerBlock
+    metadata {
+      ...WorkingGroupOpeningMetadataFields
+    }
+    applications {
+      id
+      status {
+        __typename
+      }
+    }
+  }
+  ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
 export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {
@@ -152,3 +218,52 @@ export function useGetWorkersLazyQuery(
 export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
+export const GetWorkingGroupOpeningsDocument = gql`
+  query getWorkingGroupOpenings($groupId: ID) {
+    workingGroupOpenings(where: { group_eq: $groupId }) {
+      ...WorkingGroupOpeningFields
+    }
+  }
+  ${WorkingGroupOpeningFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupOpeningsQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupOpeningsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupOpeningsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupOpeningsQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupOpeningsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>(
+    GetWorkingGroupOpeningsDocument,
+    options
+  )
+}
+export function useGetWorkingGroupOpeningsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>(
+    GetWorkingGroupOpeningsDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningsQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningsQuery>
+export type GetWorkingGroupOpeningsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningsLazyQuery>
+export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningsQuery,
+  GetWorkingGroupOpeningsQueryVariables
+>

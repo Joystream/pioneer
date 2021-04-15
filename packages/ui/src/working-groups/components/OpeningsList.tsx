@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { List, ListItem } from '../../common/components/List'
 import { TokenValue } from '../../common/components/typography'
+import { relativeTime } from '../../common/model/relativeTime'
 import { WorkingGroupOpening } from '../types'
 
 export interface OpeningsListProps {
@@ -24,9 +25,7 @@ const Opening = ({ opening }: { opening: WorkingGroupOpening }) => {
   return (
     <OpeningWrap>
       <div>id: {opening.id}</div>
-      <div>
-        Duration: {opening.duration[0]} - {opening.duration[1]}
-      </div>
+      <div>Ends in {relativeTime(opening.expectedEnding)}</div>
       {opening.type === 'LEADER' ? <BadgeViolet>LEAD</BadgeViolet> : null}
       <h4>{opening.title}</h4>
       <div>

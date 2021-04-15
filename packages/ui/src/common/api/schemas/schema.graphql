@@ -515,6 +515,10 @@ input MembershipWhereInput {
   referredById_in: [ID!]
 }
 
+input WorkingGroupOpeningsWhereInput {
+  group_eq: ID
+}
+
 input WorkersWhereInput {
   group_eq: ID
 }
@@ -558,6 +562,7 @@ type Query {
   membersByHandle(whereMembership: MembershipWhereInput, skip: Int = 0, limit: Int = 5, text: String!): [MembersByHandleFTSOutput!]!
   workingGroups(offset: Int, limit: Int = 50): [WorkingGroup!]!
   workers(offset: Int, limit: Int = 50, where: WorkersWhereInput): [Worker!]!
+  workingGroupOpenings(offset: Int, limit: Int = 50, where: WorkingGroupOpeningsWhereInput): [WorkingGroupOpening!]
 }
 
 enum EventType {

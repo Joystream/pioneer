@@ -1,37 +1,17 @@
-import BN from 'bn.js'
+import { useGetWorkingGroupOpeningsQuery } from '../queries'
+import { asWorkingGroupOpening } from '../types'
 
-import { WorkingGroupOpening } from '../types'
+interface UseOpeningsParams {
+  groupId?: string
+}
 
-export const useOpenings = () => {
-  const openings: WorkingGroupOpening[] = [
-    {
-      id: '123',
-      title: 'Storage working group leader',
-      duration: [123, 'days'],
-      type: 'LEADER',
-      reward: { value: new BN(1000), interval: 3600 },
-      applicants: { current: 2, total: 10 },
-      hiring: { current: 0, total: 1 },
-    },
-    {
-      id: '221',
-      title: 'Storage working group worker',
-      duration: [12, 'days'],
-      type: 'REGULAR',
-      reward: { value: new BN(1000), interval: 3600 },
-      applicants: { current: 2, total: 10 },
-      hiring: { current: 0, total: 1 },
-    },
-    {
-      id: '2',
-      title: 'Membership group worker',
-      duration: [1, 'minutes'],
-      type: 'REGULAR',
-      reward: { value: new BN(1000), interval: 3600 },
-      applicants: { current: 0, total: 3 },
-      hiring: { current: 0, total: 1 },
-    },
-  ]
+export const useOpenings = ({ groupId }: UseOpeningsParams = {}) => {
+  const { loading, data } = useGetWorkingGroupOpeningsQuery({ variables: { groupId: groupId } })
 
-  return openings
+  const groups = data?.workingGroupOpenings ?? []
+
+  return {
+    isLoading: loading,
+    openings: groups.map(asWorkingGroupOpening),
+  }
 }

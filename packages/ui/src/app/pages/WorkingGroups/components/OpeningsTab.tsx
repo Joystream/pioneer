@@ -5,10 +5,17 @@ import { Statistics, TokenValueStat } from '../../../../common/components/statis
 import { Label } from '../../../../common/components/typography'
 import { OpeningsList } from '../../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../../working-groups/hooks/useOpenings'
+import { WorkingGroup } from '../../../../working-groups/types'
 import { OpeningsCategories, OpeningsCategory } from '../WorkingGroup'
 
-export function OpeningsTab() {
-  const openings = useOpenings()
+interface Props {
+  workingGroup?: WorkingGroup
+}
+
+export function OpeningsTab({ workingGroup }: Props) {
+  const { isLoading, openings } = useOpenings({
+    groupId: workingGroup?.id,
+  })
 
   return (
     <ContentWithSidepanel>
@@ -18,16 +25,16 @@ export function OpeningsTab() {
           <TokenValueStat title="Working Group dept" helperText="Lorem ipsum..." value={-200} />
           <TokenValueStat title="Avg stake" helperText="Lorem ipsum..." value={100_000} />
         </Statistics>
-        <OpeningsCategories>
-          <OpeningsCategory>
-            <Label>Upcoming openings</Label>
-            <OpeningsList openings={openings} />
-          </OpeningsCategory>
-          <OpeningsCategory>
-            <Label>Openings</Label>
-            <OpeningsList openings={openings} />
-          </OpeningsCategory>
-        </OpeningsCategories>
+        {isLoading ? (
+          'loading'
+        ) : (
+          <OpeningsCategories>
+            <OpeningsCategory>
+              <Label>Openings</Label>
+              <OpeningsList openings={openings} />
+            </OpeningsCategory>
+          </OpeningsCategories>
+        )}
       </MainPanel>
       <SidePanel>
         <Label>Leader</Label>
