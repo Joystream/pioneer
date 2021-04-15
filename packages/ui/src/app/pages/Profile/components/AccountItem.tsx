@@ -6,6 +6,7 @@ import { AccountInfo } from '../../../../accounts/components/AccountInfo'
 import { TransferButton } from '../../../../accounts/components/TransferButton'
 import { useBalance } from '../../../../accounts/hooks/useBalance'
 import { Account } from '../../../../accounts/types'
+import { ToggleableItem } from '../../../../common/components/ToggleableItem'
 import { TokenValue } from '../../../../common/components/typography'
 import { Sizes } from '../../../../common/constants'
 
@@ -20,25 +21,34 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
   return (
-    <AccountItemWrap key={address}>
-      <AccountInfo account={account} />
-      <AccountBalance>
-        <TokenValue value={balance?.total} />
-      </AccountBalance>
-      <AccountBalance>
-        <TokenValue value={balance?.locked} />
-      </AccountBalance>
-      <AccountBalance>
-        <TokenValue value={balance?.recoverable} />
-      </AccountBalance>
-      <AccountBalance>
-        <TokenValue value={balance?.transferable} />
-      </AccountBalance>
-      <AccountControls>
-        <TransferButton to={account} />
-        <TransferButton from={account} disabled={isSendDisabled} />
-      </AccountControls>
-    </AccountItemWrap>
+    <ToggleableItem>
+      {(isOpen) => {
+        return (
+          <div>
+            <AccountItemWrap key={address}>
+              <AccountInfo account={account} />
+              <AccountBalance>
+                <TokenValue value={balance?.total} />
+              </AccountBalance>
+              <AccountBalance>
+                <TokenValue value={balance?.locked} />
+              </AccountBalance>
+              <AccountBalance>
+                <TokenValue value={balance?.recoverable} />
+              </AccountBalance>
+              <AccountBalance>
+                <TokenValue value={balance?.transferable} />
+              </AccountBalance>
+              <AccountControls>
+                <TransferButton to={account} />
+                <TransferButton from={account} disabled={isSendDisabled} />
+              </AccountControls>
+            </AccountItemWrap>
+            {isOpen && <div>I'm Open!</div>}
+          </div>
+        )
+      }}
+    </ToggleableItem>
   )
 }
 
@@ -58,7 +68,7 @@ const AccountBalance = styled.p``
 
 const AccountControls = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 40px);
+  grid-template-columns: repeat(2, 40px);
   grid-template-rows: 40px;
   grid-column-gap: 8px;
 `
