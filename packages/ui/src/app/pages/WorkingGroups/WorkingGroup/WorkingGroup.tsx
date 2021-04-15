@@ -32,7 +32,7 @@ export function WorkingGroup() {
     { title: 'History', active: currentTab === 'HISTORY', onClick: () => setCurrentTab('HISTORY') },
   ]
 
-  if (isLoading && !group) {
+  if (isLoading || !group) {
     return <Loading />
   }
 
@@ -44,8 +44,8 @@ export function WorkingGroup() {
         </PreviousPage>
         <Tabs tabs={tabs} />
       </PageHeader>
-      {currentTab === 'OPENINGS' && group && <OpeningsTab workingGroup={group} />}
-      {currentTab === 'ABOUT' && <AboutTab />}
+      {currentTab === 'OPENINGS' && <OpeningsTab workingGroup={group} />}
+      {currentTab === 'ABOUT' && <AboutTab workingGroup={group} />}
       {currentTab === 'HISTORY' && <HistoryTab />}
     </AppPage>
   )
