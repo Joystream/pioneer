@@ -28,13 +28,13 @@ const Worker = ({ member }: WorkerProps) => (
 
 export const WorkersList = ({ leader, workers }: WorkersListProps) => {
   return (
-    <>
+    <div>
       <Label>Leader</Label>
       {leader && <Worker member={leader} />}
 
       <Label>Workers {workers?.length && <BadgeViolet>{workers?.length}</BadgeViolet>}</Label>
       {workers && workers.map((member) => <Worker key={member.handle} member={member} />)}
-    </>
+    </div>
   )
 }
 
