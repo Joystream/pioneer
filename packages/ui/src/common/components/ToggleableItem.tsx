@@ -8,6 +8,7 @@ import { ArrowDownIcon } from './icons'
 
 interface ToggleableItemProps {
   children: ReactNode | ((isOpen: boolean) => ReactNode)
+  inlineOpenToggle?: boolean
 }
 
 export const ToggleableItem = ({ children }: ToggleableItemProps) => {
