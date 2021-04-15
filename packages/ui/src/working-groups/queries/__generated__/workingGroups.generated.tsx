@@ -1,12 +1,12 @@
-import * as Apollo from '@apollo/client'
-import { gql } from '@apollo/client'
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
 import {
   MemberFieldsFragment,
   MemberFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
+import { gql } from '@apollo/client'
 
+import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type WorkingGroupStatusFieldsFragment = {
   __typename: 'WorkingGroupStatus'
@@ -26,6 +26,7 @@ export type WorkingGroupFieldsFragment = {
   __typename: 'WorkingGroup'
   id: string
   name: string
+  budget: any
   status?: Types.Maybe<{ __typename: 'WorkingGroupStatus' } & WorkingGroupStatusFieldsFragment>
   workers?: Types.Maybe<Array<{ __typename: 'Worker' } & WorkerFieldsFragment>>
   leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
@@ -104,6 +105,7 @@ export const WorkingGroupFieldsFragmentDoc = gql`
   fragment WorkingGroupFields on WorkingGroup {
     id
     name
+    budget
     status {
       ...WorkingGroupStatusFields
     }
