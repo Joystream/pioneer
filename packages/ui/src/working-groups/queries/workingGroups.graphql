@@ -69,3 +69,9 @@ query getWorkingGroupOpenings($groupId: ID) {
     ... WorkingGroupOpeningFields
   }
 }
+
+query GetWorkingGroup($id: ID!) {
+  workingGroup(where: { id: $id }) {
+    ... WorkingGroupFields
+  }
+}

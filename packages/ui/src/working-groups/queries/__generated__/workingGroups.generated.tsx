@@ -1,9 +1,6 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
@@ -80,6 +77,15 @@ export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
 export type GetWorkingGroupOpeningsQuery = {
   __typename: 'Query'
   workingGroupOpenings?: Types.Maybe<Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>>
+}
+
+export type GetWorkingGroupQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetWorkingGroupQuery = {
+  __typename: 'Query'
+  workingGroup?: Types.Maybe<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
 }
 
 export const WorkingGroupStatusFieldsFragmentDoc = gql`
@@ -273,3 +279,43 @@ export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningsQuery,
   GetWorkingGroupOpeningsQueryVariables
 >
+export const GetWorkingGroupDocument = gql`
+  query GetWorkingGroup($id: ID!) {
+    workingGroup(where: { id: $id }) {
+      ...WorkingGroupFields
+    }
+  }
+  ${WorkingGroupFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupQuery(
+  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>(GetWorkingGroupDocument, options)
+}
+export function useGetWorkingGroupLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>(GetWorkingGroupDocument, options)
+}
+export type GetWorkingGroupQueryHookResult = ReturnType<typeof useGetWorkingGroupQuery>
+export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupLazyQuery>
+export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
