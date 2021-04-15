@@ -7,8 +7,8 @@ import { PreviousPage } from '../../../../common/components/page/PreviousPage'
 import { Tabs } from '../../../../common/components/Tabs'
 import { useWorkingGroup } from '../../../../working-groups/hooks/useWorkingGroup'
 import { AppPage } from '../../../components/AppPage'
-import { AboutTab } from '../components/AboutTab'
 
+import { AboutTab } from './AboutTab'
 import { HistoryTab } from './HistoryTab'
 import { OpeningsTab } from './OpeningsTab'
 
