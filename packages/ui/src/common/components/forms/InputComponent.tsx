@@ -429,7 +429,5 @@ const InputNotificationIcon = styled.div`
 `
 
 const InputNotificationMessage = styled(TextSmall)`
-  font-size: 12px;
-  line-height: 18px;
   color: inherit;
 `

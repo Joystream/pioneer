@@ -27,6 +27,7 @@ export const SidePanel = styled.aside`
   grid-template-columns: 1fr;
   width: 100%;
   max-width: 256px;
+  height: fit-content;
 `
 
 export const ContentWithTabs = styled(MainPanel)`
