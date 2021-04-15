@@ -33,14 +33,14 @@ export const MemberRoles = ({ size, max, wrapable }: MemberRolesProps) => {
           {rolesToDisplay.map(({ abbreviation, help }) => (
             <MemberRoleHelp key={abbreviation} memberRole={abbreviation} helperText={help} size={size} />
           ))}
-          {hiddenRoles > 0 && <MemberRoleHelp memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
+          {hiddenRoles > 0 && <MemberRoleHelpMax memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
         </MemberRolesWrapperWrapable>
       ) : (
         <MemberRolesWrapper>
           {rolesToDisplay.map(({ abbreviation, help }) => (
             <MemberRoleHelp key={abbreviation} memberRole={abbreviation} helperText={help} size={size} />
           ))}
-          {hiddenRoles > 0 && <MemberRoleHelp memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
+          {hiddenRoles > 0 && <MemberRoleHelpMax memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
         </MemberRolesWrapper>
       )}
     </>
@@ -65,6 +65,12 @@ export const MemberRolesWrapperWrapable = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(16px, 24px));
   grid-row-gap: 4px;
   grid-column-gap: 4px;
+`
+
+const MemberRoleHelpMax = styled(MemberRoleHelp)`
+  background-color: ${Colors.White};
+  color: ${Colors.Blue[500]};
+  border-color: ${Colors.Blue[50]};
 `
 
 export const MemberRolesWrapper = styled.div`

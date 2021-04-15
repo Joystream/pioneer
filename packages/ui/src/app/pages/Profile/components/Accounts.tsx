@@ -7,6 +7,7 @@ import { filterAccounts } from '../../../../accounts/model/filterAccounts'
 import { setOrder, sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
 import { List, ListItem } from '../../../../common/components/List'
 import { Loading } from '../../../../common/components/Loading'
+import { ContentWithTabs } from '../../../../common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '../../../../common/components/SortedListHeaders'
 import { Tabs } from '../../../../common/components/Tabs'
 import { Colors } from '../../../../common/constants'
@@ -54,7 +55,7 @@ export function Accounts() {
   ]
 
   return (
-    <>
+    <ContentWithTabs>
       <Tabs tabsSize="xs" tabs={tabs} />
       <AccountsWrap>
         <ListHeaders>
@@ -72,7 +73,7 @@ export function Accounts() {
           ))}
         </List>
       </AccountsWrap>
-    </>
+    </ContentWithTabs>
   )
 }
 

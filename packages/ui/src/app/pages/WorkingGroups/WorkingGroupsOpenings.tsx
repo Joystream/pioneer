@@ -4,7 +4,12 @@ import React, { useMemo, useState } from 'react'
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { Activities } from '../../../common/components/Activities'
 import { Loading } from '../../../common/components/Loading'
-import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
+import {
+  ContentWithSidepanel,
+  ContentWithTabs,
+  MainPanel,
+  SidePanel,
+} from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '../../../common/components/statistics'
@@ -65,19 +70,21 @@ export const WorkingGroupsOpenings = () => {
         <MainPanel>
           <Statistics>
             <StatisticItem title="My Roles">
-              {active ? <MemberRoles member={active} size="l" max={5} /> : <TextMedium>Select membership</TextMedium>}
+              {active ? <MemberRoles member={active} size="l" max={6} /> : <TextMedium>Select membership</TextMedium>}
             </StatisticItem>
             <TokenValueStat title="Currently staking" value={locked} />
             <MultiTokenValueStat
               title="Earned in past"
               values={[
                 { label: '24 hours', value: earnings.day },
-                { label: 'month', value: earnings.month },
+                { label: 'Month', value: earnings.month },
               ]}
             />
           </Statistics>
-          <Tabs tabsSize="xs" tabs={openingsTabs} />
-          {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
+          <ContentWithTabs>
+            <Tabs tabsSize="xs" tabs={openingsTabs} />
+            {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
+          </ContentWithTabs>
         </MainPanel>
         <SidePanel>
           <Label>Working group activities</Label>

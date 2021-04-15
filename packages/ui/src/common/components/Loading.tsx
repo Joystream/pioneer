@@ -1,8 +1,3 @@
 import React from 'react'
-import styled from 'styled-components'
 
-export const Loading = () => <LoadingComponent>Loading...</LoadingComponent>
-
-export const LoadingComponent = styled.div`
-  font-size: 1.2em;
-`
+export const Loading = () => <h3>Loading...</h3>

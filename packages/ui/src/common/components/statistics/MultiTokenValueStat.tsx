@@ -1,9 +1,8 @@
 import BN from 'bn.js'
 import React from 'react'
+import styled from 'styled-components'
 
-import { TextSmall } from '../typography'
-
-import { StatisticItem, StatisticItemProps } from './StatisticItem'
+import { StatisticItem, StatisticItemProps, StatisticItemSpacedContent, StatisticLabel } from './StatisticItem'
 import { TotalValue } from './TokenValueStat'
 
 type LabelledValue = { label: string; value: BN }
@@ -13,12 +12,16 @@ interface MultiTokenValueStatProps extends StatisticItemProps {
 }
 
 export const MultiTokenValueStat = ({ title, values }: MultiTokenValueStatProps) => (
-  <StatisticItem title={title}>
+  <MultiStatisticItem title={title}>
     {values.map(({ label, value }) => (
-      <TextSmall>
-        {label}
+      <StatisticItemSpacedContent>
+        <StatisticLabel>{label}</StatisticLabel>
         <TotalValue value={value} />
-      </TextSmall>
+      </StatisticItemSpacedContent>
     ))}
-  </StatisticItem>
+  </MultiStatisticItem>
 )
+
+const MultiStatisticItem = styled(StatisticItem)`
+  padding: 12px 16px 4px;
+`
