@@ -1,4 +1,4 @@
-import { Worker } from '@joystream/types/working-group'
+import { Worker } from '../../common/api/queries'
 
 import rawWorkingGroups from './raw/workingGroups.json'
 
