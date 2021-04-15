@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Loading } from '../../../../common/components/Loading'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
 import { Statistics, TokenValueStat } from '../../../../common/components/statistics'
 import { Label } from '../../../../common/components/typography'
@@ -15,7 +16,7 @@ interface Props {
   workingGroup?: WorkingGroup
 }
 
-export function OpeningsTab({ workingGroup }: Props) {
+export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading, openings } = useOpenings({
     groupId: workingGroup?.id,
   })
@@ -31,7 +32,7 @@ export function OpeningsTab({ workingGroup }: Props) {
           <TokenValueStat title="Avg stake" helperText="Lorem ipsum..." value={100_000} />
         </Statistics>
         {isLoading ? (
-          'loading'
+          <Loading />
         ) : (
           <OpeningsCategories>
             <OpeningsCategory>

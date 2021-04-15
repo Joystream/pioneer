@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react'
 
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { Activities } from '../../../common/components/Activities'
+import { Loading } from '../../../common/components/Loading'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
@@ -76,7 +77,7 @@ export const WorkingGroupsOpenings = () => {
             />
           </Statistics>
           <Tabs tabsSize="xs" tabs={openingsTabs} />
-          {isLoading ? null : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
+          {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
         </MainPanel>
         <SidePanel>
           <Label>Working group activities</Label>

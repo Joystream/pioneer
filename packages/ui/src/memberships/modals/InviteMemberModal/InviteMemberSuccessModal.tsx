@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { SuccessIcon } from '../../../common/components/icons'
+import { Loading } from '../../../common/components/Loading'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { TextMedium } from '../../../common/components/typography'
 import { BorderRad, Colors, Sizes } from '../../../common/constants'
@@ -41,7 +42,7 @@ export function InviteMemberSuccessModal({ onClose, formData }: Props) {
         <MemberRow>
           <MemberInfo member={(formData as unknown) as Member} />
         </MemberRow>
-        {isLoading && <TextMedium>Loading...</TextMedium>}
+        {isLoading && <Loading />}
         {!isLoading && inviteCount > 0 ? (
           <TextMedium>
             You still have {inviteCount} invitation{plural && 's'} left on the "{name}" membership.

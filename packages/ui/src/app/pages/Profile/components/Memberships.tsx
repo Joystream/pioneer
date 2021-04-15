@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { ButtonsGroup } from '../../../../common/components/buttons'
+import { Loading } from '../../../../common/components/Loading'
 import { TextMedium } from '../../../../common/components/typography'
 import { AddMembershipButton } from '../../../../memberships/components/AddMembershipButton'
 import { InviteMemberButton } from '../../../../memberships/components/InviteMemberButton'
@@ -13,7 +14,7 @@ export function Memberships() {
   const hasMemberships = !!count
 
   if (isLoading) {
-    return <Loading>Loading...</Loading>
+    return <Loading />
   }
 
   if (!hasMemberships) {
@@ -79,8 +80,4 @@ const NewMembers = styled(ButtonsGroup)`
   position: absolute;
   right: 0;
   top: 0;
-`
-
-const Loading = styled.div`
-  font-size: 2em;
 `

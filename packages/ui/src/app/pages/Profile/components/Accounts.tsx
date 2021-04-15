@@ -6,6 +6,7 @@ import { useBalances } from '../../../../accounts/hooks/useBalances'
 import { filterAccounts } from '../../../../accounts/model/filterAccounts'
 import { setOrder, sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
 import { List, ListItem } from '../../../../common/components/List'
+import { Loading } from '../../../../common/components/Loading'
 import { HeaderText, SortIconDown, SortIconUp } from '../../../../common/components/SortedListHeaders'
 import { Tabs } from '../../../../common/components/Tabs'
 import { Colors } from '../../../../common/constants'
@@ -31,7 +32,7 @@ export function Accounts() {
   ])
 
   if (!hasAccounts) {
-    return <Loading>Loading accounts...</Loading>
+    return <Loading />
   }
 
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
@@ -121,8 +122,4 @@ const ListHeader = styled.span`
     text-align: left;
     justify-self: start;
   }
-`
-
-const Loading = styled.div`
-  font-size: 2em;
 `
