@@ -1,21 +1,27 @@
 import React from 'react'
 
+import { Loading } from '../../../../common/components/Loading'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
 import { Statistics, TokenValueStat } from '../../../../common/components/statistics'
 import { Label } from '../../../../common/components/typography'
+import { useMember } from '../../../../memberships/hooks/useMembership'
 import { OpeningsList } from '../../../../working-groups/components/OpeningsList'
+import { WorkersList } from '../../../../working-groups/components/WorkersList'
 import { useOpenings } from '../../../../working-groups/hooks/useOpenings'
 import { WorkingGroup } from '../../../../working-groups/types'
+import { useWorkers } from '../../../hooks/useWorkers'
 import { OpeningsCategories, OpeningsCategory } from '../WorkingGroup'
 
 interface Props {
   workingGroup?: WorkingGroup
 }
 
-export function OpeningsTab({ workingGroup }: Props) {
+export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading, openings } = useOpenings({
     groupId: workingGroup?.id,
   })
+  const { member: leader } = useMember(workingGroup?.leaderId)
+  const { workers } = useWorkers(workingGroup?.id ?? '')
 
   return (
     <ContentWithSidepanel>
@@ -26,7 +32,7 @@ export function OpeningsTab({ workingGroup }: Props) {
           <TokenValueStat title="Avg stake" helperText="Lorem ipsum..." value={100_000} />
         </Statistics>
         {isLoading ? (
-          'loading'
+          <Loading />
         ) : (
           <OpeningsCategories>
             <OpeningsCategory>
@@ -37,8 +43,7 @@ export function OpeningsTab({ workingGroup }: Props) {
         )}
       </MainPanel>
       <SidePanel>
-        <Label>Leader</Label>
-        <Label>Workers</Label>
+        <WorkersList leader={leader} workers={workers} />
       </SidePanel>
     </ContentWithSidepanel>
   )

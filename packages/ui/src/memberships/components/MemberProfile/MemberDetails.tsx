@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { LabelLink } from '../../../common/components/forms'
 import { BlockIcon } from '../../../common/components/icons/BlockIcon'
 import { TransferSymbol } from '../../../common/components/icons/symbols'
+import { Loading } from '../../../common/components/Loading'
 import { TextMedium, TextSmall } from '../../../common/components/typography'
 import { MembershipLabel } from '../../../common/components/typography/MembershipLabel'
 import { Colors, Transitions } from '../../../common/constants'
@@ -21,7 +22,11 @@ export const MemberDetails = React.memo(({ member }: Props) => {
   const { member: memberDetails, isLoading } = useMember(member.id)
 
   if (isLoading || !memberDetails) {
-    return <EmptyBody>Loading...</EmptyBody>
+    return (
+      <EmptyBody>
+        <Loading />
+      </EmptyBody>
+    )
   }
 
   const registeredAtBlock = memberDetails.registeredAtBlock

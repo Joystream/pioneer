@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 
+import { Loading } from '../../../common/components/Loading'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { WorkingGroupsList } from '../../../working-groups/components/WorkingGroupsList'
@@ -20,7 +21,7 @@ export const WorkingGroups = () => {
   )
 
   if (isLoading) {
-    return null
+    return <Loading />
   }
 
   return (
