@@ -15,11 +15,20 @@ export const ContentWithSidepanel = styled.div`
   width: 100%;
 `
 
-export const MainPanel = styled.div``
+export const MainPanel = styled.div`
+  display: grid;
+  grid-row-gap: 24px;
+  width: 100%;
+  height: fit-content;
+`
 
 export const SidePanel = styled.aside`
   display: grid;
   grid-template-columns: 1fr;
   width: 100%;
   max-width: 256px;
+`
+
+export const ContentWithTabs = styled(MainPanel)`
+  grid-row-gap: 16px;
 `

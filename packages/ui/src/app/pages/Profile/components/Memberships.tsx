@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { ButtonsGroup } from '../../../../common/components/buttons'
 import { Loading } from '../../../../common/components/Loading'
+import { MainPanel } from '../../../../common/components/page/PageContent'
 import { TextMedium } from '../../../../common/components/typography'
 import { AddMembershipButton } from '../../../../memberships/components/AddMembershipButton'
 import { InviteMemberButton } from '../../../../memberships/components/InviteMemberButton'
@@ -68,12 +69,10 @@ const NoMembershipsInfo = styled.div`
   }
 `
 
-const MembershipsTable = styled.div`
-  display: grid;
+const MembershipsTable = styled(MainPanel)`
   position: relative;
-  grid-row-gap: 26px;
-  width: 100%;
-  padding-top: 12px;
+  grid-row-gap: 28px;
+  padding-top: 8px;
 `
 
 const NewMembers = styled(ButtonsGroup)`

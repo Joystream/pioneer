@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 
 import { Colors, Transitions } from '../constants'
 
-import { BadgeViolet } from './BadgeViolet'
+import { CountBadge } from './CountBadge'
 
 export type PageTabSize = 'xs' | 's'
 
@@ -29,7 +29,7 @@ export interface TabsProps {
 }
 
 export const Tabs = ({ tabs, className, tabsSize }: TabsProps) => (
-  <TabsContainer className={className}>
+  <TabsContainer className={className} tabsSize={tabsSize}>
     <TabsNav tabsSize={tabsSize}>
       {tabs.map(({ active, onClick, title, count }) => (
         <Tab key={title} active={active} onClick={onClick} title={title} count={count} />
@@ -41,31 +41,37 @@ export const Tabs = ({ tabs, className, tabsSize }: TabsProps) => (
 const Tab = ({ active, onClick, title, count }: TabProps) => (
   <TabContainer active={active} onClick={onClick}>
     {title}
-    {count !== undefined && <BadgeViolet>{count}</BadgeViolet>}
+    {count !== undefined && <CountBadge count={count} />}
   </TabContainer>
 )
 
-const TabsContainer = styled.div`
+const TabsContainer = styled.div<TabsSize>`
   display: flex;
   position: relative;
   align-items: center;
   width: 100%;
   z-index: 2;
 
-  &:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: calc(100% + 24px);
-    height: 1px;
-    background-color: ${Colors.Black[200]};
-    z-index: -1;
-  }
+  ${({ tabsSize }) => {
+    if (tabsSize !== 'xs') {
+      return css`
+        &:after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: -2px;
+          width: calc(100% + 24px);
+          height: 1px;
+          background-color: ${Colors.Black[200]};
+          z-index: -1;
+        }
+      `
+    }
+  }}
 `
 
 const TabContainer = styled.a<TabActiveProps>`
-  display: inline-grid;
+  display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
   position: relative;

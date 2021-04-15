@@ -14,4 +14,6 @@ export const BadgeViolet = styled.p`
   color: ${Colors.White};
   background-color: ${Colors.Blue[200]};
   text-transform: uppercase;
+  -webkit-text-stroke-width: 0;
+  -webkit-text-stroke-color: transparent;
 `

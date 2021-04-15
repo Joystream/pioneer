@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { Help } from '../Help'
-import { Label } from '../typography'
+import { Label, TextSmall } from '../typography'
 
 export interface StatisticItemProps {
   title?: string
@@ -48,7 +48,6 @@ const StatsItem = styled.li`
   display: inline-grid;
   position: relative;
   grid-template-columns: 1fr;
-  grid-template-rows: 16px 28px;
   align-content: space-between;
   flex-basis: 240px;
   flex-grow: 1;
@@ -81,4 +80,15 @@ const StatsInfo = styled(Label)`
 
 const StatsContent = styled.div`
   margin-top: auto;
+`
+
+export const StatisticItemSpacedContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`
+
+export const StatisticLabel = styled(TextSmall)`
+  color: ${Colors.Black[500]};
 `
