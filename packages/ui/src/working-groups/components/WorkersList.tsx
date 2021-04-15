@@ -14,8 +14,9 @@ export const WorkersList = ({ leader, workers }: WorkersListProps) => {
     <>
       <Label>Leader</Label>
       {leader && <MemberInfo member={leader} />}
+
       <Label>Workers</Label>
-      {workers && workers.map((w) => <MemberInfo key={w.handle} member={w} />)}
+      {workers && workers.map((member) => <MemberInfo key={member.handle} member={member} />)}
     </>
   )
 }

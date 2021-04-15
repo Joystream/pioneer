@@ -3,9 +3,12 @@ import React from 'react'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
 import { Statistics, TokenValueStat } from '../../../../common/components/statistics'
 import { Label } from '../../../../common/components/typography'
+import { useMember } from '../../../../memberships/hooks/useMembership'
 import { OpeningsList } from '../../../../working-groups/components/OpeningsList'
+import { WorkersList } from '../../../../working-groups/components/WorkersList'
 import { useOpenings } from '../../../../working-groups/hooks/useOpenings'
 import { WorkingGroup } from '../../../../working-groups/types'
+import { useWorkers } from '../../../hooks/useWorkers'
 import { OpeningsCategories, OpeningsCategory } from '../WorkingGroup'
 
 interface Props {
@@ -16,6 +19,8 @@ export function OpeningsTab({ workingGroup }: Props) {
   const { isLoading, openings } = useOpenings({
     groupId: workingGroup?.id,
   })
+  const { member: leader } = useMember(workingGroup?.leaderId)
+  const { workers } = useWorkers(workingGroup?.id ?? '')
 
   return (
     <ContentWithSidepanel>
@@ -37,8 +42,7 @@ export function OpeningsTab({ workingGroup }: Props) {
         )}
       </MainPanel>
       <SidePanel>
-        <Label>Leader</Label>
-        <Label>Workers</Label>
+        <WorkersList leader={leader} workers={workers} />
       </SidePanel>
     </ContentWithSidepanel>
   )
