@@ -50,17 +50,6 @@ export const Help = React.memo(
   )
 )
 
-export const HelpContainer = styled.div<{ absolute?: boolean }>`
-  display: flex;
-  position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
-  right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  height: fit-content;
-  text-transform: none;
-`
-
 const HelpPopup = styled.div<{ size?: 'm' | 'l' }>`
   display: none;
   flex-direction: column;
@@ -113,9 +102,9 @@ const HelpPopup = styled.div<{ size?: 'm' | 'l' }>`
     content: '';
     position: absolute;
     left: -8px;
-    top: -20px;
+    top: -8px;
     width: calc(100% + 16px);
-    height: calc(100% + 32px);
+    height: calc(100% + 16px);
     z-index: -1;
   }
   &:hover {
@@ -220,12 +209,25 @@ export const HelpComponent = styled.span<{ size?: 'm' | 'l'; memberRole?: string
     height: 100%;
     position: static;
   }
+`
+
+export const HelpContainer = styled.div<{ absolute?: boolean }>`
+  display: flex;
+  position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
+  right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+  text-transform: none;
 
   &:hover,
   &:focus {
-    color: ${Colors.Blue[500]};
-    background-color: ${Colors.Black[100]};
-    & ~ ${HelpPopup} {
+    ${HelpComponent} {
+      color: ${Colors.Blue[500]};
+      background-color: ${Colors.Black[100]};
+    }
+    ${HelpPopup} {
       display: flex;
     }
   }

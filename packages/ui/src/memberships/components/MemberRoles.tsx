@@ -9,9 +9,10 @@ interface MemberRolesProps {
   max?: number
   size?: 'l' | 'm'
   member: Member
+  wrapable?: boolean
 }
 
-export const MemberRoles = ({ size, max }: MemberRolesProps) => {
+export const MemberRoles = ({ size, max, wrapable }: MemberRolesProps) => {
   const roles = [
     { abbreviation: 'SP', help: 'Lorem ipsum...' },
     { abbreviation: 'FM', help: 'Lorem ipsum...' },
@@ -26,12 +27,23 @@ export const MemberRoles = ({ size, max }: MemberRolesProps) => {
   const hiddenRoles = roles.length - rolesToDisplay.length
 
   return (
-    <MemberRolesWrapper>
-      {rolesToDisplay.map(({ abbreviation, help }) => (
-        <MemberRoleHelp key={abbreviation} memberRole={abbreviation} helperText={help} size={size} />
-      ))}
-      {hiddenRoles > 0 && <MemberRoleHelp memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
-    </MemberRolesWrapper>
+    <>
+      {wrapable ? (
+        <MemberRolesWrapperWrapable>
+          {rolesToDisplay.map(({ abbreviation, help }) => (
+            <MemberRoleHelp key={abbreviation} memberRole={abbreviation} helperText={help} size={size} />
+          ))}
+          {hiddenRoles > 0 && <MemberRoleHelp memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
+        </MemberRolesWrapperWrapable>
+      ) : (
+        <MemberRolesWrapper>
+          {rolesToDisplay.map(({ abbreviation, help }) => (
+            <MemberRoleHelp key={abbreviation} memberRole={abbreviation} helperText={help} size={size} />
+          ))}
+          {hiddenRoles > 0 && <MemberRoleHelp memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
+        </MemberRolesWrapper>
+      )}
+    </>
   )
 }
 
@@ -48,12 +60,17 @@ export const MemberRoleHelp = styled(Help)`
   }
 `
 
-export const MemberRolesWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+export const MemberRolesWrapperWrapable = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16px, 24px));
+  grid-row-gap: 4px;
+  grid-column-gap: 4px;
+`
 
-  ${MemberRoleHelp} {
-    margin-right: 4px;
-    margin-bottom: 4px;
-  }
+export const MemberRolesWrapper = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  width: fit-content;
+  grid-column-gap: 4px;
 `
