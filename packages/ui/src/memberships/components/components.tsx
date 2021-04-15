@@ -8,8 +8,16 @@ import { AvatarImg } from './Avatar'
 import { MemberRoleHelp, MemberRolesWrapper } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
+export const MemberHead = styled.div`
+  display: grid;
+  grid-area: memberhead;
+  grid-auto-flow: column;
+  align-items: center;
+  grid-column-gap: 4px;
+  width: fit-content;
+`
+
 export const MemberHandle = styled.span`
-  grid-area: memberhandle;
   max-width: 100%;
   font-size: 14px;
   line-height: 20px;
@@ -29,13 +37,11 @@ export const MemberHandle = styled.span`
 
 export const MemberIcons = styled.div`
   display: grid;
-  grid-area: membericons;
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
   width: fit-content;
   height: fit-content;
-  margin-left: -4px;
 `
 
 export const MemberId = styled(TextSmall)`
@@ -76,9 +82,8 @@ export const MemberStatusHelp = styled(Help)`
 
 export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   display: grid;
-
   grid-template-areas:
-    'memberphoto memberhandle membericons'
+    'memberphoto memberhead memberhead'
     'memberphoto memberroles memberroles';
   align-items: center;
   width: 100%;
@@ -157,15 +162,6 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
         case 'm':
         default:
           return '0'
-      }
-    }};
-    margin-left: ${({ memberSize }) => {
-      switch (memberSize) {
-        case 'l':
-          return '-6px'
-        case 'm':
-        default:
-          return '-4px'
       }
     }};
   }

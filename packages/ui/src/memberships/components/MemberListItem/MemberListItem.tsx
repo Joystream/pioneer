@@ -28,7 +28,7 @@ export const MemberListItem = ({ member }: Props) => {
         <MemberInfo member={member} onClick={showMemberModal} showId />
       </MemberColumn>
       <MemberRolesColumn>
-        <MemberRoles member={member} size="l" />
+        <MemberRoles wrapable member={member} size="l" />
       </MemberRolesColumn>
       <MemberColumn>
         <CountInfo>0 times</CountInfo>

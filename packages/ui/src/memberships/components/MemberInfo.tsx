@@ -5,7 +5,15 @@ import { VerifiedMemberIcon } from '../../common/components/icons/VerifiedMember
 import { Member } from '../types'
 
 import { Avatar } from './Avatar'
-import { MemberHandle, MemberIcons, MemberId, MemberInfoWrap, MemberPhoto, MemberStatusHelp } from './components'
+import {
+  MemberHead,
+  MemberHandle,
+  MemberIcons,
+  MemberId,
+  MemberInfoWrap,
+  MemberPhoto,
+  MemberStatusHelp,
+} from './components'
 import { MemberRoles } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
@@ -26,11 +34,13 @@ export const MemberInfo = React.memo(
         <MemberPhoto>
           <Avatar avatarUri={member.avatar} />
         </MemberPhoto>
-        <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
-        <MemberIcons>
-          {member.isVerified && <MemberStatusHelp icon={<VerifiedMemberIcon />} helperText="Lorem fishy" />}
-          {(member as any)?.isFounder && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
-        </MemberIcons>
+        <MemberHead>
+          <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
+          <MemberIcons>
+            {member.isVerified && <MemberStatusHelp icon={<VerifiedMemberIcon />} helperText="Lorem fishy" />}
+            {(member as any)?.isFounder && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
+          </MemberIcons>
+        </MemberHead>
         {!showId && <MemberRoles member={member} size={size} max={maxRoles} />}
         {showId && <MemberId>Worker ID: {member.id}</MemberId>}
       </MemberInfoWrap>
