@@ -19,6 +19,7 @@ export type WorkingGroupStatusFieldsFragment = {
 export type WorkerFieldsFragment = {
   __typename: 'Worker'
   membership: { __typename: 'Membership' } & MemberFieldsFragment
+  group: { __typename: 'WorkingGroup'; id: string }
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -38,7 +39,7 @@ export type GetWorkingGroupsQuery = {
 }
 
 export type GetWorkersQueryVariables = Types.Exact<{
-  id?: Types.Maybe<Types.Scalars['ID']>
+  group_eq?: Types.Maybe<Types.Scalars['ID']>
 }>
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
@@ -92,6 +93,9 @@ export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
     membership {
       ...MemberFields
+    }
+    group {
+      id
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -181,8 +185,8 @@ export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGro
 export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>
 export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
 export const GetWorkersDocument = gql`
-  query getWorkers($id: ID) {
-    workers(where: { group_eq: $id }) {
+  query getWorkers($group_eq: ID) {
+    workers(where: { group_eq: $group_eq }) {
       ...WorkerFields
     }
   }
@@ -201,7 +205,7 @@ export const GetWorkersDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkersQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      group_eq: // value for 'group_eq'
  *   },
  * });
  */

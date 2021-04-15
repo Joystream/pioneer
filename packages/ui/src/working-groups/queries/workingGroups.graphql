@@ -9,6 +9,9 @@ fragment WorkerFields on Worker {
   membership {
     ...MemberFields
   }
+  group {
+    id
+  }
 }
 
 fragment WorkingGroupFields on WorkingGroup {
@@ -31,8 +34,8 @@ query getWorkingGroups {
   }
 }
 
-query getWorkers ($id: ID) {
-  workers(where: {group_eq: $id}) {
+query getWorkers ($group_eq: ID) {
+  workers(where: {group_eq: $group_eq}) {
     ...WorkerFields
   }
 }
