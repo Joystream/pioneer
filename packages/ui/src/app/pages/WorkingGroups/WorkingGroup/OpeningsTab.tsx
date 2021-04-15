@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { Loading } from '../../../../common/components/Loading'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
@@ -10,7 +11,6 @@ import { WorkersList } from '../../../../working-groups/components/WorkersList'
 import { useOpenings } from '../../../../working-groups/hooks/useOpenings'
 import { WorkingGroup } from '../../../../working-groups/types'
 import { useWorkers } from '../../../hooks/useWorkers'
-import { OpeningsCategories, OpeningsCategory } from '../WorkingGroup'
 
 interface Props {
   workingGroup?: WorkingGroup
@@ -48,3 +48,15 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
     </ContentWithSidepanel>
   )
 }
+
+const OpeningsCategories = styled.div`
+  display: grid;
+  grid-row-gap: 24px;
+  width: 100%;
+`
+
+const OpeningsCategory = styled.div`
+  display: grid;
+  grid-row-gap: 16px;
+  width: 100%;
+`
