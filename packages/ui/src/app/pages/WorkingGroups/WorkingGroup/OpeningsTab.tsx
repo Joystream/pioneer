@@ -9,8 +9,8 @@ import { useMember } from '../../../../memberships/hooks/useMembership'
 import { OpeningsList } from '../../../../working-groups/components/OpeningsList'
 import { WorkersList } from '../../../../working-groups/components/WorkersList'
 import { useOpenings } from '../../../../working-groups/hooks/useOpenings'
+import { useWorkers } from '../../../../working-groups/hooks/useWorkers'
 import { WorkingGroup } from '../../../../working-groups/types'
-import { useWorkers } from '../../../hooks/useWorkers'
 
 interface Props {
   workingGroup?: WorkingGroup

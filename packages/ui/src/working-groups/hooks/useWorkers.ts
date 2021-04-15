@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { asMember } from '../../memberships/types'
-import { useGetWorkersQuery } from '../../working-groups/queries'
+import { useGetWorkersQuery } from '../queries'
 
 export const useWorkers = (groupId: string) => {
   const options = { variables: { group_eq: groupId } }

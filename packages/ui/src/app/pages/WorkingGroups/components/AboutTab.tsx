@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
 import { useMember } from '../../../../memberships/hooks/useMembership'
 import { WorkersList } from '../../../../working-groups/components/WorkersList'
+import { useWorkers } from '../../../../working-groups/hooks/useWorkers'
 import { useWorkingGroup } from '../../../../working-groups/hooks/useWorkingGroup'
-import { useWorkers } from '../../../hooks/useWorkers'
 
 export function AboutTab() {
   const { id } = useParams<{ id: string }>()
