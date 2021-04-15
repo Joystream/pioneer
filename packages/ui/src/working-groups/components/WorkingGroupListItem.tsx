@@ -34,7 +34,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            <ValueInJoys>130,000.00</ValueInJoys>
+            <ValueInJoys>{group?.budget?.toString()}</ValueInJoys>
           </StatsValue>
           <Subscription>Current budget</Subscription>
         </StatsColumn>

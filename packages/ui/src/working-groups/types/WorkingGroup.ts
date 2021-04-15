@@ -1,3 +1,5 @@
+import BN from 'bn.js'
+
 import { Member } from '../../memberships/types'
 import { WorkerFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
@@ -15,6 +17,7 @@ export interface WorkingGroup {
   status?: any
   description?: string
   statusMessage?: string
+  budget?: BN
 }
 
 type WorkerFields = { __typename: 'Worker' } & WorkerFieldsFragment
@@ -33,5 +36,6 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     statusMessage: group.status?.message ?? '',
     workers: group.workers?.map(asWorker) ?? [],
     leaderId: group.leader?.membership.id,
+    budget: new BN(group.budget),
   }
 }

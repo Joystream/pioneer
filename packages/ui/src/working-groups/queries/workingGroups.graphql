@@ -17,6 +17,7 @@ fragment WorkerFields on Worker {
 fragment WorkingGroupFields on WorkingGroup {
   id
   name
+  budget
   status { ...WorkingGroupStatusFields }
   workers {
     ...WorkerFields
