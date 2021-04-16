@@ -1,34 +1,17 @@
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Fonts, Sizes } from '../constants'
+import { BorderRad, Colors, Sizes } from '../constants'
 
-import { Label } from './forms'
 import { Icon } from './icons'
 import { ValueInJoys } from './typography'
 
-export const TransactionInfoLabel = styled(Label)`
-  display: block;
-  margin-bottom: 32px;
-  font-weight: 400;
-  font-family: ${Fonts.Inter};
-
-  ${ValueInJoys} {
-    font-family: ${Fonts.Inter};
-    font-weight: 700;
-    color: ${Colors.Black[700]};
-    &:after {
-      font-family: ${Fonts.Inter};
-      font-weight: 700;
-      color: ${Colors.Black[700]};
-    }
-  }
-`
 export const Row = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: auto;
 `
+
 export const AccountRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -42,6 +25,7 @@ export const AccountRow = styled.div`
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
 `
+
 export const LockedAccount = styled(AccountRow)`
   padding: 8px 0 8px 16px;
   grid-template-columns: 1fr 1fr 48px;
@@ -51,6 +35,7 @@ export const LockedAccount = styled(AccountRow)`
   background-color: ${Colors.Black[75]};
   border: 1px solid ${Colors.Black[200]};
 `
+
 export const TransactionAmount = styled.div`
   display: grid;
   grid-template-columns: 320px auto;
@@ -111,6 +96,7 @@ export const TransactionAmountInfo = styled.div`
     height: 16px;
   }
 `
+
 export const TransactionAmountInfoText = styled.span`
   padding: 4px 6px;
   font-size: 10px;
