@@ -1,8 +1,8 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { Modal, ModalBody, ModalHeader } from './Modal'
-import { Stepper } from './Stepper'
+import { Modal, ModalHeader } from './Modal'
+import { Stepper, StepperModalBody } from './Stepper'
 import { TemplateBlock } from './storybookParts/previewStyles'
 
 export default {
@@ -15,9 +15,9 @@ const Template: Story = (args) => {
     <TemplateBlock>
       <Modal onClose={() => undefined} modalSize="l">
         <ModalHeader onClick={() => undefined} title="Modal with stepper" />
-        <ModalBody>
+        <StepperModalBody>
           <Stepper {...args} />
-        </ModalBody>
+        </StepperModalBody>
       </Modal>
     </TemplateBlock>
   )
