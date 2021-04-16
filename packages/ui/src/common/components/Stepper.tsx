@@ -8,11 +8,26 @@ import { ModalBody } from './Modal'
 export const Stepper = () => {
   const steps = [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }]
 
+  const stepsToRender = steps.map((step, index) => {
+    return {
+      ...step,
+      number: index + 1,
+      isActive: false,
+    }
+  })
+
+  stepsToRender[0].isActive = true
+
   return (
     <StepperWrapper>
       <StepsColumn>
-        {steps.map((value) => {
-          return <Step>{value.title}</Step>
+        {stepsToRender.map((value) => {
+          return (
+            <Step>
+              <StepNumber>{value.number}</StepNumber>
+              {value.title}
+            </Step>
+          )
         })}
       </StepsColumn>
       <StepDescriptionColumn>Col 2</StepDescriptionColumn>
@@ -23,6 +38,17 @@ export const Stepper = () => {
 
 const Step = styled.div`
   margin: 5px 0;
+`
+
+const StepNumber = styled.div`
+  display: inline-block;
+  border-radius: 20px;
+  width: 30px;
+  height: 30px;
+  border: 2px solid ${Colors.White};
+  line-height: 30px;
+  text-align: center;
+  margin-right: 4px;
 `
 
 export const StepperModalBody = styled(ModalBody)`
