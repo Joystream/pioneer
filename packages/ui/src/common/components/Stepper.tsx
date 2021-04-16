@@ -13,10 +13,12 @@ export const Stepper = () => {
       ...step,
       number: index + 1,
       isActive: false,
+      isPast: false,
     }
   })
 
-  stepsToRender[0].isActive = true
+  stepsToRender[0].isPast = true
+  stepsToRender[1].isActive = true
 
   return (
     <StepperWrapper>
@@ -24,7 +26,9 @@ export const Stepper = () => {
         {stepsToRender.map((value) => {
           return (
             <Step>
-              <StepNumber>{value.number}</StepNumber>
+              {value.isActive && <ActiveStep> ▶ </ActiveStep>}
+              {value.isPast && <DoneStep> ✔ </DoneStep>}
+              {!value.isPast && !value.isActive && <StepNumber>{value.number}</StepNumber>}
               {value.title}
             </Step>
           )
@@ -49,6 +53,16 @@ const StepNumber = styled.div`
   line-height: 30px;
   text-align: center;
   margin-right: 4px;
+`
+
+const ActiveStep = styled(StepNumber)`
+  background-color: ${Colors.LogoPurple};
+  border-color: ${Colors.LogoPurple};
+`
+
+const DoneStep = styled(StepNumber)`
+  background-color: ${Colors.Black[500]};
+  border-color: ${Colors.Black[500]};
 `
 
 export const StepperModalBody = styled(ModalBody)`
