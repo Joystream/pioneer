@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
@@ -15,6 +15,7 @@ import {
 import { TextBig, TextInlineBig, TokenValue } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
 import { Colors, Overflow, Transitions } from '../../common/constants'
+import { useToggle } from '../../common/hooks/useToggle'
 import { relativeTime } from '../../common/model/relativeTime'
 import { WorkingGroupOpening } from '../types'
 
@@ -22,21 +23,28 @@ export interface OpeningsListProps {
   openings: WorkingGroupOpening[]
 }
 
+const OpeningsListRow = ({ opening }: Props) => {
+  const [isOpened, toggleOpen] = useToggle()
+
+  return (
+    <Toggle absoluteToggle isOpen={isOpened}>
+      <OpeningItemContainer isOpen={isOpened}>
+        <OpeningListItem opening={opening} />
+        <OpeningDetails opening={opening} />
+      </OpeningItemContainer>
+      <ToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
+        <Arrow direction="down" />
+      </ToggleButton>
+    </Toggle>
+  )
+}
+
 export const OpeningsList = ({ openings }: OpeningsListProps) => {
-  const [isItemOpened, setItemOpened] = useState(false)
   return (
     <List>
       {openings.map((opening) => (
         <ListItem key={opening.id}>
-          <Toggle absoluteToggle isOpen={isItemOpened}>
-            <OpeningItemContainer isOpen={isItemOpened}>
-              <OpeningListItem opening={opening} />
-              <OpeningDetails opening={opening} />
-            </OpeningItemContainer>
-            <ToggleButton absoluteToggle isOpen={isItemOpened} onClick={() => setItemOpened(!isItemOpened)}>
-              <Arrow direction="down" />
-            </ToggleButton>
-          </Toggle>
+          <OpeningsListRow opening={opening} />
         </ListItem>
       ))}
     </List>
