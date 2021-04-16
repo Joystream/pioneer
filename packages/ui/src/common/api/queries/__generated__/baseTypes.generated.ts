@@ -526,6 +526,10 @@ export type WorkersWhereInput = {
   group_eq?: Maybe<Scalars['ID']>
 }
 
+export type WorkingGroupWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
+}
+
 export type MembershipWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
   handle?: Maybe<Scalars['String']>
@@ -567,6 +571,7 @@ export type Query = {
   membershipsConnection: MembershipConnection
   membersByHandle: Array<MembersByHandleFtsOutput>
   workingGroups: Array<WorkingGroup>
+  workingGroup?: Maybe<WorkingGroup>
   workers: Array<Worker>
   workingGroupOpenings?: Maybe<Array<WorkingGroupOpening>>
 }
@@ -641,6 +646,10 @@ export type QueryMembersByHandleArgs = {
 export type QueryWorkingGroupsArgs = {
   offset?: Maybe<Scalars['Int']>
   limit?: Maybe<Scalars['Int']>
+}
+
+export type QueryWorkingGroupArgs = {
+  where: WorkingGroupWhereUniqueInput
 }
 
 export type QueryWorkersArgs = {

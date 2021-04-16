@@ -13,21 +13,21 @@ import { useWorkers } from '../../../../working-groups/hooks/useWorkers'
 import { WorkingGroup } from '../../../../working-groups/types'
 
 interface Props {
-  workingGroup?: WorkingGroup
+  workingGroup: WorkingGroup
 }
 
 export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading, openings } = useOpenings({
-    groupId: workingGroup?.id,
+    groupId: workingGroup.id,
   })
-  const { member: leader } = useMember(workingGroup?.leaderId)
-  const { workers } = useWorkers(workingGroup?.id ?? '')
+  const { member: leader } = useMember(workingGroup.leaderId)
+  const { workers } = useWorkers(workingGroup.id ?? '')
 
   return (
     <ContentWithSidepanel>
       <MainPanel>
         <Statistics>
-          <TokenValueStat title="Current budget" helperText="Lorem ipsum..." value={150_200} />
+          <TokenValueStat title="Current budget" helperText="Lorem ipsum..." value={workingGroup.budget} />
           <TokenValueStat title="Working Group dept" helperText="Lorem ipsum..." value={-200} />
           <TokenValueStat title="Avg stake" helperText="Lorem ipsum..." value={100_000} />
         </Statistics>

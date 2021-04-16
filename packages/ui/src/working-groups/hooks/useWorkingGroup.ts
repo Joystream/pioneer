@@ -1,8 +1,12 @@
-import { useMemo } from 'react'
-
-import { useWorkingGroups } from './useWorkingGroups'
+import { useGetWorkingGroupQuery } from '../queries'
+import { asWorkingGroup } from '../types'
 
 export function useWorkingGroup(id: string) {
-  const { groups } = useWorkingGroups()
-  return useMemo(() => groups.find((g) => g.id == id), [groups])
+  const { data, loading } = useGetWorkingGroupQuery({ variables: { id } })
+  const group = data?.workingGroup
+
+  return {
+    isLoading: loading,
+    group: group ? asWorkingGroup(group) : undefined,
+  }
 }

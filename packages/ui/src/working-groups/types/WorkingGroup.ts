@@ -17,7 +17,7 @@ export interface WorkingGroup {
   status?: any
   description?: string
   statusMessage?: string
-  budget?: BN
+  budget: BN
 }
 
 type WorkerFields = { __typename: 'Worker' } & WorkerFieldsFragment
