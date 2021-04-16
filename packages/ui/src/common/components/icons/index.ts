@@ -1,5 +1,5 @@
 export * from './ArrowDownExpandedIcon'
-export * from './ArrowDownIcon'
+export * from './ArrowIcon'
 export * from './ArrowInsideIcon'
 export * from './ArrowOutsideIcon'
 export * from './BlockIcon'

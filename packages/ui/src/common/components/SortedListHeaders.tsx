@@ -3,12 +3,12 @@ import styled from 'styled-components'
 
 import { Colors, Transitions } from '../constants'
 
-import { ArrowDownIcon, Icon } from './icons'
+import { Arrow, Icon } from './icons'
 
 export function SortIconDown() {
   return (
     <IconDown>
-      <ArrowDownIcon />
+      <Arrow direction="down" />
     </IconDown>
   )
 }
@@ -16,7 +16,7 @@ export function SortIconDown() {
 export function SortIconUp() {
   return (
     <IconUp>
-      <ArrowDownIcon />
+      <Arrow direction="down" />
     </IconUp>
   )
 }

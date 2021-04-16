@@ -21,13 +21,13 @@ const Template: Story = () => (
             <h4>Icons</h4>
           </Row>
           {Object.entries(icons).map(([iconName, Component]) => {
-            if (!iconName.endsWith('Icon') || iconName === 'Icon') {
+            if (!iconName.endsWith('Icon') || iconName === 'Icon' || typeof Component === 'function') {
               return
             }
 
             return (
               <Row key={iconName}>
-                {iconName} : {<Component />}
+                {iconName}: {<Component />}
               </Row>
             )
           })}
@@ -37,7 +37,7 @@ const Template: Story = () => (
             <h4>Symbols</h4>
           </Row>
           {Object.entries(symbols).map(([iconName, Component]) => {
-            if (!iconName.endsWith('Symbol')) {
+            if (!iconName.endsWith('Symbol') || iconName === 'Symbol') {
               return
             }
 
@@ -54,6 +54,4 @@ const Template: Story = () => (
 )
 
 export const Default = Template.bind({})
-Default.args = {
-  children: 'This is a failure',
-}
+Default.args = {}

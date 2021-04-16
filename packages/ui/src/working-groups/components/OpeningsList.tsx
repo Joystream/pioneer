@@ -2,13 +2,20 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
-import { ButtonGhost } from '../../common/components/buttons'
+import { ButtonGhost, ButtonsGroup } from '../../common/components/buttons'
+import { Toggle, ToggleButton } from '../../common/components/buttons/Toggle'
+import { Arrow } from '../../common/components/icons'
 import { List, ListItem } from '../../common/components/List'
-import { StatisticItem, Statistics } from '../../common/components/statistics'
-import { ToggleableItem } from '../../common/components/ToggleableItem'
-import { TextBig, TextInlineBig, TextSmall, TokenValue } from '../../common/components/typography'
+import {
+  StatiscticContentColumn,
+  Statistics,
+  StatsBlock,
+  TwoColumnsStatistic,
+} from '../../common/components/statistics'
+import { TextBig, TextInlineBig, TokenValue } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
-import { Overflow } from '../../common/constants'
+import { Colors, Overflow, Transitions } from '../../common/constants'
+import { useToggle } from '../../common/hooks/useToggle'
 import { relativeTime } from '../../common/model/relativeTime'
 import { WorkingGroupOpening } from '../types'
 
@@ -16,19 +23,37 @@ export interface OpeningsListProps {
   openings: WorkingGroupOpening[]
 }
 
-export const OpeningsList = ({ openings }: OpeningsListProps) => (
-  <List>
-    {openings.map((opening) => (
-      <ListItem key={opening.id}>
-        <ToggleableItem inlineOpenToggle>
-          {(isOpen) => (isOpen ? <OpeningDetails opening={opening} /> : <OpeningListItem opening={opening} />)}
-        </ToggleableItem>
-      </ListItem>
-    ))}
-  </List>
-)
+const OpeningsListRow = ({ opening }: Props) => {
+  const [isOpened, toggleOpen] = useToggle()
 
-type Props = { opening: WorkingGroupOpening }
+  return (
+    <Toggle absoluteToggle isOpen={isOpened}>
+      <OpeningItemContainer isOpen={isOpened}>
+        <OpeningListItem opening={opening} />
+        <OpeningDetails opening={opening} />
+      </OpeningItemContainer>
+      <ToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
+        <Arrow direction="down" />
+      </ToggleButton>
+    </Toggle>
+  )
+}
+
+export const OpeningsList = ({ openings }: OpeningsListProps) => {
+  return (
+    <List>
+      {openings.map((opening) => (
+        <ListItem key={opening.id}>
+          <OpeningsListRow opening={opening} />
+        </ListItem>
+      ))}
+    </List>
+  )
+}
+
+type Props = {
+  opening: WorkingGroupOpening
+}
 
 const OpeningListItem = ({ opening }: Props) => (
   <OpeningWrap>
@@ -42,11 +67,13 @@ const OpeningListItem = ({ opening }: Props) => (
     </OpeningItemInfo>
     <OpeningItemSummary>
       <OpenItemSummaryColumn>
-        <TokenValue value={opening.reward.value} />
+        <TextInlineBig>
+          <TokenValue value={opening.reward.value} />
+        </TextInlineBig>
         <OpeningSubscriptionWide>Reward per {opening.reward.interval} blocks.</OpeningSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
-        <TextInlineBig light>
+        <TextInlineBig lighter>
           <TextInlineBig dark bold>
             {opening.applicants.current}
           </TextInlineBig>
@@ -55,7 +82,7 @@ const OpeningListItem = ({ opening }: Props) => (
         <Subscription>Applications</Subscription>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
-        <TextInlineBig light>
+        <TextInlineBig lighter>
           <TextInlineBig dark bold>
             {opening.hiring.current}
           </TextInlineBig>
@@ -69,29 +96,54 @@ const OpeningListItem = ({ opening }: Props) => (
 
 const OpeningDetails = ({ opening }: Props) => {
   return (
-    <div>
-      <div>Ends in {relativeTime(opening.expectedEnding)}</div>
-      <h4>{opening.title}</h4>
-      <div>"Lorem ipsum... "</div>
-      <Statistics>
-        <StatisticItem>
-          <TokenValue value={opening.reward.value} />
-          <TextSmall>Reward per {opening.reward.interval} blocks</TextSmall>
-        </StatisticItem>
-        <StatisticItem>
-          <TextBig>{opening.applicants.total}</TextBig>
-          <TextSmall>Applicant limit</TextSmall>
-          <TextBig>{opening.hiring.total}</TextBig>
-          <TextSmall>Target no of Hires</TextSmall>
-        </StatisticItem>
-        <StatisticItem>
-          <TokenValue value={opening.reward.value} />
-          <TextSmall>Minimum Stake Required</TextSmall>
-        </StatisticItem>
-      </Statistics>
-      <ButtonGhost>Learn more</ButtonGhost>
-      {/* No Notify me when... button for now */}
-    </div>
+    <OpenedContainer>
+      <OpenedWrapper>
+        <OpenedTop>
+          <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          <OpenedItemTitle>{opening.title}</OpenedItemTitle>
+        </OpenedTop>
+        <TextBig light>
+          Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to
+          Joystream are format...
+        </TextBig>
+        <Statistics withMargin>
+          <StatsBlock size="m" centered spacing="s">
+            <TextBig>
+              <TokenValue value={opening.reward.value} />
+            </TextBig>
+            <Subscription>Reward per {opening.reward.interval} blocks</Subscription>
+          </StatsBlock>
+          <StatsBlock size="m" centered spacing="s">
+            <TwoColumnsStatistic>
+              <StatiscticContentColumn>
+                <TextBig value bold>
+                  {opening.applicants.total}
+                </TextBig>
+                <Subscription>Applicant limit</Subscription>
+              </StatiscticContentColumn>
+              <StatiscticContentColumn>
+                <TextBig value bold>
+                  {opening.hiring.total}
+                </TextBig>
+                <Subscription>Target no of Hires</Subscription>
+              </StatiscticContentColumn>
+            </TwoColumnsStatistic>
+          </StatsBlock>
+          <StatsBlock size="m" centered spacing="s">
+            <TextBig>
+              <TokenValue value={opening.reward.value} />
+            </TextBig>
+            <Subscription>Minimum Stake Required</Subscription>
+          </StatsBlock>
+        </Statistics>
+        <ButtonsGroup align="right">
+          <ButtonGhost size="medium">
+            <Arrow direction="left" />
+            Learn more
+          </ButtonGhost>
+        </ButtonsGroup>
+      </OpenedWrapper>
+    </OpenedContainer>
   )
 }
 
@@ -103,7 +155,46 @@ const OpeningWrap = styled.div`
   align-items: center;
   width: 100%;
   height: 94px;
-  padding: 16px 20px 16px 16px;
+  padding: 16px 72px 16px 16px;
+  background-color: ${Colors.White};
+  transition: ${Transitions.all};
+`
+
+const OpenedContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: ${Transitions.all};
+`
+
+const OpenedWrapper = styled.div`
+  display: grid;
+  grid-row-gap: 16px;
+  width: 100%;
+  max-height: 100%;
+  padding: 16px;
+  background-color: ${Colors.Black[50]};
+  overflow: hidden;
+  transition: ${Transitions.all};
+`
+
+interface OpenedItemProps {
+  isOpen?: boolean
+}
+
+const OpeningItemContainer = styled.div<OpenedItemProps>`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  transition: ${Transitions.all};
+
+  ${OpeningWrap} {
+    margin-top: ${({ isOpen }) => (isOpen ? '-94px' : '0px')};
+  }
+  ${OpenedContainer} {
+    max-height: ${({ isOpen }) => (isOpen ? '500px' : '0px')};
+  }
 `
 
 const OpeningItemInfo = styled.div`
@@ -135,6 +226,10 @@ const OpeningItemTitle = styled.h5`
   ${Overflow.Dots}
 `
 
+const OpenedItemTitle = styled.h4`
+  ${Overflow.Dots}
+`
+
 const OpenItemSummaryColumn = styled.div`
   display: grid;
   grid-template-rows: 26px 24px;
@@ -144,4 +239,11 @@ const OpenItemSummaryColumn = styled.div`
 
 const OpeningSubscriptionWide = styled(Subscription)`
   min-width: 136px;
+`
+
+const OpenedTop = styled.div`
+  display: grid;
+  grid-template-rows: 26px 28px;
+  grid-row-gap: 8px;
+  align-items: center;
 `

@@ -1,16 +1,22 @@
 import styled, { css } from 'styled-components'
 
-import { Colors } from '../../constants'
+import { Colors, Fonts } from '../../constants'
 
 interface TextProps {
   bold?: boolean
   italic?: boolean
+  lighter?: boolean
   light?: boolean
   dark?: boolean
   className?: string
   margin?: 's' | 'm' | 'l' | 'xl' | undefined
   colorInherit?: boolean
+  value?: boolean
 }
+
+const TextValueStyle = css`
+  font-family: ${Fonts.Grotesk};
+`
 
 const TextBoldStyle = css`
   font-weight: 700;
@@ -24,8 +30,12 @@ const TextDarkStyle = css`
   color: ${Colors.Black[700]};
 `
 
-const TextLightStyle = css`
+const TextLighterStyle = css`
   color: ${Colors.Black[400]};
+`
+
+const TextLightStyle = css`
+  color: ${Colors.Black[500]};
 `
 
 const TextMargins = css<TextProps>`
@@ -63,8 +73,18 @@ const TextAllStyles = css<TextProps>`
     }
   }};
   ${(props) => {
+    if (props.lighter === true) {
+      return TextLighterStyle
+    }
+  }};
+  ${(props) => {
     if (props.light === true) {
       return TextLightStyle
+    }
+  }};
+  ${(props) => {
+    if (props.value === true) {
+      return TextValueStyle
     }
   }};
   ${TextMargins};

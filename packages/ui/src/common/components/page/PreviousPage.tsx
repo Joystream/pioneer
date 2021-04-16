@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ButtonGhost } from '../buttons'
-import { ArrowDownIcon } from '../icons'
+import { Arrow } from '../icons'
 
 interface PreviousPageProps {
   children?: React.ReactNode
@@ -14,7 +14,7 @@ export const PreviousPage = ({ children }: PreviousPageProps) => {
   return (
     <PreviousPageBlock>
       <PreviousPageButton onClick={() => history.goBack()} size="small" square>
-        <BackArrow />
+        <BackArrow direction="left" />
       </PreviousPageButton>
       {children}
     </PreviousPageBlock>
@@ -43,8 +43,7 @@ const PreviousPageButton = styled(ButtonGhost)`
   }
 `
 
-const BackArrow = styled(ArrowDownIcon)`
+const BackArrow = styled(Arrow)`
   width: 100%;
   height: 100%;
-  transform: rotate(90deg);
 `

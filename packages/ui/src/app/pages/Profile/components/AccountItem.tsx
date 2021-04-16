@@ -6,7 +6,7 @@ import { AccountInfo } from '../../../../accounts/components/AccountInfo'
 import { TransferButton } from '../../../../accounts/components/TransferButton'
 import { useBalance } from '../../../../accounts/hooks/useBalance'
 import { Account } from '../../../../accounts/types'
-import { ToggleableItem } from '../../../../common/components/ToggleableItem'
+import { ToggleableItem } from '../../../../common/components/buttons/Toggle'
 import { TokenValue } from '../../../../common/components/typography'
 import { Sizes } from '../../../../common/constants'
 

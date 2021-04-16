@@ -25,7 +25,7 @@ export const StatisticItem = ({
   helperLinkURL,
 }: StatisticItemProps) => {
   return (
-    <StatsItem key={title} className={className}>
+    <StatsBlock key={title} className={className}>
       <StatsHeader>
         <StatsInfo>
           {title}
@@ -40,29 +40,49 @@ export const StatisticItem = ({
         </StatsInfo>
       </StatsHeader>
       <StatsContent>{children}</StatsContent>
-    </StatsItem>
+    </StatsBlock>
   )
 }
 
-const StatsItem = styled.li`
-  display: inline-grid;
+interface StatiscticBlockProps {
+  size?: 's' | 'm' | 'l'
+  centered?: boolean
+  spacing?: 's' | 'm'
+}
+
+export const StatsBlock = styled.li<StatiscticBlockProps>`
+  display: grid;
   position: relative;
-  grid-template-columns: 1fr;
-  align-content: space-between;
+  align-content: ${({ centered }) => (centered ? 'stretch' : 'space-between')};
+  ${({ centered }) => (centered ? 'align-items: center;' : null)};
   flex-basis: 240px;
   flex-grow: 1;
-  height: 100px;
-  padding: 12px 16px 20px;
+  height: ${({ size }) => {
+    switch (size) {
+      case 's':
+        return 'auto'
+      case 'm':
+        return '88px'
+      case 'l':
+      default:
+        return '100px'
+    }
+  }};
+  padding: ${({ centered }) => (centered ? '20px 16px' : '12px 16px 20px')};
   border-radius: ${BorderRad.m};
   background-color: ${Colors.White};
   box-shadow: ${Shadows.light};
 
   & + & {
-    margin-left: 24px;
-  }
-
-  &.statsItemWide {
-    flex-basis: 302px;
+    margin-left: ${({ spacing }) => {
+      switch (spacing) {
+        case 's':
+          return '16px'
+        case 'm':
+        default:
+          return '24px'
+      }
+    }};
   }
 `
 
@@ -91,4 +111,17 @@ export const StatisticItemSpacedContent = styled.div`
 
 export const StatisticLabel = styled(TextSmall)`
   color: ${Colors.Black[500]};
+`
+
+export const TwoColumnsStatistic = styled.div`
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-column-gap: 16px;
+  height: 100%;
+`
+
+export const StatiscticContentColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `
