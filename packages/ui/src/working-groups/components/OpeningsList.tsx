@@ -2,13 +2,19 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
-import { ButtonGhost } from '../../common/components/buttons'
+import { ButtonGhost, ButtonsGroup } from '../../common/components/buttons'
+import { ArrowDownIcon } from '../../common/components/icons'
 import { List, ListItem } from '../../common/components/List'
-import { StatisticItem, Statistics } from '../../common/components/statistics'
+import {
+  StatiscticContentColumn,
+  Statistics,
+  StatsBlock,
+  TwoColumnsStatistic,
+} from '../../common/components/statistics'
 import { ToggleableItem } from '../../common/components/ToggleableItem'
-import { TextBig, TextInlineBig, TextSmall, TokenValue } from '../../common/components/typography'
+import { TextBig, TextInlineBig, TokenValue } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
-import { Overflow } from '../../common/constants'
+import { Colors, Overflow } from '../../common/constants'
 import { relativeTime } from '../../common/model/relativeTime'
 import { WorkingGroupOpening } from '../types'
 
@@ -42,11 +48,13 @@ const OpeningListItem = ({ opening }: Props) => (
     </OpeningItemInfo>
     <OpeningItemSummary>
       <OpenItemSummaryColumn>
-        <TokenValue value={opening.reward.value} />
+        <TextInlineBig>
+          <TokenValue value={opening.reward.value} />
+        </TextInlineBig>
         <OpeningSubscriptionWide>Reward per {opening.reward.interval} blocks.</OpeningSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
-        <TextInlineBig light>
+        <TextInlineBig lighter>
           <TextInlineBig dark bold>
             {opening.applicants.current}
           </TextInlineBig>
@@ -55,7 +63,7 @@ const OpeningListItem = ({ opening }: Props) => (
         <Subscription>Applications</Subscription>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
-        <TextInlineBig light>
+        <TextInlineBig lighter>
           <TextInlineBig dark bold>
             {opening.hiring.current}
           </TextInlineBig>
@@ -69,29 +77,52 @@ const OpeningListItem = ({ opening }: Props) => (
 
 const OpeningDetails = ({ opening }: Props) => {
   return (
-    <div>
-      <div>Ends in {relativeTime(opening.expectedEnding)}</div>
-      <h4>{opening.title}</h4>
-      <div>"Lorem ipsum... "</div>
-      <Statistics>
-        <StatisticItem>
-          <TokenValue value={opening.reward.value} />
-          <TextSmall>Reward per {opening.reward.interval} blocks</TextSmall>
-        </StatisticItem>
-        <StatisticItem>
-          <TextBig>{opening.applicants.total}</TextBig>
-          <TextSmall>Applicant limit</TextSmall>
-          <TextBig>{opening.hiring.total}</TextBig>
-          <TextSmall>Target no of Hires</TextSmall>
-        </StatisticItem>
-        <StatisticItem>
-          <TokenValue value={opening.reward.value} />
-          <TextSmall>Minimum Stake Required</TextSmall>
-        </StatisticItem>
+    <OpenedWrapper>
+      <OpenedTop>
+        <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+        <OpenedItemTitle>{opening.title}</OpenedItemTitle>
+      </OpenedTop>
+      <TextBig light>
+        Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream
+        are format...
+      </TextBig>
+      <Statistics withMargin>
+        <StatsBlock size="m" centered spacing="s">
+          <TextBig>
+            <TokenValue value={opening.reward.value} />
+          </TextBig>
+          <Subscription>Reward per {opening.reward.interval} blocks</Subscription>
+        </StatsBlock>
+        <StatsBlock size="m" centered spacing="s">
+          <TwoColumnsStatistic>
+            <StatiscticContentColumn>
+              <TextBig value bold>
+                {opening.applicants.total}
+              </TextBig>
+              <Subscription>Applicant limit</Subscription>
+            </StatiscticContentColumn>
+            <StatiscticContentColumn>
+              <TextBig value bold>
+                {opening.hiring.total}
+              </TextBig>
+              <Subscription>Target no of Hires</Subscription>
+            </StatiscticContentColumn>
+          </TwoColumnsStatistic>
+        </StatsBlock>
+        <StatsBlock size="m" centered spacing="s">
+          <TextBig>
+            <TokenValue value={opening.reward.value} />
+          </TextBig>
+          <Subscription>Minimum Stake Required</Subscription>
+        </StatsBlock>
       </Statistics>
-      <ButtonGhost>Learn more</ButtonGhost>
-      {/* No Notify me when... button for now */}
-    </div>
+      <ButtonsGroup align="right">
+        <ButtonGhost size="medium">
+          <ArrowDownIcon />
+          Learn more
+        </ButtonGhost>
+      </ButtonsGroup>
+    </OpenedWrapper>
   )
 }
 
@@ -102,8 +133,17 @@ const OpeningWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 94px;
+  min-height: 94px;
   padding: 16px 20px 16px 16px;
+  background-color: ${Colors.White};
+`
+
+const OpenedWrapper = styled.div`
+  display: grid;
+  grid-row-gap: 16px;
+  width: 100%;
+  padding: 16px 20px 16px 16px;
+  background-color: ${Colors.Black[50]};
 `
 
 const OpeningItemInfo = styled.div`
@@ -135,6 +175,10 @@ const OpeningItemTitle = styled.h5`
   ${Overflow.Dots}
 `
 
+const OpenedItemTitle = styled.h4`
+  ${Overflow.Dots}
+`
+
 const OpenItemSummaryColumn = styled.div`
   display: grid;
   grid-template-rows: 26px 24px;
@@ -144,4 +188,11 @@ const OpenItemSummaryColumn = styled.div`
 
 const OpeningSubscriptionWide = styled(Subscription)`
   min-width: 136px;
+`
+
+const OpenedTop = styled.div`
+  display: grid;
+  grid-template-rows: 26px 28px;
+  grid-row-gap: 8px;
+  align-items: center;
 `

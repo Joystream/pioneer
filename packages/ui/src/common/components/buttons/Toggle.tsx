@@ -16,6 +16,13 @@ export const ToggleButton = styled(ButtonPrimary)`
     background-color: transparent;
     border: 1px solid transparent;
   }
+  &:hover,
+  &:focus {
+    color: ${Colors.Blue[500]};
+  }
+  &:active {
+    color: ${Colors.Blue[600]};
+  }
   &:disabled {
     cursor: not-allowed;
     color: ${Colors.Black[400]};
@@ -58,5 +65,17 @@ export const Toggle = styled.div<Props>`
   &:active,
   &:focus {
     border-color: ${Colors.Blue[300]};
+  }
+
+  &:hover,
+  &:focus {
+    ${ToggleButton} {
+      color: ${Colors.Blue[500]};
+    }
+  }
+  &:active {
+    ${ToggleButton} {
+      color: ${Colors.Blue[600]};
+    }
   }
 `

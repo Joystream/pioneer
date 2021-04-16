@@ -8,9 +8,7 @@ export interface ActivityIconProps {
   variant?: ActivityType
 }
 
-export const ActivityIcon = ({ icon, variant }: ActivityIconProps) => {
-  const type: ActivityType = variant ?? 'default'
-
+export const ActivityIcon = ({ icon }: ActivityIconProps) => {
   if (icon === 'closed') {
     return <ArrowInsideIcon />
   }
