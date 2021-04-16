@@ -5,13 +5,25 @@ import { Colors } from '../constants'
 
 import { ModalBody } from './Modal'
 
-export const Stepper = () => (
-  <StepperWrapper>
-    <StepsColumn>Col 1</StepsColumn>
-    <StepDescriptionColumn>Col 2</StepDescriptionColumn>
-    <StepperBody>Col 3</StepperBody>
-  </StepperWrapper>
-)
+export const Stepper = () => {
+  const steps = [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }]
+
+  return (
+    <StepperWrapper>
+      <StepsColumn>
+        {steps.map((value) => {
+          return <Step>{value.title}</Step>
+        })}
+      </StepsColumn>
+      <StepDescriptionColumn>Col 2</StepDescriptionColumn>
+      <StepperBody>Col 3</StepperBody>
+    </StepperWrapper>
+  )
+}
+
+const Step = styled.div`
+  margin: 5px 0;
+`
 
 export const StepperModalBody = styled(ModalBody)`
   padding: 0;
