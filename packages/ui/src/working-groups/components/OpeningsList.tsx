@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { ButtonGhost, ButtonsGroup } from '../../common/components/buttons'
-import { ArrowDownIcon } from '../../common/components/icons'
+import { Toggle, ToggleButton } from '../../common/components/buttons/Toggle'
+import { Arrow } from '../../common/components/icons'
 import { List, ListItem } from '../../common/components/List'
 import {
   StatiscticContentColumn,
@@ -11,10 +12,9 @@ import {
   StatsBlock,
   TwoColumnsStatistic,
 } from '../../common/components/statistics'
-import { ToggleableItem } from '../../common/components/ToggleableItem'
 import { TextBig, TextInlineBig, TokenValue } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
-import { Colors, Overflow } from '../../common/constants'
+import { Colors, Overflow, Transitions } from '../../common/constants'
 import { relativeTime } from '../../common/model/relativeTime'
 import { WorkingGroupOpening } from '../types'
 
@@ -22,19 +22,30 @@ export interface OpeningsListProps {
   openings: WorkingGroupOpening[]
 }
 
-export const OpeningsList = ({ openings }: OpeningsListProps) => (
-  <List>
-    {openings.map((opening) => (
-      <ListItem key={opening.id}>
-        <ToggleableItem inlineOpenToggle>
-          {(isOpen) => (isOpen ? <OpeningDetails opening={opening} /> : <OpeningListItem opening={opening} />)}
-        </ToggleableItem>
-      </ListItem>
-    ))}
-  </List>
-)
+export const OpeningsList = ({ openings }: OpeningsListProps) => {
+  const [isItemOpened, setItemOpened] = useState(false)
+  return (
+    <List>
+      {openings.map((opening) => (
+        <ListItem key={opening.id}>
+          <Toggle absoluteToggle isOpen={isItemOpened}>
+            <OpeningItemContainer isOpen={isItemOpened}>
+              <OpeningListItem opening={opening} />
+              <OpeningDetails opening={opening} />
+            </OpeningItemContainer>
+            <ToggleButton absoluteToggle isOpen={isItemOpened} onClick={() => setItemOpened(!isItemOpened)}>
+              <Arrow direction="down" />
+            </ToggleButton>
+          </Toggle>
+        </ListItem>
+      ))}
+    </List>
+  )
+}
 
-type Props = { opening: WorkingGroupOpening }
+type Props = {
+  opening: WorkingGroupOpening
+}
 
 const OpeningListItem = ({ opening }: Props) => (
   <OpeningWrap>
@@ -77,52 +88,54 @@ const OpeningListItem = ({ opening }: Props) => (
 
 const OpeningDetails = ({ opening }: Props) => {
   return (
-    <OpenedWrapper>
-      <OpenedTop>
-        <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
-        <OpenedItemTitle>{opening.title}</OpenedItemTitle>
-      </OpenedTop>
-      <TextBig light>
-        Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream
-        are format...
-      </TextBig>
-      <Statistics withMargin>
-        <StatsBlock size="m" centered spacing="s">
-          <TextBig>
-            <TokenValue value={opening.reward.value} />
-          </TextBig>
-          <Subscription>Reward per {opening.reward.interval} blocks</Subscription>
-        </StatsBlock>
-        <StatsBlock size="m" centered spacing="s">
-          <TwoColumnsStatistic>
-            <StatiscticContentColumn>
-              <TextBig value bold>
-                {opening.applicants.total}
-              </TextBig>
-              <Subscription>Applicant limit</Subscription>
-            </StatiscticContentColumn>
-            <StatiscticContentColumn>
-              <TextBig value bold>
-                {opening.hiring.total}
-              </TextBig>
-              <Subscription>Target no of Hires</Subscription>
-            </StatiscticContentColumn>
-          </TwoColumnsStatistic>
-        </StatsBlock>
-        <StatsBlock size="m" centered spacing="s">
-          <TextBig>
-            <TokenValue value={opening.reward.value} />
-          </TextBig>
-          <Subscription>Minimum Stake Required</Subscription>
-        </StatsBlock>
-      </Statistics>
-      <ButtonsGroup align="right">
-        <ButtonGhost size="medium">
-          <ArrowDownIcon />
-          Learn more
-        </ButtonGhost>
-      </ButtonsGroup>
-    </OpenedWrapper>
+    <OpenedContainer>
+      <OpenedWrapper>
+        <OpenedTop>
+          <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          <OpenedItemTitle>{opening.title}</OpenedItemTitle>
+        </OpenedTop>
+        <TextBig light>
+          Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to
+          Joystream are format...
+        </TextBig>
+        <Statistics withMargin>
+          <StatsBlock size="m" centered spacing="s">
+            <TextBig>
+              <TokenValue value={opening.reward.value} />
+            </TextBig>
+            <Subscription>Reward per {opening.reward.interval} blocks</Subscription>
+          </StatsBlock>
+          <StatsBlock size="m" centered spacing="s">
+            <TwoColumnsStatistic>
+              <StatiscticContentColumn>
+                <TextBig value bold>
+                  {opening.applicants.total}
+                </TextBig>
+                <Subscription>Applicant limit</Subscription>
+              </StatiscticContentColumn>
+              <StatiscticContentColumn>
+                <TextBig value bold>
+                  {opening.hiring.total}
+                </TextBig>
+                <Subscription>Target no of Hires</Subscription>
+              </StatiscticContentColumn>
+            </TwoColumnsStatistic>
+          </StatsBlock>
+          <StatsBlock size="m" centered spacing="s">
+            <TextBig>
+              <TokenValue value={opening.reward.value} />
+            </TextBig>
+            <Subscription>Minimum Stake Required</Subscription>
+          </StatsBlock>
+        </Statistics>
+        <ButtonsGroup align="right">
+          <ButtonGhost size="medium">
+            <Arrow direction="left" />
+            Learn more
+          </ButtonGhost>
+        </ButtonsGroup>
+      </OpenedWrapper>
+    </OpenedContainer>
   )
 }
 
@@ -133,17 +146,47 @@ const OpeningWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  min-height: 94px;
-  padding: 16px 20px 16px 16px;
+  height: 94px;
+  padding: 16px 72px 16px 16px;
   background-color: ${Colors.White};
+  transition: ${Transitions.all};
+`
+
+const OpenedContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: ${Transitions.all};
 `
 
 const OpenedWrapper = styled.div`
   display: grid;
   grid-row-gap: 16px;
   width: 100%;
-  padding: 16px 20px 16px 16px;
+  max-height: 100%;
+  padding: 16px;
   background-color: ${Colors.Black[50]};
+  overflow: hidden;
+  transition: ${Transitions.all};
+`
+
+interface OpenedItemProps {
+  isOpen?: boolean
+}
+
+const OpeningItemContainer = styled.div<OpenedItemProps>`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  transition: ${Transitions.all};
+
+  ${OpeningWrap} {
+    margin-top: ${({ isOpen }) => (isOpen ? '-94px' : '0px')};
+  }
+  ${OpenedContainer} {
+    max-height: ${({ isOpen }) => (isOpen ? '500px' : '0px')};
+  }
 `
 
 const OpeningItemInfo = styled.div`

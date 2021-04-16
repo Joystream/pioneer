@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useToggle } from '../../hooks/useToggle'
 import { Toggle, ToggleButton } from '../buttons/Toggle'
-import { ArrowDownIcon } from '../icons'
+import { Arrow } from '../icons'
 
 import { EmptyOption, SelectComponent, SelectedOption } from './components'
 import { SelectProps } from './types'
@@ -91,8 +91,8 @@ export const Select = <T extends any>({
             onChange={(t) => setFilterInput(t.target.value)}
           />
         )}
-        <ToggleButton className="ui-toggle" disabled={disabled}>
-          <ArrowDownIcon />
+        <ToggleButton isOpen={isOpen} className="ui-toggle" disabled={disabled}>
+          <Arrow direction="down" />
         </ToggleButton>
       </Toggle>
       {isOpen && renderList(onOptionClick)}

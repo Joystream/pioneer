@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ToggleButton } from '../../../common/components/buttons/Toggle'
-import { ArrowDownIcon } from '../../../common/components/icons'
+import { Arrow } from '../../../common/components/icons'
 import { BalanceInfoInRow, InfoTitle, InfoValue, LockedAccount } from '../../../common/components/Modals'
 import { TokenValue } from '../../../common/components/typography'
 import { useBalance } from '../../hooks/useBalance'
@@ -24,7 +24,7 @@ export const SelectedAccount = ({ account }: SelectedAccountProps) => {
         </InfoValue>
       </BalanceInfoInRow>
       <ToggleButton className="ui-toggle" disabled>
-        <ArrowDownIcon />
+        <Arrow direction="down" />
       </ToggleButton>
     </LockedAccount>
   )
