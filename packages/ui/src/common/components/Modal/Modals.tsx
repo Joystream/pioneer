@@ -1,9 +1,8 @@
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Sizes } from '../constants'
-
-import { Icon } from './icons'
-import { ValueInJoys } from './typography'
+import { BorderRad, Colors, Sizes } from '../../constants'
+import { Icon } from '../icons'
+import { ValueInJoys } from '../typography'
 
 export const Row = styled.div`
   display: flex;
@@ -47,6 +46,7 @@ export const TransactionAmount = styled.div`
 export const TransactionInfo = styled.div`
   display: grid;
 `
+
 export const BalanceInfo = styled.div`
   display: inline-grid;
   position: relative;

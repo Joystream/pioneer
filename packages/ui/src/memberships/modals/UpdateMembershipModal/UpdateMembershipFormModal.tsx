@@ -16,8 +16,8 @@ import {
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
+  Row,
 } from '../../../common/components/Modal'
-import { Row } from '../../../common/components/Modals'
 import { TextMedium } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
 import { useForm } from '../../../common/hooks/useForm'

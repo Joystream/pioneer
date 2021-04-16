@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { AccountInfo } from '../../../accounts/components/AccountInfo'
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
 import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
-import { AccountRow } from '../../../common/components/Modals'
+import { AccountRow } from '../../../common/components/Modal'
 import { MembershipLabel } from '../../../common/components/typography/MembershipLabel'
 import { Member } from '../../types'
 

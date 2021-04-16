@@ -6,8 +6,15 @@ import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent } from '../../../common/components/forms'
 import { Help } from '../../../common/components/Help'
-import { ModalBody, ModalFooter, SignTransferContainer } from '../../../common/components/Modal'
-import { BalanceInfoNarrow, InfoTitle, InfoValue, TransactionInfo } from '../../../common/components/Modals'
+import {
+  ModalBody,
+  ModalFooter,
+  SignTransferContainer,
+  BalanceInfoNarrow,
+  InfoTitle,
+  InfoValue,
+  TransactionInfo,
+} from '../../../common/components/Modal'
 import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'

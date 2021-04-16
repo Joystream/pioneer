@@ -4,8 +4,10 @@ import React, { useMemo } from 'react'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { Help } from '../../../common/components/Help'
 import { ArrowDownExpandedIcon } from '../../../common/components/icons'
-import { ModalBody, ModalFooter, SignTransferContainer } from '../../../common/components/Modal'
 import {
+  ModalBody,
+  ModalFooter,
+  SignTransferContainer,
   BalanceInfoInRow,
   BalanceInfoNarrow,
   InfoTitle,
@@ -15,7 +17,7 @@ import {
   TransactionAmountInfo,
   TransactionAmountInfoText,
   TransactionInfo,
-} from '../../../common/components/Modals'
+} from '../../../common/components/Modal'
 import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'

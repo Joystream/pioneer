@@ -25,8 +25,11 @@ import {
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
+  BalanceInfoNarrow,
+  InfoTitle,
+  InfoValue,
+  Row,
 } from '../../../common/components/Modal'
-import { BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../../../common/components/Modals'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
 import { useForm } from '../../../common/hooks/useForm'
