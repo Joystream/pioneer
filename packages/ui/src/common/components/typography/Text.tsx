@@ -5,6 +5,7 @@ import { Colors } from '../../constants'
 interface TextProps {
   bold?: boolean
   italic?: boolean
+  light?: boolean
   dark?: boolean
   className?: string
   margin?: 's' | 'm' | 'l' | 'xl' | undefined
@@ -21,6 +22,10 @@ const TextItalicStyle = css`
 
 const TextDarkStyle = css`
   color: ${Colors.Black[700]};
+`
+
+const TextLightStyle = css`
+  color: ${Colors.Black[400]};
 `
 
 const TextMargins = css<TextProps>`
@@ -57,6 +62,11 @@ const TextAllStyles = css<TextProps>`
       return TextDarkStyle
     }
   }};
+  ${(props) => {
+    if (props.light === true) {
+      return TextLightStyle
+    }
+  }};
   ${TextMargins};
 `
 
@@ -71,6 +81,21 @@ export const TextMedium = styled.p<TextProps>`
   ${TextAllStyles}
 `
 export const TextBig = styled.p<TextProps>`
+  font-size: 16px;
+  line-height: 24px;
+  ${TextAllStyles}
+`
+export const TextInlineSmall = styled.span<TextProps>`
+  font-size: 12px;
+  line-height: 18px;
+  ${TextAllStyles}
+`
+export const TextInlineMedium = styled.span<TextProps>`
+  font-size: 14px;
+  line-height: 20px;
+  ${TextAllStyles}
+`
+export const TextInlineBig = styled.span<TextProps>`
   font-size: 16px;
   line-height: 24px;
   ${TextAllStyles}

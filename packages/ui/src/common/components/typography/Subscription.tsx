@@ -2,8 +2,8 @@ import styled from 'styled-components'
 
 import { Colors } from '../../constants'
 
-export const Subscription = styled.span`
-  font-size: 12px;
-  line-height: 18px;
+import { TextInlineSmall } from './Text'
+
+export const Subscription = styled(TextInlineSmall)`
   color: ${Colors.Black[500]};
 `

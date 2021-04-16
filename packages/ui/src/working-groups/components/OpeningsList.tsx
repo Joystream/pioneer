@@ -6,7 +6,9 @@ import { ButtonGhost } from '../../common/components/buttons'
 import { List, ListItem } from '../../common/components/List'
 import { StatisticItem, Statistics } from '../../common/components/statistics'
 import { ToggleableItem } from '../../common/components/ToggleableItem'
-import { TextBig, TextSmall, TokenValue } from '../../common/components/typography'
+import { TextBig, TextInlineBig, TextSmall, TokenValue } from '../../common/components/typography'
+import { Subscription } from '../../common/components/typography/Subscription'
+import { Overflow } from '../../common/constants'
 import { relativeTime } from '../../common/model/relativeTime'
 import { WorkingGroupOpening } from '../types'
 
@@ -30,21 +32,38 @@ type Props = { opening: WorkingGroupOpening }
 
 const OpeningListItem = ({ opening }: Props) => (
   <OpeningWrap>
-    <div>id: {opening.id}</div>
-    <div>Ends in {relativeTime(opening.expectedEnding)}</div>
-    {opening.type === 'LEADER' ? <BadgeViolet>LEAD</BadgeViolet> : null}
-    <h4>{opening.title}</h4>
-    <div>
-      <TokenValue value={opening.reward.value} />
-      <br />
-      Reward per {opening.reward.interval} blocks.
-    </div>
-    <div>
-      {opening.applicants.current} / {opening.applicants.total} Applications
-    </div>
-    <div>
-      {opening.hiring.current} / {opening.hiring.total} Hiring
-    </div>
+    <OpeningItemInfo>
+      <OpeningItemInfoTop>
+        <Subscription>ID: {opening.id}</Subscription>
+        <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+        {opening.type === 'LEADER' ? <BadgeViolet>LEAD</BadgeViolet> : null}
+      </OpeningItemInfoTop>
+      <OpeningItemTitle>{opening.title}</OpeningItemTitle>
+    </OpeningItemInfo>
+    <OpeningItemSummary>
+      <OpenItemSummaryColumn>
+        <TokenValue value={opening.reward.value} />
+        <OpeningSubscriptionWide>Reward per {opening.reward.interval} blocks.</OpeningSubscriptionWide>
+      </OpenItemSummaryColumn>
+      <OpenItemSummaryColumn>
+        <TextInlineBig light>
+          <TextInlineBig dark bold>
+            {opening.applicants.current}
+          </TextInlineBig>
+          /{opening.applicants.total}
+        </TextInlineBig>
+        <Subscription>Applications</Subscription>
+      </OpenItemSummaryColumn>
+      <OpenItemSummaryColumn>
+        <TextInlineBig light>
+          <TextInlineBig dark bold>
+            {opening.hiring.current}
+          </TextInlineBig>
+          /{opening.hiring.total}
+        </TextInlineBig>
+        <Subscription>Hiring</Subscription>
+      </OpenItemSummaryColumn>
+    </OpeningItemSummary>
   </OpeningWrap>
 )
 
@@ -77,7 +96,52 @@ const OpeningDetails = ({ opening }: Props) => {
 }
 
 const OpeningWrap = styled.div`
-  grid-template-columns: 1fr 1fr 16px;
+  display: grid;
+  grid-template-columns: auto auto;
   grid-column-gap: 24px;
-  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 94px;
+  padding: 16px 20px 16px 16px;
+`
+
+const OpeningItemInfo = styled.div`
+  display: grid;
+  grid-template-rows: 26px 24px;
+  grid-row-gap: 4px;
+  width: 100%;
+  max-width: 342px;
+  align-items: center;
+`
+
+const OpeningItemInfoTop = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  grid-column-gap: 16px;
+  width: fit-content;
+  max-width: 100%;
+`
+
+const OpeningItemSummary = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  width: 100%;
+  grid-column-gap: 40px;
+`
+
+const OpeningItemTitle = styled.h5`
+  ${Overflow.Dots}
+`
+
+const OpenItemSummaryColumn = styled.div`
+  display: grid;
+  grid-template-rows: 26px 24px;
+  grid-row-gap: 4px;
+  align-items: center;
+`
+
+const OpeningSubscriptionWide = styled(Subscription)`
+  min-width: 136px;
 `

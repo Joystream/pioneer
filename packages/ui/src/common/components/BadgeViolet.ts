@@ -1,19 +1,20 @@
 import styled from 'styled-components'
 
-import { Colors } from '../constants'
+import { BorderRad, Colors, Overflow } from '../constants'
 
-export const BadgeViolet = styled.p`
+export const BadgeViolet = styled.span`
   display: flex;
   justify-content: center;
+  align-items: center;
   width: fit-content;
-  margin: 0;
+  height: 16px;
   padding: 0 8px;
+  background-color: ${Colors.Blue[200]};
+  border-radius: ${BorderRad.l};
   font-size: 10px;
   line-height: 16px;
-  border-radius: 8px;
+  font-weight: 700;
   color: ${Colors.White};
-  background-color: ${Colors.Blue[200]};
   text-transform: uppercase;
-  -webkit-text-stroke-width: 0;
-  -webkit-text-stroke-color: transparent;
+  ${Overflow.Dots}
 `

@@ -47,8 +47,6 @@ export const Toggle = styled.div<Props>`
   padding: 0;
   border-radius: ${BorderRad.s};
   background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : Colors.White)};
-  font-size: 1em;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: ${Transitions.all};
 
   ${ToggleButton} ${Icon.type} {
