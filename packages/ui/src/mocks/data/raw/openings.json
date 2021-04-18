@@ -1,5 +1,6 @@
 [
   {
+    "id": "0",
     "groupId": 0,
     "type": "REGULAR",
     "status": "open",
@@ -18,6 +19,7 @@
     "createdAtTime": "2021-04-09T13:37:42.155Z"
   },
   {
+    "id": "1",
     "groupId": 0,
     "type": "LEADER",
     "status": "open",
@@ -36,6 +38,7 @@
     "createdAtTime": "2021-04-09T13:37:42.155Z"
   },
   {
+    "id": "2",
     "groupId": 0,
     "type": "LEADER",
     "status": "filled",
@@ -54,6 +57,7 @@
     "createdAtTime": "2021-04-09T13:37:42.155Z"
   },
   {
+    "id": "3",
     "groupId": 0,
     "type": "REGULAR",
     "status": "cancelled",
