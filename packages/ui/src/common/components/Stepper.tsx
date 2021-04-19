@@ -5,9 +5,16 @@ import { Colors } from '../constants'
 
 import { ModalBody } from './Modal'
 
-export const Stepper = () => {
-  const steps = [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }]
+interface StepperStep {
+  title: string
+}
 
+export interface StepperProps {
+  steps: StepperStep[]
+  active: number
+}
+
+export const Stepper = ({ steps }: StepperProps) => {
   const stepsToRender = steps.map((step, index) => {
     return {
       ...step,
@@ -25,7 +32,7 @@ export const Stepper = () => {
       <StepsColumn>
         {stepsToRender.map((value) => {
           return (
-            <Step>
+            <Step key={value.title}>
               {value.isActive && <ActiveStep> ▶ </ActiveStep>}
               {value.isPast && <DoneStep> ✔ </DoneStep>}
               {!value.isPast && !value.isActive && <StepNumber>{value.number}</StepNumber>}
