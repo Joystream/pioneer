@@ -8,9 +8,13 @@ import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
 import { openingTitle } from './helpers'
 
-export const ApplicationsList = ({ applications }: { applications: WorkingGroupApplication[] | undefined }) => (
+interface Props {
+  applications: WorkingGroupApplication[]
+}
+
+export const ApplicationsList = ({ applications }: Props) => (
   <List>
-    {applications?.map((application) => (
+    {applications.map((application) => (
       <ListItem key={application.id}>
         <ApplicationListItem application={application} />
       </ListItem>
