@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../common/components/Modals'
+import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../common/components/Modal'
 import { TokenValue } from '../../../common/components/typography'
 import { useBalance } from '../../hooks/useBalance'
 import { Account } from '../../types'

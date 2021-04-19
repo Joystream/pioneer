@@ -2,15 +2,17 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { ArrowDownExpandedIcon, SuccessIcon } from '../../../common/components/icons'
-import { Modal, ModalHeader, SuccessModalBody } from '../../../common/components/Modal'
 import {
+  Modal,
+  ModalHeader,
+  SuccessModalBody,
   BalanceInfo,
   InfoTitle,
   InfoValue,
   LockedAccount,
   TransactionAmountInfo,
   TransactionAmountInfoText,
-} from '../../../common/components/Modals'
+} from '../../../common/components/Modal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { AccountInfo } from '../../components/AccountInfo'
 import { useBalance } from '../../hooks/useBalance'
