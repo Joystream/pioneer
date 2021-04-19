@@ -42,6 +42,7 @@ Complex.args = {
     { title: 'Description' },
     { title: 'Short & opening description', isBabyStep: true },
     { title: 'Application process', isBabyStep: true },
+    { title: 'Reward' },
     { title: 'Stake' },
     { title: 'Application form' },
   ],
