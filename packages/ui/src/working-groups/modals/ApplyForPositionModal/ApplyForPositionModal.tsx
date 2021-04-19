@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Modal } from '../../../common/components/Modal'
+import { ButtonPrimary } from '../../../common/components/buttons'
+import { Modal, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { StepperModalBody } from '../../../common/components/StepperModal'
 import { useModal } from '../../../common/hooks/useModal'
 import { ModalWithDataCall } from '../../../common/providers/modal/types'
@@ -13,7 +14,11 @@ export const ApplyForPositionModal = () => {
 
   return (
     <Modal onClose={hideModal} modalSize="l">
+      <ModalHeader onClick={hideModal} title="Apply for role" />
       <StepperModalBody>Apply!</StepperModalBody>
+      <ModalFooter>
+        <ButtonPrimary>Next step</ButtonPrimary>
+      </ModalFooter>
     </Modal>
   )
 }
