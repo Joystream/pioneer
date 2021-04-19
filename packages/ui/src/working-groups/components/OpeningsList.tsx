@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
-import { ButtonGhost, ButtonsGroup } from '../../common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '../../common/components/buttons'
 import { Toggle, ToggleButton } from '../../common/components/buttons/Toggle'
 import { Arrow } from '../../common/components/icons'
 import { List, ListItem } from '../../common/components/List'
@@ -15,8 +15,10 @@ import {
 import { TextBig, TextInlineBig, TokenValue } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
 import { Colors, Overflow, Transitions } from '../../common/constants'
+import { useModal } from '../../common/hooks/useModal'
 import { useToggle } from '../../common/hooks/useToggle'
 import { relativeTime } from '../../common/model/relativeTime'
+import { ApplyForRoleModalCall } from '../modals/ApplyForRoleModal'
 import { WorkingGroupOpening } from '../types'
 
 export interface OpeningsListProps {
@@ -95,6 +97,8 @@ const OpeningListItem = ({ opening }: Props) => (
 )
 
 const OpeningDetails = ({ opening }: Props) => {
+  const { showModal } = useModal()
+
   return (
     <OpenedContainer>
       <OpenedWrapper>
@@ -141,6 +145,12 @@ const OpeningDetails = ({ opening }: Props) => {
             <Arrow direction="left" />
             Learn more
           </ButtonGhost>
+          <ButtonPrimary
+            size="medium"
+            onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
+          >
+            Apply now
+          </ButtonPrimary>
         </ButtonsGroup>
       </OpenedWrapper>
     </OpenedContainer>
