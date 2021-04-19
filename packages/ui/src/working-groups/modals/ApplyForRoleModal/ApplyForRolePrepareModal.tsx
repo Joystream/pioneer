@@ -60,7 +60,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
   }
 
   const nextStep = useCallback(() => {
-    if (step > 1) {
+    if (step >= 1) {
       return onSubmit()
     }
     setStep((step) => step + 1)
@@ -82,9 +82,9 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
               {step === 0 && (
                 <>
                   <Row>
-                    <h4>1. Select an account</h4>
-                    <TextMedium>First please select an account for staking</TextMedium>
-                    <InputComponent label="Select an Account for Staking" required inputSize="l">
+                    <h4>Select an account</h4>
+                    <TextMedium>First please select an account for staking.</TextMedium>
+                    <InputComponent label="Select an account for Staking" required inputSize="l">
                       <SelectAccount onChange={(account) => changeField('account', account)} />
                     </InputComponent>
                   </Row>
@@ -96,7 +96,13 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
                       role. This stake will be returned to you when the hiring process is complete, whether or not you
                       are hired, and will also be used to rank applications.
                     </TextMedium>
-                    <InputComponent required id="amount-input" inputWidth="s" units="JOY">
+                    <InputComponent
+                      id="amount-input"
+                      label="Select amount for Staking"
+                      inputWidth="s"
+                      units="JOY"
+                      required
+                    >
                       <InputNumber
                         id="amount-input"
                         value={formatTokenValue(new BN(amount))}
