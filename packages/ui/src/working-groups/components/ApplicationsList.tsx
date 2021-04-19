@@ -31,7 +31,7 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
       <br />
       Reward per block
     </div>
-    <div>{/*application.opening.applicants.current} / {application.opening.applicants.total*/} Applications</div>
+    <div>current / total Applications</div>
     <div>
       <TokenValue value={new BN(100)} />
       <br />
