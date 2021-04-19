@@ -6,7 +6,7 @@ interface UseOpeningsParams {
 }
 
 export const useOpenings = ({ groupId }: UseOpeningsParams = {}) => {
-  const { loading, data } = useGetWorkingGroupOpeningsQuery({ variables: { groupId: groupId } })
+  const { loading, data } = useGetWorkingGroupOpeningsQuery({ variables: { group_eq: groupId } })
 
   const groups = data?.workingGroupOpenings ?? []
 

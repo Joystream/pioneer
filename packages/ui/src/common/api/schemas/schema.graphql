@@ -519,6 +519,10 @@ input WorkingGroupOpeningsWhereInput {
   group_eq: ID
 }
 
+input WorkingGroupApplicationsWhereInput {
+  applicant_in: [ID!]
+}
+
 input WorkersWhereInput {
   group_eq: ID
 }
@@ -568,6 +572,7 @@ type Query {
   workingGroup(where: WorkingGroupWhereUniqueInput!): WorkingGroup
   workers(offset: Int, limit: Int = 50, where: WorkersWhereInput): [Worker!]!
   workingGroupOpenings(offset: Int, limit: Int = 50, where: WorkingGroupOpeningsWhereInput): [WorkingGroupOpening!]
+  workingGroupApplications(offset: Int, limit: Int = 50, where: WorkingGroupApplicationsWhereInput): [WorkingGroupApplication!]
 }
 
 enum EventType {

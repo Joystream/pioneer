@@ -10,11 +10,14 @@ import {
 import {
   GetWorkersQueryResult,
   GetWorkersQueryVariables,
+  GetWorkingGroupApplicationsQueryResult,
+  GetWorkingGroupApplicationsQueryVariables,
   GetWorkingGroupOpeningsQueryResult,
   GetWorkingGroupsQueryResult,
 } from '../working-groups/queries'
 
 import { MockMember } from './data'
+import { MockApplication } from './data/mockApplications'
 import { MockWorker } from './data/mockWorkingGroups'
 
 type QueryResolver<ArgsType extends Record<string, unknown>, ReturnType = unknown> = (
@@ -110,6 +113,21 @@ export const getWorkersResolver: QueryResolver<{ where: GetWorkersQueryVariables
   const { models } = groupId
     ? schema.where('Worker', (worker: MockWorker) => groupId == worker.groupId)
     : schema.all('Worker')
+
+  return models
+}
+
+export const getWorkingGroupApplicationsResolver: QueryResolver<
+  { where: GetWorkingGroupApplicationsQueryVariables },
+  GetWorkingGroupApplicationsQueryResult[]
+> = (obj, args, { mirageSchema: schema }) => {
+  const applicantIds = args.where.applicant_in
+
+  const { models } = applicantIds
+    ? schema.where('WorkingGroupApplication', (application: MockApplication) =>
+        applicantIds.includes(application.applicantId)
+      )
+    : schema.all()
 
   return models
 }

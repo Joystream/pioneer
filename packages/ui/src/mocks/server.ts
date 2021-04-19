@@ -5,6 +5,7 @@ import { AnyRegistry } from 'miragejs/-types'
 import schema from '../common/api/schemas/schema.graphql'
 
 import { seedBlocks, seedMembers } from './data'
+import { seedApplications } from './data/mockApplications'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
 import {
@@ -15,6 +16,7 @@ import {
   getWorkingGroupsResolver,
   searchMembersResolver,
   getWorkingGroupResolver,
+  getWorkingGroupApplicationsResolver,
 } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
@@ -49,6 +51,7 @@ export const makeServer = (environment = 'development') => {
               workingGroup: getWorkingGroupResolver,
               workingGroupOpenings: getWorkingGroupOpeningsResolver,
               workers: getWorkersResolver,
+              workingGroupApplications: getWorkingGroupApplicationsResolver,
             },
           },
         })
@@ -63,6 +66,7 @@ export const makeServer = (environment = 'development') => {
       seedWorkingGroups(server)
       seedOpeningStatuses(server)
       seedOpenings(server)
+      seedApplications(server)
     },
   })
 }

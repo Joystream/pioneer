@@ -5,7 +5,7 @@ import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { Label, TextBig } from '../../../common/components/typography'
 import { ApplicationsList } from '../../../working-groups/components/ApplicationsList'
-import { useApplications } from '../../../working-groups/hooks/useApplications'
+import { useMyApplications } from '../../../working-groups/hooks/useMyApplications'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
@@ -18,7 +18,7 @@ export const MyApplications = () => {
     ],
     []
   )
-  const applications = useApplications()
+  const { applications } = useMyApplications()
 
   return (
     <AppPage crumbs={crumbs}>
@@ -29,9 +29,9 @@ export const MyApplications = () => {
       <TextBig>My Applications</TextBig>
       <MainPanel>
         <Label>CURRENT APPLICATIONS</Label>
-        <ApplicationsList applications={applications} />
+        <ApplicationsList applications={applications ?? []} />
         <Label>PAST APPLICATIONS</Label>
-        <ApplicationsList applications={applications} />
+        <ApplicationsList applications={applications ?? []} />
       </MainPanel>
     </AppPage>
   )

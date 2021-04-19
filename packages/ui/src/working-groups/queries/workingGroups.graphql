@@ -64,8 +64,8 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   }
 }
 
-query getWorkingGroupOpenings($groupId: ID) {
-  workingGroupOpenings(where: {group_eq: $groupId}) {
+query getWorkingGroupOpenings($group_eq: ID) {
+  workingGroupOpenings(where: { group_eq: $group_eq }) {
     ... WorkingGroupOpeningFields
   }
 }
@@ -73,5 +73,26 @@ query getWorkingGroupOpenings($groupId: ID) {
 query GetWorkingGroup($id: ID!) {
   workingGroup(where: { id: $id }) {
     ... WorkingGroupFields
+  }
+}
+
+fragment WorkingGroupApplicationFields on WorkingGroupApplication {
+  id
+  opening {
+    group {
+      name
+    }
+    type
+    rewardPerBlock
+  }
+  applicant {
+    ...MemberFields
+  }
+}
+
+
+query GetWorkingGroupApplications($applicant_in: [ID!]) {
+  workingGroupApplications(where: { applicant_in: $applicant_in }) {
+    ...WorkingGroupApplicationFields
   }
 }

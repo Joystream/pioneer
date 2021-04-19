@@ -1,0 +1,38 @@
+[
+  {
+    "id": "0",
+    "openingId": "0",
+    "applicantId": "0",
+    "roleAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "rewardAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "answers": [],
+    "statusId": "==== INSERT A STATUS ====",
+    "createdAtBlockId": "block-1",
+    "createdAtTime": ""
+  },
+  {
+    "id": "1",
+    "openingId": "0",
+    "applicantId": "1",
+    "roleAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "rewardAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "answers": [],
+    "statusId": "==== INSERT A STATUS ====",
+    "createdAtBlockId": "block-1",
+    "createdAtTime": ""
+  },
+  {
+    "id": "2",
+    "openingId": "1",
+    "applicantId": "2",
+    "roleAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "rewardAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+    "answers": [],
+    "statusId": "==== INSERT A STATUS ====",
+    "createdAtBlockId": "block-1",
+    "createdAtTime": ""
+  }
+]
