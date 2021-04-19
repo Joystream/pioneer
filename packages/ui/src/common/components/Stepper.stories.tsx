@@ -8,6 +8,11 @@ import { TemplateBlock } from './storybookParts/previewStyles'
 export default {
   title: 'Common/Stepper',
   component: Stepper,
+  argTypes: {
+    steps: {
+      control: false,
+    },
+  },
 } as Meta
 
 const Template: Story<StepperProps> = (args) => {

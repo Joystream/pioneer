@@ -14,32 +14,27 @@ export interface StepperProps {
   active: number
 }
 
-export const Stepper = ({ steps }: StepperProps) => {
+export const Stepper = ({ steps, active = 0 }: StepperProps) => {
   const stepsToRender = steps.map((step, index) => {
     return {
       ...step,
       number: index + 1,
-      isActive: false,
-      isPast: false,
+      isActive: index === active,
+      isPast: index < active,
     }
   })
-
-  stepsToRender[0].isPast = true
-  stepsToRender[1].isActive = true
 
   return (
     <StepperWrapper>
       <StepsColumn>
-        {stepsToRender.map((value) => {
-          return (
-            <Step key={value.title}>
-              {value.isActive && <ActiveStep> ▶ </ActiveStep>}
-              {value.isPast && <DoneStep> ✔ </DoneStep>}
-              {!value.isPast && !value.isActive && <StepNumber>{value.number}</StepNumber>}
-              {value.title}
-            </Step>
-          )
-        })}
+        {stepsToRender.map((value) => (
+          <Step key={value.title}>
+            {value.isActive && <ActiveStep> ▶ </ActiveStep>}
+            {value.isPast && <DoneStep> ✔ </DoneStep>}
+            {!value.isPast && !value.isActive && <StepNumber>{value.number}</StepNumber>}
+            {value.title}
+          </Step>
+        ))}
       </StepsColumn>
       <StepDescriptionColumn>Col 2</StepDescriptionColumn>
       <StepperBody>Col 3</StepperBody>
