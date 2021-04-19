@@ -37,11 +37,11 @@ export const Complex = Template.bind({})
 Complex.args = {
   steps: [
     { title: 'General parameters' },
-    { title: 'Working Group title & limits' },
-    { title: 'Starting date & duration' },
+    { title: 'Working Group title & limits', isBabyStep: true },
+    { title: 'Starting date & duration', isBabyStep: true },
     { title: 'Description' },
-    { title: 'Short & opening description' },
-    { title: 'Application process' },
+    { title: 'Short & opening description', isBabyStep: true },
+    { title: 'Application process', isBabyStep: true },
     { title: 'Stake' },
     { title: 'Application form' },
   ],

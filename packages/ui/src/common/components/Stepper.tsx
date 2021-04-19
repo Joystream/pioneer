@@ -7,6 +7,7 @@ import { ModalBody } from './Modal'
 
 interface StepperStep {
   title: string
+  isBabyStep?: boolean
 }
 
 export interface StepperProps {
@@ -15,10 +16,12 @@ export interface StepperProps {
 }
 
 export const Stepper = ({ steps, active = 0 }: StepperProps) => {
+  let stepCounter = 1
+
   const stepsToRender = steps.map((step, index) => {
     return {
       ...step,
-      number: index + 1,
+      number: step.isBabyStep ? null : stepCounter++,
       isActive: index === active,
       isPast: index < active,
     }
