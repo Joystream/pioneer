@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components'
 
 import { Colors } from '../constants'
 
-import { ModalBody } from './Modal'
-
 interface Step {
   title: string
   isBabyStep?: boolean
@@ -37,22 +35,24 @@ export const Stepper = ({ steps, active = 0 }: StepperProps) => {
   })
 
   return (
-    <StepperModalWrapper>
-      <StepsColumn>
-        {stepsToRender.map((value) => (
-          <StepWrap key={value.title}>
-            <StepNumber isBaby={value.isBabyStep} isActive={value.isActive} isPast={value.isPast}>
-              {getStepFace(value)}
-            </StepNumber>
-            {value.title}
-          </StepWrap>
-        ))}
-      </StepsColumn>
-      <StepDescriptionColumn>Col 2</StepDescriptionColumn>
-      <StepperBody>Col 3</StepperBody>
-    </StepperModalWrapper>
+    <StepperWrap>
+      {stepsToRender.map((value) => (
+        <StepWrap key={value.title}>
+          <StepNumber isBaby={value.isBabyStep} isActive={value.isActive} isPast={value.isPast}>
+            {getStepFace(value)}
+          </StepNumber>
+          {value.title}
+        </StepWrap>
+      ))}
+    </StepperWrap>
   )
 }
+
+export const StepperWrap = styled.div`
+  background-color: ${Colors.Black[800]};
+  color: ${Colors.White};
+  padding: 14px;
+`
 
 const StepWrap = styled.div`
   margin: 5px 0;
@@ -91,29 +91,4 @@ const StepNumber = styled.div<{ isBaby?: boolean; isActive: boolean; isPast: boo
       background-color: ${Colors.Black[500]};
       border-color: ${Colors.Black[500]};
     `}
-`
-
-export const StepperModalBody = styled(ModalBody)`
-  padding: 0;
-`
-
-const StepperModalWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 184px 336px 1fr;
-  min-height: 200px;
-`
-
-const StepsColumn = styled.div`
-  background-color: ${Colors.Black[800]};
-  color: ${Colors.White};
-  padding: 14px;
-`
-
-const StepDescriptionColumn = styled.div`
-  background-color: ${Colors.Black[100]};
-  padding: 14px;
-`
-
-const StepperBody = styled.div`
-  padding: 14px;
 `
