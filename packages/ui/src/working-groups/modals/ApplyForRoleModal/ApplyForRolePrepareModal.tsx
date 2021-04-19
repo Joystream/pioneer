@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '../../../accounts/components/SelectAccount'
@@ -37,13 +37,17 @@ const StakeStepFormSchema = Yup.object().shape({
   amount: Yup.string().required(),
 })
 
-export const ApplyForRolePrepareModal = () => {
+interface Props {
+  onSubmit: () => void
+}
+
+export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
   const {
     hideModal,
     modalData: { opening },
   } = useModal<ApplyForRoleModalCall>()
   const [state] = useState<ModalState>('PREPARE')
-  const [step] = useState(0)
+  const [step, setStep] = useState(0)
   const [amount, setAmount] = useNumberInput(0)
 
   const { dispatch, isValid } = useForm<StakeStepForm>(StakeStepFormSchema, {
@@ -54,6 +58,13 @@ export const ApplyForRolePrepareModal = () => {
   const changeField = (type: keyof StakeStepForm, value: string | Account) => {
     dispatch({ type, value })
   }
+
+  const nextStep = useCallback(() => {
+    if (step > 1) {
+      return onSubmit()
+    }
+    setStep((step) => step + 1)
+  }, [step])
 
   if (state === 'PREPARE') {
     return (
@@ -68,35 +79,48 @@ export const ApplyForRolePrepareModal = () => {
             </StepDescriptionColumn>
 
             <StepperBody>
-              <Row>
-                <h4>1. Select an account</h4>
-                <TextMedium>First please select an account for staking</TextMedium>
-                <InputComponent label="Select an Account for Staking" required inputSize="l">
-                  <SelectAccount onChange={(account) => changeField('account', account)} />
-                </InputComponent>
-              </Row>
+              {step === 0 && (
+                <>
+                  <Row>
+                    <h4>1. Select an account</h4>
+                    <TextMedium>First please select an account for staking</TextMedium>
+                    <InputComponent label="Select an Account for Staking" required inputSize="l">
+                      <SelectAccount onChange={(account) => changeField('account', account)} />
+                    </InputComponent>
+                  </Row>
 
-              <Row>
-                <h4>2. Stake</h4>
-                <TextMedium>
-                  You must stake at least <ValueInJoys>{formatTokenValue(100_000)}</ValueInJoys> to apply for this role.
-                  This stake will be returned to you when the hiring process is complete, whether or not you are hired,
-                  and will also be used to rank applications.
-                </TextMedium>
-                <InputComponent required id="amount-input" inputWidth="s" units="JOY">
-                  <InputNumber
-                    id="amount-input"
-                    value={formatTokenValue(new BN(amount))}
-                    placeholder="0"
-                    onChange={(event) => setAmount(event.target.value)}
-                  />
-                </InputComponent>
-              </Row>
+                  <Row>
+                    <h4>2. Stake</h4>
+                    <TextMedium>
+                      You must stake at least <ValueInJoys>{formatTokenValue(100_000)}</ValueInJoys> to apply for this
+                      role. This stake will be returned to you when the hiring process is complete, whether or not you
+                      are hired, and will also be used to rank applications.
+                    </TextMedium>
+                    <InputComponent required id="amount-input" inputWidth="s" units="JOY">
+                      <InputNumber
+                        id="amount-input"
+                        value={formatTokenValue(new BN(amount))}
+                        placeholder="0"
+                        onChange={(event) => setAmount(event.target.value)}
+                      />
+                    </InputComponent>
+                  </Row>
+                </>
+              )}
+              {step === 1 && (
+                <>
+                  <Row>
+                    <h4>Application</h4>
+                  </Row>
+                </>
+              )}
             </StepperBody>
           </StepperModalWrapper>
         </StepperModalBody>
         <ModalFooter>
-          <ButtonPrimary disabled={!isValid}>Next step</ButtonPrimary>
+          <ButtonPrimary disabled={isValid} onClick={nextStep}>
+            Next step
+          </ButtonPrimary>
         </ModalFooter>
       </Modal>
     )
