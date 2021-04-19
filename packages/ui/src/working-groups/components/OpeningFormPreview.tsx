@@ -6,7 +6,7 @@ import { TextMedium, TokenValue } from '../../common/components/typography'
 import { relativeTime } from '../../common/model/relativeTime'
 import { WorkingGroupOpening } from '../types'
 
-type OpeningFormPreviewProps = { opening: WorkingGroupOpening }
+export type OpeningFormPreviewProps = { opening: WorkingGroupOpening }
 
 export const OpeningFormPreview = (props: OpeningFormPreviewProps) => (
   <>
