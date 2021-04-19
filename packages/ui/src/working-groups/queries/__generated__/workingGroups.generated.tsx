@@ -97,6 +97,7 @@ export type WorkingGroupApplicationFieldsFragment = {
   opening: {
     __typename: 'WorkingGroupOpening'
     type: Types.WorkingGroupOpeningType
+    rewardPerBlock: any
     group: { __typename: 'WorkingGroup'; name: string }
   }
   applicant: { __typename: 'Membership' } & MemberFieldsFragment
@@ -186,6 +187,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
         name
       }
       type
+      rewardPerBlock
     }
     applicant {
       ...MemberFields

@@ -7,6 +7,7 @@ export interface WorkingGroupApplication {
   opening: {
     type: string
     groupName: string
+    reward: BN
   }
   applicant?: Member
   roleAccount?: string

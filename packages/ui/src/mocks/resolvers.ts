@@ -122,7 +122,6 @@ export const getWorkingGroupApplicationsResolver: QueryResolver<
   GetWorkingGroupApplicationsQueryResult[]
 > = (obj, args, { mirageSchema: schema }) => {
   const applicantIds = args.where.applicant_in
-  console.error(applicantIds)
 
   const { models } = applicantIds
     ? schema.where('WorkingGroupApplication', (application: MockApplication) =>

@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import { useMemo } from 'react'
 
 import { useMyMemberships } from '../../memberships/hooks/useMyMemberships'
@@ -23,6 +24,7 @@ function toApplications(application: WorkingGroupApplicationFieldsFragment) {
     opening: {
       type: application.opening.type,
       groupName: application.opening.group.name,
+      reward: new BN(application.opening.rewardPerBlock),
     },
   }
 }
