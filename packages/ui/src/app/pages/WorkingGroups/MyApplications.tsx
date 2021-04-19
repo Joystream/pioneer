@@ -18,7 +18,7 @@ export const MyApplications = () => {
     ],
     []
   )
-  const applications = useApplications()
+  const { applications } = useApplications()
 
   return (
     <AppPage crumbs={crumbs}>

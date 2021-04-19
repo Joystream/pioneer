@@ -1,32 +1,28 @@
-import BN from 'bn.js'
+import { useMemo } from 'react'
 
 import { useMyMemberships } from '../../memberships/hooks/useMyMemberships'
-import { WorkingGroupOpening } from '../types'
+import { useGetWorkingGroupApplicationsQuery, WorkingGroupApplicationFieldsFragment } from '../queries'
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
-export function useApplications(): WorkingGroupApplication[] {
+interface UseApplications {
+  isLoading: boolean
+  applications: WorkingGroupApplication[] | undefined
+}
+
+export function useApplications(): UseApplications {
   const { members } = useMyMemberships()
-  const basicOpening: WorkingGroupOpening = {
-    id: '0',
-    expectedEnding: '',
-    title: '',
-    type: 'REGULAR',
-    reward: {
-      value: new BN(10),
-      interval: 10,
-    },
-    applicants: {
-      current: 1,
-      total: 1,
-    },
-    hiring: {
-      current: 2,
-      total: 2,
+  const params = { variables: { applicant_in: members.map((m) => m.id) } }
+  const { loading, data } = useGetWorkingGroupApplicationsQuery(params)
+  const applications = useMemo(() => data?.workingGroupApplications?.map(toApplications), [loading, data])
+  return { isLoading: loading, applications }
+}
+
+function toApplications(application: WorkingGroupApplicationFieldsFragment) {
+  return {
+    id: application.id,
+    opening: {
+      type: application.opening.type,
+      groupName: application.opening.group.name,
     },
   }
-
-  return [
-    { id: '0', applicant: members[0], opening: { ...basicOpening, title: 'Group Member' } },
-    { id: '1', applicant: members[0], opening: { ...basicOpening, title: 'Group Leader', type: 'LEADER' } },
-  ]
 }

@@ -6,9 +6,9 @@ import { List, ListItem } from '../../common/components/List'
 import { TokenValue } from '../../common/components/typography'
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
-export const ApplicationsList = ({ applications }: { applications: WorkingGroupApplication[] }) => (
+export const ApplicationsList = ({ applications }: { applications: WorkingGroupApplication[] | undefined }) => (
   <List>
-    {applications.map((application) => (
+    {applications?.map((application) => (
       <ListItem key={application.id}>
         <ApplicationListItem application={application} />
       </ListItem>
@@ -19,19 +19,17 @@ export const ApplicationsList = ({ applications }: { applications: WorkingGroupA
 const ApplicationListItem = ({ application }: { application: WorkingGroupApplication }) => (
   <OpeningWrap>
     <div>id: {application.id}</div>
-    <h4>{application.opening.title}</h4>
+    <h4>{/*application.opening.title*/}</h4>
     <div>
       <h6>6 days 23 minutes</h6>
       Time left
     </div>
     <div>
-      <TokenValue value={application.opening.reward.value} />
+      <TokenValue value={/*application.opening?.reward?.value*/ 0} />
       <br />
-      Reward per {application.opening.reward.interval} blocks.
+      Reward per {/*application.opening.reward.interval*/} blocks.
     </div>
-    <div>
-      {application.opening.applicants.current} / {application.opening.applicants.total} Applications
-    </div>
+    <div>{/*application.opening.applicants.current} / {application.opening.applicants.total*/} Applications</div>
     <div>
       <TokenValue value={new BN(100)} />
       <br />
