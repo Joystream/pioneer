@@ -5,12 +5,12 @@ import { useMyMemberships } from '../../memberships/hooks/useMyMemberships'
 import { useGetWorkingGroupApplicationsQuery, WorkingGroupApplicationFieldsFragment } from '../queries'
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
-interface UseApplications {
+interface UseMyApplications {
   isLoading: boolean
-  applications: WorkingGroupApplication[] | undefined
+  applications?: WorkingGroupApplication[]
 }
 
-export function useApplications(): UseApplications {
+export function useMyApplications(): UseMyApplications {
   const { members } = useMyMemberships()
   const params = { variables: { applicant_in: members.map((m) => m.id) } }
   const { loading, data } = useGetWorkingGroupApplicationsQuery(params)
