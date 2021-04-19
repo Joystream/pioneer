@@ -4,7 +4,14 @@ import React from 'react'
 
 import { Account } from '../../../src/accounts/types'
 import { ApiContext } from '../../../src/common/providers/api/context'
+import { ModalContext } from '../../../src/common/providers/modal/context'
+import { UseModal } from '../../../src/common/providers/modal/types'
+import { seedOpenings, seedOpeningStatuses } from '../../../src/mocks/data/mockOpenings'
+import { seedWorkingGroups } from '../../../src/mocks/data/mockWorkingGroups'
+import { fixAssociations } from '../../../src/mocks/server'
 import { ApplyForRoleModal } from '../../../src/working-groups/modals/ApplyForRoleModal'
+import { WorkingGroupOpeningFieldsFragment } from '../../../src/working-groups/queries'
+import { asWorkingGroupOpening } from '../../../src/working-groups/types'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -21,21 +28,16 @@ jest.mock('../../../src/accounts/hooks/useAccounts', () => {
   }
 })
 
-const mockCallback = jest.fn()
-
-jest.mock('../../../src/common/hooks/useModal', () => {
-  return {
-    useModal: () => ({
-      showModal: mockCallback,
-      hideModal: () => null,
-    }),
-  }
-})
-
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()
+  const useModal: UseModal<any> = {
+    hideModal: jest.fn(),
+    showModal: jest.fn(),
+    modal: null,
+    modalData: undefined,
+  }
 
-  setupMockServer()
+  const server = setupMockServer()
 
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -44,6 +46,15 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   beforeEach(async () => {
+    fixAssociations((server.server as unknown) as any)
+    seedWorkingGroups(server.server)
+    seedOpeningStatuses(server.server)
+    seedOpenings(server.server)
+
+    const fields = (server.server?.schema.first('WorkingGroupOpening') as unknown) as WorkingGroupOpeningFieldsFragment
+    const opening = asWorkingGroupOpening(fields)
+    useModal.modalData = { opening }
+
     stubDefaultBalances(api)
   })
 
@@ -55,13 +66,15 @@ describe('UI: ApplyForRoleModal', () => {
 
   function renderModal() {
     return render(
-      <MockQueryNodeProviders>
-        <MockKeyringProvider>
-          <ApiContext.Provider value={api}>
-            <ApplyForRoleModal />
-          </ApiContext.Provider>
-        </MockKeyringProvider>
-      </MockQueryNodeProviders>
+      <ModalContext.Provider value={useModal}>
+        <MockQueryNodeProviders>
+          <MockKeyringProvider>
+            <ApiContext.Provider value={api}>
+              <ApplyForRoleModal />
+            </ApiContext.Provider>
+          </MockKeyringProvider>
+        </MockQueryNodeProviders>
+      </ModalContext.Provider>
     )
   }
 })

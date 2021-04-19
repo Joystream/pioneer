@@ -4,13 +4,11 @@ import { ButtonPrimary } from '../../../common/components/buttons'
 import { Modal, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { StepperModalBody } from '../../../common/components/StepperModal'
 import { useModal } from '../../../common/hooks/useModal'
-import { ModalWithDataCall } from '../../../common/providers/modal/types'
-import { WorkingGroupOpening } from '../../types'
 
-export type ApplyForPositionModalCall = ModalWithDataCall<'ApplyForRoleModal', { opening: WorkingGroupOpening }>
+import { ApplyForRoleModalCall } from '.'
 
 export const ApplyForRoleModal = () => {
-  const { hideModal } = useModal<ApplyForPositionModalCall>()
+  const { hideModal } = useModal<ApplyForRoleModalCall>()
 
   return (
     <Modal onClose={hideModal} modalSize="l">
