@@ -18,7 +18,7 @@ import { Colors, Overflow, Transitions } from '../../common/constants'
 import { useModal } from '../../common/hooks/useModal'
 import { useToggle } from '../../common/hooks/useToggle'
 import { relativeTime } from '../../common/model/relativeTime'
-import { ApplyForPositionModalCall } from '../modals/ApplyForPositionModal'
+import { ApplyForRoleModalCall } from '../modals/ApplyForRoleModal'
 import { WorkingGroupOpening } from '../types'
 
 export interface OpeningsListProps {
@@ -147,7 +147,7 @@ const OpeningDetails = ({ opening }: Props) => {
           </ButtonGhost>
           <ButtonPrimary
             size="medium"
-            onClick={() => showModal<ApplyForPositionModalCall>({ modal: 'ApplyForPositionModal', data: { opening } })}
+            onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
           >
             Apply now
           </ButtonPrimary>

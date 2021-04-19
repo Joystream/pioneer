@@ -7,9 +7,9 @@ import { useModal } from '../../../common/hooks/useModal'
 import { ModalWithDataCall } from '../../../common/providers/modal/types'
 import { WorkingGroupOpening } from '../../types'
 
-export type ApplyForPositionModalCall = ModalWithDataCall<'ApplyForPositionModal', { opening: WorkingGroupOpening }>
+export type ApplyForPositionModalCall = ModalWithDataCall<'ApplyForRoleModal', { opening: WorkingGroupOpening }>
 
-export const ApplyForPositionModal = () => {
+export const ApplyForRoleModal = () => {
   const { hideModal } = useModal<ApplyForPositionModalCall>()
 
   return (
