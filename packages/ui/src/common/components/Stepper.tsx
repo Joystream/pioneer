@@ -8,39 +8,52 @@ interface Step {
   isBabyStep?: boolean
 }
 
+interface StepToRender extends Step {
+  number: null | number
+  isPast: boolean
+  isActive: boolean
+}
+
 export interface StepperProps {
   steps: Step[]
   active: number
 }
 
-const getStepFace = (step: RenderStep) => {
-  if (step.isBabyStep) return null
-  if (step.isActive) return '▶'
-  if (step.isPast) return '✔'
+const getStepFace = (step: StepToRender) => {
+  if (step.isBabyStep) {
+    return null
+  }
+
+  if (step.isActive) {
+    return '▶'
+  }
+
+  if (step.isPast) {
+    return '✔'
+  }
+
   return step.number
 }
 
-type RenderStep = { number: null | number; isPast: boolean; title: string; isActive: boolean; isBabyStep?: boolean }
-
-export const Stepper = ({ steps, active = 0 }: StepperProps) => {
+const asStepsToRender = (steps: Step[], active: number): StepToRender[] => {
   let stepCounter = 1
 
-  const stepsToRender: RenderStep[] = steps.map((step, index) => {
-    return {
-      ...step,
-      number: step.isBabyStep ? null : stepCounter++,
-      isActive: index === active,
-      isPast: index < active,
-    }
-  })
+  return steps.map((step, index) => ({
+    ...step,
+    number: step.isBabyStep ? null : stepCounter++,
+    isActive: index === active,
+    isPast: index < active,
+  }))
+}
+
+export const Stepper = ({ steps, active = 0 }: StepperProps) => {
+  const stepsToRender = asStepsToRender(steps, active)
 
   return (
     <StepperWrap>
       {stepsToRender.map((value) => (
         <StepWrap key={value.title}>
-          <StepNumber isBaby={value.isBabyStep} isActive={value.isActive} isPast={value.isPast}>
-            {getStepFace(value)}
-          </StepNumber>
+          <StepNumber {...value}>{getStepFace(value)}</StepNumber>
           {value.title}
         </StepWrap>
       ))}
@@ -59,7 +72,9 @@ const StepWrap = styled.div`
   display: flex;
 `
 
-const StepNumber = styled.div<{ isBaby?: boolean; isActive: boolean; isPast: boolean }>`
+type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBabyStep'>
+
+const StepNumber = styled.div<StepNumberProps>`
   display: inline-block;
   border-radius: 20px;
   width: 30px;
@@ -69,8 +84,8 @@ const StepNumber = styled.div<{ isBaby?: boolean; isActive: boolean; isPast: boo
   text-align: center;
   margin-right: 4px;
 
-  ${({ isBaby }) =>
-    isBaby &&
+  ${({ isBabyStep }: StepNumberProps) =>
+    isBabyStep &&
     css`
       border-width: 4px;
       border-radius: 4px;
@@ -78,14 +93,14 @@ const StepNumber = styled.div<{ isBaby?: boolean; isActive: boolean; isPast: boo
       max-width: 0;
     `}
 
-  ${({ isActive }) =>
+  ${({ isActive }: StepNumberProps) =>
     isActive &&
     css`
       background-color: ${Colors.LogoPurple};
       border-color: ${Colors.LogoPurple};
     `}
 
-  ${({ isPast }) =>
+  ${({ isPast }: StepNumberProps) =>
     isPast &&
     css`
       background-color: ${Colors.Black[500]};
