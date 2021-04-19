@@ -30,7 +30,7 @@ Default.args = {
   opening: {
     id: '123',
     title: 'Storage working group leader',
-    expectedEnding: '2021-03-09T10:18:04.155Z',
+    expectedEnding: '2022-03-09T10:18:04.155Z',
     type: 'LEADER',
     reward: { value: new BN(1000), interval: 3600 },
     applicants: { current: 2, total: 10 },
