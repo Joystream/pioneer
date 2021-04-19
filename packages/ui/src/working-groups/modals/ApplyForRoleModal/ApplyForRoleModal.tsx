@@ -1,7 +1,9 @@
 import BN from 'bn.js'
 import React, { useState } from 'react'
+import * as Yup from 'yup'
 
 import { SelectAccount } from '../../../accounts/components/SelectAccount'
+import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
 import { Modal, ModalFooter, ModalHeader, Row } from '../../../common/components/Modal'
@@ -13,14 +15,26 @@ import {
   StepperModalWrapper,
 } from '../../../common/components/StepperModal'
 import { TextMedium, ValueInJoys } from '../../../common/components/typography'
+import { useForm } from '../../../common/hooks/useForm'
 import { useModal } from '../../../common/hooks/useModal'
 import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
+import { AccountSchema } from '../../../memberships/model/validation'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 
 import { ApplyForRoleModalCall } from '.'
 
 const steps = [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }]
+
+interface StakeStepForm {
+  account?: Account
+  amount?: string
+}
+
+const StakeStepFormSchema = Yup.object().shape({
+  account: AccountSchema.required(),
+  amount: Yup.string().required(),
+})
 
 export const ApplyForRoleModal = () => {
   const {
@@ -29,6 +43,15 @@ export const ApplyForRoleModal = () => {
   } = useModal<ApplyForRoleModalCall>()
   const [step] = useState(0)
   const [amount, setAmount] = useNumberInput(0)
+
+  const { dispatch, isValid } = useForm<StakeStepForm>(StakeStepFormSchema, {
+    account: undefined,
+    amount: undefined,
+  })
+
+  const changeField = (type: keyof StakeStepForm, value: string | Account) => {
+    dispatch({ type, value })
+  }
 
   return (
     <Modal onClose={hideModal} modalSize="l">
@@ -43,10 +66,10 @@ export const ApplyForRoleModal = () => {
 
           <StepperBody>
             <Row>
-              <h4>1. Select and account</h4>
+              <h4>1. Select an account</h4>
               <TextMedium>First please select an account for staking</TextMedium>
-              <InputComponent label="Select an Account for Staking" required>
-                <SelectAccount onChange={(a) => console.log(a)} />
+              <InputComponent label="Select an Account for Staking" required inputSize="l">
+                <SelectAccount onChange={(account) => changeField('account', account)} />
               </InputComponent>
             </Row>
 
@@ -70,7 +93,7 @@ export const ApplyForRoleModal = () => {
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonPrimary>Next step</ButtonPrimary>
+        <ButtonPrimary disabled={!isValid}>Next step</ButtonPrimary>
       </ModalFooter>
     </Modal>
   )
