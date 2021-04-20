@@ -40,7 +40,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
   const keyring = useKeyring()
 
-  const { state, dispatch, isValid, errors, validate } = useForm<FormFields>(InviteMemberSchema, {
+  const { state, isValid, errors, validate, changeField } = useForm<FormFields>(InviteMemberSchema, {
     name: '',
     rootAccount: undefined,
     controllerAccount: undefined,
@@ -65,7 +65,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <InputComponent label="Inviting member" inputSize="l">
-            <SelectMember onChange={(member) => dispatch({ type: 'invitor', value: member })} />
+            <SelectMember onChange={(member) => changeField('invitor', member)} />
           </InputComponent>
 
           <Row>
@@ -85,12 +85,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="root-account"
                 placeholder="Type"
                 value={rootAccount?.address ?? ''}
-                onChange={(event) =>
-                  dispatch({
-                    type: 'rootAccount',
-                    value: { name: undefined, address: event.target.value },
-                  })
-                }
+                onChange={(event) => changeField('rootAccount', { name: undefined, address: event.target.value })}
               />
             </InputComponent>
           </Row>
@@ -108,12 +103,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="controller-account"
                 placeholder="Type"
                 value={controllerAccount?.address ?? ''}
-                onChange={(event) =>
-                  dispatch({
-                    type: 'controllerAccount',
-                    value: { name: undefined, address: event.target.value },
-                  })
-                }
+                onChange={(event) => changeField('controllerAccount', { name: undefined, address: event.target.value })}
               />
             </InputComponent>
           </Row>
@@ -124,7 +114,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="member-name"
                 placeholder="Type"
                 value={name}
-                onChange={(event) => dispatch({ type: 'name', value: event.target.value })}
+                onChange={(event) => changeField('name', event.target.value)}
               />
             </InputComponent>
           </Row>
@@ -141,7 +131,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="member-handle"
                 placeholder="Type"
                 value={handle}
-                onChange={(event) => dispatch({ type: 'handle', value: event.target.value })}
+                onChange={(event) => changeField('handle', event.target.value)}
               />
             </InputComponent>
           </Row>
@@ -152,7 +142,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="member-about"
                 value={about}
                 placeholder="Type"
-                onChange={(event) => dispatch({ type: 'about', value: event.target.value })}
+                onChange={(event) => changeField('about', event.target.value)}
               />
             </InputComponent>
           </Row>
@@ -174,7 +164,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               <InputText
                 id="member-avatar"
                 value={avatarUri}
-                onChange={(event) => dispatch({ type: 'avatarUri', value: event.target.value })}
+                onChange={(event) => changeField('avatarUri', event.target.value)}
               />
             </InputComponent>
           </Row>

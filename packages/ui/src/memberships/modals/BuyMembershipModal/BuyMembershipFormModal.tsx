@@ -19,16 +19,16 @@ import {
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
 import { Help } from '../../../common/components/Help'
 import {
-  ModalFooter,
-  ModalFooterGroup,
-  ModalHeader,
-  ScrolledModal,
-  ScrolledModalBody,
-  ScrolledModalContainer,
   BalanceInfoNarrow,
   InfoTitle,
   InfoValue,
+  ModalFooter,
+  ModalFooterGroup,
+  ModalHeader,
   Row,
+  ScrolledModal,
+  ScrolledModalBody,
+  ScrolledModalContainer,
 } from '../../../common/components/Modal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
@@ -73,7 +73,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   // 1. Handling async validations
   // 2. Debounce - useDebounce
 
-  const { state, dispatch, isValid, errors, validate } = useForm<FormFields>(CreateMemberSchema, {
+  const { state, isValid, errors, validate, changeField } = useForm<FormFields>(CreateMemberSchema, {
     name: '',
     rootAccount: undefined,
     controllerAccount: undefined,
@@ -95,10 +95,6 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   useEffect(() => {
     validate(state, { size: potentialMemberIdSize })
   }, [state, potentialMemberIdSize])
-
-  const changeField = (type: keyof FormFields, value: string | Account | Member | boolean) => {
-    dispatch({ type, value })
-  }
 
   const onCreate = () => {
     if (!controllerAccount || !rootAccount) {
