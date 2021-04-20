@@ -7,10 +7,10 @@ import { PageTitle } from '../../../common/components/page/PageTitle'
 import { Label, TextBig } from '../../../common/components/typography'
 import { ApplicationsList } from '../../../working-groups/components/ApplicationsList'
 import { useMyApplications } from '../../../working-groups/hooks/useMyApplications'
-import { WorkingGroupApplication } from '../../../working-groups/types/WorkingGroupApplication'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
+import { isPending } from './helpers'
 
 export const MyApplications = () => {
   const crumbs = useMemo(
@@ -21,9 +21,8 @@ export const MyApplications = () => {
     []
   )
   const { applications, isLoading } = useMyApplications()
-  const isPending = (a: WorkingGroupApplication) => a.status == 'ApplicationStatusPending'
-  const currentApplications = useMemo(() => applications?.filter(isPending), [applications])
-  const pastApplications = useMemo(() => applications?.filter((a) => !isPending(a)), [applications])
+  const currentApplications = useMemo(() => applications?.filter(isPending), [applications, isLoading])
+  const pastApplications = useMemo(() => applications?.filter((a) => !isPending(a)), [applications, isLoading])
   const displayState = () => {
     if (isLoading) return <Loading />
     return applications?.length ? null : <TextBig>No applications found</TextBig>
