@@ -42,22 +42,21 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
 
   const { state, isValid, errors, validate, changeField } = useForm<FormFields>(InviteMemberSchema, {
     name: '',
-    rootAccount: undefined,
-    controllerAccount: undefined,
     handle: '',
     about: '',
     avatarUri: '',
     hasTerms: false,
-    invitor: undefined,
   })
 
   const { rootAccount, controllerAccount, handle, name, avatarUri, about } = state
+
   const onCreate = () => onSubmit(state)
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
+
   useEffect(() => {
     validate(state, { size: potentialMemberIdSize, keyring })
-  }, [state, potentialMemberIdSize])
+  }, [JSON.stringify(state), potentialMemberIdSize?.toString()])
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
