@@ -1,4 +1,4 @@
-import { Reducer, useEffect, useReducer, useState } from 'react'
+import { Reducer, useCallback, useEffect, useReducer, useState } from 'react'
 import { AnyObjectSchema, ValidationError } from 'yup'
 
 type KeyName<T> = keyof T
@@ -24,33 +24,24 @@ export const useForm = <T extends Record<any, any>>(schema: AnyObjectSchema, ini
   const [context, setContext] = useState()
 
   useEffect(() => {
-    let stillWaiting = true
     setValid(false)
 
-    schema
-      .validate(data, { abortEarly: false, stripUnknown: true, context: context })
-      .then(() => {
-        if (stillWaiting) {
-          setValid(true)
-          setErrors([])
-        }
-      })
-      .catch((error) => {
-        if (stillWaiting) {
-          setValid(false)
-          setErrors(error.inner)
-        }
-      })
-
-    return () => {
-      stillWaiting = false
+    try {
+      schema.validateSync(data, { abortEarly: false, stripUnknown: true, context: context })
+      setValid(true)
+    } catch (error) {
+      setErrors(error.inner)
+      setValid(false)
     }
   }, [data, context])
 
-  const validate = (data: T, context: any) => {
-    setData(data)
-    setContext(context)
-  }
+  const validate = useCallback(
+    (data: T, context: any) => {
+      setData(data)
+      setContext(context)
+    },
+    [setData, setContext]
+  )
 
   const changeField = (type: KeyName<T>, value: KeyValue<T>) => {
     dispatch({ type, value })
