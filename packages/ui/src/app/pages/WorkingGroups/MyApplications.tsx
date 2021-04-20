@@ -7,10 +7,10 @@ import { PageTitle } from '../../../common/components/page/PageTitle'
 import { Label, TextBig } from '../../../common/components/typography'
 import { ApplicationsList } from '../../../working-groups/components/ApplicationsList'
 import { useMyApplications } from '../../../working-groups/hooks/useMyApplications'
+import { isPendingApplication } from '../../../working-groups/model/isPendingApplication'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
-import { isPending } from './helpers'
 
 export const MyApplications = () => {
   const crumbs = useMemo(
@@ -21,8 +21,11 @@ export const MyApplications = () => {
     []
   )
   const { applications, isLoading } = useMyApplications()
-  const currentApplications = useMemo(() => applications?.filter(isPending), [applications, isLoading])
-  const pastApplications = useMemo(() => applications?.filter((a) => !isPending(a)), [applications, isLoading])
+  const currentApplications = useMemo(() => applications?.filter(isPendingApplication), [applications, isLoading])
+  const pastApplications = useMemo(() => applications?.filter((a) => !isPendingApplication(a)), [
+    applications,
+    isLoading,
+  ])
 
   const displayLoadingOrEmptyState = () => {
     if (isLoading) {
