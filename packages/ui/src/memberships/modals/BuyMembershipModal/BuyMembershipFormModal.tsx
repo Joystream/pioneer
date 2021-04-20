@@ -162,7 +162,6 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
                 placeholder="Type"
                 value={name}
                 onChange={(event) => changeField('name', event.target.value)}
-                // changeField('name')
               />
             </InputComponent>
           </Row>
