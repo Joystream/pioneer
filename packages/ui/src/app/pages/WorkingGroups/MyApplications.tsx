@@ -6,6 +6,7 @@ import { PageTitle } from '../../../common/components/page/PageTitle'
 import { Label, TextBig } from '../../../common/components/typography'
 import { ApplicationsList } from '../../../working-groups/components/ApplicationsList'
 import { useMyApplications } from '../../../working-groups/hooks/useMyApplications'
+import { WorkingGroupApplication } from '../../../working-groups/types/WorkingGroupApplication'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
@@ -18,7 +19,14 @@ export const MyApplications = () => {
     ],
     []
   )
-  const { applications } = useMyApplications()
+  const { applications, isLoading } = useMyApplications()
+  const isPending = (a: WorkingGroupApplication) => a.status == 'ApplicationStatusPending'
+  const currentApplications = useMemo(() => applications?.filter(isPending), [applications])
+  const pastApplications = useMemo(() => applications?.filter((a) => !isPending(a)), [applications])
+  const pickText = () => {
+    if (isLoading) return 'Loading...'
+    return applications?.length ? 'My Applications' : 'No applications found'
+  }
 
   return (
     <AppPage crumbs={crumbs}>
@@ -26,12 +34,20 @@ export const MyApplications = () => {
         <PageTitle>Working Groups</PageTitle>
         <WorkingGroupsTabs />
       </PageHeader>
-      <TextBig>My Applications</TextBig>
+      <TextBig>{pickText()}</TextBig>
       <MainPanel>
-        <Label>CURRENT APPLICATIONS</Label>
-        <ApplicationsList applications={applications?.filter((a) => a.status == 'ApplicationStatusPending') ?? []} />
-        <Label>PAST APPLICATIONS</Label>
-        <ApplicationsList applications={applications?.filter((a) => a.status != 'ApplicationStatusPending') ?? []} />
+        {currentApplications?.length ? (
+          <>
+            <Label>Current applications</Label>
+            <ApplicationsList applications={currentApplications} />
+          </>
+        ) : null}
+        {pastApplications?.length ? (
+          <>
+            <Label>Past applications</Label>
+            <ApplicationsList applications={pastApplications} />
+          </>
+        ) : null}
       </MainPanel>
     </AppPage>
   )
