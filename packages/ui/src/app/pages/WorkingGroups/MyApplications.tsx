@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 
+import { Loading } from '../../../common/components/Loading'
 import { MainPanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
@@ -23,9 +24,9 @@ export const MyApplications = () => {
   const isPending = (a: WorkingGroupApplication) => a.status == 'ApplicationStatusPending'
   const currentApplications = useMemo(() => applications?.filter(isPending), [applications])
   const pastApplications = useMemo(() => applications?.filter((a) => !isPending(a)), [applications])
-  const pickText = () => {
-    if (isLoading) return 'Loading...'
-    return applications?.length ? 'My Applications' : 'No applications found'
+  const displayState = () => {
+    if (isLoading) return <Loading />
+    return applications?.length ? null : <TextBig>No applications found</TextBig>
   }
 
   return (
@@ -34,7 +35,7 @@ export const MyApplications = () => {
         <PageTitle>Working Groups</PageTitle>
         <WorkingGroupsTabs />
       </PageHeader>
-      <TextBig>{pickText()}</TextBig>
+      {displayState()}
       <MainPanel>
         {currentApplications?.length ? (
           <>
