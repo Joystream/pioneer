@@ -15,7 +15,7 @@ export interface WorkingGroupApplication {
   rewardAccount?: string
   stakingAccount?: string
   answers?: [any]
-  status?: any
+  status?: string
   createdAtBlock?: BN
   createdAtTime?: string
 }
@@ -27,4 +27,5 @@ export const asApplication = (application: WorkingGroupApplicationFieldsFragment
     groupName: application.opening.group.name,
     reward: new BN(application.opening.rewardPerBlock),
   },
+  status: application.status.__typename,
 })

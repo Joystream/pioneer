@@ -7,7 +7,7 @@
     "rewardAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "answers": [],
-    "statusId": "==== INSERT A STATUS ====",
+    "status": "pending",
     "createdAtBlockId": "block-1",
     "createdAtTime": ""
   },
@@ -19,7 +19,7 @@
     "rewardAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "answers": [],
-    "statusId": "==== INSERT A STATUS ====",
+    "status": "accepted",
     "createdAtBlockId": "block-1",
     "createdAtTime": ""
   },
@@ -31,7 +31,7 @@
     "rewardAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "answers": [],
-    "statusId": "==== INSERT A STATUS ====",
+    "status": "rejected",
     "createdAtBlockId": "block-1",
     "createdAtTime": ""
   }

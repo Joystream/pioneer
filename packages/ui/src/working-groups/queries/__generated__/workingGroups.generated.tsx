@@ -101,6 +101,11 @@ export type WorkingGroupApplicationFieldsFragment = {
     group: { __typename: 'WorkingGroup'; name: string }
   }
   applicant: { __typename: 'Membership' } & MemberFieldsFragment
+  status:
+    | { __typename: 'ApplicationStatusPending' }
+    | { __typename: 'ApplicationStatusAccepted' }
+    | { __typename: 'ApplicationStatusRejected' }
+    | { __typename: 'ApplicationStatusWithdrawn' }
 }
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
@@ -191,6 +196,9 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
     }
     applicant {
       ...MemberFields
+    }
+    status {
+      __typename
     }
   }
   ${MemberFieldsFragmentDoc}
