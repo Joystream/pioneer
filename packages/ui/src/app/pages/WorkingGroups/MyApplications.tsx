@@ -23,8 +23,12 @@ export const MyApplications = () => {
   const { applications, isLoading } = useMyApplications()
   const currentApplications = useMemo(() => applications?.filter(isPending), [applications, isLoading])
   const pastApplications = useMemo(() => applications?.filter((a) => !isPending(a)), [applications, isLoading])
-  const displayState = () => {
-    if (isLoading) return <Loading />
+
+  const displayLoadingOrEmptyState = () => {
+    if (isLoading) {
+      return <Loading />
+    }
+
     return applications?.length ? null : <TextBig>No applications found</TextBig>
   }
 
@@ -34,8 +38,8 @@ export const MyApplications = () => {
         <PageTitle>Working Groups</PageTitle>
         <WorkingGroupsTabs />
       </PageHeader>
-      {displayState()}
       <MainPanel>
+        {displayLoadingOrEmptyState()}
         {currentApplications?.length ? (
           <>
             <Label>Current applications</Label>
