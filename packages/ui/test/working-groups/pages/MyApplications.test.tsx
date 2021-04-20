@@ -44,45 +44,45 @@ describe('UI: MyApplications', () => {
     mockApplications.isLoading = true
     renderPage()
 
-    expect(screen.getByText('Loading...')).toBeDefined
-    expect(screen.queryByText(/no applications found/i)).not.toBeDefined
+    expect(screen.getByText('Loading...')).toBeDefined()
+    expect(screen.queryByText(/no applications found/i)).toBeNull()
 
-    expect(screen.queryByText(/current applications/i)).not.toBeDefined
-    expect(screen.queryByText(/past applications/i)).not.toBeDefined
+    expect(screen.queryByText(/current applications/i)).toBeNull()
+    expect(screen.queryByText(/past applications/i)).toBeNull()
   })
 
   it('No applications', async () => {
     renderPage()
 
-    expect(screen.getByText(/no applications found/i)).toBeDefined
-    expect(screen.queryByText('Loading...')).not.toBeDefined
+    expect(screen.getByText(/no applications found/i)).toBeDefined()
+    expect(screen.queryByText('Loading...')).toBeNull()
 
-    expect(screen.queryByText(/current applications/i)).not.toBeDefined
-    expect(screen.queryByText(/past applications/i)).not.toBeDefined
+    expect(screen.queryByText(/current applications/i)).toBeNull()
+    expect(screen.queryByText(/past applications/i)).toBeNull()
   })
 
   it('Current applications only', () => {
     mockApplications.applications.push(currentApplication)
     renderPage()
 
-    expect(screen.queryByText('Loading...')).not.toBeDefined
-    expect(screen.queryByText(/past applications/i)).not.toBeDefined
+    expect(screen.queryByText('Loading...')).toBeNull()
+    expect(screen.queryByText(/no applications found/i)).toBeNull()
 
-    expect(screen.getByText(/current applications/i)).toBeDefined
-    expect(screen.getByText(/storage leader/i)).toBeDefined
-    expect(screen.queryByText(/past applications/i)).not.toBeDefined
+    expect(screen.getByText(/current applications/i)).toBeDefined()
+    expect(screen.getByText(/storage leader/i)).toBeDefined()
+    expect(screen.queryByText(/past applications/i)).toBeNull()
   })
 
   it('Past applications only', () => {
     mockApplications.applications.push(pastApplication)
     renderPage()
 
-    expect(screen.queryByText('Loading...')).not.toBeDefined
-    expect(screen.queryByText(/past applications/i)).not.toBeDefined
+    expect(screen.queryByText('Loading...')).toBeNull()
+    expect(screen.queryByText(/no applications found/i)).toBeNull()
 
-    expect(screen.getByText(/past applications/i)).toBeDefined
-    expect(screen.getByText(/forum worker/i)).toBeDefined
-    expect(screen.queryByText(/current applications/i)).not.toBeDefined
+    expect(screen.getByText(/past applications/i)).toBeDefined()
+    expect(screen.getByText(/forum worker/i)).toBeDefined()
+    expect(screen.queryByText(/current applications/i)).toBeNull()
   })
 
   it('Both current and past applications', () => {
@@ -90,13 +90,13 @@ describe('UI: MyApplications', () => {
     mockApplications.applications.push(pastApplication)
     renderPage()
 
-    expect(screen.queryByText('Loading...')).not.toBeDefined
-    expect(screen.queryByText(/past applications/i)).not.toBeDefined
+    expect(screen.queryByText('Loading...')).toBeNull()
+    expect(screen.queryByText(/no applications found/i)).toBeNull()
 
-    expect(screen.getByText(/current applications/i)).toBeDefined
-    expect(screen.getByText(/storage leader/i)).toBeDefined
-    expect(screen.getByText(/past applications/i)).toBeDefined
-    expect(screen.getByText(/forum worker/i)).toBeDefined
+    expect(screen.getByText(/current applications/i)).toBeDefined()
+    expect(screen.getByText(/storage leader/i)).toBeDefined()
+    expect(screen.getByText(/past applications/i)).toBeDefined()
+    expect(screen.getByText(/forum worker/i)).toBeDefined()
   })
 
   function renderPage() {
