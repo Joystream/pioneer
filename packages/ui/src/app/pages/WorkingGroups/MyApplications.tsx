@@ -1,11 +1,13 @@
 import React, { useMemo } from 'react'
 
+import { Loading } from '../../../common/components/Loading'
 import { MainPanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { Label, TextBig } from '../../../common/components/typography'
 import { ApplicationsList } from '../../../working-groups/components/ApplicationsList'
 import { useMyApplications } from '../../../working-groups/hooks/useMyApplications'
+import { isPendingApplication } from '../../../working-groups/model/isPendingApplication'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
@@ -18,7 +20,20 @@ export const MyApplications = () => {
     ],
     []
   )
-  const { applications } = useMyApplications()
+  const { applications, isLoading } = useMyApplications()
+  const currentApplications = useMemo(() => applications?.filter(isPendingApplication), [applications, isLoading])
+  const pastApplications = useMemo(() => applications?.filter((a) => !isPendingApplication(a)), [
+    applications,
+    isLoading,
+  ])
+
+  const displayLoadingOrEmptyState = () => {
+    if (isLoading) {
+      return <Loading />
+    }
+
+    return applications?.length ? null : <TextBig>No applications found</TextBig>
+  }
 
   return (
     <AppPage crumbs={crumbs}>
@@ -26,12 +41,20 @@ export const MyApplications = () => {
         <PageTitle>Working Groups</PageTitle>
         <WorkingGroupsTabs />
       </PageHeader>
-      <TextBig>My Applications</TextBig>
       <MainPanel>
-        <Label>CURRENT APPLICATIONS</Label>
-        <ApplicationsList applications={applications?.filter((a) => a.status == 'ApplicationStatusPending') ?? []} />
-        <Label>PAST APPLICATIONS</Label>
-        <ApplicationsList applications={applications?.filter((a) => a.status != 'ApplicationStatusPending') ?? []} />
+        {displayLoadingOrEmptyState()}
+        {currentApplications?.length ? (
+          <>
+            <Label>Current applications</Label>
+            <ApplicationsList applications={currentApplications} />
+          </>
+        ) : null}
+        {pastApplications?.length ? (
+          <>
+            <Label>Past applications</Label>
+            <ApplicationsList applications={pastApplications} />
+          </>
+        ) : null}
       </MainPanel>
     </AppPage>
   )
