@@ -88,6 +88,9 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   applicant {
     ...MemberFields
   }
+  status {
+    __typename
+  }
 }
 
 

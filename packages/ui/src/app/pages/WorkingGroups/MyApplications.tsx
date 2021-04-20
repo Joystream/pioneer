@@ -29,9 +29,9 @@ export const MyApplications = () => {
       <TextBig>My Applications</TextBig>
       <MainPanel>
         <Label>CURRENT APPLICATIONS</Label>
-        <ApplicationsList applications={applications ?? []} />
+        <ApplicationsList applications={applications?.filter((a) => a.status == 'ApplicationStatusPending') ?? []} />
         <Label>PAST APPLICATIONS</Label>
-        <ApplicationsList applications={applications ?? []} />
+        <ApplicationsList applications={applications?.filter((a) => a.status != 'ApplicationStatusPending') ?? []} />
       </MainPanel>
     </AppPage>
   )

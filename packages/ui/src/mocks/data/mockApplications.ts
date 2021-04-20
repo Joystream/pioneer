@@ -8,7 +8,7 @@ export interface MockApplication {
   rewardAccount?: string
   stakingAccount?: string
   answers?: any[]
-  statusId?: string
+  status?: string
   createdAtBlockId: string
   createdAtTime: string
 }
@@ -16,12 +16,23 @@ export interface MockApplication {
 const mockApplications = rawApplications.map((application) => ({ ...application }))
 
 const seedApplication = (application: MockApplication, server: any) => {
-  const data = {
-    ...application,
-    statusId: null,
-  }
-  const groupApplication = server.schema.create('WorkingGroupApplication', data)
+  const status = seedStatus(application.status, server)
+  const data = { ...application, status }
+  server.schema.create('WorkingGroupApplication', data)
 }
 
 export const seedApplications = (server: any) =>
   mockApplications.forEach((application) => seedApplication(application, server))
+
+function seedStatus(status: string | undefined, server: any) {
+  switch (status) {
+    case 'accepted':
+      return server.schema.create('ApplicationStatusAccepted', {})
+    case 'rejected':
+      return server.schema.create('ApplicationStatusRejected', {})
+    case 'withdrawn':
+      return server.schema.create('ApplicationStatusWithdrawn', {})
+    default:
+      return server.schema.create('ApplicationStatusPending', {})
+  }
+}
