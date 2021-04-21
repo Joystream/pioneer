@@ -21,6 +21,7 @@ import { useModal } from '../../../common/hooks/useModal'
 import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
 import { AccountSchema } from '../../../memberships/model/validation'
+import { ApplicationQuestionInput } from '../../components/ApplicationQuestionInput'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 import { useOpeningQuestions } from '../../hooks/useOpeningQuestions'
 
@@ -132,21 +133,17 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
               <>
                 <Row>
                   <h4>Application</h4>
-                  {questions.map((question) => {
-                    return (
-                      <div>
-                        <p>
-                          <strong>Index</strong>: {question.index}
-                        </p>
-                        <p>
-                          <strong>Type</strong>: {question.type}
-                        </p>
-                        <p>
-                          <strong>Question</strong>: {question.question}
-                        </p>
-                      </div>
-                    )
-                  })}
+                  {questions
+                    .sort((a, b) => a.index - b.index)
+                    .map((question) => {
+                      return (
+                        <ApplicationQuestionInput
+                          type={question.type}
+                          question={question.question}
+                          key={question.index}
+                        />
+                      )
+                    })}
                 </Row>
               </>
             )}

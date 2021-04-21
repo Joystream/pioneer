@@ -42,9 +42,9 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   title: fields.metadata.shortDescription,
 })
 
-type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'
+export type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'
 
-interface ApplicationQuestion {
+export interface ApplicationQuestion {
   index: number
   type: ApplicationQuestionType
   question: string
