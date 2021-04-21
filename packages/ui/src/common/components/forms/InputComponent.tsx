@@ -160,7 +160,7 @@ export const InputNumber = React.memo(
       <StyledNumberInput
         id={id}
         name={id}
-        type="number"
+        type="string"
         value={value}
         required={required}
         validation={validation}

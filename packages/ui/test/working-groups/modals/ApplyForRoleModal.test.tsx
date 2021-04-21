@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { Account } from '../../../src/accounts/types'
@@ -12,6 +12,7 @@ import { fixAssociations } from '../../../src/mocks/server'
 import { ApplyForRoleModal } from '../../../src/working-groups/modals/ApplyForRoleModal'
 import { WorkingGroupOpeningFieldsFragment } from '../../../src/working-groups/queries'
 import { asWorkingGroupOpening } from '../../../src/working-groups/types'
+import { selectAccount } from '../../_helpers/selectAccount'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -59,9 +60,29 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   it('Renders a modal', async () => {
-    const { findByText } = renderModal()
+    renderModal()
 
-    expect(await findByText('Apply for role')).toBeDefined()
+    expect(await screen.findByText('Apply for role')).toBeDefined()
+  })
+
+  describe('Stake step', () => {
+    it('Validates fields', async () => {
+      renderModal()
+
+      const button = await screen.findByRole('button', { name: /Next step/i })
+      expect(button).toBeDisabled()
+
+      await selectAccount('Select an account for Staking', 'alice')
+
+      const input = await screen.findByLabelText(/Select amount for staking/i)
+      await fireEvent.change(input, { target: { value: '50' } })
+
+      expect(button).toBeDisabled()
+
+      await fireEvent.change(input, { target: { value: '500000' } })
+
+      expect(button).not.toBeDisabled()
+    })
   })
 
   function renderModal() {

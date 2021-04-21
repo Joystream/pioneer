@@ -1,42 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { ButtonPrimary } from '../../../common/components/buttons'
-import { Modal, ModalFooter, ModalHeader } from '../../../common/components/Modal'
-import { Stepper } from '../../../common/components/Stepper'
-import {
-  StepDescriptionColumn,
-  StepperBody,
-  StepperModalBody,
-  StepperModalWrapper,
-} from '../../../common/components/StepperModal'
 import { useModal } from '../../../common/hooks/useModal'
-import { OpeningFormPreview } from '../../components/OpeningFormPreview'
+import { ModalState } from '../../../common/types'
 
-import { ApplyForRoleModalCall } from '.'
-
-const steps = [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }]
+import { ApplyForRolePrepareModal } from './ApplyForRolePrepareModal'
 
 export const ApplyForRoleModal = () => {
-  const {
-    hideModal,
-    modalData: { opening },
-  } = useModal<ApplyForRoleModalCall>()
+  const [state, setState] = useState<ModalState>('PREPARE')
+  const { hideModal } = useModal()
 
-  return (
-    <Modal onClose={hideModal} modalSize="l">
-      <ModalHeader onClick={hideModal} title="Apply for role" />
-      <StepperModalBody>
-        <StepperModalWrapper>
-          <Stepper steps={steps} active={0} />
-          <StepDescriptionColumn>
-            <OpeningFormPreview opening={opening} />
-          </StepDescriptionColumn>
-          <StepperBody>Form</StepperBody>
-        </StepperModalWrapper>
-      </StepperModalBody>
-      <ModalFooter>
-        <ButtonPrimary>Next step</ButtonPrimary>
-      </ModalFooter>
-    </Modal>
-  )
+  if (state === 'PREPARE') {
+    return (
+      <ApplyForRolePrepareModal
+        onSubmit={() => {
+          setState('AUTHORIZE')
+          hideModal()
+        }}
+      />
+    )
+  }
+
+  return null
 }
