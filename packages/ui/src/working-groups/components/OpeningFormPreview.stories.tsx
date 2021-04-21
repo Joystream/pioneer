@@ -35,5 +35,6 @@ Default.args = {
     reward: { value: new BN(1000), interval: 3600 },
     applicants: { current: 2, total: 10 },
     hiring: { current: 0, total: 1 },
+    status: 'OpeningStatusOpen',
   },
 }

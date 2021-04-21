@@ -71,6 +71,10 @@ export type WorkingGroupOpeningFieldsFragment = {
         | { __typename: 'ApplicationStatusWithdrawn' }
     }>
   >
+  status:
+    | { __typename: 'OpeningStatusOpen' }
+    | { __typename: 'OpeningStatusFilled' }
+    | { __typename: 'OpeningStatusCancelled' }
 }
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
@@ -180,6 +184,9 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
       status {
         __typename
       }
+    }
+    status {
+      __typename
     }
   }
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}

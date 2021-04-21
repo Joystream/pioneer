@@ -62,6 +62,9 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
       __typename
     }
   }
+  status {
+    __typename
+  }
 }
 
 query getWorkingGroupOpenings($group_eq: ID) {

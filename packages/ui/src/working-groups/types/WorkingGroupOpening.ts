@@ -21,6 +21,7 @@ export interface WorkingGroupOpening {
     current: number
     total: number
   }
+  status: string
 }
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
@@ -40,4 +41,5 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     total: fields.metadata.hiringLimit,
   },
   title: fields.metadata.shortDescription,
+  status: fields.status.__typename,
 })

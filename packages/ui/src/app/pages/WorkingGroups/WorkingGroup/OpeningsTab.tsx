@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Loading } from '../../../../common/components/Loading'
@@ -10,6 +10,7 @@ import { OpeningsList } from '../../../../working-groups/components/OpeningsList
 import { WorkersList } from '../../../../working-groups/components/WorkersList'
 import { useOpenings } from '../../../../working-groups/hooks/useOpenings'
 import { useWorkers } from '../../../../working-groups/hooks/useWorkers'
+import { isOpeningOpen } from '../../../../working-groups/model/isOpeningOpen'
 import { WorkingGroup } from '../../../../working-groups/types'
 
 interface Props {
@@ -22,6 +23,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
   })
   const { member: leader } = useMember(workingGroup.leaderId)
   const { workers } = useWorkers(workingGroup.id ?? '')
+  const currentOpenings = useMemo(() => openings.filter(isOpeningOpen), [isLoading, openings])
 
   return (
     <ContentWithSidepanel>
@@ -37,7 +39,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
           <OpeningsCategories>
             <OpeningsCategory>
               <Label>Openings</Label>
-              <OpeningsList openings={openings} />
+              <OpeningsList openings={currentOpenings} />
             </OpeningsCategory>
           </OpeningsCategories>
         )}
