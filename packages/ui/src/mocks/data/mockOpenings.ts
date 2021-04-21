@@ -57,7 +57,7 @@ export const seedOpenings = (server: any) => {
 
   openingsData.map((openingData) => {
     for (const id of ids) {
-      seedOpening({ ...openingData, groupId: id }, server)
+      seedOpening({ ...openingData }, server)
     }
   })
 }
