@@ -59,19 +59,16 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
     return StakeStepFormSchema
   }, [MIN_STAKE])
 
-  const { state, dispatch, isValid, errors, validate } = useForm<StakeStepForm>(schema, {
+  const initializer = {
     account: undefined,
     amount: undefined,
-  })
+  }
+  const { changeField, validation } = useForm<StakeStepForm>(initializer, schema)
+  const { isValid, errors } = validation
 
   useMemo(() => {
-    dispatch({ type: 'amount', value: amount })
-    validate(state, {})
-  }, [JSON.stringify(state), amount])
-
-  const changeField = (type: keyof StakeStepForm, value: string | Account) => {
-    dispatch({ type, value })
-  }
+    changeField('amount', amount)
+  }, [amount])
 
   const nextStep = useCallback(() => {
     if (step >= 1) {
