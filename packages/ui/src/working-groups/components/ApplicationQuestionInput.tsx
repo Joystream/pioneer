@@ -1,11 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { CKEditor } from '@ckeditor/ckeditor5-react'
 import React from 'react'
 
+import { CKEditor } from '../../common/components/CKEditor'
 import { InputComponent, InputText } from '../../common/components/forms'
 import { ApplicationQuestionType } from '../types'
 
@@ -20,8 +18,8 @@ export const ApplicationQuestionInput = ({ question, type }: ApplicationQuestion
       {type === 'TEXT' && <InputText />}
       {type === 'TEXTAREA' && (
         <CKEditor
-          editor={ClassicEditor}
-          onChange={(event: any, editor: any) => {
+          EditorClass={ClassicEditor}
+          onChange={(event, editor) => {
             const data = editor.getData()
             console.log({ event, editor, data })
           }}
