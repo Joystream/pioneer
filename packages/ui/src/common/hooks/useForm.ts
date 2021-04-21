@@ -14,19 +14,19 @@ const formReducer = <T extends Record<any, any>>(state: T, action: Action<T>): T
 }
 
 export const useForm = <T extends Record<any, any>>(initializer: T, schema: AnyObjectSchema) => {
-  const [state, dispatch] = useReducer(formReducer as Reducer<T, Action<T>>, initializer)
+  const [fields, dispatch] = useReducer(formReducer as Reducer<T, Action<T>>, initializer)
   const [errors, setErrors] = useState<ValidationError[]>([])
   const [context, setContext] = useState<unknown>()
 
   const isValid = useMemo(() => {
     try {
-      schema.validateSync(state, { abortEarly: false, stripUnknown: true, context: context })
+      schema.validateSync(fields, { abortEarly: false, stripUnknown: true, context: context })
       return true
     } catch (error) {
       setErrors(error.inner)
       return false
     }
-  }, [JSON.stringify(state), JSON.stringify(context)])
+  }, [JSON.stringify(fields), JSON.stringify(context)])
 
   const changeField = (type: KeyName<T>, value: KeyValue<T>) => {
     dispatch({ type, value })
@@ -35,5 +35,5 @@ export const useForm = <T extends Record<any, any>>(initializer: T, schema: AnyO
   // TODO API design:
   // const [form, changeField, validation] = useForm<FormFields>({}, Validations)
   // validations.isValid
-  return { state, isValid, errors, changeField, updateContext: setContext }
+  return { fields, isValid, errors, changeField, setContext }
 }

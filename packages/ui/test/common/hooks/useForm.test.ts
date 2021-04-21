@@ -34,11 +34,11 @@ describe('useForm', () => {
       )
     )
 
-    const { isValid, errors, state } = result.current
+    const { isValid, errors, fields } = result.current
 
     expect(isValid).toBeTruthy()
     expect(errors).toHaveLength(0)
-    expect(state).toEqual({
+    expect(fields).toEqual({
       aBoolean: true,
       aNumber: 0,
       aString: '',

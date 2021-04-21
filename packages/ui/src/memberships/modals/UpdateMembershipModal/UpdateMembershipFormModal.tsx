@@ -45,7 +45,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const { api } = useApi()
   const { allAccounts } = useAccounts()
 
-  const { state, isValid, errors, updateContext, changeField } = useForm<UpdateMemberForm>(
+  const { fields, isValid, errors, setContext, changeField } = useForm<UpdateMemberForm>(
     {
       id: member.id,
       name: member.name || '',
@@ -57,7 +57,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     },
     UpdateMemberSchema
   )
-  const { handle, name, avatarUri, about, controllerAccount, rootAccount } = state
+  const { handle, name, avatarUri, about, controllerAccount, rootAccount } = fields
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
@@ -65,15 +65,15 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const handleHash = blake2AsHex(handle || '')
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
 
-  const canUpdate = isValid && hasAnyEdits(state, member)
+  const canUpdate = isValid && hasAnyEdits(fields, member)
 
   useEffect(() => {
-    updateContext({ size: potentialMemberIdSize, isHandleChanged: state.handle !== member.handle })
+    setContext({ size: potentialMemberIdSize, isHandleChanged: fields.handle !== member.handle })
   }, [potentialMemberIdSize?.toString()])
 
   const onCreate = () => {
     if (canUpdate) {
-      onSubmit(changedOrNull<UpdateMemberForm>(state, member))
+      onSubmit(changedOrNull<UpdateMemberForm>(fields, member))
     }
   }
 

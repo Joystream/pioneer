@@ -84,8 +84,8 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
     referrer: undefined,
     hasTerms: false,
   }
-  const { state, isValid, errors, updateContext, changeField } = useForm<FormFields>(initializer, CreateMemberSchema)
-  const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = state
+  const { fields, isValid, errors, setContext, changeField } = useForm<FormFields>(initializer, CreateMemberSchema)
+  const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = fields
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
@@ -94,7 +94,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
 
   useEffect(() => {
-    updateContext({ size: potentialMemberIdSize })
+    setContext({ size: potentialMemberIdSize })
   }, [potentialMemberIdSize?.toString()])
 
   const onCreate = () => {
@@ -102,7 +102,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
       return
     }
 
-    onSubmit(state)
+    onSubmit(fields)
   }
 
   return (

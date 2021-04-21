@@ -40,7 +40,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
   const keyring = useKeyring()
 
-  const { state, isValid, errors, updateContext, changeField } = useForm<FormFields>(
+  const { fields, isValid, errors, setContext, changeField } = useForm<FormFields>(
     {
       name: '',
       handle: '',
@@ -51,14 +51,14 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
     InviteMemberSchema
   )
 
-  const { rootAccount, controllerAccount, handle, name, avatarUri, about } = state
+  const { rootAccount, controllerAccount, handle, name, avatarUri, about } = fields
 
-  const onCreate = () => onSubmit(state)
+  const onCreate = () => onSubmit(fields)
   const handleHash = blake2AsHex(handle)
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
 
   useEffect(() => {
-    updateContext({ size: potentialMemberIdSize, keyring })
+    setContext({ size: potentialMemberIdSize, keyring })
   }, [potentialMemberIdSize?.toString()])
 
   return (
