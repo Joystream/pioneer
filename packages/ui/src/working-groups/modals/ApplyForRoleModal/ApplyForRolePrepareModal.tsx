@@ -22,6 +22,7 @@ import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
 import { AccountSchema } from '../../../memberships/model/validation'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
+import { useOpeningQuestions } from '../../hooks/useOpeningQuestions'
 
 import { ApplyForRoleModalCall } from '.'
 
@@ -50,6 +51,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
   } = useModal<ApplyForRoleModalCall>()
   const [step, setStep] = useState(0)
   const [amount, setAmount] = useNumberInput(0)
+  const { questions } = useOpeningQuestions({ id: opening.id })
 
   const schema = useMemo(() => {
     StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
@@ -130,6 +132,21 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
               <>
                 <Row>
                   <h4>Application</h4>
+                  {questions.map((question) => {
+                    return (
+                      <div>
+                        <p>
+                          <strong>Index</strong>: {question.index}
+                        </p>
+                        <p>
+                          <strong>Type</strong>: {question.type}
+                        </p>
+                        <p>
+                          <strong>Question</strong>: {question.question}
+                        </p>
+                      </div>
+                    )
+                  })}
                 </Row>
               </>
             )}

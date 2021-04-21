@@ -103,6 +103,14 @@ export const getWorkingGroupOpeningsResolver: QueryResolver<any, GetWorkingGroup
   return adaptRecords(models)
 }
 
+export const getWorkingGroupOpeningResolver = (obj: any, args: any, context: any, info: any) => {
+  const resolverArgs = {
+    id: args.where.id,
+  }
+
+  return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
+}
+
 export const getWorkersResolver: QueryResolver<{ where: GetWorkersQueryVariables }, GetWorkersQueryResult[]> = (
   obj,
   args,

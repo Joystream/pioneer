@@ -11,7 +11,16 @@
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": []
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
     },
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
@@ -30,7 +39,16 @@
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": []
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
     },
     "unstakingPeriod": 5,
     "rewardPerBlock": 1200,
@@ -49,7 +67,16 @@
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": []
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
     },
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
@@ -68,7 +95,16 @@
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": []
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
     },
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
