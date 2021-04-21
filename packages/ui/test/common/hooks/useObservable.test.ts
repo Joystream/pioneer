@@ -4,7 +4,7 @@ import { Subject } from 'rxjs'
 import { useObservable } from '../../../src/common/hooks/useObservable'
 
 describe('useObservable', () => {
-  it('Returns undefined for undefined observable', () => {
+  it('Undefined observable', () => {
     const { result } = renderHook(() => useObservable<undefined>(undefined, []))
     expect(result.current).toBeUndefined()
   })

@@ -19,16 +19,16 @@ import {
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
 import { Help } from '../../../common/components/Help'
 import {
-  ModalFooter,
-  ModalFooterGroup,
-  ModalHeader,
-  ScrolledModal,
-  ScrolledModalBody,
-  ScrolledModalContainer,
   BalanceInfoNarrow,
   InfoTitle,
   InfoValue,
+  ModalFooter,
+  ModalFooterGroup,
+  ModalHeader,
   Row,
+  ScrolledModal,
+  ScrolledModalBody,
+  ScrolledModalContainer,
 } from '../../../common/components/Modal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
@@ -70,10 +70,9 @@ export interface FormFields {
 
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
-  // 1. Handling async validations
   // 2. Debounce - useDebounce
 
-  const { state, dispatch, isValid, errors, validate } = useForm<FormFields>(CreateMemberSchema, {
+  const initializer = {
     name: '',
     rootAccount: undefined,
     controllerAccount: undefined,
@@ -83,8 +82,10 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
     isReferred: false,
     referrer: undefined,
     hasTerms: false,
-  })
-  const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = state
+  }
+  const { fields, changeField, validation } = useForm<FormFields>(initializer, CreateMemberSchema)
+  const { isValid, errors, setContext } = validation
+  const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = fields
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
@@ -93,19 +94,15 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
 
   useEffect(() => {
-    validate(state, { size: potentialMemberIdSize })
-  }, [state, potentialMemberIdSize])
-
-  const changeField = (type: keyof FormFields, value: string | Account | Member | boolean) => {
-    dispatch({ type, value })
-  }
+    setContext({ size: potentialMemberIdSize })
+  }, [potentialMemberIdSize?.toString()])
 
   const onCreate = () => {
     if (!controllerAccount || !rootAccount) {
       return
     }
 
-    onSubmit(state)
+    onSubmit(fields)
   }
 
   return (

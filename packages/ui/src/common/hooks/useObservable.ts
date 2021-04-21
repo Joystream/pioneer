@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Observable } from 'rxjs'
 
 export function useObservable<T>(observable: Observable<T> | undefined, deps: readonly any[]) {
@@ -9,5 +9,5 @@ export function useObservable<T>(observable: Observable<T> | undefined, deps: re
     return () => subscription && subscription.unsubscribe()
   }, deps)
 
-  return data
+  return useMemo(() => data, [JSON.stringify(data)])
 }
