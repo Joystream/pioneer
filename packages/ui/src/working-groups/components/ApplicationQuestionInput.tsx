@@ -14,7 +14,7 @@ interface ApplicationQuestionInputProps {
 
 export const ApplicationQuestionInput = ({ question, type }: ApplicationQuestionInputProps) => {
   return (
-    <InputComponent label={question} required inputSize={type === 'TEXTAREA' ? 'l' : 'm'}>
+    <InputComponent label={question} required inputSize={type === 'TEXTAREA' ? 'auto' : 'm'}>
       {type === 'TEXT' && <InputText />}
       {type === 'TEXTAREA' && (
         <CKEditor

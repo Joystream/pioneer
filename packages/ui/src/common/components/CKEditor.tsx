@@ -1,4 +1,7 @@
 import React, { useEffect, useRef } from 'react'
+import { createGlobalStyle } from 'styled-components'
+
+import { Colors } from '../constants'
 
 interface EventInfo {
   name: string
@@ -24,6 +27,16 @@ interface CKEditorProps {
   onReady?: (editor: Editor) => void
   disabled?: boolean
 }
+
+const CKEditorStylesOverrides = createGlobalStyle`
+  .ck.ck-editor {
+    width: 100%
+  }
+
+  :root{
+    --ck-focus-ring: 1px solid ${Colors.Blue[300]}
+  }
+`
 
 export const CKEditor = ({ disabled, EditorClass, onBlur, onChange, onFocus }: CKEditorProps) => {
   const ref = useRef(null)
@@ -68,5 +81,10 @@ export const CKEditor = ({ disabled, EditorClass, onBlur, onChange, onFocus }: C
     }
   }, [])
 
-  return <div ref={ref} />
+  return (
+    <>
+      <CKEditorStylesOverrides />
+      <div ref={ref} />
+    </>
+  )
 }
