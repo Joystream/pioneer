@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Loading } from '../../../../common/components/Loading'
@@ -7,7 +7,6 @@ import { Tabs } from '../../../../common/components/Tabs'
 import { OpeningsList } from '../../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../../working-groups/hooks/useOpenings'
 import { useWorkingGroup } from '../../../../working-groups/hooks/useWorkingGroup'
-import { isOpeningOpen } from '../../../../working-groups/model/isOpeningOpen'
 
 type Tab = 'OPENINGS' | 'WORKERS'
 
@@ -33,8 +32,7 @@ export function HistoryTab() {
   )
 }
 
-function OpeningsHistory({ groupId }: { groupId: string }) {
-  const { isLoading, openings } = useOpenings({ groupId })
-  const pastOpenings = useMemo(() => openings.filter((opening) => !isOpeningOpen(opening)), [isLoading, openings])
-  return isLoading ? <Loading /> : <OpeningsList openings={pastOpenings} />
+const OpeningsHistory = ({ groupId }: { groupId: string }) => {
+  const { isLoading, openings } = useOpenings({ groupId, type: 'past' })
+  return isLoading ? <Loading /> : <OpeningsList openings={openings} />
 }

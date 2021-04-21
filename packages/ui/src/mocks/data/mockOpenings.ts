@@ -51,14 +51,8 @@ const seedOpening = (openingData: RawOpeningMock, server: any) => {
 }
 
 export const seedOpenings = (server: any) => {
-  const workingGroups = server.schema.all('WorkingGroup')
-
-  const ids = workingGroups.models.map(({ id }: any) => id)
-
   openingsData.map((openingData) => {
-    for (const id of ids) {
-      seedOpening({ ...openingData }, server)
-    }
+    seedOpening({ ...openingData }, server)
   })
 }
 

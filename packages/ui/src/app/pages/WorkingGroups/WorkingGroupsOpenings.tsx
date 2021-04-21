@@ -20,7 +20,6 @@ import { MemberRoles } from '../../../memberships/components/MemberRoles'
 import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../working-groups/hooks/useOpenings'
-import { isOpeningOpen } from '../../../working-groups/model/isOpeningOpen'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
@@ -28,7 +27,7 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const { isLoading, openings } = useOpenings()
+  const { isLoading, openings } = useOpenings({ type: 'open' })
   const activities = useActivities()
   const { active } = useMyMemberships()
   const { locked } = useTotalBalances()
@@ -36,7 +35,6 @@ export const WorkingGroupsOpenings = () => {
     day: new BN(200),
     month: new BN(102_000),
   }
-  const currentOpenings = useMemo(() => openings.filter(isOpeningOpen), [isLoading, openings])
 
   const crumbs = useMemo(
     () => [
@@ -52,7 +50,7 @@ export const WorkingGroupsOpenings = () => {
       title: 'Openings',
       active: activeTab === 'OPENINGS',
       onClick: () => setActiveTab('OPENINGS'),
-      count: currentOpenings.length,
+      count: openings.length,
     },
     {
       title: 'Upcoming openings',
@@ -85,7 +83,7 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? currentOpenings : []} />}
+            {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
           </ContentWithTabs>
         </MainPanel>
         <SidePanel>
