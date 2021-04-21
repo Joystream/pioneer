@@ -40,7 +40,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
   const keyring = useKeyring()
 
-  const { state, isValid, errors, validate, changeField } = useForm<FormFields>(InviteMemberSchema, {
+  const { state, isValid, errors, updateContext, changeField } = useForm<FormFields>(InviteMemberSchema, {
     name: '',
     handle: '',
     about: '',
@@ -55,8 +55,8 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
 
   useEffect(() => {
-    validate(state, { size: potentialMemberIdSize, keyring })
-  }, [JSON.stringify(state), potentialMemberIdSize?.toString()])
+    updateContext({ size: potentialMemberIdSize, keyring })
+  }, [potentialMemberIdSize?.toString()])
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>

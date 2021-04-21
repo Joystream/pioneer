@@ -73,7 +73,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   // 1. Handling async validations
   // 2. Debounce - useDebounce
 
-  const { state, isValid, errors, validate, changeField } = useForm<FormFields>(CreateMemberSchema, {
+  const { state, isValid, errors, updateContext, changeField } = useForm<FormFields>(CreateMemberSchema, {
     name: '',
     rootAccount: undefined,
     controllerAccount: undefined,
@@ -93,8 +93,8 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
 
   useEffect(() => {
-    validate(state, { size: potentialMemberIdSize })
-  }, [state, potentialMemberIdSize])
+    updateContext({ size: potentialMemberIdSize })
+  }, [potentialMemberIdSize?.toString()])
 
   const onCreate = () => {
     if (!controllerAccount || !rootAccount) {

@@ -45,7 +45,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const { api } = useApi()
   const { allAccounts } = useAccounts()
 
-  const { state, isValid, errors, validate, changeField } = useForm<UpdateMemberForm>(UpdateMemberSchema, {
+  const { state, isValid, errors, updateContext, changeField } = useForm<UpdateMemberForm>(UpdateMemberSchema, {
     id: member.id,
     name: member.name || '',
     handle: member.handle || '',
@@ -65,8 +65,8 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const canUpdate = isValid && hasAnyEdits(state, member)
 
   useEffect(() => {
-    validate(state, { size: potentialMemberIdSize, isHandleChanged: state.handle !== member.handle })
-  }, [state, potentialMemberIdSize])
+    updateContext({ size: potentialMemberIdSize, isHandleChanged: state.handle !== member.handle })
+  }, [potentialMemberIdSize?.toString()])
 
   const onCreate = () => {
     if (canUpdate) {

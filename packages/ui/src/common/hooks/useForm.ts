@@ -1,4 +1,4 @@
-import { Reducer, useCallback, useMemo, useReducer, useState } from 'react'
+import { Reducer, useMemo, useReducer, useState } from 'react'
 import { AnyObjectSchema, ValidationError } from 'yup'
 
 type KeyName<T> = keyof T
@@ -19,26 +19,17 @@ export const useForm = <T extends Record<any, any>>(schema: AnyObjectSchema, ini
   const [state, dispatch] = useReducer(formReducer, initializer)
   const [errors, setErrors] = useState<ValidationError[]>([])
 
-  const [data, setData] = useState<T>()
-  const [context, setContext] = useState()
+  const [context, setContext] = useState<unknown>()
 
   const isValid = useMemo(() => {
     try {
-      schema.validateSync(data, { abortEarly: false, stripUnknown: true, context: context })
+      schema.validateSync(state, { abortEarly: false, stripUnknown: true, context: context })
       return true
     } catch (error) {
       setErrors(error.inner)
       return false
     }
-  }, [JSON.stringify(data), JSON.stringify(context)])
-
-  const validate = useCallback(
-    (data: T, context: any) => {
-      setData(data)
-      setContext(context)
-    },
-    [setData, setContext]
-  )
+  }, [JSON.stringify(state), JSON.stringify(context)])
 
   const changeField = (type: KeyName<T>, value: KeyValue<T>) => {
     dispatch({ type, value })
@@ -47,5 +38,5 @@ export const useForm = <T extends Record<any, any>>(schema: AnyObjectSchema, ini
   // TODO API design:
   // const [form, changeField, validation] = useForm<FormFields>({}, Validations)
   // validations.isValid
-  return { state, isValid, errors, changeField, validate }
+  return { state, isValid, errors, changeField, updateContext: setContext }
 }
