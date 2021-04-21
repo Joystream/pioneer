@@ -34,11 +34,9 @@ describe('useForm', () => {
       )
     )
 
-    const { isValid, errors, fields } = result.current
-
-    expect(isValid).toBeTruthy()
-    expect(errors).toHaveLength(0)
-    expect(fields).toEqual({
+    expect(result.current.validation.isValid).toBeTruthy()
+    expect(result.current.validation.errors).toHaveLength(0)
+    expect(result.current.fields).toEqual({
       aBoolean: true,
       aNumber: 0,
       aString: '',
@@ -57,10 +55,8 @@ describe('useForm', () => {
       )
     )
 
-    const { isValid, errors } = result.current
-
-    expect(isValid).toBeFalsy()
-    expect(errors).toHaveLength(3)
+    expect(result.current.validation.isValid).toBeFalsy()
+    expect(result.current.validation.errors).toHaveLength(3)
   })
 
   it('Validates form on changes', async () => {
@@ -75,21 +71,22 @@ describe('useForm', () => {
       )
     )
 
-    const { changeField } = result.current
-    expect(result.current.errors).toHaveLength(3)
+    expect(result.current.validation.isValid).toBeFalsy()
+    expect(result.current.validation.errors).toHaveLength(3)
 
     act(() => {
-      changeField('aNumber', 1)
+      result.current.changeField('aNumber', 1)
     })
 
-    expect(result.current.errors).toHaveLength(2)
+    expect(result.current.validation.isValid).toBeFalsy()
+    expect(result.current.validation.errors).toHaveLength(2)
 
     act(() => {
-      changeField('aBoolean', true)
-      changeField('aString', 'foo')
+      result.current.changeField('aBoolean', true)
+      result.current.changeField('aString', 'foo')
     })
 
-    expect(result.current.isValid).toBeTruthy()
-    expect(result.current.errors).toHaveLength(2)
+    expect(result.current.validation.isValid).toBeTruthy()
+    expect(result.current.validation.errors).toHaveLength(0)
   })
 })

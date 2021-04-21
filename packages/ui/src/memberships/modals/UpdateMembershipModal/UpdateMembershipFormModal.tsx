@@ -45,18 +45,17 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const { api } = useApi()
   const { allAccounts } = useAccounts()
 
-  const { fields, isValid, errors, setContext, changeField } = useForm<UpdateMemberForm>(
-    {
-      id: member.id,
-      name: member.name || '',
-      handle: member.handle || '',
-      about: '',
-      avatarUri: member.avatar || '',
-      rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
-      controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
-    },
-    UpdateMemberSchema
-  )
+  const initializer = {
+    id: member.id,
+    name: member.name || '',
+    handle: member.handle || '',
+    about: '',
+    avatarUri: member.avatar || '',
+    rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
+    controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
+  }
+  const { fields, changeField, validation } = useForm<UpdateMemberForm>(initializer, UpdateMemberSchema)
+  const { isValid, errors, setContext } = validation
   const { handle, name, avatarUri, about, controllerAccount, rootAccount } = fields
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])

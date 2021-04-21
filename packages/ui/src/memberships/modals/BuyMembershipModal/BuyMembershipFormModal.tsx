@@ -84,7 +84,8 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
     referrer: undefined,
     hasTerms: false,
   }
-  const { fields, isValid, errors, setContext, changeField } = useForm<FormFields>(initializer, CreateMemberSchema)
+  const { fields, changeField, validation: validation } = useForm<FormFields>(initializer, CreateMemberSchema)
+  const { isValid, errors, setContext } = validation
   const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = fields
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])

@@ -21,6 +21,7 @@ export const useForm = <T extends Record<any, any>>(initializer: T, schema: AnyO
   const isValid = useMemo(() => {
     try {
       schema.validateSync(fields, { abortEarly: false, stripUnknown: true, context: context })
+      setErrors([])
       return true
     } catch (error) {
       setErrors(error.inner)
@@ -32,8 +33,13 @@ export const useForm = <T extends Record<any, any>>(initializer: T, schema: AnyO
     dispatch({ type, value })
   }
 
-  // TODO API design:
-  // const [form, changeField, validation] = useForm<FormFields>({}, Validations)
-  // validations.isValid
-  return { fields, isValid, errors, changeField, setContext }
+  return {
+    fields,
+    changeField,
+    validation: {
+      isValid,
+      errors,
+      setContext,
+    },
+  }
 }

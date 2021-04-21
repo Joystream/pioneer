@@ -40,16 +40,15 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { api } = useApi()
   const keyring = useKeyring()
 
-  const { fields, isValid, errors, setContext, changeField } = useForm<FormFields>(
-    {
-      name: '',
-      handle: '',
-      about: '',
-      avatarUri: '',
-      hasTerms: false,
-    },
-    InviteMemberSchema
-  )
+  const initializer = {
+    name: '',
+    handle: '',
+    about: '',
+    avatarUri: '',
+    hasTerms: false,
+  }
+  const { fields, changeField, validation } = useForm<FormFields>(initializer, InviteMemberSchema)
+  const { isValid, errors, setContext } = validation
 
   const { rootAccount, controllerAccount, handle, name, avatarUri, about } = fields
 
