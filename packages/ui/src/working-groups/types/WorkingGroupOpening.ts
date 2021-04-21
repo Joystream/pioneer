@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { WorkingGroupOpeningFieldsFragment } from '../queries'
+import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
 
@@ -41,3 +41,19 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   },
   title: fields.metadata.shortDescription,
 })
+
+type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'
+
+interface ApplicationQuestion {
+  index: number
+  type: ApplicationQuestionType
+  question: string
+}
+
+export const asApplicationQuestion = (opening: ApplicationQuestionFieldsFragment): ApplicationQuestion => {
+  return {
+    index: opening.index,
+    type: opening.type,
+    question: opening.question,
+  }
+}
