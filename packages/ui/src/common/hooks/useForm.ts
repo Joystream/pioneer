@@ -9,16 +9,13 @@ type Action<T> = {
   value?: KeyValue<T>
 }
 
-type FormReducer<T> = Reducer<T, Action<T>>
+const formReducer = <T extends Record<any, any>>(state: T, action: Action<T>): T => {
+  return { ...state, [action.type]: action.value }
+}
 
 export const useForm = <T extends Record<any, any>>(schema: AnyObjectSchema, initializer: T) => {
-  const formReducer: FormReducer<T> = (state: T, action): T => {
-    return { ...state, [action.type]: action.value }
-  }
-
-  const [state, dispatch] = useReducer(formReducer, initializer)
+  const [state, dispatch] = useReducer(formReducer as Reducer<T, Action<T>>, initializer)
   const [errors, setErrors] = useState<ValidationError[]>([])
-
   const [context, setContext] = useState<unknown>()
 
   const isValid = useMemo(() => {
