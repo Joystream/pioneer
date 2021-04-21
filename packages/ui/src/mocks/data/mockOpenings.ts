@@ -60,24 +60,20 @@ export const seedOpenings = (server: any) => {
   const ids = workingGroups.models.map(({ id }: any) => id)
 
   openingsData.map((openingData) => {
-    console.group('seedOpening')
     const questions = openingData.metadata.applicationFormQuestions
     openingData.metadata.applicationFormQuestions = []
 
     for (const id of ids) {
       const opening = seedOpening({ ...openingData, groupId: id }, server)
-      console.log(opening.metadata)
 
       for (const question of questions) {
-        const createdQuestion = server.schema.create('ApplicationFormQuestion', {
+        server.schema.create('ApplicationFormQuestion', {
           index: questions.indexOf(question),
           ...question,
           openingMetadata: opening.metadata,
         })
-        console.log(question, createdQuestion)
       }
     }
-    console.groupEnd()
   })
 }
 
