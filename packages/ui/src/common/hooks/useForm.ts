@@ -13,7 +13,7 @@ const formReducer = <T extends Record<any, any>>(state: T, action: Action<T>): T
   return { ...state, [action.type]: action.value }
 }
 
-export const useForm = <T extends Record<any, any>>(schema: AnyObjectSchema, initializer: T) => {
+export const useForm = <T extends Record<any, any>>(initializer: T, schema: AnyObjectSchema) => {
   const [state, dispatch] = useReducer(formReducer as Reducer<T, Action<T>>, initializer)
   const [errors, setErrors] = useState<ValidationError[]>([])
   const [context, setContext] = useState<unknown>()

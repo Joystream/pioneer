@@ -73,7 +73,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   // 1. Handling async validations
   // 2. Debounce - useDebounce
 
-  const { state, isValid, errors, updateContext, changeField } = useForm<FormFields>(CreateMemberSchema, {
+  const initializer = {
     name: '',
     rootAccount: undefined,
     controllerAccount: undefined,
@@ -83,7 +83,8 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
     isReferred: false,
     referrer: undefined,
     hasTerms: false,
-  })
+  }
+  const { state, isValid, errors, updateContext, changeField } = useForm<FormFields>(initializer, CreateMemberSchema)
   const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = state
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])

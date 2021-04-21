@@ -24,11 +24,14 @@ describe('useForm', () => {
 
   it('Valid initializer', () => {
     const { result } = renderHook(() =>
-      useForm<TestForm>(OptionalSchema, {
-        aBoolean: true,
-        aNumber: 0,
-        aString: '',
-      })
+      useForm<TestForm>(
+        {
+          aBoolean: true,
+          aNumber: 0,
+          aString: '',
+        },
+        OptionalSchema
+      )
     )
 
     const { isValid, errors, state } = result.current
@@ -44,11 +47,14 @@ describe('useForm', () => {
 
   it('Invalid initializer', () => {
     const { result } = renderHook(() =>
-      useForm<Partial<TestForm>>(RequiredSchema, {
-        aBoolean: undefined,
-        aNumber: undefined,
-        aString: undefined,
-      })
+      useForm<Partial<TestForm>>(
+        {
+          aBoolean: undefined,
+          aNumber: undefined,
+          aString: undefined,
+        },
+        RequiredSchema
+      )
     )
 
     const { isValid, errors } = result.current
@@ -59,11 +65,14 @@ describe('useForm', () => {
 
   it('Validates form on changes', async () => {
     const { result } = renderHook(() =>
-      useForm<Partial<TestForm>>(RequiredSchema, {
-        aBoolean: undefined,
-        aNumber: undefined,
-        aString: undefined,
-      })
+      useForm<Partial<TestForm>>(
+        {
+          aBoolean: undefined,
+          aNumber: undefined,
+          aString: undefined,
+        },
+        RequiredSchema
+      )
     )
 
     const { changeField } = result.current
