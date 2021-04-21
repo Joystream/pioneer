@@ -53,7 +53,7 @@ const CKEditorStylesOverrides = createGlobalStyle`
     list-style-type: initial;
   }
 
-  :root{
+  :root {
     --ck-focus-ring: 1px solid ${Colors.Blue[300]};
     --ck-z-modal: calc(${ZIndex.Modal} + 10);
   }
@@ -64,31 +64,34 @@ export const CKEditor = ({ disabled, EditorClass, onBlur, onChange, onFocus }: C
   const editorRef = useRef<Editor | null>(null)
 
   useEffect(() => {
-    const current: any = editorRef?.current
-    current && (current.isReadOnly = !!disabled)
+    if (!editorRef.current) {
+      return
+    }
+
+    editorRef.current.isReadOnly = !!disabled
   }, [disabled])
 
   useEffect(() => {
-    EditorClass.create(ref.current, {}).then((editor: Editor) => {
+    const createPromise: Promise<Editor> = EditorClass.create(ref.current, {}).then((editor: Editor) => {
       editorRef.current = editor
       editor.isReadOnly = disabled ?? false
 
       const modelDocument = editor.model.document
       const viewDocument = editor.editing.view.document
 
-      modelDocument.on('change:data', (event: any) => {
+      modelDocument.on('change:data', (event: EventInfo) => {
         if (onChange) {
           onChange(event, editor)
         }
       })
 
-      viewDocument.on('focus', (event: any) => {
+      viewDocument.on('focus', (event: EventInfo) => {
         if (onFocus) {
           onFocus(event, editor)
         }
       })
 
-      viewDocument.on('blur', (event: any) => {
+      viewDocument.on('blur', (event: EventInfo) => {
         if (onBlur) {
           onBlur(event, editor)
         }
@@ -98,7 +101,7 @@ export const CKEditor = ({ disabled, EditorClass, onBlur, onChange, onFocus }: C
     })
 
     return () => {
-      editorRef.current?.destroy()
+      createPromise.then((editor) => editor.destroy())
     }
   }, [])
 
