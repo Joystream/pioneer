@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { InputComponent, InputText, InputTextarea } from '../../common/components/forms'
 import { ApplicationQuestionType } from '../types'
 
 interface ApplicationQuestionInputProps {
@@ -7,13 +8,11 @@ interface ApplicationQuestionInputProps {
   question: string
 }
 
-export const ApplicationQuestionInput = ({ question, type }: ApplicationQuestionInputProps) => (
-  <div>
-    <p>
-      <strong>Type</strong>: {type}
-    </p>
-    <p>
-      <strong>Question</strong>: {question}
-    </p>
-  </div>
-)
+export const ApplicationQuestionInput = ({ question, type }: ApplicationQuestionInputProps) => {
+  return (
+    <InputComponent label={question} required inputSize={type === 'TEXTAREA' ? 'l' : 'm'}>
+      {type === 'TEXT' && <InputText />}
+      {type === 'TEXTAREA' && <InputTextarea />}
+    </InputComponent>
+  )
+}
