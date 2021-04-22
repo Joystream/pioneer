@@ -1,10 +1,12 @@
 import { createContext } from 'react'
 
-import { UseMembership } from './provider'
+import { MyMemberships } from './provider'
 
-export const MembershipContext = createContext<UseMembership>({
+export const MembershipContext = createContext<MyMemberships>({
   active: undefined,
   setActive: () => {
     /**/
   },
+  members: [],
+  isLoading: true,
 })
