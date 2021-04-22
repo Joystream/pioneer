@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { isOpeningOpen } from '../model/isOpeningOpen'
 import { useGetWorkingGroupOpeningsQuery } from '../queries'
 import { asWorkingGroupOpening, WorkingGroupOpening } from '../types'
 
@@ -30,5 +31,3 @@ export const useOpenings = ({ groupId, type }: UseOpeningsParams = {}) => {
     openings,
   }
 }
-
-const isOpeningOpen = ({ status }: WorkingGroupOpening) => status == 'OpeningStatusOpen'
