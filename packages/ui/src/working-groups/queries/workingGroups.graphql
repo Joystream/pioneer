@@ -12,6 +12,9 @@ fragment WorkerFields on Worker {
   group {
     id
   }
+  status {
+    __typename
+  }
 }
 
 fragment WorkingGroupFields on WorkingGroup {
