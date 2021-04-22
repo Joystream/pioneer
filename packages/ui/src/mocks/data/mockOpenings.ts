@@ -2,11 +2,15 @@ import rawOpenings from './raw/openings.json'
 
 type OpeningStatusType = 'open' | 'filled' | 'cancelled'
 
+interface QuestionMock {
+  type: string
+  question: string
+}
+
 interface RawOpeningMock {
   groupId: number
   type: string // 'leader' | 'regular'
   status: string // OpeningStatusType
-
   stakeAmount: number
   metadata: {
     shortDescription: string
@@ -14,7 +18,7 @@ interface RawOpeningMock {
     hiringLimit: number
     expectedEnding: string
     applicationDetails: string
-    applicationFormQuestions?: string[]
+    applicationFormQuestions?: QuestionMock[]
   }
   unstakingPeriod: number
   rewardPerBlock: number
@@ -56,8 +60,19 @@ export const seedOpenings = (server: any) => {
   const ids = workingGroups.models.map(({ id }: any) => id)
 
   openingsData.map((openingData) => {
+    const questions = openingData.metadata.applicationFormQuestions
+    openingData.metadata.applicationFormQuestions = []
+
     for (const id of ids) {
-      seedOpening({ ...openingData, groupId: id }, server)
+      const opening = seedOpening({ ...openingData, groupId: id }, server)
+
+      for (const question of questions) {
+        server.schema.create('ApplicationFormQuestion', {
+          index: questions.indexOf(question),
+          ...question,
+          openingMetadata: opening.metadata,
+        })
+      }
     }
   })
 }

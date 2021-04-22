@@ -17,6 +17,7 @@ import {
   searchMembersResolver,
   getWorkingGroupResolver,
   getWorkingGroupApplicationsResolver,
+  getWorkingGroupOpeningResolver,
 } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
@@ -50,6 +51,7 @@ export const makeServer = (environment = 'development') => {
               workingGroups: getWorkingGroupsResolver,
               workingGroup: getWorkingGroupResolver,
               workingGroupOpenings: getWorkingGroupOpeningsResolver,
+              workingGroupOpening: getWorkingGroupOpeningResolver,
               workers: getWorkersResolver,
               workingGroupApplications: getWorkingGroupApplicationsResolver,
             },

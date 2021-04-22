@@ -534,6 +534,10 @@ export type WorkingGroupWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type WorkingGroupOpeningWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
+}
+
 export type MembershipWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
   handle?: Maybe<Scalars['String']>
@@ -578,6 +582,7 @@ export type Query = {
   workingGroup?: Maybe<WorkingGroup>
   workers: Array<Worker>
   workingGroupOpenings?: Maybe<Array<WorkingGroupOpening>>
+  workingGroupOpening?: Maybe<WorkingGroupOpening>
   workingGroupApplications?: Maybe<Array<WorkingGroupApplication>>
 }
 
@@ -667,6 +672,10 @@ export type QueryWorkingGroupOpeningsArgs = {
   offset?: Maybe<Scalars['Int']>
   limit?: Maybe<Scalars['Int']>
   where?: Maybe<WorkingGroupOpeningsWhereInput>
+}
+
+export type QueryWorkingGroupOpeningArgs = {
+  where?: Maybe<WorkingGroupOpeningWhereUniqueInput>
 }
 
 export type QueryWorkingGroupApplicationsArgs = {

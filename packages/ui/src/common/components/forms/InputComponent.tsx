@@ -41,7 +41,7 @@ interface InputProps {
 
 interface InputElementProps {
   disabled?: boolean
-  inputSize?: 'm' | 'l' | undefined
+  inputSize?: 'm' | 'l' | 'auto' | undefined
   icon?: React.ReactElement
   copy?: boolean
   units?: string
@@ -269,6 +269,8 @@ const InputContainer = styled.div<InputElementProps>`
   width: 100%;
   height: ${({ inputSize }) => {
     switch (inputSize) {
+      case 'auto':
+        return undefined
       case 'l':
         return '80px'
       case 'm':

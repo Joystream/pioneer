@@ -14,7 +14,7 @@ interface MultiTokenValueStatProps extends StatisticItemProps {
 export const MultiTokenValueStat = ({ title, values }: MultiTokenValueStatProps) => (
   <MultiStatisticItem title={title}>
     {values.map(({ label, value }) => (
-      <StatisticItemSpacedContent>
+      <StatisticItemSpacedContent key={label}>
         <StatisticLabel>{label}</StatisticLabel>
         <TotalValue value={value} />
       </StatisticItemSpacedContent>

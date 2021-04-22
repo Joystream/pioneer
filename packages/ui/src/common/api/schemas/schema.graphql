@@ -531,6 +531,10 @@ input WorkingGroupWhereUniqueInput {
   id: ID
 }
 
+input WorkingGroupOpeningWhereUniqueInput {
+  id: ID
+}
+
 input MembershipWhereUniqueInput {
   id: ID
   handle: String
@@ -572,6 +576,7 @@ type Query {
   workingGroup(where: WorkingGroupWhereUniqueInput!): WorkingGroup
   workers(offset: Int, limit: Int = 50, where: WorkersWhereInput): [Worker!]!
   workingGroupOpenings(offset: Int, limit: Int = 50, where: WorkingGroupOpeningsWhereInput): [WorkingGroupOpening!]
+  workingGroupOpening(where: WorkingGroupOpeningWhereUniqueInput): WorkingGroupOpening
   workingGroupApplications(offset: Int, limit: Int = 50, where: WorkingGroupApplicationsWhereInput): [WorkingGroupApplication!]
 }
 

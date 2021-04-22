@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
 
-import { Animations, BorderRad, Colors, Fonts, Shadows } from '../../constants'
+import { Animations, BorderRad, Colors, Fonts, Shadows, ZIndex } from '../../constants'
 import { CloseButton } from '../buttons'
 import { TextMedium, ValueInJoys } from '../typography'
 
@@ -83,7 +83,7 @@ export const ModalGlass = styled.div<ModalProps>`
   }};
   background-color: ${Colors.Black[700.85]};
   color: ${Colors.Black[900]};
-  z-index: 100000;
+  z-index: ${ZIndex.Modal};
   ${Animations.showModalBackground};
 `
 
