@@ -51,9 +51,9 @@ export const MemberProfile = React.memo(() => {
           <SidePanelTop>
             <SidePaneTitle>My Profile</SidePaneTitle>
             {isMyMember && activeTab === 'DETAILS' && (
-              <EditMembershipButton member={member}>
+              <SidePaneEditMembershipButton member={member}>
                 <EditSymbol />
-              </EditMembershipButton>
+              </SidePaneEditMembershipButton>
             )}
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
@@ -126,10 +126,16 @@ const SidePaneHeader = styled.div`
 
 const SidePanelTop = styled.div`
   display: grid;
-  grid-template-columns: 1fr 32px 20px;
+  position: relative;
+  grid-template-columns: 1fr 20px;
   grid-column-gap: 14px;
   align-items: center;
   width: 100%;
+`
+
+const SidePaneEditMembershipButton = styled(EditMembershipButton)`
+  position: absolute;
+  right: 36px;
 `
 
 const SidePaneTitle = styled.h5``
