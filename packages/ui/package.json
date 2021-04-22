@@ -21,6 +21,7 @@
     "@ckeditor/ckeditor5-dev-utils": "^24.4.2",
     "@ckeditor/ckeditor5-editor-classic": "^27.1.0",
     "@ckeditor/ckeditor5-essentials": "^27.1.0",
+    "@ckeditor/ckeditor5-heading": "^27.1.0",
     "@ckeditor/ckeditor5-markdown-gfm": "^27.1.0",
     "@ckeditor/ckeditor5-paragraph": "^27.1.0",
     "@ckeditor/ckeditor5-theme-lark": "^27.1.0",

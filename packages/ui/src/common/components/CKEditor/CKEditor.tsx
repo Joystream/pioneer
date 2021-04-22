@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
-import { MarkdownEditor } from './MarkdownEditor'
+import { MarkdownEditor } from './MarkdownEditor.js'
 import { Editor, EventInfo } from './types'
 
 interface CKEditorProps {
@@ -13,7 +13,7 @@ interface CKEditorProps {
 }
 
 export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps) => {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement | null>(null)
   const editorRef = useRef<Editor | null>(null)
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps)
   }, [disabled])
 
   useEffect(() => {
-    const createPromise: Promise<Editor> = MarkdownEditor.create(ref.current, {
+    const createPromise: Promise<Editor> = MarkdownEditor.create(ref.current || '', {
       toolbar: {
         items: [
           'heading',
@@ -55,7 +55,7 @@ export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps)
       },
       // This value must be kept in sync with the language defined in webpack.config.js.
       language: 'en',
-    }).then((editor: Editor) => {
+    }).then((editor) => {
       editorRef.current = editor
       editor.isReadOnly = disabled ?? false
 
@@ -86,7 +86,7 @@ export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps)
     return () => {
       createPromise.then((editor) => editor.destroy())
     }
-  }, [])
+  }, [ref.current])
 
   return (
     <>
