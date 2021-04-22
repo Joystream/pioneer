@@ -1,6 +1,7 @@
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp'
 import { Keyring } from '@polkadot/ui-keyring'
 import React, { ReactNode, useEffect, useState } from 'react'
+import { debounceTime } from 'rxjs/operators'
 
 import { useKeyring } from '../../../common/hooks/useKeyring'
 import { useObservable } from '../../../common/hooks/useObservable'
@@ -83,7 +84,7 @@ export const AccountsContextProvider = (props: Props) => {
     loadKeysFromExtension(keyring).catch(console.error)
   }, [isLoaded])
 
-  const accounts = useObservable(keyring.accounts.subject.asObservable(), [keyring])
+  const accounts = useObservable(keyring.accounts.subject.asObservable().pipe(debounceTime(20)), [keyring])
 
   const allAccounts: Account[] = []
 

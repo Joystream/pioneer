@@ -1,4 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
+import { act } from '@testing-library/react'
 import { renderHook } from '@testing-library/react-hooks'
 import BN from 'bn.js'
 import set from 'lodash/set'
@@ -13,6 +14,8 @@ import { stubApi } from '../../_mocks/transactions'
 
 describe('useTotalBalances', () => {
   const useApi = stubApi()
+
+  jest.useFakeTimers()
 
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -54,6 +57,10 @@ describe('useTotalBalances', () => {
     useApi.isConnected = true
 
     const { result } = renderUseTotalBalances()
+
+    act(() => {
+      jest.runOnlyPendingTimers()
+    })
 
     expect(result.current).toEqual({
       total: new BN(880),
