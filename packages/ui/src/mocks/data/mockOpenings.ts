@@ -55,24 +55,18 @@ const seedOpening = (openingData: RawOpeningMock, server: any) => {
 }
 
 export const seedOpenings = (server: any) => {
-  const workingGroups = server.schema.all('WorkingGroup')
-
-  const ids = workingGroups.models.map(({ id }: any) => id)
-
   openingsData.map((openingData) => {
     const questions = openingData.metadata.applicationFormQuestions
     openingData.metadata.applicationFormQuestions = []
 
-    for (const id of ids) {
-      const opening = seedOpening({ ...openingData, groupId: id }, server)
+    const opening = seedOpening({ ...openingData }, server)
 
-      for (const question of questions) {
-        server.schema.create('ApplicationFormQuestion', {
-          index: questions.indexOf(question),
-          ...question,
-          openingMetadata: opening.metadata,
-        })
-      }
+    for (const question of questions) {
+      server.schema.create('ApplicationFormQuestion', {
+        index: questions.indexOf(question),
+        ...question,
+        openingMetadata: opening.metadata,
+      })
     }
   })
 }

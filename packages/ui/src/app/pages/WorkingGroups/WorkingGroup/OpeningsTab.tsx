@@ -19,6 +19,7 @@ interface Props {
 export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading, openings } = useOpenings({
     groupId: workingGroup.id,
+    type: 'open',
   })
   const { member: leader } = useMember(workingGroup.leaderId)
   const { workers } = useWorkers(workingGroup.id ?? '')

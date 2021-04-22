@@ -19,6 +19,7 @@ import { useModal } from '../../common/hooks/useModal'
 import { useToggle } from '../../common/hooks/useToggle'
 import { relativeTime } from '../../common/model/relativeTime'
 import { ApplyForRoleModalCall } from '../modals/ApplyForRoleModal'
+import { isOpeningOpen } from '../model/isOpeningOpen'
 import { WorkingGroupOpening } from '../types'
 
 export interface OpeningsListProps {
@@ -148,6 +149,7 @@ const OpeningDetails = ({ opening }: Props) => {
           <ButtonPrimary
             size="medium"
             onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
+            disabled={!isOpeningOpen(opening)}
           >
             Apply now
           </ButtonPrimary>

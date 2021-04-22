@@ -23,6 +23,7 @@ Default.args = {
       reward: { value: new BN(1000), interval: 3600 },
       applicants: { current: 2, total: 10 },
       hiring: { current: 0, total: 1 },
+      status: 'OpeningStatusOpen',
     },
     {
       id: '221',
@@ -32,6 +33,7 @@ Default.args = {
       reward: { value: new BN(800), interval: 76 },
       applicants: { current: 8, total: 10 },
       hiring: { current: 1, total: 1 },
+      status: 'OpeningStatusOpen',
     },
   ],
 }

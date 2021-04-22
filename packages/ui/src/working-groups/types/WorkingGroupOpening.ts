@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
+type Status = 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
 
 export interface WorkingGroupOpening {
   id: string
@@ -21,6 +22,7 @@ export interface WorkingGroupOpening {
     current: number
     total: number
   }
+  status: Status
 }
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
@@ -40,6 +42,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     total: fields.metadata.hiringLimit,
   },
   title: fields.metadata.shortDescription,
+  status: fields.status.__typename,
 })
 
 export type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'
