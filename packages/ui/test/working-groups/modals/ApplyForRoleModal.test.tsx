@@ -62,7 +62,7 @@ describe('UI: ApplyForRoleModal', () => {
   it('Renders a modal', async () => {
     renderModal()
 
-    expect(await screen.findByText('Apply for role')).toBeDefined()
+    expect(await screen.findByText('Applying for role')).toBeDefined()
   })
 
   describe('Stake step', () => {
@@ -72,7 +72,7 @@ describe('UI: ApplyForRoleModal', () => {
       const button = await screen.findByRole('button', { name: /Next step/i })
       expect(button).toBeDisabled()
 
-      await selectAccount('Select an account for Staking', 'alice')
+      await selectAccount('Select account for Staking', 'alice')
 
       const input = await screen.findByLabelText(/Select amount for staking/i)
       await fireEvent.change(input, { target: { value: '50' } })
