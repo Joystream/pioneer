@@ -22,7 +22,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
     type: 'open',
   })
   const { member: leader } = useMember(workingGroup.leaderId)
-  const { workers } = useWorkers(workingGroup.id ?? '')
+  const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
 
   return (
     <ContentWithSidepanel>

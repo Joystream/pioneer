@@ -11,7 +11,7 @@ interface Props {
 }
 export const AboutTab = ({ workingGroup }: Props) => {
   const { member: leader } = useMember(workingGroup.leaderId ?? '')
-  const { workers } = useWorkers(workingGroup.id ?? '')
+  const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
 
   return (
     <ContentWithSidepanel>

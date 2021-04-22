@@ -3,11 +3,16 @@ import { useMemo } from 'react'
 import { asMember } from '../../memberships/types'
 import { useGetWorkersQuery, WorkerFieldsFragment } from '../queries'
 
-export const useWorkers = (groupId: string, active = true) => {
+interface UseWorkersProps {
+  groupId: string
+  fetchPast?: boolean
+}
+
+export const useWorkers = ({ groupId, fetchPast }: UseWorkersProps) => {
   const options = { variables: { group_eq: groupId } }
   const { data, loading } = useGetWorkersQuery(options)
   const workers = useMemo(
-    () => data && data.workers.filter(getWorkersFilter(active)).map(({ membership }) => asMember(membership)),
+    () => data && data.workers.filter(getWorkersFilter(fetchPast)).map(({ membership }) => asMember(membership)),
     [data, loading]
   )
 
@@ -16,6 +21,6 @@ export const useWorkers = (groupId: string, active = true) => {
 
 const isActive = (worker: WorkerFieldsFragment) => worker.status.__typename === 'WorkerStatusActive'
 
-const getWorkersFilter = (activeStatus: boolean) => {
-  return (worker: WorkerFieldsFragment) => isActive(worker) === activeStatus
+const getWorkersFilter = (fetchPast: boolean | undefined) => {
+  return (worker: WorkerFieldsFragment) => isActive(worker) === !fetchPast
 }

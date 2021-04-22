@@ -45,6 +45,6 @@ const OpeningsHistory = ({ groupId }: { groupId: string }) => {
 }
 
 const WorkersHistory = ({ groupId }: { groupId: string }) => {
-  const { isLoading, workers } = useWorkers(groupId, false)
+  const { isLoading, workers } = useWorkers({ groupId, fetchPast: true })
   return isLoading ? <Loading /> : <WorkersList workers={workers} />
 }
