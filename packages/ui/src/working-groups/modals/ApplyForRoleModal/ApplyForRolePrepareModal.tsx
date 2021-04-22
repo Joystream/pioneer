@@ -7,12 +7,14 @@ import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
+import { Arrow } from '../../../common/components/icons'
 import { Modal, ModalFooter, ModalHeader, Row } from '../../../common/components/Modal'
+import { RowGapBlock } from '../../../common/components/page/PageContent'
 import { Stepper } from '../../../common/components/Stepper'
 import {
   StepDescriptionColumn,
-  StepperBody,
   StepperModalBody,
+  StepperBody,
   StepperModalWrapper,
 } from '../../../common/components/StepperModal'
 import { TextMedium, ValueInJoys } from '../../../common/components/typography'
@@ -82,8 +84,8 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
   }, [step])
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
-      <ModalHeader onClick={hideModal} title="Apply for role" />
+    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+      <ModalHeader onClick={hideModal} title="Applying for role" />
       <StepperModalBody>
         <StepperModalWrapper>
           <Stepper steps={steps} active={step} />
@@ -94,40 +96,48 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
 
           <StepperBody>
             {step === 0 && (
-              <>
+              <RowGapBlock gap={24}>
                 <Row>
-                  <h4>Select an account</h4>
-                  <TextMedium>First please select an account for staking.</TextMedium>
-                  <InputComponent label="Select an account for Staking" required inputSize="l">
-                    <SelectAccount onChange={(account) => changeField('account', account)} />
-                  </InputComponent>
+                  <RowGapBlock gap={20}>
+                    <RowGapBlock gap={8}>
+                      <h4>Select an account</h4>
+                      <TextMedium>First please select an account for staking.</TextMedium>
+                    </RowGapBlock>
+                    <InputComponent label="Select account for Staking" required inputSize="l">
+                      <SelectAccount onChange={(account) => changeField('account', account)} />
+                    </InputComponent>
+                  </RowGapBlock>
                 </Row>
 
                 <Row>
-                  <h4>Stake</h4>
-                  <TextMedium>
-                    You must stake at least <ValueInJoys>{formatTokenValue(MIN_STAKE)}</ValueInJoys> to apply for this
-                    role. This stake will be returned to you when the hiring process is complete, whether or not you are
-                    hired, and will also be used to rank applications.
-                  </TextMedium>
-                  <InputComponent
-                    id="amount-input"
-                    label="Select amount for Staking"
-                    inputWidth="s"
-                    units="JOY"
-                    validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
-                    message={amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined}
-                    required
-                  >
-                    <InputNumber
+                  <RowGapBlock gap={20}>
+                    <RowGapBlock gap={8}>
+                      <h4>Stake</h4>
+                      <TextMedium>
+                        You must stake at least <ValueInJoys>{formatTokenValue(MIN_STAKE)}</ValueInJoys> to apply for
+                        this role. This stake will be returned to you when the hiring process is complete, whether or
+                        not you are hired, and will also be used to rank applications.
+                      </TextMedium>
+                    </RowGapBlock>
+                    <InputComponent
                       id="amount-input"
-                      value={formatTokenValue(new BN(amount))}
-                      placeholder="0"
-                      onChange={(event) => setAmount(event.target.value)}
-                    />
-                  </InputComponent>
+                      label="Select amount for Staking"
+                      tight
+                      units="JOY"
+                      validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
+                      message={amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined}
+                      required
+                    >
+                      <InputNumber
+                        id="amount-input"
+                        value={formatTokenValue(new BN(amount))}
+                        placeholder="0"
+                        onChange={(event) => setAmount(event.target.value)}
+                      />
+                    </InputComponent>
+                  </RowGapBlock>
                 </Row>
-              </>
+              </RowGapBlock>
             )}
             {step === 1 && (
               <>
@@ -151,8 +161,9 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={!isValid} onClick={nextStep}>
+        <ButtonPrimary disabled={!isValid} onClick={nextStep} size="medium">
           Next step
+          <Arrow direction="right" />
         </ButtonPrimary>
       </ModalFooter>
     </Modal>

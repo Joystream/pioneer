@@ -7,16 +7,19 @@ interface LinkProps {
   href?: string
   className?: string
   children?: React.ReactNode
+  dark?: boolean
+  size?: 'm' | 'l'
 }
 
-export const Link = ({ href, className, children }: LinkProps) => (
-  <LinkStyles href={href} target="_blank" className={className}>
+export const Link = ({ href, className, children, dark, size }: LinkProps) => (
+  <LinkStyles href={href} target="_blank" className={className} dark={dark} size={size}>
     {children}
   </LinkStyles>
 )
 
-export const LinkStyles = styled.a`
-  color: ${Colors.Blue[400]};
+export const LinkStyles = styled.a<LinkProps>`
+  color: ${({ dark }) => (dark ? Colors.Black[900] : Colors.Blue[400])};
+  ${({ size }) => size === 'l' && 'line-height: 32px'};
   text-decoration: underline;
   text-underline-offset: 1px;
   transition: ${Transitions.all};

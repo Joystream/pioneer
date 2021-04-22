@@ -1,7 +1,11 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { Colors } from '../constants'
+import { BorderRad, Colors, Transitions } from '../constants'
+
+import { Arrow, CheckboxIcon } from './icons'
+import { ScrollableModalColumn } from './Modal'
+import { TextInlineSmall } from './typography'
 
 interface Step {
   title: string
@@ -25,11 +29,11 @@ const getStepFace = (step: StepToRender) => {
   }
 
   if (step.isActive) {
-    return '▶'
+    return <Arrow direction="right" />
   }
 
   if (step.isPast) {
-    return '✔'
+    return <CheckboxIcon />
   }
 
   return step.number
@@ -52,58 +56,113 @@ export const Stepper = ({ steps, active = 0 }: StepperProps) => {
   return (
     <StepperWrap>
       {stepsToRender.map((value) => (
-        <StepWrap key={value.title}>
-          <StepNumber {...value}>{getStepFace(value)}</StepNumber>
-          {value.title}
+        <StepWrap key={value.title} {...value}>
+          <StepNumber>
+            <StepNumberText value>{getStepFace(value)}</StepNumberText>
+          </StepNumber>
+          <StepTitle>{value.title}</StepTitle>
         </StepWrap>
       ))}
     </StepperWrap>
   )
 }
 
-export const StepperWrap = styled.div`
+export const StepperWrap = styled(ScrollableModalColumn)`
+  display: grid;
+  position: relative;
+  grid-row-gap: 20px;
+  align-content: start;
   background-color: ${Colors.Black[800]};
   color: ${Colors.White};
-  padding: 14px;
 `
 
-const StepWrap = styled.div`
-  margin: 5px 0;
+const StepNumber = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid ${Colors.Black[600]};
+  border-radius: ${BorderRad.round};
+  font-weight: 700;
+  color: ${Colors.Black[300]};
+  background-color: transparent;
+  transition: ${Transitions.all};
+`
+
+const StepTitle = styled.h6`
+  font-weight: 400;
+  align-self: center;
+  color: ${Colors.Black[300]};
+  -webkit-text-stroke-width: 0.05em;
+  -webkit-text-stroke-color: transparent;
+  transition: ${Transitions.all};
 `
 
 type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBabyStep'>
 
-const StepNumber = styled.div<StepNumberProps>`
-  display: inline-block;
-  border-radius: 20px;
-  width: 30px;
-  height: 30px;
-  border: 2px solid ${Colors.White};
-  line-height: 30px;
-  text-align: center;
-  margin-right: 4px;
+const StepWrap = styled.div<StepNumberProps>`
+  display: grid;
+  position: relative;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  justify-content: start;
+
+  &:not(:last-child) {
+    ${StepNumber}:before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 14px;
+      width: 1px;
+      height: calc(100% + 20px - 28px);
+      transform: translateX(-50%);
+      background-color: ${Colors.Black[600]};
+      transition: ${Transitions.all};
+    }
+  }
 
   ${({ isBabyStep }: StepNumberProps) =>
     isBabyStep &&
     css`
-      border-width: 4px;
-      border-radius: 4px;
-      max-height: 0;
-      max-width: 0;
-    `}
+      ${StepNumber} {
+        color: ${Colors.Red[500]};
+        border-color: ${Colors.Red[500]};
+        background-color: ${Colors.White};
+      }
+    `};
 
   ${({ isActive }: StepNumberProps) =>
     isActive &&
     css`
-      background-color: ${Colors.LogoPurple};
-      border-color: ${Colors.LogoPurple};
+      ${StepNumber} {
+        color: ${Colors.White};
+        border-color: ${Colors.Blue[500]};
+        background-color: ${Colors.Blue[500]};
+      }
+      ${StepTitle} {
+        color: ${Colors.White};
+        -webkit-text-stroke-color: ${Colors.White};
+      }
     `}
 
   ${({ isPast }: StepNumberProps) =>
     isPast &&
     css`
-      background-color: ${Colors.Black[500]};
-      border-color: ${Colors.Black[500]};
+      ${StepNumber} {
+        background-color: ${Colors.Black[500]};
+        border-color: ${Colors.Black[500]};
+      }
     `}
+`
+
+const StepNumberText = styled(TextInlineSmall)`
+  display: flex;
+  width: 16px;
+  height: 16px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  color: inherit;
+  line-height: 13px;
 `

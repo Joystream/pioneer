@@ -33,3 +33,10 @@ export const SidePanel = styled.aside`
 export const ContentWithTabs = styled(MainPanel)`
   grid-row-gap: 16px;
 `
+
+export const RowGapBlock = styled.div<{ gap?: number }>`
+  display: grid;
+  grid-row-gap: ${({ gap }) => (gap ? gap + 'px' : '24px')};
+  height: fit-content;
+  width: 100%;
+`
