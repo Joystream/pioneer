@@ -6,25 +6,19 @@ import { asWorkingGroupOpening, WorkingGroupOpening } from '../types'
 
 interface UseOpeningsParams {
   groupId?: string
-  type?: 'open' | 'past'
+  type: 'open' | 'past'
 }
 
-export const useOpenings = ({ groupId, type }: UseOpeningsParams = {}) => {
+export const useOpenings = ({ groupId, type }: UseOpeningsParams) => {
   const { loading, data } = useGetWorkingGroupOpeningsQuery({ variables: { group_eq: groupId } })
 
-  const typeFilter: (opening: WorkingGroupOpening) => boolean = useMemo(() => {
-    switch (type) {
-      case 'open':
-        return (opening) => isOpeningOpen(opening)
-      case 'past':
-        return (opening) => !isOpeningOpen(opening)
-      default:
-        return () => true
-    }
-  }, [type])
+  const getTypeFilter = (t = type) => {
+    if (t === 'open') return isOpeningOpen
+    else return (opening: WorkingGroupOpening) => !isOpeningOpen(opening)
+  }
 
   const groups = data?.workingGroupOpenings ?? []
-  const openings = useMemo(() => groups.map(asWorkingGroupOpening).filter(typeFilter), [loading, data])
+  const openings = useMemo(() => groups.map(asWorkingGroupOpening).filter(getTypeFilter()), [loading, data])
 
   return {
     isLoading: loading,

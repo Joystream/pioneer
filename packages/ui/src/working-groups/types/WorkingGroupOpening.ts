@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import { WorkingGroupOpeningFieldsFragment } from '../queries'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
+type Status = 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
 
 export interface WorkingGroupOpening {
   id: string
@@ -21,7 +22,7 @@ export interface WorkingGroupOpening {
     current: number
     total: number
   }
-  status: string
+  status: Status
 }
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
