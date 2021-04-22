@@ -5,10 +5,10 @@ export type SortKey = keyof Member
 
 export function sortMemberships(members: Member[], key: SortKey, isDescending = false) {
   if (key === 'handle') {
-    return members.sort(Comparator<Member>(isDescending, key).string)
+    return [...members].sort(Comparator<Member>(isDescending, key).string)
   }
   if (key === 'inviteCount') {
-    return members.sort(Comparator<Member>(isDescending, key).number)
+    return [...members].sort(Comparator<Member>(isDescending, key).number)
   }
   return members
 }

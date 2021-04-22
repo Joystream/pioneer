@@ -15,7 +15,8 @@ interface Props {
 }
 
 export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
-  const { count, members, setActive, active } = useMyMemberships()
+  const { members, setActive, active } = useMyMemberships()
+  const count = members.length
   const switchMember = (member: Member) => {
     setActive(member)
     onClose()

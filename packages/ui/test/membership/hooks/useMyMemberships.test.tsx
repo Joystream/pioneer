@@ -39,7 +39,6 @@ describe('useMyMemberships', () => {
 
     expect(result.current).toMatchObject({
       active: undefined,
-      count: 0,
       isLoading: true,
       members: [],
     })
@@ -52,7 +51,6 @@ describe('useMyMemberships', () => {
 
     expect(result.current).toMatchObject({
       active: undefined,
-      count: 0,
       isLoading: false,
       members: [],
     })
@@ -69,7 +67,6 @@ describe('useMyMemberships', () => {
 
     expect(result.current).toMatchObject({
       active: undefined,
-      count: 1,
       isLoading: false,
       members: [aliceMember],
     })
@@ -86,7 +83,6 @@ describe('useMyMemberships', () => {
 
     expect(result.current).toMatchObject({
       active: undefined,
-      count: 1,
       isLoading: false,
       members: [bobMember],
     })
@@ -106,7 +102,6 @@ describe('useMyMemberships', () => {
 
     expect(result.current).toMatchObject({
       active: aliceMember,
-      count: 1,
       isLoading: false,
       members: [aliceMember],
     })

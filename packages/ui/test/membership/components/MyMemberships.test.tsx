@@ -1,15 +1,13 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render, waitForElementToBeRemoved, within } from '@testing-library/react'
+import { render, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { Account } from '../../../src/accounts/types'
 import { Memberships } from '../../../src/app/pages/Profile/components/Memberships'
-import { MembershipContext } from '../../../src/memberships/providers/membership/context'
-import { Member } from '../../../src/memberships/types'
+import { MembershipContextProvider } from '../../../src/memberships/providers/membership/provider'
 import { seedMembers } from '../../../src/mocks/data'
 import { alice, bob } from '../../_mocks/keyring'
-import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -32,48 +30,29 @@ describe('UI: Memberships list', () => {
 
   const mockServer = setupMockServer()
 
-  describe('with no memberships', () => {
-    it('Shows Create Membership button', async () => {
-      const { findByRole } = renderMemberships()
+  it('No memberships', async () => {
+    const { findByRole } = renderMemberships()
 
-      expect(await findByRole('button', { name: /create a membership/i })).toBeDefined()
-    })
+    expect(await findByRole('button', { name: /create a membership/i })).toBeDefined()
   })
 
-  describe('with memberships', () => {
-    it('Shows list of memberships', async () => {
-      seedMembers(mockServer.server)
-      const { getByText } = renderMemberships()
+  it('With memberships', async () => {
+    seedMembers(mockServer.server)
+    const { getByText } = renderMemberships()
 
-      await waitForElementToBeRemoved(() => getByText('Loading...'))
+    await waitForElementToBeRemoved(() => getByText('Loading...'))
 
-      expect(getByText(/alice/i)).toBeDefined()
-      expect(getByText(/bob/i)).toBeDefined()
-    })
-
-    it('Shows active membership', async () => {
-      seedMembers(mockServer.server)
-      const { getByText } = renderMemberships(getMember('bob'))
-
-      await waitForElementToBeRemoved(() => getByText('Loading...'))
-
-      const activeMemberships = getByText(/active membership/i).parentElement!
-      expect(activeMemberships).toBeDefined()
-      expect(within(activeMemberships).getByText(/bob/i)).toBeDefined()
-
-      const otherMemberships = getByText(/other memberships/i).parentElement!
-      expect(otherMemberships).toBeDefined()
-      expect(within(otherMemberships).getByText(/alice/i)).toBeDefined()
-    })
+    expect(getByText(/alice/i)).toBeDefined()
+    expect(getByText(/bob/i)).toBeDefined()
   })
 
-  function renderMemberships(active?: Member) {
+  function renderMemberships() {
     return render(
       <HashRouter>
         <MockApolloProvider>
-          <MembershipContext.Provider value={{ active, setActive: () => undefined }}>
+          <MembershipContextProvider>
             <Memberships />
-          </MembershipContext.Provider>
+          </MembershipContextProvider>
         </MockApolloProvider>
       </HashRouter>
     )
