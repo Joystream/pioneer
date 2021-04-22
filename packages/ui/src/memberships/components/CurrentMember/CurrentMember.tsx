@@ -13,9 +13,11 @@ import { AddMembershipButton } from '../AddMembershipButton'
 import { SwitchMemberModal } from './SwitchMemberModal'
 
 export const CurrentMember = () => {
-  const { count, active } = useMyMemberships()
+  const { members, active } = useMyMemberships()
   const [isOpen, toggleOpen] = useToggle()
   const { showModal } = useModal()
+
+  const count = members.length
 
   if (count < 1) {
     return <AddMembershipButton>Create membership</AddMembershipButton>

@@ -8,7 +8,6 @@ import { asMember, Member } from '../types'
 const POLL_INTERVAL = 5000
 
 interface UseMembership {
-  count: number
   members: Member[]
   isLoading: boolean
   active: Member | undefined
@@ -29,8 +28,7 @@ export function useMyMemberships(): UseMembership {
     console.error(error)
   }
 
-  const count = data?.memberships.length ?? 0
   const members = (data?.memberships ?? []).map(asMember)
 
-  return { count, members, isLoading: loading, active, setActive }
+  return { members, isLoading: loading, active, setActive }
 }

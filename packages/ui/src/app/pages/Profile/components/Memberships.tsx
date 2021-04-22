@@ -11,7 +11,8 @@ import { MembersSection } from '../../../../memberships/components/MembersSectio
 import { useMyMemberships } from '../../../../memberships/hooks/useMyMemberships'
 
 export function Memberships() {
-  const { count, isLoading, members, active } = useMyMemberships()
+  const { isLoading, members, active } = useMyMemberships()
+  const count = members.length
   const hasMemberships = !!count
 
   if (isLoading) {
