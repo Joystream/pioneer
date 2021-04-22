@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { BorderRad, Colors } from '../../constants'
 import { ActivityCategory, ActivityType } from '../../types'
-import { CopyIcon } from '../icons'
 import { AppliedIcon } from '../icons/activities/AppliedIcon'
 import { ClosedIcon } from '../icons/activities/ClosedIcon'
 import { CreatedIcon } from '../icons/activities/CreatedIcon'
@@ -76,11 +75,16 @@ export const ActivityIcon = ({ icon }: ActivityIconProps) => {
     )
   }
 
-  return <CopyIcon />
+  return (
+    <JoystreamStyle>
+      <JoystreamIcon />
+    </JoystreamStyle>
+  )
 }
 
 const DefaulActivityIconStyle = styled.div`
   display: flex;
+  grid-area: activityicon;
   justify-content: center;
   align-items: center;
   width: 44px;
