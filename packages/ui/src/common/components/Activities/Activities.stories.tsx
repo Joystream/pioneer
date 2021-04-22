@@ -23,7 +23,7 @@ Default.args = {
       id: '1',
       time: '2021-03-09T10:28:04.155Z',
       text: 'Opening "Became a Forum Moderator has been closed by the Working Group Leader',
-      category: 'apply',
+      category: 'applied',
     },
     {
       id: '2',
@@ -35,7 +35,7 @@ Default.args = {
       id: '3',
       time: '2021-03-09T10:28:04.155Z',
       text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
-      category: 'apply',
+      category: 'applied',
       type: 'error',
     },
     {

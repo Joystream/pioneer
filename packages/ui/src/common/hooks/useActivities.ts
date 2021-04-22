@@ -11,7 +11,7 @@ export const useActivities = (): Activity[] => [
     id: '2',
     time: '2021-03-09T10:28:04.155Z',
     text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
-    category: 'welcome',
+    category: 'hired',
   },
   {
     id: '3',
@@ -24,7 +24,7 @@ export const useActivities = (): Activity[] => [
     id: '4',
     time: '2021-03-09T10:28:04.155Z',
     text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
-    category: 'welcome',
+    category: 'hired',
     type: 'ok',
   },
   {
@@ -37,7 +37,7 @@ export const useActivities = (): Activity[] => [
     id: '6',
     time: '2021-03-09T10:28:04.155Z',
     text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
-    category: 'welcome',
+    category: 'hired',
   },
   {
     id: '7',
@@ -50,7 +50,7 @@ export const useActivities = (): Activity[] => [
     id: '8',
     time: '2021-03-09T10:28:04.155Z',
     text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
-    category: 'welcome',
+    category: 'hired',
     type: 'ok',
   },
 ]

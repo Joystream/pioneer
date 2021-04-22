@@ -1,4 +1,12 @@
-export type ActivityCategory = 'closed' | 'welcome' | 'trend_upwards' | 'trend_downwards' | 'apply'
+export type ActivityCategory =
+  | 'closed'
+  | 'hired'
+  | 'created'
+  | 'increased'
+  | 'decreased'
+  | 'applied'
+  | 'warned'
+  | 'joystream'
 
 export type ActivityType = 'error' | 'ok' | 'default'
 
