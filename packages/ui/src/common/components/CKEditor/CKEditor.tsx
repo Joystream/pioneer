@@ -1,26 +1,10 @@
 import React, { useEffect, useRef } from 'react'
-import { createGlobalStyle } from 'styled-components'
 
-import { Colors, ZIndex } from '../constants'
-
-interface EventInfo {
-  name: string
-  path: any[]
-  return: any
-  source: any
-}
-
-interface Editor {
-  getData: () => string
-  setData: (data: string) => void
-  isReadOnly: boolean
-  model: any
-  editing: any
-  destroy: () => Promise<undefined>
-}
+import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
+import { MarkdownEditor } from './MarkdownEditor.js'
+import { Editor, EventInfo } from './types'
 
 interface CKEditorProps {
-  EditorClass: any
   onChange?: (event: EventInfo, editor: Editor) => void
   onBlur?: (event: EventInfo, editor: Editor) => void
   onFocus?: (event: EventInfo, editor: Editor) => void
@@ -28,39 +12,8 @@ interface CKEditorProps {
   disabled?: boolean
 }
 
-const CKEditorStylesOverrides = createGlobalStyle`
-  .ck.ck-editor {
-    width: 100%;
-  }
-
-  .ck.ck-content {
-    line-height: 1.5em;
-  }
-
-  .ck.ck-content p,
-  .ck.ck-content ul,
-  .ck.ck-content ol {
-    margin: 1em 0;
-  }
-
-
-  .ck.ck-content ol {
-    padding-inline-start: 2em;
-  }
-
-  .ck.ck-content ul {
-    padding-inline-start: 2em;
-    list-style-type: initial;
-  }
-
-  :root {
-    --ck-focus-ring: 1px solid ${Colors.Blue[300]};
-    --ck-z-modal: calc(${ZIndex.Modal} + 10);
-  }
-`
-
-export const CKEditor = ({ disabled, EditorClass, onBlur, onChange, onFocus }: CKEditorProps) => {
-  const ref = useRef(null)
+export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps) => {
+  const ref = useRef<HTMLDivElement | null>(null)
   const editorRef = useRef<Editor | null>(null)
 
   useEffect(() => {
@@ -72,7 +25,37 @@ export const CKEditor = ({ disabled, EditorClass, onBlur, onChange, onFocus }: C
   }, [disabled])
 
   useEffect(() => {
-    const createPromise: Promise<Editor> = EditorClass.create(ref.current, {}).then((editor: Editor) => {
+    const createPromise: Promise<Editor> = MarkdownEditor.create(ref.current || '', {
+      toolbar: {
+        items: [
+          'heading',
+          '|',
+          'bold',
+          'italic',
+          'link',
+          'bulletedList',
+          'numberedList',
+          '|',
+          'outdent',
+          'indent',
+          '|',
+          'uploadImage',
+          'blockQuote',
+          'insertTable',
+          'mediaEmbed',
+          'undo',
+          'redo',
+        ],
+      },
+      image: {
+        toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],
+      },
+      table: {
+        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+      },
+      // This value must be kept in sync with the language defined in webpack.config.js.
+      language: 'en',
+    }).then((editor) => {
       editorRef.current = editor
       editor.isReadOnly = disabled ?? false
 
@@ -103,7 +86,7 @@ export const CKEditor = ({ disabled, EditorClass, onBlur, onChange, onFocus }: C
     return () => {
       createPromise.then((editor) => editor.destroy())
     }
-  }, [])
+  }, [ref.current])
 
   return (
     <>
