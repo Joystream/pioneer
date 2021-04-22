@@ -48,6 +48,7 @@ interface InputElementProps {
   validation?: 'invalid' | 'valid' | 'warning' | undefined
   borderless?: boolean
   inputWidth?: 's' | undefined
+  tight?: boolean
 }
 
 interface DisabledInputProps {
@@ -64,6 +65,7 @@ export const InputComponent = React.memo(
     value,
     inputSize,
     inputWidth,
+    tight,
     icon,
     copy,
     textToCopy,
@@ -78,7 +80,7 @@ export const InputComponent = React.memo(
     borderless,
   }: InputComponentProps) => {
     return (
-      <InputElement className={className} inputSize={inputSize} inputWidth={inputWidth}>
+      <InputElement className={className} inputSize={inputSize} inputWidth={inputWidth} tight={tight}>
         {label && (
           <InputLabel htmlFor={id} isRequired={required} disabled={disabled}>
             {label}
@@ -252,7 +254,7 @@ const InputElement = styled.div<InputElementProps>`
   display: grid;
   grid-row-gap: 4px;
   align-items: center;
-  width: 100%;
+  width: ${({ tight }) => (tight ? 'fit-content' : '100%')};
   min-width: ${({ inputWidth }) => (inputWidth === 's' ? '320px' : '400px')};
 `
 

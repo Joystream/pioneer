@@ -35,7 +35,7 @@ const TextLighterStyle = css`
 `
 
 const TextLightStyle = css`
-  color: ${Colors.Black[500]};
+  color: ${Colors.Black[600]};
 `
 
 const TextMargins = css<TextProps>`

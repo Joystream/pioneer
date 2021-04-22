@@ -2,15 +2,16 @@ import styled from 'styled-components'
 
 import { Colors } from '../constants'
 
-import { ModalBody, ScrollableModalColumn } from './Modal'
+import { ScrollableModalColumn, ScrolledModalBody } from './Modal'
 
 export const StepperModalWrapper = styled.div`
   display: grid;
   grid-template-columns: 184px 336px 1fr;
   min-height: 200px;
+  height: 100%;
 `
 
-export const StepperModalBody = styled(ModalBody)`
+export const StepperModalBody = styled(ScrolledModalBody)`
   padding: 0;
 `
 

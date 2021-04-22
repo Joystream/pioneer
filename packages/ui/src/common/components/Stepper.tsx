@@ -69,6 +69,7 @@ export const Stepper = ({ steps, active = 0 }: StepperProps) => {
 
 export const StepperWrap = styled(ScrollableModalColumn)`
   display: grid;
+  position: relative;
   grid-row-gap: 20px;
   align-content: start;
   background-color: ${Colors.Black[800]};
@@ -77,7 +78,6 @@ export const StepperWrap = styled(ScrollableModalColumn)`
 
 const StepNumber = styled.div`
   display: flex;
-  position: relative;
   justify-content: center;
   align-items: center;
   width: 28px;
@@ -108,14 +108,14 @@ const StepWrap = styled.div<StepNumberProps>`
   grid-column-gap: 8px;
   justify-content: start;
 
-  &:not(:first-child) {
+  &:not(:last-child) {
     ${StepNumber}:before {
       content: '';
       position: absolute;
-      bottom: calc(100% + 2px);
-      left: 50%;
+      top: 28px;
+      left: 14px;
       width: 1px;
-      height: 20px;
+      height: calc(100% + 20px - 28px);
       transform: translateX(-50%);
       background-color: ${Colors.Black[600]};
       transition: ${Transitions.all};
