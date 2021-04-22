@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
 import { useGetMembersQuery } from '../../queries'
@@ -24,17 +24,17 @@ export const MembershipContextProvider = (props: Props) => {
 
   const { allAccounts } = useAccounts()
   const addresses = allAccounts.map((account) => account.address)
-  const options = {
+
+  const { data, loading, error } = useGetMembersQuery({
     variables: { rootAccount_in: addresses, controllerAccount_in: addresses },
     pollInterval: POLL_INTERVAL,
-  }
-  const { data, loading, error } = useGetMembersQuery(options)
+  })
 
   if (error) {
     console.error(error)
   }
 
-  const members = (data?.memberships ?? []).map(asMember)
+  const members = useMemo(() => (data?.memberships ?? []).map(asMember), [loading, JSON.stringify(data?.memberships)])
 
   const value = {
     active,
