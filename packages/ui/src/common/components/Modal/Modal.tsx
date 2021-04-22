@@ -23,7 +23,7 @@ export const ModalHeader = React.memo(({ onClick, title, icon, modalHeaderSize, 
 ))
 
 type ModalSize = 'xs' | 's' | 'm' | 'l'
-type ModalHeight = 's' | 'm' | 'l'
+type ModalHeight = 's' | 'm' | 'l' | 'xl'
 
 interface ModalProps {
   onClose: () => void
@@ -79,6 +79,14 @@ export const ModalGlass = styled.div<ModalProps>`
         return '64px'
       case 'l':
         return '48px'
+      case 'xl':
+        return '40px'
+    }
+  }};
+  padding-bottom: ${({ modalHeight }) => {
+    switch (modalHeight) {
+      case 'xl':
+        return '40px'
     }
   }};
   background-color: ${Colors.Black[700.85]};
@@ -167,13 +175,13 @@ export const ModalFooterGroup = styled.div<{ left?: boolean }>`
 interface ModalWrapProps {
   modalMaxSize: string
   isDark?: boolean
-  modalHeight?: string
+  modalHeight?: ModalHeight
 }
 
 export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: ${({ modalHeight }) => (modalHeight === 'xl' ? '56px 1fr 64px' : 'auto auto auto')};
   grid-template-areas:
     'modalheader'
     'modalbody'
@@ -194,7 +202,7 @@ export const ModalWrap = styled.section<ModalWrapProps>`
         return '1240px'
     }
   }};
-  height: min-content;
+  height: ${({ modalHeight }) => (modalHeight === 'xl' ? '100%' : 'min-content')};
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
   ${Animations.showModalBlock};
@@ -272,6 +280,20 @@ export const ScrolledModalContainer = styled.div`
     width: 100%;
     height: 2px;
     visibility: hidden;
+  }
+`
+
+export const ScrollableModalColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 `
 

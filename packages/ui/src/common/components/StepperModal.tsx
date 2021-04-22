@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { Colors } from '../constants'
 
-import { ModalBody } from './Modal'
+import { ModalBody, ScrollableModalColumn } from './Modal'
 
 export const StepperModalWrapper = styled.div`
   display: grid;
@@ -14,7 +14,7 @@ export const StepperModalBody = styled(ModalBody)`
   padding: 0;
 `
 
-export const StepDescriptionColumn = styled.div`
+export const StepDescriptionColumn = styled(ScrollableModalColumn)`
   background-color: ${Colors.Black[100]};
   padding: 14px;
 `

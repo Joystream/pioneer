@@ -82,8 +82,8 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
   }, [step])
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
-      <ModalHeader onClick={hideModal} title="Apply for role" />
+    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+      <ModalHeader onClick={hideModal} title="Applying for role" />
       <StepperModalBody>
         <StepperModalWrapper>
           <Stepper steps={steps} active={step} />
