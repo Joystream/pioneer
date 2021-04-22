@@ -3,6 +3,8 @@ import { createGlobalStyle } from 'styled-components'
 
 import { Colors, ZIndex } from '../constants'
 
+import { Editor, MarkdownEditor } from './CKEditor/MarkdownEditor'
+
 interface EventInfo {
   name: string
   path: any[]
@@ -10,17 +12,7 @@ interface EventInfo {
   source: any
 }
 
-interface Editor {
-  getData: () => string
-  setData: (data: string) => void
-  isReadOnly: boolean
-  model: any
-  editing: any
-  destroy: () => Promise<undefined>
-}
-
 interface CKEditorProps {
-  EditorClass: any
   onChange?: (event: EventInfo, editor: Editor) => void
   onBlur?: (event: EventInfo, editor: Editor) => void
   onFocus?: (event: EventInfo, editor: Editor) => void
@@ -59,7 +51,7 @@ const CKEditorStylesOverrides = createGlobalStyle`
   }
 `
 
-export const CKEditor = ({ disabled, EditorClass, onBlur, onChange, onFocus }: CKEditorProps) => {
+export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps) => {
   const ref = useRef(null)
   const editorRef = useRef<Editor | null>(null)
 
@@ -72,7 +64,37 @@ export const CKEditor = ({ disabled, EditorClass, onBlur, onChange, onFocus }: C
   }, [disabled])
 
   useEffect(() => {
-    const createPromise: Promise<Editor> = EditorClass.create(ref.current, {}).then((editor: Editor) => {
+    const createPromise: Promise<Editor> = MarkdownEditor.create(ref.current, {
+      toolbar: {
+        items: [
+          'heading',
+          '|',
+          'bold',
+          'italic',
+          'link',
+          'bulletedList',
+          'numberedList',
+          '|',
+          'outdent',
+          'indent',
+          '|',
+          'uploadImage',
+          'blockQuote',
+          'insertTable',
+          'mediaEmbed',
+          'undo',
+          'redo',
+        ],
+      },
+      image: {
+        toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],
+      },
+      table: {
+        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+      },
+      // This value must be kept in sync with the language defined in webpack.config.js.
+      language: 'en',
+    }).then((editor: Editor) => {
       editorRef.current = editor
       editor.isReadOnly = disabled ?? false
 
