@@ -21,7 +21,7 @@ export function Accounts() {
   const [sortBy, setSortBy] = useState<SortKey>('name')
   const [isDescending, setDescending] = useState(false)
   const visibleAccounts = useMemo(() => filterAccounts(allAccounts, isDisplayAll, balances), [
-    allAccounts,
+    JSON.stringify(allAccounts),
     isDisplayAll,
     hasAccounts,
   ])
