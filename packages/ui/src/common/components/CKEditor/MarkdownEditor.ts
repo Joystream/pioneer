@@ -12,16 +12,6 @@ import Heading from '@ckeditor/ckeditor5-heading/src/heading'
 // @ts-ignore
 import Markdown from '@ckeditor/ckeditor5-markdown-gfm/src/markdown'
 
-export declare class Editor {
-  getData: () => string
-  setData: (data: string) => void
-  isReadOnly: boolean
-  model: any
-  editing: any
-  destroy: () => Promise<undefined>
-  static create(): Editor
-}
-
 export const MarkdownEditor = ClassicEditor
 
 // Plugins to include in the build.

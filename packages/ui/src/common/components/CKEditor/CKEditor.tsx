@@ -1,14 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
-import { Editor, MarkdownEditor } from './MarkdownEditor'
-
-interface EventInfo {
-  name: string
-  path: any[]
-  return: any
-  source: any
-}
+import { MarkdownEditor } from './MarkdownEditor'
+import { Editor, EventInfo } from './types'
 
 interface CKEditorProps {
   onChange?: (event: EventInfo, editor: Editor) => void
