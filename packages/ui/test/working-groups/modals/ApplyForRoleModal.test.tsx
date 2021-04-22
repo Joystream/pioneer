@@ -62,7 +62,7 @@ describe('UI: ApplyForRoleModal', () => {
   it('Renders a modal', async () => {
     renderModal()
 
-    expect(await screen.findByText('Apply for role')).toBeDefined()
+    expect(await screen.findByText('Applying for role')).toBeDefined()
   })
 
   describe('Stake step', () => {
