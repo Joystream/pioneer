@@ -73,6 +73,22 @@ query getWorkingGroupOpenings($group_eq: ID) {
   }
 }
 
+fragment ApplicationQuestionFields on ApplicationFormQuestion {
+  index
+  type
+  question
+}
+
+query GetWorkingGroupOpeningQuestions($id: ID) {
+  workingGroupOpening(where: {id: $id}) {
+    metadata {
+      applicationFormQuestions {
+        ...ApplicationQuestionFields
+      }
+    }
+  }
+}
+
 query GetWorkingGroup($id: ID!) {
   workingGroup(where: { id: $id }) {
     ... WorkingGroupFields
@@ -95,7 +111,6 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     __typename
   }
 }
-
 
 query GetWorkingGroupApplications($applicant_in: [ID!]) {
   workingGroupApplications(where: { applicant_in: $applicant_in }) {

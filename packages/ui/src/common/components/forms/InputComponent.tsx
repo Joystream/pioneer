@@ -41,7 +41,7 @@ interface InputProps {
 
 interface InputElementProps {
   disabled?: boolean
-  inputSize?: 'm' | 'l' | undefined
+  inputSize?: 'm' | 'l' | 'auto' | undefined
   icon?: React.ReactElement
   copy?: boolean
   units?: string
@@ -54,134 +54,142 @@ interface DisabledInputProps {
   disabled?: boolean
 }
 
-export const InputComponent = ({
-  id,
-  label,
-  required,
-  validation,
-  disabled,
-  value,
-  inputSize,
-  inputWidth,
-  icon,
-  copy,
-  textToCopy,
-  units,
-  message,
-  helperText,
-  helperTitle,
-  helperLinkText,
-  helperLinkURL,
-  className,
-  children,
-  borderless,
-}: InputComponentProps) => {
-  return (
-    <InputElement className={className} inputSize={inputSize} inputWidth={inputWidth}>
-      {label && (
-        <InputLabel htmlFor={id} isRequired={required} disabled={disabled}>
-          {label}
-          {helperText && (
-            <Help
-              helperText={helperText}
-              helperTitle={helperTitle}
-              helperLinkText={helperLinkText}
-              helperLinkURL={helperLinkURL}
-            />
-          )}
-        </InputLabel>
-      )}
-      <InputContainer
-        copy={copy}
-        units={units}
-        icon={icon}
-        validation={validation}
-        disabled={disabled}
-        inputSize={inputSize}
-        borderless={borderless}
-      >
-        {icon && <InputIcon>{icon}</InputIcon>}
-        <InputArea>{children}</InputArea>
-        {(units || copy) && (
-          <InputRightSide>
-            {units && <InputUnits>{units}</InputUnits>}
-            {copy && <InputCopy textToCopy={textToCopy ? textToCopy : value} disabled={disabled} />}
-          </InputRightSide>
+export const InputComponent = React.memo(
+  ({
+    id,
+    label,
+    required,
+    validation,
+    disabled,
+    value,
+    inputSize,
+    inputWidth,
+    icon,
+    copy,
+    textToCopy,
+    units,
+    message,
+    helperText,
+    helperTitle,
+    helperLinkText,
+    helperLinkURL,
+    className,
+    children,
+    borderless,
+  }: InputComponentProps) => {
+    return (
+      <InputElement className={className} inputSize={inputSize} inputWidth={inputWidth}>
+        {label && (
+          <InputLabel htmlFor={id} isRequired={required} disabled={disabled}>
+            {label}
+            {helperText && (
+              <Help
+                helperText={helperText}
+                helperTitle={helperTitle}
+                helperLinkText={helperLinkText}
+                helperLinkURL={helperLinkURL}
+              />
+            )}
+          </InputLabel>
         )}
-      </InputContainer>
-      {message && (
-        <InputNotification validation={validation}>
-          {validation === 'invalid' && (
-            <InputNotificationIcon>
-              <AlertSymbol />
-            </InputNotificationIcon>
+        <InputContainer
+          copy={copy}
+          units={units}
+          icon={icon}
+          validation={validation}
+          disabled={disabled}
+          inputSize={inputSize}
+          borderless={borderless}
+        >
+          {icon && <InputIcon>{icon}</InputIcon>}
+          <InputArea>{children}</InputArea>
+          {(units || copy) && (
+            <InputRightSide>
+              {units && <InputUnits>{units}</InputUnits>}
+              {copy && <InputCopy textToCopy={textToCopy ? textToCopy : value} disabled={disabled} />}
+            </InputRightSide>
           )}
-          {validation === 'warning' && (
-            <InputNotificationIcon>
-              <AlertSymbol />
-            </InputNotificationIcon>
-          )}
-          {validation === 'valid' && (
-            <InputNotificationIcon>
-              <SuccessSymbol />
-            </InputNotificationIcon>
-          )}
-          <InputNotificationMessage>{message}</InputNotificationMessage>
-        </InputNotification>
-      )}
-    </InputElement>
-  )
-}
+        </InputContainer>
+        {message && (
+          <InputNotification validation={validation}>
+            {validation === 'invalid' && (
+              <InputNotificationIcon>
+                <AlertSymbol />
+              </InputNotificationIcon>
+            )}
+            {validation === 'warning' && (
+              <InputNotificationIcon>
+                <AlertSymbol />
+              </InputNotificationIcon>
+            )}
+            {validation === 'valid' && (
+              <InputNotificationIcon>
+                <SuccessSymbol />
+              </InputNotificationIcon>
+            )}
+            <InputNotificationMessage>{message}</InputNotificationMessage>
+          </InputNotification>
+        )}
+      </InputElement>
+    )
+  }
+)
 
-export const InputText = ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
-  return (
-    <Input
-      id={id}
-      name={id}
-      type="text"
-      value={value}
-      required={required}
-      validation={validation}
-      placeholder={placeholder}
-      disabled={disabled}
-      onChange={onChange}
-      autoComplete="off"
-    />
-  )
-}
+export const InputText = React.memo(
+  ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
+    return (
+      <Input
+        id={id}
+        name={id}
+        type="text"
+        value={value}
+        required={required}
+        validation={validation}
+        placeholder={placeholder}
+        disabled={disabled}
+        onChange={onChange}
+        autoComplete="off"
+      />
+    )
+  }
+)
 
-export const InputNumber = ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
-  return (
-    <StyledNumberInput
-      id={id}
-      name={id}
-      type="number"
-      value={value}
-      required={required}
-      validation={validation}
-      placeholder={placeholder}
-      disabled={disabled}
-      onChange={onChange}
-      autoComplete="off"
-    />
-  )
-}
+export const InputNumber = React.memo(
+  ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
+    return (
+      <StyledNumberInput
+        id={id}
+        name={id}
+        type="string"
+        value={value}
+        required={required}
+        validation={validation}
+        placeholder={placeholder}
+        disabled={disabled}
+        onChange={onChange}
+        autoComplete="off"
+      />
+    )
+  }
+)
 
-export const InputTextarea = ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
-  return (
-    <Textarea
-      id={id}
-      name={id}
-      value={value}
-      required={required}
-      validation={validation}
-      placeholder={placeholder}
-      disabled={disabled}
-      onChange={onChange}
-      autoComplete="off"
-    />
-  )
-}
+export const InputTextarea = React.memo(
+  ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
+    return (
+      <Textarea
+        id={id}
+        name={id}
+        value={value}
+        required={required}
+        validation={validation}
+        placeholder={placeholder}
+        disabled={disabled}
+        onChange={onChange}
+        autoComplete="off"
+      />
+    )
+  }
+)
 
 const InputWithNothing = css<InputProps>`
   padding: 0 16px 1px 16px;
@@ -261,6 +269,8 @@ const InputContainer = styled.div<InputElementProps>`
   width: 100%;
   height: ${({ inputSize }) => {
     switch (inputSize) {
+      case 'auto':
+        return undefined
       case 'l':
         return '80px'
       case 'm':

@@ -9,11 +9,21 @@ export const selectMember = async (label: string, name: string) => {
   }
 
   const toggle = parentElement.querySelector('.ui-toggle')
-  toggle && fireEvent.click(toggle)
+
+  if (!toggle) {
+    return
+  }
+
+  await fireEvent.click(toggle)
 
   const memberTitles = parentElement?.querySelectorAll('ul > li')
   const found = memberTitles && Array.from(memberTitles).find((li) => li.textContent?.match(name))
 
   expect(found).toBeDefined()
-  found && fireEvent.click(found)
+
+  if (!found) {
+    return
+  }
+
+  await fireEvent.click(found)
 }

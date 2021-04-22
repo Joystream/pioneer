@@ -9,7 +9,7 @@ import { WorkingGroupOpening } from '../types'
 
 export type OpeningFormPreviewProps = { opening: WorkingGroupOpening }
 
-export const OpeningFormPreview = ({ opening }: OpeningFormPreviewProps) => {
+export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewProps) => {
   const openingStart = '2021-02-09T10:28:04.155Z'
 
   return (
@@ -46,4 +46,4 @@ export const OpeningFormPreview = ({ opening }: OpeningFormPreviewProps) => {
       </Row>
     </>
   )
-}
+})

@@ -98,6 +98,8 @@ describe('UI: InviteMemberModal', () => {
 
     renderModal()
 
+    expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
+
     await selectMember('Inviting member', 'alice')
     await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
       target: { value: bobStash.address },

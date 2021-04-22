@@ -86,6 +86,30 @@ export type GetWorkingGroupOpeningsQuery = {
   workingGroupOpenings?: Types.Maybe<Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>>
 }
 
+export type ApplicationQuestionFieldsFragment = {
+  __typename: 'ApplicationFormQuestion'
+  index: number
+  type: Types.ApplicationFormQuestionType
+  question: string
+}
+
+export type GetWorkingGroupOpeningQuestionsQueryVariables = Types.Exact<{
+  id?: Types.Maybe<Types.Scalars['ID']>
+}>
+
+export type GetWorkingGroupOpeningQuestionsQuery = {
+  __typename: 'Query'
+  workingGroupOpening?: Types.Maybe<{
+    __typename: 'WorkingGroupOpening'
+    metadata: {
+      __typename: 'WorkingGroupOpeningMetadata'
+      applicationFormQuestions?: Types.Maybe<
+        Array<{ __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment>
+      >
+    }
+  }>
+}
+
 export type GetWorkingGroupQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']
 }>
@@ -190,6 +214,13 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     }
   }
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
+`
+export const ApplicationQuestionFieldsFragmentDoc = gql`
+  fragment ApplicationQuestionFields on ApplicationFormQuestion {
+    index
+    type
+    question
+  }
 `
 export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
@@ -335,6 +366,67 @@ export type GetWorkingGroupOpeningsLazyQueryHookResult = ReturnType<typeof useGe
 export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningsQuery,
   GetWorkingGroupOpeningsQueryVariables
+>
+export const GetWorkingGroupOpeningQuestionsDocument = gql`
+  query GetWorkingGroupOpeningQuestions($id: ID) {
+    workingGroupOpening(where: { id: $id }) {
+      metadata {
+        applicationFormQuestions {
+          ...ApplicationQuestionFields
+        }
+      }
+    }
+  }
+  ${ApplicationQuestionFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupOpeningQuestionsQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupOpeningQuestionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupOpeningQuestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupOpeningQuestionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupOpeningQuestionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetWorkingGroupOpeningQuestionsQuery,
+    GetWorkingGroupOpeningQuestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningQuestionsQuery, GetWorkingGroupOpeningQuestionsQueryVariables>(
+    GetWorkingGroupOpeningQuestionsDocument,
+    options
+  )
+}
+export function useGetWorkingGroupOpeningQuestionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWorkingGroupOpeningQuestionsQuery,
+    GetWorkingGroupOpeningQuestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningQuestionsQuery, GetWorkingGroupOpeningQuestionsQueryVariables>(
+    GetWorkingGroupOpeningQuestionsDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningQuestionsQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningQuestionsQuery>
+export type GetWorkingGroupOpeningQuestionsLazyQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupOpeningQuestionsLazyQuery
+>
+export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningQuestionsQuery,
+  GetWorkingGroupOpeningQuestionsQueryVariables
 >
 export const GetWorkingGroupDocument = gql`
   query GetWorkingGroup($id: ID!) {

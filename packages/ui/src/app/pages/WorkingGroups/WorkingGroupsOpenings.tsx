@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
-import { Activities } from '../../../common/components/Activities'
+import { ActivitiesBlock } from '../../../common/components/Activities/ActivitiesBlock'
 import { Loading } from '../../../common/components/Loading'
 import {
   ContentWithSidepanel,
@@ -14,7 +14,7 @@ import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
-import { Label, TextMedium } from '../../../common/components/typography'
+import { TextMedium } from '../../../common/components/typography'
 import { useActivities } from '../../../common/hooks/useActivities'
 import { MemberRoles } from '../../../memberships/components/MemberRoles'
 import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
@@ -87,8 +87,7 @@ export const WorkingGroupsOpenings = () => {
           </ContentWithTabs>
         </MainPanel>
         <SidePanel>
-          <Label>Working group activities</Label>
-          <Activities activities={activities} />
+          <ActivitiesBlock activities={activities} label="Working Groups Activities" />
         </SidePanel>
       </ContentWithSidepanel>
     </AppPage>

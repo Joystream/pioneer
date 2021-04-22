@@ -6,17 +6,16 @@ import { AnySchema } from 'yup'
 import { filterAccount, SelectAccount } from '../../../accounts/components/SelectAccount'
 import { useAccounts } from '../../../accounts/hooks/useAccounts'
 import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
-import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '../../../common/components/forms'
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
 import {
   ModalFooter,
   ModalHeader,
+  Row,
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
-  Row,
 } from '../../../common/components/Modal'
 import { TextMedium } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
@@ -46,7 +45,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const { api } = useApi()
   const { allAccounts } = useAccounts()
 
-  const { state, dispatch, isValid, errors, validate } = useForm<UpdateMemberForm>(UpdateMemberSchema, {
+  const initializer = {
     id: member.id,
     name: member.name || '',
     handle: member.handle || '',
@@ -54,8 +53,10 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     avatarUri: member.avatar || '',
     rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
     controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
-  })
-  const { handle, name, avatarUri, about, controllerAccount, rootAccount } = state
+  }
+  const { fields, changeField, validation } = useForm<UpdateMemberForm>(initializer, UpdateMemberSchema)
+  const { isValid, errors, setContext } = validation
+  const { handle, name, avatarUri, about, controllerAccount, rootAccount } = fields
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
@@ -63,19 +64,15 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const handleHash = blake2AsHex(handle || '')
   const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
 
-  const canUpdate = isValid && hasAnyEdits(state, member)
+  const canUpdate = isValid && hasAnyEdits(fields, member)
 
   useEffect(() => {
-    validate(state, { size: potentialMemberIdSize, isHandleChanged: state.handle !== member.handle })
-  }, [state, potentialMemberIdSize])
-
-  const changeField = (type: keyof UpdateMemberForm, value: string | Account) => {
-    dispatch({ type, value })
-  }
+    setContext({ size: potentialMemberIdSize, isHandleChanged: fields.handle !== member.handle })
+  }, [potentialMemberIdSize?.toString()])
 
   const onCreate = () => {
     if (canUpdate) {
-      onSubmit(changedOrNull<UpdateMemberForm>(state, member))
+      onSubmit(changedOrNull<UpdateMemberForm>(fields, member))
     }
   }
 
