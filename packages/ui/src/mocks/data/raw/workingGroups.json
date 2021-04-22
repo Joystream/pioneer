@@ -2,7 +2,20 @@
   {
     "id": "0",
     "name": "Distribution",
-    "workers": [ "0", "1", "2" ],
+    "workers": [
+      {
+        "membershipId": "0",
+        "status": "active"
+      },
+      {
+        "membershipId": "1",
+        "status": "left"
+      },
+      {
+        "membershipId": "2",
+        "status": "terminated"
+      }
+    ],
     "leaderId": "0",
     "budget": "1000",
     "status": {
@@ -18,7 +31,12 @@
     "id": "1",
     "image": "https://s.gitcoin.co/static/v2/card/thumb.0a0be2e5841a.jpg",
     "name": "Storage",
-    "workers": [ "2" ],
+    "workers": [
+      {
+        "membershipId": "2",
+        "status": "active"
+      }
+    ],
     "budget": "2000",
     "status": {
       "name": "Status name",
@@ -32,7 +50,28 @@
   {
     "id": "2",
     "name": "Forum",
-    "workers": [ "4", "5", "6", "7", "8" ],
+    "workers": [
+      {
+        "membershipId": "4",
+        "status": "active"
+      },
+      {
+        "membershipId": "5",
+        "status": "left"
+      },
+      {
+        "membershipId": "6",
+        "status": "active"
+      },
+      {
+        "membershipId": "7",
+        "status": "terminated"
+      },
+      {
+        "membershipId": "8",
+        "status": "active"
+      }
+    ],
     "leaderId": "6",
     "budget": "1001",
     "status": {

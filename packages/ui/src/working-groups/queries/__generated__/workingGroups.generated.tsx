@@ -20,6 +20,10 @@ export type WorkerFieldsFragment = {
   __typename: 'Worker'
   membership: { __typename: 'Membership' } & MemberFieldsFragment
   group: { __typename: 'WorkingGroup'; id: string }
+  status:
+    | { __typename: 'WorkerStatusActive' }
+    | { __typename: 'WorkerStatusLeft' }
+    | { __typename: 'WorkerStatusTerminated' }
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -162,6 +166,9 @@ export const WorkerFieldsFragmentDoc = gql`
     }
     group {
       id
+    }
+    status {
+      __typename
     }
   }
   ${MemberFieldsFragmentDoc}

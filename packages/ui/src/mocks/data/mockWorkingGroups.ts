@@ -2,10 +2,17 @@ import { Worker } from '../../common/api/queries'
 
 import rawWorkingGroups from './raw/workingGroups.json'
 
+type WorkerStatus = 'active' | 'left' | 'terminated'
+
+interface WorkerMock {
+  membershipId: string
+  status: string
+}
+
 interface RawWorkingGroupMock {
   id: string
   name: string
-  workers?: string[]
+  workers?: WorkerMock[]
   leaderId?: string
   status: {
     name: string
@@ -31,12 +38,13 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
 
   const memberToWorker = new Map()
 
-  for (const membershipId of group.workers ?? []) {
+  for (const { membershipId, status } of group.workers ?? []) {
     const membership = server.schema.find('Membership', membershipId)
 
     const worker = server.schema.create('Worker', {
       group: workingGroup,
       membership,
+      status: seedWorkerStatus(status as WorkerStatus, server),
     })
 
     memberToWorker.set(membershipId, worker.id)
@@ -48,6 +56,17 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
   }
 
   return workingGroup
+}
+
+const seedWorkerStatus = (status: WorkerStatus, server: any) => {
+  switch (status) {
+    case 'active':
+      return server.schema.create('WorkerStatusActive', {})
+    case 'left':
+      return server.schema.create('WorkerStatusLeft', {})
+    default:
+      return server.schema.create('WorkerStatusTerminated', {})
+  }
 }
 
 export const seedWorkingGroups = (server: any) => mockWorkingGroups.map((group) => seedWorkingGroup(group, server))
