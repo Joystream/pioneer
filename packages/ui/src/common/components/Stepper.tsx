@@ -73,7 +73,6 @@ export const StepperWrap = styled(ScrollableModalColumn)`
   align-content: start;
   background-color: ${Colors.Black[800]};
   color: ${Colors.White};
-  padding: 24px;
 `
 
 const StepNumber = styled.div`

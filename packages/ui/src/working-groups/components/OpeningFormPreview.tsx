@@ -1,6 +1,8 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
+import { Link } from '../../common/components/Link'
 import { Row } from '../../common/components/Modal'
 import { TextMedium, TokenValue } from '../../common/components/typography'
 import { percentTimeLeft } from '../../common/model/percentTimeLeft'
@@ -15,14 +17,23 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
   return (
     <>
       <Row>
-        <BadgeViolet>{opening.type}</BadgeViolet>
+        <BadgeViolet inverted size="l">
+          {opening.type}
+        </BadgeViolet>
       </Row>
-      <h3>{opening.title}</h3>
-      <p>
-        Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream
-        are format...
-      </p>
-      <span>Show more</span>
+      <Row>
+        <OpeningModalTitle>{opening.title}</OpeningModalTitle>
+        <TextMedium light>
+          Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to
+          Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this
+          content monitoring to take place...
+        </TextMedium>
+      </Row>
+      <Row>
+        <Link href="http://example.com/" size="l" dark>
+          Show more
+        </Link>
+      </Row>
       <Row>
         <label>Time left</label>
         {relativeTime(opening.expectedEnding)}
@@ -47,3 +58,7 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
     </>
   )
 })
+
+const OpeningModalTitle = styled.h4`
+  margin-bottom: 8px;
+`

@@ -16,9 +16,9 @@ export const StepperModalBody = styled(ModalBody)`
 
 export const StepDescriptionColumn = styled(ScrollableModalColumn)`
   background-color: ${Colors.Black[100]};
-  padding: 14px;
 `
 
-export const StepperBody = styled.div`
-  padding: 14px;
+export const StepperBody = styled(ScrollableModalColumn)`
+  display: grid;
+  grid-row-gap: 24px;
 `

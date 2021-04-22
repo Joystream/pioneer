@@ -2,14 +2,19 @@ import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Overflow } from '../constants'
 
-export const BadgeViolet = styled.span<{ inverted?: boolean }>`
+interface BadgeVioletProps {
+  inverted?: boolean
+  size?: 'm' | 'l'
+}
+
+export const BadgeViolet = styled.span<BadgeVioletProps>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: fit-content;
-  height: 16px;
+  height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   padding: 0 8px;
-  border-radius: ${BorderRad.l};
+  border-radius: ${BorderRad.full};
   font-size: 10px;
   line-height: 16px;
   font-weight: 700;
@@ -19,10 +24,11 @@ export const BadgeViolet = styled.span<{ inverted?: boolean }>`
   ${({ inverted }) =>
     inverted
       ? css`
-          background-color: ${Colors.Blue[50]};
+          color: ${Colors.Blue[500]};
+          background-color: ${Colors.Blue[100]};
         `
       : css`
+          color: ${Colors.White};
           background-color: ${Colors.Blue[200]};
-          color: ${Colors.Blue[500]};
-        `}
+        `};
 `
