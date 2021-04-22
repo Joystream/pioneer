@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { Link } from '../../common/components/Link'
 import { Row } from '../../common/components/Modal'
+import { RowGapBlock } from '../../common/components/page/PageContent'
 import { TextMedium, TokenValue } from '../../common/components/typography'
 import { percentTimeLeft } from '../../common/model/percentTimeLeft'
 import { relativeTime } from '../../common/model/relativeTime'
@@ -15,19 +15,21 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
   const openingStart = '2021-02-09T10:28:04.155Z'
 
   return (
-    <>
+    <RowGapBlock gap={24}>
       <Row>
         <BadgeViolet inverted size="l">
           {opening.type}
         </BadgeViolet>
       </Row>
       <Row>
-        <OpeningModalTitle>{opening.title}</OpeningModalTitle>
-        <TextMedium light>
-          Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to
-          Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this
-          content monitoring to take place...
-        </TextMedium>
+        <RowGapBlock gap={8}>
+          <h4>{opening.title}</h4>
+          <TextMedium light>
+            Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to
+            Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows
+            this content monitoring to take place...
+          </TextMedium>
+        </RowGapBlock>
       </Row>
       <Row>
         <Link href="http://example.com/" size="l" dark>
@@ -55,10 +57,6 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
         <label>Stake required</label>
         <TokenValue value={200_000} />
       </Row>
-    </>
+    </RowGapBlock>
   )
 })
-
-const OpeningModalTitle = styled.h4`
-  margin-bottom: 8px;
-`

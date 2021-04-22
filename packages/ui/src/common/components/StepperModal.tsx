@@ -19,6 +19,5 @@ export const StepDescriptionColumn = styled(ScrollableModalColumn)`
 `
 
 export const StepperBody = styled(ScrollableModalColumn)`
-  display: grid;
-  grid-row-gap: 24px;
+  padding: 24px;
 `

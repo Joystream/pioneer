@@ -284,12 +284,9 @@ export const ScrolledModalContainer = styled.div`
 `
 
 export const ScrollableModalColumn = styled.div`
-  display: grid;
-  grid-row-gap: 24px;
+  display: flex;
   width: 100%;
   height: 100%;
-  align-items: start;
-  align-content: start;
   max-height: 100%;
   padding: 24px;
   overflow-y: scroll;

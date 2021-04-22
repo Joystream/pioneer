@@ -11,8 +11,8 @@ import { Modal, ModalFooter, ModalHeader, Row } from '../../../common/components
 import { Stepper } from '../../../common/components/Stepper'
 import {
   StepDescriptionColumn,
-  StepperBody,
   StepperModalBody,
+  StepperBody,
   StepperModalWrapper,
 } from '../../../common/components/StepperModal'
 import { TextMedium, ValueInJoys } from '../../../common/components/typography'
