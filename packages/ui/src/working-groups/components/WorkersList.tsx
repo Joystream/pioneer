@@ -37,16 +37,18 @@ export const WorkersList = ({ leader, workers }: WorkersListProps) => {
           <Worker member={leader} isLeader={leader} />
         </ContentWithTabs>
       )}
-      {workers && (
-        <ContentWithTabs>
-          <Label>Workers {workers?.length && <CountBadge count={workers?.length}></CountBadge>}</Label>
+      <ContentWithTabs>
+        <Label>
+          Workers <CountBadge count={workers?.length ?? 0} />{' '}
+        </Label>
+        {workers && (
           <ContentWithTabs>
             {workers.map((member) => (
               <Worker key={member.handle} member={member} />
             ))}
           </ContentWithTabs>
-        </ContentWithTabs>
-      )}
+        )}
+      </ContentWithTabs>
     </RowGapBlock>
   )
 }
