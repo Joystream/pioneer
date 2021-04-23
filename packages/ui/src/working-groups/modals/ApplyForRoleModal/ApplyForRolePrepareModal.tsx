@@ -13,8 +13,8 @@ import { RowGapBlock } from '../../../common/components/page/PageContent'
 import { Stepper } from '../../../common/components/Stepper'
 import {
   StepDescriptionColumn,
-  StepperModalBody,
   StepperBody,
+  StepperModalBody,
   StepperModalWrapper,
 } from '../../../common/components/StepperModal'
 import { TextMedium, ValueInJoys } from '../../../common/components/typography'
@@ -23,11 +23,11 @@ import { useModal } from '../../../common/hooks/useModal'
 import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
 import { AccountSchema } from '../../../memberships/model/validation'
-import { ApplicationQuestionInput } from '../../components/ApplicationQuestionInput'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 import { useOpeningQuestions } from '../../hooks/useOpeningQuestions'
 
 import { ApplyForRoleModalCall } from '.'
+import { ApplicationStep } from './ApplicationStep'
 
 const steps = [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }]
 
@@ -139,24 +139,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
                 </Row>
               </RowGapBlock>
             )}
-            {step === 1 && (
-              <>
-                <Row>
-                  <h4>Application</h4>
-                  {questions
-                    .sort((a, b) => a.index - b.index)
-                    .map((question) => {
-                      return (
-                        <ApplicationQuestionInput
-                          type={question.type}
-                          question={question.question}
-                          key={question.index}
-                        />
-                      )
-                    })}
-                </Row>
-              </>
-            )}
+            {step === 1 && <ApplicationStep questions={questions} />}
           </StepperBody>
         </StepperModalWrapper>
       </StepperModalBody>
