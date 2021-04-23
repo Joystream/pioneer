@@ -12,8 +12,6 @@ import { WorkingGroupOpening } from '../types'
 export type OpeningFormPreviewProps = { opening: WorkingGroupOpening }
 
 export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewProps) => {
-  const openingStart = '2021-02-09T10:28:04.155Z'
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -40,7 +38,6 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
         <RowGapBlock gap={4}>
           <Label>Time left</Label>
           {relativeTime(opening.expectedEnding)}
-          {/* <TextMedium>{percentTimeLeft(opening.expectedEnding, openingStart)}%</TextMedium> */}
         </RowGapBlock>
       </Row>
       <Row>
