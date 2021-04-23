@@ -77,11 +77,11 @@ const OpeningListItem = ({ opening }: Props) => (
         <OpeningSubscriptionWide>Reward per {opening.reward.interval} blocks.</OpeningSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
-        <Fraction num={opening.applicants.current} den={opening.applicants.total} sameSize />
+        <Fraction numerator={opening.applicants.current} denominator={opening.applicants.total} sameSize />
         <Subscription>Applications</Subscription>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
-        <Fraction num={opening.hiring.current} den={opening.hiring.total} sameSize />
+        <Fraction numerator={opening.hiring.current} denominator={opening.hiring.total} sameSize />
         <Subscription>Hiring</Subscription>
       </OpenItemSummaryColumn>
     </OpeningItemSummary>

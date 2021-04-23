@@ -6,18 +6,18 @@ import { Colors } from '../../constants'
 import { TextInlineMedium } from './Text'
 
 interface FractionProps {
-  num: string | number
-  den: string | number
+  numerator: string | number
+  denominator: string | number
   className?: string
   sameSize?: boolean
 }
 
-export const Fraction = React.memo(({ num, den, className, sameSize }: FractionProps) => {
+export const Fraction = React.memo(({ numerator, denominator, className, sameSize }: FractionProps) => {
   return (
     <FractionBlock className={className} sameSize={sameSize} lighter value>
-      <FractionNumerator>{num ? num : 0}</FractionNumerator>
+      <FractionNumerator>{numerator ?? 0}</FractionNumerator>
       {!sameSize && <span> </span>}/{!sameSize && <span> </span>}
-      <FractionDenominator>{den ? den : 0}</FractionDenominator>
+      <FractionDenominator>{denominator ?? 0}</FractionDenominator>
     </FractionBlock>
   )
 })
