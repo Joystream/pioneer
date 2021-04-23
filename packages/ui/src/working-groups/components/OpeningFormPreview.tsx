@@ -4,8 +4,8 @@ import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { Link } from '../../common/components/Link'
 import { Row } from '../../common/components/Modal'
 import { RowGapBlock } from '../../common/components/page/PageContent'
-import { TextMedium, TokenValue } from '../../common/components/typography'
-import { percentTimeLeft } from '../../common/model/percentTimeLeft'
+import { Label, TextInlineHuge, TextMedium, TokenValue } from '../../common/components/typography'
+import { Fraction } from '../../common/components/typography/Fraction'
 import { relativeTime } from '../../common/model/relativeTime'
 import { WorkingGroupOpening } from '../types'
 
@@ -37,25 +37,36 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
         </Link>
       </Row>
       <Row>
-        <label>Time left</label>
-        {relativeTime(opening.expectedEnding)}
-        <TextMedium>{percentTimeLeft(opening.expectedEnding, openingStart)}%</TextMedium>
+        <RowGapBlock gap={4}>
+          <Label>Time left</Label>
+          {relativeTime(opening.expectedEnding)}
+          {/* <TextMedium>{percentTimeLeft(opening.expectedEnding, openingStart)}%</TextMedium> */}
+        </RowGapBlock>
       </Row>
       <Row>
-        <label>Applicants</label>
-        <TextMedium>
-          {opening.hiring.total} / {opening.hiring.current}
-        </TextMedium>
+        <RowGapBlock gap={4}>
+          <Label>Applicants</Label>
+          <Fraction num={opening.hiring.total} den={opening.hiring.current} />
+        </RowGapBlock>
       </Row>
       <Row>
-        <label>Reward</label>
-        <TextMedium>
-          <TokenValue value={opening.reward.value} /> per {opening.reward.interval} blocks
-        </TextMedium>
+        <RowGapBlock gap={4}>
+          <Label>Reward</Label>
+          <TextMedium lighter>
+            <TextInlineHuge>
+              <TokenValue value={opening.reward.value} />
+            </TextInlineHuge>{' '}
+            per {opening.reward.interval} blocks
+          </TextMedium>
+        </RowGapBlock>
       </Row>
       <Row>
-        <label>Stake required</label>
-        <TokenValue value={200_000} />
+        <RowGapBlock gap={4}>
+          <Label>Stake required</Label>
+          <TextInlineHuge>
+            <TokenValue value={200_000} />
+          </TextInlineHuge>
+        </RowGapBlock>
       </Row>
     </RowGapBlock>
   )

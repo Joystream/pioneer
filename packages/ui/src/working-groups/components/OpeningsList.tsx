@@ -13,6 +13,7 @@ import {
   TwoColumnsStatistic,
 } from '../../common/components/statistics'
 import { TextBig, TextInlineBig, TokenValue } from '../../common/components/typography'
+import { Fraction } from '../../common/components/typography/Fraction'
 import { Subscription } from '../../common/components/typography/Subscription'
 import { Colors, Overflow, Transitions } from '../../common/constants'
 import { useModal } from '../../common/hooks/useModal'
@@ -76,21 +77,11 @@ const OpeningListItem = ({ opening }: Props) => (
         <OpeningSubscriptionWide>Reward per {opening.reward.interval} blocks.</OpeningSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
-        <TextInlineBig lighter>
-          <TextInlineBig dark bold>
-            {opening.applicants.current}
-          </TextInlineBig>
-          /{opening.applicants.total}
-        </TextInlineBig>
+        <Fraction num={opening.applicants.current} den={opening.applicants.total} sameSize />
         <Subscription>Applications</Subscription>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
-        <TextInlineBig lighter>
-          <TextInlineBig dark bold>
-            {opening.hiring.current}
-          </TextInlineBig>
-          /{opening.hiring.total}
-        </TextInlineBig>
+        <Fraction num={opening.hiring.current} den={opening.hiring.total} sameSize />
         <Subscription>Hiring</Subscription>
       </OpenItemSummaryColumn>
     </OpeningItemSummary>
