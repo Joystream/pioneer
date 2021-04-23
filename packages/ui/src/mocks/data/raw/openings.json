@@ -148,5 +148,33 @@
     "rewardPerBlock": 200,
     "createdAtBlock": 5,
     "createdAtTime": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "id": "5",
+    "groupId": 1,
+    "type": "LEADER",
+    "status": "open",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Markdown test",
+      "description": "## Heading 1\n\n### Heading 2\n\n#### Heading 3\n\n*   ui 1\n    *   ul 1.1\n        *   ul 1.1.1\n    *   ul 1.2\n*   ul 2\n\n1.  ol 1\n2.  ol 2\n\n> A quote\n\nA paragraph with **bold** and _italic_ text.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlock": 5,
+    "createdAtTime": "2021-04-09T13:37:42.155Z"
   }
 ]

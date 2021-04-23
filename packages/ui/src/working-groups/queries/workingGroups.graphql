@@ -47,6 +47,7 @@ query getWorkers ($group_eq: ID) {
 fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
   applicationDetails
   shortDescription
+  description
   hiringLimit
   expectedEnding
 }

@@ -1,9 +1,6 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
@@ -53,6 +50,7 @@ export type WorkingGroupOpeningMetadataFieldsFragment = {
   __typename: 'WorkingGroupOpeningMetadata'
   applicationDetails: string
   shortDescription: string
+  description: string
   hiringLimit: number
   expectedEnding: any
 }
@@ -197,6 +195,7 @@ export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
     applicationDetails
     shortDescription
+    description
     hiringLimit
     expectedEnding
   }

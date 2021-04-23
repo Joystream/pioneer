@@ -15,6 +15,75 @@ export type Scalars = {
   DateTime: any
 }
 
+export type ApplicationFormQuestion = {
+  __typename: 'ApplicationFormQuestion'
+  /** Related opening metadata */
+  openingMetadata: WorkingGroupOpeningMetadata
+  /** The question itself */
+  question: Scalars['String']
+  /** Type of the question (UI answer input type) */
+  type: ApplicationFormQuestionType
+  /** Index of the question */
+  index: Scalars['Int']
+}
+
+export type ApplicationFormQuestionAnswer = {
+  __typename: 'ApplicationFormQuestionAnswer'
+  /** Related application */
+  application: WorkingGroupApplication
+  /** The question beeing answered */
+  question: ApplicationFormQuestion
+  /** Applicant's answer */
+  answer: Scalars['String']
+}
+
+export enum ApplicationFormQuestionType {
+  Text = 'TEXT',
+  Textarea = 'TEXTAREA',
+}
+
+export type ApplicationStatusAccepted = {
+  __typename: 'ApplicationStatusAccepted'
+  openingFilledEventId: Scalars['ID']
+}
+
+export type ApplicationStatusPending = {
+  __typename: 'ApplicationStatusPending'
+  _phantom?: Maybe<Scalars['Int']>
+}
+
+export type ApplicationStatusRejected = {
+  __typename: 'ApplicationStatusRejected'
+  openingFilledEventId: Scalars['ID']
+}
+
+export type ApplicationStatusWithdrawn = {
+  __typename: 'ApplicationStatusWithdrawn'
+  applicationWithdrawnEventId: Scalars['ID']
+}
+
+export type ApplicationWithdrawnEvent = WorkingGroupsEvent & {
+  __typename: 'ApplicationWithdrawnEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related application */
+  application: WorkingGroupApplication
+}
+
+export type AppliedOnOpeningEvent = WorkingGroupsEvent & {
+  __typename: 'AppliedOnOpeningEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related opening */
+  opening: WorkingGroupOpening
+  /** The application that was created */
+  application: WorkingGroupApplication
+}
+
 export type BaseGraphQlObject = {
   id: Scalars['ID']
   createdAt: Scalars['DateTime']
@@ -174,8 +243,81 @@ export type BlockWhereUniqueInput = {
   id: Scalars['ID']
 }
 
+export type BudgetSetEvent = WorkingGroupsEvent & {
+  __typename: 'BudgetSetEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** New working group budget */
+  newBudget: Scalars['BigInt']
+}
+
+export type BudgetSpendingEvent = WorkingGroupsEvent & {
+  __typename: 'BudgetSpendingEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Reciever account address */
+  reciever: Scalars['String']
+  /** Amount beeing spent */
+  amount: Scalars['BigInt']
+  /** Optional rationale */
+  rationale?: Maybe<Scalars['String']>
+}
+
 export type DeleteResponse = {
   id: Scalars['ID']
+}
+
+export type Event = {
+  __typename: 'Event'
+  /** {blockNumber}-{indexInBlock} */
+  id: Scalars['ID']
+  /** Hash of the extrinsic which caused the event to be emitted */
+  inExtrinsic?: Maybe<Scalars['String']>
+  /** Blocknumber of a block in which the event was emitted. */
+  inBlock: Scalars['Int']
+  /** Index of event in block from which it was emitted. */
+  indexInBlock: Scalars['Int']
+  /** Type of the event */
+  type: EventType
+}
+
+export enum EventType {
+  MembershipBought = 'MembershipBought',
+  MemberInvited = 'MemberInvited',
+  MemberProfileUpdated = 'MemberProfileUpdated',
+  MemberAccountsUpdated = 'MemberAccountsUpdated',
+  MemberVerificationStatusUpdated = 'MemberVerificationStatusUpdated',
+  ReferralCutUpdated = 'ReferralCutUpdated',
+  InvitesTransferred = 'InvitesTransferred',
+  MembershipPriceUpdated = 'MembershipPriceUpdated',
+  InitialInvitationBalanceUpdated = 'InitialInvitationBalanceUpdated',
+  LeaderInvitationQuotaUpdated = 'LeaderInvitationQuotaUpdated',
+  InitialInvitationCountUpdated = 'InitialInvitationCountUpdated',
+  StakingAccountAddedEvent = 'StakingAccountAddedEvent',
+  StakingAccountConfirmed = 'StakingAccountConfirmed',
+  StakingAccountRemoved = 'StakingAccountRemoved',
+}
+
+export type LeaderSetEvent = WorkingGroupsEvent & {
+  __typename: 'LeaderSetEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related Lead worker */
+  worker: Worker
+}
+
+export type LeaderUnsetEvent = WorkingGroupsEvent & {
+  __typename: 'LeaderUnsetEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
 }
 
 export type MembersByHandleFtsOutput = {
@@ -267,6 +409,11 @@ export enum MembershipEntryMethod {
   Paid = 'PAID',
   Invited = 'INVITED',
   Genesis = 'GENESIS',
+}
+
+export type MembershipEvent = {
+  /** Generic event data */
+  event: Event
 }
 
 export enum MembershipOrderByInput {
@@ -518,26 +665,6 @@ export type MembershipWhereInput = {
   referredById_in?: Maybe<Array<Scalars['ID']>>
 }
 
-export type WorkingGroupOpeningsWhereInput = {
-  group_eq?: Maybe<Scalars['ID']>
-}
-
-export type WorkingGroupApplicationsWhereInput = {
-  applicant_in?: Maybe<Array<Scalars['ID']>>
-}
-
-export type WorkersWhereInput = {
-  group_eq?: Maybe<Scalars['ID']>
-}
-
-export type WorkingGroupWhereUniqueInput = {
-  id?: Maybe<Scalars['ID']>
-}
-
-export type WorkingGroupOpeningWhereUniqueInput = {
-  id?: Maybe<Scalars['ID']>
-}
-
 export type MembershipWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
   handle?: Maybe<Scalars['String']>
@@ -550,12 +677,64 @@ export enum Network {
   Olympia = 'OLYMPIA',
 }
 
+export type OpeningAddedEvent = WorkingGroupsEvent & {
+  __typename: 'OpeningAddedEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related opening */
+  opening: WorkingGroupOpening
+}
+
+export type OpeningCanceledEvent = WorkingGroupsEvent & {
+  __typename: 'OpeningCanceledEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related opening */
+  opening: WorkingGroupOpening
+}
+
+export type OpeningFilledEvent = WorkingGroupsEvent & {
+  __typename: 'OpeningFilledEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related opening */
+  opening: WorkingGroupOpening
+}
+
+export type OpeningStatusCancelled = {
+  __typename: 'OpeningStatusCancelled'
+  openingCancelledEventId: Scalars['ID']
+}
+
+export type OpeningStatusFilled = {
+  __typename: 'OpeningStatusFilled'
+  openingFilledEventId: Scalars['ID']
+}
+
+export type OpeningStatusOpen = {
+  __typename: 'OpeningStatusOpen'
+  _phantom?: Maybe<Scalars['Int']>
+}
+
 export type PageInfo = {
   __typename: 'PageInfo'
   hasNextPage: Scalars['Boolean']
   hasPreviousPage: Scalars['Boolean']
   startCursor?: Maybe<Scalars['String']>
   endCursor?: Maybe<Scalars['String']>
+}
+
+export enum PayoutType {
+  /** Standard reward payout */
+  StandardReward = 'STANDARD_REWARD',
+  /** Return of the previously missed reward */
+  ReturnMissed = 'RETURN_MISSED',
 }
 
 export type ProcessorState = {
@@ -684,45 +863,44 @@ export type QueryWorkingGroupApplicationsArgs = {
   where?: Maybe<WorkingGroupApplicationsWhereInput>
 }
 
-export enum EventType {
-  MembershipBought = 'MembershipBought',
-  MemberInvited = 'MemberInvited',
-  MemberProfileUpdated = 'MemberProfileUpdated',
-  MemberAccountsUpdated = 'MemberAccountsUpdated',
-  MemberVerificationStatusUpdated = 'MemberVerificationStatusUpdated',
-  ReferralCutUpdated = 'ReferralCutUpdated',
-  InvitesTransferred = 'InvitesTransferred',
-  MembershipPriceUpdated = 'MembershipPriceUpdated',
-  InitialInvitationBalanceUpdated = 'InitialInvitationBalanceUpdated',
-  LeaderInvitationQuotaUpdated = 'LeaderInvitationQuotaUpdated',
-  InitialInvitationCountUpdated = 'InitialInvitationCountUpdated',
-  StakingAccountAddedEvent = 'StakingAccountAddedEvent',
-  StakingAccountConfirmed = 'StakingAccountConfirmed',
-  StakingAccountRemoved = 'StakingAccountRemoved',
-}
-
-export type Event = {
-  __typename: 'Event'
-  /** {blockNumber}-{indexInBlock} */
-  id: Scalars['ID']
-  /** Hash of the extrinsic which caused the event to be emitted */
-  inExtrinsic?: Maybe<Scalars['String']>
-  /** Blocknumber of a block in which the event was emitted. */
-  inBlock: Scalars['Int']
-  /** Index of event in block from which it was emitted. */
-  indexInBlock: Scalars['Int']
-  /** Type of the event */
-  type: EventType
-}
-
-export type WorkingGroupsEvent = {
+export type StakeDecreasedEvent = WorkingGroupsEvent & {
+  __typename: 'StakeDecreasedEvent'
   /** Generic event data */
   event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related worker */
+  worker: Worker
+  /** The amount of JOY the stake was decreased by */
+  amount: Scalars['BigInt']
 }
 
-export type MembershipEvent = {
+export type StakeIncreasedEvent = WorkingGroupsEvent & {
+  __typename: 'StakeIncreasedEvent'
   /** Generic event data */
   event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related worker */
+  worker: Worker
+  /** The amount of JOY the stake was increased by */
+  amount: Scalars['BigInt']
+}
+
+export type StakeSlashedEvent = WorkingGroupsEvent & {
+  __typename: 'StakeSlashedEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related worker */
+  worker: Worker
+  /** Balance that was requested to be slashed */
+  requestedAmount: Scalars['BigInt']
+  /** Balance that was actually slashed */
+  slashedAmount: Scalars['BigInt']
+  /** Optional rationale */
+  rationale?: Maybe<Scalars['String']>
 }
 
 export type StandardDeleteResponse = {
@@ -730,27 +908,48 @@ export type StandardDeleteResponse = {
   id: Scalars['ID']
 }
 
+export type StatusTextChangedEvent = WorkingGroupsEvent & {
+  __typename: 'StatusTextChangedEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** New status metadata */
+  status: WorkingGroupStatus
+}
+
 export type Subscription = {
   __typename: 'Subscription'
   stateSubscription: ProcessorState
 }
 
-export type WorkerStatusActive = {
-  __typename: 'WorkerStatusActive'
-  _phantom?: Maybe<Scalars['Int']>
+export type TerminatedLeaderEvent = WorkingGroupsEvent & {
+  __typename: 'TerminatedLeaderEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related worker */
+  worker: Worker
+  /** Slash amount (if any) */
+  penalty?: Maybe<Scalars['BigInt']>
+  /** Optional rationale */
+  rationale?: Maybe<Scalars['String']>
 }
 
-export type WorkerStatusLeft = {
-  __typename: 'WorkerStatusLeft'
-  workerExitedEventId: Scalars['ID']
+export type TerminatedWorkerEvent = WorkingGroupsEvent & {
+  __typename: 'TerminatedWorkerEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related worker */
+  worker: Worker
+  /** Slash amount (if any) */
+  penalty?: Maybe<Scalars['BigInt']>
+  /** Optional rationale */
+  rationale?: Maybe<Scalars['String']>
 }
-
-export type WorkerStatusTerminated = {
-  __typename: 'WorkerStatusTerminated'
-  terminatedWorkerEventId: Scalars['ID']
-}
-
-export type WorkerStatus = WorkerStatusActive | WorkerStatusLeft | WorkerStatusTerminated
 
 export type Worker = {
   __typename: 'Worker'
@@ -783,20 +982,83 @@ export type Worker = {
   storage?: Maybe<Scalars['String']>
 }
 
-export type WorkingGroupStatus = {
-  __typename: 'WorkingGroupStatus'
-  /** Status name */
-  name: Scalars['String']
-  /** Status message */
-  message?: Maybe<Scalars['String']>
-  /** Status about text */
-  about?: Maybe<Scalars['String']>
-  /** Status description text */
-  description?: Maybe<Scalars['String']>
-  /** The block at which status was set */
-  setAtBlock: Block
-  /** The time at which status was set */
-  setAtTime: Scalars['DateTime']
+export type WorkerExitedEvent = WorkingGroupsEvent & {
+  __typename: 'WorkerExitedEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related worker */
+  worker: Worker
+}
+
+export type WorkerPayoutEvent = {
+  __typename: 'WorkerPayoutEvent'
+  /** Type of the worker payout */
+  type?: Maybe<PayoutType>
+  /** Related worker */
+  worker: Worker
+  /** Amount recieved */
+  recieved: Scalars['BigInt']
+  /** Amount missed (due to, for example, empty working group budget) */
+  missed: Scalars['BigInt']
+}
+
+export type WorkerRewardAccountUpdatedEvent = WorkingGroupsEvent & {
+  __typename: 'WorkerRewardAccountUpdatedEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related worker */
+  worker: Worker
+  /** New reward account */
+  newRewardAccount: Scalars['String']
+}
+
+export type WorkerRewardAmountUpdatedEvent = WorkingGroupsEvent & {
+  __typename: 'WorkerRewardAmountUpdatedEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related worker */
+  worker: Worker
+  /** New worker reward per block */
+  newRewardPerBlock: Scalars['BigInt']
+}
+
+export type WorkerRoleAccountUpdatedEvent = WorkingGroupsEvent & {
+  __typename: 'WorkerRoleAccountUpdatedEvent'
+  /** Generic event data */
+  event: Event
+  /** Related group */
+  group: WorkingGroup
+  /** Related worker */
+  worker: Worker
+  /** New role account */
+  newRoleAccount: Scalars['String']
+}
+
+export type WorkerStatus = WorkerStatusActive | WorkerStatusLeft | WorkerStatusTerminated
+
+export type WorkerStatusActive = {
+  __typename: 'WorkerStatusActive'
+  _phantom?: Maybe<Scalars['Int']>
+}
+
+export type WorkerStatusLeft = {
+  __typename: 'WorkerStatusLeft'
+  workerExitedEventId: Scalars['ID']
+}
+
+export type WorkerStatusTerminated = {
+  __typename: 'WorkerStatusTerminated'
+  terminatedWorkerEventId: Scalars['ID']
+}
+
+export type WorkersWhereInput = {
+  group_eq?: Maybe<Scalars['ID']>
 }
 
 export type WorkingGroup = {
@@ -817,42 +1079,38 @@ export type WorkingGroup = {
   budget: Scalars['BigInt']
 }
 
-export type OpeningStatusCancelled = {
-  __typename: 'OpeningStatusCancelled'
-  openingCancelledEventId: Scalars['ID']
+export type WorkingGroupApplication = {
+  __typename: 'WorkingGroupApplication'
+  /** Application runtime id */
+  id: Scalars['ID']
+  /** Related working group opening */
+  opening: WorkingGroupOpening
+  /** Applicant's membership */
+  applicant: Membership
+  /** Applicant's initial role account */
+  roleAccount: Scalars['String']
+  /** Applicant's initial reward account */
+  rewardAccount: Scalars['String']
+  /** Applicant's initial staking account */
+  stakingAccount: Scalars['String']
+  /** Answers to application form questions @derivedFrom(field: application) */
+  answers?: Maybe<Array<ApplicationFormQuestionAnswer>>
+  /** Current application status */
+  status: WorkingGroupApplicationStatus
+  /** Blocknumber of application creation block */
+  createdAtBlock: Scalars['Int']
+  /** Time of application creation */
+  createdAtTime: Scalars['DateTime']
 }
 
-export type OpeningStatusOpen = {
-  __typename: 'OpeningStatusOpen'
-  _phantom?: Maybe<Scalars['Int']>
-}
+export type WorkingGroupApplicationStatus =
+  | ApplicationStatusPending
+  | ApplicationStatusAccepted
+  | ApplicationStatusRejected
+  | ApplicationStatusWithdrawn
 
-export type OpeningStatusFilled = {
-  __typename: 'OpeningStatusFilled'
-  openingFilledEventId: Scalars['ID']
-}
-
-export type WorkingGroupOpeningStatus = OpeningStatusOpen | OpeningStatusFilled | OpeningStatusCancelled
-
-export enum WorkingGroupOpeningType {
-  Regular = 'REGULAR',
-  Leader = 'LEADER',
-}
-
-export type WorkingGroupOpeningMetadata = {
-  __typename: 'WorkingGroupOpeningMetadata'
-  /** Opening short description */
-  shortDescription: Scalars['String']
-  /** Opening description (md-formatted) */
-  description: Scalars['String']
-  /** Expected max. number of applicants that will be hired */
-  hiringLimit: Scalars['Int']
-  /** Expected time when the opening will close */
-  expectedEnding: Scalars['DateTime']
-  /** Md-formatted text explaining the application process */
-  applicationDetails: Scalars['String']
-  /** List of questions that should be answered during application @derivedFrom(field: openingMetadata) */
-  applicationFormQuestions?: Maybe<Array<ApplicationFormQuestion>>
+export type WorkingGroupApplicationsWhereInput = {
+  applicant_in?: Maybe<Array<Scalars['ID']>>
 }
 
 export type WorkingGroupOpening = {
@@ -881,316 +1139,58 @@ export type WorkingGroupOpening = {
   createdAtTime: Scalars['DateTime']
 }
 
-export type ApplicationStatusPending = {
-  __typename: 'ApplicationStatusPending'
-  _phantom?: Maybe<Scalars['Int']>
+export type WorkingGroupOpeningMetadata = {
+  __typename: 'WorkingGroupOpeningMetadata'
+  /** Opening short description */
+  shortDescription: Scalars['String']
+  /** Opening description (md-formatted) */
+  description: Scalars['String']
+  /** Expected max. number of applicants that will be hired */
+  hiringLimit: Scalars['Int']
+  /** Expected time when the opening will close */
+  expectedEnding: Scalars['DateTime']
+  /** Md-formatted text explaining the application process */
+  applicationDetails: Scalars['String']
+  /** List of questions that should be answered during application @derivedFrom(field: openingMetadata) */
+  applicationFormQuestions?: Maybe<Array<ApplicationFormQuestion>>
 }
 
-export type ApplicationStatusAccepted = {
-  __typename: 'ApplicationStatusAccepted'
-  openingFilledEventId: Scalars['ID']
+export type WorkingGroupOpeningStatus = OpeningStatusOpen | OpeningStatusFilled | OpeningStatusCancelled
+
+export enum WorkingGroupOpeningType {
+  Regular = 'REGULAR',
+  Leader = 'LEADER',
 }
 
-export type ApplicationStatusRejected = {
-  __typename: 'ApplicationStatusRejected'
-  openingFilledEventId: Scalars['ID']
+export type WorkingGroupOpeningWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
 }
 
-export type ApplicationStatusWithdrawn = {
-  __typename: 'ApplicationStatusWithdrawn'
-  applicationWithdrawnEventId: Scalars['ID']
+export type WorkingGroupOpeningsWhereInput = {
+  group_eq?: Maybe<Scalars['ID']>
 }
 
-export type WorkingGroupApplicationStatus =
-  | ApplicationStatusPending
-  | ApplicationStatusAccepted
-  | ApplicationStatusRejected
-  | ApplicationStatusWithdrawn
-
-export type WorkingGroupApplication = {
-  __typename: 'WorkingGroupApplication'
-  /** Application runtime id */
-  id: Scalars['ID']
-  /** Related working group opening */
-  opening: WorkingGroupOpening
-  /** Applicant's membership */
-  applicant: Membership
-  /** Applicant's initial role account */
-  roleAccount: Scalars['String']
-  /** Applicant's initial reward account */
-  rewardAccount: Scalars['String']
-  /** Applicant's initial staking account */
-  stakingAccount: Scalars['String']
-  /** Answers to application form questions @derivedFrom(field: application) */
-  answers?: Maybe<Array<ApplicationFormQuestionAnswer>>
-  /** Current application status */
-  status: WorkingGroupApplicationStatus
-  /** Blocknumber of application creation block */
-  createdAtBlock: Scalars['Int']
-  /** Time of application creation */
-  createdAtTime: Scalars['DateTime']
+export type WorkingGroupStatus = {
+  __typename: 'WorkingGroupStatus'
+  /** Status name */
+  name: Scalars['String']
+  /** Status message */
+  message?: Maybe<Scalars['String']>
+  /** Status about text */
+  about?: Maybe<Scalars['String']>
+  /** Status description text */
+  description?: Maybe<Scalars['String']>
+  /** The block at which status was set */
+  setAtBlock: Block
+  /** The time at which status was set */
+  setAtTime: Scalars['DateTime']
 }
 
-export type ApplicationFormQuestionAnswer = {
-  __typename: 'ApplicationFormQuestionAnswer'
-  /** Related application */
-  application: WorkingGroupApplication
-  /** The question beeing answered */
-  question: ApplicationFormQuestion
-  /** Applicant's answer */
-  answer: Scalars['String']
+export type WorkingGroupWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>
 }
 
-export enum ApplicationFormQuestionType {
-  Text = 'TEXT',
-  Textarea = 'TEXTAREA',
-}
-
-export type ApplicationFormQuestion = {
-  __typename: 'ApplicationFormQuestion'
-  /** Related opening metadata */
-  openingMetadata: WorkingGroupOpeningMetadata
-  /** The question itself */
-  question: Scalars['String']
-  /** Type of the question (UI answer input type) */
-  type: ApplicationFormQuestionType
-  /** Index of the question */
-  index: Scalars['Int']
-}
-
-export type OpeningAddedEvent = WorkingGroupsEvent & {
-  __typename: 'OpeningAddedEvent'
+export type WorkingGroupsEvent = {
   /** Generic event data */
   event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related opening */
-  opening: WorkingGroupOpening
-}
-
-export type AppliedOnOpeningEvent = WorkingGroupsEvent & {
-  __typename: 'AppliedOnOpeningEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related opening */
-  opening: WorkingGroupOpening
-  /** The application that was created */
-  application: WorkingGroupApplication
-}
-
-export type OpeningFilledEvent = WorkingGroupsEvent & {
-  __typename: 'OpeningFilledEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related opening */
-  opening: WorkingGroupOpening
-}
-
-export type LeaderSetEvent = WorkingGroupsEvent & {
-  __typename: 'LeaderSetEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related Lead worker */
-  worker: Worker
-}
-
-export type WorkerRoleAccountUpdatedEvent = WorkingGroupsEvent & {
-  __typename: 'WorkerRoleAccountUpdatedEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related worker */
-  worker: Worker
-  /** New role account */
-  newRoleAccount: Scalars['String']
-}
-
-export type LeaderUnsetEvent = WorkingGroupsEvent & {
-  __typename: 'LeaderUnsetEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-}
-
-export type WorkerExitedEvent = WorkingGroupsEvent & {
-  __typename: 'WorkerExitedEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related worker */
-  worker: Worker
-}
-
-export type TerminatedWorkerEvent = WorkingGroupsEvent & {
-  __typename: 'TerminatedWorkerEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related worker */
-  worker: Worker
-  /** Slash amount (if any) */
-  penalty?: Maybe<Scalars['BigInt']>
-  /** Optional rationale */
-  rationale?: Maybe<Scalars['String']>
-}
-
-export type TerminatedLeaderEvent = WorkingGroupsEvent & {
-  __typename: 'TerminatedLeaderEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related worker */
-  worker: Worker
-  /** Slash amount (if any) */
-  penalty?: Maybe<Scalars['BigInt']>
-  /** Optional rationale */
-  rationale?: Maybe<Scalars['String']>
-}
-
-export type StakeSlashedEvent = WorkingGroupsEvent & {
-  __typename: 'StakeSlashedEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related worker */
-  worker: Worker
-  /** Balance that was requested to be slashed */
-  requestedAmount: Scalars['BigInt']
-  /** Balance that was actually slashed */
-  slashedAmount: Scalars['BigInt']
-  /** Optional rationale */
-  rationale?: Maybe<Scalars['String']>
-}
-
-export type StakeDecreasedEvent = WorkingGroupsEvent & {
-  __typename: 'StakeDecreasedEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related worker */
-  worker: Worker
-  /** The amount of JOY the stake was decreased by */
-  amount: Scalars['BigInt']
-}
-
-export type StakeIncreasedEvent = WorkingGroupsEvent & {
-  __typename: 'StakeIncreasedEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related worker */
-  worker: Worker
-  /** The amount of JOY the stake was increased by */
-  amount: Scalars['BigInt']
-}
-
-export type ApplicationWithdrawnEvent = WorkingGroupsEvent & {
-  __typename: 'ApplicationWithdrawnEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related application */
-  application: WorkingGroupApplication
-}
-
-export type OpeningCanceledEvent = WorkingGroupsEvent & {
-  __typename: 'OpeningCanceledEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related opening */
-  opening: WorkingGroupOpening
-}
-
-export type BudgetSetEvent = WorkingGroupsEvent & {
-  __typename: 'BudgetSetEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** New working group budget */
-  newBudget: Scalars['BigInt']
-}
-
-export type WorkerRewardAccountUpdatedEvent = WorkingGroupsEvent & {
-  __typename: 'WorkerRewardAccountUpdatedEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related worker */
-  worker: Worker
-  /** New reward account */
-  newRewardAccount: Scalars['String']
-}
-
-export type WorkerRewardAmountUpdatedEvent = WorkingGroupsEvent & {
-  __typename: 'WorkerRewardAmountUpdatedEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Related worker */
-  worker: Worker
-  /** New worker reward per block */
-  newRewardPerBlock: Scalars['BigInt']
-}
-
-export type StatusTextChangedEvent = WorkingGroupsEvent & {
-  __typename: 'StatusTextChangedEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** New status metadata */
-  status: WorkingGroupStatus
-}
-
-export type BudgetSpendingEvent = WorkingGroupsEvent & {
-  __typename: 'BudgetSpendingEvent'
-  /** Generic event data */
-  event: Event
-  /** Related group */
-  group: WorkingGroup
-  /** Reciever account address */
-  reciever: Scalars['String']
-  /** Amount beeing spent */
-  amount: Scalars['BigInt']
-  /** Optional rationale */
-  rationale?: Maybe<Scalars['String']>
-}
-
-export enum PayoutType {
-  /** Standard reward payout */
-  StandardReward = 'STANDARD_REWARD',
-  /** Return of the previously missed reward */
-  ReturnMissed = 'RETURN_MISSED',
-}
-
-export type WorkerPayoutEvent = {
-  __typename: 'WorkerPayoutEvent'
-  /** Type of the worker payout */
-  type?: Maybe<PayoutType>
-  /** Related worker */
-  worker: Worker
-  /** Amount recieved */
-  recieved: Scalars['BigInt']
-  /** Amount missed (due to, for example, empty working group budget) */
-  missed: Scalars['BigInt']
 }
