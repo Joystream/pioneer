@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { FounderMemberIcon } from '../../common/components/icons/FounderMemberIcon'
+import { LeaderMemberIcon } from '../../common/components/icons/LeaderMemberIcon'
 import { VerifiedMemberIcon } from '../../common/components/icons/VerifiedMemberIcon'
 import { Member } from '../types'
 
@@ -12,12 +13,15 @@ import {
   MemberId,
   MemberInfoWrap,
   MemberPhoto,
+  MemberPhotoContainer,
   MemberStatusHelp,
+  AvatarMemberLabel,
 } from './components'
 import { MemberRoles } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
+  isLeader?: Member
   member: Member
   onClick?: () => void
   size?: 'm' | 'l'
@@ -28,11 +32,14 @@ interface MemberInfoContainerProps {
 export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps
 
 export const MemberInfo = React.memo(
-  ({ member, onClick, isOnDark, showId, memberSize, size, className, maxRoles }: MemberInfoProps) => {
+  ({ member, onClick, isOnDark, showId, memberSize, size, className, maxRoles, isLeader }: MemberInfoProps) => {
     return (
       <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize} className={className}>
         <MemberPhoto>
-          <Avatar avatarUri={member.avatar} />
+          <MemberPhotoContainer>
+            <Avatar avatarUri={member.avatar} />
+            {isLeader && <AvatarMemberLabel icon={<LeaderMemberIcon />} helperText="This member is a leader" />}
+          </MemberPhotoContainer>
         </MemberPhoto>
         <MemberHead>
           <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>

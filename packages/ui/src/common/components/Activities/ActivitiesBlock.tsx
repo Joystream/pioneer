@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { Activity } from '../../types'
 import { ContentWithTabs } from '../page/PageContent'
@@ -14,13 +13,9 @@ export interface ActivitiesBlockProps {
 
 export const ActivitiesBlock = ({ activities, label }: ActivitiesBlockProps) => {
   return (
-    <ActivitiesBlockContainer>
+    <ContentWithTabs>
       {label && <Label>{label}</Label>}
       <Activities activities={activities} />
-    </ActivitiesBlockContainer>
+    </ContentWithTabs>
   )
 }
-
-const ActivitiesBlockContainer = styled(ContentWithTabs)`
-  margin-top: 12px;
-`

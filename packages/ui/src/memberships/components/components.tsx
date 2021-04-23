@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { Help } from '../../common/components/Help'
+import { Help, HelpContainer } from '../../common/components/Help'
 import { TextSmall } from '../../common/components/typography'
 import { BorderRad, Colors, Fonts, Transitions } from '../../common/constants'
 
@@ -49,6 +49,18 @@ export const MemberId = styled(TextSmall)`
   color: ${Colors.Black[400]};
 `
 
+export const AvatarMemberLabel = styled(Help)`
+  background-color: ${Colors.Blue[500]};
+  border-color: ${Colors.Blue[500]};
+  color: ${Colors.White};
+
+  &:hover,
+  &:focus {
+    background-color: ${Colors.White};
+    color: ${Colors.Blue[500]};
+  }
+`
+
 export const MemberPhoto = styled.div`
   display: flex;
   position: relative;
@@ -58,7 +70,6 @@ export const MemberPhoto = styled.div`
   height: 40px;
   grid-area: memberphoto;
   border-radius: ${BorderRad.round};
-  overflow: hidden;
   border: 1px solid ${Colors.Black[200]};
 
   ${AvatarImg} {
@@ -66,6 +77,23 @@ export const MemberPhoto = styled.div`
     height: 100%;
     object-fit: contain;
   }
+  ${HelpContainer} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+  }
+`
+
+export const MemberPhotoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: ${BorderRad.round};
+  overflow: hidden;
 `
 
 export const MemberStatusHelp = styled(Help)`

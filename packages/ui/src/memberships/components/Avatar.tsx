@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BorderRad } from '../../common/constants'
 import { AvatarPlaceholder } from '../assets/images/AvatarPlaceholder'
 
 interface Props {
@@ -14,8 +13,10 @@ export const Avatar = React.memo(({ avatarUri, className }: Props) => {
 })
 
 export const AvatarImg = styled.img`
-  border-radius: ${BorderRad.round};
-  overflow: hidden;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: cover;
 `
 
 export const AvatarPlaceholderImage = styled(AvatarPlaceholder)`
