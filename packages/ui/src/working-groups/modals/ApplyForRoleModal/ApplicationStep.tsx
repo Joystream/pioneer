@@ -15,23 +15,25 @@ export const ApplicationStep = ({ questions, onChange }: ApplicationStepProps) =
   useMemo(() => onChange(true, [...answers]), [JSON.stringify(answers)])
 
   return (
-    <RowGapBlock gap={20}>
+    <RowGapBlock gap={24}>
       <h4>Application</h4>
-      {questions
-        .sort((a, b) => a.index - b.index)
-        .map((question) => (
-          <ApplicationQuestionInput
-            type={question.type}
-            question={question.question}
-            key={question.index}
-            onChange={(value) =>
-              setAnswers((answers) => {
-                answers.splice(question.index, 1, value)
-                return [...answers]
-              })
-            }
-          />
-        ))}
+      <RowGapBlock gap={20}>
+        {questions
+          .sort((a, b) => a.index - b.index)
+          .map((question) => (
+            <ApplicationQuestionInput
+              type={question.type}
+              question={question.question}
+              key={question.index}
+              onChange={(value) =>
+                setAnswers((answers) => {
+                  answers.splice(question.index, 1, value)
+                  return [...answers]
+                })
+              }
+            />
+          ))}
+      </RowGapBlock>
     </RowGapBlock>
   )
 }

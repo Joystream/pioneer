@@ -5,16 +5,26 @@ import styled from 'styled-components'
 import { Colors, Fonts } from '../../constants'
 import { formatTokenValue } from '../../model/formatters'
 
-interface Props {
+interface ValueProps extends ValueSizingProps {
   value: BN | number | undefined
   className?: string
 }
 
-export const TokenValue = React.memo(({ className, value }: Props) => {
-  return value ? <ValueInJoys className={className}>{formatTokenValue(value)}</ValueInJoys> : <span>-</span>
+interface ValueSizingProps {
+  size?: 's' | 'm' | 'l'
+}
+
+export const TokenValue = React.memo(({ className, value, size }: ValueProps) => {
+  return value ? (
+    <ValueInJoys className={className} size={size}>
+      {formatTokenValue(value)}
+    </ValueInJoys>
+  ) : (
+    <span>-</span>
+  )
 })
 
-export const ValueInJoys = styled.span`
+export const ValueInJoys = styled.span<ValueSizingProps>`
   display: inline-grid;
   position: relative;
   grid-auto-flow: column;

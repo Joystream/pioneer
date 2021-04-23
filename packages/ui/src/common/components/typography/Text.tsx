@@ -105,6 +105,11 @@ export const TextBig = styled.p<TextProps>`
   line-height: 24px;
   ${TextAllStyles}
 `
+export const TextHuge = styled.p<TextProps>`
+  font-size: 20px;
+  line-height: 28px;
+  ${TextAllStyles}
+`
 export const TextInlineSmall = styled.span<TextProps>`
   font-size: 12px;
   line-height: 18px;
@@ -118,5 +123,10 @@ export const TextInlineMedium = styled.span<TextProps>`
 export const TextInlineBig = styled.span<TextProps>`
   font-size: 16px;
   line-height: 24px;
+  ${TextAllStyles}
+`
+export const TextInlineHuge = styled.span<TextProps>`
+  font-size: 20px;
+  line-height: 28px;
   ${TextAllStyles}
 `
