@@ -16,8 +16,7 @@ export const ApplicationQuestionInput = ({ question, type }: ApplicationQuestion
       {type === 'TEXTAREA' && (
         <CKEditor
           onChange={(event, editor) => {
-            const data = editor.getData()
-            console.log({ event, editor, data })
+            console.log(editor.getData())
           }}
         />
       )}
