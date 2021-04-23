@@ -7,19 +7,14 @@ import { ApplicationQuestionType } from '../types'
 interface ApplicationQuestionInputProps {
   type: ApplicationQuestionType
   question: string
+  onChange: (value: string) => void
 }
 
-export const ApplicationQuestionInput = ({ question, type }: ApplicationQuestionInputProps) => {
+export const ApplicationQuestionInput = ({ question, type, onChange }: ApplicationQuestionInputProps) => {
   return (
     <InputComponent label={question} required inputSize={type === 'TEXTAREA' ? 'auto' : 'm'}>
-      {type === 'TEXT' && <InputText />}
-      {type === 'TEXTAREA' && (
-        <CKEditor
-          onChange={(event, editor) => {
-            console.log(editor.getData())
-          }}
-        />
-      )}
+      {type === 'TEXT' && <InputText onChange={(event) => onChange(event.target.value)} />}
+      {type === 'TEXTAREA' && <CKEditor onChange={(event, editor) => onChange(editor.getData())} />}
     </InputComponent>
   )
 }

@@ -42,6 +42,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
   }, [step])
 
   const onStakeStepChange = (isValid: boolean) => setIsValid(isValid)
+  const onApplicationStepChange = (isValid: boolean, answers: string[]) => console.log(answers[1])
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
@@ -54,7 +55,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
           </StepDescriptionColumn>
           <StepperBody>
             {step === 0 && <StakeStep onChange={onStakeStepChange} />}
-            {step === 1 && <ApplicationStep questions={questions} />}
+            {step === 1 && <ApplicationStep questions={questions} onChange={onApplicationStepChange} />}
           </StepperBody>
         </StepperModalWrapper>
       </StepperModalBody>

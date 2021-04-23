@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '../../../accounts/components/SelectAccount'
@@ -51,7 +51,7 @@ export function StakeStep({ onChange }: StakeStepProps) {
     changeField('amount', amount)
   }, [amount])
 
-  useMemo(() => onChange(isValid, fields), [isValid, JSON.stringify(fields)])
+  useEffect(() => onChange(isValid, fields), [isValid, JSON.stringify(fields)])
 
   return (
     <RowGapBlock gap={24}>
