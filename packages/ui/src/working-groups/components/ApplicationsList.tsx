@@ -1,12 +1,22 @@
 import BN from 'bn.js'
 import React from 'react'
-import styled from 'styled-components'
 
+import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { List, ListItem } from '../../common/components/List'
-import { TokenValue } from '../../common/components/typography'
+import { TextInlineBig, TokenValue } from '../../common/components/typography'
+import { Subscription } from '../../common/components/typography/Subscription'
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
 import { openingTitle } from './helpers'
+import {
+  OACItemInfo,
+  OACItemInfoTop,
+  OACItemSummary,
+  OACItemTitle,
+  OACSubscriptionWide,
+  OACWrap,
+  OpenItemSummaryColumn,
+} from './OpeningAndApplicationsComponents/OACStyledComponents'
 
 interface Props {
   applications: WorkingGroupApplication[]
@@ -23,33 +33,32 @@ export const ApplicationsList = ({ applications }: Props) => (
 )
 
 const ApplicationListItem = ({ application }: { application: WorkingGroupApplication }) => (
-  <OpeningWrap>
-    <div>id: {application.id}</div>
-    <h4>{openingTitle(application)}</h4>
-    <div>
-      <h6>6 days 23 minutes</h6>
-      Time left
-    </div>
-    <div>
-      <TokenValue value={application.opening?.reward} />
-      <br />
-      Reward per block
-    </div>
-    <div>current / total Applications</div>
-    <div>
-      <TokenValue value={new BN(100)} />
-      <br />
-      Staked
-    </div>
-    <div>
-      <h6>No</h6>
-      Hired
-    </div>
-  </OpeningWrap>
+  <OACWrap>
+    <OACItemInfo>
+      <OACItemInfoTop>
+        <Subscription>ID: {application.id}</Subscription>
+        <Subscription>Time left: 6 days 23 minutes</Subscription>
+        <BadgeViolet>LEAD</BadgeViolet>
+      </OACItemInfoTop>
+      <OACItemTitle>{openingTitle(application)}</OACItemTitle>
+    </OACItemInfo>
+    <OACItemSummary>
+      <OpenItemSummaryColumn>
+        <TextInlineBig>
+          <TokenValue value={application.opening?.reward} />
+        </TextInlineBig>
+        <OACSubscriptionWide>Reward per blocks.</OACSubscriptionWide>
+      </OpenItemSummaryColumn>
+      <OpenItemSummaryColumn>
+        <TextInlineBig>
+          <TokenValue value={new BN(100)} />
+        </TextInlineBig>
+        <Subscription>Staked</Subscription>
+      </OpenItemSummaryColumn>
+      <OpenItemSummaryColumn>
+        <TextInlineBig value>No</TextInlineBig>
+        <Subscription>Hired</Subscription>
+      </OpenItemSummaryColumn>
+    </OACItemSummary>
+  </OACWrap>
 )
-
-const OpeningWrap = styled.div`
-  grid-template-columns: 1fr 1fr 16px;
-  grid-column-gap: 24px;
-  padding: 16px;
-`
