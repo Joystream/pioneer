@@ -11,8 +11,8 @@ import {
 } from '../../../common/components/SidePane'
 import { Tabs } from '../../../common/components/Tabs'
 import { useModal } from '../../../common/hooks/useModal'
-import { EmptyBody } from '../../../memberships/components/MemberProfile'
 
+import { GeneralDetails } from './GeneralDetails'
 import { ApplicationDetailsModalCall } from './types'
 
 export const ApplicationDetailsModal = React.memo(() => {
@@ -44,7 +44,7 @@ export const ApplicationDetailsModal = React.memo(() => {
           />
         </SidePaneHeader>
         <SidePaneBody>
-          <EmptyBody>Loading...</EmptyBody>
+          <GeneralDetails application={application} />
         </SidePaneBody>
       </SidePane>
     </SidePaneGlass>
