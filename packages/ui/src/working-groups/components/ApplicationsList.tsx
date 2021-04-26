@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useCallback } from 'react'
+import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { List, ListItem } from '../../common/components/List'
@@ -38,7 +39,7 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: {} })
-  }, [showModal])
+  }, [application.id])
 
   return (
     <OACWrap>
@@ -48,7 +49,7 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
           <Subscription>Time left: 6 days 23 minutes</Subscription>
           <BadgeViolet>LEAD</BadgeViolet>
         </OACItemInfoTop>
-        <OACItemTitle onClick={showApplicationModal}>{openingTitle(application)}</OACItemTitle>
+        <Title onClick={showApplicationModal}>{openingTitle(application)}</Title>
       </OACItemInfo>
       <OACItemSummary>
         <OpenItemSummaryColumn>
@@ -71,3 +72,7 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
     </OACWrap>
   )
 }
+
+const Title = styled(OACItemTitle)`
+  cursor: pointer;
+`
