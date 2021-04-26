@@ -1,10 +1,12 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { List, ListItem } from '../../common/components/List'
 import { TextInlineBig, TokenValue } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
+import { useModal } from '../../common/hooks/useModal'
+import { ApplicationDetailsModalCall } from '../modals/ApplicationDetailsModal'
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
 import { openingTitle } from './helpers'
@@ -32,33 +34,40 @@ export const ApplicationsList = ({ applications }: Props) => (
   </List>
 )
 
-const ApplicationListItem = ({ application }: { application: WorkingGroupApplication }) => (
-  <OACWrap>
-    <OACItemInfo>
-      <OACItemInfoTop>
-        <Subscription>ID: {application.id}</Subscription>
-        <Subscription>Time left: 6 days 23 minutes</Subscription>
-        <BadgeViolet>LEAD</BadgeViolet>
-      </OACItemInfoTop>
-      <OACItemTitle>{openingTitle(application)}</OACItemTitle>
-    </OACItemInfo>
-    <OACItemSummary>
-      <OpenItemSummaryColumn>
-        <TextInlineBig>
-          <TokenValue value={application.opening?.reward} />
-        </TextInlineBig>
-        <OACSubscriptionWide>Reward per blocks.</OACSubscriptionWide>
-      </OpenItemSummaryColumn>
-      <OpenItemSummaryColumn>
-        <TextInlineBig>
-          <TokenValue value={new BN(100)} />
-        </TextInlineBig>
-        <Subscription>Staked</Subscription>
-      </OpenItemSummaryColumn>
-      <OpenItemSummaryColumn>
-        <TextInlineBig value>No</TextInlineBig>
-        <Subscription>Hired</Subscription>
-      </OpenItemSummaryColumn>
-    </OACItemSummary>
-  </OACWrap>
-)
+const ApplicationListItem = ({ application }: { application: WorkingGroupApplication }) => {
+  const { showModal } = useModal()
+  const showApplicationModal = useCallback(() => {
+    showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: {} })
+  }, [showModal])
+
+  return (
+    <OACWrap>
+      <OACItemInfo>
+        <OACItemInfoTop>
+          <Subscription>ID: {application.id}</Subscription>
+          <Subscription>Time left: 6 days 23 minutes</Subscription>
+          <BadgeViolet>LEAD</BadgeViolet>
+        </OACItemInfoTop>
+        <OACItemTitle onClick={showApplicationModal}>{openingTitle(application)}</OACItemTitle>
+      </OACItemInfo>
+      <OACItemSummary>
+        <OpenItemSummaryColumn>
+          <TextInlineBig>
+            <TokenValue value={application.opening?.reward} />
+          </TextInlineBig>
+          <OACSubscriptionWide>Reward per blocks.</OACSubscriptionWide>
+        </OpenItemSummaryColumn>
+        <OpenItemSummaryColumn>
+          <TextInlineBig>
+            <TokenValue value={new BN(100)} />
+          </TextInlineBig>
+          <Subscription>Staked</Subscription>
+        </OpenItemSummaryColumn>
+        <OpenItemSummaryColumn>
+          <TextInlineBig value>No</TextInlineBig>
+          <Subscription>Hired</Subscription>
+        </OpenItemSummaryColumn>
+      </OACItemSummary>
+    </OACWrap>
+  )
+}
