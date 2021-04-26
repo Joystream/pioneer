@@ -1,14 +1,21 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { MemberInfoWrap } from '..'
 import { CloseButton } from '../../../common/components/buttons'
 import { EditSymbol } from '../../../common/components/icons/symbols'
+import {
+  SidePane,
+  SidePaneBody,
+  SidePaneGlass,
+  SidePaneHeader,
+  SidePanelTop,
+  SidePaneTitle,
+} from '../../../common/components/SidePane'
 import { Tabs } from '../../../common/components/Tabs'
-import { Animations, Colors } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
 import { useMember } from '../../hooks/useMembership'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
-import { MemberInfoWrap } from '../components'
 import { EditMembershipButton } from '../EditMembershipButton'
 import { MemberInfo } from '../MemberInfo'
 
@@ -47,7 +54,7 @@ export const MemberProfile = React.memo(() => {
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane>
-        <SidePaneHeader>
+        <MemberPanelHeader>
           <SidePanelTop>
             <SidePaneTitle>My Profile</SidePaneTitle>
             {isMyMember && activeTab === 'DETAILS' && (
@@ -66,7 +73,7 @@ export const MemberProfile = React.memo(() => {
             ]}
             tabsSize="xs"
           />
-        </SidePaneHeader>
+        </MemberPanelHeader>
         <SidePaneBody>
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
@@ -77,84 +84,14 @@ export const MemberProfile = React.memo(() => {
   )
 })
 
-export const SidePaneGlass = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: ${Colors.Black[700.85]};
-  color: ${Colors.Black[900]};
-  z-index: 100000;
-  ${Animations.showModalBackground};
-`
-
-const SidePane = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: minmax(auto, 192px) 1fr;
-  grid-template-areas:
-    'sidepaneheader'
-    'sidepanebody';
-  grid-area: modal;
-  position: relative;
-  background-color: ${Colors.White};
-  width: 100%;
-  max-width: 552px;
-  height: 100vh;
-  overflow: hidden;
-  ${Animations.showSidePane};
-`
-
-const SidePaneHeader = styled.div`
-  display: grid;
-  grid-area: sidepaneheader;
-  grid-row-gap: 20px;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  max-height: 200px;
-  padding: 12px 24px 0;
-  background-color: ${Colors.White};
-
-  ${MemberInfoWrap} {
-    padding-bottom: 4px;
-  }
-`
-
-const SidePanelTop = styled.div`
-  display: grid;
-  position: relative;
-  grid-template-columns: 1fr 20px;
-  grid-column-gap: 14px;
-  align-items: center;
-  width: 100%;
-`
-
 const SidePaneEditMembershipButton = styled(EditMembershipButton)`
   position: absolute;
   right: 36px;
 `
 
-const SidePaneTitle = styled.h5``
-
-const SidePaneBody = styled.div`
-  display: flex;
-  grid-area: sidepanebody;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  background-color: ${Colors.Black[50]};
-  border-top: 1px solid ${Colors.Black[200]};
-  border-bottom: 1px solid ${Colors.Black[200]};
-  overflow-y: scroll;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
+const MemberPanelHeader = styled(SidePaneHeader)`
+  ${MemberInfoWrap} {
+    padding-bottom: 4px;
   }
 `
 

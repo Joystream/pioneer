@@ -6,6 +6,7 @@ import { ModalName } from '../common/providers/modal/types'
 import { MemberModalCall, MemberProfile } from '../memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '../memberships/modals/BuyMembershipModal'
 import { TransferInviteModal, TransferInvitesModalCall } from '../memberships/modals/TransferInviteModal'
+import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '../working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '../working-groups/modals/ApplyForRoleModal'
 
 type ModalNames =
@@ -14,6 +15,7 @@ type ModalNames =
   | ModalName<BuyMembershipModalCall>
   | ModalName<TransferModalCall>
   | ModalName<ApplyForRoleModalCall>
+  | ModalName<ApplicationDetailsModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
@@ -29,6 +31,8 @@ export const GlobalModals = () => {
       return <TransferModal />
     case 'ApplyForRoleModal':
       return <ApplyForRoleModal />
+    case 'ApplicationDetails':
+      return <ApplicationDetailsModal />
     default:
       return null
   }
