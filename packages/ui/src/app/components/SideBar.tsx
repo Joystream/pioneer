@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { MembersIcon } from '../../common/components/page/Sidebar/LinksIcons/MembersIcon'
 import { MyProfileIcon } from '../../common/components/page/Sidebar/LinksIcons/MyProfileIcon'
 import { WorkingGroupsIcon } from '../../common/components/page/Sidebar/LinksIcons/WorkingGroupsIcon'
 import { LogoLink } from '../../common/components/page/Sidebar/LogoLink'
@@ -26,6 +27,12 @@ export const SideBar = () => (
         <NavigationLink to="/working-groups">
           <WorkingGroupsIcon />
           Working Groups
+        </NavigationLink>
+      </NavigationLinksItem>
+      <NavigationLinksItem>
+        <NavigationLink to="/members">
+          <MembersIcon />
+          Members
         </NavigationLink>
       </NavigationLinksItem>
     </NavigationLinks>
