@@ -79,7 +79,7 @@ describe('UI: ApplyForRoleModal', () => {
 
       expect(button).toBeDisabled()
 
-      await fireEvent.change(input, { target: { value: '500000' } })
+      await fireEvent.change(input, { target: { value: '2000' } })
 
       expect(button).not.toBeDisabled()
     })

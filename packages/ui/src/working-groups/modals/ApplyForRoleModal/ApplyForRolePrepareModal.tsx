@@ -54,7 +54,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
             <OpeningFormPreview opening={opening} />
           </StepDescriptionColumn>
           <StepperBody>
-            {step === 0 && <StakeStep onChange={onStakeStepChange} />}
+            {step === 0 && <StakeStep onChange={onStakeStepChange} opening={opening} />}
             {step === 1 && <ApplicationStep questions={questions} onChange={onApplicationStepChange} />}
           </StepperBody>
         </StepperModalWrapper>
