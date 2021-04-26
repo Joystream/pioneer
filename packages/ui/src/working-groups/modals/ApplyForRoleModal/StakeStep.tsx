@@ -15,7 +15,7 @@ import { formatTokenValue } from '../../../common/model/formatters'
 import { AccountSchema } from '../../../memberships/model/validation'
 import { WorkingGroupOpening } from '../../types'
 
-interface StakeStepForm {
+export interface StakeStepForm {
   account?: Account
   amount?: string
 }

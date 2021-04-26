@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { Reducer, useCallback, useReducer, useState } from 'react'
 
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { Arrow } from '../../../common/components/icons'
@@ -16,12 +16,35 @@ import { useOpeningQuestions } from '../../hooks/useOpeningQuestions'
 
 import { ApplyForRoleModalCall } from '.'
 import { ApplicationStep } from './ApplicationStep'
-import { StakeStep } from './StakeStep'
+import { StakeStep, StakeStepForm } from './StakeStep'
 
 const steps = [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }]
 
 interface Props {
   onSubmit: () => void
+}
+
+type ActionStepInfo = {
+  type: 'STEP'
+  data: {
+    isValid: boolean
+    stepData: any
+    step: number
+  }
+}
+
+const stepsReducer: Reducer<Record<number, { data: any; isValid: boolean }>, ActionStepInfo> = (state, action) => {
+  const step = action.data.step
+  const data = action.data.stepData
+  const isValid = action.data.isValid
+
+  return {
+    ...state,
+    [step]: {
+      data,
+      isValid,
+    },
+  }
 }
 
 export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
@@ -31,7 +54,10 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
   } = useModal<ApplyForRoleModalCall>()
   const [step, setStep] = useState(0)
   const { questions } = useOpeningQuestions({ id: opening.id })
-  const [isValid, setIsValid] = useState(false)
+  const [state, dispatch] = useReducer(stepsReducer, {
+    0: { isValid: false, data: undefined },
+    1: { isValid: false, data: undefined },
+  })
 
   const nextStep = useCallback(() => {
     if (step >= 1) {
@@ -41,8 +67,29 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
     }
   }, [step])
 
-  const onStakeStepChange = (isValid: boolean) => setIsValid(isValid)
-  const onApplicationStepChange = (isValid: boolean, answers: string[]) => console.log(answers[1])
+  const onStakeStepChange = (isValid: boolean, fields: StakeStepForm) => {
+    dispatch({
+      type: 'STEP',
+      data: {
+        isValid: isValid,
+        stepData: fields,
+        step: 0,
+      },
+    })
+  }
+  const onApplicationStepChange = (isValid: boolean, answers: string[]) => {
+    dispatch({
+      type: 'STEP',
+      data: {
+        isValid: isValid,
+        stepData: answers,
+        step: 1,
+      },
+    })
+  }
+
+  console.log(state)
+  const isValid = state[step].isValid
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
@@ -54,7 +101,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
             <OpeningFormPreview opening={opening} />
           </StepDescriptionColumn>
           <StepperBody>
-            {step === 0 && <StakeStep onChange={onStakeStepChange} opening={opening} />}
+            {step === 0 && <StakeStep opening={opening} onChange={onStakeStepChange} />}
             {step === 1 && <ApplicationStep questions={questions} onChange={onApplicationStepChange} />}
           </StepperBody>
         </StepperModalWrapper>
