@@ -2,6 +2,7 @@ import React from 'react'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { Link } from '../../common/components/Link'
+import { MarkdownPreview } from '../../common/components/MarkdownPreview'
 import { Row } from '../../common/components/Modal'
 import { RowGapBlock } from '../../common/components/page/PageContent'
 import { Label, TextInlineHuge, TextMedium, TokenValue } from '../../common/components/typography'
@@ -22,11 +23,7 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
       <Row>
         <RowGapBlock gap={8}>
           <h4>{opening.title}</h4>
-          <TextMedium light>
-            Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to
-            Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows
-            this content monitoring to take place...
-          </TextMedium>
+          <MarkdownPreview markdown={opening.description} />
         </RowGapBlock>
       </Row>
       <Row>

@@ -53,6 +53,7 @@ export type WorkingGroupOpeningMetadataFieldsFragment = {
   __typename: 'WorkingGroupOpeningMetadata'
   applicationDetails: string
   shortDescription: string
+  description: string
   hiringLimit: number
   expectedEnding: any
 }
@@ -197,6 +198,7 @@ export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
     applicationDetails
     shortDescription
+    description
     hiringLimit
     expectedEnding
   }

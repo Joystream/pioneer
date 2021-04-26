@@ -9,6 +9,8 @@ export interface WorkingGroupOpening {
   id: string
   expectedEnding: string
   title: string
+  shortDescription: string
+  description: string
   type: WorkingGroupOpeningType
   reward: {
     value: BN
@@ -42,6 +44,8 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     total: fields.metadata.hiringLimit,
   },
   title: fields.metadata.shortDescription,
+  shortDescription: fields.metadata.shortDescription,
+  description: fields.metadata.description,
   status: fields.status.__typename,
 })
 
