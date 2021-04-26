@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-import { MemberInfoWrap } from '../../../memberships/components'
 import { Animations, Colors } from '../../constants'
 
 export const SidePaneGlass = styled.div`
@@ -44,10 +43,6 @@ export const SidePaneHeader = styled.div`
   max-height: 200px;
   padding: 12px 24px 0;
   background-color: ${Colors.White};
-
-  ${MemberInfoWrap} {
-    padding-bottom: 4px;
-  }
 `
 
 export const SidePanelTop = styled.div`

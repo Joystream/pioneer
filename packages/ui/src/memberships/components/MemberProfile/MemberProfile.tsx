@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { MemberInfoWrap } from '..'
 import { CloseButton } from '../../../common/components/buttons'
 import { EditSymbol } from '../../../common/components/icons/symbols'
 import {
@@ -53,7 +54,7 @@ export const MemberProfile = React.memo(() => {
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane>
-        <SidePaneHeader>
+        <MemberPanelHeader>
           <SidePanelTop>
             <SidePaneTitle>My Profile</SidePaneTitle>
             {isMyMember && activeTab === 'DETAILS' && (
@@ -72,7 +73,7 @@ export const MemberProfile = React.memo(() => {
             ]}
             tabsSize="xs"
           />
-        </SidePaneHeader>
+        </MemberPanelHeader>
         <SidePaneBody>
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
@@ -86,6 +87,12 @@ export const MemberProfile = React.memo(() => {
 const SidePaneEditMembershipButton = styled(EditMembershipButton)`
   position: absolute;
   right: 36px;
+`
+
+const MemberPanelHeader = styled(SidePaneHeader)`
+  ${MemberInfoWrap} {
+    padding-bottom: 4px;
+  }
 `
 
 export const EmptyBody = styled.div`
