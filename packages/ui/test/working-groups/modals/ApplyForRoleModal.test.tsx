@@ -2,7 +2,8 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
-import { Account } from '../../../src/accounts/types'
+import { AccountsContext } from '../../../src/accounts/providers/accounts/context'
+import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { ApiContext } from '../../../src/common/providers/api/context'
 import { ModalContext } from '../../../src/common/providers/modal/context'
 import { UseModal } from '../../../src/common/providers/modal/types'
@@ -18,17 +19,10 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubDefaultBalances } from '../../_mocks/transactions'
 
-const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+const useAccounts: UseAccounts = {
   hasAccounts: false,
   allAccounts: [],
 }
-
-jest.mock('../../../src/accounts/hooks/useAccounts', () => {
-  return {
-    useAccounts: () => useAccounts,
-  }
-})
-
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()
   const useModal: UseModal<any> = {
@@ -90,9 +84,11 @@ describe('UI: ApplyForRoleModal', () => {
       <ModalContext.Provider value={useModal}>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <ApiContext.Provider value={api}>
-              <ApplyForRoleModal />
-            </ApiContext.Provider>
+            <AccountsContext.Provider value={useAccounts}>
+              <ApiContext.Provider value={api}>
+                <ApplyForRoleModal />
+              </ApiContext.Provider>
+            </AccountsContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
       </ModalContext.Provider>
