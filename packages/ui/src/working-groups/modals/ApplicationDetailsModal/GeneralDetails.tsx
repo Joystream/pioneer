@@ -42,7 +42,7 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
         <td>Applied on</td>
         <AboutDateColumn>
           <AboutText>{formatDateString(application.createdAtTime)}</AboutText>
-          <Block height={application.createdAtBlock} network={'Olympia'} />
+          <Block height={application.createdAtBlock.block} network={application.createdAtBlock.network} />
         </AboutDateColumn>
       </tr>
       <tr>

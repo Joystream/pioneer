@@ -116,7 +116,9 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   }
   stakingAccount
   createdAtTime
-  createdAtBlock
+  createdAtBlock {
+    ...BlockFields
+  }
 }
 
 query GetWorkingGroupApplications($applicant_in: [ID!]) {

@@ -8,7 +8,7 @@
     "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "answers": [],
     "status": "pending",
-    "createdAtBlock": 12345,
+    "createdAtBlockId": "block-1",
     "createdAtTime": "2021-03-09T10:38:04.155Z"
   },
   {
@@ -20,7 +20,7 @@
     "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "answers": [],
     "status": "accepted",
-    "createdAtBlock": 222222,
+    "createdAtBlockId": "block-2",
     "createdAtTime": "2021-03-09T23:38:04.155Z"
   },
   {
@@ -32,7 +32,7 @@
     "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "answers": [],
     "status": "rejected",
-    "createdAtBlock": 322234,
+    "createdAtBlockId": "block-4",
     "createdAtTime": "2021-05-19T10:38:04.155Z"
   }
 ]

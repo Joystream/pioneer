@@ -2,7 +2,9 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import {
   MemberFieldsFragment,
+  BlockFieldsFragment,
   MemberFieldsFragmentDoc,
+  BlockFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
 
@@ -129,7 +131,6 @@ export type WorkingGroupApplicationFieldsFragment = {
   id: string
   stakingAccount: string
   createdAtTime: any
-  createdAtBlock: number
   opening: {
     __typename: 'WorkingGroupOpening'
     type: Types.WorkingGroupOpeningType
@@ -142,6 +143,7 @@ export type WorkingGroupApplicationFieldsFragment = {
     | { __typename: 'ApplicationStatusAccepted' }
     | { __typename: 'ApplicationStatusRejected' }
     | { __typename: 'ApplicationStatusWithdrawn' }
+  createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
 }
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
@@ -252,9 +254,12 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
     }
     stakingAccount
     createdAtTime
-    createdAtBlock
+    createdAtBlock {
+      ...BlockFields
+    }
   }
   ${MemberFieldsFragmentDoc}
+  ${BlockFieldsFragmentDoc}
 `
 export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {

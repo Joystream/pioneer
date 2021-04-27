@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { Member } from '../../memberships/types'
+import { asBlock, Block, Member } from '../../memberships/types'
 import { WorkingGroupApplicationFieldsFragment } from '../queries'
 
 export interface WorkingGroupApplication {
@@ -16,7 +16,7 @@ export interface WorkingGroupApplication {
   stakingAccount: string
   answers?: [any]
   status?: string
-  createdAtBlock: number
+  createdAtBlock: Block
   createdAtTime: string
 }
 
@@ -29,6 +29,6 @@ export const asApplication = (application: WorkingGroupApplicationFieldsFragment
   },
   status: application.status.__typename,
   stakingAccount: application.stakingAccount,
-  createdAtBlock: application.createdAtBlock,
+  createdAtBlock: asBlock(application.createdAtBlock),
   createdAtTime: application.createdAtTime,
 })
