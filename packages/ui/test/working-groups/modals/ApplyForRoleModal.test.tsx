@@ -64,7 +64,7 @@ describe('UI: ApplyForRoleModal', () => {
     it('Empty fields', async () => {
       renderModal()
 
-      const button = await screen.findByRole('button', { name: /Next step/i })
+      const button = await getNextStepButton()
       expect(button).toBeDisabled()
     })
 
@@ -75,7 +75,7 @@ describe('UI: ApplyForRoleModal', () => {
       const input = await screen.findByLabelText(/Select amount for staking/i)
       await fireEvent.change(input, { target: { value: '50' } })
 
-      const button = await screen.findByRole('button', { name: /Next step/i })
+      const button = await getNextStepButton()
       expect(button).toBeDisabled()
     })
 
@@ -83,14 +83,35 @@ describe('UI: ApplyForRoleModal', () => {
       renderModal()
 
       await selectAccount('Select account for Staking', 'alice')
-
       const input = await screen.findByLabelText(/Select amount for staking/i)
       await fireEvent.change(input, { target: { value: '2000' } })
 
-      const button = await screen.findByRole('button', { name: /Next step/i })
+      const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
     })
   })
+
+  describe('Application form step', () => {
+    beforeEach(async () => {
+      await renderModal()
+      await fillStakeStep()
+    })
+
+    it('Empty form', async () => {
+      const button = await getNextStepButton()
+      expect(button).not.toBeDisabled()
+    })
+  })
+
+  async function getNextStepButton() {
+    return await screen.findByRole('button', { name: /Next step/i })
+  }
+
+  async function fillStakeStep() {
+    await selectAccount('Select account for Staking', 'alice')
+    const input = await screen.findByLabelText(/Select amount for staking/i)
+    await fireEvent.change(input, { target: { value: '2000' } })
+  }
 
   function renderModal() {
     return render(
