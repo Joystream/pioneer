@@ -30,7 +30,9 @@ interface MemberCommon {
   referredBy?: ID
 }
 
-export interface Membership extends MemberCommon { type?: 'Membership' }
+export interface Membership extends MemberCommon {
+  type?: 'Membership'
+}
 
 export interface MMember extends MemberCommon {
   type: 'Members'
