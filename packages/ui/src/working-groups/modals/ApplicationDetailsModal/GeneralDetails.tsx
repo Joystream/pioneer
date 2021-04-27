@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { TokenValue } from '../../../common/components/typography'
+import { openingTitle } from '../../helpers'
 import { WorkingGroupApplication } from '../../types/WorkingGroupApplication'
 
 interface Props {
@@ -13,7 +14,7 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
     <table>
       <tr>
         <td>Opening</td>
-        <td>{application.opening.type + ' ' + application.opening.groupName}</td>
+        <td>{openingTitle(application)}</td>
       </tr>
       <tr>
         <td>Status</td>

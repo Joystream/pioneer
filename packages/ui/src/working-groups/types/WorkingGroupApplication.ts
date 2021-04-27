@@ -28,4 +28,5 @@ export const asApplication = (application: WorkingGroupApplicationFieldsFragment
     reward: new BN(application.opening.rewardPerBlock),
   },
   status: application.status.__typename,
+  stakingAccount: application.stakingAccount,
 })

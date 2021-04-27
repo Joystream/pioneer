@@ -114,6 +114,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   status {
     __typename
   }
+  stakingAccount
 }
 
 query GetWorkingGroupApplications($applicant_in: [ID!]) {

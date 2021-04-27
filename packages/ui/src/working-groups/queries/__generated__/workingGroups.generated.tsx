@@ -127,6 +127,7 @@ export type GetWorkingGroupQuery = {
 export type WorkingGroupApplicationFieldsFragment = {
   __typename: 'WorkingGroupApplication'
   id: string
+  stakingAccount: string
   opening: {
     __typename: 'WorkingGroupOpening'
     type: Types.WorkingGroupOpeningType
@@ -247,6 +248,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
     status {
       __typename
     }
+    stakingAccount
   }
   ${MemberFieldsFragmentDoc}
 `
