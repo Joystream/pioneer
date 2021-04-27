@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
 
 import { MemberInfo } from '..'
 import { EditSymbol } from '../../../common/components/icons/symbols'
+import { TokenValue } from '../../../common/components/typography/TokenValue'
 import { Fonts, Sizes } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
 import { Member } from '../../types'
@@ -23,43 +24,85 @@ export const MemberListItem = ({ member }: Props) => {
   }, [member.id])
 
   return (
-    <MemberItemWrap>
+    <MemberItemWrap member={member}>
+      {member.type === 'Members' && (
+        <MemberColumn>
+          <Info>#{member.id}</Info>
+        </MemberColumn>
+      )}
+
       <MemberColumn>
-        <MemberInfo member={member} onClick={showMemberModal} showId />
+        <MemberInfo member={member} onClick={showMemberModal} showId={member.type === 'Membership'} />
       </MemberColumn>
+
+      {member.type === 'Members' && (
+        <MemberColumn>
+          <Info>{member.isConcilMember ? 'YES' : 'NO'}</Info>
+        </MemberColumn>
+      )}
+
       <MemberRolesColumn>
         <MemberRoles wrapable member={member} size="l" />
       </MemberRolesColumn>
       <MemberColumn>
-        <CountInfo>0 times</CountInfo>
+        <CountInfo count={0} times={member.type !== 'Members'} />
       </MemberColumn>
       <MemberColumn>
-        <CountInfo>0 times</CountInfo>
+        <CountInfo count={0} times={member.type !== 'Members'} />
       </MemberColumn>
-      <MemberColumn>
-        <CountInfo>{member.inviteCount}</CountInfo>
-        <TransferInviteButton member={member} />
-      </MemberColumn>
-      <MemberColumn>
-        <CountInfo>0</CountInfo>
-      </MemberColumn>
-      <MemberControls>
-        <EditMembershipButton member={member} size="small">
-          <EditSymbol />
-        </EditMembershipButton>
-      </MemberControls>
+
+      {member.type !== 'Members' && (
+        <>
+          <MemberColumn>
+            <CountInfo count={member.inviteCount} />
+            <TransferInviteButton member={member} />
+          </MemberColumn>
+          <MemberColumn>
+            <CountInfo count={0} />
+          </MemberColumn>
+          <MemberControls>
+            <EditMembershipButton member={member} size="small">
+              <EditSymbol />
+            </EditMembershipButton>
+          </MemberControls>
+        </>
+      )}
+      {member.type === 'Members' && (
+        <>
+          <MemberColumn>
+            <TokenValue value={member.totalBalanced} />
+          </MemberColumn>
+          <MemberColumn>
+            <TokenValue value={member.totalStacked} />
+          </MemberColumn>
+        </>
+      )}
     </MemberItemWrap>
   )
 }
 
-const CountInfo = styled.span`
+const Info = styled.span`
   font-family: ${Fonts.Grotesk};
   font-weight: 700;
 `
+const CountInfo: FC<{ count: number; times?: boolean }> = ({ count, times }) => (
+  <Info>
+    {count}
+    {times && ' times'}
+  </Info>
+)
 
 const MemberItemWrap = styled.div`
   display: grid;
-  grid-template-columns: 194px 200px 76px 76px 96px 76px 54px;
+  grid-template-columns: ${({ member }: Props) => {
+    const name = '194px'
+    const roles = '200px'
+    const count = `${member.type === 'Members' ? 20 : 76}px`
+    const total = '194px'
+    return member.type === 'Members'
+      ? `54px ${name} 54px ${roles} ${count} ${count} ${total} ${total}`
+      : `${name} ${roles} ${count} ${count} 96px 76px 54px`
+  }};
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: start;

@@ -12,7 +12,10 @@ export interface Block {
 
 type MemberRole = 'SL' | 'SP' | 'FL'
 
-export interface Member {
+type MemberItemType = 'Membership' | 'Members'
+
+interface MemberCommon {
+  type?: MemberItemType
   id: ID
   handle: string
   rootAccount: Address
@@ -27,7 +30,18 @@ export interface Member {
   referredBy?: ID
 }
 
-export interface DetailedMember extends Member {
+interface Membership extends MemberCommon { type?: 'Membership' }
+
+interface MMember extends MemberCommon {
+  type: 'Members'
+  isConcilMember: boolean
+  totalBalanced: number
+  totalStacked: number
+}
+
+export type Member = Membership | MMember
+
+export interface DetailedMember extends MemberCommon {
   about?: string
   registeredAtBlock: Block
   registeredAtTime: 'string'

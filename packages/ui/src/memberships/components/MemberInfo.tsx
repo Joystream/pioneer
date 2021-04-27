@@ -48,7 +48,7 @@ export const MemberInfo = React.memo(
             {(member as any)?.isFounder && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
           </MemberIcons>
         </MemberHead>
-        {!showId && <MemberRoles member={member} size={size} max={maxRoles} />}
+        {member.type !== 'Members' && !showId && <MemberRoles member={member} size={size} max={maxRoles} />}
         {showId && <MemberId>Worker ID: {member.id}</MemberId>}
       </MemberInfoWrap>
     )

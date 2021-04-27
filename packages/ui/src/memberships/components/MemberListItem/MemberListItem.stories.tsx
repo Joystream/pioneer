@@ -11,10 +11,11 @@ export default {
 type Props = Parameters<typeof MemberListItem>[0]
 const Template: Story<Props> = (args) => <MemberListItem {...args} />
 
-export const Default = Template.bind({})
-Default.args = {
+export const Membership = Template.bind({})
+Membership.args = {
   member: {
-    id: '0',
+    type: 'Membership',
+    id: '144',
     name: 'Alice member',
     rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
@@ -23,5 +24,24 @@ Default.args = {
     isFoundingMember: false,
     roles: [],
     inviteCount: 0,
+  },
+}
+
+export const Members = Template.bind({})
+Members.args = {
+  member: {
+    type: 'Members',
+    id: '144',
+    name: 'Alice member',
+    rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    handle: 'alice',
+    isVerified: false,
+    isFoundingMember: false,
+    roles: [],
+    inviteCount: 0,
+    isConcilMember: true,
+    totalBalanced: 100000,
+    totalStacked: 30000,
   },
 }
