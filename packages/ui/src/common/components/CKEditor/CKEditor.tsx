@@ -4,7 +4,7 @@ import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
 import { MarkdownEditor } from './MarkdownEditor.js'
 import { Editor, EventInfo } from './types'
 
-interface CKEditorProps {
+export interface CKEditorProps {
   onChange?: (event: EventInfo, editor: Editor) => void
   onBlur?: (event: EventInfo, editor: Editor) => void
   onFocus?: (event: EventInfo, editor: Editor) => void
@@ -33,25 +33,21 @@ export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps)
           'bold',
           'italic',
           'link',
+          'strikethrough',
+          '|',
           'bulletedList',
           'numberedList',
-          '|',
           'outdent',
           'indent',
           '|',
           'uploadImage',
           'blockQuote',
-          'insertTable',
-          'mediaEmbed',
           'undo',
           'redo',
         ],
       },
       image: {
         toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],
-      },
-      table: {
-        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
       },
       // This value must be kept in sync with the language defined in webpack.config.js.
       language: 'en',
