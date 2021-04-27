@@ -19,6 +19,8 @@ const currentApplication = {
     groupName: 'Storage',
     reward: new BN(200),
   },
+  createdAtBlock: 100,
+  createdAtTime: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusPending',
 }
 
@@ -29,6 +31,8 @@ const pastApplication = {
     groupName: 'Forum',
     reward: new BN(100),
   },
+  createdAtBlock: 100,
+  createdAtTime: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusRejected',
 }
 

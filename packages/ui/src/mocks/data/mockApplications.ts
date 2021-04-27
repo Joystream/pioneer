@@ -9,7 +9,7 @@ export interface MockApplication {
   stakingAccount?: string
   answers?: any[]
   status?: string
-  createdAtBlockId: string
+  createdAtBlock: number
   createdAtTime: string
 }
 
