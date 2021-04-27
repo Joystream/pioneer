@@ -1,6 +1,7 @@
+import { Block } from '../../common/types'
 import { BlockFieldsFragment, MemberFieldsFragment } from '../queries'
 
-import { Block, Member } from './memberships'
+import { Member } from './memberships'
 
 export const asBlock = (block: BlockFieldsFragment): Block => {
   return {

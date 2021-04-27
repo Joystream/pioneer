@@ -4,7 +4,7 @@ import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { MyApplications } from '../../../src/app/pages/WorkingGroups/MyApplications'
-import { Block } from '../../../src/memberships/types'
+import { Block } from '../../../src/common/types'
 import { WorkingGroupApplication } from '../../../src/working-groups/types/WorkingGroupApplication'
 
 let mockApplications: { isLoading: boolean; applications: WorkingGroupApplication[] }

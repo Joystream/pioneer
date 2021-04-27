@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Block } from '../../memberships/types'
 import { Colors, Transitions } from '../constants'
 import { formatDateString, formatTokenValue } from '../model/formatters'
+import { Block } from '../types'
 
 import { LabelLink } from './forms'
 import { BlockIcon } from './icons'
