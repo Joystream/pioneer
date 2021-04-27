@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { RowGapBlock } from '../../../common/components/page/PageContent'
 import { ApplicationQuestionInput } from '../../components/ApplicationQuestionInput'
@@ -12,7 +12,7 @@ interface ApplicationStepProps {
 export const ApplicationStep = ({ questions, onChange }: ApplicationStepProps) => {
   const [answers, setAnswers] = useState<string[]>(questions.map(() => ''))
 
-  useMemo(() => onChange(true, [...answers]), [JSON.stringify(answers)])
+  useEffect(() => onChange(true, [...answers]), [JSON.stringify(answers)])
 
   return (
     <RowGapBlock gap={24}>
