@@ -1,36 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { AccountInfo } from '../../../accounts/components/AccountInfo'
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
-import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
+import { UnknownAccountInfo } from '../../../accounts/components/UnknownAccountInfo'
 import { AccountRow } from '../../../common/components/Modal'
 import { MembershipLabel } from '../../../common/components/typography/MembershipLabel'
 import { Member } from '../../types'
 
-export const MemberAccounts = ({ member }: { member: Member }) => {
-  const { allAccounts } = useAccounts()
-
-  const rootAccount = accountOrNamed(allAccounts, member.rootAccount, 'Root Account')
-  const controllerAccount = accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account')
-
-  return (
-    <AccountsDisplay>
-      <MembershipLabel text="Root account" />
-      {!!rootAccount && (
-        <AccountRow>
-          <AccountInfo account={rootAccount} />
-        </AccountRow>
-      )}
-      <MembershipLabel text="Controller account" />
-      {!!controllerAccount && (
-        <AccountRow>
-          <AccountInfo account={controllerAccount} />
-        </AccountRow>
-      )}
-    </AccountsDisplay>
-  )
-}
+export const MemberAccounts = ({ member }: { member: Member }) => (
+  <AccountsDisplay>
+    <MembershipLabel text="Root account" />
+    {!!member.rootAccount && (
+      <AccountRow>
+        <UnknownAccountInfo address={member.rootAccount} placeholderName="Root Account" />
+      </AccountRow>
+    )}
+    <MembershipLabel text="Controller account" />
+    {!!member.controllerAccount && (
+      <AccountRow>
+        <UnknownAccountInfo address={member.controllerAccount} placeholderName="Controller Account" />
+      </AccountRow>
+    )}
+  </AccountsDisplay>
+)
 
 const AccountsDisplay = styled.div`
   display: grid;
