@@ -33,7 +33,7 @@ export const MemberListItem = ({ member }: Props) => {
       )}
 
       <MemberColumn>
-        <MemberInfo member={member} onClick={showMemberModal} showId={member.type === 'Membership'} />
+        <MemberInfo member={member} onClick={showMemberModal} showId={member.type !== 'Members'} />
       </MemberColumn>
 
       {member.type === 'Members' && (
