@@ -1,12 +1,13 @@
 import React from 'react'
 
+import { Address } from '../../common/types'
 import { useAccounts } from '../hooks/useAccounts'
 import { accountOrNamed } from '../model/accountOrNamed'
 
 import { AccountInfo } from './AccountInfo'
 
 interface Props {
-  address: string
+  address: Address
   placeholderName: string
 }
 
