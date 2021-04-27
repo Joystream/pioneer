@@ -38,7 +38,7 @@ export const ApplicationsList = ({ applications }: Props) => (
 const ApplicationListItem = ({ application }: { application: WorkingGroupApplication }) => {
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
-    showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { application: application } })
+    showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { application } })
   }, [application.id])
 
   return (
