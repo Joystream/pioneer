@@ -30,9 +30,9 @@ interface MemberCommon {
   referredBy?: ID
 }
 
-interface Membership extends MemberCommon { type?: 'Membership' }
+export interface Membership extends MemberCommon { type?: 'Membership' }
 
-interface MMember extends MemberCommon {
+export interface MMember extends MemberCommon {
   type: 'Members'
   isConcilMember: boolean
   totalBalanced: number
@@ -40,6 +40,7 @@ interface MMember extends MemberCommon {
 }
 
 export type Member = Membership | MMember
+export type Members = Membership[] | MMember[]
 
 export interface DetailedMember extends MemberCommon {
   about?: string
