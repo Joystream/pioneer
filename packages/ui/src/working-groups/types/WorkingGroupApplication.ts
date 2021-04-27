@@ -13,7 +13,7 @@ export interface WorkingGroupApplication {
   applicant?: Member
   roleAccount?: string
   rewardAccount?: string
-  stakingAccount?: string
+  stakingAccount: string
   answers?: [any]
   status?: string
   createdAtBlock: number

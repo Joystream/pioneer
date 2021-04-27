@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
+import { UnknownAccountInfo } from '../../../accounts/components/UnknownAccountInfo'
 import { LabelLink } from '../../../common/components/forms'
 import { BlockIcon } from '../../../common/components/icons'
 import { TextMedium, TextSmall, TokenValue } from '../../../common/components/typography'
@@ -33,7 +34,9 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
       </tr>
       <tr>
         <td>Staking account</td>
-        <td>{application.stakingAccount}</td>
+        <td>
+          <UnknownAccountInfo address={application.stakingAccount} placeholderName="Staking account" />
+        </td>
       </tr>
       <tr>
         <td>Applied on</td>

@@ -22,6 +22,7 @@ const currentApplication = {
   createdAtBlock: 100,
   createdAtTime: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusPending',
+  stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
 
 const pastApplication = {
@@ -34,6 +35,7 @@ const pastApplication = {
   createdAtBlock: 100,
   createdAtTime: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusRejected',
+  stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
 
 describe('UI: MyApplications', () => {
