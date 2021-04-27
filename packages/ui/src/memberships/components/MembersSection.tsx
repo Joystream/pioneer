@@ -1,6 +1,7 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { List, ListItem } from '../../common/components/List'
 import { HeaderText, SortIconDown, SortIconUp } from '../../common/components/SortedListHeaders'
 import { Colors } from '../../common/constants'
 import { setOrder, SortKey, sortMemberships } from '../model/sortMemberships'
@@ -48,11 +49,13 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
           <ListHeader>Invited</ListHeader>
         </ListHeaders>
 
-        <MembershipsList>
+        <List>
           {sortedMemberships.map((member) => (
-            <MemberListItem member={member} key={member.handle} />
+            <ListItem key={member.handle}>
+              <MemberListItem member={member} />
+            </ListItem>
           ))}
-        </MembershipsList>
+        </List>
       </MembershipsGroup>
     </>
   )
@@ -110,12 +113,4 @@ const ListHeader = styled.span`
   &:last-child {
     position: relative;
   }
-`
-const MembershipsList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 `

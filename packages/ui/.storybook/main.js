@@ -1,3 +1,5 @@
+const webpack = require('webpack')
+
 module.exports = {
   webpackFinal: (config) => {
     config.resolve = {
@@ -8,6 +10,12 @@ module.exports = {
         path: false,
       },
     }
+    config.plugins.push(
+      new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+        process: 'process/browser.js',
+      })
+    )
     return config
   },
   core: {

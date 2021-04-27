@@ -9,11 +9,7 @@ import { ActivityComponent, ActivityComponentProps } from './ActivityComponent'
 export default {
   title: 'Common/ActivityComponent',
   component: ActivityComponent,
-  argTypes: {
-    category: {
-      control: { type: 'select' },
-    },
-  },
+  argTypes: {},
 } as Meta
 
 const Template: Story<ActivityComponentProps> = (args) => (
