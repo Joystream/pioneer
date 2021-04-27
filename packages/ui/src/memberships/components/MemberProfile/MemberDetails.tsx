@@ -1,14 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { LabelLink } from '../../../common/components/forms'
-import { BlockIcon } from '../../../common/components/icons/BlockIcon'
+import { AboutDateColumn } from '../../../common/components/AboutDateColumn'
 import { TransferSymbol } from '../../../common/components/icons/symbols'
 import { Loading } from '../../../common/components/Loading'
-import { TextMedium, TextSmall } from '../../../common/components/typography'
+import { TextMedium } from '../../../common/components/typography'
 import { MembershipLabel } from '../../../common/components/typography/MembershipLabel'
-import { Colors, Transitions } from '../../../common/constants'
-import { formatDateString, formatTokenValue } from '../../../common/model/formatters'
+import { Colors } from '../../../common/constants'
 import { useMember } from '../../hooks/useMembership'
 import { Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'
@@ -48,10 +46,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       </AboutColumn>
       <AboutRow>
         <MembershipLabel text="Registered on" />
-        <AboutDateColumn>
-          <AboutText>{formatDateString(memberDetails.registeredAtTime)}</AboutText>
-          <Block height={registeredAtBlock.block} network={registeredAtBlock.network} />
-        </AboutDateColumn>
+        <AboutDateColumn time={memberDetails.registeredAtTime} block={registeredAtBlock} />
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Member ID" />
@@ -73,11 +68,11 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Invited" />
-        <AboutDateColumn>
+        <AboutInvitesColumn>
           {(memberDetails.invitees || []).map((member) => (
             <MemberInfo member={member} key={member.handle} />
           ))}
-        </AboutDateColumn>
+        </AboutInvitesColumn>
       </AboutRow>
       <AboutRow>
         <MembershipLabel text="Hired" />
@@ -115,19 +110,6 @@ export const MemberDetails = React.memo(({ member }: Props) => {
   )
 })
 
-interface BlockInfoProps {
-  height: number
-  network: string
-}
-
-const Block = React.memo(({ height, network }: BlockInfoProps) => (
-  <BlockInfo>
-    <BlockIcon />
-    <BlockNumber>{formatTokenValue(height)}</BlockNumber>
-    <BlockNetworkInfo>on {network} network</BlockNetworkInfo>
-  </BlockInfo>
-))
-
 const AboutTable = styled.ul`
   display: grid;
   grid-row-gap: 24px;
@@ -157,28 +139,11 @@ const AboutRow = styled.li`
 const AboutText = styled(TextMedium)`
   color: ${Colors.Black[600]};
 `
-const AboutDateColumn = styled.div`
+const AboutInvitesColumn = styled.div`
   display: grid;
   grid-row-gap: 4px;
   width: 100%;
   height: fit-content;
-`
-const BlockInfo = styled.span`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 4px;
-  align-items: center;
-  width: fit-content;
-  height: fit-content;
-  color: ${Colors.Black[400]};
-`
-const BlockNetworkInfo = styled(TextSmall)`
-  color: ${Colors.Black[400]};
-`
-const BlockNumber = styled(LabelLink)`
-  font-size: inherit;
-  line-height: inherit;
-  transition: ${Transitions.all};
 `
 const AboutInvite = styled.div`
   display: flex;

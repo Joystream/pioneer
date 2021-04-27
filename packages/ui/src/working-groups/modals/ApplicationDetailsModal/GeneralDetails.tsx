@@ -1,13 +1,9 @@
 import BN from 'bn.js'
 import React from 'react'
-import styled from 'styled-components'
 
 import { UnknownAccountInfo } from '../../../accounts/components/UnknownAccountInfo'
-import { LabelLink } from '../../../common/components/forms'
-import { BlockIcon } from '../../../common/components/icons'
-import { TextMedium, TextSmall, TokenValue } from '../../../common/components/typography'
-import { Colors, Transitions } from '../../../common/constants'
-import { formatDateString, formatTokenValue } from '../../../common/model/formatters'
+import { AboutDateColumn } from '../../../common/components/AboutDateColumn'
+import { TokenValue } from '../../../common/components/typography'
 import { openingTitle } from '../../helpers'
 import { WorkingGroupApplication } from '../../types/WorkingGroupApplication'
 
@@ -40,10 +36,7 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
       </tr>
       <tr>
         <td>Applied on</td>
-        <AboutDateColumn>
-          <AboutText>{formatDateString(application.createdAtTime)}</AboutText>
-          <Block height={application.createdAtBlock.block} network={application.createdAtBlock.network} />
-        </AboutDateColumn>
+        <AboutDateColumn time={application.createdAtTime} block={application.createdAtBlock} />
       </tr>
       <tr>
         <td>Application ID</td>
@@ -52,42 +45,3 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
     </table>
   </>
 ))
-
-const AboutDateColumn = styled.div`
-  display: grid;
-  grid-row-gap: 4px;
-  width: 100%;
-  height: fit-content;
-`
-const AboutText = styled(TextMedium)`
-  color: ${Colors.Black[600]};
-`
-interface BlockInfoProps {
-  height: number
-  network: string
-}
-const Block = React.memo(({ height, network }: BlockInfoProps) => (
-  <BlockInfo>
-    <BlockIcon />
-    <BlockNumber>{formatTokenValue(height)}</BlockNumber>
-    <BlockNetworkInfo>on {network} network</BlockNetworkInfo>
-  </BlockInfo>
-))
-
-const BlockInfo = styled.span`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 4px;
-  align-items: center;
-  width: fit-content;
-  height: fit-content;
-  color: ${Colors.Black[400]};
-`
-const BlockNetworkInfo = styled(TextSmall)`
-  color: ${Colors.Black[400]};
-`
-const BlockNumber = styled(LabelLink)`
-  font-size: inherit;
-  line-height: inherit;
-  transition: ${Transitions.all};
-`
