@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import { useAccounts } from '../hooks/useAccounts'
+import { accountOrNamed } from '../model/accountOrNamed'
 
 import { AccountInfo } from './AccountInfo'
 
@@ -11,9 +12,6 @@ interface Props {
 
 export const UnknownAccountInfo = React.memo(({ address, placeholderName }: Props) => {
   const { allAccounts } = useAccounts()
-  const account = useMemo(
-    () => allAccounts.find((acc) => acc.address == address) ?? { address, name: placeholderName },
-    [allAccounts, address, placeholderName]
-  )
+  const account = accountOrNamed(allAccounts, address, placeholderName)
   return <AccountInfo account={account} />
 })
