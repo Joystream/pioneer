@@ -23,6 +23,7 @@ const useAccounts: UseAccounts = {
   hasAccounts: false,
   allAccounts: [],
 }
+
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()
   const useModal: UseModal<any> = {
@@ -60,21 +61,33 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   describe('Stake step', () => {
-    it('Validates fields', async () => {
+    it('Empty fields', async () => {
       renderModal()
 
       const button = await screen.findByRole('button', { name: /Next step/i })
       expect(button).toBeDisabled()
+    })
+
+    it('Too low stake', async () => {
+      renderModal()
+
+      await selectAccount('Select account for Staking', 'alice')
+      const input = await screen.findByLabelText(/Select amount for staking/i)
+      await fireEvent.change(input, { target: { value: '50' } })
+
+      const button = await screen.findByRole('button', { name: /Next step/i })
+      expect(button).toBeDisabled()
+    })
+
+    it('Valid fields', async () => {
+      renderModal()
 
       await selectAccount('Select account for Staking', 'alice')
 
       const input = await screen.findByLabelText(/Select amount for staking/i)
-      await fireEvent.change(input, { target: { value: '50' } })
-
-      expect(button).toBeDisabled()
-
       await fireEvent.change(input, { target: { value: '2000' } })
 
+      const button = await screen.findByRole('button', { name: /Next step/i })
       expect(button).not.toBeDisabled()
     })
   })
