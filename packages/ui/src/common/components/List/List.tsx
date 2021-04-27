@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Transitions } from '../constants'
+import { BorderRad, Colors, Transitions } from '../../constants'
 
 export const List = styled.ul`
   display: flex;

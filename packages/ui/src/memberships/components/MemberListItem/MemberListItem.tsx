@@ -8,6 +8,7 @@ import { Fonts, Sizes } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
 import { Member } from '../../types'
 import { EditMembershipButton } from '../EditMembershipButton'
+import { colLayoutByType } from '../MemberList/MemberList'
 import { MemberModalCall } from '../MemberProfile'
 import { MemberRoles } from '../MemberRoles'
 import { TransferInviteButton } from '../TransferInviteButton'
@@ -94,15 +95,7 @@ const CountInfo: FC<{ count: number; times?: boolean }> = ({ count, times }) => 
 
 const MemberItemWrap = styled.div`
   display: grid;
-  grid-template-columns: ${({ member }: Props) => {
-    const name = '194px'
-    const roles = '200px'
-    const count = `${member.type === 'Members' ? 20 : 76}px`
-    const total = '194px'
-    return member.type === 'Members'
-      ? `54px ${name} 54px ${roles} ${count} ${count} ${total} ${total}`
-      : `${name} ${roles} ${count} ${count} 96px 76px 54px`
-  }};
+  grid-template-columns: ${({ member }: Props) => colLayoutByType(member.type)};
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: start;

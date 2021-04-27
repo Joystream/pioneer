@@ -16,11 +16,13 @@ const Template: Story<Props> = (args) => <MemberList {...args} />
 
 export const Memberships = Template.bind({})
 Memberships.args = {
+  type: 'Membership',
   members: mockMembers as Membership[],
 }
 
 export const Members = Template.bind({})
 Members.args = {
+  type: 'Members',
   members: [
     {
       type: 'Members',

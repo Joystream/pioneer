@@ -2,8 +2,9 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 
-import { List, ListItem } from './List'
-import { TemplateBlock } from './storybookParts/previewStyles'
+import { TemplateBlock } from '../storybookParts/previewStyles'
+
+import { List, ListItem } from '.'
 
 export default {
   title: 'Common/List',
