@@ -29,7 +29,6 @@
     "@ckeditor/ckeditor5-markdown-gfm": "^27.1.0",
     "@ckeditor/ckeditor5-paragraph": "^27.1.0",
     "@ckeditor/ckeditor5-paste-from-office": "^27.1.0",
-    "@ckeditor/ckeditor5-table": "^27.1.0",
     "@ckeditor/ckeditor5-theme-lark": "^27.1.0",
     "@ckeditor/ckeditor5-typing": "^27.1.0",
     "@joystream/types": "^0.15.0",
