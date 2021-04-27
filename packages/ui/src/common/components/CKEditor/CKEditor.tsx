@@ -4,7 +4,7 @@ import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
 import { MarkdownEditor } from './MarkdownEditor.js'
 import { Editor, EventInfo } from './types'
 
-interface CKEditorProps {
+export interface CKEditorProps {
   onChange?: (event: EventInfo, editor: Editor) => void
   onBlur?: (event: EventInfo, editor: Editor) => void
   onFocus?: (event: EventInfo, editor: Editor) => void
