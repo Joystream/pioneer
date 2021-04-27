@@ -7,9 +7,8 @@ import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { ApiContext } from '../../../src/common/providers/api/context'
 import { ModalContext } from '../../../src/common/providers/modal/context'
 import { UseModal } from '../../../src/common/providers/modal/types'
-import { seedOpenings, seedOpeningStatuses } from '../../../src/mocks/data/mockOpenings'
+import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/mockOpenings'
 import { seedWorkingGroups } from '../../../src/mocks/data/mockWorkingGroups'
-import { fixAssociations } from '../../../src/mocks/server'
 import { ApplyForRoleModal } from '../../../src/working-groups/modals/ApplyForRoleModal'
 import { WorkingGroupOpeningFieldsFragment } from '../../../src/working-groups/queries'
 import { asWorkingGroupOpening } from '../../../src/working-groups/types'
@@ -19,9 +18,36 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubDefaultBalances } from '../../_mocks/transactions'
 
-const useAccounts: UseAccounts = {
-  hasAccounts: false,
-  allAccounts: [],
+const OPENING_DATA = {
+  groupId: 0,
+  type: 'REGULAR',
+  status: 'open',
+  stakeAmount: 2000,
+  metadata: {
+    shortDescription: 'Distribution Worker',
+    description: '# Description',
+    hiringLimit: 1,
+    expectedEnding: '2022-03-09T10:18:04.155Z',
+    applicationDetails: 'Details... ?',
+    applicationFormQuestions: [
+      {
+        type: 'TEXT',
+        question: 'Question 1',
+      },
+      {
+        type: 'TEXT',
+        question: 'Question 2',
+      },
+      {
+        type: 'TEXT',
+        question: 'Question 3',
+      },
+    ],
+  },
+  unstakingPeriod: 5,
+  rewardPerBlock: 200,
+  createdAtBlock: 5,
+  createdAtTime: '2021-04-09T13:37:42.155Z',
 }
 
 describe('UI: ApplyForRoleModal', () => {
@@ -32,20 +58,24 @@ describe('UI: ApplyForRoleModal', () => {
     modal: null,
     modalData: undefined,
   }
+  let useAccounts: UseAccounts
 
   const server = setupMockServer()
 
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useAccounts.allAccounts.push(alice, bob)
+
+    useAccounts = {
+      hasAccounts: true,
+      allAccounts: [alice, bob],
+    }
   })
 
   beforeEach(async () => {
-    fixAssociations((server.server as unknown) as any)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
-    seedOpenings(server.server)
+    seedOpening(OPENING_DATA, server.server)
 
     const fields = (server.server?.schema.first('WorkingGroupOpening') as unknown) as WorkingGroupOpeningFieldsFragment
     const opening = asWorkingGroupOpening(fields)
@@ -95,9 +125,25 @@ describe('UI: ApplyForRoleModal', () => {
     beforeEach(async () => {
       await renderModal()
       await fillStakeStep()
+      await fireEvent.click(await getNextStepButton())
+      await screen.findByRole('heading', { name: 'Application' })
+    })
+
+    it('Form questions', async () => {
+      expect(await screen.findByLabelText(/Question 1/i)).toBeDefined()
+      expect(await screen.findByLabelText(/Question 2/i)).toBeDefined()
+      expect(await screen.findByLabelText(/Question 3/i)).toBeDefined()
     })
 
     it('Empty form', async () => {
+      expect(await getNextStepButton()).toBeDisabled()
+    })
+
+    it('Valid fields', async () => {
+      await fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
+      await fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
+      await fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
     })

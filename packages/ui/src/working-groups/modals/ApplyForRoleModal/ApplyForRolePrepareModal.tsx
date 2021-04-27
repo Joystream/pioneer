@@ -77,7 +77,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
       },
     })
   }
-  const onApplicationStepChange = (isValid: boolean, answers: string[]) => {
+  const onApplicationStepChange = (isValid: boolean, answers: Record<number, string>) => {
     dispatch({
       type: 'STEP',
       data: {
@@ -88,7 +88,6 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
     })
   }
 
-  console.log(state)
   const isValid = state[step].isValid
 
   return (
