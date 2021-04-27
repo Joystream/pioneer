@@ -42,7 +42,7 @@ export interface MMember extends MemberCommon {
 export type Member = Membership | MMember
 export type Members = Membership[] | MMember[]
 
-export interface DetailedMember extends MemberCommon {
+export interface DetailedMember extends Membership {
   about?: string
   registeredAtBlock: Block
   registeredAtTime: 'string'
