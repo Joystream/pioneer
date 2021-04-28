@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Fonts, Sizes } from '../../../common/constants'
 import { Membership, OtherMember } from '../../types'
 
-export const colLayoutByType = (kind: (Membership | OtherMember)['kind']) => {
+export const colLayoutByType = (kind: 'Member' | 'MyMember') => {
   const id = 70
   const name = 194
   const concil = 80
