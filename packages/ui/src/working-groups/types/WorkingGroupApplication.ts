@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 
-import { Block } from '../../common/types'
-import { asBlock, Member } from '../../memberships/types'
+import { asBlock, Block } from '../../common/types'
+import { Member } from '../../memberships/types'
 import { WorkingGroupApplicationFieldsFragment } from '../queries'
 
 export interface WorkingGroupApplication {

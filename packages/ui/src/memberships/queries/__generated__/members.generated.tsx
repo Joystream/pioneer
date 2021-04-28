@@ -1,6 +1,8 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
+import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
+
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type MemberFieldsFragment = {
@@ -16,8 +18,6 @@ export type MemberFieldsFragment = {
   isFoundingMember: boolean
   inviteCount: number
 }
-
-export type BlockFieldsFragment = { __typename: 'Block'; id: string; block: number; network: Types.Network }
 
 export type GetMembersQueryVariables = Types.Exact<{
   rootAccount_in?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
@@ -67,13 +67,6 @@ export const MemberFieldsFragmentDoc = gql`
     isVerified
     isFoundingMember
     inviteCount
-  }
-`
-export const BlockFieldsFragmentDoc = gql`
-  fragment BlockFields on Block {
-    id
-    block
-    network
   }
 `
 export const MemberWithDetailsFragmentDoc = gql`

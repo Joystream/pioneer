@@ -1,5 +1,6 @@
+import { asBlock } from '../../common/types'
 import { MemberWithDetailsFragment, useGetMemberQuery } from '../queries'
-import { asBlock, asMember, DetailedMember } from '../types'
+import { asMember, DetailedMember } from '../types'
 
 interface UseMember {
   member?: DetailedMember

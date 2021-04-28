@@ -2,10 +2,9 @@ import * as Types from '../../../common/api/queries/__generated__/baseTypes.gene
 
 import {
   MemberFieldsFragment,
-  BlockFieldsFragment,
   MemberFieldsFragmentDoc,
-  BlockFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
