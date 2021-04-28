@@ -1,20 +1,17 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { MemberListItem } from './MemberListItem'
+import { MyMemberListItem, MemberListItem } from '.'
 
 export default {
   title: 'Member/MemberListItem',
-  component: MemberListItem,
+  subcomponents: { MyMemberListItem, MemberListItem },
 } as Meta
 
-type Props = Parameters<typeof MemberListItem>[0]
-const Template: Story<Props> = (args) => <MemberListItem {...args} />
-
-export const Membership = Template.bind({})
-Membership.args = {
+type MyMemberStory = Story<Parameters<typeof MyMemberListItem>[0]>
+export const MyMember: MyMemberStory = (props) => <MyMemberListItem {...props} />
+MyMember.args = {
   member: {
-    type: 'Membership',
     id: '144',
     name: 'Alice member',
     rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
@@ -27,10 +24,11 @@ Membership.args = {
   },
 }
 
-export const Members = Template.bind({})
-Members.args = {
+type MemberStory = Story<Parameters<typeof MemberListItem>[0]>
+export const Member: MemberStory = (props) => <MemberListItem {...props} />
+Member.args = {
   member: {
-    type: 'Members',
+    kind: 'Member',
     id: '144',
     name: 'Alice member',
     rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
@@ -41,7 +39,7 @@ Members.args = {
     roles: [],
     inviteCount: 0,
     isConcilMember: true,
-    totalBalanced: 100000,
+    totalBalance: 100000,
     totalStacked: 30000,
   },
 }

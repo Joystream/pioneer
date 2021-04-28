@@ -5,9 +5,9 @@ import { List, ListItem } from '../../common/components/List'
 import { ListHeader, ListHeaders } from '../../common/components/List/ListHeader'
 import { HeaderText, SortIconDown, SortIconUp } from '../../common/components/SortedListHeaders'
 import { setOrder, SortKey, sortMemberships } from '../model/sortMemberships'
-import { Member } from '../types'
+import { Member, Membership } from '../types'
 
-import { MemberListItem } from './MemberListItem/MemberListItem'
+import { MyMemberListItem } from './MemberListItem'
 
 interface MembersSectionProps {
   title: string
@@ -21,7 +21,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
     members,
     sortBy,
     isDescending,
-  ])
+  ]) as Membership[]
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
   const Header = ({ children, sortKey }: HeaderProps) => {
     return (
@@ -52,7 +52,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
         <List>
           {sortedMemberships.map((member) => (
             <ListItem key={member.handle}>
-              <MemberListItem member={member} />
+              <MyMemberListItem member={member} />
             </ListItem>
           ))}
         </List>
