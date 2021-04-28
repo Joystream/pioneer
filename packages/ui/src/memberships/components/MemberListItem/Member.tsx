@@ -3,17 +3,13 @@ import React, { useCallback } from 'react'
 import { MemberInfo } from '..'
 import { TokenValue } from '../../../common/components/typography/TokenValue'
 import { useModal } from '../../../common/hooks/useModal'
-import { OtherMember } from '../../types'
+import { Member } from '../../types'
 import { MemberModalCall } from '../MemberProfile'
 import { MemberRoles } from '../MemberRoles'
 
 import { CountInfo, Info, MemberColumn, MemberItemWrap, MemberRolesColumn } from './Fileds'
 
-interface Props {
-  member: OtherMember
-}
-
-export const MemberListItem = ({ member }: Props) => {
+export const MemberListItem = ({ member }: { member: Member }) => {
   const { showModal } = useModal()
 
   const showMemberModal = useCallback(() => {
@@ -21,7 +17,7 @@ export const MemberListItem = ({ member }: Props) => {
   }, [member.id])
 
   return (
-    <MemberItemWrap member={member}>
+    <MemberItemWrap kind="Member">
       <MemberColumn>
         <Info>#{member.id}</Info>
       </MemberColumn>
@@ -31,7 +27,7 @@ export const MemberListItem = ({ member }: Props) => {
       </MemberColumn>
 
       <MemberColumn>
-        <Info>{member.isConcilMember ? 'YES' : 'NO'}</Info>
+        <Info>NO</Info>
       </MemberColumn>
 
       <MemberRolesColumn>
@@ -45,10 +41,10 @@ export const MemberListItem = ({ member }: Props) => {
       </MemberColumn>
 
       <MemberColumn>
-        <TokenValue value={member.totalBalance ?? 0} />
+        <TokenValue value={0} />
       </MemberColumn>
       <MemberColumn>
-        <TokenValue value={member.totalStacked ?? 0} />
+        <TokenValue value={0} />
       </MemberColumn>
     </MemberItemWrap>
   )

@@ -2,11 +2,11 @@ import React from 'react'
 
 import { List, ListItem } from '../../../common/components/List'
 import { ListHeader, ListHeaders } from '../../../common/components/List/ListHeader'
-import { OtherMember } from '../../types'
+import { Member } from '../../types'
 import { MemberListItem } from '../MemberListItem'
 import { colLayoutByType } from '../MemberListItem/Fileds'
 
-export const MemberList = ({ members }: { members: OtherMember[] }) => (
+export const MemberList = ({ members }: { members: Member[] }) => (
   <div>
     <ListHeaders colLayout={colLayoutByType('Member')}>
       <ListHeader>Member ID</ListHeader>

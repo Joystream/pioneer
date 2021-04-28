@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Fonts, Sizes } from '../../../common/constants'
-import { Membership, OtherMember } from '../../types'
 
-export const colLayoutByType = (kind: 'Member' | 'MyMember') => {
+type MemberItemKind = 'Member' | 'MyMember'
+export const colLayoutByType = (kind: MemberItemKind) => {
   const id = 70
   const name = 194
   const concil = 80
@@ -30,7 +30,7 @@ export const CountInfo = ({ count, times }: { count: number; times?: boolean }) 
 
 export const MemberItemWrap = styled.div`
   display: grid;
-  grid-template-columns: ${({ member }: { member: Membership | OtherMember }) => colLayoutByType(member.kind)};
+  grid-template-columns: ${({ kind }: { kind: MemberItemKind }) => colLayoutByType(kind)};
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: start;

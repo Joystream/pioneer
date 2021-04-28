@@ -28,7 +28,6 @@ type MemberStory = Story<Parameters<typeof MemberListItem>[0]>
 export const Member: MemberStory = (props) => <MemberListItem {...props} />
 Member.args = {
   member: {
-    kind: 'Member',
     id: '144',
     name: 'Alice member',
     rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
@@ -38,8 +37,5 @@ Member.args = {
     isFoundingMember: false,
     roles: [],
     inviteCount: 0,
-    isConcilMember: true,
-    totalBalance: 100000,
-    totalStacked: 30000,
   },
 }

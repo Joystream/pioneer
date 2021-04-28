@@ -5,7 +5,7 @@ import { List, ListItem } from '../../common/components/List'
 import { ListHeader, ListHeaders } from '../../common/components/List/ListHeader'
 import { HeaderText, SortIconDown, SortIconUp } from '../../common/components/SortedListHeaders'
 import { setOrder, SortKey, sortMemberships } from '../model/sortMemberships'
-import { Member, Membership } from '../types'
+import { Member } from '../types'
 
 import { MyMemberListItem } from './MemberListItem'
 
@@ -21,7 +21,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
     members,
     sortBy,
     isDescending,
-  ]) as Membership[]
+  ])
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
   const Header = ({ children, sortKey }: HeaderProps) => {
     return (

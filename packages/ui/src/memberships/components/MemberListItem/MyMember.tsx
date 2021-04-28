@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import { MemberInfo } from '..'
 import { EditSymbol } from '../../../common/components/icons/symbols'
 import { useModal } from '../../../common/hooks/useModal'
-import { Membership } from '../../types'
+import { Member } from '../../types'
 import { EditMembershipButton } from '../EditMembershipButton'
 import { MemberModalCall } from '../MemberProfile'
 import { MemberRoles } from '../MemberRoles'
@@ -11,11 +11,7 @@ import { TransferInviteButton } from '../TransferInviteButton'
 
 import { CountInfo, MemberColumn, MemberControls, MemberItemWrap, MemberRolesColumn } from './Fileds'
 
-interface Props {
-  member: Membership
-}
-
-export const MyMemberListItem = ({ member }: Props) => {
+export const MyMemberListItem = ({ member }: { member: Member }) => {
   const { showModal } = useModal()
 
   const showMemberModal = useCallback(() => {
@@ -23,7 +19,7 @@ export const MyMemberListItem = ({ member }: Props) => {
   }, [member.id])
 
   return (
-    <MemberItemWrap member={member}>
+    <MemberItemWrap kind="MyMember">
       <MemberColumn>
         <MemberInfo member={member} onClick={showMemberModal} showId />
       </MemberColumn>

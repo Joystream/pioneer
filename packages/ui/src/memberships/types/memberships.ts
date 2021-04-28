@@ -19,17 +19,6 @@ export interface Member {
   referredBy?: ID
 }
 
-export interface Membership extends Member {
-  kind?: 'MyMember'
-}
-
-export interface OtherMember extends Member {
-  kind: 'Member'
-  isConcilMember?: boolean
-  totalBalance?: number
-  totalStacked?: number
-}
-
 export interface DetailedMember extends Member {
   about?: string
   registeredAtBlock: Block
