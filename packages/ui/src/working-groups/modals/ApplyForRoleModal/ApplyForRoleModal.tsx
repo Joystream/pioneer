@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
 import { FailureModal } from '../../../common/components/FailureModal'
@@ -18,13 +19,22 @@ export const ApplyForRoleModal = () => {
   const { active } = useMyMemberships()
   const signer = active?.controllerAccount
   const onDone = (result: boolean) => setState(result ? 'SUCCESS' : 'ERROR')
+  const stake = new BN(10_000)
 
   if (state === 'PREPARE') {
     return <ApplyForRolePrepareModal onSubmit={() => setState('AUTHORIZE')} />
   }
 
   if (state === 'AUTHORIZE' && signer) {
-    return <ApplyForRoleSignModal onClose={hideModal} onDone={onDone} transaction={transaction} signer={signer} />
+    return (
+      <ApplyForRoleSignModal
+        onClose={hideModal}
+        onDone={onDone}
+        transaction={transaction}
+        signer={signer}
+        stake={stake}
+      />
+    )
   }
 
   if (state === 'SUCCESS') {

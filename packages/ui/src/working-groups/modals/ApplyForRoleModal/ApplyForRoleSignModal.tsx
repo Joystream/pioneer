@@ -1,5 +1,6 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
+import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
@@ -19,9 +20,10 @@ interface SignProps {
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   signer: Address
+  stake: BN
 }
 
-export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer }: SignProps) => {
+export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer, stake }: SignProps) => {
   const { allAccounts } = useAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
   const { paymentInfo, send, status } = useSignAndSendTransaction({
@@ -45,7 +47,10 @@ export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer }: 
   return (
     <TransactionModal status={status} onClose={onClose}>
       <ModalBody>
-        <TextMedium>You intend to apply to an opening...</TextMedium>
+        <TextMedium>You intend to apply for a role.</TextMedium>
+        <TextMedium>
+          You intend to stake <TokenValue value={stake} />.
+        </TextMedium>
         <TextMedium>
           Fees of <TokenValue value={partialFee?.toBn()} /> will be applied to the transaction.
         </TextMedium>
@@ -55,6 +60,11 @@ export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer }: 
       </ModalBody>
       <ModalFooter>
         <BalanceInfoNarrow>
+          <InfoTitle>Stake:</InfoTitle>
+          <InfoValue>
+            <TokenValue value={stake} />
+          </InfoValue>
+          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
           <InfoTitle>Transaction fee:</InfoTitle>
           <InfoValue>
             <TokenValue value={partialFee?.toBn()} />
