@@ -189,20 +189,20 @@ describe('UI: ApplyForRoleModal', () => {
       expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
     })
 
-    it.skip('Success step', async () => {
+    it('Success step', async () => {
       stubTransactionSuccess(tx, [])
       await fillSteps()
 
-      fireEvent.click(screen.getByText(/^sign and update a member$/i))
+      fireEvent.click(screen.getByText(/^Sign transaction and Stake$/i))
 
       expect(await screen.findByText('Success')).toBeDefined()
     })
 
-    it.skip('Failure step', async () => {
+    it('Failure step', async () => {
       stubTransactionFailure(tx)
       await fillSteps()
 
-      fireEvent.click(screen.getByText(/^sign and update a member$/i))
+      fireEvent.click(screen.getByText(/^Sign transaction and Stake$/i))
 
       expect(await screen.findByText('Failure')).toBeDefined()
     })

@@ -62,7 +62,7 @@ export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer }: 
           <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
         </BalanceInfoNarrow>
         <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>
-          Sign and create a member
+          Sign transaction and Stake
         </ButtonPrimary>
       </ModalFooter>
     </TransactionModal>
