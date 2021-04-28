@@ -12,10 +12,7 @@ export interface Block {
 
 type MemberRole = 'SL' | 'SP' | 'FL'
 
-type MemberItemType = 'Membership' | 'Members'
-
-interface MemberCommon {
-  type?: MemberItemType
+export interface Member {
   id: ID
   handle: string
   rootAccount: Address
@@ -30,21 +27,18 @@ interface MemberCommon {
   referredBy?: ID
 }
 
-export interface Membership extends MemberCommon {
-  type?: 'Membership'
+export interface Membership extends Member {
+  kind?: 'MyMember'
 }
 
-export interface MMember extends MemberCommon {
-  type: 'Members'
-  isConcilMember: boolean
-  totalBalanced: number
-  totalStacked: number
+export interface OtherMember extends Member {
+  kind: 'Member'
+  isConcilMember?: boolean
+  totalBalance?: number
+  totalStacked?: number
 }
 
-export type Member = Membership | MMember
-export type Members = Membership[] | MMember[]
-
-export interface DetailedMember extends Membership {
+export interface DetailedMember extends Member {
   about?: string
   registeredAtBlock: Block
   registeredAtTime: 'string'
