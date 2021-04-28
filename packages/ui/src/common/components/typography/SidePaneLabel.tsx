@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-interface AboutMemberProps {
+interface Props {
   text: string
   className?: any
 }
 
-export const MembershipLabel = React.memo(({ text, className }: AboutMemberProps) => {
+export const SidePaneLabel = React.memo(({ text, className }: Props) => {
   return (
     <AboutLabel title={text} className={className}>
       {text}

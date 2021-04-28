@@ -3,7 +3,9 @@ import React from 'react'
 
 import { UnknownAccountInfo } from '../../../accounts/components/UnknownAccountInfo'
 import { AboutDateColumn } from '../../../common/components/AboutDateColumn'
+import { SidePaneTable, SidePaneText, SidePaneRow } from '../../../common/components/SidePane'
 import { TokenValue } from '../../../common/components/typography'
+import { SidePaneLabel } from '../../../common/components/typography/SidePaneLabel'
 import { openingTitle } from '../../helpers'
 import { WorkingGroupApplication } from '../../types/WorkingGroupApplication'
 
@@ -12,36 +14,34 @@ interface Props {
 }
 
 export const GeneralDetails = React.memo(({ application }: Props) => (
-  <>
-    <table>
-      <tr>
-        <td>Opening</td>
-        <td>{openingTitle(application)}</td>
-      </tr>
-      <tr>
-        <td>Status</td>
-        <td>{application.status}</td>
-      </tr>
-      <tr>
-        <td>Your stake</td>
-        <td>
-          <TokenValue value={new BN(100000)} />
-        </td>
-      </tr>
-      <tr>
-        <td>Staking account</td>
-        <td>
-          <UnknownAccountInfo address={application.stakingAccount} placeholderName="Staking account" />
-        </td>
-      </tr>
-      <tr>
-        <td>Applied on</td>
-        <AboutDateColumn time={application.createdAtTime} block={application.createdAtBlock} />
-      </tr>
-      <tr>
-        <td>Application ID</td>
-        <td>{application.id}</td>
-      </tr>
-    </table>
-  </>
+  <SidePaneTable>
+    <SidePaneRow>
+      <SidePaneLabel text="Opening" />
+      <SidePaneText>{openingTitle(application)}</SidePaneText>
+    </SidePaneRow>
+    <SidePaneRow>
+      <SidePaneLabel text="Status" />
+      <SidePaneText>{application.status}</SidePaneText>
+    </SidePaneRow>
+    <SidePaneRow>
+      <SidePaneLabel text="Your stake" />
+      <SidePaneText>
+        <TokenValue value={new BN(100000)} />
+      </SidePaneText>
+    </SidePaneRow>
+    <SidePaneRow>
+      <SidePaneLabel text="Staking account" />
+      <SidePaneText>
+        <UnknownAccountInfo address={application.stakingAccount} placeholderName="Staking account" />
+      </SidePaneText>
+    </SidePaneRow>
+    <SidePaneRow>
+      <SidePaneLabel text="Applied on" />
+      <AboutDateColumn time={application.createdAtTime} block={application.createdAtBlock} />
+    </SidePaneRow>
+    <SidePaneRow>
+      <SidePaneLabel text="Application ID" />
+      <SidePaneText>{application.id}</SidePaneText>
+    </SidePaneRow>
+  </SidePaneTable>
 ))
