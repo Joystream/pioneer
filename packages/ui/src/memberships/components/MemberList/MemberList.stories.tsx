@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { mockMembers } from '../../../mocks/data/mockMembers'
-import { Membership } from '../../types'
+import { Member, OtherMember } from '../../types'
 
 import { MemberList } from '.'
 
@@ -14,30 +14,15 @@ export default {
 type Props = Parameters<typeof MemberList>[0]
 const Template: Story<Props> = (args) => <MemberList {...args} />
 
-export const Memberships = Template.bind({})
-Memberships.args = {
-  type: 'Membership',
-  members: mockMembers as Membership[],
-}
-
 export const Members = Template.bind({})
 Members.args = {
-  type: 'Members',
-  members: [
-    {
-      type: 'Members',
-      id: '144',
-      name: 'Alice member',
-      rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      handle: 'alice',
-      isVerified: false,
-      isFoundingMember: false,
-      roles: [],
-      inviteCount: 0,
-      isConcilMember: true,
-      totalBalanced: 100000,
+  members: mockMembers.map(
+    (member: Member): OtherMember => ({
+      ...member,
+      kind: 'Member',
+      isConcilMember: false,
+      totalBalance: 100000,
       totalStacked: 30000,
-    },
-  ],
+    })
+  ),
 }
