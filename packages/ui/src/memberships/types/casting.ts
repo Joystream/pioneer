@@ -1,6 +1,6 @@
 import { BlockFieldsFragment, MemberFieldsFragment } from '../queries'
 
-import { Block, Member } from './memberships'
+import { Block, Membership } from './memberships'
 
 export const asBlock = (block: BlockFieldsFragment): Block => {
   return {
@@ -8,7 +8,7 @@ export const asBlock = (block: BlockFieldsFragment): Block => {
   }
 }
 
-export const asMember = (data: MemberFieldsFragment): Member => {
+export const asMember = (data: MemberFieldsFragment): Membership => {
   return {
     id: data.id,
     handle: data.handle,
