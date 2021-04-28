@@ -8,6 +8,8 @@ import {
   SearchMembersQueryResult,
 } from '../memberships/queries'
 import {
+  GetApplicationFormQuestionAnswerQueryResult,
+  GetApplicationFormQuestionAnswerQueryVariables,
   GetWorkersQueryResult,
   GetWorkersQueryVariables,
   GetWorkingGroupApplicationsQueryResult,
@@ -135,7 +137,20 @@ export const getWorkingGroupApplicationsResolver: QueryResolver<
     ? schema.where('WorkingGroupApplication', (application: MockApplication) =>
         applicantIds.includes(application.applicantId)
       )
-    : schema.all()
+    : schema.all('WorkingGroupApplication')
+
+  return models
+}
+
+export const getApplicationFormQuestionAnswersResolver: QueryResolver<
+  { where: GetApplicationFormQuestionAnswerQueryVariables },
+  GetApplicationFormQuestionAnswerQueryResult[]
+> = (obj, args, { mirageSchema: schema }) => {
+  const applicationId = args.where.application_eq
+
+  const { models } = applicationId
+    ? schema.where('ApplicationFormQuestionAnswer', { applicationId })
+    : schema.all('ApplicationFormQuestionAnswer')
 
   return models
 }

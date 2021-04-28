@@ -540,6 +540,10 @@ input MembershipWhereUniqueInput {
   handle: String
 }
 
+input ApplicationFormQuestionAnswerWhereInput {
+  application_eq: ID
+}
+
 enum Network {
   BABYLON
   ALEXANDRIA
@@ -578,6 +582,7 @@ type Query {
   workingGroupOpenings(offset: Int, limit: Int = 50, where: WorkingGroupOpeningsWhereInput): [WorkingGroupOpening!]
   workingGroupOpening(where: WorkingGroupOpeningWhereUniqueInput): WorkingGroupOpening
   workingGroupApplications(offset: Int, limit: Int = 50, where: WorkingGroupApplicationsWhereInput): [WorkingGroupApplication!]
+  applicationFormQuestionAnswers(offset: Int, limit: Int = 50, where: ApplicationFormQuestionAnswerWhereInput): [ApplicationFormQuestionAnswer!]
 }
 
 enum EventType {

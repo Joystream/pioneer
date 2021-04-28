@@ -156,6 +156,23 @@ export type GetWorkingGroupApplicationsQuery = {
   >
 }
 
+export type ApplicationFormQuestionAnswerFieldsFragment = {
+  __typename: 'ApplicationFormQuestionAnswer'
+  answer: string
+  question: { __typename: 'ApplicationFormQuestion'; question: string }
+}
+
+export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
+  application_eq?: Types.Maybe<Types.Scalars['ID']>
+}>
+
+export type GetApplicationFormQuestionAnswerQuery = {
+  __typename: 'Query'
+  applicationFormQuestionAnswers?: Types.Maybe<
+    Array<{ __typename: 'ApplicationFormQuestionAnswer' } & ApplicationFormQuestionAnswerFieldsFragment>
+  >
+}
+
 export const WorkingGroupStatusFieldsFragmentDoc = gql`
   fragment WorkingGroupStatusFields on WorkingGroupStatus {
     name
@@ -259,6 +276,14 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
   ${BlockFieldsFragmentDoc}
+`
+export const ApplicationFormQuestionAnswerFieldsFragmentDoc = gql`
+  fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
+    question {
+      question
+    }
+    answer
+  }
 `
 export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {
@@ -535,4 +560,63 @@ export type GetWorkingGroupApplicationsLazyQueryHookResult = ReturnType<typeof u
 export type GetWorkingGroupApplicationsQueryResult = Apollo.QueryResult<
   GetWorkingGroupApplicationsQuery,
   GetWorkingGroupApplicationsQueryVariables
+>
+export const GetApplicationFormQuestionAnswerDocument = gql`
+  query GetApplicationFormQuestionAnswer($application_eq: ID) {
+    applicationFormQuestionAnswers(where: { application_eq: $application_eq }) {
+      ...ApplicationFormQuestionAnswerFields
+    }
+  }
+  ${ApplicationFormQuestionAnswerFieldsFragmentDoc}
+`
+
+/**
+ * __useGetApplicationFormQuestionAnswerQuery__
+ *
+ * To run a query within a React component, call `useGetApplicationFormQuestionAnswerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetApplicationFormQuestionAnswerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetApplicationFormQuestionAnswerQuery({
+ *   variables: {
+ *      application_eq: // value for 'application_eq'
+ *   },
+ * });
+ */
+export function useGetApplicationFormQuestionAnswerQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetApplicationFormQuestionAnswerQuery,
+    GetApplicationFormQuestionAnswerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>(
+    GetApplicationFormQuestionAnswerDocument,
+    options
+  )
+}
+export function useGetApplicationFormQuestionAnswerLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetApplicationFormQuestionAnswerQuery,
+    GetApplicationFormQuestionAnswerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>(
+    GetApplicationFormQuestionAnswerDocument,
+    options
+  )
+}
+export type GetApplicationFormQuestionAnswerQueryHookResult = ReturnType<
+  typeof useGetApplicationFormQuestionAnswerQuery
+>
+export type GetApplicationFormQuestionAnswerLazyQueryHookResult = ReturnType<
+  typeof useGetApplicationFormQuestionAnswerLazyQuery
+>
+export type GetApplicationFormQuestionAnswerQueryResult = Apollo.QueryResult<
+  GetApplicationFormQuestionAnswerQuery,
+  GetApplicationFormQuestionAnswerQueryVariables
 >

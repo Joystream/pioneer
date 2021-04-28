@@ -126,3 +126,16 @@ query GetWorkingGroupApplications($applicant_in: [ID!]) {
     ...WorkingGroupApplicationFields
   }
 }
+
+fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
+  question {
+    question
+  }
+  answer
+}
+
+query GetApplicationFormQuestionAnswer($application_eq: ID) {
+  applicationFormQuestionAnswers(where: { application_eq: $application_eq }) {
+    ...ApplicationFormQuestionAnswerFields
+  }
+}

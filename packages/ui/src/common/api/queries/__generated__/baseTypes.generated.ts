@@ -38,6 +38,10 @@ export type ApplicationFormQuestionAnswer = {
   answer: Scalars['String']
 }
 
+export type ApplicationFormQuestionAnswerWhereInput = {
+  application_eq?: Maybe<Scalars['ID']>
+}
+
 export enum ApplicationFormQuestionType {
   Text = 'TEXT',
   Textarea = 'TEXTAREA',
@@ -764,6 +768,7 @@ export type Query = {
   workingGroupOpenings?: Maybe<Array<WorkingGroupOpening>>
   workingGroupOpening?: Maybe<WorkingGroupOpening>
   workingGroupApplications?: Maybe<Array<WorkingGroupApplication>>
+  applicationFormQuestionAnswers?: Maybe<Array<ApplicationFormQuestionAnswer>>
 }
 
 export type QueryBlocksArgs = {
@@ -862,6 +867,12 @@ export type QueryWorkingGroupApplicationsArgs = {
   offset?: Maybe<Scalars['Int']>
   limit?: Maybe<Scalars['Int']>
   where?: Maybe<WorkingGroupApplicationsWhereInput>
+}
+
+export type QueryApplicationFormQuestionAnswersArgs = {
+  offset?: Maybe<Scalars['Int']>
+  limit?: Maybe<Scalars['Int']>
+  where?: Maybe<ApplicationFormQuestionAnswerWhereInput>
 }
 
 export type StakeDecreasedEvent = WorkingGroupsEvent & {
