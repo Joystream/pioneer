@@ -1,4 +1,4 @@
-import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
+import { WorkingGroupApplication } from './types/WorkingGroupApplication'
 
 export function openingTitle(application: WorkingGroupApplication) {
   const position = application.opening.type == 'LEADER' ? 'Leader' : 'Worker'

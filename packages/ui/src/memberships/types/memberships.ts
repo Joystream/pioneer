@@ -1,14 +1,6 @@
-import { Address } from '../../common/types'
+import { Address, Block } from '../../common/types'
 
 type ID = string
-
-export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'OLYMPIA'
-
-export interface Block {
-  id: string
-  block: number
-  network: NetworkType
-}
 
 type MemberRole = 'SL' | 'SP' | 'FL'
 

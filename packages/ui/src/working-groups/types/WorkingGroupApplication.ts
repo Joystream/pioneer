@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 
+import { asBlock, Block } from '../../common/types'
 import { Member } from '../../memberships/types'
 import { WorkingGroupApplicationFieldsFragment } from '../queries'
 
@@ -13,11 +14,11 @@ export interface WorkingGroupApplication {
   applicant?: Member
   roleAccount?: string
   rewardAccount?: string
-  stakingAccount?: string
+  stakingAccount: string
   answers?: [any]
   status?: string
-  createdAtBlock?: BN
-  createdAtTime?: string
+  createdAtBlock: Block
+  createdAtTime: string
 }
 
 export const asApplication = (application: WorkingGroupApplicationFieldsFragment) => ({
@@ -28,4 +29,7 @@ export const asApplication = (application: WorkingGroupApplicationFieldsFragment
     reward: new BN(application.opening.rewardPerBlock),
   },
   status: application.status.__typename,
+  stakingAccount: application.stakingAccount,
+  createdAtBlock: asBlock(application.createdAtBlock),
+  createdAtTime: application.createdAtTime,
 })

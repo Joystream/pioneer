@@ -1,0 +1,6 @@
+
+fragment BlockFields on Block {
+  id
+  block
+  network
+}

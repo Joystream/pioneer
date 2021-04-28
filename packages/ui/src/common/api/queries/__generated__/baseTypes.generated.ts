@@ -1098,7 +1098,7 @@ export type WorkingGroupApplication = {
   /** Current application status */
   status: WorkingGroupApplicationStatus
   /** Blocknumber of application creation block */
-  createdAtBlock: Scalars['Int']
+  createdAtBlock: Block
   /** Time of application creation */
   createdAtTime: Scalars['DateTime']
 }
