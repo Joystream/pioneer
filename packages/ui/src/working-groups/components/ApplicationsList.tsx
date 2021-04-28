@@ -7,10 +7,10 @@ import { List, ListItem } from '../../common/components/List'
 import { TextInlineBig, TokenValue } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
 import { useModal } from '../../common/hooks/useModal'
+import { openingTitle } from '../helpers'
 import { ApplicationDetailsModalCall } from '../modals/ApplicationDetailsModal'
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
-import { openingTitle } from './helpers'
 import {
   OACItemInfo,
   OACItemInfoTop,
@@ -38,7 +38,7 @@ export const ApplicationsList = ({ applications }: Props) => (
 const ApplicationListItem = ({ application }: { application: WorkingGroupApplication }) => {
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
-    showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: {} })
+    showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { application } })
   }, [application.id])
 
   return (

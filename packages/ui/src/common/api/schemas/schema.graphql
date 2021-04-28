@@ -797,7 +797,7 @@ type WorkingGroupApplication {
   "Current application status"
   status: WorkingGroupApplicationStatus!
   "Blocknumber of application creation block"
-  createdAtBlock: Int!
+  createdAtBlock: Block!
   "Time of application creation"
   createdAtTime: DateTime!
 }
