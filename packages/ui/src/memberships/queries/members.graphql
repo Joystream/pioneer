@@ -11,12 +11,6 @@ fragment MemberFields on Membership {
   inviteCount
 }
 
-fragment BlockFields on Block {
-  id
-  block
-  network
-}
-
 query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!]) {
   memberships(where: {rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in}) {
     ...MemberFields

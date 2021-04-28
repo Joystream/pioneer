@@ -1,13 +1,6 @@
-import { Block } from '../../common/types'
-import { BlockFieldsFragment, MemberFieldsFragment } from '../queries'
+import { MemberFieldsFragment } from '../queries'
 
 import { Member } from './memberships'
-
-export const asBlock = (block: BlockFieldsFragment): Block => {
-  return {
-    ...block,
-  }
-}
 
 export const asMember = (data: MemberFieldsFragment): Member => {
   return {
