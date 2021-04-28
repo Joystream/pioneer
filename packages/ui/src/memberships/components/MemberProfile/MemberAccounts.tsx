@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { UnknownAccountInfo } from '../../../accounts/components/UnknownAccountInfo'
 import { AccountRow } from '../../../common/components/Modal'
-import { SidePaneLabel } from '../../../common/components/typography/SidePaneLabel'
+import { SidePaneLabel } from '../../../common/components/SidePane'
 import { Member } from '../../types'
 
 export const MemberAccounts = ({ member }: { member: Member }) => (

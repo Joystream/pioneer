@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 
 import { Colors } from '../../constants'
@@ -30,4 +31,26 @@ export const SidePaneRow = styled.li`
 `
 export const SidePaneText = styled(TextMedium)`
   color: ${Colors.Black[600]};
+`
+
+interface LabelProps {
+  text: string
+  className?: any
+}
+
+export const SidePaneLabel = React.memo(({ text, className }: LabelProps) => {
+  return (
+    <AboutLabel title={text} className={className}>
+      {text}
+    </AboutLabel>
+  )
+})
+
+export const AboutLabel = styled.h6`
+  width: fit-content;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
 `

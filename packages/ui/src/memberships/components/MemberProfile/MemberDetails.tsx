@@ -4,8 +4,13 @@ import styled from 'styled-components'
 import { AboutDateColumn } from '../../../common/components/AboutDateColumn'
 import { TransferSymbol } from '../../../common/components/icons/symbols'
 import { Loading } from '../../../common/components/Loading'
-import { SidePaneTable, SidePaneColumn, SidePaneText, SidePaneRow } from '../../../common/components/SidePane'
-import { SidePaneLabel } from '../../../common/components/typography/SidePaneLabel'
+import {
+  SidePaneTable,
+  SidePaneColumn,
+  SidePaneText,
+  SidePaneRow,
+  SidePaneLabel,
+} from '../../../common/components/SidePane'
 import { useMember } from '../../hooks/useMembership'
 import { Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'

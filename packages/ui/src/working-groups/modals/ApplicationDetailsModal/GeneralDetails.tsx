@@ -3,9 +3,8 @@ import React from 'react'
 
 import { UnknownAccountInfo } from '../../../accounts/components/UnknownAccountInfo'
 import { AboutDateColumn } from '../../../common/components/AboutDateColumn'
-import { SidePaneTable, SidePaneText, SidePaneRow } from '../../../common/components/SidePane'
+import { SidePaneTable, SidePaneText, SidePaneRow, SidePaneLabel } from '../../../common/components/SidePane'
 import { TokenValue } from '../../../common/components/typography'
-import { SidePaneLabel } from '../../../common/components/typography/SidePaneLabel'
 import { openingTitle } from '../../helpers'
 import { WorkingGroupApplication } from '../../types/WorkingGroupApplication'
 
