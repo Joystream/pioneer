@@ -7,7 +7,6 @@ export const SidePaneTable = styled.ul`
   display: grid;
   grid-row-gap: 24px;
   width: 100%;
-  height: 100%;
   padding: 24px;
 
   &:after {
