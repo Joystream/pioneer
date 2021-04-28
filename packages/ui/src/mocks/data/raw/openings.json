@@ -13,10 +13,12 @@
       "applicationDetails": "Details... ?",
       "applicationFormQuestions": [
         {
+          "id": "0",
           "type": "TEXT",
           "question": "How old are you?"
         },
         {
+          "id": "1",
           "type": "TEXTAREA",
           "question": "Why we should choose you?"
         }
@@ -41,10 +43,12 @@
       "applicationDetails": "Details... ?",
       "applicationFormQuestions": [
         {
+          "id": "2",
           "type": "TEXT",
           "question": "How old are you?"
         },
         {
+          "id": "3",
           "type": "TEXTAREA",
           "question": "Why we should choose you?"
         }
@@ -69,10 +73,12 @@
       "applicationDetails": "Details... ?",
       "applicationFormQuestions": [
         {
+          "id": "4",
           "type": "TEXT",
           "question": "How old are you?"
         },
         {
+          "id": "5",
           "type": "TEXTAREA",
           "question": "Why we should choose you?"
         }
@@ -133,16 +139,7 @@
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": [
-        {
-          "type": "TEXT",
-          "question": "How old are you?"
-        },
-        {
-          "type": "TEXTAREA",
-          "question": "Why we should choose you?"
-        }
-      ]
+      "applicationFormQuestions": []
     },
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
@@ -161,16 +158,7 @@
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": [
-        {
-          "type": "TEXT",
-          "question": "How old are you?"
-        },
-        {
-          "type": "TEXTAREA",
-          "question": "Why we should choose you?"
-        }
-      ]
+      "applicationFormQuestions": []
     },
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,

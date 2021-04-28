@@ -7,18 +7,26 @@ export interface MockApplication {
   roleAccount?: string
   rewardAccount?: string
   stakingAccount?: string
-  answers?: any[]
+  answers?: MockAnswer[]
   status?: string
   createdAtBlockId: string
   createdAtTime: string
 }
 
+interface MockAnswer {
+  questionId: string
+  answer: string
+}
+
 const mockApplications = rawApplications.map((application) => ({ ...application }))
 
-const seedApplication = (application: MockApplication, server: any) => {
-  const status = seedStatus(application.status, server)
-  const data = { ...application, status }
-  server.schema.create('WorkingGroupApplication', data)
+const seedApplication = (rawApplication: MockApplication, server: any) => {
+  const status = seedStatus(rawApplication.status, server)
+  const data = { ...rawApplication, status }
+  const answers = rawApplication.answers ?? []
+  delete data.answers
+  const application = server.schema.create('WorkingGroupApplication', data)
+  seedAnswers(application, answers, server)
 }
 
 export const seedApplications = (server: any) =>
@@ -35,4 +43,12 @@ function seedStatus(status: string | undefined, server: any) {
     default:
       return server.schema.create('ApplicationStatusPending', {})
   }
+}
+
+function seedAnswer(application: any, answer: MockAnswer, server: any) {
+  server.schema.create('ApplicationFormQuestionAnswer', { ...answer, application })
+}
+
+function seedAnswers(application: any, answers: MockAnswer[], server: any) {
+  answers.forEach((answer) => seedAnswer(application, answer, server))
 }

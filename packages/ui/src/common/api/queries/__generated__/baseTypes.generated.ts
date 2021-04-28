@@ -17,6 +17,7 @@ export type Scalars = {
 
 export type ApplicationFormQuestion = {
   __typename: 'ApplicationFormQuestion'
+  id: Scalars['ID']
   /** Related opening metadata */
   openingMetadata: WorkingGroupOpeningMetadata
   /** The question itself */

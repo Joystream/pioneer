@@ -6,7 +6,16 @@
     "roleAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "rewardAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-    "answers": [],
+    "answers": [
+      {
+        "questionId": "0",
+        "answer": "18"
+      },
+      {
+        "questionId": "1",
+        "answer": "I am the smartest"
+      }
+    ],
     "status": "pending",
     "createdAtBlockId": "block-1",
     "createdAtTime": "2021-03-09T10:38:04.155Z"
@@ -18,7 +27,16 @@
     "roleAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "rewardAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-    "answers": [],
+    "answers": [
+      {
+        "questionId": "0",
+        "answer": "13"
+      },
+      {
+        "questionId": "1",
+        "answer": "I'm, like, really good with words. Like, really really good."
+      }
+    ],
     "status": "accepted",
     "createdAtBlockId": "block-2",
     "createdAtTime": "2021-03-09T23:38:04.155Z"
@@ -30,7 +48,16 @@
     "roleAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "rewardAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "stakingAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-    "answers": [],
+    "answers": [
+      {
+        "questionId": "2",
+        "answer": "34"
+      },
+      {
+        "questionId": "3",
+        "answer": "I am the second smartest"
+      }
+    ],
     "status": "rejected",
     "createdAtBlockId": "block-4",
     "createdAtTime": "2021-05-19T10:38:04.155Z"

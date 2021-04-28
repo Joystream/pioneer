@@ -817,6 +817,7 @@ enum ApplicationFormQuestionType {
 }
 
 type ApplicationFormQuestion {
+  id: ID!
   "Related opening metadata"
   openingMetadata: WorkingGroupOpeningMetadata!
   "The question itself"
