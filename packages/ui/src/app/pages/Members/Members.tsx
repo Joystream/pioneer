@@ -4,7 +4,7 @@ import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { AppPage } from '../../components/AppPage'
 
-export const MemberList = () => {
+export const Members = () => {
   const crumbs = [{ href: '#', text: 'Members' }]
 
   return (

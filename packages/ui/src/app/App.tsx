@@ -7,7 +7,7 @@ import { Page } from '../common/components/page/Page'
 import { ExtensionWarning } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { GlobalModals } from './GlobalModals'
-import { MemberList } from './pages/Members/Members'
+import { Members } from './pages/Members/Members'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
 import { MyApplications } from './pages/WorkingGroups/MyApplications'
@@ -29,7 +29,7 @@ export const App = () => (
         <Route exact path="/working-groups/my-applications" component={MyApplications} />
         <Route exact path="/working-groups/my-roles" component={MyRoles} />
         <Route exact path="/working-groups/grouppreview/:id" component={WorkingGroup} />
-        <Route exact path="/members" component={MemberList} />
+        <Route exact path="/members" component={Members} />
         <Redirect exact from="/" to="/profile" />
       </Switch>
     </Page>
