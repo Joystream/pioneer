@@ -1,3 +1,4 @@
+import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
@@ -11,18 +12,34 @@ import { ApplyForRolePrepareModal } from './ApplyForRolePrepareModal'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
 import { ApplyForRoleSuccessModal } from './ApplyForRoleSuccessModal'
 
+export type OpeningParams = Exclude<
+  Parameters<ApiRx['tx']['membershipWorkingGroup']['applyOnOpening']>[0],
+  string | Uint8Array
+>
+
 export const ApplyForRoleModal = () => {
-  const [state, setState] = useState<ModalState>('PREPARE')
-  const { hideModal } = useModal()
   const { api } = useApi()
-  const transaction = useMemo(() => api?.tx?.membershipWorkingGroup.applyOnOpening({}), [api])
   const { active } = useMyMemberships()
+  const { hideModal } = useModal()
+  const [state, setState] = useState<ModalState>('PREPARE')
+  const [txParams, setTxParams] = useState<OpeningParams | undefined>(undefined)
+  const transaction = useMemo(() => {
+    return txParams && api?.tx?.membershipWorkingGroup.applyOnOpening(txParams)
+  }, [api, JSON.stringify(txParams)])
+
   const signer = active?.controllerAccount
   const onDone = (result: boolean) => setState(result ? 'SUCCESS' : 'ERROR')
-  const stake = new BN(10_000)
+  const stake = new BN(txParams?.stake_parameters.stake ?? 0)
 
   if (state === 'PREPARE') {
-    return <ApplyForRolePrepareModal onSubmit={() => setState('AUTHORIZE')} />
+    return (
+      <ApplyForRolePrepareModal
+        onSubmit={(params) => {
+          setTxParams(params)
+          setState('AUTHORIZE')
+        }}
+      />
+    )
   }
 
   if (state === 'AUTHORIZE' && signer) {

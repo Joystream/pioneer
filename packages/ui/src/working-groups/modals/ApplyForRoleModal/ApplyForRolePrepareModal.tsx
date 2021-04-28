@@ -11,17 +11,18 @@ import {
   StepperModalWrapper,
 } from '../../../common/components/StepperModal'
 import { useModal } from '../../../common/hooks/useModal'
+import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 import { useOpeningQuestions } from '../../hooks/useOpeningQuestions'
 
-import { ApplyForRoleModalCall } from '.'
+import { ApplyForRoleModalCall, OpeningParams } from '.'
 import { ApplicationStep } from './ApplicationStep'
 import { StakeStep, StakeStepForm } from './StakeStep'
 
 const steps = [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }]
 
 interface Props {
-  onSubmit: () => void
+  onSubmit: (params: OpeningParams) => void
 }
 
 type ActionStepInfo = {
@@ -48,6 +49,7 @@ const stepsReducer: Reducer<Record<number, { data: any; isValid: boolean }>, Act
 }
 
 export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
+  const { active } = useMyMemberships()
   const {
     hideModal,
     modalData: { opening },
@@ -61,11 +63,22 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
 
   const nextStep = useCallback(() => {
     if (step >= 1) {
-      onSubmit()
+      const stakeForm = state[0].data as StakeStepForm
+      onSubmit({
+        opening_id: opening.id,
+        member_id: active?.id,
+        role_account_id: active?.controllerAccount,
+        reward_account_id: active?.rootAccount,
+        description: JSON.stringify(state[1].data), // TODO This should be applicaiton metedata
+        stake_parameters: {
+          stake: stakeForm.amount,
+          stake_account_id: stakeForm.account?.address,
+        },
+      })
     } else {
       setStep((step) => step + 1)
     }
-  }, [step])
+  }, [step, JSON.stringify(state)])
 
   const onStakeStepChange = (isValid: boolean, fields: StakeStepForm) => {
     dispatch({
