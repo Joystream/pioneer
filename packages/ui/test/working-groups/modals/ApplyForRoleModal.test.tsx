@@ -7,6 +7,9 @@ import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { ApiContext } from '../../../src/common/providers/api/context'
 import { ModalContext } from '../../../src/common/providers/modal/context'
 import { UseModal } from '../../../src/common/providers/modal/types'
+import { MembershipContext } from '../../../src/memberships/providers/membership/context'
+import { MyMemberships } from '../../../src/memberships/providers/membership/provider'
+import { seedMembers } from '../../../src/mocks/data'
 import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/mockOpenings'
 import { seedWorkingGroups } from '../../../src/mocks/data/mockWorkingGroups'
 import { ApplyForRoleModal } from '../../../src/working-groups/modals/ApplyForRoleModal'
@@ -14,9 +17,16 @@ import { WorkingGroupOpeningFieldsFragment } from '../../../src/working-groups/q
 import { asWorkingGroupOpening } from '../../../src/working-groups/types'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { alice, bob } from '../../_mocks/keyring'
+import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubDefaultBalances } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 const OPENING_DATA = {
   groupId: 0,
@@ -58,7 +68,15 @@ describe('UI: ApplyForRoleModal', () => {
     modal: null,
     modalData: undefined,
   }
+  const useMyMemberships: MyMemberships = {
+    active: undefined,
+    members: [],
+    setActive: (member) => (useMyMemberships.active = member),
+    isLoading: false,
+  }
+
   let useAccounts: UseAccounts
+  let tx: any
 
   const server = setupMockServer()
 
@@ -73,6 +91,7 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   beforeEach(async () => {
+    seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
     seedOpening(OPENING_DATA, server.server)
@@ -80,8 +99,10 @@ describe('UI: ApplyForRoleModal', () => {
     const fields = (server.server?.schema.first('WorkingGroupOpening') as unknown) as WorkingGroupOpeningFieldsFragment
     const opening = asWorkingGroupOpening(fields)
     useModal.modalData = { opening }
+    useMyMemberships.setActive(getMember('alice'))
 
     stubDefaultBalances(api)
+    tx = stubTransaction(api, 'api.tx.membershipWorkingGroup.applyOnOpening')
   })
 
   it('Renders a modal', async () => {
@@ -149,6 +170,43 @@ describe('UI: ApplyForRoleModal', () => {
     })
   })
 
+  describe('Authorize', () => {
+    async function fillSteps() {
+      await renderModal()
+      await fillStakeStep()
+      await fireEvent.click(await getNextStepButton())
+      await screen.findByRole('heading', { name: 'Application' })
+      await fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
+      await fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
+      await fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.click(await getNextStepButton())
+    }
+
+    it('Authorize step', async () => {
+      await fillSteps()
+
+      expect(await screen.findByText('Authorize transaction')).toBeDefined()
+      expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+    })
+
+    it.skip('Success step', async () => {
+      stubTransactionSuccess(tx, [])
+      await fillSteps()
+
+      fireEvent.click(screen.getByText(/^sign and update a member$/i))
+
+      expect(await screen.findByText('Success')).toBeDefined()
+    })
+
+    it.skip('Failure step', async () => {
+      stubTransactionFailure(tx)
+      await fillSteps()
+
+      fireEvent.click(screen.getByText(/^sign and update a member$/i))
+
+      expect(await screen.findByText('Failure')).toBeDefined()
+    })
+  })
   async function getNextStepButton() {
     return await screen.findByRole('button', { name: /Next step/i })
   }
@@ -165,9 +223,11 @@ describe('UI: ApplyForRoleModal', () => {
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <AccountsContext.Provider value={useAccounts}>
-              <ApiContext.Provider value={api}>
-                <ApplyForRoleModal />
-              </ApiContext.Provider>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <ApiContext.Provider value={api}>
+                  <ApplyForRoleModal />
+                </ApiContext.Provider>
+              </MembershipContext.Provider>
             </AccountsContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
