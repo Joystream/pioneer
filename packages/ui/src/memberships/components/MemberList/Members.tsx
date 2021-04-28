@@ -1,29 +1,56 @@
-import React from 'react'
+import React, { Dispatch, ReactNode } from 'react'
 
 import { List, ListItem } from '../../../common/components/List'
 import { ListHeader, ListHeaders } from '../../../common/components/List/ListHeader'
+import { HeaderText, SortIconDown, SortIconUp } from '../../../common/components/SortedListHeaders'
 import { Member } from '../../types'
 import { MemberListItem } from '../MemberListItem'
 import { colLayoutByType } from '../MemberListItem/Fileds'
 
-export const MemberList = ({ members }: { members: Member[] }) => (
-  <div>
-    <ListHeaders colLayout={colLayoutByType('Member')}>
-      <ListHeader>Member ID</ListHeader>
-      <ListHeader>Member</ListHeader>
-      <ListHeader>Concil Member</ListHeader>
-      <ListHeader>Active Roles</ListHeader>
-      <ListHeader>Slashed</ListHeader>
-      <ListHeader>Terminated</ListHeader>
-      <ListHeader>Total Balance</ListHeader>
-      <ListHeader>Total Staked</ListHeader>
-    </ListHeaders>
-    <List>
-      {members.map((member) => (
-        <ListItem key={member.handle}>
-          <MemberListItem member={member} />
-        </ListItem>
-      ))}
-    </List>
-  </div>
-)
+type SortKey = keyof Member
+export interface MemberListOrder {
+  sortBy: SortKey
+  isDescending: boolean
+}
+
+interface MemberListProps {
+  members: Member[]
+  order?: MemberListOrder
+  onSort?: Dispatch<keyof Member>
+}
+
+export const MemberList = ({ members, order, onSort }: MemberListProps) => {
+  const SortHeader =
+    order && onSort && members.length > 1
+      ? ({ children, sortKey }: { children: ReactNode; sortKey: SortKey }) => (
+          <ListHeader onClick={() => onSort(sortKey)}>
+            <HeaderText>
+              {children}
+              {order.sortBy === sortKey && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
+            </HeaderText>
+          </ListHeader>
+        )
+      : ListHeader
+
+  return (
+    <div>
+      <ListHeaders colLayout={colLayoutByType('Member')}>
+        <SortHeader sortKey="id">Member ID</SortHeader>
+        <SortHeader sortKey="handle">Member</SortHeader>
+        <ListHeader>Concil Member</ListHeader>
+        <ListHeader>Active Roles</ListHeader>
+        <ListHeader>Slashed</ListHeader>
+        <ListHeader>Terminated</ListHeader>
+        <ListHeader>Total Balance</ListHeader>
+        <ListHeader>Total Staked</ListHeader>
+      </ListHeaders>
+      <List>
+        {members.map((member) => (
+          <ListItem key={member.handle}>
+            <MemberListItem member={member} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  )
+}
