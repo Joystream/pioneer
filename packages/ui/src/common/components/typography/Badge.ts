@@ -6,9 +6,10 @@ export const Badge = styled.span`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 16px;
+  min-width: 16px;
   height: 16px;
-  border-radius: ${BorderRad.round};
+  padding: 0 4px;
+  border-radius: ${BorderRad.full};
   background-color: ${Colors.Black[500]};
   font-size: 10px;
   line-height: 16px;
