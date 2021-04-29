@@ -43,7 +43,7 @@ export const TransactionAmount = styled.div`
   align-items: end;
 `
 
-export const TransactionInfo = styled.div`
+export const TransactionInfoContainer = styled.div`
   display: grid;
 `
 
@@ -53,10 +53,6 @@ export const BalanceInfo = styled.div`
   grid-template-columns: 1fr 168px;
   grid-template-rows: 1fr;
   align-items: center;
-
-  & + & {
-    margin-top: 4px;
-  }
 `
 
 export const BalanceInfoInRow = styled(BalanceInfo)`

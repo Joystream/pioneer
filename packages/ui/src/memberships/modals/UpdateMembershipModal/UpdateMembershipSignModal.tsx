@@ -3,11 +3,11 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React, { useMemo } from 'react'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
+import { TransactionInfo } from '../../../accounts/modals/TransferModal/TransactionInfo'
 import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { Label } from '../../../common/components/forms'
-import { Help } from '../../../common/components/Help'
-import { ModalBody, ModalFooter, BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../../../common/components/Modal'
+import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '../../../common/components/Modal'
 import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
@@ -84,13 +84,13 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
         </Row>
       </ModalBody>
       <ModalFooter>
-        <BalanceInfoNarrow>
-          <InfoTitle>Transaction fee:</InfoTitle>
-          <InfoValue>
-            <TokenValue value={paymentInfo?.partialFee.toBn()} />
-          </InfoValue>
-          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-        </BalanceInfoNarrow>
+        <TransactionInfoContainer>
+          <TransactionInfo
+            title="Transaction fee:"
+            value={paymentInfo?.partialFee.toBn()}
+            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+          />
+        </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
           Sign and update a member
         </ButtonPrimary>

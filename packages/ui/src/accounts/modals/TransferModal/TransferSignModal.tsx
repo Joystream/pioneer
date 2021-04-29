@@ -2,21 +2,19 @@ import BN from 'bn.js'
 import React, { useMemo } from 'react'
 
 import { ButtonPrimary } from '../../../common/components/buttons'
-import { Help } from '../../../common/components/Help'
 import { ArrowDownExpandedIcon } from '../../../common/components/icons'
 import {
-  ModalBody,
-  ModalFooter,
-  SignTransferContainer,
   BalanceInfoInRow,
-  BalanceInfoNarrow,
   InfoTitle,
   InfoValue,
   LockedAccount,
+  ModalBody,
+  ModalFooter,
   Row,
+  SignTransferContainer,
   TransactionAmountInfo,
   TransactionAmountInfoText,
-  TransactionInfo,
+  TransactionInfoContainer,
 } from '../../../common/components/Modal'
 import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
@@ -26,6 +24,8 @@ import { onTransactionDone } from '../../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { useBalance } from '../../hooks/useBalance'
 import { Account } from '../../types'
+
+import { TransactionInfo } from './TransactionInfo'
 
 interface Props {
   onClose: () => void
@@ -83,26 +83,16 @@ export function TransferSignModal({ onClose, from, amount, to, onDone }: Props) 
         </SignTransferContainer>
       </ModalBody>
       <ModalFooter>
-        <TransactionInfo>
-          <BalanceInfoNarrow>
-            <InfoTitle>Amount:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={amount} />
-            </InfoValue>
-          </BalanceInfoNarrow>
-          <BalanceInfoNarrow>
-            <InfoTitle>Transaction fee:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={paymentInfo?.partialFee.toBn()} />
-            </InfoValue>
-            <Help
-              helperText={
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae.Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
-              }
-              absolute
-            />
-          </BalanceInfoNarrow>
-        </TransactionInfo>
+        <TransactionInfoContainer>
+          <TransactionInfo title="Amount:" value={amount} />
+          <TransactionInfo
+            title="Transaction fee:"
+            value={paymentInfo?.partialFee?.toBn()}
+            helperText={
+              'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae. Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
+            }
+          />
+        </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
           Sign transaction and Transfer
         </ButtonPrimary>

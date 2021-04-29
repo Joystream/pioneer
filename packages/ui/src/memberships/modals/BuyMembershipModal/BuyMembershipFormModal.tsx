@@ -4,6 +4,7 @@ import React, { useCallback, useEffect } from 'react'
 import * as Yup from 'yup'
 
 import { filterAccount, SelectAccount } from '../../../accounts/components/SelectAccount'
+import { TransactionInfo } from '../../../accounts/modals/TransferModal/TransactionInfo'
 import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import {
@@ -17,11 +18,7 @@ import {
   ToggleCheckbox,
 } from '../../../common/components/forms'
 import { getErrorMessage, hasError } from '../../../common/components/forms/FieldError'
-import { Help } from '../../../common/components/Help'
 import {
-  BalanceInfoNarrow,
-  InfoTitle,
-  InfoValue,
   ModalFooter,
   ModalFooterGroup,
   ModalHeader,
@@ -29,8 +26,9 @@ import {
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
+  TransactionInfoContainer,
 } from '../../../common/components/Modal'
-import { TextMedium, TokenValue } from '../../../common/components/typography'
+import { TextMedium } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
 import { useForm } from '../../../common/hooks/useForm'
 import { useObservable } from '../../../common/hooks/useObservable'
@@ -228,13 +226,13 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
           </Checkbox>
         </ModalFooterGroup>
         <ModalFooterGroup>
-          <BalanceInfoNarrow>
-            <InfoTitle>Creation fee:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={membershipPrice?.toBn()} />
-            </InfoValue>
-            <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-          </BalanceInfoNarrow>
+          <TransactionInfoContainer>
+            <TransactionInfo
+              title="Creation fee:"
+              value={membershipPrice?.toBn()}
+              helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            />
+          </TransactionInfoContainer>
           <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
             Create a Membership
           </ButtonPrimary>
