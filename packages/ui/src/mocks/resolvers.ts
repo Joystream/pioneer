@@ -1,6 +1,7 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
 
+import { MembershipOrderByInput } from '../common/api/queries'
 import {
   GetMembersQueryResult,
   GetMembersQueryVariables,
@@ -35,13 +36,32 @@ export const getMemberResolver = (obj: any, args: any, context: any, info: any) 
   return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
 }
 
-export const getMembersResolver: QueryResolver<{ where: GetMembersQueryVariables }, GetMembersQueryResult[]> = (
-  obj,
-  args,
-  { mirageSchema: schema }
-) => {
+type SortFn = (a: MockMember, b: MockMember) => number
+const getSortFn = (orderBy?: MembershipOrderByInput): void | SortFn => {
+  const { EntryAsc, EntryDesc, HandleAsc, HandleDesc } = MembershipOrderByInput
+
+  const authorizedKeys = [EntryAsc, EntryDesc, HandleAsc, HandleDesc]
+  if (!orderBy || !authorizedKeys.includes(orderBy)) {
+    return
+  }
+
+  const [key, direction] = orderBy.toLowerCase().split('_')
+  const membersKey = (key === 'entry' ? 'id' : key) as 'id' | 'handle'
+  const fact = direction === 'desc' ? 1 : -1
+
+  return (a, b) => fact * (b[membersKey] ?? '').localeCompare(a[membersKey] ?? '')
+}
+
+export const getMembersResolver: QueryResolver<
+  {
+    where: GetMembersQueryVariables
+    orderBy?: MembershipOrderByInput
+  },
+  GetMembersQueryResult[]
+> = (obj, args, { mirageSchema: schema }) => {
   const rootAccountIn = args.where.rootAccount_in
   const controllerAccountIn = args.where.controllerAccount_in
+  const sortFn = getSortFn(args.orderBy)
 
   const { models } = rootAccountIn
     ? schema.where(
@@ -51,7 +71,7 @@ export const getMembersResolver: QueryResolver<{ where: GetMembersQueryVariables
       )
     : schema.all('Membership')
 
-  return models
+  return sortFn ? models.sort(sortFn) : models
 }
 
 const getMatcher = (text: string) => {

@@ -22,6 +22,7 @@ export type MemberFieldsFragment = {
 export type GetMembersQueryVariables = Types.Exact<{
   rootAccount_in?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
   controllerAccount_in?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
+  orderBy?: Types.Maybe<Types.MembershipOrderByInput>
 }>
 
 export type GetMembersQuery = {
@@ -84,8 +85,11 @@ export const MemberWithDetailsFragmentDoc = gql`
   ${BlockFieldsFragmentDoc}
 `
 export const GetMembersDocument = gql`
-  query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!]) {
-    memberships(where: { rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in }) {
+  query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!], $orderBy: MembershipOrderByInput) {
+    memberships(
+      where: { rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in }
+      orderBy: $orderBy
+    ) {
       ...MemberFields
     }
   }
@@ -106,6 +110,7 @@ export const GetMembersDocument = gql`
  *   variables: {
  *      rootAccount_in: // value for 'rootAccount_in'
  *      controllerAccount_in: // value for 'controllerAccount_in'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */
