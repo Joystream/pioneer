@@ -12,6 +12,7 @@
     "jsx": "react",
     "lib": ["DOM", "ES2020"],
     "paths": {
+      "@/*": ["src/*"],
       "@polkadot/api/augment": ["../types/augment/augment-api.ts"],
       "@polkadot/types/augment": ["../types/augment/augment-types.ts"]
     },
