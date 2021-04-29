@@ -3,20 +3,16 @@ import React, { Dispatch, ReactNode } from 'react'
 import { List, ListItem } from '../../../common/components/List'
 import { ListHeader, ListHeaders } from '../../../common/components/List/ListHeader'
 import { HeaderText, SortIconDown, SortIconUp } from '../../../common/components/SortedListHeaders'
+import { MemberListOrder } from '../../hooks/useMembers'
 import { Member } from '../../types'
 import { MemberListItem } from '../MemberListItem'
 import { colLayoutByType } from '../MemberListItem/Fileds'
 
-type SortKey = keyof Member
-export interface MemberListOrder {
-  sortBy: SortKey
-  isDescending: boolean
-}
-
+type SortKey = MemberListOrder['sortBy']
 interface MemberListProps {
   members: Member[]
   order?: MemberListOrder
-  onSort?: Dispatch<keyof Member>
+  onSort?: Dispatch<SortKey>
 }
 
 export const MemberList = ({ members, order, onSort }: MemberListProps) => {
