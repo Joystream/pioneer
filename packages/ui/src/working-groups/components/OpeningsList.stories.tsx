@@ -27,6 +27,7 @@ Default.args = {
       applicants: { current: 2, total: 10 },
       hiring: { current: 0, total: 1 },
       status: 'OpeningStatusOpen',
+      stake: new BN(2_000),
     },
     {
       id: '221',
@@ -40,6 +41,7 @@ Default.args = {
       applicants: { current: 8, total: 10 },
       hiring: { current: 1, total: 1 },
       status: 'OpeningStatusOpen',
+      stake: new BN(2_000),
     },
   ],
 }
