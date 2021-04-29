@@ -2,9 +2,9 @@ import { MembershipOrderByInput } from '../../common/api/queries'
 import { useGetMembersQuery } from '../queries'
 import { asMember, Member } from '../types'
 
-type SortKey = 'id' | 'handle'
+export type MemberListSortKey = 'id' | 'handle'
 export interface MemberListOrder {
-  sortBy: SortKey
+  sortBy: MemberListSortKey
   isDescending: boolean
 }
 

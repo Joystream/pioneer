@@ -4,20 +4,18 @@ import { Loading } from '../../../common/components/Loading'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { MemberList } from '../../../memberships/components/MemberList'
-import { MemberListOrder, useMembers } from '../../../memberships/hooks/useMembers'
+import { MemberListOrder, MemberListSortKey, useMembers } from '../../../memberships/hooks/useMembers'
 import { AppPage } from '../../components/AppPage'
 
-type SortKey = MemberListOrder['sortBy']
+const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberListOrder => ({
+  sortBy: sortBy,
+  isDescending: sortBy === order.sortBy && !order.isDescending,
+})
 
 export const Members = () => {
   const crumbs = [{ href: '#', text: 'Members' }]
-  const [order, dispatchSort] = useReducer(
-    (order: MemberListOrder, sortBy: SortKey): MemberListOrder => ({
-      sortBy: sortBy,
-      isDescending: sortBy === order.sortBy && !order.isDescending,
-    }),
-    { sortBy: 'id', isDescending: false }
-  )
+  const [order, dispatchSort] = useReducer(sortReducer, { sortBy: 'id', isDescending: false })
+
   const { members, isLoading } = useMembers({ order })
 
   return (
