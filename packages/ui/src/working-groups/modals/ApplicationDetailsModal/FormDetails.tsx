@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Loading } from '../../../common/components/Loading'
 import {
   SidePaneColumn,
   SidePaneLabel,
@@ -8,7 +9,7 @@ import {
   SidePaneText,
 } from '../../../common/components/SidePane'
 import { useApplicationQuestionAnswers } from '../../hooks/useApplicationQuestionAnswers'
-import { ApplicationFormQuestionAnswer } from '../../types/ApplicationFormQuestionAnswer'
+import { ApplicationQuestionAnswer } from '../../types/ApplicationQuestionAnswer'
 
 interface Props {
   applicationId: string
@@ -20,7 +21,7 @@ export const FormDetails = React.memo(({ applicationId }: Props) => {
   if (isLoading)
     return (
       <SidePaneTable>
-        <SidePaneText>Loading...</SidePaneText>
+        <Loading />
       </SidePaneTable>
     )
 
@@ -33,7 +34,7 @@ export const FormDetails = React.memo(({ applicationId }: Props) => {
   )
 })
 
-const QuestionAnswerPair = React.memo(({ answer }: { answer: ApplicationFormQuestionAnswer }) => (
+const QuestionAnswerPair = React.memo(({ answer }: { answer: ApplicationQuestionAnswer }) => (
   <SidePaneRow>
     <SidePaneColumn>
       <SidePaneLabel text={answer.question} />

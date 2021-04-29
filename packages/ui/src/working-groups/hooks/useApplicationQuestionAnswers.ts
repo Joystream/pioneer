@@ -1,5 +1,5 @@
 import { useGetApplicationFormQuestionAnswerQuery } from '../queries'
-import { asQuestionAnswer } from '../types/ApplicationFormQuestionAnswer'
+import { asQuestionAnswer } from '../types/ApplicationQuestionAnswer'
 
 export function useApplicationQuestionAnswers(applicationId: string) {
   const params = { variables: { applicationId_eq: applicationId } }
