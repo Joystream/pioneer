@@ -5,13 +5,13 @@ import { Colors, Overflow, Transitions } from '../../../common/constants'
 
 export const OACWrap = styled.div`
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr auto 40px;
   grid-column-gap: 24px;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 94px;
-  padding: 16px 72px 16px 16px;
+  padding: 16px;
   background-color: ${Colors.White};
   transition: ${Transitions.all};
 `

@@ -44,7 +44,9 @@ export const ToggleButton = styled(ButtonPrimary)<ToggleButtonProps>`
     }
   }};
   width: 32px;
+  min-width: unset;
   height: 32px;
+  padding: 0;
   background-color: transparent;
   color: ${Colors.Black[900]};
   &,

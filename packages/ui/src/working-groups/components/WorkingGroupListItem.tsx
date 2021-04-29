@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { ButtonGhost } from '../../common/components/buttons'
 import { Arrow } from '../../common/components/icons'
-import { ValueInJoys, TextMedium } from '../../common/components/typography'
+import { TextMedium, ValueInJoys } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../common/constants'
 import { Avatar, AvatarPlaceholderImage } from '../../memberships/components/Avatar'
@@ -57,7 +57,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>WG Leader</Subscription>
         </StatsColumn>
       </GroupStats>
-      <ButtonGhost square size="small" onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>
+      <ButtonGhost square size="medium" onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>
         <Arrow direction="right" />
       </ButtonGhost>
     </GroupItem>
@@ -159,7 +159,7 @@ const WGLeaderImage = styled.div`
 
 const GroupItem = styled.section`
   display: grid;
-  grid-template-columns: 108px 1fr 1fr 32px;
+  grid-template-columns: 108px 1fr 1fr 40px;
   grid-template-rows: 1fr;
   grid-column-gap: 24px;
   width: 100%;
