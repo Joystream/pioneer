@@ -64,28 +64,6 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   )
 }
 
-const GroupItem = styled.section`
-  display: grid;
-  grid-template-columns: 108px 1fr 1fr 32px;
-  grid-template-rows: 1fr;
-  grid-column-gap: 24px;
-  width: 100%;
-  height: 100%;
-  max-height: 108px;
-  align-items: center;
-  padding-right: 16px;
-  border: 1px solid ${Colors.Black[100]};
-  border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
-  overflow: hidden;
-  transition: ${Transitions.all};
-
-  &:hover,
-  &:focus-within {
-    border-color: ${Colors.Blue[100]};
-  }
-`
-
 const GroupAvatarPlaceholderImage = styled(AvatarPlaceholderImage)`
   display: flex;
   position: absolute;
@@ -117,15 +95,6 @@ const GroupImageContainer = styled.div`
   overflow: hidden;
   cursor: pointer;
   transition: ${Transitions.all};
-
-  &:hover {
-    border-color: ${Colors.Blue[100]};
-
-    ${GroupAvatarPlaceholderImage},
-    ${GroupImage} {
-      transform: scale(1);
-    }
-  }
 `
 
 const GroupContentBlock = styled.article`
@@ -141,9 +110,6 @@ const GroupTitle = styled.h5`
   transition: ${Transitions.all};
   cursor: pointer;
 
-  &:hover {
-    color: ${Colors.Blue[500]};
-  }
   &:active {
     color: ${Colors.Blue[600]};
   }
@@ -189,4 +155,38 @@ const WGLeaderImage = styled.div`
   height: 24px;
   border-radius: ${BorderRad.round};
   overflow: hidden;
+`
+
+const GroupItem = styled.section`
+  display: grid;
+  grid-template-columns: 108px 1fr 1fr 32px;
+  grid-template-rows: 1fr;
+  grid-column-gap: 24px;
+  width: 100%;
+  height: 100%;
+  max-height: 108px;
+  align-items: center;
+  padding-right: 16px;
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
+  background-color: ${Colors.White};
+  overflow: hidden;
+  transition: ${Transitions.all};
+
+  &:hover,
+  &:focus-within {
+    border-color: ${Colors.Blue[100]};
+
+    ${GroupImageContainer} {
+      border-color: ${Colors.Blue[100]};
+
+      ${GroupAvatarPlaceholderImage},
+      ${GroupImage} {
+        transform: scale(1);
+      }
+    }
+    ${GroupTitle} {
+      color: ${Colors.Blue[500]};
+    }
+  }
 `
