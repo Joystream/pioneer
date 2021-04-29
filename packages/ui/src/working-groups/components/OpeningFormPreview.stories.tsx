@@ -39,5 +39,6 @@ Default.args = {
     applicants: { current: 2, total: 10 },
     hiring: { current: 0, total: 1 },
     status: 'OpeningStatusOpen',
+    stake: new BN(2000),
   },
 }

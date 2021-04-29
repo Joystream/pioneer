@@ -25,6 +25,7 @@ export interface WorkingGroupOpening {
     total: number
   }
   status: Status
+  stake: BN
 }
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
@@ -47,6 +48,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   shortDescription: fields.metadata.shortDescription,
   description: fields.metadata.description,
   status: fields.status.__typename,
+  stake: new BN(fields.stakeAmount),
 })
 
 export type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'

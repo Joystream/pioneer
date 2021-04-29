@@ -13,8 +13,9 @@ import { useForm } from '../../../common/hooks/useForm'
 import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
 import { AccountSchema } from '../../../memberships/model/validation'
+import { WorkingGroupOpening } from '../../types'
 
-interface StakeStepForm {
+export interface StakeStepForm {
   account?: Account
   amount?: string
 }
@@ -24,21 +25,21 @@ const StakeStepFormSchema = Yup.object().shape({
   amount: Yup.number().required(),
 })
 
-const MIN_STAKE = 10_000
-
 interface StakeStepProps {
+  opening: WorkingGroupOpening
   onChange: (isValid: boolean, fields: StakeStepForm) => void
 }
 
-export function StakeStep({ onChange }: StakeStepProps) {
+export function StakeStep({ onChange, opening }: StakeStepProps) {
   const [amount, setAmount] = useNumberInput(0)
+  const minStake = opening.stake
   const schema = useMemo(() => {
     StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
-      MIN_STAKE,
+      minStake.toNumber(),
       'You need at least ${min} stake'
     )
     return StakeStepFormSchema
-  }, [MIN_STAKE])
+  }, [minStake.toString()])
 
   const initializer = {
     account: undefined,
@@ -72,9 +73,9 @@ export function StakeStep({ onChange }: StakeStepProps) {
           <RowGapBlock gap={8}>
             <h4>Stake</h4>
             <TextMedium>
-              You must stake at least <ValueInJoys>{formatTokenValue(MIN_STAKE)}</ValueInJoys> to apply for this role.
-              This stake will be returned to you when the hiring process is complete, whether or not you are hired, and
-              will also be used to rank applications.
+              You must stake at least <ValueInJoys>{formatTokenValue(minStake.toNumber())}</ValueInJoys> to apply for
+              this role. This stake will be returned to you when the hiring process is complete, whether or not you are
+              hired, and will also be used to rank applications.
             </TextMedium>
           </RowGapBlock>
           <InputComponent
