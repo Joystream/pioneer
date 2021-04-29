@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEventHandler } from 'react'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
@@ -11,7 +11,7 @@ export interface ButtonProps {
   className?: string
   children?: React.ReactNode
   disabled?: boolean
-  onClick?: () => void
+  onClick?: MouseEventHandler
 }
 
 const height: { [key in ButtonSize]: string } = {

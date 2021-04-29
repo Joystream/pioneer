@@ -1,7 +1,9 @@
-import React, { ReactNode } from 'react'
+import React, { MouseEventHandler, ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Shadows, Sizes, Transitions } from '../../constants'
+import { ToggleButton } from '../buttons/Toggle'
+import { Arrow } from '../icons'
 
 interface Props {
   children: ReactNode
@@ -22,6 +24,18 @@ export const OptionSectionHeader = ({ children }: OptionSectionHeaderProps) => (
   <OptionComponentContainer>
     <OptionHeaderComponent>{children}</OptionHeaderComponent>
   </OptionComponentContainer>
+)
+
+interface SelectToggleButtonProps {
+  isOpen?: boolean
+  disabled?: boolean
+  onToggleClick: MouseEventHandler
+}
+
+export const SelectToggleButton = ({ isOpen, disabled, onToggleClick }: SelectToggleButtonProps) => (
+  <ToggleButton isOpen={isOpen} className="ui-toggle" disabled={disabled} onClick={onToggleClick}>
+    <Arrow direction="down" />
+  </ToggleButton>
 )
 
 export const SelectedOption = styled.div`
