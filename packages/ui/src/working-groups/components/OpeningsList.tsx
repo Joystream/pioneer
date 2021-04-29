@@ -2,7 +2,7 @@ import React from 'react'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '../../common/components/buttons'
-import { Toggle, ToggleButton } from '../../common/components/buttons/Toggle'
+import { Toggle } from '../../common/components/buttons/Toggle'
 import { Arrow } from '../../common/components/icons'
 import { List, ListItem } from '../../common/components/List'
 import {
@@ -33,6 +33,7 @@ import {
   OpenedItemTitle,
   OpenedTop,
   OpenedWrapper,
+  OpeningToggleButton,
   OpenItemSummaryColumn,
 } from './OpeningAndApplicationsComponents/OACStyledComponents'
 
@@ -49,9 +50,9 @@ const OpeningsListRow = ({ opening }: Props) => {
         <OpeningListItem opening={opening} />
         <OpeningDetails opening={opening} />
       </OACItemContainer>
-      <ToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
+      <OpeningToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
         <Arrow direction="down" />
-      </ToggleButton>
+      </OpeningToggleButton>
     </Toggle>
   )
 }

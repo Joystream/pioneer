@@ -3,11 +3,12 @@ import styled from 'styled-components'
 
 import { UnknownAccountInfo } from '../../../accounts/components/UnknownAccountInfo'
 import { AccountRow } from '../../../common/components/Modal'
+import { RowGapBlock } from '../../../common/components/page/PageContent'
 import { SidePaneLabel } from '../../../common/components/SidePane'
 import { Member } from '../../types'
 
 export const MemberAccounts = ({ member }: { member: Member }) => (
-  <AccountsDisplay>
+  <AccountsDisplay gap={16}>
     <SidePaneLabel text="Root account" />
     {!!member.rootAccount && (
       <AccountRow>
@@ -23,8 +24,6 @@ export const MemberAccounts = ({ member }: { member: Member }) => (
   </AccountsDisplay>
 )
 
-const AccountsDisplay = styled.div`
-  display: grid;
-  grid-row-gap: 16px;
+const AccountsDisplay = styled(RowGapBlock)`
   padding: 24px;
 `
