@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Loading } from '../../../common/components/Loading'
+import { MarkdownPreview } from '../../../common/components/MarkdownPreview'
 import {
   SidePaneColumn,
   SidePaneLabel,
@@ -28,7 +29,7 @@ export const FormDetails = React.memo(({ applicationId }: Props) => {
   return (
     <SidePaneTable>
       {answers?.map((answer) => (
-        <QuestionAnswerPair answer={answer} key={answer.index} />
+        <QuestionAnswerPair answer={answer} key={answer.questionIndex} />
       ))}
     </SidePaneTable>
   )
@@ -38,7 +39,11 @@ const QuestionAnswerPair = React.memo(({ answer }: { answer: ApplicationQuestion
   <SidePaneRow>
     <SidePaneColumn>
       <SidePaneLabel text={answer.question} />
-      <SidePaneText>{answer.answer}</SidePaneText>
+      {answer.questionType === 'TEXT' ? (
+        <SidePaneText>{answer.answer}</SidePaneText>
+      ) : (
+        <MarkdownPreview markdown={answer.answer} />
+      )}
     </SidePaneColumn>
   </SidePaneRow>
 ))

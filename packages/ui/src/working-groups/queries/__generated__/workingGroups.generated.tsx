@@ -159,7 +159,7 @@ export type GetWorkingGroupApplicationsQuery = {
 export type ApplicationFormQuestionAnswerFieldsFragment = {
   __typename: 'ApplicationFormQuestionAnswer'
   answer: string
-  question: { __typename: 'ApplicationFormQuestion'; question: string; index: number }
+  question: { __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment
 }
 
 export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
@@ -245,13 +245,6 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   }
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
-export const ApplicationQuestionFieldsFragmentDoc = gql`
-  fragment ApplicationQuestionFields on ApplicationFormQuestion {
-    index
-    type
-    question
-  }
-`
 export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     id
@@ -277,14 +270,21 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   ${MemberFieldsFragmentDoc}
   ${BlockFieldsFragmentDoc}
 `
+export const ApplicationQuestionFieldsFragmentDoc = gql`
+  fragment ApplicationQuestionFields on ApplicationFormQuestion {
+    index
+    type
+    question
+  }
+`
 export const ApplicationFormQuestionAnswerFieldsFragmentDoc = gql`
   fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
     question {
-      question
-      index
+      ...ApplicationQuestionFields
     }
     answer
   }
+  ${ApplicationQuestionFieldsFragmentDoc}
 `
 export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {

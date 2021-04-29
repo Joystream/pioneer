@@ -129,8 +129,7 @@ query GetWorkingGroupApplications($applicant_in: [ID!]) {
 
 fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
   question {
-    question
-    index
+    ... ApplicationQuestionFields
   }
   answer
 }
