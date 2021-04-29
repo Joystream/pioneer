@@ -65,8 +65,6 @@ export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer, st
             value={stake}
             helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
-        </TransactionInfoContainer>
-        <TransactionInfoContainer>
           <TransactionInfo
             title="Transaction fee:"
             value={partialFee?.toBn()}
