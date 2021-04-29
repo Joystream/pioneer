@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '../../common/components/buttons'
@@ -103,6 +104,8 @@ const OpeningListItem = ({ opening }: Props) => (
 
 const OpeningDetails = ({ opening }: Props) => {
   const { showModal } = useModal()
+  const history = useHistory()
+  const previewGroup = () => history.push(`/working-groups/openings/${opening.id}`)
 
   return (
     <OpenedContainer>
@@ -146,7 +149,7 @@ const OpeningDetails = ({ opening }: Props) => {
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <ButtonGhost size="medium">
+          <ButtonGhost size="medium" onClick={previewGroup}>
             <Arrow direction="left" />
             Learn more
           </ButtonGhost>

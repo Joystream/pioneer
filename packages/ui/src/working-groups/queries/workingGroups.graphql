@@ -77,6 +77,12 @@ query getWorkingGroupOpenings($group_eq: ID) {
   }
 }
 
+query getWorkingGroupOpening($id: ID) {
+  workingGroupOpening(where: { id: $id }) {
+    ... WorkingGroupOpeningFields
+  }
+}
+
 fragment ApplicationQuestionFields on ApplicationFormQuestion {
   index
   type

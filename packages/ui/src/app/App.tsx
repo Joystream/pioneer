@@ -12,6 +12,7 @@ import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
 import { MyApplications } from './pages/WorkingGroups/MyApplications'
 import { MyRoles } from './pages/WorkingGroups/MyRoles'
+import { OpeningPreview } from './pages/WorkingGroups/OpeningPreview/OpeningPreview'
 import { WorkingGroup } from './pages/WorkingGroups/WorkingGroup'
 import { WorkingGroups } from './pages/WorkingGroups/WorkingGroups'
 import { WorkingGroupsOpenings } from './pages/WorkingGroups/WorkingGroupsOpenings'
@@ -30,6 +31,7 @@ export const App = () => (
         <Route exact path="/working-groups/my-roles" component={MyRoles} />
         <Route exact path="/working-groups/grouppreview/:id" component={WorkingGroup} />
         <Route exact path="/members" component={Members} />
+        <Route exact path="/working-groups/openings/:id" component={OpeningPreview} />
         <Redirect exact from="/" to="/profile" />
       </Switch>
     </Page>
