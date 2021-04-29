@@ -516,7 +516,7 @@ input MembershipWhereInput {
 }
 
 input WorkingGroupOpeningsWhereInput {
-  group_eq: ID
+  groupId_eq: ID
 }
 
 input WorkingGroupApplicationsWhereInput {
@@ -524,7 +524,7 @@ input WorkingGroupApplicationsWhereInput {
 }
 
 input WorkersWhereInput {
-  group_eq: ID
+  groupId_eq: ID
 }
 
 input WorkingGroupWhereUniqueInput {
@@ -541,7 +541,7 @@ input MembershipWhereUniqueInput {
 }
 
 input ApplicationFormQuestionAnswerWhereInput {
-  application_eq: ID
+  applicationId_eq: ID
 }
 
 enum Network {

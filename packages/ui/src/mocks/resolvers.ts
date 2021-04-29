@@ -98,8 +98,8 @@ export const getWorkingGroupOpeningsResolver: QueryResolver<any, GetWorkingGroup
   args,
   { mirageSchema: schema }
 ) => {
-  const { models } = args.where.group_eq
-    ? schema.where('WorkingGroupOpening', { groupId: args.where.group_eq })
+  const { models } = args.where.groupId_eq
+    ? schema.where('WorkingGroupOpening', { groupId: args.where.groupId_eq })
     : schema.all('WorkingGroupOpening')
 
   return adaptRecords(models)
@@ -118,7 +118,7 @@ export const getWorkersResolver: QueryResolver<{ where: GetWorkersQueryVariables
   args,
   { mirageSchema: schema }
 ) => {
-  const groupId = args.where.group_eq
+  const groupId = args.where.groupId_eq
 
   const { models } = groupId
     ? schema.where('Worker', (worker: MockWorker) => groupId == worker.groupId)
@@ -146,7 +146,7 @@ export const getApplicationFormQuestionAnswersResolver: QueryResolver<
   { where: GetApplicationFormQuestionAnswerQueryVariables },
   GetApplicationFormQuestionAnswerQueryResult[]
 > = (obj, args, { mirageSchema: schema }) => {
-  const applicationId = args.where.application_eq
+  const applicationId = args.where.applicationId_eq
 
   const { models } = applicationId
     ? schema.where('ApplicationFormQuestionAnswer', { applicationId })

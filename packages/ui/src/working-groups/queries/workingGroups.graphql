@@ -38,8 +38,8 @@ query getWorkingGroups {
   }
 }
 
-query getWorkers ($group_eq: ID) {
-  workers(where: {group_eq: $group_eq}) {
+query getWorkers ($groupId_eq: ID) {
+  workers(where: {groupId_eq: $groupId_eq}) {
     ...WorkerFields
   }
 }
@@ -71,8 +71,8 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   }
 }
 
-query getWorkingGroupOpenings($group_eq: ID) {
-  workingGroupOpenings(where: { group_eq: $group_eq }) {
+query getWorkingGroupOpenings($groupId_eq: ID) {
+  workingGroupOpenings(where: { groupId_eq: $groupId_eq }) {
     ... WorkingGroupOpeningFields
   }
 }
@@ -134,8 +134,8 @@ fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
   answer
 }
 
-query GetApplicationFormQuestionAnswer($application_eq: ID) {
-  applicationFormQuestionAnswers(where: { application_eq: $application_eq }) {
+query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
+  applicationFormQuestionAnswers(where: { applicationId_eq: $applicationId_eq }) {
     ...ApplicationFormQuestionAnswerFields
   }
 }

@@ -45,7 +45,7 @@ export type GetWorkingGroupsQuery = {
 }
 
 export type GetWorkersQueryVariables = Types.Exact<{
-  group_eq?: Types.Maybe<Types.Scalars['ID']>
+  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
 }>
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
@@ -84,7 +84,7 @@ export type WorkingGroupOpeningFieldsFragment = {
 }
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  group_eq?: Types.Maybe<Types.Scalars['ID']>
+  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
 }>
 
 export type GetWorkingGroupOpeningsQuery = {
@@ -163,7 +163,7 @@ export type ApplicationFormQuestionAnswerFieldsFragment = {
 }
 
 export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
-  application_eq?: Types.Maybe<Types.Scalars['ID']>
+  applicationId_eq?: Types.Maybe<Types.Scalars['ID']>
 }>
 
 export type GetApplicationFormQuestionAnswerQuery = {
@@ -325,8 +325,8 @@ export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGro
 export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>
 export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
 export const GetWorkersDocument = gql`
-  query getWorkers($group_eq: ID) {
-    workers(where: { group_eq: $group_eq }) {
+  query getWorkers($groupId_eq: ID) {
+    workers(where: { groupId_eq: $groupId_eq }) {
       ...WorkerFields
     }
   }
@@ -345,7 +345,7 @@ export const GetWorkersDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkersQuery({
  *   variables: {
- *      group_eq: // value for 'group_eq'
+ *      groupId_eq: // value for 'groupId_eq'
  *   },
  * });
  */
@@ -363,8 +363,8 @@ export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
 export const GetWorkingGroupOpeningsDocument = gql`
-  query getWorkingGroupOpenings($group_eq: ID) {
-    workingGroupOpenings(where: { group_eq: $group_eq }) {
+  query getWorkingGroupOpenings($groupId_eq: ID) {
+    workingGroupOpenings(where: { groupId_eq: $groupId_eq }) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -383,7 +383,7 @@ export const GetWorkingGroupOpeningsDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupOpeningsQuery({
  *   variables: {
- *      group_eq: // value for 'group_eq'
+ *      groupId_eq: // value for 'groupId_eq'
  *   },
  * });
  */
@@ -562,8 +562,8 @@ export type GetWorkingGroupApplicationsQueryResult = Apollo.QueryResult<
   GetWorkingGroupApplicationsQueryVariables
 >
 export const GetApplicationFormQuestionAnswerDocument = gql`
-  query GetApplicationFormQuestionAnswer($application_eq: ID) {
-    applicationFormQuestionAnswers(where: { application_eq: $application_eq }) {
+  query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
+    applicationFormQuestionAnswers(where: { applicationId_eq: $applicationId_eq }) {
       ...ApplicationFormQuestionAnswerFields
     }
   }
@@ -582,7 +582,7 @@ export const GetApplicationFormQuestionAnswerDocument = gql`
  * @example
  * const { data, loading, error } = useGetApplicationFormQuestionAnswerQuery({
  *   variables: {
- *      application_eq: // value for 'application_eq'
+ *      applicationId_eq: // value for 'applicationId_eq'
  *   },
  * });
  */

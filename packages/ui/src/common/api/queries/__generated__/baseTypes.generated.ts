@@ -39,7 +39,7 @@ export type ApplicationFormQuestionAnswer = {
 }
 
 export type ApplicationFormQuestionAnswerWhereInput = {
-  application_eq?: Maybe<Scalars['ID']>
+  applicationId_eq?: Maybe<Scalars['ID']>
 }
 
 export enum ApplicationFormQuestionType {
@@ -1070,7 +1070,7 @@ export type WorkerStatusTerminated = {
 }
 
 export type WorkersWhereInput = {
-  group_eq?: Maybe<Scalars['ID']>
+  groupId_eq?: Maybe<Scalars['ID']>
 }
 
 export type WorkingGroup = {
@@ -1179,7 +1179,7 @@ export type WorkingGroupOpeningWhereUniqueInput = {
 }
 
 export type WorkingGroupOpeningsWhereInput = {
-  group_eq?: Maybe<Scalars['ID']>
+  groupId_eq?: Maybe<Scalars['ID']>
 }
 
 export type WorkingGroupStatus = {
