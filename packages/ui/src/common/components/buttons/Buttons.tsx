@@ -176,7 +176,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
   background-color: ${Colors.Black[75]};
 
   & > svg {
-    color: ${Colors.Black[400]};
+    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
   }
 
   &:before {
@@ -194,6 +194,11 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
     & > svg {
       color: ${Colors.Blue[500]};
     }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Blue[500]};
+      fill: ${Colors.Blue[500]};
+    }
   }
 
   &:active {
@@ -203,6 +208,11 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
   &:disabled {
     & > svg {
       color: ${Colors.Black[300]};
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Black[300]};
+      fill: ${Colors.Black[300]};
     }
     color: ${Colors.Black[300]};
     border-color: ${Colors.Black[50]};
@@ -218,7 +228,7 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   background-color: ${Colors.White};
 
   & > svg {
-    color: ${Colors.Black[400]};
+    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
   }
 
   &:before {
@@ -236,6 +246,11 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
     & > svg {
       color: ${Colors.Blue[500]};
     }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Blue[500]};
+      fill: ${Colors.Blue[500]};
+    }
   }
 
   &:active {
@@ -245,6 +260,11 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   &:disabled {
     & > svg {
       color: ${Colors.Black[300]};
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Black[300]};
+      fill: ${Colors.Black[300]};
     }
     color: ${Colors.Black[300]};
     border-color: ${Colors.Black[200]};

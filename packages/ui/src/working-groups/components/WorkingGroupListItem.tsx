@@ -2,6 +2,8 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { ButtonGhost } from '../../common/components/buttons'
+import { Arrow } from '../../common/components/icons'
 import { ValueInJoys, TextMedium } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../common/constants'
@@ -55,20 +57,23 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>WG Leader</Subscription>
         </StatsColumn>
       </GroupStats>
+      <ButtonGhost square size="small" onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>
+        <Arrow direction="right" />
+      </ButtonGhost>
     </GroupItem>
   )
 }
 
 const GroupItem = styled.section`
   display: grid;
-  grid-template-columns: 108px 1fr 1fr;
+  grid-template-columns: 108px 1fr 1fr 32px;
   grid-template-rows: 1fr;
   grid-column-gap: 24px;
   width: 100%;
   height: 100%;
   max-height: 108px;
   align-items: center;
-  padding-right: 32px;
+  padding-right: 16px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
