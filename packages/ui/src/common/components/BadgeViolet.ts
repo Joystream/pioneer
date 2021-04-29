@@ -12,6 +12,7 @@ export const BadgeViolet = styled.span<BadgeVioletProps>`
   justify-content: center;
   align-items: center;
   width: fit-content;
+  min-width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   padding: 0 8px;
   border-radius: ${BorderRad.full};
