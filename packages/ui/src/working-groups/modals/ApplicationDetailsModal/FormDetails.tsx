@@ -27,7 +27,7 @@ export const FormDetails = React.memo(({ applicationId }: Props) => {
   return (
     <SidePaneTable>
       {answers?.map((answer) => (
-        <QuestionAnswerPair answer={answer} key={JSON.stringify(answer)} />
+        <QuestionAnswerPair answer={answer} key={answer.index} />
       ))}
     </SidePaneTable>
   )

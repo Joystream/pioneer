@@ -159,7 +159,7 @@ export type GetWorkingGroupApplicationsQuery = {
 export type ApplicationFormQuestionAnswerFieldsFragment = {
   __typename: 'ApplicationFormQuestionAnswer'
   answer: string
-  question: { __typename: 'ApplicationFormQuestion'; question: string }
+  question: { __typename: 'ApplicationFormQuestion'; question: string; index: number }
 }
 
 export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
@@ -281,6 +281,7 @@ export const ApplicationFormQuestionAnswerFieldsFragmentDoc = gql`
   fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
     question {
       question
+      index
     }
     answer
   }
