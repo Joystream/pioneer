@@ -11,8 +11,11 @@ fragment MemberFields on Membership {
   inviteCount
 }
 
-query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!]) {
-  memberships(where: {rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in}) {
+query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!], $orderBy: MembershipOrderByInput) {
+  memberships(
+    where: { rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in }
+    orderBy: $orderBy
+  ) {
     ...MemberFields
   }
 }
@@ -29,16 +32,13 @@ fragment MemberWithDetails on Membership {
 }
 
 query GetMember($id: ID!) {
-  membership(where: {id: $id}) {
+  membership(where: { id: $id }) {
     ...MemberWithDetails
   }
 }
 
 query SearchMembers($text: String!, $limit: Int) {
-  memberships(where: {
-    name_contains: $text
-    handle_contains: $text
-  }, limit: $limit) {
+  memberships(where: { name_contains: $text, handle_contains: $text }, limit: $limit) {
     ...MemberFields
   }
 }
