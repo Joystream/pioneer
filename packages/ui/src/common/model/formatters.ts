@@ -1,4 +1,5 @@
 import BN from 'bn.js'
+import { parseISO, differenceInCalendarDays, differenceInMinutes } from 'date-fns'
 
 const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
 
@@ -25,3 +26,8 @@ const DefaultDateFormatter = Intl.DateTimeFormat('en', {
 })
 
 export const formatDateString = (timestamp: string) => DefaultDateFormatter.format(new Date(timestamp))
+
+export const dateFromNow = (date: string) => ({
+  days: differenceInCalendarDays(parseISO(date), new Date()),
+  minutes: differenceInMinutes(parseISO(date), new Date()),
+})

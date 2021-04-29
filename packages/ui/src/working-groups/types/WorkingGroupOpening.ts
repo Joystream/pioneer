@@ -11,6 +11,7 @@ export interface WorkingGroupOpening {
   title: string
   shortDescription: string
   description: string
+  details: string
   type: WorkingGroupOpeningType
   reward: {
     value: BN
@@ -47,6 +48,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   title: fields.metadata.shortDescription,
   shortDescription: fields.metadata.shortDescription,
   description: fields.metadata.description,
+  details: fields.metadata.applicationDetails,
   status: fields.status.__typename,
   stake: new BN(fields.stakeAmount),
 })

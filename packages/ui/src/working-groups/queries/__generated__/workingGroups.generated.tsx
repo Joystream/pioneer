@@ -92,6 +92,15 @@ export type GetWorkingGroupOpeningsQuery = {
   workingGroupOpenings?: Types.Maybe<Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>>
 }
 
+export type GetWorkingGroupOpeningQueryVariables = Types.Exact<{
+  id?: Types.Maybe<Types.Scalars['ID']>
+}>
+
+export type GetWorkingGroupOpeningQuery = {
+  __typename: 'Query'
+  workingGroupOpening?: Types.Maybe<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>
+}
+
 export type ApplicationQuestionFieldsFragment = {
   __typename: 'ApplicationFormQuestion'
   index: number
@@ -385,6 +394,55 @@ export type GetWorkingGroupOpeningsLazyQueryHookResult = ReturnType<typeof useGe
 export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningsQuery,
   GetWorkingGroupOpeningsQueryVariables
+>
+export const GetWorkingGroupOpeningDocument = gql`
+  query getWorkingGroupOpening($id: ID) {
+    workingGroupOpening(where: { id: $id }) {
+      ...WorkingGroupOpeningFields
+    }
+  }
+  ${WorkingGroupOpeningFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupOpeningQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupOpeningQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupOpeningQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupOpeningQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupOpeningQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>(
+    GetWorkingGroupOpeningDocument,
+    options
+  )
+}
+export function useGetWorkingGroupOpeningLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>(
+    GetWorkingGroupOpeningDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningQuery>
+export type GetWorkingGroupOpeningLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningLazyQuery>
+export type GetWorkingGroupOpeningQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningQuery,
+  GetWorkingGroupOpeningQueryVariables
 >
 export const GetWorkingGroupOpeningQuestionsDocument = gql`
   query GetWorkingGroupOpeningQuestions($id: ID) {

@@ -5,6 +5,7 @@ import React from 'react'
 import { TemplateBlock } from '../storybookParts/previewStyles'
 import { TextMedium } from '../typography'
 
+import { DurationStatistics } from './DurationStatistics'
 import { MultiTokenValueStat } from './MultiTokenValueStat'
 import { StatisticItem, StatisticItemProps } from './StatisticItem'
 import { Statistics } from './Statistics'
@@ -30,6 +31,7 @@ const Template: Story<StatisticItemProps> = (args) => (
       <StatisticItem {...args}>
         <TextMedium>Inner text</TextMedium>
       </StatisticItem>
+      <DurationStatistics title="Duration value" value="2032-03-09T10:18:04.155Z" />
     </Statistics>
   </TemplateBlock>
 )
