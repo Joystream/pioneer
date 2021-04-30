@@ -27,11 +27,12 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   const schema = server.schema as any // Schema.modelFor is a hidden API.
 
   const workingGroupModel = schema.modelFor('workingGroup')
-  workingGroupModel.class.prototype.associations.workers.opts.inverse = 'group'
+  // workingGroupModel.class.prototype.associations.workers.opts.inverse = 'group'
+  // workingGroupModel.class.prototype.associations.leader.opts.inverse = 'leader'
   workingGroupModel.class.prototype.associations.leader.opts.inverse = 'leader'
 
   const workerModel = schema.modelFor('worker')
-  workerModel.class.prototype.associations.leaderGroups.opts.inverse = 'leaderGroups'
+  // workerModel.class.prototype.associations.leaderGroups.opts.inverse = 'leaderGroups'
 }
 
 export const makeServer = (environment = 'development') => {
@@ -46,13 +47,13 @@ export const makeServer = (environment = 'development') => {
           root: undefined,
           resolvers: {
             Query: {
-              membership: getMemberResolver,
+              membershipByUniqueInput: getMemberResolver,
               memberships: getMembersResolver,
               searchMemberships: searchMembersResolver,
               workingGroups: getWorkingGroupsResolver,
-              workingGroup: getWorkingGroupResolver,
+              workingGroupByUniqueInput: getWorkingGroupResolver,
               workingGroupOpenings: getWorkingGroupOpeningsResolver,
-              workingGroupOpening: getWorkingGroupOpeningResolver,
+              workingGroupOpeningByUniqueInput: getWorkingGroupOpeningResolver,
               workers: getWorkersResolver,
               workingGroupApplications: getWorkingGroupApplicationsResolver,
               applicationFormQuestionAnswers: getApplicationFormQuestionAnswersResolver,

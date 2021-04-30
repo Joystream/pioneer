@@ -14,7 +14,7 @@ interface RawWorkingGroupMock {
   name: string
   workers?: WorkerMock[]
   leaderId?: string
-  status: {
+  metadata: {
     name: string
     message: string
     about: string
@@ -30,7 +30,7 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
   const groupData = {
     ...group,
     workers: null,
-    status: server.schema.create('WorkingGroupStatus', group.status),
+    metadata: server.schema.create('WorkingGroupMetadata', group.metadata),
     leaderId: null,
   }
 
