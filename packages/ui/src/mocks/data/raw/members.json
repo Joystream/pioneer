@@ -9,7 +9,7 @@
     "isVerified": true,
     "isFoundingMember": true,
     "inviteCount": 3,
-    "registeredAtBlockId": "block-1",
+    "registeredAtBlockId": 1,
     "registeredAtTime":"2021-03-29 18:21:06.000000"
   },
   {
@@ -22,7 +22,7 @@
     "isVerified": true,
     "isFoundingMember": false,
     "inviteCount":  2,
-    "registeredAtBlockId": "block-2",
+    "registeredAtBlockId": 2,
     "registeredAtTime": "2021-03-29 18:21:06.000000",
     "invitedById": "0"
   },
@@ -36,7 +36,7 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlockId": "block-3",
+    "registeredAtBlockId": 3,
     "registeredAtTime": "2021-03-29 18:21:06.000000",
     "invitedById": "0"
   },
@@ -50,7 +50,7 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlockId": "block-3",
+    "registeredAtBlockId": 3,
     "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
@@ -63,7 +63,7 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlockId": "block-4",
+    "registeredAtBlockId": 4,
     "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
@@ -76,7 +76,7 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlockId": "block-4",
+    "registeredAtBlockId": 4,
     "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
@@ -89,7 +89,7 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlockId": "block-4",
+    "registeredAtBlockId": 4,
     "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
@@ -102,7 +102,7 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlockId": "block-4",
+    "registeredAtBlockId": 4,
     "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
@@ -115,7 +115,7 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlockId": "block-4",
+    "registeredAtBlockId": 4,
     "registeredAtTime": "2021-03-29 18:21:06.000000"
   },
   {
@@ -128,7 +128,7 @@
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
-    "registeredAtBlockId": "block-4",
+    "registeredAtBlockId": 4,
     "registeredAtTime": "2021-03-29 18:21:06.000000"
   }
 ]
