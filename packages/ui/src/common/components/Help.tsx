@@ -6,7 +6,7 @@ import { Animations, BorderRad, Colors, Transitions, Fonts } from '../constants'
 import { QuestionIcon } from './icons'
 import { LinkSymbol, LinkSymbolStyle } from './icons/symbols'
 
-interface HelpNotificationProps {
+export interface HelpNotificationProps {
   helperText: string
   helperTitle?: string
   helperLinkText?: React.ReactNode

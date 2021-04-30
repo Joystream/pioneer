@@ -10,8 +10,8 @@ import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
 import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent } from '../../../common/components/forms'
-import { Help } from '../../../common/components/Help'
-import { ModalBody, ModalFooter, BalanceInfoNarrow, InfoTitle, InfoValue, Row } from '../../../common/components/Modal'
+import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '../../../common/components/Modal'
+import { TransactionInfo } from '../../../common/components/TransactionInfo'
 import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
@@ -82,18 +82,18 @@ export const BuyMembershipSignModal = ({
         </Row>
       </ModalBody>
       <ModalFooter>
-        <BalanceInfoNarrow>
-          <InfoTitle>Creation fee:</InfoTitle>
-          <InfoValue>
-            <TokenValue value={membershipPrice?.toBn()} />
-          </InfoValue>
-          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-          <InfoTitle>Transaction fee:</InfoTitle>
-          <InfoValue>
-            <TokenValue value={paymentInfo?.partialFee.toBn()} />
-          </InfoValue>
-          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-        </BalanceInfoNarrow>
+        <TransactionInfoContainer>
+          <TransactionInfo
+            title="Creation fee:"
+            value={membershipPrice?.toBn()}
+            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+          />
+          <TransactionInfo
+            title="Transaction fee:"
+            value={paymentInfo?.partialFee.toBn()}
+            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+          />
+        </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>
           Sign and create a member
         </ButtonPrimary>

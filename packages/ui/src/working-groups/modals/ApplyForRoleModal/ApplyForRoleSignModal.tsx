@@ -8,8 +8,8 @@ import { useAccounts } from '../../../accounts/hooks/useAccounts'
 import { useBalance } from '../../../accounts/hooks/useBalance'
 import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
 import { ButtonPrimary } from '../../../common/components/buttons'
-import { Help } from '../../../common/components/Help'
-import { BalanceInfoNarrow, InfoTitle, InfoValue, ModalBody, ModalFooter, Row } from '../../../common/components/Modal'
+import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '../../../common/components/Modal'
+import { TransactionInfo } from '../../../common/components/TransactionInfo'
 import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
@@ -59,18 +59,18 @@ export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer, st
         </Row>
       </ModalBody>
       <ModalFooter>
-        <BalanceInfoNarrow>
-          <InfoTitle>Stake:</InfoTitle>
-          <InfoValue>
-            <TokenValue value={stake} />
-          </InfoValue>
-          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-          <InfoTitle>Transaction fee:</InfoTitle>
-          <InfoValue>
-            <TokenValue value={partialFee?.toBn()} />
-          </InfoValue>
-          <Help helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'} absolute />
-        </BalanceInfoNarrow>
+        <TransactionInfoContainer>
+          <TransactionInfo
+            title="Stake:"
+            value={stake}
+            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+          />
+          <TransactionInfo
+            title="Transaction fee:"
+            value={partialFee?.toBn()}
+            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+          />
+        </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>
           Sign transaction and Stake
         </ButtonPrimary>

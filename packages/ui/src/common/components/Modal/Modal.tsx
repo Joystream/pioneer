@@ -156,7 +156,7 @@ export const ModalFooter = styled.footer<{ twoColumns?: boolean }>`
   align-items: center;
   width: 100%;
   height: 64px;
-  padding: 8px 24px;
+  padding: 12px 24px;
   border-radius: 0 0 2px 2px;
 `
 
