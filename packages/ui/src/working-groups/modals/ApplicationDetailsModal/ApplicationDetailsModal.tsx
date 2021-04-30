@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { CloseButton } from '../../../common/components/buttons'
 import {
@@ -12,8 +12,11 @@ import {
 import { Tabs } from '../../../common/components/Tabs'
 import { useModal } from '../../../common/hooks/useModal'
 
+import { FormDetails } from './FormDetails'
 import { GeneralDetails } from './GeneralDetails'
 import { ApplicationDetailsModalCall } from './types'
+
+type Tab = 'GENERAL' | 'FORM'
 
 export const ApplicationDetailsModal = React.memo(() => {
   const {
@@ -27,6 +30,8 @@ export const ApplicationDetailsModal = React.memo(() => {
     }
   }
 
+  const [currentTab, setCurrentTab] = useState<Tab>('GENERAL')
+
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane>
@@ -37,14 +42,15 @@ export const ApplicationDetailsModal = React.memo(() => {
           </SidePanelTop>
           <Tabs
             tabs={[
-              { title: 'General details', active: true, onClick: () => null },
-              { title: 'Form', active: false, onClick: () => null },
+              { title: 'General details', active: currentTab === 'GENERAL', onClick: () => setCurrentTab('GENERAL') },
+              { title: 'Form', active: currentTab === 'FORM', onClick: () => setCurrentTab('FORM') },
             ]}
             tabsSize="xs"
           />
         </SidePaneHeader>
         <SidePaneBody>
-          <GeneralDetails application={application} />
+          {currentTab === 'GENERAL' && <GeneralDetails application={application} />}
+          {currentTab === 'FORM' && <FormDetails applicationId={application.id} />}
         </SidePaneBody>
       </SidePane>
     </SidePaneGlass>

@@ -516,7 +516,7 @@ input MembershipWhereInput {
 }
 
 input WorkingGroupOpeningsWhereInput {
-  group_eq: ID
+  groupId_eq: ID
 }
 
 input WorkingGroupApplicationsWhereInput {
@@ -524,7 +524,7 @@ input WorkingGroupApplicationsWhereInput {
 }
 
 input WorkersWhereInput {
-  group_eq: ID
+  groupId_eq: ID
 }
 
 input WorkingGroupWhereUniqueInput {
@@ -538,6 +538,10 @@ input WorkingGroupOpeningWhereUniqueInput {
 input MembershipWhereUniqueInput {
   id: ID
   handle: String
+}
+
+input ApplicationFormQuestionAnswerWhereInput {
+  applicationId_eq: ID
 }
 
 enum Network {
@@ -578,6 +582,7 @@ type Query {
   workingGroupOpenings(offset: Int, limit: Int = 50, where: WorkingGroupOpeningsWhereInput): [WorkingGroupOpening!]
   workingGroupOpening(where: WorkingGroupOpeningWhereUniqueInput): WorkingGroupOpening
   workingGroupApplications(offset: Int, limit: Int = 50, where: WorkingGroupApplicationsWhereInput): [WorkingGroupApplication!]
+  applicationFormQuestionAnswers(offset: Int, limit: Int = 50, where: ApplicationFormQuestionAnswerWhereInput): [ApplicationFormQuestionAnswer!]
 }
 
 enum EventType {
@@ -817,6 +822,7 @@ enum ApplicationFormQuestionType {
 }
 
 type ApplicationFormQuestion {
+  id: ID!
   "Related opening metadata"
   openingMetadata: WorkingGroupOpeningMetadata!
   "The question itself"

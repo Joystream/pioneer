@@ -17,6 +17,7 @@ export type Scalars = {
 
 export type ApplicationFormQuestion = {
   __typename: 'ApplicationFormQuestion'
+  id: Scalars['ID']
   /** Related opening metadata */
   openingMetadata: WorkingGroupOpeningMetadata
   /** The question itself */
@@ -35,6 +36,10 @@ export type ApplicationFormQuestionAnswer = {
   question: ApplicationFormQuestion
   /** Applicant's answer */
   answer: Scalars['String']
+}
+
+export type ApplicationFormQuestionAnswerWhereInput = {
+  applicationId_eq?: Maybe<Scalars['ID']>
 }
 
 export enum ApplicationFormQuestionType {
@@ -763,6 +768,7 @@ export type Query = {
   workingGroupOpenings?: Maybe<Array<WorkingGroupOpening>>
   workingGroupOpening?: Maybe<WorkingGroupOpening>
   workingGroupApplications?: Maybe<Array<WorkingGroupApplication>>
+  applicationFormQuestionAnswers?: Maybe<Array<ApplicationFormQuestionAnswer>>
 }
 
 export type QueryBlocksArgs = {
@@ -861,6 +867,12 @@ export type QueryWorkingGroupApplicationsArgs = {
   offset?: Maybe<Scalars['Int']>
   limit?: Maybe<Scalars['Int']>
   where?: Maybe<WorkingGroupApplicationsWhereInput>
+}
+
+export type QueryApplicationFormQuestionAnswersArgs = {
+  offset?: Maybe<Scalars['Int']>
+  limit?: Maybe<Scalars['Int']>
+  where?: Maybe<ApplicationFormQuestionAnswerWhereInput>
 }
 
 export type StakeDecreasedEvent = WorkingGroupsEvent & {
@@ -1058,7 +1070,7 @@ export type WorkerStatusTerminated = {
 }
 
 export type WorkersWhereInput = {
-  group_eq?: Maybe<Scalars['ID']>
+  groupId_eq?: Maybe<Scalars['ID']>
 }
 
 export type WorkingGroup = {
@@ -1167,7 +1179,7 @@ export type WorkingGroupOpeningWhereUniqueInput = {
 }
 
 export type WorkingGroupOpeningsWhereInput = {
-  group_eq?: Maybe<Scalars['ID']>
+  groupId_eq?: Maybe<Scalars['ID']>
 }
 
 export type WorkingGroupStatus = {

@@ -18,6 +18,7 @@ import {
   getWorkingGroupResolver,
   getWorkingGroupApplicationsResolver,
   getWorkingGroupOpeningResolver,
+  getApplicationFormQuestionAnswersResolver,
 } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
@@ -54,6 +55,7 @@ export const makeServer = (environment = 'development') => {
               workingGroupOpening: getWorkingGroupOpeningResolver,
               workers: getWorkersResolver,
               workingGroupApplications: getWorkingGroupApplicationsResolver,
+              applicationFormQuestionAnswers: getApplicationFormQuestionAnswersResolver,
             },
           },
         })

@@ -9,6 +9,8 @@ import {
   SearchMembersQueryResult,
 } from '../memberships/queries'
 import {
+  GetApplicationFormQuestionAnswerQueryResult,
+  GetApplicationFormQuestionAnswerQueryVariables,
   GetWorkersQueryResult,
   GetWorkersQueryVariables,
   GetWorkingGroupApplicationsQueryResult,
@@ -116,8 +118,8 @@ export const getWorkingGroupOpeningsResolver: QueryResolver<any, GetWorkingGroup
   args,
   { mirageSchema: schema }
 ) => {
-  const { models } = args.where.group_eq
-    ? schema.where('WorkingGroupOpening', { groupId: args.where.group_eq })
+  const { models } = args.where.groupId_eq
+    ? schema.where('WorkingGroupOpening', { groupId: args.where.groupId_eq })
     : schema.all('WorkingGroupOpening')
 
   return adaptRecords(models)
@@ -136,7 +138,7 @@ export const getWorkersResolver: QueryResolver<{ where: GetWorkersQueryVariables
   args,
   { mirageSchema: schema }
 ) => {
-  const groupId = args.where.group_eq
+  const groupId = args.where.groupId_eq
 
   const { models } = groupId
     ? schema.where('Worker', (worker: MockWorker) => groupId == worker.groupId)
@@ -155,7 +157,20 @@ export const getWorkingGroupApplicationsResolver: QueryResolver<
     ? schema.where('WorkingGroupApplication', (application: MockApplication) =>
         applicantIds.includes(application.applicantId)
       )
-    : schema.all()
+    : schema.all('WorkingGroupApplication')
+
+  return models
+}
+
+export const getApplicationFormQuestionAnswersResolver: QueryResolver<
+  { where: GetApplicationFormQuestionAnswerQueryVariables },
+  GetApplicationFormQuestionAnswerQueryResult[]
+> = (obj, args, { mirageSchema: schema }) => {
+  const applicationId = args.where.applicationId_eq
+
+  const { models } = applicationId
+    ? schema.where('ApplicationFormQuestionAnswer', { applicationId })
+    : schema.all('ApplicationFormQuestionAnswer')
 
   return models
 }

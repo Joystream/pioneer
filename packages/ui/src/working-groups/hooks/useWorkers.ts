@@ -9,7 +9,7 @@ interface UseWorkersProps {
 }
 
 export const useWorkers = ({ groupId, fetchPast }: UseWorkersProps) => {
-  const options = { variables: { group_eq: groupId } }
+  const options = { variables: { groupId_eq: groupId } }
   const { data, loading } = useGetWorkersQuery(options)
   const workers = useMemo(
     () => data && data.workers.filter(getWorkersFilter(fetchPast)).map(({ membership }) => asMember(membership)),
