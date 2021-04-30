@@ -47,7 +47,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       {memberDetails?.about && (
         <SidePaneColumn>
           <SidePaneLabel text="About" />
-          <SidePaneText>{memberDetails?.about}</SidePaneText>
+          <SidePaneText>{memberDetails.about}</SidePaneText>
         </SidePaneColumn>
       )}
       <SidePaneRow>
