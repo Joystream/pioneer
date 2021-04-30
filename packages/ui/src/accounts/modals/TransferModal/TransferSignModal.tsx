@@ -16,6 +16,7 @@ import {
   TransactionAmountInfoText,
   TransactionInfoContainer,
 } from '../../../common/components/Modal'
+import { TransactionInfo } from '../../../common/components/TransactionInfo'
 import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
@@ -24,8 +25,6 @@ import { onTransactionDone } from '../../../common/types'
 import { AccountInfo } from '../../components/AccountInfo'
 import { useBalance } from '../../hooks/useBalance'
 import { Account } from '../../types'
-
-import { TransactionInfo } from './TransactionInfo'
 
 interface Props {
   onClose: () => void

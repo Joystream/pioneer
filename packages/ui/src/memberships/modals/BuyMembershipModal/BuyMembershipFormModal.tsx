@@ -4,7 +4,6 @@ import React, { useCallback, useEffect } from 'react'
 import * as Yup from 'yup'
 
 import { filterAccount, SelectAccount } from '../../../accounts/components/SelectAccount'
-import { TransactionInfo } from '../../../accounts/modals/TransferModal/TransactionInfo'
 import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import {
@@ -28,6 +27,7 @@ import {
   ScrolledModalContainer,
   TransactionInfoContainer,
 } from '../../../common/components/Modal'
+import { TransactionInfo } from '../../../common/components/TransactionInfo'
 import { TextMedium } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
 import { useForm } from '../../../common/hooks/useForm'

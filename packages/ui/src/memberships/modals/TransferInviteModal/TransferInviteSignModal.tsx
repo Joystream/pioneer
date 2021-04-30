@@ -2,7 +2,6 @@ import BN from 'bn.js'
 import React, { useMemo } from 'react'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
-import { TransactionInfo } from '../../../accounts/modals/TransferModal/TransactionInfo'
 import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent } from '../../../common/components/forms'
@@ -12,6 +11,7 @@ import {
   SignTransferContainer,
   TransactionInfoContainer,
 } from '../../../common/components/Modal'
+import { TransactionInfo } from '../../../common/components/TransactionInfo'
 import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'

@@ -1,9 +1,9 @@
 import BN from 'bn.js'
 import React from 'react'
 
-import { Help } from '../../../common/components/Help'
-import { BalanceInfoNarrow, InfoTitle, InfoValue } from '../../../common/components/Modal'
-import { TokenValue } from '../../../common/components/typography'
+import { Help } from './Help'
+import { BalanceInfoNarrow, InfoTitle, InfoValue } from './Modal'
+import { TokenValue } from './typography'
 
 interface TransactionInfoProps {
   title: string
