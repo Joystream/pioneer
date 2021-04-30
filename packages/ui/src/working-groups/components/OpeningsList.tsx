@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '../../common/components/buttons'
@@ -147,10 +148,12 @@ const OpeningDetails = ({ opening }: Props) => {
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <ButtonGhost size="medium">
-            <Arrow direction="left" />
-            Learn more
-          </ButtonGhost>
+          <Link to={`/working-groups/openings/${opening.id}`}>
+            <ButtonGhost size="medium">
+              <Arrow direction="left" />
+              Learn more
+            </ButtonGhost>
+          </Link>
           <ButtonPrimary
             size="medium"
             onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}

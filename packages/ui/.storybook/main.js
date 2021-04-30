@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const path = require('path')
 
 const { styles } = require('@ckeditor/ckeditor5-dev-utils')
 
@@ -23,6 +24,9 @@ module.exports = {
         stream: require.resolve('stream-browserify'),
         path: false,
       },
+      alias: {
+        '@': path.resolve(__dirname, '..', 'src')
+      }
     }
     config.plugins.push(
       new webpack.ProvidePlugin({

@@ -85,6 +85,9 @@ module.exports = (env, argv) => ({
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
     },
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    }
   },
   output: {
     filename: '[name].[contenthash].js',

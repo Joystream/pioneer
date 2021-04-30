@@ -18,6 +18,7 @@ Default.args = {
     {
       id: '123',
       title: 'Storage working group leader',
+      details: 'Opening details',
       shortDescription: 'Become A Distribution Leader',
       description:
         '### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.',
@@ -32,6 +33,7 @@ Default.args = {
     {
       id: '221',
       title: 'Storage working group worker',
+      details: 'Opening details',
       shortDescription: 'Become A Distribution Leader',
       description:
         '### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.',

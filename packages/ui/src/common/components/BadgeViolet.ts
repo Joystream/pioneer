@@ -1,10 +1,12 @@
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Overflow } from '../constants'
+import { spacing } from '../utils/styles'
 
 interface BadgeVioletProps {
   inverted?: boolean
   size?: 'm' | 'l'
+  separated?: boolean
 }
 
 export const BadgeViolet = styled.span<BadgeVioletProps>`
@@ -21,6 +23,20 @@ export const BadgeViolet = styled.span<BadgeVioletProps>`
   font-weight: 700;
   text-transform: uppercase;
   ${Overflow.Dots}
+
+  ${({ separated }) =>
+    separated &&
+    css`
+      margin: ${spacing(0, 0.5)};
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+    `};
 
   ${({ inverted }) =>
     inverted

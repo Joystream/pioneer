@@ -1,3 +1,4 @@
+import WorkingGroupOpening from '@/app/pages/WorkingGroups/WorkingGroupsOpening'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
@@ -29,6 +30,7 @@ export const App = () => (
         <Route exact path="/working-groups/my-applications" component={MyApplications} />
         <Route exact path="/working-groups/my-roles" component={MyRoles} />
         <Route exact path="/working-groups/grouppreview/:id" component={WorkingGroup} />
+        <Route path="/working-groups/openings/:id" component={WorkingGroupOpening} />
         <Route exact path="/members" component={Members} />
         <Redirect exact from="/" to="/profile" />
       </Switch>
