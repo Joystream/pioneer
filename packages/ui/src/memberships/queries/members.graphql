@@ -3,9 +3,12 @@ fragment MemberFields on Membership {
   rootAccount
   controllerAccount
   handle
-  name
-  about
-  avatarUri
+  metadata {
+    name
+    about
+    # avatar {} - Should be fetched from the Storage system.
+    # See https://github.com/Joystream/pioneer/issues/54
+  }
   isVerified
   isFoundingMember
   inviteCount
@@ -32,13 +35,13 @@ fragment MemberWithDetails on Membership {
 }
 
 query GetMember($id: ID!) {
-  membership(where: { id: $id }) {
+  membershipByUniqueInput(where: { id: $id }) {
     ...MemberWithDetails
   }
 }
 
 query SearchMembers($text: String!, $limit: Int) {
-  memberships(where: { name_contains: $text, handle_contains: $text }, limit: $limit) {
+  memberships(where: { handle_contains: $text }, limit: $limit) {
     ...MemberFields
   }
 }
