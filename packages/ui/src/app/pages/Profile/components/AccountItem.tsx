@@ -1,5 +1,3 @@
-import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
-import { useToggle } from '@/common/hooks/useToggle'
 import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
@@ -8,8 +6,10 @@ import { AccountInfo } from '../../../../accounts/components/AccountInfo'
 import { TransferButton } from '../../../../accounts/components/TransferButton'
 import { useBalance } from '../../../../accounts/hooks/useBalance'
 import { Account } from '../../../../accounts/types'
+import { DropDownButton, DropDownToggle } from '../../../../common/components/buttons/DropDownToggle'
 import { TokenValue } from '../../../../common/components/typography'
 import { Sizes } from '../../../../common/constants'
+import { useToggle } from '../../../../common/hooks/useToggle'
 
 interface AccountItemDataProps {
   account: Account
