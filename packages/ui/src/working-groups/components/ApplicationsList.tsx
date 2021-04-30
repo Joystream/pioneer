@@ -3,6 +3,8 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
+import { ButtonGhost } from '../../common/components/buttons'
+import { FileIcon } from '../../common/components/icons/FileIcon'
 import { List, ListItem } from '../../common/components/List'
 import { TextInlineBig, TokenValue } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
@@ -69,6 +71,9 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
           <Subscription>Hired</Subscription>
         </OpenItemSummaryColumn>
       </OACItemSummary>
+      <ButtonGhost square size="medium" onClick={showApplicationModal}>
+        <FileIcon />
+      </ButtonGhost>
     </OACWrap>
   )
 }

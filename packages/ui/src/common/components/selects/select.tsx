@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useToggle } from '../../hooks/useToggle'
-import { Toggle, ToggleButton } from '../buttons/Toggle'
-import { Arrow } from '../icons'
+import { Toggle } from '../buttons/Toggle'
 
-import { EmptyOption, SelectComponent, SelectedOption } from './components'
+import { EmptyOption, SelectComponent, SelectedOption, SelectToggleButton } from './components'
 import { SelectProps } from './types'
 
 export const Select = <T extends any>({
@@ -73,6 +72,7 @@ export const Select = <T extends any>({
   }, [isOpen])
 
   const onToggleClick = () => {
+    console.log('onToggleClick.....')
     !isOpen && !disabled && toggleOpen()
   }
 
@@ -91,9 +91,14 @@ export const Select = <T extends any>({
             onChange={(t) => setFilterInput(t.target.value)}
           />
         )}
-        <ToggleButton isOpen={isOpen} className="ui-toggle" disabled={disabled}>
-          <Arrow direction="down" />
-        </ToggleButton>
+        <SelectToggleButton
+          isOpen={isOpen}
+          disabled={disabled}
+          onToggleClick={(evt) => {
+            evt.stopPropagation()
+            toggleOpen()
+          }}
+        />
       </Toggle>
       {isOpen && renderList(onOptionClick)}
     </SelectComponent>

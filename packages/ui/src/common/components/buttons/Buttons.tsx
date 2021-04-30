@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEventHandler } from 'react'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
@@ -11,7 +11,7 @@ export interface ButtonProps {
   className?: string
   children?: React.ReactNode
   disabled?: boolean
-  onClick?: () => void
+  onClick?: MouseEventHandler
 }
 
 const height: { [key in ButtonSize]: string } = {
@@ -91,6 +91,10 @@ const BasicButtonStyles = css<ButtonProps>`
 
   & > svg {
     z-index: 2;
+    transition: ${Transitions.all};
+  }
+  & .blackPart,
+  & .primaryPart {
     transition: ${Transitions.all};
   }
 
@@ -176,7 +180,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
   background-color: ${Colors.Black[75]};
 
   & > svg {
-    color: ${Colors.Black[400]};
+    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
   }
 
   &:before {
@@ -228,12 +232,11 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   background-color: ${Colors.White};
 
   & > svg {
-    color: ${Colors.Black[400]};
+    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
   }
 
   &:before {
-    background-color: ${Colors.White};
-    border: 1px solid ${Colors.Blue[100]};
+    background-color: ${Colors.Black[50]};
   }
   &:after {
     background-color: ${Colors.Blue[50]};

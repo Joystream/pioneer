@@ -51,6 +51,8 @@ const BreadcrumbsItemComponent = styled.li`
   &:last-child {
     ${BreadcrumbsItemLink} {
       color: ${Colors.Black[400]};
+      cursor: auto;
+      pointer-events: none;
     }
   }
 `
