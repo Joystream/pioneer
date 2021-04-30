@@ -3,9 +3,11 @@
     "id": "0",
     "rootAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
     "controllerAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-    "name": "Alice Member",
+    "metadata": {
+      "name": "Alice Member",
+      "about": "Pudding muffin toffee bear claw cake. Jelly-o lemon drops icing dessert powder chocolate biscuit. Soufflé jujubes cake powder."
+    },
     "handle": "alice",
-    "about": "Pudding muffin toffee bear claw cake. Jelly-o lemon drops icing dessert powder chocolate biscuit. Soufflé jujubes cake powder.",
     "isVerified": true,
     "isFoundingMember": true,
     "inviteCount": 3,
@@ -16,9 +18,11 @@
     "id": "1",
     "rootAccount": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
     "controllerAccount": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
-    "name": "Bob Member",
     "handle": "bob",
-    "about": "Oat cake sesame snaps jelly-o jelly-o. Pudding muffin toffee bear claw cake. Croissant muffin bear claw biscuit danish. Jelly beans donut pastry sugar plum lollipop dragée. Jelly-o lemon drops icing dessert powder chocolate biscuit. Soufflé jujubes cake powder.",
+    "metadata":{
+      "name": "Bob Member",
+      "about": "Oat cake sesame snaps jelly-o jelly-o. Pudding muffin toffee bear claw cake. Croissant muffin bear claw biscuit danish. Jelly beans donut pastry sugar plum lollipop dragée. Jelly-o lemon drops icing dessert powder chocolate biscuit. Soufflé jujubes cake powder."
+    },
     "isVerified": true,
     "isFoundingMember": false,
     "inviteCount":  2,
@@ -30,9 +34,11 @@
     "id": "2",
     "rootAccount": "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw",
     "controllerAccount": "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL",
-    "name": "Landon Jimenez The Third",
     "handle": "silverswan131",
-    "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice.",
+    "metadata": {
+      "name": "Landon Jimenez The Third",
+      "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice."
+    },
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
@@ -44,9 +50,11 @@
     "id": "3",
     "rootAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
     "controllerAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
-    "name": "Some Member 4",
     "handle": "member 4",
-    "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice.",
+    "metadata": {
+      "name": "Some Member 4",
+      "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice."
+    },
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
@@ -57,9 +65,11 @@
     "id": "4",
     "rootAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
     "controllerAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
-    "name": "Some Member 5",
     "handle": "some_member_5",
-    "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice.",
+    "metadata": {
+      "name": "Some Member 5",
+      "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice."
+    },
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
@@ -70,9 +80,11 @@
     "id": "5",
     "rootAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
     "controllerAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
-    "name": "Some Member 6",
     "handle": "some_member_6",
-    "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice.",
+    "metadata": {
+      "name": "Some Member 6",
+      "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice."
+    },
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
@@ -83,9 +95,11 @@
     "id": "6",
     "rootAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
     "controllerAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
-    "name": "Some Member 7",
     "handle": "some_member_7",
-    "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice.",
+    "metadata": {
+      "name": "Some Member 7",
+      "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice."
+    },
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
@@ -96,9 +110,11 @@
     "id": "7",
     "rootAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
     "controllerAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
-    "name": "Some Member 8",
     "handle": "some_member_8",
-    "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice.",
+    "metadata": {
+      "name": "Some Member 8",
+      "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice."
+    },
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
@@ -109,9 +125,11 @@
     "id": "8",
     "rootAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
     "controllerAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
-    "name": "Some Member 9",
     "handle": "some_member_9",
-    "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice.",
+    "metadata": {
+      "name": "Some Member 9",
+      "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice."
+    },
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,
@@ -122,9 +140,11 @@
     "id": "9",
     "rootAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
     "controllerAccount": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
-    "name": "Some Member 10",
     "handle": "some_member_10",
-    "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice.",
+    "metadata": {
+      "name": "Some Member 10",
+      "about": "Wafer pudding powder liquorice pastry candy pastry gummi bears lollipop. Powder apple pie pastry. Bear claw candy brownie wafer. Gingerbread chocolate bar caramels. Powder caramels jelly-o chocolate bar tart donut oat cake danish. Halvah halvah cake. Ice cream pastry caramels pudding sugar plum. Oat cake chocolate cake lemon drops toffee gingerbread jelly. Croissant jelly beans sesame snaps powder sugar plum chocolate cake ice cream cupcake tiramisu. Cupcake carrot cake tiramisu soufflé danish cake jelly sweet roll soufflé. Oat cake cheesecake jelly. Tiramisu jelly-o sugar plum sugar plum soufflé candy canes croissant carrot cake. Bear claw oat cake powder cheesecake gingerbread macaroon liquorice liquorice."
+    },
     "isVerified": false,
     "isFoundingMember": false,
     "inviteCount":  5,

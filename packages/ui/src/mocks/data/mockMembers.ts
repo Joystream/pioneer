@@ -1,11 +1,12 @@
-import { Member } from '../../memberships/types'
+import { MemberFieldsFragment } from '@/memberships/queries'
 
 import rawMembers from './raw/members.json'
 
-export type MockMember = Member & {
-  registeredAtBlockId: number
-  invitedById?: string
-  registeredAtTime: string
+export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata'> & {
+  metadata: {
+    name: string
+    about: string
+  }
 }
 
 export const mockMembers: MockMember[] = rawMembers.map((rawMember) => {
@@ -18,14 +19,9 @@ export const mockMembers: MockMember[] = rawMembers.map((rawMember) => {
 export const seedMember = (member: MockMember, server: any) => {
   const temporary: any = { ...member }
 
-  if (temporary.invitedById) {
-    // TODO: Mirage: The membership model has multiple possible inverse associations for the membership.invitedBy association.
-    // temporary.invitedBy = membersMap.get(temporary.invitedById)
-    // delete temporary.invitedById
-  }
-
   return server.schema.create('Membership', {
     ...temporary,
+    metadata: server.schema.create('MemberMetadata', member.metadata),
   })
 }
 
