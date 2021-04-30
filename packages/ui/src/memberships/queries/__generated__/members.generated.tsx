@@ -1,6 +1,6 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
@@ -11,12 +11,10 @@ export type MemberFieldsFragment = {
   rootAccount: string
   controllerAccount: string
   handle: string
-  name?: Types.Maybe<string>
-  about?: Types.Maybe<string>
-  avatarUri?: Types.Maybe<string>
   isVerified: boolean
   isFoundingMember: boolean
   inviteCount: number
+  metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string>; about?: Types.Maybe<string> }
 }
 
 export type GetMembersQueryVariables = Types.Exact<{
@@ -43,7 +41,7 @@ export type GetMemberQueryVariables = Types.Exact<{
 
 export type GetMemberQuery = {
   __typename: 'Query'
-  membership?: Types.Maybe<{ __typename: 'Membership' } & MemberWithDetailsFragment>
+  membershipByUniqueInput?: Types.Maybe<{ __typename: 'Membership' } & MemberWithDetailsFragment>
 }
 
 export type SearchMembersQueryVariables = Types.Exact<{
@@ -62,9 +60,10 @@ export const MemberFieldsFragmentDoc = gql`
     rootAccount
     controllerAccount
     handle
-    name
-    about
-    avatarUri
+    metadata {
+      name
+      about
+    }
     isVerified
     isFoundingMember
     inviteCount
@@ -129,7 +128,7 @@ export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQ
 export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>
 export const GetMemberDocument = gql`
   query GetMember($id: ID!) {
-    membership(where: { id: $id }) {
+    membershipByUniqueInput(where: { id: $id }) {
       ...MemberWithDetails
     }
   }
@@ -167,7 +166,7 @@ export type GetMemberLazyQueryHookResult = ReturnType<typeof useGetMemberLazyQue
 export type GetMemberQueryResult = Apollo.QueryResult<GetMemberQuery, GetMemberQueryVariables>
 export const SearchMembersDocument = gql`
   query SearchMembers($text: String!, $limit: Int) {
-    memberships(where: { name_contains: $text, handle_contains: $text }, limit: $limit) {
+    memberships(where: { handle_contains: $text }, limit: $limit) {
       ...MemberFields
     }
   }

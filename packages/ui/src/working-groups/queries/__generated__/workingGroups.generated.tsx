@@ -1,20 +1,18 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
+
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
-export type WorkingGroupStatusFieldsFragment = {
-  __typename: 'WorkingGroupStatus'
-  name: string
+export type WorkingGroupMetdataFieldsFragment = {
+  __typename: 'WorkingGroupMetadata'
   about?: Types.Maybe<string>
   description?: Types.Maybe<string>
-  message?: Types.Maybe<string>
+  status?: Types.Maybe<string>
+  statusMessage?: Types.Maybe<string>
 }
 
 export type WorkerFieldsFragment = {
@@ -32,8 +30,8 @@ export type WorkingGroupFieldsFragment = {
   id: string
   name: string
   budget: any
-  status?: Types.Maybe<{ __typename: 'WorkingGroupStatus' } & WorkingGroupStatusFieldsFragment>
-  workers?: Types.Maybe<Array<{ __typename: 'Worker' } & WorkerFieldsFragment>>
+  metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetdataFieldsFragment>
+  workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment>
   leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
 }
 
@@ -52,11 +50,11 @@ export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename
 
 export type WorkingGroupOpeningMetadataFieldsFragment = {
   __typename: 'WorkingGroupOpeningMetadata'
-  applicationDetails: string
-  shortDescription: string
-  description: string
-  hiringLimit: number
-  expectedEnding: any
+  applicationDetails?: Types.Maybe<string>
+  shortDescription?: Types.Maybe<string>
+  description?: Types.Maybe<string>
+  hiringLimit?: Types.Maybe<number>
+  expectedEnding?: Types.Maybe<any>
 }
 
 export type WorkingGroupOpeningFieldsFragment = {
@@ -66,17 +64,16 @@ export type WorkingGroupOpeningFieldsFragment = {
   stakeAmount: any
   rewardPerBlock: any
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
-  applications?: Types.Maybe<
-    Array<{
-      __typename: 'WorkingGroupApplication'
-      id: string
-      status:
-        | { __typename: 'ApplicationStatusPending' }
-        | { __typename: 'ApplicationStatusAccepted' }
-        | { __typename: 'ApplicationStatusRejected' }
-        | { __typename: 'ApplicationStatusWithdrawn' }
-    }>
-  >
+  applications: Array<{
+    __typename: 'WorkingGroupApplication'
+    id: string
+    status:
+      | { __typename: 'ApplicationStatusPending' }
+      | { __typename: 'ApplicationStatusAccepted' }
+      | { __typename: 'ApplicationStatusRejected' }
+      | { __typename: 'ApplicationStatusWithdrawn' }
+      | { __typename: 'ApplicationStatusCancelled' }
+  }>
   status:
     | { __typename: 'OpeningStatusOpen' }
     | { __typename: 'OpeningStatusFilled' }
@@ -89,38 +86,38 @@ export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
 
 export type GetWorkingGroupOpeningsQuery = {
   __typename: 'Query'
-  workingGroupOpenings?: Types.Maybe<Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>>
+  workingGroupOpenings: Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>
 }
 
 export type GetWorkingGroupOpeningQueryVariables = Types.Exact<{
-  id?: Types.Maybe<Types.Scalars['ID']>
+  id: Types.Scalars['ID']
 }>
 
 export type GetWorkingGroupOpeningQuery = {
   __typename: 'Query'
-  workingGroupOpening?: Types.Maybe<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>
+  workingGroupOpeningByUniqueInput?: Types.Maybe<
+    { __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment
+  >
 }
 
 export type ApplicationQuestionFieldsFragment = {
   __typename: 'ApplicationFormQuestion'
   index: number
   type: Types.ApplicationFormQuestionType
-  question: string
+  question?: Types.Maybe<string>
 }
 
 export type GetWorkingGroupOpeningQuestionsQueryVariables = Types.Exact<{
-  id?: Types.Maybe<Types.Scalars['ID']>
+  id: Types.Scalars['ID']
 }>
 
 export type GetWorkingGroupOpeningQuestionsQuery = {
   __typename: 'Query'
-  workingGroupOpening?: Types.Maybe<{
+  workingGroupOpeningByUniqueInput?: Types.Maybe<{
     __typename: 'WorkingGroupOpening'
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
-      applicationFormQuestions?: Types.Maybe<
-        Array<{ __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment>
-      >
+      applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment>
     }
   }>
 }
@@ -131,14 +128,14 @@ export type GetWorkingGroupQueryVariables = Types.Exact<{
 
 export type GetWorkingGroupQuery = {
   __typename: 'Query'
-  workingGroup?: Types.Maybe<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
+  workingGroupByUniqueInput?: Types.Maybe<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
 }
 
 export type WorkingGroupApplicationFieldsFragment = {
   __typename: 'WorkingGroupApplication'
   id: string
   stakingAccount: string
-  createdAtTime: any
+  createdAt: any
   opening: {
     __typename: 'WorkingGroupOpening'
     type: Types.WorkingGroupOpeningType
@@ -151,18 +148,17 @@ export type WorkingGroupApplicationFieldsFragment = {
     | { __typename: 'ApplicationStatusAccepted' }
     | { __typename: 'ApplicationStatusRejected' }
     | { __typename: 'ApplicationStatusWithdrawn' }
+    | { __typename: 'ApplicationStatusCancelled' }
   createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
 }
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
-  applicant_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
+  applicantId_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
 }>
 
 export type GetWorkingGroupApplicationsQuery = {
   __typename: 'Query'
-  workingGroupApplications?: Types.Maybe<
-    Array<{ __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment>
-  >
+  workingGroupApplications: Array<{ __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment>
 }
 
 export type ApplicationFormQuestionAnswerFieldsFragment = {
@@ -177,17 +173,17 @@ export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
 
 export type GetApplicationFormQuestionAnswerQuery = {
   __typename: 'Query'
-  applicationFormQuestionAnswers?: Types.Maybe<
-    Array<{ __typename: 'ApplicationFormQuestionAnswer' } & ApplicationFormQuestionAnswerFieldsFragment>
+  applicationFormQuestionAnswers: Array<
+    { __typename: 'ApplicationFormQuestionAnswer' } & ApplicationFormQuestionAnswerFieldsFragment
   >
 }
 
-export const WorkingGroupStatusFieldsFragmentDoc = gql`
-  fragment WorkingGroupStatusFields on WorkingGroupStatus {
-    name
+export const WorkingGroupMetdataFieldsFragmentDoc = gql`
+  fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
     about
     description
-    message
+    status
+    statusMessage
   }
 `
 export const WorkerFieldsFragmentDoc = gql`
@@ -209,8 +205,8 @@ export const WorkingGroupFieldsFragmentDoc = gql`
     id
     name
     budget
-    status {
-      ...WorkingGroupStatusFields
+    metadata {
+      ...WorkingGroupMetdataFields
     }
     workers {
       ...WorkerFields
@@ -221,7 +217,7 @@ export const WorkingGroupFieldsFragmentDoc = gql`
       }
     }
   }
-  ${WorkingGroupStatusFieldsFragmentDoc}
+  ${WorkingGroupMetdataFieldsFragmentDoc}
   ${WorkerFieldsFragmentDoc}
 `
 export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
@@ -271,7 +267,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       __typename
     }
     stakingAccount
-    createdAtTime
+    createdAt
     createdAtBlock {
       ...BlockFields
     }
@@ -422,8 +418,8 @@ export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningsQueryVariables
 >
 export const GetWorkingGroupOpeningDocument = gql`
-  query getWorkingGroupOpening($id: ID) {
-    workingGroupOpening(where: { id: $id }) {
+  query getWorkingGroupOpening($id: ID!) {
+    workingGroupOpeningByUniqueInput(where: { id: $id }) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -447,7 +443,7 @@ export const GetWorkingGroupOpeningDocument = gql`
  * });
  */
 export function useGetWorkingGroupOpeningQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>(
@@ -471,8 +467,8 @@ export type GetWorkingGroupOpeningQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningQueryVariables
 >
 export const GetWorkingGroupOpeningQuestionsDocument = gql`
-  query GetWorkingGroupOpeningQuestions($id: ID) {
-    workingGroupOpening(where: { id: $id }) {
+  query GetWorkingGroupOpeningQuestions($id: ID!) {
+    workingGroupOpeningByUniqueInput(where: { id: $id }) {
       metadata {
         applicationFormQuestions {
           ...ApplicationQuestionFields
@@ -500,7 +496,7 @@ export const GetWorkingGroupOpeningQuestionsDocument = gql`
  * });
  */
 export function useGetWorkingGroupOpeningQuestionsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     GetWorkingGroupOpeningQuestionsQuery,
     GetWorkingGroupOpeningQuestionsQueryVariables
   >
@@ -533,7 +529,7 @@ export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<
 >
 export const GetWorkingGroupDocument = gql`
   query GetWorkingGroup($id: ID!) {
-    workingGroup(where: { id: $id }) {
+    workingGroupByUniqueInput(where: { id: $id }) {
       ...WorkingGroupFields
     }
   }
@@ -572,8 +568,8 @@ export type GetWorkingGroupQueryHookResult = ReturnType<typeof useGetWorkingGrou
 export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupLazyQuery>
 export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 export const GetWorkingGroupApplicationsDocument = gql`
-  query GetWorkingGroupApplications($applicant_in: [ID!]) {
-    workingGroupApplications(where: { applicant_in: $applicant_in }) {
+  query GetWorkingGroupApplications($applicantId_in: [ID!]) {
+    workingGroupApplications(where: { applicantId_in: $applicantId_in }) {
       ...WorkingGroupApplicationFields
     }
   }
@@ -592,7 +588,7 @@ export const GetWorkingGroupApplicationsDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupApplicationsQuery({
  *   variables: {
- *      applicant_in: // value for 'applicant_in'
+ *      applicantId_in: // value for 'applicantId_in'
  *   },
  * });
  */
