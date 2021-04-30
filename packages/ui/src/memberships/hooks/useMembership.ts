@@ -29,5 +29,8 @@ export function useMember(memberId?: string): UseMember {
     console.error(error)
   }
 
-  return { member: data?.membership ? asMemberWithDetails(data.membership) : undefined, isLoading: loading }
+  return {
+    member: data?.membershipByUniqueInput ? asMemberWithDetails(data.membershipByUniqueInput) : undefined,
+    isLoading: loading,
+  }
 }

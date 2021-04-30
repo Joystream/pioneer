@@ -11,7 +11,7 @@ type QuestionType = 'TEXT' | 'TEXTAREA'
 
 export function asQuestionAnswer(fragment: ApplicationFormQuestionAnswerFieldsFragment): ApplicationQuestionAnswer {
   return {
-    question: fragment.question.question,
+    question: fragment.question?.question ?? '',
     answer: fragment.answer,
     questionIndex: fragment.question.index,
     questionType: fragment.question.type,

@@ -11,7 +11,7 @@ interface UseMyApplications {
 
 export function useMyApplications(): UseMyApplications {
   const { members } = useMyMemberships()
-  const params = { variables: { applicant_in: members.map((m) => m.id) } }
+  const params = { variables: { applicantId_in: members.map((m) => m.id) } }
   const { loading, data } = useGetWorkingGroupApplicationsQuery(params)
   const applications = useMemo(() => data?.workingGroupApplications?.map(asApplication), [loading, data])
   return { isLoading: loading, applications }
