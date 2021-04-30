@@ -37,7 +37,7 @@ export const Select = <T extends any>({
   )
 
   useEffect(() => {
-    if (selected) {
+    if (typeof selected !== 'undefined') {
       setSelectedOption(selected)
       onChange(selected)
     }
@@ -79,8 +79,10 @@ export const Select = <T extends any>({
   return (
     <SelectComponent ref={selectNode}>
       <Toggle onClick={onToggleClick} isOpen={isOpen} disabled={disabled}>
-        {selectedOption && !isOpen && <SelectedOption>{renderSelected(selectedOption)}</SelectedOption>}
-        {(!selectedOption || isOpen) && (
+        {typeof selectedOption !== 'undefined' && !isOpen && (
+          <SelectedOption>{renderSelected(selectedOption)}</SelectedOption>
+        )}
+        {(typeof selectedOption === 'undefined' || isOpen) && (
           <EmptyOption
             ref={textInput}
             type="text"
