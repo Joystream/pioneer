@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import { ToggleButton } from '../../../common/components/buttons/Toggle'
 import { Subscription } from '../../../common/components/typography/Subscription'
 import { Colors, Overflow, Transitions } from '../../../common/constants'
 
@@ -102,4 +103,8 @@ export const OpenedTop = styled.div`
   grid-template-rows: 26px 28px;
   grid-row-gap: 8px;
   align-items: center;
+`
+
+export const OpeningToggleButton = styled(ToggleButton)`
+  top: 8px;
 `

@@ -44,10 +44,12 @@ export const MemberDetails = React.memo(({ member }: Props) => {
 
   return (
     <SidePaneTable>
-      <SidePaneColumn>
-        <SidePaneLabel text="About" />
-        <SidePaneText>{memberDetails?.about || ''}</SidePaneText>
-      </SidePaneColumn>
+      {memberDetails?.about && (
+        <SidePaneColumn>
+          <SidePaneLabel text="About" />
+          <SidePaneText>{memberDetails.about}</SidePaneText>
+        </SidePaneColumn>
+      )}
       <SidePaneRow>
         <SidePaneLabel text="Registered on" />
         <AboutDateColumn time={memberDetails.registeredAtTime} block={registeredAtBlock} />
