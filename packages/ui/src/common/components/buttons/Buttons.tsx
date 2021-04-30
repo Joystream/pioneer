@@ -93,6 +93,10 @@ const BasicButtonStyles = css<ButtonProps>`
     z-index: 2;
     transition: ${Transitions.all};
   }
+  & .blackPart,
+  & .primaryPart {
+    transition: ${Transitions.all};
+  }
 
   &:before,
   &:after {
@@ -232,8 +236,7 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   }
 
   &:before {
-    background-color: ${Colors.White};
-    border: 1px solid ${Colors.Blue[100]};
+    background-color: ${Colors.Black[50]};
   }
   &:after {
     background-color: ${Colors.Blue[50]};
