@@ -18,7 +18,8 @@ export function CopyButton({ textToCopy, className, disabled }: CopyButtonProps)
   return (
     <CopyButtonIcon
       disabled={disabled}
-      onClick={() => {
+      onClick={(evt) => {
+        evt.stopPropagation()
         if (textToCopy && !disabled) {
           try {
             navigator.clipboard.writeText(textToCopy)

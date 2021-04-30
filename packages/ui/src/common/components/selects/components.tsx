@@ -84,6 +84,12 @@ export const OptionComponentContainer = styled.li`
   border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.s};
   background-color: transparent;
+
+  &:hover {
+    .accountName {
+      color: ${Colors.Blue[500]};
+    }
+  }
 `
 
 export const OptionComponent = styled.div`

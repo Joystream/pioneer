@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { CopyComponent } from '../../common/components/CopyComponent'
-import { BorderRad, Colors } from '../../common/constants'
+import { BorderRad, Colors, Transitions } from '../../common/constants'
 import { shortenAddress } from '../../common/model/formatters'
 import { Address } from '../../common/types'
 import { useMyMemberships } from '../../memberships/hooks/useMyMemberships'
@@ -20,7 +20,7 @@ export const AccountInfo = React.memo(({ account }: { account: Account }) => {
         <Identicon size={40} theme={'beachball'} value={account.address} />
       </AccountPhoto>
       {active && <OptionalAccountType active={active} address={account.address} />}
-      <AccountName>{account.name}</AccountName>
+      <AccountName className="accountName">{account.name}</AccountName>
       <AccountCopyAddress altText={shortenAddress(account.address)} copyText={account.address} />
     </AccountInfoWrap>
   )
@@ -70,6 +70,7 @@ const AccountName = styled.h5`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: ${Transitions.all};
 `
 
 interface OptionalAccountTypeParams {
