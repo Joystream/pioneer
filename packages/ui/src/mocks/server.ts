@@ -43,7 +43,6 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
 
   const membershipModel = schema.modelFor('membership')
   // "Mirage: The membership model has multiple possible inverse associations for the membership.invitedBy association."
-  console.log(membershipModel.class.prototype.associations)
   membershipModel.class.prototype.associations.invitedBy.opts.inverse = 'invitees'
   membershipModel.class.prototype.associations.invitees.opts.inverse = 'invitedBy'
 }

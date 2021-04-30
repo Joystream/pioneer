@@ -72,7 +72,6 @@ export const Select = <T extends any>({
   }, [isOpen])
 
   const onToggleClick = () => {
-    console.log('onToggleClick.....')
     !isOpen && !disabled && toggleOpen()
   }
 
