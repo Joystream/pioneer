@@ -61,6 +61,7 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
       <ClearBtn
         onClick={() => {
           dispatch({ type: 'clear' })
+          onApply?.(NoFilter)
         }}
       >
         Clear all Filters
