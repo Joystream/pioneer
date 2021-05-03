@@ -99,7 +99,6 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
           value={onlyVerified}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'onlyVerified', value })
-            console.log('onlyVerified', value)
           }}
         >
           <VerifiedMemberIcon />
