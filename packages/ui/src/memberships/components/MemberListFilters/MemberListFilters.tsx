@@ -7,7 +7,7 @@ import { FounderMemberIcon, VerifiedMemberIcon } from '../../../common/component
 import { SimpleSelect } from '../../../common/components/selects'
 import { Colors } from '../../../common/constants'
 
-interface MemberListFilter {
+export interface MemberListFilter {
   search: string
   role: string | null
   concil: boolean | null
