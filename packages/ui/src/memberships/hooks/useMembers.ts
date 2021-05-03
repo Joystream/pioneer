@@ -16,7 +16,7 @@ interface UseMembers {
   members: Member[]
 }
 
-export const useMembers = ({ order }: UseMemberProps): UseMembers => {
+export const useMembers = ({ order, filter }: UseMemberProps): UseMembers => {
   const { data, loading, error } = useGetMembersQuery({
     variables: { orderBy: orderToGqlInput(order) },
   })

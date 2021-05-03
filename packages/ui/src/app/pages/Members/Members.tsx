@@ -1,6 +1,7 @@
-import React, { useReducer } from 'react'
+import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
+import { MemberRolesList } from '@/memberships/components/MemberRoles'
+import React, { useReducer, useState } from 'react'
 
-import { Loading } from '../../../common/components/Loading'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { MemberList } from '../../../memberships/components/MemberList'
@@ -12,17 +13,21 @@ const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberL
   isDescending: sortBy === order.sortBy && !order.isDescending,
 })
 
+const Roles = Object.fromEntries(MemberRolesList.map(({ abbreviation }) => [abbreviation, abbreviation]))
+
 export const Members = () => {
   const crumbs = [{ href: '#', text: 'Members' }]
+  const [filter, setFilter] = useState(MemberListEmptyFilter)
   const [order, dispatchSort] = useReducer(sortReducer, { sortBy: 'id', isDescending: false })
 
-  const { members, isLoading } = useMembers({ order })
+  const { members, isLoading } = useMembers({ order, filter })
 
   return (
     <AppPage crumbs={crumbs}>
       <PageHeader>
         <PageTitle>Members</PageTitle>
-        {isLoading ? <Loading /> : <MemberList members={members} order={order} onSort={dispatchSort} />}
+        <MemberListFilters roles={Roles} onApply={setFilter} />
+        <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
       </PageHeader>
     </AppPage>
   )
