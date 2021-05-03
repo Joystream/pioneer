@@ -10,28 +10,20 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { StatisticItem, Statistics, TokenValueStat, DurationStatistics } from '@/common/components/statistics'
 import useOpening from '@/working-groups/hooks/useOpening'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, opening } = useOpening(id)
-  const crumbs = useMemo(
-    () => [
-      { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'Upcoming Opening' },
-    ],
-    []
-  )
 
   if (isLoading || !opening) {
     return <Loading />
   }
 
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage>
       <PageHeader>
         <PreviousPage>
           <PageTitle>{opening.title}</PageTitle>

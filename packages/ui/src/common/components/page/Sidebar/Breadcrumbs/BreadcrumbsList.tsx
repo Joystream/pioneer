@@ -1,17 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
+import useBreadcrumbs from 'use-react-router-breadcrumbs'
 
-import { BreadcrumbsItem, BreadcrumbsItemProps } from './BreadcrumbsItem'
+import { BreadcrumbsItem } from './BreadcrumbsItem'
 
 export interface BreadcrumbsListProps {
-  crumbs: Array<BreadcrumbsItemProps>
+  objectName?: string
 }
 
-export function BreadcrumbsList({ crumbs }: BreadcrumbsListProps) {
+export function BreadcrumbsList({ objectName }: BreadcrumbsListProps) {
+  const crumbs = useBreadcrumbs()
   return (
     <BreadcrumbsListComponent>
-      {crumbs.map(({ href, text }, index) => (
-        <BreadcrumbsItem key={index} href={href} text={text} />
+      {crumbs.map(({ match, key }, index) => (
+        <BreadcrumbsItem key={index} href={match.url} text={key} />
       ))}
     </BreadcrumbsListComponent>
   )

@@ -7,19 +7,12 @@ import { AppPage } from '../../components/AppPage'
 import { Memberships } from './components/Memberships'
 import { MyProfileTabs } from './components/MyProfileTabs'
 
-export const MyMemberships = () => {
-  const crumbs = [
-    { href: '#', text: 'My Profile' },
-    { href: '#', text: 'My Memberships' },
-  ]
-
-  return (
-    <AppPage crumbs={crumbs}>
-      <PageHeader>
-        <PageTitle>My Profile</PageTitle>
-        <MyProfileTabs />
-      </PageHeader>
-      <Memberships />
-    </AppPage>
-  )
-}
+export const MyMemberships = () => (
+  <AppPage>
+    <PageHeader>
+      <PageTitle>My Profile</PageTitle>
+      <MyProfileTabs />
+    </PageHeader>
+    <Memberships />
+  </AppPage>
+)
