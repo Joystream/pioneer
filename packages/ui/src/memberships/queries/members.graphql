@@ -23,6 +23,35 @@ query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!], $
   }
 }
 
+query FilterMembers(
+  $id: ID
+  $search: String
+  $isVerified: Boolean
+  # $isFoundingMember: Boolean!
+  # $isConcil: Boolean!
+  # role:
+  $orderBy: MembershipOrderByInput
+  $limit: Int
+  $offset: Int
+) {
+  memberships(
+    where: {
+      id_eq: $id
+      name_contains: $search
+      handle_contains: $search
+      isVerified_eq: $isVerified
+      # isFoundingMember_eq: $isFoundingMember
+      # isConcil_eq: $isConcil
+      # role_contains: $role
+    }
+    orderBy: $orderBy
+    limit: $limit
+    offset: $offset
+  ) {
+    ...MemberFields
+  }
+}
+
 fragment MemberWithDetails on Membership {
   ...MemberFields
   registeredAtTime

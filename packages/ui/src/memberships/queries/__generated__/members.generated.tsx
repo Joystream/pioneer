@@ -28,6 +28,20 @@ export type GetMembersQuery = {
   memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 }
 
+export type FilterMembersQueryVariables = Types.Exact<{
+  id?: Types.Maybe<Types.Scalars['ID']>
+  search?: Types.Maybe<Types.Scalars['String']>
+  isVerified?: Types.Maybe<Types.Scalars['Boolean']>
+  orderBy?: Types.Maybe<Types.MembershipOrderByInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type FilterMembersQuery = {
+  __typename: 'Query'
+  memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
+}
+
 export type MemberWithDetailsFragment = {
   __typename: 'Membership'
   registeredAtTime: any
@@ -126,6 +140,63 @@ export function useGetMembersLazyQuery(
 export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>
 export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>
+export const FilterMembersDocument = gql`
+  query FilterMembers(
+    $id: ID
+    $search: String
+    $isVerified: Boolean
+    $orderBy: MembershipOrderByInput
+    $limit: Int
+    $offset: Int
+  ) {
+    memberships(
+      where: { id_eq: $id, name_contains: $search, handle_contains: $search, isVerified_eq: $isVerified }
+      orderBy: $orderBy
+      limit: $limit
+      offset: $offset
+    ) {
+      ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+
+/**
+ * __useFilterMembersQuery__
+ *
+ * To run a query within a React component, call `useFilterMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFilterMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFilterMembersQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      search: // value for 'search'
+ *      isVerified: // value for 'isVerified'
+ *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useFilterMembersQuery(
+  baseOptions?: Apollo.QueryHookOptions<FilterMembersQuery, FilterMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<FilterMembersQuery, FilterMembersQueryVariables>(FilterMembersDocument, options)
+}
+export function useFilterMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FilterMembersQuery, FilterMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<FilterMembersQuery, FilterMembersQueryVariables>(FilterMembersDocument, options)
+}
+export type FilterMembersQueryHookResult = ReturnType<typeof useFilterMembersQuery>
+export type FilterMembersLazyQueryHookResult = ReturnType<typeof useFilterMembersLazyQuery>
+export type FilterMembersQueryResult = Apollo.QueryResult<FilterMembersQuery, FilterMembersQueryVariables>
 export const GetMemberDocument = gql`
   query GetMember($id: ID!) {
     membershipByUniqueInput(where: { id: $id }) {

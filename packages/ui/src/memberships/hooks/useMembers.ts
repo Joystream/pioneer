@@ -1,5 +1,7 @@
+import { MemberListFilter } from '@/memberships/components/MemberListFilters'
+
 import { MembershipOrderByInput } from '../../common/api/queries'
-import { useGetMembersQuery } from '../queries'
+import { useFilterMembersQuery, FilterMembersQueryVariables } from '../queries'
 import { asMember, Member } from '../types'
 
 export type MemberListSortKey = 'id' | 'handle'
@@ -10,6 +12,7 @@ export interface MemberListOrder {
 
 interface UseMemberProps {
   order: MemberListOrder
+  filter: MemberListFilter
 }
 interface UseMembers {
   isLoading: boolean
@@ -17,8 +20,11 @@ interface UseMembers {
 }
 
 export const useMembers = ({ order, filter }: UseMemberProps): UseMembers => {
-  const { data, loading, error } = useGetMembersQuery({
-    variables: { orderBy: orderToGqlInput(order) },
+  const { data, loading, error } = useFilterMembersQuery({
+    variables: {
+      ...filterToGqlInput(filter),
+      orderBy: orderToGqlInput(order),
+    },
   })
 
   if (error) {
@@ -42,3 +48,10 @@ const orderToGqlInput = ({ sortBy, isDescending }: MemberListOrder): MembershipO
 
   throw new Error(`Unsupported sort key: "${sortBy}" for Member Order`)
 }
+
+type FilterGqlInput = Pick<FilterMembersQueryVariables, 'id' | 'search' | 'isVerified'>
+const filterToGqlInput = ({ search, onlyVerified }: MemberListFilter): FilterGqlInput => ({
+  id: /^#\d+$/.test(search) ? search.slice(1) : /^\d+$/.test(search) ? search : undefined,
+  search,
+  isVerified: onlyVerified ? true : undefined,
+})
