@@ -22,7 +22,7 @@ interface RawOpeningMock {
   }
   unstakingPeriod: number
   rewardPerBlock: number
-  createdAtBlock: number
+  createdAtBlockId: number
   createdAtTime: string
 }
 
@@ -48,10 +48,12 @@ export function seedOpening(openingData: RawOpeningMock, server: any) {
   rawMetadata.applicationFormQuestions = []
 
   const metadata = server.schema.create('WorkingGroupOpeningMetadata', rawMetadata)
+  const openingStatus = getOpeningStatus(openingData.status as OpeningStatusType, server)
+
   const opening = server.schema.create('WorkingGroupOpening', {
     ...openingData,
     metadata: metadata,
-    status: getOpeningStatus(openingData.status as OpeningStatusType, server),
+    status: openingStatus,
   })
 
   for (const question of questions) {
@@ -75,6 +77,6 @@ export const seedOpeningStatuses = (server: any) => {
     openingFilledEventID: 0,
   })
   server.schema.create('OpeningStatusOpen', {
-    _phantom: 0,
+    phantom: 0,
   })
 }

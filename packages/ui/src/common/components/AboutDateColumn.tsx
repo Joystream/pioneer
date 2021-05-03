@@ -19,7 +19,7 @@ export const AboutDateColumn = React.memo(({ time, block }: Props) => (
     <AboutText>{formatDateString(time)}</AboutText>
     <BlockInfo>
       <BlockIcon />
-      <BlockNumber>{formatTokenValue(block.block)}</BlockNumber>
+      <BlockNumber>{formatTokenValue(block.number)}</BlockNumber>
       <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>
     </BlockInfo>
   </Column>

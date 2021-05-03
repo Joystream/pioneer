@@ -3,7 +3,7 @@ import { asWorkingGroup } from '../types'
 
 export function useWorkingGroup(id: string) {
   const { data, loading } = useGetWorkingGroupQuery({ variables: { id } })
-  const group = data?.workingGroup
+  const group = data?.workingGroupByUniqueInput
 
   return {
     isLoading: loading,

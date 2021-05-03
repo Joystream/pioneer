@@ -89,7 +89,7 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
   const isMatch = getMatcher(text)
 
   const { models } = schema.where('Membership', (member: MemberFieldsFragment) => {
-    return isMatch(member.handle) || isMatch(member.name) || isMatch(member.id)
+    return isMatch(member.handle) || isMatch(member.metadata.name) || isMatch(member.id)
   })
 
   return limit ? models.slice(0, limit) : models
@@ -151,7 +151,7 @@ export const getWorkingGroupApplicationsResolver: QueryResolver<
   { where: GetWorkingGroupApplicationsQueryVariables },
   GetWorkingGroupApplicationsQueryResult[]
 > = (obj, args, { mirageSchema: schema }) => {
-  const applicantIds = args.where.applicant_in
+  const applicantIds = args.where.applicantId_in
 
   const { models } = applicantIds
     ? schema.where('WorkingGroupApplication', (application: MockApplication) =>

@@ -1,26 +1,32 @@
 [
   {
-    "id": "block-1",
     "network": "Babylon",
-    "block": 321001,
+    "number": 321001,
     "timestamp": "2021-03-09T10:18:04.155Z"
   },
   {
-    "id": "block-2",
     "network": "Babylon",
-    "block": 321002,
+    "number": 321002,
     "timestamp": "2021-03-09T10:28:04.155Z"
   },
   {
-    "id": "block-3",
     "network": "Babylon",
-    "block": 321003,
+    "number": 321003,
     "timestamp": "2021-03-09T10:38:04.155Z"
   },
   {
-    "id": "block-4",
     "network": "Babylon",
-    "block": 321004,
+    "number": 321004,
     "timestamp": "2021-03-10T10:38:04.155Z"
+  },
+  {
+    "network": "Babylon",
+    "number": 321005,
+    "timestamp": "2021-03-11T10:38:04.155Z"
+  },
+  {
+    "network": "Babylon",
+    "number": 321006,
+    "timestamp": "2021-03-12T10:38:04.155Z"
   }
 ]
