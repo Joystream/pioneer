@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { ChangeEvent, useReducer } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '../../../common/components/buttons/Buttons'
@@ -14,28 +14,13 @@ export interface MemberListFilter {
   onlyVerified: boolean
   onlyFounder: boolean
 }
+type FilterKey = keyof MemberListFilter
 
-const CouncilOpts = {
-  All: null,
-  Yes: true,
-  no: false,
-}
-
-type Action =
-  | { type: 'clear' }
-  | { type: 'change'; field: 'search'; value: MemberListFilter['search'] }
-  | { type: 'change'; field: 'role'; value: MemberListFilter['role'] }
-  | { type: 'change'; field: 'concil'; value: MemberListFilter['concil'] }
-  | { type: 'change'; field: 'onlyVerified'; value: MemberListFilter['onlyVerified'] }
-  | { type: 'change'; field: 'onlyFounder'; value: MemberListFilter['onlyFounder'] }
-
-export const MemberListEmptyFilter: MemberListFilter = {
-  search: '',
-  role: null,
-  concil: CouncilOpts.All,
-  onlyVerified: false,
-  onlyFounder: false,
-}
+type Clear = { type: 'clear' }
+type Change<K extends FilterKey = FilterKey> = K extends FilterKey // Use a conditional type in order to distribue the union type
+  ? { type: 'change'; field: K; value: MemberListFilter[K] }
+  : never
+type Action = Clear | Change
 
 const filterReducer = (filters: MemberListFilter, action: Action): MemberListFilter => {
   switch (action.type) {
@@ -46,6 +31,20 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
       return { ...filters, [action.field]: action.value }
   }
   return filters
+}
+
+const CouncilOpts = {
+  All: null,
+  Yes: true,
+  no: false,
+}
+
+export const MemberListEmptyFilter: MemberListFilter = {
+  search: '',
+  role: null,
+  concil: CouncilOpts.All,
+  onlyVerified: false,
+  onlyFounder: false,
 }
 
 interface MemberListFiltersProps {
@@ -72,7 +71,7 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
           <InputText
             placeholder="Search"
             value={search}
-            onChange={(evt) => {
+            onChange={(evt: ChangeEvent<HTMLInputElement>) => {
               const { value } = evt.target
               dispatch({ type: 'change', field: 'search', value })
             }}
