@@ -29,7 +29,7 @@ type Action =
   | { type: 'change'; field: 'onlyVerified'; value: MemberListFilter['onlyVerified'] }
   | { type: 'change'; field: 'onlyFounder'; value: MemberListFilter['onlyFounder'] }
 
-const NoFilter: MemberListFilter = {
+export const MemberListEmptyFilter: MemberListFilter = {
   search: '',
   role: null,
   concil: CouncilOpts.All,
@@ -40,7 +40,7 @@ const NoFilter: MemberListFilter = {
 const filterReducer = (filters: MemberListFilter, action: Action): MemberListFilter => {
   switch (action.type) {
     case 'clear':
-      return NoFilter
+      return MemberListEmptyFilter
 
     case 'change':
       return { ...filters, [action.field]: action.value }
@@ -53,7 +53,7 @@ interface MemberListFiltersProps {
   onApply?: (value: MemberListFilter) => void
 }
 export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) => {
-  const [filters, dispatch] = useReducer(filterReducer, NoFilter)
+  const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
   const { search, role, concil, onlyVerified, onlyFounder } = filters
 
   return (
@@ -61,7 +61,7 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
       <ClearBtn
         onClick={() => {
           dispatch({ type: 'clear' })
-          onApply?.(NoFilter)
+          onApply?.(MemberListEmptyFilter)
         }}
       >
         Clear all Filters
