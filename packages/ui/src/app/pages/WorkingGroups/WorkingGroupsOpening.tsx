@@ -1,3 +1,7 @@
+import React, { useMemo } from 'react'
+import { useParams } from 'react-router-dom'
+import styled from 'styled-components'
+
 import { AppPage } from '@/app/components/AppPage'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { ButtonGhost } from '@/common/components/buttons/Buttons'
@@ -10,9 +14,6 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { StatisticItem, Statistics, TokenValueStat, DurationStatistics } from '@/common/components/statistics'
 import useOpening from '@/working-groups/hooks/useOpening'
-import React, { useMemo } from 'react'
-import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
 
 const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
