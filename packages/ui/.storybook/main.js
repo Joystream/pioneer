@@ -3,6 +3,8 @@ const path = require('path')
 
 const { styles } = require('@ckeditor/ckeditor5-dev-utils')
 
+const shared = require('./../dev/webpack.shared')
+
 module.exports = {
   webpackFinal: (config) => {
     config.module.rules.forEach((rule) => {
@@ -17,17 +19,8 @@ module.exports = {
       }
     })
 
-    config.resolve = {
-      extensions: ['.tsx', '.ts', '.js'],
-      fallback: {
-        crypto: require.resolve('crypto-browserify'),
-        stream: require.resolve('stream-browserify'),
-        path: false,
-      },
-      alias: {
-        '@': path.resolve(__dirname, '..', 'src')
-      }
-    }
+    config.resolve = shared.resolve
+
     config.plugins.push(
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],

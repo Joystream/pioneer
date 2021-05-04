@@ -7,6 +7,8 @@ const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
+const shared = require('./dev/webpack.shared')
+
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 
 module.exports = (env, argv) => ({
@@ -79,16 +81,7 @@ module.exports = (env, argv) => ({
       },
     ],
   },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    fallback: {
-      crypto: require.resolve('crypto-browserify'),
-      stream: require.resolve('stream-browserify'),
-    },
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    }
-  },
+  resolve: shared.resolve,
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'build'),
