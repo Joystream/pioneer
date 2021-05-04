@@ -41,7 +41,11 @@ const Template: Story = () => {
             modal: null,
           }}
         >
-          <ApplyForRoleSuccessModal />
+          <ApplyForRoleSuccessModal
+            stake={new BN(100_000)}
+            stakeAccount={{ name: 'My Account', address: '0xXXXX' }}
+            applicationId={123}
+          />
         </ModalContext.Provider>
       </HashRouter>
     </>

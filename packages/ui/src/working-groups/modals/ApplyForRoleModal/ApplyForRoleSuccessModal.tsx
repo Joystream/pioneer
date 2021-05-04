@@ -1,9 +1,12 @@
+import BN from 'bn.js'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { ButtonGhost } from '@/common/components/buttons'
+import { Account } from '@/accounts/types'
+import { ButtonGhostMedium } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalFooter, ModalHeader, Row } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Stepper } from '@/common/components/Stepper'
 import {
   StepDescriptionColumn,
@@ -11,6 +14,7 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
@@ -18,7 +22,13 @@ import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 import { ApplyForRoleModalCall } from '.'
 import { steps } from './model'
 
-export const ApplyForRoleSuccessModal = () => {
+interface Props {
+  stake: BN
+  stakeAccount: Account
+  applicationId: number
+}
+
+export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId }: Props) => {
   const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
 
   return (
@@ -30,15 +40,35 @@ export const ApplyForRoleSuccessModal = () => {
           <StepDescriptionColumn>
             <OpeningFormPreview opening={modalData.opening} />
           </StepDescriptionColumn>
-          <StepperBody>...</StepperBody>
+          <StepperBody>
+            <RowGapBlock gap={24}>
+              <Row>
+                <RowGapBlock gap={8}>
+                  <h4>Application submitted!</h4>
+                  <TextMedium>
+                    Here is your application id: {applicationId} You can track the progress of you application in "
+                    <Link to="/working-groups/my-applications">My applications subpage</Link>".
+                  </TextMedium>
+                </RowGapBlock>
+              </Row>
+              <Row>
+                <RowGapBlock gap={20}>
+                  <div>
+                    <h5>Staked</h5>
+                    <TextMedium>
+                      You have just staked <TokenValue value={stake} /> from your "{stakeAccount.name}" account.
+                    </TextMedium>
+                  </div>
+                </RowGapBlock>
+              </Row>
+            </RowGapBlock>
+          </StepperBody>
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <Link to={'/working-groups/my-applications'}>
-          <ButtonGhost size="medium">
-            Go to my applications
-            <Arrow direction="right" />
-          </ButtonGhost>
+        <Link to="/working-groups/my-applications" component={ButtonGhostMedium}>
+          Go to my applications
+          <Arrow direction="right" />
         </Link>
       </ModalFooter>
     </Modal>

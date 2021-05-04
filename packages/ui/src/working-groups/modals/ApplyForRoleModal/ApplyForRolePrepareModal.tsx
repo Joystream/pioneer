@@ -11,18 +11,18 @@ import {
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
 import { useModal } from '@/common/hooks/useModal'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { WorkingGroupOpening } from '@/working-groups/types'
 
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 import { useOpeningQuestions } from '../../hooks/useOpeningQuestions'
 
-import { ApplyForRoleModalCall, OpeningParams } from '.'
 import { ApplicationStep } from './ApplicationStep'
 import { steps } from './model'
 import { StakeStep, StakeStepForm } from './StakeStep'
 
 interface Props {
-  onSubmit: (params: OpeningParams) => void
+  onSubmit: (stake: StakeStepForm, answers: Record<string, any>) => void
+  opening: WorkingGroupOpening
 }
 
 type ActionStepInfo = {
@@ -48,12 +48,8 @@ const stepsReducer: Reducer<Record<number, { data: any; isValid: boolean }>, Act
   }
 }
 
-export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
-  const { active } = useMyMemberships()
-  const {
-    hideModal,
-    modalData: { opening },
-  } = useModal<ApplyForRoleModalCall>()
+export const ApplyForRolePrepareModal = ({ onSubmit, opening }: Props) => {
+  const { hideModal } = useModal()
   const [step, setStep] = useState(0)
   const { questions } = useOpeningQuestions({ id: opening.id })
   const [state, dispatch] = useReducer(stepsReducer, {
@@ -63,18 +59,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit }: Props) => {
 
   const nextStep = useCallback(() => {
     if (step >= 1) {
-      const stakeForm = state[0].data as StakeStepForm
-      onSubmit({
-        opening_id: opening.id,
-        member_id: active?.id,
-        role_account_id: active?.controllerAccount,
-        reward_account_id: active?.rootAccount,
-        description: JSON.stringify(state[1].data), // TODO This should be applicaiton metedata
-        stake_parameters: {
-          stake: stakeForm.amount,
-          stake_account_id: stakeForm.account?.address,
-        },
-      })
+      onSubmit(state[0].data, state[0].data)
     } else {
       setStep((step) => step + 1)
     }

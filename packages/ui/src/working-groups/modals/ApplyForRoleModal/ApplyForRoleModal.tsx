@@ -2,11 +2,14 @@ import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
-import { FailureModal } from '../../../common/components/FailureModal'
-import { useApi } from '../../../common/hooks/useApi'
-import { useModal } from '../../../common/hooks/useModal'
-import { ModalState } from '../../../common/types'
-import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
+import { Account } from '@/accounts/types'
+import { FailureModal } from '@/common/components/FailureModal'
+import { useApi } from '@/common/hooks/useApi'
+import { useModal } from '@/common/hooks/useModal'
+import { ModalState } from '@/common/types'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal/index'
+import { StakeStepForm } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 
 import { ApplyForRolePrepareModal } from './ApplyForRolePrepareModal'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
@@ -20,9 +23,11 @@ export type OpeningParams = Exclude<
 export const ApplyForRoleModal = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
-  const { hideModal } = useModal()
+  const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
+  const opening = modalData.opening
   const [state, setState] = useState<ModalState>('PREPARE')
   const [txParams, setTxParams] = useState<OpeningParams | undefined>(undefined)
+  const [stakeAccount, setStakeAccount] = useState<Account>()
   const transaction = useMemo(() => {
     return txParams && api?.tx?.membershipWorkingGroup.applyOnOpening(txParams)
   }, [api, JSON.stringify(txParams)])
@@ -32,14 +37,23 @@ export const ApplyForRoleModal = () => {
   const stake = new BN(txParams?.stake_parameters.stake ?? 0)
 
   if (state === 'PREPARE') {
-    return (
-      <ApplyForRolePrepareModal
-        onSubmit={(params) => {
-          setTxParams(params)
-          setState('AUTHORIZE')
-        }}
-      />
-    )
+    const onSubmit = (stake: StakeStepForm, answers: Record<string, any>) => {
+      setStakeAccount(stake.account)
+      setTxParams({
+        opening_id: opening.id,
+        member_id: active?.id,
+        role_account_id: active?.controllerAccount,
+        reward_account_id: active?.rootAccount,
+        description: JSON.stringify(answers),
+        stake_parameters: {
+          stake: stake.amount,
+          stake_account_id: stake.account?.address,
+        },
+      })
+      setState('AUTHORIZE')
+    }
+
+    return <ApplyForRolePrepareModal onSubmit={onSubmit} opening={opening} />
   }
 
   if (state === 'AUTHORIZE' && signer) {
@@ -54,8 +68,8 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state === 'SUCCESS') {
-    return <ApplyForRoleSuccessModal onClose={hideModal} />
+  if (state === 'SUCCESS' && stake && stakeAccount) {
+    return <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={123} />
   }
 
   return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>
