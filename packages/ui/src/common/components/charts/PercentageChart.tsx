@@ -12,7 +12,7 @@ export interface PercentageChartProps {
 
 export const PercentageChart = ({ percentage, className, isOnBlack }: PercentageChartProps) => {
   return (
-    <PercentageChartContainer className={className} onBlack={isOnBlack}>
+    <PercentageChartContainer className={className} isOnBlack={isOnBlack}>
       <PercentageChartBorder>
         <PercentageChartText value>{Math.min(percentage, 100)}%</PercentageChartText>
         <PercentageChartSvg viewBox="0 0 34 34" fill="none" color="currentColor">
@@ -23,7 +23,7 @@ export const PercentageChart = ({ percentage, className, isOnBlack }: Percentage
   )
 }
 
-const PercentageChartContainer = styled.div<{ onBlack?: boolean }>`
+const PercentageChartContainer = styled.div<{ isOnBlack?: boolean }>`
   display: flex;
   position: relative;
   justify-content: center;
@@ -31,7 +31,7 @@ const PercentageChartContainer = styled.div<{ onBlack?: boolean }>`
   width: 44px;
   height: 44px;
   padding: 1px;
-  color: ${({ onBlack }) => (onBlack ? Colors.White : Colors.Black[900])};
+  color: ${({ isOnBlack }) => (isOnBlack ? Colors.White : Colors.Black[900])};
   overflow: hidden;
 `
 
