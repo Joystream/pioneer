@@ -1,9 +1,9 @@
 import BN from 'bn.js'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { Account } from '@/accounts/types'
-import { ButtonGhostMedium } from '@/common/components/buttons'
+import { ButtonGhost } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader, Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -30,6 +30,7 @@ interface Props {
 
 export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId }: Props) => {
   const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
+  const { push } = useHistory()
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
@@ -66,10 +67,10 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId }:
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <Link to="/working-groups/my-applications" component={ButtonGhostMedium}>
+        <ButtonGhost onClick={() => push('/working-groups/my-applications')}>
           Go to my applications
           <Arrow direction="right" />
-        </Link>
+        </ButtonGhost>
       </ModalFooter>
     </Modal>
   )
