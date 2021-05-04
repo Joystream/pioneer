@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const cp = require('child_process')
 const path = require('path')
 
-const { styles } = require('@ckeditor/ckeditor5-dev-utils')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -38,33 +38,7 @@ module.exports = (env, argv) => {
     plugins: plugins,
     module: {
       rules: [
-        {
-          test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
-          use: ['raw-loader'],
-        },
-        {
-          test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
-          use: [
-            {
-              loader: 'style-loader',
-              options: {
-                injectType: 'singletonStyleTag',
-                attributes: {
-                  'data-cke': true,
-                },
-              },
-            },
-            {
-              loader: 'postcss-loader',
-              options: styles.getPostCssConfig({
-                themeImporter: {
-                  themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
-                },
-                minify: true,
-              }),
-            },
-          ],
-        },
+        ...shared.rules,
         {
           test: /\.tsx?$/,
           use: 'ts-loader',
