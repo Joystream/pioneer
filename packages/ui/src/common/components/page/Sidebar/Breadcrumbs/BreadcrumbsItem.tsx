@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { Colors, Transitions, Fonts } from '../../../../constants'
 
 export interface BreadcrumbsItemProps {
   href: string
-  text: string
+  children: ReactNode
 }
 
-export function BreadcrumbsItem({ href, text }: BreadcrumbsItemProps) {
+export function BreadcrumbsItem({ href, children }: BreadcrumbsItemProps) {
   return (
     <BreadcrumbsItemComponent>
-      <BreadcrumbsItemLink href={href}>{text}</BreadcrumbsItemLink>
+      <BreadcrumbsItemLink href={href}>{children}</BreadcrumbsItemLink>
     </BreadcrumbsItemComponent>
   )
 }

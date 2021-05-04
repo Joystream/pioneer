@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import useBreadcrumbs from 'use-react-router-breadcrumbs'
 
+import { routesList, excludePaths } from '../../../../model/breadcrumbs'
+
 import { BreadcrumbsItem } from './BreadcrumbsItem'
 
 export interface BreadcrumbsListProps {
@@ -9,11 +11,13 @@ export interface BreadcrumbsListProps {
 }
 
 export function BreadcrumbsList({ objectName }: BreadcrumbsListProps) {
-  const crumbs = useBreadcrumbs()
+  const crumbs = useBreadcrumbs(routesList, { excludePaths })
   return (
     <BreadcrumbsListComponent>
-      {crumbs.map(({ match, key }, index) => (
-        <BreadcrumbsItem key={index} href={match.url} text={key} />
+      {crumbs.map(({ match: { url }, breadcrumb, key }) => (
+        <BreadcrumbsItem key={key} href={url}>
+          {breadcrumb}
+        </BreadcrumbsItem>
       ))}
     </BreadcrumbsListComponent>
   )
