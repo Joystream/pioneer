@@ -1,25 +1,25 @@
 import React, { Reducer, useCallback, useReducer, useState } from 'react'
 
-import { ButtonPrimary } from '../../../common/components/buttons'
-import { Arrow } from '../../../common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '../../../common/components/Modal'
-import { Stepper } from '../../../common/components/Stepper'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { Arrow } from '@/common/components/icons'
+import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Stepper } from '@/common/components/Stepper'
 import {
   StepDescriptionColumn,
   StepperBody,
   StepperModalBody,
   StepperModalWrapper,
-} from '../../../common/components/StepperModal'
-import { useModal } from '../../../common/hooks/useModal'
-import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
+} from '@/common/components/StepperModal'
+import { useModal } from '@/common/hooks/useModal'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 import { useOpeningQuestions } from '../../hooks/useOpeningQuestions'
 
 import { ApplyForRoleModalCall, OpeningParams } from '.'
 import { ApplicationStep } from './ApplicationStep'
+import { steps } from './model'
 import { StakeStep, StakeStepForm } from './StakeStep'
-
-const steps = [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }]
 
 interface Props {
   onSubmit: (params: OpeningParams) => void

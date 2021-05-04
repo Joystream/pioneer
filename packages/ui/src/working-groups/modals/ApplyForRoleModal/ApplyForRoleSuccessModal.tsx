@@ -1,31 +1,46 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-import { SuccessIcon } from '../../../common/components/icons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
-import { TextMedium } from '../../../common/components/typography'
+import { ButtonGhost } from '@/common/components/buttons'
+import { Arrow } from '@/common/components/icons'
+import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Stepper } from '@/common/components/Stepper'
+import {
+  StepDescriptionColumn,
+  StepperBody,
+  StepperModalBody,
+  StepperModalWrapper,
+} from '@/common/components/StepperModal'
+import { useModal } from '@/common/hooks/useModal'
 
-interface Props {
-  onClose: () => void
-}
+import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 
-type SuccessModalProps = { onClose: () => void; children: ReactNode }
+import { ApplyForRoleModalCall } from '.'
+import { steps } from './model'
 
-const SuccessModal = ({ onClose, children }: SuccessModalProps) => {
+export const ApplyForRoleSuccessModal = () => {
+  const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
+
   return (
-    <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
-      {children}
+    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+      <ModalHeader onClick={hideModal} title="Applying for role" />
+      <StepperModalBody>
+        <StepperModalWrapper>
+          <Stepper steps={steps} active={2} />
+          <StepDescriptionColumn>
+            <OpeningFormPreview opening={modalData.opening} />
+          </StepDescriptionColumn>
+          <StepperBody>...</StepperBody>
+        </StepperModalWrapper>
+      </StepperModalBody>
+      <ModalFooter>
+        <Link to={'/working-groups/my-applications'}>
+          <ButtonGhost size="medium">
+            Go to my applications
+            <Arrow direction="right" />
+          </ButtonGhost>
+        </Link>
+      </ModalFooter>
     </Modal>
-  )
-}
-
-export const ApplyForRoleSuccessModal = ({ onClose }: Props) => {
-  return (
-    <SuccessModal onClose={onClose}>
-      <ModalBody>
-        <TextMedium>You have just successfully applier for a role.</TextMedium>
-      </ModalBody>
-      <ModalFooter />
-    </SuccessModal>
   )
 }
