@@ -23,7 +23,7 @@ const WorkingGroupOpening = () => {
   }
 
   return (
-    <AppPage>
+    <AppPage objectName={opening.title}>
       <PageHeader>
         <PreviousPage>
           <PageTitle>{opening.title}</PageTitle>

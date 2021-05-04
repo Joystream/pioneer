@@ -1,22 +1,23 @@
 import React, { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Colors, Transitions, Fonts } from '../../../../constants'
 
 export interface BreadcrumbsItemProps {
-  href: string
+  url: string
   children: ReactNode
 }
 
-export function BreadcrumbsItem({ href, children }: BreadcrumbsItemProps) {
+export function BreadcrumbsItem({ url, children }: BreadcrumbsItemProps) {
   return (
     <BreadcrumbsItemComponent>
-      <BreadcrumbsItemLink href={href}>{children}</BreadcrumbsItemLink>
+      <BreadcrumbsItemLink to={url}>{children}</BreadcrumbsItemLink>
     </BreadcrumbsItemComponent>
   )
 }
 
-const BreadcrumbsItemLink = styled.a`
+const BreadcrumbsItemLink = styled(Link)`
   font-size: 10px;
   line-height: 16px;
   color: ${Colors.Black[500]};

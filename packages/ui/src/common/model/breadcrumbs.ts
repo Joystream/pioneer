@@ -1,4 +1,4 @@
-export const routesList = [
+export const knownRoutes = [
   { path: '/profile', breadcrumb: 'My Profile' },
   { path: '/profile/memberships', breadcrumb: 'My Memberships' },
   { path: '/working-groups', breadcrumb: 'Working Groups' },
