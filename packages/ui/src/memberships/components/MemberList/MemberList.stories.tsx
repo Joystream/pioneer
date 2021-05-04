@@ -1,6 +1,7 @@
-import { asMember } from '@/memberships/types'
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
+
+import { asMember } from '@/memberships/types'
 
 import { mockMembers } from '../../../mocks/data/mockMembers'
 
