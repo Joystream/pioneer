@@ -25,8 +25,8 @@ export const App = () => (
       <Switch>
         <Route exact path="/profile" component={MyAccounts} />
         <Route exact path="/profile/memberships" component={MyMemberships} />
-        <Route exact path="/working-groups" component={WorkingGroupsOpenings} />
-        <Route exact path="/working-groups/working-groups" component={WorkingGroups} />
+        <Route exact path="/working-groups" component={WorkingGroups} />
+        <Route exact path="/working-groups/openings" component={WorkingGroupsOpenings} />
         <Route exact path="/working-groups/my-applications" component={MyApplications} />
         <Route exact path="/working-groups/my-roles" component={MyRoles} />
         <Route exact path="/working-groups/grouppreview/:id" component={WorkingGroup} />
