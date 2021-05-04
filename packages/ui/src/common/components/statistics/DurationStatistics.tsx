@@ -1,8 +1,9 @@
+import React from 'react'
+import styled from 'styled-components'
+
 import { Colors, Fonts } from '@/common/constants'
 import { dateFromNow } from '@/common/model/formatters'
 import { spacing } from '@/common/utils/styles'
-import React from 'react'
-import styled from 'styled-components'
 
 import { StatisticItem, StatisticItemProps } from './StatisticItem'
 
