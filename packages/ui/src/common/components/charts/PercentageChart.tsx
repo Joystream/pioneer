@@ -6,13 +6,13 @@ import { TextInlineSmall } from '../typography'
 
 export interface PercentageChartProps {
   percentage: number
-  onBlack?: boolean
+  isOnBlack?: boolean
   className?: string
 }
 
-export const PercentageChart = ({ percentage, className, onBlack }: PercentageChartProps) => {
+export const PercentageChart = ({ percentage, className, isOnBlack }: PercentageChartProps) => {
   return (
-    <PercentageChartContainer className={className} onBlack={onBlack}>
+    <PercentageChartContainer className={className} onBlack={isOnBlack}>
       <PercentageChartBorder>
         <PercentageChartText value>{Math.min(percentage, 100)}%</PercentageChartText>
         <PercentageChartSvg viewBox="0 0 34 34" fill="none" color="currentColor">
