@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { ButtonPrimary } from '../../../common/components/buttons/Buttons'
 import { InputComponent, InputText, TogglableIcon } from '../../../common/components/forms'
-import { FounderMemberIcon, VerifiedMemberIcon } from '../../../common/components/icons'
+import { FounderMemberIcon, SearchIcon, VerifiedMemberIcon } from '../../../common/components/icons'
 import { SimpleSelect } from '../../../common/components/selects'
 import { Colors } from '../../../common/constants'
 
@@ -67,7 +67,7 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
       </ClearBtn>
 
       <Fields>
-        <InputComponent icon={<>🔍</>} /* TODO replace by the actual icon */>
+        <InputComponent icon={<SearchIcon />}>
           <InputText
             placeholder="Search"
             value={search}
