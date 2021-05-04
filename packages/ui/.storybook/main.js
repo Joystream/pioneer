@@ -20,13 +20,8 @@ module.exports = {
     })
 
     config.resolve = shared.resolve
+    config.plugins.push(...shared.plugins)
 
-    config.plugins.push(
-      new webpack.ProvidePlugin({
-        Buffer: ['buffer', 'Buffer'],
-        process: 'process/browser.js',
-      })
-    )
     config.module.rules.unshift(
       {
         test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,

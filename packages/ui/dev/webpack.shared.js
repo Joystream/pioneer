@@ -1,5 +1,7 @@
 const path = require('path')
 
+const webpack = require('webpack')
+
 const resolve = {
   extensions: ['.tsx', '.ts', '.js'],
   fallback: {
@@ -11,6 +13,14 @@ const resolve = {
   },
 }
 
+const plugins = [
+  new webpack.ProvidePlugin({
+    Buffer: ['buffer', 'Buffer'],
+    process: 'process/browser.js',
+  }),
+]
+
 module.exports = {
   resolve,
+  plugins,
 }
