@@ -1,7 +1,7 @@
-import { isDefined } from '@/common/utils'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useToggle } from '../../hooks/useToggle'
+import { isDefined } from '../../utils'
 import { Toggle } from '../buttons/Toggle'
 
 import { EmptyOption, SelectComponent, SelectedOption, SelectToggleButton } from './components'

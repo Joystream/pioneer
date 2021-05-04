@@ -1,8 +1,8 @@
-import { isDefined } from '@/common/utils'
 import React, { useEffect, useReducer, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Colors } from '../../constants'
+import { isDefined } from '../../utils'
 import { ControlProps } from '../forms'
 
 import { Select } from '.'
