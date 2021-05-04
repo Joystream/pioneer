@@ -1,3 +1,4 @@
+import { isDefined } from '@/common/utils'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useToggle } from '../../hooks/useToggle'
@@ -10,6 +11,8 @@ export const Select = <T extends any>({
   disabled,
   placeholder,
   selected,
+  alwaysShowValue,
+  setToggle,
   onChange,
   onSearch,
   renderSelected,
@@ -23,7 +26,13 @@ export const Select = <T extends any>({
   const textInput = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    onSearch(search)
+    setToggle?.(() => () => {
+      toggleOpen()
+    })
+  }, [])
+
+  useEffect(() => {
+    onSearch?.(search)
   }, [search])
 
   const onOptionClick = useCallback(
@@ -37,7 +46,7 @@ export const Select = <T extends any>({
   )
 
   useEffect(() => {
-    if (typeof selected !== 'undefined') {
+    if (isDefined(selected)) {
       setSelectedOption(selected)
       onChange(selected)
     }
@@ -77,12 +86,11 @@ export const Select = <T extends any>({
   }
 
   return (
-    <SelectComponent ref={selectNode}>
+    <SelectComponent ref={selectNode} tabIndex={-1}>
       <Toggle onClick={onToggleClick} isOpen={isOpen} disabled={disabled}>
-        {typeof selectedOption !== 'undefined' && !isOpen && (
+        {isDefined(selectedOption) && (alwaysShowValue || !isOpen) ? (
           <SelectedOption>{renderSelected(selectedOption)}</SelectedOption>
-        )}
-        {(typeof selectedOption === 'undefined' || isOpen) && (
+        ) : (
           <EmptyOption
             ref={textInput}
             type="text"
@@ -93,6 +101,7 @@ export const Select = <T extends any>({
             onChange={(t) => setFilterInput(t.target.value)}
           />
         )}
+
         <SelectToggleButton
           isOpen={isOpen}
           disabled={disabled}
