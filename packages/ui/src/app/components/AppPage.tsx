@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { PageContent } from '../../common/components/page/PageContent'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
+import { breadcrumbsOptions } from '../constants/breadcrumbs'
 
 interface AppPageProps {
   lastBreadcrumb?: string
@@ -11,7 +12,7 @@ interface AppPageProps {
 
 export const AppPage = ({ children, lastBreadcrumb }: AppPageProps) => (
   <PageContent>
-    <Breadcrumbs lastBreadcrumb={lastBreadcrumb} />
+    <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
     <PageContainer>{children}</PageContainer>
   </PageContent>
 )

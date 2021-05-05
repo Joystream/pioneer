@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
+import { breadcrumbsOptions } from '../../src/app/constants/breadcrumbs'
 import { Breadcrumbs } from '../../src/common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
-
 
 const location = {
   key: '',
@@ -28,7 +28,7 @@ describe('Breadcrumbs', () => {
   function renderCrumbs() {
     render(
       <HashRouter>
-        <Breadcrumbs />
+        <Breadcrumbs breadcrumbsOptions={breadcrumbsOptions} />
       </HashRouter>
     )
   }

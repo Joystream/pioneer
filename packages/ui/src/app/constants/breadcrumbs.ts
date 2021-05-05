@@ -1,4 +1,4 @@
-export const knownRoutes = [
+const knownRoutes = [
   { path: '/profile', breadcrumb: 'My Profile' },
   { path: '/profile/memberships', breadcrumb: 'My Memberships' },
   { path: '/working-groups', breadcrumb: 'Working Groups' },
@@ -8,4 +8,11 @@ export const knownRoutes = [
   { path: '/members', breadcrumb: 'Members' },
 ]
 
-export const excludePaths = ['/', '/working-groups/grouppreview']
+const excludePaths = ['/', '/working-groups/grouppreview']
+
+export const breadcrumbsOptions: BreadcrumbsOptions = { knownRoutes, excludePaths }
+
+export interface BreadcrumbsOptions {
+  knownRoutes: { path: string; breadcrumb: string }[]
+  excludePaths: string[]
+}
