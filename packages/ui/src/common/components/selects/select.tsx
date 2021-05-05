@@ -61,7 +61,7 @@ export const Select = <T extends any>({
 
   useEffect(() => {
     const escListener = (event: KeyboardEvent) => {
-      if (isOpen && event.key === 'Escape') {
+      if (isOpen && ['Tab', 'Escape'].includes(event.key)) {
         toggleOpen()
         setFilterInput('')
       }
@@ -87,10 +87,6 @@ export const Select = <T extends any>({
       stopEvent(evt)
       onNavigate?.(evt)
       ;(!isOpen || key === 'Enter') && toggleOpen()
-    } else if (['Escape', 'Tab'].includes(key) && isOpen) {
-      // Tab should propagate when the select closed but just close the select when it's open
-      stopEvent(evt)
-      toggleOpen()
     }
   }
 
