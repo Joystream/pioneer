@@ -15,8 +15,8 @@ export const BreadcrumbsList = React.memo(
     const crumbs = useBreadcrumbs(routesList, { excludePaths })
     return (
       <BreadcrumbsListComponent>
-        {crumbs.map(({ match: { url }, breadcrumb, key }) => (
-          <BreadcrumbsItem key={key} url={url}>
+        {crumbs.map(({ match: { url }, breadcrumb, key }, index, { length }) => (
+          <BreadcrumbsItem key={key} url={url} isLink={index < length - 1}>
             {breadcrumb}
           </BreadcrumbsItem>
         ))}
