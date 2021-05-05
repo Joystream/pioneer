@@ -80,7 +80,7 @@ export const BuyMembershipModal = () => {
     return <BuyMembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
-  if (step === 'AUTHORIZE' || !id) {
+  if (step === 'AUTHORIZE') {
     return (
       <BuyMembershipSignModal
         onClose={onClose}
@@ -93,7 +93,7 @@ export const BuyMembershipModal = () => {
     )
   }
 
-  if (step === 'SUCCESS') {
+  if (step === 'SUCCESS' && id) {
     return <BuyMembershipSuccessModal onClose={onClose} member={formData} memberId={id.toString()} />
   }
 
