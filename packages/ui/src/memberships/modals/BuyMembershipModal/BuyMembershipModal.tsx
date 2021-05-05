@@ -1,5 +1,8 @@
+import { MemberId } from '@joystream/types/common'
 import { EventRecord } from '@polkadot/types/interfaces'
 import React, { useContext, useMemo, useState } from 'react'
+
+import { getEventParam } from '@/common/model/JoystreamNode'
 
 import { FailureModal } from '../../../common/components/FailureModal'
 import { useApi } from '../../../common/hooks/useApi'
@@ -20,7 +23,7 @@ export const BuyMembershipModal = () => {
   const [step, setStep] = useState<ModalState>('PREPARE')
   const [formData, setParams] = useState<FormFields>()
   const server = useContext(ServerContext)
-  const [id, setId] = useState<string>()
+  const [id, setId] = useState<MemberId>()
 
   const onSubmit = (params: FormFields) => {
     setStep('AUTHORIZE')
@@ -49,11 +52,12 @@ export const BuyMembershipModal = () => {
     () =>
       formData
         ? (result: boolean, events: EventRecord[]) => {
-            const memberId = events.find((event) => event.event.method === 'MemberRegistered')?.event.data[0].toString()
+            const memberId = getEventParam<MemberId>(events, 'MemberRegistered')
             setId(memberId)
+
             if (server && memberId) {
               server.schema.create('Membership', {
-                id: id,
+                id: memberId.toString(),
                 rootAccount: formData.rootAccount?.address,
                 controllerAccount: formData.controllerAccount?.address,
                 name: formData.name,
@@ -76,7 +80,7 @@ export const BuyMembershipModal = () => {
     return <BuyMembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
-  if (step === 'AUTHORIZE') {
+  if (step === 'AUTHORIZE' || !id) {
     return (
       <BuyMembershipSignModal
         onClose={onClose}
@@ -90,7 +94,7 @@ export const BuyMembershipModal = () => {
   }
 
   if (step === 'SUCCESS') {
-    return <BuyMembershipSuccessModal onClose={onClose} member={formData} memberId={id} />
+    return <BuyMembershipSuccessModal onClose={onClose} member={formData} memberId={id.toString()} />
   }
 
   return (
