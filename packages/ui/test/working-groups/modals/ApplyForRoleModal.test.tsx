@@ -192,12 +192,13 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Success step', async () => {
-      stubTransactionSuccess(tx, [])
+      stubTransactionSuccess(tx, ['EventParams', 1337], 'workingGroup', 'AppliedOnOpening')
       await fillSteps()
 
       fireEvent.click(screen.getByText(/^Sign transaction and Stake$/i))
 
       expect(await screen.findByText('Application submitted!')).toBeDefined()
+      expect(await screen.findByText(/application id: 1337/i)).toBeDefined()
     })
 
     it('Failure step', async () => {

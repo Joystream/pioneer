@@ -1,4 +1,5 @@
 import { ApiRx } from '@polkadot/api'
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
@@ -31,9 +32,15 @@ export const ApplyForRoleModal = () => {
   const transaction = useMemo(() => {
     return txParams && api?.tx?.membershipWorkingGroup.applyOnOpening(txParams)
   }, [api, JSON.stringify(txParams)])
+  const [applicationId, setApplicationId] = useState<string>()
 
   const signer = active?.controllerAccount
-  const onDone = (result: boolean) => setState(result ? 'SUCCESS' : 'ERROR')
+  const onDone = (result: boolean, events: EventRecord[]) => {
+    const applicationId = events.find((event) => event.event.method === 'AppliedOnOpening')?.event.data[1].toString()
+
+    setApplicationId(applicationId)
+    setState(result ? 'SUCCESS' : 'ERROR')
+  }
   const stake = new BN(txParams?.stake_parameters.stake ?? 0)
 
   if (state === 'PREPARE') {
@@ -68,8 +75,8 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state === 'SUCCESS' && stake && stakeAccount) {
-    return <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={123} />
+  if (state === 'SUCCESS' && stake && stakeAccount && applicationId) {
+    return <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={applicationId} />
   }
 
   return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>

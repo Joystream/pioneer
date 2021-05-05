@@ -25,7 +25,7 @@ import { steps } from './model'
 interface Props {
   stake: BN
   stakeAccount: Account
-  applicationId: number
+  applicationId: string
 }
 
 export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId }: Props) => {
