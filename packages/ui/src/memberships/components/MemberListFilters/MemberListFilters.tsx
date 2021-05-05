@@ -129,7 +129,8 @@ const ClearBtn = styled.button`
   font: inherit;
   line-height: normal;
   appearance: none;
-  font-smoothing: inherit;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
 `
 
 const MemberListFiltersContainer = styled.div`
