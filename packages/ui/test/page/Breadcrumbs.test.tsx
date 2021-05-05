@@ -25,10 +25,25 @@ describe('Breadcrumbs', () => {
     expect(screen.getByText('My Profile')).toBeDefined()
   })
 
-  function renderCrumbs() {
+  it('Path containing an excluded element', () => {
+    location.pathname = '/working-groups/grouppreview'
+    renderCrumbs()
+    expect(screen.getByText('Working Groups')).toBeDefined()
+    expect(screen.findAllByText(/preview/i)).toMatchObject({})
+  })
+
+  it('With named last crumb', () => {
+    location.pathname = '/working-groups/openings/3'
+    renderCrumbs('Distribution Leader')
+    expect(screen.getByText('Working Groups')).toBeDefined()
+    expect(screen.getByText('Openings')).toBeDefined()
+    expect(screen.getByText('Distribution Leader')).toBeDefined()
+  })
+
+  function renderCrumbs(lastBreadcrumb: string | undefined = undefined) {
     render(
       <HashRouter>
-        <Breadcrumbs breadcrumbsOptions={breadcrumbsOptions} />
+        <Breadcrumbs breadcrumbsOptions={breadcrumbsOptions} lastBreadcrumb={lastBreadcrumb} />
       </HashRouter>
     )
   }
