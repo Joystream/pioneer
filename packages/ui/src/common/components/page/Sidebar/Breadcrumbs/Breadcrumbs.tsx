@@ -1,16 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BreadcrumbsList, BreadcrumbsListProps } from './BreadcrumbsList'
+import { BreadcrumbsList } from './BreadcrumbsList'
 import { HomeLink } from './HomeLink'
 
-export type BreadcrumbsNavProps = BreadcrumbsListProps
-
-export const Breadcrumbs = React.memo(({ objectName }: BreadcrumbsNavProps) => {
+export const Breadcrumbs = React.memo(({ lastBreadcrumb }: { lastBreadcrumb?: string }) => {
   return (
     <BreadcrumbsNavigation>
       <HomeLink />
-      <BreadcrumbsList objectName={objectName} />
+      <BreadcrumbsList lastBreadcrumb={lastBreadcrumb} />
     </BreadcrumbsNavigation>
   )
 })

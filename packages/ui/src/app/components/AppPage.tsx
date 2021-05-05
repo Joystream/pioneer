@@ -5,13 +5,13 @@ import { PageContent } from '../../common/components/page/PageContent'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 
 interface AppPageProps {
-  objectName?: string
+  lastBreadcrumb?: string
   children: ReactNode
 }
 
-export const AppPage = ({ children, objectName }: AppPageProps) => (
+export const AppPage = ({ children, lastBreadcrumb }: AppPageProps) => (
   <PageContent>
-    <Breadcrumbs objectName={objectName} />
+    <Breadcrumbs lastBreadcrumb={lastBreadcrumb} />
     <PageContainer>{children}</PageContainer>
   </PageContent>
 )

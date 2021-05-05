@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -24,7 +24,7 @@ const WorkingGroupOpening = () => {
   }
 
   return (
-    <AppPage objectName={opening.title}>
+    <AppPage lastBreadcrumb={opening.title}>
       <PageHeader>
         <PreviousPage>
           <PageTitle>{opening.title}</PageTitle>

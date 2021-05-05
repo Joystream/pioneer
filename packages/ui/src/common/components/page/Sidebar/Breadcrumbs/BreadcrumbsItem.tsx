@@ -9,13 +9,13 @@ export interface BreadcrumbsItemProps {
   children: ReactNode
 }
 
-export function BreadcrumbsItem({ url, children }: BreadcrumbsItemProps) {
+export const BreadcrumbsItem = React.memo(({ url, children }: BreadcrumbsItemProps) => {
   return (
     <BreadcrumbsItemComponent>
       <BreadcrumbsItemLink to={url}>{children}</BreadcrumbsItemLink>
     </BreadcrumbsItemComponent>
   )
-}
+})
 
 const BreadcrumbsItemLink = styled(Link)`
   font-size: 10px;
