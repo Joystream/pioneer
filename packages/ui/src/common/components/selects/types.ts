@@ -5,7 +5,7 @@ export interface SelectProps<T> {
   placeholder: string
   selected?: T
   alwaysShowValue?: boolean
-  setToggle?: React.Dispatch<React.SetStateAction<(() => void) | undefined>>
+  onNavigate?: React.KeyboardEventHandler
   onChange: (selected: T) => void
   onSearch?: (search: string) => void
   renderSelected: (option: T) => ReactNode

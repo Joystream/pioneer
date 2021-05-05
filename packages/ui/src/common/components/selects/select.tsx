@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useToggle } from '../../hooks/useToggle'
 import { isDefined } from '../../utils'
+import { stopEvent } from '../../utils/events'
 import { Toggle } from '../buttons/Toggle'
 
 import { EmptyOption, SelectComponent, SelectedOption, SelectToggleButton } from './components'
@@ -12,7 +13,7 @@ export const Select = <T extends any>({
   placeholder,
   selected,
   alwaysShowValue,
-  setToggle,
+  onNavigate,
   onChange,
   onSearch,
   renderSelected,
@@ -24,12 +25,6 @@ export const Select = <T extends any>({
   const [selectedOption, setSelectedOption] = useState<T | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
   const textInput = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    setToggle?.(() => () => {
-      toggleOpen()
-    })
-  }, [])
 
   useEffect(() => {
     onSearch?.(search)
@@ -80,13 +75,27 @@ export const Select = <T extends any>({
     isOpen && textInput.current?.focus()
   }, [isOpen])
 
-  const onToggleClick = () => {
-    console.log('onToggleClick.....')
-    !isOpen && !disabled && toggleOpen()
+  const onToggleClick: React.MouseEventHandler = (evt) => {
+    stopEvent(evt)
+    !disabled && toggleOpen()
+  }
+
+  const onKeyDown: React.KeyboardEventHandler = (evt) => {
+    const { key } = evt
+    if (['ArrowDown', 'ArrowUp', 'Enter'].includes(key)) {
+      // These interaction should open the select when it's closed (and enter should always toggle it)
+      stopEvent(evt)
+      onNavigate?.(evt)
+      ;(!isOpen || key === 'Enter') && toggleOpen()
+    } else if (['Escape', 'Tab'].includes(key) && isOpen) {
+      // Tab should propagate when the select closed but just close the select when it's open
+      stopEvent(evt)
+      toggleOpen()
+    }
   }
 
   return (
-    <SelectComponent ref={selectNode} tabIndex={-1}>
+    <SelectComponent ref={selectNode} tabIndex={-1} onKeyDown={onKeyDown}>
       <Toggle onClick={onToggleClick} isOpen={isOpen} disabled={disabled}>
         {isDefined(selectedOption) && (alwaysShowValue || !isOpen) ? (
           <SelectedOption>{renderSelected(selectedOption)}</SelectedOption>
@@ -102,14 +111,7 @@ export const Select = <T extends any>({
           />
         )}
 
-        <SelectToggleButton
-          isOpen={isOpen}
-          disabled={disabled}
-          onToggleClick={(evt) => {
-            evt.stopPropagation()
-            toggleOpen()
-          }}
-        />
+        <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />
       </Toggle>
       {isOpen && renderList(onOptionClick)}
     </SelectComponent>

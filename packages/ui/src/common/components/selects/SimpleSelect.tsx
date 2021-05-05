@@ -1,23 +1,21 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useReducer } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Colors } from '../../constants'
 import { isDefined } from '../../utils'
+import { stopEvent } from '../../utils/events'
 import { ControlProps } from '../forms'
 
 import { Select } from '.'
-
-let timeout: ReturnType<typeof setTimeout>
 
 interface SimpleSelectProps<T> extends ControlProps<T> {
   title?: string
   options: { [label: string]: T }
 }
 
-type Search<T> = { type: 'search'; entries: [string, T][]; search: string }
 type Move<T> = { type: 'move'; entries: [string, T][]; step: number }
 type Set<T> = { type: 'set'; value: T | undefined }
-type Action<T> = Search<T> | Move<T> | Set<T>
+type Action<T> = Move<T> | Set<T>
 
 type FocusReducer<T> = (value: T | undefined, action: Action<T>) => T | undefined
 
@@ -28,13 +26,8 @@ const selectFocusReducer = <T extends any>(value: T | undefined, action: Action<
     case 'set':
       return action.value
 
-    case 'search': {
-      const re = RegExp(action.search, 'i')
-      return action.entries.find(([label]) => re.test(label))?.[1]
-    }
-
     case 'move': {
-      const focusedIndex = typeof value !== undefined ? action.entries.findIndex(([, v]) => v === value) : -1
+      const focusedIndex = isDefined(value) ? action.entries.findIndex(([, v]) => v === value) : -1
       const toFocusIndex = focusedIndex >= 0 ? cycle(focusedIndex, action.step, action.entries.length) : undefined
       return action.entries[toFocusIndex ?? 0]?.[1]
     }
@@ -43,89 +36,75 @@ const selectFocusReducer = <T extends any>(value: T | undefined, action: Action<
 
 export const SimpleSelect = <T extends any>({ title = '', options, value, onChange }: SimpleSelectProps<T>) => {
   const [focused, focus] = useReducer(selectFocusReducer as FocusReducer<T>, value)
-  const [toggle, setToggle] = useState<() => void>()
-  const [search, setSearch] = useState('')
-
   const entries = Object.entries(options) as [string, T][]
 
-  useEffect(() => {
-    timeout && clearTimeout(timeout)
-    if (search) {
-      focus({ type: 'search', entries, search })
-      timeout = setTimeout(() => {
-        setSearch('')
-      }, 1000)
+  const forwardChange = (value: T) => {
+    focus({ type: 'set', value })
+    onChange?.(value)
+  }
+
+  const navigate: React.KeyboardEventHandler = ({ key }) => {
+    switch (key) {
+      case 'ArrowDown':
+        return focus({ type: 'move', entries, step: 1 })
+
+      case 'ArrowUp':
+        return focus({ type: 'move', entries, step: -1 })
+
+      case 'Enter':
+        return isDefined(focused) && onChange?.(focused)
     }
-    return () => {
-      timeout && clearTimeout(timeout)
-    }
-  }, [search])
+  }
+
+  const renderSelected = (value: T) => <Selected>{entries.find(([, v]) => v === value)?.[0]}</Selected>
+
+  const renderList = (select: (value: T) => void) => (
+    <OptionsContainer>
+      {entries.map(([label, val], key) => {
+        const onClick: React.MouseEventHandler = (evt) => {
+          stopEvent(evt)
+          select(val)
+        }
+        return (
+          <Option key={key} selected={val === value} focus={val === focused} onClick={onClick}>
+            {label}
+          </Option>
+        )
+      })}
+    </OptionsContainer>
+  )
 
   return (
-    <SelectContainer
-      onKeyDown={(evt) => {
-        const { key } = evt
-        if (entries.length > 0) {
-          if (key === 'ArrowDown') {
-            focus({ type: 'move', entries, step: 1 })
-            evt.stopPropagation()
-          } else if (key === 'ArrowUp') {
-            focus({ type: 'move', entries, step: -1 })
-            evt.stopPropagation()
-          } else if (onChange && isDefined(focused) && (key === 'Enter' || key === 'Tab')) {
-            onChange(focused)
-            toggle?.()
-            evt.stopPropagation()
-          } else if (key.length === 1) {
-            const char = ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].includes(key)
-              ? `\\${key}`
-              : key
-            setSearch(search + char)
-            evt.stopPropagation()
-          }
-        }
-      }}
-    >
+    <SelectContainer>
       {title && <LabelSelect>{title}</LabelSelect>}
       <Select
         placeholder=""
         selected={value}
-        setToggle={setToggle}
-        onChange={(value) => {
-          focus({ type: 'set', value })
-          onChange && onChange(value)
-        }}
-        renderSelected={(value) => <Selected>{entries.find(([, v]) => v === value)?.[0]}</Selected>}
-        renderList={(select) => (
-          <OptionsContainer>
-            {entries.map(([label, val], key) => (
-              <Option key={key} onClick={() => select(val)} selected={val === value} focus={val === focused}>
-                {label}
-              </Option>
-            ))}
-          </OptionsContainer>
-        )}
+        onNavigate={navigate}
+        onChange={forwardChange}
+        renderSelected={renderSelected}
+        renderList={renderList}
         alwaysShowValue
       />
     </SelectContainer>
   )
 }
 
-const SelectContainer = styled.div`
+const SelectContainer = styled.label`
   display: flex;
-  & > div {
+  & > :last-child {
     height: auto;
     width: 250px;
   }
 `
-const LabelSelect = styled.label`
+const LabelSelect = styled.div`
   color: ${Colors.Grey};
   line-height: 48px;
   margin: 0 1rem;
   white-space: nowrap;
 `
 
-const Selected = styled.label`
+const Selected = styled.div`
   display: block;
   text-transform: capitalize;
   padding: 0.5rem 0;
@@ -148,7 +127,7 @@ interface OptionProps {
 const OptionFocused = css`
   color: ${Colors.Blue[500]};
 `
-const Option = styled.label`
+const Option = styled.div`
   display: block;
   padding: 1rem;
   text-transform: capitalize;
