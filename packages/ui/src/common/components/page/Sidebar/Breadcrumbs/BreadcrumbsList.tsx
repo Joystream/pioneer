@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router'
+import { useLocation } from 'react-router'
 import styled from 'styled-components'
 import useBreadcrumbs from 'use-react-router-breadcrumbs'
 
@@ -8,12 +8,11 @@ import { knownRoutes, excludePaths } from '../../../../model/breadcrumbs'
 import { BreadcrumbsItem } from './BreadcrumbsItem'
 
 export const BreadcrumbsList = React.memo(({ lastBreadcrumb }: { lastBreadcrumb?: string }) => {
-  const { location } = useHistory()
+  const location = useLocation()
   const routesList = lastBreadcrumb
     ? [...knownRoutes, { path: location.pathname, breadcrumb: lastBreadcrumb }]
     : knownRoutes
   const crumbs = useBreadcrumbs(routesList, { excludePaths })
-  console.log(crumbs)
   return (
     <BreadcrumbsListComponent>
       {crumbs.map(({ match: { url }, breadcrumb, key }) => (
