@@ -45,8 +45,16 @@
           "builtin",
           "external",
           "parent",
-          "internal"
+          [ "index", "sibling" ]
         ],
+        "pathGroups": [
+          {
+            "pattern": "@/**",
+            "group": "external",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
         "newlines-between": "always",
         "alphabetize": {
           "order": "asc",

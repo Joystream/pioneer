@@ -14,7 +14,7 @@ export interface WorkingGroup {
   about?: string
   leaderId?: string
   workers?: Worker[]
-  status?: any
+  status?: string
   description?: string
   statusMessage?: string
   budget: BN
@@ -31,9 +31,10 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     id: group.id,
     image: undefined,
     name: group.name,
-    about: group.status?.about ?? '',
-    description: group.status?.description ?? '',
-    statusMessage: group.status?.message ?? '',
+    about: group.metadata?.about ?? '',
+    description: group.metadata?.description ?? '',
+    status: group.metadata?.status ?? '',
+    statusMessage: group.metadata?.statusMessage ?? '',
     workers: group.workers?.map(asWorker) ?? [],
     leaderId: group.leader?.membership.id,
     budget: new BN(group.budget),

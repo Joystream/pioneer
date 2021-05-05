@@ -31,5 +31,5 @@ export const asApplication = (application: WorkingGroupApplicationFieldsFragment
   status: application.status.__typename,
   stakingAccount: application.stakingAccount,
   createdAtBlock: asBlock(application.createdAtBlock),
-  createdAtTime: application.createdAtTime,
+  createdAtTime: application.createdAt,
 })

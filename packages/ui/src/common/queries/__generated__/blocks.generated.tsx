@@ -1,12 +1,19 @@
 import * as Types from '../../api/queries/__generated__/baseTypes.generated'
 
 import { gql } from '@apollo/client'
-export type BlockFieldsFragment = { __typename: 'Block'; id: string; block: number; network: Types.Network }
+export type BlockFieldsFragment = {
+  __typename: 'Block'
+  id: string
+  number: number
+  timestamp: any
+  network: Types.Network
+}
 
 export const BlockFieldsFragmentDoc = gql`
   fragment BlockFields on Block {
     id
-    block
+    number
+    timestamp
     network
   }
 `

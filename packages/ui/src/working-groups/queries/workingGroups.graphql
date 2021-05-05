@@ -1,8 +1,8 @@
-fragment WorkingGroupStatusFields on WorkingGroupStatus {
-  name
+fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
   about
   description
-  message
+  status
+  statusMessage
 }
 
 fragment WorkerFields on Worker {
@@ -21,7 +21,9 @@ fragment WorkingGroupFields on WorkingGroup {
   id
   name
   budget
-  status { ...WorkingGroupStatusFields }
+  metadata {
+    ...WorkingGroupMetdataFields
+  }
   workers {
     ...WorkerFields
   }
@@ -77,8 +79,8 @@ query getWorkingGroupOpenings($groupId_eq: ID) {
   }
 }
 
-query getWorkingGroupOpening($id: ID) {
-  workingGroupOpening(where: { id: $id }) {
+query getWorkingGroupOpening($id: ID!) {
+  workingGroupOpeningByUniqueInput(where: { id: $id }) {
     ... WorkingGroupOpeningFields
   }
 }
@@ -89,8 +91,8 @@ fragment ApplicationQuestionFields on ApplicationFormQuestion {
   question
 }
 
-query GetWorkingGroupOpeningQuestions($id: ID) {
-  workingGroupOpening(where: {id: $id}) {
+query GetWorkingGroupOpeningQuestions($id: ID!) {
+  workingGroupOpeningByUniqueInput(where: {id: $id}) {
     metadata {
       applicationFormQuestions {
         ...ApplicationQuestionFields
@@ -100,7 +102,7 @@ query GetWorkingGroupOpeningQuestions($id: ID) {
 }
 
 query GetWorkingGroup($id: ID!) {
-  workingGroup(where: { id: $id }) {
+  workingGroupByUniqueInput(where: { id: $id }) {
     ... WorkingGroupFields
   }
 }
@@ -121,14 +123,14 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     __typename
   }
   stakingAccount
-  createdAtTime
+  createdAt
   createdAtBlock {
     ...BlockFields
   }
 }
 
-query GetWorkingGroupApplications($applicant_in: [ID!]) {
-  workingGroupApplications(where: { applicant_in: $applicant_in }) {
+query GetWorkingGroupApplications($applicantId_in: [ID!]) {
+  workingGroupApplications(where: { applicantId_in: $applicantId_in }) {
     ...WorkingGroupApplicationFields
   }
 }

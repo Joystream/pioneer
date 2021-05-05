@@ -4,7 +4,7 @@ export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'OLYMPIA'
 
 export interface Block {
   id: string
-  block: number
+  number: number
   network: NetworkType
 }
 

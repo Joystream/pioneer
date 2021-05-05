@@ -27,11 +27,24 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   const schema = server.schema as any // Schema.modelFor is a hidden API.
 
   const workingGroupModel = schema.modelFor('workingGroup')
-  workingGroupModel.class.prototype.associations.workers.opts.inverse = 'group'
-  workingGroupModel.class.prototype.associations.leader.opts.inverse = 'leader'
+  // "Mirage: The working-group model has multiple possible inverse associations for the worker.group association."
+
+  workingGroupModel.class.prototype.associations.workers.opts.inverse = 'worker'
+  workingGroupModel.class.prototype.associations.leader.opts.inverse = 'group'
+  // "Mirage: The working-group model has multiple possible inverse associations for the working-group-metadata.workinggroupmetadata association."
+  workingGroupModel.class.prototype.associations.metadata.opts.inverse = 'metadata'
+
+  const workingGroupMetadataModel = schema.modelFor('workingGroupMetadata')
+  // "Mirage: The working-group-metadata model has multiple possible inverse associations for the working-group.metadata association."
+  workingGroupMetadataModel.class.prototype.associations.group.opts.inverse = 'group'
 
   const workerModel = schema.modelFor('worker')
-  workerModel.class.prototype.associations.leaderGroups.opts.inverse = 'leaderGroups'
+  workerModel.class.prototype.associations.workinggroupleader.opts.inverse = 'leader'
+
+  const membershipModel = schema.modelFor('membership')
+  // "Mirage: The membership model has multiple possible inverse associations for the membership.invitedBy association."
+  membershipModel.class.prototype.associations.invitedBy.opts.inverse = 'invitees'
+  membershipModel.class.prototype.associations.invitees.opts.inverse = 'invitedBy'
 }
 
 export const makeServer = (environment = 'development') => {
@@ -46,13 +59,13 @@ export const makeServer = (environment = 'development') => {
           root: undefined,
           resolvers: {
             Query: {
-              membership: getMemberResolver,
+              membershipByUniqueInput: getMemberResolver,
               memberships: getMembersResolver,
               searchMemberships: searchMembersResolver,
               workingGroups: getWorkingGroupsResolver,
-              workingGroup: getWorkingGroupResolver,
+              workingGroupByUniqueInput: getWorkingGroupResolver,
               workingGroupOpenings: getWorkingGroupOpeningsResolver,
-              workingGroupOpening: getWorkingGroupOpeningResolver,
+              workingGroupOpeningByUniqueInput: getWorkingGroupOpeningResolver,
               workers: getWorkersResolver,
               workingGroupApplications: getWorkingGroupApplicationsResolver,
               applicationFormQuestionAnswers: getApplicationFormQuestionAnswersResolver,

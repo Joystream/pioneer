@@ -1,6 +1,7 @@
-import WorkingGroupOpening from '@/app/pages/WorkingGroups/WorkingGroupsOpening'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+
+import WorkingGroupOpening from '@/app/pages/WorkingGroups/WorkingGroupsOpening'
 
 import { ConnectionStatus } from '../common/components/ConnectionStatus'
 import { Page } from '../common/components/page/Page'

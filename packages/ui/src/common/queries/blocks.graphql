@@ -1,6 +1,7 @@
 
 fragment BlockFields on Block {
   id
-  block
+  number
+  timestamp
   network
 }

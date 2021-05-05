@@ -6,8 +6,8 @@ import { asWorkingGroupOpening } from '../types'
 const useOpening = (id: string) => {
   const { loading, data } = useGetWorkingGroupOpeningQuery({ variables: { id } })
 
-  const rawOpening = data?.workingGroupOpening
-  const opening = useMemo(() => rawOpening && asWorkingGroupOpening(rawOpening), [data?.workingGroupOpening?.id])
+  const rawOpening = data?.workingGroupOpeningByUniqueInput
+  const opening = useMemo(() => rawOpening && asWorkingGroupOpening(rawOpening), [rawOpening?.id])
 
   return {
     isLoading: loading,

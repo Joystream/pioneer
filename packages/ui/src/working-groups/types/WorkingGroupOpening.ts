@@ -43,12 +43,12 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   expectedEnding: fields.metadata.expectedEnding,
   hiring: {
     current: 0,
-    total: fields.metadata.hiringLimit,
+    total: fields.metadata?.hiringLimit ?? 0,
   },
-  title: fields.metadata.shortDescription,
-  shortDescription: fields.metadata.shortDescription,
-  description: fields.metadata.description,
-  details: fields.metadata.applicationDetails,
+  title: fields.metadata?.shortDescription ?? '',
+  shortDescription: fields.metadata.shortDescription || '',
+  description: fields.metadata?.description ?? '',
+  details: fields.metadata?.applicationDetails ?? '',
   status: fields.status.__typename,
   stake: new BN(fields.stakeAmount),
 })
@@ -65,6 +65,6 @@ export const asApplicationQuestion = (opening: ApplicationQuestionFieldsFragment
   return {
     index: opening.index,
     type: opening.type,
-    question: opening.question,
+    question: opening?.question ?? '',
   }
 }
