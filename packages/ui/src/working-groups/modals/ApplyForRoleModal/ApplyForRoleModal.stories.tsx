@@ -31,7 +31,7 @@ const Template: Story = () => {
           <ApplyForRoleSuccessModal
             stake={new BN(100_000)}
             stakeAccount={{ name: 'My Account', address: '0xXXXX' }}
-            applicationId={123}
+            applicationId={new BN(420)}
           />
         </ModalContext.Provider>
       </HashRouter>

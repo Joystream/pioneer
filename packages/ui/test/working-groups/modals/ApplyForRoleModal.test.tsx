@@ -1,3 +1,4 @@
+import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
@@ -192,7 +193,12 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Success step', async () => {
-      stubTransactionSuccess(tx, ['EventParams', 1337], 'workingGroup', 'AppliedOnOpening')
+      stubTransactionSuccess(
+        tx,
+        ['EventParams', registry.createType('ApplicationId', 1337)],
+        'workingGroup',
+        'AppliedOnOpening'
+      )
       await fillSteps()
 
       fireEvent.click(screen.getByText(/^Sign transaction and Stake$/i))

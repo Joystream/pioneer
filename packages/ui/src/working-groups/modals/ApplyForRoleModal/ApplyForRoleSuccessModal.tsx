@@ -25,7 +25,7 @@ import { steps } from './model'
 interface Props {
   stake: BN
   stakeAccount: Account
-  applicationId: string
+  applicationId: BN
 }
 
 export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId }: Props) => {
@@ -47,8 +47,8 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId }:
                 <RowGapBlock gap={8}>
                   <h4>Application submitted!</h4>
                   <TextMedium>
-                    Here is your application id: {applicationId} You can track the progress of you application in "
-                    <Link to="/working-groups/my-applications">My applications subpage</Link>".
+                    Here is your application id: {applicationId.toString()} You can track the progress of you
+                    application in "<Link to="/working-groups/my-applications">My applications subpage</Link>".
                   </TextMedium>
                 </RowGapBlock>
               </Row>

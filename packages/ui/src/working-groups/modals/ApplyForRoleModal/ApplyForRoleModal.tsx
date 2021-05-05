@@ -1,3 +1,4 @@
+import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
@@ -7,6 +8,7 @@ import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { getEventParam } from '@/common/model/JoystreamNode'
 import { ModalState } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal/index'
@@ -32,13 +34,13 @@ export const ApplyForRoleModal = () => {
   const transaction = useMemo(() => {
     return txParams && api?.tx?.membershipWorkingGroup.applyOnOpening(txParams)
   }, [api, JSON.stringify(txParams)])
-  const [applicationId, setApplicationId] = useState<string>()
+  const [applicationId, setApplicationId] = useState<BN>()
 
   const signer = active?.controllerAccount
   const onDone = (result: boolean, events: EventRecord[]) => {
-    const applicationId = events.find((event) => event.event.method === 'AppliedOnOpening')?.event.data[1].toString()
+    const applicationId = getEventParam<ApplicationId>(events, 'AppliedOnOpening', 1)
 
-    setApplicationId(applicationId)
+    setApplicationId(applicationId?.toBn())
     setState(result ? 'SUCCESS' : 'ERROR')
   }
   const stake = new BN(txParams?.stake_parameters.stake ?? 0)
