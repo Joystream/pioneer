@@ -137,24 +137,10 @@ export const InputComponent = React.memo(
   }
 )
 
-export const InputText = React.memo(
-  ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
-    return (
-      <Input
-        id={id}
-        name={id}
-        type="text"
-        value={value}
-        required={required}
-        validation={validation}
-        placeholder={placeholder}
-        disabled={disabled}
-        onChange={onChange}
-        autoComplete="off"
-      />
-    )
-  }
-)
+type IputTextProps = React.InputHTMLAttributes<HTMLInputElement> & InputProps
+export const InputText = React.memo((props: IputTextProps) => {
+  return <Input name={props.id} type="text" autoComplete="off" {...props} />
+})
 
 export const InputNumber = React.memo(
   ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {

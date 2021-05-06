@@ -71,6 +71,12 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
           <InputText
             placeholder="Search"
             value={search}
+            onKeyDown={
+              onApply &&
+              (({ key }) => {
+                key === 'Enter' && onApply(filters)
+              })
+            }
             onChange={(evt: ChangeEvent<HTMLInputElement>) => {
               const { value } = evt.target
               dispatch({ type: 'change', field: 'search', value })
