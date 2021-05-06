@@ -1,11 +1,17 @@
+import React, { useReducer, useState } from 'react'
+
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
 import { MemberRolesList } from '@/memberships/components/MemberRoles'
-import React, { useReducer, useState } from 'react'
 
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { MemberList } from '../../../memberships/components/MemberList'
-import { MemberListOrder, MemberListSortKey, useMembers } from '../../../memberships/hooks/useMembers'
+import {
+  MemberListOrder,
+  MemberListSortKey,
+  DefaultMemberListOrder,
+  useMembers,
+} from '../../../memberships/hooks/useMembers'
 import { AppPage } from '../../components/AppPage'
 
 const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberListOrder => ({
@@ -18,7 +24,7 @@ const Roles = Object.fromEntries(MemberRolesList.map(({ abbreviation }) => [abbr
 export const Members = () => {
   const crumbs = [{ href: '#', text: 'Members' }]
   const [filter, setFilter] = useState(MemberListEmptyFilter)
-  const [order, dispatchSort] = useReducer(sortReducer, { sortBy: 'id', isDescending: false })
+  const [order, dispatchSort] = useReducer(sortReducer, DefaultMemberListOrder)
 
   const { members, isLoading } = useMembers({ order, filter })
 

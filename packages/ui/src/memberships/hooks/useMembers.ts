@@ -10,6 +10,8 @@ export interface MemberListOrder {
   isDescending: boolean
 }
 
+export const DefaultMemberListOrder: MemberListOrder = { sortBy: 'id', isDescending: false }
+
 interface UseMemberProps {
   order: MemberListOrder
   filter: MemberListFilter
@@ -51,8 +53,7 @@ const orderToGqlInput = ({ sortBy, isDescending }: MemberListOrder): MembershipO
 
 type FilterGqlInput = Pick<FilterMembersQueryVariables, 'id' | 'search' | 'isVerified' | 'isFoundingMember'>
 const filterToGqlInput = ({ search, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
-  id: /^#\d+$/.test(search) ? search.slice(1) : undefined,
-  search,
-  isVerified: onlyVerified ? true : undefined,
-  isFoundingMember: onlyFounder ? true : undefined,
+  ...(search ? (/^#\d+$/.test(search) ? { id: search.slice(1) } : { search }) : {}),
+  ...(onlyVerified ? { isVerified: true } : {}),
+  ...(onlyFounder ? { isFoundingMember: true } : {}),
 })
