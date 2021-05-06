@@ -102,8 +102,14 @@ export const Fonts = {
 
 export const Transitions = {
   all: 'all 0.25s ease',
+  allXL: 'all 0.5s ease',
+  allXXL: 'all 0.75s ease',
   duration: '0.25s',
-  durationNumeric: 25,
+  durationXL: '0.5s',
+  durationXXL: '0.75s',
+  durationNumeric: 250,
+  durationNumericXL: 500,
+  durationNumericXXL: 750,
   showResult: '1s',
 }
 
