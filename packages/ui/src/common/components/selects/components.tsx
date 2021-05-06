@@ -43,7 +43,7 @@ export const SelectedOption = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   align-items: center;
-  padding: 10px 4px 10px 16px;
+  padding: 0 4px 0 16px;
 `
 
 export const EmptyOption = styled.input`
@@ -75,6 +75,19 @@ export const SelectComponent = styled.div`
   width: 100%;
   height: 100%;
   align-items: center;
+
+  &:focus-visible {
+    outline: none;
+  }
+  & > :first-child {
+    border: 1px solid ${Colors.Black[200]};
+    border-radius: 2px;
+  }
+  &:hover > :first-child,
+  &:focus-within > :first-child {
+    border-color: ${Colors.Blue[400]};
+    box-shadow: 0 0 8px rgba(129, 126, 255, 0.4);
+  }
 `
 
 export const OptionComponentContainer = styled.li`

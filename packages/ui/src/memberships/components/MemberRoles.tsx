@@ -12,16 +12,18 @@ interface MemberRolesProps {
   wrapable?: boolean
 }
 
+export const MemberRolesList = [
+  { abbreviation: 'SP', help: 'Lorem ipsum...' },
+  { abbreviation: 'FM', help: 'Lorem ipsum...' },
+  { abbreviation: 'FL', help: 'Lorem ipsum...' },
+  { abbreviation: 'CC', help: 'Lorem ipsum...' },
+  { abbreviation: 'SL', help: 'Lorem ipsum...' },
+  { abbreviation: 'AA', help: 'Lorem ipsum...' },
+  { abbreviation: 'BB', help: 'Lorem ipsum...' },
+]
+
 export const MemberRoles = ({ size, max, wrapable }: MemberRolesProps) => {
-  const roles = [
-    { abbreviation: 'SP', help: 'Lorem ipsum...' },
-    { abbreviation: 'FM', help: 'Lorem ipsum...' },
-    { abbreviation: 'FL', help: 'Lorem ipsum...' },
-    { abbreviation: 'CC', help: 'Lorem ipsum...' },
-    { abbreviation: 'SL', help: 'Lorem ipsum...' },
-    { abbreviation: 'AA', help: 'Lorem ipsum...' },
-    { abbreviation: 'BB', help: 'Lorem ipsum...' },
-  ]
+  const roles = MemberRolesList
 
   const rolesToDisplay = max ? roles.slice(0, max) : roles
   const hiddenRoles = roles.length - rolesToDisplay.length
