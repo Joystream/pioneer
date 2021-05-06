@@ -8,6 +8,7 @@ import { setOrder, SortKey, sortMemberships } from '../model/sortMemberships'
 import { Member } from '../types'
 
 import { MyMemberListItem } from './MemberListItem'
+import { colLayoutByType } from './MemberListItem/Fileds'
 
 interface MembersSectionProps {
   title: string
@@ -40,7 +41,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
       <MembershipsTableTitle>{title}</MembershipsTableTitle>
 
       <MembershipsGroup>
-        <ListHeaders>
+        <ListHeaders colLayout={colLayoutByType('MyMember')}>
           <Header sortKey={canSort ? 'handle' : undefined}>Memeberships</Header>
           <ListHeader>Roles</ListHeader>
           <ListHeader>Slashed</ListHeader>
