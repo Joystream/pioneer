@@ -8388,5 +8388,6 @@ export type WorkingGroupWhereInput = {
 }
 
 export type WorkingGroupWhereUniqueInput = {
-  name_eq?: Maybe<Scalars['String']>
+  id?: Maybe<Scalars['ID']>
+  name?: Maybe<Scalars['String']>
 }

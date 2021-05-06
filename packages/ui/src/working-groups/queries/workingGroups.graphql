@@ -102,7 +102,7 @@ query GetWorkingGroupOpeningQuestions($id: ID!) {
 }
 
 query GetWorkingGroup($name_eq: String) {
-  workingGroupByUniqueInput(where: { name_eq: $name_eq }) {
+  workingGroupByUniqueInput(where: { name: $name_eq }) {
     ... WorkingGroupFields
   }
 }

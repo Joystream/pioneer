@@ -531,7 +531,7 @@ export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<
 >
 export const GetWorkingGroupDocument = gql`
   query GetWorkingGroup($name_eq: String) {
-    workingGroupByUniqueInput(where: { name_eq: $name_eq }) {
+    workingGroupByUniqueInput(where: { name: $name_eq }) {
       ...WorkingGroupFields
     }
   }

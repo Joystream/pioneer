@@ -111,7 +111,7 @@ export const getWorkingGroupResolver: QueryResolver<WorkingGroupWhereUniqueInput
   args: any,
   { mirageSchema: schema }
 ) => {
-  const name_eq = args.where.name_eq
+  const name_eq = args.where.name
 
   const { models } = schema.where(
     'WorkingGroup',

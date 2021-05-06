@@ -7286,5 +7286,6 @@ input WorkingGroupWhereInput {
 }
 
 input WorkingGroupWhereUniqueInput {
-  name_eq: String
+  id: ID
+  name: String
 }
