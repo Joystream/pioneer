@@ -17,6 +17,9 @@ Default.args = {
   openings: [
     {
       id: '123',
+      groupId: '0',
+      groupName: 'Distribution',
+      budget: 1000,
       title: 'Storage working group leader',
       details: 'Opening details',
       shortDescription: 'Become A Distribution Leader',
@@ -32,6 +35,9 @@ Default.args = {
     },
     {
       id: '221',
+      groupId: '0',
+      groupName: 'Distribution',
+      budget: 1000,
       title: 'Storage working group worker',
       details: 'Opening details',
       shortDescription: 'Become A Distribution Leader',

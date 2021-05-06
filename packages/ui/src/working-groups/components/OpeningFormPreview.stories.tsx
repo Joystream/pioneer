@@ -29,6 +29,9 @@ export const Default = Template.bind({})
 Default.args = {
   opening: {
     id: '123',
+    groupId: '0',
+    groupName: 'Distribution',
+    budget: 1000,
     title: 'Storage working group leader',
     shortDescription: 'Become A Distribution Leader',
     details: 'Opening details',
