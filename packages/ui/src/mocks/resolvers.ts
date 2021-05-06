@@ -76,7 +76,6 @@ export const getMembersResolver: QueryResolver<
 > = (obj, { where, orderBy, limit, offset }, { mirageSchema: schema }) => {
   const { id_eq, handle_contains, isVerified_eq, isFoundingMember_eq, rootAccount_in, controllerAccount_in } = where
 
-  const idMatch = id_eq ? getMatcher(id_eq) : undefined
   const isMatch = handle_contains ? getMatcher(handle_contains) : undefined
 
   const { models } = schema.where(
@@ -85,7 +84,7 @@ export const getMembersResolver: QueryResolver<
       ? (member: MockMember) =>
           rootAccount_in?.includes(member.rootAccount) || controllerAccount_in?.includes(member.controllerAccount)
       : ({ id, handle, isVerified, isFoundingMember }: MockMember) =>
-          (idMatch?.(id) || (handle_contains ? isMatch?.(handle) : true)) &&
+          (id_eq ? id === id_eq : handle_contains ? isMatch?.(handle) : true) &&
           (!isVerified_eq || isVerified) &&
           (!isFoundingMember_eq || isFoundingMember)
   )
