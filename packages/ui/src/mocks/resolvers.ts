@@ -109,8 +109,7 @@ export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryR
 export const getWorkingGroupResolver: QueryResolver<WorkingGroupWhereUniqueInput, GetWorkingGroupQueryResult> = (
   obj: any,
   args: any,
-  { mirageSchema: schema },
-  info: any
+  { mirageSchema: schema }
 ) => {
   const name_eq = args.where.name_eq
 

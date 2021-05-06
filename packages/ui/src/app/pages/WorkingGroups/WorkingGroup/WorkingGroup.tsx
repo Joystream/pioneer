@@ -31,7 +31,7 @@ export function WorkingGroup() {
   }
 
   return (
-    <AppPage lastBreadcrumb={group?.name}>
+    <AppPage>
       <PageHeader>
         <PreviousPage>
           <PageTitle>{group?.name}</PageTitle>
