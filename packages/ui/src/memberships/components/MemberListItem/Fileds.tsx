@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Fonts, Sizes } from '../../../common/constants'
 
-type MemberItemKind = 'Member' | 'MyMember'
+type MemberItemKind = 'Member' | 'MyMember' | 'MyMemberships' | 'Accounts'
 export const colLayoutByType = (kind: MemberItemKind) => {
   const id = 70
   const name = 194
@@ -12,9 +12,18 @@ export const colLayoutByType = (kind: MemberItemKind) => {
   const count = kind === 'Member' ? 20 : 76
   const total = 100
 
-  return kind === 'Member'
-    ? `${id}px ${name}px ${concil}px ${roles}px ${count}px ${count}px ${total}px ${total}px`
-    : `${name}px ${roles}px ${count}px ${count}px 96px 76px 54px`
+  switch (kind) {
+    case 'Member':
+      return `${id}px ${name}px ${concil}px ${roles}px ${count}px ${count}px ${total}px ${total}px`
+    case 'MyMember':
+      return `${name}px ${roles}px ${count}px ${count}px 96px 76px 54px`
+    case 'MyMemberships':
+      return '194px 200px 76px 76px 96px 76px 54px'
+    case 'Accounts':
+      return '276px repeat(4, 128px) 136px'
+    default:
+      return 'repeat(auto-fill, 100px)'
+  }
 }
 
 export const Info = styled.span`

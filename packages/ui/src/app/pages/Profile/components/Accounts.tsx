@@ -1,6 +1,9 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { ListHeaders } from '@/common/components/List/ListHeader'
+import { colLayoutByType } from '@/memberships/components/MemberListItem/Fileds'
+
 import { useAccounts } from '../../../../accounts/hooks/useAccounts'
 import { useBalances } from '../../../../accounts/hooks/useBalances'
 import { filterAccounts } from '../../../../accounts/model/filterAccounts'
@@ -58,13 +61,13 @@ export function Accounts() {
     <ContentWithTabs>
       <Tabs tabsSize="xs" tabs={tabs} />
       <AccountsWrap>
-        <ListHeaders>
+        <ListAccountHeaders colLayout={colLayoutByType('Accounts')}>
           <Header sortKey="name">Account</Header>
           <Header sortKey="total">Total balance</Header>
           <Header sortKey="locked">Locked balance</Header>
           <Header sortKey="recoverable">Recoverable balance</Header>
           <Header sortKey="transferable">Transferable balance</Header>
-        </ListHeaders>
+        </ListAccountHeaders>
         <List>
           {sortedAccounts.map((account) => (
             <ListItem key={account.address}>
@@ -93,13 +96,7 @@ const AccountsWrap = styled.div`
   width: 100%;
 `
 
-const ListHeaders = styled.div`
-  display: grid;
-  grid-area: accountstablenav;
-  grid-template-rows: 1fr;
-  grid-template-columns: 276px repeat(4, 128px) 136px;
-  justify-content: space-between;
-  width: 100%;
+const ListAccountHeaders = styled(ListHeaders)`
   padding-left: 16px;
   padding-right: 8px;
 `
