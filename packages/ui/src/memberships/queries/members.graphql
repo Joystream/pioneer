@@ -27,9 +27,9 @@ query FilterMembers(
   $id: ID
   $search: String
   $isVerified: Boolean
-  # $isFoundingMember: Boolean!
-  # $isConcil: Boolean!
-  # role:
+  $isFoundingMember: Boolean
+  # $isCouncil: Boolean!
+  # role: ???
   $orderBy: MembershipOrderByInput
   $limit: Int
   $offset: Int
@@ -37,11 +37,10 @@ query FilterMembers(
   memberships(
     where: {
       id_eq: $id
-      name_contains: $search
       handle_contains: $search
       isVerified_eq: $isVerified
-      # isFoundingMember_eq: $isFoundingMember
-      # isConcil_eq: $isConcil
+      isFoundingMember_eq: $isFoundingMember
+      # isCouncil_eq: $isCouncil
       # role_contains: $role
     }
     orderBy: $orderBy

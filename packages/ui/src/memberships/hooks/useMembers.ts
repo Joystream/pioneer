@@ -49,9 +49,10 @@ const orderToGqlInput = ({ sortBy, isDescending }: MemberListOrder): MembershipO
   throw new Error(`Unsupported sort key: "${sortBy}" for Member Order`)
 }
 
-type FilterGqlInput = Pick<FilterMembersQueryVariables, 'id' | 'search' | 'isVerified'>
-const filterToGqlInput = ({ search, onlyVerified }: MemberListFilter): FilterGqlInput => ({
+type FilterGqlInput = Pick<FilterMembersQueryVariables, 'id' | 'search' | 'isVerified' | 'isFoundingMember'>
+const filterToGqlInput = ({ search, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
   id: /^#\d+$/.test(search) ? search.slice(1) : /^\d+$/.test(search) ? search : undefined,
   search,
   isVerified: onlyVerified ? true : undefined,
+  isFoundingMember: onlyFounder ? true : undefined,
 })

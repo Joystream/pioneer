@@ -32,6 +32,7 @@ export type FilterMembersQueryVariables = Types.Exact<{
   id?: Types.Maybe<Types.Scalars['ID']>
   search?: Types.Maybe<Types.Scalars['String']>
   isVerified?: Types.Maybe<Types.Scalars['Boolean']>
+  isFoundingMember?: Types.Maybe<Types.Scalars['Boolean']>
   orderBy?: Types.Maybe<Types.MembershipOrderByInput>
   limit?: Types.Maybe<Types.Scalars['Int']>
   offset?: Types.Maybe<Types.Scalars['Int']>
@@ -145,12 +146,18 @@ export const FilterMembersDocument = gql`
     $id: ID
     $search: String
     $isVerified: Boolean
+    $isFoundingMember: Boolean
     $orderBy: MembershipOrderByInput
     $limit: Int
     $offset: Int
   ) {
     memberships(
-      where: { id_eq: $id, name_contains: $search, handle_contains: $search, isVerified_eq: $isVerified }
+      where: {
+        id_eq: $id
+        handle_contains: $search
+        isVerified_eq: $isVerified
+        isFoundingMember_eq: $isFoundingMember
+      }
       orderBy: $orderBy
       limit: $limit
       offset: $offset
@@ -176,6 +183,7 @@ export const FilterMembersDocument = gql`
  *      id: // value for 'id'
  *      search: // value for 'search'
  *      isVerified: // value for 'isVerified'
+ *      isFoundingMember: // value for 'isFoundingMember'
  *      orderBy: // value for 'orderBy'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'

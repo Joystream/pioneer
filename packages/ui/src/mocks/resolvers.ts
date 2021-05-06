@@ -60,9 +60,9 @@ const paginate = <T extends any>(collection: T[], limit?: Maybe<number>, offset?
 
 type GetMembersWhereKeys =
   | 'id_eq'
-  | 'name_contains'
   | 'handle_contains'
   | 'isVerified_eq'
+  | 'isFoundingMember_eq'
   | 'rootAccount_in'
   | 'controllerAccount_in'
 export const getMembersResolver: QueryResolver<
@@ -74,7 +74,7 @@ export const getMembersResolver: QueryResolver<
   },
   MockMember[]
 > = (obj, { where, orderBy, limit, offset }, { mirageSchema: schema }) => {
-  const { id_eq, handle_contains, isVerified_eq, rootAccount_in, controllerAccount_in } = where
+  const { id_eq, handle_contains, isVerified_eq, isFoundingMember_eq, rootAccount_in, controllerAccount_in } = where
 
   const idMatch = id_eq ? getMatcher(id_eq) : undefined
   const isMatch = handle_contains ? getMatcher(handle_contains) : undefined
@@ -84,9 +84,10 @@ export const getMembersResolver: QueryResolver<
     rootAccount_in
       ? (member: MockMember) =>
           rootAccount_in?.includes(member.rootAccount) || controllerAccount_in?.includes(member.controllerAccount)
-      : ({ id, handle, name, isVerified }: MockMember) =>
-          (idMatch?.(id) || (handle_contains ? isMatch?.(handle) || isMatch?.(name) : true)) &&
-          (!isVerified_eq || isVerified)
+      : ({ id, handle, isVerified, isFoundingMember }: MockMember) =>
+          (idMatch?.(id) || (handle_contains ? isMatch?.(handle) : true)) &&
+          (!isVerified_eq || isVerified) &&
+          (!isFoundingMember_eq || isFoundingMember)
   )
 
   return paginate(sort(models, orderBy), limit, offset)
