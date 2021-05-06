@@ -17,8 +17,8 @@ type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
 
 export function WorkingGroup() {
   const [currentTab, setCurrentTab] = useState<Tab>('OPENINGS')
-  const { id } = useParams<{ id: string }>()
-  const { isLoading, group } = useWorkingGroup(id)
+  const { name } = useParams<{ name: string }>()
+  const { isLoading, group } = useWorkingGroup({ name_eq: name })
 
   const tabs = [
     { title: 'Openings', active: currentTab === 'OPENINGS', onClick: () => setCurrentTab('OPENINGS') },

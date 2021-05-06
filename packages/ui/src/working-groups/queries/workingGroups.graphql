@@ -101,8 +101,8 @@ query GetWorkingGroupOpeningQuestions($id: ID!) {
   }
 }
 
-query GetWorkingGroup($id: ID!) {
-  workingGroupByUniqueInput(where: { id: $id }) {
+query GetWorkingGroup($name_eq: String) {
+  workingGroupByUniqueInput(where: { name_eq: $name_eq }) {
     ... WorkingGroupFields
   }
 }

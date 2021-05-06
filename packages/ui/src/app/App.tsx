@@ -30,7 +30,7 @@ export const App = () => (
         <Route exact path="/working-groups/openings" component={WorkingGroupsOpenings} />
         <Route exact path="/working-groups/my-applications" component={MyApplications} />
         <Route exact path="/working-groups/my-roles" component={MyRoles} />
-        <Route exact path="/working-groups/grouppreview/:id" component={WorkingGroup} />
+        <Route exact path="/working-groups/:name" component={WorkingGroup} />
         <Route path="/working-groups/openings/:id" component={WorkingGroupOpening} />
         <Route exact path="/members" component={Members} />
         <Redirect exact from="/" to="/profile" />

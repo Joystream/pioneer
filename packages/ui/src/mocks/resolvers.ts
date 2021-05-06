@@ -1,7 +1,7 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
 
-import { MembershipOrderByInput } from '../common/api/queries'
+import { MembershipOrderByInput, WorkingGroupWhereUniqueInput } from '../common/api/queries'
 import {
   GetMembersQueryResult,
   GetMembersQueryVariables,
@@ -16,6 +16,7 @@ import {
   GetWorkingGroupApplicationsQueryResult,
   GetWorkingGroupApplicationsQueryVariables,
   GetWorkingGroupOpeningsQueryResult,
+  GetWorkingGroupQueryResult,
   GetWorkingGroupsQueryResult,
 } from '../working-groups/queries'
 
@@ -105,12 +106,20 @@ export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryR
   return adaptRecords(models)
 }
 
-export const getWorkingGroupResolver = (obj: any, args: any, context: any, info: any) => {
-  const resolverArgs = {
-    id: args.where.id,
-  }
+export const getWorkingGroupResolver: QueryResolver<WorkingGroupWhereUniqueInput, GetWorkingGroupQueryResult> = (
+  obj: any,
+  args: any,
+  { mirageSchema: schema },
+  info: any
+) => {
+  const name_eq = args.where.name_eq
 
-  return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
+  const { models } = schema.where(
+    'WorkingGroup',
+    (group: { name: string }) => group.name.toLowerCase() === name_eq.toLowerCase()
+  )
+
+  return adaptRecords(models)[0]
 }
 
 export const getWorkingGroupOpeningsResolver: QueryResolver<any, GetWorkingGroupOpeningsQueryResult[]> = (
