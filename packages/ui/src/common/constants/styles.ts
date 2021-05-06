@@ -103,6 +103,7 @@ export const Fonts = {
 export const Transitions = {
   all: 'all 0.25s ease',
   duration: '0.25s',
+  durationNumeric: 25,
   showResult: '1s',
 }
 
