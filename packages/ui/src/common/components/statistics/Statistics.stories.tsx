@@ -40,8 +40,8 @@ export const Statistic = Template.bind({})
 
 Statistic.args = {
   title: 'Statistic item',
-  helperText: 'Text to help',
-  helperTitle: 'Title to help',
-  helperLinkText: 'More info',
-  helperLinkURL: 'http://example.com/',
+  tooltipText: 'Text to help',
+  tooltipTitle: 'Title to help',
+  tooltipLinkText: 'More info',
+  tooltipLinkURL: 'http://example.com/',
 }
