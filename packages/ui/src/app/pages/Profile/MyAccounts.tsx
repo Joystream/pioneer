@@ -12,13 +12,8 @@ import { MyProfileTabs } from './components/MyProfileTabs'
 export function MyAccounts() {
   const { total, transferable, locked, recoverable } = useTotalBalances()
 
-  const crumbs = [
-    { href: '#', text: 'My Profile' },
-    { href: '#', text: 'My Accounts' },
-  ]
-
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage>
       <PageHeader>
         <PageTitle>My Profile</PageTitle>
         <MyProfileTabs />

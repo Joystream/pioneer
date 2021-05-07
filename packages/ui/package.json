@@ -58,6 +58,7 @@
     "react-transition-group": "^4.4.1",
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.2.3",
+    "use-react-router-breadcrumbs": "^2.0.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {

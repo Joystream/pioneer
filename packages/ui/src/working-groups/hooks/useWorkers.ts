@@ -4,7 +4,7 @@ import { asMember } from '../../memberships/types'
 import { useGetWorkersQuery, WorkerFieldsFragment } from '../queries'
 
 interface UseWorkersProps {
-  groupId: string
+  groupId?: string
   fetchPast?: boolean
 }
 

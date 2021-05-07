@@ -125,7 +125,7 @@ export type GetWorkingGroupOpeningQuestionsQuery = {
 }
 
 export type GetWorkingGroupQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
+  name_eq?: Types.Maybe<Types.Scalars['String']>
 }>
 
 export type GetWorkingGroupQuery = {
@@ -530,8 +530,8 @@ export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningQuestionsQueryVariables
 >
 export const GetWorkingGroupDocument = gql`
-  query GetWorkingGroup($id: ID!) {
-    workingGroupByUniqueInput(where: { id: $id }) {
+  query GetWorkingGroup($name_eq: String) {
+    workingGroupByUniqueInput(where: { name: $name_eq }) {
       ...WorkingGroupFields
     }
   }
@@ -550,12 +550,12 @@ export const GetWorkingGroupDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      name_eq: // value for 'name_eq'
  *   },
  * });
  */
 export function useGetWorkingGroupQuery(
-  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>(GetWorkingGroupDocument, options)

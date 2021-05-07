@@ -17,14 +17,8 @@ type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
 
 export function WorkingGroup() {
   const [currentTab, setCurrentTab] = useState<Tab>('OPENINGS')
-  const { id } = useParams<{ id: string }>()
-  const { isLoading, group } = useWorkingGroup(id)
-
-  const crumbs = [
-    { href: '#', text: 'Working Groups' },
-    { href: '#', text: 'Working Groups' },
-    { href: '#', text: group?.name ?? 'Group' },
-  ]
+  const { name } = useParams<{ name: string }>()
+  const { isLoading, group } = useWorkingGroup({ name_eq: name })
 
   const tabs = [
     { title: 'Openings', active: currentTab === 'OPENINGS', onClick: () => setCurrentTab('OPENINGS') },
@@ -37,7 +31,7 @@ export function WorkingGroup() {
   }
 
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage>
       <PageHeader>
         <PreviousPage>
           <PageTitle>{group?.name}</PageTitle>
