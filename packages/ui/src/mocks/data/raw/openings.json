@@ -27,7 +27,7 @@
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
     "createdAtBlockId": 5,
-    "createdAtTime": "2021-04-09T13:37:42.155Z"
+    "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
     "id": "1",
@@ -57,7 +57,7 @@
     "unstakingPeriod": 5,
     "rewardPerBlock": 1200,
     "createdAtBlockId": 5,
-    "createdAtTime": "2021-04-09T13:37:42.155Z"
+    "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
     "id": "2",
@@ -87,7 +87,7 @@
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
     "createdAtBlockId": 5,
-    "createdAtTime": "2021-04-09T13:37:42.155Z"
+    "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
     "id": "3",
@@ -106,7 +106,7 @@
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
     "createdAtBlockId": 5,
-    "createdAtTime": "2021-04-09T13:37:42.155Z"
+    "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
     "id": "4",
@@ -125,7 +125,7 @@
     "unstakingPeriod": 5,
     "rewardPerBlock": 1200,
     "createdAtBlockId": 5,
-    "createdAtTime": "2021-04-09T13:37:42.155Z"
+    "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
     "id": "5",
@@ -144,7 +144,7 @@
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
     "createdAtBlockId": 5,
-    "createdAtTime": "2021-04-09T13:37:42.155Z"
+    "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
     "id": "5",
@@ -163,6 +163,6 @@
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
     "createdAtBlockId": 5,
-    "createdAtTime": "2021-04-09T13:37:42.155Z"
+    "createdAt": "2021-04-09T13:37:42.155Z"
   }
 ]

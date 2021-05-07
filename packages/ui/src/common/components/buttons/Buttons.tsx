@@ -59,6 +59,10 @@ export function ButtonGhost({ className, children, size, square, disabled, onCli
   )
 }
 
+export const ButtonGhostMedium = (props: ButtonProps) => {
+  return <ButtonGhost {...props} size="medium" />
+}
+
 const BasicButtonStyles = css<ButtonProps>`
   display: inline-grid;
   position: relative;

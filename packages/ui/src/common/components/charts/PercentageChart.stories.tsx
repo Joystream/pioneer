@@ -21,7 +21,7 @@ const Template: Story<PercentageChartProps> = (args) => (
         </Column>
         <Column>
           <BlackBlock>
-            <PercentageChart {...args} onBlack />
+            <PercentageChart {...args} isOnBlack />
           </BlackBlock>
         </Column>
       </Row>
