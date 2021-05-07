@@ -1,8 +1,12 @@
 import { useGetWorkingGroupQuery } from '../queries'
 import { asWorkingGroup } from '../types'
 
-export function useWorkingGroup(id: string) {
-  const { data, loading } = useGetWorkingGroupQuery({ variables: { id } })
+interface Variables {
+  name_eq?: string | undefined
+}
+
+export function useWorkingGroup(variables: Variables) {
+  const { data, loading } = useGetWorkingGroupQuery({ variables })
   const group = data?.workingGroupByUniqueInput
 
   return {

@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { ActivitiesBlock } from '../../../common/components/Activities/ActivitiesBlock'
@@ -36,13 +36,6 @@ export const WorkingGroupsOpenings = () => {
     month: new BN(102_000),
   }
 
-  const crumbs = useMemo(
-    () => [
-      { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'Openings' },
-    ],
-    []
-  )
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
 
   const openingsTabs = [
@@ -61,7 +54,7 @@ export const WorkingGroupsOpenings = () => {
   ]
 
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage>
       <PageHeader>
         <PageTitle>Working Groups</PageTitle>
         <WorkingGroupsTabs />

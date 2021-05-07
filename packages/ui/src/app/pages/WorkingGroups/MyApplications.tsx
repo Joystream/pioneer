@@ -13,13 +13,6 @@ import { AppPage } from '../../components/AppPage'
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 
 export const MyApplications = () => {
-  const crumbs = useMemo(
-    () => [
-      { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'My Applications' },
-    ],
-    []
-  )
   const { applications, isLoading } = useMyApplications()
   const currentApplications = useMemo(() => applications?.filter(isPendingApplication), [applications, isLoading])
   const pastApplications = useMemo(() => applications?.filter((a) => !isPendingApplication(a)), [
@@ -36,7 +29,7 @@ export const MyApplications = () => {
   }
 
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage>
       <PageHeader>
         <PageTitle>Working Groups</PageTitle>
         <WorkingGroupsTabs />

@@ -13,13 +13,12 @@ const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberL
 })
 
 export const Members = () => {
-  const crumbs = [{ href: '#', text: 'Members' }]
   const [order, dispatchSort] = useReducer(sortReducer, { sortBy: 'id', isDescending: false })
 
   const { members, isLoading } = useMembers({ order })
 
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage>
       <PageHeader>
         <PageTitle>Members</PageTitle>
         {isLoading ? <Loading /> : <MemberList members={members} order={order} onSort={dispatchSort} />}

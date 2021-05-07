@@ -5,8 +5,8 @@ import { usePageTabs } from '../../../hooks/usePageTabs'
 
 export const WorkingGroupsTabs = () => {
   const tabs = usePageTabs([
-    ['Openings', '/working-groups'],
-    ['Working Groups', '/working-groups/working-groups'],
+    ['Openings', '/working-groups/openings'],
+    ['Working Groups', '/working-groups'],
     ['My Applications', '/working-groups/my-applications'],
     ['My Roles', '/working-groups/my-roles'],
   ])

@@ -1,3 +1,5 @@
+import { asWorkingGroupOpening } from '@/working-groups/types'
+
 import rawOpenings from './raw/openings.json'
 
 type OpeningStatusType = 'open' | 'filled' | 'cancelled'
@@ -23,7 +25,11 @@ interface RawOpeningMock {
   unstakingPeriod: number
   rewardPerBlock: number
   createdAtBlockId: number
-  createdAtTime: string
+  createdAt: string
+}
+
+export const getMockAsOpening = (index = 0) => {
+  return asWorkingGroupOpening(rawOpenings[index] as any)
 }
 
 export const openingsData = rawOpenings.map((rawOpening) => ({ ...rawOpening }))

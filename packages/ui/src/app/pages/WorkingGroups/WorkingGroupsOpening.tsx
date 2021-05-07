@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from 'react'
+import React, { memo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -26,15 +26,6 @@ const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { showModal } = useModal()
   const { isLoading, opening } = useOpening(id)
-  const { copyValue } = useCopyToClipboard()
-  const crumbs = useMemo(
-    () => [
-      { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'Upcoming Opening' },
-    ],
-    []
-  )
 
   if (isLoading || !opening) {
     return <Loading />
@@ -55,7 +46,7 @@ const WorkingGroupOpening = () => {
   })
 
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage lastBreadcrumb={opening.title}>
       <PageHeader>
         <PreviousPage>
           <PageTitle>{opening.title}</PageTitle>

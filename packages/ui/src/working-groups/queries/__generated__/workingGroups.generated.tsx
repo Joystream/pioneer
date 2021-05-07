@@ -62,11 +62,10 @@ export type WorkingGroupOpeningMetadataFieldsFragment = {
 export type WorkingGroupOpeningFieldsFragment = {
   __typename: 'WorkingGroupOpening'
   id: string
-  groupId: string
   type: Types.WorkingGroupOpeningType
   stakeAmount: any
   rewardPerBlock: any
-  group: { __typename: 'WorkingGroup'; name: string; budget: any }
+  createdAt: any
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
   applications: Array<{
     __typename: 'WorkingGroupApplication'
@@ -127,7 +126,7 @@ export type GetWorkingGroupOpeningQuestionsQuery = {
 }
 
 export type GetWorkingGroupQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
+  name_eq?: Types.Maybe<Types.Scalars['String']>
 }>
 
 export type GetWorkingGroupQuery = {
@@ -236,14 +235,10 @@ export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
 export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningFields on WorkingGroupOpening {
     id
-    groupId
-    group {
-      name
-      budget
-    }
     type
     stakeAmount
     rewardPerBlock
+    createdAt
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }
@@ -537,8 +532,8 @@ export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningQuestionsQueryVariables
 >
 export const GetWorkingGroupDocument = gql`
-  query GetWorkingGroup($id: ID!) {
-    workingGroupByUniqueInput(where: { id: $id }) {
+  query GetWorkingGroup($name_eq: String) {
+    workingGroupByUniqueInput(where: { name: $name_eq }) {
       ...WorkingGroupFields
     }
   }
@@ -557,12 +552,12 @@ export const GetWorkingGroupDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      name_eq: // value for 'name_eq'
  *   },
  * });
  */
 export function useGetWorkingGroupQuery(
-  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>(GetWorkingGroupDocument, options)

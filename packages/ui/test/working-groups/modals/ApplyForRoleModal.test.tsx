@@ -1,20 +1,23 @@
+import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
 
-import { AccountsContext } from '../../../src/accounts/providers/accounts/context'
-import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
-import { ApiContext } from '../../../src/common/providers/api/context'
-import { ModalContext } from '../../../src/common/providers/modal/context'
-import { UseModal } from '../../../src/common/providers/modal/types'
-import { MembershipContext } from '../../../src/memberships/providers/membership/context'
-import { MyMemberships } from '../../../src/memberships/providers/membership/provider'
-import { seedMembers } from '../../../src/mocks/data'
-import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/mockOpenings'
-import { seedWorkingGroups } from '../../../src/mocks/data/mockWorkingGroups'
-import { ApplyForRoleModal } from '../../../src/working-groups/modals/ApplyForRoleModal'
-import { WorkingGroupOpeningFieldsFragment } from '../../../src/working-groups/queries'
-import { asWorkingGroupOpening } from '../../../src/working-groups/types'
+import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { ApiContext } from '@/common/providers/api/context'
+import { ModalContext } from '@/common/providers/modal/context'
+import { UseModal } from '@/common/providers/modal/types'
+import { MembershipContext } from '@/memberships/providers/membership/context'
+import { MyMemberships } from '@/memberships/providers/membership/provider'
+import { seedMembers } from '@/mocks/data'
+import { seedOpening, seedOpeningStatuses } from '@/mocks/data/mockOpenings'
+import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
+import { ApplyForRoleModal } from '@/working-groups/modals/ApplyForRoleModal'
+import { WorkingGroupOpeningFieldsFragment } from '@/working-groups/queries'
+import { asWorkingGroupOpening } from '@/working-groups/types'
+
 import { selectAccount } from '../../_helpers/selectAccount'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -57,7 +60,7 @@ const OPENING_DATA = {
   unstakingPeriod: 5,
   rewardPerBlock: 200,
   createdAtBlockId: 5,
-  createdAtTime: '2021-04-09T13:37:42.155Z',
+  createdAt: '2021-04-09T13:37:42.155Z',
 }
 
 describe('UI: ApplyForRoleModal', () => {
@@ -190,12 +193,18 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Success step', async () => {
-      stubTransactionSuccess(tx, [])
+      stubTransactionSuccess(
+        tx,
+        ['EventParams', registry.createType('ApplicationId', 1337)],
+        'workingGroup',
+        'AppliedOnOpening'
+      )
       await fillSteps()
 
       fireEvent.click(screen.getByText(/^Sign transaction and Stake$/i))
 
-      expect(await screen.findByText('Success')).toBeDefined()
+      expect(await screen.findByText('Application submitted!')).toBeDefined()
+      expect(await screen.findByText(/application id: 1337/i)).toBeDefined()
     })
 
     it('Failure step', async () => {
@@ -207,6 +216,7 @@ describe('UI: ApplyForRoleModal', () => {
       expect(await screen.findByText('Failure')).toBeDefined()
     })
   })
+
   async function getNextStepButton() {
     return await screen.findByRole('button', { name: /Next step/i })
   }
@@ -219,19 +229,21 @@ describe('UI: ApplyForRoleModal', () => {
 
   function renderModal() {
     return render(
-      <ModalContext.Provider value={useModal}>
-        <MockQueryNodeProviders>
-          <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <ApplyForRoleModal />
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
-          </MockKeyringProvider>
-        </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      <BrowserRouter>
+        <ModalContext.Provider value={useModal}>
+          <MockQueryNodeProviders>
+            <MockKeyringProvider>
+              <AccountsContext.Provider value={useAccounts}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <ApiContext.Provider value={api}>
+                    <ApplyForRoleModal />
+                  </ApiContext.Provider>
+                </MembershipContext.Provider>
+              </AccountsContext.Provider>
+            </MockKeyringProvider>
+          </MockQueryNodeProviders>
+        </ModalContext.Provider>
+      </BrowserRouter>
     )
   }
 })

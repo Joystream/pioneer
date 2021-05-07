@@ -15,8 +15,8 @@ import { useWorkingGroup } from '../../../../working-groups/hooks/useWorkingGrou
 type Tab = 'OPENINGS' | 'WORKERS'
 
 export function HistoryTab() {
-  const { id } = useParams<{ id: string }>()
-  useWorkingGroup(id)
+  const { name } = useParams<{ name: string }>()
+  const { group } = useWorkingGroup({ name_eq: name })
 
   const [currentTab, setCurrentTab] = useState<Tab>('OPENINGS')
   const tabs = [
@@ -29,8 +29,8 @@ export function HistoryTab() {
     <ContentWithSidepanel>
       <MainPanel>
         <Tabs tabs={tabs} />
-        {currentTab === 'OPENINGS' && <OpeningsHistory groupId={id} />}
-        {currentTab === 'WORKERS' && <WorkersHistory groupId={id} />}
+        {currentTab === 'OPENINGS' && <OpeningsHistory groupId={group?.id} />}
+        {currentTab === 'WORKERS' && <WorkersHistory groupId={group?.id} />}
       </MainPanel>
       <SidePanel>
         <ActivitiesBlock activities={activities} label="Working Groups Activities" />
@@ -39,12 +39,12 @@ export function HistoryTab() {
   )
 }
 
-const OpeningsHistory = ({ groupId }: { groupId: string }) => {
+const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
   const { isLoading, openings } = useOpenings({ groupId, type: 'past' })
   return isLoading ? <Loading /> : <OpeningsList openings={openings} />
 }
 
-const WorkersHistory = ({ groupId }: { groupId: string }) => {
+const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   const { isLoading, workers } = useWorkers({ groupId, fetchPast: true })
   return isLoading ? <Loading /> : <WorkersList workers={workers} />
 }

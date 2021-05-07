@@ -1,3 +1,4 @@
+import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import BN from 'bn.js'
@@ -149,7 +150,7 @@ describe('UI: BuyMembershipModal', () => {
       })
 
       it('Enables the View My Profile button', async () => {
-        stubTransactionSuccess(transaction, [12], 'members', 'MemberRegistered')
+        stubTransactionSuccess(transaction, [registry.createType('MemberId', 12)], 'members', 'MemberRegistered')
         const { getByText, findByText, findByRole } = await renderAuthorizeStep()
 
         fireEvent.click(getByText(/^sign and create a member$/i))
