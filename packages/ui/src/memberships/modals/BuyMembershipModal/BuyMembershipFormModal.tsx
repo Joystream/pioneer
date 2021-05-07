@@ -134,7 +134,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
           </Row>
 
           <Row>
-            <InputComponent label="Root account" required inputSize="l" helperText="Something about root accounts">
+            <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
               <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account)} />
             </InputComponent>
           </Row>
@@ -144,7 +144,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
               label="Controller account"
               required
               inputSize="l"
-              helperText="Something about controller account"
+              tooltipText="Something about controller account"
             >
               <SelectAccount
                 filter={filterController}

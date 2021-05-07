@@ -45,9 +45,9 @@ InputComponentComponent.args = {
   textToCopy: 'Text to copy',
   units: 'units',
   message: 'Some message',
-  helperText: 'Helper text, maybe longer',
-  helperTitle: 'Helper title',
-  helperLinkText: <>Link to show it</>,
-  helperLinkURL: 'example.com',
+  tooltipText: 'Helper text, maybe longer',
+  tooltipTitle: 'Helper title',
+  tooltipLinkText: <>Link to show it</>,
+  tooltipLinkURL: 'example.com',
   borderless: false,
 }

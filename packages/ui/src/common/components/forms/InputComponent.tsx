@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
 import { CopyButton } from '../buttons'
-import { Help } from '../Help'
 import { AlertSymbol, SuccessSymbol } from '../icons/symbols'
+import { Tooltip, TooltipDefault } from '../Tooltip'
 import { TextSmall } from '../typography'
 
 import { Label } from '.'
@@ -21,10 +21,10 @@ export type InputComponentProps = InputProps &
     textToCopy?: string
     units?: string
     message?: string
-    helperText?: string
-    helperTitle?: string
-    helperLinkText?: React.ReactElement
-    helperLinkURL?: string
+    tooltipText?: string
+    tooltipTitle?: string
+    tooltipLinkText?: React.ReactElement
+    tooltipLinkURL?: string
     className?: string
     children: React.ReactNode
   }
@@ -70,10 +70,10 @@ export const InputComponent = React.memo(
     textToCopy,
     units,
     message,
-    helperText,
-    helperTitle,
-    helperLinkText,
-    helperLinkURL,
+    tooltipText,
+    tooltipTitle,
+    tooltipLinkText,
+    tooltipLinkURL,
     className,
     children,
     borderless,
@@ -83,13 +83,15 @@ export const InputComponent = React.memo(
         {label && (
           <InputLabel htmlFor={id} isRequired={required} disabled={disabled}>
             {label}
-            {helperText && (
-              <Help
-                helperText={helperText}
-                helperTitle={helperTitle}
-                helperLinkText={helperLinkText}
-                helperLinkURL={helperLinkURL}
-              />
+            {tooltipText && (
+              <Tooltip
+                tooltipText={tooltipText}
+                tooltipTitle={tooltipTitle}
+                tooltipLinkText={tooltipLinkText}
+                tooltipLinkURL={tooltipLinkURL}
+              >
+                <TooltipDefault />
+              </Tooltip>
             )}
           </InputLabel>
         )}
