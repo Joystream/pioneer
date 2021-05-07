@@ -1,9 +1,8 @@
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-import { MemberStatusTooltip } from '@/memberships/components/MemberTopTooltips'
-
 import { Colors } from '../../constants'
+import { MemberStatusTooltip } from '../Tooltip'
 
 import { ControlProps } from '.'
 

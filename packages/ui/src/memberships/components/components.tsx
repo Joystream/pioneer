@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { MemberRoleHelp, TooltipContainer } from '../../common/components/Tooltip'
+import { MemberRoleHelp, MemberStatusTooltip, TooltipContainer } from '../../common/components/Tooltip'
 import { TextSmall } from '../../common/components/typography'
 import { BorderRad, Colors, Fonts, Transitions } from '../../common/constants'
 
@@ -199,6 +199,11 @@ export const MemberDarkHover = css`
         border-color: ${Colors.Blue[500]};
         color: ${Colors.Black[300]};
       }
+    }
+    ${MemberStatusTooltip}.tooltipondark {
+      color: ${Colors.Blue[400]};
+      background-color: transparent;
+      border-color: ${Colors.Blue[400]};
     }
   }
 `

@@ -123,17 +123,45 @@ export const DefaultTooltip = styled.div<DefaultTooltipProps>`
   transition: ${Transitions.all};
 `
 
-export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipProps>`
+interface DarkTooltipInnerItemProps {
+  isOnDark?: boolean
+}
+
+export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipProps & DarkTooltipInnerItemProps>`
   color: ${Colors.White};
   border-color: ${Colors.Blue[500]};
   background-color: ${Colors.Blue[500]};
 `
+
 interface MemberRoleTooltipProps {
   size?: 'l' | 'm'
-  isOnDark?: boolean
 }
 
-export const MemberRoleHelp = styled(DefaultTooltip)<MemberRoleTooltipProps>`
+export const MemberStatusTooltip = styled(DefaultTooltip)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
+  ${({ size }) =>
+    size === 'l'
+      ? css`
+          width: 24px;
+          height: 24px;
+        `
+      : css`
+          width: 16px;
+          height: 16px;
+        `};
+  ${({ isOnDark }) =>
+    isOnDark
+      ? css`
+          border-color: ${Colors.Blue[500]};
+          color: ${Colors.Blue[500]};
+          background-color: transparent;
+        `
+      : css`
+          border-color: ${Colors.Black[200]};
+          color: ${Colors.Black[900]};
+        `};
+`
+
+export const MemberRoleHelp = styled(DefaultTooltip)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
   width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   font-size: ${({ size }) => (size === 'l' ? '10px' : '6px')};
@@ -281,9 +309,21 @@ export const TooltipComponent = styled.button`
       background-color: ${Colors.Blue[400]};
     }
     ${MemberRoleHelp} {
-      color: ${Colors.White};
-      background-color: ${Colors.Blue[500]};
-      border-color: ${Colors.Blue[500]};
+      color: ${Colors.White} !important;
+      background-color: ${Colors.Blue[500]} !important;
+      border-color: ${Colors.Blue[500]} !important;
+    }
+    ${MemberStatusTooltip} {
+      &.TooltipOnLight {
+        color: ${Colors.Blue[500]};
+        background-color: ${Colors.Black[50]};
+        border-color: ${Colors.Blue[100]};
+      }
+      &.TooltipOnDark {
+        color: ${Colors.Blue[400]} !important;
+        background-color: transparent !important;
+        border-color: ${Colors.Blue[400]} !important;
+      }
     }
   }
 `

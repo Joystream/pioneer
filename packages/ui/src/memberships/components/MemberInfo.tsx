@@ -1,7 +1,8 @@
 import React from 'react'
 
+import { FounderMemberIcon, VerifiedMemberIcon } from '../../common/components/icons'
 import { LeaderMemberIcon } from '../../common/components/icons/LeaderMemberIcon'
-import { AvatarStarTooltipContainer, Tooltip } from '../../common/components/Tooltip'
+import { AvatarStarTooltipContainer, MemberStatusTooltip, Tooltip } from '../../common/components/Tooltip'
 import { Member } from '../types'
 
 import { Avatar } from './Avatar'
@@ -15,7 +16,6 @@ import {
   MemberPhotoContainer,
 } from './components'
 import { MemberRoles } from './MemberRoles'
-import { FounderMemberTooltip, VerifiedMemberTooltip } from './MemberTopTooltips'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
@@ -60,13 +60,17 @@ export const MemberInfo = React.memo(
           <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
           <MemberIcons>
             {member.isVerified && (
-              <Tooltip tooltipText="Lorem fishy">
-                <VerifiedMemberTooltip isOnDark={isOnDark} />
+              <Tooltip tooltipText="This member is verified">
+                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'TooltipOnDark' : 'TooltipOnLight'}>
+                  <VerifiedMemberIcon />
+                </MemberStatusTooltip>
               </Tooltip>
             )}
             {(member as any)?.isFounder && (
-              <Tooltip tooltipText="Lorem fishy">
-                <FounderMemberTooltip isOnDark={isOnDark} />
+              <Tooltip tooltipText="This member is verified">
+                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'TooltipOnDark' : 'TooltipOnLight'}>
+                  <FounderMemberIcon />
+                </MemberStatusTooltip>
               </Tooltip>
             )}
           </MemberIcons>
