@@ -1,7 +1,7 @@
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
+import { useGetMembershipsConnectionQuery } from '@/memberships/queries'
 
-import { MembershipOrderByInput } from '../../common/api/queries'
-import { useFilterMembersQuery, FilterMembersQueryVariables } from '../queries'
+import { MembershipOrderByInput, MembershipWhereInput } from '../../common/api/queries'
 import { asMember, Member } from '../types'
 
 export type MemberListSortKey = 'id' | 'handle'
@@ -22,11 +22,13 @@ interface UseMembers {
 }
 
 export const useMembers = ({ order, filter }: UseMemberProps): UseMembers => {
-  const { data, loading, error } = useFilterMembersQuery({
-    variables: {
-      ...filterToGqlInput(filter),
-      orderBy: orderToGqlInput(order),
-    },
+  const variables = {
+    where: { ...filterToGqlInput(filter) },
+    orderBy: orderToGqlInput(order),
+  }
+
+  const { data, loading, error } = useGetMembershipsConnectionQuery({
+    variables,
   })
 
   if (error) {
@@ -51,9 +53,10 @@ const orderToGqlInput = ({ sortBy, isDescending }: MemberListOrder): MembershipO
   throw new Error(`Unsupported sort key: "${sortBy}" for Member Order`)
 }
 
-type FilterGqlInput = Pick<FilterMembersQueryVariables, 'id' | 'search' | 'isVerified' | 'isFoundingMember'>
+type FilterGqlInput = Pick<MembershipWhereInput, 'id_eq' | 'isVerified_eq' | 'isFoundingMember_eq' | 'handle_contains'>
+
 const filterToGqlInput = ({ search, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
-  ...(search ? (/^#\d+$/.test(search) ? { id: search.slice(1) } : { search }) : {}),
-  ...(onlyVerified ? { isVerified: true } : {}),
-  ...(onlyFounder ? { isFoundingMember: true } : {}),
+  ...(search ? { handle_contains: search } : {}),
+  ...(onlyVerified ? { isVerified_eq: true } : {}),
+  ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
 })

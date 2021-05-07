@@ -28,21 +28,6 @@ export type GetMembersQuery = {
   memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 }
 
-export type FilterMembersQueryVariables = Types.Exact<{
-  id?: Types.Maybe<Types.Scalars['ID']>
-  search?: Types.Maybe<Types.Scalars['String']>
-  isVerified?: Types.Maybe<Types.Scalars['Boolean']>
-  isFoundingMember?: Types.Maybe<Types.Scalars['Boolean']>
-  orderBy?: Types.Maybe<Types.MembershipOrderByInput>
-  limit?: Types.Maybe<Types.Scalars['Int']>
-  offset?: Types.Maybe<Types.Scalars['Int']>
-}>
-
-export type FilterMembersQuery = {
-  __typename: 'Query'
-  memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
-}
-
 export type MemberWithDetailsFragment = {
   __typename: 'Membership'
   registeredAtTime: any
@@ -69,13 +54,16 @@ export type SearchMembersQuery = {
   memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 }
 
-export type GetPaginatedMembersQueryVariables = Types.Exact<{
-  after?: Types.Maybe<Types.Scalars['String']>
+export type GetMembershipsConnectionQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.MembershipWhereInput>
-  order?: Types.Maybe<Types.MembershipOrderByInput>
+  orderBy?: Types.Maybe<Types.MembershipOrderByInput>
+  first?: Types.Maybe<Types.Scalars['Int']>
+  after?: Types.Maybe<Types.Scalars['String']>
+  last?: Types.Maybe<Types.Scalars['Int']>
+  before?: Types.Maybe<Types.Scalars['String']>
 }>
 
-export type GetPaginatedMembersQuery = {
+export type GetMembershipsConnectionQuery = {
   __typename: 'Query'
   membershipsConnection: {
     __typename: 'MembershipConnection'
@@ -167,70 +155,6 @@ export function useGetMembersLazyQuery(
 export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>
 export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>
-export const FilterMembersDocument = gql`
-  query FilterMembers(
-    $id: ID
-    $search: String
-    $isVerified: Boolean
-    $isFoundingMember: Boolean
-    $orderBy: MembershipOrderByInput
-    $limit: Int
-    $offset: Int
-  ) {
-    memberships(
-      where: {
-        id_eq: $id
-        handle_contains: $search
-        isVerified_eq: $isVerified
-        isFoundingMember_eq: $isFoundingMember
-      }
-      orderBy: $orderBy
-      limit: $limit
-      offset: $offset
-    ) {
-      ...MemberFields
-    }
-  }
-  ${MemberFieldsFragmentDoc}
-`
-
-/**
- * __useFilterMembersQuery__
- *
- * To run a query within a React component, call `useFilterMembersQuery` and pass it any options that fit your needs.
- * When your component renders, `useFilterMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFilterMembersQuery({
- *   variables: {
- *      id: // value for 'id'
- *      search: // value for 'search'
- *      isVerified: // value for 'isVerified'
- *      isFoundingMember: // value for 'isFoundingMember'
- *      orderBy: // value for 'orderBy'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useFilterMembersQuery(
-  baseOptions?: Apollo.QueryHookOptions<FilterMembersQuery, FilterMembersQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<FilterMembersQuery, FilterMembersQueryVariables>(FilterMembersDocument, options)
-}
-export function useFilterMembersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FilterMembersQuery, FilterMembersQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<FilterMembersQuery, FilterMembersQueryVariables>(FilterMembersDocument, options)
-}
-export type FilterMembersQueryHookResult = ReturnType<typeof useFilterMembersQuery>
-export type FilterMembersLazyQueryHookResult = ReturnType<typeof useFilterMembersLazyQuery>
-export type FilterMembersQueryResult = Apollo.QueryResult<FilterMembersQuery, FilterMembersQueryVariables>
 export const GetMemberDocument = gql`
   query GetMember($id: ID!) {
     membershipByUniqueInput(where: { id: $id }) {
@@ -310,9 +234,23 @@ export function useSearchMembersLazyQuery(
 export type SearchMembersQueryHookResult = ReturnType<typeof useSearchMembersQuery>
 export type SearchMembersLazyQueryHookResult = ReturnType<typeof useSearchMembersLazyQuery>
 export type SearchMembersQueryResult = Apollo.QueryResult<SearchMembersQuery, SearchMembersQueryVariables>
-export const GetPaginatedMembersDocument = gql`
-  query GetPaginatedMembers($after: String, $where: MembershipWhereInput, $order: MembershipOrderByInput) {
-    membershipsConnection(where: $where, orderBy: $order, after: $after) {
+export const GetMembershipsConnectionDocument = gql`
+  query GetMembershipsConnection(
+    $where: MembershipWhereInput
+    $orderBy: MembershipOrderByInput
+    $first: Int
+    $after: String
+    $last: Int
+    $before: String
+  ) {
+    membershipsConnection(
+      where: $where
+      orderBy: $orderBy
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+    ) {
       edges {
         cursor
         node {
@@ -332,44 +270,47 @@ export const GetPaginatedMembersDocument = gql`
 `
 
 /**
- * __useGetPaginatedMembersQuery__
+ * __useGetMembershipsConnectionQuery__
  *
- * To run a query within a React component, call `useGetPaginatedMembersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPaginatedMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetMembershipsConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMembershipsConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetPaginatedMembersQuery({
+ * const { data, loading, error } = useGetMembershipsConnectionQuery({
  *   variables: {
- *      after: // value for 'after'
  *      where: // value for 'where'
- *      order: // value for 'order'
+ *      orderBy: // value for 'orderBy'
+ *      first: // value for 'first'
+ *      after: // value for 'after'
+ *      last: // value for 'last'
+ *      before: // value for 'before'
  *   },
  * });
  */
-export function useGetPaginatedMembersQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetPaginatedMembersQuery, GetPaginatedMembersQueryVariables>
+export function useGetMembershipsConnectionQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMembershipsConnectionQuery, GetMembershipsConnectionQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetPaginatedMembersQuery, GetPaginatedMembersQueryVariables>(
-    GetPaginatedMembersDocument,
+  return Apollo.useQuery<GetMembershipsConnectionQuery, GetMembershipsConnectionQueryVariables>(
+    GetMembershipsConnectionDocument,
     options
   )
 }
-export function useGetPaginatedMembersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetPaginatedMembersQuery, GetPaginatedMembersQueryVariables>
+export function useGetMembershipsConnectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMembershipsConnectionQuery, GetMembershipsConnectionQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetPaginatedMembersQuery, GetPaginatedMembersQueryVariables>(
-    GetPaginatedMembersDocument,
+  return Apollo.useLazyQuery<GetMembershipsConnectionQuery, GetMembershipsConnectionQueryVariables>(
+    GetMembershipsConnectionDocument,
     options
   )
 }
-export type GetPaginatedMembersQueryHookResult = ReturnType<typeof useGetPaginatedMembersQuery>
-export type GetPaginatedMembersLazyQueryHookResult = ReturnType<typeof useGetPaginatedMembersLazyQuery>
-export type GetPaginatedMembersQueryResult = Apollo.QueryResult<
-  GetPaginatedMembersQuery,
-  GetPaginatedMembersQueryVariables
+export type GetMembershipsConnectionQueryHookResult = ReturnType<typeof useGetMembershipsConnectionQuery>
+export type GetMembershipsConnectionLazyQueryHookResult = ReturnType<typeof useGetMembershipsConnectionLazyQuery>
+export type GetMembershipsConnectionQueryResult = Apollo.QueryResult<
+  GetMembershipsConnectionQuery,
+  GetMembershipsConnectionQueryVariables
 >

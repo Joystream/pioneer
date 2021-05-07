@@ -23,25 +23,6 @@ query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!], $
   }
 }
 
-query FilterMembers(
-  $id: ID
-  $search: String
-  $isVerified: Boolean
-  $isFoundingMember: Boolean
-  $orderBy: MembershipOrderByInput
-  $limit: Int
-  $offset: Int
-) {
-  memberships(
-    where: { id_eq: $id, handle_contains: $search, isVerified_eq: $isVerified, isFoundingMember_eq: $isFoundingMember }
-    orderBy: $orderBy
-    limit: $limit
-    offset: $offset
-  ) {
-    ...MemberFields
-  }
-}
-
 fragment MemberWithDetails on Membership {
   ...MemberFields
   registeredAtTime
@@ -65,8 +46,22 @@ query SearchMembers($text: String!, $limit: Int) {
   }
 }
 
-query GetPaginatedMembers($after: String, $where: MembershipWhereInput, $order: MembershipOrderByInput) {
-  membershipsConnection(where: $where, orderBy: $order, after: $after) {
+query GetMembershipsConnection(
+  $where: MembershipWhereInput,
+  $orderBy: MembershipOrderByInput,
+  $first: Int,
+  $after: String,
+  $last: Int,
+  $before: String
+) {
+  membershipsConnection(
+    where: $where,
+    orderBy: $orderBy,
+    first: $first,
+    after: $after,
+    last: $last,
+    before: $before
+  ) {
     edges {
       cursor
       node {
