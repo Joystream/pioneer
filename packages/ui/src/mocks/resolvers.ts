@@ -1,5 +1,6 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
+import { resolveRelayConnection } from '@miragejs/graphql/dist/resolvers/relay'
 
 import {
   Maybe,
@@ -122,6 +123,12 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
   })
 
   return limit ? models.slice(0, limit) : models
+}
+
+export const membershipsConnectionResolver: QueryResolver<any, any> = (parent, args, context, info) => {
+  const type = (info as any).schema.getType('MembershipConnection')
+
+  return resolveRelayConnection(parent, args, context, info, type)
 }
 
 export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryResult[]> = (

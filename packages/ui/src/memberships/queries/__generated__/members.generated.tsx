@@ -69,6 +69,32 @@ export type SearchMembersQuery = {
   memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 }
 
+export type GetPaginatedMembersQueryVariables = Types.Exact<{
+  after?: Types.Maybe<Types.Scalars['String']>
+  where?: Types.Maybe<Types.MembershipWhereInput>
+  order?: Types.Maybe<Types.MembershipOrderByInput>
+}>
+
+export type GetPaginatedMembersQuery = {
+  __typename: 'Query'
+  membershipsConnection: {
+    __typename: 'MembershipConnection'
+    totalCount: number
+    edges: Array<{
+      __typename: 'MembershipEdge'
+      cursor: string
+      node: { __typename: 'Membership' } & MemberFieldsFragment
+    }>
+    pageInfo: {
+      __typename: 'PageInfo'
+      startCursor?: Types.Maybe<string>
+      endCursor?: Types.Maybe<string>
+      hasNextPage: boolean
+      hasPreviousPage: boolean
+    }
+  }
+}
+
 export const MemberFieldsFragmentDoc = gql`
   fragment MemberFields on Membership {
     id
@@ -284,3 +310,66 @@ export function useSearchMembersLazyQuery(
 export type SearchMembersQueryHookResult = ReturnType<typeof useSearchMembersQuery>
 export type SearchMembersLazyQueryHookResult = ReturnType<typeof useSearchMembersLazyQuery>
 export type SearchMembersQueryResult = Apollo.QueryResult<SearchMembersQuery, SearchMembersQueryVariables>
+export const GetPaginatedMembersDocument = gql`
+  query GetPaginatedMembers($after: String, $where: MembershipWhereInput, $order: MembershipOrderByInput) {
+    membershipsConnection(where: $where, orderBy: $order, after: $after) {
+      edges {
+        cursor
+        node {
+          ...MemberFields
+        }
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPaginatedMembersQuery__
+ *
+ * To run a query within a React component, call `useGetPaginatedMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPaginatedMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPaginatedMembersQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *      where: // value for 'where'
+ *      order: // value for 'order'
+ *   },
+ * });
+ */
+export function useGetPaginatedMembersQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetPaginatedMembersQuery, GetPaginatedMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPaginatedMembersQuery, GetPaginatedMembersQueryVariables>(
+    GetPaginatedMembersDocument,
+    options
+  )
+}
+export function useGetPaginatedMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPaginatedMembersQuery, GetPaginatedMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPaginatedMembersQuery, GetPaginatedMembersQueryVariables>(
+    GetPaginatedMembersDocument,
+    options
+  )
+}
+export type GetPaginatedMembersQueryHookResult = ReturnType<typeof useGetPaginatedMembersQuery>
+export type GetPaginatedMembersLazyQueryHookResult = ReturnType<typeof useGetPaginatedMembersLazyQuery>
+export type GetPaginatedMembersQueryResult = Apollo.QueryResult<
+  GetPaginatedMembersQuery,
+  GetPaginatedMembersQueryVariables
+>

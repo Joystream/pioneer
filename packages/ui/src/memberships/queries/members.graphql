@@ -64,3 +64,21 @@ query SearchMembers($text: String!, $limit: Int) {
     ...MemberFields
   }
 }
+
+query GetPaginatedMembers($after: String, $where: MembershipWhereInput, $order: MembershipOrderByInput) {
+  membershipsConnection(where: $where, orderBy: $order, after: $after) {
+    edges {
+      cursor
+      node {
+        ...MemberFields
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+    totalCount
+  }
+}
