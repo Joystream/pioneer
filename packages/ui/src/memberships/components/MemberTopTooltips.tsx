@@ -7,25 +7,37 @@ import { Colors } from '@/common/constants'
 
 interface MemberStatusTooltipProps {
   isOnDark?: boolean
+  className?: string
+  size?: 'l' | 'm'
 }
 
-export const VerifiedMemberTooltip = ({ isOnDark }: MemberStatusTooltipProps) => {
+export const VerifiedMemberTooltip = ({ isOnDark, className, size }: MemberStatusTooltipProps) => {
   return (
-    <MemberStatusTooltip isOnDark={isOnDark}>
+    <MemberStatusTooltip isOnDark={isOnDark} className={className} size={size}>
       <VerifiedMemberIcon />
     </MemberStatusTooltip>
   )
 }
 
-export const FounderMemberTooltip = ({ isOnDark }: MemberStatusTooltipProps) => {
+export const FounderMemberTooltip = ({ isOnDark, className, size }: MemberStatusTooltipProps) => {
   return (
-    <MemberStatusTooltip isOnDark={isOnDark}>
+    <MemberStatusTooltip isOnDark={isOnDark} className={className} size={size}>
       <FounderMemberIcon />
     </MemberStatusTooltip>
   )
 }
 
-const MemberStatusTooltip = styled(DefaultTooltip)<MemberStatusTooltipProps>`
+export const MemberStatusTooltip = styled(DefaultTooltip)<MemberStatusTooltipProps>`
+  ${({ size }) =>
+    size === 'l'
+      ? css`
+          width: 24px;
+          height: 24px;
+        `
+      : css`
+          width: 16px;
+          height: 16px;
+        `};
   ${({ isOnDark }) =>
     isOnDark
       ? css`

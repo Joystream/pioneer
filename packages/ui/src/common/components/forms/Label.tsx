@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { Colors } from '../../constants'
-import { HelpContainer } from '../Help'
+import { TooltipContainer } from '../Tooltip'
 
 interface LabelProps {
   isRequired?: boolean
@@ -37,7 +37,7 @@ export const Label = styled.label<LabelProps>`
     }};
   }
 
-  ${HelpContainer} {
+  ${TooltipContainer} {
     position: relative;
     display: inline;
     transform: unset;

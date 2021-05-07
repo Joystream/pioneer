@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import { MemberStatusTooltip } from '@/memberships/components/MemberTopTooltips'
+
 import { Colors } from '../../constants'
-import { HelpComponent } from '../Help'
 
 import { ControlProps } from '.'
 
@@ -11,20 +12,37 @@ interface TogglableIconProps extends ControlProps<boolean> {
 }
 export const TogglableIcon = ({ children, value, onChange }: TogglableIconProps) => (
   <label onClick={() => onChange?.(!value)}>
-    <DualStateIcon size="l" checked={value}>
-      {children}
-    </DualStateIcon>
+    <DualStateIcon checked={value}>{children}</DualStateIcon>
   </label>
 )
 
-const DualStateIcon = styled(HelpComponent)`
+const DualStateIcon = styled(MemberStatusTooltip)`
+  width: 24px;
+  height: 24px;
   ${({ checked }: { checked?: boolean }) =>
     checked
       ? css`
           color: ${Colors.White};
-          background: ${Colors.Black[800]};
+          border-color: ${Colors.Blue[500]};
+          background-color: ${Colors.Blue[500]};
+
+          &:hover,
+          &:focus {
+            color: ${Colors.Blue[500]};
+            border-color: ${Colors.Blue[100]};
+            background-color: ${Colors.Black[50]};
+          }
         `
       : css`
-          background: transparent;
+          color: ${Colors.Black[900]};
+          border-color: ${Colors.Black[200]};
+          background-color: 'transparent';
+
+          &:hover,
+          &:focus {
+            color: ${Colors.Blue[500]};
+            border-color: ${Colors.Blue[100]};
+            background-color: ${Colors.Black[50]};
+          }
         `}
 `
