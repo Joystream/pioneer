@@ -90,7 +90,7 @@ export const TooltipDefault = () => {
   )
 }
 
-const DefaultTooltip = styled.div`
+export const DefaultTooltip = styled.div`
   display: flex;
   position: relative;
   justify-content: center;

@@ -1,23 +1,23 @@
 import React from 'react'
 
-import { FounderMemberIcon } from '../../common/components/icons/FounderMemberIcon'
+import { Tooltip } from '@/common/components/Tooltip'
+
 import { LeaderMemberIcon } from '../../common/components/icons/LeaderMemberIcon'
-import { VerifiedMemberIcon } from '../../common/components/icons/VerifiedMemberIcon'
 import { Member } from '../types'
 
 import { Avatar } from './Avatar'
 import {
-  MemberHead,
+  AvatarMemberLabel,
   MemberHandle,
+  MemberHead,
   MemberIcons,
   MemberId,
   MemberInfoWrap,
   MemberPhoto,
   MemberPhotoContainer,
-  MemberStatusHelp,
-  AvatarMemberLabel,
 } from './components'
 import { MemberRoles } from './MemberRoles'
+import { FounderMemberTooltip, VerifiedMemberTooltip } from './MemberTopTooltips'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
@@ -55,8 +55,16 @@ export const MemberInfo = React.memo(
         <MemberHead>
           <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
           <MemberIcons>
-            {member.isVerified && <MemberStatusHelp icon={<VerifiedMemberIcon />} helperText="Lorem fishy" />}
-            {(member as any)?.isFounder && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
+            {member.isVerified && (
+              <Tooltip tooltipText="Lorem fishy">
+                <VerifiedMemberTooltip isOnDark={isOnDark} />
+              </Tooltip>
+            )}
+            {(member as any)?.isFounder && (
+              <Tooltip tooltipText="Lorem fishy">
+                <FounderMemberTooltip isOnDark={isOnDark} />
+              </Tooltip>
+            )}
           </MemberIcons>
         </MemberHead>
         {showGroup && !showId && <MemberRoles roles={member.roles} size={size} max={maxRoles} />}
