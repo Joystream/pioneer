@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { Animations, Colors } from '../../constants'
+import { Animations, Colors, ZIndex } from '../../constants'
 import { ButtonsGroup } from '../buttons'
 
 export const SidePaneGlass = styled.div`
@@ -13,7 +13,7 @@ export const SidePaneGlass = styled.div`
   height: 100%;
   background-color: ${Colors.Black[700.85]};
   color: ${Colors.Black[900]};
-  z-index: 100000;
+  z-index: ${ZIndex.Modal};
   ${Animations.showModalBackground};
 `
 

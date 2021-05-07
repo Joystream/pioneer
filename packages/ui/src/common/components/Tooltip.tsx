@@ -9,6 +9,7 @@ import { QuestionIcon } from './icons'
 import { LinkSymbol, LinkSymbolStyle } from './icons/symbols'
 
 export interface TooltipProps {
+  absolute?: boolean
   children: React.ReactNode
   position?: DOMRect
 }
@@ -27,6 +28,7 @@ export const Tooltip = ({
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
+  absolute,
   className,
 }: TooltipProps & TooltipPopupProps) => {
   const tooltipRef = React.useRef() as React.MutableRefObject<HTMLButtonElement>
@@ -57,7 +59,7 @@ export const Tooltip = ({
   }
 
   return (
-    <TooltipContainer>
+    <TooltipContainer absolute={absolute}>
       <TooltipComponent ref={tooltipRef} {...handlers} z-index={0}>
         {children}
       </TooltipComponent>
