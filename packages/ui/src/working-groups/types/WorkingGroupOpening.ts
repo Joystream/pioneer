@@ -8,6 +8,7 @@ type Status = 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancel
 export interface WorkingGroupOpening {
   id: string
   expectedEnding: string
+  createdAt: string
   title: string
   shortDescription: string
   description: string
@@ -41,6 +42,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     interval: 1,
   },
   expectedEnding: fields.metadata.expectedEnding,
+  createdAt: fields.createdAt,
   hiring: {
     current: 0,
     total: fields.metadata?.hiringLimit ?? 0,

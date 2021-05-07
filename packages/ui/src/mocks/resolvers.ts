@@ -1,8 +1,18 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
 
-import { Maybe, MembershipOrderByInput, MembershipWhereInput } from '../common/api/queries'
-import { MemberFieldsFragment, SearchMembersQueryResult } from '../memberships/queries'
+import {
+  Maybe,
+  MembershipOrderByInput,
+  MembershipWhereInput,
+  WorkingGroupWhereUniqueInput,
+} from '../common/api/queries'
+import {
+  GetMembersQueryResult,
+  GetMembersQueryVariables,
+  MemberFieldsFragment,
+  SearchMembersQueryResult,
+} from '../memberships/queries'
 import {
   GetApplicationFormQuestionAnswerQueryResult,
   GetApplicationFormQuestionAnswerQueryVariables,
@@ -11,6 +21,7 @@ import {
   GetWorkingGroupApplicationsQueryResult,
   GetWorkingGroupApplicationsQueryVariables,
   GetWorkingGroupOpeningsQueryResult,
+  GetWorkingGroupQueryResult,
   GetWorkingGroupsQueryResult,
 } from '../working-groups/queries'
 
@@ -121,12 +132,19 @@ export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryR
   return adaptRecords(models)
 }
 
-export const getWorkingGroupResolver = (obj: any, args: any, context: any, info: any) => {
-  const resolverArgs = {
-    id: args.where.id,
-  }
+export const getWorkingGroupResolver: QueryResolver<WorkingGroupWhereUniqueInput, GetWorkingGroupQueryResult> = (
+  obj: any,
+  args: any,
+  { mirageSchema: schema }
+) => {
+  const name_eq = args.where.name
 
-  return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
+  const { models } = schema.where(
+    'WorkingGroup',
+    (group: { name: string }) => group.name.toLowerCase() === name_eq.toLowerCase()
+  )
+
+  return adaptRecords(models)[0]
 }
 
 export const getWorkingGroupOpeningsResolver: QueryResolver<any, GetWorkingGroupOpeningsQueryResult[]> = (

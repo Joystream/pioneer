@@ -59,6 +59,7 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   type
   stakeAmount
   rewardPerBlock
+  createdAt
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
@@ -101,8 +102,8 @@ query GetWorkingGroupOpeningQuestions($id: ID!) {
   }
 }
 
-query GetWorkingGroup($id: ID!) {
-  workingGroupByUniqueInput(where: { id: $id }) {
+query GetWorkingGroup($name_eq: String) {
+  workingGroupByUniqueInput(where: { name: $name_eq }) {
     ... WorkingGroupFields
   }
 }

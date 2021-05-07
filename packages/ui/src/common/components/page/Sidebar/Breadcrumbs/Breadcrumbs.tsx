@@ -1,17 +1,24 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BreadcrumbsList, BreadcrumbsListProps } from './BreadcrumbsList'
+import { BreadcrumbsOptions } from '@/app/constants/breadcrumbs'
+
+import { BreadcrumbsList } from './BreadcrumbsList'
 import { HomeLink } from './HomeLink'
 
-export type BreadcrumbsNavProps = BreadcrumbsListProps
+export interface BreadcrumbsProps {
+  breadcrumbsOptions: BreadcrumbsOptions
+  lastBreadcrumb?: string
+}
 
-export const Breadcrumbs = React.memo(({ crumbs }: BreadcrumbsNavProps) => (
-  <BreadcrumbsNavigation>
-    <HomeLink />
-    <BreadcrumbsList crumbs={crumbs} />
-  </BreadcrumbsNavigation>
-))
+export const Breadcrumbs = React.memo(({ breadcrumbsOptions, lastBreadcrumb }: BreadcrumbsProps) => {
+  return (
+    <BreadcrumbsNavigation>
+      <HomeLink />
+      <BreadcrumbsList lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
+    </BreadcrumbsNavigation>
+  )
+})
 
 const BreadcrumbsNavigation = styled.nav`
   display: inline-flex;

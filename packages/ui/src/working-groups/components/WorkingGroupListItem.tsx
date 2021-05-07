@@ -19,14 +19,15 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const history = useHistory()
 
   const { member: leader } = useMember(group.leaderId)
+  const groupAddress = `/working-groups/${group.name.toLowerCase()}`
 
   return (
     <GroupItem>
-      <GroupImageContainer onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>
+      <GroupImageContainer onClick={() => history.push(groupAddress)}>
         {group.image ? <GroupImage src={group.image} /> : <GroupAvatarPlaceholderImage />}
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>{group.name}</GroupTitle>
+        <GroupTitle onClick={() => history.push(groupAddress)}>{group.name}</GroupTitle>
         {group.about && <GroupContent>{group.about}</GroupContent>}
       </GroupContentBlock>
       <GroupStats>
@@ -57,7 +58,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>WG Leader</Subscription>
         </StatsColumn>
       </GroupStats>
-      <ButtonGhost square size="medium" onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>
+      <ButtonGhost square size="medium" onClick={() => history.push(groupAddress)}>
         <Arrow direction="right" />
       </ButtonGhost>
     </GroupItem>

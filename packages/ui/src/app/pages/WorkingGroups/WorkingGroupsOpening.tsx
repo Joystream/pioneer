@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -18,21 +18,13 @@ import useOpening from '@/working-groups/hooks/useOpening'
 const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, opening } = useOpening(id)
-  const crumbs = useMemo(
-    () => [
-      { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'Upcoming Opening' },
-    ],
-    []
-  )
 
   if (isLoading || !opening) {
     return <Loading />
   }
 
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage lastBreadcrumb={opening.title}>
       <PageHeader>
         <PreviousPage>
           <PageTitle>{opening.title}</PageTitle>

@@ -22,14 +22,13 @@ const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberL
 const Roles = Object.fromEntries(MemberRolesList.map(({ abbreviation }) => [abbreviation, abbreviation]))
 
 export const Members = () => {
-  const crumbs = [{ href: '#', text: 'Members' }]
   const [filter, setFilter] = useState(MemberListEmptyFilter)
   const [order, dispatchSort] = useReducer(sortReducer, DefaultMemberListOrder)
 
   const { members, isLoading } = useMembers({ order, filter })
 
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage>
       <PageHeader>
         <PageTitle>Members</PageTitle>
         <MemberListFilters roles={Roles} onApply={setFilter} />
