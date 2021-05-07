@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Transitions } from '../constants'
+import { BorderRad, Colors, Fonts, Transitions } from '../constants'
 
 import { PopupItem } from './animatedComponents/PopupItem'
 import { QuestionIcon } from './icons'
@@ -128,6 +128,37 @@ export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipP
   border-color: ${Colors.Blue[500]};
   background-color: ${Colors.Blue[500]};
 `
+interface MemberRoleTooltipProps {
+  size?: 'l' | 'm'
+  isOnDark?: boolean
+}
+
+export const MemberRoleHelp = styled(DefaultTooltip)<MemberRoleTooltipProps>`
+  width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
+  height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
+  font-size: ${({ size }) => (size === 'l' ? '10px' : '6px')};
+  line-height: 1;
+  font-family: ${Fonts.Inter};
+  font-weight: 700;
+  ${({ isOnDark }) =>
+    isOnDark
+      ? css`
+          color: ${Colors.Black[300]};
+          background-color: ${Colors.Black[600]};
+          border-color: ${Colors.Black[600]};
+        `
+      : css`
+          color: ${Colors.Black[600]};
+          background-color: ${Colors.Black[100]};
+          border-color: ${Colors.Black[100]};
+        `};
+`
+
+export const MemberRoleHelpMax = styled(MemberRoleHelp)`
+  background-color: ${Colors.White};
+  color: ${Colors.Blue[500]};
+  border-color: ${Colors.Blue[50]};
+`
 
 const initialPopupPosition = {
   left: 24,
@@ -248,6 +279,11 @@ export const TooltipComponent = styled.button`
       color: ${Colors.White};
       border-color: ${Colors.Blue[400]};
       background-color: ${Colors.Blue[400]};
+    }
+    ${MemberRoleHelp} {
+      color: ${Colors.White};
+      background-color: ${Colors.Blue[500]};
+      border-color: ${Colors.Blue[500]};
     }
   }
 `
