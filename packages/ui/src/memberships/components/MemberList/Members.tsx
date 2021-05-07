@@ -31,9 +31,11 @@ export const MemberList = ({ isLoading, members, order, onSort }: MemberListProp
         )
       : ListHeader
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  if (isLoading) {
+    return <Loading />
+  }
+
+  return (
     <div>
       <ListHeaders colLayout={colLayoutByType('Member')}>
         <SortHeader sortKey="id">Member ID</SortHeader>
