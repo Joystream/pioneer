@@ -40,6 +40,11 @@ module.exports = (env, argv) => {
       rules: [
         ...shared.rules,
         {
+          test: /\.js$/,
+          include: /node_modules/,
+          type: 'javascript/auto',
+        },
+        {
           test: /\.tsx?$/,
           use: 'ts-loader',
           exclude: /node_modules/,
