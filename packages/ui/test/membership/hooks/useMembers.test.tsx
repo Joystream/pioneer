@@ -13,12 +13,15 @@ const { EntryAsc, EntryDesc, HandleAsc } = MembershipOrderByInput
 interface RenderUseMembers {
   filter?: Partial<MemberListFilter>
   order?: Partial<MemberListOrder>
+  limit?: number
+  offset?: number
 }
-const renderUseMembers = ({ filter = {}, order = {} }: RenderUseMembers) =>
+const renderUseMembers = ({ filter = {}, order = {}, ...pagination }: RenderUseMembers) =>
   renderHook(() =>
     useMembers({
       filter: { ...MemberListEmptyFilter, ...filter },
       order: { ...DefaultMemberListOrder, ...order },
+      ...pagination,
     })
   )
 
@@ -78,6 +81,13 @@ describe('useMembers', () => {
     renderUseMembers({ filter: { onlyVerified: true } })
     expect(useFilterMembersQuery).toBeCalledWith({
       variables: { orderBy: EntryAsc, isVerified: true },
+    })
+  })
+
+  it('Paginate', () => {
+    renderUseMembers({ limit: 5, offset: 10 })
+    expect(useFilterMembersQuery).toBeCalledWith({
+      variables: { orderBy: EntryAsc, limit: 5, offset: 10 },
     })
   })
 

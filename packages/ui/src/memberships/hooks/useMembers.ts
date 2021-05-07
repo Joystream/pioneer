@@ -15,15 +15,18 @@ export const DefaultMemberListOrder: MemberListOrder = { sortBy: 'id', isDescend
 interface UseMemberProps {
   order: MemberListOrder
   filter: MemberListFilter
+  limit?: number
+  offset?: number
 }
 interface UseMembers {
   isLoading: boolean
   members: Member[]
 }
 
-export const useMembers = ({ order, filter }: UseMemberProps): UseMembers => {
+export const useMembers = ({ order, filter, ...pagination }: UseMemberProps): UseMembers => {
   const { data, loading, error } = useFilterMembersQuery({
     variables: {
+      ...pagination,
       ...filterToGqlInput(filter),
       orderBy: orderToGqlInput(order),
     },
