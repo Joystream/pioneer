@@ -28,21 +28,12 @@ query FilterMembers(
   $search: String
   $isVerified: Boolean
   $isFoundingMember: Boolean
-  # $isCouncil: Boolean!
-  # role: ???
   $orderBy: MembershipOrderByInput
   $limit: Int
   $offset: Int
 ) {
   memberships(
-    where: {
-      id_eq: $id
-      handle_contains: $search
-      isVerified_eq: $isVerified
-      isFoundingMember_eq: $isFoundingMember
-      # isCouncil_eq: $isCouncil
-      # role_contains: $role
-    }
+    where: { id_eq: $id, handle_contains: $search, isVerified_eq: $isVerified, isFoundingMember_eq: $isFoundingMember }
     orderBy: $orderBy
     limit: $limit
     offset: $offset
