@@ -27,72 +27,67 @@ jest.mock('../../../src/memberships/queries', () => ({
 }))
 const mockedUseFilterMembersQuery = useFilterMembersQuery as jest.Mock
 
-describe('useMyMember', () => {
+describe('useMembers', () => {
   beforeEach(() => {
     mockedUseFilterMembersQuery.mockClear()
   })
 
-  it('calls the useFilterMembersQuery', () => {
-    renderUseMembers({})
-    expect(useFilterMembersQuery).toBeCalled()
-  })
-
-  it('queries members by ascending ids (default)', () => {
+  it('Default order', () => {
     renderUseMembers({})
     expect(useFilterMembersQuery).toBeCalledWith({
       variables: { orderBy: EntryAsc },
     })
   })
 
-  it('queries members by descending ids', () => {
+  it('Inverse order', () => {
     renderUseMembers({ order: { isDescending: true } })
     expect(useFilterMembersQuery).toBeCalledWith({
       variables: { orderBy: EntryDesc },
     })
   })
 
-  it('queries members by ascending handles', () => {
+  it('Order by handle', () => {
     renderUseMembers({ order: { sortBy: 'handle' } })
     expect(useFilterMembersQuery).toBeCalledWith({
       variables: { orderBy: HandleAsc },
     })
   })
 
-  it('queries members matching a search', () => {
+  it('Search by handle', () => {
     renderUseMembers({ filter: { search: 'alice' } })
     expect(useFilterMembersQuery).toBeCalledWith({
       variables: { orderBy: EntryAsc, search: 'alice' },
     })
   })
 
-  it('queries members by id', () => {
+  it('Search by Id', () => {
     renderUseMembers({ filter: { search: '#42' } })
     expect(useFilterMembersQuery).toBeCalledWith({
       variables: { orderBy: EntryAsc, id: '42' },
     })
   })
 
-  it('queries founding members only', () => {
+  it('Founding members filter', () => {
     renderUseMembers({ filter: { onlyFounder: true } })
     expect(useFilterMembersQuery).toBeCalledWith({
       variables: { orderBy: EntryAsc, isFoundingMember: true },
     })
   })
 
-  it('queries verified members only', () => {
+  it('Verified members filter', () => {
     renderUseMembers({ filter: { onlyVerified: true } })
     expect(useFilterMembersQuery).toBeCalledWith({
       variables: { orderBy: EntryAsc, isVerified: true },
     })
   })
 
-  it('returns an empty array of members when loading', () => {
+  it('Return loading state', () => {
     mockedUseFilterMembersQuery.mockReturnValue({ loading: true })
     const { result } = renderUseMembers({ filter: { onlyVerified: true } })
     expect(result.current).toStrictEqual({ isLoading: true, members: [] })
   })
 
-  it('returns the members', () => {
+  it('Return members', () => {
     const data = { memberships: mockMembers.slice(0, 2) }
     const members = data.memberships.map(asMember as (d: MockMember) => Member)
 
