@@ -56,6 +56,11 @@ fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
 
 fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   id
+  groupId
+  group {
+    name
+    budget
+  }
   type
   stakeAmount
   rewardPerBlock

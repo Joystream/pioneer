@@ -3,10 +3,13 @@ import BN from 'bn.js'
 import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
-type Status = 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
+type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
 
 export interface WorkingGroupOpening {
   id: string
+  groupId: string
+  groupName: string
+  budget: number
   expectedEnding: string
   createdAt: string
   title: string
@@ -32,6 +35,9 @@ export interface WorkingGroupOpening {
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
   id: fields.id,
+  groupId: fields.groupId,
+  groupName: fields.group.name,
+  budget: fields.group.budget,
   applicants: {
     current: 0,
     total: fields.applications?.length || 0,
