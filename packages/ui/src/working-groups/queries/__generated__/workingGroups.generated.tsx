@@ -62,10 +62,12 @@ export type WorkingGroupOpeningMetadataFieldsFragment = {
 export type WorkingGroupOpeningFieldsFragment = {
   __typename: 'WorkingGroupOpening'
   id: string
+  groupId: string
   type: Types.WorkingGroupOpeningType
   stakeAmount: any
   rewardPerBlock: any
   createdAt: any
+  group: { __typename: 'WorkingGroup'; name: string; budget: any }
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
   applications: Array<{
     __typename: 'WorkingGroupApplication'
@@ -235,6 +237,11 @@ export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
 export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningFields on WorkingGroupOpening {
     id
+    groupId
+    group {
+      name
+      budget
+    }
     type
     stakeAmount
     rewardPerBlock
