@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
@@ -31,21 +31,26 @@ export const Tooltip = ({
   absolute,
   className,
 }: TooltipProps & TooltipPopupProps) => {
-  const tooltipRef = React.useRef() as React.MutableRefObject<HTMLButtonElement>
-  const tooltipPopupRef = React.useRef() as React.MutableRefObject<HTMLDivElement>
+  const tooltipRef = useRef() as React.MutableRefObject<HTMLButtonElement>
+  const tooltipPopupRef = useRef() as React.MutableRefObject<HTMLDivElement>
   const [isTooltipActive, setTooltipActive] = useState(false)
   const tooltipPosition = tooltipRef.current?.getBoundingClientRect()
+  const timeoutRef = useRef<any>()
+  const hoverRef = useRef(false)
 
   const showTooltip = () => {
-    if (!isTooltipActive) {
-      setTooltipActive(!isTooltipActive)
-    }
+    const showTooltipDelay = setTimeout(() => {
+      setTooltipActive(true)
+    }, Transitions.durationNumeric)
+    timeoutRef.current = showTooltipDelay
+    return () => clearTimeout(showTooltipDelay)
   }
   const hideTooltip = () => {
+    if (hoverRef.current) return
+    console.log("This isn't work: ", hoverRef.current)
+    clearTimeout(timeoutRef.current)
     const hideTooltipDelay = setTimeout(() => {
-      if (isTooltipActive) {
-        setTooltipActive(!isTooltipActive)
-      }
+      setTooltipActive(false)
     }, Transitions.durationNumericXL)
     return () => clearTimeout(hideTooltipDelay)
   }
@@ -57,6 +62,10 @@ export const Tooltip = ({
     onMouseEnter: showTooltip,
     onMouseLeave: hideTooltip,
   }
+  const otherHandlers = {
+    onMouseEnter: () => (hoverRef.current = true),
+    onMouseLeave: () => (hoverRef.current = false),
+  }
 
   return (
     <TooltipContainer absolute={absolute}>
@@ -66,7 +75,12 @@ export const Tooltip = ({
       {isTooltipActive &&
         tooltipPosition &&
         ReactDOM.createPortal(
-          <TooltipPopupContainer ref={tooltipPopupRef} className={className} position={tooltipPosition} {...handlers}>
+          <TooltipPopupContainer
+            ref={tooltipPopupRef}
+            className={className}
+            position={tooltipPosition}
+            {...otherHandlers}
+          >
             {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
             <TooltipText>{tooltipText}</TooltipText>
             {tooltipLinkURL && (
