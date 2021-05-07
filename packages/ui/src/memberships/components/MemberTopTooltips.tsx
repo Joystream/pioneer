@@ -1,9 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { VerifiedMemberIcon, FounderMemberIcon } from '@/common/components/icons'
-import { DefaultTooltip } from '@/common/components/Tooltip'
-import { Colors } from '@/common/constants'
+import { VerifiedMemberIcon, FounderMemberIcon } from '../../common/components/icons'
+import { DefaultTooltip } from '../../common/components/Tooltip'
+import { Colors } from '../../common/constants'
 
 interface MemberStatusTooltipProps {
   isOnDark?: boolean

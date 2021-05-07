@@ -1,9 +1,6 @@
-import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { LeaderMemberIcon } from '@/common/components/icons/LeaderMemberIcon'
-import { DefaultTooltip, TooltipContainer } from '@/common/components/Tooltip'
-
+import { TooltipContainer } from '../../common/components/Tooltip'
 import { TextSmall } from '../../common/components/typography'
 import { BorderRad, Colors, Fonts, Transitions } from '../../common/constants'
 
@@ -50,27 +47,6 @@ export const MemberIcons = styled.div`
 export const MemberId = styled(TextSmall)`
   grid-area: memberroles;
   color: ${Colors.Black[400]};
-`
-
-export const AvatarMemberLabel = () => {
-  return (
-    <AvatarMemberLabelTooltip>
-      <LeaderMemberIcon />
-    </AvatarMemberLabelTooltip>
-  )
-}
-
-const AvatarMemberLabelTooltip = styled(DefaultTooltip)`
-  color: ${Colors.White};
-  border-color: ${Colors.Blue[500]};
-  background-color: ${Colors.Blue[500]};
-
-  &:hover,
-  &:focus {
-    color: ${Colors.White};
-    border-color: ${Colors.Blue[400]};
-    background-color: ${Colors.Blue[400]};
-  }
 `
 
 export const MemberPhoto = styled.div`

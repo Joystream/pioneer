@@ -7,7 +7,6 @@ import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 import { Colors, Fonts } from '../../common/constants'
 import { MemberRole } from '../types'
 
-
 interface MemberRolesProps {
   max?: number
   size?: 'l' | 'm'

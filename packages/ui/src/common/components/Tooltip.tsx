@@ -96,15 +96,19 @@ export const Tooltip = ({
   )
 }
 
-export const TooltipDefault = () => {
+interface DefaultTooltipProps {
+  className?: string
+}
+
+export const TooltipDefault = ({ className }: DefaultTooltipProps) => {
   return (
-    <DefaultTooltip>
+    <DefaultTooltip className={className}>
       <QuestionIcon />
     </DefaultTooltip>
   )
 }
 
-export const DefaultTooltip = styled.div`
+export const DefaultTooltip = styled.div<DefaultTooltipProps>`
   display: flex;
   position: relative;
   justify-content: center;
@@ -117,13 +121,12 @@ export const DefaultTooltip = styled.div`
   color: ${Colors.Black[500]};
   cursor: pointer;
   transition: ${Transitions.all};
+`
 
-  &:hover,
-  &:focus {
-    border-color: ${Colors.Blue[100]};
-    color: ${Colors.Blue[500]};
-    background-color: ${Colors.Black[100]};
-  }
+export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipProps>`
+  color: ${Colors.White};
+  border-color: ${Colors.Blue[500]};
+  background-color: ${Colors.Blue[500]};
 `
 
 const initialPopupPosition = {
@@ -169,9 +172,6 @@ const TooltipPopupContainer = styled(PopupItem)<{ position: DOMRect }>`
     width: calc(100% + 16px);
     height: calc(100% + 16px);
     z-index: -1;
-  }
-  &:hover {
-    display: flex;
   }
 `
 
@@ -235,6 +235,20 @@ export const TooltipComponent = styled.button`
     width: 100%;
     height: 100%;
     position: static;
+  }
+
+  &:hover,
+  &:focus {
+    ${DefaultTooltip} {
+      color: ${Colors.Blue[500]};
+      border-color: ${Colors.Blue[100]};
+      background-color: ${Colors.Black[100]};
+    }
+    ${AvatarStarTooltipContainer} {
+      color: ${Colors.White};
+      border-color: ${Colors.Blue[400]};
+      background-color: ${Colors.Blue[400]};
+    }
   }
 `
 
