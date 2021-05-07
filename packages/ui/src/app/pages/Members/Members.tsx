@@ -1,10 +1,17 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
 
-import { Loading } from '../../../common/components/Loading'
+import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
+import { MemberRolesList } from '@/memberships/components/MemberRoles'
+
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { MemberList } from '../../../memberships/components/MemberList'
-import { MemberListOrder, MemberListSortKey, useMembers } from '../../../memberships/hooks/useMembers'
+import {
+  MemberListOrder,
+  MemberListSortKey,
+  DefaultMemberListOrder,
+  useMembers,
+} from '../../../memberships/hooks/useMembers'
 import { AppPage } from '../../components/AppPage'
 
 const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberListOrder => ({
@@ -12,16 +19,20 @@ const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberL
   isDescending: sortBy === order.sortBy && !order.isDescending,
 })
 
-export const Members = () => {
-  const [order, dispatchSort] = useReducer(sortReducer, { sortBy: 'id', isDescending: false })
+const Roles = Object.fromEntries(MemberRolesList.map(({ abbreviation }) => [abbreviation, abbreviation]))
 
-  const { members, isLoading } = useMembers({ order })
+export const Members = () => {
+  const [filter, setFilter] = useState(MemberListEmptyFilter)
+  const [order, dispatchSort] = useReducer(sortReducer, DefaultMemberListOrder)
+
+  const { members, isLoading } = useMembers({ order, filter })
 
   return (
     <AppPage>
       <PageHeader>
         <PageTitle>Members</PageTitle>
-        {isLoading ? <Loading /> : <MemberList members={members} order={order} onSort={dispatchSort} />}
+        <MemberListFilters roles={Roles} onApply={setFilter} />
+        <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
       </PageHeader>
     </AppPage>
   )

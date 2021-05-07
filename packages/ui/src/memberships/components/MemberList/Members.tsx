@@ -1,5 +1,7 @@
 import React, { Dispatch, ReactNode } from 'react'
 
+import { Loading } from '@/common/components/Loading'
+
 import { List, ListItem } from '../../../common/components/List'
 import { ListHeader, ListHeaders } from '../../../common/components/List/ListHeader'
 import { HeaderText, SortIconDown, SortIconUp } from '../../../common/components/SortedListHeaders'
@@ -11,11 +13,12 @@ import { colLayoutByType } from '../MemberListItem/Fileds'
 type SortKey = MemberListOrder['sortBy']
 interface MemberListProps {
   members: Member[]
+  isLoading?: boolean
   order?: MemberListOrder
   onSort?: Dispatch<SortKey>
 }
 
-export const MemberList = ({ members, order, onSort }: MemberListProps) => {
+export const MemberList = ({ isLoading, members, order, onSort }: MemberListProps) => {
   const SortHeader =
     order && onSort && members.length > 1
       ? ({ children, sortKey }: { children: ReactNode; sortKey: SortKey }) => (
@@ -27,6 +30,10 @@ export const MemberList = ({ members, order, onSort }: MemberListProps) => {
           </ListHeader>
         )
       : ListHeader
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <div>

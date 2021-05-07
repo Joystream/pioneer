@@ -1,7 +1,12 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
 
-import { MembershipOrderByInput, WorkingGroupWhereUniqueInput } from '../common/api/queries'
+import {
+  Maybe,
+  MembershipOrderByInput,
+  MembershipWhereInput,
+  WorkingGroupWhereUniqueInput,
+} from '../common/api/queries'
 import {
   GetMembersQueryResult,
   GetMembersQueryVariables,
@@ -39,42 +44,65 @@ export const getMemberResolver = (obj: any, args: any, context: any, info: any) 
   return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
 }
 
-type SortFn = (a: MockMember, b: MockMember) => number
-const getSortFn = (orderBy?: MembershipOrderByInput): void | SortFn => {
+type SortableKeys = keyof SortableQueryResult
+interface SortableQueryResult {
+  id: string
+  handle: string
+}
+const sort = <T extends SortableQueryResult>(members: T[], orderBy?: Maybe<MembershipOrderByInput>): T[] => {
+  const sortByKey = (key: SortableKeys, direction: number) => (a: T, b: T) =>
+    direction * (b[key] ?? '').localeCompare(a[key] ?? '')
+
   const { EntryAsc, EntryDesc, HandleAsc, HandleDesc } = MembershipOrderByInput
 
   const authorizedKeys = [EntryAsc, EntryDesc, HandleAsc, HandleDesc]
   if (!orderBy || !authorizedKeys.includes(orderBy)) {
-    return
+    return members
   }
 
   const [key, direction] = orderBy.toLowerCase().split('_')
-  const membersKey = (key === 'entry' ? 'id' : key) as 'id' | 'handle'
-  const fact = direction === 'desc' ? 1 : -1
+  const membersKey = (key === 'entry' ? 'id' : key) as SortableKeys
 
-  return (a, b) => fact * (b[membersKey] ?? '').localeCompare(a[membersKey] ?? '')
+  return members.sort(sortByKey(membersKey, direction === 'desc' ? 1 : -1))
 }
 
+const paginate = <T extends any>(collection: T[], limit?: Maybe<number>, offset?: Maybe<number>): T[] => {
+  const start = (offset ?? 0) * (limit ?? 0)
+  return collection.slice(start, start + (limit ?? 0) || undefined)
+}
+
+type GetMembersWhereKeys =
+  | 'id_eq'
+  | 'handle_contains'
+  | 'isVerified_eq'
+  | 'isFoundingMember_eq'
+  | 'rootAccount_in'
+  | 'controllerAccount_in'
 export const getMembersResolver: QueryResolver<
   {
-    where: GetMembersQueryVariables
+    where: Pick<MembershipWhereInput, GetMembersWhereKeys>
     orderBy?: MembershipOrderByInput
+    limit?: number
+    offset?: number
   },
-  GetMembersQueryResult[]
-> = (obj, args, { mirageSchema: schema }) => {
-  const rootAccountIn = args.where.rootAccount_in
-  const controllerAccountIn = args.where.controllerAccount_in
-  const sortFn = getSortFn(args.orderBy)
+  MockMember[]
+> = (obj, { where, orderBy, limit, offset }, { mirageSchema: schema }) => {
+  const { id_eq, handle_contains, isVerified_eq, isFoundingMember_eq, rootAccount_in, controllerAccount_in } = where
 
-  const { models } = rootAccountIn
-    ? schema.where(
-        'Membership',
-        (member: MockMember) =>
-          rootAccountIn?.includes(member.rootAccount) || controllerAccountIn?.includes(member.controllerAccount)
-      )
-    : schema.all('Membership')
+  const isMatch = handle_contains ? getMatcher(handle_contains) : undefined
 
-  return sortFn ? models.sort(sortFn) : models
+  const { models } = schema.where(
+    'Membership',
+    rootAccount_in
+      ? (member: MockMember) =>
+          rootAccount_in?.includes(member.rootAccount) || controllerAccount_in?.includes(member.controllerAccount)
+      : ({ id, handle, isVerified, isFoundingMember }: MockMember) =>
+          (id_eq ? id === id_eq : handle_contains ? isMatch?.(handle) : true) &&
+          (!isVerified_eq || isVerified) &&
+          (!isFoundingMember_eq || isFoundingMember)
+  )
+
+  return paginate(sort(models, orderBy), limit, offset)
 }
 
 const getMatcher = (text: string) => {

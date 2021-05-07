@@ -55,6 +55,12 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
   const { search, role, concil, onlyVerified, onlyFounder } = filters
 
+  const onSearchKeyDown: React.KeyboardEventHandler | undefined =
+    onApply &&
+    (({ key }) => {
+      key === 'Enter' && onApply(filters)
+    })
+
   return (
     <MemberListFiltersContainer>
       <ClearBtn
@@ -71,6 +77,7 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
           <InputText
             placeholder="Search"
             value={search}
+            onKeyDown={onSearchKeyDown}
             onChange={(evt: ChangeEvent<HTMLInputElement>) => {
               const { value } = evt.target
               dispatch({ type: 'change', field: 'search', value })
