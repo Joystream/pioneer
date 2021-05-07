@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Tooltip } from '@/common/components/Tooltip'
 
-import { LeaderMemberIcon } from '../../common/components/icons/LeaderMemberIcon'
 import { Member } from '../types'
 
 import { Avatar } from './Avatar'
@@ -49,7 +48,11 @@ export const MemberInfo = React.memo(
         <MemberPhoto>
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />
-            {isLeader && <AvatarMemberLabel icon={<LeaderMemberIcon />} helperText="This member is a leader" />}
+            {isLeader && (
+              <Tooltip tooltipText="This member is a leader">
+                <AvatarMemberLabel />
+              </Tooltip>
+            )}
           </MemberPhotoContainer>
         </MemberPhoto>
         <MemberHead>

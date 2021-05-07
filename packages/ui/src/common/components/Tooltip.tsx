@@ -215,7 +215,7 @@ export const TooltipComponent = styled.button`
   position: relative;
   justify-content: center;
   align-items: center;
-  z-index: 60;
+  z-index: 50;
 
   svg {
     width: 100%;
