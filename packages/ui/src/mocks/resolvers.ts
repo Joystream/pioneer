@@ -44,11 +44,15 @@ export const getMemberResolver = (obj: any, args: any, context: any, info: any) 
   return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
 }
 
+type SortableKeys = keyof SortableQueryResult
 interface SortableQueryResult {
   id: string
   handle: string
 }
 const sort = <T extends SortableQueryResult>(members: T[], orderBy?: Maybe<MembershipOrderByInput>): T[] => {
+  const sortByKey = (key: SortableKeys, direction: number) => (a: T, b: T) =>
+    direction * (b[key] ?? '').localeCompare(a[key] ?? '')
+
   const { EntryAsc, EntryDesc, HandleAsc, HandleDesc } = MembershipOrderByInput
 
   const authorizedKeys = [EntryAsc, EntryDesc, HandleAsc, HandleDesc]
@@ -57,11 +61,9 @@ const sort = <T extends SortableQueryResult>(members: T[], orderBy?: Maybe<Membe
   }
 
   const [key, direction] = orderBy.toLowerCase().split('_')
-  const membersKey = (key === 'entry' ? 'id' : key) as 'id' | 'handle'
-  const fact = direction === 'desc' ? 1 : -1
-  const sortFn = (a: T, b: T) => fact * (b[membersKey] ?? '').localeCompare(a[membersKey] ?? '')
+  const membersKey = (key === 'entry' ? 'id' : key) as SortableKeys
 
-  return members.sort(sortFn)
+  return members.sort(sortByKey(membersKey, direction === 'desc' ? 1 : -1))
 }
 
 const paginate = <T extends any>(collection: T[], limit?: Maybe<number>, offset?: Maybe<number>): T[] => {
