@@ -26,6 +26,7 @@ const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { showModal } = useModal()
   const { isLoading, opening } = useOpening(id)
+  const { copyValue } = useCopyToClipboard()
 
   if (isLoading || !opening) {
     return <Loading />
