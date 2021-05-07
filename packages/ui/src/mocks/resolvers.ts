@@ -1,18 +1,15 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
 
+import { isNumber } from '@/common/utils'
+
 import {
   Maybe,
   MembershipOrderByInput,
   MembershipWhereInput,
   WorkingGroupWhereUniqueInput,
 } from '../common/api/queries'
-import {
-  GetMembersQueryResult,
-  GetMembersQueryVariables,
-  MemberFieldsFragment,
-  SearchMembersQueryResult,
-} from '../memberships/queries'
+import { MemberFieldsFragment, SearchMembersQueryResult } from '../memberships/queries'
 import {
   GetApplicationFormQuestionAnswerQueryResult,
   GetApplicationFormQuestionAnswerQueryVariables,
@@ -67,8 +64,8 @@ const sort = <T extends SortableQueryResult>(members: T[], orderBy?: Maybe<Membe
 }
 
 const paginate = <T extends any>(collection: T[], limit?: Maybe<number>, offset?: Maybe<number>): T[] => {
-  const start = (offset ?? 0) * (limit ?? 0)
-  return collection.slice(start, start + (limit ?? 0) || undefined)
+  const start = offset ?? 0
+  return collection.slice(start, isNumber(limit) ? start + limit : undefined)
 }
 
 type GetMembersWhereKeys =
