@@ -35,7 +35,7 @@ export const useMembers = ({ order, filter }: UseMemberProps): UseMembers => {
 
   return {
     isLoading: loading,
-    members: data?.memberships.map(asMember) ?? [],
+    members: data?.membershipsConnection.edges.map(({ node }) => asMember(node)) ?? [],
   }
 }
 

@@ -1,6 +1,7 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
-import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
-import { resolveRelayConnection } from '@miragejs/graphql/dist/resolvers/relay'
+import { adaptRecords, getRecords } from '@miragejs/graphql/dist/orm/records'
+import { getEdges, getPageInfo, getRelayArgs } from '@miragejs/graphql/dist/relay-pagination'
+import { unwrapType } from '@miragejs/graphql/dist/utils'
 
 import {
   Maybe,
@@ -125,10 +126,34 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
   return limit ? models.slice(0, limit) : models
 }
 
-export const membershipsConnectionResolver: QueryResolver<any, any> = (parent, args, context, info) => {
-  const type = (info as any).schema.getType('MembershipConnection')
+export const membershipsConnectionResolver: QueryResolver<any, any> = (obj, args, context, info) => {
+  const connectionType = (info as any).schema.getType('MembershipConnection')
 
-  return resolveRelayConnection(parent, args, context, info, type)
+  const { edges: edgesField } = connectionType.getFields()
+  const { type: edgeType } = unwrapType(edgesField.type)
+  const { type: nodeType } = unwrapType(edgeType.getFields().node.type)
+  const { relayArgs, nonRelayArgs } = getRelayArgs({})
+
+  // We don't have filtering yet so simple where is sufficient
+  const records = getRecords(nodeType, nonRelayArgs, context.mirageSchema)
+
+  if (args.orderBy) {
+    const [field, order] = args.orderBy.split('_')
+
+    if (field in (info as any).schema.getType('Membership').getFields()) {
+      records.sort((a, b) => {
+        return a[field]?.toString().localeCompare(b[field]?.toString()) * (order === 'ASC' ? 1 : -1)
+      })
+    }
+  }
+
+  const edges = getEdges(records, relayArgs, nodeType.name)
+
+  return {
+    edges,
+    pageInfo: getPageInfo(records, edges),
+    totalCount: records.length,
+  }
 }
 
 export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryResult[]> = (
