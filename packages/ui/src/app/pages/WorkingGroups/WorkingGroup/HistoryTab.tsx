@@ -28,7 +28,7 @@ export function HistoryTab() {
   return (
     <ContentWithSidepanel>
       <MainPanel>
-        <Tabs tabs={tabs} />
+        <Tabs tabsSize="xs" tabs={tabs} />
         {currentTab === 'OPENINGS' && <OpeningsHistory groupId={group?.id} />}
         {currentTab === 'WORKERS' && <WorkersHistory groupId={group?.id} />}
       </MainPanel>
