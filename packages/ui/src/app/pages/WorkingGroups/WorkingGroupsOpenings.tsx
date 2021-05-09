@@ -1,6 +1,8 @@
 import BN from 'bn.js'
 import React, { useState } from 'react'
 
+import { ButtonPrimary } from '@/common/components/buttons'
+
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { ActivitiesBlock } from '../../../common/components/Activities/ActivitiesBlock'
 import { Loading } from '../../../common/components/Loading'
@@ -14,15 +16,19 @@ import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
-import { TextMedium } from '../../../common/components/typography'
 import { useActivities } from '../../../common/hooks/useActivities'
+import { useModal } from '../../../common/hooks/useModal'
+import { useToggle } from '../../../common/hooks/useToggle'
+import { SwitchMemberModal } from '../../../memberships/components/CurrentMember/SwitchMemberModal'
 import { MemberRoles } from '../../../memberships/components/MemberRoles'
 import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
+import { BuyMembershipModalCall } from '../../../memberships/modals/BuyMembershipModal'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
+
 
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
@@ -31,6 +37,9 @@ export const WorkingGroupsOpenings = () => {
   const activities = useActivities()
   const { active } = useMyMemberships()
   const { locked } = useTotalBalances()
+  const [isSelectMembershipOpen, toggleSelectMembershipOpen] = useToggle()
+  const { showModal } = useModal()
+
   const earnings = {
     day: new BN(200),
     month: new BN(102_000),
@@ -54,35 +63,49 @@ export const WorkingGroupsOpenings = () => {
   ]
 
   return (
-    <AppPage>
-      <PageHeader>
-        <PageTitle>Working Groups</PageTitle>
-        <WorkingGroupsTabs />
-      </PageHeader>
-      <ContentWithSidepanel>
-        <MainPanel>
-          <Statistics>
-            <StatisticItem title="My Roles">
-              {active ? <MemberRoles member={active} size="l" max={6} /> : <TextMedium>Select membership</TextMedium>}
-            </StatisticItem>
-            <TokenValueStat title="Currently staking" value={locked} />
-            <MultiTokenValueStat
-              title="Earned in past"
-              values={[
-                { label: '24 hours', value: earnings.day },
-                { label: 'Month', value: earnings.month },
-              ]}
-            />
-          </Statistics>
-          <ContentWithTabs>
-            <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
-          </ContentWithTabs>
-        </MainPanel>
-        <SidePanel>
-          <ActivitiesBlock activities={activities} label="Working Groups Activities" />
-        </SidePanel>
-      </ContentWithSidepanel>
-    </AppPage>
+    <>
+      <AppPage>
+        <PageHeader>
+          <PageTitle>Working Groups</PageTitle>
+          <WorkingGroupsTabs />
+        </PageHeader>
+        <ContentWithSidepanel>
+          <MainPanel>
+            <Statistics>
+              <StatisticItem title="My Roles">
+                {active ? (
+                  <MemberRoles member={active} size="l" max={6} />
+                ) : (
+                  <ButtonPrimary size="small" onClick={toggleSelectMembershipOpen}>
+                    Select membership
+                  </ButtonPrimary>
+                )}
+              </StatisticItem>
+              <TokenValueStat title="Currently staking" value={locked} />
+              <MultiTokenValueStat
+                title="Earned in past"
+                values={[
+                  { label: '24 hours', value: earnings.day },
+                  { label: 'Month', value: earnings.month },
+                ]}
+              />
+            </Statistics>
+            <ContentWithTabs>
+              <Tabs tabsSize="xs" tabs={openingsTabs} />
+              {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
+            </ContentWithTabs>
+          </MainPanel>
+          <SidePanel>
+            <ActivitiesBlock activities={activities} label="Working Groups Activities" />
+          </SidePanel>
+        </ContentWithSidepanel>
+      </AppPage>
+      {isSelectMembershipOpen && (
+        <SwitchMemberModal
+          onClose={toggleSelectMembershipOpen}
+          onCreateMember={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
+        />
+      )}
+    </>
   )
 }
