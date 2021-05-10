@@ -9,7 +9,6 @@ import { useMyMemberships } from '../../hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
 
-
 export const CurrentMember = () => {
   const { members, active } = useMyMemberships()
   const { showModal } = useModal()

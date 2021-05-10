@@ -7,12 +7,7 @@ import {
   MembershipWhereInput,
   WorkingGroupWhereUniqueInput,
 } from '../common/api/queries'
-import {
-  GetMembersQueryResult,
-  GetMembersQueryVariables,
-  MemberFieldsFragment,
-  SearchMembersQueryResult,
-} from '../memberships/queries'
+import { MemberFieldsFragment, SearchMembersQueryResult } from '../memberships/queries'
 import {
   GetApplicationFormQuestionAnswerQueryResult,
   GetApplicationFormQuestionAnswerQueryVariables,
