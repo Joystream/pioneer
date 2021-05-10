@@ -18,7 +18,7 @@
     ],
     "status": "pending",
     "createdAtBlockId": 1,
-    "createdAtTime": "2021-03-09T10:38:04.155Z"
+    "createdAt": "2021-03-09T10:38:04.155Z"
   },
   {
     "id": "1",
@@ -39,7 +39,7 @@
     ],
     "status": "accepted",
     "createdAtBlockId": 2,
-    "createdAtTime": "2021-03-09T23:38:04.155Z"
+    "createdAt": "2021-03-09T23:38:04.155Z"
   },
   {
     "id": "2",
@@ -60,6 +60,6 @@
     ],
     "status": "rejected",
     "createdAtBlockId": 4,
-    "createdAtTime": "2021-05-19T10:38:04.155Z"
+    "createdAt": "2021-05-19T10:38:04.155Z"
   }
 ]

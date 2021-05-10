@@ -36,7 +36,7 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
     </SidePaneRow>
     <SidePaneRow>
       <SidePaneLabel text="Applied on" />
-      <AboutDateColumn time={application.createdAtTime} block={application.createdAtBlock} />
+      <AboutDateColumn time={application.createdAt} block={application.createdAtBlock} />
     </SidePaneRow>
     <SidePaneRow>
       <SidePaneLabel text="Application ID" />
