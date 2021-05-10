@@ -2,8 +2,8 @@ import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords, getRecords } from '@miragejs/graphql/dist/orm/records'
 import { getEdges, getPageInfo, getRelayArgs } from '@miragejs/graphql/dist/relay-pagination'
 import { unwrapType } from '@miragejs/graphql/dist/utils'
-import { AnyRegistry } from 'miragejs/-types'
-import Schema from 'miragejs/orm/schema'
+
+import { Filter, QueryArgs, QueryResolver, WhereArgs, WhereQueryResolver } from '@/mocks/types'
 
 import {
   ApplicationFormQuestionAnswer,
@@ -30,29 +30,6 @@ import {
 } from '../working-groups/queries'
 
 import { MockMember } from './data'
-
-type WhereQueryResolver<QueryArgs, ReturnType = unknown> = (
-  obj: unknown,
-  args: QueryArgs,
-  context: { mirageSchema: Schema<AnyRegistry> },
-  info: unknown
-) => ReturnType
-
-interface QueryArgs {
-  offset?: any
-  limit?: any
-  where?: any
-  orderBy?: any
-}
-type Filter = (a: any) => boolean
-type WhereArgs<T extends QueryArgs> = T['where']
-
-type QueryResolver<ArgsType extends Record<string, unknown>, ReturnType = unknown> = (
-  obj: unknown,
-  args: ArgsType,
-  context: { mirageSchema: any },
-  info: unknown
-) => ReturnType
 
 const getWhereResolver = <T extends QueryArgs, D>(
   modelName: string,
