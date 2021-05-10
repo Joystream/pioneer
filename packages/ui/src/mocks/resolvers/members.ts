@@ -12,7 +12,7 @@ export const getMemberResolver = (obj: any, args: any, context: any, info: any) 
   return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
 }
 
-export const getMembersResolver = getWhereResolver('Membership', () => () => true)
+export const getMembersResolver = getWhereResolver('Membership')
 
 const getMatcher = (text: string) => {
   const regExp = new RegExp(text, 'i')

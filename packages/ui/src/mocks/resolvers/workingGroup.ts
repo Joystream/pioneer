@@ -1,27 +1,10 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
 
-import {
-  ApplicationFormQuestionAnswer,
-  QueryApplicationFormQuestionAnswersArgs,
-  QueryWorkersArgs,
-  QueryWorkingGroupApplicationsArgs,
-  QueryWorkingGroupOpeningsArgs,
-  Worker,
-  WorkingGroupApplication,
-  WorkingGroupOpening,
-  WorkingGroupWhereUniqueInput,
-} from '@/common/api/queries'
+import { WorkingGroupWhereUniqueInput } from '@/common/api/queries'
 import { getWhereResolver } from '@/mocks/baseResolvers'
 import { QueryResolver } from '@/mocks/types'
-import {
-  GetApplicationFormQuestionAnswerQueryResult,
-  GetWorkersQueryResult,
-  GetWorkingGroupApplicationsQueryResult,
-  GetWorkingGroupOpeningsQueryResult,
-  GetWorkingGroupQueryResult,
-  GetWorkingGroupsQueryResult,
-} from '@/working-groups/queries'
+import { GetWorkingGroupQueryResult, GetWorkingGroupsQueryResult } from '@/working-groups/queries'
 
 export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryResult[]> = (
   obj,
@@ -56,29 +39,7 @@ export const getWorkingGroupOpeningResolver = (obj: any, args: any, context: any
   return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
 }
 
-export const getWorkingGroupOpeningsResolver = getWhereResolver<
-  QueryWorkingGroupOpeningsArgs,
-  GetWorkingGroupOpeningsQueryResult
->('WorkingGroupOpening', (where) => {
-  return (opening: WorkingGroupOpening) => opening.groupId === where?.groupId_eq
-})
-
-export const getWorkersResolver = getWhereResolver<QueryWorkersArgs, GetWorkersQueryResult>('Worker', (where) => {
-  return (worker: Worker) => worker.groupId === where?.groupId_eq
-})
-
-export const getWorkingGroupApplicationsResolver = getWhereResolver<
-  QueryWorkingGroupApplicationsArgs,
-  GetWorkingGroupApplicationsQueryResult
->('WorkingGroupApplication', (where) => {
-  return (application: WorkingGroupApplication) => {
-    return where?.applicantId_in?.includes(application.applicantId) ?? false
-  }
-})
-
-export const getApplicationFormQuestionAnswersResolver = getWhereResolver<
-  QueryApplicationFormQuestionAnswersArgs,
-  GetApplicationFormQuestionAnswerQueryResult
->('ApplicationFormQuestionAnswer', (where) => {
-  return (answer: ApplicationFormQuestionAnswer) => answer.applicationId === where?.applicationId_eq
-})
+export const getWorkingGroupOpeningsResolver = getWhereResolver('WorkingGroupOpening')
+export const getWorkersResolver = getWhereResolver('Worker')
+export const getWorkingGroupApplicationsResolver = getWhereResolver('WorkingGroupApplication')
+export const getApplicationFormQuestionAnswersResolver = getWhereResolver('ApplicationFormQuestionAnswer')

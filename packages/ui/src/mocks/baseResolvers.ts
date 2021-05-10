@@ -4,19 +4,36 @@ import { unwrapType } from '@miragejs/graphql/dist/utils'
 import { GraphQLObjectType, GraphQLSchema } from 'graphql/type'
 
 import { PageInfo } from '@/common/api/queries'
-import { ConnectionQueryResolver, Filter, QueryArgs, WhereArgs, WhereQueryResolver } from '@/mocks/types'
+import { ConnectionQueryResolver, QueryArgs, WhereQueryResolver } from '@/mocks/types'
 
-export const getWhereResolver = <T extends QueryArgs, D>(
-  modelName: string,
-  filter: (T: WhereArgs<T>) => Filter
-): WhereQueryResolver<T, D> => {
+type FilterCallback = (model: Record<string, any>) => boolean
+
+const getFilter = (where: Record<string, any>) => {
+  const filters: FilterCallback[] = []
+
+  for (const [key, checkValue] of Object.entries(where)) {
+    const [field, type] = key.split('_')
+
+    if (type === 'eq') {
+      filters.push((model: Record<string, any>) => String(model[field]) === checkValue.toString())
+    }
+
+    if (type === 'in') {
+      filters.push((model: Record<string, any>) => checkValue.includes(model[field]))
+    }
+  }
+
+  return (model: any) => filters.every((value) => value(model))
+}
+
+export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): WhereQueryResolver<T, D> => {
   return (obj, args, { mirageSchema: schema }) => {
     const { where, limit } = args
 
-    const { models } = schema.all(modelName)
+    let { models } = schema.all(modelName)
 
     if (where) {
-      models.filter(filter(where))
+      models = models.filter(getFilter(where))
     }
 
     if (limit) {
