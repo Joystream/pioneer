@@ -23,17 +23,30 @@ export const BreadcrumbsItem = React.memo(({ url, children, isLink }: Breadcrumb
 })
 
 const BreadcrumbsItemLink = styled(Link)`
-  transition: ${Transitions.all};
-  color: ${Colors.Black[500]};
-
-  &:hover {
-    color: ${Colors.Blue[500]};
+  &,
+  &:visited {
+    color: ${Colors.Black[500]};
+    font-size: 10px;
+    line-height: 16px;
+    font-family: ${Fonts.Inter};
+    text-decoration: none;
+    cursor: pointer;
+    transition: ${Transitions.all};
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      color: ${Colors.Blue[500]};
+    }
   }
 `
 
-const BreadcrumbsItemText = styled.div`
+const BreadcrumbsItemText = styled.span`
   color: ${Colors.Black[400]};
+  font-size: 10px;
+  line-height: 16px;
+  font-family: ${Fonts.Inter};
   cursor: auto;
+  transition: ${Transitions.all};
 `
 
 const BreadcrumbsItemComponent = styled.li`
@@ -41,11 +54,6 @@ const BreadcrumbsItemComponent = styled.li`
   position: relative;
   align-items: center;
   margin-left: 26px;
-  color: ${Colors.Black[500]};
-  font-size: 10px;
-  line-height: 16px;
-  font-family: ${Fonts.Inter};
-  text-decoration: none;
 
   &:before {
     content: '';
