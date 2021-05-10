@@ -3,7 +3,8 @@ import { adaptRecords, getRecords } from '@miragejs/graphql/dist/orm/records'
 import { getEdges, getPageInfo, getRelayArgs } from '@miragejs/graphql/dist/relay-pagination'
 import { unwrapType } from '@miragejs/graphql/dist/utils'
 
-import { Filter, QueryArgs, QueryResolver, WhereArgs, WhereQueryResolver } from '@/mocks/types'
+import { getWhereResolver } from '@/mocks/baseResolvers'
+import { QueryResolver } from '@/mocks/types'
 
 import {
   ApplicationFormQuestionAnswer,
@@ -30,23 +31,6 @@ import {
 } from '../working-groups/queries'
 
 import { MockMember } from './data'
-
-const getWhereResolver = <T extends QueryArgs, D>(
-  modelName: string,
-  filter: (T: WhereArgs<T>) => Filter
-): WhereQueryResolver<T, D> => {
-  return (obj, args, { mirageSchema: schema }) => {
-    const { where, limit } = args
-
-    const { models } = where && filter ? schema.where(modelName, filter(where)) : schema.all(modelName)
-
-    if (limit) {
-      models.splice(limit)
-    }
-
-    return (adaptRecords(models) as unknown) as D
-  }
-}
 
 export const getMemberResolver = (obj: any, args: any, context: any, info: any) => {
   const resolverArgs = {
