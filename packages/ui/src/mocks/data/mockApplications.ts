@@ -10,7 +10,7 @@ export interface MockApplication {
   answers?: MockAnswer[]
   status?: string
   createdAtBlockId: number
-  createdAtTime: string
+  createdAt: string
 }
 
 interface MockAnswer {
