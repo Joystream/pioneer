@@ -2,34 +2,50 @@ import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords, getRecords } from '@miragejs/graphql/dist/orm/records'
 import { getEdges, getPageInfo, getRelayArgs } from '@miragejs/graphql/dist/relay-pagination'
 import { unwrapType } from '@miragejs/graphql/dist/utils'
+import { AnyRegistry } from 'miragejs/-types'
+import Schema from 'miragejs/orm/schema'
 
 import {
+  ApplicationFormQuestionAnswer,
   Maybe,
   MembershipOrderByInput,
   MembershipWhereInput,
+  QueryApplicationFormQuestionAnswersArgs,
+  QueryWorkersArgs,
+  QueryWorkingGroupApplicationsArgs,
+  QueryWorkingGroupOpeningsArgs,
+  Worker,
+  WorkingGroupApplication,
+  WorkingGroupOpening,
   WorkingGroupWhereUniqueInput,
 } from '../common/api/queries'
-import {
-  GetMembersQueryResult,
-  GetMembersQueryVariables,
-  MemberFieldsFragment,
-  SearchMembersQueryResult,
-} from '../memberships/queries'
+import { MemberFieldsFragment, SearchMembersQueryResult } from '../memberships/queries'
 import {
   GetApplicationFormQuestionAnswerQueryResult,
-  GetApplicationFormQuestionAnswerQueryVariables,
   GetWorkersQueryResult,
-  GetWorkersQueryVariables,
   GetWorkingGroupApplicationsQueryResult,
-  GetWorkingGroupApplicationsQueryVariables,
   GetWorkingGroupOpeningsQueryResult,
   GetWorkingGroupQueryResult,
   GetWorkingGroupsQueryResult,
 } from '../working-groups/queries'
 
 import { MockMember } from './data'
-import { MockApplication } from './data/mockApplications'
-import { MockWorker } from './data/mockWorkingGroups'
+
+type WhereQueryResolver<QueryArgs, ReturnType = unknown> = (
+  obj: unknown,
+  args: QueryArgs,
+  context: { mirageSchema: Schema<AnyRegistry> },
+  info: unknown
+) => ReturnType
+
+interface QueryArgs {
+  offset?: any
+  limit?: any
+  where?: any
+  orderBy?: any
+}
+type Filter = (a: any) => boolean
+type WhereArgs<T extends QueryArgs> = T['where']
 
 type QueryResolver<ArgsType extends Record<string, unknown>, ReturnType = unknown> = (
   obj: unknown,
@@ -37,6 +53,23 @@ type QueryResolver<ArgsType extends Record<string, unknown>, ReturnType = unknow
   context: { mirageSchema: any },
   info: unknown
 ) => ReturnType
+
+const getWhereResolver = <T extends QueryArgs, D>(
+  modelName: string,
+  filter: (T: WhereArgs<T>) => Filter
+): WhereQueryResolver<T, D> => {
+  return (obj, args, { mirageSchema: schema }) => {
+    const { where, limit } = args
+
+    const { models } = where && filter ? schema.where(modelName, filter(where)) : schema.all(modelName)
+
+    if (limit) {
+      models.splice(limit)
+    }
+
+    return (adaptRecords(models) as unknown) as D
+  }
+}
 
 export const getMemberResolver = (obj: any, args: any, context: any, info: any) => {
   const resolverArgs = {
@@ -181,18 +214,6 @@ export const getWorkingGroupResolver: QueryResolver<WorkingGroupWhereUniqueInput
   return adaptRecords(models)[0]
 }
 
-export const getWorkingGroupOpeningsResolver: QueryResolver<any, GetWorkingGroupOpeningsQueryResult[]> = (
-  parent,
-  args,
-  { mirageSchema: schema }
-) => {
-  const { models } = args.where.groupId_eq
-    ? schema.where('WorkingGroupOpening', { groupId: args.where.groupId_eq })
-    : schema.all('WorkingGroupOpening')
-
-  return adaptRecords(models)
-}
-
 export const getWorkingGroupOpeningResolver = (obj: any, args: any, context: any, info: any) => {
   const resolverArgs = {
     id: args.where.id,
@@ -201,44 +222,29 @@ export const getWorkingGroupOpeningResolver = (obj: any, args: any, context: any
   return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
 }
 
-export const getWorkersResolver: QueryResolver<{ where: GetWorkersQueryVariables }, GetWorkersQueryResult[]> = (
-  obj,
-  args,
-  { mirageSchema: schema }
-) => {
-  const groupId = args.where.groupId_eq
+export const getWorkingGroupOpeningsResolver = getWhereResolver<
+  QueryWorkingGroupOpeningsArgs,
+  GetWorkingGroupOpeningsQueryResult
+>('WorkingGroupOpening', (where) => {
+  return (opening: WorkingGroupOpening) => opening.groupId === where?.groupId_eq
+})
 
-  const { models } = groupId
-    ? schema.where('Worker', (worker: MockWorker) => groupId == worker.groupId)
-    : schema.all('Worker')
+export const getWorkersResolver = getWhereResolver<QueryWorkersArgs, GetWorkersQueryResult>('Worker', (where) => {
+  return (worker: Worker) => worker.groupId === where?.groupId_eq
+})
 
-  return models
-}
+export const getWorkingGroupApplicationsResolver = getWhereResolver<
+  QueryWorkingGroupApplicationsArgs,
+  GetWorkingGroupApplicationsQueryResult
+>('WorkingGroupApplication', (where) => {
+  return (application: WorkingGroupApplication) => {
+    return where?.applicantId_in?.includes(application.applicantId) ?? false
+  }
+})
 
-export const getWorkingGroupApplicationsResolver: QueryResolver<
-  { where: GetWorkingGroupApplicationsQueryVariables },
-  GetWorkingGroupApplicationsQueryResult[]
-> = (obj, args, { mirageSchema: schema }) => {
-  const applicantIds = args.where.applicantId_in
-
-  const { models } = applicantIds
-    ? schema.where('WorkingGroupApplication', (application: MockApplication) =>
-        applicantIds.includes(application.applicantId)
-      )
-    : schema.all('WorkingGroupApplication')
-
-  return models
-}
-
-export const getApplicationFormQuestionAnswersResolver: QueryResolver<
-  { where: GetApplicationFormQuestionAnswerQueryVariables },
-  GetApplicationFormQuestionAnswerQueryResult[]
-> = (obj, args, { mirageSchema: schema }) => {
-  const applicationId = args.where.applicationId_eq
-
-  const { models } = applicationId
-    ? schema.where('ApplicationFormQuestionAnswer', { applicationId })
-    : schema.all('ApplicationFormQuestionAnswer')
-
-  return models
-}
+export const getApplicationFormQuestionAnswersResolver = getWhereResolver<
+  QueryApplicationFormQuestionAnswersArgs,
+  GetApplicationFormQuestionAnswerQueryResult
+>('ApplicationFormQuestionAnswer', (where) => {
+  return (answer: ApplicationFormQuestionAnswer) => answer.applicationId === where?.applicationId_eq
+})
