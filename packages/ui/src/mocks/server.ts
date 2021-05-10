@@ -2,6 +2,16 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
+import {
+  getApplicationFormQuestionAnswersResolver,
+  getWorkersResolver,
+  getWorkingGroupApplicationsResolver,
+  getWorkingGroupOpeningResolver,
+  getWorkingGroupOpeningsResolver,
+  getWorkingGroupResolver,
+  getWorkingGroupsResolver,
+} from '@/mocks/resolvers/workingGroup'
+
 import schema from '../common/api/schemas/schema.graphql'
 
 import { seedBlocks, seedMembers } from './data'
@@ -11,14 +21,7 @@ import { seedWorkingGroups } from './data/mockWorkingGroups'
 import {
   getMemberResolver,
   getMembersResolver,
-  getWorkingGroupOpeningsResolver,
-  getWorkersResolver,
-  getWorkingGroupsResolver,
   searchMembersResolver,
-  getWorkingGroupResolver,
-  getWorkingGroupApplicationsResolver,
-  getWorkingGroupOpeningResolver,
-  getApplicationFormQuestionAnswersResolver,
   membershipsConnectionResolver,
 } from './resolvers'
 
