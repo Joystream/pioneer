@@ -4,7 +4,7 @@ import { unwrapType } from '@miragejs/graphql/dist/utils'
 import { GraphQLObjectType, GraphQLSchema } from 'graphql/type'
 
 import { PageInfo } from '@/common/api/queries'
-import { ConnectionQueryResolver, QueryArgs, WhereQueryResolver } from '@/mocks/types'
+import { ConnectionQueryResolver, QueryArgs, WhereQueryResolver } from '@/mocks/resolvers/types'
 
 type FilterCallback = (model: Record<string, any>) => boolean
 

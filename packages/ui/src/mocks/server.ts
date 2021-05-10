@@ -2,7 +2,6 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import { getConnectionResolver, getWhereResolver } from '@/mocks/baseResolvers'
 import {
   getWorkingGroupOpeningResolver,
   getWorkingGroupResolver,
@@ -15,7 +14,7 @@ import { seedBlocks, seedMembers } from './data'
 import { seedApplications } from './data/mockApplications'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
-import { getMemberResolver, searchMembersResolver } from './resolvers'
+import { getConnectionResolver, getWhereResolver, getMemberResolver, searchMembersResolver } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
 // See: https://github.com/miragejs/ember-cli-mirage/issues/996#issuecomment-315011890

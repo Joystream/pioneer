@@ -1,7 +1,7 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 
 import { MemberFieldsFragment, SearchMembersQueryResult } from '@/memberships/queries'
-import { QueryResolver } from '@/mocks/types'
+import { QueryResolver } from '@/mocks/resolvers/types'
 
 export const getMemberResolver = (obj: any, args: any, context: any, info: any) => {
   const resolverArgs = {
