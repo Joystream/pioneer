@@ -1,6 +1,6 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
@@ -36,7 +36,7 @@ export type MemberWithDetailsFragment = {
 } & MemberFieldsFragment
 
 export type GetMemberQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
+  where: Types.MembershipWhereUniqueInput
 }>
 
 export type GetMemberQuery = {
@@ -156,8 +156,8 @@ export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>
 export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>
 export const GetMemberDocument = gql`
-  query GetMember($id: ID!) {
-    membershipByUniqueInput(where: { id: $id }) {
+  query GetMember($where: MembershipWhereUniqueInput!) {
+    membershipByUniqueInput(where: $where) {
       ...MemberWithDetails
     }
   }
@@ -176,7 +176,7 @@ export const GetMemberDocument = gql`
  * @example
  * const { data, loading, error } = useGetMemberQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      where: // value for 'where'
  *   },
  * });
  */

@@ -23,6 +23,13 @@ export type WhereQueryResolver<QueryArgs, ReturnType = unknown> = (
   info: unknown
 ) => ReturnType
 
+export type UniqueQueryResolver<QueryArgs, ReturnType = unknown> = (
+  obj: unknown,
+  args: QueryArgs,
+  context: { mirageSchema: Schema<AnyRegistry> },
+  info: unknown
+) => ReturnType
+
 export interface QueryArgs {
   offset?: any
   limit?: any

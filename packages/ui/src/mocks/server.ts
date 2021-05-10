@@ -11,10 +11,10 @@ import { seedWorkingGroups } from './data/mockWorkingGroups'
 import {
   getConnectionResolver,
   getWhereResolver,
-  getMemberResolver,
   searchMembersResolver,
   getWorkingGroupOpeningResolver,
   getWorkingGroupResolver,
+  getUniqueResolver,
 } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
@@ -55,7 +55,7 @@ export const makeServer = (environment = 'development') => {
           root: undefined,
           resolvers: {
             Query: {
-              membershipByUniqueInput: getMemberResolver,
+              membershipByUniqueInput: getUniqueResolver('Membership'),
               memberships: getWhereResolver('Membership'),
               searchMemberships: searchMembersResolver,
               membershipsConnection: getConnectionResolver('MembershipConnection'),

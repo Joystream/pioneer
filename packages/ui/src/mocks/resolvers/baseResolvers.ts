@@ -1,10 +1,10 @@
-import { adaptRecords, getRecords } from '@miragejs/graphql/dist/orm/records'
+import { adaptRecord, adaptRecords, getRecords } from '@miragejs/graphql/dist/orm/records'
 import { getEdges, getPageInfo, getRelayArgs } from '@miragejs/graphql/dist/relay-pagination'
 import { unwrapType } from '@miragejs/graphql/dist/utils'
 import { GraphQLObjectType, GraphQLSchema } from 'graphql/type'
 
 import { PageInfo } from '@/common/api/queries'
-import { ConnectionQueryResolver, QueryArgs, WhereQueryResolver } from '@/mocks/resolvers/types'
+import { ConnectionQueryResolver, QueryArgs, UniqueQueryResolver, WhereQueryResolver } from '@/mocks/resolvers/types'
 
 type FilterCallback = (model: Record<string, any>) => boolean
 
@@ -45,6 +45,14 @@ export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): Whe
     }
 
     return (adaptRecords(models) as unknown) as D
+  }
+}
+
+export const getUniqueResolver = <T extends QueryArgs, D>(modelName: string): UniqueQueryResolver<T, D> => {
+  return (obj, args, { mirageSchema: schema }) => {
+    const model = schema.findBy(modelName, args.where)
+
+    return adaptRecord(model) as D
   }
 }
 

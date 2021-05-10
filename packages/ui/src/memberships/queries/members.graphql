@@ -34,8 +34,8 @@ fragment MemberWithDetails on Membership {
   }
 }
 
-query GetMember($id: ID!) {
-  membershipByUniqueInput(where: { id: $id }) {
+query GetMember($where: MembershipWhereUniqueInput!) {
+  membershipByUniqueInput(where: $where) {
     ...MemberWithDetails
   }
 }
