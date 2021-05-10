@@ -5,16 +5,12 @@ import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
 import { ArrowDownExpandedIcon, Icon } from '../../../common/components/icons'
 import { BorderRad, Colors, Transitions } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
-import { useToggle } from '../../../common/hooks/useToggle'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
-import { BuyMembershipModalCall } from '../../modals/BuyMembershipModal'
+import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
-
-import { SwitchMemberModal } from './SwitchMemberModal'
 
 export const CurrentMember = () => {
   const { members, active } = useMyMemberships()
-  const [isOpen, toggleOpen] = useToggle()
   const { showModal } = useModal()
 
   const count = members.length
@@ -26,19 +22,13 @@ export const CurrentMember = () => {
   return (
     <>
       <MembershipsCount count={count} />
-      <SwitchMember onClick={toggleOpen}>
+      <SwitchMember onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
         {active && <MemberInfo member={active} isOnDark={true} maxRoles={4} />}
         {!active && <>Select membership</>}
         <SwitchArrow>
           <ArrowDownExpandedIcon />
         </SwitchArrow>
       </SwitchMember>
-      {isOpen && (
-        <SwitchMemberModal
-          onClose={toggleOpen}
-          onCreateMember={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
-        />
-      )}
     </>
   )
 }
