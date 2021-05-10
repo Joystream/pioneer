@@ -1,7 +1,7 @@
 [
   {
     "id": "0",
-    "name": "Distribution",
+    "name": "distribution",
     "workers": [
       {
         "membershipId": "0",
@@ -30,7 +30,7 @@
   {
     "id": "1",
     "image": "https://s.gitcoin.co/static/v2/card/thumb.0a0be2e5841a.jpg",
-    "name": "Storage",
+    "name": "storage",
     "workers": [
       {
         "membershipId": "2",
@@ -49,7 +49,7 @@
   },
   {
     "id": "2",
-    "name": "Forum",
+    "name": "forum",
     "workers": [
       {
         "membershipId": "4",

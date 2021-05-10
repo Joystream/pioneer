@@ -85,8 +85,8 @@ query getWorkingGroupOpenings($groupId_eq: ID) {
   }
 }
 
-query getWorkingGroupOpening($id: ID!) {
-  workingGroupOpeningByUniqueInput(where: { id: $id }) {
+query getWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
+  workingGroupOpeningByUniqueInput(where: $where) {
     ... WorkingGroupOpeningFields
   }
 }
@@ -107,8 +107,8 @@ query GetWorkingGroupOpeningQuestions($id: ID!) {
   }
 }
 
-query GetWorkingGroup($name_eq: String) {
-  workingGroupByUniqueInput(where: { name: $name_eq }) {
+query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
+  workingGroupByUniqueInput(where: $where) {
     ... WorkingGroupFields
   }
 }

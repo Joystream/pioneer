@@ -8,14 +8,7 @@ import { seedBlocks, seedMembers } from './data'
 import { seedApplications } from './data/mockApplications'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
-import {
-  getConnectionResolver,
-  getWhereResolver,
-  searchMembersResolver,
-  getWorkingGroupOpeningResolver,
-  getWorkingGroupResolver,
-  getUniqueResolver,
-} from './resolvers'
+import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
 // See: https://github.com/miragejs/ember-cli-mirage/issues/996#issuecomment-315011890
@@ -60,9 +53,9 @@ export const makeServer = (environment = 'development') => {
               searchMemberships: searchMembersResolver,
               membershipsConnection: getConnectionResolver('MembershipConnection'),
               workingGroups: getWhereResolver('WorkingGroup'),
-              workingGroupByUniqueInput: getWorkingGroupResolver,
+              workingGroupByUniqueInput: getUniqueResolver('WorkingGroup'),
               workingGroupOpenings: getWhereResolver('WorkingGroupOpening'),
-              workingGroupOpeningByUniqueInput: getWorkingGroupOpeningResolver,
+              workingGroupOpeningByUniqueInput: getUniqueResolver('WorkingGroupOpening'),
               workers: getWhereResolver('Worker'),
               workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
               applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
