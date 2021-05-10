@@ -13,7 +13,7 @@ interface RawWorkingGroupMock {
   id: string
   name: string
   workers?: WorkerMock[]
-  leaderId?: string
+  leaderId?: string | null
   metadata: {
     name: string
     message: string
@@ -34,7 +34,7 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
     leaderId: null,
   }
 
-  const workingGroup = server.schema.create('WorkingGroup', groupData)
+  let workingGroup = server.schema.create('WorkingGroup', groupData)
   const groupId = workingGroup.id
 
   const memberToWorker = new Map()
@@ -52,6 +52,7 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
   }
 
   if (group.leaderId) {
+    workingGroup = server.schema.find('WorkingGroup', workingGroup.id)
     workingGroup.leaderId = memberToWorker.get(group.leaderId)
     workingGroup.save()
   }

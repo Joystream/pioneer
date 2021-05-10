@@ -17,9 +17,9 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
 
   const workingGroupModel = schema.modelFor('workingGroup')
   // "Mirage: The working-group model has multiple possible inverse associations for the worker.group association."
+  workingGroupModel.class.prototype.associations.workers.opts.inverse = 'group'
+  workingGroupModel.class.prototype.associations.leader.opts.inverse = 'workinggroupleader'
 
-  workingGroupModel.class.prototype.associations.workers.opts.inverse = 'worker'
-  workingGroupModel.class.prototype.associations.leader.opts.inverse = 'group'
   // "Mirage: The working-group model has multiple possible inverse associations for the working-group-metadata.workinggroupmetadata association."
   workingGroupModel.class.prototype.associations.metadata.opts.inverse = 'metadata'
 
@@ -27,8 +27,8 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   // "Mirage: The working-group-metadata model has multiple possible inverse associations for the working-group.metadata association."
   workingGroupMetadataModel.class.prototype.associations.group.opts.inverse = 'group'
 
-  const workerModel = schema.modelFor('worker')
-  workerModel.class.prototype.associations.workinggroupleader.opts.inverse = 'leader'
+  // const workerModel = schema.modelFor('worker')
+  // workerModel.class.prototype.associations.workinggroupleader.opts.inverse = 'leader'
 
   const membershipModel = schema.modelFor('membership')
   // "Mirage: The membership model has multiple possible inverse associations for the membership.invitedBy association."
