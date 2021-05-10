@@ -35,6 +35,7 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
   }
 
   const workingGroup = server.schema.create('WorkingGroup', groupData)
+  const groupId = workingGroup.id
 
   const memberToWorker = new Map()
 
@@ -42,9 +43,9 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
     const membership = server.schema.find('Membership', membershipId)
 
     const worker = server.schema.create('Worker', {
-      group: workingGroup,
+      groupId,
       membership,
-      status: seedWorkerStatus(status as WorkerStatus, server),
+      status: seedWorkerStatus(status as WorkerStatus, membership.id + '_' + groupId, server),
     })
 
     memberToWorker.set(membershipId, worker.id)
@@ -58,14 +59,14 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
   return workingGroup
 }
 
-const seedWorkerStatus = (status: WorkerStatus, server: any) => {
+const seedWorkerStatus = (status: WorkerStatus, id: string, server: any) => {
   switch (status) {
     case 'active':
       return server.schema.create('WorkerStatusActive', {})
     case 'left':
-      return server.schema.create('WorkerStatusLeft', {})
+      return server.schema.create('WorkerStatusLeft', { workerStartedLeavingEventId: id })
     default:
-      return server.schema.create('WorkerStatusTerminated', {})
+      return server.schema.create('WorkerStatusTerminated', { terminatedWorkerEventId: id })
   }
 }
 

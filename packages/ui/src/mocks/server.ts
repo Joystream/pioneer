@@ -9,16 +9,12 @@ import { seedApplications } from './data/mockApplications'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
 import {
+  getConnectionResolver,
+  getWhereResolver,
   getMemberResolver,
-  getMembersResolver,
-  getWorkingGroupOpeningsResolver,
-  getWorkersResolver,
-  getWorkingGroupsResolver,
   searchMembersResolver,
-  getWorkingGroupResolver,
-  getWorkingGroupApplicationsResolver,
   getWorkingGroupOpeningResolver,
-  getApplicationFormQuestionAnswersResolver,
+  getWorkingGroupResolver,
 } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
@@ -60,15 +56,16 @@ export const makeServer = (environment = 'development') => {
           resolvers: {
             Query: {
               membershipByUniqueInput: getMemberResolver,
-              memberships: getMembersResolver,
+              memberships: getWhereResolver('Membership'),
               searchMemberships: searchMembersResolver,
-              workingGroups: getWorkingGroupsResolver,
+              membershipsConnection: getConnectionResolver('MembershipConnection'),
+              workingGroups: getWhereResolver('WorkingGroup'),
               workingGroupByUniqueInput: getWorkingGroupResolver,
-              workingGroupOpenings: getWorkingGroupOpeningsResolver,
+              workingGroupOpenings: getWhereResolver('WorkingGroupOpening'),
               workingGroupOpeningByUniqueInput: getWorkingGroupOpeningResolver,
-              workers: getWorkersResolver,
-              workingGroupApplications: getWorkingGroupApplicationsResolver,
-              applicationFormQuestionAnswers: getApplicationFormQuestionAnswersResolver,
+              workers: getWhereResolver('Worker'),
+              workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
+              applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
             },
           },
         })

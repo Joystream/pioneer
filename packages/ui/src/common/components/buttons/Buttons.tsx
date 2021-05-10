@@ -38,7 +38,7 @@ const getPadding = (props: ButtonProps) => {
 export function ButtonPrimary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonPrimaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      {children}
+      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
     </ButtonPrimaryStyles>
   )
 }
@@ -46,7 +46,7 @@ export function ButtonPrimary({ className, children, size, square, disabled, onC
 export function ButtonSecondary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      {children}
+      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
     </ButtonSecondaryStyles>
   )
 }
@@ -54,21 +54,17 @@ export function ButtonSecondary({ className, children, size, square, disabled, o
 export function ButtonGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      {children}
+      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
     </ButtonGhostStyles>
   )
 }
 
-export const ButtonGhostMedium = (props: ButtonProps) => {
-  return <ButtonGhost {...props} size="medium" />
-}
-
 const BasicButtonStyles = css<ButtonProps>`
-  display: inline-grid;
+  display: flex;
   position: relative;
-  grid-auto-flow: column;
-  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
-  justify-items: center;
+  /* grid-auto-flow: column; */
+  /* grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')}; */
+  justify-content: center;
   align-items: center;
   width: fit-content;
   min-width: ${getHeight};
@@ -141,6 +137,19 @@ const BasicButtonStyles = css<ButtonProps>`
         transform: translate(-150%, -50%);
       }
     }
+  }
+`
+
+const ButtonInnerWrapper = styled.span<ButtonProps>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
+  justify-items: center;
+  align-items: center;
+  width: fit-content;
+  transform: translateY(1px);
+  & > svg {
+    transform: translateY(-1px);
   }
 `
 

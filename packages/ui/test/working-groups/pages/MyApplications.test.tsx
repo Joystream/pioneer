@@ -27,7 +27,7 @@ const currentApplication = {
     reward: new BN(200),
   },
   createdAtBlock: block,
-  createdAtTime: '2021-03-09T10:38:04.155Z',
+  createdAt: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusPending',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
@@ -40,7 +40,7 @@ const pastApplication = {
     reward: new BN(100),
   },
   createdAtBlock: block,
-  createdAtTime: '2021-03-09T10:38:04.155Z',
+  createdAt: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusRejected',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
