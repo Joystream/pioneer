@@ -87,7 +87,7 @@ describe('UI: TransferModal', () => {
     const { findByLabelText, findByText, findByRole } = renderModal({ from: alice, to: bob })
 
     const input = await findByLabelText('Number of tokens')
-    expect(await findByText('Transfer tokens')).toBeDisabled()
+    expect(await findByRole('button', { name: 'Transfer tokens' })).toBeDisabled()
 
     await fireEvent.change(input, { target: { value: '50' } })
 
