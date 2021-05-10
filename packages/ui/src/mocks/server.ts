@@ -2,19 +2,20 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import {
-  getWorkingGroupOpeningResolver,
-  getWorkingGroupResolver,
-  getWorkingGroupsResolver,
-} from '@/mocks/resolvers/workingGroup'
-
 import schema from '../common/api/schemas/schema.graphql'
 
 import { seedBlocks, seedMembers } from './data'
 import { seedApplications } from './data/mockApplications'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
-import { getConnectionResolver, getWhereResolver, getMemberResolver, searchMembersResolver } from './resolvers'
+import {
+  getConnectionResolver,
+  getWhereResolver,
+  getMemberResolver,
+  searchMembersResolver,
+  getWorkingGroupOpeningResolver,
+  getWorkingGroupResolver,
+} from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
 // See: https://github.com/miragejs/ember-cli-mirage/issues/996#issuecomment-315011890
@@ -58,7 +59,7 @@ export const makeServer = (environment = 'development') => {
               memberships: getWhereResolver('Membership'),
               searchMemberships: searchMembersResolver,
               membershipsConnection: getConnectionResolver('MembershipConnection'),
-              workingGroups: getWorkingGroupsResolver,
+              workingGroups: getWhereResolver('WorkingGroup'),
               workingGroupByUniqueInput: getWorkingGroupResolver,
               workingGroupOpenings: getWhereResolver('WorkingGroupOpening'),
               workingGroupOpeningByUniqueInput: getWorkingGroupOpeningResolver,

@@ -3,17 +3,7 @@ import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
 
 import { WorkingGroupWhereUniqueInput } from '@/common/api/queries'
 import { QueryResolver } from '@/mocks/resolvers/types'
-import { GetWorkingGroupQueryResult, GetWorkingGroupsQueryResult } from '@/working-groups/queries'
-
-export const getWorkingGroupsResolver: QueryResolver<any, GetWorkingGroupsQueryResult[]> = (
-  obj,
-  args,
-  { mirageSchema: schema }
-) => {
-  const { models } = schema.all('WorkingGroup')
-
-  return adaptRecords(models)
-}
+import { GetWorkingGroupQueryResult } from '@/working-groups/queries'
 
 export const getWorkingGroupResolver: QueryResolver<WorkingGroupWhereUniqueInput, GetWorkingGroupQueryResult> = (
   obj: any,
