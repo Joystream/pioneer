@@ -1,12 +1,9 @@
 import { renderHook } from '@testing-library/react-hooks'
 
 import { MembershipOrderByInput } from '@/common/api/queries'
-import { MemberListFilter, MemberListEmptyFilter } from '@/memberships/components/MemberListFilters'
-import { MemberListOrder, DefaultMemberListOrder, useMembers } from '@/memberships/hooks/useMembers'
-import { asMember, Member } from '@/memberships/types'
-import { MockMember, mockMembers } from '@/mocks/data/mockMembers'
-
-import { useFilterMembersQuery } from '../../../src/memberships/queries'
+import { MemberListEmptyFilter, MemberListFilter } from '@/memberships/components/MemberListFilters'
+import { DefaultMemberListOrder, MemberListOrder, useMembers } from '@/memberships/hooks/useMembers'
+import { useGetMembershipsConnectionQuery } from '@/memberships/queries'
 
 const { EntryAsc, EntryDesc, HandleAsc } = MembershipOrderByInput
 
@@ -26,9 +23,10 @@ const renderUseMembers = ({ filter = {}, order = {}, ...pagination }: RenderUseM
   )
 
 jest.mock('../../../src/memberships/queries', () => ({
-  useFilterMembersQuery: jest.fn(() => ({})),
+  useGetMembershipsConnectionQuery: jest.fn(() => ({})),
 }))
-const mockedUseFilterMembersQuery = useFilterMembersQuery as jest.Mock
+
+const mockedUseFilterMembersQuery = useGetMembershipsConnectionQuery as jest.Mock
 
 describe('useMembers', () => {
   beforeEach(() => {
@@ -37,57 +35,43 @@ describe('useMembers', () => {
 
   it('Default order', () => {
     renderUseMembers({})
-    expect(useFilterMembersQuery).toBeCalledWith({
-      variables: { orderBy: EntryAsc },
+    expect(useGetMembershipsConnectionQuery).toBeCalledWith({
+      variables: { orderBy: EntryAsc, where: {} },
     })
   })
 
   it('Inverse order', () => {
     renderUseMembers({ order: { isDescending: true } })
-    expect(useFilterMembersQuery).toBeCalledWith({
-      variables: { orderBy: EntryDesc },
+    expect(useGetMembershipsConnectionQuery).toBeCalledWith({
+      variables: { orderBy: EntryDesc, where: {} },
     })
   })
 
   it('Order by handle', () => {
     renderUseMembers({ order: { sortBy: 'handle' } })
-    expect(useFilterMembersQuery).toBeCalledWith({
-      variables: { orderBy: HandleAsc },
+    expect(useGetMembershipsConnectionQuery).toBeCalledWith({
+      variables: { orderBy: HandleAsc, where: {} },
     })
   })
 
   it('Search by handle', () => {
     renderUseMembers({ filter: { search: 'alice' } })
-    expect(useFilterMembersQuery).toBeCalledWith({
-      variables: { orderBy: EntryAsc, search: 'alice' },
-    })
-  })
-
-  it('Search by Id', () => {
-    renderUseMembers({ filter: { search: '#42' } })
-    expect(useFilterMembersQuery).toBeCalledWith({
-      variables: { orderBy: EntryAsc, id: '42' },
+    expect(useGetMembershipsConnectionQuery).toBeCalledWith({
+      variables: { orderBy: EntryAsc, where: { handle_contains: 'alice' } },
     })
   })
 
   it('Founding members filter', () => {
     renderUseMembers({ filter: { onlyFounder: true } })
-    expect(useFilterMembersQuery).toBeCalledWith({
-      variables: { orderBy: EntryAsc, isFoundingMember: true },
+    expect(useGetMembershipsConnectionQuery).toBeCalledWith({
+      variables: { orderBy: EntryAsc, where: { isFoundingMember_eq: true } },
     })
   })
 
   it('Verified members filter', () => {
     renderUseMembers({ filter: { onlyVerified: true } })
-    expect(useFilterMembersQuery).toBeCalledWith({
-      variables: { orderBy: EntryAsc, isVerified: true },
-    })
-  })
-
-  it('Paginate', () => {
-    renderUseMembers({ limit: 5, offset: 10 })
-    expect(useFilterMembersQuery).toBeCalledWith({
-      variables: { orderBy: EntryAsc, limit: 5, offset: 10 },
+    expect(useGetMembershipsConnectionQuery).toBeCalledWith({
+      variables: { orderBy: EntryAsc, where: { isVerified_eq: true } },
     })
   })
 
@@ -95,15 +79,5 @@ describe('useMembers', () => {
     mockedUseFilterMembersQuery.mockReturnValue({ loading: true })
     const { result } = renderUseMembers({ filter: { onlyVerified: true } })
     expect(result.current).toStrictEqual({ isLoading: true, members: [] })
-  })
-
-  it('Return members', () => {
-    const data = { memberships: mockMembers.slice(0, 2) }
-    const members = data.memberships.map(asMember as (d: MockMember) => Member)
-
-    mockedUseFilterMembersQuery.mockReturnValue({ data, loading: false })
-
-    const { result } = renderUseMembers({ filter: { onlyVerified: true } })
-    expect(result.current).toStrictEqual({ isLoading: false, members })
   })
 })

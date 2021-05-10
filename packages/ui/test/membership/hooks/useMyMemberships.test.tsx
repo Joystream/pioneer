@@ -4,7 +4,7 @@ import React from 'react'
 import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { useMyMemberships } from '../../../src/memberships/hooks/useMyMemberships'
 import { seedMembers } from '../../../src/mocks/data'
-import { alice, bobStash } from '../../_mocks/keyring'
+import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -61,6 +61,7 @@ describe('useMyMemberships', () => {
     const aliceMember = getMember('alice')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(alice)
+    useAccounts.allAccounts.push(aliceStash)
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
@@ -76,6 +77,7 @@ describe('useMyMemberships', () => {
     seedMembers(mockServer.server)
     const bobMember = getMember('bob')
     useAccounts.hasAccounts = true
+    useAccounts.allAccounts.push(bob)
     useAccounts.allAccounts.push(bobStash)
 
     const { result, waitForNextUpdate } = renderUseMembership()
@@ -93,6 +95,7 @@ describe('useMyMemberships', () => {
     const aliceMember = getMember('alice')
     useAccounts.hasAccounts = true
     useAccounts.allAccounts.push(alice)
+    useAccounts.allAccounts.push(aliceStash)
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
