@@ -49,8 +49,8 @@ export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): Whe
 }
 
 export const getConnectionResolver = <T extends QueryArgs, D>(typeName: string): ConnectionQueryResolver<T, D> => {
-  return (obj, args, context, info) => {
-    const schema = (info as any).schema as GraphQLSchema
+  return (obj, args, context, info: any) => {
+    const schema = info.schema as GraphQLSchema
     const connectionType = schema.getType(typeName) as GraphQLObjectType
 
     const { edges: edgesField } = connectionType?.getFields()
