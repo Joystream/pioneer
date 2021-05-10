@@ -5,6 +5,7 @@ import { useModal } from '../common/hooks/useModal'
 import { ModalName } from '../common/providers/modal/types'
 import { MemberModalCall, MemberProfile } from '../memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '../memberships/modals/BuyMembershipModal'
+import { SwitchMemberModal, SwitchMemberModalCall } from '../memberships/modals/SwitchMemberModal'
 import { TransferInviteModal, TransferInvitesModalCall } from '../memberships/modals/TransferInviteModal'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '../working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '../working-groups/modals/ApplyForRoleModal'
@@ -16,6 +17,7 @@ type ModalNames =
   | ModalName<TransferModalCall>
   | ModalName<ApplyForRoleModalCall>
   | ModalName<ApplicationDetailsModalCall>
+  | ModalName<SwitchMemberModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
@@ -33,6 +35,8 @@ export const GlobalModals = () => {
       return <ApplyForRoleModal />
     case 'ApplicationDetails':
       return <ApplicationDetailsModal />
+    case 'SwitchMember':
+      return <SwitchMemberModal />
     default:
       return null
   }

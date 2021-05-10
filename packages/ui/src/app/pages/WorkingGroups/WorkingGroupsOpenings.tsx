@@ -18,17 +18,14 @@ import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '
 import { Tabs } from '../../../common/components/Tabs'
 import { useActivities } from '../../../common/hooks/useActivities'
 import { useModal } from '../../../common/hooks/useModal'
-import { useToggle } from '../../../common/hooks/useToggle'
-import { SwitchMemberModal } from '../../../memberships/components/CurrentMember/SwitchMemberModal'
 import { MemberRoles } from '../../../memberships/components/MemberRoles'
 import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
-import { BuyMembershipModalCall } from '../../../memberships/modals/BuyMembershipModal'
+import { SwitchMemberModalCall } from '../../../memberships/modals/SwitchMemberModal'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
-
 
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
@@ -37,7 +34,6 @@ export const WorkingGroupsOpenings = () => {
   const activities = useActivities()
   const { active } = useMyMemberships()
   const { locked } = useTotalBalances()
-  const [isSelectMembershipOpen, toggleSelectMembershipOpen] = useToggle()
   const { showModal } = useModal()
 
   const earnings = {
@@ -63,49 +59,41 @@ export const WorkingGroupsOpenings = () => {
   ]
 
   return (
-    <>
-      <AppPage>
-        <PageHeader>
-          <PageTitle>Working Groups</PageTitle>
-          <WorkingGroupsTabs />
-        </PageHeader>
-        <ContentWithSidepanel>
-          <MainPanel>
-            <Statistics>
-              <StatisticItem title="My Roles">
-                {active ? (
-                  <MemberRoles member={active} size="l" max={6} />
-                ) : (
-                  <ButtonPrimary size="small" onClick={toggleSelectMembershipOpen}>
-                    Select membership
-                  </ButtonPrimary>
-                )}
-              </StatisticItem>
-              <TokenValueStat title="Currently staking" value={locked} />
-              <MultiTokenValueStat
-                title="Earned in past"
-                values={[
-                  { label: '24 hours', value: earnings.day },
-                  { label: 'Month', value: earnings.month },
-                ]}
-              />
-            </Statistics>
-            <ContentWithTabs>
-              <Tabs tabsSize="xs" tabs={openingsTabs} />
-              {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
-            </ContentWithTabs>
-          </MainPanel>
-          <SidePanel>
-            <ActivitiesBlock activities={activities} label="Working Groups Activities" />
-          </SidePanel>
-        </ContentWithSidepanel>
-      </AppPage>
-      {isSelectMembershipOpen && (
-        <SwitchMemberModal
-          onClose={toggleSelectMembershipOpen}
-          onCreateMember={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
-        />
-      )}
-    </>
+    <AppPage>
+      <PageHeader>
+        <PageTitle>Working Groups</PageTitle>
+        <WorkingGroupsTabs />
+      </PageHeader>
+      <ContentWithSidepanel>
+        <MainPanel>
+          <Statistics>
+            <StatisticItem title="My Roles">
+              {active ? (
+                <MemberRoles member={active} size="l" max={6} />
+              ) : (
+                <ButtonPrimary size="small" onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
+                  Select membership
+                </ButtonPrimary>
+              )}
+            </StatisticItem>
+            <TokenValueStat title="Currently staking" value={locked} />
+            <MultiTokenValueStat
+              title="Earned in past"
+              values={[
+                { label: '24 hours', value: earnings.day },
+                { label: 'Month', value: earnings.month },
+              ]}
+            />
+          </Statistics>
+          <ContentWithTabs>
+            <Tabs tabsSize="xs" tabs={openingsTabs} />
+            {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
+          </ContentWithTabs>
+        </MainPanel>
+        <SidePanel>
+          <ActivitiesBlock activities={activities} label="Working Groups Activities" />
+        </SidePanel>
+      </ContentWithSidepanel>
+    </AppPage>
   )
 }

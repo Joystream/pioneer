@@ -1,30 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { Notification, NotificationComponent } from '../../../common/components/Notification'
 import { BorderRad, Colors, Transitions } from '../../../common/constants'
+import { useModal } from '../../../common/hooks/useModal'
+import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../components'
+import { AddMembershipButtonSwitch } from '../../components/AddMembershipButtonSwitch'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
 import { Member } from '../../types'
-import { AddMembershipButtonSwitch } from '../AddMembershipButtonSwitch'
+import { BuyMembershipModalCall } from '../BuyMembershipModal'
 
-interface Props {
-  onClose: () => void
-  onCreateMember: () => void
-}
-
-export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
+export const SwitchMemberModal = () => {
   const { members, setActive, active } = useMyMemberships()
+  const { showModal, hideModal } = useModal()
   const count = members.length
   const switchMember = (member: Member) => {
     setActive(member)
-    onClose()
+    hideModal()
   }
 
   return (
-    <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
-      <SwitchModalHeader title="Select Membership" onClick={onClose} modalHeaderSize="s" />
+    <Modal modalSize="xs" modalHeight="s" isDark onClose={hideModal}>
+      <SwitchModalHeader title="Select Membership" onClick={hideModal} modalHeaderSize="s" />
       <SwitchModalBody>
         <MembershipsCount count={count} />
         <MembersList>
@@ -43,8 +41,8 @@ export const SwitchMemberModal = ({ onClose, onCreateMember }: Props) => {
       <SwitchModalFooter>
         <AddMembershipButtonSwitch
           onClick={() => {
-            onClose()
-            onCreateMember()
+            hideModal()
+            showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })
           }}
         />
       </SwitchModalFooter>
