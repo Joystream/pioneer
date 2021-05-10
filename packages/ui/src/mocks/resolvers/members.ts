@@ -1,7 +1,6 @@
 import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 
 import { MemberFieldsFragment, SearchMembersQueryResult } from '@/memberships/queries'
-import { getConnectionResolver, getWhereResolver } from '@/mocks/baseResolvers'
 import { QueryResolver } from '@/mocks/types'
 
 export const getMemberResolver = (obj: any, args: any, context: any, info: any) => {
@@ -11,8 +10,6 @@ export const getMemberResolver = (obj: any, args: any, context: any, info: any) 
 
   return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
 }
-
-export const getMembersResolver = getWhereResolver('Membership')
 
 const getMatcher = (text: string) => {
   const regExp = new RegExp(text, 'i')
@@ -32,5 +29,3 @@ export const searchMembersResolver: QueryResolver<{ text: string; limit?: number
 
   return limit ? models.slice(0, limit) : models
 }
-
-export const membershipsConnectionResolver = getConnectionResolver('MembershipConnection')

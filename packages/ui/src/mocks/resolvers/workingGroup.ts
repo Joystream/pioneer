@@ -2,7 +2,6 @@ import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
 import { adaptRecords } from '@miragejs/graphql/dist/orm/records'
 
 import { WorkingGroupWhereUniqueInput } from '@/common/api/queries'
-import { getWhereResolver } from '@/mocks/baseResolvers'
 import { QueryResolver } from '@/mocks/types'
 import { GetWorkingGroupQueryResult, GetWorkingGroupsQueryResult } from '@/working-groups/queries'
 
@@ -38,8 +37,3 @@ export const getWorkingGroupOpeningResolver = (obj: any, args: any, context: any
 
   return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
 }
-
-export const getWorkingGroupOpeningsResolver = getWhereResolver('WorkingGroupOpening')
-export const getWorkersResolver = getWhereResolver('Worker')
-export const getWorkingGroupApplicationsResolver = getWhereResolver('WorkingGroupApplication')
-export const getApplicationFormQuestionAnswersResolver = getWhereResolver('ApplicationFormQuestionAnswer')

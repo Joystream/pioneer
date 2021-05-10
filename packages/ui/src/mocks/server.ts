@@ -2,12 +2,9 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
+import { getConnectionResolver, getWhereResolver } from '@/mocks/baseResolvers'
 import {
-  getApplicationFormQuestionAnswersResolver,
-  getWorkersResolver,
-  getWorkingGroupApplicationsResolver,
   getWorkingGroupOpeningResolver,
-  getWorkingGroupOpeningsResolver,
   getWorkingGroupResolver,
   getWorkingGroupsResolver,
 } from '@/mocks/resolvers/workingGroup'
@@ -18,12 +15,7 @@ import { seedBlocks, seedMembers } from './data'
 import { seedApplications } from './data/mockApplications'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
-import {
-  getMemberResolver,
-  getMembersResolver,
-  searchMembersResolver,
-  membershipsConnectionResolver,
-} from './resolvers'
+import { getMemberResolver, searchMembersResolver } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
 // See: https://github.com/miragejs/ember-cli-mirage/issues/996#issuecomment-315011890
@@ -64,16 +56,16 @@ export const makeServer = (environment = 'development') => {
           resolvers: {
             Query: {
               membershipByUniqueInput: getMemberResolver,
-              memberships: getMembersResolver,
+              memberships: getWhereResolver('Membership'),
               searchMemberships: searchMembersResolver,
-              membershipsConnection: membershipsConnectionResolver,
+              membershipsConnection: getConnectionResolver('MembershipConnection'),
               workingGroups: getWorkingGroupsResolver,
               workingGroupByUniqueInput: getWorkingGroupResolver,
-              workingGroupOpenings: getWorkingGroupOpeningsResolver,
+              workingGroupOpenings: getWhereResolver('WorkingGroupOpening'),
               workingGroupOpeningByUniqueInput: getWorkingGroupOpeningResolver,
-              workers: getWorkersResolver,
-              workingGroupApplications: getWorkingGroupApplicationsResolver,
-              applicationFormQuestionAnswers: getApplicationFormQuestionAnswersResolver,
+              workers: getWhereResolver('Worker'),
+              workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
+              applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
             },
           },
         })
