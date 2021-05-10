@@ -18,6 +18,10 @@ const getFilter = (where: Record<string, any>) => {
       filters.push((model: Record<string, any>) => String(model[field]) === checkValue.toString())
     }
 
+    if (type === 'contains') {
+      filters.push((model: Record<string, any>) => String(model[field]).includes(checkValue.toString()))
+    }
+
     if (type === 'in') {
       filters.push((model: Record<string, any>) => checkValue.includes(model[field]))
     }
@@ -55,7 +59,7 @@ export const getConnectionResolver = <T extends QueryArgs, D>(typeName: string):
     const { relayArgs, nonRelayArgs } = getRelayArgs({})
 
     // We don't have filtering yet so simple where is sufficient
-    const records = getRecords(nodeType, nonRelayArgs, context.mirageSchema)
+    let records = getRecords(nodeType, nonRelayArgs, context.mirageSchema)
 
     if (args.orderBy) {
       const [field, order] = args.orderBy.split('_')
@@ -65,6 +69,10 @@ export const getConnectionResolver = <T extends QueryArgs, D>(typeName: string):
           return a[field]?.toString().localeCompare(b[field]?.toString()) * (order === 'ASC' ? 1 : -1)
         })
       }
+    }
+
+    if (args.where) {
+      records = records.filter(getFilter(args.where))
     }
 
     const edges = (getEdges(records, relayArgs, nodeType.name) as unknown) as D[]
