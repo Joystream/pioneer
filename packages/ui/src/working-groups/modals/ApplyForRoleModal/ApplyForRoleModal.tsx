@@ -2,7 +2,7 @@ import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
@@ -11,6 +11,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { getEventParam } from '@/common/model/JoystreamNode'
 import { ModalState } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal/index'
 import { StakeStepForm } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 
@@ -26,9 +27,9 @@ export type OpeningParams = Exclude<
 export const ApplyForRoleModal = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
-  const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
+  const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const opening = modalData.opening
-  const [state, setState] = useState<ModalState>('PREPARE')
+  const [state, setState] = useState<ModalState>('REQUIREMENTS_CHECK')
   const [txParams, setTxParams] = useState<OpeningParams | undefined>(undefined)
   const [stakeAccount, setStakeAccount] = useState<Account>()
   const transaction = useMemo(() => {
@@ -44,6 +45,19 @@ export const ApplyForRoleModal = () => {
     setState(result ? 'SUCCESS' : 'ERROR')
   }
   const stake = new BN(txParams?.stake_parameters.stake ?? 0)
+
+  useEffect(() => {
+    if (state !== 'REQUIREMENTS_CHECK') {
+      return
+    }
+
+    if (active) {
+      setState('PREPARE')
+      return
+    }
+
+    showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+  }, [state])
 
   if (state === 'PREPARE') {
     const onSubmit = (stake: StakeStepForm, answers: Record<string, any>) => {

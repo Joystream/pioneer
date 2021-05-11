@@ -109,6 +109,16 @@ describe('UI: ApplyForRoleModal', () => {
     tx = stubTransaction(api, 'api.tx.membershipWorkingGroup.applyOnOpening')
   })
 
+  describe('Requirements', () => {
+    it('No active member', async () => {
+      useMyMemberships.active = undefined
+
+      renderModal()
+
+      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+    })
+  })
+
   it('Renders a modal', async () => {
     renderModal()
 

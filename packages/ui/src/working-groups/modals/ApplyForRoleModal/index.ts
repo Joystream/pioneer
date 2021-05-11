@@ -1,4 +1,5 @@
-import { ModalWithDataCall } from '../../../common/providers/modal/types'
+import { ModalWithDataCall } from '@/common/providers/modal/types'
+
 import { WorkingGroupOpening } from '../../types'
 
 export type ApplyForRoleModalCall = ModalWithDataCall<'ApplyForRoleModal', { opening: WorkingGroupOpening }>
