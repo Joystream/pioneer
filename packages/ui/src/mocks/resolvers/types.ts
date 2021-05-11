@@ -26,8 +26,17 @@ export type WhereQueryResolver<QueryArgs, ReturnType = unknown> = (
 export interface QueryArgs {
   offset?: any
   limit?: any
+  first?: number
+  after?: string
+  last?: number
+  before?: string
   where?: any
   orderBy?: any
+}
+
+export interface Edge {
+  node: any
+  cursor: string
 }
 
 export type Filter = (a: any) => boolean

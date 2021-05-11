@@ -4,7 +4,9 @@ import { unwrapType } from '@miragejs/graphql/dist/utils'
 import { GraphQLObjectType, GraphQLSchema } from 'graphql/type'
 
 import { PageInfo } from '@/common/api/queries'
-import { ConnectionQueryResolver, QueryArgs, WhereQueryResolver } from '@/mocks/resolvers/types'
+import { isNumber } from '@/common/utils'
+import { takeAfter, takeBefore } from '@/common/utils/list'
+import { ConnectionQueryResolver, Edge, QueryArgs, WhereQueryResolver } from '@/mocks/resolvers/types'
 
 type FilterCallback = (model: Record<string, any>) => boolean
 
@@ -48,7 +50,9 @@ export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): Whe
   }
 }
 
-export const getConnectionResolver = <T extends QueryArgs, D>(typeName: string): ConnectionQueryResolver<T, D> => {
+export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
+  typeName: string
+): ConnectionQueryResolver<T, D> => {
   return (obj, args, context, info: any) => {
     const schema = info.schema as GraphQLSchema
     const connectionType = schema.getType(typeName) as GraphQLObjectType
@@ -75,7 +79,21 @@ export const getConnectionResolver = <T extends QueryArgs, D>(typeName: string):
       records = records.filter(getFilter(args.where))
     }
 
-    const edges = (getEdges(records, relayArgs, nodeType.name) as unknown) as D[]
+    let edges = (getEdges(records, relayArgs, nodeType.name) as unknown) as D[]
+
+    // Mock Pagination
+    const { after, before, first, last } = args
+    if (after) {
+      edges = takeAfter(({ cursor }: D) => cursor === after, edges)
+    }
+    if (before) {
+      edges = takeBefore(({ cursor }: D) => cursor === before, edges)
+    }
+    if (isNumber(first) || isNumber(last)) {
+      const end = isNumber(first) ? first : undefined
+      const start = isNumber(last) ? (end ?? 0) - last : 0
+      edges = edges.slice(start, end)
+    }
 
     return {
       edges,
