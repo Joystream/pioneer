@@ -12,17 +12,22 @@ export interface MemberListOrder {
 
 export const DefaultMemberListOrder: MemberListOrder = { sortBy: 'id', isDescending: false }
 
+export const MEMBERS_PER_PAGE = 5
+
 interface UseMemberProps {
   order: MemberListOrder
   filter: MemberListFilter
+  page?: number
 }
 interface UseMembers {
   isLoading: boolean
   members: Member[]
 }
 
-export const useMembers = ({ order, filter }: UseMemberProps): UseMembers => {
+export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMembers => {
   const variables = {
+    first: page * MEMBERS_PER_PAGE,
+    last: page > 1 ? MEMBERS_PER_PAGE : undefined,
     where: filterToGqlInput(filter),
     orderBy: orderToGqlInput(order),
   }
