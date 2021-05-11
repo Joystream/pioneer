@@ -1,10 +1,9 @@
 import { ApiRx } from '@polkadot/api'
 
-import { groupExtrinsics } from '../types'
+import { groupExtrinsics, GroupName } from '../types'
 
-export function getGroup(api?: ApiRx, groupName?: string) {
+export function getGroup(api?: ApiRx, groupName?: GroupName | string) {
   if (api && groupName && groupName in groupExtrinsics) {
-    const name = groupName as keyof typeof groupExtrinsics
-    return api.tx[groupExtrinsics[name]]
+    return api.tx[groupExtrinsics[groupName as GroupName]]
   }
 }
