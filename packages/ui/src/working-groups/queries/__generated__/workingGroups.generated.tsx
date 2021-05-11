@@ -95,7 +95,7 @@ export type GetWorkingGroupOpeningsQuery = {
 }
 
 export type GetWorkingGroupOpeningQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
+  where: Types.WorkingGroupOpeningWhereUniqueInput
 }>
 
 export type GetWorkingGroupOpeningQuery = {
@@ -128,7 +128,7 @@ export type GetWorkingGroupOpeningQuestionsQuery = {
 }
 
 export type GetWorkingGroupQueryVariables = Types.Exact<{
-  name_eq?: Types.Maybe<Types.Scalars['String']>
+  where: Types.WorkingGroupWhereUniqueInput
 }>
 
 export type GetWorkingGroupQuery = {
@@ -429,8 +429,8 @@ export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningsQueryVariables
 >
 export const GetWorkingGroupOpeningDocument = gql`
-  query getWorkingGroupOpening($id: ID!) {
-    workingGroupOpeningByUniqueInput(where: { id: $id }) {
+  query getWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
+    workingGroupOpeningByUniqueInput(where: $where) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -449,7 +449,7 @@ export const GetWorkingGroupOpeningDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupOpeningQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      where: // value for 'where'
  *   },
  * });
  */
@@ -539,8 +539,8 @@ export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningQuestionsQueryVariables
 >
 export const GetWorkingGroupDocument = gql`
-  query GetWorkingGroup($name_eq: String) {
-    workingGroupByUniqueInput(where: { name: $name_eq }) {
+  query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
+    workingGroupByUniqueInput(where: $where) {
       ...WorkingGroupFields
     }
   }
@@ -559,12 +559,12 @@ export const GetWorkingGroupDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupQuery({
  *   variables: {
- *      name_eq: // value for 'name_eq'
+ *      where: // value for 'where'
  *   },
  * });
  */
 export function useGetWorkingGroupQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>(GetWorkingGroupDocument, options)

@@ -8,14 +8,7 @@ import { seedBlocks, seedMembers } from './data'
 import { seedApplications } from './data/mockApplications'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
-import {
-  getConnectionResolver,
-  getWhereResolver,
-  getMemberResolver,
-  searchMembersResolver,
-  getWorkingGroupOpeningResolver,
-  getWorkingGroupResolver,
-} from './resolvers'
+import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
 // See: https://github.com/miragejs/ember-cli-mirage/issues/996#issuecomment-315011890
@@ -24,18 +17,15 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
 
   const workingGroupModel = schema.modelFor('workingGroup')
   // "Mirage: The working-group model has multiple possible inverse associations for the worker.group association."
+  workingGroupModel.class.prototype.associations.workers.opts.inverse = 'group'
+  workingGroupModel.class.prototype.associations.leader.opts.inverse = 'workinggroupleader'
 
-  workingGroupModel.class.prototype.associations.workers.opts.inverse = 'worker'
-  workingGroupModel.class.prototype.associations.leader.opts.inverse = 'group'
   // "Mirage: The working-group model has multiple possible inverse associations for the working-group-metadata.workinggroupmetadata association."
   workingGroupModel.class.prototype.associations.metadata.opts.inverse = 'metadata'
 
   const workingGroupMetadataModel = schema.modelFor('workingGroupMetadata')
   // "Mirage: The working-group-metadata model has multiple possible inverse associations for the working-group.metadata association."
   workingGroupMetadataModel.class.prototype.associations.group.opts.inverse = 'group'
-
-  const workerModel = schema.modelFor('worker')
-  workerModel.class.prototype.associations.workinggroupleader.opts.inverse = 'leader'
 
   const membershipModel = schema.modelFor('membership')
   // "Mirage: The membership model has multiple possible inverse associations for the membership.invitedBy association."
@@ -55,14 +45,14 @@ export const makeServer = (environment = 'development') => {
           root: undefined,
           resolvers: {
             Query: {
-              membershipByUniqueInput: getMemberResolver,
+              membershipByUniqueInput: getUniqueResolver('Membership'),
               memberships: getWhereResolver('Membership'),
               searchMemberships: searchMembersResolver,
               membershipsConnection: getConnectionResolver('MembershipConnection'),
               workingGroups: getWhereResolver('WorkingGroup'),
-              workingGroupByUniqueInput: getWorkingGroupResolver,
+              workingGroupByUniqueInput: getUniqueResolver('WorkingGroup'),
               workingGroupOpenings: getWhereResolver('WorkingGroupOpening'),
-              workingGroupOpeningByUniqueInput: getWorkingGroupOpeningResolver,
+              workingGroupOpeningByUniqueInput: getUniqueResolver('WorkingGroupOpening'),
               workers: getWhereResolver('Worker'),
               workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
               applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),

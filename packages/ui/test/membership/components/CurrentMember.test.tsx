@@ -3,6 +3,8 @@ import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-l
 import React from 'react'
 
 import { AccountsContextProvider } from '../../../src/accounts/providers/accounts/provider'
+import { GlobalModals } from '../../../src/app/GlobalModals'
+import { ModalContextProvider } from '../../../src/common/providers/modal/provider'
 import { CurrentMember } from '../../../src/memberships/components/CurrentMember'
 import { seedMembers, seedMember, mockMembers } from '../../../src/mocks/data'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -68,7 +70,10 @@ describe('UI: CurrentMember component', () => {
       <MockKeyringProvider>
         <AccountsContextProvider>
           <MockQueryNodeProviders>
-            <CurrentMember />
+            <ModalContextProvider>
+              <CurrentMember />
+              <GlobalModals />
+            </ModalContextProvider>
           </MockQueryNodeProviders>
         </AccountsContextProvider>
       </MockKeyringProvider>

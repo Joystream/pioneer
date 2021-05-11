@@ -1,14 +1,15 @@
 import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { Account } from '../../../src/accounts/types'
-import { ApiContext } from '../../../src/common/providers/api/context'
-import { BuyMembershipModal } from '../../../src/memberships/modals/BuyMembershipModal'
+import { Account } from '@/accounts/types'
+import { ApiContext } from '@/common/providers/api/context'
+import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
+
 import { selectAccount } from '../../_helpers/selectAccount'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, bob } from '../../_mocks/keyring'
@@ -28,7 +29,7 @@ const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useAccounts', () => {
+jest.mock('@/accounts/hooks/useAccounts', () => {
   return {
     useAccounts: () => useAccounts,
   }
@@ -36,7 +37,7 @@ jest.mock('../../../src/accounts/hooks/useAccounts', () => {
 
 const mockCallback = jest.fn()
 
-jest.mock('../../../src/common/hooks/useModal', () => {
+jest.mock('@/common/hooks/useModal', () => {
   return {
     useModal: () => ({
       showModal: mockCallback,
@@ -72,9 +73,9 @@ describe('UI: BuyMembershipModal', () => {
   })
 
   it('Enables button when valid form', async () => {
-    const { findByText, getByText, getByLabelText } = renderModal()
+    const { getByLabelText } = renderModal()
 
-    expect(getByText(/^Create a membership$/i)).toBeDisabled()
+    expect(await findSubmitButton()).toBeDisabled()
 
     await selectAccount('Root account', 'bob')
     await selectAccount('Controller account', 'alice')
@@ -82,13 +83,13 @@ describe('UI: BuyMembershipModal', () => {
     fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
     fireEvent.click(getByLabelText(/I agree to the terms/i))
 
-    expect(await findByText(/^Create a membership$/i)).not.toBeDisabled()
+    expect(await findSubmitButton()).not.toBeDisabled()
   })
 
   it('Disables button when invalid avatar URL', async () => {
-    const { findByText, getByText, getByLabelText } = renderModal()
+    const { getByLabelText } = renderModal()
 
-    expect(getByText(/^Create a membership$/i)).toBeDisabled()
+    expect(await findSubmitButton()).toBeDisabled()
 
     await selectAccount('Root account', 'bob')
     await selectAccount('Controller account', 'alice')
@@ -97,16 +98,16 @@ describe('UI: BuyMembershipModal', () => {
     fireEvent.click(getByLabelText(/I agree to the terms/i))
 
     fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
-    expect(await findByText(/^Create a membership$/i)).toBeDisabled()
+    expect(await findSubmitButton()).toBeDisabled()
 
     fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-    expect(await findByText(/^Create a membership$/i)).not.toBeDisabled()
+    expect(await findSubmitButton()).not.toBeDisabled()
   })
 
   describe('Authorize step', () => {
     const renderAuthorizeStep = async () => {
       const rendered = renderModal()
-      const { findByText, getByLabelText } = rendered
+      const { getByLabelText } = rendered
 
       await selectAccount('Root account', 'bob')
       await selectAccount('Controller account', 'alice')
@@ -116,7 +117,7 @@ describe('UI: BuyMembershipModal', () => {
       fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
       fireEvent.click(getByLabelText(/I agree to the terms/i))
 
-      fireEvent.click(await findByText(/^Create a membership$/i))
+      fireEvent.click(await findSubmitButton())
 
       return rendered
     }
@@ -143,7 +144,7 @@ describe('UI: BuyMembershipModal', () => {
         stubTransactionSuccess(transaction, [1], 'members', 'MemberRegistered')
         const { getByText, findByText } = await renderAuthorizeStep()
 
-        fireEvent.click(getByText(/^sign and create a member$/i))
+        fireEvent.click(await screen.findByRole('button', { name: /^sign and create a member$/i }))
 
         expect(await findByText('Success')).toBeDefined()
         expect(getByText(/^realbobbybob/i)).toBeDefined()
@@ -151,9 +152,9 @@ describe('UI: BuyMembershipModal', () => {
 
       it('Enables the View My Profile button', async () => {
         stubTransactionSuccess(transaction, [registry.createType('MemberId', 12)], 'members', 'MemberRegistered')
-        const { getByText, findByText, findByRole } = await renderAuthorizeStep()
+        const { findByText, findByRole } = await renderAuthorizeStep()
 
-        fireEvent.click(getByText(/^sign and create a member$/i))
+        fireEvent.click(await screen.findByRole('button', { name: /^sign and create a member$/i }))
 
         expect(await findByText('Success')).toBeDefined()
         const button = await findByRole('button', { name: 'View my profile' })
@@ -166,14 +167,18 @@ describe('UI: BuyMembershipModal', () => {
     describe('Failure', () => {
       it('Renders transaction failure', async () => {
         stubTransactionFailure(transaction)
-        const { getByText, findByText } = await renderAuthorizeStep()
+        const { findByText } = await renderAuthorizeStep()
 
-        fireEvent.click(getByText(/^sign and create a member$/i))
+        fireEvent.click(await screen.findByRole('button', { name: /^sign and create a member$/i }))
 
         expect(await findByText('Failure')).toBeDefined()
       })
     })
   })
+
+  async function findSubmitButton() {
+    return await screen.findByRole('button', { name: /^Create a membership$/i })
+  }
 
   function renderModal() {
     return render(

@@ -1,15 +1,5 @@
-import { mirageGraphQLFieldResolver } from '@miragejs/graphql'
-
 import { MemberFieldsFragment, SearchMembersQueryResult } from '@/memberships/queries'
 import { QueryResolver } from '@/mocks/resolvers/types'
-
-export const getMemberResolver = (obj: any, args: any, context: any, info: any) => {
-  const resolverArgs = {
-    id: args.where.id,
-  }
-
-  return mirageGraphQLFieldResolver(obj, resolverArgs, context, info)
-}
 
 const getMatcher = (text: string) => {
   const regExp = new RegExp(text, 'i')

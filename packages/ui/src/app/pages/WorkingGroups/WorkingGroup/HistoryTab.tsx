@@ -16,7 +16,7 @@ type Tab = 'OPENINGS' | 'WORKERS'
 
 export function HistoryTab() {
   const { name } = useParams<{ name: string }>()
-  const { group } = useWorkingGroup({ name_eq: name })
+  const { group } = useWorkingGroup({ name })
 
   const [currentTab, setCurrentTab] = useState<Tab>('OPENINGS')
   const tabs = [

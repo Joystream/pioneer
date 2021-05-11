@@ -20,7 +20,7 @@ export const asMemberWithDetails = (data: MemberWithDetailsFragment): DetailedMe
 
 export function useMember(memberId?: string): UseMember {
   const options = {
-    variables: { id: memberId ?? '' },
+    variables: { where: { id: memberId ?? '' } },
   }
 
   const { data, loading, error } = useGetMemberQuery(options)
