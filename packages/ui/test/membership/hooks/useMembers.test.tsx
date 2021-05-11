@@ -84,6 +84,6 @@ describe('useMembers', () => {
   it('Return loading state', () => {
     mockedUseFilterMembersQuery.mockReturnValue({ loading: true })
     const { result } = renderUseMembers({ filter: { onlyVerified: true } })
-    expect(result.current).toStrictEqual({ isLoading: true, members: [] })
+    expect(result.current).toStrictEqual({ isLoading: true, members: [], pageCount: undefined })
   })
 })

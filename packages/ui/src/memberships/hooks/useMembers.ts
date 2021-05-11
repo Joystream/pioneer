@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembershipsConnectionQuery } from '@/memberships/queries'
 
@@ -22,6 +24,7 @@ interface UseMemberProps {
 interface UseMembers {
   isLoading: boolean
   members: Member[]
+  pageCount?: number
 }
 
 export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMembers => {
@@ -36,6 +39,13 @@ export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMemb
     variables,
   })
 
+  const [totalCount, setTotalCount] = useState<number>()
+  useEffect(() => {
+    if (!totalCount && data?.membershipsConnection.totalCount) {
+      setTotalCount(data?.membershipsConnection.totalCount)
+    }
+  }, [data])
+
   if (error) {
     console.error(error)
   }
@@ -43,6 +53,7 @@ export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMemb
   return {
     isLoading: loading,
     members: data?.membershipsConnection.edges.map(({ node }) => asMember(node)) ?? [],
+    pageCount: totalCount && Math.ceil(totalCount / MEMBERS_PER_PAGE),
   }
 }
 
