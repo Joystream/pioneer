@@ -4,8 +4,6 @@ import { unwrapType } from '@miragejs/graphql/dist/utils'
 import { GraphQLObjectType, GraphQLSchema } from 'graphql/type'
 
 import { PageInfo } from '@/common/api/queries'
-import { isNumber } from '@/common/utils'
-import { takeAfter, takeBefore } from '@/common/utils/list'
 import {
   ConnectionQueryResolver,
   Edge,
@@ -74,10 +72,10 @@ export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
     const { edges: edgesField } = connectionType?.getFields()
     const { type: edgeType } = unwrapType(edgesField.type)
     const { type: nodeType } = unwrapType(edgeType.getFields().node.type)
-    const { relayArgs, nonRelayArgs } = getRelayArgs({})
+    const { relayArgs } = getRelayArgs(args)
 
     // We don't have filtering yet so simple where is sufficient
-    let records = getRecords(nodeType, nonRelayArgs, context.mirageSchema)
+    let records = getRecords(nodeType, {}, context.mirageSchema)
 
     if (args.orderBy) {
       const [field, order] = args.orderBy.split('_')
@@ -93,21 +91,7 @@ export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
       records = records.filter(getFilter(args.where))
     }
 
-    let edges = (getEdges(records, relayArgs, nodeType.name) as unknown) as D[]
-
-    // Mock Pagination
-    const { after, before, first, last } = args
-    if (after) {
-      edges = takeAfter(({ cursor }: D) => cursor === after, edges)
-    }
-    if (before) {
-      edges = takeBefore(({ cursor }: D) => cursor === before, edges)
-    }
-    if (isNumber(first) || isNumber(last)) {
-      const end = isNumber(first) ? first : undefined
-      const start = isNumber(last) ? (end ?? 0) - last : 0
-      edges = edges.slice(start, end)
-    }
+    const edges = (getEdges(records, relayArgs, nodeType.name) as unknown) as D[]
 
     return {
       edges,
