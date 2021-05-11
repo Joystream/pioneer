@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 
 import { Pagination } from '@/common/components/Pagination'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
@@ -25,7 +25,12 @@ const Roles = Object.fromEntries(MemberRolesList.map(({ abbreviation }) => [abbr
 export const Members = () => {
   const [filter, setFilter] = useState(MemberListEmptyFilter)
   const [order, dispatchSort] = useReducer(sortReducer, DefaultMemberListOrder)
+
   const [page, setPage] = useState(1)
+  useEffect(() => {
+    setPage(1)
+  }, [filter, order])
+
   const { members, isLoading, pageCount } = useMembers({ order, filter, page })
 
   return (
@@ -34,7 +39,7 @@ export const Members = () => {
         <PageTitle>Members</PageTitle>
         <MemberListFilters roles={Roles} onApply={setFilter} />
         <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
-        {pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} />}
+        {!isLoading && pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
       </PageHeader>
     </AppPage>
   )
