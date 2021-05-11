@@ -1,7 +1,7 @@
-import { AugmentedSubmittables } from '@polkadot/api/types'
 import { useMemo } from 'react'
 
 import { useApi } from '../../common/hooks/useApi'
+import { groupExtrinsics } from '../types'
 
 export function useWithdrawMembershipTransaction(groupName: string) {
   const { api } = useApi()
@@ -12,23 +12,4 @@ export function useWithdrawMembershipTransaction(groupName: string) {
       return api.tx[groupExtrinsics[name]].withdrawApplication
     }
   }, [api, groupName])
-}
-
-enum groupNames {
-  forum,
-  storage,
-  content,
-  membership,
-}
-
-type groupSubmittableSet = keyof AugmentedSubmittables<'rxjs'> &
-  ('forumWorkingGroup' | 'storageWorkingGroup' | 'contentDirectoryWorkingGroup' | 'membershipWorkingGroup')
-
-const groupExtrinsics: {
-  [key in keyof typeof groupNames]: groupSubmittableSet
-} = {
-  forum: 'forumWorkingGroup',
-  storage: 'storageWorkingGroup',
-  content: 'contentDirectoryWorkingGroup',
-  membership: 'membershipWorkingGroup',
 }
