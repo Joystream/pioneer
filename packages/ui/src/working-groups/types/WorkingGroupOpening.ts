@@ -7,6 +7,13 @@ import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
 type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
 
+enum Network {
+  Babylon = 'BABYLON',
+  Alexandria = 'ALEXANDRIA',
+  Rome = 'ROME',
+  Olympia = 'OLYMPIA',
+}
+
 export interface WorkingGroupOpening {
   id: string
   groupId: string
@@ -28,6 +35,12 @@ export interface WorkingGroupOpening {
     member: Member
     status: string
   }[]
+  createdAtBlock: {
+    id: string
+    number: number
+    network: Network
+    createdAt: string
+  }
   applicants: {
     current: number
     total: number
@@ -52,6 +65,12 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
         status: application.status.__typename,
       }))
     : [],
+  createdAtBlock: {
+    id: fields.createdAtBlock.id,
+    number: fields.createdAtBlock.number,
+    network: fields.createdAtBlock.network,
+    createdAt: fields.createdAtBlock.createdAt,
+  },
   applicants: {
     current: 0,
     total: fields.applications?.length || 0,

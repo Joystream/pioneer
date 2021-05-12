@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
+import { AboutDateColumn } from '@/common/components/AboutDateColumn'
 import { BadgeRed } from '@/common/components/BadgeRed'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons/Buttons'
@@ -118,6 +119,9 @@ const WorkingGroupOpening = () => {
           )}
         </SidePanel>
       </ContentWithSidepanel>
+      <Footer>
+        <AboutDateColumn block={opening.createdAtBlock} time={opening.createdAtBlock.createdAt} horizontal />
+      </Footer>
     </AppPage>
   )
 }
@@ -132,6 +136,12 @@ const ButtonsWrapper = styled.div`
   button {
     margin-left: ${spacing(1)};
   }
+`
+
+const Footer = styled.div`
+  position: absolute;
+  bottom: 5px;
+  font-size: 14px;
 `
 
 export default WorkingGroupOpening

@@ -1,5 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { spacing } from '@/common/utils/styles'
 
 import { Colors, Transitions } from '../constants'
 import { formatDateString, formatTokenValue } from '../model/formatters'
@@ -12,24 +14,41 @@ import { TextMedium, TextSmall } from './typography'
 interface Props {
   block: Block
   time: string
+  horizontal?: boolean
 }
 
-export const AboutDateColumn = React.memo(({ time, block }: Props) => (
-  <Column>
+export const AboutDateColumn = React.memo(({ time, block, horizontal }: Props) => (
+  <Wrapper horizontal={horizontal}>
     <AboutText>{formatDateString(time)}</AboutText>
+    {horizontal && <Separator>|</Separator>}
     <BlockInfo>
       <BlockIcon />
       <BlockNumber>{formatTokenValue(block.number)}</BlockNumber>
       <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>
     </BlockInfo>
-  </Column>
+  </Wrapper>
 ))
 
-const Column = styled.div`
-  display: grid;
-  grid-row-gap: 4px;
+const Separator = styled.span`
+  margin: ${spacing(0, 1)};
+`
+
+const Wrapper = styled.div<{ horizontal?: boolean }>`
   width: 100%;
   height: fit-content;
+
+  ${({ horizontal }) => {
+    if (!horizontal) {
+      return css`
+        display: grid;
+        grid-row-gap: 4px;
+      `
+    }
+    return css`
+      display: flex;
+      align-items: center;
+    `
+  }}
 `
 const AboutText = styled(TextMedium)`
   color: ${Colors.Black[600]};
