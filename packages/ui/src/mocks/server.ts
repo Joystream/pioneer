@@ -8,6 +8,7 @@ import { seedBlocks, seedMembers } from './data'
 import { seedApplications } from './data/mockApplications'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
+import { seedWorkers } from './data/seedWorkers'
 import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
@@ -68,6 +69,7 @@ export const makeServer = (environment = 'development') => {
       seedBlocks(server)
       seedMembers(server)
       seedWorkingGroups(server)
+      seedWorkers(server)
       seedOpeningStatuses(server)
       seedOpenings(server)
       // seedApplications(server)

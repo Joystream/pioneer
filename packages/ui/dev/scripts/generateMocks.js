@@ -170,10 +170,10 @@ const generateOpenings = () => {
 
 const main = () => {
   const mocks = {
-    // members: generateMembers(),
-    // blocks: generateBlocks(),
-    // workingGroups: generateWorkingGroups(),
-    // workers: generateWorkers(),
+    members: generateMembers(),
+    blocks: generateBlocks(),
+    workingGroups: generateWorkingGroups(),
+    workers: generateWorkers(),
     openings: generateOpenings(),
   }
 
