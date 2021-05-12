@@ -1,4 +1,4 @@
-import { Worker } from '../../common/api/queries'
+import { Worker } from '@/common/api/queries'
 
 import rawWorkingGroups from './raw/workingGroups.json'
 

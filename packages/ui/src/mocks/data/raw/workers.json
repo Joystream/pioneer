@@ -1,0 +1,625 @@
+[
+  [
+    {
+      "membershipId": "11",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "18",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "19",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "2",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "20",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "23",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "24",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "29",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "3",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "32",
+      "workingGroupId": 0,
+      "status": "active"
+    },
+    {
+      "membershipId": "35",
+      "workingGroupId": 0,
+      "status": "active"
+    },
+    {
+      "membershipId": "36",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "4",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "45",
+      "workingGroupId": 0,
+      "status": "active"
+    },
+    {
+      "membershipId": "52",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "57",
+      "workingGroupId": 0,
+      "status": "active"
+    },
+    {
+      "membershipId": "6",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "62",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "65",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "72",
+      "workingGroupId": 0,
+      "status": "active"
+    },
+    {
+      "membershipId": "74",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "76",
+      "workingGroupId": 0,
+      "status": "active"
+    },
+    {
+      "membershipId": "8",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "81",
+      "workingGroupId": 0,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "81",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "96",
+      "workingGroupId": 0,
+      "status": "left"
+    },
+    {
+      "membershipId": "99",
+      "workingGroupId": 0,
+      "status": "active"
+    }
+  ],
+  [
+    {
+      "membershipId": "1",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "100",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "17",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "20",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "23",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "26",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "28",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "30",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "32",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "33",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "34",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "4",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "40",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "41",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "47",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "5",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "52",
+      "workingGroupId": 1,
+      "status": "active"
+    },
+    {
+      "membershipId": "54",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "58",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "61",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "62",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "64",
+      "workingGroupId": 1,
+      "status": "active"
+    },
+    {
+      "membershipId": "67",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "72",
+      "workingGroupId": 1,
+      "status": "active"
+    },
+    {
+      "membershipId": "76",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "77",
+      "workingGroupId": 1,
+      "status": "active"
+    },
+    {
+      "membershipId": "8",
+      "workingGroupId": 1,
+      "status": "active"
+    },
+    {
+      "membershipId": "8",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "8",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "81",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "82",
+      "workingGroupId": 1,
+      "status": "left"
+    },
+    {
+      "membershipId": "89",
+      "workingGroupId": 1,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "97",
+      "workingGroupId": 1,
+      "status": "terminated"
+    }
+  ],
+  [
+    {
+      "membershipId": "1",
+      "workingGroupId": 2,
+      "status": "active"
+    },
+    {
+      "membershipId": "10",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "11",
+      "workingGroupId": 2,
+      "status": "active"
+    },
+    {
+      "membershipId": "14",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "15",
+      "workingGroupId": 2,
+      "status": "active"
+    },
+    {
+      "membershipId": "17",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "2",
+      "workingGroupId": 2,
+      "status": "active"
+    },
+    {
+      "membershipId": "2",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "22",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "26",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "3",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "34",
+      "workingGroupId": 2,
+      "status": "active"
+    },
+    {
+      "membershipId": "41",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "44",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "47",
+      "workingGroupId": 2,
+      "status": "active"
+    },
+    {
+      "membershipId": "47",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "56",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "59",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "59",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "64",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "65",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "67",
+      "workingGroupId": 2,
+      "status": "active"
+    },
+    {
+      "membershipId": "68",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "70",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "74",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "75",
+      "workingGroupId": 2,
+      "status": "active"
+    },
+    {
+      "membershipId": "80",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "82",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "84",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "85",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "90",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "91",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "94",
+      "workingGroupId": 2,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "96",
+      "workingGroupId": 2,
+      "status": "left"
+    },
+    {
+      "membershipId": "97",
+      "workingGroupId": 2,
+      "status": "active"
+    },
+    {
+      "membershipId": "99",
+      "workingGroupId": 2,
+      "status": "terminated"
+    }
+  ],
+  [
+    {
+      "membershipId": "10",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "10",
+      "workingGroupId": 3,
+      "status": "left"
+    },
+    {
+      "membershipId": "16",
+      "workingGroupId": 3,
+      "status": "left"
+    },
+    {
+      "membershipId": "18",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "23",
+      "workingGroupId": 3,
+      "status": "left"
+    },
+    {
+      "membershipId": "28",
+      "workingGroupId": 3,
+      "status": "active"
+    },
+    {
+      "membershipId": "28",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "36",
+      "workingGroupId": 3,
+      "status": "active"
+    },
+    {
+      "membershipId": "37",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "38",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "4",
+      "workingGroupId": 3,
+      "status": "left"
+    },
+    {
+      "membershipId": "43",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "47",
+      "workingGroupId": 3,
+      "status": "active"
+    },
+    {
+      "membershipId": "47",
+      "workingGroupId": 3,
+      "status": "left"
+    },
+    {
+      "membershipId": "52",
+      "workingGroupId": 3,
+      "status": "active"
+    },
+    {
+      "membershipId": "57",
+      "workingGroupId": 3,
+      "status": "active"
+    },
+    {
+      "membershipId": "59",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "60",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "64",
+      "workingGroupId": 3,
+      "status": "active"
+    },
+    {
+      "membershipId": "68",
+      "workingGroupId": 3,
+      "status": "left"
+    },
+    {
+      "membershipId": "74",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "74",
+      "workingGroupId": 3,
+      "status": "left"
+    },
+    {
+      "membershipId": "75",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "85",
+      "workingGroupId": 3,
+      "status": "terminated"
+    },
+    {
+      "membershipId": "96",
+      "workingGroupId": 3,
+      "status": "active"
+    },
+    {
+      "membershipId": "97",
+      "workingGroupId": 3,
+      "status": "left"
+    },
+    {
+      "membershipId": "99",
+      "workingGroupId": 3,
+      "status": "terminated"
+    }
+  ]
+]

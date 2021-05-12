@@ -18,6 +18,7 @@ const saveFile = (name, contents) => {
 
 const FIRST_BLOCK = 1000
 const MAX_MEMBERS = 100
+
 const KNOWN_MEMBERS = [
   {
     handle: 'alice',
@@ -37,9 +38,9 @@ const generateMembers = () => {
   let nextId = 0
 
   const generateMember = (known = {}) => ({
-    id: nextId++,
-    rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    id: String(nextId++),
+    rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+    controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
     handle: `${faker.lorem.word()}_${faker.lorem.word()}`,
     metadata: {
       name: faker.lorem.words(2),
@@ -48,7 +49,7 @@ const generateMembers = () => {
     isVerified: Math.random() > 0.5,
     isFoundingMember: nextId < 9,
     inviteCount: 5,
-    registeredAtBlockId: nextId + FIRST_BLOCK,
+    registeredAtBlockId: String(nextId),
     registeredAtTime: new Date().toJSON(),
     ...known,
   })
@@ -64,7 +65,7 @@ const generateBlocks = () => {
   let nextNumber = FIRST_BLOCK
 
   const generateBlock = () => ({
-    network: nextNumber < 1100 ? 'Babylon' : 'Olympia',
+    network: nextNumber < 1050 ? 'Babylon' : 'Olympia',
     number: nextNumber++,
     timestamp: new Date().toJSON(),
   })
@@ -76,7 +77,7 @@ const WORKING_GROUPS = ['forum', 'storage', 'content', 'membership']
 
 const generateWorkingGroups = () => {
   const generateWorkingGroup = (groupName, id) => ({
-    id,
+    id: String(id),
     name: groupName,
     workers: [],
     leaderId: null,
@@ -91,7 +92,7 @@ const generateWorkingGroups = () => {
         `## ${faker.lorem.words(randomFromRange(2, 5))}`,
         faker.lorem.paragraphs(randomFromRange(1, 3)),
       ].join('\n\n'),
-      setAtBlockId: randomFromRange(FIRST_BLOCK, FIRST_BLOCK + 50),
+      setAtBlockId: randomFromRange(1, 50),
       setAtTime: '2021-03-09T10:28:04.155Z',
     },
   })
