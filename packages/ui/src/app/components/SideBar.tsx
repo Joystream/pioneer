@@ -1,8 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { ProposalsRoutes } from '@/proposals/constants/routes'
+
 import { MembersIcon } from '../../common/components/page/Sidebar/LinksIcons/MembersIcon'
 import { MyProfileIcon } from '../../common/components/page/Sidebar/LinksIcons/MyProfileIcon'
+import { ProposalsIcon } from '../../common/components/page/Sidebar/LinksIcons/ProposalsIcon'
 import { WorkingGroupsIcon } from '../../common/components/page/Sidebar/LinksIcons/WorkingGroupsIcon'
 import { LogoLink } from '../../common/components/page/Sidebar/LogoLink'
 import { Navigation } from '../../common/components/page/Sidebar/Navigation'
@@ -27,6 +30,12 @@ export const SideBar = () => (
         <NavigationLink to="/working-groups">
           <WorkingGroupsIcon />
           Working Groups
+        </NavigationLink>
+      </NavigationLinksItem>
+      <NavigationLinksItem>
+        <NavigationLink to={ProposalsRoutes.current}>
+          <ProposalsIcon />
+          Proposals
         </NavigationLink>
       </NavigationLinksItem>
       <NavigationLinksItem>

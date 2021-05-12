@@ -1,5 +1,7 @@
 import BN from 'bn.js'
 
+import { asMember, Member } from '@/memberships/types'
+
 import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
@@ -9,6 +11,7 @@ export interface WorkingGroupOpening {
   id: string
   groupId: string
   groupName: string
+  leaderId?: string | null
   budget: number
   expectedEnding: string
   createdAt: string
@@ -21,6 +24,10 @@ export interface WorkingGroupOpening {
     value: BN
     interval: number
   }
+  applications: {
+    member: Member
+    status: string
+  }[]
   applicants: {
     current: number
     total: number
@@ -37,7 +44,14 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   id: fields.id,
   groupId: fields.groupId,
   groupName: fields.group.name,
+  leaderId: fields.group.leaderId,
   budget: fields.group.budget,
+  applications: fields.applications.length
+    ? fields.applications.map((application) => ({
+        member: asMember(application.applicant),
+        status: application.status.__typename,
+      }))
+    : [],
   applicants: {
     current: 0,
     total: fields.applications?.length || 0,

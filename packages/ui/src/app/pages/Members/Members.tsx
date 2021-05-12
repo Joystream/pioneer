@@ -37,10 +37,10 @@ export const Members = () => {
     <AppPage>
       <PageHeader>
         <PageTitle>Members</PageTitle>
-        <MemberListFilters roles={Roles} onApply={setFilter} />
-        <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
-        {!isLoading && pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
       </PageHeader>
+      <MemberListFilters roles={Roles} onApply={setFilter} />
+      <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
+      {!isLoading && pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
     </AppPage>
   )
 }

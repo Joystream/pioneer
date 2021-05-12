@@ -7,6 +7,10 @@ type WorkerStatus = 'active' | 'left' | 'terminated'
 interface WorkerMock {
   membershipId: string
   status: string
+  rewardPerBlock: number
+  earnedTotal: number
+  stake: number
+  nextPaymentAt: string
 }
 
 interface RawWorkingGroupMock {
@@ -39,13 +43,18 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
 
   const memberToWorker = new Map()
 
-  for (const { membershipId, status } of group.workers ?? []) {
+  for (const { membershipId, status, rewardPerBlock, stake, earnedTotal, nextPaymentAt } of group.workers ?? []) {
     const membership = server.schema.find('Membership', membershipId)
 
     const worker = server.schema.create('Worker', {
       groupId,
       membership,
       status: seedWorkerStatus(status as WorkerStatus, membership.id + '_' + groupId, server),
+      isLead: membershipId === workingGroup.leaderId,
+      rewardPerBlock,
+      earnedTotal,
+      stake,
+      nextPaymentAt,
     })
 
     memberToWorker.set(membershipId, worker.id)

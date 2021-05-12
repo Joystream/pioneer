@@ -19,8 +19,11 @@ export type WorkingGroupMetdataFieldsFragment = {
 
 export type WorkerFieldsFragment = {
   __typename: 'Worker'
+  isLead: boolean
+  rewardPerBlock: any
+  stake: any
   membership: { __typename: 'Membership' } & MemberFieldsFragment
-  group: { __typename: 'WorkingGroup'; id: string }
+  group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
     | { __typename: 'WorkerStatusActive' }
     | { __typename: 'WorkerStatusLeft' }
@@ -45,7 +48,7 @@ export type GetWorkingGroupsQuery = {
 }
 
 export type GetWorkersQueryVariables = Types.Exact<{
-  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
+  where?: Types.Maybe<Types.WorkerWhereInput>
 }>
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
@@ -67,7 +70,7 @@ export type WorkingGroupOpeningFieldsFragment = {
   stakeAmount: any
   rewardPerBlock: any
   createdAt: any
-  group: { __typename: 'WorkingGroup'; name: string; budget: any }
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
   applications: Array<{
     __typename: 'WorkingGroupApplication'
@@ -78,6 +81,18 @@ export type WorkingGroupOpeningFieldsFragment = {
       | { __typename: 'ApplicationStatusRejected' }
       | { __typename: 'ApplicationStatusWithdrawn' }
       | { __typename: 'ApplicationStatusCancelled' }
+    applicant: {
+      __typename: 'Membership'
+      id: string
+      isVerified: boolean
+      handle: string
+      rootAccount: string
+      controllerAccount: string
+      inviteCount: number
+      isFoundingMember: boolean
+      roles: Array<{ __typename: 'Worker'; id: string }>
+      metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string> }
+    }
   }>
   status:
     | { __typename: 'OpeningStatusOpen' }
@@ -198,10 +213,14 @@ export const WorkerFieldsFragmentDoc = gql`
     }
     group {
       id
+      name
     }
     status {
       __typename
     }
+    isLead
+    rewardPerBlock
+    stake
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -241,6 +260,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     group {
       name
       budget
+      leaderId
     }
     type
     stakeAmount
@@ -251,6 +271,24 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     }
     applications {
       id
+      status {
+        __typename
+      }
+      applicant {
+        id
+        isVerified
+        handle
+        rootAccount
+        controllerAccount
+        inviteCount
+        isFoundingMember
+        roles {
+          id
+        }
+        metadata {
+          name
+        }
+      }
       status {
         __typename
       }
@@ -342,8 +380,8 @@ export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGro
 export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>
 export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
 export const GetWorkersDocument = gql`
-  query getWorkers($groupId_eq: ID) {
-    workers(where: { groupId_eq: $groupId_eq }) {
+  query getWorkers($where: WorkerWhereInput) {
+    workers(where: $where) {
       ...WorkerFields
     }
   }
@@ -362,7 +400,7 @@ export const GetWorkersDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkersQuery({
  *   variables: {
- *      groupId_eq: // value for 'groupId_eq'
+ *      where: // value for 'where'
  *   },
  * });
  */

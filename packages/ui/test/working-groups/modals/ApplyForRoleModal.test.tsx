@@ -36,6 +36,7 @@ const OPENING_DATA = {
   type: 'REGULAR',
   status: 'open',
   stakeAmount: 2000,
+  applications: null,
   metadata: {
     shortDescription: 'Distribution Worker',
     description: '# Description',
