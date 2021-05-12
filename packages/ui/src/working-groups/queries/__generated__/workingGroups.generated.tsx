@@ -67,7 +67,7 @@ export type WorkingGroupOpeningFieldsFragment = {
   stakeAmount: any
   rewardPerBlock: any
   createdAt: any
-  group: { __typename: 'WorkingGroup'; name: string; budget: any }
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
   applications: Array<{
     __typename: 'WorkingGroupApplication'
@@ -253,6 +253,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     group {
       name
       budget
+      leaderId
     }
     type
     stakeAmount

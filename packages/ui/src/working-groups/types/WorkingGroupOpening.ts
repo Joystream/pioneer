@@ -11,6 +11,7 @@ export interface WorkingGroupOpening {
   id: string
   groupId: string
   groupName: string
+  leaderId?: string | null
   budget: number
   expectedEnding: string
   createdAt: string
@@ -43,6 +44,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   id: fields.id,
   groupId: fields.groupId,
   groupName: fields.group.name,
+  leaderId: fields.group.leaderId,
   budget: fields.group.budget,
   applications: fields.applications.length
     ? fields.applications.map((application) => ({

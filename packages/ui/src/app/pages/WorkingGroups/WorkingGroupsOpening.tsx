@@ -112,7 +112,8 @@ const WorkingGroupOpening = () => {
               allApplicants={opening.applications}
               myApplication={hiredMember?.member.id === activeMembership?.id ? activeMembership : undefined}
               hired={hiredMember?.member}
-              hiringComplete={opening.status === OpeningStatuses.CANCELLED}
+              hiringComplete={opening.status !== OpeningStatuses.OPEN}
+              leaderId={opening.leaderId}
             />
           )}
         </SidePanel>

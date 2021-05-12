@@ -18,7 +18,7 @@ export const WorkersList = ({ leader, workers }: WorkersListProps) => {
       {leader && (
         <ContentWithTabs>
           <Label>Leader</Label>
-          <Worker member={leader} isLeader={leader} />
+          <Worker member={leader} isLeader={true} />
         </ContentWithTabs>
       )}
       <ContentWithTabs>

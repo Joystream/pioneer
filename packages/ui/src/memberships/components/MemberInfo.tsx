@@ -21,7 +21,7 @@ import { MemberRoles } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
-  isLeader?: Member
+  isLeader?: boolean
   member: Member
   onClick?: () => void
   size?: 'm' | 'l'

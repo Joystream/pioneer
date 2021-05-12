@@ -18,12 +18,13 @@ export interface WorkersListProps {
     member: Member
   }[]
   hiringComplete: boolean
+  leaderId?: string | null
 }
 
-export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComplete }: WorkersListProps) => {
+export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComplete, leaderId }: WorkersListProps) => {
   const [isWarningOpen, setIsWarningOpen] = useState<boolean>(hiringComplete)
 
-  const onWaringClose = () => {
+  const onWarningClose = (): void => {
     setIsWarningOpen((prevState) => !prevState)
   }
 
@@ -32,12 +33,12 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
       {myApplication && (
         <ContentWithTabs>
           <Label>My application</Label>
-          <Worker member={myApplication} />
+          <Worker member={myApplication} isLeader={myApplication.id === leaderId} />
         </ContentWithTabs>
       )}
       {hiringComplete && isWarningOpen && (
         <Warning>
-          <StyledCloseButton onClick={onWaringClose} />
+          <StyledCloseButton onClick={onWarningClose} />
           <h5>Hiring complete!</h5>
           <p>We are very sorry, you haven’t been chosen.</p>
         </Warning>
@@ -45,7 +46,7 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
       {hired && (
         <ContentWithTabs>
           <Label>Hired</Label>
-          <Worker member={hired} isLeader={hired} />
+          <Worker member={hired} isLeader={hired.id === leaderId} />
         </ContentWithTabs>
       )}
       <ContentWithTabs>
@@ -55,7 +56,7 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
         {allApplicants && (
           <ContentWithTabs>
             {allApplicants.map(({ member }) => (
-              <Worker key={member.handle} member={member} />
+              <Worker key={member.handle} member={member} isLeader={member.id === leaderId} />
             ))}
           </ContentWithTabs>
         )}

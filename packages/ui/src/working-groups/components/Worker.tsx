@@ -8,7 +8,7 @@ import { Member } from '@/memberships/types'
 
 interface WorkerProps {
   member: Member
-  isLeader?: Member
+  isLeader?: boolean
 }
 
 export const Worker = ({ member, isLeader }: WorkerProps) => (
