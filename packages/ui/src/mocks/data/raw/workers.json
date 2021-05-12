@@ -1,659 +1,641 @@
 [
   {
-    "membershipId": "0",
-    "workingGroupId": 0,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1100,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-15T16:12:44.199Z"
+    "membershipId": "11",
+    "groupId": 0,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1400,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-17T04:28:09.505Z"
   },
   {
     "membershipId": "12",
-    "workingGroupId": 0,
-    "status": "terminated",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3500,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-14T16:48:09.204Z"
-  },
-  {
-    "membershipId": "16",
-    "workingGroupId": 0,
+    "groupId": 0,
     "status": "terminated",
     "rewardPerBlock": 100,
-    "earnedTotal": 3200,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-12T21:05:03.328Z"
-  },
-  {
-    "membershipId": "16",
-    "workingGroupId": 0,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 2100,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-15T10:01:05.665Z"
-  },
-  {
-    "membershipId": "19",
-    "workingGroupId": 0,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1500,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-13T02:49:01.976Z"
-  },
-  {
-    "membershipId": "21",
-    "workingGroupId": 0,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1500,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-19T02:16:59.242Z"
-  },
-  {
-    "membershipId": "23",
-    "workingGroupId": 0,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 3600,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-12T20:25:48.699Z"
-  },
-  {
-    "membershipId": "27",
-    "workingGroupId": 0,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 3000,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-16T09:44:05.714Z"
-  },
-  {
-    "membershipId": "28",
-    "workingGroupId": 0,
-    "status": "terminated",
-    "rewardPerBlock": 200,
     "earnedTotal": 1200,
     "stake": 1000,
-    "nextPaymentAt": "2021-05-18T15:34:23.749Z"
-  },
-  {
-    "membershipId": "30",
-    "workingGroupId": 0,
-    "status": "active",
-    "rewardPerBlock": 100,
-    "earnedTotal": 3000,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-16T14:32:04.482Z"
-  },
-  {
-    "membershipId": "30",
-    "workingGroupId": 0,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 3300,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-15T23:47:24.977Z"
-  },
-  {
-    "membershipId": "33",
-    "workingGroupId": 0,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1700,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-12T22:41:37.162Z"
-  },
-  {
-    "membershipId": "35",
-    "workingGroupId": 0,
-    "status": "terminated",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3400,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-13T11:10:45.212Z"
-  },
-  {
-    "membershipId": "35",
-    "workingGroupId": 0,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3800,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-12T23:14:54.308Z"
-  },
-  {
-    "membershipId": "42",
-    "workingGroupId": 0,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3900,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-13T00:38:42.958Z"
-  },
-  {
-    "membershipId": "44",
-    "workingGroupId": 0,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1400,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-14T07:24:03.832Z"
-  },
-  {
-    "membershipId": "47",
-    "workingGroupId": 0,
-    "status": "active",
-    "rewardPerBlock": 100,
-    "earnedTotal": 2200,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-12T15:35:51.110Z"
-  },
-  {
-    "membershipId": "5",
-    "workingGroupId": 0,
-    "status": "terminated",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1100,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-14T11:26:34.553Z"
-  },
-  {
-    "membershipId": "7",
-    "workingGroupId": 0,
-    "status": "active",
-    "rewardPerBlock": 100,
-    "earnedTotal": 2200,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-15T20:43:47.183Z"
-  },
-  {
-    "membershipId": "10",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 2500,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-13T22:11:36.084Z"
-  },
-  {
-    "membershipId": "11",
-    "workingGroupId": 1,
-    "status": "terminated",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3600,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-13T12:26:09.105Z"
-  },
-  {
-    "membershipId": "11",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 3900,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-13T20:13:40.921Z"
-  },
-  {
-    "membershipId": "13",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 4000,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-13T11:47:22.947Z"
-  },
-  {
-    "membershipId": "14",
-    "workingGroupId": 1,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1000,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-13T23:13:36.356Z"
-  },
-  {
-    "membershipId": "14",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1700,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-17T04:35:22.046Z"
-  },
-  {
-    "membershipId": "24",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 2500,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-18T22:40:42.476Z"
-  },
-  {
-    "membershipId": "25",
-    "workingGroupId": 1,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 2600,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-19T16:49:55.855Z"
-  },
-  {
-    "membershipId": "25",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1300,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-12T21:30:13.529Z"
-  },
-  {
-    "membershipId": "26",
-    "workingGroupId": 1,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1100,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-14T11:14:12.820Z"
-  },
-  {
-    "membershipId": "26",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1500,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-14T00:48:39.478Z"
-  },
-  {
-    "membershipId": "28",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 3700,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-14T21:43:52.721Z"
-  },
-  {
-    "membershipId": "29",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3100,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-15T03:38:17.145Z"
-  },
-  {
-    "membershipId": "30",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1300,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-14T07:57:39.661Z"
-  },
-  {
-    "membershipId": "31",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 3800,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-14T01:14:41.098Z"
-  },
-  {
-    "membershipId": "34",
-    "workingGroupId": 1,
-    "status": "active",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3400,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-19T02:36:53.807Z"
-  },
-  {
-    "membershipId": "37",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1600,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-13T14:04:23.751Z"
-  },
-  {
-    "membershipId": "39",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3800,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-14T19:55:05.118Z"
-  },
-  {
-    "membershipId": "4",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 2300,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-17T15:53:55.117Z"
-  },
-  {
-    "membershipId": "40",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3900,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-20T08:12:24.110Z"
-  },
-  {
-    "membershipId": "41",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1600,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-20T05:16:39.686Z"
-  },
-  {
-    "membershipId": "42",
-    "workingGroupId": 1,
-    "status": "active",
-    "rewardPerBlock": 100,
-    "earnedTotal": 3000,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-16T08:01:44.321Z"
-  },
-  {
-    "membershipId": "5",
-    "workingGroupId": 1,
-    "status": "active",
-    "rewardPerBlock": 100,
-    "earnedTotal": 2100,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-16T12:01:58.002Z"
-  },
-  {
-    "membershipId": "5",
-    "workingGroupId": 1,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1000,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-14T20:00:08.552Z"
-  },
-  {
-    "membershipId": "50",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3800,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-14T03:59:05.379Z"
-  },
-  {
-    "membershipId": "7",
-    "workingGroupId": 1,
-    "status": "active",
-    "rewardPerBlock": 200,
-    "earnedTotal": 2800,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-17T05:10:25.525Z"
-  },
-  {
-    "membershipId": "8",
-    "workingGroupId": 1,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3100,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-13T13:41:12.632Z"
-  },
-  {
-    "membershipId": "9",
-    "workingGroupId": 1,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 2400,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-15T02:42:31.472Z"
-  },
-  {
-    "membershipId": "14",
-    "workingGroupId": 2,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1900,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-13T12:49:28.623Z"
-  },
-  {
-    "membershipId": "16",
-    "workingGroupId": 2,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 2600,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-14T13:18:19.156Z"
-  },
-  {
-    "membershipId": "16",
-    "workingGroupId": 2,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1600,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-19T18:22:51.252Z"
+    "nextPaymentAt": "2021-05-13T02:38:27.770Z"
   },
   {
     "membershipId": "18",
-    "workingGroupId": 2,
-    "status": "terminated",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1300,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-16T13:06:28.654Z"
-  },
-  {
-    "membershipId": "18",
-    "workingGroupId": 2,
+    "groupId": 0,
     "status": "left",
     "rewardPerBlock": 200,
-    "earnedTotal": 3400,
+    "earnedTotal": 3900,
     "stake": 1000,
-    "nextPaymentAt": "2021-05-13T19:04:33.451Z"
+    "nextPaymentAt": "2021-05-14T18:31:18.861Z"
   },
   {
     "membershipId": "2",
-    "workingGroupId": 2,
-    "status": "active",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1200,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-16T11:09:44.411Z"
+    "groupId": 0,
+    "status": "terminated",
+    "rewardPerBlock": 100,
+    "earnedTotal": 3400,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-20T12:11:49.474Z"
   },
   {
-    "membershipId": "24",
-    "workingGroupId": 2,
+    "membershipId": "20",
+    "groupId": 0,
     "status": "active",
     "rewardPerBlock": 100,
-    "earnedTotal": 3800,
+    "earnedTotal": 1300,
     "stake": 1000,
-    "nextPaymentAt": "2021-05-13T05:21:22.527Z"
+    "nextPaymentAt": "2021-05-12T15:56:19.801Z"
   },
   {
-    "membershipId": "24",
-    "workingGroupId": 2,
+    "membershipId": "21",
+    "groupId": 0,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3900,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-16T20:06:00.310Z"
+  },
+  {
+    "membershipId": "22",
+    "groupId": 0,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1300,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-16T17:16:01.278Z"
+  },
+  {
+    "membershipId": "23",
+    "groupId": 0,
+    "status": "active",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1500,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-14T06:05:46.643Z"
+  },
+  {
+    "membershipId": "23",
+    "groupId": 0,
+    "status": "terminated",
+    "rewardPerBlock": 100,
+    "earnedTotal": 2000,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-14T16:05:46.715Z"
+  },
+  {
+    "membershipId": "25",
+    "groupId": 0,
+    "status": "left",
+    "rewardPerBlock": 100,
+    "earnedTotal": 3500,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-17T01:56:22.352Z"
+  },
+  {
+    "membershipId": "26",
+    "groupId": 0,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3900,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-14T16:36:18.418Z"
+  },
+  {
+    "membershipId": "26",
+    "groupId": 0,
     "status": "left",
     "rewardPerBlock": 200,
-    "earnedTotal": 3300,
+    "earnedTotal": 3800,
     "stake": 2000,
-    "nextPaymentAt": "2021-05-17T21:42:36.144Z"
+    "nextPaymentAt": "2021-05-14T22:45:54.218Z"
   },
   {
     "membershipId": "27",
-    "workingGroupId": 2,
+    "groupId": 0,
     "status": "left",
+    "rewardPerBlock": 100,
+    "earnedTotal": 3800,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-13T07:26:09.110Z"
+  },
+  {
+    "membershipId": "3",
+    "groupId": 0,
+    "status": "active",
     "rewardPerBlock": 200,
-    "earnedTotal": 1800,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-16T22:17:00.238Z"
-  },
-  {
-    "membershipId": "28",
-    "workingGroupId": 2,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1100,
+    "earnedTotal": 3100,
     "stake": 1000,
-    "nextPaymentAt": "2021-05-12T22:35:00.349Z"
+    "nextPaymentAt": "2021-05-14T17:22:37.011Z"
   },
   {
-    "membershipId": "38",
-    "workingGroupId": 2,
+    "membershipId": "31",
+    "groupId": 0,
     "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1800,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-16T01:03:13.876Z"
-  },
-  {
-    "membershipId": "38",
-    "workingGroupId": 2,
-    "status": "left",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1000,
-    "stake": 1000,
-    "nextPaymentAt": "2021-05-13T21:51:40.130Z"
-  },
-  {
-    "membershipId": "4",
-    "workingGroupId": 2,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 3500,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-17T19:18:25.575Z"
-  },
-  {
-    "membershipId": "40",
-    "workingGroupId": 2,
-    "status": "left",
-    "rewardPerBlock": 100,
+    "rewardPerBlock": 200,
     "earnedTotal": 3000,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-12T16:17:16.321Z"
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-15T10:21:36.827Z"
   },
   {
-    "membershipId": "42",
-    "workingGroupId": 2,
-    "status": "terminated",
-    "rewardPerBlock": 100,
-    "earnedTotal": 1900,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-15T18:24:26.212Z"
-  },
-  {
-    "membershipId": "48",
-    "workingGroupId": 2,
-    "status": "terminated",
+    "membershipId": "33",
+    "groupId": 0,
+    "status": "left",
     "rewardPerBlock": 200,
     "earnedTotal": 2800,
     "stake": 2000,
-    "nextPaymentAt": "2021-05-13T15:39:40.152Z"
+    "nextPaymentAt": "2021-05-14T04:59:40.787Z"
+  },
+  {
+    "membershipId": "34",
+    "groupId": 0,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 2300,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-12T23:49:51.521Z"
+  },
+  {
+    "membershipId": "39",
+    "groupId": 0,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3400,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-17T14:16:31.905Z"
+  },
+  {
+    "membershipId": "41",
+    "groupId": 0,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 2100,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-18T11:37:44.591Z"
+  },
+  {
+    "membershipId": "44",
+    "groupId": 0,
+    "status": "active",
+    "rewardPerBlock": 100,
+    "earnedTotal": 2800,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T14:13:02.062Z"
+  },
+  {
+    "membershipId": "49",
+    "groupId": 0,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3000,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-18T14:20:04.068Z"
+  },
+  {
+    "membershipId": "13",
+    "groupId": 1,
+    "status": "terminated",
+    "rewardPerBlock": 100,
+    "earnedTotal": 3100,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-14T07:59:57.116Z"
+  },
+  {
+    "membershipId": "13",
+    "groupId": 1,
+    "status": "left",
+    "rewardPerBlock": 100,
+    "earnedTotal": 1900,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-13T00:36:36.956Z"
+  },
+  {
+    "membershipId": "17",
+    "groupId": 1,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 2800,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-16T19:34:00.097Z"
+  },
+  {
+    "membershipId": "24",
+    "groupId": 1,
+    "status": "active",
+    "rewardPerBlock": 100,
+    "earnedTotal": 1600,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-15T10:50:44.094Z"
+  },
+  {
+    "membershipId": "25",
+    "groupId": 1,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3100,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T08:21:15.633Z"
+  },
+  {
+    "membershipId": "29",
+    "groupId": 1,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3100,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-14T04:33:06.627Z"
+  },
+  {
+    "membershipId": "33",
+    "groupId": 1,
+    "status": "active",
+    "rewardPerBlock": 100,
+    "earnedTotal": 3000,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T21:39:28.255Z"
+  },
+  {
+    "membershipId": "36",
+    "groupId": 1,
+    "status": "active",
+    "rewardPerBlock": 100,
+    "earnedTotal": 3500,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-12T18:11:03.811Z"
+  },
+  {
+    "membershipId": "40",
+    "groupId": 1,
+    "status": "active",
+    "rewardPerBlock": 100,
+    "earnedTotal": 3900,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-14T22:33:35.242Z"
+  },
+  {
+    "membershipId": "40",
+    "groupId": 1,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 2100,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-19T01:03:54.873Z"
   },
   {
     "membershipId": "48",
-    "workingGroupId": 2,
+    "groupId": 1,
     "status": "left",
     "rewardPerBlock": 200,
-    "earnedTotal": 2400,
+    "earnedTotal": 3700,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-14T06:54:03.573Z"
+  },
+  {
+    "membershipId": "9",
+    "groupId": 1,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 2200,
     "stake": 1000,
-    "nextPaymentAt": "2021-05-14T16:14:39.931Z"
+    "nextPaymentAt": "2021-05-16T11:29:05.311Z"
   },
   {
-    "membershipId": "7",
-    "workingGroupId": 2,
-    "status": "terminated",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1200,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-13T07:35:00.528Z"
-  },
-  {
-    "membershipId": "0",
-    "workingGroupId": 3,
-    "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3400,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-12T23:09:41.227Z"
-  },
-  {
-    "membershipId": "14",
-    "workingGroupId": 3,
+    "membershipId": "1",
+    "groupId": 2,
     "status": "active",
     "rewardPerBlock": 200,
     "earnedTotal": 2200,
     "stake": 2000,
-    "nextPaymentAt": "2021-05-14T03:19:22.118Z"
+    "nextPaymentAt": "2021-05-14T08:33:28.669Z"
   },
   {
-    "membershipId": "21",
-    "workingGroupId": 3,
+    "membershipId": "10",
+    "groupId": 2,
     "status": "left",
     "rewardPerBlock": 200,
     "earnedTotal": 3300,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-17T09:38:18.269Z"
+  },
+  {
+    "membershipId": "15",
+    "groupId": 2,
+    "status": "terminated",
+    "rewardPerBlock": 100,
+    "earnedTotal": 1100,
     "stake": 1000,
-    "nextPaymentAt": "2021-05-20T05:07:01.484Z"
+    "nextPaymentAt": "2021-05-12T19:49:07.737Z"
+  },
+  {
+    "membershipId": "19",
+    "groupId": 2,
+    "status": "active",
+    "rewardPerBlock": 100,
+    "earnedTotal": 2000,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-17T00:39:24.957Z"
+  },
+  {
+    "membershipId": "19",
+    "groupId": 2,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3000,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-21T09:16:03.634Z"
+  },
+  {
+    "membershipId": "23",
+    "groupId": 2,
+    "status": "active",
+    "rewardPerBlock": 200,
+    "earnedTotal": 2900,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T05:25:16.545Z"
+  },
+  {
+    "membershipId": "29",
+    "groupId": 2,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 2200,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T18:25:03.597Z"
+  },
+  {
+    "membershipId": "30",
+    "groupId": 2,
+    "status": "active",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1500,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-18T04:07:23.174Z"
+  },
+  {
+    "membershipId": "30",
+    "groupId": 2,
+    "status": "terminated",
+    "rewardPerBlock": 100,
+    "earnedTotal": 2400,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T08:44:58.099Z"
+  },
+  {
+    "membershipId": "31",
+    "groupId": 2,
+    "status": "active",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1400,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-18T00:01:10.614Z"
   },
   {
     "membershipId": "32",
-    "workingGroupId": 3,
-    "status": "terminated",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3300,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-16T00:57:46.210Z"
-  },
-  {
-    "membershipId": "34",
-    "workingGroupId": 3,
+    "groupId": 2,
     "status": "active",
-    "rewardPerBlock": 200,
-    "earnedTotal": 1400,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-15T10:38:04.051Z"
+    "rewardPerBlock": 100,
+    "earnedTotal": 3700,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-14T10:37:49.994Z"
   },
   {
-    "membershipId": "42",
-    "workingGroupId": 3,
+    "membershipId": "36",
+    "groupId": 2,
+    "status": "active",
+    "rewardPerBlock": 100,
+    "earnedTotal": 2200,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-19T10:18:42.440Z"
+  },
+  {
+    "membershipId": "48",
+    "groupId": 2,
     "status": "left",
-    "rewardPerBlock": 200,
-    "earnedTotal": 3900,
-    "stake": 2000,
-    "nextPaymentAt": "2021-05-16T04:18:25.819Z"
-  },
-  {
-    "membershipId": "43",
-    "workingGroupId": 3,
-    "status": "active",
     "rewardPerBlock": 200,
     "earnedTotal": 2100,
     "stake": 1000,
-    "nextPaymentAt": "2021-05-12T20:53:21.200Z"
+    "nextPaymentAt": "2021-05-17T02:20:48.209Z"
   },
   {
-    "membershipId": "44",
-    "workingGroupId": 3,
+    "membershipId": "5",
+    "groupId": 2,
+    "status": "left",
+    "rewardPerBlock": 100,
+    "earnedTotal": 3200,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-14T15:31:06.731Z"
+  },
+  {
+    "membershipId": "10",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1700,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-19T14:28:05.919Z"
+  },
+  {
+    "membershipId": "12",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 2900,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-16T11:52:05.224Z"
+  },
+  {
+    "membershipId": "14",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 100,
+    "earnedTotal": 1300,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T10:30:03.040Z"
+  },
+  {
+    "membershipId": "15",
+    "groupId": 3,
     "status": "active",
+    "rewardPerBlock": 100,
+    "earnedTotal": 2300,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-13T05:54:06.357Z"
+  },
+  {
+    "membershipId": "15",
+    "groupId": 3,
+    "status": "left",
     "rewardPerBlock": 100,
     "earnedTotal": 1400,
     "stake": 2000,
-    "nextPaymentAt": "2021-05-15T04:20:34.677Z"
+    "nextPaymentAt": "2021-05-15T02:25:41.097Z"
+  },
+  {
+    "membershipId": "16",
+    "groupId": 3,
+    "status": "active",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1100,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-16T12:57:46.104Z"
+  },
+  {
+    "membershipId": "22",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 2900,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T10:58:31.533Z"
+  },
+  {
+    "membershipId": "24",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3900,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-16T08:09:08.676Z"
+  },
+  {
+    "membershipId": "25",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3400,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-13T00:10:13.455Z"
+  },
+  {
+    "membershipId": "26",
+    "groupId": 3,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1100,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-19T13:36:26.347Z"
+  },
+  {
+    "membershipId": "26",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1800,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-16T12:43:40.830Z"
+  },
+  {
+    "membershipId": "27",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1900,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-19T16:11:36.539Z"
+  },
+  {
+    "membershipId": "32",
+    "groupId": 3,
+    "status": "terminated",
+    "rewardPerBlock": 100,
+    "earnedTotal": 3700,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-15T22:37:02.733Z"
+  },
+  {
+    "membershipId": "34",
+    "groupId": 3,
+    "status": "terminated",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1900,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-13T11:42:10.259Z"
+  },
+  {
+    "membershipId": "34",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 100,
+    "earnedTotal": 2800,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T07:22:54.097Z"
+  },
+  {
+    "membershipId": "36",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3500,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-12T20:45:04.817Z"
+  },
+  {
+    "membershipId": "38",
+    "groupId": 3,
+    "status": "active",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1700,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-13T11:17:08.958Z"
+  },
+  {
+    "membershipId": "38",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1900,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-19T12:44:52.406Z"
+  },
+  {
+    "membershipId": "41",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 100,
+    "earnedTotal": 2000,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-13T03:31:40.880Z"
+  },
+  {
+    "membershipId": "42",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 3000,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-15T06:15:26.022Z"
+  },
+  {
+    "membershipId": "44",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1600,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-15T03:24:45.435Z"
+  },
+  {
+    "membershipId": "48",
+    "groupId": 3,
+    "status": "active",
+    "rewardPerBlock": 100,
+    "earnedTotal": 2500,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-17T03:16:32.649Z"
+  },
+  {
+    "membershipId": "6",
+    "groupId": 3,
+    "status": "active",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1800,
+    "stake": 1000,
+    "nextPaymentAt": "2021-05-14T03:18:50.718Z"
+  },
+  {
+    "membershipId": "9",
+    "groupId": 3,
+    "status": "left",
+    "rewardPerBlock": 200,
+    "earnedTotal": 1200,
+    "stake": 2000,
+    "nextPaymentAt": "2021-05-16T12:02:29.062Z"
   }
 ]

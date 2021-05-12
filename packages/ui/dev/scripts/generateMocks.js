@@ -101,7 +101,7 @@ const generateWorkingGroups = () => {
 const generateWorkers = () => {
   const generateWorker = (type, groupId) => (memberId) => ({
     membershipId: memberId,
-    workingGroupId: groupId,
+    groupId: groupId,
     status: type,
     rewardPerBlock: randomFromRange(1, 2) * 100,
     earnedTotal: randomFromRange(10, 40) * 100,
