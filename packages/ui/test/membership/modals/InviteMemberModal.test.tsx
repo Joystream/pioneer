@@ -134,7 +134,7 @@ describe('UI: InviteMemberModal', () => {
       await fillFormAndProceed()
 
       expect(await screen.findByText('Authorize transaction')).toBeDefined()
-      expect(await screen.findByText('You are inviting this member. You have 3 invites left.')).toBeDefined()
+      expect(await screen.findByText('You are inviting this member. You have 5 invites left.')).toBeDefined()
       expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
       expect(await screen.findByRole('button', { name: /^Sign and create/i })).toBeEnabled()
     })
@@ -154,7 +154,7 @@ describe('UI: InviteMemberModal', () => {
       await fireEvent.click(screen.getByText(/^sign and create a member$/i))
 
       expect(await screen.findByText('Success')).toBeDefined()
-      expect(await screen.findByText(/3 invitations left on the "/i)).toBeDefined()
+      expect(await screen.findByText(/5 invitations left on the "/i)).toBeDefined()
     })
 
     it('Failure step', async () => {
