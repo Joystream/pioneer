@@ -60,9 +60,35 @@ const generateBlocks = () => {
   return Array.from({ length: 1000 }, generateBlock)
 }
 
+const generateWorkingGroups = () => {
+  const generateWorkingGroup = (groupName, id) => ({
+    id,
+    name: groupName,
+    workers: [],
+    leaderId: null,
+    budget: randomFromRange(1000, 5000),
+    metadata: {
+      name: faker.lorem.words(2),
+      message: faker.lorem.words(randomFromRange(2, 5)),
+      about: faker.lorem.words(randomFromRange(30, 50)),
+      description: [
+        `# ${faker.lorem.words(randomFromRange(2, 6))}`,
+        faker.lorem.paragraph(),
+        `## ${faker.lorem.words(randomFromRange(2, 5))}`,
+        faker.lorem.paragraphs(randomFromRange(1, 3)),
+      ].join('\n\n'),
+      setAtBlockId: randomFromRange(FIRST_BLOCK, FIRST_BLOCK + 50),
+      setAtTime: '2021-03-09T10:28:04.155Z',
+    },
+  })
+
+  return ['forum', 'storage', 'content', 'membership'].map(generateWorkingGroup)
+}
+
 const main = () => {
-  console.log(generateMembers().pop())
-  console.log(generateBlocks())
+  const members = generateMembers()
+  const blocks = generateBlocks()
+  const workingGroups = generateWorkingGroups()
 }
 
 main()
