@@ -17,8 +17,11 @@ export type WorkingGroupMetdataFieldsFragment = {
 
 export type WorkerFieldsFragment = {
   __typename: 'Worker'
+  isLead: boolean
+  rewardPerBlock: any
+  stake: any
   membership: { __typename: 'Membership' } & MemberFieldsFragment
-  group: { __typename: 'WorkingGroup'; id: string }
+  group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
     | { __typename: 'WorkerStatusActive' }
     | { __typename: 'WorkerStatusLeft' }
@@ -196,10 +199,14 @@ export const WorkerFieldsFragmentDoc = gql`
     }
     group {
       id
+      name
     }
     status {
       __typename
     }
+    isLead
+    rewardPerBlock
+    stake
   }
   ${MemberFieldsFragmentDoc}
 `

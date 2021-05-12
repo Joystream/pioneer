@@ -10,11 +10,15 @@ fragment WorkerFields on Worker {
     ...MemberFields
   }
   group {
-    id
+    id,
+    name
   }
   status {
     __typename
   }
+  isLead
+  rewardPerBlock
+  stake
 }
 
 fragment WorkingGroupFields on WorkingGroup {

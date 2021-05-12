@@ -9,11 +9,19 @@
       },
       {
         "membershipId": "1",
-        "status": "left"
+        "status": "left",
+        "rewardPerBlock": 3093,
+        "earnedTotal": 4302040,
+        "stake": 395000021,
+        "nextPaymentAt": "2021-05-16T10:28:04.155Z"
       },
       {
         "membershipId": "2",
-        "status": "terminated"
+        "status": "terminated",
+        "rewardPerBlock": 5048,
+        "earnedTotal": 439499,
+        "stake": 193988211,
+        "nextPaymentAt": "2021-05-16T10:28:04.155Z"
       }
     ],
     "leaderId": "0",
@@ -33,8 +41,28 @@
     "name": "storage",
     "workers": [
       {
+        "membershipId": "0",
+        "status": "active",
+        "rewardPerBlock": 13923,
+        "earnedTotal": 3101000,
+        "stake": 192837021,
+        "nextPaymentAt": "2021-05-16T10:28:04.155Z"
+      },
+      {
+        "membershipId": "1",
+        "status": "left",
+        "rewardPerBlock": 3093,
+        "earnedTotal": 4302040,
+        "stake": 395000021,
+        "nextPaymentAt": "2021-05-16T10:28:04.155Z"
+      },
+      {
         "membershipId": "2",
-        "status": "active"
+        "status": "terminated",
+        "rewardPerBlock": 5048,
+        "earnedTotal": 439499,
+        "stake": 193988211,
+        "nextPaymentAt": "2021-05-16T10:28:04.155Z"
       }
     ],
     "budget": "2000",

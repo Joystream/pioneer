@@ -1,5 +1,4 @@
 import { Worker } from '../../common/api/queries'
-
 import rawWorkingGroups from './raw/workingGroups.json'
 
 type WorkerStatus = 'active' | 'left' | 'terminated'
@@ -7,6 +6,10 @@ type WorkerStatus = 'active' | 'left' | 'terminated'
 interface WorkerMock {
   membershipId: string
   status: string
+  rewardPerBlock: number
+  earnedTotal: number
+  stake: number
+  nextPaymentAt: string
 }
 
 interface RawWorkingGroupMock {
