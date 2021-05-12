@@ -125,10 +125,10 @@ const generateWorkers = () => {
 }
 
 const generateOpenings = () => {
-  const generateOpening = (status, groupId, name) => {
+  const generateOpening = (status, groupId, name) => () => {
     const isLeader = Math.random() > 0.9
 
-    return () => ({
+    return {
       groupId: String(groupId),
       type: isLeader ? 'LEADER' : 'REGULAR',
       status: status,
@@ -154,14 +154,14 @@ const generateOpenings = () => {
       rewardPerBlock: randomFromRange(1, 5) * 100,
       createdAtBlockId: randomFromRange(20, 100),
       createdAt: '2021-04-09T13:37:42.155Z',
-    })
+    }
   }
 
   const generateOpeningsForGroup = (groupName, id) => {
     return [
-      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('active', id)),
-      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('filled', id)),
-      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('cancelled', id)),
+      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('open', id, groupName)),
+      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('filled', id, groupName)),
+      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('cancelled', id, groupName)),
     ]
   }
 
@@ -170,10 +170,10 @@ const generateOpenings = () => {
 
 const main = () => {
   const mocks = {
-    members: generateMembers(),
-    blocks: generateBlocks(),
-    workingGroups: generateWorkingGroups(),
-    workers: generateWorkers(),
+    // members: generateMembers(),
+    // blocks: generateBlocks(),
+    // workingGroups: generateWorkingGroups(),
+    // workers: generateWorkers(),
     openings: generateOpenings(),
   }
 

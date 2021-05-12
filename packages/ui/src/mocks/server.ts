@@ -70,7 +70,7 @@ export const makeServer = (environment = 'development') => {
       seedWorkingGroups(server)
       seedOpeningStatuses(server)
       seedOpenings(server)
-      seedApplications(server)
+      // seedApplications(server)
     },
   })
 }
