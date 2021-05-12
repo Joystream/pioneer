@@ -16,9 +16,9 @@ const saveFile = (name, contents) => {
   fs.writeFileSync(pathName, JSON.stringify(contents, null, 2))
 }
 
-const FIRST_BLOCK = 1000
-const MAX_MEMBERS = 100
-
+const FIRST_BLOCK_NUMBER = 1000
+const WORKING_GROUPS = ['forum', 'storage', 'content', 'membership']
+const MAX_MEMBERS = 200
 const KNOWN_MEMBERS = [
   {
     handle: 'alice',
@@ -62,7 +62,7 @@ const generateMembers = () => {
 }
 
 const generateBlocks = () => {
-  let nextNumber = FIRST_BLOCK
+  let nextNumber = FIRST_BLOCK_NUMBER
 
   const generateBlock = () => ({
     network: nextNumber < 1050 ? 'Babylon' : 'Olympia',
@@ -72,8 +72,6 @@ const generateBlocks = () => {
 
   return Array.from({ length: 1000 }, generateBlock)
 }
-
-const WORKING_GROUPS = ['forum', 'storage', 'content', 'membership']
 
 const generateWorkingGroups = () => {
   const generateWorkingGroup = (groupName, id) => ({
@@ -107,7 +105,7 @@ const generateWorkers = () => {
     status: type,
   })
 
-  const generatePastWorkers = (groupName, id) => {
+  const generateAllWorkers = (groupName, id) => {
     const workersIds = randomUniqueArrayFromRange(randomFromRange(2, 10), 0, MAX_MEMBERS)
     const terminatedIds = randomUniqueArrayFromRange(randomFromRange(0, 20), 0, MAX_MEMBERS)
     const leftIds = randomUniqueArrayFromRange(randomFromRange(0, 20), 0, MAX_MEMBERS)
@@ -119,7 +117,48 @@ const generateWorkers = () => {
     ].sort((a, b) => a.membershipId.localeCompare(b.membershipId))
   }
 
-  return WORKING_GROUPS.map(generatePastWorkers)
+  return WORKING_GROUPS.map(generateAllWorkers).flatMap((a) => a)
+}
+
+const generateOpenings = () => {
+  const generateOpening = (status, groupId) => () => ({
+    groupId: String(groupId),
+    type: 'REGULAR',
+    status: status,
+    stakeAmount: 2000,
+    metadata: {
+      shortDescription: 'Distribution Worker',
+      description:
+        '### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.',
+      hiringLimit: 1,
+      expectedEnding: '2022-03-09T10:18:04.155Z',
+      applicationDetails: 'Details... ?',
+      applicationFormQuestions: [
+        {
+          type: 'TEXT',
+          question: 'How old are you?',
+        },
+        {
+          type: 'TEXTAREA',
+          question: 'Why we should choose you?',
+        },
+      ],
+    },
+    unstakingPeriod: 5,
+    rewardPerBlock: 200,
+    createdAtBlockId: 5,
+    createdAt: '2021-04-09T13:37:42.155Z',
+  })
+
+  const generateOpeningsForGroup = (groupName, id) => {
+    return [
+      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('active', id)),
+      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('filled', id)),
+      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('cancelled', id)),
+    ]
+  }
+
+  return WORKING_GROUPS.map(generateOpeningsForGroup).flatMap((a) => a)
 }
 
 const main = () => {
@@ -128,6 +167,7 @@ const main = () => {
     blocks: generateBlocks(),
     workingGroups: generateWorkingGroups(),
     workers: generateWorkers(),
+    openings: generateOpenings(),
   }
 
   Object.entries(mocks).forEach(([fileName, contents]) => saveFile(fileName, contents))

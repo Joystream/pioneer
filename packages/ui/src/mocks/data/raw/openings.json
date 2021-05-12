@@ -1,9 +1,8 @@
 [
   {
-    "id": "0",
-    "groupId": 0,
+    "groupId": "0",
     "type": "REGULAR",
-    "status": "open",
+    "status": "active",
     "stakeAmount": 2000,
     "metadata": {
       "shortDescription": "Distribution Worker",
@@ -13,12 +12,10 @@
       "applicationDetails": "Details... ?",
       "applicationFormQuestions": [
         {
-          "id": "0",
           "type": "TEXT",
           "question": "How old are you?"
         },
         {
-          "id": "1",
           "type": "TEXTAREA",
           "question": "Why we should choose you?"
         }
@@ -30,55 +27,157 @@
     "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
-    "id": "1",
-    "groupId": 0,
-    "type": "LEADER",
-    "status": "open",
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "active",
     "stakeAmount": 2000,
     "metadata": {
-      "shortDescription": "Become A Distribution Leader",
+      "shortDescription": "Distribution Worker",
       "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
       "applicationFormQuestions": [
         {
-          "id": "2",
           "type": "TEXT",
           "question": "How old are you?"
         },
         {
-          "id": "3",
           "type": "TEXTAREA",
           "question": "Why we should choose you?"
         }
       ]
     },
     "unstakingPeriod": 5,
-    "rewardPerBlock": 1200,
+    "rewardPerBlock": 200,
     "createdAtBlockId": 5,
     "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
-    "id": "2",
-    "groupId": 0,
-    "type": "LEADER",
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
     "status": "filled",
     "stakeAmount": 2000,
     "metadata": {
-      "shortDescription": "Become A Distribution Leader",
+      "shortDescription": "Distribution Worker",
       "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
       "applicationFormQuestions": [
         {
-          "id": "4",
           "type": "TEXT",
           "question": "How old are you?"
         },
         {
-          "id": "5",
           "type": "TEXTAREA",
           "question": "Why we should choose you?"
         }
@@ -90,8 +189,115 @@
     "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
-    "id": "3",
-    "groupId": 0,
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
     "type": "REGULAR",
     "status": "cancelled",
     "stakeAmount": 2000,
@@ -101,7 +307,16 @@
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": []
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
     },
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
@@ -109,37 +324,215 @@
     "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
-    "id": "4",
-    "groupId": 1,
-    "type": "LEADER",
-    "status": "open",
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "cancelled",
     "stakeAmount": 2000,
     "metadata": {
-      "shortDescription": "Become A Storage Leader",
+      "shortDescription": "Distribution Worker",
       "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": []
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
     },
     "unstakingPeriod": 5,
-    "rewardPerBlock": 1200,
+    "rewardPerBlock": 200,
     "createdAtBlockId": 5,
     "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
-    "id": "5",
-    "groupId": 1,
-    "type": "LEADER",
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "0",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
     "status": "filled",
     "stakeAmount": 2000,
     "metadata": {
-      "shortDescription": "Become A Storage Leader",
+      "shortDescription": "Distribution Worker",
       "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": []
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
     },
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
@@ -147,18 +540,1187 @@
     "createdAt": "2021-04-09T13:37:42.155Z"
   },
   {
-    "id": "5",
-    "groupId": 1,
-    "type": "LEADER",
-    "status": "open",
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "filled",
     "stakeAmount": 2000,
     "metadata": {
-      "shortDescription": "Markdown test",
-      "description": "## Heading 1\n\n### Heading 2\n\n#### Heading 3\n\n*   ui 1\n    *   ul 1.1\n        *   ul 1.1.1\n    *   ul 1.2\n*   ul 2\n\n1.  ol 1\n2.  ol 2\n\n> A quote\n\nA paragraph with **bold** and _italic_ text.",
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
       "hiringLimit": 1,
       "expectedEnding": "2022-03-09T10:18:04.155Z",
       "applicationDetails": "Details... ?",
-      "applicationFormQuestions": []
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "1",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "2",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "active",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "filled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
+    },
+    "unstakingPeriod": 5,
+    "rewardPerBlock": 200,
+    "createdAtBlockId": 5,
+    "createdAt": "2021-04-09T13:37:42.155Z"
+  },
+  {
+    "groupId": "3",
+    "type": "REGULAR",
+    "status": "cancelled",
+    "stakeAmount": 2000,
+    "metadata": {
+      "shortDescription": "Distribution Worker",
+      "description": "### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.",
+      "hiringLimit": 1,
+      "expectedEnding": "2022-03-09T10:18:04.155Z",
+      "applicationDetails": "Details... ?",
+      "applicationFormQuestions": [
+        {
+          "type": "TEXT",
+          "question": "How old are you?"
+        },
+        {
+          "type": "TEXTAREA",
+          "question": "Why we should choose you?"
+        }
+      ]
     },
     "unstakingPeriod": 5,
     "rewardPerBlock": 200,
