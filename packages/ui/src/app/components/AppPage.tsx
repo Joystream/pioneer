@@ -19,8 +19,10 @@ export const AppPage = ({ children, lastBreadcrumb }: AppPageProps) => (
 
 export const PageContainer = styled.div`
   display: grid;
+  align-items: start;
   grid-template-columns: 1fr;
-  grid-template-rows: auto;
+  grid-template-rows: auto 1fr;
   grid-row-gap: 24px;
   width: 100%;
+  flex-grow: 1;
 `

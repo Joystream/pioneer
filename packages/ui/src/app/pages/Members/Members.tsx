@@ -31,9 +31,9 @@ export const Members = () => {
     <AppPage>
       <PageHeader>
         <PageTitle>Members</PageTitle>
-        <MemberListFilters roles={Roles} onApply={setFilter} />
-        <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
       </PageHeader>
+      <MemberListFilters roles={Roles} onApply={setFilter} />
+      <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
     </AppPage>
   )
 }
