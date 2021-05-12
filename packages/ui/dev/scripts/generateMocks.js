@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const faker = require('faker')
 
 const randomFromRange = (min, max) => {
@@ -7,6 +9,11 @@ const randomFromRange = (min, max) => {
 const randomUniqueArrayFromRange = (currentWorkers, min, max) => {
   const set = new Set(Array.from({ length: currentWorkers }, () => randomFromRange(min, max)))
   return [...set.values()]
+}
+
+const saveFile = (name, contents) => {
+  const pathName = path.join(__dirname, '..', '..', 'src', 'mocks', 'data', 'raw', name + '.json')
+  fs.writeFileSync(pathName, JSON.stringify(contents, null, 2))
 }
 
 const FIRST_BLOCK = 1000
@@ -115,12 +122,14 @@ const generateWorkers = () => {
 }
 
 const main = () => {
-  const members = generateMembers()
-  const blocks = generateBlocks()
-  const workingGroups = generateWorkingGroups()
-  const workers = generateWorkers()
+  const mocks = {
+    members: generateMembers(),
+    blocks: generateBlocks(),
+    workingGroups: generateWorkingGroups(),
+    workers: generateWorkers(),
+  }
 
-  console.log(workers)
+  Object.entries(mocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
 
 main()
