@@ -93,19 +93,25 @@ const generateWorkingGroups = () => {
 }
 
 const generateWorkers = () => {
-  const generateCurrentWorkers = (groupName, id) => {
+  const generateWorker = (type, groupId) => (memberId) => ({
+    membershipId: memberId,
+    workingGroupId: groupId,
+    status: type,
+  })
+
+  const generatePastWorkers = (groupName, id) => {
     const workersIds = randomUniqueArrayFromRange(randomFromRange(2, 10), 0, MAX_MEMBERS)
+    const terminatedIds = randomUniqueArrayFromRange(randomFromRange(0, 20), 0, MAX_MEMBERS)
+    const leftIds = randomUniqueArrayFromRange(randomFromRange(0, 20), 0, MAX_MEMBERS)
 
-    const generateCurrentWorker = (memberId) => ({
-      membershipId: memberId,
-      workingGroupId: id,
-      status: 'active',
-    })
-
-    return workersIds.map(generateCurrentWorker)
+    return [
+      ...workersIds.map(generateWorker('active', id)),
+      ...terminatedIds.map(generateWorker('terminated', id)),
+      ...leftIds.map(generateWorker('left', id)),
+    ].sort((a, b) => a.membershipId.localeCompare(b.membershipId))
   }
 
-  return [...WORKING_GROUPS.map(generateCurrentWorkers)]
+  return WORKING_GROUPS.map(generatePastWorkers)
 }
 
 const main = () => {
