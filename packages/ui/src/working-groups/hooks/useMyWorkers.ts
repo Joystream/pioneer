@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
-import { useGetWorkersQuery } from '../queries'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+
+import { useGetWorkersQuery } from '../queries'
 import { asWorkerWithDetails } from '../types'
 
 export const useMyWorkers = () => {

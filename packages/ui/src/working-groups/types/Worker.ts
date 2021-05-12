@@ -1,6 +1,6 @@
 import { Member } from '@/memberships/types'
-import { WorkingGroup } from '@/working-groups/types/WorkingGroup'
 import { WorkerFieldsFragment } from '@/working-groups/queries'
+import { WorkingGroup } from '@/working-groups/types/WorkingGroup'
 
 export interface Worker {
   membership: Pick<Member, 'id'>

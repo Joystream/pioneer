@@ -1,4 +1,5 @@
 import { Worker } from '../../common/api/queries'
+
 import rawWorkingGroups from './raw/workingGroups.json'
 
 type WorkerStatus = 'active' | 'left' | 'terminated'

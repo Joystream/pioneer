@@ -1,19 +1,18 @@
 import React from 'react'
 
+import { AppPage } from '@/app/components/AppPage'
 import { Loading } from '@/common/components/Loading'
+import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
-import { Label, TextBig } from '@/common/components/typography'
-import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
-import { AppPage } from '@/app/components/AppPage'
-import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
-import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
+import { Label } from '@/common/components/typography'
 import { RolesList } from '@/working-groups/components/RolesList'
+import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
+
+import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 
 export const MyRoles = () => {
   const { isLoading, workers } = useMyWorkers()
-
-  console.log('My Workers', workers)
 
   const displayRoles = () => {
     if (isLoading) {

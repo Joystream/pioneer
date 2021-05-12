@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 
+import { AppPage } from '@/app/components/AppPage'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
@@ -8,7 +9,7 @@ import { Label, TextBig } from '@/common/components/typography'
 import { ApplicationsList } from '@/working-groups/components/ApplicationsList'
 import { useMyApplications } from '@/working-groups/hooks/useMyApplications'
 import { isPendingApplication } from '@/working-groups/model/isPendingApplication'
-import { AppPage } from '@/app/components/AppPage'
+
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 
 export const MyApplications = () => {

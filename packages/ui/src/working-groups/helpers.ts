@@ -1,5 +1,6 @@
-import { WorkingGroupApplication } from './types/WorkingGroupApplication'
 import { WorkerWithDetails } from '@/working-groups/types'
+
+import { WorkingGroupApplication } from './types/WorkingGroupApplication'
 
 export function openingTitle(application: WorkingGroupApplication) {
   const position = application.opening.type == 'LEADER' ? 'Leader' : 'Worker'

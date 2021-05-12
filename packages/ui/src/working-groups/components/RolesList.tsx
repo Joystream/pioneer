@@ -1,9 +1,16 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
-import BN from 'bn.js'
 
 import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { ButtonGhost } from '@/common/components/buttons'
+import { KebabMenuIcon } from '@/common/components/icons'
 import { List, ListItem } from '@/common/components/List'
+import { TextInlineBig, TokenValue } from '@/common/components/typography'
+import { WorkerWithDetails } from '@/working-groups/types'
+
+import { workerRoleTitle } from '../helpers'
+
 import {
   OACItemInfo,
   OACItemInfoTop,
@@ -13,11 +20,6 @@ import {
   OACWrap,
   OpenItemSummaryColumn,
 } from './OpeningAndApplicationsComponents/OACStyledComponents'
-import { TextInlineBig, TokenValue } from '@/common/components/typography'
-import { ButtonGhost } from '@/common/components/buttons'
-import { workerRoleTitle } from '../helpers'
-import { KebabMenuIcon } from '@/common/components/icons'
-import { WorkerWithDetails } from '@/working-groups/types'
 
 interface Props {
   workers: WorkerWithDetails[]
