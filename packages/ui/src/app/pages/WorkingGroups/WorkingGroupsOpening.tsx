@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -10,7 +10,7 @@ import { BellIcon } from '@/common/components/icons/BellIcon'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageContent'
+import { ContentWithSidepanel, MainPanel, SidePanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -18,6 +18,8 @@ import { StatisticItem, Statistics, TokenValueStat, DurationStatistics } from '@
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
 import { spacing } from '@/common/utils/styles'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
 import { OpeningStatuses, MappedStatuses } from '@/working-groups/constants'
 import useOpening from '@/working-groups/hooks/useOpening'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
@@ -25,8 +27,16 @@ import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal
 const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { showModal } = useModal()
+  const { active: activeMembership } = useMyMemberships()
   const { isLoading, opening } = useOpening(id)
   const { copyValue } = useCopyToClipboard()
+
+  const hiredMember = useMemo(() => {
+    if (opening) {
+      return opening.applications.find(({ status }) => status === 'ApplicationStatusAccepted')
+    }
+    return null
+  }, [opening])
 
   if (isLoading || !opening) {
     return <Loading />
@@ -96,6 +106,17 @@ const WorkingGroupOpening = () => {
       </MainPanel>
       <ContentWithSidepanel>
         <MarkdownPreview markdown={opening.description} />
+        <SidePanel>
+          {opening.status !== OpeningStatuses.UPCOMING && (
+            <ApplicantsList
+              allApplicants={opening.applications}
+              myApplication={hiredMember?.member.id === activeMembership?.id ? activeMembership : undefined}
+              hired={hiredMember?.member}
+              hiringComplete={opening.status !== OpeningStatuses.OPEN}
+              leaderId={opening.leaderId}
+            />
+          )}
+        </SidePanel>
       </ContentWithSidepanel>
     </AppPage>
   )
@@ -106,6 +127,7 @@ const Row = styled.div`
 `
 const ButtonsWrapper = styled.div`
   margin-left: auto;
+  display: flex;
 
   button {
     margin-left: ${spacing(1)};

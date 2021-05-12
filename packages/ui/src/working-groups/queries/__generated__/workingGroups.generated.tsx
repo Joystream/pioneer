@@ -67,7 +67,7 @@ export type WorkingGroupOpeningFieldsFragment = {
   stakeAmount: any
   rewardPerBlock: any
   createdAt: any
-  group: { __typename: 'WorkingGroup'; name: string; budget: any }
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
   applications: Array<{
     __typename: 'WorkingGroupApplication'
@@ -78,6 +78,18 @@ export type WorkingGroupOpeningFieldsFragment = {
       | { __typename: 'ApplicationStatusRejected' }
       | { __typename: 'ApplicationStatusWithdrawn' }
       | { __typename: 'ApplicationStatusCancelled' }
+    applicant: {
+      __typename: 'Membership'
+      id: string
+      isVerified: boolean
+      handle: string
+      rootAccount: string
+      controllerAccount: string
+      inviteCount: number
+      isFoundingMember: boolean
+      roles: Array<{ __typename: 'Worker'; id: string }>
+      metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string> }
+    }
   }>
   status:
     | { __typename: 'OpeningStatusOpen' }
@@ -241,6 +253,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     group {
       name
       budget
+      leaderId
     }
     type
     stakeAmount
@@ -251,6 +264,24 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     }
     applications {
       id
+      status {
+        __typename
+      }
+      applicant {
+        id
+        isVerified
+        handle
+        rootAccount
+        controllerAccount
+        inviteCount
+        isFoundingMember
+        roles {
+          id
+        }
+        metadata {
+          name
+        }
+      }
       status {
         __typename
       }

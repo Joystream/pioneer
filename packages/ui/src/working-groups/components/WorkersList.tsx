@@ -1,32 +1,16 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import { ButtonGhost } from '../../common/components/buttons'
-import { CountBadge } from '../../common/components/CountBadge'
-import { FileIcon } from '../../common/components/icons/FileIcon'
-import { ContentWithTabs, RowGapBlock } from '../../common/components/page/PageContent'
-import { Label } from '../../common/components/typography'
-import { MemberInfo } from '../../memberships/components'
-import { Member } from '../../memberships/types'
+import { CountBadge } from '@/common/components/CountBadge'
+import { ContentWithTabs, RowGapBlock } from '@/common/components/page/PageContent'
+import { Label } from '@/common/components/typography'
+import { Member } from '@/memberships/types'
+
+import { Worker } from './Worker'
 
 export interface WorkersListProps {
   leader?: Member
   workers?: Member[]
 }
-
-interface WorkerProps {
-  member: Member
-  isLeader?: Member
-}
-
-const Worker = ({ member, isLeader }: WorkerProps) => (
-  <WorkerWrap>
-    <MemberInfo member={member} isLeader={isLeader} />
-    <ButtonGhost square size="small">
-      <FileIcon />
-    </ButtonGhost>
-  </WorkerWrap>
-)
 
 export const WorkersList = ({ leader, workers }: WorkersListProps) => {
   return (
@@ -34,7 +18,7 @@ export const WorkersList = ({ leader, workers }: WorkersListProps) => {
       {leader && (
         <ContentWithTabs>
           <Label>Leader</Label>
-          <Worker member={leader} isLeader={leader} />
+          <Worker member={leader} isLeader={true} />
         </ContentWithTabs>
       )}
       <ContentWithTabs>
@@ -52,9 +36,3 @@ export const WorkersList = ({ leader, workers }: WorkersListProps) => {
     </RowGapBlock>
   )
 }
-
-const WorkerWrap = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 32px;
-  grid-column-gap: 8px;
-`

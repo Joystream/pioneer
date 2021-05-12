@@ -60,6 +60,7 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   group {
     name
     budget
+    leaderId
   }
   type
   stakeAmount
@@ -70,6 +71,24 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   }
   applications {
     id
+    status {
+      __typename
+    }
+    applicant {
+      id
+      isVerified
+      handle
+      rootAccount
+      controllerAccount
+      inviteCount
+      isFoundingMember
+      roles {
+        id
+      }
+      metadata {
+        name
+      }
+    }
     status {
       __typename
     }
