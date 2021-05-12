@@ -155,6 +155,7 @@ export type WorkingGroupApplicationFieldsFragment = {
   __typename: 'WorkingGroupApplication'
   id: string
   stakingAccount: string
+  roleAccount: string
   opening: {
     __typename: 'WorkingGroupOpening'
     type: Types.WorkingGroupOpeningType
@@ -318,6 +319,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       __typename
     }
     stakingAccount
+    roleAccount
     createdAtBlock {
       ...BlockFields
     }

@@ -29,5 +29,6 @@ export const asApplication = (application: WorkingGroupApplicationFieldsFragment
   },
   status: application.status.__typename,
   stakingAccount: application.stakingAccount,
+  roleAccount: application.roleAccount,
   createdAtBlock: asBlock(application.createdAtBlock),
 })

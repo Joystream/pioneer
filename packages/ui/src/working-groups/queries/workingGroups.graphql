@@ -154,6 +154,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     __typename
   }
   stakingAccount
+  roleAccount
   createdAtBlock {
     ...BlockFields
   }
