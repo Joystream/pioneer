@@ -17,6 +17,7 @@ import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { ButtonGhost } from '@/common/components/buttons'
 import { FileIcon } from '@/common/components/icons/FileIcon'
 import { WorkerWithDetails } from '@/working-groups/hooks/useMyWorkers'
+import { KebabMenuIcon } from '@/common/components/icons'
 
 interface Props {
   workers: WorkerWithDetails[]
@@ -68,7 +69,7 @@ const RolesListItem = ({ worker }: { worker: WorkerWithDetails }) => {
         </OpenItemSummaryColumn>
       </OACItemSummary>
       <ButtonGhost square size="medium">
-        <FileIcon />
+        <KebabMenuIcon />
       </ButtonGhost>
     </OACWrap>
   )
