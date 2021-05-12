@@ -103,6 +103,10 @@ const generateWorkers = () => {
     membershipId: memberId,
     workingGroupId: groupId,
     status: type,
+    rewardPerBlock: randomFromRange(1, 2) * 100,
+    earnedTotal: randomFromRange(10, 40) * 100,
+    stake: randomFromRange(1, 2) * 1000,
+    nextPaymentAt: faker.date.soon(randomFromRange(1, 10)).toJSON(),
   })
 
   const generateAllWorkers = (groupName, id) => {

@@ -8,17 +8,25 @@ interface RawWorker {
   membershipId: string
   status: string
   workingGroupId: number
+  rewardPerBlock: number
+  earnedTotal: number
+  stake: number
+  nextPaymentAt: string
 }
 
 export type MockWorker = Worker & { groupId: string; memberId: string }
 
 export const mockWorkers = rawWorkers.map((rawGroup) => ({ ...rawGroup }))
 
-const seedWorker = ({ membershipId, workingGroupId, status }: RawWorker, server: any) => {
+const seedWorker = (worker: RawWorker, server: any) => {
   return server.schema.create('Worker', {
-    groupId: workingGroupId,
-    membershipId: membershipId,
-    status: seedWorkerStatus(status as WorkerStatus, membershipId + '_' + workingGroupId, server),
+    rewardPerBlock: worker.rewardPerBlock,
+    earnedTotal: worker.earnedTotal,
+    stake: worker.stake,
+    nextPaymentAt: worker.nextPaymentAt,
+    groupId: worker.workingGroupId,
+    membershipId: worker.membershipId,
+    status: seedWorkerStatus(worker.status as WorkerStatus, worker.membershipId + '_' + worker.workingGroupId, server),
   })
 }
 
