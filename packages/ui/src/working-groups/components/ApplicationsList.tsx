@@ -17,12 +17,12 @@ import { WithdrawApplicationModal } from '../modals/WithdrawApplicationModal/Wit
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
 import {
+  ApplicationItemWrap,
   OACItemInfo,
   OACItemInfoTop,
   OACItemSummary,
   OACItemTitle,
   OACSubscriptionWide,
-  OACWrap,
   OpenItemSummaryColumn,
 } from './OpeningAndApplicationsComponents/OACStyledComponents'
 
@@ -49,7 +49,7 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
 
   return (
     <>
-      <OACWrap>
+      <ApplicationItemWrap>
         <OACItemInfo>
           <OACItemInfoTop>
             <Subscription>ID: {application.id}</Subscription>
@@ -82,7 +82,7 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
         <ButtonGhost square size="medium" onClick={toggleWithdrawModalVisible}>
           <CrossIcon />
         </ButtonGhost>
-      </OACWrap>
+      </ApplicationItemWrap>
       {isWithdrawModalVisible && (
         <WithdrawApplicationModal onClose={toggleWithdrawModalVisible} application={application} />
       )}

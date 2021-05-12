@@ -17,6 +17,10 @@ export const OACWrap = styled.div`
   transition: ${Transitions.all};
 `
 
+export const ApplicationItemWrap = styled(OACWrap)`
+  grid-template-columns: 1fr auto 40px 40px;
+`
+
 export const OpenedContainer = styled.div`
   display: flex;
   flex-direction: column;
