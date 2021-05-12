@@ -2,10 +2,11 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 
-import { AccountsContextProvider } from '../../../src/accounts/providers/accounts/provider'
-import { GlobalModals } from '../../../src/app/GlobalModals'
-import { ModalContextProvider } from '../../../src/common/providers/modal/provider'
-import { CurrentMember } from '../../../src/memberships/components/CurrentMember'
+import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { CurrentMember } from '@/memberships/components/CurrentMember'
+
 import { seedMembers, seedMember, mockMembers } from '../../../src/mocks/data'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -33,7 +34,7 @@ describe('UI: CurrentMember component', () => {
     it('Displays memberships count', async () => {
       const { getAllByText } = await renderAndWait()
 
-      expect(getAllByText(/memberships/i)[0]?.parentElement?.textContent).toMatch(/^memberships 3/i)
+      expect(getAllByText(/memberships/i)[0]?.parentElement?.textContent).toMatch(/^memberships 2/i)
     })
 
     it('Renders select member button', async () => {
