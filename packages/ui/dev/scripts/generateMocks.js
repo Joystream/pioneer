@@ -18,7 +18,7 @@ const saveFile = (name, contents) => {
 
 const FIRST_BLOCK_NUMBER = 1000
 const WORKING_GROUPS = ['forum', 'storage', 'content', 'membership']
-const MAX_MEMBERS = 200
+const MAX_MEMBERS = 50
 const KNOWN_MEMBERS = [
   {
     handle: 'alice',
@@ -106,8 +106,8 @@ const generateWorkers = () => {
   })
 
   const generateAllWorkers = (groupName, id) => {
-    const workersIds = randomUniqueArrayFromRange(randomFromRange(2, 10), 0, MAX_MEMBERS)
-    const terminatedIds = randomUniqueArrayFromRange(randomFromRange(0, 20), 0, MAX_MEMBERS)
+    const workersIds = randomUniqueArrayFromRange(randomFromRange(2, 7), 0, MAX_MEMBERS)
+    const terminatedIds = randomUniqueArrayFromRange(randomFromRange(0, 10), 0, MAX_MEMBERS)
     const leftIds = randomUniqueArrayFromRange(randomFromRange(0, 20), 0, MAX_MEMBERS)
 
     return [
@@ -163,9 +163,9 @@ const generateOpenings = () => {
 
   const generateOpeningsForGroup = (groupName, id) => {
     return [
-      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('open', id, groupName)),
-      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('filled', id, groupName)),
-      ...Array.from({ length: randomFromRange(2, 8) }, generateOpening('cancelled', id, groupName)),
+      ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id, groupName)),
+      ...Array.from({ length: randomFromRange(4, 8) }, generateOpening('filled', id, groupName)),
+      ...Array.from({ length: randomFromRange(1, 2) }, generateOpening('cancelled', id, groupName)),
     ]
   }
 
