@@ -4,24 +4,29 @@ const randomFromRange = (min, max) => {
   return (Math.random() * (max - min) + min).toFixed()
 }
 
+const randomUniqueArrayFromRange = (currentWorkers, min, max) => {
+  const set = new Set(Array.from({ length: currentWorkers }, () => randomFromRange(min, max)))
+  return [...set.values()]
+}
+
 const FIRST_BLOCK = 1000
+const MAX_MEMBERS = 100
+const KNOWN_MEMBERS = [
+  {
+    handle: 'alice',
+    rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    isVerified: true,
+  },
+  {
+    handle: 'bob',
+    rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    isVerified: true,
+  },
+]
 
 const generateMembers = () => {
-  const known = [
-    {
-      handle: 'alice',
-      rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-      controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      isVerified: true,
-    },
-    {
-      handle: 'bob',
-      rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-      controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      isVerified: true,
-    },
-  ]
-
   let nextId = 0
 
   const generateMember = (known = {}) => ({
@@ -41,9 +46,9 @@ const generateMembers = () => {
     ...known,
   })
 
-  const members = Array.from({ length: 100 }, generateMember)
+  const members = Array.from({ length: MAX_MEMBERS }, generateMember)
 
-  members.push(...known.map(generateMember))
+  members.push(...KNOWN_MEMBERS.map(generateMember))
 
   return members
 }
@@ -59,6 +64,8 @@ const generateBlocks = () => {
 
   return Array.from({ length: 1000 }, generateBlock)
 }
+
+const WORKING_GROUPS = ['forum', 'storage', 'content', 'membership']
 
 const generateWorkingGroups = () => {
   const generateWorkingGroup = (groupName, id) => ({
@@ -82,13 +89,32 @@ const generateWorkingGroups = () => {
     },
   })
 
-  return ['forum', 'storage', 'content', 'membership'].map(generateWorkingGroup)
+  return WORKING_GROUPS.map(generateWorkingGroup)
+}
+
+const generateWorkers = () => {
+  const generateCurrentWorkers = (groupName, id) => {
+    const workersIds = randomUniqueArrayFromRange(randomFromRange(2, 10), 0, MAX_MEMBERS)
+
+    const generateCurrentWorker = (memberId) => ({
+      membershipId: memberId,
+      workingGroupId: id,
+      status: 'active',
+    })
+
+    return workersIds.map(generateCurrentWorker)
+  }
+
+  return [...WORKING_GROUPS.map(generateCurrentWorkers)]
 }
 
 const main = () => {
   const members = generateMembers()
   const blocks = generateBlocks()
   const workingGroups = generateWorkingGroups()
+  const workers = generateWorkers()
+
+  console.log(workers)
 }
 
 main()
