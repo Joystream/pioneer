@@ -15,7 +15,7 @@ import {
 } from './OpeningAndApplicationsComponents/OACStyledComponents'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { ButtonGhost } from '@/common/components/buttons'
-import { FileIcon } from '@/common/components/icons/FileIcon'
+import { workerRoleTitle } from '../helpers'
 import { WorkerWithDetails } from '@/working-groups/hooks/useMyWorkers'
 import { KebabMenuIcon } from '@/common/components/icons'
 
@@ -38,9 +38,10 @@ const RolesListItem = ({ worker }: { worker: WorkerWithDetails }) => {
     <OACWrap>
       <OACItemInfo>
         <OACItemInfoTop>
-          <BadgeViolet>STORAGE</BadgeViolet>
+          <BadgeViolet>{worker.group.name}</BadgeViolet>
+          {worker.isLeader && <BadgeViolet>LEADER</BadgeViolet>}
         </OACItemInfoTop>
-        <Title>Storage provider</Title>
+        <Title>{workerRoleTitle(worker)}</Title>
       </OACItemInfo>
       <OACItemSummary>
         <OpenItemSummaryColumn>
