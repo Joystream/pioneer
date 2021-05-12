@@ -73,6 +73,15 @@ const generateBlocks = () => {
   return Array.from({ length: 1000 }, generateBlock)
 }
 
+function randomMarkdown() {
+  return [
+    `# ${faker.lorem.words(randomFromRange(2, 6))}`,
+    faker.lorem.paragraph(),
+    `## ${faker.lorem.words(randomFromRange(2, 5))}`,
+    faker.lorem.paragraphs(randomFromRange(1, 3)),
+  ].join('\n\n')
+}
+
 const generateWorkingGroups = () => {
   const generateWorkingGroup = (groupName, id) => ({
     id: String(id),
@@ -84,12 +93,7 @@ const generateWorkingGroups = () => {
       name: faker.lorem.words(2),
       message: faker.lorem.words(randomFromRange(2, 5)),
       about: faker.lorem.words(randomFromRange(30, 50)),
-      description: [
-        `# ${faker.lorem.words(randomFromRange(2, 6))}`,
-        faker.lorem.paragraph(),
-        `## ${faker.lorem.words(randomFromRange(2, 5))}`,
-        faker.lorem.paragraphs(randomFromRange(1, 3)),
-      ].join('\n\n'),
+      description: randomMarkdown(),
       setAtBlockId: randomFromRange(1, 50),
       setAtTime: '2021-03-09T10:28:04.155Z',
     },
@@ -121,34 +125,37 @@ const generateWorkers = () => {
 }
 
 const generateOpenings = () => {
-  const generateOpening = (status, groupId) => () => ({
-    groupId: String(groupId),
-    type: 'REGULAR',
-    status: status,
-    stakeAmount: 2000,
-    metadata: {
-      shortDescription: 'Distribution Worker',
-      description:
-        '### Intro\n\nContent Curators will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated.\n\n#### Details\n\nOur current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.',
-      hiringLimit: 1,
-      expectedEnding: '2022-03-09T10:18:04.155Z',
-      applicationDetails: 'Details... ?',
-      applicationFormQuestions: [
-        {
-          type: 'TEXT',
-          question: 'How old are you?',
-        },
-        {
-          type: 'TEXTAREA',
-          question: 'Why we should choose you?',
-        },
-      ],
-    },
-    unstakingPeriod: 5,
-    rewardPerBlock: 200,
-    createdAtBlockId: 5,
-    createdAt: '2021-04-09T13:37:42.155Z',
-  })
+  const generateOpening = (status, groupId, name) => {
+    const isLeader = Math.random() > 0.9
+
+    return () => ({
+      groupId: String(groupId),
+      type: isLeader ? 'LEADER' : 'REGULAR',
+      status: status,
+      stakeAmount: randomFromRange(2, 8) * 1000,
+      metadata: {
+        shortDescription: `${name} ${isLeader ? 'leader' : 'worker'}`,
+        description: randomMarkdown(),
+        hiringLimit: 1,
+        expectedEnding: '2022-03-09T10:18:04.155Z',
+        applicationDetails: randomMarkdown(),
+        applicationFormQuestions: [
+          {
+            type: 'TEXT',
+            question: 'How old are you?',
+          },
+          {
+            type: 'TEXTAREA',
+            question: 'Why we should choose you?',
+          },
+        ],
+      },
+      unstakingPeriod: 5,
+      rewardPerBlock: randomFromRange(1, 5) * 100,
+      createdAtBlockId: randomFromRange(20, 100),
+      createdAt: '2021-04-09T13:37:42.155Z',
+    })
+  }
 
   const generateOpeningsForGroup = (groupName, id) => {
     return [
