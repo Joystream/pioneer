@@ -6,6 +6,8 @@ export const PageContent = styled.main`
   height: 100%;
   grid-area: page;
   padding: 40px 0;
+  display: flex;
+  flex-drection: columns;
 `
 
 export const ContentWithSidepanel = styled.div`
