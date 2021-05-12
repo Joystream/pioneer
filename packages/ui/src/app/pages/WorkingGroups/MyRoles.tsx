@@ -6,7 +6,7 @@ import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
-import { Label } from '@/common/components/typography'
+import { Label, TextBig } from '@/common/components/typography'
 import { RolesList } from '@/working-groups/components/RolesList'
 import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 
@@ -50,11 +50,11 @@ export const MyRoles = () => {
         </Statistics>
         <ContentWithTabs>
           <Label>Current roles</Label>
-          <RolesList workers={currentRoles} />
+          {currentRoles.length ? <RolesList workers={currentRoles} /> : <TextBig>No current roles found</TextBig>}
         </ContentWithTabs>
         <ContentWithTabs>
           <Label>Past roles</Label>
-          <RolesList workers={pastRoles} />
+          {pastRoles.length ? <RolesList workers={pastRoles} /> : <TextBig>No past roles found</TextBig>}
         </ContentWithTabs>
       </MainPanel>
     )
