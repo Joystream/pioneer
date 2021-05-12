@@ -1,12 +1,8 @@
 import rawApplications from './raw/applications.json'
 
-export interface MockApplication {
-  id: string
+export interface RawApplication {
   openingId?: string
   applicantId: string
-  roleAccount?: string
-  rewardAccount?: string
-  stakingAccount?: string
   answers?: MockAnswer[]
   status?: string
   createdAtBlockId: number
@@ -20,7 +16,7 @@ interface MockAnswer {
 
 const mockApplications = rawApplications.map((application) => ({ ...application }))
 
-const seedApplication = (rawApplication: MockApplication, server: any) => {
+const seedApplication = (rawApplication: RawApplication, server: any) => {
   const status = seedStatus(rawApplication.status, server)
   const data = { ...rawApplication, status }
   const answers = rawApplication.answers ?? []

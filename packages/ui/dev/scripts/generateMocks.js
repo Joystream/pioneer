@@ -194,8 +194,8 @@ const generateApplications = (openings) => {
 }
 
 const generateOpeningsAndApplications = () => {
-  const openings = generateOpenings()
-  const applications = generateApplications(openings)
+  const openings = generateOpenings().flatMap((a) => a)
+  const applications = generateApplications(openings).flatMap((a) => a)
 
   return {
     openings,

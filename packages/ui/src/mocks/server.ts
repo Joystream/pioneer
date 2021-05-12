@@ -72,7 +72,7 @@ export const makeServer = (environment = 'development') => {
       seedWorkers(server)
       seedOpeningStatuses(server)
       seedOpenings(server)
-      // seedApplications(server)
+      seedApplications(server)
     },
   })
 }
