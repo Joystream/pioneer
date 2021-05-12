@@ -4,6 +4,8 @@ const randomFromRange = (min, max) => {
   return (Math.random() * (max - min) + min).toFixed()
 }
 
+const FIRST_BLOCK = 1000
+
 const generateMembers = () => {
   const known = [
     {
@@ -34,8 +36,8 @@ const generateMembers = () => {
     isVerified: Math.random() > 0.5,
     isFoundingMember: nextId < 9,
     inviteCount: 5,
-    registeredAtBlockId: 3,
-    registeredAtTime: '2021-03-29 18:21:06.000000',
+    registeredAtBlockId: nextId + FIRST_BLOCK,
+    registeredAtTime: new Date().toJSON(),
     ...known,
   })
 
@@ -46,8 +48,21 @@ const generateMembers = () => {
   return members
 }
 
+const generateBlocks = () => {
+  let nextNumber = FIRST_BLOCK
+
+  const generateBlock = () => ({
+    network: nextNumber < 1100 ? 'Babylon' : 'Olympia',
+    number: nextNumber++,
+    timestamp: new Date().toJSON(),
+  })
+
+  return Array.from({ length: 1000 }, generateBlock)
+}
+
 const main = () => {
   console.log(generateMembers().pop())
+  console.log(generateBlocks())
 }
 
 main()
