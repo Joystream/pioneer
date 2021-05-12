@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { useGetWorkersQuery } from '../queries'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { asWorkerWithDetails } from '@/working-groups/types'
+import { asWorkerWithDetails } from '../types'
 
 export const useMyWorkers = () => {
   const { members } = useMyMemberships()

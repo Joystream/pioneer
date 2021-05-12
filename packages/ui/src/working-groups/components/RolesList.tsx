@@ -16,8 +16,8 @@ import {
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { ButtonGhost } from '@/common/components/buttons'
 import { workerRoleTitle } from '../helpers'
-import { WorkerWithDetails } from '@/working-groups/hooks/useMyWorkers'
 import { KebabMenuIcon } from '@/common/components/icons'
+import { WorkerWithDetails } from '@/working-groups/types'
 
 interface Props {
   workers: WorkerWithDetails[]
