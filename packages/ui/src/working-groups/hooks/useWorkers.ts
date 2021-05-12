@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
-import { asMember } from '../../memberships/types'
+import { asMember } from '@/memberships/types'
+
 import { useGetWorkersQuery, WorkerFieldsFragment } from '../queries'
 
 interface UseWorkersProps {
@@ -9,7 +10,7 @@ interface UseWorkersProps {
 }
 
 export const useWorkers = ({ groupId, fetchPast }: UseWorkersProps) => {
-  const options = { variables: { groupId_eq: groupId } }
+  const options = { variables: { where: { groupId_eq: groupId } } }
   const { data, loading } = useGetWorkersQuery(options)
   const workers = useMemo(
     () => data && data.workers.filter(getWorkersFilter(fetchPast)).map(({ membership }) => asMember(membership)),

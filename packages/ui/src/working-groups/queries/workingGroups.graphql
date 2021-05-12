@@ -10,11 +10,15 @@ fragment WorkerFields on Worker {
     ...MemberFields
   }
   group {
-    id
+    id,
+    name
   }
   status {
     __typename
   }
+  isLead
+  rewardPerBlock
+  stake
 }
 
 fragment WorkingGroupFields on WorkingGroup {
@@ -40,8 +44,8 @@ query getWorkingGroups {
   }
 }
 
-query getWorkers ($groupId_eq: ID) {
-  workers(where: {groupId_eq: $groupId_eq}) {
+query getWorkers ($where: WorkerWhereInput) {
+  workers(where: $where) {
     ...WorkerFields
   }
 }

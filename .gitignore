@@ -3,3 +3,4 @@ build
 coverage
 build-storybook
 .idea
+*.log
