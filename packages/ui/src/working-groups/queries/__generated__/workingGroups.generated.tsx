@@ -22,12 +22,16 @@ export type WorkerFieldsFragment = {
   isLead: boolean
   rewardPerBlock: any
   stake: any
+  roleAccount: string
+  rewardAccount: string
+  stakeAccount: string
   membership: { __typename: 'Membership' } & MemberFieldsFragment
   group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
     | { __typename: 'WorkerStatusActive' }
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
+  hiredAtBlock: { __typename: 'Block'; id: string; network: Types.Network; timestamp: any; number: number }
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -220,6 +224,15 @@ export const WorkerFieldsFragmentDoc = gql`
     isLead
     rewardPerBlock
     stake
+    roleAccount
+    rewardAccount
+    stakeAccount
+    hiredAtBlock {
+      id
+      network
+      timestamp
+      number
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
