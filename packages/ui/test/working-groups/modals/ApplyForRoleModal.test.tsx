@@ -105,7 +105,7 @@ describe('UI: ApplyForRoleModal', () => {
     useMyMemberships.setActive(getMember('alice'))
 
     stubDefaultBalances(api)
-    tx = stubTransaction(api, 'api.tx.membershipWorkingGroup.applyOnOpening')
+    tx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
   })
 
   describe('Requirements', () => {
@@ -118,7 +118,7 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Insufficient funds', async () => {
-      tx = stubTransaction(api, 'api.tx.membershipWorkingGroup.applyOnOpening', 10_000)
+      tx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
 
       renderModal()
 
