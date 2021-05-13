@@ -39,8 +39,8 @@ const APPLICATION: WorkingGroupApplication = {
     id: '1',
     number: 1,
     network: 'BABYLON',
+    timestamp: '2021-03-09T23:38:04.155Z',
   },
-  createdAt: '2021-03-09T23:38:04.155Z',
 }
 
 describe('UI: WithdrawApplication modal', () => {
