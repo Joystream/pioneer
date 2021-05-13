@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Fonts, Transitions } from '../constants'
+import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
+import { PopupItem } from '../animatedComponents/PopupItem'
+import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
-import { PopupItem } from './animatedComponents/PopupItem'
-import { QuestionIcon } from './icons'
-import { LinkSymbol, LinkSymbolStyle } from './icons/symbols'
+import { DefaultTooltip, DefaultTooltipProps } from './TooltipDefault'
 
 export interface TooltipProps {
   absolute?: boolean
@@ -98,34 +98,7 @@ export const Tooltip = ({
   )
 }
 
-export interface DefaultTooltipProps {
-  className?: string
-}
-
-export const TooltipDefault = ({ className }: DefaultTooltipProps) => {
-  return (
-    <DefaultTooltip className={className}>
-      <QuestionIcon />
-    </DefaultTooltip>
-  )
-}
-
-export const DefaultTooltip = styled.div<DefaultTooltipProps>`
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  width: 16px;
-  height: 16px;
-  border: 1px solid ${Colors.Black[300]};
-  border-radius: ${BorderRad.round};
-  background-color: ${Colors.White};
-  color: ${Colors.Black[500]};
-  cursor: pointer;
-  transition: ${Transitions.all};
-`
-
-interface DarkTooltipInnerItemProps {
+export interface DarkTooltipInnerItemProps {
   isOnDark?: boolean
 }
 
@@ -189,7 +162,6 @@ export const MemberRoleHelpMax = styled(MemberRoleHelp)`
   color: ${Colors.Blue[500]};
   border-color: ${Colors.Blue[50]};
 `
-
 const initialPopupPosition = {
   left: 24,
   top: 4,

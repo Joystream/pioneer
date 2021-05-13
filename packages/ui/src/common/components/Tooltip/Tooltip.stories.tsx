@@ -3,7 +3,8 @@ import faker from 'faker'
 import React from 'react'
 import styled from 'styled-components'
 
-import { TemplateBlock } from './storybookParts/previewStyles'
+import { TemplateBlock } from '../storybookParts/previewStyles'
+
 import { Tooltip, TooltipDefault, TooltipPopupProps, TooltipProps } from './Tooltip'
 
 export default {
