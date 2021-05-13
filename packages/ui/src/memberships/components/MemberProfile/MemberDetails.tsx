@@ -52,7 +52,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       )}
       <SidePaneRow>
         <SidePaneLabel text="Registered on" />
-        <AboutDateColumn time={memberDetails.registeredAtTime} block={registeredAtBlock} />
+        <AboutDateColumn block={registeredAtBlock} />
       </SidePaneRow>
       <SidePaneRow>
         <SidePaneLabel text="Member ID" />

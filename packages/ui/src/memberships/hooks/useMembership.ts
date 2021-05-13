@@ -13,7 +13,6 @@ export const asMemberWithDetails = (data: MemberWithDetailsFragment): DetailedMe
     about: '',
     invitedBy: '',
     registeredAtBlock: asBlock(data.registeredAtBlock),
-    registeredAtTime: data.registeredAtTime,
     invitees: [],
   }
 }
