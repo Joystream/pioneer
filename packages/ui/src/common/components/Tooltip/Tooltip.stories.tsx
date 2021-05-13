@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { TemplateBlock } from '../storybookParts/previewStyles'
 
-import { Tooltip, TooltipDefault, TooltipPopupProps, TooltipProps } from './Tooltip'
+import { Tooltip, TooltipDefault, TooltipPopupProps, TooltipProps } from '.'
 
 export default {
   title: 'Common/Tooltip',
