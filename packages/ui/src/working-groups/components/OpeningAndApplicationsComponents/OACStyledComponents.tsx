@@ -80,6 +80,7 @@ export const OACItemSummary = styled.div`
 `
 
 export const OACItemTitle = styled.h5`
+  text-transform: capitalize;
   ${Overflow.Dots}
 `
 
