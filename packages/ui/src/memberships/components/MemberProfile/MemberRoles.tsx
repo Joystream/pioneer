@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { RowGapBlock } from '../../../common/components/page/PageContent'
-import { TextMedium } from '../../../common/components/typography'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TextMedium } from '@/common/components/typography'
 import { Member } from '../../types'
 
 import { MemberRoleToggle } from './MemberRoleToggle'
@@ -10,8 +10,8 @@ import { MemberRoleToggle } from './MemberRoleToggle'
 export const MemberSideRoles = ({ member }: { member: Member }) => {
   return (
     <RolesDisplay gap={8}>
-      {member.roles ? (
-        <MemberRoleToggle member={member} role="Some role name" />
+      {member.roles.length ? (
+        member.roles.map((role) => <MemberRoleToggle member={member} role={role} />)
       ) : (
         <TextMedium light>This profile has no roles.</TextMedium>
       )}
