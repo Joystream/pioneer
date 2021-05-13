@@ -2,37 +2,36 @@ import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { AccountInfo } from '../../../accounts/components/AccountInfo'
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
-import { useBalance } from '../../../accounts/hooks/useBalance'
-import { TransferModalCall } from '../../../accounts/modals/TransferModal'
-import { ButtonPrimary } from '../../../common/components/buttons'
+import { AccountInfo } from '@/accounts/components/AccountInfo'
+import { useAccounts } from '@/accounts/hooks/useAccounts'
+import { useBalance } from '@/accounts/hooks/useBalance'
+import { TransferModalCall } from '@/accounts/modals/TransferModal'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { ButtonPrimary } from '@/common/components/buttons'
 import {
+  BalanceInfoInRow,
+  InfoTitle,
+  InfoValue,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  BalanceInfoInRow,
-  InfoTitle,
-  InfoValue,
-} from '../../../common/components/Modal'
-import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { BorderRad, Colors, Sizes } from '../../../common/constants'
-import { useModal } from '../../../common/hooks/useModal'
+} from '@/common/components/Modal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
 
-interface Props {
+import { BorderRad, Colors, Sizes } from '../../../common/constants'
+
+export interface InsufficientFundsModalProps {
   onClose: () => void
   address: string
   amount: BN
 }
 
-export function TransferInviteRequirementsModal({ onClose, address, amount }: Props) {
+export function InsufficientFundsModal({ onClose, address, amount }: InsufficientFundsModalProps) {
   const { showModal } = useModal()
   const { allAccounts } = useAccounts()
-  const account = useMemo(
-    () => allAccounts.find((acc) => acc.address == address) || { name: 'Controller account', address },
-    [allAccounts]
-  )
+  const account = useMemo(() => accountOrNamed(allAccounts, address, 'Controller account'), [allAccounts])
   const { transferable } = useBalance(account.address) || {}
 
   return (

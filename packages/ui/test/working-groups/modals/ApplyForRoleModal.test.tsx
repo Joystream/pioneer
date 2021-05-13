@@ -109,6 +109,24 @@ describe('UI: ApplyForRoleModal', () => {
     tx = stubTransaction(api, 'api.tx.membershipWorkingGroup.applyOnOpening')
   })
 
+  describe('Requirements', () => {
+    it('No active member', async () => {
+      useMyMemberships.active = undefined
+
+      renderModal()
+
+      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+    })
+
+    it('Insufficient funds', async () => {
+      tx = stubTransaction(api, 'api.tx.membershipWorkingGroup.applyOnOpening', 10_000)
+
+      renderModal()
+
+      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    })
+  })
+
   it('Renders a modal', async () => {
     renderModal()
 
