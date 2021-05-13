@@ -6,6 +6,7 @@ import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { useAccounts } from '@/accounts/hooks/useAccounts'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { TransferModalCall } from '@/accounts/modals/TransferModal'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import {
   BalanceInfoInRow,
@@ -30,10 +31,7 @@ interface Props {
 export function InsufficientFundsModal({ onClose, address, amount }: Props) {
   const { showModal } = useModal()
   const { allAccounts } = useAccounts()
-  const account = useMemo(
-    () => allAccounts.find((acc) => acc.address == address) || { name: 'Controller account', address },
-    [allAccounts]
-  )
+  const account = useMemo(() => accountOrNamed(allAccounts, address, 'Controller account'), [allAccounts])
   const { transferable } = useBalance(account.address) || {}
 
   return (
