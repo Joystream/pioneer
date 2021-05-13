@@ -27,7 +27,7 @@ export const MyRoles = () => {
 
     const currentRoles = (workers && workers.filter((worker) => worker.status === 'WorkerStatusActive')) || []
     const pastRoles = (workers && workers.filter((worker) => worker.status !== 'WorkerStatusActive')) || []
-
+    console.log(JSON.stringify(currentRoles))
     return (
       <MainPanel>
         <Statistics>
