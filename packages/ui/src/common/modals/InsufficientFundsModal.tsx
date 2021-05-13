@@ -22,13 +22,13 @@ import { useModal } from '@/common/hooks/useModal'
 
 import { BorderRad, Colors, Sizes } from '../constants'
 
-interface Props {
+export interface InsufficientFundsModalProps {
   onClose: () => void
   address: string
   amount: BN
 }
 
-export function InsufficientFundsModal({ onClose, address, amount }: Props) {
+export function InsufficientFundsModal({ onClose, address, amount }: InsufficientFundsModalProps) {
   const { showModal } = useModal()
   const { allAccounts } = useAccounts()
   const account = useMemo(() => accountOrNamed(allAccounts, address, 'Controller account'), [allAccounts])
