@@ -30,6 +30,15 @@ Default.args = {
     membership: { id: '0' },
     rewardPerBlock: 13923,
     stake: 192837021,
+    roleAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    stakeAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    hiredAtBlock: {
+      id: '35',
+      network: 'OLYMPIA',
+      number: 1034,
+      timestamp: '2021-05-13T13:50:23.694Z',
+    },
     status: 'WorkerStatusActive',
   },
 }
