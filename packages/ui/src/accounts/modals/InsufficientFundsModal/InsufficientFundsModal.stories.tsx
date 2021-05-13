@@ -5,7 +5,7 @@ import React from 'react'
 import { InsufficientFundsModal, InsufficientFundsModalProps } from './InsufficientFundsModal'
 
 export default {
-  title: 'Common/InsufficientFundsModal',
+  title: 'Accounts/InsufficientFundsModal',
   component: InsufficientFundsModal,
 } as Meta
 

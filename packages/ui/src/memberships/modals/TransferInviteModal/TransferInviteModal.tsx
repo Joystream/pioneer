@@ -1,12 +1,12 @@
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TransferIcon } from '@/common/components/icons'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
-import { InsufficientFundsModal } from '@/common/modals/InsufficientFundsModal'
 import { ModalState } from '@/common/types'
 
 import { useMember } from '../../hooks/useMembership'

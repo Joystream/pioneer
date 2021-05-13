@@ -20,7 +20,7 @@ import {
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 
-import { BorderRad, Colors, Sizes } from '../constants'
+import { BorderRad, Colors, Sizes } from '../../../common/constants'
 
 export interface InsufficientFundsModalProps {
   onClose: () => void
