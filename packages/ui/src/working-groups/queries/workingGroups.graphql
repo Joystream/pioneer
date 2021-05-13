@@ -72,7 +72,6 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   createdAtBlock {
     ...BlockFields
   }
-  createdAt
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
@@ -155,7 +154,6 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     __typename
   }
   stakingAccount
-  createdAt
   createdAtBlock {
     ...BlockFields
   }

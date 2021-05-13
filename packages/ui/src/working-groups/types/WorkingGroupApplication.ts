@@ -18,7 +18,6 @@ export interface WorkingGroupApplication {
   answers?: [any]
   status?: string
   createdAtBlock: Block
-  createdAt: string
 }
 
 export const asApplication = (application: WorkingGroupApplicationFieldsFragment) => ({
@@ -31,5 +30,4 @@ export const asApplication = (application: WorkingGroupApplicationFieldsFragment
   status: application.status.__typename,
   stakingAccount: application.stakingAccount,
   createdAtBlock: asBlock(application.createdAtBlock),
-  createdAt: application.createdAt,
 })

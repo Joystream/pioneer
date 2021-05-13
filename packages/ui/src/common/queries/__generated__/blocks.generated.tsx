@@ -7,7 +7,6 @@ export type BlockFieldsFragment = {
   number: number
   timestamp: any
   network: Types.Network
-  createdAt: any
 }
 
 export const BlockFieldsFragmentDoc = gql`
@@ -16,6 +15,5 @@ export const BlockFieldsFragmentDoc = gql`
     number
     timestamp
     network
-    createdAt
   }
 `

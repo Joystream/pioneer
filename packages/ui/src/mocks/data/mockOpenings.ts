@@ -10,7 +10,7 @@ interface QuestionMock {
 }
 
 interface RawOpeningMock {
-  groupId: number
+  groupId: string
   type: string // 'leader' | 'regular'
   status: string // OpeningStatusType
   stakeAmount: number
@@ -24,8 +24,7 @@ interface RawOpeningMock {
   }
   unstakingPeriod: number
   rewardPerBlock: number
-  createdAtBlockId: number
-  createdAt: string
+  createdAtBlockId: string
 }
 
 export const getMockAsOpening = (index = 0) => {

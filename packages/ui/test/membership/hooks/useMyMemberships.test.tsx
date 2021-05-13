@@ -1,9 +1,10 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
-import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
-import { useMyMemberships } from '../../../src/memberships/hooks/useMyMemberships'
-import { seedMembers } from '../../../src/mocks/data'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { seedMembers } from '@/mocks/data'
+
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockQueryNodeProviders } from '../../_mocks/providers'

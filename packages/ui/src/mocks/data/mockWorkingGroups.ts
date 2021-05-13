@@ -1,22 +1,8 @@
-import { Worker } from '../../common/api/queries'
-
 import rawWorkingGroups from './raw/workingGroups.json'
-
-type WorkerStatus = 'active' | 'left' | 'terminated'
-
-interface WorkerMock {
-  membershipId: string
-  status: string
-  rewardPerBlock: number
-  earnedTotal: number
-  stake: number
-  nextPaymentAt: string
-}
 
 interface RawWorkingGroupMock {
   id: string
   name: string
-  workers?: WorkerMock[]
   leaderId?: string | null
   metadata: {
     name: string
@@ -25,8 +11,6 @@ interface RawWorkingGroupMock {
     description: string
   }
 }
-
-export type MockWorker = Worker & { groupId: string; memberId: string }
 
 export const mockWorkingGroups = rawWorkingGroups.map((rawGroup) => ({ ...rawGroup }))
 
@@ -38,46 +22,7 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
     leaderId: null,
   }
 
-  let workingGroup = server.schema.create('WorkingGroup', groupData)
-  const groupId = workingGroup.id
-
-  const memberToWorker = new Map()
-
-  for (const { membershipId, status, rewardPerBlock, stake, earnedTotal, nextPaymentAt } of group.workers ?? []) {
-    const membership = server.schema.find('Membership', membershipId)
-
-    const worker = server.schema.create('Worker', {
-      groupId,
-      membership,
-      status: seedWorkerStatus(status as WorkerStatus, membership.id + '_' + groupId, server),
-      isLead: membershipId === workingGroup.leaderId,
-      rewardPerBlock,
-      earnedTotal,
-      stake,
-      nextPaymentAt,
-    })
-
-    memberToWorker.set(membershipId, worker.id)
-  }
-
-  if (group.leaderId) {
-    workingGroup = server.schema.find('WorkingGroup', workingGroup.id)
-    workingGroup.leaderId = memberToWorker.get(group.leaderId)
-    workingGroup.save()
-  }
-
-  return workingGroup
-}
-
-const seedWorkerStatus = (status: WorkerStatus, id: string, server: any) => {
-  switch (status) {
-    case 'active':
-      return server.schema.create('WorkerStatusActive', {})
-    case 'left':
-      return server.schema.create('WorkerStatusLeft', { workerStartedLeavingEventId: id })
-    default:
-      return server.schema.create('WorkerStatusTerminated', { terminatedWorkerEventId: id })
-  }
+  return server.schema.create('WorkingGroup', groupData)
 }
 
 export const seedWorkingGroups = (server: any) => mockWorkingGroups.map((group) => seedWorkingGroup(group, server))
