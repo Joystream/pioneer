@@ -61,7 +61,6 @@ const OPENING_DATA = {
   unstakingPeriod: 5,
   rewardPerBlock: 200,
   createdAtBlockId: '5',
-  createdAt: '2021-04-09T13:37:42.155Z',
 }
 
 describe('UI: ApplyForRoleModal', () => {

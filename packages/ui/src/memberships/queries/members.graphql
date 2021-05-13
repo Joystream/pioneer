@@ -25,7 +25,6 @@ query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!], $
 
 fragment MemberWithDetails on Membership {
   ...MemberFields
-  registeredAtTime
   registeredAtBlock {
     ...BlockFields
   }

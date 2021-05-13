@@ -4,5 +4,4 @@ fragment BlockFields on Block {
   number
   timestamp
   network
-  createdAt
 }

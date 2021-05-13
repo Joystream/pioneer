@@ -69,7 +69,6 @@ export type WorkingGroupOpeningFieldsFragment = {
   type: Types.WorkingGroupOpeningType
   stakeAmount: any
   rewardPerBlock: any
-  createdAt: any
   group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
   createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
@@ -156,7 +155,6 @@ export type WorkingGroupApplicationFieldsFragment = {
   __typename: 'WorkingGroupApplication'
   id: string
   stakingAccount: string
-  createdAt: any
   opening: {
     __typename: 'WorkingGroupOpening'
     type: Types.WorkingGroupOpeningType
@@ -269,7 +267,6 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     createdAtBlock {
       ...BlockFields
     }
-    createdAt
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }
@@ -321,7 +318,6 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       __typename
     }
     stakingAccount
-    createdAt
     createdAtBlock {
       ...BlockFields
     }

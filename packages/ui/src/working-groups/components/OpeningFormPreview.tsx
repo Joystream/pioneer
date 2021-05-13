@@ -44,7 +44,7 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
             </Row>
             <PercentageChart percentage={70} />
           </TimeLeftWrap>
-          <TextSmall>Created at {formatDateString(opening.createdAt)}</TextSmall>
+          <TextSmall>Created at {formatDateString(opening.createdAtBlock.timestamp)}</TextSmall>
         </RowGapBlock>
       </Row>
       <Row>

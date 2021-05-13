@@ -6,7 +6,6 @@ export interface RawApplication {
   answers?: MockAnswer[]
   status?: string
   createdAtBlockId: number
-  createdAt: string
 }
 
 interface MockAnswer {

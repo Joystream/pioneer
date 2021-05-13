@@ -25,7 +25,6 @@ interface RawOpeningMock {
   unstakingPeriod: number
   rewardPerBlock: number
   createdAtBlockId: string
-  createdAt: string
 }
 
 export const getMockAsOpening = (index = 0) => {

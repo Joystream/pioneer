@@ -41,7 +41,6 @@ const generateOpenings = () => {
       unstakingPeriod: 5,
       rewardPerBlock: randomFromRange(1, 5) * 100,
       createdAtBlockId: randomFromRange(20, 100),
-      createdAt: '2021-04-09T13:37:42.155Z',
     }
   }
 
@@ -70,7 +69,6 @@ const generateApplications = (openings) => {
       })),
       status: 'pending',
       createdAtBlockId: 1,
-      createdAt: '2021-03-09T10:38:04.155Z',
     })
 
     return applicantsIds.map(generateApplication)

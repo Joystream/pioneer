@@ -30,7 +30,6 @@ export type GetMembersQuery = {
 
 export type MemberWithDetailsFragment = {
   __typename: 'Membership'
-  registeredAtTime: any
   registeredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
   invitees: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 } & MemberFieldsFragment
@@ -101,7 +100,6 @@ export const MemberFieldsFragmentDoc = gql`
 export const MemberWithDetailsFragmentDoc = gql`
   fragment MemberWithDetails on Membership {
     ...MemberFields
-    registeredAtTime
     registeredAtBlock {
       ...BlockFields
     }

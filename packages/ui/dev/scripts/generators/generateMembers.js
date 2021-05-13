@@ -33,7 +33,6 @@ const generateMembers = () => {
     isFoundingMember: nextId < 9,
     inviteCount: 5,
     registeredAtBlockId: String(nextId),
-    registeredAtTime: new Date().toJSON(),
     ...known,
   })
 
