@@ -1,15 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
+import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { ToggleableItem, ToggleButton } from '@/common/components/buttons/Toggle'
 import { Arrow } from '@/common/components/icons'
 import { SidePaneColumn, SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/common/components/SidePane'
 import { BorderRad, Colors } from '@/common/constants'
-import { WorkerWithDetails } from '@/working-groups/types'
-import { workerRoleTitle } from '@/working-groups/helpers'
 import { formatTokenValue } from '@/common/model/formatters'
 import { Member } from '@/memberships/types'
+import { workerRoleTitle } from '@/working-groups/helpers'
+import { WorkerWithDetails } from '@/working-groups/types'
 
 export interface Props {
   member: Member
@@ -30,7 +32,9 @@ export const MemberRoleToggle = ({ role }: Props) => {
                 <MemberRoleTable>
                   <SidePaneRow>
                     <SidePaneLabel text="Hired" />
-                    <SidePaneColumn>Add block component here</SidePaneColumn>
+                    <SidePaneColumn>
+                      <BlockTime block={role.hiredAtBlock} />
+                    </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
                     <SidePaneLabel text="Reward" />
@@ -41,26 +45,32 @@ export const MemberRoleToggle = ({ role }: Props) => {
                   <SidePaneRow>
                     <SidePaneLabel text="Earned total" />
                     <SidePaneColumn>
-                      <SidePaneText>{formatTokenValue(role.earnedTotal)} JOY </SidePaneText>
+                      <SidePaneText>{formatTokenValue(role.earnedTotal)} JOY</SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
                     <SidePaneLabel text="Earned in 24h" />
                     <SidePaneColumn>
-                      <SidePaneText> {formatTokenValue(1000)} JOY (id for test) </SidePaneText>
+                      <SidePaneText>{formatTokenValue(1000)} JOY</SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
                     <SidePaneLabel text="Role account" />
-                    <SidePaneColumn>Add account component here</SidePaneColumn>
+                    <SidePaneColumn>
+                      <UnknownAccountInfo address={role.roleAccount} placeholderName="Role account" />
+                    </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
                     <SidePaneLabel text="Staking account" />
-                    <SidePaneColumn>Add account component here</SidePaneColumn>
+                    <SidePaneColumn>
+                      <UnknownAccountInfo address={role.stakeAccount} placeholderName="Staking account" />
+                    </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
                     <SidePaneLabel text="Reward account" />
-                    <SidePaneColumn>Add account component here</SidePaneColumn>
+                    <SidePaneColumn>
+                      <UnknownAccountInfo address={role.rewardAccount} placeholderName="Reward account" />
+                    </SidePaneColumn>
                   </SidePaneRow>
                   <ButtonsGroup align="left">
                     <ButtonGhost size="small">

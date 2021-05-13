@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { MemberInfoWrap } from '..'
 import { CloseButton } from '@/common/components/buttons'
+
+import { MemberInfoWrap } from '..'
 import { EditSymbol } from '../../../common/components/icons/symbols'
 import {
   SidePane,
