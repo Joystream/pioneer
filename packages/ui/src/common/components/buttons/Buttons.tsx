@@ -59,11 +59,9 @@ export function ButtonGhost({ className, children, size, square, disabled, onCli
   )
 }
 
-const BasicButtonStyles = css<ButtonProps>`
+export const BasicButtonStyles = css<ButtonProps>`
   display: flex;
   position: relative;
-  /* grid-auto-flow: column; */
-  /* grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')}; */
   justify-content: center;
   align-items: center;
   width: fit-content;
