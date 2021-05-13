@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { AboutDateColumn } from '../../../common/components/AboutDateColumn'
+import { BlockTime } from '../../../common/components/BlockTime'
 import { TransferSymbol } from '../../../common/components/icons/symbols'
 import { Loading } from '../../../common/components/Loading'
 import {
@@ -52,7 +52,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       )}
       <SidePaneRow>
         <SidePaneLabel text="Registered on" />
-        <AboutDateColumn time={memberDetails.registeredAtTime} block={registeredAtBlock} />
+        <BlockTime block={registeredAtBlock} />
       </SidePaneRow>
       <SidePaneRow>
         <SidePaneLabel text="Member ID" />

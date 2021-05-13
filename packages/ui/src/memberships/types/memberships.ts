@@ -22,6 +22,5 @@ export interface Member {
 export interface DetailedMember extends Member {
   about?: string
   registeredAtBlock: Block
-  registeredAtTime: 'string'
   invitees: Member[]
 }

@@ -69,6 +69,9 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   type
   stakeAmount
   rewardPerBlock
+  createdAtBlock {
+    ...BlockFields
+  }
   createdAt
   metadata {
     ... WorkingGroupOpeningMetadataFields

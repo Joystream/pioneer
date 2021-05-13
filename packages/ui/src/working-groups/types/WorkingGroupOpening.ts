@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 
+import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 
 import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
@@ -28,6 +29,7 @@ export interface WorkingGroupOpening {
     member: Member
     status: string
   }[]
+  createdAtBlock: Block
   applicants: {
     current: number
     total: number
@@ -52,6 +54,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
         status: application.status.__typename,
       }))
     : [],
+  createdAtBlock: asBlock(fields.createdAtBlock),
   applicants: {
     current: 0,
     total: fields.applications?.length || 0,
