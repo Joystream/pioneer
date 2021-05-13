@@ -9,9 +9,10 @@ import { size } from '@/common/utils/styles'
 interface PaginationProps {
   pageCount: number
   handlePageChange: (page: number) => void
+  page?: number
 }
 
-export const Pagination: FC<PaginationProps> = ({ pageCount, handlePageChange }) => (
+export const Pagination: FC<PaginationProps> = ({ pageCount, handlePageChange, page }) => (
   <StyledPaginateContainer>
     <ReactPaginate
       pageCount={pageCount}
@@ -28,6 +29,7 @@ export const Pagination: FC<PaginationProps> = ({ pageCount, handlePageChange })
       nextLinkClassName="pagination__link"
       previousLinkClassName="pagination__link pagination__link--previous"
       onPageChange={(value) => handlePageChange(value.selected + 1)}
+      forcePage={page && page - 1}
     />
   </StyledPaginateContainer>
 )

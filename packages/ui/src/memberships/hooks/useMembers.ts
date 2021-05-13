@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembershipsConnectionQuery } from '@/memberships/queries'
 
@@ -12,24 +14,37 @@ export interface MemberListOrder {
 
 export const DefaultMemberListOrder: MemberListOrder = { sortBy: 'id', isDescending: false }
 
+export const MEMBERS_PER_PAGE = 5
+
 interface UseMemberProps {
   order: MemberListOrder
   filter: MemberListFilter
+  page?: number
 }
 interface UseMembers {
   isLoading: boolean
   members: Member[]
+  pageCount?: number
 }
 
-export const useMembers = ({ order, filter }: UseMemberProps): UseMembers => {
+export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMembers => {
   const variables = {
-    where: { ...filterToGqlInput(filter) },
+    first: page * MEMBERS_PER_PAGE,
+    last: page > 1 ? MEMBERS_PER_PAGE : undefined,
+    where: filterToGqlInput(filter),
     orderBy: orderToGqlInput(order),
   }
 
   const { data, loading, error } = useGetMembershipsConnectionQuery({
     variables,
   })
+
+  const [totalCount, setTotalCount] = useState<number>()
+  useEffect(() => {
+    if (!totalCount && data?.membershipsConnection.totalCount) {
+      setTotalCount(data?.membershipsConnection.totalCount)
+    }
+  }, [data])
 
   if (error) {
     console.error(error)
@@ -38,6 +53,7 @@ export const useMembers = ({ order, filter }: UseMemberProps): UseMembers => {
   return {
     isLoading: loading,
     members: data?.membershipsConnection.edges.map(({ node }) => asMember(node)) ?? [],
+    pageCount: totalCount && Math.ceil(totalCount / MEMBERS_PER_PAGE),
   }
 }
 

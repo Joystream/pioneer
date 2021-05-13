@@ -4,7 +4,13 @@ import { unwrapType } from '@miragejs/graphql/dist/utils'
 import { GraphQLObjectType, GraphQLSchema } from 'graphql/type'
 
 import { PageInfo } from '@/common/api/queries'
-import { ConnectionQueryResolver, QueryArgs, UniqueQueryResolver, WhereQueryResolver } from '@/mocks/resolvers/types'
+import {
+  ConnectionQueryResolver,
+  Edge,
+  QueryArgs,
+  UniqueQueryResolver,
+  WhereQueryResolver,
+} from '@/mocks/resolvers/types'
 
 type FilterCallback = (model: Record<string, any>) => boolean
 
@@ -56,7 +62,9 @@ export const getUniqueResolver = <T extends QueryArgs, D>(modelName: string): Un
   }
 }
 
-export const getConnectionResolver = <T extends QueryArgs, D>(typeName: string): ConnectionQueryResolver<T, D> => {
+export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
+  typeName: string
+): ConnectionQueryResolver<T, D> => {
   return (obj, args, context, info: any) => {
     const schema = info.schema as GraphQLSchema
     const connectionType = schema.getType(typeName) as GraphQLObjectType
@@ -64,10 +72,10 @@ export const getConnectionResolver = <T extends QueryArgs, D>(typeName: string):
     const { edges: edgesField } = connectionType?.getFields()
     const { type: edgeType } = unwrapType(edgesField.type)
     const { type: nodeType } = unwrapType(edgeType.getFields().node.type)
-    const { relayArgs, nonRelayArgs } = getRelayArgs({})
+    const { relayArgs } = getRelayArgs(args)
 
     // We don't have filtering yet so simple where is sufficient
-    let records = getRecords(nodeType, nonRelayArgs, context.mirageSchema)
+    let records = getRecords(nodeType, {}, context.mirageSchema)
 
     if (args.orderBy) {
       const [field, order] = args.orderBy.split('_')
