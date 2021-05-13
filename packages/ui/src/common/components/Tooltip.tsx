@@ -34,9 +34,12 @@ export const Tooltip = ({
   const tooltipRef = useRef() as React.MutableRefObject<HTMLButtonElement>
   const tooltipPopupRef = useRef() as React.MutableRefObject<HTMLDivElement>
   const [isTooltipActive, setTooltipActive] = useState(false)
+  const [isForceActive, setForceActive] = useState(false)
   const tooltipPosition = tooltipRef.current?.getBoundingClientRect()
   const timeoutRef = useRef<any>()
   const hoverRef = useRef(false)
+
+  const isTooltipVisible = isForceActive || isTooltipActive
 
   const showTooltip = () => {
     const showTooltipDelay = setTimeout(() => {
@@ -58,7 +61,10 @@ export const Tooltip = ({
   }
 
   const handlers = {
-    onClick: showTooltip,
+    onClick: () => {
+      setTooltipActive(false)
+      setForceActive((active) => !active)
+    },
     onFocus: showTooltip,
     onBlur: hideTooltip,
     onMouseEnter: showTooltip,
@@ -74,7 +80,7 @@ export const Tooltip = ({
       <TooltipComponent ref={tooltipRef} {...handlers} z-index={0}>
         {children}
       </TooltipComponent>
-      {isTooltipActive &&
+      {isTooltipVisible &&
         tooltipPosition &&
         ReactDOM.createPortal(
           <TooltipPopupContainer
