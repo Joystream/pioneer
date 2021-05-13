@@ -1,8 +1,18 @@
 import React from 'react'
+import styled from 'styled-components'
+
+import { Colors } from '@/common/constants'
 
 import { FounderMemberIcon, VerifiedMemberIcon } from '../../common/components/icons'
 import { LeaderMemberIcon } from '../../common/components/icons/LeaderMemberIcon'
-import { AvatarStarTooltipContainer, MemberStatusTooltip, Tooltip } from '../../common/components/Tooltip'
+import {
+  DarkTooltipInnerItemProps,
+  DefaultTooltip,
+  DefaultTooltipProps,
+  MemberStatusTooltip,
+  Tooltip,
+  TooltipComponent,
+} from '../../common/components/Tooltip'
 import { Member } from '../types'
 
 import { Avatar } from './Avatar'
@@ -48,7 +58,7 @@ export const MemberInfo = React.memo(
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />
             {isLeader && (
-              <Tooltip tooltipText="This member is a leader">
+              <Tooltip tooltipText="This member is a leaderrr">
                 <AvatarStarTooltipContainer>
                   <LeaderMemberIcon />
                 </AvatarStarTooltipContainer>
@@ -81,3 +91,16 @@ export const MemberInfo = React.memo(
     )
   }
 )
+
+export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipProps & DarkTooltipInnerItemProps>`
+  color: ${Colors.White};
+  border-color: ${Colors.Blue[500]};
+  background-color: ${Colors.Blue[500]};
+
+  ${TooltipComponent}:hover > &,
+  ${TooltipComponent}:focus > & {
+    color: ${Colors.White};
+    border-color: ${Colors.Blue[400]};
+    background-color: ${Colors.Blue[400]};
+  }
+`

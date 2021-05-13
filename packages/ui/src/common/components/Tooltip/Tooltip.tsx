@@ -6,7 +6,7 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 import { PopupItem } from '../animatedComponents/PopupItem'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
-import { DefaultTooltip, DefaultTooltipProps } from './TooltipDefault'
+import { DefaultTooltip } from './TooltipDefault'
 
 export interface TooltipProps {
   absolute?: boolean
@@ -101,12 +101,6 @@ export const Tooltip = ({
 export interface DarkTooltipInnerItemProps {
   isOnDark?: boolean
 }
-
-export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipProps & DarkTooltipInnerItemProps>`
-  color: ${Colors.White};
-  border-color: ${Colors.Blue[500]};
-  background-color: ${Colors.Blue[500]};
-`
 
 interface MemberRoleTooltipProps {
   size?: 'l' | 'm'
@@ -276,11 +270,6 @@ export const TooltipComponent = styled.button`
       color: ${Colors.Blue[500]};
       border-color: ${Colors.Blue[100]};
       background-color: ${Colors.Black[100]};
-    }
-    ${AvatarStarTooltipContainer} {
-      color: ${Colors.White};
-      border-color: ${Colors.Blue[400]};
-      background-color: ${Colors.Blue[400]};
     }
     ${MemberRoleHelp} {
       color: ${Colors.White} !important;
