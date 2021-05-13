@@ -13,13 +13,13 @@ import { TextMedium, TextSmall } from './typography'
 
 interface Props {
   block: Block
-  time: string
+  time?: string
   horizontal?: boolean
 }
 
 export const AboutDateColumn = React.memo(({ time, block, horizontal }: Props) => (
   <Wrapper horizontal={horizontal}>
-    <AboutText>{formatDateString(time)}</AboutText>
+    <AboutText>{formatDateString(time ?? block.timestamp)}</AboutText>
     {horizontal && <Separator>|</Separator>}
     <BlockInfo>
       <BlockIcon />

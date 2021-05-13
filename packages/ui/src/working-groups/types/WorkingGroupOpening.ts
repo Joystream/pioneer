@@ -1,18 +1,12 @@
 import BN from 'bn.js'
 
+import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 
 import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
 type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
-
-enum Network {
-  Babylon = 'BABYLON',
-  Alexandria = 'ALEXANDRIA',
-  Rome = 'ROME',
-  Olympia = 'OLYMPIA',
-}
 
 export interface WorkingGroupOpening {
   id: string
@@ -35,12 +29,7 @@ export interface WorkingGroupOpening {
     member: Member
     status: string
   }[]
-  createdAtBlock: {
-    id: string
-    number: number
-    network: Network
-    createdAt: string
-  }
+  createdAtBlock: Block
   applicants: {
     current: number
     total: number
@@ -65,12 +54,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
         status: application.status.__typename,
       }))
     : [],
-  createdAtBlock: {
-    id: fields.createdAtBlock.id,
-    number: fields.createdAtBlock.number,
-    network: fields.createdAtBlock.network,
-    createdAt: fields.createdAtBlock.createdAt,
-  },
+  createdAtBlock: asBlock(fields.createdAtBlock),
   applicants: {
     current: 0,
     total: fields.applications?.length || 0,

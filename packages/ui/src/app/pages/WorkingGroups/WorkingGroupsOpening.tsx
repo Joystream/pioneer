@@ -120,7 +120,7 @@ const WorkingGroupOpening = () => {
         </SidePanel>
       </ContentWithSidepanel>
       <Footer>
-        <AboutDateColumn block={opening.createdAtBlock} time={opening.createdAtBlock.createdAt} horizontal />
+        <AboutDateColumn block={opening.createdAtBlock} horizontal />
       </Footer>
     </AppPage>
   )
