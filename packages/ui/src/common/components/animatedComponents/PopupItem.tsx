@@ -2,13 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 
 interface DropItemProps {
-  ref: React.MutableRefObject<HTMLDivElement>
   children?: React.ReactNode
   className?: string
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
 }
 
-export const PopupItem = ({ children, className }: DropItemProps) => {
-  return <PopupItemContainer className={className}>{children}</PopupItemContainer>
+export const PopupItem = ({ children, ...other }: DropItemProps) => {
+  return <PopupItemContainer {...other}>{children}</PopupItemContainer>
 }
 
 const PopupItemContainer = styled.div`

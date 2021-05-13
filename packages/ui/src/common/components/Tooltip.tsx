@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { css } from 'styled-components'
 
@@ -22,6 +22,8 @@ export interface TooltipPopupProps {
   tooltipLinkURL?: string
 }
 
+const { setTimeout, clearTimeout } = window
+
 export const Tooltip = ({
   children,
   tooltipText,
@@ -31,64 +33,56 @@ export const Tooltip = ({
   absolute,
   className,
 }: TooltipProps & TooltipPopupProps) => {
-  const tooltipRef = useRef() as React.MutableRefObject<HTMLButtonElement>
-  const tooltipPopupRef = useRef() as React.MutableRefObject<HTMLDivElement>
+  const tooltipRef = useRef<HTMLButtonElement>(null)
+  const timeoutRef = useRef<number>()
   const [isTooltipActive, setTooltipActive] = useState(false)
   const [isForceActive, setForceActive] = useState(false)
-  const tooltipPosition = tooltipRef.current?.getBoundingClientRect()
-  const timeoutRef = useRef<any>()
-  const hoverRef = useRef(false)
+  const [isOver, setOver] = useState(false)
 
-  const isTooltipVisible = isForceActive || isTooltipActive
+  useEffect(() => {
+    clearTimeout(timeoutRef.current)
 
-  const showTooltip = () => {
-    const showTooltipDelay = setTimeout(() => {
-      setTooltipActive(true)
-    }, Transitions.durationNumeric)
-    timeoutRef.current = showTooltipDelay
-    return () => clearTimeout(showTooltipDelay)
-  }
-
-  const hideTooltip = () => {
-    if (hoverRef.current) {
-      return
+    if (isOver) {
+      timeoutRef.current = setTimeout(() => setTooltipActive(true), Transitions.durationNumeric)
+    } else {
+      timeoutRef.current = setTimeout(() => setTooltipActive(false), Transitions.durationNumericXL)
     }
 
-    clearTimeout(timeoutRef.current)
-    timeoutRef.current = setTimeout(() => setTooltipActive(false), Transitions.durationNumericXL)
+    return () => {
+      clearTimeout(timeoutRef.current)
+    }
+  }, [isOver])
 
-    return () => clearTimeout(timeoutRef.current)
-  }
+  const tooltipPosition = tooltipRef.current?.getBoundingClientRect()
+  const isTooltipVisible = isForceActive || isTooltipActive
 
-  const handlers = {
+  const mouseIsOver = () => setOver(true)
+  const mouseLeft = () => setOver(false)
+
+  const tooltipHandlers = {
     onClick: () => {
       setTooltipActive(false)
       setForceActive((active) => !active)
     },
-    onFocus: showTooltip,
-    onBlur: hideTooltip,
-    onMouseEnter: showTooltip,
-    onMouseLeave: hideTooltip,
+    onFocus: mouseIsOver,
+    onBlur: mouseLeft,
+    onMouseEnter: mouseIsOver,
+    onMouseLeave: mouseLeft,
   }
-  const otherHandlers = {
-    onMouseEnter: () => (hoverRef.current = true),
-    onMouseLeave: () => (hoverRef.current = false),
+  const popUpHandlers = {
+    onMouseEnter: () => mouseIsOver(),
+    onMouseLeave: () => mouseLeft(),
   }
 
   return (
     <TooltipContainer absolute={absolute}>
-      <TooltipComponent ref={tooltipRef} {...handlers} z-index={0}>
+      <TooltipComponent ref={tooltipRef} {...tooltipHandlers} z-index={0}>
         {children}
       </TooltipComponent>
       {isTooltipVisible &&
         tooltipPosition &&
         ReactDOM.createPortal(
-          <TooltipPopupContainer
-            ref={tooltipPopupRef}
-            className={className}
-            position={tooltipPosition}
-            {...otherHandlers}
-          >
+          <TooltipPopupContainer className={className} position={tooltipPosition} {...popUpHandlers}>
             {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
             <TooltipText>{tooltipText}</TooltipText>
             {tooltipLinkURL && (
