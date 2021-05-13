@@ -2,23 +2,24 @@ import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { AccountInfo } from '../../../accounts/components/AccountInfo'
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
-import { useBalance } from '../../../accounts/hooks/useBalance'
-import { TransferModalCall } from '../../../accounts/modals/TransferModal'
-import { ButtonPrimary } from '../../../common/components/buttons'
+import { AccountInfo } from '@/accounts/components/AccountInfo'
+import { useAccounts } from '@/accounts/hooks/useAccounts'
+import { useBalance } from '@/accounts/hooks/useBalance'
+import { TransferModalCall } from '@/accounts/modals/TransferModal'
+import { ButtonPrimary } from '@/common/components/buttons'
 import {
+  BalanceInfoInRow,
+  InfoTitle,
+  InfoValue,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  BalanceInfoInRow,
-  InfoTitle,
-  InfoValue,
-} from '../../../common/components/Modal'
-import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { BorderRad, Colors, Sizes } from '../../../common/constants'
-import { useModal } from '../../../common/hooks/useModal'
+} from '@/common/components/Modal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
+
+import { BorderRad, Colors, Sizes } from '../constants'
 
 interface Props {
   onClose: () => void
@@ -26,7 +27,7 @@ interface Props {
   amount: BN
 }
 
-export function TransferInviteRequirementsModal({ onClose, address, amount }: Props) {
+export function InsufficientFundsModal({ onClose, address, amount }: Props) {
   const { showModal } = useModal()
   const { allAccounts } = useAccounts()
   const account = useMemo(

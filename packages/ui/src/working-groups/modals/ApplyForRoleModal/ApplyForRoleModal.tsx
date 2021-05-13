@@ -4,10 +4,12 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { InsufficientFundsModal } from '@/common/modals/InsufficientFundsModal'
 import { getEventParam } from '@/common/model/JoystreamNode'
 import { ModalState } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -30,10 +32,21 @@ export const ApplyForRoleModal = () => {
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const opening = modalData.opening
   const [state, setState] = useState<ModalState>('REQUIREMENTS_CHECK')
-  const [txParams, setTxParams] = useState<OpeningParams | undefined>(undefined)
+  const [txParams, setTxParams] = useState<OpeningParams>({
+    member_id: active?.id,
+    opening_id: opening.id,
+    role_account_id: active?.controllerAccount,
+    reward_account_id: active?.controllerAccount,
+    stake_parameters: {
+      stake: opening.stake,
+      staking_account_id: active?.controllerAccount,
+    },
+  })
   const [stakeAccount, setStakeAccount] = useState<Account>()
   const transaction = useMemo(() => {
-    return txParams && api?.tx?.membershipWorkingGroup.applyOnOpening(txParams)
+    if (active && txParams && api) {
+      return api.tx?.membershipWorkingGroup.applyOnOpening(txParams)
+    }
   }, [api, JSON.stringify(txParams)])
   const [applicationId, setApplicationId] = useState<BN>()
 
@@ -45,19 +58,36 @@ export const ApplyForRoleModal = () => {
     setState(result ? 'SUCCESS' : 'ERROR')
   }
   const stake = new BN(txParams?.stake_parameters.stake ?? 0)
+  const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
   useEffect(() => {
     if (state !== 'REQUIREMENTS_CHECK') {
       return
     }
 
-    if (active) {
+    if (active && feeInfo?.canAfford) {
       setState('PREPARE')
       return
     }
 
-    showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
-  }, [state])
+    if (!active) {
+      showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+    }
+
+    if (feeInfo && !feeInfo.canAfford) {
+      setState('REQUIREMENTS_FAIL')
+    }
+  }, [state, active?.id, JSON.stringify(feeInfo)])
+
+  if (!active || !feeInfo) {
+    return null
+  }
+
+  if (state === 'REQUIREMENTS_FAIL') {
+    return (
+      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
+    )
+  }
 
   if (state === 'PREPARE') {
     const onSubmit = (stake: StakeStepForm, answers: Record<string, any>) => {

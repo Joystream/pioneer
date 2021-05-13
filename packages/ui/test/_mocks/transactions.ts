@@ -88,9 +88,9 @@ export const stubBatchTransactionSuccess = (transaction: any) => {
   set(transaction, 'signAndSend', () => stubTransactionResult(getBatchSuccessEvents()))
 }
 
-export const stubTransaction = (api: UseApi, transactionPath: string) => {
+export const stubTransaction = (api: UseApi, transactionPath: string, fee = 25) => {
   const transaction = {}
-  set(transaction, 'paymentInfo', () => of(toRuntimeDispatchInfo(25)))
+  set(transaction, 'paymentInfo', () => of(toRuntimeDispatchInfo(fee)))
   set(api, transactionPath, () => transaction)
   return transaction
 }
