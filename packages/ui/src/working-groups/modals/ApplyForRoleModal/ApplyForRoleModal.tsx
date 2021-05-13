@@ -16,6 +16,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal/index'
 import { StakeStepForm } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
+import { getGroup } from '@/working-groups/model/getGroup'
 
 import { ApplyForRolePrepareModal } from './ApplyForRolePrepareModal'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
@@ -45,7 +46,7 @@ export const ApplyForRoleModal = () => {
   const [stakeAccount, setStakeAccount] = useState<Account>()
   const transaction = useMemo(() => {
     if (active && txParams && api) {
-      return api.tx?.membershipWorkingGroup.applyOnOpening(txParams)
+      return getGroup(api, opening.groupName)?.applyOnOpening(txParams)
     }
   }, [api, JSON.stringify(txParams)])
   const [applicationId, setApplicationId] = useState<BN>()
