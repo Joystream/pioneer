@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { MemberInfoWrap } from '..'
-import { CloseButton } from '../../../common/components/buttons'
+import { CloseButton } from '@/common/components/buttons'
 import { EditSymbol } from '../../../common/components/icons/symbols'
 import {
   SidePane,
@@ -31,6 +31,8 @@ export const MemberProfile = React.memo(() => {
   const { members, isLoading } = useMyMemberships()
   const { modalData, hideModal } = useModal<MemberModalCall>()
   const { isLoading: loading, member } = useMember(modalData.id)
+
+  console.log('my member', member)
 
   const isMyMember = !isLoading && !!members.find((m) => m.id == member?.id)
 
