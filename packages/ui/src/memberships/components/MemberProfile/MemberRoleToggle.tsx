@@ -6,21 +6,24 @@ import { ToggleableItem, ToggleButton } from '@/common/components/buttons/Toggle
 import { Arrow } from '@/common/components/icons'
 import { SidePaneColumn, SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/common/components/SidePane'
 import { BorderRad, Colors } from '@/common/constants'
-import { Member } from '../../types'
+import { WorkerWithDetails } from '@/working-groups/types'
+import { workerRoleTitle } from '@/working-groups/helpers'
+import { formatTokenValue } from '@/common/model/formatters'
+import { Member } from '@/memberships/types'
 
-export interface MemberRoleToggleProps {
+export interface Props {
   member: Member
-  role: string
+  role: WorkerWithDetails
 }
 
-export const MemberRoleToggle = ({ member, role }: MemberRoleToggleProps) => {
+export const MemberRoleToggle = ({ role }: Props) => {
   return (
     <RoleToggle absoluteToggle>
       {(isOpen) => {
         return (
           <MemberRoleToggleContainer>
             <MemberRoleTitleContainer>
-              <h5>{role}</h5>
+              <h5>{workerRoleTitle(role)}</h5>
             </MemberRoleTitleContainer>
             {isOpen && (
               <MemberRoleTableContainer>
@@ -32,19 +35,19 @@ export const MemberRoleToggle = ({ member, role }: MemberRoleToggleProps) => {
                   <SidePaneRow>
                     <SidePaneLabel text="Reward" />
                     <SidePaneColumn>
-                      <SidePaneText>13 923 JOY / 3600 blocks</SidePaneText>
+                      <SidePaneText>{formatTokenValue(role.rewardPerBlock)} JOY / 3600 blocks</SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
                     <SidePaneLabel text="Earned total" />
                     <SidePaneColumn>
-                      <SidePaneText>20 923M JOY </SidePaneText>
+                      <SidePaneText>{formatTokenValue(role.earnedTotal)} JOY </SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
                     <SidePaneLabel text="Earned in 24h" />
                     <SidePaneColumn>
-                      <SidePaneText> {member.id} JOY (id for test) </SidePaneText>
+                      <SidePaneText> {formatTokenValue(1000)} JOY (id for test) </SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>

@@ -1,7 +1,6 @@
-import { asBlock } from '../../common/types'
+import { asBlock } from '@/common/types'
 import { MemberWithDetailsFragment, useGetMemberQuery } from '../queries'
 import { asMember, DetailedMember } from '../types'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 import { WorkerWithDetails } from '@/working-groups/types'
 
@@ -17,7 +16,7 @@ export const asMemberWithDetails = (data: MemberWithDetailsFragment, roles: Work
     invitedBy: '',
     registeredAtBlock: asBlock(data.registeredAtBlock),
     invitees: [],
-    roles,
+    roles: roles.filter((role) => role.status === 'WorkerStatusActive'),
   }
 }
 

@@ -1,9 +1,9 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { TemplateBlock, ModalBlock, WhiteBlock } from '../../../common/components/storybookParts/previewStyles'
+import { TemplateBlock, ModalBlock, WhiteBlock } from '@/common/components/storybookParts/previewStyles'
 
-import { MemberRoleToggle, MemberRoleToggleProps } from './MemberRoleToggle'
+import { MemberRoleToggle, Props as MemberRoleToggleProps } from './MemberRoleToggle'
 
 export default {
   title: 'Member/MemberRoleToggle',
@@ -23,16 +23,13 @@ const Template: Story<MemberRoleToggleProps> = (args) => (
 
 export const Default = Template.bind({})
 Default.args = {
-  member: {
-    id: '0',
-    name: 'Alice member',
-    rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    handle: 'alice',
-    isVerified: false,
-    isFoundingMember: false,
-    roles: [],
-    inviteCount: 0,
+  role: {
+    earnedTotal: 1000,
+    group: { id: '3', name: 'membership' },
+    isLeader: false,
+    membership: { id: '0' },
+    rewardPerBlock: 13923,
+    stake: 192837021,
+    status: 'WorkerStatusActive',
   },
-  role: 'Some Role Name',
 }
