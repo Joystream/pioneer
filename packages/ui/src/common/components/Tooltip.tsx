@@ -45,14 +45,16 @@ export const Tooltip = ({
     timeoutRef.current = showTooltipDelay
     return () => clearTimeout(showTooltipDelay)
   }
+
   const hideTooltip = () => {
-    if (hoverRef.current) return
-    console.log("This isn't work: ", hoverRef.current)
+    if (hoverRef.current) {
+      return
+    }
+
     clearTimeout(timeoutRef.current)
-    const hideTooltipDelay = setTimeout(() => {
-      setTooltipActive(false)
-    }, Transitions.durationNumericXL)
-    return () => clearTimeout(hideTooltipDelay)
+    timeoutRef.current = setTimeout(() => setTooltipActive(false), Transitions.durationNumericXL)
+
+    return () => clearTimeout(timeoutRef.current)
   }
 
   const handlers = {
@@ -96,7 +98,7 @@ export const Tooltip = ({
   )
 }
 
-interface DefaultTooltipProps {
+export interface DefaultTooltipProps {
   className?: string
 }
 
