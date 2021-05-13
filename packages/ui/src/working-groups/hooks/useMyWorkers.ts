@@ -10,7 +10,7 @@ export const useMyWorkers = () => {
   const params = { variables: { where: { membershipId_in: members.map((m) => m.id) } } }
 
   const { data, loading } = useGetWorkersQuery(params)
-  const workers = useMemo(() => data && data.workers.map(asWorkerWithDetails), [data, loading])
+  const workers = useMemo(() => (data && data.workers.map(asWorkerWithDetails)) || [], [data, loading])
 
   return { workers, isLoading: loading }
 }

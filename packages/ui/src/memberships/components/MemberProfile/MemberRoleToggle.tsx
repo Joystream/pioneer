@@ -1,17 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ButtonGhost, ButtonsGroup } from '../../../common/components/buttons'
-import { ToggleableItem, ToggleButton } from '../../../common/components/buttons/Toggle'
-import { Arrow } from '../../../common/components/icons'
-import {
-  SidePaneColumn,
-  SidePaneLabel,
-  SidePaneRow,
-  SidePaneTable,
-  SidePaneText,
-} from '../../../common/components/SidePane'
-import { BorderRad, Colors } from '../../../common/constants'
+import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
+import { ToggleableItem, ToggleButton } from '@/common/components/buttons/Toggle'
+import { Arrow } from '@/common/components/icons'
+import { SidePaneColumn, SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/common/components/SidePane'
+import { BorderRad, Colors } from '@/common/constants'
 import { Member } from '../../types'
 
 export interface MemberRoleToggleProps {
