@@ -12,6 +12,7 @@ const shared = require('./dev/webpack.shared')
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 
 module.exports = (env, argv) => {
+  const isDevelopment = argv.mode === 'development'
   const plugins = [
     ...shared.plugins,
     new CleanWebpackPlugin(),
@@ -20,7 +21,7 @@ module.exports = (env, argv) => {
     }),
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
-      IS_DEVELOPMENT: argv.mode === 'development',
+      IS_DEVELOPMENT: isDevelopment,
     }),
     new CopyPlugin({
       patterns: [
@@ -51,7 +52,7 @@ module.exports = (env, argv) => {
           use: [
             {
               loader: 'babel-loader',
-              options: { plugins: [['babel-plugin-styled-components', { displayName: true }]] },
+              options: { plugins: [['babel-plugin-styled-components', { displayName: isDevelopment }]] },
             },
           ],
         },
