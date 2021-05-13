@@ -48,6 +48,12 @@ module.exports = (env, argv) => {
           test: /\.tsx?$/,
           use: 'ts-loader',
           exclude: /node_modules/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: { plugins: [['babel-plugin-styled-components', { displayName: true }]] },
+            },
+          ],
         },
         {
           test: /\.(png|jpg|gif|woff|woff2|eot|ttf|otf)$/,
