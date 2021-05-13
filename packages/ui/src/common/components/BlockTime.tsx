@@ -16,7 +16,7 @@ interface Props {
   horizontal?: boolean
 }
 
-export const AboutDateColumn = React.memo(({ block, horizontal }: Props) => (
+export const BlockTime = React.memo(({ block, horizontal }: Props) => (
   <Wrapper horizontal={horizontal}>
     <AboutText>{formatDateString(block.timestamp)}</AboutText>
     {horizontal && <Separator>|</Separator>}

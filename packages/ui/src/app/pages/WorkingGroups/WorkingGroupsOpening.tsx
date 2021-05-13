@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
-import { AboutDateColumn } from '@/common/components/AboutDateColumn'
 import { BadgeRed } from '@/common/components/BadgeRed'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons/Buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
@@ -120,7 +120,7 @@ const WorkingGroupOpening = () => {
         </SidePanel>
       </ContentWithSidepanel>
       <Footer>
-        <AboutDateColumn block={opening.createdAtBlock} horizontal />
+        <BlockTime block={opening.createdAtBlock} horizontal />
       </Footer>
     </AppPage>
   )
