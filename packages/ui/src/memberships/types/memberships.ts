@@ -1,7 +1,6 @@
 import { WorkerWithDetails } from '@/working-groups/types'
 
 import { Address, Block } from '../../common/types'
-import { WorkerWithDetails } from '@/working-groups/types'
 
 type ID = string
 
