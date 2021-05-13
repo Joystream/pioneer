@@ -11,7 +11,7 @@ interface Props {
 export const WithdrawApplicationSuccessModal = ({ onClose }: Props) => (
   <Modal onClose={onClose} modalSize="s">
     <ModalBody>
-      <Row>Success!</Row>
+      <Row>Application withdrawn.</Row>
     </ModalBody>
     <ModalFooter>
       <ButtonPrimary onClick={onClose}>Return</ButtonPrimary>

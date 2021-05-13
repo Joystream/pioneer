@@ -20,7 +20,7 @@ const block: Block = {
   timestamp: '2021-03-09T10:38:04.155Z',
 }
 
-const currentApplication = {
+const currentApplication: WorkingGroupApplication = {
   id: '1',
   opening: {
     type: 'LEADER',
@@ -31,6 +31,7 @@ const currentApplication = {
   createdAt: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusPending',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  roleAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
 
 const pastApplication = {
@@ -44,6 +45,7 @@ const pastApplication = {
   createdAt: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusRejected',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  roleAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
 
 describe('UI: MyApplications', () => {

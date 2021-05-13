@@ -12,7 +12,7 @@ export interface WorkingGroupApplication {
     reward: BN
   }
   applicant?: Member
-  roleAccount?: string
+  roleAccount: string
   rewardAccount?: string
   stakingAccount: string
   answers?: [any]
