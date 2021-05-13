@@ -26,7 +26,7 @@ const PreviousPageBlock = styled.div`
   grid-auto-flow: column;
   grid-column-gap: 8px;
   align-items: center;
-  grid-template-columns: 1% auto auto;
+  grid-template-columns: auto auto;
 `
 
 const PreviousPageButton = styled(ButtonGhost)`

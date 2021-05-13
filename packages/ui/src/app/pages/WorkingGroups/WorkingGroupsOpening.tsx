@@ -62,29 +62,31 @@ const WorkingGroupOpening = () => {
       <PageHeader>
         <PreviousPage>
           <PageTitle>{opening.title}</PageTitle>
-          <ButtonsWrapper>
-            {(opening.status === OpeningStatuses.OPEN || opening.status === OpeningStatuses.CANCELLED) && (
-              <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
-                <LinkIcon />
-                Copy link
-              </ButtonGhost>
-            )}
-            {opening.status === OpeningStatuses.OPEN && (
-              <ButtonPrimary
-                size="medium"
-                onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
-              >
-                Apply now!
-              </ButtonPrimary>
-            )}
-            {opening.status === OpeningStatuses.UPCOMING && (
-              <ButtonGhost size="small">
-                <BellIcon />
-                Notify me when it’s open
-              </ButtonGhost>
-            )}
-          </ButtonsWrapper>
         </PreviousPage>
+        <ButtonsWrapper>
+          {(opening.status === OpeningStatuses.OPEN || opening.status === OpeningStatuses.CANCELLED) && (
+            <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
+              <LinkIcon />
+              Copy link
+            </ButtonGhost>
+          )}
+          {opening.status === OpeningStatuses.OPEN && (
+            <ButtonPrimary
+              size="medium"
+              onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
+            >
+              Apply now!
+            </ButtonPrimary>
+          )}
+          {opening.status === OpeningStatuses.UPCOMING && (
+            <ButtonGhost size="small">
+              <BellIcon />
+              Notify me when it’s open
+            </ButtonGhost>
+          )}
+        </ButtonsWrapper>
+      </PageHeader>
+      <OpeningsLayout>
         <Row>
           <BadgeViolet inverted size="l" separated>
             {opening.groupName}
@@ -94,8 +96,6 @@ const WorkingGroupOpening = () => {
           </BadgeViolet>
           <StatusBadge />
         </Row>
-      </PageHeader>
-      <MainPanel>
         <Statistics>
           <StatisticItem title="Current budget" helperText="Lorem ipsum...">
             {opening.budget}
@@ -104,27 +104,35 @@ const WorkingGroupOpening = () => {
           <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.value} />
           <StatisticItem title="Hiring limit">{opening.hiring.total}</StatisticItem>
         </Statistics>
-      </MainPanel>
-      <ContentWithSidepanel>
-        <MarkdownPreview markdown={opening.description} />
-        <SidePanel>
-          {opening.status !== OpeningStatuses.UPCOMING && (
-            <ApplicantsList
-              allApplicants={opening.applications}
-              myApplication={hiredMember?.member.id === activeMembership?.id ? activeMembership : undefined}
-              hired={hiredMember?.member}
-              hiringComplete={opening.status !== OpeningStatuses.OPEN}
-              leaderId={opening.leaderId}
-            />
-          )}
-        </SidePanel>
-      </ContentWithSidepanel>
+        <ContentWithSidepanel>
+          <MainPanel>
+            <MarkdownPreview markdown={opening.description} />
+          </MainPanel>
+          <SidePanel>
+            {opening.status !== OpeningStatuses.UPCOMING && (
+              <ApplicantsList
+                allApplicants={opening.applications}
+                myApplication={hiredMember?.member.id === activeMembership?.id ? activeMembership : undefined}
+                hired={hiredMember?.member}
+                hiringComplete={opening.status !== OpeningStatuses.OPEN}
+                leaderId={opening.leaderId}
+              />
+            )}
+          </SidePanel>
+        </ContentWithSidepanel>
+      </OpeningsLayout>
       <Footer>
         <BlockTime block={opening.createdAtBlock} horizontal />
       </Footer>
     </AppPage>
   )
 }
+
+const OpeningsLayout = styled.div`
+  grid-template-rows: auto;
+  grid-row-gap: 24px;
+  display: grid;
+`
 
 const Row = styled.div`
   display: flex;
