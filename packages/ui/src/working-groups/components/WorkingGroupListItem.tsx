@@ -2,7 +2,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { ButtonGhost } from '../../common/components/buttons'
+import { ButtonBareGhost } from '../../common/components/buttons'
 import { Arrow } from '../../common/components/icons'
 import { TextMedium, ValueInJoys } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
@@ -58,9 +58,9 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>WG Leader</Subscription>
         </StatsColumn>
       </GroupStats>
-      <ButtonGhost square size="medium" onClick={() => history.push(groupAddress)}>
+      <ButtonBareGhost square size="medium" onClick={() => history.push(groupAddress)}>
         <Arrow direction="right" />
-      </ButtonGhost>
+      </ButtonBareGhost>
     </GroupItem>
   )
 }

@@ -58,6 +58,13 @@ export function ButtonGhost({ className, children, size, square, disabled, onCli
     </ButtonGhostStyles>
   )
 }
+export function ButtonBareGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
+  return (
+    <ButtonBareGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
+      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
+    </ButtonBareGhostStyles>
+  )
+}
 
 export const BasicButtonStyles = css<ButtonProps>`
   display: flex;
@@ -282,6 +289,55 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
     }
     color: ${Colors.Black[300]};
     border-color: ${Colors.Black[200]};
+    background-color: ${Colors.White};
+  }
+`
+
+export const ButtonBareGhostStyles = styled.button<ButtonProps>`
+  ${BasicButtonStyles};
+
+  color: ${Colors.Black[900]};
+  border-color: transparent;
+  background-color: ${Colors.White};
+
+  & > svg {
+    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
+  }
+
+  &:before,
+  &:after {
+    display: none;
+  }
+
+  &:hover,
+  &:focus {
+    border-color: transparent;
+    color: ${Colors.Blue[500]};
+    & > svg {
+      color: ${Colors.Blue[500]};
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Blue[500]};
+      fill: ${Colors.Blue[500]};
+    }
+  }
+
+  &:active {
+    border-color: transparent;
+  }
+
+  &:disabled {
+    & > svg {
+      color: ${Colors.Black[300]};
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Black[300]};
+      fill: ${Colors.Black[300]};
+    }
+    color: ${Colors.Black[300]};
+    border-color: transparent;
     background-color: ${Colors.White};
   }
 `
