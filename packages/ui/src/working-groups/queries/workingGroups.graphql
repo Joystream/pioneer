@@ -19,6 +19,12 @@ fragment WorkerFields on Worker {
   isLead
   rewardPerBlock
   stake
+  roleAccount
+  rewardAccount
+  stakeAccount
+  hiredAtBlock {
+    ...BlockFields
+  }
 }
 
 fragment WorkingGroupFields on WorkingGroup {
