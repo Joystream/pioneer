@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+
 import { Colors } from '../../constants'
 
 export const MarkdownPreviewStyles = createGlobalStyle`
@@ -75,7 +76,7 @@ export const MarkdownPreviewStyles = createGlobalStyle`
       transform: translateY(-50%);
       width: 16px;
       height: 16px;
-      background: url("data:image/svg+xml;utf8,<svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.36778 6.09505L0.900391 10.5624L1.90436 11.5664L7.37571 6.09505L1.90436 0.623699L0.900391 1.62766L5.36778 6.09505Z" fill="#404B5A"/></svg>") no-repeat center;
+      background: url('data:image/svg+xml;utf8,<svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.36778 6.09505L0.900391 10.5624L1.90436 11.5664L7.37571 6.09505L1.90436 0.623699L0.900391 1.62766L5.36778 6.09505Z" fill="#404B5A"/></svg>') no-repeat center;
     }
   }
 `
