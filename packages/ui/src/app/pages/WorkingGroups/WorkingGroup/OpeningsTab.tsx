@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { CountBadge } from '@/common/components/CountBadge'
+import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
+
 import { Loading } from '../../../../common/components/Loading'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
 import { Statistics, TokenValueStat } from '../../../../common/components/statistics'
@@ -17,10 +20,8 @@ interface Props {
 }
 
 export const OpeningsTab = ({ workingGroup }: Props) => {
-  const { isLoading, openings } = useOpenings({
-    groupId: workingGroup.id,
-    type: 'open',
-  })
+  const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, type: 'open' })
+  const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
   const { member: leader } = useMember(workingGroup.leaderId)
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
 
@@ -39,6 +40,17 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
             <OpeningsCategory>
               <Label>Openings</Label>
               <OpeningsList openings={openings} />
+            </OpeningsCategory>
+          </OpeningsCategories>
+        )}
+        {isLoadingUpcoming ? (
+          <Loading />
+        ) : (
+          <OpeningsCategories>
+            <OpeningsCategory>
+              <Label>
+                Upcoming Openings <CountBadge count={upcomingOpenings.length} />
+              </Label>
             </OpeningsCategory>
           </OpeningsCategories>
         )}

@@ -3,32 +3,46 @@ import BN from 'bn.js'
 import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 
-import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
+import {
+  ApplicationQuestionFieldsFragment,
+  UpcomingWorkingGroupOpeningFieldsFragment,
+  WorkingGroupOpeningFieldsFragment,
+} from '../queries'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
 type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
 
-export interface WorkingGroupOpening {
+export interface BaseOpening {
   id: string
   groupId: string
   groupName: string
-  leaderId?: string | null
-  budget: number
   expectedEnding: string
   title: string
   shortDescription: string
   description: string
   details: string
-  type: WorkingGroupOpeningType
+  createdAtBlock: Block
+  stake: BN
+  budget: number
   reward: {
     value: BN
     interval: number
   }
+}
+
+export interface UpcomingWorkingGroupOpening extends BaseOpening {
+  hiringLimit: number
+}
+
+export interface WorkingGroupOpening extends BaseOpening {
+  leaderId?: string | null
+  budget: number
+  type: WorkingGroupOpeningType
+  status: Status
   applications: {
     member: Member
     status: string
   }[]
-  createdAtBlock: Block
   applicants: {
     current: number
     total: number
@@ -37,43 +51,53 @@ export interface WorkingGroupOpening {
     current: number
     total: number
   }
-  status: Status
-  stake: BN
 }
 
-export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
+const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | WorkingGroupOpeningFieldsFragment) => ({
   id: fields.id,
+  title: `${fields.group.name} Working Group`,
   groupId: fields.groupId,
   groupName: fields.group.name,
-  leaderId: fields.group.leaderId,
   budget: fields.group.budget,
+  createdAtBlock: asBlock(fields.createdAtBlock),
+  reward: {
+    value: fields.rewardPerBlock,
+    interval: 1,
+  },
+  expectedEnding: fields.metadata.expectedEnding,
+  shortDescription: fields.metadata.shortDescription || '',
+  description: fields.metadata?.description ?? '',
+  details: fields.metadata?.applicationDetails ?? '',
+  stake: new BN(fields.stakeAmount),
+})
+
+export const asUpcomingWorkingGroupOpening = (
+  fields: UpcomingWorkingGroupOpeningFieldsFragment
+): UpcomingWorkingGroupOpening => ({
+  ...asBaseOpening(fields),
+  hiringLimit: fields.metadata?.hiringLimit ?? 0,
+})
+
+export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
+  ...asBaseOpening(fields),
+  title: `${fields.group.name.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
+  type: fields.type as WorkingGroupOpeningType,
+  status: fields.status.__typename,
+  leaderId: fields.group.leaderId,
   applications: fields.applications.length
     ? fields.applications.map((application) => ({
         member: asMember(application.applicant),
         status: application.status.__typename,
       }))
     : [],
-  createdAtBlock: asBlock(fields.createdAtBlock),
   applicants: {
     current: 0,
     total: fields.applications?.length || 0,
   },
-  type: fields.type as WorkingGroupOpeningType,
-  reward: {
-    value: fields.rewardPerBlock,
-    interval: 1,
-  },
-  expectedEnding: fields.metadata.expectedEnding,
   hiring: {
     current: 0,
     total: fields.metadata?.hiringLimit ?? 0,
   },
-  title: fields.metadata?.shortDescription ?? '',
-  shortDescription: fields.metadata.shortDescription || '',
-  description: fields.metadata?.description ?? '',
-  details: fields.metadata?.applicationDetails ?? '',
-  status: fields.status.__typename,
-  stake: new BN(fields.stakeAmount),
 })
 
 export type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'

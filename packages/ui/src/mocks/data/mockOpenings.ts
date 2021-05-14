@@ -22,7 +22,7 @@ interface RawOpeningMock {
     applicationDetails: string
     applicationFormQuestions: QuestionMock[]
   }
-  unstakingPeriod: number
+  unstakingPeriod: string
   rewardPerBlock: number
   createdAtBlockId: string
 }

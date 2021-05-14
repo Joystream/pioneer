@@ -4,46 +4,67 @@ const { randomUniqueArrayFromRange, randomFromRange, randomMarkdown } = require(
 const { MAX_MEMBERS } = require('./generateMembers')
 const { WORKING_GROUPS } = require('./generateWorkingGroups')
 
-const generateOpenings = () => {
-  let nextQuestionId = 0
-  let nextOpeningId = 0
+let nextQuestionId = 0
+let nextOpeningId = 0
 
-  const generateOpening = (status, groupId, name) => () => {
-    const isLeader = Math.random() > 0.9
+const getApplicationFormQuestions = () => [
+  {
+    id: String(nextQuestionId++),
+    type: 'TEXT',
+    question: faker.lorem.words(randomFromRange(3, 8)) + '?',
+  },
+  {
+    id: String(nextQuestionId++),
+    type: 'TEXTAREA',
+    question: faker.lorem.words(randomFromRange(4, 6)) + '?',
+  },
+]
 
-    const applicationFormQuestions = [
-      {
-        id: String(nextQuestionId++),
-        type: 'TEXT',
-        question: faker.lorem.words(randomFromRange(3, 8)) + '?',
-      },
-      {
-        id: String(nextQuestionId++),
-        type: 'TEXTAREA',
-        question: faker.lorem.words(randomFromRange(4, 6)) + '?',
-      },
-    ]
+const generateMetadata = () => ({
+  shortDescription: faker.lorem.sentence(randomFromRange(20, 60)),
+  description: randomMarkdown(),
+  hiringLimit: 1,
+  applicationDetails: randomMarkdown(),
+  applicationFormQuestions: getApplicationFormQuestions(),
+})
 
-    return {
-      id: String(nextOpeningId++),
-      groupId: String(groupId),
-      type: isLeader ? 'LEADER' : 'REGULAR',
-      status: status,
-      stakeAmount: randomFromRange(2, 8) * 1000,
-      metadata: {
-        shortDescription: `${name} ${isLeader ? 'leader' : 'worker'}`,
-        description: randomMarkdown(),
-        hiringLimit: 1,
-        expectedEnding: '2022-03-09T10:18:04.155Z',
-        applicationDetails: randomMarkdown(),
-        applicationFormQuestions: applicationFormQuestions,
-      },
-      unstakingPeriod: 5,
-      rewardPerBlock: randomFromRange(1, 5) * 100,
-      createdAtBlockId: randomFromRange(20, 100),
-    }
+const generateBaseOpening = (groupId) => ({
+  id: String(nextOpeningId++),
+  groupId: String(groupId),
+  stakeAmount: randomFromRange(2, 8) * 1000,
+  rewardPerBlock: randomFromRange(1, 5) * 100,
+  createdAtBlockId: randomFromRange(20, 100),
+  version: 1,
+})
+
+const generateOpening = (status, groupId, name) => () => {
+  const isLeader = Math.random() > 0.9
+  const isInPast = status !== 'open'
+  return {
+    ...generateBaseOpening(groupId, name, isLeader),
+    type: isLeader ? 'LEADER' : 'REGULAR',
+    status,
+    unstakingPeriod: randomFromRange(5, 10),
+    metadata: {
+      ...generateMetadata(),
+      expectedEnding: isInPast ? faker.date.recent(90) : faker.date.soon(10),
+    },
   }
+}
 
+const generateUpcomingOpening = (groupId) => () => {
+  return {
+    ...generateBaseOpening(groupId),
+    expectedStart: faker.date.soon(randomFromRange(10, 30)).toJSON(),
+    metadata: {
+      ...generateMetadata(),
+      shortDescription: 'Upcoming worker opening.' + faker.lorem.words(randomFromRange(5, 10)),
+      expectedEnding: faker.date.soon(randomFromRange(40, 50)).toJSON(),
+    },
+  }
+}
+
+const generateOpenings = () => {
   const generateOpeningsForGroup = (groupName, id) => {
     return [
       ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id, groupName)),
@@ -75,13 +96,24 @@ const generateApplications = (openings) => {
   })
 }
 
+const generateUpcomingOpenings = () => {
+  const generateUpcomingOpeningsForGroup = (groupName, id) => {
+    return [...Array.from({ length: randomFromRange(1, 3) }, generateUpcomingOpening(id, groupName))]
+  }
+
+  return WORKING_GROUPS.map(generateUpcomingOpeningsForGroup).flatMap((a) => a)
+}
+
 const generateOpeningsAndApplications = () => {
   const openings = generateOpenings().flatMap((a) => a)
   const applications = generateApplications(openings).flatMap((a) => a)
+  nextOpeningId = 0
+  const upcomingOpenings = generateUpcomingOpenings().flatMap((a) => a)
 
   return {
     openings,
     applications,
+    upcomingOpenings,
   }
 }
 

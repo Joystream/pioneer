@@ -2,6 +2,8 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
+import { seedUpcomingOpenings } from '@/mocks/data/seedUpcomingOpening'
+
 import schema from '../common/api/schemas/schema.graphql'
 
 import { seedBlocks, seedMembers } from './data'
@@ -58,6 +60,7 @@ export const makeServer = (environment = 'development') => {
               workers: getWhereResolver('Worker'),
               workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
               applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
+              upcomingWorkingGroupOpenings: getWhereResolver('UpcomingWorkingGroupOpening'),
             },
           },
         })
@@ -73,6 +76,7 @@ export const makeServer = (environment = 'development') => {
       seedWorkers(server)
       seedOpeningStatuses(server)
       seedOpenings(server)
+      seedUpcomingOpenings(server)
       seedApplications(server)
     },
   })
