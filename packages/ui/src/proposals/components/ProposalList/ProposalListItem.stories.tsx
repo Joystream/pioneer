@@ -18,6 +18,8 @@ export const Default = Template.bind({})
 Default.args = {
   id: '1',
   createdAt: '2021-03-29 18:21:06.000000',
+  title: 'Lorem ipsum, dolor sit amet consectetur',
+  rationale: 'Voluptatem id voluptatibus aspernatur quibusdam hic porro. Labore, eligendi tempore?',
   stage: 'DECIDING',
   type: 'Founding request',
   proposer: asMember((mockMembers[0] as unknown) as any),

@@ -9,7 +9,7 @@ import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
 import { Proposal } from '@/proposals/types'
 
-export const ProposalListItem = ({ id, createdAt, stage, type, proposer }: Proposal) => (
+export const ProposalListItem = ({ id, title, createdAt, stage, type, proposer }: Proposal) => (
   <TableListItem key={id} colLayout={ProposalColLayout}>
     <DateField value={createdAt} />
     <StageField>
@@ -18,7 +18,7 @@ export const ProposalListItem = ({ id, createdAt, stage, type, proposer }: Propo
     </StageField>
     <TypeField bold>
       <BadgeViolet>{type}</BadgeViolet>
-      Lorem ipsum, dolor sit amet consectetur
+      {title}
     </TypeField>
     <MemberInfo member={proposer} />
   </TableListItem>
