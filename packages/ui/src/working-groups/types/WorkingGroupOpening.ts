@@ -3,7 +3,11 @@ import BN from 'bn.js'
 import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 
-import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
+import {
+  ApplicationQuestionFieldsFragment,
+  UpcomingWorkingGroupOpeningFieldsFragment,
+  WorkingGroupOpeningFieldsFragment,
+} from '../queries'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
 type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
@@ -73,6 +77,46 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   description: fields.metadata?.description ?? '',
   details: fields.metadata?.applicationDetails ?? '',
   status: fields.status.__typename,
+  stake: new BN(fields.stakeAmount),
+})
+
+export interface UpcomingWorkingGroupOpening {
+  id: string
+  groupId: string
+  groupName: string
+  budget: number
+  expectedEnding: string
+  title: string
+  shortDescription: string
+  description: string
+  details: string
+  reward: {
+    value: BN
+    interval: number
+  }
+  createdAtBlock: Block
+  hiringLimit: number
+  stake: BN
+}
+
+export const asUpcomingWorkingGroupOpening = (
+  fields: UpcomingWorkingGroupOpeningFieldsFragment
+): UpcomingWorkingGroupOpening => ({
+  id: fields.id,
+  groupId: fields.groupId,
+  groupName: fields.group.name,
+  budget: fields.group.budget,
+  createdAtBlock: asBlock(fields.createdAtBlock),
+  reward: {
+    value: fields.rewardPerBlock,
+    interval: 1,
+  },
+  expectedEnding: fields.metadata.expectedEnding,
+  hiringLimit: fields.metadata?.hiringLimit ?? 0,
+  title: fields.metadata?.shortDescription ?? '',
+  shortDescription: fields.metadata.shortDescription || '',
+  description: fields.metadata?.description ?? '',
+  details: fields.metadata?.applicationDetails ?? '',
   stake: new BN(fields.stakeAmount),
 })
 
