@@ -4,46 +4,68 @@ const { randomUniqueArrayFromRange, randomFromRange, randomMarkdown } = require(
 const { MAX_MEMBERS } = require('./generateMembers')
 const { WORKING_GROUPS } = require('./generateWorkingGroups')
 
-const generateOpenings = () => {
-  let nextQuestionId = 0
-  let nextOpeningId = 0
+let nextQuestionId = 0
+let nextOpeningId = 0
 
-  const generateOpening = (status, groupId, name) => () => {
-    const isLeader = Math.random() > 0.9
+const getApplicationFormQuestions = () => [
+  {
+    id: String(nextQuestionId++),
+    type: 'TEXT',
+    question: faker.lorem.words(randomFromRange(3, 8)) + '?',
+  },
+  {
+    id: String(nextQuestionId++),
+    type: 'TEXTAREA',
+    question: faker.lorem.words(randomFromRange(4, 6)) + '?',
+  },
+]
 
-    const applicationFormQuestions = [
-      {
-        id: String(nextQuestionId++),
-        type: 'TEXT',
-        question: faker.lorem.words(randomFromRange(3, 8)) + '?',
-      },
-      {
-        id: String(nextQuestionId++),
-        type: 'TEXTAREA',
-        question: faker.lorem.words(randomFromRange(4, 6)) + '?',
-      },
-    ]
-
-    return {
-      id: String(nextOpeningId++),
-      groupId: String(groupId),
-      type: isLeader ? 'LEADER' : 'REGULAR',
-      status: status,
-      stakeAmount: randomFromRange(2, 8) * 1000,
-      metadata: {
-        shortDescription: `${name} ${isLeader ? 'leader' : 'worker'}`,
-        description: randomMarkdown(),
-        hiringLimit: 1,
-        expectedEnding: '2022-03-09T10:18:04.155Z',
-        applicationDetails: randomMarkdown(),
-        applicationFormQuestions: applicationFormQuestions,
-      },
-      unstakingPeriod: 5,
-      rewardPerBlock: randomFromRange(1, 5) * 100,
-      createdAtBlockId: randomFromRange(20, 100),
-    }
+function generateMetadata(name, isLeader) {
+  return {
+    shortDescription: `${name} ${isLeader ? 'leader' : 'worker'}`,
+    description: randomMarkdown(),
+    hiringLimit: 1,
+    expectedEnding: '2022-03-09T10:18:04.155Z',
+    applicationDetails: randomMarkdown(),
+    applicationFormQuestions: getApplicationFormQuestions(),
   }
+}
 
+const generateBaseOpening = (groupId) => {
+  return {
+    id: String(nextOpeningId++),
+    groupId: String(groupId),
+    stakeAmount: randomFromRange(2, 8) * 1000,
+    rewardPerBlock: randomFromRange(1, 5) * 100,
+    createdAtBlockId: randomFromRange(20, 100),
+    version: 1,
+  }
+}
+
+const generateOpening = (status, groupId, name) => () => {
+  const isLeader = Math.random() > 0.9
+  return {
+    ...generateBaseOpening(groupId, name, isLeader),
+    type: isLeader ? 'LEADER' : 'REGULAR',
+    status,
+    unstakingPeriod: randomFromRange(5, 10),
+    metadata: generateMetadata(name, isLeader),
+  }
+}
+
+const generateUpcomingOpening = (groupId, name) => () => {
+  return {
+    ...generateBaseOpening(groupId, name, false),
+    metadata: {
+      ...generateMetadata(name, false),
+      description: 'Upcoming worker opening',
+      expectedEnding: faker.date.soon(randomFromRange(40, 50)).toJSON(),
+    },
+    expectedStart: faker.date.soon(randomFromRange(10, 30)).toJSON(),
+  }
+}
+
+const generateOpenings = () => {
   const generateOpeningsForGroup = (groupName, id) => {
     return [
       ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id, groupName)),
@@ -75,13 +97,24 @@ const generateApplications = (openings) => {
   })
 }
 
+const generateUpcomingOpenings = () => {
+  const generateUpcomingOpeningsForGroup = (groupName, id) => {
+    return [...Array.from({ length: randomFromRange(1, 3) }, generateUpcomingOpening(id, groupName))]
+  }
+
+  return WORKING_GROUPS.map(generateUpcomingOpeningsForGroup).flatMap((a) => a)
+}
+
 const generateOpeningsAndApplications = () => {
   const openings = generateOpenings().flatMap((a) => a)
   const applications = generateApplications(openings).flatMap((a) => a)
+  nextOpeningId = 0
+  const upcomingOpenings = generateUpcomingOpenings().flatMap((a) => a)
 
   return {
     openings,
     applications,
+    upcomingOpenings,
   }
 }
 
