@@ -11,14 +11,7 @@ import { Label, TextInlineHuge, TextMedium, TextSmall, TokenValue } from '@/comm
 import { Fraction } from '@/common/components/typography/Fraction'
 import { formatDateString } from '@/common/model/formatters'
 import { relativeTime } from '@/common/model/relativeTime'
-import { BadgeViolet } from '../../common/components/BadgeViolet'
-import { Link } from '../../common/components/Link'
-import { MarkdownPreview } from '../../common/components/MarkdownPreview/MarkdownPreview'
-import { Row } from '../../common/components/Modal'
-import { RowGapBlock } from '../../common/components/page/PageContent'
-import { Label, TextInlineHuge, TextMedium, TokenValue } from '../../common/components/typography'
-import { Fraction } from '../../common/components/typography/Fraction'
-import { relativeTime } from '../../common/model/relativeTime'
+
 import { WorkingGroupOpening } from '../types'
 
 export type OpeningFormPreviewProps = { opening: WorkingGroupOpening }
