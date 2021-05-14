@@ -12,14 +12,12 @@ import { useMyMemberships } from '../../../../memberships/hooks/useMyMemberships
 
 export function Memberships() {
   const { isLoading, members, active } = useMyMemberships()
-  const count = members.length
-  const hasMemberships = !!count
 
   if (isLoading) {
     return <Loading />
   }
 
-  if (!hasMemberships) {
+  if (!members.length) {
     return (
       <NoMemberships>
         <NoMembershipsInfo>

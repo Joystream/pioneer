@@ -69,7 +69,7 @@ export const WorkingGroupsOpenings = () => {
           <Statistics>
             <StatisticItem title="My Roles">
               {active ? (
-                <MemberRoles member={active} size="l" max={6} />
+                <MemberRoles roles={active.roles} size="l" max={6} />
               ) : (
                 <ButtonPrimary size="small" onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
                   Select membership

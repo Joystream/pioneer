@@ -13,7 +13,15 @@ interface MemberRolesProps {
   wrapable?: boolean
 }
 
+const defaultRole = {
+  groupName: 'Member Role',
+  isLeader: false,
+}
+
 export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) => {
+  if (!roles.length) {
+    roles = [defaultRole]
+  }
   const rolesToDisplay = max ? roles.slice(0, max) : roles
   const hiddenRoles = roles.length - rolesToDisplay.length
 
