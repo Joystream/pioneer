@@ -22,7 +22,7 @@ export const BadgeRed = styled.span<BadgeRedProps>`
   line-height: 16px;
   font-weight: 700;
   text-transform: uppercase;
-  ${Overflow.Dots}
+  ${Overflow.FullDots}
 
   ${({ separated }) =>
     separated &&
