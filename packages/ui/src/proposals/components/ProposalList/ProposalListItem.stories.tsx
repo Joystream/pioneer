@@ -3,8 +3,6 @@ import React from 'react'
 
 import { asMember } from '@/memberships/types'
 import { mockMembers } from '@/mocks/data/mockMembers'
-import { ProposalStages, ProposalTypes } from '@/proposals/constants'
-import { Proposal } from '@/proposals/types'
 
 import { ProposalListItem } from './ProposalListItem'
 
@@ -20,7 +18,7 @@ export const Default = Template.bind({})
 Default.args = {
   id: '1',
   createdAt: '2021-03-29 18:21:06.000000',
-  stage: Object.keys(ProposalStages)[0] as Proposal['stage'],
-  type: Object.keys(ProposalTypes)[0] as Proposal['type'],
+  stage: 'DECIDING',
+  type: 'Founding request',
   proposer: asMember((mockMembers[0] as unknown) as any),
 }

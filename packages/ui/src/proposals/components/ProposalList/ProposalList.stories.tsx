@@ -1,8 +1,10 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
+import { asMember } from '@/memberships/types'
 import { mockMembers } from '@/mocks/data/mockMembers'
-import { ProposalStages, ProposalTypes } from '@/proposals/constants'
+import { ProposalStageKeys } from '@/proposals/constants'
+import { Proposal } from '@/proposals/types'
 
 import { ProposalList } from '.'
 
@@ -16,11 +18,17 @@ const Template: Story<Props> = (args) => <ProposalList {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  proposals: Array(4)
+  proposals: Array<Pick<Proposal, 'createdAt' | 'type' | 'proposer'>>(4)
     .fill({
       createdAt: '2021-03-29 18:21:06.000000',
-      type: Object.keys(ProposalTypes)[0],
-      proposer: mockMembers[0],
+      type: 'Founding request',
+      proposer: asMember((mockMembers[0] as unknown) as any),
     })
-    .map((proposal, index) => ({ ...proposal, id: index, stage: Object.keys(ProposalStages)[index] })),
+    .map(
+      (proposal, index): Proposal => ({
+        ...proposal,
+        id: String(index),
+        stage: ProposalStageKeys[index],
+      })
+    ),
 }
