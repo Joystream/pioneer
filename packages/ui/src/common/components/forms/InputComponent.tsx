@@ -235,7 +235,7 @@ const Textarea = styled.textarea`
   }
 `
 
-const InputElement = styled.div<InputElementProps>`
+export const InputElement = styled.div<InputElementProps>`
   display: grid;
   grid-row-gap: 4px;
   align-items: center;

@@ -2,7 +2,7 @@ import React, { ChangeEvent, useReducer } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '../../../common/components/buttons/Buttons'
-import { InputComponent, InputText, TogglableIcon } from '../../../common/components/forms'
+import { InputComponent, InputElement, InputText, TogglableIcon } from '../../../common/components/forms'
 import { FounderMemberIcon, SearchIcon, VerifiedMemberIcon } from '../../../common/components/icons'
 import { SimpleSelect } from '../../../common/components/selects'
 import { Colors } from '../../../common/constants'
@@ -158,5 +158,10 @@ const Fields = styled.div`
   }
   & > :last-child {
     margin-left: auto;
+  }
+
+  ${InputElement} {
+    min-width: 200px;
+    max-width: 400px;
   }
 `

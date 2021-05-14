@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react'
 
+import { MainPanel } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
 import { MemberRolesList } from '@/memberships/components/MemberRoles'
@@ -38,9 +39,11 @@ export const Members = () => {
       <PageHeader>
         <PageTitle>Members</PageTitle>
       </PageHeader>
-      <MemberListFilters roles={Roles} onApply={setFilter} />
-      <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
-      {!isLoading && pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
+      <MainPanel>
+        <MemberListFilters roles={Roles} onApply={setFilter} />
+        <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
+        {!isLoading && pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
+      </MainPanel>
     </AppPage>
   )
 }
