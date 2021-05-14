@@ -21,11 +21,11 @@ import {
   OpenItemSummaryColumn,
 } from './OpeningAndApplicationsComponents/OACStyledComponents'
 
-interface Props {
+export interface RolesListProps {
   workers: WorkerWithDetails[]
 }
 
-export const RolesList = ({ workers }: Props) => (
+export const RolesList = ({ workers }: RolesListProps) => (
   <List>
     {workers.map((worker) => (
       <ListItem key={worker.group.name + worker.membership.id}>
