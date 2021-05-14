@@ -46,7 +46,7 @@ interface InputElementProps {
   units?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
   borderless?: boolean
-  inputWidth?: 's' | undefined
+  inputWidth?: 's' | 'xs' | undefined
   tight?: boolean
 }
 
@@ -235,12 +235,21 @@ const Textarea = styled.textarea`
   }
 `
 
-const InputElement = styled.div<InputElementProps>`
+export const InputElement = styled.div<InputElementProps>`
   display: grid;
   grid-row-gap: 4px;
   align-items: center;
   width: ${({ tight }) => (tight ? 'fit-content' : '100%')};
-  min-width: ${({ inputWidth }) => (inputWidth === 's' ? '320px' : '400px')};
+  min-width: ${({ inputWidth }) => {
+    switch (inputWidth) {
+      case 's':
+        return '320px'
+      case 'xs':
+        return '200px'
+      default:
+        return '400px'
+    }
+  }};
 `
 
 const InputLabel = styled(Label)<DisabledInputProps>`
