@@ -84,11 +84,12 @@ export const OACItemSummary = styled.div`
 
 export const OACItemTitle = styled.h5`
   text-transform: capitalize;
-  ${Overflow.Dots}
+  ${Overflow.FullDots};
 `
 
 export const OpenedItemTitle = styled.h4`
-  ${Overflow.Dots}
+  text-transform: capitalize;
+  ${Overflow.FullDots}
 `
 
 export const OpenItemSummaryColumn = styled.div`
