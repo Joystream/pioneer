@@ -1,6 +1,7 @@
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat'
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold'
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic'
+import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials'
@@ -12,8 +13,6 @@ import List from '@ckeditor/ckeditor5-list/src/list'
 import Markdown from '@ckeditor/ckeditor5-markdown-gfm/src/markdown'
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice'
-import Table from '@ckeditor/ckeditor5-table/src/table'
-import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar'
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation'
 
 export const MarkdownEditor = ClassicEditor
@@ -25,6 +24,7 @@ ClassicEditor.builtinPlugins = [
   Autoformat,
   Bold,
   Italic,
+  Strikethrough,
   BlockQuote,
   Heading,
   Image,
@@ -33,7 +33,5 @@ ClassicEditor.builtinPlugins = [
   List,
   Paragraph,
   PasteFromOffice,
-  Table,
-  TableToolbar,
   TextTransformation,
 ]

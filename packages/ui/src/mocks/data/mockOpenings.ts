@@ -1,3 +1,5 @@
+import { asWorkingGroupOpening } from '@/working-groups/types'
+
 import rawOpenings from './raw/openings.json'
 
 type OpeningStatusType = 'open' | 'filled' | 'cancelled'
@@ -8,7 +10,7 @@ interface QuestionMock {
 }
 
 interface RawOpeningMock {
-  groupId: number
+  groupId: string
   type: string // 'leader' | 'regular'
   status: string // OpeningStatusType
   stakeAmount: number
@@ -18,15 +20,18 @@ interface RawOpeningMock {
     hiringLimit: number
     expectedEnding: string
     applicationDetails: string
-    applicationFormQuestions?: QuestionMock[]
+    applicationFormQuestions: QuestionMock[]
   }
   unstakingPeriod: number
   rewardPerBlock: number
-  createdAtBlock: number
-  createdAtTime: string
+  createdAtBlockId: string
 }
 
-export const openingsData = rawOpenings.map((rawGroup) => ({ ...rawGroup }))
+export const getMockAsOpening = (index = 0) => {
+  return asWorkingGroupOpening(rawOpenings[index] as any)
+}
+
+export const openingsData = rawOpenings.map((rawOpening) => ({ ...rawOpening }))
 
 const getOpeningStatus = (status: OpeningStatusType, server: any) => {
   let model = 'OpeningStatusFilled'
@@ -42,33 +47,31 @@ const getOpeningStatus = (status: OpeningStatusType, server: any) => {
   return server.schema.find(model, 1)
 }
 
-const seedOpening = (openingData: RawOpeningMock, server: any) => {
-  const metadata = server.schema.create('WorkingGroupOpeningMetadata', openingData.metadata)
+export function seedOpening(openingData: RawOpeningMock, server: any) {
+  const rawMetadata = { ...openingData.metadata }
+  const questions = rawMetadata.applicationFormQuestions
+  rawMetadata.applicationFormQuestions = []
 
-  const opening = {
+  const metadata = server.schema.create('WorkingGroupOpeningMetadata', rawMetadata)
+  const openingStatus = getOpeningStatus(openingData.status as OpeningStatusType, server)
+
+  const opening = server.schema.create('WorkingGroupOpening', {
     ...openingData,
     metadata: metadata,
-    status: getOpeningStatus(openingData.status as OpeningStatusType, server),
-  }
+    status: openingStatus,
+  })
 
-  return server.schema.create('WorkingGroupOpening', opening)
+  for (const question of questions) {
+    server.schema.create('ApplicationFormQuestion', {
+      index: questions.indexOf(question),
+      ...question,
+      openingMetadata: opening.metadata,
+    })
+  }
 }
 
 export const seedOpenings = (server: any) => {
-  openingsData.map((openingData) => {
-    const questions = openingData.metadata.applicationFormQuestions
-    openingData.metadata.applicationFormQuestions = []
-
-    const opening = seedOpening({ ...openingData }, server)
-
-    for (const question of questions) {
-      server.schema.create('ApplicationFormQuestion', {
-        index: questions.indexOf(question),
-        ...question,
-        openingMetadata: opening.metadata,
-      })
-    }
-  })
+  openingsData.map((openingData) => seedOpening(openingData, server))
 }
 
 export const seedOpeningStatuses = (server: any) => {
@@ -79,6 +82,6 @@ export const seedOpeningStatuses = (server: any) => {
     openingFilledEventID: 0,
   })
   server.schema.create('OpeningStatusOpen', {
-    _phantom: 0,
+    phantom: 0,
   })
 }

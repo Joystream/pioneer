@@ -1,29 +1,27 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const cp = require('child_process')
 const path = require('path')
 
-const { styles } = require('@ckeditor/ckeditor5-dev-utils')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
+const shared = require('./dev/webpack.shared')
+
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 
-module.exports = (env, argv) => ({
-  entry: './src',
-  devtool: 'source-map',
-  plugins: [
+module.exports = (env, argv) => {
+  const isDevelopment = argv.mode === 'development'
+  const plugins = [
+    ...shared.plugins,
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
-      IS_DEVELOPMENT: argv.mode === 'development',
-    }),
-    new webpack.ProvidePlugin({
-      Buffer: ['buffer', 'Buffer'],
-      process: 'process/browser.js',
+      IS_DEVELOPMENT: isDevelopment,
     }),
     new CopyPlugin({
       patterns: [
@@ -33,68 +31,53 @@ module.exports = (env, argv) => ({
         },
       ],
     }),
-  ],
-  module: {
-    rules: [
-      {
-        test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
-        use: ['raw-loader'],
-      },
-      {
-        test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              injectType: 'singletonStyleTag',
-              attributes: {
-                'data-cke': true,
-              },
+  ]
+
+  return {
+    entry: './src',
+    devtool: 'source-map',
+    plugins: plugins,
+    module: {
+      rules: [
+        ...shared.rules,
+        {
+          test: /\.js$/,
+          include: /node_modules/,
+          type: 'javascript/auto',
+        },
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: { plugins: [['babel-plugin-styled-components', { displayName: isDevelopment }]] },
             },
-          },
-          {
-            loader: 'postcss-loader',
-            options: styles.getPostCssConfig({
-              themeImporter: {
-                themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
-              },
-              minify: true,
-            }),
-          },
-        ],
-      },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.(png|jpg|gif|woff|woff2|eot|ttf|otf)$/,
-        use: ['file-loader'],
-      },
-      {
-        test: /\.(graphql|gql)$/,
-        exclude: /node_modules/,
-        loader: 'graphql-tag/loader',
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    fallback: {
-      crypto: require.resolve('crypto-browserify'),
-      stream: require.resolve('stream-browserify'),
+          ],
+        },
+        {
+          test: /\.(png|jpg|gif|woff|woff2|eot|ttf|otf)$/,
+          use: ['file-loader'],
+        },
+        {
+          test: /\.(graphql|gql)$/,
+          exclude: /node_modules/,
+          loader: 'graphql-tag/loader',
+        },
+      ],
     },
-  },
-  output: {
-    filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'build'),
-    globalObject: 'this',
-  },
-  devServer: {
-    historyApiFallback: true,
-    host: '0.0.0.0',
-    stats: 'errors-only',
-    overlay: true,
-  },
-})
+    resolve: shared.resolve,
+    output: {
+      filename: '[name].[contenthash].js',
+      path: path.resolve(__dirname, 'build'),
+      globalObject: 'this',
+    },
+    devServer: {
+      historyApiFallback: true,
+      host: '0.0.0.0',
+      stats: 'errors-only',
+      overlay: true,
+    },
+  }
+}

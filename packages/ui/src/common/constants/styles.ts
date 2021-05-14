@@ -103,6 +103,7 @@ export const Fonts = {
 export const Transitions = {
   all: 'all 0.25s ease',
   duration: '0.25s',
+  durationNumeric: 25,
   showResult: '1s',
 }
 
@@ -215,6 +216,12 @@ export const Overflow = {
     overflow: hidden;
   `,
   Dots: `
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  `,
+  FullDots: `
+    max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

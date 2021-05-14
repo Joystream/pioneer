@@ -1,17 +1,18 @@
 import styled from 'styled-components'
 
+import { ToggleButton } from '../../../common/components/buttons/Toggle'
 import { Subscription } from '../../../common/components/typography/Subscription'
 import { Colors, Overflow, Transitions } from '../../../common/constants'
 
 export const OACWrap = styled.div`
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr auto 40px;
   grid-column-gap: 24px;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 94px;
-  padding: 16px 72px 16px 16px;
+  padding: 16px;
   background-color: ${Colors.White};
   transition: ${Transitions.all};
 `
@@ -51,6 +52,9 @@ export const OACItemContainer = styled.div<OpenedItemProps>`
   ${OpenedContainer} {
     max-height: ${({ isOpen }) => (isOpen ? '500px' : '0px')};
   }
+  & + ${ToggleButton} {
+    top: 30px;
+  }
 `
 
 export const OACItemInfo = styled.div`
@@ -79,11 +83,13 @@ export const OACItemSummary = styled.div`
 `
 
 export const OACItemTitle = styled.h5`
-  ${Overflow.Dots}
+  text-transform: capitalize;
+  ${Overflow.FullDots};
 `
 
 export const OpenedItemTitle = styled.h4`
-  ${Overflow.Dots}
+  text-transform: capitalize;
+  ${Overflow.FullDots}
 `
 
 export const OpenItemSummaryColumn = styled.div`
@@ -102,4 +108,8 @@ export const OpenedTop = styled.div`
   grid-template-rows: 26px 28px;
   grid-row-gap: 8px;
   align-items: center;
+`
+
+export const OpeningToggleButton = styled(ToggleButton)`
+  top: 8px;
 `

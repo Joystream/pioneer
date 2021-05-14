@@ -1,5 +1,7 @@
+import { asBlock } from '@/common/types'
+
 import { MemberWithDetailsFragment, useGetMemberQuery } from '../queries'
-import { asBlock, asMember, DetailedMember } from '../types'
+import { asMember, DetailedMember } from '../types'
 
 interface UseMember {
   member?: DetailedMember
@@ -12,14 +14,13 @@ export const asMemberWithDetails = (data: MemberWithDetailsFragment): DetailedMe
     about: '',
     invitedBy: '',
     registeredAtBlock: asBlock(data.registeredAtBlock),
-    registeredAtTime: data.registeredAtTime,
     invitees: [],
   }
 }
 
 export function useMember(memberId?: string): UseMember {
   const options = {
-    variables: { id: memberId ?? '' },
+    variables: { where: { id: memberId ?? '' } },
   }
 
   const { data, loading, error } = useGetMemberQuery(options)
@@ -28,5 +29,8 @@ export function useMember(memberId?: string): UseMember {
     console.error(error)
   }
 
-  return { member: data?.membership ? asMemberWithDetails(data.membership) : undefined, isLoading: loading }
+  return {
+    member: data?.membershipByUniqueInput ? asMemberWithDetails(data.membershipByUniqueInput) : undefined,
+    isLoading: loading,
+  }
 }

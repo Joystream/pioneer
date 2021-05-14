@@ -1,19 +1,20 @@
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 
-import { Account } from '../../../accounts/types'
-import { FailureModal } from '../../../common/components/FailureModal'
-import { TransferIcon } from '../../../common/components/icons'
-import { WaitModal } from '../../../common/components/WaitModal'
-import { useModal } from '../../../common/hooks/useModal'
-import { ModalState } from '../../../common/types'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
+import { Account } from '@/accounts/types'
+import { FailureModal } from '@/common/components/FailureModal'
+import { TransferIcon } from '@/common/components/icons'
+import { WaitModal } from '@/common/components/WaitModal'
+import { useModal } from '@/common/hooks/useModal'
+import { ModalState } from '@/common/types'
+
 import { useMember } from '../../hooks/useMembership'
 import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
 import { Member } from '../../types'
 
 import { TransferInvitesModalCall } from '.'
 import { TransferInviteFormModal } from './TransferInviteFormModal'
-import { TransferInviteRequirementsModal } from './TransferInviteRequirementsModal'
 import { TransferInviteSignModal } from './TransferInviteSignModal'
 import { TransferInviteSuccessModal } from './TransferInviteSuccessModal'
 
@@ -53,7 +54,7 @@ export function TransferInviteModal() {
 
   if (step === 'REQUIREMENTS_FAIL' && transactionFeeInfo) {
     return (
-      <TransferInviteRequirementsModal
+      <InsufficientFundsModal
         onClose={hideModal}
         address={member.controllerAccount}
         amount={transactionFeeInfo.transactionFee}

@@ -1,16 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useToggle } from '../../hooks/useToggle'
-import { Toggle, ToggleButton } from '../buttons/Toggle'
-import { Arrow } from '../icons'
+import { isDefined } from '../../utils'
+import { stopEvent } from '../../utils/events'
+import { Toggle } from '../buttons/Toggle'
 
-import { EmptyOption, SelectComponent, SelectedOption } from './components'
+import { EmptyOption, SelectComponent, SelectedOption, SelectToggleButton } from './components'
 import { SelectProps } from './types'
 
 export const Select = <T extends any>({
   disabled,
   placeholder,
   selected,
+  alwaysShowValue,
+  onNavigate,
   onChange,
   onSearch,
   renderSelected,
@@ -24,7 +27,7 @@ export const Select = <T extends any>({
   const textInput = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    onSearch(search)
+    onSearch?.(search)
   }, [search])
 
   const onOptionClick = useCallback(
@@ -38,7 +41,7 @@ export const Select = <T extends any>({
   )
 
   useEffect(() => {
-    if (selected) {
+    if (isDefined(selected)) {
       setSelectedOption(selected)
       onChange(selected)
     }
@@ -58,7 +61,7 @@ export const Select = <T extends any>({
 
   useEffect(() => {
     const escListener = (event: KeyboardEvent) => {
-      if (isOpen && event.key === 'Escape') {
+      if (isOpen && ['Tab', 'Escape'].includes(event.key)) {
         toggleOpen()
         setFilterInput('')
       }
@@ -72,15 +75,27 @@ export const Select = <T extends any>({
     isOpen && textInput.current?.focus()
   }, [isOpen])
 
-  const onToggleClick = () => {
-    !isOpen && !disabled && toggleOpen()
+  const onToggleClick: React.MouseEventHandler = (evt) => {
+    stopEvent(evt)
+    !disabled && toggleOpen()
+  }
+
+  const onKeyDown: React.KeyboardEventHandler = (evt) => {
+    const { key } = evt
+    if (['ArrowDown', 'ArrowUp', 'Enter'].includes(key)) {
+      // These interaction should open the select when it's closed (and enter should always toggle it)
+      stopEvent(evt)
+      onNavigate?.(evt)
+      ;(!isOpen || key === 'Enter') && toggleOpen()
+    }
   }
 
   return (
-    <SelectComponent ref={selectNode}>
+    <SelectComponent ref={selectNode} tabIndex={-1} onKeyDown={onKeyDown}>
       <Toggle onClick={onToggleClick} isOpen={isOpen} disabled={disabled}>
-        {selectedOption && !isOpen && <SelectedOption>{renderSelected(selectedOption)}</SelectedOption>}
-        {(!selectedOption || isOpen) && (
+        {isDefined(selectedOption) && (alwaysShowValue || !isOpen) ? (
+          <SelectedOption>{renderSelected(selectedOption)}</SelectedOption>
+        ) : (
           <EmptyOption
             ref={textInput}
             type="text"
@@ -91,9 +106,8 @@ export const Select = <T extends any>({
             onChange={(t) => setFilterInput(t.target.value)}
           />
         )}
-        <ToggleButton isOpen={isOpen} className="ui-toggle" disabled={disabled}>
-          <Arrow direction="down" />
-        </ToggleButton>
+
+        <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />
       </Toggle>
       {isOpen && renderList(onOptionClick)}
     </SelectComponent>

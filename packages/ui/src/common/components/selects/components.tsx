@@ -1,7 +1,9 @@
-import React, { ReactNode } from 'react'
+import React, { MouseEventHandler, ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Shadows, Sizes, Transitions } from '../../constants'
+import { ToggleButton } from '../buttons/Toggle'
+import { Arrow } from '../icons'
 
 interface Props {
   children: ReactNode
@@ -24,12 +26,24 @@ export const OptionSectionHeader = ({ children }: OptionSectionHeaderProps) => (
   </OptionComponentContainer>
 )
 
+interface SelectToggleButtonProps {
+  isOpen?: boolean
+  disabled?: boolean
+  onToggleClick: MouseEventHandler
+}
+
+export const SelectToggleButton = ({ isOpen, disabled, onToggleClick }: SelectToggleButtonProps) => (
+  <ToggleButton isOpen={isOpen} className="ui-toggle" disabled={disabled} onClick={onToggleClick}>
+    <Arrow direction="down" />
+  </ToggleButton>
+)
+
 export const SelectedOption = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   align-items: center;
-  padding: 10px 28px 10px 16px;
+  padding: 0 4px 0 16px;
 `
 
 export const EmptyOption = styled.input`
@@ -61,6 +75,19 @@ export const SelectComponent = styled.div`
   width: 100%;
   height: 100%;
   align-items: center;
+
+  &:focus-visible {
+    outline: none;
+  }
+  & > :first-child {
+    border: 1px solid ${Colors.Black[200]};
+    border-radius: 2px;
+  }
+  &:hover > :first-child,
+  &:focus-within > :first-child {
+    border-color: ${Colors.Blue[400]};
+    box-shadow: 0 0 8px rgba(129, 126, 255, 0.4);
+  }
 `
 
 export const OptionComponentContainer = styled.li`
@@ -70,6 +97,12 @@ export const OptionComponentContainer = styled.li`
   border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.s};
   background-color: transparent;
+
+  &:hover {
+    .accountName {
+      color: ${Colors.Blue[500]};
+    }
+  }
 `
 
 export const OptionComponent = styled.div`

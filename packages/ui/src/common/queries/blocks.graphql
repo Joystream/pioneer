@@ -1,0 +1,7 @@
+
+fragment BlockFields on Block {
+  id
+  number
+  timestamp
+  network
+}

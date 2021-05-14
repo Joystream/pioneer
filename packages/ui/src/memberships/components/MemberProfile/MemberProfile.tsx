@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { CloseButton } from '@/common/components/buttons'
+
 import { MemberInfoWrap } from '..'
-import { CloseButton } from '../../../common/components/buttons'
 import { EditSymbol } from '../../../common/components/icons/symbols'
 import {
   SidePane,
@@ -21,6 +22,7 @@ import { MemberInfo } from '../MemberInfo'
 
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
+import { MemberSideRoles } from './MemberRoles'
 import { MemberModalCall } from './types'
 
 type ProfileTabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
@@ -77,7 +79,7 @@ export const MemberProfile = React.memo(() => {
         <SidePaneBody>
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
-          {activeTab === 'ROLES' && <EmptyBody>Roles</EmptyBody>}
+          {activeTab === 'ROLES' && <MemberSideRoles member={member} />}
         </SidePaneBody>
       </SidePane>
     </SidePaneGlass>

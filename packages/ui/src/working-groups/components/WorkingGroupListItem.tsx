@@ -2,7 +2,9 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { ValueInJoys, TextMedium } from '../../common/components/typography'
+import { ButtonBareGhost } from '../../common/components/buttons'
+import { Arrow } from '../../common/components/icons'
+import { TextMedium, ValueInJoys } from '../../common/components/typography'
 import { Subscription } from '../../common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../common/constants'
 import { Avatar, AvatarPlaceholderImage } from '../../memberships/components/Avatar'
@@ -17,14 +19,15 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const history = useHistory()
 
   const { member: leader } = useMember(group.leaderId)
+  const groupAddress = `/working-groups/${group.name.toLowerCase()}`
 
   return (
     <GroupItem>
-      <GroupImageContainer onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>
+      <GroupImageContainer onClick={() => history.push(groupAddress)}>
         {group.image ? <GroupImage src={group.image} /> : <GroupAvatarPlaceholderImage />}
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle onClick={() => history.push(`/working-groups/grouppreview/${group.id}`)}>{group.name}</GroupTitle>
+        <GroupTitle onClick={() => history.push(groupAddress)}>{group.name}</GroupTitle>
         {group.about && <GroupContent>{group.about}</GroupContent>}
       </GroupContentBlock>
       <GroupStats>
@@ -55,31 +58,12 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>WG Leader</Subscription>
         </StatsColumn>
       </GroupStats>
+      <ButtonBareGhost square size="medium" onClick={() => history.push(groupAddress)}>
+        <Arrow direction="right" />
+      </ButtonBareGhost>
     </GroupItem>
   )
 }
-
-const GroupItem = styled.section`
-  display: grid;
-  grid-template-columns: 108px 1fr 1fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 24px;
-  width: 100%;
-  height: 100%;
-  max-height: 108px;
-  align-items: center;
-  padding-right: 32px;
-  border: 1px solid ${Colors.Black[100]};
-  border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
-  overflow: hidden;
-  transition: ${Transitions.all};
-
-  &:hover,
-  &:focus-within {
-    border-color: ${Colors.Blue[100]};
-  }
-`
 
 const GroupAvatarPlaceholderImage = styled(AvatarPlaceholderImage)`
   display: flex;
@@ -112,15 +96,6 @@ const GroupImageContainer = styled.div`
   overflow: hidden;
   cursor: pointer;
   transition: ${Transitions.all};
-
-  &:hover {
-    border-color: ${Colors.Blue[100]};
-
-    ${GroupAvatarPlaceholderImage},
-    ${GroupImage} {
-      transform: scale(1);
-    }
-  }
 `
 
 const GroupContentBlock = styled.article`
@@ -131,14 +106,11 @@ const GroupContentBlock = styled.article`
 `
 
 const GroupTitle = styled.h5`
-  max-width: 100%;
-  ${Overflow.Dots};
+  text-transform: capitalize;
+  ${Overflow.FullDots};
   transition: ${Transitions.all};
   cursor: pointer;
 
-  &:hover {
-    color: ${Colors.Blue[500]};
-  }
   &:active {
     color: ${Colors.Blue[600]};
   }
@@ -184,4 +156,38 @@ const WGLeaderImage = styled.div`
   height: 24px;
   border-radius: ${BorderRad.round};
   overflow: hidden;
+`
+
+const GroupItem = styled.section`
+  display: grid;
+  grid-template-columns: 108px 1fr 1fr 40px;
+  grid-template-rows: 1fr;
+  grid-column-gap: 24px;
+  width: 100%;
+  height: 100%;
+  max-height: 108px;
+  align-items: center;
+  padding-right: 16px;
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
+  background-color: ${Colors.White};
+  overflow: hidden;
+  transition: ${Transitions.all};
+
+  &:hover,
+  &:focus-within {
+    border-color: ${Colors.Blue[100]};
+
+    ${GroupImageContainer} {
+      border-color: ${Colors.Blue[100]};
+
+      ${GroupAvatarPlaceholderImage},
+      ${GroupImage} {
+        transform: scale(1);
+      }
+    }
+    ${GroupTitle} {
+      color: ${Colors.Blue[500]};
+    }
+  }
 `

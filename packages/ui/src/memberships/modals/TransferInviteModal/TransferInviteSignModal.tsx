@@ -5,18 +5,15 @@ import { SelectedAccount } from '../../../accounts/components/SelectAccount'
 import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent } from '../../../common/components/forms'
-import { Help } from '../../../common/components/Help'
 import {
   ModalBody,
   ModalFooter,
   SignTransferContainer,
-  BalanceInfoNarrow,
-  InfoTitle,
-  InfoValue,
-  TransactionInfo,
+  TransactionInfoContainer,
 } from '../../../common/components/Modal'
+import { TransactionInfo } from '../../../common/components/TransactionInfo'
 import { TransactionModal } from '../../../common/components/TransactionModal'
-import { TextMedium, TokenValue } from '../../../common/components/typography'
+import { TextMedium } from '../../../common/components/typography'
 import { useApi } from '../../../common/hooks/useApi'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { formatTokenValue } from '../../../common/model/formatters'
@@ -63,20 +60,13 @@ export function TransferInviteSignModal({ onClose, sourceMember, targetMember, a
         </SignTransferContainer>
       </ModalBody>
       <ModalFooter>
-        <TransactionInfo>
-          <BalanceInfoNarrow>
-            <InfoTitle>Transaction fee:</InfoTitle>
-            <InfoValue>
-              <TokenValue value={fee} />
-            </InfoValue>
-            <Help
-              helperText={
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae.Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
-              }
-              absolute
-            />
-          </BalanceInfoNarrow>
-        </TransactionInfo>
+        <TransactionInfoContainer>
+          <TransactionInfo
+            title="Transaction fee:"
+            value={fee}
+            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+          />
+        </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
           Sign and Send
         </ButtonPrimary>

@@ -4,6 +4,7 @@ import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { MyApplications } from '../../../src/app/pages/WorkingGroups/MyApplications'
+import { Block } from '../../../src/common/types'
 import { WorkingGroupApplication } from '../../../src/working-groups/types/WorkingGroupApplication'
 
 let mockApplications: { isLoading: boolean; applications: WorkingGroupApplication[] }
@@ -12,6 +13,13 @@ jest.mock('../../../src/working-groups/hooks/useMyApplications', () => ({
   useMyApplications: () => mockApplications,
 }))
 
+const block: Block = {
+  id: 'block-1',
+  number: 1,
+  network: 'BABYLON',
+  timestamp: '2021-03-09T10:38:04.155Z',
+}
+
 const currentApplication = {
   id: '1',
   opening: {
@@ -19,7 +27,10 @@ const currentApplication = {
     groupName: 'Storage',
     reward: new BN(200),
   },
+  createdAtBlock: block,
+  createdAt: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusPending',
+  stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
 
 const pastApplication = {
@@ -29,7 +40,10 @@ const pastApplication = {
     groupName: 'Forum',
     reward: new BN(100),
   },
+  createdAtBlock: block,
+  createdAt: '2021-03-09T10:38:04.155Z',
   status: 'ApplicationStatusRejected',
+  stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
 }
 
 describe('UI: MyApplications', () => {

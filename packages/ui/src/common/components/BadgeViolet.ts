@@ -1,10 +1,12 @@
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Overflow } from '../constants'
+import { spacing } from '../utils/styles'
 
 interface BadgeVioletProps {
   inverted?: boolean
   size?: 'm' | 'l'
+  separated?: boolean
 }
 
 export const BadgeViolet = styled.span<BadgeVioletProps>`
@@ -12,6 +14,7 @@ export const BadgeViolet = styled.span<BadgeVioletProps>`
   justify-content: center;
   align-items: center;
   width: fit-content;
+  min-width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   padding: 0 8px;
   border-radius: ${BorderRad.full};
@@ -19,7 +22,21 @@ export const BadgeViolet = styled.span<BadgeVioletProps>`
   line-height: 16px;
   font-weight: 700;
   text-transform: uppercase;
-  ${Overflow.Dots}
+  ${Overflow.FullDots}
+
+  ${({ separated }) =>
+    separated &&
+    css`
+      margin: ${spacing(0, 0.5)};
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+    `};
 
   ${({ inverted }) =>
     inverted

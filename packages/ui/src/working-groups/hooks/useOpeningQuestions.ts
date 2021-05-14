@@ -6,9 +6,9 @@ interface UseOpeningQuestionsParams {
 }
 
 export const useOpeningQuestions = ({ id }: UseOpeningQuestionsParams) => {
-  const { loading, data } = useGetWorkingGroupOpeningQuestionsQuery({ variables: { id } })
+  const { loading, data } = useGetWorkingGroupOpeningQuestionsQuery({ variables: { id: id ?? '' } })
 
-  const opening = data?.workingGroupOpening
+  const opening = data?.workingGroupOpeningByUniqueInput
 
   return {
     isLoading: loading,

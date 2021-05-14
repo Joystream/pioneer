@@ -1,0 +1,44 @@
+import { Meta, Story } from '@storybook/react'
+import React from 'react'
+
+import { TemplateBlock, ModalBlock, WhiteBlock } from '@/common/components/storybookParts/previewStyles'
+
+import { MemberRoleToggle, MemberRoleToggleProps } from './MemberRoleToggle'
+
+export default {
+  title: 'Member/MemberRoleToggle',
+  component: MemberRoleToggle,
+} as Meta
+
+const Template: Story<MemberRoleToggleProps> = (args) => (
+  <TemplateBlock>
+    <ModalBlock>
+      <MemberRoleToggle {...args} />
+    </ModalBlock>
+    <WhiteBlock>
+      <MemberRoleToggle {...args} />
+    </WhiteBlock>
+  </TemplateBlock>
+)
+
+export const Default = Template.bind({})
+Default.args = {
+  role: {
+    earnedTotal: 1000,
+    group: { id: '3', name: 'membership' },
+    isLeader: false,
+    membership: { id: '0' },
+    rewardPerBlock: 13923,
+    stake: 192837021,
+    roleAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    stakeAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    hiredAtBlock: {
+      id: '35',
+      network: 'OLYMPIA',
+      number: 1034,
+      timestamp: '2021-05-13T13:50:23.694Z',
+    },
+    status: 'WorkerStatusActive',
+  },
+}

@@ -5,32 +5,37 @@ import { Icon } from '../../../icons'
 export const MembersIcon = () => (
   <Icon
     size="16"
-    viewBox="0 0 24 24"
+    viewBox="0 0 16 16"
     preserveAspectRatio="xMidYMid meet"
     fill="none"
     color="currentColor"
     className="nav-icon"
   >
-    <path fillRule="evenodd" clipRule="evenodd" d="M20 18H15V20H20V18ZM13 16V22H20.5L22 20.5V16H13Z" fill="#3F38FF" />
     <path
-      className="whitePart"
       fillRule="evenodd"
       clipRule="evenodd"
-      d="M4 6H9V4H4V6ZM11 8V2H3.5L2 3.5V8H11Z"
+      d="M13.3333 12.0003H9.99996V13.3337H13.3333V12.0003ZM8.66663 10.667V14.667H13.6666L14.6666 13.667V10.667H8.66663Z"
       fill="currentColor"
     />
     <path
       className="whitePart"
       fillRule="evenodd"
       clipRule="evenodd"
-      d="M20 4H15V12H20V4ZM13 2V14H22V2H13Z"
+      d="M2.66671 3.99967H6.00004V2.66634H2.66671V3.99967ZM7.33337 5.33301V1.33301H2.33337L1.33337 2.33301V5.33301H7.33337Z"
       fill="currentColor"
     />
     <path
       className="whitePart"
       fillRule="evenodd"
       clipRule="evenodd"
-      d="M9 12H4V20H9V12ZM2 10V22H11V10H2Z"
+      d="M13.3333 2.66634H9.99996V7.99967H13.3333V2.66634ZM8.66663 1.33301V9.33301H14.6666V1.33301H8.66663Z"
+      fill="currentColor"
+    />
+    <path
+      className="whitePart"
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M6.00004 8.00033H2.66671V13.3337H6.00004V8.00033ZM1.33337 6.66699V14.667H7.33337V6.66699H1.33337Z"
       fill="currentColor"
     />
   </Icon>

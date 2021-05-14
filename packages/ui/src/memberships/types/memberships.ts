@@ -1,16 +1,8 @@
-import { Address } from '../../common/types'
+import { WorkerWithDetails } from '@/working-groups/types'
+
+import { Address, Block } from '../../common/types'
 
 type ID = string
-
-export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'OLYMPIA'
-
-export interface Block {
-  id: string
-  block: number
-  network: NetworkType
-}
-
-type MemberRole = 'SL' | 'SP' | 'FL'
 
 export interface Member {
   id: ID
@@ -20,7 +12,7 @@ export interface Member {
   name?: string
   avatar?: string
   inviteCount: number
-  roles: MemberRole[]
+  roles: WorkerWithDetails[]
   isVerified: boolean
   isFoundingMember: boolean
   invitedBy?: ID
@@ -30,6 +22,5 @@ export interface Member {
 export interface DetailedMember extends Member {
   about?: string
   registeredAtBlock: Block
-  registeredAtTime: 'string'
   invitees: Member[]
 }

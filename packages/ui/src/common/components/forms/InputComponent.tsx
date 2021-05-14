@@ -29,14 +29,13 @@ export type InputComponentProps = InputProps &
     children: React.ReactNode
   }
 
-interface InputProps {
+interface InputProps<Element extends HTMLElement = HTMLInputElement> extends React.InputHTMLAttributes<Element> {
   id?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
   required?: boolean
   value?: string
   placeholder?: string
   disabled?: boolean
-  onChange?: (event: any) => void
 }
 
 interface InputElementProps {
@@ -137,24 +136,9 @@ export const InputComponent = React.memo(
   }
 )
 
-export const InputText = React.memo(
-  ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
-    return (
-      <Input
-        id={id}
-        name={id}
-        type="text"
-        value={value}
-        required={required}
-        validation={validation}
-        placeholder={placeholder}
-        disabled={disabled}
-        onChange={onChange}
-        autoComplete="off"
-      />
-    )
-  }
-)
+export const InputText = React.memo((props: InputProps) => {
+  return <Input name={props.id} type="text" autoComplete="off" {...props} />
+})
 
 export const InputNumber = React.memo(
   ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
@@ -175,8 +159,9 @@ export const InputNumber = React.memo(
   }
 )
 
+type TextAreaProps = InputProps<HTMLTextAreaElement & HTMLInputElement>
 export const InputTextarea = React.memo(
-  ({ id, value, required, validation, placeholder, disabled, onChange }: InputProps) => {
+  ({ id, value, required, validation, placeholder, disabled, onChange }: TextAreaProps) => {
     return (
       <Textarea
         id={id}

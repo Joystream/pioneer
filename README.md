@@ -1,4 +1,10 @@
+![Pioneer](https://user-images.githubusercontent.com/247363/116713796-699da780-a9d5-11eb-82b1-a42bccd642d7.png)
+
+
 # Pioneer
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d870546e-6452-42d6-81d2-7a625637d6a4/deploy-status)](https://app.netlify.com/sites/pioneer-2/deploys)
+[![CI](https://github.com/Joystream/pioneer/actions/workflows/CI.yml/badge.svg)](https://github.com/Joystream/pioneer/actions/workflows/CI.yml)
 
 Governance app for Joystream DAO
 

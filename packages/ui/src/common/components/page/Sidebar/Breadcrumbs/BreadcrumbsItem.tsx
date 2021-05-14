@@ -1,32 +1,52 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Colors, Transitions, Fonts } from '../../../../constants'
 
 export interface BreadcrumbsItemProps {
-  href: string
-  text: string
+  url: string
+  children: ReactNode
+  isLink: boolean
 }
 
-export function BreadcrumbsItem({ href, text }: BreadcrumbsItemProps) {
+export const BreadcrumbsItem = React.memo(({ url, children, isLink }: BreadcrumbsItemProps) => {
   return (
     <BreadcrumbsItemComponent>
-      <BreadcrumbsItemLink href={href}>{text}</BreadcrumbsItemLink>
+      {isLink ? (
+        <BreadcrumbsItemLink to={url}>{children}</BreadcrumbsItemLink>
+      ) : (
+        <BreadcrumbsItemText>{children}</BreadcrumbsItemText>
+      )}
     </BreadcrumbsItemComponent>
   )
-}
+})
 
-const BreadcrumbsItemLink = styled.a`
+const BreadcrumbsItemLink = styled(Link)`
+  &,
+  &:visited {
+    color: ${Colors.Black[500]};
+    font-size: 10px;
+    line-height: 16px;
+    font-family: ${Fonts.Inter};
+    text-decoration: none;
+    cursor: pointer;
+    transition: ${Transitions.all};
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      color: ${Colors.Blue[500]};
+    }
+  }
+`
+
+const BreadcrumbsItemText = styled.span`
+  color: ${Colors.Black[400]};
   font-size: 10px;
   line-height: 16px;
-  color: ${Colors.Black[500]};
-  transition: ${Transitions.all};
-  text-decoration: none;
   font-family: ${Fonts.Inter};
-
-  &:hover {
-    color: ${Colors.Blue[500]};
-  }
+  cursor: auto;
+  transition: ${Transitions.all};
 `
 
 const BreadcrumbsItemComponent = styled.li`
@@ -34,7 +54,6 @@ const BreadcrumbsItemComponent = styled.li`
   position: relative;
   align-items: center;
   margin-left: 26px;
-  color: ${Colors.Black[500]};
 
   &:before {
     content: '';
@@ -46,11 +65,5 @@ const BreadcrumbsItemComponent = styled.li`
     border-top: 1px solid ${Colors.Black[300]};
     border-right: 1px solid ${Colors.Black[300]};
     transform: translate(0, -50%) rotate(45deg);
-  }
-
-  &:last-child {
-    ${BreadcrumbsItemLink} {
-      color: ${Colors.Black[400]};
-    }
   }
 `

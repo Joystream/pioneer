@@ -11,13 +11,14 @@ import { ButtonPrimary } from './Buttons'
 interface ToggleableItemProps {
   children: ReactNode | ((isOpen: boolean) => ReactNode)
   absoluteToggle?: boolean
+  className?: string
 }
 
-export const ToggleableItem = ({ children, absoluteToggle }: ToggleableItemProps) => {
+export const ToggleableItem = ({ children, absoluteToggle, className }: ToggleableItemProps) => {
   const [isOpen, toggleOpen] = useToggle()
 
   return (
-    <Toggle isOpen={isOpen} absoluteToggle={absoluteToggle}>
+    <Toggle isOpen={isOpen} absoluteToggle={absoluteToggle} className={className}>
       {isFunction(children) ? children(isOpen) : children}
       <ToggleButton onClick={toggleOpen} absoluteToggle={absoluteToggle} isOpen={isOpen} size="small">
         <Arrow direction="down" />
@@ -37,14 +38,16 @@ const AbsoluteToggleButton = css<ToggleButtonProps>`
   right: 8px;
 `
 
-export const ToggleButton = styled(ButtonPrimary)<ToggleButtonProps>`
+export const ToggleButton = styled(ButtonPrimary)<ToggleButtonProps & { className?: string }>`
   ${({ absoluteToggle }) => {
     if (absoluteToggle) {
       return AbsoluteToggleButton
     }
   }};
   width: 32px;
+  min-width: unset;
   height: 32px;
+  padding: 0;
   background-color: transparent;
   color: ${Colors.Black[900]};
   &,

@@ -7,7 +7,7 @@ import { Account } from '../../../src/accounts/types'
 import { Memberships } from '../../../src/app/pages/Profile/components/Memberships'
 import { MembershipContextProvider } from '../../../src/memberships/providers/membership/provider'
 import { seedMembers } from '../../../src/mocks/data'
-import { alice, bob } from '../../_mocks/keyring'
+import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -25,7 +25,7 @@ jest.mock('../../../src/accounts/hooks/useAccounts', () => {
 describe('UI: Memberships list', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
-    useAccounts.allAccounts.push(alice, bob)
+    useAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
   })
 
   const mockServer = setupMockServer()

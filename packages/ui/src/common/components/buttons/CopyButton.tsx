@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+
+import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 
 import { Colors, Transitions, Animations } from '../../constants'
 import { CopyIcon } from '../icons'
@@ -12,22 +14,17 @@ export interface CopyButtonProps {
 }
 
 export function CopyButton({ textToCopy, className, disabled }: CopyButtonProps) {
-  const [isSuccessfullyCopied, setSuccessfullyCopied] = useState(false)
-  const [isCopyFailure, setCopyFailure] = useState(false)
+  const { copyValue, isSuccessfullyCopied, isCopyFailure, setCopyFailure, setSuccessfullyCopied } = useCopyToClipboard()
 
   return (
     <CopyButtonIcon
       disabled={disabled}
-      onClick={() => {
+      onClick={(evt) => {
+        evt.stopPropagation()
         if (textToCopy && !disabled) {
-          try {
-            navigator.clipboard.writeText(textToCopy)
-            setSuccessfullyCopied(!isSuccessfullyCopied)
-          } catch (error) {
-            setCopyFailure(!isCopyFailure)
-          }
+          copyValue(textToCopy)
         } else if (textToCopy == undefined) {
-          setCopyFailure(!isCopyFailure)
+          setCopyFailure(true)
         }
       }}
       className={className}

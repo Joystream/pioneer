@@ -101,6 +101,7 @@ const ListHeaders = styled.div`
   justify-content: space-between;
   width: 100%;
   padding-left: 16px;
+  padding-right: 8px;
 `
 
 const ListHeader = styled.span`

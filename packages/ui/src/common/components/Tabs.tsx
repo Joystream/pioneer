@@ -70,7 +70,7 @@ const TabsContainer = styled.div<TabsSize>`
   }}
 `
 
-const TabContainer = styled.a<TabActiveProps>`
+const TabContainer = styled.button<TabActiveProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
@@ -82,7 +82,7 @@ const TabContainer = styled.a<TabActiveProps>`
   font-weight: 400;
   color: ${({ active }) => (active ? Colors.Black[900] : Colors.Black[500])};
   text-transform: capitalize;
-  -webkit-text-stroke-width: 0.05em;
+  -webkit-text-stroke-width: ${({ active }) => (active ? '0.05em' : '0em')};
   -webkit-text-stroke-color: ${({ active }) => (active ? Colors.Black[900] : 'transparent')};
   cursor: pointer;
   transition: ${Transitions.all};
@@ -110,23 +110,22 @@ const TabContainer = styled.a<TabActiveProps>`
     }
   }
 
-  &:hover {
+  &:hover,
+  &:focus,
+  &:focus-within {
     color: ${Colors.Blue[500]};
     -webkit-text-stroke-color: ${({ active }) => (active ? Colors.Blue[500] : 'transparent')};
+  }
+  &:active {
+    color: ${Colors.Blue[700]};
+    -webkit-text-stroke-color: ${({ active }) => (active ? Colors.Blue[700] : 'transparent')};
   }
 
   ${({ active }) =>
     active &&
     css`
       &:before {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        width: 100%;
-        height: 2px;
-        background: ${Colors.Blue[500]};
         transform: scaleX(1);
-        transition: ${Transitions.all};
         animation: showTabUnderline ${Transitions.duration};
 
         @keyframes showTabUnderline {

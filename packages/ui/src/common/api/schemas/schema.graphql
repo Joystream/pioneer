@@ -1,3 +1,648 @@
+type ApplicationFormQuestion implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  openingMetadata: WorkingGroupOpeningMetadata!
+  openingMetadataId: String!
+
+  """The question itself"""
+  question: String
+
+  """Type of the question (UI answer input type)"""
+  type: ApplicationFormQuestionType!
+
+  """Index of the question"""
+  index: Int!
+  applicationformquestionanswerquestion: [ApplicationFormQuestionAnswer!]
+}
+
+type ApplicationFormQuestionAnswer implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  application: WorkingGroupApplication!
+  applicationId: String!
+  question: ApplicationFormQuestion!
+  questionId: String!
+
+  """Applicant's answer"""
+  answer: String!
+}
+
+type ApplicationFormQuestionAnswerConnection {
+  totalCount: Int!
+  edges: [ApplicationFormQuestionAnswerEdge!]!
+  pageInfo: PageInfo!
+}
+
+input ApplicationFormQuestionAnswerCreateInput {
+  applicationId: ID!
+  questionId: ID!
+  answer: String!
+}
+
+type ApplicationFormQuestionAnswerEdge {
+  node: ApplicationFormQuestionAnswer!
+  cursor: String!
+}
+
+enum ApplicationFormQuestionAnswerOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  applicationId_ASC
+  applicationId_DESC
+  questionId_ASC
+  questionId_DESC
+  answer_ASC
+  answer_DESC
+}
+
+input ApplicationFormQuestionAnswerUpdateInput {
+  applicationId: ID
+  questionId: ID
+  answer: String
+}
+
+input ApplicationFormQuestionAnswerWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  applicationId_eq: ID
+  applicationId_in: [ID!]
+  questionId_eq: ID
+  questionId_in: [ID!]
+  answer_eq: String
+  answer_contains: String
+  answer_startsWith: String
+  answer_endsWith: String
+  answer_in: [String!]
+}
+
+input ApplicationFormQuestionAnswerWhereUniqueInput {
+  id: ID!
+}
+
+type ApplicationFormQuestionConnection {
+  totalCount: Int!
+  edges: [ApplicationFormQuestionEdge!]!
+  pageInfo: PageInfo!
+}
+
+input ApplicationFormQuestionCreateInput {
+  openingMetadataId: ID!
+  question: String
+  type: ApplicationFormQuestionType!
+  index: Float!
+}
+
+type ApplicationFormQuestionEdge {
+  node: ApplicationFormQuestion!
+  cursor: String!
+}
+
+enum ApplicationFormQuestionOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  openingMetadataId_ASC
+  openingMetadataId_DESC
+  question_ASC
+  question_DESC
+  type_ASC
+  type_DESC
+  index_ASC
+  index_DESC
+}
+
+enum ApplicationFormQuestionType {
+  TEXT
+  TEXTAREA
+}
+
+input ApplicationFormQuestionUpdateInput {
+  openingMetadataId: ID
+  question: String
+  type: ApplicationFormQuestionType
+  index: Float
+}
+
+input ApplicationFormQuestionWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  openingMetadataId_eq: ID
+  openingMetadataId_in: [ID!]
+  question_eq: String
+  question_contains: String
+  question_startsWith: String
+  question_endsWith: String
+  question_in: [String!]
+  type_eq: ApplicationFormQuestionType
+  type_in: [ApplicationFormQuestionType!]
+  index_eq: Int
+  index_gt: Int
+  index_gte: Int
+  index_lt: Int
+  index_lte: Int
+  index_in: [Int!]
+}
+
+input ApplicationFormQuestionWhereUniqueInput {
+  id: ID!
+}
+
+type ApplicationStatusAccepted {
+  openingFilledEventId: String!
+}
+
+input ApplicationStatusAcceptedCreateInput {
+  openingFilledEventId: String!
+}
+
+input ApplicationStatusAcceptedUpdateInput {
+  openingFilledEventId: String
+}
+
+input ApplicationStatusAcceptedWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  openingFilledEventId_eq: String
+  openingFilledEventId_contains: String
+  openingFilledEventId_startsWith: String
+  openingFilledEventId_endsWith: String
+  openingFilledEventId_in: [String!]
+}
+
+input ApplicationStatusAcceptedWhereUniqueInput {
+  id: ID!
+}
+
+type ApplicationStatusCancelled {
+  openingCancelledEventId: String!
+}
+
+input ApplicationStatusCancelledCreateInput {
+  openingCancelledEventId: String!
+}
+
+input ApplicationStatusCancelledUpdateInput {
+  openingCancelledEventId: String
+}
+
+input ApplicationStatusCancelledWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  openingCancelledEventId_eq: String
+  openingCancelledEventId_contains: String
+  openingCancelledEventId_startsWith: String
+  openingCancelledEventId_endsWith: String
+  openingCancelledEventId_in: [String!]
+}
+
+input ApplicationStatusCancelledWhereUniqueInput {
+  id: ID!
+}
+
+type ApplicationStatusPending {
+  phantom: Int
+}
+
+input ApplicationStatusPendingCreateInput {
+  phantom: Float
+}
+
+input ApplicationStatusPendingUpdateInput {
+  phantom: Float
+}
+
+input ApplicationStatusPendingWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  phantom_eq: Int
+  phantom_gt: Int
+  phantom_gte: Int
+  phantom_lt: Int
+  phantom_lte: Int
+  phantom_in: [Int!]
+}
+
+input ApplicationStatusPendingWhereUniqueInput {
+  id: ID!
+}
+
+type ApplicationStatusRejected {
+  openingFilledEventId: String!
+}
+
+input ApplicationStatusRejectedCreateInput {
+  openingFilledEventId: String!
+}
+
+input ApplicationStatusRejectedUpdateInput {
+  openingFilledEventId: String
+}
+
+input ApplicationStatusRejectedWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  openingFilledEventId_eq: String
+  openingFilledEventId_contains: String
+  openingFilledEventId_startsWith: String
+  openingFilledEventId_endsWith: String
+  openingFilledEventId_in: [String!]
+}
+
+input ApplicationStatusRejectedWhereUniqueInput {
+  id: ID!
+}
+
+type ApplicationStatusWithdrawn {
+  applicationWithdrawnEventId: String!
+}
+
+input ApplicationStatusWithdrawnCreateInput {
+  applicationWithdrawnEventId: String!
+}
+
+input ApplicationStatusWithdrawnUpdateInput {
+  applicationWithdrawnEventId: String
+}
+
+input ApplicationStatusWithdrawnWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  applicationWithdrawnEventId_eq: String
+  applicationWithdrawnEventId_contains: String
+  applicationWithdrawnEventId_startsWith: String
+  applicationWithdrawnEventId_endsWith: String
+  applicationWithdrawnEventId_in: [String!]
+}
+
+input ApplicationStatusWithdrawnWhereUniqueInput {
+  id: ID!
+}
+
+type ApplicationWithdrawnEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  application: WorkingGroupApplication!
+  applicationId: String!
+}
+
+type ApplicationWithdrawnEventConnection {
+  totalCount: Int!
+  edges: [ApplicationWithdrawnEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input ApplicationWithdrawnEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  applicationId: ID!
+}
+
+type ApplicationWithdrawnEventEdge {
+  node: ApplicationWithdrawnEvent!
+  cursor: String!
+}
+
+enum ApplicationWithdrawnEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  applicationId_ASC
+  applicationId_DESC
+}
+
+input ApplicationWithdrawnEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  applicationId: ID
+}
+
+input ApplicationWithdrawnEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  applicationId_eq: ID
+  applicationId_in: [ID!]
+}
+
+input ApplicationWithdrawnEventWhereUniqueInput {
+  id: ID!
+}
+
+type AppliedOnOpeningEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  opening: WorkingGroupOpening!
+  openingId: String!
+  application: WorkingGroupApplication!
+  applicationId: String!
+}
+
+type AppliedOnOpeningEventConnection {
+  totalCount: Int!
+  edges: [AppliedOnOpeningEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input AppliedOnOpeningEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  openingId: ID!
+  applicationId: ID!
+}
+
+type AppliedOnOpeningEventEdge {
+  node: AppliedOnOpeningEvent!
+  cursor: String!
+}
+
+enum AppliedOnOpeningEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  openingId_ASC
+  openingId_DESC
+  applicationId_ASC
+  applicationId_DESC
+}
+
+input AppliedOnOpeningEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  openingId: ID
+  applicationId: ID
+}
+
+input AppliedOnOpeningEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  openingId_eq: ID
+  openingId_in: [ID!]
+  applicationId_eq: ID
+  applicationId_in: [ID!]
+}
+
+input AppliedOnOpeningEventWhereUniqueInput {
+  id: ID!
+}
+
 interface BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -67,10 +712,23 @@ type Block implements BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
-  block: Int!
-  executedAt: DateTime!
+
+  """Block number (height)"""
+  number: Int!
+
+  """Block timestamp"""
+  timestamp: BigInt!
+
+  """Network the block was produced in"""
   network: Network!
+  eventinBlock: [Event!]
   membershipregisteredAtBlock: [Membership!]
+  membershipsystemsnapshotsnapshotBlock: [MembershipSystemSnapshot!]
+  upcomingworkinggroupopeningcreatedAtBlock: [UpcomingWorkingGroupOpening!]
+  workerhiredAtBlock: [Worker!]
+  workinggroupapplicationcreatedAtBlock: [WorkingGroupApplication!]
+  workinggroupmetadatasetAtBlock: [WorkingGroupMetadata!]
+  workinggroupopeningcreatedAtBlock: [WorkingGroupOpening!]
 }
 
 type BlockConnection {
@@ -80,8 +738,8 @@ type BlockConnection {
 }
 
 input BlockCreateInput {
-  block: Float!
-  executedAt: DateTime!
+  number: Float!
+  timestamp: BigInt!
   network: Network!
 }
 
@@ -97,17 +755,17 @@ enum BlockOrderByInput {
   updatedAt_DESC
   deletedAt_ASC
   deletedAt_DESC
-  block_ASC
-  block_DESC
-  executedAt_ASC
-  executedAt_DESC
+  number_ASC
+  number_DESC
+  timestamp_ASC
+  timestamp_DESC
   network_ASC
   network_DESC
 }
 
 input BlockUpdateInput {
-  block: Float
-  executedAt: DateTime
+  number: Float
+  timestamp: BigInt
   network: Network
 }
 
@@ -136,22 +794,676 @@ input BlockWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
-  block_eq: Int
-  block_gt: Int
-  block_gte: Int
-  block_lt: Int
-  block_lte: Int
-  block_in: [Int!]
-  executedAt_eq: DateTime
-  executedAt_lt: DateTime
-  executedAt_lte: DateTime
-  executedAt_gt: DateTime
-  executedAt_gte: DateTime
+  number_eq: Int
+  number_gt: Int
+  number_gte: Int
+  number_lt: Int
+  number_lte: Int
+  number_in: [Int!]
+  timestamp_eq: BigInt
+  timestamp_gt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lt: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
   network_eq: Network
   network_in: [Network!]
 }
 
 input BlockWhereUniqueInput {
+  id: ID!
+}
+
+type BudgetSetEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+
+  """New working group budget"""
+  newBudget: BigInt!
+}
+
+type BudgetSetEventConnection {
+  totalCount: Int!
+  edges: [BudgetSetEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BudgetSetEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  newBudget: BigInt!
+}
+
+type BudgetSetEventEdge {
+  node: BudgetSetEvent!
+  cursor: String!
+}
+
+enum BudgetSetEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  newBudget_ASC
+  newBudget_DESC
+}
+
+input BudgetSetEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  newBudget: BigInt
+}
+
+input BudgetSetEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  newBudget_eq: BigInt
+  newBudget_gt: BigInt
+  newBudget_gte: BigInt
+  newBudget_lt: BigInt
+  newBudget_lte: BigInt
+  newBudget_in: [BigInt!]
+}
+
+input BudgetSetEventWhereUniqueInput {
+  id: ID!
+}
+
+type BudgetSpendingEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+
+  """Reciever account address"""
+  reciever: String!
+
+  """Amount beeing spent"""
+  amount: BigInt!
+
+  """Optional rationale"""
+  rationale: String
+}
+
+type BudgetSpendingEventConnection {
+  totalCount: Int!
+  edges: [BudgetSpendingEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input BudgetSpendingEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  reciever: String!
+  amount: BigInt!
+  rationale: String
+}
+
+type BudgetSpendingEventEdge {
+  node: BudgetSpendingEvent!
+  cursor: String!
+}
+
+enum BudgetSpendingEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  reciever_ASC
+  reciever_DESC
+  amount_ASC
+  amount_DESC
+  rationale_ASC
+  rationale_DESC
+}
+
+input BudgetSpendingEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  reciever: String
+  amount: BigInt
+  rationale: String
+}
+
+input BudgetSpendingEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  reciever_eq: String
+  reciever_contains: String
+  reciever_startsWith: String
+  reciever_endsWith: String
+  reciever_in: [String!]
+  amount_eq: BigInt
+  amount_gt: BigInt
+  amount_gte: BigInt
+  amount_lt: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  rationale_eq: String
+  rationale_contains: String
+  rationale_startsWith: String
+  rationale_endsWith: String
+  rationale_in: [String!]
+}
+
+input BudgetSpendingEventWhereUniqueInput {
+  id: ID!
+}
+
+"""Manages content ids, type and storage provider decision about it"""
+type DataObject implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """Content owner"""
+  owner: DataObjectOwner!
+
+  """Content added at"""
+  addedAt: Int!
+
+  """Content type id"""
+  typeId: Int!
+
+  """Content size in bytes"""
+  size: BigInt!
+
+  """Storage provider id of the liaison"""
+  liaisonId: BigInt!
+
+  """Storage provider as liaison judgment"""
+  liaisonJudgement: LiaisonJudgement!
+
+  """IPFS content id"""
+  ipfsContentId: String!
+
+  """Joystream runtime content"""
+  joystreamContentId: String!
+  membermetadataavatar: [MemberMetadata!]
+}
+
+type DataObjectConnection {
+  totalCount: Int!
+  edges: [DataObjectEdge!]!
+  pageInfo: PageInfo!
+}
+
+input DataObjectCreateInput {
+  owner: JSONObject!
+  addedAt: Float!
+  typeId: Float!
+  size: BigInt!
+  liaisonId: BigInt!
+  liaisonJudgement: LiaisonJudgement!
+  ipfsContentId: String!
+  joystreamContentId: String!
+}
+
+type DataObjectEdge {
+  node: DataObject!
+  cursor: String!
+}
+
+enum DataObjectOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  addedAt_ASC
+  addedAt_DESC
+  typeId_ASC
+  typeId_DESC
+  size_ASC
+  size_DESC
+  liaisonId_ASC
+  liaisonId_DESC
+  liaisonJudgement_ASC
+  liaisonJudgement_DESC
+  ipfsContentId_ASC
+  ipfsContentId_DESC
+  joystreamContentId_ASC
+  joystreamContentId_DESC
+}
+
+union DataObjectOwner = DataObjectOwnerMember | DataObjectOwnerChannel | DataObjectOwnerDao | DataObjectOwnerCouncil | DataObjectOwnerWorkingGroup
+
+type DataObjectOwnerChannel {
+  """Channel identifier"""
+  channel: BigInt!
+
+  """Variant needs to have at least one property. This value is not used."""
+  dummy: Int
+}
+
+input DataObjectOwnerChannelCreateInput {
+  channel: BigInt!
+  dummy: Float
+}
+
+input DataObjectOwnerChannelUpdateInput {
+  channel: BigInt
+  dummy: Float
+}
+
+input DataObjectOwnerChannelWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  channel_eq: BigInt
+  channel_gt: BigInt
+  channel_gte: BigInt
+  channel_lt: BigInt
+  channel_lte: BigInt
+  channel_in: [BigInt!]
+  dummy_eq: Int
+  dummy_gt: Int
+  dummy_gte: Int
+  dummy_lt: Int
+  dummy_lte: Int
+  dummy_in: [Int!]
+}
+
+input DataObjectOwnerChannelWhereUniqueInput {
+  id: ID!
+}
+
+type DataObjectOwnerCouncil {
+  """Variant needs to have at least one property. This value is not used."""
+  dummy: Int
+}
+
+input DataObjectOwnerCouncilCreateInput {
+  dummy: Float
+}
+
+input DataObjectOwnerCouncilUpdateInput {
+  dummy: Float
+}
+
+input DataObjectOwnerCouncilWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  dummy_eq: Int
+  dummy_gt: Int
+  dummy_gte: Int
+  dummy_lt: Int
+  dummy_lte: Int
+  dummy_in: [Int!]
+}
+
+input DataObjectOwnerCouncilWhereUniqueInput {
+  id: ID!
+}
+
+type DataObjectOwnerDao {
+  """DAO identifier"""
+  dao: BigInt!
+}
+
+input DataObjectOwnerDaoCreateInput {
+  dao: BigInt!
+}
+
+input DataObjectOwnerDaoUpdateInput {
+  dao: BigInt
+}
+
+input DataObjectOwnerDaoWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  dao_eq: BigInt
+  dao_gt: BigInt
+  dao_gte: BigInt
+  dao_lt: BigInt
+  dao_lte: BigInt
+  dao_in: [BigInt!]
+}
+
+input DataObjectOwnerDaoWhereUniqueInput {
+  id: ID!
+}
+
+type DataObjectOwnerMember {
+  """Member identifier"""
+  member: BigInt!
+
+  """Variant needs to have at least one property. This value is not used."""
+  dummy: Int
+}
+
+input DataObjectOwnerMemberCreateInput {
+  member: BigInt!
+  dummy: Float
+}
+
+input DataObjectOwnerMemberUpdateInput {
+  member: BigInt
+  dummy: Float
+}
+
+input DataObjectOwnerMemberWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  member_eq: BigInt
+  member_gt: BigInt
+  member_gte: BigInt
+  member_lt: BigInt
+  member_lte: BigInt
+  member_in: [BigInt!]
+  dummy_eq: Int
+  dummy_gt: Int
+  dummy_gte: Int
+  dummy_lt: Int
+  dummy_lte: Int
+  dummy_in: [Int!]
+}
+
+input DataObjectOwnerMemberWhereUniqueInput {
+  id: ID!
+}
+
+type DataObjectOwnerWorkingGroup {
+  """Variant needs to have at least one property. This value is not used."""
+  dummy: Int
+}
+
+input DataObjectOwnerWorkingGroupCreateInput {
+  dummy: Float
+}
+
+input DataObjectOwnerWorkingGroupUpdateInput {
+  dummy: Float
+}
+
+input DataObjectOwnerWorkingGroupWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  dummy_eq: Int
+  dummy_gt: Int
+  dummy_gte: Int
+  dummy_lt: Int
+  dummy_lte: Int
+  dummy_in: [Int!]
+}
+
+input DataObjectOwnerWorkingGroupWhereUniqueInput {
+  id: ID!
+}
+
+input DataObjectUpdateInput {
+  owner: JSONObject
+  addedAt: Float
+  typeId: Float
+  size: BigInt
+  liaisonId: BigInt
+  liaisonJudgement: LiaisonJudgement
+  ipfsContentId: String
+  joystreamContentId: String
+}
+
+input DataObjectWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  owner_json: JSONObject
+  addedAt_eq: Int
+  addedAt_gt: Int
+  addedAt_gte: Int
+  addedAt_lt: Int
+  addedAt_lte: Int
+  addedAt_in: [Int!]
+  typeId_eq: Int
+  typeId_gt: Int
+  typeId_gte: Int
+  typeId_lt: Int
+  typeId_lte: Int
+  typeId_in: [Int!]
+  size_eq: BigInt
+  size_gt: BigInt
+  size_gte: BigInt
+  size_lt: BigInt
+  size_lte: BigInt
+  size_in: [BigInt!]
+  liaisonId_eq: BigInt
+  liaisonId_gt: BigInt
+  liaisonId_gte: BigInt
+  liaisonId_lt: BigInt
+  liaisonId_lte: BigInt
+  liaisonId_in: [BigInt!]
+  liaisonJudgement_eq: LiaisonJudgement
+  liaisonJudgement_in: [LiaisonJudgement!]
+  ipfsContentId_eq: String
+  ipfsContentId_contains: String
+  ipfsContentId_startsWith: String
+  ipfsContentId_endsWith: String
+  ipfsContentId_in: [String!]
+  joystreamContentId_eq: String
+  joystreamContentId_contains: String
+  joystreamContentId_startsWith: String
+  joystreamContentId_endsWith: String
+  joystreamContentId_in: [String!]
+}
+
+input DataObjectWhereUniqueInput {
   id: ID!
 }
 
@@ -161,6 +1473,1263 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 interface DeleteResponse {
+  id: ID!
+}
+
+type Event implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """Hash of the extrinsic which caused the event to be emitted"""
+  inExtrinsic: String
+  inBlock: Block!
+  inBlockId: String!
+
+  """Index of event in block from which it was emitted."""
+  indexInBlock: Int!
+
+  """Type of the event"""
+  type: EventType!
+  applicationwithdrawneventevent: [ApplicationWithdrawnEvent!]
+  appliedonopeningeventevent: [AppliedOnOpeningEvent!]
+  budgetseteventevent: [BudgetSetEvent!]
+  budgetspendingeventevent: [BudgetSpendingEvent!]
+  initialinvitationbalanceupdatedeventevent: [InitialInvitationBalanceUpdatedEvent!]
+  initialinvitationcountupdatedeventevent: [InitialInvitationCountUpdatedEvent!]
+  invitestransferredeventevent: [InvitesTransferredEvent!]
+  leaderinvitationquotaupdatedeventevent: [LeaderInvitationQuotaUpdatedEvent!]
+  leaderseteventevent: [LeaderSetEvent!]
+  leaderunseteventevent: [LeaderUnsetEvent!]
+  memberaccountsupdatedeventevent: [MemberAccountsUpdatedEvent!]
+  memberinvitedeventevent: [MemberInvitedEvent!]
+  memberprofileupdatedeventevent: [MemberProfileUpdatedEvent!]
+  memberverificationstatusupdatedeventevent: [MemberVerificationStatusUpdatedEvent!]
+  membershipboughteventevent: [MembershipBoughtEvent!]
+  membershippriceupdatedeventevent: [MembershipPriceUpdatedEvent!]
+  newmissedrewardlevelreachedeventevent: [NewMissedRewardLevelReachedEvent!]
+  openingaddedeventevent: [OpeningAddedEvent!]
+  openingcanceledeventevent: [OpeningCanceledEvent!]
+  openingfilledeventevent: [OpeningFilledEvent!]
+  referralcutupdatedeventevent: [ReferralCutUpdatedEvent!]
+  rewardpaideventevent: [RewardPaidEvent!]
+  stakedecreasedeventevent: [StakeDecreasedEvent!]
+  stakeincreasedeventevent: [StakeIncreasedEvent!]
+  stakeslashedeventevent: [StakeSlashedEvent!]
+  stakingaccountaddedeventevent: [StakingAccountAddedEvent!]
+  stakingaccountconfirmedeventevent: [StakingAccountConfirmedEvent!]
+  stakingaccountremovedeventevent: [StakingAccountRemovedEvent!]
+  statustextchangedeventevent: [StatusTextChangedEvent!]
+  terminatedleadereventevent: [TerminatedLeaderEvent!]
+  terminatedworkereventevent: [TerminatedWorkerEvent!]
+  workerexitedeventevent: [WorkerExitedEvent!]
+  workerrewardaccountupdatedeventevent: [WorkerRewardAccountUpdatedEvent!]
+  workerrewardamountupdatedeventevent: [WorkerRewardAmountUpdatedEvent!]
+  workerroleaccountupdatedeventevent: [WorkerRoleAccountUpdatedEvent!]
+  workerstartedleavingeventevent: [WorkerStartedLeavingEvent!]
+}
+
+type EventConnection {
+  totalCount: Int!
+  edges: [EventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input EventCreateInput {
+  inExtrinsic: String
+  inBlockId: ID!
+  indexInBlock: Float!
+  type: EventType!
+}
+
+type EventEdge {
+  node: Event!
+  cursor: String!
+}
+
+enum EventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlockId_ASC
+  inBlockId_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  type_ASC
+  type_DESC
+}
+
+enum EventType {
+  MembershipBought
+  MemberInvited
+  MemberProfileUpdated
+  MemberAccountsUpdated
+  MemberVerificationStatusUpdated
+  ReferralCutUpdated
+  InvitesTransferred
+  MembershipPriceUpdated
+  InitialInvitationBalanceUpdated
+  LeaderInvitationQuotaUpdated
+  InitialInvitationCountUpdated
+  StakingAccountAddedEvent
+  StakingAccountConfirmed
+  StakingAccountRemoved
+  OpeningAdded
+  AppliedOnOpening
+  OpeningFilled
+  LeaderSet
+  WorkerRoleAccountUpdated
+  LeaderUnset
+  WorkerExited
+  TerminatedWorker
+  TerminatedLeader
+  WorkerStartedLeaving
+  StakeSlashed
+  StakeDecreased
+  StakeIncreased
+  ApplicationWithdrawn
+  OpeningCanceled
+  BudgetSet
+  WorkerRewardAccountUpdated
+  WorkerRewardAmountUpdated
+  StatusTextChanged
+  BudgetSpending
+  RewardPaid
+  NewMissedRewardLevelReached
+}
+
+input EventUpdateInput {
+  inExtrinsic: String
+  inBlockId: ID
+  indexInBlock: Float
+  type: EventType
+}
+
+input EventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlockId_eq: ID
+  inBlockId_in: [ID!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  type_eq: EventType
+  type_in: [EventType!]
+}
+
+input EventWhereUniqueInput {
+  id: ID!
+}
+
+type InitialInvitationBalanceUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+
+  """New initial invitation balance."""
+  newInitialBalance: BigInt!
+}
+
+type InitialInvitationBalanceUpdatedEventConnection {
+  totalCount: Int!
+  edges: [InitialInvitationBalanceUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input InitialInvitationBalanceUpdatedEventCreateInput {
+  eventId: ID!
+  newInitialBalance: BigInt!
+}
+
+type InitialInvitationBalanceUpdatedEventEdge {
+  node: InitialInvitationBalanceUpdatedEvent!
+  cursor: String!
+}
+
+enum InitialInvitationBalanceUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  newInitialBalance_ASC
+  newInitialBalance_DESC
+}
+
+input InitialInvitationBalanceUpdatedEventUpdateInput {
+  eventId: ID
+  newInitialBalance: BigInt
+}
+
+input InitialInvitationBalanceUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  newInitialBalance_eq: BigInt
+  newInitialBalance_gt: BigInt
+  newInitialBalance_gte: BigInt
+  newInitialBalance_lt: BigInt
+  newInitialBalance_lte: BigInt
+  newInitialBalance_in: [BigInt!]
+}
+
+input InitialInvitationBalanceUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
+type InitialInvitationCountUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+
+  """New initial invitation count for members."""
+  newInitialInvitationCount: Int!
+}
+
+type InitialInvitationCountUpdatedEventConnection {
+  totalCount: Int!
+  edges: [InitialInvitationCountUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input InitialInvitationCountUpdatedEventCreateInput {
+  eventId: ID!
+  newInitialInvitationCount: Float!
+}
+
+type InitialInvitationCountUpdatedEventEdge {
+  node: InitialInvitationCountUpdatedEvent!
+  cursor: String!
+}
+
+enum InitialInvitationCountUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  newInitialInvitationCount_ASC
+  newInitialInvitationCount_DESC
+}
+
+input InitialInvitationCountUpdatedEventUpdateInput {
+  eventId: ID
+  newInitialInvitationCount: Float
+}
+
+input InitialInvitationCountUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  newInitialInvitationCount_eq: Int
+  newInitialInvitationCount_gt: Int
+  newInitialInvitationCount_gte: Int
+  newInitialInvitationCount_lt: Int
+  newInitialInvitationCount_lte: Int
+  newInitialInvitationCount_in: [Int!]
+}
+
+input InitialInvitationCountUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
+type InvalidActionMetadata {
+  """Reason why the action metadata was considered invalid"""
+  reason: String!
+}
+
+input InvalidActionMetadataCreateInput {
+  reason: String!
+}
+
+input InvalidActionMetadataUpdateInput {
+  reason: String
+}
+
+input InvalidActionMetadataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  reason_eq: String
+  reason_contains: String
+  reason_startsWith: String
+  reason_endsWith: String
+  reason_in: [String!]
+}
+
+input InvalidActionMetadataWhereUniqueInput {
+  id: ID!
+}
+
+type InvitesTransferredEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  sourceMember: Membership!
+  sourceMemberId: String!
+  targetMember: Membership!
+  targetMemberId: String!
+
+  """Number of invites transferred."""
+  numberOfInvites: Int!
+}
+
+type InvitesTransferredEventConnection {
+  totalCount: Int!
+  edges: [InvitesTransferredEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input InvitesTransferredEventCreateInput {
+  eventId: ID!
+  sourceMemberId: ID!
+  targetMemberId: ID!
+  numberOfInvites: Float!
+}
+
+type InvitesTransferredEventEdge {
+  node: InvitesTransferredEvent!
+  cursor: String!
+}
+
+enum InvitesTransferredEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  sourceMemberId_ASC
+  sourceMemberId_DESC
+  targetMemberId_ASC
+  targetMemberId_DESC
+  numberOfInvites_ASC
+  numberOfInvites_DESC
+}
+
+input InvitesTransferredEventUpdateInput {
+  eventId: ID
+  sourceMemberId: ID
+  targetMemberId: ID
+  numberOfInvites: Float
+}
+
+input InvitesTransferredEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  sourceMemberId_eq: ID
+  sourceMemberId_in: [ID!]
+  targetMemberId_eq: ID
+  targetMemberId_in: [ID!]
+  numberOfInvites_eq: Int
+  numberOfInvites_gt: Int
+  numberOfInvites_gte: Int
+  numberOfInvites_lt: Int
+  numberOfInvites_lte: Int
+  numberOfInvites_in: [Int!]
+}
+
+input InvitesTransferredEventWhereUniqueInput {
+  id: ID!
+}
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
+type LeaderInvitationQuotaUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+
+  """New quota."""
+  newInvitationQuota: Int!
+}
+
+type LeaderInvitationQuotaUpdatedEventConnection {
+  totalCount: Int!
+  edges: [LeaderInvitationQuotaUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input LeaderInvitationQuotaUpdatedEventCreateInput {
+  eventId: ID!
+  newInvitationQuota: Float!
+}
+
+type LeaderInvitationQuotaUpdatedEventEdge {
+  node: LeaderInvitationQuotaUpdatedEvent!
+  cursor: String!
+}
+
+enum LeaderInvitationQuotaUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  newInvitationQuota_ASC
+  newInvitationQuota_DESC
+}
+
+input LeaderInvitationQuotaUpdatedEventUpdateInput {
+  eventId: ID
+  newInvitationQuota: Float
+}
+
+input LeaderInvitationQuotaUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  newInvitationQuota_eq: Int
+  newInvitationQuota_gt: Int
+  newInvitationQuota_gte: Int
+  newInvitationQuota_lt: Int
+  newInvitationQuota_lte: Int
+  newInvitationQuota_in: [Int!]
+}
+
+input LeaderInvitationQuotaUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
+type LeaderSetEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker
+  workerId: String
+}
+
+type LeaderSetEventConnection {
+  totalCount: Int!
+  edges: [LeaderSetEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input LeaderSetEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID
+}
+
+type LeaderSetEventEdge {
+  node: LeaderSetEvent!
+  cursor: String!
+}
+
+enum LeaderSetEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+}
+
+input LeaderSetEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+}
+
+input LeaderSetEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+}
+
+input LeaderSetEventWhereUniqueInput {
+  id: ID!
+}
+
+type LeaderUnsetEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  leader: Worker!
+  leaderId: String!
+}
+
+type LeaderUnsetEventConnection {
+  totalCount: Int!
+  edges: [LeaderUnsetEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input LeaderUnsetEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  leaderId: ID!
+}
+
+type LeaderUnsetEventEdge {
+  node: LeaderUnsetEvent!
+  cursor: String!
+}
+
+enum LeaderUnsetEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  leaderId_ASC
+  leaderId_DESC
+}
+
+input LeaderUnsetEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  leaderId: ID
+}
+
+input LeaderUnsetEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  leaderId_eq: ID
+  leaderId_in: [ID!]
+}
+
+input LeaderUnsetEventWhereUniqueInput {
+  id: ID!
+}
+
+enum LiaisonJudgement {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+type MemberAccountsUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  member: Membership!
+  memberId: String!
+
+  """
+  New member root account in SS58 encoding. Null means no new value was provided.
+  """
+  newRootAccount: String
+
+  """
+  New member controller in SS58 encoding. Null means no new value was provided.
+  """
+  newControllerAccount: String
+}
+
+type MemberAccountsUpdatedEventConnection {
+  totalCount: Int!
+  edges: [MemberAccountsUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MemberAccountsUpdatedEventCreateInput {
+  eventId: ID!
+  memberId: ID!
+  newRootAccount: String
+  newControllerAccount: String
+}
+
+type MemberAccountsUpdatedEventEdge {
+  node: MemberAccountsUpdatedEvent!
+  cursor: String!
+}
+
+enum MemberAccountsUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  memberId_ASC
+  memberId_DESC
+  newRootAccount_ASC
+  newRootAccount_DESC
+  newControllerAccount_ASC
+  newControllerAccount_DESC
+}
+
+input MemberAccountsUpdatedEventUpdateInput {
+  eventId: ID
+  memberId: ID
+  newRootAccount: String
+  newControllerAccount: String
+}
+
+input MemberAccountsUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  memberId_eq: ID
+  memberId_in: [ID!]
+  newRootAccount_eq: String
+  newRootAccount_contains: String
+  newRootAccount_startsWith: String
+  newRootAccount_endsWith: String
+  newRootAccount_in: [String!]
+  newControllerAccount_eq: String
+  newControllerAccount_contains: String
+  newControllerAccount_startsWith: String
+  newControllerAccount_endsWith: String
+  newControllerAccount_in: [String!]
+}
+
+input MemberAccountsUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
+type MemberInvitedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  invitingMember: Membership!
+  invitingMemberId: String!
+  newMember: Membership!
+  newMemberId: String!
+
+  """New member root account in SS58 encoding."""
+  rootAccount: String!
+
+  """New member controller in SS58 encoding."""
+  controllerAccount: String!
+
+  """New member handle."""
+  handle: String!
+  metadata: MemberMetadata!
+  metadataId: String!
+}
+
+type MemberInvitedEventConnection {
+  totalCount: Int!
+  edges: [MemberInvitedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MemberInvitedEventCreateInput {
+  eventId: ID!
+  invitingMemberId: ID!
+  newMemberId: ID!
+  rootAccount: String!
+  controllerAccount: String!
+  handle: String!
+  metadataId: ID!
+}
+
+type MemberInvitedEventEdge {
+  node: MemberInvitedEvent!
+  cursor: String!
+}
+
+enum MemberInvitedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  invitingMemberId_ASC
+  invitingMemberId_DESC
+  newMemberId_ASC
+  newMemberId_DESC
+  rootAccount_ASC
+  rootAccount_DESC
+  controllerAccount_ASC
+  controllerAccount_DESC
+  handle_ASC
+  handle_DESC
+  metadataId_ASC
+  metadataId_DESC
+}
+
+input MemberInvitedEventUpdateInput {
+  eventId: ID
+  invitingMemberId: ID
+  newMemberId: ID
+  rootAccount: String
+  controllerAccount: String
+  handle: String
+  metadataId: ID
+}
+
+input MemberInvitedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  invitingMemberId_eq: ID
+  invitingMemberId_in: [ID!]
+  newMemberId_eq: ID
+  newMemberId_in: [ID!]
+  rootAccount_eq: String
+  rootAccount_contains: String
+  rootAccount_startsWith: String
+  rootAccount_endsWith: String
+  rootAccount_in: [String!]
+  controllerAccount_eq: String
+  controllerAccount_contains: String
+  controllerAccount_startsWith: String
+  controllerAccount_endsWith: String
+  controllerAccount_in: [String!]
+  handle_eq: String
+  handle_contains: String
+  handle_startsWith: String
+  handle_endsWith: String
+  handle_in: [String!]
+  metadataId_eq: ID
+  metadataId_in: [ID!]
+}
+
+input MemberInvitedEventWhereUniqueInput {
+  id: ID!
+}
+
+type MemberMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """Member's name"""
+  name: String
+  avatar: DataObject
+  avatarId: String
+
+  """Short text chosen by member to share information about themselves"""
+  about: String
+  memberinvitedeventmetadata: [MemberInvitedEvent!]
+  memberprofileupdatedeventnewMetadata: [MemberProfileUpdatedEvent!]
+  membershipmetadata: [Membership!]
+  membershipboughteventmetadata: [MembershipBoughtEvent!]
+}
+
+type MemberMetadataConnection {
+  totalCount: Int!
+  edges: [MemberMetadataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MemberMetadataCreateInput {
+  name: String
+  avatarId: ID
+  about: String
+}
+
+type MemberMetadataEdge {
+  node: MemberMetadata!
+  cursor: String!
+}
+
+enum MemberMetadataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  name_ASC
+  name_DESC
+  avatarId_ASC
+  avatarId_DESC
+  about_ASC
+  about_DESC
+}
+
+input MemberMetadataUpdateInput {
+  name: String
+  avatarId: ID
+  about: String
+}
+
+input MemberMetadataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  name_eq: String
+  name_contains: String
+  name_startsWith: String
+  name_endsWith: String
+  name_in: [String!]
+  avatarId_eq: ID
+  avatarId_in: [ID!]
+  about_eq: String
+  about_contains: String
+  about_startsWith: String
+  about_endsWith: String
+  about_in: [String!]
+}
+
+input MemberMetadataWhereUniqueInput {
+  id: ID!
+}
+
+type MemberProfileUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  member: Membership!
+  memberId: String!
+
+  """New member handle. Null means no new value was provided."""
+  newHandle: String
+  newMetadata: MemberMetadata!
+  newMetadataId: String!
+}
+
+type MemberProfileUpdatedEventConnection {
+  totalCount: Int!
+  edges: [MemberProfileUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MemberProfileUpdatedEventCreateInput {
+  eventId: ID!
+  memberId: ID!
+  newHandle: String
+  newMetadataId: ID!
+}
+
+type MemberProfileUpdatedEventEdge {
+  node: MemberProfileUpdatedEvent!
+  cursor: String!
+}
+
+enum MemberProfileUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  memberId_ASC
+  memberId_DESC
+  newHandle_ASC
+  newHandle_DESC
+  newMetadataId_ASC
+  newMetadataId_DESC
+}
+
+input MemberProfileUpdatedEventUpdateInput {
+  eventId: ID
+  memberId: ID
+  newHandle: String
+  newMetadataId: ID
+}
+
+input MemberProfileUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  memberId_eq: ID
+  memberId_in: [ID!]
+  newHandle_eq: String
+  newHandle_contains: String
+  newHandle_startsWith: String
+  newHandle_endsWith: String
+  newHandle_in: [String!]
+  newMetadataId_eq: ID
+  newMetadataId_in: [ID!]
+}
+
+input MemberProfileUpdatedEventWhereUniqueInput {
   id: ID!
 }
 
@@ -186,15 +2755,8 @@ type Membership implements BaseGraphQLObject {
 
   """The unique handle chosen by member"""
   handle: String!
-
-  """Member's name"""
-  name: String
-
-  """A Url to member's Avatar image"""
-  avatarUri: String
-
-  """Short text chosen by member to share information about themselves"""
-  about: String
+  metadata: MemberMetadata!
+  metadataId: String!
 
   """Member's controller account id"""
   controllerAccount: String!
@@ -213,9 +2775,6 @@ type Membership implements BaseGraphQLObject {
   """Whether member has been verified by membership working group."""
   isVerified: Boolean!
 
-  """Whether member has been verified by membership working group."""
-  isFoundingMember: Boolean!
-
   """Staking accounts bounded to membership."""
   boundAccounts: [String!]!
 
@@ -227,78 +2786,26 @@ type Membership implements BaseGraphQLObject {
   referredMembers: [Membership!]!
   referredBy: Membership
   referredById: String
+
+  """Whether member is founding member."""
+  isFoundingMember: Boolean!
+  roles: [Worker!]!
+  invitestransferredeventsourceMember: [InvitesTransferredEvent!]
+  invitestransferredeventtargetMember: [InvitesTransferredEvent!]
+  memberaccountsupdatedeventmember: [MemberAccountsUpdatedEvent!]
+  memberinvitedeventinvitingMember: [MemberInvitedEvent!]
+  memberinvitedeventnewMember: [MemberInvitedEvent!]
+  memberprofileupdatedeventmember: [MemberProfileUpdatedEvent!]
+  memberverificationstatusupdatedeventmember: [MemberVerificationStatusUpdatedEvent!]
+  membershipboughteventnewMember: [MembershipBoughtEvent!]
+  membershipboughteventreferrer: [MembershipBoughtEvent!]
+  stakingaccountaddedeventmember: [StakingAccountAddedEvent!]
+  stakingaccountconfirmedeventmember: [StakingAccountConfirmedEvent!]
+  stakingaccountremovedeventmember: [StakingAccountRemovedEvent!]
+  workinggroupapplicationapplicant: [WorkingGroupApplication!]
 }
 
-type MembershipConnection {
-  totalCount: Int!
-  edges: [MembershipEdge!]!
-  pageInfo: PageInfo!
-}
-
-input MembershipCreateInput {
-  handle: String!
-  name: String
-  avatarUri: String
-  about: String
-  controllerAccount: String!
-  rootAccount: String!
-  registeredAtBlockId: ID!
-  registeredAtTime: DateTime!
-  entry: MembershipEntryMethod!
-  isVerified: Boolean!
-  boundAccounts: [String!]!
-  inviteCount: Float!
-  invitedById: ID
-  referredById: ID
-}
-
-type MembershipEdge {
-  node: Membership!
-  cursor: String!
-}
-
-enum MembershipEntryMethod {
-  PAID
-  INVITED
-  GENESIS
-}
-
-enum MembershipOrderByInput {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  deletedAt_ASC
-  deletedAt_DESC
-  handle_ASC
-  handle_DESC
-  name_ASC
-  name_DESC
-  avatarUri_ASC
-  avatarUri_DESC
-  about_ASC
-  about_DESC
-  controllerAccount_ASC
-  controllerAccount_DESC
-  rootAccount_ASC
-  rootAccount_DESC
-  registeredAtBlockId_ASC
-  registeredAtBlockId_DESC
-  registeredAtTime_ASC
-  registeredAtTime_DESC
-  entry_ASC
-  entry_DESC
-  isVerified_ASC
-  isVerified_DESC
-  inviteCount_ASC
-  inviteCount_DESC
-  invitedById_ASC
-  invitedById_DESC
-  referredById_ASC
-  referredById_DESC
-}
-
-type MembershipSystem implements BaseGraphQLObject {
+type MembershipBoughtEvent implements BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
   createdById: String!
@@ -307,65 +2814,80 @@ type MembershipSystem implements BaseGraphQLObject {
   deletedAt: DateTime
   deletedById: String
   version: Int!
+  event: Event!
+  eventId: String!
+  newMember: Membership!
+  newMemberId: String!
 
-  """Initial invitation count of a new member."""
-  defaultInviteCount: Int!
+  """New member root account in SS58 encoding."""
+  rootAccount: String!
 
-  """Current price to buy a membership."""
-  membershipPrice: BigInt!
+  """New member controller in SS58 encoding."""
+  controllerAccount: String!
 
-  """Amount of tokens diverted to invitor."""
-  referralCut: BigInt!
-
-  """
-  The initial, locked, balance credited to controller account of invitee.
-  """
-  invitedInitialBalance: BigInt!
+  """New member handle."""
+  handle: String!
+  metadata: MemberMetadata!
+  metadataId: String!
+  referrer: Membership
+  referrerId: String
 }
 
-type MembershipSystemConnection {
+type MembershipBoughtEventConnection {
   totalCount: Int!
-  edges: [MembershipSystemEdge!]!
+  edges: [MembershipBoughtEventEdge!]!
   pageInfo: PageInfo!
 }
 
-input MembershipSystemCreateInput {
-  defaultInviteCount: Float!
-  membershipPrice: BigInt!
-  referralCut: BigInt!
-  invitedInitialBalance: BigInt!
+input MembershipBoughtEventCreateInput {
+  eventId: ID!
+  newMemberId: ID!
+  rootAccount: String!
+  controllerAccount: String!
+  handle: String!
+  metadataId: ID!
+  referrerId: ID
 }
 
-type MembershipSystemEdge {
-  node: MembershipSystem!
+type MembershipBoughtEventEdge {
+  node: MembershipBoughtEvent!
   cursor: String!
 }
 
-enum MembershipSystemOrderByInput {
+enum MembershipBoughtEventOrderByInput {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
   deletedAt_ASC
   deletedAt_DESC
-  defaultInviteCount_ASC
-  defaultInviteCount_DESC
-  membershipPrice_ASC
-  membershipPrice_DESC
-  referralCut_ASC
-  referralCut_DESC
-  invitedInitialBalance_ASC
-  invitedInitialBalance_DESC
+  eventId_ASC
+  eventId_DESC
+  newMemberId_ASC
+  newMemberId_DESC
+  rootAccount_ASC
+  rootAccount_DESC
+  controllerAccount_ASC
+  controllerAccount_DESC
+  handle_ASC
+  handle_DESC
+  metadataId_ASC
+  metadataId_DESC
+  referrerId_ASC
+  referrerId_DESC
 }
 
-input MembershipSystemUpdateInput {
-  defaultInviteCount: Float
-  membershipPrice: BigInt
-  referralCut: BigInt
-  invitedInitialBalance: BigInt
+input MembershipBoughtEventUpdateInput {
+  eventId: ID
+  newMemberId: ID
+  rootAccount: String
+  controllerAccount: String
+  handle: String
+  metadataId: ID
+  referrerId: ID
 }
 
-input MembershipSystemWhereInput {
+input MembershipBoughtEventWhereInput {
   id_eq: ID
   id_in: [ID!]
   createdAt_eq: DateTime
@@ -390,6 +2912,302 @@ input MembershipSystemWhereInput {
   deletedAt_gte: DateTime
   deletedById_eq: ID
   deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  newMemberId_eq: ID
+  newMemberId_in: [ID!]
+  rootAccount_eq: String
+  rootAccount_contains: String
+  rootAccount_startsWith: String
+  rootAccount_endsWith: String
+  rootAccount_in: [String!]
+  controllerAccount_eq: String
+  controllerAccount_contains: String
+  controllerAccount_startsWith: String
+  controllerAccount_endsWith: String
+  controllerAccount_in: [String!]
+  handle_eq: String
+  handle_contains: String
+  handle_startsWith: String
+  handle_endsWith: String
+  handle_in: [String!]
+  metadataId_eq: ID
+  metadataId_in: [ID!]
+  referrerId_eq: ID
+  referrerId_in: [ID!]
+}
+
+input MembershipBoughtEventWhereUniqueInput {
+  id: ID!
+}
+
+type MembershipConnection {
+  totalCount: Int!
+  edges: [MembershipEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MembershipCreateInput {
+  handle: String!
+  metadataId: ID!
+  controllerAccount: String!
+  rootAccount: String!
+  registeredAtBlockId: ID!
+  registeredAtTime: DateTime!
+  entry: MembershipEntryMethod!
+  isVerified: Boolean!
+  boundAccounts: [String!]!
+  inviteCount: Float!
+  invitedById: ID
+  referredById: ID
+  isFoundingMember: Boolean!
+}
+
+type MembershipEdge {
+  node: Membership!
+  cursor: String!
+}
+
+enum MembershipEntryMethod {
+  PAID
+  INVITED
+  GENESIS
+}
+
+enum MembershipOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  handle_ASC
+  handle_DESC
+  metadataId_ASC
+  metadataId_DESC
+  controllerAccount_ASC
+  controllerAccount_DESC
+  rootAccount_ASC
+  rootAccount_DESC
+  registeredAtBlockId_ASC
+  registeredAtBlockId_DESC
+  registeredAtTime_ASC
+  registeredAtTime_DESC
+  entry_ASC
+  entry_DESC
+  isVerified_ASC
+  isVerified_DESC
+  inviteCount_ASC
+  inviteCount_DESC
+  invitedById_ASC
+  invitedById_DESC
+  referredById_ASC
+  referredById_DESC
+  isFoundingMember_ASC
+  isFoundingMember_DESC
+}
+
+type MembershipPriceUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+
+  """The new membership price."""
+  newPrice: BigInt!
+}
+
+type MembershipPriceUpdatedEventConnection {
+  totalCount: Int!
+  edges: [MembershipPriceUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MembershipPriceUpdatedEventCreateInput {
+  eventId: ID!
+  newPrice: BigInt!
+}
+
+type MembershipPriceUpdatedEventEdge {
+  node: MembershipPriceUpdatedEvent!
+  cursor: String!
+}
+
+enum MembershipPriceUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  newPrice_ASC
+  newPrice_DESC
+}
+
+input MembershipPriceUpdatedEventUpdateInput {
+  eventId: ID
+  newPrice: BigInt
+}
+
+input MembershipPriceUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  newPrice_eq: BigInt
+  newPrice_gt: BigInt
+  newPrice_gte: BigInt
+  newPrice_lt: BigInt
+  newPrice_lte: BigInt
+  newPrice_in: [BigInt!]
+}
+
+input MembershipPriceUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
+type MembershipSystemSnapshot implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  snapshotBlock: Block!
+  snapshotBlockId: String!
+
+  """Time of the snapshot (based on block timestamp)"""
+  snapshotTime: DateTime!
+
+  """Initial invitation count of a new member."""
+  defaultInviteCount: Int!
+
+  """Current price to buy a membership."""
+  membershipPrice: BigInt!
+
+  """Percentage of tokens diverted to invitor."""
+  referralCut: Int!
+
+  """
+  The initial, locked, balance credited to controller account of invitee.
+  """
+  invitedInitialBalance: BigInt!
+}
+
+type MembershipSystemSnapshotConnection {
+  totalCount: Int!
+  edges: [MembershipSystemSnapshotEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MembershipSystemSnapshotCreateInput {
+  snapshotBlockId: ID!
+  snapshotTime: DateTime!
+  defaultInviteCount: Float!
+  membershipPrice: BigInt!
+  referralCut: Float!
+  invitedInitialBalance: BigInt!
+}
+
+type MembershipSystemSnapshotEdge {
+  node: MembershipSystemSnapshot!
+  cursor: String!
+}
+
+enum MembershipSystemSnapshotOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  snapshotBlockId_ASC
+  snapshotBlockId_DESC
+  snapshotTime_ASC
+  snapshotTime_DESC
+  defaultInviteCount_ASC
+  defaultInviteCount_DESC
+  membershipPrice_ASC
+  membershipPrice_DESC
+  referralCut_ASC
+  referralCut_DESC
+  invitedInitialBalance_ASC
+  invitedInitialBalance_DESC
+}
+
+input MembershipSystemSnapshotUpdateInput {
+  snapshotBlockId: ID
+  snapshotTime: DateTime
+  defaultInviteCount: Float
+  membershipPrice: BigInt
+  referralCut: Float
+  invitedInitialBalance: BigInt
+}
+
+input MembershipSystemSnapshotWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  snapshotBlockId_eq: ID
+  snapshotBlockId_in: [ID!]
+  snapshotTime_eq: DateTime
+  snapshotTime_lt: DateTime
+  snapshotTime_lte: DateTime
+  snapshotTime_gt: DateTime
+  snapshotTime_gte: DateTime
   defaultInviteCount_eq: Int
   defaultInviteCount_gt: Int
   defaultInviteCount_gte: Int
@@ -402,12 +3220,12 @@ input MembershipSystemWhereInput {
   membershipPrice_lt: BigInt
   membershipPrice_lte: BigInt
   membershipPrice_in: [BigInt!]
-  referralCut_eq: BigInt
-  referralCut_gt: BigInt
-  referralCut_gte: BigInt
-  referralCut_lt: BigInt
-  referralCut_lte: BigInt
-  referralCut_in: [BigInt!]
+  referralCut_eq: Int
+  referralCut_gt: Int
+  referralCut_gte: Int
+  referralCut_lt: Int
+  referralCut_lte: Int
+  referralCut_in: [Int!]
   invitedInitialBalance_eq: BigInt
   invitedInitialBalance_gt: BigInt
   invitedInitialBalance_gte: BigInt
@@ -416,15 +3234,13 @@ input MembershipSystemWhereInput {
   invitedInitialBalance_in: [BigInt!]
 }
 
-input MembershipSystemWhereUniqueInput {
+input MembershipSystemSnapshotWhereUniqueInput {
   id: ID!
 }
 
 input MembershipUpdateInput {
   handle: String
-  name: String
-  avatarUri: String
-  about: String
+  metadataId: ID
   controllerAccount: String
   rootAccount: String
   registeredAtBlockId: ID
@@ -435,6 +3251,7 @@ input MembershipUpdateInput {
   inviteCount: Float
   invitedById: ID
   referredById: ID
+  isFoundingMember: Boolean
 }
 
 input MembershipWhereInput {
@@ -467,21 +3284,8 @@ input MembershipWhereInput {
   handle_startsWith: String
   handle_endsWith: String
   handle_in: [String!]
-  name_eq: String
-  name_contains: String
-  name_startsWith: String
-  name_endsWith: String
-  name_in: [String!]
-  avatarUri_eq: String
-  avatarUri_contains: String
-  avatarUri_startsWith: String
-  avatarUri_endsWith: String
-  avatarUri_in: [String!]
-  about_eq: String
-  about_contains: String
-  about_startsWith: String
-  about_endsWith: String
-  about_in: [String!]
+  metadataId_eq: ID
+  metadataId_in: [ID!]
   controllerAccount_eq: String
   controllerAccount_contains: String
   controllerAccount_startsWith: String
@@ -513,26 +3317,8 @@ input MembershipWhereInput {
   invitedById_in: [ID!]
   referredById_eq: ID
   referredById_in: [ID!]
-}
-
-input WorkingGroupOpeningsWhereInput {
-  group_eq: ID
-}
-
-input WorkingGroupApplicationsWhereInput {
-  applicant_in: [ID!]
-}
-
-input WorkersWhereInput {
-  group_eq: ID
-}
-
-input WorkingGroupWhereUniqueInput {
-  id: ID
-}
-
-input WorkingGroupOpeningWhereUniqueInput {
-  id: ID
+  isFoundingMember_eq: Boolean
+  isFoundingMember_in: [Boolean!]
 }
 
 input MembershipWhereUniqueInput {
@@ -540,11 +3326,639 @@ input MembershipWhereUniqueInput {
   handle: String
 }
 
+type MemberVerificationStatusUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  member: Membership!
+  memberId: String!
+  worker: Worker!
+  workerId: String!
+
+  """New status."""
+  isVerified: Boolean!
+}
+
+type MemberVerificationStatusUpdatedEventConnection {
+  totalCount: Int!
+  edges: [MemberVerificationStatusUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input MemberVerificationStatusUpdatedEventCreateInput {
+  eventId: ID!
+  memberId: ID!
+  workerId: ID!
+  isVerified: Boolean!
+}
+
+type MemberVerificationStatusUpdatedEventEdge {
+  node: MemberVerificationStatusUpdatedEvent!
+  cursor: String!
+}
+
+enum MemberVerificationStatusUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  memberId_ASC
+  memberId_DESC
+  workerId_ASC
+  workerId_DESC
+  isVerified_ASC
+  isVerified_DESC
+}
+
+input MemberVerificationStatusUpdatedEventUpdateInput {
+  eventId: ID
+  memberId: ID
+  workerId: ID
+  isVerified: Boolean
+}
+
+input MemberVerificationStatusUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  memberId_eq: ID
+  memberId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  isVerified_eq: Boolean
+  isVerified_in: [Boolean!]
+}
+
+input MemberVerificationStatusUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
 enum Network {
   BABYLON
   ALEXANDRIA
   ROME
   OLYMPIA
+}
+
+type NewMissedRewardLevelReachedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """New missed reward amount"""
+  newMissedRewardAmount: BigInt!
+}
+
+type NewMissedRewardLevelReachedEventConnection {
+  totalCount: Int!
+  edges: [NewMissedRewardLevelReachedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input NewMissedRewardLevelReachedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  newMissedRewardAmount: BigInt!
+}
+
+type NewMissedRewardLevelReachedEventEdge {
+  node: NewMissedRewardLevelReachedEvent!
+  cursor: String!
+}
+
+enum NewMissedRewardLevelReachedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  newMissedRewardAmount_ASC
+  newMissedRewardAmount_DESC
+}
+
+input NewMissedRewardLevelReachedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  newMissedRewardAmount: BigInt
+}
+
+input NewMissedRewardLevelReachedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  newMissedRewardAmount_eq: BigInt
+  newMissedRewardAmount_gt: BigInt
+  newMissedRewardAmount_gte: BigInt
+  newMissedRewardAmount_lt: BigInt
+  newMissedRewardAmount_lte: BigInt
+  newMissedRewardAmount_in: [BigInt!]
+}
+
+input NewMissedRewardLevelReachedEventWhereUniqueInput {
+  id: ID!
+}
+
+type OpeningAddedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  opening: WorkingGroupOpening!
+  openingId: String!
+}
+
+type OpeningAddedEventConnection {
+  totalCount: Int!
+  edges: [OpeningAddedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OpeningAddedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  openingId: ID!
+}
+
+type OpeningAddedEventEdge {
+  node: OpeningAddedEvent!
+  cursor: String!
+}
+
+enum OpeningAddedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  openingId_ASC
+  openingId_DESC
+}
+
+input OpeningAddedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  openingId: ID
+}
+
+input OpeningAddedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  openingId_eq: ID
+  openingId_in: [ID!]
+}
+
+input OpeningAddedEventWhereUniqueInput {
+  id: ID!
+}
+
+type OpeningCanceledEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  opening: WorkingGroupOpening!
+  openingId: String!
+}
+
+type OpeningCanceledEventConnection {
+  totalCount: Int!
+  edges: [OpeningCanceledEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OpeningCanceledEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  openingId: ID!
+}
+
+type OpeningCanceledEventEdge {
+  node: OpeningCanceledEvent!
+  cursor: String!
+}
+
+enum OpeningCanceledEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  openingId_ASC
+  openingId_DESC
+}
+
+input OpeningCanceledEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  openingId: ID
+}
+
+input OpeningCanceledEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  openingId_eq: ID
+  openingId_in: [ID!]
+}
+
+input OpeningCanceledEventWhereUniqueInput {
+  id: ID!
+}
+
+type OpeningFilledEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  opening: WorkingGroupOpening!
+  openingId: String!
+  workersHired: [Worker!]!
+}
+
+type OpeningFilledEventConnection {
+  totalCount: Int!
+  edges: [OpeningFilledEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input OpeningFilledEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  openingId: ID!
+}
+
+type OpeningFilledEventEdge {
+  node: OpeningFilledEvent!
+  cursor: String!
+}
+
+enum OpeningFilledEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  openingId_ASC
+  openingId_DESC
+}
+
+input OpeningFilledEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  openingId: ID
+}
+
+input OpeningFilledEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  openingId_eq: ID
+  openingId_in: [ID!]
+}
+
+input OpeningFilledEventWhereUniqueInput {
+  id: ID!
+}
+
+type OpeningStatusCancelled {
+  openingCancelledEventId: String!
+}
+
+input OpeningStatusCancelledCreateInput {
+  openingCancelledEventId: String!
+}
+
+input OpeningStatusCancelledUpdateInput {
+  openingCancelledEventId: String
+}
+
+input OpeningStatusCancelledWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  openingCancelledEventId_eq: String
+  openingCancelledEventId_contains: String
+  openingCancelledEventId_startsWith: String
+  openingCancelledEventId_endsWith: String
+  openingCancelledEventId_in: [String!]
+}
+
+input OpeningStatusCancelledWhereUniqueInput {
+  id: ID!
+}
+
+type OpeningStatusFilled {
+  openingFilledEventId: String!
+}
+
+input OpeningStatusFilledCreateInput {
+  openingFilledEventId: String!
+}
+
+input OpeningStatusFilledUpdateInput {
+  openingFilledEventId: String
+}
+
+input OpeningStatusFilledWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  openingFilledEventId_eq: String
+  openingFilledEventId_contains: String
+  openingFilledEventId_startsWith: String
+  openingFilledEventId_endsWith: String
+  openingFilledEventId_in: [String!]
+}
+
+input OpeningStatusFilledWhereUniqueInput {
+  id: ID!
+}
+
+type OpeningStatusOpen {
+  phantom: Int
+}
+
+input OpeningStatusOpenCreateInput {
+  phantom: Float
+}
+
+input OpeningStatusOpenUpdateInput {
+  phantom: Float
+}
+
+input OpeningStatusOpenWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  phantom_eq: Int
+  phantom_gt: Int
+  phantom_gte: Int
+  phantom_lt: Int
+  phantom_lte: Int
+  phantom_in: [Int!]
+}
+
+input OpeningStatusOpenWhereUniqueInput {
+  id: ID!
 }
 
 type PageInfo {
@@ -562,66 +3976,1115 @@ type ProcessorState {
 }
 
 type Query {
+  applicationFormQuestionAnswers(offset: Int, limit: Int = 50, where: ApplicationFormQuestionAnswerWhereInput, orderBy: ApplicationFormQuestionAnswerOrderByInput): [ApplicationFormQuestionAnswer!]!
+  applicationFormQuestionAnswerByUniqueInput(where: ApplicationFormQuestionAnswerWhereUniqueInput!): ApplicationFormQuestionAnswer
+  applicationFormQuestionAnswersConnection(first: Int, after: String, last: Int, before: String, where: ApplicationFormQuestionAnswerWhereInput, orderBy: ApplicationFormQuestionAnswerOrderByInput): ApplicationFormQuestionAnswerConnection!
+  applicationFormQuestions(offset: Int, limit: Int = 50, where: ApplicationFormQuestionWhereInput, orderBy: ApplicationFormQuestionOrderByInput): [ApplicationFormQuestion!]!
+  applicationFormQuestionByUniqueInput(where: ApplicationFormQuestionWhereUniqueInput!): ApplicationFormQuestion
+  applicationFormQuestionsConnection(first: Int, after: String, last: Int, before: String, where: ApplicationFormQuestionWhereInput, orderBy: ApplicationFormQuestionOrderByInput): ApplicationFormQuestionConnection!
+  applicationWithdrawnEvents(offset: Int, limit: Int = 50, where: ApplicationWithdrawnEventWhereInput, orderBy: ApplicationWithdrawnEventOrderByInput): [ApplicationWithdrawnEvent!]!
+  applicationWithdrawnEventByUniqueInput(where: ApplicationWithdrawnEventWhereUniqueInput!): ApplicationWithdrawnEvent
+  applicationWithdrawnEventsConnection(first: Int, after: String, last: Int, before: String, where: ApplicationWithdrawnEventWhereInput, orderBy: ApplicationWithdrawnEventOrderByInput): ApplicationWithdrawnEventConnection!
+  appliedOnOpeningEvents(offset: Int, limit: Int = 50, where: AppliedOnOpeningEventWhereInput, orderBy: AppliedOnOpeningEventOrderByInput): [AppliedOnOpeningEvent!]!
+  appliedOnOpeningEventByUniqueInput(where: AppliedOnOpeningEventWhereUniqueInput!): AppliedOnOpeningEvent
+  appliedOnOpeningEventsConnection(first: Int, after: String, last: Int, before: String, where: AppliedOnOpeningEventWhereInput, orderBy: AppliedOnOpeningEventOrderByInput): AppliedOnOpeningEventConnection!
   blocks(offset: Int, limit: Int = 50, where: BlockWhereInput, orderBy: BlockOrderByInput): [Block!]!
-  block(where: BlockWhereUniqueInput!): Block
+  blockByUniqueInput(where: BlockWhereUniqueInput!): Block
   blocksConnection(first: Int, after: String, last: Int, before: String, where: BlockWhereInput, orderBy: BlockOrderByInput): BlockConnection!
-  membershipSystems(offset: Int, limit: Int = 50, where: MembershipSystemWhereInput, orderBy: MembershipSystemOrderByInput): [MembershipSystem!]!
-  membershipSystem(where: MembershipSystemWhereUniqueInput!): MembershipSystem
-  membershipSystemsConnection(first: Int, after: String, last: Int, before: String, where: MembershipSystemWhereInput, orderBy: MembershipSystemOrderByInput): MembershipSystemConnection!
+  budgetSetEvents(offset: Int, limit: Int = 50, where: BudgetSetEventWhereInput, orderBy: BudgetSetEventOrderByInput): [BudgetSetEvent!]!
+  budgetSetEventByUniqueInput(where: BudgetSetEventWhereUniqueInput!): BudgetSetEvent
+  budgetSetEventsConnection(first: Int, after: String, last: Int, before: String, where: BudgetSetEventWhereInput, orderBy: BudgetSetEventOrderByInput): BudgetSetEventConnection!
+  budgetSpendingEvents(offset: Int, limit: Int = 50, where: BudgetSpendingEventWhereInput, orderBy: BudgetSpendingEventOrderByInput): [BudgetSpendingEvent!]!
+  budgetSpendingEventByUniqueInput(where: BudgetSpendingEventWhereUniqueInput!): BudgetSpendingEvent
+  budgetSpendingEventsConnection(first: Int, after: String, last: Int, before: String, where: BudgetSpendingEventWhereInput, orderBy: BudgetSpendingEventOrderByInput): BudgetSpendingEventConnection!
+  dataObjects(offset: Int, limit: Int = 50, where: DataObjectWhereInput, orderBy: DataObjectOrderByInput): [DataObject!]!
+  dataObjectByUniqueInput(where: DataObjectWhereUniqueInput!): DataObject
+  dataObjectsConnection(first: Int, after: String, last: Int, before: String, where: DataObjectWhereInput, orderBy: DataObjectOrderByInput): DataObjectConnection!
+  events(offset: Int, limit: Int = 50, where: EventWhereInput, orderBy: EventOrderByInput): [Event!]!
+  eventByUniqueInput(where: EventWhereUniqueInput!): Event
+  eventsConnection(first: Int, after: String, last: Int, before: String, where: EventWhereInput, orderBy: EventOrderByInput): EventConnection!
+  initialInvitationBalanceUpdatedEvents(offset: Int, limit: Int = 50, where: InitialInvitationBalanceUpdatedEventWhereInput, orderBy: InitialInvitationBalanceUpdatedEventOrderByInput): [InitialInvitationBalanceUpdatedEvent!]!
+  initialInvitationBalanceUpdatedEventByUniqueInput(where: InitialInvitationBalanceUpdatedEventWhereUniqueInput!): InitialInvitationBalanceUpdatedEvent
+  initialInvitationBalanceUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: InitialInvitationBalanceUpdatedEventWhereInput, orderBy: InitialInvitationBalanceUpdatedEventOrderByInput): InitialInvitationBalanceUpdatedEventConnection!
+  initialInvitationCountUpdatedEvents(offset: Int, limit: Int = 50, where: InitialInvitationCountUpdatedEventWhereInput, orderBy: InitialInvitationCountUpdatedEventOrderByInput): [InitialInvitationCountUpdatedEvent!]!
+  initialInvitationCountUpdatedEventByUniqueInput(where: InitialInvitationCountUpdatedEventWhereUniqueInput!): InitialInvitationCountUpdatedEvent
+  initialInvitationCountUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: InitialInvitationCountUpdatedEventWhereInput, orderBy: InitialInvitationCountUpdatedEventOrderByInput): InitialInvitationCountUpdatedEventConnection!
+  invitesTransferredEvents(offset: Int, limit: Int = 50, where: InvitesTransferredEventWhereInput, orderBy: InvitesTransferredEventOrderByInput): [InvitesTransferredEvent!]!
+  invitesTransferredEventByUniqueInput(where: InvitesTransferredEventWhereUniqueInput!): InvitesTransferredEvent
+  invitesTransferredEventsConnection(first: Int, after: String, last: Int, before: String, where: InvitesTransferredEventWhereInput, orderBy: InvitesTransferredEventOrderByInput): InvitesTransferredEventConnection!
+  leaderInvitationQuotaUpdatedEvents(offset: Int, limit: Int = 50, where: LeaderInvitationQuotaUpdatedEventWhereInput, orderBy: LeaderInvitationQuotaUpdatedEventOrderByInput): [LeaderInvitationQuotaUpdatedEvent!]!
+  leaderInvitationQuotaUpdatedEventByUniqueInput(where: LeaderInvitationQuotaUpdatedEventWhereUniqueInput!): LeaderInvitationQuotaUpdatedEvent
+  leaderInvitationQuotaUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: LeaderInvitationQuotaUpdatedEventWhereInput, orderBy: LeaderInvitationQuotaUpdatedEventOrderByInput): LeaderInvitationQuotaUpdatedEventConnection!
+  leaderSetEvents(offset: Int, limit: Int = 50, where: LeaderSetEventWhereInput, orderBy: LeaderSetEventOrderByInput): [LeaderSetEvent!]!
+  leaderSetEventByUniqueInput(where: LeaderSetEventWhereUniqueInput!): LeaderSetEvent
+  leaderSetEventsConnection(first: Int, after: String, last: Int, before: String, where: LeaderSetEventWhereInput, orderBy: LeaderSetEventOrderByInput): LeaderSetEventConnection!
+  leaderUnsetEvents(offset: Int, limit: Int = 50, where: LeaderUnsetEventWhereInput, orderBy: LeaderUnsetEventOrderByInput): [LeaderUnsetEvent!]!
+  leaderUnsetEventByUniqueInput(where: LeaderUnsetEventWhereUniqueInput!): LeaderUnsetEvent
+  leaderUnsetEventsConnection(first: Int, after: String, last: Int, before: String, where: LeaderUnsetEventWhereInput, orderBy: LeaderUnsetEventOrderByInput): LeaderUnsetEventConnection!
+  memberAccountsUpdatedEvents(offset: Int, limit: Int = 50, where: MemberAccountsUpdatedEventWhereInput, orderBy: MemberAccountsUpdatedEventOrderByInput): [MemberAccountsUpdatedEvent!]!
+  memberAccountsUpdatedEventByUniqueInput(where: MemberAccountsUpdatedEventWhereUniqueInput!): MemberAccountsUpdatedEvent
+  memberAccountsUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: MemberAccountsUpdatedEventWhereInput, orderBy: MemberAccountsUpdatedEventOrderByInput): MemberAccountsUpdatedEventConnection!
+  memberInvitedEvents(offset: Int, limit: Int = 50, where: MemberInvitedEventWhereInput, orderBy: MemberInvitedEventOrderByInput): [MemberInvitedEvent!]!
+  memberInvitedEventByUniqueInput(where: MemberInvitedEventWhereUniqueInput!): MemberInvitedEvent
+  memberInvitedEventsConnection(first: Int, after: String, last: Int, before: String, where: MemberInvitedEventWhereInput, orderBy: MemberInvitedEventOrderByInput): MemberInvitedEventConnection!
+  memberMetadata(offset: Int, limit: Int = 50, where: MemberMetadataWhereInput, orderBy: MemberMetadataOrderByInput): [MemberMetadata!]!
+  memberMetadataByUniqueInput(where: MemberMetadataWhereUniqueInput!): MemberMetadata
+  memberMetadataConnection(first: Int, after: String, last: Int, before: String, where: MemberMetadataWhereInput, orderBy: MemberMetadataOrderByInput): MemberMetadataConnection!
+  memberProfileUpdatedEvents(offset: Int, limit: Int = 50, where: MemberProfileUpdatedEventWhereInput, orderBy: MemberProfileUpdatedEventOrderByInput): [MemberProfileUpdatedEvent!]!
+  memberProfileUpdatedEventByUniqueInput(where: MemberProfileUpdatedEventWhereUniqueInput!): MemberProfileUpdatedEvent
+  memberProfileUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: MemberProfileUpdatedEventWhereInput, orderBy: MemberProfileUpdatedEventOrderByInput): MemberProfileUpdatedEventConnection!
+  memberVerificationStatusUpdatedEvents(offset: Int, limit: Int = 50, where: MemberVerificationStatusUpdatedEventWhereInput, orderBy: MemberVerificationStatusUpdatedEventOrderByInput): [MemberVerificationStatusUpdatedEvent!]!
+  memberVerificationStatusUpdatedEventByUniqueInput(where: MemberVerificationStatusUpdatedEventWhereUniqueInput!): MemberVerificationStatusUpdatedEvent
+  memberVerificationStatusUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: MemberVerificationStatusUpdatedEventWhereInput, orderBy: MemberVerificationStatusUpdatedEventOrderByInput): MemberVerificationStatusUpdatedEventConnection!
+  membershipBoughtEvents(offset: Int, limit: Int = 50, where: MembershipBoughtEventWhereInput, orderBy: MembershipBoughtEventOrderByInput): [MembershipBoughtEvent!]!
+  membershipBoughtEventByUniqueInput(where: MembershipBoughtEventWhereUniqueInput!): MembershipBoughtEvent
+  membershipBoughtEventsConnection(first: Int, after: String, last: Int, before: String, where: MembershipBoughtEventWhereInput, orderBy: MembershipBoughtEventOrderByInput): MembershipBoughtEventConnection!
+  membershipPriceUpdatedEvents(offset: Int, limit: Int = 50, where: MembershipPriceUpdatedEventWhereInput, orderBy: MembershipPriceUpdatedEventOrderByInput): [MembershipPriceUpdatedEvent!]!
+  membershipPriceUpdatedEventByUniqueInput(where: MembershipPriceUpdatedEventWhereUniqueInput!): MembershipPriceUpdatedEvent
+  membershipPriceUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: MembershipPriceUpdatedEventWhereInput, orderBy: MembershipPriceUpdatedEventOrderByInput): MembershipPriceUpdatedEventConnection!
+  membershipSystemSnapshots(offset: Int, limit: Int = 50, where: MembershipSystemSnapshotWhereInput, orderBy: MembershipSystemSnapshotOrderByInput): [MembershipSystemSnapshot!]!
+  membershipSystemSnapshotByUniqueInput(where: MembershipSystemSnapshotWhereUniqueInput!): MembershipSystemSnapshot
+  membershipSystemSnapshotsConnection(first: Int, after: String, last: Int, before: String, where: MembershipSystemSnapshotWhereInput, orderBy: MembershipSystemSnapshotOrderByInput): MembershipSystemSnapshotConnection!
   memberships(offset: Int, limit: Int = 50, where: MembershipWhereInput, orderBy: MembershipOrderByInput): [Membership!]!
-  membership(where: MembershipWhereUniqueInput!): Membership
+  membershipByUniqueInput(where: MembershipWhereUniqueInput!): Membership
   membershipsConnection(first: Int, after: String, last: Int, before: String, where: MembershipWhereInput, orderBy: MembershipOrderByInput): MembershipConnection!
+  newMissedRewardLevelReachedEvents(offset: Int, limit: Int = 50, where: NewMissedRewardLevelReachedEventWhereInput, orderBy: NewMissedRewardLevelReachedEventOrderByInput): [NewMissedRewardLevelReachedEvent!]!
+  newMissedRewardLevelReachedEventByUniqueInput(where: NewMissedRewardLevelReachedEventWhereUniqueInput!): NewMissedRewardLevelReachedEvent
+  newMissedRewardLevelReachedEventsConnection(first: Int, after: String, last: Int, before: String, where: NewMissedRewardLevelReachedEventWhereInput, orderBy: NewMissedRewardLevelReachedEventOrderByInput): NewMissedRewardLevelReachedEventConnection!
+  openingAddedEvents(offset: Int, limit: Int = 50, where: OpeningAddedEventWhereInput, orderBy: OpeningAddedEventOrderByInput): [OpeningAddedEvent!]!
+  openingAddedEventByUniqueInput(where: OpeningAddedEventWhereUniqueInput!): OpeningAddedEvent
+  openingAddedEventsConnection(first: Int, after: String, last: Int, before: String, where: OpeningAddedEventWhereInput, orderBy: OpeningAddedEventOrderByInput): OpeningAddedEventConnection!
+  openingCanceledEvents(offset: Int, limit: Int = 50, where: OpeningCanceledEventWhereInput, orderBy: OpeningCanceledEventOrderByInput): [OpeningCanceledEvent!]!
+  openingCanceledEventByUniqueInput(where: OpeningCanceledEventWhereUniqueInput!): OpeningCanceledEvent
+  openingCanceledEventsConnection(first: Int, after: String, last: Int, before: String, where: OpeningCanceledEventWhereInput, orderBy: OpeningCanceledEventOrderByInput): OpeningCanceledEventConnection!
+  openingFilledEvents(offset: Int, limit: Int = 50, where: OpeningFilledEventWhereInput, orderBy: OpeningFilledEventOrderByInput): [OpeningFilledEvent!]!
+  openingFilledEventByUniqueInput(where: OpeningFilledEventWhereUniqueInput!): OpeningFilledEvent
+  openingFilledEventsConnection(first: Int, after: String, last: Int, before: String, where: OpeningFilledEventWhereInput, orderBy: OpeningFilledEventOrderByInput): OpeningFilledEventConnection!
   membersByHandle(whereMembership: MembershipWhereInput, skip: Int = 0, limit: Int = 5, text: String!): [MembersByHandleFTSOutput!]!
-  workingGroups(offset: Int, limit: Int = 50): [WorkingGroup!]!
-  workingGroup(where: WorkingGroupWhereUniqueInput!): WorkingGroup
-  workers(offset: Int, limit: Int = 50, where: WorkersWhereInput): [Worker!]!
-  workingGroupOpenings(offset: Int, limit: Int = 50, where: WorkingGroupOpeningsWhereInput): [WorkingGroupOpening!]
-  workingGroupOpening(where: WorkingGroupOpeningWhereUniqueInput): WorkingGroupOpening
-  workingGroupApplications(offset: Int, limit: Int = 50, where: WorkingGroupApplicationsWhereInput): [WorkingGroupApplication!]
+  referralCutUpdatedEvents(offset: Int, limit: Int = 50, where: ReferralCutUpdatedEventWhereInput, orderBy: ReferralCutUpdatedEventOrderByInput): [ReferralCutUpdatedEvent!]!
+  referralCutUpdatedEventByUniqueInput(where: ReferralCutUpdatedEventWhereUniqueInput!): ReferralCutUpdatedEvent
+  referralCutUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: ReferralCutUpdatedEventWhereInput, orderBy: ReferralCutUpdatedEventOrderByInput): ReferralCutUpdatedEventConnection!
+  rewardPaidEvents(offset: Int, limit: Int = 50, where: RewardPaidEventWhereInput, orderBy: RewardPaidEventOrderByInput): [RewardPaidEvent!]!
+  rewardPaidEventByUniqueInput(where: RewardPaidEventWhereUniqueInput!): RewardPaidEvent
+  rewardPaidEventsConnection(first: Int, after: String, last: Int, before: String, where: RewardPaidEventWhereInput, orderBy: RewardPaidEventOrderByInput): RewardPaidEventConnection!
+  stakeDecreasedEvents(offset: Int, limit: Int = 50, where: StakeDecreasedEventWhereInput, orderBy: StakeDecreasedEventOrderByInput): [StakeDecreasedEvent!]!
+  stakeDecreasedEventByUniqueInput(where: StakeDecreasedEventWhereUniqueInput!): StakeDecreasedEvent
+  stakeDecreasedEventsConnection(first: Int, after: String, last: Int, before: String, where: StakeDecreasedEventWhereInput, orderBy: StakeDecreasedEventOrderByInput): StakeDecreasedEventConnection!
+  stakeIncreasedEvents(offset: Int, limit: Int = 50, where: StakeIncreasedEventWhereInput, orderBy: StakeIncreasedEventOrderByInput): [StakeIncreasedEvent!]!
+  stakeIncreasedEventByUniqueInput(where: StakeIncreasedEventWhereUniqueInput!): StakeIncreasedEvent
+  stakeIncreasedEventsConnection(first: Int, after: String, last: Int, before: String, where: StakeIncreasedEventWhereInput, orderBy: StakeIncreasedEventOrderByInput): StakeIncreasedEventConnection!
+  stakeSlashedEvents(offset: Int, limit: Int = 50, where: StakeSlashedEventWhereInput, orderBy: StakeSlashedEventOrderByInput): [StakeSlashedEvent!]!
+  stakeSlashedEventByUniqueInput(where: StakeSlashedEventWhereUniqueInput!): StakeSlashedEvent
+  stakeSlashedEventsConnection(first: Int, after: String, last: Int, before: String, where: StakeSlashedEventWhereInput, orderBy: StakeSlashedEventOrderByInput): StakeSlashedEventConnection!
+  stakingAccountAddedEvents(offset: Int, limit: Int = 50, where: StakingAccountAddedEventWhereInput, orderBy: StakingAccountAddedEventOrderByInput): [StakingAccountAddedEvent!]!
+  stakingAccountAddedEventByUniqueInput(where: StakingAccountAddedEventWhereUniqueInput!): StakingAccountAddedEvent
+  stakingAccountAddedEventsConnection(first: Int, after: String, last: Int, before: String, where: StakingAccountAddedEventWhereInput, orderBy: StakingAccountAddedEventOrderByInput): StakingAccountAddedEventConnection!
+  stakingAccountConfirmedEvents(offset: Int, limit: Int = 50, where: StakingAccountConfirmedEventWhereInput, orderBy: StakingAccountConfirmedEventOrderByInput): [StakingAccountConfirmedEvent!]!
+  stakingAccountConfirmedEventByUniqueInput(where: StakingAccountConfirmedEventWhereUniqueInput!): StakingAccountConfirmedEvent
+  stakingAccountConfirmedEventsConnection(first: Int, after: String, last: Int, before: String, where: StakingAccountConfirmedEventWhereInput, orderBy: StakingAccountConfirmedEventOrderByInput): StakingAccountConfirmedEventConnection!
+  stakingAccountRemovedEvents(offset: Int, limit: Int = 50, where: StakingAccountRemovedEventWhereInput, orderBy: StakingAccountRemovedEventOrderByInput): [StakingAccountRemovedEvent!]!
+  stakingAccountRemovedEventByUniqueInput(where: StakingAccountRemovedEventWhereUniqueInput!): StakingAccountRemovedEvent
+  stakingAccountRemovedEventsConnection(first: Int, after: String, last: Int, before: String, where: StakingAccountRemovedEventWhereInput, orderBy: StakingAccountRemovedEventOrderByInput): StakingAccountRemovedEventConnection!
+  statusTextChangedEvents(offset: Int, limit: Int = 50, where: StatusTextChangedEventWhereInput, orderBy: StatusTextChangedEventOrderByInput): [StatusTextChangedEvent!]!
+  statusTextChangedEventByUniqueInput(where: StatusTextChangedEventWhereUniqueInput!): StatusTextChangedEvent
+  statusTextChangedEventsConnection(first: Int, after: String, last: Int, before: String, where: StatusTextChangedEventWhereInput, orderBy: StatusTextChangedEventOrderByInput): StatusTextChangedEventConnection!
+  terminatedLeaderEvents(offset: Int, limit: Int = 50, where: TerminatedLeaderEventWhereInput, orderBy: TerminatedLeaderEventOrderByInput): [TerminatedLeaderEvent!]!
+  terminatedLeaderEventByUniqueInput(where: TerminatedLeaderEventWhereUniqueInput!): TerminatedLeaderEvent
+  terminatedLeaderEventsConnection(first: Int, after: String, last: Int, before: String, where: TerminatedLeaderEventWhereInput, orderBy: TerminatedLeaderEventOrderByInput): TerminatedLeaderEventConnection!
+  terminatedWorkerEvents(offset: Int, limit: Int = 50, where: TerminatedWorkerEventWhereInput, orderBy: TerminatedWorkerEventOrderByInput): [TerminatedWorkerEvent!]!
+  terminatedWorkerEventByUniqueInput(where: TerminatedWorkerEventWhereUniqueInput!): TerminatedWorkerEvent
+  terminatedWorkerEventsConnection(first: Int, after: String, last: Int, before: String, where: TerminatedWorkerEventWhereInput, orderBy: TerminatedWorkerEventOrderByInput): TerminatedWorkerEventConnection!
+  upcomingWorkingGroupOpenings(offset: Int, limit: Int = 50, where: UpcomingWorkingGroupOpeningWhereInput, orderBy: UpcomingWorkingGroupOpeningOrderByInput): [UpcomingWorkingGroupOpening!]!
+  upcomingWorkingGroupOpeningByUniqueInput(where: UpcomingWorkingGroupOpeningWhereUniqueInput!): UpcomingWorkingGroupOpening
+  upcomingWorkingGroupOpeningsConnection(first: Int, after: String, last: Int, before: String, where: UpcomingWorkingGroupOpeningWhereInput, orderBy: UpcomingWorkingGroupOpeningOrderByInput): UpcomingWorkingGroupOpeningConnection!
+  workerExitedEvents(offset: Int, limit: Int = 50, where: WorkerExitedEventWhereInput, orderBy: WorkerExitedEventOrderByInput): [WorkerExitedEvent!]!
+  workerExitedEventByUniqueInput(where: WorkerExitedEventWhereUniqueInput!): WorkerExitedEvent
+  workerExitedEventsConnection(first: Int, after: String, last: Int, before: String, where: WorkerExitedEventWhereInput, orderBy: WorkerExitedEventOrderByInput): WorkerExitedEventConnection!
+  workerRewardAccountUpdatedEvents(offset: Int, limit: Int = 50, where: WorkerRewardAccountUpdatedEventWhereInput, orderBy: WorkerRewardAccountUpdatedEventOrderByInput): [WorkerRewardAccountUpdatedEvent!]!
+  workerRewardAccountUpdatedEventByUniqueInput(where: WorkerRewardAccountUpdatedEventWhereUniqueInput!): WorkerRewardAccountUpdatedEvent
+  workerRewardAccountUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: WorkerRewardAccountUpdatedEventWhereInput, orderBy: WorkerRewardAccountUpdatedEventOrderByInput): WorkerRewardAccountUpdatedEventConnection!
+  workerRewardAmountUpdatedEvents(offset: Int, limit: Int = 50, where: WorkerRewardAmountUpdatedEventWhereInput, orderBy: WorkerRewardAmountUpdatedEventOrderByInput): [WorkerRewardAmountUpdatedEvent!]!
+  workerRewardAmountUpdatedEventByUniqueInput(where: WorkerRewardAmountUpdatedEventWhereUniqueInput!): WorkerRewardAmountUpdatedEvent
+  workerRewardAmountUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: WorkerRewardAmountUpdatedEventWhereInput, orderBy: WorkerRewardAmountUpdatedEventOrderByInput): WorkerRewardAmountUpdatedEventConnection!
+  workerRoleAccountUpdatedEvents(offset: Int, limit: Int = 50, where: WorkerRoleAccountUpdatedEventWhereInput, orderBy: WorkerRoleAccountUpdatedEventOrderByInput): [WorkerRoleAccountUpdatedEvent!]!
+  workerRoleAccountUpdatedEventByUniqueInput(where: WorkerRoleAccountUpdatedEventWhereUniqueInput!): WorkerRoleAccountUpdatedEvent
+  workerRoleAccountUpdatedEventsConnection(first: Int, after: String, last: Int, before: String, where: WorkerRoleAccountUpdatedEventWhereInput, orderBy: WorkerRoleAccountUpdatedEventOrderByInput): WorkerRoleAccountUpdatedEventConnection!
+  workerStartedLeavingEvents(offset: Int, limit: Int = 50, where: WorkerStartedLeavingEventWhereInput, orderBy: WorkerStartedLeavingEventOrderByInput): [WorkerStartedLeavingEvent!]!
+  workerStartedLeavingEventByUniqueInput(where: WorkerStartedLeavingEventWhereUniqueInput!): WorkerStartedLeavingEvent
+  workerStartedLeavingEventsConnection(first: Int, after: String, last: Int, before: String, where: WorkerStartedLeavingEventWhereInput, orderBy: WorkerStartedLeavingEventOrderByInput): WorkerStartedLeavingEventConnection!
+  workers(offset: Int, limit: Int = 50, where: WorkerWhereInput, orderBy: WorkerOrderByInput): [Worker!]!
+  workerByUniqueInput(where: WorkerWhereUniqueInput!): Worker
+  workersConnection(first: Int, after: String, last: Int, before: String, where: WorkerWhereInput, orderBy: WorkerOrderByInput): WorkerConnection!
+  workingGroupApplications(offset: Int, limit: Int = 50, where: WorkingGroupApplicationWhereInput, orderBy: WorkingGroupApplicationOrderByInput): [WorkingGroupApplication!]!
+  workingGroupApplicationByUniqueInput(where: WorkingGroupApplicationWhereUniqueInput!): WorkingGroupApplication
+  workingGroupApplicationsConnection(first: Int, after: String, last: Int, before: String, where: WorkingGroupApplicationWhereInput, orderBy: WorkingGroupApplicationOrderByInput): WorkingGroupApplicationConnection!
+  workingGroupMetadata(offset: Int, limit: Int = 50, where: WorkingGroupMetadataWhereInput, orderBy: WorkingGroupMetadataOrderByInput): [WorkingGroupMetadata!]!
+  workingGroupMetadataByUniqueInput(where: WorkingGroupMetadataWhereUniqueInput!): WorkingGroupMetadata
+  workingGroupMetadataConnection(first: Int, after: String, last: Int, before: String, where: WorkingGroupMetadataWhereInput, orderBy: WorkingGroupMetadataOrderByInput): WorkingGroupMetadataConnection!
+  workingGroupOpeningMetadata(offset: Int, limit: Int = 50, where: WorkingGroupOpeningMetadataWhereInput, orderBy: WorkingGroupOpeningMetadataOrderByInput): [WorkingGroupOpeningMetadata!]!
+  workingGroupOpeningMetadataByUniqueInput(where: WorkingGroupOpeningMetadataWhereUniqueInput!): WorkingGroupOpeningMetadata
+  workingGroupOpeningMetadataConnection(first: Int, after: String, last: Int, before: String, where: WorkingGroupOpeningMetadataWhereInput, orderBy: WorkingGroupOpeningMetadataOrderByInput): WorkingGroupOpeningMetadataConnection!
+  workingGroupOpenings(offset: Int, limit: Int = 50, where: WorkingGroupOpeningWhereInput, orderBy: WorkingGroupOpeningOrderByInput): [WorkingGroupOpening!]!
+  workingGroupOpeningByUniqueInput(where: WorkingGroupOpeningWhereUniqueInput!): WorkingGroupOpening
+  workingGroupOpeningsConnection(first: Int, after: String, last: Int, before: String, where: WorkingGroupOpeningWhereInput, orderBy: WorkingGroupOpeningOrderByInput): WorkingGroupOpeningConnection!
+  workingGroups(offset: Int, limit: Int = 50, where: WorkingGroupWhereInput, orderBy: WorkingGroupOrderByInput): [WorkingGroup!]!
+  workingGroupByUniqueInput(where: WorkingGroupWhereUniqueInput!): WorkingGroup
+  workingGroupsConnection(first: Int, after: String, last: Int, before: String, where: WorkingGroupWhereInput, orderBy: WorkingGroupOrderByInput): WorkingGroupConnection!
 }
 
-enum EventType {
-  MembershipBought,
-  MemberInvited,
-  MemberProfileUpdated,
-  MemberAccountsUpdated,
-  MemberVerificationStatusUpdated,
-  ReferralCutUpdated,
-  InvitesTransferred,
-  MembershipPriceUpdated,
-  InitialInvitationBalanceUpdated,
-  LeaderInvitationQuotaUpdated,
-  InitialInvitationCountUpdated,
-  StakingAccountAddedEvent,
-  StakingAccountConfirmed,
-  StakingAccountRemoved,
-}
-
-type Event {
-  "{blockNumber}-{indexInBlock}"
+type ReferralCutUpdatedEvent implements BaseGraphQLObject {
   id: ID!
-  "Hash of the extrinsic which caused the event to be emitted"
-  inExtrinsic: String
-  "Blocknumber of a block in which the event was emitted."
-  inBlock: Int!
-  "Index of event in block from which it was emitted."
-  indexInBlock: Int!
-  "Type of the event"
-  type: EventType!
-}
-
-interface WorkingGroupsEvent {
-  "Generic event data"
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   event: Event!
+  eventId: String!
+
+  """New cut value."""
+  newValue: Int!
 }
 
-interface MembershipEvent {
-  "Generic event data"
+type ReferralCutUpdatedEventConnection {
+  totalCount: Int!
+  edges: [ReferralCutUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input ReferralCutUpdatedEventCreateInput {
+  eventId: ID!
+  newValue: Float!
+}
+
+type ReferralCutUpdatedEventEdge {
+  node: ReferralCutUpdatedEvent!
+  cursor: String!
+}
+
+enum ReferralCutUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  newValue_ASC
+  newValue_DESC
+}
+
+input ReferralCutUpdatedEventUpdateInput {
+  eventId: ID
+  newValue: Float
+}
+
+input ReferralCutUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  newValue_eq: Int
+  newValue_gt: Int
+  newValue_gte: Int
+  newValue_lt: Int
+  newValue_lte: Int
+  newValue_in: [Int!]
+}
+
+input ReferralCutUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
+type RewardPaidEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
   event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """The account that recieved the reward"""
+  rewardAccount: String!
+
+  """Amount recieved"""
+  amount: BigInt!
+
+  """Type of the payment (REGULAR/MISSED)"""
+  type: RewardPaymentType!
 }
 
+type RewardPaidEventConnection {
+  totalCount: Int!
+  edges: [RewardPaidEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input RewardPaidEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  rewardAccount: String!
+  amount: BigInt!
+  type: RewardPaymentType!
+}
+
+type RewardPaidEventEdge {
+  node: RewardPaidEvent!
+  cursor: String!
+}
+
+enum RewardPaidEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  rewardAccount_ASC
+  rewardAccount_DESC
+  amount_ASC
+  amount_DESC
+  type_ASC
+  type_DESC
+}
+
+input RewardPaidEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  rewardAccount: String
+  amount: BigInt
+  type: RewardPaymentType
+}
+
+input RewardPaidEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  rewardAccount_eq: String
+  rewardAccount_contains: String
+  rewardAccount_startsWith: String
+  rewardAccount_endsWith: String
+  rewardAccount_in: [String!]
+  amount_eq: BigInt
+  amount_gt: BigInt
+  amount_gte: BigInt
+  amount_lt: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  type_eq: RewardPaymentType
+  type_in: [RewardPaymentType!]
+}
+
+input RewardPaidEventWhereUniqueInput {
+  id: ID!
+}
+
+enum RewardPaymentType {
+  REGULAR
+  MISSED
+}
+
+type StakeDecreasedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """The amount of JOY the stake was decreased by"""
+  amount: BigInt!
+}
+
+type StakeDecreasedEventConnection {
+  totalCount: Int!
+  edges: [StakeDecreasedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StakeDecreasedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  amount: BigInt!
+}
+
+type StakeDecreasedEventEdge {
+  node: StakeDecreasedEvent!
+  cursor: String!
+}
+
+enum StakeDecreasedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  amount_ASC
+  amount_DESC
+}
+
+input StakeDecreasedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  amount: BigInt
+}
+
+input StakeDecreasedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  amount_eq: BigInt
+  amount_gt: BigInt
+  amount_gte: BigInt
+  amount_lt: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+}
+
+input StakeDecreasedEventWhereUniqueInput {
+  id: ID!
+}
+
+type StakeIncreasedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """The amount of JOY the stake was increased by"""
+  amount: BigInt!
+}
+
+type StakeIncreasedEventConnection {
+  totalCount: Int!
+  edges: [StakeIncreasedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StakeIncreasedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  amount: BigInt!
+}
+
+type StakeIncreasedEventEdge {
+  node: StakeIncreasedEvent!
+  cursor: String!
+}
+
+enum StakeIncreasedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  amount_ASC
+  amount_DESC
+}
+
+input StakeIncreasedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  amount: BigInt
+}
+
+input StakeIncreasedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  amount_eq: BigInt
+  amount_gt: BigInt
+  amount_gte: BigInt
+  amount_lt: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+}
+
+input StakeIncreasedEventWhereUniqueInput {
+  id: ID!
+}
+
+type StakeSlashedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """Balance that was requested to be slashed"""
+  requestedAmount: BigInt!
+
+  """Balance that was actually slashed"""
+  slashedAmount: BigInt!
+
+  """Optional rationale"""
+  rationale: String
+}
+
+type StakeSlashedEventConnection {
+  totalCount: Int!
+  edges: [StakeSlashedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StakeSlashedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  requestedAmount: BigInt!
+  slashedAmount: BigInt!
+  rationale: String
+}
+
+type StakeSlashedEventEdge {
+  node: StakeSlashedEvent!
+  cursor: String!
+}
+
+enum StakeSlashedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  requestedAmount_ASC
+  requestedAmount_DESC
+  slashedAmount_ASC
+  slashedAmount_DESC
+  rationale_ASC
+  rationale_DESC
+}
+
+input StakeSlashedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  requestedAmount: BigInt
+  slashedAmount: BigInt
+  rationale: String
+}
+
+input StakeSlashedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  requestedAmount_eq: BigInt
+  requestedAmount_gt: BigInt
+  requestedAmount_gte: BigInt
+  requestedAmount_lt: BigInt
+  requestedAmount_lte: BigInt
+  requestedAmount_in: [BigInt!]
+  slashedAmount_eq: BigInt
+  slashedAmount_gt: BigInt
+  slashedAmount_gte: BigInt
+  slashedAmount_lt: BigInt
+  slashedAmount_lte: BigInt
+  slashedAmount_in: [BigInt!]
+  rationale_eq: String
+  rationale_contains: String
+  rationale_startsWith: String
+  rationale_endsWith: String
+  rationale_in: [String!]
+}
+
+input StakeSlashedEventWhereUniqueInput {
+  id: ID!
+}
+
+type StakingAccountAddedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  member: Membership!
+  memberId: String!
+
+  """New staking account in SS58 encoding."""
+  account: String!
+}
+
+type StakingAccountAddedEventConnection {
+  totalCount: Int!
+  edges: [StakingAccountAddedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StakingAccountAddedEventCreateInput {
+  eventId: ID!
+  memberId: ID!
+  account: String!
+}
+
+type StakingAccountAddedEventEdge {
+  node: StakingAccountAddedEvent!
+  cursor: String!
+}
+
+enum StakingAccountAddedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  memberId_ASC
+  memberId_DESC
+  account_ASC
+  account_DESC
+}
+
+input StakingAccountAddedEventUpdateInput {
+  eventId: ID
+  memberId: ID
+  account: String
+}
+
+input StakingAccountAddedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  memberId_eq: ID
+  memberId_in: [ID!]
+  account_eq: String
+  account_contains: String
+  account_startsWith: String
+  account_endsWith: String
+  account_in: [String!]
+}
+
+input StakingAccountAddedEventWhereUniqueInput {
+  id: ID!
+}
+
+type StakingAccountConfirmedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  member: Membership!
+  memberId: String!
+
+  """New staking account in SS58 encoding."""
+  account: String!
+}
+
+type StakingAccountConfirmedEventConnection {
+  totalCount: Int!
+  edges: [StakingAccountConfirmedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StakingAccountConfirmedEventCreateInput {
+  eventId: ID!
+  memberId: ID!
+  account: String!
+}
+
+type StakingAccountConfirmedEventEdge {
+  node: StakingAccountConfirmedEvent!
+  cursor: String!
+}
+
+enum StakingAccountConfirmedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  memberId_ASC
+  memberId_DESC
+  account_ASC
+  account_DESC
+}
+
+input StakingAccountConfirmedEventUpdateInput {
+  eventId: ID
+  memberId: ID
+  account: String
+}
+
+input StakingAccountConfirmedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  memberId_eq: ID
+  memberId_in: [ID!]
+  account_eq: String
+  account_contains: String
+  account_startsWith: String
+  account_endsWith: String
+  account_in: [String!]
+}
+
+input StakingAccountConfirmedEventWhereUniqueInput {
+  id: ID!
+}
+
+type StakingAccountRemovedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  member: Membership!
+  memberId: String!
+
+  """New staking account in SS58 encoding."""
+  account: String!
+}
+
+type StakingAccountRemovedEventConnection {
+  totalCount: Int!
+  edges: [StakingAccountRemovedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StakingAccountRemovedEventCreateInput {
+  eventId: ID!
+  memberId: ID!
+  account: String!
+}
+
+type StakingAccountRemovedEventEdge {
+  node: StakingAccountRemovedEvent!
+  cursor: String!
+}
+
+enum StakingAccountRemovedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  memberId_ASC
+  memberId_DESC
+  account_ASC
+  account_DESC
+}
+
+input StakingAccountRemovedEventUpdateInput {
+  eventId: ID
+  memberId: ID
+  account: String
+}
+
+input StakingAccountRemovedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  memberId_eq: ID
+  memberId_in: [ID!]
+  account_eq: String
+  account_contains: String
+  account_startsWith: String
+  account_endsWith: String
+  account_in: [String!]
+}
+
+input StakingAccountRemovedEventWhereUniqueInput {
+  id: ID!
+}
 
 type StandardDeleteResponse {
+  id: ID!
+}
+
+type StatusTextChangedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+
+  """Original action metadata as hex string"""
+  metadata: String
+
+  """Event result depeding on the metadata action type"""
+  result: WorkingGroupMetadataActionResult!
+  upcomingworkinggroupopeningcreatedInEvent: [UpcomingWorkingGroupOpening!]
+  workinggroupmetadatasetInEvent: [WorkingGroupMetadata!]
+}
+
+type StatusTextChangedEventConnection {
+  totalCount: Int!
+  edges: [StatusTextChangedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input StatusTextChangedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  metadata: String
+  result: JSONObject!
+}
+
+type StatusTextChangedEventEdge {
+  node: StatusTextChangedEvent!
+  cursor: String!
+}
+
+enum StatusTextChangedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  metadata_ASC
+  metadata_DESC
+}
+
+input StatusTextChangedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  metadata: String
+  result: JSONObject
+}
+
+input StatusTextChangedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  metadata_eq: String
+  metadata_contains: String
+  metadata_startsWith: String
+  metadata_endsWith: String
+  metadata_in: [String!]
+  result_json: JSONObject
+}
+
+input StatusTextChangedEventWhereUniqueInput {
   id: ID!
 }
 
@@ -629,92 +5092,2047 @@ type Subscription {
   stateSubscription: ProcessorState!
 }
 
-type WorkerStatusActive {
-  # No additional information needed
-  _phantom: Int
+type TerminatedLeaderEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """Slash amount (if any)"""
+  penalty: BigInt
+
+  """Optional rationale"""
+  rationale: String
 }
 
-type WorkerStatusLeft {
-  workerExitedEventId: ID!
+type TerminatedLeaderEventConnection {
+  totalCount: Int!
+  edges: [TerminatedLeaderEventEdge!]!
+  pageInfo: PageInfo!
 }
 
-type WorkerStatusTerminated {
-  terminatedWorkerEventId: ID!
+input TerminatedLeaderEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  penalty: BigInt
+  rationale: String
+}
+
+type TerminatedLeaderEventEdge {
+  node: TerminatedLeaderEvent!
+  cursor: String!
+}
+
+enum TerminatedLeaderEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  penalty_ASC
+  penalty_DESC
+  rationale_ASC
+  rationale_DESC
+}
+
+input TerminatedLeaderEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  penalty: BigInt
+  rationale: String
+}
+
+input TerminatedLeaderEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  penalty_eq: BigInt
+  penalty_gt: BigInt
+  penalty_gte: BigInt
+  penalty_lt: BigInt
+  penalty_lte: BigInt
+  penalty_in: [BigInt!]
+  rationale_eq: String
+  rationale_contains: String
+  rationale_startsWith: String
+  rationale_endsWith: String
+  rationale_in: [String!]
+}
+
+input TerminatedLeaderEventWhereUniqueInput {
+  id: ID!
+}
+
+type TerminatedWorkerEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """Slash amount (if any)"""
+  penalty: BigInt
+
+  """Optional rationale"""
+  rationale: String
+}
+
+type TerminatedWorkerEventConnection {
+  totalCount: Int!
+  edges: [TerminatedWorkerEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input TerminatedWorkerEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  penalty: BigInt
+  rationale: String
+}
+
+type TerminatedWorkerEventEdge {
+  node: TerminatedWorkerEvent!
+  cursor: String!
+}
+
+enum TerminatedWorkerEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  penalty_ASC
+  penalty_DESC
+  rationale_ASC
+  rationale_DESC
+}
+
+input TerminatedWorkerEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  penalty: BigInt
+  rationale: String
+}
+
+input TerminatedWorkerEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  penalty_eq: BigInt
+  penalty_gt: BigInt
+  penalty_gte: BigInt
+  penalty_lt: BigInt
+  penalty_lte: BigInt
+  penalty_in: [BigInt!]
+  rationale_eq: String
+  rationale_contains: String
+  rationale_startsWith: String
+  rationale_endsWith: String
+  rationale_in: [String!]
+}
+
+input TerminatedWorkerEventWhereUniqueInput {
+  id: ID!
+}
+
+type UpcomingOpeningAdded {
+  upcomingOpeningId: String!
+}
+
+input UpcomingOpeningAddedCreateInput {
+  upcomingOpeningId: String!
+}
+
+input UpcomingOpeningAddedUpdateInput {
+  upcomingOpeningId: String
+}
+
+input UpcomingOpeningAddedWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  upcomingOpeningId_eq: String
+  upcomingOpeningId_contains: String
+  upcomingOpeningId_startsWith: String
+  upcomingOpeningId_endsWith: String
+  upcomingOpeningId_in: [String!]
+}
+
+input UpcomingOpeningAddedWhereUniqueInput {
+  id: ID!
+}
+
+type UpcomingOpeningRemoved {
+  upcomingOpeningId: String!
+}
+
+input UpcomingOpeningRemovedCreateInput {
+  upcomingOpeningId: String!
+}
+
+input UpcomingOpeningRemovedUpdateInput {
+  upcomingOpeningId: String
+}
+
+input UpcomingOpeningRemovedWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  upcomingOpeningId_eq: String
+  upcomingOpeningId_contains: String
+  upcomingOpeningId_startsWith: String
+  upcomingOpeningId_endsWith: String
+  upcomingOpeningId_in: [String!]
+}
+
+input UpcomingOpeningRemovedWhereUniqueInput {
+  id: ID!
+}
+
+type UpcomingWorkingGroupOpening implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  createdInEvent: StatusTextChangedEvent!
+  createdInEventId: String!
+  createdAtBlock: Block!
+  createdAtBlockId: String!
+  group: WorkingGroup!
+  groupId: String!
+
+  """Expected opening start time"""
+  expectedStart: DateTime
+
+  """Expected min. application/role stake amount"""
+  stakeAmount: BigInt
+
+  """Expected reward per block"""
+  rewardPerBlock: BigInt
+  metadata: WorkingGroupOpeningMetadata!
+  metadataId: String!
+}
+
+type UpcomingWorkingGroupOpeningConnection {
+  totalCount: Int!
+  edges: [UpcomingWorkingGroupOpeningEdge!]!
+  pageInfo: PageInfo!
+}
+
+input UpcomingWorkingGroupOpeningCreateInput {
+  createdInEventId: ID!
+  createdAtBlockId: ID!
+  groupId: ID!
+  expectedStart: DateTime
+  stakeAmount: BigInt
+  rewardPerBlock: BigInt
+  metadataId: ID!
+}
+
+type UpcomingWorkingGroupOpeningEdge {
+  node: UpcomingWorkingGroupOpening!
+  cursor: String!
+}
+
+enum UpcomingWorkingGroupOpeningOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  createdInEventId_ASC
+  createdInEventId_DESC
+  createdAtBlockId_ASC
+  createdAtBlockId_DESC
+  groupId_ASC
+  groupId_DESC
+  expectedStart_ASC
+  expectedStart_DESC
+  stakeAmount_ASC
+  stakeAmount_DESC
+  rewardPerBlock_ASC
+  rewardPerBlock_DESC
+  metadataId_ASC
+  metadataId_DESC
+}
+
+input UpcomingWorkingGroupOpeningUpdateInput {
+  createdInEventId: ID
+  createdAtBlockId: ID
+  groupId: ID
+  expectedStart: DateTime
+  stakeAmount: BigInt
+  rewardPerBlock: BigInt
+  metadataId: ID
+}
+
+input UpcomingWorkingGroupOpeningWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  createdInEventId_eq: ID
+  createdInEventId_in: [ID!]
+  createdAtBlockId_eq: ID
+  createdAtBlockId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  expectedStart_eq: DateTime
+  expectedStart_lt: DateTime
+  expectedStart_lte: DateTime
+  expectedStart_gt: DateTime
+  expectedStart_gte: DateTime
+  stakeAmount_eq: BigInt
+  stakeAmount_gt: BigInt
+  stakeAmount_gte: BigInt
+  stakeAmount_lt: BigInt
+  stakeAmount_lte: BigInt
+  stakeAmount_in: [BigInt!]
+  rewardPerBlock_eq: BigInt
+  rewardPerBlock_gt: BigInt
+  rewardPerBlock_gte: BigInt
+  rewardPerBlock_lt: BigInt
+  rewardPerBlock_lte: BigInt
+  rewardPerBlock_in: [BigInt!]
+  metadataId_eq: ID
+  metadataId_in: [ID!]
+}
+
+input UpcomingWorkingGroupOpeningWhereUniqueInput {
+  id: ID!
+}
+
+type Worker implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """WorkerId in specific working group module"""
+  runtimeId: Int!
+  group: WorkingGroup!
+  groupId: String!
+  membership: Membership!
+  membershipId: String!
+
+  """Worker's role account"""
+  roleAccount: String!
+
+  """Worker's reward account"""
+  rewardAccount: String!
+
+  """Worker's staking account"""
+  stakeAccount: String!
+
+  """Current worker status"""
+  status: WorkerStatus!
+
+  """Whether the worker is also the working group lead"""
+  isLead: Boolean!
+
+  """Current role stake (in JOY)"""
+  stake: BigInt!
+
+  """Current reward per block"""
+  rewardPerBlock: BigInt!
+
+  """
+  The reward amount the worker is currently missing (due to empty working group budget)
+  """
+  missingRewardAmount: BigInt
+  payouts: [RewardPaidEvent!]!
+  slashes: [StakeSlashedEvent!]!
+  hiredAtBlock: Block!
+  hiredAtBlockId: String!
+
+  """Time the worker was hired at"""
+  hiredAtTime: DateTime!
+  entry: OpeningFilledEvent!
+  entryId: String!
+  application: WorkingGroupApplication!
+  applicationId: String!
+
+  """Worker's storage data"""
+  storage: String
+  leaderseteventworker: [LeaderSetEvent!]
+  leaderunseteventleader: [LeaderUnsetEvent!]
+  memberverificationstatusupdatedeventworker: [MemberVerificationStatusUpdatedEvent!]
+  newmissedrewardlevelreachedeventworker: [NewMissedRewardLevelReachedEvent!]
+  stakedecreasedeventworker: [StakeDecreasedEvent!]
+  stakeincreasedeventworker: [StakeIncreasedEvent!]
+  terminatedleadereventworker: [TerminatedLeaderEvent!]
+  terminatedworkereventworker: [TerminatedWorkerEvent!]
+  workerexitedeventworker: [WorkerExitedEvent!]
+  workerrewardaccountupdatedeventworker: [WorkerRewardAccountUpdatedEvent!]
+  workerrewardamountupdatedeventworker: [WorkerRewardAmountUpdatedEvent!]
+  workerroleaccountupdatedeventworker: [WorkerRoleAccountUpdatedEvent!]
+  workerstartedleavingeventworker: [WorkerStartedLeavingEvent!]
+  workinggroupleader: [WorkingGroup!]
+}
+
+type WorkerConnection {
+  totalCount: Int!
+  edges: [WorkerEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkerCreateInput {
+  runtimeId: Float!
+  groupId: ID!
+  membershipId: ID!
+  roleAccount: String!
+  rewardAccount: String!
+  stakeAccount: String!
+  status: JSONObject!
+  isLead: Boolean!
+  stake: BigInt!
+  rewardPerBlock: BigInt!
+  missingRewardAmount: BigInt
+  hiredAtBlockId: ID!
+  hiredAtTime: DateTime!
+  entryId: ID!
+  applicationId: ID!
+  storage: String
+}
+
+type WorkerEdge {
+  node: Worker!
+  cursor: String!
+}
+
+type WorkerExitedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+}
+
+type WorkerExitedEventConnection {
+  totalCount: Int!
+  edges: [WorkerExitedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkerExitedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+}
+
+type WorkerExitedEventEdge {
+  node: WorkerExitedEvent!
+  cursor: String!
+}
+
+enum WorkerExitedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+}
+
+input WorkerExitedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+}
+
+input WorkerExitedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+}
+
+input WorkerExitedEventWhereUniqueInput {
+  id: ID!
+}
+
+enum WorkerOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  runtimeId_ASC
+  runtimeId_DESC
+  groupId_ASC
+  groupId_DESC
+  membershipId_ASC
+  membershipId_DESC
+  roleAccount_ASC
+  roleAccount_DESC
+  rewardAccount_ASC
+  rewardAccount_DESC
+  stakeAccount_ASC
+  stakeAccount_DESC
+  isLead_ASC
+  isLead_DESC
+  stake_ASC
+  stake_DESC
+  rewardPerBlock_ASC
+  rewardPerBlock_DESC
+  missingRewardAmount_ASC
+  missingRewardAmount_DESC
+  hiredAtBlockId_ASC
+  hiredAtBlockId_DESC
+  hiredAtTime_ASC
+  hiredAtTime_DESC
+  entryId_ASC
+  entryId_DESC
+  applicationId_ASC
+  applicationId_DESC
+  storage_ASC
+  storage_DESC
+}
+
+type WorkerRewardAccountUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """New reward account"""
+  newRewardAccount: String!
+}
+
+type WorkerRewardAccountUpdatedEventConnection {
+  totalCount: Int!
+  edges: [WorkerRewardAccountUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkerRewardAccountUpdatedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  newRewardAccount: String!
+}
+
+type WorkerRewardAccountUpdatedEventEdge {
+  node: WorkerRewardAccountUpdatedEvent!
+  cursor: String!
+}
+
+enum WorkerRewardAccountUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  newRewardAccount_ASC
+  newRewardAccount_DESC
+}
+
+input WorkerRewardAccountUpdatedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  newRewardAccount: String
+}
+
+input WorkerRewardAccountUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  newRewardAccount_eq: String
+  newRewardAccount_contains: String
+  newRewardAccount_startsWith: String
+  newRewardAccount_endsWith: String
+  newRewardAccount_in: [String!]
+}
+
+input WorkerRewardAccountUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
+type WorkerRewardAmountUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """New worker reward per block"""
+  newRewardPerBlock: BigInt!
+}
+
+type WorkerRewardAmountUpdatedEventConnection {
+  totalCount: Int!
+  edges: [WorkerRewardAmountUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkerRewardAmountUpdatedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  newRewardPerBlock: BigInt!
+}
+
+type WorkerRewardAmountUpdatedEventEdge {
+  node: WorkerRewardAmountUpdatedEvent!
+  cursor: String!
+}
+
+enum WorkerRewardAmountUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  newRewardPerBlock_ASC
+  newRewardPerBlock_DESC
+}
+
+input WorkerRewardAmountUpdatedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  newRewardPerBlock: BigInt
+}
+
+input WorkerRewardAmountUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  newRewardPerBlock_eq: BigInt
+  newRewardPerBlock_gt: BigInt
+  newRewardPerBlock_gte: BigInt
+  newRewardPerBlock_lt: BigInt
+  newRewardPerBlock_lte: BigInt
+  newRewardPerBlock_in: [BigInt!]
+}
+
+input WorkerRewardAmountUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
+type WorkerRoleAccountUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """New role account"""
+  newRoleAccount: String!
+}
+
+type WorkerRoleAccountUpdatedEventConnection {
+  totalCount: Int!
+  edges: [WorkerRoleAccountUpdatedEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkerRoleAccountUpdatedEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  newRoleAccount: String!
+}
+
+type WorkerRoleAccountUpdatedEventEdge {
+  node: WorkerRoleAccountUpdatedEvent!
+  cursor: String!
+}
+
+enum WorkerRoleAccountUpdatedEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  newRoleAccount_ASC
+  newRoleAccount_DESC
+}
+
+input WorkerRoleAccountUpdatedEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  newRoleAccount: String
+}
+
+input WorkerRoleAccountUpdatedEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  newRoleAccount_eq: String
+  newRoleAccount_contains: String
+  newRoleAccount_startsWith: String
+  newRoleAccount_endsWith: String
+  newRoleAccount_in: [String!]
+}
+
+input WorkerRoleAccountUpdatedEventWhereUniqueInput {
+  id: ID!
+}
+
+type WorkerStartedLeavingEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+  event: Event!
+  eventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  worker: Worker!
+  workerId: String!
+
+  """Optional rationale"""
+  rationale: String
+}
+
+type WorkerStartedLeavingEventConnection {
+  totalCount: Int!
+  edges: [WorkerStartedLeavingEventEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkerStartedLeavingEventCreateInput {
+  eventId: ID!
+  groupId: ID!
+  workerId: ID!
+  rationale: String
+}
+
+type WorkerStartedLeavingEventEdge {
+  node: WorkerStartedLeavingEvent!
+  cursor: String!
+}
+
+enum WorkerStartedLeavingEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  eventId_ASC
+  eventId_DESC
+  groupId_ASC
+  groupId_DESC
+  workerId_ASC
+  workerId_DESC
+  rationale_ASC
+  rationale_DESC
+}
+
+input WorkerStartedLeavingEventUpdateInput {
+  eventId: ID
+  groupId: ID
+  workerId: ID
+  rationale: String
+}
+
+input WorkerStartedLeavingEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  eventId_eq: ID
+  eventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  workerId_eq: ID
+  workerId_in: [ID!]
+  rationale_eq: String
+  rationale_contains: String
+  rationale_startsWith: String
+  rationale_endsWith: String
+  rationale_in: [String!]
+}
+
+input WorkerStartedLeavingEventWhereUniqueInput {
+  id: ID!
 }
 
 union WorkerStatus = WorkerStatusActive | WorkerStatusLeft | WorkerStatusTerminated
 
-type Worker {
-  "The group that the worker belongs to"
-  group: WorkingGroup!
-  leaderGroups: [WorkingGroup!]
-  "Worker membership"
-  membership: Membership!
-  "Worker's role account"
-  roleAccount: String!
-  "Worker's reward account"
-  rewardAccount: String!
-  "Worker's staking account"
-  stakeAccount: String!
-  "Current worker status"
-  status: WorkerStatus!
-  "Whether the worker is also the working group lead"
-  isLead: Boolean!
-  "Current role stake (in JOY)"
-  stake: BigInt!
-  "All related reward payouts @derivedFrom(field: worker)"
-  payouts: [WorkerPayoutEvent!]
-  "Blocknumber of the block the worker was hired at"
-  hiredAtBlock: Int!
-  "Time the worker was hired at"
-  hiredAtTime: DateTime!
-  "Related worker entry application"
-  application: WorkingGroupApplication!
-  "Worker's storage data"
+type WorkerStatusActive {
+  phantom: Int
+}
+
+input WorkerStatusActiveCreateInput {
+  phantom: Float
+}
+
+input WorkerStatusActiveUpdateInput {
+  phantom: Float
+}
+
+input WorkerStatusActiveWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  phantom_eq: Int
+  phantom_gt: Int
+  phantom_gte: Int
+  phantom_lt: Int
+  phantom_lte: Int
+  phantom_in: [Int!]
+}
+
+input WorkerStatusActiveWhereUniqueInput {
+  id: ID!
+}
+
+type WorkerStatusLeft {
+  workerStartedLeavingEventId: String!
+  workerExitedEventId: String
+}
+
+input WorkerStatusLeftCreateInput {
+  workerStartedLeavingEventId: String!
+  workerExitedEventId: String
+}
+
+input WorkerStatusLeftUpdateInput {
+  workerStartedLeavingEventId: String
+  workerExitedEventId: String
+}
+
+input WorkerStatusLeftWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  workerStartedLeavingEventId_eq: String
+  workerStartedLeavingEventId_contains: String
+  workerStartedLeavingEventId_startsWith: String
+  workerStartedLeavingEventId_endsWith: String
+  workerStartedLeavingEventId_in: [String!]
+  workerExitedEventId_eq: String
+  workerExitedEventId_contains: String
+  workerExitedEventId_startsWith: String
+  workerExitedEventId_endsWith: String
+  workerExitedEventId_in: [String!]
+}
+
+input WorkerStatusLeftWhereUniqueInput {
+  id: ID!
+}
+
+type WorkerStatusTerminated {
+  terminatedWorkerEventId: String!
+}
+
+input WorkerStatusTerminatedCreateInput {
+  terminatedWorkerEventId: String!
+}
+
+input WorkerStatusTerminatedUpdateInput {
+  terminatedWorkerEventId: String
+}
+
+input WorkerStatusTerminatedWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  terminatedWorkerEventId_eq: String
+  terminatedWorkerEventId_contains: String
+  terminatedWorkerEventId_startsWith: String
+  terminatedWorkerEventId_endsWith: String
+  terminatedWorkerEventId_in: [String!]
+}
+
+input WorkerStatusTerminatedWhereUniqueInput {
+  id: ID!
+}
+
+input WorkerUpdateInput {
+  runtimeId: Float
+  groupId: ID
+  membershipId: ID
+  roleAccount: String
+  rewardAccount: String
+  stakeAccount: String
+  status: JSONObject
+  isLead: Boolean
+  stake: BigInt
+  rewardPerBlock: BigInt
+  missingRewardAmount: BigInt
+  hiredAtBlockId: ID
+  hiredAtTime: DateTime
+  entryId: ID
+  applicationId: ID
   storage: String
 }
 
-type WorkingGroupStatus {
-  "Status name"
-  name: String!
-  "Status message"
-  message: String
-  "Status about text"
-  about: String
-  "Status description text"
-  description: String
-  "The block at which status was set"
-  setAtBlock: Block!
-  "The time at which status was set"
-  setAtTime: DateTime!
+input WorkerWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  runtimeId_eq: Int
+  runtimeId_gt: Int
+  runtimeId_gte: Int
+  runtimeId_lt: Int
+  runtimeId_lte: Int
+  runtimeId_in: [Int!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  membershipId_eq: ID
+  membershipId_in: [ID!]
+  roleAccount_eq: String
+  roleAccount_contains: String
+  roleAccount_startsWith: String
+  roleAccount_endsWith: String
+  roleAccount_in: [String!]
+  rewardAccount_eq: String
+  rewardAccount_contains: String
+  rewardAccount_startsWith: String
+  rewardAccount_endsWith: String
+  rewardAccount_in: [String!]
+  stakeAccount_eq: String
+  stakeAccount_contains: String
+  stakeAccount_startsWith: String
+  stakeAccount_endsWith: String
+  stakeAccount_in: [String!]
+  status_json: JSONObject
+  isLead_eq: Boolean
+  isLead_in: [Boolean!]
+  stake_eq: BigInt
+  stake_gt: BigInt
+  stake_gte: BigInt
+  stake_lt: BigInt
+  stake_lte: BigInt
+  stake_in: [BigInt!]
+  rewardPerBlock_eq: BigInt
+  rewardPerBlock_gt: BigInt
+  rewardPerBlock_gte: BigInt
+  rewardPerBlock_lt: BigInt
+  rewardPerBlock_lte: BigInt
+  rewardPerBlock_in: [BigInt!]
+  missingRewardAmount_eq: BigInt
+  missingRewardAmount_gt: BigInt
+  missingRewardAmount_gte: BigInt
+  missingRewardAmount_lt: BigInt
+  missingRewardAmount_lte: BigInt
+  missingRewardAmount_in: [BigInt!]
+  hiredAtBlockId_eq: ID
+  hiredAtBlockId_in: [ID!]
+  hiredAtTime_eq: DateTime
+  hiredAtTime_lt: DateTime
+  hiredAtTime_lte: DateTime
+  hiredAtTime_gt: DateTime
+  hiredAtTime_gte: DateTime
+  entryId_eq: ID
+  entryId_in: [ID!]
+  applicationId_eq: ID
+  applicationId_in: [ID!]
+  storage_eq: String
+  storage_contains: String
+  storage_startsWith: String
+  storage_endsWith: String
+  storage_in: [String!]
 }
 
-type WorkingGroup {
-  "Working group runtime id"
+input WorkerWhereUniqueInput {
   id: ID!
-  "Working group name"
+}
+
+type WorkingGroup implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """Working group name"""
   name: String!
-  "Working group current status"
-  status: WorkingGroupStatus
-  "Current working group leader"
+  metadata: WorkingGroupMetadata
+  metadataId: String
   leader: Worker
-  "Workers that currently belong to the group or belonged to the group in the past @derivedFrom(field: group)"
-  workers: [Worker!]
-  "All openings related to this group @derivedFrom(field: group)"
-  openings: [WorkingGroupOpening!]
-  "Current working group budget (JOY)"
+  leaderId: String
+  workers: [Worker!]!
+  openings: [WorkingGroupOpening!]!
+
+  """Current working group budget (JOY)"""
+  budget: BigInt!
+  applicationwithdrawneventgroup: [ApplicationWithdrawnEvent!]
+  appliedonopeningeventgroup: [AppliedOnOpeningEvent!]
+  budgetseteventgroup: [BudgetSetEvent!]
+  budgetspendingeventgroup: [BudgetSpendingEvent!]
+  leaderseteventgroup: [LeaderSetEvent!]
+  leaderunseteventgroup: [LeaderUnsetEvent!]
+  newmissedrewardlevelreachedeventgroup: [NewMissedRewardLevelReachedEvent!]
+  openingaddedeventgroup: [OpeningAddedEvent!]
+  openingcanceledeventgroup: [OpeningCanceledEvent!]
+  openingfilledeventgroup: [OpeningFilledEvent!]
+  rewardpaideventgroup: [RewardPaidEvent!]
+  stakedecreasedeventgroup: [StakeDecreasedEvent!]
+  stakeincreasedeventgroup: [StakeIncreasedEvent!]
+  stakeslashedeventgroup: [StakeSlashedEvent!]
+  statustextchangedeventgroup: [StatusTextChangedEvent!]
+  terminatedleadereventgroup: [TerminatedLeaderEvent!]
+  terminatedworkereventgroup: [TerminatedWorkerEvent!]
+  upcomingworkinggroupopeninggroup: [UpcomingWorkingGroupOpening!]
+  workerexitedeventgroup: [WorkerExitedEvent!]
+  workerrewardaccountupdatedeventgroup: [WorkerRewardAccountUpdatedEvent!]
+  workerrewardamountupdatedeventgroup: [WorkerRewardAmountUpdatedEvent!]
+  workerroleaccountupdatedeventgroup: [WorkerRoleAccountUpdatedEvent!]
+  workerstartedleavingeventgroup: [WorkerStartedLeavingEvent!]
+  workinggroupmetadatagroup: [WorkingGroupMetadata!]
+}
+
+type WorkingGroupApplication implements BaseGraphQLObject {
+  id: ID!
+
+  """Time of application creation"""
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """ApplicationId in specific working group module"""
+  runtimeId: Int!
+  opening: WorkingGroupOpening!
+  openingId: String!
+  applicant: Membership!
+  applicantId: String!
+
+  """Application stake"""
+  stake: BigInt!
+
+  """Applicant's initial role account"""
+  roleAccount: String!
+
+  """Applicant's initial reward account"""
+  rewardAccount: String!
+
+  """Applicant's initial staking account"""
+  stakingAccount: String!
+  answers: [ApplicationFormQuestionAnswer!]!
+
+  """Current application status"""
+  status: WorkingGroupApplicationStatus!
+  createdAtBlock: Block!
+  createdAtBlockId: String!
+  applicationwithdrawneventapplication: [ApplicationWithdrawnEvent!]
+  appliedonopeningeventapplication: [AppliedOnOpeningEvent!]
+  workerapplication: [Worker!]
+}
+
+type WorkingGroupApplicationConnection {
+  totalCount: Int!
+  edges: [WorkingGroupApplicationEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkingGroupApplicationCreateInput {
+  createdAt: DateTime!
+  runtimeId: Float!
+  openingId: ID!
+  applicantId: ID!
+  stake: BigInt!
+  roleAccount: String!
+  rewardAccount: String!
+  stakingAccount: String!
+  status: JSONObject!
+  createdAtBlockId: ID!
+}
+
+type WorkingGroupApplicationEdge {
+  node: WorkingGroupApplication!
+  cursor: String!
+}
+
+enum WorkingGroupApplicationOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  runtimeId_ASC
+  runtimeId_DESC
+  openingId_ASC
+  openingId_DESC
+  applicantId_ASC
+  applicantId_DESC
+  stake_ASC
+  stake_DESC
+  roleAccount_ASC
+  roleAccount_DESC
+  rewardAccount_ASC
+  rewardAccount_DESC
+  stakingAccount_ASC
+  stakingAccount_DESC
+  createdAtBlockId_ASC
+  createdAtBlockId_DESC
+}
+
+union WorkingGroupApplicationStatus = ApplicationStatusPending | ApplicationStatusAccepted | ApplicationStatusRejected | ApplicationStatusWithdrawn | ApplicationStatusCancelled
+
+input WorkingGroupApplicationUpdateInput {
+  createdAt: DateTime
+  runtimeId: Float
+  openingId: ID
+  applicantId: ID
+  stake: BigInt
+  roleAccount: String
+  rewardAccount: String
+  stakingAccount: String
+  status: JSONObject
+  createdAtBlockId: ID
+}
+
+input WorkingGroupApplicationWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  runtimeId_eq: Int
+  runtimeId_gt: Int
+  runtimeId_gte: Int
+  runtimeId_lt: Int
+  runtimeId_lte: Int
+  runtimeId_in: [Int!]
+  openingId_eq: ID
+  openingId_in: [ID!]
+  applicantId_eq: ID
+  applicantId_in: [ID!]
+  stake_eq: BigInt
+  stake_gt: BigInt
+  stake_gte: BigInt
+  stake_lt: BigInt
+  stake_lte: BigInt
+  stake_in: [BigInt!]
+  roleAccount_eq: String
+  roleAccount_contains: String
+  roleAccount_startsWith: String
+  roleAccount_endsWith: String
+  roleAccount_in: [String!]
+  rewardAccount_eq: String
+  rewardAccount_contains: String
+  rewardAccount_startsWith: String
+  rewardAccount_endsWith: String
+  rewardAccount_in: [String!]
+  stakingAccount_eq: String
+  stakingAccount_contains: String
+  stakingAccount_startsWith: String
+  stakingAccount_endsWith: String
+  stakingAccount_in: [String!]
+  status_json: JSONObject
+  createdAtBlockId_eq: ID
+  createdAtBlockId_in: [ID!]
+}
+
+input WorkingGroupApplicationWhereUniqueInput {
+  id: ID!
+}
+
+type WorkingGroupConnection {
+  totalCount: Int!
+  edges: [WorkingGroupEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkingGroupCreateInput {
+  name: String!
+  metadataId: ID
+  leaderId: ID
   budget: BigInt!
 }
 
-type OpeningStatusCancelled {
-  openingCancelledEventId: ID!
+type WorkingGroupEdge {
+  node: WorkingGroup!
+  cursor: String!
 }
-type OpeningStatusOpen {
-  # No additional information needed
-  _phantom: Int
+
+type WorkingGroupMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """Working group status"""
+  status: String
+
+  """Working group status message"""
+  statusMessage: String
+
+  """Working group about text"""
+  about: String
+
+  """Working group description text"""
+  description: String
+  setAtBlock: Block!
+  setAtBlockId: String!
+  setInEvent: StatusTextChangedEvent!
+  setInEventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  workinggroupmetadata: [WorkingGroup!]
 }
-type OpeningStatusFilled {
-  openingFilledEventId: ID!
+
+union WorkingGroupMetadataActionResult = UpcomingOpeningAdded | UpcomingOpeningRemoved | WorkingGroupMetadataSet | InvalidActionMetadata
+
+type WorkingGroupMetadataConnection {
+  totalCount: Int!
+  edges: [WorkingGroupMetadataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkingGroupMetadataCreateInput {
+  status: String
+  statusMessage: String
+  about: String
+  description: String
+  setAtBlockId: ID!
+  setInEventId: ID!
+  groupId: ID!
+}
+
+type WorkingGroupMetadataEdge {
+  node: WorkingGroupMetadata!
+  cursor: String!
+}
+
+enum WorkingGroupMetadataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  status_ASC
+  status_DESC
+  statusMessage_ASC
+  statusMessage_DESC
+  about_ASC
+  about_DESC
+  description_ASC
+  description_DESC
+  setAtBlockId_ASC
+  setAtBlockId_DESC
+  setInEventId_ASC
+  setInEventId_DESC
+  groupId_ASC
+  groupId_DESC
+}
+
+type WorkingGroupMetadataSet {
+  metadataId: String!
+}
+
+input WorkingGroupMetadataSetCreateInput {
+  metadataId: String!
+}
+
+input WorkingGroupMetadataSetUpdateInput {
+  metadataId: String
+}
+
+input WorkingGroupMetadataSetWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  metadataId_eq: String
+  metadataId_contains: String
+  metadataId_startsWith: String
+  metadataId_endsWith: String
+  metadataId_in: [String!]
+}
+
+input WorkingGroupMetadataSetWhereUniqueInput {
+  id: ID!
+}
+
+input WorkingGroupMetadataUpdateInput {
+  status: String
+  statusMessage: String
+  about: String
+  description: String
+  setAtBlockId: ID
+  setInEventId: ID
+  groupId: ID
+}
+
+input WorkingGroupMetadataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  status_eq: String
+  status_contains: String
+  status_startsWith: String
+  status_endsWith: String
+  status_in: [String!]
+  statusMessage_eq: String
+  statusMessage_contains: String
+  statusMessage_startsWith: String
+  statusMessage_endsWith: String
+  statusMessage_in: [String!]
+  about_eq: String
+  about_contains: String
+  about_startsWith: String
+  about_endsWith: String
+  about_in: [String!]
+  description_eq: String
+  description_contains: String
+  description_startsWith: String
+  description_endsWith: String
+  description_in: [String!]
+  setAtBlockId_eq: ID
+  setAtBlockId_in: [ID!]
+  setInEventId_eq: ID
+  setInEventId_in: [ID!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+}
+
+input WorkingGroupMetadataWhereUniqueInput {
+  id: ID!
+}
+
+type WorkingGroupOpening implements BaseGraphQLObject {
+  id: ID!
+
+  """Time of opening creation"""
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """OpeningId in specific working group module"""
+  runtimeId: Int!
+  group: WorkingGroup!
+  groupId: String!
+  applications: [WorkingGroupApplication!]!
+
+  """Type of the opening (Leader/Regular)"""
+  type: WorkingGroupOpeningType!
+
+  """Current opening status"""
+  status: WorkingGroupOpeningStatus!
+  metadata: WorkingGroupOpeningMetadata!
+  metadataId: String!
+
+  """Min. application/role stake amount"""
+  stakeAmount: BigInt!
+
+  """Role stake unstaking period in blocks"""
+  unstakingPeriod: Int!
+
+  """Initial workers' reward per block"""
+  rewardPerBlock: BigInt!
+  createdAtBlock: Block!
+  createdAtBlockId: String!
+  appliedonopeningeventopening: [AppliedOnOpeningEvent!]
+  openingaddedeventopening: [OpeningAddedEvent!]
+  openingcanceledeventopening: [OpeningCanceledEvent!]
+  openingfilledeventopening: [OpeningFilledEvent!]
+}
+
+type WorkingGroupOpeningConnection {
+  totalCount: Int!
+  edges: [WorkingGroupOpeningEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkingGroupOpeningCreateInput {
+  createdAt: DateTime!
+  runtimeId: Float!
+  groupId: ID!
+  type: WorkingGroupOpeningType!
+  status: JSONObject!
+  metadataId: ID!
+  stakeAmount: BigInt!
+  unstakingPeriod: Float!
+  rewardPerBlock: BigInt!
+  createdAtBlockId: ID!
+}
+
+type WorkingGroupOpeningEdge {
+  node: WorkingGroupOpening!
+  cursor: String!
+}
+
+type WorkingGroupOpeningMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: String!
+  updatedAt: DateTime
+  updatedById: String
+  deletedAt: DateTime
+  deletedById: String
+  version: Int!
+
+  """Whether the originally provided metadata was valid"""
+  originallyValid: Boolean!
+
+  """Opening short description"""
+  shortDescription: String
+
+  """Opening description (md-formatted)"""
+  description: String
+
+  """Expected max. number of applicants that will be hired"""
+  hiringLimit: Int
+
+  """Expected time when the opening will close"""
+  expectedEnding: DateTime
+
+  """Md-formatted text explaining the application process"""
+  applicationDetails: String
+  applicationFormQuestions: [ApplicationFormQuestion!]!
+  upcomingworkinggroupopeningmetadata: [UpcomingWorkingGroupOpening!]
+  workinggroupopeningmetadata: [WorkingGroupOpening!]
+}
+
+type WorkingGroupOpeningMetadataConnection {
+  totalCount: Int!
+  edges: [WorkingGroupOpeningMetadataEdge!]!
+  pageInfo: PageInfo!
+}
+
+input WorkingGroupOpeningMetadataCreateInput {
+  originallyValid: Boolean!
+  shortDescription: String
+  description: String
+  hiringLimit: Float
+  expectedEnding: DateTime
+  applicationDetails: String
+}
+
+type WorkingGroupOpeningMetadataEdge {
+  node: WorkingGroupOpeningMetadata!
+  cursor: String!
+}
+
+enum WorkingGroupOpeningMetadataOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  originallyValid_ASC
+  originallyValid_DESC
+  shortDescription_ASC
+  shortDescription_DESC
+  description_ASC
+  description_DESC
+  hiringLimit_ASC
+  hiringLimit_DESC
+  expectedEnding_ASC
+  expectedEnding_DESC
+  applicationDetails_ASC
+  applicationDetails_DESC
+}
+
+input WorkingGroupOpeningMetadataUpdateInput {
+  originallyValid: Boolean
+  shortDescription: String
+  description: String
+  hiringLimit: Float
+  expectedEnding: DateTime
+  applicationDetails: String
+}
+
+input WorkingGroupOpeningMetadataWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  originallyValid_eq: Boolean
+  originallyValid_in: [Boolean!]
+  shortDescription_eq: String
+  shortDescription_contains: String
+  shortDescription_startsWith: String
+  shortDescription_endsWith: String
+  shortDescription_in: [String!]
+  description_eq: String
+  description_contains: String
+  description_startsWith: String
+  description_endsWith: String
+  description_in: [String!]
+  hiringLimit_eq: Int
+  hiringLimit_gt: Int
+  hiringLimit_gte: Int
+  hiringLimit_lt: Int
+  hiringLimit_lte: Int
+  hiringLimit_in: [Int!]
+  expectedEnding_eq: DateTime
+  expectedEnding_lt: DateTime
+  expectedEnding_lte: DateTime
+  expectedEnding_gt: DateTime
+  expectedEnding_gte: DateTime
+  applicationDetails_eq: String
+  applicationDetails_contains: String
+  applicationDetails_startsWith: String
+  applicationDetails_endsWith: String
+  applicationDetails_in: [String!]
+}
+
+input WorkingGroupOpeningMetadataWhereUniqueInput {
+  id: ID!
+}
+
+enum WorkingGroupOpeningOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  runtimeId_ASC
+  runtimeId_DESC
+  groupId_ASC
+  groupId_DESC
+  type_ASC
+  type_DESC
+  metadataId_ASC
+  metadataId_DESC
+  stakeAmount_ASC
+  stakeAmount_DESC
+  unstakingPeriod_ASC
+  unstakingPeriod_DESC
+  rewardPerBlock_ASC
+  rewardPerBlock_DESC
+  createdAtBlockId_ASC
+  createdAtBlockId_DESC
 }
 
 union WorkingGroupOpeningStatus = OpeningStatusOpen | OpeningStatusFilled | OpeningStatusCancelled
@@ -724,326 +7142,150 @@ enum WorkingGroupOpeningType {
   LEADER
 }
 
-type WorkingGroupOpeningMetadata {
-  "Opening short description"
-  shortDescription: String!
-  "Opening description (md-formatted)"
-  description: String!
-  "Expected max. number of applicants that will be hired"
-  hiringLimit: Int!
-  "Expected time when the opening will close"
-  expectedEnding: DateTime!
-  "Md-formatted text explaining the application process"
-  applicationDetails: String!
-  "List of questions that should be answered during application @derivedFrom(field: openingMetadata)"
-  applicationFormQuestions: [ApplicationFormQuestion!]
+input WorkingGroupOpeningUpdateInput {
+  createdAt: DateTime
+  runtimeId: Float
+  groupId: ID
+  type: WorkingGroupOpeningType
+  status: JSONObject
+  metadataId: ID
+  stakeAmount: BigInt
+  unstakingPeriod: Float
+  rewardPerBlock: BigInt
+  createdAtBlockId: ID
 }
 
-type WorkingGroupOpening {
-  "Opening runtime id"
+input WorkingGroupOpeningWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  runtimeId_eq: Int
+  runtimeId_gt: Int
+  runtimeId_gte: Int
+  runtimeId_lt: Int
+  runtimeId_lte: Int
+  runtimeId_in: [Int!]
+  groupId_eq: ID
+  groupId_in: [ID!]
+  type_eq: WorkingGroupOpeningType
+  type_in: [WorkingGroupOpeningType!]
+  status_json: JSONObject
+  metadataId_eq: ID
+  metadataId_in: [ID!]
+  stakeAmount_eq: BigInt
+  stakeAmount_gt: BigInt
+  stakeAmount_gte: BigInt
+  stakeAmount_lt: BigInt
+  stakeAmount_lte: BigInt
+  stakeAmount_in: [BigInt!]
+  unstakingPeriod_eq: Int
+  unstakingPeriod_gt: Int
+  unstakingPeriod_gte: Int
+  unstakingPeriod_lt: Int
+  unstakingPeriod_lte: Int
+  unstakingPeriod_in: [Int!]
+  rewardPerBlock_eq: BigInt
+  rewardPerBlock_gt: BigInt
+  rewardPerBlock_gte: BigInt
+  rewardPerBlock_lt: BigInt
+  rewardPerBlock_lte: BigInt
+  rewardPerBlock_in: [BigInt!]
+  createdAtBlockId_eq: ID
+  createdAtBlockId_in: [ID!]
+}
+
+input WorkingGroupOpeningWhereUniqueInput {
   id: ID!
-  "Related working group"
-  group: WorkingGroup!
-  "List of opening applications  @derivedFrom(field: opening)"
-  applications: [WorkingGroupApplication!]
-  "Type of the opening (Leader/Regular)"
-  type: WorkingGroupOpeningType!
-  "Current opening status"
-  status: WorkingGroupOpeningStatus!
-  "Opening metadata"
-  metadata: WorkingGroupOpeningMetadata!
-  "Role stake amount"
-  stakeAmount: BigInt!
-  "Role stake unstaking period in blocks"
-  unstakingPeriod: Int!
-  "Initial workers' reward per block"
-  rewardPerBlock: BigInt!
-  "Blocknumber of opening creation block"
-  createdAtBlock: Int!
-  "Time of opening creation"
-  createdAtTime: DateTime!
-}
-type ApplicationStatusPending {
-  # No additional information needed
-  _phantom: Int
-}
-type ApplicationStatusAccepted {
-  openingFilledEventId: ID!
-}
-type ApplicationStatusRejected {
-  openingFilledEventId: ID!
-}
-type ApplicationStatusWithdrawn {
-  applicationWithdrawnEventId: ID!
 }
 
-union WorkingGroupApplicationStatus = ApplicationStatusPending | ApplicationStatusAccepted | ApplicationStatusRejected | ApplicationStatusWithdrawn
-
-type WorkingGroupApplication {
-  "Application runtime id"
-  id: ID!
-  "Related working group opening"
-  opening: WorkingGroupOpening!
-  "Applicant's membership"
-  applicant: Membership!
-  "Applicant's initial role account"
-  roleAccount: String!
-  "Applicant's initial reward account"
-  rewardAccount: String!
-  "Applicant's initial staking account"
-  stakingAccount: String!
-  "Answers to application form questions @derivedFrom(field: application)"
-  answers: [ApplicationFormQuestionAnswer!]
-  "Current application status"
-  status: WorkingGroupApplicationStatus!
-  "Blocknumber of application creation block"
-  createdAtBlock: Int!
-  "Time of application creation"
-  createdAtTime: DateTime!
+enum WorkingGroupOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  name_ASC
+  name_DESC
+  metadataId_ASC
+  metadataId_DESC
+  leaderId_ASC
+  leaderId_DESC
+  budget_ASC
+  budget_DESC
 }
 
-type ApplicationFormQuestionAnswer {
-  "Related application"
-  application: WorkingGroupApplication!
-  "The question beeing answered"
-  question: ApplicationFormQuestion!
-  "Applicant's answer"
-  answer: String!
+input WorkingGroupUpdateInput {
+  name: String
+  metadataId: ID
+  leaderId: ID
+  budget: BigInt
 }
 
-enum ApplicationFormQuestionType {
-  TEXT
-  TEXTAREA
+input WorkingGroupWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  name_eq: String
+  name_contains: String
+  name_startsWith: String
+  name_endsWith: String
+  name_in: [String!]
+  metadataId_eq: ID
+  metadataId_in: [ID!]
+  leaderId_eq: ID
+  leaderId_in: [ID!]
+  budget_eq: BigInt
+  budget_gt: BigInt
+  budget_gte: BigInt
+  budget_lt: BigInt
+  budget_lte: BigInt
+  budget_in: [BigInt!]
 }
 
-type ApplicationFormQuestion {
-  "Related opening metadata"
-  openingMetadata: WorkingGroupOpeningMetadata!
-  "The question itself"
-  question: String!
-  "Type of the question (UI answer input type)"
-  type: ApplicationFormQuestionType!
-  "Index of the question"
-  index: Int!
+input WorkingGroupWhereUniqueInput {
+  id: ID
+  name: String
 }
-
-type OpeningAddedEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related opening"
-  opening: WorkingGroupOpening!
-  # Other opening data like: metadata, type, staking policy, reward etc. is immutable, so can be read directly from Opening entity
-}
-
-type AppliedOnOpeningEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related opening"
-  opening: WorkingGroupOpening!
-  "The application that was created"
-  application: WorkingGroupApplication!
-  # Same as with opening - application parameters are immutable and can be fetched from Application entity
-}
-
-type OpeningFilledEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related opening"
-  opening: WorkingGroupOpening!
-  # Otherwise we would need a field like "acceptedIn" filed in application or a separate table to make OneToMany
-}
-
-type LeaderSetEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related Lead worker"
-  worker: Worker!
-}
-
-type WorkerRoleAccountUpdatedEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related worker"
-  worker: Worker!
-  "New role account"
-  newRoleAccount: String!
-}
-
-type LeaderUnsetEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-}
-
-type WorkerExitedEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related worker"
-  worker: Worker!
-}
-
-type TerminatedWorkerEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related worker"
-  worker: Worker!
-  "Slash amount (if any)"
-  penalty: BigInt
-  "Optional rationale"
-  rationale: String
-}
-
-type TerminatedLeaderEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related worker"
-  worker: Worker!
-  "Slash amount (if any)"
-  penalty: BigInt
-  "Optional rationale"
-  rationale: String
-}
-
-type StakeSlashedEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related worker"
-  worker: Worker!
-  "Balance that was requested to be slashed"
-  requestedAmount: BigInt!
-  "Balance that was actually slashed"
-  slashedAmount: BigInt!
-  "Optional rationale"
-  rationale: String
-}
-
-type StakeDecreasedEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related worker"
-  worker: Worker!
-  "The amount of JOY the stake was decreased by"
-  amount: BigInt!
-}
-
-type StakeIncreasedEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related worker"
-  worker: Worker!
-  "The amount of JOY the stake was increased by"
-  amount: BigInt!
-}
-
-type ApplicationWithdrawnEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related application"
-  application: WorkingGroupApplication!
-}
-
-type OpeningCanceledEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related opening"
-  opening: WorkingGroupOpening!
-}
-
-type BudgetSetEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "New working group budget"
-  newBudget: BigInt!
-}
-
-type WorkerRewardAccountUpdatedEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related worker"
-  worker: Worker!
-  "New reward account"
-  newRewardAccount: String!
-}
-
-type WorkerRewardAmountUpdatedEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Related worker"
-  worker: Worker!
-  "New worker reward per block"
-  newRewardPerBlock: BigInt!
-}
-
-type StatusTextChangedEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "New status metadata"
-  status: WorkingGroupStatus!
-}
-
-type BudgetSpendingEvent implements WorkingGroupsEvent {
-  "Generic event data"
-  event: Event!
-  "Related group"
-  group: WorkingGroup!
-  "Reciever account address"
-  reciever: String!
-  "Amount beeing spent"
-  amount: BigInt!
-  "Optional rationale"
-  rationale: String
-}
-
-enum PayoutType {
-  "Standard reward payout"
-  STANDARD_REWARD
-  "Return of the previously missed reward"
-  RETURN_MISSED
-}
-
-type WorkerPayoutEvent {
-  "Type of the worker payout"
-  type: PayoutType
-  "Related worker"
-  worker: Worker!
-  "Amount recieved"
-  recieved: BigInt!
-  "Amount missed (due to, for example, empty working group budget)"
-  missed: BigInt!
-}
-

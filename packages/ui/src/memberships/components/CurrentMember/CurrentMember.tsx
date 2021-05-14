@@ -2,42 +2,45 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
+import { ButtonPrimary } from '../../../common/components/buttons'
 import { ArrowDownExpandedIcon, Icon } from '../../../common/components/icons'
 import { BorderRad, Colors, Transitions } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
-import { useToggle } from '../../../common/hooks/useToggle'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
-import { BuyMembershipModalCall } from '../../modals/BuyMembershipModal'
+import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
-
-import { SwitchMemberModal } from './SwitchMemberModal'
 
 export const CurrentMember = () => {
   const { members, active } = useMyMemberships()
-  const [isOpen, toggleOpen] = useToggle()
   const { showModal } = useModal()
 
   const count = members.length
 
   if (count < 1) {
-    return <AddMembershipButton>Create membership</AddMembershipButton>
+    return (
+      <MembershipButtonsWrapper>
+        <AddMembershipButton>Create membership</AddMembershipButton>
+      </MembershipButtonsWrapper>
+    )
   }
 
   return (
     <>
       <MembershipsCount count={count} />
-      <SwitchMember onClick={toggleOpen}>
-        {active && <MemberInfo member={active} isOnDark={true} maxRoles={4} />}
-        {!active && <>Select membership</>}
-        <SwitchArrow>
-          <ArrowDownExpandedIcon />
-        </SwitchArrow>
-      </SwitchMember>
-      {isOpen && (
-        <SwitchMemberModal
-          onClose={toggleOpen}
-          onCreateMember={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
-        />
+      {active && (
+        <SwitchMember onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
+          {active && <MemberInfo member={active} isOnDark={true} maxRoles={4} />}
+          <SwitchArrow>
+            <ArrowDownExpandedIcon />
+          </SwitchArrow>
+        </SwitchMember>
+      )}
+      {!active && (
+        <MembershipButtonsWrapper>
+          <MembershipActionButton onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
+            Select membership
+          </MembershipActionButton>
+        </MembershipButtonsWrapper>
       )}
     </>
   )
@@ -75,4 +78,15 @@ const SwitchMember = styled.div`
 
     ${MemberDarkHover}
   }
+`
+
+export const MembershipActionButton = styled(ButtonPrimary)`
+  width: 100%;
+`
+
+const MembershipButtonsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  grid-area: memberaccount;
 `

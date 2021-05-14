@@ -1,5 +1,16 @@
 import React from 'react'
+import styled from 'styled-components'
 
+import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { PercentageChart } from '@/common/components/charts/PercentageChart'
+import { Link } from '@/common/components/Link'
+import { MarkdownPreview } from '@/common/components/MarkdownPreview/MarkdownPreview'
+import { Row } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { Label, TextInlineHuge, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
+import { Fraction } from '@/common/components/typography/Fraction'
+import { formatDateString } from '@/common/model/formatters'
+import { relativeTime } from '@/common/model/relativeTime'
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { Link } from '../../common/components/Link'
 import { MarkdownPreview } from '../../common/components/MarkdownPreview/MarkdownPreview'
@@ -33,8 +44,14 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
       </Row>
       <Row>
         <RowGapBlock gap={4}>
-          <Label>Time left</Label>
-          {relativeTime(opening.expectedEnding)}
+          <TimeLeftWrap>
+            <Row>
+              <Label>Time left</Label>
+              {relativeTime(opening.expectedEnding)}
+            </Row>
+            <PercentageChart percentage={70} />
+          </TimeLeftWrap>
+          <TextSmall>Created at {formatDateString(opening.createdAtBlock.timestamp)}</TextSmall>
         </RowGapBlock>
       </Row>
       <Row>
@@ -65,3 +82,8 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
     </RowGapBlock>
   )
 })
+
+const TimeLeftWrap = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 40px;
+`

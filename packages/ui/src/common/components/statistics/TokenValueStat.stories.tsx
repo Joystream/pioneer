@@ -6,7 +6,7 @@ import { BlackBlock, ModalBlock, TemplateBlock, WhiteBlock } from '../storybookP
 import { TokenValueStat, TokenValueStatProps } from './TokenValueStat'
 
 export default {
-  title: 'Common/Statistics',
+  title: 'Common/TokenValueStat',
   component: TokenValueStat,
 } as Meta
 

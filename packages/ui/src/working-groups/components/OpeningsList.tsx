@@ -1,8 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '../../common/components/buttons'
-import { Toggle, ToggleButton } from '../../common/components/buttons/Toggle'
+import { Toggle } from '../../common/components/buttons/Toggle'
 import { Arrow } from '../../common/components/icons'
 import { List, ListItem } from '../../common/components/List'
 import {
@@ -33,6 +34,7 @@ import {
   OpenedItemTitle,
   OpenedTop,
   OpenedWrapper,
+  OpeningToggleButton,
   OpenItemSummaryColumn,
 } from './OpeningAndApplicationsComponents/OACStyledComponents'
 
@@ -49,9 +51,9 @@ const OpeningsListRow = ({ opening }: Props) => {
         <OpeningListItem opening={opening} />
         <OpeningDetails opening={opening} />
       </OACItemContainer>
-      <ToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
+      <OpeningToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
         <Arrow direction="down" />
-      </ToggleButton>
+      </OpeningToggleButton>
     </Toggle>
   )
 }
@@ -146,10 +148,12 @@ const OpeningDetails = ({ opening }: Props) => {
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <ButtonGhost size="medium">
-            <Arrow direction="left" />
-            Learn more
-          </ButtonGhost>
+          <Link to={`/working-groups/openings/${opening.id}`}>
+            <ButtonGhost size="medium">
+              <Arrow direction="left" />
+              Learn more
+            </ButtonGhost>
+          </Link>
           <ButtonPrimary
             size="medium"
             onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}

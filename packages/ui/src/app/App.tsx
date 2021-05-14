@@ -1,15 +1,19 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
+import WorkingGroupOpening from '@/app/pages/WorkingGroups/WorkingGroupsOpening'
+import { ProposalsRoutes } from '@/proposals/constants/routes'
+
 import { ConnectionStatus } from '../common/components/ConnectionStatus'
 import { Page } from '../common/components/page/Page'
 
 import { ExtensionWarning } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { GlobalModals } from './GlobalModals'
-import { MemberList } from './pages/Members/Members'
+import { Members } from './pages/Members/Members'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
+import { Proposals } from './pages/Proposals/Proposals'
 import { MyApplications } from './pages/WorkingGroups/MyApplications'
 import { MyRoles } from './pages/WorkingGroups/MyRoles'
 import { WorkingGroup } from './pages/WorkingGroups/WorkingGroup'
@@ -24,12 +28,16 @@ export const App = () => (
       <Switch>
         <Route exact path="/profile" component={MyAccounts} />
         <Route exact path="/profile/memberships" component={MyMemberships} />
-        <Route exact path="/working-groups" component={WorkingGroupsOpenings} />
-        <Route exact path="/working-groups/working-groups" component={WorkingGroups} />
+        <Route exact path="/working-groups" component={WorkingGroups} />
+        <Route exact path="/working-groups/openings" component={WorkingGroupsOpenings} />
         <Route exact path="/working-groups/my-applications" component={MyApplications} />
         <Route exact path="/working-groups/my-roles" component={MyRoles} />
-        <Route exact path="/working-groups/grouppreview/:id" component={WorkingGroup} />
-        <Route exact path="/members" component={MemberList} />
+        <Route exact path="/working-groups/:name" component={WorkingGroup} />
+        <Route path="/working-groups/openings/:id" component={WorkingGroupOpening} />
+        <Route exact path={ProposalsRoutes.current} component={Proposals} />
+        <Route exact path={ProposalsRoutes.past} />
+        <Route exact path={ProposalsRoutes.myproposals} />
+        <Route exact path="/members" component={Members} />
         <Redirect exact from="/" to="/profile" />
       </Switch>
     </Page>

@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react'
-import styled from 'styled-components'
 
-import { ButtonPrimary, ButtonSize } from '../../common/components/buttons'
+import { ButtonSize } from '../../common/components/buttons'
 import { useModal } from '../../common/hooks/useModal'
 import { BuyMembershipModalCall } from '../modals/BuyMembershipModal'
+
+import { MembershipActionButton } from './CurrentMember'
 
 interface AddMembershipButtonProps {
   className?: string
@@ -15,17 +16,12 @@ export const AddMembershipButton = ({ className, children, size }: AddMembership
   const { showModal } = useModal()
 
   return (
-    <AddMemberships
-      size={size}
+    <MembershipActionButton
       onClick={() => showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })}
       className={className}
+      size={size}
     >
       {children}
-    </AddMemberships>
+    </MembershipActionButton>
   )
 }
-
-const AddMemberships = styled(ButtonPrimary)`
-  justify-self: center;
-  align-self: center;
-`

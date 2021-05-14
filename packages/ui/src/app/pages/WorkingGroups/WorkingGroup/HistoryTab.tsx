@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { Pagination } from '@/common/components/Pagination'
+
 import { ActivitiesBlock } from '../../../../common/components/Activities/ActivitiesBlock'
 import { Loading } from '../../../../common/components/Loading'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
@@ -15,8 +17,8 @@ import { useWorkingGroup } from '../../../../working-groups/hooks/useWorkingGrou
 type Tab = 'OPENINGS' | 'WORKERS'
 
 export function HistoryTab() {
-  const { id } = useParams<{ id: string }>()
-  useWorkingGroup(id)
+  const { name } = useParams<{ name: string }>()
+  const { group } = useWorkingGroup({ name })
 
   const [currentTab, setCurrentTab] = useState<Tab>('OPENINGS')
   const tabs = [
@@ -28,9 +30,9 @@ export function HistoryTab() {
   return (
     <ContentWithSidepanel>
       <MainPanel>
-        <Tabs tabs={tabs} />
-        {currentTab === 'OPENINGS' && <OpeningsHistory groupId={id} />}
-        {currentTab === 'WORKERS' && <WorkersHistory groupId={id} />}
+        <Tabs tabsSize="xs" tabs={tabs} />
+        {currentTab === 'OPENINGS' && <OpeningsHistory groupId={group?.id} />}
+        {currentTab === 'WORKERS' && <WorkersHistory groupId={group?.id} />}
       </MainPanel>
       <SidePanel>
         <ActivitiesBlock activities={activities} label="Working Groups Activities" />
@@ -39,12 +41,20 @@ export function HistoryTab() {
   )
 }
 
-const OpeningsHistory = ({ groupId }: { groupId: string }) => {
-  const { isLoading, openings } = useOpenings({ groupId, type: 'past' })
-  return isLoading ? <Loading /> : <OpeningsList openings={openings} />
+const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
+  const [page, setPage] = useState<number>(0)
+  const { isLoading, openings, pageCount } = useOpenings({ groupId, type: 'past', page })
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <>
+      <OpeningsList openings={openings} />
+      <Pagination pageCount={pageCount as number} handlePageChange={setPage} page={page} />
+    </>
+  )
 }
 
-const WorkersHistory = ({ groupId }: { groupId: string }) => {
+const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   const { isLoading, workers } = useWorkers({ groupId, fetchPast: true })
   return isLoading ? <Loading /> : <WorkersList workers={workers} />
 }

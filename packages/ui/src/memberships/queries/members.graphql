@@ -3,29 +3,28 @@ fragment MemberFields on Membership {
   rootAccount
   controllerAccount
   handle
-  name
-  about
-  avatarUri
+  metadata {
+    name
+    about
+    # avatar {} - Should be fetched from the Storage system.
+    # See https://github.com/Joystream/pioneer/issues/54
+  }
   isVerified
   isFoundingMember
   inviteCount
 }
 
-fragment BlockFields on Block {
-  id
-  block
-  network
-}
-
-query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!]) {
-  memberships(where: {rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in}) {
+query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!], $orderBy: MembershipOrderByInput) {
+  memberships(
+    where: { rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in }
+    orderBy: $orderBy
+  ) {
     ...MemberFields
   }
 }
 
 fragment MemberWithDetails on Membership {
   ...MemberFields
-  registeredAtTime
   registeredAtBlock {
     ...BlockFields
   }
@@ -34,17 +33,46 @@ fragment MemberWithDetails on Membership {
   }
 }
 
-query GetMember($id: ID!) {
-  membership(where: {id: $id}) {
+query GetMember($where: MembershipWhereUniqueInput!) {
+  membershipByUniqueInput(where: $where) {
     ...MemberWithDetails
   }
 }
 
 query SearchMembers($text: String!, $limit: Int) {
-  memberships(where: {
-    name_contains: $text
-    handle_contains: $text
-  }, limit: $limit) {
+  memberships(where: { handle_contains: $text }, limit: $limit) {
     ...MemberFields
+  }
+}
+
+query GetMembershipsConnection(
+  $where: MembershipWhereInput,
+  $orderBy: MembershipOrderByInput,
+  $first: Int,
+  $after: String,
+  $last: Int,
+  $before: String
+) {
+  membershipsConnection(
+    where: $where,
+    orderBy: $orderBy,
+    first: $first,
+    after: $after,
+    last: $last,
+    before: $before
+  ) {
+    edges {
+      cursor
+      node {
+        ...MemberFields
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+    totalCount
   }
 }

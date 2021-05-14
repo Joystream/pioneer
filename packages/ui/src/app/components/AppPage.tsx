@@ -3,23 +3,26 @@ import styled from 'styled-components'
 
 import { PageContent } from '../../common/components/page/PageContent'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
+import { breadcrumbsOptions } from '../constants/breadcrumbs'
 
 interface AppPageProps {
-  crumbs: { href: string; text: string }[]
+  lastBreadcrumb?: string
   children: ReactNode
 }
 
-export const AppPage = ({ children, crumbs }: AppPageProps) => (
+export const AppPage = ({ children, lastBreadcrumb }: AppPageProps) => (
   <PageContent>
-    <Breadcrumbs crumbs={crumbs} />
+    <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
     <PageContainer>{children}</PageContainer>
   </PageContent>
 )
 
 export const PageContainer = styled.div`
   display: grid;
+  align-items: start;
   grid-template-columns: 1fr;
-  grid-template-rows: auto;
+  grid-template-rows: auto 1fr;
   grid-row-gap: 24px;
   width: 100%;
+  flex-grow: 1;
 `

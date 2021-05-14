@@ -3,7 +3,7 @@ import React from 'react'
 import { Icon } from './Icon'
 
 export const FileIcon = React.memo(() => (
-  <Icon size="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+  <Icon size="16" viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
     <path
       d="M2 1.33301H9.60947L14 5.72353L14 14.3524L13 15.333H2V1.33301ZM3.33333 2.66634V13.9997H12.6667L12.6667 6.27582L9.05719 2.66634H3.33333Z"
       fill="currentColor"

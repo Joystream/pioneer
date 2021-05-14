@@ -1,39 +1,29 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { AccountInfo } from '../../../accounts/components/AccountInfo'
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
-import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
+import { UnknownAccountInfo } from '../../../accounts/components/UnknownAccountInfo'
 import { AccountRow } from '../../../common/components/Modal'
-import { MembershipLabel } from '../../../common/components/typography/MembershipLabel'
+import { RowGapBlock } from '../../../common/components/page/PageContent'
+import { SidePaneLabel } from '../../../common/components/SidePane'
 import { Member } from '../../types'
 
-export const MemberAccounts = ({ member }: { member: Member }) => {
-  const { allAccounts } = useAccounts()
+export const MemberAccounts = ({ member }: { member: Member }) => (
+  <AccountsDisplay gap={16}>
+    <SidePaneLabel text="Root account" />
+    {!!member.rootAccount && (
+      <AccountRow>
+        <UnknownAccountInfo address={member.rootAccount} placeholderName="Root Account" />
+      </AccountRow>
+    )}
+    <SidePaneLabel text="Controller account" />
+    {!!member.controllerAccount && (
+      <AccountRow>
+        <UnknownAccountInfo address={member.controllerAccount} placeholderName="Controller Account" />
+      </AccountRow>
+    )}
+  </AccountsDisplay>
+)
 
-  const rootAccount = accountOrNamed(allAccounts, member.rootAccount, 'Root Account')
-  const controllerAccount = accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account')
-
-  return (
-    <AccountsDisplay>
-      <MembershipLabel text="Root account" />
-      {!!rootAccount && (
-        <AccountRow>
-          <AccountInfo account={rootAccount} />
-        </AccountRow>
-      )}
-      <MembershipLabel text="Controller account" />
-      {!!controllerAccount && (
-        <AccountRow>
-          <AccountInfo account={controllerAccount} />
-        </AccountRow>
-      )}
-    </AccountsDisplay>
-  )
-}
-
-const AccountsDisplay = styled.div`
-  display: grid;
-  grid-row-gap: 16px;
+const AccountsDisplay = styled(RowGapBlock)`
   padding: 24px;
 `

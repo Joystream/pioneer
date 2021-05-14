@@ -1,4 +1,4 @@
-import { Member } from '../../../src/memberships/types'
+import { asMember, Member } from '../../../src/memberships/types'
 import { mockMembers } from '../../../src/mocks/data'
 
 export type Members = 'alice' | 'bob'
@@ -9,5 +9,5 @@ export const getMember = (handle: Members): Member => {
   delete member.registeredAtTime
   delete member.invitedById
   delete member.about
-  return member
+  return asMember(member)
 }

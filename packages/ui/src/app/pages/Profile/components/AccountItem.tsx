@@ -6,9 +6,10 @@ import { AccountInfo } from '../../../../accounts/components/AccountInfo'
 import { TransferButton } from '../../../../accounts/components/TransferButton'
 import { useBalance } from '../../../../accounts/hooks/useBalance'
 import { Account } from '../../../../accounts/types'
-import { ToggleableItem } from '../../../../common/components/buttons/Toggle'
+import { DropDownButton, DropDownToggle } from '../../../../common/components/buttons/DropDownToggle'
 import { TokenValue } from '../../../../common/components/typography'
 import { Sizes } from '../../../../common/constants'
+import { useToggle } from '../../../../common/hooks/useToggle'
 
 interface AccountItemDataProps {
   account: Account
@@ -17,38 +18,26 @@ interface AccountItemDataProps {
 export const AccountItem = ({ account }: AccountItemDataProps) => {
   const address = account.address
   const balance = useBalance(address)
-
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
+  const [isDropped, setDropped] = useToggle()
+
   return (
-    <ToggleableItem>
-      {(isOpen) => {
-        return (
-          <div>
-            <AccountItemWrap key={address}>
-              <AccountInfo account={account} />
-              <AccountBalance>
-                <TokenValue value={balance?.total} />
-              </AccountBalance>
-              <AccountBalance>
-                <TokenValue value={balance?.locked} />
-              </AccountBalance>
-              <AccountBalance>
-                <TokenValue value={balance?.recoverable} />
-              </AccountBalance>
-              <AccountBalance>
-                <TokenValue value={balance?.transferable} />
-              </AccountBalance>
-              <AccountControls>
-                <TransferButton to={account} />
-                <TransferButton from={account} disabled={isSendDisabled} />
-              </AccountControls>
-            </AccountItemWrap>
-            {isOpen && <div>I'm Open!</div>}
-          </div>
-        )
-      }}
-    </ToggleableItem>
+    <>
+      <AccountItemWrap key={address}>
+        <AccountInfo account={account} />
+        <TokenValue value={balance?.total} />
+        <TokenValue value={balance?.locked} />
+        <TokenValue value={balance?.recoverable} />
+        <TokenValue value={balance?.transferable} />
+        <AccountControls>
+          <TransferButton to={account} />
+          <TransferButton from={account} disabled={isSendDisabled} />
+          <DropDownButton onClick={setDropped} isDropped={isDropped} size="medium" />
+        </AccountControls>
+      </AccountItemWrap>
+      <DropDownToggle isDropped={isDropped}>I'm opened</DropDownToggle>
+    </>
   )
 }
 
@@ -61,14 +50,13 @@ const AccountItemWrap = styled.div`
   align-items: center;
   width: 100%;
   height: ${Sizes.accountHeight};
-  padding: 16px 0 16px 14px;
+  padding: 16px 8px 16px 16px;
+  margin-left: -1px;
 `
-
-const AccountBalance = styled.p``
 
 const AccountControls = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 40px);
+  grid-template-columns: repeat(3, 40px);
   grid-template-rows: 40px;
   grid-column-gap: 8px;
 `

@@ -1,21 +1,34 @@
 import BN from 'bn.js'
 
+import { asBlock, Block } from '@/common/types'
+import { asMember, Member } from '@/memberships/types'
+
 import { ApplicationQuestionFieldsFragment, WorkingGroupOpeningFieldsFragment } from '../queries'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
-type Status = 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
+type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
 
 export interface WorkingGroupOpening {
   id: string
+  groupId: string
+  groupName: string
+  leaderId?: string | null
+  budget: number
   expectedEnding: string
   title: string
   shortDescription: string
   description: string
+  details: string
   type: WorkingGroupOpeningType
   reward: {
     value: BN
     interval: number
   }
+  applications: {
+    member: Member
+    status: string
+  }[]
+  createdAtBlock: Block
   applicants: {
     current: number
     total: number
@@ -25,10 +38,22 @@ export interface WorkingGroupOpening {
     total: number
   }
   status: Status
+  stake: BN
 }
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
   id: fields.id,
+  groupId: fields.groupId,
+  groupName: fields.group.name,
+  leaderId: fields.group.leaderId,
+  budget: fields.group.budget,
+  applications: fields.applications.length
+    ? fields.applications.map((application) => ({
+        member: asMember(application.applicant),
+        status: application.status.__typename,
+      }))
+    : [],
+  createdAtBlock: asBlock(fields.createdAtBlock),
   applicants: {
     current: 0,
     total: fields.applications?.length || 0,
@@ -41,12 +66,14 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   expectedEnding: fields.metadata.expectedEnding,
   hiring: {
     current: 0,
-    total: fields.metadata.hiringLimit,
+    total: fields.metadata?.hiringLimit ?? 0,
   },
-  title: fields.metadata.shortDescription,
-  shortDescription: fields.metadata.shortDescription,
-  description: fields.metadata.description,
+  title: fields.metadata?.shortDescription ?? '',
+  shortDescription: fields.metadata.shortDescription || '',
+  description: fields.metadata?.description ?? '',
+  details: fields.metadata?.applicationDetails ?? '',
   status: fields.status.__typename,
+  stake: new BN(fields.stakeAmount),
 })
 
 export type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'
@@ -61,6 +88,6 @@ export const asApplicationQuestion = (opening: ApplicationQuestionFieldsFragment
   return {
     index: opening.index,
     type: opening.type,
-    question: opening.question,
+    question: opening?.question ?? '',
   }
 }

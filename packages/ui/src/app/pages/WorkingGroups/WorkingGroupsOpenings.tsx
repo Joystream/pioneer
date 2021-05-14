@@ -1,5 +1,7 @@
 import BN from 'bn.js'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
+
+import { ButtonPrimary } from '@/common/components/buttons'
 
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { ActivitiesBlock } from '../../../common/components/Activities/ActivitiesBlock'
@@ -14,10 +16,11 @@ import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
-import { TextMedium } from '../../../common/components/typography'
 import { useActivities } from '../../../common/hooks/useActivities'
+import { useModal } from '../../../common/hooks/useModal'
 import { MemberRoles } from '../../../memberships/components/MemberRoles'
 import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
+import { SwitchMemberModalCall } from '../../../memberships/modals/SwitchMemberModal'
 import { OpeningsList } from '../../../working-groups/components/OpeningsList'
 import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
@@ -31,18 +34,13 @@ export const WorkingGroupsOpenings = () => {
   const activities = useActivities()
   const { active } = useMyMemberships()
   const { locked } = useTotalBalances()
+  const { showModal } = useModal()
+
   const earnings = {
     day: new BN(200),
     month: new BN(102_000),
   }
 
-  const crumbs = useMemo(
-    () => [
-      { href: '#', text: 'Working Groups' },
-      { href: '#', text: 'Openings' },
-    ],
-    []
-  )
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
 
   const openingsTabs = [
@@ -61,7 +59,7 @@ export const WorkingGroupsOpenings = () => {
   ]
 
   return (
-    <AppPage crumbs={crumbs}>
+    <AppPage>
       <PageHeader>
         <PageTitle>Working Groups</PageTitle>
         <WorkingGroupsTabs />
@@ -70,7 +68,13 @@ export const WorkingGroupsOpenings = () => {
         <MainPanel>
           <Statistics>
             <StatisticItem title="My Roles">
-              {active ? <MemberRoles member={active} size="l" max={6} /> : <TextMedium>Select membership</TextMedium>}
+              {active ? (
+                <MemberRoles member={active} size="l" max={6} />
+              ) : (
+                <ButtonPrimary size="small" onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
+                  Select membership
+                </ButtonPrimary>
+              )}
             </StatisticItem>
             <TokenValueStat title="Currently staking" value={locked} />
             <MultiTokenValueStat

@@ -1,21 +1,23 @@
-const webpack = require('webpack')
+const shared = require('./../dev/webpack.shared')
 
 module.exports = {
   webpackFinal: (config) => {
-    config.resolve = {
-      extensions: ['.tsx', '.ts', '.js'],
-      fallback: {
-        crypto: require.resolve('crypto-browserify'),
-        stream: require.resolve('stream-browserify'),
-        path: false,
-      },
-    }
-    config.plugins.push(
-      new webpack.ProvidePlugin({
-        Buffer: ['buffer', 'Buffer'],
-        process: 'process/browser.js',
-      })
-    )
+    config.module.rules.forEach((rule) => {
+      if (isCssRule(rule)) {
+        rule.exclude = /ckeditor5-[^/]+\/theme\/[\w-/]+\.css$/
+      }
+    })
+
+    config.module.rules.forEach((rule) => {
+      if (isSvgRule(rule)) {
+        rule.exclude = /ckeditor5-[^/]+\/theme\/icons\/[^/]+\.svg$/
+      }
+    })
+
+    config.resolve = shared.resolve
+    config.plugins.push(...shared.plugins)
+    config.module.rules.unshift(...shared.rules)
+
     return config
   },
   core: {
@@ -23,4 +25,12 @@ module.exports = {
   },
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(ts|tsx)'],
   addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-actions'],
+}
+
+function isCssRule(rule) {
+  return rule.test.toString().indexOf('css') > -1
+}
+
+function isSvgRule(rule) {
+  return rule.test.toString().indexOf('svg') > -1
 }

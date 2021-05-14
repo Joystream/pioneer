@@ -1,9 +1,9 @@
-import { Network } from '../../common/api/queries'
-import { BlockFieldsFragment } from '../../memberships/queries'
+import { Network } from '@/common/api/queries'
+import { BlockFieldsFragment } from '@/common/queries'
 
 import rawBlocks from './raw/blocks.json'
 
-export type MockBlock = BlockFieldsFragment
+export type MockBlock = Omit<BlockFieldsFragment, 'id'>
 
 export const mockBlocks: MockBlock[] = rawBlocks.map((rawBlock) => {
   return {
@@ -14,7 +14,7 @@ export const mockBlocks: MockBlock[] = rawBlocks.map((rawBlock) => {
 })
 
 export const seedBlocks = (server: any) => {
-  return mockBlocks.reduce((map, block) => {
-    return map.set(block.id, server.schema.create('Block', { ...block }))
-  }, new Map())
+  for (const block of mockBlocks) {
+    server.schema.create('Block', { ...block })
+  }
 }

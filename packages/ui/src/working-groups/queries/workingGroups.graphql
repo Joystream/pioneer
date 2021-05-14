@@ -1,8 +1,8 @@
-fragment WorkingGroupStatusFields on WorkingGroupStatus {
-  name
+fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
   about
   description
-  message
+  status
+  statusMessage
 }
 
 fragment WorkerFields on Worker {
@@ -10,10 +10,20 @@ fragment WorkerFields on Worker {
     ...MemberFields
   }
   group {
-    id
+    id,
+    name
   }
   status {
     __typename
+  }
+  isLead
+  rewardPerBlock
+  stake
+  roleAccount
+  rewardAccount
+  stakeAccount
+  hiredAtBlock {
+    ...BlockFields
   }
 }
 
@@ -21,7 +31,9 @@ fragment WorkingGroupFields on WorkingGroup {
   id
   name
   budget
-  status { ...WorkingGroupStatusFields }
+  metadata {
+    ...WorkingGroupMetdataFields
+  }
   workers {
     ...WorkerFields
   }
@@ -38,8 +50,8 @@ query getWorkingGroups {
   }
 }
 
-query getWorkers ($group_eq: ID) {
-  workers(where: {group_eq: $group_eq}) {
+query getWorkers ($where: WorkerWhereInput) {
+  workers(where: $where) {
     ...WorkerFields
   }
 }
@@ -54,14 +66,41 @@ fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
 
 fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   id
+  groupId
+  group {
+    name
+    budget
+    leaderId
+  }
   type
   stakeAmount
   rewardPerBlock
+  createdAtBlock {
+    ...BlockFields
+  }
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
   applications {
     id
+    status {
+      __typename
+    }
+    applicant {
+      id
+      isVerified
+      handle
+      rootAccount
+      controllerAccount
+      inviteCount
+      isFoundingMember
+      roles {
+        id
+      }
+      metadata {
+        name
+      }
+    }
     status {
       __typename
     }
@@ -71,8 +110,36 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   }
 }
 
-query getWorkingGroupOpenings($group_eq: ID) {
-  workingGroupOpenings(where: { group_eq: $group_eq }) {
+fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
+  totalCount
+  edges {
+    node {
+      ... WorkingGroupOpeningFields
+    }
+    cursor
+  }
+  pageInfo {
+    hasNextPage
+    hasPreviousPage
+    startCursor
+    endCursor
+  }
+}
+
+query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
+  workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {
+    ... WorkingGroupOpeningFieldsConnection
+  }
+}
+
+query getWorkingGroupOpenings($groupId_eq: ID) {
+  workingGroupOpenings(where: { groupId_eq: $groupId_eq }) {
+    ... WorkingGroupOpeningFields
+  }
+}
+
+query getWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
+  workingGroupOpeningByUniqueInput(where: $where) {
     ... WorkingGroupOpeningFields
   }
 }
@@ -83,8 +150,8 @@ fragment ApplicationQuestionFields on ApplicationFormQuestion {
   question
 }
 
-query GetWorkingGroupOpeningQuestions($id: ID) {
-  workingGroupOpening(where: {id: $id}) {
+query GetWorkingGroupOpeningQuestions($id: ID!) {
+  workingGroupOpeningByUniqueInput(where: {id: $id}) {
     metadata {
       applicationFormQuestions {
         ...ApplicationQuestionFields
@@ -93,8 +160,8 @@ query GetWorkingGroupOpeningQuestions($id: ID) {
   }
 }
 
-query GetWorkingGroup($id: ID!) {
-  workingGroup(where: { id: $id }) {
+query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
+  workingGroupByUniqueInput(where: $where) {
     ... WorkingGroupFields
   }
 }
@@ -114,10 +181,27 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   status {
     __typename
   }
+  stakingAccount
+  createdAtBlock {
+    ...BlockFields
+  }
 }
 
-query GetWorkingGroupApplications($applicant_in: [ID!]) {
-  workingGroupApplications(where: { applicant_in: $applicant_in }) {
+query GetWorkingGroupApplications($applicantId_in: [ID!]) {
+  workingGroupApplications(where: { applicantId_in: $applicantId_in }) {
     ...WorkingGroupApplicationFields
+  }
+}
+
+fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
+  question {
+    ... ApplicationQuestionFields
+  }
+  answer
+}
+
+query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
+  applicationFormQuestionAnswers(where: { applicationId_eq: $applicationId_eq }) {
+    ...ApplicationFormQuestionAnswerFields
   }
 }

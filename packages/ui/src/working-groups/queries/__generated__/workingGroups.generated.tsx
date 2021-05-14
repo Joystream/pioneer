@@ -4,26 +4,34 @@ import {
   MemberFieldsFragment,
   MemberFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
-export type WorkingGroupStatusFieldsFragment = {
-  __typename: 'WorkingGroupStatus'
-  name: string
+export type WorkingGroupMetdataFieldsFragment = {
+  __typename: 'WorkingGroupMetadata'
   about?: Types.Maybe<string>
   description?: Types.Maybe<string>
-  message?: Types.Maybe<string>
+  status?: Types.Maybe<string>
+  statusMessage?: Types.Maybe<string>
 }
 
 export type WorkerFieldsFragment = {
   __typename: 'Worker'
+  isLead: boolean
+  rewardPerBlock: any
+  stake: any
+  roleAccount: string
+  rewardAccount: string
+  stakeAccount: string
   membership: { __typename: 'Membership' } & MemberFieldsFragment
-  group: { __typename: 'WorkingGroup'; id: string }
+  group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
     | { __typename: 'WorkerStatusActive' }
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
+  hiredAtBlock: { __typename: 'Block'; id: string; network: Types.Network; timestamp: any; number: number }
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -31,8 +39,8 @@ export type WorkingGroupFieldsFragment = {
   id: string
   name: string
   budget: any
-  status?: Types.Maybe<{ __typename: 'WorkingGroupStatus' } & WorkingGroupStatusFieldsFragment>
-  workers?: Types.Maybe<Array<{ __typename: 'Worker' } & WorkerFieldsFragment>>
+  metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetdataFieldsFragment>
+  workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment>
   leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
 }
 
@@ -44,89 +52,143 @@ export type GetWorkingGroupsQuery = {
 }
 
 export type GetWorkersQueryVariables = Types.Exact<{
-  group_eq?: Types.Maybe<Types.Scalars['ID']>
+  where?: Types.Maybe<Types.WorkerWhereInput>
 }>
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
 
 export type WorkingGroupOpeningMetadataFieldsFragment = {
   __typename: 'WorkingGroupOpeningMetadata'
-  applicationDetails: string
-  shortDescription: string
-  description: string
-  hiringLimit: number
-  expectedEnding: any
+  applicationDetails?: Types.Maybe<string>
+  shortDescription?: Types.Maybe<string>
+  description?: Types.Maybe<string>
+  hiringLimit?: Types.Maybe<number>
+  expectedEnding?: Types.Maybe<any>
 }
 
 export type WorkingGroupOpeningFieldsFragment = {
   __typename: 'WorkingGroupOpening'
   id: string
+  groupId: string
   type: Types.WorkingGroupOpeningType
   stakeAmount: any
   rewardPerBlock: any
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
-  applications?: Types.Maybe<
-    Array<{
-      __typename: 'WorkingGroupApplication'
+  applications: Array<{
+    __typename: 'WorkingGroupApplication'
+    id: string
+    status:
+      | { __typename: 'ApplicationStatusPending' }
+      | { __typename: 'ApplicationStatusAccepted' }
+      | { __typename: 'ApplicationStatusRejected' }
+      | { __typename: 'ApplicationStatusWithdrawn' }
+      | { __typename: 'ApplicationStatusCancelled' }
+    applicant: {
+      __typename: 'Membership'
       id: string
-      status:
-        | { __typename: 'ApplicationStatusPending' }
-        | { __typename: 'ApplicationStatusAccepted' }
-        | { __typename: 'ApplicationStatusRejected' }
-        | { __typename: 'ApplicationStatusWithdrawn' }
-    }>
-  >
+      isVerified: boolean
+      handle: string
+      rootAccount: string
+      controllerAccount: string
+      inviteCount: number
+      isFoundingMember: boolean
+      roles: Array<{ __typename: 'Worker'; id: string }>
+      metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string> }
+    }
+  }>
   status:
     | { __typename: 'OpeningStatusOpen' }
     | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusCancelled' }
 }
 
+export type WorkingGroupOpeningFieldsConnectionFragment = {
+  __typename: 'WorkingGroupOpeningConnection'
+  totalCount: number
+  edges: Array<{
+    __typename: 'WorkingGroupOpeningEdge'
+    cursor: string
+    node: { __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment
+  }>
+  pageInfo: {
+    __typename: 'PageInfo'
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+    startCursor?: Types.Maybe<string>
+    endCursor?: Types.Maybe<string>
+  }
+}
+
+export type GetWorkingGroupOpeningsConnectionQueryVariables = Types.Exact<{
+  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
+  first?: Types.Maybe<Types.Scalars['Int']>
+  last?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type GetWorkingGroupOpeningsConnectionQuery = {
+  __typename: 'Query'
+  workingGroupOpeningsConnection: {
+    __typename: 'WorkingGroupOpeningConnection'
+  } & WorkingGroupOpeningFieldsConnectionFragment
+}
+
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  group_eq?: Types.Maybe<Types.Scalars['ID']>
+  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
 }>
 
 export type GetWorkingGroupOpeningsQuery = {
   __typename: 'Query'
-  workingGroupOpenings?: Types.Maybe<Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>>
+  workingGroupOpenings: Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>
+}
+
+export type GetWorkingGroupOpeningQueryVariables = Types.Exact<{
+  where: Types.WorkingGroupOpeningWhereUniqueInput
+}>
+
+export type GetWorkingGroupOpeningQuery = {
+  __typename: 'Query'
+  workingGroupOpeningByUniqueInput?: Types.Maybe<
+    { __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment
+  >
 }
 
 export type ApplicationQuestionFieldsFragment = {
   __typename: 'ApplicationFormQuestion'
   index: number
   type: Types.ApplicationFormQuestionType
-  question: string
+  question?: Types.Maybe<string>
 }
 
 export type GetWorkingGroupOpeningQuestionsQueryVariables = Types.Exact<{
-  id?: Types.Maybe<Types.Scalars['ID']>
+  id: Types.Scalars['ID']
 }>
 
 export type GetWorkingGroupOpeningQuestionsQuery = {
   __typename: 'Query'
-  workingGroupOpening?: Types.Maybe<{
+  workingGroupOpeningByUniqueInput?: Types.Maybe<{
     __typename: 'WorkingGroupOpening'
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
-      applicationFormQuestions?: Types.Maybe<
-        Array<{ __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment>
-      >
+      applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment>
     }
   }>
 }
 
 export type GetWorkingGroupQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
+  where: Types.WorkingGroupWhereUniqueInput
 }>
 
 export type GetWorkingGroupQuery = {
   __typename: 'Query'
-  workingGroup?: Types.Maybe<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
+  workingGroupByUniqueInput?: Types.Maybe<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
 }
 
 export type WorkingGroupApplicationFieldsFragment = {
   __typename: 'WorkingGroupApplication'
   id: string
+  stakingAccount: string
   opening: {
     __typename: 'WorkingGroupOpening'
     type: Types.WorkingGroupOpeningType
@@ -139,25 +201,42 @@ export type WorkingGroupApplicationFieldsFragment = {
     | { __typename: 'ApplicationStatusAccepted' }
     | { __typename: 'ApplicationStatusRejected' }
     | { __typename: 'ApplicationStatusWithdrawn' }
+    | { __typename: 'ApplicationStatusCancelled' }
+  createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
 }
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
-  applicant_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
+  applicantId_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
 }>
 
 export type GetWorkingGroupApplicationsQuery = {
   __typename: 'Query'
-  workingGroupApplications?: Types.Maybe<
-    Array<{ __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment>
+  workingGroupApplications: Array<{ __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment>
+}
+
+export type ApplicationFormQuestionAnswerFieldsFragment = {
+  __typename: 'ApplicationFormQuestionAnswer'
+  answer: string
+  question: { __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment
+}
+
+export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
+  applicationId_eq?: Types.Maybe<Types.Scalars['ID']>
+}>
+
+export type GetApplicationFormQuestionAnswerQuery = {
+  __typename: 'Query'
+  applicationFormQuestionAnswers: Array<
+    { __typename: 'ApplicationFormQuestionAnswer' } & ApplicationFormQuestionAnswerFieldsFragment
   >
 }
 
-export const WorkingGroupStatusFieldsFragmentDoc = gql`
-  fragment WorkingGroupStatusFields on WorkingGroupStatus {
-    name
+export const WorkingGroupMetdataFieldsFragmentDoc = gql`
+  fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
     about
     description
-    message
+    status
+    statusMessage
   }
 `
 export const WorkerFieldsFragmentDoc = gql`
@@ -167,9 +246,22 @@ export const WorkerFieldsFragmentDoc = gql`
     }
     group {
       id
+      name
     }
     status {
       __typename
+    }
+    isLead
+    rewardPerBlock
+    stake
+    roleAccount
+    rewardAccount
+    stakeAccount
+    hiredAtBlock {
+      id
+      network
+      timestamp
+      number
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -179,8 +271,8 @@ export const WorkingGroupFieldsFragmentDoc = gql`
     id
     name
     budget
-    status {
-      ...WorkingGroupStatusFields
+    metadata {
+      ...WorkingGroupMetdataFields
     }
     workers {
       ...WorkerFields
@@ -191,7 +283,7 @@ export const WorkingGroupFieldsFragmentDoc = gql`
       }
     }
   }
-  ${WorkingGroupStatusFieldsFragmentDoc}
+  ${WorkingGroupMetdataFieldsFragmentDoc}
   ${WorkerFieldsFragmentDoc}
 `
 export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
@@ -206,9 +298,18 @@ export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
 export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningFields on WorkingGroupOpening {
     id
+    groupId
+    group {
+      name
+      budget
+      leaderId
+    }
     type
     stakeAmount
     rewardPerBlock
+    createdAtBlock {
+      ...BlockFields
+    }
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }
@@ -217,19 +318,49 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
       status {
         __typename
       }
+      applicant {
+        id
+        isVerified
+        handle
+        rootAccount
+        controllerAccount
+        inviteCount
+        isFoundingMember
+        roles {
+          id
+        }
+        metadata {
+          name
+        }
+      }
+      status {
+        __typename
+      }
     }
     status {
       __typename
     }
   }
+  ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
-export const ApplicationQuestionFieldsFragmentDoc = gql`
-  fragment ApplicationQuestionFields on ApplicationFormQuestion {
-    index
-    type
-    question
+export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
+  fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
+    totalCount
+    edges {
+      node {
+        ...WorkingGroupOpeningFields
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
   }
+  ${WorkingGroupOpeningFieldsFragmentDoc}
 `
 export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
@@ -247,8 +378,29 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
     status {
       __typename
     }
+    stakingAccount
+    createdAtBlock {
+      ...BlockFields
+    }
   }
   ${MemberFieldsFragmentDoc}
+  ${BlockFieldsFragmentDoc}
+`
+export const ApplicationQuestionFieldsFragmentDoc = gql`
+  fragment ApplicationQuestionFields on ApplicationFormQuestion {
+    index
+    type
+    question
+  }
+`
+export const ApplicationFormQuestionAnswerFieldsFragmentDoc = gql`
+  fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
+    question {
+      ...ApplicationQuestionFields
+    }
+    answer
+  }
+  ${ApplicationQuestionFieldsFragmentDoc}
 `
 export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {
@@ -290,8 +442,8 @@ export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGro
 export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>
 export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
 export const GetWorkersDocument = gql`
-  query getWorkers($group_eq: ID) {
-    workers(where: { group_eq: $group_eq }) {
+  query getWorkers($where: WorkerWhereInput) {
+    workers(where: $where) {
       ...WorkerFields
     }
   }
@@ -310,7 +462,7 @@ export const GetWorkersDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkersQuery({
  *   variables: {
- *      group_eq: // value for 'group_eq'
+ *      where: // value for 'where'
  *   },
  * });
  */
@@ -327,9 +479,70 @@ export function useGetWorkersLazyQuery(
 export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
+export const GetWorkingGroupOpeningsConnectionDocument = gql`
+  query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
+    workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {
+      ...WorkingGroupOpeningFieldsConnection
+    }
+  }
+  ${WorkingGroupOpeningFieldsConnectionFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupOpeningsConnectionQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupOpeningsConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupOpeningsConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupOpeningsConnectionQuery({
+ *   variables: {
+ *      groupId_eq: // value for 'groupId_eq'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupOpeningsConnectionQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetWorkingGroupOpeningsConnectionQuery,
+    GetWorkingGroupOpeningsConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningsConnectionQuery, GetWorkingGroupOpeningsConnectionQueryVariables>(
+    GetWorkingGroupOpeningsConnectionDocument,
+    options
+  )
+}
+export function useGetWorkingGroupOpeningsConnectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWorkingGroupOpeningsConnectionQuery,
+    GetWorkingGroupOpeningsConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningsConnectionQuery, GetWorkingGroupOpeningsConnectionQueryVariables>(
+    GetWorkingGroupOpeningsConnectionDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningsConnectionQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupOpeningsConnectionQuery
+>
+export type GetWorkingGroupOpeningsConnectionLazyQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupOpeningsConnectionLazyQuery
+>
+export type GetWorkingGroupOpeningsConnectionQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningsConnectionQuery,
+  GetWorkingGroupOpeningsConnectionQueryVariables
+>
 export const GetWorkingGroupOpeningsDocument = gql`
-  query getWorkingGroupOpenings($group_eq: ID) {
-    workingGroupOpenings(where: { group_eq: $group_eq }) {
+  query getWorkingGroupOpenings($groupId_eq: ID) {
+    workingGroupOpenings(where: { groupId_eq: $groupId_eq }) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -348,7 +561,7 @@ export const GetWorkingGroupOpeningsDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupOpeningsQuery({
  *   variables: {
- *      group_eq: // value for 'group_eq'
+ *      groupId_eq: // value for 'groupId_eq'
  *   },
  * });
  */
@@ -376,9 +589,58 @@ export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningsQuery,
   GetWorkingGroupOpeningsQueryVariables
 >
+export const GetWorkingGroupOpeningDocument = gql`
+  query getWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
+    workingGroupOpeningByUniqueInput(where: $where) {
+      ...WorkingGroupOpeningFields
+    }
+  }
+  ${WorkingGroupOpeningFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupOpeningQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupOpeningQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupOpeningQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupOpeningQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupOpeningQuery(
+  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>(
+    GetWorkingGroupOpeningDocument,
+    options
+  )
+}
+export function useGetWorkingGroupOpeningLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>(
+    GetWorkingGroupOpeningDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningQuery>
+export type GetWorkingGroupOpeningLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningLazyQuery>
+export type GetWorkingGroupOpeningQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningQuery,
+  GetWorkingGroupOpeningQueryVariables
+>
 export const GetWorkingGroupOpeningQuestionsDocument = gql`
-  query GetWorkingGroupOpeningQuestions($id: ID) {
-    workingGroupOpening(where: { id: $id }) {
+  query GetWorkingGroupOpeningQuestions($id: ID!) {
+    workingGroupOpeningByUniqueInput(where: { id: $id }) {
       metadata {
         applicationFormQuestions {
           ...ApplicationQuestionFields
@@ -406,7 +668,7 @@ export const GetWorkingGroupOpeningQuestionsDocument = gql`
  * });
  */
 export function useGetWorkingGroupOpeningQuestionsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     GetWorkingGroupOpeningQuestionsQuery,
     GetWorkingGroupOpeningQuestionsQueryVariables
   >
@@ -438,8 +700,8 @@ export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningQuestionsQueryVariables
 >
 export const GetWorkingGroupDocument = gql`
-  query GetWorkingGroup($id: ID!) {
-    workingGroup(where: { id: $id }) {
+  query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
+    workingGroupByUniqueInput(where: $where) {
       ...WorkingGroupFields
     }
   }
@@ -458,7 +720,7 @@ export const GetWorkingGroupDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      where: // value for 'where'
  *   },
  * });
  */
@@ -478,8 +740,8 @@ export type GetWorkingGroupQueryHookResult = ReturnType<typeof useGetWorkingGrou
 export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupLazyQuery>
 export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 export const GetWorkingGroupApplicationsDocument = gql`
-  query GetWorkingGroupApplications($applicant_in: [ID!]) {
-    workingGroupApplications(where: { applicant_in: $applicant_in }) {
+  query GetWorkingGroupApplications($applicantId_in: [ID!]) {
+    workingGroupApplications(where: { applicantId_in: $applicantId_in }) {
       ...WorkingGroupApplicationFields
     }
   }
@@ -498,7 +760,7 @@ export const GetWorkingGroupApplicationsDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupApplicationsQuery({
  *   variables: {
- *      applicant_in: // value for 'applicant_in'
+ *      applicantId_in: // value for 'applicantId_in'
  *   },
  * });
  */
@@ -525,4 +787,63 @@ export type GetWorkingGroupApplicationsLazyQueryHookResult = ReturnType<typeof u
 export type GetWorkingGroupApplicationsQueryResult = Apollo.QueryResult<
   GetWorkingGroupApplicationsQuery,
   GetWorkingGroupApplicationsQueryVariables
+>
+export const GetApplicationFormQuestionAnswerDocument = gql`
+  query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
+    applicationFormQuestionAnswers(where: { applicationId_eq: $applicationId_eq }) {
+      ...ApplicationFormQuestionAnswerFields
+    }
+  }
+  ${ApplicationFormQuestionAnswerFieldsFragmentDoc}
+`
+
+/**
+ * __useGetApplicationFormQuestionAnswerQuery__
+ *
+ * To run a query within a React component, call `useGetApplicationFormQuestionAnswerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetApplicationFormQuestionAnswerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetApplicationFormQuestionAnswerQuery({
+ *   variables: {
+ *      applicationId_eq: // value for 'applicationId_eq'
+ *   },
+ * });
+ */
+export function useGetApplicationFormQuestionAnswerQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetApplicationFormQuestionAnswerQuery,
+    GetApplicationFormQuestionAnswerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>(
+    GetApplicationFormQuestionAnswerDocument,
+    options
+  )
+}
+export function useGetApplicationFormQuestionAnswerLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetApplicationFormQuestionAnswerQuery,
+    GetApplicationFormQuestionAnswerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>(
+    GetApplicationFormQuestionAnswerDocument,
+    options
+  )
+}
+export type GetApplicationFormQuestionAnswerQueryHookResult = ReturnType<
+  typeof useGetApplicationFormQuestionAnswerQuery
+>
+export type GetApplicationFormQuestionAnswerLazyQueryHookResult = ReturnType<
+  typeof useGetApplicationFormQuestionAnswerLazyQuery
+>
+export type GetApplicationFormQuestionAnswerQueryResult = Apollo.QueryResult<
+  GetApplicationFormQuestionAnswerQuery,
+  GetApplicationFormQuestionAnswerQueryVariables
 >

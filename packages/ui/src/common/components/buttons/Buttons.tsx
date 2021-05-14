@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEventHandler } from 'react'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
@@ -11,7 +11,7 @@ export interface ButtonProps {
   className?: string
   children?: React.ReactNode
   disabled?: boolean
-  onClick?: () => void
+  onClick?: MouseEventHandler
 }
 
 const height: { [key in ButtonSize]: string } = {
@@ -38,7 +38,7 @@ const getPadding = (props: ButtonProps) => {
 export function ButtonPrimary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonPrimaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      {children}
+      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
     </ButtonPrimaryStyles>
   )
 }
@@ -46,7 +46,7 @@ export function ButtonPrimary({ className, children, size, square, disabled, onC
 export function ButtonSecondary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      {children}
+      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
     </ButtonSecondaryStyles>
   )
 }
@@ -54,17 +54,22 @@ export function ButtonSecondary({ className, children, size, square, disabled, o
 export function ButtonGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      {children}
+      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
     </ButtonGhostStyles>
   )
 }
+export function ButtonBareGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
+  return (
+    <ButtonBareGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
+      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
+    </ButtonBareGhostStyles>
+  )
+}
 
-const BasicButtonStyles = css<ButtonProps>`
-  display: inline-grid;
+export const BasicButtonStyles = css<ButtonProps>`
+  display: flex;
   position: relative;
-  grid-auto-flow: column;
-  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
-  justify-items: center;
+  justify-content: center;
   align-items: center;
   width: fit-content;
   min-width: ${getHeight};
@@ -91,6 +96,10 @@ const BasicButtonStyles = css<ButtonProps>`
 
   & > svg {
     z-index: 2;
+    transition: ${Transitions.all};
+  }
+  & .blackPart,
+  & .primaryPart {
     transition: ${Transitions.all};
   }
 
@@ -136,6 +145,19 @@ const BasicButtonStyles = css<ButtonProps>`
   }
 `
 
+const ButtonInnerWrapper = styled.span<ButtonProps>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
+  justify-items: center;
+  align-items: center;
+  width: fit-content;
+  transform: translateY(1px);
+  & > svg {
+    transform: translateY(-1px);
+  }
+`
+
 export const ButtonPrimaryStyles = styled.button<ButtonProps>`
   ${BasicButtonStyles};
 
@@ -176,7 +198,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
   background-color: ${Colors.Black[75]};
 
   & > svg {
-    color: ${Colors.Black[400]};
+    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
   }
 
   &:before {
@@ -194,6 +216,11 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
     & > svg {
       color: ${Colors.Blue[500]};
     }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Blue[500]};
+      fill: ${Colors.Blue[500]};
+    }
   }
 
   &:active {
@@ -203,6 +230,11 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
   &:disabled {
     & > svg {
       color: ${Colors.Black[300]};
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Black[300]};
+      fill: ${Colors.Black[300]};
     }
     color: ${Colors.Black[300]};
     border-color: ${Colors.Black[50]};
@@ -218,12 +250,11 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   background-color: ${Colors.White};
 
   & > svg {
-    color: ${Colors.Black[400]};
+    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
   }
 
   &:before {
-    background-color: ${Colors.White};
-    border: 1px solid ${Colors.Blue[100]};
+    background-color: ${Colors.Black[50]};
   }
   &:after {
     background-color: ${Colors.Blue[50]};
@@ -236,6 +267,11 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
     & > svg {
       color: ${Colors.Blue[500]};
     }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Blue[500]};
+      fill: ${Colors.Blue[500]};
+    }
   }
 
   &:active {
@@ -246,8 +282,62 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
     & > svg {
       color: ${Colors.Black[300]};
     }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Black[300]};
+      fill: ${Colors.Black[300]};
+    }
     color: ${Colors.Black[300]};
     border-color: ${Colors.Black[200]};
+    background-color: ${Colors.White};
+  }
+`
+
+export const ButtonBareGhostStyles = styled.button<ButtonProps>`
+  ${BasicButtonStyles};
+
+  color: ${Colors.Black[900]};
+  border-color: transparent;
+  background-color: ${Colors.White};
+
+  & > svg {
+    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
+  }
+
+  &:before,
+  &:after {
+    display: none;
+  }
+
+  &:hover,
+  &:focus {
+    border-color: transparent;
+    color: ${Colors.Blue[500]};
+    & > svg {
+      color: ${Colors.Blue[500]};
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Blue[500]};
+      fill: ${Colors.Blue[500]};
+    }
+  }
+
+  &:active {
+    border-color: transparent;
+  }
+
+  &:disabled {
+    & > svg {
+      color: ${Colors.Black[300]};
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Black[300]};
+      fill: ${Colors.Black[300]};
+    }
+    color: ${Colors.Black[300]};
+    border-color: transparent;
     background-color: ${Colors.White};
   }
 `
