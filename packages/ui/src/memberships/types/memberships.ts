@@ -5,8 +5,8 @@ import { Address, Block } from '../../common/types'
 type ID = string
 
 export interface MemberRole {
-  group: { name: string }
-  isLead: boolean
+  groupName: string
+  isLeader: boolean
 }
 
 export interface Member {

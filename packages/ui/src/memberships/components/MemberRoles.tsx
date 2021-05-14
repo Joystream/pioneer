@@ -1,30 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Help } from '../../common/components/Help'
-import { Colors } from '../../common/constants'
-import { Member } from '../types'
+import { Help } from '@/common/components/Help'
+import { Colors } from '@/common/constants'
+import { MemberRole } from '../types'
+import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
 interface MemberRolesProps {
   max?: number
   size?: 'l' | 'm'
-  member: Member
+  roles: MemberRole[]
   wrapable?: boolean
 }
 
-export const MemberRolesList = [
-  { abbreviation: 'SP', help: 'Lorem ipsum...' },
-  { abbreviation: 'FM', help: 'Lorem ipsum...' },
-  { abbreviation: 'FL', help: 'Lorem ipsum...' },
-  { abbreviation: 'CC', help: 'Lorem ipsum...' },
-  { abbreviation: 'SL', help: 'Lorem ipsum...' },
-  { abbreviation: 'AA', help: 'Lorem ipsum...' },
-  { abbreviation: 'BB', help: 'Lorem ipsum...' },
-]
-
-export const MemberRoles = ({ size, max, wrapable }: MemberRolesProps) => {
-  const roles = MemberRolesList
-
+export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) => {
   const rolesToDisplay = max ? roles.slice(0, max) : roles
   const hiddenRoles = roles.length - rolesToDisplay.length
 
@@ -32,15 +21,25 @@ export const MemberRoles = ({ size, max, wrapable }: MemberRolesProps) => {
     <>
       {wrapable ? (
         <MemberRolesWrapperWrapable>
-          {rolesToDisplay.map(({ abbreviation, help }) => (
-            <MemberRoleHelp key={abbreviation} memberRole={abbreviation} helperText={help} size={size} />
+          {rolesToDisplay.map((role, index) => (
+            <MemberRoleHelp
+              key={index}
+              memberRole={memberRoleAbbreviation(role)}
+              helperText={memberRoleTitle(role)}
+              size={size}
+            />
           ))}
           {hiddenRoles > 0 && <MemberRoleHelpMax memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
         </MemberRolesWrapperWrapable>
       ) : (
         <MemberRolesWrapper>
-          {rolesToDisplay.map(({ abbreviation, help }) => (
-            <MemberRoleHelp key={abbreviation} memberRole={abbreviation} helperText={help} size={size} />
+          {rolesToDisplay.map((role, index) => (
+            <MemberRoleHelp
+              key={index}
+              memberRole={memberRoleAbbreviation(role)}
+              helperText={memberRoleTitle(role)}
+              size={size}
+            />
           ))}
           {hiddenRoles > 0 && <MemberRoleHelpMax memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
         </MemberRolesWrapper>

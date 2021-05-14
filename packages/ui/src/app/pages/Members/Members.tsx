@@ -3,7 +3,6 @@ import React, { useEffect, useReducer, useState } from 'react'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
-import { MemberRolesList } from '@/memberships/components/MemberRoles'
 
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
@@ -20,9 +19,9 @@ const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberL
   sortBy: sortBy,
   isDescending: sortBy === order.sortBy && !order.isDescending,
 })
-
-const Roles = Object.fromEntries(MemberRolesList.map(({ abbreviation }) => [abbreviation, abbreviation]))
-
+//
+// const Roles = Object.fromEntries(MemberRolesList.map(({ abbreviation }) => [abbreviation, abbreviation]))
+const Roles = {}
 export const Members = () => {
   const [filter, setFilter] = useState(MemberListEmptyFilter)
   const [order, dispatchSort] = useReducer(sortReducer, DefaultMemberListOrder)
