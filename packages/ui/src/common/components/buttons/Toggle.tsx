@@ -38,7 +38,7 @@ const AbsoluteToggleButton = css<ToggleButtonProps>`
   right: 8px;
 `
 
-export const ToggleButton = styled(ButtonPrimary)<ToggleButtonProps>`
+export const ToggleButton = styled(ButtonPrimary)<ToggleButtonProps & { className?: string }>`
   ${({ absoluteToggle }) => {
     if (absoluteToggle) {
       return AbsoluteToggleButton

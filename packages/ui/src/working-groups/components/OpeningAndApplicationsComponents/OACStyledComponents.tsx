@@ -52,6 +52,9 @@ export const OACItemContainer = styled.div<OpenedItemProps>`
   ${OpenedContainer} {
     max-height: ${({ isOpen }) => (isOpen ? '500px' : '0px')};
   }
+  & + ${ToggleButton} {
+    top: 30px;
+  }
 `
 
 export const OACItemInfo = styled.div`
