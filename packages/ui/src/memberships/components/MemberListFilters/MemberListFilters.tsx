@@ -2,7 +2,7 @@ import React, { ChangeEvent, useReducer } from 'react'
 import styled from 'styled-components'
 
 import { ButtonBareGhost, ButtonPrimary } from '../../../common/components/buttons/Buttons'
-import { InputComponent, InputElement, InputText, TogglableIcon } from '../../../common/components/forms'
+import { InputComponent, InputText, TogglableIcon } from '../../../common/components/forms'
 import { FounderMemberIcon, SearchIcon, VerifiedMemberIcon } from '../../../common/components/icons'
 import { SimpleSelect } from '../../../common/components/selects'
 import { Colors } from '../../../common/constants'
@@ -145,9 +145,4 @@ const Fields = styled.div`
   height: 64px;
   padding: 0 16px;
   background: ${Colors.Black[100]};
-
-  ${InputElement} {
-    min-width: 200px;
-    max-width: 400px;
-  }
 `
