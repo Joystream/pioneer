@@ -83,18 +83,7 @@ export type WorkingGroupOpeningFieldsFragment = {
       | { __typename: 'ApplicationStatusRejected' }
       | { __typename: 'ApplicationStatusWithdrawn' }
       | { __typename: 'ApplicationStatusCancelled' }
-    applicant: {
-      __typename: 'Membership'
-      id: string
-      isVerified: boolean
-      handle: string
-      rootAccount: string
-      controllerAccount: string
-      inviteCount: number
-      isFoundingMember: boolean
-      roles: Array<{ __typename: 'Worker'; id: string }>
-      metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string> }
-    }
+    applicant: { __typename: 'Membership' } & MemberFieldsFragment
   }>
   status:
     | { __typename: 'OpeningStatusOpen' }
@@ -340,19 +329,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
         __typename
       }
       applicant {
-        id
-        isVerified
-        handle
-        rootAccount
-        controllerAccount
-        inviteCount
-        isFoundingMember
-        roles {
-          id
-        }
-        metadata {
-          name
-        }
+        ...MemberFields
       }
       status {
         __typename
@@ -364,6 +341,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   }
   ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
+  ${MemberFieldsFragmentDoc}
 `
 export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
   fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {

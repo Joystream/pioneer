@@ -87,19 +87,7 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
       __typename
     }
     applicant {
-      id
-      isVerified
-      handle
-      rootAccount
-      controllerAccount
-      inviteCount
-      isFoundingMember
-      roles {
-        id
-      }
-      metadata {
-        name
-      }
+      ...MemberFields
     }
     status {
       __typename
