@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import React from 'react'
 
-import { MarkdownPreview } from '../../../src/common/components/MarkdownPreview'
+import { MarkdownPreview } from '../../../src/common/components/MarkdownPreview/MarkdownPreview'
 
 const EDITOR_OUTPUT = `## Heading 1
 

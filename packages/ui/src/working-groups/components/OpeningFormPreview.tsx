@@ -2,7 +2,7 @@ import React from 'react'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
 import { Link } from '../../common/components/Link'
-import { MarkdownPreview } from '../../common/components/MarkdownPreview'
+import { MarkdownPreview } from '../../common/components/MarkdownPreview/MarkdownPreview'
 import { Row } from '../../common/components/Modal'
 import { RowGapBlock } from '../../common/components/page/PageContent'
 import { Label, TextInlineHuge, TextMedium, TokenValue } from '../../common/components/typography'
