@@ -106,8 +106,8 @@ const GroupContentBlock = styled.article`
 `
 
 const GroupTitle = styled.h5`
-  max-width: 100%;
-  ${Overflow.Dots};
+  text-transform: capitalize;
+  ${Overflow.FullDots};
   transition: ${Transitions.all};
   cursor: pointer;
 
