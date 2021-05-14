@@ -3,7 +3,7 @@ import React from 'react'
 
 import { TemplateBlock, ModalBlock, WhiteBlock } from '@/common/components/storybookParts/previewStyles'
 
-import { MemberRoleToggle, Props as MemberRoleToggleProps } from './MemberRoleToggle'
+import { MemberRoleToggle, MemberRoleToggleProps } from './MemberRoleToggle'
 
 export default {
   title: 'Member/MemberRoleToggle',

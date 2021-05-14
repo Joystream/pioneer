@@ -7,18 +7,18 @@ import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { ToggleableItem, ToggleButton } from '@/common/components/buttons/Toggle'
 import { Arrow } from '@/common/components/icons'
 import { SidePaneColumn, SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/common/components/SidePane'
+import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
-import { formatTokenValue } from '@/common/model/formatters'
 import { Member } from '@/memberships/types'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { WorkerWithDetails } from '@/working-groups/types'
 
-export interface Props {
+export interface MemberRoleToggleProps {
   member: Member
   role: WorkerWithDetails
 }
 
-export const MemberRoleToggle = ({ role }: Props) => {
+export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
   return (
     <RoleToggle absoluteToggle>
       {(isOpen) => {
@@ -39,19 +39,25 @@ export const MemberRoleToggle = ({ role }: Props) => {
                   <SidePaneRow>
                     <SidePaneLabel text="Reward" />
                     <SidePaneColumn>
-                      <SidePaneText>{formatTokenValue(role.rewardPerBlock)} JOY / 3600 blocks</SidePaneText>
+                      <SidePaneText>
+                        <TokenValue value={role.rewardPerBlock} /> / 3600 blocks
+                      </SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
                     <SidePaneLabel text="Earned total" />
                     <SidePaneColumn>
-                      <SidePaneText>{formatTokenValue(role.earnedTotal)} JOY</SidePaneText>
+                      <SidePaneText>
+                        <TokenValue value={role.earnedTotal} />
+                      </SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
                     <SidePaneLabel text="Earned in 24h" />
                     <SidePaneColumn>
-                      <SidePaneText>{formatTokenValue(1000)} JOY</SidePaneText>
+                      <SidePaneText>
+                        <TokenValue value={1000} />
+                      </SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>
                   <SidePaneRow>
