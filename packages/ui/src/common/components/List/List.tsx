@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../constants'
 
@@ -21,4 +21,16 @@ export const ListItem = styled.li`
   & + & {
     margin-top: -1px;
   }
+`
+
+export const TableListRowStyle = (colLayout?: string) => css`
+  grid-template-columns: ${colLayout ?? 'repeat(auto-fill, 100px)'};
+  justify-content: space-between;
+  padding-left: 16px;
+`
+
+export const TableListItem = styled(ListItem)`
+  align-items: center;
+  grid-template-rows: 90px;
+  ${(props: { colLayout?: string }) => TableListRowStyle(props.colLayout)}
 `
