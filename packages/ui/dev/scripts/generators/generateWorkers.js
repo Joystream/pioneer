@@ -13,6 +13,7 @@ const generateWorkers = () => {
     earnedTotal: randomFromRange(10, 40) * 100,
     stake: randomFromRange(1, 2) * 1000,
     nextPaymentAt: faker.date.soon(randomFromRange(1, 10)).toJSON(),
+    hiredAtBlockId: randomFromRange(20, 100),
   })
 
   const generateAllWorkers = (groupName, id) => {

@@ -18,7 +18,7 @@ export const SidePaneTable = styled.ul`
     visibility: hidden;
   }
 `
-export const SidePaneColumn = styled.li`
+export const SidePaneColumn = styled.div`
   display: grid;
   grid-row-gap: 8px;
   width: 100%;

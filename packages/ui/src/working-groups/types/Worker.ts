@@ -1,3 +1,4 @@
+import { Address, asBlock, Block } from '@/common/types'
 import { Member } from '@/memberships/types'
 import { WorkerFieldsFragment } from '@/working-groups/queries'
 import { WorkingGroup } from '@/working-groups/types/WorkingGroup'
@@ -16,6 +17,10 @@ export interface WorkerWithDetails extends Worker {
   earnedTotal: number
   stake: number
   status: string
+  roleAccount: Address
+  rewardAccount: Address
+  stakeAccount: Address
+  hiredAtBlock: Block
 }
 
 export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
@@ -35,4 +40,8 @@ export const asWorkerWithDetails = (fields: WorkerFieldsFragment): WorkerWithDet
   earnedTotal: 1000,
   stake: fields.stake,
   isLeader: fields.isLead,
+  roleAccount: fields.roleAccount,
+  rewardAccount: fields.rewardAccount,
+  stakeAccount: fields.stakeAccount,
+  hiredAtBlock: asBlock(fields.hiredAtBlock),
 })
