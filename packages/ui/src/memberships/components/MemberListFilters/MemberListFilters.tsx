@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useReducer } from 'react'
 import styled from 'styled-components'
 
-import { ButtonPrimary } from '../../../common/components/buttons/Buttons'
+import { ButtonBareGhost, ButtonPrimary } from '../../../common/components/buttons/Buttons'
 import { InputComponent, InputElement, InputText, TogglableIcon } from '../../../common/components/forms'
 import { FounderMemberIcon, SearchIcon, VerifiedMemberIcon } from '../../../common/components/icons'
 import { SimpleSelect } from '../../../common/components/selects'
@@ -63,17 +63,18 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
 
   return (
     <MemberListFiltersContainer>
-      <ClearBtn
+      <ClearButton
+        size="small"
         onClick={() => {
           dispatch({ type: 'clear' })
           onApply?.(MemberListEmptyFilter)
         }}
       >
         Clear all Filters
-      </ClearBtn>
+      </ClearButton>
 
       <Fields>
-        <InputComponent icon={<SearchIcon />}>
+        <InputComponent icon={<SearchIcon />} tight inputWidth="xs">
           <InputText
             placeholder="Search"
             value={search}
@@ -117,48 +118,33 @@ export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) =>
         >
           <FounderMemberIcon />
         </TogglableIcon>
-
-        <ButtonPrimary onClick={onApply && (() => onApply(filters))}>Apply</ButtonPrimary>
+        <ButtonPrimary size="medium" onClick={onApply && (() => onApply(filters))}>
+          Apply
+        </ButtonPrimary>
       </Fields>
     </MemberListFiltersContainer>
   )
 }
 
-const ClearBtn = styled.button`
-  border: none;
-  margin: 0;
-  padding: 0.5rem;
-  width: auto;
-  overflow: visible;
-  cursor: pointer;
-  background: transparent;
-  color: ${Colors.Grey};
-  font: inherit;
-  line-height: normal;
-  appearance: none;
-  -webkit-font-smoothing: inherit;
-  -moz-osx-font-smoothing: inherit;
+const ClearButton = styled(ButtonBareGhost)`
+  position: absolute;
+  top: -32px;
+  right: 0;
 `
 
 const MemberListFiltersContainer = styled.div`
-  text-align: end;
+  display: flex;
+  position: relative;
 `
 
 const Fields = styled.div`
-  background: ${Colors.Black[100]};
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
   align-items: center;
-  box-sizing: content-box;
-  padding: 1rem;
-  height: 48px;
-  gap: 1rem;
-  text-align: initial;
-  & > div {
-    width: auto;
-  }
-  & > :last-child {
-    margin-left: auto;
-  }
+  grid-column-gap: 16px;
+  height: 64px;
+  padding: 0 16px;
+  background: ${Colors.Black[100]};
 
   ${InputElement} {
     min-width: 200px;

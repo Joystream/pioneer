@@ -11,7 +11,7 @@ import { BellIcon } from '@/common/components/icons/BellIcon'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, SidePanel } from '@/common/components/page/PageContent'
+import { ContentWithSidepanel, MainPanel, RowGapBlock, SidePanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -86,7 +86,7 @@ const WorkingGroupOpening = () => {
           )}
         </ButtonsWrapper>
       </PageHeader>
-      <OpeningsLayout>
+      <RowGapBlock>
         <Row>
           <BadgeViolet inverted size="l" separated>
             {opening.groupName}
@@ -120,19 +120,13 @@ const WorkingGroupOpening = () => {
             )}
           </SidePanel>
         </ContentWithSidepanel>
-      </OpeningsLayout>
+      </RowGapBlock>
       <Footer>
         <BlockTime block={opening.createdAtBlock} horizontal />
       </Footer>
     </AppPage>
   )
 }
-
-const OpeningsLayout = styled.div`
-  grid-template-rows: auto;
-  grid-row-gap: 24px;
-  display: grid;
-`
 
 const Row = styled.div`
   display: flex;
