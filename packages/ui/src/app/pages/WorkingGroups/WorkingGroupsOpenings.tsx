@@ -1,19 +1,15 @@
 import BN from 'bn.js'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 
 import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { ActivitiesBlock } from '../../../common/components/Activities/ActivitiesBlock'
 import { Loading } from '../../../common/components/Loading'
-import {
-  ContentWithSidepanel,
-  ContentWithTabs,
-  MainPanel,
-  SidePanel,
-} from '../../../common/components/page/PageContent'
+import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '../../../common/components/page/PageContent'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
+import { SidePanel } from '../../../common/components/page/SidePanel'
 import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '../../../common/components/statistics'
 import { Tabs } from '../../../common/components/Tabs'
 import { useActivities } from '../../../common/hooks/useActivities'
@@ -57,6 +53,7 @@ export const WorkingGroupsOpenings = () => {
       count: 0,
     },
   ]
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <AppPage>
@@ -65,7 +62,7 @@ export const WorkingGroupsOpenings = () => {
         <WorkingGroupsTabs />
       </PageHeader>
       <ContentWithSidepanel>
-        <MainPanel>
+        <MainPanel ref={sideNeighborRef}>
           <Statistics>
             <StatisticItem title="My Roles">
               {active ? (
@@ -90,7 +87,7 @@ export const WorkingGroupsOpenings = () => {
             {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
           </ContentWithTabs>
         </MainPanel>
-        <SidePanel>
+        <SidePanel neighbor={sideNeighborRef}>
           <ActivitiesBlock activities={activities} label="Working Groups Activities" />
         </SidePanel>
       </ContentWithSidepanel>

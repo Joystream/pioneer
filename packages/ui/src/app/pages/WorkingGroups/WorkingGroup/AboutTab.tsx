@@ -10,7 +10,7 @@ import { useGroupStatistics } from '@/working-groups/hooks/useGroupStatistics'
 import { useWorkers } from '@/working-groups/hooks/useWorkers'
 import { WorkingGroup } from '@/working-groups/types'
 
-import { StatusGroup, StatusBadge, StatusTitleGroup } from '../components/StatusBadges'
+import { StatusBadge, StatusGroup, StatusTitleGroup } from '../components/StatusBadges'
 
 interface Props {
   workingGroup: WorkingGroup
