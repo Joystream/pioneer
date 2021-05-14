@@ -1,11 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
+
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
@@ -231,6 +229,31 @@ export type GetApplicationFormQuestionAnswerQuery = {
   >
 }
 
+export type UpcomingWorkingGroupOpeningFieldsFragment = {
+  __typename: 'UpcomingWorkingGroupOpening'
+  id: string
+  groupId: string
+  expectedStart?: Types.Maybe<any>
+  stakeAmount?: Types.Maybe<any>
+  rewardPerBlock?: Types.Maybe<any>
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
+  metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
+}
+
+export type GetUpcomingWorkingGroupOpeningsQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.UpcomingWorkingGroupOpeningWhereInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type GetUpcomingWorkingGroupOpeningsQuery = {
+  __typename: 'Query'
+  upcomingWorkingGroupOpenings: Array<
+    { __typename: 'UpcomingWorkingGroupOpening' } & UpcomingWorkingGroupOpeningFieldsFragment
+  >
+}
+
 export const WorkingGroupMetdataFieldsFragmentDoc = gql`
   fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
     about
@@ -401,6 +424,28 @@ export const ApplicationFormQuestionAnswerFieldsFragmentDoc = gql`
     answer
   }
   ${ApplicationQuestionFieldsFragmentDoc}
+`
+export const UpcomingWorkingGroupOpeningFieldsFragmentDoc = gql`
+  fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
+    id
+    groupId
+    group {
+      name
+      budget
+      leaderId
+    }
+    expectedStart
+    stakeAmount
+    rewardPerBlock
+    createdAtBlock {
+      ...BlockFields
+    }
+    metadata {
+      ...WorkingGroupOpeningMetadataFields
+    }
+  }
+  ${BlockFieldsFragmentDoc}
+  ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
 export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {
@@ -846,4 +891,63 @@ export type GetApplicationFormQuestionAnswerLazyQueryHookResult = ReturnType<
 export type GetApplicationFormQuestionAnswerQueryResult = Apollo.QueryResult<
   GetApplicationFormQuestionAnswerQuery,
   GetApplicationFormQuestionAnswerQueryVariables
+>
+export const GetUpcomingWorkingGroupOpeningsDocument = gql`
+  query GetUpcomingWorkingGroupOpenings($where: UpcomingWorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
+    upcomingWorkingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
+      ...UpcomingWorkingGroupOpeningFields
+    }
+  }
+  ${UpcomingWorkingGroupOpeningFieldsFragmentDoc}
+`
+
+/**
+ * __useGetUpcomingWorkingGroupOpeningsQuery__
+ *
+ * To run a query within a React component, call `useGetUpcomingWorkingGroupOpeningsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUpcomingWorkingGroupOpeningsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUpcomingWorkingGroupOpeningsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetUpcomingWorkingGroupOpeningsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetUpcomingWorkingGroupOpeningsQuery,
+    GetUpcomingWorkingGroupOpeningsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUpcomingWorkingGroupOpeningsQuery, GetUpcomingWorkingGroupOpeningsQueryVariables>(
+    GetUpcomingWorkingGroupOpeningsDocument,
+    options
+  )
+}
+export function useGetUpcomingWorkingGroupOpeningsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUpcomingWorkingGroupOpeningsQuery,
+    GetUpcomingWorkingGroupOpeningsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUpcomingWorkingGroupOpeningsQuery, GetUpcomingWorkingGroupOpeningsQueryVariables>(
+    GetUpcomingWorkingGroupOpeningsDocument,
+    options
+  )
+}
+export type GetUpcomingWorkingGroupOpeningsQueryHookResult = ReturnType<typeof useGetUpcomingWorkingGroupOpeningsQuery>
+export type GetUpcomingWorkingGroupOpeningsLazyQueryHookResult = ReturnType<
+  typeof useGetUpcomingWorkingGroupOpeningsLazyQuery
+>
+export type GetUpcomingWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
+  GetUpcomingWorkingGroupOpeningsQuery,
+  GetUpcomingWorkingGroupOpeningsQueryVariables
 >

@@ -205,3 +205,28 @@ query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
     ...ApplicationFormQuestionAnswerFields
   }
 }
+
+fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
+  id
+  groupId
+  group {
+    name
+    budget
+    leaderId
+  }
+  expectedStart
+  stakeAmount
+  rewardPerBlock
+  createdAtBlock {
+    ...BlockFields
+  }
+  metadata {
+    ... WorkingGroupOpeningMetadataFields
+  }
+}
+
+query GetUpcomingWorkingGroupOpenings($where: UpcomingWorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
+  upcomingWorkingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
+    ...UpcomingWorkingGroupOpeningFields
+  }
+}
