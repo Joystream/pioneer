@@ -29,8 +29,6 @@ export const MemberSideRoles = ({ member }: { member: Member }) => {
     ))
   }
 
-  console.log('my roles', workers)
-
   return <RolesDisplay gap={8}>{displayRoles()}</RolesDisplay>
 }
 

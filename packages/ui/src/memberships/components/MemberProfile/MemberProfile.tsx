@@ -33,8 +33,6 @@ export const MemberProfile = React.memo(() => {
   const { modalData, hideModal } = useModal<MemberModalCall>()
   const { isLoading: loading, member } = useMember(modalData.id)
 
-  console.log('my member', member)
-
   const isMyMember = !isLoading && !!members.find((m) => m.id == member?.id)
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
