@@ -3,9 +3,8 @@ import styled from 'styled-components'
 
 import { Help } from '@/common/components/Help'
 import { Colors } from '@/common/constants'
-import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
-
 import { MemberRole } from '../types'
+import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
 interface MemberRolesProps {
   max?: number
