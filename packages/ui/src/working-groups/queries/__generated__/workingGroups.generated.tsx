@@ -104,6 +104,36 @@ export type WorkingGroupOpeningFieldsFragment = {
     | { __typename: 'OpeningStatusCancelled' }
 }
 
+export type WorkingGroupOpeningFieldsConnectionFragment = {
+  __typename: 'WorkingGroupOpeningConnection'
+  totalCount: number
+  edges: Array<{
+    __typename: 'WorkingGroupOpeningEdge'
+    cursor: string
+    node: { __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment
+  }>
+  pageInfo: {
+    __typename: 'PageInfo'
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+    startCursor?: Types.Maybe<string>
+    endCursor?: Types.Maybe<string>
+  }
+}
+
+export type GetWorkingGroupOpeningsConnectionQueryVariables = Types.Exact<{
+  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
+  first?: Types.Maybe<Types.Scalars['Int']>
+  last?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type GetWorkingGroupOpeningsConnectionQuery = {
+  __typename: 'Query'
+  workingGroupOpeningsConnection: {
+    __typename: 'WorkingGroupOpeningConnection'
+  } & WorkingGroupOpeningFieldsConnectionFragment
+}
+
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
   groupId_eq?: Types.Maybe<Types.Scalars['ID']>
 }>
@@ -314,6 +344,24 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
+export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
+  fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
+    totalCount
+    edges {
+      node {
+        ...WorkingGroupOpeningFields
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+  ${WorkingGroupOpeningFieldsFragmentDoc}
+`
 export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     id
@@ -431,6 +479,67 @@ export function useGetWorkersLazyQuery(
 export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
+export const GetWorkingGroupOpeningsConnectionDocument = gql`
+  query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
+    workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {
+      ...WorkingGroupOpeningFieldsConnection
+    }
+  }
+  ${WorkingGroupOpeningFieldsConnectionFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupOpeningsConnectionQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupOpeningsConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupOpeningsConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupOpeningsConnectionQuery({
+ *   variables: {
+ *      groupId_eq: // value for 'groupId_eq'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupOpeningsConnectionQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetWorkingGroupOpeningsConnectionQuery,
+    GetWorkingGroupOpeningsConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningsConnectionQuery, GetWorkingGroupOpeningsConnectionQueryVariables>(
+    GetWorkingGroupOpeningsConnectionDocument,
+    options
+  )
+}
+export function useGetWorkingGroupOpeningsConnectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWorkingGroupOpeningsConnectionQuery,
+    GetWorkingGroupOpeningsConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningsConnectionQuery, GetWorkingGroupOpeningsConnectionQueryVariables>(
+    GetWorkingGroupOpeningsConnectionDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningsConnectionQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupOpeningsConnectionQuery
+>
+export type GetWorkingGroupOpeningsConnectionLazyQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupOpeningsConnectionLazyQuery
+>
+export type GetWorkingGroupOpeningsConnectionQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningsConnectionQuery,
+  GetWorkingGroupOpeningsConnectionQueryVariables
+>
 export const GetWorkingGroupOpeningsDocument = gql`
   query getWorkingGroupOpenings($groupId_eq: ID) {
     workingGroupOpenings(where: { groupId_eq: $groupId_eq }) {

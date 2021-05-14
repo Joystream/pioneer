@@ -110,6 +110,28 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   }
 }
 
+fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
+  totalCount
+  edges {
+    node {
+      ... WorkingGroupOpeningFields
+    }
+    cursor
+  }
+  pageInfo {
+    hasNextPage
+    hasPreviousPage
+    startCursor
+    endCursor
+  }
+}
+
+query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
+  workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {
+    ... WorkingGroupOpeningFieldsConnection
+  }
+}
+
 query getWorkingGroupOpenings($groupId_eq: ID) {
   workingGroupOpenings(where: { groupId_eq: $groupId_eq }) {
     ... WorkingGroupOpeningFields

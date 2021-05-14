@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { Pagination } from '@/common/components/Pagination'
+
 import { ActivitiesBlock } from '../../../../common/components/Activities/ActivitiesBlock'
 import { Loading } from '../../../../common/components/Loading'
 import { ContentWithSidepanel, MainPanel, SidePanel } from '../../../../common/components/page/PageContent'
@@ -40,8 +42,16 @@ export function HistoryTab() {
 }
 
 const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
-  const { isLoading, openings } = useOpenings({ groupId, type: 'past' })
-  return isLoading ? <Loading /> : <OpeningsList openings={openings} />
+  const [page, setPage] = useState<number>(0)
+  const { isLoading, openings, pageCount } = useOpenings({ groupId, type: 'past', page })
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <>
+      <OpeningsList openings={openings} />
+      <Pagination pageCount={pageCount as number} handlePageChange={setPage} page={page} />
+    </>
+  )
 }
 
 const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
