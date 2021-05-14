@@ -16,9 +16,10 @@ import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { StatisticItem, Statistics, TokenValueStat, DurationStatistics } from '@/common/components/statistics'
+import { Colors } from '@/common/constants/styles'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
-import { spacing } from '@/common/utils/styles'
+import { spacing, size } from '@/common/utils/styles'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
 import { OpeningStatuses, MappedStatuses } from '@/working-groups/constants'
@@ -57,6 +58,34 @@ const WorkingGroupOpening = () => {
     )
   })
 
+  const ApplyButton = memo(() => (
+    <ButtonPrimary
+      size="medium"
+      onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
+    >
+      Apply now!
+    </ButtonPrimary>
+  ))
+
+  const ApplicationStatus = memo(() => (
+    <ApplicationStatusWrapper>
+      <Circle />
+      {opening.status === OpeningStatuses.UPCOMING && (
+        <>
+          <h4>The opening hasn't started yet</h4>
+          <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p>
+        </>
+      )}
+      {opening.status === OpeningStatuses.OPEN && (
+        <>
+          <h4>No applicants yet</h4>
+          <p>There are no applicants yet lorem ipsum dolor sit amet.</p>
+        </>
+      )}
+      {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
+    </ApplicationStatusWrapper>
+  ))
+
   return (
     <AppPage lastBreadcrumb={opening.title}>
       <PageHeader>
@@ -70,14 +99,7 @@ const WorkingGroupOpening = () => {
               Copy link
             </ButtonGhost>
           )}
-          {opening.status === OpeningStatuses.OPEN && (
-            <ButtonPrimary
-              size="medium"
-              onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
-            >
-              Apply now!
-            </ButtonPrimary>
-          )}
+          {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
           {opening.status === OpeningStatuses.UPCOMING && (
             <ButtonGhost size="small">
               <BellIcon />
@@ -118,6 +140,8 @@ const WorkingGroupOpening = () => {
                 leaderId={opening.leaderId}
               />
             )}
+            {opening.status === OpeningStatuses.UPCOMING ||
+              (opening.status === OpeningStatuses.OPEN && !opening.applications.length && <ApplicationStatus />)}
           </SidePanel>
         </ContentWithSidepanel>
       </RowGapBlock>
@@ -127,6 +151,24 @@ const WorkingGroupOpening = () => {
     </AppPage>
   )
 }
+
+const ApplicationStatusWrapper = styled.div`
+  text-align: center;
+
+  h4 {
+    color: ${Colors.Blue[500]};
+    margin: ${spacing(2, 0)};
+  }
+
+  p {
+    color: ${Colors.Black[500]};
+    margin-bottom: ${spacing(2)};
+  }
+
+  button {
+    display: inline-flex;
+  }
+`
 
 const Row = styled.div`
   display: flex;
@@ -144,6 +186,13 @@ const Footer = styled.div`
   position: absolute;
   bottom: 5px;
   font-size: 14px;
+`
+
+const Circle = styled.div`
+  border-radius: 50%;
+  background-color: ${Colors.Black[50]};
+  margin: 0 auto;
+  ${size('96px')};
 `
 
 export default WorkingGroupOpening
