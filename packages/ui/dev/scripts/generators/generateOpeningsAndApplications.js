@@ -20,48 +20,47 @@ const getApplicationFormQuestions = () => [
   },
 ]
 
-function generateMetadata(name, isLeader) {
-  return {
-    shortDescription: `${name} ${isLeader ? 'leader' : 'worker'}`,
-    description: randomMarkdown(),
-    hiringLimit: 1,
-    expectedEnding: '2022-03-09T10:18:04.155Z',
-    applicationDetails: randomMarkdown(),
-    applicationFormQuestions: getApplicationFormQuestions(),
-  }
-}
+const generateMetadata = () => ({
+  shortDescription: faker.lorem.sentence(randomFromRange(20, 60)),
+  description: randomMarkdown(),
+  hiringLimit: 1,
+  applicationDetails: randomMarkdown(),
+  applicationFormQuestions: getApplicationFormQuestions(),
+})
 
-const generateBaseOpening = (groupId) => {
-  return {
-    id: String(nextOpeningId++),
-    groupId: String(groupId),
-    stakeAmount: randomFromRange(2, 8) * 1000,
-    rewardPerBlock: randomFromRange(1, 5) * 100,
-    createdAtBlockId: randomFromRange(20, 100),
-    version: 1,
-  }
-}
+const generateBaseOpening = (groupId) => ({
+  id: String(nextOpeningId++),
+  groupId: String(groupId),
+  stakeAmount: randomFromRange(2, 8) * 1000,
+  rewardPerBlock: randomFromRange(1, 5) * 100,
+  createdAtBlockId: randomFromRange(20, 100),
+  version: 1,
+})
 
 const generateOpening = (status, groupId, name) => () => {
   const isLeader = Math.random() > 0.9
+  const isInPast = status !== 'open'
   return {
     ...generateBaseOpening(groupId, name, isLeader),
     type: isLeader ? 'LEADER' : 'REGULAR',
     status,
     unstakingPeriod: randomFromRange(5, 10),
-    metadata: generateMetadata(name, isLeader),
+    metadata: {
+      ...generateMetadata(),
+      expectedEnding: isInPast ? faker.date.recent(90) : faker.date.soon(10),
+    },
   }
 }
 
-const generateUpcomingOpening = (groupId, name) => () => {
+const generateUpcomingOpening = (groupId) => () => {
   return {
-    ...generateBaseOpening(groupId, name, false),
+    ...generateBaseOpening(groupId),
+    expectedStart: faker.date.soon(randomFromRange(10, 30)).toJSON(),
     metadata: {
-      ...generateMetadata(name, false),
-      description: 'Upcoming worker opening',
+      ...generateMetadata(),
+      shortDescription: 'Upcoming worker opening.' + faker.lorem.words(randomFromRange(5, 10)),
       expectedEnding: faker.date.soon(randomFromRange(40, 50)).toJSON(),
     },
-    expectedStart: faker.date.soon(randomFromRange(10, 30)).toJSON(),
   }
 }
 
