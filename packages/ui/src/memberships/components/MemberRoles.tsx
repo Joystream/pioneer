@@ -3,9 +3,8 @@ import styled from 'styled-components'
 
 import { Help } from '@/common/components/Help'
 import { Colors } from '@/common/constants'
-import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
-
 import { MemberRole } from '../types'
+import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
 interface MemberRolesProps {
   max?: number
@@ -20,7 +19,7 @@ const defaultRole = {
 }
 
 export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) => {
-  if (!roles.length) {
+  if (!roles || !roles.length) {
     roles = [defaultRole]
   }
   const rolesToDisplay = max ? roles.slice(0, max) : roles
