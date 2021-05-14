@@ -3,8 +3,7 @@ import React from 'react'
 
 import { asMember } from '@/memberships/types'
 import { mockMembers } from '@/mocks/data/mockMembers'
-import { ProposalStageKeys } from '@/proposals/constants'
-import { Proposal } from '@/proposals/types'
+import { Proposal, ProposalStage } from '@/proposals/types'
 
 import { ProposalList } from '.'
 
@@ -28,7 +27,7 @@ Default.args = {
       (proposal, index): Proposal => ({
         ...proposal,
         id: String(index),
-        stage: ProposalStageKeys[index],
+        stage: (['DECIDING', 'DORMANT', 'GRACING', 'SUCCEDED'] as ProposalStage[])[index],
       })
     ),
 }
