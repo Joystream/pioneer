@@ -1,6 +1,6 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
@@ -15,6 +15,7 @@ export type MemberFieldsFragment = {
   isFoundingMember: boolean
   inviteCount: number
   metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string>; about?: Types.Maybe<string> }
+  roles: Array<{ __typename: 'Worker'; isLead: boolean; group: { __typename: 'WorkingGroup'; name: string } }>
 }
 
 export type GetMembersQueryVariables = Types.Exact<{
@@ -95,6 +96,12 @@ export const MemberFieldsFragmentDoc = gql`
     isVerified
     isFoundingMember
     inviteCount
+    roles {
+      group {
+        name
+      }
+      isLead
+    }
   }
 `
 export const MemberWithDetailsFragmentDoc = gql`

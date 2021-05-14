@@ -13,6 +13,6 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
     isVerified: data.isVerified,
     rootAccount: data.rootAccount,
     controllerAccount: data.controllerAccount,
-    roles: [],
+    roles: data.roles,
   }
 }

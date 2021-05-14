@@ -12,6 +12,12 @@ fragment MemberFields on Membership {
   isVerified
   isFoundingMember
   inviteCount
+  roles {
+    group {
+      name
+    }
+    isLead
+  }
 }
 
 query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!], $orderBy: MembershipOrderByInput) {

@@ -19,6 +19,7 @@ interface MemberListProps {
 }
 
 export const MemberList = ({ isLoading, members, order, onSort }: MemberListProps) => {
+  console.log('my members', members)
   const SortHeader =
     order && onSort && members.length > 1
       ? ({ children, sortKey }: { children: ReactNode; sortKey: SortKey }) => (

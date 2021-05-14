@@ -1,11 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
+
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
@@ -31,7 +29,7 @@ export type WorkerFieldsFragment = {
     | { __typename: 'WorkerStatusActive' }
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
-  hiredAtBlock: { __typename: 'Block'; id: string; network: Types.Network; timestamp: any; number: number }
+  hiredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -283,13 +281,11 @@ export const WorkerFieldsFragmentDoc = gql`
     rewardAccount
     stakeAccount
     hiredAtBlock {
-      id
-      network
-      timestamp
-      number
+      ...BlockFields
     }
   }
   ${MemberFieldsFragmentDoc}
+  ${BlockFieldsFragmentDoc}
 `
 export const WorkingGroupFieldsFragmentDoc = gql`
   fragment WorkingGroupFields on WorkingGroup {
