@@ -1,14 +1,23 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import { Icon } from './Icon'
 
-export const LinkIcon = memo(() => (
-  <Icon width="14" height="14" viewBox="0 0 14 14" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+interface LinkIconProps {
+  className?: any
+}
+
+export const LinkIcon = React.memo(({ className }: LinkIconProps) => (
+  <Icon
+    size="16"
+    viewBox="0 0 16 16"
+    preserveAspectRatio="xMidYMid meet"
+    fill="none"
+    color="currentColor"
+    className={className}
+  >
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
       d="M5.69604 3.30738L7.16787 1.83555C8.55929 0.444126 10.8152 0.444127 12.2067 1.83555C13.5981 3.22697 13.5981 5.48292 12.2067 6.87434L10.7348 8.34617L9.8863 7.49764L11.3581 6.02581C12.2809 5.10302 12.2809 3.60687 11.3581 2.68408C10.4353 1.76129 8.93919 1.76128 8.0164 2.68408L6.54457 4.15591L5.69604 3.30738ZM2.77857 7.92191C1.85577 8.8447 1.85577 10.3408 2.77857 11.2636C3.70136 12.1864 5.19751 12.1864 6.1203 11.2636L7.59213 9.79181L8.44066 10.6403L6.96883 12.1122C5.57741 13.5036 3.32146 13.5036 1.93004 12.1122C0.538616 10.7207 0.538616 8.4648 1.93004 7.07338L3.40187 5.60155L4.2504 6.45008L2.77857 7.92191ZM4.12469 9.06899L9.16348 4.0302L10.012 4.87873L4.97322 9.91752L4.12469 9.06899Z"
-      fill="#8C96A6"
+      fill="currentColor"
     />
   </Icon>
 ))
