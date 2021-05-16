@@ -2,8 +2,15 @@ import React from 'react'
 
 import { Icon } from './Icon'
 
-export const BlockIcon = () => (
-  <Icon size="16" viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
+export const BlockIcon = (className: { className?: string }) => (
+  <Icon
+    size="16"
+    viewBox="0 0 16 16"
+    preserveAspectRatio="xMidYMid meet"
+    fill="none"
+    color="currentColor"
+    className={className}
+  >
     <path
       fillRule="evenodd"
       clipRule="evenodd"

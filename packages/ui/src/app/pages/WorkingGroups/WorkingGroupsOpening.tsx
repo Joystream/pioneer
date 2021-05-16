@@ -11,11 +11,18 @@ import { BellIcon } from '@/common/components/icons/BellIcon'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, RowGapBlock, SidePanel } from '@/common/components/page/PageContent'
+import {
+  ContentWithSidepanel,
+  MainPanel,
+  PageFooter,
+  RowGapBlock,
+  SidePanel,
+} from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
-import { StatisticItem, Statistics, TokenValueStat, DurationStatistics } from '@/common/components/statistics'
+import { Statistics, TokenValueStat, DurationStatistics } from '@/common/components/statistics'
+import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -24,7 +31,7 @@ import { OpeningStatuses, MappedStatuses } from '@/working-groups/constants'
 import useOpening from '@/working-groups/hooks/useOpening'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 
-const WorkingGroupOpening = () => {
+export const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
@@ -57,7 +64,7 @@ const WorkingGroupOpening = () => {
   })
 
   return (
-    <AppPage lastBreadcrumb={opening.title}>
+    <AppPage lastBreadcrumb={opening.title} rowGap="s">
       <PageHeader>
         <PreviousPage>
           <PageTitle>{opening.title}</PageTitle>
@@ -96,12 +103,10 @@ const WorkingGroupOpening = () => {
           <StatusBadge />
         </Row>
         <Statistics>
-          <StatisticItem title="Current budget" helperText="Lorem ipsum...">
-            {opening.budget}
-          </StatisticItem>
+          <TokenValueStat title="Current budget" helperText="Lorem ipsum..." value={opening.budget} />
           <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
           <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.value} />
-          <StatisticItem title="Hiring limit">{opening.hiring.total}</StatisticItem>
+          <NumericValueStat title="Hiring limit" value={opening.hiring.total} />
         </Statistics>
         <ContentWithSidepanel>
           <MainPanel>
@@ -120,9 +125,9 @@ const WorkingGroupOpening = () => {
           </SidePanel>
         </ContentWithSidepanel>
       </RowGapBlock>
-      <Footer>
+      <PageFooter>
         <BlockTime block={opening.createdAtBlock} horizontal />
-      </Footer>
+      </PageFooter>
     </AppPage>
   )
 }
@@ -130,11 +135,3 @@ const WorkingGroupOpening = () => {
 const Row = styled.div`
   display: flex;
 `
-
-const Footer = styled.div`
-  position: absolute;
-  bottom: 5px;
-  font-size: 14px;
-`
-
-export default WorkingGroupOpening
