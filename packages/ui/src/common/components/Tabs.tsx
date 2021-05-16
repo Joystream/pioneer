@@ -97,17 +97,6 @@ const TabContainer = styled.button<TabActiveProps>`
     background: ${Colors.Blue[500]};
     transform: scaleX(0);
     transition: ${Transitions.all};
-    animation: hideTabUnderline ${Transitions.duration};
-
-    @keyframes hideTabUnderline {
-      from {
-        transform: scaleX(1);
-        background: ${Colors.Blue[500]};
-      }
-      to {
-        transform: scaleX(0);
-      }
-    }
   }
 
   &:hover,
