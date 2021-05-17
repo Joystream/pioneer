@@ -1,25 +1,40 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../../constants'
 
-interface NavigationLinkProps {
+interface NavigationLinkProps extends DisabledNavigationLingkProps {
   children: React.ReactNode
   exact?: boolean
   className?: string
   to: string
 }
 
-export const NavigationLink = ({ children, exact, className, to }: NavigationLinkProps) => {
+interface DisabledNavigationLingkProps {
+  disabled?: boolean
+}
+
+export const NavigationLink = ({ children, exact, className, to, disabled }: NavigationLinkProps) => {
   return (
-    <NavigationItemLink exact={exact} to={to} className={className} activeClassName="active-page">
+    <NavigationItemLink
+      exact={exact}
+      to={to}
+      className={className}
+      disabled={disabled}
+      activeClassName="active-page"
+      onClick={(event) => {
+        if (disabled === true) {
+          event.preventDefault()
+        }
+      }}
+    >
       {children}
     </NavigationItemLink>
   )
 }
 
-const NavigationItemLink = styled(NavLink)`
+const NavigationItemLink = styled(NavLink)<DisabledNavigationLingkProps>`
   display: grid;
   position: relative;
   grid-auto-flow: column;
@@ -35,7 +50,7 @@ const NavigationItemLink = styled(NavLink)`
   line-height: 24px;
   -webkit-text-stroke-width: 0.05em;
   -webkit-text-stroke-color: transparent;
-  color: ${Colors.Black[200]};
+  color: ${({ disabled }) => (disabled ? Colors.Black[600] : Colors.Black[200])};
   text-transform: capitalize;
   text-decoration: none;
   overflow: hidden;
@@ -65,18 +80,32 @@ const NavigationItemLink = styled(NavLink)`
   }
 
   .nav-icon {
-    color: ${Colors.Black[300]};
+    color: ${({ disabled }) => (disabled ? Colors.Black[600] : Colors.Black[300])};
     transition: ${Transitions.all};
   }
 
   &:hover {
-    color: ${Colors.White};
-    &:after {
-      background-color: ${Colors.Blue[700]};
-    }
-    .nav-icon {
-      color: ${Colors.Blue[500]};
-    }
+    ${({ disabled }) =>
+      disabled
+        ? css`
+            color: ${Colors.Black[600]};
+            &:after {
+              background-color: 'transparent';
+            }
+            .nav-icon {
+              color: ${Colors.Black[600]};
+            }
+            cursor: not-allowed;
+          `
+        : css`
+            color: ${Colors.White};
+            &:after {
+              background-color: ${Colors.Blue[700]};
+            }
+            .nav-icon {
+              color: ${Colors.White};
+            }
+          `};
   }
 
   &.active-page {
