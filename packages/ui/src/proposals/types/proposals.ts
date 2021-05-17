@@ -4,7 +4,7 @@ export type ProposalStage =
   | 'DECIDING'
   | 'DORMANT'
   | 'GRACING'
-  | 'SUCCEDED'
+  | 'SUCCEEDED'
   | 'FAILED'
   | 'VETOED'
   | 'SLASHED'

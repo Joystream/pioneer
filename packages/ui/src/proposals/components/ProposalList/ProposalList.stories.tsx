@@ -5,17 +5,18 @@ import { asMember } from '@/memberships/types'
 import { mockMembers } from '@/mocks/data/mockMembers'
 import { Proposal, ProposalStage } from '@/proposals/types'
 
-import { ProposalList } from '.'
+import { ProposalList, ProposalListProps } from '.'
 
 export default {
   title: 'Proposals/ProposalList',
   component: ProposalList,
 } as Meta
 
-type Props = Parameters<typeof ProposalList>[0]
-const Template: Story<Props> = (args) => <ProposalList {...args} />
+const Template: Story<ProposalListProps> = (args) => <ProposalList {...args} />
 
 export const Default = Template.bind({})
+const stages: ProposalStage[] = ['DECIDING', 'DORMANT', 'GRACING', 'SUCCEEDED']
+
 Default.args = {
   proposals: Array<Omit<Proposal, 'id' | 'stage'>>(4)
     .fill({
@@ -29,7 +30,7 @@ Default.args = {
       (proposal, index): Proposal => ({
         ...proposal,
         id: String(index),
-        stage: (['DECIDING', 'DORMANT', 'GRACING', 'SUCCEDED'] as ProposalStage[])[index],
+        stage: stages[index],
       })
     ),
 }

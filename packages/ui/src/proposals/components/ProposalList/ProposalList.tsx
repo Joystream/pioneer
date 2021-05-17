@@ -7,7 +7,11 @@ import { Proposal } from '@/proposals/types'
 
 import { ProposalListItem } from './ProposalListItem'
 
-export const ProposalList = ({ proposals }: { proposals: Proposal[] }) => (
+export interface ProposalListProps {
+  proposals: Proposal[]
+}
+
+export const ProposalList = ({ proposals }: ProposalListProps) => (
   <>
     <ListHeaders colLayout={ProposalColLayout}>
       <ListHeader>Created</ListHeader>
