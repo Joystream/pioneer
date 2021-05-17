@@ -6,6 +6,7 @@ fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
 }
 
 fragment WorkerFields on Worker {
+  id
   membership {
     ...MemberFields
   }

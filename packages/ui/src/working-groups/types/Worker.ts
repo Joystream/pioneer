@@ -4,6 +4,7 @@ import { WorkerFieldsFragment } from '@/working-groups/queries'
 import { WorkingGroup } from '@/working-groups/types/WorkingGroup'
 
 export interface Worker {
+  id: string
   membership: Pick<Member, 'id'>
   group: Pick<WorkingGroup, 'id' | 'name'>
   status: string
@@ -24,6 +25,7 @@ export interface WorkerWithDetails extends Worker {
 }
 
 export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
+  id: fields.id,
   group: {
     id: fields.group.id,
     name: fields.group.name,
