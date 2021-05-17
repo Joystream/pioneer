@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { CloseButton } from '@/common/components/buttons'
+import { ButtonGhost, CloseButton } from '@/common/components/buttons'
+import { LinkIcon } from '@/common/components/icons/LinkIcon'
 
 import { MemberInfoWrap } from '..'
 import { EditSymbol } from '../../../common/components/icons/symbols'
@@ -12,6 +13,7 @@ import {
   SidePaneHeader,
   SidePanelTop,
   SidePaneTitle,
+  SidePaneTopButtonsGroup,
 } from '../../../common/components/SidePane'
 import { Tabs } from '../../../common/components/Tabs'
 import { useModal } from '../../../common/hooks/useModal'
@@ -59,11 +61,16 @@ export const MemberProfile = React.memo(() => {
         <MemberPanelHeader>
           <SidePanelTop>
             <SidePaneTitle>My Profile</SidePaneTitle>
-            {isMyMember && activeTab === 'DETAILS' && (
-              <SidePaneEditMembershipButton member={member}>
-                <EditSymbol />
-              </SidePaneEditMembershipButton>
-            )}
+            <SidePaneTopButtonsGroup>
+              {isMyMember && activeTab === 'DETAILS' && (
+                <EditMembershipButton member={member}>
+                  <EditSymbol />
+                </EditMembershipButton>
+              )}
+              <ButtonGhost size="small">
+                <LinkIcon />
+              </ButtonGhost>
+            </SidePaneTopButtonsGroup>
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
           <MemberInfo member={member} memberSize="l" size="l" />
@@ -85,11 +92,6 @@ export const MemberProfile = React.memo(() => {
     </SidePaneGlass>
   )
 })
-
-const SidePaneEditMembershipButton = styled(EditMembershipButton)`
-  position: absolute;
-  right: 36px;
-`
 
 const MemberPanelHeader = styled(SidePaneHeader)`
   ${MemberInfoWrap} {

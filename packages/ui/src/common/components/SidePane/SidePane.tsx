@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { Animations, Colors } from '../../constants'
+import { ButtonsGroup } from '../buttons'
 
 export const SidePaneGlass = styled.div`
   display: flex;
@@ -72,4 +73,9 @@ export const SidePaneBody = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`
+
+export const SidePaneTopButtonsGroup = styled(ButtonsGroup)`
+  position: absolute;
+  right: 36px;
 `
