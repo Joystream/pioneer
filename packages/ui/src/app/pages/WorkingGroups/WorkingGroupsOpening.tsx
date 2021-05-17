@@ -6,7 +6,7 @@ import { AppPage } from '@/app/components/AppPage'
 import { BadgeRed } from '@/common/components/BadgeRed'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons/Buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
@@ -18,7 +18,6 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { StatisticItem, Statistics, TokenValueStat, DurationStatistics } from '@/common/components/statistics'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
-import { spacing } from '@/common/utils/styles'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
 import { OpeningStatuses, MappedStatuses } from '@/working-groups/constants'
@@ -63,7 +62,7 @@ const WorkingGroupOpening = () => {
         <PreviousPage>
           <PageTitle>{opening.title}</PageTitle>
         </PreviousPage>
-        <ButtonsWrapper>
+        <ButtonsGroup>
           {(opening.status === OpeningStatuses.OPEN || opening.status === OpeningStatuses.CANCELLED) && (
             <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
               <LinkIcon />
@@ -75,7 +74,7 @@ const WorkingGroupOpening = () => {
               size="medium"
               onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
             >
-              Apply now!
+              Apply now
             </ButtonPrimary>
           )}
           {opening.status === OpeningStatuses.UPCOMING && (
@@ -84,7 +83,7 @@ const WorkingGroupOpening = () => {
               Notify me when it’s open
             </ButtonGhost>
           )}
-        </ButtonsWrapper>
+        </ButtonsGroup>
       </PageHeader>
       <RowGapBlock>
         <Row>
@@ -130,14 +129,6 @@ const WorkingGroupOpening = () => {
 
 const Row = styled.div`
   display: flex;
-`
-const ButtonsWrapper = styled.div`
-  margin-left: auto;
-  display: flex;
-
-  button {
-    margin-left: ${spacing(1)};
-  }
 `
 
 const Footer = styled.div`
