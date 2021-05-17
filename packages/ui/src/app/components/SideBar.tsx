@@ -1,6 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
+import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/CouncilIcon'
+import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon'
+import { OverviewIcon } from '@/common/components/page/Sidebar/LinksIcons/OverviewIcon'
+import { SettingsIcon } from '@/common/components/page/Sidebar/LinksIcons/SettingsIcon'
+import { ValidatorsIcon } from '@/common/components/page/Sidebar/LinksIcons/ValidatorsIcon'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
 import { MembersIcon } from '../../common/components/page/Sidebar/LinksIcons/MembersIcon'
@@ -21,6 +27,12 @@ export const SideBar = () => (
     </NavigationHeader>
     <NavigationLinks>
       <NavigationLinksItem>
+        <NavigationLink to="lorem" disabled>
+          <OverviewIcon />
+          Overview
+        </NavigationLink>
+      </NavigationLinksItem>
+      <NavigationLinksItem>
         <NavigationLink to="/profile">
           <MyProfileIcon />
           My profile
@@ -39,9 +51,39 @@ export const SideBar = () => (
         </NavigationLink>
       </NavigationLinksItem>
       <NavigationLinksItem>
+        <NavigationLink to="lorem" disabled>
+          <CouncilIcon />
+          Council
+        </NavigationLink>
+      </NavigationLinksItem>
+      <NavigationLinksItem>
+        <NavigationLink to="lorem" disabled>
+          <ConstitutionIcon />
+          Constitution
+        </NavigationLink>
+      </NavigationLinksItem>
+      <NavigationLinksItem>
+        <NavigationLink to="lorem" disabled>
+          <ValidatorsIcon />
+          Validators
+        </NavigationLink>
+      </NavigationLinksItem>
+      <NavigationLinksItem>
+        <NavigationLink to="lorem" disabled>
+          <ForumIcon />
+          Forum
+        </NavigationLink>
+      </NavigationLinksItem>
+      <NavigationLinksItem>
         <NavigationLink to="/members">
           <MembersIcon />
           Members
+        </NavigationLink>
+      </NavigationLinksItem>
+      <NavigationLinksItem>
+        <NavigationLink to="lorem" disabled>
+          <SettingsIcon />
+          Settings
         </NavigationLink>
       </NavigationLinksItem>
     </NavigationLinks>

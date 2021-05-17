@@ -2,14 +2,14 @@ import styled from 'styled-components'
 
 import { Colors } from '../../constants'
 
+import { TableListRowStyle } from './List'
+
 export const ListHeaders = styled.div`
   display: grid;
   grid-area: accountstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: ${(props: Partial<{ colLayout?: string }>) => props.colLayout ?? 'repeat(auto-fill, 100px)'};
-  justify-content: space-between;
   width: 100%;
-  padding-left: 16px;
+  ${(props: { colLayout?: string }) => TableListRowStyle(props.colLayout)}
 `
 export const ListHeader = styled.span`
   display: flex;
