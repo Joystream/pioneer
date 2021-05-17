@@ -310,7 +310,7 @@ export const SuccessModalBody = styled(ModalBody)`
   grid-row-gap: 8px;
   background-color: ${Colors.White};
   border: none;
-  padding: 12px 24px 40px;
+  padding: 8px 24px 24px;
 `
 
 export const SignTransferContainer = styled.div`
