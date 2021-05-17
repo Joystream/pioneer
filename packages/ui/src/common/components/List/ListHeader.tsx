@@ -6,7 +6,6 @@ import { TableListRowStyle } from './List'
 
 export const ListHeaders = styled.div`
   display: grid;
-  grid-area: accountstablenav;
   grid-template-rows: 1fr;
   width: 100%;
   ${(props: { colLayout?: string }) => TableListRowStyle(props.colLayout)}
