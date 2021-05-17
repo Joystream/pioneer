@@ -2,7 +2,6 @@ import { capitalizeFirstLetter } from '@/common/helpers'
 import { WorkerWithDetails } from '@/working-groups/types'
 
 import { WorkingGroupApplication } from './types/WorkingGroupApplication'
-import { capitalizeFirstLetter } from '@/common/helpers'
 
 export function openingTitle(application: WorkingGroupApplication) {
   const position = application.opening.type == 'LEADER' ? 'Leader' : 'Worker'
