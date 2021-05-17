@@ -16,7 +16,13 @@ import { alice } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 const WORKER: WorkerWithDetails = {
   membership: {
@@ -74,22 +80,45 @@ describe('UI: LeaveRoleModal', () => {
     expect(screen.getByRole('button', { name: 'Leave the position anyway' })).toBeDefined()
   })
 
-  it("With member's controller account in keyring", async () => {
-    await renderWithValidSigner()
-    await fireEvent.click(screen.getByRole('button', { name: 'Leave the position anyway' }))
-    expect(
-      screen.findByText("The transaction can only be signed with the membership's controller account.")
-    ).toBeDefined()
-    expect(screen.getByRole('button', { name: 'Sign and leave role' })).not.toBeDisabled()
+  describe('Sign step', () => {
+    it("With member's controller account in keyring", async () => {
+      await renderWithValidSigner()
+      await fireEvent.click(screen.getByRole('button', { name: 'Leave the position anyway' }))
+      expect(
+        screen.findByText("The transaction can only be signed with the membership's controller account.")
+      ).toBeDefined()
+      expect(screen.getByRole('button', { name: 'Sign and leave role' })).not.toBeDisabled()
+    })
+
+    it("Without member's controller account in keyring", async () => {
+      await renderWithoutValidSigner()
+      await fireEvent.click(screen.getByRole('button', { name: 'Leave the position anyway' }))
+      expect(
+        screen.findByText("The transaction can only be signed with the membership's controller account.")
+      ).toBeDefined()
+      expect(screen.getByRole('button', { name: 'Sign and leave role' })).toBeDisabled()
+    })
   })
 
-  it("Without member's controller account in keyring", async () => {
-    await renderWithoutValidSigner()
-    await fireEvent.click(screen.getByRole('button', { name: 'Leave the position anyway' }))
-    expect(
-      screen.findByText("The transaction can only be signed with the membership's controller account.")
-    ).toBeDefined()
-    expect(screen.getByRole('button', { name: 'Sign and leave role' })).toBeDisabled()
+  describe('Sign the transaction', () => {
+    async function renderSignStep() {
+      await renderWithValidSigner()
+      await fireEvent.click(screen.getByRole('button', { name: 'Leave the position anyway' }))
+    }
+
+    it('Transaction success', async () => {
+      await renderSignStep()
+      stubTransactionSuccess(transaction, [WORKER.id], 'workingGroup', 'WorkerStartedLeaving')
+      await fireEvent.click(screen.getByRole('button', { name: 'Sign and leave role' }))
+      expect(screen.findByText('Success!')).toBeDefined()
+    })
+
+    it('Transaction failure', async () => {
+      await renderSignStep()
+      stubTransactionFailure(transaction)
+      await fireEvent.click(screen.getByRole('button', { name: 'Sign and leave role' }))
+      expect(screen.findByText('There was a problem leaving the role.')).toBeDefined()
+    })
   })
 
   function renderModal(worker = WORKER) {
