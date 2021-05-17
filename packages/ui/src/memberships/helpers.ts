@@ -1,4 +1,5 @@
 import { MemberRole } from './types'
+import { capitalizeFirstLetter } from '@/common/helpers'
 
 export function memberRoleAbbreviation(role: MemberRole) {
   if (role.groupName === 'Member Role') {
@@ -14,7 +15,7 @@ export function memberRoleTitle(role: MemberRole) {
   }
 
   const position = role.isLeader ? 'Leader' : 'Worker'
-  const group = role.groupName
+  const group = capitalizeFirstLetter(role.groupName)
 
   return `${group} ${position}`
 }
