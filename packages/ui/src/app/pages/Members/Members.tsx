@@ -15,6 +15,7 @@ import {
   useMembers,
 } from '../../../memberships/hooks/useMembers'
 import { AppPage } from '../../components/AppPage'
+import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
 const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberListOrder => ({
   sortBy: sortBy,
