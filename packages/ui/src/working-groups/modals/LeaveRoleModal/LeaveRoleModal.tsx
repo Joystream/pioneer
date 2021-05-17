@@ -17,13 +17,17 @@ interface Props {
 
 export const LeaveRoleModal = ({ onClose, worker }: Props) => {
   const { api } = useApi()
-  const [rationale] = useState('')
+  const [rationale, setRationale] = useState('')
   const [step, setStep] = useState<ModalState>('PREPARE')
   const transaction = getGroup(api, worker.group.name)?.leaveRole(worker.id, rationale)
   const onDone = (success: boolean) => setStep(success ? 'SUCCESS' : 'ERROR')
+  const onContinue = (newRationale: string) => {
+    setRationale(newRationale)
+    setStep('AUTHORIZE')
+  }
 
   if (step === 'PREPARE') {
-    return <LeaveRolePrepareModal onClose={onClose} onContinue={() => setStep('AUTHORIZE')} />
+    return <LeaveRolePrepareModal onClose={onClose} onContinue={onContinue} />
   }
 
   if (step === 'AUTHORIZE' && transaction) {
