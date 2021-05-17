@@ -5,7 +5,10 @@ const { WORKING_GROUPS } = require('./generateWorkingGroups')
 const { randomUniqueArrayFromRange, randomFromRange } = require('./utils')
 
 const generateWorkers = () => {
+  let nextId = 0
+
   const generateWorker = (type, groupId) => (memberId) => ({
+    id: String(nextId++),
     membershipId: memberId,
     groupId: groupId,
     status: type,

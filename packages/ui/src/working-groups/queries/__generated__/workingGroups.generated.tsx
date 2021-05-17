@@ -1,9 +1,11 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import {
+  MemberFieldsFragment,
+  MemberFieldsFragmentDoc,
+} from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
-
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
@@ -55,6 +57,15 @@ export type GetWorkersQueryVariables = Types.Exact<{
 }>
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
+
+export type GetWorkerQueryVariables = Types.Exact<{
+  where: Types.WorkerWhereUniqueInput
+}>
+
+export type GetWorkerQuery = {
+  __typename: 'Query'
+  workerByUniqueInput?: Types.Maybe<{ __typename: 'Worker' } & WorkerFieldsFragment>
+}
 
 export type WorkingGroupOpeningMetadataFieldsFragment = {
   __typename: 'WorkingGroupOpeningMetadata'
@@ -502,6 +513,44 @@ export function useGetWorkersLazyQuery(
 export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
+export const GetWorkerDocument = gql`
+  query getWorker($where: WorkerWhereUniqueInput!) {
+    workerByUniqueInput(where: $where) {
+      ...WorkerFields
+    }
+  }
+  ${WorkerFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkerQuery__
+ *
+ * To run a query within a React component, call `useGetWorkerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkerQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetWorkerQuery(baseOptions: Apollo.QueryHookOptions<GetWorkerQuery, GetWorkerQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkerQuery, GetWorkerQueryVariables>(GetWorkerDocument, options)
+}
+export function useGetWorkerLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerQuery, GetWorkerQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkerQuery, GetWorkerQueryVariables>(GetWorkerDocument, options)
+}
+export type GetWorkerQueryHookResult = ReturnType<typeof useGetWorkerQuery>
+export type GetWorkerLazyQueryHookResult = ReturnType<typeof useGetWorkerLazyQuery>
+export type GetWorkerQueryResult = Apollo.QueryResult<GetWorkerQuery, GetWorkerQueryVariables>
 export const GetWorkingGroupOpeningsConnectionDocument = gql`
   query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
     workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {

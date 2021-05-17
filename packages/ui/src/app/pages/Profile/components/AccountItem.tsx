@@ -41,7 +41,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
   )
 }
 
-const AccountItemWrap = styled.div`
+export const AccountItemWrap = styled.div`
   display: grid;
   grid-template-columns: 276px repeat(4, 128px) 136px;
   grid-template-rows: 1fr;

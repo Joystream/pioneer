@@ -57,6 +57,12 @@ query getWorkers ($where: WorkerWhereInput) {
   }
 }
 
+query getWorker ($where: WorkerWhereUniqueInput!) {
+  workerByUniqueInput(where: $where) {
+    ...WorkerFields
+  }
+}
+
 fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
   applicationDetails
   shortDescription
