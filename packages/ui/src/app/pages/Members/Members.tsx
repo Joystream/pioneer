@@ -3,6 +3,7 @@ import React, { useEffect, useReducer, useState } from 'react'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
+import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
@@ -14,7 +15,6 @@ import {
   useMembers,
 } from '../../../memberships/hooks/useMembers'
 import { AppPage } from '../../components/AppPage'
-import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
 const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberListOrder => ({
   sortBy: sortBy,

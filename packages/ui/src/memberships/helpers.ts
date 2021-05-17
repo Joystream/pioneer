@@ -1,5 +1,6 @@
-import { MemberRole } from './types'
 import { capitalizeFirstLetter } from '@/common/helpers'
+
+import { MemberRole } from './types'
 
 export function memberRoleAbbreviation(role: MemberRole) {
   if (role.groupName === 'Member Role') {
