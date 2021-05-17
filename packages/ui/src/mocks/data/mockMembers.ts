@@ -2,7 +2,12 @@ import { MemberFieldsFragment } from '@/memberships/queries'
 
 import rawMembers from './raw/members.json'
 
-export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata'> & {
+export interface MockRole {
+  group: { name: string }
+  isLead: boolean
+}
+
+export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 'roles'> & {
   metadata: {
     name: string
     about: string
@@ -12,7 +17,6 @@ export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata'> &
 export const mockMembers: MockMember[] = rawMembers.map((rawMember) => {
   return {
     ...rawMember,
-    roles: [],
   }
 })
 

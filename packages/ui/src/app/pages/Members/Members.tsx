@@ -3,7 +3,7 @@ import React, { useEffect, useReducer, useState } from 'react'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
-import { MemberRolesList } from '@/memberships/components/MemberRoles'
+import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
@@ -21,8 +21,6 @@ const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberL
   isDescending: sortBy === order.sortBy && !order.isDescending,
 })
 
-const Roles = Object.fromEntries(MemberRolesList.map(({ abbreviation }) => [abbreviation, abbreviation]))
-
 export const Members = () => {
   const [filter, setFilter] = useState(MemberListEmptyFilter)
   const [order, dispatchSort] = useReducer(sortReducer, DefaultMemberListOrder)
@@ -34,13 +32,20 @@ export const Members = () => {
 
   const { members, isLoading, pageCount } = useMembers({ order, filter, page })
 
+  const roles: { [key: string]: string } = {}
+  for (const member of members) {
+    for (const role of member.roles) {
+      roles[memberRoleTitle(role)] = memberRoleAbbreviation(role)
+    }
+  }
+
   return (
     <AppPage>
       <PageHeader>
         <PageTitle>Members</PageTitle>
       </PageHeader>
       <MainPanel>
-        <MemberListFilters roles={Roles} onApply={setFilter} />
+        <MemberListFilters roles={roles} onApply={setFilter} />
         <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
         {!isLoading && pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
       </MainPanel>

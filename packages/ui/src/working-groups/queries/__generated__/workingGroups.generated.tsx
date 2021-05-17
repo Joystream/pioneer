@@ -31,7 +31,7 @@ export type WorkerFieldsFragment = {
     | { __typename: 'WorkerStatusActive' }
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
-  hiredAtBlock: { __typename: 'Block'; id: string; network: Types.Network; timestamp: any; number: number }
+  hiredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -85,18 +85,7 @@ export type WorkingGroupOpeningFieldsFragment = {
       | { __typename: 'ApplicationStatusRejected' }
       | { __typename: 'ApplicationStatusWithdrawn' }
       | { __typename: 'ApplicationStatusCancelled' }
-    applicant: {
-      __typename: 'Membership'
-      id: string
-      isVerified: boolean
-      handle: string
-      rootAccount: string
-      controllerAccount: string
-      inviteCount: number
-      isFoundingMember: boolean
-      roles: Array<{ __typename: 'Worker'; id: string }>
-      metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string> }
-    }
+    applicant: { __typename: 'Membership' } & MemberFieldsFragment
   }>
   status:
     | { __typename: 'OpeningStatusOpen' }
@@ -283,13 +272,11 @@ export const WorkerFieldsFragmentDoc = gql`
     rewardAccount
     stakeAccount
     hiredAtBlock {
-      id
-      network
-      timestamp
-      number
+      ...BlockFields
     }
   }
   ${MemberFieldsFragmentDoc}
+  ${BlockFieldsFragmentDoc}
 `
 export const WorkingGroupFieldsFragmentDoc = gql`
   fragment WorkingGroupFields on WorkingGroup {
@@ -344,19 +331,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
         __typename
       }
       applicant {
-        id
-        isVerified
-        handle
-        rootAccount
-        controllerAccount
-        inviteCount
-        isFoundingMember
-        roles {
-          id
-        }
-        metadata {
-          name
-        }
+        ...MemberFields
       }
       status {
         __typename
@@ -368,6 +343,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   }
   ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
+  ${MemberFieldsFragmentDoc}
 `
 export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
   fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
