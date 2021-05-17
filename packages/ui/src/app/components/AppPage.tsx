@@ -5,24 +5,35 @@ import { PageContent } from '../../common/components/page/PageContent'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { breadcrumbsOptions } from '../constants/breadcrumbs'
 
-interface AppPageProps {
+interface AppPageProps extends PageContainerProps {
   lastBreadcrumb?: string
   children: ReactNode
 }
 
-export const AppPage = ({ children, lastBreadcrumb }: AppPageProps) => (
+interface PageContainerProps {
+  rowGap?: 's' | 'm'
+}
+
+export const AppPage = ({ children, lastBreadcrumb, rowGap }: AppPageProps) => (
   <PageContent>
     <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
-    <PageContainer>{children}</PageContainer>
+    <PageContainer rowGap={rowGap}>{children}</PageContainer>
   </PageContent>
 )
 
-export const PageContainer = styled.div`
+export const PageContainer = styled.div<PageContainerProps>`
   display: grid;
   align-items: start;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr;
-  grid-row-gap: 24px;
+  grid-row-gap: ${({ rowGap }) => {
+    switch (rowGap) {
+      case 's':
+        return '16px'
+      case 'm':
+      default:
+        return '24px'
+    }
+  }};
   width: 100%;
-  flex-grow: 1;
 `

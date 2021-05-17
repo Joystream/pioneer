@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-import WorkingGroupOpening from '@/app/pages/WorkingGroups/WorkingGroupsOpening'
+import { WorkingGroupOpening } from '@/app/pages/WorkingGroups/WorkingGroupsOpening'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
 import { ConnectionStatus } from '../common/components/ConnectionStatus'
