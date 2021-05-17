@@ -18,6 +18,8 @@ const generateWorkingGroups = () => {
       description: randomMarkdown(),
       setAtBlockId: randomFromRange(1, 50),
       setAtTime: '2021-03-09T10:28:04.155Z',
+      status: 'Scheduled downtime',
+      statusMessage: randomMarkdown(),
     },
   })
 
