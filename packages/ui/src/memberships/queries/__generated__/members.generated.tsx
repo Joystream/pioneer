@@ -38,7 +38,6 @@ export type GetMembersQuery = {
 
 export type GetMembersCountQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.MembershipWhereInput>
-  pageSize?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetMembersCountQuery = {
@@ -141,8 +140,8 @@ export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>
 export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>
 export const GetMembersCountDocument = gql`
-  query GetMembersCount($where: MembershipWhereInput, $pageSize: Int) {
-    membershipsConnection(where: $where, first: $pageSize) {
+  query GetMembersCount($where: MembershipWhereInput) {
+    membershipsConnection(where: $where) {
       totalCount
     }
   }
@@ -161,7 +160,6 @@ export const GetMembersCountDocument = gql`
  * const { data, loading, error } = useGetMembersCountQuery({
  *   variables: {
  *      where: // value for 'where'
- *      pageSize: // value for 'pageSize'
  *   },
  * });
  */

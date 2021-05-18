@@ -34,7 +34,7 @@ export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMemb
     orderBy: orderToGqlInput(order),
   }
   const { data, loading, error } = useGetMembersQuery({ variables })
-  const { data: connectionData } = useGetMembersCountQuery({ variables: { where, pageSize: MEMBERS_PER_PAGE } })
+  const { data: connectionData } = useGetMembersCountQuery({ variables: { where } })
 
   if (error) {
     console.error(error)

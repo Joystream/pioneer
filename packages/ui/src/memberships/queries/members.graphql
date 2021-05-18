@@ -36,8 +36,8 @@ query GetMembers($where: MembershipWhereInput, $orderBy: MembershipOrderByInput,
   }
 }
 
-query GetMembersCount($where: MembershipWhereInput, $pageSize: Int) {
-  membershipsConnection(where: $where, first: $pageSize) {
+query GetMembersCount($where: MembershipWhereInput) {
+  membershipsConnection(where: $where) {
     totalCount
   }
 }
