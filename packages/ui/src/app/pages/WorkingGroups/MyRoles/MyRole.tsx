@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { AppPage } from '@/app/components/AppPage'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { BadgeRed } from '@/common/components/BadgeRed'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { Help } from '@/common/components/Help'
@@ -77,6 +78,11 @@ export const MyRole = () => {
           <BadgeViolet inverted size="l" separated>
             WORKER ID #{worker.id}
           </BadgeViolet>
+          {worker.status !== 'WorkerStatusActive' && (
+            <BadgeRed inverted size="l" separated>
+              ROLE ENDED
+            </BadgeRed>
+          )}
         </Row>
         <Statistics>
           <MultiTokenValueStat
