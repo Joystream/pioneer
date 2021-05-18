@@ -26,7 +26,7 @@ export const MembershipContextProvider = (props: Props) => {
   const addresses = allAccounts.map((account) => account.address)
 
   const { data, loading, error } = useGetMembersQuery({
-    variables: { rootAccount_in: addresses, controllerAccount_in: addresses },
+    variables: { where: { rootAccount_in: addresses, controllerAccount_in: addresses } },
     pollInterval: POLL_INTERVAL,
   })
 
