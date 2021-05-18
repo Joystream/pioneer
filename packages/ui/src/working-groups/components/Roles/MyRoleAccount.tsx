@@ -4,12 +4,18 @@ import styled from 'styled-components'
 import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account } from '@/accounts/types'
-import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { ListItem } from '@/common/components/List'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { Label, TokenValue } from '@/common/components/typography'
 
-export const MyRoleAccount = (account: Account) => {
+export interface MyRoleAccountProps {
+  account: Account
+  canChangeAccount?: boolean
+  canMoveTokens?: boolean
+}
+
+export const MyRoleAccount = ({ account, canChangeAccount, canMoveTokens }: MyRoleAccountProps) => {
   const balance = useBalance(account.address)
 
   return (
@@ -17,7 +23,8 @@ export const MyRoleAccount = (account: Account) => {
       <RoleAccountHeader>
         <Label>{account.name}</Label>
         <ButtonsGroup>
-          <ButtonGhost size="small">Change {account.name}</ButtonGhost>
+          {canChangeAccount === true && <ButtonGhost size="small">Change {account.name}</ButtonGhost>}
+          {canMoveTokens === true && <ButtonPrimary size="small">Move excess tokens</ButtonPrimary>}
         </ButtonsGroup>
       </RoleAccountHeader>
       <ListItem>

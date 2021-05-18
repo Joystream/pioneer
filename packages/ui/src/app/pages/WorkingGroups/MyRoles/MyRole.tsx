@@ -110,9 +110,9 @@ export const MyRole = () => {
         </Statistics>
         <ContentWithSidepanel>
           <MainPanel>
-            <MyRoleAccount name="Role Account" address={worker.roleAccount} />
-            <MyRoleAccount name="Staking Account" address={worker.stakeAccount} />
-            <MyRoleAccount name="Reward Account" address={worker.rewardAccount} />
+            <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} canChangeAccount={true} />
+            <MyRoleAccount account={{ name: 'Role Account', address: worker.stakeAccount }} canMoveTokens={true} />
+            <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} canChangeAccount={true} />
           </MainPanel>
           <SidePanel>
             <ActivitiesBlock activities={activities} label="Role Activities" />
