@@ -8,7 +8,11 @@ const mock: { [k: string]: { proposals: Proposal[] } } = {
   past: { proposals: [] },
 }
 
-export const useProposals = ({ type }: { type: 'current' | 'past' }) => {
+interface Props {
+  type: 'current' | 'past'
+}
+
+export const useProposals = ({ type }: Props) => {
   const { loading, data, error } = useMockDelay(mock[type])
 
   if (error) {
