@@ -65,10 +65,12 @@ export const MyRole = () => {
           >
             Opening
           </ButtonGhost>
-          <ButtonGhost size="medium">
-            Leave a position
-            <Help helperText="Lorem ipsum" helperTitle="Lorem ipsum" />
-          </ButtonGhost>
+          {worker.status === 'WorkerStatusActive' && (
+            <ButtonGhost size="medium">
+              Leave a position
+              <Help helperText="Lorem ipsum" helperTitle="Lorem ipsum" />
+            </ButtonGhost>
+          )}
         </ButtonsGroup>
       </PageHeader>
       <RowGapBlock>
