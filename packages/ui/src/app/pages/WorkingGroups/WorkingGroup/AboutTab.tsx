@@ -22,7 +22,7 @@ export const AboutTab = ({ workingGroup }: Props) => {
         <div>{workingGroup.description}</div>
         <StatusRow>
           <h4>Status</h4>
-          <StatusBadge>{workingGroup.status}</StatusBadge>
+          {!!workingGroup.status && <StatusBadge>{workingGroup.status}</StatusBadge>}
         </StatusRow>
         <div>{workingGroup.statusMessage}</div>
         <h4>About</h4>
