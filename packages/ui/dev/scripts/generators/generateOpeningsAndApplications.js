@@ -77,13 +77,16 @@ const generateOpenings = () => {
 }
 
 const generateApplications = (openings) => {
+  let nextId = 0
+
   return openings.map((opening) => {
     const applicantsIds = randomUniqueArrayFromRange(8, 0, MAX_MEMBERS)
     const questions = opening.metadata.applicationFormQuestions
 
-    const generateApplication = (id) => ({
+    const generateApplication = (applicantId) => ({
+      id: String(nextId++),
       openingId: opening.id,
-      applicantId: String(id),
+      applicantId,
       answers: questions.map((question) => ({
         questionId: question.id,
         answer: faker.lorem.words(randomFromRange(5, 10)),

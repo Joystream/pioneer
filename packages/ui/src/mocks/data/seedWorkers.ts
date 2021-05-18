@@ -5,6 +5,7 @@ import rawWorkers from './raw/workers.json'
 type WorkerStatus = 'active' | 'left' | 'terminated'
 
 interface RawWorker {
+  id: string
   membershipId: string
   status: string
   groupId: number
@@ -14,7 +15,7 @@ interface RawWorker {
   nextPaymentAt: string
 }
 
-export type MockWorker = Worker & { groupId: string; memberId: string }
+export type MockWorker = Worker & { groupId: string; memberId: string; applicationId: string }
 
 export const mockWorkers = rawWorkers.map((rawGroup) => ({ ...rawGroup }))
 

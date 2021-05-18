@@ -7,6 +7,7 @@ import { WorkingGroupApplicationFieldsFragment } from '../queries'
 export interface WorkingGroupApplication {
   id: string
   opening: {
+    id: string
     type: string
     groupName: string
     reward: BN
@@ -23,6 +24,7 @@ export interface WorkingGroupApplication {
 export const asApplication = (application: WorkingGroupApplicationFieldsFragment) => ({
   id: application.id,
   opening: {
+    id: application.opening.id,
     type: application.opening.type,
     groupName: application.opening.group.name,
     reward: new BN(application.opening.rewardPerBlock),

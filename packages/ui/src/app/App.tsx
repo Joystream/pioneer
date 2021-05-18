@@ -15,7 +15,8 @@ import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
 import { Proposals } from './pages/Proposals/Proposals'
 import { MyApplications } from './pages/WorkingGroups/MyApplications'
-import { MyRoles } from './pages/WorkingGroups/MyRoles'
+import { MyRole } from './pages/WorkingGroups/MyRoles/MyRole'
+import { MyRoles } from './pages/WorkingGroups/MyRoles/MyRoles'
 import { WorkingGroup } from './pages/WorkingGroups/WorkingGroup'
 import { WorkingGroups } from './pages/WorkingGroups/WorkingGroups'
 import { WorkingGroupsOpenings } from './pages/WorkingGroups/WorkingGroupsOpenings'
@@ -32,6 +33,7 @@ export const App = () => (
         <Route exact path="/working-groups/openings" component={WorkingGroupsOpenings} />
         <Route exact path="/working-groups/my-applications" component={MyApplications} />
         <Route exact path="/working-groups/my-roles" component={MyRoles} />
+        <Route exact path="/working-groups/my-roles/:id" component={MyRole} />
         <Route exact path="/working-groups/:name" component={WorkingGroup} />
         <Route path="/working-groups/openings/:id" component={WorkingGroupOpening} />
         <Route exact path={ProposalsRoutes.current} component={Proposals} />

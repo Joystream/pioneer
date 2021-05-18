@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '@/common/components/BadgeViolet'
@@ -7,10 +8,9 @@ import { ButtonGhost } from '@/common/components/buttons'
 import { KebabMenuIcon } from '@/common/components/icons'
 import { List, ListItem } from '@/common/components/List'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
-import { WorkerWithDetails } from '@/working-groups/types'
+import { Worker } from '@/working-groups/types'
 
-import { workerRoleTitle } from '../helpers'
-
+import { workerRoleTitle } from '../../helpers'
 import {
   OACItemInfo,
   OACItemInfoTop,
@@ -19,23 +19,25 @@ import {
   OACSubscriptionWide,
   OACWrap,
   OpenItemSummaryColumn,
-} from './OpeningAndApplicationsComponents/OACStyledComponents'
+} from '../OpeningAndApplicationsComponents/OACStyledComponents'
 
 export interface RolesListProps {
-  workers: WorkerWithDetails[]
+  workers: Worker[]
 }
 
 export const RolesList = ({ workers }: RolesListProps) => (
   <List>
     {workers.map((worker) => (
-      <ListItem key={worker.group.name + worker.membership.id}>
+      <ListItem key={worker.id}>
         <RolesListItem worker={worker} />
       </ListItem>
     ))}
   </List>
 )
 
-const RolesListItem = ({ worker }: { worker: WorkerWithDetails }) => {
+const RolesListItem = ({ worker }: { worker: Worker }) => {
+  const history = useHistory()
+
   return (
     <OACWrap>
       <OACItemInfo>
@@ -43,7 +45,7 @@ const RolesListItem = ({ worker }: { worker: WorkerWithDetails }) => {
           <BadgeViolet>{worker.group.name}</BadgeViolet>
           {worker.isLeader && <BadgeViolet>LEADER</BadgeViolet>}
         </OACItemInfoTop>
-        <Title>{workerRoleTitle(worker)}</Title>
+        <Title onClick={() => history.push(`/working-groups/my-roles/${worker.id}`)}>{workerRoleTitle(worker)}</Title>
       </OACItemInfo>
       <OACItemSummary>
         <OpenItemSummaryColumn>
