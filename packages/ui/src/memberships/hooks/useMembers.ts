@@ -43,7 +43,7 @@ export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMemb
   return {
     isLoading: loading,
     members: data?.memberships.map(asMember) ?? [],
-    pageCount: connectionData?.membershipsConnection.totalCount,
+    pageCount: Math.ceil((connectionData?.membershipsConnection.totalCount ?? 0) / MEMBERS_PER_PAGE),
   }
 }
 
