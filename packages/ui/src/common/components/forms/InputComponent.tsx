@@ -230,9 +230,8 @@ const StyledNumberInput = styled(Input)`
 `
 
 const Textarea = styled.textarea`
-  ${InputStyles} {
-    resize: none;
-  }
+  ${InputStyles}
+  resize: none;
 `
 
 export const InputElement = styled.div<InputElementProps>`
