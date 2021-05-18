@@ -73,7 +73,7 @@ describe('UI: LeaveRoleModal', () => {
     transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.leaveRole')
   })
 
-  it('Renders the modal', async () => {
+  it('Prepare step', async () => {
     await renderModal()
     expect(screen.findByText('Leaving a position?')).toBeDefined()
     expect(screen.findByText('Please remember that this action is irreversible.')).toBeDefined()
