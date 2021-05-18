@@ -6,22 +6,29 @@ import { useGetWorkersQuery, WorkerFieldsFragment } from '../queries'
 
 interface UseWorkersProps {
   groupId?: string
-  fetchPast?: boolean
+  statusIn?: Status[]
 }
 
-export const useWorkers = ({ groupId, fetchPast }: UseWorkersProps) => {
+export const useWorkers = ({ groupId, statusIn }: UseWorkersProps) => {
   const options = { variables: { where: { groupId_eq: groupId } } }
   const { data, loading } = useGetWorkersQuery(options)
   const workers = useMemo(
-    () => data && data.workers.filter(getWorkersFilter(fetchPast)).map(({ membership }) => asMember(membership)),
+    () => data && data.workers.filter(getWorkersFilter(statusIn)).map(({ membership }) => asMember(membership)),
     [data, loading]
   )
 
   return { workers, isLoading: loading }
 }
 
-const isActive = (worker: WorkerFieldsFragment) => worker.status.__typename === 'WorkerStatusActive'
+type WorkerStatus = WorkerFieldsFragment['status']['__typename']
+type Status = 'active' | 'left' | 'terminated'
+const StatusTypename: Record<Status, WorkerStatus> = {
+  active: 'WorkerStatusActive',
+  left: 'WorkerStatusLeft',
+  terminated: 'WorkerStatusTerminated',
+}
 
-const getWorkersFilter = (fetchPast: boolean | undefined) => {
-  return (worker: WorkerFieldsFragment) => isActive(worker) === !fetchPast
+const getWorkersFilter = (statusIn?: Status[]) => {
+  const statusTypeIn = statusIn?.map((status) => StatusTypename[status]) ?? ['WorkerStatusActive']
+  return (worker: WorkerFieldsFragment) => statusTypeIn.includes(worker.status.__typename)
 }
