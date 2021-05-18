@@ -6,8 +6,8 @@ import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { CurrentMember } from '@/memberships/components/CurrentMember'
+import { seedMembers, seedMember, mockMembers } from '@/mocks/data'
 
-import { seedMembers, seedMember, mockMembers } from '../../../src/mocks/data'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 

@@ -1,6 +1,7 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
+import { useAccounts } from '@/accounts/hooks/useAccounts'
+
 import { useGetMembersQuery } from '../../queries'
 import { asMember, Member } from '../../types'
 
