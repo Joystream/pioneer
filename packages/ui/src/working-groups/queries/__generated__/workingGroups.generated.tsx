@@ -1,11 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
+
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
@@ -33,6 +31,7 @@ export type WorkerFieldsFragment = {
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
   hiredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
+  application: { __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -190,6 +189,7 @@ export type WorkingGroupApplicationFieldsFragment = {
   stakingAccount: string
   opening: {
     __typename: 'WorkingGroupOpening'
+    id: string
     type: Types.WorkingGroupOpeningType
     rewardPerBlock: any
     group: { __typename: 'WorkingGroup'; name: string }
@@ -263,6 +263,31 @@ export const WorkingGroupMetdataFieldsFragmentDoc = gql`
     statusMessage
   }
 `
+export const WorkingGroupApplicationFieldsFragmentDoc = gql`
+  fragment WorkingGroupApplicationFields on WorkingGroupApplication {
+    id
+    opening {
+      id
+      group {
+        name
+      }
+      type
+      rewardPerBlock
+    }
+    applicant {
+      ...MemberFields
+    }
+    status {
+      __typename
+    }
+    stakingAccount
+    createdAtBlock {
+      ...BlockFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+  ${BlockFieldsFragmentDoc}
+`
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
     id
@@ -285,9 +310,13 @@ export const WorkerFieldsFragmentDoc = gql`
     hiredAtBlock {
       ...BlockFields
     }
+    application {
+      ...WorkingGroupApplicationFields
+    }
   }
   ${MemberFieldsFragmentDoc}
   ${BlockFieldsFragmentDoc}
+  ${WorkingGroupApplicationFieldsFragmentDoc}
 `
 export const WorkingGroupFieldsFragmentDoc = gql`
   fragment WorkingGroupFields on WorkingGroup {
@@ -373,30 +402,6 @@ export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
     }
   }
   ${WorkingGroupOpeningFieldsFragmentDoc}
-`
-export const WorkingGroupApplicationFieldsFragmentDoc = gql`
-  fragment WorkingGroupApplicationFields on WorkingGroupApplication {
-    id
-    opening {
-      group {
-        name
-      }
-      type
-      rewardPerBlock
-    }
-    applicant {
-      ...MemberFields
-    }
-    status {
-      __typename
-    }
-    stakingAccount
-    createdAtBlock {
-      ...BlockFields
-    }
-  }
-  ${MemberFieldsFragmentDoc}
-  ${BlockFieldsFragmentDoc}
 `
 export const ApplicationQuestionFieldsFragmentDoc = gql`
   fragment ApplicationQuestionFields on ApplicationFormQuestion {

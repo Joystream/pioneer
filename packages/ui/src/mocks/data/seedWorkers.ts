@@ -15,7 +15,7 @@ interface RawWorker {
   nextPaymentAt: string
 }
 
-export type MockWorker = Worker & { groupId: string; memberId: string }
+export type MockWorker = Worker & { groupId: string; memberId: string; applicationId: string }
 
 export const mockWorkers = rawWorkers.map((rawGroup) => ({ ...rawGroup }))
 

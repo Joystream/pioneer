@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 
-import { useGetWorkersQuery } from '../queries'
+import { useGetWorkerQuery } from '../queries'
 import { asWorkerWithDetails } from '../types'
 
 export const useWorker = (id: string) => {
-  const params = { variables: { where: { id_eq: id } } }
+  const params = { variables: { where: { id: id } } }
 
-  const { data, loading } = useGetWorkersQuery(params)
+  const { data, loading } = useGetWorkerQuery(params)
 
-  const rawWorker = data && data.workers && data.workers.length ? data.workers[0] : null
+  const rawWorker = data && data.workerByUniqueInput
   const worker = useMemo(() => rawWorker && asWorkerWithDetails(rawWorker), [rawWorker?.id])
 
   return { worker, isLoading: loading }

@@ -58,6 +58,7 @@ export const makeServer = (environment = 'development') => {
               workingGroupOpeningsConnection: getConnectionResolver('WorkingGroupOpeningConnection'),
               workingGroupOpeningByUniqueInput: getUniqueResolver('WorkingGroupOpening'),
               workers: getWhereResolver('Worker'),
+              workerByUniqueInput: getUniqueResolver('Worker'),
               workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
               applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
               upcomingWorkingGroupOpenings: getWhereResolver('UpcomingWorkingGroupOpening'),

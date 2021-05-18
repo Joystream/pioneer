@@ -2,22 +2,21 @@ import { Address, asBlock, Block } from '@/common/types'
 import { Member } from '@/memberships/types'
 import { WorkerFieldsFragment } from '@/working-groups/queries'
 import { WorkingGroup } from '@/working-groups/types/WorkingGroup'
+import { asApplication, WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 export interface Worker {
   id: string
   membership: Pick<Member, 'id'>
   group: Pick<WorkingGroup, 'id' | 'name'>
   status: string
-}
-
-export interface WorkerWithDetails extends Worker {
-  membership: Pick<Member, 'id'>
-  group: Pick<WorkingGroup, 'id' | 'name'>
   isLeader: boolean
   rewardPerBlock: number
   earnedTotal: number
   stake: number
-  status: string
+}
+
+export interface WorkerWithDetails extends Worker {
+  application: WorkingGroupApplication
   roleAccount: Address
   rewardAccount: Address
   stakeAccount: Address
@@ -34,14 +33,15 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
     id: fields.membership.id,
   },
   status: fields.status.__typename,
+  isLeader: fields.isLead,
+  rewardPerBlock: fields.rewardPerBlock,
+  earnedTotal: 1000,
+  stake: fields.stake,
 })
 
 export const asWorkerWithDetails = (fields: WorkerFieldsFragment): WorkerWithDetails => ({
   ...asWorker(fields),
-  rewardPerBlock: fields.rewardPerBlock,
-  earnedTotal: 1000,
-  stake: fields.stake,
-  isLeader: fields.isLead,
+  application: asApplication(fields.application),
   roleAccount: fields.roleAccount,
   rewardAccount: fields.rewardAccount,
   stakeAccount: fields.stakeAccount,

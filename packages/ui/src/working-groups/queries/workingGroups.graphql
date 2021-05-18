@@ -26,6 +26,9 @@ fragment WorkerFields on Worker {
   hiredAtBlock {
     ...BlockFields
   }
+  application {
+    ...WorkingGroupApplicationFields
+  }
 }
 
 fragment WorkingGroupFields on WorkingGroup {
@@ -164,6 +167,7 @@ query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
 fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   id
   opening {
+    id
     group {
       name
     }

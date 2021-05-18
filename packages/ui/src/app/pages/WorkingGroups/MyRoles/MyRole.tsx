@@ -1,6 +1,6 @@
 import BN from 'bn.js'
-import React from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useCallback } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
@@ -25,17 +25,24 @@ import { useActivities } from '@/common/hooks/useActivities'
 import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useWorker } from '@/working-groups/hooks/useWorker'
+import { useModal } from '@/common/hooks/useModal'
+import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 
 export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
 
   const { worker, isLoading } = useWorker(id)
 
+  const history = useHistory()
+  const activities = useActivities()
+  const { showModal } = useModal()
+  const showApplicationModal = useCallback(() => {
+    showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { application: worker?.application! } })
+  }, [worker?.application.id])
+
   if (isLoading || !worker) {
     return <Loading />
   }
-
-  const activities = useActivities()
 
   return (
     <AppPage lastBreadcrumb={workerRoleTitle(worker)} rowGap="s">
@@ -44,8 +51,15 @@ export const MyRole = () => {
           <PageTitle>{workerRoleTitle(worker)}</PageTitle>
         </PreviousPage>
         <ButtonsGroup>
-          <ButtonGhost size="medium">Application</ButtonGhost>
-          <ButtonGhost size="medium">Opening</ButtonGhost>
+          <ButtonGhost size="medium" onClick={showApplicationModal}>
+            Application
+          </ButtonGhost>
+          <ButtonGhost
+            size="medium"
+            onClick={() => history.push(`/working-groups/openings/${worker?.application.opening.id}`)}
+          >
+            Opening
+          </ButtonGhost>
           <ButtonGhost size="medium">
             Leave a position
             <Help helperText="Lorem ipsum" helperTitle="Lorem ipsum" />
