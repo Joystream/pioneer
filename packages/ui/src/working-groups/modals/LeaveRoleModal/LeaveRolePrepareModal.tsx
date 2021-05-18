@@ -13,7 +13,7 @@ interface Props {
 export const LeaveRolePrepareModal = ({ onClose, onContinue }: Props) => {
   const [rationale, setRationale] = useState('')
   return (
-    <Modal onClose={onClose} modalSize={'m'}>
+    <Modal onClose={onClose} modalSize="m">
       <ModalHeader onClick={onClose} title="Leaving a position?" />
       <Row>
         <TextMedium>Please remember that this action is irreversible.</TextMedium>
