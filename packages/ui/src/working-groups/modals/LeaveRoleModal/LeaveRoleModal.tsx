@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 
-import { FailureModal } from '../../../common/components/FailureModal'
-import { useApi } from '../../../common/hooks/useApi'
-import { ModalState } from '../../../common/types'
+import { FailureModal } from '@/common/components/FailureModal'
+import { useApi } from '@/common/hooks/useApi'
+import { ModalState } from '@/common/types'
+
 import { getGroup } from '../../model/getGroup'
 import { WorkerWithDetails } from '../../types'
 
@@ -27,7 +28,7 @@ export const LeaveRoleModal = ({ onClose, worker }: Props) => {
   }
 
   if (step === 'PREPARE') {
-    return <LeaveRolePrepareModal onClose={onClose} onContinue={onContinue} />
+    return <LeaveRolePrepareModal onClose={onClose} onContinue={onContinue} unstakingPeriod={20} />
   }
 
   if (step === 'AUTHORIZE' && transaction) {

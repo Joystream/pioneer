@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 
-import { ButtonPrimary } from '../../../common/components/buttons'
-import { InputComponent, InputText } from '../../../common/components/forms'
-import { Modal, ModalFooter, ModalHeader, Row } from '../../../common/components/Modal'
-import { Label, TextMedium } from '../../../common/components/typography'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { InputComponent, InputText } from '@/common/components/forms'
+import { Modal, ModalFooter, ModalHeader, Row } from '@/common/components/Modal'
+import { Label, TextMedium } from '@/common/components/typography'
 
 interface Props {
+  unstakingPeriod: number
   onClose: () => void
   onContinue: (rationale: string) => void
 }
 
-export const LeaveRolePrepareModal = ({ onClose, onContinue }: Props) => {
+export const LeaveRolePrepareModal = ({ onClose, onContinue, unstakingPeriod }: Props) => {
   const [rationale, setRationale] = useState('')
   return (
     <Modal onClose={onClose} modalSize="m">
@@ -20,7 +21,7 @@ export const LeaveRolePrepareModal = ({ onClose, onContinue }: Props) => {
       </Row>
       <Row>
         <Label>Info</Label>
-        <TextMedium>Unstaking period takes: X blocks.</TextMedium>
+        <TextMedium>Unstaking period takes: {unstakingPeriod} blocks.</TextMedium>
       </Row>
       <InputComponent label="Please tell us why you're leaving">
         <InputText onChange={(event) => setRationale(event.target.value)} />
