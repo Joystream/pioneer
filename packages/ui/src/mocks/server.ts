@@ -74,11 +74,11 @@ export const makeServer = (environment = 'development') => {
       seedBlocks(server)
       seedMembers(server)
       seedWorkingGroups(server)
-      seedWorkers(server)
       seedOpeningStatuses(server)
       seedOpenings(server)
       seedUpcomingOpenings(server)
       seedApplications(server)
+      seedWorkers(server)
     },
   })
 }
