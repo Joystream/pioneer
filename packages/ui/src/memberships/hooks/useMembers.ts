@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react'
-
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
-import { useGetMembershipsConnectionQuery } from '@/memberships/queries'
+import { useGetMembersCountQuery, useGetMembersQuery } from '@/memberships/queries'
 
 import { MembershipOrderByInput, MembershipWhereInput } from '../../common/api/queries'
 import { asMember, Member } from '../types'
@@ -14,7 +12,7 @@ export interface MemberListOrder {
 
 export const DefaultMemberListOrder: MemberListOrder = { sortBy: 'id', isDescending: false }
 
-export const MEMBERS_PER_PAGE = 5
+export const MEMBERS_PER_PAGE = 10
 
 interface UseMemberProps {
   order: MemberListOrder
@@ -28,23 +26,15 @@ interface UseMembers {
 }
 
 export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMembers => {
+  const where = filterToGqlInput(filter)
   const variables = {
-    first: page * MEMBERS_PER_PAGE,
-    last: page > 1 ? MEMBERS_PER_PAGE : undefined,
-    where: filterToGqlInput(filter),
+    limit: MEMBERS_PER_PAGE,
+    offset: (page - 1) * MEMBERS_PER_PAGE,
+    where,
     orderBy: orderToGqlInput(order),
   }
-
-  const { data, loading, error } = useGetMembershipsConnectionQuery({
-    variables,
-  })
-
-  const [totalCount, setTotalCount] = useState<number>()
-  useEffect(() => {
-    if (!totalCount && data?.membershipsConnection.totalCount) {
-      setTotalCount(data?.membershipsConnection.totalCount)
-    }
-  }, [data])
+  const { data, loading, error } = useGetMembersQuery({ variables })
+  const { data: connectionData } = useGetMembersCountQuery({ variables: { where, pageSize: MEMBERS_PER_PAGE } })
 
   if (error) {
     console.error(error)
@@ -52,8 +42,8 @@ export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMemb
 
   return {
     isLoading: loading,
-    members: data?.membershipsConnection.edges.map(({ node }) => asMember(node)) ?? [],
-    pageCount: totalCount && Math.ceil(totalCount / MEMBERS_PER_PAGE),
+    members: data?.memberships.map(asMember) ?? [],
+    pageCount: connectionData?.membershipsConnection.totalCount,
   }
 }
 

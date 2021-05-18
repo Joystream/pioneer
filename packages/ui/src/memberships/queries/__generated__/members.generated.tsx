@@ -18,10 +18,17 @@ export type MemberFieldsFragment = {
   roles: Array<{ __typename: 'Worker'; isLead: boolean; group: { __typename: 'WorkingGroup'; name: string } }>
 }
 
+export type MemberWithDetailsFragment = {
+  __typename: 'Membership'
+  registeredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
+  invitees: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
+} & MemberFieldsFragment
+
 export type GetMembersQueryVariables = Types.Exact<{
-  rootAccount_in?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
-  controllerAccount_in?: Types.Maybe<Array<Types.Scalars['String']> | Types.Scalars['String']>
+  where?: Types.Maybe<Types.MembershipWhereInput>
   orderBy?: Types.Maybe<Types.MembershipOrderByInput>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetMembersQuery = {
@@ -29,11 +36,15 @@ export type GetMembersQuery = {
   memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 }
 
-export type MemberWithDetailsFragment = {
-  __typename: 'Membership'
-  registeredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
-  invitees: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
-} & MemberFieldsFragment
+export type GetMembersCountQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.MembershipWhereInput>
+  pageSize?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type GetMembersCountQuery = {
+  __typename: 'Query'
+  membershipsConnection: { __typename: 'MembershipConnection'; totalCount: number }
+}
 
 export type GetMemberQueryVariables = Types.Exact<{
   where: Types.MembershipWhereUniqueInput
@@ -52,35 +63,6 @@ export type SearchMembersQueryVariables = Types.Exact<{
 export type SearchMembersQuery = {
   __typename: 'Query'
   memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
-}
-
-export type GetMembershipsConnectionQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.MembershipWhereInput>
-  orderBy?: Types.Maybe<Types.MembershipOrderByInput>
-  first?: Types.Maybe<Types.Scalars['Int']>
-  after?: Types.Maybe<Types.Scalars['String']>
-  last?: Types.Maybe<Types.Scalars['Int']>
-  before?: Types.Maybe<Types.Scalars['String']>
-}>
-
-export type GetMembershipsConnectionQuery = {
-  __typename: 'Query'
-  membershipsConnection: {
-    __typename: 'MembershipConnection'
-    totalCount: number
-    edges: Array<{
-      __typename: 'MembershipEdge'
-      cursor: string
-      node: { __typename: 'Membership' } & MemberFieldsFragment
-    }>
-    pageInfo: {
-      __typename: 'PageInfo'
-      startCursor?: Types.Maybe<string>
-      endCursor?: Types.Maybe<string>
-      hasNextPage: boolean
-      hasPreviousPage: boolean
-    }
-  }
 }
 
 export const MemberFieldsFragmentDoc = gql`
@@ -118,11 +100,8 @@ export const MemberWithDetailsFragmentDoc = gql`
   ${BlockFieldsFragmentDoc}
 `
 export const GetMembersDocument = gql`
-  query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!], $orderBy: MembershipOrderByInput) {
-    memberships(
-      where: { rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in }
-      orderBy: $orderBy
-    ) {
+  query GetMembers($where: MembershipWhereInput, $orderBy: MembershipOrderByInput, $offset: Int, $limit: Int) {
+    memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
       ...MemberFields
     }
   }
@@ -141,9 +120,10 @@ export const GetMembersDocument = gql`
  * @example
  * const { data, loading, error } = useGetMembersQuery({
  *   variables: {
- *      rootAccount_in: // value for 'rootAccount_in'
- *      controllerAccount_in: // value for 'controllerAccount_in'
+ *      where: // value for 'where'
  *      orderBy: // value for 'orderBy'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -160,6 +140,46 @@ export function useGetMembersLazyQuery(
 export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>
 export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>
+export const GetMembersCountDocument = gql`
+  query GetMembersCount($where: MembershipWhereInput, $pageSize: Int) {
+    membershipsConnection(where: $where, first: $pageSize) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetMembersCountQuery__
+ *
+ * To run a query within a React component, call `useGetMembersCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMembersCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMembersCountQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useGetMembersCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMembersCountQuery, GetMembersCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMembersCountQuery, GetMembersCountQueryVariables>(GetMembersCountDocument, options)
+}
+export function useGetMembersCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMembersCountQuery, GetMembersCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMembersCountQuery, GetMembersCountQueryVariables>(GetMembersCountDocument, options)
+}
+export type GetMembersCountQueryHookResult = ReturnType<typeof useGetMembersCountQuery>
+export type GetMembersCountLazyQueryHookResult = ReturnType<typeof useGetMembersCountLazyQuery>
+export type GetMembersCountQueryResult = Apollo.QueryResult<GetMembersCountQuery, GetMembersCountQueryVariables>
 export const GetMemberDocument = gql`
   query GetMember($where: MembershipWhereUniqueInput!) {
     membershipByUniqueInput(where: $where) {
@@ -239,83 +259,3 @@ export function useSearchMembersLazyQuery(
 export type SearchMembersQueryHookResult = ReturnType<typeof useSearchMembersQuery>
 export type SearchMembersLazyQueryHookResult = ReturnType<typeof useSearchMembersLazyQuery>
 export type SearchMembersQueryResult = Apollo.QueryResult<SearchMembersQuery, SearchMembersQueryVariables>
-export const GetMembershipsConnectionDocument = gql`
-  query GetMembershipsConnection(
-    $where: MembershipWhereInput
-    $orderBy: MembershipOrderByInput
-    $first: Int
-    $after: String
-    $last: Int
-    $before: String
-  ) {
-    membershipsConnection(
-      where: $where
-      orderBy: $orderBy
-      first: $first
-      after: $after
-      last: $last
-      before: $before
-    ) {
-      edges {
-        cursor
-        node {
-          ...MemberFields
-        }
-      }
-      pageInfo {
-        startCursor
-        endCursor
-        hasNextPage
-        hasPreviousPage
-      }
-      totalCount
-    }
-  }
-  ${MemberFieldsFragmentDoc}
-`
-
-/**
- * __useGetMembershipsConnectionQuery__
- *
- * To run a query within a React component, call `useGetMembershipsConnectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMembershipsConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetMembershipsConnectionQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *      first: // value for 'first'
- *      after: // value for 'after'
- *      last: // value for 'last'
- *      before: // value for 'before'
- *   },
- * });
- */
-export function useGetMembershipsConnectionQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetMembershipsConnectionQuery, GetMembershipsConnectionQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetMembershipsConnectionQuery, GetMembershipsConnectionQueryVariables>(
-    GetMembershipsConnectionDocument,
-    options
-  )
-}
-export function useGetMembershipsConnectionLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetMembershipsConnectionQuery, GetMembershipsConnectionQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetMembershipsConnectionQuery, GetMembershipsConnectionQueryVariables>(
-    GetMembershipsConnectionDocument,
-    options
-  )
-}
-export type GetMembershipsConnectionQueryHookResult = ReturnType<typeof useGetMembershipsConnectionQuery>
-export type GetMembershipsConnectionLazyQueryHookResult = ReturnType<typeof useGetMembershipsConnectionLazyQuery>
-export type GetMembershipsConnectionQueryResult = Apollo.QueryResult<
-  GetMembershipsConnectionQuery,
-  GetMembershipsConnectionQueryVariables
->

@@ -20,15 +20,6 @@ fragment MemberFields on Membership {
   }
 }
 
-query GetMembers($rootAccount_in: [String!], $controllerAccount_in: [String!], $orderBy: MembershipOrderByInput) {
-  memberships(
-    where: { rootAccount_in: $rootAccount_in, controllerAccount_in: $controllerAccount_in }
-    orderBy: $orderBy
-  ) {
-    ...MemberFields
-  }
-}
-
 fragment MemberWithDetails on Membership {
   ...MemberFields
   registeredAtBlock {
@@ -36,6 +27,18 @@ fragment MemberWithDetails on Membership {
   }
   invitees {
     ...MemberFields
+  }
+}
+
+query GetMembers($where: MembershipWhereInput, $orderBy: MembershipOrderByInput, $offset: Int, $limit: Int) {
+  memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    ...MemberFields
+  }
+}
+
+query GetMembersCount($where: MembershipWhereInput, $pageSize: Int) {
+  membershipsConnection(where: $where, first: $pageSize) {
+    totalCount
   }
 }
 
@@ -48,37 +51,5 @@ query GetMember($where: MembershipWhereUniqueInput!) {
 query SearchMembers($text: String!, $limit: Int) {
   memberships(where: { handle_contains: $text }, limit: $limit) {
     ...MemberFields
-  }
-}
-
-query GetMembershipsConnection(
-  $where: MembershipWhereInput,
-  $orderBy: MembershipOrderByInput,
-  $first: Int,
-  $after: String,
-  $last: Int,
-  $before: String
-) {
-  membershipsConnection(
-    where: $where,
-    orderBy: $orderBy,
-    first: $first,
-    after: $after,
-    last: $last,
-    before: $before
-  ) {
-    edges {
-      cursor
-      node {
-        ...MemberFields
-      }
-    }
-    pageInfo {
-      startCursor
-      endCursor
-      hasNextPage
-      hasPreviousPage
-    }
-    totalCount
   }
 }
