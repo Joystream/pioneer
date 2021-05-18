@@ -1,6 +1,7 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
+import { useAccounts } from '@/accounts/hooks/useAccounts'
+
 import { useGetMembersQuery } from '../../queries'
 import { asMember, Member } from '../../types'
 
@@ -17,7 +18,7 @@ export interface MyMemberships {
   setActive: (member: Member) => void
 }
 
-const POLL_INTERVAL = 5000
+const POLL_INTERVAL = 10_000
 
 export const MembershipContextProvider = (props: Props) => {
   const [active, setActive] = useState<Member>()
@@ -26,7 +27,7 @@ export const MembershipContextProvider = (props: Props) => {
   const addresses = allAccounts.map((account) => account.address)
 
   const { data, loading, error } = useGetMembersQuery({
-    variables: { rootAccount_in: addresses, controllerAccount_in: addresses },
+    variables: { where: { rootAccount_in: addresses, controllerAccount_in: addresses } },
     pollInterval: POLL_INTERVAL,
   })
 

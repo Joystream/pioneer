@@ -38,7 +38,7 @@ const getFilter = (where: Record<string, any>) => {
 
 export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): WhereQueryResolver<T, D> => {
   return (obj, args, { mirageSchema: schema }) => {
-    const { where, limit } = args
+    const { where, limit, offset } = args
 
     let { models } = schema.all(modelName)
 
@@ -46,11 +46,11 @@ export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): Whe
       models = models.filter(getFilter(where))
     }
 
-    if (limit) {
-      models.splice(limit)
-    }
+    const start = offset || 0
+    const end = parseInt(limit ?? 0) > 0 ? start + limit : undefined
+    const pagedRecords = models.slice(start, end)
 
-    return (adaptRecords(models) as unknown) as D
+    return (adaptRecords(pagedRecords) as unknown) as D
   }
 }
 
