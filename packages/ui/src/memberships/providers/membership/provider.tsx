@@ -18,7 +18,7 @@ export interface MyMemberships {
   setActive: (member: Member) => void
 }
 
-const POLL_INTERVAL = 5000
+const POLL_INTERVAL = 10_000
 
 export const MembershipContextProvider = (props: Props) => {
   const [active, setActive] = useState<Member>()
