@@ -10,7 +10,7 @@ export const mockProposals = Array<Omit<Proposal, 'id' | 'stage'>>(4)
     title: 'Lorem ipsum, dolor sit amet consectetur',
     rationale: 'Voluptatem id voluptatibus aspernatur quibusdam hic porro. Labore, eligendi tempore?',
     type: 'Founding request',
-    proposer: asMember((mockMembers[0] as unknown) as any),
+    proposer: asMember({ ...mockMembers[0], roles: [{ group: { name: 'Content' }, isLead: true }] } as any),
   })
   .map(
     (proposal, index): Proposal => ({
