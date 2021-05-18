@@ -5,8 +5,8 @@ import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { BadgeRed } from '@/common/components/BadgeRed'
+import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { Help } from '@/common/components/Help'
@@ -23,11 +23,12 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Statistics, TokenValueStat, MultiTokenValueStat } from '@/common/components/statistics'
 import { useActivities } from '@/common/hooks/useActivities'
+import { useModal } from '@/common/hooks/useModal'
 import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useWorker } from '@/working-groups/hooks/useWorker'
-import { useModal } from '@/common/hooks/useModal'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
+import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
@@ -38,8 +39,11 @@ export const MyRole = () => {
   const activities = useActivities()
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
-    showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { application: worker?.application! } })
-  }, [worker?.application.id])
+    showModal<ApplicationDetailsModalCall>({
+      modal: 'ApplicationDetails',
+      data: { application: (worker && worker.application) as WorkingGroupApplication },
+    })
+  }, [worker && worker.application.id])
 
   if (isLoading || !worker) {
     return <Loading />

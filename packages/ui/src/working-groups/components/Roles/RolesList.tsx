@@ -8,7 +8,7 @@ import { ButtonGhost } from '@/common/components/buttons'
 import { KebabMenuIcon } from '@/common/components/icons'
 import { List, ListItem } from '@/common/components/List'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
-import { Worker, WorkerWithDetails } from '@/working-groups/types'
+import { Worker } from '@/working-groups/types'
 
 import { workerRoleTitle } from '../../helpers'
 import {

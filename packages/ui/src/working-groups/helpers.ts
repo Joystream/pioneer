@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { Worker, WorkerWithDetails } from '@/working-groups/types'
+import { Worker } from '@/working-groups/types'
 
 import { WorkingGroupApplication } from './types/WorkingGroupApplication'
 
