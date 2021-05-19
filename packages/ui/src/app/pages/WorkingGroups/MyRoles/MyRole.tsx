@@ -120,7 +120,7 @@ export const MyRole = () => {
         </ContentWithSidepanel>
       </RowGapBlock>
       <PageFooter>
-        <BlockTime block={worker.hiredAtBlock} horizontal />
+        <BlockTime block={worker.hiredAtBlock} horizontal dateLabel="Hired" />
       </PageFooter>
     </AppPage>
   )
