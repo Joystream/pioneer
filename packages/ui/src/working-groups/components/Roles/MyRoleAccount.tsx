@@ -23,10 +23,12 @@ export const MyRoleAccount = ({ account }: MyRoleAccountProps) => {
             <Label>Total balance</Label>
             <TokenValue value={balance?.total} />
           </RoleAccountBalance>
-          <RoleAccountBalance>
-            <Label>Locked balance</Label>
-            <TokenValue value={balance?.locked} />
-          </RoleAccountBalance>
+          {account.name === 'Stake Account' && (
+            <RoleAccountBalance>
+              <Label>Locked balance</Label>
+              <TokenValue value={balance?.locked} />
+            </RoleAccountBalance>
+          )}
         </RoleAccountBalances>
       </RoleAccount>
     </ListItem>
