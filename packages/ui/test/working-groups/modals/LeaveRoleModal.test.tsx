@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/common/providers/api/context'
+import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -104,6 +105,12 @@ describe('UI: LeaveRoleModal', () => {
   })
 
   function renderModal(worker = WORKER) {
+    const modalContext = {
+      modal: 'LeaveRole',
+      modalData: { worker },
+      showModal: () => null,
+      hideModal: () => null,
+    }
     return render(
       <BrowserRouter>
         <MockQueryNodeProviders>
@@ -111,7 +118,9 @@ describe('UI: LeaveRoleModal', () => {
             <AccountsContext.Provider value={useAccounts}>
               <MembershipContext.Provider value={useMyMemberships}>
                 <ApiContext.Provider value={api}>
-                  <LeaveRoleModal worker={worker} onClose={() => null} />
+                  <ModalContext.Provider value={modalContext}>
+                    <LeaveRoleModal />
+                  </ModalContext.Provider>
                 </ApiContext.Provider>
               </MembershipContext.Provider>
             </AccountsContext.Provider>
