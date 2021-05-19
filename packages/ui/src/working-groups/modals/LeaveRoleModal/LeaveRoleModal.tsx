@@ -5,7 +5,7 @@ import { useApi } from '@/common/hooks/useApi'
 import { ModalState } from '@/common/types'
 
 import { getGroup } from '../../model/getGroup'
-import { WorkerWithDetails } from '../../types'
+import { Worker } from '../../types'
 
 import { LeaveRolePrepareModal } from './LeaveRolePrepareModal'
 import { LeaveRoleSignModal } from './LeaveRoleSignModal'
@@ -13,7 +13,7 @@ import { LeaveRoleSuccessModal } from './LeaveRoleSuccessModal'
 
 interface Props {
   onClose: () => void
-  worker: WorkerWithDetails
+  worker: Worker
 }
 
 export const LeaveRoleModal = ({ onClose, worker }: Props) => {

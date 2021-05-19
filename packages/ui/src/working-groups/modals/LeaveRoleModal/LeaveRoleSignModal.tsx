@@ -14,12 +14,12 @@ import { TextMedium } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { onTransactionDone } from '@/common/types'
 
-import { WorkerWithDetails } from '../../types'
+import { Worker } from '../../types'
 
 interface Props {
   onClose: () => void
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
-  worker: WorkerWithDetails
+  worker: Worker
   onDone: onTransactionDone
 }
 

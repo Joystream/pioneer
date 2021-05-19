@@ -31,7 +31,7 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   },
   membership: {
     id: fields.membership.id,
-    controllerAccount: fields.membership.controllerAccount
+    controllerAccount: fields.membership.controllerAccount,
   },
   status: fields.status.__typename,
   isLeader: fields.isLead,

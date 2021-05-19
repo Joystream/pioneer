@@ -11,7 +11,7 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { LeaveRoleModal } from '@/working-groups/modals/LeaveRoleModal/LeaveRoleModal'
-import { WorkerWithDetails } from '@/working-groups/types'
+import { Worker } from '@/working-groups/types'
 
 import { alice } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -25,7 +25,7 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const WORKER: WorkerWithDetails = {
+const WORKER: Worker = {
   membership: {
     id: '1',
     controllerAccount: alice.address,
