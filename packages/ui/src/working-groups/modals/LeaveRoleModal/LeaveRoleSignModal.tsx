@@ -7,7 +7,7 @@ import { useAccounts } from '@/accounts/hooks/useAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { ModalBody, ModalFooter, ModalHeader, Row, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TransactionModal } from '@/common/components/TransactionModal'
 import { TextMedium } from '@/common/components/typography'
@@ -34,7 +34,6 @@ export const LeaveRoleSignModal = ({ onClose, onDone, transaction, worker }: Pro
 
   return (
     <TransactionModal status={status} onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Leaving a position?" />
       <ModalBody>
         <Row>
           <TextMedium>The transaction can only be signed with the membership's controller account.</TextMedium>
