@@ -6,7 +6,7 @@ import { asApplication, WorkingGroupApplication } from '@/working-groups/types/W
 
 export interface Worker {
   id: string
-  membership: Pick<Member, 'id'>
+  membership: Pick<Member, 'id' | 'controllerAccount'>
   group: Pick<WorkingGroup, 'id' | 'name'>
   status: string
   isLeader: boolean
@@ -31,6 +31,7 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   },
   membership: {
     id: fields.membership.id,
+    controllerAccount: fields.membership.controllerAccount,
   },
   status: fields.status.__typename,
   isLeader: fields.isLead,
