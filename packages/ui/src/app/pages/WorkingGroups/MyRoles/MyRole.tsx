@@ -115,7 +115,7 @@ export const MyRole = () => {
               },
             ]}
           />
-          <TokenValueStat title="Stake height" value={150000} />
+          <TokenValueStat title="Stake height" value={worker.stake} />
           <TokenValueStat title="Owed reward" value={150000} />
           <TokenValueStat title="Next payout in" value={150000} />
         </Statistics>
