@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Animations, Colors } from '../../constants'
 import { ButtonsGroup } from '../buttons'
@@ -17,23 +17,6 @@ export const SidePaneGlass = styled.div`
   ${Animations.showModalBackground};
 `
 
-export const SidePane = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: minmax(auto, 192px) 1fr;
-  grid-template-areas:
-    'sidepaneheader'
-    'sidepanebody';
-  grid-area: modal;
-  position: relative;
-  background-color: ${Colors.White};
-  width: 100%;
-  max-width: 552px;
-  height: 100vh;
-  overflow: hidden;
-  ${Animations.showSidePane};
-`
-
 export const SidePaneHeader = styled.div`
   display: grid;
   grid-area: sidepaneheader;
@@ -41,7 +24,7 @@ export const SidePaneHeader = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  max-height: 200px;
+  max-height: 100%;
   padding: 12px 24px 0;
   background-color: ${Colors.White};
 `
@@ -53,6 +36,7 @@ export const SidePanelTop = styled.div`
   grid-column-gap: 14px;
   align-items: center;
   width: 100%;
+  max-height: 28px;
 `
 
 export const SidePaneTitle = styled.h5``
@@ -78,4 +62,29 @@ export const SidePaneBody = styled.div`
 export const SidePaneTopButtonsGroup = styled(ButtonsGroup)`
   position: absolute;
   right: 36px;
+`
+
+export const SidePane = styled.div<{ topSize?: 's' | 'm' }>`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(auto, ${({ topSize }) => (topSize === 's' ? '132px' : '192px')}) 1fr;
+  grid-template-areas:
+    'sidepaneheader'
+    'sidepanebody';
+  grid-area: modal;
+  position: relative;
+  background-color: ${Colors.White};
+  width: 100%;
+  max-width: 552px;
+  height: 100vh;
+  overflow: hidden;
+  ${Animations.showSidePane};
+
+  ${SidePaneHeader} {
+    ${({ topSize }) =>
+      topSize == 's' &&
+      css`
+        align-content: space-between;
+      `};
+  }
 `
