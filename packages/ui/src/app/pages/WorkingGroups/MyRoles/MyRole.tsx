@@ -47,7 +47,6 @@ export const MyRole = () => {
     })
   }, [worker && worker.application.id])
   const isActive = worker && worker.status === 'WorkerStatusActive'
-  console.log(isActive)
 
   if (isLoading || !worker) {
     return <Loading />
