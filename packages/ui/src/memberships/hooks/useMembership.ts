@@ -1,3 +1,4 @@
+import { error } from '@/common/logger'
 import { asBlock } from '@/common/types'
 
 import { MemberWithDetailsFragment, useGetMemberQuery } from '../queries'
@@ -23,10 +24,10 @@ export function useMember(memberId?: string): UseMember {
     variables: { where: { id: memberId ?? '' } },
   }
 
-  const { data, loading, error } = useGetMemberQuery(options)
+  const { data, loading, error: err } = useGetMemberQuery(options)
 
-  if (error) {
-    console.error(error)
+  if (err) {
+    error(err)
   }
 
   return {

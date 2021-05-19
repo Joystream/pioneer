@@ -1,5 +1,7 @@
 import { useEffect, useMemo } from 'react'
 
+import { info } from '@/common/logger'
+
 import { useApi } from '../../common/hooks/useApi'
 import { useObservable } from '../../common/hooks/useObservable'
 import { useSignAndSendTransaction } from '../../common/hooks/useSignAndSendTransaction'
@@ -31,7 +33,7 @@ export function useMockMembers() {
   const { send } = useSignAndSendTransaction({
     transaction,
     signer: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    onDone: (success) => console.log(success ? '✅ Members created' : '❗️Error processing batch transaction'),
+    onDone: (success) => info(success ? '✅ Members created' : '❗️Error processing batch transaction'),
   })
 
   const hasCreatedMember = useObservable(api?.query?.members.membershipById.size(0), [isConnected])?.toNumber()
@@ -42,10 +44,10 @@ export function useMockMembers() {
     }
 
     if (!hasCreatedMember) {
-      console.log('🌱 Creating members on chain using mocks')
+      info('🌱 Creating members on chain using mocks')
       send()
     } else {
-      console.log('✅ Member with id (0) already created')
+      info('✅ Member with id (0) already created')
     }
   }, [isConnected, members, hasCreatedMember])
 }

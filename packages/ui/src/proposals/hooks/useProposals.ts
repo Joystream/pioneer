@@ -1,3 +1,4 @@
+import { error } from '@/common/logger'
 import { mockProposals } from '@/mocks/data/mockProposals'
 import { useMockDelay } from '@/mocks/hooks/useMockDelay'
 
@@ -13,10 +14,10 @@ interface Props {
 }
 
 export const useProposals = ({ type }: Props) => {
-  const { loading, data, error } = useMockDelay(mock[type])
+  const { loading, data, error: err } = useMockDelay(mock[type])
 
-  if (error) {
-    console.error(error)
+  if (err) {
+    error(err)
   }
 
   return {

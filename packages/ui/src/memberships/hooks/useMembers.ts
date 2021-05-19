@@ -1,3 +1,4 @@
+import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembersCountQuery, useGetMembersQuery } from '@/memberships/queries'
 
@@ -5,6 +6,7 @@ import { MembershipOrderByInput, MembershipWhereInput } from '../../common/api/q
 import { asMember, Member } from '../types'
 
 export type MemberListSortKey = 'id' | 'handle'
+
 export interface MemberListOrder {
   sortBy: MemberListSortKey
   isDescending: boolean
@@ -19,6 +21,7 @@ interface UseMemberProps {
   filter: MemberListFilter
   page?: number
 }
+
 interface UseMembers {
   isLoading: boolean
   members: Member[]
@@ -33,11 +36,11 @@ export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMemb
     where,
     orderBy: orderToGqlInput(order),
   }
-  const { data, loading, error } = useGetMembersQuery({ variables })
+  const { data, loading, error: err } = useGetMembersQuery({ variables })
   const { data: connectionData } = useGetMembersCountQuery({ variables: { where } })
 
-  if (error) {
-    console.error(error)
+  if (err) {
+    error(err)
   }
 
   return {
