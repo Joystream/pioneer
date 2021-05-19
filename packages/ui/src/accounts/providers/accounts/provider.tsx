@@ -3,6 +3,8 @@ import { Keyring } from '@polkadot/ui-keyring'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime } from 'rxjs/operators'
 
+import { error } from '@/common/logger'
+
 import { useKeyring } from '../../../common/hooks/useKeyring'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { Account } from '../../types'
@@ -81,7 +83,7 @@ export const AccountsContextProvider = (props: Props) => {
       return
     }
 
-    loadKeysFromExtension(keyring).catch(console.error)
+    loadKeysFromExtension(keyring).catch(error)
   }, [isLoaded])
 
   const accounts = useObservable(keyring.accounts.subject.asObservable().pipe(debounceTime(20)), [keyring])

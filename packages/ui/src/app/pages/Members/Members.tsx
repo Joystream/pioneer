@@ -1,19 +1,14 @@
 import React, { useEffect, useReducer, useState } from 'react'
 
 import { MainPanel } from '@/common/components/page/PageContent'
+import { PageHeader } from '@/common/components/page/PageHeader'
+import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
+import { MemberList } from '@/memberships/components/MemberList'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
 import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
+import { DefaultMemberListOrder, MemberListOrder, MemberListSortKey, useMembers } from '@/memberships/hooks/useMembers'
 
-import { PageHeader } from '../../../common/components/page/PageHeader'
-import { PageTitle } from '../../../common/components/page/PageTitle'
-import { MemberList } from '../../../memberships/components/MemberList'
-import {
-  MemberListOrder,
-  MemberListSortKey,
-  DefaultMemberListOrder,
-  useMembers,
-} from '../../../memberships/hooks/useMembers'
 import { AppPage } from '../../components/AppPage'
 
 const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberListOrder => ({
@@ -47,7 +42,9 @@ export const Members = () => {
       <MainPanel>
         <MemberListFilters roles={roles} onApply={setFilter} />
         <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
-        {!isLoading && pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
+        {!isLoading && !!pageCount && pageCount > 1 && (
+          <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
+        )}
       </MainPanel>
     </AppPage>
   )

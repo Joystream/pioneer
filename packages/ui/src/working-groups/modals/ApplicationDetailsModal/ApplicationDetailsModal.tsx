@@ -34,7 +34,7 @@ export const ApplicationDetailsModal = React.memo(() => {
 
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
-      <SidePane>
+      <SidePane topSize="s">
         <SidePaneHeader>
           <SidePanelTop>
             <SidePaneTitle>My Application</SidePaneTitle>

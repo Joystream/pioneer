@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { WorkerWithDetails } from '@/working-groups/types'
+import { Worker } from '@/working-groups/types'
 
 import { WorkingGroupApplication } from './types/WorkingGroupApplication'
 
@@ -10,7 +10,7 @@ export function openingTitle(application: WorkingGroupApplication) {
   return `${group} ${position}`
 }
 
-export function workerRoleTitle(worker: WorkerWithDetails) {
+export function workerRoleTitle(worker: Worker) {
   const position = worker.isLeader ? 'Leader' : 'Worker'
   const group = capitalizeFirstLetter(worker.group.name)
 

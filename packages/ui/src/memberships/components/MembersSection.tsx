@@ -41,14 +41,14 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
       <MembershipsTableTitle>{title}</MembershipsTableTitle>
 
       <MembershipsGroup>
-        <ListHeaders colLayout={colLayoutByType('MyMember')}>
+        <MembershipsHeaders colLayout={colLayoutByType('MyMember')}>
           <Header sortKey={canSort ? 'handle' : undefined}>Memeberships</Header>
           <ListHeader>Roles</ListHeader>
           <ListHeader>Slashed</ListHeader>
           <ListHeader>Terminated</ListHeader>
           <Header sortKey={canSort ? 'inviteCount' : undefined}>Invitations</Header>
           <ListHeader>Invited</ListHeader>
-        </ListHeaders>
+        </MembershipsHeaders>
 
         <List>
           {sortedMemberships.map((member) => (
@@ -79,4 +79,7 @@ const MembershipsGroup = styled.div`
     'accountslist';
   grid-row-gap: 5px;
   width: 100%;
+`
+const MembershipsHeaders = styled(ListHeaders)`
+  grid-area: accountstablenav;
 `

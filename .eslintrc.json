@@ -28,6 +28,7 @@
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "no-console": "error",
     "no-redeclare": "off",
     "no-unused-vars": "off",
     "quotes": [
@@ -85,6 +86,14 @@
       ],
       "rules": {
         "import/order": "off"
+      }
+    },
+    {
+      "files": [
+        "src/common/logger/*.ts"
+      ],
+      "rules": {
+        "no-console": "off"
       }
     }
   ]
