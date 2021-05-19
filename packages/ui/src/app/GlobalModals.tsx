@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { ChangeRoleModal, ChangeRoleModalCall } from '@/working-groups/modals/ChangeRoleModal'
+
 import { TransferModal, TransferModalCall } from '../accounts/modals/TransferModal'
 import { useModal } from '../common/hooks/useModal'
 import { ModalName } from '../common/providers/modal/types'
@@ -18,6 +20,7 @@ type ModalNames =
   | ModalName<ApplyForRoleModalCall>
   | ModalName<ApplicationDetailsModalCall>
   | ModalName<SwitchMemberModalCall>
+  | ModalName<ChangeRoleModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
@@ -37,6 +40,8 @@ export const GlobalModals = () => {
       return <ApplicationDetailsModal />
     case 'SwitchMember':
       return <SwitchMemberModal />
+    case 'ChangeRoleModal':
+      return <ChangeRoleModal />
     default:
       return null
   }

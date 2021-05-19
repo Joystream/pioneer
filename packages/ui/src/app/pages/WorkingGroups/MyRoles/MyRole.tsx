@@ -48,6 +48,10 @@ export const MyRole = () => {
   }, [worker && worker.application.id])
   const isActive = worker && worker.status === 'WorkerStatusActive'
 
+  const onChangeRoleClick = (): void => {
+    showModal({ modal: 'ChangeRoleModal', data: { worker } })
+  }
+
   if (isLoading || !worker) {
     return <Loading />
   }
@@ -116,7 +120,9 @@ export const MyRole = () => {
             <ContentWithTabs>
               <RoleAccountHeader>
                 <Label>Role Account</Label>
-                <ButtonsGroup>{isActive && <ButtonGhost size="small">Change Role Account</ButtonGhost>}</ButtonsGroup>
+                <ButtonsGroup onClick={onChangeRoleClick}>
+                  {isActive && <ButtonGhost size="small">Change Role Account</ButtonGhost>}
+                </ButtonsGroup>
               </RoleAccountHeader>
               <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} />
             </ContentWithTabs>
