@@ -2,6 +2,8 @@ import { web3Accounts, web3Enable } from '@polkadot/extension-dapp'
 import keyring from '@polkadot/ui-keyring/Keyring'
 import React, { ReactNode, useEffect, useState } from 'react'
 
+import { error } from '@/common/logger'
+
 import { KeyringContext } from './context'
 
 interface Props {
@@ -54,7 +56,7 @@ export const KeyringContextProvider = (props: Props) => {
       return
     }
 
-    loadKeysFromExtension().catch(console.error)
+    loadKeysFromExtension().catch(error)
   }, [isLoaded])
 
   return <KeyringContext.Provider value={keyring}>{props.children}</KeyringContext.Provider>

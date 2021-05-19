@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 
+import { info } from '@/common/logger'
+
 import { useAccounts } from '../../accounts/hooks/useAccounts'
 import { useApi } from '../../common/hooks/useApi'
 import { useObservable } from '../../common/hooks/useObservable'
@@ -14,7 +16,7 @@ export function useSudoBudget() {
 
   useMemo(() => {
     if (budget !== undefined) {
-      console.log(`💸 Current Membership WG budget: ${budget} JOY`)
+      info(`💸 Current Membership WG budget: ${budget} JOY`)
     }
   }, [JSON.stringify(budget)])
 
@@ -29,7 +31,7 @@ export function useSudoBudget() {
     transaction: budgetTransaction,
     signer: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     onDone: (success) => {
-      console.log(success ? `💰 Budget increased to: ${BUDGET} JOY` : '❗️Error processing sudo transaction')
+      info(success ? `💰 Budget increased to: ${BUDGET} JOY` : '❗️Error processing sudo transaction')
     },
   })
 
@@ -38,7 +40,7 @@ export function useSudoBudget() {
       return
     }
 
-    console.log('🤑 Increasing Membership Working Group budget')
+    info('🤑 Increasing Membership Working Group budget')
     sendBudget()
   }, [isConnected, hasAccounts])
 }
