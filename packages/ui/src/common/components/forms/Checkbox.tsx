@@ -101,7 +101,7 @@ export const CheckboxLabel = styled.label<CheckboxLabelProps>`
   }};
   font-size: 14px;
   line-height: 20px;
-  font-weight: 600;
+  font-weight: 400;
   font-family: ${Fonts.Inter};
   opacity: ${(props) => (props.isLabelEnabled == false ? '0.4' : '1')};
   cursor: ${(props) => (props.isLabelEnabled == false ? 'not-allowed' : 'pointer')};
@@ -125,6 +125,7 @@ export const CheckboxNative = styled.input`
   max-width: 1px;
   height: 1px;
   max-height: 1px;
+  margin: 0;
   overflow: hidden;
   clip: rect(0 0 0 0);
   outline: none;
