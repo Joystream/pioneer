@@ -8,11 +8,12 @@ import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgeRed } from '@/common/components/BadgeRed'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { Help } from '@/common/components/Help'
 import { Loading } from '@/common/components/Loading'
 import {
   ContentWithSidepanel,
+  ContentWithTabs,
   MainPanel,
   PageFooter,
   RowGapBlock,
@@ -22,6 +23,7 @@ import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Statistics, TokenValueStat, MultiTokenValueStat } from '@/common/components/statistics'
+import { Label } from '@/common/components/typography'
 import { useActivities } from '@/common/hooks/useActivities'
 import { useModal } from '@/common/hooks/useModal'
 import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
@@ -44,6 +46,7 @@ export const MyRole = () => {
       data: { application: (worker && worker.application) as WorkingGroupApplication },
     })
   }, [worker && worker.application.id])
+  const isActive = worker && worker.status === 'WorkerStatusActive'
 
   if (isLoading || !worker) {
     return <Loading />
@@ -65,7 +68,7 @@ export const MyRole = () => {
           >
             Opening
           </ButtonGhost>
-          {worker.status === 'WorkerStatusActive' && (
+          {isActive && (
             <ButtonGhost size="medium">
               Leave a position
               <Help helperText="Lorem ipsum" helperTitle="Lorem ipsum" />
@@ -84,7 +87,7 @@ export const MyRole = () => {
           <BadgeViolet inverted size="l" separated>
             WORKER ID #{worker.id}
           </BadgeViolet>
-          {worker.status !== 'WorkerStatusActive' && (
+          {!isActive && (
             <BadgeRed inverted size="l" separated>
               ROLE ENDED
             </BadgeRed>
@@ -110,9 +113,29 @@ export const MyRole = () => {
         </Statistics>
         <ContentWithSidepanel>
           <MainPanel>
-            <MyRoleAccount name="Role Account" address={worker.roleAccount} />
-            <MyRoleAccount name="Staking Account" address={worker.stakeAccount} />
-            <MyRoleAccount name="Reward Account" address={worker.rewardAccount} />
+            <ContentWithTabs>
+              <RoleAccountHeader>
+                <Label>Role Account</Label>
+                <ButtonsGroup>{isActive && <ButtonGhost size="small">Change Role Account</ButtonGhost>}</ButtonsGroup>
+              </RoleAccountHeader>
+              <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} />
+            </ContentWithTabs>
+            <ContentWithTabs>
+              <RoleAccountHeader>
+                <Label>Stake Account</Label>
+                <ButtonsGroup>
+                  {isActive && <ButtonPrimary size="small">Move Excess Tokens</ButtonPrimary>}
+                </ButtonsGroup>
+              </RoleAccountHeader>
+              <MyRoleAccount account={{ name: 'Stake Account', address: worker.stakeAccount }} />
+            </ContentWithTabs>
+            <ContentWithTabs>
+              <RoleAccountHeader>
+                <Label>Reward Account</Label>
+                <ButtonsGroup>{isActive && <ButtonGhost size="small">Change Reward Account</ButtonGhost>}</ButtonsGroup>
+              </RoleAccountHeader>
+              <MyRoleAccount account={{ name: 'Reward Account', address: worker.rewardAccount }} />
+            </ContentWithTabs>
           </MainPanel>
           <SidePanel>
             <ActivitiesBlock activities={activities} label="Role Activities" />
@@ -128,4 +151,11 @@ export const MyRole = () => {
 
 const Row = styled.div`
   display: flex;
+`
+
+const RoleAccountHeader = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 `
