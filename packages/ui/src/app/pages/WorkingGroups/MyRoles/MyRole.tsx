@@ -38,9 +38,20 @@ export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
 
   const { worker, isLoading } = useWorker(id)
+  const isActive = worker && worker.status === 'WorkerStatusActive'
 
   const history = useHistory()
+
   const activities = useActivities()
+  const warning =
+    worker && !isActive
+      ? {
+          title: 'Role Ended',
+          content: 'We are sorry, but this role has already ended.',
+          isClosable: false,
+        }
+      : undefined
+
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({
@@ -48,7 +59,6 @@ export const MyRole = () => {
       data: { application: (worker && worker.application) as WorkingGroupApplication },
     })
   }, [worker && worker.application.id])
-  const isActive = worker && worker.status === 'WorkerStatusActive'
   const showLeaveRoleModal = useCallback(() => {
     worker &&
       showModal<LeaveRoleModalCall>({
@@ -170,7 +180,7 @@ export const MyRole = () => {
             </ContentWithTabs>
           </MainPanel>
           <SidePanel>
-            <ActivitiesBlock activities={activities} label="Role Activities" />
+            <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} />
           </SidePanel>
         </ContentWithSidepanel>
       </RowGapBlock>
