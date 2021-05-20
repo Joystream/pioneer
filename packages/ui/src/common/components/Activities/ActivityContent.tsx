@@ -1,9 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Activity } from '../types'
+import { Activity } from '../../types'
 
-export function getActivityContent(activity: Activity) {
+interface Props {
+  activity: Activity
+}
+
+export const ActivityContent = React.memo(({ activity }: Props) => {
   switch (activity.eventType) {
     case 'AppliedOnOpeningEvent':
       return (
@@ -15,4 +19,4 @@ export function getActivityContent(activity: Activity) {
     default:
       return <>{activity.eventType}</>
   }
-}
+})
