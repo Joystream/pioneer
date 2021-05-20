@@ -178,7 +178,6 @@ const TooltipPopupContainer = styled(PopupItem)<{ position: DOMRect }>`
   border-radius: ${BorderRad.m};
   transition: ${Transitions.all};
   z-index: 55;
-
   &:after {
     content: '';
     position: absolute;
@@ -230,7 +229,6 @@ export const TooltipLink = styled.a`
   font-weight: 400;
   color: ${Colors.Black[400]};
   transition: ${Transitions.all};
-
   ${LinkSymbolStyle} {
     width: 12px;
     height: 12px;
@@ -239,10 +237,8 @@ export const TooltipLink = styled.a`
       fill: ${Colors.Black[300]};
     }
   }
-
   &:hover {
     color: ${Colors.Blue[500]};
-
     ${LinkSymbolStyle} {
       .blackPart,
       .primaryPart {
@@ -258,13 +254,11 @@ export const TooltipComponent = styled.button`
   justify-content: center;
   align-items: center;
   z-index: 50;
-
   svg {
     width: 100%;
     height: 100%;
     position: static;
   }
-
   &:hover,
   &:focus {
     ${DefaultTooltip} {
