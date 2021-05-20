@@ -1,8 +1,10 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { ContentWithSidepanel, MainPanel, SidePanel } from '@/common/components/page/PageContent'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
+import { Colors } from '@/common/constants'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupStatistics } from '@/working-groups/hooks/useGroupStatistics'
@@ -27,7 +29,10 @@ export const AboutTab = ({ workingGroup }: Props) => {
         </Statistics>
         <h4>Welcome</h4>
         <div>{workingGroup.description}</div>
-        <h4>Status</h4>
+        <StatusRow>
+          <h4>Status</h4>
+          {!!workingGroup.status && <StatusBadge>{workingGroup.status}</StatusBadge>}
+        </StatusRow>
         <div>{workingGroup.statusMessage}</div>
         <h4>About</h4>
         <div>{workingGroup.about}</div>
@@ -38,3 +43,19 @@ export const AboutTab = ({ workingGroup }: Props) => {
     </ContentWithSidepanel>
   )
 }
+
+const StatusRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+`
+
+const StatusBadge = styled.div`
+  background-color: ${Colors.Grey};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: 32px;
+`

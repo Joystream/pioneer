@@ -9,6 +9,8 @@ interface RawWorkingGroupMock {
     message: string
     about: string
     description: string
+    status: string
+    statusMessage: string
   }
 }
 
