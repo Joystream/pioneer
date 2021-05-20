@@ -14,3 +14,6 @@ export const latest = (...dates: (Date | undefined)[]) => {
 
 type PartialRange = { start?: Date; end?: Date }
 export const fromRange = (range: PartialDateRange) => (range ?? {}) as PartialRange
+
+export const toDDMMYY = (date: Date | undefined) =>
+  date?.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })
