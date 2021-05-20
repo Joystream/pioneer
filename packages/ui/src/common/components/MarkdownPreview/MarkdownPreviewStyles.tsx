@@ -1,43 +1,94 @@
 import { createGlobalStyle } from 'styled-components'
 
-import { Colors } from '../../constants'
+import { Colors, Fonts } from '../../constants'
 
 export const MarkdownPreviewStyles = createGlobalStyle`
   .markdown-preview {
     width: 100%;
-    margin-bottom: 30px;
-  }
 
-  .markdown-preview h3,
-  .markdown-preview h4,
-  .markdown-preview h5,
-  .markdown-preview h6 {
-    margin-bottom: 8px;
-    font-weight: 700;
-    color: ${Colors.Black[900]};
-  }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 24px;
+      font-family: ${Fonts.Grotesk};
+      font-weight: 700;
+      color: ${Colors.Black[900]};
+    }
+    h1 {
+      font-size: 24px;
+      line-height: 32px;
+    }
+    h2 {
+      font-size: 20px;
+      line-height: 28px;
+    }
+    h3 {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    h4 {
+      font-size: 14px;
+      line-height: 20px;
+    }
+    h5, h6 {
+      font-size: 10px;
+      line-height: 16px;
+    }
 
-  .markdown-preview h3 {
-    font-size: 24px;
-    line-height: 32px;
-  }
+    p {
+      margin-top: 8px;
+      font-family: ${Fonts.Inter};
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 400;
+      color: ${Colors.Black[600]};
+    }
+    
+    li {
+      position: relative;
+      font-family: ${Fonts.Inter};
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 400;
+      color: ${Colors.Black[500]};
+    }
 
-  .markdown-preview h4 {
-    font-size: 20px;
-    line-height: 28px;
-  }
+    ul {
+      display: grid;
+      grid-row-gap: 8px;
+      width: 100%;
+      padding-left: 24px;
+      list-style: none;
 
-  .markdown-preview h5 {
-    font-size: 16px;
-    line-height: 24px;
-  }
+      li {
+        &:before {
+          content: url("data:image/svg+xml;charset=UTF-8, <svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 16 16'><path d='M8.13804 9.3253L3.67065 4.85791L2.66669 5.86187L8.13804 11.3332L13.6094 5.86187L12.6054 4.85791L8.13804 9.3253Z' fill='rgb(64, 75, 90)' /></svg>");
+          position: absolute;
+          top: 50%;
+          left: -26px;
+          width: 16px;
+          height: 16px;
+          transform: translateY(-50%) rotate(-90deg);
+        }
+      }
+    }
+    ol {
+      display: grid;
+      grid-row-gap: 8px;
+      width: 100%;
+      padding-left: 24px;
+      list-style: none;
 
-  .markdown-preview p {
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 18px;
-    margin-bottom: 8px;
-    color: ${Colors.Black[600]};
+      li {
+        &:before {
+          content: url("data:image/svg+xml;charset=UTF-8, <svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='16' width='16' viewBox='0 0 16 16'><path d='M8.13804 9.3253L3.67065 4.85791L2.66669 5.86187L8.13804 11.3332L13.6094 5.86187L12.6054 4.85791L8.13804 9.3253Z' fill='rgb(64, 75, 90)' /></svg>");
+          position: absolute;
+          top: 50%;
+          left: -26px;
+          width: 16px;
+          height: 16px;
+          transform: translateY(-50%) rotate(-90deg);
+        }
+      }
+    }
   }
 
   .markdown-preview a {
@@ -51,32 +102,6 @@ export const MarkdownPreviewStyles = createGlobalStyle`
     &:hover {
       text-decoration: none;
       color: ${Colors.Blue[500]};
-    }
-  }
-
-  .markdown-preview ul,
-  .markdown-preview ol {
-    list-style: none;
-    margin: 0 0 8px 0;
-    padding-left: 30px;
-  }
-
-  .markdown-preview li {
-    position: relative;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 24px;
-    color: ${Colors.Black[500]};
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: -28px;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      background: url('data:image/svg+xml;utf8,<svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.36778 6.09505L0.900391 10.5624L1.90436 11.5664L7.37571 6.09505L1.90436 0.623699L0.900391 1.62766L5.36778 6.09505Z" fill="#404B5A"/></svg>') no-repeat center;
     }
   }
 `

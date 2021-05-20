@@ -3,7 +3,11 @@ import ReactMarkdown from 'react-markdown'
 
 import { MarkdownPreviewStyles } from './MarkdownPreviewStyles'
 
-export const MarkdownPreview = ({ markdown }: { markdown: string }) => {
+export interface MarkdownPreviewProps {
+  markdown: string
+}
+
+export const MarkdownPreview = ({ markdown }: MarkdownPreviewProps) => {
   return (
     <>
       <MarkdownPreviewStyles />
