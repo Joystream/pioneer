@@ -30,6 +30,7 @@ import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useWorker } from '@/working-groups/hooks/useWorker'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
+import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
@@ -57,7 +58,11 @@ export const MyRole = () => {
   }, [worker])
 
   const onChangeRoleClick = (): void => {
-    showModal({ modal: 'ChangeRoleModal', data: { worker } })
+    showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_ROLE_ACCOUNT } })
+  }
+
+  const onChangeRewardClick = (): void => {
+    showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
   }
 
   if (isLoading || !worker) {
@@ -128,8 +133,12 @@ export const MyRole = () => {
             <ContentWithTabs>
               <RoleAccountHeader>
                 <Label>Role Account</Label>
-                <ButtonsGroup onClick={onChangeRoleClick}>
-                  {isActive && <ButtonGhost size="small">Change Role Account</ButtonGhost>}
+                <ButtonsGroup>
+                  {isActive && (
+                    <ButtonGhost size="small" onClick={onChangeRoleClick}>
+                      Change Role Account
+                    </ButtonGhost>
+                  )}
                 </ButtonsGroup>
               </RoleAccountHeader>
               <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} balances={['total']} />
@@ -149,7 +158,13 @@ export const MyRole = () => {
             <ContentWithTabs>
               <RoleAccountHeader>
                 <Label>Reward Account</Label>
-                <ButtonsGroup>{isActive && <ButtonGhost size="small">Change Reward Account</ButtonGhost>}</ButtonsGroup>
+                <ButtonsGroup>
+                  {isActive && (
+                    <ButtonGhost size="small" onClick={onChangeRewardClick}>
+                      Change Reward Account
+                    </ButtonGhost>
+                  )}
+                </ButtonsGroup>
               </RoleAccountHeader>
               <MyRoleAccount account={{ name: 'Reward Account', address: worker.rewardAccount }} balances={['total']} />
             </ContentWithTabs>
