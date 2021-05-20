@@ -18,7 +18,7 @@ export const ActivitiesBlock = ({ activities, label, warning }: ActivitiesBlockP
   return (
     <ContentWithTabs>
       {label && <Label>{label}</Label>}
-      {warning && <Warning title={warning.title} content={warning.content} isClosable={warning.isClosable} />}
+      {warning && <Warning {...warning} />}
       <Activities activities={activities} />
     </ContentWithTabs>
   )
