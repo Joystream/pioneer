@@ -2,22 +2,22 @@ import React, { useState } from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
+import { useModal } from '@/common/hooks/useModal'
 import { ModalState } from '@/common/types'
 
 import { getGroup } from '../../model/getGroup'
-import { Worker } from '../../types'
 
 import { LeaveRolePrepareModal } from './LeaveRolePrepareModal'
 import { LeaveRoleSignModal } from './LeaveRoleSignModal'
 import { LeaveRoleSuccessModal } from './LeaveRoleSuccessModal'
+import { LeaveRoleModalCall } from './types'
 
-interface Props {
-  onClose: () => void
-  worker: Worker
-}
-
-export const LeaveRoleModal = ({ onClose, worker }: Props) => {
+export const LeaveRoleModal = () => {
   const { api } = useApi()
+  const {
+    hideModal,
+    modalData: { worker },
+  } = useModal<LeaveRoleModalCall>()
   const [rationale, setRationale] = useState('')
   const [step, setStep] = useState<ModalState>('PREPARE')
   const transaction = getGroup(api, worker.group.name)?.leaveRole(worker.id, rationale)
@@ -28,16 +28,16 @@ export const LeaveRoleModal = ({ onClose, worker }: Props) => {
   }
 
   if (step === 'PREPARE') {
-    return <LeaveRolePrepareModal onClose={onClose} onContinue={onContinue} unstakingPeriod={20} />
+    return <LeaveRolePrepareModal onClose={hideModal} onContinue={onContinue} unstakingPeriod={20} />
   }
 
   if (step === 'AUTHORIZE' && transaction) {
-    return <LeaveRoleSignModal onClose={onClose} transaction={transaction} worker={worker} onDone={onDone} />
+    return <LeaveRoleSignModal onClose={hideModal} transaction={transaction} worker={worker} onDone={onDone} />
   }
 
   if (step === 'SUCCESS') {
-    return <LeaveRoleSuccessModal onClose={onClose} />
+    return <LeaveRoleSuccessModal onClose={hideModal} />
   }
 
-  return <FailureModal onClose={onClose}>There was a problem leaving the role.</FailureModal>
+  return <FailureModal onClose={hideModal}>There was a problem leaving the role.</FailureModal>
 }
