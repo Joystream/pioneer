@@ -9,6 +9,7 @@ import { Tabs } from '@/common/components/Tabs'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 import { AppPage } from '../../../components/AppPage'
+import { StatusGroup, StatusBadge } from '../components/StatusBadges'
 
 import { AboutTab } from './AboutTab'
 import { HistoryTab } from './HistoryTab'
@@ -36,6 +37,11 @@ export function WorkingGroup() {
       <PageHeader>
         <PreviousPage>
           <PageTitle>{group?.name}</PageTitle>
+          {currentTab === 'ABOUT' && (
+            <StatusGroup>
+              <StatusBadge>Scheduled Downtime</StatusBadge>
+            </StatusGroup>
+          )}
         </PreviousPage>
         <Tabs tabs={tabs} />
       </PageHeader>
