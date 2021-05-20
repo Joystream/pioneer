@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { CloseButton } from '@/common/components/buttons'
 import { Colors } from '@/common/constants'
+import { useToggle } from '@/common/hooks/useToggle'
 import { size, spacing } from '@/common/utils/styles'
 
 export interface WarningProps {
@@ -12,22 +13,18 @@ export interface WarningProps {
 }
 
 export const Warning = ({ title, content, isClosable }: WarningProps) => {
-  const [isOpened, setIsOpened] = useState(true)
+  const [isOpened, toggleOpen] = useToggle(true)
 
-  const onWarningClose = (): void => {
-    setIsOpened(false)
+  if (!isOpened) {
+    return null
   }
 
   return (
-    <>
-      {isOpened && (
-        <WarningBlock>
-          {isClosable !== false && <StyledCloseButton onClick={onWarningClose} />}
-          <h5>{title}</h5>
-          <p>{content}</p>
-        </WarningBlock>
-      )}
-    </>
+    <WarningBlock>
+      {isClosable !== false && <StyledCloseButton onClick={toggleOpen} />}
+      <h5>{title}</h5>
+      <p>{content}</p>
+    </WarningBlock>
   )
 }
 
