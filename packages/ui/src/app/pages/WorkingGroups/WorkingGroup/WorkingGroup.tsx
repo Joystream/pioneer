@@ -36,10 +36,10 @@ export function WorkingGroup() {
     <AppPage>
       <PageHeader>
         <PreviousPage>
-          <PageTitle>{group?.name}</PageTitle>
-          {currentTab === 'ABOUT' && (
+          <PageTitle>{group.name}</PageTitle>
+          {group.status && (
             <StatusGroup>
-              <StatusBadge>Scheduled Downtime</StatusBadge>
+              <StatusBadge>{group.status}</StatusBadge>
             </StatusGroup>
           )}
         </PreviousPage>
