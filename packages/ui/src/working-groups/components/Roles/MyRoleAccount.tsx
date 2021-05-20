@@ -7,11 +7,14 @@ import { Account } from '@/accounts/types'
 import { ListItem } from '@/common/components/List'
 import { Label, TokenValue } from '@/common/components/typography'
 
+type BalanceType = 'total' | 'free' | 'locked'
+
 export interface MyRoleAccountProps {
   account: Account
+  balances: BalanceType[]
 }
 
-export const MyRoleAccount = ({ account }: MyRoleAccountProps) => {
+export const MyRoleAccount = ({ account, balances }: MyRoleAccountProps) => {
   const balance = useBalance(account.address)
 
   return (
@@ -19,14 +22,24 @@ export const MyRoleAccount = ({ account }: MyRoleAccountProps) => {
       <RoleAccount>
         <UnknownAccountInfo address={account.address} placeholderName={account.name as string} />
         <RoleAccountBalances>
-          <RoleAccountBalance>
-            <Label>Total balance</Label>
-            <TokenValue value={balance?.total} />
-          </RoleAccountBalance>
-          <RoleAccountBalance>
-            <Label>Locked balance</Label>
-            <TokenValue value={balance?.locked} />
-          </RoleAccountBalance>
+          {balances.includes('free') && (
+            <RoleAccountBalance>
+              <Label>Free balance</Label>
+              <TokenValue value={balance?.transferable} />
+            </RoleAccountBalance>
+          )}
+          {balances.includes('total') && (
+            <RoleAccountBalance>
+              <Label>Total balance</Label>
+              <TokenValue value={balance?.total} />
+            </RoleAccountBalance>
+          )}
+          {balances.includes('locked') && (
+            <RoleAccountBalance>
+              <Label>Locked balance</Label>
+              <TokenValue value={balance?.locked} />
+            </RoleAccountBalance>
+          )}
         </RoleAccountBalances>
       </RoleAccount>
     </ListItem>

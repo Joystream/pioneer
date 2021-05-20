@@ -119,7 +119,7 @@ export const MyRole = () => {
               },
             ]}
           />
-          <TokenValueStat title="Stake height" value={150000} />
+          <TokenValueStat title="Stake height" value={worker.stake} />
           <TokenValueStat title="Owed reward" value={150000} />
           <TokenValueStat title="Next payout in" value={150000} />
         </Statistics>
@@ -132,7 +132,7 @@ export const MyRole = () => {
                   {isActive && <ButtonGhost size="small">Change Role Account</ButtonGhost>}
                 </ButtonsGroup>
               </RoleAccountHeader>
-              <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} />
+              <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} balances={['total']} />
             </ContentWithTabs>
             <ContentWithTabs>
               <RoleAccountHeader>
@@ -141,14 +141,17 @@ export const MyRole = () => {
                   {isActive && <ButtonPrimary size="small">Move Excess Tokens</ButtonPrimary>}
                 </ButtonsGroup>
               </RoleAccountHeader>
-              <MyRoleAccount account={{ name: 'Stake Account', address: worker.stakeAccount }} />
+              <MyRoleAccount
+                account={{ name: 'Stake Account', address: worker.stakeAccount }}
+                balances={['total', 'locked']}
+              />
             </ContentWithTabs>
             <ContentWithTabs>
               <RoleAccountHeader>
                 <Label>Reward Account</Label>
                 <ButtonsGroup>{isActive && <ButtonGhost size="small">Change Reward Account</ButtonGhost>}</ButtonsGroup>
               </RoleAccountHeader>
-              <MyRoleAccount account={{ name: 'Reward Account', address: worker.rewardAccount }} />
+              <MyRoleAccount account={{ name: 'Reward Account', address: worker.rewardAccount }} balances={['total']} />
             </ContentWithTabs>
           </MainPanel>
           <SidePanel>
