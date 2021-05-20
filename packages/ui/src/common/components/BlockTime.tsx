@@ -9,13 +9,13 @@ import { LabelLink } from './forms'
 import { BlockIcon, BlockIconStyles } from './icons'
 import { TextMedium, TextSmall } from './typography'
 
-interface Props {
+export interface BlockTimeProps {
   block: Block
   horizontal?: boolean
   dateLabel?: string
 }
 
-export const BlockTime = React.memo(({ block, horizontal, dateLabel }: Props) => (
+export const BlockTime = React.memo(({ block, horizontal, dateLabel }: BlockTimeProps) => (
   <Wrapper horizontal={horizontal}>
     <AboutText>
       {dateLabel && horizontal && dateLabel + ': '}
