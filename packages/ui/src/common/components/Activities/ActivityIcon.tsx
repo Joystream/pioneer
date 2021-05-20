@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors } from '../../constants'
-import { ActivityCategory, ActivityType } from '../../types'
+import { ActivityCategory } from '../../types'
 import { AppliedIcon } from '../icons/activities/AppliedIcon'
 import { ClosedIcon } from '../icons/activities/ClosedIcon'
 import { CreatedIcon } from '../icons/activities/CreatedIcon'
@@ -13,74 +13,25 @@ import { JoystreamIcon } from '../icons/activities/JoystreamIcon'
 import { WarnedIcon } from '../icons/activities/WarnedIcon'
 
 export interface ActivityIconProps {
-  icon: ActivityCategory
-  variant?: ActivityType
+  category: ActivityCategory
 }
 
-export const ActivityIcon = ({ icon }: ActivityIconProps) => {
-  if (icon === 'closed') {
-    return (
-      <NegativeStyle>
-        <ClosedIcon />
-      </NegativeStyle>
-    )
+export const ActivityIcon = React.memo(({ category }: ActivityIconProps) => {
+  switch (category) {
+    case 'AppliedOnOpeningEvent':
+      return (
+        <JoystreamStyle>
+          <AppliedIcon />
+        </JoystreamStyle>
+      )
+    default:
+      return (
+        <JoystreamStyle>
+          <JoystreamIcon />
+        </JoystreamStyle>
+      )
   }
-  if (icon === 'hired') {
-    return (
-      <PositiveStyle>
-        <HiredIcon />
-      </PositiveStyle>
-    )
-  }
-  if (icon === 'created') {
-    return (
-      <JoystreamStyle>
-        <CreatedIcon />
-      </JoystreamStyle>
-    )
-  }
-  if (icon === 'increased') {
-    return (
-      <PositiveStyle>
-        <IncreasedIcon />
-      </PositiveStyle>
-    )
-  }
-  if (icon === 'decreased') {
-    return (
-      <NegativeStyle>
-        <DecreasedIcon />
-      </NegativeStyle>
-    )
-  }
-  if (icon === 'applied') {
-    return (
-      <JoystreamStyle>
-        <AppliedIcon />
-      </JoystreamStyle>
-    )
-  }
-  if (icon === 'warned') {
-    return (
-      <NegativeStyle>
-        <WarnedIcon />
-      </NegativeStyle>
-    )
-  }
-  if (icon === 'joystream') {
-    return (
-      <JoystreamStyle>
-        <JoystreamIcon />
-      </JoystreamStyle>
-    )
-  }
-
-  return (
-    <JoystreamStyle>
-      <JoystreamIcon />
-    </JoystreamStyle>
-  )
-}
+})
 
 const DefaulActivityIconStyle = styled.div`
   display: flex;

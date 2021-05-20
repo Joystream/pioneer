@@ -13,14 +13,7 @@ export const Activities = ({ activities }: ActivitiesProps) => {
   return (
     <ActivitiesList>
       {activities.map((activity) => (
-        <ActivityComponent
-          key={activity.id}
-          type={activity.type}
-          category={activity.category}
-          timestamp={activity.time}
-        >
-          {activity.text}
-        </ActivityComponent>
+        <ActivityComponent activity={activity} key={activity.eventType + activity.id} />
       ))}
     </ActivitiesList>
   )
