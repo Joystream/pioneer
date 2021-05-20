@@ -1,25 +1,27 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { spacing } from '@/common/utils/styles'
-
 import { Colors, Transitions } from '../constants'
 import { formatDateString, formatTokenValue } from '../model/formatters'
 import { Block } from '../types'
 
 import { LabelLink } from './forms'
-import { BlockIcon } from './icons'
+import { BlockIcon, BlockIconStyles } from './icons'
 import { TextMedium, TextSmall } from './typography'
 
-interface Props {
+export interface BlockTimeProps {
   block: Block
   horizontal?: boolean
+  dateLabel?: string
 }
 
-export const BlockTime = React.memo(({ block, horizontal }: Props) => (
+export const BlockTime = React.memo(({ block, horizontal, dateLabel }: BlockTimeProps) => (
   <Wrapper horizontal={horizontal}>
-    <AboutText>{formatDateString(block.timestamp)}</AboutText>
-    {horizontal && <Separator>|</Separator>}
+    <AboutText>
+      {dateLabel && horizontal && dateLabel + ': '}
+      {formatDateString(block.timestamp)}
+    </AboutText>
+    {horizontal && <Separator>{' | '}</Separator>}
     <BlockInfo>
       <BlockIcon />
       <BlockNumber>{formatTokenValue(block.number)}</BlockNumber>
@@ -29,26 +31,10 @@ export const BlockTime = React.memo(({ block, horizontal }: Props) => (
 ))
 
 const Separator = styled.span`
-  margin: ${spacing(0, 1)};
+  font-size: inherit;
+  line-height: inherit;
 `
 
-const Wrapper = styled.div<{ horizontal?: boolean }>`
-  width: 100%;
-  height: fit-content;
-
-  ${({ horizontal }) => {
-    if (!horizontal) {
-      return css`
-        display: grid;
-        grid-row-gap: 4px;
-      `
-    }
-    return css`
-      display: flex;
-      align-items: center;
-    `
-  }}
-`
 const AboutText = styled(TextMedium)`
   color: ${Colors.Black[600]};
 `
@@ -68,4 +54,39 @@ const BlockNumber = styled(LabelLink)`
   font-size: inherit;
   line-height: inherit;
   transition: ${Transitions.all};
+`
+const Wrapper = styled.div<{ horizontal?: boolean }>`
+  display: grid;
+  width: fit-content;
+  height: fit-content;
+
+  ${({ horizontal }) => {
+    if (horizontal) {
+      return css`
+        grid-auto-flow: column;
+        grid-column-gap: 8px;
+        align-items: center;
+
+        ${AboutText} {
+          font-size: 12px;
+          line-height: 18px;
+          color: ${Colors.Black[400]};
+        }
+        ${BlockIconStyles} {
+          color: ${Colors.Black[500]};
+        }
+        ${Separator} {
+          color: ${Colors.Black[400]};
+        }
+      `
+    } else {
+      return css`
+        grid-row-gap: 4px;
+
+        ${BlockIconStyles} {
+          color: ${Colors.Black[900]};
+        }
+      `
+    }
+  }}
 `

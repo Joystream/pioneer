@@ -151,7 +151,7 @@ export const WorkingGroupOpening = () => {
         </ContentWithSidepanel>
       </RowGapBlock>
       <PageFooter>
-        <BlockTime block={opening.createdAtBlock} horizontal />
+        <BlockTime block={opening.createdAtBlock} horizontal dateLabel="Hired" />
       </PageFooter>
     </AppPage>
   )
