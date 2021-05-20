@@ -32,6 +32,7 @@
     "@ckeditor/ckeditor5-paste-from-office": "^27.1.0",
     "@ckeditor/ckeditor5-theme-lark": "^27.1.0",
     "@ckeditor/ckeditor5-typing": "^27.1.0",
+    "@joystream/metadata-protobuf": "^1.0.0",
     "@joystream/types": "^0.15.0",
     "@polkadot/api": "2.4.1",
     "@polkadot/extension-dapp": "^0.32.1",
