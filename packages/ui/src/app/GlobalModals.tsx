@@ -9,6 +9,7 @@ import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/S
 import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/modals/TransferInviteModal'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { ChangeRoleModal, ChangeRoleModalCall } from '@/working-groups/modals/ChangeRoleModal'
 import { LeaveRoleModal, LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 
 type ModalNames =
@@ -19,6 +20,7 @@ type ModalNames =
   | ModalName<ApplyForRoleModalCall>
   | ModalName<ApplicationDetailsModalCall>
   | ModalName<SwitchMemberModalCall>
+  | ModalName<ChangeRoleModalCall>
   | ModalName<LeaveRoleModalCall>
 
 export const GlobalModals = () => {
@@ -39,6 +41,8 @@ export const GlobalModals = () => {
       return <ApplicationDetailsModal />
     case 'SwitchMember':
       return <SwitchMemberModal />
+    case 'ChangeRoleModal':
+      return <ChangeRoleModal />
     case 'LeaveRole':
       return <LeaveRoleModal />
     default:
