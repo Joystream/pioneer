@@ -1,6 +1,0 @@
-export enum Steps {
-  SELECT_ACCOUNT,
-  SIGN_TRANSACTION,
-  SUCCESS,
-  ERROR,
-}

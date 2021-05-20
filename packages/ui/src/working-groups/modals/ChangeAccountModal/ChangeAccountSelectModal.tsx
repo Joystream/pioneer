@@ -13,9 +13,10 @@ interface Props {
   onClose: () => void
   onAccept: (selectedAccount: Account) => void
   title: string
+  buttonLabel: string
 }
 
-export const ChangeRoleAccountModal: FC<Props> = ({ account, onClose, onAccept, title }) => {
+export const ChangeAccountSelectModal: FC<Props> = ({ account, onClose, onAccept, title, buttonLabel }) => {
   const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(account)
   const filterSelectedAccount = useCallback(filterAccount(selectedAccount), [selectedAccount])
   const onClick = () => {
@@ -41,7 +42,7 @@ export const ChangeRoleAccountModal: FC<Props> = ({ account, onClose, onAccept, 
       </ModalBody>
       <ModalFooter>
         <ButtonPrimary size="medium" onClick={onClick} disabled={!selectedAccount}>
-          Change role
+          {buttonLabel}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>
