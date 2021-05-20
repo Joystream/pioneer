@@ -60,7 +60,8 @@ export const Tooltip = ({
   const mouseLeft = () => setOver(false)
 
   const tooltipHandlers = {
-    onClick: () => {
+    onClick: (event: React.MouseEvent<HTMLElement>) => {
+      event.stopPropagation()
       setTooltipActive(false)
       setForceActive((active) => !active)
     },
