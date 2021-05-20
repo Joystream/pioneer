@@ -30,6 +30,7 @@ import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useWorker } from '@/working-groups/hooks/useWorker'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
+import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 export const MyRole = () => {
@@ -47,6 +48,13 @@ export const MyRole = () => {
     })
   }, [worker && worker.application.id])
   const isActive = worker && worker.status === 'WorkerStatusActive'
+  const showLeaveRoleModal = useCallback(() => {
+    worker &&
+      showModal<LeaveRoleModalCall>({
+        modal: 'LeaveRole',
+        data: { worker },
+      })
+  }, [worker])
 
   const onChangeRoleClick = (): void => {
     showModal({ modal: 'ChangeRoleModal', data: { worker } })
@@ -73,8 +81,8 @@ export const MyRole = () => {
             Opening
           </ButtonGhost>
           {isActive && (
-            <ButtonGhost size="medium">
-              Leave a position
+            <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
+              Leave this position
               <Help helperText="Lorem ipsum" helperTitle="Lorem ipsum" />
             </ButtonGhost>
           )}
@@ -149,7 +157,7 @@ export const MyRole = () => {
         </ContentWithSidepanel>
       </RowGapBlock>
       <PageFooter>
-        <BlockTime block={worker.hiredAtBlock} horizontal />
+        <BlockTime block={worker.hiredAtBlock} horizontal dateLabel="Hired" />
       </PageFooter>
     </AppPage>
   )
