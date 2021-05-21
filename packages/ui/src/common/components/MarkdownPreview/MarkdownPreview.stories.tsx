@@ -25,6 +25,55 @@ const Template: Story<MarkdownPreviewProps> = (args) => (
 export const MarkdownPreviewStory = Template.bind({})
 
 MarkdownPreviewStory.args = {
-  markdown:
-    '# Header h1 (big)\nParagraph big.\nWill one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.\n## Header h2 (medium)\nParagraph big.\nWill one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.\n### Header h3 (small)\nParagraph big.\nWill one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.\n#### Header h4\n##### Header h5\n###### Header h6 \n [Text in link](example.com "Titletext") \n \n UL\n *   The maximum review period for this opening is 99,999 blocks (approximately 6 days, 23 hours).\n*   Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.\n*   Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. \n \n OL \n \n 1.  The maximum review period for this opening is 99,999 blocks (approximately 6 days, 23 hours).\n2.  Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.\n3.  Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. \n \n `# Install rust toolchain ./setup.sh # Install npm package dependencies # Also good habit to run this when switching between branches yarn install`',
+  markdown: `# Header h1 (big)
+
+Paragraph big.
+
+Will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.
+
+## Header h2 (medium)
+
+Paragraph big.
+
+Will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.
+
+### Header h3 (small)
+
+Paragraph big.
+
+Will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and comprehensively monitored and moderated. Our current testnet allows this content monitoring to take place by giving users who are selected for the role administrative access to the Joystream content directory to make changes where necessary.
+
+#### Header h4
+
+##### Header h5
+
+###### Header h6
+
+A paragraph with [Text in link](example.com "Titletext").
+
+UL
+
+*   The maximum review period for this opening is 99,999 blocks (approximately 6 days, 23 hours).
+*   Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.
+*   Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.
+
+OL
+
+1.  The maximum review period for this opening is 99,999 blocks (approximately 6 days, 23 hours).
+2.  Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.
+3.  Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.Visit our GitHub repository to find out more about the technical requirements needed to participate in this role. Visit our GitHub repository to find out more about the technical requirements needed to participate in this role.
+
+A paragraph with an inline \`CodeElement\` should be \`<code />\`.
+
+\`\`\`
+# Install rust toolchain
+./setup.sh
+
+# Install
+npm package dependencies
+
+# Also good habit to run this when switching between branches
+
+yarn install
+\`\`\``,
 }
