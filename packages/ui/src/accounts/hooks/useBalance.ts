@@ -1,9 +1,10 @@
 import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import BN from 'bn.js'
 
-import { useApi } from '../../common/hooks/useApi'
-import { useObservable } from '../../common/hooks/useObservable'
-import { Address } from '../../common/types'
+import { useApi } from '@/common/hooks/useApi'
+import { useObservable } from '@/common/hooks/useObservable'
+import { Address } from '@/common/types'
+
 import { Balances } from '../types'
 
 export function toBalances(balances: DeriveBalancesAll): Balances {
@@ -14,13 +15,13 @@ export function toBalances(balances: DeriveBalancesAll): Balances {
       reason: <string>lock.id.toHuman(),
     }
   })
-  const recoverable = new BN(locks.length ? Math.max(...locks.map((lock) => lock.amount.toNumber())) : 0)
+  const recoverableBalance = new BN(locks.length ? Math.max(...locks.map((lock) => lock.amount.toNumber())) : 0)
 
   return {
-    total: availableBalance.add(lockedBalance),
+    total: availableBalance.add(lockedBalance).add(recoverableBalance),
     transferable: availableBalance,
     locked: lockedBalance,
-    recoverable,
+    recoverable: recoverableBalance,
     locks,
   }
 }

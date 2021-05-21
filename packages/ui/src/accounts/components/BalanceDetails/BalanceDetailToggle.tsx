@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { BalanceLockInfo } from '@/accounts/types'
 import { ToggleableItem, ToggleButton } from '@/common/components/buttons/Toggle'
+import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 
@@ -18,6 +19,7 @@ export const BalanceDetailToggle = ({ info }: BalanceDetailToggleProps) => {
           <DetailToggleContainer>
             <DetailTitleContainer>
               <h5>{capitalizeFirstLetter(info.reason.trim())}</h5>
+              <TokenValue value={info.amount} />
             </DetailTitleContainer>
             {isOpen && <DetailContainer>Here some info!</DetailContainer>}
           </DetailToggleContainer>
@@ -45,7 +47,9 @@ const DetailToggleContainer = styled.div`
 `
 
 const DetailTitleContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr repeat(2, 352px);
+  grid-template-rows: 1fr;
   width: 100%;
   height: 100%;
   min-height: 56px;
