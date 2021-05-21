@@ -5,36 +5,30 @@ import { BorderRad, Colors } from '../../constants'
 import { ActivityCategory } from '../../types'
 import { AppliedIcon } from '../icons/activities/AppliedIcon'
 import { DecreasedIcon } from '../icons/activities/DecreasedIcon'
-import { JoystreamIcon } from '../icons/activities/JoystreamIcon'
+
+type IconStyle = 'positive' | 'negative' | 'joystream'
 
 export interface ActivityIconProps {
   category: ActivityCategory
 }
 
+const EventMap: Record<ActivityCategory, [React.FC, IconStyle]> = {
+  AppliedOnOpeningEvent: [AppliedIcon, 'positive'],
+  ApplicationWithdrawnEvent: [AppliedIcon, 'positive'],
+  BudgetSpendingEvent: [DecreasedIcon, 'negative'],
+  BudgetSetEvent: [AppliedIcon, 'positive'],
+}
+
 export const ActivityIcon = React.memo(({ category }: ActivityIconProps) => {
-  switch (category) {
-    case 'AppliedOnOpeningEvent':
-      return (
-        <IconStyle style="positive">
-          <AppliedIcon />
-        </IconStyle>
-      )
-    case 'BudgetSpendingEvent':
-      return (
-        <IconStyle style="negative">
-          <DecreasedIcon />
-        </IconStyle>
-      )
-    default:
-      return (
-        <IconStyle style="joystream">
-          <JoystreamIcon />
-        </IconStyle>
-      )
-  }
+  const [Icon, style] = EventMap[category]
+  return (
+    <IconWrap iconStyle={style}>
+      <Icon />
+    </IconWrap>
+  )
 })
 
-const IconStyle = styled.div<{ style: 'positive' | 'negative' | 'joystream' }>`
+const IconWrap = styled.div<{ iconStyle: IconStyle }>`
   display: flex;
   grid-area: activityicon;
   justify-content: center;
@@ -44,10 +38,10 @@ const IconStyle = styled.div<{ style: 'positive' | 'negative' | 'joystream' }>`
   padding: 12px;
   border-radius: ${BorderRad.round};
 
-  ${({ style }) => {
-    if (style === 'negative') {
+  ${({ iconStyle }) => {
+    if (iconStyle === 'negative') {
       return NegativeStyle
-    } else if (style === 'positive') {
+    } else if (iconStyle === 'positive') {
       return PositiveStyle
     } else {
       return JoystreamStyle
