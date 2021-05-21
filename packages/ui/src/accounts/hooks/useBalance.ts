@@ -14,12 +14,13 @@ export function toBalances(balances: DeriveBalancesAll): Balances {
       reason: <string>lock.id.toHuman(),
     }
   })
+  const recoverable = new BN(locks.length ? Math.max(...locks.map((lock) => lock.amount.toNumber())) : 0)
 
   return {
     total: availableBalance.add(lockedBalance),
     transferable: availableBalance,
     locked: lockedBalance,
-    recoverable: new BN(0),
+    recoverable,
     locks,
   }
 }
