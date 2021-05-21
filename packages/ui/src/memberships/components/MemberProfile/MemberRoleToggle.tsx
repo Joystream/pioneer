@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
@@ -9,8 +10,10 @@ import { Arrow } from '@/common/components/icons'
 import { SidePaneColumn, SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/common/components/SidePane'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
 import { Member } from '@/memberships/types'
 import { workerRoleTitle } from '@/working-groups/helpers'
+import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { WorkerWithDetails } from '@/working-groups/types'
 
 export interface MemberRoleToggleProps {
@@ -19,6 +22,15 @@ export interface MemberRoleToggleProps {
 }
 
 export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
+  const history = useHistory()
+  const { showModal } = useModal()
+  const showApplicationModal = useCallback(() => {
+    showModal<ApplicationDetailsModalCall>({
+      modal: 'ApplicationDetails',
+      data: { application: role.application },
+    })
+  }, [role.application.id])
+
   return (
     <RoleToggle absoluteToggle>
       {(isOpen) => {
@@ -79,10 +91,13 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                     </SidePaneColumn>
                   </SidePaneRow>
                   <ButtonsGroup align="left">
-                    <ButtonGhost size="small">
+                    <ButtonGhost size="small" onClick={showApplicationModal}>
                       Application preview <Arrow direction="right" />
                     </ButtonGhost>
-                    <ButtonGhost size="small">
+                    <ButtonGhost
+                      size="small"
+                      onClick={() => history.push(`/working-groups/openings/${role?.application.opening.id}`)}
+                    >
                       Opening preview <Arrow direction="right" />
                     </ButtonGhost>
                   </ButtonsGroup>
