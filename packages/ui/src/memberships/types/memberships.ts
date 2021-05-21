@@ -1,5 +1,3 @@
-import { WorkerWithDetails } from '@/working-groups/types'
-
 import { Address, Block } from '../../common/types'
 
 type ID = string
@@ -24,9 +22,8 @@ export interface Member {
   referredBy?: ID
 }
 
-export interface DetailedMember extends Omit<Member, 'roles'> {
+export interface DetailedMember extends Member {
   about?: string
   registeredAtBlock: Block
   invitees: Member[]
-  roles: WorkerWithDetails[]
 }
