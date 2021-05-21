@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { TemplateBlock } from '../storybookParts/previewStyles'
@@ -21,29 +22,36 @@ Default.args = {
   activities: [
     {
       id: '1',
-      time: '2021-03-09T10:28:04.155Z',
-      text: 'Opening "Became a Forum Moderator has been closed by the Working Group Leader',
-      category: 'applied',
+      createdAt: '2021-03-09T10:28:04.155Z',
+      eventType: 'AppliedOnOpeningEvent',
+      membership: {
+        handle: 'xXproGamerDarknessXx',
+        id: '1',
+      },
+      opening: {
+        title: 'Forum Worker',
+        id: '2',
+      },
     },
     {
       id: '2',
-      time: '2021-03-09T10:28:04.155Z',
-      text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
-      category: 'closed',
+      createdAt: '2021-05-09T10:28:04.155Z',
+      eventType: 'ApplicationWithdrawnEvent',
+      membership: {
+        handle: 'andy00',
+        id: '1',
+      },
+      opening: {
+        title: 'Forum Worker',
+        id: '2',
+      },
     },
     {
       id: '3',
-      time: '2021-03-09T10:28:04.155Z',
-      text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
-      category: 'applied',
-      type: 'error',
-    },
-    {
-      id: '4',
-      time: '2021-03-09T10:28:04.155Z',
-      text: 'Jennifer_123 has been hired as a Storage Working Group Leader',
-      category: 'closed',
-      type: 'ok',
+      createdAt: '2021-05-19T10:28:04.155Z',
+      eventType: 'BudgetSpendingEvent',
+      amount: new BN('10000'),
+      groupName: 'Forum',
     },
   ],
 }
