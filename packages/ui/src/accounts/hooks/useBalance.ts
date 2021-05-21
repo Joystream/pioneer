@@ -8,12 +8,19 @@ import { Balances } from '../types'
 
 export function toBalances(balances: DeriveBalancesAll): Balances {
   const { lockedBalance, availableBalance } = balances
+  const locks = balances.lockedBreakdown.map((lock) => {
+    return {
+      amount: new BN(lock.amount),
+      reason: <string>lock.id.toHuman(),
+    }
+  })
 
   return {
     total: availableBalance.add(lockedBalance),
     transferable: availableBalance,
     locked: lockedBalance,
     recoverable: new BN(0),
+    locks,
   }
 }
 
