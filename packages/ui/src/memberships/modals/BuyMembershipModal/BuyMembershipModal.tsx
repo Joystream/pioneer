@@ -1,35 +1,19 @@
 import { MembershipMetadata } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
 import { MemberId } from '@joystream/types/common'
 import { EventRecord } from '@polkadot/types/interfaces'
 import React, { useContext, useMemo, useState } from 'react'
 
-import { getEventParam } from '@/common/model/JoystreamNode'
-
-import { FailureModal } from '../../../common/components/FailureModal'
-import { useApi } from '../../../common/hooks/useApi'
-import { useModal } from '../../../common/hooks/useModal'
-import { useObservable } from '../../../common/hooks/useObservable'
-import { ServerContext } from '../../../common/providers/server/context'
-import { ModalState } from '../../../common/types'
+import { FailureModal } from '@/common/components/FailureModal'
+import { useApi } from '@/common/hooks/useApi'
+import { useModal } from '@/common/hooks/useModal'
+import { useObservable } from '@/common/hooks/useObservable'
+import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
+import { ServerContext } from '@/common/providers/server/context'
+import { ModalState } from '@/common/types'
 
 import { BuyMembershipFormModal, FormFields } from './BuyMembershipFormModal'
 import { BuyMembershipSignModal } from './BuyMembershipSignModal'
 import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
-
-export type AnyMessage<T> = T & {
-  toJSON(): Record<string, unknown>
-}
-
-export type AnyMetadataClass<T> = {
-  decode(binary: Uint8Array): AnyMessage<T>
-  encode(obj: T): { finish(): Uint8Array }
-  toObject(obj: AnyMessage<T>): Record<string, unknown>
-}
-
-const metadataToBytes = <T extends any>(metaClass: AnyMetadataClass<T>, message: T) => {
-  return createType('Bytes', '0x' + Buffer.from(metaClass.encode(message).finish()).toString('hex'))
-}
 
 export const BuyMembershipModal = () => {
   const { hideModal } = useModal()
