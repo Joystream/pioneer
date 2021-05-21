@@ -25,7 +25,7 @@ const getFontSize = (props: ButtonProps) => (props.size === 'small' ? '14px' : '
 const getLineHeight = (props: ButtonProps) => (props.size === 'small' ? '20px' : '24px')
 const getPadding = (props: ButtonProps) => {
   if (props.size == 'small') {
-    return props.square ? '6px' : '4px 8px'
+    return props.square ? '4px' : '4px 8px'
   }
 
   if (props.size == 'medium') {
