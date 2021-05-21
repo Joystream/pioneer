@@ -6,7 +6,7 @@ import { useToggle } from '../../hooks/useToggle'
 import { isFunction } from '../../utils'
 import { Arrow, Icon } from '../icons'
 
-import { ButtonPrimary } from './Buttons'
+import { ButtonBareGhost } from './Buttons'
 
 interface ToggleableItemProps {
   children: ReactNode | ((isOpen: boolean) => ReactNode)
@@ -20,7 +20,7 @@ export const ToggleableItem = ({ children, absoluteToggle, className }: Toggleab
   return (
     <Toggle isOpen={isOpen} absoluteToggle={absoluteToggle} className={className}>
       {isFunction(children) ? children(isOpen) : children}
-      <ToggleButton onClick={toggleOpen} absoluteToggle={absoluteToggle} isOpen={isOpen} size="small">
+      <ToggleButton onClick={toggleOpen} absoluteToggle={absoluteToggle} isOpen={isOpen} size="small" square>
         <Arrow direction="down" />
       </ToggleButton>
     </Toggle>
@@ -38,7 +38,9 @@ const AbsoluteToggleButton = css<ToggleButtonProps>`
   right: 8px;
 `
 
-export const ToggleButton = styled(ButtonPrimary)<ToggleButtonProps & { className?: string }>`
+export const ToggleButton = styled(ButtonBareGhost).attrs(() => ({
+  square: true,
+}))<ToggleButtonProps & { className?: string }>`
   ${({ absoluteToggle }) => {
     if (absoluteToggle) {
       return AbsoluteToggleButton
@@ -48,34 +50,10 @@ export const ToggleButton = styled(ButtonPrimary)<ToggleButtonProps & { classNam
   min-width: unset;
   height: 32px;
   padding: 0;
-  background-color: transparent;
-  color: ${Colors.Black[900]};
   &,
-  &:hover,
-  &:focus,
-  &:active,
   &:disabled {
     background-color: transparent;
-    border: 1px solid transparent;
-  }
-  &:hover,
-  &:focus {
-    color: ${Colors.Blue[500]};
-  }
-  &:active {
-    color: ${Colors.Blue[600]};
-  }
-  &:disabled {
-    cursor: not-allowed;
-    color: ${Colors.Black[400]};
-  }
-  &:before,
-  &:after {
-    display: none;
-  }
-
-  & > svg {
-    color: inherit;
+    color: ${Colors.Black[900]};
   }
 
   ${Icon.type} {

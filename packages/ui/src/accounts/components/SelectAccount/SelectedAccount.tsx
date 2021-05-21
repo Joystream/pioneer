@@ -23,7 +23,7 @@ export const SelectedAccount = ({ account }: SelectedAccountProps) => {
           <TokenValue value={transferable} />
         </InfoValue>
       </BalanceInfoInRow>
-      <ToggleButton className="ui-toggle" disabled>
+      <ToggleButton className="ui-toggle" disabled square>
         <Arrow direction="down" />
       </ToggleButton>
     </LockedAccount>
