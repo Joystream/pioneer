@@ -1,26 +1,19 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { ActivityToIconMap } from '@/common/components/Activities/ActivityToIconMap'
+
 import { BorderRad, Colors } from '../../constants'
 import { ActivityCategory } from '../../types'
-import { AppliedIcon } from '../icons/activities/AppliedIcon'
-import { DecreasedIcon } from '../icons/activities/DecreasedIcon'
 
-type IconStyle = 'positive' | 'negative' | 'joystream'
+export type IconStyle = 'positive' | 'negative' | 'joystream'
 
 export interface ActivityIconProps {
   category: ActivityCategory
 }
 
-const EventMap: Record<ActivityCategory, [React.FC, IconStyle]> = {
-  AppliedOnOpeningEvent: [AppliedIcon, 'positive'],
-  ApplicationWithdrawnEvent: [AppliedIcon, 'positive'],
-  BudgetSpendingEvent: [DecreasedIcon, 'negative'],
-  BudgetSetEvent: [AppliedIcon, 'positive'],
-}
-
 export const ActivityIcon = React.memo(({ category }: ActivityIconProps) => {
-  const [Icon, style] = EventMap[category]
+  const [Icon, style] = ActivityToIconMap[category]
   return (
     <IconWrap iconStyle={style}>
       <Icon />
