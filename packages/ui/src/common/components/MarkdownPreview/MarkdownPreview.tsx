@@ -11,7 +11,18 @@ export const MarkdownPreview = ({ markdown }: MarkdownPreviewProps) => {
   return (
     <>
       <MarkdownPreviewStyles />
-      <ReactMarkdown className="markdown-preview">{markdown}</ReactMarkdown>
+      <ReactMarkdown
+        className="markdown-preview"
+        components={{
+          code: ({ children }) => (
+            <pre>
+              <code>{children}</code>
+            </pre>
+          ),
+        }}
+      >
+        {markdown}
+      </ReactMarkdown>
     </>
   )
 }
