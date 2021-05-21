@@ -40,6 +40,13 @@ export const RowGapBlock = styled.div<{ gap?: number }>`
   height: fit-content;
   width: 100%;
 `
+export const ColumnGapBlock = styled.div<{ gap?: number }>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: ${({ gap }) => (gap ? gap + 'px' : '16px')};
+  width: fit-content;
+`
+
 export const PageFooter = styled.footer`
   display: grid;
   position: absolute;
