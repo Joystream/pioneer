@@ -1,3 +1,5 @@
+import BN from 'bn.js'
+
 import { Activity } from '../types'
 
 export const useActivities = (): Activity[] => [
@@ -26,5 +28,12 @@ export const useActivities = (): Activity[] => [
       title: 'Forum Worker',
       id: '2',
     },
+  },
+  {
+    id: '3',
+    createdAt: '2021-05-19T10:28:04.155Z',
+    eventType: 'BudgetSpendingEvent',
+    amount: new BN('10000'),
+    groupName: 'Forum',
   },
 ]

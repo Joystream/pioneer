@@ -4,13 +4,8 @@ import styled from 'styled-components'
 import { BorderRad, Colors } from '../../constants'
 import { ActivityCategory } from '../../types'
 import { AppliedIcon } from '../icons/activities/AppliedIcon'
-import { ClosedIcon } from '../icons/activities/ClosedIcon'
-import { CreatedIcon } from '../icons/activities/CreatedIcon'
 import { DecreasedIcon } from '../icons/activities/DecreasedIcon'
-import { HiredIcon } from '../icons/activities/HiredIcon'
-import { IncreasedIcon } from '../icons/activities/IncreasedIcon'
 import { JoystreamIcon } from '../icons/activities/JoystreamIcon'
-import { WarnedIcon } from '../icons/activities/WarnedIcon'
 
 export interface ActivityIconProps {
   category: ActivityCategory
@@ -24,11 +19,17 @@ export const ActivityIcon = React.memo(({ category }: ActivityIconProps) => {
           <AppliedIcon />
         </JoystreamStyle>
       )
+    case 'BudgetSpendingEvent':
+      return (
+        <NegativeStyle>
+          <DecreasedIcon />
+        </NegativeStyle>
+      )
     default:
       return (
-        <JoystreamStyle>
+        <PositiveStyle>
           <JoystreamIcon />
-        </JoystreamStyle>
+        </PositiveStyle>
       )
   }
 })
