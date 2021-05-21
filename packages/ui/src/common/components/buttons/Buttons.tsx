@@ -65,6 +65,26 @@ export function ButtonBareGhost({ className, children, size, square, disabled, o
     </ButtonBareGhostStyles>
   )
 }
+export function ButtonLink({ className, children, square, disabled, onClick }: ButtonProps) {
+  return (
+    <ButtonLinkStyles className={className} square={square} disabled={disabled} onClick={onClick}>
+      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
+    </ButtonLinkStyles>
+  )
+}
+
+const ButtonInnerWrapper = styled.span<ButtonProps>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
+  justify-items: center;
+  align-items: center;
+  width: fit-content;
+  transform: translateY(1px);
+  & > svg {
+    transform: translateY(-1px);
+  }
+`
 
 export const BasicButtonStyles = css<ButtonProps>`
   display: flex;
@@ -94,7 +114,7 @@ export const BasicButtonStyles = css<ButtonProps>`
   transition: ${Transitions.all};
   z-index: 1;
 
-  & > svg {
+  ${ButtonInnerWrapper} > svg {
     z-index: 2;
     transition: ${Transitions.all};
   }
@@ -145,19 +165,6 @@ export const BasicButtonStyles = css<ButtonProps>`
   }
 `
 
-const ButtonInnerWrapper = styled.span<ButtonProps>`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
-  justify-items: center;
-  align-items: center;
-  width: fit-content;
-  transform: translateY(1px);
-  & > svg {
-    transform: translateY(-1px);
-  }
-`
-
 export const ButtonPrimaryStyles = styled.button<ButtonProps>`
   ${BasicButtonStyles};
 
@@ -165,7 +172,7 @@ export const ButtonPrimaryStyles = styled.button<ButtonProps>`
   border-color: ${Colors.Blue[500]};
   background-color: ${Colors.Blue[500]};
 
-  & > svg {
+  ${ButtonInnerWrapper} > svg {
     color: ${Colors.White};
   }
 
@@ -197,7 +204,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
   border-color: ${Colors.Black[75]};
   background-color: ${Colors.Black[75]};
 
-  & > svg {
+  ${ButtonInnerWrapper} > svg {
     color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
   }
 
@@ -213,7 +220,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
     border-color: ${Colors.Black[50]};
     color: ${Colors.Blue[500]};
 
-    & > svg {
+    ${ButtonInnerWrapper} > svg {
       color: ${Colors.Blue[500]};
     }
     & .blackPart,
@@ -228,7 +235,7 @@ export const ButtonSecondaryStyles = styled.button<ButtonProps>`
   }
 
   &:disabled {
-    & > svg {
+    ${ButtonInnerWrapper} > svg {
       color: ${Colors.Black[300]};
     }
     & .blackPart,
@@ -249,7 +256,7 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   border-color: ${Colors.Black[200]};
   background-color: ${Colors.White};
 
-  & > svg {
+  ${ButtonInnerWrapper} > svg {
     color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
   }
 
@@ -264,7 +271,7 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   &:focus {
     border-color: ${Colors.Blue[100]};
     color: ${Colors.Blue[500]};
-    & > svg {
+    ${ButtonInnerWrapper} > svg {
       color: ${Colors.Blue[500]};
     }
     & .blackPart,
@@ -279,7 +286,7 @@ export const ButtonGhostStyles = styled.button<ButtonProps>`
   }
 
   &:disabled {
-    & > svg {
+    ${ButtonInnerWrapper} > svg {
       color: ${Colors.Black[300]};
     }
     & .blackPart,
@@ -300,7 +307,7 @@ export const ButtonBareGhostStyles = styled.button<ButtonProps>`
   border-color: transparent;
   background-color: ${Colors.White};
 
-  & > svg {
+  ${ButtonInnerWrapper} > svg {
     color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
   }
 
@@ -313,7 +320,7 @@ export const ButtonBareGhostStyles = styled.button<ButtonProps>`
   &:focus {
     border-color: transparent;
     color: ${Colors.Blue[500]};
-    & > svg {
+    ${ButtonInnerWrapper} > svg {
       color: ${Colors.Blue[500]};
     }
     & .blackPart,
@@ -325,10 +332,14 @@ export const ButtonBareGhostStyles = styled.button<ButtonProps>`
 
   &:active {
     border-color: transparent;
+    color: ${Colors.Blue[600]};
+    ${ButtonInnerWrapper} > svg {
+      color: ${Colors.Blue[600]};
+    }
   }
 
   &:disabled {
-    & > svg {
+    ${ButtonInnerWrapper} > svg {
       color: ${Colors.Black[300]};
     }
     & .blackPart,
@@ -339,6 +350,86 @@ export const ButtonBareGhostStyles = styled.button<ButtonProps>`
     color: ${Colors.Black[300]};
     border-color: transparent;
     background-color: ${Colors.White};
+  }
+`
+
+export const ButtonLinkStyles = styled.button<ButtonProps>`
+  ${BasicButtonStyles};
+  grid-column-gap: 4px;
+  height: fit-content;
+  padding: 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: ${Colors.Black[900]};
+  text-transform: none;
+  border-radius: 0;
+  border-color: transparent;
+  background-color: transparent;
+
+  ${ButtonInnerWrapper} > svg {
+    color: ${Colors.Black[900]};
+    width: 12px;
+    height: 12px;
+  }
+
+  &:before {
+    top: auto;
+    bottom: 2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    border-radius: 0;
+    border: none;
+    transform: translateX(0%);
+    background-color: ${Colors.Black[900]};
+  }
+  &:after {
+    background-color: ${Colors.Blue[50]};
+    border-radius: 0;
+  }
+
+  &:hover,
+  &:focus {
+    border-color: transparent;
+    color: ${Colors.Blue[500]};
+
+    &:before {
+      background-color: ${Colors.Blue[500]};
+      transform: translateX(0%);
+    }
+
+    ${ButtonInnerWrapper} > svg {
+      color: ${Colors.Blue[500]};
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Blue[500]};
+      fill: ${Colors.Blue[500]};
+    }
+  }
+
+  &:active {
+    border-color: transparent;
+    transform: scale(1);
+
+    &:before {
+      transform: translateX(100%);
+    }
+  }
+
+  &:disabled {
+    ${ButtonInnerWrapper} > svg {
+      color: ${Colors.Black[300]};
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Black[300]};
+      fill: ${Colors.Black[300]};
+    }
+    color: ${Colors.Black[300]};
+    border-color: transparent;
+    background-color: transparent;
   }
 `
 
