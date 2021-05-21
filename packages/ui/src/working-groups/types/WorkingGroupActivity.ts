@@ -6,14 +6,26 @@ export type WorkingGroupActivity = ApplicationWithdrawnActivity | AppliedOnOpeni
 
 interface ApplicationWithdrawnActivity extends BaseActivity {
   eventType: 'ApplicationWithdrawnEvent'
-  memberHandle: string
-  openingTitle: string
+  membership: {
+    id: string
+    handle: string
+  }
+  opening: {
+    id: string
+    title: string
+  }
 }
 
 interface AppliedOnOpeningActivity extends BaseActivity {
   eventType: 'AppliedOnOpeningEvent'
-  memberHandle: string
-  openingTitle: string
+  membership: {
+    id: string
+    handle: string
+  }
+  opening: {
+    id: string
+    title: string
+  }
 }
 
 interface BudgetSetActivity extends BaseActivity {
