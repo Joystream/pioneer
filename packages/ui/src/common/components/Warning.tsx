@@ -6,6 +6,9 @@ import { Colors } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
 import { size, spacing } from '@/common/utils/styles'
 
+import { RowGapBlock } from './page/PageContent'
+import { TextMedium } from './typography'
+
 export interface WarningProps {
   title: string
   content: string
@@ -20,28 +23,23 @@ export const Warning = ({ title, content, isClosable }: WarningProps) => {
   }
 
   return (
-    <WarningBlock>
+    <WarningBlock gap={8}>
       {isClosable !== false && <StyledCloseButton onClick={toggleOpen} />}
       <h5>{title}</h5>
-      <p>{content}</p>
+      <TextMedium light>{content}</TextMedium>
     </WarningBlock>
   )
 }
 
-const WarningBlock = styled.div`
+const WarningBlock = styled(RowGapBlock)`
   background-color: ${Colors.Red[50]};
   position: relative;
   padding: ${spacing(2)};
-  color: ${Colors.Black[600]};
-
-  h5 {
-    margin-bottom: ${spacing(1)};
-  }
 `
 
 const StyledCloseButton = styled(CloseButton)`
   position: absolute;
-  top: 10px;
-  right: 10px;
-  ${size('16px')}
+  top: 8px;
+  right: 8px;
+  ${size('16px')};
 `
