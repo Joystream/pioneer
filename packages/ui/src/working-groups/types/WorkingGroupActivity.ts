@@ -20,7 +20,7 @@ interface ApplicationWithdrawnActivity extends BaseActivity {
   }
 }
 
-interface AppliedOnOpeningActivity extends BaseActivity {
+export interface AppliedOnOpeningActivity extends BaseActivity {
   eventType: 'AppliedOnOpeningEvent'
   membership: {
     id: string
@@ -32,13 +32,13 @@ interface AppliedOnOpeningActivity extends BaseActivity {
   }
 }
 
-interface BudgetSetActivity extends BaseActivity {
+export interface BudgetSetActivity extends BaseActivity {
   eventType: 'BudgetSetEvent'
   groupName: string
   newBudget: BN
 }
 
-interface BudgetSpendingActivity extends BaseActivity {
+export interface BudgetSpendingActivity extends BaseActivity {
   eventType: 'BudgetSpendingEvent'
   groupName: string
   amount: BN
