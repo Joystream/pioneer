@@ -36,4 +36,11 @@ export const useActivities = (): Activity[] => [
     amount: new BN('10000'),
     groupName: 'Forum',
   },
+  {
+    id: '4',
+    createdAt: '2021-05-20T10:28:04.155Z',
+    eventType: 'BudgetSetEvent',
+    groupName: 'Forum',
+    newBudget: new BN(100000),
+  },
 ]

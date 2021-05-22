@@ -8,7 +8,7 @@ export type WorkingGroupActivity =
   | BudgetSetActivity
   | BudgetSpendingActivity
 
-interface ApplicationWithdrawnActivity extends BaseActivity {
+export interface ApplicationWithdrawnActivity extends BaseActivity {
   eventType: 'ApplicationWithdrawnEvent'
   membership: {
     id: string

@@ -5,9 +5,11 @@ import { AppliedIcon } from '@/common/components/icons/activities/AppliedIcon'
 import { DecreasedIcon } from '@/common/components/icons/activities/DecreasedIcon'
 import { ActivityCategory } from '@/common/types'
 
+import { IncreasedIcon } from '../icons/activities/IncreasedIcon'
+
 export const ActivityToIconMap: Record<ActivityCategory, [React.FC, IconStyle]> = {
-  AppliedOnOpeningEvent: [AppliedIcon, 'positive'],
-  ApplicationWithdrawnEvent: [AppliedIcon, 'positive'],
+  AppliedOnOpeningEvent: [AppliedIcon, 'joystream'],
+  ApplicationWithdrawnEvent: [AppliedIcon, 'joystream'],
   BudgetSpendingEvent: [DecreasedIcon, 'negative'],
-  BudgetSetEvent: [AppliedIcon, 'positive'],
+  BudgetSetEvent: [IncreasedIcon, 'positive'],
 }
