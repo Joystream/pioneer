@@ -98,13 +98,14 @@ export const MemberPhotoContainer = styled.div`
 
 export const MemberStatusHelp = styled(Help)`
   background-color: transparent;
-  color: ${Colors.Blue[500]};
+  color: ${Colors.Black[900]};
+  border-color: ${Colors.Black[200]};
 
   &:hover,
   &:focus {
-    background-color: ${Colors.Blue[500]};
-    border-color: ${Colors.Blue[500]};
-    color: ${Colors.Black[25]};
+    background-color: ${Colors.Black[50]};
+    border-color: ${Colors.Blue[100]};
+    color: ${Colors.Blue[500]};
   }
 `
 
@@ -213,15 +214,15 @@ export const MemberDarkHover = css`
       color: ${Colors.Black[50]};
     }
     ${MemberStatusHelp} {
-      border-color: ${Colors.Blue[400]};
-      color: ${Colors.Blue[400]};
       background-color: transparent;
+      color: ${Colors.Blue[400]};
+      border-color: ${Colors.Blue[400]};
 
       &:hover,
       &:focus {
-        background-color: ${Colors.Blue[500]};
-        border-color: ${Colors.Blue[500]};
-        color: ${Colors.Black[300]};
+        background-color: transparent;
+        color: ${Colors.Blue[400]};
+        border-color: ${Colors.Blue[400]};
       }
     }
     ${MemberRoleHelp} {
@@ -233,7 +234,7 @@ export const MemberDarkHover = css`
       &:focus {
         background-color: ${Colors.Blue[500]};
         border-color: ${Colors.Blue[500]};
-        color: ${Colors.Black[300]};
+        color: ${Colors.White};
       }
     }
   }
@@ -244,14 +245,15 @@ const MemberOnDarkStyles = css`
     color: ${Colors.Black[75]};
   }
   ${MemberStatusHelp} {
-    color: ${Colors.Blue[500]};
     background-color: transparent;
+    color: ${Colors.Blue[500]};
     border-color: ${Colors.Blue[500]};
 
-    &:hover {
-      color: ${Colors.Black[300]};
-      background-color: ${Colors.Blue[500]};
-      border-color: ${Colors.Blue[500]};
+    &:hover,
+    &:focus {
+      background-color: transparent;
+      color: ${Colors.Blue[400]};
+      border-color: ${Colors.Blue[400]};
     }
   }
   ${MemberRoleHelp} {
@@ -260,9 +262,9 @@ const MemberOnDarkStyles = css`
     border-color: ${Colors.Black[600]};
 
     &:hover {
-      color: ${Colors.Black[300]};
       background-color: ${Colors.Blue[500]};
       border-color: ${Colors.Blue[500]};
+      color: ${Colors.White};
     }
   }
 `

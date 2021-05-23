@@ -64,9 +64,9 @@ export const MemberRoleHelp = styled(Help)`
 
   &:hover,
   &:focus {
-    background-color: ${Colors.Blue[500]};
-    border-color: ${Colors.Blue[500]};
-    color: ${Colors.Black[25]};
+    background-color: ${Colors.Blue[500]} !important;
+    border-color: ${Colors.Blue[500]} !important;
+    color: ${Colors.White} !important;
   }
 `
 
@@ -80,7 +80,7 @@ export const MemberRolesWrapperWrapable = styled.div`
 const MemberRoleHelpMax = styled(MemberRoleHelp)`
   background-color: ${Colors.White};
   color: ${Colors.Blue[500]};
-  border-color: ${Colors.Blue[50]};
+  border-color: ${Colors.Blue[500]};
 `
 
 export const MemberRolesWrapper = styled.div`
