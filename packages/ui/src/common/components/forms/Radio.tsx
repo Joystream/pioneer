@@ -1,59 +1,50 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
-import { CheckboxIcon, CheckboxIconStyles } from '../icons/CheckboxIcon'
 
-export interface CheckboxProps {
+export interface RadioProps {
   id: string
+  name: string
   isRequired?: boolean
   children?: React.ReactNode
   enabled?: boolean
   isChecked?: boolean
-  onChange?: (value: boolean) => void
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export function Checkbox({ id, isRequired, children, enabled = true, isChecked = false, onChange }: CheckboxProps) {
-  const [isStateChecked, setStateChecked] = useState(isChecked)
-
+export function Radio({ id, name, isRequired, children, enabled = true, isChecked = false, onChange }: RadioProps) {
   return (
-    <CheckboxLabel
+    <RadioLabel
       htmlFor={id}
-      onClick={(event) => {
-        event.preventDefault()
-        if (enabled !== false) {
-          setStateChecked(!isStateChecked)
-          onChange && onChange(!isStateChecked)
-        }
-      }}
+      onClick={() => (isChecked = !isChecked)}
       isLabelEnabled={enabled}
-      isCheckboxChecked={isStateChecked}
+      isRadioChecked={isChecked}
     >
-      <CheckboxNative
-        type="checkbox"
+      <RadioNative
+        type="radio"
         id={id}
-        name={id}
+        name={name}
+        value={id}
         required={isRequired}
-        checked={isStateChecked}
+        checked={isChecked}
         disabled={!enabled}
-        onChange={(event) => setStateChecked(event.target.checked)}
+        onChange={onChange}
       />
-      <CheckboxStyled disabled={!enabled} isChecked={isChecked}>
-        <CheckboxIcon />
-      </CheckboxStyled>
-      <CheckboxSideText>{children}</CheckboxSideText>
-    </CheckboxLabel>
+      <RadioStyled disabled={!enabled} isChecked={isChecked} />
+      <RadioSideText>{children}</RadioSideText>
+    </RadioLabel>
   )
 }
 
-export const CheckboxSideText = styled.span`
+export const RadioSideText = styled.span`
   color: inherit;
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
 `
 
-export const CheckboxStyled = styled.span<{ disabled?: boolean; isChecked?: boolean }>`
+export const RadioStyled = styled.span<{ disabled?: boolean; isChecked?: boolean }>`
   display: flex;
   position: relative;
   justify-content: center;
@@ -62,7 +53,7 @@ export const CheckboxStyled = styled.span<{ disabled?: boolean; isChecked?: bool
   height: 16px;
   margin: 4px;
   border: 2px solid ${Colors.Black[300]};
-  border-radius: ${BorderRad.m};
+  border-radius: ${BorderRad.round};
   background-color: ${({ disabled, isChecked }) => {
     if (isChecked === true) {
       return 'transparent'
@@ -75,21 +66,24 @@ export const CheckboxStyled = styled.span<{ disabled?: boolean; isChecked?: bool
   pointer-events: none;
   overflow: hidden;
 
-  ${CheckboxIconStyles} {
-    width: 16px;
-    height: 16px;
+  &:before {
+    content: '';
     position: absolute;
-    transform: translateY(-100%);
-    transition: transform ${Transitions.duration} ease;
+    width: 6px;
+    height: 6px;
+    border-radius: ${BorderRad.round};
+    background-color: ${Colors.Black[900]};
+    transform: translateY(-16px);
+    transition: ${Transitions.all};
   }
 `
 
-interface CheckboxLabelProps {
+interface RadioLabelProps {
   isLabelEnabled?: boolean
-  isCheckboxChecked?: boolean
+  isRadioChecked?: boolean
 }
 
-export const CheckboxLabel = styled.label<CheckboxLabelProps>`
+export const RadioLabel = styled.label<RadioLabelProps>`
   display: inline-grid;
   position: relative;
   grid-auto-flow: column;
@@ -97,9 +91,9 @@ export const CheckboxLabel = styled.label<CheckboxLabelProps>`
   align-items: center;
   width: fit-content;
   color: ${(props) => {
-    if (props.isCheckboxChecked === false) {
+    if (props.isRadioChecked === false) {
       return Colors.Black[600]
-    } else if (props.isCheckboxChecked === true) {
+    } else if (props.isRadioChecked === true) {
       return Colors.Black[900]
     } else {
       return props.isLabelEnabled == false ? Colors.Black[600] : Colors.Black[900]
@@ -118,14 +112,17 @@ export const CheckboxLabel = styled.label<CheckboxLabelProps>`
   &:focus-within {
     color: ${(props) => (props.isLabelEnabled == false ? Colors.Black[600] : Colors.Blue[500])};
 
-    ${CheckboxStyled} {
+    ${RadioStyled} {
       border-color: ${Colors.Blue[400]};
-      color: ${Colors.Blue[500]};
+
+      &:before {
+        background-color: ${Colors.Blue[500]};
+      }
     }
   }
 `
 
-export const CheckboxNative = styled.input`
+export const RadioNative = styled.input`
   position: absolute;
   width: 1px;
   max-width: 1px;
@@ -136,28 +133,42 @@ export const CheckboxNative = styled.input`
   clip: rect(0 0 0 0);
   outline: none;
 
-  &:focus + ${CheckboxStyled}, &:hover + ${CheckboxStyled} {
+  &:focus + ${RadioStyled}, &:hover + ${RadioStyled} {
     border-color: ${Colors.Black[300]};
     color: ${Colors.Black[400]};
-  }
 
-  &:checked + ${CheckboxStyled} {
-    border-color: ${Colors.Blue[500]};
-    color: ${Colors.Black[900]};
-    ${CheckboxIconStyles} {
-      transform: translateY(0);
+    &:before {
+      background-color: ${Colors.Blue[500]};
     }
   }
-  &:checked&:focus + ${CheckboxStyled}, &:checked&:hover + ${CheckboxStyled} {
-    border-color: ${Colors.Blue[400]};
-    color: ${Colors.Blue[500]};
+
+  &:checked + ${RadioStyled} {
+    border-color: ${Colors.Blue[500]};
+
+    &:before {
+      transform: translateY(0);
+      background-color: ${Colors.Black[900]};
+    }
   }
-  &:focus + ${CheckboxStyled}, &:hover + ${CheckboxStyled} {
+  &:checked&:focus + ${RadioStyled}, &:checked&:hover + ${RadioStyled} {
     border-color: ${Colors.Blue[400]};
-    color: ${Colors.Blue[500]};
+
+    &:before {
+      background-color: ${Colors.Blue[500]};
+    }
   }
-  &:disabled&:focus + ${CheckboxStyled}, &:disabled&:hover + ${CheckboxStyled} {
+  &:focus + ${RadioStyled}, &:hover + ${RadioStyled} {
+    border-color: ${Colors.Blue[400]};
+
+    &:before {
+      background-color: ${Colors.Blue[500]};
+    }
+  }
+  &:disabled&:focus + ${RadioStyled}, &:disabled&:hover + ${RadioStyled} {
     border-color: ${({ checked }) => (checked === true ? Colors.Blue[400] : Colors.Black[300])};
-    color: ${Colors.Blue[500]};
+
+    &:before {
+      background-color: ${Colors.Blue[500]};
+    }
   }
 `
