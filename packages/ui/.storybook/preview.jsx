@@ -34,8 +34,14 @@ export const parameters = {
       },
       {
         name: 'Around modal glass',
-        value: Colors.Black[700.85]
+        value: Colors.Black[700.85],
       },
     ],
+  },
+  options: {
+    storySort: {
+      method: 'alphabetical',
+      order: ['Common'],
+    },
   },
 }
