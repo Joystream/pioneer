@@ -16,7 +16,6 @@ import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
 
 export const BuyMembershipModal = () => {
   const { hideModal } = useModal()
-  const onClose = hideModal
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
   const [step, setStep] = useState<ModalState>('PREPARE')
@@ -49,13 +48,13 @@ export const BuyMembershipModal = () => {
   }, [JSON.stringify(formData)])
 
   if (step === 'PREPARE' || !formData) {
-    return <BuyMembershipFormModal onClose={onClose} onSubmit={onSubmit} membershipPrice={membershipPrice} />
+    return <BuyMembershipFormModal onClose={hideModal} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
   if (step === 'AUTHORIZE') {
     return (
       <BuyMembershipSignModal
-        onClose={onClose}
+        onClose={hideModal}
         membershipPrice={membershipPrice}
         formData={formData}
         onDone={onDone}
@@ -66,11 +65,11 @@ export const BuyMembershipModal = () => {
   }
 
   if (step === 'SUCCESS' && id) {
-    return <BuyMembershipSuccessModal onClose={onClose} member={formData} memberId={id.toString()} />
+    return <BuyMembershipSuccessModal onClose={hideModal} member={formData} memberId={id.toString()} />
   }
 
   return (
-    <FailureModal onClose={onClose}>There was a problem with creating a membership for {formData.name}.</FailureModal>
+    <FailureModal onClose={hideModal}>There was a problem with creating a membership for {formData.name}.</FailureModal>
   )
 }
 
