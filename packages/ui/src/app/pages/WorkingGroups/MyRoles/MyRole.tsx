@@ -9,7 +9,6 @@ import { BadgeRed } from '@/common/components/BadgeRed'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
-import { Help } from '@/common/components/Help'
 import { Loading } from '@/common/components/Loading'
 import {
   ContentWithSidepanel,
@@ -23,6 +22,7 @@ import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Statistics, TokenValueStat, MultiTokenValueStat } from '@/common/components/statistics'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
 import { useActivities } from '@/common/hooks/useActivities'
 import { useModal } from '@/common/hooks/useModal'
@@ -98,7 +98,9 @@ export const MyRole = () => {
           {isActive && (
             <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
               Leave this position
-              <Help helperText="Lorem ipsum" helperTitle="Lorem ipsum" />
+              <Tooltip tooltipText="Lorem ipsum" tooltipTitle="Lorem ipsum">
+                <TooltipDefault />
+              </Tooltip>
             </ButtonGhost>
           )}
         </ButtonsGroup>

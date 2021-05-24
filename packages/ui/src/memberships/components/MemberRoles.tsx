@@ -1,8 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { Help } from '@/common/components/Help'
-import { Colors } from '@/common/constants'
+import { DarkTooltipInnerItemProps, DefaultTooltip, Tooltip, TooltipComponent } from '@/common/components/Tooltip'
+import { Colors, Fonts } from '@/common/constants'
 import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
 import { MemberRole } from '../types'
@@ -31,42 +31,111 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
       {wrapable ? (
         <MemberRolesWrapperWrapable>
           {rolesToDisplay.map((role, index) => (
-            <MemberRoleHelp
-              key={index}
-              memberRole={memberRoleAbbreviation(role)}
-              helperText={memberRoleTitle(role)}
-              size={size}
-            />
+            <Tooltip tooltipText={memberRoleTitle(role)}>
+              <MemberRoleHelp key={index} size={size}>
+                {memberRoleAbbreviation(role)}
+              </MemberRoleHelp>
+            </Tooltip>
           ))}
-          {hiddenRoles > 0 && <MemberRoleHelpMax memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
+          {hiddenRoles > 0 && (
+            <Tooltip tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}>
+              <MemberRoleHelpMax size={size}>{`+${hiddenRoles}`}</MemberRoleHelpMax>
+            </Tooltip>
+          )}
         </MemberRolesWrapperWrapable>
       ) : (
         <MemberRolesWrapper>
           {rolesToDisplay.map((role, index) => (
-            <MemberRoleHelp
-              key={index}
-              memberRole={memberRoleAbbreviation(role)}
-              helperText={memberRoleTitle(role)}
-              size={size}
-            />
+            <Tooltip tooltipText={memberRoleTitle(role)}>
+              <MemberRoleHelp key={index} size={size}>
+                {memberRoleAbbreviation(role)}
+              </MemberRoleHelp>
+            </Tooltip>
           ))}
-          {hiddenRoles > 0 && <MemberRoleHelpMax memberRole={`+${hiddenRoles}`} helperText={''} size={size} />}
+          {hiddenRoles > 0 && (
+            <Tooltip tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}>
+              <MemberRoleHelpMax size={size}>{`+${hiddenRoles}`}</MemberRoleHelpMax>
+            </Tooltip>
+          )}
         </MemberRolesWrapper>
       )}
     </>
   )
 }
 
-export const MemberRoleHelp = styled(Help)`
-  background-color: ${Colors.Black[100]};
-  color: ${Colors.Black[600]};
-  border-color: ${Colors.Black[100]};
+interface MemberRoleTooltipProps {
+  size?: 'l' | 'm'
+}
 
-  &:hover,
-  &:focus {
-    background-color: ${Colors.Blue[500]};
-    border-color: ${Colors.Blue[500]};
-    color: ${Colors.Black[25]};
+export const MemberRoleHelp = styled(DefaultTooltip)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
+  width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
+  height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
+  font-size: ${({ size }) => (size === 'l' ? '10px' : '6px')};
+  line-height: 1;
+  font-family: ${Fonts.Inter};
+  font-weight: 700;
+  ${({ isOnDark }) =>
+    isOnDark
+      ? css`
+          color: ${Colors.Black[300]};
+          background-color: ${Colors.Black[600]};
+          border-color: ${Colors.Black[600]};
+        `
+      : css`
+          color: ${Colors.Black[600]};
+          background-color: ${Colors.Black[100]};
+          border-color: ${Colors.Black[100]};
+        `};
+
+  ${TooltipComponent}:hover > &,
+  ${TooltipComponent}:focus > & {
+    color: ${Colors.White} !important;
+    background-color: ${Colors.Blue[500]} !important;
+    border-color: ${Colors.Blue[500]} !important;
+  }
+`
+
+export const MemberRoleHelpMax = styled(MemberRoleHelp)`
+  background-color: ${Colors.White};
+  color: ${Colors.Blue[500]};
+  border-color: ${Colors.Blue[50]};
+`
+
+export const MemberStatusTooltip = styled(DefaultTooltip)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
+  ${({ size }) =>
+    size === 'l'
+      ? css`
+          width: 24px;
+          height: 24px;
+        `
+      : css`
+          width: 16px;
+          height: 16px;
+        `};
+  ${({ isOnDark }) =>
+    isOnDark
+      ? css`
+          border-color: ${Colors.Blue[500]};
+          color: ${Colors.Blue[500]};
+          background-color: transparent;
+        `
+      : css`
+          border-color: ${Colors.Black[200]};
+          color: ${Colors.Black[900]};
+        `};
+
+  ${TooltipComponent}:hover > &,
+  ${TooltipComponent}:focus > & {
+    &.TooltipOnLight {
+      color: ${Colors.Blue[500]};
+      background-color: ${Colors.Black[50]};
+      border-color: ${Colors.Blue[100]};
+    }
+    &.TooltipOnDark {
+      color: ${Colors.Blue[400]} !important;
+      background-color: transparent !important;
+      border-color: ${Colors.Blue[400]} !important;
+    }
   }
 `
 
@@ -75,12 +144,6 @@ export const MemberRolesWrapperWrapable = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(16px, 24px));
   grid-row-gap: 4px;
   grid-column-gap: 4px;
-`
-
-const MemberRoleHelpMax = styled(MemberRoleHelp)`
-  background-color: ${Colors.White};
-  color: ${Colors.Blue[500]};
-  border-color: ${Colors.Blue[50]};
 `
 
 export const MemberRolesWrapper = styled.div`

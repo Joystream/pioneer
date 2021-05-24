@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '@/common/components/BadgeViolet'
-import { Help } from '@/common/components/Help'
 import { TableListItem } from '@/common/components/List'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextSmall } from '@/common/components/typography/Text'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
@@ -14,7 +14,9 @@ export const ProposalListItem = ({ id, title, createdAt, stage, type, proposer }
     <DateField value={createdAt} />
     <StageField>
       <TextSmall bold>{stage}</TextSmall>
-      <Help helperText="Lorem ipsum, dolor sit amet consectetur" />
+      <Tooltip tooltipText="Lorem ipsum, dolor sit amet consectetur">
+        <TooltipDefault />
+      </Tooltip>
     </StageField>
     <TypeField bold>
       <BadgeViolet>{type}</BadgeViolet>

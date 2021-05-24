@@ -88,7 +88,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
           <Row>
             <InputComponent
               label="Root account"
-              helperText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+              tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
               required
               inputSize="l"
             >
@@ -103,7 +103,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
           <Row>
             <InputComponent
               label="Controller account"
-              helperText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+              tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
               required
               inputSize="l"
             >

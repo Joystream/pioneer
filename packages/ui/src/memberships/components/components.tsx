@@ -1,11 +1,11 @@
 import styled, { css } from 'styled-components'
 
-import { Help, HelpContainer } from '../../common/components/Help'
+import { MemberRoleHelp, MemberStatusTooltip, TooltipContainer } from '../../common/components/Tooltip'
 import { TextSmall } from '../../common/components/typography'
 import { BorderRad, Colors, Fonts, Transitions } from '../../common/constants'
 
 import { AvatarImg } from './Avatar'
-import { MemberRoleHelp, MemberRolesWrapper } from './MemberRoles'
+import { MemberRolesWrapper } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 export const MemberHead = styled.div`
@@ -49,18 +49,6 @@ export const MemberId = styled(TextSmall)`
   color: ${Colors.Black[400]};
 `
 
-export const AvatarMemberLabel = styled(Help)`
-  background-color: ${Colors.Blue[500]};
-  border-color: ${Colors.Blue[500]};
-  color: ${Colors.White};
-
-  &:hover,
-  &:focus {
-    background-color: ${Colors.White};
-    color: ${Colors.Blue[500]};
-  }
-`
-
 export const MemberPhoto = styled.div`
   display: flex;
   position: relative;
@@ -77,7 +65,7 @@ export const MemberPhoto = styled.div`
     height: 100%;
     object-fit: contain;
   }
-  ${HelpContainer} {
+  ${TooltipContainer} {
     position: absolute;
     top: 0;
     left: 0;
@@ -94,18 +82,6 @@ export const MemberPhotoContainer = styled.div`
   height: 100%;
   border-radius: ${BorderRad.round};
   overflow: hidden;
-`
-
-export const MemberStatusHelp = styled(Help)`
-  background-color: transparent;
-  color: ${Colors.Blue[500]};
-
-  &:hover,
-  &:focus {
-    background-color: ${Colors.Blue[500]};
-    border-color: ${Colors.Blue[500]};
-    color: ${Colors.Black[25]};
-  }
 `
 
 export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
@@ -212,18 +188,6 @@ export const MemberDarkHover = css`
     ${MemberHandle} {
       color: ${Colors.Black[50]};
     }
-    ${MemberStatusHelp} {
-      border-color: ${Colors.Blue[400]};
-      color: ${Colors.Blue[400]};
-      background-color: transparent;
-
-      &:hover,
-      &:focus {
-        background-color: ${Colors.Blue[500]};
-        border-color: ${Colors.Blue[500]};
-        color: ${Colors.Black[300]};
-      }
-    }
     ${MemberRoleHelp} {
       color: ${Colors.Black[200]};
       background-color: ${Colors.Black[500]};
@@ -236,23 +200,17 @@ export const MemberDarkHover = css`
         color: ${Colors.Black[300]};
       }
     }
+    ${MemberStatusTooltip}.tooltipondark {
+      color: ${Colors.Blue[400]};
+      background-color: transparent;
+      border-color: ${Colors.Blue[400]};
+    }
   }
 `
 
 const MemberOnDarkStyles = css`
   ${MemberHandle} {
     color: ${Colors.Black[75]};
-  }
-  ${MemberStatusHelp} {
-    color: ${Colors.Blue[500]};
-    background-color: transparent;
-    border-color: ${Colors.Blue[500]};
-
-    &:hover {
-      color: ${Colors.Black[300]};
-      background-color: ${Colors.Blue[500]};
-      border-color: ${Colors.Blue[500]};
-    }
   }
   ${MemberRoleHelp} {
     color: ${Colors.Black[300]};

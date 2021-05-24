@@ -1,23 +1,29 @@
 import React from 'react'
+import styled from 'styled-components'
 
-import { FounderMemberIcon } from '../../common/components/icons/FounderMemberIcon'
-import { LeaderMemberIcon } from '../../common/components/icons/LeaderMemberIcon'
-import { VerifiedMemberIcon } from '../../common/components/icons/VerifiedMemberIcon'
+import { FounderMemberIcon, VerifiedMemberIcon, LeaderMemberIcon } from '@/common/components/icons'
+import { Colors } from '@/common/constants'
+
+import {
+  DarkTooltipInnerItemProps,
+  DefaultTooltip,
+  DefaultTooltipProps,
+  Tooltip,
+  TooltipComponent,
+} from '../../common/components/Tooltip'
 import { Member } from '../types'
 
 import { Avatar } from './Avatar'
 import {
-  MemberHead,
   MemberHandle,
+  MemberHead,
   MemberIcons,
   MemberId,
   MemberInfoWrap,
   MemberPhoto,
   MemberPhotoContainer,
-  MemberStatusHelp,
-  AvatarMemberLabel,
 } from './components'
-import { MemberRoles } from './MemberRoles'
+import { MemberRoles, MemberStatusTooltip } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
@@ -49,14 +55,32 @@ export const MemberInfo = React.memo(
         <MemberPhoto>
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />
-            {isLeader && <AvatarMemberLabel icon={<LeaderMemberIcon />} helperText="This member is a leader" />}
+            {isLeader && (
+              <Tooltip tooltipText="This member is a leaderrr">
+                <AvatarStarTooltipContainer>
+                  <LeaderMemberIcon />
+                </AvatarStarTooltipContainer>
+              </Tooltip>
+            )}
           </MemberPhotoContainer>
         </MemberPhoto>
         <MemberHead>
           <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
           <MemberIcons>
-            {member.isVerified && <MemberStatusHelp icon={<VerifiedMemberIcon />} helperText="Lorem fishy" />}
-            {(member as any)?.isFounder && <MemberStatusHelp icon={<FounderMemberIcon />} helperText="Lorem fishy" />}
+            {member.isVerified && (
+              <Tooltip tooltipText="This member is verified">
+                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'TooltipOnDark' : 'TooltipOnLight'}>
+                  <VerifiedMemberIcon />
+                </MemberStatusTooltip>
+              </Tooltip>
+            )}
+            {(member as any)?.isFounder && (
+              <Tooltip tooltipText="This member is verified">
+                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'TooltipOnDark' : 'TooltipOnLight'}>
+                  <FounderMemberIcon />
+                </MemberStatusTooltip>
+              </Tooltip>
+            )}
           </MemberIcons>
         </MemberHead>
         {showGroup && !showId && <MemberRoles roles={member.roles} size={size} max={maxRoles} />}
@@ -65,3 +89,16 @@ export const MemberInfo = React.memo(
     )
   }
 )
+
+export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipProps & DarkTooltipInnerItemProps>`
+  color: ${Colors.White};
+  border-color: ${Colors.Blue[500]};
+  background-color: ${Colors.Blue[500]};
+
+  ${TooltipComponent}:hover > &,
+  ${TooltipComponent}:focus > & {
+    color: ${Colors.White};
+    border-color: ${Colors.Blue[400]};
+    background-color: ${Colors.Blue[400]};
+  }
+`

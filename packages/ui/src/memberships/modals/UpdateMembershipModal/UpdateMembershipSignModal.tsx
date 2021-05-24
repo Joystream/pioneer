@@ -88,7 +88,7 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee.toBn()}
-            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>

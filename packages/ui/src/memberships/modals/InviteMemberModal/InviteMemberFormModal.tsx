@@ -78,7 +78,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               label="Root account"
               id="root-account"
               required
-              helperText="Something about root accounts"
+              tooltipText="Something about root accounts"
               validation={hasError('rootAccount', errors) ? 'invalid' : undefined}
               message={hasError('rootAccount', errors) ? getErrorMessage('rootAccount', errors) : ''}
             >
@@ -96,7 +96,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               label="Controller account"
               id="controller-account"
               required
-              helperText="Something about controller accounts"
+              tooltipText="Something about controller accounts"
               validation={hasError('controllerAccount', errors) ? 'invalid' : undefined}
               message={hasError('controllerAccount', errors) ? getErrorMessage('controllerAccount', errors) : ''}
             >

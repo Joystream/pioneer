@@ -23,4 +23,22 @@ export const Animations = css`
       opacity: 0;
     }
   }
+  .Tooltip {
+    &-enter {
+      transform: translateY(8px);
+      opacity: 0;
+    }
+    &-enter-active {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+    &-exit {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+    &-exit-active {
+      transform: translateY(8px);
+      opacity: 0;
+    }
+  }
 `

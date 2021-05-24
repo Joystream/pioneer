@@ -2,40 +2,42 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Shadows } from '../../constants'
-import { Help } from '../Help'
+import { Tooltip, TooltipDefault } from '../Tooltip'
 import { Label, TextSmall } from '../typography'
 
 export interface StatisticItemProps {
   title?: string
-  helperText?: string
+  tooltipText?: string
   className?: string
   children?: React.ReactNode
-  helperTitle?: string
-  helperLinkText?: React.ReactNode
-  helperLinkURL?: string
+  tooltipTitle?: string
+  tooltipLinkText?: React.ReactNode
+  tooltipLinkURL?: string
 }
 
 export const StatisticItem = ({
   title,
-  helperText,
+  tooltipText,
   className,
   children,
-  helperTitle,
-  helperLinkText,
-  helperLinkURL,
+  tooltipTitle,
+  tooltipLinkText,
+  tooltipLinkURL,
 }: StatisticItemProps) => {
   return (
     <StatsBlock key={title} className={className}>
       <StatsHeader>
         <StatsInfo>
           {title}
-          {helperText && (
-            <Help
-              helperText={helperText}
-              helperTitle={helperTitle}
-              helperLinkText={helperLinkText}
-              helperLinkURL={helperLinkURL}
-            />
+          {tooltipText && (
+            <Tooltip
+              tooltipText={tooltipText}
+              tooltipTitle={tooltipTitle}
+              tooltipLinkText={tooltipLinkText}
+              tooltipLinkURL={tooltipLinkURL}
+            >
+              <TooltipDefault />
+            </Tooltip>
           )}
         </StatsInfo>
       </StatsHeader>

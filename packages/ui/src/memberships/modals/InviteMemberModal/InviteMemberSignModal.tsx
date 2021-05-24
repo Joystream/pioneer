@@ -72,7 +72,7 @@ export const InviteMemberSignModal = ({ onClose, formData, onDone, transaction, 
           <TransactionInfo
             title="Transaction fee:"
             value={partialFee?.toBn()}
-            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>

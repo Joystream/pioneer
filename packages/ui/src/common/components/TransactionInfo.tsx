@@ -1,26 +1,26 @@
 import BN from 'bn.js'
 import React from 'react'
 
-import { Help } from './Help'
 import { BalanceInfoNarrow, InfoTitle, InfoValue } from './Modal'
+import { Tooltip, TooltipDefault } from './Tooltip'
 import { TokenValue } from './typography'
 
 interface TransactionInfoProps {
   title: string
   value?: BN
-  helperText?: string
-  helperTitle?: string
-  helperLinkText?: React.ReactNode
-  helperLinkURL?: string
+  tooltipText?: string
+  tooltipTitle?: string
+  tooltipLinkText?: React.ReactNode
+  tooltipLinkURL?: string
 }
 
 export const TransactionInfo = ({
   title,
   value,
-  helperText,
-  helperTitle,
-  helperLinkText,
-  helperLinkURL,
+  tooltipText,
+  tooltipTitle,
+  tooltipLinkText,
+  tooltipLinkURL,
 }: TransactionInfoProps) => {
   return (
     <BalanceInfoNarrow>
@@ -28,14 +28,16 @@ export const TransactionInfo = ({
       <InfoValue>
         <TokenValue value={value} />
       </InfoValue>
-      {helperText && (
-        <Help
-          helperTitle={helperTitle}
-          helperLinkText={helperLinkText}
-          helperText={helperText}
-          helperLinkURL={helperLinkURL}
+      {tooltipText && (
+        <Tooltip
+          tooltipTitle={tooltipTitle}
+          tooltipLinkText={tooltipLinkText}
+          tooltipText={tooltipText}
+          tooltipLinkURL={tooltipLinkURL}
           absolute
-        />
+        >
+          <TooltipDefault />
+        </Tooltip>
       )}
     </BalanceInfoNarrow>
   )
