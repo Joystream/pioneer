@@ -7,7 +7,7 @@ import { Row, TemplateBlock } from '../storybookParts/previewStyles'
 import { ButtonBareGhost, ButtonGhost, ButtonLink, ButtonPrimary, ButtonProps, ButtonSecondary } from './Buttons'
 
 export default {
-  title: 'Common/Buttons',
+  title: 'Common/Buttons/Buttons',
   component: ButtonPrimary,
 } as Meta
 

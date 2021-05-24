@@ -4,7 +4,7 @@ import React from 'react'
 import { Props, ToggleCheckbox } from './ToggleCheckbox'
 
 export default {
-  title: 'Common/ToggleCheckbox',
+  title: 'Common/Forms/ToggleCheckbox',
   component: ToggleCheckbox,
 } as Meta
 

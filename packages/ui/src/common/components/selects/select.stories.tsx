@@ -6,7 +6,7 @@ import { ModalBlock } from '../storybookParts/previewStyles'
 import { SimpleSelect } from '.'
 
 export default {
-  title: 'Common/Select',
+  title: 'Common/Forms/Select',
   component: SimpleSelect,
 } as Meta
 

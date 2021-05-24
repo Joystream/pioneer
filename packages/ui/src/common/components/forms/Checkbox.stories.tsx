@@ -6,7 +6,7 @@ import { Column, Row, TemplateBlock } from '../storybookParts/previewStyles'
 import { Checkbox, CheckboxProps } from './Checkbox'
 
 export default {
-  title: 'Common/Checkbox',
+  title: 'Common/Forms/Checkbox',
   component: Checkbox,
 } as Meta
 

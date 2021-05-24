@@ -6,7 +6,7 @@ import { ModalBlock, Row, TemplateBlock } from '../storybookParts/previewStyles'
 import { InputComponent, InputComponentProps, InputNumber, InputText } from './InputComponent'
 
 export default {
-  title: 'Common/InputComponent',
+  title: 'Common/Forms/InputComponent',
   component: InputComponent,
 } as Meta
 
