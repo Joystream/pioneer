@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 
 import { BaseActivity } from '@/common/types'
+import { Member } from '@/memberships/types'
 
 export type WorkingGroupActivity =
   | ApplicationWithdrawnActivity
@@ -10,10 +11,7 @@ export type WorkingGroupActivity =
 
 export interface ApplicationWithdrawnActivity extends BaseActivity {
   eventType: 'ApplicationWithdrawnEvent'
-  membership: {
-    id: string
-    handle: string
-  }
+  membership: Pick<Member, 'id' | 'handle'>
   opening: {
     id: string
     title: string
@@ -22,10 +20,7 @@ export interface ApplicationWithdrawnActivity extends BaseActivity {
 
 export interface AppliedOnOpeningActivity extends BaseActivity {
   eventType: 'AppliedOnOpeningEvent'
-  membership: {
-    id: string
-    handle: string
-  }
+  membership: Pick<Member, 'id' | 'handle'>
   opening: {
     id: string
     title: string
