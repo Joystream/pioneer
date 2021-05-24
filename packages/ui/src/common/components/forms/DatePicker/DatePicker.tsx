@@ -2,7 +2,7 @@ import { addMonths, addWeeks, addYears, isAfter, isBefore, isEqual, startOfMonth
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { ButtonGhost, ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
+import { ButtonSecondary, FilterButtons } from '@/common/components/buttons'
 import { Shadows } from '@/common/constants'
 import { DateRange, PartialDateRange } from '@/common/types/Dates'
 import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
@@ -21,7 +21,7 @@ export const DatePicker = ({ withinDates, onApply }: DatePickerProps) => {
   const { start, end } = fromRange(dates)
   const dateString = `${toDDMMYY(start) ?? placeholder} - ${toDDMMYY(end) ?? placeholder}`
 
-  const datepicker = useRef<HTMLDivElement>(null)
+  const container = useRef<HTMLDivElement>(null)
   const [isOpen, toggleOpen] = useState(false)
 
   useEffect(() => {
@@ -32,13 +32,13 @@ export const DatePicker = ({ withinDates, onApply }: DatePickerProps) => {
       if (!evt.target) return
 
       const target = evt.target as Node
-      const clickedOutside = !datepicker.current?.contains(target) ?? false
+      const clickedOutside = !container.current?.contains(target) ?? false
       clickedOutside && toggleOpen(false)
     }
 
     window.addEventListener('mousedown', closePopup)
     return () => window.removeEventListener('mousedown', closePopup)
-  }, [datepicker, isOpen])
+  }, [isOpen])
 
   const clear = () => {
     setDates(undefined)
@@ -50,14 +50,15 @@ export const DatePicker = ({ withinDates, onApply }: DatePickerProps) => {
   }
 
   return (
-    <DatePickerContainer ref={datepicker} onMouseDown={() => !isOpen && toggleOpen(true)}>
+    <DatePickerContainer ref={container} onMouseDown={() => !isOpen && toggleOpen(true)}>
       <InputComponent tight inputWidth="xs">
         <InputText placeholder="-" value={dateString} readOnly />
         {isOpen && (
           <DatePickerPopup>
             <DatePickerCalendars value={dates} within={withinDates} onChange={setDates} />
-            <ClearFilterBtutton onClick={clear}>Clear Filter</ClearFilterBtutton>
-            <ApplyFilterBtutton onClick={apply}>Apply Filter</ApplyFilterBtutton>
+            <DatePickerFooter>
+              <FilterButtons onApply={apply} onClear={clear} />
+            </DatePickerFooter>
           </DatePickerPopup>
         )}
       </InputComponent>
@@ -159,13 +160,17 @@ const DatePickerPopup = styled.div`
   width: 672px;
 `
 
-const ClearFilterBtutton = styled(ButtonGhost)`
-  grid-column: 2;
-  justify-self: end;
-`
-const ApplyFilterBtutton = styled(ButtonPrimary)`
-  grid-column: 3;
-  width: 100%;
+const DatePickerFooter = styled.div`
+  display: contents;
+
+  & > :first-child {
+    grid-column: 2;
+    justify-self: end;
+  }
+  & > :last-child {
+    grid-column: 3;
+    width: 100%;
+  }
 `
 
 const DatePickerSideNav = styled.div`
