@@ -1,4 +1,3 @@
-import { MembershipMetadata } from '@joystream/metadata-protobuf'
 import { MemberId } from '@joystream/types/common'
 import { EventRecord } from '@polkadot/types/interfaces'
 import React, { useMemo, useState } from 'react'
@@ -7,10 +6,11 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
-import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
+import { getEventParam } from '@/common/model/JoystreamNode'
 import { ModalState } from '@/common/types'
+import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
-import { BuyMembershipFormModal, FormFields } from './BuyMembershipFormModal'
+import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
 import { BuyMembershipSignModal } from './BuyMembershipSignModal'
 import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
 
@@ -19,10 +19,10 @@ export const BuyMembershipModal = () => {
   const { api } = useApi()
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
   const [step, setStep] = useState<ModalState>('PREPARE')
-  const [formData, setParams] = useState<FormFields>()
+  const [formData, setParams] = useState<MemberFormFields>()
   const [id, setId] = useState<MemberId>()
 
-  const onSubmit = (params: FormFields) => {
+  const onSubmit = (params: MemberFormFields) => {
     setStep('AUTHORIZE')
     setParams(params)
   }
@@ -32,7 +32,7 @@ export const BuyMembershipModal = () => {
       return
     }
 
-    return api.tx.members.buyMembership(toByMembershipTransactionParams(formData))
+    return api.tx.members.buyMembership(toMemberTransactionParams(formData))
   }, [JSON.stringify(formData)])
 
   const onDone = useMemo(() => {
@@ -72,14 +72,3 @@ export const BuyMembershipModal = () => {
     <FailureModal onClose={hideModal}>There was a problem with creating a membership for {formData.name}.</FailureModal>
   )
 }
-
-const toByMembershipTransactionParams = (formData: FormFields) => ({
-  root_account: formData.rootAccount?.address,
-  controller_account: formData.controllerAccount?.address,
-  handle: formData.handle,
-  metadata: metadataToBytes(MembershipMetadata, {
-    name: formData.name,
-    about: formData.about,
-  }),
-  referrer_id: formData.referrer?.id,
-})

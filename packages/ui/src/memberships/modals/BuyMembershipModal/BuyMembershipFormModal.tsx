@@ -38,7 +38,7 @@ import { Member } from '../../types'
 
 interface CreateProps {
   onClose: () => void
-  onSubmit: (params: FormFields) => void
+  onSubmit: (params: MemberFormFields) => void
   membershipPrice?: BalanceOf
 }
 
@@ -53,7 +53,7 @@ const CreateMemberSchema = Yup.object().shape({
   referrer: ReferrerSchema,
 })
 
-export interface FormFields {
+export interface MemberFormFields {
   rootAccount?: Account
   controllerAccount?: Account
   name: string
@@ -68,7 +68,6 @@ export interface FormFields {
 
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
-  // 2. Debounce - useDebounce
 
   const initializer = {
     name: '',
@@ -81,7 +80,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
     referrer: undefined,
     hasTerms: false,
   }
-  const { fields, changeField, validation } = useForm<FormFields>(initializer, CreateMemberSchema)
+  const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, CreateMemberSchema)
   const { isValid, errors, setContext } = validation
   const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = fields
 
