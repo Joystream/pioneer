@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import { MemberModalLink } from '@/common/components/ModalLink'
 import { useModal } from '@/common/hooks/useModal'
 
 import { ApplicationWithdrawnActivity } from '../../types'
@@ -9,16 +10,9 @@ interface Props {
   activity: ApplicationWithdrawnActivity
 }
 
-export const ApplicationWithdrawnContent = ({ activity }: Props) => {
-  const { showModal } = useModal()
-  const { membership, opening } = activity
-  return (
+export const ApplicationWithdrawnContent = ({ activity: { membership, opening } }: Props) => (
     <>
-      <Link to="#" onClick={() => showModal({ modal: 'Member', data: { id: membership.id } })}>
-        {membership.handle}
-      </Link>{' '}
-      has withdrawn application from "<Link to={`/working-groups/openings/${opening.id}`}>{opening.title}</Link>"
-      opening.
+      <MemberModalLink call={{ modal: 'Member', data: { id: membership.id } }}>{membership.handle}</MemberModalLink> has
+      withdrawn application from "<Link to={`/working-groups/openings/${opening.id}`}>{opening.title}</Link>" opening.
     </>
-  )
-}
+)
