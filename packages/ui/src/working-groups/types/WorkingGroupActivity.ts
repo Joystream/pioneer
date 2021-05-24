@@ -9,6 +9,7 @@ export type WorkingGroupActivity =
   | BudgetSetActivity
   | BudgetSpendingActivity
   | LeaderSetActivity
+  | StatusTextChangedActivity
 
 type ShortMember = Pick<Member, 'id' | 'handle'>
 
@@ -43,5 +44,10 @@ export interface BudgetSpendingActivity extends BaseActivity {
 export interface LeaderSetActivity extends BaseActivity {
   eventType: 'LeaderSetEvent'
   membership: ShortMember
+  groupName: string
+}
+
+export interface StatusTextChangedActivity extends BaseActivity {
+  eventType: 'StatusTextChangedEvent'
   groupName: string
 }

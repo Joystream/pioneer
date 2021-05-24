@@ -56,6 +56,12 @@ export const useActivities = (): Activity[] =>
         },
         groupName: 'storage',
       },
+      {
+        id: '6',
+        createdAt: '2021-05-24T10:28:04.155Z',
+        eventType: 'StatusTextChangedEvent',
+        groupName: 'storage',
+      },
     ],
     []
   )

@@ -14,4 +14,5 @@ export const ActivityToIconMap: Record<ActivityCategory, [React.FC, IconStyle]> 
   BudgetSpendingEvent: [DecreasedIcon, 'negative'],
   BudgetSetEvent: [IncreasedIcon, 'positive'],
   LeaderSetEvent: [HiredIcon, 'joystream'],
+  StatusTextChangedEvent: [AppliedIcon, 'positive'],
 }
