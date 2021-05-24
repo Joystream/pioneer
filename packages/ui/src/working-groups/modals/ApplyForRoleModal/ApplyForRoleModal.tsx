@@ -1,3 +1,4 @@
+import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
 import { EventRecord } from '@polkadot/types/interfaces/system'
@@ -10,7 +11,7 @@ import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { getEventParam } from '@/common/model/JoystreamNode'
+import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
 import { ModalState } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -91,14 +92,14 @@ export const ApplyForRoleModal = () => {
   }
 
   if (state === 'PREPARE') {
-    const onSubmit = (stake: StakeStepForm, answers: Record<string, any>) => {
+    const onSubmit = (stake: StakeStepForm, answers: Record<string, string>) => {
       setStakeAccount(stake.account)
       setTxParams({
         opening_id: opening.id,
         member_id: active?.id,
         role_account_id: active?.controllerAccount,
         reward_account_id: active?.rootAccount,
-        description: JSON.stringify(answers),
+        description: metadataToBytes(ApplicationMetadata, { answers: Object.values(answers) }),
         stake_parameters: {
           stake: stake.amount,
           stake_account_id: stake.account?.address,
