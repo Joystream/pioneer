@@ -1,10 +1,10 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { DarkTooltipInnerItemProps, DefaultTooltip, Tooltip, TooltipComponent } from '@/common/components/Tooltip'
 import { Colors, Fonts } from '@/common/constants'
 import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
-import { DarkTooltipInnerItemProps, DefaultTooltip, Tooltip, TooltipComponent } from '../../common/components/Tooltip'
 import { MemberRole } from '../types'
 
 interface MemberRolesProps {
