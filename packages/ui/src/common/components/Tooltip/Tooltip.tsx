@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
+import { BorderRad, Colors, Transitions } from '../../constants'
 import { PopupItem } from '../animatedComponents/PopupItem'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
 import { DefaultTooltip } from './TooltipDefault'
 
-export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers'> {
+export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 'position'> {
   absolute?: boolean
   children: React.ReactNode
 }
@@ -28,10 +28,6 @@ export interface TooltipPopupProps {
 
 export interface DarkTooltipInnerItemProps {
   isOnDark?: boolean
-}
-
-interface MemberRoleTooltipProps {
-  size?: 'l' | 'm'
 }
 
 const { setTimeout, clearTimeout } = window
@@ -125,56 +121,6 @@ const TooltipPopup = (props: TooltipPopupProps) => {
   )
 }
 
-export const MemberStatusTooltip = styled(DefaultTooltip)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
-  ${({ size }) =>
-    size === 'l'
-      ? css`
-          width: 24px;
-          height: 24px;
-        `
-      : css`
-          width: 16px;
-          height: 16px;
-        `};
-  ${({ isOnDark }) =>
-    isOnDark
-      ? css`
-          border-color: ${Colors.Blue[500]};
-          color: ${Colors.Blue[500]};
-          background-color: transparent;
-        `
-      : css`
-          border-color: ${Colors.Black[200]};
-          color: ${Colors.Black[900]};
-        `};
-`
-
-export const MemberRoleHelp = styled(DefaultTooltip)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
-  width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
-  height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
-  font-size: ${({ size }) => (size === 'l' ? '10px' : '6px')};
-  line-height: 1;
-  font-family: ${Fonts.Inter};
-  font-weight: 700;
-  ${({ isOnDark }) =>
-    isOnDark
-      ? css`
-          color: ${Colors.Black[300]};
-          background-color: ${Colors.Black[600]};
-          border-color: ${Colors.Black[600]};
-        `
-      : css`
-          color: ${Colors.Black[600]};
-          background-color: ${Colors.Black[100]};
-          border-color: ${Colors.Black[100]};
-        `};
-`
-
-export const MemberRoleHelpMax = styled(MemberRoleHelp)`
-  background-color: ${Colors.White};
-  color: ${Colors.Blue[500]};
-  border-color: ${Colors.Blue[50]};
-`
 const initialPopupPosition = {
   left: 24,
   top: 4,
@@ -283,23 +229,6 @@ export const TooltipComponent = styled.button`
       color: ${Colors.Blue[500]};
       border-color: ${Colors.Blue[100]};
       background-color: ${Colors.Black[100]};
-    }
-    ${MemberRoleHelp} {
-      color: ${Colors.White} !important;
-      background-color: ${Colors.Blue[500]} !important;
-      border-color: ${Colors.Blue[500]} !important;
-    }
-    ${MemberStatusTooltip} {
-      &.TooltipOnLight {
-        color: ${Colors.Blue[500]};
-        background-color: ${Colors.Black[50]};
-        border-color: ${Colors.Blue[100]};
-      }
-      &.TooltipOnDark {
-        color: ${Colors.Blue[400]} !important;
-        background-color: transparent !important;
-        border-color: ${Colors.Blue[400]} !important;
-      }
     }
   }
 `

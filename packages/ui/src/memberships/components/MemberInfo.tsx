@@ -1,15 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { FounderMemberIcon, VerifiedMemberIcon, LeaderMemberIcon } from '@/common/components/icons'
 import { Colors } from '@/common/constants'
 
-import { FounderMemberIcon, VerifiedMemberIcon } from '../../common/components/icons'
-import { LeaderMemberIcon } from '../../common/components/icons/LeaderMemberIcon'
 import {
   DarkTooltipInnerItemProps,
   DefaultTooltip,
   DefaultTooltipProps,
-  MemberStatusTooltip,
   Tooltip,
   TooltipComponent,
 } from '../../common/components/Tooltip'
@@ -25,7 +23,7 @@ import {
   MemberPhoto,
   MemberPhotoContainer,
 } from './components'
-import { MemberRoles } from './MemberRoles'
+import { MemberRoles, MemberStatusTooltip } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 interface MemberInfoContainerProps {
