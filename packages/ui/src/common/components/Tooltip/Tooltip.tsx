@@ -8,7 +8,7 @@ import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
 import { DefaultTooltip } from './TooltipDefault'
 
-export interface TooltipProps {
+export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers'> {
   absolute?: boolean
   children: React.ReactNode
 }
@@ -20,9 +20,6 @@ export interface TooltipPopupProps {
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
   position: DOMRect
-}
-
-type TooltipPopupParams = TooltipPopupProps & {
   popUpHandlers: {
     onMouseEnter: () => void
     onMouseLeave: () => void
@@ -47,7 +44,7 @@ export const Tooltip = ({
   tooltipLinkText,
   tooltipLinkURL,
   className,
-}: TooltipProps & TooltipPopupProps) => {
+}: TooltipProps) => {
   const tooltipRef = useRef<HTMLButtonElement>(null)
   const timeoutRef = useRef<number>()
   const [isTooltipActive, setTooltipActive] = useState(false)
@@ -110,7 +107,7 @@ export const Tooltip = ({
   )
 }
 
-const TooltipPopup = (props: TooltipPopupParams) => {
+const TooltipPopup = (props: TooltipPopupProps) => {
   const { tooltipLinkText, tooltipText, position, tooltipLinkURL, tooltipTitle, className, popUpHandlers } = props
 
   return ReactDOM.createPortal(
