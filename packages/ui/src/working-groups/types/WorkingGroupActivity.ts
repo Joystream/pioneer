@@ -9,8 +9,7 @@ export type WorkingGroupActivity =
   | BudgetSetActivity
   | BudgetSpendingActivity
 
-export interface ApplicationWithdrawnActivity extends BaseActivity {
-  eventType: 'ApplicationWithdrawnEvent'
+interface ApplicationActivity extends BaseActivity {
   membership: Pick<Member, 'id' | 'handle'>
   opening: {
     id: string
@@ -18,13 +17,12 @@ export interface ApplicationWithdrawnActivity extends BaseActivity {
   }
 }
 
-export interface AppliedOnOpeningActivity extends BaseActivity {
+export interface ApplicationWithdrawnActivity extends ApplicationActivity {
+  eventType: 'ApplicationWithdrawnEvent'
+}
+
+export interface AppliedOnOpeningActivity extends ApplicationActivity {
   eventType: 'AppliedOnOpeningEvent'
-  membership: Pick<Member, 'id' | 'handle'>
-  opening: {
-    id: string
-    title: string
-  }
 }
 
 export interface BudgetSetActivity extends BaseActivity {
