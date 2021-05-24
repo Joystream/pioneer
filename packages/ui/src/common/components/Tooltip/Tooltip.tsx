@@ -11,7 +11,6 @@ import { DefaultTooltip } from './TooltipDefault'
 export interface TooltipProps {
   absolute?: boolean
   children: React.ReactNode
-  position?: DOMRect
 }
 
 export interface TooltipPopupProps {
@@ -20,17 +19,33 @@ export interface TooltipPopupProps {
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
+  position: DOMRect
+}
+
+type TooltipPopupParams = TooltipPopupProps & {
+  popUpHandlers: {
+    onMouseEnter: () => void
+    onMouseLeave: () => void
+  }
+}
+
+export interface DarkTooltipInnerItemProps {
+  isOnDark?: boolean
+}
+
+interface MemberRoleTooltipProps {
+  size?: 'l' | 'm'
 }
 
 const { setTimeout, clearTimeout } = window
 
 export const Tooltip = ({
+  absolute,
   children,
   tooltipText,
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
-  absolute,
   className,
 }: TooltipProps & TooltipPopupProps) => {
   const tooltipRef = useRef<HTMLButtonElement>(null)
@@ -71,8 +86,8 @@ export const Tooltip = ({
     onMouseLeave: mouseLeft,
   }
   const popUpHandlers = {
-    onMouseEnter: () => mouseIsOver(),
-    onMouseLeave: () => mouseLeft(),
+    onMouseEnter: mouseIsOver,
+    onMouseLeave: mouseLeft,
   }
 
   return (
@@ -80,31 +95,37 @@ export const Tooltip = ({
       <TooltipComponent ref={tooltipRef} {...tooltipHandlers} z-index={0}>
         {children}
       </TooltipComponent>
-      {isTooltipVisible &&
-        tooltipPosition &&
-        ReactDOM.createPortal(
-          <TooltipPopupContainer className={className} position={tooltipPosition} {...popUpHandlers}>
-            {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
-            <TooltipText>{tooltipText}</TooltipText>
-            {tooltipLinkURL && (
-              <TooltipLink href={tooltipLinkURL} target="_blank">
-                {tooltipLinkText ?? 'Link'}
-                <LinkSymbol />
-              </TooltipLink>
-            )}
-          </TooltipPopupContainer>,
-          document.body
-        )}
+      {isTooltipVisible && tooltipPosition && (
+        <TooltipPopup
+          className={className}
+          position={tooltipPosition}
+          popUpHandlers={popUpHandlers}
+          tooltipTitle={tooltipTitle}
+          tooltipText={tooltipText}
+          tooltipLinkURL={tooltipLinkURL}
+          tooltipLinkText={tooltipLinkText}
+        />
+      )}
     </TooltipContainer>
   )
 }
 
-export interface DarkTooltipInnerItemProps {
-  isOnDark?: boolean
-}
+const TooltipPopup = (props: TooltipPopupParams) => {
+  const { tooltipLinkText, tooltipText, position, tooltipLinkURL, tooltipTitle, className, popUpHandlers } = props
 
-interface MemberRoleTooltipProps {
-  size?: 'l' | 'm'
+  return ReactDOM.createPortal(
+    <TooltipPopupContainer className={className} position={position} {...popUpHandlers}>
+      {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
+      <TooltipText>{tooltipText}</TooltipText>
+      {tooltipLinkURL && (
+        <TooltipLink href={tooltipLinkURL} target="_blank">
+          {tooltipLinkText ?? 'Link'}
+          <LinkSymbol />
+        </TooltipLink>
+      )}
+    </TooltipPopupContainer>,
+    document.body
+  )
 }
 
 export const MemberStatusTooltip = styled(DefaultTooltip)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
