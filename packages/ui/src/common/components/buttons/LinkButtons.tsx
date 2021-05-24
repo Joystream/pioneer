@@ -66,6 +66,26 @@ export function LinkButtonBareGhost({ className, children, size, square, disable
     </LinkButtonBareGhostStyles>
   )
 }
+export function LinkButtonLink({ className, children, square, disabled, to }: LinkButtonProps) {
+  return (
+    <LinkButtonLinkStyles className={className} square={square} disabled={disabled} to={to}>
+      <LinkButtonInnerWrapper>{children}</LinkButtonInnerWrapper>
+    </LinkButtonLinkStyles>
+  )
+}
+
+const LinkButtonInnerWrapper = styled.span<{ size?: LinkButtonSize }>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
+  justify-items: center;
+  align-items: center;
+  width: fit-content;
+  transform: translateY(1px);
+  & > svg {
+    transform: translateY(-1px);
+  }
+`
 
 export const BasicLinkButtonStyles = css<LinkButtonProps>`
   &,
@@ -92,12 +112,13 @@ export const BasicLinkButtonStyles = css<LinkButtonProps>`
     font-weight: 700;
     text-transform: capitalize;
     outline: none;
+    user-select: none;
     cursor: pointer;
     overflow: hidden;
     transition: ${Transitions.all};
     z-index: 1;
 
-    & > svg {
+    ${LinkButtonInnerWrapper} > svg {
       z-index: 2;
       transition: ${Transitions.all};
     }
@@ -133,7 +154,7 @@ export const BasicLinkButtonStyles = css<LinkButtonProps>`
         transform: translate(-50%, -50%);
       }
     }
-    &:disabled {
+    &:not(:link) {
       cursor: not-allowed;
 
       &:hover,
@@ -149,200 +170,279 @@ export const BasicLinkButtonStyles = css<LinkButtonProps>`
   }
 `
 
-const LinkButtonInnerWrapper = styled.span<{ size?: LinkButtonSize }>`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
-  justify-items: center;
-  align-items: center;
-  width: fit-content;
-  transform: translateY(1px);
-  & > svg {
-    transform: translateY(-1px);
-  }
-`
-
 export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonProps>`
   ${BasicLinkButtonStyles};
-
-  color: ${Colors.White};
-  border-color: ${Colors.Blue[500]};
-  background-color: ${Colors.Blue[500]};
-
-  & > svg {
+  &,
+  &:visited {
     color: ${Colors.White};
-  }
+    border-color: ${Colors.Blue[500]};
+    background-color: ${Colors.Blue[500]};
 
-  &:before {
-    background-color: ${Colors.Blue[400]};
-  }
-  &:after {
-    background-color: ${Colors.Blue[700]};
-  }
+    ${LinkButtonInnerWrapper} > svg {
+      color: ${Colors.White};
+    }
 
-  &:hover,
-  &:focus {
-    border-color: ${Colors.Blue[400]};
-  }
+    &:before {
+      background-color: ${Colors.Blue[400]};
+    }
+    &:after {
+      background-color: ${Colors.Blue[700]};
+    }
 
-  &:active {
-    border-color: ${Colors.Blue[700]};
-  }
+    &:hover,
+    &:focus {
+      border-color: ${Colors.Blue[400]};
+    }
 
-  &:disabled {
-    border-color: ${Colors.Blue[100]};
-    background-color: ${Colors.Blue[100]};
+    &:active {
+      border-color: ${Colors.Blue[700]};
+    }
+
+    &:not(:link) {
+      border-color: ${Colors.Blue[100]};
+      background-color: ${Colors.Blue[100]};
+    }
   }
 `
 
 export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonProps>`
   ${BasicLinkButtonStyles};
+  &,
+  &:visited {
+    border-color: ${Colors.Black[75]};
+    background-color: ${Colors.Black[75]};
 
-  border-color: ${Colors.Black[75]};
-  background-color: ${Colors.Black[75]};
+    ${LinkButtonInnerWrapper} > svg {
+      color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
+    }
 
-  & > svg {
-    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
-  }
+    &:before {
+      background-color: ${Colors.Black[50]};
+    }
+    &:after {
+      background-color: ${Colors.Black[100]};
+    }
 
-  &:before {
-    background-color: ${Colors.Black[50]};
-  }
-  &:after {
-    background-color: ${Colors.Black[100]};
-  }
-
-  &:hover,
-  &:focus {
-    border-color: ${Colors.Black[50]};
-    color: ${Colors.Blue[500]};
-
-    & > svg {
+    &:hover,
+    &:focus {
+      border-color: ${Colors.Black[50]};
       color: ${Colors.Blue[500]};
-    }
-    & .blackPart,
-    & .primaryPart {
-      color: ${Colors.Blue[500]};
-      fill: ${Colors.Blue[500]};
-    }
-  }
 
-  &:active {
-    border-color: ${Colors.Black[100]};
-  }
+      ${LinkButtonInnerWrapper} > svg {
+        color: ${Colors.Blue[500]};
+      }
+      & .blackPart,
+      & .primaryPart {
+        color: ${Colors.Blue[500]};
+        fill: ${Colors.Blue[500]};
+      }
+    }
 
-  &:disabled {
-    & > svg {
-      color: ${Colors.Black[300]};
+    &:active {
+      border-color: ${Colors.Black[100]};
     }
-    & .blackPart,
-    & .primaryPart {
+
+    &:not(:link) {
+      ${LinkButtonInnerWrapper} > svg {
+        color: ${Colors.Black[300]};
+      }
+      & .blackPart,
+      & .primaryPart {
+        color: ${Colors.Black[300]};
+        fill: ${Colors.Black[300]};
+      }
       color: ${Colors.Black[300]};
-      fill: ${Colors.Black[300]};
+      border-color: ${Colors.Black[50]};
+      background-color: ${Colors.Black[50]};
     }
-    color: ${Colors.Black[300]};
-    border-color: ${Colors.Black[50]};
-    background-color: ${Colors.Black[50]};
   }
 `
 
 export const LinkButtonGhostStyles = styled(Link)<LinkButtonProps>`
   ${BasicLinkButtonStyles};
-
-  color: ${Colors.Black[900]};
-  border-color: ${Colors.Black[200]};
-  background-color: ${Colors.White};
-
-  & > svg {
-    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
-  }
-
-  &:before {
-    background-color: ${Colors.Black[50]};
-  }
-  &:after {
-    background-color: ${Colors.Blue[50]};
-  }
-
-  &:hover,
-  &:focus {
-    border-color: ${Colors.Blue[100]};
-    color: ${Colors.Blue[500]};
-    & > svg {
-      color: ${Colors.Blue[500]};
-    }
-    & .blackPart,
-    & .primaryPart {
-      color: ${Colors.Blue[500]};
-      fill: ${Colors.Blue[500]};
-    }
-  }
-
-  &:active {
-    border-color: ${Colors.Blue[100]};
-  }
-
-  &:disabled {
-    & > svg {
-      color: ${Colors.Black[300]};
-    }
-    & .blackPart,
-    & .primaryPart {
-      color: ${Colors.Black[300]};
-      fill: ${Colors.Black[300]};
-    }
-    color: ${Colors.Black[300]};
+  &,
+  &:visited {
+    color: ${Colors.Black[900]};
     border-color: ${Colors.Black[200]};
     background-color: ${Colors.White};
+
+    ${LinkButtonInnerWrapper} > svg {
+      color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
+    }
+
+    &:before {
+      background-color: ${Colors.Black[50]};
+    }
+    &:after {
+      background-color: ${Colors.Blue[50]};
+    }
+
+    &:hover,
+    &:focus {
+      border-color: ${Colors.Blue[100]};
+      color: ${Colors.Blue[500]};
+      ${LinkButtonInnerWrapper} > svg {
+        color: ${Colors.Blue[500]};
+      }
+      & .blackPart,
+      & .primaryPart {
+        color: ${Colors.Blue[500]};
+        fill: ${Colors.Blue[500]};
+      }
+    }
+
+    &:active {
+      border-color: ${Colors.Blue[100]};
+    }
+
+    &:not(:link) {
+      ${LinkButtonInnerWrapper} > svg {
+        color: ${Colors.Black[300]};
+      }
+      & .blackPart,
+      & .primaryPart {
+        color: ${Colors.Black[300]};
+        fill: ${Colors.Black[300]};
+      }
+      color: ${Colors.Black[300]};
+      border-color: ${Colors.Black[200]};
+      background-color: ${Colors.White};
+    }
   }
 `
 
 export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonProps>`
   ${BasicLinkButtonStyles};
-
-  color: ${Colors.Black[900]};
-  border-color: transparent;
-  background-color: ${Colors.White};
-
-  & > svg {
-    color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
-  }
-
-  &:before,
-  &:after {
-    display: none;
-  }
-
-  &:hover,
-  &:focus {
-    border-color: transparent;
-    color: ${Colors.Blue[500]};
-    & > svg {
-      color: ${Colors.Blue[500]};
-    }
-    & .blackPart,
-    & .primaryPart {
-      color: ${Colors.Blue[500]};
-      fill: ${Colors.Blue[500]};
-    }
-  }
-
-  &:active {
-    border-color: transparent;
-  }
-
-  &:disabled {
-    & > svg {
-      color: ${Colors.Black[300]};
-    }
-    & .blackPart,
-    & .primaryPart {
-      color: ${Colors.Black[300]};
-      fill: ${Colors.Black[300]};
-    }
-    color: ${Colors.Black[300]};
+  &,
+  &:visited {
+    color: ${Colors.Black[900]};
     border-color: transparent;
     background-color: ${Colors.White};
+
+    ${LinkButtonInnerWrapper} > svg {
+      color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
+    }
+
+    &:before,
+    &:after {
+      display: none;
+    }
+
+    &:hover,
+    &:focus {
+      border-color: transparent;
+      color: ${Colors.Blue[500]};
+      ${LinkButtonInnerWrapper} > svg {
+        color: ${Colors.Blue[500]};
+      }
+      & .blackPart,
+      & .primaryPart {
+        color: ${Colors.Blue[500]};
+        fill: ${Colors.Blue[500]};
+      }
+    }
+
+    &:active {
+      border-color: transparent;
+    }
+
+    &:not(:link) {
+      ${LinkButtonInnerWrapper} > svg {
+        color: ${Colors.Black[300]};
+      }
+      & .blackPart,
+      & .primaryPart {
+        color: ${Colors.Black[300]};
+        fill: ${Colors.Black[300]};
+      }
+      color: ${Colors.Black[300]};
+      border-color: transparent;
+      background-color: ${Colors.White};
+    }
+  }
+`
+
+export const LinkButtonLinkStyles = styled(Link)<LinkButtonProps>`
+  ${BasicLinkButtonStyles};
+
+  &,
+  &:visited {
+    grid-column-gap: 4px;
+    height: fit-content;
+    padding: 0;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: ${Colors.Black[900]};
+    text-transform: none;
+    border-radius: 0;
+    border-color: transparent;
+    background-color: transparent;
+
+    ${LinkButtonInnerWrapper} > svg {
+      color: ${Colors.Black[900]};
+      width: 12px;
+      height: 12px;
+    }
+
+    &:before {
+      top: auto;
+      bottom: 2px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      border-radius: 0;
+      border: none;
+      transform: translateX(0%);
+      background-color: ${Colors.Black[900]};
+    }
+    &:after {
+      background-color: ${Colors.Blue[50]};
+      border-radius: 0;
+    }
+
+    &:hover,
+    &:focus {
+      border-color: transparent;
+      color: ${Colors.Blue[500]};
+
+      &:before {
+        background-color: ${Colors.Blue[500]};
+        transform: translateX(0%);
+      }
+
+      ${LinkButtonInnerWrapper} > svg {
+        color: ${Colors.Blue[500]};
+      }
+      & .blackPart,
+      & .primaryPart {
+        color: ${Colors.Blue[500]};
+        fill: ${Colors.Blue[500]};
+      }
+    }
+
+    &:active {
+      border-color: transparent;
+      transform: scale(1);
+
+      &:before {
+        transform: translateX(100%);
+      }
+    }
+
+    &:not(:link) {
+      ${LinkButtonInnerWrapper} > svg {
+        color: ${Colors.Black[300]};
+      }
+      & .blackPart,
+      & .primaryPart {
+        color: ${Colors.Black[300]};
+        fill: ${Colors.Black[300]};
+      }
+      color: ${Colors.Black[300]};
+      border-color: transparent;
+      background-color: transparent;
+    }
   }
 `
 

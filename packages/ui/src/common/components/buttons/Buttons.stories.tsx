@@ -4,7 +4,7 @@ import React from 'react'
 import { TransferIcon } from '../icons'
 import { Row, TemplateBlock } from '../storybookParts/previewStyles'
 
-import { ButtonGhost, ButtonPrimary, ButtonProps, ButtonSecondary } from './Buttons'
+import { ButtonBareGhost, ButtonGhost, ButtonLink, ButtonPrimary, ButtonProps, ButtonSecondary } from './Buttons'
 
 export default {
   title: 'Common/Buttons',
@@ -84,9 +84,40 @@ const Template: Story<ButtonProps> = (args) => (
         <TransferIcon />
       </ButtonGhost>
     </Row>
+    <Row>
+      <ButtonBareGhost {...args} size="large">
+        <TransferIcon />
+        Large button
+      </ButtonBareGhost>
+      <ButtonBareGhost {...args} size="large" square>
+        <TransferIcon />
+      </ButtonBareGhost>
+      <ButtonBareGhost {...args} size="medium">
+        <TransferIcon />
+        Medium buttom
+      </ButtonBareGhost>
+      <ButtonBareGhost {...args} size="medium" square>
+        <TransferIcon />
+      </ButtonBareGhost>
+      <ButtonBareGhost {...args} size="small">
+        <TransferIcon />
+        Small button
+      </ButtonBareGhost>
+      <ButtonBareGhost {...args} size="small" square>
+        <TransferIcon />
+      </ButtonBareGhost>
+    </Row>
+    <Row>
+      <ButtonLink {...args}>
+        <TransferIcon />
+        Link button
+      </ButtonLink>
+    </Row>
   </TemplateBlock>
 )
 
 export const ButtonsComponent = Template.bind({})
 
-ButtonsComponent.args = {}
+ButtonsComponent.args = {
+  disabled: false,
+}

@@ -12,7 +12,6 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { LeaveRoleModal } from '@/working-groups/modals/LeaveRoleModal/LeaveRoleModal'
-import { Worker } from '@/working-groups/types'
 
 import { alice } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -26,22 +25,7 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const WORKER: Worker = {
-  membership: {
-    id: '1',
-    controllerAccount: alice.address,
-  },
-  group: {
-    name: 'forum',
-    id: '1',
-  },
-  isLeader: false,
-  rewardPerBlock: 100,
-  earnedTotal: 2000,
-  stake: 2000,
-  status: '',
-  id: '1',
-}
+import { WORKER } from './constants'
 
 describe('UI: LeaveRoleModal', () => {
   const api = stubApi()

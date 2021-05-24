@@ -5,7 +5,7 @@ import { Colors, Transitions } from '../../constants'
 import { DropItem } from '../animatedComponents/DropItem'
 import { Arrow, Icon } from '../icons'
 
-import { ButtonPrimary, ButtonSize } from './Buttons'
+import { ButtonBareGhost, ButtonSize } from './Buttons'
 
 interface DroppedProps {
   isDropped: boolean
@@ -38,7 +38,7 @@ export const DropDownButton = ({ isDropped, className, size, onClick }: DropDown
   )
 }
 
-const ToggleButton = styled(ButtonPrimary)<DroppedProps>`
+const ToggleButton = styled(ButtonBareGhost)<DroppedProps>`
   background-color: transparent;
   color: ${Colors.Black[900]};
   &,

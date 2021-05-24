@@ -30,6 +30,7 @@ import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useWorker } from '@/working-groups/hooks/useWorker'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
+import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
@@ -37,9 +38,20 @@ export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
 
   const { worker, isLoading } = useWorker(id)
+  const isActive = worker && worker.status === 'WorkerStatusActive'
 
   const history = useHistory()
+
   const activities = useActivities()
+  const warning =
+    worker && !isActive
+      ? {
+          title: 'Role Ended',
+          content: 'We are sorry, but this role has already ended.',
+          isClosable: false,
+        }
+      : undefined
+
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({
@@ -47,7 +59,6 @@ export const MyRole = () => {
       data: { application: (worker && worker.application) as WorkingGroupApplication },
     })
   }, [worker && worker.application.id])
-  const isActive = worker && worker.status === 'WorkerStatusActive'
   const showLeaveRoleModal = useCallback(() => {
     worker &&
       showModal<LeaveRoleModalCall>({
@@ -55,6 +66,14 @@ export const MyRole = () => {
         data: { worker },
       })
   }, [worker])
+
+  const onChangeRoleClick = (): void => {
+    showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_ROLE_ACCOUNT } })
+  }
+
+  const onChangeRewardClick = (): void => {
+    showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
+  }
 
   if (isLoading || !worker) {
     return <Loading />
@@ -117,7 +136,7 @@ export const MyRole = () => {
               },
             ]}
           />
-          <TokenValueStat title="Stake height" value={150000} />
+          <TokenValueStat title="Stake height" value={worker.stake} />
           <TokenValueStat title="Owed reward" value={150000} />
           <TokenValueStat title="Next payout in" value={150000} />
         </Statistics>
@@ -126,9 +145,15 @@ export const MyRole = () => {
             <ContentWithTabs>
               <RoleAccountHeader>
                 <Label>Role Account</Label>
-                <ButtonsGroup>{isActive && <ButtonGhost size="small">Change Role Account</ButtonGhost>}</ButtonsGroup>
+                <ButtonsGroup>
+                  {isActive && (
+                    <ButtonGhost size="small" onClick={onChangeRoleClick}>
+                      Change Role Account
+                    </ButtonGhost>
+                  )}
+                </ButtonsGroup>
               </RoleAccountHeader>
-              <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} />
+              <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} balances={['total']} />
             </ContentWithTabs>
             <ContentWithTabs>
               <RoleAccountHeader>
@@ -137,18 +162,27 @@ export const MyRole = () => {
                   {isActive && <ButtonPrimary size="small">Move Excess Tokens</ButtonPrimary>}
                 </ButtonsGroup>
               </RoleAccountHeader>
-              <MyRoleAccount account={{ name: 'Stake Account', address: worker.stakeAccount }} />
+              <MyRoleAccount
+                account={{ name: 'Stake Account', address: worker.stakeAccount }}
+                balances={['total', 'locked']}
+              />
             </ContentWithTabs>
             <ContentWithTabs>
               <RoleAccountHeader>
                 <Label>Reward Account</Label>
-                <ButtonsGroup>{isActive && <ButtonGhost size="small">Change Reward Account</ButtonGhost>}</ButtonsGroup>
+                <ButtonsGroup>
+                  {isActive && (
+                    <ButtonGhost size="small" onClick={onChangeRewardClick}>
+                      Change Reward Account
+                    </ButtonGhost>
+                  )}
+                </ButtonsGroup>
               </RoleAccountHeader>
-              <MyRoleAccount account={{ name: 'Reward Account', address: worker.rewardAccount }} />
+              <MyRoleAccount account={{ name: 'Reward Account', address: worker.rewardAccount }} balances={['total']} />
             </ContentWithTabs>
           </MainPanel>
           <SidePanel>
-            <ActivitiesBlock activities={activities} label="Role Activities" />
+            <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} />
           </SidePanel>
         </ContentWithSidepanel>
       </RowGapBlock>

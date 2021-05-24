@@ -1,88 +1,27 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { ActivityToIconMap } from '@/common/components/Activities/ActivityToIconMap'
 
 import { BorderRad, Colors } from '../../constants'
-import { ActivityCategory, ActivityType } from '../../types'
-import { AppliedIcon } from '../icons/activities/AppliedIcon'
-import { ClosedIcon } from '../icons/activities/ClosedIcon'
-import { CreatedIcon } from '../icons/activities/CreatedIcon'
-import { DecreasedIcon } from '../icons/activities/DecreasedIcon'
-import { HiredIcon } from '../icons/activities/HiredIcon'
-import { IncreasedIcon } from '../icons/activities/IncreasedIcon'
-import { JoystreamIcon } from '../icons/activities/JoystreamIcon'
-import { WarnedIcon } from '../icons/activities/WarnedIcon'
+import { ActivityCategory } from '../../types'
+
+export type IconStyle = 'positive' | 'negative' | 'joystream'
 
 export interface ActivityIconProps {
-  icon: ActivityCategory
-  variant?: ActivityType
+  category: ActivityCategory
 }
 
-export const ActivityIcon = ({ icon }: ActivityIconProps) => {
-  if (icon === 'closed') {
-    return (
-      <NegativeStyle>
-        <ClosedIcon />
-      </NegativeStyle>
-    )
-  }
-  if (icon === 'hired') {
-    return (
-      <PositiveStyle>
-        <HiredIcon />
-      </PositiveStyle>
-    )
-  }
-  if (icon === 'created') {
-    return (
-      <JoystreamStyle>
-        <CreatedIcon />
-      </JoystreamStyle>
-    )
-  }
-  if (icon === 'increased') {
-    return (
-      <PositiveStyle>
-        <IncreasedIcon />
-      </PositiveStyle>
-    )
-  }
-  if (icon === 'decreased') {
-    return (
-      <NegativeStyle>
-        <DecreasedIcon />
-      </NegativeStyle>
-    )
-  }
-  if (icon === 'applied') {
-    return (
-      <JoystreamStyle>
-        <AppliedIcon />
-      </JoystreamStyle>
-    )
-  }
-  if (icon === 'warned') {
-    return (
-      <NegativeStyle>
-        <WarnedIcon />
-      </NegativeStyle>
-    )
-  }
-  if (icon === 'joystream') {
-    return (
-      <JoystreamStyle>
-        <JoystreamIcon />
-      </JoystreamStyle>
-    )
-  }
-
+export const ActivityIcon = React.memo(({ category }: ActivityIconProps) => {
+  const [Icon, style] = ActivityToIconMap[category]
   return (
-    <JoystreamStyle>
-      <JoystreamIcon />
-    </JoystreamStyle>
+    <IconWrap iconStyle={style}>
+      <Icon />
+    </IconWrap>
   )
-}
+})
 
-const DefaulActivityIconStyle = styled.div`
+const IconWrap = styled.div<{ iconStyle: IconStyle }>`
   display: flex;
   grid-area: activityicon;
   justify-content: center;
@@ -91,22 +30,32 @@ const DefaulActivityIconStyle = styled.div`
   height: 44px;
   padding: 12px;
   border-radius: ${BorderRad.round};
+
+  ${({ iconStyle }) => {
+    if (iconStyle === 'negative') {
+      return NegativeStyle
+    } else if (iconStyle === 'positive') {
+      return PositiveStyle
+    } else {
+      return JoystreamStyle
+    }
+  }}
 `
 
-const NegativeStyle = styled(DefaulActivityIconStyle)`
+const NegativeStyle = css`
   background-color: ${Colors.Red[50]};
   color: ${Colors.Red[200]};
-  box-shadow: 0px 10px 28px ${Colors.Red[50] + 'CC'};
+  box-shadow: 0 10px 28px ${Colors.Red[50] + 'CC'};
 `
 
-const PositiveStyle = styled(DefaulActivityIconStyle)`
+const PositiveStyle = css`
   background-color: ${Colors.Green[50]};
   color: ${Colors.Green[500]};
-  box-shadow: 0px 10px 28px ${Colors.Green[50] + 'CC'};
+  box-shadow: 0 10px 28px ${Colors.Green[50] + 'CC'};
 `
 
-const JoystreamStyle = styled(DefaulActivityIconStyle)`
+const JoystreamStyle = css`
   background-color: ${Colors.Blue[50]};
   color: ${Colors.Blue[300]};
-  box-shadow: 0px 10px 28px ${Colors.Blue[50] + 'CC'};
+  box-shadow: 0 10px 28px ${Colors.Blue[50] + 'CC'};
 `
