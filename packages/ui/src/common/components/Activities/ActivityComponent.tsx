@@ -12,7 +12,7 @@ export interface ActivityComponentProps {
   children: ReactNode
 }
 
-export const ActivityComponent = React.memo(({ activity, children }: ActivityComponentProps) => (
+export const ActivityComponent = ({ activity, children }: ActivityComponentProps) => (
   <ActivityItem>
     <ActivityIcon category={activity.eventType} />
     <ActivityTime lighter>{relativeTime(activity.createdAt)}</ActivityTime>
@@ -20,7 +20,7 @@ export const ActivityComponent = React.memo(({ activity, children }: ActivityCom
       {children}
     </ActivityText>
   </ActivityItem>
-))
+)
 
 const ActivityItem = styled.div`
   display: grid;

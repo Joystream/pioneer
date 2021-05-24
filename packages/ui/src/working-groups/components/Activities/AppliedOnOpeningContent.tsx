@@ -9,7 +9,7 @@ interface Props {
   activity: AppliedOnOpeningActivity
 }
 
-export const AppliedOnOpeningContent: React.FC<Props> = React.memo(({ activity }: Props) => {
+export const AppliedOnOpeningContent = ({ activity }: Props) => {
   const { showModal } = useModal()
   const { membership, opening } = activity
   return (
@@ -20,4 +20,4 @@ export const AppliedOnOpeningContent: React.FC<Props> = React.memo(({ activity }
       has applied on the opening <Link to={`/working-groups/openings/${opening.id}`}>{opening.title}</Link>.
     </>
   )
-})
+}

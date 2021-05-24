@@ -9,7 +9,7 @@ interface Props {
   activity: ApplicationWithdrawnActivity
 }
 
-export const ApplicationWithdrawnContent: React.FC<Props> = React.memo(({ activity }: Props) => {
+export const ApplicationWithdrawnContent = ({ activity }: Props) => {
   const { showModal } = useModal()
   const { membership, opening } = activity
   return (
@@ -21,4 +21,4 @@ export const ApplicationWithdrawnContent: React.FC<Props> = React.memo(({ activi
       opening.
     </>
   )
-})
+}
