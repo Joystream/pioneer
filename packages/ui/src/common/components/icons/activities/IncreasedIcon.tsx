@@ -5,7 +5,7 @@ interface ActivityIconProps {
   className?: string
 }
 
-export function IncreasedIcon({ className }: ActivityIconProps) {
+export const IncreasedIcon: React.FC<ActivityIconProps> = ({ className }) => {
   return (
     <ActivityIcon viewBox="0 0 20 20" fill="none" color="currentColor" className={className}>
       <path
