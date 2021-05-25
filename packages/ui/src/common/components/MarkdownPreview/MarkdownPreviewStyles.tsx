@@ -101,11 +101,20 @@ export const MarkdownPreviewStyles = createGlobalStyle`
     background-color: ${Colors.Black[700]};
   }
 
-  .markdown-preview code {
+  .markdown-preview .in-block-code {
     font-size: 12px;
     line-height: 20px;
     color: ${Colors.Black[300]};
     background-color: ${Colors.Black[700]};
+  }
+  
+  .markdown-preview .inline-code {
+    font-size: 12px;
+    line-height: 24px;
+    padding: 4px 8px;
+    color: ${Colors.Black[300]};
+    background-color: ${Colors.Black[700]};
+    border-radius: ${BorderRad.s};
   }
 
   .markdown-preview a {

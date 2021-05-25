@@ -16,9 +16,9 @@ export const MarkdownPreview = ({ markdown }: MarkdownPreviewProps) => {
         components={{
           code: ({ children, inline }) => {
             if (inline) {
-              return <code>{children}</code>
+              return <code className="inline-code">{children}</code>
             }
-            return <code>{children}</code>
+            return <code className="in-block-code">{children}</code>
           },
         }}
       >
