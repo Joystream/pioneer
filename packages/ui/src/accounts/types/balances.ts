@@ -12,6 +12,9 @@ export interface Balances {
   locked: BN
   recoverable: BN
   transferable: BN
+}
+
+export interface DetailedBalances extends Balances {
   locks: BalanceLockInfo[]
 }
 

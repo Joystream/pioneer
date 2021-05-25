@@ -5,9 +5,9 @@ import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 import { Address } from '@/common/types'
 
-import { Balances } from '../types'
+import { DetailedBalances } from '../types'
 
-export function toBalances(balances: DeriveBalancesAll): Balances {
+export function toBalances(balances: DeriveBalancesAll): DetailedBalances {
   const { lockedBalance, availableBalance } = balances
 
   const locks = balances.lockedBreakdown.map((lock) => {
@@ -28,7 +28,7 @@ export function toBalances(balances: DeriveBalancesAll): Balances {
   }
 }
 
-export const useBalance = (address?: Address): Balances | null => {
+export const useBalance = (address?: Address): DetailedBalances | null => {
   const { api } = useApi()
 
   const balances = useObservable(address ? api?.derive.balances.all(address) : undefined, [api, address])
