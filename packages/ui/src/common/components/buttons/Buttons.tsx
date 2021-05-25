@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
-export type ButtonSize = 'small' | 'medium' | 'large'
+export type ButtonSize = 'tiny' | 'small' | 'medium' | 'large'
 
 export interface ButtonProps {
   size?: ButtonSize
@@ -18,10 +18,17 @@ const height: { [key in ButtonSize]: string } = {
   large: '48px',
   medium: '40px',
   small: '32px',
+  tiny: '32px',
+}
+const fontSize: { [key in ButtonSize]: string } = {
+  large: '16px',
+  medium: '16px',
+  small: '14px',
+  tiny: '12px',
 }
 
 const getHeight = (props: ButtonProps) => height[props.size || 'large']
-const getFontSize = (props: ButtonProps) => (props.size === 'small' ? '14px' : '16px')
+const getFontSize = (props: ButtonProps) => fontSize[props.size || 'large']
 const getLineHeight = (props: ButtonProps) => (props.size === 'small' ? '20px' : '24px')
 const getPadding = (props: ButtonProps) => {
   if (props.size == 'small') {
