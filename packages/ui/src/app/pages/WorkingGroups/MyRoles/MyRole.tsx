@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { useCallback } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
@@ -9,6 +9,7 @@ import { BadgeRed } from '@/common/components/BadgeRed'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Loading } from '@/common/components/Loading'
 import {
   ContentWithSidepanel,
@@ -39,8 +40,6 @@ export const MyRole = () => {
 
   const { worker, isLoading } = useWorker(id)
   const isActive = worker && worker.status === 'WorkerStatusActive'
-
-  const history = useHistory()
 
   const activities = useActivities()
   const warning =
@@ -89,12 +88,9 @@ export const MyRole = () => {
           <ButtonGhost size="medium" onClick={showApplicationModal}>
             Application
           </ButtonGhost>
-          <ButtonGhost
-            size="medium"
-            onClick={() => history.push(`/working-groups/openings/${worker?.application.opening.id}`)}
-          >
+          <LinkButtonGhost size="medium" to={`/working-groups/openings/${worker?.application.opening.id}`}>
             Opening
-          </ButtonGhost>
+          </LinkButtonGhost>
           {isActive && (
             <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
               Leave this position

@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
+import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { ToggleableItem, ToggleButton } from '@/common/components/buttons/Toggle'
 import { Arrow } from '@/common/components/icons'
 import { SidePaneColumn, SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/common/components/SidePane'
@@ -22,7 +22,6 @@ export interface MemberRoleToggleProps {
 }
 
 export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
-  const history = useHistory()
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({
@@ -94,12 +93,9 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                     <ButtonGhost size="small" onClick={showApplicationModal}>
                       Application preview <Arrow direction="right" />
                     </ButtonGhost>
-                    <ButtonGhost
-                      size="small"
-                      onClick={() => history.push(`/working-groups/openings/${role?.application.opening.id}`)}
-                    >
+                    <LinkButtonGhost size="small" to={`/working-groups/openings/${role?.application.opening.id}`}>
                       Opening preview <Arrow direction="right" />
-                    </ButtonGhost>
+                    </LinkButtonGhost>
                   </ButtonsGroup>
                 </MemberRoleTable>
               </MemberRoleTableContainer>
