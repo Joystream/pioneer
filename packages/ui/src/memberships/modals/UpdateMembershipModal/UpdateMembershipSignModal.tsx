@@ -1,6 +1,9 @@
+import { MembershipMetadata } from '@joystream/metadata-protobuf'
 import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React, { useMemo } from 'react'
+
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
 import { Account } from '../../../accounts/types'
@@ -41,11 +44,14 @@ function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, ap
   }
 
   if (hasProfileEdits) {
-    const updateProfile = api.tx.members.updateProfile(member.id, transactionParams.handle || null, {
-      name: transactionParams.name || null,
-      avatar_uri: transactionParams.avatarUri || null,
-      about: transactionParams.about || null,
-    })
+    const updateProfile = api.tx.members.updateProfile(
+      member.id,
+      transactionParams.handle ?? null,
+      metadataToBytes(MembershipMetadata, {
+        about: transactionParams.about ?? null,
+        name: transactionParams.name ?? null,
+      })
+    )
     transactions.push(updateProfile)
   }
 

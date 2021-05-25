@@ -14,12 +14,12 @@ import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
 import { Address, onTransactionDone } from '../../../common/types'
-import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
+import { MemberFormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 import { getMessage } from '../utils'
 
 interface SignProps {
   onClose: () => void
-  formData: FormFields
+  formData: MemberFormFields
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   signer: Address
