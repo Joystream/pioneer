@@ -1,43 +1,34 @@
-import React, { memo, useMemo } from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
-import { useAccounts } from '@/accounts/hooks/useAccounts'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { useBalances } from '@/accounts/hooks/useBalances'
 import { useTotalBalances } from '@/accounts/hooks/useTotalBalances'
 import { MemberRow } from '@/accounts/modals/MoveFoundsModal/styles'
-import { Account } from '@/accounts/types'
+import { Account, AddressToBalanceMap } from '@/accounts/types'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { VotingSymbol, LockSymbol } from '@/common/components/icons/symbols'
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '@/common/components/Modal'
 import { TokenValue, TextSmall, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants/styles'
+import { useModal } from '@/common/hooks/useModal'
 import { useToggle } from '@/common/hooks/useToggle'
 import { spacing } from '@/common/utils/styles'
 
+import { MoveFundsModalCall } from '.'
+
 interface Props {
   account: Account
+  balances: AddressToBalanceMap
 }
 
-export const MoveFoundsAccountItem = memo(({ account }: Props) => {
+export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
+  const {
+    modalData: { lockedFoundsAccounts },
+  } = useModal<MoveFundsModalCall>()
   const [isDropped, setIsDropped] = useToggle()
-  const { allAccounts } = useAccounts()
   const { locked } = useBalance(account.address) || {}
   const { transferable } = useTotalBalances()
-  const balances = useBalances()
-
-  const accounts = useMemo(() => {
-    if (allAccounts.length) {
-      return allAccounts.filter(
-        (subAccount) =>
-          balances[subAccount.address] &&
-          balances[subAccount.address].transferable.toNumber() > 0 &&
-          subAccount.address !== account.address
-      )
-    }
-    return []
-  }, [allAccounts, balances])
 
   return (
     <>
@@ -55,9 +46,9 @@ export const MoveFoundsAccountItem = memo(({ account }: Props) => {
       </LockedFoundsMemberRow>
       <DropDownToggleStyled isDropped={isDropped}>
         <TextSmall margin="l">Other accounts with transferable balances:</TextSmall>
-        {accounts.map((account) => (
+        {lockedFoundsAccounts[account.address].map((account) => (
           <SubAccountRow>
-            <AccountInfo account={account} key={`subaccount-${account.address}`} />
+            <AccountInfo account={account} key={`lockedFoundsAccount-${account.address}`} />
             <BalanceInfoInRow>
               <InfoTitle>Transferable balance</InfoTitle>
               <InfoValue>

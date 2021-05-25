@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
@@ -15,28 +15,13 @@ import { ModalBody, MemberRow } from './styles'
 interface Props {
   onClose: () => void
   onManageAccountsClick: () => void
-  price: number
+  requiredStake: number
   balances: AddressToBalanceMap
-  allAccounts: Account[]
+  accounts: Account[]
 }
 
-export const MoveFoundsTransferableModal = ({
-  onClose,
-  onManageAccountsClick,
-  price,
-  balances,
-  allAccounts,
-}: Props) => {
-  const accounts = useMemo(() => {
-    if (allAccounts.length) {
-      return allAccounts.filter(
-        (account) => balances[account.address] && balances[account.address].transferable.toNumber() > 0
-      )
-    }
-    return []
-  }, [allAccounts, balances])
-
-  if (!allAccounts.length) {
+export const MoveFoundsTransferableModal = ({ onClose, onManageAccountsClick, requiredStake, balances, accounts }: Props) => {
+  if (!accounts.length) {
     return null
   }
 
@@ -46,7 +31,7 @@ export const MoveFoundsTransferableModal = ({
       <ModalBody>
         <TextMedium margin="l">
           Unfortunately, you don’t have any accounts suitable for applying to this role. You need at least{' '}
-          <TokenValue value={price} /> to apply for this role. Please move your funds.
+          <TokenValue value={requiredStake} /> to apply for this role. Please move your funds.
         </TextMedium>
         <TextMedium margin="s" bold>
           Accounts with transferable balances:
