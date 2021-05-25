@@ -10,12 +10,14 @@ import { DetailedBalances } from '../types'
 export function toBalances(balances: DeriveBalancesAll): DetailedBalances {
   const { lockedBalance, availableBalance } = balances
 
-  const locks = balances.lockedBreakdown.map((lock) => {
-    return {
-      amount: new BN(lock.amount),
-      reason: <string>lock.id.toHuman(),
-    }
-  })
+  const locks = balances.lockedBreakdown
+    ? balances.lockedBreakdown.map((lock) => {
+        return {
+          amount: new BN(lock.amount),
+          reason: <string>lock.id.toHuman(),
+        }
+      })
+    : []
   const maxLockAmount = new BN(locks.length ? Math.max(...locks.map((lock) => lock.amount.toNumber())) : 0)
   const recoverableBalance = new BN(0)
 
