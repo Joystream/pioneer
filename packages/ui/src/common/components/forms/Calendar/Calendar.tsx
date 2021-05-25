@@ -14,8 +14,6 @@ import {
   CalendarNav,
 } from './components'
 
-const DAYS = 6 * 7
-
 export interface CalendarProps {
   month?: Date
   within?: PartialDateRange
@@ -64,6 +62,9 @@ const CalendarHeader = React.memo(({ month, within, withinMonths, onChange }: Ca
   )
 })
 
+const DAYS_PER_CALENDAR_PAGE = 6 * 7
+const DAY_NAMES = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
+
 interface CalendarBodyProps {
   month: Date
   within?: PartialDateRange
@@ -72,20 +73,20 @@ interface CalendarBodyProps {
 }
 
 const CalendarBody = React.memo(({ month, within, selection, onChange }: CalendarBodyProps) => {
-  const firstday = useMemo(() => startOfWeek(addDays(month, -1), { weekStartsOn: 1 }), [month])
+  const firstDay = useMemo(() => startOfWeek(addDays(month, -1), { weekStartsOn: 1 }), [month])
 
   return (
     <>
-      {['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'].map((day) => (
+      {DAY_NAMES.map((day) => (
         <CalendarWeekDay key={day} lighter>
           {day}
         </CalendarWeekDay>
       ))}
 
-      {Array.from({ length: DAYS }).map((_, index) => (
+      {Array.from({ length: DAYS_PER_CALENDAR_PAGE }).map((_, index) => (
         <CalendarDay
           key={index}
-          day={addDays(firstday, index)}
+          day={addDays(firstDay, index)}
           month={month}
           selection={selection}
           within={within}
