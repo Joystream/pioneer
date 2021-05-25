@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
+import { RouterLink } from '@/common/components/RouterLink'
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 
 import { AppliedOnOpeningActivity } from '../../types'
@@ -12,6 +12,6 @@ interface Props {
 export const AppliedOnOpeningContent = ({ activity: { membership, opening } }: Props) => (
   <>
     <MemberModalLink call={{ modal: 'Member', data: { id: membership.id } }}>{membership.handle}</MemberModalLink> has
-    applied on the opening <Link to={`/working-groups/openings/${opening.id}`}>{opening.title}</Link>.
+    applied on the opening <RouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</RouterLink>.
   </>
 )

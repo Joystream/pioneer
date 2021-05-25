@@ -1,20 +1,22 @@
 import React, { AnchorHTMLAttributes } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Colors, Transitions } from '../constants'
 
-interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface StyledLinkProps {
   dark?: boolean
   size?: 'm' | 'l'
 }
 
+interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement>, StyledLinkProps {}
+
 export const Link = ({ href, className, children, dark, size, onClick }: LinkProps) => (
-  <LinkStyles href={href} target="_blank" className={className} dark={dark} size={size} onClick={onClick}>
+  <StyledLink href={href} target="_blank" className={className} dark={dark} size={size} onClick={onClick}>
     {children}
-  </LinkStyles>
+  </StyledLink>
 )
 
-export const LinkStyles = styled.a<LinkProps>`
+export const LinkStyles = css<StyledLinkProps>`
   color: ${({ dark }) => (dark ? Colors.Black[900] : Colors.Blue[400])};
   ${({ size }) => size === 'l' && 'line-height: 32px'};
   text-decoration: underline;
@@ -30,4 +32,8 @@ export const LinkStyles = styled.a<LinkProps>`
   &:active {
     color: ${Colors.Blue[600]};
   }
+`
+
+export const StyledLink = styled.a<StyledLinkProps>`
+  ${LinkStyles}
 `
