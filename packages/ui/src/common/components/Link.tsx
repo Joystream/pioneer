@@ -1,18 +1,15 @@
-import React from 'react'
+import React, { AnchorHTMLAttributes } from 'react'
 import styled from 'styled-components'
 
 import { Colors, Transitions } from '../constants'
 
-interface LinkProps {
-  href?: string
-  className?: string
-  children?: React.ReactNode
+interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   dark?: boolean
   size?: 'm' | 'l'
 }
 
-export const Link = ({ href, className, children, dark, size }: LinkProps) => (
-  <LinkStyles href={href} target="_blank" className={className} dark={dark} size={size}>
+export const Link = ({ href, className, children, dark, size, onClick }: LinkProps) => (
+  <LinkStyles href={href} target="_blank" className={className} dark={dark} size={size} onClick={onClick}>
     {children}
   </LinkStyles>
 )
