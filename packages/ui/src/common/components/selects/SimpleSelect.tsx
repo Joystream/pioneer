@@ -1,10 +1,11 @@
 import React, { useReducer } from 'react'
 import styled, { css } from 'styled-components'
 
-import { Colors } from '../../constants'
-import { isDefined } from '../../utils'
-import { stopEvent } from '../../utils/events'
-import { ControlProps } from '../forms'
+import { ControlProps } from '@/common/components/forms'
+import { FilterLabel } from '@/common/components/forms/FilterBox'
+import { Colors } from '@/common/constants'
+import { isDefined } from '@/common/utils'
+import { stopEvent } from '@/common/utils/events'
 
 import { Select } from '.'
 
@@ -76,7 +77,11 @@ export const SimpleSelect = <T extends any>({ title = '', options, value, onChan
 
   return (
     <SelectContainer>
-      {title && <LabelSelect>{title}</LabelSelect>}
+      {title && (
+        <FilterLabel lighter bold>
+          {title}
+        </FilterLabel>
+      )}
       <Select
         placeholder=""
         selected={value}
@@ -91,17 +96,11 @@ export const SimpleSelect = <T extends any>({ title = '', options, value, onChan
 }
 
 const SelectContainer = styled.label`
-  display: flex;
+  display: block;
   & > :last-child {
-    height: auto;
-    width: 250px;
+    height: 48px;
+    min-width: 250px;
   }
-`
-const LabelSelect = styled.div`
-  color: ${Colors.Grey};
-  line-height: 48px;
-  margin: 0 1rem;
-  white-space: nowrap;
 `
 
 const Selected = styled.div`
