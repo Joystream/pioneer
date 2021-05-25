@@ -33,9 +33,9 @@ export const RangeSlider = ({ value, min = 0, max, handleGap = 1, onChange }: Ra
 
         if (0 <= newCursor && newCursor <= 1) {
           setCursor(newCursor)
-        } else if (newCursor < 0 && (!cursor || cursor > 0)) {
+        } else if (newCursor < 0 && cursor !== 0) {
           setCursor(0)
-        } else if (newCursor > 1 && (!cursor || cursor < 1)) {
+        } else if (newCursor > 1 && cursor !== 1) {
           setCursor(1)
         }
       }
