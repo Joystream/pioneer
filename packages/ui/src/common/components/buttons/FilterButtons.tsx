@@ -3,8 +3,8 @@ import React from 'react'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 
 interface FilterButtonsProps {
-  onClear: () => void
-  onApply: () => void
+  onClear?: () => void
+  onApply?: () => void
 }
 export const FilterButtons = ({ onClear, onApply }: FilterButtonsProps) => (
   <>

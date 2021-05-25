@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import { addMonths, startOfToday } from 'date-fns'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { PartialDateRange } from '@/common/types/Dates'
 
@@ -12,15 +12,24 @@ export default {
 } as Meta
 
 const Template: Story = () => {
+  const [value, setValue] = useState<PartialDateRange>()
   const today = startOfToday()
   const withinDates = { start: addMonths(today, -13), end: today }
 
-  const display = (dates: PartialDateRange) =>
+  const display = () =>
     setTimeout(() => {
-      alert(JSON.stringify(dates, null, 2))
+      alert(JSON.stringify(value, null, 2))
     }, 100)
 
-  return <DatePicker withinDates={withinDates} onApply={display} />
+  return (
+    <DatePicker
+      value={value}
+      withinDates={withinDates}
+      onApply={display}
+      onClear={() => setValue(undefined)}
+      onChange={setValue}
+    />
+  )
 }
 
 export const Default = Template.bind({})

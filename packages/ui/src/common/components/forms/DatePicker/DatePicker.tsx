@@ -11,14 +11,17 @@ import { Calendar } from '../Calendar'
 import { InputComponent, InputText } from '../InputComponent'
 
 interface DatePickerProps {
+  title?: string
+  value: PartialDateRange
   withinDates?: PartialDateRange
-  onApply?: (value: PartialDateRange) => void
+  onApply?: () => void
+  onClear?: () => void
+  onChange: (value: PartialDateRange) => void
 }
 
-export const DatePicker = ({ withinDates, onApply }: DatePickerProps) => {
-  const [dates, setDates] = useState<PartialDateRange>()
+export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChange }: DatePickerProps) => {
   const placeholder = '__/__/__'
-  const { start, end } = fromRange(dates)
+  const { start, end } = fromRange(value)
   const dateString = `${toDDMMYY(start) ?? placeholder} - ${toDDMMYY(end) ?? placeholder}`
 
   const container = useRef<HTMLDivElement>(null)
@@ -40,12 +43,8 @@ export const DatePicker = ({ withinDates, onApply }: DatePickerProps) => {
     return () => window.removeEventListener('mousedown', closePopup)
   }, [isOpen])
 
-  const clear = () => {
-    setDates(undefined)
-    onApply?.(undefined)
-  }
   const apply = () => {
-    onApply?.(dates)
+    onApply?.()
     toggleOpen(false)
   }
 
@@ -55,9 +54,9 @@ export const DatePicker = ({ withinDates, onApply }: DatePickerProps) => {
         <InputText placeholder="-" value={dateString} readOnly />
         {isOpen && (
           <DatePickerPopup>
-            <DatePickerCalendars value={dates} within={withinDates} onChange={setDates} />
+            <DatePickerCalendars value={value} within={withinDates} onChange={onChange} />
             <DatePickerFooter>
-              <FilterButtons onApply={apply} onClear={clear} />
+              <FilterButtons onApply={apply} onClear={onClear} />
             </DatePickerFooter>
           </DatePickerPopup>
         )}
