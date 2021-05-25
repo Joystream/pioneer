@@ -11,7 +11,6 @@ import { Calendar } from '../Calendar'
 import { InputComponent, InputText } from '../InputComponent'
 
 interface DatePickerProps {
-  title?: string
   value: PartialDateRange
   withinDates?: PartialDateRange
   onApply?: () => void
@@ -19,7 +18,7 @@ interface DatePickerProps {
   onChange: (value: PartialDateRange) => void
 }
 
-export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChange }: DatePickerProps) => {
+export const DatePicker = ({ value, withinDates, onApply, onClear, onChange }: DatePickerProps) => {
   const placeholder = '__/__/__'
   const { start, end } = fromRange(value)
   const dateString = `${toDDMMYY(start) ?? placeholder} - ${toDDMMYY(end) ?? placeholder}`
@@ -74,14 +73,14 @@ const DatePickerCalendars = ({ value, within, onChange }: DatePickerCalendarsPro
   const { start, end } = fromRange(value)
 
   const today = useMemo(() => startOfToday(), [])
-  const thisMonth = useMemo(() => startOfMonth(today), [])
-  const [monthL, setMonthL] = useState(start ? startOfMonth(start) : addMonths(thisMonth, -1))
-  const [monthR, setMonthR] = useState(end ? startOfMonth(end) : thisMonth)
+  const currentMonth = useMemo(() => startOfMonth(today), [])
+  const [leftCalendarMonth, setLeftCalendarMonth] = useState(start ? startOfMonth(start) : addMonths(currentMonth, -1))
+  const [rightCalendarMonth, setRightCalendarMonth] = useState(end ? startOfMonth(end) : currentMonth)
 
-  const selectionStrategy = (k1: keyof DateRange) => (day: Date) => {
+  const selectionStrategy = (preferedSide: keyof DateRange) => (day: Date) => {
     if (!value) {
       // Click anywhere when there is no range -> Set either the range start or end
-      onChange({ [k1]: day } as { start: Date } | { end: Date })
+      onChange({ [preferedSide]: day } as { start: Date } | { end: Date })
     } else if (isBefore(day, start ?? (end as Date))) {
       // Clicked before the range (or selected day) -> Expand the range
       onChange({ ...value, start: day })
@@ -96,7 +95,7 @@ const DatePickerCalendars = ({ value, within, onChange }: DatePickerCalendarsPro
       onChange(start ? { start } : undefined)
     } else {
       // Clicked within the range -> Shrink the range from either its start or end
-      onChange({ ...value, [k1]: day } as PartialDateRange)
+      onChange({ ...value, [preferedSide]: day })
     }
   }
 
@@ -105,8 +104,8 @@ const DatePickerCalendars = ({ value, within, onChange }: DatePickerCalendarsPro
     const date = change(today, offset)
     const start = latest(date, min) ?? date
     const end = earliest(today, max) ?? today
-    setMonthL(startOfMonth(start))
-    setMonthR(startOfMonth(end))
+    setLeftCalendarMonth(startOfMonth(start))
+    setRightCalendarMonth(startOfMonth(end))
     onChange({ start, end })
   }
 
@@ -114,19 +113,19 @@ const DatePickerCalendars = ({ value, within, onChange }: DatePickerCalendarsPro
     <>
       <Calendar
         selection={value}
-        month={monthL}
+        month={leftCalendarMonth}
         within={within}
-        withinMonths={{ end: monthR }}
-        onChangeMonth={setMonthL}
+        withinMonths={{ end: rightCalendarMonth }}
+        onChangeMonth={setLeftCalendarMonth}
         onChange={selectionStrategy('start')}
       />
 
       <Calendar
         selection={value}
-        month={monthR}
+        month={rightCalendarMonth}
         within={within}
-        withinMonths={{ start: monthL }}
-        onChangeMonth={setMonthR}
+        withinMonths={{ start: leftCalendarMonth }}
+        onChangeMonth={setRightCalendarMonth}
         onChange={selectionStrategy('end')}
       />
 
