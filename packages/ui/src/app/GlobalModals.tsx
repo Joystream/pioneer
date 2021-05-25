@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
 import { useModal } from '@/common/hooks/useModal'
 import { ModalName } from '@/common/providers/modal/types'
@@ -22,6 +23,7 @@ type ModalNames =
   | ModalName<SwitchMemberModalCall>
   | ModalName<LeaveRoleModalCall>
   | ModalName<ChangeAccountModalCall>
+  | ModalName<MoveFundsModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
@@ -45,6 +47,8 @@ export const GlobalModals = () => {
       return <LeaveRoleModal />
     case 'ChangeAccountModal':
       return <ChangeAccountModal />
+    case 'MoveFundsModal':
+      return <MoveFundsModal />
     default:
       return null
   }
