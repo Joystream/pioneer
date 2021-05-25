@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { MemberModalLink } from '@/common/components/ModalLink'
+import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 
 import { ApplicationWithdrawnActivity } from '../../types'
 

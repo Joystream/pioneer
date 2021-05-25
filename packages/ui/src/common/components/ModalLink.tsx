@@ -1,8 +1,6 @@
 import React from 'react'
 import { ReactNode } from 'react-markdown'
 
-import { MemberModalCall } from '@/memberships/components/MemberProfile'
-
 import { useModal } from '../hooks/useModal'
 import { AnyModalCall } from '../providers/modal/types'
 
@@ -13,7 +11,7 @@ interface ModalLinkProps<Call> {
   children: ReactNode
 }
 
-const ModalLink = ({ call, children }: ModalLinkProps<AnyModalCall>) => {
+export const ModalLink = ({ call, children }: ModalLinkProps<AnyModalCall>) => {
   const { showModal } = useModal()
   return (
     <Link
@@ -27,4 +25,4 @@ const ModalLink = ({ call, children }: ModalLinkProps<AnyModalCall>) => {
   )
 }
 
-export const MemberModalLink = (props: ModalLinkProps<MemberModalCall>) => ModalLink(props)
+export type IModalLink<Call> = React.FC<ModalLinkProps<Call>>
