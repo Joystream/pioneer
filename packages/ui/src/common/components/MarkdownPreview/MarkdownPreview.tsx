@@ -14,11 +14,12 @@ export const MarkdownPreview = ({ markdown }: MarkdownPreviewProps) => {
       <ReactMarkdown
         className="markdown-preview"
         components={{
-          code: ({ children }) => (
-            <pre>
-              <code>{children}</code>
-            </pre>
-          ),
+          code: ({ children, inline }) => {
+            if (inline) {
+              return <code>{children}</code>
+            }
+            return <code>{children}</code>
+          },
         }}
       >
         {markdown}
