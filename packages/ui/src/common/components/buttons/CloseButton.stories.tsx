@@ -6,7 +6,7 @@ import { Row, TemplateBlock } from '../storybookParts/previewStyles'
 import { CloseButton } from './CloseButton'
 
 export default {
-  title: 'Common/CloseButton',
+  title: 'Common/Buttons/CloseButton',
   component: CloseButton,
 } as Meta
 

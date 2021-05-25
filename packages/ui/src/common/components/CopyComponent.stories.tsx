@@ -5,7 +5,7 @@ import { CopyComponent, CopyComponentProps } from './CopyComponent'
 import { Row, Column, TemplateBlock } from './storybookParts/previewStyles'
 
 export default {
-  title: 'Common/CopyComponent',
+  title: 'Common/Buttons/CopyComponent',
   component: CopyComponent,
 } as Meta
 

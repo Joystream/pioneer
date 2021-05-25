@@ -8,7 +8,7 @@ import { TemplateBlock } from '../storybookParts/previewStyles'
 import { CKEditor, CKEditorProps } from './CKEditor'
 
 export default {
-  title: 'Common/CKEditor',
+  title: 'Common/Forms/CKEditor',
   component: CKEditor,
 } as Meta
 

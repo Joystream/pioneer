@@ -6,7 +6,7 @@ import { Column, Row, TemplateBlock } from '../storybookParts/previewStyles'
 import { Radio, RadioProps } from './Radio'
 
 export default {
-  title: 'Common/Radio',
+  title: 'Common/Forms/Radio',
   component: Radio,
 } as Meta
 

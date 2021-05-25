@@ -7,7 +7,7 @@ import { StepDescriptionColumn, StepperBody, StepperModalBody, StepperModalWrapp
 import { TemplateBlock } from './storybookParts/previewStyles'
 
 export default {
-  title: 'Common/Stepper',
+  title: 'Common/Modals/Stepper',
   component: Stepper,
   argTypes: {
     steps: {
