@@ -12,8 +12,7 @@ import {
 } from '@/common/components/SidePane'
 import { Tabs } from '@/common/components/Tabs'
 import { useModal } from '@/common/hooks/useModal'
-import { useGetWorkingGroupApplicationQuery } from '@/working-groups/queries'
-import { asApplication } from '@/working-groups/types/WorkingGroupApplication'
+import { useApplication } from '@/working-groups/hooks/useApplication'
 
 import { FormDetails } from './FormDetails'
 import { GeneralDetails } from './GeneralDetails'
@@ -26,13 +25,7 @@ export const ApplicationDetailsModal = React.memo(() => {
     hideModal,
     modalData: { applicationId },
   } = useModal<ApplicationDetailsModalCall>()
-
-  const { loading, data } = useGetWorkingGroupApplicationQuery({
-    variables: { where: { id: applicationId } },
-  })
-  const application = data?.workingGroupApplicationByUniqueInput
-    ? asApplication(data.workingGroupApplicationByUniqueInput)
-    : null
+  const { isLoading, application } = useApplication(applicationId)
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -59,9 +52,9 @@ export const ApplicationDetailsModal = React.memo(() => {
           />
         </SidePaneHeader>
         <SidePaneBody>
-          {loading && <Loading />}
-          {!loading && application && currentTab === 'GENERAL' && <GeneralDetails application={application} />}
-          {!loading && application && currentTab === 'FORM' && <FormDetails applicationId={application.id} />}
+          {isLoading && <Loading />}
+          {!isLoading && application && currentTab === 'GENERAL' && <GeneralDetails application={application} />}
+          {!isLoading && application && currentTab === 'FORM' && <FormDetails applicationId={application.id} />}
         </SidePaneBody>
       </SidePane>
     </SidePaneGlass>
