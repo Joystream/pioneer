@@ -35,7 +35,7 @@ export const ProposalListItem = ({ title, stage, type, proposer, isPast, ...prop
 }
 
 const ProposalItem = styled(TableListItem)`
-  background-color: ${({ isPast }: { isPast?: boolean }) => (isPast ? Colors.Black[50] : Colors.White)}; ;
+  background-color: ${({ isPast }: { isPast?: boolean }) => (isPast ? Colors.Black[50] : Colors.White)};
 `
 
 const StageField = styled.div`
