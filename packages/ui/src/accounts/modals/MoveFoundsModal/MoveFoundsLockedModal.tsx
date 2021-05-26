@@ -8,7 +8,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { MoveFoundsAccountItem } from './MoveFoundsAccountItem'
 import { ModalBody } from './styles'
 
-interface Props {
+export interface MoveFoundsLockedModalProps {
   onClose: () => void
   onManageAccountsClick: () => void
   requiredStake: number
@@ -16,9 +16,15 @@ interface Props {
   accounts: Account[]
 }
 
-export const MoveFoundsLockedModal = ({ onClose, onManageAccountsClick, requiredStake, balances, accounts }: Props) => {
+export const MoveFoundsLockedModal = ({
+  onClose,
+  onManageAccountsClick,
+  requiredStake,
+  balances,
+  accounts,
+}: MoveFoundsLockedModalProps) => {
   if (!accounts.length) {
-    return <></>
+    return null
   }
 
   return (
