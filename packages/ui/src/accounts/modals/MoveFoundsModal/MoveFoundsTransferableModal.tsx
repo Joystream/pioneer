@@ -2,17 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
-import { AddressToBalanceMap, Account } from '@/accounts/types'
+import { Account, AddressToBalanceMap } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { HelpIcon } from '@/common/components/icons'
-import { Modal, ModalHeader, BalanceInfoInRow, InfoTitle, InfoValue, ModalFooter } from '@/common/components/Modal'
+import { BalanceInfoInRow, InfoTitle, InfoValue, Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 
-import { ModalBody, MemberRow } from './styles'
+import { MemberRow, ModalBody } from './styles'
 
-interface Props {
+export interface MoveFoundsTransferableModalProps {
   onClose: () => void
   onManageAccountsClick: () => void
   requiredStake: number
@@ -24,9 +24,9 @@ export const MoveFoundsTransferableModal = ({
   onClose,
   onManageAccountsClick,
   requiredStake,
-  balances,
   accounts,
-}: Props) => {
+  balances,
+}: MoveFoundsTransferableModalProps) => {
   if (!accounts.length) {
     return null
   }
