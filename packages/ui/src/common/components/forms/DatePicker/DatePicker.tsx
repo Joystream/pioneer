@@ -29,12 +29,12 @@ export const DatePicker = ({ value, withinDates, onApply, onClear, onChange }: D
   useEffect(() => {
     if (!isOpen) return
 
-    const closePopup = (evt: MouseEvent) => {
-      evt.stopPropagation()
-      if (!evt.target) return
+    const closePopup = (event: MouseEvent) => {
+      event.stopPropagation()
+      if (!event.target) return
 
-      const target = evt.target as Node
-      const clickedOutside = !container.current?.contains(target) ?? false
+      const target = event.target as Node
+      const clickedOutside = !container.current?.contains(target)
       clickedOutside && toggleOpen(false)
     }
 
@@ -150,7 +150,6 @@ const DatePickerPopup = styled.div`
   top: calc(100% + 4px);
   box-shadow: ${Shadows.light};
   padding: 16px;
-
   display: inline-grid;
   gap: 16px;
   grid-template-columns: auto auto auto;
