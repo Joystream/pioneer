@@ -12,6 +12,7 @@ export type WorkingGroupActivity =
   | StatusTextChangedActivity
   | OpeningAddedActivity
   | OpeningCanceledActivity
+  | StakeSlashedActivity
 
 type ShortMember = Pick<Member, 'id' | 'handle'>
 
@@ -23,7 +24,7 @@ interface OpeningActivity extends BaseActivity {
 }
 
 interface ApplicationActivity extends OpeningActivity {
-  membership: ShortMember
+  member: ShortMember
 }
 
 export interface ApplicationWithdrawnActivity extends ApplicationActivity {
@@ -48,7 +49,7 @@ export interface BudgetSpendingActivity extends BaseActivity {
 
 export interface LeaderSetActivity extends BaseActivity {
   eventType: 'LeaderSetEvent'
-  membership: ShortMember
+  member: ShortMember
   groupName: string
 }
 
@@ -63,4 +64,10 @@ export interface OpeningAddedActivity extends OpeningActivity {
 
 export interface OpeningCanceledActivity extends OpeningActivity {
   eventType: 'OpeningCanceledEvent'
+}
+
+export interface StakeSlashedActivity extends BaseActivity {
+  eventType: 'StakeSlashedEvent'
+  member: ShortMember
+  groupName: string
 }

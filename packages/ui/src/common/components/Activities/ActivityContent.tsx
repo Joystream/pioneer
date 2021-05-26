@@ -7,6 +7,7 @@ import { BudgetSpendingContent } from '@/working-groups/components/Activities/Bu
 import { LeaderSetContent } from '@/working-groups/components/Activities/LeaderSetContent'
 import { OpeningAddedContent } from '@/working-groups/components/Activities/OpeningAddedContent'
 import { OpeningCanceledContent } from '@/working-groups/components/Activities/OpeningCanceledContent'
+import { StakeSlashedContent } from '@/working-groups/components/Activities/StakeSlashedContent'
 import { StatusTextChangedContent } from '@/working-groups/components/Activities/StatusTextChangedContent'
 
 import { Activity } from '../../types'
@@ -33,6 +34,8 @@ export const ActivityContent = React.memo(({ activity }: Props) => {
       return <OpeningAddedContent activity={activity} />
     case 'OpeningCanceledEvent':
       return <OpeningCanceledContent activity={activity} />
+    case 'StakeSlashedEvent':
+      return <StakeSlashedContent activity={activity} />
     default:
       return <div />
   }

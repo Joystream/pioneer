@@ -9,6 +9,7 @@ import { ClosedIcon } from '../icons/activities/ClosedIcon'
 import { CreatedIcon } from '../icons/activities/CreatedIcon'
 import { HiredIcon } from '../icons/activities/HiredIcon'
 import { IncreasedIcon } from '../icons/activities/IncreasedIcon'
+import { WarnedIcon } from '../icons/activities/WarnedIcon'
 
 export const ActivityToIconMap: Record<ActivityCategory, [React.FC, IconStyle]> = {
   AppliedOnOpeningEvent: [AppliedIcon, 'joystream'],
@@ -19,4 +20,5 @@ export const ActivityToIconMap: Record<ActivityCategory, [React.FC, IconStyle]> 
   StatusTextChangedEvent: [AppliedIcon, 'positive'],
   OpeningAddedEvent: [CreatedIcon, 'joystream'],
   OpeningCanceledEvent: [ClosedIcon, 'negative'],
+  StakeSlashedEvent: [WarnedIcon, 'negative'],
 }

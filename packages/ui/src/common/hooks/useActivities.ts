@@ -10,7 +10,7 @@ export const useActivities = (): Activity[] =>
         id: '1',
         createdAt: '2021-03-09T10:28:04.155Z',
         eventType: 'AppliedOnOpeningEvent',
-        membership: {
+        member: {
           handle: 'xXproGamerDarknessXx',
           id: '1',
         },
@@ -23,7 +23,7 @@ export const useActivities = (): Activity[] =>
         id: '2',
         createdAt: '2021-05-09T10:28:04.155Z',
         eventType: 'ApplicationWithdrawnEvent',
-        membership: {
+        member: {
           handle: 'andy00',
           id: '1',
         },
@@ -50,7 +50,7 @@ export const useActivities = (): Activity[] =>
         id: '5',
         createdAt: '2021-05-23T10:28:04.155Z',
         eventType: 'LeaderSetEvent',
-        membership: {
+        member: {
           id: '3',
           handle: 'Kyle_1994',
         },
@@ -78,6 +78,16 @@ export const useActivities = (): Activity[] =>
         opening: {
           id: '3',
           title: 'Forum Working Group Regular',
+        },
+      },
+      {
+        id: '9',
+        createdAt: '2021-05-26T19:28:04.155Z',
+        eventType: 'StakeSlashedEvent',
+        groupName: 'Forum',
+        member: {
+          id: '6',
+          handle: 'stefan0',
         },
       },
     ],
