@@ -1,5 +1,5 @@
 import { addDays, addMonths, isAfter, isBefore, isEqual, isSameMonth } from 'date-fns'
-import React from 'react'
+import React, { FC } from 'react'
 import styled, { css } from 'styled-components'
 
 import { TextMedium, TextSmall } from '@/common/components/typography'
@@ -13,10 +13,9 @@ interface CalendarNavProps {
   min?: Date
   max?: Date
   onClick?: (month: Date) => void
-  children?: React.ReactNode
 }
 
-export const CalendarNav = ({ month, direction, min, max, children, onClick }: CalendarNavProps) => {
+export const CalendarNav: FC<CalendarNavProps> = ({ month, direction, min, max, children, onClick }) => {
   const target = addMonths(month, direction)
   const isOutofBounds = direction > 0 ? max && isAfter(target, max) : min && isBefore(addDays(month, -1), min)
   if (!onClick || isOutofBounds) {
