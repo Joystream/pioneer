@@ -1,15 +1,17 @@
 import { asMember } from '@/memberships/types'
-import { proposalStages } from '@/proposals/constants'
-import { PastProposal, Proposal } from '@/proposals/types'
+import { PastProposal, Proposal, ProposalStage } from '@/proposals/types'
 
 import { mockMembers } from './mockMembers'
+
+const proposalStages: ProposalStage[] = ['DECIDING', 'DORMANT', 'GRACING', 'SUCCEEDED']
+const proposalTypes = ['FUNDING REQUEST']
 
 export const mockProposals = Array<Omit<Proposal, 'id' | 'stage'>>(4)
   .fill({
     createdAt: '2021-03-29 18:21:06.000000',
     title: 'Lorem ipsum, dolor sit amet consectetur',
     rationale: 'Voluptatem id voluptatibus aspernatur quibusdam hic porro. Labore, eligendi tempore?',
-    type: 'Founding request',
+    type: proposalTypes[0],
     proposer: asMember({ ...mockMembers[0], roles: [{ group: { name: 'Content' }, isLead: true }] } as any),
   })
   .map(
