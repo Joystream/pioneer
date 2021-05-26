@@ -24,10 +24,11 @@ const Template: Story<MemberRoleToggleProps> = (args) => (
 export const Default = Template.bind({})
 Default.args = {
   role: {
+    id: '123',
     earnedTotal: 1000,
     group: { id: '3', name: 'membership' },
     isLeader: false,
-    membership: { id: '0' },
+    membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
     rewardPerBlock: 13923,
     stake: 192837021,
     roleAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
@@ -39,6 +40,8 @@ Default.args = {
       number: 1034,
       timestamp: '2021-05-13T13:50:23.694Z',
     },
+    applicationId: '0',
+    openingId: '0',
     status: 'WorkerStatusActive',
   },
 }

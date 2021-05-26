@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
-import { CloseButton } from '../../../common/components/buttons'
+import { CloseButton } from '@/common/components/buttons'
+import { Loading } from '@/common/components/Loading'
 import {
   SidePane,
   SidePaneBody,
@@ -8,9 +9,11 @@ import {
   SidePaneHeader,
   SidePanelTop,
   SidePaneTitle,
-} from '../../../common/components/SidePane'
-import { Tabs } from '../../../common/components/Tabs'
-import { useModal } from '../../../common/hooks/useModal'
+} from '@/common/components/SidePane'
+import { Tabs } from '@/common/components/Tabs'
+import { useModal } from '@/common/hooks/useModal'
+import { useGetWorkingGroupApplicationQuery } from '@/working-groups/queries'
+import { asApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 import { FormDetails } from './FormDetails'
 import { GeneralDetails } from './GeneralDetails'
@@ -21,8 +24,15 @@ type Tab = 'GENERAL' | 'FORM'
 export const ApplicationDetailsModal = React.memo(() => {
   const {
     hideModal,
-    modalData: { application },
+    modalData: { applicationId },
   } = useModal<ApplicationDetailsModalCall>()
+
+  const { loading, data } = useGetWorkingGroupApplicationQuery({
+    variables: { where: { id: applicationId } },
+  })
+  const application = data?.workingGroupApplicationByUniqueInput
+    ? asApplication(data.workingGroupApplicationByUniqueInput)
+    : null
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -49,8 +59,9 @@ export const ApplicationDetailsModal = React.memo(() => {
           />
         </SidePaneHeader>
         <SidePaneBody>
-          {currentTab === 'GENERAL' && <GeneralDetails application={application} />}
-          {currentTab === 'FORM' && <FormDetails applicationId={application.id} />}
+          {loading && <Loading />}
+          {!loading && application && currentTab === 'GENERAL' && <GeneralDetails application={application} />}
+          {!loading && application && currentTab === 'FORM' && <FormDetails applicationId={application.id} />}
         </SidePaneBody>
       </SidePane>
     </SidePaneGlass>

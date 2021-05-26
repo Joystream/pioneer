@@ -26,9 +26,9 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({
       modal: 'ApplicationDetails',
-      data: { application: role.application },
+      data: { applicationId: role.applicationId },
     })
-  }, [role.application.id])
+  }, [role])
 
   return (
     <RoleToggle absoluteToggle>
@@ -93,7 +93,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                     <ButtonGhost size="small" onClick={showApplicationModal}>
                       Application preview <Arrow direction="right" />
                     </ButtonGhost>
-                    <LinkButtonGhost size="small" to={`/working-groups/openings/${role?.application.opening.id}`}>
+                    <LinkButtonGhost size="small" to={`/working-groups/openings/${role?.openingId}`}>
                       Opening preview <Arrow direction="right" />
                     </LinkButtonGhost>
                   </ButtonsGroup>

@@ -24,7 +24,7 @@ export const AboutTab = ({ workingGroup }: Props) => {
     <ContentWithSidepanel>
       <MainPanel>
         <Statistics>
-          <TokenValueStat title="Spending" helperText="Lorem ipsum..." value={statistics.spending} />
+          <TokenValueStat title="Spending" tooltipText="Lorem ipsum..." value={statistics.spending} />
           <NumericValueStat title="Total hired" value={statistics.totalHired ?? 'Loading...'} />
           <NumericValueStat title="Total fired" value={statistics.totalFired ?? 'Loading...'} />
         </Statistics>
