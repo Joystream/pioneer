@@ -1,9 +1,9 @@
 import { asMember } from '@/memberships/types'
-import { Proposal, ProposalStage } from '@/proposals/types'
+import { proposalStages } from '@/proposals/constants'
+import { PastProposal, Proposal } from '@/proposals/types'
 
 import { mockMembers } from './mockMembers'
 
-const stages: ProposalStage[] = ['DECIDING', 'DORMANT', 'GRACING', 'SUCCEEDED']
 export const mockProposals = Array<Omit<Proposal, 'id' | 'stage'>>(4)
   .fill({
     createdAt: '2021-03-29 18:21:06.000000',
@@ -16,6 +16,12 @@ export const mockProposals = Array<Omit<Proposal, 'id' | 'stage'>>(4)
     (proposal, index): Proposal => ({
       ...proposal,
       id: String(index),
-      stage: stages[index],
+      stage: proposalStages[index],
     })
   )
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const mockPastProposals: PastProposal[] = mockProposals.map(({ createdAt, ...proposal }) => ({
+  ...proposal,
+  endedAt: '2021-02-28 18:21:06.000000',
+}))
