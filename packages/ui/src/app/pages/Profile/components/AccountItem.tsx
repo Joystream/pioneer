@@ -2,21 +2,21 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
-import { AccountInfo } from '../../../../accounts/components/AccountInfo'
-import { TransferButton } from '../../../../accounts/components/TransferButton'
-import { useBalance } from '../../../../accounts/hooks/useBalance'
-import { Account } from '../../../../accounts/types'
-import { DropDownButton, DropDownToggle } from '../../../../common/components/buttons/DropDownToggle'
-import { TextSmall, TextMedium, TokenValue } from '../../../../common/components/typography'
-import { Sizes, Colors} from '../../../../common/constants'
-import { useToggle } from '../../../../common/hooks/useToggle'
-import { Label } from '../../../../common/components/typography/Label'
-import { EnvelopeIcon } from '../../../../common/components/icons/EnvelopeIcon'
-import { LabelIcon } from '../../../../common/components/icons/LabelIcon'
-import { BoxIcon} from '../../../../common/components/icons/BoxIcon'
-import { VoteIcon } from '../../../../common/components/icons/VoteIcon'
-import { ButtonGhost } from '../../../../common/components/buttons'
-import { Arrow } from '../../../../common/components/icons'
+import { AccountInfo } from '@/accounts/components/AccountInfo'
+import { TransferButton } from '@/accounts/components/TransferButton'
+import { useBalance } from '@/accounts/hooks/useBalance'
+import { Account } from '@/accounts/types'
+import { ButtonGhost } from '@/common/components/buttons'
+import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
+import { Arrow } from '@/common/components/icons'
+import { BoxIcon } from '@/common/components/icons/BoxIcon'
+import { EnvelopeIcon } from '@/common/components/icons/EnvelopeIcon'
+import { LabelIcon } from '@/common/components/icons/LabelIcon'
+import { VoteIcon } from '@/common/components/icons/VoteIcon'
+import { TextSmall, TextMedium, TokenValue } from '@/common/components/typography'
+import { Label } from '@/common/components/typography/Label'
+import { Sizes, Colors } from '@/common/constants'
+import { useToggle } from '@/common/hooks/useToggle'
 
 interface DetailsItemDataProps {
   account: Account
@@ -32,14 +32,14 @@ export const DetailsItem = ({ account }: DetailsItemDataProps) => {
     <>
       <AccountDetailsWrap>
         <DetailsInfo>
-          <LabelIcon/>
+          <LabelIcon />
           <DetailsName>Staking for a role</DetailsName>
         </DetailsInfo>
-        <TokenValue value={balance?.total}/>
-        <TokenValue value={balance?.locked}/>
-        <TokenValue value={balance?.recoverable}/>
-        <TokenValue value={balance?.transferable}/>
-        <DropDownButton onClick={setDropped} isDropped={isDropped} size="medium"/>
+        <TokenValue value={balance?.total} />
+        <TokenValue value={balance?.locked} />
+        <TokenValue value={balance?.recoverable} />
+        <TokenValue value={balance?.transferable} />
+        <DropDownButton onClick={setDropped} isDropped={isDropped} size="medium" />
       </AccountDetailsWrap>
       <DetailsDropDownToggle isDropped={isDropped}>
         <DetailsDropDownColumn>
@@ -47,7 +47,7 @@ export const DetailsItem = ({ account }: DetailsItemDataProps) => {
             <DetailBoxTitle>Lock date:</DetailBoxTitle>
             <TextMedium dark>01/07/2020, 10:00 am CET</TextMedium>
             <DetailBlockNumber>
-              <BoxIcon/>
+              <BoxIcon />
               <DetailBlockNumberText lighter>389,829 block</DetailBlockNumberText>
             </DetailBlockNumber>
           </DetailBox>
@@ -57,13 +57,13 @@ export const DetailsItem = ({ account }: DetailsItemDataProps) => {
           </DetailBox>
         </DetailsDropDownColumn>
         <DetailsDropDownColumn>
-          <DetailsButton size={'small'}>
+          <DetailsButton size="small">
             Application preview
-            <ButtonArrow direction="right"/>
+            <ButtonArrow direction="right" />
           </DetailsButton>
-          <DetailsButton size={'small'}>
+          <DetailsButton size="small">
             Opening preview
-            <ButtonArrow direction="right"/>
+            <ButtonArrow direction="right" />
           </DetailsButton>
         </DetailsDropDownColumn>
       </DetailsDropDownToggle>
@@ -94,9 +94,7 @@ export const DetailsItemLock = ({ account }: DetailsItemLockDataProps) => {
         <TokenValue value={balance?.transferable} />
         <DropDownButton onClick={setDropped} isDropped={isDropped} size="medium" />
       </AccountDetailsWrap>
-      <DetailsDropDownToggle isDropped={isDropped}>
-        Is open
-      </DetailsDropDownToggle>
+      <DetailsDropDownToggle isDropped={isDropped}>Is open</DetailsDropDownToggle>
     </>
   )
 }
@@ -267,9 +265,7 @@ const DetailsName = styled.h6`
   margin-left: 16px;
 `
 
-const DetailBox = styled.div`
-  //padding-right: 10px;
-`
+const DetailBox = styled.div``
 
 const DetailBoxTitle = styled(Label)`
   margin-bottom: 8px;
