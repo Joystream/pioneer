@@ -10,6 +10,7 @@ const resolve = {
     crypto: require.resolve('crypto-browserify'),
     stream: require.resolve('stream-browserify'),
     path: false,
+    fs: false,
   },
   alias: {
     '@': path.resolve(__dirname, '../src'),
