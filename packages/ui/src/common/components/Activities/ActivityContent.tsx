@@ -5,6 +5,7 @@ import { AppliedOnOpeningContent } from '@/working-groups/components/Activities/
 import { BudgetSetContent } from '@/working-groups/components/Activities/BudgetSetContent'
 import { BudgetSpendingContent } from '@/working-groups/components/Activities/BudgetSpendingContent'
 import { LeaderSetContent } from '@/working-groups/components/Activities/LeaderSetContent'
+import { OpeninigAddedContent } from '@/working-groups/components/Activities/OpeningAddedContent'
 import { StatusTextChangedContent } from '@/working-groups/components/Activities/StatusTextChangedContent'
 
 import { Activity } from '../../types'
@@ -27,6 +28,8 @@ export const ActivityContent = React.memo(({ activity }: Props) => {
       return <LeaderSetContent activity={activity} />
     case 'StatusTextChangedEvent':
       return <StatusTextChangedContent activity={activity} />
+    case 'OpeningAddedEvent':
+      return <OpeninigAddedContent activity={activity} />
     default:
       return <div />
   }

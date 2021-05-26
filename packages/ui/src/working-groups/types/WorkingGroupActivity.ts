@@ -10,6 +10,7 @@ export type WorkingGroupActivity =
   | BudgetSpendingActivity
   | LeaderSetActivity
   | StatusTextChangedActivity
+  | OpeningAddedActivity
 
 type ShortMember = Pick<Member, 'id' | 'handle'>
 
@@ -50,4 +51,12 @@ export interface LeaderSetActivity extends BaseActivity {
 export interface StatusTextChangedActivity extends BaseActivity {
   eventType: 'StatusTextChangedEvent'
   groupName: string
+}
+
+export interface OpeningAddedActivity extends BaseActivity {
+  eventType: 'OpeningAddedEvent'
+  opening: {
+    id: string
+    title: string
+  }
 }

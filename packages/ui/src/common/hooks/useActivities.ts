@@ -62,6 +62,15 @@ export const useActivities = (): Activity[] =>
         eventType: 'StatusTextChangedEvent',
         groupName: 'storage',
       },
+      {
+        id: '7',
+        createdAt: '2021-05-25T10:28:04.155Z',
+        eventType: 'OpeningAddedEvent',
+        opening: {
+          id: '3',
+          title: 'Forum Working Group Regular',
+        },
+      },
     ],
     []
   )
