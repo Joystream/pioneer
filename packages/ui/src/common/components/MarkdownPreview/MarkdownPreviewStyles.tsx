@@ -6,7 +6,13 @@ export const MarkdownPreviewStyles = createGlobalStyle`
   .markdown-preview {
     width: 100%;
   }
-  .markdown-preview h1, h2, h3, h4, h5, h6 {
+
+  .markdown-preview h1,
+  .markdown-preview h2,
+  .markdown-preview h3,
+  .markdown-preview h4,
+  .markdown-preview h5,
+  .markdown-preview h6 {
     margin-top: 24px;
     font-family: ${Fonts.Grotesk};
     font-weight: 700;
@@ -34,7 +40,8 @@ export const MarkdownPreviewStyles = createGlobalStyle`
     line-height: 20px;
   }
 
-  .markdown-preview h5, .markdown-preview h6 {
+  .markdown-preview h5,
+  .markdown-preview h6 {
     margin-top: 12px;
     font-size: 10px;
     line-height: 16px;
@@ -57,7 +64,7 @@ export const MarkdownPreviewStyles = createGlobalStyle`
     font-weight: 400;
     color: ${Colors.Black[500]};
   }
-  
+
   .markdown-preview ul {
     display: grid;
     grid-row-gap: 8px;
@@ -66,7 +73,6 @@ export const MarkdownPreviewStyles = createGlobalStyle`
     padding-left: 24px;
     list-style: none;
   }
-
 
   .markdown-preview ol {
     display: grid;
@@ -107,7 +113,7 @@ export const MarkdownPreviewStyles = createGlobalStyle`
     color: ${Colors.Black[300]};
     background-color: ${Colors.Black[700]};
   }
-  
+
   .markdown-preview .inline-code {
     font-size: 12px;
     line-height: 24px;

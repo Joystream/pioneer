@@ -1,11 +1,12 @@
 import styled, { css } from 'styled-components'
 
-import { MemberRoleHelp, MemberStatusTooltip, TooltipContainer } from '../../common/components/Tooltip'
-import { TextSmall } from '../../common/components/typography'
+import { TooltipContainer } from '@/common/components/Tooltip'
+import { TextSmall } from '@/common/components/typography'
+
 import { BorderRad, Colors, Fonts, Transitions } from '../../common/constants'
 
 import { AvatarImg } from './Avatar'
-import { MemberRolesWrapper } from './MemberRoles'
+import { MemberRoleHelp, MemberRolesWrapper, MemberStatusTooltip } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
 export const MemberHead = styled.div`

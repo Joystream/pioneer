@@ -31,14 +31,12 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
       {wrapable ? (
         <MemberRolesWrapperWrapable>
           {rolesToDisplay.map((role, index) => (
-            <Tooltip tooltipText={memberRoleTitle(role)}>
-              <MemberRoleHelp key={index} size={size}>
-                {memberRoleAbbreviation(role)}
-              </MemberRoleHelp>
+            <Tooltip key={index} tooltipText={memberRoleTitle(role)}>
+              <MemberRoleHelp size={size}>{memberRoleAbbreviation(role)}</MemberRoleHelp>
             </Tooltip>
           ))}
           {hiddenRoles > 0 && (
-            <Tooltip tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}>
+            <Tooltip key="hidden" tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}>
               <MemberRoleHelpMax size={size}>{`+${hiddenRoles}`}</MemberRoleHelpMax>
             </Tooltip>
           )}
@@ -46,14 +44,12 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
       ) : (
         <MemberRolesWrapper>
           {rolesToDisplay.map((role, index) => (
-            <Tooltip tooltipText={memberRoleTitle(role)}>
-              <MemberRoleHelp key={index} size={size}>
-                {memberRoleAbbreviation(role)}
-              </MemberRoleHelp>
+            <Tooltip key={index} tooltipText={memberRoleTitle(role)}>
+              <MemberRoleHelp size={size}>{memberRoleAbbreviation(role)}</MemberRoleHelp>
             </Tooltip>
           ))}
           {hiddenRoles > 0 && (
-            <Tooltip tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}>
+            <Tooltip key="hidden" tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}>
               <MemberRoleHelpMax size={size}>{`+${hiddenRoles}`}</MemberRoleHelpMax>
             </Tooltip>
           )}

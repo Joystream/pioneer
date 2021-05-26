@@ -1,8 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { MemberRolesList } from '../MemberRoles'
-
 import { MemberListFilters } from '.'
 
 export default {
@@ -13,7 +11,9 @@ export default {
 type MemberListFiltersStory = Story<Parameters<typeof MemberListFilters>[0]>
 export const Default: MemberListFiltersStory = (props) => <MemberListFilters {...props} />
 Default.args = {
-  roles: Object.fromEntries(MemberRolesList.map(({ abbreviation }) => [abbreviation, abbreviation])),
+  roles: {
+    AB: 'ab',
+  },
   onApply: (filters) => {
     alert(JSON.stringify(filters, null, 2))
   },

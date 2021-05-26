@@ -2,7 +2,6 @@ import { Address, asBlock, Block } from '@/common/types'
 import { Member } from '@/memberships/types'
 import { WorkerFieldsFragment } from '@/working-groups/queries'
 import { WorkingGroup } from '@/working-groups/types/WorkingGroup'
-import { asApplication, WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 export interface Worker {
   id: string
@@ -16,7 +15,8 @@ export interface Worker {
 }
 
 export interface WorkerWithDetails extends Worker {
-  application: WorkingGroupApplication
+  applicationId: string
+  openingId: string
   roleAccount: Address
   rewardAccount: Address
   stakeAccount: Address
@@ -42,7 +42,8 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
 
 export const asWorkerWithDetails = (fields: WorkerFieldsFragment): WorkerWithDetails => ({
   ...asWorker(fields),
-  application: asApplication(fields.application),
+  applicationId: fields.application.id,
+  openingId: fields.application.openingId,
   roleAccount: fields.roleAccount,
   rewardAccount: fields.rewardAccount,
   stakeAccount: fields.stakeAccount,

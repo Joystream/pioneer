@@ -27,7 +27,8 @@ fragment WorkerFields on Worker {
     ...BlockFields
   }
   application {
-    ...WorkingGroupApplicationFields
+    id
+    openingId
   }
 }
 
@@ -188,6 +189,12 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
 
 query GetWorkingGroupApplications($applicantId_in: [ID!]) {
   workingGroupApplications(where: { applicantId_in: $applicantId_in }) {
+    ...WorkingGroupApplicationFields
+  }
+}
+
+query GetWorkingGroupApplication($where: WorkingGroupApplicationWhereUniqueInput!) {
+  workingGroupApplicationByUniqueInput(where: $where){
     ...WorkingGroupApplicationFields
   }
 }
