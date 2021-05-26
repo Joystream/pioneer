@@ -14,7 +14,7 @@ import {
 } from './LinkButtons'
 
 export default {
-  title: 'Common/LinkButtons',
+  title: 'Common/Buttons/LinkButtons',
   component: LinkButtonPrimary,
 } as Meta
 

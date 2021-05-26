@@ -9,11 +9,11 @@ import { BorderRad, Colors, Sizes } from '../../../common/constants'
 import { MemberInfo } from '../../components'
 import { useMember } from '../../hooks/useMembership'
 import { Member } from '../../types'
-import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
+import { MemberFormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 interface Props {
   onClose: () => void
-  formData: FormFields
+  formData: MemberFormFields
 }
 
 type SuccessModalProps = { onClose: () => void; children: ReactNode }

@@ -11,10 +11,11 @@
     ]
   },
   "scripts": {
-    "lint": "wsrun --exclude @joystream/types -c lint",
+    "lint": "wsrun --package ui -c lint",
     "build": "wsrun --fast-exit --stages -c build",
-    "build:storybook": "wsrun --package @joystream/types -c build && wsrun --package ui -c build:storybook",
-    "test": "wsrun --fast-exit --exclude @joystream/types -c test",
+    "build:storybook": "wsrun --fast-exit --stages -c --exlude ui build && wsrun --package ui -c build:storybook",
+    "storybook": "wsrun --package ui -c storybook",
+    "test": "wsrun --fast-exit --package ui -c test",
     "start": "wsrun --package ui -c start"
   },
   "dependencies": {

@@ -13,6 +13,7 @@ export type ProposalStage =
 export interface Proposal {
   id: string
   createdAt: string
+  endedAt?: string
   title: string
   rationale: string
   stage: ProposalStage

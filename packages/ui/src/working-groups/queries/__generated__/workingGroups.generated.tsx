@@ -33,7 +33,7 @@ export type WorkerFieldsFragment = {
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
   hiredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
-  application: { __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment
+  application: { __typename: 'WorkingGroupApplication'; id: string; openingId: string }
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -215,6 +215,17 @@ export type GetWorkingGroupApplicationsQuery = {
   workingGroupApplications: Array<{ __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment>
 }
 
+export type GetWorkingGroupApplicationQueryVariables = Types.Exact<{
+  where: Types.WorkingGroupApplicationWhereUniqueInput
+}>
+
+export type GetWorkingGroupApplicationQuery = {
+  __typename: 'Query'
+  workingGroupApplicationByUniqueInput?: Types.Maybe<
+    { __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment
+  >
+}
+
 export type ApplicationFormQuestionAnswerFieldsFragment = {
   __typename: 'ApplicationFormQuestionAnswer'
   answer: string
@@ -265,31 +276,6 @@ export const WorkingGroupMetdataFieldsFragmentDoc = gql`
     statusMessage
   }
 `
-export const WorkingGroupApplicationFieldsFragmentDoc = gql`
-  fragment WorkingGroupApplicationFields on WorkingGroupApplication {
-    id
-    opening {
-      id
-      group {
-        name
-      }
-      type
-      rewardPerBlock
-    }
-    applicant {
-      ...MemberFields
-    }
-    status {
-      __typename
-    }
-    stakingAccount
-    createdAtBlock {
-      ...BlockFields
-    }
-  }
-  ${MemberFieldsFragmentDoc}
-  ${BlockFieldsFragmentDoc}
-`
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
     id
@@ -313,12 +299,12 @@ export const WorkerFieldsFragmentDoc = gql`
       ...BlockFields
     }
     application {
-      ...WorkingGroupApplicationFields
+      id
+      openingId
     }
   }
   ${MemberFieldsFragmentDoc}
   ${BlockFieldsFragmentDoc}
-  ${WorkingGroupApplicationFieldsFragmentDoc}
 `
 export const WorkingGroupFieldsFragmentDoc = gql`
   fragment WorkingGroupFields on WorkingGroup {
@@ -404,6 +390,31 @@ export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
     }
   }
   ${WorkingGroupOpeningFieldsFragmentDoc}
+`
+export const WorkingGroupApplicationFieldsFragmentDoc = gql`
+  fragment WorkingGroupApplicationFields on WorkingGroupApplication {
+    id
+    opening {
+      id
+      group {
+        name
+      }
+      type
+      rewardPerBlock
+    }
+    applicant {
+      ...MemberFields
+    }
+    status {
+      __typename
+    }
+    stakingAccount
+    createdAtBlock {
+      ...BlockFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+  ${BlockFieldsFragmentDoc}
 `
 export const ApplicationQuestionFieldsFragmentDoc = gql`
   fragment ApplicationQuestionFields on ApplicationFormQuestion {
@@ -866,6 +877,55 @@ export type GetWorkingGroupApplicationsLazyQueryHookResult = ReturnType<typeof u
 export type GetWorkingGroupApplicationsQueryResult = Apollo.QueryResult<
   GetWorkingGroupApplicationsQuery,
   GetWorkingGroupApplicationsQueryVariables
+>
+export const GetWorkingGroupApplicationDocument = gql`
+  query GetWorkingGroupApplication($where: WorkingGroupApplicationWhereUniqueInput!) {
+    workingGroupApplicationByUniqueInput(where: $where) {
+      ...WorkingGroupApplicationFields
+    }
+  }
+  ${WorkingGroupApplicationFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkingGroupApplicationQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupApplicationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupApplicationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupApplicationQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupApplicationQuery(
+  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>(
+    GetWorkingGroupApplicationDocument,
+    options
+  )
+}
+export function useGetWorkingGroupApplicationLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>(
+    GetWorkingGroupApplicationDocument,
+    options
+  )
+}
+export type GetWorkingGroupApplicationQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationQuery>
+export type GetWorkingGroupApplicationLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationLazyQuery>
+export type GetWorkingGroupApplicationQueryResult = Apollo.QueryResult<
+  GetWorkingGroupApplicationQuery,
+  GetWorkingGroupApplicationQueryVariables
 >
 export const GetApplicationFormQuestionAnswerDocument = gql`
   query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {

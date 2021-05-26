@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { useCallback } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
@@ -9,6 +9,7 @@ import { BadgeRed } from '@/common/components/BadgeRed'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Loading } from '@/common/components/Loading'
 import {
   ContentWithSidepanel,
@@ -21,7 +22,7 @@ import {
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
-import { Statistics, TokenValueStat, MultiTokenValueStat } from '@/common/components/statistics'
+import { MultiTokenValueStat, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
 import { useActivities } from '@/common/hooks/useActivities'
@@ -32,15 +33,12 @@ import { useWorker } from '@/working-groups/hooks/useWorker'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
-import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
 
   const { worker, isLoading } = useWorker(id)
   const isActive = worker && worker.status === 'WorkerStatusActive'
-
-  const history = useHistory()
 
   const activities = useActivities()
   const warning =
@@ -54,11 +52,14 @@ export const MyRole = () => {
 
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
+    if (!worker?.applicationId) {
+      return
+    }
     showModal<ApplicationDetailsModalCall>({
       modal: 'ApplicationDetails',
-      data: { application: (worker && worker.application) as WorkingGroupApplication },
+      data: { applicationId: worker.applicationId },
     })
-  }, [worker && worker.application.id])
+  }, [worker?.applicationId])
   const showLeaveRoleModal = useCallback(() => {
     worker &&
       showModal<LeaveRoleModalCall>({
@@ -89,12 +90,9 @@ export const MyRole = () => {
           <ButtonGhost size="medium" onClick={showApplicationModal}>
             Application
           </ButtonGhost>
-          <ButtonGhost
-            size="medium"
-            onClick={() => history.push(`/working-groups/openings/${worker?.application.opening.id}`)}
-          >
+          <LinkButtonGhost size="medium" to={`/working-groups/openings/${worker?.openingId}`}>
             Opening
-          </ButtonGhost>
+          </LinkButtonGhost>
           {isActive && (
             <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
               Leave this position

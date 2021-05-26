@@ -9,19 +9,20 @@ import { ProposalListItem } from './ProposalListItem'
 
 export interface ProposalListProps {
   proposals: Proposal[]
+  isPast?: boolean
 }
 
-export const ProposalList = ({ proposals }: ProposalListProps) => (
+export const ProposalList = ({ proposals, isPast }: ProposalListProps) => (
   <>
     <ListHeaders colLayout={ProposalColLayout}>
-      <ListHeader>Created</ListHeader>
+      <ListHeader>{isPast ? 'Ended' : 'Created'}</ListHeader>
       <ListHeader>Stage</ListHeader>
       <ListHeader>Type</ListHeader>
       <ListHeader>Proposer</ListHeader>
     </ListHeaders>
     <List>
       {proposals.map((proposal) => (
-        <ProposalListItem key={proposal.id} {...proposal} />
+        <ProposalListItem key={proposal.id} {...proposal} isPast={isPast} />
       ))}
     </List>
   </>

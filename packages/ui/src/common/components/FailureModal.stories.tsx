@@ -4,7 +4,7 @@ import React from 'react'
 import { FailureModal, FailureModalProps } from './FailureModal'
 
 export default {
-  title: 'Common/FailureModal',
+  title: 'Common/Modals/FailureModal',
   component: FailureModal,
 } as Meta
 

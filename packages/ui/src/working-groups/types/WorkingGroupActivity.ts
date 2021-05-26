@@ -8,23 +8,25 @@ export type WorkingGroupActivity =
   | AppliedOnOpeningActivity
   | BudgetSetActivity
   | BudgetSpendingActivity
+  | LeaderSetActivity
+  | StatusTextChangedActivity
 
-export interface ApplicationWithdrawnActivity extends BaseActivity {
-  eventType: 'ApplicationWithdrawnEvent'
-  membership: Pick<Member, 'id' | 'handle'>
+type ShortMember = Pick<Member, 'id' | 'handle'>
+
+interface ApplicationActivity extends BaseActivity {
+  membership: ShortMember
   opening: {
     id: string
     title: string
   }
 }
 
-export interface AppliedOnOpeningActivity extends BaseActivity {
+export interface ApplicationWithdrawnActivity extends ApplicationActivity {
+  eventType: 'ApplicationWithdrawnEvent'
+}
+
+export interface AppliedOnOpeningActivity extends ApplicationActivity {
   eventType: 'AppliedOnOpeningEvent'
-  membership: Pick<Member, 'id' | 'handle'>
-  opening: {
-    id: string
-    title: string
-  }
 }
 
 export interface BudgetSetActivity extends BaseActivity {
@@ -37,4 +39,15 @@ export interface BudgetSpendingActivity extends BaseActivity {
   eventType: 'BudgetSpendingEvent'
   groupName: string
   amount: BN
+}
+
+export interface LeaderSetActivity extends BaseActivity {
+  eventType: 'LeaderSetEvent'
+  membership: ShortMember
+  groupName: string
+}
+
+export interface StatusTextChangedActivity extends BaseActivity {
+  eventType: 'StatusTextChangedEvent'
+  groupName: string
 }

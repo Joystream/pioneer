@@ -7,7 +7,7 @@ import { Column, ModalBlock, Row, TemplateBlock } from '../storybookParts/previe
 import { TogglableIcon } from '.'
 
 export default {
-  title: 'Common/TogglableIcon',
+  title: 'Common/Forms/TogglableIcon',
   component: TogglableIcon,
 } as Meta
 

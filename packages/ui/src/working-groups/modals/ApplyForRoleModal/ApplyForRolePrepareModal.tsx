@@ -21,7 +21,7 @@ import { steps } from './model'
 import { StakeStep, StakeStepForm } from './StakeStep'
 
 interface Props {
-  onSubmit: (stake: StakeStepForm, answers: Record<string, any>) => void
+  onSubmit: (stake: StakeStepForm, answers: Record<string, string>) => void
   opening: WorkingGroupOpening
 }
 
@@ -59,7 +59,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit, opening }: Props) => {
 
   const nextStep = useCallback(() => {
     if (step >= 1) {
-      onSubmit(state[0].data, state[0].data)
+      onSubmit(state[0].data, state[1].data)
     } else {
       setStep((step) => step + 1)
     }

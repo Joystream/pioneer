@@ -50,7 +50,7 @@ export const MemberListEmptyFilter: MemberListFilter = {
 
 interface MemberListFiltersProps {
   searchSlot?: React.RefObject<HTMLDivElement>
-  roles: { [k: string]: MemberRole }
+  roles: { [k: string]: string }
   onApply?: (value: MemberListFilter) => void
 }
 

@@ -58,7 +58,7 @@ const OPENING_DATA = {
       },
     ],
   },
-  unstakingPeriod: 5,
+  unstakingPeriod: '5',
   rewardPerBlock: 200,
   createdAtBlockId: '5',
 }

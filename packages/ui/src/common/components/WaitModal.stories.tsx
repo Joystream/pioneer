@@ -6,7 +6,7 @@ import { info } from '@/common/logger'
 import { WaitModal, WaitModalProps } from './WaitModal'
 
 export default {
-  title: 'Common/WaitModal',
+  title: 'Common/Modals/WaitModal',
   component: WaitModal,
 } as Meta
 
