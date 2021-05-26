@@ -16,4 +16,4 @@ export const Default = Template.bind({})
 Default.args = { proposals: mockProposals }
 
 export const Past = Template.bind({})
-Past.args = { proposals: mockPastProposals, past: true }
+Past.args = { proposals: mockPastProposals, isPast: true }

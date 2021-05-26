@@ -1,42 +1,29 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
-import { Colors } from '@/common/constants'
 import { ProposalColLayout } from '@/proposals/constants'
-import { PastProposal, Proposal } from '@/proposals/types'
+import { Proposal } from '@/proposals/types'
 
 import { ProposalListItem } from './ProposalListItem'
 
-export type ProposalListProps = CurrentProposalList | PastProposalList
-interface CurrentProposalList {
+export interface ProposalListProps {
   proposals: Proposal[]
-  past?: false
-}
-interface PastProposalList {
-  proposals: PastProposal[]
-  past: true
+  isPast?: boolean
 }
 
-export const ProposalList = (props: ProposalListProps) => (
-  <ListContainer past={props.past}>
+export const ProposalList = ({ proposals, isPast }: ProposalListProps) => (
+  <>
     <ListHeaders colLayout={ProposalColLayout}>
-      <ListHeader>{props.past ? 'Created' : 'Ended'}</ListHeader>
+      <ListHeader>{isPast ? 'Ended' : 'Created'}</ListHeader>
       <ListHeader>Stage</ListHeader>
       <ListHeader>Type</ListHeader>
       <ListHeader>Proposer</ListHeader>
     </ListHeaders>
-    <List>{props.past ? pastProposalItems(props.proposals) : proposalItems(props.proposals)}</List>
-  </ListContainer>
+    <List>
+      {proposals.map((proposal) => (
+        <ProposalListItem key={proposal.id} {...proposal} isPast={isPast} />
+      ))}
+    </List>
+  </>
 )
-
-const proposalItems = (proposals: Proposal[]) =>
-  proposals.map(({ createdAt, ...props }) => <ProposalListItem key={props.id} date={createdAt} {...props} />)
-
-const pastProposalItems = (proposals: PastProposal[]) =>
-  proposals.map(({ endedAt, ...props }) => <ProposalListItem key={props.id} date={endedAt} {...props} />)
-
-const ListContainer = styled.div`
-  --items-background-color: ${({ past }: { past?: boolean }) => (past ? Colors.Black[50] : Colors.White)};
-`

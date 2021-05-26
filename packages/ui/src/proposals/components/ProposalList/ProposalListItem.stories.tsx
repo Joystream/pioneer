@@ -14,4 +14,4 @@ type Props = Parameters<typeof ProposalListItem>[0]
 const Template: Story<Props> = (args) => <ProposalListItem {...args} />
 
 export const Default = Template.bind({})
-Default.args = { date: new Date().toISOString(), ...mockProposals[0] }
+Default.args = mockProposals[0]
