@@ -71,6 +71,15 @@ export const useActivities = (): Activity[] =>
           title: 'Forum Working Group Regular',
         },
       },
+      {
+        id: '8',
+        createdAt: '2021-05-25T10:28:04.155Z',
+        eventType: 'OpeningCanceledEvent',
+        opening: {
+          id: '3',
+          title: 'Forum Working Group Regular',
+        },
+      },
     ],
     []
   )

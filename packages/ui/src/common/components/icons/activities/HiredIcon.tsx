@@ -5,7 +5,7 @@ interface ActivityIconProps {
   className?: string
 }
 
-export const HiredIcon: React.FC<ActivityIconProps> = ({ className }: ActivityIconProps) => {
+export const HiredIcon: React.FC<ActivityIconProps> = ({ className }) => {
   return (
     <ActivityIcon viewBox="0 0 20 20" fill="none" color="currentColor" className={className}>
       <path

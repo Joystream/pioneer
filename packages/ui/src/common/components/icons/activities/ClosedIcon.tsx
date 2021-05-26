@@ -5,7 +5,7 @@ interface ActivityIconProps {
   className?: string
 }
 
-export function ClosedIcon({ className }: ActivityIconProps) {
+export const ClosedIcon: React.FC<ActivityIconProps> = ({ className }) => {
   return (
     <ActivityIcon viewBox="0 0 20 20" fill="none" color="currentColor" className={className}>
       <path

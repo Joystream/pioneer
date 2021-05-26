@@ -11,15 +11,19 @@ export type WorkingGroupActivity =
   | LeaderSetActivity
   | StatusTextChangedActivity
   | OpeningAddedActivity
+  | OpeningCanceledActivity
 
 type ShortMember = Pick<Member, 'id' | 'handle'>
 
-interface ApplicationActivity extends BaseActivity {
-  membership: ShortMember
+interface OpeningActivity extends BaseActivity {
   opening: {
     id: string
     title: string
   }
+}
+
+interface ApplicationActivity extends OpeningActivity {
+  membership: ShortMember
 }
 
 export interface ApplicationWithdrawnActivity extends ApplicationActivity {
@@ -53,10 +57,10 @@ export interface StatusTextChangedActivity extends BaseActivity {
   groupName: string
 }
 
-export interface OpeningAddedActivity extends BaseActivity {
+export interface OpeningAddedActivity extends OpeningActivity {
   eventType: 'OpeningAddedEvent'
-  opening: {
-    id: string
-    title: string
-  }
+}
+
+export interface OpeningCanceledActivity extends OpeningActivity {
+  eventType: 'OpeningCanceledEvent'
 }

@@ -7,7 +7,7 @@ interface Props {
   activity: OpeningAddedActivity
 }
 
-export const OpeninigAddedContent = ({ activity: { opening } }: Props) => (
+export const OpeningAddedContent = ({ activity: { opening } }: Props) => (
   <>
     Opening "<RouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</RouterLink>" has been created by
     the Council.
