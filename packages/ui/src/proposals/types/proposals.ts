@@ -19,3 +19,13 @@ export interface Proposal {
   type: string
   proposer: Member
 }
+
+export interface PastProposal {
+  id: string
+  endedAt: string
+  title: string
+  rationale: string
+  stage: ProposalStage
+  type: string
+  proposer: Member
+}
