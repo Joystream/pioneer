@@ -20,7 +20,13 @@ interface Props {
   accounts: Account[]
 }
 
-export const MoveFoundsTransferableModal = ({ onClose, onManageAccountsClick, requiredStake, balances, accounts }: Props) => {
+export const MoveFoundsTransferableModal = ({
+  onClose,
+  onManageAccountsClick,
+  requiredStake,
+  balances,
+  accounts,
+}: Props) => {
   if (!accounts.length) {
     return null
   }
