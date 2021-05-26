@@ -3,15 +3,15 @@ import React from 'react'
 import { RouterLink } from '@/common/components/RouterLink'
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 
-import { AppliedOnOpeningActivity } from '../../types'
+import { LeaderSetActivity } from '../../types'
 
 interface Props {
-  activity: AppliedOnOpeningActivity
+  activity: LeaderSetActivity
 }
 
-export const AppliedOnOpeningContent = ({ activity: { membership, opening } }: Props) => (
+export const LeaderSetContent = ({ activity: { membership, groupName } }: Props) => (
   <>
     <MemberModalLink call={{ modal: 'Member', data: { id: membership.id } }}>{membership.handle}</MemberModalLink> has
-    applied on the opening <RouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</RouterLink>.
+    been appointed Leader of the <RouterLink to={`working-groups/${groupName}`}>{groupName} Working Group</RouterLink>.
   </>
 )

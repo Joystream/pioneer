@@ -46,6 +46,22 @@ export const useActivities = (): Activity[] =>
         groupName: 'Forum',
         newBudget: new BN(100000),
       },
+      {
+        id: '5',
+        createdAt: '2021-05-23T10:28:04.155Z',
+        eventType: 'LeaderSetEvent',
+        membership: {
+          id: '3',
+          handle: 'Kyle_1994',
+        },
+        groupName: 'storage',
+      },
+      {
+        id: '6',
+        createdAt: '2021-05-24T10:28:04.155Z',
+        eventType: 'StatusTextChangedEvent',
+        groupName: 'storage',
+      },
     ],
     []
   )
