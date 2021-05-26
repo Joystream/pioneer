@@ -2,9 +2,8 @@ import React, { FC } from 'react'
 import ReactPaginate from 'react-paginate'
 import styled from 'styled-components'
 
-import { ArrowRightIcon } from '@/common/components/icons'
-import { Colors } from '@/common/constants/styles'
-import { size } from '@/common/utils/styles'
+import { Arrow } from '@/common/components/icons'
+import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants/styles'
 
 interface PaginationProps {
   pageCount: number
@@ -24,8 +23,8 @@ export const Pagination: FC<PaginationProps> = ({ pageCount, handlePageChange, p
       activeClassName="page--active"
       activeLinkClassName="pagination__link--active"
       breakLinkClassName="pagination__link"
-      nextLabel={<ArrowRightIcon />}
-      previousLabel={<ArrowRightIcon />}
+      previousLabel={<Arrow direction="left" />}
+      nextLabel={<Arrow direction="right" />}
       nextLinkClassName="pagination__link"
       previousLinkClassName="pagination__link pagination__link--previous"
       onPageChange={(value) => handlePageChange(value.selected + 1)}
@@ -34,41 +33,133 @@ export const Pagination: FC<PaginationProps> = ({ pageCount, handlePageChange, p
   </StyledPaginateContainer>
 )
 
-const StyledPaginateContainer = styled.div`
+const StyledPaginateContainer = styled.nav`
+  display: flex;
+  width: fit-content;
+
   .pagination {
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 2px;
+    width: fit-content;
+    align-items: center;
+  }
+  .pagination__link {
     display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    min-width: 32px;
+    height: 32px;
+    padding: 6px 4px 4px;
+    border: 1px solid transparent;
+    border-color: ${Colors.Black[200]};
+    background-color: ${Colors.White};
+    border-radius: ${BorderRad.s};
+    color: ${Colors.Black[900]};
+    font-family: ${Fonts.Grotesk};
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 700;
+    text-transform: capitalize;
+    outline: none;
+    user-select: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: ${Transitions.all};
+    z-index: 1;
 
-    .page,
-    .break,
-    .previous,
-    .next {
-      ${size('32px')}
-      border: 1px solid ${Colors.Black[200]};
-      border-radius: 2px;
-      margin: 0 2px;
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 150%;
+      height: 150%;
+      border-radius: ${BorderRad.full};
+      transform: translate(-150%, -50%);
+      transition: ${Transitions.all};
+      z-index: -1;
+      pointer-events: none;
+    }
+    &:before {
+      background-color: ${Colors.Black[50]};
+    }
+    &:after {
+      background-color: ${Colors.Blue[50]};
+    }
 
-      &--active {
-        border: 1px solid ${Colors.Blue[100]};
-        background-color: ${Colors.Blue[50]};
+    &:hover,
+    &:focus {
+      border-color: ${Colors.Blue[100]};
+      color: ${Colors.Blue[500]};
+      &:before {
+        transform: translate(-50%, -50%);
+      }
+    }
+    &:active {
+      transform: scale(0.96);
+      border-color: ${Colors.Blue[100]};
+      &:after {
+        transform: translate(-50%, -50%);
+      }
+    }
+    &.disabled {
+      cursor: not-allowed;
+      color: ${Colors.Black[300]};
+      border-color: ${Colors.Black[200]};
+      background-color: ${Colors.White};
+
+      &:hover,
+      &:focus,
+      &:active {
+        transform: scale(1);
+        color: ${Colors.Black[300]};
+        border-color: ${Colors.Black[200]};
+        background-color: ${Colors.White};
+
+        &:after,
+        &:before {
+          transform: translate(-150%, -50%);
+        }
       }
     }
 
-    &__link {
-      ${size('100%')}
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: ${Colors.Black[900]};
-      cursor: pointer;
-      text-align: center;
-
-      &--active {
-        color: ${Colors.Blue[500]};
+    &--active {
+      border-color: ${Colors.Blue[100]};
+      color: ${Colors.Blue[500]};
+      &:after {
+        transform: translate(-50%, -50%);
       }
+    }
+  }
+  .previous,
+  .next {
+    .pagination__link {
+      padding: 4px;
+    }
 
-      &--previous {
-        svg {
-          transform: rotate(180deg);
+    &.disabled {
+      .pagination__link {
+        cursor: not-allowed;
+        color: ${Colors.Black[300]};
+        border-color: ${Colors.Black[200]};
+        background-color: ${Colors.White};
+
+        &:hover,
+        &:focus,
+        &:active {
+          transform: scale(1);
+          color: ${Colors.Black[300]};
+          border-color: ${Colors.Black[200]};
+          background-color: ${Colors.White};
+
+          &:after,
+          &:before {
+            transform: translate(-150%, -50%);
+          }
         }
       }
     }

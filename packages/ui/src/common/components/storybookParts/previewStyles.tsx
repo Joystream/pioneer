@@ -9,6 +9,14 @@ export const TemplateBlock = styled.div`
   width: 100%;
 `
 
+export const ScrollBlock = styled.div`
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  padding-bottom: 32px;
+  overflow: scroll;
+`
+
 export const FullHeightGrid = styled.div`
   display: grid;
   position: absolute;

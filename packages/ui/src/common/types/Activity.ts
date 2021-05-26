@@ -1,19 +1,10 @@
-export type ActivityCategory =
-  | 'closed'
-  | 'hired'
-  | 'created'
-  | 'increased'
-  | 'decreased'
-  | 'applied'
-  | 'warned'
-  | 'joystream'
+import { WorkingGroupActivity } from '@/working-groups/types'
 
-export type ActivityType = 'error' | 'ok' | 'default'
+export type ActivityCategory = Activity['eventType']
 
-export interface Activity {
+export type Activity = WorkingGroupActivity
+
+export interface BaseActivity {
   id: string
-  time: string
-  text: string
-  category: ActivityCategory
-  type?: ActivityType
+  createdAt: string
 }

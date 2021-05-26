@@ -6,6 +6,8 @@ import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { Observable } from 'rxjs'
 
+import { info } from '@/common/logger'
+
 import { Address, onTransactionDone } from '../types'
 
 import { useApi } from './useApi'
@@ -34,20 +36,20 @@ const observeTransaction = (
   const statusCallback = (result: ISubmittableResult) => {
     const { status, events } = result
 
-    console.log(`Current transaction status: ${status.type}`)
+    info(`Current transaction status: ${status.type}`)
 
     if (status.isReady) {
       setStatus('PENDING')
     }
 
     if (status.isInBlock) {
-      console.log('Included at block hash', JSON.stringify(status.asInBlock))
-      console.log('Events:')
+      info('Included at block hash', JSON.stringify(status.asInBlock))
+      info('Events:')
 
       events.forEach(({ event: { data, method, section }, phase }) => {
-        console.log('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
+        info('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
       })
-      console.log(JSON.stringify(events))
+      info(JSON.stringify(events))
 
       setEvents(events)
       setStatus(isError(events) ? 'ERROR' : 'SUCCESS')

@@ -63,12 +63,12 @@ export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer, st
           <TransactionInfo
             title="Stake:"
             value={stake}
-            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
           <TransactionInfo
             title="Transaction fee:"
             value={partialFee?.toBn()}
-            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>

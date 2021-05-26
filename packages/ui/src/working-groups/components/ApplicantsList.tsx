@@ -1,12 +1,9 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React from 'react'
 
-import { CloseButton } from '@/common/components/buttons'
 import { CountBadge } from '@/common/components/CountBadge'
 import { ContentWithTabs, RowGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
-import { Colors } from '@/common/constants/styles'
-import { spacing, size } from '@/common/utils/styles'
+import { Warning } from '@/common/components/Warning'
 import { Member } from '@/memberships/types'
 
 import { Worker } from './Worker'
@@ -22,12 +19,6 @@ export interface WorkersListProps {
 }
 
 export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComplete, leaderId }: WorkersListProps) => {
-  const [isWarningOpen, setIsWarningOpen] = useState<boolean>(hiringComplete)
-
-  const onWarningClose = (): void => {
-    setIsWarningOpen((prevState) => !prevState)
-  }
-
   return (
     <RowGapBlock gap={36}>
       {myApplication && (
@@ -36,13 +27,7 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
           <Worker member={myApplication} isLeader={myApplication.id === leaderId} />
         </ContentWithTabs>
       )}
-      {hiringComplete && isWarningOpen && (
-        <Warning>
-          <StyledCloseButton onClick={onWarningClose} />
-          <h5>Hiring complete!</h5>
-          <p>We are very sorry, you haven’t been chosen.</p>
-        </Warning>
-      )}
+      {hiringComplete && <Warning title={'Hiring complete!'} content={'We are very sorry, you haven’t been chosen.'} />}
       {hired && (
         <ContentWithTabs>
           <Label>Hired</Label>
@@ -64,21 +49,3 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
     </RowGapBlock>
   )
 }
-
-const Warning = styled.div`
-  background-color: ${Colors.Red[50]};
-  position: relative;
-  padding: ${spacing(2)};
-  color: ${Colors.Black[600]};
-
-  h5 {
-    margin-bottom: ${spacing(1)};
-  }
-`
-
-const StyledCloseButton = styled(CloseButton)`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  ${size('16px')}
-`

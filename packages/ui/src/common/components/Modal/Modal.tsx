@@ -76,9 +76,9 @@ export const ModalGlass = styled.div<ModalProps>`
       case 's':
         return '0px'
       case 'm':
-        return '64px'
+        return '120px'
       case 'l':
-        return '48px'
+        return '44px'
       case 'xl':
         return '40px'
     }
@@ -310,7 +310,7 @@ export const SuccessModalBody = styled(ModalBody)`
   grid-row-gap: 8px;
   background-color: ${Colors.White};
   border: none;
-  padding: 12px 24px 40px;
+  padding: 8px 24px 24px;
 `
 
 export const SignTransferContainer = styled.div`

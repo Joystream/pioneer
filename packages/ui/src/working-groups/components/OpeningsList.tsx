@@ -1,8 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+
+import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 
 import { BadgeViolet } from '../../common/components/BadgeViolet'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '../../common/components/buttons'
+import { ButtonPrimary, ButtonsGroup } from '../../common/components/buttons'
 import { Toggle } from '../../common/components/buttons/Toggle'
 import { Arrow } from '../../common/components/icons'
 import { List, ListItem } from '../../common/components/List'
@@ -148,12 +149,10 @@ const OpeningDetails = ({ opening }: Props) => {
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <Link to={`/working-groups/openings/${opening.id}`}>
-            <ButtonGhost size="medium">
-              <Arrow direction="left" />
-              Learn more
-            </ButtonGhost>
-          </Link>
+          <LinkButtonGhost to={`/working-groups/openings/${opening.id}`}>
+            <Arrow direction="left" />
+            Learn more
+          </LinkButtonGhost>
           <ButtonPrimary
             size="medium"
             onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}

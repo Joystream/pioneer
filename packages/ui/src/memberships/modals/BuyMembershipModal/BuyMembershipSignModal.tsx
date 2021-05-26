@@ -18,12 +18,12 @@ import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendT
 import { onTransactionDone } from '../../../common/types'
 import { getMessage } from '../utils'
 
-import { FormFields } from './BuyMembershipFormModal'
+import { MemberFormFields } from './BuyMembershipFormModal'
 
 interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
-  formData: FormFields
+  formData: MemberFormFields
   onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   initialSigner?: Account
@@ -86,12 +86,12 @@ export const BuyMembershipSignModal = ({
           <TransactionInfo
             title="Creation fee:"
             value={membershipPrice?.toBn()}
-            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee.toBn()}
-            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>

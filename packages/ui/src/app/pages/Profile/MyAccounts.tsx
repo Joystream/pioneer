@@ -19,10 +19,10 @@ export function MyAccounts() {
         <MyProfileTabs />
       </PageHeader>
       <Statistics>
-        <TokenValueStat title="Total balance" helperText="Lorem ipsum..." value={total} />
-        <TokenValueStat title="Total transferable balance" helperText="Lorem ipsum..." value={transferable} />
-        <TokenValueStat title="Total locked balance" helperText="Lorem ipsum..." value={locked} />
-        <TokenValueStat title="Total recoverable" helperText="Lorem ipsum..." value={recoverable} />
+        <TokenValueStat title="Total balance" tooltipText="Lorem ipsum..." value={total} />
+        <TokenValueStat title="Total transferable balance" tooltipText="Lorem ipsum..." value={transferable} />
+        <TokenValueStat title="Total locked balance" tooltipText="Lorem ipsum..." value={locked} />
+        <TokenValueStat title="Total recoverable" tooltipText="Lorem ipsum..." value={recoverable} />
       </Statistics>
       <Accounts />
     </AppPage>

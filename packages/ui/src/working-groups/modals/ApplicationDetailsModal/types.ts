@@ -1,7 +1,3 @@
-import { ModalWithDataCall } from '../../../common/providers/modal/types'
-import { WorkingGroupApplication } from '../../types/WorkingGroupApplication'
+import { ModalWithDataCall } from '@/common/providers/modal/types'
 
-export type ApplicationDetailsModalCall = ModalWithDataCall<
-  'ApplicationDetails',
-  { application: WorkingGroupApplication }
->
+export type ApplicationDetailsModalCall = ModalWithDataCall<'ApplicationDetails', { applicationId: string }>

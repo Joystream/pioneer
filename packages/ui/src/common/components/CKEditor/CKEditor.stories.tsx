@@ -1,12 +1,14 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
+import { info } from '@/common/logger'
+
 import { TemplateBlock } from '../storybookParts/previewStyles'
 
 import { CKEditor, CKEditorProps } from './CKEditor'
 
 export default {
-  title: 'Common/CKEditor',
+  title: 'Common/Forms/CKEditor',
   component: CKEditor,
 } as Meta
 
@@ -19,5 +21,5 @@ const Template: Story<CKEditorProps> = (args) => (
 export const ClassicEditor = Template.bind({})
 
 ClassicEditor.args = {
-  onChange: (event, editor) => console.log(editor.getData()),
+  onChange: (event, editor) => info(editor.getData()),
 }

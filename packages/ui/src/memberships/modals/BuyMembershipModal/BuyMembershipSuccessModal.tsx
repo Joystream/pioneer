@@ -11,11 +11,11 @@ import { MemberInfo } from '../../components'
 import { MemberModalCall } from '../../components/MemberProfile'
 import { Member } from '../../types'
 
-import { FormFields } from './BuyMembershipFormModal'
+import { MemberFormFields } from './BuyMembershipFormModal'
 
 interface Props {
   onClose: () => void
-  member: FormFields
+  member: MemberFormFields
   memberId?: string
 }
 

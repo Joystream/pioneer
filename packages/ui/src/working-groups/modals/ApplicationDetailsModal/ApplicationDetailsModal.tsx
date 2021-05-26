@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
-import { CloseButton } from '../../../common/components/buttons'
+import { CloseButton } from '@/common/components/buttons'
+import { Loading } from '@/common/components/Loading'
 import {
   SidePane,
   SidePaneBody,
@@ -8,9 +9,10 @@ import {
   SidePaneHeader,
   SidePanelTop,
   SidePaneTitle,
-} from '../../../common/components/SidePane'
-import { Tabs } from '../../../common/components/Tabs'
-import { useModal } from '../../../common/hooks/useModal'
+} from '@/common/components/SidePane'
+import { Tabs } from '@/common/components/Tabs'
+import { useModal } from '@/common/hooks/useModal'
+import { useApplication } from '@/working-groups/hooks/useApplication'
 
 import { FormDetails } from './FormDetails'
 import { GeneralDetails } from './GeneralDetails'
@@ -21,8 +23,9 @@ type Tab = 'GENERAL' | 'FORM'
 export const ApplicationDetailsModal = React.memo(() => {
   const {
     hideModal,
-    modalData: { application },
+    modalData: { applicationId },
   } = useModal<ApplicationDetailsModalCall>()
+  const { isLoading, application } = useApplication(applicationId)
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -34,7 +37,7 @@ export const ApplicationDetailsModal = React.memo(() => {
 
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
-      <SidePane>
+      <SidePane topSize="s">
         <SidePaneHeader>
           <SidePanelTop>
             <SidePaneTitle>My Application</SidePaneTitle>
@@ -49,8 +52,9 @@ export const ApplicationDetailsModal = React.memo(() => {
           />
         </SidePaneHeader>
         <SidePaneBody>
-          {currentTab === 'GENERAL' && <GeneralDetails application={application} />}
-          {currentTab === 'FORM' && <FormDetails applicationId={application.id} />}
+          {isLoading && <Loading />}
+          {!isLoading && application && currentTab === 'GENERAL' && <GeneralDetails application={application} />}
+          {!isLoading && application && currentTab === 'FORM' && <FormDetails applicationId={application.id} />}
         </SidePaneBody>
       </SidePane>
     </SidePaneGlass>

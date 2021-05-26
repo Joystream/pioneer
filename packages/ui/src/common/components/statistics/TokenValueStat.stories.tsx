@@ -28,9 +28,9 @@ export const TokenValue = Template.bind({})
 
 TokenValue.args = {
   title: 'Statistic title',
-  helperText: 'Text to help',
+  tooltipText: 'Text to help',
   value: 100000,
-  helperTitle: 'Title to help',
-  helperLinkText: 'More info',
-  helperLinkURL: 'http://example.com/',
+  tooltipTitle: 'Title to help',
+  tooltipLinkText: 'More info',
+  tooltipLinkURL: 'http://example.com/',
 }

@@ -6,26 +6,34 @@ import { AppPage } from '@/app/components/AppPage'
 import { BadgeRed } from '@/common/components/BadgeRed'
 import { BadgeViolet } from '@/common/components/BadgeViolet'
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons/Buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, RowGapBlock, SidePanel } from '@/common/components/page/PageContent'
+import {
+  ContentWithSidepanel,
+  MainPanel,
+  PageFooter,
+  RowGapBlock,
+  SidePanel,
+} from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
-import { StatisticItem, Statistics, TokenValueStat, DurationStatistics } from '@/common/components/statistics'
+import { Statistics, TokenValueStat, DurationStatistics } from '@/common/components/statistics'
+import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
+import { Colors } from '@/common/constants/styles'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
-import { spacing } from '@/common/utils/styles'
+import { size, spacing } from '@/common/utils/styles'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
 import { OpeningStatuses, MappedStatuses } from '@/working-groups/constants'
 import useOpening from '@/working-groups/hooks/useOpening'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 
-const WorkingGroupOpening = () => {
+export const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
@@ -57,34 +65,55 @@ const WorkingGroupOpening = () => {
     )
   })
 
+  const ApplyButton = memo(() => (
+    <ButtonPrimary
+      size="medium"
+      onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
+    >
+      Apply now!
+    </ButtonPrimary>
+  ))
+
+  const ApplicationStatus = memo(() => (
+    <ApplicationStatusWrapper>
+      <Circle />
+      {opening.status === OpeningStatuses.UPCOMING && (
+        <>
+          <h4>The opening hasn't started yet</h4>
+          <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p>
+        </>
+      )}
+      {opening.status === OpeningStatuses.OPEN && (
+        <>
+          <h4>No applicants yet</h4>
+          <p>There are no applicants yet lorem ipsum dolor sit amet.</p>
+        </>
+      )}
+      {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
+    </ApplicationStatusWrapper>
+  ))
+
   return (
-    <AppPage lastBreadcrumb={opening.title}>
+    <AppPage lastBreadcrumb={opening.title} rowGap="s">
       <PageHeader>
         <PreviousPage>
           <PageTitle>{opening.title}</PageTitle>
         </PreviousPage>
-        <ButtonsWrapper>
+        <ButtonsGroup>
           {(opening.status === OpeningStatuses.OPEN || opening.status === OpeningStatuses.CANCELLED) && (
             <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
               <LinkIcon />
               Copy link
             </ButtonGhost>
           )}
-          {opening.status === OpeningStatuses.OPEN && (
-            <ButtonPrimary
-              size="medium"
-              onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
-            >
-              Apply now!
-            </ButtonPrimary>
-          )}
+          {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
           {opening.status === OpeningStatuses.UPCOMING && (
             <ButtonGhost size="small">
               <BellIcon />
               Notify me when it’s open
             </ButtonGhost>
           )}
-        </ButtonsWrapper>
+        </ButtonsGroup>
       </PageHeader>
       <RowGapBlock>
         <Row>
@@ -97,12 +126,10 @@ const WorkingGroupOpening = () => {
           <StatusBadge />
         </Row>
         <Statistics>
-          <StatisticItem title="Current budget" helperText="Lorem ipsum...">
-            {opening.budget}
-          </StatisticItem>
+          <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
           <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
           <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.value} />
-          <StatisticItem title="Hiring limit">{opening.hiring.total}</StatisticItem>
+          <NumericValueStat title="Hiring limit" value={opening.hiring.total} />
         </Statistics>
         <ContentWithSidepanel>
           <MainPanel>
@@ -118,32 +145,43 @@ const WorkingGroupOpening = () => {
                 leaderId={opening.leaderId}
               />
             )}
+            {opening.status === OpeningStatuses.UPCOMING ||
+              (opening.status === OpeningStatuses.OPEN && !opening.applications.length && <ApplicationStatus />)}
           </SidePanel>
         </ContentWithSidepanel>
       </RowGapBlock>
-      <Footer>
-        <BlockTime block={opening.createdAtBlock} horizontal />
-      </Footer>
+      <PageFooter>
+        <BlockTime block={opening.createdAtBlock} horizontal dateLabel="Hired" />
+      </PageFooter>
     </AppPage>
   )
 }
 
-const Row = styled.div`
-  display: flex;
-`
-const ButtonsWrapper = styled.div`
-  margin-left: auto;
-  display: flex;
+const ApplicationStatusWrapper = styled.div`
+  text-align: center;
+
+  h4 {
+    color: ${Colors.Blue[500]};
+    margin: ${spacing(2, 0)};
+  }
+
+  p {
+    color: ${Colors.Black[500]};
+    margin-bottom: ${spacing(2)};
+  }
 
   button {
-    margin-left: ${spacing(1)};
+    display: inline-flex;
   }
 `
 
-const Footer = styled.div`
-  position: absolute;
-  bottom: 5px;
-  font-size: 14px;
+const Row = styled.div`
+  display: flex;
 `
 
-export default WorkingGroupOpening
+const Circle = styled.div`
+  border-radius: 50%;
+  background-color: ${Colors.Black[50]};
+  margin: 0 auto;
+  ${size('96px')};
+`

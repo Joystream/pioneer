@@ -6,7 +6,7 @@ import { Column, Row, TemplateBlock } from '../storybookParts/previewStyles'
 import { Checkbox, CheckboxProps } from './Checkbox'
 
 export default {
-  title: 'Common/Checkbox',
+  title: 'Common/Forms/Checkbox',
   component: Checkbox,
 } as Meta
 
@@ -14,16 +14,19 @@ const Template: Story<CheckboxProps> = (args) => (
   <TemplateBlock>
     <Column>
       <Row>
-        Default
-        <Checkbox {...args} id="id0" />
+        <Checkbox {...args} id="id0">
+          Something here (Default)
+        </Checkbox>
       </Row>
       <Row>
-        Disabled
-        <Checkbox {...args} id="id1" enabled={false} />
+        <Checkbox {...args} id="id1" enabled={false}>
+          Something here (Disabled)
+        </Checkbox>
       </Row>
       <Row>
-        Checked
-        <Checkbox {...args} id="id2" isChecked />
+        <Checkbox {...args} id="id2" isChecked enabled={false}>
+          Something here (Checked)
+        </Checkbox>
       </Row>
     </Column>
   </TemplateBlock>

@@ -1,8 +1,11 @@
-import { WorkerWithDetails } from '@/working-groups/types'
-
 import { Address, Block } from '../../common/types'
 
 type ID = string
+
+export interface MemberRole {
+  groupName: string
+  isLeader: boolean
+}
 
 export interface Member {
   id: ID
@@ -12,7 +15,7 @@ export interface Member {
   name?: string
   avatar?: string
   inviteCount: number
-  roles: WorkerWithDetails[]
+  roles: MemberRole[]
   isVerified: boolean
   isFoundingMember: boolean
   invitedBy?: ID

@@ -20,11 +20,11 @@ import { useKeyring } from '../../../common/hooks/useKeyring'
 import { useObservable } from '../../../common/hooks/useObservable'
 import { SelectMember } from '../../components/SelectMember'
 import { AvatarURISchema, HandleSchema, MemberSchema, NewAddressSchema } from '../../model/validation'
-import { FormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
+import { MemberFormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 interface InviteProps {
   onClose: () => void
-  onSubmit: (params: FormFields) => void
+  onSubmit: (params: MemberFormFields) => void
 }
 
 const InviteMemberSchema = Yup.object().shape({
@@ -47,7 +47,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
     avatarUri: '',
     hasTerms: false,
   }
-  const { fields, changeField, validation } = useForm<FormFields>(initializer, InviteMemberSchema)
+  const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, InviteMemberSchema)
   const { isValid, errors, setContext } = validation
 
   const { rootAccount, controllerAccount, handle, name, avatarUri, about } = fields
@@ -78,7 +78,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               label="Root account"
               id="root-account"
               required
-              helperText="Something about root accounts"
+              tooltipText="Something about root accounts"
               validation={hasError('rootAccount', errors) ? 'invalid' : undefined}
               message={hasError('rootAccount', errors) ? getErrorMessage('rootAccount', errors) : ''}
             >
@@ -96,7 +96,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               label="Controller account"
               id="controller-account"
               required
-              helperText="Something about controller accounts"
+              tooltipText="Something about controller accounts"
               validation={hasError('controllerAccount', errors) ? 'invalid' : undefined}
               message={hasError('controllerAccount', errors) ? getErrorMessage('controllerAccount', errors) : ''}
             >

@@ -29,9 +29,9 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
     <ContentWithSidepanel>
       <MainPanel>
         <Statistics>
-          <TokenValueStat title="Current budget" helperText="Lorem ipsum..." value={workingGroup.budget} />
-          <TokenValueStat title="Working Group dept" helperText="Lorem ipsum..." value={-200} />
-          <TokenValueStat title="Avg stake" helperText="Lorem ipsum..." value={100_000} />
+          <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={workingGroup.budget} />
+          <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={-200} />
+          <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={100_000} />
         </Statistics>
         {isLoading ? (
           <Loading />

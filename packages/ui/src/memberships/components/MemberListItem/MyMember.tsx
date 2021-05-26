@@ -25,7 +25,7 @@ export const MyMemberListItem = ({ member }: { member: Member }) => {
       </MemberColumn>
 
       <MemberRolesColumn>
-        <MemberRoles wrapable member={member} size="l" />
+        <MemberRoles wrapable roles={member.roles} size="l" />
       </MemberRolesColumn>
       <MemberColumn>
         <CountInfo count={0} times />

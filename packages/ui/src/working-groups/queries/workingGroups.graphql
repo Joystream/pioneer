@@ -6,6 +6,7 @@ fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
 }
 
 fragment WorkerFields on Worker {
+  id
   membership {
     ...MemberFields
   }
@@ -24,6 +25,10 @@ fragment WorkerFields on Worker {
   stakeAccount
   hiredAtBlock {
     ...BlockFields
+  }
+  application {
+    id
+    openingId
   }
 }
 
@@ -52,6 +57,12 @@ query getWorkingGroups {
 
 query getWorkers ($where: WorkerWhereInput) {
   workers(where: $where) {
+    ...WorkerFields
+  }
+}
+
+query getWorker ($where: WorkerWhereUniqueInput!) {
+  workerByUniqueInput(where: $where) {
     ...WorkerFields
   }
 }
@@ -87,19 +98,7 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
       __typename
     }
     applicant {
-      id
-      isVerified
-      handle
-      rootAccount
-      controllerAccount
-      inviteCount
-      isFoundingMember
-      roles {
-        id
-      }
-      metadata {
-        name
-      }
+      ...MemberFields
     }
     status {
       __typename
@@ -169,6 +168,7 @@ query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
 fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   id
   opening {
+    id
     group {
       name
     }
@@ -189,6 +189,12 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
 
 query GetWorkingGroupApplications($applicantId_in: [ID!]) {
   workingGroupApplications(where: { applicantId_in: $applicantId_in }) {
+    ...WorkingGroupApplicationFields
+  }
+}
+
+query GetWorkingGroupApplication($where: WorkingGroupApplicationWhereUniqueInput!) {
+  workingGroupApplicationByUniqueInput(where: $where){
     ...WorkingGroupApplicationFields
   }
 }

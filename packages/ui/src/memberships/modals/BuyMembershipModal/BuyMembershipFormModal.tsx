@@ -38,7 +38,7 @@ import { Member } from '../../types'
 
 interface CreateProps {
   onClose: () => void
-  onSubmit: (params: FormFields) => void
+  onSubmit: (params: MemberFormFields) => void
   membershipPrice?: BalanceOf
 }
 
@@ -53,7 +53,7 @@ const CreateMemberSchema = Yup.object().shape({
   referrer: ReferrerSchema,
 })
 
-export interface FormFields {
+export interface MemberFormFields {
   rootAccount?: Account
   controllerAccount?: Account
   name: string
@@ -68,7 +68,6 @@ export interface FormFields {
 
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
   const { api } = useApi()
-  // 2. Debounce - useDebounce
 
   const initializer = {
     name: '',
@@ -81,7 +80,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
     referrer: undefined,
     hasTerms: false,
   }
-  const { fields, changeField, validation } = useForm<FormFields>(initializer, CreateMemberSchema)
+  const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, CreateMemberSchema)
   const { isValid, errors, setContext } = validation
   const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = fields
 
@@ -134,7 +133,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
           </Row>
 
           <Row>
-            <InputComponent label="Root account" required inputSize="l" helperText="Something about root accounts">
+            <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
               <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account)} />
             </InputComponent>
           </Row>
@@ -144,7 +143,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
               label="Controller account"
               required
               inputSize="l"
-              helperText="Something about controller account"
+              tooltipText="Something about controller account"
             >
               <SelectAccount
                 filter={filterController}
@@ -230,7 +229,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
             <TransactionInfo
               title="Creation fee:"
               value={membershipPrice?.toBn()}
-              helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+              tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
             />
           </TransactionInfoContainer>
           <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>

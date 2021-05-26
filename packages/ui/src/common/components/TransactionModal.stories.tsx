@@ -7,7 +7,7 @@ import { TransactionModal, TransactionModalProps } from './TransactionModal'
 import { TextMedium } from './typography'
 
 export default {
-  title: 'Common/TransactionModal',
+  title: 'Common/Modals/TransactionModal',
   component: TransactionModal,
 } as Meta
 

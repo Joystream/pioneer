@@ -64,7 +64,7 @@ export function TransferInviteSignModal({ onClose, sourceMember, targetMember, a
           <TransactionInfo
             title="Transaction fee:"
             value={fee}
-            helperText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>

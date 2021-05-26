@@ -47,7 +47,7 @@ const NotificationComponent = styled.div<{ isError?: boolean }>`
   background-color: ${Colors.Black[800]};
   border-left: 4px solid ${({ isError }) => (isError ? Colors.Red[400] : Colors.Blue[500])};
   border-radius: ${BorderRad.m};
-  box-shadow: ${Shadows.common};
+  box-shadow: ${Shadows.select};
   ${Animations.showNotification};
 `
 
