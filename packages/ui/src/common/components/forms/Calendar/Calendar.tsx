@@ -1,5 +1,5 @@
 import { addDays, startOfMonth, startOfWeek } from 'date-fns'
-import React, { useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 
 import { Arrow } from '@/common/components/icons'
 import { DateSelection, PartialDateRange } from '@/common/types/Dates'
@@ -44,7 +44,7 @@ interface CalendarHeaderProps {
   onChange?: (month: Date) => void
 }
 
-const CalendarHeader = React.memo(({ month, within, withinMonths, onChange }: CalendarHeaderProps) => {
+const CalendarHeader = memo(({ month, within, withinMonths, onChange }: CalendarHeaderProps) => {
   const title = month.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })
   const { start: min, end: max } = fromRange(within)
   const { start: minMonth, end: maxMonth } = fromRange(withinMonths)
@@ -72,7 +72,7 @@ interface CalendarBodyProps {
   onChange?: (day: Date) => void
 }
 
-const CalendarBody = React.memo(({ month, within, selection, onChange }: CalendarBodyProps) => {
+const CalendarBody = memo(({ month, within, selection, onChange }: CalendarBodyProps) => {
   const firstDay = useMemo(() => startOfWeek(addDays(month, -1), { weekStartsOn: 1 }), [month])
 
   return (
