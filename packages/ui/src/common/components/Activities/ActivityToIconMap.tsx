@@ -21,4 +21,6 @@ export const ActivityToIconMap: Record<ActivityCategory, [React.FC, IconStyle]> 
   OpeningAddedEvent: [CreatedIcon, 'joystream'],
   OpeningCanceledEvent: [ClosedIcon, 'negative'],
   StakeSlashedEvent: [WarnedIcon, 'negative'],
+  StakeIncreasedEvent: [AppliedIcon, 'negative'],
+  StakeDecreasedEvent: [AppliedIcon, 'positive'],
 }

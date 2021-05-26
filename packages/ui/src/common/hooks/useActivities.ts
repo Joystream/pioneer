@@ -90,6 +90,26 @@ export const useActivities = (): Activity[] =>
           handle: 'stefan0',
         },
       },
+      {
+        id: '10',
+        createdAt: '2021-05-26T19:28:04.155Z',
+        eventType: 'StakeIncreasedEvent',
+        member: {
+          id: '6',
+          handle: 'stefan0',
+        },
+        amount: new BN(1000),
+      },
+      {
+        id: '11',
+        createdAt: '2021-05-26T19:28:04.155Z',
+        eventType: 'StakeDecreasedEvent',
+        member: {
+          id: '6',
+          handle: 'stefan0',
+        },
+        amount: new BN(1000),
+      },
     ],
     []
   )
