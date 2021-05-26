@@ -110,6 +110,15 @@ export const useActivities = (): Activity[] =>
         },
         amount: new BN(1000),
       },
+      {
+        id: '12',
+        createdAt: '2021-05-26T19:28:04.155Z',
+        eventType: 'WorkerExitedEvent',
+        member: {
+          id: '7',
+          handle: 'mr_guy',
+        },
+      },
     ],
     []
   )

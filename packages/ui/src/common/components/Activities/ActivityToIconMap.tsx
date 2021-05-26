@@ -23,4 +23,5 @@ export const ActivityToIconMap: Record<ActivityCategory, [React.FC, IconStyle]> 
   StakeSlashedEvent: [WarnedIcon, 'negative'],
   StakeIncreasedEvent: [AppliedIcon, 'negative'],
   StakeDecreasedEvent: [AppliedIcon, 'positive'],
+  WorkerExitedEvent: [ClosedIcon, 'negative'],
 }
