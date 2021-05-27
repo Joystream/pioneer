@@ -184,7 +184,11 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       <AccountItemWrap key={address}>
         <AccountInfo account={account} />
         <TokenValue value={balance?.total} />
-        <TokenValue value={balance?.locked} />
+        <div>
+          <TokenValue value={balance?.locked} />
+          <br />
+          {balance?.locks.map((lock) => lockIcon(lock.id || 1))}
+        </div>
         <TokenValue value={balance?.recoverable} />
         <TokenValue value={balance?.transferable} />
         <AccountControls>
