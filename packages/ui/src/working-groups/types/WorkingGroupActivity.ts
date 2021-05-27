@@ -3,6 +3,8 @@ import BN from 'bn.js'
 import { BaseActivity } from '@/common/types'
 import { Member } from '@/memberships/types'
 
+import { WorkingGroupOpening } from '.'
+
 export type WorkingGroupActivity =
   | ApplicationWithdrawnActivity
   | AppliedOnOpeningActivity
@@ -18,11 +20,10 @@ export type WorkingGroupActivity =
 
 type ShortMember = Pick<Member, 'id' | 'handle'>
 
+type ShortOpening = Pick<WorkingGroupOpening, 'id' | 'type' | 'title' | 'groupName'>
+
 interface OpeningActivity extends BaseActivity {
-  opening: {
-    id: string
-    title: string
-  }
+  opening: ShortOpening
 }
 
 interface ApplicationActivity extends OpeningActivity {

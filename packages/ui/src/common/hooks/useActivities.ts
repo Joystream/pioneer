@@ -17,6 +17,8 @@ export const useActivities = (): Activity[] =>
         opening: {
           title: 'Forum Worker',
           id: '2',
+          type: 'REGULAR',
+          groupName: 'forum',
         },
       },
       {
@@ -30,6 +32,8 @@ export const useActivities = (): Activity[] =>
         opening: {
           title: 'Forum Worker',
           id: '2',
+          type: 'REGULAR',
+          groupName: 'forum',
         },
       },
       {
@@ -69,6 +73,8 @@ export const useActivities = (): Activity[] =>
         opening: {
           id: '3',
           title: 'Forum Working Group Regular',
+          type: 'REGULAR',
+          groupName: 'forum',
         },
       },
       {
@@ -78,6 +84,8 @@ export const useActivities = (): Activity[] =>
         opening: {
           id: '3',
           title: 'Forum Working Group Regular',
+          type: 'REGULAR',
+          groupName: 'forum',
         },
       },
       {
@@ -117,6 +125,28 @@ export const useActivities = (): Activity[] =>
         member: {
           id: '7',
           handle: 'mr_guy',
+        },
+      },
+      {
+        id: '13',
+        createdAt: '2021-05-25T10:28:04.155Z',
+        eventType: 'OpeningAddedEvent',
+        opening: {
+          id: '3',
+          title: 'Forum Working Group Leader',
+          type: 'LEADER',
+          groupName: 'forum',
+        },
+      },
+      {
+        id: '14',
+        createdAt: '2021-05-25T10:28:04.155Z',
+        eventType: 'OpeningCanceledEvent',
+        opening: {
+          id: '3',
+          title: 'Forum Working Group Leader',
+          type: 'LEADER',
+          groupName: 'forum',
         },
       },
     ],
