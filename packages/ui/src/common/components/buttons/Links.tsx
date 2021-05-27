@@ -65,7 +65,14 @@ export function LinkBareGhost({ className, children, size, square, disabled, hre
     </LinkBareGhostStyles>
   )
 }
-export function LinkLink({ className, children, square, disabled, href, accentColor }: LinkProps & {accentColor?: boolean}) {
+export function LinkLink({
+  className,
+  children,
+  square,
+  disabled,
+  href,
+  accentColor,
+}: LinkProps & { accentColor?: boolean }) {
   return (
     <LinkLinkStyles className={className} square={square} disabled={disabled} href={href} accentColor={accentColor}>
       <LinkInnerWrapper>{children}</LinkInnerWrapper>
@@ -361,7 +368,7 @@ export const LinkBareGhostStyles = styled.a<LinkProps>`
   }
 `
 
-export const LinkLinkStyles = styled.a<LinkProps & {accentColor?: boolean}>`
+export const LinkLinkStyles = styled.a<LinkProps & { accentColor?: boolean }>`
   ${BasicLinkStyles};
 
   &,
@@ -372,7 +379,7 @@ export const LinkLinkStyles = styled.a<LinkProps & {accentColor?: boolean}>`
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
-    color: ${({accentColor}) => accentColor ? Colors.Blue[400] : Colors.Black[900]};
+    color: ${({ accentColor }) => (accentColor ? Colors.Blue[400] : Colors.Black[900])};
     text-transform: none;
     border-radius: 0;
     border-color: transparent;
@@ -443,23 +450,4 @@ export const LinkLinkStyles = styled.a<LinkProps & {accentColor?: boolean}>`
       background-color: transparent;
     }
   }
-`
-
-export const LinksGroup = styled.div<{ align?: 'left' | 'center' | 'right' }>`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 8px;
-  align-items: center;
-  width: fit-content;
-  justify-self: ${({ align }) => {
-    switch (align) {
-      case 'left':
-      default:
-        return 'start'
-      case 'center':
-        return 'center'
-      case 'right':
-        return 'end'
-    }
-  }};
 `

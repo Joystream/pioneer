@@ -445,22 +445,3 @@ export const LinkButtonLinkStyles = styled(Link)<LinkButtonProps>`
     }
   }
 `
-
-export const LinkButtonsGroup = styled.div<{ align?: 'left' | 'center' | 'right' }>`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 8px;
-  align-items: center;
-  width: fit-content;
-  justify-self: ${({ align }) => {
-    switch (align) {
-      case 'left':
-      default:
-        return 'start'
-      case 'center':
-        return 'center'
-      case 'right':
-        return 'end'
-    }
-  }};
-`
