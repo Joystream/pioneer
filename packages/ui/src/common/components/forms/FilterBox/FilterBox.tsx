@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ButtonBareGhost } from '@/common/components/buttons'
 import { CrossIcon } from '@/common/components/icons'
+import { StyledLink } from '@/common/components/Link'
 import { Colors } from '@/common/constants'
 
 import { FilterSearchBox } from './FilterSearchBox'
@@ -18,7 +18,7 @@ interface FilterBoxProps {
 
 export const FilterBox = ({ search = '', searchSlot, onApply, onClear, onSearch, children }: FilterBoxProps) => (
   <FilterContainer>
-    <ClearButton size="tiny" onClick={onClear}>
+    <ClearButton onClick={onClear}>
       <CrossIcon />
       Clear all Filters
     </ClearButton>
@@ -35,14 +35,14 @@ const FilterContainer = styled.div`
   flex-direction: column;
 `
 
-const ClearButton = styled(ButtonBareGhost)`
+const ClearButton = styled(StyledLink)`
   align-self: flex-end;
   color: ${Colors.Black[400]};
-  & > span {
-    column-gap: 4px;
-  }
+  text-decoration: none;
   svg {
     color: ${Colors.Black[900]};
+    margin-right: 6px;
+    vertical-align: middle;
     width: 12px;
   }
 `
