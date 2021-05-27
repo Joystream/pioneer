@@ -1,5 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
+import { MemoryRouter } from 'react-router'
 
 import { getMockAsOpening } from '@/mocks/data/mockOpenings'
 
@@ -10,7 +11,11 @@ export default {
   component: OpeningsList,
 } as Meta
 
-const Template: Story<OpeningsListProps> = (args) => <OpeningsList {...args} />
+const Template: Story<OpeningsListProps> = (args) => (
+  <MemoryRouter>
+    <OpeningsList {...args} />
+  </MemoryRouter>
+)
 
 export const Default = Template.bind({})
 

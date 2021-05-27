@@ -16,7 +16,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { MemberRoles } from '@/memberships/components/MemberRoles'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { OpeningsList } from '@/working-groups/components/OpeningsList'
+import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 
@@ -87,7 +87,8 @@ export const WorkingGroupsOpenings = () => {
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
             {activeTab === 'OPENINGS' && (isLoading ? <Loading /> : <OpeningsList openings={openings} />)}
-            {activeTab === 'UPCOMING' && (upcomingLoading ? <Loading /> : <OpeningsList openings={upcomingOpenings} />)}
+            {activeTab === 'UPCOMING' &&
+              (upcomingLoading ? <Loading /> : <UpcomingOpeningsList openings={upcomingOpenings} />)}
           </ContentWithTabs>
         </MainPanel>
         <SidePanel neighbor={sideNeighborRef}>
