@@ -17,6 +17,7 @@ export type WorkingGroupActivity =
   | StakeSlashedActivity
   | StakeChangedActivity
   | WorkerExitedActivity
+  | WorkerStartedLeavingActivity
 
 type ShortMember = Pick<Member, 'id' | 'handle'>
 
@@ -83,5 +84,10 @@ export interface StakeChangedActivity extends BaseActivity {
 
 export interface WorkerExitedActivity extends BaseActivity {
   eventType: 'WorkerExitedEvent'
+  member: ShortMember
+}
+
+export interface WorkerStartedLeavingActivity extends BaseActivity {
+  eventType: 'WorkerStartedLeavingEvent'
   member: ShortMember
 }

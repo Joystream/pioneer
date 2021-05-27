@@ -176,5 +176,14 @@ Default.args = {
         groupName: 'forum',
       },
     },
+    {
+      id: '15',
+      createdAt: '2021-05-25T10:28:04.155Z',
+      eventType: 'WorkerStartedLeavingEvent',
+      member: {
+        id: '8',
+        handle: 'johann',
+      },
+    },
   ],
 }

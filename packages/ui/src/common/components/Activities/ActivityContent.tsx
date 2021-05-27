@@ -11,6 +11,7 @@ import { StakeChangedContent } from '@/working-groups/components/Activities/Stak
 import { StakeSlashedContent } from '@/working-groups/components/Activities/StakeSlashedContent'
 import { StatusTextChangedContent } from '@/working-groups/components/Activities/StatusTextChangedContent'
 import { WorkerExitedContent } from '@/working-groups/components/Activities/WorkerExitedContent'
+import { WorkerStartedLeavingContent } from '@/working-groups/components/Activities/WorkerStartedLeavingContent'
 
 import { Activity } from '../../types'
 
@@ -43,6 +44,8 @@ export const ActivityContent = React.memo(({ activity }: Props) => {
       return <StakeChangedContent activity={activity} />
     case 'WorkerExitedEvent':
       return <WorkerExitedContent activity={activity} />
+    case 'WorkerStartedLeavingEvent':
+      return <WorkerStartedLeavingContent activity={activity} />
     default:
       return <div />
   }
