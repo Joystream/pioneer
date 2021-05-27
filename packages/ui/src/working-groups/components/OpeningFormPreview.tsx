@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { LinkLink } from '@/common/components/buttons/Links'
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
-import { Link } from '@/common/components/Link'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview/MarkdownPreview'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -31,9 +31,9 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
         </RowGapBlock>
       </Row>
       <Row>
-        <Link href="http://example.com/" size="l" dark>
+        <LinkLink href="http://example.com/" size="small">
           Show more
-        </Link>
+        </LinkLink>
       </Row>
       <Row>
         <RowGapBlock gap={4}>

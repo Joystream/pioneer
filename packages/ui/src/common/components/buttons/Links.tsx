@@ -65,9 +65,9 @@ export function LinkBareGhost({ className, children, size, square, disabled, hre
     </LinkBareGhostStyles>
   )
 }
-export function LinkLink({ className, children, square, disabled, href }: LinkProps) {
+export function LinkLink({ className, children, square, disabled, href, accentColor }: LinkProps & {accentColor?: boolean}) {
   return (
-    <LinkLinkStyles className={className} square={square} disabled={disabled} href={href}>
+    <LinkLinkStyles className={className} square={square} disabled={disabled} href={href} accentColor={accentColor}>
       <LinkInnerWrapper>{children}</LinkInnerWrapper>
     </LinkLinkStyles>
   )
@@ -361,7 +361,7 @@ export const LinkBareGhostStyles = styled.a<LinkProps>`
   }
 `
 
-export const LinkLinkStyles = styled.a<LinkProps>`
+export const LinkLinkStyles = styled.a<LinkProps & {accentColor?: boolean}>`
   ${BasicLinkStyles};
 
   &,
@@ -372,7 +372,7 @@ export const LinkLinkStyles = styled.a<LinkProps>`
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
-    color: ${Colors.Black[900]};
+    color: ${({accentColor}) => accentColor ? Colors.Blue[400] : Colors.Black[900]};
     text-transform: none;
     border-radius: 0;
     border-color: transparent;

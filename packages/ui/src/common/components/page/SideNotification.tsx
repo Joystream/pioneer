@@ -4,9 +4,9 @@ import styled from 'styled-components'
 
 import { Animations, BorderRad, Colors, Shadows } from '../../constants'
 import { CloseButton } from '../buttons'
+import { LinkLink } from '../buttons/Links'
 import { SuccessIcon } from '../icons'
 import { FailureSymbol } from '../icons/symbols'
-import { Link } from '../Link'
 import { TextMedium } from '../typography'
 
 export interface NotificationProps {
@@ -28,7 +28,7 @@ export const SideNotification = ({ title, message, link, onClick, isError }: Not
       <NotificationMessage>
         {message}
         {link && ' '}
-        {link && <Link href={link}>See details</Link>}
+        {link && <LinkLink href={link} accentColor>See details</LinkLink>}
       </NotificationMessage>
     </NotificationComponent>,
     document.body
@@ -48,6 +48,7 @@ const NotificationComponent = styled.div<{ isError?: boolean }>`
   border-left: 4px solid ${({ isError }) => (isError ? Colors.Red[400] : Colors.Blue[500])};
   border-radius: ${BorderRad.m};
   box-shadow: ${Shadows.select};
+  z-index: 45;
   ${Animations.showNotification};
 `
 
