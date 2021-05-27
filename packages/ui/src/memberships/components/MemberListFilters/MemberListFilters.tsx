@@ -1,15 +1,16 @@
-import React, { ChangeEvent, useReducer } from 'react'
+import React, { useReducer } from 'react'
 import styled from 'styled-components'
 
-import { ButtonBareGhost, ButtonPrimary } from '../../../common/components/buttons/Buttons'
-import { InputComponent, InputText, TogglableIcon } from '../../../common/components/forms'
-import { FounderMemberIcon, SearchIcon, VerifiedMemberIcon } from '../../../common/components/icons'
-import { SimpleSelect } from '../../../common/components/selects'
-import { Colors } from '../../../common/constants'
+import { ButtonPrimary } from '@/common/components/buttons/Buttons'
+import { TogglableIcon } from '@/common/components/forms'
+import { FilterBox } from '@/common/components/forms/FilterBox'
+import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
+import { SimpleSelect } from '@/common/components/selects'
+import { MemberRole } from '@/memberships/types'
 
 export interface MemberListFilter {
   search: string
-  role: string | null
+  role: MemberRole | null
   concil: boolean | null
   onlyVerified: boolean
   onlyFounder: boolean
@@ -48,101 +49,66 @@ export const MemberListEmptyFilter: MemberListFilter = {
 }
 
 interface MemberListFiltersProps {
+  searchSlot?: React.RefObject<HTMLDivElement>
   roles: { [k: string]: string }
   onApply?: (value: MemberListFilter) => void
 }
-export const MemberListFilters = ({ roles, onApply }: MemberListFiltersProps) => {
+
+export const MemberListFilters = ({ searchSlot, roles, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
   const { search, role, concil, onlyVerified, onlyFounder } = filters
 
-  const onSearchKeyDown: React.KeyboardEventHandler | undefined =
-    onApply &&
-    (({ key }) => {
-      key === 'Enter' && onApply(filters)
-    })
+  const apply = onApply && onApply && (() => onApply(filters))
+  const clear = () => {
+    dispatch({ type: 'clear' })
+    onApply?.(MemberListEmptyFilter)
+  }
+
+  const onSearch = (value: string) => {
+    dispatch({ type: 'change', field: 'search', value })
+  }
 
   return (
-    <MemberListFiltersContainer>
-      <ClearButton
-        size="small"
-        onClick={() => {
-          dispatch({ type: 'clear' })
-          onApply?.(MemberListEmptyFilter)
+    <FilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
+      <SimpleSelect
+        title="Roles"
+        options={{ All: null, ...roles }}
+        value={role}
+        onChange={(value) => {
+          dispatch({ type: 'change', field: 'role', value })
+        }}
+      />
+      <SimpleSelect
+        title="Council Members"
+        options={CouncilOpts}
+        value={concil}
+        onChange={(value) => {
+          dispatch({ type: 'change', field: 'concil', value })
+        }}
+      />
+      <TogglableIcon
+        value={onlyVerified}
+        onChange={(value) => {
+          dispatch({ type: 'change', field: 'onlyVerified', value })
         }}
       >
-        Clear all Filters
-      </ClearButton>
-
-      <Fields>
-        <InputComponent icon={<SearchIcon />} tight inputWidth="xs">
-          <InputText
-            placeholder="Search"
-            value={search}
-            onKeyDown={onSearchKeyDown}
-            onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-              const { value } = evt.target
-              dispatch({ type: 'change', field: 'search', value })
-            }}
-          />
-        </InputComponent>
-
-        <SimpleSelect
-          title="Roles"
-          options={{ All: null, ...roles }}
-          value={role}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'role', value })
-          }}
-        />
-        <SimpleSelect
-          title="Council Members"
-          options={CouncilOpts}
-          value={concil}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'concil', value })
-          }}
-        />
-        <TogglableIcon
-          value={onlyVerified}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'onlyVerified', value })
-          }}
-        >
-          <VerifiedMemberIcon />
-        </TogglableIcon>
-        <TogglableIcon
-          value={onlyFounder}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'onlyFounder', value })
-          }}
-        >
-          <FounderMemberIcon />
-        </TogglableIcon>
-        <ButtonPrimary size="medium" onClick={onApply && (() => onApply(filters))}>
-          Apply
-        </ButtonPrimary>
-      </Fields>
-    </MemberListFiltersContainer>
+        <VerifiedMemberIcon />
+      </TogglableIcon>
+      <TogglableIcon
+        value={onlyFounder}
+        onChange={(value) => {
+          dispatch({ type: 'change', field: 'onlyFounder', value })
+        }}
+      >
+        <FounderMemberIcon />
+      </TogglableIcon>
+      <ApplyButton size="medium" onClick={apply}>
+        Apply
+      </ApplyButton>
+    </FilterBox>
   )
 }
 
-const ClearButton = styled(ButtonBareGhost)`
-  position: absolute;
-  top: -32px;
-  right: 0;
-`
-
-const MemberListFiltersContainer = styled.div`
-  display: flex;
-  position: relative;
-`
-
-const Fields = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  grid-column-gap: 16px;
-  height: 64px;
-  padding: 0 16px;
-  background: ${Colors.Black[100]};
+const ApplyButton = styled(ButtonPrimary)`
+  margin-left: auto;
 `

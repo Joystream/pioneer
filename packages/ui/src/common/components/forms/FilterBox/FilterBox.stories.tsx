@@ -1,0 +1,39 @@
+import { Meta, Story } from '@storybook/react'
+import React, { useRef, useState } from 'react'
+
+import { SimpleSelect } from '@/common/components/selects'
+
+import { FilterBox, FilterPageHeader } from '.'
+
+export default {
+  title: 'Common/FilterBox',
+  component: FilterBox,
+} as Meta
+
+export const Default: Story = () => {
+  const searchSlot = useRef<HTMLDivElement>(null)
+
+  const [search, setSearch] = useState('')
+  const [selectValue, setSelectValue] = useState<null | 'foo' | 'bar'>(null)
+
+  const display = () => alert(JSON.stringify({ search, selectValue }, null, 2))
+  const clear = () => {
+    setSearch('')
+    setSelectValue(null)
+  }
+
+  return (
+    <>
+      <FilterPageHeader ref={searchSlot} title="Filter Box" />
+      <FilterBox searchSlot={searchSlot} search={search} onApply={display} onClear={clear} onSearch={setSearch}>
+        <SimpleSelect
+          title="Select"
+          options={{ All: null, foo: 'foo', bar: 'bar' }}
+          value={selectValue}
+          onChange={setSelectValue}
+        />
+      </FilterBox>
+    </>
+  )
+}
+Default.args = {}
