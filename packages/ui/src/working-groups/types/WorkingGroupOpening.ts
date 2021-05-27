@@ -32,6 +32,7 @@ export interface BaseOpening {
 
 export interface UpcomingWorkingGroupOpening extends BaseOpening {
   hiringLimit: number
+  expectedStart: string
 }
 
 export interface WorkingGroupOpening extends BaseOpening {
@@ -79,6 +80,7 @@ export const asUpcomingWorkingGroupOpening = (
 ): UpcomingWorkingGroupOpening => ({
   ...asBaseOpening(fields),
   hiringLimit: fields.metadata?.hiringLimit ?? 0,
+  expectedStart: fields.expectedStart,
 })
 
 export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({

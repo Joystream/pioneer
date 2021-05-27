@@ -22,7 +22,7 @@ export const UpcomingOpeningListItem = ({ opening }: UpcomingProps) => (
     <OACItemInfo>
       <OACItemInfoTop>
         <Subscription>ID: {opening.id}</Subscription>
-        <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+        <Subscription>Starts {relativeTime(opening.expectedStart)}</Subscription>
       </OACItemInfoTop>
       <OACItemTitle>{opening.title}</OACItemTitle>
     </OACItemInfo>
@@ -31,7 +31,7 @@ export const UpcomingOpeningListItem = ({ opening }: UpcomingProps) => (
         <TextInlineBig>
           <TokenValue value={opening.reward.value} />
         </TextInlineBig>
-        <OACSubscriptionWide>Reward per {opening.reward.interval} blocks.</OACSubscriptionWide>
+        <OACSubscriptionWide>Reward per 3600 blocks.</OACSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>.</OpenItemSummaryColumn>
       <OpenItemSummaryColumn>

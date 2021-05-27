@@ -3,6 +3,7 @@ import React from 'react'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Arrow } from '@/common/components/icons'
+import { BellIcon } from '@/common/components/icons/BellIcon'
 import { StatiscticContentColumn, Statistics, StatsBlock, TwoColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
@@ -20,28 +21,19 @@ export const UpcomingOpeningDetails = ({ opening }: UpcomingProps) => {
     <OpenedContainer>
       <OpenedWrapper>
         <OpenedTop>
-          <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+          <Subscription>Starts {relativeTime(opening.expectedStart)}</Subscription>
           <OpenedItemTitle>{opening.title}</OpenedItemTitle>
         </OpenedTop>
-        <TextBig light>
-          Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to
-          Joystream are format...
-        </TextBig>
+        <TextBig light>{opening.shortDescription}</TextBig>
         <Statistics withMargin>
           <StatsBlock size="m" centered spacing="s">
             <TextBig>
               <TokenValue value={opening.reward.value} />
             </TextBig>
-            <Subscription>Reward per {opening.reward.interval} blocks</Subscription>
+            <Subscription>Reward per 3600 blocks</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered spacing="s">
             <TwoColumnsStatistic>
-              <StatiscticContentColumn>
-                <TextBig value bold>
-                  .
-                </TextBig>
-                <Subscription>Applicant limit</Subscription>
-              </StatiscticContentColumn>
               <StatiscticContentColumn>
                 <TextBig value bold>
                   {opening.hiringLimit}
@@ -62,7 +54,10 @@ export const UpcomingOpeningDetails = ({ opening }: UpcomingProps) => {
             <Arrow direction="left" />
             Learn more
           </LinkButtonGhost>
-          <ButtonPrimary size="medium">Notify my when it's open</ButtonPrimary>
+          <ButtonPrimary size="medium" disabled>
+            <BellIcon />
+            Notify my when it's open
+          </ButtonPrimary>
         </ButtonsGroup>
       </OpenedWrapper>
     </OpenedContainer>

@@ -28,10 +28,7 @@ export const OpeningDetails = ({ opening }: Props) => {
           <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
           <OpenedItemTitle>{opening.title}</OpenedItemTitle>
         </OpenedTop>
-        <TextBig light>
-          Content Curators will one day be essential for ensuring that the petabytes of media items uploaded to
-          Joystream are format...
-        </TextBig>
+        <TextBig light>{opening.shortDescription}</TextBig>
         <Statistics withMargin>
           <StatsBlock size="m" centered spacing="s">
             <TextBig>
