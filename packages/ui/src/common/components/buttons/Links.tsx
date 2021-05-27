@@ -5,13 +5,16 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
 export type LinkSize = 'small' | 'medium' | 'large'
 
-export interface LinkProps {
-  size?: LinkSize
+export interface LinkProps extends LinkSizingProps {
   square?: boolean
   className?: string
   children?: React.ReactNode
   disabled?: boolean
   href: string
+}
+
+interface LinkSizingProps {
+  size: LinkSize
 }
 
 const height: { [key in LinkSize]: string } = {
@@ -38,7 +41,7 @@ const getPadding = (props: LinkProps) => {
 export function LinkPrimary({ className, children, size, square, disabled, href }: LinkProps) {
   return (
     <LinkPrimaryStyles className={className} size={size} square={square} disabled={disabled} href={href}>
-      <LinkInnerWrapper>{children}</LinkInnerWrapper>
+      <LinkInnerWrapper size={size}>{children}</LinkInnerWrapper>
     </LinkPrimaryStyles>
   )
 }
@@ -46,7 +49,7 @@ export function LinkPrimary({ className, children, size, square, disabled, href 
 export function LinkSecondary({ className, children, size, square, disabled, href }: LinkProps) {
   return (
     <LinkSecondaryStyles className={className} size={size} square={square} disabled={disabled} href={href}>
-      <LinkInnerWrapper>{children}</LinkInnerWrapper>
+      <LinkInnerWrapper size={size}>{children}</LinkInnerWrapper>
     </LinkSecondaryStyles>
   )
 }
@@ -54,14 +57,14 @@ export function LinkSecondary({ className, children, size, square, disabled, hre
 export function LinkGhost({ className, children, size, square, disabled, href }: LinkProps) {
   return (
     <LinkGhostStyles className={className} size={size} square={square} disabled={disabled} href={href}>
-      <LinkInnerWrapper>{children}</LinkInnerWrapper>
+      <LinkInnerWrapper size={size}>{children}</LinkInnerWrapper>
     </LinkGhostStyles>
   )
 }
 export function LinkBareGhost({ className, children, size, square, disabled, href }: LinkProps) {
   return (
     <LinkBareGhostStyles className={className} size={size} square={square} disabled={disabled} href={href}>
-      <LinkInnerWrapper>{children}</LinkInnerWrapper>
+      <LinkInnerWrapper size={size}>{children}</LinkInnerWrapper>
     </LinkBareGhostStyles>
   )
 }
@@ -74,13 +77,20 @@ export function LinkLink({
   accentColor,
 }: LinkProps & { accentColor?: boolean }) {
   return (
-    <LinkLinkStyles className={className} square={square} disabled={disabled} href={href} accentColor={accentColor}>
-      <LinkInnerWrapper>{children}</LinkInnerWrapper>
+    <LinkLinkStyles
+      className={className}
+      square={square}
+      disabled={disabled}
+      href={href}
+      accentColor={accentColor}
+      size="small"
+    >
+      <LinkInnerWrapper size="small">{children}</LinkInnerWrapper>
     </LinkLinkStyles>
   )
 }
 
-const LinkInnerWrapper = styled.span<{ size?: LinkSize }>`
+const LinkInnerWrapper = styled.span<LinkSizingProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};

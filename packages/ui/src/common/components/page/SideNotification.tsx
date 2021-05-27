@@ -29,7 +29,7 @@ export const SideNotification = ({ title, message, link, onClick, isError }: Not
         {message}
         {link && ' '}
         {link && (
-          <LinkLink href={link} accentColor>
+          <LinkLink href={link} accentColor size="small">
             See details
           </LinkLink>
         )}
