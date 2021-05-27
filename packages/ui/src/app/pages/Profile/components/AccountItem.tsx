@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { TransferButton } from '@/accounts/components/TransferButton'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { Account, BalanceLockInfo } from '@/accounts/types'
+import { Account, BalanceLock } from '@/accounts/types'
 import { ButtonGhost } from '@/common/components/buttons'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { Arrow } from '@/common/components/icons'
@@ -19,18 +19,29 @@ import { Sizes, Colors } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
 
 interface DetailsItemDataProps {
-  lock: BalanceLockInfo
+  lock: BalanceLock
 }
 
-export const DetailsItem = ({ lock }: DetailsItemDataProps) => {
+export const lockIcon = (id: number) => {
+  switch (id) {
+    case 10:
+      return <LabelIcon />
+    case 11:
+      return <EnvelopeIcon />
+    default:
+      return <VoteIcon />
+  }
+}
+
+export const LockItem = ({ lock }: DetailsItemDataProps) => {
   const [isDropped, setDropped] = useToggle()
 
   return (
     <>
       <AccountDetailsWrap>
         <DetailsInfo>
-          <LabelIcon />
-          <DetailsName>{lock.info.reason}</DetailsName>
+          {lockIcon(lock.id || 1)}
+          <DetailsName>{lock.reason}</DetailsName>
         </DetailsInfo>
         <TokenValue value={0} />
         <TokenValue value={lock.amount} />
@@ -165,7 +176,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       return <TextMedium light>No locks found.</TextMedium>
     }
 
-    return balance.locks.map((lock) => <DetailsItem lock={lock} />)
+    return balance.locks.map((lock) => <LockItem lock={lock} />)
   }
 
   return (
