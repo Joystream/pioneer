@@ -8,9 +8,11 @@ import { DateRange, PartialDateRange } from '@/common/types/Dates'
 import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
 
 import { Calendar } from '../Calendar'
+import { FilterLabel } from '../FilterBox'
 import { InputComponent, InputText } from '../InputComponent'
 
 interface DatePickerProps {
+  title?: string
   value: PartialDateRange
   withinDates?: PartialDateRange
   onApply?: () => void
@@ -18,7 +20,7 @@ interface DatePickerProps {
   onChange: (value: PartialDateRange) => void
 }
 
-export const DatePicker = ({ value, withinDates, onApply, onClear, onChange }: DatePickerProps) => {
+export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChange }: DatePickerProps) => {
   const placeholder = '__/__/__'
   const { start, end } = fromRange(value)
   const dateString = `${toDDMMYY(start) ?? placeholder} - ${toDDMMYY(end) ?? placeholder}`
@@ -49,6 +51,11 @@ export const DatePicker = ({ value, withinDates, onApply, onClear, onChange }: D
 
   return (
     <DatePickerContainer ref={container} onMouseDown={() => !isOpen && toggleOpen(true)}>
+      {title && (
+        <FilterLabel lighter bold>
+          {title}
+        </FilterLabel>
+      )}
       <InputComponent tight inputWidth="xs">
         <InputText placeholder="-" value={dateString} readOnly />
         {isOpen && (
