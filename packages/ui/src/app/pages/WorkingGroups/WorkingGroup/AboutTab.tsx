@@ -1,7 +1,8 @@
 import React from 'react'
 
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, RowGapBlock, SidePanel } from '@/common/components/page/PageContent'
+import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
 import { useMember } from '@/memberships/hooks/useMembership'
