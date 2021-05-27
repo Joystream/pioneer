@@ -44,6 +44,8 @@ Default.args = {
       opening: {
         title: 'Forum Worker',
         id: '2',
+        type: 'REGULAR',
+        groupName: 'forum',
       },
     },
     {
@@ -57,6 +59,8 @@ Default.args = {
       opening: {
         title: 'Forum Worker',
         id: '2',
+        type: 'REGULAR',
+        groupName: 'forum',
       },
     },
     {
@@ -88,6 +92,98 @@ Default.args = {
       createdAt: '2021-05-24T10:28:04.155Z',
       eventType: 'StatusTextChangedEvent',
       groupName: 'storage',
+    },
+    {
+      id: '7',
+      createdAt: '2021-05-25T10:28:04.155Z',
+      eventType: 'OpeningAddedEvent',
+      opening: {
+        id: '3',
+        title: 'Forum Working Group Regular',
+        type: 'REGULAR',
+        groupName: 'forum',
+      },
+    },
+    {
+      id: '8',
+      createdAt: '2021-05-25T10:28:04.155Z',
+      eventType: 'OpeningCanceledEvent',
+      opening: {
+        id: '3',
+        title: 'Forum Working Group Regular',
+        type: 'REGULAR',
+        groupName: 'forum',
+      },
+    },
+    {
+      id: '9',
+      createdAt: '2021-05-26T19:28:04.155Z',
+      eventType: 'StakeSlashedEvent',
+      groupName: 'Forum',
+      member: {
+        id: '6',
+        handle: 'stefan0',
+      },
+    },
+    {
+      id: '10',
+      createdAt: '2021-05-26T19:28:04.155Z',
+      eventType: 'StakeIncreasedEvent',
+      member: {
+        id: '6',
+        handle: 'stefan0',
+      },
+      amount: new BN(1000),
+    },
+    {
+      id: '11',
+      createdAt: '2021-05-26T19:28:04.155Z',
+      eventType: 'StakeDecreasedEvent',
+      member: {
+        id: '6',
+        handle: 'stefan0',
+      },
+      amount: new BN(1000),
+    },
+    {
+      id: '12',
+      createdAt: '2021-05-26T19:28:04.155Z',
+      eventType: 'WorkerExitedEvent',
+      member: {
+        id: '7',
+        handle: 'mr_guy',
+      },
+    },
+    {
+      id: '13',
+      createdAt: '2021-05-25T10:28:04.155Z',
+      eventType: 'OpeningAddedEvent',
+      opening: {
+        id: '3',
+        title: 'Forum Working Group Leader',
+        type: 'LEADER',
+        groupName: 'forum',
+      },
+    },
+    {
+      id: '14',
+      createdAt: '2021-05-25T10:28:04.155Z',
+      eventType: 'OpeningCanceledEvent',
+      opening: {
+        id: '3',
+        title: 'Forum Working Group Leader',
+        type: 'LEADER',
+        groupName: 'forum',
+      },
+    },
+    {
+      id: '15',
+      createdAt: '2021-05-25T10:28:04.155Z',
+      eventType: 'WorkerStartedLeavingEvent',
+      member: {
+        id: '8',
+        handle: 'johann',
+      },
     },
   ],
 }
