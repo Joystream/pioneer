@@ -6,13 +6,16 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
 export type LinkButtonSize = 'small' | 'medium' | 'large'
 
-export interface LinkButtonProps {
-  size?: LinkButtonSize
+export interface LinkButtonProps extends LinkButtonSizingProps {
   square?: boolean
   className?: string
   children?: React.ReactNode
   disabled?: boolean
   to: string
+}
+
+interface LinkButtonSizingProps {
+  size: LinkButtonSize
 }
 
 const height: { [key in LinkButtonSize]: string } = {
@@ -39,7 +42,7 @@ const getPadding = (props: LinkButtonProps) => {
 export function LinkButtonPrimary({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
     <LinkButtonPrimaryStyles className={className} size={size} square={square} disabled={disabled} to={to}>
-      <LinkButtonInnerWrapper>{children}</LinkButtonInnerWrapper>
+      <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonPrimaryStyles>
   )
 }
@@ -47,7 +50,7 @@ export function LinkButtonPrimary({ className, children, size, square, disabled,
 export function LinkButtonSecondary({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
     <LinkButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} to={to}>
-      <LinkButtonInnerWrapper>{children}</LinkButtonInnerWrapper>
+      <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonSecondaryStyles>
   )
 }
@@ -55,26 +58,26 @@ export function LinkButtonSecondary({ className, children, size, square, disable
 export function LinkButtonGhost({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
     <LinkButtonGhostStyles className={className} size={size} square={square} disabled={disabled} to={to}>
-      <LinkButtonInnerWrapper>{children}</LinkButtonInnerWrapper>
+      <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonGhostStyles>
   )
 }
 export function LinkButtonBareGhost({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
     <LinkButtonBareGhostStyles className={className} size={size} square={square} disabled={disabled} to={to}>
-      <LinkButtonInnerWrapper>{children}</LinkButtonInnerWrapper>
+      <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonBareGhostStyles>
   )
 }
 export function LinkButtonLink({ className, children, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonLinkStyles className={className} square={square} disabled={disabled} to={to}>
-      <LinkButtonInnerWrapper>{children}</LinkButtonInnerWrapper>
+    <LinkButtonLinkStyles className={className} square={square} disabled={disabled} to={to} size="small">
+      <LinkButtonInnerWrapper size="small">{children}</LinkButtonInnerWrapper>
     </LinkButtonLinkStyles>
   )
 }
 
-const LinkButtonInnerWrapper = styled.span<{ size?: LinkButtonSize }>`
+const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};

@@ -108,7 +108,7 @@ export const WorkingGroupOpening = () => {
           )}
           {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
           {opening.status === OpeningStatuses.UPCOMING && (
-            <ButtonGhost size="small">
+            <ButtonGhost size="medium">
               <BellIcon />
               Notify me when it’s open
             </ButtonGhost>

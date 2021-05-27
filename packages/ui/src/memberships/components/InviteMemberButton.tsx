@@ -7,7 +7,7 @@ import { InviteMemberModal } from '../modals/InviteMemberModal'
 interface InviteMemberButtonProps {
   className?: string
   children: ReactNode
-  size?: ButtonSize
+  size: ButtonSize
 }
 
 export const InviteMemberButton = ({ className, children, size }: InviteMemberButtonProps) => {

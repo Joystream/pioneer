@@ -15,7 +15,9 @@ export const LeaveRoleSuccessModal = React.memo(({ onClose }: Props) => (
       <TextMedium>You have successfully left the role.</TextMedium>
     </ModalBody>
     <ModalFooter>
-      <ButtonPrimary onClick={onClose}>Return</ButtonPrimary>
+      <ButtonPrimary onClick={onClose} size="medium">
+        Return
+      </ButtonPrimary>
     </ModalFooter>
   </Modal>
 ))

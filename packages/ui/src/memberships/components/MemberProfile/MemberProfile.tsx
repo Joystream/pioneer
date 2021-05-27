@@ -63,7 +63,7 @@ export const MemberProfile = React.memo(() => {
             <SidePaneTitle>My Profile</SidePaneTitle>
             <SidePaneTopButtonsGroup>
               {isMyMember && activeTab === 'DETAILS' && (
-                <EditMembershipButton member={member}>
+                <EditMembershipButton member={member} size="small">
                   <EditSymbol />
                 </EditMembershipButton>
               )}

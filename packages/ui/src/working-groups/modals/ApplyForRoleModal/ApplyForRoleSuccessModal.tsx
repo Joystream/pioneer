@@ -67,7 +67,7 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId }:
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonGhost onClick={() => push('/working-groups/my-applications')}>
+        <ButtonGhost onClick={() => push('/working-groups/my-applications')} size="medium">
           Go to my applications
           <Arrow direction="right" />
         </ButtonGhost>

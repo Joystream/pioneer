@@ -29,7 +29,9 @@ export const LeaveRolePrepareModal = ({ onClose, onContinue, unstakingPeriod }: 
         </InputComponent>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary onClick={() => onContinue(rationale)}>Leave the position anyway</ButtonPrimary>
+        <ButtonPrimary onClick={() => onContinue(rationale)} size="medium">
+          Leave the position anyway
+        </ButtonPrimary>
       </ModalFooter>
     </Modal>
   )

@@ -9,7 +9,7 @@ import { MembershipActionButton } from './CurrentMember'
 interface AddMembershipButtonProps {
   className?: string
   children: ReactNode
-  size?: ButtonSize
+  size: ButtonSize
 }
 
 export const AddMembershipButton = ({ className, children, size }: AddMembershipButtonProps) => {

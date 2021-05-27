@@ -19,7 +19,7 @@ export const CurrentMember = () => {
   if (count < 1) {
     return (
       <MembershipButtonsWrapper>
-        <AddMembershipButton>Create membership</AddMembershipButton>
+        <AddMembershipButton size="large">Create membership</AddMembershipButton>
       </MembershipButtonsWrapper>
     )
   }
@@ -37,7 +37,10 @@ export const CurrentMember = () => {
       )}
       {!active && (
         <MembershipButtonsWrapper>
-          <MembershipActionButton onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
+          <MembershipActionButton
+            onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}
+            size="large"
+          >
             Select membership
           </MembershipActionButton>
         </MembershipButtonsWrapper>
