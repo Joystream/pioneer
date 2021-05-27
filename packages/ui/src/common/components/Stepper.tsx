@@ -80,13 +80,14 @@ const StepNumber = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  justify-self: center;
   width: 28px;
   height: 28px;
   border: 2px solid ${Colors.Black[600]};
   border-radius: ${BorderRad.round};
   font-weight: 700;
   color: ${Colors.Black[300]};
-  background-color: transparent;
+  background-color: ${Colors.Black[800]};
   transition: ${Transitions.all};
 `
 
@@ -104,7 +105,7 @@ type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBabyStep'>
 const StepWrap = styled.div<StepNumberProps>`
   display: grid;
   position: relative;
-  grid-auto-flow: column;
+  grid-template-columns: 28px 1fr;
   grid-column-gap: 8px;
   justify-content: start;
 
@@ -115,7 +116,7 @@ const StepWrap = styled.div<StepNumberProps>`
       top: 28px;
       left: 14px;
       width: 1px;
-      height: calc(100% + 20px - 28px);
+      height: calc(100% + 20px);
       transform: translateX(-50%);
       background-color: ${Colors.Black[600]};
       transition: ${Transitions.all};
@@ -126,9 +127,18 @@ const StepWrap = styled.div<StepNumberProps>`
     isBabyStep &&
     css`
       ${StepNumber} {
-        color: ${Colors.Red[500]};
-        border-color: ${Colors.Red[500]};
-        background-color: ${Colors.White};
+        width: 8px;
+        height: 8px;
+        margin-top: 4px;
+        color: transparent;
+        border-color: transparent;
+        background-color: ${Colors.Black[300]};
+      }
+      ${StepTitle} {
+        font-size: 12px;
+        line-height: 18px;
+        color: ${Colors.Black[400]};
+        -webkit-text-stroke-color: transparent;
       }
     `};
 
