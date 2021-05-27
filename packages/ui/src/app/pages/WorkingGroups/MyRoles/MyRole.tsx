@@ -17,11 +17,11 @@ import {
   MainPanel,
   PageFooter,
   RowGapBlock,
-  SidePanel,
 } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
+import { SidePanel } from '@/common/components/page/SidePanel'
 import { MultiTokenValueStat, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
