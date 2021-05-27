@@ -20,7 +20,7 @@ const StubBody = () => {
         <TextMedium>Transaction preview here.</TextMedium>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary>Sign and send</ButtonPrimary>
+        <ButtonPrimary size="medium">Sign and send</ButtonPrimary>
       </ModalFooter>
     </>
   )

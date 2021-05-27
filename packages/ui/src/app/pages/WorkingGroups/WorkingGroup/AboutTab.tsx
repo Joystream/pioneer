@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { ContentWithSidepanel, MainPanel, RowGapBlock, SidePanel } from '@/common/components/page/PageContent'
+import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -10,7 +11,7 @@ import { useGroupStatistics } from '@/working-groups/hooks/useGroupStatistics'
 import { useWorkers } from '@/working-groups/hooks/useWorkers'
 import { WorkingGroup } from '@/working-groups/types'
 
-import { StatusGroup, StatusBadge, StatusTitleGroup } from '../components/StatusBadges'
+import { StatusBadge, StatusGroup, StatusTitleGroup } from '../components/StatusBadges'
 
 interface Props {
   workingGroup: WorkingGroup
@@ -19,10 +20,11 @@ export const AboutTab = ({ workingGroup }: Props) => {
   const { member: leader } = useMember(workingGroup.leaderId ?? '')
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
   const { statistics } = useGroupStatistics(workingGroup.id)
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <ContentWithSidepanel>
-      <MainPanel>
+      <MainPanel ref={sideNeighborRef}>
         <Statistics>
           <TokenValueStat title="Spending" tooltipText="Lorem ipsum..." value={statistics.spending} />
           <NumericValueStat title="Total hired" value={statistics.totalHired ?? 'Loading...'} />
@@ -54,7 +56,7 @@ export const AboutTab = ({ workingGroup }: Props) => {
           )}
         </RowGapBlock>
       </MainPanel>
-      <SidePanel>
+      <SidePanel neighbor={sideNeighborRef}>
         <WorkersList leader={leader} workers={workers} />
       </SidePanel>
     </ContentWithSidepanel>

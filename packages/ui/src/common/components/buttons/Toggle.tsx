@@ -40,6 +40,7 @@ const AbsoluteToggleButton = css<ToggleButtonProps>`
 
 export const ToggleButton = styled(ButtonBareGhost).attrs(() => ({
   square: true,
+  size: 'small',
 }))<ToggleButtonProps & { className?: string }>`
   ${({ absoluteToggle }) => {
     if (absoluteToggle) {

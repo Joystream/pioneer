@@ -9,14 +9,13 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { useActivities } from '@/common/hooks/useActivities'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
-import { NoProposals } from '@/proposals/components/NoProposals'
 import { ProposalList } from '@/proposals/components/ProposalList'
-import { useProposals } from '@/proposals/hooks/useProposals'
+import { usePastProposals } from '@/proposals/hooks/usePastProposals'
 
 import { ProposalsTabs } from './components/ProposalsTabs'
 
-export const Proposals = () => {
-  const { proposals, isLoading } = useProposals()
+export const PastProposals = () => {
+  const { proposals, isLoading } = usePastProposals()
   const activities = useActivities()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
@@ -28,20 +27,14 @@ export const Proposals = () => {
         <ProposalsTabs />
       </PageHeader>
 
-      {proposals.length || isLoading ? (
-        <ContentWithSidepanel>
-          <MainPanel ref={sideNeighborRef}>
-            {isLoading ? <Loading /> : <ProposalList proposals={proposals} />}
-          </MainPanel>
-          <SidePanel neighbor={sideNeighborRef}>
-            <ActivitiesBlock activities={activities} label="Proposals Activities" />
-          </SidePanel>
-        </ContentWithSidepanel>
-      ) : (
-        <MainPanel>
-          <NoProposals />
+      <ContentWithSidepanel>
+        <MainPanel ref={sideNeighborRef}>
+          {isLoading ? <Loading /> : <ProposalList proposals={proposals} isPast />}
         </MainPanel>
-      )}
+        <SidePanel neighbor={sideNeighborRef}>
+          <ActivitiesBlock activities={activities} label="Proposals Activities" />
+        </SidePanel>
+      </ContentWithSidepanel>
     </AppPage>
   )
 }

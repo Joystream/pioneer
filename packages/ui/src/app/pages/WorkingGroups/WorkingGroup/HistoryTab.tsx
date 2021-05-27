@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { Loading } from '@/common/components/Loading'
-import { ContentWithSidepanel, MainPanel, SidePanel } from '@/common/components/page/PageContent'
+import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageContent'
+import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
 import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
@@ -25,15 +26,16 @@ export function HistoryTab() {
     { title: 'Past workers', active: currentTab === 'WORKERS', onClick: () => setCurrentTab('WORKERS') },
   ]
   const activities = useActivities()
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <ContentWithSidepanel>
-      <MainPanel>
+      <MainPanel ref={sideNeighborRef}>
         <Tabs tabsSize="xs" tabs={tabs} />
         {currentTab === 'OPENINGS' && <OpeningsHistory groupId={group?.id} />}
         {currentTab === 'WORKERS' && <WorkersHistory groupId={group?.id} />}
       </MainPanel>
-      <SidePanel>
+      <SidePanel neighbor={sideNeighborRef}>
         <ActivitiesBlock activities={activities} label="Working Groups Activities" />
       </SidePanel>
     </ContentWithSidepanel>

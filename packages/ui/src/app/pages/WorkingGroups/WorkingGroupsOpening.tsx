@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react'
+import React, { memo, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -11,17 +11,12 @@ import { BellIcon } from '@/common/components/icons/BellIcon'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import {
-  ContentWithSidepanel,
-  MainPanel,
-  PageFooter,
-  RowGapBlock,
-  SidePanel,
-} from '@/common/components/page/PageContent'
+import { ContentWithSidepanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
-import { Statistics, TokenValueStat, DurationStatistics } from '@/common/components/statistics'
+import { SidePanel } from '@/common/components/page/SidePanel'
+import { DurationStatistics, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
 import { Colors } from '@/common/constants/styles'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
@@ -29,7 +24,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { size, spacing } from '@/common/utils/styles'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
-import { OpeningStatuses, MappedStatuses } from '@/working-groups/constants'
+import { MappedStatuses, OpeningStatuses } from '@/working-groups/constants'
 import useOpening from '@/working-groups/hooks/useOpening'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 
@@ -93,6 +88,8 @@ export const WorkingGroupOpening = () => {
     </ApplicationStatusWrapper>
   ))
 
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
+
   return (
     <AppPage lastBreadcrumb={opening.title} rowGap="s">
       <PageHeader>
@@ -108,7 +105,7 @@ export const WorkingGroupOpening = () => {
           )}
           {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
           {opening.status === OpeningStatuses.UPCOMING && (
-            <ButtonGhost size="small">
+            <ButtonGhost size="medium">
               <BellIcon />
               Notify me when it’s open
             </ButtonGhost>
@@ -132,10 +129,10 @@ export const WorkingGroupOpening = () => {
           <NumericValueStat title="Hiring limit" value={opening.hiring.total} />
         </Statistics>
         <ContentWithSidepanel>
-          <MainPanel>
+          <MainPanel ref={sideNeighborRef}>
             <MarkdownPreview markdown={opening.description} />
           </MainPanel>
-          <SidePanel>
+          <SidePanel neighbor={sideNeighborRef}>
             {opening.status !== OpeningStatuses.UPCOMING && (
               <ApplicantsList
                 allApplicants={opening.applications}

@@ -1,3 +1,4 @@
+import { Network, WorkingGroupOpeningType } from '@/common/api/queries'
 import { asWorkingGroupOpening } from '@/working-groups/types'
 
 import rawOpenings from './raw/openings.json'
@@ -28,7 +29,32 @@ interface RawOpeningMock {
 }
 
 export const getMockAsOpening = (index = 0) => {
-  return asWorkingGroupOpening(rawOpenings[index] as any)
+  return asWorkingGroupOpening({
+    ...rawOpenings[index],
+    metadata: {
+      __typename: 'WorkingGroupOpeningMetadata',
+      ...rawOpenings[index].metadata,
+    },
+    status: {
+      __typename: 'OpeningStatusOpen',
+    },
+    type: WorkingGroupOpeningType.Regular,
+    __typename: 'WorkingGroupOpening',
+    applications: [],
+    group: {
+      leaderId: null,
+      __typename: 'WorkingGroup',
+      budget: 10_000,
+      name: 'Working Group',
+    },
+    createdAtBlock: {
+      __typename: 'Block',
+      id: '1234',
+      number: 1234,
+      timestamp: new Date().toJSON(),
+      network: Network.Olympia,
+    },
+  })
 }
 
 export const openingsData = rawOpenings.map((rawOpening) => ({ ...rawOpening }))

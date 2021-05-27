@@ -1,12 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ButtonsGroup } from '../../../../common/components/buttons'
 import { Loading } from '../../../../common/components/Loading'
 import { MainPanel } from '../../../../common/components/page/PageContent'
 import { TextMedium } from '../../../../common/components/typography'
 import { AddMembershipButton } from '../../../../memberships/components/AddMembershipButton'
-import { InviteMemberButton } from '../../../../memberships/components/InviteMemberButton'
 import { MembersSection } from '../../../../memberships/components/MembersSection'
 import { useMyMemberships } from '../../../../memberships/hooks/useMyMemberships'
 
@@ -27,7 +25,7 @@ export function Memberships() {
             velit mollit. Exercitation veniam consequat sunt nostrud amet.
           </TextMedium>
         </NoMembershipsInfo>
-        <NoMembershipButton>Create a membership</NoMembershipButton>
+        <NoMembershipButton size="medium">Create a membership</NoMembershipButton>
       </NoMemberships>
     )
   }
@@ -36,10 +34,6 @@ export function Memberships() {
 
   return (
     <MembershipsTable>
-      <NewMembers>
-        <InviteMemberButton size="medium">Invite a member</InviteMemberButton>
-        <AddMembershipButton size="medium">Add Membership</AddMembershipButton>
-      </NewMembers>
       {!!active && <MembersSection title="Active membership" members={[active]} />}
       {!!otherMemberships.length && <MembersSection title="Other memberships" members={otherMemberships} />}
     </MembershipsTable>
@@ -72,10 +66,4 @@ const MembershipsTable = styled(MainPanel)`
   position: relative;
   grid-row-gap: 28px;
   padding-top: 8px;
-`
-
-const NewMembers = styled(ButtonsGroup)`
-  position: absolute;
-  right: 0;
-  top: 0;
 `

@@ -130,11 +130,21 @@ const DatePickerCalendars = ({ value, within, onChange }: DatePickerCalendarsPro
       />
 
       <DatePickerSideNav>
-        <ButtonSecondary onClick={setToNowFrom(addWeeks, -1)}>Last week</ButtonSecondary>
-        <ButtonSecondary onClick={setToNowFrom(addMonths, -1)}>Past month</ButtonSecondary>
-        <ButtonSecondary onClick={setToNowFrom(addMonths, -3)}>Past 3 months</ButtonSecondary>
-        <ButtonSecondary onClick={setToNowFrom(addMonths, -6)}>Past 6 months</ButtonSecondary>
-        <ButtonSecondary onClick={setToNowFrom(addYears, -1)}>Past year</ButtonSecondary>
+        <ButtonSecondary onClick={setToNowFrom(addWeeks, -1)} size="medium">
+          Last week
+        </ButtonSecondary>
+        <ButtonSecondary onClick={setToNowFrom(addMonths, -1)} size="medium">
+          Past month
+        </ButtonSecondary>
+        <ButtonSecondary onClick={setToNowFrom(addMonths, -3)} size="medium">
+          Past 3 months
+        </ButtonSecondary>
+        <ButtonSecondary onClick={setToNowFrom(addMonths, -6)} size="medium">
+          Past 6 months
+        </ButtonSecondary>
+        <ButtonSecondary onClick={setToNowFrom(addYears, -1)} size="medium">
+          Past year
+        </ButtonSecondary>
       </DatePickerSideNav>
     </>
   )

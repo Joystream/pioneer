@@ -149,13 +149,13 @@ const OpeningDetails = ({ opening }: Props) => {
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <LinkButtonGhost to={`/working-groups/openings/${opening.id}`}>
+          <LinkButtonGhost to={`/working-groups/openings/${opening.id}`} size="medium">
             <Arrow direction="left" />
             Learn more
           </LinkButtonGhost>
           <ButtonPrimary
-            size="medium"
             onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
+            size="medium"
             disabled={!isOpeningOpen(opening)}
           >
             Apply now
