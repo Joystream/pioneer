@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -20,10 +20,11 @@ export const AboutTab = ({ workingGroup }: Props) => {
   const { member: leader } = useMember(workingGroup.leaderId ?? '')
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
   const { statistics } = useGroupStatistics(workingGroup.id)
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <ContentWithSidepanel>
-      <MainPanel>
+      <MainPanel ref={sideNeighborRef}>
         <Statistics>
           <TokenValueStat title="Spending" tooltipText="Lorem ipsum..." value={statistics.spending} />
           <NumericValueStat title="Total hired" value={statistics.totalHired ?? 'Loading...'} />
@@ -55,7 +56,7 @@ export const AboutTab = ({ workingGroup }: Props) => {
           )}
         </RowGapBlock>
       </MainPanel>
-      <SidePanel>
+      <SidePanel neighbor={sideNeighborRef}>
         <WorkersList leader={leader} workers={workers} />
       </SidePanel>
     </ContentWithSidepanel>

@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -79,6 +79,7 @@ export const MyRole = () => {
   if (isLoading || !worker) {
     return <Loading />
   }
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <AppPage lastBreadcrumb={workerRoleTitle(worker)} rowGap="s">
@@ -139,7 +140,7 @@ export const MyRole = () => {
           <TokenValueStat title="Next payout in" value={150000} />
         </Statistics>
         <ContentWithSidepanel>
-          <MainPanel>
+          <MainPanel ref={sideNeighborRef}>
             <ContentWithTabs>
               <RoleAccountHeader>
                 <Label>Role Account</Label>
@@ -179,7 +180,7 @@ export const MyRole = () => {
               <MyRoleAccount account={{ name: 'Reward Account', address: worker.rewardAccount }} balances={['total']} />
             </ContentWithTabs>
           </MainPanel>
-          <SidePanel>
+          <SidePanel neighbor={sideNeighborRef}>
             <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} />
           </SidePanel>
         </ContentWithSidepanel>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
@@ -25,10 +25,11 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
   const { member: leader } = useMember(workingGroup.leaderId)
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <ContentWithSidepanel>
-      <MainPanel>
+      <MainPanel ref={sideNeighborRef}>
         <Statistics>
           <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={workingGroup.budget} />
           <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={-200} />
@@ -56,7 +57,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
           </OpeningsCategories>
         )}
       </MainPanel>
-      <SidePanel>
+      <SidePanel neighbor={sideNeighborRef}>
         <WorkersList leader={leader} workers={workers} />
       </SidePanel>
     </ContentWithSidepanel>
