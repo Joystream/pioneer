@@ -1,18 +1,27 @@
-import React from 'react'
+import { JSXElementConstructor } from 'react'
 
-import { IconStyle } from '@/common/components/Activities/ActivityIcon'
-import { AppliedIcon } from '@/common/components/icons/activities/AppliedIcon'
-import { DecreasedIcon } from '@/common/components/icons/activities/DecreasedIcon'
-import { ActivityCategory } from '@/common/types'
-
+import { ActivityCategory } from '../../types'
+import { AppliedIcon } from '../icons/activities/AppliedIcon'
+import { ClosedIcon } from '../icons/activities/ClosedIcon'
+import { CreatedIcon } from '../icons/activities/CreatedIcon'
+import { DecreasedIcon } from '../icons/activities/DecreasedIcon'
 import { HiredIcon } from '../icons/activities/HiredIcon'
 import { IncreasedIcon } from '../icons/activities/IncreasedIcon'
+import { WarnedIcon } from '../icons/activities/WarnedIcon'
 
-export const ActivityToIconMap: Record<ActivityCategory, [React.FC, IconStyle]> = {
+import { IconStyle } from './ActivityIcon'
+
+export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<any>, IconStyle]> = {
   AppliedOnOpeningEvent: [AppliedIcon, 'joystream'],
   ApplicationWithdrawnEvent: [AppliedIcon, 'joystream'],
   BudgetSpendingEvent: [DecreasedIcon, 'negative'],
   BudgetSetEvent: [IncreasedIcon, 'positive'],
   LeaderSetEvent: [HiredIcon, 'joystream'],
   StatusTextChangedEvent: [AppliedIcon, 'positive'],
+  OpeningAddedEvent: [CreatedIcon, 'joystream'],
+  OpeningCanceledEvent: [ClosedIcon, 'negative'],
+  StakeSlashedEvent: [WarnedIcon, 'negative'],
+  StakeIncreasedEvent: [AppliedIcon, 'negative'],
+  StakeDecreasedEvent: [AppliedIcon, 'positive'],
+  WorkerExitedEvent: [ClosedIcon, 'negative'],
 }

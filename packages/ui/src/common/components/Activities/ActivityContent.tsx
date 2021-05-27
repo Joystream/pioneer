@@ -5,7 +5,12 @@ import { AppliedOnOpeningContent } from '@/working-groups/components/Activities/
 import { BudgetSetContent } from '@/working-groups/components/Activities/BudgetSetContent'
 import { BudgetSpendingContent } from '@/working-groups/components/Activities/BudgetSpendingContent'
 import { LeaderSetContent } from '@/working-groups/components/Activities/LeaderSetContent'
+import { OpeningAddedContent } from '@/working-groups/components/Activities/OpeningAddedContent'
+import { OpeningCanceledContent } from '@/working-groups/components/Activities/OpeningCanceledContent'
+import { StakeChangedContent } from '@/working-groups/components/Activities/StakeChangedContent'
+import { StakeSlashedContent } from '@/working-groups/components/Activities/StakeSlashedContent'
 import { StatusTextChangedContent } from '@/working-groups/components/Activities/StatusTextChangedContent'
+import { WorkerExitedContent } from '@/working-groups/components/Activities/WorkerExitedContent'
 
 import { Activity } from '../../types'
 
@@ -27,6 +32,17 @@ export const ActivityContent = React.memo(({ activity }: Props) => {
       return <LeaderSetContent activity={activity} />
     case 'StatusTextChangedEvent':
       return <StatusTextChangedContent activity={activity} />
+    case 'OpeningAddedEvent':
+      return <OpeningAddedContent activity={activity} />
+    case 'OpeningCanceledEvent':
+      return <OpeningCanceledContent activity={activity} />
+    case 'StakeSlashedEvent':
+      return <StakeSlashedContent activity={activity} />
+    case 'StakeDecreasedEvent':
+    case 'StakeIncreasedEvent':
+      return <StakeChangedContent activity={activity} />
+    case 'WorkerExitedEvent':
+      return <WorkerExitedContent activity={activity} />
     default:
       return <div />
   }
