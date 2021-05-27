@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { AppPage } from '@/app/components/AppPage'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
@@ -18,6 +18,7 @@ import { ProposalsTabs } from './components/ProposalsTabs'
 export const Proposals = () => {
   const { proposals, isLoading } = useProposals()
   const activities = useActivities()
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <AppPage>
@@ -29,8 +30,10 @@ export const Proposals = () => {
 
       {proposals.length || isLoading ? (
         <ContentWithSidepanel>
-          <MainPanel>{isLoading ? <Loading /> : <ProposalList proposals={proposals} />}</MainPanel>
-          <SidePanel>
+          <MainPanel ref={sideNeighborRef}>
+            {isLoading ? <Loading /> : <ProposalList proposals={proposals} />}
+          </MainPanel>
+          <SidePanel neighbor={sideNeighborRef}>
             <ActivitiesBlock activities={activities} label="Proposals Activities" />
           </SidePanel>
         </ContentWithSidepanel>

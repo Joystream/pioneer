@@ -4,12 +4,12 @@ import styled from 'styled-components'
 interface SidePanelProps {
   className?: string
   children?: React.ReactNode
-  neighbor?: React.MutableRefObject<HTMLDivElement | null>
+  neighbor: React.MutableRefObject<HTMLDivElement | null>
 }
 
 export const SidePanel = ({ neighbor, className, children }: SidePanelProps) => {
   return (
-    <SidePanelStyles neighborHeight={neighbor?.current?.getBoundingClientRect().height} className={className}>
+    <SidePanelStyles neighborHeight={neighbor.current?.getBoundingClientRect().height} className={className}>
       {children}
     </SidePanelStyles>
   )

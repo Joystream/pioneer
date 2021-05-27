@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react'
+import React, { memo, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -88,6 +88,8 @@ export const WorkingGroupOpening = () => {
     </ApplicationStatusWrapper>
   ))
 
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
+
   return (
     <AppPage lastBreadcrumb={opening.title} rowGap="s">
       <PageHeader>
@@ -127,10 +129,10 @@ export const WorkingGroupOpening = () => {
           <NumericValueStat title="Hiring limit" value={opening.hiring.total} />
         </Statistics>
         <ContentWithSidepanel>
-          <MainPanel>
+          <MainPanel ref={sideNeighborRef}>
             <MarkdownPreview markdown={opening.description} />
           </MainPanel>
-          <SidePanel>
+          <SidePanel neighbor={sideNeighborRef}>
             {opening.status !== OpeningStatuses.UPCOMING && (
               <ApplicantsList
                 allApplicants={opening.applications}
