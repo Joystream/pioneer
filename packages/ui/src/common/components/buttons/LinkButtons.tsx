@@ -154,19 +154,6 @@ export const BasicLinkButtonStyles = css<LinkButtonProps>`
         transform: translate(-50%, -50%);
       }
     }
-    &:not(:link) {
-      cursor: not-allowed;
-
-      &:hover,
-      &:focus,
-      &:active {
-        transform: scale(1);
-        &:after,
-        &:before {
-          transform: translate(-150%, -50%);
-        }
-      }
-    }
   }
 `
 
@@ -196,11 +183,6 @@ export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonProps>`
 
     &:active {
       border-color: ${Colors.Blue[700]};
-    }
-
-    &:not(:link) {
-      border-color: ${Colors.Blue[100]};
-      background-color: ${Colors.Blue[100]};
     }
   }
 `
@@ -241,20 +223,6 @@ export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonProps>`
     &:active {
       border-color: ${Colors.Black[100]};
     }
-
-    &:not(:link) {
-      ${LinkButtonInnerWrapper} > svg {
-        color: ${Colors.Black[300]};
-      }
-      & .blackPart,
-      & .primaryPart {
-        color: ${Colors.Black[300]};
-        fill: ${Colors.Black[300]};
-      }
-      color: ${Colors.Black[300]};
-      border-color: ${Colors.Black[50]};
-      background-color: ${Colors.Black[50]};
-    }
   }
 `
 
@@ -294,20 +262,6 @@ export const LinkButtonGhostStyles = styled(Link)<LinkButtonProps>`
     &:active {
       border-color: ${Colors.Blue[100]};
     }
-
-    &:not(:link) {
-      ${LinkButtonInnerWrapper} > svg {
-        color: ${Colors.Black[300]};
-      }
-      & .blackPart,
-      & .primaryPart {
-        color: ${Colors.Black[300]};
-        fill: ${Colors.Black[300]};
-      }
-      color: ${Colors.Black[300]};
-      border-color: ${Colors.Black[200]};
-      background-color: ${Colors.White};
-    }
   }
 `
 
@@ -344,20 +298,6 @@ export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonProps>`
 
     &:active {
       border-color: transparent;
-    }
-
-    &:not(:link) {
-      ${LinkButtonInnerWrapper} > svg {
-        color: ${Colors.Black[300]};
-      }
-      & .blackPart,
-      & .primaryPart {
-        color: ${Colors.Black[300]};
-        fill: ${Colors.Black[300]};
-      }
-      color: ${Colors.Black[300]};
-      border-color: transparent;
-      background-color: ${Colors.White};
     }
   }
 `
@@ -428,20 +368,6 @@ export const LinkButtonLinkStyles = styled(Link)<LinkButtonProps>`
       &:before {
         transform: translateX(100%);
       }
-    }
-
-    &:not(:link) {
-      ${LinkButtonInnerWrapper} > svg {
-        color: ${Colors.Black[300]};
-      }
-      & .blackPart,
-      & .primaryPart {
-        color: ${Colors.Black[300]};
-        fill: ${Colors.Black[300]};
-      }
-      color: ${Colors.Black[300]};
-      border-color: transparent;
-      background-color: transparent;
     }
   }
 `
