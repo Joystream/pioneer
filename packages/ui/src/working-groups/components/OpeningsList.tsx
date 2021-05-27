@@ -149,7 +149,7 @@ const OpeningDetails = ({ opening }: Props) => {
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <LinkButtonGhost to={`/working-groups/openings/${opening.id}`}>
+          <LinkButtonGhost size="medium" to={`/working-groups/openings/${opening.id}`}>
             <Arrow direction="left" />
             Learn more
           </LinkButtonGhost>
