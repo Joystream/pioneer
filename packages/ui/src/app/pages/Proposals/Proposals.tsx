@@ -15,7 +15,7 @@ import { useProposals } from '@/proposals/hooks/useProposals'
 import { ProposalsTabs } from './components/ProposalsTabs'
 
 export const Proposals = () => {
-  const { proposals, isLoading } = useProposals({ type: 'current' })
+  const { proposals, isLoading } = useProposals()
   const activities = useActivities()
 
   return (
@@ -25,6 +25,7 @@ export const Proposals = () => {
         <AddProposalButton />
         <ProposalsTabs />
       </PageHeader>
+
       {isLoading ? (
         <MainPanel>
           <Loading />
