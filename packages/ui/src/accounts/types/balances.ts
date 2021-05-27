@@ -1,10 +1,15 @@
+import { LockIdentifier } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 
-import { Address } from '../../common/types'
+import { Address } from '@/common/types'
 
 export interface BalanceLockInfo {
   amount: BN
-  reason: string
+  info: {
+    id?: number
+    type?: LockIdentifier
+    reason: string
+  }
 }
 
 export interface Balances {

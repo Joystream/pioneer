@@ -35,6 +35,23 @@ export function useSudoBudget() {
     },
   })
 
+  const openingTransaction = useMemo(() => {
+    return (
+      api &&
+      api.tx.utility.batch([
+        api.tx.members.addStakingAccountCandidate(0),
+        api.tx.members.confirmStakingAccount(0, '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
+      ])
+    )
+  }, [api])
+  const { send: applyOpening } = useSignAndSendTransaction({
+    transaction: openingTransaction,
+    signer: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    onDone: (success) => {
+      info(success ? '✅ Applied for Opening' : '❗️Error applying for Opening')
+    },
+  })
+
   useMemo(() => {
     if (!IS_DEVELOPMENT || !(api && isConnected && hasAccounts)) {
       return
@@ -42,5 +59,7 @@ export function useSudoBudget() {
 
     info('🤑 Increasing Membership Working Group budget')
     sendBudget()
+    info('📖 Applying for Opening')
+    applyOpening()
   }, [isConnected, hasAccounts])
 }

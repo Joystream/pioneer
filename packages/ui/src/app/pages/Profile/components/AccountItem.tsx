@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { TransferButton } from '@/accounts/components/TransferButton'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { Account } from '@/accounts/types'
+import { Account, BalanceLockInfo } from '@/accounts/types'
 import { ButtonGhost } from '@/common/components/buttons'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { Arrow } from '@/common/components/icons'
@@ -19,13 +19,10 @@ import { Sizes, Colors } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
 
 interface DetailsItemDataProps {
-  account: Account
+  lock: BalanceLockInfo
 }
 
-export const DetailsItem = ({ account }: DetailsItemDataProps) => {
-  const address = account.address
-  const balance = useBalance(address)
-
+export const DetailsItem = ({ lock }: DetailsItemDataProps) => {
   const [isDropped, setDropped] = useToggle()
 
   return (
@@ -33,12 +30,12 @@ export const DetailsItem = ({ account }: DetailsItemDataProps) => {
       <AccountDetailsWrap>
         <DetailsInfo>
           <LabelIcon />
-          <DetailsName>Staking for a role</DetailsName>
+          <DetailsName>{lock.info.reason}</DetailsName>
         </DetailsInfo>
-        <TokenValue value={balance?.total} />
-        <TokenValue value={balance?.locked} />
-        <TokenValue value={balance?.recoverable} />
-        <TokenValue value={balance?.transferable} />
+        <TokenValue value={0} />
+        <TokenValue value={lock.amount} />
+        <TokenValue value={0} />
+        <TokenValue value={0} />
         <DropDownButton onClick={setDropped} isDropped={isDropped} size="medium" />
       </AccountDetailsWrap>
       <DetailsDropDownToggle isDropped={isDropped}>
@@ -163,6 +160,14 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
 
   const [isDropped, setDropped] = useToggle()
 
+  const displayLocks = () => {
+    if (!balance || !balance.locks.length) {
+      return <TextMedium light>No locks found.</TextMedium>
+    }
+
+    return balance.locks.map((lock) => <DetailsItem lock={lock} />)
+  }
+
   return (
     <>
       <AccountItemWrap key={address}>
@@ -179,8 +184,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       </AccountItemWrap>
       <StyledDropDown isDropped={isDropped}>
         <StyledLabel>Account Locks:</StyledLabel>
-        <DetailsItem account={account} />
-        <DetailsItemLock account={account} />
+        {displayLocks()}
       </StyledDropDown>
       <StyledDropDown isDropped={isDropped}>
         <StyledLabel>Recoverable balance</StyledLabel>
