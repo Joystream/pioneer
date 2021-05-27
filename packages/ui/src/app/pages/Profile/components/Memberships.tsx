@@ -27,7 +27,7 @@ export function Memberships() {
             velit mollit. Exercitation veniam consequat sunt nostrud amet.
           </TextMedium>
         </NoMembershipsInfo>
-        <NoMembershipButton>Create a membership</NoMembershipButton>
+        <NoMembershipButton size="medium">Create a membership</NoMembershipButton>
       </NoMemberships>
     )
   }

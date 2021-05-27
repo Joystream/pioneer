@@ -5,13 +5,16 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
 export type ButtonSize = 'small' | 'medium' | 'large'
 
-export interface ButtonProps {
-  size?: ButtonSize
+export interface ButtonProps extends ButtonSizingProps {
   square?: boolean
   className?: string
   children?: React.ReactNode
   disabled?: boolean
   onClick?: MouseEventHandler
+}
+
+interface ButtonSizingProps {
+  size: ButtonSize
 }
 
 const height: { [key in ButtonSize]: string } = {
@@ -38,7 +41,7 @@ const getPadding = (props: ButtonProps) => {
 export function ButtonPrimary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonPrimaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
+      <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonPrimaryStyles>
   )
 }
@@ -46,7 +49,7 @@ export function ButtonPrimary({ className, children, size, square, disabled, onC
 export function ButtonSecondary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
+      <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonSecondaryStyles>
   )
 }
@@ -54,26 +57,26 @@ export function ButtonSecondary({ className, children, size, square, disabled, o
 export function ButtonGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
+      <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonGhostStyles>
   )
 }
 export function ButtonBareGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonBareGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
-      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
+      <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonBareGhostStyles>
   )
 }
 export function ButtonLink({ className, children, square, disabled, onClick }: ButtonProps) {
   return (
-    <ButtonLinkStyles className={className} square={square} disabled={disabled} onClick={onClick}>
-      <ButtonInnerWrapper>{children}</ButtonInnerWrapper>
+    <ButtonLinkStyles size="small" className={className} square={square} disabled={disabled} onClick={onClick}>
+      <ButtonInnerWrapper size="small">{children}</ButtonInnerWrapper>
     </ButtonLinkStyles>
   )
 }
 
-const ButtonInnerWrapper = styled.span<ButtonProps>`
+const ButtonInnerWrapper = styled.span<ButtonSizingProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
@@ -356,6 +359,7 @@ export const ButtonBareGhostStyles = styled.button<ButtonProps>`
 export const ButtonLinkStyles = styled.button<ButtonProps>`
   ${BasicButtonStyles};
   grid-column-gap: 4px;
+  min-width: fit-content;
   height: fit-content;
   padding: 0;
   font-size: 14px;

@@ -15,7 +15,9 @@ export const ChangeAccountSuccessModal: FC<Props> = ({ onClose, children }) => (
       <TextMedium>{children}</TextMedium>
     </ModalBody>
     <ModalFooter>
-      <ButtonPrimary onClick={onClose}>Return</ButtonPrimary>
+      <ButtonPrimary onClick={onClose} size="medium">
+        Return
+      </ButtonPrimary>
     </ModalFooter>
   </Modal>
 )
