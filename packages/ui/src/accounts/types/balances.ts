@@ -1,15 +1,11 @@
-import { LockIdentifier } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 
 import { Address } from '@/common/types'
 
-export interface BalanceLockInfo {
+export interface BalanceLock {
+  id?: number
   amount: BN
-  info: {
-    id?: number
-    type?: LockIdentifier
-    reason: string
-  }
+  reason: string
 }
 
 export interface Balances {
@@ -20,7 +16,7 @@ export interface Balances {
 }
 
 export interface DetailedBalances extends Balances {
-  locks: BalanceLockInfo[]
+  locks: BalanceLock[]
 }
 
 export type AddressToBalanceMap = {
