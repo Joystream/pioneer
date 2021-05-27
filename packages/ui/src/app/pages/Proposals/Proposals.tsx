@@ -26,15 +26,9 @@ export const Proposals = () => {
         <ProposalsTabs />
       </PageHeader>
 
-      {isLoading ? (
-        <MainPanel>
-          <Loading />
-        </MainPanel>
-      ) : proposals.length ? (
+      {proposals.length || isLoading ? (
         <ContentWithSidepanel>
-          <MainPanel>
-            <ProposalList proposals={proposals} />
-          </MainPanel>
+          <MainPanel>{isLoading ? <Loading /> : <ProposalList proposals={proposals} />}</MainPanel>
           <SidePanel>
             <ActivitiesBlock activities={activities} label="Proposals Activities" />
           </SidePanel>

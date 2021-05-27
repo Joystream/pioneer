@@ -8,7 +8,6 @@ import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { useActivities } from '@/common/hooks/useActivities'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
-import { NoProposals } from '@/proposals/components/NoProposals'
 import { ProposalList } from '@/proposals/components/ProposalList'
 import { usePastProposals } from '@/proposals/hooks/usePastProposals'
 
@@ -26,24 +25,12 @@ export const PastProposals = () => {
         <ProposalsTabs />
       </PageHeader>
 
-      {isLoading ? (
-        <MainPanel>
-          <Loading />
-        </MainPanel>
-      ) : proposals.length ? (
-        <ContentWithSidepanel>
-          <MainPanel>
-            <ProposalList proposals={proposals} isPast />
-          </MainPanel>
-          <SidePanel>
-            <ActivitiesBlock activities={activities} label="Proposals Activities" />
-          </SidePanel>
-        </ContentWithSidepanel>
-      ) : (
-        <MainPanel>
-          <NoProposals />
-        </MainPanel>
-      )}
+      <ContentWithSidepanel>
+        <MainPanel>{isLoading ? <Loading /> : <ProposalList proposals={proposals} isPast />}</MainPanel>
+        <SidePanel>
+          <ActivitiesBlock activities={activities} label="Proposals Activities" />
+        </SidePanel>
+      </ContentWithSidepanel>
     </AppPage>
   )
 }
