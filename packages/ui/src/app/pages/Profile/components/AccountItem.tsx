@@ -171,6 +171,14 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
 
   const [isDropped, setDropped] = useToggle()
 
+  const displayLockIcons = () => {
+    if (!balance || !balance.locks.length) {
+      return null
+    }
+
+    return balance.locks.map((lock) => lockIcon(lock.id || 1))
+  }
+
   const displayLocks = () => {
     if (!balance || !balance.locks.length) {
       return <TextMedium light>No locks found.</TextMedium>
@@ -187,7 +195,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         <div>
           <TokenValue value={balance?.locked} />
           <br />
-          {balance?.locks.map((lock) => lockIcon(lock.id || 1))}
+          {displayLockIcons()}
         </div>
         <TokenValue value={balance?.recoverable} />
         <TokenValue value={balance?.transferable} />

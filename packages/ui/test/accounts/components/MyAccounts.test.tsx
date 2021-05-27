@@ -5,7 +5,7 @@ import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
-import { Account, Balances } from '../../../src/accounts/types'
+import { Account, Balances, DetailedBalances } from '../../../src/accounts/types'
 import { Accounts } from '../../../src/app/pages/Profile/components/Accounts'
 import { shortenAddress } from '../../../src/common/model/formatters'
 import { KeyringContext } from '../../../src/common/providers/keyring/context'
@@ -29,7 +29,7 @@ jest.mock('../../../src/accounts/hooks/useAccounts', () => {
   }
 })
 
-let balances: Balances | null = null
+let balances: DetailedBalances | null = null
 
 const useBalance = {
   useBalance: () => balances,
@@ -82,6 +82,7 @@ describe('UI: Accounts list', () => {
         locked: new BN(0),
         transferable: new BN(1000),
         recoverable: new BN(0),
+        locks: [],
       }
       const { findByText } = renderAccounts()
 
@@ -103,6 +104,7 @@ describe('UI: Accounts list', () => {
         locked: new BN(0),
         transferable: new BN(1000),
         recoverable: new BN(0),
+        locks: [],
       }
       const aliceMember = getMember('alice')
       seedMembers(mockServer.server)

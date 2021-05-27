@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { LockIdentifier } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
