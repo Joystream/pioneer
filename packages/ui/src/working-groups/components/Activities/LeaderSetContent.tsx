@@ -9,9 +9,9 @@ interface Props {
   activity: LeaderSetActivity
 }
 
-export const LeaderSetContent = ({ activity: { membership, groupName } }: Props) => (
+export const LeaderSetContent = ({ activity: { member, groupName } }: Props) => (
   <>
-    <MemberModalLink call={{ modal: 'Member', data: { id: membership.id } }}>{membership.handle}</MemberModalLink> has
-    been appointed Leader of the <RouterLink to={`working-groups/${groupName}`}>{groupName} Working Group</RouterLink>.
+    <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink> has been
+    appointed Leader of the <RouterLink to={`working-groups/${groupName}`}>{groupName} Working Group</RouterLink>.
   </>
 )

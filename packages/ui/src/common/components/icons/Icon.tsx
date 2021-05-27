@@ -5,8 +5,12 @@ interface IconProps extends ThemedStyledProps<React.SVGProps<SVGSVGElement>, any
   size: string
 }
 
-export const Icon = React.memo(styled.svg<{ className?: string }>`
-  height: ${(props) => (props as IconProps).size}px;
-  width: ${(props) => (props as IconProps).size}px;
+export interface StyledIcon {
+  className?: string
+}
+
+export const Icon = React.memo(styled.svg<IconProps>`
+  height: ${({ size }) => size}px;
+  width: ${({ size }) => size}px;
   position: relative;
 `)

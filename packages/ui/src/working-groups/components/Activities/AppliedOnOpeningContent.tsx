@@ -9,9 +9,9 @@ interface Props {
   activity: AppliedOnOpeningActivity
 }
 
-export const AppliedOnOpeningContent = ({ activity: { membership, opening } }: Props) => (
+export const AppliedOnOpeningContent = ({ activity: { member, opening } }: Props) => (
   <>
-    <MemberModalLink call={{ modal: 'Member', data: { id: membership.id } }}>{membership.handle}</MemberModalLink> has
-    applied on the opening <RouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</RouterLink>.
+    <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink> has applied
+    on the opening <RouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</RouterLink>.
   </>
 )
