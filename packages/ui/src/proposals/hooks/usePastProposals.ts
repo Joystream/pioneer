@@ -1,9 +1,9 @@
 import { error } from '@/common/logger'
-import { mockProposals } from '@/mocks/data/mockProposals'
+import { mockPastProposals } from '@/mocks/data/mockProposals'
 import { useMockDelay } from '@/mocks/hooks/useMockDelay'
 
-export const useProposals = () => {
-  const { loading, data, error: err } = useMockDelay({ proposals: mockProposals })
+export const usePastProposals = () => {
+  const { loading, data, error: err } = useMockDelay({ proposals: mockPastProposals })
 
   if (err) {
     error(err)

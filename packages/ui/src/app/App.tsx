@@ -13,6 +13,7 @@ import { GlobalModals } from './GlobalModals'
 import { Members } from './pages/Members/Members'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
+import { PastProposals } from './pages/Proposals/PastProposals'
 import { Proposals } from './pages/Proposals/Proposals'
 import { MyApplications } from './pages/WorkingGroups/MyApplications'
 import { MyRole } from './pages/WorkingGroups/MyRoles/MyRole'
@@ -37,7 +38,7 @@ export const App = () => (
         <Route exact path="/working-groups/:name" component={WorkingGroup} />
         <Route path="/working-groups/openings/:id" component={WorkingGroupOpening} />
         <Route exact path={ProposalsRoutes.current} component={Proposals} />
-        <Route exact path={ProposalsRoutes.past} />
+        <Route exact path={ProposalsRoutes.past} component={PastProposals} />
         <Route exact path={ProposalsRoutes.myproposals} />
         <Route exact path="/members" component={Members} />
         <Redirect exact from="/" to="/profile" />
