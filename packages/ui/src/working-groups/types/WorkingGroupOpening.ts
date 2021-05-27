@@ -53,6 +53,9 @@ export interface WorkingGroupOpening extends BaseOpening {
   }
 }
 
+export const isUpcomingOpening = (opening: BaseOpening): opening is UpcomingWorkingGroupOpening =>
+  'hiringLimit' in opening
+
 const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | WorkingGroupOpeningFieldsFragment) => ({
   id: fields.id,
   title: `${fields.group.name} Working Group`,

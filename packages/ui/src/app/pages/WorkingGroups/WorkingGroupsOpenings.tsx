@@ -18,6 +18,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { OpeningsList } from '@/working-groups/components/OpeningsList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
+import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 
 import { AppPage } from '../../components/AppPage'
 
@@ -27,6 +28,7 @@ type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
   const { isLoading, openings } = useOpenings({ type: 'open' })
+  const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
   const activities = useActivities()
   const { active } = useMyMemberships()
   const { locked } = useTotalBalances()
@@ -50,7 +52,7 @@ export const WorkingGroupsOpenings = () => {
       title: 'Upcoming openings',
       active: activeTab === 'UPCOMING',
       onClick: () => setActiveTab('UPCOMING'),
-      count: 0,
+      count: upcomingOpenings.length,
     },
   ]
   const sideNeighborRef = useRef<HTMLDivElement>(null)
@@ -84,7 +86,8 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
+            {activeTab === 'OPENINGS' && (isLoading ? <Loading /> : <OpeningsList openings={openings} />)}
+            {activeTab === 'UPCOMING' && (upcomingLoading ? <Loading /> : <OpeningsList openings={upcomingOpenings} />)}
           </ContentWithTabs>
         </MainPanel>
         <SidePanel neighbor={sideNeighborRef}>
