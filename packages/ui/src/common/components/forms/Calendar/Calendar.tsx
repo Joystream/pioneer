@@ -77,11 +77,11 @@ const CalendarBody = memo(({ month, within, selection, onChange }: CalendarBodyP
 
   return (
     <>
-      {DAY_NAMES.map((day) => (
-        <CalendarWeekDay key={day} lighter>
-          {day}
-        </CalendarWeekDay>
-      ))}
+      <CalendarHeaderContainer>
+        {DAY_NAMES.map((day) => (
+          <CalendarWeekDay key={day}>{day}</CalendarWeekDay>
+        ))}
+      </CalendarHeaderContainer>
 
       {Array.from({ length: DAYS_PER_CALENDAR_PAGE }).map((_, index) => (
         <CalendarDay

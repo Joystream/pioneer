@@ -76,7 +76,7 @@ export function ButtonLink({ className, children, square, disabled, onClick }: B
   )
 }
 
-const ButtonInnerWrapper = styled.span<ButtonSizingProps>`
+export const ButtonInnerWrapper = styled.span<ButtonSizingProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
