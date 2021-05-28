@@ -15,8 +15,8 @@ const memberTabs: TabsDefinition[] = [
 ]
 
 export const WorkingGroupsTabs = () => {
-  const { members } = useMyMemberships()
-  const avaliableTabs = members.length == 0 ? basicTabs : basicTabs.concat(memberTabs)
+  const { hasMembers } = useMyMemberships()
+  const avaliableTabs = !hasMembers ? basicTabs : basicTabs.concat(memberTabs)
   const tabs = usePageTabs(avaliableTabs)
 
   return <Tabs tabs={tabs} />

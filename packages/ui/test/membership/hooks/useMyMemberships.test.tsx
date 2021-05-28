@@ -42,6 +42,7 @@ describe('useMyMemberships', () => {
       active: undefined,
       isLoading: true,
       members: [],
+      hasMembers: false,
     })
   })
 
@@ -54,6 +55,7 @@ describe('useMyMemberships', () => {
       active: undefined,
       isLoading: false,
       members: [],
+      hasMembers: false,
     })
   })
 
@@ -71,6 +73,7 @@ describe('useMyMemberships', () => {
       active: undefined,
       isLoading: false,
       members: [aliceMember],
+      hasMembers: true,
     })
   })
 
@@ -88,6 +91,7 @@ describe('useMyMemberships', () => {
       active: undefined,
       isLoading: false,
       members: [bobMember],
+      hasMembers: true,
     })
   })
 
@@ -108,6 +112,7 @@ describe('useMyMemberships', () => {
       active: aliceMember,
       isLoading: false,
       members: [aliceMember],
+      hasMembers: true,
     })
   })
 })
