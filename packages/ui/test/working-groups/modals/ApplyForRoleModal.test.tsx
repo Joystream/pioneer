@@ -76,6 +76,7 @@ describe('UI: ApplyForRoleModal', () => {
     members: [],
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
+    hasMembers: true,
   }
 
   let useAccounts: UseAccounts
