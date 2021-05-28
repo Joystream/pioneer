@@ -140,6 +140,11 @@ const StepWrap = styled.div<StepNumberProps>`
         color: ${Colors.Black[400]};
         -webkit-text-stroke-color: transparent;
       }
+      &:not(:last-child) {
+        ${StepNumber}:before {
+          top: 12px;
+        }
+      }
     `};
 
   ${({ isActive }: StepNumberProps) =>
