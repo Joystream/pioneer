@@ -104,9 +104,11 @@ export const Transitions = {
   all: 'all 0.25s ease',
   allXL: 'all 0.5s ease',
   allXXL: 'all 0.75s ease',
+  durations: '0.1s',
   duration: '0.25s',
   durationXL: '0.5s',
   durationXXL: '0.75s',
+  durationNumericS: 100,
   durationNumeric: 250,
   durationNumericXL: 500,
   durationNumericXXL: 750,
@@ -181,19 +183,15 @@ export const Animations = {
       to {}
     }
   `,
-  showHelperTooltip: `
-    animation: showHelperTooltip 0.25s ease;
-    animation-delay: 0.25s;
-    animation-fill-mode: forwards;
+  showTooltip: `
+    animation: showTooltip ${Transitions.durations} ease;
 
     @keyframes showHelperTooltip {
       from {
         opacity: 0;
-        transform: translateY(8px);
-        visibility: hidden;
       }
       to {
-        visibility: visible;
+        opacity: 1;
       }
     }
   `,

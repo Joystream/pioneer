@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Transitions } from '../../constants'
+import { Animations, BorderRad, Colors, Transitions } from '../../constants'
 import { PopupItem } from '../animatedComponents/PopupItem'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
@@ -51,9 +51,9 @@ export const Tooltip = ({
     clearTimeout(timeoutRef.current)
 
     if (isOver) {
-      timeoutRef.current = setTimeout(() => setTooltipActive(true), Transitions.durationNumeric)
+      timeoutRef.current = setTimeout(() => setTooltipActive(true), Transitions.durationNumericS)
     } else {
-      timeoutRef.current = setTimeout(() => setTooltipActive(false), Transitions.durationNumericXL)
+      timeoutRef.current = setTimeout(() => setTooltipActive(false), Transitions.durationNumericS)
     }
 
     return () => {
@@ -142,6 +142,8 @@ const TooltipPopupContainer = styled(PopupItem)<{ position: DOMRect }>`
   border-radius: ${BorderRad.m};
   transition: ${Transitions.all};
   z-index: 55;
+  ${Animations.showTooltip};
+
   &:after {
     content: '';
     position: absolute;
