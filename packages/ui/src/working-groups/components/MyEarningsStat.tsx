@@ -3,7 +3,7 @@ import React from 'react'
 
 import { MultiTokenValueStat } from '@/common/components/statistics'
 
-export const MyEarnings = () => {
+export const MyEarningsStat = () => {
   return (
     <MultiTokenValueStat
       title="Earned in past"

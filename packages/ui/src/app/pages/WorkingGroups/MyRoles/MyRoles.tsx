@@ -7,8 +7,8 @@ import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label, TextBig } from '@/common/components/typography'
-import { MyEarnings } from '@/working-groups/components/MyEarnings'
-import { MyStake } from '@/working-groups/components/MyStake'
+import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
+import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
 import { RolesList } from '@/working-groups/components/Roles/RolesList'
 import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 
@@ -47,8 +47,8 @@ export const MyRoles = () => {
       </PageHeader>
       <MainPanel>
         <Statistics>
-          <MyEarnings />
-          <MyStake />
+          <MyEarningsStat />
+          <MyStakeStat />
           <TokenValueStat title="Total owed reward" value={150000} />
           <TokenValueStat title="Next payout in" value={150000} />
         </Statistics>

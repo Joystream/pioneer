@@ -6,7 +6,7 @@ import { Worker } from '@/working-groups/types'
 
 const getTotalStake = (workers: Worker[]) => workers.reduce((total, worker) => total + worker.stake, 0)
 
-export const MyStake = () => {
+export const MyStakeStat = () => {
   const { workers } = useMyWorkers()
   const totalStake = getTotalStake(workers)
 

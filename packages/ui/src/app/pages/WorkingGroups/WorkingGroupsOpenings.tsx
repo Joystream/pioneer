@@ -9,9 +9,9 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
-import { MyEarnings } from '@/working-groups/components/MyEarnings'
+import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
-import { MyStake } from '@/working-groups/components/MyStake'
+import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
 import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
@@ -54,8 +54,8 @@ export const WorkingGroupsOpenings = () => {
         <MainPanel ref={sideNeighborRef}>
           <Statistics>
             <MyRolesStat />
-            <MyStake />
-            <MyEarnings />
+            <MyStakeStat />
+            <MyEarningsStat />
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
