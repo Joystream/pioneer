@@ -34,7 +34,7 @@ export const lockIcon = (type: LockType) => {
   }
 }
 
-interface AccountLocksProps {
+export interface AccountLocksProps {
   locks: BalanceLock[] | undefined
 }
 
@@ -46,7 +46,7 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
   return (
     <>
       {locks.map((lock, index) => (
-        <div key={index}>{lockIcon(lock.type)}</div>
+        <span key={index}>{lockIcon(lock.type)}</span>
       ))}
     </>
   )
