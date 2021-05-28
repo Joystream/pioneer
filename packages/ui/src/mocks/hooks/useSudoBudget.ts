@@ -35,7 +35,7 @@ export function useSudoBudget() {
     },
   })
 
-  const openingTransaction = useMemo(() => {
+  const addStakeTransaction = useMemo(() => {
     return (
       api &&
       api.tx.utility.batch([
@@ -44,11 +44,11 @@ export function useSudoBudget() {
       ])
     )
   }, [api])
-  const { send: applyOpening } = useSignAndSendTransaction({
-    transaction: openingTransaction,
+  const { send: addStake } = useSignAndSendTransaction({
+    transaction: addStakeTransaction,
     signer: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     onDone: (success) => {
-      info(success ? '✅ Applied for Opening' : '❗️Error applying for Opening')
+      info(success ? '✅ Adding stake' : '❗️Error adding stake')
     },
   })
 
@@ -59,7 +59,7 @@ export function useSudoBudget() {
 
     info('🤑 Increasing Membership Working Group budget')
     sendBudget()
-    info('📖 Applying for Opening')
-    applyOpening()
+    info('📖 Stake added')
+    addStake()
   }, [isConnected, hasAccounts])
 }
