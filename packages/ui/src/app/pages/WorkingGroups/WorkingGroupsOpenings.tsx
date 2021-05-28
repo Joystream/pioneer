@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useRef, useState } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
@@ -7,9 +6,10 @@ import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/compo
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { MultiTokenValueStat, Statistics } from '@/common/components/statistics'
+import { Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
+import { MyEarnings } from '@/working-groups/components/MyEarnings'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStake } from '@/working-groups/components/MyStake'
 import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
@@ -26,11 +26,6 @@ export const WorkingGroupsOpenings = () => {
   const { isLoading, openings } = useOpenings({ type: 'open' })
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
   const activities = useActivities()
-
-  const earnings = {
-    day: new BN(200),
-    month: new BN(102_000),
-  }
 
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
 
@@ -60,13 +55,7 @@ export const WorkingGroupsOpenings = () => {
           <Statistics>
             <MyRolesStat />
             <MyStake />
-            <MultiTokenValueStat
-              title="Earned in past"
-              values={[
-                { label: '24 hours', value: earnings.day },
-                { label: 'Month', value: earnings.month },
-              ]}
-            />
+            <MyEarnings />
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
