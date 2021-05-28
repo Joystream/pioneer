@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { BadgeViolet } from '@/common/components/BadgeViolet'
-import { LinkLink } from '@/common/components/buttons/Links'
+import { ButtonLink } from '@/common/components/buttons'
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview/MarkdownPreview'
+import { MarkdownCollapsibleContainer } from '@/common/components/MarkdownPreview/MarkdownPreviewStyles'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineHuge, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
@@ -17,6 +18,7 @@ import { WorkingGroupOpening } from '../types'
 export type OpeningFormPreviewProps = { opening: WorkingGroupOpening }
 
 export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewProps) => {
+  const [isMarkdownCollapsed, setMarkdownCollapsed] = useState(true)
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -27,13 +29,15 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
       <Row>
         <RowGapBlock gap={8}>
           <h4>{opening.title}</h4>
-          <MarkdownPreview markdown={opening.description} />
+          <MarkdownCollapsibleContainer isCollapsed={isMarkdownCollapsed}>
+            <MarkdownPreview markdown={opening.description} />
+          </MarkdownCollapsibleContainer>
         </RowGapBlock>
       </Row>
       <Row>
-        <LinkLink href="http://example.com/" size="small">
-          Show more
-        </LinkLink>
+        <ButtonLink onClick={() => setMarkdownCollapsed(!isMarkdownCollapsed)} size="small">
+          Show {isMarkdownCollapsed ? 'more' : 'less'}
+        </ButtonLink>
       </Row>
       <Row>
         <RowGapBlock gap={4}>

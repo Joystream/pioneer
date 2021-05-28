@@ -1,10 +1,15 @@
-import { createGlobalStyle } from 'styled-components'
+import React, { useRef } from 'react'
+import styled, { createGlobalStyle } from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
 export const MarkdownPreviewStyles = createGlobalStyle`
   .markdown-preview {
     width: 100%;
+  }
+
+  .markdown-preview > *:nth-child(1) {
+    margin-top: 0;
   }
 
   .markdown-preview h1,
@@ -140,7 +145,7 @@ export const MarkdownPreviewStyles = createGlobalStyle`
     }
   }
 
-  .markdown-preview ul li:before {
+  .markdown-preview ul > li:before {
     content: url('data:image/svg+xml;charset=UTF-8, <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="16" width="16" viewBox="0 0 16 16"><path d="M8.13804 9.3253L3.67065 4.85791L2.66669 5.86187L8.13804 11.3332L13.6094 5.86187L12.6054 4.85791L8.13804 9.3253Z" fill="rgb(64, 75, 90)"></path></svg>');
     position: absolute;
     top: 50%;
@@ -149,4 +154,44 @@ export const MarkdownPreviewStyles = createGlobalStyle`
     height: 16px;
     transform: translateY(-50%) rotate(-90deg);
   }
+`
+
+interface MarkdownCollapsibleContainerProps {
+  isCollapsed: boolean
+  children?: React.ReactNode
+}
+
+export const MarkdownCollapsibleContainer = ({ isCollapsed, children }: MarkdownCollapsibleContainerProps) => {
+  const ownRef = useRef<HTMLDivElement>(null)
+
+  return (
+    <CollapsibleMarkdownContainer
+      isCollapsed={isCollapsed}
+      ref={ownRef}
+      ownHeight={ownRef && ownRef.current?.scrollHeight}
+    >
+      {children}
+    </CollapsibleMarkdownContainer>
+  )
+}
+
+interface CollapsibleMarkdownContainerProps {
+  isCollapsed: boolean
+  ownHeight?: number
+}
+
+const CollapsibleMarkdownContainer = styled.div<CollapsibleMarkdownContainerProps>`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: ${({ isCollapsed, ownHeight }) => {
+    return isCollapsed ? '164px' : ownHeight + 'px'
+  }};
+  overflow: hidden;
+  mask-image: ${({ isCollapsed }) =>
+    isCollapsed
+      ? 'linear-gradient(180deg, black, black calc(100% - 64px), transparent 100%)'
+      : 'linear-gradient(180deg, black, black 100%, transparent)'};
+  mask-size: 100%;
+  transition: ${Transitions.all};
 `
