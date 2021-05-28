@@ -5,6 +5,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { Account } from '@/accounts/types'
 import { ButtonGhost } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
+import { Info } from '@/common/components/Info'
 import { Modal, ModalFooter, ModalHeader, Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Stepper } from '@/common/components/Stepper'
@@ -54,12 +55,14 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId }:
               </Row>
               <Row>
                 <RowGapBlock gap={20}>
-                  <div>
-                    <h5>Staked</h5>
-                    <TextMedium>
-                      You have just staked <TokenValue value={stake} /> from your "{stakeAccount.name}" account.
-                    </TextMedium>
-                  </div>
+                  <Info
+                    title="Staked"
+                    content={
+                      <TextMedium light>
+                        You have just staked <TokenValue value={stake} /> from your "{stakeAccount.name}" account.
+                      </TextMedium>
+                    }
+                  />
                 </RowGapBlock>
               </Row>
             </RowGapBlock>

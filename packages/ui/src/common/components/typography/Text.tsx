@@ -9,7 +9,7 @@ interface TextProps {
   light?: boolean
   dark?: boolean
   className?: string
-  margin?: 's' | 'm' | 'l' | 'xl' | undefined
+  margin?: 'xs' | 's' | 'm' | 'l' | 'xl' | undefined
   colorInherit?: boolean
   value?: boolean
 }
@@ -41,6 +41,8 @@ const TextLightStyle = css`
 const TextMargins = css<TextProps>`
   margin-bottom: ${({ margin }) => {
     switch (margin) {
+      case 'xs':
+        return '4px'
       case 's':
         return '8px'
       case 'm':
