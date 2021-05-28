@@ -1,3 +1,5 @@
+import faker from 'faker'
+
 import { Network, WorkingGroupOpeningType } from '@/common/api/queries'
 import { asWorkingGroupOpening } from '@/working-groups/types'
 
@@ -34,6 +36,7 @@ export const getMockAsOpening = (index = 0) => {
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata',
       ...rawOpenings[index].metadata,
+      expectedEnding: faker.date.soon(5).toJSON(),
     },
     status: {
       __typename: 'OpeningStatusOpen',
@@ -51,7 +54,7 @@ export const getMockAsOpening = (index = 0) => {
       __typename: 'Block',
       id: '1234',
       number: 1234,
-      timestamp: new Date().toJSON(),
+      timestamp: faker.date.recent(2).toJSON(),
       network: Network.Olympia,
     },
   })
