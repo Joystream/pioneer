@@ -105,24 +105,28 @@ describe('sortAccounts', () => {
         locked: new BN(3),
         recoverable: new BN(1),
         transferable: new BN(11),
+        locks: [],
       },
       '1': {
         total: new BN(3),
         locked: new BN(2),
         recoverable: new BN(0),
         transferable: new BN(11),
+        locks: [],
       },
       '2': {
         total: new BN(1),
         locked: new BN(1),
         recoverable: new BN(5),
         transferable: new BN(1),
+        locks: [],
       },
       '3': {
         total: new BN(2),
         locked: new BN(6),
         recoverable: new BN(5),
         transferable: new BN(1),
+        locks: [],
       },
     }
     const anna = { name: 'Anna', address: '0' }

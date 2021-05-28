@@ -82,6 +82,7 @@ describe('UI: Accounts list', () => {
         locked: new BN(0),
         transferable: new BN(1000),
         recoverable: new BN(0),
+        locks: [],
       }
       const { findByText } = renderAccounts()
 
@@ -103,6 +104,7 @@ describe('UI: Accounts list', () => {
         locked: new BN(0),
         transferable: new BN(1000),
         recoverable: new BN(0),
+        locks: [],
       }
       const aliceMember = getMember('alice')
       seedMembers(mockServer.server)

@@ -9,6 +9,7 @@ export const zeroBalance = () => ({
   locked: new BN(0),
   transferable: new BN(0),
   total: new BN(0),
+  locks: [],
 })
 
 const addBalances = (a: Balances, b: Balances) => ({
@@ -16,6 +17,7 @@ const addBalances = (a: Balances, b: Balances) => ({
   locked: a.locked.add(b.locked),
   transferable: a.transferable.add(b.transferable),
   total: a.total.add(b.total),
+  locks: a.locks.concat(b.locks),
 })
 
 export function useTotalBalances(): Balances {

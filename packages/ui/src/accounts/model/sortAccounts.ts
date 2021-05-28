@@ -3,7 +3,7 @@ import { Account, AddressToBalanceMap, Balances } from '../types'
 
 import { BalanceComparator } from './BalanceComparator'
 
-export type SortKey = keyof Balances | 'name'
+export type SortKey = keyof Omit<Balances, 'locks'> | 'name'
 
 export function sortAccounts(accounts: Account[], balanceMap: AddressToBalanceMap, key: SortKey, isDescending = false) {
   return key === 'name'

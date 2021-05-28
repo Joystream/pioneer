@@ -35,6 +35,23 @@ export function useSudoBudget() {
     },
   })
 
+  const addStakeTransaction = useMemo(() => {
+    return (
+      api &&
+      api.tx.utility.batch([
+        api.tx.members.addStakingAccountCandidate(0),
+        api.tx.members.confirmStakingAccount(0, '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
+      ])
+    )
+  }, [api])
+  const { send: addStake } = useSignAndSendTransaction({
+    transaction: addStakeTransaction,
+    signer: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    onDone: (success) => {
+      info(success ? '✅ Adding stake' : '❗️Error adding stake')
+    },
+  })
+
   useMemo(() => {
     if (!IS_DEVELOPMENT || !(api && isConnected && hasAccounts)) {
       return
@@ -42,5 +59,7 @@ export function useSudoBudget() {
 
     info('🤑 Increasing Membership Working Group budget')
     sendBudget()
+    info('📖 Stake added')
+    addStake()
   }, [isConnected, hasAccounts])
 }
