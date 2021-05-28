@@ -99,7 +99,6 @@ const SelectContainer = styled.label`
   display: block;
   & > :last-child {
     height: 48px;
-    min-width: 250px;
   }
 `
 
@@ -107,6 +106,7 @@ const Selected = styled.div`
   display: block;
   text-transform: capitalize;
   padding: 0.5rem 0;
+  grid-column: span 2;
 `
 const OptionsContainer = styled.div`
   background: ${Colors.White};

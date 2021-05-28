@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonSecondary, FilterButtons } from '@/common/components/buttons'
-import { Shadows } from '@/common/constants'
+import { Colors, Shadows } from '@/common/constants'
 import { DateRange, PartialDateRange } from '@/common/types/Dates'
 import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
 
@@ -56,7 +56,7 @@ export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChan
           {title}
         </FilterLabel>
       )}
-      <InputComponent tight inputWidth="xs">
+      <DatePickerInput tight inputWidth="xs">
         <InputText placeholder="-" value={dateString} readOnly />
         {isOpen && (
           <DatePickerPopup>
@@ -66,7 +66,7 @@ export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChan
             </DatePickerFooter>
           </DatePickerPopup>
         )}
-      </InputComponent>
+      </DatePickerInput>
     </DatePickerContainer>
   )
 }
@@ -161,7 +161,12 @@ const DatePickerContainer = styled.div`
   display: inline-block;
 `
 
+const DatePickerInput = styled(InputComponent)`
+  width: unset;
+`
+
 const DatePickerPopup = styled.div`
+  background-color: ${Colors.White};
   position: absolute;
   left: 0;
   top: calc(100% + 4px);
@@ -171,7 +176,8 @@ const DatePickerPopup = styled.div`
   gap: 16px;
   grid-template-columns: auto auto auto;
   justify-items: center;
-  width: 672px;
+  width: max-content;
+  z-index: 51;
 `
 
 const DatePickerFooter = styled.div`
