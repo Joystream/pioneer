@@ -11,12 +11,13 @@ export interface PercentageChartProps {
 }
 
 export const PercentageChart = ({ percentage, className, isOnBlack }: PercentageChartProps) => {
+  const innerPercentage = percentage <= 0 ? 0 : percentage
   return (
     <PercentageChartContainer className={className} isOnBlack={isOnBlack}>
       <PercentageChartBorder>
-        <PercentageChartText value>{Math.min(percentage, 100)}%</PercentageChartText>
+        <PercentageChartText>{Math.min(innerPercentage, 100)}%</PercentageChartText>
         <PercentageChartSvg viewBox="0 0 34 34" fill="none" color="currentColor">
-          <PercentageChartCircle cx="17" cy="17" r="16" percentage={Math.min(percentage, 100)} />
+          <PercentageChartCircle cx="17" cy="17" r="16" percentage={Math.min(innerPercentage, 100)} />
         </PercentageChartSvg>
       </PercentageChartBorder>
     </PercentageChartContainer>
@@ -49,6 +50,7 @@ const PercentageChartText = styled(TextInlineSmall)`
   color: inherit;
   font-weight: 700;
   text-align: center;
+  transform: translateY(1px);
   transition: ${Transitions.all};
 `
 
@@ -66,7 +68,7 @@ const PercentageChartCircle = styled.circle<{ percentage: number }>`
   stroke-dasharray: 100;
   stroke-dashoffset: ${({ percentage }) => `${100 - percentage}`};
   stroke-linecap: round;
-  stroke: ${Colors.Blue[500]};
+  stroke: ${({ percentage }) => (percentage <= 0 ? 'transparent' : Colors.Blue[500])};
   stroke-width: 2;
   transition: ${Transitions.all};
 `

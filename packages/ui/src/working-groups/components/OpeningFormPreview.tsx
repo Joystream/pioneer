@@ -11,6 +11,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineHuge, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
 import { Fraction } from '@/common/components/typography/Fraction'
 import { formatDateString } from '@/common/model/formatters'
+import { percentTimeLeft } from '@/common/model/percentTimeLeft'
 import { relativeTime } from '@/common/model/relativeTime'
 
 import { WorkingGroupOpening } from '../types'
@@ -46,9 +47,9 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
               <Label>Time left</Label>
               {relativeTime(opening.expectedEnding)}
             </Row>
-            <PercentageChart percentage={70} />
+            <PercentageChart percentage={percentTimeLeft(opening.expectedEnding, opening.createdAtBlock.timestamp)} />
           </TimeLeftWrap>
-          <TextSmall>Created at {formatDateString(opening.createdAtBlock.timestamp)}</TextSmall>
+          <TextSmall>Created: {formatDateString(opening.createdAtBlock.timestamp)}</TextSmall>
         </RowGapBlock>
       </Row>
       <Row>
