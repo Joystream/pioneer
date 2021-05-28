@@ -7,8 +7,10 @@ interface UseOpeningsParams {
   groupId?: string
 }
 
-export const useUpcomingOpenings = ({ groupId }: UseOpeningsParams) => {
-  const { loading, data } = useGetUpcomingWorkingGroupOpeningsQuery({ variables: { where: { groupId_eq: groupId } } })
+export const useUpcomingOpenings = (params?: UseOpeningsParams) => {
+  const options = params?.groupId ? { variables: { where: { groupId_eq: params.groupId } } } : undefined
+
+  const { loading, data } = useGetUpcomingWorkingGroupOpeningsQuery(options)
 
   const groups = data?.upcomingWorkingGroupOpenings ?? []
   const upcomingOpenings = useMemo(() => groups.map(asUpcomingWorkingGroupOpening), [loading, data])

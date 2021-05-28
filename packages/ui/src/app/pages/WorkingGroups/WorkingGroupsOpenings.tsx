@@ -1,23 +1,21 @@
-import BN from 'bn.js'
-import React, { useState, useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
-import { ButtonPrimary } from '@/common/components/buttons'
+import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
+import { Loading } from '@/common/components/Loading'
+import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
+import { PageHeader } from '@/common/components/page/PageHeader'
+import { PageTitle } from '@/common/components/page/PageTitle'
+import { SidePanel } from '@/common/components/page/SidePanel'
+import { Statistics } from '@/common/components/statistics'
+import { Tabs } from '@/common/components/Tabs'
+import { useActivities } from '@/common/hooks/useActivities'
+import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
+import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
+import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
+import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
+import { useOpenings } from '@/working-groups/hooks/useOpenings'
+import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 
-import { ActivitiesBlock } from '../../../common/components/Activities/ActivitiesBlock'
-import { Loading } from '../../../common/components/Loading'
-import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '../../../common/components/page/PageContent'
-import { PageHeader } from '../../../common/components/page/PageHeader'
-import { PageTitle } from '../../../common/components/page/PageTitle'
-import { SidePanel } from '../../../common/components/page/SidePanel'
-import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '../../../common/components/statistics'
-import { Tabs } from '../../../common/components/Tabs'
-import { useActivities } from '../../../common/hooks/useActivities'
-import { useModal } from '../../../common/hooks/useModal'
-import { MemberRoles } from '../../../memberships/components/MemberRoles'
-import { useMyMemberships } from '../../../memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '../../../memberships/modals/SwitchMemberModal'
-import { OpeningsList } from '../../../working-groups/components/OpeningsList'
-import { useOpenings } from '../../../working-groups/hooks/useOpenings'
 import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
@@ -26,15 +24,8 @@ type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
   const { isLoading, openings } = useOpenings({ type: 'open' })
+  const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
   const activities = useActivities()
-  const { active } = useMyMemberships()
-  const { showModal } = useModal()
-
-  const totalStake = openings.reduce((a: BN, b) => a.add(b.stake), new BN(0))
-  const earnings = {
-    day: new BN(200),
-    month: new BN(102_000),
-  }
 
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
 
@@ -49,11 +40,10 @@ export const WorkingGroupsOpenings = () => {
       title: 'Upcoming openings',
       active: activeTab === 'UPCOMING',
       onClick: () => setActiveTab('UPCOMING'),
-      count: 0,
+      count: upcomingOpenings.length,
     },
   ]
   const sideNeighborRef = useRef<HTMLDivElement>(null)
-
   return (
     <AppPage>
       <PageHeader>
@@ -63,27 +53,15 @@ export const WorkingGroupsOpenings = () => {
       <ContentWithSidepanel>
         <MainPanel ref={sideNeighborRef}>
           <Statistics>
-            <StatisticItem title="My Roles">
-              {active ? (
-                <MemberRoles roles={active.roles} size="l" max={6} />
-              ) : (
-                <ButtonPrimary size="small" onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
-                  Select membership
-                </ButtonPrimary>
-              )}
-            </StatisticItem>
-            <TokenValueStat title="Currently staking" value={totalStake} />
-            <MultiTokenValueStat
-              title="Earned in past"
-              values={[
-                { label: '24 hours', value: earnings.day },
-                { label: 'Month', value: earnings.month },
-              ]}
-            />
+            <MyRolesStat />
+            <MyStakeStat />
+            <MyEarningsStat />
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {isLoading ? <Loading /> : <OpeningsList openings={activeTab === 'OPENINGS' ? openings : []} />}
+            {activeTab === 'OPENINGS' && (isLoading ? <Loading /> : <OpeningsList openings={openings} />)}
+            {activeTab === 'UPCOMING' &&
+              (upcomingLoading ? <Loading /> : <UpcomingOpeningsList openings={upcomingOpenings} />)}
           </ContentWithTabs>
         </MainPanel>
         <SidePanel neighbor={sideNeighborRef}>
