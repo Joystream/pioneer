@@ -1,11 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
+
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
@@ -46,6 +44,16 @@ export type WorkingGroupFieldsFragment = {
   leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
 }
 
+export type RewardPaidEventFieldsFragment = {
+  __typename: 'RewardPaidEvent'
+  id: string
+  eventId: string
+  groupId: string
+  workerId: string
+  amount: any
+  createdAt: any
+}
+
 export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetWorkingGroupsQuery = {
@@ -66,6 +74,15 @@ export type GetWorkerQueryVariables = Types.Exact<{
 export type GetWorkerQuery = {
   __typename: 'Query'
   workerByUniqueInput?: Types.Maybe<{ __typename: 'Worker' } & WorkerFieldsFragment>
+}
+
+export type GetRewardsQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.RewardPaidEventWhereInput>
+}>
+
+export type GetRewardsQuery = {
+  __typename: 'Query'
+  rewardPaidEvents: Array<{ __typename: 'RewardPaidEvent' } & RewardPaidEventFieldsFragment>
 }
 
 export type WorkingGroupOpeningMetadataFieldsFragment = {
@@ -326,6 +343,16 @@ export const WorkingGroupFieldsFragmentDoc = gql`
   ${WorkingGroupMetdataFieldsFragmentDoc}
   ${WorkerFieldsFragmentDoc}
 `
+export const RewardPaidEventFieldsFragmentDoc = gql`
+  fragment RewardPaidEventFields on RewardPaidEvent {
+    id
+    eventId
+    groupId
+    workerId
+    amount
+    createdAt
+  }
+`
 export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
     applicationDetails
@@ -569,6 +596,44 @@ export function useGetWorkerLazyQuery(
 export type GetWorkerQueryHookResult = ReturnType<typeof useGetWorkerQuery>
 export type GetWorkerLazyQueryHookResult = ReturnType<typeof useGetWorkerLazyQuery>
 export type GetWorkerQueryResult = Apollo.QueryResult<GetWorkerQuery, GetWorkerQueryVariables>
+export const GetRewardsDocument = gql`
+  query getRewards($where: RewardPaidEventWhereInput) {
+    rewardPaidEvents(where: $where) {
+      ...RewardPaidEventFields
+    }
+  }
+  ${RewardPaidEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetRewardsQuery__
+ *
+ * To run a query within a React component, call `useGetRewardsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRewardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRewardsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetRewardsQuery(baseOptions?: Apollo.QueryHookOptions<GetRewardsQuery, GetRewardsQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options)
+}
+export function useGetRewardsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetRewardsQuery, GetRewardsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options)
+}
+export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>
+export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>
+export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>
 export const GetWorkingGroupOpeningsConnectionDocument = gql`
   query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
     workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {
