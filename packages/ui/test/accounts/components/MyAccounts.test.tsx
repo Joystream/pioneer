@@ -5,7 +5,7 @@ import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
-import { Account, Balances, DetailedBalances } from '../../../src/accounts/types'
+import { Account, Balances } from '../../../src/accounts/types'
 import { Accounts } from '../../../src/app/pages/Profile/components/Accounts'
 import { shortenAddress } from '../../../src/common/model/formatters'
 import { KeyringContext } from '../../../src/common/providers/keyring/context'
@@ -29,7 +29,7 @@ jest.mock('../../../src/accounts/hooks/useAccounts', () => {
   }
 })
 
-let balances: DetailedBalances | null = null
+let balances: Balances | null = null
 
 const useBalance = {
   useBalance: () => balances,

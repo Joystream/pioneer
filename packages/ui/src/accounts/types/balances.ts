@@ -2,10 +2,23 @@ import BN from 'bn.js'
 
 import { Address } from '@/common/types'
 
+export type LockType =
+  | 'Voting'
+  | 'Council Candidate'
+  | 'Councilor'
+  | 'Validation'
+  | 'Nomination'
+  | 'Proposals'
+  | 'Storage Worker'
+  | 'Content Directory Worker'
+  | 'Forum Worker'
+  | 'Membership Worker'
+  | 'Invitation'
+  | 'Staking Candidate'
+
 export interface BalanceLock {
-  id?: number
   amount: BN
-  reason: string
+  type: LockType
 }
 
 export interface Balances {
@@ -13,9 +26,6 @@ export interface Balances {
   locked: BN
   recoverable: BN
   transferable: BN
-}
-
-export interface DetailedBalances extends Balances {
   locks: BalanceLock[]
 }
 

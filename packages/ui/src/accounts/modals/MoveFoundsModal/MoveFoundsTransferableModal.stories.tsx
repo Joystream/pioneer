@@ -17,6 +17,7 @@ const balanceMock = () => ({
   total: new BN(10_000),
   locked: new BN(10_000),
   recoverable: new BN(10_000),
+  locks: [],
 })
 
 const Template: Story<MoveFoundsTransferableModalProps> = (args) => {

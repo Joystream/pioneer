@@ -50,6 +50,7 @@ describe('useTotalBalances', () => {
       transferable: new BN(0),
       locked: new BN(0),
       recoverable: new BN(0),
+      locks: [],
     })
   })
 
@@ -67,6 +68,7 @@ describe('useTotalBalances', () => {
       transferable: new BN(800),
       locked: new BN(80),
       recoverable: new BN(0),
+      locks: [],
     })
   })
 })

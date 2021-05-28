@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { TransferButton } from '@/accounts/components/TransferButton'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { Account, BalanceLock } from '@/accounts/types'
+import { Account, BalanceLock, LockType } from '@/accounts/types'
 import { ButtonGhost } from '@/common/components/buttons'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { Arrow } from '@/common/components/icons'
@@ -22,14 +22,32 @@ interface DetailsItemDataProps {
   lock: BalanceLock
 }
 
-export const lockIcon = (id: number) => {
-  switch (id) {
-    case 10:
+export const lockIcon = (type: LockType) => {
+  switch (type) {
+    case 'Voting':
       return <LabelIcon />
-    case 11:
+    case 'Council Candidate':
+      return <LabelIcon />
+    case 'Councilor':
+      return <LabelIcon />
+    case 'Validation':
+      return <LabelIcon />
+    case 'Nomination':
+      return <LabelIcon />
+    case 'Proposals':
+      return <LabelIcon />
+    case 'Storage Worker':
+      return <LabelIcon />
+    case 'Content Directory Worker':
+      return <LabelIcon />
+    case 'Forum Worker':
+      return <LabelIcon />
+    case 'Membership Worker':
+      return <LabelIcon />
+    case 'Invitation':
+      return <LabelIcon />
+    case 'Staking Candidate':
       return <EnvelopeIcon />
-    default:
-      return <VoteIcon />
   }
 }
 
@@ -40,8 +58,8 @@ export const LockItem = ({ lock }: DetailsItemDataProps) => {
     <>
       <AccountDetailsWrap>
         <DetailsInfo>
-          {lockIcon(lock.id || 1)}
-          <DetailsName>{lock.reason}</DetailsName>
+          {lockIcon(lock.type)}
+          <DetailsName>{lock.type}</DetailsName>
         </DetailsInfo>
         <TokenValue value={0} />
         <TokenValue value={lock.amount} />
@@ -176,7 +194,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       return null
     }
 
-    return balance.locks.map((lock) => lockIcon(lock.id || 1))
+    return balance.locks.map((lock) => lockIcon(lock.type || 1))
   }
 
   const displayLocks = () => {
@@ -184,7 +202,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       return <TextMedium light>No locks found.</TextMedium>
     }
 
-    return balance.locks.map((lock) => <LockItem lock={lock} />)
+    return balance.locks.map((lock) => <LockItem key={lock.type + '_' + lock.amount.toString()} lock={lock} />)
   }
 
   return (

@@ -3,26 +3,25 @@ import { LockIdentifier } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 
 import { lockTypes } from '@/accounts/model/lockTypes'
+import { capitalizeFirstLetter } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 import { Address } from '@/common/types'
 
-import { DetailedBalances } from '../types'
+import { Balances } from '../types'
 
 function lockLookup(id: LockIdentifier) {
-  const foundLock = lockTypes.find((lockType) => id.eq(lockType.type))
-
-  return foundLock ? { id: foundLock.id, reason: foundLock.reason } : { reason: <string>id.toHuman() }
+  return lockTypes[id.toHex()] || capitalizeFirstLetter(<string>id.toHuman()).trim()
 }
 
-export function toBalances(balances: DeriveBalancesAll): DetailedBalances {
+export function toBalances(balances: DeriveBalancesAll): Balances {
   const { lockedBalance, availableBalance } = balances
 
   const locks = balances.lockedBreakdown
     ? balances.lockedBreakdown.map((lock) => {
         return {
           amount: new BN(lock.amount),
-          ...lockLookup(lock.id),
+          type: lockLookup(lock.id),
         }
       })
     : []
@@ -39,7 +38,7 @@ export function toBalances(balances: DeriveBalancesAll): DetailedBalances {
   }
 }
 
-export const useBalance = (address?: Address): DetailedBalances | null => {
+export const useBalance = (address?: Address): Balances | null => {
   const { api } = useApi()
 
   const balances = useObservable(address ? api?.derive.balances.all(address) : undefined, [api, address])
