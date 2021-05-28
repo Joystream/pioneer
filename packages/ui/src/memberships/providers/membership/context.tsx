@@ -8,5 +8,6 @@ export const MembershipContext = createContext<MyMemberships>({
     /**/
   },
   members: [],
+  hasMembers: false,
   isLoading: true,
 })

@@ -11,12 +11,10 @@ import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
 
 export const CurrentMember = () => {
-  const { members, active } = useMyMemberships()
+  const { members, hasMembers, active } = useMyMemberships()
   const { showModal } = useModal()
 
-  const count = members.length
-
-  if (count < 1) {
+  if (!hasMembers) {
     return (
       <MembershipButtonsWrapper>
         <AddMembershipButton size="large">Create membership</AddMembershipButton>
@@ -26,7 +24,7 @@ export const CurrentMember = () => {
 
   return (
     <>
-      <MembershipsCount count={count} />
+      <MembershipsCount count={members.length} />
       {active && (
         <SwitchMember onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
           {active && <MemberInfo member={active} isOnDark={true} maxRoles={4} />}

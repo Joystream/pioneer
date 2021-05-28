@@ -14,6 +14,7 @@ interface Props {
 
 export interface MyMemberships {
   members: Member[]
+  hasMembers: boolean
   isLoading: boolean
   active: Member | undefined
   setActive: (member: Member) => void
@@ -42,6 +43,7 @@ export const MembershipContextProvider = (props: Props) => {
     active,
     setActive,
     members,
+    hasMembers: !!members.length,
     isLoading: loading,
   }
 

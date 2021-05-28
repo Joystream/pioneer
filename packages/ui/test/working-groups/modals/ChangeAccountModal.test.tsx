@@ -41,6 +41,7 @@ describe('UI: ChangeRoleModal', () => {
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
+    hasMembers: true,
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
   }

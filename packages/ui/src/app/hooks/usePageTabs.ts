@@ -2,7 +2,7 @@ import { Path } from 'history'
 import { useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
 
-type TabsDefinition = [string, Path]
+export type TabsDefinition = [string, Path]
 
 export const usePageTabs = (tabs: TabsDefinition[]) => {
   const history = useHistory()

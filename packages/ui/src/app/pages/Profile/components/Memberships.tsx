@@ -9,13 +9,13 @@ import { MembersSection } from '../../../../memberships/components/MembersSectio
 import { useMyMemberships } from '../../../../memberships/hooks/useMyMemberships'
 
 export function Memberships() {
-  const { isLoading, members, active } = useMyMemberships()
+  const { isLoading, members, active, hasMembers } = useMyMemberships()
 
   if (isLoading) {
     return <Loading />
   }
 
-  if (!members.length) {
+  if (!hasMembers) {
     return (
       <NoMemberships>
         <NoMembershipsInfo>
