@@ -28,6 +28,7 @@ export const useHasRequiredStake = (address: Address, stake: number) => {
       allAccounts.length &&
       hasRequiredStake !== true &&
       totalTransferableToNumber <= stake &&
+      totalLockedToNumber > 0 &&
       totalLockedToNumber + totalTransferableToNumber >= stake
     ) {
       return allAccounts.reduce((accounts, currentAccount) => {
