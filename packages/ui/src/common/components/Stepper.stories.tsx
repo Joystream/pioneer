@@ -36,6 +36,7 @@ const Template: Story<StepperProps> = (args) => {
 export const Simple = Template.bind({})
 Simple.args = {
   steps: [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }],
+  active: 0,
 }
 
 export const Complex = Template.bind({})
@@ -51,4 +52,5 @@ Complex.args = {
     { title: 'Stake' },
     { title: 'Application form' },
   ],
+  active: 0,
 }
