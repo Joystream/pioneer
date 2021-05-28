@@ -1,20 +1,16 @@
 import BN from 'bn.js'
-import React, { useState, useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { MultiTokenValueStat, StatisticItem, Statistics, TokenValueStat } from '@/common/components/statistics'
+import { MultiTokenValueStat, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
-import { useModal } from '@/common/hooks/useModal'
-import { MemberRoles } from '@/memberships/components/MemberRoles'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
@@ -29,8 +25,6 @@ export const WorkingGroupsOpenings = () => {
   const { isLoading, openings } = useOpenings({ type: 'open' })
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
   const activities = useActivities()
-  const { active } = useMyMemberships()
-  const { showModal } = useModal()
 
   const totalStake = openings.reduce((a: BN, b) => a.add(b.stake), new BN(0))
   const earnings = {
@@ -55,7 +49,6 @@ export const WorkingGroupsOpenings = () => {
     },
   ]
   const sideNeighborRef = useRef<HTMLDivElement>(null)
-
   return (
     <AppPage>
       <PageHeader>
@@ -65,15 +58,7 @@ export const WorkingGroupsOpenings = () => {
       <ContentWithSidepanel>
         <MainPanel ref={sideNeighborRef}>
           <Statistics>
-            <StatisticItem title="My Roles">
-              {active ? (
-                <MemberRoles roles={active.roles} size="l" max={6} />
-              ) : (
-                <ButtonPrimary size="small" onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
-                  Select membership
-                </ButtonPrimary>
-              )}
-            </StatisticItem>
+            <MyRolesStat />
             <TokenValueStat title="Currently staking" value={totalStake} />
             <MultiTokenValueStat
               title="Earned in past"
