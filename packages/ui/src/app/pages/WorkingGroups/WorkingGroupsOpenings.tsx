@@ -7,10 +7,11 @@ import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/compo
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { MultiTokenValueStat, Statistics, TokenValueStat } from '@/common/components/statistics'
+import { MultiTokenValueStat, Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
+import { MyStake } from '@/working-groups/components/MyStake'
 import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
@@ -26,7 +27,6 @@ export const WorkingGroupsOpenings = () => {
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
   const activities = useActivities()
 
-  const totalStake = openings.reduce((a: BN, b) => a.add(b.stake), new BN(0))
   const earnings = {
     day: new BN(200),
     month: new BN(102_000),
@@ -59,7 +59,7 @@ export const WorkingGroupsOpenings = () => {
         <MainPanel ref={sideNeighborRef}>
           <Statistics>
             <MyRolesStat />
-            <TokenValueStat title="Currently staking" value={totalStake} />
+            <MyStake />
             <MultiTokenValueStat
               title="Earned in past"
               values={[
