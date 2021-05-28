@@ -3,7 +3,6 @@ import React, { useState, useRef } from 'react'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 
-import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
 import { ActivitiesBlock } from '../../../common/components/Activities/ActivitiesBlock'
 import { Loading } from '../../../common/components/Loading'
 import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '../../../common/components/page/PageContent'
@@ -29,9 +28,9 @@ export const WorkingGroupsOpenings = () => {
   const { isLoading, openings } = useOpenings({ type: 'open' })
   const activities = useActivities()
   const { active } = useMyMemberships()
-  const { locked } = useTotalBalances()
   const { showModal } = useModal()
 
+  const totalStake = openings.reduce((a: BN, b) => a.add(b.stake), new BN(0))
   const earnings = {
     day: new BN(200),
     month: new BN(102_000),
@@ -73,7 +72,7 @@ export const WorkingGroupsOpenings = () => {
                 </ButtonPrimary>
               )}
             </StatisticItem>
-            <TokenValueStat title="Currently staking" value={locked} />
+            <TokenValueStat title="Currently staking" value={totalStake} />
             <MultiTokenValueStat
               title="Earned in past"
               values={[
