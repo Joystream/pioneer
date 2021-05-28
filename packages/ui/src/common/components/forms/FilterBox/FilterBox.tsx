@@ -52,10 +52,5 @@ const ClearButton = styled(StyledLink)`
 
 const Fields = styled.div`
   background: ${Colors.Black[50]};
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: start;
-  gap: 16px;
   padding: 16px;
 `
