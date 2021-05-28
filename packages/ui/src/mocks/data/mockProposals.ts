@@ -3,8 +3,8 @@ import { Proposal, ProposalStage } from '@/proposals/types'
 
 import { mockMembers } from './mockMembers'
 
-export const proposalStages: ProposalStage[] = ['DECIDING', 'DORMANT', 'GRACING', 'SUCCEEDED']
-export const proposalTypes = ['FUNDING REQUEST']
+export const proposalStages: ProposalStage[] = ['Deciding', 'Dormant', 'Gracing', 'Succeeded']
+export const proposalTypes = ['Funding Request']
 
 export const mockProposals = Array<Omit<Proposal, 'id' | 'stage'>>(4)
   .fill({
