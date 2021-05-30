@@ -40,3 +40,12 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     budget: new BN(group.budget),
   }
 }
+
+export type GroupName = 'forum' | 'storage' | 'content' | 'membership'
+
+export const GroupRewardPeriods: Record<GroupName, BN> = {
+  forum: new BN(14400 + 10),
+  storage: new BN(14400 + 20),
+  content: new BN(14400 + 30),
+  membership: new BN(14400 + 40),
+}

@@ -1,3 +1,5 @@
+import BN from 'bn.js'
+
 import { Worker } from '@/working-groups/types'
 
 import { alice } from '../../_mocks/keyring'
@@ -12,7 +14,10 @@ export const WORKER: Worker = {
     id: '1',
   },
   isLeader: false,
-  rewardPerBlock: 100,
+  reward: {
+    value: new BN(1000),
+    interval: 14410,
+  },
   earnedTotal: 2000,
   stake: 2000,
   status: '',
