@@ -9,6 +9,6 @@ interface RawEvent {
 export const mockEvents = rawEvents.map((rawEvent) => ({ ...rawEvent }))
 
 const seedEvent = (mockEvent: RawEvent, server: any) => {
-  return server.schema.create('Event', { ...mockEvent, createdAt: new Date(mockEvent.createdAt) })
+  return server.schema.create('Event', mockEvent)
 }
 export const seedEvents = (server: any) => mockEvents.map((event) => seedEvent(event, server))

@@ -1,26 +1,40 @@
-import { startOfWeek } from 'date-fns'
+import BN from 'bn.js'
+import { startOfMonth, subHours } from 'date-fns'
 
 import { useAccounts } from '@/accounts/hooks/useAccounts'
+import { RewardPaidEventWhereInput } from '@/common/api/queries'
 
-import { useGetRewardsQuery } from '../queries'
+import { RewardPaidEventFieldsFragment, useGetRewardsQuery } from '../queries'
 
 interface UseMyEarnings {
-  isLoading: boolean
-  earnings: {
-    today: number
-    month: number
-  }
+  last24hours: BN | null
+  month: BN | null
 }
 
 export function useMyEarnings(): UseMyEarnings {
   const { allAccounts } = useAccounts()
 
-  const where = {
+  const where: RewardPaidEventWhereInput = {
     rewardAccount_in: allAccounts.map((account) => account.address),
-    createdAt_gte: startOfWeek(Date.now(), { weekStartsOn: 1 }),
+    createdAt_gte: startOfMonth(Date.now()).toISOString(),
   }
   const { loading, data } = useGetRewardsQuery({ variables: { where } })
 
-  console.log('Rewards query response', loading, data, where)
-  return { isLoading: loading, earnings: { today: 0, month: 0 } }
+  if (loading) {
+    return {
+      last24hours: null,
+      month: null,
+    }
+  }
+
+  const monthEarnings = data ? data.rewardPaidEvents.reduce((a, b) => a + Number(b.amount), 0) : 0
+
+  const last24hoursEvents = data
+    ? data.rewardPaidEvents.filter(
+        (event: RewardPaidEventFieldsFragment) => new Date(event.createdAt) >= subHours(Date.now(), 24)
+      )
+    : []
+  const last24hoursEarnings = last24hoursEvents.reduce((a, b) => a + Number(b.amount), 0)
+
+  return { last24hours: new BN(last24hoursEarnings), month: new BN(monthEarnings) }
 }

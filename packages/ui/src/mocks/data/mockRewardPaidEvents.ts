@@ -20,7 +20,6 @@ const seedEvent = (mockEvent: RawRewardPaidEvent, server: any) => {
 
   return server.schema.create('RewardPaidEvent', {
     ...mockEvent,
-    createdAt: new Date(mockEvent.createdAt),
     event,
     group,
     worker,

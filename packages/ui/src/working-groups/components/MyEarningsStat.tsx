@@ -11,8 +11,8 @@ export const MyEarningsStat = () => {
     <MultiTokenValueStat
       title="Earned in past"
       values={[
-        { label: '24 hours', value: new BN(200) },
-        { label: 'Month', value: new BN(102_000) },
+        { label: '24 hours', value: earnings.last24hours as BN },
+        { label: 'Month', value: earnings.month as BN },
       ]}
     />
   )
