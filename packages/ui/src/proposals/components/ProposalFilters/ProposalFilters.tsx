@@ -109,7 +109,10 @@ export const ProposalFilters = ({
             dispatch({ type: 'change', field: 'lifetime', value })
           }}
           onApply={apply}
-          onClear={clear}
+          onClear={() => {
+            dispatch({ type: 'change', field: 'lifetime', value: undefined })
+            onApply({ ...filters, lifetime: undefined })
+          }}
         />
 
         <SimpleSelect
