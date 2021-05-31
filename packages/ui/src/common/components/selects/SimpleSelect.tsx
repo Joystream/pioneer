@@ -77,11 +77,7 @@ export const SimpleSelect = <T extends any>({ title = '', options, value, onChan
 
   return (
     <SelectContainer>
-      {title && (
-        <FilterLabel lighter bold>
-          {title}
-        </FilterLabel>
-      )}
+      {title && <FilterLabel>{title}</FilterLabel>}
       <Select
         placeholder=""
         selected={value}
