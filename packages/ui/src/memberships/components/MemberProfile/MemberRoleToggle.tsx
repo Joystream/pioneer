@@ -51,7 +51,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                     <SidePaneLabel text="Reward" />
                     <SidePaneColumn>
                       <SidePaneText>
-                        <TokenValue value={role.reward.value} /> / {role.reward.interval} blocks
+                        <TokenValue value={role.reward.payout} /> / {role.reward.blockInterval} blocks
                       </SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>

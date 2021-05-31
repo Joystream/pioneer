@@ -29,9 +29,9 @@ export const UpcomingOpeningListItem = ({ opening }: UpcomingProps) => (
     <OACItemSummary>
       <OpenItemSummaryColumn>
         <TextInlineBig>
-          <TokenValue value={opening.reward.value} />
+          <TokenValue value={opening.reward.payout} />
         </TextInlineBig>
-        <OACSubscriptionWide>Reward per 3600 blocks.</OACSubscriptionWide>
+        <OACSubscriptionWide>Reward per {opening.reward.blockInterval} blocks.</OACSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>.</OpenItemSummaryColumn>
       <OpenItemSummaryColumn>

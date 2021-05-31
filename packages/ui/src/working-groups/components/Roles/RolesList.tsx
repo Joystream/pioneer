@@ -50,9 +50,9 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
       <OACItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={new BN(worker.reward.value)} />
+            <TokenValue value={new BN(worker.reward.payout)} />
           </TextInlineBig>
-          <OACSubscriptionWide>Reward per {worker.reward.interval} blocks</OACSubscriptionWide>
+          <OACSubscriptionWide>Reward per {worker.reward.blockInterval} blocks</OACSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>

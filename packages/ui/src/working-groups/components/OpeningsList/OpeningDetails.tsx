@@ -32,9 +32,9 @@ export const OpeningDetails = ({ opening }: Props) => {
         <Statistics withMargin>
           <StatsBlock size="m" centered spacing="s">
             <TextBig>
-              <TokenValue value={opening.reward.value} />
+              <TokenValue value={opening.reward.payout} />
             </TextBig>
-            <Subscription>Reward per {opening.reward.interval} blocks</Subscription>
+            <Subscription>Reward per {opening.reward.blockInterval} blocks</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered spacing="s">
             <TwoColumnsStatistic>
@@ -54,7 +54,7 @@ export const OpeningDetails = ({ opening }: Props) => {
           </StatsBlock>
           <StatsBlock size="m" centered spacing="s">
             <TextBig>
-              <TokenValue value={opening.reward.value} />
+              <TokenValue value={opening.reward.payout} />
             </TextBig>
             <Subscription>Minimum Stake Required</Subscription>
           </StatsBlock>
