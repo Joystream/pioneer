@@ -10,7 +10,7 @@ export function getReward(rewardPerBlock: number, groupName: string): Reward {
         blockInterval: GroupRewardPeriods[groupName as GroupName].toNumber(),
       }
     : {
-        payout: new BN(0),
-        blockInterval: 14400,
+        payout: new BN(7),
+        blockInterval: 1,
       }
 }
