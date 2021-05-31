@@ -6,7 +6,7 @@ import { RewardPaidEventWhereInput } from '@/common/api/queries'
 
 import { RewardPaidEventFieldsFragment, useGetRewardsQuery } from '../queries'
 
-interface UseMyEarnings {
+export interface UseMyEarnings {
   last24hours: BN | null
   month: BN | null
 }
