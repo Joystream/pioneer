@@ -1,3 +1,5 @@
+import BN from 'bn.js'
+
 import { getReward } from '@/working-groups/model/getReward'
 
 describe('getReward', () => {
@@ -7,7 +9,10 @@ describe('getReward', () => {
     expect(reward.blockInterval).toEqual(14410)
   })
 
-  it('Not a group name', () => {
-    expect(() => getReward(1, 'incorrect')).toThrow(TypeError)
+  it('Not a known group name', () => {
+    expect(getReward(1, 'incorrect')).toEqual({
+      payout: new BN(0),
+      blockInterval: 14400,
+    })
   })
 })
