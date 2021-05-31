@@ -1,9 +1,8 @@
 import React, { useReducer } from 'react'
 import styled from 'styled-components'
 
-import { ButtonPrimary } from '@/common/components/buttons/Buttons'
 import { TogglableIcon } from '@/common/components/forms'
-import { FilterBox } from '@/common/components/forms/FilterBox'
+import { FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
 import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { SimpleSelect } from '@/common/components/selects'
 import { MemberRole } from '@/memberships/types'
@@ -70,45 +69,69 @@ export const MemberListFilters = ({ searchSlot, roles, onApply }: MemberListFilt
 
   return (
     <FilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
-      <SimpleSelect
-        title="Roles"
-        options={{ All: null, ...roles }}
-        value={role}
-        onChange={(value) => {
-          dispatch({ type: 'change', field: 'role', value })
-        }}
-      />
-      <SimpleSelect
-        title="Council Members"
-        options={CouncilOpts}
-        value={concil}
-        onChange={(value) => {
-          dispatch({ type: 'change', field: 'concil', value })
-        }}
-      />
-      <TogglableIcon
-        value={onlyVerified}
-        onChange={(value) => {
-          dispatch({ type: 'change', field: 'onlyVerified', value })
-        }}
-      >
-        <VerifiedMemberIcon />
-      </TogglableIcon>
-      <TogglableIcon
-        value={onlyFounder}
-        onChange={(value) => {
-          dispatch({ type: 'change', field: 'onlyFounder', value })
-        }}
-      >
-        <FounderMemberIcon />
-      </TogglableIcon>
-      <ApplyButton size="medium" onClick={apply}>
-        Apply
-      </ApplyButton>
+      <Fields>
+        <SelectContainer>
+          <SimpleSelect
+            title="Roles"
+            options={{ All: null, ...roles }}
+            value={role}
+            onChange={(value) => {
+              dispatch({ type: 'change', field: 'role', value })
+            }}
+          />
+        </SelectContainer>
+
+        <SelectContainer>
+          <SimpleSelect
+            title="Council Members"
+            options={CouncilOpts}
+            value={concil}
+            onChange={(value) => {
+              dispatch({ type: 'change', field: 'concil', value })
+            }}
+          />
+        </SelectContainer>
+
+        <ToggleContainer>
+          <FilterLabel>Member Type</FilterLabel>
+          <TogglableIcon
+            value={onlyVerified}
+            onChange={(value) => {
+              dispatch({ type: 'change', field: 'onlyVerified', value })
+            }}
+          >
+            <VerifiedMemberIcon />
+          </TogglableIcon>
+
+          <TogglableIcon
+            value={onlyFounder}
+            onChange={(value) => {
+              dispatch({ type: 'change', field: 'onlyFounder', value })
+            }}
+          >
+            <FounderMemberIcon />
+          </TogglableIcon>
+        </ToggleContainer>
+      </Fields>
     </FilterBox>
   )
 }
 
-const ApplyButton = styled(ButtonPrimary)`
-  margin-left: auto;
+const Fields = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+`
+
+const SelectContainer = styled.div`
+  flex-basis: 180px;
+`
+
+const ToggleContainer = styled.div`
+  display: grid;
+  gap: 4px 8px;
+  grid-template-columns: auto 1fr;
+  & > :first-child {
+    grid-column: span 2;
+  }
 `
