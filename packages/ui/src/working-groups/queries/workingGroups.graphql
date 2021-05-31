@@ -51,10 +51,8 @@ fragment WorkingGroupFields on WorkingGroup {
 
 fragment RewardPaidEventFields on RewardPaidEvent {
   id
-  eventId
-  groupId
-  workerId
   amount
+  rewardAccount
   createdAt
 }
 

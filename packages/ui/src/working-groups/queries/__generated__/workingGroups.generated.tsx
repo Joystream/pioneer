@@ -47,10 +47,8 @@ export type WorkingGroupFieldsFragment = {
 export type RewardPaidEventFieldsFragment = {
   __typename: 'RewardPaidEvent'
   id: string
-  eventId: string
-  groupId: string
-  workerId: string
   amount: any
+  rewardAccount: string
   createdAt: any
 }
 
@@ -346,10 +344,8 @@ export const WorkingGroupFieldsFragmentDoc = gql`
 export const RewardPaidEventFieldsFragmentDoc = gql`
   fragment RewardPaidEventFields on RewardPaidEvent {
     id
-    eventId
-    groupId
-    workerId
     amount
+    rewardAccount
     createdAt
   }
 `
