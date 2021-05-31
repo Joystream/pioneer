@@ -10,14 +10,13 @@ import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
 import { Calendar } from '../Calendar'
 import { FilterLabel } from '../FilterBox'
 import { InputComponent, InputText } from '../InputComponent'
+import { ControlProps } from '../types'
 
-interface DatePickerProps {
+interface DatePickerProps extends ControlProps<PartialDateRange> {
   title?: string
-  value: PartialDateRange
   withinDates?: PartialDateRange
   onApply?: () => void
   onClear?: () => void
-  onChange: (value: PartialDateRange) => void
 }
 
 export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChange }: DatePickerProps) => {
@@ -71,11 +70,10 @@ export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChan
   )
 }
 
-interface DatePickerCalendarsProps {
-  value: PartialDateRange
+interface DatePickerCalendarsProps extends ControlProps<PartialDateRange> {
   within?: PartialDateRange
-  onChange: (value: PartialDateRange) => void
 }
+
 const DatePickerCalendars = ({ value, within, onChange }: DatePickerCalendarsProps) => {
   const { start, end } = fromRange(value)
 

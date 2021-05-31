@@ -4,9 +4,11 @@ export const isDefined = <T extends any>(something: T | undefined): something is
 
 export const isNumber = (something: unknown): something is number => typeof something === 'number'
 
-export const objectShallowContains = <T extends { [k: string]: any }>(contained: T): ((container: T) => boolean) => {
-  const containedKeys: Array<keyof T> = Object.keys(contained)
-  return (container) => containedKeys.every((key) => container[key] === contained[key])
+export const objectEquals = <T extends Record<string, any>>(reference: T): ((compared: T) => boolean) => {
+  const expectedKeys: Array<keyof T> = Object.keys(reference)
+  return (compared) =>
+    expectedKeys.length === Object.keys(compared).length &&
+    expectedKeys.every((key) => compared[key] === reference[key])
 }
 
 type Indexer<T> = (item: T, index: number) => string

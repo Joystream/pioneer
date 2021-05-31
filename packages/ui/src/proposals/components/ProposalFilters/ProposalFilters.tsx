@@ -5,7 +5,7 @@ import { DatePicker } from '@/common/components/forms/DatePicker'
 import { FilterBox } from '@/common/components/forms/FilterBox'
 import { SimpleSelect } from '@/common/components/selects'
 import { PartialDateRange } from '@/common/types/Dates'
-import { indexList, objectShallowContains } from '@/common/utils'
+import { indexList, objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
 import { ProposalStage } from '@/proposals/types'
 
@@ -43,7 +43,7 @@ export const ProposalEmptyFilter: ProposalFiltersState = {
   stage: null,
 }
 
-const isFilterEmpty = objectShallowContains(ProposalEmptyFilter)
+const isFilterEmpty = objectEquals(ProposalEmptyFilter)
 
 export interface ProposalFiltersProps {
   searchSlot: React.RefObject<HTMLDivElement>

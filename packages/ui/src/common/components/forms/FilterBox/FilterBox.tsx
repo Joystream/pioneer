@@ -40,7 +40,7 @@ const ClearButton = styled(StyledLink)`
   align-self: flex-end;
   color: ${Colors.Black[400]};
   text-decoration: none;
-  visibility: ${({ show }: { show?: boolean }) => (show === false ? 'hidden' : 'visible')};
+  visibility: ${({ show = true }: { show?: boolean }) => (show ? 'visible' : 'hidden')};
 
   svg {
     color: ${Colors.Black[900]};
