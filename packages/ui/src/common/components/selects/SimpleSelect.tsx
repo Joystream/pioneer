@@ -41,7 +41,7 @@ export const SimpleSelect = <T extends any>({ title = '', options, value, onChan
 
   const forwardChange = (value: T) => {
     focus({ type: 'set', value })
-    onChange?.(value)
+    onChange(value)
   }
 
   const navigate: React.KeyboardEventHandler = ({ key }) => {
@@ -53,7 +53,7 @@ export const SimpleSelect = <T extends any>({ title = '', options, value, onChan
         return focus({ type: 'move', entries, step: -1 })
 
       case 'Enter':
-        return isDefined(focused) && onChange?.(focused)
+        return isDefined(focused) && onChange(focused)
     }
   }
 

@@ -10,8 +10,9 @@ import { ControlProps } from '.'
 interface TogglableIconProps extends ControlProps<boolean> {
   children: ReactNode
 }
+
 export const TogglableIcon = ({ children, value, onChange }: TogglableIconProps) => (
-  <label onClick={() => onChange?.(!value)}>
+  <label onClick={() => onChange(!value)}>
     <DualStateIcon checked={value}>{children}</DualStateIcon>
   </label>
 )

@@ -21,12 +21,12 @@ const Template: Story<Props> = ({ value, ...props }) => {
       <TemplateBlock>
         <Row>
           <Column>
-            <TogglableIcon value={v1} onChange={setV1} {...props}>
+            <TogglableIcon {...props} value={v1} onChange={setV1}>
               <FounderMemberIcon />
             </TogglableIcon>
           </Column>
           <Column>
-            <TogglableIcon value={v2} onChange={setV2} {...props}>
+            <TogglableIcon {...props} value={v2} onChange={setV2}>
               <VerifiedMemberIcon />
             </TogglableIcon>
           </Column>
