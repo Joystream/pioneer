@@ -1,27 +1,28 @@
 import { useEffect, useState, useMemo } from 'react'
 
 import { useAccounts } from '@/accounts/hooks/useAccounts'
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { useBalances } from '@/accounts/hooks/useBalances'
 import { useTotalBalances } from '@/accounts/hooks/useTotalBalances'
 import { Account } from '@/accounts/types'
 import { Address } from '@/common/types'
 
-export const useHasRequiredStake = (address: Address, stake: number) => {
+export const useHasRequiredStake = (stake: number) => {
   const [hasRequiredStake, setHasRequiredStake] = useState<boolean | undefined>(undefined)
-  const balance = useBalance(address)
   const balances = useBalances()
   const { allAccounts } = useAccounts()
   const { transferable: totalTransferable, locked: totalLocked } = useTotalBalances()
-  const transferable = balance?.transferable
   const totalTransferableToNumber = totalTransferable.toNumber()
   const totalLockedToNumber = totalLocked.toNumber()
 
   useEffect(() => {
-    if (transferable) {
-      setHasRequiredStake(transferable.toNumber() >= stake)
+    if (Object.keys(balances).length) {
+      setHasRequiredStake(
+        Object.keys(balances)
+          .map((key) => balances[key].transferable)
+          .some((value) => value.toNumber() >= stake)
+      )
     }
-  }, [transferable])
+  }, [balances])
 
   const accountsWithLockedFounds: { [key in Address]: Account[] } | null = useMemo(() => {
     if (

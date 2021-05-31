@@ -31,7 +31,7 @@ const useBalance = {
 
 jest.mock('../../../src/accounts/hooks/useBalance', () => useBalance)
 
-let balances: AddressToBalanceMap | null = null
+let balances: AddressToBalanceMap = {}
 
 const useBalances = {
   useBalances: () => balances,
@@ -59,15 +59,16 @@ describe('useHasRequiredStake', () => {
         </AccountsContextProvider>
       </MockKeyringProvider>
     )
-    return renderHook(() => useHasRequiredStake(alice.address, stake), { wrapper })
+    return renderHook(() => useHasRequiredStake(stake), { wrapper })
   }
 
-  it('Returns true flag if account has enough founds', () => {
+  it('Member has enough founds', () => {
     balance = {
       total: new BN(1000),
       locked: new BN(0),
       transferable: new BN(1000),
       recoverable: new BN(0),
+      locks: [],
     }
     balances = {
       [alice.address]: balance,
@@ -76,12 +77,14 @@ describe('useHasRequiredStake', () => {
         locked: new BN(0),
         transferable: new BN(1000),
         recoverable: new BN(0),
+        locks: [],
       },
       [bob.address]: {
         total: new BN(1000),
         locked: new BN(0),
         transferable: new BN(1000),
         recoverable: new BN(0),
+        locks: [],
       },
     }
     const { result } = renderUseTotalBalances(1000)
@@ -92,12 +95,13 @@ describe('useHasRequiredStake', () => {
     })
   })
 
-  it('Returns false flag and empty accounts if account has not enough founds', () => {
+  it('Member has not enough founds', () => {
     balance = {
       total: new BN(10),
       locked: new BN(0),
       transferable: new BN(10),
       recoverable: new BN(0),
+      locks: [],
     }
     balances = {
       [alice.address]: balance,
@@ -106,12 +110,14 @@ describe('useHasRequiredStake', () => {
         locked: new BN(0),
         transferable: new BN(50),
         recoverable: new BN(0),
+        locks: [],
       },
       [bob.address]: {
         total: new BN(20),
         locked: new BN(20),
         transferable: new BN(0),
         recoverable: new BN(0),
+        locks: [],
       },
     }
     const { result } = renderUseTotalBalances(1000)
@@ -122,12 +128,13 @@ describe('useHasRequiredStake', () => {
     })
   })
 
-  it('Returns transferable accounts if exists and if account has not enough founds', () => {
+  it('Not enough funds with transferrable funds', () => {
     balance = {
       total: new BN(0),
       locked: new BN(0),
       transferable: new BN(0),
       recoverable: new BN(0),
+      locks: [],
     }
     balances = {
       [alice.address]: balance,
@@ -136,12 +143,14 @@ describe('useHasRequiredStake', () => {
         locked: new BN(0),
         transferable: new BN(900),
         recoverable: new BN(0),
+        locks: [],
       },
       [bob.address]: {
         total: new BN(100),
         locked: new BN(0),
         transferable: new BN(100),
         recoverable: new BN(0),
+        locks: [],
       },
     }
     const { result } = renderUseTotalBalances(1000)
@@ -152,12 +161,13 @@ describe('useHasRequiredStake', () => {
     })
   })
 
-  it('Returns accounts with locked founds if exists and if account has not enough founds', () => {
+  it('Not enough funds with transferrable to an account with locked founds', () => {
     balance = {
       total: new BN(50),
       locked: new BN(0),
       transferable: new BN(50),
       recoverable: new BN(0),
+      locks: [],
     }
     balances = {
       [alice.address]: balance,
@@ -166,12 +176,14 @@ describe('useHasRequiredStake', () => {
         locked: new BN(200),
         transferable: new BN(50),
         recoverable: new BN(0),
+        locks: [],
       },
       [bob.address]: {
         total: new BN(700),
         locked: new BN(400),
         transferable: new BN(300),
         recoverable: new BN(0),
+        locks: [],
       },
     }
     const { result } = renderUseTotalBalances(1000)
