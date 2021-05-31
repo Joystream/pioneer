@@ -51,7 +51,7 @@ export interface ProposalFiltersProps {
   withinDates?: PartialDateRange
   proposers: Member[]
   stages: ProposalStage[]
-  onApply?: (value: ProposalFiltersState) => void
+  onApply: (value: ProposalFiltersState) => void
 }
 
 export const ProposalFilters = ({
@@ -69,14 +69,14 @@ export const ProposalFilters = ({
   const proposersOptions = useMemo(() => ({ All: null, ...indexList(proposers, ({ handle }) => handle) }), [proposers])
   const stagesOptions = useMemo(() => ({ All: null, ...indexList(stages) }), [stages])
 
-  const apply = onApply && (() => onApply(filters))
+  const apply = () => onApply(filters)
   const clear = useMemo(
     () =>
       isFilterEmpty(filters)
         ? undefined
         : () => {
             dispatch({ type: 'clear' })
-            onApply?.(ProposalEmptyFilter)
+            onApply(ProposalEmptyFilter)
           },
     [onApply, filters]
   )
