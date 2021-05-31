@@ -23,7 +23,7 @@ export const Default: Story = () => {
   return (
     <>
       <FilterPageHeader ref={searchSlot} title="Members" />
-      <MemberListFilters searchSlot={searchSlot} roles={Roles} onApply={display} />
+      <MemberListFilters searchSlot={searchSlot} memberCount={648} roles={Roles} onApply={display} />
     </>
   )
 }

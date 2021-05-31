@@ -1,10 +1,12 @@
 import React, { useReducer } from 'react'
 import styled from 'styled-components'
 
+import { CountBadge } from '@/common/components/CountBadge'
 import { TogglableIcon } from '@/common/components/forms'
 import { FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
 import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { SimpleSelect } from '@/common/components/selects'
+import { TextInlineBig } from '@/common/components/typography'
 import { MemberRole } from '@/memberships/types'
 
 export interface MemberListFilter {
@@ -49,11 +51,12 @@ export const MemberListEmptyFilter: MemberListFilter = {
 
 interface MemberListFiltersProps {
   searchSlot?: React.RefObject<HTMLDivElement>
+  memberCount?: number
   roles: { [k: string]: string }
   onApply?: (value: MemberListFilter) => void
 }
 
-export const MemberListFilters = ({ searchSlot, roles, onApply }: MemberListFiltersProps) => {
+export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
   const { search, role, concil, onlyVerified, onlyFounder } = filters
 
@@ -70,6 +73,11 @@ export const MemberListFilters = ({ searchSlot, roles, onApply }: MemberListFilt
   return (
     <FilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
       <Fields>
+        <FieldsHeader>
+          <TextInlineBig bold>All members</TextInlineBig>
+          {memberCount && <MemberCount count={memberCount} />}
+        </FieldsHeader>
+
         <SelectContainer>
           <SimpleSelect
             title="Roles"
@@ -121,6 +129,15 @@ const Fields = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+`
+
+const FieldsHeader = styled.div`
+  align-self: center;
+  margin-right: auto;
+`
+const MemberCount = styled(CountBadge)`
+  font-weight: 700;
+  margin-left: 8px;
 `
 
 const SelectContainer = styled.div`

@@ -25,6 +25,7 @@ interface UseMemberProps {
 interface UseMembers {
   isLoading: boolean
   members: Member[]
+  totalCount?: number
   pageCount?: number
 }
 
@@ -43,10 +44,13 @@ export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMemb
     error(err)
   }
 
+  const totalCount = connectionData?.membershipsConnection.totalCount
+
   return {
     isLoading: loading,
     members: data?.memberships.map(asMember) ?? [],
-    pageCount: Math.ceil((connectionData?.membershipsConnection.totalCount ?? 0) / MEMBERS_PER_PAGE),
+    totalCount,
+    pageCount: totalCount && Math.ceil(totalCount / MEMBERS_PER_PAGE),
   }
 }
 
