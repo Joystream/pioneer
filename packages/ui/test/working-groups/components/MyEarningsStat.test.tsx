@@ -2,8 +2,10 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { screen, render, waitForElementToBeRemoved } from '@testing-library/react'
 import { startOfToday, subDays } from 'date-fns'
 import React from 'react'
-import { HashRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 
+import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -15,14 +17,21 @@ import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { seedWorkers } from '@/mocks/data/seedWorkers'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 
-import { MockApolloProvider } from '../../_mocks/providers'
+import { alice, bob } from '../../_mocks/keyring'
+import { getMember } from '../../_mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
 describe('MyEarningsStat', () => {
   const mockServer = setupMockServer()
+
+  const useAccounts: UseAccounts = {
+    hasAccounts: true,
+    allAccounts: [alice, bob],
+  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
-    members: [],
+    members: [getMember('alice'), getMember('bob')],
     setActive: (member) => (useMyMemberships.active = member),
     isLoading: false,
     hasMembers: true,
@@ -45,14 +54,17 @@ describe('MyEarningsStat', () => {
     seedApplications(mockServer.server)
     seedWorkers(mockServer.server)
     seedEvent({ id: '0', createdAt: new Date().toISOString(), type: 'RewardPaid' }, mockServer.server)
+
+    const workerSchema = mockServer.server?.schema.first('Worker')
+
     seedRewardPaidEvent(
       {
         id: '0',
         createdAt: new Date().toISOString(),
         eventId: '0',
-        groupId: '0',
-        workerId: '0',
-        rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+        groupId: workerSchema?.attrs.groupId as string,
+        workerId: workerSchema?.attrs.id as string,
+        rewardAccount: workerSchema?.attrs.rewardAccount as string,
         amount: 100,
         type: 'REGULAR',
       },
@@ -63,9 +75,9 @@ describe('MyEarningsStat', () => {
         id: '1',
         createdAt: subDays(startOfToday(), 10).toISOString(),
         eventId: '0',
-        groupId: '0',
-        workerId: '0',
-        rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+        groupId: workerSchema?.attrs.groupId as string,
+        workerId: workerSchema?.attrs.id as string,
+        rewardAccount: workerSchema?.attrs.rewardAccount as string,
         amount: 500,
         type: 'REGULAR',
       },
@@ -82,13 +94,17 @@ describe('MyEarningsStat', () => {
 
   function renderStat() {
     render(
-      <HashRouter>
-        <MockApolloProvider>
-          <MembershipContext.Provider value={useMyMemberships}>
-            <MyEarningsStat />
-          </MembershipContext.Provider>
-        </MockApolloProvider>
-      </HashRouter>
+      <BrowserRouter>
+        <MockQueryNodeProviders>
+          <MockKeyringProvider>
+            <AccountsContext.Provider value={useAccounts}>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <MyEarningsStat />
+              </MembershipContext.Provider>
+            </AccountsContext.Provider>
+          </MockKeyringProvider>
+        </MockQueryNodeProviders>
+      </BrowserRouter>
     )
   }
 })
