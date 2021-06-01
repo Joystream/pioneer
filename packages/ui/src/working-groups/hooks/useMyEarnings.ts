@@ -1,7 +1,6 @@
 import BN from 'bn.js'
-import { startOfMonth, subHours } from 'date-fns'
+import { subHours, startOfToday, subDays } from 'date-fns'
 
-import { useAccounts } from '@/accounts/hooks/useAccounts'
 import { RewardPaidEventWhereInput } from '@/common/api/queries'
 import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 
@@ -17,7 +16,7 @@ export function useMyEarnings(): UseMyEarnings {
 
   const where: RewardPaidEventWhereInput = {
     workerId_in: workers.map((worker) => worker.id),
-    createdAt_gte: startOfMonth(Date.now()).toISOString(),
+    createdAt_gte: subDays(startOfToday(), 30).toISOString(),
   }
   const { loading, data } = useGetRewardsQuery({ variables: { where } })
 
