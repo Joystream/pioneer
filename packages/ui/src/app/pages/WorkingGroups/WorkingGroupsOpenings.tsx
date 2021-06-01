@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 
+import { WorkingGroupOpening } from '@/common/api/queries'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
@@ -8,11 +9,13 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
+import { Label, TextBig } from '@/common/components/typography'
 import { useActivities } from '@/common/hooks/useActivities'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
 import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
+import { RolesList } from '@/working-groups/components/Roles/RolesList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 
@@ -23,9 +26,11 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const { isLoading, openings } = useOpenings({ type: 'open' })
+  const { isLoading: currentLoading, openings: currentOpenings } = useOpenings({ type: 'open' })
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
+
   const activities = useActivities()
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
 
@@ -34,7 +39,7 @@ export const WorkingGroupsOpenings = () => {
       title: 'Openings',
       active: activeTab === 'OPENINGS',
       onClick: () => setActiveTab('OPENINGS'),
-      count: openings.length,
+      count: currentOpenings.length,
     },
     {
       title: 'Upcoming openings',
@@ -43,7 +48,23 @@ export const WorkingGroupsOpenings = () => {
       count: upcomingOpenings.length,
     },
   ]
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
+
+  const displayOpenings = (type: 'CURRENT' | 'UPCOMING') => {
+    if ((type === 'CURRENT' && currentLoading) || (type === 'UPCOMING' && upcomingLoading)) {
+      return <Loading />
+    }
+
+    if (!(type === 'CURRENT' ? currentOpenings : upcomingOpenings).length) {
+      return <TextBig>No {type.toLowerCase()} openings found</TextBig>
+    }
+
+    return type === 'CURRENT' ? (
+      <OpeningsList openings={currentOpenings} />
+    ) : (
+      <UpcomingOpeningsList openings={upcomingOpenings} />
+    )
+  }
+
   return (
     <AppPage>
       <PageHeader>
@@ -59,9 +80,8 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && (isLoading ? <Loading /> : <OpeningsList openings={openings} />)}
-            {activeTab === 'UPCOMING' &&
-              (upcomingLoading ? <Loading /> : <UpcomingOpeningsList openings={upcomingOpenings} />)}
+            {activeTab === 'OPENINGS' && displayOpenings('CURRENT')}
+            {activeTab === 'UPCOMING' && displayOpenings('UPCOMING')}
           </ContentWithTabs>
         </MainPanel>
         <SidePanel neighbor={sideNeighborRef}>
