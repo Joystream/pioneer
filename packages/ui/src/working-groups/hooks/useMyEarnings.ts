@@ -3,6 +3,7 @@ import { startOfMonth, subHours } from 'date-fns'
 
 import { useAccounts } from '@/accounts/hooks/useAccounts'
 import { RewardPaidEventWhereInput } from '@/common/api/queries'
+import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 
 import { RewardPaidEventFieldsFragment, useGetRewardsQuery } from '../queries'
 
@@ -12,10 +13,10 @@ export interface UseMyEarnings {
 }
 
 export function useMyEarnings(): UseMyEarnings {
-  const { allAccounts } = useAccounts()
+  const { workers } = useMyWorkers()
 
   const where: RewardPaidEventWhereInput = {
-    rewardAccount_in: allAccounts.map((account) => account.address),
+    workerId_in: workers.map((worker) => worker.id),
     createdAt_gte: startOfMonth(Date.now()).toISOString(),
   }
   const { loading, data } = useGetRewardsQuery({ variables: { where } })
