@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Fraction } from '@/common/components/typography/Fraction'
 import { Subscription } from '@/common/components/typography/Subscription'
@@ -26,7 +26,7 @@ export const OpeningListItem = ({ opening }: Props) => (
       <OACItemInfoTop>
         <Subscription>ID: {opening.id}</Subscription>
         <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
-        {opening.type === 'LEADER' ? <BadgeViolet>LEAD</BadgeViolet> : null}
+        {opening.type === 'LEADER' ? <BadgeStatus>LEAD</BadgeStatus> : null}
       </OACItemInfoTop>
       <OACItemTitle>{opening.title}</OACItemTitle>
     </OACItemInfo>

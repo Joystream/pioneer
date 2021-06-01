@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { TableListItem } from '@/common/components/List'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextSmall } from '@/common/components/typography/Text'
@@ -26,7 +26,7 @@ export const ProposalListItem = ({ title, stage, type, proposer, isPast, ...prop
         </Tooltip>
       </StageField>
       <TypeField bold>
-        <BadgeViolet>{type}</BadgeViolet>
+        <BadgeStatus>{type}</BadgeStatus>
         {title}
       </TypeField>
       <MemberInfo member={proposer} />
