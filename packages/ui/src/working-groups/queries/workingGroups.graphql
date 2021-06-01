@@ -28,7 +28,10 @@ fragment WorkerFields on Worker {
   }
   application {
     id
-    openingId
+    opening {
+      id
+      unstakingPeriod
+    }
   }
 }
 

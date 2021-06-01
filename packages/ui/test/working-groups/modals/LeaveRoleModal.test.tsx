@@ -62,9 +62,10 @@ describe('UI: LeaveRoleModal', () => {
   })
 
   it('Prepare step', async () => {
-    renderModal()
+    renderModal({ ...WORKER, unstakingPeriod: 14409 })
     expect(await screen.findByText('Leaving a position?')).toBeDefined()
     expect(await screen.findByText('Please remember that this action is irreversible.')).toBeDefined()
+    expect(await screen.findByText('Unstaking period takes 14409 blocks.')).toBeDefined()
     expect(screen.getByRole('button', { name: 'Leave the position anyway' })).toBeDefined()
   })
 

@@ -22,7 +22,7 @@ export const LeaveRolePrepareModal = ({ onClose, onContinue, unstakingPeriod }: 
         </Row>
         <Row>
           <Label>Info</Label>
-          <TextMedium>Unstaking period takes: {unstakingPeriod} blocks.</TextMedium>
+          <TextMedium>Unstaking period takes {unstakingPeriod} blocks.</TextMedium>
         </Row>
         <InputComponent label="Please tell us why you're leaving">
           <InputText onChange={(event) => setRationale(event.target.value)} />
