@@ -2,12 +2,13 @@ import { addMonths, addWeeks, addYears, isAfter, isBefore, isEqual, startOfMonth
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { ButtonSecondary, FilterButtons } from '@/common/components/buttons'
+import { ButtonSecondary, ButtonSecondaryStyles, FilterButtons } from '@/common/components/buttons'
 import { Colors, Shadows } from '@/common/constants'
 import { DateRange, PartialDateRange } from '@/common/types/Dates'
 import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
 
 import { Calendar } from '../Calendar'
+import { CALENDAR_WRAP_SIZE } from '../Calendar/components'
 import { FilterLabel } from '../FilterBox'
 import { InputComponent, InputText } from '../InputComponent'
 import { ControlProps } from '../types'
@@ -56,9 +57,7 @@ export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChan
         {isOpen && (
           <DatePickerPopup>
             <DatePickerCalendars value={value} within={withinDates} onChange={onChange} />
-            <DatePickerFooter>
-              <FilterButtons onApply={apply} onClear={onClear} />
-            </DatePickerFooter>
+            <FilterButtons onApply={apply} onClear={onClear} />
           </DatePickerPopup>
         )}
       </DatePickerInput>
@@ -111,43 +110,44 @@ const DatePickerCalendars = ({ value, within, onChange }: DatePickerCalendarsPro
   }
 
   return (
-    <>
-      <Calendar
-        selection={value}
-        month={leftCalendarMonth}
-        within={within}
-        withinMonths={{ end: rightCalendarMonth }}
-        onChangeMonth={setLeftCalendarMonth}
-        onChange={selectionStrategy('start')}
-      />
+    <DatePickerControllersWrapper>
+      <DatePickerCalendarsWrapper>
+        <Calendar
+          selection={value}
+          month={leftCalendarMonth}
+          within={within}
+          withinMonths={{ end: rightCalendarMonth }}
+          onChangeMonth={setLeftCalendarMonth}
+          onChange={selectionStrategy('start')}
+        />
 
-      <Calendar
-        selection={value}
-        month={rightCalendarMonth}
-        within={within}
-        withinMonths={{ start: leftCalendarMonth }}
-        onChangeMonth={setRightCalendarMonth}
-        onChange={selectionStrategy('end')}
-      />
-
+        <Calendar
+          selection={value}
+          month={rightCalendarMonth}
+          within={within}
+          withinMonths={{ start: leftCalendarMonth }}
+          onChangeMonth={setRightCalendarMonth}
+          onChange={selectionStrategy('end')}
+        />
+      </DatePickerCalendarsWrapper>
       <DatePickerSideNav>
-        <ButtonSecondary onClick={setToNowFrom(addWeeks, -1)} size="medium">
+        <ButtonSecondary onClick={setToNowFrom(addWeeks, -1)} size="small">
           Last week
         </ButtonSecondary>
-        <ButtonSecondary onClick={setToNowFrom(addMonths, -1)} size="medium">
+        <ButtonSecondary onClick={setToNowFrom(addMonths, -1)} size="small">
           Past month
         </ButtonSecondary>
-        <ButtonSecondary onClick={setToNowFrom(addMonths, -3)} size="medium">
+        <ButtonSecondary onClick={setToNowFrom(addMonths, -3)} size="small">
           Past 3 months
         </ButtonSecondary>
-        <ButtonSecondary onClick={setToNowFrom(addMonths, -6)} size="medium">
+        <ButtonSecondary onClick={setToNowFrom(addMonths, -6)} size="small">
           Past 6 months
         </ButtonSecondary>
-        <ButtonSecondary onClick={setToNowFrom(addYears, -1)} size="medium">
+        <ButtonSecondary onClick={setToNowFrom(addYears, -1)} size="small">
           Past year
         </ButtonSecondary>
       </DatePickerSideNav>
-    </>
+    </DatePickerControllersWrapper>
   )
 }
 
@@ -160,38 +160,35 @@ const DatePickerInput = styled(InputComponent)`
 `
 
 const DatePickerPopup = styled.div`
-  background-color: ${Colors.White};
+  display: grid;
   position: absolute;
-  left: 0;
   top: calc(100% + 4px);
-  box-shadow: ${Shadows.light};
+  left: 0;
+  grid-row-gap: 12px;
+  max-width: 624px;
   padding: 16px;
-  display: inline-grid;
-  gap: 16px;
-  grid-template-columns: auto auto auto;
-  justify-items: center;
-  width: max-content;
-  z-index: 51;
+  background-color: ${Colors.White};
+  box-shadow: ${Shadows.light};
 `
 
-const DatePickerFooter = styled.div`
-  display: contents;
+const DatePickerControllersWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: 16px;
+`
 
-  & > :first-child {
-    grid-column: 2;
-    justify-self: end;
-  }
-  & > :last-child {
-    grid-column: 3;
-    width: 100%;
-  }
+const DatePickerCalendarsWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, ${CALENDAR_WRAP_SIZE});
+  grid-column-gap: 16px;
 `
 
 const DatePickerSideNav = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  & > * {
-    width: 100%;
+  ${ButtonSecondaryStyles} {
+    width: 112px;
+    padding: 4px;
   }
 `

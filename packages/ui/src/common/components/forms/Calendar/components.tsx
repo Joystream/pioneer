@@ -81,12 +81,15 @@ const selectionFlags = (day: Date, selection?: DateSelection): SelectionFlags =>
   return {}
 }
 
+const ITEM_FAKE_SIZE = '33px'
 const ITEM_SIZE = '32px'
+export const CALENDAR_WRAP_SIZE = '224px'
 
 export const CalendarGrid = styled.div`
-  display: inline-grid;
-  grid-template-columns: repeat(7, ${ITEM_SIZE});
-  grid-auto-rows: ${ITEM_SIZE};
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: ${CALENDAR_WRAP_SIZE};
   user-select: none;
 `
 
@@ -101,12 +104,12 @@ const ItemStyle = css`
 `
 
 export const CalendarHeaderContainer = styled(CalendarGrid)`
-  grid-column: span 7;
+  width: 100%;
   background-color: ${Colors.White};
 `
 export const CalendarTitle = styled(TextSmall)`
   ${ItemStyle}
-  grid-column: 2 / span 5;
+  width: 160px;
 `
 
 export const CalendarWeekDay = styled.span`
@@ -114,27 +117,37 @@ export const CalendarWeekDay = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${ITEM_SIZE};
-  height: ${ITEM_SIZE};
+  width: ${ITEM_FAKE_SIZE};
+  height: ${ITEM_FAKE_SIZE};
   text-align: center;
   font-family: ${Fonts.Grotesk};
   font-size: 10px;
   line-height: 16px;
   font-weight: 700;
   color: ${Colors.Black[400]};
+  margin-left: -1px;
+  margin-top: -1px;
 `
 
 const CalendarButton = styled(ButtonGhost).attrs(() => ({
   size: 'small',
   square: true,
 }))`
-  width: 100%;
-  min-width: 100%;
-  max-width: 100%;
-  height: 100%;
+  min-width: ${ITEM_FAKE_SIZE};
+  width: ${ITEM_FAKE_SIZE};
+  max-width: ${ITEM_FAKE_SIZE};
+  min-height: ${ITEM_FAKE_SIZE};
+  height: ${ITEM_FAKE_SIZE};
+  max-height: ${ITEM_FAKE_SIZE};
+  margin-top: -1px;
+  margin-left: -1px;
   font-size: 10px;
   line-height: 16px;
   border-radius: 0;
+
+  &:not(:first-child) {
+    margin-left: -1px;
+  }
 
   &:focus {
     border-color: ${Colors.Black[200]};
@@ -149,10 +162,12 @@ const ChangeMonthButton = styled(ButtonGhost).attrs(() => ({
   size: 'small',
   square: true,
 }))`
-  width: 100%;
-  min-width: 100%;
-  max-width: 100%;
-  height: 100%;
+  min-width: ${ITEM_SIZE};
+  width: ${ITEM_SIZE};
+  max-width: ${ITEM_SIZE};
+  min-height: ${ITEM_SIZE};
+  height: ${ITEM_SIZE};
+  max-height: ${ITEM_SIZE};
   font-size: 10px;
   line-height: 16px;
   ${({ disabled }) =>
@@ -170,22 +185,8 @@ interface SelectableDayProps extends SelectionFlags {
 const DayButton = styled(CalendarButton)<SelectableDayProps>`
   font-family: ${Fonts.Inter};
   font-weight: 400;
-  border: none;
-  box-shadow: 0px 0px 0px 1px ${Colors.Black[200]};
-
-  &:hover,
-  &:focus {
-    box-shadow: 0px 0px 0px 1px ${Colors.Blue[100]};
-  }
-
-  &:active {
-    box-shadow: 0px 0px 0px 1px ${Colors.Blue[100]};
-  }
-
-  &:disabled {
-    color: ${Colors.Black[300]};
-    box-shadow: 0px 0px 0px 1px ${Colors.Black[200]};
-  }
+  width: ${ITEM_FAKE_SIZE};
+  height: ${ITEM_FAKE_SIZE};
 
   ${ButtonInnerWrapper} {
     transform: translateY(0);

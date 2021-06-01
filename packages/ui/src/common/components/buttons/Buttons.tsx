@@ -84,6 +84,7 @@ export const ButtonInnerWrapper = styled.span<ButtonSizingProps>`
   align-items: center;
   width: fit-content;
   transform: translateY(1px);
+  white-space: nowrap;
   & > svg {
     transform: translateY(-1px);
   }
