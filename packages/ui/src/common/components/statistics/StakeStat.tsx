@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
+import { WarnedIcon } from '@/common/components/icons/activities/WarnedIcon'
 import { MultiStatisticItem } from '@/common/components/statistics/MultiTokenValueStat'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -22,7 +23,7 @@ export const StakeStat = ({ value, minStake }: StakeStatProps) => {
   }
 
   return (
-    <MultiStatisticItem title={title}>
+    <MultiStatisticItem title={title} TooltipIcon={Icon} tooltipText={'Some text'}>
       <StatisticItemSpacedContent>
         <TotalValue value={value} textColor={Colors.Red[400]} />
       </StatisticItemSpacedContent>
@@ -37,4 +38,7 @@ export const StakeStat = ({ value, minStake }: StakeStatProps) => {
 
 const MinStakeText = styled(TextMedium)`
   color: ${Colors.Black[500]};
+`
+const Icon = styled(WarnedIcon)`
+  color: ${Colors.Red[400]};
 `
