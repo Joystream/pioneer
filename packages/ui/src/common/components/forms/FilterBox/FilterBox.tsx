@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { CrossIcon } from '@/common/components/icons'
 import { StyledLink } from '@/common/components/Link'
 import { Colors } from '@/common/constants'
+import { isDefined } from '@/common/utils'
 
 import { FilterSearchBox } from './FilterSearchBox'
 
@@ -18,7 +19,7 @@ interface FilterBoxProps {
 
 export const FilterBox = ({ search = '', searchSlot, onApply, onClear, onSearch, children }: FilterBoxProps) => (
   <FilterContainer>
-    <ClearButton onClick={onClear}>
+    <ClearButton onClick={onClear} show={isDefined(onClear)}>
       <CrossIcon />
       Clear all Filters
     </ClearButton>
@@ -39,6 +40,8 @@ const ClearButton = styled(StyledLink)`
   align-self: flex-end;
   color: ${Colors.Black[400]};
   text-decoration: none;
+  visibility: ${({ show = true }: { show?: boolean }) => (show ? 'visible' : 'hidden')};
+
   svg {
     color: ${Colors.Black[900]};
     margin-right: 6px;
@@ -49,10 +52,5 @@ const ClearButton = styled(StyledLink)`
 
 const Fields = styled.div`
   background: ${Colors.Black[50]};
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: start;
-  gap: 16px;
   padding: 16px;
 `

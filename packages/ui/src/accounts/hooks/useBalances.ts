@@ -1,12 +1,13 @@
 import { combineLatest } from 'rxjs'
 import { map } from 'rxjs/operators'
 
+import { toBalances } from '@/accounts/model/toBalances'
+
 import { useApi } from '../../common/hooks/useApi'
 import { useObservable } from '../../common/hooks/useObservable'
 import { AddressToBalanceMap } from '../types'
 
 import { useAccounts } from './useAccounts'
-import { toBalances } from './useBalance'
 
 export function useBalances() {
   const { hasAccounts, allAccounts } = useAccounts()

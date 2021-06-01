@@ -56,9 +56,9 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
       <OACItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={application.opening?.reward} />
+            <TokenValue value={application.opening.reward.payout} />
           </TextInlineBig>
-          <OACSubscriptionWide>Reward per blocks.</OACSubscriptionWide>
+          <OACSubscriptionWide>Reward per {application.opening.reward.blockInterval} blocks.</OACSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
