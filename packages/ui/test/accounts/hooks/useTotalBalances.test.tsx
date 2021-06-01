@@ -6,9 +6,10 @@ import set from 'lodash/set'
 import React, { ReactNode } from 'react'
 import { of } from 'rxjs'
 
-import { useTotalBalances } from '../../../src/accounts/hooks/useTotalBalances'
-import { AccountsContextProvider } from '../../../src/accounts/providers/accounts/provider'
-import { ApiContext } from '../../../src/common/providers/api/context'
+import { useTotalBalances } from '@/accounts/hooks/useTotalBalances'
+import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
+import { ApiContext } from '@/common/providers/api/context'
+
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi } from '../../_mocks/transactions'
 
@@ -29,17 +30,6 @@ describe('useTotalBalances', () => {
       })
     )
   })
-
-  function renderUseTotalBalances() {
-    const wrapper = ({ children }: { children: ReactNode }) => (
-      <MockKeyringProvider>
-        <AccountsContextProvider>
-          <ApiContext.Provider value={useApi}>{children}</ApiContext.Provider>
-        </AccountsContextProvider>
-      </MockKeyringProvider>
-    )
-    return renderHook(() => useTotalBalances(), { wrapper })
-  }
 
   it('Returns zero balances when API not ready', () => {
     useApi.isConnected = false
@@ -71,4 +61,15 @@ describe('useTotalBalances', () => {
       locks: [],
     })
   })
+
+  function renderUseTotalBalances() {
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <MockKeyringProvider>
+        <AccountsContextProvider>
+          <ApiContext.Provider value={useApi}>{children}</ApiContext.Provider>
+        </AccountsContextProvider>
+      </MockKeyringProvider>
+    )
+    return renderHook(() => useTotalBalances(), { wrapper })
+  }
 })
