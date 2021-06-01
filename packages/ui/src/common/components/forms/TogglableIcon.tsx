@@ -28,9 +28,8 @@ const DualStateIcon = styled(MemberStatusTooltip)`
 
           &:hover,
           &:focus {
-            color: ${Colors.Blue[500]};
-            border-color: ${Colors.Blue[100]};
-            background-color: ${Colors.Black[50]};
+            border-color: ${Colors.Blue[400]};
+            background-color: ${Colors.Blue[400]};
           }
         `
       : css`
