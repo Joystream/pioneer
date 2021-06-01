@@ -6,7 +6,7 @@ import { SimpleSelect } from '@/common/components/selects'
 import { FilterBox, FilterPageHeader } from '.'
 
 export default {
-  title: 'Common/FilterBox',
+  title: 'Common/Forms/FilterBox',
   component: FilterBox,
 } as Meta
 
@@ -17,10 +17,13 @@ export const Default: Story = () => {
   const [selectValue, setSelectValue] = useState<null | 'foo' | 'bar'>(null)
 
   const display = () => alert(JSON.stringify({ search, selectValue }, null, 2))
-  const clear = () => {
-    setSearch('')
-    setSelectValue(null)
-  }
+  const clear =
+    search || selectValue
+      ? () => {
+          setSearch('')
+          setSelectValue(null)
+        }
+      : undefined
 
   return (
     <>

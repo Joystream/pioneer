@@ -33,9 +33,9 @@ export const OpeningListItem = ({ opening }: Props) => (
     <OACItemSummary>
       <OpenItemSummaryColumn>
         <TextInlineBig>
-          <TokenValue value={opening.reward.value} />
+          <TokenValue value={opening.reward.payout} />
         </TextInlineBig>
-        <OACSubscriptionWide>Reward per 3600 blocks.</OACSubscriptionWide>
+        <OACSubscriptionWide>Reward per {opening.reward.blockInterval} blocks.</OACSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
         <Fraction numerator={opening.applicants.current} denominator={opening.applicants.total} sameSize />

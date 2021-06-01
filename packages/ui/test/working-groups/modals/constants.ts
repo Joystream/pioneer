@@ -1,4 +1,5 @@
 import { WorkerWithDetails } from '@/working-groups/types'
+import { getReward } from '@/working-groups/model/getReward'
 
 import { alice } from '../../_mocks/keyring'
 
@@ -12,7 +13,7 @@ export const WORKER: WorkerWithDetails = {
     id: '1',
   },
   isLeader: false,
-  rewardPerBlock: 100,
+  reward: getReward(2, 'forum'),
   earnedTotal: 2000,
   stake: 2000,
   status: '',

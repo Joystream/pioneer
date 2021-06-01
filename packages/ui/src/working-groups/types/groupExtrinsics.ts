@@ -1,6 +1,6 @@
 import { AugmentedSubmittables } from '@polkadot/api/types'
 
-export type GroupName = 'forum' | 'storage' | 'content' | 'membership'
+import { GroupName } from '.'
 
 type groupSubmittableSet = keyof AugmentedSubmittables<'rxjs'> &
   ('forumWorkingGroup' | 'storageWorkingGroup' | 'contentDirectoryWorkingGroup' | 'membershipWorkingGroup')

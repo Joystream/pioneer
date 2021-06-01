@@ -63,9 +63,9 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
           <Label>Reward</Label>
           <TextMedium lighter>
             <TextInlineHuge>
-              <TokenValue value={opening.reward.value} />
+              <TokenValue value={opening.reward.payout} />
             </TextInlineHuge>{' '}
-            per {opening.reward.interval} blocks
+            per {opening.reward.blockInterval} blocks
           </TextMedium>
         </RowGapBlock>
       </Row>
