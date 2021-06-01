@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { BadgeViolet } from '../../common/components/BadgeViolet'
+import { BadgeStatus } from '../../common/components/BadgeStatus/BadgeStatus'
 import { ButtonGhost } from '../../common/components/buttons'
 import { FileIcon } from '../../common/components/icons/FileIcon'
 import { List, ListItem } from '../../common/components/List'
@@ -49,7 +49,7 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
         <OACItemInfoTop>
           <Subscription>ID: {application.id}</Subscription>
           <Subscription>Time left: 6 days 23 minutes</Subscription>
-          <BadgeViolet>LEAD</BadgeViolet>
+          <BadgeStatus>LEAD</BadgeStatus>
         </OACItemInfoTop>
         <Title onClick={showApplicationModal}>{openingTitle(application)}</Title>
       </OACItemInfo>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonLink } from '@/common/components/buttons'
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview/MarkdownPreview'
@@ -23,9 +23,9 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
   return (
     <RowGapBlock gap={24}>
       <Row>
-        <BadgeViolet inverted size="l">
+        <BadgeStatus inverted size="l">
           {opening.type}
-        </BadgeViolet>
+        </BadgeStatus>
       </Row>
       <Row>
         <RowGapBlock gap={8}>

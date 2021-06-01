@@ -2,7 +2,7 @@ import Identicon from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
 
-import { BadgeViolet } from '../../common/components/BadgeViolet'
+import { BadgeStatus } from '../../common/components/BadgeStatus/BadgeStatus'
 import { CopyComponent } from '../../common/components/CopyComponent'
 import { BorderRad, Colors, Transitions } from '../../common/constants'
 import { shortenAddress } from '../../common/model/formatters'
@@ -39,7 +39,7 @@ const AccountInfoWrap = styled.div`
   width: 100%;
   justify-self: start;
 
-  & ${BadgeViolet} {
+  & ${BadgeStatus} {
     grid-area: accounttype;
   }
 `
@@ -80,7 +80,7 @@ interface OptionalAccountTypeParams {
 
 const OptionalAccountType = ({ active, address }: OptionalAccountTypeParams) => {
   if ((active && active.rootAccount === address) || active.controllerAccount === address) {
-    return <BadgeViolet>{active.rootAccount === address ? 'Root account' : 'Controller account'}</BadgeViolet>
+    return <BadgeStatus>{active.rootAccount === address ? 'Root account' : 'Controller account'}</BadgeStatus>
   }
 
   return null
