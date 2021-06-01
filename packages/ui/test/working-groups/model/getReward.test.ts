@@ -10,8 +10,8 @@ describe('getReward', () => {
   })
 
   it('Not a known group name', () => {
-    expect(getReward(1, 'incorrect')).toEqual({
-      payout: new BN(7),
+    expect(getReward(10, 'incorrect')).toEqual({
+      payout: new BN(10),
       blockInterval: 1,
     })
   })
