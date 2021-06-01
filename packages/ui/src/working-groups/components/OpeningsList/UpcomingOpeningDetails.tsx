@@ -28,9 +28,9 @@ export const UpcomingOpeningDetails = ({ opening }: UpcomingProps) => {
         <Statistics withMargin>
           <StatsBlock size="m" centered spacing="s">
             <TextBig>
-              <TokenValue value={opening.reward.value} />
+              <TokenValue value={opening.reward.payout} />
             </TextBig>
-            <Subscription>Reward per 3600 blocks</Subscription>
+            <Subscription>Reward per {opening.reward.blockInterval} blocks</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered spacing="s">
             <TwoColumnsStatistic>
@@ -44,7 +44,7 @@ export const UpcomingOpeningDetails = ({ opening }: UpcomingProps) => {
           </StatsBlock>
           <StatsBlock size="m" centered spacing="s">
             <TextBig>
-              <TokenValue value={opening.reward.value} />
+              <TokenValue value={opening.reward.payout} />
             </TextBig>
             <Subscription>Minimum Stake Required</Subscription>
           </StatsBlock>

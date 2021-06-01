@@ -3,11 +3,14 @@ import BN from 'bn.js'
 import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 
+import { getReward } from '../model/getReward'
 import {
   ApplicationQuestionFieldsFragment,
   UpcomingWorkingGroupOpeningFieldsFragment,
   WorkingGroupOpeningFieldsFragment,
 } from '../queries'
+
+import { Reward } from './Reward'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
 type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
@@ -24,10 +27,7 @@ export interface BaseOpening {
   createdAtBlock: Block
   stake: BN
   budget: number
-  reward: {
-    value: BN
-    interval: number
-  }
+  reward: Reward
 }
 
 export interface UpcomingWorkingGroupOpening extends BaseOpening {
@@ -64,10 +64,7 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
   groupName: fields.group.name,
   budget: fields.group.budget,
   createdAtBlock: asBlock(fields.createdAtBlock),
-  reward: {
-    value: fields.rewardPerBlock,
-    interval: 1,
-  },
+  reward: getReward(fields.rewardPerBlock, fields.group.name),
   expectedEnding: fields.metadata.expectedEnding,
   shortDescription: fields.metadata.shortDescription || '',
   description: fields.metadata?.description ?? '',

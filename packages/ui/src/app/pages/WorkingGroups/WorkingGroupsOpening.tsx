@@ -125,7 +125,7 @@ export const WorkingGroupOpening = () => {
         <Statistics>
           <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
           <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
-          <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.value} />
+          <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.payout} />
           <NumericValueStat title="Hiring limit" value={opening.hiring.total} />
         </Statistics>
         <ContentWithSidepanel>
