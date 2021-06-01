@@ -29,5 +29,4 @@ export const WORKER: WorkerWithDetails = {
     number: 100,
     timestamp: '2021-06-01T06:42:00.155Z',
   },
-  unstakingPeriod: 14400,
 }

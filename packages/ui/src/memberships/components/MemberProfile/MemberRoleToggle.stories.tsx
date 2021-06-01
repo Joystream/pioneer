@@ -44,6 +44,5 @@ Default.args = {
     applicationId: '0',
     openingId: '0',
     status: 'WorkerStatusActive',
-    unstakingPeriod: 14400,
   },
 }

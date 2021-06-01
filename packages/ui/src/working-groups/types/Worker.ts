@@ -25,7 +25,6 @@ export interface WorkerWithDetails extends Worker {
   rewardAccount: Address
   stakeAccount: Address
   hiredAtBlock: Block
-  unstakingPeriod: number
 }
 
 export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
@@ -48,10 +47,9 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
 export const asWorkerWithDetails = (fields: WorkerFieldsFragment): WorkerWithDetails => ({
   ...asWorker(fields),
   applicationId: fields.application.id,
-  openingId: fields.application.opening.id,
+  openingId: fields.application.openingId,
   roleAccount: fields.roleAccount,
   rewardAccount: fields.rewardAccount,
   stakeAccount: fields.stakeAccount,
   hiredAtBlock: asBlock(fields.hiredAtBlock),
-  unstakingPeriod: fields.application.opening.unstakingPeriod,
 })

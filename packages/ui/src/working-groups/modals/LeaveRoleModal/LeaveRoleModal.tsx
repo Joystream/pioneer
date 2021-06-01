@@ -28,9 +28,7 @@ export const LeaveRoleModal = () => {
   }
 
   if (step === 'PREPARE') {
-    return (
-      <LeaveRolePrepareModal onClose={hideModal} onContinue={onContinue} unstakingPeriod={worker.unstakingPeriod} />
-    )
+    return <LeaveRolePrepareModal onClose={hideModal} onContinue={onContinue} unstakingPeriod={0} />
   }
 
   if (step === 'AUTHORIZE' && transaction) {
