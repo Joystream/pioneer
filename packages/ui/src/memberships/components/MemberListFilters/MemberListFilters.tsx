@@ -52,7 +52,7 @@ export const MemberListEmptyFilter: MemberListFilter = {
 
 const isFilterEmpty = objectEquals(MemberListEmptyFilter)
 
-interface MemberListFiltersProps {
+export interface MemberListFiltersProps {
   searchSlot?: React.RefObject<HTMLDivElement>
   memberCount?: number
   roles: { [k: string]: string }
