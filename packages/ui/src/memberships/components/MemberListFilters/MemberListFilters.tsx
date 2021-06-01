@@ -90,6 +90,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
             value={role}
             onChange={(value) => {
               dispatch({ type: 'change', field: 'role', value })
+              onApply({ ...filters, role: value })
             }}
           />
         </SelectContainer>
@@ -101,6 +102,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
             value={concil}
             onChange={(value) => {
               dispatch({ type: 'change', field: 'concil', value })
+              onApply({ ...filters, concil: value })
             }}
           />
         </SelectContainer>
@@ -111,6 +113,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
             value={onlyVerified}
             onChange={(value) => {
               dispatch({ type: 'change', field: 'onlyVerified', value })
+              onApply({ ...filters, onlyVerified: value })
             }}
           >
             <VerifiedMemberIcon />
@@ -120,6 +123,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
             value={onlyFounder}
             onChange={(value) => {
               dispatch({ type: 'change', field: 'onlyFounder', value })
+              onApply({ ...filters, onlyFounder: value })
             }}
           >
             <FounderMemberIcon />

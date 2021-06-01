@@ -43,7 +43,6 @@ export const Select = <T extends any>({
   useEffect(() => {
     if (isDefined(selected)) {
       setSelectedOption(selected)
-      onChange(selected)
     }
   }, [selected])
 
