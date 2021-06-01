@@ -7,6 +7,7 @@ import { FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
 import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { SimpleSelect } from '@/common/components/selects'
 import { TextInlineBig } from '@/common/components/typography'
+import { objectEquals } from '@/common/utils'
 import { MemberRole } from '@/memberships/types'
 
 export interface MemberListFilter {
@@ -49,11 +50,13 @@ export const MemberListEmptyFilter: MemberListFilter = {
   onlyFounder: false,
 }
 
+const isFilterEmpty = objectEquals(MemberListEmptyFilter)
+
 interface MemberListFiltersProps {
   searchSlot?: React.RefObject<HTMLDivElement>
   memberCount?: number
   roles: { [k: string]: string }
-  onApply?: (value: MemberListFilter) => void
+  onApply: (value: MemberListFilter) => void
 }
 
 export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: MemberListFiltersProps) => {
@@ -61,10 +64,12 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
   const { search, role, concil, onlyVerified, onlyFounder } = filters
 
   const apply = onApply && onApply && (() => onApply(filters))
-  const clear = () => {
-    dispatch({ type: 'clear' })
-    onApply?.(MemberListEmptyFilter)
-  }
+  const clear = isFilterEmpty(filters)
+    ? undefined
+    : () => {
+        dispatch({ type: 'clear' })
+        onApply?.(MemberListEmptyFilter)
+      }
 
   const onSearch = (value: string) => {
     dispatch({ type: 'change', field: 'search', value })
