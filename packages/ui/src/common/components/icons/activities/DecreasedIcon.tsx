@@ -11,31 +11,9 @@ export const DecreasedIcon = ({ className }: StyledIcon) => (
       fill="currentColor"
     />
 
-    <rect
-      y="8.33337"
-      width="3.33333"
-      height="10"
-      fill="currentColor"/>
-    <rect
-      x="5"
-      y="10.8334"
-      width="3.33333"
-      height="7.5"
-      fill="currentColor"
-    />
-    <rect
-      x="10"
-      y="13.3334"
-      width="3.33333"
-      height="5"
-      fill="currentColor"
-    />
-    <rect
-      x="15"
-      y="15.8334"
-      width="3.33333"
-      height="2.5"
-      fill="currentColor"
-    />
+    <rect y="8.33337" width="3.33333" height="10" fill="currentColor" />
+    <rect x="5" y="10.8334" width="3.33333" height="7.5" fill="currentColor" />
+    <rect x="10" y="13.3334" width="3.33333" height="5" fill="currentColor" />
+    <rect x="15" y="15.8334" width="3.33333" height="2.5" fill="currentColor" />
   </Icon>
 )
