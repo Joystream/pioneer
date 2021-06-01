@@ -52,6 +52,7 @@ export interface WorkingGroupOpening extends BaseOpening {
     current: number
     total: number
   }
+  unstakingPeriod: number
 }
 
 export const isUpcomingOpening = (opening: BaseOpening): opening is UpcomingWorkingGroupOpening =>
@@ -100,6 +101,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     current: 0,
     total: fields.metadata?.hiringLimit ?? 0,
   },
+  unstakingPeriod: fields.unstakingPeriod,
 })
 
 export type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'

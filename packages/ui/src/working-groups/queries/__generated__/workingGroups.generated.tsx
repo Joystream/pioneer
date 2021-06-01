@@ -84,6 +84,7 @@ export type WorkingGroupOpeningFieldsFragment = {
   type: Types.WorkingGroupOpeningType
   stakeAmount: any
   rewardPerBlock: any
+  unstakingPeriod: number
   group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
   createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
@@ -368,6 +369,7 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     status {
       __typename
     }
+    unstakingPeriod
   }
   ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
