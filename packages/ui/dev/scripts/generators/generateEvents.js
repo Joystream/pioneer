@@ -38,7 +38,7 @@ const generateRewardPaidEvent = (baseEvent) => {
     groupId: groupId.toString(),
     workerId: workerId.toString(),
     rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-    amount: randomFromRange(0, 10000),
+    amount: Number(randomFromRange(0, 10000)),
     type: 'REGULAR',
   }
 }

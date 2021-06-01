@@ -7,13 +7,13 @@ interface RawRewardPaidEvent {
   groupId: string
   workerId: string
   rewardAccount: string
-  amount: string
+  amount: number
   type: string
 }
 
 export const mockEvents = rawEvents.map((rawEvent) => ({ ...rawEvent }))
 
-const seedEvent = (mockEvent: RawRewardPaidEvent, server: any) => {
+export const seedRewardPaidEvent = (mockEvent: RawRewardPaidEvent, server: any) => {
   return server.schema.create('RewardPaidEvent', mockEvent)
 }
-export const seedRewardPaidEvents = (server: any) => mockEvents.map((event) => seedEvent(event, server))
+export const seedRewardPaidEvents = (server: any) => mockEvents.map((event) => seedRewardPaidEvent(event, server))
