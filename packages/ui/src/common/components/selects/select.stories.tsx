@@ -15,7 +15,7 @@ const Template: Story<Props> = ({ value, ...props }) => {
   const [v, setV] = useState(value)
   return (
     <ModalBlock>
-      <SimpleSelect value={v} onChange={setV} {...props} />
+      <SimpleSelect {...props} value={v} onChange={setV} />
     </ModalBlock>
   )
 }
