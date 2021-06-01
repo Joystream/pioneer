@@ -14,15 +14,6 @@ interface RawRewardPaidEvent {
 export const mockEvents = rawEvents.map((rawEvent) => ({ ...rawEvent }))
 
 const seedEvent = (mockEvent: RawRewardPaidEvent, server: any) => {
-  const event = server.schema.find('Event', mockEvent.eventId)
-  const group = server.schema.find('WorkingGroup', mockEvent.groupId)
-  const worker = server.schema.find('Worker', mockEvent.workerId)
-
-  return server.schema.create('RewardPaidEvent', {
-    ...mockEvent,
-    event,
-    group,
-    worker,
-  })
+  return server.schema.create('RewardPaidEvent', mockEvent)
 }
 export const seedRewardPaidEvents = (server: any) => mockEvents.map((event) => seedEvent(event, server))
