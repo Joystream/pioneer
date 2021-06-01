@@ -1,9 +1,10 @@
+import { createType } from '@joystream/types'
 import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
 
-import { UseApi } from '../../src/common/providers/api/provider'
+import { UseApi } from '@/common/providers/api/provider'
 
 import { toRuntimeDispatchInfo } from './chainTypes'
 
@@ -115,11 +116,29 @@ export const stubDefaultBalances = (api: UseApi) => {
 }
 
 export const stubBalances = (api: UseApi, balances: { available?: number; locked?: number }) => {
+  const availableBalance = new BN(balances.available ?? 0)
+  const lockedBalance = new BN(balances.locked ?? 0)
+
   set(api, 'api.derive.balances.all', () =>
     from([
       {
-        availableBalance: new BN(balances.available ?? 0),
-        lockedBalance: new BN(balances.locked ?? 0),
+        availableBalance: createType('Balance', availableBalance),
+        lockedBalance: createType('Balance', lockedBalance),
+        accountId: createType('AccountId', '0x00'),
+        accountNonce: createType('Index', 1),
+        freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
+        frozenFee: new BN(0),
+        frozenMisc: new BN(0),
+        isVesting: false,
+        lockedBreakdown: [],
+        reservedBalance: new BN(0),
+        vestedBalance: new BN(0),
+        vestedClaimable: new BN(0),
+        vestingEndBlock: createType('BlockNumber', 1234),
+        vestingLocked: new BN(0),
+        vestingPerBlock: new BN(0),
+        vestingTotal: new BN(0),
+        votingBalance: new BN(0),
       },
     ])
   )
