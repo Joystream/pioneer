@@ -22,6 +22,6 @@ export const MultiTokenValueStat = ({ title, values }: MultiTokenValueStatProps)
   </MultiStatisticItem>
 )
 
-const MultiStatisticItem = styled(StatisticItem)`
+export const MultiStatisticItem = styled(StatisticItem)`
   padding: 12px 16px 4px;
 `

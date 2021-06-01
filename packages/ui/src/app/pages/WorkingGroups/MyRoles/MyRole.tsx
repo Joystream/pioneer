@@ -23,6 +23,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { MultiTokenValueStat, Statistics, TokenValueStat } from '@/common/components/statistics'
+import { StakeStat } from '@/common/components/statistics/StakeStat'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
 import { useActivities } from '@/common/hooks/useActivities'
@@ -136,7 +137,7 @@ export const MyRole = () => {
               },
             ]}
           />
-          <TokenValueStat title="Stake height" value={worker.stake} />
+          <StakeStat value={worker.stake} minStake={100000} />
           <TokenValueStat title="Owed reward" value={150000} />
           <TokenValueStat title="Next payout in" value={150000} />
         </Statistics>
@@ -164,7 +165,7 @@ export const MyRole = () => {
               </RoleAccountHeader>
               <MyRoleAccount
                 account={{ name: 'Stake Account', address: worker.stakeAccount }}
-                balances={['total', 'locked']}
+                balances={['free', 'total', 'locked']}
               />
             </ContentWithTabs>
             <ContentWithTabs>
