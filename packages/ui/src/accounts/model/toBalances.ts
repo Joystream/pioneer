@@ -11,7 +11,7 @@ function lockLookup(id: LockIdentifier) {
 }
 
 export function toBalances(balances: DeriveBalancesAll): Balances {
-  const { lockedBalance, availableBalance, lockedBreakdown, freeBalance } = balances
+  const { lockedBalance, availableBalance, lockedBreakdown, freeBalance, reservedBalance } = balances
 
   const locks = lockedBreakdown.map((lock) => ({
     amount: lock.amount,
@@ -20,7 +20,7 @@ export function toBalances(balances: DeriveBalancesAll): Balances {
 
   const transferable = availableBalance.toBn()
   const locked = lockedBalance.toBn()
-  const total = freeBalance.toBn() // Should be .add(reservedBalance) ?
+  const total = freeBalance.toBn().add(reservedBalance)
 
   return {
     locked,
