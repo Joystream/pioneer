@@ -34,7 +34,7 @@ const getFilter = (where: Record<string, any>) => {
 
     if (type === 'gte') {
       if (field === 'createdAt') {
-        filters.push((model: Record<string, any>) => new Date(model[field]) >= new Date(checkValue))
+        filters.push((model: Record<string, any>) => new Date(model[field]).getTime() >= new Date(checkValue).getTime())
       } else {
         filters.push((model: Record<string, any>) => String(model[field]).localeCompare(checkValue.toString()) === 1)
       }
