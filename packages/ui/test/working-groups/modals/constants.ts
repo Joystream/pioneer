@@ -1,5 +1,5 @@
-import { WorkerWithDetails } from '@/working-groups/types'
 import { getReward } from '@/working-groups/model/getReward'
+import { WorkerWithDetails } from '@/working-groups/types'
 
 import { alice } from '../../_mocks/keyring'
 
