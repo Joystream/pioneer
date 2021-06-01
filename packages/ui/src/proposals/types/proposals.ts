@@ -1,14 +1,14 @@
 import { Member } from '@/memberships/types'
 
 export type ProposalStage =
-  | 'DECIDING'
-  | 'DORMANT'
-  | 'GRACING'
-  | 'SUCCEEDED'
-  | 'FAILED'
-  | 'VETOED'
-  | 'SLASHED'
-  | 'REJECTED'
+  | 'Deciding'
+  | 'Dormant'
+  | 'Gracing'
+  | 'Succeeded'
+  | 'Failed'
+  | 'Vetoed'
+  | 'Slashed'
+  | 'Rejected'
 
 export interface Proposal {
   id: string

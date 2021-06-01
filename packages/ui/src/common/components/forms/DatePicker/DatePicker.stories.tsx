@@ -7,7 +7,7 @@ import { PartialDateRange } from '@/common/types/Dates'
 import { DatePicker } from '.'
 
 export default {
-  title: 'Common/DatePicker',
+  title: 'Common/Forms/DatePicker',
   component: DatePicker,
 } as Meta
 
