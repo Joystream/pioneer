@@ -1,5 +1,5 @@
-import { useApi } from "./useApi";
-import { useObservable } from "./useObservable";
+import { useApi } from './useApi'
+import { useObservable } from './useObservable'
 
 export function useCurrentBlockNumber() {
   const { api } = useApi()
