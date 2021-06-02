@@ -49,6 +49,13 @@ fragment WorkingGroupFields on WorkingGroup {
   }
 }
 
+fragment RewardPaidEventFields on RewardPaidEvent {
+  id
+  amount
+  rewardAccount
+  createdAt
+}
+
 query getWorkingGroups {
   workingGroups {
     ...WorkingGroupFields,
@@ -64,6 +71,12 @@ query getWorkers ($where: WorkerWhereInput) {
 query getWorker ($where: WorkerWhereUniqueInput!) {
   workerByUniqueInput(where: $where) {
     ...WorkerFields
+  }
+}
+
+query getRewards ($where: RewardPaidEventWhereInput) {
+  rewardPaidEvents(where: $where) {
+    ...RewardPaidEventFields
   }
 }
 

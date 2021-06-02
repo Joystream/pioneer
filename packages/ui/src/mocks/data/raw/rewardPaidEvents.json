@@ -1,0 +1,102 @@
+[
+  {
+    "id": "0",
+    "createdAt": "2021-06-01T10:37:39.263Z",
+    "eventId": "0",
+    "groupId": "0",
+    "workerId": "0",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 3777,
+    "type": "REGULAR"
+  },
+  {
+    "id": "1",
+    "createdAt": "2021-05-17T17:41:19.678Z",
+    "eventId": "1",
+    "groupId": "0",
+    "workerId": "0",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 8127,
+    "type": "REGULAR"
+  },
+  {
+    "id": "2",
+    "createdAt": "2021-05-11T18:49:03.633Z",
+    "eventId": "2",
+    "groupId": "2",
+    "workerId": "43",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 3119,
+    "type": "REGULAR"
+  },
+  {
+    "id": "3",
+    "createdAt": "2021-05-06T14:05:14.775Z",
+    "eventId": "3",
+    "groupId": "1",
+    "workerId": "28",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 4758,
+    "type": "REGULAR"
+  },
+  {
+    "id": "4",
+    "createdAt": "2021-05-01T02:47:52.701Z",
+    "eventId": "4",
+    "groupId": "2",
+    "workerId": "41",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 3351,
+    "type": "REGULAR"
+  },
+  {
+    "id": "5",
+    "createdAt": "2021-05-17T02:51:36.949Z",
+    "eventId": "5",
+    "groupId": "1",
+    "workerId": "30",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 6379,
+    "type": "REGULAR"
+  },
+  {
+    "id": "6",
+    "createdAt": "2021-05-01T08:14:58.322Z",
+    "eventId": "6",
+    "groupId": "1",
+    "workerId": "27",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 1507,
+    "type": "REGULAR"
+  },
+  {
+    "id": "7",
+    "createdAt": "2021-05-05T12:21:18.015Z",
+    "eventId": "7",
+    "groupId": "1",
+    "workerId": "26",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 1681,
+    "type": "REGULAR"
+  },
+  {
+    "id": "8",
+    "createdAt": "2021-06-01T08:22:48.512Z",
+    "eventId": "8",
+    "groupId": "2",
+    "workerId": "42",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 1410,
+    "type": "REGULAR"
+  },
+  {
+    "id": "9",
+    "createdAt": "2021-05-22T19:05:46.776Z",
+    "eventId": "9",
+    "groupId": "1",
+    "workerId": "26",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 8946,
+    "type": "REGULAR"
+  }
+]
