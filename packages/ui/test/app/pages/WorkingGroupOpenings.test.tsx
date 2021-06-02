@@ -10,22 +10,7 @@ import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { OPENING_DATA } from '../../working-groups/modals/ApplyForRoleModal.test'
-
-const aliceMember = {
-  id: '0',
-  rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-  controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-  handle: 'alice',
-  metadata: {
-    name: 'animi et',
-    about: 'Optio possimus...',
-  },
-  isVerified: true,
-  isFoundingMember: true,
-  inviteCount: 5,
-  registeredAtBlockId: '1',
-}
+import { MEMBER_ALICE, OPENING } from '../../_mocks/server/seeds'
 
 describe('WorkingGroupOpenings', () => {
   const mockServer = setupMockServer()
@@ -52,12 +37,11 @@ describe('WorkingGroupOpenings', () => {
   })
 
   it('With openings', async () => {
-    seedBlocks(mockServer.server)
-    seedMember(aliceMember, mockServer.server)
+    seedMember(MEMBER_ALICE, mockServer.server)
     seedWorkingGroups(mockServer.server)
     seedOpeningStatuses(mockServer.server)
-    seedOpening({ ...OPENING_DATA }, mockServer.server)
-    seedOpening({ ...OPENING_DATA }, mockServer.server)
+    seedOpening({ ...OPENING }, mockServer.server)
+    seedOpening({ ...OPENING }, mockServer.server)
 
     renderPage()
 

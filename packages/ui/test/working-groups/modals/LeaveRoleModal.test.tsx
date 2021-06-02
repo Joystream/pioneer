@@ -20,6 +20,7 @@ import { alice } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { OPENING, WORKER } from '../../_mocks/server/seeds'
 import {
   stubApi,
   stubDefaultBalances,
@@ -27,27 +28,6 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-import { WORKER } from './constants'
-
-const OPENING_DATA = {
-  groupId: '0',
-  type: 'REGULAR',
-  status: 'open',
-  stakeAmount: 2000,
-  applications: null,
-  metadata: {
-    shortDescription: 'Distribution Worker',
-    description: '# Description',
-    hiringLimit: 1,
-    expectedEnding: '2022-03-09T10:18:04.155Z',
-    applicationDetails: 'Details... ?',
-    applicationFormQuestions: [],
-  },
-  unstakingPeriod: '14409',
-  rewardPerBlock: 200,
-  createdAtBlockId: '5',
-}
 
 const WORKER_DATA = {
   id: '1',
@@ -100,7 +80,7 @@ describe('UI: LeaveRoleModal', () => {
     seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
-    seedOpening(OPENING_DATA, server.server)
+    seedOpening(OPENING, server.server)
     seedApplication(APPLICATION_DATA, server.server)
     seedWorker(WORKER_DATA, server.server)
     useMyMemberships.setActive(getMember('alice'))

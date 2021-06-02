@@ -22,6 +22,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { WORKER as worker } from '../../_mocks/server/seeds'
 import {
   stubApi,
   stubDefaultBalances,
@@ -29,8 +30,6 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-import { WORKER as worker } from './constants'
 
 const OPENING_DATA = {
   groupId: '1',
