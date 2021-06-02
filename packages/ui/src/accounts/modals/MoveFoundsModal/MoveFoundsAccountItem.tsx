@@ -2,7 +2,6 @@ import React, { memo } from 'react'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { useTotalBalances } from '@/accounts/hooks/useTotalBalances'
 import { MemberRow } from '@/accounts/modals/MoveFoundsModal/styles'
 import { Account, AddressToBalanceMap } from '@/accounts/types'
@@ -18,7 +17,7 @@ import { spacing } from '@/common/utils/styles'
 import { MoveFundsModalCall } from '.'
 
 interface Props {
-  account: Account
+  account?: Account
   balances: AddressToBalanceMap
 }
 
@@ -27,18 +26,17 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
     modalData: { lockedFoundsAccounts },
   } = useModal<MoveFundsModalCall>()
   const [isDropped, setIsDropped] = useToggle()
-  const { locked } = useBalance(account.address) || {}
   const { transferable } = useTotalBalances()
 
   return (
     <>
-      <LockedFoundsMemberRow key={account.address}>
-        <AccountInfo account={account} />
+      <LockedFoundsMemberRow key={account?.address}>
+        {account && <AccountInfo account={account} />}
         <LockedBalanceInfoRow>
           <InfoTitle>Locked balance</InfoTitle>
           <LockedFoundsInfoValue>
             <LockSymbolStyled />
-            <TokenValue value={locked} />
+            <TokenValue value={balances[account?.address as string].locked} />
             <VotingSymbolStyled />
           </LockedFoundsInfoValue>
         </LockedBalanceInfoRow>
@@ -46,17 +44,19 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
       </LockedFoundsMemberRow>
       <DropDownToggleStyled isDropped={isDropped}>
         <TextSmall margin="l">Other accounts with transferable balances:</TextSmall>
-        {lockedFoundsAccounts[account.address].map((account) => (
-          <SubAccountRow>
-            <AccountInfo account={account} key={`lockedFoundsAccount-${account.address}`} />
-            <BalanceInfoInRow>
-              <InfoTitle>Transferable balance</InfoTitle>
-              <InfoValue>
-                <TokenValue value={balances[account.address] && balances[account.address].transferable} />
-              </InfoValue>
-            </BalanceInfoInRow>
-          </SubAccountRow>
-        ))}
+        {lockedFoundsAccounts &&
+          account &&
+          lockedFoundsAccounts[account.address].map((subAccount) => (
+            <SubAccountRow key={`lockedFoundsAccount-${subAccount.address}`}>
+              <AccountInfo account={subAccount} />
+              <BalanceInfoInRow>
+                <InfoTitle>Transferable balance</InfoTitle>
+                <InfoValue>
+                  <TokenValue value={balances[account.address] && balances[account.address].transferable} />
+                </InfoValue>
+              </BalanceInfoInRow>
+            </SubAccountRow>
+          ))}
         <div>
           <Divider />
           <BalanceSummary>

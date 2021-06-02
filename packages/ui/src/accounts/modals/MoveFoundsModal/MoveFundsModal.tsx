@@ -6,6 +6,7 @@ import { useModal } from '@/common/hooks/useModal'
 
 import { MoveFundsModalCall } from '.'
 import { MoveFoundsModalType } from './constants'
+import { MoveFoundsInsufficientBalanceModal } from './MoveFoundsInsufficientBalanceModal'
 import { MoveFoundsLockedModal } from './MoveFoundsLockedModal'
 import { MoveFoundsTransferableModal } from './MoveFoundsTransferableModal'
 
@@ -42,6 +43,16 @@ export const MoveFundsModal = () => {
         requiredStake={requiredStake}
         balances={balances}
         accounts={accounts}
+      />
+    )
+  }
+
+  if (type === MoveFoundsModalType.NO_FOUNDS) {
+    return (
+      <MoveFoundsInsufficientBalanceModal
+        onClose={hideModal}
+        onManageAccountsClick={onManageAccountsClick}
+        requiredStake={requiredStake}
       />
     )
   }

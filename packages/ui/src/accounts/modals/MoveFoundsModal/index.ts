@@ -11,7 +11,7 @@ export type MoveFundsModalCall = ModalWithDataCall<
   {
     requiredStake: number
     type: MoveFoundsModalType
-    accounts: Account[]
-    lockedFoundsAccounts: { [key in Address]: Account[] }
+    accounts?: Account[]
+    lockedFoundsAccounts?: { [key in Address]: Account[] }
   }
 >

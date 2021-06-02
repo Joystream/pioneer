@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
+import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFoundsModalType } from '@/accounts/modals/MoveFoundsModal/constants'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Arrow } from '@/common/components/icons'
@@ -20,6 +23,36 @@ import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
 
 export const OpeningDetails = ({ opening }: Props) => {
   const { showModal } = useModal()
+  const requiredStake = opening.stake.toNumber()
+  const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
+
+  const onApplyNowClick = useCallback(() => {
+    if (hasRequiredStake === true) {
+      showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })
+    }
+    if (hasRequiredStake === false) {
+      if (transferableAccounts) {
+        showModal<MoveFundsModalCall>({
+          modal: 'MoveFundsModal',
+          data: { type: MoveFoundsModalType.TRANSFERABLE, accounts: transferableAccounts, requiredStake },
+        })
+      } else if (!transferableAccounts && accountsWithLockedFounds && Object.keys(accountsWithLockedFounds).length) {
+        showModal<MoveFundsModalCall>({
+          modal: 'MoveFundsModal',
+          data: {
+            type: MoveFoundsModalType.LOCKED_FOUNDS,
+            lockedFoundsAccounts: accountsWithLockedFounds,
+            requiredStake,
+          },
+        })
+      } else {
+        showModal<MoveFundsModalCall>({
+          modal: 'MoveFundsModal',
+          data: { type: MoveFoundsModalType.NO_FOUNDS, requiredStake },
+        })
+      }
+    }
+  }, [hasRequiredStake, transferableAccounts])
 
   return (
     <OpenedContainer>
@@ -54,7 +87,7 @@ export const OpeningDetails = ({ opening }: Props) => {
           </StatsBlock>
           <StatsBlock size="m" centered spacing="s">
             <TextBig>
-              <TokenValue value={opening.reward.payout} />
+              <TokenValue value={opening.stake} />
             </TextBig>
             <Subscription>Minimum Stake Required</Subscription>
           </StatsBlock>
@@ -64,11 +97,7 @@ export const OpeningDetails = ({ opening }: Props) => {
             <Arrow direction="left" />
             Learn more
           </LinkButtonGhost>
-          <ButtonPrimary
-            onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
-            size="medium"
-            disabled={!isOpeningOpen(opening)}
-          >
+          <ButtonPrimary onClick={onApplyNowClick} size="medium" disabled={!isOpeningOpen(opening)}>
             Apply now
           </ButtonPrimary>
         </ButtonsGroup>
