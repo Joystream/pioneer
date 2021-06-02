@@ -43,8 +43,9 @@ export function HistoryTab() {
 }
 
 const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
-  const [page, setPage] = useState<number>(0)
+  const [page, setPage] = useState<number>(1)
   const { isLoading, openings, pageCount } = useOpenings({ groupId, type: 'past', page })
+
   return isLoading ? (
     <Loading />
   ) : (
