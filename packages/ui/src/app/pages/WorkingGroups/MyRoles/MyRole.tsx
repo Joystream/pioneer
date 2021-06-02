@@ -77,8 +77,6 @@ export const MyRole = () => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
   }
 
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
-
   if (isLoading || !worker) {
     return <Loading />
   }
