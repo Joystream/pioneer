@@ -67,6 +67,8 @@ export const MyRole = () => {
       })
   }, [worker])
 
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
+
   const onChangeRoleClick = (): void => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_ROLE_ACCOUNT } })
   }
@@ -74,8 +76,6 @@ export const MyRole = () => {
   const onChangeRewardClick = (): void => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
   }
-
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   if (isLoading || !worker) {
     return <Loading />
