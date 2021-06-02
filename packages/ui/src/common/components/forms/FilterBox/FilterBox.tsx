@@ -39,6 +39,8 @@ const FilterContainer = styled.div`
 const ClearButton = styled(StyledLink)`
   align-self: flex-end;
   color: ${Colors.Black[400]};
+  font-size: 10px;
+  line-height: 16px;
   text-decoration: none;
   visibility: ${({ show = true }: { show?: boolean }) => (show ? 'visible' : 'hidden')};
 
@@ -46,7 +48,7 @@ const ClearButton = styled(StyledLink)`
     color: ${Colors.Black[900]};
     margin-right: 6px;
     vertical-align: middle;
-    width: 12px;
+    width: 10px;
   }
 `
 
