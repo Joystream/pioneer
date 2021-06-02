@@ -36,10 +36,3 @@ describe('getNextPayout', () => {
     },
   })
 })
-
-/*  Payout intervals in blocks:
-    forum: 14400 + 10
-    storage: 14400 + 20
-    content: 14400 + 30
-    membership: 14400 + 40
-*/
