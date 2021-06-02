@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import styled from 'styled-components'
 
 import { InputComponent, InputText } from '@/common/components/forms'
 import { SearchIcon } from '@/common/components/icons'
@@ -24,10 +25,19 @@ export const FilterSearchBox = React.memo(({ value, slot, onApply, onChange }: S
   return (
     slot.current &&
     createPortal(
-      <InputComponent icon={<SearchIcon />} tight inputWidth="xs">
+      <SearchInput>
         <InputText placeholder="Search" value={value} onChange={change} onKeyDown={keyDown} />
-      </InputComponent>,
+      </SearchInput>,
       slot.current
     )
   )
 })
+
+const SearchInput = styled(InputComponent).attrs({
+  icon: <SearchIcon />,
+  tight: true,
+  inputSize: 's',
+  inputWidth: 'xs',
+})`
+  width: 240px;
+`

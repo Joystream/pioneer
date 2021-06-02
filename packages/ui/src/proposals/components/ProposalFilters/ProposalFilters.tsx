@@ -98,6 +98,7 @@ export const ProposalFilters = ({
           value={type}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'type', value })
+            onApply({ ...filters, type: value })
           }}
         />
 
@@ -121,6 +122,7 @@ export const ProposalFilters = ({
           value={proposer}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'proposer', value })
+            onApply({ ...filters, proposer: value })
           }}
         />
 
@@ -130,6 +132,7 @@ export const ProposalFilters = ({
           value={stage}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'stage', value })
+            onApply({ ...filters, stage: value })
           }}
         />
       </Fields>

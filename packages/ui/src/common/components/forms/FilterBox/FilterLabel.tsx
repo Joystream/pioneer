@@ -1,10 +1,13 @@
 import styled from 'styled-components'
 
 import { TextSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { Fonts } from '@/common/constants'
 
 export const FilterLabel = styled(TextSmall).attrs({ bold: true, lighter: true })`
-  color: ${Colors.Grey};
+  cursor: pointer;
+  font-family: ${Fonts.Grotesk};
+  font-size: 10px;
+  line-height: 16px;
   text-transform: uppercase;
   white-space: nowrap;
 `
