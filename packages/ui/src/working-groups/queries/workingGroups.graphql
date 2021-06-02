@@ -120,6 +120,7 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   status {
     __typename
   }
+  unstakingPeriod
 }
 
 fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {

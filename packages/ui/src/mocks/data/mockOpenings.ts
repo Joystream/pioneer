@@ -57,6 +57,7 @@ export const getMockAsOpening = (index = 0) => {
       timestamp: faker.date.recent(2).toJSON(),
       network: Network.Olympia,
     },
+    unstakingPeriod: 14400,
   })
 }
 
