@@ -19,6 +19,7 @@ fragment WorkerFields on Worker {
   }
   isLead
   rewardPerBlock
+  missingRewardAmount
   stake
   roleAccount
   rewardAccount

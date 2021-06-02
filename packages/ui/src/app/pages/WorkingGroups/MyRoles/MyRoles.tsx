@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 
 import { AppPage } from '@/app/components/AppPage'
@@ -17,6 +18,8 @@ import { WorkingGroupsTabs } from '../components/WorkingGroupsTabs'
 
 export const MyRoles = () => {
   const { isLoading, workers } = useMyWorkers()
+
+  const owedReward = workers.reduce((a, b) => a.add(new BN(b.owedReward)), new BN(0))
 
   const displayRoles = () => {
     if (isLoading) {
@@ -50,7 +53,7 @@ export const MyRoles = () => {
         <Statistics>
           <MyEarningsStat />
           <MyStakeStat />
-          <TokenValueStat title="Total owed reward" value={150000} />
+          <TokenValueStat title="Total owed reward" value={owedReward} />
           <NextPayoutStat workers={workers} />
         </Statistics>
         {displayRoles()}

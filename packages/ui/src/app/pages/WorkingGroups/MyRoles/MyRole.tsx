@@ -15,12 +15,12 @@ import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { MultiTokenValueStat, Statistics, TokenValueStat } from '@/common/components/statistics'
-import { StakeStat } from '@/common/components/statistics/StakeStat'
+import { MultiTokenValueStat, Statistics, TokenValueStat, StakeStat } from '@/common/components/statistics'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
 import { useActivities } from '@/common/hooks/useActivities'
 import { useModal } from '@/common/hooks/useModal'
+import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useWorker } from '@/working-groups/hooks/useWorker'
@@ -130,7 +130,7 @@ export const MyRole = () => {
           ]}
         />
         <StakeStat value={worker.stake} minStake={worker.minStake} />
-        <TokenValueStat title="Owed reward" value={150000} />
+        <TokenValueStat title="Owed reward" value={worker.owedReward} />
         <TokenValueStat title="Next payout in" value={150000} />
       </Statistics>
       <ContentWithSidepanel>

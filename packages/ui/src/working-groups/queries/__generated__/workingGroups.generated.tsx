@@ -22,6 +22,7 @@ export type WorkerFieldsFragment = {
   id: string
   isLead: boolean
   rewardPerBlock: any
+  missingRewardAmount?: Types.Maybe<any>
   stake: any
   roleAccount: string
   rewardAccount: string
@@ -314,6 +315,7 @@ export const WorkerFieldsFragmentDoc = gql`
     }
     isLead
     rewardPerBlock
+    missingRewardAmount
     stake
     roleAccount
     rewardAccount
