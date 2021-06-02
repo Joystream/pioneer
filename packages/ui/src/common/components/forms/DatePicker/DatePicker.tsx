@@ -50,11 +50,7 @@ export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChan
 
   return (
     <DatePickerContainer ref={container} onMouseDown={() => !isOpen && toggleOpen(true)}>
-      {title && (
-        <FilterLabel lighter bold>
-          {title}
-        </FilterLabel>
-      )}
+      {title && <FilterLabel>{title}</FilterLabel>}
       <DatePickerInput tight inputWidth="xs">
         <InputText placeholder="-" value={dateString} readOnly />
         {isOpen && (
