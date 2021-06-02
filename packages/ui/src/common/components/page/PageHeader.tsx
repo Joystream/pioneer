@@ -6,7 +6,7 @@ export const PageHeader = styled.section`
   display: flex;
   position: relative;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 16px 8px;
 
   ${ButtonsGroup} {
