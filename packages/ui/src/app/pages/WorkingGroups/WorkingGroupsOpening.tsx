@@ -33,6 +33,7 @@ export const WorkingGroupOpening = () => {
   const { active: activeMembership } = useMyMemberships()
   const { isLoading, opening } = useOpening(id)
   const { copyValue } = useCopyToClipboard()
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const hiredMember = useMemo(() => {
     if (opening) {
@@ -86,8 +87,6 @@ export const WorkingGroupOpening = () => {
       {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
     </ApplicationStatusWrapper>
   ))
-
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <AppPage lastBreadcrumb={opening.title} rowGap="s">
