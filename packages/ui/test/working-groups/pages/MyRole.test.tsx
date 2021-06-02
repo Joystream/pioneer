@@ -87,50 +87,6 @@ describe('UI: My Role Page', () => {
     })
   })
 
-  // it('Loaded', async () => {
-  //   seedMembers(mockServer.server)
-  //   seedWorkingGroups(mockServer.server)
-  //   seedOpenings(mockServer.server)
-  //   seedApplications(mockServer.server)
-  //   seedWorkers(mockServer.server)
-  //
-  //   const workerSchema = mockServer.server?.schema.first('Worker')
-  //
-  //   seedRewardPaidEvent(
-  //     {
-  //       id: '0',
-  //       createdAt: new Date().toISOString(),
-  //       eventId: '0',
-  //       groupId: workerSchema?.attrs.groupId as string,
-  //       workerId: workerSchema?.attrs.id as string,
-  //       rewardAccount: workerSchema?.attrs.rewardAccount as string,
-  //       amount: 100,
-  //       type: 'REGULAR',
-  //     },
-  //     mockServer.server
-  //   )
-  //   seedRewardPaidEvent(
-  //     {
-  //       id: '1',
-  //       createdAt: subDays(startOfToday(), 10).toISOString(),
-  //       eventId: '0',
-  //       groupId: workerSchema?.attrs.groupId as string,
-  //       workerId: workerSchema?.attrs.id as string,
-  //       rewardAccount: workerSchema?.attrs.rewardAccount as string,
-  //       amount: 500,
-  //       type: 'REGULAR',
-  //     },
-  //     mockServer.server
-  //   )
-  //
-  //   renderStat()
-  //
-  //   await waitForElementToBeRemoved(() => screen.getAllByText('-')[0])
-  //
-  //   expect(screen.getByText('100')).toBeDefined()
-  //   expect(screen.getByText('600')).toBeDefined()
-  // })
-
   function renderPage() {
     return render(
       <MemoryRouter initialEntries={[`working-groups/my-roles/${mockWorker.id}`]}>
