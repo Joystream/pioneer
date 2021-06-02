@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { prettyDOM, render, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'
