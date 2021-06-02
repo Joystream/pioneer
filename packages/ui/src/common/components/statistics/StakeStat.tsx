@@ -41,4 +41,6 @@ const MinStakeText = styled(TextMedium)`
 `
 const Icon = styled(WarnedIcon)`
   color: ${Colors.Red[400]};
+  width: 15px;
+  height: 15px;
 `

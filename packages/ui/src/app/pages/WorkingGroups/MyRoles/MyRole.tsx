@@ -137,7 +137,7 @@ export const MyRole = () => {
               },
             ]}
           />
-          <StakeStat value={worker.stake} minStake={100000} />
+          <StakeStat value={worker.stake} minStake={worker.minStake} />
           <TokenValueStat title="Owed reward" value={150000} />
           <TokenValueStat title="Next payout in" value={150000} />
         </Statistics>

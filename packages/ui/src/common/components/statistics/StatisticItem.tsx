@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Shadows } from '../../constants'
@@ -100,7 +100,7 @@ const StatsHeader = styled.div`
 
 const StatsInfo = styled(Label)`
   position: relative;
-  align-items: center;
+  align-items: start;
 `
 
 const StatsContent = styled.div`
