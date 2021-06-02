@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import { subHours, startOfToday, subDays } from 'date-fns'
+import { startOfToday, subDays, subHours } from 'date-fns'
 
 import { RewardPaidEventWhereInput } from '@/common/api/queries'
 import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
@@ -11,6 +11,13 @@ export interface UseMyEarnings {
   month: BN | null
 }
 
+const getEarnings = (allEvents: RewardPaidEventFieldsFragment[]) => allEvents.reduce((a, b) => a + Number(b.amount), 0)
+
+const getFilterTodayEvents = () => {
+  const time = subHours(Date.now(), 24).getTime()
+  return ({ createdAt }: { createdAt: string }) => new Date(createdAt).getTime() >= time
+}
+
 export function useMyEarnings(): UseMyEarnings {
   const { workers } = useMyWorkers()
 
@@ -20,21 +27,19 @@ export function useMyEarnings(): UseMyEarnings {
   }
   const { loading, data } = useGetRewardsQuery({ variables: { where } })
 
-  if (loading) {
+  if (loading || !data) {
     return {
       last24hours: null,
       month: null,
     }
   }
 
-  const monthEarnings = data ? data.rewardPaidEvents.reduce((a, b) => a + Number(b.amount), 0) : 0
+  const monthEarnings = getEarnings(data.rewardPaidEvents)
+  const last24hoursEvents = data.rewardPaidEvents.filter(getFilterTodayEvents())
+  const last24hoursEarnings = getEarnings(last24hoursEvents)
 
-  const last24hoursEvents = data
-    ? data.rewardPaidEvents.filter(
-        (event: RewardPaidEventFieldsFragment) => new Date(event.createdAt) >= subHours(Date.now(), 24)
-      )
-    : []
-  const last24hoursEarnings = last24hoursEvents.reduce((a, b) => a + Number(b.amount), 0)
-
-  return { last24hours: new BN(last24hoursEarnings), month: new BN(monthEarnings) }
+  return {
+    last24hours: new BN(last24hoursEarnings),
+    month: new BN(monthEarnings),
+  }
 }
