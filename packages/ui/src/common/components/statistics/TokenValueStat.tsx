@@ -7,7 +7,7 @@ import { TokenValue } from '../typography'
 import { StatisticItem, StatisticItemProps } from './StatisticItem'
 
 export interface TokenValueStatProps extends StatisticItemProps {
-  value: number | BN
+  value?: number | BN | null
 }
 
 export const TokenValueStat = (props: TokenValueStatProps) => {

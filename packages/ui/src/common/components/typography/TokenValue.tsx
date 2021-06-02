@@ -5,22 +5,24 @@ import styled from 'styled-components'
 import { Colors, Fonts } from '../../constants'
 import { formatTokenValue } from '../../model/formatters'
 
-interface ValueProps extends ValueSizingProps {
-  value: BN | number | undefined
-  className?: string
-}
-
 interface ValueSizingProps {
   size?: 's' | 'm' | 'l'
 }
 
+interface ValueProps extends ValueSizingProps {
+  value?: BN | number | null
+  className?: string
+}
+
 export const TokenValue = React.memo(({ className, value, size }: ValueProps) => {
-  return value ? (
+  if (!value) {
+    return <span>-</span>
+  }
+
+  return (
     <ValueInJoys className={className} size={size}>
       {formatTokenValue(value)}
     </ValueInJoys>
-  ) : (
-    <span>-</span>
   )
 })
 

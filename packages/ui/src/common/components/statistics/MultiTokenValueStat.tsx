@@ -5,7 +5,10 @@ import styled from 'styled-components'
 import { StatisticItem, StatisticItemProps, StatisticItemSpacedContent, StatisticLabel } from './StatisticItem'
 import { TotalValue } from './TokenValueStat'
 
-type LabelledValue = { label: string; value: BN | number }
+interface LabelledValue {
+  label: string
+  value?: BN | number | null
+}
 
 interface MultiTokenValueStatProps extends StatisticItemProps {
   values: LabelledValue[]
