@@ -31,6 +31,14 @@ const getFilter = (where: Record<string, any>) => {
     if (type === 'in') {
       filters.push((model: Record<string, any>) => checkValue.includes(model[field]))
     }
+
+    if (type === 'gte') {
+      if (field === 'createdAt') {
+        filters.push((model: Record<string, any>) => new Date(model[field]).getTime() >= new Date(checkValue).getTime())
+      } else {
+        filters.push((model: Record<string, any>) => String(model[field]).localeCompare(checkValue.toString()) === 1)
+      }
+    }
   }
 
   return (model: any) => filters.every((value) => value(model))

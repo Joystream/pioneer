@@ -25,7 +25,7 @@ export const Members = () => {
     setPage(1)
   }, [filter, order])
 
-  const { members, isLoading, pageCount } = useMembers({ order, filter, page })
+  const { members, isLoading, totalCount, pageCount } = useMembers({ order, filter, page })
 
   const roles: { [key: string]: string } = {}
   for (const member of members) {
@@ -40,7 +40,7 @@ export const Members = () => {
         <PageTitle>Members</PageTitle>
       </PageHeader>
       <MainPanel>
-        <MemberListFilters roles={roles} onApply={setFilter} />
+        <MemberListFilters memberCount={totalCount} roles={roles} onApply={setFilter} />
         <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
         {!isLoading && !!pageCount && pageCount > 1 && (
           <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />

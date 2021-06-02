@@ -5,8 +5,7 @@ import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { BadgeRed } from '@/common/components/BadgeRed'
-import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
@@ -76,10 +75,11 @@ export const MyRole = () => {
     showModal({ modal: 'ChangeAccountModal', data: { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT } })
   }
 
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
+
   if (isLoading || !worker) {
     return <Loading />
   }
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
     <AppPage lastBreadcrumb={workerRoleTitle(worker)} rowGap="s">
@@ -106,19 +106,19 @@ export const MyRole = () => {
       </PageHeader>
       <RowGapBlock>
         <Row>
-          <BadgeViolet inverted size="l" separated>
+          <BadgeStatus inverted size="l" separated>
             {worker.group.name.toUpperCase()}
-          </BadgeViolet>
-          <BadgeViolet inverted size="l" separated>
+          </BadgeStatus>
+          <BadgeStatus inverted size="l" separated>
             {worker.isLeader ? 'LEADER' : 'REGULAR'}
-          </BadgeViolet>
-          <BadgeViolet inverted size="l" separated>
+          </BadgeStatus>
+          <BadgeStatus inverted size="l" separated>
             WORKER ID #{worker.id}
-          </BadgeViolet>
+          </BadgeStatus>
           {!isActive && (
-            <BadgeRed inverted size="l" separated>
+            <BadgeStatus ended inverted size="l" separated>
               ROLE ENDED
-            </BadgeRed>
+            </BadgeStatus>
           )}
         </Row>
         <Statistics>

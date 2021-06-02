@@ -8,7 +8,9 @@ import schema from '../common/api/schemas/schema.graphql'
 
 import { seedBlocks, seedMembers } from './data'
 import { seedApplications } from './data/mockApplications'
+import { seedEvents } from './data/mockEvents'
 import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
+import { seedRewardPaidEvents } from './data/mockRewardPaidEvents'
 import { seedWorkingGroups } from './data/mockWorkingGroups'
 import { seedWorkers } from './data/seedWorkers'
 import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
@@ -62,6 +64,7 @@ export const makeServer = (environment = 'development') => {
               workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
               applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
               upcomingWorkingGroupOpenings: getWhereResolver('UpcomingWorkingGroupOpening'),
+              rewardPaidEvents: getWhereResolver('RewardPaidEvent'),
             },
           },
         })
@@ -79,6 +82,8 @@ export const makeServer = (environment = 'development') => {
       seedUpcomingOpenings(server)
       seedApplications(server)
       seedWorkers(server)
+      seedEvents(server)
+      seedRewardPaidEvents(server)
     },
   })
 }

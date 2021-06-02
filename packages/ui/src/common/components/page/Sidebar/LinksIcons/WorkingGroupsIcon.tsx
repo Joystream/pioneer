@@ -4,27 +4,19 @@ import { Icon } from '../../../icons'
 
 export const WorkingGroupsIcon = () => (
   <Icon
-    size="16"
-    viewBox="0 0 16 16"
+    size="20"
+    viewBox="0 0 20 20"
     preserveAspectRatio="xMidYMid meet"
     fill="none"
     color="currentColor"
     className="nav-icon"
   >
     <path
-      className="whitePart"
-      d="M4.90905 2.66667L5.57572 2H10.4242L11.0909 2.66667V3.77778H15.3333V7.7037L14.6666 8.37037H11V7.03704H14V5.11111H9.75753V3.33333H6.24238V5.11111H1.99996V7.03704H4.99996V8.37037H1.33329L0.666626 7.7037V3.77778H4.90905V2.66667ZM0.666626 13.3333V8.88889H1.99996V12.6667H14V8.88889H15.3333V13.3333L14.6666 14H1.33329L0.666626 13.3333Z"
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M0.833252 10H5.83325H6.66658V7.5H13.3333V10H19.1666V5.83333L18.3333 5H14.1666V3.33333L13.3333 2.5H6.66658L5.83325 3.33333V5H1.66659L0.833252 5.83333V10ZM6.66658 11.6667V14.1667H13.3333V11.6667H19.1666V17.5H0.833252V11.6667H6.66658Z"
       fill="currentColor"
     />
-    <path
-      className="primaryPart"
-      d="M6 9.33301H7.33333V9.99967H8.66667V9.33301H10V11.333H6V9.33301Z"
-      fill="currentColor"
-    />
-    <path
-      className="whitePart"
-      d="M6 8.66699H7.33333V8.00033H8.66667V8.66699H10V6.66699H6V8.66699Z"
-      fill="currentColor"
-    />
+    <rect x="8.33325" y="9.16663" width="3.33333" height="3.33333" fill="currentColor" />
   </Icon>
 )

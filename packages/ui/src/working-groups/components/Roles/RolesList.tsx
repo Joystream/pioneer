@@ -3,7 +3,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons'
 import { KebabMenuIcon } from '@/common/components/icons'
 import { List, ListItem } from '@/common/components/List'
@@ -42,8 +42,8 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
     <OACWrap>
       <OACItemInfo>
         <OACItemInfoTop>
-          <BadgeViolet>{worker.group.name}</BadgeViolet>
-          {worker.isLeader && <BadgeViolet>LEADER</BadgeViolet>}
+          <BadgeStatus>{worker.group.name}</BadgeStatus>
+          {worker.isLeader && <BadgeStatus>LEADER</BadgeStatus>}
         </OACItemInfoTop>
         <Title onClick={() => history.push(`/working-groups/my-roles/${worker.id}`)}>{workerRoleTitle(worker)}</Title>
       </OACItemInfo>

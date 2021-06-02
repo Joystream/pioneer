@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
-import { BadgeRed } from '@/common/components/BadgeRed'
-import { BadgeViolet } from '@/common/components/BadgeViolet'
+import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
@@ -50,13 +49,13 @@ export const WorkingGroupOpening = () => {
     const { status } = opening
     const label = MappedStatuses[opening.status]
     return status === OpeningStatuses.CANCELLED ? (
-      <BadgeRed inverted size="l" separated>
+      <BadgeStatus ended inverted size="l" separated>
         {label}
-      </BadgeRed>
+      </BadgeStatus>
     ) : (
-      <BadgeViolet inverted size="l" separated>
+      <BadgeStatus inverted size="l" separated>
         {label}
-      </BadgeViolet>
+      </BadgeStatus>
     )
   })
 
@@ -114,12 +113,12 @@ export const WorkingGroupOpening = () => {
       </PageHeader>
       <RowGapBlock>
         <Row>
-          <BadgeViolet inverted size="l" separated>
+          <BadgeStatus inverted size="l" separated>
             {opening.groupName}
-          </BadgeViolet>
-          <BadgeViolet inverted size="l" separated>
+          </BadgeStatus>
+          <BadgeStatus inverted size="l" separated>
             {opening.type}
-          </BadgeViolet>
+          </BadgeStatus>
           <StatusBadge />
         </Row>
         <Statistics>

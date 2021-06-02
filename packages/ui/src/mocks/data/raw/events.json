@@ -1,0 +1,52 @@
+[
+  {
+    "id": "0",
+    "createdAt": "2021-05-02T21:37:39.263Z",
+    "type": "RewardPaid"
+  },
+  {
+    "id": "1",
+    "createdAt": "2021-05-17T17:41:19.678Z",
+    "type": "RewardPaid"
+  },
+  {
+    "id": "2",
+    "createdAt": "2021-05-11T18:49:03.633Z",
+    "type": "RewardPaid"
+  },
+  {
+    "id": "3",
+    "createdAt": "2021-05-06T14:05:14.775Z",
+    "type": "RewardPaid"
+  },
+  {
+    "id": "4",
+    "createdAt": "2021-05-01T02:47:52.701Z",
+    "type": "RewardPaid"
+  },
+  {
+    "id": "5",
+    "createdAt": "2021-05-17T02:51:36.949Z",
+    "type": "RewardPaid"
+  },
+  {
+    "id": "6",
+    "createdAt": "2021-05-01T08:14:58.322Z",
+    "type": "RewardPaid"
+  },
+  {
+    "id": "7",
+    "createdAt": "2021-05-05T12:21:18.015Z",
+    "type": "RewardPaid"
+  },
+  {
+    "id": "8",
+    "createdAt": "2021-06-01T08:22:48.512Z",
+    "type": "RewardPaid"
+  },
+  {
+    "id": "9",
+    "createdAt": "2021-05-22T19:05:46.776Z",
+    "type": "RewardPaid"
+  }
+]

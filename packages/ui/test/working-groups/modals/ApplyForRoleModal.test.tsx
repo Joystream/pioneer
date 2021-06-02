@@ -2,7 +2,7 @@ import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -248,7 +248,7 @@ describe('UI: ApplyForRoleModal', () => {
 
   function renderModal() {
     return render(
-      <BrowserRouter>
+      <MemoryRouter>
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
@@ -262,7 +262,7 @@ describe('UI: ApplyForRoleModal', () => {
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     )
   }
 })

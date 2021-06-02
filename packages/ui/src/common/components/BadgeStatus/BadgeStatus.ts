@@ -1,15 +1,16 @@
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Overflow } from '../constants'
-import { spacing } from '../utils/styles'
+import { BorderRad, Colors, Overflow } from '../../constants'
+import { spacing } from '../../utils/styles'
 
-interface BadgeVioletProps {
+export interface BadgeStatusProps {
   inverted?: boolean
   size?: 'm' | 'l'
   separated?: boolean
+  ended?: boolean
 }
 
-export const BadgeViolet = styled.span<BadgeVioletProps>`
+export const BadgeStatus = styled.span<BadgeStatusProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,4 +49,11 @@ export const BadgeViolet = styled.span<BadgeVioletProps>`
           color: ${Colors.White};
           background-color: ${Colors.Blue[200]};
         `};
+
+  ${({ ended }) =>
+    ended &&
+    css`
+      color: ${Colors.Red[400]};
+      background-color: ${Colors.Red[50]};
+    `}
 `
