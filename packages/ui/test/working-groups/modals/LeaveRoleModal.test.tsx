@@ -1,7 +1,7 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -96,8 +96,9 @@ describe('UI: LeaveRoleModal', () => {
       showModal: () => null,
       hideModal: () => null,
     }
+
     return render(
-      <BrowserRouter>
+      <MemoryRouter>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <AccountsContext.Provider value={useAccounts}>
@@ -111,7 +112,7 @@ describe('UI: LeaveRoleModal', () => {
             </AccountsContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </BrowserRouter>
+      </MemoryRouter>
     )
   }
 })

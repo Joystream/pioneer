@@ -1,8 +1,8 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { screen, render, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import { startOfToday, subDays } from 'date-fns'
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -94,7 +94,7 @@ describe('MyEarningsStat', () => {
 
   function renderStat() {
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <AccountsContext.Provider value={useAccounts}>
@@ -104,7 +104,7 @@ describe('MyEarningsStat', () => {
             </AccountsContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </BrowserRouter>
+      </MemoryRouter>
     )
   }
 })
