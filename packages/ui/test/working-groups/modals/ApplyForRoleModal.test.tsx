@@ -31,7 +31,7 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const OPENING_DATA = {
+export const OPENING_DATA = {
   groupId: '0',
   type: 'REGULAR',
   status: 'open',

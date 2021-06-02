@@ -79,8 +79,8 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && displayOpenings(upcomingLoading, upcomingOpenings, UpcomingOpeningsList)}
-            {activeTab === 'UPCOMING' && displayOpenings(currentLoading, currentOpenings, OpeningsList)}
+            {activeTab === 'OPENINGS' && displayOpenings(currentLoading, currentOpenings, OpeningsList)}
+            {activeTab === 'UPCOMING' && displayOpenings(upcomingLoading, upcomingOpenings, UpcomingOpeningsList)}
           </ContentWithTabs>
         </MainPanel>
         <SidePanel neighbor={sideNeighborRef}>

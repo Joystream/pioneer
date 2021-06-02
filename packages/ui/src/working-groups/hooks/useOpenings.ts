@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
+import { error as logError } from '@/common/logger'
+
 import { isOpeningOpen } from '../model/isOpeningOpen'
 import { useGetWorkingGroupOpeningsConnectionQuery } from '../queries'
 import { asWorkingGroupOpening, WorkingGroupOpening } from '../types'
@@ -27,9 +29,13 @@ export const useOpenings = ({ groupId, type, page }: UseOpeningsParams) => {
     last: page !== undefined && page > 1 ? OPENINGS_PER_PAGE : undefined,
     groupId_eq: groupId,
   }
-  const { loading, data } = useGetWorkingGroupOpeningsConnectionQuery({ variables })
-
+  const { loading, data, error } = useGetWorkingGroupOpeningsConnectionQuery({ variables })
   const [totalCount, setTotalCount] = useState<number>()
+
+  if (error) {
+    logError(error)
+  }
+
   useEffect(() => {
     if (!totalCount && data?.workingGroupOpeningsConnection.totalCount) {
       setTotalCount(data?.workingGroupOpeningsConnection.totalCount)
