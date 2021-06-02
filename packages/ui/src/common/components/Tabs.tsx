@@ -40,8 +40,7 @@ export const Tabs = ({ tabs, className, tabsSize }: TabsProps) => (
 
 const Tab = ({ active, onClick, title, count }: TabProps) => (
   <TabContainer active={active} onClick={onClick}>
-    {title}
-    {count !== undefined && <CountBadge count={count} />}
+    {title} {count !== undefined && <CountBadge count={count} />}
   </TabContainer>
 )
 

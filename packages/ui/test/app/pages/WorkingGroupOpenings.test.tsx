@@ -21,6 +21,20 @@ describe('WorkingGroupOpenings', () => {
   })
 
   it('Renders page', async () => {
+    renderPage()
+
+    expect(await screen.findByRole('heading', { name: 'Working Groups' })).toBeDefined()
+  })
+
+  it('No openings', async () => {
+    renderPage()
+
+    expect(await screen.findByText('No openings found')).toBeDefined()
+    expect(await screen.findByRole('button', { name: /^Openings 0/i })).toBeDefined()
+    expect(await screen.findByRole('button', { name: /^Upcoming openings 0/i })).toBeDefined()
+  })
+
+  function renderPage() {
     render(
       <MemoryRouter>
         <MockQueryNodeProviders>
@@ -28,7 +42,5 @@ describe('WorkingGroupOpenings', () => {
         </MockQueryNodeProviders>
       </MemoryRouter>
     )
-
-    expect(await screen.findByRole('heading', { name: 'Working Groups' })).toBeDefined()
-  })
+  }
 })
