@@ -24,11 +24,12 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-import { WORKER } from './constants'
+import { getDefaultWorker } from '../../_mocks/workers'
 
 describe('UI: LeaveRoleModal', () => {
   const api = stubApi()
+
+  const worker = getDefaultWorker()
 
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -76,7 +77,7 @@ describe('UI: LeaveRoleModal', () => {
 
     it('Transaction success', async () => {
       await renderSignStep()
-      stubTransactionSuccess(transaction, [WORKER.id], 'workingGroup', 'WorkerStartedLeaving')
+      stubTransactionSuccess(transaction, [worker.id], 'workingGroup', 'WorkerStartedLeaving')
       fireEvent.click(screen.getByRole('button', { name: 'Sign and leave role' }))
       expect(await screen.findByText('Success!')).toBeDefined()
     })
@@ -89,7 +90,7 @@ describe('UI: LeaveRoleModal', () => {
     })
   })
 
-  function renderModal(worker = WORKER) {
+  function renderModal() {
     const modalContext = {
       modal: 'LeaveRole',
       modalData: { worker },

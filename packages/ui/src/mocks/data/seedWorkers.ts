@@ -4,7 +4,7 @@ import rawWorkers from './raw/workers.json'
 
 type WorkerStatus = 'active' | 'left' | 'terminated'
 
-interface RawWorker {
+export interface RawWorker {
   id: string
   membershipId: string
   status: string
@@ -19,7 +19,7 @@ export type MockWorker = Worker & { groupId: string; memberId: string; applicati
 
 export const mockWorkers = rawWorkers.map((rawGroup) => ({ ...rawGroup }))
 
-const seedWorker = (worker: RawWorker, server: any) => {
+export const seedWorker = (worker: RawWorker, server: any) => {
   const member = server.schema.find('Membership', worker.membershipId)
   return server.schema.create('Worker', {
     roleAccount: member.controllerAccount,

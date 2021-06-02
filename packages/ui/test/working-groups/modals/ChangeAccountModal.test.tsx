@@ -26,10 +26,11 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-import { WORKER as worker } from './constants'
+import { getDefaultWorker } from '../../_mocks/workers'
 
 describe('UI: ChangeRoleModal', () => {
+  const worker = getDefaultWorker()
+
   const api = stubApi()
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
