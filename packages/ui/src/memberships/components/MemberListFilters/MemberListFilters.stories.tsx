@@ -3,10 +3,14 @@ import React, { useRef } from 'react'
 
 import { FilterPageHeader } from '@/common/components/forms/FilterBox'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
+import { MemberRole } from '@/memberships/types'
 
 import { MemberListFilters, MemberListFiltersProps } from '.'
 
-const Roles = { AB: 'ab' }
+const Roles: MemberRole[] = [
+  { groupName: 'Member Role', isLeader: false },
+  { groupName: 'Forum', isLeader: true },
+]
 
 export default {
   title: 'Member/MemberListFilters',

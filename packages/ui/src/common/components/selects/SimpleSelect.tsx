@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { ReactNode, useMemo, useReducer } from 'react'
 import styled, { css } from 'styled-components'
 
 import { ControlProps } from '@/common/components/forms'
@@ -9,12 +9,10 @@ import { stopEvent } from '@/common/utils/events'
 
 import { Select } from '.'
 
-interface SimpleSelectProps<T> extends ControlProps<T> {
-  title?: string
-  options: { [label: string]: T }
-}
+type Option = string | ReactNode
+type ValueToOption<T> = (value: T) => Option
 
-type Move<T> = { type: 'move'; entries: [string, T][]; step: number }
+type Move<T> = { type: 'move'; entries: [Option, T][]; step: number }
 type Set<T> = { type: 'set'; value: T | undefined }
 type Action<T> = Move<T> | Set<T>
 
@@ -35,11 +33,27 @@ const selectFocusReducer = <T extends any>(value: T | undefined, action: Action<
   }
 }
 
-export const SimpleSelect = <T extends any>({ title = '', options, value, onChange }: SimpleSelectProps<T>) => {
-  const [focused, focus] = useReducer(selectFocusReducer as FocusReducer<T>, value)
-  const entries = Object.entries(options) as [string, T][]
+interface SimpleSelectProps<T> extends FilterSelectProps<T> {
+  emptyOption?: Option
+}
 
-  const forwardChange = (value: T) => {
+export const SimpleSelect = <T extends any>({
+  title,
+  values,
+  emptyOption,
+  renderOption = String,
+  renderSelected,
+  value,
+  onChange,
+}: SimpleSelectProps<T>) => {
+  const [focused, focus] = useReducer(selectFocusReducer as FocusReducer<T | null>, value)
+
+  const entries = useMemo<[Option, T | null][]>(() => {
+    const valueEntries: [Option, T][] = values.map((value) => [renderOption(value), value])
+    return isDefined(emptyOption) ? [[emptyOption, null], ...valueEntries] : valueEntries
+  }, [values, renderOption, emptyOption])
+
+  const forwardChange = (value: T | null) => {
     focus({ type: 'set', value })
     onChange(value)
   }
@@ -57,9 +71,11 @@ export const SimpleSelect = <T extends any>({ title = '', options, value, onChan
     }
   }
 
-  const renderSelected = (value: T) => <Selected>{entries.find(([, v]) => v === value)?.[0]}</Selected>
+  const renderSelectedOption = (value: T | null) => (
+    <Selected>{renderSelected?.(value) ?? (value === null ? emptyOption : renderOption(value))}</Selected>
+  )
 
-  const renderList = (select: (value: T) => void) => (
+  const renderList = (select: (value: T | null) => void) => (
     <OptionsContainer>
       {entries.map(([label, val], key) => {
         const onClick: React.MouseEventHandler = (evt) => {
@@ -83,13 +99,23 @@ export const SimpleSelect = <T extends any>({ title = '', options, value, onChan
         selected={value}
         onNavigate={navigate}
         onChange={forwardChange}
-        renderSelected={renderSelected}
+        renderSelected={renderSelectedOption}
         renderList={renderList}
-        alwaysShowValue
       />
     </SelectContainer>
   )
 }
+
+interface FilterSelectProps<T> extends ControlProps<T | null> {
+  title?: string
+  values: T[]
+  renderOption?: ValueToOption<T>
+  renderSelected?: (value: T | null) => Option
+}
+
+export const FilterSelect = <T extends any>(props: FilterSelectProps<T>) => (
+  <SimpleSelect {...props} emptyOption="All" />
+)
 
 const SelectContainer = styled.label`
   display: block;

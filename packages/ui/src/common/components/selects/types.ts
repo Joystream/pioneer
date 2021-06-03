@@ -4,7 +4,6 @@ export interface SelectProps<T> {
   disabled?: boolean
   placeholder: string
   selected?: T
-  alwaysShowValue?: boolean
   onNavigate?: React.KeyboardEventHandler
   onChange: (selected: T) => void
   onSearch?: (search: string) => void

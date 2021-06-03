@@ -12,7 +12,6 @@ export const Select = <T extends any>({
   disabled,
   placeholder,
   selected,
-  alwaysShowValue,
   onNavigate,
   onChange,
   onSearch,

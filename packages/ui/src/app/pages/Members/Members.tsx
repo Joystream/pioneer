@@ -6,8 +6,8 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
 import { MemberList } from '@/memberships/components/MemberList'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
-import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 import { DefaultMemberListOrder, MemberListOrder, MemberListSortKey, useMembers } from '@/memberships/hooks/useMembers'
+import { MemberRole } from '@/memberships/types'
 
 import { AppPage } from '../../components/AppPage'
 
@@ -27,10 +27,10 @@ export const Members = () => {
 
   const { members, isLoading, totalCount, pageCount } = useMembers({ order, filter, page })
 
-  const roles: { [key: string]: string } = {}
+  const roles = new Set<MemberRole>()
   for (const member of members) {
     for (const role of member.roles) {
-      roles[memberRoleTitle(role)] = memberRoleAbbreviation(role)
+      roles.add(role)
     }
   }
 
@@ -40,7 +40,7 @@ export const Members = () => {
         <PageTitle>Members</PageTitle>
       </PageHeader>
       <MainPanel>
-        <MemberListFilters memberCount={totalCount} roles={roles} onApply={setFilter} />
+        <MemberListFilters memberCount={totalCount} roles={[...roles]} onApply={setFilter} />
         <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
         {!isLoading && !!pageCount && pageCount > 1 && (
           <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
