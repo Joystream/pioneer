@@ -35,6 +35,7 @@ const selectFocusReducer = <T extends any>(value: T | undefined, action: Action<
 
 interface SimpleSelectProps<T> extends FilterSelectProps<T> {
   emptyOption?: Option
+  onSearch?: (search: string) => void
 }
 
 export const SimpleSelect = <T extends any>({
@@ -45,6 +46,7 @@ export const SimpleSelect = <T extends any>({
   renderSelected,
   value,
   onChange,
+  onSearch,
 }: SimpleSelectProps<T>) => {
   const [focused, focus] = useReducer(selectFocusReducer as FocusReducer<T | null>, value)
 
@@ -99,6 +101,7 @@ export const SimpleSelect = <T extends any>({
         selected={value}
         onNavigate={navigate}
         onChange={forwardChange}
+        onSearch={onSearch}
         renderSelected={renderSelectedOption}
         renderList={renderList}
       />

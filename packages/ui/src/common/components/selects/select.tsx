@@ -90,10 +90,8 @@ export const Select = <T extends any>({
 
   return (
     <SelectComponent ref={selectNode} tabIndex={-1} onKeyDown={onKeyDown}>
-      <Toggle onClick={onToggleClick} isOpen={isOpen} disabled={disabled}>
-        {isDefined(selectedOption) && (alwaysShowValue || !isOpen) ? (
-          <SelectedOption>{renderSelected(selectedOption)}</SelectedOption>
-        ) : (
+      <Toggle onClick={isOpen ? undefined : onToggleClick} isOpen={isOpen} disabled={disabled}>
+        {onSearch && (isOpen || !isDefined(selectedOption)) ? (
           <EmptyOption
             ref={textInput}
             type="text"
@@ -103,6 +101,8 @@ export const Select = <T extends any>({
             disabled={disabled}
             onChange={(t) => setFilterInput(t.target.value)}
           />
+        ) : (
+          <SelectedOption>{isDefined(selectedOption) && renderSelected(selectedOption)}</SelectedOption>
         )}
 
         <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />
