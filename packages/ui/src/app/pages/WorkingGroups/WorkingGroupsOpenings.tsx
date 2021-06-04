@@ -1,22 +1,19 @@
 import React, { useRef, useState } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
-import { TextBig } from '@/common/components/typography'
 import { useActivities } from '@/common/hooks/useActivities'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
-import { OpeningsList } from '@/working-groups/components/OpeningsList'
+import { LoadingOpenings } from '@/working-groups/components/OpeningsList/LoadingOpenings'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
-import { UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
 
 import { AppPage } from '../../components/AppPage'
 
@@ -46,18 +43,6 @@ export const WorkingGroupsOpenings = () => {
     },
   ]
 
-  const displayOpenings = (loading: boolean, openings: UpcomingWorkingGroupOpening[] | WorkingGroupOpening[]) => {
-    if (loading) {
-      return <Loading />
-    }
-
-    if (!openings.length) {
-      return <TextBig>No openings found</TextBig>
-    }
-
-    return <OpeningsList openings={openings} />
-  }
-
   return (
     <AppPage>
       <PageHeader>
@@ -73,8 +58,8 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && displayOpenings(currentLoading, currentOpenings)}
-            {activeTab === 'UPCOMING' && displayOpenings(upcomingLoading, upcomingOpenings)}
+            {activeTab === 'OPENINGS' && <LoadingOpenings isLoading={currentLoading} openings={currentOpenings} />}
+            {activeTab === 'UPCOMING' && <LoadingOpenings isLoading={upcomingLoading} openings={upcomingOpenings} />}
           </ContentWithTabs>
         </MainPanel>
         <SidePanel neighbor={sideNeighborRef}>

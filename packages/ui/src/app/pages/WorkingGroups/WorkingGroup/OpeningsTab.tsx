@@ -2,13 +2,12 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
-import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
 import { useMember } from '@/memberships/hooks/useMembership'
-import { OpeningsList } from '@/working-groups/components/OpeningsList'
+import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
@@ -40,14 +39,14 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
             <Label>
               Upcoming Openings <CountBadge count={upcomingOpenings.length} />
             </Label>
-            {isLoadingUpcoming ? <Loading /> : <OpeningsList openings={upcomingOpenings} />}
+            <LoadingOpenings isLoading={isLoadingUpcoming} openings={upcomingOpenings} />
           </OpeningsCategory>
         </OpeningsCategories>
 
         <OpeningsCategories>
           <OpeningsCategory>
             <Label>Openings</Label>
-            {isLoading ? <Loading /> : <OpeningsList openings={openings} />}
+            <LoadingOpenings isLoading={isLoading} openings={openings} />
           </OpeningsCategory>
         </OpeningsCategories>
       </MainPanel>
