@@ -20,8 +20,8 @@ interface Props {
 }
 
 export const OpeningsTab = ({ workingGroup }: Props) => {
-  const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, type: 'open' })
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
+  const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, type: 'open' })
   const { member: leader } = useMember(workingGroup.leaderId)
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
   const sideNeighborRef = useRef<HTMLDivElement>(null)
@@ -34,25 +34,22 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
           <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={-200} />
           <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={100_000} />
         </Statistics>
+
+        <OpeningsCategories>
+          <OpeningsCategory>
+            <Label>
+              Upcoming Openings <CountBadge count={upcomingOpenings.length} />
+            </Label>
+            {isLoadingUpcoming ? <Loading /> : <OpeningsList openings={upcomingOpenings} />}
+          </OpeningsCategory>
+        </OpeningsCategories>
+
         <OpeningsCategories>
           <OpeningsCategory>
             <Label>Openings</Label>
             {isLoading ? <Loading /> : <OpeningsList openings={openings} />}
           </OpeningsCategory>
         </OpeningsCategories>
-
-        {isLoadingUpcoming ? (
-          <Loading />
-        ) : (
-          <OpeningsCategories>
-            <OpeningsCategory>
-              <Label>
-                Upcoming Openings <CountBadge count={upcomingOpenings.length} />
-              </Label>
-              <OpeningsList openings={upcomingOpenings} />
-            </OpeningsCategory>
-          </OpeningsCategories>
-        )}
       </MainPanel>
       <SidePanel neighbor={sideNeighborRef}>
         <WorkersList leader={leader} workers={workers} />
