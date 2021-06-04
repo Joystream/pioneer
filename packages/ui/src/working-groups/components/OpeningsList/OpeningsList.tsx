@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { List, ListItem } from '@/common/components/List'
-import { OpeningsListRow } from '@/working-groups/components/OpeningsList/OpeningsListRow'
+import { UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
 
-import { WorkingGroupOpening } from '../../types'
+import { OpeningsListRow } from './OpeningsListRow'
 
 export interface OpeningsListProps {
-  openings: WorkingGroupOpening[]
+  openings: WorkingGroupOpening[] | UpcomingWorkingGroupOpening[]
 }
 
 export const OpeningsList = ({ openings }: OpeningsListProps) => {

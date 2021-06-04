@@ -1,22 +1,19 @@
-import React, { JSXElementConstructor, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
-import { TextBig } from '@/common/components/typography'
 import { useActivities } from '@/common/hooks/useActivities'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
-import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
+import { LoadingOpenings } from '@/working-groups/components/OpeningsList/LoadingOpenings'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
-import { BaseOpening } from '@/working-groups/types'
 
 import { AppPage } from '../../components/AppPage'
 
@@ -27,11 +24,9 @@ type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 export const WorkingGroupsOpenings = () => {
   const { isLoading: currentLoading, openings: currentOpenings } = useOpenings({ type: 'open' })
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
-
   const activities = useActivities()
-  const sideNeighborRef = useRef<HTMLDivElement>(null)
-
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
+  const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const openingsTabs = [
     {
@@ -48,22 +43,6 @@ export const WorkingGroupsOpenings = () => {
     },
   ]
 
-  const displayOpenings = <T extends BaseOpening>(
-    loading: boolean,
-    openings: T[],
-    Component: JSXElementConstructor<{ openings: T[] }>
-  ) => {
-    if (loading) {
-      return <Loading />
-    }
-
-    if (!openings.length) {
-      return <TextBig>No openings found</TextBig>
-    }
-
-    return <Component openings={openings} />
-  }
-
   return (
     <AppPage>
       <PageHeader>
@@ -79,8 +58,8 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && displayOpenings(upcomingLoading, upcomingOpenings, UpcomingOpeningsList)}
-            {activeTab === 'UPCOMING' && displayOpenings(currentLoading, currentOpenings, OpeningsList)}
+            {activeTab === 'OPENINGS' && <LoadingOpenings isLoading={currentLoading} openings={currentOpenings} />}
+            {activeTab === 'UPCOMING' && <LoadingOpenings isLoading={upcomingLoading} openings={upcomingOpenings} />}
           </ContentWithTabs>
         </MainPanel>
         <SidePanel neighbor={sideNeighborRef}>

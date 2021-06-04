@@ -1,7 +1,7 @@
 import { getReward } from '@/working-groups/model/getReward'
 import { WorkerWithDetails } from '@/working-groups/types'
 
-import { alice } from '../../_mocks/keyring'
+import { alice } from '../keyring'
 
 export const WORKER: WorkerWithDetails = {
   membership: {

@@ -8,13 +8,13 @@ import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeTime } from '@/common/model/relativeTime'
+import { Props } from '@/working-groups/components/OpeningsList/Opening/OpeningListItem'
 import {
   OpenedContainer,
   OpenedItemTitle,
   OpenedTop,
   OpenedWrapper,
-} from '@/working-groups/components/OpeningAndApplicationsComponents/OACStyledComponents'
-import { Props } from '@/working-groups/components/OpeningsList/OpeningListItem'
+} from '@/working-groups/components/ToggleableItemStyledComponents'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
 

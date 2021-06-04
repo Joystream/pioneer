@@ -55,16 +55,16 @@ describe('MyEarningsStat', () => {
     seedWorkers(mockServer.server)
     seedEvent({ id: '0', createdAt: new Date().toISOString(), type: 'RewardPaid' }, mockServer.server)
 
-    const workerSchema = mockServer.server?.schema.first('Worker')
+    const worker = mockServer.server?.schema.first('Worker')
 
     seedRewardPaidEvent(
       {
         id: '0',
         createdAt: new Date().toISOString(),
         eventId: '0',
-        groupId: workerSchema?.attrs.groupId as string,
-        workerId: workerSchema?.attrs.id as string,
-        rewardAccount: workerSchema?.attrs.rewardAccount as string,
+        groupId: String(worker?.attrs.groupId),
+        workerId: String(worker?.attrs.id),
+        rewardAccount: String(worker?.attrs.rewardAccount),
         amount: 100,
         type: 'REGULAR',
       },
@@ -75,9 +75,9 @@ describe('MyEarningsStat', () => {
         id: '1',
         createdAt: subDays(startOfToday(), 10).toISOString(),
         eventId: '0',
-        groupId: workerSchema?.attrs.groupId as string,
-        workerId: workerSchema?.attrs.id as string,
-        rewardAccount: workerSchema?.attrs.rewardAccount as string,
+        groupId: String(worker?.attrs.groupId),
+        workerId: String(worker?.attrs.id),
+        rewardAccount: String(worker?.attrs.rewardAccount),
         amount: 500,
         type: 'REGULAR',
       },

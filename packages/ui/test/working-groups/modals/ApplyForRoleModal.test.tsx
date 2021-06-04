@@ -23,6 +23,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { OPENING_DATA } from '../../_mocks/server/seeds'
 import {
   stubApi,
   stubDefaultBalances,
@@ -30,38 +31,6 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-const OPENING_DATA = {
-  groupId: '0',
-  type: 'REGULAR',
-  status: 'open',
-  stakeAmount: 2000,
-  applications: null,
-  metadata: {
-    shortDescription: 'Distribution Worker',
-    description: '# Description',
-    hiringLimit: 1,
-    expectedEnding: '2022-03-09T10:18:04.155Z',
-    applicationDetails: 'Details... ?',
-    applicationFormQuestions: [
-      {
-        type: 'TEXT',
-        question: 'Question 1',
-      },
-      {
-        type: 'TEXT',
-        question: 'Question 2',
-      },
-      {
-        type: 'TEXT',
-        question: 'Question 3',
-      },
-    ],
-  },
-  unstakingPeriod: '5',
-  rewardPerBlock: 200,
-  createdAtBlockId: '5',
-}
 
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()

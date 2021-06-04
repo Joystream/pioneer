@@ -6,10 +6,11 @@ import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { CurrentMember } from '@/memberships/components/CurrentMember'
-import { seedMembers, seedMember, mockMembers } from '@/mocks/data'
+import { seedMember, seedMembers } from '@/mocks/data'
 
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
 
 describe('UI: CurrentMember component', () => {
   const mockServer = setupMockServer()
@@ -56,7 +57,7 @@ describe('UI: CurrentMember component', () => {
 
   describe('with one membership', () => {
     beforeEach(() => {
-      seedMember(mockMembers.find((m) => m.handle == 'alice')!, mockServer.server)
+      seedMember(MEMBER_ALICE_DATA, mockServer.server)
     })
 
     it('Renders select member button', async () => {

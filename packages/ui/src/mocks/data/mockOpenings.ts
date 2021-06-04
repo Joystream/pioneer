@@ -48,7 +48,7 @@ export const getMockAsOpening = (index = 0) => {
       leaderId: null,
       __typename: 'WorkingGroup',
       budget: 10_000,
-      name: 'Working Group',
+      name: 'Storage',
     },
     createdAtBlock: {
       __typename: 'Block',

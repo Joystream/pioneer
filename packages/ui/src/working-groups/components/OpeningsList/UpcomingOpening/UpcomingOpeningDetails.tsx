@@ -8,13 +8,13 @@ import { StatiscticContentColumn, Statistics, StatsBlock, TwoColumnsStatistic } 
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { relativeTime } from '@/common/model/relativeTime'
+import { UpcomingProps } from '@/working-groups/components/OpeningsList/UpcomingOpening/UpcomingOpeningListItem'
 import {
   OpenedContainer,
   OpenedItemTitle,
   OpenedTop,
   OpenedWrapper,
-} from '@/working-groups/components/OpeningAndApplicationsComponents/OACStyledComponents'
-import { UpcomingProps } from '@/working-groups/components/OpeningsList/UpcomingOpeningListItem'
+} from '@/working-groups/components/ToggleableItemStyledComponents'
 
 export const UpcomingOpeningDetails = ({ opening }: UpcomingProps) => {
   return (

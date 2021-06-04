@@ -1,7 +1,7 @@
 import { Server } from 'miragejs'
 
-import { seedBlocks } from '../../../src/mocks/data'
-import { fixAssociations, makeServer } from '../../../src/mocks/server'
+import { seedBlocks } from '@/mocks/data'
+import { fixAssociations, makeServer } from '@/mocks/server'
 
 interface MockServer {
   server?: Server

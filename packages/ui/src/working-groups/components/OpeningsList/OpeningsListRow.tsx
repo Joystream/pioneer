@@ -4,17 +4,16 @@ import { Toggle } from '@/common/components/buttons/Toggle'
 import { Arrow } from '@/common/components/icons'
 import { useToggle } from '@/common/hooks/useToggle'
 import {
-  OACItemContainer,
+  ToggleableItemContainer,
   OpeningToggleButton,
-} from '@/working-groups/components/OpeningAndApplicationsComponents/OACStyledComponents'
-import { OpeningDetails } from '@/working-groups/components/OpeningsList/OpeningDetails'
-import { OpeningListItem } from '@/working-groups/components/OpeningsList/OpeningListItem'
-import { UpcomingOpeningDetails } from '@/working-groups/components/OpeningsList/UpcomingOpeningDetails'
-import { UpcomingOpeningListItem } from '@/working-groups/components/OpeningsList/UpcomingOpeningListItem'
+} from '@/working-groups/components/ToggleableItemStyledComponents'
 import { isUpcomingOpening, UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
 
+import { Opening } from './Opening'
+import { UpcomingOpening } from './UpcomingOpening'
+
 export interface ListRowProps {
-  opening: UpcomingWorkingGroupOpening | WorkingGroupOpening
+  opening: WorkingGroupOpening | UpcomingWorkingGroupOpening
 }
 
 export const OpeningsListRow = ({ opening }: ListRowProps) => {
@@ -22,19 +21,9 @@ export const OpeningsListRow = ({ opening }: ListRowProps) => {
 
   return (
     <Toggle absoluteToggle isOpen={isOpened}>
-      <OACItemContainer isOpen={isOpened}>
-        {isUpcomingOpening(opening) ? (
-          <>
-            <UpcomingOpeningListItem opening={opening} />
-            <UpcomingOpeningDetails opening={opening} />
-          </>
-        ) : (
-          <>
-            <OpeningListItem opening={opening} />
-            <OpeningDetails opening={opening} />
-          </>
-        )}
-      </OACItemContainer>
+      <ToggleableItemContainer isOpen={isOpened}>
+        {isUpcomingOpening(opening) ? <UpcomingOpening opening={opening} /> : <Opening opening={opening} />}
+      </ToggleableItemContainer>
       <OpeningToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
         <Arrow direction="down" />
       </OpeningToggleButton>

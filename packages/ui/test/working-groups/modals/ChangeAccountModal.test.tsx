@@ -11,7 +11,7 @@ import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
-import { RawApplication, seedApplication } from '@/mocks/data/mockApplications'
+import { seedApplication } from '@/mocks/data/mockApplications'
 import { seedOpening, seedOpeningStatuses } from '@/mocks/data/mockOpenings'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { seedWorker } from '@/mocks/data/seedWorkers'
@@ -22,6 +22,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import {
   stubApi,
   stubDefaultBalances,
@@ -29,48 +30,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-import { WORKER as worker } from './constants'
-
-const OPENING_DATA = {
-  groupId: '1',
-  type: 'REGULAR',
-  status: 'open',
-  stakeAmount: 2000,
-  applications: null,
-  metadata: {
-    shortDescription: 'Distribution Worker',
-    description: '# Description',
-    hiringLimit: 1,
-    expectedEnding: '2022-03-09T10:18:04.155Z',
-    applicationDetails: 'Details... ?',
-    applicationFormQuestions: [],
-  },
-  unstakingPeriod: '14409',
-  rewardPerBlock: 200,
-  createdAtBlockId: '5',
-}
-
-const WORKER_DATA = {
-  id: '1',
-  membershipId: '0',
-  groupId: 1,
-  applicationId: '1',
-  nextPaymentAt: '',
-  rewardPerBlock: 0,
-  earnedTotal: 2000,
-  stake: 2000,
-  status: '',
-  hiredAtBlockId: '1',
-}
-
-const APPLICATION_DATA: RawApplication = {
-  openingId: '1',
-  applicantId: '41',
-  answers: [],
-  status: 'pending',
-  createdAtBlockId: 1,
-}
+import { WORKER as worker } from '../../_mocks/working-groups'
 
 describe('UI: ChangeRoleModal', () => {
   const api = stubApi()

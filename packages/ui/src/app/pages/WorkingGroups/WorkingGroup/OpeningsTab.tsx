@@ -2,13 +2,12 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
-import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
 import { useMember } from '@/memberships/hooks/useMembership'
-import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
+import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
@@ -20,8 +19,8 @@ interface Props {
 }
 
 export const OpeningsTab = ({ workingGroup }: Props) => {
-  const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, type: 'open' })
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
+  const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, type: 'open' })
   const { member: leader } = useMember(workingGroup.leaderId)
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
   const sideNeighborRef = useRef<HTMLDivElement>(null)
@@ -34,28 +33,22 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
           <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={-200} />
           <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={100_000} />
         </Statistics>
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <OpeningsCategories>
-            <OpeningsCategory>
-              <Label>Openings</Label>
-              <OpeningsList openings={openings} />
-            </OpeningsCategory>
-          </OpeningsCategories>
-        )}
-        {isLoadingUpcoming ? (
-          <Loading />
-        ) : (
-          <OpeningsCategories>
-            <OpeningsCategory>
-              <Label>
-                Upcoming Openings <CountBadge count={upcomingOpenings.length} />
-              </Label>
-              <UpcomingOpeningsList openings={upcomingOpenings} />
-            </OpeningsCategory>
-          </OpeningsCategories>
-        )}
+
+        <OpeningsCategories>
+          <OpeningsCategory>
+            <Label>
+              Upcoming Openings <CountBadge count={upcomingOpenings.length} />
+            </Label>
+            <LoadingOpenings isLoading={isLoadingUpcoming} openings={upcomingOpenings} />
+          </OpeningsCategory>
+        </OpeningsCategories>
+
+        <OpeningsCategories>
+          <OpeningsCategory>
+            <Label>Openings</Label>
+            <LoadingOpenings isLoading={isLoading} openings={openings} />
+          </OpeningsCategory>
+        </OpeningsCategories>
       </MainPanel>
       <SidePanel neighbor={sideNeighborRef}>
         <WorkersList leader={leader} workers={workers} />

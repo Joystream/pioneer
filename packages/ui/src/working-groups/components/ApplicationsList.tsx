@@ -14,14 +14,14 @@ import { ApplicationDetailsModalCall } from '../modals/ApplicationDetailsModal'
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
 import {
-  OACItemInfo,
-  OACItemInfoTop,
-  OACItemSummary,
-  OACItemTitle,
-  OACSubscriptionWide,
-  OACWrap,
+  ToggleableItemInfo,
+  ToggleableItemInfoTop,
+  ToggleableItemSummary,
+  ToggleableItemTitle,
+  ToggleableSubscriptionWide,
+  ToggleableItemWrap,
   OpenItemSummaryColumn,
-} from './OpeningAndApplicationsComponents/OACStyledComponents'
+} from './ToggleableItemStyledComponents'
 
 interface Props {
   applications: WorkingGroupApplication[]
@@ -44,21 +44,23 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
   }, [application.id])
 
   return (
-    <OACWrap>
-      <OACItemInfo>
-        <OACItemInfoTop>
+    <ToggleableItemWrap>
+      <ToggleableItemInfo>
+        <ToggleableItemInfoTop>
           <Subscription>ID: {application.id}</Subscription>
           <Subscription>Time left: 6 days 23 minutes</Subscription>
           <BadgeStatus>LEAD</BadgeStatus>
-        </OACItemInfoTop>
+        </ToggleableItemInfoTop>
         <Title onClick={showApplicationModal}>{openingTitle(application)}</Title>
-      </OACItemInfo>
-      <OACItemSummary>
+      </ToggleableItemInfo>
+      <ToggleableItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
             <TokenValue value={application.opening.reward.payout} />
           </TextInlineBig>
-          <OACSubscriptionWide>Reward per {application.opening.reward.blockInterval} blocks.</OACSubscriptionWide>
+          <ToggleableSubscriptionWide>
+            Reward per {application.opening.reward.blockInterval} blocks.
+          </ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
@@ -70,14 +72,14 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
           <TextInlineBig value>No</TextInlineBig>
           <Subscription>Hired</Subscription>
         </OpenItemSummaryColumn>
-      </OACItemSummary>
+      </ToggleableItemSummary>
       <ButtonGhost square size="medium" onClick={showApplicationModal}>
         <FileIcon />
       </ButtonGhost>
-    </OACWrap>
+    </ToggleableItemWrap>
   )
 }
 
-const Title = styled(OACItemTitle)`
+const Title = styled(ToggleableItemTitle)`
   cursor: pointer;
 `

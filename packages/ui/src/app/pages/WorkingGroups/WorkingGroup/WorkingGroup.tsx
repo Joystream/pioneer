@@ -28,26 +28,34 @@ export function WorkingGroup() {
     { title: 'History', active: currentTab === 'HISTORY', onClick: () => setCurrentTab('HISTORY') },
   ]
 
-  if (isLoading || !group) {
-    return <Loading />
+  const displayTabs = () => {
+    if (isLoading || !group) {
+      return <Loading />
+    }
+
+    return (
+      <>
+        {currentTab === 'OPENINGS' && <OpeningsTab workingGroup={group} />}
+        {currentTab === 'ABOUT' && <AboutTab workingGroup={group} />}
+        {currentTab === 'HISTORY' && <HistoryTab />}
+      </>
+    )
   }
 
   return (
     <AppPage>
       <PageHeader>
         <PreviousPage>
-          <PageTitle>{group.name}</PageTitle>
-          {group.status && (
+          <PageTitle>{group?.name ?? name}</PageTitle>
+          {group?.status && (
             <StatusGroup>
-              <StatusBadge>{group.status}</StatusBadge>
+              <StatusBadge>{group?.status}</StatusBadge>
             </StatusGroup>
           )}
         </PreviousPage>
         <Tabs tabs={tabs} />
       </PageHeader>
-      {currentTab === 'OPENINGS' && <OpeningsTab workingGroup={group} />}
-      {currentTab === 'ABOUT' && <AboutTab workingGroup={group} />}
-      {currentTab === 'HISTORY' && <HistoryTab />}
+      {displayTabs()}
     </AppPage>
   )
 }
