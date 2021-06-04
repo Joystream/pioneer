@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Animations, BorderRad, Colors, Shadows, Transitions } from '../../constants'
 import { ButtonGhost } from '../buttons'
@@ -9,7 +9,11 @@ export interface ContextMenuProps {
   children: React.ReactNode
 }
 
-export const ContextMenu = ({ children }: ContextMenuProps) => {
+export interface ContextMenuAlignMentProps {
+  align?: 'left' | 'right'
+}
+
+export const ContextMenu = ({ children, align }: ContextMenuProps & ContextMenuAlignMentProps) => {
   const [isMenuVisible, setMenuVisible] = useState(false)
   const contextMenuHandlers = {
     onClick: (event: React.MouseEvent<HTMLElement>) => {
@@ -24,7 +28,7 @@ export const ContextMenu = ({ children }: ContextMenuProps) => {
       <ButtonGhost square size="medium" {...contextMenuHandlers}>
         <KebabMenuIcon />
       </ButtonGhost>
-      {isMenuVisible && <ContextMenuOptions children={children} />}
+      {isMenuVisible && <ContextMenuOptions children={children} align={align} />}
     </ContextMenuContainer>
   )
 }
@@ -34,16 +38,31 @@ interface ContextMenuOptionsProps {
   children: React.ReactNode
 }
 
-export const ContextMenuOptions = ({ className, children }: ContextMenuOptionsProps) => {
-  return <TooltipPopupContainer className={className}>{children}</TooltipPopupContainer>
+export const ContextMenuOptions = ({
+  className,
+  children,
+  align,
+}: ContextMenuOptionsProps & ContextMenuAlignMentProps) => {
+  return (
+    <ContextMenuWrapper className={className} align={align}>
+      {children}
+    </ContextMenuWrapper>
+  )
 }
 
-const TooltipPopupContainer = styled.div`
+const ContextMenuWrapper = styled.div<ContextMenuAlignMentProps>`
   display: grid;
   grid-row-gap: 8px;
   position: absolute;
   top: 100%;
-  right: 0;
+  ${({ align }) =>
+    align === 'left'
+      ? css`
+          left: 0;
+        `
+      : css`
+          right: 0;
+        `}
   width: fit-content;
   padding: 16px 24px;
   background-color: ${Colors.White};

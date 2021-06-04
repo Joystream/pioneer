@@ -5,8 +5,8 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonLink } from '@/common/components/buttons'
+import { ContextMenu } from '@/common/components/ContextMenu'
 import { List, ListItem } from '@/common/components/List'
-import { ContextMenu } from '@/common/components/Tooltip/ContextMenu'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Worker } from '@/working-groups/types'
 
