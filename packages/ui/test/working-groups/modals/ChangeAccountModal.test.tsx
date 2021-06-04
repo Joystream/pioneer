@@ -11,7 +11,10 @@ import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
+import { RawApplication, seedApplication } from '@/mocks/data/mockApplications'
+import { seedOpening, seedOpeningStatuses } from '@/mocks/data/mockOpenings'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
+import { seedWorker } from '@/mocks/data/seedWorkers'
 import { ChangeAccountModal } from '@/working-groups/modals/ChangeAccountModal/ChangeAccountModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 
@@ -28,6 +31,46 @@ import {
 } from '../../_mocks/transactions'
 
 import { WORKER as worker } from './constants'
+
+const OPENING_DATA = {
+  groupId: '1',
+  type: 'REGULAR',
+  status: 'open',
+  stakeAmount: 2000,
+  applications: null,
+  metadata: {
+    shortDescription: 'Distribution Worker',
+    description: '# Description',
+    hiringLimit: 1,
+    expectedEnding: '2022-03-09T10:18:04.155Z',
+    applicationDetails: 'Details... ?',
+    applicationFormQuestions: [],
+  },
+  unstakingPeriod: '14409',
+  rewardPerBlock: 200,
+  createdAtBlockId: '5',
+}
+
+const WORKER_DATA = {
+  id: '1',
+  membershipId: '0',
+  groupId: 1,
+  applicationId: '1',
+  nextPaymentAt: '',
+  rewardPerBlock: 0,
+  earnedTotal: 2000,
+  stake: 2000,
+  status: '',
+  hiredAtBlockId: '1',
+}
+
+const APPLICATION_DATA: RawApplication = {
+  openingId: '1',
+  applicantId: '41',
+  answers: [],
+  status: 'pending',
+  createdAtBlockId: 1,
+}
 
 describe('UI: ChangeRoleModal', () => {
   const api = stubApi()
@@ -64,16 +107,20 @@ describe('UI: ChangeRoleModal', () => {
   beforeEach(async () => {
     seedMembers(server.server)
     seedWorkingGroups(server.server)
+    seedOpeningStatuses(server.server)
+    seedOpening(OPENING_DATA, server.server)
+    seedApplication(APPLICATION_DATA, server.server)
+    seedWorker(WORKER_DATA, server.server)
     useMyMemberships.setActive(getMember('alice'))
     stubDefaultBalances(api)
   })
 
   describe('Change role account - authorize step', () => {
     async function renderSignStep() {
-      useModal.modalData = { worker, type: ModalTypes.CHANGE_ROLE_ACCOUNT }
-      transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.updateRoleAccount')
+      useModal.modalData = { workerId: '1', type: ModalTypes.CHANGE_ROLE_ACCOUNT }
+      transaction = stubTransaction(api, 'api.tx.storageWorkingGroup.updateRoleAccount')
       renderModal()
-      fireEvent.click(screen.getByPlaceholderText('Select account or paste account address'))
+      fireEvent.click(await screen.findByPlaceholderText('Select account or paste account address'))
       fireEvent.click(await screen.findByText('bob'))
       fireEvent.click(await screen.findByRole('button', { name: 'Change' }))
     }
@@ -95,10 +142,10 @@ describe('UI: ChangeRoleModal', () => {
 
   describe('Change reward account - authorize step', () => {
     async function renderSignStep() {
-      transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.updateRewardAccount')
-      useModal.modalData = { worker, type: ModalTypes.CHANGE_REWARD_ACCOUNT }
+      useModal.modalData = { workerId: '1', type: ModalTypes.CHANGE_REWARD_ACCOUNT }
+      transaction = stubTransaction(api, 'api.tx.storageWorkingGroup.updateRewardAccount')
       renderModal()
-      fireEvent.click(screen.getByPlaceholderText('Select account or paste account address'))
+      fireEvent.click(await screen.findByPlaceholderText('Select account or paste account address'))
       fireEvent.click(await screen.findByText('bob'))
       fireEvent.click(await screen.findByRole('button', { name: 'Change' }))
     }
