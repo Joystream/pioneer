@@ -1,9 +1,11 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { LockType, BalanceLock } from '@/accounts/types'
 import { EnvelopeIcon } from '@/common/components/icons/EnvelopeIcon'
 import { LabelIcon } from '@/common/components/icons/LabelIcon'
 import { VoteIcon } from '@/common/components/icons/VoteIcon'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
 
 export const lockIcon = (type: LockType) => {
   switch (type) {
@@ -44,10 +46,15 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
   }
 
   return (
-    <>
+    <AccountLocksWrapper gap={4}>
       {locks.map((lock, index) => (
         <span key={index}>{lockIcon(lock.type)}</span>
       ))}
-    </>
+    </AccountLocksWrapper>
   )
 }
+
+const AccountLocksWrapper = styled(ColumnGapBlock)`
+  position: absolute;
+  top: 24px;
+`

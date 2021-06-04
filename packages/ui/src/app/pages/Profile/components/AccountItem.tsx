@@ -39,10 +39,10 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       <AccountItemWrap key={address}>
         <AccountInfo account={account} />
         <TokenValue value={balance?.total} />
-        <RowGapBlock align="right" gap={0.01}>
+        <ValueAndLocks align="right">
           <TokenValue value={balance?.locked} />
           <AccountLocks locks={balance?.locks} />
-        </RowGapBlock>
+        </ValueAndLocks>
         <TokenValue value={balance?.recoverable} />
         <TokenValue value={balance?.transferable} />
         <AccountControls>
@@ -93,4 +93,8 @@ const StyledDropDown = styled(DropDownToggle)`
 
 const StyledLabel = styled(Label)`
   margin-bottom: 8px;
+`
+
+const ValueAndLocks = styled(RowGapBlock)`
+  position: relative;
 `
