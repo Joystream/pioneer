@@ -10,7 +10,7 @@ import { seedMember, seedMembers } from '@/mocks/data'
 
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { MEMBER_ALICE } from '../../_mocks/server/seeds'
+import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
 
 describe('UI: CurrentMember component', () => {
   const mockServer = setupMockServer()
@@ -57,7 +57,7 @@ describe('UI: CurrentMember component', () => {
 
   describe('with one membership', () => {
     beforeEach(() => {
-      seedMember(MEMBER_ALICE, mockServer.server)
+      seedMember(MEMBER_ALICE_DATA, mockServer.server)
     })
 
     it('Renders select member button', async () => {

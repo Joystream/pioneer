@@ -1,3 +1,4 @@
+import { Network } from '@/common/api/queries'
 import { asUpcomingWorkingGroupOpening } from '@/working-groups/types'
 
 import rawOpenings from './raw/upcomingOpenings.json'
@@ -23,8 +24,23 @@ export interface RawUpcomingOpeningMock {
   createdAtBlockId: string
 }
 
-export const getMockAsOpening = (index = 0) => {
-  return asUpcomingWorkingGroupOpening(rawOpenings[index] as any)
+export const getMockAsUpcomingOpening = (index = 0) => {
+  return asUpcomingWorkingGroupOpening({
+    __typename: 'UpcomingWorkingGroupOpening',
+    createdAtBlock: {
+      __typename: 'Block',
+      id: '1',
+      number: 1234,
+      timestamp: '',
+      network: ('OLYMPIA' as unknown) as Network,
+    },
+    ...rawOpenings[index],
+    group: {
+      __typename: 'WorkingGroup',
+      name: 'Forum',
+      budget: 1000,
+    },
+  } as any)
 }
 
 export const openingsData = rawOpenings.map((rawOpening) => ({ ...rawOpening }))

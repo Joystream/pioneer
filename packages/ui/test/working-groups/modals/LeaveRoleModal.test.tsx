@@ -10,7 +10,7 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
-import { RawApplication, seedApplication } from '@/mocks/data/mockApplications'
+import { seedApplication } from '@/mocks/data/mockApplications'
 import { seedOpening, seedOpeningStatuses } from '@/mocks/data/mockOpenings'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { seedWorker } from '@/mocks/data/seedWorkers'
@@ -20,7 +20,7 @@ import { alice } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { OPENING, WORKER } from '../../_mocks/server/seeds'
+import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import {
   stubApi,
   stubDefaultBalances,
@@ -28,27 +28,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-const WORKER_DATA = {
-  id: '1',
-  membershipId: '0',
-  groupId: 1,
-  applicationId: '1',
-  nextPaymentAt: '',
-  rewardPerBlock: 0,
-  earnedTotal: 2000,
-  stake: 2000,
-  status: '',
-  hiredAtBlockId: '1',
-}
-
-const APPLICATION_DATA: RawApplication = {
-  openingId: '1',
-  applicantId: '41',
-  answers: [],
-  status: 'pending',
-  createdAtBlockId: 1,
-}
+import { WORKER } from '../../_mocks/working-groups'
 
 describe('UI: LeaveRoleModal', () => {
   const api = stubApi()
@@ -80,7 +60,7 @@ describe('UI: LeaveRoleModal', () => {
     seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
-    seedOpening(OPENING, server.server)
+    seedOpening(OPENING_DATA, server.server)
     seedApplication(APPLICATION_DATA, server.server)
     seedWorker(WORKER_DATA, server.server)
     useMyMemberships.setActive(getMember('alice'))

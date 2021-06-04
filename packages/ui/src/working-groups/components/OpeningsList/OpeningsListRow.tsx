@@ -7,14 +7,13 @@ import {
   OACItemContainer,
   OpeningToggleButton,
 } from '@/working-groups/components/OpeningAndApplicationsComponents/OACStyledComponents'
-import { OpeningDetails } from '@/working-groups/components/OpeningsList/OpeningDetails'
-import { OpeningListItem } from '@/working-groups/components/OpeningsList/OpeningListItem'
-import { UpcomingOpeningDetails } from '@/working-groups/components/OpeningsList/UpcomingOpeningDetails'
-import { UpcomingOpeningListItem } from '@/working-groups/components/OpeningsList/UpcomingOpeningListItem'
 import { isUpcomingOpening, UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
 
+import { Opening } from './Opening'
+import { UpcomingOpening } from './UpcomingOpening'
+
 export interface ListRowProps {
-  opening: UpcomingWorkingGroupOpening | WorkingGroupOpening
+  opening: WorkingGroupOpening | UpcomingWorkingGroupOpening
 }
 
 export const OpeningsListRow = ({ opening }: ListRowProps) => {
@@ -23,17 +22,7 @@ export const OpeningsListRow = ({ opening }: ListRowProps) => {
   return (
     <Toggle absoluteToggle isOpen={isOpened}>
       <OACItemContainer isOpen={isOpened}>
-        {isUpcomingOpening(opening) ? (
-          <>
-            <UpcomingOpeningListItem opening={opening} />
-            <UpcomingOpeningDetails opening={opening} />
-          </>
-        ) : (
-          <>
-            <OpeningListItem opening={opening} />
-            <OpeningDetails opening={opening} />
-          </>
-        )}
+        {isUpcomingOpening(opening) ? <UpcomingOpening opening={opening} /> : <Opening opening={opening} />}
       </OACItemContainer>
       <OpeningToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
         <Arrow direction="down" />

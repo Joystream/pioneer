@@ -8,7 +8,7 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
 import { useMember } from '@/memberships/hooks/useMembership'
-import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
+import { OpeningsList } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
@@ -34,16 +34,13 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
           <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={-200} />
           <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={100_000} />
         </Statistics>
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <OpeningsCategories>
-            <OpeningsCategory>
-              <Label>Openings</Label>
-              <OpeningsList openings={openings} />
-            </OpeningsCategory>
-          </OpeningsCategories>
-        )}
+        <OpeningsCategories>
+          <OpeningsCategory>
+            <Label>Openings</Label>
+            {isLoading ? <Loading /> : <OpeningsList openings={openings} />}
+          </OpeningsCategory>
+        </OpeningsCategories>
+
         {isLoadingUpcoming ? (
           <Loading />
         ) : (
@@ -52,7 +49,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
               <Label>
                 Upcoming Openings <CountBadge count={upcomingOpenings.length} />
               </Label>
-              <UpcomingOpeningsList openings={upcomingOpenings} />
+              <OpeningsList openings={upcomingOpenings} />
             </OpeningsCategory>
           </OpeningsCategories>
         )}

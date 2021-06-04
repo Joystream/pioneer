@@ -33,7 +33,12 @@ export const UpcomingOpeningListItem = ({ opening }: UpcomingProps) => (
         </TextInlineBig>
         <OACSubscriptionWide>Reward per {opening.reward.blockInterval} blocks.</OACSubscriptionWide>
       </OpenItemSummaryColumn>
-      <OpenItemSummaryColumn>.</OpenItemSummaryColumn>
+      <OpenItemSummaryColumn>
+        <TextInlineBig>
+          <TokenValue value={opening.stake} />
+        </TextInlineBig>
+        <OACSubscriptionWide>Minimum stake required</OACSubscriptionWide>
+      </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
         <TextMedium>{opening.hiringLimit}</TextMedium>
         <Subscription>Hiring</Subscription>

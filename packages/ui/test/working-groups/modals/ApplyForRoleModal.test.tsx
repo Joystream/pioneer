@@ -23,7 +23,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { OPENING } from '../../_mocks/server/seeds'
+import { OPENING_DATA } from '../../_mocks/server/seeds'
 import {
   stubApi,
   stubDefaultBalances,
@@ -67,7 +67,7 @@ describe('UI: ApplyForRoleModal', () => {
     seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
-    seedOpening(OPENING, server.server)
+    seedOpening(OPENING_DATA, server.server)
 
     const fields = (server.server?.schema.first('WorkingGroupOpening') as unknown) as WorkingGroupOpeningFieldsFragment
     const opening = asWorkingGroupOpening(fields)

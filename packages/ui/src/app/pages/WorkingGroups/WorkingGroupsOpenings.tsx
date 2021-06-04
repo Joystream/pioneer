@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { Loading } from '@/common/components/Loading'
@@ -13,10 +13,10 @@ import { useActivities } from '@/common/hooks/useActivities'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
-import { OpeningsList, UpcomingOpeningsList } from '@/working-groups/components/OpeningsList'
+import { OpeningsList } from '@/working-groups/components/OpeningsList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
-import { BaseOpening } from '@/working-groups/types'
+import { UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
 
 import { AppPage } from '../../components/AppPage'
 
@@ -46,11 +46,7 @@ export const WorkingGroupsOpenings = () => {
     },
   ]
 
-  const displayOpenings = <T extends BaseOpening>(
-    loading: boolean,
-    openings: T[],
-    Component: JSXElementConstructor<{ openings: T[] }>
-  ) => {
+  const displayOpenings = (loading: boolean, openings: UpcomingWorkingGroupOpening[] | WorkingGroupOpening[]) => {
     if (loading) {
       return <Loading />
     }
@@ -59,7 +55,7 @@ export const WorkingGroupsOpenings = () => {
       return <TextBig>No openings found</TextBig>
     }
 
-    return <Component openings={openings} />
+    return <OpeningsList openings={openings} />
   }
 
   return (
@@ -77,8 +73,8 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && displayOpenings(currentLoading, currentOpenings, OpeningsList)}
-            {activeTab === 'UPCOMING' && displayOpenings(upcomingLoading, upcomingOpenings, UpcomingOpeningsList)}
+            {activeTab === 'OPENINGS' && displayOpenings(currentLoading, currentOpenings)}
+            {activeTab === 'UPCOMING' && displayOpenings(upcomingLoading, upcomingOpenings)}
           </ContentWithTabs>
         </MainPanel>
         <SidePanel neighbor={sideNeighborRef}>

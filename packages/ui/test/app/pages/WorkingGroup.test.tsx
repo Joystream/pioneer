@@ -11,7 +11,7 @@ import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { MEMBER_ALICE, OPENING, UPCOMING_OPENING } from '../../_mocks/server/seeds'
+import { MEMBER_ALICE_DATA, OPENING_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'
 
 describe('WorkingGroup', () => {
   const mockServer = setupMockServer()
@@ -19,7 +19,7 @@ describe('WorkingGroup', () => {
   beforeAll(cryptoWaitReady)
 
   beforeEach(() => {
-    seedMember(MEMBER_ALICE, mockServer.server)
+    seedMember(MEMBER_ALICE_DATA, mockServer.server)
     seedWorkingGroups(mockServer.server)
     seedOpeningStatuses(mockServer.server)
   })
@@ -31,7 +31,7 @@ describe('WorkingGroup', () => {
   })
 
   it('Openings tab', async () => {
-    seedOpening(OPENING, mockServer.server)
+    seedOpening(OPENING_DATA, mockServer.server)
     seedUpcomingOpening(UPCOMING_OPENING, mockServer.server)
 
     renderPage()

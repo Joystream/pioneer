@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-import { ToggleButton } from '../../../common/components/buttons/Toggle'
-import { Subscription } from '../../../common/components/typography/Subscription'
-import { Colors, Overflow, Transitions } from '../../../common/constants'
+import { ToggleButton } from '@/common/components/buttons/Toggle'
+import { Subscription } from '@/common/components/typography/Subscription'
+import { Colors, Overflow, Transitions } from '@/common/constants'
 
 export const OACWrap = styled.div`
   display: grid;
