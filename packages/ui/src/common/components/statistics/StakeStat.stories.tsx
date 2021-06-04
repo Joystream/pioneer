@@ -6,7 +6,7 @@ import { StakeStat, StakeStatProps } from '@/common/components/statistics/StakeS
 import { TemplateBlock, WhiteBlock } from '../storybookParts/previewStyles'
 
 export default {
-  title: 'Common/StakeStat',
+  title: 'Common/Statistics/StakeStat',
   component: StakeStat,
 } as Meta
 
