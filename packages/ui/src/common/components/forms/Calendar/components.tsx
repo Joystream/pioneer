@@ -2,10 +2,12 @@ import { addDays, addMonths, isAfter, isBefore, isEqual, isSameMonth } from 'dat
 import React, { FC } from 'react'
 import styled, { css } from 'styled-components'
 
-import { TextMedium, TextSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { TextSmall } from '@/common/components/typography'
+import { Colors, Fonts } from '@/common/constants'
 import { DateSelection, PartialDateRange } from '@/common/types/Dates'
 import { fromRange } from '@/common/utils/dates'
+
+import { ButtonGhost, ButtonInnerWrapper } from '../../buttons'
 
 interface CalendarNavProps {
   month: Date
@@ -79,20 +81,22 @@ const selectionFlags = (day: Date, selection?: DateSelection): SelectionFlags =>
   return {}
 }
 
+const ITEM_FAKE_SIZE = '33px'
+const ITEM_SIZE = '32px'
+export const CALENDAR_WRAP_SIZE = '224px'
+
 export const CalendarGrid = styled.div`
-  display: inline-grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: ${CALENDAR_WRAP_SIZE};
   user-select: none;
 `
 
 export const CalendarMonth = styled(CalendarGrid)`
-  background-color: ${Colors.White};
   justify-content: start;
-  padding: 1px;
 `
 
-const ITEM_SIZE = '32px'
 const ItemStyle = css`
   text-align: center;
   vertical-align: middle;
@@ -100,28 +104,72 @@ const ItemStyle = css`
 `
 
 export const CalendarHeaderContainer = styled(CalendarGrid)`
-  grid-column: span 7;
+  width: 100%;
+  background-color: ${Colors.White};
 `
-export const CalendarTitle = styled(TextMedium)`
+export const CalendarTitle = styled(TextSmall)`
   ${ItemStyle}
-  grid-column: 2 / span 5;
+  width: 160px;
 `
 
-export const CalendarWeekDay = styled(TextSmall)`
+export const CalendarWeekDay = styled.span`
   ${ItemStyle}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${ITEM_FAKE_SIZE};
+  height: ${ITEM_FAKE_SIZE};
+  text-align: center;
+  font-family: ${Fonts.Grotesk};
+  font-size: 10px;
+  line-height: 16px;
+  font-weight: 700;
+  color: ${Colors.Black[400]};
+  margin-left: -1px;
+  margin-top: -1px;
+`
+
+const CalendarButton = styled(ButtonGhost).attrs(() => ({
+  size: 'small',
+  square: true,
+}))`
+  min-width: ${ITEM_FAKE_SIZE};
+  width: ${ITEM_FAKE_SIZE};
+  max-width: ${ITEM_FAKE_SIZE};
+  min-height: ${ITEM_FAKE_SIZE};
+  height: ${ITEM_FAKE_SIZE};
+  max-height: ${ITEM_FAKE_SIZE};
+  margin-top: -1px;
+  margin-left: -1px;
+  font-size: 10px;
+  line-height: 16px;
+  border-radius: 0;
+
+  &:not(:first-child) {
+    margin-left: -1px;
+  }
+
+  &:focus {
+    border-color: ${Colors.Black[200]};
+    color: ${Colors.Black[900]};
+    &:before {
+      transform: translate(-150%, -50%);
+    }
+  }
+`
+
+const ChangeMonthButton = styled(ButtonGhost).attrs(() => ({
+  size: 'small',
+  square: true,
+}))`
+  min-width: ${ITEM_SIZE};
   width: ${ITEM_SIZE};
-`
-
-const CalendarButton = styled.button`
-  ${ItemStyle}
-  outline: 1px solid ${Colors.Black[200]};
-  cursor: pointer;
-  width: ${ITEM_SIZE};
-`
-
-const ChangeMonthButton = styled(CalendarButton)`
-  display: grid;
-  place-items: center;
+  max-width: ${ITEM_SIZE};
+  min-height: ${ITEM_SIZE};
+  height: ${ITEM_SIZE};
+  max-height: ${ITEM_SIZE};
+  font-size: 10px;
+  line-height: 16px;
   ${({ disabled }) =>
     disabled &&
     css`
@@ -134,8 +182,15 @@ interface SelectableDayProps extends SelectionFlags {
   disabled?: boolean
 }
 
-const DayButton = styled(CalendarButton)`
-  font-size: 12px;
+const DayButton = styled(CalendarButton)<SelectableDayProps>`
+  font-family: ${Fonts.Inter};
+  font-weight: 400;
+  width: ${ITEM_FAKE_SIZE};
+  height: ${ITEM_FAKE_SIZE};
+
+  ${ButtonInnerWrapper} {
+    transform: translateY(0);
+  }
 
   ${({ selected, first, last, inMonth, disabled }: SelectableDayProps) => {
     if (disabled) {
@@ -153,6 +208,9 @@ const DayButton = styled(CalendarButton)`
       return css`
         background-color: ${Colors.Blue[500]};
         color: ${Colors.White};
+        &:focus {
+          color: ${Colors.White};
+        }
         ${first &&
         css`
           border-top-left-radius: 50%;
