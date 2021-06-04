@@ -9,6 +9,7 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account } from '@/accounts/types'
 import { DetailsItemVote, LockItem } from '@/app/pages/Profile/components/LockItem'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { Label } from '@/common/components/typography/Label'
 import { Sizes, Colors } from '@/common/constants'
@@ -38,11 +39,10 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       <AccountItemWrap key={address}>
         <AccountInfo account={account} />
         <TokenValue value={balance?.total} />
-        <div>
+        <RowGapBlock align="right" gap={0.01}>
           <TokenValue value={balance?.locked} />
-          <br />
           <AccountLocks locks={balance?.locks} />
-        </div>
+        </RowGapBlock>
         <TokenValue value={balance?.recoverable} />
         <TokenValue value={balance?.transferable} />
         <AccountControls>
