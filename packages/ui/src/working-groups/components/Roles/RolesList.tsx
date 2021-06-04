@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
-import { ButtonGhost } from '@/common/components/buttons'
-import { KebabMenuIcon } from '@/common/components/icons'
+import { ButtonLink } from '@/common/components/buttons'
 import { List, ListItem } from '@/common/components/List'
+import { ContextMenu } from '@/common/components/Tooltip/ContextMenu'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Worker } from '@/working-groups/types'
 
@@ -73,9 +73,14 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
           <OACSubscriptionWide>Staked</OACSubscriptionWide>
         </OpenItemSummaryColumn>
       </OACItemSummary>
-      <ButtonGhost square size="medium">
-        <KebabMenuIcon />
-      </ButtonGhost>
+      <ContextMenu>
+        <ButtonLink size="small" bold borderless>
+          Change reward account
+        </ButtonLink>
+        <ButtonLink size="small" bold borderless>
+          Leave a position
+        </ButtonLink>
+      </ContextMenu>
     </OACWrap>
   )
 }

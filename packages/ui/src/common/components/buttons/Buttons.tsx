@@ -10,6 +10,8 @@ export interface ButtonProps extends ButtonSizingProps {
   className?: string
   children?: React.ReactNode
   disabled?: boolean
+  bold?: boolean
+  borderless?: boolean
   onClick?: MouseEventHandler
 }
 
@@ -68,9 +70,17 @@ export function ButtonBareGhost({ className, children, size, square, disabled, o
     </ButtonBareGhostStyles>
   )
 }
-export function ButtonLink({ className, children, square, disabled, onClick }: ButtonProps) {
+export function ButtonLink({ className, children, square, borderless, bold, disabled, onClick }: ButtonProps) {
   return (
-    <ButtonLinkStyles size="small" className={className} square={square} disabled={disabled} onClick={onClick}>
+    <ButtonLinkStyles
+      size="small"
+      className={className}
+      square={square}
+      disabled={disabled}
+      onClick={onClick}
+      bold={bold}
+      borderless={borderless}
+    >
       <ButtonInnerWrapper size="small">{children}</ButtonInnerWrapper>
     </ButtonLinkStyles>
   )
@@ -83,6 +93,7 @@ const ButtonInnerWrapper = styled.span<ButtonSizingProps>`
   justify-items: center;
   align-items: center;
   width: fit-content;
+  white-space: nowrap;
   transform: translateY(1px);
   & > svg {
     transform: translateY(-1px);
@@ -364,7 +375,7 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
   padding: 0;
   font-size: 14px;
   line-height: 20px;
-  font-weight: 400;
+  font-weight: ${({ bold }) => (bold ? '700' : '400')};
   color: ${Colors.Black[900]};
   text-transform: none;
   border-radius: 0;
@@ -376,7 +387,6 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
     width: 12px;
     height: 12px;
   }
-
   &:before {
     top: auto;
     bottom: 2px;
@@ -385,7 +395,7 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
     height: 1px;
     border-radius: 0;
     border: none;
-    transform: translateX(0%);
+    transform: ${({ borderless }) => (borderless ? 'translateX(-100%)' : 'translateX(0)')};
     background-color: ${Colors.Black[900]};
   }
   &:after {
