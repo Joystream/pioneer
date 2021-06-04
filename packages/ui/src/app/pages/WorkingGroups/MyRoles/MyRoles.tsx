@@ -12,6 +12,7 @@ import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
 import { RolesList } from '@/working-groups/components/Roles/RolesList'
 import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 
+import { NextPayoutStat } from '../../../../working-groups/components/NextPayoutStat'
 import { WorkingGroupsTabs } from '../components/WorkingGroupsTabs'
 
 export const MyRoles = () => {
@@ -50,7 +51,7 @@ export const MyRoles = () => {
           <MyEarningsStat />
           <MyStakeStat />
           <TokenValueStat title="Total owed reward" value={150000} />
-          <TokenValueStat title="Next payout in" value={150000} />
+          <NextPayoutStat workers={workers} />
         </Statistics>
         {displayRoles()}
       </MainPanel>
