@@ -104,7 +104,7 @@ export const MyRole = () => {
           )}
         </ButtonsGroup>
       </PageHeader>
-      <RowGapBlock>
+      <RowGapBlock gap={24}>
         <Row>
           <BadgeStatus inverted size="l" separated>
             {worker.group.name.toUpperCase()}

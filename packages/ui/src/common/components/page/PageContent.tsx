@@ -28,13 +28,21 @@ export const ContentWithTabs = styled(MainPanel)`
   grid-row-gap: 16px;
 `
 
-export const RowGapBlock = styled.div<{ gap?: number }>`
+interface GapBlockProps {
+  gap?: number
+  align?: 'left' | 'right'
+  alignCenter?: boolean
+}
+
+export const RowGapBlock = styled.div<GapBlockProps>`
   display: grid;
-  grid-row-gap: ${({ gap }) => (gap ? gap + 'px' : '24px')};
-  height: fit-content;
+  grid-row-gap: ${({ gap }) => (gap ? gap + 'px' : '0px')};
   width: 100%;
+  height: fit-content;
+  justify-content: ${({ align }) => (align === 'right' ? 'end' : 'start')};
+  justify-items: ${({ align }) => (align === 'right' ? 'end' : 'start')};
 `
-export const ColumnGapBlock = styled.div<{ gap?: number; alignCenter?: boolean }>`
+export const ColumnGapBlock = styled.div<GapBlockProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: ${({ gap }) => (gap ? gap + 'px' : '16px')};
