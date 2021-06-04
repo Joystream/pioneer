@@ -6,14 +6,14 @@ import { Fraction } from '@/common/components/typography/Fraction'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { relativeTime } from '@/common/model/relativeTime'
 import {
-  OACItemInfo,
-  OACItemInfoTop,
-  OACItemSummary,
-  OACItemTitle,
-  OACSubscriptionWide,
-  OACWrap,
+  ToggleableItemInfo,
+  ToggleableItemInfoTop,
+  ToggleableItemSummary,
+  ToggleableItemTitle,
+  ToggleableSubscriptionWide,
+  ToggleableItemWrap,
   OpenItemSummaryColumn,
-} from '@/working-groups/components/OpeningAndApplicationsComponents/OACStyledComponents'
+} from '@/working-groups/components/ToggleableItemStyledComponents'
 import { WorkingGroupOpening } from '@/working-groups/types'
 
 export type Props = {
@@ -21,21 +21,21 @@ export type Props = {
 }
 
 export const OpeningListItem = ({ opening }: Props) => (
-  <OACWrap>
-    <OACItemInfo>
-      <OACItemInfoTop>
+  <ToggleableItemWrap>
+    <ToggleableItemInfo>
+      <ToggleableItemInfoTop>
         <Subscription>ID: {opening.id}</Subscription>
         <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
         {opening.type === 'LEADER' ? <BadgeStatus>LEAD</BadgeStatus> : null}
-      </OACItemInfoTop>
-      <OACItemTitle>{opening.title}</OACItemTitle>
-    </OACItemInfo>
-    <OACItemSummary>
+      </ToggleableItemInfoTop>
+      <ToggleableItemTitle>{opening.title}</ToggleableItemTitle>
+    </ToggleableItemInfo>
+    <ToggleableItemSummary>
       <OpenItemSummaryColumn>
         <TextInlineBig>
           <TokenValue value={opening.reward.payout} />
         </TextInlineBig>
-        <OACSubscriptionWide>Reward per {opening.reward.blockInterval} blocks.</OACSubscriptionWide>
+        <ToggleableSubscriptionWide>Reward per {opening.reward.blockInterval} blocks.</ToggleableSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
         <Fraction numerator={opening.applicants.current} denominator={opening.applicants.total} sameSize />
@@ -45,6 +45,6 @@ export const OpeningListItem = ({ opening }: Props) => (
         <Fraction numerator={opening.hiring.current} denominator={opening.hiring.total} sameSize />
         <Subscription>Hiring</Subscription>
       </OpenItemSummaryColumn>
-    </OACItemSummary>
-  </OACWrap>
+    </ToggleableItemSummary>
+  </ToggleableItemWrap>
 )

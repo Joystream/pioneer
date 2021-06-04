@@ -4,9 +4,9 @@ import { Toggle } from '@/common/components/buttons/Toggle'
 import { Arrow } from '@/common/components/icons'
 import { useToggle } from '@/common/hooks/useToggle'
 import {
-  OACItemContainer,
+  ToggleableItemContainer,
   OpeningToggleButton,
-} from '@/working-groups/components/OpeningAndApplicationsComponents/OACStyledComponents'
+} from '@/working-groups/components/ToggleableItemStyledComponents'
 import { isUpcomingOpening, UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
 
 import { Opening } from './Opening'
@@ -21,9 +21,9 @@ export const OpeningsListRow = ({ opening }: ListRowProps) => {
 
   return (
     <Toggle absoluteToggle isOpen={isOpened}>
-      <OACItemContainer isOpen={isOpened}>
+      <ToggleableItemContainer isOpen={isOpened}>
         {isUpcomingOpening(opening) ? <UpcomingOpening opening={opening} /> : <Opening opening={opening} />}
-      </OACItemContainer>
+      </ToggleableItemContainer>
       <OpeningToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
         <Arrow direction="down" />
       </OpeningToggleButton>

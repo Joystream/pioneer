@@ -4,7 +4,7 @@ import { ToggleButton } from '@/common/components/buttons/Toggle'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { Colors, Overflow, Transitions } from '@/common/constants'
 
-export const OACWrap = styled.div`
+export const ToggleableItemWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr auto 40px;
   grid-column-gap: 24px;
@@ -39,14 +39,14 @@ interface OpenedItemProps {
   isOpen?: boolean
 }
 
-export const OACItemContainer = styled.div<OpenedItemProps>`
+export const ToggleableItemContainer = styled.div<OpenedItemProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
   overflow: hidden;
   transition: ${Transitions.all};
 
-  ${OACWrap} {
+  ${ToggleableItemWrap} {
     margin-top: ${({ isOpen }) => (isOpen ? '-94px' : '0px')};
   }
   ${OpenedContainer} {
@@ -57,7 +57,7 @@ export const OACItemContainer = styled.div<OpenedItemProps>`
   }
 `
 
-export const OACItemInfo = styled.div`
+export const ToggleableItemInfo = styled.div`
   display: grid;
   grid-template-rows: 26px 24px;
   grid-row-gap: 4px;
@@ -66,7 +66,7 @@ export const OACItemInfo = styled.div`
   align-items: center;
 `
 
-export const OACItemInfoTop = styled.div`
+export const ToggleableItemInfoTop = styled.div`
   display: grid;
   grid-auto-flow: column;
   align-items: center;
@@ -75,14 +75,14 @@ export const OACItemInfoTop = styled.div`
   max-width: 100%;
 `
 
-export const OACItemSummary = styled.div`
+export const ToggleableItemSummary = styled.div`
   display: grid;
   grid-auto-flow: column;
   width: 100%;
   grid-column-gap: 40px;
 `
 
-export const OACItemTitle = styled.h5`
+export const ToggleableItemTitle = styled.h5`
   text-transform: capitalize;
   ${Overflow.FullDots};
 `
@@ -99,7 +99,7 @@ export const OpenItemSummaryColumn = styled.div`
   align-items: center;
 `
 
-export const OACSubscriptionWide = styled(Subscription)`
+export const ToggleableSubscriptionWide = styled(Subscription)`
   min-width: 136px;
 `
 

@@ -4,45 +4,45 @@ import { TextInlineBig, TextMedium, TokenValue } from '@/common/components/typog
 import { Subscription } from '@/common/components/typography/Subscription'
 import { relativeTime } from '@/common/model/relativeTime'
 import {
-  OACItemInfo,
-  OACItemInfoTop,
-  OACItemSummary,
-  OACItemTitle,
-  OACSubscriptionWide,
-  OACWrap,
+  ToggleableItemInfo,
+  ToggleableItemInfoTop,
+  ToggleableItemSummary,
+  ToggleableItemTitle,
+  ToggleableSubscriptionWide,
+  ToggleableItemWrap,
   OpenItemSummaryColumn,
-} from '@/working-groups/components/OpeningAndApplicationsComponents/OACStyledComponents'
+} from '@/working-groups/components/ToggleableItemStyledComponents'
 import { UpcomingWorkingGroupOpening } from '@/working-groups/types'
 
 export type UpcomingProps = {
   opening: UpcomingWorkingGroupOpening
 }
 export const UpcomingOpeningListItem = ({ opening }: UpcomingProps) => (
-  <OACWrap>
-    <OACItemInfo>
-      <OACItemInfoTop>
+  <ToggleableItemWrap>
+    <ToggleableItemInfo>
+      <ToggleableItemInfoTop>
         <Subscription>ID: {opening.id}</Subscription>
         <Subscription>Starts {relativeTime(opening.expectedStart)}</Subscription>
-      </OACItemInfoTop>
-      <OACItemTitle>{opening.title}</OACItemTitle>
-    </OACItemInfo>
-    <OACItemSummary>
+      </ToggleableItemInfoTop>
+      <ToggleableItemTitle>{opening.title}</ToggleableItemTitle>
+    </ToggleableItemInfo>
+    <ToggleableItemSummary>
       <OpenItemSummaryColumn>
         <TextInlineBig>
           <TokenValue value={opening.reward.payout} />
         </TextInlineBig>
-        <OACSubscriptionWide>Reward per {opening.reward.blockInterval} blocks.</OACSubscriptionWide>
+        <ToggleableSubscriptionWide>Reward per {opening.reward.blockInterval} blocks.</ToggleableSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
         <TextInlineBig>
           <TokenValue value={opening.stake} />
         </TextInlineBig>
-        <OACSubscriptionWide>Minimum stake required</OACSubscriptionWide>
+        <ToggleableSubscriptionWide>Minimum stake required</ToggleableSubscriptionWide>
       </OpenItemSummaryColumn>
       <OpenItemSummaryColumn>
         <TextMedium>{opening.hiringLimit}</TextMedium>
         <Subscription>Hiring</Subscription>
       </OpenItemSummaryColumn>
-    </OACItemSummary>
-  </OACWrap>
+    </ToggleableItemSummary>
+  </ToggleableItemWrap>
 )

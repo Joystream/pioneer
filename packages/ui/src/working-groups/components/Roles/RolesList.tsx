@@ -16,14 +16,14 @@ import { Worker } from '@/working-groups/types'
 
 import { workerRoleTitle } from '../../helpers'
 import {
-  OACItemInfo,
-  OACItemInfoTop,
-  OACItemSummary,
-  OACItemTitle,
-  OACSubscriptionWide,
-  OACWrap,
+  ToggleableItemInfo,
+  ToggleableItemInfoTop,
+  ToggleableItemSummary,
+  ToggleableItemTitle,
+  ToggleableSubscriptionWide,
+  ToggleableItemWrap,
   OpenItemSummaryColumn,
-} from '../OpeningAndApplicationsComponents/OACStyledComponents'
+} from '../ToggleableItemStyledComponents'
 
 export interface RolesListProps {
   workers: Worker[]
@@ -56,40 +56,40 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
   }, [])
 
   return (
-    <OACWrap>
-      <OACItemInfo>
-        <OACItemInfoTop>
+    <ToggleableItemWrap>
+      <ToggleableItemInfo>
+        <ToggleableItemInfoTop>
           <BadgeStatus>{worker.group.name}</BadgeStatus>
           {worker.isLeader && <BadgeStatus>LEADER</BadgeStatus>}
-        </OACItemInfoTop>
+        </ToggleableItemInfoTop>
         <Title onClick={() => history.push(`/working-groups/my-roles/${worker.id}`)}>{workerRoleTitle(worker)}</Title>
-      </OACItemInfo>
-      <OACItemSummary>
+      </ToggleableItemInfo>
+      <ToggleableItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
             <TokenValue value={new BN(worker.reward.payout)} />
           </TextInlineBig>
-          <OACSubscriptionWide>Reward per {worker.reward.blockInterval} blocks</OACSubscriptionWide>
+          <ToggleableSubscriptionWide>Reward per {worker.reward.blockInterval} blocks</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
             <TokenValue value={new BN(worker.earnedTotal)} />
           </TextInlineBig>
-          <OACSubscriptionWide>Earned total</OACSubscriptionWide>
+          <ToggleableSubscriptionWide>Earned total</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
             <TokenValue value={new BN(2396000)} />
           </TextInlineBig>
-          <OACSubscriptionWide>Next payment in</OACSubscriptionWide>
+          <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
             <TokenValue value={new BN(worker.stake)} />
           </TextInlineBig>
-          <OACSubscriptionWide>Staked</OACSubscriptionWide>
+          <ToggleableSubscriptionWide>Staked</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
-      </OACItemSummary>
+      </ToggleableItemSummary>
       <ContextMenu>
         <ButtonLink size="small" bold borderless onClick={changeRewardCallback}>
           Change reward account
@@ -98,10 +98,10 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
           Leave a position
         </ButtonLink>
       </ContextMenu>
-    </OACWrap>
+    </ToggleableItemWrap>
   )
 }
 
-const Title = styled(OACItemTitle)`
+const Title = styled(ToggleableItemTitle)`
   cursor: pointer;
 `
