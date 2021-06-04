@@ -10,10 +10,12 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
+import { RawApplication, seedApplication } from '@/mocks/data/mockApplications'
+import { seedOpening, seedOpeningStatuses } from '@/mocks/data/mockOpenings'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
+import { seedWorker } from '@/mocks/data/seedWorkers'
 import { LeaveRoleModal } from '@/working-groups/modals/LeaveRoleModal/LeaveRoleModal'
 
-import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/mockOpenings'
 import { alice } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -47,6 +49,27 @@ const OPENING_DATA = {
   createdAtBlockId: '5',
 }
 
+const WORKER_DATA = {
+  id: '1',
+  membershipId: '0',
+  groupId: 1,
+  applicationId: '1',
+  nextPaymentAt: '',
+  rewardPerBlock: 0,
+  earnedTotal: 2000,
+  stake: 2000,
+  status: '',
+  hiredAtBlockId: '1',
+}
+
+const APPLICATION_DATA: RawApplication = {
+  openingId: '1',
+  applicantId: '41',
+  answers: [],
+  status: 'pending',
+  createdAtBlockId: 1,
+}
+
 describe('UI: LeaveRoleModal', () => {
   const api = stubApi()
 
@@ -78,45 +101,46 @@ describe('UI: LeaveRoleModal', () => {
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
     seedOpening(OPENING_DATA, server.server)
+    seedApplication(APPLICATION_DATA, server.server)
+    seedWorker(WORKER_DATA, server.server)
     useMyMemberships.setActive(getMember('alice'))
     stubDefaultBalances(api)
-    transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.leaveRole')
+    transaction = stubTransaction(api, 'api.tx.storageWorkingGroup.leaveRole')
   })
 
   it('Prepare step', async () => {
-    const openingId = server.server!.schema.first('WorkingGroupOpening')!.id!
-    renderModal({ ...WORKER, openingId })
+    renderModal()
     expect(await screen.findByText('Leaving a position?')).toBeDefined()
     expect(await screen.findByText('Please remember that this action is irreversible.')).toBeDefined()
     expect(await screen.findByText('Unstaking period takes 14409 blocks.')).toBeDefined()
-    expect(screen.getByRole('button', { name: 'Leave the position anyway' })).toBeDefined()
+    expect(await screen.findByRole('button', { name: 'Leave the position anyway' })).toBeDefined()
   })
 
   describe('Authorize step', () => {
     async function renderSignStep() {
       renderModal()
-      fireEvent.click(screen.getByRole('button', { name: 'Leave the position anyway' }))
+      fireEvent.click(await screen.findByRole('button', { name: 'Leave the position anyway' }))
     }
 
     it('Transaction success', async () => {
       await renderSignStep()
       stubTransactionSuccess(transaction, [WORKER.id], 'workingGroup', 'WorkerStartedLeaving')
-      fireEvent.click(screen.getByRole('button', { name: 'Sign and leave role' }))
+      fireEvent.click(await screen.findByRole('button', { name: 'Sign and leave role' }))
       expect(await screen.findByText('Success!')).toBeDefined()
     })
 
     it('Transaction failure', async () => {
       await renderSignStep()
       stubTransactionFailure(transaction)
-      fireEvent.click(screen.getByRole('button', { name: 'Sign and leave role' }))
+      fireEvent.click(await screen.findByRole('button', { name: 'Sign and leave role' }))
       expect(await screen.findByText('There was a problem leaving the role.')).toBeDefined()
     })
   })
 
-  function renderModal(worker = WORKER) {
+  function renderModal() {
     const modalContext = {
       modal: 'LeaveRole',
-      modalData: { worker },
+      modalData: { workerId: '1' },
       showModal: () => null,
       hideModal: () => null,
     }

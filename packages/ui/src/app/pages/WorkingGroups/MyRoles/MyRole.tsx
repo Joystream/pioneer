@@ -63,7 +63,7 @@ export const MyRole = () => {
     worker &&
       showModal<LeaveRoleModalCall>({
         modal: 'LeaveRole',
-        data: { worker },
+        data: { workerId: worker.id },
       })
   }, [worker])
 

@@ -6,6 +6,7 @@ type WorkerStatus = 'active' | 'left' | 'terminated'
 
 interface RawWorker {
   id: string
+  applicationId: string
   membershipId: string
   status: string
   groupId: number
@@ -13,13 +14,14 @@ interface RawWorker {
   earnedTotal: number
   stake: number
   nextPaymentAt: string
+  hiredAtBlockId: string
 }
 
 export type MockWorker = Worker & { groupId: string; memberId: string; applicationId: string }
 
 export const mockWorkers = rawWorkers.map((rawGroup) => ({ ...rawGroup }))
 
-const seedWorker = (worker: RawWorker, server: any) => {
+export const seedWorker = (worker: RawWorker, server: any) => {
   const member = server.schema.find('Membership', worker.membershipId)
   return server.schema.create('Worker', {
     roleAccount: member.controllerAccount,

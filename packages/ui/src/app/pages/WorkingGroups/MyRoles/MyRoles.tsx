@@ -9,10 +9,10 @@ import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label, TextBig } from '@/common/components/typography'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
+import { NextPayoutStat } from '@/working-groups/components/NextPayoutStat'
 import { RolesList } from '@/working-groups/components/Roles/RolesList'
 import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 
-import { NextPayoutStat } from '../../../../working-groups/components/NextPayoutStat'
 import { WorkingGroupsTabs } from '../components/WorkingGroupsTabs'
 
 export const MyRoles = () => {

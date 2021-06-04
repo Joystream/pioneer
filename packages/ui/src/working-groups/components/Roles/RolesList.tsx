@@ -1,13 +1,17 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
-import { ButtonGhost } from '@/common/components/buttons'
-import { KebabMenuIcon } from '@/common/components/icons'
+import { ButtonLink } from '@/common/components/buttons'
+import { ContextMenu } from '@/common/components/ContextMenu'
 import { List, ListItem } from '@/common/components/List'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
+import { ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
+import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
+import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { Worker } from '@/working-groups/types'
 
 import { workerRoleTitle } from '../../helpers'
@@ -37,6 +41,19 @@ export const RolesList = ({ workers }: RolesListProps) => (
 
 const RolesListItem = ({ worker }: { worker: Worker }) => {
   const history = useHistory()
+  const { showModal } = useModal()
+  const changeRewardCallback = useCallback(() => {
+    showModal<ChangeAccountModalCall>({
+      modal: 'ChangeAccountModal',
+      data: { workerId: worker.id, type: ModalTypes.CHANGE_REWARD_ACCOUNT },
+    })
+  }, [])
+  const leaveRoleCallback = useCallback(() => {
+    showModal<LeaveRoleModalCall>({
+      modal: 'LeaveRole',
+      data: { workerId: worker.id },
+    })
+  }, [])
 
   return (
     <OACWrap>
@@ -73,9 +90,14 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
           <OACSubscriptionWide>Staked</OACSubscriptionWide>
         </OpenItemSummaryColumn>
       </OACItemSummary>
-      <ButtonGhost square size="medium">
-        <KebabMenuIcon />
-      </ButtonGhost>
+      <ContextMenu>
+        <ButtonLink size="small" bold borderless onClick={changeRewardCallback}>
+          Change reward account
+        </ButtonLink>
+        <ButtonLink size="small" bold borderless onClick={leaveRoleCallback}>
+          Leave a position
+        </ButtonLink>
+      </ContextMenu>
     </OACWrap>
   )
 }

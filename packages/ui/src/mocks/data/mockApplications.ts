@@ -15,7 +15,7 @@ interface MockAnswer {
 
 const mockApplications = rawApplications.map((application) => ({ ...application }))
 
-const seedApplication = (rawApplication: RawApplication, server: any) => {
+export const seedApplication = (rawApplication: RawApplication, server: any) => {
   const status = seedStatus(rawApplication.status, server)
 
   const member = server.schema.find('Membership', rawApplication.applicantId)
