@@ -7,7 +7,7 @@ interface QuestionMock {
   question: string
 }
 
-interface RawUpcomingOpeningMock {
+export interface RawUpcomingOpeningMock {
   groupId: string
   stakeAmount: number
   metadata: {

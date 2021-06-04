@@ -1,3 +1,4 @@
+import { RawUpcomingOpeningMock } from '@/mocks/data/seedUpcomingOpening'
 import { getReward } from '@/working-groups/model/getReward'
 import { WorkerWithDetails } from '@/working-groups/types'
 
@@ -76,4 +77,29 @@ export const OPENING = {
   unstakingPeriod: '14409',
   rewardPerBlock: 200,
   createdAtBlockId: '5',
+}
+
+export const UPCOMING_OPENING: RawUpcomingOpeningMock = {
+  groupId: '0',
+  stakeAmount: 5000,
+  rewardPerBlock: 200,
+  createdAtBlockId: '70',
+  expectedStart: '2021-06-11T23:52:47.017Z',
+  metadata: {
+    shortDescription: 'Upcoming worker opening.officiis aliquam sapiente et quis sed',
+    description: 'Description',
+    hiringLimit: 1,
+    applicationDetails: 'Eaque voluptate similique',
+    applicationFormQuestions: [
+      {
+        type: 'TEXT',
+        question: 'tempore a quas dicta qui voluptas delectus?',
+      },
+      {
+        type: 'TEXTAREA',
+        question: 'dolorem ad fuga ipsum sed?',
+      },
+    ],
+    expectedEnding: '2021-07-04T14:01:59.513Z',
+  },
 }

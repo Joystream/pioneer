@@ -4,13 +4,14 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { WorkingGroupsOpenings } from '@/app/pages/WorkingGroups/WorkingGroupsOpenings'
-import { seedBlocks, seedMember } from '@/mocks/data'
+import { seedMember } from '@/mocks/data'
 import { seedOpening, seedOpeningStatuses } from '@/mocks/data/mockOpenings'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
+import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { MEMBER_ALICE, OPENING } from '../../_mocks/server/seeds'
+import { MEMBER_ALICE, OPENING, UPCOMING_OPENING } from '../../_mocks/server/seeds'
 
 describe('WorkingGroupOpenings', () => {
   const mockServer = setupMockServer()
@@ -18,8 +19,9 @@ describe('WorkingGroupOpenings', () => {
   beforeAll(cryptoWaitReady)
 
   beforeEach(() => {
-    seedBlocks(mockServer.server)
+    seedMember(MEMBER_ALICE, mockServer.server)
     seedWorkingGroups(mockServer.server)
+    seedOpeningStatuses(mockServer.server)
   })
 
   it('Renders page', async () => {
@@ -37,9 +39,6 @@ describe('WorkingGroupOpenings', () => {
   })
 
   it('With openings', async () => {
-    seedMember(MEMBER_ALICE, mockServer.server)
-    seedWorkingGroups(mockServer.server)
-    seedOpeningStatuses(mockServer.server)
     seedOpening({ ...OPENING }, mockServer.server)
     seedOpening({ ...OPENING }, mockServer.server)
 
@@ -47,6 +46,15 @@ describe('WorkingGroupOpenings', () => {
 
     expect(await screen.findByRole('button', { name: /^Openings 2/i })).toBeDefined()
     expect(await screen.findByRole('button', { name: /^Upcoming openings 0/i })).toBeDefined()
+  })
+
+  it('With upcoming openings', async () => {
+    seedUpcomingOpening(UPCOMING_OPENING, mockServer.server)
+
+    renderPage()
+
+    expect(await screen.findByRole('button', { name: /^Openings 0/i })).toBeDefined()
+    expect(await screen.findByRole('button', { name: /^Upcoming openings 1/i })).toBeDefined()
   })
 
   function renderPage() {
