@@ -5,7 +5,6 @@ import { useBalances } from '@/accounts/hooks/useBalances'
 import { useModal } from '@/common/hooks/useModal'
 
 import { MoveFundsModalCall } from '.'
-import { MoveFoundsModalType } from './constants'
 import { MoveFoundsInsufficientBalanceModal } from './MoveFoundsInsufficientBalanceModal'
 import { MoveFoundsLockedModal } from './MoveFoundsLockedModal'
 import { MoveFoundsTransferableModal } from './MoveFoundsTransferableModal'
@@ -13,7 +12,7 @@ import { MoveFoundsTransferableModal } from './MoveFoundsTransferableModal'
 export const MoveFundsModal = () => {
   const {
     hideModal,
-    modalData: { requiredStake, type, accounts },
+    modalData: { requiredStake, accounts, lockedFoundsAccounts },
   } = useModal<MoveFundsModalCall>()
   const { push } = useHistory()
   const balances = useBalances()
@@ -23,7 +22,7 @@ export const MoveFundsModal = () => {
     push('/profile')
   }
 
-  if (type === MoveFoundsModalType.TRANSFERABLE) {
+  if (accounts) {
     return (
       <MoveFoundsTransferableModal
         onClose={hideModal}
@@ -33,21 +32,16 @@ export const MoveFundsModal = () => {
         accounts={accounts}
       />
     )
-  }
-
-  if (type === MoveFoundsModalType.LOCKED_FOUNDS) {
+  } else if (lockedFoundsAccounts && Object.keys(lockedFoundsAccounts).length) {
     return (
       <MoveFoundsLockedModal
         onClose={hideModal}
         onManageAccountsClick={onManageAccountsClick}
         requiredStake={requiredStake}
         balances={balances}
-        accounts={accounts}
       />
     )
-  }
-
-  if (type === MoveFoundsModalType.NO_FOUNDS) {
+  } else {
     return (
       <MoveFoundsInsufficientBalanceModal
         onClose={hideModal}
@@ -56,6 +50,4 @@ export const MoveFundsModal = () => {
       />
     )
   }
-
-  return null
 }

@@ -1,8 +1,7 @@
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
-import { useTotalBalances } from '@/accounts/hooks/useTotalBalances'
 import { MemberRow } from '@/accounts/modals/MoveFoundsModal/styles'
 import { Account, AddressToBalanceMap } from '@/accounts/types'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
@@ -26,7 +25,13 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
     modalData: { lockedFoundsAccounts },
   } = useModal<MoveFundsModalCall>()
   const [isDropped, setIsDropped] = useToggle()
-  const { transferable } = useTotalBalances()
+
+  const totalTransferable = useMemo<number>(() => {
+    if (lockedFoundsAccounts && account) {
+      return lockedFoundsAccounts[account.address].reduce((a, b) => a + balances[b.address].transferable.toNumber(), 0)
+    }
+    return 0
+  }, [lockedFoundsAccounts, account])
 
   return (
     <>
@@ -60,7 +65,7 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
         <div>
           <Divider />
           <BalanceSummary>
-            <TextMedium bold>Total balance:</TextMedium> <BalanceTokenValue value={transferable} />
+            <TextMedium bold>Total balance:</TextMedium> <BalanceTokenValue value={totalTransferable} />
           </BalanceSummary>
         </div>
       </DropDownToggleStyled>
