@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Select } from '../../../common/components/selects'
 import { useKeyring } from '../../../common/hooks/useKeyring'
 import { Address } from '../../../common/types'
-import { useAccounts } from '../../hooks/useAccounts'
+import { useMyAccounts } from '../../hooks/useMyAccounts'
 import { accountOrNamed } from '../../model/accountOrNamed'
 import { isValidAddress } from '../../model/isValidAddress'
 import { Account } from '../../types'
@@ -25,7 +25,7 @@ interface Props {
 }
 
 export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
   const options = allAccounts.filter(filter || (() => true))
   const [selectedOption, setSelectedOption] = useState(selected)
   const [search, setSearch] = useState('')

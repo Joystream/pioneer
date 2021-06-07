@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { AnySchema } from 'yup'
 
 import { filterAccount, SelectAccount } from '../../../accounts/components/SelectAccount'
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
+import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '../../../common/components/forms'
@@ -43,7 +43,7 @@ const UpdateMemberSchema = Yup.object().shape({
 
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
   const { api } = useApi()
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
 
   const initializer = {
     id: member.id,

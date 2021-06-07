@@ -4,7 +4,7 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useEffect, useState } from 'react'
 
 import { SelectAccount, SelectedAccount } from '../../../accounts/components/SelectAccount'
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
+import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
 import { useBalance } from '../../../accounts/hooks/useBalance'
 import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
 import { Account } from '../../../accounts/types'
@@ -37,7 +37,7 @@ export const BuyMembershipSignModal = ({
   transaction,
   initialSigner,
 }: SignProps) => {
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
   const [from, setFrom] = useState(
     initialSigner ?? accountOrNamed(allAccounts, formData.invitor?.controllerAccount || '', 'Controller account')
   )

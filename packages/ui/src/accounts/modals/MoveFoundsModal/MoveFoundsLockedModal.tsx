@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useAccounts } from '@/accounts/hooks/useAccounts'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal/index'
 import { AddressToBalanceMap } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -24,7 +24,7 @@ export const MoveFoundsLockedModal = ({
   requiredStake,
   balances,
 }: MoveFoundsLockedModalProps) => {
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
   const {
     modalData: { lockedFoundsAccounts },
   } = useModal<MoveFundsModalCall>()

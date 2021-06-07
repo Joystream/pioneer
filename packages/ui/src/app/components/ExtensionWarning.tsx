@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-import { useAccounts } from '../../accounts/hooks/useAccounts'
+import { useMyAccounts } from '../../accounts/hooks/useMyAccounts'
 import { SideNotification } from '../../common/components/page/SideNotification'
 
 const HIDE_NOTIFICATION_TIMEOUT = 10000
 
 export function ExtensionWarning() {
-  const { error } = useAccounts()
+  const { error } = useMyAccounts()
   const [showNotification, setShowNotification] = useState(false)
 
   useEffect(() => {

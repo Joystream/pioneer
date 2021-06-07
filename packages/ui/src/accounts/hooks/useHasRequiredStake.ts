@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 
-import { useAccounts } from '@/accounts/hooks/useAccounts'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useBalances } from '@/accounts/hooks/useBalances'
 import { useTotalBalances } from '@/accounts/hooks/useTotalBalances'
 import { Account } from '@/accounts/types'
@@ -9,7 +9,7 @@ import { Address } from '@/common/types'
 export const useHasRequiredStake = (stake: number) => {
   const [hasRequiredStake, setHasRequiredStake] = useState<boolean | undefined>(undefined)
   const balances = useBalances()
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
   const { transferable: totalTransferable, locked: totalLocked } = useTotalBalances()
   const totalTransferableToNumber = totalTransferable.toNumber()
   const totalLockedToNumber = totalLocked.toNumber()

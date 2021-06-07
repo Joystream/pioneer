@@ -3,7 +3,7 @@ import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useEffect, useState } from 'react'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
+import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
 import { useBalance } from '../../../accounts/hooks/useBalance'
 import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
 import { ButtonPrimary } from '../../../common/components/buttons'
@@ -26,7 +26,7 @@ interface SignProps {
 }
 
 export const InviteMemberSignModal = ({ onClose, formData, onDone, transaction, signer }: SignProps) => {
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
   const { paymentInfo, send, status } = useSignAndSendTransaction({
     transaction,
