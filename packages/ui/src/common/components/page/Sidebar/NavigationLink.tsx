@@ -80,7 +80,7 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLingkProps>`
   }
 
   .nav-icon {
-    color: ${({ disabled }) => (disabled ? Colors.Black[600] : Colors.Black[300])};
+    color: ${({ disabled }) => (disabled ? Colors.Black[600] : Colors.Black[400])};
     transition: ${Transitions.all};
   }
 
