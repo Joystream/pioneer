@@ -46,6 +46,9 @@ fragment WorkingGroupFields on WorkingGroup {
   workers {
     ...WorkerFields
   }
+  openings {
+    ...WorkingGroupOpeningFields
+  }
   leader {
     membership {
       id

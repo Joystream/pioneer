@@ -16,7 +16,7 @@ interface UseOpeningsParams {
   page?: number
 }
 
-const getTypeFilter = (type: OpeningType) => {
+export const getTypeFilter = (type: OpeningType) => {
   if (type === 'open') {
     return isOpeningOpen
   }

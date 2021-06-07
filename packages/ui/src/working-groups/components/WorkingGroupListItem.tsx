@@ -42,7 +42,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>Current budget</Subscription>
         </StatsColumn>
         <StatsColumn>
-          <StatsValue>1</StatsValue>
+          <StatsValue>{group.openings?.length ?? 0}</StatsValue>
           <Subscription>Openings</Subscription>
         </StatsColumn>
         <StatsColumn>

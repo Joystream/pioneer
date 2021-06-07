@@ -1,5 +1,9 @@
 import BN from 'bn.js'
 
+import { getTypeFilter } from '@/working-groups/hooks/useOpenings'
+import { getWorkersFilter } from '@/working-groups/hooks/useWorkers'
+import { asWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types/WorkingGroupOpening'
+
 import { Member } from '../../memberships/types'
 import { WorkerFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
@@ -14,6 +18,7 @@ export interface WorkingGroup {
   about?: string
   leaderId?: string
   workers?: Worker[]
+  openings?: WorkingGroupOpening[]
   status?: string
   description?: string
   statusMessage?: string
@@ -35,7 +40,8 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     description: group.metadata?.description ?? '',
     status: group.metadata?.status ?? '',
     statusMessage: group.metadata?.statusMessage ?? '',
-    workers: group.workers?.map(asWorker) ?? [],
+    workers: group.workers?.filter(getWorkersFilter(['active'])).map(asWorker) ?? [],
+    openings: group.openings?.map(asWorkingGroupOpening).filter(getTypeFilter('open')) ?? [],
     leaderId: group.leader?.membership.id,
     budget: new BN(group.budget),
   }

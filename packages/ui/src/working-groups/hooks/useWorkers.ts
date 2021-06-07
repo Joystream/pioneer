@@ -28,7 +28,7 @@ const StatusTypename: Record<Status, WorkerStatus> = {
   terminated: 'WorkerStatusTerminated',
 }
 
-const getWorkersFilter = (statusIn?: Status[]) => {
+export const getWorkersFilter = (statusIn?: Status[]) => {
   const statusTypeIn = statusIn?.map((status) => StatusTypename[status]) ?? ['WorkerStatusActive']
   return (worker: WorkerFieldsFragment) => statusTypeIn.includes(worker.status.__typename)
 }

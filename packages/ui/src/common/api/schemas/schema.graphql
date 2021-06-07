@@ -7283,6 +7283,7 @@ input WorkingGroupWhereInput {
   budget_lt: BigInt
   budget_lte: BigInt
   budget_in: [BigInt!]
+  worker: WorkerWhereInput
 }
 
 input WorkingGroupWhereUniqueInput {

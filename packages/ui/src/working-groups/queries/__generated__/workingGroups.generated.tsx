@@ -1,11 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
+
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
@@ -49,6 +47,7 @@ export type WorkingGroupFieldsFragment = {
   budget: any
   metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetdataFieldsFragment>
   workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment>
+  openings: Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>
   leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
 }
 
@@ -334,34 +333,6 @@ export const WorkerFieldsFragmentDoc = gql`
   ${MemberFieldsFragmentDoc}
   ${BlockFieldsFragmentDoc}
 `
-export const WorkingGroupFieldsFragmentDoc = gql`
-  fragment WorkingGroupFields on WorkingGroup {
-    id
-    name
-    budget
-    metadata {
-      ...WorkingGroupMetdataFields
-    }
-    workers {
-      ...WorkerFields
-    }
-    leader {
-      membership {
-        id
-      }
-    }
-  }
-  ${WorkingGroupMetdataFieldsFragmentDoc}
-  ${WorkerFieldsFragmentDoc}
-`
-export const RewardPaidEventFieldsFragmentDoc = gql`
-  fragment RewardPaidEventFields on RewardPaidEvent {
-    id
-    amount
-    rewardAccount
-    createdAt
-  }
-`
 export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
     applicationDetails
@@ -409,6 +380,38 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
   ${MemberFieldsFragmentDoc}
+`
+export const WorkingGroupFieldsFragmentDoc = gql`
+  fragment WorkingGroupFields on WorkingGroup {
+    id
+    name
+    budget
+    metadata {
+      ...WorkingGroupMetdataFields
+    }
+    workers {
+      ...WorkerFields
+    }
+    openings {
+      ...WorkingGroupOpeningFields
+    }
+    leader {
+      membership {
+        id
+      }
+    }
+  }
+  ${WorkingGroupMetdataFieldsFragmentDoc}
+  ${WorkerFieldsFragmentDoc}
+  ${WorkingGroupOpeningFieldsFragmentDoc}
+`
+export const RewardPaidEventFieldsFragmentDoc = gql`
+  fragment RewardPaidEventFields on RewardPaidEvent {
+    id
+    amount
+    rewardAccount
+    createdAt
+  }
 `
 export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
   fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
