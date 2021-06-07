@@ -22,4 +22,11 @@ describe('blocksToTime', () => {
     const blocks = new BN(20)
     expect(blocksToTime(blocks)).toEqual('2 min')
   })
+
+  it('bigger numbers of blocks', () => {
+    expect(blocksToTime(new BN(481))).toEqual('48 min')
+    expect(blocksToTime(new BN(800))).toEqual('1 hr')
+    expect(blocksToTime(new BN(2800))).toEqual('4 hr')
+    expect(blocksToTime(new BN(14430))).toEqual('1 day')
+  })
 })
