@@ -81,7 +81,7 @@ export const WORKER_DATA = {
   nextPaymentAt: '',
   rewardPerBlock: 0,
   earnedTotal: 2000,
-  stake: 2000,
+  stake: 4000,
   status: '',
   hiredAtBlockId: '1',
 }

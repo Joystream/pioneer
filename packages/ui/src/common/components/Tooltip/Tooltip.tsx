@@ -220,11 +220,6 @@ export const TooltipComponent = styled.button`
   justify-content: center;
   align-items: center;
   z-index: 50;
-  svg {
-    width: 100%;
-    height: 100%;
-    position: static;
-  }
   &:hover,
   &:focus {
     ${DefaultTooltip} {

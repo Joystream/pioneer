@@ -16,6 +16,7 @@ export interface Worker {
   reward: Reward
   earnedTotal: number
   stake: number
+  minStake: number
 }
 
 export interface WorkerWithDetails extends Worker {
@@ -42,6 +43,7 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   reward: getReward(fields.rewardPerBlock, fields.group.name),
   earnedTotal: 1000,
   stake: fields.stake,
+  minStake: fields.application.opening.stakeAmount,
 })
 
 export const asWorkerWithDetails = (fields: WorkerFieldsFragment): WorkerWithDetails => ({

@@ -33,7 +33,12 @@ export type WorkerFieldsFragment = {
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
   hiredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
-  application: { __typename: 'WorkingGroupApplication'; id: string; openingId: string }
+  application: {
+    __typename: 'WorkingGroupApplication'
+    id: string
+    openingId: string
+    opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
+  }
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -319,6 +324,9 @@ export const WorkerFieldsFragmentDoc = gql`
     application {
       id
       openingId
+      opening {
+        stakeAmount
+      }
     }
   }
   ${MemberFieldsFragmentDoc}
