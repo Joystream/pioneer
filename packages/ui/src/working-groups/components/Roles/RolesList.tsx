@@ -59,7 +59,7 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
     <ToggleableItemWrap>
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
-          <BadgeStatus>{worker.group.name}</BadgeStatus>
+          <BadgeStatus inverted>{worker.group.name}</BadgeStatus>
           {worker.isLeader && <BadgeStatus>LEADER</BadgeStatus>}
         </ToggleableItemInfoTop>
         <Title onClick={() => history.push(`/working-groups/my-roles/${worker.id}`)}>{workerRoleTitle(worker)}</Title>
