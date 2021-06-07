@@ -26,7 +26,15 @@ export const UpcomingOpening = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   if (isLoading || !opening) {
-    return <Loading />
+    return (
+      <AppPage lastBreadcrumb={id} rowGap="s">
+        <RowGapBlock gap={24}>
+          <ContentWithSidepanel>
+            <Loading />
+          </ContentWithSidepanel>
+        </RowGapBlock>
+      </AppPage>
+    )
   }
 
   const ApplicationStatus = memo(() => (
