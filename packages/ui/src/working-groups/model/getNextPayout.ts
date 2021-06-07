@@ -14,4 +14,5 @@ export function getNextPayout(workers: Pick<Worker, 'group'>[], blockNumber: BN)
   if (nextPayoutPerGroup.length) {
     return nextPayoutPerGroup.reduce((closest, time) => (closest = BN.min(closest, time)))
   }
+  return new BN(-1)
 }
