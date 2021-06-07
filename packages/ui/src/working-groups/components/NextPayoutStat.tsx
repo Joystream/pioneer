@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react'
 
-import { TokenValueStat } from '../../common/components/statistics'
+import { StatisticItem } from '../../common/components/statistics'
+import { NumericValue } from '../../common/components/statistics/NumericValueStat'
+import { TextMedium } from '../../common/components/typography'
 import { useCurrentBlockNumber } from '../../common/hooks/useCurrentBlockNumber'
 import { getNextPayout } from '../model/getNextPayout'
 import { Worker } from '../types'
@@ -16,5 +18,10 @@ export const NextPayoutStat = ({ workers }: Props) => {
     blockNumber?.toNumber(),
   ])
 
-  return <TokenValueStat title={'Next payout in'} value={nextPayout ?? 0} />
+  return (
+    <StatisticItem title={'Next payout in'}>
+      <NumericValue>{nextPayout?.toString() ?? 0} blocks</NumericValue>
+      <TextMedium lighter>(~4 hours)</TextMedium>
+    </StatisticItem>
+  )
 }
