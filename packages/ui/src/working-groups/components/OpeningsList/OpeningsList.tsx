@@ -6,7 +6,7 @@ import { UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-grou
 import { OpeningsListRow } from './OpeningsListRow'
 
 export interface OpeningsListProps {
-  openings: WorkingGroupOpening[] | UpcomingWorkingGroupOpening[]
+  openings: Array<WorkingGroupOpening | UpcomingWorkingGroupOpening>
 }
 
 export const OpeningsList = ({ openings }: OpeningsListProps) => {
