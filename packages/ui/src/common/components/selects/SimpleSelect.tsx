@@ -8,6 +8,7 @@ import { isDefined } from '@/common/utils'
 import { stopEvent } from '@/common/utils/events'
 
 import { Select } from '.'
+import { EmptyOption } from './components'
 
 type Option = string | ReactNode
 type ValueToOption<T> = (value: T) => Option
@@ -122,16 +123,22 @@ export const FilterSelect = <T extends any>(props: FilterSelectProps<T>) => (
 
 const SelectContainer = styled.label`
   display: block;
+
+  ${EmptyOption} {
+    padding: 0 16px;
+  }
   & > :last-child {
     height: 48px;
   }
 `
 
 const Selected = styled.div`
+  cursor: pointer;
   display: block;
   text-transform: capitalize;
   padding: 0.5rem 0;
   grid-column: span 2;
+  user-select: none;
 `
 const OptionsContainer = styled.div`
   background: ${Colors.White};
@@ -140,6 +147,7 @@ const OptionsContainer = styled.div`
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 100%;
+  user-select: none;
   width: 100%;
   z-index: 10;
 `
@@ -152,6 +160,7 @@ const OptionFocused = css`
   color: ${Colors.Blue[500]};
 `
 const Option = styled.div`
+  cursor: pointer;
   display: block;
   padding: 1rem;
   text-transform: capitalize;
