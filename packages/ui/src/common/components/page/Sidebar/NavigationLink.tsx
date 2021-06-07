@@ -90,7 +90,7 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLingkProps>`
         ? css`
             color: ${Colors.Black[600]};
             &:after {
-              background-color: 'transparent';
+              background-color: transparent;
             }
             .nav-icon {
               color: ${Colors.Black[600]};
