@@ -5,8 +5,10 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
@@ -44,6 +46,8 @@ export const ApplyForRoleModal = () => {
       staking_account_id: active?.controllerAccount,
     },
   })
+  const requiredStake = opening.stake.toNumber()
+  const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
   const [stakeAccount, setStakeAccount] = useState<Account>()
   const transaction = useMemo(() => {
     if (active && txParams && api) {
@@ -63,6 +67,13 @@ export const ApplyForRoleModal = () => {
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
   useEffect(() => {
+    if (hasRequiredStake === false) {
+      showModal<MoveFundsModalCall>({
+        modal: 'MoveFundsModal',
+        data: { lockedFoundsAccounts: accountsWithLockedFounds, accounts: transferableAccounts, requiredStake },
+      })
+    }
+
     if (state !== 'REQUIREMENTS_CHECK') {
       return
     }
@@ -72,16 +83,16 @@ export const ApplyForRoleModal = () => {
       return
     }
 
-    if (!active) {
+    if (!active && hasRequiredStake) {
       showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
     }
 
     if (feeInfo && !feeInfo.canAfford) {
       setState('REQUIREMENTS_FAIL')
     }
-  }, [state, active?.id, JSON.stringify(feeInfo)])
+  }, [state, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
-  if (!active || !feeInfo) {
+  if (!active || !feeInfo || hasRequiredStake === false) {
     return null
   }
 

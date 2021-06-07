@@ -15,7 +15,7 @@ export interface MoveFoundsTransferableModalProps {
   onManageAccountsClick: () => void
   requiredStake: number
   balances: AddressToBalanceMap
-  accounts: Account[]
+  accounts?: Account[]
 }
 
 export const MoveFoundsTransferableModal = ({
@@ -25,7 +25,7 @@ export const MoveFoundsTransferableModal = ({
   accounts,
   balances,
 }: MoveFoundsTransferableModalProps) => {
-  if (!accounts.length) {
+  if (!accounts || !accounts.length) {
     return null
   }
 

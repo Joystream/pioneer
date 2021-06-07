@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
+import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { ModalContext } from '@/common/providers/modal/context'
 
 import { alice, aliceStash, bob, bobStash } from '../../../../test/_mocks/keyring'
@@ -26,21 +27,28 @@ const Template: Story<MoveFoundsLockedModalProps> = (args) => {
   return (
     <>
       <HashRouter>
-        <ModalContext.Provider
+        <AccountsContext.Provider
           value={{
-            modalData: {
-              lockedFoundsAccounts: {
-                [alice.address]: [aliceStash, bobStash, bob],
-                [bobStash.address]: [alice, bob],
-              },
-            },
-            modal: 'Foo',
-            hideModal: () => undefined,
-            showModal: () => undefined,
+            hasAccounts: true,
+            allAccounts: [alice, aliceStash, bob, bobStash],
           }}
         >
-          <MoveFoundsLockedModal {...args} />
-        </ModalContext.Provider>
+          <ModalContext.Provider
+            value={{
+              modalData: {
+                lockedFoundsAccounts: {
+                  [alice.address]: [aliceStash, bobStash, bob],
+                  [bobStash.address]: [alice, bob],
+                },
+              },
+              modal: 'Foo',
+              hideModal: () => undefined,
+              showModal: () => undefined,
+            }}
+          >
+            <MoveFoundsLockedModal {...args} />
+          </ModalContext.Provider>
+        </AccountsContext.Provider>
       </HashRouter>
     </>
   )
@@ -48,7 +56,6 @@ const Template: Story<MoveFoundsLockedModalProps> = (args) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  accounts: [alice, bobStash],
   balances: {
     [alice.address]: balanceMock(),
     [aliceStash.address]: balanceMock(),

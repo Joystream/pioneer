@@ -54,7 +54,7 @@ export const OpeningDetails = ({ opening }: Props) => {
           </StatsBlock>
           <StatsBlock size="m" centered spacing="s">
             <TextBig>
-              <TokenValue value={opening.reward.payout} />
+              <TokenValue value={opening.stake} />
             </TextBig>
             <Subscription>Minimum Stake Required</Subscription>
           </StatsBlock>

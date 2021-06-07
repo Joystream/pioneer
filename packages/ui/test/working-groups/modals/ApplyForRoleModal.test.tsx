@@ -32,6 +32,14 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
+const useHasRequiredStake = { hasRequiredStake: true }
+
+jest.mock('../../../src/accounts/hooks/useHasRequiredStake', () => {
+  return {
+    useHasRequiredStake: () => useHasRequiredStake,
+  }
+})
+
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()
   const useModal: UseModal<any> = {

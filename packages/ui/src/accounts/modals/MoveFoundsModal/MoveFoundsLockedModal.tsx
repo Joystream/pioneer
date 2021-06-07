@@ -1,9 +1,12 @@
 import React from 'react'
 
-import { Account, AddressToBalanceMap } from '@/accounts/types'
+import { useAccounts } from '@/accounts/hooks/useAccounts'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal/index'
+import { AddressToBalanceMap } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
 
 import { MoveFoundsAccountItem } from './MoveFoundsAccountItem'
 import { ModalBody } from './styles'
@@ -13,7 +16,6 @@ export interface MoveFoundsLockedModalProps {
   onManageAccountsClick: () => void
   requiredStake: number
   balances: AddressToBalanceMap
-  accounts: Account[]
 }
 
 export const MoveFoundsLockedModal = ({
@@ -21,11 +23,11 @@ export const MoveFoundsLockedModal = ({
   onManageAccountsClick,
   requiredStake,
   balances,
-  accounts,
 }: MoveFoundsLockedModalProps) => {
-  if (!accounts.length) {
-    return null
-  }
+  const { allAccounts } = useAccounts()
+  const {
+    modalData: { lockedFoundsAccounts },
+  } = useModal<MoveFundsModalCall>()
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
@@ -38,9 +40,14 @@ export const MoveFoundsLockedModal = ({
         <TextMedium margin="s" bold>
           Accounts with locked balances:
         </TextMedium>
-        {accounts.map((account) => (
-          <MoveFoundsAccountItem account={account} balances={balances} />
-        ))}
+        {lockedFoundsAccounts &&
+          Object.keys(lockedFoundsAccounts).map((address) => (
+            <MoveFoundsAccountItem
+              key={address}
+              account={allAccounts.find((account) => account.address === address)}
+              balances={balances}
+            />
+          ))}
       </ModalBody>
       <ModalFooter>
         <ButtonPrimary size="medium" onClick={onManageAccountsClick}>
