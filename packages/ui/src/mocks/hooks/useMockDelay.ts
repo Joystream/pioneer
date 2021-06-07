@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react'
+import { DependencyList, useEffect, useState } from 'react'
 
 interface ReturnType<T> {
   loading: boolean
   data: T | undefined
   error: any
 }
-export const useMockDelay = <T extends any>(toReturn: T): ReturnType<T> => {
+export const useMockDelay = <T extends any>(
+  toReturn: T,
+  deps: DependencyList | undefined = [JSON.stringify(toReturn)]
+): ReturnType<T> => {
   const [data, setData] = useState<T>()
 
   useEffect(() => {
@@ -15,7 +18,7 @@ export const useMockDelay = <T extends any>(toReturn: T): ReturnType<T> => {
     return () => {
       clearTimeout(timeout)
     }
-  }, [toReturn])
+  }, deps)
 
   return { loading: !data, data, error: undefined }
 }
