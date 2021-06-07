@@ -1,6 +1,7 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
+import { UpcomingOpening } from '@/app/pages/WorkingGroups/UpcomingOpening'
 import { WorkingGroupOpening } from '@/app/pages/WorkingGroups/WorkingGroupsOpening'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
@@ -36,7 +37,8 @@ export const App = () => (
         <Route exact path="/working-groups/my-roles" component={MyRoles} />
         <Route exact path="/working-groups/my-roles/:id" component={MyRole} />
         <Route exact path="/working-groups/:name" component={WorkingGroup} />
-        <Route path="/working-groups/openings/:id" component={WorkingGroupOpening} />
+        <Route exact path="/working-groups/openings/:id" component={WorkingGroupOpening} />
+        <Route exact path="/working-groups/upcoming-openings/:id" component={UpcomingOpening} />
         <Route exact path={ProposalsRoutes.current} component={Proposals} />
         <Route exact path={ProposalsRoutes.past} component={PastProposals} />
         <Route exact path={ProposalsRoutes.myproposals} />
