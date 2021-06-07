@@ -9,7 +9,7 @@ import { AddressToBalanceMap } from '../types'
 
 import { useMyAccounts } from './useMyAccounts'
 
-export function useBalances() {
+export function useMyBalances() {
   const { hasAccounts, allAccounts } = useMyAccounts()
   const { isConnected, api } = useApi()
 

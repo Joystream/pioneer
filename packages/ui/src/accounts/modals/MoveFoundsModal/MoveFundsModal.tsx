@@ -1,7 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { useBalances } from '@/accounts/hooks/useBalances'
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useModal } from '@/common/hooks/useModal'
 
 import { MoveFundsModalCall } from '.'
@@ -15,7 +15,7 @@ export const MoveFundsModal = () => {
     modalData: { requiredStake, accounts, lockedFoundsAccounts },
   } = useModal<MoveFundsModalCall>()
   const { push } = useHistory()
-  const balances = useBalances()
+  const balances = useMyBalances()
 
   const onManageAccountsClick = (): void => {
     hideModal()
