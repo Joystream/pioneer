@@ -16,6 +16,7 @@ export const useMockDelay = <T extends any>(
       setData(toReturn)
     }, 500)
     return () => {
+      setData(undefined)
       clearTimeout(timeout)
     }
   }, deps)
