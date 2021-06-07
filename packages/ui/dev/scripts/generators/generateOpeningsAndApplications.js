@@ -1,8 +1,8 @@
 const faker = require('faker')
 
-const { randomUniqueArrayFromRange, randomFromRange, randomMarkdown } = require('./utils')
 const { MAX_MEMBERS } = require('./generateMembers')
 const { WORKING_GROUPS } = require('./generateWorkingGroups')
+const { randomUniqueArrayFromRange, randomFromRange, randomMarkdown } = require('./utils')
 
 let nextQuestionId = 0
 let nextOpeningId = 0
@@ -31,7 +31,7 @@ const generateMetadata = () => ({
 const generateBaseOpening = (groupId) => ({
   id: String(nextOpeningId++),
   groupId: String(groupId),
-  stakeAmount: randomFromRange(2, 8) * 1000,
+  stakeAmount: randomFromRange(1, 10) * 1000,
   rewardPerBlock: randomFromRange(1, 5) * 100,
   createdAtBlockId: randomFromRange(20, 100),
   version: 1,
