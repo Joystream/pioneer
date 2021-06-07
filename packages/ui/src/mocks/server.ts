@@ -64,6 +64,7 @@ export const makeServer = (environment = 'development') => {
               workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
               applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
               upcomingWorkingGroupOpenings: getWhereResolver('UpcomingWorkingGroupOpening'),
+              upcomingWorkingGroupOpeningByUniqueInput: getUniqueResolver('UpcomingWorkingGroupOpening'),
               rewardPaidEvents: getWhereResolver('RewardPaidEvent'),
             },
           },
