@@ -10,13 +10,7 @@ import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Loading } from '@/common/components/Loading'
-import {
-  ContentWithSidepanel,
-  ContentWithTabs,
-  MainPanel,
-  PageFooter,
-  RowGapBlock,
-} from '@/common/components/page/PageContent'
+import { ContentWithSidepanel, ContentWithTabs, MainPanel, PageFooter } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -104,87 +98,83 @@ export const MyRole = () => {
           )}
         </ButtonsGroup>
       </PageHeader>
-      <RowGapBlock gap={24}>
-        <Row>
-          <BadgeStatus inverted size="l" separated>
-            {worker.group.name.toUpperCase()}
+      <Row>
+        <BadgeStatus inverted size="l" separated>
+          {worker.group.name.toUpperCase()}
+        </BadgeStatus>
+        <BadgeStatus inverted size="l" separated>
+          {worker.isLeader ? 'LEADER' : 'REGULAR'}
+        </BadgeStatus>
+        <BadgeStatus inverted size="l" separated>
+          WORKER ID #{worker.id}
+        </BadgeStatus>
+        {!isActive && (
+          <BadgeStatus ended inverted size="l" separated>
+            ROLE ENDED
           </BadgeStatus>
-          <BadgeStatus inverted size="l" separated>
-            {worker.isLeader ? 'LEADER' : 'REGULAR'}
-          </BadgeStatus>
-          <BadgeStatus inverted size="l" separated>
-            WORKER ID #{worker.id}
-          </BadgeStatus>
-          {!isActive && (
-            <BadgeStatus ended inverted size="l" separated>
-              ROLE ENDED
-            </BadgeStatus>
-          )}
-        </Row>
-        <Statistics>
-          <MultiTokenValueStat
-            title="Total earned in the past"
-            values={[
-              {
-                label: '24 hours',
-                value: new BN(200),
-              },
-              {
-                label: 'Month',
-                value: new BN(10200000),
-              },
-            ]}
-          />
-          <TokenValueStat title="Stake height" value={worker.stake} />
-          <TokenValueStat title="Owed reward" value={150000} />
-          <TokenValueStat title="Next payout in" value={150000} />
-        </Statistics>
-        <ContentWithSidepanel>
-          <MainPanel ref={sideNeighborRef}>
-            <ContentWithTabs>
-              <RoleAccountHeader>
-                <Label>Role Account</Label>
-                <ButtonsGroup>
-                  {isActive && (
-                    <ButtonGhost size="small" onClick={onChangeRoleClick}>
-                      Change Role Account
-                    </ButtonGhost>
-                  )}
-                </ButtonsGroup>
-              </RoleAccountHeader>
-              <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} balances={['total']} />
-            </ContentWithTabs>
-            <ContentWithTabs>
-              <RoleAccountHeader>
-                <Label>Stake Account</Label>
-                <ButtonsGroup>
-                  {isActive && <ButtonPrimary size="small">Move Excess Tokens</ButtonPrimary>}
-                </ButtonsGroup>
-              </RoleAccountHeader>
-              <MyRoleAccount
-                account={{ name: 'Stake Account', address: worker.stakeAccount }}
-                balances={['total', 'locked']}
-              />
-            </ContentWithTabs>
-            <ContentWithTabs>
-              <RoleAccountHeader>
-                <Label>Reward Account</Label>
-                <ButtonsGroup>
-                  {isActive && (
-                    <ButtonGhost size="small" onClick={onChangeRewardClick}>
-                      Change Reward Account
-                    </ButtonGhost>
-                  )}
-                </ButtonsGroup>
-              </RoleAccountHeader>
-              <MyRoleAccount account={{ name: 'Reward Account', address: worker.rewardAccount }} balances={['total']} />
-            </ContentWithTabs>
-          </MainPanel>
-          <SidePanel neighbor={sideNeighborRef}>
-            <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} />
-          </SidePanel>
-        </ContentWithSidepanel>
-      </RowGapBlock>
+        )}
+      </Row>
+      <Statistics>
+        <MultiTokenValueStat
+          title="Total earned in the past"
+          values={[
+            {
+              label: '24 hours',
+              value: new BN(200),
+            },
+            {
+              label: 'Month',
+              value: new BN(10200000),
+            },
+          ]}
+        />
+        <TokenValueStat title="Stake height" value={worker.stake} />
+        <TokenValueStat title="Owed reward" value={150000} />
+        <TokenValueStat title="Next payout in" value={150000} />
+      </Statistics>
+      <ContentWithSidepanel>
+        <MainPanel ref={sideNeighborRef}>
+          <ContentWithTabs>
+            <RoleAccountHeader>
+              <Label>Role Account</Label>
+              <ButtonsGroup>
+                {isActive && (
+                  <ButtonGhost size="small" onClick={onChangeRoleClick}>
+                    Change Role Account
+                  </ButtonGhost>
+                )}
+              </ButtonsGroup>
+            </RoleAccountHeader>
+            <MyRoleAccount account={{ name: 'Role Account', address: worker.roleAccount }} balances={['total']} />
+          </ContentWithTabs>
+          <ContentWithTabs>
+            <RoleAccountHeader>
+              <Label>Stake Account</Label>
+              <ButtonsGroup>{isActive && <ButtonPrimary size="small">Move Excess Tokens</ButtonPrimary>}</ButtonsGroup>
+            </RoleAccountHeader>
+            <MyRoleAccount
+              account={{ name: 'Stake Account', address: worker.stakeAccount }}
+              balances={['total', 'locked']}
+            />
+          </ContentWithTabs>
+          <ContentWithTabs>
+            <RoleAccountHeader>
+              <Label>Reward Account</Label>
+              <ButtonsGroup>
+                {isActive && (
+                  <ButtonGhost size="small" onClick={onChangeRewardClick}>
+                    Change Reward Account
+                  </ButtonGhost>
+                )}
+              </ButtonsGroup>
+            </RoleAccountHeader>
+            <MyRoleAccount account={{ name: 'Reward Account', address: worker.rewardAccount }} balances={['total']} />
+          </ContentWithTabs>
+        </MainPanel>
+        <SidePanel neighbor={sideNeighborRef}>
+          <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} />
+        </SidePanel>
+      </ContentWithSidepanel>
       <PageFooter>
         <BlockTime block={worker.hiredAtBlock} horizontal dateLabel="Hired" />
       </PageFooter>
