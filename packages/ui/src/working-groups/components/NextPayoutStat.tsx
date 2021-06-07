@@ -4,6 +4,7 @@ import { StatisticItem } from '../../common/components/statistics'
 import { NumericValue } from '../../common/components/statistics/NumericValueStat'
 import { TextMedium } from '../../common/components/typography'
 import { useCurrentBlockNumber } from '../../common/hooks/useCurrentBlockNumber'
+import { blocksToTime } from '../../common/model/blocksToTime'
 import { getNextPayout } from '../model/getNextPayout'
 import { Worker } from '../types'
 
@@ -21,7 +22,7 @@ export const NextPayoutStat = ({ workers }: Props) => {
   return (
     <StatisticItem title={'Next payout in'}>
       <NumericValue>{nextPayout?.toString() ?? 0} blocks</NumericValue>
-      <TextMedium lighter>(~4 hours)</TextMedium>
+      <TextMedium lighter>({nextPayout && blocksToTime(nextPayout)})</TextMedium>
     </StatisticItem>
   )
 }
