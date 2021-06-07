@@ -1,11 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import {
-  MemberFieldsFragment,
-  MemberFieldsFragmentDoc,
-} from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
+
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
@@ -33,7 +31,12 @@ export type WorkerFieldsFragment = {
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
   hiredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
-  application: { __typename: 'WorkingGroupApplication'; id: string; openingId: string }
+  application: {
+    __typename: 'WorkingGroupApplication'
+    id: string
+    openingId: string
+    opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
+  }
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -319,6 +322,9 @@ export const WorkerFieldsFragmentDoc = gql`
     application {
       id
       openingId
+      opening {
+        stakeAmount
+      }
     }
   }
   ${MemberFieldsFragmentDoc}

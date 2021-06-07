@@ -13,6 +13,7 @@ export interface StatisticItemProps {
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
+  TooltipIcon?: React.ElementType
 }
 
 export const StatisticItem = ({
@@ -23,6 +24,7 @@ export const StatisticItem = ({
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
+  TooltipIcon = TooltipDefault,
 }: StatisticItemProps) => {
   return (
     <StatsBlock key={title} className={className}>
@@ -36,7 +38,7 @@ export const StatisticItem = ({
               tooltipLinkText={tooltipLinkText}
               tooltipLinkURL={tooltipLinkURL}
             >
-              <TooltipDefault />
+              <TooltipIcon />
             </Tooltip>
           )}
         </StatsInfo>
@@ -98,6 +100,7 @@ const StatsHeader = styled.div`
 
 const StatsInfo = styled(Label)`
   position: relative;
+  align-items: start;
 `
 
 const StatsContent = styled.div`
