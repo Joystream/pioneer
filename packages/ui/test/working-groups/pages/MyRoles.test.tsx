@@ -11,7 +11,7 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 import { seedApplication } from '@/mocks/data/mockApplications'
-import { seedOpening, seedOpenings } from '@/mocks/data/mockOpenings'
+import { seedOpening } from '@/mocks/data/mockOpenings'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { seedWorker } from '@/mocks/data/seedWorkers'
 
@@ -50,7 +50,6 @@ describe('UI: My Role Page', () => {
     beforeEach(() => {
       seedMembers(mockServer.server)
       seedWorkingGroups(mockServer.server)
-      seedOpenings(mockServer.server)
       seedOpening(OPENING_DATA, mockServer.server)
       seedApplication(APPLICATION_DATA, mockServer.server)
     })
@@ -76,7 +75,7 @@ describe('UI: My Role Page', () => {
       })
 
       it('Higher than minimal', async () => {
-        seedWorker(WORKER_DATA, mockServer.server)
+        seedWorker({ ...WORKER_DATA, stake: 7000 }, mockServer.server)
 
         const { getByText, queryByText } = renderPage()
 
