@@ -248,6 +248,12 @@ fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
   }
 }
 
+query GetUpcomingWorkingGroupOpening($where: UpcomingWorkingGroupOpeningWhereUniqueInput!) {
+  upcomingWorkingGroupOpeningByUniqueInput(where: $where) {
+    ...UpcomingWorkingGroupOpeningFields
+  }
+}
+
 query GetUpcomingWorkingGroupOpenings($where: UpcomingWorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
   upcomingWorkingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
     ...UpcomingWorkingGroupOpeningFields
