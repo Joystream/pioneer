@@ -14,6 +14,7 @@ interface RawWorker {
   earnedTotal: number
   stake: number
   nextPaymentAt: string
+  missingRewardAmount: number
   hiredAtBlockId: string
 }
 

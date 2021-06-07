@@ -15,6 +15,7 @@ const generateWorkers = () => {
     status: type,
     rewardPerBlock: randomFromRange(1, 2) * 100,
     earnedTotal: randomFromRange(10, 40) * 100,
+    missingRewardAmount: randomFromRange(0, 20) * 100,
     stake: randomFromRange(3, 8) * 1000,
     nextPaymentAt: faker.date.soon(randomFromRange(1, 10)).toJSON(),
     hiredAtBlockId: randomFromRange(20, 100),

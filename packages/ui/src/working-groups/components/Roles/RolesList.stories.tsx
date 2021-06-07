@@ -24,6 +24,7 @@ Default.args = {
       stake: 1000,
       minStake: 400,
       isLeader: false,
+      owedReward: 1000,
     },
   ],
 }
