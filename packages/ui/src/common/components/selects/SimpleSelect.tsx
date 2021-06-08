@@ -1,17 +1,14 @@
 import React, { ReactNode, useMemo, useReducer } from 'react'
 import styled, { css } from 'styled-components'
 
-import { ControlProps } from '@/common/components/forms'
 import { FilterLabel } from '@/common/components/forms/FilterBox'
 import { Colors } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 import { stopEvent } from '@/common/utils/events'
 
 import { Select } from '.'
-import { EmptyOption } from './components'
+import { DefaultSelectProps, OptionNode, OptionProps } from './types'
 
-type Option = string | ReactNode
-type ValueToOption<T> = (value: T) => Option
 
 type Move<T> = { type: 'move'; entries: [Option, T][]; step: number }
 type Set<T> = { type: 'set'; value: T | undefined }
@@ -34,8 +31,8 @@ const selectFocusReducer = <T extends any>(value: T | undefined, action: Action<
   }
 }
 
-interface SimpleSelectProps<T> extends FilterSelectProps<T> {
-  emptyOption?: Option
+interface SimpleSelectProps<T> extends DefaultSelectProps<T> {
+  emptyOption?: OptionNode
   onSearch?: (search: string) => void
 }
 
@@ -109,17 +106,6 @@ export const SimpleSelect = <T extends any>({
     </SelectContainer>
   )
 }
-
-interface FilterSelectProps<T> extends ControlProps<T | null> {
-  title?: string
-  options: T[]
-  renderOption?: ValueToOption<T>
-  renderSelected?: (value: T | null) => Option
-}
-
-export const FilterSelect = <T extends any>(props: FilterSelectProps<T>) => (
-  <SimpleSelect {...props} emptyOption="All" />
-)
 
 const SelectContainer = styled.label`
   display: block;
