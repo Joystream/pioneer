@@ -4,14 +4,14 @@ import { renderHook } from '@testing-library/react-hooks'
 import BN from 'bn.js'
 import React, { ReactNode } from 'react'
 
-import { useTotalBalances } from '@/accounts/hooks/useTotalBalances'
+import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/common/providers/api/context'
 
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubBalances } from '../../_mocks/transactions'
 
-describe('useTotalBalances', () => {
+describe('useMyTotalBalances', () => {
   const useApi = stubApi()
 
   jest.useFakeTimers()
@@ -63,6 +63,6 @@ describe('useTotalBalances', () => {
         </AccountsContextProvider>
       </MockKeyringProvider>
     )
-    return renderHook(() => useTotalBalances(), { wrapper })
+    return renderHook(() => useMyTotalBalances(), { wrapper })
   }
 })

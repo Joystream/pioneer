@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { TransferButtonStyled } from '../../accounts/components/TransferButton'
-import { useTotalBalances } from '../../accounts/hooks/useTotalBalances'
+import { useMyTotalBalances } from '../../accounts/hooks/useMyTotalBalances'
 import { TokenValue } from '../../common/components/typography'
 import { Colors } from '../../common/constants'
 
@@ -10,7 +10,7 @@ import { Memberships } from '.'
 import { CurrentMember } from './CurrentMember'
 
 export function ProfileComponent() {
-  const { total } = useTotalBalances()
+  const { total } = useMyTotalBalances()
 
   return (
     <Profile>

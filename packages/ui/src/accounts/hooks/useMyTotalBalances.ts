@@ -20,7 +20,7 @@ const addBalances = (a: Balances, b: Balances) => ({
   locks: a.locks.concat(b.locks),
 })
 
-export function useTotalBalances(): Balances {
+export function useMyTotalBalances(): Balances {
   const balances = useMyBalances()
 
   return [...Object.values(balances)].reduce(addBalances, zeroBalance())
