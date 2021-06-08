@@ -32,7 +32,6 @@ const generateBaseOpening = (groupId: number) => ({
   groupId: String(groupId),
   stakeAmount: randomFromRange(1, 10) * 1000,
   rewardPerBlock: randomFromRange(1, 5) * 100,
-  createdAtBlockId: randomFromRange(20, 100),
   version: 1,
 })
 
@@ -98,7 +97,6 @@ const generateApplications = (openings: Opening[], mocks: Mocks) => {
         answer: faker.lorem.words(randomFromRange(5, 10)),
       })),
       status: 'pending',
-      createdAtBlockId: 1,
     })
 
     return applicantsIds.map(generateApplication)

@@ -6,8 +6,8 @@ type WorkerStatus = 'active' | 'left' | 'terminated'
 
 interface RawWorker {
   id: string
-  applicationId: string
-  membershipId: string
+  applicationId: number
+  membershipId: number
   status: string
   groupId: number
   rewardPerBlock: number
@@ -15,7 +15,6 @@ interface RawWorker {
   stake: number
   nextPaymentAt: string
   missingRewardAmount: number
-  hiredAtBlockId: string
 }
 
 export type MockWorker = Worker & { groupId: string; memberId: string; applicationId: string }

@@ -21,7 +21,6 @@ export interface RawUpcomingOpeningMock {
   }
   expectedStart: string
   rewardPerBlock: number
-  createdAtBlockId: string
 }
 
 export const getMockAsUpcomingOpening = (index = 0) => {

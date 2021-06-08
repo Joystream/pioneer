@@ -32,7 +32,6 @@ const generateMember = () => ({
   isVerified: Math.random() > 0.5,
   isFoundingMember: nextId < 9,
   inviteCount: 5,
-  registeredAtBlockId: String(nextId),
 })
 
 export type Member = ReturnType<typeof generateMember>

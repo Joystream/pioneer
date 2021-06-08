@@ -25,9 +25,8 @@ interface RawOpeningMock {
     applicationDetails: string
     applicationFormQuestions: QuestionMock[]
   }
-  unstakingPeriod: string
+  unstakingPeriod: number
   rewardPerBlock: number
-  createdAtBlockId: string
 }
 
 export const getMockAsOpening = (index = 0) => {
