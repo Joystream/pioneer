@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useTotalBalances } from '../../../accounts/hooks/useTotalBalances'
+import { useMyTotalBalances } from '../../../accounts/hooks/useMyTotalBalances'
 import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '../../../common/components/statistics'
@@ -10,7 +10,7 @@ import { Accounts } from './components/Accounts'
 import { MyProfileTabs } from './components/MyProfileTabs'
 
 export function MyAccounts() {
-  const { total, transferable, locked, recoverable } = useTotalBalances()
+  const { total, transferable, locked, recoverable } = useMyTotalBalances()
 
   return (
     <AppPage>

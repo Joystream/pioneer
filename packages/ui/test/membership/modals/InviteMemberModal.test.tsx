@@ -24,14 +24,14 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const useAccounts: UseAccounts = {
+const useMyAccounts: UseAccounts = {
   hasAccounts: false,
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useAccounts', () => {
+jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
   return {
-    useAccounts: () => useAccounts,
+    useMyAccounts: () => useMyAccounts,
   }
 })
 
@@ -39,7 +39,7 @@ describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useAccounts.allAccounts.push(alice, aliceStash)
+    useMyAccounts.allAccounts.push(alice, aliceStash)
   })
 
   afterAll(() => {

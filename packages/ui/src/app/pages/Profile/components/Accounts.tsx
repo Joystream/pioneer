@@ -1,8 +1,8 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { useAccounts } from '../../../../accounts/hooks/useAccounts'
-import { useBalances } from '../../../../accounts/hooks/useBalances'
+import { useMyAccounts } from '../../../../accounts/hooks/useMyAccounts'
+import { useMyBalances } from '../../../../accounts/hooks/useMyBalances'
 import { filterAccounts } from '../../../../accounts/model/filterAccounts'
 import { setOrder, sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
 import { List, ListItem } from '../../../../common/components/List'
@@ -15,9 +15,9 @@ import { Colors } from '../../../../common/constants'
 import { AccountItem } from './AccountItem'
 
 export function Accounts() {
-  const { allAccounts, hasAccounts } = useAccounts()
+  const { allAccounts, hasAccounts } = useMyAccounts()
   const [isDisplayAll, setIsDisplayAll] = useState(true)
-  const balances = useBalances()
+  const balances = useMyBalances()
   const [sortBy, setSortBy] = useState<SortKey>('name')
   const [isDescending, setDescending] = useState(false)
   const visibleAccounts = useMemo(() => filterAccounts(allAccounts, isDisplayAll, balances), [

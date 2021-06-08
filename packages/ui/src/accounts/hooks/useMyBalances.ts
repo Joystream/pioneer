@@ -7,10 +7,10 @@ import { useApi } from '../../common/hooks/useApi'
 import { useObservable } from '../../common/hooks/useObservable'
 import { AddressToBalanceMap } from '../types'
 
-import { useAccounts } from './useAccounts'
+import { useMyAccounts } from './useMyAccounts'
 
-export function useBalances() {
-  const { hasAccounts, allAccounts } = useAccounts()
+export function useMyBalances() {
+  const { hasAccounts, allAccounts } = useMyAccounts()
   const { isConnected, api } = useApi()
 
   const addresses = allAccounts.map((account) => account.address)

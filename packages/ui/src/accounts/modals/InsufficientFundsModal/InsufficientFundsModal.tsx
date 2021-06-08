@@ -3,8 +3,8 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
-import { useAccounts } from '@/accounts/hooks/useAccounts'
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { TransferModalCall } from '@/accounts/modals/TransferModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -30,7 +30,7 @@ export interface InsufficientFundsModalProps {
 
 export function InsufficientFundsModal({ onClose, address, amount }: InsufficientFundsModalProps) {
   const { showModal } = useModal()
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
   const account = useMemo(() => accountOrNamed(allAccounts, address, 'Controller account'), [allAccounts])
   const { transferable } = useBalance(account.address) || {}
 

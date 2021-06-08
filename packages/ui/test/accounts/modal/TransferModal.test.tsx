@@ -20,14 +20,14 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useAccounts', () => {
+jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
   return {
-    useAccounts: () => useAccounts,
+    useMyAccounts: () => useMyAccounts,
   }
 })
 
@@ -35,7 +35,7 @@ describe('UI: TransferModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useAccounts.allAccounts.push(alice, bob)
+    useMyAccounts.allAccounts.push(alice, bob)
   })
 
   afterAll(() => {

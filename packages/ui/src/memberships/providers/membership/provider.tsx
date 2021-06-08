@@ -1,6 +1,6 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 
-import { useAccounts } from '@/accounts/hooks/useAccounts'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { error } from '@/common/logger'
 
 import { useGetMembersQuery } from '../../queries'
@@ -25,7 +25,7 @@ const POLL_INTERVAL = 10_000
 export const MembershipContextProvider = (props: Props) => {
   const [active, setActive] = useState<Member>()
 
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
   const addresses = allAccounts.map((account) => account.address)
 
   const { data, loading, error: err } = useGetMembersQuery({

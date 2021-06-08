@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { info } from '@/common/logger'
 
-import { useAccounts } from '../../accounts/hooks/useAccounts'
+import { useMyAccounts } from '../../accounts/hooks/useMyAccounts'
 import { useApi } from '../../common/hooks/useApi'
 import { useObservable } from '../../common/hooks/useObservable'
 import { useSignAndSendTransaction } from '../../common/hooks/useSignAndSendTransaction'
@@ -11,7 +11,7 @@ const BUDGET = 100
 
 export function useSudoBudget() {
   const { api, isConnected } = useApi()
-  const { hasAccounts } = useAccounts()
+  const { hasAccounts } = useMyAccounts()
   const budget = useObservable(api?.query.membershipWorkingGroup.budget(), [isConnected])
 
   useMemo(() => {

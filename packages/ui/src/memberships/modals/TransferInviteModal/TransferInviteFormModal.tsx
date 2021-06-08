@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
 
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
+import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
 import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
@@ -24,7 +24,7 @@ export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Pro
   const [to, setTo] = useState<Member>()
   const [amount, setAmount] = useNumberInput(0)
   const filterRecipient = useCallback(filterMember(from), [from])
-  const accounts = useAccounts()
+  const accounts = useMyAccounts()
 
   const signer = accounts.allAccounts.find((a) => a.address === from?.controllerAccount)
   const isAmountValid = !from || parseInt(amount) <= from.inviteCount

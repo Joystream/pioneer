@@ -4,8 +4,8 @@ import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
-import { useAccounts } from '../../../accounts/hooks/useAccounts'
 import { useBalance } from '../../../accounts/hooks/useBalance'
+import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '../../../common/components/Modal'
@@ -24,7 +24,7 @@ interface SignProps {
 }
 
 export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer, stake }: SignProps) => {
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
   const { paymentInfo, send, status } = useSignAndSendTransaction({
     transaction,

@@ -6,9 +6,9 @@ import { SelectAccount } from '../../../src/accounts/components/SelectAccount'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
-jest.mock('../../../src/accounts/hooks/useAccounts', () => {
+jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
   return {
-    useAccounts: () => ({
+    useMyAccounts: () => ({
       hasAccounts: false,
       allAccounts: [
         { name: 'Alice', address: '1' },

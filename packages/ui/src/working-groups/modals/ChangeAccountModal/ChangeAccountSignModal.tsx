@@ -2,7 +2,7 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React, { FC } from 'react'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useAccounts } from '@/accounts/hooks/useAccounts'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const ChangeAccountSignModal: FC<Props> = ({ onClose, worker, onDone, transaction, title, buttonLabel }) => {
-  const { allAccounts } = useAccounts()
+  const { allAccounts } = useMyAccounts()
   const signer = accountOrNamed(allAccounts, worker.membership.controllerAccount, 'Controller account')
   const { paymentInfo, send, status } = useSignAndSendTransaction({
     transaction,

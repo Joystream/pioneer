@@ -2,7 +2,7 @@ import BN from 'bn.js'
 
 import { Balances } from '../types'
 
-import { useBalances } from './useBalances'
+import { useMyBalances } from './useMyBalances'
 
 export const zeroBalance = () => ({
   recoverable: new BN(0),
@@ -20,8 +20,8 @@ const addBalances = (a: Balances, b: Balances) => ({
   locks: a.locks.concat(b.locks),
 })
 
-export function useTotalBalances(): Balances {
-  const balances = useBalances()
+export function useMyTotalBalances(): Balances {
+  const balances = useMyBalances()
 
   return [...Object.values(balances)].reduce(addBalances, zeroBalance())
 }
