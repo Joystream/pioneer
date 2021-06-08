@@ -4,9 +4,9 @@
   "license": "GPL-3.0-only",
   "scripts": {
     "build": "node --max_old_space_size=4096 ./node_modules/.bin/webpack --mode production --progress",
-    "queries:generate": "graphql-codegen --config codegen.config.yml",
+    "queries:generate": "graphql-codegen --config codegen.config.yml && yarn lint:fix",
     "lint": "yarn lint:prettier --check && yarn lint:eslint",
-    "lint:fix": "yarn lint:prettier --write && yarn lint:eslint --fix",
+    "lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
     "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
     "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'",
     "start": "NODE_OPTIONS=--max_old_space_size=8192 webpack serve --mode development --progress",

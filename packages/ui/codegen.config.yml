@@ -13,10 +13,6 @@ config:
 
 generates:
   src/common/api/queries/__generated__/baseTypes.generated.ts:
-    hooks:
-      afterOneFileWrite:
-        - prettier --write
-        - eslint --fix
     plugins:
       - typescript
   src/common/api/queries/__generated__/:
@@ -25,10 +21,6 @@ generates:
       baseTypesPath: baseTypes.generated.ts
       folder: __generated__
       extension: .generated.tsx
-    hooks:
-      afterOneFileWrite:
-        - prettier --write
-        - eslint --fix
     plugins:
       - typescript-operations
       - typescript-react-apollo
