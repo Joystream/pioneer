@@ -1,8 +1,8 @@
 import React, { memo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
+import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
@@ -16,8 +16,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { DurationStatistics, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
-import { Colors } from '@/common/constants/styles'
-import { spacing } from '@/common/utils/styles'
+import { ApplicationStatusWrapper } from '@/working-groups/components/ApplicationStatusWrapper'
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { useUpcomingOpening } from '@/working-groups/hooks/useUpcomingOpening'
 
@@ -62,14 +61,14 @@ export const UpcomingOpening = () => {
         </ButtonsGroup>
       </PageHeader>
       <RowGapBlock gap={24}>
-        <Row>
+        <BadgesRow>
           <BadgeStatus inverted size="l" separated>
             {opening.groupName}
           </BadgeStatus>
           <BadgeStatus inverted size="l" separated>
             Upcoming
           </BadgeStatus>
-        </Row>
+        </BadgesRow>
         <Statistics>
           <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
           <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
@@ -91,25 +90,3 @@ export const UpcomingOpening = () => {
     </AppPage>
   )
 }
-
-const ApplicationStatusWrapper = styled.div`
-  text-align: center;
-
-  h4 {
-    color: ${Colors.Blue[500]};
-    margin: ${spacing(2, 0)};
-  }
-
-  p {
-    color: ${Colors.Black[500]};
-    margin-bottom: ${spacing(2)};
-  }
-
-  button {
-    display: inline-flex;
-  }
-`
-
-const Row = styled.div`
-  display: flex;
-`

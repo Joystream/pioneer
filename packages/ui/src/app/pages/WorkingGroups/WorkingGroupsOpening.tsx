@@ -1,8 +1,8 @@
 import React, { memo, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
+import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
@@ -16,12 +16,11 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { DurationStatistics, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
-import { Colors } from '@/common/constants/styles'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
-import { spacing } from '@/common/utils/styles'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
+import { ApplicationStatusWrapper } from '@/working-groups/components/ApplicationStatusWrapper'
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { MappedStatuses, OpeningStatuses } from '@/working-groups/constants'
 import { useOpening } from '@/working-groups/hooks/useOpening'
@@ -107,7 +106,7 @@ export const WorkingGroupOpening = () => {
         </ButtonsGroup>
       </PageHeader>
       <RowGapBlock gap={24}>
-        <Row>
+        <BadgesRow>
           <BadgeStatus inverted size="l" separated>
             {opening.groupName}
           </BadgeStatus>
@@ -115,7 +114,7 @@ export const WorkingGroupOpening = () => {
             {opening.type}
           </BadgeStatus>
           <StatusBadge />
-        </Row>
+        </BadgesRow>
         <Statistics>
           <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
           <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
@@ -144,25 +143,3 @@ export const WorkingGroupOpening = () => {
     </AppPage>
   )
 }
-
-const ApplicationStatusWrapper = styled.div`
-  text-align: center;
-
-  h4 {
-    color: ${Colors.Blue[500]};
-    margin: ${spacing(2, 0)};
-  }
-
-  p {
-    color: ${Colors.Black[500]};
-    margin-bottom: ${spacing(2)};
-  }
-
-  button {
-    display: inline-flex;
-  }
-`
-
-const Row = styled.div`
-  display: flex;
-`
