@@ -6,14 +6,17 @@ import { seedUpcomingOpenings } from '@/mocks/data/seedUpcomingOpening'
 
 import schema from '../common/api/schemas/schema.graphql'
 
-import { seedBlocks, seedMembers } from './data'
-import { seedApplications } from './data/mockApplications'
+import {
+  seedApplications,
+  seedEvents,
+  seedMembers,
+  seedOpenings,
+  seedOpeningStatuses,
+  seedRewardPaidEvents,
+  seedWorkers,
+  seedWorkingGroups,
+} from './data'
 import { seedBudgetSpendingEvents } from './data/mockBudgetSpendingEvents'
-import { seedEvents } from './data/mockEvents'
-import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
-import { seedRewardPaidEvents } from './data/mockRewardPaidEvents'
-import { seedWorkingGroups } from './data/mockWorkingGroups'
-import { seedWorkers } from './data/seedWorkers'
 import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
@@ -77,7 +80,6 @@ export const makeServer = (environment = 'development') => {
     seeds(server: Server<AnyRegistry>) {
       fixAssociations(server)
 
-      seedBlocks(server)
       seedMembers(server)
       seedWorkingGroups(server)
       seedOpeningStatuses(server)

@@ -1,6 +1,6 @@
 import faker from 'faker'
 
-import { Network, WorkingGroupOpeningType } from '@/common/api/queries'
+import { WorkingGroupOpeningType } from '@/common/api/queries'
 import { asWorkingGroupOpening } from '@/working-groups/types'
 
 import rawOpenings from './raw/openings.json'
@@ -49,13 +49,6 @@ export const getMockAsOpening = (index = 0) => {
       __typename: 'WorkingGroup',
       budget: 10_000,
       name: 'Storage',
-    },
-    createdAtBlock: {
-      __typename: 'Block',
-      id: '1234',
-      number: 1234,
-      timestamp: faker.date.recent(2).toJSON(),
-      network: Network.Olympia,
     },
     unstakingPeriod: 14400,
   })

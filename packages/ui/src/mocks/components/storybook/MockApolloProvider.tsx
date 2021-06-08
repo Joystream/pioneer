@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 
-import { seedBlocks } from '@/mocks/data'
 import { fixAssociations, makeServer } from '@/mocks/server'
 
 import { MockApolloProvider as TestMockApolloProvider } from '../../../../test/_mocks/providers'
@@ -14,9 +13,8 @@ export const MockApolloProvider: typeof TestMockApolloProvider = (props) => {
       const glob = global as any
       glob.MockServer = makeServer('storybook')
       fixAssociations((MockServer as unknown) as any)
-      seedBlocks(MockServer)
     }
   }, [])
 
-  return <TestMockApolloProvider {...props} />
+  return <TestMockApolloProvider>{props.children}</TestMockApolloProvider>
 }

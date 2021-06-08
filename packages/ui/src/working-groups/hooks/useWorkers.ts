@@ -10,7 +10,7 @@ interface UseWorkersProps {
 }
 
 export const useWorkers = ({ groupId, statusIn }: UseWorkersProps) => {
-  const options = { variables: { where: { groupId_eq: groupId } } }
+  const options = { variables: { where: { group_eq: groupId } } }
   const { data, loading } = useGetWorkersQuery(options)
   const workers = useMemo(
     () => data && data.workers.filter(getWorkersFilter(statusIn)).map(({ membership }) => asMember(membership)),
