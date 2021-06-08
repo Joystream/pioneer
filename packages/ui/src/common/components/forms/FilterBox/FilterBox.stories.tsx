@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useRef, useState } from 'react'
 
-import { SimpleSelect } from '@/common/components/selects'
+import { FilterSelect } from '@/common/components/selects'
 
 import { FilterBox, FilterPageHeader } from '.'
 
@@ -29,12 +29,7 @@ export const Default: Story = () => {
     <>
       <FilterPageHeader ref={searchSlot} title="Filter Box" />
       <FilterBox searchSlot={searchSlot} search={search} onApply={display} onClear={clear} onSearch={setSearch}>
-        <SimpleSelect
-          title="Select"
-          options={{ All: null, foo: 'foo', bar: 'bar' }}
-          value={selectValue}
-          onChange={setSelectValue}
-        />
+        <FilterSelect title="Select" values={['foo', 'bar']} value={selectValue} onChange={setSelectValue} />
       </FilterBox>
     </>
   )

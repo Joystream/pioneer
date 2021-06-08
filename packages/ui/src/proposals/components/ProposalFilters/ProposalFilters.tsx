@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { DatePicker } from '@/common/components/forms/DatePicker'
 import { FilterBox } from '@/common/components/forms/FilterBox'
-import { SimpleSelect } from '@/common/components/selects'
+import { FilterSelect } from '@/common/components/selects'
 import { PartialDateRange } from '@/common/types/Dates'
-import { indexList, objectEquals } from '@/common/utils'
+import { objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
 import { ProposalStage } from '@/proposals/types'
 
@@ -65,10 +65,6 @@ export const ProposalFilters = ({
   const [filters, dispatch] = useReducer(filterReducer, ProposalEmptyFilter)
   const { search, stage, type, lifetime, proposer } = filters
 
-  const typesOptions = useMemo(() => ({ All: null, ...indexList(types) }), [types])
-  const proposersOptions = useMemo(() => ({ All: null, ...indexList(proposers, ({ handle }) => handle) }), [proposers])
-  const stagesOptions = useMemo(() => ({ All: null, ...indexList(stages) }), [stages])
-
   const apply = () => onApply(filters)
   const clear = useMemo(
     () =>
@@ -92,9 +88,9 @@ export const ProposalFilters = ({
       }}
     >
       <Fields>
-        <SimpleSelect
+        <FilterSelect
           title="Type"
-          options={typesOptions}
+          values={types}
           value={type}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'type', value })
@@ -116,9 +112,10 @@ export const ProposalFilters = ({
           }}
         />
 
-        <SimpleSelect
+        <FilterSelect
           title="Proposer"
-          options={proposersOptions}
+          values={proposers}
+          renderOption={({ handle }) => handle}
           value={proposer}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'proposer', value })
@@ -126,9 +123,9 @@ export const ProposalFilters = ({
           }}
         />
 
-        <SimpleSelect
+        <FilterSelect
           title="Stage"
-          options={stagesOptions}
+          values={stages}
           value={stage}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'stage', value })

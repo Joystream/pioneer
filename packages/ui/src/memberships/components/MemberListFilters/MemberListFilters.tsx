@@ -5,9 +5,10 @@ import { CountBadge } from '@/common/components/CountBadge'
 import { TogglableIcon } from '@/common/components/forms'
 import { FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
 import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
-import { SimpleSelect } from '@/common/components/selects'
+import { FilterSelect } from '@/common/components/selects'
 import { TextInlineBig } from '@/common/components/typography'
 import { objectEquals } from '@/common/utils'
+import { memberRoleAbbreviation } from '@/memberships/helpers'
 import { MemberRole } from '@/memberships/types'
 
 export interface MemberListFilter {
@@ -36,16 +37,10 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
   return filters
 }
 
-const CouncilOpts = {
-  All: null,
-  Yes: true,
-  no: false,
-}
-
 export const MemberListEmptyFilter: MemberListFilter = {
   search: '',
   role: null,
-  concil: CouncilOpts.All,
+  concil: null,
   onlyVerified: false,
   onlyFounder: false,
 }
@@ -55,7 +50,7 @@ const isFilterEmpty = objectEquals(MemberListEmptyFilter)
 export interface MemberListFiltersProps {
   searchSlot?: React.RefObject<HTMLDivElement>
   memberCount?: number
-  roles: { [k: string]: string }
+  roles: MemberRole[]
   onApply: (value: MemberListFilter) => void
 }
 
@@ -84,9 +79,10 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
         </FieldsHeader>
 
         <SelectContainer>
-          <SimpleSelect
+          <FilterSelect
             title="Roles"
-            options={{ All: null, ...roles }}
+            values={roles}
+            renderOption={memberRoleAbbreviation}
             value={role}
             onChange={(value) => {
               dispatch({ type: 'change', field: 'role', value })
@@ -96,9 +92,10 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
         </SelectContainer>
 
         <SelectContainer>
-          <SimpleSelect
+          <FilterSelect
             title="Council Members"
-            options={CouncilOpts}
+            values={[true, false]}
+            renderOption={(value) => (value ? 'Yes' : 'No')}
             value={concil}
             onChange={(value) => {
               dispatch({ type: 'change', field: 'concil', value })

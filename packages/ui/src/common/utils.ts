@@ -10,7 +10,3 @@ export const objectEquals = <T extends Record<string, any>>(reference: T): ((com
     expectedKeys.length === Object.keys(compared).length &&
     expectedKeys.every((key) => compared[key] === reference[key])
 }
-
-type Indexer<T> = (item: T, index: number) => string
-export const indexList = <T extends any>(list: T[], itemToKey = ((item) => item) as Indexer<T>) =>
-  Object.fromEntries(list.map((item, index) => [itemToKey(item, index), item]))
