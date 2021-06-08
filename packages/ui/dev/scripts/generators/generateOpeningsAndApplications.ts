@@ -68,7 +68,7 @@ const generateOpenings = (mocks: Mocks) => {
   const generateOpeningsForGroup = (groupName: string, id: number) => {
     return [
       ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id)),
-      ...Array.from({ length: randomFromRange(4, 8) }, generateOpening('filled', id)),
+      ...Array.from({ length: randomFromRange(2, 6) }, generateOpening('filled', id)),
       ...Array.from({ length: randomFromRange(1, 2) }, generateOpening('cancelled', id)),
     ]
   }

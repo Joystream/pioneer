@@ -23,9 +23,9 @@ export type Worker = ReturnType<ReturnType<typeof generateWorker>>
 
 export const generateWorkers = (mocks: Mocks) => {
   const generateAllWorkers = (groupName: string, id: number) => {
-    const workersIds = [0, 1, ...randomUniqueArrayFromRange(randomFromRange(2, 7), 2, mocks.workers.length)]
-    const terminatedIds = randomUniqueArrayFromRange(randomFromRange(0, 10), 0, mocks.workers.length)
-    const leftIds = randomUniqueArrayFromRange(randomFromRange(0, 20), 0, mocks.workers.length)
+    const workersIds = [0, 1, ...randomUniqueArrayFromRange(randomFromRange(2, 7), 2, mocks.members.length)]
+    const terminatedIds = randomUniqueArrayFromRange(randomFromRange(2, 8), 0, mocks.members.length)
+    const leftIds = randomUniqueArrayFromRange(randomFromRange(2, 14), 0, mocks.members.length)
 
     return [
       ...workersIds.map(generateWorker('active', id)),
