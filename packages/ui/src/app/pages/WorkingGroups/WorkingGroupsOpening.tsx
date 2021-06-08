@@ -19,9 +19,10 @@ import { NumericValueStat } from '@/common/components/statistics/NumericValueSta
 import { Colors } from '@/common/constants/styles'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
-import { size, spacing } from '@/common/utils/styles'
+import { spacing } from '@/common/utils/styles'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
+import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { MappedStatuses, OpeningStatuses } from '@/working-groups/constants'
 import { useOpening } from '@/working-groups/hooks/useOpening'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
@@ -78,7 +79,7 @@ export const WorkingGroupOpening = () => {
 
   const ApplicationStatus = memo(() => (
     <ApplicationStatusWrapper>
-      <Circle />
+      <OpeningIcon />
       {opening.status === OpeningStatuses.OPEN && (
         <>
           <h4>No applicants yet</h4>
@@ -164,11 +165,4 @@ const ApplicationStatusWrapper = styled.div`
 
 const Row = styled.div`
   display: flex;
-`
-
-const Circle = styled.div`
-  border-radius: 50%;
-  background-color: ${Colors.Black[50]};
-  margin: 0 auto;
-  ${size('96px')};
 `

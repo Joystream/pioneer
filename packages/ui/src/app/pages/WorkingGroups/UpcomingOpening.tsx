@@ -17,7 +17,8 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { DurationStatistics, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
 import { Colors } from '@/common/constants/styles'
-import { size, spacing } from '@/common/utils/styles'
+import { spacing } from '@/common/utils/styles'
+import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { useUpcomingOpening } from '@/working-groups/hooks/useUpcomingOpening'
 
 export const UpcomingOpening = () => {
@@ -39,7 +40,7 @@ export const UpcomingOpening = () => {
 
   const ApplicationStatus = memo(() => (
     <ApplicationStatusWrapper>
-      <Circle />
+      <OpeningIcon />
       <>
         <h4>The opening hasn't started yet</h4>
         <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p>
@@ -111,11 +112,4 @@ const ApplicationStatusWrapper = styled.div`
 
 const Row = styled.div`
   display: flex;
-`
-
-const Circle = styled.div`
-  border-radius: 50%;
-  background-color: ${Colors.Black[50]};
-  margin: 0 auto;
-  ${size('96px')};
 `
