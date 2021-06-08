@@ -2,20 +2,19 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import { seedUpcomingOpenings } from '@/mocks/data/seedUpcomingOpening'
-
-import schema from '../common/api/schemas/schema.graphql'
+import schema from '@/common/api/schemas/schema.graphql'
 
 import {
   seedApplications,
+  seedBudgetSpendingEvents,
   seedMembers,
-  seedOpenings,
   seedOpeningStatuses,
+  seedOpenings,
   seedRewardPaidEvents,
+  seedUpcomingOpenings,
   seedWorkers,
   seedWorkingGroups,
 } from './data'
-import { seedBudgetSpendingEvents } from './data/mockBudgetSpendingEvents'
 import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.

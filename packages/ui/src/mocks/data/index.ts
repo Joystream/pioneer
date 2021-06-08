@@ -1,4 +1,5 @@
 export * from './mockApplications'
+export * from './mockBudgetSpendingEvents'
 export * from './mockMembers'
 export * from './mockOpenings'
 export * from './mockProposals'
