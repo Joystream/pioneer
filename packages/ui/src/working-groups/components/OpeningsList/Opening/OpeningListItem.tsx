@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
+import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Fraction } from '@/common/components/typography/Fraction'
 import { Subscription } from '@/common/components/typography/Subscription'

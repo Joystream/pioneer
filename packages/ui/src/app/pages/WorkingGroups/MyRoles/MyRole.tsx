@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { AppPage } from '@/app/components/AppPage'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
+import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'

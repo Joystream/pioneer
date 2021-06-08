@@ -298,6 +298,17 @@ export type UpcomingWorkingGroupOpeningFieldsFragment = {
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
 }
 
+export type GetUpcomingWorkingGroupOpeningQueryVariables = Types.Exact<{
+  where: Types.UpcomingWorkingGroupOpeningWhereUniqueInput
+}>
+
+export type GetUpcomingWorkingGroupOpeningQuery = {
+  __typename: 'Query'
+  upcomingWorkingGroupOpeningByUniqueInput?: Types.Maybe<
+    { __typename: 'UpcomingWorkingGroupOpening' } & UpcomingWorkingGroupOpeningFieldsFragment
+  >
+}
+
 export type GetUpcomingWorkingGroupOpeningsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.UpcomingWorkingGroupOpeningWhereInput>
   limit?: Types.Maybe<Types.Scalars['Int']>
@@ -1132,6 +1143,63 @@ export type GetApplicationFormQuestionAnswerLazyQueryHookResult = ReturnType<
 export type GetApplicationFormQuestionAnswerQueryResult = Apollo.QueryResult<
   GetApplicationFormQuestionAnswerQuery,
   GetApplicationFormQuestionAnswerQueryVariables
+>
+export const GetUpcomingWorkingGroupOpeningDocument = gql`
+  query GetUpcomingWorkingGroupOpening($where: UpcomingWorkingGroupOpeningWhereUniqueInput!) {
+    upcomingWorkingGroupOpeningByUniqueInput(where: $where) {
+      ...UpcomingWorkingGroupOpeningFields
+    }
+  }
+  ${UpcomingWorkingGroupOpeningFieldsFragmentDoc}
+`
+
+/**
+ * __useGetUpcomingWorkingGroupOpeningQuery__
+ *
+ * To run a query within a React component, call `useGetUpcomingWorkingGroupOpeningQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUpcomingWorkingGroupOpeningQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUpcomingWorkingGroupOpeningQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetUpcomingWorkingGroupOpeningQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUpcomingWorkingGroupOpeningQuery,
+    GetUpcomingWorkingGroupOpeningQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUpcomingWorkingGroupOpeningQuery, GetUpcomingWorkingGroupOpeningQueryVariables>(
+    GetUpcomingWorkingGroupOpeningDocument,
+    options
+  )
+}
+export function useGetUpcomingWorkingGroupOpeningLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUpcomingWorkingGroupOpeningQuery,
+    GetUpcomingWorkingGroupOpeningQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUpcomingWorkingGroupOpeningQuery, GetUpcomingWorkingGroupOpeningQueryVariables>(
+    GetUpcomingWorkingGroupOpeningDocument,
+    options
+  )
+}
+export type GetUpcomingWorkingGroupOpeningQueryHookResult = ReturnType<typeof useGetUpcomingWorkingGroupOpeningQuery>
+export type GetUpcomingWorkingGroupOpeningLazyQueryHookResult = ReturnType<
+  typeof useGetUpcomingWorkingGroupOpeningLazyQuery
+>
+export type GetUpcomingWorkingGroupOpeningQueryResult = Apollo.QueryResult<
+  GetUpcomingWorkingGroupOpeningQuery,
+  GetUpcomingWorkingGroupOpeningQueryVariables
 >
 export const GetUpcomingWorkingGroupOpeningsDocument = gql`
   query GetUpcomingWorkingGroupOpenings($where: UpcomingWorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {

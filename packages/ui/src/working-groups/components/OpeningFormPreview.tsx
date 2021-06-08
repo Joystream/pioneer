@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
+import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonLink } from '@/common/components/buttons'
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview/MarkdownPreview'

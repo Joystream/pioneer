@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
+import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { TableListItem } from '@/common/components/List'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextSmall } from '@/common/components/typography/Text'
