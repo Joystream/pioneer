@@ -3,7 +3,15 @@ import faker from 'faker'
 import { randomFromRange } from './utils'
 
 const MAX_MEMBERS = 50
-export const KNOWN_MEMBERS = [
+
+interface KnownMember {
+  isVerified: boolean
+  handle: string
+  rootAccount: string
+  controllerAccount: string
+}
+
+export const KNOWN_MEMBERS: KnownMember[] = [
   {
     handle: 'alice',
     rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
@@ -20,7 +28,7 @@ export const KNOWN_MEMBERS = [
 
 let nextId = 0
 
-const generateMember = () => ({
+const generateMember = (override?: KnownMember) => ({
   id: String(nextId++),
   rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
   controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
@@ -32,6 +40,7 @@ const generateMember = () => ({
   isVerified: Math.random() > 0.5,
   isFoundingMember: nextId < 9,
   inviteCount: 5,
+  ...override,
 })
 
 export type Member = ReturnType<typeof generateMember>
