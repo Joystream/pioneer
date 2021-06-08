@@ -90,7 +90,7 @@ export const ProposalFilters = ({
       <Fields>
         <FilterSelect
           title="Type"
-          values={types}
+          options={types}
           value={type}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'type', value })
@@ -114,7 +114,7 @@ export const ProposalFilters = ({
 
         <FilterSelect
           title="Proposer"
-          values={proposers}
+          options={proposers}
           renderOption={({ handle }) => handle}
           value={proposer}
           onChange={(value) => {
@@ -125,7 +125,7 @@ export const ProposalFilters = ({
 
         <FilterSelect
           title="Stage"
-          values={stages}
+          options={stages}
           value={stage}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'stage', value })

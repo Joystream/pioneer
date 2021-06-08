@@ -81,7 +81,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
         <SelectContainer>
           <FilterSelect
             title="Roles"
-            values={roles}
+            options={roles}
             renderOption={memberRoleAbbreviation}
             value={role}
             onChange={(value) => {
@@ -94,7 +94,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
         <SelectContainer>
           <FilterSelect
             title="Council Members"
-            values={[true, false]}
+            options={[true, false]}
             renderOption={(value) => (value ? 'Yes' : 'No')}
             value={concil}
             onChange={(value) => {

@@ -41,7 +41,7 @@ interface SimpleSelectProps<T> extends FilterSelectProps<T> {
 
 export const SimpleSelect = <T extends any>({
   title,
-  values,
+  options,
   emptyOption,
   renderOption = String,
   renderSelected,
@@ -52,9 +52,9 @@ export const SimpleSelect = <T extends any>({
   const [focused, focus] = useReducer(selectFocusReducer as FocusReducer<T | null>, value)
 
   const entries = useMemo<[Option, T | null][]>(() => {
-    const valueEntries: [Option, T][] = values.map((value) => [renderOption(value), value])
+    const valueEntries: [Option, T][] = options.map((value) => [renderOption(value), value])
     return isDefined(emptyOption) ? [[emptyOption, null], ...valueEntries] : valueEntries
-  }, [values, renderOption, emptyOption])
+  }, [options, renderOption, emptyOption])
 
   const forwardChange = (value: T | null) => {
     focus({ type: 'set', value })
@@ -112,7 +112,7 @@ export const SimpleSelect = <T extends any>({
 
 interface FilterSelectProps<T> extends ControlProps<T | null> {
   title?: string
-  values: T[]
+  options: T[]
   renderOption?: ValueToOption<T>
   renderSelected?: (value: T | null) => Option
 }
