@@ -25,11 +25,15 @@ const getFilter = (where: Record<string, any>) => {
     const [field, type] = key.split('_')
 
     if (type === 'eq') {
-      filters.push((model: Record<string, any>) => String(model[field]) === checkValue.toString())
+      filters.push((model: Record<string, any>) => {
+        return String(model[getFieldName(model, field)]) === checkValue.toString()
+      })
     }
 
     if (type === 'contains') {
-      filters.push((model: Record<string, any>) => String(model[field]).includes(checkValue.toString()))
+      filters.push((model: Record<string, any>) =>
+        String(model[getFieldName(model, field)]).includes(checkValue.toString())
+      )
     }
 
     if (type === 'in') {
