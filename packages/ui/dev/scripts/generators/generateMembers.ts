@@ -2,7 +2,7 @@ import faker from 'faker'
 
 import { randomFromRange } from './utils'
 
-export const MAX_MEMBERS = 50
+const MAX_MEMBERS = 50
 export const KNOWN_MEMBERS = [
   {
     handle: 'alice',
@@ -18,24 +18,25 @@ export const KNOWN_MEMBERS = [
   },
 ]
 
+let nextId = 0
+
+const generateMember = () => ({
+  id: String(nextId++),
+  rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+  controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+  handle: `${faker.lorem.word()}_${faker.lorem.word()}_${nextId}`,
+  metadata: {
+    name: faker.lorem.words(2),
+    about: faker.lorem.paragraphs(randomFromRange(1, 4)),
+  },
+  isVerified: Math.random() > 0.5,
+  isFoundingMember: nextId < 9,
+  inviteCount: 5,
+  registeredAtBlockId: String(nextId),
+})
+
+export type Member = ReturnType<typeof generateMember>
+
 export const generateMembers = () => {
-  let nextId = 0
-
-  const generateMember = (known = {}) => ({
-    id: String(nextId++),
-    rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    handle: `${faker.lorem.word()}_${faker.lorem.word()}_${nextId}`,
-    metadata: {
-      name: faker.lorem.words(2),
-      about: faker.lorem.paragraphs(randomFromRange(1, 4)),
-    },
-    isVerified: Math.random() > 0.5,
-    isFoundingMember: nextId < 9,
-    inviteCount: 5,
-    registeredAtBlockId: String(nextId),
-    ...known,
-  })
-
   return [...KNOWN_MEMBERS.map(generateMember), ...Array.from({ length: MAX_MEMBERS }, generateMember)]
 }

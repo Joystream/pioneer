@@ -1,7 +1,6 @@
 import faker from 'faker'
 
-import { MAX_MEMBERS } from './generateMembers'
-import { WORKING_GROUPS } from './generateWorkingGroups'
+import { Mocks } from './types'
 import { randomUniqueArrayFromRange, randomFromRange, randomMarkdown } from './utils'
 
 let nextQuestionId = 0
@@ -66,7 +65,7 @@ const generateUpcomingOpening = (groupId: number) => () => {
   }
 }
 
-const generateOpenings = () => {
+const generateOpenings = (mocks: Mocks) => {
   const generateOpeningsForGroup = (groupName: string, id: number) => {
     return [
       ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id)),
@@ -75,17 +74,22 @@ const generateOpenings = () => {
     ]
   }
 
-  return WORKING_GROUPS.map(generateOpeningsForGroup).flatMap((a) => a)
+  return mocks.workingGroups
+    .map(({ id }) => id)
+    .map(generateOpeningsForGroup)
+    .flatMap((a) => a)
 }
 
-const generateApplications = (openings: Opening[]) => {
+const generateApplications = (openings: Opening[], mocks: Mocks) => {
   let nextId = 0
 
   return openings.map((opening) => {
-    const applicantsIds = randomUniqueArrayFromRange(8, 0, MAX_MEMBERS)
+    const applicantsIds = randomUniqueArrayFromRange(8, 0, mocks.members.length - 1).map(
+      (index) => mocks.members[index].id
+    )
     const questions = opening.metadata.applicationFormQuestions
 
-    const generateApplication = (applicantId: number) => ({
+    const generateApplication = (applicantId: string) => ({
       id: String(nextId++),
       openingId: opening.id,
       applicantId,
@@ -101,19 +105,22 @@ const generateApplications = (openings: Opening[]) => {
   })
 }
 
-const generateUpcomingOpenings = () => {
+const generateUpcomingOpenings = (mocks: Mocks) => {
   const generateUpcomingOpeningsForGroup = (groupName: string, id: number) => {
     return [...Array.from({ length: randomFromRange(1, 3) }, generateUpcomingOpening(id))]
   }
 
-  return WORKING_GROUPS.map(generateUpcomingOpeningsForGroup).flatMap((a) => a)
+  return mocks.workingGroups
+    .map(({ id }) => id)
+    .map(generateUpcomingOpeningsForGroup)
+    .flatMap((a) => a)
 }
 
-export const generateOpeningsAndApplications = () => {
-  const openings = generateOpenings().flatMap((a) => a)
-  const applications = generateApplications(openings).flatMap((a) => a)
+export const generateOpeningsAndApplications = (mocks: Mocks) => {
+  const openings = generateOpenings(mocks).flatMap((a) => a)
+  const applications = generateApplications(openings, mocks).flatMap((a) => a)
   nextOpeningId = 0
-  const upcomingOpenings = generateUpcomingOpenings().flatMap((a) => a)
+  const upcomingOpenings = generateUpcomingOpenings(mocks).flatMap((a) => a)
 
   return {
     openings,
