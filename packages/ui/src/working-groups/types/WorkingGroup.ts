@@ -1,11 +1,9 @@
 import BN from 'bn.js'
 
-import { getTypeFilter } from '@/working-groups/hooks/useOpenings'
-import { getWorkersFilter } from '@/working-groups/hooks/useWorkers'
-import { asWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types/WorkingGroupOpening'
+import { Member } from '@/memberships/types'
+import { WorkingGroupOpening } from '@/working-groups/types/WorkingGroupOpening'
 
-import { Member } from '../../memberships/types'
-import { WorkerFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
+import { WorkingGroupFieldsFragment } from '../queries'
 
 interface Worker {
   membership: Pick<Member, 'id'>
@@ -25,12 +23,6 @@ export interface WorkingGroup {
   budget: BN
 }
 
-type WorkerFields = { __typename: 'Worker' } & WorkerFieldsFragment
-
-const asWorker = (worker: WorkerFields) => ({
-  membership: worker.membership,
-})
-
 export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup => {
   return {
     id: group.id,
@@ -40,8 +32,6 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     description: group.metadata?.description ?? '',
     status: group.metadata?.status ?? '',
     statusMessage: group.metadata?.statusMessage ?? '',
-    workers: group.workers?.filter(getWorkersFilter(['active'])).map(asWorker) ?? [],
-    openings: group.openings?.map(asWorkingGroupOpening).filter(getTypeFilter('open')) ?? [],
     leaderId: group.leader?.membership.id,
     budget: new BN(group.budget),
   }

@@ -39,6 +39,14 @@ const getFilter = (where: Record<string, any>) => {
         filters.push((model: Record<string, any>) => String(model[field]).localeCompare(checkValue.toString()) === 1)
       }
     }
+
+    if (field === 'onlyOpened' && checkValue === true) {
+      filters.push((model: Record<string, any>) => model.status.modelName.includes('status-open'))
+    }
+
+    if (field === 'onlyActive' && checkValue === true) {
+      filters.push((model: Record<string, any>) => model.status.modelName.includes('status-active'))
+    }
   }
 
   return (model: any) => filters.every((value) => value(model))

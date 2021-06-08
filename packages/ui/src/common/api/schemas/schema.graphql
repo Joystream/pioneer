@@ -6471,6 +6471,7 @@ input WorkerWhereInput {
   storage_startsWith: String
   storage_endsWith: String
   storage_in: [String!]
+  onlyActive: Boolean
 }
 
 input WorkerWhereUniqueInput {
@@ -7213,6 +7214,7 @@ input WorkingGroupOpeningWhereInput {
   rewardPerBlock_in: [BigInt!]
   createdAtBlockId_eq: ID
   createdAtBlockId_in: [ID!]
+  onlyOpened: Boolean
 }
 
 input WorkingGroupOpeningWhereUniqueInput {

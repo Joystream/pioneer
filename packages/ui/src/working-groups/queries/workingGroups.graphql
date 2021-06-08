@@ -43,12 +43,6 @@ fragment WorkingGroupFields on WorkingGroup {
   metadata {
     ...WorkingGroupMetdataFields
   }
-  workers {
-    ...WorkerFields
-  }
-  openings {
-    ...WorkingGroupOpeningFields
-  }
   leader {
     membership {
       id
@@ -66,6 +60,28 @@ fragment RewardPaidEventFields on RewardPaidEvent {
 query getWorkingGroups {
   workingGroups {
     ...WorkingGroupFields,
+  }
+}
+
+fragment WorkerFieldsConnection on WorkerConnection {
+  totalCount
+  edges {
+    node {
+      ...WorkerFields
+    }
+    cursor
+  }
+  pageInfo {
+    hasNextPage
+    hasPreviousPage
+    startCursor
+    endCursor
+  }
+}
+
+query getWorkersConnection($groupId: ID, $onlyActive: Boolean) {
+  workersConnection(where: { groupId_eq: $groupId, onlyActive: $onlyActive }) {
+    ...WorkerFieldsConnection
   }
 }
 
@@ -146,8 +162,8 @@ fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
   }
 }
 
-query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
-  workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {
+query getWorkingGroupOpeningsConnection($groupId_eq: ID, $onlyOpened: Boolean, $first: Int, $last: Int) {
+  workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq, onlyOpened: $onlyOpened }, first: $first, last: $last) {
     ... WorkingGroupOpeningFieldsConnection
   }
 }

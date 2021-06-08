@@ -7574,6 +7574,7 @@ export type WorkerWhereInput = {
   storage_startsWith?: Maybe<Scalars['String']>
   storage_endsWith?: Maybe<Scalars['String']>
   storage_in?: Maybe<Array<Scalars['String']>>
+  onlyActive?: Maybe<Scalars['Boolean']>
 }
 
 export type WorkerWhereUniqueInput = {
@@ -8315,6 +8316,7 @@ export type WorkingGroupOpeningWhereInput = {
   rewardPerBlock_in?: Maybe<Array<Scalars['BigInt']>>
   createdAtBlockId_eq?: Maybe<Scalars['ID']>
   createdAtBlockId_in?: Maybe<Array<Scalars['ID']>>
+  onlyOpened?: Maybe<Scalars['Boolean']>
 }
 
 export type WorkingGroupOpeningWhereUniqueInput = {

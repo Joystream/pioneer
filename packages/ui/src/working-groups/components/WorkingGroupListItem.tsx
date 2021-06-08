@@ -2,6 +2,8 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { useCountOpenings, useCountWorkers } from '@/working-groups/hooks/useWorkingGroup'
+
 import { ButtonBareGhost } from '../../common/components/buttons'
 import { Arrow } from '../../common/components/icons'
 import { TextMedium, ValueInJoys } from '../../common/components/typography'
@@ -17,6 +19,8 @@ export interface WorkingGroupProps {
 
 export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const history = useHistory()
+  const workersCount = useCountWorkers(group.id)
+  const openingsCount = useCountOpenings(group.id)
 
   const { member: leader } = useMember(group.leaderId)
   const groupAddress = `/working-groups/${group.name.toLowerCase()}`
@@ -32,7 +36,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
-          <StatsValue>{group.workers?.length ?? 0}</StatsValue>
+          <StatsValue>{workersCount}</StatsValue>
           <Subscription>Workers</Subscription>
         </StatsColumn>
         <StatsColumn>
@@ -42,7 +46,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>Current budget</Subscription>
         </StatsColumn>
         <StatsColumn>
-          <StatsValue>{group.openings?.length ?? 0}</StatsValue>
+          <StatsValue>{openingsCount}</StatsValue>
           <Subscription>Openings</Subscription>
         </StatsColumn>
         <StatsColumn>

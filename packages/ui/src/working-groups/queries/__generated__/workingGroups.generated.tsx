@@ -1,9 +1,11 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment , BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
+import {
+  MemberFieldsFragment,
+  MemberFieldsFragmentDoc,
+} from '../../../memberships/queries/__generated__/members.generated'
+import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
-
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
@@ -46,8 +48,6 @@ export type WorkingGroupFieldsFragment = {
   name: string
   budget: any
   metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetdataFieldsFragment>
-  workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment>
-  openings: Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>
   leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
 }
 
@@ -64,6 +64,29 @@ export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never 
 export type GetWorkingGroupsQuery = {
   __typename: 'Query'
   workingGroups: Array<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
+}
+
+export type WorkerFieldsConnectionFragment = {
+  __typename: 'WorkerConnection'
+  totalCount: number
+  edges: Array<{ __typename: 'WorkerEdge'; cursor: string; node: { __typename: 'Worker' } & WorkerFieldsFragment }>
+  pageInfo: {
+    __typename: 'PageInfo'
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+    startCursor?: Types.Maybe<string>
+    endCursor?: Types.Maybe<string>
+  }
+}
+
+export type GetWorkersConnectionQueryVariables = Types.Exact<{
+  groupId?: Types.Maybe<Types.Scalars['ID']>
+  onlyActive?: Types.Maybe<Types.Scalars['Boolean']>
+}>
+
+export type GetWorkersConnectionQuery = {
+  __typename: 'Query'
+  workersConnection: { __typename: 'WorkerConnection' } & WorkerFieldsConnectionFragment
 }
 
 export type GetWorkersQueryVariables = Types.Exact<{
@@ -146,6 +169,7 @@ export type WorkingGroupOpeningFieldsConnectionFragment = {
 
 export type GetWorkingGroupOpeningsConnectionQueryVariables = Types.Exact<{
   groupId_eq?: Types.Maybe<Types.Scalars['ID']>
+  onlyOpened?: Types.Maybe<Types.Scalars['Boolean']>
   first?: Types.Maybe<Types.Scalars['Int']>
   last?: Types.Maybe<Types.Scalars['Int']>
 }>
@@ -299,6 +323,30 @@ export const WorkingGroupMetdataFieldsFragmentDoc = gql`
     statusMessage
   }
 `
+export const WorkingGroupFieldsFragmentDoc = gql`
+  fragment WorkingGroupFields on WorkingGroup {
+    id
+    name
+    budget
+    metadata {
+      ...WorkingGroupMetdataFields
+    }
+    leader {
+      membership {
+        id
+      }
+    }
+  }
+  ${WorkingGroupMetdataFieldsFragmentDoc}
+`
+export const RewardPaidEventFieldsFragmentDoc = gql`
+  fragment RewardPaidEventFields on RewardPaidEvent {
+    id
+    amount
+    rewardAccount
+    createdAt
+  }
+`
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
     id
@@ -332,6 +380,24 @@ export const WorkerFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
   ${BlockFieldsFragmentDoc}
+`
+export const WorkerFieldsConnectionFragmentDoc = gql`
+  fragment WorkerFieldsConnection on WorkerConnection {
+    totalCount
+    edges {
+      node {
+        ...WorkerFields
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+  ${WorkerFieldsFragmentDoc}
 `
 export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
@@ -380,38 +446,6 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
   ${MemberFieldsFragmentDoc}
-`
-export const WorkingGroupFieldsFragmentDoc = gql`
-  fragment WorkingGroupFields on WorkingGroup {
-    id
-    name
-    budget
-    metadata {
-      ...WorkingGroupMetdataFields
-    }
-    workers {
-      ...WorkerFields
-    }
-    openings {
-      ...WorkingGroupOpeningFields
-    }
-    leader {
-      membership {
-        id
-      }
-    }
-  }
-  ${WorkingGroupMetdataFieldsFragmentDoc}
-  ${WorkerFieldsFragmentDoc}
-  ${WorkingGroupOpeningFieldsFragmentDoc}
-`
-export const RewardPaidEventFieldsFragmentDoc = gql`
-  fragment RewardPaidEventFields on RewardPaidEvent {
-    id
-    amount
-    rewardAccount
-    createdAt
-  }
 `
 export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
   fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
@@ -533,6 +567,56 @@ export function useGetWorkingGroupsLazyQuery(
 export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGroupsQuery>
 export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>
 export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
+export const GetWorkersConnectionDocument = gql`
+  query getWorkersConnection($groupId: ID, $onlyActive: Boolean) {
+    workersConnection(where: { groupId_eq: $groupId, onlyActive: $onlyActive }) {
+      ...WorkerFieldsConnection
+    }
+  }
+  ${WorkerFieldsConnectionFragmentDoc}
+`
+
+/**
+ * __useGetWorkersConnectionQuery__
+ *
+ * To run a query within a React component, call `useGetWorkersConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkersConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkersConnectionQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      onlyActive: // value for 'onlyActive'
+ *   },
+ * });
+ */
+export function useGetWorkersConnectionQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkersConnectionQuery, GetWorkersConnectionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkersConnectionQuery, GetWorkersConnectionQueryVariables>(
+    GetWorkersConnectionDocument,
+    options
+  )
+}
+export function useGetWorkersConnectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkersConnectionQuery, GetWorkersConnectionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkersConnectionQuery, GetWorkersConnectionQueryVariables>(
+    GetWorkersConnectionDocument,
+    options
+  )
+}
+export type GetWorkersConnectionQueryHookResult = ReturnType<typeof useGetWorkersConnectionQuery>
+export type GetWorkersConnectionLazyQueryHookResult = ReturnType<typeof useGetWorkersConnectionLazyQuery>
+export type GetWorkersConnectionQueryResult = Apollo.QueryResult<
+  GetWorkersConnectionQuery,
+  GetWorkersConnectionQueryVariables
+>
 export const GetWorkersDocument = gql`
   query getWorkers($where: WorkerWhereInput) {
     workers(where: $where) {
@@ -648,8 +732,12 @@ export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>
 export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>
 export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>
 export const GetWorkingGroupOpeningsConnectionDocument = gql`
-  query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
-    workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {
+  query getWorkingGroupOpeningsConnection($groupId_eq: ID, $onlyOpened: Boolean, $first: Int, $last: Int) {
+    workingGroupOpeningsConnection(
+      where: { groupId_eq: $groupId_eq, onlyOpened: $onlyOpened }
+      first: $first
+      last: $last
+    ) {
       ...WorkingGroupOpeningFieldsConnection
     }
   }
@@ -669,6 +757,7 @@ export const GetWorkingGroupOpeningsConnectionDocument = gql`
  * const { data, loading, error } = useGetWorkingGroupOpeningsConnectionQuery({
  *   variables: {
  *      groupId_eq: // value for 'groupId_eq'
+ *      onlyOpened: // value for 'onlyOpened'
  *      first: // value for 'first'
  *      last: // value for 'last'
  *   },
