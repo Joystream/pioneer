@@ -18,14 +18,14 @@ import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
-const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: false,
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useAccounts', () => {
+jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
   return {
-    useAccounts: () => useAccounts,
+    useMyAccounts: () => useMyAccounts,
   }
 })
 
@@ -43,8 +43,8 @@ describe('UI: Accounts list', () => {
   beforeAll(cryptoWaitReady)
 
   beforeEach(async () => {
-    useAccounts.hasAccounts = false
-    useAccounts.allAccounts.splice(0)
+    useMyAccounts.hasAccounts = false
+    useMyAccounts.allAccounts.splice(0)
   })
 
   afterEach(cleanup)
@@ -62,8 +62,8 @@ describe('UI: Accounts list', () => {
 
   describe('with development accounts', () => {
     beforeEach(() => {
-      useAccounts.hasAccounts = true
-      useAccounts.allAccounts.push(alice)
+      useMyAccounts.hasAccounts = true
+      useMyAccounts.allAccounts.push(alice)
     })
 
     it('Renders empty balance when not returned', async () => {
@@ -94,8 +94,8 @@ describe('UI: Accounts list', () => {
 
   describe('with active membership', () => {
     beforeEach(() => {
-      useAccounts.hasAccounts = true
-      useAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
+      useMyAccounts.hasAccounts = true
+      useMyAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
     })
 
     it("Annotate active member's accounts", async () => {

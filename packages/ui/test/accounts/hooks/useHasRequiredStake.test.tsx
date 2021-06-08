@@ -12,24 +12,24 @@ import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi } from '../../_mocks/transactions'
 
-const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useAccounts', () => {
+jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
   return {
-    useAccounts: () => useAccounts,
+    useMyAccounts: () => useMyAccounts,
   }
 })
 
 let balances: AddressToBalanceMap = {}
 
-const useBalances = {
-  useBalances: () => balances,
+const useMyBalances = {
+  useMyBalances: () => balances,
 }
 
-jest.mock('../../../src/accounts/hooks/useBalances', () => useBalances)
+jest.mock('../../../src/accounts/hooks/useMyBalances', () => useMyBalances)
 
 describe('useHasRequiredStake', () => {
   const useApi = stubApi()
@@ -37,8 +37,8 @@ describe('useHasRequiredStake', () => {
   jest.useFakeTimers()
 
   beforeAll(async () => {
-    useAccounts.hasAccounts = true
-    useAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
+    useMyAccounts.hasAccounts = true
+    useMyAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
   })
 
   afterEach(cleanup)

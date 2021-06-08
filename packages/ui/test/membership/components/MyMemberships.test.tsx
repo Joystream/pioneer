@@ -11,21 +11,21 @@ import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
-const useAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
+const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useAccounts', () => {
+jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
   return {
-    useAccounts: () => useAccounts,
+    useMyAccounts: () => useMyAccounts,
   }
 })
 
 describe('UI: Memberships list', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
-    useAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
+    useMyAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
   })
 
   const mockServer = setupMockServer()

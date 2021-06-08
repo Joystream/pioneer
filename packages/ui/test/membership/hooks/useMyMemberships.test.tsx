@@ -16,14 +16,14 @@ const renderUseMembership = () => {
   })
 }
 
-const useAccounts: UseAccounts = {
+const useMyAccounts: UseAccounts = {
   hasAccounts: false,
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useAccounts', () => {
+jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
   return {
-    useAccounts: () => useAccounts,
+    useMyAccounts: () => useMyAccounts,
   }
 })
 
@@ -31,8 +31,8 @@ describe('useMyMemberships', () => {
   const mockServer = setupMockServer()
 
   afterEach(() => {
-    useAccounts.hasAccounts = false
-    useAccounts.allAccounts.splice(0)
+    useMyAccounts.hasAccounts = false
+    useMyAccounts.allAccounts.splice(0)
   })
 
   it('Returns loading state', () => {
@@ -62,9 +62,9 @@ describe('useMyMemberships', () => {
   it('Matched rootAccount', async () => {
     seedMembers(mockServer.server)
     const aliceMember = getMember('alice')
-    useAccounts.hasAccounts = true
-    useAccounts.allAccounts.push(alice)
-    useAccounts.allAccounts.push(aliceStash)
+    useMyAccounts.hasAccounts = true
+    useMyAccounts.allAccounts.push(alice)
+    useMyAccounts.allAccounts.push(aliceStash)
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
@@ -80,9 +80,9 @@ describe('useMyMemberships', () => {
   it('Matched controllerAccount', async () => {
     seedMembers(mockServer.server)
     const bobMember = getMember('bob')
-    useAccounts.hasAccounts = true
-    useAccounts.allAccounts.push(bob)
-    useAccounts.allAccounts.push(bobStash)
+    useMyAccounts.hasAccounts = true
+    useMyAccounts.allAccounts.push(bob)
+    useMyAccounts.allAccounts.push(bobStash)
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
@@ -98,9 +98,9 @@ describe('useMyMemberships', () => {
   it('Allows to set active member', async () => {
     seedMembers(mockServer.server)
     const aliceMember = getMember('alice')
-    useAccounts.hasAccounts = true
-    useAccounts.allAccounts.push(alice)
-    useAccounts.allAccounts.push(aliceStash)
+    useMyAccounts.hasAccounts = true
+    useMyAccounts.allAccounts.push(alice)
+    useMyAccounts.allAccounts.push(aliceStash)
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
