@@ -1,18 +1,29 @@
-import React from 'react'
+import React, { MouseEventHandler } from 'react'
 
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { stopEvent } from '@/common/utils/events'
 
 interface FilterButtonsProps {
   onClear?: () => void
   onApply?: () => void
 }
-export const FilterButtons = ({ onClear, onApply }: FilterButtonsProps) => (
-  <ButtonsGroup align="right">
-    <ButtonGhost onClick={onClear} size="medium">
-      Clear Filter
-    </ButtonGhost>
-    <ButtonPrimary onClick={onApply} size="medium">
-      Apply Filter
-    </ButtonPrimary>
-  </ButtonsGroup>
-)
+export const FilterButtons = ({ onClear, onApply }: FilterButtonsProps) => {
+  const apply: MouseEventHandler<Element> = (evt) => {
+    stopEvent(evt)
+    onApply?.()
+  }
+  const clear: MouseEventHandler<Element> = (evt) => {
+    stopEvent(evt)
+    onClear?.()
+  }
+  return (
+    <ButtonsGroup align="right">
+      <ButtonGhost onClick={clear} size="medium">
+        Clear Filter
+      </ButtonGhost>
+      <ButtonPrimary onClick={apply} size="medium">
+        Apply Filter
+      </ButtonPrimary>
+    </ButtonsGroup>
+  )
+}
