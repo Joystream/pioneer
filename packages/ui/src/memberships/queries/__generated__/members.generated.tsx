@@ -1,8 +1,6 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
-
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type MemberFieldsFragment = {
@@ -20,13 +18,12 @@ export type MemberFieldsFragment = {
 
 export type MemberWithDetailsFragment = {
   __typename: 'Membership'
-  registeredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
   invitees: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 } & MemberFieldsFragment
 
 export type GetMembersQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.MembershipWhereInput>
-  orderBy?: Types.Maybe<Types.MembershipOrderByInput>
+  orderBy?: Types.Maybe<Array<Types.MembershipOrderByInput> | Types.MembershipOrderByInput>
   offset?: Types.Maybe<Types.Scalars['Int']>
   limit?: Types.Maybe<Types.Scalars['Int']>
 }>
@@ -88,18 +85,14 @@ export const MemberFieldsFragmentDoc = gql`
 export const MemberWithDetailsFragmentDoc = gql`
   fragment MemberWithDetails on Membership {
     ...MemberFields
-    registeredAtBlock {
-      ...BlockFields
-    }
     invitees {
       ...MemberFields
     }
   }
   ${MemberFieldsFragmentDoc}
-  ${BlockFieldsFragmentDoc}
 `
 export const GetMembersDocument = gql`
-  query GetMembers($where: MembershipWhereInput, $orderBy: MembershipOrderByInput, $offset: Int, $limit: Int) {
+  query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
     memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
       ...MemberFields
     }

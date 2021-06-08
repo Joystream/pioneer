@@ -24,9 +24,9 @@ fragment WorkerFields on Worker {
   roleAccount
   rewardAccount
   stakeAccount
-  hiredAtBlock {
-    ...BlockFields
-  }
+#  hiredAtBlock {
+#    ...BlockFields
+#  }
   application {
     id
     openingId
@@ -118,9 +118,9 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   type
   stakeAmount
   rewardPerBlock
-  createdAtBlock {
-    ...BlockFields
-  }
+#  createdAtBlock {
+#    ...BlockFields
+#  }
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
@@ -159,13 +159,13 @@ fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
 }
 
 query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
-  workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {
+  workingGroupOpeningsConnection(where: { group_eq: $groupId_eq }, first: $first, last: $last) {
     ... WorkingGroupOpeningFieldsConnection
   }
 }
 
 query getWorkingGroupOpenings($groupId_eq: ID) {
-  workingGroupOpenings(where: { groupId_eq: $groupId_eq }) {
+  workingGroupOpenings(where: { group_eq: $groupId_eq }) {
     ... WorkingGroupOpeningFields
   }
 }
@@ -215,13 +215,13 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     __typename
   }
   stakingAccount
-  createdAtBlock {
-    ...BlockFields
-  }
+#  createdAtBlock {
+#    ...BlockFields
+#  }
 }
 
 query GetWorkingGroupApplications($applicantId_in: [ID!]) {
-  workingGroupApplications(where: { applicantId_in: $applicantId_in }) {
+  workingGroupApplications(where: { applicant_in: $applicantId_in }) {
     ...WorkingGroupApplicationFields
   }
 }
@@ -240,7 +240,7 @@ fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
 }
 
 query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
-  applicationFormQuestionAnswers(where: { applicationId_eq: $applicationId_eq }) {
+  applicationFormQuestionAnswers(where: { application_eq: $applicationId_eq }) {
     ...ApplicationFormQuestionAnswerFields
   }
 }
@@ -256,9 +256,9 @@ fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
   expectedStart
   stakeAmount
   rewardPerBlock
-  createdAtBlock {
-    ...BlockFields
-  }
+#  createdAtBlock {
+#    ...BlockFields
+#  }
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
