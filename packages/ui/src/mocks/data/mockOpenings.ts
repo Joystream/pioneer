@@ -12,7 +12,7 @@ interface QuestionMock {
   question: string
 }
 
-interface RawOpeningMock {
+export interface RawOpeningMock {
   groupId: string
   type: string // 'leader' | 'regular'
   status: string // OpeningStatusType

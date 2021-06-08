@@ -4,7 +4,7 @@ import rawWorkers from './raw/workers.json'
 
 type WorkerStatus = 'active' | 'left' | 'terminated'
 
-interface RawWorker {
+export interface RawWorker {
   id: string
   applicationId: number
   membershipId: number
