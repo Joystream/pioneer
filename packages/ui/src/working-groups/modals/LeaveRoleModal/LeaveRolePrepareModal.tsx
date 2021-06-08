@@ -4,7 +4,7 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader, Row } from '@/common/components/Modal'
 import { Label, TextMedium } from '@/common/components/typography'
-import useOpening from '@/working-groups/hooks/useOpening'
+import { useOpening } from '@/working-groups/hooks/useOpening'
 
 interface Props {
   openingId: string

@@ -6,7 +6,6 @@ import { AppPage } from '@/app/components/AppPage'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
-import { BellIcon } from '@/common/components/icons/BellIcon'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
@@ -24,7 +23,7 @@ import { size, spacing } from '@/common/utils/styles'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
 import { MappedStatuses, OpeningStatuses } from '@/working-groups/constants'
-import useOpening from '@/working-groups/hooks/useOpening'
+import { useOpening } from '@/working-groups/hooks/useOpening'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 
 export const WorkingGroupOpening = () => {
@@ -43,7 +42,15 @@ export const WorkingGroupOpening = () => {
   }, [opening])
 
   if (isLoading || !opening) {
-    return <Loading />
+    return (
+      <AppPage lastBreadcrumb={id} rowGap="s">
+        <RowGapBlock gap={24}>
+          <ContentWithSidepanel>
+            <Loading />
+          </ContentWithSidepanel>
+        </RowGapBlock>
+      </AppPage>
+    )
   }
 
   const StatusBadge = memo(() => {
@@ -72,12 +79,6 @@ export const WorkingGroupOpening = () => {
   const ApplicationStatus = memo(() => (
     <ApplicationStatusWrapper>
       <Circle />
-      {opening.status === OpeningStatuses.UPCOMING && (
-        <>
-          <h4>The opening hasn't started yet</h4>
-          <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p>
-        </>
-      )}
       {opening.status === OpeningStatuses.OPEN && (
         <>
           <h4>No applicants yet</h4>
@@ -102,12 +103,6 @@ export const WorkingGroupOpening = () => {
             </ButtonGhost>
           )}
           {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
-          {opening.status === OpeningStatuses.UPCOMING && (
-            <ButtonGhost size="medium">
-              <BellIcon />
-              Notify me when it’s open
-            </ButtonGhost>
-          )}
         </ButtonsGroup>
       </PageHeader>
       <RowGapBlock gap={24}>
@@ -131,17 +126,14 @@ export const WorkingGroupOpening = () => {
             <MarkdownPreview markdown={opening.description} />
           </MainPanel>
           <SidePanel neighbor={sideNeighborRef}>
-            {opening.status !== OpeningStatuses.UPCOMING && (
-              <ApplicantsList
-                allApplicants={opening.applications}
-                myApplication={hiredMember?.member.id === activeMembership?.id ? activeMembership : undefined}
-                hired={hiredMember?.member}
-                hiringComplete={opening.status !== OpeningStatuses.OPEN}
-                leaderId={opening.leaderId}
-              />
-            )}
-            {opening.status === OpeningStatuses.UPCOMING ||
-              (opening.status === OpeningStatuses.OPEN && !opening.applications.length && <ApplicationStatus />)}
+            <ApplicantsList
+              allApplicants={opening.applications}
+              myApplication={hiredMember?.member.id === activeMembership?.id ? activeMembership : undefined}
+              hired={hiredMember?.member}
+              hiringComplete={opening.status !== OpeningStatuses.OPEN}
+              leaderId={opening.leaderId}
+            />
+            {opening.status === OpeningStatuses.OPEN && !opening.applications.length && <ApplicationStatus />}
           </SidePanel>
         </ContentWithSidepanel>
       </RowGapBlock>

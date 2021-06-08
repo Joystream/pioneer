@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useGetWorkingGroupOpeningQuery } from '../queries'
 import { asWorkingGroupOpening } from '../types'
 
-const useOpening = (id: string) => {
+export const useOpening = (id: string) => {
   const { loading, data } = useGetWorkingGroupOpeningQuery({ variables: { where: { id } } })
 
   const rawOpening = data?.workingGroupOpeningByUniqueInput
@@ -14,5 +14,3 @@ const useOpening = (id: string) => {
     opening,
   }
 }
-
-export default useOpening
