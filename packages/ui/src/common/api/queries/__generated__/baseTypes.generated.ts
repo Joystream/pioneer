@@ -8385,7 +8385,6 @@ export type WorkingGroupWhereInput = {
   budget_lt?: Maybe<Scalars['BigInt']>
   budget_lte?: Maybe<Scalars['BigInt']>
   budget_in?: Maybe<Array<Scalars['BigInt']>>
-  worker?: Maybe<WorkerWhereInput>
 }
 
 export type WorkingGroupWhereUniqueInput = {
