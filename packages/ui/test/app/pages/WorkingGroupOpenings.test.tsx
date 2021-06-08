@@ -5,6 +5,8 @@ import { MemoryRouter } from 'react-router'
 
 import { WorkingGroupsOpenings } from '@/app/pages/WorkingGroups/WorkingGroupsOpenings'
 import { seedMember } from '@/mocks/data'
+import { seedBudgetSpendingEvents } from '@/mocks/data/mockBudgetSpendingEvents'
+import { seedEvents } from '@/mocks/data/mockEvents'
 import { seedOpening, seedOpeningStatuses } from '@/mocks/data/mockOpenings'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
@@ -22,6 +24,8 @@ describe('WorkingGroupOpenings', () => {
     seedMember(MEMBER_ALICE_DATA, mockServer.server)
     seedWorkingGroups(mockServer.server)
     seedOpeningStatuses(mockServer.server)
+    seedEvents(mockServer.server)
+    seedBudgetSpendingEvents(mockServer.server)
   })
 
   it('Renders page', async () => {

@@ -52,6 +52,25 @@ export type WorkingGroupFieldsFragment = {
   leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
 }
 
+export type BudgetSpendingEventFieldsFragment = {
+  __typename: 'BudgetSpendingEvent'
+  id: string
+  groupId: string
+  eventId: string
+  reciever: string
+  amount: any
+  rationale?: Types.Maybe<string>
+}
+
+export type GetBudgetSpendingQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.BudgetSpendingEventWhereInput>
+}>
+
+export type GetBudgetSpendingQuery = {
+  __typename: 'Query'
+  budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent' } & BudgetSpendingEventFieldsFragment>
+}
+
 export type RewardPaidEventFieldsFragment = {
   __typename: 'RewardPaidEvent'
   id: string
@@ -354,6 +373,16 @@ export const WorkingGroupFieldsFragmentDoc = gql`
   ${WorkingGroupMetdataFieldsFragmentDoc}
   ${WorkerFieldsFragmentDoc}
 `
+export const BudgetSpendingEventFieldsFragmentDoc = gql`
+  fragment BudgetSpendingEventFields on BudgetSpendingEvent {
+    id
+    groupId
+    eventId
+    reciever
+    amount
+    rationale
+  }
+`
 export const RewardPaidEventFieldsFragmentDoc = gql`
   fragment RewardPaidEventFields on RewardPaidEvent {
     id
@@ -491,6 +520,49 @@ export const UpcomingWorkingGroupOpeningFieldsFragmentDoc = gql`
   ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
+export const GetBudgetSpendingDocument = gql`
+  query getBudgetSpending($where: BudgetSpendingEventWhereInput) {
+    budgetSpendingEvents(where: $where) {
+      ...BudgetSpendingEventFields
+    }
+  }
+  ${BudgetSpendingEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetBudgetSpendingQuery__
+ *
+ * To run a query within a React component, call `useGetBudgetSpendingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBudgetSpendingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBudgetSpendingQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetBudgetSpendingQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(GetBudgetSpendingDocument, options)
+}
+export function useGetBudgetSpendingLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(
+    GetBudgetSpendingDocument,
+    options
+  )
+}
+export type GetBudgetSpendingQueryHookResult = ReturnType<typeof useGetBudgetSpendingQuery>
+export type GetBudgetSpendingLazyQueryHookResult = ReturnType<typeof useGetBudgetSpendingLazyQuery>
+export type GetBudgetSpendingQueryResult = Apollo.QueryResult<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>
 export const GetWorkingGroupsDocument = gql`
   query getWorkingGroups {
     workingGroups {

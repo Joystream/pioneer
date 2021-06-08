@@ -6,6 +6,7 @@ const { randomFromRange } = require('./utils')
 
 let nextBaseEventId = 0
 let nextRewardPaidEventId = 0
+let nextBudgetSpendingEventId = 0
 
 const generateBaseEvent = () => {
   return {
@@ -34,13 +35,30 @@ const generateRewardPaidEvent = (baseEvent) => {
   }
 }
 
+const generateBudgetSpending = (baseEvent) => {
+  const worker = rawWorkers[randomFromRange(0, rawWorkers.length - 1)]
+
+  return {
+    id: (nextBudgetSpendingEventId++).toString(),
+    createdAt: baseEvent.createdAt,
+    eventId: baseEvent.id,
+    groupId: worker.groupId.toString(),
+    workerId: worker.id.toString(),
+    rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    amount: Number(randomFromRange(0, 10000)),
+    reciever: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY'
+  }
+}
+
 const generateAllEvents = () => {
   const events = generateBaseEvents()
-  const rewardPaidEvents = events.map((event) => generateRewardPaidEvent(event))
+  const rewardPaidEvents = events.map(generateRewardPaidEvent)
+  const budgetSpendingEvents = events.map(generateBudgetSpending)
 
   return {
     events,
     rewardPaidEvents,
+    budgetSpendingEvents
   }
 }
 
