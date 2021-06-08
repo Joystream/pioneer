@@ -40,3 +40,18 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     budget: new BN(group.budget),
   }
 }
+
+const KnownWorkingGroups = ['forum', 'storage', 'content', 'membership'] as const
+
+export type GroupName = typeof KnownWorkingGroups[number]
+
+export const isKnownGroupName = (name: string): name is GroupName => {
+  return KnownWorkingGroups.includes(name as GroupName)
+}
+
+export const GroupRewardPeriods: Record<GroupName, BN> = {
+  forum: new BN(14400 + 10),
+  storage: new BN(14400 + 20),
+  content: new BN(14400 + 30),
+  membership: new BN(14400 + 40),
+}

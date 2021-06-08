@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import {Column, Row, TemplateBlock} from '@/common/components/storybookParts/previewStyles';
+import { Column, Row, TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 
 import * as icons from '.'
 

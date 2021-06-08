@@ -41,7 +41,7 @@ export const SimpleSelect = <T extends any>({ title = '', options, value, onChan
 
   const forwardChange = (value: T) => {
     focus({ type: 'set', value })
-    onChange?.(value)
+    onChange(value)
   }
 
   const navigate: React.KeyboardEventHandler = ({ key }) => {
@@ -53,7 +53,7 @@ export const SimpleSelect = <T extends any>({ title = '', options, value, onChan
         return focus({ type: 'move', entries, step: -1 })
 
       case 'Enter':
-        return isDefined(focused) && onChange?.(focused)
+        return isDefined(focused) && onChange(focused)
     }
   }
 
@@ -99,7 +99,6 @@ const SelectContainer = styled.label`
   display: block;
   & > :last-child {
     height: 48px;
-    min-width: 250px;
   }
 `
 
@@ -107,6 +106,7 @@ const Selected = styled.div`
   display: block;
   text-transform: capitalize;
   padding: 0.5rem 0;
+  grid-column: span 2;
 `
 const OptionsContainer = styled.div`
   background: ${Colors.White};

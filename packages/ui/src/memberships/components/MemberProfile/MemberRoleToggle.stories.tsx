@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { TemplateBlock, ModalBlock, WhiteBlock } from '@/common/components/storybookParts/previewStyles'
+import { getReward } from '@/working-groups/model/getReward'
 
 import { MemberRoleToggle, MemberRoleToggleProps } from './MemberRoleToggle'
 
@@ -29,7 +30,7 @@ Default.args = {
     group: { id: '3', name: 'membership' },
     isLeader: false,
     membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
-    rewardPerBlock: 13923,
+    reward: getReward(2, 'membership'),
     stake: 192837021,
     roleAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',

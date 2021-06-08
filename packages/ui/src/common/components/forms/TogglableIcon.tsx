@@ -10,8 +10,9 @@ import { ControlProps } from '.'
 interface TogglableIconProps extends ControlProps<boolean> {
   children: ReactNode
 }
+
 export const TogglableIcon = ({ children, value, onChange }: TogglableIconProps) => (
-  <label onClick={() => onChange?.(!value)}>
+  <label onClick={() => onChange(!value)}>
     <DualStateIcon checked={value}>{children}</DualStateIcon>
   </label>
 )
@@ -19,6 +20,11 @@ export const TogglableIcon = ({ children, value, onChange }: TogglableIconProps)
 const DualStateIcon = styled(MemberStatusTooltip)`
   width: 24px;
   height: 24px;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
   ${({ checked }: { checked?: boolean }) =>
     checked
       ? css`
@@ -28,9 +34,8 @@ const DualStateIcon = styled(MemberStatusTooltip)`
 
           &:hover,
           &:focus {
-            color: ${Colors.Blue[500]};
-            border-color: ${Colors.Blue[100]};
-            background-color: ${Colors.Black[50]};
+            border-color: ${Colors.Blue[400]};
+            background-color: ${Colors.Blue[400]};
           }
         `
       : css`

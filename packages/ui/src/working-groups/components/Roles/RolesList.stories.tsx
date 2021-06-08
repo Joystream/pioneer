@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { RolesList, RolesListProps } from '@/working-groups/components/Roles/RolesList'
+import { getReward } from '@/working-groups/model/getReward'
 
 export default {
   title: 'WorkingGroup/RolesList',
@@ -18,7 +19,7 @@ Default.args = {
       group: { id: '0', name: 'forum' },
       membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
       status: 'WorkerStatusActive',
-      rewardPerBlock: 100,
+      reward: getReward(1, 'forum'),
       earnedTotal: 1000,
       stake: 1000,
       isLeader: false,

@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
-import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
+
+import { getReward } from '@/working-groups/model/getReward'
 
 import { MyApplications } from '../../../src/app/pages/WorkingGroups/MyApplications'
 import { Block } from '../../../src/common/types'
@@ -26,7 +27,7 @@ const currentApplication: WorkingGroupApplication = {
     id: '2',
     type: 'LEADER',
     groupName: 'Storage',
-    reward: new BN(200),
+    reward: getReward(1, 'storage'),
   },
   createdAtBlock: block,
   status: 'ApplicationStatusPending',
@@ -39,7 +40,7 @@ const pastApplication: WorkingGroupApplication = {
     id: '2',
     type: 'REGULAR',
     groupName: 'Forum',
-    reward: new BN(100),
+    reward: getReward(1, 'forum'),
   },
   createdAtBlock: block,
   status: 'ApplicationStatusRejected',
