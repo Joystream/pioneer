@@ -1,13 +1,17 @@
-import { MouseEventHandler, ReactNode } from 'react'
+import { KeyboardEventHandler, MouseEventHandler, ReactNode } from 'react'
 
 import { ControlProps } from '../forms'
 
+export interface SelectProps<T, V> {
   disabled?: boolean
   placeholder: string
-  selected?: T
-  onNavigate?: React.KeyboardEventHandler
-  onChange: (selected: T) => void
+  selected?: V
+  onNavigate?: KeyboardEventHandler
+  onChange: (selected: T, toggle: () => void) => void
   onSearch?: (search: string) => void
+  renderSelected: (option: V) => ReactNode
+  renderList: (onOptionClick: (option: T) => void, toggle: () => void) => ReactNode
+}
 
 export type OptionNode = string | ReactNode
 
@@ -17,9 +21,10 @@ export interface OptionProps {
   onClick?: MouseEventHandler
 }
 
-export interface DefaultSelectProps<T> extends ControlProps<T> {
+export interface DefaultSelectProps<Option, Value = Option | null, Change = Option | null>
+  extends ControlProps<Value, Change> {
   title?: string
-  options: T[]
-  renderOption?: (option: T, props?: OptionProps) => OptionNode
-  renderSelected?: (value: T) => OptionNode
+  options: Option[]
+  renderOption?: (option: Option, props?: OptionProps) => OptionNode
+  renderSelected?: (value: Value) => OptionNode
 }

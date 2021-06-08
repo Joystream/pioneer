@@ -1,94 +1,146 @@
-import React, { ReactNode, useMemo, useReducer } from 'react'
-import styled, { css } from 'styled-components'
+import React, { Fragment, useCallback, useReducer } from 'react'
+import styled from 'styled-components'
 
 import { FilterLabel } from '@/common/components/forms/FilterBox'
 import { Colors } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 import { stopEvent } from '@/common/utils/events'
 
+import { FilterButtons } from '../buttons'
+
 import { Select } from '.'
+import { EmptyOption, OptionContainer } from './components'
 import { DefaultSelectProps, OptionNode, OptionProps } from './types'
 
+// Focus management:
 
-type Move<T> = { type: 'move'; entries: [Option, T][]; step: number }
-type Set<T> = { type: 'set'; value: T | undefined }
+type Move<T> = { type: 'move'; options: T[]; step: number }
+type Set<T> = { type: 'set'; value: T | null }
 type Action<T> = Move<T> | Set<T>
 
-type FocusReducer<T> = (value: T | undefined, action: Action<T>) => T | undefined
+type FocusReducer<T> = (value: T | null, action: Action<T>) => T | null
 
 const cycle = (i: number, s: number, len: number) => (len + i + s) % len
 
-const selectFocusReducer = <T extends any>(value: T | undefined, action: Action<T>): T | undefined => {
+const selectFocusReducer = <T extends any>(value: T | null, action: Action<T>): T | null => {
   switch (action.type) {
     case 'set':
       return action.value
 
     case 'move': {
-      const focusedIndex = isDefined(value) ? action.entries.findIndex(([, v]) => v === value) : -1
-      const toFocusIndex = focusedIndex >= 0 ? cycle(focusedIndex, action.step, action.entries.length) : undefined
-      return action.entries[toFocusIndex ?? 0]?.[1]
+      const { options } = action
+      const focusedIndex = value === null ? 0 : 1 + options.indexOf(value)
+      const toFocusIndex = cycle(focusedIndex, action.step, 1 + options.length)
+      return options[toFocusIndex - 1] ?? null
     }
   }
 }
 
-interface SimpleSelectProps<T> extends DefaultSelectProps<T> {
+// Helpers:
+
+const wrapOption = (option: OptionNode, props: OptionProps, key?: any) =>
+  typeof option === 'string' ? (
+    <OptionContainer key={key} {...props}>
+      {option}
+    </OptionContainer>
+  ) : (
+    <Fragment key={key}>{option}</Fragment>
+  )
+
+// Component:
+
+interface SimpleSelectProps<Option, Value = Option> extends DefaultSelectProps<Option, Value> {
   emptyOption?: OptionNode
+  valueToOption?: (value: Value) => Option | null
+  onApply?: () => void
+  onClear?: () => void
   onSearch?: (search: string) => void
 }
 
-export const SimpleSelect = <T extends any>({
+export const SimpleSelect = <Option extends any, Value extends any = Option>({
   title,
   options,
   emptyOption,
   renderOption = String,
   renderSelected,
+  valueToOption = (value) => value as Option,
   value,
   onChange,
+  onApply,
+  onClear,
   onSearch,
-}: SimpleSelectProps<T>) => {
-  const [focused, focus] = useReducer(selectFocusReducer as FocusReducer<T | null>, value)
+}: SimpleSelectProps<Option, Value>) => {
+  const [focused, focus] = useReducer(selectFocusReducer as FocusReducer<Option>, valueToOption(value))
 
-  const entries = useMemo<[Option, T | null][]>(() => {
-    const valueEntries: [Option, T][] = options.map((value) => [renderOption(value), value])
-    return isDefined(emptyOption) ? [[emptyOption, null], ...valueEntries] : valueEntries
-  }, [options, renderOption, emptyOption])
-
-  const forwardChange = (value: T | null) => {
-    focus({ type: 'set', value })
-    onChange(value)
-  }
+  const change = useCallback(
+    (pickedOption: Option | null, reset: () => void) => {
+      focus({ type: 'set', value: pickedOption })
+      !onApply && reset()
+      onChange(pickedOption)
+    },
+    [onChange]
+  )
 
   const navigate: React.KeyboardEventHandler = ({ key }) => {
     switch (key) {
       case 'ArrowDown':
-        return focus({ type: 'move', entries, step: 1 })
+        return focus({ type: 'move', options, step: 1 })
 
       case 'ArrowUp':
-        return focus({ type: 'move', entries, step: -1 })
+        return focus({ type: 'move', options, step: -1 })
 
       case 'Enter':
         return isDefined(focused) && onChange(focused)
     }
   }
 
-  const renderSelectedOption = (value: T | null) => (
-    <Selected>{renderSelected?.(value) ?? (value === null ? emptyOption : renderOption(value))}</Selected>
+  const renderSelectedOption = useCallback(
+    (value: Value) => {
+      if (renderSelected) {
+        return <Selected>{renderSelected(value)}</Selected>
+      } else {
+        const option = valueToOption(value)
+        return <Selected>{option === null ? emptyOption : renderOption(option)}</Selected>
+      }
+    },
+    [value, emptyOption]
   )
 
-  const renderList = (select: (value: T | null) => void) => (
-    <OptionsContainer>
-      {entries.map(([label, val], key) => {
-        const onClick: React.MouseEventHandler = (evt) => {
+  const renderList = useCallback(
+    (select: (option: Option | null) => void, toggle: () => void) => {
+      const apply =
+        onApply &&
+        (() => {
+          toggle()
+          onApply()
+        })
+
+      const optionProps = (option: Option | null): OptionProps => ({
+        selected: option === value,
+        focus: option === focused,
+        onClick: (evt) => {
           stopEvent(evt)
-          select(val)
-        }
-        return (
-          <Option key={key} selected={val === value} focus={val === focused} onClick={onClick}>
-            {label}
-          </Option>
-        )
-      })}
-    </OptionsContainer>
+          select(option)
+        },
+      })
+
+      const EmptyOption = emptyOption && wrapOption(emptyOption, optionProps(null))
+
+      const OptionList = options.map((option, key) => {
+        const props = optionProps(option)
+        const optionNode = renderOption(option, props)
+        return wrapOption(optionNode, props, key)
+      })
+
+      return (
+        <OptionsContainer>
+          {EmptyOption}
+          {OptionList}
+          {apply && <FilterButtons onApply={apply} onClear={onClear} />}
+        </OptionsContainer>
+      )
+    },
+    [JSON.stringify(options), focused, value, emptyOption]
   )
 
   return (
@@ -98,7 +150,7 @@ export const SimpleSelect = <T extends any>({
         placeholder=""
         selected={value}
         onNavigate={navigate}
-        onChange={forwardChange}
+        onChange={change}
         onSearch={onSearch}
         renderSelected={renderSelectedOption}
         renderList={renderList}
@@ -120,10 +172,9 @@ const SelectContainer = styled.label`
 
 const Selected = styled.div`
   cursor: pointer;
-  display: block;
+  display: flex;
+  gap: 8px;
   text-transform: capitalize;
-  padding: 0.5rem 0;
-  grid-column: span 2;
   user-select: none;
 `
 const OptionsContainer = styled.div`
@@ -136,28 +187,4 @@ const OptionsContainer = styled.div`
   user-select: none;
   width: 100%;
   z-index: 10;
-`
-
-interface OptionProps {
-  focus?: boolean
-  selected?: boolean
-}
-const OptionFocused = css`
-  color: ${Colors.Blue[500]};
-`
-const Option = styled.div`
-  cursor: pointer;
-  display: block;
-  padding: 1rem;
-  text-transform: capitalize;
-  ${({ focus, selected }: OptionProps) => (selected || focus) && OptionFocused}
-  &:hover {
-    ${OptionFocused}
-  }
-  ${({ selected }: OptionProps) =>
-    selected &&
-    css`
-      background: ${Colors.Blue[50]};
-      font-weight: bold;
-    `}
 `
