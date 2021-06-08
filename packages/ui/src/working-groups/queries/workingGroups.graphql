@@ -53,6 +53,21 @@ fragment WorkingGroupFields on WorkingGroup {
   }
 }
 
+fragment BudgetSpendingEventFields on BudgetSpendingEvent {
+  id,
+  groupId,
+  eventId,
+  reciever,
+  amount,
+  rationale
+}
+
+query getBudgetSpending ($where: BudgetSpendingEventWhereInput) {
+  budgetSpendingEvents(where: $where) {
+    ...BudgetSpendingEventFields
+  }
+}
+
 fragment RewardPaidEventFields on RewardPaidEvent {
   id
   amount
