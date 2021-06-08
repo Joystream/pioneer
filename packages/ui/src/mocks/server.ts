@@ -2,7 +2,7 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import schema from '@/common/api/schemas/schema.graphql'
+import schema from '../common/api/schemas/schema.graphql'
 
 import {
   seedApplications,

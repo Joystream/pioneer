@@ -56,7 +56,6 @@ fragment WorkingGroupFields on WorkingGroup {
 fragment BudgetSpendingEventFields on BudgetSpendingEvent {
   id,
   groupId,
-  eventId,
   reciever,
   amount,
   rationale

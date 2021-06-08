@@ -3,7 +3,6 @@ import rawEvents from './raw/budgetSpendingEvents.json'
 interface RawBudgetSpendingEvent {
   id: string
   createdAt: string
-  eventId: string
   groupId: string
   workerId: string
   rewardAccount: string

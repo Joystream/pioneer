@@ -54,7 +54,6 @@ export type BudgetSpendingEventFieldsFragment = {
   __typename: 'BudgetSpendingEvent'
   id: string
   groupId: string
-  eventId: string
   reciever: string
   amount: any
   rationale?: Types.Maybe<string>
@@ -379,7 +378,6 @@ export const BudgetSpendingEventFieldsFragmentDoc = gql`
   fragment BudgetSpendingEventFields on BudgetSpendingEvent {
     id
     groupId
-    eventId
     reciever
     amount
     rationale

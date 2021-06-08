@@ -3,7 +3,6 @@ import rawEvents from './raw/rewardPaidEvents.json'
 interface RawRewardPaidEvent {
   id: string
   createdAt: string
-  eventId: string
   groupId: string
   workerId: string
   rewardAccount: string

@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 
-const { generateBlocks } = require('./generators/generateBlocks')
 const { generateAllEvents } = require('./generators/generateEvents')
 const { generateMembers } = require('./generators/generateMembers')
 const { generateOpeningsAndApplications } = require('./generators/generateOpeningsAndApplications')
@@ -16,7 +15,6 @@ const saveFile = (name, contents) => {
 const main = () => {
   const mocks = {
     members: generateMembers(),
-    blocks: generateBlocks(),
     workingGroups: generateWorkingGroups(),
     workers: generateWorkers(),
     ...generateOpeningsAndApplications(),

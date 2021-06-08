@@ -7,7 +7,7 @@ export interface UseGroupSpending {
 }
 
 export const useGroupSpending = (groupId: string): UseGroupSpending => {
-  const { data, loading } = useGetBudgetSpendingQuery({ variables: { where: { groupId_eq: groupId } } })
+  const { data, loading } = useGetBudgetSpendingQuery({ variables: { where: { group_eq: groupId } } })
 
   if (loading || !data) {
     return {
