@@ -5,26 +5,22 @@ import styled from 'styled-components'
 import { Row, TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 
-import {
-  WorkingGroupImagePlaceholder,
-  WGImagePlaceholderProps,
-  WorkingGroupImage,
-} from './WorkingGroupImagePlaceholder'
+import { WorkingGroupImage, WorkingGroupImageProps, WorkingGroupImageTag } from './WorkingGroupImage'
 
 export default {
   title: 'WorkingGroup/WorkingGroupImagePlaceholder',
-  component: WorkingGroupImagePlaceholder,
+  component: WorkingGroupImage,
 } as Meta
 
-const Template: Story<WGImagePlaceholderProps> = (args) => {
+const Template: Story<WorkingGroupImageProps> = (args) => {
   return (
     <TemplateBlock>
       <Row>
         <GroupImageContainer>
-          <WorkingGroupImagePlaceholder {...args} />
+          <WorkingGroupImage {...args} />
         </GroupImageContainer>
         <GroupImageContainer>
-          <WorkingGroupImagePlaceholder groupName={undefined} />
+          <WorkingGroupImage groupName={undefined} />
         </GroupImageContainer>
       </Row>
       <Row>
@@ -56,7 +52,7 @@ const GroupImageContainer = styled.div`
   &:hover {
     border-color: ${Colors.Blue[100]};
 
-    ${WorkingGroupImage} {
+    ${WorkingGroupImageTag} {
       transform: scale(1.1);
     }
   }

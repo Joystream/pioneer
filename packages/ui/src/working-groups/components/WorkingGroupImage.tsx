@@ -3,16 +3,16 @@ import styled from 'styled-components'
 
 import { Colors, Transitions } from '../../common/constants'
 
-export interface WGImagePlaceholderProps {
+export interface WorkingGroupImageProps {
   className?: string
   groupName: string | undefined
 }
 
-export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePlaceholderProps) => {
+export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImageProps) => {
   switch (groupName) {
     case 'bandwidth':
       return (
-        <WorkingGroupImage viewBox="0 0 108 108" fill="none" className={className}>
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <rect x="42.8284" y="42.8281" width="22" height="22" fill={Colors.Black[500]} />
           <circle cx="54" cy="54" r="2" fill={Colors.White} />
           <path
@@ -63,11 +63,11 @@ export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePl
             d="M64.8284 55.8281L59.8284 55.8281L59.8284 51.8281L64.8284 51.8281L64.8284 55.8281Z"
             fill={Colors.Black[900]}
           />
-        </WorkingGroupImage>
+        </WorkingGroupImageTag>
       )
     case 'storage':
       return (
-        <WorkingGroupImage viewBox="0 0 108 108" fill="none" className={className}>
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path fillRule="evenodd" clipRule="evenodd" d="M53 37H73V39H53V37Z" fill={Colors.White} />
           <path fillRule="evenodd" clipRule="evenodd" d="M53 33H80V35H53V33Z" fill={Colors.White} />
           <path d="M64 68V44H44.0131H24V68H24.2129H27.7738H64Z" fill={Colors.Blue[500]} />
@@ -94,11 +94,11 @@ export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePl
           <circle cx="44" cy="77" r="2" fill={Colors.Blue[500]} />
           <circle cx="67" cy="77" r="2" fill={Colors.Black[500]} />
           <circle cx="57" cy="56" r="2" fill={Colors.White} />
-        </WorkingGroupImage>
+        </WorkingGroupImageTag>
       )
     case 'forum':
       return (
-        <WorkingGroupImage viewBox="0 0 108 108" fill="none" className={className}>
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path d="M44 53.9256V29H60H88.021V53.9256H85L75.8506 59.5V53.9256H44Z" fill={Colors.Black[500]} />
           <path fillRule="evenodd" clipRule="evenodd" d="M53 42H73V44H53V42Z" fill={Colors.White} />
           <path fillRule="evenodd" clipRule="evenodd" d="M53 38H80V40H53V38Z" fill={Colors.White} />
@@ -111,11 +111,11 @@ export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePl
           />
           <path fillRule="evenodd" clipRule="evenodd" d="M28.021 62H48.021V64H28.021V62Z" fill={Colors.White} />
           <path fillRule="evenodd" clipRule="evenodd" d="M28.021 58H55.021V60H28.021V58Z" fill={Colors.White} />
-        </WorkingGroupImage>
+        </WorkingGroupImageTag>
       )
     case 'membership':
       return (
-        <WorkingGroupImage viewBox="0 0 108 108" fill="none" className={className}>
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
             d="M30.2553 34.3861L35.2106 28.0149C35.611 27.5001 36.389 27.5001 36.7894 28.0149L41.7447 34.3861C42.2556 35.0429 41.7875 36 40.9554 36H38H31.0446C30.2125 36 29.7444 35.0429 30.2553 34.3861Z"
             fill={Colors.Black[500]}
@@ -138,11 +138,11 @@ export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePl
             d="M55.577 75.9645C55.0603 75.9877 54.5343 76 54 76C53.1477 76 52.3164 75.9687 51.5108 75.9119C51.6163 75.5562 51.7618 75.217 51.9473 74.8945C52.1816 74.5039 52.4746 74.1279 52.8262 73.7666C53.1777 73.4053 53.5928 73.0244 54.0713 72.624C54.9111 71.9404 55.5459 71.3008 55.9756 70.7051C56.4053 70.1094 56.6201 69.4307 56.6201 68.6689C56.6201 67.8682 56.3955 67.2334 55.9463 66.7646C55.4971 66.2959 54.7695 66.0615 53.7637 66.0615C52.748 66.0615 52.001 66.3105 51.5225 66.8086C51.0439 67.3066 50.7754 67.9756 50.7168 68.8154H46.9668C47.1035 66.999 47.7969 65.5781 49.0469 64.5527C50.2969 63.5176 51.9326 63 53.9541 63C54.9307 63 55.8145 63.1416 56.6055 63.4248C57.3965 63.6982 58.0703 64.084 58.627 64.582C59.1934 65.0801 59.623 65.6855 59.916 66.3984C60.2188 67.1113 60.3701 67.8975 60.3701 68.7568C60.3701 69.9385 60.1406 70.9053 59.6816 71.6572C59.2227 72.3994 58.6123 73.1123 57.8506 73.7959C57.4502 74.1572 57.0791 74.4795 56.7373 74.7627C56.3955 75.0361 56.0977 75.3193 55.8438 75.6123C55.7472 75.7282 55.6583 75.8456 55.577 75.9645Z"
             fill={Colors.Black[900]}
           />
-        </WorkingGroupImage>
+        </WorkingGroupImageTag>
       )
     case 'content':
       return (
-        <WorkingGroupImage viewBox="0 0 108 108" fill="none" className={className}>
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -178,11 +178,11 @@ export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePl
           <rect x="76.8925" y="58.0996" width="3.76344" height="3.5" fill={Colors.White} />
           <rect x="76.8925" y="65.3994" width="3.76344" height="3.5" fill={Colors.White} />
           <rect x="76.8925" y="72.7002" width="3.76344" height="3.5" fill={Colors.White} />
-        </WorkingGroupImage>
+        </WorkingGroupImageTag>
       )
     case 'discovery':
       return (
-        <WorkingGroupImage viewBox="0 0 108 108" fill="none" className={className}>
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -217,11 +217,11 @@ export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePl
             fill={Colors.Black[900]}
           />
           <path d="M27 57C27 52.0294 31.0294 48 36 48" stroke={Colors.White} strokeWidth="2" />
-        </WorkingGroupImage>
+        </WorkingGroupImageTag>
       )
     case 'operations':
       return (
-        <WorkingGroupImage viewBox="0 0 108 108" fill="none" className={className}>
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -254,11 +254,11 @@ export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePl
             d="M47.2212 61.8113C47.077 62.3515 47 62.9166 47 63.5C47 64.084 47.077 64.6492 47.2205 65.1881C47.6074 65.1683 47.9925 65.2519 48.3331 65.4299C48.6737 65.6078 48.9565 65.8731 49.1504 66.1963C49.3442 66.5195 49.4414 66.8881 49.4313 67.2612C49.4212 67.6344 49.3042 67.9976 49.0931 68.3106C49.9394 69.1128 50.9838 69.6942 52.1278 70C52.3035 69.6672 52.5713 69.3877 52.9017 69.1925C53.2321 68.9973 53.6121 68.894 53.9997 68.894C54.3872 68.894 54.7672 68.9973 55.0976 69.1925C55.428 69.3877 55.6958 69.6672 55.8715 70C57.0155 69.6942 58.0599 69.1128 58.9062 68.3106C58.6953 67.9976 58.5784 67.6345 58.5684 67.2614C58.5584 66.8884 58.6557 66.5199 58.8495 66.1968C59.0433 65.8737 59.3261 65.6086 59.6666 65.4307C60.0071 65.2527 60.392 65.169 60.7788 65.1887C60.923 64.6485 61 64.0834 61 63.5C61 62.9166 60.923 62.3515 60.7788 61.8119C60.3919 61.8317 60.0068 61.7481 59.6662 61.5701C59.3256 61.3922 59.0428 61.1269 58.8489 60.8037C58.6551 60.4805 58.5579 60.1119 58.568 59.7388C58.5781 59.3656 58.6951 59.0024 58.9062 58.6894C58.0599 57.8872 57.0155 57.3058 55.8715 57C55.6958 57.3328 55.428 57.6123 55.0976 57.8075C54.7672 58.0027 54.3872 58.106 53.9997 58.106C53.6121 58.106 53.2321 58.0027 52.9017 57.8075C52.5713 57.6123 52.3035 57.3328 52.1278 57C50.9838 57.3058 49.9394 57.8872 49.0931 58.6894C49.3039 59.0024 49.4208 59.3654 49.4309 59.7384C49.4409 60.1114 49.3437 60.4798 49.15 60.8028C48.9562 61.1259 48.6736 61.3911 48.3332 61.5691C47.9928 61.747 47.608 61.8309 47.2212 61.8113ZM54.0003 65.6325C55.2375 65.6325 56.2405 64.6663 56.2405 63.4744C56.2405 62.2825 55.2375 61.3162 54.0003 61.3162C52.7632 61.3162 51.7602 62.2825 51.7602 63.4744C51.7602 64.6663 52.7632 65.6325 54.0003 65.6325Z"
             fill={Colors.White}
           />
-        </WorkingGroupImage>
+        </WorkingGroupImageTag>
       )
     case 'gateways':
       return (
-        <WorkingGroupImage viewBox="0 0 108 108" fill="none" className={className}>
+        <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path
             d="M35.5621 45.2243C35.5621 47.6573 34.3868 49.8094 32.5854 51.1187C34.5099 51.8896 35.9362 53.1912 36.9405 54.6869C38.4956 57.0028 39 59.7091 39 61.4814V62.5391L38.0754 63.012C36.6746 63.7286 33.0061 64.999 28.5 64.999C23.9939 64.999 20.3254 63.7286 18.9246 63.012L18 62.5391V61.4814C18 59.7091 18.5044 57.0028 20.0595 54.6869C21.0638 53.1911 22.4902 51.8895 24.4149 51.1186C22.6135 49.8093 21.4382 47.6572 21.4382 45.2243C21.4382 41.2339 24.6 37.999 28.5002 37.999C32.4004 37.999 35.5621 41.2339 35.5621 45.2243Z"
             fill={Colors.Blue[500]}
@@ -283,11 +283,11 @@ export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePl
             d="M68 62.2252L71.5687 62.2255C72.8463 62.2251 74.007 61.6999 74.8588 60.8481C75.4688 60.238 75.9204 59.4603 76.1427 58.588L78.462 58.5881L78.4622 56.1104L76.1431 56.1105C75.9356 55.2908 75.523 54.5378 74.9305 53.9203C74.1496 53.1064 73.1413 52.6117 72.0516 52.499C71.2583 53.1377 70.5982 53.8841 70.0595 54.6864C70.0004 54.7744 69.9428 54.863 69.8867 54.952H71.5694L71.5698 54.9521C72.161 54.952 72.7196 55.1947 73.1427 55.6358C73.2809 55.7797 73.3994 55.9391 73.4968 56.1104H72.7754L72.7754 58.588L73.4957 58.5881C73.101 59.2825 72.3848 59.7477 71.5687 59.7481L68.1387 59.7478C68.0419 60.3819 68 60.9702 68 61.4809V62.2252Z"
             fill={Colors.Black[900]}
           />
-        </WorkingGroupImage>
+        </WorkingGroupImageTag>
       )
     default:
       return (
-        <WorkingGroupImage viewBox="0 0 40 40" fill="none" className={className}>
+        <WorkingGroupImageTag viewBox="0 0 40 40" fill="none" className={className}>
           <rect fill={Colors.Blue[50]} x="0" y="0" width="40" height="40" />
           <rect
             x="0"
@@ -318,12 +318,12 @@ export const WorkingGroupImagePlaceholder = ({ className, groupName }: WGImagePl
             fill={Colors.Blue[500]}
             d="M18.1315994,22.4400005v0.1646996c0,0.1352005,0,0.2703991-0.0144997,0.3903008 c-0.0284996,0.2546997-0.0569992,0.5098991-0.1280003,0.7497997c-0.0289993,0.1198997-0.0574989,0.2398987-0.1000004,0.3450985 H14.6819l0.4703999-1.6351986h2.9792995v-0.0151997V22.4400005z"
           />
-        </WorkingGroupImage>
+        </WorkingGroupImageTag>
       )
   }
 }
 
-export const WorkingGroupImage = styled.svg`
+export const WorkingGroupImageTag = styled.svg`
   display: flex;
   position: absolute;
   width: calc(100% + 16px);

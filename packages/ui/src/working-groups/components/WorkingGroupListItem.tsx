@@ -11,7 +11,7 @@ import { Avatar } from '../../memberships/components/Avatar'
 import { useMember } from '../../memberships/hooks/useMembership'
 import { WorkingGroup } from '../types'
 
-import { WorkingGroupImage, WorkingGroupImagePlaceholder } from './WorkingGroupImagePlaceholder'
+import { WorkingGroupImage, WorkingGroupImageTag } from './WorkingGroupImage'
 
 export interface WorkingGroupProps {
   group: WorkingGroup
@@ -26,7 +26,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   return (
     <GroupItem>
       <GroupImageContainer onClick={() => history.push(groupAddress)}>
-        {group.image ? <GroupImage src={group.image} /> : <WorkingGroupImagePlaceholder groupName={group.name} />}
+        <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
       <GroupContentBlock>
         <GroupTitle onClick={() => history.push(groupAddress)}>{group.name}</GroupTitle>
@@ -66,16 +66,6 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
     </GroupItem>
   )
 }
-
-const GroupImage = styled.img`
-  display: flex;
-  position: absolute;
-  width: calc(100% + 16px);
-  height: calc(100% + 16px);
-  transform: scale(0.9);
-  object-fit: cover;
-  transition: ${Transitions.all};
-`
 
 const GroupImageContainer = styled.div`
   display: flex;
@@ -173,8 +163,7 @@ const GroupItem = styled.section`
     ${GroupImageContainer} {
       border-color: ${Colors.Blue[100]};
 
-      ${WorkingGroupImage},
-      ${GroupImage} {
+      ${WorkingGroupImageTag} {
         transform: scale(1);
       }
     }
