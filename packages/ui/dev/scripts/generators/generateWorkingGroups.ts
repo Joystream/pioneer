@@ -1,11 +1,11 @@
-const faker = require('faker')
+import faker from 'faker'
 
-const { randomMarkdown, randomFromRange } = require('./utils')
+import { randomMarkdown, randomFromRange } from './utils'
 
-const WORKING_GROUPS = ['forum', 'storage', 'content', 'membership']
+export const WORKING_GROUPS = ['forum', 'storage', 'content', 'membership']
 
-const generateWorkingGroups = () => {
-  const generateWorkingGroup = (groupName, id) => ({
+export const generateWorkingGroups = () => {
+  const generateWorkingGroup = (groupName: string, id: number) => ({
     id: String(id),
     name: groupName,
     workers: [],
@@ -25,4 +25,3 @@ const generateWorkingGroups = () => {
 
   return WORKING_GROUPS.map(generateWorkingGroup)
 }
-module.exports = { generateWorkingGroups, WORKING_GROUPS }

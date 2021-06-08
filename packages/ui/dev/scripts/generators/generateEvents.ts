@@ -1,8 +1,8 @@
-const faker = require('faker')
+import faker from 'faker'
 
-const rawWorkers = require('../../../src/mocks/data/raw/workers.json')
+import rawWorkers from '../../../src/mocks/data/raw/workers.json'
 
-const { randomFromRange } = require('./utils')
+import { randomFromRange } from './utils'
 
 let nextRewardPaidEventId = 0
 let nextBudgetSpendingEventId = 0
@@ -35,7 +35,7 @@ const generateBudgetSpending = () => {
   }
 }
 
-const generateAllEvents = () => {
+export const generateAllEvents = () => {
   const rewardPaidEvents = Array.from({ length: 10 }).map(generateRewardPaidEvent)
   const budgetSpendingEvents = Array.from({ length: 10 }).map(generateBudgetSpending)
 
@@ -44,5 +44,3 @@ const generateAllEvents = () => {
     budgetSpendingEvents,
   }
 }
-
-module.exports = { generateAllEvents }

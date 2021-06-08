@@ -1,8 +1,8 @@
-const faker = require('faker')
+import faker from 'faker'
 
-const { MAX_MEMBERS } = require('./generateMembers')
-const { WORKING_GROUPS } = require('./generateWorkingGroups')
-const { randomUniqueArrayFromRange, randomFromRange, randomMarkdown } = require('./utils')
+import { MAX_MEMBERS } from './generateMembers'
+import { WORKING_GROUPS } from './generateWorkingGroups'
+import { randomUniqueArrayFromRange, randomFromRange, randomMarkdown } from './utils'
 
 let nextQuestionId = 0
 let nextOpeningId = 0
@@ -28,7 +28,7 @@ const generateMetadata = () => ({
   applicationFormQuestions: getApplicationFormQuestions(),
 })
 
-const generateBaseOpening = (groupId) => ({
+const generateBaseOpening = (groupId: number) => ({
   id: String(nextOpeningId++),
   groupId: String(groupId),
   stakeAmount: randomFromRange(1, 10) * 1000,
@@ -37,11 +37,11 @@ const generateBaseOpening = (groupId) => ({
   version: 1,
 })
 
-const generateOpening = (status, groupId, name) => () => {
+const generateOpening = (status: string, groupId: number) => () => {
   const isLeader = Math.random() > 0.9
   const isInPast = status !== 'open'
   return {
-    ...generateBaseOpening(groupId, name, isLeader),
+    ...generateBaseOpening(groupId),
     type: isLeader ? 'LEADER' : 'REGULAR',
     status,
     unstakingPeriod: randomFromRange(5, 10),
@@ -52,7 +52,9 @@ const generateOpening = (status, groupId, name) => () => {
   }
 }
 
-const generateUpcomingOpening = (groupId) => () => {
+type Opening = ReturnType<ReturnType<typeof generateOpening>>
+
+const generateUpcomingOpening = (groupId: number) => () => {
   return {
     ...generateBaseOpening(groupId),
     expectedStart: faker.date.soon(randomFromRange(10, 30)).toJSON(),
@@ -65,25 +67,25 @@ const generateUpcomingOpening = (groupId) => () => {
 }
 
 const generateOpenings = () => {
-  const generateOpeningsForGroup = (groupName, id) => {
+  const generateOpeningsForGroup = (groupName: string, id: number) => {
     return [
-      ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id, groupName)),
-      ...Array.from({ length: randomFromRange(4, 8) }, generateOpening('filled', id, groupName)),
-      ...Array.from({ length: randomFromRange(1, 2) }, generateOpening('cancelled', id, groupName)),
+      ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id)),
+      ...Array.from({ length: randomFromRange(4, 8) }, generateOpening('filled', id)),
+      ...Array.from({ length: randomFromRange(1, 2) }, generateOpening('cancelled', id)),
     ]
   }
 
   return WORKING_GROUPS.map(generateOpeningsForGroup).flatMap((a) => a)
 }
 
-const generateApplications = (openings) => {
+const generateApplications = (openings: Opening[]) => {
   let nextId = 0
 
   return openings.map((opening) => {
     const applicantsIds = randomUniqueArrayFromRange(8, 0, MAX_MEMBERS)
     const questions = opening.metadata.applicationFormQuestions
 
-    const generateApplication = (applicantId) => ({
+    const generateApplication = (applicantId: number) => ({
       id: String(nextId++),
       openingId: opening.id,
       applicantId,
@@ -100,14 +102,14 @@ const generateApplications = (openings) => {
 }
 
 const generateUpcomingOpenings = () => {
-  const generateUpcomingOpeningsForGroup = (groupName, id) => {
-    return [...Array.from({ length: randomFromRange(1, 3) }, generateUpcomingOpening(id, groupName))]
+  const generateUpcomingOpeningsForGroup = (groupName: string, id: number) => {
+    return [...Array.from({ length: randomFromRange(1, 3) }, generateUpcomingOpening(id))]
   }
 
   return WORKING_GROUPS.map(generateUpcomingOpeningsForGroup).flatMap((a) => a)
 }
 
-const generateOpeningsAndApplications = () => {
+export const generateOpeningsAndApplications = () => {
   const openings = generateOpenings().flatMap((a) => a)
   const applications = generateApplications(openings).flatMap((a) => a)
   nextOpeningId = 0
@@ -119,5 +121,3 @@ const generateOpeningsAndApplications = () => {
     upcomingOpenings,
   }
 }
-
-module.exports = { generateOpeningsAndApplications }

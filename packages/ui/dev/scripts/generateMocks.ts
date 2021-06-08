@@ -1,13 +1,13 @@
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-const { generateAllEvents } = require('./generators/generateEvents')
-const { generateMembers } = require('./generators/generateMembers')
-const { generateOpeningsAndApplications } = require('./generators/generateOpeningsAndApplications')
-const { generateWorkers } = require('./generators/generateWorkers')
-const { generateWorkingGroups } = require('./generators/generateWorkingGroups')
+import { generateAllEvents } from './generators/generateEvents'
+import { generateMembers } from './generators/generateMembers'
+import { generateOpeningsAndApplications } from './generators/generateOpeningsAndApplications'
+import { generateWorkers } from './generators/generateWorkers'
+import { generateWorkingGroups } from './generators/generateWorkingGroups'
 
-const saveFile = (name, contents) => {
+const saveFile = (name: string, contents: any) => {
   const pathName = path.join(__dirname, '..', '..', 'src', 'mocks', 'data', 'raw', name + '.json')
   fs.writeFileSync(pathName, JSON.stringify(contents, null, 2))
 }

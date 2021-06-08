@@ -1,8 +1,9 @@
-const faker = require('faker')
-const { randomFromRange } = require('./utils')
+import faker from 'faker'
 
-const MAX_MEMBERS = 50
-const KNOWN_MEMBERS = [
+import { randomFromRange } from './utils'
+
+export const MAX_MEMBERS = 50
+export const KNOWN_MEMBERS = [
   {
     handle: 'alice',
     rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
@@ -17,7 +18,7 @@ const KNOWN_MEMBERS = [
   },
 ]
 
-const generateMembers = () => {
+export const generateMembers = () => {
   let nextId = 0
 
   const generateMember = (known = {}) => ({
@@ -37,10 +38,4 @@ const generateMembers = () => {
   })
 
   return [...KNOWN_MEMBERS.map(generateMember), ...Array.from({ length: MAX_MEMBERS }, generateMember)]
-}
-
-module.exports = {
-  generateMembers,
-  MAX_MEMBERS,
-  KNOWN_MEMBERS,
 }

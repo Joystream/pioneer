@@ -1,13 +1,13 @@
-const faker = require('faker')
+import faker from 'faker'
 
-const { MAX_MEMBERS } = require('./generateMembers')
-const { WORKING_GROUPS } = require('./generateWorkingGroups')
-const { randomUniqueArrayFromRange, randomFromRange } = require('./utils')
+import { MAX_MEMBERS } from './generateMembers'
+import { WORKING_GROUPS } from './generateWorkingGroups'
+import { randomUniqueArrayFromRange, randomFromRange } from './utils'
 
-const generateWorkers = () => {
+export const generateWorkers = () => {
   let nextId = 0
 
-  const generateWorker = (type, groupId) => (memberId) => ({
+  const generateWorker = (type: string, groupId: number) => (memberId: number) => ({
     id: String(nextId++),
     membershipId: memberId,
     groupId: groupId,
@@ -21,8 +21,8 @@ const generateWorkers = () => {
     hiredAtBlockId: randomFromRange(20, 100),
   })
 
-  const generateAllWorkers = (groupName, id) => {
-    const workersIds = ['0', '1', ...randomUniqueArrayFromRange(randomFromRange(2, 7), 2, MAX_MEMBERS)]
+  const generateAllWorkers = (groupName: string, id: number) => {
+    const workersIds = [0, 1, ...randomUniqueArrayFromRange(randomFromRange(2, 7), 2, MAX_MEMBERS)]
     const terminatedIds = randomUniqueArrayFromRange(randomFromRange(0, 10), 0, MAX_MEMBERS)
     const leftIds = randomUniqueArrayFromRange(randomFromRange(0, 20), 0, MAX_MEMBERS)
 
@@ -30,10 +30,8 @@ const generateWorkers = () => {
       ...workersIds.map(generateWorker('active', id)),
       ...terminatedIds.map(generateWorker('terminated', id)),
       ...leftIds.map(generateWorker('left', id)),
-    ].sort((a, b) => a.membershipId.localeCompare(b.membershipId))
+    ].sort((a, b) => a.membershipId - b.membershipId)
   }
 
-  return WORKING_GROUPS.map(generateAllWorkers).flatMap((a) => a)
+  return WORKING_GROUPS.map(generateAllWorkers).flatMap((a: any) => a)
 }
-
-module.exports = { generateWorkers }
