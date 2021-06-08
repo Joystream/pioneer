@@ -37,11 +37,11 @@ export const seedWorker = (worker: RawWorker, server: any) => {
 const seedWorkerStatus = (status: WorkerStatus, id: string, server: any) => {
   switch (status) {
     case 'active':
-      return server.schema.create('WorkerStatusActive', {})
+      return server.schema.create('WorkerStatusActive', { phantom: 0 })
     case 'left':
-      return server.schema.create('WorkerStatusLeft', { workerStartedLeavingEventId: id })
+      return server.schema.create('WorkerStatusLeft', { phantom: 0 })
     default:
-      return server.schema.create('WorkerStatusTerminated', { terminatedWorkerEventId: id })
+      return server.schema.create('WorkerStatusTerminated', { phantom: 0 })
   }
 }
 
