@@ -8,7 +8,6 @@ import schema from '../common/api/schemas/schema.graphql'
 
 import {
   seedApplications,
-  seedEvents,
   seedMembers,
   seedOpenings,
   seedOpeningStatuses,
@@ -87,7 +86,6 @@ export const makeServer = (environment = 'development') => {
       seedUpcomingOpenings(server)
       seedApplications(server)
       seedWorkers(server)
-      seedEvents(server)
       seedRewardPaidEvents(server)
       seedBudgetSpendingEvents(server)
     },
