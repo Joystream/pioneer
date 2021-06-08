@@ -5,9 +5,15 @@ import { Icon, StyledIcon } from '../Icon'
 export const DecreasedIcon = ({ className }: StyledIcon) => (
   <Icon size="20" viewBox="0 0 20 20" fill="none" color="currentColor" className={className}>
     <path
-      d="M15.8319 11.32L11.4226 6.91072H10.2441L7.50002 9.6548L3.08928 5.24406L1.91077 6.42257L6.91077 11.4226H8.08928L10.8334 8.67849L14.6534 12.4985L15.8319 11.32Z"
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M16.2466 9.26392H12.4185V10.8334H18.3569L19.1667 10.0486V4.86945H17.5471V8.28665L10.9807 2.55977H9.89732L6.48011 5.54011L1.08343 0.833373L0 1.99994L5.93839 7.17913H7.02182L10.439 4.1988L16.2466 9.26392Z"
       fill="currentColor"
     />
-    <path d="M13.3334 15H17.5L18.3334 14.1667V10H16.6667V13.3333H13.3334V15Z" fill="currentColor" />
+
+    <rect y="8.33337" width="3.33333" height="10" fill="currentColor" />
+    <rect x="5" y="10.8334" width="3.33333" height="7.5" fill="currentColor" />
+    <rect x="10" y="13.3334" width="3.33333" height="5" fill="currentColor" />
+    <rect x="15" y="15.8334" width="3.33333" height="2.5" fill="currentColor" />
   </Icon>
 )
