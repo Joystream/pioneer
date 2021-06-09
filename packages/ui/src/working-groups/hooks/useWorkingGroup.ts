@@ -5,14 +5,6 @@ interface WhereInput {
   name?: string | undefined
 }
 
-// export function useCountWorkers(groupId: string) {
-//   const { data, loading } = useGetWorkersConnectionQuery({
-//     variables: { groupId, onlyActive: true },
-//   })
-//
-//   return loading ? 0 : data?.workersConnection.totalCount
-// }
-
 export function useCountOpenings(groupId: string) {
   const { data, loading } = useGetWorkingGroupOpeningsConnectionQuery({
     variables: { groupId_eq: groupId, status_json: { isTypeOf_eq: 'OpeningStatusOpen' } },
