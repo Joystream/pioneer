@@ -19,7 +19,7 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
   return {
     id: group.id,
     image: undefined,
-    name: group.name,
+    name: asWorkingGroupName(group.name),
     about: group.metadata?.about ?? '',
     description: group.metadata?.description ?? '',
     status: group.metadata?.status ?? '',
@@ -30,7 +30,14 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
   }
 }
 
-const KnownWorkingGroups = ['forum', 'storage', 'content', 'membership'] as const
+const KnownWorkingGroups = ['forum', 'storage', 'content directory', 'membership'] as const
+
+const asWorkingGroupName = (name: string) => {
+  return name
+    .replace('WorkingGroup', '')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .toLowerCase()
+}
 
 export type GroupName = typeof KnownWorkingGroups[number]
 
@@ -41,6 +48,6 @@ export const isKnownGroupName = (name: string): name is GroupName => {
 export const GroupRewardPeriods: Record<GroupName, BN> = {
   forum: new BN(14400 + 10),
   storage: new BN(14400 + 20),
-  content: new BN(14400 + 30),
+  'content directory': new BN(14400 + 30),
   membership: new BN(14400 + 40),
 }

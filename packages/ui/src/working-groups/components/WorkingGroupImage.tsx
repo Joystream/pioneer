@@ -2,10 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Colors, Transitions } from '../../common/constants'
+import { GroupName } from '../types'
 
 export interface WorkingGroupImageProps {
   className?: string
-  groupName: string | undefined
+  groupName?: GroupName | string
 }
 
 export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImageProps) => {
@@ -140,7 +141,7 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           />
         </WorkingGroupImageTag>
       )
-    case 'content':
+    case 'content directory':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path

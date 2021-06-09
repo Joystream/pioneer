@@ -18,7 +18,7 @@ export const MEMBER_ALICE_DATA = {
 }
 
 export const OPENING_DATA: RawOpeningMock = {
-  groupId: '0',
+  groupId: 'forumWorkingGroup',
   type: 'REGULAR',
   status: 'open',
   stakeAmount: 2000,
