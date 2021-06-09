@@ -1,11 +1,14 @@
 import React, { useEffect, useReducer, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
+import { useModal } from '@/common/hooks/useModal'
 import { MemberList } from '@/memberships/components/MemberList'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
+import { MemberModalCall } from '@/memberships/components/MemberProfile'
 import { DefaultMemberListOrder, MemberListOrder, MemberListSortKey, useMembers } from '@/memberships/hooks/useMembers'
 import { MemberRole } from '@/memberships/types'
 
@@ -17,6 +20,12 @@ const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberL
 })
 
 export const Members = () => {
+  const { id } = useParams<{ id?: string }>()
+  const { showModal } = useModal()
+  useEffect(() => {
+    !!id && showModal<MemberModalCall>({ modal: 'Member', data: { id } })
+  }, [id])
+
   const [filter, setFilter] = useState(MemberListEmptyFilter)
   const [order, dispatchSort] = useReducer(sortReducer, DefaultMemberListOrder)
 

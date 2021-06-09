@@ -43,6 +43,7 @@ export const App = () => (
         <Route exact path={ProposalsRoutes.past} component={PastProposals} />
         <Route exact path={ProposalsRoutes.myproposals} />
         <Route exact path="/members" component={Members} />
+        <Route exact path="/members/:id" component={Members} />
         <Redirect exact from="/" to="/profile" />
       </Switch>
     </Page>
