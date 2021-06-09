@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { ControlProps } from '@/common/components/forms'
 import { SimpleSelect } from '@/common/components/selects'
 import { useDebounce } from '@/common/hooks/useDebounce'
-import { objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
 import { useProposers } from '@/proposals/hooks/useProposers'
 
@@ -23,7 +22,7 @@ export const SelectProposer = ({ value, onChange }: ControlProps<Member | null>)
     const { isSearch, proposers } = data
     if (!proposers) {
       return
-    } else if (isSearch || !value || proposers.some(objectEquals(value))) {
+    } else if (isSearch || !value || proposers.some(({ id }) => id === value.id)) {
       setProposers({ isSearch, options: proposers })
     } else {
       setProposers({ isSearch, options: [...proposers.slice(0, DISPLAYED_OPTION_LIMIT - 2), value] })
@@ -40,6 +39,7 @@ export const SelectProposer = ({ value, onChange }: ControlProps<Member | null>)
       options={proposers.options}
       renderOption={({ handle }) => handle}
       emptyOption={proposers.isSearch ? undefined : 'All'}
+      optionEquals={({ id: idA }) => ({ id: idB }) => idA === idB}
       value={value}
       onChange={onChange}
       onSearch={setSearch}

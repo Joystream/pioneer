@@ -64,6 +64,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
   renderOption = String,
   renderSelected,
   valueToOption = (value) => value as Option,
+  optionEquals = (optionA) => (optionB) => optionA === optionB,
   value,
   onChange,
   onApply,
@@ -107,6 +108,13 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
     [value, emptyOption]
   )
 
+  const equals = (reference: Option | null): ((compared: Option | null) => boolean) => {
+    const isReference = reference !== null && optionEquals(reference)
+    return isReference ? (compared) => compared !== null && isReference(compared) : (compared) => compared === null
+  }
+  const isSelected = useCallback(equals(valueToOption(value)), [value])
+  const isFocused = useCallback(equals(focused), [focused])
+
   const renderList = useCallback(
     (select: (option: Option | null) => void, toggle: () => void) => {
       const apply =
@@ -117,8 +125,8 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
         })
 
       const optionProps = (option: Option | null): OptionProps => ({
-        selected: option === value,
-        focus: option === focused,
+        selected: isSelected(option),
+        focus: isFocused(option),
         onClick: (evt) => {
           stopEvent(evt)
           select(option)
@@ -147,7 +155,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
         </Options>
       )
     },
-    [JSON.stringify(options), focused, value, emptyOption]
+    [JSON.stringify(options), emptyOption, isSelected, isFocused]
   )
 
   return (
