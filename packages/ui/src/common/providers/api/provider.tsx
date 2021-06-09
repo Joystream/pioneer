@@ -5,7 +5,7 @@ import { ApiRx, WsProvider } from '@polkadot/api'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
 import React, { ReactNode, useEffect, useState } from 'react'
 
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
+import { NetworkType, useNetwork } from '../../hooks/useNetwork'
 
 import { ApiContext } from './context'
 
@@ -17,8 +17,6 @@ export interface UseApi {
   api: ApiRx | undefined
   isConnected: boolean
 }
-
-export type NetworkType = 'local' | 'olympia-testnet'
 
 const endpoints: Record<NetworkType, string> = {
   local: 'ws://127.0.0.1:9944',
@@ -32,7 +30,7 @@ const getEndPoint = (network: NetworkType) => {
 export const ApiContextProvider = (props: Props) => {
   const [isConnected, setIsConnected] = useState(false)
   const [api, setApi] = useState<ApiRx | undefined>(undefined)
-  const [network] = useLocalStorage<NetworkType>('network')
+  const [network] = useNetwork()
 
   useEffect(() => {
     const provider = new WsProvider(getEndPoint(network))

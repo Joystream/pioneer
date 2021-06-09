@@ -5,14 +5,13 @@ import { MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SimpleSelect } from '@/common/components/selects'
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
-import { NetworkType } from '@/common/providers/api/provider'
+import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
 
 import { AppPage } from '../../components/AppPage'
 
 export const Settings = () => {
   const options: NetworkType[] = ['local', 'olympia-testnet']
-  const [network, setNetwork] = useLocalStorage<NetworkType>('network')
+  const [network, setNetwork] = useNetwork()
 
   const switchNetwork = () => {
     if (network === 'local') {
@@ -31,7 +30,7 @@ export const Settings = () => {
       </PageHeader>
       <MainPanel>
         <InputComponent label="Network" borderless>
-          <SimpleSelect values={options} value={network || 'local'} onChange={switchNetwork} />
+          <SimpleSelect values={options} value={network} onChange={switchNetwork} />
         </InputComponent>
       </MainPanel>
     </AppPage>

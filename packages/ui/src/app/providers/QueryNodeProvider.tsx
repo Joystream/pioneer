@@ -1,8 +1,7 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import React, { ReactNode } from 'react'
 
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
-import { NetworkType } from '@/common/providers/api/provider'
+import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
 import { ServerContextProvider } from '@/common/providers/server/provider'
 import { makeServer } from '@/mocks/server'
 
@@ -10,18 +9,17 @@ interface Props {
   children: ReactNode
 }
 
-const getHydraUri = (network: NetworkType) => {
-  if (network === 'olympia-testnet') {
-    return 'https://olympia-dev.joystream.app/query/server/graphql'
-  }
-
-  return 'http://localhost:8081/graphql'
+const endpointMap: Record<NetworkType, string> = {
+  local: 'http://localhost:8081/graphql',
+  'olympia-testnet': 'https://olympia-dev.joystream.app/query/server/graphql',
 }
 
+const getQueryNodeUri = (network: NetworkType) => endpointMap[network]
+
 export const QueryNodeProvider = ({ children }: Props) => {
-  const [network] = useLocalStorage<NetworkType>('network')
+  const [network] = useNetwork()
   const client = new ApolloClient({
-    uri: getHydraUri(network),
+    uri: getQueryNodeUri(network),
     cache: new InMemoryCache(),
   })
 
