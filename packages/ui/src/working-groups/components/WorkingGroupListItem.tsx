@@ -2,8 +2,6 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { useCountOpenings } from '@/working-groups/hooks/useWorkingGroup'
-
 import { ButtonBareGhost } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
@@ -11,6 +9,7 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { Avatar } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
+import { useCountOpenings } from '@/working-groups/hooks/useWorkingGroup'
 
 import { WorkingGroup } from '../types'
 
