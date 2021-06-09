@@ -78,7 +78,6 @@ export const MultiSelect = <T extends any>({
 }
 
 export const MultiSelected = styled(Selected)`
-  word-spacing: 8px;
   & > * {
     display: inline-block;
   }

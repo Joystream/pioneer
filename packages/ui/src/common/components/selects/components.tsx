@@ -42,7 +42,7 @@ export const SelectToggleButton = ({ isOpen, disabled, onToggleClick }: SelectTo
 
 export const SelectedOption = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   align-items: center;
   padding: 0 4px 0 16px;

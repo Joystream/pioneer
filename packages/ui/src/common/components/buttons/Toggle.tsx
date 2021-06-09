@@ -74,7 +74,7 @@ const AbsoluteToggleElement = css<Props>`
 `
 
 const NotAbsoluteToggleElement = css<Props>`
-  grid-template-columns: 1fr 32px;
+  grid-template-columns: minmax(0, 1fr) 32px;
   padding-right: 8px;
   grid-column-gap: 4px;
 `

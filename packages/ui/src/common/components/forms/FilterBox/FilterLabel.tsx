@@ -9,5 +9,6 @@ export const FilterLabel = styled(TextSmall).attrs({ bold: true, lighter: true }
   font-size: 10px;
   line-height: 16px;
   text-transform: uppercase;
+  user-select: none;
   white-space: nowrap;
 `
