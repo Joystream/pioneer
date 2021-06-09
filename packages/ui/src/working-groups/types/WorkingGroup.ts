@@ -1,11 +1,6 @@
 import BN from 'bn.js'
 
-import { Member } from '../../memberships/types'
-import { WorkerFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
-
-interface Worker {
-  membership: Pick<Member, 'id'>
-}
+import { WorkingGroupFieldsFragment } from '../queries'
 
 export interface WorkingGroup {
   id: string
@@ -13,18 +8,12 @@ export interface WorkingGroup {
   image?: string
   about?: string
   leaderId?: string
-  workers?: Worker[]
+  workerIds?: string[]
   status?: string
   description?: string
   statusMessage?: string
   budget: BN
 }
-
-type WorkerFields = { __typename: 'Worker' } & WorkerFieldsFragment
-
-const asWorker = (worker: WorkerFields) => ({
-  membership: worker.membership,
-})
 
 export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup => {
   return {
@@ -35,7 +24,7 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     description: group.metadata?.description ?? '',
     status: group.metadata?.status ?? '',
     statusMessage: group.metadata?.statusMessage ?? '',
-    workers: group.workers?.map(asWorker) ?? [],
+    workerIds: group.workers.map((w) => w.id) ?? [],
     leaderId: group.leader?.membership.id,
     budget: new BN(group.budget),
   }

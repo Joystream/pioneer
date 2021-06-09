@@ -21,6 +21,10 @@ fragment WorkerFields on Worker {
   rewardPerBlock
   missingRewardAmount
   stake
+}
+
+fragment WorkerDetailedFields on Worker {
+  ...WorkerFields
   roleAccount
   rewardAccount
   stakeAccount
@@ -44,7 +48,7 @@ fragment WorkingGroupFields on WorkingGroup {
     ...WorkingGroupMetdataFields
   }
   workers {
-    ...WorkerFields
+    id
   }
   leader {
     membership {
@@ -86,9 +90,15 @@ query getWorkers ($where: WorkerWhereInput) {
   }
 }
 
+query getDetailedWorkers ($where: WorkerWhereInput) {
+  workers(where: $where) {
+    ...WorkerDetailedFields
+  }
+}
+
 query getWorker ($where: WorkerWhereUniqueInput!) {
   workerByUniqueInput(where: $where) {
-    ...WorkerFields
+    ...WorkerDetailedFields
   }
 }
 
@@ -123,22 +133,29 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
+  status {
+    __typename
+  }
+  unstakingPeriod
+  applications {
+    id
+  }
+}
+
+fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
+  ... WorkingGroupOpeningFields
   applications {
     id
     status {
       __typename
     }
     applicant {
-      ...MemberFields
+      ... MemberFields
     }
     status {
       __typename
     }
   }
-  status {
-    __typename
-  }
-  unstakingPeriod
 }
 
 fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
@@ -171,7 +188,7 @@ query getWorkingGroupOpenings($groupId_eq: ID) {
 
 query getWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
   workingGroupOpeningByUniqueInput(where: $where) {
-    ... WorkingGroupOpeningFields
+    ... WorkingGroupOpeningDetailedFields
   }
 }
 
@@ -185,7 +202,7 @@ query GetWorkingGroupOpeningQuestions($id: ID!) {
   workingGroupOpeningByUniqueInput(where: {id: $id}) {
     metadata {
       applicationFormQuestions {
-        ...ApplicationQuestionFields
+        ... ApplicationQuestionFields
       }
     }
   }

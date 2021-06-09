@@ -2,13 +2,14 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { ButtonBareGhost } from '../../common/components/buttons'
-import { Arrow } from '../../common/components/icons'
-import { TextMedium, ValueInJoys } from '../../common/components/typography'
-import { Subscription } from '../../common/components/typography/Subscription'
-import { BorderRad, Colors, Fonts, Overflow, Transitions } from '../../common/constants'
-import { Avatar } from '../../memberships/components/Avatar'
-import { useMember } from '../../memberships/hooks/useMembership'
+import { ButtonBareGhost } from '@/common/components/buttons'
+import { Arrow } from '@/common/components/icons'
+import { TextMedium, ValueInJoys } from '@/common/components/typography'
+import { Subscription } from '@/common/components/typography/Subscription'
+import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
+import { Avatar } from '@/memberships/components/Avatar'
+import { useMember } from '@/memberships/hooks/useMembership'
+
 import { WorkingGroup } from '../types'
 
 import { WorkingGroupImage, WorkingGroupImageTag } from './WorkingGroupImage'
@@ -34,7 +35,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
-          <StatsValue>{group.workers?.length ?? 0}</StatsValue>
+          <StatsValue>{group.workerIds?.length ?? 0}</StatsValue>
           <Subscription>Workers</Subscription>
         </StatsColumn>
         <StatsColumn>

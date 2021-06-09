@@ -1,6 +1,6 @@
 import { Address, asBlock, Block } from '@/common/types'
 import { Member } from '@/memberships/types'
-import { WorkerFieldsFragment } from '@/working-groups/queries'
+import { WorkerDetailedFieldsFragment, WorkerFieldsFragment } from '@/working-groups/queries'
 import { WorkingGroup } from '@/working-groups/types/WorkingGroup'
 
 import { getReward } from '../model/getReward'
@@ -17,7 +17,6 @@ export interface Worker {
   owedReward: number
   earnedTotal: number
   stake: number
-  minStake: number
 }
 
 export interface WorkerWithDetails extends Worker {
@@ -27,6 +26,7 @@ export interface WorkerWithDetails extends Worker {
   rewardAccount: Address
   stakeAccount: Address
   hiredAtBlock: Block
+  minStake: number
 }
 
 export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
@@ -45,15 +45,15 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   earnedTotal: 1000,
   stake: fields.stake,
   owedReward: fields.missingRewardAmount,
-  minStake: fields.application.opening.stakeAmount,
 })
 
-export const asWorkerWithDetails = (fields: WorkerFieldsFragment): WorkerWithDetails => ({
+export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): WorkerWithDetails => ({
   ...asWorker(fields),
   applicationId: fields.application.id,
   openingId: fields.application.openingId,
   roleAccount: fields.roleAccount,
   rewardAccount: fields.rewardAccount,
   stakeAccount: fields.stakeAccount,
+  minStake: fields.application.opening.stakeAmount,
   hiredAtBlock: asBlock(),
 })
