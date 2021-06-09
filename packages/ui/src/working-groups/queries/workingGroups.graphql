@@ -44,7 +44,7 @@ fragment WorkingGroupFields on WorkingGroup {
     ...WorkingGroupMetdataFields
   }
   workers {
-    ...WorkerFields
+    id
   }
   leader {
     membership {

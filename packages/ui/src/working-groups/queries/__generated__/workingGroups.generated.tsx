@@ -46,7 +46,7 @@ export type WorkingGroupFieldsFragment = {
   name: string
   budget: any
   metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetdataFieldsFragment>
-  workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment>
+  workers: Array<{ __typename: 'Worker'; id: string }>
   leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
 }
 
@@ -316,14 +316,6 @@ export type GetUpcomingWorkingGroupOpeningsQuery = {
   >
 }
 
-export const WorkingGroupMetdataFieldsFragmentDoc = gql`
-  fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
-    about
-    description
-    status
-    statusMessage
-  }
-`
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
     id
@@ -354,6 +346,14 @@ export const WorkerFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
+export const WorkingGroupMetdataFieldsFragmentDoc = gql`
+  fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
+    about
+    description
+    status
+    statusMessage
+  }
+`
 export const WorkingGroupFieldsFragmentDoc = gql`
   fragment WorkingGroupFields on WorkingGroup {
     id
@@ -363,7 +363,7 @@ export const WorkingGroupFieldsFragmentDoc = gql`
       ...WorkingGroupMetdataFields
     }
     workers {
-      ...WorkerFields
+      id
     }
     leader {
       membership {
@@ -372,7 +372,6 @@ export const WorkingGroupFieldsFragmentDoc = gql`
     }
   }
   ${WorkingGroupMetdataFieldsFragmentDoc}
-  ${WorkerFieldsFragmentDoc}
 `
 export const BudgetSpendingEventFieldsFragmentDoc = gql`
   fragment BudgetSpendingEventFields on BudgetSpendingEvent {
