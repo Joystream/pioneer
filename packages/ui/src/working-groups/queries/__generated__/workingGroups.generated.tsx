@@ -139,6 +139,15 @@ export type WorkingGroupOpeningFieldsFragment = {
   unstakingPeriod: number
   group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
+  status:
+    | { __typename: 'OpeningStatusOpen' }
+    | { __typename: 'OpeningStatusFilled' }
+    | { __typename: 'OpeningStatusCancelled' }
+  applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+}
+
+export type WorkingGroupOpeningDetailedFieldsFragment = {
+  __typename: 'WorkingGroupOpening'
   applications: Array<{
     __typename: 'WorkingGroupApplication'
     id: string
@@ -150,11 +159,7 @@ export type WorkingGroupOpeningFieldsFragment = {
       | { __typename: 'ApplicationStatusCancelled' }
     applicant: { __typename: 'Membership' } & MemberFieldsFragment
   }>
-  status:
-    | { __typename: 'OpeningStatusOpen' }
-    | { __typename: 'OpeningStatusFilled' }
-    | { __typename: 'OpeningStatusCancelled' }
-}
+} & WorkingGroupOpeningFieldsFragment
 
 export type WorkingGroupOpeningFieldsConnectionFragment = {
   __typename: 'WorkingGroupOpeningConnection'
@@ -202,7 +207,7 @@ export type GetWorkingGroupOpeningQueryVariables = Types.Exact<{
 export type GetWorkingGroupOpeningQuery = {
   __typename: 'Query'
   workingGroupOpeningByUniqueInput?: Types.Maybe<
-    { __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment
+    { __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningDetailedFieldsFragment
   >
 }
 
@@ -433,6 +438,19 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }
+    status {
+      __typename
+    }
+    unstakingPeriod
+    applications {
+      id
+    }
+  }
+  ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
+`
+export const WorkingGroupOpeningDetailedFieldsFragmentDoc = gql`
+  fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
+    ...WorkingGroupOpeningFields
     applications {
       id
       status {
@@ -445,12 +463,8 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
         __typename
       }
     }
-    status {
-      __typename
-    }
-    unstakingPeriod
   }
-  ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
+  ${WorkingGroupOpeningFieldsFragmentDoc}
   ${MemberFieldsFragmentDoc}
 `
 export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
@@ -881,10 +895,10 @@ export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
 export const GetWorkingGroupOpeningDocument = gql`
   query getWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
     workingGroupOpeningByUniqueInput(where: $where) {
-      ...WorkingGroupOpeningFields
+      ...WorkingGroupOpeningDetailedFields
     }
   }
-  ${WorkingGroupOpeningFieldsFragmentDoc}
+  ${WorkingGroupOpeningDetailedFieldsFragmentDoc}
 `
 
 /**

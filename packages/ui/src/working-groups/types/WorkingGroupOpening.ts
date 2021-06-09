@@ -7,6 +7,7 @@ import { getReward } from '../model/getReward'
 import {
   ApplicationQuestionFieldsFragment,
   UpcomingWorkingGroupOpeningFieldsFragment,
+  WorkingGroupOpeningDetailedFieldsFragment,
   WorkingGroupOpeningFieldsFragment,
 } from '../queries'
 
@@ -40,10 +41,6 @@ export interface WorkingGroupOpening extends BaseOpening {
   budget: number
   type: WorkingGroupOpeningType
   status: Status
-  applications: {
-    member: Member
-    status: string
-  }[]
   applicants: {
     current: number
     total: number
@@ -53,6 +50,13 @@ export interface WorkingGroupOpening extends BaseOpening {
     total: number
   }
   unstakingPeriod: number
+}
+
+export interface WorkingGroupDetailedOpening extends WorkingGroupOpening {
+  applications: {
+    member: Member
+    status: string
+  }[]
 }
 
 export const isUpcomingOpening = (opening: BaseOpening): opening is UpcomingWorkingGroupOpening =>
@@ -87,12 +91,6 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   type: fields.type as WorkingGroupOpeningType,
   status: fields.status.__typename,
   leaderId: fields.group.leaderId,
-  applications: fields.applications.length
-    ? fields.applications.map((application) => ({
-        member: asMember(application.applicant),
-        status: application.status.__typename,
-      }))
-    : [],
   applicants: {
     current: 0,
     total: fields.applications?.length || 0,
@@ -102,6 +100,18 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     total: fields.metadata?.hiringLimit ?? 0,
   },
   unstakingPeriod: fields.unstakingPeriod,
+})
+
+export const asWorkingGroupDetailedOpening = (
+  fields: WorkingGroupOpeningDetailedFieldsFragment
+): WorkingGroupDetailedOpening => ({
+  ...asWorkingGroupOpening(fields),
+  applications: fields.applications.length
+    ? fields.applications.map((application) => ({
+        member: asMember(application.applicant),
+        status: application.status.__typename,
+      }))
+    : [],
 })
 
 export type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'

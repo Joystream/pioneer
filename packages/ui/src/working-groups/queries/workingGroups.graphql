@@ -133,22 +133,29 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
+  status {
+    __typename
+  }
+  unstakingPeriod
+  applications {
+    id
+  }
+}
+
+fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
+  ... WorkingGroupOpeningFields
   applications {
     id
     status {
       __typename
     }
     applicant {
-      ...MemberFields
+      ... MemberFields
     }
     status {
       __typename
     }
   }
-  status {
-    __typename
-  }
-  unstakingPeriod
 }
 
 fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
@@ -181,7 +188,7 @@ query getWorkingGroupOpenings($groupId_eq: ID) {
 
 query getWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
   workingGroupOpeningByUniqueInput(where: $where) {
-    ... WorkingGroupOpeningFields
+    ... WorkingGroupOpeningDetailedFields
   }
 }
 
@@ -195,7 +202,7 @@ query GetWorkingGroupOpeningQuestions($id: ID!) {
   workingGroupOpeningByUniqueInput(where: {id: $id}) {
     metadata {
       applicationFormQuestions {
-        ...ApplicationQuestionFields
+        ... ApplicationQuestionFields
       }
     }
   }
