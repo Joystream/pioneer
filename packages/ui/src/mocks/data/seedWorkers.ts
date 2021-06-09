@@ -9,7 +9,7 @@ export interface RawWorker {
   applicationId: number
   membershipId: number
   status: string
-  groupId: number
+  groupId: string
   rewardPerBlock: number
   earnedTotal: number
   stake: number

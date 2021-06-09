@@ -74,7 +74,7 @@ export const UPCOMING_OPENING: RawUpcomingOpeningMock = {
 export const WORKER_DATA: RawWorker = {
   id: '1',
   membershipId: 0,
-  groupId: 1,
+  groupId: 'forumWorkingGroup',
   applicationId: 1,
   nextPaymentAt: '',
   rewardPerBlock: 0,

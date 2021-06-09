@@ -27,15 +27,15 @@ const generateMetadata = () => ({
   applicationFormQuestions: getApplicationFormQuestions(),
 })
 
-const generateBaseOpening = (groupId: number) => ({
+const generateBaseOpening = (groupId: string) => ({
   id: String(nextOpeningId++),
-  groupId: String(groupId),
+  groupId: groupId,
   stakeAmount: randomFromRange(1, 10) * 1000,
   rewardPerBlock: randomFromRange(1, 5) * 100,
   version: 1,
 })
 
-const generateOpening = (status: string, groupId: number) => () => {
+const generateOpening = (status: string, groupId: string) => () => {
   const isLeader = Math.random() > 0.9
   const isInPast = status !== 'open'
   return {
@@ -52,7 +52,7 @@ const generateOpening = (status: string, groupId: number) => () => {
 
 type Opening = ReturnType<ReturnType<typeof generateOpening>>
 
-const generateUpcomingOpening = (groupId: number) => () => {
+const generateUpcomingOpening = (groupId: string) => () => {
   return {
     ...generateBaseOpening(groupId),
     expectedStart: faker.date.soon(randomFromRange(10, 30)).toJSON(),
@@ -65,11 +65,11 @@ const generateUpcomingOpening = (groupId: number) => () => {
 }
 
 const generateOpenings = (mocks: Mocks) => {
-  const generateOpeningsForGroup = (groupName: string, id: number) => {
+  const generateOpeningsForGroup = (groupName: string) => {
     return [
-      ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id)),
-      ...Array.from({ length: randomFromRange(2, 6) }, generateOpening('filled', id)),
-      ...Array.from({ length: randomFromRange(1, 2) }, generateOpening('cancelled', id)),
+      ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', groupName)),
+      ...Array.from({ length: randomFromRange(2, 6) }, generateOpening('filled', groupName)),
+      ...Array.from({ length: randomFromRange(1, 2) }, generateOpening('cancelled', groupName)),
     ]
   }
 
@@ -104,8 +104,8 @@ const generateApplications = (openings: Opening[], mocks: Mocks) => {
 }
 
 const generateUpcomingOpenings = (mocks: Mocks) => {
-  const generateUpcomingOpeningsForGroup = (groupName: string, id: number) => {
-    return [...Array.from({ length: randomFromRange(1, 3) }, generateUpcomingOpening(id))]
+  const generateUpcomingOpeningsForGroup = (groupName: string) => {
+    return [...Array.from({ length: randomFromRange(1, 3) }, generateUpcomingOpening(groupName))]
   }
 
   return mocks.workingGroups

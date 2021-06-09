@@ -1,92 +1,92 @@
 [
   {
     "id": "0",
-    "createdAt": "2021-06-07T10:33:46.377Z",
-    "groupId": "2",
-    "workerId": "52",
+    "createdAt": "2021-05-30T11:54:35.392Z",
+    "groupId": "contentWorkingGroup",
+    "workerId": "54",
     "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "amount": 2090,
+    "amount": 7370,
     "type": "REGULAR"
   },
   {
     "id": "1",
-    "createdAt": "2021-05-13T19:05:30.436Z",
-    "groupId": "2",
-    "workerId": "55",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "amount": 2790,
-    "type": "REGULAR"
-  },
-  {
-    "id": "2",
-    "createdAt": "2021-05-18T09:45:38.567Z",
-    "groupId": "2",
-    "workerId": "45",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "amount": 3340,
-    "type": "REGULAR"
-  },
-  {
-    "id": "3",
-    "createdAt": "2021-05-21T21:31:05.108Z",
-    "groupId": "1",
-    "workerId": "23",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "amount": 4110,
-    "type": "REGULAR"
-  },
-  {
-    "id": "4",
-    "createdAt": "2021-05-10T20:30:48.400Z",
-    "groupId": "3",
-    "workerId": "62",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "amount": 3880,
-    "type": "REGULAR"
-  },
-  {
-    "id": "5",
-    "createdAt": "2021-05-24T08:07:09.648Z",
-    "groupId": "1",
-    "workerId": "22",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "amount": 4900,
-    "type": "REGULAR"
-  },
-  {
-    "id": "6",
-    "createdAt": "2021-05-13T21:45:46.581Z",
-    "groupId": "3",
-    "workerId": "72",
+    "createdAt": "2021-05-22T16:24:54.515Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "36",
     "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
     "amount": 3730,
     "type": "REGULAR"
   },
   {
-    "id": "7",
-    "createdAt": "2021-05-10T19:23:04.853Z",
-    "groupId": "0",
-    "workerId": "3",
+    "id": "2",
+    "createdAt": "2021-06-03T19:15:28.019Z",
+    "groupId": "contentWorkingGroup",
+    "workerId": "50",
     "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "amount": 4650,
+    "amount": 6580,
+    "type": "REGULAR"
+  },
+  {
+    "id": "3",
+    "createdAt": "2021-05-30T10:54:38.921Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "83",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 8290,
+    "type": "REGULAR"
+  },
+  {
+    "id": "4",
+    "createdAt": "2021-05-20T21:35:24.308Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "14",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 6600,
+    "type": "REGULAR"
+  },
+  {
+    "id": "5",
+    "createdAt": "2021-05-29T00:55:32.030Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "68",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 6320,
+    "type": "REGULAR"
+  },
+  {
+    "id": "6",
+    "createdAt": "2021-05-24T02:07:37.829Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "8",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 7800,
+    "type": "REGULAR"
+  },
+  {
+    "id": "7",
+    "createdAt": "2021-06-02T15:25:57.757Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "26",
+    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "amount": 6690,
     "type": "REGULAR"
   },
   {
     "id": "8",
-    "createdAt": "2021-06-06T04:35:54.757Z",
-    "groupId": "0",
-    "workerId": "6",
+    "createdAt": "2021-06-08T16:28:07.832Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "12",
     "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "amount": 6070,
+    "amount": 5430,
     "type": "REGULAR"
   },
   {
     "id": "9",
-    "createdAt": "2021-05-26T07:06:31.266Z",
-    "groupId": "1",
-    "workerId": "23",
+    "createdAt": "2021-05-28T16:57:09.644Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "67",
     "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-    "amount": 1560,
+    "amount": 1870,
     "type": "REGULAR"
   }
 ]

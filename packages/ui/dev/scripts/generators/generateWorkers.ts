@@ -6,7 +6,7 @@ import { randomUniqueArrayFromRange, randomFromRange } from './utils'
 
 let nextId = 0
 
-const generateWorker = (type: string, groupId: number) => (memberId: number) => ({
+const generateWorker = (type: string, groupId: string) => (memberId: number) => ({
   id: String(nextId++),
   membershipId: memberId,
   groupId: groupId,
@@ -22,16 +22,16 @@ const generateWorker = (type: string, groupId: number) => (memberId: number) => 
 export type Worker = ReturnType<ReturnType<typeof generateWorker>>
 
 export const generateWorkers = (mocks: Mocks) => {
-  const generateAllWorkers = (groupName: string, id: number) => {
-    const workersIds = [0, 1, ...randomUniqueArrayFromRange(randomFromRange(2, 7), 2, mocks.members.length)]
-    const terminatedIds = randomUniqueArrayFromRange(randomFromRange(2, 8), 0, mocks.members.length)
-    const leftIds = randomUniqueArrayFromRange(randomFromRange(2, 14), 0, mocks.members.length)
+  const generateAllWorkers = (groupName: string) => {
+    const workersIds = [0, 1, ...randomUniqueArrayFromRange(randomFromRange(2, 7), 2, mocks.members.length - 1)]
+    const terminatedIds = randomUniqueArrayFromRange(randomFromRange(2, 8), 0, mocks.members.length - 1)
+    const leftIds = randomUniqueArrayFromRange(randomFromRange(2, 14), 0, mocks.members.length - 1)
 
     return [
-      ...workersIds.map(generateWorker('active', id)),
-      ...terminatedIds.map(generateWorker('terminated', id)),
-      ...leftIds.map(generateWorker('left', id)),
-    ].sort((a, b) => a.membershipId - b.membershipId)
+      ...workersIds.map(generateWorker('active', groupName)),
+      ...terminatedIds.map(generateWorker('terminated', groupName)),
+      ...leftIds.map(generateWorker('left', groupName)),
+    ]
   }
 
   return WORKING_GROUPS.map(generateAllWorkers).flatMap((a: any) => a)

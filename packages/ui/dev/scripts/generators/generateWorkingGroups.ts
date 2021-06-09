@@ -2,10 +2,15 @@ import faker from 'faker'
 
 import { randomMarkdown, randomFromRange } from './utils'
 
-export const WORKING_GROUPS = ['forum', 'storage', 'content', 'membership']
+export const WORKING_GROUPS = [
+  'forumWorkingGroup',
+  'storageWorkingGroup',
+  'contentWorkingGroup',
+  'membershipWorkingGroup',
+]
 
-const generateWorkingGroup = (groupName: string, id: number) => ({
-  id: String(id),
+const generateWorkingGroup = (groupName: string) => ({
+  id: groupName,
   name: groupName,
   workers: [],
   leaderId: null,
