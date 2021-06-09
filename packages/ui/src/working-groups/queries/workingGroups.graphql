@@ -180,6 +180,12 @@ query getWorkingGroupOpeningsConnection($groupId_eq: ID, $status_json: JSONObjec
   }
 }
 
+query countWorkingGroupOpenings($groupId_eq: ID, $status_json: JSONObject) {
+  workingGroupOpeningsConnection(where: { group_eq: $groupId_eq, status_json: $status_json }) {
+    totalCount
+  }
+}
+
 query getWorkingGroupOpenings($groupId_eq: ID) {
   workingGroupOpenings(where: { group_eq: $groupId_eq }) {
     ... WorkingGroupOpeningFields

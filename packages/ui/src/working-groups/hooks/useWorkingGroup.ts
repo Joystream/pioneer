@@ -1,4 +1,8 @@
-import { useGetWorkingGroupOpeningsConnectionQuery, useGetWorkingGroupQuery } from '../queries'
+import {
+  useCountWorkingGroupOpeningsQuery,
+  useGetWorkingGroupOpeningsConnectionQuery,
+  useGetWorkingGroupQuery,
+} from '../queries'
 import { asWorkingGroup } from '../types'
 
 interface WhereInput {
@@ -6,7 +10,7 @@ interface WhereInput {
 }
 
 export function useCountOpenings(groupId: string) {
-  const { data, loading } = useGetWorkingGroupOpeningsConnectionQuery({
+  const { data, loading } = useCountWorkingGroupOpeningsQuery({
     variables: { groupId_eq: groupId, status_json: { isTypeOf_eq: 'OpeningStatusOpen' } },
   })
 
