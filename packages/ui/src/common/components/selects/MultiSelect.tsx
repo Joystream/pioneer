@@ -1,18 +1,25 @@
 import React, { useCallback } from 'react'
+import styled from 'styled-components'
 
-import { equals } from '@/common/utils'
+import { equals, intersperse, isString } from '@/common/utils'
 
-import { DefaultSelectProps, OptionContainer, OptionNode, OptionProps, SimpleSelect } from '.'
+import { DefaultSelectProps, OptionContainer, Selected, SimpleSelect } from '.'
+import { OptionNode, OptionProps, RenderOption } from './types'
 
 interface MultiSelectProps<T extends any> extends DefaultSelectProps<T, T[], T[]> {
   emptyOption?: OptionNode
   onApply: (value: T[]) => void
 }
 
+const defaultRenderSelected = <T extends any>(renderOption: RenderOption<T>) => (value: T[]) => {
+  const optionNodes = value.map((option) => renderOption(option))
+  const nodes = optionNodes.some(isString) ? optionNodes.map((node) => <u>{node}</u>) : optionNodes
+  return <MultiSelected>{intersperse(nodes, ' ')}</MultiSelected>
 }
 
 export const MultiSelect = <T extends any>({
   renderOption = String,
+  renderSelected = defaultRenderSelected(renderOption),
   onApply,
   onChange,
   ...props
@@ -69,3 +76,10 @@ export const MultiSelect = <T extends any>({
     />
   )
 }
+
+export const MultiSelected = styled(Selected)`
+  word-spacing: 8px;
+  & > * {
+    display: inline-block;
+  }
+`

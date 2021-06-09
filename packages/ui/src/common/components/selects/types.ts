@@ -21,10 +21,12 @@ export interface OptionProps {
   onClick?: MouseEventHandler
 }
 
+export type RenderOption<Option> = (option: Option, props?: OptionProps) => OptionNode
+
 export interface DefaultSelectProps<Option, Value = Option | null, Change = Option | null>
   extends ControlProps<Value, Change> {
   title?: string
   options: Option[]
-  renderOption?: (option: Option, props?: OptionProps) => OptionNode
+  renderOption?: RenderOption<Option>
   renderSelected?: (value: Value) => OptionNode
 }

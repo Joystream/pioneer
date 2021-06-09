@@ -189,6 +189,15 @@ export const OptionsListComponent = styled.ul`
   }
 `
 
+export const Selected = styled.div`
+  cursor: pointer;
+  text-transform: capitalize;
+  user-select: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
 const OptionFocused = css`
   color: ${Colors.Blue[500]};
 `

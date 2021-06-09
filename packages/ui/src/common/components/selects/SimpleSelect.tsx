@@ -3,13 +3,13 @@ import styled from 'styled-components'
 
 import { FilterLabel } from '@/common/components/forms/FilterBox'
 import { Colors } from '@/common/constants'
-import { isDefined } from '@/common/utils'
+import { isDefined, isString } from '@/common/utils'
 import { stopEvent } from '@/common/utils/events'
 
 import { FilterButtons } from '../buttons'
 
 import { Select } from '.'
-import { EmptyOption, OptionContainer } from './components'
+import { EmptyOption, OptionContainer, Selected } from './components'
 import { DefaultSelectProps, OptionNode, OptionProps } from './types'
 
 // Focus management:
@@ -39,7 +39,7 @@ const selectFocusReducer = <T extends any>(value: T | null, action: Action<T>): 
 // Helpers:
 
 const wrapOption = (option: OptionNode, props: OptionProps, key?: any) =>
-  typeof option === 'string' ? (
+  isString(option) ? (
     <OptionContainer key={key} {...props}>
       {option}
     </OptionContainer>
@@ -97,7 +97,8 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
   const renderSelectedOption = useCallback(
     (value: Value) => {
       if (renderSelected) {
-        return <Selected>{renderSelected(value)}</Selected>
+        const selectedNode = renderSelected(value)
+        return isString(selectedNode) ? <Selected>{selectedNode}</Selected> : selectedNode
       } else {
         const option = valueToOption(value)
         return <Selected>{option === null ? emptyOption : renderOption(option)}</Selected>
@@ -170,13 +171,6 @@ const SelectContainer = styled.label`
   }
 `
 
-const Selected = styled.div`
-  cursor: pointer;
-  display: flex;
-  gap: 8px;
-  text-transform: capitalize;
-  user-select: none;
-`
 const OptionsContainer = styled.div`
   background: ${Colors.White};
   border: 1px solid ${Colors.Black[300]};
