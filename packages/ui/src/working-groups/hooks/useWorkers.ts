@@ -17,7 +17,7 @@ export const useWorkers = ({ groupId, statusIn }: UseWorkersProps) => {
       data &&
       data.workers
         .filter(getWorkersFilter(statusIn))
-        .map(({ membership, application }) => ({ member: asMember(membership), applicationId: application.id })),
+        .map(({ membership, applicationId }) => ({ member: asMember(membership), applicationId })),
     [data, loading]
   )
 

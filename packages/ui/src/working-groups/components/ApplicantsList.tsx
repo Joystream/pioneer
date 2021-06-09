@@ -4,7 +4,7 @@ import { CountBadge } from '@/common/components/CountBadge'
 import { ContentWithTabs, RowGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
 import { Warning } from '@/common/components/Warning'
-import { WorkerWithMemberAndApplication, WorkingGroupOpeningApplication } from '@/working-groups/types'
+import { WorkingGroupOpeningApplication } from '@/working-groups/types'
 
 import { Worker } from './Worker'
 

@@ -19,6 +19,7 @@ export type WorkingGroupMetdataFieldsFragment = {
 export type WorkerFieldsFragment = {
   __typename: 'Worker'
   id: string
+  applicationId: string
   isLead: boolean
   rewardPerBlock: any
   missingRewardAmount?: Types.Maybe<any>
@@ -347,6 +348,7 @@ export const WorkerFieldsFragmentDoc = gql`
     status {
       __typename
     }
+    applicationId
     isLead
     rewardPerBlock
     missingRewardAmount
