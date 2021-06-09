@@ -5,26 +5,37 @@ import { ApiRx, WsProvider } from '@polkadot/api'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
 import React, { ReactNode, useEffect, useState } from 'react'
 
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
+
 import { ApiContext } from './context'
 
 interface Props {
   children: ReactNode
 }
+
 export interface UseApi {
   api: ApiRx | undefined
   isConnected: boolean
 }
 
-export type Network = 'DEV' | 'TESTNET'
+export type NetworkType = 'local' | 'olympia-testnet'
+
+const endpoints: Record<NetworkType, string> = {
+  local: 'ws://127.0.0.1:9944',
+  'olympia-testnet': 'wss://olympia-dev.joystream.app/rpc',
+}
+
+const getEndPoint = (network: NetworkType) => {
+  return endpoints[network] || endpoints['local']
+}
 
 export const ApiContextProvider = (props: Props) => {
   const [isConnected, setIsConnected] = useState(false)
   const [api, setApi] = useState<ApiRx | undefined>(undefined)
-  const network = 'DEV'
+  const [network] = useLocalStorage<NetworkType>('network')
 
   useEffect(() => {
-    const endpoint = network === 'DEV' ? 'ws://127.0.0.1:9944/' : 'wss://rome-rpc-endpoint.joystream.org:9944'
-    const provider = new WsProvider(endpoint)
+    const provider = new WsProvider(getEndPoint(network))
 
     ApiRx.create({ provider, rpc: jsonrpc, types: types, registry }).subscribe((api) => {
       setApi(api)
