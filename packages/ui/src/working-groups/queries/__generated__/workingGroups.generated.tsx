@@ -4,7 +4,6 @@ import {
   MemberFieldsFragment,
   MemberFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
-import { BlockFieldsFragment, BlockFieldsFragmentDoc } from '../../../common/queries/__generated__/blocks.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
@@ -33,7 +32,6 @@ export type WorkerFieldsFragment = {
     | { __typename: 'WorkerStatusActive' }
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
-  hiredAtBlock: { __typename: 'Block' } & BlockFieldsFragment
   application: {
     __typename: 'WorkingGroupApplication'
     id: string
@@ -56,7 +54,6 @@ export type BudgetSpendingEventFieldsFragment = {
   __typename: 'BudgetSpendingEvent'
   id: string
   groupId: string
-  eventId: string
   reciever: string
   amount: any
   rationale?: Types.Maybe<string>
@@ -128,7 +125,6 @@ export type WorkingGroupOpeningFieldsFragment = {
   rewardPerBlock: any
   unstakingPeriod: number
   group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
-  createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
   applications: Array<{
     __typename: 'WorkingGroupApplication'
@@ -246,7 +242,6 @@ export type WorkingGroupApplicationFieldsFragment = {
     | { __typename: 'ApplicationStatusRejected' }
     | { __typename: 'ApplicationStatusWithdrawn' }
     | { __typename: 'ApplicationStatusCancelled' }
-  createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
 }
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
@@ -294,7 +289,6 @@ export type UpcomingWorkingGroupOpeningFieldsFragment = {
   stakeAmount?: Types.Maybe<any>
   rewardPerBlock?: Types.Maybe<any>
   group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
-  createdAtBlock: { __typename: 'Block' } & BlockFieldsFragment
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
 }
 
@@ -350,9 +344,6 @@ export const WorkerFieldsFragmentDoc = gql`
     roleAccount
     rewardAccount
     stakeAccount
-    hiredAtBlock {
-      ...BlockFields
-    }
     application {
       id
       openingId
@@ -362,7 +353,6 @@ export const WorkerFieldsFragmentDoc = gql`
     }
   }
   ${MemberFieldsFragmentDoc}
-  ${BlockFieldsFragmentDoc}
 `
 export const WorkingGroupFieldsFragmentDoc = gql`
   fragment WorkingGroupFields on WorkingGroup {
@@ -388,7 +378,6 @@ export const BudgetSpendingEventFieldsFragmentDoc = gql`
   fragment BudgetSpendingEventFields on BudgetSpendingEvent {
     id
     groupId
-    eventId
     reciever
     amount
     rationale
@@ -423,9 +412,6 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     type
     stakeAmount
     rewardPerBlock
-    createdAtBlock {
-      ...BlockFields
-    }
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }
@@ -446,7 +432,6 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     }
     unstakingPeriod
   }
-  ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
   ${MemberFieldsFragmentDoc}
 `
@@ -486,12 +471,8 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       __typename
     }
     stakingAccount
-    createdAtBlock {
-      ...BlockFields
-    }
   }
   ${MemberFieldsFragmentDoc}
-  ${BlockFieldsFragmentDoc}
 `
 export const ApplicationQuestionFieldsFragmentDoc = gql`
   fragment ApplicationQuestionFields on ApplicationFormQuestion {
@@ -521,14 +502,10 @@ export const UpcomingWorkingGroupOpeningFieldsFragmentDoc = gql`
     expectedStart
     stakeAmount
     rewardPerBlock
-    createdAtBlock {
-      ...BlockFields
-    }
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }
   }
-  ${BlockFieldsFragmentDoc}
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
 export const GetBudgetSpendingDocument = gql`
@@ -729,7 +706,7 @@ export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQ
 export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>
 export const GetWorkingGroupOpeningsConnectionDocument = gql`
   query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
-    workingGroupOpeningsConnection(where: { groupId_eq: $groupId_eq }, first: $first, last: $last) {
+    workingGroupOpeningsConnection(where: { group_eq: $groupId_eq }, first: $first, last: $last) {
       ...WorkingGroupOpeningFieldsConnection
     }
   }
@@ -790,7 +767,7 @@ export type GetWorkingGroupOpeningsConnectionQueryResult = Apollo.QueryResult<
 >
 export const GetWorkingGroupOpeningsDocument = gql`
   query getWorkingGroupOpenings($groupId_eq: ID) {
-    workingGroupOpenings(where: { groupId_eq: $groupId_eq }) {
+    workingGroupOpenings(where: { group_eq: $groupId_eq }) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -989,7 +966,7 @@ export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorking
 export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 export const GetWorkingGroupApplicationsDocument = gql`
   query GetWorkingGroupApplications($applicantId_in: [ID!]) {
-    workingGroupApplications(where: { applicantId_in: $applicantId_in }) {
+    workingGroupApplications(where: { applicant_in: $applicantId_in }) {
       ...WorkingGroupApplicationFields
     }
   }
@@ -1087,7 +1064,7 @@ export type GetWorkingGroupApplicationQueryResult = Apollo.QueryResult<
 >
 export const GetApplicationFormQuestionAnswerDocument = gql`
   query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
-    applicationFormQuestionAnswers(where: { applicationId_eq: $applicationId_eq }) {
+    applicationFormQuestionAnswers(where: { application_eq: $applicationId_eq }) {
       ...ApplicationFormQuestionAnswerFields
     }
   }

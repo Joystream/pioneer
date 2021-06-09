@@ -13,7 +13,7 @@
     "test": "jest",
     "storybook": "start-storybook -p 6006 -s public --no-manager-cache",
     "build:storybook": "build-storybook -o build-storybook",
-    "mocks:generate": "node dev/scripts/generateMocks.js"
+    "mocks:generate": "ts-node dev/scripts/generateMocks.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.3.15",

@@ -21,7 +21,6 @@ export interface RawUpcomingOpeningMock {
   }
   expectedStart: string
   rewardPerBlock: number
-  createdAtBlockId: string
 }
 
 export const getMockAsUpcomingOpening = (index = 0) => {
@@ -43,7 +42,7 @@ export const getMockAsUpcomingOpening = (index = 0) => {
   } as any)
 }
 
-export const openingsData = rawOpenings.map((rawOpening) => ({ ...rawOpening }))
+export const upcomingOpeningsData = rawOpenings.map((rawOpening) => ({ ...rawOpening }))
 
 export function seedUpcomingOpening(openingData: RawUpcomingOpeningMock, server: any) {
   const rawMetadata = { ...openingData.metadata }
@@ -67,5 +66,5 @@ export function seedUpcomingOpening(openingData: RawUpcomingOpeningMock, server:
 }
 
 export const seedUpcomingOpenings = (server: any) => {
-  openingsData.map((openingData) => seedUpcomingOpening(openingData, server))
+  upcomingOpeningsData.map((openingData) => seedUpcomingOpening(openingData, server))
 }

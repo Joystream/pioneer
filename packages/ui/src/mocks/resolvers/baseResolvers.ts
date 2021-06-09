@@ -14,6 +14,10 @@ import {
 
 type FilterCallback = (model: Record<string, any>) => boolean
 
+function getFieldName(model: Record<string, any>, field: string) {
+  return model[field].toString().startsWith('model:') ? field + 'Id' : field
+}
+
 const getFilter = (where: Record<string, any>) => {
   const filters: FilterCallback[] = []
 
@@ -21,15 +25,23 @@ const getFilter = (where: Record<string, any>) => {
     const [field, type] = key.split('_')
 
     if (type === 'eq') {
-      filters.push((model: Record<string, any>) => String(model[field]) === checkValue.toString())
+      filters.push((model: Record<string, any>) => {
+        return String(model[getFieldName(model, field)]) === checkValue.toString()
+      })
     }
 
     if (type === 'contains') {
-      filters.push((model: Record<string, any>) => String(model[field]).includes(checkValue.toString()))
+      filters.push((model: Record<string, any>) =>
+        String(model[getFieldName(model, field)]).includes(checkValue.toString())
+      )
     }
 
     if (type === 'in') {
-      filters.push((model: Record<string, any>) => checkValue.includes(model[field]))
+      filters.push((model: Record<string, any>) => {
+        const fieldName = getFieldName(model, field)
+
+        return checkValue.includes(model[fieldName]) || checkValue.includes(String(model[fieldName]))
+      })
     }
 
     if (type === 'gte') {

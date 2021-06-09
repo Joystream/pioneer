@@ -54,11 +54,11 @@ export const useMembers = ({ order, filter, page = 1 }: UseMemberProps): UseMemb
   }
 }
 
-const { EntryAsc, EntryDesc, HandleAsc, HandleDesc } = MembershipOrderByInput
+const { CreatedAtAsc, CreatedAtDesc, HandleAsc, HandleDesc } = MembershipOrderByInput
 const orderToGqlInput = ({ sortBy, isDescending }: MemberListOrder): MembershipOrderByInput => {
   switch (sortBy) {
     case 'id':
-      return isDescending ? EntryDesc : EntryAsc
+      return isDescending ? CreatedAtDesc : CreatedAtAsc
     case 'handle':
       return isDescending ? HandleDesc : HandleAsc
   }

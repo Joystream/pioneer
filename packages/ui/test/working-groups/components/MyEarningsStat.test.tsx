@@ -10,7 +10,6 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 import { seedApplications } from '@/mocks/data/mockApplications'
-import { seedEvent } from '@/mocks/data/mockEvents'
 import { seedOpenings } from '@/mocks/data/mockOpenings'
 import { seedRewardPaidEvent } from '@/mocks/data/mockRewardPaidEvents'
 import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
@@ -53,7 +52,6 @@ describe('MyEarningsStat', () => {
     seedOpenings(mockServer.server)
     seedApplications(mockServer.server)
     seedWorkers(mockServer.server)
-    seedEvent({ id: '0', createdAt: new Date().toISOString(), type: 'RewardPaid' }, mockServer.server)
 
     const worker = mockServer.server?.schema.first('Worker')
 
@@ -61,7 +59,6 @@ describe('MyEarningsStat', () => {
       {
         id: '0',
         createdAt: new Date().toISOString(),
-        eventId: '0',
         groupId: String(worker?.attrs.groupId),
         workerId: String(worker?.attrs.id),
         rewardAccount: String(worker?.attrs.rewardAccount),
@@ -74,7 +71,6 @@ describe('MyEarningsStat', () => {
       {
         id: '1',
         createdAt: subDays(startOfToday(), 10).toISOString(),
-        eventId: '0',
         groupId: String(worker?.attrs.groupId),
         workerId: String(worker?.attrs.id),
         rewardAccount: String(worker?.attrs.rewardAccount),

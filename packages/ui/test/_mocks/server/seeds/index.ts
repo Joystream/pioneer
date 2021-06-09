@@ -1,3 +1,4 @@
+import { RawOpeningMock, RawWorker } from '@/mocks/data'
 import { RawApplication } from '@/mocks/data/mockApplications'
 import { RawUpcomingOpeningMock } from '@/mocks/data/seedUpcomingOpening'
 
@@ -16,12 +17,11 @@ export const MEMBER_ALICE_DATA = {
   registeredAtBlockId: '1',
 }
 
-export const OPENING_DATA = {
+export const OPENING_DATA: RawOpeningMock = {
   groupId: '0',
   type: 'REGULAR',
   status: 'open',
   stakeAmount: 2000,
-  applications: null,
   metadata: {
     shortDescription: 'Distribution Worker',
     description: '# Description',
@@ -43,16 +43,14 @@ export const OPENING_DATA = {
       },
     ],
   },
-  unstakingPeriod: '14409',
+  unstakingPeriod: 14409,
   rewardPerBlock: 200,
-  createdAtBlockId: '5',
 }
 
 export const UPCOMING_OPENING: RawUpcomingOpeningMock = {
   groupId: '0',
   stakeAmount: 5000,
   rewardPerBlock: 200,
-  createdAtBlockId: '70',
   expectedStart: '2021-06-11T23:52:47.017Z',
   metadata: {
     shortDescription: 'Upcoming worker opening.officiis aliquam sapiente et quis sed',
@@ -73,18 +71,17 @@ export const UPCOMING_OPENING: RawUpcomingOpeningMock = {
   },
 }
 
-export const WORKER_DATA = {
+export const WORKER_DATA: RawWorker = {
   id: '1',
-  membershipId: '0',
+  membershipId: 0,
   groupId: 1,
-  applicationId: '1',
+  applicationId: 1,
   nextPaymentAt: '',
   rewardPerBlock: 0,
   earnedTotal: 2000,
   stake: 4000,
   missingRewardAmount: 1000,
   status: '',
-  hiredAtBlockId: '1',
 }
 
 export const APPLICATION_DATA: RawApplication = {
@@ -92,5 +89,4 @@ export const APPLICATION_DATA: RawApplication = {
   applicantId: '41',
   answers: [],
   status: 'pending',
-  createdAtBlockId: 1,
 }

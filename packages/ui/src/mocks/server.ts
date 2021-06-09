@@ -2,18 +2,19 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import { seedUpcomingOpenings } from '@/mocks/data/seedUpcomingOpening'
-
 import schema from '../common/api/schemas/schema.graphql'
 
-import { seedBlocks, seedMembers } from './data'
-import { seedApplications } from './data/mockApplications'
-import { seedBudgetSpendingEvents } from './data/mockBudgetSpendingEvents'
-import { seedEvents } from './data/mockEvents'
-import { seedOpenings, seedOpeningStatuses } from './data/mockOpenings'
-import { seedRewardPaidEvents } from './data/mockRewardPaidEvents'
-import { seedWorkingGroups } from './data/mockWorkingGroups'
-import { seedWorkers } from './data/seedWorkers'
+import {
+  seedApplications,
+  seedBudgetSpendingEvents,
+  seedMembers,
+  seedOpeningStatuses,
+  seedOpenings,
+  seedRewardPaidEvents,
+  seedUpcomingOpenings,
+  seedWorkers,
+  seedWorkingGroups,
+} from './data'
 import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
@@ -77,7 +78,6 @@ export const makeServer = (environment = 'development') => {
     seeds(server: Server<AnyRegistry>) {
       fixAssociations(server)
 
-      seedBlocks(server)
       seedMembers(server)
       seedWorkingGroups(server)
       seedOpeningStatuses(server)
@@ -85,7 +85,6 @@ export const makeServer = (environment = 'development') => {
       seedUpcomingOpenings(server)
       seedApplications(server)
       seedWorkers(server)
-      seedEvents(server)
       seedRewardPaidEvents(server)
       seedBudgetSpendingEvents(server)
     },

@@ -22,7 +22,7 @@ export function useMyEarnings(): UseMyEarnings {
   const { workers } = useMyWorkers()
 
   const where: RewardPaidEventWhereInput = {
-    workerId_in: workers.map((worker) => worker.id),
+    worker_in: workers.map((worker) => worker.id),
     createdAt_gte: subDays(startOfToday(), 30).toISOString(),
   }
   const { loading, data } = useGetRewardsQuery({ variables: { where } })

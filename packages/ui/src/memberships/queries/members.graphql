@@ -22,15 +22,15 @@ fragment MemberFields on Membership {
 
 fragment MemberWithDetails on Membership {
   ...MemberFields
-  registeredAtBlock {
-    ...BlockFields
-  }
+#  registeredAtBlock {
+#    ...BlockFields
+#  }
   invitees {
     ...MemberFields
   }
 }
 
-query GetMembers($where: MembershipWhereInput, $orderBy: MembershipOrderByInput, $offset: Int, $limit: Int) {
+query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
   memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...MemberFields
   }
