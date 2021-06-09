@@ -13,7 +13,11 @@ export const useWorkers = ({ groupId, statusIn }: UseWorkersProps) => {
   const options = { variables: { where: { group_eq: groupId } } }
   const { data, loading } = useGetWorkersQuery(options)
   const workers = useMemo(
-    () => data && data.workers.filter(getWorkersFilter(statusIn)).map(({ membership }) => asMember(membership)),
+    () =>
+      data &&
+      data.workers
+        .filter(getWorkersFilter(statusIn))
+        .map(({ membership, application }) => ({ member: asMember(membership), applicationId: application.id })),
     [data, loading]
   )
 

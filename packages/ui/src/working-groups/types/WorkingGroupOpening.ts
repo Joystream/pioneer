@@ -36,6 +36,12 @@ export interface UpcomingWorkingGroupOpening extends BaseOpening {
   expectedStart: string
 }
 
+export interface WorkingGroupOpeningApplication {
+  id: string
+  member: Member
+  status: string
+}
+
 export interface WorkingGroupOpening extends BaseOpening {
   leaderId?: string | null
   budget: number
@@ -53,10 +59,7 @@ export interface WorkingGroupOpening extends BaseOpening {
 }
 
 export interface WorkingGroupDetailedOpening extends WorkingGroupOpening {
-  applications: {
-    member: Member
-    status: string
-  }[]
+  applications: WorkingGroupOpeningApplication[]
 }
 
 export const isUpcomingOpening = (opening: BaseOpening): opening is UpcomingWorkingGroupOpening =>
@@ -108,6 +111,7 @@ export const asWorkingGroupDetailedOpening = (
   ...asWorkingGroupOpening(fields),
   applications: fields.applications.length
     ? fields.applications.map((application) => ({
+        id: application.id,
         member: asMember(application.applicant),
         status: application.status.__typename,
       }))

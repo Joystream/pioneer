@@ -127,8 +127,8 @@ export const WorkingGroupOpening = () => {
           <SidePanel neighbor={sideNeighborRef}>
             <ApplicantsList
               allApplicants={opening.applications}
-              myApplication={hiredMember?.member.id === activeMembership?.id ? activeMembership : undefined}
-              hired={hiredMember?.member}
+              myApplication={hiredMember && hiredMember?.member.id === activeMembership?.id ? hiredMember : undefined}
+              hired={hiredMember || undefined}
               hiringComplete={opening.status !== OpeningStatuses.OPEN}
               leaderId={opening.leaderId}
             />
