@@ -6,18 +6,22 @@ import { randomUniqueArrayFromRange, randomFromRange } from './utils'
 
 let nextId = 0
 
-const generateWorker = (type: string, groupId: string) => (memberId: number) => ({
-  id: String(nextId++),
-  membershipId: memberId,
-  groupId: groupId,
-  applicationId: randomFromRange(0, 100),
-  status: type,
-  rewardPerBlock: randomFromRange(1, 2) * 100,
-  earnedTotal: randomFromRange(10, 40) * 100,
-  missingRewardAmount: randomFromRange(0, 20) * 100,
-  stake: randomFromRange(3, 8) * 1000,
-  nextPaymentAt: faker.date.soon(randomFromRange(1, 10)).toJSON(),
-})
+const generateWorker = (type: string, groupId: string) => (memberId: number) => {
+  const runtimeId = nextId++
+  return {
+    id: `${groupId}-${runtimeId}`,
+    runtimeId,
+    membershipId: memberId,
+    groupId,
+    applicationId: randomFromRange(0, 100),
+    status: type,
+    rewardPerBlock: randomFromRange(1, 2) * 100,
+    earnedTotal: randomFromRange(10, 40) * 100,
+    missingRewardAmount: randomFromRange(0, 20) * 100,
+    stake: randomFromRange(3, 8) * 1000,
+    nextPaymentAt: faker.date.soon(randomFromRange(1, 10)).toJSON(),
+  }
+}
 
 export type Worker = ReturnType<ReturnType<typeof generateWorker>>
 

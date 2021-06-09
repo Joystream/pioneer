@@ -27,13 +27,18 @@ const generateMetadata = () => ({
   applicationFormQuestions: getApplicationFormQuestions(),
 })
 
-const generateBaseOpening = (groupId: string) => ({
-  id: String(nextOpeningId++),
-  groupId: groupId,
-  stakeAmount: randomFromRange(1, 10) * 1000,
-  rewardPerBlock: randomFromRange(1, 5) * 100,
-  version: 1,
-})
+const generateBaseOpening = (groupId: string) => {
+  const runtimeId = nextOpeningId++
+
+  return {
+    id: `${groupId}-${runtimeId}`,
+    runtimeId,
+    groupId: groupId,
+    stakeAmount: randomFromRange(1, 10) * 1000,
+    rewardPerBlock: randomFromRange(1, 5) * 100,
+    version: 1,
+  }
+}
 
 const generateOpening = (status: string, groupId: string) => () => {
   const isLeader = Math.random() > 0.9
@@ -88,16 +93,20 @@ const generateApplications = (openings: Opening[], mocks: Mocks) => {
     )
     const questions = opening.metadata.applicationFormQuestions
 
-    const generateApplication = (applicantId: string) => ({
-      id: String(nextId++),
-      openingId: opening.id,
-      applicantId,
-      answers: questions.map((question) => ({
-        questionId: question.id,
-        answer: faker.lorem.words(randomFromRange(5, 10)),
-      })),
-      status: 'pending',
-    })
+    const generateApplication = (applicantId: string) => {
+      const runtimeId = nextId++
+      return {
+        id: `${opening.groupId}-${runtimeId}`,
+        runtimeId,
+        openingId: opening.id,
+        applicantId,
+        answers: questions.map((question) => ({
+          questionId: question.id,
+          answer: faker.lorem.words(randomFromRange(5, 10)),
+        })),
+        status: 'pending',
+      }
+    }
 
     return applicantsIds.map(generateApplication)
   })
