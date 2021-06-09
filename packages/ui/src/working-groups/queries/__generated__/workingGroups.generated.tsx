@@ -180,6 +180,7 @@ export type WorkingGroupOpeningFieldsConnectionFragment = {
 
 export type GetWorkingGroupOpeningsConnectionQueryVariables = Types.Exact<{
   groupId_eq?: Types.Maybe<Types.Scalars['ID']>
+  status_json?: Types.Maybe<Types.Scalars['JSONObject']>
   first?: Types.Maybe<Types.Scalars['Int']>
   last?: Types.Maybe<Types.Scalars['Int']>
 }>
@@ -783,8 +784,12 @@ export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>
 export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>
 export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>
 export const GetWorkingGroupOpeningsConnectionDocument = gql`
-  query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
-    workingGroupOpeningsConnection(where: { group_eq: $groupId_eq }, first: $first, last: $last) {
+  query getWorkingGroupOpeningsConnection($groupId_eq: ID, $status_json: JSONObject, $first: Int, $last: Int) {
+    workingGroupOpeningsConnection(
+      where: { group_eq: $groupId_eq, status_json: $status_json }
+      first: $first
+      last: $last
+    ) {
       ...WorkingGroupOpeningFieldsConnection
     }
   }
@@ -804,6 +809,7 @@ export const GetWorkingGroupOpeningsConnectionDocument = gql`
  * const { data, loading, error } = useGetWorkingGroupOpeningsConnectionQuery({
  *   variables: {
  *      groupId_eq: // value for 'groupId_eq'
+ *      status_json: // value for 'status_json'
  *      first: // value for 'first'
  *      last: // value for 'last'
  *   },
