@@ -23,22 +23,26 @@ export type WorkerFieldsFragment = {
   rewardPerBlock: any
   missingRewardAmount?: Types.Maybe<any>
   stake: any
-  roleAccount: string
-  rewardAccount: string
-  stakeAccount: string
   membership: { __typename: 'Membership' } & MemberFieldsFragment
   group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
     | { __typename: 'WorkerStatusActive' }
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
+}
+
+export type WorkerDetailedFieldsFragment = {
+  __typename: 'Worker'
+  roleAccount: string
+  rewardAccount: string
+  stakeAccount: string
   application: {
     __typename: 'WorkingGroupApplication'
     id: string
     openingId: string
     opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
   }
-}
+} & WorkerFieldsFragment
 
 export type WorkingGroupFieldsFragment = {
   __typename: 'WorkingGroup'
@@ -89,13 +93,22 @@ export type GetWorkersQueryVariables = Types.Exact<{
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
 
+export type GetDetailedWorkersQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.WorkerWhereInput>
+}>
+
+export type GetDetailedWorkersQuery = {
+  __typename: 'Query'
+  workers: Array<{ __typename: 'Worker' } & WorkerDetailedFieldsFragment>
+}
+
 export type GetWorkerQueryVariables = Types.Exact<{
   where: Types.WorkerWhereUniqueInput
 }>
 
 export type GetWorkerQuery = {
   __typename: 'Query'
-  workerByUniqueInput?: Types.Maybe<{ __typename: 'Worker' } & WorkerFieldsFragment>
+  workerByUniqueInput?: Types.Maybe<{ __typename: 'Worker' } & WorkerDetailedFieldsFragment>
 }
 
 export type GetRewardsQueryVariables = Types.Exact<{
@@ -333,6 +346,12 @@ export const WorkerFieldsFragmentDoc = gql`
     rewardPerBlock
     missingRewardAmount
     stake
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const WorkerDetailedFieldsFragmentDoc = gql`
+  fragment WorkerDetailedFields on Worker {
+    ...WorkerFields
     roleAccount
     rewardAccount
     stakeAccount
@@ -344,7 +363,7 @@ export const WorkerFieldsFragmentDoc = gql`
       }
     }
   }
-  ${MemberFieldsFragmentDoc}
+  ${WorkerFieldsFragmentDoc}
 `
 export const WorkingGroupMetdataFieldsFragmentDoc = gql`
   fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
@@ -627,13 +646,59 @@ export function useGetWorkersLazyQuery(
 export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
+export const GetDetailedWorkersDocument = gql`
+  query getDetailedWorkers($where: WorkerWhereInput) {
+    workers(where: $where) {
+      ...WorkerDetailedFields
+    }
+  }
+  ${WorkerDetailedFieldsFragmentDoc}
+`
+
+/**
+ * __useGetDetailedWorkersQuery__
+ *
+ * To run a query within a React component, call `useGetDetailedWorkersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDetailedWorkersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDetailedWorkersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetDetailedWorkersQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>(GetDetailedWorkersDocument, options)
+}
+export function useGetDetailedWorkersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>(
+    GetDetailedWorkersDocument,
+    options
+  )
+}
+export type GetDetailedWorkersQueryHookResult = ReturnType<typeof useGetDetailedWorkersQuery>
+export type GetDetailedWorkersLazyQueryHookResult = ReturnType<typeof useGetDetailedWorkersLazyQuery>
+export type GetDetailedWorkersQueryResult = Apollo.QueryResult<
+  GetDetailedWorkersQuery,
+  GetDetailedWorkersQueryVariables
+>
 export const GetWorkerDocument = gql`
   query getWorker($where: WorkerWhereUniqueInput!) {
     workerByUniqueInput(where: $where) {
-      ...WorkerFields
+      ...WorkerDetailedFields
     }
   }
-  ${WorkerFieldsFragmentDoc}
+  ${WorkerDetailedFieldsFragmentDoc}
 `
 
 /**

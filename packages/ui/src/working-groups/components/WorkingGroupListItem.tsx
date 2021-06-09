@@ -9,6 +9,7 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { Avatar } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
+
 import { WorkingGroup } from '../types'
 
 import { WorkingGroupImage, WorkingGroupImageTag } from './WorkingGroupImage'
