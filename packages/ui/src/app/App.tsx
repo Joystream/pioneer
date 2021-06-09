@@ -1,12 +1,9 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-import { UpcomingOpening } from '@/app/pages/WorkingGroups/UpcomingOpening'
-import { WorkingGroupOpening } from '@/app/pages/WorkingGroups/WorkingGroupsOpening'
+import { ConnectionStatus } from '@/common/components/ConnectionStatus'
+import { Page } from '@/common/components/page/Page'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
-
-import { ConnectionStatus } from '../common/components/ConnectionStatus'
-import { Page } from '../common/components/page/Page'
 
 import { ExtensionWarning } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
@@ -16,11 +13,14 @@ import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
 import { PastProposals } from './pages/Proposals/PastProposals'
 import { Proposals } from './pages/Proposals/Proposals'
+import { Settings } from './pages/Settings/Settings'
 import { MyApplications } from './pages/WorkingGroups/MyApplications'
 import { MyRole } from './pages/WorkingGroups/MyRoles/MyRole'
 import { MyRoles } from './pages/WorkingGroups/MyRoles/MyRoles'
+import { UpcomingOpening } from './pages/WorkingGroups/UpcomingOpening'
 import { WorkingGroup } from './pages/WorkingGroups/WorkingGroup'
 import { WorkingGroups } from './pages/WorkingGroups/WorkingGroups'
+import { WorkingGroupOpening } from './pages/WorkingGroups/WorkingGroupsOpening'
 import { WorkingGroupsOpenings } from './pages/WorkingGroups/WorkingGroupsOpenings'
 import { Providers } from './Providers'
 
@@ -44,6 +44,7 @@ export const App = () => (
         <Route exact path={ProposalsRoutes.myproposals} />
         <Route exact path="/members" component={Members} />
         <Route exact path="/members/:id" component={Members} />
+        <Route exact path="/settings" component={Settings} />
         <Redirect exact from="/" to="/profile" />
       </Switch>
     </Page>

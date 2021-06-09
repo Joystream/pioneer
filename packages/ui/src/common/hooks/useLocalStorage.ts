@@ -23,7 +23,7 @@ function setItem(key: string, value: any) {
   }
 }
 
-export function useLocalStorage<T extends string>(key: string) {
+export const useLocalStorage = <T extends string>(key: string) => {
   const [value, setValue] = useState<T>(() => getItem(key))
 
   useEffect(() => {

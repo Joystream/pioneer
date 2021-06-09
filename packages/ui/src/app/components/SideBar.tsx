@@ -4,21 +4,20 @@ import styled from 'styled-components'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
 import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/CouncilIcon'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon'
+import { MembersIcon } from '@/common/components/page/Sidebar/LinksIcons/MembersIcon'
+import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons/MyProfileIcon'
 import { OverviewIcon } from '@/common/components/page/Sidebar/LinksIcons/OverviewIcon'
+import { ProposalsIcon } from '@/common/components/page/Sidebar/LinksIcons/ProposalsIcon'
 import { SettingsIcon } from '@/common/components/page/Sidebar/LinksIcons/SettingsIcon'
 import { ValidatorsIcon } from '@/common/components/page/Sidebar/LinksIcons/ValidatorsIcon'
+import { WorkingGroupsIcon } from '@/common/components/page/Sidebar/LinksIcons/WorkingGroupsIcon'
+import { LogoLink } from '@/common/components/page/Sidebar/LogoLink'
+import { Navigation } from '@/common/components/page/Sidebar/Navigation'
+import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHeader'
+import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
+import { Version } from '@/common/components/page/Sidebar/Version'
+import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
-
-import { MembersIcon } from '../../common/components/page/Sidebar/LinksIcons/MembersIcon'
-import { MyProfileIcon } from '../../common/components/page/Sidebar/LinksIcons/MyProfileIcon'
-import { ProposalsIcon } from '../../common/components/page/Sidebar/LinksIcons/ProposalsIcon'
-import { WorkingGroupsIcon } from '../../common/components/page/Sidebar/LinksIcons/WorkingGroupsIcon'
-import { LogoLink } from '../../common/components/page/Sidebar/LogoLink'
-import { Navigation } from '../../common/components/page/Sidebar/Navigation'
-import { NavigationHeader } from '../../common/components/page/Sidebar/NavigationHeader'
-import { NavigationLink } from '../../common/components/page/Sidebar/NavigationLink'
-import { Version } from '../../common/components/page/Sidebar/Version'
-import { ProfileComponent } from '../../memberships/components/ProfileComponent'
 
 export const SideBar = () => (
   <Navigation>
@@ -81,7 +80,7 @@ export const SideBar = () => (
         </NavigationLink>
       </NavigationLinksItem>
       <NavigationLinksItem>
-        <NavigationLink to="lorem" disabled>
+        <NavigationLink to="/settings">
           <SettingsIcon />
           Settings
         </NavigationLink>
