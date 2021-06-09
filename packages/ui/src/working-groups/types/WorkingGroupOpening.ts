@@ -12,6 +12,7 @@ import {
 } from '../queries'
 
 import { Reward } from './Reward'
+import { asWorkingGroupName } from './WorkingGroup'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
 type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
@@ -69,7 +70,7 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
   id: fields.id,
   title: `${fields.group.name} Working Group`,
   groupId: fields.groupId,
-  groupName: fields.group.name,
+  groupName: asWorkingGroupName(fields.group.name),
   budget: fields.group.budget,
   createdAtBlock: asBlock(),
   reward: getReward(fields.rewardPerBlock, fields.group.name),

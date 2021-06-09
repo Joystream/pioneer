@@ -32,7 +32,7 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
 
 const KnownWorkingGroups = ['forum', 'storage', 'content directory', 'membership'] as const
 
-const asWorkingGroupName = (name: string) => {
+export const asWorkingGroupName = (name: string) => {
   return name
     .replace('WorkingGroup', '')
     .replace(/([a-z])([A-Z])/g, '$1 $2')
