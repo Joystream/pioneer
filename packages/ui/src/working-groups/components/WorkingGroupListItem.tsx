@@ -21,7 +21,7 @@ export interface WorkingGroupProps {
 
 export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const history = useHistory()
-  const openingsCount = useCountOpenings(group.id)
+  const { isLoading: loadingOpenings, openings } = useCountOpenings(group.id)
 
   const { member: leader } = useMember(group.leaderId)
   const groupAddress = `/working-groups/${group.name.toLowerCase()}`
@@ -47,7 +47,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>Current budget</Subscription>
         </StatsColumn>
         <StatsColumn>
-          <StatsValue>{openingsCount}</StatsValue>
+          <StatsValue>{loadingOpenings ? '-' : openings}</StatsValue>
           <Subscription>Openings</Subscription>
         </StatsColumn>
         <StatsColumn>

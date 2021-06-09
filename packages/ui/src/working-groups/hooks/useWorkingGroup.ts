@@ -14,7 +14,7 @@ export function useCountOpenings(groupId: string) {
     variables: { groupId_eq: groupId, status_json: { isTypeOf_eq: 'OpeningStatusOpen' } },
   })
 
-  return loading ? 0 : data?.workingGroupOpeningsConnection.totalCount
+  return { isLoading: loading, openings: data?.workingGroupOpeningsConnection.totalCount }
 }
 
 export function useWorkingGroup(where: WhereInput) {
