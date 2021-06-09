@@ -15,7 +15,7 @@ export const Settings = () => {
         <PageTitle>Settings</PageTitle>
       </PageHeader>
       <MainPanel>
-        <InputComponent label="Network">
+        <InputComponent label="Network" borderless>
           <SimpleSelect values={['local', 'olympia-testnet']} value={'local'} onChange={() => undefined} />
         </InputComponent>
       </MainPanel>
