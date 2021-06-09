@@ -6,13 +6,15 @@ import { DefaultSelectProps, OptionContainer, OptionNode, OptionProps, SimpleSel
 
 interface MultiSelectProps<T extends any> extends DefaultSelectProps<T, T[], T[]> {
   emptyOption?: OptionNode
-  onApply: () => void
-  onClear?: () => void
+  onApply: (value: T[]) => void
+}
+
 }
 
 export const MultiSelect = <T extends any>({
-  onChange,
   renderOption = String,
+  onApply,
+  onChange,
   ...props
 }: MultiSelectProps<T>) => {
   const { value, options } = props
@@ -35,6 +37,16 @@ export const MultiSelect = <T extends any>({
     [value, options]
   )
 
+  const apply = () => onApply?.(value)
+
+  const clear =
+    value.length === 0
+      ? undefined
+      : () => {
+          onChange([])
+          onApply?.([])
+        }
+
   const renderMultiSelectOption = (option: T, props?: OptionProps) => {
     const { focus = false, onClick } = props ?? {}
     const selected = value.some(equals(option))
@@ -47,10 +59,13 @@ export const MultiSelect = <T extends any>({
 
   return (
     <SimpleSelect
-      {...props}
-      onChange={change}
       valueToOption={(value) => value[0] ?? null}
       renderOption={renderMultiSelectOption}
+      renderSelected={renderSelected}
+      onChange={change}
+      onApply={apply}
+      onClear={clear}
+      {...props}
     />
   )
 }
