@@ -1,6 +1,6 @@
 import React, { MouseEventHandler } from 'react'
 
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { stopEvent } from '@/common/utils/events'
 
 interface FilterButtonsProps {
@@ -17,13 +17,13 @@ export const FilterButtons = ({ onClear, onApply }: FilterButtonsProps) => {
     onClear?.()
   }
   return (
-    <ButtonsGroup align="right">
+    <>
       <ButtonGhost onClick={clear} size="medium">
         Clear Filter
       </ButtonGhost>
       <ButtonPrimary onClick={apply} size="medium">
         Apply Filter
       </ButtonPrimary>
-    </ButtonsGroup>
+    </>
   )
 }

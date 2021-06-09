@@ -125,20 +125,26 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
         },
       })
 
-      const EmptyOption = emptyOption && wrapOption(emptyOption, optionProps(null))
+      const nullOption = emptyOption && wrapOption(emptyOption, optionProps(null))
 
-      const OptionList = options.map((option, key) => {
+      const optionList = options.map((option, key) => {
         const props = optionProps(option)
         const optionNode = renderOption(option, props)
         return wrapOption(optionNode, props, key)
       })
 
+      const footer = apply && (
+        <OptionsFooter>
+          <FilterButtons onApply={apply} onClear={onClear} />
+        </OptionsFooter>
+      )
+
       return (
-        <OptionsContainer>
-          {EmptyOption}
-          {OptionList}
-          {apply && <FilterButtons onApply={apply} onClear={onClear} />}
-        </OptionsContainer>
+        <Options>
+          {nullOption}
+          {optionList}
+          {footer}
+        </Options>
       )
     },
     [JSON.stringify(options), focused, value, emptyOption]
@@ -171,7 +177,7 @@ const SelectContainer = styled.label`
   }
 `
 
-const OptionsContainer = styled.div`
+const Options = styled.div`
   background: ${Colors.White};
   border: 1px solid ${Colors.Black[300]};
   border-radius: 2px;
@@ -179,6 +185,10 @@ const OptionsContainer = styled.div`
   position: absolute;
   top: 100%;
   user-select: none;
-  width: 100%;
+  min-width: 100%;
   z-index: 10;
+`
+
+const OptionsFooter = styled.div`
+  display: flex;
 `
