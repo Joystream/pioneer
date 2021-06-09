@@ -4,6 +4,9 @@ export const isDefined = <T extends any>(something: T | undefined): something is
 
 export const isNumber = (something: unknown): something is number => typeof something === 'number'
 
+export const isRecord = (something: unknown): something is Record<string, any> =>
+  typeof something === 'object' && something !== null
+
 export const objectEquals = <T extends Record<string, any>>(
   reference: T,
   checkExtraKeys = false
@@ -13,3 +16,8 @@ export const objectEquals = <T extends Record<string, any>>(
     (!checkExtraKeys || expectedKeys.length === Object.keys(compared).length) &&
     expectedKeys.every((key) => compared[key] === reference[key])
 }
+
+export const equals = <T extends any>(reference: T, checkExtraKeys = false): ((compared: T) => boolean) =>
+  isRecord(reference)
+    ? (objectEquals(reference, checkExtraKeys) as (compared: T) => boolean)
+    : (compared: T) => compared === reference

@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react'
 
-import { objectEquals } from '@/common/utils'
+import { equals } from '@/common/utils'
 
 import { DefaultSelectProps, OptionContainer, OptionNode, OptionProps, SimpleSelect } from '.'
 
-interface MultiSelectProps<T extends Record<string, any>> extends DefaultSelectProps<T, T[], T[]> {
+interface MultiSelectProps<T extends any> extends DefaultSelectProps<T, T[], T[]> {
   emptyOption?: OptionNode
   onApply: () => void
   onClear?: () => void
 }
 
-export const MultiSelect = <T extends Record<string, any>>({
+export const MultiSelect = <T extends any>({
   onChange,
   renderOption = String,
   ...props
@@ -22,13 +22,13 @@ export const MultiSelect = <T extends Record<string, any>>({
       if (pickedOption === null) {
         onChange([])
       } else {
-        const isPickedOption = objectEquals(pickedOption)
+        const isPickedOption = equals(pickedOption)
         onChange(
           value.some(isPickedOption)
             ? // Remove from selection
               value.filter((option) => !isPickedOption(option))
             : // Add to selection (keep the `options` sorting order)
-              options.filter((option) => isPickedOption(option) || value.some(objectEquals(option)))
+              options.filter((option) => isPickedOption(option) || value.some(equals(option)))
         )
       }
     },
@@ -37,7 +37,7 @@ export const MultiSelect = <T extends Record<string, any>>({
 
   const renderMultiSelectOption = (option: T, props?: OptionProps) => {
     const { focus = false, onClick } = props ?? {}
-    const selected = value.some(objectEquals(option))
+    const selected = value.some(equals(option))
     return (
       <OptionContainer focus={focus} selected={selected} onClick={onClick}>
         {renderOption(option)}
