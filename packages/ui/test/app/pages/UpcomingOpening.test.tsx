@@ -42,7 +42,7 @@ describe('WorkingGroupOpenings', () => {
 
   function renderPage() {
     const history = createMemoryHistory()
-    history.push('/upcoming-opening/1')
+    history.push('/upcoming-opening/forumWorkingGroup-1')
 
     render(
       <Router history={history}>

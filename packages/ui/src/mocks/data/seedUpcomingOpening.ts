@@ -9,6 +9,8 @@ interface QuestionMock {
 }
 
 export interface RawUpcomingOpeningMock {
+  id: string
+  runtimeId: number
   groupId: string
   stakeAmount: number
   metadata: {
