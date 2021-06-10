@@ -41,6 +41,22 @@ fragment WorkerDetailedFields on Worker {
   }
 }
 
+fragment WorkerFieldsConnection on WorkerConnection {
+  totalCount
+  edges {
+    node {
+      ...WorkerFields
+    }
+    cursor
+  }
+  pageInfo {
+    hasNextPage
+    hasPreviousPage
+    startCursor
+    endCursor
+  }
+}
+
 fragment WorkingGroupFields on WorkingGroup {
   id
   name
@@ -88,6 +104,12 @@ query getWorkingGroups {
 query getWorkers ($where: WorkerWhereInput) {
   workers(where: $where) {
     ...WorkerFields
+  }
+}
+
+query getWorkersConnection($where: WorkerWhereInput, $first: Int, $last: Int) {
+  workersConnection(where: $where, first: $first, last: $last) {
+    ...WorkerFieldsConnection
   }
 }
 

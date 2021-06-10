@@ -11,7 +11,7 @@ import { useActivities } from '@/common/hooks/useActivities'
 import { OpeningsList } from '@/working-groups/components/OpeningsList'
 import { WorkersTableList } from '@/working-groups/components/WorkersTableList/WorkersTableList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
-import { useWorkers } from '@/working-groups/hooks/useWorkers'
+import { useWorkersPagination } from '@/working-groups/hooks/useWorkersPagination'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 type Tab = 'OPENINGS' | 'WORKERS'
@@ -57,6 +57,15 @@ const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
 }
 
 const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
-  const { isLoading, workers } = useWorkers({ groupId, statusIn: ['left', 'terminated'] })
-  return isLoading ? <Loading /> : <WorkersTableList workers={workers} past />
+  const [page, setPage] = useState<number>(1)
+  const { isLoading, workers, pageCount } = useWorkersPagination({ groupId, statusIn: ['left', 'terminated'], page })
+
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <>
+      <WorkersTableList workers={workers} past />
+      <Pagination pageCount={pageCount as number} handlePageChange={setPage} page={page} />
+    </>
+  )
 }
