@@ -10,16 +10,15 @@ import { Worker } from './Worker'
 export interface WorkersListProps {
   leader?: Member
   workers?: Member[]
-  past?: boolean
 }
 
-export const WorkersList = ({ leader, workers, past }: WorkersListProps) => {
+export const WorkersList = ({ leader, workers }: WorkersListProps) => {
   return (
     <RowGapBlock gap={36}>
       {leader && (
         <ContentWithTabs>
           <Label>Leader</Label>
-          <Worker member={leader} isLeader={true} past={past} />
+          <Worker member={leader} isLeader={true} />
         </ContentWithTabs>
       )}
       <ContentWithTabs>
@@ -29,7 +28,7 @@ export const WorkersList = ({ leader, workers, past }: WorkersListProps) => {
         {workers && (
           <ContentWithTabs>
             {workers.map((member) => (
-              <Worker key={member.handle} member={member} past={past} />
+              <Worker key={member.handle} member={member} />
             ))}
           </ContentWithTabs>
         )}

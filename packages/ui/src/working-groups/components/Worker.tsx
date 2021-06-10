@@ -9,11 +9,10 @@ import { Member } from '@/memberships/types'
 interface WorkerProps {
   member: Member
   isLeader?: boolean
-  past?: boolean
 }
 
-export const Worker = ({ member, isLeader, past }: WorkerProps) => (
-  <WorkerWrap past={past}>
+export const Worker = ({ member, isLeader }: WorkerProps) => (
+  <WorkerWrap>
     <MemberInfo member={member} isLeader={isLeader} />
     <ButtonGhost square size="small">
       <FileIcon />
@@ -21,7 +20,7 @@ export const Worker = ({ member, isLeader, past }: WorkerProps) => (
   </WorkerWrap>
 )
 
-const WorkerWrap = styled.div<{ past?: boolean }>`
+const WorkerWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr 32px;
   grid-column-gap: 8px;
