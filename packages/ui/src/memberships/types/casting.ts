@@ -1,3 +1,4 @@
+import { asWorkingGroupName } from '../../working-groups/types'
 import { MemberFieldsFragment } from '../queries'
 
 import { Member, MemberRole } from './memberships'
@@ -19,5 +20,5 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
 
 export const asMemberRole = (data: { group: { name: string }; isLead: boolean }): MemberRole => ({
   isLeader: data.isLead,
-  groupName: data.group.name,
+  groupName: asWorkingGroupName(data.group.name),
 })

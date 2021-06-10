@@ -8,6 +8,6 @@ type groupSubmittableSet = keyof AugmentedSubmittables<'rxjs'> &
 export const groupExtrinsics: Record<GroupName, groupSubmittableSet> = {
   forum: 'forumWorkingGroup',
   storage: 'storageWorkingGroup',
-  content: 'contentDirectoryWorkingGroup',
+  'content directory': 'contentDirectoryWorkingGroup',
   membership: 'membershipWorkingGroup',
 }

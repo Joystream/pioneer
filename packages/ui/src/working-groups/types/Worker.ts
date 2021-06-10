@@ -1,7 +1,7 @@
 import { Address, asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 import { WorkerDetailedFieldsFragment, WorkerFieldsFragment } from '@/working-groups/queries'
-import { WorkingGroup } from '@/working-groups/types/WorkingGroup'
+import { asWorkingGroupName, WorkingGroup } from '@/working-groups/types/WorkingGroup'
 
 import { getReward } from '../model/getReward'
 
@@ -50,7 +50,7 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   id: fields.id,
   group: {
     id: fields.group.id,
-    name: fields.group.name,
+    name: asWorkingGroupName(fields.group.name),
   },
   membership: {
     id: fields.membership.id,

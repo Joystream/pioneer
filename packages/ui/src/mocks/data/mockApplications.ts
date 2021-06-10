@@ -1,6 +1,8 @@
 import rawApplications from './raw/applications.json'
 
 export interface RawApplication {
+  id: string
+  runtimeId: number
   openingId?: string
   applicantId: string
   answers?: MockAnswer[]

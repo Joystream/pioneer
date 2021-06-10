@@ -13,6 +13,7 @@ import {
 } from '../queries'
 
 import { Reward } from './Reward'
+import { asWorkingGroupName } from './WorkingGroup'
 
 type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
 type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
@@ -76,20 +77,24 @@ export interface WorkingGroupDetailedOpening extends WorkingGroupOpening {
 export const isUpcomingOpening = (opening: BaseOpening): opening is UpcomingWorkingGroupOpening =>
   'hiringLimit' in opening
 
-const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | WorkingGroupOpeningFieldsFragment) => ({
-  id: fields.id,
-  title: `${fields.group.name} Working Group`,
-  groupId: fields.groupId,
-  groupName: fields.group.name,
-  budget: fields.group.budget,
-  createdAtBlock: asBlock(),
-  reward: getReward(fields.rewardPerBlock, fields.group.name),
-  expectedEnding: fields.metadata.expectedEnding,
-  shortDescription: fields.metadata.shortDescription || '',
-  description: fields.metadata?.description ?? '',
-  details: fields.metadata?.applicationDetails ?? '',
-  stake: new BN(fields.stakeAmount),
-})
+const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | WorkingGroupOpeningFieldsFragment) => {
+  const groupName = asWorkingGroupName(fields.group.name)
+
+  return {
+    id: fields.id,
+    title: `${groupName} Working Group`,
+    groupId: fields.groupId,
+    groupName: groupName,
+    budget: fields.group.budget,
+    createdAtBlock: asBlock(),
+    reward: getReward(fields.rewardPerBlock, fields.group.name),
+    expectedEnding: fields.metadata.expectedEnding,
+    shortDescription: fields.metadata.shortDescription || '',
+    description: fields.metadata?.description ?? '',
+    details: fields.metadata?.applicationDetails ?? '',
+    stake: new BN(fields.stakeAmount),
+  }
+}
 
 export const asUpcomingWorkingGroupOpening = (
   fields: UpcomingWorkingGroupOpeningFieldsFragment
@@ -99,22 +104,26 @@ export const asUpcomingWorkingGroupOpening = (
   expectedStart: fields.expectedStart,
 })
 
-export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
-  ...asBaseOpening(fields),
-  title: `${fields.group.name.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
-  type: fields.type as WorkingGroupOpeningType,
-  status: fields.status.__typename,
-  leaderId: fields.group.leaderId,
-  applicants: {
-    current: 0,
-    total: fields.applications?.length || 0,
-  },
-  hiring: {
-    current: 0,
-    total: fields.metadata?.hiringLimit ?? 0,
-  },
-  unstakingPeriod: fields.unstakingPeriod,
-})
+export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => {
+  const groupName = asWorkingGroupName(fields.group.name)
+
+  return {
+    ...asBaseOpening(fields),
+    title: `${groupName.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
+    type: fields.type as WorkingGroupOpeningType,
+    status: fields.status.__typename,
+    leaderId: fields.group.leaderId,
+    applicants: {
+      current: 0,
+      total: fields.applications?.length || 0,
+    },
+    hiring: {
+      current: 0,
+      total: fields.metadata?.hiringLimit ?? 0,
+    },
+    unstakingPeriod: fields.unstakingPeriod,
+  }
+}
 
 export const asWorkingGroupDetailedOpening = (
   fields: WorkingGroupOpeningDetailedFieldsFragment

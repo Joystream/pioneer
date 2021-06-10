@@ -65,7 +65,7 @@ describe('UI: LeaveRoleModal', () => {
     seedWorker(WORKER_DATA, server.server)
     useMyMemberships.setActive(getMember('alice'))
     stubDefaultBalances(api)
-    transaction = stubTransaction(api, 'api.tx.storageWorkingGroup.leaveRole')
+    transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.leaveRole')
   })
 
   it('Prepare step', async () => {
@@ -100,7 +100,7 @@ describe('UI: LeaveRoleModal', () => {
   function renderModal() {
     const modalContext = {
       modal: 'LeaveRole',
-      modalData: { workerId: '1' },
+      modalData: { workerId: 'forumWorkingGroup-1' },
       showModal: () => null,
       hideModal: () => null,
     }

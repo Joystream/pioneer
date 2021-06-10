@@ -13,6 +13,8 @@ interface QuestionMock {
 }
 
 export interface RawOpeningMock {
+  id: string
+  runtimeId: number
   groupId: string
   type: string // 'leader' | 'regular'
   status: string // OpeningStatusType

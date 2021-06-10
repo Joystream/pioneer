@@ -37,9 +37,9 @@ describe('WorkingGroupListItem', () => {
 
   describe('Loaded', () => {
     it('Openings count', async () => {
-      seedOpening(OPENING_DATA, mockServer.server)
-      seedOpening(OPENING_DATA, mockServer.server)
-      seedOpening({ ...OPENING_DATA, status: 'cancelled' }, mockServer.server)
+      seedOpening({ ...OPENING_DATA }, mockServer.server)
+      seedOpening({ ...OPENING_DATA, runtimeId: 2, id: 'forumWorkingGroup-2' }, mockServer.server)
+      seedOpening({ ...OPENING_DATA, runtimeId: 3, id: 'forumWorkingGroup-3', status: 'cancelled' }, mockServer.server)
 
       renderElement(group)
 
@@ -50,9 +50,18 @@ describe('WorkingGroupListItem', () => {
     it('Workers count', async () => {
       seedOpening(OPENING_DATA, mockServer.server)
       seedApplication(APPLICATION_DATA, mockServer.server)
-      seedWorker({ ...WORKER_DATA, id: '0', groupId: 0, status: 'active' }, mockServer.server)
-      seedWorker({ ...WORKER_DATA, id: '1', groupId: 0, status: 'active' }, mockServer.server)
-      seedWorker({ ...WORKER_DATA, id: '2', groupId: 0, status: 'left' }, mockServer.server)
+      seedWorker(
+        { ...WORKER_DATA, id: 'forumWorkingGroup-1', groupId: 'forumWorkingGroup', status: 'active' },
+        mockServer.server
+      )
+      seedWorker(
+        { ...WORKER_DATA, id: 'forumWorkingGroup-2', groupId: 'forumWorkingGroup', status: 'active' },
+        mockServer.server
+      )
+      seedWorker(
+        { ...WORKER_DATA, id: 'forumWorkingGroup-3', groupId: 'forumWorkingGroup', status: 'left' },
+        mockServer.server
+      )
 
       renderElement(group)
 

@@ -4,6 +4,7 @@ import { getReward } from '../model/getReward'
 import { WorkingGroupApplicationFieldsFragment } from '../queries'
 
 import { Reward } from './Reward'
+import { asWorkingGroupName } from './WorkingGroup'
 
 export interface WorkingGroupApplication {
   id: string
@@ -27,7 +28,7 @@ export const asApplication = (application: WorkingGroupApplicationFieldsFragment
   opening: {
     id: application.opening.id,
     type: application.opening.type,
-    groupName: application.opening.group.name,
+    groupName: asWorkingGroupName(application.opening.group.name),
     reward: getReward(application.opening.rewardPerBlock, application.opening.group.name),
   },
   status: application.status.__typename,

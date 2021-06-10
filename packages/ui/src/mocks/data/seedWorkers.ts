@@ -6,10 +6,11 @@ type WorkerStatus = 'active' | 'left' | 'terminated'
 
 export interface RawWorker {
   id: string
-  applicationId: number
+  runtimeId: number
+  applicationId: string
   membershipId: number
   status: string
-  groupId: number
+  groupId: string
   rewardPerBlock: number
   earnedTotal: number
   stake: number

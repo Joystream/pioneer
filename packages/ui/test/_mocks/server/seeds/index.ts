@@ -18,7 +18,9 @@ export const MEMBER_ALICE_DATA = {
 }
 
 export const OPENING_DATA: RawOpeningMock = {
-  groupId: '0',
+  id: 'forumWorkingGroup-1',
+  runtimeId: 1,
+  groupId: 'forumWorkingGroup',
   type: 'REGULAR',
   status: 'open',
   stakeAmount: 2000,
@@ -48,7 +50,9 @@ export const OPENING_DATA: RawOpeningMock = {
 }
 
 export const UPCOMING_OPENING: RawUpcomingOpeningMock = {
-  groupId: '0',
+  id: 'forumWorkingGroup-1',
+  runtimeId: 1,
+  groupId: 'forumWorkingGroup',
   stakeAmount: 5000,
   rewardPerBlock: 200,
   expectedStart: '2021-06-11T23:52:47.017Z',
@@ -72,10 +76,11 @@ export const UPCOMING_OPENING: RawUpcomingOpeningMock = {
 }
 
 export const WORKER_DATA: RawWorker = {
-  id: '1',
+  id: 'forumWorkingGroup-1',
+  runtimeId: 1,
   membershipId: 0,
-  groupId: 1,
-  applicationId: 1,
+  groupId: 'forumWorkingGroup',
+  applicationId: 'forumWorkingGroup-1',
   nextPaymentAt: '',
   rewardPerBlock: 0,
   earnedTotal: 2000,
@@ -85,7 +90,9 @@ export const WORKER_DATA: RawWorker = {
 }
 
 export const APPLICATION_DATA: RawApplication = {
-  openingId: '1',
+  id: 'forumWorkingGroup-1',
+  runtimeId: 1,
+  openingId: 'forumWorkingGroup-1',
   applicantId: '41',
   answers: [],
   status: 'pending',

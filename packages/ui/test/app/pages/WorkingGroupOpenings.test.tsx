@@ -42,7 +42,7 @@ describe('WorkingGroupOpenings', () => {
 
   it('With openings', async () => {
     seedOpening({ ...OPENING_DATA }, mockServer.server)
-    seedOpening({ ...OPENING_DATA }, mockServer.server)
+    seedOpening({ ...OPENING_DATA, id: 'forumWorkingGroup-2', runtimeId: 2 }, mockServer.server)
 
     renderPage()
 
