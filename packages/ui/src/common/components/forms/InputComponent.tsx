@@ -288,7 +288,7 @@ const InputContainer = styled.div<InputElementProps>`
           return Colors.Orange[500]
         case undefined:
         default:
-          return Colors.Black[200]
+          return Colors.Black[300]
       }
     }};
   border: ${({ borderless }) => {
@@ -298,7 +298,7 @@ const InputContainer = styled.div<InputElementProps>`
   }};
   border-color: ${({ disabled }) => {
     if (disabled) {
-      return Colors.Black[200]
+      return Colors.Black[300]
     }
   }};
   border-radius: ${BorderRad.s};
@@ -334,7 +334,7 @@ const InputContainer = styled.div<InputElementProps>`
     }};
     border-color: ${({ disabled }) => {
       if (disabled) {
-        return Colors.Black[200]
+        return Colors.Black[300]
       }
     }};
     box-shadow: ${({ validation }) => {
