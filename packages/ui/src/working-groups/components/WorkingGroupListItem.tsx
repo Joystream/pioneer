@@ -9,7 +9,8 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { Avatar } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
-import { useCountOpenings } from '@/working-groups/hooks/useWorkingGroup'
+import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
+import { useCountWorkers } from '@/working-groups/hooks/useCountWorkers'
 
 import { WorkingGroup } from '../types'
 
@@ -22,6 +23,7 @@ export interface WorkingGroupProps {
 export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const history = useHistory()
   const { isLoading: loadingOpenings, openings } = useCountOpenings(group.id)
+  const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
 
   const { member: leader } = useMember(group.leaderId)
   const groupAddress = `/working-groups/${group.name.toLowerCase()}`
@@ -37,7 +39,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
-          <StatsValue>{group.workerIds?.length ?? 0}</StatsValue>
+          <StatsValue>{loadingWorkers ? '-' : workers}</StatsValue>
           <Subscription>Workers</Subscription>
         </StatsColumn>
         <StatsColumn>

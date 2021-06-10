@@ -203,6 +203,16 @@ export type CountWorkingGroupOpeningsQuery = {
   workingGroupOpeningsConnection: { __typename: 'WorkingGroupOpeningConnection'; totalCount: number }
 }
 
+export type CountWorkingGroupWorkersQueryVariables = Types.Exact<{
+  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
+  status_json?: Types.Maybe<Types.Scalars['JSONObject']>
+}>
+
+export type CountWorkingGroupWorkersQuery = {
+  __typename: 'Query'
+  workersConnection: { __typename: 'WorkerConnection'; totalCount: number }
+}
+
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
 }>
@@ -909,6 +919,55 @@ export type CountWorkingGroupOpeningsLazyQueryHookResult = ReturnType<typeof use
 export type CountWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   CountWorkingGroupOpeningsQuery,
   CountWorkingGroupOpeningsQueryVariables
+>
+export const CountWorkingGroupWorkersDocument = gql`
+  query countWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
+    workersConnection(where: { group_eq: $groupId_eq, status_json: $status_json }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useCountWorkingGroupWorkersQuery__
+ *
+ * To run a query within a React component, call `useCountWorkingGroupWorkersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCountWorkingGroupWorkersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCountWorkingGroupWorkersQuery({
+ *   variables: {
+ *      groupId_eq: // value for 'groupId_eq'
+ *      status_json: // value for 'status_json'
+ *   },
+ * });
+ */
+export function useCountWorkingGroupWorkersQuery(
+  baseOptions?: Apollo.QueryHookOptions<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>(
+    CountWorkingGroupWorkersDocument,
+    options
+  )
+}
+export function useCountWorkingGroupWorkersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>(
+    CountWorkingGroupWorkersDocument,
+    options
+  )
+}
+export type CountWorkingGroupWorkersQueryHookResult = ReturnType<typeof useCountWorkingGroupWorkersQuery>
+export type CountWorkingGroupWorkersLazyQueryHookResult = ReturnType<typeof useCountWorkingGroupWorkersLazyQuery>
+export type CountWorkingGroupWorkersQueryResult = Apollo.QueryResult<
+  CountWorkingGroupWorkersQuery,
+  CountWorkingGroupWorkersQueryVariables
 >
 export const GetWorkingGroupOpeningsDocument = gql`
   query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
