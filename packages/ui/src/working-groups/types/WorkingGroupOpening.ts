@@ -93,22 +93,26 @@ export const asUpcomingWorkingGroupOpening = (
   expectedStart: fields.expectedStart,
 })
 
-export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => ({
-  ...asBaseOpening(fields),
-  title: `${fields.group.name.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
-  type: fields.type as WorkingGroupOpeningType,
-  status: fields.status.__typename,
-  leaderId: fields.group.leaderId,
-  applicants: {
-    current: 0,
-    total: fields.applications?.length || 0,
-  },
-  hiring: {
-    current: 0,
-    total: fields.metadata?.hiringLimit ?? 0,
-  },
-  unstakingPeriod: fields.unstakingPeriod,
-})
+export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment): WorkingGroupOpening => {
+  const groupName = asWorkingGroupName(fields.group.name)
+
+  return {
+    ...asBaseOpening(fields),
+    title: `${groupName.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
+    type: fields.type as WorkingGroupOpeningType,
+    status: fields.status.__typename,
+    leaderId: fields.group.leaderId,
+    applicants: {
+      current: 0,
+      total: fields.applications?.length || 0,
+    },
+    hiring: {
+      current: 0,
+      total: fields.metadata?.hiringLimit ?? 0,
+    },
+    unstakingPeriod: fields.unstakingPeriod,
+  }
+}
 
 export const asWorkingGroupDetailedOpening = (
   fields: WorkingGroupOpeningDetailedFieldsFragment

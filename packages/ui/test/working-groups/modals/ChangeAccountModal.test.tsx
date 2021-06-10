@@ -77,8 +77,8 @@ describe('UI: ChangeRoleModal', () => {
 
   describe('Change role account - authorize step', () => {
     async function renderSignStep() {
-      useModal.modalData = { workerId: '1', type: ModalTypes.CHANGE_ROLE_ACCOUNT }
-      transaction = stubTransaction(api, 'api.tx.storageWorkingGroup.updateRoleAccount')
+      useModal.modalData = { workerId: WORKER_DATA.id, type: ModalTypes.CHANGE_ROLE_ACCOUNT }
+      transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.updateRoleAccount')
       renderModal()
       fireEvent.click(await screen.findByPlaceholderText('Select account or paste account address'))
       fireEvent.click(await screen.findByText('bob'))
@@ -102,8 +102,8 @@ describe('UI: ChangeRoleModal', () => {
 
   describe('Change reward account - authorize step', () => {
     async function renderSignStep() {
-      useModal.modalData = { workerId: '1', type: ModalTypes.CHANGE_REWARD_ACCOUNT }
-      transaction = stubTransaction(api, 'api.tx.storageWorkingGroup.updateRewardAccount')
+      useModal.modalData = { workerId: WORKER_DATA.id, type: ModalTypes.CHANGE_REWARD_ACCOUNT }
+      transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.updateRewardAccount')
       renderModal()
       fireEvent.click(await screen.findByPlaceholderText('Select account or paste account address'))
       fireEvent.click(await screen.findByText('bob'))
