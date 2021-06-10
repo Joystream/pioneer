@@ -201,7 +201,7 @@ export const MemberDarkHover = css`
         color: ${Colors.Black[300]};
       }
     }
-    ${MemberStatusTooltip}.TooltipOnDark {
+    ${MemberStatusTooltip}.tooltipondark {
       color: ${Colors.Blue[400]};
       background-color: transparent;
       border-color: ${Colors.Blue[400]};
