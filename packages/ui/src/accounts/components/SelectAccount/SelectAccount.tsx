@@ -40,10 +40,15 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
       setSelectedOption(accountOrNamed(allAccounts, search, 'Unsaved account'))
   }, [filteredOptions, search, selectedOption])
 
+  const change = (selected: Account, close: () => void) => {
+    onChange(selected)
+    close()
+  }
+
   return (
     <Select
       selected={selectedOption}
-      onChange={onChange}
+      onChange={change}
       disabled={false}
       renderSelected={(option) => <OptionAccount option={option} />}
       placeholder="Select account or paste account address"

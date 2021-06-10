@@ -73,9 +73,9 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
   const [focused, focus] = useReducer(selectFocusReducer as FocusReducer<Option>, valueToOption(value))
 
   const change = useCallback(
-    (pickedOption: Option | null, reset: () => void) => {
+    (pickedOption: Option | null, close: () => void) => {
       focus({ type: 'set', value: pickedOption })
-      !onApply && reset()
+      !onApply && close()
       onChange(pickedOption)
     },
     [onChange]

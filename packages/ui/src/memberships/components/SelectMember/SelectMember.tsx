@@ -43,10 +43,15 @@ export const SelectMember = ({ onChange, filter, selected, disabled }: Props) =>
     foundMembers,
   ])
 
+  const change = (selected: Member, close: () => void) => {
+    onChange(selected)
+    close()
+  }
+
   return (
     <Select
       selected={selected}
-      onChange={onChange}
+      onChange={change}
       disabled={disabled}
       renderSelected={(option) => <MemberInfo member={option} />}
       placeholder="Select Member or type a member"
