@@ -69,14 +69,14 @@ export const MemberInfo = React.memo(
           <MemberIcons>
             {member.isVerified && (
               <Tooltip tooltipText="This member is verified">
-                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'TooltipOnDark' : 'TooltipOnLight'}>
+                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
                   <VerifiedMemberIcon />
                 </MemberStatusTooltip>
               </Tooltip>
             )}
             {(member as any)?.isFounder && (
               <Tooltip tooltipText="This member is verified">
-                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'TooltipOnDark' : 'TooltipOnLight'}>
+                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
                   <FounderMemberIcon />
                 </MemberStatusTooltip>
               </Tooltip>

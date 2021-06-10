@@ -122,12 +122,12 @@ export const MemberStatusTooltip = styled(DefaultTooltip)<MemberRoleTooltipProps
 
   ${TooltipComponent}:hover > &,
   ${TooltipComponent}:focus > & {
-    &.TooltipOnLight {
+    &.tooltiponlight {
       color: ${Colors.Blue[500]};
       background-color: ${Colors.Black[50]};
       border-color: ${Colors.Blue[100]};
     }
-    &.TooltipOnDark {
+    &.tooltipondark {
       color: ${Colors.Blue[400]} !important;
       background-color: transparent !important;
       border-color: ${Colors.Blue[400]} !important;
