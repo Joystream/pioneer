@@ -9,7 +9,8 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { Avatar } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
-import { useCountOpenings, useCountWorkers } from '@/working-groups/hooks/useWorkingGroup'
+import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
+import { useCountWorkers } from '@/working-groups/hooks/useCountWorkers'
 
 import { WorkingGroup } from '../types'
 
