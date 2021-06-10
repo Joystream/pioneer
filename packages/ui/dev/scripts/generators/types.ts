@@ -1,12 +1,12 @@
-import { Member } from './generateMembers'
-import { Opening, UpcomingOpening } from './generateOpeningsAndUpcomingOpenings'
-import { Worker } from './generateWorkers'
-import { WorkingGroup } from './generateWorkingGroups'
+import { MemberMock } from './generateMembers'
+import { OpeningMock, UpcomingOpeningMock } from './generateOpeningsAndUpcomingOpenings'
+import { WorkerMock } from './generateWorkers'
+import { WorkingGroupMock } from './generateWorkingGroups'
 
 export interface Mocks {
-  members: Member[]
-  workingGroups: WorkingGroup[]
-  openings: Opening[]
-  upcomingOpenings: UpcomingOpening[]
-  workers: Worker[]
+  members: MemberMock[]
+  workingGroups: WorkingGroupMock[]
+  openings: OpeningMock[]
+  upcomingOpenings: UpcomingOpeningMock[]
+  workers: WorkerMock[]
 }

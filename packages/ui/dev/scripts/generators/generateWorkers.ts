@@ -1,6 +1,6 @@
 import faker from 'faker'
 
-import { Opening } from './generateOpeningsAndUpcomingOpenings'
+import { OpeningMock } from './generateOpeningsAndUpcomingOpenings'
 import { WORKING_GROUPS } from './generateWorkingGroups'
 import { Mocks } from './types'
 import { randomFromRange, randomUniqueArrayFromRange } from './utils'
@@ -9,7 +9,7 @@ let nextId = 0
 
 let nextApplicationId = 0
 
-const generateApplication = (opening: Opening, status = 'pending') => (applicantId: string) => {
+const generateApplication = (opening: OpeningMock, status = 'pending') => (applicantId: string) => {
   const runtimeId = nextApplicationId++
 
   return {
@@ -25,7 +25,7 @@ const generateApplication = (opening: Opening, status = 'pending') => (applicant
   }
 }
 
-const generateWorker = (type: string, groupId: string, applications: Application[], opening?: Opening) => (
+const generateWorker = (type: string, groupId: string, applications: Application[], opening?: OpeningMock) => (
   memberId: number
 ) => {
   if (!opening) {
@@ -51,11 +51,11 @@ const generateWorker = (type: string, groupId: string, applications: Application
   }
 }
 
-export type Worker = ReturnType<ReturnType<typeof generateWorker>>
+export type WorkerMock = ReturnType<ReturnType<typeof generateWorker>>
 
 type Application = ReturnType<ReturnType<typeof generateApplication>>
 
-export const generateApplications = (openings: Opening[], mocks: Mocks) => {
+export const generateApplications = (openings: OpeningMock[], mocks: Mocks) => {
   return openings.map((opening) => {
     const applicantsIds = randomUniqueArrayFromRange(8, 0, mocks.members.length - 1).map(
       (index) => mocks.members[index].id

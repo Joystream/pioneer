@@ -26,7 +26,7 @@ const generateWorkingGroup = (groupName: string) => ({
   },
 })
 
-export type WorkingGroup = ReturnType<typeof generateWorkingGroup>
+export type WorkingGroupMock = ReturnType<typeof generateWorkingGroup>
 
 export const generateWorkingGroups = () => {
   return WORKING_GROUPS.map(generateWorkingGroup)

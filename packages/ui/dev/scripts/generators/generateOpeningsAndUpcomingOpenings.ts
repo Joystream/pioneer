@@ -55,7 +55,7 @@ const generateOpening = (status: string, groupId: string) => () => {
   }
 }
 
-export type Opening = ReturnType<ReturnType<typeof generateOpening>>
+export type OpeningMock = ReturnType<ReturnType<typeof generateOpening>>
 
 const generateUpcomingOpening = (groupId: string) => () => {
   return {
@@ -95,7 +95,7 @@ const generateUpcomingOpenings = (mocks: Mocks) => {
     .flatMap((a) => a)
 }
 
-export type UpcomingOpening = ReturnType<ReturnType<typeof generateUpcomingOpening>>
+export type UpcomingOpeningMock = ReturnType<ReturnType<typeof generateUpcomingOpening>>
 
 export const generateOpeningsAndUpcomingOpenings = (mocks: Mocks) => {
   const openings = generateOpenings(mocks).flatMap((a) => a)

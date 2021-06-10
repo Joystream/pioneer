@@ -43,7 +43,7 @@ const generateMember = (override?: KnownMember) => ({
   ...override,
 })
 
-export type Member = ReturnType<typeof generateMember>
+export type MemberMock = ReturnType<typeof generateMember>
 
 export const generateMembers = () => {
   return [...KNOWN_MEMBERS.map(generateMember), ...Array.from({ length: MAX_MEMBERS }, generateMember)]
