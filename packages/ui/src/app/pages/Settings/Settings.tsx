@@ -29,7 +29,7 @@ export const Settings = () => {
         <PageTitle>Settings</PageTitle>
       </PageHeader>
       <MainPanel>
-        <InputComponent label="Network" borderless>
+        <InputComponent label="Select network" borderless>
           <SimpleSelect values={options} value={network} onChange={switchNetwork} />
         </InputComponent>
       </MainPanel>
