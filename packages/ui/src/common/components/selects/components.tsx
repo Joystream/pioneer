@@ -194,6 +194,7 @@ export const Selected = styled.div`
   text-transform: capitalize;
   user-select: none;
   overflow: hidden;
+  padding: 0 4px 0 16px;
   text-overflow: ellipsis;
   white-space: nowrap;
 `
