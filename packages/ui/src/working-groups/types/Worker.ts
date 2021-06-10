@@ -29,6 +29,13 @@ export interface WorkerWithDetails extends Worker {
   minStake: number
 }
 
+export type WorkerStatus = 'active' | 'left' | 'terminated'
+export const WorkerStatusTypename: Record<WorkerStatus, WorkerFieldsFragment['status']['__typename']> = {
+  active: 'WorkerStatusActive',
+  left: 'WorkerStatusLeft',
+  terminated: 'WorkerStatusTerminated',
+}
+
 export interface WorkerWithMemberAndApplication {
   member: Member
   applicationId: string

@@ -44,11 +44,19 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
     }
 
     if (type === 'in') {
-      filters.push((model: Record<string, any>) => {
-        const fieldName = getFieldName(model, field)
+      if (field === 'isTypeOf') {
+        filters.push((model: Record<string, any>) => {
+          return checkValue
+            .map((value: string) => camelCaseToDash(value))
+            .includes(String(model[nestedField as string].modelName))
+        })
+      } else {
+        filters.push((model: Record<string, any>) => {
+          const fieldName = getFieldName(model, field)
 
-        return checkValue.includes(model[fieldName]) || checkValue.includes(String(model[fieldName]))
-      })
+          return checkValue.includes(model[fieldName]) || checkValue.includes(String(model[fieldName]))
+        })
+      }
     }
 
     if (type === 'gte') {

@@ -7,6 +7,7 @@ import { getReward } from '../model/getReward'
 import {
   ApplicationQuestionFieldsFragment,
   UpcomingWorkingGroupOpeningFieldsFragment,
+  WorkerFieldsFragment,
   WorkingGroupOpeningDetailedFieldsFragment,
   WorkingGroupOpeningFieldsFragment,
 } from '../queries'
@@ -56,6 +57,16 @@ export interface WorkingGroupOpening extends BaseOpening {
     total: number
   }
   unstakingPeriod: number
+}
+
+export type WorkingGroupOpeningStatus = 'open' | 'filled' | 'cancelled'
+export const WorkingGroupOpeningStatusTypename: Record<
+  WorkingGroupOpeningStatus,
+  WorkingGroupOpeningFieldsFragment['status']['__typename']
+> = {
+  open: 'OpeningStatusOpen',
+  filled: 'OpeningStatusFilled',
+  cancelled: 'OpeningStatusCancelled',
 }
 
 export interface WorkingGroupDetailedOpening extends WorkingGroupOpening {
