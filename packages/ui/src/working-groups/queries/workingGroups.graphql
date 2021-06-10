@@ -29,9 +29,9 @@ fragment WorkerDetailedFields on Worker {
   roleAccount
   rewardAccount
   stakeAccount
-#  hiredAtBlock {
-#    ...BlockFields
-#  }
+  #  hiredAtBlock {
+  #    ...BlockFields
+  #  }
   application {
     id
     openingId
@@ -128,9 +128,9 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   type
   stakeAmount
   rewardPerBlock
-#  createdAtBlock {
-#    ...BlockFields
-#  }
+  #  createdAtBlock {
+  #    ...BlockFields
+  #  }
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
@@ -187,6 +187,12 @@ query countWorkingGroupOpenings($groupId_eq: ID, $status_json: JSONObject) {
   }
 }
 
+query countWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
+  workersConnection(where: { group_eq: $groupId_eq, status_json: $status_json }) {
+    totalCount
+  }
+}
+
 query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
   workingGroupOpenings(where: $where) {
     ... WorkingGroupOpeningFields
@@ -238,9 +244,9 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     __typename
   }
   stakingAccount
-#  createdAtBlock {
-#    ...BlockFields
-#  }
+  #  createdAtBlock {
+  #    ...BlockFields
+  #  }
 }
 
 query GetWorkingGroupApplications($applicantId_in: [ID!]) {
@@ -279,9 +285,9 @@ fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
   expectedStart
   stakeAmount
   rewardPerBlock
-#  createdAtBlock {
-#    ...BlockFields
-#  }
+  #  createdAtBlock {
+  #    ...BlockFields
+  #  }
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
