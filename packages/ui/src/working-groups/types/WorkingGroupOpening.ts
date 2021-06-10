@@ -66,20 +66,24 @@ export interface WorkingGroupDetailedOpening extends WorkingGroupOpening {
 export const isUpcomingOpening = (opening: BaseOpening): opening is UpcomingWorkingGroupOpening =>
   'hiringLimit' in opening
 
-const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | WorkingGroupOpeningFieldsFragment) => ({
-  id: fields.id,
-  title: `${fields.group.name} Working Group`,
-  groupId: fields.groupId,
-  groupName: asWorkingGroupName(fields.group.name),
-  budget: fields.group.budget,
-  createdAtBlock: asBlock(),
-  reward: getReward(fields.rewardPerBlock, fields.group.name),
-  expectedEnding: fields.metadata.expectedEnding,
-  shortDescription: fields.metadata.shortDescription || '',
-  description: fields.metadata?.description ?? '',
-  details: fields.metadata?.applicationDetails ?? '',
-  stake: new BN(fields.stakeAmount),
-})
+const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | WorkingGroupOpeningFieldsFragment) => {
+  const groupName = asWorkingGroupName(fields.group.name)
+
+  return {
+    id: fields.id,
+    title: `${groupName} Working Group`,
+    groupId: fields.groupId,
+    groupName: groupName,
+    budget: fields.group.budget,
+    createdAtBlock: asBlock(),
+    reward: getReward(fields.rewardPerBlock, fields.group.name),
+    expectedEnding: fields.metadata.expectedEnding,
+    shortDescription: fields.metadata.shortDescription || '',
+    description: fields.metadata?.description ?? '',
+    details: fields.metadata?.applicationDetails ?? '',
+    stake: new BN(fields.stakeAmount),
+  }
+}
 
 export const asUpcomingWorkingGroupOpening = (
   fields: UpcomingWorkingGroupOpeningFieldsFragment
