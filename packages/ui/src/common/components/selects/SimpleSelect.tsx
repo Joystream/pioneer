@@ -123,6 +123,7 @@ export const FilterSelect = <T extends any>(props: FilterSelectProps<T>) => (
 
 const SelectContainer = styled.label`
   display: block;
+  width: 100%;
 
   ${EmptyOption} {
     padding: 0 16px;
