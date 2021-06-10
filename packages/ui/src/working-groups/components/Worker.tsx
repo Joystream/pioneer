@@ -7,7 +7,6 @@ import { useModal } from '@/common/hooks/useModal'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
-import { WorkerWithMemberAndApplication } from '@/working-groups/types'
 
 interface WorkerProps {
   member: Member
