@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { asMember } from '@/memberships/types'
-import { WorkerStatus, WorkerStatusTypename } from '@/working-groups/types'
+import { WorkerStatus, WorkerStatusTypename, WorkerWithMemberAndApplication } from '@/working-groups/types'
 
 import { useGetWorkersQuery } from '../queries'
 
@@ -20,7 +20,7 @@ export const useWorkers = ({ groupId, statusIn }: UseWorkersProps) => {
     },
   }
   const { data, loading } = useGetWorkersQuery(options)
-  const workers = useMemo(
+  const workers: WorkerWithMemberAndApplication[] | undefined = useMemo(
     () =>
       data &&
       data.workers.map(({ membership, applicationId }) => ({
@@ -32,8 +32,3 @@ export const useWorkers = ({ groupId, statusIn }: UseWorkersProps) => {
 
   return { workers, isLoading: loading }
 }
-
-// const getWorkersFilter = (statusIn?: WorkerStatus[]) => {
-//   const statusTypeIn = statusIn?.map((status) => StatusTypename[status]) ?? ['WorkerStatusActive']
-//   return (worker: WorkerFieldsFragment) => statusTypeIn.includes(worker.status.__typename)
-// }
