@@ -20,7 +20,7 @@ interface Props {
 export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
   const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, statusIn: ['open'] })
-  const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
+  const { workers } = useWorkers({ groupId: workingGroup.id ?? '', statusIn: ['active'] })
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const leader = workers?.find((worker) => worker.member.id === workingGroup.leaderId)
