@@ -37,9 +37,9 @@ describe('WorkingGroupListItem', () => {
   describe('Loaded', () => {
     it('Openings count', async () => {
       seedOpeningStatuses(mockServer.server)
-      seedOpening(OPENING_DATA, mockServer.server)
-      seedOpening(OPENING_DATA, mockServer.server)
-      seedOpening({ ...OPENING_DATA, status: 'cancelled' }, mockServer.server)
+      seedOpening({ ...OPENING_DATA }, mockServer.server)
+      seedOpening({ ...OPENING_DATA, runtimeId: 2, id: 'forumWorkingGroup-2' }, mockServer.server)
+      seedOpening({ ...OPENING_DATA, runtimeId: 3, id: 'forumWorkingGroup-3', status: 'cancelled' }, mockServer.server)
 
       renderElement(group)
 
