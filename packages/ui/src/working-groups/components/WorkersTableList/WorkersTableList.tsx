@@ -2,12 +2,12 @@ import React from 'react'
 
 import { List, ListItem } from '@/common/components/List'
 
-import { WorkerWithMemberAndApplication } from '../../types'
+import { WorkerBaseInfo } from '../../types'
 
 import { WorkersTableListRow } from './WorkersTableListRow'
 
 export interface WorkersTableListProps {
-  workers?: WorkerWithMemberAndApplication[]
+  workers?: WorkerBaseInfo[]
   past?: boolean
 }
 
