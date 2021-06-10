@@ -4,7 +4,7 @@ import { ToggleButton } from '@/common/components/buttons/Toggle'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { Colors, Overflow, Transitions } from '@/common/constants'
 
-export const ToggleableItemWrap = styled.div`
+export const ToggleableItemWrap = styled.div<{ past?: boolean }>`
   display: grid;
   grid-template-columns: 1fr auto 40px;
   grid-column-gap: 24px;
@@ -13,7 +13,7 @@ export const ToggleableItemWrap = styled.div`
   width: 100%;
   height: 94px;
   padding: 16px;
-  background-color: ${Colors.White};
+  background-color: ${({ past }) => (past ? Colors.Black[50] : Colors.White)};
   transition: ${Transitions.all};
 `
 

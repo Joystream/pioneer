@@ -56,7 +56,7 @@ export const MemberInfo = React.memo(
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />
             {isLeader && (
-              <Tooltip tooltipText="This member is a leaderrr">
+              <Tooltip tooltipText="This member is a leader">
                 <AvatarStarTooltipContainer>
                   <LeaderMemberIcon />
                 </AvatarStarTooltipContainer>
