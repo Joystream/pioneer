@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
-import { asMember } from '@/memberships/types'
-import { WorkerStatus, WorkerStatusTypename, WorkerWithMemberAndApplication } from '@/working-groups/types'
+import { asWorkerBaseInfo, WorkerStatus, WorkerStatusTypename } from '@/working-groups/types'
 
 import { useGetWorkersQuery } from '../queries'
 
@@ -10,25 +9,21 @@ interface UseWorkersProps {
   statusIn?: WorkerStatus[]
 }
 
-export const useWorkers = ({ groupId, statusIn }: UseWorkersProps) => {
-  const options = {
-    variables: {
-      where: {
-        group_eq: groupId,
-        status_json: statusIn ? { isTypeOf_in: statusIn.map((status) => WorkerStatusTypename[status]) } : undefined,
-      },
-    },
+const getStatusWhere = (statusIn?: WorkerStatus[]) => {
+  if (!statusIn) {
+    return
   }
-  const { data, loading } = useGetWorkersQuery(options)
-  const workers: WorkerWithMemberAndApplication[] | undefined = useMemo(
-    () =>
-      data &&
-      data.workers.map(({ membership, applicationId }) => ({
-        member: asMember(membership),
-        applicationId,
-      })),
-    [data, loading]
-  )
+
+  return { isTypeOf_in: statusIn.map((status) => WorkerStatusTypename[status]) }
+}
+
+export const useWorkers = ({ groupId: group_eq, statusIn }: UseWorkersProps) => {
+  const variables = {
+    where: { group_eq, status_json: getStatusWhere(statusIn) },
+  }
+
+  const { data, loading } = useGetWorkersQuery({ variables })
+  const workers = useMemo(() => data && data.workers.map(asWorkerBaseInfo), [data, loading])
 
   return { workers, isLoading: loading }
 }
