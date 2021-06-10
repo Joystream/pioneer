@@ -33,6 +33,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   const filteredOptions = useMemo(() => filterByText(options, search), [search, options])
   const keyring = useKeyring()
 
+  useEffect(() => setSelectedOption(selected), [selected])
   useEffect(() => {
     filteredOptions.length === 0 &&
       isValidAddress(search, keyring) &&
