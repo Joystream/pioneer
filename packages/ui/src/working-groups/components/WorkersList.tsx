@@ -16,23 +16,23 @@ export interface WorkersListProps {
 
 export const WorkersList = ({ leader, workers, past }: WorkersListProps) => {
   return (
-    <RowGapBlock gap={36}>
-      {leader && (
-        <ContentWithTabs>
-          <Label>Leader</Label>
-          <List>
-            <ListItem>
-              <Worker member={leader} isLeader={true} past={past} />
-            </ListItem>
-          </List>
-        </ContentWithTabs>
-      )}
-      <RowGapBlock gap={16}>
-        <Label>
-          Workers <CountBadge count={workers?.length ?? 0} />{' '}
-        </Label>
-        {workers && (
-          <ContentWithTabs>
+    <List as="div">
+      <RowGapBlock gap={36} align="none">
+        {leader && (
+          <RowGapBlock gap={16} align="none">
+            <Label>Leader</Label>
+            <List>
+              <ListItem>
+                <Worker member={leader} isLeader={true} past={past} />
+              </ListItem>
+            </List>
+          </RowGapBlock>
+        )}
+        <RowGapBlock gap={16} align="none">
+          <Label>
+            Workers <CountBadge count={workers?.length ?? 0} />{' '}
+          </Label>
+          {workers && (
             <List>
               {workers.map((member) => (
                 <ListItem key={member.handle}>
@@ -40,9 +40,9 @@ export const WorkersList = ({ leader, workers, past }: WorkersListProps) => {
                 </ListItem>
               ))}
             </List>
-          </ContentWithTabs>
-        )}
+          )}
+        </RowGapBlock>
       </RowGapBlock>
-    </RowGapBlock>
+    </List>
   )
 }

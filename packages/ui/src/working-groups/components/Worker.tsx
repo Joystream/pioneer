@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ButtonGhost } from '@/common/components/buttons'
+import { ButtonBareGhost, ButtonGhost } from '@/common/components/buttons'
 import { FileIcon } from '@/common/components/icons/FileIcon'
 import { Colors, Transitions } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
@@ -15,16 +15,16 @@ interface WorkerProps {
 
 export const Worker = ({ member, isLeader, past }: WorkerProps) => (
   <WorkerWrap past={past}>
-    <MemberInfo member={member} isLeader={isLeader} />
-    <ButtonGhost square size="small">
+    <MemberInfo member={member} isLeader={isLeader} showId />
+    <ButtonBareGhost square size="small">
       <FileIcon />
-    </ButtonGhost>
+    </ButtonBareGhost>
   </WorkerWrap>
 )
 
 const WorkerWrap = styled.div<{ past?: boolean }>`
   display: grid;
-  grid-template-columns: 1fr auto 40px;
+  grid-template-columns: 1fr 40px;
   grid-column-gap: 24px;
   justify-content: space-between;
   align-items: center;
