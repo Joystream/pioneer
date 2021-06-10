@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 import { Member } from '@/memberships/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
@@ -17,18 +16,14 @@ export default {
 
 export const Default: Story = ({ onChange }) => {
   const [value, setValue] = useState<Member | null>(null)
+  const change = (value: Member | null) => {
+    setValue(value)
+    onChange(value)
+  }
 
   return (
-    <MockApolloProvider>
-      <MembershipContextProvider>
-        <SelectProposer
-          value={value}
-          onChange={(value) => {
-            setValue(value)
-            onChange(value)
-          }}
-        />
-      </MembershipContextProvider>
+    <MockApolloProvider members>
+      <SelectProposer value={value} onChange={change} />
     </MockApolloProvider>
   )
 }

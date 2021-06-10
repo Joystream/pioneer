@@ -1,20 +1,41 @@
-import React, { useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
+import { seedMembers } from '@/mocks/data'
+import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { fixAssociations, makeServer } from '@/mocks/server'
 
 import { MockApolloProvider as TestMockApolloProvider } from '../../../../test/_mocks/providers'
 
-// NOTE Use the global context instead of a hook for performance (otherwise hot reloads take too long)
-declare let MockServer: any
+interface Seeds {
+  blocks?: boolean
+  members?: boolean
+  workingGroups?: boolean
+}
 
-export const MockApolloProvider: typeof TestMockApolloProvider = (props) => {
+// NOTE Use the global context instead of a hook for performance (otherwise hot reloads take too long)
+declare let MockServer: Seeds & { server: ReturnType<typeof makeServer> }
+
+export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
+  const [started, setStarted] = useState('MockServer' in window)
+
   useEffect(() => {
-    if (!('MockServer' in window)) {
+    if (!started) {
       const glob = global as any
-      glob.MockServer = makeServer('storybook')
-      fixAssociations((MockServer as unknown) as any)
+      glob.MockServer = {}
+      MockServer.server = makeServer('storybook')
+      fixAssociations(MockServer.server)
+      setStarted(true)
+    }
+
+    if (toSeed.members && !MockServer.members) {
+      seedMembers(MockServer.server)
+      MockServer.members = true
+    }
+    if (toSeed.workingGroups && !MockServer.workingGroups) {
+      seedWorkingGroups(MockServer.server)
+      MockServer.workingGroups = true
     }
   }, [])
 
-  return <TestMockApolloProvider>{props.children}</TestMockApolloProvider>
+  return <TestMockApolloProvider>{started ? children : <h3>Starting mock server...</h3>}</TestMockApolloProvider>
 }
