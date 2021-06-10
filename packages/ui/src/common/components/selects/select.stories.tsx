@@ -1,7 +1,8 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useMemo, useState } from 'react'
+import styled from 'styled-components'
 
-import { ModalBlock, Row, TemplateBlock } from '../storybookParts/previewStyles'
+import { ModalBlock, TemplateBlock } from '../storybookParts/previewStyles'
 
 import { SimpleSelect, FilterSelect, MultiSelect } from '.'
 
@@ -52,3 +53,8 @@ export const Default = Template
 Default.args = {
   optionsString: 'sunt irure cillum labore pariatur commodo tempor excepteur',
 }
+
+const Row = styled.div`
+  display: flex;
+  gap: 8px;
+`
