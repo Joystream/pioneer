@@ -4,10 +4,10 @@ import rawWorkers from './raw/workers.json'
 
 type WorkerStatus = 'active' | 'left' | 'terminated'
 
-interface RawWorker {
+export interface RawWorker {
   id: string
-  applicationId: string
-  membershipId: string
+  applicationId: number
+  membershipId: number
   status: string
   groupId: number
   rewardPerBlock: number
@@ -15,7 +15,6 @@ interface RawWorker {
   stake: number
   nextPaymentAt: string
   missingRewardAmount: number
-  hiredAtBlockId: string
 }
 
 export type MockWorker = Worker & { groupId: string; memberId: string; applicationId: string }
@@ -37,11 +36,11 @@ export const seedWorker = (worker: RawWorker, server: any) => {
 const seedWorkerStatus = (status: WorkerStatus, id: string, server: any) => {
   switch (status) {
     case 'active':
-      return server.schema.create('WorkerStatusActive', {})
+      return server.schema.create('WorkerStatusActive', { phantom: 0 })
     case 'left':
-      return server.schema.create('WorkerStatusLeft', { workerStartedLeavingEventId: id })
+      return server.schema.create('WorkerStatusLeft', { phantom: 0 })
     default:
-      return server.schema.create('WorkerStatusTerminated', { terminatedWorkerEventId: id })
+      return server.schema.create('WorkerStatusTerminated', { phantom: 0 })
   }
 }
 

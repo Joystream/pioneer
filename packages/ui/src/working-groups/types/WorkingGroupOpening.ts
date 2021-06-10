@@ -7,6 +7,8 @@ import { getReward } from '../model/getReward'
 import {
   ApplicationQuestionFieldsFragment,
   UpcomingWorkingGroupOpeningFieldsFragment,
+  WorkerFieldsFragment,
+  WorkingGroupOpeningDetailedFieldsFragment,
   WorkingGroupOpeningFieldsFragment,
 } from '../queries'
 
@@ -35,15 +37,17 @@ export interface UpcomingWorkingGroupOpening extends BaseOpening {
   expectedStart: string
 }
 
+export interface WorkingGroupOpeningApplication {
+  id: string
+  member: Member
+  status: string
+}
+
 export interface WorkingGroupOpening extends BaseOpening {
   leaderId?: string | null
   budget: number
   type: WorkingGroupOpeningType
   status: Status
-  applications: {
-    member: Member
-    status: string
-  }[]
   applicants: {
     current: number
     total: number
@@ -55,6 +59,20 @@ export interface WorkingGroupOpening extends BaseOpening {
   unstakingPeriod: number
 }
 
+export type WorkingGroupOpeningStatus = 'open' | 'filled' | 'cancelled'
+export const WorkingGroupOpeningStatusTypename: Record<
+  WorkingGroupOpeningStatus,
+  WorkingGroupOpeningFieldsFragment['status']['__typename']
+> = {
+  open: 'OpeningStatusOpen',
+  filled: 'OpeningStatusFilled',
+  cancelled: 'OpeningStatusCancelled',
+}
+
+export interface WorkingGroupDetailedOpening extends WorkingGroupOpening {
+  applications: WorkingGroupOpeningApplication[]
+}
+
 export const isUpcomingOpening = (opening: BaseOpening): opening is UpcomingWorkingGroupOpening =>
   'hiringLimit' in opening
 
@@ -64,7 +82,7 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
   groupId: fields.groupId,
   groupName: fields.group.name,
   budget: fields.group.budget,
-  createdAtBlock: asBlock(fields.createdAtBlock),
+  createdAtBlock: asBlock(),
   reward: getReward(fields.rewardPerBlock, fields.group.name),
   expectedEnding: fields.metadata.expectedEnding,
   shortDescription: fields.metadata.shortDescription || '',
@@ -87,12 +105,6 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
   type: fields.type as WorkingGroupOpeningType,
   status: fields.status.__typename,
   leaderId: fields.group.leaderId,
-  applications: fields.applications.length
-    ? fields.applications.map((application) => ({
-        member: asMember(application.applicant),
-        status: application.status.__typename,
-      }))
-    : [],
   applicants: {
     current: 0,
     total: fields.applications?.length || 0,
@@ -102,6 +114,19 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     total: fields.metadata?.hiringLimit ?? 0,
   },
   unstakingPeriod: fields.unstakingPeriod,
+})
+
+export const asWorkingGroupDetailedOpening = (
+  fields: WorkingGroupOpeningDetailedFieldsFragment
+): WorkingGroupDetailedOpening => ({
+  ...asWorkingGroupOpening(fields),
+  applications: fields.applications.length
+    ? fields.applications.map((application) => ({
+        id: application.id,
+        member: asMember(application.applicant),
+        status: application.status.__typename,
+      }))
+    : [],
 })
 
 export type ApplicationQuestionType = 'TEXT' | 'TEXTAREA'

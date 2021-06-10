@@ -1,11 +1,16 @@
 import { Address, asBlock, Block } from '@/common/types'
-import { Member } from '@/memberships/types'
-import { WorkerFieldsFragment } from '@/working-groups/queries'
+import { asMember, Member } from '@/memberships/types'
+import { WorkerDetailedFieldsFragment, WorkerFieldsFragment } from '@/working-groups/queries'
 import { WorkingGroup } from '@/working-groups/types/WorkingGroup'
 
 import { getReward } from '../model/getReward'
 
 import { Reward } from './Reward'
+
+export interface WorkerBaseInfo {
+  member: Member
+  applicationId: string
+}
 
 export interface Worker {
   id: string
@@ -17,7 +22,6 @@ export interface Worker {
   owedReward: number
   earnedTotal: number
   stake: number
-  minStake: number
 }
 
 export interface WorkerWithDetails extends Worker {
@@ -27,7 +31,20 @@ export interface WorkerWithDetails extends Worker {
   rewardAccount: Address
   stakeAccount: Address
   hiredAtBlock: Block
+  minStake: number
 }
+
+export type WorkerStatus = 'active' | 'left' | 'terminated'
+export const WorkerStatusTypename: Record<WorkerStatus, WorkerFieldsFragment['status']['__typename']> = {
+  active: 'WorkerStatusActive',
+  left: 'WorkerStatusLeft',
+  terminated: 'WorkerStatusTerminated',
+}
+
+export const asWorkerBaseInfo = (fields: WorkerFieldsFragment): WorkerBaseInfo => ({
+  member: asMember(fields.membership),
+  applicationId: fields.applicationId,
+})
 
 export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   id: fields.id,
@@ -45,15 +62,15 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   earnedTotal: 1000,
   stake: fields.stake,
   owedReward: fields.missingRewardAmount,
-  minStake: fields.application.opening.stakeAmount,
 })
 
-export const asWorkerWithDetails = (fields: WorkerFieldsFragment): WorkerWithDetails => ({
+export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): WorkerWithDetails => ({
   ...asWorker(fields),
   applicationId: fields.application.id,
   openingId: fields.application.openingId,
   roleAccount: fields.roleAccount,
   rewardAccount: fields.rewardAccount,
   stakeAccount: fields.stakeAccount,
-  hiredAtBlock: asBlock(fields.hiredAtBlock),
+  minStake: fields.application.opening.stakeAmount,
+  hiredAtBlock: asBlock(),
 })

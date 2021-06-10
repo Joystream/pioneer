@@ -1,6 +1,5 @@
 import { Server } from 'miragejs'
 
-import { seedBlocks } from '@/mocks/data'
 import { fixAssociations, makeServer } from '@/mocks/server'
 
 interface MockServer {
@@ -13,7 +12,6 @@ export function setupMockServer(): MockServer {
   beforeEach(() => {
     mock.server = makeServer('test')
     fixAssociations((mock.server as unknown) as any)
-    seedBlocks(mock.server)
   })
 
   afterEach(() => {

@@ -8,7 +8,7 @@ interface UseOpeningsParams {
 }
 
 export const useUpcomingOpenings = (params?: UseOpeningsParams) => {
-  const options = params?.groupId ? { variables: { where: { groupId_eq: params.groupId } } } : undefined
+  const options = params?.groupId ? { variables: { where: { group_eq: params.groupId } } } : undefined
 
   const { loading, data } = useGetUpcomingWorkingGroupOpeningsQuery(options)
 

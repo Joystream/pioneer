@@ -14,15 +14,16 @@ import { UpcomingOpening } from './UpcomingOpening'
 
 export interface ListRowProps {
   opening: WorkingGroupOpening | UpcomingWorkingGroupOpening
+  past?: boolean
 }
 
-export const OpeningsListRow = ({ opening }: ListRowProps) => {
+export const OpeningsListRow = ({ opening, past }: ListRowProps) => {
   const [isOpened, toggleOpen] = useToggle()
 
   return (
     <Toggle absoluteToggle isOpen={isOpened}>
       <ToggleableItemContainer isOpen={isOpened}>
-        {isUpcomingOpening(opening) ? <UpcomingOpening opening={opening} /> : <Opening opening={opening} />}
+        {isUpcomingOpening(opening) ? <UpcomingOpening opening={opening} /> : <Opening opening={opening} past={past} />}
       </ToggleableItemContainer>
       <OpeningToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
         <Arrow direction="down" />

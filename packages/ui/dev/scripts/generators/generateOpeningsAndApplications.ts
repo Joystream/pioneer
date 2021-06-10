@@ -1,8 +1,7 @@
-const faker = require('faker')
+import faker from 'faker'
 
-const { MAX_MEMBERS } = require('./generateMembers')
-const { WORKING_GROUPS } = require('./generateWorkingGroups')
-const { randomUniqueArrayFromRange, randomFromRange, randomMarkdown } = require('./utils')
+import { Mocks } from './types'
+import { randomUniqueArrayFromRange, randomFromRange, randomMarkdown } from './utils'
 
 let nextQuestionId = 0
 let nextOpeningId = 0
@@ -28,20 +27,19 @@ const generateMetadata = () => ({
   applicationFormQuestions: getApplicationFormQuestions(),
 })
 
-const generateBaseOpening = (groupId) => ({
+const generateBaseOpening = (groupId: number) => ({
   id: String(nextOpeningId++),
   groupId: String(groupId),
   stakeAmount: randomFromRange(1, 10) * 1000,
   rewardPerBlock: randomFromRange(1, 5) * 100,
-  createdAtBlockId: randomFromRange(20, 100),
   version: 1,
 })
 
-const generateOpening = (status, groupId, name) => () => {
+const generateOpening = (status: string, groupId: number) => () => {
   const isLeader = Math.random() > 0.9
   const isInPast = status !== 'open'
   return {
-    ...generateBaseOpening(groupId, name, isLeader),
+    ...generateBaseOpening(groupId),
     type: isLeader ? 'LEADER' : 'REGULAR',
     status,
     unstakingPeriod: randomFromRange(5, 10),
@@ -52,7 +50,9 @@ const generateOpening = (status, groupId, name) => () => {
   }
 }
 
-const generateUpcomingOpening = (groupId) => () => {
+type Opening = ReturnType<ReturnType<typeof generateOpening>>
+
+const generateUpcomingOpening = (groupId: number) => () => {
   return {
     ...generateBaseOpening(groupId),
     expectedStart: faker.date.soon(randomFromRange(10, 30)).toJSON(),
@@ -64,26 +64,31 @@ const generateUpcomingOpening = (groupId) => () => {
   }
 }
 
-const generateOpenings = () => {
-  const generateOpeningsForGroup = (groupName, id) => {
+const generateOpenings = (mocks: Mocks) => {
+  const generateOpeningsForGroup = (groupName: string, id: number) => {
     return [
-      ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id, groupName)),
-      ...Array.from({ length: randomFromRange(4, 8) }, generateOpening('filled', id, groupName)),
-      ...Array.from({ length: randomFromRange(1, 2) }, generateOpening('cancelled', id, groupName)),
+      ...Array.from({ length: randomFromRange(1, 3) }, generateOpening('open', id)),
+      ...Array.from({ length: randomFromRange(2, 6) }, generateOpening('filled', id)),
+      ...Array.from({ length: randomFromRange(1, 2) }, generateOpening('cancelled', id)),
     ]
   }
 
-  return WORKING_GROUPS.map(generateOpeningsForGroup).flatMap((a) => a)
+  return mocks.workingGroups
+    .map(({ id }) => id)
+    .map(generateOpeningsForGroup)
+    .flatMap((a) => a)
 }
 
-const generateApplications = (openings) => {
+const generateApplications = (openings: Opening[], mocks: Mocks) => {
   let nextId = 0
 
   return openings.map((opening) => {
-    const applicantsIds = randomUniqueArrayFromRange(8, 0, MAX_MEMBERS)
+    const applicantsIds = randomUniqueArrayFromRange(8, 0, mocks.members.length - 1).map(
+      (index) => mocks.members[index].id
+    )
     const questions = opening.metadata.applicationFormQuestions
 
-    const generateApplication = (applicantId) => ({
+    const generateApplication = (applicantId: string) => ({
       id: String(nextId++),
       openingId: opening.id,
       applicantId,
@@ -92,26 +97,28 @@ const generateApplications = (openings) => {
         answer: faker.lorem.words(randomFromRange(5, 10)),
       })),
       status: 'pending',
-      createdAtBlockId: 1,
     })
 
     return applicantsIds.map(generateApplication)
   })
 }
 
-const generateUpcomingOpenings = () => {
-  const generateUpcomingOpeningsForGroup = (groupName, id) => {
-    return [...Array.from({ length: randomFromRange(1, 3) }, generateUpcomingOpening(id, groupName))]
+const generateUpcomingOpenings = (mocks: Mocks) => {
+  const generateUpcomingOpeningsForGroup = (groupName: string, id: number) => {
+    return [...Array.from({ length: randomFromRange(1, 3) }, generateUpcomingOpening(id))]
   }
 
-  return WORKING_GROUPS.map(generateUpcomingOpeningsForGroup).flatMap((a) => a)
+  return mocks.workingGroups
+    .map(({ id }) => id)
+    .map(generateUpcomingOpeningsForGroup)
+    .flatMap((a) => a)
 }
 
-const generateOpeningsAndApplications = () => {
-  const openings = generateOpenings().flatMap((a) => a)
-  const applications = generateApplications(openings).flatMap((a) => a)
+export const generateOpeningsAndApplications = (mocks: Mocks) => {
+  const openings = generateOpenings(mocks).flatMap((a) => a)
+  const applications = generateApplications(openings, mocks).flatMap((a) => a)
   nextOpeningId = 0
-  const upcomingOpenings = generateUpcomingOpenings().flatMap((a) => a)
+  const upcomingOpenings = generateUpcomingOpenings(mocks).flatMap((a) => a)
 
   return {
     openings,
@@ -119,5 +126,3 @@ const generateOpeningsAndApplications = () => {
     upcomingOpenings,
   }
 }
-
-module.exports = { generateOpeningsAndApplications }

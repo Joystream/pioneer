@@ -1,6 +1,8 @@
 import React from 'react'
 import { ReactNode } from 'react-markdown'
+import styled from 'styled-components'
 
+import { Colors } from '../constants'
 import { useModal } from '../hooks/useModal'
 import { AnyModalCall } from '../providers/modal/types'
 
@@ -14,15 +16,24 @@ interface ModalLinkProps<Call> {
 export const ModalLink = ({ call, children }: ModalLinkProps<AnyModalCall>) => {
   const { showModal } = useModal()
   return (
-    <Link
+    <ModalLinkItem
       onClick={(evt) => {
         evt.preventDefault()
         showModal(call)
       }}
     >
       {children}
-    </Link>
+    </ModalLinkItem>
   )
 }
 
 export type IModalLink<Call> = React.FC<ModalLinkProps<Call>>
+
+const ModalLinkItem = styled(Link)`
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  text-decoration: none;
+  color: ${Colors.Black[900]};
+  font-weight: 700;
+`

@@ -17,7 +17,7 @@ const Template: Story<BlockTimeProps> = (args) => (
       </ModalBlock>
     </Row>
     <Row>
-      <BlockTime {...args} horizontal dateLabel="Text" />
+      <BlockTime {...args} layout="row" dateLabel="Text" />
     </Row>
   </TemplateBlock>
 )

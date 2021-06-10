@@ -82,7 +82,6 @@ export const SelectComponent = styled.div`
     outline: none;
   }
   & > :first-child {
-    border: 1px solid ${Colors.Black[200]};
     border-radius: 2px;
   }
   &:hover > :first-child,

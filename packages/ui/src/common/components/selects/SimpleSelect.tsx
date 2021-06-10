@@ -169,6 +169,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
 const SelectContainer = styled.label`
   display: block;
   flex-basis: 184px;
+  width: 100%;
 
   ${EmptyOption} {
     padding: 0 16px;

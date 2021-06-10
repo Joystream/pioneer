@@ -5,7 +5,6 @@ import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/component
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
-import { useMember } from '@/memberships/hooks/useMembership'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupStatistics } from '@/working-groups/hooks/useGroupStatistics'
 import { useWorkers } from '@/working-groups/hooks/useWorkers'
@@ -17,10 +16,11 @@ interface Props {
   workingGroup: WorkingGroup
 }
 export const AboutTab = ({ workingGroup }: Props) => {
-  const { member: leader } = useMember(workingGroup.leaderId ?? '')
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
   const { statistics } = useGroupStatistics(workingGroup.id)
   const sideNeighborRef = useRef<HTMLDivElement>(null)
+
+  const leader = workers?.find((worker) => worker.member.id === workingGroup.leaderId)
 
   return (
     <ContentWithSidepanel>

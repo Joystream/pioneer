@@ -14,7 +14,7 @@ export const asMemberWithDetails = (data: MemberWithDetailsFragment): DetailedMe
     ...asMember(data),
     about: '',
     invitedBy: '',
-    registeredAtBlock: asBlock(data.registeredAtBlock),
+    registeredAtBlock: asBlock(),
     invitees: [],
   }
 }

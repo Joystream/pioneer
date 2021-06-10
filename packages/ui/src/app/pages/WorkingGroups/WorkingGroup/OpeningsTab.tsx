@@ -6,7 +6,6 @@ import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageCo
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
-import { useMember } from '@/memberships/hooks/useMembership'
 import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
@@ -20,10 +19,11 @@ interface Props {
 
 export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
-  const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, type: 'open' })
-  const { member: leader } = useMember(workingGroup.leaderId)
+  const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, statusIn: ['open'] })
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
   const sideNeighborRef = useRef<HTMLDivElement>(null)
+
+  const leader = workers?.find((worker) => worker.member.id === workingGroup.leaderId)
 
   return (
     <ContentWithSidepanel>

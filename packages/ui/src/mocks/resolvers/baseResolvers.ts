@@ -4,6 +4,7 @@ import { unwrapType } from '@miragejs/graphql/dist/utils'
 import { GraphQLObjectType, GraphQLSchema } from 'graphql/type'
 
 import { PageInfo } from '@/common/api/queries'
+import { camelCaseToDash } from '@/mocks/helpers'
 import {
   ConnectionQueryResolver,
   Edge,
@@ -14,22 +15,48 @@ import {
 
 type FilterCallback = (model: Record<string, any>) => boolean
 
-const getFilter = (where: Record<string, any>) => {
+function getFieldName(model: Record<string, any>, field: string) {
+  return model[field].toString().startsWith('model:') ? field + 'Id' : field
+}
+
+const getFilter = (where: Record<string, any>, nestedField?: string) => {
   const filters: FilterCallback[] = []
 
   for (const [key, checkValue] of Object.entries(where)) {
     const [field, type] = key.split('_')
 
     if (type === 'eq') {
-      filters.push((model: Record<string, any>) => String(model[field]) === checkValue.toString())
+      if (field === 'isTypeOf') {
+        filters.push((model: Record<string, any>) => {
+          return String(model[nestedField as string].modelName) === camelCaseToDash(checkValue.toString())
+        })
+      } else {
+        filters.push((model: Record<string, any>) => {
+          return String(model[getFieldName(model, field)]) === checkValue.toString()
+        })
+      }
     }
 
     if (type === 'contains') {
-      filters.push((model: Record<string, any>) => String(model[field]).includes(checkValue.toString()))
+      filters.push((model: Record<string, any>) =>
+        String(model[getFieldName(model, field)]).includes(checkValue.toString())
+      )
     }
 
     if (type === 'in') {
-      filters.push((model: Record<string, any>) => checkValue.includes(model[field]))
+      if (field === 'isTypeOf') {
+        filters.push((model: Record<string, any>) => {
+          return checkValue
+            .map((value: string) => camelCaseToDash(value))
+            .includes(String(model[nestedField as string].modelName))
+        })
+      } else {
+        filters.push((model: Record<string, any>) => {
+          const fieldName = getFieldName(model, field)
+
+          return checkValue.includes(model[fieldName]) || checkValue.includes(String(model[fieldName]))
+        })
+      }
     }
 
     if (type === 'gte') {
@@ -38,6 +65,10 @@ const getFilter = (where: Record<string, any>) => {
       } else {
         filters.push((model: Record<string, any>) => String(model[field]).localeCompare(checkValue.toString()) === 1)
       }
+    }
+
+    if (type === 'json') {
+      filters.push(getFilter(checkValue, field))
     }
   }
 
