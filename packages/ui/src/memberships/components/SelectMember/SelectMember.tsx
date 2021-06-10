@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 
-import { Select } from '../../../common/components/selects'
+import { Select, SelectedOption } from '../../../common/components/selects'
 import { useDebounce } from '../../../common/hooks/useDebounce'
 import { useSearchMembersQuery } from '../../queries'
 import { asMember, Member } from '../../types'
@@ -53,10 +53,16 @@ export const SelectMember = ({ onChange, filter, selected, disabled }: Props) =>
       selected={selected}
       onChange={change}
       disabled={disabled}
-      renderSelected={(option) => <MemberInfo member={option} />}
+      renderSelected={renderSelected}
       placeholder="Select Member or type a member"
       renderList={(onOptionClick) => <OptionsListMember allMembers={filteredFoundMembers} onChange={onOptionClick} />}
       onSearch={(search) => setSearch(search)}
     />
   )
 }
+
+const renderSelected = (member: Member) => (
+  <SelectedOption>
+    <MemberInfo member={member} />
+  </SelectedOption>
+)

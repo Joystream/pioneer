@@ -5,7 +5,7 @@ import { isDefined } from '../../utils'
 import { stopEvent } from '../../utils/events'
 import { Toggle } from '../buttons/Toggle'
 
-import { EmptyOption, SelectComponent, SelectedOption, SelectToggleButton } from './components'
+import { EmptyOption, SelectComponent, SelectToggleButton } from './components'
 import { SelectProps } from './types'
 
 export const Select = <T extends any, V extends any = T>({
@@ -102,7 +102,7 @@ export const Select = <T extends any, V extends any = T>({
             onChange={(t) => setFilterInput(t.target.value)}
           />
         ) : (
-          <SelectedOption>{isDefined(selectedOption) && renderSelected(selectedOption)}</SelectedOption>
+          isDefined(selectedOption) && renderSelected(selectedOption)
         )}
 
         <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />

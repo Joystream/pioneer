@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { Select } from '../../../common/components/selects'
+import { Select, SelectedOption } from '../../../common/components/selects'
 import { useKeyring } from '../../../common/hooks/useKeyring'
 import { Address } from '../../../common/types'
 import { useMyAccounts } from '../../hooks/useMyAccounts'
@@ -51,10 +51,16 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
       selected={selectedOption}
       onChange={change}
       disabled={false}
-      renderSelected={(option) => <OptionAccount option={option} />}
+      renderSelected={renderSelected}
       placeholder="Select account or paste account address"
       renderList={(onOptionClick) => <OptionListAccount onChange={onOptionClick} options={filteredOptions} />}
       onSearch={(search) => setSearch(search)}
     />
   )
 })
+
+const renderSelected = (option: Account) => (
+  <SelectedOption>
+    <OptionAccount option={option} />
+  </SelectedOption>
+)
