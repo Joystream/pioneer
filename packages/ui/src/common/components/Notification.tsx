@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../constants'
 
-import { NotificationIcon } from './icons/NotificationIcon'
+import { BellIcon } from './icons/BellIcon'
 
 export interface NotificationProps {
   hasNotification?: boolean
@@ -12,7 +12,7 @@ export interface NotificationProps {
 export function Notification({ hasNotification }: NotificationProps) {
   return (
     <NotificationComponent hasNotification={hasNotification}>
-      <NotificationIcon />
+      <BellIcon />
     </NotificationComponent>
   )
 }

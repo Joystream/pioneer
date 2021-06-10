@@ -1,8 +1,4 @@
-import {
-  useCountWorkingGroupOpeningsQuery,
-  useGetWorkingGroupOpeningsConnectionQuery,
-  useGetWorkingGroupQuery,
-} from '../queries'
+import { useCountWorkingGroupOpeningsQuery, useGetWorkingGroupQuery } from '../queries'
 import { asWorkingGroup } from '../types'
 
 interface WhereInput {

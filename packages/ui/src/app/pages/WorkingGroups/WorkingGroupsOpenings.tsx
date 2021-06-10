@@ -22,7 +22,7 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const { isLoading: currentLoading, openings: currentOpenings } = useOpenings({ type: 'open' })
+  const { isLoading: currentLoading, openings: currentOpenings } = useOpenings({ statusIn: ['open'] })
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
   const activities = useActivities()
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')

@@ -164,7 +164,7 @@ export const MyRole = () => {
         </SidePanel>
       </ContentWithSidepanel>
       <PageFooter>
-        <BlockTime block={worker.hiredAtBlock} horizontal dateLabel="Hired" />
+        <BlockTime block={worker.hiredAtBlock} layout="row" dateLabel="Hired" />
       </PageFooter>
     </AppPage>
   )

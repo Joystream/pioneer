@@ -3,13 +3,13 @@ import React from 'react'
 import { CountBadge } from '@/common/components/CountBadge'
 import { ContentWithTabs, RowGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
-import { WorkerWithMemberAndApplication } from '@/working-groups/types'
+import { WorkerBaseInfo } from '@/working-groups/types'
 
 import { Worker } from './Worker'
 
 export interface WorkersListProps {
-  leader?: WorkerWithMemberAndApplication
-  workers?: WorkerWithMemberAndApplication[]
+  leader?: WorkerBaseInfo
+  workers?: WorkerBaseInfo[]
 }
 
 export const WorkersList = ({ leader, workers }: WorkersListProps) => {

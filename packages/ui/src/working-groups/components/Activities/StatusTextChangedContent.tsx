@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { RouterLink } from '@/common/components/RouterLink'
+import { ActivityRouterLink } from '@/common/components/Activities/ActivityRouterLink'
 
 import { StatusTextChangedActivity } from '../../types'
 
@@ -10,6 +10,9 @@ interface Props {
 export const StatusTextChangedContent = React.memo(({ activity }: Props) => (
   <>
     Status updated by the{' '}
-    <RouterLink to={`/working-groups/${activity.groupName}`}>{activity.groupName} Working Group</RouterLink> Lead.
+    <ActivityRouterLink to={`/working-groups/${activity.groupName}`}>
+      {activity.groupName} Working Group
+    </ActivityRouterLink>{' '}
+    Lead.
   </>
 ))

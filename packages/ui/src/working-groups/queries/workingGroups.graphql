@@ -187,8 +187,8 @@ query countWorkingGroupOpenings($groupId_eq: ID, $status_json: JSONObject) {
   }
 }
 
-query getWorkingGroupOpenings($groupId_eq: ID) {
-  workingGroupOpenings(where: { group_eq: $groupId_eq }) {
+query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
+  workingGroupOpenings(where: $where) {
     ... WorkingGroupOpeningFields
   }
 }

@@ -1,11 +1,16 @@
 import { Address, asBlock, Block } from '@/common/types'
-import { Member } from '@/memberships/types'
+import { asMember, Member } from '@/memberships/types'
 import { WorkerDetailedFieldsFragment, WorkerFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupName, WorkingGroup } from '@/working-groups/types/WorkingGroup'
 
 import { getReward } from '../model/getReward'
 
 import { Reward } from './Reward'
+
+export interface WorkerBaseInfo {
+  member: Member
+  applicationId: string
+}
 
 export interface Worker {
   id: string
@@ -29,10 +34,17 @@ export interface WorkerWithDetails extends Worker {
   minStake: number
 }
 
-export interface WorkerWithMemberAndApplication {
-  member: Member
-  applicationId: string
+export type WorkerStatus = 'active' | 'left' | 'terminated'
+export const WorkerStatusTypename: Record<WorkerStatus, WorkerFieldsFragment['status']['__typename']> = {
+  active: 'WorkerStatusActive',
+  left: 'WorkerStatusLeft',
+  terminated: 'WorkerStatusTerminated',
 }
+
+export const asWorkerBaseInfo = (fields: WorkerFieldsFragment): WorkerBaseInfo => ({
+  member: asMember(fields.membership),
+  applicationId: fields.applicationId,
+})
 
 export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   id: fields.id,

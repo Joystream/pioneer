@@ -18,10 +18,11 @@ import { WorkingGroupOpening } from '@/working-groups/types'
 
 export type Props = {
   opening: WorkingGroupOpening
+  past?: boolean
 }
 
-export const OpeningListItem = ({ opening }: Props) => (
-  <ToggleableItemWrap>
+export const OpeningListItem = ({ opening, past }: Props) => (
+  <ToggleableItemWrap past={past}>
     <ToggleableItemInfo>
       <ToggleableItemInfoTop>
         <Subscription>ID: {opening.id}</Subscription>

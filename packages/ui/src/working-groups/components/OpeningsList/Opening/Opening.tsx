@@ -5,9 +5,14 @@ import { WorkingGroupOpening } from '@/working-groups/types'
 import { OpeningDetails } from './OpeningDetails'
 import { OpeningListItem } from './OpeningListItem'
 
-export const Opening = (props: { opening: WorkingGroupOpening }) => (
+interface OpeningProps {
+  opening: WorkingGroupOpening
+  past?: boolean
+}
+
+export const Opening = ({ opening, past }: OpeningProps) => (
   <>
-    <OpeningListItem opening={props.opening} />
-    <OpeningDetails opening={props.opening} />
+    <OpeningListItem opening={opening} past={past} />
+    <OpeningDetails opening={opening} />
   </>
 )
