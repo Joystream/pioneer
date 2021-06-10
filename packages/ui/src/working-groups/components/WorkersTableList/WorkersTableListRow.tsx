@@ -7,14 +7,14 @@ import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
 export interface ListRowProps {
-  worker: Member
+  member: Member
   past?: boolean
 }
 
-export const WorkersTableListRow = ({ worker, past }: ListRowProps) => {
+export const WorkersTableListRow = ({ member, past }: ListRowProps) => {
   return (
     <WorkerItem past={past}>
-      <MemberInfo member={worker} showId />
+      <MemberInfo member={member} showId />
       <BlockTime
         block={{
           id: '100',

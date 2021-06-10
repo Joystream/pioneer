@@ -204,7 +204,7 @@ export type CountWorkingGroupOpeningsQuery = {
 }
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
+  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
 }>
 
 export type GetWorkingGroupOpeningsQuery = {
@@ -911,8 +911,8 @@ export type CountWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   CountWorkingGroupOpeningsQueryVariables
 >
 export const GetWorkingGroupOpeningsDocument = gql`
-  query getWorkingGroupOpenings($groupId_eq: ID) {
-    workingGroupOpenings(where: { group_eq: $groupId_eq }) {
+  query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
+    workingGroupOpenings(where: $where) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -931,7 +931,7 @@ export const GetWorkingGroupOpeningsDocument = gql`
  * @example
  * const { data, loading, error } = useGetWorkingGroupOpeningsQuery({
  *   variables: {
- *      groupId_eq: // value for 'groupId_eq'
+ *      where: // value for 'where'
  *   },
  * });
  */

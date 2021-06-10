@@ -9,7 +9,6 @@ import { Pagination } from '@/common/components/Pagination'
 import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
 import { OpeningsList } from '@/working-groups/components/OpeningsList'
-import { WorkersList } from '@/working-groups/components/WorkersList'
 import { WorkersTableList } from '@/working-groups/components/WorkersTableList/WorkersTableList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useWorkers } from '@/working-groups/hooks/useWorkers'
@@ -45,7 +44,7 @@ export function HistoryTab() {
 
 const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
   const [page, setPage] = useState<number>(1)
-  const { isLoading, openings, pageCount } = useOpenings({ groupId, type: 'past', page })
+  const { isLoading, openings, pageCount } = useOpenings({ groupId, statusIn: ['filled', 'cancelled'], page })
 
   return isLoading ? (
     <Loading />
