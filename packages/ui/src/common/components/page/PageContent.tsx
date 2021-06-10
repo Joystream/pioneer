@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const PageContent = styled.main`
   position: relative;
@@ -30,7 +30,7 @@ export const ContentWithTabs = styled(MainPanel)`
 
 interface GapBlockProps {
   gap?: number
-  align?: 'left' | 'right'
+  align?: 'left' | 'right' | 'none'
   alignCenter?: boolean
 }
 
@@ -39,8 +39,8 @@ export const RowGapBlock = styled.div<GapBlockProps>`
   grid-row-gap: ${({ gap }) => (gap ? gap + 'px' : '0px')};
   width: 100%;
   height: fit-content;
-  justify-content: ${({ align }) => (align === 'right' ? 'end' : 'start')};
-  justify-items: ${({ align }) => (align === 'right' ? 'end' : 'start')};
+  justify-content: ${({ align }) => align !== 'none' && (align === 'right' ? 'end' : 'start')};
+  justify-items: ${({ align }) => align !== 'none' && (align === 'right' ? 'end' : 'start')};
 `
 export const ColumnGapBlock = styled.div<GapBlockProps>`
   display: grid;

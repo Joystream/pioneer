@@ -10,6 +10,7 @@ import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
 import { OpeningsList } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
+import { WorkersTableList } from '@/working-groups/components/WorkersTableList/WorkersTableList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useWorkers } from '@/working-groups/hooks/useWorkers'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
@@ -50,7 +51,7 @@ const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
     <Loading />
   ) : (
     <>
-      <OpeningsList openings={openings} />
+      <OpeningsList openings={openings} past />
       <Pagination pageCount={pageCount as number} handlePageChange={setPage} page={page} />
     </>
   )
@@ -58,5 +59,5 @@ const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
 
 const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   const { isLoading, workers } = useWorkers({ groupId, statusIn: ['left', 'terminated'] })
-  return isLoading ? <Loading /> : <WorkersList workers={workers} />
+  return isLoading ? <Loading /> : <WorkersTableList workers={workers} past />
 }
