@@ -32,13 +32,16 @@ export const WorkingGroupOpening = () => {
   const { isLoading, opening } = useOpening(id)
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
-
-  const hiredMember = useMemo(() => {
+  const hiringApplication = useMemo(() => {
     if (opening) {
       return opening.applications.find(({ status }) => status === 'ApplicationStatusAccepted')
     }
-    return null
-  }, [opening])
+  }, [opening?.id])
+  const myApplication = useMemo(() => {
+    if (opening) {
+      return opening.applications.find(({ id }) => id === activeMembership?.id)
+    }
+  }, [opening?.id, activeMembership?.id])
 
   if (isLoading || !opening) {
     return (
@@ -127,8 +130,8 @@ export const WorkingGroupOpening = () => {
           <SidePanel neighbor={sideNeighborRef}>
             <ApplicantsList
               allApplicants={opening.applications}
-              myApplication={hiredMember?.member.id === activeMembership?.id ? activeMembership : undefined}
-              hired={hiredMember?.member}
+              myApplication={myApplication}
+              hired={hiringApplication}
               hiringComplete={opening.status !== OpeningStatuses.OPEN}
               leaderId={opening.leaderId}
             />

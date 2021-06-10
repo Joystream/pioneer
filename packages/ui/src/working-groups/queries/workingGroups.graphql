@@ -17,6 +17,7 @@ fragment WorkerFields on Worker {
   status {
     __typename
   }
+  applicationId
   isLead
   rewardPerBlock
   missingRewardAmount

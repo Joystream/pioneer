@@ -3,13 +3,13 @@ import React from 'react'
 import { CountBadge } from '@/common/components/CountBadge'
 import { ContentWithTabs, RowGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
-import { Member } from '@/memberships/types'
+import { WorkerWithMemberAndApplication } from '@/working-groups/types'
 
 import { Worker } from './Worker'
 
 export interface WorkersListProps {
-  leader?: Member
-  workers?: Member[]
+  leader?: WorkerWithMemberAndApplication
+  workers?: WorkerWithMemberAndApplication[]
 }
 
 export const WorkersList = ({ leader, workers }: WorkersListProps) => {
@@ -18,7 +18,7 @@ export const WorkersList = ({ leader, workers }: WorkersListProps) => {
       {leader && (
         <ContentWithTabs>
           <Label>Leader</Label>
-          <Worker member={leader} isLeader={true} />
+          <Worker member={leader.member} applicationId={leader.applicationId} isLeader={true} />
         </ContentWithTabs>
       )}
       <ContentWithTabs>
@@ -27,8 +27,8 @@ export const WorkersList = ({ leader, workers }: WorkersListProps) => {
         </Label>
         {workers && (
           <ContentWithTabs>
-            {workers.map((member) => (
-              <Worker key={member.handle} member={member} />
+            {workers.map((worker, index) => (
+              <Worker key={index} member={worker.member} applicationId={worker.applicationId} />
             ))}
           </ContentWithTabs>
         )}

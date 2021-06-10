@@ -29,6 +29,11 @@ export interface WorkerWithDetails extends Worker {
   minStake: number
 }
 
+export interface WorkerWithMemberAndApplication {
+  member: Member
+  applicationId: string
+}
+
 export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   id: fields.id,
   group: {
