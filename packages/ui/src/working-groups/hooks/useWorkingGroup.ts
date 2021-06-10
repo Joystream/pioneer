@@ -3,7 +3,7 @@ import {
   useCountWorkingGroupWorkersQuery,
   useGetWorkingGroupQuery,
 } from '../queries'
-import { asWorkingGroup } from '../types'
+import { asWorkingGroup, WorkerStatusTypename } from '../types'
 
 interface WhereInput {
   name?: string | undefined
