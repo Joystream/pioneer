@@ -9,6 +9,7 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { Avatar } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
+import { useCountOpenings } from '@/working-groups/hooks/useWorkingGroup'
 
 import { WorkingGroup } from '../types'
 
@@ -20,6 +21,7 @@ export interface WorkingGroupProps {
 
 export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const history = useHistory()
+  const { isLoading: loadingOpenings, openings } = useCountOpenings(group.id)
 
   const { member: leader } = useMember(group.leaderId)
   const groupAddress = `/working-groups/${group.name.toLowerCase()}`
@@ -45,7 +47,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>Current budget</Subscription>
         </StatsColumn>
         <StatsColumn>
-          <StatsValue>1</StatsValue>
+          <StatsValue>{loadingOpenings ? '-' : openings}</StatsValue>
           <Subscription>Openings</Subscription>
         </StatsColumn>
         <StatsColumn>
@@ -168,6 +170,7 @@ const GroupItem = styled.section`
         transform: scale(1);
       }
     }
+
     ${GroupTitle} {
       color: ${Colors.Blue[500]};
     }

@@ -174,9 +174,15 @@ fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
   }
 }
 
-query getWorkingGroupOpeningsConnection($groupId_eq: ID, $first: Int, $last: Int) {
-  workingGroupOpeningsConnection(where: { group_eq: $groupId_eq }, first: $first, last: $last) {
+query getWorkingGroupOpeningsConnection($groupId_eq: ID, $status_json: JSONObject, $first: Int, $last: Int) {
+  workingGroupOpeningsConnection(where: { group_eq: $groupId_eq, status_json: $status_json }, first: $first, last: $last) {
     ... WorkingGroupOpeningFieldsConnection
+  }
+}
+
+query countWorkingGroupOpenings($groupId_eq: ID, $status_json: JSONObject) {
+  workingGroupOpeningsConnection(where: { group_eq: $groupId_eq, status_json: $status_json }) {
+    totalCount
   }
 }
 

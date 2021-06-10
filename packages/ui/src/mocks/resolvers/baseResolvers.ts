@@ -4,6 +4,7 @@ import { unwrapType } from '@miragejs/graphql/dist/utils'
 import { GraphQLObjectType, GraphQLSchema } from 'graphql/type'
 
 import { PageInfo } from '@/common/api/queries'
+import { camelCaseToDash } from '@/mocks/helpers'
 import {
   ConnectionQueryResolver,
   Edge,
@@ -18,16 +19,22 @@ function getFieldName(model: Record<string, any>, field: string) {
   return model[field].toString().startsWith('model:') ? field + 'Id' : field
 }
 
-const getFilter = (where: Record<string, any>) => {
+const getFilter = (where: Record<string, any>, nestedField?: string) => {
   const filters: FilterCallback[] = []
 
   for (const [key, checkValue] of Object.entries(where)) {
     const [field, type] = key.split('_')
 
     if (type === 'eq') {
-      filters.push((model: Record<string, any>) => {
-        return String(model[getFieldName(model, field)]) === checkValue.toString()
-      })
+      if (field === 'isTypeOf') {
+        filters.push((model: Record<string, any>) => {
+          return String(model[nestedField as string].modelName) === camelCaseToDash(checkValue.toString())
+        })
+      } else {
+        filters.push((model: Record<string, any>) => {
+          return String(model[getFieldName(model, field)]) === checkValue.toString()
+        })
+      }
     }
 
     if (type === 'contains') {
@@ -50,6 +57,10 @@ const getFilter = (where: Record<string, any>) => {
       } else {
         filters.push((model: Record<string, any>) => String(model[field]).localeCompare(checkValue.toString()) === 1)
       }
+    }
+
+    if (type === 'json') {
+      filters.push(getFilter(checkValue, field))
     }
   }
 
