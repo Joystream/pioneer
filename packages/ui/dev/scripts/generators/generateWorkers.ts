@@ -7,6 +7,24 @@ import { randomFromRange, randomUniqueArrayFromRange } from './utils'
 
 let nextId = 0
 
+let nextApplicationId = 0
+
+const generateApplication = (opening: Opening, status = 'pending') => (applicantId: string) => {
+  const runtimeId = nextApplicationId++
+
+  return {
+    id: `${opening.groupId}-${runtimeId}`,
+    runtimeId,
+    openingId: opening.id,
+    applicantId,
+    answers: opening.metadata.applicationFormQuestions.map((question) => ({
+      questionId: question.id,
+      answer: faker.lorem.words(randomFromRange(5, 10)),
+    })),
+    status,
+  }
+}
+
 const generateWorker = (type: string, groupId: string, applications: Application[], opening?: Opening) => (
   memberId: number
 ) => {
@@ -15,7 +33,7 @@ const generateWorker = (type: string, groupId: string, applications: Application
   }
   const runtimeId = nextId++
 
-  const application = extracted(opening, 'filled')(String(memberId))
+  const application = generateApplication(opening, 'filled')(String(memberId))
   applications.push(application)
 
   return {
@@ -35,26 +53,7 @@ const generateWorker = (type: string, groupId: string, applications: Application
 
 export type Worker = ReturnType<ReturnType<typeof generateWorker>>
 
-let nextApplicationId = 0
-function extracted(opening: Opening, status = 'pending') {
-  return (applicantId: string) => {
-    const runtimeId = nextApplicationId++
-
-    return {
-      id: `${opening.groupId}-${runtimeId}`,
-      runtimeId,
-      openingId: opening.id,
-      applicantId,
-      answers: opening.metadata.applicationFormQuestions.map((question) => ({
-        questionId: question.id,
-        answer: faker.lorem.words(randomFromRange(5, 10)),
-      })),
-      status,
-    }
-  }
-}
-
-type Application = ReturnType<ReturnType<typeof extracted>>
+type Application = ReturnType<ReturnType<typeof generateApplication>>
 
 export const generateApplications = (openings: Opening[], mocks: Mocks) => {
   return openings.map((opening) => {
@@ -62,7 +61,7 @@ export const generateApplications = (openings: Opening[], mocks: Mocks) => {
       (index) => mocks.members[index].id
     )
 
-    return applicantsIds.map(extracted(opening))
+    return applicantsIds.map(generateApplication(opening))
   })
 }
 
