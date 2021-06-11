@@ -3,13 +3,10 @@ import { addMonths, startOfToday } from 'date-fns'
 import React, { useRef } from 'react'
 
 import { FilterPageHeader } from '@/common/components/forms/FilterBox'
-import { Member } from '@/memberships/types'
-import { mockMembers } from '@/mocks/data'
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { proposalStages, proposalTypes } from '@/mocks/data/mockProposals'
 
 import { ProposalFilters, ProposalFiltersProps } from '.'
-
-const proposers = (mockMembers.slice(0, 10) as unknown) as Member[]
 
 export default {
   title: 'Proposals/ProposalFilters',
@@ -26,17 +23,16 @@ export const Default: Story<Pick<ProposalFiltersProps, 'onApply'>> = (props) => 
   const withinDates = { start: addMonths(today, -13), end: today }
 
   return (
-    <>
+    <MockApolloProvider members>
       <FilterPageHeader ref={searchSlot} title="Proposal" />
       <ProposalFilters
         {...props}
         searchSlot={searchSlot}
         types={proposalTypes}
         withinDates={withinDates}
-        proposers={proposers}
         stages={proposalStages}
       />
-    </>
+    </MockApolloProvider>
   )
 }
 
