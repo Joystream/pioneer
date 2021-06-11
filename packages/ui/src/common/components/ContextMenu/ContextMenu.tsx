@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Animations, BorderRad, Colors, Shadows, Transitions } from '../../constants'
@@ -23,8 +23,23 @@ export const ContextMenu = ({ children, align }: ContextMenuProps & ContextMenuA
     onBlur: () => setMenuVisible(false),
   }
 
+  const container = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!isMenuVisible) return
+    const outsideClickListener = (event: MouseEvent) => {
+      if (!event.target) return
+      const target = event.target as Node
+      const clickedOutside = !container.current?.contains(target)
+      if (!clickedOutside) return
+      setMenuVisible(false)
+      window.removeEventListener('mousedown', outsideClickListener)
+    }
+    addEventListener('mousedown', outsideClickListener)
+    return () => removeEventListener('mousedown', outsideClickListener)
+  }, [isMenuVisible])
+
   return (
-    <ContextMenuContainer>
+    <ContextMenuContainer ref={container}>
       <ButtonGhost square size="medium" {...contextMenuHandlers}>
         <KebabMenuIcon />
       </ButtonGhost>
