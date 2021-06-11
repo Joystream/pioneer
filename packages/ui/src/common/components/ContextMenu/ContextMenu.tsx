@@ -1,19 +1,20 @@
+import item from '@polkadot/ui-keyring/options/item'
 import React, { useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Animations, BorderRad, Colors, Shadows, Transitions } from '../../constants'
-import { ButtonGhost } from '../buttons'
+import { ButtonGhost, ButtonLink } from '../buttons'
 import { KebabMenuIcon } from '../icons'
 
 export interface ContextMenuProps {
-  children: React.ReactNode
+  items: { text: string; onClick: () => void }[]
 }
 
-export interface ContextMenuAlignMentProps {
+export interface ContextMenuAlignmentProps {
   align?: 'left' | 'right'
 }
 
-export const ContextMenu = ({ children, align }: ContextMenuProps & ContextMenuAlignMentProps) => {
+export const ContextMenu = ({ align, items }: ContextMenuProps & ContextMenuAlignmentProps) => {
   const [isMenuVisible, setMenuVisible] = useState(false)
   const contextMenuHandlers = {
     onClick: (event: React.MouseEvent<HTMLElement>) => {
@@ -43,7 +44,23 @@ export const ContextMenu = ({ children, align }: ContextMenuProps & ContextMenuA
       <ButtonGhost square size="medium" {...contextMenuHandlers}>
         <KebabMenuIcon />
       </ButtonGhost>
-      {isMenuVisible && <ContextMenuOptions children={children} align={align} />}
+      {isMenuVisible && (
+        <ContextMenuOptions align={align}>
+          {items.map((item) => (
+            <ButtonLink
+              size="small"
+              bold
+              borderless
+              onClick={() => {
+                item.onClick()
+                setMenuVisible(false)
+              }}
+            >
+              {item.text}
+            </ButtonLink>
+          ))}
+        </ContextMenuOptions>
+      )}
     </ContextMenuContainer>
   )
 }
@@ -57,7 +74,7 @@ export const ContextMenuOptions = ({
   className,
   children,
   align,
-}: ContextMenuOptionsProps & ContextMenuAlignMentProps) => {
+}: ContextMenuOptionsProps & ContextMenuAlignmentProps) => {
   return (
     <ContextMenuWrapper className={className} align={align}>
       {children}
@@ -65,7 +82,7 @@ export const ContextMenuOptions = ({
   )
 }
 
-const ContextMenuWrapper = styled.div<ContextMenuAlignMentProps>`
+const ContextMenuWrapper = styled.div<ContextMenuAlignmentProps>`
   display: grid;
   grid-row-gap: 8px;
   position: absolute;
