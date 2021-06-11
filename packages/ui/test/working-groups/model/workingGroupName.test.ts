@@ -1,15 +1,29 @@
-import { urlParamToWorkingGroupName } from '@/working-groups/model/workingGroupName'
+import { groupNameToURLParam, urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 
-describe('urlParamToWorkingGroupName()', () => {
+describe('urlParamToWorkingGroupId()', () => {
   it('forum', () => {
-    expect(urlParamToWorkingGroupName('forum')).toBe('forumWorkingGroup')
+    expect(urlParamToWorkingGroupId('forum')).toBe('forumWorkingGroup')
   })
 
   it('content-directory', () => {
-    expect(urlParamToWorkingGroupName('content-directory')).toBe('contentDirectoryWorkingGroup')
+    expect(urlParamToWorkingGroupId('content-directory')).toBe('contentDirectoryWorkingGroup')
   })
 
   it('some-future-group-name', () => {
-    expect(urlParamToWorkingGroupName('some-future-group-name')).toBe('someFutureGroupNameWorkingGroup')
+    expect(urlParamToWorkingGroupId('some-future-group-name')).toBe('someFutureGroupNameWorkingGroup')
+  })
+})
+
+describe('groupNameToURLParam()', () => {
+  it('forum', () => {
+    expect(groupNameToURLParam('forum')).toBe('forum')
+  })
+
+  it('content directory', () => {
+    expect(groupNameToURLParam('content directory')).toBe('content-directory')
+  })
+
+  it('CONTENT DIRECTORY', () => {
+    expect(groupNameToURLParam('CONTENT DIRECTORY')).toBe('content-directory')
   })
 })
