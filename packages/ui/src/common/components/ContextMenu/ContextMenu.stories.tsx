@@ -16,8 +16,21 @@ const Template: Story<ContextMenuProps & ContextMenuAlignmentProps> = () => {
   return (
     <TemplateBlock>
       <ColumnGapBlock gap={48}>
-        <ContextMenu align="left" items={[]} />
-        <ContextMenu align="right" items={[]} />
+        <ContextMenu
+          align="left"
+          items={[
+            { text: 'First element', onClick: () => null },
+            { text: 'Second element', onClick: () => null },
+          ]}
+        />
+        <ContextMenu
+          align="right"
+          items={[
+            { text: 'First element', onClick: () => null },
+            { text: 'Second element', onClick: () => null },
+            { text: 'Third element', onClick: () => null },
+          ]}
+        />
       </ColumnGapBlock>
     </TemplateBlock>
   )
