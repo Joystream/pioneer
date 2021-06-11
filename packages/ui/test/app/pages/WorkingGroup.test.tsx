@@ -31,6 +31,21 @@ describe('WorkingGroup', () => {
     expect(await screen.findByRole('heading', { name: /forum/i })).toBeDefined()
   })
 
+  it('Loads working group by url param', async () => {
+    renderPage()
+
+    await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
+    expect(await screen.findByText(/current budget/i)).toBeDefined()
+  })
+
+  it('Loads working group by url param with a hyphen', async () => {
+    renderPage('/working-groups/content-directory')
+
+    await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
+
+    expect(await screen.findByText(/current budget/i)).toBeDefined()
+  })
+
   it('Openings tab', async () => {
     seedOpening(OPENING_DATA, mockServer.server)
     seedUpcomingOpening(UPCOMING_OPENING, mockServer.server)

@@ -8,8 +8,9 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Tabs } from '@/common/components/Tabs'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
+import { urlParamToWorkingGroupName } from '../../../../working-groups/model/workingGroupName'
 import { AppPage } from '../../../components/AppPage'
-import { StatusGroup, StatusBadge } from '../components/StatusBadges'
+import { StatusBadge, StatusGroup } from '../components/StatusBadges'
 
 import { AboutTab } from './AboutTab'
 import { HistoryTab } from './HistoryTab'
@@ -20,7 +21,7 @@ type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
 export function WorkingGroup() {
   const [currentTab, setCurrentTab] = useState<Tab>('OPENINGS')
   const { name } = useParams<{ name: string }>()
-  const { isLoading, group } = useWorkingGroup({ name: `${name}WorkingGroup` })
+  const { isLoading, group } = useWorkingGroup({ name: urlParamToWorkingGroupName(name) })
 
   const tabs = [
     { title: 'Openings', active: currentTab === 'OPENINGS', onClick: () => setCurrentTab('OPENINGS') },
