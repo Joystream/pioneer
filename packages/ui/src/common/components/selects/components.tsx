@@ -1,9 +1,11 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Shadows, Sizes, Transitions } from '../../constants'
 import { ToggleButton } from '../buttons/Toggle'
 import { Arrow } from '../icons'
+
+import { OptionProps } from './types'
 
 interface Props {
   children: ReactNode
@@ -184,4 +186,35 @@ export const OptionsListComponent = styled.ul`
   ${OptionComponentContainer} + ${OptionComponentContainer} {
     margin-top: -1px;
   }
+`
+
+export const Selected = styled.div`
+  cursor: pointer;
+  text-transform: capitalize;
+  user-select: none;
+  overflow: hidden;
+  padding: 0 4px 0 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+const OptionFocused = css`
+  color: ${Colors.Blue[500]};
+`
+export const OptionContainer = styled.div`
+  cursor: pointer;
+  display: block;
+  line-height: 40px;
+  padding: 0 16px;
+  text-transform: capitalize;
+  ${({ focus, selected }: OptionProps) => (selected || focus) && OptionFocused}
+  &:hover {
+    ${OptionFocused}
+  }
+  ${({ selected }: OptionProps) =>
+    selected &&
+    css`
+      background: ${Colors.Blue[50]};
+      font-weight: bold;
+    `}
 `

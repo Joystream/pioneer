@@ -2,7 +2,7 @@ import { addMonths, addWeeks, addYears, isAfter, isBefore, isEqual, startOfMonth
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { ButtonSecondary, ButtonSecondaryStyles, FilterButtons } from '@/common/components/buttons'
+import { ButtonSecondary, ButtonSecondaryStyles, ButtonsGroup, FilterButtons } from '@/common/components/buttons'
 import { Colors, Shadows } from '@/common/constants'
 import { DateRange, PartialDateRange } from '@/common/types/Dates'
 import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
@@ -57,7 +57,9 @@ export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChan
         {isOpen && (
           <DatePickerPopup>
             <DatePickerCalendars value={value} within={withinDates} onChange={onChange} />
-            <FilterButtons onApply={apply} onClear={onClear} />
+            <ButtonsGroup align="right">
+              <FilterButtons onApply={apply} onClear={onClear} />
+            </ButtonsGroup>
           </DatePickerPopup>
         )}
       </DatePickerInput>

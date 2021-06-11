@@ -1,4 +1,4 @@
-export interface ControlProps<T> {
-  value: T
-  onChange: (value: T) => void
+export interface ControlProps<Value, Update = Value> {
+  value: Value
+  onChange: (value: Update) => void
 }

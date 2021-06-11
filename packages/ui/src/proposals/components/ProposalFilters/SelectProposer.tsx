@@ -18,15 +18,15 @@ export const SelectProposer = ({ value, onChange }: ControlProps<Member | null>)
     limit: DISPLAYED_OPTION_LIMIT - (searchDebounced ? 0 : 1),
   })
 
-  const [proposers, setProposers] = useState({ isSearch: data.isSearch, values: data.proposers ?? [] })
+  const [proposers, setProposers] = useState({ isSearch: data.isSearch, options: data.proposers ?? [] })
   useEffect(() => {
     const { isSearch, proposers } = data
     if (!proposers) {
       return
     } else if (isSearch || !value || proposers.some(objectEquals(value))) {
-      setProposers({ isSearch, values: proposers })
+      setProposers({ isSearch, options: proposers })
     } else {
-      setProposers({ isSearch, values: [...proposers.slice(0, DISPLAYED_OPTION_LIMIT - 2), value] })
+      setProposers({ isSearch, options: [...proposers.slice(0, DISPLAYED_OPTION_LIMIT - 2), value] })
     }
   }, [data.proposers?.map(({ id }) => id).toString(), value?.id])
 
@@ -37,7 +37,7 @@ export const SelectProposer = ({ value, onChange }: ControlProps<Member | null>)
   return (
     <SimpleSelect
       title="Proposer"
-      values={proposers.values}
+      options={proposers.options}
       renderOption={({ handle }) => handle}
       emptyOption={proposers.isSearch ? undefined : 'All'}
       value={value}

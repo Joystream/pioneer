@@ -29,7 +29,7 @@ export const Default: Story = () => {
     <>
       <FilterPageHeader ref={searchSlot} title="Filter Box" />
       <FilterBox searchSlot={searchSlot} search={search} onApply={display} onClear={clear} onSearch={setSearch}>
-        <FilterSelect title="Select" values={['foo', 'bar']} value={selectValue} onChange={setSelectValue} />
+        <FilterSelect title="Select" options={['foo', 'bar']} value={selectValue} onChange={setSelectValue} />
       </FilterBox>
     </>
   )
