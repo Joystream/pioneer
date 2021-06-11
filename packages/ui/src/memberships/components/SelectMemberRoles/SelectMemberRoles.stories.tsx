@@ -1,6 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
+import { ModalBlock } from '@/common/components/storybookParts/previewStyles'
 import { MemberRole } from '@/memberships/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
@@ -22,7 +23,9 @@ export const Default: Story = ({ onApply }) => {
 
   return (
     <MockApolloProvider workingGroups>
-      <SelectMemberRoles value={value} onChange={setValue} onApply={apply} onClear={clear} />
+      <ModalBlock>
+        <SelectMemberRoles value={value} onChange={setValue} onApply={apply} onClear={clear} />
+      </ModalBlock>
     </MockApolloProvider>
   )
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { ControlProps } from '@/common/components/forms'
-import { MultiSelect, MultiSelected } from '@/common/components/selects'
+import { MultiSelect, MultiSelected, Selected } from '@/common/components/selects'
 import { TextMedium } from '@/common/components/typography'
 import { intersperse } from '@/common/utils'
 import { MemberRoleHelp } from '@/memberships/components/MemberRoles'
@@ -25,14 +25,18 @@ export const SelectMemberRoles = ({ value, ...props }: Props) => {
 
   const renderSelected = (value: MemberRole[]) => {
     if (!value.length) {
-      return <TextMedium lighter>Select</TextMedium>
+      return (
+        <Selected>
+          <TextMedium lighter>Select</TextMedium>
+        </Selected>
+      )
     } else {
       const roleHelpers = value.map((role, key) => (
         <MemberRoleHelp key={key} size="l">
           {memberRoleAbbreviation(role)}
         </MemberRoleHelp>
       ))
-      return <Selected>{intersperse(roleHelpers, ' ')}</Selected>
+      return <SelectedRoles>{intersperse(roleHelpers, ' ')}</SelectedRoles>
     }
   }
 
@@ -48,7 +52,7 @@ export const SelectMemberRoles = ({ value, ...props }: Props) => {
   )
 }
 
-const Selected = styled(MultiSelected)`
+const SelectedRoles = styled(MultiSelected)`
   word-spacing: 4px;
   ${MemberRoleHelp} {
     display: inline-flex;

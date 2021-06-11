@@ -193,4 +193,7 @@ const Options = styled.div`
 
 const OptionsFooter = styled.div`
   display: flex;
+  & > * {
+    flex-grow: 1;
+  }
 `
