@@ -11,9 +11,10 @@ interface MultiSelectProps<T extends any> extends DefaultSelectProps<T, T[], T[]
   onApply: (value: T[]) => void
 }
 
+const defaultSelectedOption = (node: OptionNode, key: number) => <u key={key}>{node}</u>
 const defaultRenderSelected = <T extends any>(renderOption: RenderOption<T>) => (value: T[]) => {
   const optionNodes = value.map((option) => renderOption(option))
-  const nodes = optionNodes.some(isString) ? optionNodes.map((node) => <u>{node}</u>) : optionNodes
+  const nodes = optionNodes.some(isString) ? optionNodes.map(defaultSelectedOption) : optionNodes
   return <MultiSelected>{intersperse(nodes, ' ')}</MultiSelected>
 }
 
