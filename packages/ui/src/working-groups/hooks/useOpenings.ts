@@ -30,7 +30,7 @@ export const useOpenings = ({ groupId: group_eq, statusIn, page }: UseOpeningsPa
   }
 
   const { loading, data, error } = useGetWorkingGroupOpeningsConnectionQuery({ variables })
-  const [totalCount, setTotalCount] = useState<number>()
+  const [totalCount, setTotalCount] = useState<number>(0)
 
   if (error) {
     logError(error)

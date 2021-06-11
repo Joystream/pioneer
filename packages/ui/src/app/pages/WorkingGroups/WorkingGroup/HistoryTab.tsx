@@ -14,6 +14,8 @@ import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useWorkersPagination } from '@/working-groups/hooks/useWorkersPagination'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
+import { TextBig } from '../../../../common/components/typography'
+
 type Tab = 'OPENINGS' | 'WORKERS'
 
 export function HistoryTab() {
@@ -50,10 +52,14 @@ const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
     return <Loading />
   }
 
+  if (!openings || !openings.length) {
+    return <TextBig>No openings found</TextBig>
+  }
+
   return (
     <>
       <OpeningsList openings={openings} past />
-      <Pagination pageCount={pageCount as number} handlePageChange={setPage} page={page} />
+      <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
     </>
   )
 }
@@ -66,10 +72,14 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
     return <Loading />
   }
 
+  if (!workers || workers.length) {
+    return <TextBig>No workers found</TextBig>
+  }
+
   return (
     <>
       <WorkersTableList workers={workers} past />
-      <Pagination pageCount={pageCount as number} handlePageChange={setPage} page={page} />
+      <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
     </>
   )
 }
