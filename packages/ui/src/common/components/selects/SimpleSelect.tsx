@@ -188,7 +188,7 @@ const Options = styled.div`
   top: 100%;
   user-select: none;
   min-width: 100%;
-  z-index: 10;
+  z-index: 51;
 `
 
 const OptionsFooter = styled.div`
