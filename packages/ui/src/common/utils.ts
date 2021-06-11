@@ -9,19 +9,24 @@ export const isString = (something: unknown): something is string => typeof some
 export const isRecord = (something: unknown): something is Record<string, any> =>
   typeof something === 'object' && something !== null
 
+interface EqualsOption {
+  checkExtraKeys?: boolean
+  deep?: boolean
+}
+
 export const objectEquals = <T extends Record<string, any>>(
   reference: T,
-  checkExtraKeys = false
+  { checkExtraKeys = false, deep = false }: EqualsOption = {}
 ): ((compared: T) => boolean) => {
   const expectedKeys: Array<keyof T> = Object.keys(reference)
   return (compared) =>
     (!checkExtraKeys || expectedKeys.length === Object.keys(compared).length) &&
-    expectedKeys.every((key) => compared[key] === reference[key])
+    expectedKeys.every((key) => (deep ? equals(compared[key])(reference[key]) : compared[key] === reference[key]))
 }
 
-export const equals = <T extends any>(reference: T, checkExtraKeys = false): ((compared: T) => boolean) =>
+export const equals = <T extends any>(reference: T, options: EqualsOption = {}): ((compared: T) => boolean) =>
   isRecord(reference)
-    ? (objectEquals(reference, checkExtraKeys) as (compared: T) => boolean)
+    ? (objectEquals(reference, options) as (compared: T) => boolean)
     : (compared: T) => compared === reference
 
 export const intersperse = <T extends any, S extends any>(list: T[], separator: S): (T | S)[] =>
