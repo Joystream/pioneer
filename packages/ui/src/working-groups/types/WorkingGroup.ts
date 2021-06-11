@@ -2,7 +2,7 @@ import BN from 'bn.js'
 
 import { getAverageStake } from '@/working-groups/model/getAverageStake'
 
-import { WorkerFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
+import { WorkingGroupFieldsFragment } from '../queries'
 
 export interface WorkingGroup {
   id: string

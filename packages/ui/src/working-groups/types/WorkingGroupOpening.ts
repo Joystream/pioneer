@@ -7,7 +7,6 @@ import { getReward } from '../model/getReward'
 import {
   ApplicationQuestionFieldsFragment,
   UpcomingWorkingGroupOpeningFieldsFragment,
-  WorkerFieldsFragment,
   WorkingGroupOpeningDetailedFieldsFragment,
   WorkingGroupOpeningFieldsFragment,
 } from '../queries'
