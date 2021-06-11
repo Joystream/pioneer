@@ -20,7 +20,7 @@ interface FilterBoxProps {
 }
 
 export const FilterBox = ({ search = '', searchSlot, onApply, onClear, onSearch, children }: FilterBoxProps) => (
-  <FilterContainer gap={8}>
+  <FilterContainer gap={8} align="none">
     {isDefined(onClear) && (
       <ClearButton onClick={onClear} size="small" borderless>
         <CrossIcon />
@@ -48,7 +48,7 @@ const ClearButton = styled(ButtonLink)`
   color: ${Colors.Black[400]};
 
   &:before {
-    bottom: 0px;
+    bottom: 0;
   }
 
   ${ButtonInnerWrapper} > svg {

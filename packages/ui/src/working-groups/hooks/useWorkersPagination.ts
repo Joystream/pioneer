@@ -27,7 +27,7 @@ export const useWorkersPagination = ({ groupId: group_eq, statusIn, page = 1 }: 
     workersData,
     loadingWorkers,
   ])
-  const totalCount = countData?.workersConnection.totalCount
+  const totalCount = countData?.workersConnection.totalCount ?? 0
 
   return {
     isLoading: loadingWorkers || loadingCount,
