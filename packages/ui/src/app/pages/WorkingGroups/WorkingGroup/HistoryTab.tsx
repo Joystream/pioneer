@@ -43,12 +43,14 @@ export function HistoryTab() {
 }
 
 const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState(1)
   const { isLoading, openings, pageCount } = useOpenings({ groupId, statusIn: ['filled', 'cancelled'], page })
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  if (isLoading) {
+    return <Loading />
+  }
+
+  return (
     <>
       <OpeningsList openings={openings} past />
       <Pagination pageCount={pageCount as number} handlePageChange={setPage} page={page} />
@@ -57,12 +59,14 @@ const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
 }
 
 const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState(1)
   const { isLoading, workers, pageCount } = useWorkersPagination({ groupId, statusIn: ['left', 'terminated'], page })
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  if (isLoading) {
+    return <Loading />
+  }
+
+  return (
     <>
       <WorkersTableList workers={workers} past />
       <Pagination pageCount={pageCount as number} handlePageChange={setPage} page={page} />
