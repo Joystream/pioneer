@@ -9,6 +9,7 @@ import { stopEvent } from '@/common/utils/events'
 
 import { Toggle } from '../buttons/Toggle'
 import { CheckboxIcon, CheckboxIconStyles } from '../icons'
+import { TextInlineMedium } from '../typography'
 
 import { Select } from '.'
 import { EmptyOption, SelectComponent, SelectedOption } from './components'
@@ -95,7 +96,7 @@ export const SimpleSelect = <T extends any>({
         }
         return (
           <OptionItem key={key} selected={val === value} focus={val === focused} onClick={onClick}>
-            {label}
+            <TextInlineMedium>{label}</TextInlineMedium>
             {val == value && <CheckboxIcon />}
           </OptionItem>
         )
@@ -131,10 +132,11 @@ export const FilterSelect = <T extends any>(props: FilterSelectProps<T>) => (
 )
 
 const Selected = styled.div`
-  cursor: pointer;
   display: block;
   text-transform: capitalize;
+  cursor: pointer;
   user-select: none;
+  ${Overflow.FullDots};
 `
 
 const OptionsContainer = styled.ul`
@@ -156,12 +158,14 @@ interface OptionProps {
   focus?: boolean
   selected?: boolean
 }
+
 const OptionFocused = css`
   color: ${Colors.Blue[500]};
 `
+
 const OptionItem = styled.li`
   display: grid;
-  grid-template-columns: 1fr 16px;
+  grid-template-columns: ${({ selected }) => (selected ? '1fr 16px' : '1fr')};
   grid-column-gap: 16px;
   align-items: center;
   padding: 0 16px;
@@ -170,12 +174,17 @@ const OptionItem = styled.li`
   text-transform: capitalize;
   cursor: pointer;
   transition: ${Transitions.all};
-  ${Overflow.FullDots};
-  ${({ focus, selected }: OptionProps) => (selected || focus) && OptionFocused}
+  ${({ focus, selected }: OptionProps) => (selected || focus) && OptionFocused};
+
+  &,
+  ${TextInlineMedium} {
+    ${Overflow.FullDots};
+  }
 
   &:hover {
     ${OptionFocused}
   }
+
   ${({ selected }: OptionProps) =>
     selected &&
     css`
@@ -199,6 +208,7 @@ const SelectContainer = styled.label<SimpleSelectSizingProps>`
 
   ${SelectedOption} {
     grid-template-columns: 1fr;
+    ${Overflow.FullDots}
   }
 
   ${Toggle} {
