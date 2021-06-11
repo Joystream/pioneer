@@ -109,6 +109,12 @@ query getWorker ($where: WorkerWhereUniqueInput!) {
   }
 }
 
+query getGroupDebt ($where: WorkerWhereInput!) {
+  workers(where: $where) {
+    missingRewardAmount
+  }
+}
+
 query getRewards ($where: RewardPaidEventWhereInput) {
   rewardPaidEvents(where: $where) {
     ...RewardPaidEventFields
