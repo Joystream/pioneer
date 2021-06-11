@@ -18,9 +18,20 @@ interface DatePickerProps extends ControlProps<PartialDateRange> {
   withinDates?: PartialDateRange
   onApply?: () => void
   onClear?: () => void
+  inputSize?: 'xs' | 's' | 'm' | 'l' | 'auto' | undefined
+  inputWidth?: 'auto' | 's' | 'xs' | undefined
 }
 
-export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChange }: DatePickerProps) => {
+export const DatePicker = ({
+  title,
+  value,
+  withinDates,
+  onApply,
+  onClear,
+  onChange,
+  inputSize,
+  inputWidth,
+}: DatePickerProps) => {
   const placeholder = '__/__/__'
   const { start, end } = fromRange(value)
   const dateString = `${toDDMMYY(start) ?? placeholder} - ${toDDMMYY(end) ?? placeholder}`
@@ -52,7 +63,7 @@ export const DatePicker = ({ title, value, withinDates, onApply, onClear, onChan
   return (
     <DatePickerContainer ref={container} onMouseDown={() => !isOpen && toggleOpen(true)}>
       {title && <FilterLabel>{title}</FilterLabel>}
-      <DatePickerInput tight inputWidth="xs">
+      <DatePickerInput tight inputWidth={inputWidth} inputSize={inputSize}>
         <InputText placeholder="-" value={dateString} readOnly />
         {isOpen && (
           <DatePickerPopup>

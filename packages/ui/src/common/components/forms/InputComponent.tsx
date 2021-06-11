@@ -38,15 +38,15 @@ interface InputProps<Element extends HTMLElement = HTMLInputElement> extends Rea
   disabled?: boolean
 }
 
-interface InputElementProps {
+export interface InputElementProps {
   disabled?: boolean
-  inputSize?: 's' | 'm' | 'l' | 'auto' | undefined
+  inputSize?: 'xs' | 's' | 'm' | 'l' | 'auto' | undefined
   icon?: React.ReactElement
   copy?: boolean
   units?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
   borderless?: boolean
-  inputWidth?: 's' | 'xs' | undefined
+  inputWidth?: 'auto' | 's' | 'xs' | undefined
   tight?: boolean
 }
 
@@ -243,6 +243,8 @@ export const InputElement = styled.div<InputElementProps>`
   width: ${({ tight }) => (tight ? 'fit-content' : '100%')};
   min-width: ${({ inputWidth }) => {
     switch (inputWidth) {
+      case 'auto':
+        return null
       case 's':
         return '320px'
       case 'xs':
@@ -268,13 +270,15 @@ const InputContainer = styled.div<InputElementProps>`
     switch (inputSize) {
       case 'auto':
         return undefined
-      case 'l':
-        return '80px'
+      case 'xs':
+        return '32px'
       case 's':
         return '40px'
       case 'm':
       default:
         return '48px'
+      case 'l':
+        return '80px'
     }
   }};
   border: 1px solid

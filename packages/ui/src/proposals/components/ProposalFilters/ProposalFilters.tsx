@@ -110,6 +110,8 @@ export const ProposalFilters = ({
             dispatch({ type: 'change', field: 'lifetime', value: undefined })
             onApply({ ...filters, lifetime: undefined })
           }}
+          inputSize="xs"
+          inputWidth="auto"
         />
 
         <FilterSelect
