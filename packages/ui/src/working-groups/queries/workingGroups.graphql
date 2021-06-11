@@ -85,9 +85,15 @@ query getWorkingGroups {
   }
 }
 
-query getWorkers ($where: WorkerWhereInput) {
-  workers(where: $where) {
+query getWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int) {
+  workers(where: $where, offset: $offset, limit: $limit) {
     ...WorkerFields
+  }
+}
+
+query getWorkersCount ($where: WorkerWhereInput) {
+  workersConnection(where: $where) {
+    totalCount
   }
 }
 
