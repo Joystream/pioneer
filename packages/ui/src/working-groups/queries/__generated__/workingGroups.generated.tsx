@@ -90,9 +90,20 @@ export type GetWorkingGroupsQuery = {
 
 export type GetWorkersQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.WorkerWhereInput>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
+
+export type GetWorkersCountQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.WorkerWhereInput>
+}>
+
+export type GetWorkersCountQuery = {
+  __typename: 'Query'
+  workersConnection: { __typename: 'WorkerConnection'; totalCount: number }
+}
 
 export type GetDetailedWorkersQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.WorkerWhereInput>
@@ -646,8 +657,8 @@ export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGro
 export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>
 export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
 export const GetWorkersDocument = gql`
-  query getWorkers($where: WorkerWhereInput) {
-    workers(where: $where) {
+  query getWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
+    workers(where: $where, offset: $offset, limit: $limit) {
       ...WorkerFields
     }
   }
@@ -667,6 +678,8 @@ export const GetWorkersDocument = gql`
  * const { data, loading, error } = useGetWorkersQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -683,6 +696,45 @@ export function useGetWorkersLazyQuery(
 export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
+export const GetWorkersCountDocument = gql`
+  query getWorkersCount($where: WorkerWhereInput) {
+    workersConnection(where: $where) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetWorkersCountQuery__
+ *
+ * To run a query within a React component, call `useGetWorkersCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkersCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkersCountQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetWorkersCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkersCountQuery, GetWorkersCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkersCountQuery, GetWorkersCountQueryVariables>(GetWorkersCountDocument, options)
+}
+export function useGetWorkersCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkersCountQuery, GetWorkersCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkersCountQuery, GetWorkersCountQueryVariables>(GetWorkersCountDocument, options)
+}
+export type GetWorkersCountQueryHookResult = ReturnType<typeof useGetWorkersCountQuery>
+export type GetWorkersCountLazyQueryHookResult = ReturnType<typeof useGetWorkersCountLazyQuery>
+export type GetWorkersCountQueryResult = Apollo.QueryResult<GetWorkersCountQuery, GetWorkersCountQueryVariables>
 export const GetDetailedWorkersDocument = gql`
   query getDetailedWorkers($where: WorkerWhereInput) {
     workers(where: $where) {

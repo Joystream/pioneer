@@ -1,7 +1,8 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { createMemoryHistory } from 'history'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
+import { Route, Router, Switch } from 'react-router-dom'
 
 import { WorkingGroup } from '@/app/pages/WorkingGroups/WorkingGroup'
 import { seedMember } from '@/mocks/data'
@@ -30,6 +31,21 @@ describe('WorkingGroup', () => {
     expect(await screen.findByRole('heading', { name: /forum/i })).toBeDefined()
   })
 
+  it('Loads working group by url param', async () => {
+    renderPage()
+
+    await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
+    expect(await screen.findByText(/current budget/i)).toBeDefined()
+  })
+
+  it('Loads working group by url param with a hyphen', async () => {
+    renderPage('/working-groups/content-directory')
+
+    await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
+
+    expect(await screen.findByText(/current budget/i)).toBeDefined()
+  })
+
   it('Openings tab', async () => {
     seedOpening(OPENING_DATA, mockServer.server)
     seedUpcomingOpening(UPCOMING_OPENING, mockServer.server)
@@ -41,13 +57,17 @@ describe('WorkingGroup', () => {
     expect(await screen.findAllByRole('heading', { name: /^forum Working Group$/i })).toHaveLength(2)
   })
 
-  function renderPage() {
+  function renderPage(path = '/working-groups/forum') {
+    const history = createMemoryHistory()
+    history.push(path)
     render(
-      <MemoryRouter>
+      <Router history={history}>
         <MockQueryNodeProviders>
-          <WorkingGroup />
+          <Switch>
+            <Route path="/working-groups/:name" component={WorkingGroup} />
+          </Switch>
         </MockQueryNodeProviders>
-      </MemoryRouter>
+      </Router>
     )
   }
 })

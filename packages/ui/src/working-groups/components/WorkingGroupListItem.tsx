@@ -12,6 +12,7 @@ import { useMember } from '@/memberships/hooks/useMembership'
 import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
 import { useCountWorkers } from '@/working-groups/hooks/useCountWorkers'
 
+import { groupNameToURLParam } from '../model/workingGroupName'
 import { WorkingGroup } from '../types'
 
 import { WorkingGroupImage, WorkingGroupImageTag } from './WorkingGroupImage'
@@ -26,7 +27,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
 
   const { member: leader } = useMember(group.leaderId)
-  const groupAddress = `/working-groups/${group.name.toLowerCase()}`
+  const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
 
   return (
     <GroupItem>

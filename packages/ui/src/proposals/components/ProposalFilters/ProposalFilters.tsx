@@ -84,7 +84,7 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
       <Fields>
         <FilterSelect
           title="Type"
-          values={types}
+          options={types}
           value={type}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'type', value })
@@ -104,6 +104,8 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
             dispatch({ type: 'change', field: 'lifetime', value: undefined })
             onApply({ ...filters, lifetime: undefined })
           }}
+          inputSize="xs"
+          inputWidth="auto"
         />
 
         <SelectProposer
@@ -116,7 +118,7 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
 
         <FilterSelect
           title="Stage"
-          values={stages}
+          options={stages}
           value={stage}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'stage', value })
@@ -130,8 +132,7 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
 
 const Fields = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 8px;
   align-items: center;
-  gap: 16px;
-  max-width: 1600px;
 `

@@ -15,8 +15,8 @@ export const WorkersTableList = ({ workers, past }: WorkersTableListProps) => (
   <>
     {workers && (
       <List>
-        {workers.map((worker) => (
-          <ListItem key={worker.member.id}>
+        {workers.map((worker, index) => (
+          <ListItem key={index}>
             <WorkersTableListRow member={worker.member} past={past} />
           </ListItem>
         ))}

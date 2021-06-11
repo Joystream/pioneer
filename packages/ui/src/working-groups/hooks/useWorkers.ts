@@ -4,12 +4,12 @@ import { asWorkerBaseInfo, WorkerStatus, WorkerStatusTypename } from '@/working-
 
 import { useGetWorkersQuery } from '../queries'
 
-interface UseWorkersProps {
+export interface UseWorkersProps {
   groupId?: string
   statusIn?: WorkerStatus[]
 }
 
-const getStatusWhere = (statusIn?: WorkerStatus[]) => {
+export const getStatusWhere = (statusIn?: WorkerStatus[]) => {
   if (!statusIn) {
     return
   }

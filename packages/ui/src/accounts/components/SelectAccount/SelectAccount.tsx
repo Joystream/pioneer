@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { Select } from '../../../common/components/selects'
+import { Select, SelectedOption } from '../../../common/components/selects'
 import { useKeyring } from '../../../common/hooks/useKeyring'
 import { Address } from '../../../common/types'
 import { useMyAccounts } from '../../hooks/useMyAccounts'
@@ -33,6 +33,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
   const filteredOptions = useMemo(() => filterByText(options, search), [search, options])
   const keyring = useKeyring()
 
+  useEffect(() => setSelectedOption(selected), [selected])
   useEffect(() => {
     filteredOptions.length === 0 &&
       isValidAddress(search, keyring) &&
@@ -40,15 +41,26 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
       setSelectedOption(accountOrNamed(allAccounts, search, 'Unsaved account'))
   }, [filteredOptions, search, selectedOption])
 
+  const change = (selected: Account, close: () => void) => {
+    onChange(selected)
+    close()
+  }
+
   return (
     <Select
       selected={selectedOption}
-      onChange={onChange}
+      onChange={change}
       disabled={false}
-      renderSelected={(option) => <OptionAccount option={option} />}
+      renderSelected={renderSelected}
       placeholder="Select account or paste account address"
       renderList={(onOptionClick) => <OptionListAccount onChange={onOptionClick} options={filteredOptions} />}
       onSearch={(search) => setSearch(search)}
     />
   )
 })
+
+const renderSelected = (option: Account) => (
+  <SelectedOption>
+    <OptionAccount option={option} />
+  </SelectedOption>
+)

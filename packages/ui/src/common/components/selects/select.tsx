@@ -5,10 +5,10 @@ import { isDefined } from '../../utils'
 import { stopEvent } from '../../utils/events'
 import { Toggle } from '../buttons/Toggle'
 
-import { EmptyOption, SelectComponent, SelectedOption, SelectToggleButton } from './components'
+import { EmptyOption, SelectComponent, SelectToggleButton } from './components'
 import { SelectProps } from './types'
 
-export const Select = <T extends any>({
+export const Select = <T extends any, V extends any = T>({
   disabled,
   placeholder,
   selected,
@@ -17,11 +17,11 @@ export const Select = <T extends any>({
   onSearch,
   renderSelected,
   renderList,
-}: SelectProps<T>) => {
+}: SelectProps<T, V>) => {
   const [filterInput, setFilterInput] = useState('')
   const search = filterInput
   const [isOpen, toggleOpen] = useToggle()
-  const [selectedOption, setSelectedOption] = useState<T | undefined>(selected)
+  const [selectedOption, setSelectedOption] = useState<V | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
   const textInput = useRef<HTMLInputElement>(null)
 
@@ -31,12 +31,12 @@ export const Select = <T extends any>({
 
   const onOptionClick = useCallback(
     (option: T) => {
-      toggleOpen()
-      setSelectedOption(option)
-      onChange(option)
-      setFilterInput('')
+      onChange(option, () => {
+        toggleOpen()
+        setFilterInput('')
+      })
     },
-    [toggleOpen]
+    [toggleOpen, onChange]
   )
 
   useEffect(() => {
@@ -102,12 +102,12 @@ export const Select = <T extends any>({
             onChange={(t) => setFilterInput(t.target.value)}
           />
         ) : (
-          <SelectedOption>{isDefined(selectedOption) && renderSelected(selectedOption)}</SelectedOption>
+          isDefined(selectedOption) && renderSelected(selectedOption)
         )}
 
         <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />
       </Toggle>
-      {isOpen && renderList(onOptionClick)}
+      {isOpen && renderList(onOptionClick, toggleOpen)}
     </SelectComponent>
   )
 }

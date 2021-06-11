@@ -1,4 +1,6 @@
 export * from './components'
 export * from './types'
+export * from './FilterSelect'
+export * from './MultiSelect'
 export * from './select'
 export * from './SimpleSelect'
