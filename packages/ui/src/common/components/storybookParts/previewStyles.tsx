@@ -26,12 +26,12 @@ export const FullHeightGrid = styled.div`
   left: 0;
 `
 
-export const Row = styled.div`
+export const Row = styled.div<{ wide?: boolean }>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
   align-items: center;
-  width: fit-content;
+  width: ${({ wide }) => (wide ? '100%' : 'fit-content')};
 `
 
 export const Column = styled.div`

@@ -1,9 +1,9 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { Column, ModalBlock, Row } from '../storybookParts/previewStyles'
+import { Row, TemplateBlock } from '../storybookParts/previewStyles'
 
-import { SimpleSelect, FilterSelect } from '.'
+import { FilterSelect, SimpleSelect } from '.'
 
 export default {
   title: 'Common/Forms/Select',
@@ -13,16 +13,26 @@ export default {
 const Template: Story<{ values: string[] }> = ({ values }) => {
   const [value, setValue] = useState<string | null>(null)
   return (
-    <ModalBlock>
-      <Row>
-        <Column>
-          <SimpleSelect title="Simple Select" values={values} value={value} onChange={setValue} />
-        </Column>
-        <Column>
-          <FilterSelect title="Filter Select" values={values} value={value} onChange={setValue} />
-        </Column>
+    <TemplateBlock>
+      <Row wide>
+        <SimpleSelect title="Simple Select" values={values} value={value} onChange={setValue} />
       </Row>
-    </ModalBlock>
+      <Row wide>
+        <SimpleSelect title="Simple Select" values={values} value={value} onChange={setValue} selectSize="m" />
+      </Row>
+      <Row wide>
+        <SimpleSelect title="Simple Select" values={values} value={value} onChange={setValue} selectSize="l" />
+      </Row>
+      <Row wide>
+        <FilterSelect title="Filter Select" values={values} value={value} onChange={setValue} />
+      </Row>
+      <Row wide>
+        <FilterSelect title="Filter Select" values={values} value={value} onChange={setValue} selectSize="m" />
+      </Row>
+      <Row wide>
+        <FilterSelect title="Filter Select" values={values} value={value} onChange={setValue} selectSize="l" />
+      </Row>
+    </TemplateBlock>
   )
 }
 

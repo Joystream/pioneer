@@ -80,6 +80,7 @@ export const BorderRad = {
 }
 
 export const Sizes = {
+  simpleSelectHeight: '48px',
   selectHeight: '80px',
   accountHeight: '94px',
 }

@@ -139,8 +139,7 @@ export const ProposalFilters = ({
 
 const Fields = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 16px;
   align-items: center;
-  gap: 16px;
-  max-width: 1600px;
 `

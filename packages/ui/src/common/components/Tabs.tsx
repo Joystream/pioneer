@@ -93,7 +93,7 @@ const TabContainer = styled.button<TabActiveProps>`
     bottom: -2px;
     width: 100%;
     height: 2px;
-    background: ${Colors.Blue[500]};
+    background-color: ${Colors.Blue[500]};
     transform: scaleX(0);
     transition: ${Transitions.all};
   }
@@ -119,7 +119,7 @@ const TabContainer = styled.button<TabActiveProps>`
         @keyframes showTabUnderline {
           from {
             transform: scaleX(0);
-            background: ${Colors.Blue[500]};
+            background-color: ${Colors.Blue[500]};
           }
           to {
             transform: scaleX(1);

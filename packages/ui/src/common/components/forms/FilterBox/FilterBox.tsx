@@ -53,6 +53,6 @@ const ClearButton = styled(StyledLink)`
 `
 
 const Fields = styled.div`
-  background: ${Colors.Black[50]};
+  background-color: ${Colors.Black[50]};
   padding: 16px;
 `

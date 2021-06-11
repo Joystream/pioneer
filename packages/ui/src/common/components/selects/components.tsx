@@ -33,10 +33,15 @@ interface SelectToggleButtonProps {
 }
 
 export const SelectToggleButton = ({ isOpen, disabled, onToggleClick }: SelectToggleButtonProps) => (
-  <ToggleButton isOpen={isOpen} className="ui-toggle" disabled={disabled} onClick={onToggleClick}>
+  <ToggleButtonStyled isOpen={isOpen} className="ui-toggle" disabled={disabled} onClick={onToggleClick}>
     <Arrow direction="down" />
-  </ToggleButton>
+  </ToggleButtonStyled>
 )
+
+const ToggleButtonStyled = styled(ToggleButton)`
+  width: 32px;
+  height: 100%;
+`
 
 export const SelectedOption = styled.div`
   display: grid;
@@ -85,7 +90,7 @@ export const SelectComponent = styled.div`
   &:hover > :first-child,
   &:focus-within > :first-child {
     border-color: ${Colors.Blue[400]};
-    box-shadow: 0 0 8px rgba(129, 126, 255, 0.4);
+    box-shadow: ${Shadows.focusDefault};
   }
 `
 
@@ -112,7 +117,7 @@ export const OptionComponent = styled.div`
   width: 100%;
   height: 100%;
   border: none;
-  background: ${Colors.White};
+  background-color: ${Colors.White};
   cursor: pointer;
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};

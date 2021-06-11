@@ -75,7 +75,7 @@ const SwitchMember = styled.div`
   &:hover,
   &:focus {
     outline: none;
-    background: ${Colors.Black[600]};
+    background-color: ${Colors.Black[600]};
 
     ${MemberDarkHover}
   }
