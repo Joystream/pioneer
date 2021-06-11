@@ -7,6 +7,7 @@ import { Colors, Shadows } from '@/common/constants'
 import { DateRange, PartialDateRange } from '@/common/types/Dates'
 import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
 
+import { CalendarIcon } from '../../icons/CalendarIcon'
 import { Calendar } from '../Calendar'
 import { CALENDAR_WRAP_SIZE } from '../Calendar/components'
 import { FilterLabel } from '../FilterBox'
@@ -63,7 +64,7 @@ export const DatePicker = ({
   return (
     <DatePickerContainer ref={container} onMouseDown={() => !isOpen && toggleOpen(true)}>
       {title && <FilterLabel>{title}</FilterLabel>}
-      <DatePickerInput tight inputWidth={inputWidth} inputSize={inputSize}>
+      <DatePickerInput tight inputWidth={inputWidth} inputSize={inputSize} icon={<CalendarIcon />} iconRight>
         <InputText placeholder="-" value={dateString} readOnly />
         {isOpen && (
           <DatePickerPopup>
