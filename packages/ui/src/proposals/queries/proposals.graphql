@@ -1,0 +1,3 @@
+fragment ProposalFields on Proposal {
+  id
+}
