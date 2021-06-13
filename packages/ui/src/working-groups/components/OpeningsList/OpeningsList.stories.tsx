@@ -2,8 +2,9 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { getMockAsOpening } from '@/mocks/data/mockOpenings'
 import { getMockAsUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
+
+import { getMockAsOpening } from '../../../mocks/data/seedOpenings'
 
 import { OpeningsList, OpeningsListProps } from './OpeningsList'
 

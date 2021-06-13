@@ -6,10 +6,10 @@ import { Route, Router, Switch } from 'react-router-dom'
 
 import { WorkingGroup } from '@/app/pages/WorkingGroups/WorkingGroup'
 import { seedMember } from '@/mocks/data'
-import { seedOpening, seedOpeningStatuses } from '@/mocks/data/mockOpenings'
-import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
+import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 
+import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, OPENING_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'

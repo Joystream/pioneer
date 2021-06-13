@@ -1,7 +1,7 @@
 import faker from 'faker'
 
 import { proposalStatuses } from '../../../src/proposals/model/status'
-import { proposalTypes } from '../../../src/proposals/model/type'
+import { proposalDetails } from '@/proposals/model/details'
 
 import { Mocks } from './types'
 import { randomFromRange } from './utils'
@@ -13,7 +13,7 @@ let nextId = 0
 const generateProposal = (mocks: Mocks) => {
   const member = mocks.members[randomFromRange(0, mocks.members.length - 1)]
   const status = proposalStatuses[randomFromRange(0, proposalStatuses.length - 1)]
-  const details = proposalTypes[randomFromRange(0, proposalTypes.length - 1)]
+  const details = proposalDetails[randomFromRange(0, proposalDetails.length - 1)]
 
   const createdAt = faker.date.recent(20)
 
@@ -21,10 +21,10 @@ const generateProposal = (mocks: Mocks) => {
     id: String(nextId++),
     title: faker.random.words(4),
     status,
-    statusSetAtTime: faker.date.between(createdAt, new Date()),
+    statusSetAtTime: faker.date.between(createdAt, new Date()).toISOString(),
     details,
     creatorId: member.id,
-    createdAt,
+    createdAt: createdAt.toISOString(),
   }
 }
 

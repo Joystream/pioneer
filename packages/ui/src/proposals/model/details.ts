@@ -1,4 +1,4 @@
-export const proposalTypes = [
+export const proposalDetails = [
   'signal',
   'runtimeUpgrade',
   'fundingRequest',

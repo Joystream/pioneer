@@ -1,9 +1,10 @@
 import { error } from '@/common/logger'
-import { mockProposals } from '@/mocks/data/mockProposals'
 import { useMockDelay } from '@/mocks/hooks/useMockDelay'
 
+import { seedProposals } from '../../mocks/data/seedProposals'
+
 export const useProposals = () => {
-  const { loading, data, error: err } = useMockDelay({ proposals: mockProposals })
+  const { loading, data, error: err } = useMockDelay({ proposals: seedProposals })
 
   if (err) {
     error(err)

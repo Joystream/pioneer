@@ -14,11 +14,7 @@ export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 
   }
 }
 
-export const mockMembers: MockMember[] = rawMembers.map((rawMember) => {
-  return {
-    ...rawMember,
-  }
-})
+export const mockMembers: MockMember[] = rawMembers.map((rawMember) => rawMember)
 
 export const seedMember = (member: MockMember, server: any) => {
   const temporary: any = { ...member }
