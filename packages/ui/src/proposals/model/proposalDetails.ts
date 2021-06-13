@@ -1,4 +1,6 @@
-export const proposalDetails = [
+import { ProposalDetails, ProposalStatus } from '@/proposals/types'
+
+export const proposalDetails: ProposalDetails[] = [
   'signal',
   'runtimeUpgrade',
   'fundingRequest',
@@ -25,3 +27,9 @@ export const proposalDetails = [
   'unlockBlogPost',
   'veto',
 ]
+
+export const typenameToProposalDetails = (typename: string): ProposalDetails => {
+  const details = typename.replace('ProposalDetails', '')
+  console.log(details, details.charAt(0).toLowerCase() + status.slice(1))
+  return (details.charAt(0).toLowerCase() + details.slice(1)) as ProposalDetails
+}

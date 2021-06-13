@@ -1,17 +1,17 @@
-import { error } from '@/common/logger'
-import { useMockDelay } from '@/mocks/hooks/useMockDelay'
+import { useGetProposalsQuery } from '@/proposals/queries'
+import { asProposal, Proposal } from '@/proposals/types'
 
-import { seedProposals } from '../../mocks/data/seedProposals'
+interface UseProposals {
+  isLoading: boolean
+  proposals: Proposal[]
+}
 
-export const useProposals = () => {
-  const { loading, data, error: err } = useMockDelay({ proposals: seedProposals })
+export const useProposals = (): UseProposals => {
+  const { loading, data } = useGetProposalsQuery()
 
-  if (err) {
-    error(err)
-  }
-
+  console.log('llellele', data)
   return {
     isLoading: loading,
-    proposals: data?.proposals ?? [],
+    proposals: data && data.proposals ? data.proposals.map(asProposal) : [],
   }
 }

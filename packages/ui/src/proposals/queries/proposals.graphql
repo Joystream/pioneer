@@ -13,3 +13,9 @@ fragment ProposalFields on Proposal {
   }
   createdAt
 }
+
+query getProposals($where: ProposalWhereInput) {
+  proposals(where: $where) {
+    ...ProposalFields
+  }
+}

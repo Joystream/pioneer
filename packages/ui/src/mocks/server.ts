@@ -14,6 +14,7 @@ import {
   seedUpcomingOpenings,
   seedWorkers,
   seedWorkingGroups,
+  seedProposals,
 } from './data'
 import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
 
@@ -70,6 +71,7 @@ export const makeServer = (environment = 'development') => {
               upcomingWorkingGroupOpeningByUniqueInput: getUniqueResolver('UpcomingWorkingGroupOpening'),
               rewardPaidEvents: getWhereResolver('RewardPaidEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
+              proposals: getWhereResolver('Proposal'),
             },
           },
         })
@@ -88,6 +90,7 @@ export const makeServer = (environment = 'development') => {
       seedWorkers(server)
       seedRewardPaidEvents(server)
       seedBudgetSpendingEvents(server)
+      seedProposals(server)
     },
   })
 }
