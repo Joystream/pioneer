@@ -4,6 +4,7 @@ import path from 'path'
 import { generateAllEvents } from './generators/generateEvents'
 import { generateMembers } from './generators/generateMembers'
 import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
+import { generateProposals } from './generators/generateProposals'
 import { generateWorkers } from './generators/generateWorkers'
 import { generateWorkingGroups } from './generators/generateWorkingGroups'
 import { Mocks } from './generators/types'
@@ -20,6 +21,7 @@ const main = () => {
     openings: [],
     upcomingOpenings: [],
     workers: [],
+    proposals: [],
   }
 
   mocks.members = generateMembers()
@@ -27,6 +29,7 @@ const main = () => {
   Object.assign(mocks, generateOpeningsAndUpcomingOpenings(mocks))
   Object.assign(mocks, generateWorkers(mocks))
   Object.assign(mocks, generateAllEvents(mocks))
+  mocks.proposals = generateProposals(mocks)
 
   Object.entries(mocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }

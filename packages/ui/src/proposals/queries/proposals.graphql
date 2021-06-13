@@ -1,3 +1,15 @@
 fragment ProposalFields on Proposal {
   id
+  title
+  status {
+    __typename
+  }
+  statusSetAtTime
+  details {
+    __typename
+  }
+  creator {
+    ...MemberFields
+  }
+  createdAt
 }
