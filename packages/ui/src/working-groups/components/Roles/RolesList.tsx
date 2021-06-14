@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { ButtonLink } from '@/common/components/buttons'
 import { ContextMenu } from '@/common/components/ContextMenu'
 import { List, ListItem } from '@/common/components/List'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
@@ -16,13 +15,13 @@ import { Worker } from '@/working-groups/types'
 
 import { workerRoleTitle } from '../../helpers'
 import {
+  OpenItemSummaryColumn,
   ToggleableItemInfo,
   ToggleableItemInfoTop,
   ToggleableItemSummary,
   ToggleableItemTitle,
-  ToggleableSubscriptionWide,
   ToggleableItemWrap,
-  OpenItemSummaryColumn,
+  ToggleableSubscriptionWide,
 } from '../ToggleableItemStyledComponents'
 
 export interface RolesListProps {
