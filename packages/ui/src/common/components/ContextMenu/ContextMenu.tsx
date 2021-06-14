@@ -1,6 +1,8 @@
 import item from '@polkadot/ui-keyring/options/item'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
+
+import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 
 import { Animations, BorderRad, Colors, Shadows, Transitions } from '../../constants'
 import { ButtonGhost, ButtonLink } from '../buttons'
@@ -25,19 +27,7 @@ export const ContextMenu = ({ align, items }: ContextMenuProps & ContextMenuAlig
   }
 
   const container = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (!isMenuVisible) return
-    const outsideClickListener = (event: MouseEvent) => {
-      if (!event.target) return
-      const target = event.target as Node
-      const clickedOutside = !container.current?.contains(target)
-      if (!clickedOutside) return
-      setMenuVisible(false)
-      window.removeEventListener('mousedown', outsideClickListener)
-    }
-    addEventListener('mousedown', outsideClickListener)
-    return () => removeEventListener('mousedown', outsideClickListener)
-  }, [isMenuVisible])
+  useOutsideClick(container, isMenuVisible, setMenuVisible)
 
   return (
     <ContextMenuContainer ref={container}>
