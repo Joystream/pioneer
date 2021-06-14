@@ -12,6 +12,6 @@ export const usePastProposals = ({ filters }: UsePastProposalsProps) => {
 
   return {
     types,
-    stages
+    stages,
   }
 }
