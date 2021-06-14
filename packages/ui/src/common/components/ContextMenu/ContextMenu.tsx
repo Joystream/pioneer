@@ -8,8 +8,13 @@ import { Animations, BorderRad, Colors, Shadows, Transitions } from '../../const
 import { ButtonGhost, ButtonLink } from '../buttons'
 import { KebabMenuIcon } from '../icons'
 
+export interface ContextMenuItem {
+  text: string
+  onClick: () => void
+}
+
 export interface ContextMenuProps {
-  items: { text: string; onClick: () => void }[]
+  items: ContextMenuItem[]
 }
 
 export interface ContextMenuAlignmentProps {
