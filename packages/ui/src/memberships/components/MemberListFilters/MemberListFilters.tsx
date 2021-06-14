@@ -46,7 +46,7 @@ export const MemberListEmptyFilter: MemberListFilter = {
   onlyFounder: false,
 }
 
-const isFilterEmpty = objectEquals(MemberListEmptyFilter, { deep: true })
+const isFilterEmpty = objectEquals(MemberListEmptyFilter, { depth: 2 })
 
 export interface MemberListFiltersProps {
   searchSlot?: React.RefObject<HTMLDivElement>

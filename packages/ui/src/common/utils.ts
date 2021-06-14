@@ -11,23 +11,31 @@ export const isRecord = (something: unknown): something is Record<string, any> =
 
 interface EqualsOption {
   checkExtraKeys?: boolean
-  deep?: boolean
+  depth?: boolean | number
 }
 
 export const objectEquals = <T extends Record<string, any>>(
   reference: T,
-  { checkExtraKeys = false, deep = false }: EqualsOption = {}
+  { checkExtraKeys = false, depth = 1 }: EqualsOption = {}
 ): ((compared: T) => boolean) => {
+  const equalsOption = { checkExtraKeys, depth: isNumber(depth) ? depth - 1 : depth }
   const expectedKeys: Array<keyof T> = Object.keys(reference)
   return (compared) =>
     (!checkExtraKeys || expectedKeys.length === Object.keys(compared).length) &&
-    expectedKeys.every((key) => (deep ? equals(compared[key])(reference[key]) : compared[key] === reference[key]))
+    expectedKeys.every((key) => equals(compared[key], equalsOption)(reference[key]))
 }
 
-export const equals = <T extends any>(reference: T, options: EqualsOption = {}): ((compared: T) => boolean) =>
-  isRecord(reference)
-    ? (objectEquals(reference, options) as (compared: T) => boolean)
-    : (compared: T) => compared === reference
+export const equals = <T extends any>(
+  reference: T,
+  { depth = 1, ...option }: EqualsOption = {}
+): ((compared: T) => boolean) => {
+  if (depth > 0 && isRecord(reference)) {
+    const isEqual = objectEquals(reference, { depth, ...option })
+    return (compared) => isRecord(compared) && isEqual(compared)
+  } else {
+    return (compared) => compared === reference
+  }
+}
 
 export const intersperse = <T extends any, S extends any>(list: T[], separator: S): (T | S)[] =>
   list.length < 2 ? list : [list[0], ...list.slice(1).flatMap((item) => [separator, item])]
