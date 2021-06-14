@@ -102,7 +102,7 @@ export const stubQuery = (api: UseApi, querySubPath: string, response: unknown) 
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: ({} as unknown) as ApiRx,
+    api: {} as unknown as ApiRx,
     isConnected: true,
   }
   return api

@@ -20,17 +20,14 @@ export function Accounts() {
   const balances = useMyBalances()
   const [sortBy, setSortBy] = useState<SortKey>('name')
   const [isDescending, setDescending] = useState(false)
-  const visibleAccounts = useMemo(() => filterAccounts(allAccounts, isDisplayAll, balances), [
-    JSON.stringify(allAccounts),
-    isDisplayAll,
-    hasAccounts,
-  ])
-  const sortedAccounts = useMemo(() => sortAccounts(visibleAccounts, balances, sortBy, isDescending), [
-    visibleAccounts,
-    balances,
-    sortBy,
-    isDescending,
-  ])
+  const visibleAccounts = useMemo(
+    () => filterAccounts(allAccounts, isDisplayAll, balances),
+    [JSON.stringify(allAccounts), isDisplayAll, hasAccounts]
+  )
+  const sortedAccounts = useMemo(
+    () => sortAccounts(visibleAccounts, balances, sortBy, isDescending),
+    [visibleAccounts, balances, sortBy, isDescending]
+  )
 
   if (!hasAccounts) {
     return <Loading />

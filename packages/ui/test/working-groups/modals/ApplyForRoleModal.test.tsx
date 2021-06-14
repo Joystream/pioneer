@@ -77,7 +77,7 @@ describe('UI: ApplyForRoleModal', () => {
     seedOpeningStatuses(server.server)
     seedOpening(OPENING_DATA, server.server)
 
-    const fields = (server.server?.schema.first('WorkingGroupOpening') as unknown) as WorkingGroupOpeningFieldsFragment
+    const fields = server.server?.schema.first('WorkingGroupOpening') as unknown as WorkingGroupOpeningFieldsFragment
     const opening = asWorkingGroupOpening(fields)
     useModal.modalData = { opening }
     useMyMemberships.setActive(getMember('alice'))

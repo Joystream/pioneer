@@ -11,7 +11,7 @@ export const useProposers = ({ search, limit }: { search: string; limit: number 
 
   return {
     isLoading: loading,
-    proposers: data && ((data.memberships as unknown) as Member[]),
+    proposers: data && (data.memberships as unknown as Member[]),
     isSearch: !!search && !loading,
   }
 }

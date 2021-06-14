@@ -26,7 +26,7 @@ describe('WorkingGroupListItem', () => {
     seedWorkingGroups(mockServer.server)
     seedOpeningStatuses(mockServer.server)
 
-    group = (mockServer.server?.schema.first('WorkingGroup')?.attrs as unknown) as WorkingGroup
+    group = mockServer.server?.schema.first('WorkingGroup')?.attrs as unknown as WorkingGroup
   })
 
   it('Loading', () => {

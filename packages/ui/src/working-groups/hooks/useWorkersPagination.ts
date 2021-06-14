@@ -23,10 +23,10 @@ export const useWorkersPagination = ({ groupId: group_eq, statusIn, page = 1 }: 
   const { loading: loadingWorkers, data: workersData } = useGetWorkersQuery({ variables })
   const { loading: loadingCount, data: countData } = useGetWorkersCountQuery({ variables })
 
-  const workers = useMemo(() => workersData && workersData.workers && workersData.workers.map(asWorkerBaseInfo), [
-    workersData,
-    loadingWorkers,
-  ])
+  const workers = useMemo(
+    () => workersData && workersData.workers && workersData.workers.map(asWorkerBaseInfo),
+    [workersData, loadingWorkers]
+  )
   const totalCount = countData?.workersConnection.totalCount ?? 0
 
   return {

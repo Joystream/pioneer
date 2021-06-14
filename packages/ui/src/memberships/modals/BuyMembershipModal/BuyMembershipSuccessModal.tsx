@@ -35,7 +35,7 @@ export const BuyMembershipSuccessModal = ({ onClose, member, memberId }: Props) 
       <ModalBody>
         <TextMedium>You have just successfully created a new membership</TextMedium>
         <MemberRow>
-          <MemberInfo member={(member as unknown) as Member} />
+          <MemberInfo member={member as unknown as Member} />
         </MemberRow>
       </ModalBody>
       <ModalFooter>

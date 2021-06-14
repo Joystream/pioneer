@@ -33,7 +33,7 @@ export const getMockAsUpcomingOpening = (index = 0) => {
       id: '1',
       number: 1234,
       timestamp: '',
-      network: ('OLYMPIA' as unknown) as Network,
+      network: 'OLYMPIA' as unknown as Network,
     },
     ...rawOpenings[index],
     group: {

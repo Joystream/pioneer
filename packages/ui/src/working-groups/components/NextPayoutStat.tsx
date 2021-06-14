@@ -15,10 +15,10 @@ interface Props {
 
 export const NextPayoutStat = ({ workers }: Props) => {
   const blockNumber = useCurrentBlockNumber()
-  const nextPayout = useMemo(() => blockNumber && getNextPayout(workers, blockNumber), [
-    workers.length,
-    blockNumber?.toNumber(),
-  ])
+  const nextPayout = useMemo(
+    () => blockNumber && getNextPayout(workers, blockNumber),
+    [workers.length, blockNumber?.toNumber()]
+  )
 
   return (
     <StatisticItem title={'Next payout in'}>

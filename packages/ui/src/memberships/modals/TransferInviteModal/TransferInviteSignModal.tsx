@@ -31,11 +31,10 @@ interface Props {
 
 export function TransferInviteSignModal({ onClose, sourceMember, targetMember, amount, onDone, signer }: Props) {
   const { api } = useApi()
-  const transaction = useMemo(() => api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount), [
-    sourceMember.id,
-    targetMember.id,
-    amount,
-  ])
+  const transaction = useMemo(
+    () => api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount),
+    [sourceMember.id, targetMember.id, amount]
+  )
   const signerAddress = signer.address
   const { paymentInfo, send, status } = useSignAndSendTransaction({
     transaction,

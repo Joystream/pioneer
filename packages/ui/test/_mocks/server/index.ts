@@ -11,7 +11,7 @@ export function setupMockServer(): MockServer {
 
   beforeEach(() => {
     mock.server = makeServer('test')
-    fixAssociations((mock.server as unknown) as any)
+    fixAssociations(mock.server as unknown as any)
   })
 
   afterEach(() => {

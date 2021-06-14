@@ -18,11 +18,10 @@ interface MembersSectionProps {
 export const MembersSection = ({ title, members }: MembersSectionProps) => {
   const [sortBy, setSortBy] = useState<SortKey>('handle')
   const [isDescending, setDescending] = useState(false)
-  const sortedMemberships = useMemo(() => sortMemberships(members, sortBy, isDescending), [
-    members,
-    sortBy,
-    isDescending,
-  ])
+  const sortedMemberships = useMemo(
+    () => sortMemberships(members, sortBy, isDescending),
+    [members, sortBy, isDescending]
+  )
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
   const Header = ({ children, sortKey }: HeaderProps) => {
     return (
