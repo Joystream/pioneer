@@ -16,6 +16,6 @@ export const useGroupDebt = (groupId: string) => {
   }
 
   return {
-    debt: new BN(data.workers.reduce((a, b) => a + b.missingRewardAmount, 0)),
+    debt: data.workers.reduce((a, b) => a.add(new BN(b.missingRewardAmount)), new BN(0)),
   }
 }
