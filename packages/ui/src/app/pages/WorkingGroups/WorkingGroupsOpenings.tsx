@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react'
 
+import { PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
+import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -14,8 +15,6 @@ import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
 import { LoadingOpenings } from '@/working-groups/components/OpeningsList/LoadingOpenings'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
-
-import { AppPage } from '../../components/AppPage'
 
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 
@@ -44,12 +43,14 @@ export const WorkingGroupsOpenings = () => {
   ]
 
   return (
-    <AppPage>
-      <PageHeader>
-        <PageTitle>Working Groups</PageTitle>
-        <WorkingGroupsTabs />
-      </PageHeader>
-      <ContentWithSidepanel>
+    <PageLayout
+      header={
+        <PageHeader>
+          <PageTitle>Working Groups</PageTitle>
+          <WorkingGroupsTabs />
+        </PageHeader>
+      }
+      main={
         <MainPanel ref={sideNeighborRef}>
           <Statistics>
             <MyRolesStat />
@@ -62,10 +63,12 @@ export const WorkingGroupsOpenings = () => {
             {activeTab === 'UPCOMING' && <LoadingOpenings isLoading={upcomingLoading} openings={upcomingOpenings} />}
           </ContentWithTabs>
         </MainPanel>
+      }
+      lowSidebar={
         <SidePanel neighbor={sideNeighborRef}>
           <ActivitiesBlock activities={activities} label="Working Groups Activities" />
         </SidePanel>
-      </ContentWithSidepanel>
-    </AppPage>
+      }
+    />
   )
 }

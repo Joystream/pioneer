@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { AppPage } from '@/app/components/AppPage'
+import { PageLayout } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
@@ -29,26 +29,30 @@ export const MyApplications = () => {
   }
 
   return (
-    <AppPage>
-      <PageHeader>
-        <PageTitle>Working Groups</PageTitle>
-        <WorkingGroupsTabs />
-      </PageHeader>
-      <MainPanel>
-        {displayLoadingOrEmptyState()}
-        {currentApplications?.length ? (
-          <ContentWithTabs>
-            <Label>Current applications</Label>
-            <ApplicationsList applications={currentApplications} />
-          </ContentWithTabs>
-        ) : null}
-        {pastApplications?.length ? (
-          <ContentWithTabs>
-            <Label>Past applications</Label>
-            <ApplicationsList applications={pastApplications} />
-          </ContentWithTabs>
-        ) : null}
-      </MainPanel>
-    </AppPage>
+    <PageLayout
+      header={
+        <PageHeader>
+          <PageTitle>Working Groups</PageTitle>
+          <WorkingGroupsTabs />
+        </PageHeader>
+      }
+      main={
+        <MainPanel>
+          {displayLoadingOrEmptyState()}
+          {currentApplications?.length ? (
+            <ContentWithTabs>
+              <Label>Current applications</Label>
+              <ApplicationsList applications={currentApplications} />
+            </ContentWithTabs>
+          ) : null}
+          {pastApplications?.length ? (
+            <ContentWithTabs>
+              <Label>Past applications</Label>
+              <ApplicationsList applications={pastApplications} />
+            </ContentWithTabs>
+          ) : null}
+        </MainPanel>
+      }
+    />
   )
 }

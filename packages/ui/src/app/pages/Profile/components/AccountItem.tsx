@@ -48,7 +48,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         <AccountControls>
           <TransferButton to={account} />
           <TransferButton from={account} disabled={isSendDisabled} />
-          <DropDownButton onClick={setDropped} isDropped={isDropped} size="medium" />
+          <DropDownButton onClick={setDropped} isDropped={isDropped} />
         </AccountControls>
       </AccountItemWrap>
       <StyledDropDown isDropped={isDropped}>
@@ -65,7 +65,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
 
 export const AccountItemWrap = styled.div`
   display: grid;
-  grid-template-columns: 276px repeat(4, 128px) 136px;
+  grid-template-columns: 276px repeat(4, 128px) 104px;
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: end;
@@ -78,9 +78,9 @@ export const AccountItemWrap = styled.div`
 
 const AccountControls = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 40px);
-  grid-template-rows: 40px;
-  grid-column-gap: 8px;
+  grid-template-columns: repeat(3, 32px);
+  grid-template-rows: 32px;
+  grid-column-gap: 4px;
 `
 const StyledDropDown = styled(DropDownToggle)`
   padding: 16px 16px 0 16px;

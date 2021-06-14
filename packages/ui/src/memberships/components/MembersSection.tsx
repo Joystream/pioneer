@@ -38,7 +38,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
 
   return (
     <>
-      <MembershipsTableTitle>{title}</MembershipsTableTitle>
+      <h6>{title}</h6>
 
       <MembershipsGroup>
         <MembershipsHeaders colLayout={colLayoutByType('MyMember')}>
@@ -67,9 +67,6 @@ interface HeaderProps {
   sortKey?: SortKey
 }
 
-const MembershipsTableTitle = styled.h6`
-  margin-top: 4px;
-`
 const MembershipsGroup = styled.div`
   display: grid;
   grid-template-columns: 1fr;

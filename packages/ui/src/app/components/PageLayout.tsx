@@ -1,51 +1,117 @@
 import React, { ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { PageContent } from '../../common/components/page/PageContent'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { breadcrumbsOptions } from '../constants/breadcrumbs'
 
-interface AppPageProps extends PageLayoutProps, PageLayoutItemsProps {
+export interface PageLayoutProps {
   lastBreadcrumb?: string
-}
-
-interface PageLayoutItemsProps {
   header?: ReactNode
-  content?: ReactNode
-  sidebar?: ReactNode
+  main?: ReactNode
+  lowSidebar?: ReactNode
+  highSidebar?: ReactNode
   footer?: ReactNode
 }
 
-interface PageLayoutProps {
-  rowGap?: 's' | 'm'
-  columnGap?: 's' | 'm'
-}
-
-export const PageLayout = ({ header, content, sidebar, footer, lastBreadcrumb, rowGap }: AppPageProps) => (
+export const PageLayout = ({
+  header,
+  main: content,
+  lowSidebar,
+  highSidebar,
+  footer,
+  lastBreadcrumb,
+}: PageLayoutProps) => (
   <PageContent>
     <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
-    <PageLayoutComponent rowGap={rowGap} header={header} content={content} sidebar={sidebar} footer={footer}>
+    <PageLayoutComponent
+      header={header}
+      main={content}
+      lowSidebar={lowSidebar}
+      highSidebar={highSidebar}
+      footer={footer}
+    >
       {header}
       {content}
-      {sidebar}
+      {lowSidebar}
+      {highSidebar}
       {footer}
     </PageLayoutComponent>
   </PageContent>
 )
 
-export const PageLayoutComponent = styled.div<PageLayoutProps & PageLayoutItemsProps>`
-  display: grid;
-  align-items: start;
+const SidebarWidth = '280px'
+
+const PageLayoutDefault = css`
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr;
-  grid-row-gap: ${({ rowGap }) => {
-    switch (rowGap) {
-      case 's':
-        return '16px'
-      case 'm':
-      default:
-        return '24px'
+  grid-template-areas:
+    'header'
+    'content';
+`
+
+const PageLayoutWithFooter = css`
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'header'
+    'content'
+    'footer';
+`
+
+const PageLayoutWithLowSidebar = css`
+  grid-template-columns: 1fr ${SidebarWidth};
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'header header'
+    'content sidebar';
+`
+
+const PageLayoutWithLowSidebarAndFooter = css`
+  grid-template-columns: 1fr ${SidebarWidth};
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'header header'
+    'content sidebar'
+    'footer sidebar';
+`
+
+const PageLayoutWithHighSidebar = css`
+  grid-template-columns: 1fr ${SidebarWidth};
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'header sidebar'
+    'content sidebar';
+`
+
+const PageLayoutWithHighSidebarAndFooter = css`
+  grid-template-columns: 1fr ${SidebarWidth};
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'header sidebar'
+    'content sidebar'
+    'footer sidebar';
+`
+
+export const PageLayoutComponent = styled.div<PageLayoutProps>`
+  display: grid;
+  position: relative;
+  align-items: start;
+  grid-row-gap: 24px;
+  width: 100%;
+  ${(props) => {
+    if (props.main && !props.lowSidebar && !props.highSidebar && !props.footer) {
+      return PageLayoutDefault
+    } else if (props.main && props.footer && !props.lowSidebar && !props.highSidebar) {
+      return PageLayoutWithFooter
+    } else if (props.main && props.lowSidebar && !props.highSidebar && !props.footer) {
+      return PageLayoutWithLowSidebar
+    } else if (props.main && props.lowSidebar && props.footer && !props.highSidebar) {
+      return PageLayoutWithLowSidebarAndFooter
+    } else if (props.main && props.highSidebar && !props.lowSidebar && !props.footer) {
+      return PageLayoutWithHighSidebar
+    } else if (props.main && props.highSidebar && props.footer && !props.lowSidebar) {
+      return PageLayoutWithHighSidebarAndFooter
     }
   }};
-  width: 100%;
 `

@@ -14,7 +14,7 @@ export const colLayoutByType = (kind: MemberItemKind) => {
 
   return kind === 'Member'
     ? `${id}px ${name}px ${concil}px ${roles}px ${count}px ${count}px ${total}px ${total}px`
-    : `${name}px ${roles}px ${count}px ${count}px 96px 76px 54px`
+    : `${name}px ${roles}px ${count}px ${count}px 96px 80px 46px`
 }
 
 export const Info = styled.span`

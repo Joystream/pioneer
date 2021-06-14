@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 
-import { AppPage } from '@/app/components/AppPage'
+import { PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageContent'
@@ -20,27 +20,30 @@ export const Proposals = () => {
   const activities = useActivities()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   return (
-    <AppPage>
-      <PageHeader>
-        <PageTitle>Proposals</PageTitle>
-        <AddProposalButton />
-        <ProposalsTabs />
-      </PageHeader>
-
-      {proposals.length || isLoading ? (
-        <ContentWithSidepanel>
-          <MainPanel ref={sideNeighborRef}>
-            {isLoading ? <Loading /> : <ProposalList proposals={proposals} />}
+    <PageLayout
+      header={
+        <PageHeader>
+          <PageTitle>Proposals</PageTitle>
+          <AddProposalButton />
+          <ProposalsTabs />
+        </PageHeader>
+      }
+      main={
+        proposals.length || isLoading ? (
+          <ContentWithSidepanel>
+            <MainPanel ref={sideNeighborRef}>
+              {isLoading ? <Loading /> : <ProposalList proposals={proposals} />}
+            </MainPanel>
+            <SidePanel neighbor={sideNeighborRef}>
+              <ActivitiesBlock activities={activities} label="Proposals Activities" />
+            </SidePanel>
+          </ContentWithSidepanel>
+        ) : (
+          <MainPanel>
+            <NoProposals />
           </MainPanel>
-          <SidePanel neighbor={sideNeighborRef}>
-            <ActivitiesBlock activities={activities} label="Proposals Activities" />
-          </SidePanel>
-        </ContentWithSidepanel>
-      ) : (
-        <MainPanel>
-          <NoProposals />
-        </MainPanel>
-      )}
-    </AppPage>
+        )
+      }
+    />
   )
 }

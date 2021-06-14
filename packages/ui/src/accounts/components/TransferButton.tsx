@@ -23,7 +23,7 @@ export function TransferButton({ from, to, disabled }: Props) {
 
   return (
     <ButtonForTransfer
-      size="medium"
+      size="small"
       square
       onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { from, to } })}
       disabled={isDisabled}
