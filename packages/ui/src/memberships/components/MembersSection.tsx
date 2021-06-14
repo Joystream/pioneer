@@ -38,7 +38,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
   const canSort = sortedMemberships.length > 1
 
   return (
-    <RowGapBlock gap={22} align="none">
+    <RowGapBlock gap={22}>
       <MembershipsTableTitle>{title}</MembershipsTableTitle>
 
       <MembershipsGroup>

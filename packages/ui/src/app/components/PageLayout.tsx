@@ -14,31 +14,39 @@ export interface PageLayoutProps {
   footer?: ReactNode
 }
 
-export const PageLayout = ({
-  header,
-  main: content,
-  lowSidebar,
-  highSidebar,
-  footer,
-  lastBreadcrumb,
-}: PageLayoutProps) => (
+export const PageLayout = ({ header, main, lowSidebar, highSidebar, footer, lastBreadcrumb }: PageLayoutProps) => (
   <PageContent>
     <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
-    <PageLayoutComponent
-      header={header}
-      main={content}
-      lowSidebar={lowSidebar}
-      highSidebar={highSidebar}
-      footer={footer}
-    >
-      {header}
-      {content}
-      {lowSidebar}
-      {highSidebar}
-      {footer}
+    <PageLayoutComponent header={header} main={main} lowSidebar={lowSidebar} highSidebar={highSidebar} footer={footer}>
+      {header && <PageHeader>{header}</PageHeader>}
+      {main && <PageMain>{main}</PageMain>}
+      {lowSidebar && <PageSidebar>{lowSidebar}</PageSidebar>}
+      {highSidebar && <PageSidebar>{highSidebar}</PageSidebar>}
+      {footer && <PageFooter>{footer}</PageFooter>}
     </PageLayoutComponent>
   </PageContent>
 )
+
+const PageHeader = styled.header`
+  width: 100%;
+  grid-area: header;
+`
+
+const PageMain = styled.main`
+  width: 100%;
+  grid-area: main;
+`
+
+const PageSidebar = styled.aside`
+  position: relative;
+  width: 100%;
+  grid-area: sidebar;
+`
+
+const PageFooter = styled.footer`
+  width: 100%;
+  grid-area: footer;
+`
 
 const SidebarWidth = '280px'
 
@@ -47,7 +55,7 @@ const PageLayoutDefault = css`
   grid-template-rows: auto 1fr;
   grid-template-areas:
     'header'
-    'content';
+    'main';
 `
 
 const PageLayoutWithFooter = css`
@@ -55,7 +63,7 @@ const PageLayoutWithFooter = css`
   grid-template-rows: auto 1fr auto;
   grid-template-areas:
     'header'
-    'content'
+    'main'
     'footer';
 `
 
@@ -64,7 +72,7 @@ const PageLayoutWithLowSidebar = css`
   grid-template-rows: auto 1fr;
   grid-template-areas:
     'header header'
-    'content sidebar';
+    'main sidebar';
 `
 
 const PageLayoutWithLowSidebarAndFooter = css`
@@ -72,7 +80,7 @@ const PageLayoutWithLowSidebarAndFooter = css`
   grid-template-rows: auto 1fr auto;
   grid-template-areas:
     'header header'
-    'content sidebar'
+    'main sidebar'
     'footer sidebar';
 `
 
@@ -81,7 +89,7 @@ const PageLayoutWithHighSidebar = css`
   grid-template-rows: auto 1fr;
   grid-template-areas:
     'header sidebar'
-    'content sidebar';
+    'main sidebar';
 `
 
 const PageLayoutWithHighSidebarAndFooter = css`
@@ -89,7 +97,7 @@ const PageLayoutWithHighSidebarAndFooter = css`
   grid-template-rows: auto 1fr auto;
   grid-template-areas:
     'header sidebar'
-    'content sidebar'
+    'main sidebar'
     'footer sidebar';
 `
 
@@ -99,6 +107,7 @@ export const PageLayoutComponent = styled.div<PageLayoutProps>`
   align-items: start;
   grid-row-gap: 24px;
   width: 100%;
+  min-height: 100%;
   ${(props) => {
     if (props.main && !props.lowSidebar && !props.highSidebar && !props.footer) {
       return PageLayoutDefault

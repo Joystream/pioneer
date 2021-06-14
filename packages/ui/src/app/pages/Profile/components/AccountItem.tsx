@@ -39,7 +39,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       <AccountItemWrap key={address}>
         <AccountInfo account={account} />
         <TokenValue value={balance?.total} />
-        <ValueAndLocks align="right">
+        <ValueAndLocks align="end">
           <TokenValue value={balance?.locked} />
           <AccountLocks locks={balance?.locks} />
         </ValueAndLocks>

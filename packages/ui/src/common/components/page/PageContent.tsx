@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const PageContent = styled.main`
+export const PageContent = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
@@ -30,8 +30,7 @@ export const ContentWithTabs = styled(MainPanel)`
 
 interface GapBlockProps {
   gap?: number
-  align?: 'left' | 'right' | 'none'
-  alignCenter?: boolean
+  align?: 'end' | 'center'
 }
 
 export const RowGapBlock = styled.div<GapBlockProps>`
@@ -39,18 +38,34 @@ export const RowGapBlock = styled.div<GapBlockProps>`
   grid-row-gap: ${({ gap }) => (gap ? gap + 'px' : '0px')};
   width: 100%;
   height: fit-content;
-  justify-content: ${({ align }) => align !== 'none' && (align === 'right' ? 'end' : 'start')};
-  justify-items: ${({ align }) => align !== 'none' && (align === 'right' ? 'end' : 'start')};
+  justify-content: ${({ align }) => {
+    if (align == 'end') {
+      return 'end'
+    } else if (align == 'center') {
+      return 'center'
+    } else {
+      return undefined
+    }
+  }};
+  justify-items: ${({ align }) => {
+    if (align == 'end') {
+      return 'end'
+    } else if (align == 'center') {
+      return 'center'
+    } else {
+      return undefined
+    }
+  }};
 `
 export const ColumnGapBlock = styled.div<GapBlockProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: ${({ gap }) => (gap ? gap + 'px' : '16px')};
   width: fit-content;
-  align-items: ${({ alignCenter }) => (alignCenter ? 'center' : 'start')};
+  align-items: ${({ align }) => (align == 'center' ? 'center' : 'start')};
 `
 
-export const PageFooter = styled.footer`
+export const PageFooter = styled.div`
   display: grid;
   position: absolute;
   bottom: 8px;
