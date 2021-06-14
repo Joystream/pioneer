@@ -15,7 +15,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice'
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation'
 
-export const MarkdownEditor = ClassicEditor
+export default class MarkdownEditor extends ClassicEditor {}
 
 // Plugins to include in the build.
 ClassicEditor.builtinPlugins = [

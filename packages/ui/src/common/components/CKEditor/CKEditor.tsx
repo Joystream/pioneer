@@ -1,8 +1,7 @@
+import MarkdownEditor, { Editor, EventInfo } from '@joystream/markdown-editor'
 import React, { useEffect, useRef } from 'react'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
-import { MarkdownEditor } from './MarkdownEditor.js'
-import { Editor, EventInfo } from './types'
 
 export interface CKEditorProps {
   onChange?: (event: EventInfo, editor: Editor) => void
@@ -51,7 +50,7 @@ export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps)
       },
       // This value must be kept in sync with the language defined in webpack.config.js.
       language: 'en',
-    }).then((editor) => {
+    }).then((editor: any) => {
       editorRef.current = editor
       editor.isReadOnly = disabled ?? false
 
