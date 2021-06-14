@@ -10,7 +10,6 @@ import { MemberList } from '@/memberships/components/MemberList'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
 import { MemberModalCall } from '@/memberships/components/MemberProfile'
 import { DefaultMemberListOrder, MemberListOrder, MemberListSortKey, useMembers } from '@/memberships/hooks/useMembers'
-import { MemberRole } from '@/memberships/types'
 
 import { AppPage } from '../../components/AppPage'
 
@@ -36,20 +35,13 @@ export const Members = () => {
 
   const { members, isLoading, totalCount, pageCount } = useMembers({ order, filter, page })
 
-  const roles = new Set<MemberRole>()
-  for (const member of members) {
-    for (const role of member.roles) {
-      roles.add(role)
-    }
-  }
-
   return (
     <AppPage>
       <PageHeader>
         <PageTitle>Members</PageTitle>
       </PageHeader>
       <MainPanel>
-        <MemberListFilters memberCount={totalCount} roles={[...roles]} onApply={setFilter} />
+        <MemberListFilters memberCount={totalCount} onApply={setFilter} />
         <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
         {!isLoading && !!pageCount && pageCount > 1 && (
           <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />

@@ -13,7 +13,7 @@ export interface SelectProps<T, V> {
   renderList: (onOptionClick: (option: T) => void, toggle: () => void) => ReactNode
 }
 
-export type OptionNode = string | ReactNode
+export type OptionNode = ReactNode
 
 export interface OptionProps {
   selected: boolean
