@@ -12,7 +12,7 @@
   },
   "scripts": {
     "lint": "wsrun --package ui -c lint",
-    "build": "wsrun --fast-exit --stages -c build",
+    "build": "wsrun --fast-exit --stages -c --exclude @joystream/markdown-editor build",
     "build:storybook": "wsrun --fast-exit --stages -c --exlude ui build && wsrun --package ui -c build:storybook",
     "storybook": "wsrun --package ui -c storybook",
     "test": "wsrun --fast-exit --package ui -c test",
