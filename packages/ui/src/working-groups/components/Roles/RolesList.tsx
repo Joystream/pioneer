@@ -90,14 +90,12 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
           <ToggleableSubscriptionWide>Staked</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>
-      <ContextMenu>
-        <ButtonLink size="small" bold borderless onClick={changeRewardCallback}>
-          Change reward account
-        </ButtonLink>
-        <ButtonLink size="small" bold borderless onClick={leaveRoleCallback}>
-          Leave a position
-        </ButtonLink>
-      </ContextMenu>
+      <ContextMenu
+        items={[
+          { text: 'Change reward account', onClick: changeRewardCallback },
+          { text: 'Leave a position', onClick: leaveRoleCallback },
+        ]}
+      />
     </ToggleableItemWrap>
   )
 }

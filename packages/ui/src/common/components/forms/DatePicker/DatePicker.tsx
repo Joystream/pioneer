@@ -1,9 +1,10 @@
 import { addMonths, addWeeks, addYears, isAfter, isBefore, isEqual, startOfMonth, startOfToday } from 'date-fns'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonSecondary, ButtonSecondaryStyles, ButtonsGroup, FilterButtons } from '@/common/components/buttons'
 import { Colors, Shadows } from '@/common/constants'
+import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 import { DateRange, PartialDateRange } from '@/common/types/Dates'
 import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
 
@@ -40,21 +41,7 @@ export const DatePicker = ({
   const container = useRef<HTMLDivElement>(null)
   const [isOpen, toggleOpen] = useState(false)
 
-  useEffect(() => {
-    if (!isOpen) return
-
-    const closePopup = (event: MouseEvent) => {
-      event.stopPropagation()
-      if (!event.target) return
-
-      const target = event.target as Node
-      const clickedOutside = !container.current?.contains(target)
-      clickedOutside && toggleOpen(false)
-    }
-
-    window.addEventListener('mousedown', closePopup)
-    return () => window.removeEventListener('mousedown', closePopup)
-  }, [isOpen])
+  useOutsideClick(container, isOpen, toggleOpen)
 
   const apply = () => {
     onApply?.()
