@@ -43,12 +43,13 @@ export const ProposalItemVoteDetails = ({ proposal, memberId, isCouncilMember }:
   )
 }
 
-const getVoteDisplay = (constitutionality?: number) => (vote: ProposalVote, index: number) => (
-  <VoteDisplay key={index}>
-    {(constitutionality ?? 0) > 1 && `${vote.votingRound}/${constitutionality} `}
-    {voteStatusMap[vote.voteKind]}
-  </VoteDisplay>
-)
+const getVoteDisplay = (constitutionality?: number) => (vote: ProposalVote, index: number) =>
+  (
+    <VoteDisplay key={index}>
+      {(constitutionality ?? 0) > 1 && `${vote.votingRound}/${constitutionality} `}
+      {voteStatusMap[vote.voteKind]}
+    </VoteDisplay>
+  )
 
 const voteStatusMap: Record<ProposalVote['voteKind'], ReactNode> = {
   ABSTAIN: <VoteStatus>Abstained</VoteStatus>,

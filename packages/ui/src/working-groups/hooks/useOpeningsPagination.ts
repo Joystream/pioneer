@@ -33,10 +33,10 @@ export const useOpeningsPagination = ({ groupId, type, page = 1 }: UseOpeningsPa
 
   const totalCount = countData?.workingGroupOpeningsConnection.totalCount ?? 0
 
-  const openings = useMemo(() => data?.workingGroupOpenings.map((opening) => asWorkingGroupOpening(opening)) ?? [], [
-    loading,
-    data,
-  ])
+  const openings = useMemo(
+    () => data?.workingGroupOpenings.map((opening) => asWorkingGroupOpening(opening)) ?? [],
+    [loading, data]
+  )
 
   return {
     isLoading: loading,

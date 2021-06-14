@@ -21,10 +21,10 @@ const defaultRenderSelected =
     const optionNodes = value.map((option) => renderOption(option))
     const nodes = optionNodes.some(isString) ? optionNodes.map(defaultSelectedOption) : optionNodes
     return (
-    <Selected>
-      <MultiSelectedInner>{intersperse(nodes, () => ', ')}</MultiSelectedInner>
-    </Selected>
-  )
+      <Selected>
+        <MultiSelectedInner>{intersperse(nodes, () => ', ')}</MultiSelectedInner>
+      </Selected>
+    )
   }
 
 export const MultiSelect = <T extends any>({

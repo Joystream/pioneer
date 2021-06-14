@@ -31,14 +31,14 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
   const lastEditedAt = edited >= 0 ? new Date(Date.now() - edited * A_MINUTE).toISOString() : undefined
   const reaction = likes >= 0 ? repeat(() => PostReaction.Like, likes) : undefined
   const repliesTo: ForumPost | undefined = replyText
-    ? (({
+    ? ({
         ...post,
         id: '1',
         link: '#post-0',
         text: replyText,
         authorId: post?.author?.id ?? '',
         author: { ...post.author, handle: 'abby_12' },
-      } as unknown) as ForumPost)
+      } as unknown as ForumPost)
     : undefined
 
   const membershipContext = {

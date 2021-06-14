@@ -38,7 +38,7 @@ const Template: Story<Props> = ({
   const thread = asStorybookThread(topThreadTitle, rawCategory.id)
   const post = asStorybookPost(latestPostText, thread?.id)
   const category = {
-    ...asForumCategory((rawCategory as unknown) as ForumCategoryFieldsFragment),
+    ...asForumCategory(rawCategory as unknown as ForumCategoryFieldsFragment),
     moderators: repeat(asStorybookModerator(), moderatorsCount),
     subcategories: subcategoriesTitles.map((title, index) => ({
       id: `${index}`,

@@ -17,8 +17,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice'
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation'
 
-export default class MarkdownEditor extends ClassicEditor {}
-
+export const MarkdownEditor = ClassicEditor
 export const InlineMarkdownEditor = InlineEditor
 
 // Plugins to include in the build.
@@ -50,10 +49,16 @@ function MentionToLink(editor) {
   editor.conversion.for('downcast').attributeToElement({
     model: 'mention',
     view: (modelAttributeValue, { writer }) =>
-      modelAttributeValue && writer.createAttributeElement('a', {
+      modelAttributeValue &&
+      writer.createAttributeElement('a', {
         class: 'mention',
         href: `#mention?member-id=${modelAttributeValue.memberId}`,
       }),
     converterPriority: 'high',
   })
+}
+
+export default {
+  MarkdownEditor,
+  InlineMarkdownEditor,
 }

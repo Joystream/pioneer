@@ -21,6 +21,5 @@ export const Default = Template.bind({})
 Default.args = {
   onClose: () => null,
   author: getMember('alice'),
-  text:
-    '## magni eius qui eaquen\n\n**ecessitatibus expedita** mollitia nobis omnis qui sint suscipit voluptatem excepturi nemo illo eaque suscipit consequatur ab quae expedita est modi *voluptatem* ipsum iure temporibus et voluptatem aut voluptatem et voluptas',
+  text: '## magni eius qui eaquen\n\n**ecessitatibus expedita** mollitia nobis omnis qui sint suscipit voluptatem excepturi nemo illo eaque suscipit consequatur ab quae expedita est modi *voluptatem* ipsum iure temporibus et voluptatem aut voluptatem et voluptas',
 }

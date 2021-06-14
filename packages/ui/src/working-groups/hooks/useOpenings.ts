@@ -31,10 +31,10 @@ export const useOpenings = ({ groupId: group_eq, type }: UseOpeningsParams) => {
   const { data, loading, error: err } = useGetWorkingGroupOpeningsQuery({ variables: { where } })
   err && error(err)
 
-  const openings = useMemo(() => data?.workingGroupOpenings.map((opening) => asWorkingGroupOpening(opening)) ?? [], [
-    loading,
-    data,
-  ])
+  const openings = useMemo(
+    () => data?.workingGroupOpenings.map((opening) => asWorkingGroupOpening(opening)) ?? [],
+    [loading, data]
+  )
 
   return {
     openings,

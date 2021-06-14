@@ -161,7 +161,7 @@ export const getInterfaceResolver = <T extends QueryArgs, D>(): WhereQueryResolv
     const end = parseInt(limit ?? 0) > 0 ? start + limit : undefined
     const pagedRecords = models?.slice(start, end)
 
-    return (adaptRecords(pagedRecords ?? []) as unknown) as D
+    return adaptRecords(pagedRecords ?? []) as unknown as D
   }
 }
 

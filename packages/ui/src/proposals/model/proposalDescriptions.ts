@@ -52,6 +52,5 @@ export const proposalDescriptions: ProposalDescriptions = {
     'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
   unlockBlogPost:
     'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
-  veto:
-    'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
+  veto: 'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Vestibulum congue fermentum erat eu tempus.',
 }
