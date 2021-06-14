@@ -1,6 +1,7 @@
 import { RawOpeningMock, RawWorker } from '@/mocks/data'
-import { RawApplication } from '@/mocks/data/mockApplications'
 import { RawUpcomingOpeningMock } from '@/mocks/data/seedUpcomingOpening'
+
+import { RawApplication } from '../../../../src/mocks/data/seedApplications'
 
 export const MEMBER_ALICE_DATA = {
   id: '0',

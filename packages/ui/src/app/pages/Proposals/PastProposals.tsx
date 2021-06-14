@@ -11,6 +11,7 @@ import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { ProposalEmptyFilter, ProposalFilters } from '@/proposals/components/ProposalFilters'
 import { ProposalList } from '@/proposals/components/ProposalList'
 import { usePastProposals } from '@/proposals/hooks/usePastProposals'
+import { useProposals } from '@/proposals/hooks/useProposals'
 
 import { ProposalsTabs } from './components/ProposalsTabs'
 
@@ -18,7 +19,9 @@ export const PastProposals = () => {
   const searchSlot = useRef<HTMLDivElement>(null)
   const [filters, setFilters] = useState(ProposalEmptyFilter)
 
-  const { proposals, types, stages, isLoading } = usePastProposals({ filters })
+  const { types, stages } = usePastProposals({ filters })
+  const { isLoading, proposals } = useProposals({ status: 'past' })
+
   const activities = useActivities()
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)

@@ -4,8 +4,9 @@ import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { ModalContext } from '@/common/providers/modal/context'
-import { getMockAsOpening } from '@/mocks/data/mockOpenings'
 import { ApplyForRoleSuccessModal } from '@/working-groups/modals/ApplyForRoleModal/ApplyForRoleSuccessModal'
+
+import { getMockAsOpening } from '../../../mocks/data/seedOpenings'
 
 import { ApplyForRoleModal } from './ApplyForRoleModal'
 
