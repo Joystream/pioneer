@@ -15,7 +15,7 @@ export function setupMockServer(props?: Props): MockServer {
 
   beforeAll(() => {
     mock.server = makeServer('test')
-    fixAssociations((mock.server as unknown) as any)
+    fixAssociations(mock.server as unknown as any)
   })
 
   if (!props?.noCleanupAfterEach) {

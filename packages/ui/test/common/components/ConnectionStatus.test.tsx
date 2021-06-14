@@ -18,7 +18,7 @@ describe('UI: Connection status component', () => {
   beforeEach(() => {
     eventEmitter = new EventEmitter()
     useApi.connectionState = 'connected'
-    useApi.api = (eventEmitter as unknown) as ApiRx
+    useApi.api = eventEmitter as unknown as ApiRx
   })
 
   jest.useFakeTimers()

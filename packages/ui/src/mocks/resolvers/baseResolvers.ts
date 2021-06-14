@@ -134,7 +134,7 @@ export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): Whe
     const end = parseInt(limit ?? 0) > 0 ? start + limit : undefined
     const pagedRecords = models.slice(start, end)
 
-    return (adaptRecords(pagedRecords) as unknown) as D
+    return adaptRecords(pagedRecords) as unknown as D
   }
 }
 
@@ -197,7 +197,7 @@ export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
       records.sort(getSortBy(fields, nodeType))
     }
 
-    const edges = (getEdges(records, relayArgs, nodeType.name) as unknown) as D[]
+    const edges = getEdges(records, relayArgs, nodeType.name) as unknown as D[]
 
     return {
       edges,

@@ -124,7 +124,7 @@ describe('UI: Accounts list', () => {
       <HashRouter>
         <MockApiProvider>
           <MockApolloProvider>
-            <MembershipContext.Provider value={({ active, setActive: () => undefined } as unknown) as MyMemberships}>
+            <MembershipContext.Provider value={{ active, setActive: () => undefined } as unknown as MyMemberships}>
               <Accounts />
             </MembershipContext.Provider>
           </MockApolloProvider>
