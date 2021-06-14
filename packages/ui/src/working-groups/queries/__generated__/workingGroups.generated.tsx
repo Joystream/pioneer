@@ -123,6 +123,15 @@ export type GetWorkerQuery = {
   workerByUniqueInput?: Types.Maybe<{ __typename: 'Worker' } & WorkerDetailedFieldsFragment>
 }
 
+export type GetGroupDebtQueryVariables = Types.Exact<{
+  where: Types.WorkerWhereInput
+}>
+
+export type GetGroupDebtQuery = {
+  __typename: 'Query'
+  workers: Array<{ __typename: 'Worker'; missingRewardAmount?: Types.Maybe<any> }>
+}
+
 export type GetRewardsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.RewardPaidEventWhereInput>
 }>
@@ -819,6 +828,45 @@ export function useGetWorkerLazyQuery(
 export type GetWorkerQueryHookResult = ReturnType<typeof useGetWorkerQuery>
 export type GetWorkerLazyQueryHookResult = ReturnType<typeof useGetWorkerLazyQuery>
 export type GetWorkerQueryResult = Apollo.QueryResult<GetWorkerQuery, GetWorkerQueryVariables>
+export const GetGroupDebtDocument = gql`
+  query getGroupDebt($where: WorkerWhereInput!) {
+    workers(where: $where) {
+      missingRewardAmount
+    }
+  }
+`
+
+/**
+ * __useGetGroupDebtQuery__
+ *
+ * To run a query within a React component, call `useGetGroupDebtQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupDebtQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupDebtQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetGroupDebtQuery(
+  baseOptions: Apollo.QueryHookOptions<GetGroupDebtQuery, GetGroupDebtQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetGroupDebtQuery, GetGroupDebtQueryVariables>(GetGroupDebtDocument, options)
+}
+export function useGetGroupDebtLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetGroupDebtQuery, GetGroupDebtQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetGroupDebtQuery, GetGroupDebtQueryVariables>(GetGroupDebtDocument, options)
+}
+export type GetGroupDebtQueryHookResult = ReturnType<typeof useGetGroupDebtQuery>
+export type GetGroupDebtLazyQueryHookResult = ReturnType<typeof useGetGroupDebtLazyQuery>
+export type GetGroupDebtQueryResult = Apollo.QueryResult<GetGroupDebtQuery, GetGroupDebtQueryVariables>
 export const GetRewardsDocument = gql`
   query getRewards($where: RewardPaidEventWhereInput) {
     rewardPaidEvents(where: $where) {
