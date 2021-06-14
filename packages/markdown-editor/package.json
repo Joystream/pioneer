@@ -5,13 +5,12 @@
   "private": true,
   "scripts": {
     "build:editor": "node --max_old_space_size=4096 ./node_modules/.bin/webpack --mode production --progress",
-    "build": "yarn build:editor",
     "lint": "yarn lint:prettier --check && yarn lint:eslint",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
     "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
     "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'"
   },
-  "main": "build/ckeditor.js",
+  "main": "dist/ckeditor.js",
   "types": "src/",
   "dependencies": {
     "@ckeditor/ckeditor5-autoformat": "^27.1.0",
