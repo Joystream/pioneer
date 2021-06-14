@@ -1,12 +1,14 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
 import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
+import { Pagination } from '@/common/components/Pagination'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
 import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
+import { OpeningsList } from '@/working-groups/components/OpeningsList/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupDebt } from '@/working-groups/hooks/useGroupDebt'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
@@ -19,8 +21,9 @@ interface Props {
 }
 
 export const OpeningsTab = ({ workingGroup }: Props) => {
+  const [page, setPage] = useState(1)
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
-  const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, statusIn: ['open'] })
+  const { isLoading, pageCount, openings } = useOpenings({ groupId: workingGroup.id, statusIn: ['open'], page })
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '', statusIn: ['active'] })
   const { debt } = useGroupDebt(workingGroup.id)
 
@@ -49,7 +52,8 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         <OpeningsCategories>
           <OpeningsCategory>
             <Label>Openings</Label>
-            <LoadingOpenings isLoading={isLoading} openings={openings} />
+            <OpeningsList openings={openings} isLoading={isLoading} />
+            <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
           </OpeningsCategory>
         </OpeningsCategories>
       </MainPanel>

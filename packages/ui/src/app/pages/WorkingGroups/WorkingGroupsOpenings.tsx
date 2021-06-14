@@ -5,13 +5,14 @@ import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/compo
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
+import { Pagination } from '@/common/components/Pagination'
 import { Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
-import { LoadingOpenings } from '@/working-groups/components/OpeningsList/LoadingOpenings'
+import { LoadingOpenings, OpeningsList } from '@/working-groups/components/OpeningsList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 
@@ -22,7 +23,8 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const { isLoading: currentLoading, openings: currentOpenings } = useOpenings({ statusIn: ['open'] })
+  const [page, setPage] = useState(1)
+  const { isLoading: currentLoading, openings: currentOpenings, pageCount } = useOpenings({ statusIn: ['open'], page })
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
   const activities = useActivities()
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
@@ -58,7 +60,12 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && <LoadingOpenings isLoading={currentLoading} openings={currentOpenings} />}
+            {activeTab === 'OPENINGS' && (
+              <>
+                <OpeningsList isLoading={currentLoading} openings={currentOpenings} />
+                <Pagination page={page} pageCount={pageCount} handlePageChange={setPage} />
+              </>
+            )}
             {activeTab === 'UPCOMING' && <LoadingOpenings isLoading={upcomingLoading} openings={upcomingOpenings} />}
           </ContentWithTabs>
         </MainPanel>
