@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 import { error as logError } from '@/common/logger'
 
@@ -7,7 +7,7 @@ import { asWorkingGroupOpening, WorkingGroupOpeningStatus, WorkingGroupOpeningSt
 
 export const OPENINGS_PER_PAGE = 5
 
-interface UseOpeningsParams {
+export interface UseOpeningsParams {
   groupId?: string
   statusIn?: WorkingGroupOpeningStatus[]
   page?: number

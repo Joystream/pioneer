@@ -5,15 +5,14 @@ import { ContentWithSidepanel, ContentWithTabs, MainPanel } from '@/common/compo
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { Pagination } from '@/common/components/Pagination'
 import { Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
-import { LoadingOpenings, OpeningsList } from '@/working-groups/components/OpeningsList'
-import { useOpenings } from '@/working-groups/hooks/useOpenings'
+import { LoadingOpenings, OpeningsPagination } from '@/working-groups/components/OpeningsList'
+import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 
 import { AppPage } from '../../components/AppPage'
@@ -23,8 +22,7 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const [page, setPage] = useState(1)
-  const { isLoading: currentLoading, openings: currentOpenings, pageCount } = useOpenings({ statusIn: ['open'], page })
+  const { openings: currentOpeningsCount } = useCountOpenings()
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
   const activities = useActivities()
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
@@ -35,7 +33,7 @@ export const WorkingGroupsOpenings = () => {
       title: 'Openings',
       active: activeTab === 'OPENINGS',
       onClick: () => setActiveTab('OPENINGS'),
-      count: currentOpenings.length,
+      count: currentOpeningsCount,
     },
     {
       title: 'Upcoming openings',
@@ -60,12 +58,7 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && (
-              <>
-                <OpeningsList isLoading={currentLoading} openings={currentOpenings} />
-                <Pagination page={page} pageCount={pageCount} handlePageChange={setPage} />
-              </>
-            )}
+            {activeTab === 'OPENINGS' && <OpeningsPagination statusIn={['open']} />}
             {activeTab === 'UPCOMING' && <LoadingOpenings isLoading={upcomingLoading} openings={upcomingOpenings} />}
           </ContentWithTabs>
         </MainPanel>
