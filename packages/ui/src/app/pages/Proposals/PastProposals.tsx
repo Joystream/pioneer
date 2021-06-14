@@ -17,9 +17,9 @@ import { ProposalsTabs } from './components/ProposalsTabs'
 
 export const PastProposals = () => {
   const searchSlot = useRef<HTMLDivElement>(null)
-  const [filters, setFilters] = useState(ProposalEmptyFilter)
+  const [, setFilters] = useState(ProposalEmptyFilter)
 
-  const { types, stages } = usePastProposals({ filters })
+  const { types, stages } = usePastProposals()
   const { isLoading, proposals } = useProposals({ status: 'past' })
 
   const activities = useActivities()
