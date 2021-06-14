@@ -2,7 +2,7 @@ import React, { Fragment, useCallback, useReducer } from 'react'
 import styled from 'styled-components'
 
 import { FilterLabel } from '@/common/components/forms/FilterBox'
-import { Colors } from '@/common/constants'
+import { Colors, ZIndex } from '@/common/constants'
 import { isDefined, isString } from '@/common/utils'
 import { stopEvent } from '@/common/utils/events'
 
@@ -188,9 +188,12 @@ const Options = styled.div`
   top: 100%;
   user-select: none;
   min-width: 100%;
-  z-index: 10;
+  z-index: ${ZIndex.Select};
 `
 
 const OptionsFooter = styled.div`
   display: flex;
+  & > * {
+    flex-grow: 1;
+  }
 `

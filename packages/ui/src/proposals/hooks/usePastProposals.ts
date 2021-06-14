@@ -1,25 +1,16 @@
-import { error } from '@/common/logger'
-import { mockPastProposals, proposalStages, proposalTypes } from '@/mocks/data/mockProposals'
-import { useMockDelay } from '@/mocks/hooks/useMockDelay'
 import { ProposalFiltersState } from '@/proposals/components/ProposalFilters'
+import { proposalDetails } from '@/proposals/model/proposalDetails'
+import { proposalStatuses } from '@/proposals/model/proposalStatus'
 
 interface UsePastProposalsProps {
   filters: ProposalFiltersState
 }
 
 export const usePastProposals = ({ filters }: UsePastProposalsProps) => {
-  const { loading, data, error: err } = useMockDelay({ proposals: mockPastProposals, filters })
-
-  if (err) {
-    error(err)
-  }
-
-  const stages = data ? proposalStages : []
-  const types = data ? proposalTypes : []
+  const stages = proposalStatuses
+  const types = proposalDetails
 
   return {
-    isLoading: loading,
-    proposals: data?.proposals ?? [],
     types,
     stages,
   }

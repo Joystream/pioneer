@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 
 import { seedMembers } from '@/mocks/data'
-import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
+import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { fixAssociations, makeServer } from '@/mocks/server'
 
 import { MockApolloProvider as TestMockApolloProvider } from '../../../../test/_mocks/providers'

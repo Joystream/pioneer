@@ -16,10 +16,9 @@ import { useProposals } from '@/proposals/hooks/useProposals'
 import { ProposalsTabs } from './components/ProposalsTabs'
 
 export const Proposals = () => {
-  const { proposals, isLoading } = useProposals()
+  const { proposals, isLoading } = useProposals({ status: 'active' })
   const activities = useActivities()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
-
   return (
     <AppPage>
       <PageHeader>

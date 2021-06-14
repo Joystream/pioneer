@@ -91,6 +91,8 @@ export const Select = <T extends any, V extends any = T>({
   return (
     <SelectComponent ref={selectNode} tabIndex={-1} onKeyDown={onKeyDown}>
       <Toggle onClick={isOpen ? undefined : onToggleClick} isOpen={isOpen} disabled={disabled}>
+        <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />
+
         {onSearch && (isOpen || !isDefined(selectedOption)) ? (
           <EmptyOption
             ref={textInput}
@@ -104,8 +106,6 @@ export const Select = <T extends any, V extends any = T>({
         ) : (
           isDefined(selectedOption) && renderSelected(selectedOption)
         )}
-
-        <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />
       </Toggle>
       {isOpen && renderList(onOptionClick, toggleOpen)}
     </SelectComponent>

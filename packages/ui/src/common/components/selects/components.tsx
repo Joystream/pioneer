@@ -78,6 +78,10 @@ export const SelectComponent = styled.div`
   height: 100%;
   align-items: center;
 
+  ${ToggleButton} {
+    order: 1;
+  }
+
   &:focus-visible {
     outline: none;
   }

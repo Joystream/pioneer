@@ -4,7 +4,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { seedApplication, seedMembers, seedOpening, seedOpeningStatuses, seedWorker } from '@/mocks/data'
-import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
+import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { WorkingGroupListItem } from '@/working-groups/components/WorkingGroupListItem'
 import { WorkingGroup } from '@/working-groups/types'
 
