@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { List, ListItem } from '../../common/components/List'
 import { ListHeader, ListHeaders } from '../../common/components/List/ListHeader'
+import { RowGapBlock } from '../../common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '../../common/components/SortedListHeaders'
 import { setOrder, SortKey, sortMemberships } from '../model/sortMemberships'
 import { Member } from '../types'
@@ -37,8 +38,8 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
   const canSort = sortedMemberships.length > 1
 
   return (
-    <>
-      <h6>{title}</h6>
+    <RowGapBlock gap={22} align="none">
+      <MembershipsTableTitle>{title}</MembershipsTableTitle>
 
       <MembershipsGroup>
         <MembershipsHeaders colLayout={colLayoutByType('MyMember')}>
@@ -58,7 +59,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
           ))}
         </List>
       </MembershipsGroup>
-    </>
+    </RowGapBlock>
   )
 }
 
@@ -66,6 +67,10 @@ interface HeaderProps {
   children: ReactNode
   sortKey?: SortKey
 }
+
+const MembershipsTableTitle = styled.h6`
+  margin-top: 4px;
+`
 
 const MembershipsGroup = styled.div`
   display: grid;
@@ -77,6 +82,7 @@ const MembershipsGroup = styled.div`
   grid-row-gap: 5px;
   width: 100%;
 `
+
 const MembershipsHeaders = styled(ListHeaders)`
   grid-area: accountstablenav;
 `
