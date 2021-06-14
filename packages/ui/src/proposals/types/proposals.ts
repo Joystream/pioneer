@@ -53,17 +53,19 @@ export interface Proposal {
   endedAt?: string
 }
 
-export const asProposal = (proposal: ProposalFieldsFragment): Proposal => {
-  const status = typenameToProposalStatus(proposal.status.__typename)
-  const details = typenameToProposalDetails(proposal.details.__typename)
-
-  return {
-    id: proposal.id,
-    title: proposal.title,
-    status,
-    details,
-    proposer: asMember(proposal.creator),
-    createdAt: proposal.createdAt,
-    endedAt: isProposalActive(status) ? proposal.statusSetAtTime : undefined,
+export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
+  const proposal: Proposal = {
+    id: fields.id,
+    title: fields.title,
+    status: typenameToProposalStatus(fields.status.__typename),
+    details: typenameToProposalDetails(fields.details.__typename),
+    proposer: asMember(fields.creator),
+    createdAt: fields.createdAt,
   }
+
+  if (!isProposalActive(proposal.status)) {
+    proposal.endedAt = fields.statusSetAtTime
+  }
+
+  return proposal
 }

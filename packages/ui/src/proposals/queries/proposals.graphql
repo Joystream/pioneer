@@ -14,8 +14,19 @@ fragment ProposalFields on Proposal {
   createdAt
 }
 
+fragment ProposalDetailedFields on Proposal {
+  ...ProposalFields
+  stakingAccount
+}
+
 query getProposals($where: ProposalWhereInput) {
   proposals(where: $where) {
     ...ProposalFields
+  }
+}
+
+query getProposal($where: ProposalWhereUniqueInput!) {
+  proposal: proposalByUniqueInput(where: $where) {
+    ...ProposalDetailedFields
   }
 }

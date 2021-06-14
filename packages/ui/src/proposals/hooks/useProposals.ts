@@ -1,15 +1,41 @@
+import {
+  proposalActiveStatuses,
+  proposalPastStatuses,
+  proposalStatusToTypename,
+} from '@/proposals/model/proposalStatus'
 import { useGetProposalsQuery } from '@/proposals/queries'
 import { asProposal, Proposal } from '@/proposals/types'
+
+type UseProposalsStatus = 'active' | 'past'
+
+interface UseProposalsProps {
+  status: UseProposalsStatus
+}
 
 interface UseProposals {
   isLoading: boolean
   proposals: Proposal[]
 }
 
-export const useProposals = (): UseProposals => {
-  const { loading, data } = useGetProposalsQuery()
+export const getStatusWhere = (status: UseProposalsStatus) => {
+  if (!status) {
+    return
+  }
 
-  console.log('llellele', data)
+  if (status === 'active') {
+    return { isTypeOf_in: proposalActiveStatuses.map(proposalStatusToTypename) }
+  }
+
+  return { isTypeOf_in: proposalPastStatuses.map(proposalStatusToTypename) }
+}
+
+export const useProposals = ({ status }: UseProposalsProps): UseProposals => {
+  const variables = {
+    where: { status_json: getStatusWhere(status) },
+  }
+
+  const { loading, data } = useGetProposalsQuery({ variables })
+
   return {
     isLoading: loading,
     proposals: data && data.proposals ? data.proposals.map(asProposal) : [],

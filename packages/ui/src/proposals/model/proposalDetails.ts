@@ -1,4 +1,5 @@
-import { ProposalDetails, ProposalStatus } from '@/proposals/types'
+import { lowerFirstLetter } from '@/common/helpers'
+import { ProposalDetails } from '@/proposals/types'
 
 export const proposalDetails: ProposalDetails[] = [
   'signal',
@@ -30,6 +31,6 @@ export const proposalDetails: ProposalDetails[] = [
 
 export const typenameToProposalDetails = (typename: string): ProposalDetails => {
   const details = typename.replace('ProposalDetails', '')
-  console.log(details, details.charAt(0).toLowerCase() + status.slice(1))
-  return (details.charAt(0).toLowerCase() + details.slice(1)) as ProposalDetails
+
+  return lowerFirstLetter(details) as ProposalDetails
 }

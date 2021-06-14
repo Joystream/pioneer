@@ -22,7 +22,7 @@ export const ProposalList = ({ proposals, isPast }: ProposalListProps) => (
     </ListHeaders>
     <List>
       {proposals.map((proposal) => (
-        <ProposalListItem key={proposal.id} {...proposal} isPast={isPast} />
+        <ProposalListItem key={proposal.id} proposal={proposal} />
       ))}
     </List>
   </>

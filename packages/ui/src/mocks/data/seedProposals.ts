@@ -17,7 +17,6 @@ export const seedProposal = (proposal: ProposalMock, server: any) => {
 }
 
 const seedProposalStatus = (status: string, server: any) => {
-  console.log('ProposalStatus' + capitalizeFirstLetter(status))
   return server.schema.create('ProposalStatus' + capitalizeFirstLetter(status))
 }
 

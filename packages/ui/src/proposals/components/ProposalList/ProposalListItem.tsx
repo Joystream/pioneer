@@ -6,30 +6,32 @@ import { TableListItem } from '@/common/components/List'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextSmall } from '@/common/components/typography/Text'
 import { Colors } from '@/common/constants'
+import { camelCaseToText } from '@/common/helpers'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
+import { isProposalActive } from '@/proposals/model/proposalStatus'
 import { Proposal } from '@/proposals/types'
 
-interface ProposalListItemProps extends Proposal {
-  isPast?: boolean
+interface ProposalListItemProps {
+  proposal: Proposal
 }
 
-export const ProposalListItem = ({ title, stage, type, proposer, isPast, ...proposal }: ProposalListItemProps) => {
-  const date = new Date(isPast ? (proposal.endedAt as string) : proposal.createdAt)
+export const ProposalListItem = ({ proposal }: ProposalListItemProps) => {
+  const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
   return (
-    <ProposalItem colLayout={ProposalColLayout} isPast={isPast}>
+    <ProposalItem colLayout={ProposalColLayout} isPast={!isProposalActive(proposal.status)}>
       <TextSmall lighter>{date.toLocaleDateString('en-GB')}</TextSmall>
       <StageField>
-        <TextSmall bold>{stage}</TextSmall>
+        <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
         <Tooltip tooltipText="Lorem ipsum, dolor sit amet consectetur">
           <TooltipDefault />
         </Tooltip>
       </StageField>
       <TypeField bold>
-        <BadgeStatus>{type}</BadgeStatus>
-        {title}
+        <BadgeStatus>{camelCaseToText(proposal.details)}</BadgeStatus>
+        {proposal.title}
       </TypeField>
-      <MemberInfo member={proposer} />
+      <MemberInfo member={proposal.proposer} />
     </ProposalItem>
   )
 }
@@ -42,6 +44,7 @@ const StageField = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5em;
+
   & > :first-child {
     flex: 0 1;
   }
