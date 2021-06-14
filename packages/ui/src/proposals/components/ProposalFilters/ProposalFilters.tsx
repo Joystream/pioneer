@@ -9,6 +9,8 @@ import { objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
 import { ProposalStage } from '@/proposals/types'
 
+import { SelectProposer } from './SelectProposer'
+
 export interface ProposalFiltersState {
   search: string
   stage: ProposalStage | null
@@ -49,19 +51,11 @@ export interface ProposalFiltersProps {
   searchSlot: React.RefObject<HTMLDivElement>
   types: string[]
   withinDates?: PartialDateRange
-  proposers: Member[]
   stages: ProposalStage[]
   onApply: (value: ProposalFiltersState) => void
 }
 
-export const ProposalFilters = ({
-  searchSlot,
-  stages,
-  types,
-  withinDates,
-  proposers,
-  onApply,
-}: ProposalFiltersProps) => {
+export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onApply }: ProposalFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, ProposalEmptyFilter)
   const { search, stage, type, lifetime, proposer } = filters
 
@@ -114,10 +108,7 @@ export const ProposalFilters = ({
           inputWidth="auto"
         />
 
-        <FilterSelect
-          title="Proposer"
-          options={proposers}
-          renderOption={({ handle }) => handle}
+        <SelectProposer
           value={proposer}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'proposer', value })

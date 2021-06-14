@@ -18,7 +18,7 @@ export const PastProposals = () => {
   const searchSlot = useRef<HTMLDivElement>(null)
   const [filters, setFilters] = useState(ProposalEmptyFilter)
 
-  const { proposals, types, stages, proposers, isLoading } = usePastProposals({ filters })
+  const { proposals, types, stages, isLoading } = usePastProposals({ filters })
   const activities = useActivities()
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
@@ -32,13 +32,7 @@ export const PastProposals = () => {
 
       <ContentWithSidepanel>
         <MainPanel ref={sideNeighborRef}>
-          <ProposalFilters
-            searchSlot={searchSlot}
-            types={types}
-            stages={stages}
-            proposers={proposers}
-            onApply={setFilters}
-          />
+          <ProposalFilters searchSlot={searchSlot} types={types} stages={stages} onApply={setFilters} />
           {isLoading ? <Loading /> : <ProposalList proposals={proposals} isPast />}
         </MainPanel>
         <SidePanel neighbor={sideNeighborRef}>
