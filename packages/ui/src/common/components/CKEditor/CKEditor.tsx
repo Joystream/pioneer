@@ -81,7 +81,7 @@ export const CKEditor = React.forwardRef(
           // This value must be kept in sync with the language defined in webpack.config.js.
           language: 'en',
         })
-        .then((editor) => {
+        .then((editor: any) => {
           if (onReady) {
             onReady(editor)
           }
