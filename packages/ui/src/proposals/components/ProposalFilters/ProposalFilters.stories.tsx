@@ -4,7 +4,8 @@ import React, { useRef } from 'react'
 
 import { FilterPageHeader } from '@/common/components/forms/FilterBox'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { proposalStages, proposalTypes } from '@/mocks/data/mockProposals'
+import { proposalDetails } from '@/proposals/model/proposalDetails'
+import { proposalStatuses } from '@/proposals/model/proposalStatus'
 
 import { ProposalFilters, ProposalFiltersProps } from '.'
 
@@ -28,9 +29,9 @@ export const Default: Story<Pick<ProposalFiltersProps, 'onApply'>> = (props) => 
       <ProposalFilters
         {...props}
         searchSlot={searchSlot}
-        types={proposalTypes}
+        types={proposalDetails}
         withinDates={withinDates}
-        stages={proposalStages}
+        stages={proposalStatuses}
       />
     </MockApolloProvider>
   )

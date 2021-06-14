@@ -7,17 +7,18 @@ import { FilterSelect } from '@/common/components/selects'
 import { PartialDateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
-import { ProposalStage } from '@/proposals/types'
+import { ProposalStatus } from '@/proposals/types'
 
 import { SelectProposer } from './SelectProposer'
 
 export interface ProposalFiltersState {
   search: string
-  stage: ProposalStage | null
+  stage: ProposalStatus | null
   type: string | null
   lifetime: PartialDateRange
   proposer: Member | null
 }
+
 type FilterKey = keyof ProposalFiltersState
 
 type Clear = { type: 'clear' }
@@ -51,7 +52,7 @@ export interface ProposalFiltersProps {
   searchSlot: React.RefObject<HTMLDivElement>
   types: string[]
   withinDates?: PartialDateRange
-  stages: ProposalStage[]
+  stages: ProposalStatus[]
   onApply: (value: ProposalFiltersState) => void
 }
 
