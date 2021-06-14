@@ -11,7 +11,7 @@
     "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'"
   },
   "main": "dist/ckeditor.js",
-  "types": "src/",
+  "types": "types/",
   "dependencies": {
     "@ckeditor/ckeditor5-autoformat": "^27.1.0",
     "@ckeditor/ckeditor5-basic-styles": "^27.1.0",
