@@ -6,11 +6,15 @@ export function useOutsideClick(
   setOpen: Dispatch<SetStateAction<boolean>>
 ) {
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) {
+      return
+    }
 
     const closePopup = (event: MouseEvent) => {
       event.stopPropagation()
-      if (!event.target) return
+      if (!event.target) {
+        return
+      }
 
       const target = event.target as Node
       const clickedOutside = !container.current?.contains(target)
