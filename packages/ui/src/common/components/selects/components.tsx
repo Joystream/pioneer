@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Shadows, Sizes, Transitions } from '../../constants'
+import { BorderRad, Colors, Overflow, Shadows, Sizes, Transitions } from '../../constants'
 import { ToggleButton } from '../buttons/Toggle'
 import { Arrow } from '../icons'
 
@@ -193,13 +193,15 @@ export const OptionsListComponent = styled.ul`
 `
 
 export const Selected = styled.div`
-  cursor: pointer;
-  text-transform: capitalize;
-  user-select: none;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   padding: 0 4px 0 16px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-transform: capitalize;
+  ${Overflow.FullDots};
+  cursor: pointer;
+  user-select: none;
 `
 
 const OptionFocused = css`

@@ -2,14 +2,15 @@ import React, { Fragment, useCallback, useReducer } from 'react'
 import styled from 'styled-components'
 
 import { FilterLabel } from '@/common/components/forms/FilterBox'
-import { Colors, ZIndex } from '@/common/constants'
+import { BorderRad, Colors, Overflow, Shadows, ZIndex } from '@/common/constants'
 import { isDefined, isString } from '@/common/utils'
 import { stopEvent } from '@/common/utils/events'
 
 import { FilterButtons } from '../buttons'
+import { Toggle } from '../buttons/Toggle'
 
 import { Select } from '.'
-import { EmptyOption, OptionContainer, Selected } from './components'
+import { EmptyOption, OptionContainer, SelectComponent, Selected, SelectedOption } from './components'
 import { DefaultSelectProps, OptionNode, OptionProps } from './types'
 
 // Focus management:
@@ -49,7 +50,11 @@ const wrapOption = (option: OptionNode, props: OptionProps, key?: any) =>
 
 // Component:
 
-interface SimpleSelectProps<Option, Value = Option> extends DefaultSelectProps<Option, Value> {
+export interface SimpleSelectSizingProps {
+  selectSize?: 's' | 'm' | 'l'
+}
+
+interface SimpleSelectProps<Option, Value = Option> extends DefaultSelectProps<Option, Value>, SimpleSelectSizingProps {
   emptyOption?: OptionNode
   valueToOption?: (value: Value) => Option | null
   onApply?: () => void
@@ -61,6 +66,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
   title,
   options,
   emptyOption,
+  selectSize,
   renderOption = String,
   renderSelected,
   valueToOption = (value) => value as Option,
@@ -159,7 +165,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
   )
 
   return (
-    <SelectContainer>
+    <SelectContainer selectSize={selectSize}>
       {title && <FilterLabel>{title}</FilterLabel>}
       <Select
         placeholder=""
@@ -174,28 +180,58 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
   )
 }
 
-const SelectContainer = styled.label`
-  display: block;
-  flex-basis: 184px;
+const SelectContainer = styled.label<SimpleSelectSizingProps>`
+  display: grid;
   width: 100%;
-
   ${EmptyOption} {
     padding: 0 16px;
   }
-  & > :last-child {
-    height: 48px;
+  ${SelectedOption} {
+    grid-template-columns: 1fr;
+    ${Overflow.FullDots}
+  }
+  ${Toggle} {
+    border: 1px solid ${Colors.Black[200]};
+    cursor: pointer;
+  }
+  ${SelectComponent} {
+    height: ${({ selectSize }) => {
+      switch (selectSize) {
+        case 's':
+        default:
+          return '32px;'
+        case 'm':
+          return '40px'
+        case 'l':
+          return '48px'
+      }
+    }};
+  }
+
+  &:hover,
+  &:focus,
+  &:focus-within,
+  &:active {
+    ${FilterLabel} {
+      color: ${Colors.Blue[400]};
+    }
   }
 `
 
 const Options = styled.div`
-  background: ${Colors.White};
+  margin-top: -1px;
+  background-color: ${Colors.White};
   border: 1px solid ${Colors.Black[300]};
-  border-radius: 2px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid ${Colors.Blue[400]};
+  border-radius: ${BorderRad.s};
+  box-shadow: ${Shadows.select};
   position: absolute;
   top: 100%;
   user-select: none;
   min-width: 100%;
+  width: 100%;
+  max-width: 100%;
+  ${Overflow.FullDots};
   z-index: ${ZIndex.Select};
 `
 
