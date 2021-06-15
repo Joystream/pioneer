@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { Loading } from '@/common/components/Loading'

@@ -183,8 +183,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
 } & WorkingGroupOpeningFieldsFragment
 
 export type CountWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
-  status_json?: Types.Maybe<Types.Scalars['JSONObject']>
+  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
 }>
 
 export type CountWorkingGroupOpeningsQuery = {
@@ -859,8 +858,8 @@ export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>
 export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>
 export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>
 export const CountWorkingGroupOpeningsDocument = gql`
-  query countWorkingGroupOpenings($groupId_eq: ID, $status_json: JSONObject) {
-    workingGroupOpeningsConnection(where: { group_eq: $groupId_eq, status_json: $status_json }) {
+  query countWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
+    workingGroupOpeningsConnection(where: $where) {
       totalCount
     }
   }
@@ -878,8 +877,7 @@ export const CountWorkingGroupOpeningsDocument = gql`
  * @example
  * const { data, loading, error } = useCountWorkingGroupOpeningsQuery({
  *   variables: {
- *      groupId_eq: // value for 'groupId_eq'
- *      status_json: // value for 'status_json'
+ *      where: // value for 'where'
  *   },
  * });
  */

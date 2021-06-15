@@ -171,8 +171,8 @@ fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
   }
 }
 
-query countWorkingGroupOpenings($groupId_eq: ID, $status_json: JSONObject) {
-  workingGroupOpeningsConnection(where: { group_eq: $groupId_eq, status_json: $status_json }) {
+query countWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
+  workingGroupOpeningsConnection(where: $where) {
     totalCount
   }
 }

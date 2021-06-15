@@ -13,17 +13,18 @@ interface UseOpeningsPaginationParams extends UseOpeningsParams {
 }
 
 export const useOpeningsPagination = ({ groupId: group_eq, statusIn, page = 1 }: UseOpeningsPaginationParams) => {
+  const where = {
+    group_eq,
+    status_json: getStatusWhere(statusIn),
+  }
   const variables = {
     limit: OPENINGS_PER_PAGE,
     offset: (page - 1) * OPENINGS_PER_PAGE,
-    where: {
-      group_eq,
-      status_json: getStatusWhere(statusIn),
-    },
+    where,
   }
 
   const { data, loading, error } = useGetWorkingGroupOpeningsQuery({ variables })
-  const { data: countData } = useCountWorkingGroupOpeningsQuery({ variables: variables.where })
+  const { data: countData } = useCountWorkingGroupOpeningsQuery({ variables: { where } })
 
   if (error) {
     logError(error)
