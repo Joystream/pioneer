@@ -5,7 +5,7 @@ export const PageContent = styled.div`
   width: 100%;
   height: 100%;
   grid-area: page;
-  padding: 40px 0;
+  padding: 40px 0 8px;
 `
 
 export const ContentWithSidepanel = styled.div`
@@ -67,8 +67,6 @@ export const ColumnGapBlock = styled.div<GapBlockProps>`
 
 export const PageFooter = styled.div`
   display: grid;
-  position: absolute;
-  bottom: 8px;
   grid-auto-flow: column;
   grid-column-gap: 48px;
   align-items: center;

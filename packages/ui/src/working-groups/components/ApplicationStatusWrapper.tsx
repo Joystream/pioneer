@@ -1,22 +1,17 @@
 import styled from 'styled-components'
 
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { spacing } from '@/common/utils/styles'
 
-export const ApplicationStatusWrapper = styled.div`
+export const ApplicationStatusWrapper = styled(RowGapBlock)`
   text-align: center;
 
-  h4 {
+  & > ${RowGapBlock} > h4 {
     color: ${Colors.Blue[500]};
-    margin: ${spacing(2, 0)};
   }
 
-  p {
+  ${TextSmall} {
     color: ${Colors.Black[500]};
-    margin-bottom: ${spacing(2)};
-  }
-
-  button {
-    display: inline-flex;
   }
 `

@@ -15,6 +15,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { DurationStatistics, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
+import { TextSmall } from '@/common/components/typography'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -82,13 +83,13 @@ export const WorkingGroupOpening = () => {
   ))
 
   const ApplicationStatus = memo(() => (
-    <ApplicationStatusWrapper>
+    <ApplicationStatusWrapper gap={24} align="center">
       <OpeningIcon />
       {opening.status === OpeningStatuses.OPEN && (
-        <>
+        <RowGapBlock gap={16}>
           <h4>No applicants yet</h4>
-          <p>There are no applicants yet lorem ipsum dolor sit amet.</p>
-        </>
+          <TextSmall>There are no applicants yet lorem ipsum dolor sit amet.</TextSmall>
+        </RowGapBlock>
       )}
       {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
     </ApplicationStatusWrapper>
@@ -111,29 +112,29 @@ export const WorkingGroupOpening = () => {
             )}
             {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
           </ButtonsGroup>
+          <RowGapBlock gap={24}>
+            <BadgesRow>
+              <BadgeStatus inverted size="l" separated>
+                {opening.groupName}
+              </BadgeStatus>
+              <BadgeStatus inverted size="l" separated>
+                {opening.type}
+              </BadgeStatus>
+              <StatusBadge />
+            </BadgesRow>
+            <Statistics>
+              <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
+              <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
+              <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.payout} />
+              <NumericValueStat title="Hiring limit" value={opening.hiring.total} />
+            </Statistics>
+          </RowGapBlock>
         </PageHeader>
       }
       main={
-        <RowGapBlock gap={24}>
-          <BadgesRow>
-            <BadgeStatus inverted size="l" separated>
-              {opening.groupName}
-            </BadgeStatus>
-            <BadgeStatus inverted size="l" separated>
-              {opening.type}
-            </BadgeStatus>
-            <StatusBadge />
-          </BadgesRow>
-          <Statistics>
-            <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
-            <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
-            <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.payout} />
-            <NumericValueStat title="Hiring limit" value={opening.hiring.total} />
-          </Statistics>
-          <MainPanel ref={sideNeighborRef}>
-            <MarkdownPreview markdown={opening.description} />
-          </MainPanel>
-        </RowGapBlock>
+        <MainPanel ref={sideNeighborRef}>
+          <MarkdownPreview markdown={opening.description} />
+        </MainPanel>
       }
       lowSidebar={
         <SidePanel neighbor={sideNeighborRef}>

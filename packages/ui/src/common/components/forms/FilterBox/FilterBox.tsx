@@ -20,7 +20,7 @@ interface FilterBoxProps {
 }
 
 export const FilterBox = ({ search = '', searchSlot, onApply, onClear, onSearch, children }: FilterBoxProps) => (
-  <FilterContainer gap={8} align="none">
+  <FilterContainer gap={8}>
     {isDefined(onClear) && (
       <ClearButton onClick={onClear} size="small" borderless>
         <CrossIcon />

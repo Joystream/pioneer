@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 
 import { useMyTotalBalances } from '../../../accounts/hooks/useMyTotalBalances'
 import { PageHeader } from '../../../common/components/page/PageHeader'
@@ -16,7 +17,7 @@ export function MyAccounts() {
   return (
     <PageLayout
       header={
-        <>
+        <RowGapBlock gap={24}>
           <PageHeader>
             <PageTitle>My Profile</PageTitle>
             <MyProfileTabs />
@@ -27,7 +28,7 @@ export function MyAccounts() {
             <TokenValueStat title="Total locked balance" tooltipText="Lorem ipsum..." value={locked} />
             <TokenValueStat title="Total recoverable" tooltipText="Lorem ipsum..." value={recoverable} />
           </Statistics>
-        </>
+        </RowGapBlock>
       }
       main={<Accounts />}
     />
