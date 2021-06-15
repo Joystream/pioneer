@@ -18,10 +18,19 @@ interface FilterBoxProps {
   onClear?: () => void
   onSearch?: (value: string) => void
   children: React.ReactNode
+  className?: string
 }
 
-export const FilterBox = ({ search = '', searchSlot, onApply, onClear, onSearch, children }: FilterBoxProps) => (
-  <FilterContainer gap={8}>
+export const FilterBox = ({
+  search = '',
+  searchSlot,
+  onApply,
+  onClear,
+  onSearch,
+  children,
+  className,
+}: FilterBoxProps) => (
+  <FilterContainer gap={8} className={className}>
     {isDefined(onClear) && (
       <ClearButton onClick={onClear} size="small" borderless>
         <CrossIcon />

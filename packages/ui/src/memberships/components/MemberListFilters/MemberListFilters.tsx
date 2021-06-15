@@ -8,6 +8,7 @@ import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons
 import { FilterSelect } from '@/common/components/selects'
 import { TextInlineBig } from '@/common/components/typography'
 import { objectEquals } from '@/common/utils'
+import { spacing } from '@/common/utils/styles'
 import { MemberRole } from '@/memberships/types'
 
 import { SelectMemberRoles } from '../SelectMemberRoles'
@@ -71,7 +72,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
   }
 
   return (
-    <FilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
+    <MembersFilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
       <Fields>
         <FieldsHeader>
           <TextInlineBig bold>All members</TextInlineBig>
@@ -126,9 +127,13 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
           </TogglableIcon>
         </ToggleContainer>
       </Fields>
-    </FilterBox>
+    </MembersFilterBox>
   )
 }
+
+const MembersFilterBox = styled(FilterBox)`
+  margin-top: ${spacing(1)};
+`
 
 const Fields = styled.div`
   display: flex;
