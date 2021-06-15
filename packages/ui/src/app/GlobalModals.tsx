@@ -8,12 +8,13 @@ import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberP
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/modals/TransferInviteModal'
+import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import { LeaveRoleModal, LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 
-type ModalNames =
+export type ModalNames =
   | ModalName<TransferInvitesModalCall>
   | ModalName<MemberModalCall>
   | ModalName<BuyMembershipModalCall>
@@ -24,6 +25,7 @@ type ModalNames =
   | ModalName<LeaveRoleModalCall>
   | ModalName<ChangeAccountModalCall>
   | ModalName<MoveFundsModalCall>
+  | ModalName<AddNewProposalModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
@@ -49,6 +51,8 @@ export const GlobalModals = () => {
       return <ChangeAccountModal />
     case 'MoveFundsModal':
       return <MoveFundsModal />
+    case 'AddNewProposalModal':
+      return <AddNewProposalModal />
     default:
       return null
   }
