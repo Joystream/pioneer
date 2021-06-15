@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { AppPage } from '@/app/components/AppPage'
 import { Loading } from '@/common/components/Loading'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Tabs } from '@/common/components/Tabs'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
+import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 
-import { urlParamToWorkingGroupId } from '../../../../working-groups/model/workingGroupName'
-import { AppPage } from '../../../components/AppPage'
 import { StatusBadge, StatusGroup } from '../components/StatusBadges'
 
 import { AboutTab } from './AboutTab'

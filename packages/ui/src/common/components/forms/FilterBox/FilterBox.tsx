@@ -2,9 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { CrossIcon } from '@/common/components/icons'
-import { StyledLink } from '@/common/components/Link'
-import { Colors } from '@/common/constants'
+import { Colors, Fonts } from '@/common/constants'
 import { isDefined } from '@/common/utils'
+
+import { ButtonInnerWrapper, ButtonLink } from '../../buttons'
+import { RowGapBlock } from '../../page/PageContent'
 
 import { FilterSearchBox } from './FilterSearchBox'
 
@@ -18,12 +20,13 @@ interface FilterBoxProps {
 }
 
 export const FilterBox = ({ search = '', searchSlot, onApply, onClear, onSearch, children }: FilterBoxProps) => (
-  <FilterContainer>
-    <ClearButton onClick={onClear} show={isDefined(onClear)}>
-      <CrossIcon />
-      Clear all Filters
-    </ClearButton>
-
+  <FilterContainer gap={8} align="none">
+    {isDefined(onClear) && (
+      <ClearButton onClick={onClear} size="small" borderless>
+        <CrossIcon />
+        Clear all filters
+      </ClearButton>
+    )}
     <Fields>
       {searchSlot && <FilterSearchBox value={search} slot={searchSlot} onApply={onApply} onChange={onSearch} />}
       {children}
@@ -31,28 +34,30 @@ export const FilterBox = ({ search = '', searchSlot, onApply, onClear, onSearch,
   </FilterContainer>
 )
 
-const FilterContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const FilterContainer = styled(RowGapBlock)`
+  position: relative;
 `
 
-const ClearButton = styled(StyledLink)`
-  align-self: flex-end;
-  color: ${Colors.Black[400]};
+const ClearButton = styled(ButtonLink)`
+  position: absolute;
+  right: 0;
+  top: -18px;
+  font-family: ${Fonts.Inter};
   font-size: 10px;
   line-height: 16px;
-  text-decoration: none;
-  visibility: ${({ show = true }: { show?: boolean }) => (show ? 'visible' : 'hidden')};
+  color: ${Colors.Black[400]};
 
-  svg {
+  &:before {
+    bottom: 0;
+  }
+
+  ${ButtonInnerWrapper} > svg {
     color: ${Colors.Black[900]};
-    margin-right: 6px;
-    vertical-align: middle;
-    width: 10px;
+    transform: none;
   }
 `
 
 const Fields = styled.div`
   background: ${Colors.Black[50]};
-  padding: 16px;
+  padding: 8px 16px 12px;
 `

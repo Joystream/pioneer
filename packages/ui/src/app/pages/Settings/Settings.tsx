@@ -30,7 +30,7 @@ export const Settings = () => {
       </PageHeader>
       <MainPanel>
         <InputComponent label="Select network" borderless>
-          <SimpleSelect values={options} value={network} onChange={switchNetwork} />
+          <SimpleSelect options={options} value={network} onChange={switchNetwork} />
         </InputComponent>
       </MainPanel>
     </AppPage>

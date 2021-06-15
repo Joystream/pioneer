@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { mockProposals } from '@/mocks/data/mockProposals'
+import { getMember } from '../../../../test/_mocks/members'
 
 import { ProposalListItem } from './ProposalListItem'
 
@@ -14,4 +14,13 @@ type Props = Parameters<typeof ProposalListItem>[0]
 const Template: Story<Props> = (args) => <ProposalListItem {...args} />
 
 export const Default = Template.bind({})
-Default.args = mockProposals[0]
+Default.args = {
+  proposal: {
+    createdAt: '2021-06-11T16:26:04.129Z',
+    details: 'setWorkingGroupLeadReward',
+    id: '0',
+    proposer: getMember('alice'),
+    status: 'deciding',
+    title: 'firewall Stand-alone set Checking',
+  },
+}

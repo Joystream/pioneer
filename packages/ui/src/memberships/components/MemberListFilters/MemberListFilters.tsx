@@ -8,12 +8,13 @@ import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons
 import { FilterSelect } from '@/common/components/selects'
 import { TextInlineBig } from '@/common/components/typography'
 import { objectEquals } from '@/common/utils'
-import { memberRoleAbbreviation } from '@/memberships/helpers'
 import { MemberRole } from '@/memberships/types'
+
+import { SelectMemberRoles } from '../SelectMemberRoles'
 
 export interface MemberListFilter {
   search: string
-  role: MemberRole | null
+  roles: MemberRole[]
   concil: boolean | null
   onlyVerified: boolean
   onlyFounder: boolean
@@ -39,31 +40,30 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
 
 export const MemberListEmptyFilter: MemberListFilter = {
   search: '',
-  role: null,
+  roles: [],
   concil: null,
   onlyVerified: false,
   onlyFounder: false,
 }
 
-const isFilterEmpty = objectEquals(MemberListEmptyFilter)
+const isFilterEmpty = objectEquals(MemberListEmptyFilter, { depth: 2 })
 
 export interface MemberListFiltersProps {
   searchSlot?: React.RefObject<HTMLDivElement>
   memberCount?: number
-  roles: MemberRole[]
   onApply: (value: MemberListFilter) => void
 }
 
-export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: MemberListFiltersProps) => {
+export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
-  const { search, role, concil, onlyVerified, onlyFounder } = filters
+  const { search, roles, concil, onlyVerified, onlyFounder } = filters
 
-  const apply = onApply && onApply && (() => onApply(filters))
+  const apply = () => onApply(filters)
   const clear = isFilterEmpty(filters)
     ? undefined
     : () => {
         dispatch({ type: 'clear' })
-        onApply?.(MemberListEmptyFilter)
+        onApply(MemberListEmptyFilter)
       }
 
   const onSearch = (value: string) => {
@@ -79,14 +79,13 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
         </FieldsHeader>
 
         <SelectContainer>
-          <FilterSelect
-            title="Roles"
-            values={roles}
-            renderOption={memberRoleAbbreviation}
-            value={role}
-            onChange={(value) => {
-              dispatch({ type: 'change', field: 'role', value })
-              onApply({ ...filters, role: value })
+          <SelectMemberRoles
+            value={roles}
+            onChange={(value) => dispatch({ type: 'change', field: 'roles', value })}
+            onApply={apply}
+            onClear={() => {
+              dispatch({ type: 'change', field: 'roles', value: [] })
+              onApply({ ...filters, roles: [] })
             }}
           />
         </SelectContainer>
@@ -94,7 +93,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, roles, onApply }: M
         <SelectContainer>
           <FilterSelect
             title="Council Members"
-            values={[true, false]}
+            options={[true, false]}
             renderOption={(value) => (value ? 'Yes' : 'No')}
             value={concil}
             onChange={(value) => {

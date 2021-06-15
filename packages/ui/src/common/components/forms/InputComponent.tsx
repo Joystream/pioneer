@@ -38,15 +38,16 @@ interface InputProps<Element extends HTMLElement = HTMLInputElement> extends Rea
   disabled?: boolean
 }
 
-interface InputElementProps {
+export interface InputElementProps {
   disabled?: boolean
-  inputSize?: 's' | 'm' | 'l' | 'auto' | undefined
+  inputSize?: 'xs' | 's' | 'm' | 'l' | 'auto' | undefined
   icon?: React.ReactElement
+  iconRight?: boolean
   copy?: boolean
   units?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
   borderless?: boolean
-  inputWidth?: 's' | 'xs' | undefined
+  inputWidth?: 'auto' | 's' | 'xs' | undefined
   tight?: boolean
 }
 
@@ -66,6 +67,7 @@ export const InputComponent = React.memo(
     inputWidth,
     tight,
     icon,
+    iconRight,
     copy,
     textToCopy,
     units,
@@ -99,6 +101,7 @@ export const InputComponent = React.memo(
           copy={copy}
           units={units}
           icon={icon}
+          iconRight={iconRight}
           validation={validation}
           disabled={disabled}
           inputSize={inputSize}
@@ -186,6 +189,9 @@ const InputWithNothing = css<InputProps>`
 const InputWithIcon = css<InputProps>`
   padding: 0 16px 1px 36px;
 `
+const InputWithRightIcon = css<InputProps>`
+  padding: 0 36px 1px 16px;
+`
 const InputWithRight = css<InputProps>`
   padding: 0 0 1px 16px;
 `
@@ -243,6 +249,8 @@ export const InputElement = styled.div<InputElementProps>`
   width: ${({ tight }) => (tight ? 'fit-content' : '100%')};
   min-width: ${({ inputWidth }) => {
     switch (inputWidth) {
+      case 'auto':
+        return null
       case 's':
         return '320px'
       case 'xs':
@@ -258,6 +266,16 @@ const InputLabel = styled(Label)<DisabledInputProps>`
   color: ${({ disabled }) => (disabled ? Colors.Black[500] : Colors.Black[900])};
 `
 
+const InputIcon = styled.div<DisabledInputProps>`
+  display: flex;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  color: inherit;
+  transition: ${Transitions.all};
+`
+
 const InputContainer = styled.div<InputElementProps>`
   display: grid;
   position: relative;
@@ -268,13 +286,15 @@ const InputContainer = styled.div<InputElementProps>`
     switch (inputSize) {
       case 'auto':
         return undefined
-      case 'l':
-        return '80px'
+      case 'xs':
+        return '32px'
       case 's':
         return '40px'
       case 'm':
       default:
         return '48px'
+      case 'l':
+        return '80px'
     }
   }};
   border: 1px solid
@@ -309,6 +329,7 @@ const InputContainer = styled.div<InputElementProps>`
   & textarea {
     ${(props) => (!props.icon && !props.units && !props.copy ? InputWithNothing : null)}
     ${(props) => (props.icon && !props.units && !props.copy ? InputWithIcon : null)}
+    ${(props) => (props.icon && props.iconRight && !props.units && !props.copy ? InputWithRightIcon : null)}
     ${(props) => ((props.units || props.copy) && !props.icon ? InputWithRight : null)}
     ${(props) => ((props.units || props.copy) && props.icon ? InputWithBoth : null)}
   }
@@ -355,17 +376,17 @@ const InputContainer = styled.div<InputElementProps>`
       }
     }};
   }
-`
 
-const InputIcon = styled.div<DisabledInputProps>`
-  display: flex;
-  position: absolute;
-  left: 16px;
-  width: 16px;
-  height: 16px;
-  pointer-events: none;
-  color: inherit;
-  transition: ${Transitions.all};
+  ${InputIcon} {
+    ${({ iconRight }) =>
+      iconRight
+        ? css`
+            right: 16px;
+          `
+        : css`
+            left: 16px;
+          `};
+  }
 `
 
 const InputArea = styled.div`

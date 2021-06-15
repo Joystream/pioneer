@@ -7,15 +7,18 @@ import { FilterSelect } from '@/common/components/selects'
 import { PartialDateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
-import { ProposalStage } from '@/proposals/types'
+import { ProposalStatus } from '@/proposals/types'
+
+import { SelectProposer } from './SelectProposer'
 
 export interface ProposalFiltersState {
   search: string
-  stage: ProposalStage | null
+  stage: ProposalStatus | null
   type: string | null
   lifetime: PartialDateRange
   proposer: Member | null
 }
+
 type FilterKey = keyof ProposalFiltersState
 
 type Clear = { type: 'clear' }
@@ -49,19 +52,11 @@ export interface ProposalFiltersProps {
   searchSlot: React.RefObject<HTMLDivElement>
   types: string[]
   withinDates?: PartialDateRange
-  proposers: Member[]
-  stages: ProposalStage[]
+  stages: ProposalStatus[]
   onApply: (value: ProposalFiltersState) => void
 }
 
-export const ProposalFilters = ({
-  searchSlot,
-  stages,
-  types,
-  withinDates,
-  proposers,
-  onApply,
-}: ProposalFiltersProps) => {
+export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onApply }: ProposalFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, ProposalEmptyFilter)
   const { search, stage, type, lifetime, proposer } = filters
 
@@ -90,7 +85,7 @@ export const ProposalFilters = ({
       <Fields>
         <FilterSelect
           title="Type"
-          values={types}
+          options={types}
           value={type}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'type', value })
@@ -110,12 +105,11 @@ export const ProposalFilters = ({
             dispatch({ type: 'change', field: 'lifetime', value: undefined })
             onApply({ ...filters, lifetime: undefined })
           }}
+          inputSize="xs"
+          inputWidth="auto"
         />
 
-        <FilterSelect
-          title="Proposer"
-          values={proposers}
-          renderOption={({ handle }) => handle}
+        <SelectProposer
           value={proposer}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'proposer', value })
@@ -125,7 +119,7 @@ export const ProposalFilters = ({
 
         <FilterSelect
           title="Stage"
-          values={stages}
+          options={stages}
           value={stage}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'stage', value })
@@ -139,8 +133,7 @@ export const ProposalFilters = ({
 
 const Fields = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 8px;
   align-items: center;
-  gap: 16px;
-  max-width: 1600px;
 `

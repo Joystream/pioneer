@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { CloseButton } from '@/common/components/buttons'
@@ -11,7 +11,7 @@ import { TextMedium } from './typography'
 
 export interface WarningProps {
   title: string
-  content: string
+  content: ReactNode
   isClosable?: boolean
 }
 

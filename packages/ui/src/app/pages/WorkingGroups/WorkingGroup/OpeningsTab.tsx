@@ -8,6 +8,7 @@ import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
 import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
+import { useGroupDebt } from '@/working-groups/hooks/useGroupDebt'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 import { useWorkers } from '@/working-groups/hooks/useWorkers'
@@ -21,6 +22,8 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
   const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, statusIn: ['open'] })
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '', statusIn: ['active'] })
+  const { debt } = useGroupDebt(workingGroup.id)
+
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   const leader = workers?.find((worker) => worker.member.id === workingGroup.leaderId)
@@ -30,7 +33,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
       <MainPanel ref={sideNeighborRef}>
         <Statistics>
           <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={workingGroup.budget} />
-          <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={-200} />
+          <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={debt} />
           <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={workingGroup.averageStake} />
         </Statistics>
 
