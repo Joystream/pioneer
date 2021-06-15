@@ -40,7 +40,7 @@ export const PastProposals = () => {
           {isLoading ? <Loading /> : <ProposalList proposals={proposals} isPast />}
         </MainPanel>
       }
-      lowSidebar={
+      sidebar={
         <SidePanel neighbor={sideNeighborRef}>
           <ActivitiesBlock activities={activities} label="Proposals Activities" />
         </SidePanel>

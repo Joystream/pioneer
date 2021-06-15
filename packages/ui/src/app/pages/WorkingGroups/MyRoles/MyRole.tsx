@@ -165,7 +165,7 @@ export const MyRole = () => {
           </ContentWithTabs>
         </MainPanel>
       }
-      lowSidebar={
+      sidebar={
         <SidePanel neighbor={sideNeighborRef}>
           <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} />
         </SidePanel>

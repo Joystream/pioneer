@@ -64,7 +64,7 @@ export const WorkingGroupsOpenings = () => {
           </ContentWithTabs>
         </MainPanel>
       }
-      lowSidebar={
+      sidebar={
         <SidePanel neighbor={sideNeighborRef}>
           <ActivitiesBlock activities={activities} label="Working Groups Activities" />
         </SidePanel>

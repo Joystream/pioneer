@@ -39,7 +39,7 @@ export const Proposals = () => {
           </MainPanel>
         )
       }
-      lowSidebar={
+      sidebar={
         (proposals.length || isLoading) && (
           <SidePanel neighbor={sideNeighborRef}>
             <ActivitiesBlock activities={activities} label="Proposals Activities" />

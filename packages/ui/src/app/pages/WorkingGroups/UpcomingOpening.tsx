@@ -87,7 +87,7 @@ export const UpcomingOpening = () => {
           <MarkdownPreview markdown={opening.description} />
         </MainPanel>
       }
-      lowSidebar={
+      sidebar={
         <SidePanel neighbor={sideNeighborRef}>
           <ApplicationStatus />
         </SidePanel>

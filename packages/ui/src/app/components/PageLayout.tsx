@@ -9,19 +9,17 @@ export interface PageLayoutProps {
   lastBreadcrumb?: string
   header?: ReactNode
   main?: ReactNode
-  lowSidebar?: ReactNode
-  highSidebar?: ReactNode
+  sidebar?: ReactNode
   footer?: ReactNode
 }
 
-export const PageLayout = ({ header, main, lowSidebar, highSidebar, footer, lastBreadcrumb }: PageLayoutProps) => (
+export const PageLayout = ({ header, main, sidebar, footer, lastBreadcrumb }: PageLayoutProps) => (
   <PageContent>
     <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
-    <PageLayoutComponent header={header} main={main} lowSidebar={lowSidebar} highSidebar={highSidebar} footer={footer}>
+    <PageLayoutComponent header={header} main={main} sidebar={sidebar} footer={footer}>
       {header && <PageHeader>{header}</PageHeader>}
       {main && <PageMain>{main}</PageMain>}
-      {lowSidebar && <PageSidebar>{lowSidebar}</PageSidebar>}
-      {highSidebar && <PageSidebar>{highSidebar}</PageSidebar>}
+      {sidebar && <PageSidebar>{sidebar}</PageSidebar>}
       {footer && <PageFooter>{footer}</PageFooter>}
     </PageLayoutComponent>
   </PageContent>
@@ -67,7 +65,7 @@ const PageLayoutWithFooter = css`
     'footer';
 `
 
-const PageLayoutWithLowSidebar = css`
+const PageLayoutWithSidebar = css`
   grid-template-columns: 1fr ${SidebarWidth};
   grid-template-rows: auto 1fr;
   grid-template-areas:
@@ -75,28 +73,11 @@ const PageLayoutWithLowSidebar = css`
     'main sidebar';
 `
 
-const PageLayoutWithLowSidebarAndFooter = css`
+const PageLayoutWithSidebarAndFooter = css`
   grid-template-columns: 1fr ${SidebarWidth};
   grid-template-rows: auto 1fr auto;
   grid-template-areas:
     'header header'
-    'main sidebar'
-    'footer sidebar';
-`
-
-const PageLayoutWithHighSidebar = css`
-  grid-template-columns: 1fr ${SidebarWidth};
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    'header sidebar'
-    'main sidebar';
-`
-
-const PageLayoutWithHighSidebarAndFooter = css`
-  grid-template-columns: 1fr ${SidebarWidth};
-  grid-template-rows: auto 1fr auto;
-  grid-template-areas:
-    'header sidebar'
     'main sidebar'
     'footer sidebar';
 `
@@ -114,18 +95,14 @@ export const PageLayoutComponent = styled.div<PageLayoutProps>`
       padding-bottom: 16px;
     `};
   ${(props) => {
-    if (props.main && !props.lowSidebar && !props.highSidebar && !props.footer) {
+    if (props.main && !props.sidebar && !props.footer) {
       return PageLayoutDefault
-    } else if (props.main && props.footer && !props.lowSidebar && !props.highSidebar) {
+    } else if (props.main && props.footer && !props.sidebar) {
       return PageLayoutWithFooter
-    } else if (props.main && props.lowSidebar && !props.highSidebar && !props.footer) {
-      return PageLayoutWithLowSidebar
-    } else if (props.main && props.lowSidebar && props.footer && !props.highSidebar) {
-      return PageLayoutWithLowSidebarAndFooter
-    } else if (props.main && props.highSidebar && !props.lowSidebar && !props.footer) {
-      return PageLayoutWithHighSidebar
-    } else if (props.main && props.highSidebar && props.footer && !props.lowSidebar) {
-      return PageLayoutWithHighSidebarAndFooter
+    } else if (props.main && props.sidebar && !props.footer) {
+      return PageLayoutWithSidebar
+    } else if (props.main && props.sidebar && props.footer) {
+      return PageLayoutWithSidebarAndFooter
     }
   }};
 `

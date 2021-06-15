@@ -136,7 +136,7 @@ export const WorkingGroupOpening = () => {
           <MarkdownPreview markdown={opening.description} />
         </MainPanel>
       }
-      lowSidebar={
+      sidebar={
         <SidePanel neighbor={sideNeighborRef}>
           <ApplicantsList
             allApplicants={opening.applications}
