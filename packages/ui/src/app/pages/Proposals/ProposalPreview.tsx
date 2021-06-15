@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { AppPage } from '@/app/components/AppPage'
+import { PageLayout } from '@/app/components/PageLayout'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
@@ -31,29 +31,35 @@ export const ProposalPreview = () => {
 
   if (isLoading || !proposal) {
     return (
-      <AppPage lastBreadcrumb={id} rowGap="s">
-        <RowGapBlock gap={24}>
-          <ContentWithSidepanel>
-            <Loading />
-          </ContentWithSidepanel>
-        </RowGapBlock>
-      </AppPage>
+      <PageLayout
+        lastBreadcrumb={id}
+        main={
+          <RowGapBlock gap={24}>
+            <ContentWithSidepanel>
+              <Loading />
+            </ContentWithSidepanel>
+          </RowGapBlock>
+        }
+      />
     )
   }
 
   return (
-    <AppPage lastBreadcrumb={proposal.title} rowGap="s">
-      <PageHeader>
-        <PreviousPage>
-          <PageTitle>{proposal.title}</PageTitle>
-        </PreviousPage>
-        <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
-          <LinkIcon />
-          Copy link
-        </ButtonGhost>
-      </PageHeader>
+    <PageLayout
+      lastBreadcrumb={proposal.title}
+      header={
+        <PageHeader>
+          <PreviousPage>
+            <PageTitle>{proposal.title}</PageTitle>
+          </PreviousPage>
 
-      <ContentWithSidepanel>
+          <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
+            <LinkIcon />
+            Copy link
+          </ButtonGhost>
+        </PageHeader>
+      }
+      main={
         <MainPanel ref={sideNeighborRef}>
           <RowGapBlock gap={24}>
             <div>
@@ -81,7 +87,8 @@ export const ProposalPreview = () => {
             </div>
           </RowGapBlock>
         </MainPanel>
-
+      }
+      sidebar={
         <SidePanel neighbor={sideNeighborRef}>
           <RowGapBlock gap={36}>
             {/* Voting dashboard */}
@@ -95,7 +102,7 @@ export const ProposalPreview = () => {
             </ContentWithTabs>
           </RowGapBlock>
         </SidePanel>
-      </ContentWithSidepanel>
-    </AppPage>
+      }
+    />
   )
 }
