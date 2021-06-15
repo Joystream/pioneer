@@ -83,7 +83,8 @@ export default {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
     '\\.(svg|css)$': '<rootDir>/test/_mocks/imports/fileMock.js',
-    '\\CKEditor$': '<rootDir>/test/_mocks/imports/CKEditor.tsx',
+    CKEditor$: '<rootDir>/test/_mocks/imports/CKEditorMock.tsx',
+    'react-identicon$': '<rootDir>/test/_mocks/imports/IdenticonMock.tsx',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
 
