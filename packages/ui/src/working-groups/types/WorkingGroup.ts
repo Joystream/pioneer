@@ -1,5 +1,7 @@
 import BN from 'bn.js'
 
+import { getAverageStake } from '@/working-groups/model/getAverageStake'
+
 import { WorkingGroupFieldsFragment } from '../queries'
 
 export interface WorkingGroup {
@@ -8,11 +10,11 @@ export interface WorkingGroup {
   image?: string
   about?: string
   leaderId?: string
-  workerIds?: string[]
   status?: string
   description?: string
   statusMessage?: string
   budget: BN
+  averageStake: BN
 }
 
 export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup => {
@@ -24,9 +26,9 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     description: group.metadata?.description ?? '',
     status: group.metadata?.status ?? '',
     statusMessage: group.metadata?.statusMessage ?? '',
-    workerIds: group.workers.map((w) => w.id) ?? [],
     leaderId: group.leader?.membership.id,
     budget: new BN(group.budget),
+    averageStake: getAverageStake(group.workers),
   }
 }
 
