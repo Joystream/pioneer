@@ -38,7 +38,7 @@ export function WorkingGroup() {
       <>
         {currentTab === 'OPENINGS' && <OpeningsTab workingGroup={group} />}
         {currentTab === 'ABOUT' && <AboutTab workingGroup={group} />}
-        {currentTab === 'HISTORY' && <HistoryTab />}
+        {currentTab === 'HISTORY' && <HistoryTab workingGroup={group} />}
       </>
     )
   }

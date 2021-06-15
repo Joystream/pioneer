@@ -6,9 +6,10 @@ import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageCo
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
-import { LoadingOpenings, OpeningsPagination } from '@/working-groups/components/OpeningsList'
+import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupDebt } from '@/working-groups/hooks/useGroupDebt'
+import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 import { useWorkers } from '@/working-groups/hooks/useWorkers'
 import { WorkingGroup } from '@/working-groups/types'
@@ -19,6 +20,7 @@ interface Props {
 
 export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
+  const { isLoading: isLoadingCurrent, openings } = useOpenings({ groupId: workingGroup.id, statusIn: ['open'] })
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '', statusIn: ['active'] })
   const { debt } = useGroupDebt(workingGroup.id)
 
@@ -47,7 +49,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         <OpeningsCategories>
           <OpeningsCategory>
             <Label>Openings</Label>
-            <OpeningsPagination groupId={workingGroup.id} statusIn={['open']} />
+            <LoadingOpenings isLoading={isLoadingCurrent} openings={openings} />
           </OpeningsCategory>
         </OpeningsCategories>
       </MainPanel>

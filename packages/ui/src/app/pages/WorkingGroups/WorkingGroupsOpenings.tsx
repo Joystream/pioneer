@@ -11,8 +11,8 @@ import { useActivities } from '@/common/hooks/useActivities'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
-import { LoadingOpenings, OpeningsPagination } from '@/working-groups/components/OpeningsList'
-import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
+import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
+import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 
 import { AppPage } from '../../components/AppPage'
@@ -22,8 +22,8 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const { openings: currentOpeningsCount } = useCountOpenings()
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
+  const { isLoading: currentLoading, openings } = useOpenings({ statusIn: ['open'] })
   const activities = useActivities()
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
   const sideNeighborRef = useRef<HTMLDivElement>(null)
@@ -33,7 +33,7 @@ export const WorkingGroupsOpenings = () => {
       title: 'Openings',
       active: activeTab === 'OPENINGS',
       onClick: () => setActiveTab('OPENINGS'),
-      count: currentOpeningsCount,
+      count: openings.length,
     },
     {
       title: 'Upcoming openings',
@@ -58,7 +58,7 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && <OpeningsPagination statusIn={['open']} />}
+            {activeTab === 'OPENINGS' && <LoadingOpenings isLoading={currentLoading} openings={openings} />}
             {activeTab === 'UPCOMING' && <LoadingOpenings isLoading={upcomingLoading} openings={upcomingOpenings} />}
           </ContentWithTabs>
         </MainPanel>
