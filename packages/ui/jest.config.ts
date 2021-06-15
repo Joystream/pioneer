@@ -83,6 +83,7 @@ export default {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
     '\\.(svg|css)$': '<rootDir>/test/_mocks/imports/fileMock.js',
+    '\\CKEditor$': '<rootDir>/test/_mocks/imports/CKEditor.tsx',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
 
@@ -140,7 +141,7 @@ export default {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  // testEnvironment: "jest-environment-jsdom",
+  testEnvironment: 'jest-environment-jsdom',
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
