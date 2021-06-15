@@ -10,7 +10,7 @@ import { Tabs } from '@/common/components/Tabs'
 import { useActivities } from '@/common/hooks/useActivities'
 import { OpeningsList } from '@/working-groups/components/OpeningsList'
 import { WorkersTableList } from '@/working-groups/components/WorkersTableList/WorkersTableList'
-import { useOpenings } from '@/working-groups/hooks/useOpenings'
+import { useOpeningsPagination } from '@/working-groups/hooks/useOpeningsPagination'
 import { useWorkersPagination } from '@/working-groups/hooks/useWorkersPagination'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
@@ -46,7 +46,7 @@ export function HistoryTab() {
 
 const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => {
   const [page, setPage] = useState(1)
-  const { isLoading, openings, pageCount } = useOpenings({ groupId, statusIn: ['filled', 'cancelled'], page })
+  const { isLoading, openings, pageCount } = useOpeningsPagination({ groupId, statusIn: ['filled', 'cancelled'], page })
 
   if (isLoading) {
     return <Loading />
