@@ -3,7 +3,8 @@ import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Overflow, Shadows, Sizes, Transitions } from '../../constants'
 import { ToggleButton } from '../buttons/Toggle'
-import { Arrow } from '../icons'
+import { Arrow, CheckboxIconStyles } from '../icons'
+import { TextInlineMedium } from '../typography'
 
 import { OptionProps } from './types'
 
@@ -223,4 +224,12 @@ export const OptionContainer = styled.div`
       background: ${Colors.Blue[50]};
       font-weight: bold;
     `}
+  ${CheckboxIconStyles} {
+    width: 16px;
+    height: 16px;
+  }
+  &,
+  ${TextInlineMedium} {
+    ${Overflow.FullDots};
+  }
 `

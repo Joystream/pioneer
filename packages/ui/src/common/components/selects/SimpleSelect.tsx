@@ -8,6 +8,8 @@ import { stopEvent } from '@/common/utils/events'
 
 import { FilterButtons } from '../buttons'
 import { Toggle } from '../buttons/Toggle'
+import { CheckboxIcon } from '../icons'
+import { TextInlineMedium } from '../typography'
 
 import { Select } from '.'
 import { EmptyOption, OptionContainer, SelectComponent, Selected, SelectedOption } from './components'
@@ -42,7 +44,8 @@ const selectFocusReducer = <T extends any>(value: T | null, action: Action<T>): 
 const wrapOption = (option: OptionNode, props: OptionProps, key?: any) =>
   isString(option) ? (
     <OptionContainer key={key} {...props}>
-      {option}
+      <TextInlineMedium>{option}</TextInlineMedium>
+      {props.selected && <CheckboxIcon />}
     </OptionContainer>
   ) : (
     <Fragment key={key}>{option}</Fragment>
