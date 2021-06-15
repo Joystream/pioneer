@@ -5,10 +5,11 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
-import { ApiContext } from '../../../src/common/providers/api/context'
-import { InviteMemberModal } from '../../../src/memberships/modals/InviteMemberModal'
-import { seedMembers } from '../../../src/mocks/data'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { ApiContext } from '@/common/providers/api/context'
+import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
+import { seedMembers } from '@/mocks/data'
+
 import { selectMember } from '../../_helpers/selectMember'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bobStash } from '../../_mocks/keyring'
@@ -29,7 +30,7 @@ const useMyAccounts: UseAccounts = {
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
+jest.mock('@/accounts/hooks/useMyAccounts', () => {
   return {
     useMyAccounts: () => useMyAccounts,
   }
@@ -57,6 +58,7 @@ describe('UI: InviteMemberModal', () => {
     stubQuery(api, 'members.membershipPrice', toBalanceOf(100))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     inviteMemberTx = stubTransaction(api, 'api.tx.members.inviteMember')
+    seedMembers(server.server)
   })
 
   it('Validate Working Group Budget', async () => {
@@ -74,8 +76,6 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Enables button', async () => {
-    seedMembers(server.server)
-
     renderModal()
 
     expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
@@ -94,8 +94,6 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Disables button when one of addresses is invalid', async () => {
-    seedMembers(server.server)
-
     renderModal()
 
     expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
@@ -114,19 +112,22 @@ describe('UI: InviteMemberModal', () => {
   })
 
   describe('Authorize', () => {
-    async function fillFormAndProceed(invitor = 'alice') {
-      seedMembers(server.server)
+    async function fillFormAndProceed() {
       renderModal()
-      await screen.findAllByRole('button')
-      await selectMember('Inviting member', invitor)
-      fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
+
+      expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
+
+      await selectMember('Inviting member', 'alice')
+      await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
         target: { value: bobStash.address },
       })
-      fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
+      await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
         target: { value: controllerAddress },
       })
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+      await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+
+      expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeEnabled()
       fireEvent.click(await screen.findByRole('button', { name: /^Invite a member$/i }))
     }
 

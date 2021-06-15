@@ -4,11 +4,13 @@ export const selectMember = async (label: string, name: string) => {
   const labelElement = await screen.findByText(new RegExp(`${label}`, 'i'))
   const parentElement = labelElement.parentElement
 
+  expect(parentElement).toBeDefined()
   if (!parentElement) {
     return
   }
 
   const toggle = parentElement.querySelector('.ui-toggle')
+  expect(toggle).toBeDefined()
 
   if (!toggle) {
     return
