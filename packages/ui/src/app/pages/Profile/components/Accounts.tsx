@@ -89,7 +89,7 @@ const AccountsWrap = styled.div`
   grid-template-areas:
     'accountstablenav'
     'accountslist';
-  grid-row-gap: 5px;
+  grid-row-gap: 4px;
   width: 100%;
 `
 

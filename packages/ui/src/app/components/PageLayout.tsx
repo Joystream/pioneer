@@ -108,7 +108,11 @@ export const PageLayoutComponent = styled.div<PageLayoutProps>`
   grid-row-gap: 24px;
   width: 100%;
   min-height: 100%;
-  ${(props) => (!props.footer && css` padding-bottom: 16px; `)};
+  ${(props) =>
+    !props.footer &&
+    css`
+      padding-bottom: 16px;
+    `};
   ${(props) => {
     if (props.main && !props.lowSidebar && !props.highSidebar && !props.footer) {
       return PageLayoutDefault

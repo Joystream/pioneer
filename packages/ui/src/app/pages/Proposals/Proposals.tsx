@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 import { PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { Loading } from '@/common/components/Loading'
-import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageContent'
+import { MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -30,18 +30,20 @@ export const Proposals = () => {
       }
       main={
         proposals.length || isLoading ? (
-          <ContentWithSidepanel>
-            <MainPanel ref={sideNeighborRef}>
-              {isLoading ? <Loading /> : <ProposalList proposals={proposals} />}
-            </MainPanel>
-            <SidePanel neighbor={sideNeighborRef}>
-              <ActivitiesBlock activities={activities} label="Proposals Activities" />
-            </SidePanel>
-          </ContentWithSidepanel>
+          <MainPanel ref={sideNeighborRef}>
+            {isLoading ? <Loading /> : <ProposalList proposals={proposals} />}
+          </MainPanel>
         ) : (
           <MainPanel>
             <NoProposals />
           </MainPanel>
+        )
+      }
+      lowSidebar={
+        (proposals.length || isLoading) && (
+          <SidePanel neighbor={sideNeighborRef}>
+            <ActivitiesBlock activities={activities} label="Proposals Activities" />
+          </SidePanel>
         )
       }
     />
