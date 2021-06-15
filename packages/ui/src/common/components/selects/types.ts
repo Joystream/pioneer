@@ -27,6 +27,7 @@ export interface DefaultSelectProps<Option, Value = Option | null, Change = Opti
   extends ControlProps<Value, Change> {
   title?: string
   options: Option[]
+  optionEquals?: (optionA: Option) => (optionB: Option) => boolean
   renderOption?: RenderOption<Option>
   renderSelected?: (value: Value) => OptionNode
 }

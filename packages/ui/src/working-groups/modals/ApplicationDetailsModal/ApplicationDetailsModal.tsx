@@ -8,6 +8,7 @@ import {
   SidePaneGlass,
   SidePaneHeader,
   SidePanelTop,
+  SidePaneTable,
   SidePaneTitle,
 } from '@/common/components/SidePane'
 import { Tabs } from '@/common/components/Tabs'
@@ -52,7 +53,11 @@ export const ApplicationDetailsModal = React.memo(() => {
           />
         </SidePaneHeader>
         <SidePaneBody>
-          {isLoading && <Loading />}
+          {isLoading && (
+            <SidePaneTable>
+              <Loading />
+            </SidePaneTable>
+          )}
           {!isLoading && application && currentTab === 'GENERAL' && <GeneralDetails application={application} />}
           {!isLoading && application && currentTab === 'FORM' && <FormDetails applicationId={application.id} />}
         </SidePaneBody>

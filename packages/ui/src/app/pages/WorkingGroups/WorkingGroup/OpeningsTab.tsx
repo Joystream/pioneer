@@ -20,7 +20,7 @@ interface Props {
 
 export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
-  const { isLoading, openings } = useOpenings({ groupId: workingGroup.id, statusIn: ['open'] })
+  const { isLoading: isLoadingCurrent, openings } = useOpenings({ groupId: workingGroup.id, statusIn: ['open'] })
   const { workers } = useWorkers({ groupId: workingGroup.id ?? '', statusIn: ['active'] })
   const { debt } = useGroupDebt(workingGroup.id)
 
@@ -34,7 +34,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         <Statistics>
           <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={workingGroup.budget} />
           <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={debt} />
-          <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={100_000} />
+          <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={workingGroup.averageStake} />
         </Statistics>
 
         <OpeningsCategories>
@@ -49,7 +49,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         <OpeningsCategories>
           <OpeningsCategory>
             <Label>Openings</Label>
-            <LoadingOpenings isLoading={isLoading} openings={openings} />
+            <LoadingOpenings isLoading={isLoadingCurrent} openings={openings} />
           </OpeningsCategory>
         </OpeningsCategories>
       </MainPanel>

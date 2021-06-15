@@ -89,7 +89,7 @@ const AccountsWrap = styled.div`
   grid-template-areas:
     'accountstablenav'
     'accountslist';
-  grid-row-gap: 5px;
+  grid-row-gap: 4px;
   width: 100%;
 `
 
@@ -97,7 +97,7 @@ const ListHeaders = styled.div`
   display: grid;
   grid-area: accountstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 276px repeat(4, 128px) 136px;
+  grid-template-columns: 276px repeat(4, 128px) 104px;
   justify-content: space-between;
   width: 100%;
   padding-left: 16px;

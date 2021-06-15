@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { List, ListItem } from '../../common/components/List'
 import { ListHeader, ListHeaders } from '../../common/components/List/ListHeader'
+import { RowGapBlock } from '../../common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '../../common/components/SortedListHeaders'
 import { setOrder, SortKey, sortMemberships } from '../model/sortMemberships'
 import { Member } from '../types'
@@ -37,7 +38,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
   const canSort = sortedMemberships.length > 1
 
   return (
-    <>
+    <RowGapBlock gap={22}>
       <MembershipsTableTitle>{title}</MembershipsTableTitle>
 
       <MembershipsGroup>
@@ -58,7 +59,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
           ))}
         </List>
       </MembershipsGroup>
-    </>
+    </RowGapBlock>
   )
 }
 
@@ -70,6 +71,7 @@ interface HeaderProps {
 const MembershipsTableTitle = styled.h6`
   margin-top: 4px;
 `
+
 const MembershipsGroup = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -80,6 +82,7 @@ const MembershipsGroup = styled.div`
   grid-row-gap: 5px;
   width: 100%;
 `
+
 const MembershipsHeaders = styled(ListHeaders)`
   grid-area: accountstablenav;
 `

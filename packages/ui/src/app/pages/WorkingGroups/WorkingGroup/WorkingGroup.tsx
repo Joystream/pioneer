@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { AppPage } from '@/app/components/AppPage'
+import { PageLayout } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -38,25 +38,27 @@ export function WorkingGroup() {
       <>
         {currentTab === 'OPENINGS' && <OpeningsTab workingGroup={group} />}
         {currentTab === 'ABOUT' && <AboutTab workingGroup={group} />}
-        {currentTab === 'HISTORY' && <HistoryTab />}
+        {currentTab === 'HISTORY' && <HistoryTab workingGroup={group} />}
       </>
     )
   }
 
   return (
-    <AppPage>
-      <PageHeader>
-        <PreviousPage>
-          <PageTitle>{group?.name ?? name.replace(/-/, ' ')}</PageTitle>
-          {group?.status && (
-            <StatusGroup>
-              <StatusBadge>{group?.status}</StatusBadge>
-            </StatusGroup>
-          )}
-        </PreviousPage>
-        <Tabs tabs={tabs} />
-      </PageHeader>
-      {displayTabs()}
-    </AppPage>
+    <PageLayout
+      header={
+        <PageHeader>
+          <PreviousPage>
+            <PageTitle>{group?.name ?? name.replace(/-/, ' ')}</PageTitle>
+            {group?.status && (
+              <StatusGroup>
+                <StatusBadge>{group?.status}</StatusBadge>
+              </StatusGroup>
+            )}
+          </PreviousPage>
+          <Tabs tabs={tabs} />
+        </PageHeader>
+      }
+      main={displayTabs()}
+    />
   )
 }
