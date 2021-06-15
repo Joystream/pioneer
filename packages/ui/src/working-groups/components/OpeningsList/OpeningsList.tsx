@@ -6,14 +6,14 @@ import { UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-grou
 import { OpeningsListRow } from './OpeningsListRow'
 
 export interface OpeningsListProps {
-  openings?: WorkingGroupOpening[] | UpcomingWorkingGroupOpening[]
+  openings: WorkingGroupOpening[] | UpcomingWorkingGroupOpening[]
   past?: boolean
 }
 
 export const OpeningsList = ({ openings, past }: OpeningsListProps) => {
   return (
     <List>
-      {openings?.map((opening: any) => (
+      {openings.map((opening: any) => (
         <ListItem key={opening.id}>
           <OpeningsListRow opening={opening} past={past} />
         </ListItem>

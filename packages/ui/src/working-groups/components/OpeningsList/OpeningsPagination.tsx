@@ -13,8 +13,12 @@ export const OpeningsPagination = (props: Props) => {
   const [page, setPage] = useState(1)
   const { isLoading, openings, pageCount } = useOpeningsPagination({ ...props, page })
 
-  if (isLoading) return <Loading />
-  if (openings.length === 0) return <TextBig>No openings found</TextBig>
+  if (isLoading) {
+    return <Loading />
+  }
+  if (openings.length === 0) {
+    return <TextBig>No openings found</TextBig>
+  }
 
   return (
     <>
