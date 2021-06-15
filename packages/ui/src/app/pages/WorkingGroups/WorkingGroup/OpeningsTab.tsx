@@ -34,7 +34,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         <Statistics>
           <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={workingGroup.budget} />
           <TokenValueStat title="Working Group dept" tooltipText="Lorem ipsum..." value={debt} />
-          <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={100_000} />
+          <TokenValueStat title="Avg stake" tooltipText="Lorem ipsum..." value={workingGroup.averageStake} />
         </Statistics>
 
         <OpeningsCategories>
