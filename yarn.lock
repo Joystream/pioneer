@@ -1147,6 +1147,11 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@cassiozen/usestatemachine@^1.0.0-beta.1":
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@cassiozen/usestatemachine/-/usestatemachine-1.0.0-beta.1.tgz#fc4169b9d3a4806df120939022e5726ef5a7e12c"
+  integrity sha512-6nVUTyFuL+kGrNwSiPktWUNR9JBR43Dard1EL+rzEboKlrOs0LEFdGVYsorOrFT5aof2C4v65vujPWXieznfKg==
+
 "@ckeditor/ckeditor5-autoformat@^27.1.0":
   version "27.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-autoformat/-/ckeditor5-autoformat-27.1.0.tgz#61ce1c11209f8008ce5c06859fe6f4638b362198"

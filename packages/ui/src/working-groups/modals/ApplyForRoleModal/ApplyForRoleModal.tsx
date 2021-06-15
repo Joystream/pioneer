@@ -1,3 +1,4 @@
+import useStateMachine from '@cassiozen/usestatemachine'
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
@@ -14,7 +15,6 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
-import { ModalState } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
@@ -35,7 +35,23 @@ export const ApplyForRoleModal = () => {
   const { active } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const opening = modalData.opening
-  const [step, setStep] = useState<ModalState>('REQUIREMENTS_CHECK')
+  const [state, send] = useStateMachine()({
+    initial: 'req-check',
+    states: {
+      'req-check': {
+        on: { REQ_FAIL: 'req-fail', REQ_PASS: 'prepare' },
+      },
+      'req-fail': {},
+      prepare: {
+        on: { VALID: 'authorize' },
+      },
+      authorize: {
+        on: { SUCCESS: 'success', ERROR: 'error' },
+      },
+      success: {},
+      error: {},
+    },
+  })
   const [txParams, setTxParams] = useState<OpeningParams>({
     member_id: active?.id,
     opening_id: opening.runtimeId,
@@ -61,7 +77,7 @@ export const ApplyForRoleModal = () => {
     const applicationId = getEventParam<ApplicationId>(events, 'AppliedOnOpening', 1)
 
     setApplicationId(applicationId?.toBn())
-    setStep(result ? 'SUCCESS' : 'ERROR')
+    send(result ? 'SUCCESS' : 'ERROR')
   }
   const stake = new BN(txParams?.stake_parameters.stake ?? 0)
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
@@ -74,12 +90,12 @@ export const ApplyForRoleModal = () => {
       })
     }
 
-    if (step !== 'REQUIREMENTS_CHECK') {
+    if (state.value !== 'req-check') {
       return
     }
 
     if (active && feeInfo?.canAfford) {
-      setStep('PREPARE')
+      send('REQ_PASS')
       return
     }
 
@@ -88,21 +104,21 @@ export const ApplyForRoleModal = () => {
     }
 
     if (feeInfo && !feeInfo.canAfford) {
-      setStep('REQUIREMENTS_FAIL')
+      send('REQ_FAIL')
     }
-  }, [step, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
+  }, [state.value, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
   if (!active || !feeInfo || hasRequiredStake === false) {
     return null
   }
 
-  if (step === 'REQUIREMENTS_FAIL') {
+  if (state.value === 'req-fail') {
     return (
       <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
     )
   }
 
-  if (step === 'PREPARE') {
+  if (state.value === 'prepare') {
     const onSubmit = (stake: StakeStepForm, answers: Record<string, string>) => {
       setStakeAccount(stake.account)
       setTxParams({
@@ -116,13 +132,13 @@ export const ApplyForRoleModal = () => {
           stake_account_id: stake.account?.address,
         },
       })
-      setStep('AUTHORIZE')
+      send('VALID')
     }
 
     return <ApplyForRolePrepareModal onSubmit={onSubmit} opening={opening} />
   }
 
-  if (step === 'AUTHORIZE' && signer) {
+  if (state.value === 'authorize' && signer) {
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
@@ -134,9 +150,13 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (step === 'SUCCESS' && stake && stakeAccount && applicationId) {
+  if (state.value === 'success' && stake && stakeAccount && applicationId) {
     return <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={applicationId} />
   }
 
-  return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>
+  if (state.value === 'error') {
+    return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>
+  }
+
+  return null
 }
