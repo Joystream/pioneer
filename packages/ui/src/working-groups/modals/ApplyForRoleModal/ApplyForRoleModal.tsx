@@ -17,7 +17,7 @@ import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
 import { ModalState } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal/index'
+import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { StakeStepForm } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 import { getGroup } from '@/working-groups/model/getGroup'
 
@@ -35,7 +35,7 @@ export const ApplyForRoleModal = () => {
   const { active } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const opening = modalData.opening
-  const [state, setState] = useState<ModalState>('REQUIREMENTS_CHECK')
+  const [step, setStep] = useState<ModalState>('REQUIREMENTS_CHECK')
   const [txParams, setTxParams] = useState<OpeningParams>({
     member_id: active?.id,
     opening_id: opening.runtimeId,
@@ -61,7 +61,7 @@ export const ApplyForRoleModal = () => {
     const applicationId = getEventParam<ApplicationId>(events, 'AppliedOnOpening', 1)
 
     setApplicationId(applicationId?.toBn())
-    setState(result ? 'SUCCESS' : 'ERROR')
+    setStep(result ? 'SUCCESS' : 'ERROR')
   }
   const stake = new BN(txParams?.stake_parameters.stake ?? 0)
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
@@ -74,12 +74,12 @@ export const ApplyForRoleModal = () => {
       })
     }
 
-    if (state !== 'REQUIREMENTS_CHECK') {
+    if (step !== 'REQUIREMENTS_CHECK') {
       return
     }
 
     if (active && feeInfo?.canAfford) {
-      setState('PREPARE')
+      setStep('PREPARE')
       return
     }
 
@@ -88,21 +88,21 @@ export const ApplyForRoleModal = () => {
     }
 
     if (feeInfo && !feeInfo.canAfford) {
-      setState('REQUIREMENTS_FAIL')
+      setStep('REQUIREMENTS_FAIL')
     }
-  }, [state, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
+  }, [step, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
   if (!active || !feeInfo || hasRequiredStake === false) {
     return null
   }
 
-  if (state === 'REQUIREMENTS_FAIL') {
+  if (step === 'REQUIREMENTS_FAIL') {
     return (
       <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
     )
   }
 
-  if (state === 'PREPARE') {
+  if (step === 'PREPARE') {
     const onSubmit = (stake: StakeStepForm, answers: Record<string, string>) => {
       setStakeAccount(stake.account)
       setTxParams({
@@ -116,13 +116,13 @@ export const ApplyForRoleModal = () => {
           stake_account_id: stake.account?.address,
         },
       })
-      setState('AUTHORIZE')
+      setStep('AUTHORIZE')
     }
 
     return <ApplyForRolePrepareModal onSubmit={onSubmit} opening={opening} />
   }
 
-  if (state === 'AUTHORIZE' && signer) {
+  if (step === 'AUTHORIZE' && signer) {
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
@@ -134,7 +134,7 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state === 'SUCCESS' && stake && stakeAccount && applicationId) {
+  if (step === 'SUCCESS' && stake && stakeAccount && applicationId) {
     return <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={applicationId} />
   }
 
