@@ -15,6 +15,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { DurationStatistics, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
+import { TextSmall } from '@/common/components/typography'
 import { ApplicationStatusWrapper } from '@/working-groups/components/ApplicationStatusWrapper'
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { useUpcomingOpening } from '@/working-groups/hooks/useUpcomingOpening'
@@ -40,12 +41,12 @@ export const UpcomingOpening = () => {
   }
 
   const ApplicationStatus = memo(() => (
-    <ApplicationStatusWrapper>
+    <ApplicationStatusWrapper gap={24} align="center">
       <OpeningIcon />
-      <>
+      <RowGapBlock gap={16}>
         <h4>The opening hasn't started yet</h4>
-        <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p>
-      </>
+        <TextSmall>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</TextSmall>
+      </RowGapBlock>
     </ApplicationStatusWrapper>
   ))
 
@@ -53,18 +54,16 @@ export const UpcomingOpening = () => {
     <PageLayout
       lastBreadcrumb={opening.title}
       header={
-        <>
-          <PageHeader>
-            <PreviousPage>
-              <PageTitle>{opening.title}</PageTitle>
-            </PreviousPage>
-            <ButtonsGroup>
-              <ButtonGhost size="medium">
-                <BellIcon />
-                Notify me when it’s open
-              </ButtonGhost>
-            </ButtonsGroup>
-          </PageHeader>
+        <PageHeader>
+          <PreviousPage>
+            <PageTitle>{opening.title}</PageTitle>
+          </PreviousPage>
+          <ButtonsGroup>
+            <ButtonGhost size="medium">
+              <BellIcon />
+              Notify me when it’s open
+            </ButtonGhost>
+          </ButtonsGroup>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>
@@ -81,7 +80,7 @@ export const UpcomingOpening = () => {
               <NumericValueStat title="Hiring limit" value={opening.hiringLimit} />
             </Statistics>
           </RowGapBlock>
-        </>
+        </PageHeader>
       }
       main={
         <MainPanel ref={sideNeighborRef}>
