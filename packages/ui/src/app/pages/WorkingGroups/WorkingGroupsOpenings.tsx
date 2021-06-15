@@ -12,7 +12,7 @@ import { useActivities } from '@/common/hooks/useActivities'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
-import { LoadingOpenings } from '@/working-groups/components/OpeningsList/LoadingOpenings'
+import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 
@@ -21,8 +21,8 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
-  const { isLoading: currentLoading, openings: currentOpenings } = useOpenings({ statusIn: ['open'] })
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
+  const { isLoading: currentLoading, openings } = useOpenings({ statusIn: ['open'] })
   const activities = useActivities()
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
   const sideNeighborRef = useRef<HTMLDivElement>(null)
@@ -32,7 +32,7 @@ export const WorkingGroupsOpenings = () => {
       title: 'Openings',
       active: activeTab === 'OPENINGS',
       onClick: () => setActiveTab('OPENINGS'),
-      count: currentOpenings.length,
+      count: openings.length,
     },
     {
       title: 'Upcoming openings',
@@ -59,7 +59,7 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && <LoadingOpenings isLoading={currentLoading} openings={currentOpenings} />}
+            {activeTab === 'OPENINGS' && <LoadingOpenings isLoading={currentLoading} openings={openings} />}
             {activeTab === 'UPCOMING' && <LoadingOpenings isLoading={upcomingLoading} openings={upcomingOpenings} />}
           </ContentWithTabs>
         </MainPanel>

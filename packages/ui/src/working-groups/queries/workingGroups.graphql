@@ -171,30 +171,8 @@ fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
   }
 }
 
-fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
-  totalCount
-  edges {
-    node {
-      ... WorkingGroupOpeningFields
-    }
-    cursor
-  }
-  pageInfo {
-    hasNextPage
-    hasPreviousPage
-    startCursor
-    endCursor
-  }
-}
-
-query getWorkingGroupOpeningsConnection($groupId_eq: ID, $status_json: JSONObject, $first: Int, $last: Int) {
-  workingGroupOpeningsConnection(where: { group_eq: $groupId_eq, status_json: $status_json }, first: $first, last: $last) {
-    ... WorkingGroupOpeningFieldsConnection
-  }
-}
-
-query countWorkingGroupOpenings($groupId_eq: ID, $status_json: JSONObject) {
-  workingGroupOpeningsConnection(where: { group_eq: $groupId_eq, status_json: $status_json }) {
+query countWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
+  workingGroupOpeningsConnection(where: $where) {
     totalCount
   }
 }
@@ -205,8 +183,8 @@ query countWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
   }
 }
 
-query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
-  workingGroupOpenings(where: $where) {
+query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
+  workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
     ... WorkingGroupOpeningFields
   }
 }

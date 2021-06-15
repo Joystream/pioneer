@@ -182,40 +182,8 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
   }>
 } & WorkingGroupOpeningFieldsFragment
 
-export type WorkingGroupOpeningFieldsConnectionFragment = {
-  __typename: 'WorkingGroupOpeningConnection'
-  totalCount: number
-  edges: Array<{
-    __typename: 'WorkingGroupOpeningEdge'
-    cursor: string
-    node: { __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment
-  }>
-  pageInfo: {
-    __typename: 'PageInfo'
-    hasNextPage: boolean
-    hasPreviousPage: boolean
-    startCursor?: Types.Maybe<string>
-    endCursor?: Types.Maybe<string>
-  }
-}
-
-export type GetWorkingGroupOpeningsConnectionQueryVariables = Types.Exact<{
-  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
-  status_json?: Types.Maybe<Types.Scalars['JSONObject']>
-  first?: Types.Maybe<Types.Scalars['Int']>
-  last?: Types.Maybe<Types.Scalars['Int']>
-}>
-
-export type GetWorkingGroupOpeningsConnectionQuery = {
-  __typename: 'Query'
-  workingGroupOpeningsConnection: {
-    __typename: 'WorkingGroupOpeningConnection'
-  } & WorkingGroupOpeningFieldsConnectionFragment
-}
-
 export type CountWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
-  status_json?: Types.Maybe<Types.Scalars['JSONObject']>
+  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
 }>
 
 export type CountWorkingGroupOpeningsQuery = {
@@ -235,6 +203,8 @@ export type CountWorkingGroupWorkersQuery = {
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  offset?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetWorkingGroupOpeningsQuery = {
@@ -509,24 +479,6 @@ export const WorkingGroupOpeningDetailedFieldsFragmentDoc = gql`
   }
   ${WorkingGroupOpeningFieldsFragmentDoc}
   ${MemberFieldsFragmentDoc}
-`
-export const WorkingGroupOpeningFieldsConnectionFragmentDoc = gql`
-  fragment WorkingGroupOpeningFieldsConnection on WorkingGroupOpeningConnection {
-    totalCount
-    edges {
-      node {
-        ...WorkingGroupOpeningFields
-      }
-      cursor
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
-    }
-  }
-  ${WorkingGroupOpeningFieldsFragmentDoc}
 `
 export const WorkingGroupApplicationFieldsFragmentDoc = gql`
   fragment WorkingGroupApplicationFields on WorkingGroupApplication {
@@ -905,75 +857,9 @@ export function useGetRewardsLazyQuery(
 export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>
 export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>
 export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>
-export const GetWorkingGroupOpeningsConnectionDocument = gql`
-  query getWorkingGroupOpeningsConnection($groupId_eq: ID, $status_json: JSONObject, $first: Int, $last: Int) {
-    workingGroupOpeningsConnection(
-      where: { group_eq: $groupId_eq, status_json: $status_json }
-      first: $first
-      last: $last
-    ) {
-      ...WorkingGroupOpeningFieldsConnection
-    }
-  }
-  ${WorkingGroupOpeningFieldsConnectionFragmentDoc}
-`
-
-/**
- * __useGetWorkingGroupOpeningsConnectionQuery__
- *
- * To run a query within a React component, call `useGetWorkingGroupOpeningsConnectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetWorkingGroupOpeningsConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetWorkingGroupOpeningsConnectionQuery({
- *   variables: {
- *      groupId_eq: // value for 'groupId_eq'
- *      status_json: // value for 'status_json'
- *      first: // value for 'first'
- *      last: // value for 'last'
- *   },
- * });
- */
-export function useGetWorkingGroupOpeningsConnectionQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetWorkingGroupOpeningsConnectionQuery,
-    GetWorkingGroupOpeningsConnectionQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetWorkingGroupOpeningsConnectionQuery, GetWorkingGroupOpeningsConnectionQueryVariables>(
-    GetWorkingGroupOpeningsConnectionDocument,
-    options
-  )
-}
-export function useGetWorkingGroupOpeningsConnectionLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetWorkingGroupOpeningsConnectionQuery,
-    GetWorkingGroupOpeningsConnectionQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetWorkingGroupOpeningsConnectionQuery, GetWorkingGroupOpeningsConnectionQueryVariables>(
-    GetWorkingGroupOpeningsConnectionDocument,
-    options
-  )
-}
-export type GetWorkingGroupOpeningsConnectionQueryHookResult = ReturnType<
-  typeof useGetWorkingGroupOpeningsConnectionQuery
->
-export type GetWorkingGroupOpeningsConnectionLazyQueryHookResult = ReturnType<
-  typeof useGetWorkingGroupOpeningsConnectionLazyQuery
->
-export type GetWorkingGroupOpeningsConnectionQueryResult = Apollo.QueryResult<
-  GetWorkingGroupOpeningsConnectionQuery,
-  GetWorkingGroupOpeningsConnectionQueryVariables
->
 export const CountWorkingGroupOpeningsDocument = gql`
-  query countWorkingGroupOpenings($groupId_eq: ID, $status_json: JSONObject) {
-    workingGroupOpeningsConnection(where: { group_eq: $groupId_eq, status_json: $status_json }) {
+  query countWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
+    workingGroupOpeningsConnection(where: $where) {
       totalCount
     }
   }
@@ -991,8 +877,7 @@ export const CountWorkingGroupOpeningsDocument = gql`
  * @example
  * const { data, loading, error } = useCountWorkingGroupOpeningsQuery({
  *   variables: {
- *      groupId_eq: // value for 'groupId_eq'
- *      status_json: // value for 'status_json'
+ *      where: // value for 'where'
  *   },
  * });
  */
@@ -1070,8 +955,8 @@ export type CountWorkingGroupWorkersQueryResult = Apollo.QueryResult<
   CountWorkingGroupWorkersQueryVariables
 >
 export const GetWorkingGroupOpeningsDocument = gql`
-  query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
-    workingGroupOpenings(where: $where) {
+  query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
+    workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -1091,6 +976,8 @@ export const GetWorkingGroupOpeningsDocument = gql`
  * const { data, loading, error } = useGetWorkingGroupOpeningsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
