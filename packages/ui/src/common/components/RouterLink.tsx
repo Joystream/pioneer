@@ -9,3 +9,9 @@ interface Props extends StyledLinkProps, LinkProps, React.RefAttributes<HTMLAnch
 export const RouterLink = styled(Link)<Props>`
   ${LinkStyles}
 `
+
+export const GhostRouterLink = styled(Link)`
+  display: contents;
+  color: unset;
+  font-family: unset;
+`

@@ -1,5 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
+import { MemoryRouter } from 'react-router'
 
 import { getMember } from '../../../../test/_mocks/members'
 
@@ -11,7 +12,11 @@ export default {
 } as Meta
 
 type Props = Parameters<typeof ProposalListItem>[0]
-const Template: Story<Props> = (args) => <ProposalListItem {...args} />
+const Template: Story<Props> = (args) => (
+  <MemoryRouter>
+    <ProposalListItem {...args} />
+  </MemoryRouter>
+)
 
 export const Default = Template.bind({})
 Default.args = {
