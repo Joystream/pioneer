@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { CrossIcon } from '@/common/components/icons'
 import { Colors, Fonts } from '@/common/constants'
 import { isDefined } from '@/common/utils'
+import { spacing } from '@/common/utils/styles'
 
 import { ButtonInnerWrapper, ButtonLink } from '../../buttons'
 import { RowGapBlock } from '../../page/PageContent'
@@ -17,10 +18,19 @@ interface FilterBoxProps {
   onClear?: () => void
   onSearch?: (value: string) => void
   children: React.ReactNode
+  className?: string
 }
 
-export const FilterBox = ({ search = '', searchSlot, onApply, onClear, onSearch, children }: FilterBoxProps) => (
-  <FilterContainer gap={8} align="none">
+export const FilterBox = ({
+  search = '',
+  searchSlot,
+  onApply,
+  onClear,
+  onSearch,
+  children,
+  className,
+}: FilterBoxProps) => (
+  <FilterContainer gap={8} className={className}>
     {isDefined(onClear) && (
       <ClearButton onClick={onClear} size="small" borderless>
         <CrossIcon />
@@ -36,6 +46,7 @@ export const FilterBox = ({ search = '', searchSlot, onApply, onClear, onSearch,
 
 const FilterContainer = styled(RowGapBlock)`
   position: relative;
+  margin-top: ${spacing(2)};
 `
 
 const ClearButton = styled(ButtonLink)`

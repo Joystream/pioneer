@@ -15,7 +15,7 @@ export const SidePanel = ({ neighbor, className, children }: SidePanelProps) => 
   )
 }
 
-export const SidePanelStyles = styled.aside<{ neighborHeight?: number }>`
+export const SidePanelStyles = styled.div<{ neighborHeight?: number }>`
   display: grid;
   position: absolute;
   top: 0;

@@ -1,4 +1,3 @@
-import item from '@polkadot/ui-keyring/options/item'
 import React, { useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 

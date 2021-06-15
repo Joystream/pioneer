@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 
-import { AppPage } from '@/app/components/AppPage'
+import { PageLayout } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
@@ -44,20 +44,24 @@ export const MyRoles = () => {
   }
 
   return (
-    <AppPage>
-      <PageHeader>
-        <PageTitle>Working Groups</PageTitle>
-        <WorkingGroupsTabs />
-      </PageHeader>
-      <MainPanel>
-        <Statistics>
-          <MyEarningsStat />
-          <MyStakeStat />
-          <TokenValueStat title="Total owed reward" value={owedReward} />
-          <NextPayoutStat workers={workers} />
-        </Statistics>
-        {displayRoles()}
-      </MainPanel>
-    </AppPage>
+    <PageLayout
+      header={
+        <PageHeader>
+          <PageTitle>Working Groups</PageTitle>
+          <WorkingGroupsTabs />
+        </PageHeader>
+      }
+      main={
+        <MainPanel>
+          <Statistics>
+            <MyEarningsStat />
+            <MyStakeStat />
+            <TokenValueStat title="Total owed reward" value={owedReward} />
+            <NextPayoutStat workers={workers} />
+          </Statistics>
+          {displayRoles()}
+        </MainPanel>
+      }
+    />
   )
 }
