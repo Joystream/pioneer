@@ -49,7 +49,7 @@ fragment WorkingGroupFields on WorkingGroup {
     ...WorkingGroupMetdataFields
   }
   workers {
-    id
+    stake
   }
   leader {
     membership {

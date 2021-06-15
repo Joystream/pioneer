@@ -65,5 +65,5 @@ const NoMembershipsInfo = styled.div`
 const MembershipsTable = styled(MainPanel)`
   position: relative;
   grid-row-gap: 28px;
-  padding-top: 8px;
+  padding-top: 12px;
 `

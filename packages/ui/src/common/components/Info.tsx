@@ -15,7 +15,7 @@ export interface InfoProps {
 export const Info = ({ title, content }: InfoProps) => {
   return (
     <InfoBlock gap={8}>
-      <ColumnGapBlock gap={8} alignCenter>
+      <ColumnGapBlock gap={8} align="center">
         <Tooltip tooltipText="Lorem ipsum">
           <TooltipDefault />
         </Tooltip>

@@ -51,7 +51,7 @@ export type WorkingGroupFieldsFragment = {
   name: string
   budget: any
   metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetdataFieldsFragment>
-  workers: Array<{ __typename: 'Worker'; id: string }>
+  workers: Array<{ __typename: 'Worker'; stake: any }>
   leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
 }
 
@@ -400,7 +400,7 @@ export const WorkingGroupFieldsFragmentDoc = gql`
       ...WorkingGroupMetdataFields
     }
     workers {
-      id
+      stake
     }
     leader {
       membership {

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { Loading } from '@/common/components/Loading'
-import { ContentWithSidepanel, MainPanel } from '@/common/components/page/PageContent'
+import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
 import { Tabs } from '@/common/components/Tabs'
@@ -32,9 +32,11 @@ export function HistoryTab({ workingGroup }: Props) {
   return (
     <ContentWithSidepanel>
       <MainPanel ref={sideNeighborRef}>
-        <Tabs tabsSize="xs" tabs={tabs} />
-        {currentTab === 'OPENINGS' && <OpeningsHistory groupId={workingGroup?.id} />}
-        {currentTab === 'WORKERS' && <WorkersHistory groupId={workingGroup?.id} />}
+        <RowGapBlock gap={32}>
+          <Tabs tabsSize="xs" tabs={tabs} />
+          {currentTab === 'OPENINGS' && <OpeningsHistory groupId={workingGroup?.id} />}
+          {currentTab === 'WORKERS' && <WorkersHistory groupId={workingGroup?.id} />}
+        </RowGapBlock>
       </MainPanel>
       <SidePanel neighbor={sideNeighborRef}>
         <ActivitiesBlock activities={activities} label="Working Groups Activities" />

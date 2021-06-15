@@ -1,7 +1,7 @@
 import React, { memo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { AppPage } from '@/app/components/AppPage'
+import { PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
@@ -15,6 +15,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { DurationStatistics, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
+import { TextSmall } from '@/common/components/typography'
 import { ApplicationStatusWrapper } from '@/working-groups/components/ApplicationStatusWrapper'
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { useUpcomingOpening } from '@/working-groups/hooks/useUpcomingOpening'
@@ -26,66 +27,76 @@ export const UpcomingOpening = () => {
 
   if (isLoading || !opening) {
     return (
-      <AppPage lastBreadcrumb={id} rowGap="s">
-        <RowGapBlock gap={24}>
-          <ContentWithSidepanel>
-            <Loading />
-          </ContentWithSidepanel>
-        </RowGapBlock>
-      </AppPage>
+      <PageLayout
+        lastBreadcrumb={id}
+        main={
+          <RowGapBlock gap={24}>
+            <ContentWithSidepanel>
+              <Loading />
+            </ContentWithSidepanel>
+          </RowGapBlock>
+        }
+      />
     )
   }
 
   const ApplicationStatus = memo(() => (
-    <ApplicationStatusWrapper>
+    <ApplicationStatusWrapper gap={24} align="center">
       <OpeningIcon />
-      <>
+      <RowGapBlock gap={16}>
         <h4>The opening hasn't started yet</h4>
-        <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p>
-      </>
+        <TextSmall>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</TextSmall>
+      </RowGapBlock>
     </ApplicationStatusWrapper>
   ))
 
   return (
-    <AppPage lastBreadcrumb={opening.title} rowGap="s">
-      <PageHeader>
-        <PreviousPage>
-          <PageTitle>{opening.title}</PageTitle>
-        </PreviousPage>
-        <ButtonsGroup>
-          <ButtonGhost size="medium">
-            <BellIcon />
-            Notify me when it’s open
-          </ButtonGhost>
-        </ButtonsGroup>
-      </PageHeader>
-      <RowGapBlock gap={24}>
-        <BadgesRow>
-          <BadgeStatus inverted size="l" separated>
-            {opening.groupName}
-          </BadgeStatus>
-          <BadgeStatus inverted size="l" separated>
-            Upcoming
-          </BadgeStatus>
-        </BadgesRow>
-        <Statistics>
-          <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
-          <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
-          <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.payout} />
-          <NumericValueStat title="Hiring limit" value={opening.hiringLimit} />
-        </Statistics>
-        <ContentWithSidepanel>
-          <MainPanel ref={sideNeighborRef}>
-            <MarkdownPreview markdown={opening.description} />
-          </MainPanel>
-          <SidePanel neighbor={sideNeighborRef}>
-            <ApplicationStatus />
-          </SidePanel>
-        </ContentWithSidepanel>
-      </RowGapBlock>
-      <PageFooter>
-        <BlockTime block={opening.createdAtBlock} layout="row" dateLabel="Hired" />
-      </PageFooter>
-    </AppPage>
+    <PageLayout
+      lastBreadcrumb={opening.title}
+      header={
+        <PageHeader>
+          <PreviousPage>
+            <PageTitle>{opening.title}</PageTitle>
+          </PreviousPage>
+          <ButtonsGroup>
+            <ButtonGhost size="medium">
+              <BellIcon />
+              Notify me when it’s open
+            </ButtonGhost>
+          </ButtonsGroup>
+          <RowGapBlock gap={24}>
+            <BadgesRow>
+              <BadgeStatus inverted size="l" separated>
+                {opening.groupName}
+              </BadgeStatus>
+              <BadgeStatus inverted size="l" separated>
+                Upcoming
+              </BadgeStatus>
+            </BadgesRow>
+            <Statistics>
+              <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
+              <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
+              <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.payout} />
+              <NumericValueStat title="Hiring limit" value={opening.hiringLimit} />
+            </Statistics>
+          </RowGapBlock>
+        </PageHeader>
+      }
+      main={
+        <MainPanel ref={sideNeighborRef}>
+          <MarkdownPreview markdown={opening.description} />
+        </MainPanel>
+      }
+      sidebar={
+        <SidePanel neighbor={sideNeighborRef}>
+          <ApplicationStatus />
+        </SidePanel>
+      }
+      footer={
+        <PageFooter>
+          <BlockTime block={opening.createdAtBlock} layout="row" dateLabel="Hired" />
+        </PageFooter>
+      }
+    />
   )
 }

@@ -1,0 +1,32 @@
+fragment ProposalFields on Proposal {
+  id
+  title
+  status {
+    __typename
+  }
+  statusSetAtTime
+  details {
+    __typename
+  }
+  creator {
+    ...MemberFields
+  }
+  createdAt
+}
+
+fragment ProposalDetailedFields on Proposal {
+  ...ProposalFields
+  stakingAccount
+}
+
+query getProposals($where: ProposalWhereInput) {
+  proposals(where: $where) {
+    ...ProposalFields
+  }
+}
+
+query getProposal($where: ProposalWhereUniqueInput!) {
+  proposal: proposalByUniqueInput(where: $where) {
+    ...ProposalDetailedFields
+  }
+}

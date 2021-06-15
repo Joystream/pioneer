@@ -6,10 +6,10 @@ import { Route, Router } from 'react-router-dom'
 
 import { UpcomingOpening } from '@/app/pages/WorkingGroups/UpcomingOpening'
 import { seedMember } from '@/mocks/data'
-import { seedOpeningStatuses } from '@/mocks/data/mockOpenings'
-import { seedWorkingGroups } from '@/mocks/data/mockWorkingGroups'
 import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
+import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 
+import { seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'

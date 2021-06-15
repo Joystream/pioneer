@@ -1,16 +1,43 @@
-import { error } from '@/common/logger'
-import { mockProposals } from '@/mocks/data/mockProposals'
-import { useMockDelay } from '@/mocks/hooks/useMockDelay'
+import {
+  proposalActiveStatuses,
+  proposalPastStatuses,
+  proposalStatusToTypename,
+} from '@/proposals/model/proposalStatus'
+import { useGetProposalsQuery } from '@/proposals/queries'
+import { asProposal, Proposal } from '@/proposals/types'
 
-export const useProposals = () => {
-  const { loading, data, error: err } = useMockDelay({ proposals: mockProposals })
+type UseProposalsStatus = 'active' | 'past'
 
-  if (err) {
-    error(err)
+interface UseProposalsProps {
+  status: UseProposalsStatus
+}
+
+interface UseProposals {
+  isLoading: boolean
+  proposals: Proposal[]
+}
+
+export const getStatusWhere = (status: UseProposalsStatus) => {
+  if (!status) {
+    return
   }
+
+  if (status === 'active') {
+    return { isTypeOf_in: proposalActiveStatuses.map(proposalStatusToTypename) }
+  }
+
+  return { isTypeOf_in: proposalPastStatuses.map(proposalStatusToTypename) }
+}
+
+export const useProposals = ({ status }: UseProposalsProps): UseProposals => {
+  const variables = {
+    where: { status_json: getStatusWhere(status) },
+  }
+
+  const { loading, data } = useGetProposalsQuery({ variables })
 
   return {
     isLoading: loading,
-    proposals: data?.proposals ?? [],
+    proposals: data && data.proposals ? data.proposals.map(asProposal) : [],
   }
 }

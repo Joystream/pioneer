@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { PageLayout } from '@/app/components/PageLayout'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -10,9 +11,6 @@ import { MemberList } from '@/memberships/components/MemberList'
 import { MemberListEmptyFilter, MemberListFilters } from '@/memberships/components/MemberListFilters'
 import { MemberModalCall } from '@/memberships/components/MemberProfile'
 import { DefaultMemberListOrder, MemberListOrder, MemberListSortKey, useMembers } from '@/memberships/hooks/useMembers'
-import { MemberRole } from '@/memberships/types'
-
-import { AppPage } from '../../components/AppPage'
 
 const sortReducer = (order: MemberListOrder, sortBy: MemberListSortKey): MemberListOrder => ({
   sortBy: sortBy,
@@ -36,25 +34,22 @@ export const Members = () => {
 
   const { members, isLoading, totalCount, pageCount } = useMembers({ order, filter, page })
 
-  const roles = new Set<MemberRole>()
-  for (const member of members) {
-    for (const role of member.roles) {
-      roles.add(role)
-    }
-  }
-
   return (
-    <AppPage>
-      <PageHeader>
-        <PageTitle>Members</PageTitle>
-      </PageHeader>
-      <MainPanel>
-        <MemberListFilters memberCount={totalCount} roles={[...roles]} onApply={setFilter} />
-        <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
-        {!isLoading && !!pageCount && pageCount > 1 && (
-          <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-        )}
-      </MainPanel>
-    </AppPage>
+    <PageLayout
+      header={
+        <PageHeader>
+          <PageTitle>Members</PageTitle>
+        </PageHeader>
+      }
+      main={
+        <MainPanel>
+          <MemberListFilters memberCount={totalCount} onApply={setFilter} />
+          <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
+          {!isLoading && !!pageCount && pageCount > 1 && (
+            <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
+          )}
+        </MainPanel>
+      }
+    />
   )
 }

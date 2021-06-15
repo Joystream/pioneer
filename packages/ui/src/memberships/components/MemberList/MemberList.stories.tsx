@@ -3,7 +3,7 @@ import React from 'react'
 
 import { asMember } from '@/memberships/types'
 
-import { mockMembers } from '../../../mocks/data/mockMembers'
+import { mockMembers } from '../../../mocks/data/seedMembers'
 
 import { MemberList } from '.'
 

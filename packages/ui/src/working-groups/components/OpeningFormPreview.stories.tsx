@@ -3,7 +3,8 @@ import React from 'react'
 
 import { Stepper } from '@/common/components/Stepper'
 import { StepDescriptionColumn, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
-import { getMockAsOpening } from '@/mocks/data/mockOpenings'
+
+import { getMockAsOpening } from '../../mocks/data/seedOpenings'
 
 import { OpeningFormPreview, OpeningFormPreviewProps } from './OpeningFormPreview'
 

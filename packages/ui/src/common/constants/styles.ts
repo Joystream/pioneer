@@ -69,6 +69,7 @@ export const Colors = {
 
 export const ZIndex = {
   Modal: 50,
+  Select: 60,
 }
 
 export const BorderRad = {
