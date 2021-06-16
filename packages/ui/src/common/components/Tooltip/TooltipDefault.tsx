@@ -24,7 +24,7 @@ export const DefaultTooltip = styled.div<DefaultTooltipProps>`
   width: 16px;
   height: 16px;
   border: 1px solid ${Colors.Black[300]};
-  border-radius: ${BorderRad.round};
+  border-radius: ${BorderRad.full};
   background-color: transparent;
   color: ${Colors.Black[500]};
   cursor: pointer;
