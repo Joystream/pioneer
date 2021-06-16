@@ -1,10 +1,11 @@
-import useStateMachine from '@cassiozen/usestatemachine'
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
 import { EventRecord } from '@polkadot/types/interfaces/system'
+import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
+import { createMachine } from 'xstate'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -35,23 +36,33 @@ export const ApplyForRoleModal = () => {
   const { active } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const opening = modalData.opening
-  const [state, send] = useStateMachine()({
-    initial: 'req-check',
-    states: {
-      'req-check': {
-        on: { REQ_FAIL: 'req-fail', REQ_PASS: 'prepare' },
+
+  const [state, send] = useMachine(
+    createMachine({
+      initial: 'requirementsVerification',
+      states: {
+        requirementsVerification: {
+          on: {
+            FAIL: 'requirementsFailed',
+            PASS: 'prepare',
+          },
+        },
+        requirementsFailed: { type: 'final' },
+        prepare: {
+          on: { VALID: 'authorize' },
+        },
+        authorize: {
+          on: {
+            SUCCESS: 'success',
+            ERROR: 'error',
+          },
+        },
+        success: { type: 'final' },
+        error: { type: 'final' },
       },
-      'req-fail': {},
-      prepare: {
-        on: { VALID: 'authorize' },
-      },
-      authorize: {
-        on: { SUCCESS: 'success', ERROR: 'error' },
-      },
-      success: {},
-      error: {},
-    },
-  })
+    })
+  )
+
   const [txParams, setTxParams] = useState<OpeningParams>({
     member_id: active?.id,
     opening_id: opening.runtimeId,
@@ -90,12 +101,12 @@ export const ApplyForRoleModal = () => {
       })
     }
 
-    if (state.value !== 'req-check') {
+    if (state.value !== 'requirementsVerification') {
       return
     }
 
     if (active && feeInfo?.canAfford) {
-      send('REQ_PASS')
+      send('PASS')
       return
     }
 
@@ -104,7 +115,7 @@ export const ApplyForRoleModal = () => {
     }
 
     if (feeInfo && !feeInfo.canAfford) {
-      send('REQ_FAIL')
+      send('FAIL')
     }
   }, [state.value, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
@@ -112,7 +123,7 @@ export const ApplyForRoleModal = () => {
     return null
   }
 
-  if (state.value === 'req-fail') {
+  if (state.value === 'requirementsFailed') {
     return (
       <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
     )
