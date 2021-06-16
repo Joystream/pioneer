@@ -30,8 +30,10 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
     if (!mapRoles.has(abbreviation)) {
       mapRoles.set(abbreviation, { title: memberRoleTitle(role), count: 0 })
     }
-    const roleDef = mapRoles.get(abbreviation)!
-    mapRoles.set(abbreviation, { ...roleDef, count: roleDef.count + 1 })
+    const roleDef = mapRoles.get(abbreviation)
+    if (roleDef) {
+      mapRoles.set(abbreviation, { ...roleDef, count: roleDef.count + 1 })
+    }
   }
   const rolesWithCount = [...mapRoles.entries()]
 
@@ -131,17 +133,81 @@ export const MemberRoleHelp = styled(DefaultTooltip)<MemberRoleTooltipProps & Da
 `
 
 export const MemberRoleHelpGroupItem = styled(MemberRoleHelp)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
-  min-width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   width: fit-content;
+  min-width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
+  height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   gap: 4px;
   padding: 0 4px;
+  font-size: ${({ size }) => (size === 'l' ? '10px' : '6px')};
+  line-height: 1;
+  font-family: ${Fonts.Inter};
+  font-weight: 700;
+  ${({ isOnDark }) =>
+    isOnDark
+      ? css`
+          color: ${Colors.Black[300]};
+          background-color: ${Colors.Black[600]};
+          border-color: ${Colors.Black[600]};
+        `
+      : css`
+          color: ${Colors.Black[600]};
+          background-color: ${Colors.Black[100]};
+          border-color: ${Colors.Black[100]};
+        `};
 
-  ${TooltipComponent} > & > ${CountBadgeComponent} {
-    min-width: ${({ size }) => (size == 'l' ? '16px' : '10px')};
-    height: ${({ size }) => (size == 'l' ? '16px' : '10px')};
-    padding: ${({ size }) => (size == 'l' ? '0 4px' : '0 2px')};
-    font-size: ${({ size }) => (size == 'l' ? '10px' : '6px')};
-    line-height: ${({ size }) => (size == 'l' ? '16px' : '8px')};
+  ${TooltipComponent}:hover > &,
+  ${TooltipComponent}:focus > & {
+    color: ${Colors.White} !important;
+    background-color: ${Colors.Blue[500]} !important;
+    border-color: ${Colors.Blue[500]} !important;
+  }
+
+  ${CountBadgeComponent} {
+    min-width: ${({ size }) => {
+      switch (size) {
+        case 'l':
+          return '16px'
+        case 'm':
+        default:
+          return '10px'
+      }
+    }};
+    height: ${({ size }) => {
+      switch (size) {
+        case 'l':
+          return '16px'
+        case 'm':
+        default:
+          return '10px'
+      }
+    }};
+    padding: ${({ size }) => {
+      switch (size) {
+        case 'l':
+          return '0px 4px'
+        case 'm':
+        default:
+          return '0px 2px'
+      }
+    }};
+    font-size: ${({ size }) => {
+      switch (size) {
+        case 'l':
+          return '10px'
+        case 'm':
+        default:
+          return '6px'
+      }
+    }};
+    line-height: ${({ size }) => {
+      switch (size) {
+        case 'l':
+          return '16px'
+        case 'm':
+        default:
+          return '8px'
+      }
+    }};
     background-color: ${Colors.Blue[100]};
   }
 `
