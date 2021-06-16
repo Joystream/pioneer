@@ -14,7 +14,7 @@ export const CountBadge = React.memo(({ count, className }: CountBadgeProps) => 
   <CountBadgeComponent className={className}>{count}</CountBadgeComponent>
 ))
 
-const CountBadgeComponent = styled(Badge)`
+export const CountBadgeComponent = styled(Badge)`
   color: ${Colors.Blue[500]};
   background-color: ${Colors.Blue[50]};
   -webkit-text-stroke-width: 0;
