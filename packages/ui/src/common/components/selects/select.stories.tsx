@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { ModalBlock, TemplateBlock } from '../storybookParts/previewStyles'
+import { ModalBlock, ScrollBlock, TemplateBlock } from '../storybookParts/previewStyles'
 
 import { SimpleSelect, FilterSelect, MultiSelect } from '.'
 
@@ -34,18 +34,42 @@ const Template: Story<Props> = ({ optionsString = '', onApply }) => {
   const [multi, setMulti] = useState<string[]>([])
 
   return (
-    <ModalBlock>
-      <TemplateBlock>
-        <Row>
-          <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} />
-          <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
-        </Row>
-        <Row>
-          <SimpleSelect title="Search Select" options={result} value={value} onChange={setValue} onSearch={setSearch} />
-          <MultiSelect title="Multi Select" options={options} value={multi} onChange={setMulti} onApply={onApply} />
-        </Row>
-      </TemplateBlock>
-    </ModalBlock>
+    <ScrollBlock>
+      <ModalBlock>
+        <TemplateBlock>
+          <Row>
+            <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} />
+          </Row>
+          <Row>
+            <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} selectSize="m" />
+          </Row>
+          <Row>
+            <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} selectSize="l" />
+          </Row>
+          <Row>
+            <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
+          </Row>
+          <Row>
+            <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
+          </Row>
+          <Row>
+            <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
+          </Row>
+          <Row>
+            <SimpleSelect
+              title="Search Select"
+              options={result}
+              value={value}
+              onChange={setValue}
+              onSearch={setSearch}
+            />
+          </Row>
+          <Row>
+            <MultiSelect title="Multi Select" options={options} value={multi} onChange={setMulti} onApply={onApply} />
+          </Row>
+        </TemplateBlock>
+      </ModalBlock>
+    </ScrollBlock>
   )
 }
 

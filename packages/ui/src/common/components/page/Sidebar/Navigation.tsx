@@ -21,6 +21,6 @@ export const Navigation = styled.nav`
   max-width: 226px;
   height: 100vh;
   z-index: 10;
-  background: ${Colors.Black[900]};
+  background-color: ${Colors.Black[900]};
   color: ${Colors.White};
 `

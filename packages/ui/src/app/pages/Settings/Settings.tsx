@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
-import { InputComponent } from '@/common/components/forms'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -31,9 +30,13 @@ export const Settings = () => {
       }
       main={
         <MainPanel>
-          <InputComponent label="Select network" borderless>
-            <SimpleSelect options={options} value={network} onChange={switchNetwork} />
-          </InputComponent>
+          <SimpleSelect
+            title="Select network"
+            options={options}
+            value={network}
+            onChange={switchNetwork}
+            selectSize="l"
+          />
         </MainPanel>
       }
     />

@@ -1,14 +1,15 @@
 import styled from 'styled-components'
 
-import { TextSmall } from '@/common/components/typography'
-import { Fonts } from '@/common/constants'
+import { TextInlineSmall } from '@/common/components/typography'
+import { Fonts, Transitions } from '@/common/constants'
 
-export const FilterLabel = styled(TextSmall).attrs({ bold: true, lighter: true })`
-  cursor: pointer;
+export const FilterLabel = styled(TextInlineSmall).attrs({ bold: true, lighter: true })`
   font-family: ${Fonts.Grotesk};
   font-size: 10px;
   line-height: 16px;
   text-transform: uppercase;
   user-select: none;
   white-space: nowrap;
+  cursor: pointer;
+  transition: ${Transitions.all};
 `
