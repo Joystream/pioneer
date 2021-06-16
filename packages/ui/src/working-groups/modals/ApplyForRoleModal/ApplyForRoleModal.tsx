@@ -44,21 +44,26 @@ export const ApplyForRoleModal = () => {
         requirementsVerification: {
           on: {
             FAIL: 'requirementsFailed',
-            PASS: 'prepare',
+            PASS: 'steps',
           },
         },
         requirementsFailed: { type: 'final' },
-        prepare: {
-          on: { VALID: 'authorize' },
-        },
-        authorize: {
-          on: {
-            SUCCESS: 'success',
-            ERROR: 'error',
+        steps: {
+          initial: 'prepare',
+          states: {
+            prepare: {
+              on: { VALID: 'authorize' },
+            },
+            authorize: {
+              on: {
+                SUCCESS: 'success',
+                ERROR: 'error',
+              },
+            },
+            success: { type: 'final' },
+            error: { type: 'final' },
           },
         },
-        success: { type: 'final' },
-        error: { type: 'final' },
       },
     })
   )
@@ -123,13 +128,13 @@ export const ApplyForRoleModal = () => {
     return null
   }
 
-  if (state.value === 'requirementsFailed') {
+  if (state.matches('requirementsFailed')) {
     return (
       <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
     )
   }
 
-  if (state.value === 'prepare') {
+  if (state.matches('steps.prepare')) {
     const onSubmit = (stake: StakeStepForm, answers: Record<string, string>) => {
       setStakeAccount(stake.account)
       setTxParams({
@@ -149,7 +154,7 @@ export const ApplyForRoleModal = () => {
     return <ApplyForRolePrepareModal onSubmit={onSubmit} opening={opening} />
   }
 
-  if (state.value === 'authorize' && signer) {
+  if (state.matches('steps.authorize') && signer) {
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
@@ -161,11 +166,11 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state.value === 'success' && stake && stakeAccount && applicationId) {
+  if (state.matches('steps.success') && stake && stakeAccount && applicationId) {
     return <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={applicationId} />
   }
 
-  if (state.value === 'error') {
+  if (state.matches('steps.error')) {
     return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>
   }
 
