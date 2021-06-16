@@ -25,12 +25,25 @@ const formConfig = {
 
 const transactionConfig = {
   id: 'transaction',
-  initial: 'signer',
+  initial: 'signing',
   states: {
-    signer: {},
-    signInternal: {},
-    signWithExtension: {},
-    pending: {},
+    signing: {
+      on: {
+        SIGN_INTERNAL: 'pending',
+        SIGN_EXTERNAL: 'signWithExtension',
+      },
+    },
+    signWithExtension: {
+      on: {
+        SIGNED: 'pending',
+      },
+    },
+    pending: {
+      on: {
+        SUCCESS: 'success',
+        ERROR: 'error',
+      },
+    },
     success: { type: 'final' },
     error: { type: 'final' },
   },
@@ -56,6 +69,49 @@ const stepperConfig = {
     },
   },
 } as const
+
+describe('Transaction machine', () => {
+  const machine = createMachine(transactionConfig)
+  let service: Interpreter<any>
+
+  beforeEach(() => {
+    service = interpret(machine)
+    service.start()
+  })
+
+  it('Initial', () => {
+    expect(service.state.matches('signing')).toBeTruthy()
+  })
+
+  it('Sign internal', () => {
+    service.send('SIGN_INTERNAL')
+    expect(service.state.matches('pending')).toBeTruthy()
+  })
+
+  it('Sign external', () => {
+    service.send('SIGN_EXTERNAL')
+    expect(service.state.matches('signWithExtension')).toBeTruthy()
+
+    service.send('SIGNED')
+    expect(service.state.matches('pending')).toBeTruthy()
+  })
+
+  it('Transaction success', () => {
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('SUCCESS')
+
+    expect(service.state.matches('success')).toBeTruthy()
+  })
+
+  it('Transaction error', () => {
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('ERROR')
+
+    expect(service.state.matches('error')).toBeTruthy()
+  })
+})
 
 describe('Form machine', () => {
   const machine = createMachine(formConfig)
@@ -108,13 +164,13 @@ describe('Stepper machine', () => {
     service.start()
   })
 
-  it('Transition to step 2', () => {
+  it('Standard step', () => {
     service.send('NEXT')
 
     expect(service.state.matches('step2')).toBeTruthy()
   })
 
-  it('Transition to step 3 on done', () => {
+  it('Form step', () => {
     service.send('NEXT')
     service.send('INPUT')
     service.send('VALID')
