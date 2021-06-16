@@ -8,7 +8,7 @@ import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
 import { MemberRole } from '../types'
 
-interface MemberRolesProps {
+export interface MemberRolesProps {
   max?: number
   size?: 'l' | 'm'
   roles: MemberRole[]
@@ -85,7 +85,7 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
   )
 }
 
-interface MemberRoleHelpGroup {
+export interface MemberRoleHelpGroup {
   count?: number
   abbreviation?: string
   size?: 'l' | 'm'
