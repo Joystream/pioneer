@@ -1,19 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
-import { error as logError } from '@/common/logger'
+import { error } from '@/common/logger'
+import { useGetWorkingGroupOpeningsQuery } from '@/working-groups/queries'
+import {
+  asWorkingGroupOpening,
+  WorkingGroupOpeningStatus,
+  WorkingGroupOpeningStatusTypename,
+} from '@/working-groups/types'
 
-import { useGetWorkingGroupOpeningsConnectionQuery } from '../queries'
-import { asWorkingGroupOpening, WorkingGroupOpeningStatus, WorkingGroupOpeningStatusTypename } from '../types'
-
-export const OPENINGS_PER_PAGE = 5
-
-interface UseOpeningsParams {
+export interface UseOpeningsParams {
   groupId?: string
   statusIn?: WorkingGroupOpeningStatus[]
-  page?: number
 }
 
-const getStatusWhere = (statusIn?: WorkingGroupOpeningStatus[]) => {
+export const getStatusWhere = (statusIn?: WorkingGroupOpeningStatus[]) => {
   if (!statusIn) {
     return
   }
@@ -21,33 +21,21 @@ const getStatusWhere = (statusIn?: WorkingGroupOpeningStatus[]) => {
   return { isTypeOf_in: statusIn.map((status) => WorkingGroupOpeningStatusTypename[status]) }
 }
 
-export const useOpenings = ({ groupId: group_eq, statusIn, page }: UseOpeningsParams) => {
-  const variables = {
-    first: page !== undefined ? page * OPENINGS_PER_PAGE : undefined,
-    last: page !== undefined && page > 1 ? OPENINGS_PER_PAGE : undefined,
+export const useOpenings = ({ groupId: group_eq, statusIn }: UseOpeningsParams) => {
+  const where = {
     group_eq,
     status_json: getStatusWhere(statusIn),
   }
+  const { data, loading, error: err } = useGetWorkingGroupOpeningsQuery({ variables: { where } })
+  err && error(err)
 
-  const { loading, data, error } = useGetWorkingGroupOpeningsConnectionQuery({ variables })
-  const [totalCount, setTotalCount] = useState<number>(0)
-
-  if (error) {
-    logError(error)
-  }
-
-  useEffect(() => {
-    if (!totalCount && data?.workingGroupOpeningsConnection.totalCount) {
-      setTotalCount(data?.workingGroupOpeningsConnection.totalCount)
-    }
-  }, [data])
-
-  const groups = data?.workingGroupOpeningsConnection.edges ?? []
-  const openings = useMemo(() => groups.map(({ node }) => asWorkingGroupOpening(node)), [loading, data])
+  const openings = useMemo(() => data?.workingGroupOpenings.map((opening) => asWorkingGroupOpening(opening)) ?? [], [
+    loading,
+    data,
+  ])
 
   return {
-    isLoading: loading,
     openings,
-    pageCount: totalCount && Math.ceil(totalCount / OPENINGS_PER_PAGE),
+    isLoading: loading,
   }
 }
