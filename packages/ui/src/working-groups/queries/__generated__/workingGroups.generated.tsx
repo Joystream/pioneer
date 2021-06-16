@@ -19,6 +19,7 @@ export type WorkingGroupMetdataFieldsFragment = {
 export type WorkerFieldsFragment = {
   __typename: 'Worker'
   id: string
+  runtimeId: number
   applicationId: string
   isLead: boolean
   rewardPerBlock: any
@@ -379,6 +380,7 @@ export type GetUpcomingWorkingGroupOpeningsQuery = {
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
     id
+    runtimeId
     membership {
       ...MemberFields
     }

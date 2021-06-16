@@ -28,10 +28,10 @@ export const ChangeAccountModal = () => {
     }
 
     if (modalType === ModalTypes.CHANGE_ROLE_ACCOUNT) {
-      return getGroup(api, worker.group.name)?.updateRoleAccount(workerId, selectedAccount?.address)
+      return getGroup(api, worker.group.name)?.updateRoleAccount(worker.runtimeId, selectedAccount?.address)
     }
 
-    return getGroup(api, worker.group.name)?.updateRewardAccount(workerId, selectedAccount?.address)
+    return getGroup(api, worker.group.name)?.updateRewardAccount(worker.runtimeId, selectedAccount?.address)
   }, [selectedAccount?.address, worker?.id])
 
   const onDone = (success: boolean) => {

@@ -26,6 +26,7 @@ export const Default = Template.bind({})
 Default.args = {
   role: {
     id: '123',
+    runtimeId: 12,
     earnedTotal: 1000,
     group: { id: '3', name: 'membership' },
     isLeader: false,

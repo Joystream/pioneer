@@ -14,6 +14,7 @@ export interface WorkerBaseInfo {
 
 export interface Worker {
   id: string
+  runtimeId: number
   membership: Pick<Member, 'id' | 'controllerAccount'>
   group: Pick<WorkingGroup, 'id' | 'name'>
   status: string
@@ -48,6 +49,7 @@ export const asWorkerBaseInfo = (fields: WorkerFieldsFragment): WorkerBaseInfo =
 
 export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   id: fields.id,
+  runtimeId: fields.runtimeId,
   group: {
     id: fields.group.id,
     name: asWorkingGroupName(fields.group.name),

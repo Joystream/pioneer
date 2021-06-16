@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
@@ -19,7 +19,10 @@ export const LeaveRoleModal = () => {
   const { worker } = useWorker(modalData.workerId)
   const [rationale, setRationale] = useState('')
   const [step, setStep] = useState<ModalState>('PREPARE')
-  const transaction = getGroup(api, worker?.group?.name)?.leaveRole(modalData.workerId, rationale)
+  const transaction = useMemo(
+    () => worker && getGroup(api, worker?.group?.name)?.leaveRole(worker.runtimeId, rationale),
+    [worker?.id]
+  )
   const onDone = (success: boolean) => setStep(success ? 'SUCCESS' : 'ERROR')
   const onContinue = (newRationale: string) => {
     setRationale(newRationale)
