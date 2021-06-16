@@ -49,27 +49,6 @@ const transactionConfig = {
   },
 } as const
 
-const stepperConfig = {
-  id: 'stepper',
-  initial: 'step1',
-  states: {
-    step1: {
-      on: { NEXT: 'step2' },
-    },
-    step2: {
-      ...formConfig,
-      onDone: 'step3',
-    },
-    step3: {
-      ...transactionConfig,
-      onDone: 'step4',
-    },
-    step4: {
-      type: 'final',
-    },
-  },
-} as const
-
 describe('Transaction machine', () => {
   const machine = createMachine(transactionConfig)
   let service: Interpreter<any>
@@ -156,7 +135,26 @@ describe('Form machine', () => {
 })
 
 describe('Stepper machine', () => {
-  const machine = createMachine(stepperConfig)
+  const machine = createMachine({
+    id: 'stepper',
+    initial: 'step1',
+    states: {
+      step1: {
+        on: { NEXT: 'form' },
+      },
+      form: {
+        ...formConfig,
+        onDone: 'transaction',
+      },
+      transaction: {
+        ...transactionConfig,
+        onDone: 'done',
+      },
+      done: {
+        type: 'final',
+      },
+    },
+  } as const)
   let service: Interpreter<any>
 
   beforeEach(() => {
@@ -167,7 +165,7 @@ describe('Stepper machine', () => {
   it('Standard step', () => {
     service.send('NEXT')
 
-    expect(service.state.matches('step2')).toBeTruthy()
+    expect(service.state.matches('form')).toBeTruthy()
   })
 
   it('Form step', () => {
@@ -176,6 +174,19 @@ describe('Stepper machine', () => {
     service.send('VALID')
     service.send('DONE')
 
-    expect(service.state.matches('step3')).toBeTruthy()
+    expect(service.state.matches('transaction')).toBeTruthy()
+  })
+
+  it('Transaction step', () => {
+    service.send('NEXT')
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('SUCCESS')
+
+    expect(service.state.matches('done')).toBeTruthy()
   })
 })
