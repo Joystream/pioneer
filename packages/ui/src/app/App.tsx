@@ -12,6 +12,7 @@ import { Members } from './pages/Members/Members'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
 import { PastProposals } from './pages/Proposals/PastProposals'
+import { ProposalPreview } from './pages/Proposals/ProposalPreview'
 import { Proposals } from './pages/Proposals/Proposals'
 import { Settings } from './pages/Settings/Settings'
 import { MyApplications } from './pages/WorkingGroups/MyApplications'
@@ -42,6 +43,7 @@ export const App = () => (
         <Route exact path={ProposalsRoutes.current} component={Proposals} />
         <Route exact path={ProposalsRoutes.past} component={PastProposals} />
         <Route exact path={ProposalsRoutes.myproposals} />
+        <Route exact path={`${ProposalsRoutes.preview}/:id`} component={ProposalPreview} />
         <Route exact path="/members" component={Members} />
         <Route exact path="/members/:id" component={Members} />
         <Route exact path="/settings" component={Settings} />

@@ -3,12 +3,14 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { TableListItem } from '@/common/components/List'
+import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextSmall } from '@/common/components/typography/Text'
 import { Colors } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
+import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { isProposalActive } from '@/proposals/model/proposalStatus'
 import { Proposal } from '@/proposals/types'
 
@@ -19,20 +21,22 @@ interface ProposalListItemProps {
 export const ProposalListItem = ({ proposal }: ProposalListItemProps) => {
   const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
   return (
-    <ProposalItem colLayout={ProposalColLayout} isPast={!isProposalActive(proposal.status)}>
-      <TextSmall lighter>{date.toLocaleDateString('en-GB')}</TextSmall>
-      <StageField>
-        <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
-        <Tooltip tooltipText="Lorem ipsum, dolor sit amet consectetur">
-          <TooltipDefault />
-        </Tooltip>
-      </StageField>
-      <TypeField bold>
-        <BadgeStatus>{camelCaseToText(proposal.details)}</BadgeStatus>
-        {proposal.title}
-      </TypeField>
-      <MemberInfo member={proposal.proposer} />
-    </ProposalItem>
+    <GhostRouterLink to={`${ProposalsRoutes.preview}/${proposal.id}`}>
+      <ProposalItem colLayout={ProposalColLayout} isPast={!isProposalActive(proposal.status)}>
+        <TextSmall lighter>{date.toLocaleDateString('en-GB')}</TextSmall>
+        <StageField>
+          <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
+          <Tooltip tooltipText="Lorem ipsum, dolor sit amet consectetur">
+            <TooltipDefault />
+          </Tooltip>
+        </StageField>
+        <TypeField bold>
+          <BadgeStatus>{camelCaseToText(proposal.details)}</BadgeStatus>
+          {proposal.title}
+        </TypeField>
+        <MemberInfo member={proposal.proposer} />
+      </ProposalItem>
+    </GhostRouterLink>
   )
 }
 
