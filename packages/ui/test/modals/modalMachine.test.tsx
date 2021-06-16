@@ -190,3 +190,146 @@ describe('Stepper machine', () => {
     expect(service.state.matches('done')).toBeTruthy()
   })
 })
+
+describe('Multi transaction machine', () => {
+  const machine = createMachine({
+    id: 'stepper',
+    initial: 'form1',
+    states: {
+      form1: {
+        ...formConfig,
+        onDone: 'transaction1',
+      },
+      transaction1: {
+        ...transactionConfig,
+        onDone: [
+          {
+            target: 'error',
+            in: 'transaction1.error',
+          },
+          {
+            target: 'form2',
+            in: 'transaction1.success',
+          },
+        ],
+      },
+      form2: {
+        ...formConfig,
+        onDone: 'transaction2',
+      },
+      transaction2: {
+        ...transactionConfig,
+        onDone: [
+          {
+            target: 'error',
+            in: 'transaction2.error',
+          },
+          {
+            target: 'done',
+            in: 'transaction2.success',
+          },
+        ],
+      },
+      error: {
+        type: 'final',
+      },
+      done: {
+        type: 'final',
+      },
+    },
+  })
+  let service: Interpreter<any>
+
+  beforeEach(() => {
+    service = interpret(machine)
+    service.start()
+  })
+
+  it('Form 1 step', () => {
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    expect(service.state.matches('transaction1')).toBeTruthy()
+  })
+
+  it('Transaction 1 step', () => {
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('SUCCESS')
+
+    expect(service.state.matches('form2')).toBeTruthy()
+  })
+
+  it('Transaction 1 error', () => {
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('ERROR')
+
+    expect(service.state.matches('error')).toBeTruthy()
+  })
+
+  it('Form 2 step', () => {
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('SUCCESS')
+
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    expect(service.state.matches('transaction2')).toBeTruthy()
+  })
+
+  it('Transaction 2 error', () => {
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('SUCCESS')
+
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('ERROR')
+
+    expect(service.state.matches('error')).toBeTruthy()
+  })
+
+  it('Success', () => {
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('SUCCESS')
+
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('SUCCESS')
+
+    expect(service.state.matches('done')).toBeTruthy()
+  })
+})
