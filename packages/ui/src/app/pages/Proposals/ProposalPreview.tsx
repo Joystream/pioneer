@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { PageLayout } from '@/app/components/PageLayout'
-import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
@@ -57,18 +57,20 @@ export const ProposalPreview = () => {
             <LinkIcon />
             Copy link
           </ButtonGhost>
+
+          <RowGapBlock gap={24}>
+            <BadgesRow>
+              <BadgeStatus inverted size="l">
+                {camelCaseToText(proposal.status)}
+              </BadgeStatus>
+              {/* Time Left */}
+            </BadgesRow>
+          </RowGapBlock>
         </PageHeader>
       }
       main={
         <MainPanel ref={sideNeighborRef}>
           <RowGapBlock gap={24}>
-            <div>
-              <BadgeStatus inverted size="l">
-                {camelCaseToText(proposal.status)}
-              </BadgeStatus>
-              {/* Time Left */}
-            </div>
-
             {/* Statistics */}
             <Statistics></Statistics>
 
