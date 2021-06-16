@@ -3,6 +3,9 @@ import styled from 'styled-components'
 
 import { equals, intersperse, isString } from '@/common/utils'
 
+import { CheckboxIcon } from '../icons'
+import { TextInlineMedium } from '../typography'
+
 import { DefaultSelectProps, OptionContainer, Selected, SimpleSelect } from '.'
 import { OptionNode, OptionProps, RenderOption } from './types'
 
@@ -15,7 +18,11 @@ const defaultSelectedOption = (node: OptionNode, key: number) => <u key={key}>{n
 const defaultRenderSelected = <T extends any>(renderOption: RenderOption<T>) => (value: T[]) => {
   const optionNodes = value.map((option) => renderOption(option))
   const nodes = optionNodes.some(isString) ? optionNodes.map(defaultSelectedOption) : optionNodes
-  return <MultiSelected>{intersperse(nodes, ' ')}</MultiSelected>
+  return (
+    <Selected>
+      <MultiSelectedInner>{intersperse(nodes, `${',' + ' '}`)}</MultiSelectedInner>
+    </Selected>
+  )
 }
 
 export const MultiSelect = <T extends any>({
@@ -60,7 +67,8 @@ export const MultiSelect = <T extends any>({
     const selected = value.some(equals(option))
     return (
       <OptionContainer focus={focus} selected={selected} onClick={onClick}>
-        {renderOption(option)}
+        <TextInlineMedium>{renderOption(option)}</TextInlineMedium>
+        {selected && <CheckboxIcon />}
       </OptionContainer>
     )
   }
@@ -78,8 +86,6 @@ export const MultiSelect = <T extends any>({
   )
 }
 
-export const MultiSelected = styled(Selected)`
-  & > * {
-    display: inline-block;
-  }
+export const MultiSelectedInner = styled.span`
+  display: inline-block;
 `

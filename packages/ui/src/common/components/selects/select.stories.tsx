@@ -47,7 +47,10 @@ const Template: Story<Props> = ({ optionsString = '', onApply }) => {
             <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} selectSize="l" />
           </Row>
           <Row>
-            <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} />
+            <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
+          </Row>
+          <Row>
+            <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
           </Row>
           <Row>
             <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />

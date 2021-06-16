@@ -12,7 +12,7 @@ import { CalendarIcon } from '../../icons/CalendarIcon'
 import { Calendar } from '../Calendar'
 import { CALENDAR_WRAP_SIZE } from '../Calendar/components'
 import { FilterLabel } from '../FilterBox'
-import { InputComponent, InputText } from '../InputComponent'
+import { InputComponent, InputContainer, InputText } from '../InputComponent'
 import { ControlProps } from '../types'
 
 interface DatePickerProps extends ControlProps<PartialDateRange> {
@@ -154,10 +154,29 @@ const DatePickerCalendars = ({ value, within, onChange }: DatePickerCalendarsPro
 
 const DatePickerContainer = styled.div`
   display: inline-block;
+
+  &:hover,
+  &:focus,
+  &:focus-within,
+  &:active {
+    ${FilterLabel} {
+      color: ${Colors.Blue[400]};
+    }
+  }
 `
 
 const DatePickerInput = styled(InputComponent)`
   width: unset;
+
+  ${InputContainer} {
+    border: 1px solid ${Colors.Black[200]};
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+      border-color: ${Colors.Blue[400]};
+    }
+  }
 `
 
 const DatePickerPopup = styled.div`

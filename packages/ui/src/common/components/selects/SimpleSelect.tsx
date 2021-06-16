@@ -7,7 +7,7 @@ import { isDefined, isString } from '@/common/utils'
 import { stopEvent } from '@/common/utils/events'
 
 import { FilterButtons } from '../buttons'
-import { Toggle } from '../buttons/Toggle'
+import { Toggle, ToggleButton } from '../buttons/Toggle'
 import { CheckboxIcon } from '../icons'
 import { TextInlineMedium } from '../typography'
 
@@ -197,6 +197,10 @@ const SelectContainer = styled.label<SimpleSelectSizingProps>`
     border: 1px solid ${Colors.Black[200]};
     cursor: pointer;
   }
+  ${ToggleButton} {
+    height: 100%;
+  }
+  ${OptionContainer},
   ${SelectComponent} {
     height: ${({ selectSize }) => {
       switch (selectSize) {

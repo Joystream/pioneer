@@ -276,7 +276,7 @@ const InputIcon = styled.div<DisabledInputProps>`
   transition: ${Transitions.all};
 `
 
-const InputContainer = styled.div<InputElementProps>`
+export const InputContainer = styled.div<InputElementProps>`
   display: grid;
   position: relative;
   grid-template-columns: ${(props) => (props.copy || props.units ? '1fr auto' : '1fr')};

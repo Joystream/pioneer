@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Overflow, Shadows, Sizes, Transitions } from '../../constants'
+import { Animations, BorderRad, Colors, Overflow, Shadows, Sizes, Transitions } from '../../constants'
 import { ToggleButton } from '../buttons/Toggle'
 import { Arrow, CheckboxIconStyles } from '../icons'
 import { TextInlineMedium } from '../typography'
@@ -119,7 +119,7 @@ export const OptionComponent = styled.div`
   width: 100%;
   height: 100%;
   border: none;
-  background: ${Colors.White};
+  background-color: ${Colors.White};
   cursor: pointer;
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
@@ -209,11 +209,15 @@ const OptionFocused = css`
   color: ${Colors.Blue[500]};
 `
 export const OptionContainer = styled.div`
-  cursor: pointer;
-  display: block;
-  line-height: 40px;
+  display: grid;
+  grid-template-columns: 1fr 16px;
+  align-items: center;
+  width: 100%;
   padding: 0 16px;
+  cursor: pointer;
   text-transform: capitalize;
+  transition: ${Transitions.all};
+
   ${({ focus, selected }: OptionProps) => (selected || focus) && OptionFocused}
   &:hover {
     ${OptionFocused}
@@ -221,12 +225,13 @@ export const OptionContainer = styled.div`
   ${({ selected }: OptionProps) =>
     selected &&
     css`
-      background: ${Colors.Blue[50]};
+      background-color: ${Colors.Blue[50]};
       font-weight: bold;
     `}
   ${CheckboxIconStyles} {
     width: 16px;
     height: 16px;
+    ${Animations.showSymbol};
   }
   &,
   ${TextInlineMedium} {
