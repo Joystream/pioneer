@@ -1,4 +1,4 @@
-import { createMachine, interpret } from 'xstate'
+import { createMachine, interpret, Interpreter } from 'xstate'
 
 const formConfig = {
   id: 'form',
@@ -57,27 +57,69 @@ const stepperConfig = {
   },
 } as const
 
+describe('Form machine', () => {
+  const machine = createMachine(formConfig)
+  let service: Interpreter<any>
+
+  beforeEach(() => {
+    service = interpret(machine)
+    service.start()
+  })
+
+  it('Initial', () => {
+    expect(service.state.matches('initial')).toBeTruthy()
+  })
+
+  it('Validating', () => {
+    service.send('INPUT')
+
+    expect(service.state.matches('validating')).toBeTruthy()
+  })
+
+  it('Valid', () => {
+    service.send('INPUT')
+    service.send('VALID')
+
+    expect(service.state.matches('valid')).toBeTruthy()
+  })
+
+  it('Invalid', () => {
+    service.send('INPUT')
+    service.send('INVALID')
+
+    expect(service.state.matches('invalid')).toBeTruthy()
+  })
+
+  it('Done', () => {
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    expect(service.state.matches('done')).toBeTruthy()
+  })
+})
+
 describe('Stepper machine', () => {
-  const stepperMachine = createMachine(stepperConfig)
+  const machine = createMachine(stepperConfig)
+  let service: Interpreter<any>
+
+  beforeEach(() => {
+    service = interpret(machine)
+    service.start()
+  })
 
   it('Transition to step 2', () => {
-    const stepperService = interpret(stepperMachine.withContext({}))
-    stepperService.start()
+    service.send('NEXT')
 
-    stepperService.send('NEXT')
-
-    expect(stepperService.state.matches('step2')).toBeTruthy()
+    expect(service.state.matches('step2')).toBeTruthy()
   })
 
   it('Transition to step 3 on done', () => {
-    const stepperService = interpret(stepperMachine.withContext({}))
-    stepperService.start()
+    service.send('NEXT')
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
 
-    stepperService.send('NEXT')
-    stepperService.send('INPUT')
-    stepperService.send('VALID')
-    stepperService.send('DONE')
-
-    expect(stepperService.state.matches('step3')).toBeTruthy()
+    expect(service.state.matches('step3')).toBeTruthy()
   })
 })
