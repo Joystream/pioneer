@@ -216,6 +216,7 @@ export const TooltipLink = styled.a`
   font-weight: 400;
   color: ${Colors.Black[400]};
   transition: ${Transitions.all};
+  text-transform: capitalize;
 
   ${LinkSymbolStyle} {
     width: 12px;

@@ -88,6 +88,7 @@ export const WORKER_DATA: RawWorker = {
   stake: 4000,
   missingRewardAmount: 1000,
   status: '',
+  createdAt: '2021-07-04T14:01:59.513Z',
 }
 
 export const APPLICATION_DATA: RawApplication = {

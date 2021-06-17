@@ -1,5 +1,5 @@
-import { capitalizeFirstLetter, lowerFirstLetter } from '@/common/helpers'
-import { ProposalStatus } from '@/proposals/types'
+import { lowerFirstLetter, capitalizeFirstLetter } from '../../common/helpers'
+import { ProposalStatus } from '../types'
 
 export const proposalActiveStatuses: ProposalStatus[] = ['deciding', 'gracing', 'dormant']
 export const proposalPastStatuses: ProposalStatus[] = [

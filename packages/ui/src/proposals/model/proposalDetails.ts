@@ -1,5 +1,5 @@
-import { lowerFirstLetter } from '@/common/helpers'
-import { ProposalDetails } from '@/proposals/types'
+import { lowerFirstLetter } from '../../common/helpers'
+import { ProposalDetails } from '../types'
 
 export const proposalDetails: ProposalDetails[] = [
   'signal',

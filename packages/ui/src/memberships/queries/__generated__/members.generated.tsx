@@ -13,7 +13,12 @@ export type MemberFieldsFragment = {
   isFoundingMember: boolean
   inviteCount: number
   metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string>; about?: Types.Maybe<string> }
-  roles: Array<{ __typename: 'Worker'; isLead: boolean; group: { __typename: 'WorkingGroup'; name: string } }>
+  roles: Array<{
+    __typename: 'Worker'
+    createdAt: any
+    isLead: boolean
+    group: { __typename: 'WorkingGroup'; name: string }
+  }>
 }
 
 export type MemberWithDetailsFragment = {
@@ -78,6 +83,7 @@ export const MemberFieldsFragmentDoc = gql`
       group {
         name
       }
+      createdAt
       isLead
     }
   }

@@ -16,6 +16,7 @@ export interface RawWorker {
   stake: number
   nextPaymentAt: string
   missingRewardAmount: number
+  createdAt: string
 }
 
 export type MockWorker = Worker & { groupId: string; memberId: string; applicationId: string }

@@ -2,16 +2,19 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { CountBadge, CountBadgeComponent } from '@/common/components/CountBadge'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
   DarkTooltipInnerItemProps,
   DefaultTooltip,
   Tooltip,
   TooltipComponent,
+  TooltipLink,
   TooltipPopupTitle,
   TooltipText,
 } from '@/common/components/Tooltip'
 import { Colors, Fonts } from '@/common/constants'
 import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
+import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
 import { MemberRole } from '../types'
 
@@ -98,16 +101,23 @@ export interface MemberRolePopupContentProps {
 }
 
 export const MemberRolePopupContent = ({ roles }: MemberRolePopupContentProps) => {
+  const groupAddress = `#/working-groups/${groupNameToURLParam(roles[0].groupName)}`
   return (
     <>
       {roles.map((role, index) => (
-        <>
-          <TooltipPopupTitle>
-            {memberRoleTitle(role)} {roles.length > 1 ? '#' + index : ''}
-          </TooltipPopupTitle>
-          {role.createdAt && <TooltipText>Member since: {}</TooltipText>}
-        </>
+        <PopupRoleItem key={index}>
+          <PopupRoleTitle>
+            {memberRoleTitle(role)} {roles.length > 1 ? index + 1 : ''}
+          </PopupRoleTitle>
+          {role.createdAt && (
+            <TooltipText>Member since: {new Date(role.createdAt).toLocaleDateString('en-GB')}</TooltipText>
+          )}
+        </PopupRoleItem>
       ))}
+      <TooltipLink href={groupAddress} target="_blank">
+        {roles[0].groupName} Group
+        <LinkSymbol />
+      </TooltipLink>
     </>
   )
 }
@@ -190,7 +200,7 @@ export const MemberRoleHelpGroupItem = styled(MemberRoleHelp)<MemberRoleTooltipP
   }
 
   ${CountBadgeComponent} {
-    min -width: ${({ size }) => {
+    min-width: ${({ size }) => {
       switch (size) {
         case 'l':
           return '16px'
@@ -295,4 +305,12 @@ export const MemberRolesWrapper = styled.div`
 
 export const MemberRolesWrapperWrapable = styled(MemberRolesWrapper)`
   flex-wrap: wrap;
+`
+
+const PopupRoleItem = styled.div`
+  margin-bottom: 12px;
+`
+
+const PopupRoleTitle = styled(TooltipPopupTitle)`
+  margin-bottom: 3px;
 `
