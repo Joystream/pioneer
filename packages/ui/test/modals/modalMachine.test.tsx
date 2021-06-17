@@ -1,4 +1,4 @@
-import { createMachine, interpret, Interpreter } from 'xstate'
+import { assign, createMachine, EventObject, interpret, Interpreter } from 'xstate'
 
 const formConfig = {
   id: 'form',
@@ -26,6 +26,9 @@ const formConfig = {
 const transactionConfig = {
   id: 'transaction',
   initial: 'signing',
+  context: {
+    events: [],
+  },
   states: {
     signing: {
       on: {
@@ -40,11 +43,21 @@ const transactionConfig = {
     },
     pending: {
       on: {
-        SUCCESS: 'success',
+        SUCCESS: {
+          target: 'success',
+          actions: assign({
+            events: (context, event: EventObject & { events: [] }) => event.events,
+          }),
+        },
         ERROR: 'error',
       },
     },
-    success: { type: 'final' },
+    success: {
+      type: 'final',
+      data: {
+        events: (context: any, event: any) => event.events,
+      },
+    },
     error: { type: 'final' },
   },
 } as const
@@ -89,6 +102,68 @@ describe('Transaction machine', () => {
     service.send('ERROR')
 
     expect(service.state.matches('error')).toBeTruthy()
+  })
+
+  it('Send events', () => {
+    service.send('SIGN_EXTERNAL')
+    service.send('SIGNED')
+    service.send('SUCCESS', { events: ['foo', 'bar'] })
+
+    expect(service.state.context).toEqual({
+      events: ['foo', 'bar'],
+    })
+  })
+})
+
+describe('Stepper with transaction machine', () => {
+  const machine = createMachine({
+    id: 'stepper',
+    initial: 'step1',
+    context: {
+      transactionEvents: [],
+    },
+    states: {
+      step1: {
+        on: { NEXT: 'transaction' },
+      },
+      transaction: {
+        invoke: {
+          src: createMachine(transactionConfig),
+          onDone: {
+            actions: assign({
+              transactionEvents: (context, event) => event.data.events,
+            }),
+            target: 'done',
+          },
+        },
+      },
+      done: {
+        type: 'final',
+      },
+    },
+  } as const)
+  let service: Interpreter<any>
+
+  beforeEach(() => {
+    service = interpret(machine)
+    service.start()
+  })
+
+  it('Transaction events', () => {
+    service.send('NEXT')
+
+    expect(service.state.matches('transaction')).toBeTruthy()
+
+    const transaction = service.children.get('stepper.transaction:invocation[0]')!
+
+    transaction.send('SIGN_EXTERNAL')
+    transaction.send('SIGNED')
+    ;(transaction.send as any)('SUCCESS', { events: ['foo', 'bar'] })
+
+    expect(service.state.matches('done')).toBeTruthy()
+    expect(service.state.context).toEqual({
+      transactionEvents: ['foo', 'bar'],
+    })
   })
 })
 
