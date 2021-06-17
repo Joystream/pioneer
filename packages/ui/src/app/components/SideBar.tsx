@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { NotificationsButton } from '@/common/components/Notifications'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
 import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/CouncilIcon'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon'
@@ -23,6 +24,7 @@ export const SideBar = () => (
   <Navigation>
     <NavigationHeader>
       <LogoLink />
+      <NotificationsButton />
     </NavigationHeader>
     <NavigationLinks>
       <NavigationLinksItem>

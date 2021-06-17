@@ -1,10 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { BreadcrumbsOptions } from '@/app/constants/breadcrumbs'
-
-import { CloseButton } from '../../../buttons'
-import { Notifications } from '../../../Notifications'
 
 import { BreadcrumbsList } from './BreadcrumbsList'
 import { HomeLink } from './HomeLink'
@@ -15,18 +12,11 @@ export interface BreadcrumbsProps {
 }
 
 export const Breadcrumbs = React.memo(({ breadcrumbsOptions, lastBreadcrumb }: BreadcrumbsProps) => {
-  const [notificationsOpen, setNotificationsOpen] = useState(false)
   return (
-    <>
-      <BreadcrumbsNavigation>
-        <TopRow>
-          <HomeLink />
-          <CloseButton onClick={() => setNotificationsOpen(true)} />
-        </TopRow>
-        <BreadcrumbsList lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
-      </BreadcrumbsNavigation>
-      {notificationsOpen && <Notifications onClose={() => setNotificationsOpen(false)} isOpen={notificationsOpen} />}
-    </>
+    <BreadcrumbsNavigation>
+      <HomeLink />
+      <BreadcrumbsList lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
+    </BreadcrumbsNavigation>
   )
 })
 
@@ -36,10 +26,4 @@ const BreadcrumbsNavigation = styled.nav`
   position: absolute;
   top: 6px;
   left: 0;
-`
-
-const TopRow = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 `
