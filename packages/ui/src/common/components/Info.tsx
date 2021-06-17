@@ -8,19 +8,21 @@ import { ColumnGapBlock, RowGapBlock } from './page/PageContent'
 import { Tooltip, TooltipDefault } from './Tooltip'
 
 export interface InfoProps {
-  title: string
+  title?: string
   content: React.ReactNode
 }
 
 export const Info = ({ title, content }: InfoProps) => {
   return (
     <InfoBlock gap={8}>
-      <ColumnGapBlock gap={8} align="center">
-        <Tooltip tooltipText="Lorem ipsum">
-          <TooltipDefault />
-        </Tooltip>
-        <h5>{title}</h5>
-      </ColumnGapBlock>
+      {title && (
+        <ColumnGapBlock gap={8} align="center">
+          <Tooltip tooltipText="Lorem ipsum">
+            <TooltipDefault />
+          </Tooltip>
+          <h5>{title}</h5>
+        </ColumnGapBlock>
+      )}
       {content}
     </InfoBlock>
   )
