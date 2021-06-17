@@ -2,7 +2,14 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { CountBadge, CountBadgeComponent } from '@/common/components/CountBadge'
-import { DarkTooltipInnerItemProps, DefaultTooltip, Tooltip, TooltipComponent } from '@/common/components/Tooltip'
+import {
+  DarkTooltipInnerItemProps,
+  DefaultTooltip,
+  Tooltip,
+  TooltipComponent,
+  TooltipPopupTitle,
+  TooltipText,
+} from '@/common/components/Tooltip'
 import { Colors, Fonts } from '@/common/constants'
 import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 
@@ -24,15 +31,16 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
   if (!roles || !roles.length) {
     roles = [defaultRole]
   }
-  const mapRoles = new Map<string, { title: string; count: number }>()
+  const mapRoles = new Map<string, MemberRole[]>()
   for (const role of roles) {
     const abbreviation = memberRoleAbbreviation(role)
     if (!mapRoles.has(abbreviation)) {
-      mapRoles.set(abbreviation, { title: memberRoleTitle(role), count: 0 })
-    }
-    const roleDef = mapRoles.get(abbreviation)
-    if (roleDef) {
-      mapRoles.set(abbreviation, { ...roleDef, count: roleDef.count + 1 })
+      mapRoles.set(abbreviation, [role])
+    } else {
+      const roleDef = mapRoles.get(abbreviation)
+      if (roleDef) {
+        mapRoles.set(abbreviation, [...roleDef, role])
+      }
     }
   }
   const rolesWithCount = [...mapRoles.entries()]
@@ -44,13 +52,13 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
     <>
       {wrapable ? (
         <MemberRolesWrapperWrapable>
-          {rolesToDisplay.map(([abbreviation, { count, title }], index) =>
-            count > 1 ? (
-              <Tooltip key={index} tooltipText={title}>
-                <MemberRoleHelpGroup size={size} count={count} abbreviation={abbreviation} />
+          {rolesToDisplay.map(([abbreviation, roles], index) =>
+            roles.length > 1 ? (
+              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
+                <MemberRoleHelpGroup size={size} count={roles.length} abbreviation={abbreviation} />
               </Tooltip>
             ) : (
-              <Tooltip key={index} tooltipText={title}>
+              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
                 <MemberRoleHelp size={size}>{abbreviation}</MemberRoleHelp>
               </Tooltip>
             )
@@ -63,13 +71,13 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
         </MemberRolesWrapperWrapable>
       ) : (
         <MemberRolesWrapper>
-          {rolesToDisplay.map(([abbreviation, { count, title }], index) =>
-            count > 1 ? (
-              <Tooltip key={index} tooltipText={title}>
-                <MemberRoleHelpGroup size={size} count={count} abbreviation={abbreviation} />
+          {rolesToDisplay.map(([abbreviation, roles], index) =>
+            roles.length > 1 ? (
+              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
+                <MemberRoleHelpGroup size={size} count={roles.length} abbreviation={abbreviation} />
               </Tooltip>
             ) : (
-              <Tooltip key={index} tooltipText={title}>
+              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
                 <MemberRoleHelp size={size}>{abbreviation}</MemberRoleHelp>
               </Tooltip>
             )
@@ -81,6 +89,25 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
           )}
         </MemberRolesWrapper>
       )}
+    </>
+  )
+}
+
+export interface MemberRolePopupContentProps {
+  roles: MemberRole[]
+}
+
+export const MemberRolePopupContent = ({ roles }: MemberRolePopupContentProps) => {
+  return (
+    <>
+      {roles.map((role, index) => (
+        <>
+          <TooltipPopupTitle>
+            {memberRoleTitle(role)} {roles.length > 1 ? '#' + index : ''}
+          </TooltipPopupTitle>
+          {role.createdAt && <TooltipText>Member since: {}</TooltipText>}
+        </>
+      ))}
     </>
   )
 }
@@ -163,7 +190,7 @@ export const MemberRoleHelpGroupItem = styled(MemberRoleHelp)<MemberRoleTooltipP
   }
 
   ${CountBadgeComponent} {
-    min-width: ${({ size }) => {
+    min -width: ${({ size }) => {
       switch (size) {
         case 'l':
           return '16px'
@@ -248,6 +275,7 @@ export const MemberStatusTooltip = styled(DefaultTooltip)<MemberRoleTooltipProps
       background-color: ${Colors.Black[50]};
       border-color: ${Colors.Blue[100]};
     }
+
     &.tooltipondark {
       color: ${Colors.Blue[400]} !important;
       background-color: transparent !important;

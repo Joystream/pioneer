@@ -15,10 +15,11 @@ export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 
 
 export interface TooltipPopupProps {
   className?: string
-  tooltipText: string
+  tooltipText?: string
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
+  popupContent?: React.ReactNode
   position: DOMRect
   popUpHandlers: {
     onMouseEnter: () => void
@@ -39,6 +40,7 @@ export const Tooltip = ({
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
+  popupContent,
   className,
 }: TooltipProps) => {
   const tooltipRef = useRef<HTMLButtonElement>(null)
@@ -97,6 +99,7 @@ export const Tooltip = ({
           tooltipText={tooltipText}
           tooltipLinkURL={tooltipLinkURL}
           tooltipLinkText={tooltipLinkText}
+          popupContent={popupContent}
         />
       )}
     </TooltipContainer>
@@ -104,7 +107,25 @@ export const Tooltip = ({
 }
 
 const TooltipPopup = (props: TooltipPopupProps) => {
-  const { tooltipLinkText, tooltipText, position, tooltipLinkURL, tooltipTitle, className, popUpHandlers } = props
+  const {
+    tooltipLinkText,
+    tooltipText,
+    position,
+    tooltipLinkURL,
+    tooltipTitle,
+    className,
+    popUpHandlers,
+    popupContent,
+  } = props
+
+  if (popupContent) {
+    return ReactDOM.createPortal(
+      <TooltipPopupContainer className={className} position={position} {...popUpHandlers}>
+        {popupContent}
+      </TooltipPopupContainer>,
+      document.body
+    )
+  }
 
   return ReactDOM.createPortal(
     <TooltipPopupContainer className={className} position={position} {...popUpHandlers}>
@@ -195,16 +216,20 @@ export const TooltipLink = styled.a`
   font-weight: 400;
   color: ${Colors.Black[400]};
   transition: ${Transitions.all};
+
   ${LinkSymbolStyle} {
     width: 12px;
     height: 12px;
+
     .blackPart,
     .primaryPart {
       fill: ${Colors.Black[300]};
     }
   }
+
   &:hover {
     color: ${Colors.Blue[500]};
+
     ${LinkSymbolStyle} {
       .blackPart,
       .primaryPart {
@@ -220,6 +245,7 @@ export const TooltipComponent = styled.button`
   justify-content: center;
   align-items: center;
   z-index: 50;
+
   &:hover,
   &:focus {
     ${DefaultTooltip} {
