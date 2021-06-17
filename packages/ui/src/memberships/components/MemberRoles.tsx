@@ -1,4 +1,5 @@
 import React from 'react'
+import { generatePath } from 'react-router'
 import styled, { css } from 'styled-components'
 
 import { CountBadge, CountBadgeComponent } from '@/common/components/CountBadge'
@@ -101,7 +102,8 @@ export interface MemberRolePopupContentProps {
 }
 
 export const MemberRolePopupContent = ({ roles }: MemberRolePopupContentProps) => {
-  const groupAddress = `#/working-groups/${groupNameToURLParam(roles[0].groupName)}`
+  const groupAddress = generatePath(`/working-groups/${groupNameToURLParam(roles[0].groupName)}`)
+
   return (
     <>
       {roles.map((role, index) => (
@@ -114,10 +116,10 @@ export const MemberRolePopupContent = ({ roles }: MemberRolePopupContentProps) =
           )}
         </PopupRoleItem>
       ))}
-      <TooltipLink href={groupAddress} target="_blank">
+      <PopupGroupLink to={groupAddress} target="_blank">
         {roles[0].groupName} Group
         <LinkSymbol />
-      </TooltipLink>
+      </PopupGroupLink>
     </>
   )
 }
@@ -312,5 +314,9 @@ const PopupRoleItem = styled.div`
 `
 
 const PopupRoleTitle = styled(TooltipPopupTitle)`
+  margin-bottom: 3px;
+`
+
+const PopupGroupLink = styled(TooltipLink)`
   margin-bottom: 3px;
 `

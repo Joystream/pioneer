@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Animations, BorderRad, Colors, Transitions } from '../../constants'
@@ -132,7 +133,7 @@ const TooltipPopup = (props: TooltipPopupProps) => {
       {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
       <TooltipText>{tooltipText}</TooltipText>
       {tooltipLinkURL && (
-        <TooltipLink href={tooltipLinkURL} target="_blank">
+        <TooltipLink to={tooltipLinkURL} target="_blank">
           {tooltipLinkText ?? 'Link'}
           <LinkSymbol />
         </TooltipLink>
@@ -178,6 +179,7 @@ const TooltipPopupContainer = styled(PopupItem)<{ position: DOMRect }>`
     clip-path: polygon(100% 0, 0 0, 0 100%);
     z-index: 1;
   }
+
   &:before {
     content: '';
     position: absolute;
@@ -204,7 +206,7 @@ export const TooltipText = styled.p`
   color: ${Colors.Black[400]};
 `
 
-export const TooltipLink = styled.a`
+export const TooltipLink = styled(Link)<{ to: string; target: string }>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
