@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { ButtonPrimary } from '../buttons'
-import { HelpIcon } from '../icons'
+import { BellIcon } from '../icons/BellIcon'
 
 import { Notifications } from './Notifications'
 
@@ -14,7 +14,7 @@ export const NotificationsButton = () => {
   return (
     <span ref={container}>
       <ButtonPrimary square size={'small'} onClick={() => setPanelOpen(!isPanelOpen)}>
-        <HelpIcon />
+        <BellIcon />
       </ButtonPrimary>
       {isPanelOpen && <Notifications onClose={onClose} />}
     </span>
