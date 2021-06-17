@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -74,6 +74,25 @@ describe('UI: AddNewProposalModal', () => {
       const { findByText } = renderModal()
 
       expect(await findByText('Insufficient Funds')).toBeDefined()
+    })
+  })
+
+  describe('Warning', () => {
+    it('Not checked', async () => {
+      const { findByText } = renderModal()
+      const button = (await findByText('I want to create a proposal anyway')).parentElement
+
+      expect(button).toBeDisabled()
+    })
+
+    it('Checked', async () => {
+      const { findByRole, findByText } = renderModal()
+      const button = (await findByText('I want to create a proposal anyway')).parentElement
+
+      const checkbox = await findByRole('checkbox')
+      await fireEvent.click(checkbox)
+
+      expect(button).toBeEnabled()
     })
   })
 

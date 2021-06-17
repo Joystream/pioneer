@@ -6,10 +6,10 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { ModalState } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
+import { AddNewProposalWarningModal } from '@/proposals/modals/AddNewProposal/AddNewProposalWarningModal'
+import { AddNewProposalModalCall, AddProposalModalState } from '@/proposals/modals/AddNewProposal/index'
 import { ProposalDetails } from '@/proposals/types'
 
 export type NewProposalParams = Exclude<
@@ -21,7 +21,7 @@ export const AddNewProposalModal = () => {
   const { api } = useApi()
   const { active: member } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
-  const [state, setState] = useState<ModalState>('REQUIREMENTS_CHECK')
+  const [state, setState] = useState<AddProposalModalState>('REQUIREMENTS_CHECK')
   const [type, setType] = useState<ProposalDetails>('signal')
 
   const [txParams, setTxParams] = useState<NewProposalParams>({
@@ -39,15 +39,21 @@ export const AddNewProposalModal = () => {
   const feeInfo = useTransactionFee(member?.controllerAccount, transaction)
 
   useEffect(() => {
+    if (state !== 'REQUIREMENTS_CHECK') {
+      return
+    }
+
     if (!member) {
       return showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
     }
 
     if (feeInfo && feeInfo.canAfford) {
-      return setState('PREPARE')
+      return setState('WARNING')
     }
 
-    setState('REQUIREMENTS_FAIL')
+    if (feeInfo && !feeInfo.canAfford) {
+      setState('REQUIREMENTS_FAIL')
+    }
   }, [state, member?.id, JSON.stringify(feeInfo)])
 
   if (!member || !feeInfo) {
@@ -58,6 +64,10 @@ export const AddNewProposalModal = () => {
     return (
       <InsufficientFundsModal onClose={hideModal} address={member.controllerAccount} amount={feeInfo.transactionFee} />
     )
+  }
+
+  if (state === 'WARNING') {
+    return <AddNewProposalWarningModal onNext={() => setState('PREPARE')} />
   }
 
   return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>
