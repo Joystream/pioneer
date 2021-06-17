@@ -154,6 +154,7 @@ export type WorkingGroupOpeningMetadataFieldsFragment = {
 export type WorkingGroupOpeningFieldsFragment = {
   __typename: 'WorkingGroupOpening'
   id: string
+  runtimeId: number
   groupId: string
   type: Types.WorkingGroupOpeningType
   stakeAmount: any
@@ -441,6 +442,7 @@ export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
 export const WorkingGroupOpeningFieldsFragmentDoc = gql`
   fragment WorkingGroupOpeningFields on WorkingGroupOpening {
     id
+    runtimeId
     groupId
     group {
       name

@@ -44,6 +44,7 @@ export interface WorkingGroupOpeningApplication {
 }
 
 export interface WorkingGroupOpening extends BaseOpening {
+  runtimeId: number
   leaderId?: string | null
   budget: number
   type: WorkingGroupOpeningType
@@ -108,6 +109,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
 
   return {
     ...asBaseOpening(fields),
+    runtimeId: fields.runtimeId,
     title: `${groupName.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
     type: fields.type as WorkingGroupOpeningType,
     status: fields.status.__typename,

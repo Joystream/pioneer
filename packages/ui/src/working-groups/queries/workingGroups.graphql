@@ -132,6 +132,7 @@ fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
 
 fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   id
+  runtimeId
   groupId
   group {
     name
