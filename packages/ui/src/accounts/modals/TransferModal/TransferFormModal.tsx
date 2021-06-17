@@ -55,7 +55,11 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
             disabled={!!from}
             borderless={!!from}
           >
-            {from ? <SelectedAccount account={from} /> : <SelectAccount filter={filterSender} onChange={setSender} />}
+            {from ? (
+              <SelectedAccount account={from} />
+            ) : (
+              <SelectAccount filter={filterSender} onChange={setSender} selected={sender} />
+            )}
           </InputComponent>
         </Row>
         <TransactionAmount>
@@ -93,7 +97,11 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
             disabled={!!to}
             borderless={!!to}
           >
-            {to ? <SelectedAccount account={to} /> : <SelectAccount filter={filterRecipient} onChange={setRecipient} />}
+            {to ? (
+              <SelectedAccount account={to} />
+            ) : (
+              <SelectAccount filter={filterRecipient} onChange={setRecipient} selected={recipient} />
+            )}
           </InputComponent>
         </Row>
       </ModalBody>
