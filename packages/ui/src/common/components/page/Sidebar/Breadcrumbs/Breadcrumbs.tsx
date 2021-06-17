@@ -15,17 +15,17 @@ export interface BreadcrumbsProps {
 }
 
 export const Breadcrumbs = React.memo(({ breadcrumbsOptions, lastBreadcrumb }: BreadcrumbsProps) => {
-  const [notificationsVisible, setNotificationsVisible] = useState(false)
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
   return (
     <>
       <BreadcrumbsNavigation>
         <TopRow>
           <HomeLink />
-          <CloseButton onClick={() => setNotificationsVisible(true)} />
+          <CloseButton onClick={() => setNotificationsOpen(true)} />
         </TopRow>
         <BreadcrumbsList lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
       </BreadcrumbsNavigation>
-      {notificationsVisible && <Notifications />}
+      {notificationsOpen && <Notifications onClose={() => setNotificationsOpen(false)} isOpen={notificationsOpen} />}
     </>
   )
 })

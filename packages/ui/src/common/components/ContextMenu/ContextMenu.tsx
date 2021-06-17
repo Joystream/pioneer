@@ -31,7 +31,7 @@ export const ContextMenu = ({ align, items }: ContextMenuProps & ContextMenuAlig
   }
 
   const container = useRef<HTMLDivElement>(null)
-  useOutsideClick(container, isMenuVisible, setMenuVisible)
+  useOutsideClick(container, isMenuVisible, () => setMenuVisible(false))
 
   return (
     <ContextMenuContainer ref={container}>

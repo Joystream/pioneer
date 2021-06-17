@@ -41,7 +41,7 @@ export const DatePicker = ({
   const container = useRef<HTMLDivElement>(null)
   const [isOpen, toggleOpen] = useState(false)
 
-  useOutsideClick(container, isOpen, toggleOpen)
+  useOutsideClick(container, isOpen, () => toggleOpen(false))
 
   const apply = () => {
     onApply?.()
