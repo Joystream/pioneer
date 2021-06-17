@@ -63,7 +63,6 @@ describe('UI: ApplyForRoleModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    jest.spyOn(console, 'log').mockImplementation()
 
     useAccounts = {
       hasAccounts: true,

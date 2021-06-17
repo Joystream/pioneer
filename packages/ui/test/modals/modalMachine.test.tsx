@@ -1,4 +1,4 @@
-import { assign, createMachine, EventObject, interpret, Interpreter } from 'xstate'
+import { assign, createMachine, DoneInvokeEvent, EventObject, interpret, Interpreter } from 'xstate'
 
 const formConfig = {
   id: 'form',
@@ -191,6 +191,7 @@ describe('Form machine', () => {
     service.send('VALID')
 
     expect(service.state.matches('valid')).toBeTruthy()
+    expect(service.state.matches('valid')).toBeTruthy()
   })
 
   it('Invalid', () => {
@@ -209,6 +210,8 @@ describe('Form machine', () => {
   })
 })
 
+const isError = (event: DoneInvokeEvent<{ isError?: boolean }>) => !!event.data?.isError
+
 describe('Stepper machine', () => {
   const machine = createMachine({
     id: 'stepper',
@@ -222,14 +225,29 @@ describe('Stepper machine', () => {
         onDone: 'transaction',
       },
       transaction: {
-        ...transactionConfig,
-        onDone: 'done',
+        invoke: {
+          id: 'foo',
+          src: createMachine(transactionConfig),
+          onDone: [
+            {
+              target: 'done',
+              cond: (context, event) => !isError(event),
+            },
+            {
+              target: 'error',
+              cond: (context, event) => isError(event),
+            },
+          ],
+        },
       },
       done: {
         type: 'final',
       },
+      error: {
+        type: 'final',
+      },
     },
-  } as const)
+  })
   let service: Interpreter<any>
 
   beforeEach(() => {
@@ -258,11 +276,28 @@ describe('Stepper machine', () => {
     service.send('VALID')
     service.send('DONE')
 
-    service.send('SIGN_EXTERNAL')
-    service.send('SIGNED')
-    service.send('SUCCESS')
+    const child = service.children.get('stepper.transaction:invocation[0]')!
+
+    child.send('SIGN_EXTERNAL')
+    child.send('SIGNED')
+    child.send('SUCCESS')
 
     expect(service.state.matches('done')).toBeTruthy()
+  })
+
+  it('Transaction error', () => {
+    service.send('NEXT')
+    service.send('INPUT')
+    service.send('VALID')
+    service.send('DONE')
+
+    const child = service.children.get('stepper.transaction:invocation[0]')!
+
+    child.send('SIGN_EXTERNAL')
+    child.send('SIGNED')
+    child.send('ERROR')
+
+    expect(service.state.matches('error')).toBeTruthy()
   })
 })
 

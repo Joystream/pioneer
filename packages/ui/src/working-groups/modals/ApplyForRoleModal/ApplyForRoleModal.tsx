@@ -5,7 +5,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
-import { createMachine } from 'xstate'
+import { assign, createMachine, EventObject } from 'xstate'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -13,8 +13,10 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { isError } from '@/common/hooks/useSignAndSendTransaction'
 import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -31,6 +33,60 @@ export type OpeningParams = Exclude<
   string | Uint8Array
 >
 
+const transactionConfig = {
+  id: 'transaction',
+  initial: 'prepare',
+  context: {
+    events: [],
+  },
+  states: {
+    prepare: {
+      on: {
+        SIGN: 'signing',
+      },
+    },
+    signing: {
+      on: {
+        SIGN_INTERNAL: 'pending',
+        SIGN_EXTERNAL: 'signWithExtension',
+      },
+    },
+    signWithExtension: {
+      on: {
+        SIGNED: 'pending',
+      },
+    },
+    pending: {
+      on: {
+        SUCCESS: {
+          target: 'success',
+          actions: assign({
+            events: (context, event: EventObject & { events: [] }) => event.events,
+          }),
+        },
+        ERROR: {
+          target: 'error',
+          actions: assign({
+            events: (context, event: EventObject & { events: [] }) => event.events,
+          }),
+        },
+      },
+    },
+    success: {
+      type: 'final',
+      data: {
+        events: (context: any, event: any) => event.events,
+      },
+    },
+    error: {
+      type: 'final',
+      data: {
+        events: (context: any, event: any) => event.events,
+      },
+    },
+  },
+} as const
+
 export const ApplyForRoleModal = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
@@ -38,34 +94,56 @@ export const ApplyForRoleModal = () => {
   const opening = modalData.opening
 
   const [state, send] = useMachine(
-    createMachine({
-      initial: 'requirementsVerification',
-      states: {
-        requirementsVerification: {
-          on: {
-            FAIL: 'requirementsFailed',
-            PASS: 'steps',
+    createMachine<{ transactionEvents: EventRecord[] }>(
+      {
+        initial: 'requirementsVerification',
+        context: { transactionEvents: [] },
+        states: {
+          requirementsVerification: {
+            on: {
+              FAIL: 'requirementsFailed',
+              PASS: 'steps',
+            },
           },
-        },
-        requirementsFailed: { type: 'final' },
-        steps: {
-          initial: 'prepare',
-          states: {
-            prepare: {
-              on: { VALID: 'authorize' },
-            },
-            authorize: {
-              on: {
-                SUCCESS: 'success',
-                ERROR: 'error',
+          requirementsFailed: { type: 'final' },
+          steps: {
+            initial: 'prepare',
+            states: {
+              prepare: {
+                on: { VALID: 'transaction' },
               },
+              transaction: {
+                id: 'transaction',
+                invoke: {
+                  src: createMachine(transactionConfig),
+                  onDone: [
+                    {
+                      target: 'error',
+                      actions: ['assignTransactionEvents'],
+                      cond: (context, event) => isError(event.data.events),
+                    },
+                    {
+                      target: 'success',
+                      cond: (context, event) => !isError(event.data.events),
+                      actions: ['assignTransactionEvents'],
+                    },
+                  ],
+                },
+              },
+              success: { type: 'final' },
+              error: { type: 'final' },
             },
-            success: { type: 'final' },
-            error: { type: 'final' },
           },
         },
       },
-    })
+      {
+        actions: {
+          assignTransactionEvents: assign({
+            transactionEvents: (context, event) => event.data.events,
+          }),
+        },
+      }
+    )
   )
 
   const [txParams, setTxParams] = useState<OpeningParams>({
@@ -86,15 +164,7 @@ export const ApplyForRoleModal = () => {
       return getGroup(api, opening.groupName)?.applyOnOpening(txParams)
     }
   }, [api, JSON.stringify(txParams)])
-  const [applicationId, setApplicationId] = useState<BN>()
-
   const signer = active?.controllerAccount
-  const onDone = (result: boolean, events: EventRecord[]) => {
-    const applicationId = getEventParam<ApplicationId>(events, 'AppliedOnOpening', 1)
-
-    setApplicationId(applicationId?.toBn())
-    send(result ? 'SUCCESS' : 'ERROR')
-  }
   const stake = new BN(txParams?.stake_parameters.stake ?? 0)
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
@@ -154,20 +224,25 @@ export const ApplyForRoleModal = () => {
     return <ApplyForRolePrepareModal onSubmit={onSubmit} opening={opening} />
   }
 
-  if (state.matches('steps.authorize') && signer) {
+  const transactionService = state.children['transaction:invocation[0]']
+
+  if (state.matches('steps.transaction') && signer && transactionService) {
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
-        onDone={onDone}
         transaction={transaction}
         signer={signer}
         stake={stake}
+        service={transactionService}
       />
     )
   }
 
-  if (state.matches('steps.success') && stake && stakeAccount && applicationId) {
-    return <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={applicationId} />
+  if (state.matches('steps.success') && stake && stakeAccount) {
+    const applicationId = getEventParam<ApplicationId>(state.context.transactionEvents, 'AppliedOnOpening', 1)
+    return (
+      <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={applicationId ?? BN_ZERO} />
+    )
   }
 
   if (state.matches('steps.error')) {
