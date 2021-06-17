@@ -20,6 +20,7 @@ export const WORKER: WorkerWithDetails = {
   owedReward: 1000,
   status: '',
   id: '1',
+  runtimeId: 12,
   applicationId: '1',
   openingId: '1',
   roleAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',

@@ -38,7 +38,7 @@ export const ApplyForRoleModal = () => {
   const [state, setState] = useState<ModalState>('REQUIREMENTS_CHECK')
   const [txParams, setTxParams] = useState<OpeningParams>({
     member_id: active?.id,
-    opening_id: opening.id,
+    opening_id: opening.runtimeId,
     role_account_id: active?.controllerAccount,
     reward_account_id: active?.controllerAccount,
     stake_parameters: {
@@ -106,7 +106,7 @@ export const ApplyForRoleModal = () => {
     const onSubmit = (stake: StakeStepForm, answers: Record<string, string>) => {
       setStakeAccount(stake.account)
       setTxParams({
-        opening_id: opening.id,
+        opening_id: opening.runtimeId,
         member_id: active?.id,
         role_account_id: active?.controllerAccount,
         reward_account_id: active?.rootAccount,

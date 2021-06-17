@@ -16,6 +16,7 @@ Default.args = {
   workers: [
     {
       id: '0',
+      runtimeId: 1,
       group: { id: '0', name: 'forum' },
       membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
       status: 'WorkerStatusActive',

@@ -7,6 +7,7 @@ fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
 
 fragment WorkerFields on Worker {
   id
+  runtimeId
   membership {
     ...MemberFields
   }
@@ -131,6 +132,7 @@ fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
 
 fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   id
+  runtimeId
   groupId
   group {
     name
