@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useRef } from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
@@ -8,12 +8,10 @@ import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { useActivities } from '@/common/hooks/useActivities'
-import { useModal } from '@/common/hooks/useModal'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { NoProposals } from '@/proposals/components/NoProposals'
 import { ProposalList } from '@/proposals/components/ProposalList'
 import { useProposals } from '@/proposals/hooks/useProposals'
-import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 
 import { ProposalsTabs } from './components/ProposalsTabs'
 

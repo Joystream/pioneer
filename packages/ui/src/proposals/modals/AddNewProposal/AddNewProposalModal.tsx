@@ -6,7 +6,6 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { ModalState } from '@/common/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { AddNewProposalWarningModal } from '@/proposals/modals/AddNewProposal/AddNewProposalWarningModal'
