@@ -1,4 +1,4 @@
-import { createMachine, interpret, Interpreter, StateMachine } from 'xstate'
+import { createMachine, interpret, Interpreter } from 'xstate'
 
 import { formConfig, transactionConfig } from '@/common/model/machines'
 
@@ -7,13 +7,19 @@ interface Step {
   type: 'past' | 'active' | 'next'
 }
 
-const getSteps = (machine: StateMachine<any, any, any>): Step[] => {
+const getSteps = (service: Interpreter<any>): Step[] => {
+  const machine = service.machine
+
+  const active = service.state.value.toString()
+
   return machine.stateIds
-    .map((id) => machine.getStateNodeById(id))
+    .map((id) => {
+      return machine.getStateNodeById(id)
+    })
     .filter((stateNode) => !!stateNode?.meta?.isStep)
     .map((stateNode) => ({
       title: stateNode?.meta?.stepTitle ?? '',
-      type: 'next',
+      type: active === stateNode?.key ? 'active' : 'next',
     }))
 }
 
@@ -265,6 +271,7 @@ describe('Machine: Steppers', () => {
   describe('Stepper', () => {
     const simpleStepper = createMachine({
       id: 'simple',
+      initial: 'requirements',
       states: {
         requirements: { on: { DONE: 'step1' } },
         step1: {
@@ -285,11 +292,22 @@ describe('Machine: Steppers', () => {
 
     beforeEach(() => {
       service = interpret(simpleStepper)
+      service.start()
     })
 
     it('Steps from machine', () => {
-      expect(getSteps(service.machine)).toEqual([
+      expect(getSteps(service)).toEqual([
         { title: 'Step One', type: 'next' },
+        { title: 'Step Two', type: 'next' },
+        { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Active step', () => {
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'active' },
         { title: 'Step Two', type: 'next' },
         { title: 'Step Done', type: 'next' },
       ])
