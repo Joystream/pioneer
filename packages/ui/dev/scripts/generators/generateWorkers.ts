@@ -48,6 +48,7 @@ const generateWorker = (type: string, groupId: string, applications: Application
     missingRewardAmount: randomFromRange(0, 20) * 100,
     stake: randomFromRange(3, 8) * 1000,
     nextPaymentAt: faker.date.soon(randomFromRange(1, 10)).toJSON(),
+    createdAt: faker.date.recent(30),
   }
 }
 

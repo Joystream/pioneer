@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Animations, BorderRad, Colors, Transitions } from '../../constants'
@@ -15,10 +16,11 @@ export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 
 
 export interface TooltipPopupProps {
   className?: string
-  tooltipText: string
+  tooltipText?: string
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
+  popupContent?: React.ReactNode
   position: DOMRect
   popUpHandlers: {
     onMouseEnter: () => void
@@ -39,6 +41,7 @@ export const Tooltip = ({
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
+  popupContent,
   className,
 }: TooltipProps) => {
   const tooltipRef = useRef<HTMLButtonElement>(null)
@@ -97,6 +100,7 @@ export const Tooltip = ({
           tooltipText={tooltipText}
           tooltipLinkURL={tooltipLinkURL}
           tooltipLinkText={tooltipLinkText}
+          popupContent={popupContent}
         />
       )}
     </TooltipContainer>
@@ -104,14 +108,32 @@ export const Tooltip = ({
 }
 
 const TooltipPopup = (props: TooltipPopupProps) => {
-  const { tooltipLinkText, tooltipText, position, tooltipLinkURL, tooltipTitle, className, popUpHandlers } = props
+  const {
+    tooltipLinkText,
+    tooltipText,
+    position,
+    tooltipLinkURL,
+    tooltipTitle,
+    className,
+    popUpHandlers,
+    popupContent,
+  } = props
+
+  if (popupContent) {
+    return ReactDOM.createPortal(
+      <TooltipPopupContainer className={className} position={position} {...popUpHandlers}>
+        {popupContent}
+      </TooltipPopupContainer>,
+      document.body
+    )
+  }
 
   return ReactDOM.createPortal(
     <TooltipPopupContainer className={className} position={position} {...popUpHandlers}>
       {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
       <TooltipText>{tooltipText}</TooltipText>
       {tooltipLinkURL && (
-        <TooltipLink href={tooltipLinkURL} target="_blank">
+        <TooltipLink to={tooltipLinkURL} target="_blank">
           {tooltipLinkText ?? 'Link'}
           <LinkSymbol />
         </TooltipLink>
@@ -157,6 +179,7 @@ const TooltipPopupContainer = styled(PopupItem)<{ position: DOMRect }>`
     clip-path: polygon(100% 0, 0 0, 0 100%);
     z-index: 1;
   }
+
   &:before {
     content: '';
     position: absolute;
@@ -183,7 +206,7 @@ export const TooltipText = styled.p`
   color: ${Colors.Black[400]};
 `
 
-export const TooltipLink = styled.a`
+export const TooltipLink = styled(Link)<{ to: string; target: string }>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
@@ -195,16 +218,21 @@ export const TooltipLink = styled.a`
   font-weight: 400;
   color: ${Colors.Black[400]};
   transition: ${Transitions.all};
+  text-transform: capitalize;
+
   ${LinkSymbolStyle} {
     width: 12px;
     height: 12px;
+
     .blackPart,
     .primaryPart {
       fill: ${Colors.Black[300]};
     }
   }
+
   &:hover {
     color: ${Colors.Blue[500]};
+
     ${LinkSymbolStyle} {
       .blackPart,
       .primaryPart {
@@ -220,6 +248,7 @@ export const TooltipComponent = styled.button`
   justify-content: center;
   align-items: center;
   z-index: 50;
+
   &:hover,
   &:focus {
     ${DefaultTooltip} {

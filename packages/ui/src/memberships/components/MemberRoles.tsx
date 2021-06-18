@@ -2,9 +2,19 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { CountBadge, CountBadgeComponent } from '@/common/components/CountBadge'
-import { DarkTooltipInnerItemProps, DefaultTooltip, Tooltip, TooltipComponent } from '@/common/components/Tooltip'
+import { LinkSymbol } from '@/common/components/icons/symbols'
+import {
+  DarkTooltipInnerItemProps,
+  DefaultTooltip,
+  Tooltip,
+  TooltipComponent,
+  TooltipLink,
+  TooltipPopupTitle,
+  TooltipText,
+} from '@/common/components/Tooltip'
 import { Colors, Fonts } from '@/common/constants'
 import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
+import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
 import { MemberRole } from '../types'
 
@@ -24,15 +34,16 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
   if (!roles || !roles.length) {
     roles = [defaultRole]
   }
-  const mapRoles = new Map<string, { title: string; count: number }>()
+  const mapRoles = new Map<string, MemberRole[]>()
   for (const role of roles) {
     const abbreviation = memberRoleAbbreviation(role)
     if (!mapRoles.has(abbreviation)) {
-      mapRoles.set(abbreviation, { title: memberRoleTitle(role), count: 0 })
-    }
-    const roleDef = mapRoles.get(abbreviation)
-    if (roleDef) {
-      mapRoles.set(abbreviation, { ...roleDef, count: roleDef.count + 1 })
+      mapRoles.set(abbreviation, [role])
+    } else {
+      const roleDef = mapRoles.get(abbreviation)
+      if (roleDef) {
+        mapRoles.set(abbreviation, [...roleDef, role])
+      }
     }
   }
   const rolesWithCount = [...mapRoles.entries()]
@@ -44,13 +55,13 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
     <>
       {wrapable ? (
         <MemberRolesWrapperWrapable>
-          {rolesToDisplay.map(([abbreviation, { count, title }], index) =>
-            count > 1 ? (
-              <Tooltip key={index} tooltipText={title}>
-                <MemberRoleHelpGroup size={size} count={count} abbreviation={abbreviation} />
+          {rolesToDisplay.map(([abbreviation, roles], index) =>
+            roles.length > 1 ? (
+              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
+                <MemberRoleHelpGroup size={size} count={roles.length} abbreviation={abbreviation} />
               </Tooltip>
             ) : (
-              <Tooltip key={index} tooltipText={title}>
+              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
                 <MemberRoleHelp size={size}>{abbreviation}</MemberRoleHelp>
               </Tooltip>
             )
@@ -63,13 +74,13 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
         </MemberRolesWrapperWrapable>
       ) : (
         <MemberRolesWrapper>
-          {rolesToDisplay.map(([abbreviation, { count, title }], index) =>
-            count > 1 ? (
-              <Tooltip key={index} tooltipText={title}>
-                <MemberRoleHelpGroup size={size} count={count} abbreviation={abbreviation} />
+          {rolesToDisplay.map(([abbreviation, roles], index) =>
+            roles.length > 1 ? (
+              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
+                <MemberRoleHelpGroup size={size} count={roles.length} abbreviation={abbreviation} />
               </Tooltip>
             ) : (
-              <Tooltip key={index} tooltipText={title}>
+              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
                 <MemberRoleHelp size={size}>{abbreviation}</MemberRoleHelp>
               </Tooltip>
             )
@@ -81,6 +92,33 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
           )}
         </MemberRolesWrapper>
       )}
+    </>
+  )
+}
+
+export interface MemberRolePopupContentProps {
+  roles: MemberRole[]
+}
+
+export const MemberRolePopupContent = ({ roles }: MemberRolePopupContentProps) => {
+  const groupAddress = `/working-groups/${groupNameToURLParam(roles[0].groupName)}`
+
+  return (
+    <>
+      {roles.map((role, index) => (
+        <PopupRoleItem key={index}>
+          <PopupRoleTitle>
+            {memberRoleTitle(role)} {roles.length > 1 ? index + 1 : ''}
+          </PopupRoleTitle>
+          {role.createdAt && (
+            <TooltipText>Member since: {new Date(role.createdAt).toLocaleDateString('en-GB')}</TooltipText>
+          )}
+        </PopupRoleItem>
+      ))}
+      <PopupGroupLink to={groupAddress} target="_blank">
+        {roles[0].groupName} Group
+        <LinkSymbol />
+      </PopupGroupLink>
     </>
   )
 }
@@ -248,6 +286,7 @@ export const MemberStatusTooltip = styled(DefaultTooltip)<MemberRoleTooltipProps
       background-color: ${Colors.Black[50]};
       border-color: ${Colors.Blue[100]};
     }
+
     &.tooltipondark {
       color: ${Colors.Blue[400]} !important;
       background-color: transparent !important;
@@ -267,4 +306,16 @@ export const MemberRolesWrapper = styled.div`
 
 export const MemberRolesWrapperWrapable = styled(MemberRolesWrapper)`
   flex-wrap: wrap;
+`
+
+const PopupRoleItem = styled.div`
+  margin-bottom: 12px;
+`
+
+const PopupRoleTitle = styled(TooltipPopupTitle)`
+  margin-bottom: 3px;
+`
+
+const PopupGroupLink = styled(TooltipLink)`
+  margin-bottom: 3px;
 `

@@ -18,7 +18,8 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   }
 }
 
-export const asMemberRole = (data: { group: { name: string }; isLead: boolean }): MemberRole => ({
+export const asMemberRole = (data: MemberFieldsFragment['roles'][0]): MemberRole => ({
   isLeader: data.isLead,
   groupName: asWorkingGroupName(data.group.name),
+  createdAt: data.createdAt,
 })

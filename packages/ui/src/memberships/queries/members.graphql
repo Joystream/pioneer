@@ -16,6 +16,7 @@ fragment MemberFields on Membership {
     group {
       name
     }
+    createdAt
     isLead
   }
 }
