@@ -57,7 +57,7 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
     return <Loading />
   }
 
-  if (!workers || workers.length) {
+  if (!workers || !workers.length) {
     return <TextBig>No workers found</TextBig>
   }
 
