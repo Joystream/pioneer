@@ -3,9 +3,11 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
+import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -14,6 +16,7 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { ApplyForRoleModal } from '@/working-groups/modals/ApplyForRoleModal'
+import { applyForRoleMachine } from '@/working-groups/modals/ApplyForRoleModal/machine'
 import { WorkingGroupOpeningFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupOpening } from '@/working-groups/types'
 
@@ -84,6 +87,17 @@ describe('UI: ApplyForRoleModal', () => {
 
     stubDefaultBalances(api)
     tx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
+  })
+
+  describe('Steps', () => {
+    const service = interpret(applyForRoleMachine)
+    service.start()
+
+    expect(getSteps(service)).toEqual([
+      { title: 'Stake', type: 'next' },
+      { title: 'Form', type: 'next' },
+      { title: 'Submit application', type: 'next' },
+    ])
   })
 
   describe('Requirements', () => {
