@@ -12,38 +12,33 @@ export const applyForRoleMachine = createMachine<{ transactionEvents: EventRecor
       requirementsVerification: {
         on: {
           FAIL: 'requirementsFailed',
-          PASS: 'steps',
+          PASS: 'prepare',
         },
       },
       requirementsFailed: { type: 'final' },
-      steps: {
-        initial: 'prepare',
-        states: {
-          prepare: {
-            on: { VALID: 'transaction' },
-          },
-          transaction: {
-            invoke: {
-              id: 'transaction',
-              src: createMachine(transactionConfig),
-              onDone: [
-                {
-                  target: 'error',
-                  actions: ['assignTransactionEvents'],
-                  cond: (context, event) => isError(event.data.events),
-                },
-                {
-                  target: 'success',
-                  cond: (context, event) => !isError(event.data.events),
-                  actions: ['assignTransactionEvents'],
-                },
-              ],
+      prepare: {
+        on: { VALID: 'transaction' },
+      },
+      transaction: {
+        invoke: {
+          id: 'transaction',
+          src: createMachine(transactionConfig),
+          onDone: [
+            {
+              target: 'error',
+              actions: ['assignTransactionEvents'],
+              cond: (context, event) => isError(event.data.events),
             },
-          },
-          success: { type: 'final' },
-          error: { type: 'final' },
+            {
+              target: 'success',
+              cond: (context, event) => !isError(event.data.events),
+              actions: ['assignTransactionEvents'],
+            },
+          ],
         },
       },
+      success: { type: 'final' },
+      error: { type: 'final' },
     },
   },
   {

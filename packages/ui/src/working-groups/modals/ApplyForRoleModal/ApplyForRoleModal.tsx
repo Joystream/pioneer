@@ -96,7 +96,7 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state.matches('steps.prepare')) {
+  if (state.matches('prepare')) {
     const onSubmit = (stake: StakeStepForm, answers: Record<string, string>) => {
       setStakeAccount(stake.account)
       setTxParams({
@@ -118,7 +118,7 @@ export const ApplyForRoleModal = () => {
 
   const transactionService = state.children['transaction']
 
-  if (state.matches('steps.transaction') && signer && transactionService) {
+  if (state.matches('transaction') && signer && transactionService) {
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
@@ -130,14 +130,14 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state.matches('steps.success') && stake && stakeAccount) {
+  if (state.matches('success') && stake && stakeAccount) {
     const applicationId = getEventParam<ApplicationId>(state.context.transactionEvents, 'AppliedOnOpening', 1)
     return (
       <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={applicationId ?? BN_ZERO} />
     )
   }
 
-  if (state.matches('steps.error')) {
+  if (state.matches('error')) {
     return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>
   }
 
