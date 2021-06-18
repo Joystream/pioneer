@@ -1,6 +1,6 @@
-import { Interpreter, State, StateNode } from 'xstate'
+import { Interpreter, State, StateMachine, StateNode } from 'xstate'
 
-interface Step {
+export interface Step {
   title: string
   type: 'past' | 'active' | 'next'
   isBaby?: boolean
@@ -14,10 +14,9 @@ const getActiveNodeOrder = (state: State<any>) => (activeId: number, stateNode: 
   return activeId
 }
 
-export const getSteps = (service: Interpreter<any>): Step[] => {
-  const machine = service.machine
+export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>, state: State<any>): Step[] => {
   const stateNodes = machine.stateIds.map((id) => machine.getStateNodeById(id))
-  const activeNodeOrder = stateNodes.reduce(getActiveNodeOrder(service.state), -1)
+  const activeNodeOrder = stateNodes.reduce(getActiveNodeOrder(state), -1)
 
   return stateNodes
     .filter((stateNode) => !!stateNode?.meta?.isStep)
@@ -28,4 +27,11 @@ export const getSteps = (service: Interpreter<any>): Step[] => {
         ...(stateNode.parent?.meta?.isStep ? { isBaby: true } : undefined),
       }
     })
+}
+
+export const getSteps = (service: Interpreter<any>): Step[] => {
+  const machine = service.machine
+  const state = service.state
+
+  return getStepsFromMachineAndState(machine, state)
 }

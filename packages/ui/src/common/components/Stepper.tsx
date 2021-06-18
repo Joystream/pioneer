@@ -2,15 +2,11 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../constants'
+import { Step } from '../model/machines/getSteps'
 
 import { Arrow, CheckboxIcon } from './icons'
 import { ScrollableModalColumn } from './Modal'
 import { TextInlineSmall } from './typography'
-
-interface Step {
-  title: string
-  isBabyStep?: boolean
-}
 
 interface StepToRender extends Step {
   number: null | number
@@ -20,11 +16,10 @@ interface StepToRender extends Step {
 
 export interface StepperProps {
   steps: Step[]
-  active: number
 }
 
 const getStepFace = (step: StepToRender) => {
-  if (step.isBabyStep) {
+  if (step.isBaby) {
     return null
   }
 
@@ -39,19 +34,19 @@ const getStepFace = (step: StepToRender) => {
   return step.number
 }
 
-const asStepsToRender = (steps: Step[], active: number): StepToRender[] => {
+const asStepsToRender = (steps: Step[]): StepToRender[] => {
   let stepCounter = 1
 
-  return steps.map((step, index) => ({
+  return steps.map((step) => ({
     ...step,
-    number: step.isBabyStep ? null : stepCounter++,
-    isActive: index === active,
-    isPast: index < active,
+    number: step.isBaby ? null : stepCounter++,
+    isActive: step.type === 'active',
+    isPast: step.type === 'past',
   }))
 }
 
-export const Stepper = ({ steps, active = 0 }: StepperProps) => {
-  const stepsToRender = asStepsToRender(steps, active)
+export const Stepper = ({ steps }: StepperProps) => {
+  const stepsToRender = asStepsToRender(steps)
 
   return (
     <StepperWrap>
@@ -100,7 +95,7 @@ const StepTitle = styled.h6`
   transition: ${Transitions.all};
 `
 
-type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBabyStep'>
+type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBaby'>
 
 const StepWrap = styled.div<StepNumberProps>`
   display: grid;
@@ -123,8 +118,8 @@ const StepWrap = styled.div<StepNumberProps>`
     }
   }
 
-  ${({ isBabyStep }: StepNumberProps) =>
-    isBabyStep &&
+  ${({ isBaby }: StepNumberProps) =>
+    isBaby &&
     css`
       ${StepNumber} {
         width: 8px;

@@ -15,9 +15,10 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
+import { getStepsFromMachineAndState } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal/index'
+import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { StakeStepForm } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 import { getGroup } from '@/working-groups/model/getGroup'
 
@@ -120,7 +121,14 @@ export const ApplyForRoleModal = () => {
       send('VALID')
     }
 
-    return <ApplyForRolePrepareModal onSubmit={onSubmit} send={() => send('VALID')} opening={opening} />
+    return (
+      <ApplyForRolePrepareModal
+        onSubmit={onSubmit}
+        send={() => send('VALID')}
+        opening={opening}
+        steps={getStepsFromMachineAndState(applyForRoleMachine, state)}
+      />
+    )
   }
 
   if (state.matches('transaction') && signer) {

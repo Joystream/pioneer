@@ -1,4 +1,4 @@
-import { assign, EventObject } from 'xstate'
+import { assign, EventObject, MachineConfig } from 'xstate'
 
 export const formConfig = {
   id: 'form',
@@ -23,7 +23,7 @@ export const formConfig = {
   },
 } as const
 
-export const transactionConfig = {
+export const transactionConfig: MachineConfig<any, any, any> = {
   id: 'transaction',
   initial: 'prepare',
   context: {

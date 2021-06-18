@@ -13,17 +13,18 @@ import {
 import { useModal } from '@/common/hooks/useModal'
 import { WorkingGroupOpening } from '@/working-groups/types'
 
+import { Step } from '../../../common/model/machines/getSteps'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 import { useOpeningQuestions } from '../../hooks/useOpeningQuestions'
 
 import { ApplicationStep } from './ApplicationStep'
-import { steps } from './model'
 import { StakeStep, StakeStepForm } from './StakeStep'
 
 interface Props {
   onSubmit: (stake: StakeStepForm, answers: Record<string, string>) => void
   opening: WorkingGroupOpening
   send: () => void
+  steps: Step[]
 }
 
 type ActionStepInfo = {
@@ -49,7 +50,7 @@ const stepsReducer: Reducer<Record<number, { data: any; isValid: boolean }>, Act
   }
 }
 
-export const ApplyForRolePrepareModal = ({ onSubmit, opening, send }: Props) => {
+export const ApplyForRolePrepareModal = ({ onSubmit, opening, send, steps }: Props) => {
   const { hideModal } = useModal()
   const [step, setStep] = useState(0)
   const { questions } = useOpeningQuestions({ id: opening.id })
@@ -95,7 +96,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit, opening, send }: Props) => 
       <ModalHeader onClick={hideModal} title="Applying for role" />
       <StepperModalBody>
         <StepperModalWrapper>
-          <Stepper steps={steps} active={step} />
+          <Stepper steps={steps} />
           <StepDescriptionColumn>
             <OpeningFormPreview opening={opening} />
           </StepDescriptionColumn>

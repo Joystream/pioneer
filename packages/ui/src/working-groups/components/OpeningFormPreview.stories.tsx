@@ -16,7 +16,7 @@ export default {
 const Template: Story<OpeningFormPreviewProps> = (args) => (
   <StepperModalBody>
     <StepperModalWrapper>
-      <Stepper steps={[{ title: 'Foo step' }]} active={-1} />
+      <Stepper steps={[{ title: 'Foo step', type: 'next' }]} />
       <StepDescriptionColumn>
         <OpeningFormPreview {...args} />
       </StepDescriptionColumn>
