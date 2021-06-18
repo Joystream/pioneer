@@ -27,19 +27,17 @@ interface Props {
 export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
   const { allAccounts } = useMyAccounts()
   const options = allAccounts.filter(filter || (() => true))
-  const [selectedOption, setSelectedOption] = useState(selected)
   const [search, setSearch] = useState('')
 
   const filteredOptions = useMemo(() => filterByText(options, search), [search, options])
   const keyring = useKeyring()
 
-  useEffect(() => setSelectedOption(selected), [selected])
   useEffect(() => {
     filteredOptions.length === 0 &&
       isValidAddress(search, keyring) &&
-      (!selectedOption || selectedOption.address !== search) &&
-      setSelectedOption(accountOrNamed(allAccounts, search, 'Unsaved account'))
-  }, [filteredOptions, search, selectedOption])
+      (!selected || selected.address !== search) &&
+      onChange(accountOrNamed(allAccounts, search, 'Unsaved account'))
+  }, [filteredOptions, search, selected])
 
   const change = (selected: Account, close: () => void) => {
     onChange(selected)
@@ -48,7 +46,7 @@ export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) 
 
   return (
     <Select
-      selected={selectedOption}
+      selected={selected}
       onChange={change}
       disabled={false}
       renderSelected={renderSelected}
