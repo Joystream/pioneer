@@ -9,8 +9,8 @@ import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { AddNewProposalWarningModal } from '@/proposals/modals/AddNewProposal/AddNewProposalWarningModal'
-import { AddNewProposalModalCall, AddProposalModalState } from '@/proposals/modals/AddNewProposal/index'
-import { ProposalDetails } from '@/proposals/types'
+
+import { AddNewProposalModalCall, AddProposalModalState } from '.'
 
 export type NewProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
@@ -22,9 +22,8 @@ export const AddNewProposalModal = () => {
   const { active: member } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, setState] = useState<AddProposalModalState>('REQUIREMENTS_CHECK')
-  const [type, setType] = useState<ProposalDetails>('signal')
 
-  const [txParams, setTxParams] = useState<NewProposalParams>({
+  const [txParams] = useState<NewProposalParams>({
     member_id: member?.id,
     title: '',
     description: '',
@@ -70,5 +69,5 @@ export const AddNewProposalModal = () => {
     return <AddNewProposalWarningModal onNext={() => setState('PREPARE')} />
   }
 
-  return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>
+  return <FailureModal onClose={hideModal}>There was a problem with creating proposal.</FailureModal>
 }

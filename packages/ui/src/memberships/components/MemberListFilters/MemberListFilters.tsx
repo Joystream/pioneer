@@ -151,7 +151,7 @@ const MemberCount = styled(CountBadge)`
 `
 
 const SelectContainer = styled.div`
-  flex-basis: 180px;
+  flex-basis: 220px;
 `
 
 const ToggleContainer = styled.div`
