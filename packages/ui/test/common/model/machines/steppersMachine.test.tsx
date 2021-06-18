@@ -1,6 +1,13 @@
-import { createMachine, interpret, Interpreter } from 'xstate'
+import { createMachine, interpret, Interpreter, StateMachine } from 'xstate'
 
 import { formConfig, transactionConfig } from '@/common/model/machines'
+
+const getSteps = (machine: StateMachine<any, any, any>): string[] => {
+  return machine.stateIds
+    .map((id) => machine.getStateNodeById(id))
+    .filter((stateNode) => !!stateNode.meta.isStep)
+    .map((stateNode) => stateNode?.meta?.stepTitle ?? '')
+}
 
 describe('Machine: Steppers', () => {
   describe('Form with transaction', () => {
@@ -244,6 +251,36 @@ describe('Machine: Steppers', () => {
       service.send('SUCCESS')
 
       expect(service.state.matches('done')).toBeTruthy()
+    })
+  })
+
+  describe('Stepper', () => {
+    const simpleStepper = createMachine({
+      id: 'simple',
+      states: {
+        requirements: { on: { DONE: 'step1' } },
+        step1: {
+          meta: { isStep: true, stepTitle: 'Step One' },
+          on: { DONE: 'step2' },
+        },
+        step2: {
+          meta: { isStep: true, stepTitle: 'Step Two' },
+          on: { DONE: 'done' },
+        },
+        done: {
+          meta: { isStep: true, stepTitle: 'Step Done' },
+          type: 'final',
+        },
+      },
+    })
+    let service: Interpreter<any>
+
+    beforeEach(() => {
+      service = interpret(simpleStepper)
+    })
+
+    it('Steps from machine', () => {
+      expect(getSteps(service.machine)).toBe(['Step one', 'Step two', 'Step three'])
     })
   })
 })
