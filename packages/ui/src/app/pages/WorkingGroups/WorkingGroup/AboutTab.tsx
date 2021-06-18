@@ -16,7 +16,7 @@ interface Props {
   workingGroup: WorkingGroup
 }
 export const AboutTab = ({ workingGroup }: Props) => {
-  const { workers } = useWorkers({ groupId: workingGroup.id ?? '' })
+  const { workers } = useWorkers({ groupId: workingGroup.id ?? '', statusIn: ['active'] })
   const { statistics } = useGroupStatistics(workingGroup.id)
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
