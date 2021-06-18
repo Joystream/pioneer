@@ -23,6 +23,7 @@ import { StakeStep, StakeStepForm } from './StakeStep'
 interface Props {
   onSubmit: (stake: StakeStepForm, answers: Record<string, string>) => void
   opening: WorkingGroupOpening
+  send: () => void
 }
 
 type ActionStepInfo = {
@@ -48,7 +49,7 @@ const stepsReducer: Reducer<Record<number, { data: any; isValid: boolean }>, Act
   }
 }
 
-export const ApplyForRolePrepareModal = ({ onSubmit, opening }: Props) => {
+export const ApplyForRolePrepareModal = ({ onSubmit, opening, send }: Props) => {
   const { hideModal } = useModal()
   const [step, setStep] = useState(0)
   const { questions } = useOpeningQuestions({ id: opening.id })
@@ -61,6 +62,7 @@ export const ApplyForRolePrepareModal = ({ onSubmit, opening }: Props) => {
     if (step >= 1) {
       onSubmit(state[0].data, state[1].data)
     } else {
+      send()
       setStep((step) => step + 1)
     }
   }, [step, JSON.stringify(state)])

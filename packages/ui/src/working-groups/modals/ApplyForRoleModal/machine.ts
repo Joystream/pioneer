@@ -15,7 +15,7 @@ export const applyForRoleMachine = createMachine<{ transactionEvents: EventRecor
       requirementsFailed: { type: 'final' },
       stake: {
         meta: { isStep: true, stepTitle: 'Stake' },
-        on: { VALID: 'stake' },
+        on: { VALID: 'form' },
       },
       form: {
         meta: { isStep: true, stepTitle: 'Form' },
