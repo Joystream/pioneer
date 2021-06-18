@@ -1,68 +1,8 @@
-import { assign, createMachine, DoneInvokeEvent, EventObject, interpret, Interpreter } from 'xstate'
+import { assign, createMachine, DoneInvokeEvent, interpret, Interpreter } from 'xstate'
 
-const formConfig = {
-  id: 'form',
-  initial: 'initial',
-  states: {
-    initial: {
-      on: { INPUT: 'validating' },
-    },
-    validating: {
-      on: {
-        VALID: 'valid',
-        INVALID: 'invalid',
-      },
-    },
-    valid: {
-      on: { INPUT: 'validating', DONE: 'done' },
-    },
-    invalid: {
-      on: { INPUT: 'validating' },
-    },
-    done: { type: 'final' },
-  },
-} as const
+import { formConfig, transactionConfig } from '@/common/model/machines'
 
-const transactionConfig = {
-  id: 'transaction',
-  initial: 'signing',
-  context: {
-    events: [],
-  },
-  states: {
-    signing: {
-      on: {
-        SIGN_INTERNAL: 'pending',
-        SIGN_EXTERNAL: 'signWithExtension',
-      },
-    },
-    signWithExtension: {
-      on: {
-        SIGNED: 'pending',
-      },
-    },
-    pending: {
-      on: {
-        SUCCESS: {
-          target: 'success',
-          actions: assign({
-            events: (context, event: EventObject & { events: [] }) => event.events,
-          }),
-        },
-        ERROR: 'error',
-      },
-    },
-    success: {
-      type: 'final',
-      data: {
-        events: (context: any, event: any) => event.events,
-      },
-    },
-    error: { type: 'final' },
-  },
-} as const
-
-describe('Transaction machine', () => {
+describe('Machine: Transaction machine', () => {
   const machine = createMachine(transactionConfig)
   let service: Interpreter<any>
 
@@ -72,15 +12,22 @@ describe('Transaction machine', () => {
   })
 
   it('Initial', () => {
+    expect(service.state.matches('prepare')).toBeTruthy()
+  })
+
+  it('Sign', () => {
+    service.send('SIGN')
     expect(service.state.matches('signing')).toBeTruthy()
   })
 
   it('Sign internal', () => {
+    service.send('SIGN')
     service.send('SIGN_INTERNAL')
     expect(service.state.matches('pending')).toBeTruthy()
   })
 
   it('Sign external', () => {
+    service.send('SIGN')
     service.send('SIGN_EXTERNAL')
     expect(service.state.matches('signWithExtension')).toBeTruthy()
 
@@ -89,6 +36,7 @@ describe('Transaction machine', () => {
   })
 
   it('Transaction success', () => {
+    service.send('SIGN')
     service.send('SIGN_EXTERNAL')
     service.send('SIGNED')
     service.send('SUCCESS')
@@ -97,6 +45,7 @@ describe('Transaction machine', () => {
   })
 
   it('Transaction error', () => {
+    service.send('SIGN')
     service.send('SIGN_EXTERNAL')
     service.send('SIGNED')
     service.send('ERROR')
@@ -105,6 +54,7 @@ describe('Transaction machine', () => {
   })
 
   it('Send events', () => {
+    service.send('SIGN')
     service.send('SIGN_EXTERNAL')
     service.send('SIGNED')
     service.send('SUCCESS', { events: ['foo', 'bar'] })

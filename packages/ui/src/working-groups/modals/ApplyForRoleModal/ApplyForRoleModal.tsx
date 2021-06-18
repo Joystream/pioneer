@@ -5,7 +5,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
-import { assign, createMachine, EventObject } from 'xstate'
+import { assign, createMachine } from 'xstate'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -24,6 +24,8 @@ import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal
 import { StakeStepForm } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 import { getGroup } from '@/working-groups/model/getGroup'
 
+import { transactionConfig } from '../../../common/model/machines'
+
 import { ApplyForRolePrepareModal } from './ApplyForRolePrepareModal'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
 import { ApplyForRoleSuccessModal } from './ApplyForRoleSuccessModal'
@@ -32,60 +34,6 @@ export type OpeningParams = Exclude<
   Parameters<ApiRx['tx']['membershipWorkingGroup']['applyOnOpening']>[0],
   string | Uint8Array
 >
-
-const transactionConfig = {
-  id: 'transaction',
-  initial: 'prepare',
-  context: {
-    events: [],
-  },
-  states: {
-    prepare: {
-      on: {
-        SIGN: 'signing',
-      },
-    },
-    signing: {
-      on: {
-        SIGN_INTERNAL: 'pending',
-        SIGN_EXTERNAL: 'signWithExtension',
-      },
-    },
-    signWithExtension: {
-      on: {
-        SIGNED: 'pending',
-      },
-    },
-    pending: {
-      on: {
-        SUCCESS: {
-          target: 'success',
-          actions: assign({
-            events: (context, event: EventObject & { events: [] }) => event.events,
-          }),
-        },
-        ERROR: {
-          target: 'error',
-          actions: assign({
-            events: (context, event: EventObject & { events: [] }) => event.events,
-          }),
-        },
-      },
-    },
-    success: {
-      type: 'final',
-      data: {
-        events: (context: any, event: any) => event.events,
-      },
-    },
-    error: {
-      type: 'final',
-      data: {
-        events: (context: any, event: any) => event.events,
-      },
-    },
-  },
-} as const
 
 export const ApplyForRoleModal = () => {
   const { api } = useApi()
