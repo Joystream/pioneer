@@ -1,5 +1,4 @@
 import React from 'react'
-import { generatePath } from 'react-router'
 import styled, { css } from 'styled-components'
 
 import { CountBadge, CountBadgeComponent } from '@/common/components/CountBadge'
@@ -102,7 +101,7 @@ export interface MemberRolePopupContentProps {
 }
 
 export const MemberRolePopupContent = ({ roles }: MemberRolePopupContentProps) => {
-  const groupAddress = generatePath(`/working-groups/${groupNameToURLParam(roles[0].groupName)}`)
+  const groupAddress = `/working-groups/${groupNameToURLParam(roles[0].groupName)}`
 
   return (
     <>
