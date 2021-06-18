@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react'
 
-import { Select, SelectedOption } from '../../../common/components/selects'
-import { useDebounce } from '../../../common/hooks/useDebounce'
+import { Select, SelectedOption } from '@/common/components/selects'
+import { useDebounce } from '@/common/hooks/useDebounce'
+
 import { useSearchMembersQuery } from '../../queries'
 import { asMember, Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'

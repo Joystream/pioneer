@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { useKeyring } from '@/common/hooks/useKeyring'
+import { Address } from '@/common/types'
+
 import { Select, SelectedOption } from '../../../common/components/selects'
-import { useKeyring } from '../../../common/hooks/useKeyring'
-import { Address } from '../../../common/types'
 import { useMyAccounts } from '../../hooks/useMyAccounts'
 import { accountOrNamed } from '../../model/accountOrNamed'
 import { isValidAddress } from '../../model/isValidAddress'

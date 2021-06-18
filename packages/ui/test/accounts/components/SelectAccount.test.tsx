@@ -1,8 +1,12 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render } from '@testing-library/react'
-import React from 'react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import React, { useState } from 'react'
 
-import { SelectAccount } from '../../../src/accounts/components/SelectAccount'
+import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { Account } from '@/accounts/types'
+import { KeyringContext } from '@/common/providers/keyring/context'
+
+import { mockKeyring } from '../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -91,13 +95,40 @@ describe('UI: SelectAccount component', () => {
 
       expect(textBox.getAttribute('value')).toEqual('')
     })
+
+    it('Picks an account', () => {
+      renderOpenedComponent()
+      expect(screen.getByText('Alice')).toBeDefined()
+      expect(screen.getByText('Bob')).toBeDefined()
+      act(() => {
+        fireEvent.click(screen.getByText('Alice'))
+      })
+      expect(screen.getByText('Alice')).toBeDefined()
+      expect(screen.queryAllByText('Bob')).toEqual([])
+    })
+
+    it('Picks an unknown account', () => {
+      renderOpenedComponent()
+      const textBox = screen.getByRole('textbox')
+      act(() => {
+        fireEvent.change(textBox, { target: { value: '5CStixio6DdmhMJGtTpUVWtR2PvR7Kydc7RnECRYefFr5mKy' } })
+        jest.runOnlyPendingTimers()
+      })
+      expect(screen.getByText('Unsaved account')).toBeDefined()
+    })
   })
 
   function renderComponent() {
+    const Form = () => {
+      const [selected, setSelected] = useState<Account>()
+      return <SelectAccount selected={selected} onChange={(a) => setSelected(a)} />
+    }
     return render(
-      <MockQueryNodeProviders>
-        <SelectAccount onChange={() => undefined} />
-      </MockQueryNodeProviders>
+      <KeyringContext.Provider value={mockKeyring()}>
+        <MockQueryNodeProviders>
+          <Form />
+        </MockQueryNodeProviders>
+      </KeyringContext.Provider>
     )
   }
 })
