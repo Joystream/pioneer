@@ -273,7 +273,7 @@ describe('Machine: Steppers', () => {
     })
   })
 
-  describe('Stepper', () => {
+  describe('Simple Stepper', () => {
     const simpleStepper = createMachine({
       id: 'simple',
       initial: 'requirements',
@@ -336,6 +336,87 @@ describe('Machine: Steppers', () => {
     })
 
     it('Last step', () => {
+      service.send('DONE')
+      service.send('DONE')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Two', type: 'past' },
+        { title: 'Step Done', type: 'active' },
+      ])
+    })
+  })
+
+  describe('Simple Stepper with gaps', () => {
+    const gapStepper = createMachine({
+      id: 'simple',
+      initial: 'requirements',
+      states: {
+        requirements: {
+          id: 'requirements',
+          on: { DONE: 'step1' },
+        },
+        step1: {
+          id: 'step1',
+          meta: { isStep: true, stepTitle: 'Step One' },
+          on: { DONE: 'step2' },
+        },
+        step2: {
+          id: 'step2',
+          meta: { isStep: true, stepTitle: 'Step Two' },
+          on: { DONE: 'gap' },
+        },
+        gap: {
+          id: 'gap',
+          on: { DONE: 'done' },
+        },
+        done: {
+          id: 'done',
+          meta: { isStep: true, stepTitle: 'Step Done' },
+          type: 'final',
+        },
+      },
+    })
+    let service: Interpreter<any>
+
+    beforeEach(() => {
+      service = interpret(gapStepper)
+      service.start()
+    })
+
+    it('Steps from machine', () => {
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'next' },
+        { title: 'Step Two', type: 'next' },
+        { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Active step', () => {
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'active' },
+        { title: 'Step Two', type: 'next' },
+        { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Gap step', () => {
+      service.send('DONE')
+      service.send('DONE')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Two', type: 'past' },
+        { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Last step', () => {
+      service.send('DONE')
       service.send('DONE')
       service.send('DONE')
       service.send('DONE')
