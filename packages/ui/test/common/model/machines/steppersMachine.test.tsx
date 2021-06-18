@@ -5,13 +5,14 @@ import { formConfig, transactionConfig } from '@/common/model/machines'
 interface Step {
   title: string
   type: 'past' | 'active' | 'next'
+  isBaby?: boolean
 }
 
 const getSteps = (service: Interpreter<any>): Step[] => {
   const machine = service.machine
   const state = service.state
-  const activeNode = machine.getStateNodeById(state.value.toString())
-  const activeOrder = activeNode?.order ?? -1
+
+  let activeId = -1
 
   return machine.stateIds
     .map((id) => {
@@ -19,12 +20,19 @@ const getSteps = (service: Interpreter<any>): Step[] => {
     })
     .filter((stateNode) => !!stateNode?.meta?.isStep)
     .map((stateNode) => {
-      const isActive = activeOrder === stateNode?.order
+      const isActive = state.matches(stateNode.path.join('.'))
 
+      if (isActive) {
+        activeId = stateNode.order
+      }
+
+      return stateNode
+    })
+    .map((stateNode) => {
       return {
         title: stateNode?.meta?.stepTitle ?? '',
-        type: isActive ? 'active' : stateNode.order > activeOrder ? 'next' : 'past',
-        isBaby: stateNode.parent?.meta?.isStep ? true : undefined,
+        type: stateNode.order === activeId ? 'active' : stateNode.order < activeId ? 'past' : 'next',
+        ...(stateNode.parent?.meta?.isStep ? { isBaby: true } : undefined),
       }
     })
 }
@@ -447,12 +455,13 @@ describe('Machine: Steppers', () => {
         multi: {
           id: 'multi',
           meta: { isStep: true, stepTitle: 'Step Multi' },
+          initial: 'multi1',
           states: {
             multi1: { id: 'multi1', on: { DONE: 'multi2' }, meta: { isStep: true, stepTitle: 'Step Multi 1' } },
             multi2: { id: 'multi2', on: { DONE: 'multiDone' }, meta: { isStep: true, stepTitle: 'Step Multi 2' } },
             multiDone: { id: 'multiDone', type: 'final' },
           },
-          on: { DONE: 'done' },
+          onDone: 'done',
         },
         done: {
           id: 'done',
@@ -475,6 +484,35 @@ describe('Machine: Steppers', () => {
         { title: 'Step Multi 1', type: 'next', isBaby: true },
         { title: 'Step Multi 2', type: 'next', isBaby: true },
         { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Active baby step', () => {
+      service.send('DONE')
+      service.send('DONE')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Multi', type: 'past' },
+        { title: 'Step Multi 1', type: 'past', isBaby: true },
+        { title: 'Step Multi 2', type: 'active', isBaby: true },
+        { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Last step', () => {
+      service.send('DONE')
+      service.send('DONE')
+      service.send('DONE')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Multi', type: 'past' },
+        { title: 'Step Multi 1', type: 'past', isBaby: true },
+        { title: 'Step Multi 2', type: 'past', isBaby: true },
+        { title: 'Step Done', type: 'active' },
       ])
     })
   })
