@@ -1,8 +1,8 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { isError } from '../../../common/hooks/useSignAndSendTransaction'
-import { transactionConfig } from '../../../common/model/machines'
+import { isError } from '@/common/hooks/useSignAndSendTransaction'
+import { transactionConfig } from '@/common/model/machines'
 
 export const applyForRoleMachine = createMachine<{ transactionEvents: EventRecord[] }>(
   {
