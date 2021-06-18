@@ -1,4 +1,4 @@
-import { createMachine, interpret, Interpreter } from 'xstate'
+import { createMachine, interpret, Interpreter, State, StateNode } from 'xstate'
 
 import { formConfig, transactionConfig } from '@/common/model/machines'
 
@@ -8,30 +8,25 @@ interface Step {
   isBaby?: boolean
 }
 
+const getActiveNodeOrder = (state: State<any>) => (activeId: number, stateNode: StateNode) => {
+  if (state.matches(stateNode.path.join('.'))) {
+    return stateNode.order
+  }
+
+  return activeId
+}
+
 const getSteps = (service: Interpreter<any>): Step[] => {
   const machine = service.machine
-  const state = service.state
+  const stateNodes = machine.stateIds.map((id) => machine.getStateNodeById(id))
+  const activeNodeOrder = stateNodes.reduce(getActiveNodeOrder(service.state), -1)
 
-  let activeId = -1
-
-  return machine.stateIds
-    .map((id) => {
-      return machine.getStateNodeById(id)
-    })
+  return stateNodes
     .filter((stateNode) => !!stateNode?.meta?.isStep)
-    .map((stateNode) => {
-      const isActive = state.matches(stateNode.path.join('.'))
-
-      if (isActive) {
-        activeId = stateNode.order
-      }
-
-      return stateNode
-    })
     .map((stateNode) => {
       return {
         title: stateNode?.meta?.stepTitle ?? '',
-        type: stateNode.order === activeId ? 'active' : stateNode.order < activeId ? 'past' : 'next',
+        type: stateNode.order === activeNodeOrder ? 'active' : stateNode.order < activeNodeOrder ? 'past' : 'next',
         ...(stateNode.parent?.meta?.isStep ? { isBaby: true } : undefined),
       }
     })
