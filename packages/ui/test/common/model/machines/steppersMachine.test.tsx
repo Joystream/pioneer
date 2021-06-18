@@ -288,21 +288,17 @@ describe('Machine: Steppers', () => {
       initial: 'requirements',
       states: {
         requirements: {
-          id: 'requirements',
           on: { DONE: 'step1' },
         },
         step1: {
-          id: 'step1',
           meta: { isStep: true, stepTitle: 'Step One' },
           on: { DONE: 'step2' },
         },
         step2: {
-          id: 'step2',
           meta: { isStep: true, stepTitle: 'Step Two' },
           on: { DONE: 'done' },
         },
         done: {
-          id: 'done',
           meta: { isStep: true, stepTitle: 'Step Done' },
           type: 'final',
         },
@@ -363,25 +359,20 @@ describe('Machine: Steppers', () => {
       initial: 'requirements',
       states: {
         requirements: {
-          id: 'requirements',
           on: { DONE: 'step1' },
         },
         step1: {
-          id: 'step1',
           meta: { isStep: true, stepTitle: 'Step One' },
           on: { DONE: 'step2' },
         },
         step2: {
-          id: 'step2',
           meta: { isStep: true, stepTitle: 'Step Two' },
           on: { DONE: 'gap' },
         },
         gap: {
-          id: 'gap',
           on: { DONE: 'done' },
         },
         done: {
-          id: 'done',
           meta: { isStep: true, stepTitle: 'Step Done' },
           type: 'final',
         },
@@ -444,27 +435,23 @@ describe('Machine: Steppers', () => {
       initial: 'requirements',
       states: {
         requirements: {
-          id: 'requirements',
           on: { DONE: 'step1' },
         },
         step1: {
-          id: 'step1',
           meta: { isStep: true, stepTitle: 'Step One' },
           on: { DONE: 'multi' },
         },
         multi: {
-          id: 'multi',
           meta: { isStep: true, stepTitle: 'Step Multi' },
           initial: 'multi1',
           states: {
-            multi1: { id: 'multi1', on: { DONE: 'multi2' }, meta: { isStep: true, stepTitle: 'Step Multi 1' } },
-            multi2: { id: 'multi2', on: { DONE: 'multiDone' }, meta: { isStep: true, stepTitle: 'Step Multi 2' } },
-            multiDone: { id: 'multiDone', type: 'final' },
+            multi1: { on: { DONE: 'multi2' }, meta: { isStep: true, stepTitle: 'Step Multi 1' } },
+            multi2: { on: { DONE: 'multiDone' }, meta: { isStep: true, stepTitle: 'Step Multi 2' } },
+            multiDone: { type: 'final' },
           },
           onDone: 'done',
         },
         done: {
-          id: 'done',
           meta: { isStep: true, stepTitle: 'Step Done' },
           type: 'final',
         },
