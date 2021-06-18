@@ -9,18 +9,23 @@ interface Step {
 
 const getSteps = (service: Interpreter<any>): Step[] => {
   const machine = service.machine
-
-  const active = service.state.value.toString()
+  const state = service.state
+  const activeNode = machine.getStateNodeById(state.value.toString())
+  const activeOrder = activeNode?.order ?? -1
 
   return machine.stateIds
     .map((id) => {
       return machine.getStateNodeById(id)
     })
     .filter((stateNode) => !!stateNode?.meta?.isStep)
-    .map((stateNode) => ({
-      title: stateNode?.meta?.stepTitle ?? '',
-      type: active === stateNode?.key ? 'active' : 'next',
-    }))
+    .map((stateNode) => {
+      const isActive = activeOrder === stateNode?.order
+
+      return {
+        title: stateNode?.meta?.stepTitle ?? '',
+        type: isActive ? 'active' : stateNode.order > activeOrder ? 'next' : 'past',
+      }
+    })
 }
 
 describe('Machine: Steppers', () => {
@@ -273,16 +278,22 @@ describe('Machine: Steppers', () => {
       id: 'simple',
       initial: 'requirements',
       states: {
-        requirements: { on: { DONE: 'step1' } },
+        requirements: {
+          id: 'requirements',
+          on: { DONE: 'step1' },
+        },
         step1: {
+          id: 'step1',
           meta: { isStep: true, stepTitle: 'Step One' },
           on: { DONE: 'step2' },
         },
         step2: {
+          id: 'step2',
           meta: { isStep: true, stepTitle: 'Step Two' },
           on: { DONE: 'done' },
         },
         done: {
+          id: 'done',
           meta: { isStep: true, stepTitle: 'Step Done' },
           type: 'final',
         },
@@ -310,6 +321,29 @@ describe('Machine: Steppers', () => {
         { title: 'Step One', type: 'active' },
         { title: 'Step Two', type: 'next' },
         { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Active and past step', () => {
+      service.send('DONE')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Two', type: 'active' },
+        { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Last step', () => {
+      service.send('DONE')
+      service.send('DONE')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Two', type: 'past' },
+        { title: 'Step Done', type: 'active' },
       ])
     })
   })
