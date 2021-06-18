@@ -24,6 +24,7 @@ const getSteps = (service: Interpreter<any>): Step[] => {
       return {
         title: stateNode?.meta?.stepTitle ?? '',
         type: isActive ? 'active' : stateNode.order > activeOrder ? 'next' : 'past',
+        isBaby: stateNode.parent?.meta?.isStep ? true : undefined,
       }
     })
 }
@@ -350,7 +351,7 @@ describe('Machine: Steppers', () => {
 
   describe('Simple Stepper with gaps', () => {
     const gapStepper = createMachine({
-      id: 'simple',
+      id: 'simpleWithGaps',
       initial: 'requirements',
       states: {
         requirements: {
@@ -425,6 +426,55 @@ describe('Machine: Steppers', () => {
         { title: 'Step One', type: 'past' },
         { title: 'Step Two', type: 'past' },
         { title: 'Step Done', type: 'active' },
+      ])
+    })
+  })
+
+  describe('Complex stepper', () => {
+    const simpleStepper = createMachine({
+      id: 'complex',
+      initial: 'requirements',
+      states: {
+        requirements: {
+          id: 'requirements',
+          on: { DONE: 'step1' },
+        },
+        step1: {
+          id: 'step1',
+          meta: { isStep: true, stepTitle: 'Step One' },
+          on: { DONE: 'multi' },
+        },
+        multi: {
+          id: 'multi',
+          meta: { isStep: true, stepTitle: 'Step Multi' },
+          states: {
+            multi1: { id: 'multi1', on: { DONE: 'multi2' }, meta: { isStep: true, stepTitle: 'Step Multi 1' } },
+            multi2: { id: 'multi2', on: { DONE: 'multiDone' }, meta: { isStep: true, stepTitle: 'Step Multi 2' } },
+            multiDone: { id: 'multiDone', type: 'final' },
+          },
+          on: { DONE: 'done' },
+        },
+        done: {
+          id: 'done',
+          meta: { isStep: true, stepTitle: 'Step Done' },
+          type: 'final',
+        },
+      },
+    })
+    let service: Interpreter<any>
+
+    beforeEach(() => {
+      service = interpret(simpleStepper)
+      service.start()
+    })
+
+    it('Steps from machine', () => {
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'next' },
+        { title: 'Step Multi', type: 'next' },
+        { title: 'Step Multi 1', type: 'next', isBaby: true },
+        { title: 'Step Multi 2', type: 'next', isBaby: true },
+        { title: 'Step Done', type: 'next' },
       ])
     })
   })
