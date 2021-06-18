@@ -1,3 +1,4 @@
+import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 import { typenameToProposalDetails } from '@/proposals/model/proposalDetails'
 import { isProposalActive, typenameToProposalStatus } from '@/proposals/model/proposalStatus'
@@ -51,6 +52,8 @@ export interface Proposal {
   proposer: Member
   createdAt: string
   endedAt?: string
+  statusSetAtBlock: Block
+  exactExecutionBlock?: Block
 }
 
 export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
@@ -61,6 +64,7 @@ export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
     details: typenameToProposalDetails(fields.details.__typename),
     proposer: asMember(fields.creator),
     createdAt: fields.createdAt,
+    statusSetAtBlock: asBlock(),
   }
 
   if (!isProposalActive(proposal.status)) {
