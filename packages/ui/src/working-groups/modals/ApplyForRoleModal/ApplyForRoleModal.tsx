@@ -15,7 +15,7 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
-import { getStepsFromMachineAndState } from '@/common/model/machines/getSteps'
+import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
@@ -37,7 +37,7 @@ export const ApplyForRoleModal = () => {
   const { active } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const opening = modalData.opening
-  const [state, send] = useMachine(applyForRoleMachine)
+  const [state, send, service] = useMachine(applyForRoleMachine)
   const [txParams, setTxParams] = useState<OpeningParams>({
     member_id: active?.id,
     opening_id: opening.runtimeId,
@@ -126,7 +126,7 @@ export const ApplyForRoleModal = () => {
         onSubmit={onSubmit}
         send={() => send('VALID')}
         opening={opening}
-        steps={getStepsFromMachineAndState(applyForRoleMachine, state)}
+        steps={getSteps(service)}
       />
     )
   }

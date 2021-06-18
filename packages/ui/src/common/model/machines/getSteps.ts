@@ -30,8 +30,5 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
 }
 
 export const getSteps = (service: Interpreter<any>): Step[] => {
-  const machine = service.machine
-  const state = service.state
-
-  return getStepsFromMachineAndState(machine, state)
+  return getStepsFromMachineAndState(service.machine, service.state)
 }
