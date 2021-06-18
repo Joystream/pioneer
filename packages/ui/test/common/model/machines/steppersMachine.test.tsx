@@ -164,6 +164,7 @@ describe('Machine: Steppers', () => {
       service.send('VALID')
       service.send('DONE')
 
+      service.send('SIGN')
       service.send('SIGN_EXTERNAL')
       service.send('SIGNED')
       service.send('SUCCESS')
@@ -176,6 +177,7 @@ describe('Machine: Steppers', () => {
       service.send('VALID')
       service.send('DONE')
 
+      service.send('SIGN')
       service.send('SIGN_EXTERNAL')
       service.send('SIGNED')
       service.send('ERROR')
@@ -188,6 +190,7 @@ describe('Machine: Steppers', () => {
       service.send('VALID')
       service.send('DONE')
 
+      service.send('SIGN')
       service.send('SIGN_EXTERNAL')
       service.send('SIGNED')
       service.send('SUCCESS')
@@ -204,6 +207,7 @@ describe('Machine: Steppers', () => {
       service.send('VALID')
       service.send('DONE')
 
+      service.send('SIGN')
       service.send('SIGN_EXTERNAL')
       service.send('SIGNED')
       service.send('SUCCESS')
@@ -212,6 +216,7 @@ describe('Machine: Steppers', () => {
       service.send('VALID')
       service.send('DONE')
 
+      service.send('SIGN')
       service.send('SIGN_EXTERNAL')
       service.send('SIGNED')
       service.send('ERROR')
@@ -224,6 +229,7 @@ describe('Machine: Steppers', () => {
       service.send('VALID')
       service.send('DONE')
 
+      service.send('SIGN')
       service.send('SIGN_EXTERNAL')
       service.send('SIGNED')
       service.send('SUCCESS')
@@ -232,6 +238,7 @@ describe('Machine: Steppers', () => {
       service.send('VALID')
       service.send('DONE')
 
+      service.send('SIGN')
       service.send('SIGN_EXTERNAL')
       service.send('SIGNED')
       service.send('SUCCESS')
