@@ -1,5 +1,6 @@
 import React, { useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
@@ -13,10 +14,13 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics } from '@/common/components/statistics'
-import { Label } from '@/common/components/typography'
+import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
+import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
+import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
+import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useProposal } from '@/proposals/hooks/useProposal'
 
 import { randomMarkdown } from '../../../../dev/scripts/generators/utils'
@@ -26,6 +30,7 @@ export const ProposalPreview = () => {
   const { isLoading, proposal } = useProposal(id)
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
+  const blocksToProposalExecution = useBlocksToProposalExecution(proposal)
 
   const rationale = useMemo(randomMarkdown, [])
 
@@ -59,12 +64,18 @@ export const ProposalPreview = () => {
           </ButtonGhost>
 
           <RowGapBlock gap={24}>
-            <BadgesRow>
+            <BadgeAndTime>
               <BadgeStatus inverted size="l">
                 {camelCaseToText(proposal.status)}
               </BadgeStatus>
-              {/* Time Left */}
-            </BadgesRow>
+              {blocksToProposalExecution && (
+                <TextMedium>
+                  <TextInlineMedium lighter>Time left:</TextInlineMedium>{' '}
+                  <TextInlineMedium bold>{formatBlocksToDuration(blocksToProposalExecution)}</TextInlineMedium>{' '}
+                  <TextInlineMedium lighter>({formatTokenValue(blocksToProposalExecution)} blocks)</TextInlineMedium>
+                </TextMedium>
+              )}
+            </BadgeAndTime>
           </RowGapBlock>
         </PageHeader>
       }
@@ -108,3 +119,6 @@ export const ProposalPreview = () => {
     />
   )
 }
+const BadgeAndTime = styled(BadgesRow)`
+  gap: ${spacing(2)};
+`

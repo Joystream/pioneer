@@ -2,6 +2,8 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { asBlock } from '@/common/types'
+
 import { getMember } from '../../../../test/_mocks/members'
 
 import { ProposalListItem } from './ProposalListItem'
@@ -27,5 +29,6 @@ Default.args = {
     proposer: getMember('alice'),
     status: 'deciding',
     title: 'firewall Stand-alone set Checking',
+    statusSetAtBlock: asBlock(),
   },
 }
