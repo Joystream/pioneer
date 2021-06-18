@@ -2,11 +2,17 @@ import { createMachine, interpret, Interpreter, StateMachine } from 'xstate'
 
 import { formConfig, transactionConfig } from '@/common/model/machines'
 
-const getSteps = (machine: StateMachine<any, any, any>): string[] => {
+interface Step {
+  title: string
+}
+
+const getSteps = (machine: StateMachine<any, any, any>): Step[] => {
   return machine.stateIds
     .map((id) => machine.getStateNodeById(id))
-    .filter((stateNode) => !!stateNode.meta.isStep)
-    .map((stateNode) => stateNode?.meta?.stepTitle ?? '')
+    .filter((stateNode) => !!stateNode?.meta?.isStep)
+    .map((stateNode) => ({
+      title: stateNode?.meta?.stepTitle ?? '',
+    }))
 }
 
 describe('Machine: Steppers', () => {
@@ -280,7 +286,7 @@ describe('Machine: Steppers', () => {
     })
 
     it('Steps from machine', () => {
-      expect(getSteps(service.machine)).toBe(['Step one', 'Step two', 'Step three'])
+      expect(getSteps(service.machine)).toEqual([{ title: 'Step One' }, { title: 'Step Two' }, { title: 'Step Done' }])
     })
   })
 })
