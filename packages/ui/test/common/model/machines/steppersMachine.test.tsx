@@ -4,6 +4,7 @@ import { formConfig, transactionConfig } from '@/common/model/machines'
 
 interface Step {
   title: string
+  type: 'past' | 'active' | 'next'
 }
 
 const getSteps = (machine: StateMachine<any, any, any>): Step[] => {
@@ -12,6 +13,7 @@ const getSteps = (machine: StateMachine<any, any, any>): Step[] => {
     .filter((stateNode) => !!stateNode?.meta?.isStep)
     .map((stateNode) => ({
       title: stateNode?.meta?.stepTitle ?? '',
+      type: 'next',
     }))
 }
 
@@ -286,7 +288,11 @@ describe('Machine: Steppers', () => {
     })
 
     it('Steps from machine', () => {
-      expect(getSteps(service.machine)).toEqual([{ title: 'Step One' }, { title: 'Step Two' }, { title: 'Step Done' }])
+      expect(getSteps(service.machine)).toEqual([
+        { title: 'Step One', type: 'next' },
+        { title: 'Step Two', type: 'next' },
+        { title: 'Step Done', type: 'next' },
+      ])
     })
   })
 })
