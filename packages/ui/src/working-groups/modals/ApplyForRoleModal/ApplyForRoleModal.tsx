@@ -61,8 +61,8 @@ export const ApplyForRoleModal = () => {
                 on: { VALID: 'transaction' },
               },
               transaction: {
-                id: 'transaction',
                 invoke: {
+                  id: 'transaction',
                   src: createMachine(transactionConfig),
                   onDone: [
                     {
@@ -172,7 +172,7 @@ export const ApplyForRoleModal = () => {
     return <ApplyForRolePrepareModal onSubmit={onSubmit} opening={opening} />
   }
 
-  const transactionService = state.children['transaction:invocation[0]']
+  const transactionService = state.children['transaction']
 
   if (state.matches('steps.transaction') && signer && transactionService) {
     return (
