@@ -5,7 +5,7 @@ import { AddProposalButton } from '../AddProposalButton'
 
 export const NoProposals = () => (
   <NoProposalContainer>
-    <h3>There is no current proposals yet</h3>
+    <h3>There are no current proposals yet</h3>
     <p>
       Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit
       mollit. Exercitation veniam consequat sunt nostrud amet.
