@@ -4,11 +4,10 @@ import React from 'react'
 import { HashRouter } from 'react-router-dom'
 import { interpret } from 'xstate'
 
+import { getSteps } from '@/common/model/machines/getSteps'
 import { ModalContext } from '@/common/providers/modal/context'
+import { getMockAsOpening } from '@/mocks/data/seedOpenings'
 import { ApplyForRoleSuccessModal } from '@/working-groups/modals/ApplyForRoleModal/ApplyForRoleSuccessModal'
-
-import { getSteps } from '../../../common/model/machines/getSteps'
-import { getMockAsOpening } from '../../../mocks/data/seedOpenings'
 
 import { ApplyForRoleModal } from './ApplyForRoleModal'
 import { applyForRoleMachine } from './machine'

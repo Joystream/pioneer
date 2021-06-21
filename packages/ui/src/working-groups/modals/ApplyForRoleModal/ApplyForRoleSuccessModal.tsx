@@ -17,8 +17,8 @@ import {
 } from '@/common/components/StepperModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { Step } from '@/common/model/machines/getSteps'
 
-import { Step } from '../../../common/model/machines/getSteps'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 
 import { ApplyForRoleModalCall } from '.'

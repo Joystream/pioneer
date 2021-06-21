@@ -12,9 +12,9 @@ import {
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
 import { useModal } from '@/common/hooks/useModal'
+import { Step } from '@/common/model/machines/getSteps'
 import { WorkingGroupOpening } from '@/working-groups/types'
 
-import { Step } from '../../../common/model/machines/getSteps'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 import { useOpeningQuestions } from '../../hooks/useOpeningQuestions'
 
