@@ -25,7 +25,7 @@ const generateApplication = (opening: OpeningMock, status = 'pending') => (appli
   }
 }
 
-const generateWorker = (type: string, groupId: string, applications: Application[], opening?: OpeningMock) => (
+const generateWorker = (type: string, groupId: string, applications: ApplicationMock[], opening?: OpeningMock) => (
   memberId: number
 ) => {
   if (!opening) {
@@ -54,20 +54,21 @@ const generateWorker = (type: string, groupId: string, applications: Application
 
 export type WorkerMock = ReturnType<ReturnType<typeof generateWorker>>
 
-type Application = ReturnType<ReturnType<typeof generateApplication>>
+export type ApplicationMock = ReturnType<ReturnType<typeof generateApplication>>
 
-export const generateApplications = (openings: OpeningMock[], mocks: Mocks) => {
-  return openings.map((opening) => {
-    const applicantsIds = randomUniqueArrayFromRange(8, 0, mocks.members.length - 1).map(
+export const generateWithdrawnApplications = (mocks: Mocks): ApplicationMock[] => {
+  return  mocks.openings.map((opening) => {
+    const applicantsIds = randomUniqueArrayFromRange(2, 0, mocks.members.length - 1).map(
       (index) => mocks.members[index].id
     )
 
-    return applicantsIds.map(generateApplication(opening))
+    return applicantsIds.map(generateApplication(opening, 'withdrawn'))
   })
+    .flat()
 }
 
 export const generateWorkers = (mocks: Mocks) => {
-  const applications: Application[] = []
+  const applications: ApplicationMock[] = []
 
   const findOpening = (group: string, status: string) => {
     return mocks.openings.find((opening) => opening.groupId === group && opening.status === status)
