@@ -1,7 +1,11 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-export const applyForRoleMachine = createMachine<{ transactionEvents: EventRecord[] }>(
+interface ApplyForRoleContext {
+  transactionEvents: EventRecord[]
+}
+
+export const applyForRoleMachine = createMachine<ApplyForRoleContext>(
   {
     initial: 'requirementsVerification',
     context: { transactionEvents: [] },
