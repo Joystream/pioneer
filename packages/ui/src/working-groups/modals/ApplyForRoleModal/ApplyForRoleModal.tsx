@@ -10,7 +10,6 @@ import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -19,11 +18,11 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
-import { StakeStepForm } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 import { getGroup } from '@/working-groups/model/getGroup'
 
-import { ApplyForRolePrepareModal } from './ApplyForRolePrepareModal'
+import { ApplyForRoleApplicationStep } from './ApplyForRoleApplicationStep'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
+import { ApplyForRoleStakeStep } from './ApplyForRoleStakeStep'
 import { ApplyForRoleSuccessModal } from './ApplyForRoleSuccessModal'
 import { applyForRoleMachine } from './machine'
 
@@ -38,7 +37,7 @@ export const ApplyForRoleModal = () => {
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const opening = modalData.opening
   const [state, send, service] = useMachine(applyForRoleMachine)
-  const [txParams, setTxParams] = useState<OpeningParams>({
+  const txParams = {
     member_id: active?.id,
     opening_id: opening.runtimeId,
     role_account_id: active?.controllerAccount,
@@ -47,10 +46,9 @@ export const ApplyForRoleModal = () => {
       stake: opening.stake,
       staking_account_id: active?.controllerAccount,
     },
-  })
+  }
   const requiredStake = opening.stake.toNumber()
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
-  const [stakeAccount, setStakeAccount] = useState<Account>()
   const transaction = useMemo(() => {
     if (active && txParams && api) {
       return getGroup(api, opening.groupName)?.applyOnOpening(txParams)
@@ -104,47 +102,49 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state.matches('stake') || state.matches('form')) {
-    const onSubmit = (stake: StakeStepForm, answers: Record<string, string>) => {
-      setStakeAccount(stake.account)
-      setTxParams({
-        opening_id: opening.runtimeId,
-        member_id: active?.id,
-        role_account_id: active?.controllerAccount,
-        reward_account_id: active?.rootAccount,
-        description: metadataToBytes(ApplicationMetadata, { answers: Object.values(answers) }),
-        stake_parameters: {
-          stake: stake.amount,
-          stake_account_id: stake.account?.address,
-        },
-      })
-      send('VALID')
-    }
+  if (state.matches('stake')) {
+    return <ApplyForRoleStakeStep opening={opening} steps={getSteps(service)} send={send} />
+  }
 
-    return (
-      <ApplyForRolePrepareModal
-        onSubmit={onSubmit}
-        send={() => send('VALID')}
-        opening={opening}
-        steps={getSteps(service)}
-      />
-    )
+  if (state.matches('form')) {
+    return <ApplyForRoleApplicationStep opening={opening} steps={getSteps(service)} send={send} />
   }
 
   if (state.matches('transaction') && signer) {
+    const { stake, answers } = state.context
+
+    const transaction = getGroup(api, opening.groupName)?.applyOnOpening({
+      opening_id: opening.runtimeId,
+      member_id: active?.id,
+      role_account_id: active?.controllerAccount,
+      reward_account_id: active?.rootAccount,
+      description: metadataToBytes(ApplicationMetadata, { answers: Object.values(answers) }),
+      stake_parameters: {
+        stake: stake.amount,
+        stake_account_id: stake.account?.address,
+      },
+    })
+
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
         onDone={onDone}
         transaction={transaction}
         signer={signer}
-        stake={stake}
+        stake={new BN(state.context.stake.amount)}
       />
     )
   }
 
-  if (state.matches('success') && stake && stakeAccount && applicationId) {
-    return <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={applicationId} />
+  if (state.matches('success') && stake && applicationId) {
+    return (
+      <ApplyForRoleSuccessModal
+        stake={stake}
+        stakeAccount={state.context.stake.account}
+        applicationId={applicationId}
+        steps={getSteps(service)}
+      />
+    )
   }
 
   if (state.matches('error')) {
