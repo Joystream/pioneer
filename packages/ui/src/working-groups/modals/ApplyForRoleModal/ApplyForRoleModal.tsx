@@ -35,46 +35,37 @@ export const ApplyForRoleModal = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
-  const opening = modalData.opening
   const [state, send, service] = useMachine(applyForRoleMachine)
-  const txParams = {
-    member_id: active?.id,
-    opening_id: opening.runtimeId,
-    role_account_id: active?.controllerAccount,
-    reward_account_id: active?.controllerAccount,
-    stake_parameters: {
-      stake: opening.stake,
-      staking_account_id: active?.controllerAccount,
-    },
-  }
+  const opening = modalData.opening
   const requiredStake = opening.stake.toNumber()
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
   const transaction = useMemo(() => {
-    if (active && txParams && api) {
-      return getGroup(api, opening.groupName)?.applyOnOpening(txParams)
+    if (active && api) {
+      return getGroup(api, opening.groupName)?.applyOnOpening({
+        member_id: active?.id,
+        opening_id: opening.runtimeId,
+        role_account_id: active?.controllerAccount,
+        reward_account_id: active?.controllerAccount,
+        stake_parameters: {
+          stake: opening.stake,
+          staking_account_id: active?.controllerAccount,
+        },
+      })
     }
-  }, [api, JSON.stringify(txParams)])
-  const [applicationId, setApplicationId] = useState<BN>()
-
-  const signer = active?.controllerAccount
-  const onDone = (result: boolean, events: EventRecord[]) => {
-    const applicationId = getEventParam<ApplicationId>(events, 'AppliedOnOpening', 1)
-
-    setApplicationId(applicationId?.toBn())
-    send(result ? 'SUCCESS' : 'ERROR')
-  }
-  const stake = new BN(txParams?.stake_parameters.stake ?? 0)
+  }, [api, active?.id])
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
-
+  const [applicationId, setApplicationId] = useState<BN>()
   useEffect(() => {
+    if (!state.matches('requirementsVerification')) {
+      return
+    }
+
     if (hasRequiredStake === false) {
       showModal<MoveFundsModalCall>({
         modal: 'MoveFundsModal',
         data: { lockedFoundsAccounts: accountsWithLockedFounds, accounts: transferableAccounts, requiredStake },
       })
-    }
 
-    if (!state.matches('requirementsVerification')) {
       return
     }
 
@@ -91,6 +82,13 @@ export const ApplyForRoleModal = () => {
       send('FAIL')
     }
   }, [state.value, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
+
+  const onDone = (result: boolean, events: EventRecord[]) => {
+    const applicationId = getEventParam<ApplicationId>(events, 'AppliedOnOpening', 1)
+
+    setApplicationId(applicationId?.toBn())
+    send(result ? 'SUCCESS' : 'ERROR')
+  }
 
   if (!active || !feeInfo || hasRequiredStake === false) {
     return null
@@ -109,6 +107,8 @@ export const ApplyForRoleModal = () => {
   if (state.matches('form')) {
     return <ApplyForRoleApplicationStep opening={opening} steps={getSteps(service)} send={send} />
   }
+
+  const signer = active?.controllerAccount
 
   if (state.matches('transaction') && signer) {
     const { stake, answers } = state.context
@@ -136,10 +136,10 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state.matches('success') && stake && applicationId) {
+  if (state.matches('success') && applicationId) {
     return (
       <ApplyForRoleSuccessModal
-        stake={stake}
+        stake={new BN(state.context.stake.amount)}
         stakeAccount={state.context.stake.account}
         applicationId={applicationId}
         steps={getSteps(service)}
