@@ -1,0 +1,47 @@
+[
+  {
+    "id": "0",
+    "createdAt": "2021-06-08T13:12:12.733Z",
+    "applicationId": "membershipWorkingGroup-119"
+  },
+  {
+    "id": "1",
+    "createdAt": "2021-05-29T00:53:48.318Z",
+    "applicationId": "forumWorkingGroup-73"
+  },
+  {
+    "id": "2",
+    "createdAt": "2021-05-30T23:00:08.891Z",
+    "applicationId": "membershipWorkingGroup-121"
+  },
+  {
+    "id": "3",
+    "createdAt": "2021-06-07T22:27:23.969Z",
+    "applicationId": "forumWorkingGroup-67"
+  },
+  {
+    "id": "4",
+    "createdAt": "2021-06-14T16:26:35.144Z",
+    "applicationId": "contentDirectoryWorkingGroup-100"
+  },
+  {
+    "id": "5",
+    "createdAt": "2021-06-07T10:23:52.468Z",
+    "applicationId": "membershipWorkingGroup-116"
+  },
+  {
+    "id": "6",
+    "createdAt": "2021-06-18T10:46:22.779Z",
+    "applicationId": "membershipWorkingGroup-125"
+  },
+  {
+    "id": "7",
+    "createdAt": "2021-06-04T20:41:15.001Z",
+    "applicationId": "forumWorkingGroup-75"
+  },
+  {
+    "id": "8",
+    "createdAt": "2021-06-16T16:00:30.087Z",
+    "applicationId": "storageWorkingGroup-92"
+  }
+]

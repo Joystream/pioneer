@@ -2,6 +2,9 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
+import { seedApplicationWithdrawnEvents } from '@/mocks/data/seedApplicationWithdrawnEvents'
+import { seedAppliedOnOpeningEvents } from '@/mocks/data/seedAppliedOnOpeningEvents'
+
 import schema from '../common/api/schemas/schema.graphql'
 
 import {
@@ -71,6 +74,8 @@ export const makeServer = (environment = 'development') => {
               upcomingWorkingGroupOpeningByUniqueInput: getUniqueResolver('UpcomingWorkingGroupOpening'),
               rewardPaidEvents: getWhereResolver('RewardPaidEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
+              appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
+              applicationWithdrawnEvents: getWhereResolver('ApplicationWithdrawnEvent'),
               proposals: getWhereResolver('Proposal'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
             },
@@ -91,6 +96,8 @@ export const makeServer = (environment = 'development') => {
       seedWorkers(server)
       seedRewardPaidEvents(server)
       seedBudgetSpendingEvents(server)
+      seedAppliedOnOpeningEvents(server)
+      seedApplicationWithdrawnEvents(server)
       seedProposals(server)
     },
   })
