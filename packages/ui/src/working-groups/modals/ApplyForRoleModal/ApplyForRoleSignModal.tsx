@@ -1,7 +1,9 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
+import { useActor } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
+import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
 import { useBalance } from '../../../accounts/hooks/useBalance'
@@ -13,28 +15,25 @@ import { TransactionInfo } from '../../../common/components/TransactionInfo'
 import { TransactionModal } from '../../../common/components/TransactionModal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
 import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
-import { Address, onTransactionDone } from '../../../common/types'
+import { Address } from '../../../common/types'
 
 interface SignProps {
   onClose: () => void
-  onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   signer: Address
   stake: BN
+  service: ActorRef<any>
 }
 
-export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer, stake }: SignProps) => {
+export const ApplyForRoleSignModal = ({ onClose, transaction, signer, stake, service }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, send, status } = useSignAndSendTransaction({
-    transaction,
-    signer: signer,
-    onDone,
-  })
+  const { paymentInfo } = useSignAndSendTransaction({ transaction, signer, service })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(signer)
   const transferable = balance?.transferable
   const partialFee = paymentInfo?.partialFee
+  const [state, send] = useActor(service)
 
   useEffect(() => {
     if (transferable && partialFee) {
@@ -42,10 +41,10 @@ export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer, st
     }
   }, [partialFee?.toString(), transferable?.toString()])
 
-  const signDisabled = status !== 'READY' || !hasFunds
+  const signDisabled = !state.matches('prepare') || !hasFunds
 
   return (
-    <TransactionModal status={status} onClose={onClose}>
+    <TransactionModal onClose={onClose} service={service}>
       <ModalBody>
         <TextMedium>You intend to apply for a role.</TextMedium>
         <TextMedium>
@@ -71,7 +70,7 @@ export const ApplyForRoleSignModal = ({ onClose, onDone, transaction, signer, st
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>
+        <ButtonPrimary size="medium" onClick={() => send('SIGN')} disabled={signDisabled}>
           Sign transaction and Stake
         </ButtonPrimary>
       </ModalFooter>

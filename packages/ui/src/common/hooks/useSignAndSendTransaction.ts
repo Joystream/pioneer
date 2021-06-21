@@ -53,7 +53,7 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
     }
   }
 
-  const errorHandler = () => send({ type: 'ERROR', payload: {} })
+  const errorHandler = () => send({ type: 'ERROR', events: [] })
 
   transaction.subscribe(statusCallback, errorHandler)
 }

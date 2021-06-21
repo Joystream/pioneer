@@ -1,10 +1,9 @@
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
-import { EventRecord } from '@polkadot/types/interfaces/system'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -56,7 +55,7 @@ export const ApplyForRoleModal = () => {
     }
   }, [api, active?.id])
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
-  const [applicationId, setApplicationId] = useState<BN>()
+
   useEffect(() => {
     if (!state.matches('requirementsVerification')) {
       return
@@ -85,13 +84,6 @@ export const ApplyForRoleModal = () => {
     }
   }, [state.value, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
-  const onDone = (result: boolean, events: EventRecord[]) => {
-    const applicationId = getEventParam<ApplicationId>(events, 'AppliedOnOpening', 1)
-
-    setApplicationId(applicationId?.toBn())
-    send(result ? 'SUCCESS' : 'ERROR')
-  }
-
   if (!active || !feeInfo || hasRequiredStake === false) {
     return null
   }
@@ -111,8 +103,9 @@ export const ApplyForRoleModal = () => {
   }
 
   const signer = active?.controllerAccount
+  const transactionService = state.children['transaction']
 
-  if (state.matches('transaction') && signer && api) {
+  if (state.matches('transaction') && signer && api && transactionService) {
     const { stake, answers } = state.context
 
     const transaction = getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
@@ -130,20 +123,22 @@ export const ApplyForRoleModal = () => {
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
-        onDone={onDone}
         transaction={transaction}
         signer={signer}
         stake={new BN(state.context.stake.amount)}
+        service={transactionService}
       />
     )
   }
 
-  if (state.matches('success') && applicationId) {
+  if (state.matches('success')) {
+    const applicationId = getEventParam<ApplicationId>(state.context.transactionEvents, 'AppliedOnOpening', 1)
+
     return (
       <ApplyForRoleSuccessModal
         stake={new BN(state.context.stake.amount)}
         stakeAccount={state.context.stake.account}
-        applicationId={applicationId}
+        applicationId={new BN(applicationId ?? 0)}
         steps={getSteps(service)}
       />
     )
