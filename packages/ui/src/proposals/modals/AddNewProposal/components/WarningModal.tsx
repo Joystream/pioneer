@@ -14,7 +14,7 @@ interface AddNewProposalWarningModalProps {
   onNext: () => void
 }
 
-export const AddNewProposalWarningModal = ({ onNext }: AddNewProposalWarningModalProps) => {
+export const WarningModal = ({ onNext }: AddNewProposalWarningModalProps) => {
   const { hideModal } = useModal()
   const [isAwareChecked, setAwareChecked] = useState(false)
 

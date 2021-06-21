@@ -1,16 +1,30 @@
 import { ApiRx } from '@polkadot/api'
+import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo, useState } from 'react'
+import styled from 'styled-components'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
+import { Arrow } from '@/common/components/icons'
+import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Stepper } from '@/common/components/Stepper'
+import {
+  StepDescriptionColumn,
+  StepperBody,
+  StepperModalBody,
+  StepperModalWrapper,
+} from '@/common/components/StepperModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { getStepsFromMachineAndState } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { AddNewProposalWarningModal } from '@/proposals/modals/AddNewProposal/AddNewProposalWarningModal'
-
-import { AddNewProposalModalCall, AddProposalModalState } from '.'
+import { TypeSelection } from '@/proposals/modals/AddNewProposal/components/TypeSelection'
+import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
+import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
+import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 
 export type NewProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
@@ -21,7 +35,7 @@ export const AddNewProposalModal = () => {
   const { api } = useApi()
   const { active: member } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
-  const [state, setState] = useState<AddProposalModalState>('REQUIREMENTS_CHECK')
+  const [state, send, service] = useMachine(addNewProposalMachine)
 
   const [txParams] = useState<NewProposalParams>({
     member_id: member?.id,
@@ -37,8 +51,8 @@ export const AddNewProposalModal = () => {
   }, [api, JSON.stringify(txParams)])
   const feeInfo = useTransactionFee(member?.controllerAccount, transaction)
 
-  useEffect(() => {
-    if (state !== 'REQUIREMENTS_CHECK') {
+  useEffect((): any => {
+    if (!state.matches('requirementsVerification')) {
       return
     }
 
@@ -47,11 +61,11 @@ export const AddNewProposalModal = () => {
     }
 
     if (feeInfo && feeInfo.canAfford) {
-      return setState('WARNING')
+      return send('NEXT')
     }
 
     if (feeInfo && !feeInfo.canAfford) {
-      setState('REQUIREMENTS_FAIL')
+      return send('FAIL')
     }
   }, [state, member?.id, JSON.stringify(feeInfo)])
 
@@ -59,15 +73,40 @@ export const AddNewProposalModal = () => {
     return null
   }
 
-  if (state === 'REQUIREMENTS_FAIL') {
+  if (state.matches('requirementsFailed')) {
     return (
       <InsufficientFundsModal onClose={hideModal} address={member.controllerAccount} amount={feeInfo.transactionFee} />
     )
   }
 
-  if (state === 'WARNING') {
-    return <AddNewProposalWarningModal onNext={() => setState('PREPARE')} />
+  if (state.matches('warning')) {
+    return <WarningModal onNext={() => send('NEXT')} />
   }
 
-  return <FailureModal onClose={hideModal}>There was a problem with creating proposal.</FailureModal>
+  if (state.matches('error')) {
+    return <FailureModal onClose={hideModal}>There was a problem with creating proposal.</FailureModal>
+  }
+
+  return (
+    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+      <ModalHeader onClick={hideModal} title="Creating new proposal" />
+      <StepperModalBody>
+        <StepperProposalWrapper>
+          <Stepper steps={getStepsFromMachineAndState(addNewProposalMachine, state)} />
+          <StepDescriptionColumn></StepDescriptionColumn>
+          <StepperBody>{state.matches('typeSelection') && <TypeSelection />}</StepperBody>
+        </StepperProposalWrapper>
+      </StepperModalBody>
+      <ModalFooter>
+        <ButtonPrimary onClick={() => send('NEXT')} size="medium">
+          Next step
+          <Arrow direction="right" />
+        </ButtonPrimary>
+      </ModalFooter>
+    </Modal>
+  )
 }
+
+const StepperProposalWrapper = styled(StepperModalWrapper)`
+  grid-template-columns: 220px 336px 1fr;
+`
