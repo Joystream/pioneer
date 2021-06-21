@@ -1,14 +1,21 @@
 import { createMachine } from 'xstate'
 
+import { StakeStepForm } from './StakeStep'
+
 type EmptyObject = Record<string, never>
+
+interface ApplyForRoleContext {
+  stake?: StakeStepForm
+}
+
 type ApplyForRoleState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
-  | { value: 'form'; context: EmptyObject }
-  | { value: 'transaction'; context: EmptyObject }
-  | { value: 'success'; context: EmptyObject }
-  | { value: 'error'; context: EmptyObject }
+  | { value: 'form'; context: { stake: StakeStepForm } }
+  | { value: 'transaction'; context: { stake: StakeStepForm } }
+  | { value: 'success'; context: { stake: StakeStepForm } }
+  | { value: 'error'; context: { stake: StakeStepForm } }
 
 type ApplyForRoleEvent =
   | { type: 'FAIL' }
@@ -17,7 +24,7 @@ type ApplyForRoleEvent =
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
 
-export const applyForRoleMachine = createMachine<EmptyObject, ApplyForRoleEvent, ApplyForRoleState>({
+export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRoleEvent, ApplyForRoleState>({
   initial: 'requirementsVerification',
   states: {
     requirementsVerification: {
