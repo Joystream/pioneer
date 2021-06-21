@@ -1,11 +1,14 @@
 import { createMachine } from 'xstate'
 
+import { ApplicationQuestion } from '../../types'
+
 import { StakeStepForm } from './StakeStep'
 
 type EmptyObject = Record<string, never>
 
 interface ApplyForRoleContext {
   stake?: StakeStepForm
+  questions?: ApplicationQuestion[]
 }
 
 type ApplyForRoleState =
@@ -13,9 +16,9 @@ type ApplyForRoleState =
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
   | { value: 'form'; context: { stake: StakeStepForm } }
-  | { value: 'transaction'; context: { stake: StakeStepForm } }
-  | { value: 'success'; context: { stake: StakeStepForm } }
-  | { value: 'error'; context: { stake: StakeStepForm } }
+  | { value: 'transaction'; context: { stake: StakeStepForm; questions: ApplicationQuestion[] } }
+  | { value: 'success'; context: { stake: StakeStepForm; questions: ApplicationQuestion[] } }
+  | { value: 'error'; context: { stake: StakeStepForm; questions: ApplicationQuestion[] } }
 
 type ApplyForRoleEvent =
   | { type: 'FAIL' }
