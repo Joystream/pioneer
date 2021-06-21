@@ -134,7 +134,11 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
 
           <Row>
             <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
-              <SelectAccount filter={filterRoot} onChange={(account) => changeField('rootAccount', account)} />
+              <SelectAccount
+                filter={filterRoot}
+                onChange={(account) => changeField('rootAccount', account)}
+                selected={rootAccount}
+              />
             </InputComponent>
           </Row>
 
@@ -148,6 +152,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
               <SelectAccount
                 filter={filterController}
                 onChange={(account) => changeField('controllerAccount', account)}
+                selected={controllerAccount}
               />
             </InputComponent>
           </Row>

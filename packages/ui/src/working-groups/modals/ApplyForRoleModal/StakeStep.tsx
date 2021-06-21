@@ -63,7 +63,7 @@ export function StakeStep({ onChange, opening }: StakeStepProps) {
             <TextMedium>First please select an account for staking.</TextMedium>
           </RowGapBlock>
           <InputComponent label="Select account for Staking" required inputSize="l">
-            <SelectAccount onChange={(account) => changeField('account', account)} />
+            <SelectAccount onChange={(account) => changeField('account', account)} selected={fields.account} />
           </InputComponent>
         </RowGapBlock>
       </Row>

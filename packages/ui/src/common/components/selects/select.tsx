@@ -21,7 +21,6 @@ export const Select = <T extends any, V extends any = T>({
   const [filterInput, setFilterInput] = useState('')
   const search = filterInput
   const [isOpen, toggleOpen] = useToggle()
-  const [selectedOption, setSelectedOption] = useState<V | undefined>(selected)
   const selectNode = useRef<HTMLDivElement>(null)
   const textInput = useRef<HTMLInputElement>(null)
 
@@ -38,12 +37,6 @@ export const Select = <T extends any, V extends any = T>({
     },
     [toggleOpen, onChange]
   )
-
-  useEffect(() => {
-    if (isDefined(selected)) {
-      setSelectedOption(selected)
-    }
-  }, [selected])
 
   useEffect(() => {
     const clickListener = (event: MouseEvent) => {
@@ -73,6 +66,10 @@ export const Select = <T extends any, V extends any = T>({
     isOpen && textInput.current?.focus()
   }, [isOpen])
 
+  useEffect(() => {
+    isOpen && toggleOpen()
+  }, [selected])
+
   const onToggleClick: React.MouseEventHandler = (evt) => {
     stopEvent(evt)
     !disabled && toggleOpen()
@@ -93,7 +90,7 @@ export const Select = <T extends any, V extends any = T>({
       <Toggle onClick={isOpen ? undefined : onToggleClick} isOpen={isOpen} disabled={disabled}>
         <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />
 
-        {onSearch && (isOpen || !isDefined(selectedOption)) ? (
+        {onSearch && (isOpen || !isDefined(selected)) ? (
           <EmptyOption
             ref={textInput}
             type="text"
@@ -104,7 +101,7 @@ export const Select = <T extends any, V extends any = T>({
             onChange={(t) => setFilterInput(t.target.value)}
           />
         ) : (
-          isDefined(selectedOption) && renderSelected(selectedOption)
+          isDefined(selected) && renderSelected(selected)
         )}
       </Toggle>
       {isOpen && renderList(onOptionClick, toggleOpen)}

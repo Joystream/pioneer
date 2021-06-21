@@ -37,7 +37,7 @@ export const ChangeAccountSelectModal: FC<Props> = ({ account, onClose, onAccept
           disabled={from}
           borderless={from}
         >
-          <SelectAccount filter={filterSelectedAccount} onChange={setSelectedAccount} />
+          <SelectAccount filter={filterSelectedAccount} onChange={setSelectedAccount} selected={selectedAccount} />
         </InputComponent>
       </ModalBody>
       <ModalFooter>
