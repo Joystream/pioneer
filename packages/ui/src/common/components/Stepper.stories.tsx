@@ -35,22 +35,24 @@ const Template: Story<StepperProps> = (args) => {
 
 export const Simple = Template.bind({})
 Simple.args = {
-  steps: [{ title: 'Stake' }, { title: 'Form' }, { title: 'Submit application' }],
-  active: 0,
+  steps: [
+    { title: 'Stake', type: 'next' },
+    { title: 'Form', type: 'next' },
+    { title: 'Submit application', type: 'next' },
+  ],
 }
 
 export const Complex = Template.bind({})
 Complex.args = {
   steps: [
-    { title: 'General parameters' },
-    { title: 'Working Group title & limits', isBabyStep: true },
-    { title: 'Starting date & duration', isBabyStep: true },
-    { title: 'Description' },
-    { title: 'Short & opening description', isBabyStep: true },
-    { title: 'Application process', isBabyStep: true },
-    { title: 'Reward' },
-    { title: 'Stake' },
-    { title: 'Application form' },
+    { title: 'General parameters', type: 'next' },
+    { title: 'Working Group title & limits', isBaby: true, type: 'next' },
+    { title: 'Starting date & duration', isBaby: true, type: 'next' },
+    { title: 'Description', type: 'next' },
+    { title: 'Short & opening description', isBaby: true, type: 'next' },
+    { title: 'Application process', isBaby: true, type: 'next' },
+    { title: 'Reward', type: 'next' },
+    { title: 'Stake', type: 'next' },
+    { title: 'Application form', type: 'next' },
   ],
-  active: 0,
 }

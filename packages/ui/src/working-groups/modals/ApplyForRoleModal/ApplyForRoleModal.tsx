@@ -2,6 +2,7 @@ import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
 import { EventRecord } from '@polkadot/types/interfaces/system'
+import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 
@@ -14,16 +15,17 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
-import { ModalState } from '@/common/types'
+import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal/index'
+import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { StakeStepForm } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 import { getGroup } from '@/working-groups/model/getGroup'
 
 import { ApplyForRolePrepareModal } from './ApplyForRolePrepareModal'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
 import { ApplyForRoleSuccessModal } from './ApplyForRoleSuccessModal'
+import { applyForRoleMachine } from './machine'
 
 export type OpeningParams = Exclude<
   Parameters<ApiRx['tx']['membershipWorkingGroup']['applyOnOpening']>[0],
@@ -35,7 +37,7 @@ export const ApplyForRoleModal = () => {
   const { active } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const opening = modalData.opening
-  const [state, setState] = useState<ModalState>('REQUIREMENTS_CHECK')
+  const [state, send, service] = useMachine(applyForRoleMachine)
   const [txParams, setTxParams] = useState<OpeningParams>({
     member_id: active?.id,
     opening_id: opening.runtimeId,
@@ -61,7 +63,7 @@ export const ApplyForRoleModal = () => {
     const applicationId = getEventParam<ApplicationId>(events, 'AppliedOnOpening', 1)
 
     setApplicationId(applicationId?.toBn())
-    setState(result ? 'SUCCESS' : 'ERROR')
+    send(result ? 'SUCCESS' : 'ERROR')
   }
   const stake = new BN(txParams?.stake_parameters.stake ?? 0)
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
@@ -74,12 +76,12 @@ export const ApplyForRoleModal = () => {
       })
     }
 
-    if (state !== 'REQUIREMENTS_CHECK') {
+    if (!state.matches('requirementsVerification')) {
       return
     }
 
     if (active && feeInfo?.canAfford) {
-      setState('PREPARE')
+      send('PASS')
       return
     }
 
@@ -88,21 +90,21 @@ export const ApplyForRoleModal = () => {
     }
 
     if (feeInfo && !feeInfo.canAfford) {
-      setState('REQUIREMENTS_FAIL')
+      send('FAIL')
     }
-  }, [state, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
+  }, [state.value, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
   if (!active || !feeInfo || hasRequiredStake === false) {
     return null
   }
 
-  if (state === 'REQUIREMENTS_FAIL') {
+  if (state.matches('requirementsFailed')) {
     return (
       <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
     )
   }
 
-  if (state === 'PREPARE') {
+  if (state.matches('stake') || state.matches('form')) {
     const onSubmit = (stake: StakeStepForm, answers: Record<string, string>) => {
       setStakeAccount(stake.account)
       setTxParams({
@@ -116,13 +118,20 @@ export const ApplyForRoleModal = () => {
           stake_account_id: stake.account?.address,
         },
       })
-      setState('AUTHORIZE')
+      send('VALID')
     }
 
-    return <ApplyForRolePrepareModal onSubmit={onSubmit} opening={opening} />
+    return (
+      <ApplyForRolePrepareModal
+        onSubmit={onSubmit}
+        send={() => send('VALID')}
+        opening={opening}
+        steps={getSteps(service)}
+      />
+    )
   }
 
-  if (state === 'AUTHORIZE' && signer) {
+  if (state.matches('transaction') && signer) {
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
@@ -134,9 +143,13 @@ export const ApplyForRoleModal = () => {
     )
   }
 
-  if (state === 'SUCCESS' && stake && stakeAccount && applicationId) {
+  if (state.matches('success') && stake && stakeAccount && applicationId) {
     return <ApplyForRoleSuccessModal stake={stake} stakeAccount={stakeAccount} applicationId={applicationId} />
   }
 
-  return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>
+  if (state.matches('error')) {
+    return <FailureModal onClose={hideModal}>There was a problem with applying for an opening.</FailureModal>
+  }
+
+  return null
 }

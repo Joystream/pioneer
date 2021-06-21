@@ -22,8 +22,8 @@ interface UseSignAndSendTransactionParams {
 
 export type TransactionStatus = 'READY' | 'SIGN' | 'EXTENSION' | 'PENDING' | 'SUCCESS' | 'ERROR'
 
-const isError = (events: EventRecord[]) => {
-  return events.find(({ event: { method } }) => {
+export const isError = (events: EventRecord[]) => {
+  return !!events.find(({ event: { method } }) => {
     return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
   })
 }
