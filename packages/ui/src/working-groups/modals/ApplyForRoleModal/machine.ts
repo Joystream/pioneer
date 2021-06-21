@@ -1,5 +1,15 @@
 import { createMachine } from 'xstate'
 
+type EmptyObject = Record<string, never>
+type ApplyForRoleState =
+  | { value: 'requirementsVerification'; context: EmptyObject }
+  | { value: 'requirementsFailed'; context: EmptyObject }
+  | { value: 'stake'; context: EmptyObject }
+  | { value: 'form'; context: EmptyObject }
+  | { value: 'transaction'; context: EmptyObject }
+  | { value: 'success'; context: EmptyObject }
+  | { value: 'error'; context: EmptyObject }
+
 type ApplyForRoleEvent =
   | { type: 'FAIL' }
   | { type: 'PASS' }
@@ -7,7 +17,7 @@ type ApplyForRoleEvent =
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
 
-export const applyForRoleMachine = createMachine<Record<string, never>, ApplyForRoleEvent>({
+export const applyForRoleMachine = createMachine<EmptyObject, ApplyForRoleEvent, ApplyForRoleState>({
   initial: 'requirementsVerification',
   states: {
     requirementsVerification: {
