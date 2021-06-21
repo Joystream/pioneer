@@ -21,6 +21,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { getStepsFromMachineAndState } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
 import { TypeSelection } from '@/proposals/modals/AddNewProposal/components/TypeSelection'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
@@ -93,8 +94,10 @@ export const AddNewProposalModal = () => {
       <StepperModalBody>
         <StepperProposalWrapper>
           <Stepper steps={getStepsFromMachineAndState(addNewProposalMachine, state)} />
-          <StepDescriptionColumn></StepDescriptionColumn>
-          <StepperBody>{state.matches('typeSelection') && <TypeSelection />}</StepperBody>
+          <StepDescriptionColumn>
+            <Constants />
+          </StepDescriptionColumn>
+          <StepperBody>{state.matches('proposalType') && <TypeSelection />}</StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter>

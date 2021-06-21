@@ -14,30 +14,45 @@ export const addNewProposalMachine = createMachine<{ transactionEvents: EventRec
       },
       requirementsFailed: { type: 'final' },
       warning: {
-        meta: { isStep: true, stepTitle: 'Select type' },
         on: {
-          NEXT: 'typeSelection',
+          NEXT: 'proposalType',
         },
       },
-      typeSelection: {
+      proposalType: {
+        meta: { isStep: true, stepTitle: 'Proposal type' },
         on: {
-          NEXT: 'error',
+          NEXT: 'generalParameters',
         },
       },
       generalParameters: {
         meta: { isStep: true, stepTitle: 'General parameters' },
+        on: {
+          NEXT: 'stakingAccount',
+        },
       },
       stakingAccount: {
         meta: { isStep: true, isBaby: true, stepTitle: 'Staking account' },
+        on: {
+          NEXT: 'proposalDetails',
+        },
       },
       proposalDetails: {
         meta: { isStep: true, isBaby: true, stepTitle: 'Proposal details' },
+        on: {
+          NEXT: 'triggerAndDiscussion',
+        },
       },
       triggerAndDiscussion: {
         meta: { isStep: true, isBaby: true, stepTitle: 'Trigger & Discussion' },
+        on: {
+          NEXT: 'specificParameters',
+        },
       },
       specificParameters: {
         meta: { isStep: true, stepTitle: 'Specific parameters' },
+        on: {
+          NEXT: 'error',
+        },
       },
       error: { type: 'final' },
     },
