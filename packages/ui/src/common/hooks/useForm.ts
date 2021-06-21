@@ -27,7 +27,7 @@ export const useForm = <T extends Record<any, any>>(initializer: T, schema: AnyO
       setErrors(error.inner)
       return false
     }
-  }, [JSON.stringify(fields), JSON.stringify(context)])
+  }, [JSON.stringify(fields), JSON.stringify(context), schema])
 
   const changeField = (type: KeyName<T>, value: KeyValue<T>) => {
     dispatch({ type, value })
