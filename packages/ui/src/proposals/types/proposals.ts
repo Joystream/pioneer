@@ -4,6 +4,8 @@ import { typenameToProposalDetails } from '@/proposals/model/proposalDetails'
 import { isProposalActive, typenameToProposalStatus } from '@/proposals/model/proposalStatus'
 import { ProposalFieldsFragment } from '@/proposals/queries'
 
+import { randomMarkdown } from '../../../dev/scripts/generators/utils'
+
 export type ProposalStatus =
   | 'deciding'
   | 'gracing'
@@ -53,6 +55,7 @@ export interface Proposal {
   createdAt: string
   endedAt?: string
   statusSetAtBlock: Block
+  rationale: string
   exactExecutionBlock?: Block
 }
 
@@ -64,6 +67,7 @@ export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
     details: typenameToProposalDetails(fields.details.__typename),
     proposer: asMember(fields.creator),
     createdAt: fields.createdAt,
+    rationale: randomMarkdown(),
     statusSetAtBlock: asBlock(),
   }
 

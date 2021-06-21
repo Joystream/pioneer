@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -7,7 +7,6 @@ import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
-import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ContentWithSidepanel, ContentWithTabs, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -20,10 +19,9 @@ import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
+import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useProposal } from '@/proposals/hooks/useProposal'
-
-import { randomMarkdown } from '../../../../dev/scripts/generators/utils'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
@@ -31,8 +29,6 @@ export const ProposalPreview = () => {
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const blocksToProposalExecution = useBlocksToProposalExecution(proposal)
-
-  const rationale = useMemo(randomMarkdown, [])
 
   if (isLoading || !proposal) {
     return (
@@ -88,11 +84,7 @@ export const ProposalPreview = () => {
             {/* Proposal-specific dashboard */}
             <h3>{camelCaseToText(proposal.details)}</h3>
 
-            {/* Rationale */}
-            <RowGapBlock gap={8}>
-              <h4>Rationale</h4>
-              <MarkdownPreview markdown={rationale} />
-            </RowGapBlock>
+            <RationalePreview rationale={proposal.rationale} />
 
             {/* Discussion */}
             <div>
