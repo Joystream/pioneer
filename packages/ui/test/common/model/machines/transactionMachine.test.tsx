@@ -1,13 +1,12 @@
 import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
-import { transactionConfig } from '@/common/model/machines'
+import { transactionMachine } from '@/common/model/machines'
 
 describe('Machine: Transaction machine', () => {
-  const machine = createMachine(transactionConfig)
   let service: Interpreter<any>
 
   beforeEach(() => {
-    service = interpret(machine)
+    service = interpret(transactionMachine)
     service.start()
   })
 
@@ -65,7 +64,6 @@ describe('Machine: Transaction machine', () => {
   })
 
   describe('as child', () => {
-    const transaction = createMachine(transactionConfig)
     const parent = createMachine({
       id: 'parent',
       initial: 'transaction',
@@ -76,7 +74,7 @@ describe('Machine: Transaction machine', () => {
         transaction: {
           invoke: {
             id: 'transaction',
-            src: transaction,
+            src: transactionMachine,
             onDone: {
               target: 'success',
               actions: assign({ transactionEvents: (context, event) => event.data.events }),
