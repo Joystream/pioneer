@@ -10,6 +10,6 @@ interface Props {
 export const StakeChangedContent = ({ activity: { member, amount, eventType } }: Props) => (
   <>
     <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink>'s stake has
-    been {eventType === 'StakeDecreasedEvent' ? 'reduced' : 'increased'} by <TokenValue value={amount} />
+    been {eventType === 'StakeDecreased' ? 'reduced' : 'increased'} by <TokenValue value={amount} />
   </>
 )

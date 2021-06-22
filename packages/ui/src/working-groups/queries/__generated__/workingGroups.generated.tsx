@@ -348,6 +348,59 @@ export type GetUpcomingWorkingGroupOpeningsQuery = {
   >
 }
 
+export type AppliedOnOpeningEventFieldsFragment = {
+  __typename: 'AppliedOnOpeningEvent'
+  id: string
+  createdAt: any
+  application: {
+    __typename: 'WorkingGroupApplication'
+    applicant: { __typename: 'Membership'; id: string; handle: string }
+  }
+  opening: {
+    __typename: 'WorkingGroupOpening'
+    id: string
+    type: Types.WorkingGroupOpeningType
+    group: { __typename: 'WorkingGroup'; name: string }
+  }
+}
+
+export type ApplicationWithdrawnEventFieldsFragment = {
+  __typename: 'ApplicationWithdrawnEvent'
+  id: string
+  createdAt: any
+  application: {
+    __typename: 'WorkingGroupApplication'
+    opening: {
+      __typename: 'WorkingGroupOpening'
+      id: string
+      type: Types.WorkingGroupOpeningType
+      group: { __typename: 'WorkingGroup'; name: string }
+    }
+    applicant: { __typename: 'Membership'; id: string; handle: string }
+  }
+}
+
+export type BudgetSpendingActivityEventFieldsFragment = {
+  __typename: 'BudgetSpendingEvent'
+  id: string
+  createdAt: any
+  amount: any
+  group: { __typename: 'WorkingGroup'; name: string }
+}
+
+export type GetGroupEventsQueryVariables = Types.Exact<{
+  group_eq: Types.Scalars['ID']
+}>
+
+export type GetGroupEventsQuery = {
+  __typename: 'Query'
+  appliedOnOpeningEvents: Array<{ __typename: 'AppliedOnOpeningEvent' } & AppliedOnOpeningEventFieldsFragment>
+  applicationWithdrawnEvents: Array<
+    { __typename: 'ApplicationWithdrawnEvent' } & ApplicationWithdrawnEventFieldsFragment
+  >
+  budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent' } & BudgetSpendingActivityEventFieldsFragment>
+}
+
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
     id
@@ -538,6 +591,54 @@ export const UpcomingWorkingGroupOpeningFieldsFragmentDoc = gql`
     }
   }
   ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
+`
+export const AppliedOnOpeningEventFieldsFragmentDoc = gql`
+  fragment AppliedOnOpeningEventFields on AppliedOnOpeningEvent {
+    id
+    createdAt
+    application {
+      applicant {
+        id
+        handle
+      }
+    }
+    opening {
+      id
+      type
+      group {
+        name
+      }
+    }
+  }
+`
+export const ApplicationWithdrawnEventFieldsFragmentDoc = gql`
+  fragment ApplicationWithdrawnEventFields on ApplicationWithdrawnEvent {
+    id
+    createdAt
+    application {
+      opening {
+        id
+        type
+        group {
+          name
+        }
+      }
+      applicant {
+        id
+        handle
+      }
+    }
+  }
+`
+export const BudgetSpendingActivityEventFieldsFragmentDoc = gql`
+  fragment BudgetSpendingActivityEventFields on BudgetSpendingEvent {
+    id
+    createdAt
+    amount
+    group {
+      name
+    }
+  }
 `
 export const GetBudgetSpendingDocument = gql`
   query getBudgetSpending($where: BudgetSpendingEventWhereInput) {
@@ -1432,3 +1533,51 @@ export type GetUpcomingWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetUpcomingWorkingGroupOpeningsQuery,
   GetUpcomingWorkingGroupOpeningsQueryVariables
 >
+export const GetGroupEventsDocument = gql`
+  query GetGroupEvents($group_eq: ID!) {
+    appliedOnOpeningEvents(where: { group_eq: $group_eq }) {
+      ...AppliedOnOpeningEventFields
+    }
+    applicationWithdrawnEvents(where: { group_eq: $group_eq }) {
+      ...ApplicationWithdrawnEventFields
+    }
+    budgetSpendingEvents(where: { group_eq: $group_eq }) {
+      ...BudgetSpendingActivityEventFields
+    }
+  }
+  ${AppliedOnOpeningEventFieldsFragmentDoc}
+  ${ApplicationWithdrawnEventFieldsFragmentDoc}
+  ${BudgetSpendingActivityEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetGroupEventsQuery__
+ *
+ * To run a query within a React component, call `useGetGroupEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupEventsQuery({
+ *   variables: {
+ *      group_eq: // value for 'group_eq'
+ *   },
+ * });
+ */
+export function useGetGroupEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetGroupEventsQuery, GetGroupEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetGroupEventsQuery, GetGroupEventsQueryVariables>(GetGroupEventsDocument, options)
+}
+export function useGetGroupEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetGroupEventsQuery, GetGroupEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetGroupEventsQuery, GetGroupEventsQueryVariables>(GetGroupEventsDocument, options)
+}
+export type GetGroupEventsQueryHookResult = ReturnType<typeof useGetGroupEventsQuery>
+export type GetGroupEventsLazyQueryHookResult = ReturnType<typeof useGetGroupEventsLazyQuery>
+export type GetGroupEventsQueryResult = Apollo.QueryResult<GetGroupEventsQuery, GetGroupEventsQueryVariables>

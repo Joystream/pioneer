@@ -40,6 +40,7 @@ const generateBudgetSpending = (mocks: Mocks) => () => {
 
 const generateApplicationEvents = (mocks: Mocks) => () => {
   const application = mocks.applications[randomFromRange(0, mocks.applications.length - 1)]
+  const opening = mocks.openings.find(opening => opening.id == application.openingId)
 
   const date = faker.date.recent(30)
 
@@ -48,6 +49,7 @@ const generateApplicationEvents = (mocks: Mocks) => () => {
     createdAt: faker.date.recent(5, date),
     applicationId: application.id,
     openingId: application.openingId,
+    groupId: opening?.groupId,
   }
 
   if (application.status === 'withdrawn') {
@@ -56,6 +58,7 @@ const generateApplicationEvents = (mocks: Mocks) => () => {
         id: (nextApplicationWithdrawnEventId++).toString(),
         createdAt: date,
         applicationId: application.id,
+        groupId: opening?.groupId,
       },
       appliedEvent
     }

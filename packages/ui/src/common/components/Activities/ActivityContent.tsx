@@ -21,30 +21,30 @@ interface Props {
 
 export const ActivityContent = React.memo(({ activity }: Props) => {
   switch (activity.eventType) {
-    case 'AppliedOnOpeningEvent':
+    case 'AppliedOnOpening':
       return <AppliedOnOpeningContent activity={activity} />
-    case 'BudgetSpendingEvent':
+    case 'BudgetSpending':
       return <BudgetSpendingContent activity={activity} />
-    case 'ApplicationWithdrawnEvent':
+    case 'ApplicationWithdrawn':
       return <ApplicationWithdrawnContent activity={activity} />
-    case 'BudgetSetEvent':
+    case 'BudgetSet':
       return <BudgetSetContent activity={activity} />
-    case 'LeaderSetEvent':
+    case 'LeaderSet':
       return <LeaderSetContent activity={activity} />
-    case 'StatusTextChangedEvent':
+    case 'StatusTextChanged':
       return <StatusTextChangedContent activity={activity} />
-    case 'OpeningAddedEvent':
+    case 'OpeningAdded':
       return <OpeningAddedContent activity={activity} />
-    case 'OpeningCanceledEvent':
+    case 'OpeningCanceled':
       return <OpeningCanceledContent activity={activity} />
-    case 'StakeSlashedEvent':
+    case 'StakeSlashed':
       return <StakeSlashedContent activity={activity} />
-    case 'StakeDecreasedEvent':
-    case 'StakeIncreasedEvent':
+    case 'StakeDecreased':
+    case 'StakeIncreased':
       return <StakeChangedContent activity={activity} />
-    case 'WorkerExitedEvent':
+    case 'WorkerExited':
       return <WorkerExitedContent activity={activity} />
-    case 'WorkerStartedLeavingEvent':
+    case 'WorkerStartedLeaving':
       return <WorkerStartedLeavingContent activity={activity} />
     default:
       return <div />
