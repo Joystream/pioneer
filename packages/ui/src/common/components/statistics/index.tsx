@@ -1,4 +1,5 @@
 export * from './Statistics'
+export * from './StatisticBar'
 export * from './StatisticHeader'
 export * from './StatisticItem'
 export * from './FractionValue'
