@@ -29,6 +29,6 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
     })
 }
 
-export const getSteps = (service: Interpreter<any>): Step[] => {
+export const getSteps = (service: Interpreter<any, any, any, any>): Step[] => {
   return getStepsFromMachineAndState(service.machine, service.state)
 }

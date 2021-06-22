@@ -25,7 +25,7 @@ const validationSchemaFromQuestions = (questions: ApplicationQuestion[]) => {
 export const ApplicationStep = ({ questions, onChange }: ApplicationStepProps) => {
   const schema = useMemo(() => validationSchemaFromQuestions(questions), [JSON.stringify(questions)])
   const { fields, changeField, validation } = useForm<Record<number, string>>({}, schema)
-  useEffect(() => onChange(validation.isValid, fields), [JSON.stringify(fields)])
+  useEffect(() => onChange(validation.isValid, fields), [JSON.stringify(fields), validation.isValid])
 
   return (
     <RowGapBlock gap={24}>

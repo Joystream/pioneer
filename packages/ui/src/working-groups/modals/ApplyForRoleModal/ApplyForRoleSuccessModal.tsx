@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
@@ -18,30 +17,29 @@ import {
 } from '@/common/components/StepperModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { Step } from '@/common/model/machines/getSteps'
 
-import { getStepsFromMachineAndState } from '../../../common/model/machines/getSteps'
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 
 import { ApplyForRoleModalCall } from '.'
-import { applyForRoleMachine } from './machine'
 
 interface Props {
   stake: BN
   stakeAccount: Account
   applicationId: BN
+  steps: Step[]
 }
 
-export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId }: Props) => {
+export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, steps }: Props) => {
   const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
   const { push } = useHistory()
-  const [state] = useMachine(applyForRoleMachine)
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader onClick={hideModal} title="Applying for role" />
       <StepperModalBody>
         <StepperModalWrapper>
-          <Stepper steps={getStepsFromMachineAndState(applyForRoleMachine, state)} />
+          <Stepper steps={steps} />
           <StepDescriptionColumn>
             <OpeningFormPreview opening={modalData.opening} />
           </StepDescriptionColumn>

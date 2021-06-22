@@ -2,13 +2,15 @@ import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
+import { interpret } from 'xstate'
 
+import { getSteps } from '@/common/model/machines/getSteps'
 import { ModalContext } from '@/common/providers/modal/context'
+import { getMockAsOpening } from '@/mocks/data/seedOpenings'
 import { ApplyForRoleSuccessModal } from '@/working-groups/modals/ApplyForRoleModal/ApplyForRoleSuccessModal'
 
-import { getMockAsOpening } from '../../../mocks/data/seedOpenings'
-
 import { ApplyForRoleModal } from './ApplyForRoleModal'
+import { applyForRoleMachine } from './machine'
 
 export default {
   title: 'WorkingGroup/ApplyForRoleModal',
@@ -33,6 +35,7 @@ const Template: Story = () => {
             stake={new BN(100_000)}
             stakeAccount={{ name: 'My Account', address: '0xXXXX' }}
             applicationId={new BN(420)}
+            steps={getSteps(interpret(applyForRoleMachine))}
           />
         </ModalContext.Provider>
       </HashRouter>
