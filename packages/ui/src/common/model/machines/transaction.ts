@@ -1,4 +1,4 @@
-import { assign, createMachine, EventObject, MachineConfig, send } from 'xstate'
+import { assign, createMachine, DoneInvokeEvent, EventObject, MachineConfig, send } from 'xstate'
 import { actionTypes } from 'xstate/lib/actions'
 
 export const transactionConfig: MachineConfig<any, any, any> = {
@@ -61,3 +61,7 @@ export const transactionConfig: MachineConfig<any, any, any> = {
 }
 
 export const transactionMachine = createMachine(transactionConfig)
+
+export const isTransactionSuccess = (context: unknown, event: DoneInvokeEvent<{ isError: boolean }>) =>
+  !event.data.isError
+export const isTransactionError = (context: unknown, event: DoneInvokeEvent<{ isError: boolean }>) => event.data.isError

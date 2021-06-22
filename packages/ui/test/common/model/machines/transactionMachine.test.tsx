@@ -1,6 +1,6 @@
 import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
-import { transactionMachine } from '@/common/model/machines'
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 
 describe('Machine: Transaction machine', () => {
   let service: Interpreter<any>
@@ -79,12 +79,12 @@ describe('Machine: Transaction machine', () => {
               {
                 target: 'success',
                 actions: assign({ transactionEvents: (context, event) => event.data.events }),
-                cond: (context, event) => !event.data.isError,
+                cond: isTransactionSuccess,
               },
               {
                 target: 'error',
                 actions: assign({ transactionEvents: (context, event) => event.data.events }),
-                cond: (context, event) => !!event.data.isError,
+                cond: isTransactionError,
               },
             ],
           },
