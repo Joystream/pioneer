@@ -18,7 +18,7 @@ import {
 } from '@/common/components/StepperModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { getSteps, getStepsFromMachineAndState } from '@/common/model/machines/getSteps'
+import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Checkbox } from '@/common/components/forms'
