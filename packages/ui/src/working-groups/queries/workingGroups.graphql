@@ -309,9 +309,9 @@ fragment AppliedOnOpeningEventFields on AppliedOnOpeningEvent {
   opening {
     id
     type
-    group {
-      name
-    }
+  }
+  group {
+    name
   }
 }
 
@@ -322,14 +322,14 @@ fragment ApplicationWithdrawnEventFields on ApplicationWithdrawnEvent {
     opening {
       id
       type
-      group {
-        name
-      }
     }
     applicant {
       id
       handle
     }
+  }
+  group {
+    name
   }
 }
 

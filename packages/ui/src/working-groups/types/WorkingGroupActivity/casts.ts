@@ -1,11 +1,21 @@
 import BN from 'bn.js'
 
+import { capitalizeFirstLetter } from '@/common/helpers'
 import {
   ApplicationWithdrawnEventFieldsFragment,
   AppliedOnOpeningEventFieldsFragment,
   BudgetSpendingActivityEventFieldsFragment,
 } from '@/working-groups/queries/__generated__/workingGroups.generated'
-import { ApplicationWithdrawnActivity, AppliedOnOpeningActivity, BudgetSpendingActivity } from '@/working-groups/types'
+import {
+  ApplicationWithdrawnActivity,
+  AppliedOnOpeningActivity,
+  asWorkingGroupName,
+  BudgetSpendingActivity,
+} from '@/working-groups/types'
+
+function asPositionTitle(groupName: string, type: 'LEADER' | 'REGULAR') {
+  return `${capitalizeFirstLetter(asWorkingGroupName(groupName))} ${type == 'LEADER' ? 'Leader' : 'Worker'}`
+}
 
 export function asAppliedOnOpeningActivity(fragment: AppliedOnOpeningEventFieldsFragment): AppliedOnOpeningActivity {
   return {
@@ -19,8 +29,8 @@ export function asAppliedOnOpeningActivity(fragment: AppliedOnOpeningEventFields
     opening: {
       id: fragment.opening.id,
       type: fragment.opening.type,
-      groupName: fragment.opening.group.name,
-      title: fragment.opening.id,
+      groupName: fragment.group.name,
+      title: asPositionTitle(fragment.group.name, fragment.opening.type),
     },
   }
 }
@@ -39,8 +49,8 @@ export function asApplicationWithdrawnActivity(
     opening: {
       id: fragment.application.opening.id,
       type: fragment.application.opening.type,
-      groupName: fragment.application.opening.group.name,
-      title: fragment.application.opening.id,
+      groupName: fragment.group.name,
+      title: asPositionTitle(fragment.group.name, fragment.application.opening.type),
     },
   }
 }

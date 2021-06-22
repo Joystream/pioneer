@@ -356,12 +356,8 @@ export type AppliedOnOpeningEventFieldsFragment = {
     __typename: 'WorkingGroupApplication'
     applicant: { __typename: 'Membership'; id: string; handle: string }
   }
-  opening: {
-    __typename: 'WorkingGroupOpening'
-    id: string
-    type: Types.WorkingGroupOpeningType
-    group: { __typename: 'WorkingGroup'; name: string }
-  }
+  opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
+  group: { __typename: 'WorkingGroup'; name: string }
 }
 
 export type ApplicationWithdrawnEventFieldsFragment = {
@@ -370,14 +366,10 @@ export type ApplicationWithdrawnEventFieldsFragment = {
   createdAt: any
   application: {
     __typename: 'WorkingGroupApplication'
-    opening: {
-      __typename: 'WorkingGroupOpening'
-      id: string
-      type: Types.WorkingGroupOpeningType
-      group: { __typename: 'WorkingGroup'; name: string }
-    }
+    opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
     applicant: { __typename: 'Membership'; id: string; handle: string }
   }
+  group: { __typename: 'WorkingGroup'; name: string }
 }
 
 export type BudgetSpendingActivityEventFieldsFragment = {
@@ -605,9 +597,9 @@ export const AppliedOnOpeningEventFieldsFragmentDoc = gql`
     opening {
       id
       type
-      group {
-        name
-      }
+    }
+    group {
+      name
     }
   }
 `
@@ -619,14 +611,14 @@ export const ApplicationWithdrawnEventFieldsFragmentDoc = gql`
       opening {
         id
         type
-        group {
-          name
-        }
       }
       applicant {
         id
         handle
       }
+    }
+    group {
+      name
     }
   }
 `
