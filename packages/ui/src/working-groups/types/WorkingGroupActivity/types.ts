@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import { BaseActivity } from '@/common/types'
 import { Member } from '@/memberships/types'
 
-import { WorkingGroupOpening } from '.'
+import { WorkingGroupOpening } from '..'
 
 export type WorkingGroupActivity =
   | ApplicationWithdrawnActivity
@@ -32,62 +32,62 @@ interface ApplicationActivity extends OpeningActivity {
 }
 
 export interface ApplicationWithdrawnActivity extends ApplicationActivity {
-  eventType: 'ApplicationWithdrawnEvent'
+  eventType: 'ApplicationWithdrawn'
 }
 
 export interface AppliedOnOpeningActivity extends ApplicationActivity {
-  eventType: 'AppliedOnOpeningEvent'
+  eventType: 'AppliedOnOpening'
 }
 
 export interface BudgetSetActivity extends BaseActivity {
-  eventType: 'BudgetSetEvent'
+  eventType: 'BudgetSet'
   groupName: string
   newBudget: BN
 }
 
 export interface BudgetSpendingActivity extends BaseActivity {
-  eventType: 'BudgetSpendingEvent'
+  eventType: 'BudgetSpending'
   groupName: string
   amount: BN
 }
 
 export interface LeaderSetActivity extends BaseActivity {
-  eventType: 'LeaderSetEvent'
+  eventType: 'LeaderSet'
   member: ShortMember
   groupName: string
 }
 
 export interface StatusTextChangedActivity extends BaseActivity {
-  eventType: 'StatusTextChangedEvent'
+  eventType: 'StatusTextChanged'
   groupName: string
 }
 
 export interface OpeningAddedActivity extends OpeningActivity {
-  eventType: 'OpeningAddedEvent'
+  eventType: 'OpeningAdded'
 }
 
 export interface OpeningCanceledActivity extends OpeningActivity {
-  eventType: 'OpeningCanceledEvent'
+  eventType: 'OpeningCanceled'
 }
 
 export interface StakeSlashedActivity extends BaseActivity {
-  eventType: 'StakeSlashedEvent'
+  eventType: 'StakeSlashed'
   member: ShortMember
   groupName: string
 }
 
 export interface StakeChangedActivity extends BaseActivity {
-  eventType: 'StakeIncreasedEvent' | 'StakeDecreasedEvent'
+  eventType: 'StakeIncreased' | 'StakeDecreased'
   member: ShortMember
   amount: BN
 }
 
 export interface WorkerExitedActivity extends BaseActivity {
-  eventType: 'WorkerExitedEvent'
+  eventType: 'WorkerExited'
   member: ShortMember
 }
 
 export interface WorkerStartedLeavingActivity extends BaseActivity {
-  eventType: 'WorkerStartedLeavingEvent'
+  eventType: 'WorkerStartedLeaving'
   member: ShortMember
 }

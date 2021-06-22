@@ -9,7 +9,7 @@ export const useActivities = (): Activity[] =>
       {
         id: '1',
         createdAt: '2021-03-09T10:28:04.155Z',
-        eventType: 'AppliedOnOpeningEvent',
+        eventType: 'AppliedOnOpening',
         member: {
           handle: 'xXproGamerDarknessXx',
           id: '1',
@@ -24,7 +24,7 @@ export const useActivities = (): Activity[] =>
       {
         id: '2',
         createdAt: '2021-05-09T10:28:04.155Z',
-        eventType: 'ApplicationWithdrawnEvent',
+        eventType: 'ApplicationWithdrawn',
         member: {
           handle: 'andy00',
           id: '1',
@@ -39,21 +39,21 @@ export const useActivities = (): Activity[] =>
       {
         id: '3',
         createdAt: '2021-05-19T10:28:04.155Z',
-        eventType: 'BudgetSpendingEvent',
+        eventType: 'BudgetSpending',
         amount: new BN('10000'),
         groupName: 'Forum',
       },
       {
         id: '4',
         createdAt: '2021-05-20T10:28:04.155Z',
-        eventType: 'BudgetSetEvent',
+        eventType: 'BudgetSet',
         groupName: 'Forum',
         newBudget: new BN(100000),
       },
       {
         id: '5',
         createdAt: '2021-05-23T10:28:04.155Z',
-        eventType: 'LeaderSetEvent',
+        eventType: 'LeaderSet',
         member: {
           id: '3',
           handle: 'Kyle_1994',
@@ -63,13 +63,13 @@ export const useActivities = (): Activity[] =>
       {
         id: '6',
         createdAt: '2021-05-24T10:28:04.155Z',
-        eventType: 'StatusTextChangedEvent',
+        eventType: 'StatusTextChanged',
         groupName: 'storage',
       },
       {
         id: '7',
         createdAt: '2021-05-25T10:28:04.155Z',
-        eventType: 'OpeningAddedEvent',
+        eventType: 'OpeningAdded',
         opening: {
           id: '3',
           title: 'Forum Working Group Regular',
@@ -80,7 +80,7 @@ export const useActivities = (): Activity[] =>
       {
         id: '8',
         createdAt: '2021-05-25T10:28:04.155Z',
-        eventType: 'OpeningCanceledEvent',
+        eventType: 'OpeningCanceled',
         opening: {
           id: '3',
           title: 'Forum Working Group Regular',
@@ -91,7 +91,7 @@ export const useActivities = (): Activity[] =>
       {
         id: '9',
         createdAt: '2021-05-26T19:28:04.155Z',
-        eventType: 'StakeSlashedEvent',
+        eventType: 'StakeSlashed',
         groupName: 'Forum',
         member: {
           id: '6',
@@ -101,7 +101,7 @@ export const useActivities = (): Activity[] =>
       {
         id: '10',
         createdAt: '2021-05-26T19:28:04.155Z',
-        eventType: 'StakeIncreasedEvent',
+        eventType: 'StakeIncreased',
         member: {
           id: '6',
           handle: 'stefan0',
@@ -111,7 +111,7 @@ export const useActivities = (): Activity[] =>
       {
         id: '11',
         createdAt: '2021-05-26T19:28:04.155Z',
-        eventType: 'StakeDecreasedEvent',
+        eventType: 'StakeDecreased',
         member: {
           id: '6',
           handle: 'stefan0',
@@ -121,7 +121,7 @@ export const useActivities = (): Activity[] =>
       {
         id: '12',
         createdAt: '2021-05-26T19:28:04.155Z',
-        eventType: 'WorkerExitedEvent',
+        eventType: 'WorkerExited',
         member: {
           id: '7',
           handle: 'mr_guy',
@@ -130,7 +130,7 @@ export const useActivities = (): Activity[] =>
       {
         id: '13',
         createdAt: '2021-05-25T10:28:04.155Z',
-        eventType: 'OpeningAddedEvent',
+        eventType: 'OpeningAdded',
         opening: {
           id: '3',
           title: 'Forum Working Group Leader',
@@ -141,7 +141,7 @@ export const useActivities = (): Activity[] =>
       {
         id: '14',
         createdAt: '2021-05-25T10:28:04.155Z',
-        eventType: 'OpeningCanceledEvent',
+        eventType: 'OpeningCanceled',
         opening: {
           id: '3',
           title: 'Forum Working Group Leader',

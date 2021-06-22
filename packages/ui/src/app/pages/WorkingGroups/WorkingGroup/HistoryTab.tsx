@@ -6,13 +6,12 @@ import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/component
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
 import { Tabs } from '@/common/components/Tabs'
-import { useActivities } from '@/common/hooks/useActivities'
+import { TextBig } from '@/common/components/typography'
 import { OpeningsPagination } from '@/working-groups/components/OpeningsList'
 import { WorkersTableList } from '@/working-groups/components/WorkersTableList/WorkersTableList'
+import { useGroupActivities } from '@/working-groups/hooks/useGroupActivities'
 import { useWorkersPagination } from '@/working-groups/hooks/useWorkersPagination'
 import { WorkingGroup } from '@/working-groups/types'
-
-import { TextBig } from '../../../../common/components/typography'
 
 type Tab = 'OPENINGS' | 'WORKERS'
 
@@ -26,7 +25,7 @@ export function HistoryTab({ workingGroup }: Props) {
     { title: 'Past openings', active: currentTab === 'OPENINGS', onClick: () => setCurrentTab('OPENINGS') },
     { title: 'Past workers', active: currentTab === 'WORKERS', onClick: () => setCurrentTab('WORKERS') },
   ]
-  const activities = useActivities()
+  const { activities } = useGroupActivities(workingGroup.id)
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (

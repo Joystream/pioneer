@@ -296,3 +296,60 @@ query GetUpcomingWorkingGroupOpenings($where: UpcomingWorkingGroupOpeningWhereIn
     ...UpcomingWorkingGroupOpeningFields
   }
 }
+
+fragment AppliedOnOpeningEventFields on AppliedOnOpeningEvent {
+  id
+  createdAt
+  application {
+    applicant {
+      id
+      handle
+    }
+  }
+  opening {
+    id
+    type
+  }
+  group {
+    name
+  }
+}
+
+fragment ApplicationWithdrawnEventFields on ApplicationWithdrawnEvent {
+  id
+  createdAt
+  application {
+    opening {
+      id
+      type
+    }
+    applicant {
+      id
+      handle
+    }
+  }
+  group {
+    name
+  }
+}
+
+fragment BudgetSpendingActivityEventFields on BudgetSpendingEvent {
+  id
+  createdAt
+  amount
+  group {
+    name
+  }
+}
+
+query GetGroupEvents($group_eq: ID!) {
+  appliedOnOpeningEvents(where: { group_eq: $group_eq }) {
+    ...AppliedOnOpeningEventFields
+  }
+  applicationWithdrawnEvents(where: { group_eq: $group_eq }) {
+    ...ApplicationWithdrawnEventFields
+  }
+  budgetSpendingEvents(where: { group_eq: $group_eq }) {
+    ...BudgetSpendingActivityEventFields
+  }
+}

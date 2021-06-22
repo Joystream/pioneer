@@ -1,7 +1,7 @@
 import { MemberMock } from './generateMembers'
 import { OpeningMock, UpcomingOpeningMock } from './generateOpeningsAndUpcomingOpenings'
 import { ProposalMock } from './generateProposals'
-import { WorkerMock } from './generateWorkers'
+import {ApplicationMock, WorkerMock} from './generateWorkers'
 import { WorkingGroupMock } from './generateWorkingGroups'
 
 export interface Mocks {
@@ -10,5 +10,6 @@ export interface Mocks {
   openings: OpeningMock[]
   upcomingOpenings: UpcomingOpeningMock[]
   workers: WorkerMock[]
+  applications: ApplicationMock[]
   proposals: ProposalMock[]
 }
