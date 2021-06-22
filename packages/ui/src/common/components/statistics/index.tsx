@@ -1,5 +1,6 @@
 export * from './Statistics'
 export * from './StatisticItem'
+export * from './FractionValue'
 export * from './TokenValueStat'
 export * from './MultiTokenValueStat'
 export * from './DurationStatistics'
