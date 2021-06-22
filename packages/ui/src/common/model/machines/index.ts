@@ -1,4 +1,4 @@
-import { assign, EventObject, MachineConfig, sendParent } from 'xstate'
+import { assign, EventObject, MachineConfig, send } from 'xstate'
 import { actionTypes } from 'xstate/lib/actions'
 
 export const formConfig = {
@@ -70,7 +70,7 @@ export const transactionConfig: MachineConfig<any, any, any> = {
     error: {
       type: 'final',
       data: { events: (context: any, event: any) => event.events },
-      entry: sendParent((context, event) => ({ type: actionTypes.error, data: { events: event.events } })),
+      entry: send((context, event) => ({ type: actionTypes.error, data: { events: event.events } })),
     },
   },
 } as const
