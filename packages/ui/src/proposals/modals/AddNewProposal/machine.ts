@@ -26,27 +26,25 @@ export const addNewProposalMachine = createMachine<{ transactionEvents: EventRec
       },
       generalParameters: {
         meta: { isStep: true, stepTitle: 'General parameters' },
-        on: {
-          NEXT: 'stakingAccount',
+        states: {
+          stakingAccount: {
+            meta: { isStep: true, stepTitle: 'Staking account' },
+            on: {
+              NEXT: 'proposalDetails',
+            },
+          },
+          proposalDetails: {
+            meta: { isStep: true, stepTitle: 'Proposal details' },
+            on: {
+              NEXT: 'triggerAndDiscussion',
+            },
+          },
+          triggerAndDiscussion: {
+            meta: { isStep: true, stepTitle: 'Trigger & Discussion' },
+            type: 'final',
+          },
         },
-      },
-      stakingAccount: {
-        meta: { isStep: true, isBaby: true, stepTitle: 'Staking account' },
-        on: {
-          NEXT: 'proposalDetails',
-        },
-      },
-      proposalDetails: {
-        meta: { isStep: true, isBaby: true, stepTitle: 'Proposal details' },
-        on: {
-          NEXT: 'triggerAndDiscussion',
-        },
-      },
-      triggerAndDiscussion: {
-        meta: { isStep: true, isBaby: true, stepTitle: 'Trigger & Discussion' },
-        on: {
-          NEXT: 'specificParameters',
-        },
+        onDone: 'specificParameters',
       },
       specificParameters: {
         meta: { isStep: true, stepTitle: 'Specific parameters' },

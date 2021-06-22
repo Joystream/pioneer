@@ -24,7 +24,7 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
       return {
         title: stateNode?.meta?.stepTitle ?? '',
         type: stateNode.order === activeNodeOrder ? 'active' : stateNode.order < activeNodeOrder ? 'past' : 'next',
-        isBaby: stateNode?.meta?.isBaby === true,
+        ...(stateNode.parent?.meta?.isStep ? { isBaby: true } : undefined),
       }
     })
 }
