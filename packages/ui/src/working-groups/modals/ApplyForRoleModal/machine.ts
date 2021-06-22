@@ -1,7 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { transactionConfig } from '../../../common/model/machines'
+import { transactionMachine } from '@/common/model/machines'
 
 import { StakeStepForm } from './StakeStep'
 
@@ -86,15 +86,19 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
       meta: { isStep: true, stepTitle: 'Submit application' },
       invoke: {
         id: 'transaction',
-        src: createMachine(transactionConfig),
-        onDone: {
-          target: 'success',
-          actions: assign({ transactionEvents: (context, event) => event.data.events }),
-        },
-        onError: {
-          target: 'error',
-          actions: assign({ transactionEvents: (context, event) => event.data.events }),
-        },
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: (context, event) => !event.data.isError,
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: (context, event) => !!event.data.isError,
+          },
+        ],
       },
     },
     success: { type: 'final' },

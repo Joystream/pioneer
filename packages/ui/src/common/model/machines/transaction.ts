@@ -34,22 +34,30 @@ export const transactionConfig: MachineConfig<any, any, any> = {
         },
         ERROR: {
           target: 'error',
-          actions: assign({
-            events: (context, event: EventObject & { events: [] }) => event.events,
-          }),
+          actions: [
+            assign({
+              events: (context, event: EventObject & { events: [] }) => event.events,
+            }),
+            send({ type: actionTypes.errorPlatform, isError: 'true' }),
+          ],
         },
       },
     },
     success: {
       type: 'final',
-      data: { events: (context: any, event: any) => event.events },
+      data: {
+        events: (context: any, event: any) => event.events,
+        isError: false,
+      },
     },
     error: {
       type: 'final',
-      data: { events: (context: any, event: any) => event.events },
-      entry: send((context, event) => ({ type: actionTypes.error, data: { events: event.events } })),
+      data: {
+        events: (context: any, event: any) => event.events,
+        isError: true,
+      },
     },
   },
-} as const
+}
 
 export const transactionMachine = createMachine(transactionConfig)

@@ -75,14 +75,18 @@ describe('Machine: Transaction machine', () => {
           invoke: {
             id: 'transaction',
             src: transactionMachine,
-            onDone: {
-              target: 'success',
-              actions: assign({ transactionEvents: (context, event) => event.data.events }),
-            },
-            onError: {
-              target: 'error',
-              actions: assign({ transactionEvents: (context, event) => event.data.events }),
-            },
+            onDone: [
+              {
+                target: 'success',
+                actions: assign({ transactionEvents: (context, event) => event.data.events }),
+                cond: (context, event) => !event.data.isError,
+              },
+              {
+                target: 'error',
+                actions: assign({ transactionEvents: (context, event) => event.data.events }),
+                cond: (context, event) => !!event.data.isError,
+              },
+            ],
           },
         },
         success: { type: 'final' },
@@ -114,7 +118,7 @@ describe('Machine: Transaction machine', () => {
       child.send('SIGNED')
       child.send({ type: 'ERROR', events: ['foo', 'bar'] })
 
-      expect(service.state.matches('success')).toBeTruthy()
+      expect(service.state.matches('error')).toBeTruthy()
       expect(service.state.context).toEqual({ transactionEvents: ['foo', 'bar'] })
     })
   })
