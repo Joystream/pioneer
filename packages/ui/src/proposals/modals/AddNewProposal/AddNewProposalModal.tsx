@@ -88,7 +88,7 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={hideModal}>There was a problem with creating proposal.</FailureModal>
+    return <FailureModal onClose={hideModal}>There was a problem while creating proposal.</FailureModal>
   }
 
   function selectType(type: ProposalDetails) {
