@@ -1,7 +1,6 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { isError } from '../../../common/hooks/useSignAndSendTransaction'
 import { transactionConfig } from '../../../common/model/machines'
 
 import { StakeStepForm } from './StakeStep'
@@ -51,63 +50,54 @@ export type ApplyForRoleEvent =
   | TransactionErrorEvent
   | TransactionSuccessEvent
 
-export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRoleEvent, ApplyForRoleState>(
-  {
-    initial: 'requirementsVerification',
-    states: {
-      requirementsVerification: {
-        on: {
-          FAIL: 'requirementsFailed',
-          PASS: 'stake',
-        },
+export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRoleEvent, ApplyForRoleState>({
+  initial: 'requirementsVerification',
+  states: {
+    requirementsVerification: {
+      on: {
+        FAIL: 'requirementsFailed',
+        PASS: 'stake',
       },
-      requirementsFailed: { type: 'final' },
-      stake: {
-        meta: { isStep: true, stepTitle: 'Stake' },
-        on: {
-          VALID: {
-            target: 'form',
-            actions: assign({
-              stake: (context, event) => (event as ValidStakeStepEvent).stake,
-            }),
-          },
-        },
-      },
-      form: {
-        meta: { isStep: true, stepTitle: 'Form' },
-        on: {
-          VALID: {
-            target: 'transaction',
-            actions: assign({
-              answers: (context, event) => (event as ValidApplicationStepEvent).answers,
-            }),
-          },
-        },
-      },
-      transaction: {
-        meta: { isStep: true, stepTitle: 'Submit application' },
-        invoke: {
-          id: 'transaction',
-          src: createMachine(transactionConfig),
-          onDone: [
-            {
-              target: 'error',
-              actions: assign({ transactionEvents: (context, event) => event.data.events }),
-              cond: (context, event) => isError(event.data.events),
-            },
-            {
-              target: 'success',
-              cond: (context, event) => !isError(event.data.events),
-              actions: assign({ transactionEvents: (context, event) => event.data.events }),
-            },
-          ],
-        },
-      },
-      success: { type: 'final' },
-      error: { type: 'final' },
     },
+    requirementsFailed: { type: 'final' },
+    stake: {
+      meta: { isStep: true, stepTitle: 'Stake' },
+      on: {
+        VALID: {
+          target: 'form',
+          actions: assign({
+            stake: (context, event) => (event as ValidStakeStepEvent).stake,
+          }),
+        },
+      },
+    },
+    form: {
+      meta: { isStep: true, stepTitle: 'Form' },
+      on: {
+        VALID: {
+          target: 'transaction',
+          actions: assign({
+            answers: (context, event) => (event as ValidApplicationStepEvent).answers,
+          }),
+        },
+      },
+    },
+    transaction: {
+      meta: { isStep: true, stepTitle: 'Submit application' },
+      invoke: {
+        id: 'transaction',
+        src: createMachine(transactionConfig),
+        onDone: {
+          target: 'success',
+          actions: assign({ transactionEvents: (context, event) => event.data.events }),
+        },
+        onError: {
+          target: 'error',
+          actions: assign({ transactionEvents: (context, event) => event.data.events }),
+        },
+      },
+    },
+    success: { type: 'final' },
+    error: { type: 'final' },
   },
-  {
-    actions: {},
-  }
-)
+})
