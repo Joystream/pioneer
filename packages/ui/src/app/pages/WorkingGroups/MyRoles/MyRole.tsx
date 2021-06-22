@@ -20,6 +20,7 @@ import { Label } from '@/common/components/typography'
 import { useActivities } from '@/common/hooks/useActivities'
 import { useModal } from '@/common/hooks/useModal'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
+import { NextPayoutStat } from '@/working-groups/components/NextPayoutStat'
 import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useWorker } from '@/working-groups/hooks/useWorker'
@@ -121,7 +122,7 @@ export const MyRole = () => {
             <MyEarningsStat />
             <StakeStat value={worker.stake} minStake={worker.minStake} />
             <TokenValueStat title="Owed reward" value={worker.owedReward} />
-            <TokenValueStat title="Next payout in" value={150000} />
+            <NextPayoutStat workers={[worker]} />
           </Statistics>
         </>
       }
