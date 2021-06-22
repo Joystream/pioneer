@@ -18,7 +18,7 @@ import {
 } from '@/common/components/StepperModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { getStepsFromMachineAndState } from '@/common/model/machines/getSteps'
+import { getSteps, getStepsFromMachineAndState } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
@@ -26,6 +26,7 @@ import { TypeSelection } from '@/proposals/modals/AddNewProposal/components/Type
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
+import { ProposalDetails } from '@/proposals/types'
 
 export type NewProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
@@ -37,6 +38,8 @@ export const AddNewProposalModal = () => {
   const { active: member } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
+  const [type, setType] = useState<ProposalDetails | null>(null)
+  const [isValid, setValid] = useState<boolean>(false)
 
   const [txParams] = useState<NewProposalParams>({
     member_id: member?.id,
@@ -88,20 +91,32 @@ export const AddNewProposalModal = () => {
     return <FailureModal onClose={hideModal}>There was a problem with creating proposal.</FailureModal>
   }
 
+  function selectType(type: ProposalDetails) {
+    setValid(true)
+    setType(type)
+  }
+
+  function goToNext() {
+    setValid(false)
+    send('NEXT')
+  }
+
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader onClick={hideModal} title="Creating new proposal" />
       <StepperModalBody>
         <StepperProposalWrapper>
-          <Stepper steps={getStepsFromMachineAndState(addNewProposalMachine, state)} />
+          <Stepper steps={getSteps(service)} />
           <StepDescriptionColumn>
             <Constants />
           </StepDescriptionColumn>
-          <StepperBody>{state.matches('proposalType') && <TypeSelection />}</StepperBody>
+          <StepperBody>
+            {state.matches('proposalType') && <TypeSelection type={type} setType={(type) => selectType(type)} />}
+          </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonPrimary onClick={() => send('NEXT')} size="medium">
+        <ButtonPrimary disabled={!isValid} onClick={goToNext} size="medium">
           Next step
           <Arrow direction="right" />
         </ButtonPrimary>
