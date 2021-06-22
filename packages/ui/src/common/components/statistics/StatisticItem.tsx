@@ -1,52 +1,22 @@
-import React from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 
+import { TextSmall } from '@/common/components/typography'
+
 import { BorderRad, Colors, Shadows } from '../../constants'
-import { Tooltip, TooltipDefault } from '../Tooltip'
-import { Label, TextSmall } from '../typography'
 
-export interface StatisticItemProps {
-  title?: string
-  tooltipText?: string
+import { StatisticHeader, StatisticHeaderProps } from './StatisticHeader'
+
+export interface StatisticItemProps extends StatisticHeaderProps {
   className?: string
-  children?: React.ReactNode
-  tooltipTitle?: string
-  tooltipLinkText?: React.ReactNode
-  tooltipLinkURL?: string
-  TooltipIcon?: React.ElementType
 }
 
-export const StatisticItem = ({
-  title,
-  tooltipText,
-  className,
-  children,
-  tooltipTitle,
-  tooltipLinkText,
-  tooltipLinkURL,
-  TooltipIcon = TooltipDefault,
-}: StatisticItemProps) => {
-  return (
-    <StatsBlock key={title} className={className}>
-      <StatsHeader>
-        <StatsInfo>
-          {title}
-          {tooltipText && (
-            <Tooltip
-              tooltipText={tooltipText}
-              tooltipTitle={tooltipTitle}
-              tooltipLinkText={tooltipLinkText}
-              tooltipLinkURL={tooltipLinkURL}
-            >
-              <TooltipIcon />
-            </Tooltip>
-          )}
-        </StatsInfo>
-      </StatsHeader>
-      <StatsContent>{children}</StatsContent>
-    </StatsBlock>
-  )
-}
+export const StatisticItem: FC<StatisticItemProps> = ({ className, children, ...headerProps }) => (
+  <StatsBlock key={headerProps.title} className={className}>
+    <StatisticHeader {...headerProps} />
+    <StatsContent>{children}</StatsContent>
+  </StatsBlock>
+)
 
 interface StatiscticBlockProps {
   size?: 's' | 'm' | 'l'
@@ -90,20 +60,7 @@ export const StatsBlock = styled.li<StatiscticBlockProps>`
   }
 `
 
-const StatsHeader = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  width: 100%;
-  justify-content: space-between;
-  align-items: start;
-`
-
-const StatsInfo = styled(Label)`
-  position: relative;
-  align-items: start;
-`
-
-const StatsContent = styled.div`
+export const StatsContent = styled.div`
   margin-top: auto;
 `
 
