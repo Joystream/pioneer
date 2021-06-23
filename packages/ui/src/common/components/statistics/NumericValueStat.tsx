@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { Colors, Fonts } from '@/common/constants'
@@ -10,7 +10,7 @@ export interface TokenValueStatProps extends StatisticItemProps {
   value: number | BN | string
 }
 
-export const NumericValueStat = (props: TokenValueStatProps) => {
+export const NumericValueStat: FC<TokenValueStatProps> = (props) => {
   return (
     <StatisticItem {...props}>
       <NumericValue>{props.value}</NumericValue>
