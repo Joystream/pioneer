@@ -1,8 +1,6 @@
 import BN from 'bn.js'
 import React, { ReactElement, useCallback, useState } from 'react'
 
-import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
-import { Account } from '../../../accounts/types'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader, Row, TransactionAmount } from '../../../common/components/Modal'
@@ -14,7 +12,7 @@ import { Member } from '../../types'
 
 interface Props {
   onClose: () => void
-  onAccept: (amount: BN, from: Member, to: Member, signer: Account) => void
+  onAccept: (amount: BN, from: Member, to: Member) => void
   icon: ReactElement
   member?: Member
 }
@@ -24,9 +22,7 @@ export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Pro
   const [to, setTo] = useState<Member>()
   const [amount, setAmount] = useNumberInput(0)
   const filterRecipient = useCallback(filterMember(from), [from])
-  const accounts = useMyAccounts()
 
-  const signer = accounts.allAccounts.find((a) => a.address === from?.controllerAccount)
   const isAmountValid = !from || parseInt(amount) <= from.inviteCount
   const isDisabled = !amount || !isAmountValid || !from || !to
   const isShowError = amount && !isAmountValid
@@ -69,7 +65,7 @@ export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Pro
       <ModalFooter>
         <ButtonPrimary
           size="medium"
-          onClick={() => from && to && signer && onAccept(new BN(amount), from, to, signer)}
+          onClick={() => from && to && onAccept(new BN(amount), from, to)}
           disabled={isDisabled}
         >
           Transfer Invites

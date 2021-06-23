@@ -2,7 +2,8 @@ import BN from 'bn.js'
 import React, { useMemo } from 'react'
 
 import { SelectedAccount } from '../../../accounts/components/SelectAccount'
-import { Account } from '../../../accounts/types'
+import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent } from '../../../common/components/forms'
 import {
@@ -24,19 +25,19 @@ interface Props {
   onClose: () => void
   sourceMember: Member
   targetMember: Member
-  signer: Account
   amount: BN
   onDone: onTransactionDone
 }
 
-export function TransferInviteSignModal({ onClose, sourceMember, targetMember, amount, onDone, signer }: Props) {
+export function TransferInviteSignModal({ onClose, sourceMember, targetMember, amount, onDone }: Props) {
   const { api } = useApi()
+  const { allAccounts } = useMyAccounts()
   const transaction = useMemo(() => api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount), [
     sourceMember.id,
     targetMember.id,
     amount,
   ])
-  const signerAddress = signer.address
+  const signerAddress = sourceMember.controllerAccount
   const { paymentInfo, send, status } = useSignAndSendTransaction({
     transaction,
     signer: signerAddress,
@@ -55,7 +56,9 @@ export function TransferInviteSignModal({ onClose, sourceMember, targetMember, a
             JOY will be applied to the transaction.
           </TextMedium>
           <InputComponent required inputSize="l" label="Fee paid by account" disabled borderless>
-            <SelectedAccount account={signer} />
+            <SelectedAccount
+              account={accountOrNamed(allAccounts, sourceMember.controllerAccount, 'Controller Account')}
+            />
           </InputComponent>
         </SignTransferContainer>
       </ModalBody>
