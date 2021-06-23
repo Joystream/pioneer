@@ -20,8 +20,8 @@ export const LeaveRoleModal = () => {
   const [rationale, setRationale] = useState('')
   const [step, setStep] = useState<ModalState>('PREPARE')
   const transaction = useMemo(
-    () => worker && getGroup(api, worker?.group?.name)?.leaveRole(worker.runtimeId, rationale),
-    [worker?.id]
+    () => worker && api && getGroup(api, worker?.group?.name)?.leaveRole(worker.runtimeId, rationale),
+    [worker?.id, api]
   )
   const onDone = (success: boolean) => setStep(success ? 'SUCCESS' : 'ERROR')
   const onContinue = (newRationale: string) => {
