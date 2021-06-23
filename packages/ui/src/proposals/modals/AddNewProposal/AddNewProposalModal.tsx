@@ -27,7 +27,6 @@ import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/P
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
-import { ProposalDetails } from '@/proposals/types'
 
 export type NewProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
@@ -129,6 +128,6 @@ export const AddNewProposalModal = () => {
   )
 }
 
-const StepperProposalWrapper = styled(StepperModalWrapper)`
+export const StepperProposalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 220px 336px 1fr;
 `

@@ -12,7 +12,7 @@ import { enabledProposals } from '@/proposals/model/proposalDetails'
 import { ProposalDetails } from '@/proposals/types'
 
 interface ProposalTypeStepProps {
-  type: ProposalDetails | null
+  type?: ProposalDetails
   setType: (type: ProposalDetails) => void
 }
 
