@@ -1,49 +1,63 @@
-import React, { useMemo, useState } from 'react'
+import { useMachine } from '@xstate/react'
+import React from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { ModalState } from '@/common/types'
 import { useWorker } from '@/working-groups/hooks/useWorker'
 
 import { getGroup } from '../../model/getGroup'
+import { GroupName } from '../../types'
 
 import { LeaveRolePrepareModal } from './LeaveRolePrepareModal'
 import { LeaveRoleSignModal } from './LeaveRoleSignModal'
 import { LeaveRoleSuccessModal } from './LeaveRoleSuccessModal'
+import { leaveRoleMachine } from './machine'
 import { LeaveRoleModalCall } from './types'
 
 export const LeaveRoleModal = () => {
   const { api } = useApi()
   const { hideModal, modalData } = useModal<LeaveRoleModalCall>()
   const { worker } = useWorker(modalData.workerId)
-  const [rationale, setRationale] = useState('')
-  const [step, setStep] = useState<ModalState>('PREPARE')
-  const transaction = useMemo(
-    () => worker && api && getGroup(api, worker?.group?.name)?.leaveRole(worker.runtimeId, rationale),
-    [worker?.id, api]
-  )
-  const onDone = (success: boolean) => setStep(success ? 'SUCCESS' : 'ERROR')
-  const onContinue = (newRationale: string) => {
-    setRationale(newRationale)
-    setStep('AUTHORIZE')
-  }
+  const [state, send] = useMachine(leaveRoleMachine)
 
-  if (!worker) {
+  if (!worker || !api) {
     return null
   }
 
-  if (step === 'PREPARE') {
-    return <LeaveRolePrepareModal onClose={hideModal} onContinue={onContinue} openingId={worker.openingId} />
+  if (state.matches('prepare')) {
+    return (
+      <LeaveRolePrepareModal
+        onClose={hideModal}
+        onContinue={(newRationale: string) => send('DONE', { rationale: newRationale })}
+        openingId={worker.openingId}
+      />
+    )
   }
 
-  if (step === 'AUTHORIZE' && transaction) {
-    return <LeaveRoleSignModal onClose={hideModal} transaction={transaction} worker={worker} onDone={onDone} />
+  if (state.matches('transaction')) {
+    const transaction = getGroup(api, worker.group.name as GroupName).leaveRole(
+      worker.runtimeId,
+      state.context.rationale
+    )
+
+    return (
+      <LeaveRoleSignModal
+        onClose={hideModal}
+        transaction={transaction}
+        worker={worker}
+        onDone={(success: boolean) => send(success ? 'SUCCESS' : 'ERROR')}
+      />
+    )
   }
 
-  if (step === 'SUCCESS') {
+  if (state.matches('success')) {
     return <LeaveRoleSuccessModal onClose={hideModal} />
   }
 
-  return <FailureModal onClose={hideModal}>There was a problem leaving the role.</FailureModal>
+  if (state.matches('error')) {
+    return <FailureModal onClose={hideModal}>There was a problem leaving the role.</FailureModal>
+  }
+
+  return null
 }
