@@ -24,8 +24,8 @@ const Template: Story<StatisticBarProps> = (args) => {
         <StatisticBar {...args} numerator={`${ceil(100 * ratio)}%`} denominator={`${floor(100 * threshold)}%`} />
       </TwoRowStatistic>
       <TwoRowStatistic>
-        <StatisticBar {...args} value={0} threshold={0.1} numerator="0" denominator="max 2 votes" />
-        <StatisticBar {...args} value={0} threshold={0.1} numerator="0%" denominator="max 10%" />
+        <StatisticBar {...args} numerator={floor(10 * value)} denominator={`max ${ceil(10 * threshold)} votes`} />
+        <StatisticBar {...args} numerator={`${ceil(100 * ratio)}%`} denominator={`max ${floor(100 * threshold)}%`} />
       </TwoRowStatistic>
     </Statistics>
   )
