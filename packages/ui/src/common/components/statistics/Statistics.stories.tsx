@@ -7,7 +7,8 @@ import { TextMedium } from '../typography'
 
 import { DurationStatistics } from './DurationStatistics'
 import { MultiTokenValueStat } from './MultiTokenValueStat'
-import { StatisticItem, StatisticItemProps } from './StatisticItem'
+import { StatisticBar } from './StatisticBar'
+import { StatisticItem, StatisticItemProps, StatsBlock } from './StatisticItem'
 import { Statistics } from './Statistics'
 import { TokenValueStat } from './TokenValueStat'
 
@@ -20,6 +21,7 @@ const Template: Story<StatisticItemProps> = (args) => (
   <TemplateBlock>
     <Statistics>
       <TokenValueStat {...args} title="Token value stat" value={100_000} />
+
       <MultiTokenValueStat
         {...args}
         title="Multi token value"
@@ -28,10 +30,16 @@ const Template: Story<StatisticItemProps> = (args) => (
           { label: 'Month', value: new BN(123_001) },
         ]}
       />
+
       <StatisticItem {...args}>
         <TextMedium>Inner text</TextMedium>
       </StatisticItem>
+
       <DurationStatistics title="Duration value" value="2032-03-09T10:18:04.155Z" />
+
+      <StatsBlock>
+        <StatisticBar {...args} value={0.4} threshold={0.6} numerator={8} denominator="20 votes" />
+      </StatsBlock>
     </Statistics>
   </TemplateBlock>
 )
@@ -43,5 +51,4 @@ Statistic.args = {
   tooltipText: 'Text to help',
   tooltipTitle: 'Title to help',
   tooltipLinkText: 'More info',
-  tooltipLinkURL: 'http://example.com/',
 }

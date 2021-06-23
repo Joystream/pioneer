@@ -85,13 +85,16 @@ export const TwoColumnsStatistic = styled.div`
 
 export const TwoRowStatistic = styled(StatsBlock)`
   grid-template-rows: auto auto;
-  grid-row-gap: ${spacing(2)};
   height: auto;
+  padding: ${spacing(2)};
 
   ${StatsContent} {
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
+    & + * {
+      margin-top: ${spacing(2)};
+    }
   }
 `
 

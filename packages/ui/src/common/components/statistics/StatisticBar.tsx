@@ -13,7 +13,7 @@ export interface StatisticBarProps extends StatisticHeaderProps, FractionValuePr
 }
 
 export const StatisticBar = ({ value, threshold, numerator, denominator, ...headerProps }: StatisticBarProps) => (
-  <div>
+  <>
     <StatisticHeader {...headerProps} />
 
     <StatsContent>
@@ -25,7 +25,7 @@ export const StatisticBar = ({ value, threshold, numerator, denominator, ...head
         <FractionValue numerator={numerator} denominator={denominator} />
       </Figure>
     </StatsContent>
-  </div>
+  </>
 )
 
 const ThresholdBar = styled.div`
