@@ -8,6 +8,7 @@ import { TextBig, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { proposalDescriptions } from '@/proposals/model/proposalDescriptions'
+import { enabledProposals } from '@/proposals/model/proposalDetails'
 import { ProposalDetails } from '@/proposals/types'
 
 interface TypeSelectionProps {
@@ -16,6 +17,12 @@ interface TypeSelectionProps {
 }
 
 export const TypeSelection = ({ type: chosenType, setType }: TypeSelectionProps) => {
+  function selectType(type: ProposalDetails) {
+    if (enabledProposals.includes(type)) {
+      setType(type)
+    }
+  }
+
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -27,7 +34,12 @@ export const TypeSelection = ({ type: chosenType, setType }: TypeSelectionProps)
       <Row>
         <List>
           {Object.entries(proposalDescriptions).map(([type, description]) => (
-            <TypeListItem key={type} onClick={() => setType(type as ProposalDetails)} active={type === chosenType}>
+            <TypeListItem
+              key={type}
+              onClick={() => selectType(type as ProposalDetails)}
+              active={type === chosenType}
+              disabled={!enabledProposals.includes(type as ProposalDetails)}
+            >
               <TypeItemWrap>
                 <TextBig dark bold>
                   {camelCaseToText(type)}
@@ -42,6 +54,12 @@ export const TypeSelection = ({ type: chosenType, setType }: TypeSelectionProps)
   )
 }
 
+export const TypeListItem = styled(ListItem)<{ active: boolean; disabled: boolean }>`
+  cursor: pointer;
+  ${({ active }) => active && `border-color: ${Colors.Blue[500]};`}
+  ${({ disabled }) => disabled && 'cursor: not-allowed; opacity: .5;'}
+`
+
 export const TypeItemWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -50,9 +68,4 @@ export const TypeItemWrap = styled.div`
   width: 100%;
   min-height: 100px;
   padding: 8px 16px;
-  cursor: pointer;
-`
-
-export const TypeListItem = styled(ListItem)<{ active: boolean }>`
-  ${({ active }) => active && `border-color: ${Colors.Blue[500]};`}
 `

@@ -1,4 +1,3 @@
-import { ProposalParameters } from '@joystream/types/proposals'
 import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -75,8 +74,6 @@ export const AddNewProposalModal = () => {
       return send('FAIL')
     }
   }, [state, member?.id, JSON.stringify(feeInfo)])
-
-  useEffect(() => console.log('kekekek', constants), [type])
 
   if (!member || !feeInfo) {
     return null
