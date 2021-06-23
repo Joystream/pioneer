@@ -23,7 +23,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
-import { TypeSelection } from '@/proposals/modals/AddNewProposal/components/TypeSelection'
+import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
@@ -39,8 +39,7 @@ export const AddNewProposalModal = () => {
   const { active: member } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
-  const [type, setType] = useState<ProposalDetails | null>(null)
-  const constants = useConstants(type)
+  const constants = useConstants(state.context.proposalType)
   const [isValid, setValid] = useState<boolean>(false)
 
   const [txParams] = useState<NewProposalParams>({
@@ -75,6 +74,14 @@ export const AddNewProposalModal = () => {
     }
   }, [state, member?.id, JSON.stringify(feeInfo)])
 
+  useEffect((): any => {
+    if (state.matches('proposalType') && state.context.proposalType) {
+      return setValid(true)
+    }
+
+    setValid(false)
+  }, [state, member?.id])
+
   if (!member || !feeInfo) {
     return null
   }
@@ -93,16 +100,6 @@ export const AddNewProposalModal = () => {
     return <FailureModal onClose={hideModal}>There was a problem while creating proposal.</FailureModal>
   }
 
-  function selectType(type: ProposalDetails) {
-    setValid(true)
-    setType(type)
-  }
-
-  function goToNext() {
-    setValid(false)
-    send('NEXT')
-  }
-
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader onClick={hideModal} title="Creating new proposal" />
@@ -113,12 +110,17 @@ export const AddNewProposalModal = () => {
             <Constants constants={constants} />
           </StepDescriptionColumn>
           <StepperBody>
-            {state.matches('proposalType') && <TypeSelection type={type} setType={(type) => selectType(type)} />}
+            {state.matches('proposalType') && (
+              <ProposalTypeStep
+                type={state.context.proposalType}
+                setType={(proposalType) => send('SELECT', { proposalType })}
+              />
+            )}
           </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={!isValid} onClick={goToNext} size="medium">
+        <ButtonPrimary disabled={!isValid} onClick={() => send('NEXT')} size="medium">
           Next step
           <Arrow direction="right" />
         </ButtonPrimary>

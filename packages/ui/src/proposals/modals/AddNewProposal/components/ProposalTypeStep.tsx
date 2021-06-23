@@ -11,12 +11,12 @@ import { proposalDescriptions } from '@/proposals/model/proposalDescriptions'
 import { enabledProposals } from '@/proposals/model/proposalDetails'
 import { ProposalDetails } from '@/proposals/types'
 
-interface TypeSelectionProps {
+interface ProposalTypeStepProps {
   type: ProposalDetails | null
   setType: (type: ProposalDetails) => void
 }
 
-export const TypeSelection = ({ type: chosenType, setType }: TypeSelectionProps) => {
+export const ProposalTypeStep = ({ type: chosenType, setType }: ProposalTypeStepProps) => {
   function selectType(type: ProposalDetails) {
     if (enabledProposals.includes(type)) {
       setType(type)
