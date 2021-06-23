@@ -20,7 +20,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
+import { stubApi, stubDefaultBalances, stubProposalConstants, stubTransaction } from '../../_mocks/transactions'
 
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
@@ -59,6 +59,7 @@ describe('UI: AddNewProposalModal', () => {
     useMyMemberships.setActive(getMember('alice'))
 
     stubDefaultBalances(api)
+    stubProposalConstants(api)
     tx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
   })
 
@@ -134,7 +135,7 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     it('Selected', async () => {
-      const type = (await screen.findByText('Runtime Upgrade')).parentElement?.parentElement as HTMLElement
+      const type = (await screen.findByText('Signal')).parentElement?.parentElement as HTMLElement
       await fireEvent.click(type)
 
       const button = await getNextStepButton()
