@@ -1,3 +1,4 @@
+import { ProposalParameters } from '@joystream/types/proposals'
 import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -21,6 +22,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { useConstants } from '@/proposals/hooks/useConstants'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
 import { TypeSelection } from '@/proposals/modals/AddNewProposal/components/TypeSelection'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
@@ -39,6 +41,7 @@ export const AddNewProposalModal = () => {
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const [type, setType] = useState<ProposalDetails | null>(null)
+  const constants = useConstants(type)
   const [isValid, setValid] = useState<boolean>(false)
 
   const [txParams] = useState<NewProposalParams>({
@@ -72,6 +75,8 @@ export const AddNewProposalModal = () => {
       return send('FAIL')
     }
   }, [state, member?.id, JSON.stringify(feeInfo)])
+
+  useEffect(() => console.log('kekekek', constants), [type])
 
   if (!member || !feeInfo) {
     return null
@@ -108,7 +113,7 @@ export const AddNewProposalModal = () => {
         <StepperProposalWrapper>
           <Stepper steps={getSteps(service)} />
           <StepDescriptionColumn>
-            <Constants />
+            <Constants constants={constants} />
           </StepDescriptionColumn>
           <StepperBody>
             {state.matches('proposalType') && <TypeSelection type={type} setType={(type) => selectType(type)} />}

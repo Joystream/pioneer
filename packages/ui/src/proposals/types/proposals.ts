@@ -1,3 +1,6 @@
+import { Option, u128, u32 } from '@polkadot/types'
+import BN from 'bn.js'
+
 import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 import { typenameToProposalDetails } from '@/proposals/model/proposalDetails'
