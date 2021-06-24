@@ -1,5 +1,5 @@
 import { addMonths, addWeeks, addYears, isAfter, isBefore, isEqual, startOfMonth, startOfToday } from 'date-fns'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonSecondary, ButtonSecondaryStyles, ButtonsGroup, FilterButtons } from '@/common/components/buttons'
@@ -38,7 +38,7 @@ export const DatePicker = ({
   const { start, end } = fromRange(value)
   const dateString = `${toDDMMYY(start) ?? placeholder} - ${toDDMMYY(end) ?? placeholder}`
 
-  const container = useRef<HTMLDivElement>(null)
+  const [container, setContainer] = useState<HTMLSpanElement | null>(null)
   const [isOpen, toggleOpen] = useState(false)
 
   useOutsideClick(container, isOpen, () => toggleOpen(false))
@@ -49,7 +49,7 @@ export const DatePicker = ({
   }
 
   return (
-    <DatePickerContainer ref={container} onMouseDown={() => !isOpen && toggleOpen(true)}>
+    <DatePickerContainer ref={setContainer} onMouseDown={() => !isOpen && toggleOpen(true)}>
       {title && <FilterLabel>{title}</FilterLabel>}
       <DatePickerInput tight inputWidth={inputWidth} inputSize={inputSize} icon={<CalendarIcon />} iconRight>
         <InputText placeholder="-" value={dateString} readOnly />

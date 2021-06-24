@@ -1,6 +1,10 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
-export function useOutsideClick(container: React.RefObject<any>, isOpen: boolean, onClose: () => void) {
+export function useOutsideClick(
+  container: HTMLDivElement | HTMLSpanElement | null,
+  isOpen: boolean,
+  onClose: () => void
+) {
   useEffect(() => {
     if (!isOpen) {
       return
@@ -13,7 +17,7 @@ export function useOutsideClick(container: React.RefObject<any>, isOpen: boolean
       }
 
       const target = event.target as Node
-      const clickedOutside = !container.current?.contains(target)
+      const clickedOutside = !container?.contains(target)
       if (clickedOutside) {
         onClose()
         window.removeEventListener('mousedown', closePopup)
