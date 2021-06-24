@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Colors, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
+import { Colors, RemoveScrollbar, Shadows, Transitions } from '../../constants'
 import { ActivitiesList } from '../Activities'
 import { ActivityItem } from '../Activities/ActivityComponent'
 import { Close } from '../buttons'
@@ -16,22 +16,24 @@ export const NotificationsHeader = styled.div`
   }
 `
 
-export const NotificationsPanel = styled.div`
+export const NotificationsPanel = styled.aside`
   display: flex;
-  position: fixed;
+  position: absolute;
   left: 226px;
   top: 0;
   flex-direction: column;
   row-gap: 12px;
+  width: 286px;
+  max-width: 286px;
   height: 100%;
   min-height: 100%;
   max-height: 100%;
-  max-width: 286px;
   padding-top: 16px;
   background-color: ${Colors.White};
   box-shadow: ${Shadows.common};
   overflow: hidden;
-  z-index: ${ZIndex.Modal};
+  transition: ${Transitions.all};
+  z-index: -1;
 
   ${ActivitiesList} {
     grid-row-gap: 0;
