@@ -2,9 +2,6 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import { seedApplicationWithdrawnEvents } from '@/mocks/data/seedApplicationWithdrawnEvents'
-import { seedAppliedOnOpeningEvents } from '@/mocks/data/seedAppliedOnOpeningEvents'
-
 import schema from '../common/api/schemas/schema.graphql'
 
 import {
@@ -18,6 +15,10 @@ import {
   seedWorkers,
   seedWorkingGroups,
   seedProposals,
+  seedAppliedOnOpeningEvents,
+  seedApplicationWithdrawnEvents,
+  seedStakeIncreasedEvents,
+  seedStakeDecreasedEvents,
 } from './data'
 import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
 
@@ -76,6 +77,8 @@ export const makeServer = (environment = 'development') => {
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
               appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
               applicationWithdrawnEvents: getWhereResolver('ApplicationWithdrawnEvent'),
+              stakeDecreasedEvents: getWhereResolver('StakeDecreasedEvent'),
+              stakeIncreasedEvents: getWhereResolver('StakeIncreasedEvent'),
               proposals: getWhereResolver('Proposal'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
             },
@@ -99,6 +102,8 @@ export const makeServer = (environment = 'development') => {
       seedAppliedOnOpeningEvents(server)
       seedApplicationWithdrawnEvents(server)
       seedProposals(server)
+      seedStakeDecreasedEvents(server)
+      seedStakeIncreasedEvents(server)
     },
   })
 }
