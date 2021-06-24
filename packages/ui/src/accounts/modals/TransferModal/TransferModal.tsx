@@ -1,61 +1,63 @@
 import { EventRecord } from '@polkadot/types/interfaces'
+import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useState } from 'react'
+import React from 'react'
 
-import { FailureModal } from '../../../common/components/FailureModal'
-import { TokenValue } from '../../../common/components/typography'
-import { useModal } from '../../../common/hooks/useModal'
-import { ModalState } from '../../../common/types'
+import { FailureModal } from '@/common/components/FailureModal'
+import { TokenValue } from '@/common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
+
 import { Account } from '../../types'
 
+import { transferMachine } from './machine'
 import { TransferFormModal } from './TransferFormModal'
 import { TransferSignModal } from './TransferSignModal'
 import { TransferSuccessModal } from './TransferSuccessModal'
 import { TransferModalCall } from './types'
 
-export function TransferModal() {
+export const TransferModal = () => {
   const { hideModal, modalData } = useModal<TransferModalCall>()
-  const { from, to } = modalData
-  const [step, setStep] = useState<ModalState>('PREPARE')
-  const [amount, setAmount] = useState<BN>(new BN(0))
-  const [fee, setFee] = useState<BN>(new BN(0))
-  const [transferFrom, setTransferFrom] = useState<Account | undefined>(from)
-  const [transferTo, setTransferTo] = useState<Account | undefined>(to)
+  const { from: transferFrom, to: transferTo } = modalData
+  const [state, send] = useMachine(transferMachine)
 
-  const isTransfer = !from && !to
-  const isSend = !!from
+  const isTransfer = !transferFrom && !transferTo
+  const isSend = !!transferFrom
   const title = isTransfer ? 'Transfer tokens' : isSend ? 'Send tokens' : 'Receive tokens'
 
   const onAccept = (amount: BN, from: Account, to: Account) => {
-    setAmount(amount)
-    setTransferTo(to)
-    setTransferFrom(from)
-    setStep('AUTHORIZE')
+    send([{ type: 'SET_AMOUNT', amount }, { type: 'SET_FROM', from }, { type: 'SET_TO', to }, 'DONE'])
   }
 
-  const onDone = (result: boolean, events: EventRecord[], fee: BN) => {
-    setStep(result ? 'SUCCESS' : 'ERROR')
-    setFee(fee)
+  const onDone = (isSuccess: boolean, events: EventRecord[], fee: BN) => {
+    send(isSuccess ? 'SUCCESS' : 'ERROR', { fee })
   }
 
-  if (step === 'PREPARE' || !transferTo || !transferFrom) {
+  if (state.matches('prepare')) {
     return (
       <TransferFormModal onClose={hideModal} from={transferFrom} to={transferTo} onAccept={onAccept} title={title} />
     )
   }
 
-  if (step === 'AUTHORIZE') {
-    return <TransferSignModal onClose={hideModal} from={transferFrom} amount={amount} to={transferTo} onDone={onDone} />
+  if (state.matches('transaction')) {
+    const { amount, to, from } = state.context
+    return <TransferSignModal onClose={hideModal} from={from} to={to} amount={amount} onDone={onDone} />
   }
 
-  if (step === 'SUCCESS') {
-    return <TransferSuccessModal onClose={hideModal} from={transferFrom} to={transferTo} amount={amount} fee={fee} />
+  if (state.matches('success')) {
+    const { amount, to, from, fee } = state.context
+    return <TransferSuccessModal onClose={hideModal} from={from} to={to} amount={amount} fee={fee} />
   }
 
-  return (
-    <FailureModal onClose={hideModal}>
-      You haven’t transferred <TokenValue value={amount} /> stake from “{transferFrom.name}” account to “
-      {transferTo.name}” destination.
-    </FailureModal>
-  )
+  if (state.matches('error')) {
+    const { amount, to, from } = state.context
+
+    return (
+      <FailureModal onClose={hideModal}>
+        You haven’t transferred <TokenValue value={amount} /> stake from “{from.name}” account to “{to.name}”
+        destination.
+      </FailureModal>
+    )
+  }
+
+  return null
 }
