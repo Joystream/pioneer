@@ -10,7 +10,7 @@ import { Arrow } from '@/common/components/icons'
 import { BoxIcon } from '@/common/components/icons/BoxIcon'
 import { VoteIcon } from '@/common/components/icons/VoteIcon'
 import { Label, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { BorderRad, Colors } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
 
 interface DetailsItemDataProps {
@@ -21,7 +21,7 @@ export const LockItem = ({ lock }: DetailsItemDataProps) => {
   const [isDropped, setDropped] = useToggle()
 
   return (
-    <>
+    <DetailsItemVoteWrapper>
       <AccountDetailsWrap>
         <DetailsInfo>
           {lockIcon(lock.type)}
@@ -59,7 +59,7 @@ export const LockItem = ({ lock }: DetailsItemDataProps) => {
           </DetailsButton>
         </DetailsDropDownColumn>
       </DetailsDropDownToggle>
-    </>
+    </DetailsItemVoteWrapper>
   )
 }
 
@@ -74,7 +74,7 @@ export const DetailsItemVote = ({ account }: DetailsItemVoteDataProps) => {
   const [isDropped, setDropped] = useToggle()
 
   return (
-    <>
+    <DetailsItemVoteWrapper>
       <AccountDetailsWrap>
         <DetailsInfo>
           <VoteIcon />
@@ -112,23 +112,27 @@ export const DetailsItemVote = ({ account }: DetailsItemVoteDataProps) => {
           </DetailsButton>
         </DetailsDropDownColumn>
       </DetailsDropDownToggle>
-    </>
+    </DetailsItemVoteWrapper>
   )
 }
 
+const DetailsItemVoteWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`
+
 const AccountDetailsWrap = styled.div`
   display: grid;
-  grid-template-columns: 260px repeat(4, 133px) 115px;
+  grid-template-columns: 260px repeat(4, 132px) 86px;
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: end;
   align-items: center;
   width: 100%;
-  padding: 3px 16px;
-  margin-left: -1px;
+  padding: 4px 16px;
   height: 46px;
-  margin-top: 4px;
-  border-radius: 2px;
+  border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
 `
 
@@ -150,12 +154,14 @@ const DetailsDropDownColumn = styled.div`
   &:last-child {
     display: flex;
     justify-content: flex-end;
+    align-items: flex-end;
   }
 `
 
 const DetailsInfo = styled.div`
   display: flex;
   width: 100%;
+  column-gap: 16px;
 `
 
 const DetailsName = styled.h6`
@@ -163,7 +169,6 @@ const DetailsName = styled.h6`
   font-weight: 700;
   line-height: 20px;
   color: ${Colors.Black[900]};
-  margin-left: 16px;
 `
 
 const DetailBox = styled.div``

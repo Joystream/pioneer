@@ -35,7 +35,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
   }
 
   return (
-    <>
+    <AccounItemWrapper>
       <AccountItemWrap key={address}>
         <AccountInfo account={account} />
         <TokenValue value={balance?.total} />
@@ -52,16 +52,24 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         </AccountControls>
       </AccountItemWrap>
       <StyledDropDown isDropped={isDropped}>
-        <StyledLabel>Account Locks:</StyledLabel>
-        {displayLocks()}
+        <RowGapBlock gap={8}>
+          <Label>Account Locks:</Label>
+          {displayLocks()}
+        </RowGapBlock>
+        <RowGapBlock gap={8}>
+          <Label>Recoverable balance</Label>
+          <DetailsItemVote account={account} />
+        </RowGapBlock>
       </StyledDropDown>
-      <StyledDropDown isDropped={isDropped}>
-        <StyledLabel>Recoverable balance</StyledLabel>
-        <DetailsItemVote account={account} />
-      </StyledDropDown>
-    </>
+    </AccounItemWrapper>
   )
 }
+
+const AccounItemWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`
 
 export const AccountItemWrap = styled.div`
   display: grid;
@@ -83,16 +91,9 @@ const AccountControls = styled.div`
   grid-column-gap: 4px;
 `
 const StyledDropDown = styled(DropDownToggle)`
-  padding: 16px 16px 0 16px;
+  row-gap: 16px;
+  padding: 16px;
   background-color: ${Colors.Black[50]};
-
-  &:last-child {
-    padding: 16px;
-  }
-`
-
-const StyledLabel = styled(Label)`
-  margin-bottom: 8px;
 `
 
 const ValueAndLocks = styled(RowGapBlock)`
