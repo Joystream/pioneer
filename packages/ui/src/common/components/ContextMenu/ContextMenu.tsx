@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
@@ -30,11 +30,11 @@ export const ContextMenu = ({ align, items }: ContextMenuProps & ContextMenuAlig
     onBlur: () => setMenuVisible(false),
   }
 
-  const container = useRef<HTMLDivElement>(null)
+  const [container, setContainer] = useState<HTMLDivElement | null>(null)
   useOutsideClick(container, isMenuVisible, () => setMenuVisible(false))
 
   return (
-    <ContextMenuContainer ref={container}>
+    <ContextMenuContainer ref={setContainer}>
       <ButtonGhost square size="medium" {...contextMenuHandlers}>
         <KebabMenuIcon />
       </ButtonGhost>

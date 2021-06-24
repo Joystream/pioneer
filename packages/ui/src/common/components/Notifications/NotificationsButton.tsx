@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { ButtonPrimary } from '../buttons'
@@ -9,10 +9,10 @@ import { Notifications } from './Notifications'
 export const NotificationsButton = () => {
   const [isPanelOpen, setPanelOpen] = useState(false)
   const onClose = () => setPanelOpen(false)
-  const container = useRef<HTMLDivElement>(null)
+  const [container, setContainer] = useState<HTMLSpanElement | null>(null)
   useOutsideClick(container, isPanelOpen, onClose)
   return (
-    <span ref={container}>
+    <span ref={setContainer}>
       <ButtonPrimary square size={'small'} onClick={() => setPanelOpen(!isPanelOpen)}>
         <BellIcon />
       </ButtonPrimary>
