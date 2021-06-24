@@ -2,6 +2,8 @@ import styled from 'styled-components'
 
 import { BorderRad, Colors } from '../../constants'
 
+export const ratioControl = { control: { type: 'range', min: 0, max: 1, step: 0.01 } }
+
 export const TemplateBlock = styled.div`
   display: grid;
   grid-column-gap: 24px;

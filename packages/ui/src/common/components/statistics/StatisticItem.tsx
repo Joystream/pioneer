@@ -1,52 +1,23 @@
-import React from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 
+import { TextSmall } from '@/common/components/typography'
+import { spacing } from '@/common/utils/styles'
+
 import { BorderRad, Colors, Shadows } from '../../constants'
-import { Tooltip, TooltipDefault } from '../Tooltip'
-import { Label, TextSmall } from '../typography'
 
-export interface StatisticItemProps {
-  title?: string
-  tooltipText?: string
+import { StatisticHeader, StatisticHeaderProps } from './StatisticHeader'
+
+export interface StatisticItemProps extends StatisticHeaderProps {
   className?: string
-  children?: React.ReactNode
-  tooltipTitle?: string
-  tooltipLinkText?: React.ReactNode
-  tooltipLinkURL?: string
-  TooltipIcon?: React.ElementType
 }
 
-export const StatisticItem = ({
-  title,
-  tooltipText,
-  className,
-  children,
-  tooltipTitle,
-  tooltipLinkText,
-  tooltipLinkURL,
-  TooltipIcon = TooltipDefault,
-}: StatisticItemProps) => {
-  return (
-    <StatsBlock key={title} className={className}>
-      <StatsHeader>
-        <StatsInfo>
-          {title}
-          {tooltipText && (
-            <Tooltip
-              tooltipText={tooltipText}
-              tooltipTitle={tooltipTitle}
-              tooltipLinkText={tooltipLinkText}
-              tooltipLinkURL={tooltipLinkURL}
-            >
-              <TooltipIcon />
-            </Tooltip>
-          )}
-        </StatsInfo>
-      </StatsHeader>
-      <StatsContent>{children}</StatsContent>
-    </StatsBlock>
-  )
-}
+export const StatisticItem: FC<StatisticItemProps> = ({ className, children, ...headerProps }) => (
+  <StatsBlock key={headerProps.title} className={className}>
+    <StatisticHeader {...headerProps} />
+    <StatsContent>{children}</StatsContent>
+  </StatsBlock>
+)
 
 interface StatiscticBlockProps {
   size?: 's' | 'm' | 'l'
@@ -90,20 +61,7 @@ export const StatsBlock = styled.li<StatiscticBlockProps>`
   }
 `
 
-const StatsHeader = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  width: 100%;
-  justify-content: space-between;
-  align-items: start;
-`
-
-const StatsInfo = styled(Label)`
-  position: relative;
-  align-items: start;
-`
-
-const StatsContent = styled.div`
+export const StatsContent = styled.div`
   margin-top: auto;
 `
 
@@ -121,8 +79,23 @@ export const StatisticLabel = styled(TextSmall)`
 export const TwoColumnsStatistic = styled.div`
   display: grid;
   grid-template-columns: auto auto;
-  grid-column-gap: 16px;
+  grid-column-gap: ${spacing(2)};
   height: 100%;
+`
+
+export const TwoRowStatistic = styled(StatsBlock)`
+  grid-template-rows: auto auto;
+  height: auto;
+  padding: ${spacing(2)};
+
+  ${StatsContent} {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    & + * {
+      margin-top: ${spacing(2)};
+    }
+  }
 `
 
 export const StatiscticContentColumn = styled.div`
