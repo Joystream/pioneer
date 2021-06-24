@@ -1,28 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TextMedium } from '@/common/components/typography'
+
 import { AddProposalButton } from '../AddProposalButton'
 
 export const NoProposals = () => (
-  <NoProposalContainer>
+  <NoProposalContainer gap={16}>
     <h3>There are no current proposals yet</h3>
-    <p>
+    <TextMedium>
       Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit
       mollit. Exercitation veniam consequat sunt nostrud amet.
-    </p>
+    </TextMedium>
     <AddProposalButton />
   </NoProposalContainer>
 )
 
-const NoProposalContainer = styled.div`
+const NoProposalContainer = styled(RowGapBlock)`
   place-self: center;
-  height: 50%;
-  width: 422px;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto;
-  align-content: start;
   justify-items: center;
-  gap: 16px;
+  width: 420px;
+  height: fit-content;
+  margin-top: 172px;
   text-align: center;
 `
