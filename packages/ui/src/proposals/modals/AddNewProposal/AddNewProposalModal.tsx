@@ -78,15 +78,8 @@ export const AddNewProposalModal = () => {
       }
     }
 
-    if (state.matches('generalParameters.stakingAccount') && !hasRequiredStake) {
-      return showModal<MoveFundsModalCall>({
-        modal: 'MoveFundsModal',
-        data: {
-          lockedFoundsAccounts: accountsWithLockedFounds,
-          accounts: transferableAccounts,
-          requiredStake: (constants?.requiredStake as BN).toNumber(),
-        },
-      })
+    if (state.matches('requiredStakeVerification')) {
+      return send(hasRequiredStake ? 'NEXT' : 'FAIL')
     }
   }, [state, member?.id, JSON.stringify(feeInfo)])
 
@@ -102,7 +95,7 @@ export const AddNewProposalModal = () => {
     return setValid(false)
   }, [state, member?.id])
 
-  if (!member || !feeInfo || !hasRequiredStake) {
+  if (!member || !feeInfo) {
     return null
   }
 
@@ -114,6 +107,20 @@ export const AddNewProposalModal = () => {
 
   if (state.matches('warning')) {
     return <WarningModal onNext={() => send('NEXT')} />
+  }
+
+  if (state.matches('requiredStakeFailed')) {
+    console.log(constants)
+    showModal<MoveFundsModalCall>({
+      modal: 'MoveFundsModal',
+      data: {
+        lockedFoundsAccounts: accountsWithLockedFounds,
+        accounts: transferableAccounts,
+        requiredStake: (constants?.requiredStake as BN).toNumber(),
+      },
+    })
+
+    return null
   }
 
   if (state.matches('error')) {
