@@ -19,6 +19,7 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
+import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -121,7 +122,13 @@ export const AddNewProposalModal = () => {
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
-      <ModalHeader onClick={hideModal} title="Creating new proposal" />
+      <ModalHeader
+        onClick={hideModal}
+        title={
+          'Creating new proposal' +
+          (state.context.proposalType ? ': ' + camelCaseToText(state.context.proposalType) : '')
+        }
+      />
       <StepperModalBody>
         <StepperProposalWrapper>
           <Stepper steps={getSteps(service)} />
