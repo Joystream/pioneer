@@ -16,6 +16,7 @@ import { seedMembers } from '@/mocks/data'
 import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 
+import { selectAccount } from '../../_helpers/selectAccount'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -122,24 +123,45 @@ describe('UI: AddNewProposalModal', () => {
         { title: 'Specific parameters', type: 'next' },
       ])
     })
-  })
 
-  describe('Select type', () => {
-    beforeEach(async () => {
-      await finishWarning()
+    describe('Proposal type', () => {
+      beforeEach(async () => {
+        await finishWarning()
+      })
+
+      it('Not selected', async () => {
+        const button = await getNextStepButton()
+        expect(button).toBeDisabled()
+      })
+
+      it('Selected', async () => {
+        const type = (await screen.findByText('Signal')).parentElement?.parentElement as HTMLElement
+        await fireEvent.click(type)
+
+        const button = await getNextStepButton()
+        expect(button).not.toBeDisabled()
+      })
     })
 
-    it('Not selected', async () => {
-      const button = await getNextStepButton()
-      expect(button).toBeDisabled()
-    })
+    describe('General parameter', () => {
+      beforeEach(async () => {
+        await finishWarning()
+        await finishProposalType()
+      })
 
-    it('Selected', async () => {
-      const type = (await screen.findByText('Signal')).parentElement?.parentElement as HTMLElement
-      await fireEvent.click(type)
+      describe('Staking account', () => {
+        it('Not selected', async () => {
+          const button = await getNextStepButton()
+          expect(button).toBeDisabled()
+        })
 
-      const button = await getNextStepButton()
-      expect(button).not.toBeDisabled()
+        it('Selected', async () => {
+          await selectAccount('Select account for Staking', 'alice')
+
+          const button = await getNextStepButton()
+          expect(button).not.toBeDisabled()
+        })
+      })
     })
   })
 
@@ -148,6 +170,14 @@ describe('UI: AddNewProposalModal', () => {
 
     const checkbox = await screen.findByRole('checkbox')
     await fireEvent.click(checkbox)
+    await fireEvent.click(button as HTMLElement)
+  }
+
+  async function finishProposalType() {
+    const type = (await screen.findByText('Signal')).parentElement?.parentElement as HTMLElement
+    await fireEvent.click(type)
+
+    const button = await getNextStepButton()
     await fireEvent.click(button as HTMLElement)
   }
 

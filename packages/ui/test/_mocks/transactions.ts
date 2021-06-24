@@ -116,7 +116,7 @@ export const stubDefaultBalances = (api: UseApi) => {
 }
 
 export const stubProposalConstants = (api: UseApi) => {
-  set(api, 'api.consts.proposalsCodex', () =>
+  set(api, 'api.consts.proposalsCodex.signal', () =>
     from([
       {
         votingPeriod: 10,
