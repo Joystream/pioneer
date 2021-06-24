@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+
+import React, { useRef, useState } from 'react'
+import ReactDOM from 'react-dom'
+import styled from 'styled-components'
+
+import { Colors } from '@/common/constants'
 
 import { useOutsideClick } from '../../hooks/useOutsideClick'
-import { ButtonPrimary } from '../buttons'
-import { BellIcon } from '../icons/BellIcon'
+import { ButtonBareGhost, ButtonInnerWrapper } from '../buttons'
+import { BellFilledIcon } from '../icons/BellFilledIcon'
 
 import { Notifications } from './Notifications'
 
@@ -12,11 +17,25 @@ export const NotificationsButton = () => {
   const [container, setContainer] = useState<HTMLSpanElement | null>(null)
   useOutsideClick(container, isPanelOpen, onClose)
   return (
-    <span ref={setContainer}>
-      <ButtonPrimary square size={'small'} onClick={() => setPanelOpen(!isPanelOpen)}>
-        <BellIcon />
-      </ButtonPrimary>
-      {isPanelOpen && <Notifications onClose={onClose} />}
-    </span>
+    <>
+      <NotificationsStyledButton
+        isPanelOpen={isPanelOpen}
+        square
+        size={'small'}
+        onClick={() => setPanelOpen(!isPanelOpen)}
+      >
+        <BellFilledIcon />
+      </NotificationsStyledButton>
+      {isPanelOpen && ReactDOM.createPortal(<Notifications onClose={onClose} />, document.body)}
+    </>
   )
 }
+
+const NotificationsStyledButton = styled(ButtonBareGhost)<{ isPanelOpen?: boolean }>`
+  background-color: ${({ isPanelOpen }) => (isPanelOpen ? Colors.Black[700] : 'transparent')};
+  color: ${Colors.White};
+
+  ${ButtonInnerWrapper} > svg {
+    color: ${Colors.White};
+  }
+`

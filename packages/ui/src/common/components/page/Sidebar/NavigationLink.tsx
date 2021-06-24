@@ -38,7 +38,7 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLingkProps>`
   display: grid;
   position: relative;
   grid-auto-flow: column;
-  grid-column-gap: 12px;
+  grid-column-gap: 16px;
   justify-content: start;
   align-items: center;
   width: 100%;

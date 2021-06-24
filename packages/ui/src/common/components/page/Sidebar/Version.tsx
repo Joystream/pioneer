@@ -6,8 +6,10 @@ export function Version() {
 }
 
 const VersionText = styled.div`
-  display: grid;
-  grid-area: barversion;
+  display: flex;
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
   justify-content: center;
   align-items: center;
 `

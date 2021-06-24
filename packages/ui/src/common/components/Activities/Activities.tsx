@@ -22,7 +22,7 @@ export const Activities = ({ activities }: ActivitiesProps) => {
   )
 }
 
-const ActivitiesList = styled.ul`
+export const ActivitiesList = styled.ul`
   display: grid;
   grid-row-gap: 24px;
 `

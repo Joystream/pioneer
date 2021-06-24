@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { RemoveScrollbar } from '@/common/constants'
+
 interface SidePanelProps {
   className?: string
   children?: React.ReactNode
@@ -28,11 +30,7 @@ export const SidePanelStyles = styled.div<{ neighborHeight?: number }>`
   padding-left: 24px;
   overflow: hidden;
   overflow-y: scroll;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  ${RemoveScrollbar};
 
   &:after {
     content: '';

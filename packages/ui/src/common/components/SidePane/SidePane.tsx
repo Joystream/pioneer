@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { Animations, Colors, ZIndex } from '../../constants'
+import { Animations, Colors, RemoveScrollbar, ZIndex } from '../../constants'
 import { ButtonsGroup } from '../buttons'
 
 export const SidePaneGlass = styled.div`
@@ -52,11 +52,7 @@ export const SidePaneBody = styled.div`
   border-top: 1px solid ${Colors.Black[200]};
   border-bottom: 1px solid ${Colors.Black[200]};
   overflow-y: scroll;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  ${RemoveScrollbar};
 `
 
 export const SidePaneTopButtonsGroup = styled(ButtonsGroup)`
