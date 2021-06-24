@@ -115,6 +115,23 @@ export const stubDefaultBalances = (api: UseApi) => {
   })
 }
 
+export const stubProposalConstants = (api: UseApi) => {
+  set(api, 'api.consts.proposalsCodex', () =>
+    from([
+      {
+        votingPeriod: 10,
+        gracePeriod: 10,
+        approvalQuorumPercentage: 10,
+        approvalThresholdPercentage: 10,
+        slashingQuorumPercentage: 10,
+        slashingThresholdPercentage: 10,
+        requiredStake: 10,
+        constitutionality: 10,
+      },
+    ])
+  )
+}
+
 export const stubBalances = (api: UseApi, balances: { available?: number; locked?: number }) => {
   const availableBalance = new BN(balances.available ?? 0)
   const lockedBalance = new BN(balances.locked ?? 0)
