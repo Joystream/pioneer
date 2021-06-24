@@ -15,8 +15,6 @@ type AddNewProposalState =
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'warning'; context: EmptyObject }
   | { value: 'proposalType'; context: { proposalType: Required<ProposalDetails> } }
-  | { value: 'requiredStakeVerification'; context: { proposalType: Required<ProposalDetails> } }
-  | { value: 'requiredStakeFailed'; context: { proposalType: Required<ProposalDetails> } }
   | {
       value: 'generalParameters'
       context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
@@ -37,8 +35,8 @@ type AddNewProposalState =
       value: 'specificParameters'
       context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
     }
-  | { value: 'success'; context: AddNewProposalContext }
-  | { value: 'error'; context: AddNewProposalContext }
+  | { value: 'success'; context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> } }
+  | { value: 'error'; context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> } }
 
 type SelectProposalEvent = { type: 'SELECT'; proposalType: ProposalDetails }
 type SelectAccountEvent = { type: 'SELECT'; stakingAccount: Account }
@@ -63,7 +61,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       meta: { isStep: true, stepTitle: 'Proposal type' },
       on: {
         NEXT: {
-          target: 'requiredStakeVerification',
+          target: 'generalParameters',
           cond: (context) => !!context.proposalType,
         },
         SELECT: {
@@ -73,13 +71,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         },
       },
     },
-    requiredStakeVerification: {
-      on: {
-        FAIL: 'requiredStakeFailed',
-        NEXT: 'generalParameters',
-      },
-    },
-    requiredStakeFailed: { type: 'final' },
     generalParameters: {
       initial: 'stakingAccount',
       meta: { isStep: true, stepTitle: 'General parameters' },

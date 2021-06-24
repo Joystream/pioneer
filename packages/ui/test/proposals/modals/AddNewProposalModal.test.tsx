@@ -143,24 +143,7 @@ describe('UI: AddNewProposalModal', () => {
       })
     })
 
-    describe('Required stake', () => {
-      beforeEach(async () => {
-        await finishWarning()
-      })
-
-      it('Not enough funds', async () => {
-        stubProposalConstants(api, { requiredStake: 9999 })
-        await finishProposalType()
-        expect(screen.queryByText('Creating new proposal')).toBeNull()
-      })
-
-      it('Enough funds', async () => {
-        await finishProposalType()
-        expect(screen.queryByText('Creating new proposal')).toBeDefined()
-      })
-    })
-
-    describe('General parameters', () => {
+    describe('General parameter', () => {
       beforeEach(async () => {
         await finishWarning()
         await finishProposalType()

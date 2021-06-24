@@ -19,7 +19,6 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
-import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -78,8 +77,15 @@ export const AddNewProposalModal = () => {
       }
     }
 
-    if (state.matches('requiredStakeVerification')) {
-      return send(hasRequiredStake ? 'NEXT' : 'FAIL')
+    if (state.matches('generalParameters.stakingAccount') && !hasRequiredStake) {
+      return showModal<MoveFundsModalCall>({
+        modal: 'MoveFundsModal',
+        data: {
+          lockedFoundsAccounts: accountsWithLockedFounds,
+          accounts: transferableAccounts,
+          requiredStake: (constants?.requiredStake as BN).toNumber(),
+        },
+      })
     }
   }, [state, member?.id, JSON.stringify(feeInfo)])
 
@@ -95,7 +101,7 @@ export const AddNewProposalModal = () => {
     return setValid(false)
   }, [state, member?.id])
 
-  if (!member || !feeInfo) {
+  if (!member || !feeInfo || !hasRequiredStake) {
     return null
   }
 
@@ -109,32 +115,13 @@ export const AddNewProposalModal = () => {
     return <WarningModal onNext={() => send('NEXT')} />
   }
 
-  if (state.matches('requiredStakeFailed')) {
-    showModal<MoveFundsModalCall>({
-      modal: 'MoveFundsModal',
-      data: {
-        lockedFoundsAccounts: accountsWithLockedFounds,
-        accounts: transferableAccounts,
-        requiredStake: (constants?.requiredStake as BN).toNumber(),
-      },
-    })
-
-    return null
-  }
-
   if (state.matches('error')) {
     return <FailureModal onClose={hideModal}>There was a problem while creating proposal.</FailureModal>
   }
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
-      <ModalHeader
-        onClick={hideModal}
-        title={
-          'Creating new proposal' +
-          (state.context.proposalType ? ': ' + camelCaseToText(state.context.proposalType) : '')
-        }
-      />
+      <ModalHeader onClick={hideModal} title="Creating new proposal" />
       <StepperModalBody>
         <StepperProposalWrapper>
           <Stepper steps={getSteps(service)} />
