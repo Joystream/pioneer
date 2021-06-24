@@ -21,14 +21,17 @@ import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
+import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, proposal } = useProposal(id)
+  const constants = useConstants(proposal?.details)
+
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
-  const blocksToProposalExecution = useBlocksToProposalExecution(proposal)
+  const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
 
   if (isLoading || !proposal) {
     return (
