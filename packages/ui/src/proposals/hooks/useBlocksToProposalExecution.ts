@@ -1,18 +1,11 @@
-import { ApiRx } from '@polkadot/api'
-
-import { useApi } from '@/common/hooks/useApi'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { Block } from '@/common/types'
-
-import { Proposal } from '../types'
-
-type ProposalParameterKey = keyof ApiRx['consts']['proposalsCodex']
+import { Proposal, ProposalConstants } from '@/proposals/types'
 
 const estimableStatus = ['gracing', 'deciding']
 
-export const useBlocksToProposalExecution = (proposal: Proposal | null) => {
+export const useBlocksToProposalExecution = (proposal: Proposal | null, constants: ProposalConstants | null) => {
   const currentBlockNumber = useCurrentBlockNumber()
-  const { api } = useApi()
 
   if (!currentBlockNumber || !proposal || !estimableStatus.includes(proposal.status)) {
     return
@@ -22,10 +15,9 @@ export const useBlocksToProposalExecution = (proposal: Proposal | null) => {
 
   if (proposal.exactExecutionBlock) {
     return blocksUntil(proposal.exactExecutionBlock)
-  } else if (api) {
-    const detailsParameters = `${proposal.details}ProposalParameters` as ProposalParameterKey
+  } else if (constants) {
     const periodKey = proposal.status === 'deciding' ? 'votingPeriod' : 'gracePeriod'
-    const period = api.consts.proposalsCodex[detailsParameters][periodKey]
-    return blocksUntil(proposal.statusSetAtBlock) + period.toNumber()
+    const period = constants[periodKey]
+    return blocksUntil(proposal.statusSetAtBlock) + period
   }
 }
