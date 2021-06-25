@@ -1,19 +1,19 @@
+import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
-import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TransferIcon } from '@/common/components/icons'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
-import { ModalState } from '@/common/types'
 
 import { useMember } from '../../hooks/useMembership'
 import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
 import { Member } from '../../types'
 
 import { TransferInvitesModalCall } from '.'
+import { transferInvitesMachine } from './machine'
 import { TransferInviteFormModal } from './TransferInviteFormModal'
 import { TransferInviteSignModal } from './TransferInviteSignModal'
 import { TransferInviteSuccessModal } from './TransferInviteSuccessModal'
@@ -21,38 +21,24 @@ import { TransferInviteSuccessModal } from './TransferInviteSuccessModal'
 export function TransferInviteModal() {
   const { hideModal, modalData } = useModal<TransferInvitesModalCall>()
   const { isLoading, member } = useMember(modalData.memberId)
-  const [step, setStep] = useState<ModalState>('REQUIREMENTS_CHECK')
-  const [amount, setAmount] = useState<BN>(new BN(0))
-  const [targetMember, setTargetMember] = useState<Member>()
-  const [signer, setSigner] = useState<Account>()
+  const [state, send] = useMachine(transferInvitesMachine)
   const transactionFeeInfo = useTransferInviteFee(member)
 
   useEffect(() => {
-    if (step === 'REQUIREMENTS_CHECK' && transactionFeeInfo) {
-      setStep(transactionFeeInfo.canAfford ? 'PREPARE' : 'REQUIREMENTS_FAIL')
+    if (state.matches('requirementsVerification') && transactionFeeInfo) {
+      send(transactionFeeInfo.canAfford ? 'PASS' : 'FAIL')
     }
   }, [transactionFeeInfo])
-
-  const onAccept = (amount: BN, from: Member, to: Member, signer: Account) => {
-    setAmount(amount)
-    setTargetMember(to)
-    setSigner(signer)
-    setStep('AUTHORIZE')
-  }
-
-  const onDone = (result: boolean) => {
-    setStep(result ? 'SUCCESS' : 'ERROR')
-  }
 
   if (isLoading || !member) {
     return null
   }
 
-  if (step === 'REQUIREMENTS_CHECK') {
+  if (state.matches('requirementsVerification')) {
     return <WaitModal onClose={hideModal} title="Loading..." description="" />
   }
 
-  if (step === 'REQUIREMENTS_FAIL' && transactionFeeInfo) {
+  if (state.matches('requirementsFailed') && transactionFeeInfo) {
     return (
       <InsufficientFundsModal
         onClose={hideModal}
@@ -62,26 +48,35 @@ export function TransferInviteModal() {
     )
   }
 
-  if (step === 'PREPARE' || !targetMember || !signer) {
+  if (state.matches('prepare')) {
+    const onAccept = (amount: BN, from: Member, to: Member) => {
+      send('DONE', { numberOfInvites: amount, targetMember: to })
+    }
+
     return <TransferInviteFormModal onClose={hideModal} onAccept={onAccept} icon={<TransferIcon />} member={member} />
   }
 
-  if (step === 'AUTHORIZE') {
+  if (state.matches('transaction')) {
+    const { targetMember, numberOfInvites } = state.context
     return (
       <TransferInviteSignModal
         onClose={hideModal}
         sourceMember={member}
         targetMember={targetMember}
-        signer={signer}
-        amount={amount}
-        onDone={onDone}
+        amount={numberOfInvites}
+        onDone={(result: boolean) => send(result ? 'SUCCESS' : 'ERROR')}
       />
     )
   }
 
-  if (step === 'SUCCESS') {
-    return <TransferInviteSuccessModal onClose={hideModal} recipient={targetMember} amount={amount} />
+  if (state.matches('success')) {
+    const { targetMember, numberOfInvites } = state.context
+    return <TransferInviteSuccessModal onClose={hideModal} recipient={targetMember} amount={numberOfInvites} />
   }
 
-  return <FailureModal onClose={hideModal}>There was a problem transferring your invites.</FailureModal>
+  if (state.matches('error')) {
+    return <FailureModal onClose={hideModal}>There was a problem transferring your invites.</FailureModal>
+  }
+
+  return null
 }

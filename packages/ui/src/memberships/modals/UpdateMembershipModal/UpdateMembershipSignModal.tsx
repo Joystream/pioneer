@@ -3,20 +3,21 @@ import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React, { useMemo } from 'react'
 
+import { SelectedAccount } from '@/accounts/components/SelectAccount'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { Label } from '@/common/components/forms'
+import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { TransactionModal } from '@/common/components/TransactionModal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
+import { onTransactionDone } from '@/common/types'
+import { WithNullableValues } from '@/common/types/form'
 
-import { SelectedAccount } from '../../../accounts/components/SelectAccount'
-import { Account } from '../../../accounts/types'
-import { ButtonPrimary } from '../../../common/components/buttons'
-import { Label } from '../../../common/components/forms'
-import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '../../../common/components/Modal'
-import { TransactionInfo } from '../../../common/components/TransactionInfo'
-import { TransactionModal } from '../../../common/components/TransactionModal'
-import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { useApi } from '../../../common/hooks/useApi'
-import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
-import { onTransactionDone } from '../../../common/types'
-import { WithNullableValues } from '../../../common/types/form'
 import { Member } from '../../types'
 
 import { UpdateMemberForm } from './types'
@@ -26,7 +27,6 @@ interface SignProps {
   transactionParams: WithNullableValues<UpdateMemberForm>
   onDone: onTransactionDone
   member: Member
-  signer: Account
 }
 
 const hasEdits = (object: Record<string, any>, fields: string[]) => {
@@ -67,9 +67,11 @@ function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, ap
   return api.tx.utility.batch(transactions)
 }
 
-export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, signer, onDone }: SignProps) => {
+export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, onDone }: SignProps) => {
   const { api } = useApi()
+  const { allAccounts } = useMyAccounts()
   const updateProfileTransaction = useMemo(() => createBatch(transactionParams, api, member), [member.id])
+  const signer = accountOrNamed(allAccounts, member.controllerAccount, 'Controller account')
 
   const { paymentInfo, send, status } = useSignAndSendTransaction({
     transaction: updateProfileTransaction,

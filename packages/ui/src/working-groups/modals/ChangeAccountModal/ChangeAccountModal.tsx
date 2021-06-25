@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from 'react'
+import { ApiRx } from '@polkadot/api'
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { useMachine } from '@xstate/react'
+import React from 'react'
 
 import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
@@ -7,11 +10,31 @@ import { useModal } from '@/common/hooks/useModal'
 import { useWorker } from '@/working-groups/hooks/useWorker'
 import { getGroup } from '@/working-groups/model/getGroup'
 
+import { Address } from '../../../common/types'
+import { GroupName, WorkerWithDetails } from '../../types'
+
 import { ChangeAccountModalCall } from '.'
 import { ChangeAccountSelectModal } from './ChangeAccountSelectModal'
 import { ChangeAccountSignModal } from './ChangeAccountSignModal'
 import { ChangeAccountSuccessModal } from './ChangeAccountSuccessModal'
-import { ModalTypes, Steps } from './constants'
+import { ModalTypes } from './constants'
+import { changeAccountMachine } from './machine'
+
+const getTransaction = (
+  worker: WorkerWithDetails,
+  api: ApiRx,
+  modalType: ModalTypes,
+  selectedAddress: Address
+): SubmittableExtrinsic<'rxjs'> => {
+  const runtimeId = worker.runtimeId
+  const group = getGroup(api, worker.group.name as GroupName)
+
+  if (modalType === ModalTypes.CHANGE_ROLE_ACCOUNT) {
+    return group.updateRoleAccount(runtimeId, selectedAddress)
+  } else {
+    return group.updateRewardAccount(runtimeId, selectedAddress)
+  }
+}
 
 export const ChangeAccountModal = () => {
   const { api } = useApi()
@@ -19,51 +42,29 @@ export const ChangeAccountModal = () => {
   const workerId = modalData.workerId
   const modalType = modalData.type
   const { worker } = useWorker(workerId)
-  const [step, setStep] = useState<Steps>(Steps.SELECT_ACCOUNT)
-  const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(undefined)
+  const [state, send] = useMachine(changeAccountMachine)
 
-  const transaction = useMemo(() => {
-    if (!selectedAccount || !worker) {
-      return null
-    }
-
-    if (modalType === ModalTypes.CHANGE_ROLE_ACCOUNT) {
-      return getGroup(api, worker.group.name)?.updateRoleAccount(worker.runtimeId, selectedAccount?.address)
-    }
-
-    return getGroup(api, worker.group.name)?.updateRewardAccount(worker.runtimeId, selectedAccount?.address)
-  }, [selectedAccount?.address, worker?.id])
-
-  const onDone = (success: boolean) => {
-    setStep(success ? Steps.SUCCESS : Steps.ERROR)
-  }
-
-  const onAccept = (account: Account) => {
-    setSelectedAccount(account)
-    setStep(Steps.SIGN_TRANSACTION)
-  }
-
-  if (step === Steps.SELECT_ACCOUNT) {
+  if (state.matches('prepare') || !worker || !api) {
     return (
       <ChangeAccountSelectModal
         title={modalType === ModalTypes.CHANGE_ROLE_ACCOUNT ? 'Change role account' : 'Change reward account'}
         buttonLabel="Change"
         onClose={hideModal}
-        onAccept={onAccept}
+        onAccept={(account: Account) => send('DONE', { selectedAddress: account.address })}
       />
     )
   }
 
-  if (step === Steps.SIGN_TRANSACTION) {
-    if (!transaction || !worker) {
-      return null
-    }
+  if (state.matches('transaction')) {
+    const transaction = getTransaction(worker, api, modalType, state.context.selectedAddress)
 
     return (
       <ChangeAccountSignModal
         transaction={transaction}
         onClose={hideModal}
-        onDone={onDone}
+        onDone={(success: boolean) => {
+          send(success ? 'SUCCESS' : 'ERROR')
+        }}
         worker={worker}
         title="The transaction can only be signed with the membership's controller account."
         buttonLabel={
@@ -75,7 +76,7 @@ export const ChangeAccountModal = () => {
     )
   }
 
-  if (step === Steps.SUCCESS) {
+  if (state.matches('success')) {
     return (
       <ChangeAccountSuccessModal onClose={hideModal}>
         {modalType === ModalTypes.CHANGE_ROLE_ACCOUNT
@@ -85,11 +86,15 @@ export const ChangeAccountModal = () => {
     )
   }
 
-  return (
-    <FailureModal onClose={hideModal}>
-      {modalType === ModalTypes.CHANGE_ROLE_ACCOUNT
-        ? 'There was a problem changing the role account.'
-        : 'There was a problem changing the reward account.'}
-    </FailureModal>
-  )
+  if (state.matches('error')) {
+    return (
+      <FailureModal onClose={hideModal}>
+        {modalType === ModalTypes.CHANGE_ROLE_ACCOUNT
+          ? 'There was a problem changing the role account.'
+          : 'There was a problem changing the reward account.'}
+      </FailureModal>
+    )
+  }
+
+  return null
 }

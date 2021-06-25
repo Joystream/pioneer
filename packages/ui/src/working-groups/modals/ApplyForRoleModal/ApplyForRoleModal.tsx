@@ -20,6 +20,8 @@ import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { getGroup } from '@/working-groups/model/getGroup'
 
+import { GroupName } from '../../types'
+
 import { ApplyForRoleApplicationStep } from './ApplyForRoleApplicationStep'
 import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
 import { ApplyForRoleStakeStep } from './ApplyForRoleStakeStep'
@@ -41,7 +43,7 @@ export const ApplyForRoleModal = () => {
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
   const transaction = useMemo(() => {
     if (active && api) {
-      return getGroup(api, opening.groupName)?.applyOnOpening({
+      return getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
         member_id: active?.id,
         opening_id: opening.runtimeId,
         role_account_id: active?.controllerAccount,
@@ -110,10 +112,10 @@ export const ApplyForRoleModal = () => {
 
   const signer = active?.controllerAccount
 
-  if (state.matches('transaction') && signer) {
+  if (state.matches('transaction') && signer && api) {
     const { stake, answers } = state.context
 
-    const transaction = getGroup(api, opening.groupName)?.applyOnOpening({
+    const transaction = getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
       opening_id: opening.runtimeId,
       member_id: active?.id,
       role_account_id: active?.controllerAccount,

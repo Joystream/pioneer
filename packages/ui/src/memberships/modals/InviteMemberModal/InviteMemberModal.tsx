@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useMachine } from '@xstate/react'
+import React, { useEffect } from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -6,13 +7,13 @@ import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
-import { Address, ModalState } from '../../../common/types'
-import { MemberFormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
+import { Address } from '../../../common/types'
 
 import { InviteMemberFormModal } from './InviteMemberFormModal'
 import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
 import { InviteMemberSignModal } from './InviteMemberSignModal'
 import { InviteMemberSuccessModal } from './InviteMemberSuccessModal'
+import { inviteMemberMachine } from './machine'
 
 interface MembershipModalProps {
   onClose: () => void
@@ -20,61 +21,54 @@ interface MembershipModalProps {
 
 export function InviteMemberModal({ onClose }: MembershipModalProps) {
   const { api } = useApi()
-  const [step, setStep] = useState<ModalState>('REQUIREMENTS_CHECK')
-  const [formData, setFormData] = useState<MemberFormFields>()
-  const onSubmit = (params: MemberFormFields) => {
-    setStep('AUTHORIZE')
-    setFormData(params)
-  }
-  const onDone = (result: boolean) => setStep(result ? 'SUCCESS' : 'ERROR')
-
-  const transaction = useMemo(() => {
-    if (!formData || !api) {
-      return
-    }
-
-    return api.tx.members.inviteMember(toMemberTransactionParams(formData))
-  }, [JSON.stringify(formData)])
   const workingGroupBudget = useObservable(api?.query.membershipWorkingGroup.budget(), [])
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [])
+  const [state, send] = useMachine(inviteMemberMachine)
 
   useEffect(() => {
-    if (step === 'REQUIREMENTS_CHECK' && workingGroupBudget && membershipPrice) {
+    if (state.matches('requirementsVerification') && workingGroupBudget && membershipPrice) {
       const isBudgetOK = workingGroupBudget.toBn().gte(membershipPrice.toBn())
-
-      setStep(isBudgetOK ? 'PREPARE' : 'REQUIREMENTS_FAIL')
+      send(isBudgetOK ? 'PASS' : 'FAIL')
     }
   }, [workingGroupBudget, membershipPrice])
 
-  if (step === 'REQUIREMENTS_CHECK') {
+  if (state.matches('requirementsVerification')) {
     return <WaitModal onClose={onClose} title="Loading..." description="" />
   }
 
-  if (step === 'REQUIREMENTS_FAIL') {
+  if (state.matches('requirementsFailed')) {
     return <InviteMemberRequirementsModal onClose={onClose} />
   }
 
-  if (step == 'PREPARE' || !formData) {
-    return <InviteMemberFormModal onClose={onClose} onSubmit={onSubmit} />
+  if (state.matches('prepare')) {
+    return <InviteMemberFormModal onClose={onClose} onSubmit={(params) => send({ type: 'DONE', form: params })} />
   }
 
-  if (step === 'AUTHORIZE') {
+  if (state.matches('transaction')) {
+    const transaction = api?.tx.members.inviteMember(toMemberTransactionParams(state.context.form))
+
     return (
       <InviteMemberSignModal
         onClose={onClose}
-        formData={formData}
-        signer={formData.invitor?.controllerAccount as Address}
-        onDone={onDone}
+        formData={state.context.form}
+        signer={state.context.form.invitor?.controllerAccount as Address}
+        onDone={(result: boolean) => send(result ? 'SUCCESS' : 'ERROR')}
         transaction={transaction}
       />
     )
   }
 
-  if (step === 'SUCCESS') {
-    return <InviteMemberSuccessModal onClose={onClose} formData={formData} />
+  if (state.matches('success')) {
+    return <InviteMemberSuccessModal onClose={onClose} formData={state.context.form} />
   }
 
-  return (
-    <FailureModal onClose={onClose}>There was a problem with creating a membership for {formData.name}.</FailureModal>
-  )
+  if (state.matches('error')) {
+    return (
+      <FailureModal onClose={onClose}>
+        There was a problem with creating a membership for {state.context.form.name}.
+      </FailureModal>
+    )
+  }
+
+  return null
 }

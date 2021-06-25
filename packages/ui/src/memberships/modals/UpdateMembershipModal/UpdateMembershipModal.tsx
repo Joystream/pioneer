@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import { useMachine } from '@xstate/react'
+import React from 'react'
 
-import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
-import { FailureModal } from '../../../common/components/FailureModal'
-import { WithNullableValues } from '../../../common/types/form'
+import { FailureModal } from '@/common/components/FailureModal'
+
 import { Member } from '../../types'
 
-import { UpdateMemberForm } from './types'
+import { updateMembershipMachine } from './machine'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSignModal } from './UpdateMembershipSignModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
@@ -15,40 +15,37 @@ interface MembershipModalProps {
   onClose: () => void
 }
 
-type ModalState = 'PREPARE' | 'AUTHORIZE' | 'SUCCESS' | 'ERROR'
-
 export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps) => {
-  const [step, setStep] = useState<ModalState>('PREPARE')
-  const [transactionParams, setParams] = useState<WithNullableValues<UpdateMemberForm>>()
-  const { allAccounts } = useMyAccounts()
-  const signer = allAccounts.find((account) => member.controllerAccount === account.address)
+  const [state, send] = useMachine(updateMembershipMachine)
 
-  const onSubmit = (params: WithNullableValues<UpdateMemberForm>) => {
-    setStep('AUTHORIZE')
-    setParams(params)
-  }
-
-  const onDone = (result: boolean) => setStep(result ? 'SUCCESS' : 'ERROR')
-
-  if (step === 'PREPARE' || !transactionParams || !signer) {
-    return <UpdateMembershipFormModal onClose={onClose} onSubmit={onSubmit} member={member} />
-  }
-
-  if (step === 'AUTHORIZE') {
+  if (state.matches('prepare')) {
     return (
-      <UpdateMembershipSignModal
+      <UpdateMembershipFormModal
         onClose={onClose}
-        transactionParams={transactionParams}
+        onSubmit={(params) => send('DONE', { form: params })}
         member={member}
-        signer={signer}
-        onDone={onDone}
       />
     )
   }
 
-  if (step === 'SUCCESS') {
+  if (state.matches('transaction')) {
+    return (
+      <UpdateMembershipSignModal
+        onClose={onClose}
+        transactionParams={state.context.form}
+        member={member}
+        onDone={(result: boolean) => send(result ? 'SUCCESS' : 'ERROR')}
+      />
+    )
+  }
+
+  if (state.matches('success')) {
     return <UpdateMembershipSuccessModal onClose={onClose} member={member} />
   }
 
-  return <FailureModal onClose={onClose}>There was a problem updating membership for {member.name}.</FailureModal>
+  if (state.matches('error')) {
+    return <FailureModal onClose={onClose}>There was a problem updating membership for {member.name}.</FailureModal>
+  }
+
+  return null
 }
