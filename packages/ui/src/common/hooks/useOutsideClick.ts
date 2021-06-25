@@ -12,12 +12,12 @@ export function useOutsideClick(
 
     const closePopup = (event: MouseEvent) => {
       event.stopPropagation()
-      if (!event.target) {
+      if (!event.target || !container) {
         return
       }
 
       const target = event.target as Node
-      const clickedOutside = !container?.contains(target)
+      const clickedOutside = !container.contains(target)
       if (clickedOutside) {
         onClose()
         window.removeEventListener('mousedown', closePopup)

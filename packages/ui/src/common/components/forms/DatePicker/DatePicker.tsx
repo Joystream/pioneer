@@ -1,9 +1,11 @@
 import { addMonths, addWeeks, addYears, isAfter, isBefore, isEqual, startOfMonth, startOfToday } from 'date-fns'
 import React, { useMemo, useState } from 'react'
+import ReactDOM from 'react-dom'
+import { usePopper } from 'react-popper'
 import styled from 'styled-components'
 
 import { ButtonSecondary, ButtonSecondaryStyles, ButtonsGroup, FilterButtons } from '@/common/components/buttons'
-import { Colors, Shadows } from '@/common/constants'
+import { Colors, Shadows, ZIndex } from '@/common/constants'
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 import { DateRange, PartialDateRange } from '@/common/types/Dates'
 import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
@@ -38,10 +40,22 @@ export const DatePicker = ({
   const { start, end } = fromRange(value)
   const dateString = `${toDDMMYY(start) ?? placeholder} - ${toDDMMYY(end) ?? placeholder}`
 
-  const [container, setContainer] = useState<HTMLSpanElement | null>(null)
+  const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>(null)
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null)
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: 'auto-start',
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 0],
+        },
+      },
+    ],
+  })
   const [isOpen, toggleOpen] = useState(false)
 
-  useOutsideClick(container, isOpen, () => toggleOpen(false))
+  useOutsideClick(popperElement, isOpen, () => toggleOpen(false))
 
   const apply = () => {
     onApply?.()
@@ -49,18 +63,20 @@ export const DatePicker = ({
   }
 
   return (
-    <DatePickerContainer ref={setContainer} onMouseDown={() => !isOpen && toggleOpen(true)}>
+    <DatePickerContainer ref={setReferenceElement} onMouseDown={() => !isOpen && toggleOpen(true)}>
       {title && <FilterLabel>{title}</FilterLabel>}
       <DatePickerInput tight inputWidth={inputWidth} inputSize={inputSize} icon={<CalendarIcon />} iconRight>
         <InputText placeholder="-" value={dateString} readOnly />
-        {isOpen && (
-          <DatePickerPopup>
-            <DatePickerCalendars value={value} within={withinDates} onChange={onChange} />
-            <ButtonsGroup align="right">
-              <FilterButtons onApply={apply} onClear={onClear} />
-            </ButtonsGroup>
-          </DatePickerPopup>
-        )}
+        {isOpen &&
+          ReactDOM.createPortal(
+            <DatePickerPopup ref={setPopperElement} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
+              <DatePickerCalendars value={value} within={withinDates} onChange={onChange} />
+              <ButtonsGroup align="right">
+                <FilterButtons onApply={apply} onClear={onClear} />
+              </ButtonsGroup>
+            </DatePickerPopup>,
+            document.body
+          )}
       </DatePickerInput>
     </DatePickerContainer>
   )
@@ -154,7 +170,6 @@ const DatePickerCalendars = ({ value, within, onChange }: DatePickerCalendarsPro
 
 const DatePickerContainer = styled.div`
   display: inline-block;
-
   &:hover,
   &:focus,
   &:focus-within,
@@ -179,7 +194,7 @@ const DatePickerInput = styled(InputComponent)`
   }
 `
 
-const DatePickerPopup = styled.div`
+const DatePickerPopup = styled.div<{ isOpen?: boolean }>`
   display: grid;
   position: absolute;
   top: calc(100% + 4px);
@@ -189,6 +204,7 @@ const DatePickerPopup = styled.div`
   padding: 16px;
   background-color: ${Colors.White};
   box-shadow: ${Shadows.light};
+  z-index: ${ZIndex.Select};
 `
 
 const DatePickerControllersWrapper = styled.div`
