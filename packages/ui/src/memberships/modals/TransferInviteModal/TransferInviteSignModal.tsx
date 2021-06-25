@@ -1,24 +1,20 @@
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
+import { ActorRef } from 'xstate'
 
-import { SelectedAccount } from '../../../accounts/components/SelectAccount'
-import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
-import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
-import { ButtonPrimary } from '../../../common/components/buttons'
-import { InputComponent } from '../../../common/components/forms'
-import {
-  ModalBody,
-  ModalFooter,
-  SignTransferContainer,
-  TransactionInfoContainer,
-} from '../../../common/components/Modal'
-import { TransactionInfo } from '../../../common/components/TransactionInfo'
-import { TransactionModal } from '../../../common/components/TransactionModal'
-import { TextMedium } from '../../../common/components/typography'
-import { useApi } from '../../../common/hooks/useApi'
-import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
-import { formatTokenValue } from '../../../common/model/formatters'
-import { onTransactionDone } from '../../../common/types'
+import { SelectedAccount } from '@/accounts/components/SelectAccount'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { InputComponent } from '@/common/components/forms'
+import { ModalBody, ModalFooter, SignTransferContainer, TransactionInfoContainer } from '@/common/components/Modal'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { TransactionModal } from '@/common/components/TransactionModal'
+import { TextMedium } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { formatTokenValue } from '@/common/model/formatters'
+
 import { Member } from '../../types'
 
 interface Props {
@@ -26,10 +22,10 @@ interface Props {
   sourceMember: Member
   targetMember: Member
   amount: BN
-  onDone: onTransactionDone
+  service: ActorRef<any>
 }
 
-export function TransferInviteSignModal({ onClose, sourceMember, targetMember, amount, onDone }: Props) {
+export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, amount, service }: Props) => {
   const { api } = useApi()
   const { allAccounts } = useMyAccounts()
   const transaction = useMemo(() => api?.tx?.members?.transferInvites(sourceMember.id, targetMember.id, amount), [
@@ -38,17 +34,17 @@ export function TransferInviteSignModal({ onClose, sourceMember, targetMember, a
     amount,
   ])
   const signerAddress = sourceMember.controllerAccount
-  const { paymentInfo, send, status } = useSignAndSendTransaction({
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
     signer: signerAddress,
-    onDone,
+    service,
   })
   const plural = amount.gt(new BN(1))
   const name = targetMember.name
   const fee = paymentInfo?.partialFee.toBn()
 
   return (
-    <TransactionModal status={status} onClose={onClose}>
+    <TransactionModal service={service} onClose={onClose}>
       <ModalBody>
         <SignTransferContainer>
           <TextMedium margin="m">
@@ -70,7 +66,7 @@ export function TransferInviteSignModal({ onClose, sourceMember, targetMember, a
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
+        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
           Sign and Send
         </ButtonPrimary>
       </ModalFooter>
