@@ -11,9 +11,11 @@ interface RawEvent {
 export const mockStakeDecreasedEvents = rawStakeDecreasedEvents.map((rawEvent) => ({ ...rawEvent }))
 export const mockStakeIncreasedEvents = rawStakeIncreasedEvents.map((rawEvent) => ({ ...rawEvent }))
 
-export const seedStakeDecreasedEvent = (mockEvent: RawEvent, server: any) => server.schema.create('StakeDecreasedEvent')
+export const seedStakeDecreasedEvent = (mockEvent: RawEvent, server: any) =>
+  server.schema.create('StakeDecreasedEvent')
 
-export const seedStakeIncreasedEvent = (mockEvent: RawEvent, server: any) => server.schema.create('StakeIncreasedEvent')
+export const seedStakeIncreasedEvent = (mockEvent: RawEvent, server: any) =>
+  server.schema.create('StakeIncreasedEvent')
 
 export const seedStakeDecreasedEvents = (server: any) =>
   mockStakeDecreasedEvents.map((event) => seedStakeDecreasedEvent(event, server))

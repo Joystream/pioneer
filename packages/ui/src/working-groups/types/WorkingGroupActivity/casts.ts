@@ -4,13 +4,14 @@ import { capitalizeFirstLetter } from '@/common/helpers'
 import {
   ApplicationWithdrawnEventFieldsFragment,
   AppliedOnOpeningEventFieldsFragment,
-  BudgetSpendingActivityEventFieldsFragment,
+  BudgetSpendingActivityEventFieldsFragment, StakeDecreasedEventFieldsFragment, StakeIncreasedEventFieldsFragment,
 } from '@/working-groups/queries/__generated__/workingGroups.generated'
 import {
   ApplicationWithdrawnActivity,
   AppliedOnOpeningActivity,
   asWorkingGroupName,
   BudgetSpendingActivity,
+  StakeChangedActivity,
 } from '@/working-groups/types'
 
 function asPositionTitle(groupName: string, type: 'LEADER' | 'REGULAR') {
@@ -61,6 +62,21 @@ export function asBudgetSpendingActivity(fragment: BudgetSpendingActivityEventFi
     id: fragment.id,
     createdAt: fragment.createdAt,
     groupName: fragment.group.name,
+    amount: new BN(fragment.amount),
+  }
+}
+
+type StakeChangedFragment = StakeDecreasedEventFieldsFragment | StakeIncreasedEventFieldsFragment
+
+export function asStakeChangedActivity(fragment: StakeChangedFragment): StakeChangedActivity {
+  return {
+    id: fragment.id,
+    createdAt: fragment.createdAt,
+    eventType: fragment.__typename === 'StakeDecreasedEvent' ? 'StakeDecreased' : 'StakeIncreased',
+    member: {
+      id: fragment.worker.membership.id,
+      handle: fragment.worker.membership.handle,
+    },
     amount: new BN(fragment.amount),
   }
 }

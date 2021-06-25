@@ -7,6 +7,7 @@ let nextRewardPaidEventId = 0
 let nextBudgetSpendingEventId = 0
 let nextAppliedOnOpeningEventId = 0
 let nextApplicationWithdrawnEventId = 0
+let nextStakeChangedEventId = 0
 
 const generateRewardPaidEvent = (mocks: Mocks) => {
   return () => {
