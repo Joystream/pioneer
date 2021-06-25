@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { useMyRoleIds } from '@/memberships/hooks/useMyRoleIds'
 import { useGetMemberRoleEventsQuery } from '@/working-groups/queries'
-import { asStakeChangedActivity } from '@/working-groups/types/WorkingGroupActivity'
+import { asStakeChangedActivity, asStakeSlashedActivity } from '@/working-groups/types/WorkingGroupActivity'
 
 export const useMemberNotifications = () => {
   const { workerIds } = useMyRoleIds()
@@ -13,6 +13,7 @@ export const useMemberNotifications = () => {
         ? [
             ...data.stakeDecreasedEvents.map(asStakeChangedActivity),
             ...data.stakeIncreasedEvents.map(asStakeChangedActivity),
+            ...data.stakeSlashedEvents.map(asStakeSlashedActivity),
           ]
         : [],
     [loading, data, workerIds.length]

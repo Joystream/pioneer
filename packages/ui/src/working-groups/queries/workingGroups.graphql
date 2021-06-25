@@ -371,6 +371,7 @@ fragment StakeSlashedEventFields on StakeSlashedEvent {
   createdAt
   group {
     id
+    name
   }
   worker {
     membership {

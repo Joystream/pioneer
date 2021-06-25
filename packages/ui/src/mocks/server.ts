@@ -2,6 +2,8 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
+import { seedStakeSlashedEvents } from '@/mocks/data/seedStakeSlashedEvents'
+
 import schema from '../common/api/schemas/schema.graphql'
 
 import {
@@ -79,6 +81,7 @@ export const makeServer = (environment = 'development') => {
               applicationWithdrawnEvents: getWhereResolver('ApplicationWithdrawnEvent'),
               stakeDecreasedEvents: getWhereResolver('StakeDecreasedEvent'),
               stakeIncreasedEvents: getWhereResolver('StakeIncreasedEvent'),
+              stakeSlashedEvents: getWhereResolver('StakeSlashedEvent'),
               proposals: getWhereResolver('Proposal'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
             },
@@ -104,6 +107,7 @@ export const makeServer = (environment = 'development') => {
       seedProposals(server)
       seedStakeDecreasedEvents(server)
       seedStakeIncreasedEvents(server)
+      seedStakeSlashedEvents(server)
     },
   })
 }

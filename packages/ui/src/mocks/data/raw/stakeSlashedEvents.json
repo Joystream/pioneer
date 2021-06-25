@@ -1,0 +1,82 @@
+[
+  {
+    "createdAt": "2021-06-19T23:30:22.864Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-50",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-06-19T07:20:53.470Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-46",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-06-20T18:25:39.770Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-71",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-06-23T19:00:16.358Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-4",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-06-20T08:04:08.875Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-69",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-06-20T12:23:09.037Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-27",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-06-21T20:32:35.834Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-44",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-06-24T08:38:50.483Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-62",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-06-18T23:16:26.157Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-18",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-06-23T00:32:02.284Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-66",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  }
+]

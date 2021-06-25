@@ -77,6 +77,18 @@ const generateStakeChanged = (mocks: Mocks) => () => {
   }
 }
 
+const generateStakeSlashedEvent = (mocks: Mocks) => () => {
+  const worker = mocks.workers[randomFromRange(0, mocks.workers.length -1)]
+  return {
+    createdAt: faker.date.recent(7),
+    groupId: worker?.groupId,
+    workerId: worker?.id,
+    requestedAmount: 1000,
+    slashedAmount: 1000,
+    rationale: 'rationale',
+  }
+}
+
 export const generateAllEvents = (mocks: Mocks) => {
   const rewardPaidEvents = Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks))
   const budgetSpendingEvents = Array.from({ length: 10 }).map(generateBudgetSpending(mocks))
@@ -87,6 +99,7 @@ export const generateAllEvents = (mocks: Mocks) => {
     .map(({ withdrawnEvent }) => withdrawnEvent)
   const stakeDecreasedEvents = Array.from({ length: 10 }).map(generateStakeChanged(mocks))
   const stakeIncreasedEvents = Array.from({ length: 10 }).map(generateStakeChanged(mocks))
+  const stakeSlashedEvents = Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks))
 
   return {
     rewardPaidEvents,
@@ -95,5 +108,6 @@ export const generateAllEvents = (mocks: Mocks) => {
     applicationWithdrawnEvents,
     stakeDecreasedEvents,
     stakeIncreasedEvents,
+    stakeSlashedEvents,
   }
 }

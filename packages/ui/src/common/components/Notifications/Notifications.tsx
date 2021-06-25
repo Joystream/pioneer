@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
+import { useMemberNotifications } from '@/memberships/hooks/useMemberNotifications'
 
 import { Colors, RemoveScrollbar, Shadows, Transitions } from '../../constants'
 import { useActivities } from '../../hooks/useActivities'
@@ -17,7 +18,7 @@ interface Props {
 }
 
 export const Notifications = ({ onClose, isNotificationsPanelOpen }: Props) => {
-  const activities = useActivities()
+  const { activities } = useMemberNotifications()
   const [container, setContainer] = useState<HTMLDivElement | null>(null)
   useOutsideClick(container, isNotificationsPanelOpen, onClose)
 

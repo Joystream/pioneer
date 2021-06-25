@@ -4,7 +4,10 @@ import { capitalizeFirstLetter } from '@/common/helpers'
 import {
   ApplicationWithdrawnEventFieldsFragment,
   AppliedOnOpeningEventFieldsFragment,
-  BudgetSpendingActivityEventFieldsFragment, StakeDecreasedEventFieldsFragment, StakeIncreasedEventFieldsFragment,
+  BudgetSpendingActivityEventFieldsFragment,
+  StakeDecreasedEventFieldsFragment,
+  StakeIncreasedEventFieldsFragment,
+  StakeSlashedEventFieldsFragment,
 } from '@/working-groups/queries/__generated__/workingGroups.generated'
 import {
   ApplicationWithdrawnActivity,
@@ -12,6 +15,7 @@ import {
   asWorkingGroupName,
   BudgetSpendingActivity,
   StakeChangedActivity,
+  StakeSlashedActivity,
 } from '@/working-groups/types'
 
 function asPositionTitle(groupName: string, type: 'LEADER' | 'REGULAR') {
@@ -78,5 +82,18 @@ export function asStakeChangedActivity(fragment: StakeChangedFragment): StakeCha
       handle: fragment.worker.membership.handle,
     },
     amount: new BN(fragment.amount),
+  }
+}
+
+export function asStakeSlashedActivity(fragment: StakeSlashedEventFieldsFragment): StakeSlashedActivity {
+  return {
+    eventType: 'StakeSlashed',
+    id: fragment.id,
+    createdAt: fragment.createdAt,
+    member: {
+      id: fragment.worker.membership.id,
+      handle: fragment.worker.membership.handle,
+    },
+    groupName: asWorkingGroupName(fragment.group.name),
   }
 }
