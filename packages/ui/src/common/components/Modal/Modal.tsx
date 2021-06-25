@@ -91,7 +91,7 @@ export const ModalGlass = styled.div<ModalProps>`
   }};
   background-color: ${Colors.Black[700.85]};
   color: ${Colors.Black[900]};
-  z-index: ${ZIndex.Modal};
+  z-index: ${ZIndex.modal};
   ${Animations.showModalBackground};
 `
 

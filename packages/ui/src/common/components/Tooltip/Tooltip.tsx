@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Animations, BorderRad, Colors, Transitions } from '../../constants'
+import { Animations, BorderRad, Colors, Transitions, ZIndex } from '../../constants'
 import { PopupItem } from '../animatedComponents/PopupItem'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
@@ -163,7 +163,7 @@ const TooltipPopupContainer = styled(PopupItem)<{ position: DOMRect }>`
   background-color: ${Colors.Black[700]};
   border-radius: ${BorderRad.m};
   transition: ${Transitions.all};
-  z-index: 55;
+  z-index: ${ZIndex.tooltip};
   ${Animations.showTooltip};
 
   &:after {
@@ -247,7 +247,6 @@ export const TooltipComponent = styled.button`
   position: relative;
   justify-content: center;
   align-items: center;
-  z-index: 50;
 
   &:hover,
   &:focus {
