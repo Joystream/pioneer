@@ -6,7 +6,7 @@ export function useOutsideClick(
   onClose: () => void
 ) {
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpen || !container) {
       return
     }
 
@@ -26,5 +26,5 @@ export function useOutsideClick(
 
     window.addEventListener('mousedown', closePopup)
     return () => window.removeEventListener('mousedown', closePopup)
-  }, [isOpen])
+  }, [isOpen, container])
 }

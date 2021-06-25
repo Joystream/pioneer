@@ -13,13 +13,13 @@ import { Label } from '../typography'
 
 interface Props {
   onClose: () => void
-  isNotificationsPanelOpen?: boolean
+  isNotificationsPanelOpen: boolean
 }
 
 export const Notifications = ({ onClose, isNotificationsPanelOpen }: Props) => {
   const activities = useActivities()
   const [container, setContainer] = useState<HTMLDivElement | null>(null)
-  useOutsideClick(container, isNotificationsPanelOpen!, onClose)
+  useOutsideClick(container, isNotificationsPanelOpen, onClose)
 
   return (
     <NotificationsPanel ref={setContainer}>

@@ -23,7 +23,7 @@ const Template: Story = () => (
       }}
     >
       <TemplateBlock>
-        <Notifications onClose={() => null} />
+        <Notifications onClose={() => null} isNotificationsPanelOpen={true} />
       </TemplateBlock>
     </ModalContext.Provider>
   </MemoryRouter>
