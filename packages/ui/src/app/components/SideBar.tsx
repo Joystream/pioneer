@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
 import styled from 'styled-components'
 
@@ -19,15 +19,12 @@ import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHea
 import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
 import { Version } from '@/common/components/page/Sidebar/Version'
 import { Transitions } from '@/common/constants'
-import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
 export const SideBar = () => {
   const [isNotificationsPanelOpen, setNotificationsPanelOpen] = useState(false)
   const onClose = () => setNotificationsPanelOpen(false)
-  const container = useRef<HTMLDivElement>(null)
-  useOutsideClick(container, isNotificationsPanelOpen, onClose)
 
   return (
     <Navigation>
@@ -107,7 +104,7 @@ export const SideBar = () => {
         timeout={Transitions.durationNumeric}
         unmountOnExit
       >
-        <Notifications onClose={onClose} ref={container} />
+        <Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />
       </CSSTransition>
     </Navigation>
   )
