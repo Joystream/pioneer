@@ -1,4 +1,3 @@
-
 import React from 'react'
 import styled from 'styled-components'
 
@@ -24,7 +23,7 @@ export const NotificationsButton = ({ onClick, isNotificationsPanelOpen }: Notif
   )
 }
 
-const NotificationsStyledButton = styled(ButtonBareGhost) <{ isNotificationsPanelOpen?: boolean }>`
+const NotificationsStyledButton = styled(ButtonBareGhost)<{ isNotificationsPanelOpen?: boolean }>`
   background-color: ${({ isNotificationsPanelOpen }) => (isNotificationsPanelOpen ? Colors.Black[700] : 'transparent')};
   color: ${Colors.White};
 
