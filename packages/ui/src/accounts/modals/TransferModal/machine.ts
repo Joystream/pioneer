@@ -1,6 +1,8 @@
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+
 import { Account } from '../../types'
 
 type EmptyObject = Record<string, never>
@@ -23,12 +25,14 @@ type TransferState =
   | { value: 'success'; context: Required<TransferContext> }
   | { value: 'error'; context: Required<TransferContext> }
 
+type TransferSuccessEvent = { type: 'SUCCESS'; fee: BN }
+
 export type TransferEvent =
   | { type: 'SET_TO'; to: Account }
   | { type: 'SET_FROM'; from: Account }
   | { type: 'SET_AMOUNT'; amount: BN }
   | { type: 'DONE' }
-  | { type: 'SUCCESS'; fee: BN }
+  | TransferSuccessEvent
   | { type: 'ERROR' }
 
 export const transferMachine = createMachine<TransferContext, TransferEvent, TransferState>({
@@ -49,12 +53,20 @@ export const transferMachine = createMachine<TransferContext, TransferEvent, Tra
       },
     },
     transaction: {
-      on: {
-        SUCCESS: {
-          target: 'success',
-          actions: assign({ fee: (_, event) => event.fee }),
-        },
-        ERROR: 'error',
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            cond: isTransactionSuccess,
+            actions: assign({ fee: (_, event) => event.data.fee }),
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+          },
+        ],
       },
     },
     success: { type: 'final' },
