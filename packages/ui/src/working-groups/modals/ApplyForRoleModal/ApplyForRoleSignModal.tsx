@@ -1,6 +1,5 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import { useActor } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
 import { ActorRef } from 'xstate'
@@ -28,12 +27,11 @@ interface SignProps {
 export const ApplyForRoleSignModal = ({ onClose, transaction, signer, stake, service }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo } = useSignAndSendTransaction({ transaction, signer, service })
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(signer)
   const transferable = balance?.transferable
   const partialFee = paymentInfo?.partialFee
-  const [state, send] = useActor(service)
 
   useEffect(() => {
     if (transferable && partialFee) {
@@ -41,7 +39,7 @@ export const ApplyForRoleSignModal = ({ onClose, transaction, signer, stake, ser
     }
   }, [partialFee?.toString(), transferable?.toString()])
 
-  const signDisabled = !state.matches('prepare') || !hasFunds
+  const signDisabled = !isReady || !hasFunds
 
   return (
     <TransactionModal onClose={onClose} service={service}>
@@ -70,7 +68,7 @@ export const ApplyForRoleSignModal = ({ onClose, transaction, signer, stake, ser
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={() => send('SIGN')} disabled={signDisabled}>
+        <ButtonPrimary size="medium" onClick={sign} disabled={signDisabled}>
           Sign transaction and Stake
         </ButtonPrimary>
       </ModalFooter>

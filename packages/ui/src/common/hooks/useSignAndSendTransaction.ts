@@ -3,7 +3,7 @@ import { web3FromAddress } from '@polkadot/extension-dapp'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
@@ -64,6 +64,7 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
 
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const [state, send] = useActor(service)
+  const sign = useCallback(() => send('SIGN'), [service])
 
   useEffect(() => {
     if (!state.matches('signing') || !transaction) {
@@ -85,5 +86,7 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
 
   return {
     paymentInfo,
+    sign,
+    isReady: state.matches('prepare'),
   }
 }
