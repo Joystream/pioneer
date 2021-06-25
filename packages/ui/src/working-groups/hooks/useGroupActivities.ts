@@ -17,8 +17,8 @@ export const useGroupActivities = (groupId: string) => {
             ...data.appliedOnOpeningEvents.map(asAppliedOnOpeningActivity),
             ...data.applicationWithdrawnEvents.map(asApplicationWithdrawnActivity),
             ...data.budgetSpendingEvents.map(asBudgetSpendingActivity),
-            // ...data.stakeDecreasedEvents.map(asStakeChangedActivity),
-            // ...data.stakeIncreasedEvents.map(asStakeChangedActivity),
+            ...data.stakeDecreasedEvents.map(asStakeChangedActivity),
+            ...data.stakeIncreasedEvents.map(asStakeChangedActivity),
           ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         : [],
     [data, loading]

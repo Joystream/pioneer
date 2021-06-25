@@ -30,9 +30,3 @@ query getProposal($where: ProposalWhereUniqueInput!) {
     ...ProposalDetailedFields
   }
 }
-
-query getProposalTypes() {
-  types: proposal(where: $where) {
-    ...ProposalDetailedFields
-  }
-}

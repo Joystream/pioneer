@@ -12,10 +12,10 @@ export const mockStakeDecreasedEvents = rawStakeDecreasedEvents.map((rawEvent) =
 export const mockStakeIncreasedEvents = rawStakeIncreasedEvents.map((rawEvent) => ({ ...rawEvent }))
 
 export const seedStakeDecreasedEvent = (mockEvent: RawEvent, server: any) =>
-  server.schema.create('StakeDecreasedEvent')
+  server.schema.create('StakeDecreasedEvent', mockEvent)
 
 export const seedStakeIncreasedEvent = (mockEvent: RawEvent, server: any) =>
-  server.schema.create('StakeIncreasedEvent')
+  server.schema.create('StakeIncreasedEvent', mockEvent)
 
 export const seedStakeDecreasedEvents = (server: any) =>
   mockStakeDecreasedEvents.map((event) => seedStakeDecreasedEvent(event, server))

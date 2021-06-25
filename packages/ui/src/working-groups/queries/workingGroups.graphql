@@ -366,12 +366,29 @@ fragment StakeIncreasedEventFields on StakeIncreasedEvent {
   amount
 }
 
+fragment StakeSlashedEventFields on StakeSlashedEvent {
+  id
+  createdAt
+  group {
+    id
+  }
+  worker {
+    membership {
+      id
+      handle
+    }
+  }
+}
+
 query GetMemberRoleEvents($worker_in: [ID!]) {
   stakeDecreasedEvents(where: { worker_in: $worker_in }) {
     ...StakeDecreasedEventFields
   }
   stakeIncreasedEvents(where: { worker_in: $worker_in }) {
     ...StakeIncreasedEventFields
+  }
+  stakeSlashedEvents(where: { worker_in: $worker_in }) {
+    ...StakeSlashedEventFields
   }
 }
 
@@ -385,12 +402,12 @@ query GetGroupEvents($group_eq: ID!) {
   budgetSpendingEvents(where: { group_eq: $group_eq }) {
     ...BudgetSpendingActivityEventFields
   }
-#  stakeDecreasedEvents(where: { group_eq: $group_eq }) {
-#    ...StakeDecreasedEventFields
-#  }
-#  stakeIncreasedEvents(where: { group_eq: $group_eq }) {
-#    ...StakeIncreasedEventFields
-#  }
+  stakeDecreasedEvents(where: { group_eq: $group_eq }) {
+    ...StakeDecreasedEventFields
+  }
+  stakeIncreasedEvents(where: { group_eq: $group_eq }) {
+    ...StakeIncreasedEventFields
+  }
 }
 
 query GetWorkerIds($where: WorkerWhereInput) {

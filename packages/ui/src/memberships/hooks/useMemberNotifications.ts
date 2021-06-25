@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { useMyRoleIds } from '@/memberships/hooks/useMyRoleIds'
-import {useGetMemberRoleEventsQuery} from '@/working-groups/queries';
+import { useGetMemberRoleEventsQuery } from '@/working-groups/queries'
 import { asStakeChangedActivity } from '@/working-groups/types/WorkingGroupActivity'
 
 export const useMemberNotifications = () => {
