@@ -78,12 +78,18 @@ describe('Machine: Transaction machine', () => {
             onDone: [
               {
                 target: 'success',
-                actions: assign({ transactionEvents: (context, event) => event.data.events }),
+                actions: assign({
+                  transactionEvents: (context, event) => event.data.events,
+                  fee: (context, event) => event.data.fee,
+                }),
                 cond: isTransactionSuccess,
               },
               {
                 target: 'error',
-                actions: assign({ transactionEvents: (context, event) => event.data.events }),
+                actions: assign({
+                  transactionEvents: (context, event) => event.data.events,
+                  fee: (context, event) => event.data.fee,
+                }),
                 cond: isTransactionError,
               },
             ],

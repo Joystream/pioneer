@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import { assign, createMachine, DoneInvokeEvent, EventObject, MachineConfig, send } from 'xstate'
 import { actionTypes } from 'xstate/lib/actions'
 
@@ -30,6 +31,7 @@ export const transactionConfig: MachineConfig<any, any, any> = {
           target: 'success',
           actions: assign({
             events: (context, event: EventObject & { events: [] }) => event.events,
+            fee: (context, event: EventObject & { fee: BN }) => event.fee,
           }),
         },
         ERROR: {
@@ -37,6 +39,7 @@ export const transactionConfig: MachineConfig<any, any, any> = {
           actions: [
             assign({
               events: (context, event: EventObject & { events: [] }) => event.events,
+              fee: (context, event: EventObject & { fee: BN }) => event.fee,
             }),
             send({ type: actionTypes.errorPlatform, isError: 'true' }),
           ],
@@ -47,6 +50,7 @@ export const transactionConfig: MachineConfig<any, any, any> = {
       type: 'final',
       data: {
         events: (context: any, event: any) => event.events,
+        fee: (context: any, event: any) => event.fee,
         isError: false,
       },
     },
@@ -54,6 +58,7 @@ export const transactionConfig: MachineConfig<any, any, any> = {
       type: 'final',
       data: {
         events: (context: any, event: any) => event.events,
+        fee: (context: any, event: any) => event.fee,
         isError: true,
       },
     },

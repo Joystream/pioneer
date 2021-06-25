@@ -3,6 +3,7 @@ import { web3FromAddress } from '@polkadot/extension-dapp'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
+import BN from 'bn.js'
 import { useCallback, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
@@ -27,7 +28,7 @@ export const isError = (events: EventRecord[]): boolean => {
   })
 }
 
-const observeTransaction = (transaction: Observable<ISubmittableResult>, send: Sender<any>) => {
+const observeTransaction = (transaction: Observable<ISubmittableResult>, send: Sender<any>, fee: BN) => {
   const statusCallback = (result: ISubmittableResult) => {
     const { status, events } = result
 
@@ -49,6 +50,7 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
       send({
         type: isError(events) ? 'ERROR' : 'SUCCESS',
         events,
+        fee,
       })
     }
   }
@@ -67,22 +69,23 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
   const sign = useCallback(() => send('SIGN'), [service])
 
   useEffect(() => {
-    if (!state.matches('signing') || !transaction) {
+    if (!state.matches('signing') || !transaction || !paymentInfo) {
       return
     }
 
     const keyringPair = keyring.getPair(signer)
+    const fee = paymentInfo.partialFee.toBn()
 
     if (keyringPair.meta.isInjected) {
       send('SIGN_EXTENSION')
       web3FromAddress(signer).then((extension) => {
-        observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send)
+        observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee)
       })
     } else {
       send('SIGN_INTERNAL')
-      observeTransaction(transaction.signAndSend(keyringPair), send)
+      observeTransaction(transaction.signAndSend(keyringPair), send, fee)
     }
-  }, [api, state.value.toString()])
+  }, [api, state.value.toString(), paymentInfo])
 
   return {
     paymentInfo,
