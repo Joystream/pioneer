@@ -22,7 +22,7 @@ export const ActivityComponent = ({ activity, children }: ActivityComponentProps
   </ActivityItem>
 )
 
-const ActivityItem = styled.div`
+export const ActivityItem = styled.div`
   display: grid;
   grid-template-columns: 44px 1fr;
   grid-template-rows: auto auto;

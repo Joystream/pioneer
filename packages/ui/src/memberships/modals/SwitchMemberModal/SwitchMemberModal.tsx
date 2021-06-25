@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
 import { Notification, NotificationComponent } from '../../../common/components/Notification'
-import { BorderRad, Colors, Transitions } from '../../../common/constants'
+import { BorderRad, Colors, RemoveScrollbar, Transitions } from '../../../common/constants'
 import { useModal } from '../../../common/hooks/useModal'
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../components'
 import { AddMembershipButtonSwitch } from '../../components/AddMembershipButtonSwitch'
@@ -87,11 +87,7 @@ const MembersList = styled.ul<{ memberIndicatorOffset?: string }>`
   padding-left: 16px;
   overflow: hidden;
   overflow-y: scroll;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  ${RemoveScrollbar};
 `
 
 const MemberItem = styled.li<{ isMemberActive: boolean }>`

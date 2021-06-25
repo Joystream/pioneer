@@ -232,3 +232,11 @@ export const Overflow = {
     text-overflow: ellipsis;
   `,
 }
+
+export const RemoveScrollbar = `
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`

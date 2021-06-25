@@ -37,4 +37,18 @@ export const Animations = css`
       opacity: 0;
     }
   }
+  .NotificationsPanel {
+    &-enter {
+      transform: translateX(-100%);
+    }
+    &-enter-active {
+      transform: translateX(0%);
+    }
+    &-exit {
+      transform: translateX(0%);
+    }
+    &-exit-active {
+      transform: translateX(-100%);
+    }
+  }
 `

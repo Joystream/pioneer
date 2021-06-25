@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
 
-import { Animations, BorderRad, Colors, Fonts, Shadows, ZIndex } from '../../constants'
+import { Animations, BorderRad, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
 import { CloseButton } from '../buttons'
 import { TextMedium, ValueInJoys } from '../typography'
 
@@ -260,11 +260,7 @@ export const ScrolledModalBody = styled(ModalBody)`
   max-height: 100%;
   padding: 0;
   overflow-y: scroll;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  ${RemoveScrollbar};
 `
 
 export const ScrolledModalContainer = styled.div`
@@ -290,11 +286,7 @@ export const ScrollableModalColumn = styled.div`
   max-height: 100%;
   padding: 24px;
   overflow-y: scroll;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  ${RemoveScrollbar};
 `
 
 export const ResultModalBody = styled(ModalBody)`

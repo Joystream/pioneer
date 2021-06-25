@@ -4,6 +4,6 @@ export const NavigationHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px 0;
+  padding: 4px 8px 0 16px;
   grid-area: barheader;
 `
