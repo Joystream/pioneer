@@ -33,13 +33,6 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
   const approvalRatio = total && approve / total
   const slashingRatio = total && slash / total
 
-  const approvalPercentOfTheThreshold = approvalThresholdRatio
-    ? Math.floor((approvalRatio / approvalThresholdRatio) * 100)
-    : '∞'
-  const slashingPercentOfTheThreshold = slashingThresholdRatio
-    ? Math.floor((slashingRatio / slashingThresholdRatio) * 100)
-    : '∞'
-
   return (
     <Statistics>
       <TwoRowStatistic>
@@ -58,7 +51,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           tooltipLinkURL={tooltipLinkURL}
           value={approvalRatio}
           threshold={approvalThresholdRatio}
-          numerator={`${approvalPercentOfTheThreshold}%`}
+          numerator={`${Math.floor(approvalRatio * 100)}%`}
           denominator={`${approvalThresholdPercentage}%`}
         />
       </TwoRowStatistic>
@@ -79,7 +72,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           tooltipLinkURL={tooltipLinkURL}
           value={slashingRatio}
           threshold={slashingThresholdRatio}
-          numerator={`${slashingPercentOfTheThreshold}%`}
+          numerator={`${Math.floor(slashingRatio * 100)}%`}
           denominator={`max ${slashingThresholdPercentage}%`}
         />
       </TwoRowStatistic>
