@@ -5,9 +5,8 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
+import { Address } from '@/common/types'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
-
-import { Address } from '../../../common/types'
 
 import { InviteMemberFormModal } from './InviteMemberFormModal'
 import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
@@ -46,7 +45,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
 
   if (state.matches('transaction')) {
     const transaction = api?.tx.members.inviteMember(toMemberTransactionParams(state.context.form))
-    const transactionService = state.children['transaction']
+    const transactionService = state.children.transaction
 
     return (
       <InviteMemberSignModal

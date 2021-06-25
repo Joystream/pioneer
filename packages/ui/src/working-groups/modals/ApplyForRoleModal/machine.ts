@@ -91,12 +91,12 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
           {
             target: 'success',
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
-            cond: isTransactionError,
+            cond: isTransactionSuccess,
           },
           {
             target: 'error',
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
-            cond: isTransactionSuccess,
+            cond: isTransactionError,
           },
         ],
       },
