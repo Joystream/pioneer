@@ -34,21 +34,7 @@ type ValidApplicationStepEvent = {
   type: 'VALID'
   answers: Record<number, string>
 }
-type TransactionSuccessEvent = {
-  type: 'SUCCESS'
-  events: EventRecord[]
-}
-type TransactionErrorEvent = {
-  type: 'ERROR'
-  events: EventRecord[]
-}
-export type ApplyForRoleEvent =
-  | { type: 'FAIL' }
-  | { type: 'PASS' }
-  | ValidStakeStepEvent
-  | ValidApplicationStepEvent
-  | TransactionErrorEvent
-  | TransactionSuccessEvent
+export type ApplyForRoleEvent = { type: 'FAIL' } | { type: 'PASS' } | ValidStakeStepEvent | ValidApplicationStepEvent
 
 export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRoleEvent, ApplyForRoleState>({
   initial: 'requirementsVerification',

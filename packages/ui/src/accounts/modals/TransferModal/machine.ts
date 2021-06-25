@@ -1,3 +1,4 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
@@ -25,15 +26,23 @@ type TransferState =
   | { value: 'success'; context: Required<TransferContext> }
   | { value: 'error'; context: Required<TransferContext> }
 
-type TransferSuccessEvent = { type: 'SUCCESS'; fee: BN }
-
+type TransactionSuccessEvent = {
+  type: 'SUCCESS'
+  events: EventRecord[]
+  fee: BN
+}
+type TransactionErrorEvent = {
+  type: 'ERROR'
+  events: EventRecord[]
+  fee: BN
+}
 export type TransferEvent =
   | { type: 'SET_TO'; to: Account }
   | { type: 'SET_FROM'; from: Account }
   | { type: 'SET_AMOUNT'; amount: BN }
   | { type: 'DONE' }
-  | TransferSuccessEvent
-  | { type: 'ERROR' }
+  | TransactionSuccessEvent
+  | TransactionErrorEvent
 
 export const transferMachine = createMachine<TransferContext, TransferEvent, TransferState>({
   initial: 'prepare',
