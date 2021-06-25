@@ -46,13 +46,14 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
 
   if (state.matches('transaction')) {
     const transaction = api?.tx.members.inviteMember(toMemberTransactionParams(state.context.form))
+    const transactionService = state.children['transaction']
 
     return (
       <InviteMemberSignModal
         onClose={onClose}
         formData={state.context.form}
         signer={state.context.form.invitor?.controllerAccount as Address}
-        onDone={(result: boolean) => send(result ? 'SUCCESS' : 'ERROR')}
+        service={transactionService}
         transaction={transaction}
       />
     )

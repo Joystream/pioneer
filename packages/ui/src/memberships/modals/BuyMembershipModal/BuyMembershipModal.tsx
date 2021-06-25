@@ -1,5 +1,3 @@
-import { MemberId } from '@joystream/types/common'
-import { EventRecord } from '@polkadot/types/interfaces'
 import { useMachine } from '@xstate/react'
 import React from 'react'
 
@@ -7,7 +5,6 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
-import { getEventParam } from '@/common/model/JoystreamNode'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
@@ -30,24 +27,16 @@ export const BuyMembershipModal = () => {
   if (state.matches('transaction')) {
     const transaction = api?.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
     const { form } = state.context
-
-    const onDone = (result: boolean, events: EventRecord[]) => {
-      if (result) {
-        const memberId = getEventParam<MemberId>(events, 'MemberRegistered')
-        send('SUCCESS', { memberId: memberId })
-      } else {
-        send('ERROR')
-      }
-    }
+    const service = state.children.transaction
 
     return (
       <BuyMembershipSignModal
         onClose={hideModal}
         membershipPrice={membershipPrice}
         formData={form}
-        onDone={onDone}
         transaction={transaction}
         initialSigner={form.controllerAccount}
+        service={service}
       />
     )
   }
