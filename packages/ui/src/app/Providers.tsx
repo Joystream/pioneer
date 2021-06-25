@@ -7,7 +7,6 @@ import { ApiContextProvider } from '@/common/providers/api/provider'
 import { KeyringContextProvider } from '@/common/providers/keyring/provider'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
-import { Mocks } from '@/mocks/Mocks'
 
 import { GlobalStyle } from './providers/GlobalStyle'
 
@@ -23,7 +22,6 @@ export const Providers = ({ children }: Props) => (
           <MembershipContextProvider>
             <HashRouter>
               <ModalContextProvider>
-                <Mocks />
                 <GlobalStyle />
                 {children}
               </ModalContextProvider>
