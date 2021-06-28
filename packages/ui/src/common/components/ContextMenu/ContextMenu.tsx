@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 
-import { Animations, BorderRad, Colors, Shadows, Transitions } from '../../constants'
+import { Animations, BorderRad, Colors, Shadows, Transitions, ZIndex } from '../../constants'
 import { ButtonGhost, ButtonLink } from '../buttons'
 import { KebabMenuIcon } from '../icons'
 
@@ -95,7 +95,7 @@ const ContextMenuWrapper = styled.div<ContextMenuAlignmentProps>`
   border-radius: ${BorderRad.m};
   box-shadow: ${Shadows.select};
   transition: ${Transitions.all};
-  z-index: 55;
+  z-index: ${ZIndex.contextMenu};
   ${Animations.showTooltip};
 `
 

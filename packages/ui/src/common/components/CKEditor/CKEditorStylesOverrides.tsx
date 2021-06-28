@@ -29,6 +29,6 @@ export const CKEditorStylesOverrides = createGlobalStyle`
 
   :root {
     --ck-focus-ring: 1px solid ${Colors.Blue[300]};
-    --ck-z-modal: calc(${ZIndex.Modal} + 10);
+    --ck-z-modal: calc(${ZIndex.modal} + 10);
   }
 `

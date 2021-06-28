@@ -68,8 +68,13 @@ export const Colors = {
 }
 
 export const ZIndex = {
-  Modal: 50,
-  Select: 60,
+  navbar: 70,
+  navbarInner: 75,
+  modal: 85,
+  select: 60,
+  contextMenu: 55,
+  tooltip: 100,
+  sideNotification: 90,
 }
 
 export const BorderRad = {

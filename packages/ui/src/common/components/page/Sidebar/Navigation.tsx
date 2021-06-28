@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Colors } from '../../../constants'
+import { Colors, ZIndex } from '../../../constants'
 
 export const Navigation = styled.nav`
   display: flex;
@@ -11,7 +11,7 @@ export const Navigation = styled.nav`
   width: 100%;
   max-width: 226px;
   height: 100vh;
-  z-index: 100;
+  z-index: ${ZIndex.navbar};
 `
 
 export const NavigationInnerWrapper = styled.div`
@@ -28,5 +28,5 @@ export const NavigationInnerWrapper = styled.div`
   padding-bottom: 20px;
   color: ${Colors.White};
   background-color: ${Colors.Black[900]};
-  z-index: 150;
+  z-index: ${ZIndex.navbarInner};
 `

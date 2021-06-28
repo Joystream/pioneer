@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonSecondary, ButtonSecondaryStyles, ButtonsGroup, FilterButtons } from '@/common/components/buttons'
-import { Colors, Shadows } from '@/common/constants'
+import { Colors, Shadows, ZIndex } from '@/common/constants'
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 import { DateRange, PartialDateRange } from '@/common/types/Dates'
 import { earliest, fromRange, latest, toDDMMYY } from '@/common/utils/dates'
@@ -189,6 +189,7 @@ const DatePickerPopup = styled.div`
   padding: 16px;
   background-color: ${Colors.White};
   box-shadow: ${Shadows.light};
+  z-index: ${ZIndex.select};
 `
 
 const DatePickerControllersWrapper = styled.div`

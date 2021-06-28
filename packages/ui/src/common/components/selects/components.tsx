@@ -1,7 +1,17 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-import { Animations, BorderRad, Colors, Overflow, RemoveScrollbar, Shadows, Sizes, Transitions } from '../../constants'
+import {
+  Animations,
+  BorderRad,
+  Colors,
+  Overflow,
+  RemoveScrollbar,
+  Shadows,
+  Sizes,
+  Transitions,
+  ZIndex,
+} from '../../constants'
 import { ToggleButton } from '../buttons/Toggle'
 import { Arrow, CheckboxIconStyles } from '../icons'
 import { TextInlineMedium } from '../typography'
@@ -156,7 +166,7 @@ export const OptionsListComponent = styled.ul`
   transition: ${Transitions.all};
   animation: showOptions 0.25s ease;
   cursor: auto;
-  z-index: 10;
+  z-index: ${ZIndex.contextMenu};
   ${RemoveScrollbar};
 
   @keyframes showOptions {

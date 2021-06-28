@@ -239,7 +239,7 @@ const Options = styled.div`
   width: 100%;
   max-width: 100%;
   ${Overflow.FullDots};
-  z-index: ${ZIndex.Select};
+  z-index: ${ZIndex.select};
 `
 
 const OptionsFooter = styled.div`

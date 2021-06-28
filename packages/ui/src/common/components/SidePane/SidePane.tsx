@@ -13,7 +13,7 @@ export const SidePaneGlass = styled.div`
   height: 100%;
   background-color: ${Colors.Black[700.85]};
   color: ${Colors.Black[900]};
-  z-index: ${ZIndex.Modal};
+  z-index: ${ZIndex.modal};
   ${Animations.showModalBackground};
 `
 
