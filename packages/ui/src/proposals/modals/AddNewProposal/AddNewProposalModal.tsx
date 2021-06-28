@@ -166,6 +166,7 @@ export const AddNewProposalModal = () => {
             )}
             {state.matches('generalParameters.proposalDetails') && (
               <ProposalDetailsStep
+                proposer={member}
                 setTitle={(title) => send('SET_TITLE', { title })}
                 setRationale={(rationale) => send('SET_RATIONALE', { rationale })}
               />

@@ -5,13 +5,16 @@ import { InputComponent, InputText } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { SelectMember } from '@/memberships/components/SelectMember'
+import { Member } from '@/memberships/types'
 
 interface ProposalDetailsStepProps {
+  proposer: Member
   setTitle: (title: string) => void
   setRationale: (rationale: string) => void
 }
 
-export const ProposalDetailsStep = ({ setTitle, setRationale }: ProposalDetailsStepProps) => {
+export const ProposalDetailsStep = ({ proposer, setTitle, setRationale }: ProposalDetailsStepProps) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -22,6 +25,9 @@ export const ProposalDetailsStep = ({ setTitle, setRationale }: ProposalDetailsS
       </Row>
       <Row>
         <RowGapBlock gap={20}>
+          <InputComponent label="Proposer" inputSize="l" disabled={true}>
+            <SelectMember onChange={() => true} disabled={true} selected={proposer} />
+          </InputComponent>
           <InputComponent label="Proposal title" required inputSize="m" id="title-block">
             <InputText id="title-input" onChange={(event) => setTitle(event.target.value)} />
           </InputComponent>
