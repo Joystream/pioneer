@@ -7,7 +7,7 @@ import { asProposalConstants, ProposalConstants } from '@/proposals/types/consta
 import { ProposalDetails } from '../types'
 
 export const useConstants = (proposalType?: ProposalDetails): ProposalConstants | null => {
-  const { api } = useApi()
+  const { api, isConnected } = useApi()
 
   return useMemo(() => {
     if (!proposalType) {
@@ -18,5 +18,5 @@ export const useConstants = (proposalType?: ProposalDetails): ProposalConstants 
       api?.consts.proposalsCodex[(proposalType + 'ProposalParameters') as keyof ApiRx['consts']['proposalsCodex']]
 
     return constants ? asProposalConstants(constants) : null
-  }, [proposalType])
+  }, [proposalType, isConnected])
 }

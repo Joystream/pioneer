@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 
-import { ProposalVotedEvent, ProposalVoteKind } from '@/common/api/queries'
+import { ProposalVoteKind } from '@/common/api/queries'
 import { useCouncilSize } from '@/common/hooks/useCouncilSize'
 import { Reducer } from '@/common/types/helpers'
+import { VoteFieldsFragment } from '@/proposals/queries'
 
 export interface VoteCount {
   total: number
@@ -13,22 +14,24 @@ export interface VoteCount {
   remain: number
 }
 
-export const useVoteCount = (votes?: ProposalVotedEvent[]): VoteCount | undefined => {
+export const useVoteCount = (votes?: VoteFieldsFragment[]): VoteCount | undefined => {
   const councilSize = useCouncilSize()
 
-  const count = useMemo(() => votes?.reduce(VoteCounting, [0, 0, 0, 0]), [votes?.length])
+  return useMemo(() => {
+    const count = votes?.reduce(VoteCounting, [0, 0, 0, 0])
 
-  if (!councilSize || !votes || !count) {
-    return
-  }
+    if (!councilSize || !votes || !count) {
+      return
+    }
 
-  const total = votes.length
-  const remain = councilSize - total
-  const [approve, reject, slash, abstain] = count
-  return { total, approve, reject, slash, abstain, remain }
+    const total = votes.length
+    const remain = councilSize - total
+    const [approve, reject, slash, abstain] = count
+    return { total, approve, reject, slash, abstain, remain }
+  }, [votes?.length, councilSize])
 }
 
-const VoteCounting: Reducer<[number, number, number, number], ProposalVotedEvent> = (
+const VoteCounting: Reducer<[number, number, number, number], VoteFieldsFragment> = (
   [approve, reject, slash, abstain],
   { voteKind }
 ) => [
