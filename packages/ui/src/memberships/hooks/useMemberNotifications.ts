@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useMyRoleIds } from '@/memberships/hooks/useMyRoleIds'
+import { useMyRoleIds } from '@/working-groups/hooks/useMyRoleIds'
 import { useGetMemberRoleEventsQuery } from '@/working-groups/queries'
 import { asStakeChangedActivity, asStakeSlashedActivity } from '@/working-groups/types/WorkingGroupActivity'
 
