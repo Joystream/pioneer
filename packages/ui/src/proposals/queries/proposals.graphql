@@ -18,7 +18,7 @@ fragment VoteFields on ProposalVotedEvent {
   voteKind
 }
 
-fragment ProposalDetailedFields on Proposal {
+fragment ProposalWithDetailsFields on Proposal {
   ...ProposalFields
   stakingAccount
   description
@@ -35,12 +35,12 @@ query getProposals($where: ProposalWhereInput) {
 
 query getProposal($where: ProposalWhereUniqueInput!) {
   proposal: proposalByUniqueInput(where: $where) {
-    ...ProposalDetailedFields
+    ...ProposalWithDetailsFields
   }
 }
 
-query getProposalTypes() {
-  types: proposal(where: $where) {
-    ...ProposalDetailedFields
-  }
-}
+# query getProposalTypes() {
+#   types: proposal(where: $where) {
+#     ...ProposalWithDetailsFields
+#   }
+# }

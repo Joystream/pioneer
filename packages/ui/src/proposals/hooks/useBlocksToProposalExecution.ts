@@ -1,11 +1,11 @@
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { Block } from '@/common/types'
-import { ProposalDetailed, ProposalConstants } from '@/proposals/types'
+import { ProposalWithDetails, ProposalConstants } from '@/proposals/types'
 
 const estimableStatus = ['gracing', 'deciding']
 
 export const useBlocksToProposalExecution = (
-  proposal: ProposalDetailed | null,
+  proposal: ProposalWithDetails | null,
   constants: ProposalConstants | null
 ) => {
   const currentBlockNumber = useCurrentBlockNumber()

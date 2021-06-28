@@ -1,16 +1,16 @@
 import { asBlock, Block } from '@/common/types'
-import { ProposalDetailedFieldsFragment, VoteFieldsFragment } from '@/proposals/queries'
+import { ProposalWithDetailsFieldsFragment, VoteFieldsFragment } from '@/proposals/queries'
 
 import { asProposal, Proposal } from './proposals'
 
-export interface ProposalDetailed extends Proposal {
+export interface ProposalWithDetails extends Proposal {
   votes: VoteFieldsFragment[]
   statusSetAtBlock: Block
   rationale: string
   exactExecutionBlock?: Block
 }
 
-export const asDetailedProposal = (fields: ProposalDetailedFieldsFragment): ProposalDetailed => ({
+export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment): ProposalWithDetails => ({
   ...asProposal(fields),
   votes: fields.votes,
   rationale: fields.description,
