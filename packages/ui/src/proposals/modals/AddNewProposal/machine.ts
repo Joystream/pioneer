@@ -8,6 +8,8 @@ type EmptyObject = Record<string, never>
 interface AddNewProposalContext {
   proposalType?: ProposalDetails
   stakingAccount?: Account
+  proposalTitle?: string
+  proposalRationale?: string
 }
 
 type AddNewProposalState =
@@ -27,22 +29,46 @@ type AddNewProposalState =
     }
   | {
       value: 'generalParameters.proposalDetails'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
+      context: {
+        proposalType: Required<ProposalDetails>
+        stakingAccount: Required<Account>
+        proposalTitle: Required<string>
+        proposalRationale: Required<string>
+      }
     }
   | {
       value: 'generalParameters.triggerAndDiscussion'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
+      context: {
+        proposalType: Required<ProposalDetails>
+        stakingAccount: Required<Account>
+        proposalTitle: Required<string>
+        proposalRationale: Required<string>
+      }
     }
   | {
       value: 'specificParameters'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
+      context: {
+        proposalType: Required<ProposalDetails>
+        stakingAccount: Required<Account>
+        proposalTitle: Required<string>
+        proposalRationale: Required<string>
+      }
     }
   | { value: 'success'; context: AddNewProposalContext }
   | { value: 'error'; context: AddNewProposalContext }
 
 type SelectProposalEvent = { type: 'SELECT'; proposalType: ProposalDetails }
 type SelectAccountEvent = { type: 'SELECT'; stakingAccount: Account }
-export type AddNewProposalEvent = { type: 'FAIL' } | { type: 'NEXT' } | SelectProposalEvent | SelectAccountEvent
+type SetTitleEvent = { type: 'SET_TITLE'; title: string }
+type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
+
+export type AddNewProposalEvent =
+  | { type: 'FAIL' }
+  | { type: 'NEXT' }
+  | SelectProposalEvent
+  | SelectAccountEvent
+  | SetTitleEvent
+  | SetRationaleEvent
 
 export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNewProposalEvent, AddNewProposalState>({
   initial: 'requirementsVerification',
@@ -102,6 +128,16 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           meta: { isStep: true, stepTitle: 'Proposal details' },
           on: {
             NEXT: 'triggerAndDiscussion',
+            SET_TITLE: {
+              actions: assign({
+                proposalTitle: (context, event) => (event as SetTitleEvent).title,
+              }),
+            },
+            SET_RATIONALE: {
+              actions: assign({
+                proposalRationale: (context, event) => (event as SetRationaleEvent).rationale,
+              }),
+            },
           },
         },
         triggerAndDiscussion: {

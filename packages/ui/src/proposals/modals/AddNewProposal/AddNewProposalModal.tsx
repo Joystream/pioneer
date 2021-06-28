@@ -27,6 +27,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
+import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
@@ -92,6 +93,14 @@ export const AddNewProposalModal = () => {
       return setValid(true)
     }
 
+    if (
+      state.matches('generalParameters.proposalDetails') &&
+      state.context.proposalTitle &&
+      state.context.proposalRationale
+    ) {
+      return setValid(true)
+    }
+
     return setValid(false)
   }, [state, member?.id])
 
@@ -153,6 +162,12 @@ export const AddNewProposalModal = () => {
                 requiredStake={constants?.requiredStake as BN}
                 account={state.context.stakingAccount}
                 setAccount={(stakingAccount) => send('SELECT', { stakingAccount })}
+              />
+            )}
+            {state.matches('generalParameters.proposalDetails') && (
+              <ProposalDetailsStep
+                setTitle={(title) => send('SET_TITLE', { title })}
+                setRationale={(rationale) => send('SET_RATIONALE', { rationale })}
               />
             )}
           </StepperBody>
