@@ -1,9 +1,9 @@
 import { useGetProposalQuery } from '@/proposals/queries'
-import { asProposal, Proposal } from '@/proposals/types'
+import { asDetailedProposal, ProposalDetailed } from '@/proposals/types'
 
 interface UseProposal {
   isLoading: boolean
-  proposal: Proposal | null
+  proposal: ProposalDetailed | null
 }
 
 export const useProposal = (id: string): UseProposal => {
@@ -13,6 +13,6 @@ export const useProposal = (id: string): UseProposal => {
 
   return {
     isLoading: loading,
-    proposal: data && data.proposal ? asProposal(data.proposal) : null,
+    proposal: data && data.proposal ? asDetailedProposal(data.proposal) : null,
   }
 }
