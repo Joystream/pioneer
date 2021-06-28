@@ -2,9 +2,6 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { asBlock } from '@/common/types'
-
-import { randomMarkdown } from '../../../../dev/scripts/generators/utils'
 import { getMember } from '../../../../test/_mocks/members'
 
 import { ProposalList, ProposalListProps } from '.'
@@ -30,8 +27,6 @@ Default.args = {
       proposer: getMember('alice'),
       status: 'deciding',
       title: 'firewall Stand-alone set Checking',
-      rationale: randomMarkdown(),
-      statusSetAtBlock: asBlock(),
     },
     {
       createdAt: '2021-05-31T03:15:57.037Z',
@@ -40,8 +35,6 @@ Default.args = {
       proposer: getMember('bob'),
       status: 'deciding',
       title: 'Computer Directives grey Clothing',
-      rationale: randomMarkdown(),
-      statusSetAtBlock: asBlock(),
     },
   ],
 }
@@ -57,8 +50,6 @@ Past.args = {
       proposer: getMember('alice'),
       status: 'slashed',
       title: 'firewall Stand-alone set Checking',
-      rationale: randomMarkdown(),
-      statusSetAtBlock: asBlock(),
     },
     {
       createdAt: '2021-05-31T03:15:57.037Z',
@@ -68,8 +59,6 @@ Past.args = {
       proposer: getMember('bob'),
       status: 'vetoed',
       title: 'Computer Directives grey Clothing',
-      rationale: randomMarkdown(),
-      statusSetAtBlock: asBlock(),
     },
   ],
 }
