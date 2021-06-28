@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { ProposalVoteKind } from '@/common/api/queries'
 import { useCouncilSize } from '@/common/hooks/useCouncilSize'
 import { Reducer } from '@/common/types/helpers'
+import { isDefined } from '@/common/utils'
 import { VoteFieldsFragment } from '@/proposals/queries'
 
 export interface VoteCount {
@@ -11,7 +12,7 @@ export interface VoteCount {
   reject: number
   slash: number
   abstain: number
-  remain: number
+  remain?: number
 }
 
 export const useVoteCount = (votes?: VoteFieldsFragment[]): VoteCount | undefined => {
@@ -20,12 +21,12 @@ export const useVoteCount = (votes?: VoteFieldsFragment[]): VoteCount | undefine
   return useMemo(() => {
     const count = votes?.reduce(VoteCounting, [0, 0, 0, 0])
 
-    if (!councilSize || !votes || !count) {
+    if (!votes || !count) {
       return
     }
 
     const total = votes.length
-    const remain = councilSize - total
+    const remain = isDefined(councilSize) ? councilSize - total : undefined
     const [approve, reject, slash, abstain] = count
     return { total, approve, reject, slash, abstain, remain }
   }, [votes?.length, councilSize])

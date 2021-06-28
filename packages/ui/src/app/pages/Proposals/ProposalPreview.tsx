@@ -36,7 +36,7 @@ export const ProposalPreview = () => {
 
   const voteCount = useVoteCount(proposal?.votes)
 
-  if (isLoading || !proposal) {
+  if (isLoading || !proposal || !voteCount) {
     return (
       <PageLayout
         lastBreadcrumb={id}
@@ -84,8 +84,7 @@ export const ProposalPreview = () => {
       main={
         <MainPanel ref={sideNeighborRef}>
           <RowGapBlock gap={24}>
-            {/* Statistics */}
-            {voteCount && constants && <ProposalStatistics constants={constants} voteCount={voteCount} />}
+            <ProposalStatistics voteCount={voteCount} constants={constants} />
 
             {/* Proposal-specific dashboard */}
             <h3>{camelCaseToText(proposal.details)}</h3>

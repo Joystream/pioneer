@@ -14,7 +14,7 @@ export default {
     approve: voteControl,
     reject: voteControl,
     slash: voteControl,
-    councilSize: { control: { type: 'range', min: 10, max: 40 } },
+    councilSize: { control: { type: 'range', min: 0, max: 20 } },
     approvalQuorumPercentage: percentageControl,
     approvalThresholdPercentage: percentageControl,
     slashingQuorumPercentage: percentageControl,
@@ -28,6 +28,7 @@ interface Args {
   slash: number
   abstain: number
   councilSize: number
+  unknownConstants: boolean
   approvalQuorumPercentage: number
   approvalThresholdPercentage: number
   slashingQuorumPercentage: number
@@ -40,27 +41,27 @@ export const Default: Story<Args> = ({
   slash = 0,
   abstain = 0,
   councilSize,
+  unknownConstants,
   approvalQuorumPercentage,
   approvalThresholdPercentage,
   slashingQuorumPercentage,
   slashingThresholdPercentage,
 }) => {
+  const constants = unknownConstants
+    ? null
+    : ({
+        approvalQuorumPercentage,
+        approvalThresholdPercentage,
+        slashingQuorumPercentage,
+        slashingThresholdPercentage,
+      } as ProposalConstants)
+
   const total = approve + slash + reject + abstain
-  const remain = councilSize - total
+  const remain = councilSize ? councilSize - total : undefined
 
   return (
     <MemoryRouter>
-      <ProposalStatistics
-        constants={
-          {
-            approvalQuorumPercentage,
-            approvalThresholdPercentage,
-            slashingQuorumPercentage,
-            slashingThresholdPercentage,
-          } as ProposalConstants
-        }
-        voteCount={{ approve, slash, reject, abstain, total, remain }}
-      />
+      <ProposalStatistics constants={constants} voteCount={{ approve, slash, reject, abstain, total, remain }} />
     </MemoryRouter>
   )
 }
@@ -70,6 +71,7 @@ Default.args = {
   reject: 2,
   slash: 0,
   councilSize: 20,
+  unknownConstants: false,
   approvalQuorumPercentage: 30,
   approvalThresholdPercentage: 51,
   slashingQuorumPercentage: 10,
