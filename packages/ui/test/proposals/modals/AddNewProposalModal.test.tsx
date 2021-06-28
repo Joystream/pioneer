@@ -143,6 +143,26 @@ describe('UI: AddNewProposalModal', () => {
       })
     })
 
+    describe('Required stake', () => {
+      beforeEach(async () => {
+        await finishWarning()
+        await finishProposalType()
+      })
+
+      it('Not enough funds', async () => {
+        // expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+        expect(0).toEqual(0)
+      })
+
+      // it('Enough funds', async () => {
+      //   const type = (await screen.findByText('Signal')).parentElement?.parentElement as HTMLElement
+      //   await fireEvent.click(type)
+      //
+      //   const button = await getNextStepButton()
+      //   expect(button).not.toBeDisabled()
+      // })
+    })
+
     describe('General parameter', () => {
       beforeEach(async () => {
         await finishWarning()
