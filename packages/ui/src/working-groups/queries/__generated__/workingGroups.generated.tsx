@@ -380,6 +380,41 @@ export type BudgetSpendingActivityEventFieldsFragment = {
   group: { __typename: 'WorkingGroup'; name: string }
 }
 
+export type StakeDecreasedEventFieldsFragment = {
+  __typename: 'StakeDecreasedEvent'
+  id: string
+  createdAt: any
+  amount: any
+  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+}
+
+export type StakeIncreasedEventFieldsFragment = {
+  __typename: 'StakeIncreasedEvent'
+  id: string
+  createdAt: any
+  amount: any
+  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+}
+
+export type StakeSlashedEventFieldsFragment = {
+  __typename: 'StakeSlashedEvent'
+  id: string
+  createdAt: any
+  group: { __typename: 'WorkingGroup'; id: string; name: string }
+  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+}
+
+export type GetMemberRoleEventsQueryVariables = Types.Exact<{
+  worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
+}>
+
+export type GetMemberRoleEventsQuery = {
+  __typename: 'Query'
+  stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment>
+  stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment>
+  stakeSlashedEvents: Array<{ __typename: 'StakeSlashedEvent' } & StakeSlashedEventFieldsFragment>
+}
+
 export type GetGroupEventsQueryVariables = Types.Exact<{
   group_eq: Types.Scalars['ID']
 }>
@@ -391,7 +426,15 @@ export type GetGroupEventsQuery = {
     { __typename: 'ApplicationWithdrawnEvent' } & ApplicationWithdrawnEventFieldsFragment
   >
   budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent' } & BudgetSpendingActivityEventFieldsFragment>
+  stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment>
+  stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment>
 }
+
+export type GetWorkerIdsQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.WorkerWhereInput>
+}>
+
+export type GetWorkerIdsQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker'; id: string }> }
 
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
@@ -629,6 +672,48 @@ export const BudgetSpendingActivityEventFieldsFragmentDoc = gql`
     amount
     group {
       name
+    }
+  }
+`
+export const StakeDecreasedEventFieldsFragmentDoc = gql`
+  fragment StakeDecreasedEventFields on StakeDecreasedEvent {
+    id
+    createdAt
+    worker {
+      membership {
+        id
+        handle
+      }
+    }
+    amount
+  }
+`
+export const StakeIncreasedEventFieldsFragmentDoc = gql`
+  fragment StakeIncreasedEventFields on StakeIncreasedEvent {
+    id
+    createdAt
+    worker {
+      membership {
+        id
+        handle
+      }
+    }
+    amount
+  }
+`
+export const StakeSlashedEventFieldsFragmentDoc = gql`
+  fragment StakeSlashedEventFields on StakeSlashedEvent {
+    id
+    createdAt
+    group {
+      id
+      name
+    }
+    worker {
+      membership {
+        id
+        handle
+      }
     }
   }
 `
@@ -1525,6 +1610,63 @@ export type GetUpcomingWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetUpcomingWorkingGroupOpeningsQuery,
   GetUpcomingWorkingGroupOpeningsQueryVariables
 >
+export const GetMemberRoleEventsDocument = gql`
+  query GetMemberRoleEvents($worker_in: [ID!]) {
+    stakeDecreasedEvents(where: { worker_in: $worker_in }) {
+      ...StakeDecreasedEventFields
+    }
+    stakeIncreasedEvents(where: { worker_in: $worker_in }) {
+      ...StakeIncreasedEventFields
+    }
+    stakeSlashedEvents(where: { worker_in: $worker_in }) {
+      ...StakeSlashedEventFields
+    }
+  }
+  ${StakeDecreasedEventFieldsFragmentDoc}
+  ${StakeIncreasedEventFieldsFragmentDoc}
+  ${StakeSlashedEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetMemberRoleEventsQuery__
+ *
+ * To run a query within a React component, call `useGetMemberRoleEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberRoleEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberRoleEventsQuery({
+ *   variables: {
+ *      worker_in: // value for 'worker_in'
+ *   },
+ * });
+ */
+export function useGetMemberRoleEventsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>(
+    GetMemberRoleEventsDocument,
+    options
+  )
+}
+export function useGetMemberRoleEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberRoleEventsQuery, GetMemberRoleEventsQueryVariables>(
+    GetMemberRoleEventsDocument,
+    options
+  )
+}
+export type GetMemberRoleEventsQueryHookResult = ReturnType<typeof useGetMemberRoleEventsQuery>
+export type GetMemberRoleEventsLazyQueryHookResult = ReturnType<typeof useGetMemberRoleEventsLazyQuery>
+export type GetMemberRoleEventsQueryResult = Apollo.QueryResult<
+  GetMemberRoleEventsQuery,
+  GetMemberRoleEventsQueryVariables
+>
 export const GetGroupEventsDocument = gql`
   query GetGroupEvents($group_eq: ID!) {
     appliedOnOpeningEvents(where: { group_eq: $group_eq }) {
@@ -1536,10 +1678,18 @@ export const GetGroupEventsDocument = gql`
     budgetSpendingEvents(where: { group_eq: $group_eq }) {
       ...BudgetSpendingActivityEventFields
     }
+    stakeDecreasedEvents(where: { group_eq: $group_eq }) {
+      ...StakeDecreasedEventFields
+    }
+    stakeIncreasedEvents(where: { group_eq: $group_eq }) {
+      ...StakeIncreasedEventFields
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
   ${BudgetSpendingActivityEventFieldsFragmentDoc}
+  ${StakeDecreasedEventFieldsFragmentDoc}
+  ${StakeIncreasedEventFieldsFragmentDoc}
 `
 
 /**
@@ -1573,3 +1723,42 @@ export function useGetGroupEventsLazyQuery(
 export type GetGroupEventsQueryHookResult = ReturnType<typeof useGetGroupEventsQuery>
 export type GetGroupEventsLazyQueryHookResult = ReturnType<typeof useGetGroupEventsLazyQuery>
 export type GetGroupEventsQueryResult = Apollo.QueryResult<GetGroupEventsQuery, GetGroupEventsQueryVariables>
+export const GetWorkerIdsDocument = gql`
+  query GetWorkerIds($where: WorkerWhereInput) {
+    workers(where: $where) {
+      id
+    }
+  }
+`
+
+/**
+ * __useGetWorkerIdsQuery__
+ *
+ * To run a query within a React component, call `useGetWorkerIdsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkerIdsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkerIdsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetWorkerIdsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>(GetWorkerIdsDocument, options)
+}
+export function useGetWorkerIdsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>(GetWorkerIdsDocument, options)
+}
+export type GetWorkerIdsQueryHookResult = ReturnType<typeof useGetWorkerIdsQuery>
+export type GetWorkerIdsLazyQueryHookResult = ReturnType<typeof useGetWorkerIdsLazyQuery>
+export type GetWorkerIdsQueryResult = Apollo.QueryResult<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>
