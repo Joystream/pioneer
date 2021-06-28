@@ -44,7 +44,9 @@ export const AddNewProposalModal = () => {
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const constants = useConstants(state.context.proposalType)
-  const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(10000000000)
+  const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
+    constants?.requiredStake.toNumber() || 0
+  )
   const [isValid, setValid] = useState<boolean>(false)
 
   const [txParams] = useState<NewProposalParams>({
