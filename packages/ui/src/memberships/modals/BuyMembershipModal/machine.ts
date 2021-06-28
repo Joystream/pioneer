@@ -1,5 +1,9 @@
+import { MemberId } from '@joystream/types/common'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
+
+import { getEventParam } from '@/common/model/JoystreamNode'
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 
 import { MemberFormFields } from './BuyMembershipFormModal'
 
@@ -35,12 +39,22 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
       },
     },
     transaction: {
-      on: {
-        SUCCESS: {
-          target: 'success',
-          actions: assign({ memberId: (_, event) => event.memberId }),
-        },
-        ERROR: 'error',
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({
+              memberId: (context, event) => getEventParam<MemberId>(event.data.events, 'MemberRegistered'),
+            }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+          },
+        ],
       },
     },
     success: { type: 'final' },

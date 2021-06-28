@@ -29,12 +29,14 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
   }
 
   if (state.matches('transaction')) {
+    const transactionService = state.children.transaction
+
     return (
       <UpdateMembershipSignModal
         onClose={onClose}
         transactionParams={state.context.form}
         member={member}
-        onDone={(result: boolean) => send(result ? 'SUCCESS' : 'ERROR')}
+        service={transactionService}
       />
     )
   }

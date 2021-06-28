@@ -46,7 +46,7 @@ export const LeaveRoleModal = () => {
         onClose={hideModal}
         transaction={transaction}
         worker={worker}
-        onDone={(success: boolean) => send(success ? 'SUCCESS' : 'ERROR')}
+        service={state.children.transaction}
       />
     )
   }
