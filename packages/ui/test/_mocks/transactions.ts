@@ -116,20 +116,16 @@ export const stubDefaultBalances = (api: UseApi) => {
 }
 
 export const stubProposalConstants = (api: UseApi) => {
-  set(api, 'api.consts.proposalsCodex.signal', () =>
-    from([
-      {
-        votingPeriod: 10,
-        gracePeriod: 10,
-        approvalQuorumPercentage: 10,
-        approvalThresholdPercentage: 10,
-        slashingQuorumPercentage: 10,
-        slashingThresholdPercentage: 10,
-        requiredStake: 10,
-        constitutionality: 10,
-      },
-    ])
-  )
+  set(api, 'api.consts.proposalsCodex.signal', {
+    votingPeriod: new BN(10),
+    gracePeriod: new BN(10),
+    approvalQuorumPercentage: new BN(10),
+    approvalThresholdPercentage: new BN(10),
+    slashingQuorumPercentage: new BN(10),
+    slashingThresholdPercentage: new BN(10),
+    requiredStake: new BN(10),
+    constitutionality: new BN(10),
+  })
 }
 
 export const stubBalances = (api: UseApi, balances: { available?: number; locked?: number }) => {
