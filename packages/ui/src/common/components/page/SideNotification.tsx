@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
-import { Animations, BorderRad, Colors, Shadows } from '../../constants'
+import { Animations, BorderRad, Colors, Shadows, ZIndex } from '../../constants'
 import { CloseButton } from '../buttons'
 import { LinkLink } from '../buttons/Links'
 import { SuccessIcon } from '../icons'
@@ -52,7 +52,7 @@ const NotificationComponent = styled.div<{ isError?: boolean }>`
   border-left: 4px solid ${({ isError }) => (isError ? Colors.Red[400] : Colors.Blue[500])};
   border-radius: ${BorderRad.m};
   box-shadow: ${Shadows.select};
-  z-index: 45;
+  z-index: ${ZIndex.sideNotification};
   ${Animations.showNotification};
 `
 

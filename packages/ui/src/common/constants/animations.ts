@@ -51,4 +51,18 @@ export const Animations = css`
       transform: translateX(-100%);
     }
   }
+  .ActiveTypeIcon {
+    &-enter {
+      opacity: 0;
+    }
+    &-enter-active {
+      opacity: 1;
+    }
+    &-exit {
+      opacity: 1;
+    }
+    &-exit-active {
+      opacity: 0;
+    }
+  }
 `

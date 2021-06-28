@@ -204,7 +204,7 @@ const DatePickerPopup = styled.div<{ isOpen?: boolean }>`
   padding: 16px;
   background-color: ${Colors.White};
   box-shadow: ${Shadows.light};
-  z-index: ${ZIndex.Select};
+  z-index: ${ZIndex.select};
 `
 
 const DatePickerControllersWrapper = styled.div`
