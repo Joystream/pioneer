@@ -127,7 +127,10 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         proposalDetails: {
           meta: { isStep: true, stepTitle: 'Proposal details' },
           on: {
-            NEXT: 'triggerAndDiscussion',
+            NEXT: {
+              target: 'triggerAndDiscussion',
+              cond: (context) => !!context.proposalTitle && !!context.proposalRationale,
+            },
             SET_TITLE: {
               actions: assign({
                 proposalTitle: (context, event) => (event as SetTitleEvent).title,
