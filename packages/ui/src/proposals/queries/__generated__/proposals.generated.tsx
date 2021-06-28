@@ -55,9 +55,13 @@ export type ProposalFieldsFragment = {
   creator: { __typename: 'Membership' } & MemberFieldsFragment
 }
 
+export type VoteFieldsFragment = { __typename: 'ProposalVotedEvent'; voteKind: Types.ProposalVoteKind }
+
 export type ProposalDetailedFieldsFragment = {
   __typename: 'Proposal'
   stakingAccount?: Types.Maybe<string>
+  description: string
+  votes: Array<{ __typename: 'ProposalVotedEvent' } & VoteFieldsFragment>
 } & ProposalFieldsFragment
 
 export type GetProposalsQueryVariables = Types.Exact<{
@@ -78,6 +82,15 @@ export type GetProposalQuery = {
   proposal?: Types.Maybe<{ __typename: 'Proposal' } & ProposalDetailedFieldsFragment>
 }
 
+export type GetProposalTypesQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.ProposalWhereInput>
+}>
+
+export type GetProposalTypesQuery = {
+  __typename: 'Query'
+  types: Array<{ __typename: 'Proposal' } & ProposalDetailedFieldsFragment>
+}
+
 export const ProposalFieldsFragmentDoc = gql`
   fragment ProposalFields on Proposal {
     id
@@ -96,12 +109,22 @@ export const ProposalFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
+export const VoteFieldsFragmentDoc = gql`
+  fragment VoteFields on ProposalVotedEvent {
+    voteKind
+  }
+`
 export const ProposalDetailedFieldsFragmentDoc = gql`
   fragment ProposalDetailedFields on Proposal {
     ...ProposalFields
     stakingAccount
+    description
+    votes {
+      ...VoteFields
+    }
   }
   ${ProposalFieldsFragmentDoc}
+  ${VoteFieldsFragmentDoc}
 `
 export const GetProposalsDocument = gql`
   query getProposals($where: ProposalWhereInput) {
@@ -181,3 +204,43 @@ export function useGetProposalLazyQuery(
 export type GetProposalQueryHookResult = ReturnType<typeof useGetProposalQuery>
 export type GetProposalLazyQueryHookResult = ReturnType<typeof useGetProposalLazyQuery>
 export type GetProposalQueryResult = Apollo.QueryResult<GetProposalQuery, GetProposalQueryVariables>
+export const GetProposalTypesDocument = gql`
+  query getProposalTypes($where: ProposalWhereInput) {
+    types: proposals(where: $where) {
+      ...ProposalDetailedFields
+    }
+  }
+  ${ProposalDetailedFieldsFragmentDoc}
+`
+
+/**
+ * __useGetProposalTypesQuery__
+ *
+ * To run a query within a React component, call `useGetProposalTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProposalTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProposalTypesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetProposalTypesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetProposalTypesQuery, GetProposalTypesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetProposalTypesQuery, GetProposalTypesQueryVariables>(GetProposalTypesDocument, options)
+}
+export function useGetProposalTypesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetProposalTypesQuery, GetProposalTypesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetProposalTypesQuery, GetProposalTypesQueryVariables>(GetProposalTypesDocument, options)
+}
+export type GetProposalTypesQueryHookResult = ReturnType<typeof useGetProposalTypesQuery>
+export type GetProposalTypesLazyQueryHookResult = ReturnType<typeof useGetProposalTypesLazyQuery>
+export type GetProposalTypesQueryResult = Apollo.QueryResult<GetProposalTypesQuery, GetProposalTypesQueryVariables>
