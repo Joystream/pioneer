@@ -12,7 +12,6 @@ import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { Statistics } from '@/common/components/statistics'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
@@ -20,9 +19,11 @@ import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatt
 import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
+import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
+import { useVoteCount } from '@/proposals/hooks/useVoteCount'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
@@ -32,6 +33,8 @@ export const ProposalPreview = () => {
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
+
+  const voteCount = useVoteCount(proposal?.votes)
 
   if (isLoading || !proposal) {
     return (
@@ -82,7 +85,7 @@ export const ProposalPreview = () => {
         <MainPanel ref={sideNeighborRef}>
           <RowGapBlock gap={24}>
             {/* Statistics */}
-            <Statistics></Statistics>
+            {voteCount && constants && <ProposalStatistics constants={constants} voteCount={voteCount} />}
 
             {/* Proposal-specific dashboard */}
             <h3>{camelCaseToText(proposal.details)}</h3>
