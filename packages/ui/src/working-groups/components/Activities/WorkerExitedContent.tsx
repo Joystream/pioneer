@@ -4,12 +4,16 @@ import { ActivityContentProps } from '@/common/components/Activities/ActivityCon
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 import { WorkerExitedActivity } from '@/working-groups/types'
 
-export const WorkerExitedContent: React.FC<ActivityContentProps> = ({ activity }) => {
+export const WorkerExitedContent: React.FC<ActivityContentProps> = ({ activity, isOwn }) => {
   const { member } = activity as WorkerExitedActivity
   return (
     <>
-      <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink> left a
-      role.
+      {isOwn ? (
+        <>You </>
+      ) : (
+        <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle} </MemberModalLink>
+      )}
+      left a role.
     </>
   )
 }

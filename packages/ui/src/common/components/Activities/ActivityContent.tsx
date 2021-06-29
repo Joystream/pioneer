@@ -18,6 +18,7 @@ import { Activity } from '../../types'
 
 export interface ActivityContentProps {
   activity: Activity
+  isOwn?: boolean
 }
 
 const ActivityMap: Record<ActivityCategory, React.FC<ActivityContentProps>> = {
@@ -36,7 +37,7 @@ const ActivityMap: Record<ActivityCategory, React.FC<ActivityContentProps>> = {
   WorkerStartedLeaving: WorkerStartedLeavingContent,
 }
 
-export const ActivityContent = React.memo(({ activity }: ActivityContentProps) => {
+export const ActivityContent = React.memo(({ activity, isOwn }: ActivityContentProps) => {
   const Content = ActivityMap[activity.eventType]
-  return <Content activity={activity} />
+  return <Content activity={activity} isOwn={isOwn} />
 })

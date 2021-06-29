@@ -8,14 +8,15 @@ import { ActivityContent } from './ActivityContent'
 
 export interface ActivitiesProps {
   activities: Activity[]
+  isOwn?: boolean
 }
 
-export const Activities = ({ activities }: ActivitiesProps) => {
+export const Activities = ({ activities, isOwn }: ActivitiesProps) => {
   return (
     <ActivitiesList>
       {activities.map((activity) => (
         <ActivityComponent activity={activity} key={activity.eventType + activity.id}>
-          <ActivityContent activity={activity} />
+          <ActivityContent activity={activity} isOwn={isOwn} />
         </ActivityComponent>
       ))}
     </ActivitiesList>

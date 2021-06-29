@@ -28,7 +28,7 @@ export const Notifications = ({ onClose, isNotificationsPanelOpen }: Props) => {
         <CloseButton onClick={onClose} />
       </NotificationsHeader>
       <NotificationsBody>
-        <ActivitiesBlock activities={activities} />
+        <ActivitiesBlock activities={activities} isOwn />
       </NotificationsBody>
     </NotificationsPanel>
   )
