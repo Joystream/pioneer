@@ -15,17 +15,19 @@ const { ceil, floor } = Math
 
 const Template: Story<StatisticBarProps> = (args) => {
   const { value, threshold } = args
-  const ratio = value / threshold
+  const thresholdVotes = threshold ? ceil(10 * threshold) : '-'
+  const thresholdVoteDenominator = `${thresholdVotes} vote${thresholdVotes === 1 ? '' : 's'}`
+  const thresholdPercent = threshold ? `${floor(100 * threshold)}%` : '-'
 
   return (
     <Statistics>
       <TwoRowStatistic>
-        <StatisticBar {...args} numerator={floor(10 * value)} denominator={`${ceil(10 * threshold)} votes`} />
-        <StatisticBar {...args} numerator={`${ceil(100 * ratio)}%`} denominator={`${floor(100 * threshold)}%`} />
+        <StatisticBar {...args} numerator={floor(10 * value)} denominator={thresholdVoteDenominator} />
+        <StatisticBar {...args} numerator={`${ceil(100 * value)}%`} denominator={thresholdPercent} />
       </TwoRowStatistic>
       <TwoRowStatistic>
-        <StatisticBar {...args} numerator={floor(10 * value)} denominator={`max ${ceil(10 * threshold)} votes`} />
-        <StatisticBar {...args} numerator={`${ceil(100 * ratio)}%`} denominator={`max ${floor(100 * threshold)}%`} />
+        <StatisticBar {...args} numerator={floor(10 * value)} denominator={`max ${thresholdVoteDenominator}`} />
+        <StatisticBar {...args} numerator={`${ceil(100 * value)}%`} denominator={`max ${thresholdPercent}`} />
       </TwoRowStatistic>
     </Statistics>
   )
