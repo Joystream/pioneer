@@ -5,6 +5,7 @@ import { set } from 'lodash'
 import { from, of } from 'rxjs'
 
 import { UseApi } from '@/common/providers/api/provider'
+import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { toRuntimeDispatchInfo } from './chainTypes'
 
@@ -115,21 +116,19 @@ export const stubDefaultBalances = (api: UseApi) => {
   })
 }
 
-export const stubProposalConstants = (api: UseApi) => {
-  set(api, 'api.consts.proposalsCodex', () =>
-    from([
-      {
-        votingPeriod: 10,
-        gracePeriod: 10,
-        approvalQuorumPercentage: 10,
-        approvalThresholdPercentage: 10,
-        slashingQuorumPercentage: 10,
-        slashingThresholdPercentage: 10,
-        requiredStake: 10,
-        constitutionality: 10,
-      },
-    ])
-  )
+export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: number }) => {
+  for (const proposalType of proposalDetails) {
+    set(api, `api.consts.proposalsCodex.${proposalType}ProposalParameters`, {
+      votingPeriod: new BN(10),
+      gracePeriod: new BN(10),
+      approvalQuorumPercentage: new BN(10),
+      approvalThresholdPercentage: new BN(10),
+      slashingQuorumPercentage: new BN(10),
+      slashingThresholdPercentage: new BN(10),
+      requiredStake: new BN(constants && constants.requiredStake ? constants.requiredStake : 10),
+      constitutionality: new BN(10),
+    })
+  }
 }
 
 export const stubBalances = (api: UseApi, balances: { available?: number; locked?: number }) => {

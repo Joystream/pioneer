@@ -1,13 +1,12 @@
-import { createMachine, interpret, Interpreter } from 'xstate'
+import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
-import { transactionConfig } from '@/common/model/machines'
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 
 describe('Machine: Transaction machine', () => {
-  const machine = createMachine(transactionConfig)
   let service: Interpreter<any>
 
   beforeEach(() => {
-    service = interpret(machine)
+    service = interpret(transactionMachine)
     service.start()
   })
 
@@ -61,6 +60,72 @@ describe('Machine: Transaction machine', () => {
 
     expect(service.state.context).toEqual({
       events: ['foo', 'bar'],
+    })
+  })
+
+  describe('as child', () => {
+    const parent = createMachine({
+      id: 'parent',
+      initial: 'transaction',
+      context: {
+        transactionEvents: [],
+      },
+      states: {
+        transaction: {
+          invoke: {
+            id: 'transaction',
+            src: transactionMachine,
+            onDone: [
+              {
+                target: 'success',
+                actions: assign({
+                  transactionEvents: (context, event) => event.data.events,
+                  fee: (context, event) => event.data.fee,
+                }),
+                cond: isTransactionSuccess,
+              },
+              {
+                target: 'error',
+                actions: assign({
+                  transactionEvents: (context, event) => event.data.events,
+                  fee: (context, event) => event.data.fee,
+                }),
+                cond: isTransactionError,
+              },
+            ],
+          },
+        },
+        success: { type: 'final' },
+        error: { type: 'final' },
+      },
+    })
+    let service: Interpreter<any>
+
+    beforeEach(() => {
+      service = interpret(parent)
+      service.start()
+    })
+
+    it('success', () => {
+      const child = service.children.get('transaction')!
+      child.send('SIGN')
+      child.send('SIGN_EXTERNAL')
+      child.send('SIGNED')
+      child.send({ type: 'SUCCESS', events: ['foo', 'bar'] })
+
+      expect(service.state.matches('success')).toBeTruthy()
+      expect(service.state.context).toEqual({ transactionEvents: ['foo', 'bar'] })
+    })
+
+    it('error', () => {
+      const child = service.children.get('transaction')!
+      child.send('SIGN')
+      child.send('SIGN_EXTERNAL')
+      child.send('SIGNED')
+      child.send({ type: 'ERROR', events: ['foo', 'bar'] })
+
+      expect(service.state.matches('error')).toBeTruthy()
+      expect(service.state.context).toEqual({ transactionEvents: ['foo', 'bar'] })
     })
   })
 })

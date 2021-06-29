@@ -55,9 +55,13 @@ export type ProposalFieldsFragment = {
   creator: { __typename: 'Membership' } & MemberFieldsFragment
 }
 
-export type ProposalDetailedFieldsFragment = {
+export type VoteFieldsFragment = { __typename: 'ProposalVotedEvent'; voteKind: Types.ProposalVoteKind }
+
+export type ProposalWithDetailsFieldsFragment = {
   __typename: 'Proposal'
   stakingAccount?: Types.Maybe<string>
+  description: string
+  votes: Array<{ __typename: 'ProposalVotedEvent' } & VoteFieldsFragment>
 } & ProposalFieldsFragment
 
 export type GetProposalsQueryVariables = Types.Exact<{
@@ -75,7 +79,7 @@ export type GetProposalQueryVariables = Types.Exact<{
 
 export type GetProposalQuery = {
   __typename: 'Query'
-  proposal?: Types.Maybe<{ __typename: 'Proposal' } & ProposalDetailedFieldsFragment>
+  proposal?: Types.Maybe<{ __typename: 'Proposal' } & ProposalWithDetailsFieldsFragment>
 }
 
 export const ProposalFieldsFragmentDoc = gql`
@@ -96,12 +100,22 @@ export const ProposalFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
-export const ProposalDetailedFieldsFragmentDoc = gql`
-  fragment ProposalDetailedFields on Proposal {
+export const VoteFieldsFragmentDoc = gql`
+  fragment VoteFields on ProposalVotedEvent {
+    voteKind
+  }
+`
+export const ProposalWithDetailsFieldsFragmentDoc = gql`
+  fragment ProposalWithDetailsFields on Proposal {
     ...ProposalFields
     stakingAccount
+    description
+    votes {
+      ...VoteFields
+    }
   }
   ${ProposalFieldsFragmentDoc}
+  ${VoteFieldsFragmentDoc}
 `
 export const GetProposalsDocument = gql`
   query getProposals($where: ProposalWhereInput) {
@@ -146,10 +160,10 @@ export type GetProposalsQueryResult = Apollo.QueryResult<GetProposalsQuery, GetP
 export const GetProposalDocument = gql`
   query getProposal($where: ProposalWhereUniqueInput!) {
     proposal: proposalByUniqueInput(where: $where) {
-      ...ProposalDetailedFields
+      ...ProposalWithDetailsFields
     }
   }
-  ${ProposalDetailedFieldsFragmentDoc}
+  ${ProposalWithDetailsFieldsFragmentDoc}
 `
 
 /**

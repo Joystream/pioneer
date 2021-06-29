@@ -1,18 +1,20 @@
+import { useActor } from '@xstate/react'
 import React, { ReactNode } from 'react'
-
-import { TransactionStatus } from '../hooks/useSignAndSendTransaction'
+import { ActorRef } from 'xstate'
 
 import { Modal, ModalHeader } from './Modal'
 import { WaitModal } from './WaitModal'
 
 export interface TransactionModalProps {
   children: ReactNode
-  status: TransactionStatus
   onClose: () => void
+  service: ActorRef<any>
 }
 
-export const TransactionModal = ({ status, onClose, children }: TransactionModalProps) => {
-  if (status === 'READY') {
+export const TransactionModal = ({ onClose, children, service }: TransactionModalProps) => {
+  const [state] = useActor(service)
+
+  if (state.matches('prepare')) {
     return (
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
         <ModalHeader onClick={onClose} title="Authorize transaction" />
@@ -21,7 +23,7 @@ export const TransactionModal = ({ status, onClose, children }: TransactionModal
     )
   }
 
-  if (status === 'EXTENSION') {
+  if (state.matches('signWithExtension')) {
     return (
       <WaitModal
         onClose={onClose}
@@ -31,7 +33,7 @@ export const TransactionModal = ({ status, onClose, children }: TransactionModal
     )
   }
 
-  if (status === 'PENDING') {
+  if (state.matches('pending')) {
     return (
       <WaitModal
         onClose={onClose}

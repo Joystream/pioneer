@@ -2,6 +2,7 @@ import { MembershipMetadata } from '@joystream/metadata-protobuf'
 import { ApiRx } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React, { useMemo } from 'react'
+import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -15,7 +16,6 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
-import { onTransactionDone } from '@/common/types'
 import { WithNullableValues } from '@/common/types/form'
 
 import { Member } from '../../types'
@@ -25,8 +25,8 @@ import { UpdateMemberForm } from './types'
 interface SignProps {
   onClose: () => void
   transactionParams: WithNullableValues<UpdateMemberForm>
-  onDone: onTransactionDone
   member: Member
+  service: ActorRef<any>
 }
 
 const hasEdits = (object: Record<string, any>, fields: string[]) => {
@@ -67,20 +67,16 @@ function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, ap
   return api.tx.utility.batch(transactions)
 }
 
-export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, onDone }: SignProps) => {
+export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, service }: SignProps) => {
   const { api } = useApi()
   const { allAccounts } = useMyAccounts()
-  const updateProfileTransaction = useMemo(() => createBatch(transactionParams, api, member), [member.id])
+  const transaction = useMemo(() => createBatch(transactionParams, api, member), [member.id])
   const signer = accountOrNamed(allAccounts, member.controllerAccount, 'Controller account')
 
-  const { paymentInfo, send, status } = useSignAndSendTransaction({
-    transaction: updateProfileTransaction,
-    signer: signer.address,
-    onDone,
-  })
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer: signer.address, service })
 
   return (
-    <TransactionModal status={status} onClose={onClose}>
+    <TransactionModal onClose={onClose} service={service}>
       <ModalBody>
         <TextMedium>
           You intend to update your membership. Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be
@@ -99,7 +95,7 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={send} disabled={status !== 'READY'}>
+        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
           Sign and update a member
         </ButtonPrimary>
       </ModalFooter>

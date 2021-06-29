@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { StatisticBar, Statistics, TwoRowStatistic } from '@/common/components/statistics'
+import { isDefined } from '@/common/utils'
 import { VoteCount } from '@/proposals/hooks/useVoteCount'
 import { ProposalConstants } from '@/proposals/types'
 
@@ -8,28 +9,28 @@ const tooltipLinkURL = 'https://joystream.gitbook.io/joystream-handbook/governan
 
 interface ProposalStatisticsProps {
   voteCount: VoteCount
-  constants: ProposalConstants
+  constants: ProposalConstants | null
 }
 export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsProps) => {
   const { approve, slash, total, remain } = voteCount
-  const councilSize = total + remain
+  const councilSize = isDefined(remain) ? total + remain : undefined
   const {
-    approvalQuorumPercentage,
-    approvalThresholdPercentage,
-    slashingQuorumPercentage,
-    slashingThresholdPercentage,
-  } = constants
+    approvalQuorumPercentage = undefined,
+    approvalThresholdPercentage = undefined,
+    slashingQuorumPercentage = undefined,
+    slashingThresholdPercentage = undefined,
+  } = constants ?? {}
 
-  const approvalQuorumRatio = approvalQuorumPercentage / 100
-  const approvalThresholdRatio = approvalThresholdPercentage / 100
-  const slashingQuorumRatio = slashingQuorumPercentage / 100
-  const slashingThresholdRatio = slashingThresholdPercentage / 100
+  const approvalQuorumRatio = approvalQuorumPercentage && approvalQuorumPercentage / 100
+  const approvalThresholdRatio = approvalThresholdPercentage && approvalThresholdPercentage / 100
+  const slashingQuorumRatio = slashingQuorumPercentage && slashingQuorumPercentage / 100
+  const slashingThresholdRatio = slashingThresholdPercentage && slashingThresholdPercentage / 100
 
   // NOTE: use ceil since these are minimums to reach
-  const approvalQuorum = Math.ceil(councilSize * approvalQuorumRatio)
-  const slashingQuorum = Math.ceil(councilSize * slashingQuorumRatio)
+  const approvalQuorum = councilSize && approvalQuorumRatio && Math.ceil(councilSize * approvalQuorumRatio)
+  const slashingQuorum = councilSize && slashingQuorumRatio && Math.ceil(councilSize * slashingQuorumRatio)
 
-  const quorumRatio = councilSize && total / councilSize
+  const quorumRatio = councilSize ? total / councilSize : 0
   const approvalRatio = total && approve / total
   const slashingRatio = total && slash / total
 
@@ -37,13 +38,13 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
     <Statistics>
       <TwoRowStatistic>
         <StatisticBar
-          title="Approva Quorum"
+          title="Approval Quorum"
           tooltipText="Number of votes cast below which the proposal cannot be approved"
           tooltipLinkURL={tooltipLinkURL}
           value={quorumRatio}
           threshold={approvalQuorumRatio}
           numerator={total}
-          denominator={`${approvalQuorum} votes`}
+          denominator={`${approvalQuorum ?? '-'} votes`}
         />
         <StatisticBar
           title="Approval Threshold"
@@ -52,7 +53,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           value={approvalRatio}
           threshold={approvalThresholdRatio}
           numerator={`${Math.floor(approvalRatio * 100)}%`}
-          denominator={`${approvalThresholdPercentage}%`}
+          denominator={approvalThresholdRatio?.toLocaleString('en', { style: 'percent' }) ?? '-'}
         />
       </TwoRowStatistic>
 
@@ -64,7 +65,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           value={quorumRatio}
           threshold={slashingQuorumRatio}
           numerator={total}
-          denominator={`max ${slashingQuorum} votes`}
+          denominator={`max ${slashingQuorum ?? '-'} votes`}
         />
         <StatisticBar
           title="Slashing Threshold"
@@ -73,7 +74,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           value={slashingRatio}
           threshold={slashingThresholdRatio}
           numerator={`${Math.floor(slashingRatio * 100)}%`}
-          denominator={`max ${slashingThresholdPercentage}%`}
+          denominator={`max ${slashingThresholdRatio?.toLocaleString('en', { style: 'percent' }) ?? '-'}`}
         />
       </TwoRowStatistic>
     </Statistics>

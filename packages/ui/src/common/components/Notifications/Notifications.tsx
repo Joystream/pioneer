@@ -2,9 +2,9 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
+import { useMemberNotifications } from '@/memberships/hooks/useMemberNotifications'
 
 import { Colors, RemoveScrollbar, Shadows, Transitions } from '../../constants'
-import { useActivities } from '../../hooks/useActivities'
 import { ActivitiesList } from '../Activities'
 import { ActivitiesBlock } from '../Activities/ActivitiesBlock'
 import { ActivityItem } from '../Activities/ActivityComponent'
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const Notifications = ({ onClose, isNotificationsPanelOpen }: Props) => {
-  const activities = useActivities()
+  const { activities } = useMemberNotifications()
   const containerRef = useRef<HTMLDivElement>(null)
   useOutsideClick(containerRef, isNotificationsPanelOpen, onClose)
 
