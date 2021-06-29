@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { ActivityContentProps } from '@/common/components/Activities/ActivityContent'
+import { ActivityContentComponent } from '@/common/components/Activities/ActivityContent'
 import { TokenValue } from '@/common/components/typography'
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 import { StakeChangedActivity } from '@/working-groups/types'
 
-export const StakeChangedContent: React.FC<ActivityContentProps> = ({ activity, isOwn }) => {
+export const StakeChangedContent: ActivityContentComponent = ({ activity, isOwn }) => {
   const { member, amount, eventType } = activity as StakeChangedActivity
   return (
     <>

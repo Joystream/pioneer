@@ -1,14 +1,10 @@
 import React from 'react'
 
-import { ActivityContentProps } from '@/common/components/Activities/ActivityContent'
+import { ActivityContentComponent } from '@/common/components/Activities/ActivityContent'
 import { ActivityRouterLink } from '@/common/components/Activities/ActivityRouterLink'
 import { OpeningCanceledActivity } from '@/working-groups/types'
 
-interface Props {
-  activity: OpeningCanceledActivity
-}
-
-export const OpeningCanceledContent: React.FC<ActivityContentProps> = ({ activity }) => {
+export const OpeningCanceledContent: ActivityContentComponent = ({ activity }) => {
   const { opening } = activity as OpeningCanceledActivity
   return (
     <>

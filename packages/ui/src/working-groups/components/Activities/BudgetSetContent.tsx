@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { ActivityContentProps } from '@/common/components/Activities/ActivityContent'
+import { ActivityContentComponent } from '@/common/components/Activities/ActivityContent'
 import { TokenValue } from '@/common/components/typography'
 
 import { BudgetSetActivity } from '../../types'
 
-export const BudgetSetContent: React.FC<ActivityContentProps> = React.memo(({ activity }) => {
+export const BudgetSetContent: ActivityContentComponent = React.memo(({ activity }) => {
   const { groupName, newBudget } = activity as BudgetSetActivity
   return (
     <>

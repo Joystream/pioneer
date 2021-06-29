@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 
 import { ActivityCategory } from '@/common/types/Activity'
 import { ApplicationWithdrawnContent } from '@/working-groups/components/Activities/ApplicationWithdrawnContent'
@@ -21,7 +21,11 @@ export interface ActivityContentProps {
   isOwn?: boolean
 }
 
-const ActivityMap: Record<ActivityCategory, React.FC<ActivityContentProps>> = {
+export interface ActivityContentComponent {
+  (props: ActivityContentProps): ReactElement<any, any> | null
+}
+
+const ActivityMap: Record<ActivityCategory, ActivityContentComponent> = {
   AppliedOnOpening: AppliedOnOpeningContent,
   ApplicationWithdrawn: ApplicationWithdrawnContent,
   BudgetSpending: BudgetSpendingContent,

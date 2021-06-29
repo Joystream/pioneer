@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { ActivityContentProps } from '@/common/components/Activities/ActivityContent'
+import { ActivityContentComponent } from '@/common/components/Activities/ActivityContent'
 import { ActivityRouterLink } from '@/common/components/Activities/ActivityRouterLink'
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 
 import { AppliedOnOpeningActivity } from '../../types'
 
-export const AppliedOnOpeningContent: React.FC<ActivityContentProps> = ({ activity, isOwn }) => {
+export const AppliedOnOpeningContent: ActivityContentComponent = ({ activity, isOwn }) => {
   const { member, opening } = activity as AppliedOnOpeningActivity
   return (
     <>

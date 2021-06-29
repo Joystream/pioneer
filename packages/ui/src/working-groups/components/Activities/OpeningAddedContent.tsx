@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { ActivityContentProps } from '@/common/components/Activities/ActivityContent'
+import { ActivityContentComponent } from '@/common/components/Activities/ActivityContent'
 import { ActivityRouterLink } from '@/common/components/Activities/ActivityRouterLink'
 import { OpeningAddedActivity } from '@/working-groups/types'
 
-export const OpeningAddedContent: React.FC<ActivityContentProps> = ({ activity }) => {
+export const OpeningAddedContent: ActivityContentComponent = ({ activity }) => {
   const { opening } = activity as OpeningAddedActivity
   return (
     <>

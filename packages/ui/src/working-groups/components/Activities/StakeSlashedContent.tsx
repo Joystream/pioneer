@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { ActivityContentProps } from '@/common/components/Activities/ActivityContent'
+import { ActivityContentComponent } from '@/common/components/Activities/ActivityContent'
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 import { StakeSlashedActivity } from '@/working-groups/types'
 
-export const StakeSlashedContent: React.FC<ActivityContentProps> = ({ activity, isOwn }) => {
+export const StakeSlashedContent: ActivityContentComponent = ({ activity, isOwn }) => {
   const { member, groupName } = activity as StakeSlashedActivity
   return (
     <>
