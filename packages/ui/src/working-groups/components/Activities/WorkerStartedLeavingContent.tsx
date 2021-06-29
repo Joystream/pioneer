@@ -6,14 +6,15 @@ import { WorkerStartedLeavingActivity } from '@/working-groups/types'
 
 export const WorkerStartedLeavingContent: ActivityContentComponent = ({ activity, isOwn }) => {
   const { member } = activity as WorkerStartedLeavingActivity
+
+  if (isOwn) {
+    return <>You left role and you are still in the unstaking period.</>
+  }
+
   return (
     <>
-      {isOwn ? (
-        <>You </>
-      ) : (
-        <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle} </MemberModalLink>
-      )}
-      left a role and {isOwn ? 'are' : 'is'} still in the unstaking period.
+      <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle} </MemberModalLink>
+      left a role and is still in the unstaking period.
     </>
   )
 }

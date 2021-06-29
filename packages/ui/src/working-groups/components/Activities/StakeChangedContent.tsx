@@ -7,16 +7,18 @@ import { StakeChangedActivity } from '@/working-groups/types'
 
 export const StakeChangedContent: ActivityContentComponent = ({ activity, isOwn }) => {
   const { member, amount, eventType } = activity as StakeChangedActivity
+
+  if (isOwn) {
+    return (
+      <>
+        Your stake has been {eventType === 'StakeDecreased' ? 'reduced' : 'increased'} by <TokenValue value={amount} />
+      </>
+    )
+  }
   return (
     <>
-      {isOwn ? (
-        <>Your </>
-      ) : (
-        <>
-          <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink>'s{' '}
-        </>
-      )}
-      stake has been {eventType === 'StakeDecreased' ? 'reduced' : 'increased'} by <TokenValue value={amount} />
+      <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink>'s stake has
+      been {eventType === 'StakeDecreased' ? 'reduced' : 'increased'} by <TokenValue value={amount} />
     </>
   )
 }

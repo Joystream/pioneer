@@ -6,13 +6,14 @@ import { WorkerExitedActivity } from '@/working-groups/types'
 
 export const WorkerExitedContent: ActivityContentComponent = ({ activity, isOwn }) => {
   const { member } = activity as WorkerExitedActivity
+
+  if (isOwn) {
+    return <>You left a role.</>
+  }
+
   return (
     <>
-      {isOwn ? (
-        <>You </>
-      ) : (
-        <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle} </MemberModalLink>
-      )}
+      <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink>
       left a role.
     </>
   )

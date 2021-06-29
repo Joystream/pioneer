@@ -7,9 +7,10 @@ import { StatusTextChangedActivity } from '../../types'
 
 export const StatusTextChangedContent: ActivityContentComponent = React.memo(({ activity }) => {
   const { groupName } = activity as StatusTextChangedActivity
+
   return (
     <>
-      Status updated by the{' '}
+      Status updated by the
       <ActivityRouterLink to={`/working-groups/${groupName}`}>{groupName} Working Group</ActivityRouterLink> Lead.
     </>
   )
