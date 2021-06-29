@@ -26,10 +26,8 @@ async function opening(api: ApiPromise) {
     '1337'
   )
 
-  await signAndSend(api.tx.sudo.sudo(createOpening), ALICE)
-
   const applyOnOpeningTx = api.tx.membershipWorkingGroup.applyOnOpening({
-    opening_id: 1,
+    opening_id: 0,
     member_id: 0,
     role_account_id: ALICE_STASH,
     reward_account_id: ALICE,
@@ -39,6 +37,8 @@ async function opening(api: ApiPromise) {
       staking_account_id: CHARLIE,
     },
   })
+
+  await signAndSend(api.tx.sudo.sudo(createOpening), ALICE)
   await signAndSend(applyOnOpeningTx, ALICE)
 }
 
