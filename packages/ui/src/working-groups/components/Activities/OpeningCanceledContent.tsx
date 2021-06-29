@@ -4,8 +4,8 @@ import { ActivityContentComponent } from '@/common/components/Activities/Activit
 import { ActivityRouterLink } from '@/common/components/Activities/ActivityRouterLink'
 import { OpeningCanceledActivity } from '@/working-groups/types'
 
-export const OpeningCanceledContent: ActivityContentComponent = ({ activity }) => {
-  const { opening } = activity as OpeningCanceledActivity
+export const OpeningCanceledContent: ActivityContentComponent<OpeningCanceledActivity> = ({ activity }) => {
+  const { opening } = activity
 
   return (
     <>

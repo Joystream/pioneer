@@ -6,8 +6,8 @@ import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 
 import { AppliedOnOpeningActivity } from '../../types'
 
-export const AppliedOnOpeningContent: ActivityContentComponent = ({ activity, isOwn }) => {
-  const { member, opening } = activity as AppliedOnOpeningActivity
+export const AppliedOnOpeningContent: ActivityContentComponent<AppliedOnOpeningActivity> = ({ activity, isOwn }) => {
+  const { member, opening } = activity
   return (
     <>
       {isOwn ? (

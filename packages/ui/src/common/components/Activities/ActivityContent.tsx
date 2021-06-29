@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 
-import { ActivityCategory } from '@/common/types/Activity'
+import { Activity, ActivityCategory, BaseActivity } from '@/common/types/Activity'
 import { ApplicationWithdrawnContent } from '@/working-groups/components/Activities/ApplicationWithdrawnContent'
 import { AppliedOnOpeningContent } from '@/working-groups/components/Activities/AppliedOnOpeningContent'
 import { BudgetSetContent } from '@/working-groups/components/Activities/BudgetSetContent'
@@ -14,18 +14,11 @@ import { StatusTextChangedContent } from '@/working-groups/components/Activities
 import { WorkerExitedContent } from '@/working-groups/components/Activities/WorkerExitedContent'
 import { WorkerStartedLeavingContent } from '@/working-groups/components/Activities/WorkerStartedLeavingContent'
 
-import { Activity } from '../../types'
-
-export interface ActivityContentProps {
-  activity: Activity
-  isOwn?: boolean
+export interface ActivityContentComponent<Activity extends BaseActivity> {
+  (props: { activity: Activity; isOwn?: boolean }): ReactElement | null
 }
 
-export interface ActivityContentComponent {
-  (props: ActivityContentProps): ReactElement<any, any> | null
-}
-
-const ActivityMap: Record<ActivityCategory, ActivityContentComponent> = {
+const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   AppliedOnOpening: AppliedOnOpeningContent,
   ApplicationWithdrawn: ApplicationWithdrawnContent,
   BudgetSpending: BudgetSpendingContent,
@@ -41,7 +34,7 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent> = {
   WorkerStartedLeaving: WorkerStartedLeavingContent,
 }
 
-export const ActivityContent = React.memo(({ activity, isOwn }: ActivityContentProps) => {
+export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {
   const Content = ActivityMap[activity.eventType]
   return <Content activity={activity} isOwn={isOwn} />
 })

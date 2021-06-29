@@ -6,8 +6,11 @@ import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 
 import { ApplicationWithdrawnActivity } from '../../types'
 
-export const ApplicationWithdrawnContent: ActivityContentComponent = ({ activity, isOwn }) => {
-  const { member, opening } = activity as ApplicationWithdrawnActivity
+export const ApplicationWithdrawnContent: ActivityContentComponent<ApplicationWithdrawnActivity> = ({
+  activity,
+  isOwn,
+}) => {
+  const { member, opening } = activity
   return (
     <>
       {isOwn ? (

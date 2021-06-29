@@ -5,8 +5,8 @@ import { TokenValue } from '@/common/components/typography'
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 import { StakeChangedActivity } from '@/working-groups/types'
 
-export const StakeChangedContent: ActivityContentComponent = ({ activity, isOwn }) => {
-  const { member, amount, eventType } = activity as StakeChangedActivity
+export const StakeChangedContent: ActivityContentComponent<StakeChangedActivity> = ({ activity, isOwn }) => {
+  const { member, amount, eventType } = activity
 
   if (isOwn) {
     return (

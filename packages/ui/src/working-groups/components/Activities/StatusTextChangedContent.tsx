@@ -5,13 +5,15 @@ import { ActivityRouterLink } from '@/common/components/Activities/ActivityRoute
 
 import { StatusTextChangedActivity } from '../../types'
 
-export const StatusTextChangedContent: ActivityContentComponent = React.memo(({ activity }) => {
-  const { groupName } = activity as StatusTextChangedActivity
+export const StatusTextChangedContent: ActivityContentComponent<StatusTextChangedActivity> = React.memo(
+  ({ activity }) => {
+    const { groupName } = activity
 
-  return (
-    <>
-      Status updated by the
-      <ActivityRouterLink to={`/working-groups/${groupName}`}>{groupName} Working Group</ActivityRouterLink> Lead.
-    </>
-  )
-})
+    return (
+      <>
+        Status updated by the
+        <ActivityRouterLink to={`/working-groups/${groupName}`}>{groupName} Working Group</ActivityRouterLink> Lead.
+      </>
+    )
+  }
+)

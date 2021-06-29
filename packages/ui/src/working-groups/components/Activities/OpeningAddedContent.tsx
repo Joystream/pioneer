@@ -4,8 +4,8 @@ import { ActivityContentComponent } from '@/common/components/Activities/Activit
 import { ActivityRouterLink } from '@/common/components/Activities/ActivityRouterLink'
 import { OpeningAddedActivity } from '@/working-groups/types'
 
-export const OpeningAddedContent: ActivityContentComponent = ({ activity }) => {
-  const { opening } = activity as OpeningAddedActivity
+export const OpeningAddedContent: ActivityContentComponent<OpeningAddedActivity> = ({ activity }) => {
+  const { opening } = activity
   return (
     <>
       Opening "<ActivityRouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</ActivityRouterLink>"

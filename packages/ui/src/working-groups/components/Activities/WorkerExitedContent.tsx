@@ -4,8 +4,8 @@ import { ActivityContentComponent } from '@/common/components/Activities/Activit
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 import { WorkerExitedActivity } from '@/working-groups/types'
 
-export const WorkerExitedContent: ActivityContentComponent = ({ activity, isOwn }) => {
-  const { member } = activity as WorkerExitedActivity
+export const WorkerExitedContent: ActivityContentComponent<WorkerExitedActivity> = ({ activity, isOwn }) => {
+  const { member } = activity
 
   if (isOwn) {
     return <>You left a role.</>
