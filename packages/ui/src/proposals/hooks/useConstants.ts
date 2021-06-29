@@ -7,16 +7,48 @@ import { asProposalConstants, ProposalConstants } from '@/proposals/types/consta
 import { ProposalDetails } from '../types'
 
 export const useConstants = (proposalType?: ProposalDetails): ProposalConstants | null => {
-  const { api } = useApi()
+  const { api, isConnected } = useApi()
 
   return useMemo(() => {
     if (!proposalType) {
       return null
     }
 
-    const constants =
-      api?.consts.proposalsCodex[(proposalType + 'ProposalParameters') as keyof ApiRx['consts']['proposalsCodex']]
+    const constantKey = proposalTypeToConstantKey.get(proposalType)
+
+    if (!constantKey) {
+      return null
+    }
+    const constants = api?.consts.proposalsCodex[constantKey]
 
     return constants ? asProposalConstants(constants) : null
-  }, [proposalType])
+  }, [proposalType, isConnected])
 }
+
+const proposalTypeToConstantKey = new Map<ProposalDetails, keyof ApiRx['consts']['proposalsCodex']>([
+  ['amendConstitution', 'amendConstitutionProposalParameters'],
+  ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
+  ['createBlogPost', 'createBlogPostProposalParameters'],
+  ['createWorkingGroupLeadOpening', 'createWorkingGroupLeadOpeningProposalParameters'],
+  ['decreaseWorkingGroupLeadStake', 'decreaseWorkingGroupLeadStakeProposalParameters'],
+  ['editBlogPost', 'editBlogPostProoposalParamters'],
+  ['fillWorkingGroupLeadOpening', 'fillWorkingGroupOpeningProposalParameters'],
+  ['fundingRequest', 'fundingRequestProposalParameters'],
+  ['lockBlogPost', 'lockBlogPostProposalParameters'],
+  ['runtimeUpgrade', 'runtimeUpgradeProposalParameters'],
+  ['setCouncilBudgetIncrement', 'setCouncilBudgetIncrementProposalParameters'],
+  ['setCouncilorReward', 'setCouncilorRewardProposalParameters'],
+  ['setInitialInvitationBalance', 'setInitialInvitationBalanceProposalParameters'],
+  ['setInitialInvitationCount', 'setInvitationCountProposalParameters'],
+  ['setMaxValidatorCount', 'setMaxValidatorCountProposalParameters'],
+  ['setMembershipLeadInvitationQuota', 'setMembershipLeadInvitationQuotaProposalParameters'],
+  ['setMembershipPrice', 'setMembershipPriceProposalParameters'],
+  ['setReferralCut', 'setReferralCutProposalParameters'],
+  ['setWorkingGroupLeadReward', 'setWorkingGroupLeadRewardProposalParameters'],
+  ['signal', 'signalProposalParameters'],
+  ['slashWorkingGroupLead', 'slashWorkingGroupLeadProposalParameters'],
+  ['terminateWorkingGroupLead', 'terminateWorkingGroupLeadProposalParameters'],
+  ['unlockBlogPost', 'unlockBlogPostProposalParameters'],
+  ['updateWorkingGroupBudget', 'updateWorkingGroupBudgetProposalParameters'],
+  ['veto', 'vetoProposalProposalParameters'],
+])

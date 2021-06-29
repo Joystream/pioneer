@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { ProgressBar } from '@/common/components/Progress'
 import { Colors } from '@/common/constants'
@@ -9,7 +9,7 @@ import { FractionValue, FractionValueProps } from './FractionValue'
 
 export interface StatisticBarProps extends StatisticHeaderProps, FractionValueProps {
   value: number
-  threshold: number
+  threshold?: number
 }
 
 export const StatisticBar = ({ value, threshold, numerator, denominator, ...headerProps }: StatisticBarProps) => (
@@ -28,20 +28,24 @@ export const StatisticBar = ({ value, threshold, numerator, denominator, ...head
   </>
 )
 
-const ThresholdBar = styled.div`
+const ThresholdBar = styled.div<{ threshold?: number }>`
   position: relative;
   display: flex;
   align-items: center;
   width: 223px;
 
-  &::after {
-    border-right: solid 2px ${Colors.Black[900]};
-    content: '';
-    display: block;
-    position: absolute;
-    height: 14px;
-    left: ${({ threshold }: { threshold: number }) => `calc(${threshold * 100}% - 1px)`};
-  }
+  ${({ threshold }) =>
+    threshold &&
+    css`
+      &::after {
+        border-right: solid 2px ${Colors.Black[900]};
+        content: '';
+        display: block;
+        position: absolute;
+        height: 14px;
+        left: calc(${threshold * 100}% - 1px);
+      }
+    `};
 `
 
 const Figure = styled.div`

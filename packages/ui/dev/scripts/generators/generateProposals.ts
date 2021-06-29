@@ -1,12 +1,17 @@
 import faker from 'faker'
 
+import { ProposalVoteKind } from '../../../src/common/api/queries'
 import { proposalDetails } from '../../../src/proposals/model/proposalDetails'
 import { proposalStatuses } from '../../../src/proposals/model/proposalStatus'
 
 import { Mocks } from './types'
-import { randomFromRange } from './utils'
+import { randomFromRange, randomMarkdown } from './utils'
 
 const MAX_PROPOSALS = 20
+
+const MAX_VOTE = 3
+const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
+const VotesKind = [Approve, Approve, Reject, Abstain, Slash]
 
 let nextId = 0
 
@@ -17,6 +22,10 @@ const generateProposal = (mocks: Mocks) => {
 
   const createdAt = faker.date.recent(20)
 
+  const description = randomMarkdown()
+  const voteKinds = faker.random.arrayElements(VotesKind, randomFromRange(0, MAX_VOTE)) as string[]
+  const votes = voteKinds.map((voteKind) => ({ voteKind }))
+
   return {
     id: String(nextId++),
     title: faker.random.words(4),
@@ -25,6 +34,8 @@ const generateProposal = (mocks: Mocks) => {
     details,
     creatorId: member.id,
     createdAt: createdAt.toISOString(),
+    description,
+    votes,
   }
 }
 

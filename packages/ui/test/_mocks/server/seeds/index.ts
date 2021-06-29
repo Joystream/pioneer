@@ -1,6 +1,7 @@
 import { RawOpeningMock, RawWorker } from '@/mocks/data'
 import { RawUpcomingOpeningMock } from '@/mocks/data/seedUpcomingOpening'
 
+import { ProposalMock } from '../../../../dev/scripts/generators/generateProposals'
 import { RawApplication } from '../../../../src/mocks/data/seedApplications'
 
 export const MEMBER_ALICE_DATA = {
@@ -98,4 +99,17 @@ export const APPLICATION_DATA: RawApplication = {
   applicantId: '41',
   answers: [],
   status: 'pending',
+}
+
+export const PROPOSAL_DATA: ProposalMock = {
+  id: '0',
+  title: 'Rubber scalable functionalities dedicated',
+  status: 'deciding',
+  statusSetAtTime: '2021-06-16T02:37:48.929Z',
+  details: 'updateWorkingGroupBudget',
+  creatorId: '0',
+  createdAt: '2021-06-15T14:59:37.847Z',
+  description:
+    '# et quo quaerat optio\n\nLaudantium non molestias consequatur occaecati non officia. Eum eaque suscipit nam soluta. Nihil quia velit voluptatibus. Architecto nemo quis. Veniam beatae porro cum fugiat corrupti voluptatem quia.\n\n## odio dolorem impedit amet\n\nDolorem ut ipsam repellat repudiandae quia. Id animi sed et et a voluptas sit itaque. Magni nihil perferendis facilis. Animi eos vel ut.\n \rRepellat rerum rerum velit sint cupiditate. Qui et aliquam modi. Molestiae ad distinctio necessitatibus accusantium. Voluptatem blanditiis explicabo accusamus ut praesentium.',
+  votes: ['APPROVE', 'APPROVE', 'SLASH'].map((voteKind) => ({ voteKind })),
 }

@@ -1,10 +1,7 @@
-import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 import { typenameToProposalDetails } from '@/proposals/model/proposalDetails'
 import { isProposalActive, typenameToProposalStatus } from '@/proposals/model/proposalStatus'
 import { ProposalFieldsFragment } from '@/proposals/queries'
-
-import { randomMarkdown } from '../../../dev/scripts/generators/utils'
 
 export type ProposalStatus =
   | 'deciding'
@@ -54,9 +51,6 @@ export interface Proposal {
   proposer: Member
   createdAt: string
   endedAt?: string
-  statusSetAtBlock: Block
-  rationale: string
-  exactExecutionBlock?: Block
 }
 
 export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
@@ -67,8 +61,6 @@ export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
     details: typenameToProposalDetails(fields.details.__typename),
     proposer: asMember(fields.creator),
     createdAt: fields.createdAt,
-    rationale: randomMarkdown(),
-    statusSetAtBlock: asBlock(),
   }
 
   if (!isProposalActive(proposal.status)) {
