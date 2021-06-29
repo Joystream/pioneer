@@ -1,60 +1,25 @@
 /* eslint-disable no-console */
 import { ApplicationMetadata, OpeningMetadata } from '@joystream/metadata-protobuf'
-import { registry, types } from '@joystream/types'
-import { ApiPromise, WsProvider } from '@polkadot/api'
-import { SubmittableExtrinsic } from '@polkadot/api/types'
-import testKeyring from '@polkadot/keyring/testing'
-import { KeyringInstance } from '@polkadot/keyring/types'
-import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
-import { IKeyringPair, ISubmittableResult } from '@polkadot/types/types'
+import { ApiPromise } from '@polkadot/api'
 
 import { metadataToBytes } from '../../src/common/model/JoystreamNode'
+
+import { getApi, signAndSend } from './lib/api'
 
 const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
 const ALICE_STASH = '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY'
 const CHARLIE = '5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y'
 
-const getApi = async () => {
-  const provider = new WsProvider('ws://127.0.0.1:9944')
-  return await ApiPromise.create({ provider, rpc: jsonrpc, types: types, registry })
-}
-
-async function signAndSend(stakingConfirmTx: SubmittableExtrinsic<'promise'>, aliceSigner: IKeyringPair) {
-  let unsubCb: () => void
-
-  return new Promise<void>((resolve) => {
-    stakingConfirmTx
-      .signAndSend(aliceSigner, function ({ events = [], status }: ISubmittableResult) {
-        console.log('Transaction status:', status.type)
-
-        if (status.isInBlock) {
-          console.log(' > Included at block hash', status.asInBlock.toHex())
-          console.log(' > Events:')
-
-          events.forEach(({ event: { data, method, section }, phase }) => {
-            console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
-          })
-        } else if (status.isFinalized) {
-          console.log(' > Finalized block hash', status.asFinalized.toHex())
-
-          unsubCb()
-          resolve()
-        }
-      })
-      .then((unsub) => (unsubCb = unsub))
-  })
-}
-
-async function staking(api: ApiPromise, keyring: KeyringInstance) {
+async function staking(api: ApiPromise) {
   console.log('============== STAKING')
   const stakingCandidateTx = api.tx.members.addStakingAccountCandidate('0')
   const stakingConfirmTx = api.tx.members.confirmStakingAccount('0', CHARLIE)
 
-  await signAndSend(stakingCandidateTx, keyring.getPair(CHARLIE))
-  await signAndSend(stakingConfirmTx, keyring.getPair(ALICE))
+  await signAndSend(stakingCandidateTx, CHARLIE)
+  await signAndSend(stakingConfirmTx, ALICE)
 }
 
-async function proposal(api: ApiPromise, keyring: KeyringInstance) {
+async function proposal(api: ApiPromise) {
   console.log('============== PROPOSAL')
   const proposalExtrinsic = api.tx.proposalsCodex.createProposal(
     {
@@ -68,10 +33,10 @@ async function proposal(api: ApiPromise, keyring: KeyringInstance) {
     }
   )
 
-  await signAndSend(proposalExtrinsic, keyring.getPair(ALICE))
+  await signAndSend(proposalExtrinsic, ALICE)
 }
 
-async function opening(api: ApiPromise, keyring: KeyringInstance) {
+async function opening(api: ApiPromise) {
   console.log('============== OPENING')
   const createOpening = api.tx.membershipWorkingGroup.addOpening(
     metadataToBytes(OpeningMetadata, {
@@ -90,7 +55,7 @@ async function opening(api: ApiPromise, keyring: KeyringInstance) {
     '1337'
   )
 
-  await signAndSend(api.tx.sudo.sudo(createOpening), keyring.getPair(ALICE))
+  await signAndSend(api.tx.sudo.sudo(createOpening), ALICE)
 
   const applyOnOpeningTx = api.tx.membershipWorkingGroup.applyOnOpening({
     opening_id: 1,
@@ -103,16 +68,15 @@ async function opening(api: ApiPromise, keyring: KeyringInstance) {
       staking_account_id: CHARLIE,
     },
   })
-  await signAndSend(applyOnOpeningTx, keyring.getPair(ALICE))
+  await signAndSend(applyOnOpeningTx, ALICE)
 }
 
 const main = async () => {
   const api = await getApi()
-  const keyring = testKeyring()
 
-  await staking(api, keyring)
-  await proposal(api, keyring)
-  await opening(api, keyring)
+  await staking(api)
+  await proposal(api)
+  await opening(api)
 
   await api.disconnect()
 }
