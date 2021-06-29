@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, prettyDOM, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -17,11 +17,16 @@ import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 
 import { selectAccount } from '../../_helpers/selectAccount'
+import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubDefaultBalances, stubProposalConstants, stubTransaction } from '../../_mocks/transactions'
+
+jest.mock('@/common/components/CKEditor', () => ({
+  CKEditor: (props: any) => mockCKEditor(props),
+}))
 
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
@@ -151,6 +156,7 @@ describe('UI: AddNewProposalModal', () => {
       it('Not enough funds', async () => {
         stubProposalConstants(api, { requiredStake: 9999 })
         await finishProposalType()
+
         expect(screen.queryByText('Creating new proposal')).toBeNull()
       })
 
@@ -179,6 +185,24 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).not.toBeDisabled()
         })
       })
+
+      describe('Proposal details', () => {
+        beforeEach(async () => {
+          await finishStakingAccount()
+        })
+
+        it('Not filled', async () => {
+          const button = await getNextStepButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Filled', async () => {
+          await fillProposalDetails()
+
+          const button = await getNextStepButton()
+          expect(button).not.toBeDisabled()
+        })
+      })
     })
   })
 
@@ -194,8 +218,21 @@ describe('UI: AddNewProposalModal', () => {
     const type = (await screen.findByText('Signal')).parentElement?.parentElement as HTMLElement
     await fireEvent.click(type)
 
-    const button = await getNextStepButton()
-    await fireEvent.click(button as HTMLElement)
+    await clickNextButton()
+  }
+
+  async function finishStakingAccount() {
+    await selectAccount('Select account for Staking', 'alice')
+
+    await clickNextButton()
+  }
+
+  async function fillProposalDetails() {
+    const titleInput = await screen.findByLabelText(/Proposal title/i)
+    await fireEvent.change(titleInput, { target: { value: 'Some title' } })
+
+    const rationaleInput = await screen.findByLabelText(/Rationale/i)
+    await fireEvent.change(rationaleInput, { target: { value: 'Some rationale' } })
   }
 
   async function getWarningNextButton() {
@@ -204,6 +241,11 @@ describe('UI: AddNewProposalModal', () => {
 
   async function getNextStepButton() {
     return await screen.findByRole('button', { name: /Next step/i })
+  }
+
+  async function clickNextButton() {
+    const button = await getNextStepButton()
+    await fireEvent.click(button as HTMLElement)
   }
 
   function renderModal() {

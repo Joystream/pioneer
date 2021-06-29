@@ -40,11 +40,11 @@ export const ProposalDetailsStep = ({ proposer, setTitle, setRationale }: Propos
           <InputComponent label="Proposer" inputSize="l">
             <SelectMember onChange={() => true} disabled={true} selected={proposer} />
           </InputComponent>
-          <InputComponent label="Proposal title" required inputSize="m" id="title-block">
-            <InputText id="title-input" onChange={(event) => setTitle(event.target.value)} />
+          <InputComponent label="Proposal title" required inputSize="m" id="field-title">
+            <InputText id="field-title" onChange={(event) => setTitle(event.target.value)} />
           </InputComponent>
-          <InputComponent label="Rationale" required inputSize="auto" id="rationale-block">
-            <CKEditor onChange={(event, editor) => setRationale(editor.getData())} />
+          <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
+            <CKEditor id="field-rationale" onChange={(event, editor) => setRationale(editor.getData())} />
           </InputComponent>
           <CustomLink onClick={showRationaleModal}>How to write a good rationale?</CustomLink>
         </RowGapBlock>
