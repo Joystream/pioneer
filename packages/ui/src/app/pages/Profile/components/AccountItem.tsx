@@ -6,7 +6,7 @@ import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks } from '@/accounts/components/AccountLocks'
 import { TransferButton } from '@/accounts/components/TransferButton'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { Account } from '@/accounts/types'
+import { Account, Balances } from '@/accounts/types'
 import { DetailsItemVote, LockItem } from '@/app/pages/Profile/components/LockItem'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -19,20 +19,26 @@ interface AccountItemDataProps {
   account: Account
 }
 
+const DisplayLocks = ({ balance }: { balance: Balances | null }) => {
+  if (!balance || !balance.locks.length) {
+    return <TextMedium light>No locks found.</TextMedium>
+  }
+
+  return (
+    <>
+      {balance.locks.map((lock, index) => (
+        <LockItem key={index} lock={lock} />
+      ))}
+    </>
+  )
+}
+
 export const AccountItem = ({ account }: AccountItemDataProps) => {
   const address = account.address
   const balance = useBalance(address)
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
   const [isDropped, setDropped] = useToggle()
-
-  const displayLocks = () => {
-    if (!balance || !balance.locks.length) {
-      return <TextMedium light>No locks found.</TextMedium>
-    }
-
-    return balance.locks.map((lock, index) => <LockItem key={index} lock={lock} />)
-  }
 
   return (
     <AccounItemWrapper>
@@ -54,7 +60,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
       <StyledDropDown isDropped={isDropped}>
         <RowGapBlock gap={8}>
           <Label>Account Locks:</Label>
-          {displayLocks()}
+          <DisplayLocks balance={balance} />
         </RowGapBlock>
         <RowGapBlock gap={8}>
           <Label>Recoverable balance</Label>
