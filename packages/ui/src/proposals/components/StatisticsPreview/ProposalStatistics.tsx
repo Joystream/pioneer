@@ -38,7 +38,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
     <Statistics>
       <TwoRowStatistic>
         <StatisticBar
-          title="Approva Quorum"
+          title="Approval Quorum"
           tooltipText="Number of votes cast below which the proposal cannot be approved"
           tooltipLinkURL={tooltipLinkURL}
           value={quorumRatio}
