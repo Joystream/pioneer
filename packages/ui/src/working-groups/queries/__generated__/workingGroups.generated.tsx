@@ -285,6 +285,15 @@ export type GetWorkingGroupApplicationsQuery = {
   workingGroupApplications: Array<{ __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment>
 }
 
+export type GetWorkingGroupApplicationIdsQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.WorkingGroupApplicationWhereInput>
+}>
+
+export type GetWorkingGroupApplicationIdsQuery = {
+  __typename: 'Query'
+  workingGroupApplications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+}
+
 export type GetWorkingGroupApplicationQueryVariables = Types.Exact<{
   where: Types.WorkingGroupApplicationWhereUniqueInput
 }>
@@ -406,10 +415,15 @@ export type StakeSlashedEventFieldsFragment = {
 
 export type GetMemberRoleEventsQueryVariables = Types.Exact<{
   worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
+  application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
 }>
 
 export type GetMemberRoleEventsQuery = {
   __typename: 'Query'
+  appliedOnOpeningEvents: Array<{ __typename: 'AppliedOnOpeningEvent' } & AppliedOnOpeningEventFieldsFragment>
+  applicationWithdrawnEvents: Array<
+    { __typename: 'ApplicationWithdrawnEvent' } & ApplicationWithdrawnEventFieldsFragment
+  >
   stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment>
   stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment>
   stakeSlashedEvents: Array<{ __typename: 'StakeSlashedEvent' } & StakeSlashedEventFieldsFragment>
@@ -1386,6 +1400,59 @@ export type GetWorkingGroupApplicationsQueryResult = Apollo.QueryResult<
   GetWorkingGroupApplicationsQuery,
   GetWorkingGroupApplicationsQueryVariables
 >
+export const GetWorkingGroupApplicationIdsDocument = gql`
+  query GetWorkingGroupApplicationIds($where: WorkingGroupApplicationWhereInput) {
+    workingGroupApplications(where: $where) {
+      id
+    }
+  }
+`
+
+/**
+ * __useGetWorkingGroupApplicationIdsQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupApplicationIdsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupApplicationIdsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupApplicationIdsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetWorkingGroupApplicationIdsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>(
+    GetWorkingGroupApplicationIdsDocument,
+    options
+  )
+}
+export function useGetWorkingGroupApplicationIdsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWorkingGroupApplicationIdsQuery,
+    GetWorkingGroupApplicationIdsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>(
+    GetWorkingGroupApplicationIdsDocument,
+    options
+  )
+}
+export type GetWorkingGroupApplicationIdsQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationIdsQuery>
+export type GetWorkingGroupApplicationIdsLazyQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupApplicationIdsLazyQuery
+>
+export type GetWorkingGroupApplicationIdsQueryResult = Apollo.QueryResult<
+  GetWorkingGroupApplicationIdsQuery,
+  GetWorkingGroupApplicationIdsQueryVariables
+>
 export const GetWorkingGroupApplicationDocument = gql`
   query GetWorkingGroupApplication($where: WorkingGroupApplicationWhereUniqueInput!) {
     workingGroupApplicationByUniqueInput(where: $where) {
@@ -1611,7 +1678,13 @@ export type GetUpcomingWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetUpcomingWorkingGroupOpeningsQueryVariables
 >
 export const GetMemberRoleEventsDocument = gql`
-  query GetMemberRoleEvents($worker_in: [ID!]) {
+  query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
+    appliedOnOpeningEvents(where: { application_in: $application_in }) {
+      ...AppliedOnOpeningEventFields
+    }
+    applicationWithdrawnEvents(where: { application_in: $application_in }) {
+      ...ApplicationWithdrawnEventFields
+    }
     stakeDecreasedEvents(where: { worker_in: $worker_in }) {
       ...StakeDecreasedEventFields
     }
@@ -1622,6 +1695,8 @@ export const GetMemberRoleEventsDocument = gql`
       ...StakeSlashedEventFields
     }
   }
+  ${AppliedOnOpeningEventFieldsFragmentDoc}
+  ${ApplicationWithdrawnEventFieldsFragmentDoc}
   ${StakeDecreasedEventFieldsFragmentDoc}
   ${StakeIncreasedEventFieldsFragmentDoc}
   ${StakeSlashedEventFieldsFragmentDoc}
@@ -1640,6 +1715,7 @@ export const GetMemberRoleEventsDocument = gql`
  * const { data, loading, error } = useGetMemberRoleEventsQuery({
  *   variables: {
  *      worker_in: // value for 'worker_in'
+ *      application_in: // value for 'application_in'
  *   },
  * });
  */

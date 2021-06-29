@@ -247,6 +247,12 @@ query GetWorkingGroupApplications($applicantId_in: [ID!]) {
   }
 }
 
+query GetWorkingGroupApplicationIds($where: WorkingGroupApplicationWhereInput) {
+  workingGroupApplications(where: $where) {
+    id
+  }
+}
+
 query GetWorkingGroupApplication($where: WorkingGroupApplicationWhereUniqueInput!) {
   workingGroupApplicationByUniqueInput(where: $where){
     ...WorkingGroupApplicationFields
@@ -381,7 +387,13 @@ fragment StakeSlashedEventFields on StakeSlashedEvent {
   }
 }
 
-query GetMemberRoleEvents($worker_in: [ID!]) {
+query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
+  appliedOnOpeningEvents(where: { application_in: $application_in }) {
+    ...AppliedOnOpeningEventFields
+  }
+  applicationWithdrawnEvents(where: { application_in: $application_in }) {
+    ...ApplicationWithdrawnEventFields
+  }
   stakeDecreasedEvents(where: { worker_in: $worker_in }) {
     ...StakeDecreasedEventFields
   }
