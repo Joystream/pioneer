@@ -33,6 +33,19 @@ const DisplayLocks = ({ balance }: { balance: Balances | null }) => {
   )
 }
 
+const LocksDetails = (props: { balance: Balances | null; account: Account }) => (
+  <>
+    <RowGapBlock gap={8}>
+      <Label>Account Locks:</Label>
+      <DisplayLocks balance={props.balance} />
+    </RowGapBlock>
+    <RowGapBlock gap={8}>
+      <Label>Recoverable balance</Label>
+      <DetailsItemVote account={props.account} />
+    </RowGapBlock>
+  </>
+)
+
 export const AccountItem = ({ account }: AccountItemDataProps) => {
   const address = account.address
   const balance = useBalance(address)
@@ -58,14 +71,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         </AccountControls>
       </AccountItemWrap>
       <StyledDropDown isDropped={isDropped}>
-        <RowGapBlock gap={8}>
-          <Label>Account Locks:</Label>
-          <DisplayLocks balance={balance} />
-        </RowGapBlock>
-        <RowGapBlock gap={8}>
-          <Label>Recoverable balance</Label>
-          <DetailsItemVote account={account} />
-        </RowGapBlock>
+        <LocksDetails balance={balance} account={account} />
       </StyledDropDown>
     </AccounItemWrapper>
   )
