@@ -1,21 +1,23 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { ISubmittableResult } from '@polkadot/types/types'
+import { useActor } from '@xstate/react'
 import React, { useEffect, useState } from 'react'
+import { ActorRef } from 'xstate'
 
-import { SelectAccount, SelectedAccount } from '../../../accounts/components/SelectAccount'
-import { useBalance } from '../../../accounts/hooks/useBalance'
-import { useMyAccounts } from '../../../accounts/hooks/useMyAccounts'
-import { accountOrNamed } from '../../../accounts/model/accountOrNamed'
-import { Account } from '../../../accounts/types'
-import { ButtonPrimary } from '../../../common/components/buttons'
-import { InputComponent } from '../../../common/components/forms'
-import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '../../../common/components/Modal'
-import { TransactionInfo } from '../../../common/components/TransactionInfo'
-import { TransactionModal } from '../../../common/components/TransactionModal'
-import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { useSignAndSendTransaction } from '../../../common/hooks/useSignAndSendTransaction'
-import { onTransactionDone } from '../../../common/types'
+import { SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
+import { useBalance } from '@/accounts/hooks/useBalance'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { Account } from '@/accounts/types'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { InputComponent } from '@/common/components/forms'
+import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { TransactionModal } from '@/common/components/TransactionModal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+
 import { getMessage } from '../utils'
 
 import { MemberFormFields } from './BuyMembershipFormModal'
@@ -24,27 +26,28 @@ interface SignProps {
   onClose: () => void
   membershipPrice?: BalanceOf
   formData: MemberFormFields
-  onDone: onTransactionDone
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   initialSigner?: Account
+  service: ActorRef<any>
 }
 
 export const BuyMembershipSignModal = ({
   onClose,
   membershipPrice,
   formData,
-  onDone,
   transaction,
   initialSigner,
+  service,
 }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const [from, setFrom] = useState(
     initialSigner ?? accountOrNamed(allAccounts, formData.invitor?.controllerAccount || '', 'Controller account')
   )
   const fromAddress = from.address
-  const { paymentInfo, send, status } = useSignAndSendTransaction({ transaction, signer: fromAddress, onDone })
+  const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
   const [hasFunds, setHasFunds] = useState(false)
   const balance = useBalance(fromAddress)
+  const [state, send] = useActor(service)
 
   useEffect(() => {
     if (balance?.transferable && paymentInfo?.partialFee && membershipPrice) {
@@ -54,10 +57,10 @@ export const BuyMembershipSignModal = ({
     }
   }, [fromAddress, balance])
 
-  const signDisabled = status !== 'READY' || !hasFunds
+  const signDisabled = !state.matches('prepare') || !hasFunds
 
   return (
-    <TransactionModal status={status} onClose={onClose}>
+    <TransactionModal onClose={onClose} service={service}>
       <ModalBody>
         <TextMedium>You intend to create a new membership.</TextMedium>
         <TextMedium>
@@ -94,7 +97,7 @@ export const BuyMembershipSignModal = ({
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={send} disabled={signDisabled}>
+        <ButtonPrimary size="medium" onClick={() => send('SIGN')} disabled={signDisabled}>
           Sign and create a member
         </ButtonPrimary>
       </ModalFooter>

@@ -1,5 +1,6 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import React, { FC } from 'react'
+import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -11,29 +12,28 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TransactionModal } from '@/common/components/TransactionModal'
 import { TextMedium } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
-import { onTransactionDone } from '@/common/types'
 import { WorkerWithDetails } from '@/working-groups/types'
 
 interface Props {
   onClose: () => void
   worker: WorkerWithDetails
-  onDone: onTransactionDone
+  service: ActorRef<any>
   transaction: SubmittableExtrinsic<'rxjs'>
   title: string
   buttonLabel: string
 }
 
-export const ChangeAccountSignModal: FC<Props> = ({ onClose, worker, onDone, transaction, title, buttonLabel }) => {
+export const ChangeAccountSignModal: FC<Props> = ({ onClose, worker, service, transaction, title, buttonLabel }) => {
   const { allAccounts } = useMyAccounts()
   const signer = accountOrNamed(allAccounts, worker.membership.controllerAccount, 'Controller account')
-  const { paymentInfo, send, status } = useSignAndSendTransaction({
+  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
     signer: signer?.address ?? '',
-    onDone,
+    service,
   })
 
   return (
-    <TransactionModal status={status} onClose={onClose}>
+    <TransactionModal service={service} onClose={onClose}>
       <ModalBody>
         <Row>
           <TextMedium>{title}</TextMedium>
@@ -46,7 +46,7 @@ export const ChangeAccountSignModal: FC<Props> = ({ onClose, worker, onDone, tra
         <TransactionInfoContainer>
           <TransactionInfo title="Transaction fee:" value={paymentInfo?.partialFee.toBn()} />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={send} disabled={!signer}>
+        <ButtonPrimary size="medium" onClick={sign} disabled={!signer || !isReady}>
           {buttonLabel}
         </ButtonPrimary>
       </ModalFooter>

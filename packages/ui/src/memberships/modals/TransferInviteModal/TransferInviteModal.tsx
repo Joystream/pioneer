@@ -64,7 +64,7 @@ export function TransferInviteModal() {
         sourceMember={member}
         targetMember={targetMember}
         amount={numberOfInvites}
-        onDone={(result: boolean) => send(result ? 'SUCCESS' : 'ERROR')}
+        service={state.children.transaction}
       />
     )
   }

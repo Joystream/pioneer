@@ -5,12 +5,17 @@ import {
   ApplicationWithdrawnEventFieldsFragment,
   AppliedOnOpeningEventFieldsFragment,
   BudgetSpendingActivityEventFieldsFragment,
+  StakeDecreasedEventFieldsFragment,
+  StakeIncreasedEventFieldsFragment,
+  StakeSlashedEventFieldsFragment,
 } from '@/working-groups/queries/__generated__/workingGroups.generated'
 import {
   ApplicationWithdrawnActivity,
   AppliedOnOpeningActivity,
   asWorkingGroupName,
   BudgetSpendingActivity,
+  StakeChangedActivity,
+  StakeSlashedActivity,
 } from '@/working-groups/types'
 
 function asPositionTitle(groupName: string, type: 'LEADER' | 'REGULAR') {
@@ -62,5 +67,33 @@ export function asBudgetSpendingActivity(fragment: BudgetSpendingActivityEventFi
     createdAt: fragment.createdAt,
     groupName: fragment.group.name,
     amount: new BN(fragment.amount),
+  }
+}
+
+type StakeChangedFragment = StakeDecreasedEventFieldsFragment | StakeIncreasedEventFieldsFragment
+
+export function asStakeChangedActivity(fragment: StakeChangedFragment): StakeChangedActivity {
+  return {
+    id: fragment.id,
+    createdAt: fragment.createdAt,
+    eventType: fragment.__typename === 'StakeDecreasedEvent' ? 'StakeDecreased' : 'StakeIncreased',
+    member: {
+      id: fragment.worker.membership.id,
+      handle: fragment.worker.membership.handle,
+    },
+    amount: new BN(fragment.amount),
+  }
+}
+
+export function asStakeSlashedActivity(fragment: StakeSlashedEventFieldsFragment): StakeSlashedActivity {
+  return {
+    eventType: 'StakeSlashed',
+    id: fragment.id,
+    createdAt: fragment.createdAt,
+    member: {
+      id: fragment.worker.membership.id,
+      handle: fragment.worker.membership.handle,
+    },
+    groupName: asWorkingGroupName(fragment.group.name),
   }
 }

@@ -62,9 +62,7 @@ export const ChangeAccountModal = () => {
       <ChangeAccountSignModal
         transaction={transaction}
         onClose={hideModal}
-        onDone={(success: boolean) => {
-          send(success ? 'SUCCESS' : 'ERROR')
-        }}
+        service={state.children.transaction}
         worker={worker}
         title="The transaction can only be signed with the membership's controller account."
         buttonLabel={

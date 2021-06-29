@@ -1,5 +1,6 @@
 import { assign, createMachine } from 'xstate'
 
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
 import { Address } from '../../../common/types'
 
 type EmptyObject = Record<string, never>
@@ -33,9 +34,19 @@ export const changeAccountMachine = createMachine<ChangeAccountContext, ChangeAc
       },
     },
     transaction: {
-      on: {
-        SUCCESS: 'success',
-        ERROR: 'error',
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+          },
+        ],
       },
     },
     success: { type: 'final' },

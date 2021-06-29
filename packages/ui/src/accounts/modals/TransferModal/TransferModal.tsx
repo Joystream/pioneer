@@ -1,4 +1,3 @@
-import { EventRecord } from '@polkadot/types/interfaces'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React from 'react'
@@ -28,10 +27,6 @@ export const TransferModal = () => {
     send([{ type: 'SET_AMOUNT', amount }, { type: 'SET_FROM', from }, { type: 'SET_TO', to }, 'DONE'])
   }
 
-  const onDone = (isSuccess: boolean, events: EventRecord[], fee: BN) => {
-    send(isSuccess ? 'SUCCESS' : 'ERROR', { fee })
-  }
-
   if (state.matches('prepare')) {
     return (
       <TransferFormModal onClose={hideModal} from={transferFrom} to={transferTo} onAccept={onAccept} title={title} />
@@ -40,7 +35,8 @@ export const TransferModal = () => {
 
   if (state.matches('transaction')) {
     const { amount, to, from } = state.context
-    return <TransferSignModal onClose={hideModal} from={from} to={to} amount={amount} onDone={onDone} />
+    const service = state.children.transaction
+    return <TransferSignModal onClose={hideModal} from={from} to={to} amount={amount} service={service} />
   }
 
   if (state.matches('success')) {

@@ -1,5 +1,8 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
+
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 
 import { Account } from '../../types'
 
@@ -23,13 +26,23 @@ type TransferState =
   | { value: 'success'; context: Required<TransferContext> }
   | { value: 'error'; context: Required<TransferContext> }
 
+type TransactionSuccessEvent = {
+  type: 'SUCCESS'
+  events: EventRecord[]
+  fee: BN
+}
+type TransactionErrorEvent = {
+  type: 'ERROR'
+  events: EventRecord[]
+  fee: BN
+}
 export type TransferEvent =
   | { type: 'SET_TO'; to: Account }
   | { type: 'SET_FROM'; from: Account }
   | { type: 'SET_AMOUNT'; amount: BN }
   | { type: 'DONE' }
-  | { type: 'SUCCESS'; fee: BN }
-  | { type: 'ERROR' }
+  | TransactionSuccessEvent
+  | TransactionErrorEvent
 
 export const transferMachine = createMachine<TransferContext, TransferEvent, TransferState>({
   initial: 'prepare',
@@ -49,12 +62,20 @@ export const transferMachine = createMachine<TransferContext, TransferEvent, Tra
       },
     },
     transaction: {
-      on: {
-        SUCCESS: {
-          target: 'success',
-          actions: assign({ fee: (_, event) => event.fee }),
-        },
-        ERROR: 'error',
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            cond: isTransactionSuccess,
+            actions: assign({ fee: (_, event) => event.data.fee }),
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+          },
+        ],
       },
     },
     success: { type: 'final' },
