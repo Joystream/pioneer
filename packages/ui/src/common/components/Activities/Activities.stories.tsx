@@ -10,7 +10,7 @@ import { Activity } from '@/common/types'
 import { ModalContext } from '../../providers/modal/context'
 import { TemplateBlock } from '../storybookParts/previewStyles'
 
-import { Activities, ActivitiesProps } from './Activities'
+import { ActivitiesProps } from './Activities'
 
 export default {
   title: 'Common/Activities',

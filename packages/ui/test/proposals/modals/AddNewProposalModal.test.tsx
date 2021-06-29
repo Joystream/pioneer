@@ -39,7 +39,6 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   let useAccounts: UseAccounts
-  let tx: any
 
   const server = setupMockServer()
 
@@ -60,7 +59,7 @@ describe('UI: AddNewProposalModal', () => {
 
     stubDefaultBalances(api)
     stubProposalConstants(api)
-    tx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+    stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
   })
 
   describe('Requirements', () => {
@@ -73,7 +72,7 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     it('Insufficient funds', async () => {
-      tx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 10000)
+      stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 10000)
 
       const { findByText } = renderModal()
 
