@@ -1,18 +1,16 @@
 import React from 'react'
 
+import { ActivityContentProps } from '@/common/components/Activities/ActivityContent'
 import { ActivityRouterLink } from '@/common/components/Activities/ActivityRouterLink'
 
 import { StatusTextChangedActivity } from '../../types'
 
-interface Props {
-  activity: StatusTextChangedActivity
-}
-export const StatusTextChangedContent = React.memo(({ activity }: Props) => (
-  <>
-    Status updated by the{' '}
-    <ActivityRouterLink to={`/working-groups/${activity.groupName}`}>
-      {activity.groupName} Working Group
-    </ActivityRouterLink>{' '}
-    Lead.
-  </>
-))
+export const StatusTextChangedContent: React.FC<ActivityContentProps> = React.memo(({ activity }) => {
+  const { groupName } = activity as StatusTextChangedActivity
+  return (
+    <>
+      Status updated by the{' '}
+      <ActivityRouterLink to={`/working-groups/${groupName}`}>{groupName} Working Group</ActivityRouterLink> Lead.
+    </>
+  )
+})

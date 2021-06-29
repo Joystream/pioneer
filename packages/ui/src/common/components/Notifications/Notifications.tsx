@@ -5,7 +5,6 @@ import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 import { useMemberNotifications } from '@/memberships/hooks/useMemberNotifications'
 
 import { Colors, RemoveScrollbar, Shadows, Transitions } from '../../constants'
-import { useActivities } from '../../hooks/useActivities'
 import { ActivitiesList } from '../Activities'
 import { ActivitiesBlock } from '../Activities/ActivitiesBlock'
 import { ActivityItem } from '../Activities/ActivityComponent'
