@@ -1,5 +1,5 @@
 import { addMonths, addWeeks, addYears, isAfter, isBefore, isEqual, startOfMonth, startOfToday } from 'date-fns'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import styled from 'styled-components'
@@ -39,10 +39,10 @@ export const DatePicker = ({
   const placeholder = '__/__/__'
   const { start, end } = fromRange(value)
   const dateString = `${toDDMMYY(start) ?? placeholder} - ${toDDMMYY(end) ?? placeholder}`
-  const referenceElementRef = useRef<HTMLDivElement>(null)
-  const popperElementRef = useRef<HTMLDivElement>(null)
+  const [referenceElementRef, setReferenceElementRef] = useState<HTMLDivElement | null>(null)
+  const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
 
-  const { styles, attributes } = usePopper(referenceElementRef.current, popperElementRef.current, {
+  const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
     placement: 'bottom-start',
     modifiers: [
       {
@@ -63,13 +63,13 @@ export const DatePicker = ({
   }
 
   return (
-    <DatePickerContainer ref={referenceElementRef} onMouseUp={() => toggleOpen(true)}>
+    <DatePickerContainer ref={setReferenceElementRef} onMouseUp={() => toggleOpen(true)}>
       {title && <FilterLabel>{title}</FilterLabel>}
       <DatePickerInput tight inputWidth={inputWidth} inputSize={inputSize} icon={<CalendarIcon />} iconRight>
         <InputText placeholder="-" value={dateString} readOnly />
         {isOpen &&
           ReactDOM.createPortal(
-            <DatePickerPopup ref={popperElementRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
+            <DatePickerPopup ref={setPopperElementRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
               <DatePickerCalendars value={value} within={withinDates} onChange={onChange} />
               <ButtonsGroup align="right">
                 <FilterButtons onApply={apply} onClear={onClear} />
