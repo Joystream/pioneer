@@ -20,6 +20,7 @@ import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
+import { VotesPreview } from '@/proposals/components/VotesPreview/VotesPreview'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
@@ -101,7 +102,7 @@ export const ProposalPreview = () => {
       sidebar={
         <SidePanel neighbor={sideNeighborRef}>
           <RowGapBlock gap={36}>
-            {/* Voting dashboard */}
+            <VotesPreview votes={votes} />
 
             {/* Proposal stages history */}
 
