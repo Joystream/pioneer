@@ -17,4 +17,4 @@ const CKEditor = ({ id, onChange }: CKEditorProps) => (
   />
 )
 
-export const mockCKEditor = (props: any) => CKEditor(props)
+export const mockCKEditor = (props: CKEditorProps) => CKEditor(props)

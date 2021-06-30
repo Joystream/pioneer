@@ -6,6 +6,7 @@ import { interpret } from 'xstate'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { CKEditorProps } from '@/common/components/CKEditor'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -25,7 +26,7 @@ import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubDefaultBalances, stubProposalConstants, stubTransaction } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
-  CKEditor: (props: any) => mockCKEditor(props),
+  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
 describe('UI: AddNewProposalModal', () => {
@@ -45,7 +46,6 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   let useAccounts: UseAccounts
-  let tx: any
 
   const server = setupMockServer()
 
@@ -66,7 +66,7 @@ describe('UI: AddNewProposalModal', () => {
 
     stubDefaultBalances(api)
     stubProposalConstants(api)
-    tx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+    stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
   })
 
   describe('Requirements', () => {
@@ -79,7 +79,7 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     it('Insufficient funds', async () => {
-      tx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 10000)
+      stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 10000)
 
       const { findByText } = renderModal()
 
