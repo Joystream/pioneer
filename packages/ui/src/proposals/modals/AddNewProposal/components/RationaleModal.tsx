@@ -13,17 +13,15 @@ import {
   SidePaneTitle,
 } from '@/common/components/SidePane'
 import { TextMedium } from '@/common/components/typography'
-import { useModal } from '@/common/hooks/useModal'
-import { ModalCall } from '@/common/providers/modal/types'
 
-export type RationaleModalCall = ModalCall<'RationaleModal'>
+interface RationaleModalProps {
+  closeModal: () => void
+}
 
-export const RationaleModal = React.memo(() => {
-  const { hideModal } = useModal<RationaleModalCall>()
-
+export const RationaleModal = ({ closeModal }: RationaleModalProps) => {
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
-      hideModal()
+      closeModal()
     }
   }
 
@@ -33,7 +31,7 @@ export const RationaleModal = React.memo(() => {
         <SidePaneHeader>
           <SidePanelTop>
             <SidePaneTitle>How to write a good rationale?</SidePaneTitle>
-            <CloseButton onClick={hideModal} />
+            <CloseButton onClick={closeModal} />
           </SidePanelTop>
         </SidePaneHeader>
         <SidePaneBody>
@@ -63,4 +61,4 @@ export const RationaleModal = React.memo(() => {
       </SidePane>
     </SidePaneGlass>
   )
-})
+}

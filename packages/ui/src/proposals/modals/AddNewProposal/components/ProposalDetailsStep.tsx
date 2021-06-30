@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { CKEditor } from '@/common/components/CKEditor'
@@ -11,7 +11,7 @@ import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
-import { RationaleModalCall } from '@/proposals/modals/AddNewProposal/components/RationaleModal'
+import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/RationaleModal'
 
 interface ProposalDetailsStepProps {
   proposer: Member
@@ -20,36 +20,34 @@ interface ProposalDetailsStepProps {
 }
 
 export const ProposalDetailsStep = ({ proposer, setTitle, setRationale }: ProposalDetailsStepProps) => {
-  const { showModal } = useModal()
-  const showRationaleModal = useCallback(() => {
-    showModal<RationaleModalCall>({
-      modal: 'RationaleModal',
-    })
-  }, [])
+  const [showRationale, setShowRationale] = useState<boolean>(false)
 
   return (
-    <RowGapBlock gap={24}>
-      <Row>
-        <RowGapBlock gap={8}>
-          <h4>General parameters</h4>
-          <TextMedium lighter>Proposal details</TextMedium>
-        </RowGapBlock>
-      </Row>
-      <Row>
-        <RowGapBlock gap={20}>
-          <InputComponent label="Proposer" inputSize="l">
-            <SelectMember onChange={() => true} disabled={true} selected={proposer} />
-          </InputComponent>
-          <InputComponent label="Proposal title" required inputSize="m" id="field-title">
-            <InputText id="field-title" onChange={(event) => setTitle(event.target.value)} />
-          </InputComponent>
-          <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
-            <CKEditor id="field-rationale" onChange={(event, editor) => setRationale(editor.getData())} />
-          </InputComponent>
-          <CustomLink onClick={showRationaleModal}>How to write a good rationale?</CustomLink>
-        </RowGapBlock>
-      </Row>
-    </RowGapBlock>
+    <>
+      <RowGapBlock gap={24}>
+        <Row>
+          <RowGapBlock gap={8}>
+            <h4>General parameters</h4>
+            <TextMedium lighter>Proposal details</TextMedium>
+          </RowGapBlock>
+        </Row>
+        <Row>
+          <RowGapBlock gap={20}>
+            <InputComponent label="Proposer" inputSize="l">
+              <SelectMember onChange={() => true} disabled={true} selected={proposer} />
+            </InputComponent>
+            <InputComponent label="Proposal title" required inputSize="m" id="field-title">
+              <InputText id="field-title" onChange={(event) => setTitle(event.target.value)} />
+            </InputComponent>
+            <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
+              <CKEditor id="field-rationale" onChange={(event, editor) => setRationale(editor.getData())} />
+            </InputComponent>
+            <CustomLink onClick={() => setShowRationale(true)}>How to write a good rationale?</CustomLink>
+          </RowGapBlock>
+        </Row>
+      </RowGapBlock>
+      {showRationale && <RationaleModal closeModal={() => setShowRationale(false)} />}
+    </>
   )
 }
 
