@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CKEditorProps } from '@/common/components/CKEditor'
+import { CKEditorProps, Editor, EventInfo } from '@/common/components/CKEditor'
 import { Input } from '@/common/components/forms'
 
 const CKEditor = ({ id, onChange }: CKEditorProps) => (
@@ -9,9 +9,11 @@ const CKEditor = ({ id, onChange }: CKEditorProps) => (
     name={id || 'ck-test'}
     type="text"
     autoComplete="off"
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    onChange={(event) => onChange(event, { getData: () => event.target.value })}
+    onChange={(event) => {
+      const mockEditor = { getData: () => event.target.value } as Editor
+      const mockEvent = {} as EventInfo
+      return onChange?.(mockEvent, mockEditor)
+    }}
   />
 )
 

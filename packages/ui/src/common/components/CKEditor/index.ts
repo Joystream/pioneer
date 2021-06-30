@@ -1,2 +1,2 @@
 export * from './CKEditor'
-export { EventInfo } from './types'
+export * from './types'
