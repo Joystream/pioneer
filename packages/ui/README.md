@@ -7,6 +7,7 @@ The application is divided to 3 types of building blocks:
     * `accounts`
     * `memberships`
     * `workingGroup`
+    * `proposals`
     * ...
 * `app` Application specific: routing, pages, etc.
 
@@ -23,3 +24,7 @@ The common and domain specific code is split by functionality:
 * `modals` - Contains specific modals
 * `model` - Contains business logic like validation, helpers, etc.
 * `queries` - Contains domain specific queries
+
+## Scripts
+
+- `yarn node-mocks` – Helper for creating on-chain data like members, setting staking accounts, etc.
