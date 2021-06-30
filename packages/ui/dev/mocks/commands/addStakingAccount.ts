@@ -15,18 +15,38 @@ async function staking(api: ApiPromise, controllerAccount: string, stakingAccoun
 
 const accountChoices: ReadonlyArray<KnownAccount> = ['alice', 'alice_stash', 'bob', 'bob_stash']
 
-export const options = {
-  c: { choices: accountChoices, default: 'alice' as KnownAccount, alias: 'controllerAccount' },
-  s: { choices: accountChoices, default: 'charlie' as KnownAccount, alias: 'stakingAccount' },
-  m: { type: 'string', default: '0', alias: 'memberId' } as const,
+export const memberIdOption = { type: 'string', default: '0', alias: 'memberId' } as const
+export const controllerAccountOption = {
+  choices: accountChoices,
+  default: 'alice' as KnownAccount,
+  alias: 'controllerAccount',
+}
+export const stakingAccountOption = {
+  choices: accountChoices,
+  default: 'charlie' as KnownAccount,
+  alias: 'stakingAccount',
 }
 
-export type AddMembersCommandArgs = yargs.InferredOptionTypes<typeof options>
+export const addStakingAccountOptions = {
+  c: controllerAccountOption,
+  s: stakingAccountOption,
+  m: memberIdOption,
+}
 
-export const addStakingAccountCommand = async (args: yargs.Arguments<AddMembersCommandArgs>) => {
+export type AddStakingAccountCommandOptions = yargs.InferredOptionTypes<typeof addStakingAccountOptions>
+export type AddStakingAccountArgs = yargs.Arguments<AddStakingAccountCommandOptions>
+
+export const addStakingAccountCommand = async (args: AddStakingAccountArgs) => {
   const api = await getApi()
 
   await staking(api, getAccount(args.c), getAccount(args.s), args.m)
 
   await api.disconnect()
+}
+
+export const addStakingAccountModule = {
+  command: 'add-staking-account',
+  describe: 'Add & confirm staking account',
+  handler: addStakingAccountCommand,
+  builder: (argv: yargs.Argv<unknown>) => argv.options(addStakingAccountOptions),
 }

@@ -1,22 +1,38 @@
 /* eslint-disable no-console */
 import { ApiPromise } from '@polkadot/api'
+import yargs from 'yargs'
 
-import { CHARLIE } from '../data/addresses'
+import { getAccount } from '../data/addresses'
 import { getApi, signAndSend } from '../lib/api'
 
-async function staking(api: ApiPromise) {
-  console.log('============== STAKING')
-  const removeStakingTx = api.tx.members.removeStakingAccount('0')
+import { memberIdOption, stakingAccountOption } from './addStakingAccount'
 
-  await signAndSend(removeStakingTx, CHARLIE)
+async function removeStakingAccount(api: ApiPromise, account: string, memberId: string) {
+  console.log('============== Remove staking')
+  const removeStakingTx = api.tx.members.removeStakingAccount(memberId)
+
+  await signAndSend(removeStakingTx, account)
 }
 
-const main = async () => {
+export const removeStakingOptions = {
+  s: stakingAccountOption,
+  m: memberIdOption,
+}
+
+export type RemoveStakingAccountCommandOptions = yargs.InferredOptionTypes<typeof removeStakingOptions>
+export type RemoveStakingAccountArgs = yargs.Arguments<RemoveStakingAccountCommandOptions>
+
+export const removeStakingAccountCommand = async (args: RemoveStakingAccountArgs) => {
   const api = await getApi()
 
-  await staking(api)
+  await removeStakingAccount(api, getAccount(args.s), args.m)
 
   await api.disconnect()
 }
 
-main()
+export const removeStakingAccountModule = {
+  command: 'remove-staking-account',
+  describe: 'Remove staking account',
+  handler: removeStakingAccountCommand,
+  builder: (argv: yargs.Argv) => argv.options(removeStakingOptions),
+}

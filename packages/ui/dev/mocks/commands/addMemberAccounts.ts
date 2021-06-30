@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
 import { ApiPromise } from '@polkadot/api'
 
-import memberData from '@/mocks/data/raw/members.json'
-
+import memberData from '../../../src/mocks/data/raw/members.json'
 import { ALICE } from '../data/addresses'
 import { getApi, signAndSend } from '../lib/api'
 
@@ -32,4 +31,10 @@ export const addMembersCommand = async () => {
   await addMembers(api)
 
   await api.disconnect()
+}
+
+export const addMembersModule = {
+  command: 'create-members',
+  describe: 'Create member accounts from mocks',
+  handler: addMembersCommand,
 }
