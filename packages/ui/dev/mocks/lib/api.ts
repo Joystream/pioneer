@@ -19,8 +19,25 @@ export const getApi = async () => {
 
 const keyring = testKeyring()
 
-export async function signAndSend(tx: SubmittableExtrinsic<'promise'>, signer: string) {
+const trim = (message: string, maxLength = 80) =>
+  message.length > maxLength ? message.slice(0, maxLength) + '...' : message
+
+const describeTx = (tx: SubmittableExtrinsic<'promise'>) => {
+  console.log(
+    `Sending: ${chalk.yellow(
+      `api.tx.${tx.method.sectionName}.${tx.method.methodName}(${trim(tx.method.args.toString())})`
+    )}`
+  )
+}
+
+export async function signAndSend(
+  tx: SubmittableExtrinsic<'promise'>,
+  signer: string,
+  innerTx?: SubmittableExtrinsic<'promise'>
+) {
   let unsubCb: () => void
+
+  describeTx(innerTx ? innerTx : tx)
 
   return new Promise<EventRecord[]>((resolve) => {
     tx.signAndSend(keyring.getPair(signer), function ({ events = [], status }: ISubmittableResult) {

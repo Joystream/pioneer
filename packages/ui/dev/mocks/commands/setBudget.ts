@@ -16,10 +16,11 @@ const setBudgetCommand = async (args: SetBudgetArgs) => {
   const budget = args.b
 
   await withApi(async (api) => {
-    console.log('============== Set budget')
-    const setBudgetTx = api.tx.sudo.sudo(api.tx.membershipWorkingGroup.setBudget(budget))
+    const budgetTx = api.tx.membershipWorkingGroup.setBudget(budget)
 
-    await signAndSend(setBudgetTx, getSudoAccount())
+    const tx = api.tx.sudo.sudo(budgetTx)
+
+    await signAndSend(tx, getSudoAccount(), budgetTx)
   })
 }
 

@@ -8,7 +8,6 @@ import { ALICE, ALICE_STASH, CHARLIE } from '../data/addresses'
 import { getApi, signAndSend } from '../lib/api'
 
 async function opening(api: ApiPromise) {
-  console.log('============== OPENING')
   const createOpening = api.tx.membershipWorkingGroup.addOpening(
     metadataToBytes(OpeningMetadata, {
       shortDescription: 'Test opening',
@@ -38,7 +37,7 @@ async function opening(api: ApiPromise) {
     },
   })
 
-  await signAndSend(api.tx.sudo.sudo(createOpening), ALICE)
+  await signAndSend(api.tx.sudo.sudo(createOpening), ALICE, createOpening)
   await signAndSend(applyOnOpeningTx, ALICE)
 }
 
