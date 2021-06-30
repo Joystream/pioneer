@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { ProposalVoteKind } from '@/common/api/queries'
 import { ButtonGhost } from '@/common/components/buttons'
-import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
+import { DropDownButton, DropDownToggle, ToggleContainer } from '@/common/components/buttons/DropDownToggle'
 import { FileIcon } from '@/common/components/icons/FileIcon'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextInlineMedium } from '@/common/components/typography'
@@ -78,15 +78,20 @@ const VotesContainer = styled(RowGapBlock).attrs({ gap: 8 })`
   border-radius: ${BorderRad.s};
 `
 
-const VoteType = styled.div``
+const VoteType = styled.div`
+  ${ToggleContainer} {
+    row-gap: ${spacing(1 / 2)};
+  }
+`
 
 const VoteTypeHeader = styled.label<{ kind: string }>`
   display: grid;
   align-items: center;
   grid-template-columns: 128px 1fr auto;
   cursor: pointer;
-  padding: ${spacing(1, 2)};
+  padding: ${spacing(1)};
   text-transform: capitalize;
+
   h6 {
     color: ${({ kind }) => {
       switch (kind) {
@@ -104,6 +109,5 @@ const VoteTypeHeader = styled.label<{ kind: string }>`
 const VoteListItem = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 2px 0;
   padding: ${spacing(1, 2)};
 `

@@ -57,8 +57,8 @@ export const Default: Story<Args> = ({ approve = 0, reject = 0, slash = 0, absta
 }
 
 Default.args = {
-  approve: 2,
-  reject: 2,
+  approve: 3,
+  reject: 1,
   slash: 0,
-  councilSize: 10,
+  councilSize: 12,
 }
