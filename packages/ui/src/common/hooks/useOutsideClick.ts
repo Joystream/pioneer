@@ -1,30 +1,46 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
+
+const isRef = (obj: any): obj is React.RefObject<any> => !!obj.current
 
 export function useOutsideClick(
-  container: HTMLDivElement | HTMLSpanElement | null,
+  refOrElement: React.RefObject<HTMLElement> | HTMLElement | null,
   isOpen: boolean,
   onClose: () => void
 ) {
   useEffect(() => {
-    if (!isOpen || !container) {
+    if (!isOpen || !refOrElement) {
+      return
+    }
+
+    let element: HTMLElement | null
+
+    if (isRef(refOrElement)) {
+      element = refOrElement.current
+    } else {
+      element = refOrElement
+    }
+
+    if (!element) {
       return
     }
 
     const closePopup = (event: MouseEvent) => {
       event.stopPropagation()
-      if (!event.target) {
+
+      if (!event.target || !element) {
         return
       }
 
       const target = event.target as Node
-      const clickedOutside = !container?.contains(target)
+      const clickedOutside = !element.contains(target)
+
       if (clickedOutside) {
-        onClose()
         window.removeEventListener('mousedown', closePopup)
+        onClose()
       }
     }
 
     window.addEventListener('mousedown', closePopup)
     return () => window.removeEventListener('mousedown', closePopup)
-  }, [isOpen, container])
+  }, [isOpen, refOrElement])
 }
