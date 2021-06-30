@@ -5,35 +5,35 @@ import { ProposalDetails } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
 
-interface AfterProposalTypeContext {
+interface ProposalTypeContext {
   proposalType?: ProposalDetails
 }
 
-interface AfterStakingAccountContext extends Required<AfterProposalTypeContext> {
+interface StakingAccountContext extends Required<ProposalTypeContext> {
   stakingAccount?: Account
 }
 
-interface AfterBaseDetailsContext extends Required<AfterStakingAccountContext> {
+interface BaseDetailsContext extends Required<StakingAccountContext> {
   proposalTitle?: string
   proposalRationale?: string
 }
 
-type Context = Partial<AfterProposalTypeContext & AfterStakingAccountContext & AfterBaseDetailsContext>
+type Context = Partial<ProposalTypeContext & StakingAccountContext & BaseDetailsContext>
 
 type AddNewProposalState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'warning'; context: EmptyObject }
-  | { value: 'proposalType'; context: Required<AfterProposalTypeContext> }
-  | { value: 'requiredStakeVerification'; context: Required<AfterProposalTypeContext> }
-  | { value: 'requiredStakeFailed'; context: Required<AfterProposalTypeContext> }
-  | { value: 'generalParameters'; context: Required<AfterBaseDetailsContext> }
-  | { value: 'generalParameters.stakingAccount'; context: Required<AfterStakingAccountContext> }
-  | { value: 'generalParameters.proposalDetails'; context: Required<AfterBaseDetailsContext> }
-  | { value: 'generalParameters.triggerAndDiscussion'; context: Required<AfterBaseDetailsContext> }
-  | { value: 'specificParameters'; context: Required<AfterBaseDetailsContext> }
-  | { value: 'success'; context: Required<AfterBaseDetailsContext> }
-  | { value: 'error'; context: Required<AfterBaseDetailsContext> }
+  | { value: 'proposalType'; context: Required<ProposalTypeContext> }
+  | { value: 'requiredStakeVerification'; context: Required<ProposalTypeContext> }
+  | { value: 'requiredStakeFailed'; context: Required<ProposalTypeContext> }
+  | { value: 'generalParameters'; context: Required<BaseDetailsContext> }
+  | { value: 'generalParameters.stakingAccount'; context: Required<StakingAccountContext> }
+  | { value: 'generalParameters.proposalDetails'; context: Required<BaseDetailsContext> }
+  | { value: 'generalParameters.triggerAndDiscussion'; context: Required<BaseDetailsContext> }
+  | { value: 'specificParameters'; context: Required<BaseDetailsContext> }
+  | { value: 'success'; context: Required<BaseDetailsContext> }
+  | { value: 'error'; context: Required<BaseDetailsContext> }
 
 type SelectProposalEvent = { type: 'SELECT'; proposalType: ProposalDetails }
 type SelectAccountEvent = { type: 'SELECT'; stakingAccount: Account }
