@@ -8,14 +8,11 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
+import { seedEvent, seedMembers, seedApplications, seedOpenings } from '@/mocks/data'
 import { seedWorkers } from '@/mocks/data/seedWorkers'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 
-import { seedApplications } from '../../../src/mocks/data/seedApplications'
-import { seedOpenings } from '../../../src/mocks/data/seedOpenings'
-import { seedRewardPaidEvent } from '../../../src/mocks/data/seedRewardPaidEvents'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -55,7 +52,7 @@ describe('MyEarningsStat', () => {
 
     const worker = mockServer.server?.schema.first('Worker')
 
-    seedRewardPaidEvent(
+    seedEvent(
       {
         id: '0',
         createdAt: new Date().toISOString(),
@@ -65,9 +62,10 @@ describe('MyEarningsStat', () => {
         amount: 100,
         type: 'REGULAR',
       },
+      'RewardPaidEvent',
       mockServer.server
     )
-    seedRewardPaidEvent(
+    seedEvent(
       {
         id: '1',
         createdAt: subDays(startOfToday(), 10).toISOString(),
@@ -77,6 +75,7 @@ describe('MyEarningsStat', () => {
         amount: 500,
         type: 'REGULAR',
       },
+      'RewardPaidEvent',
       mockServer.server
     )
 

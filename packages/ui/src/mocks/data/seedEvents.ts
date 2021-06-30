@@ -48,41 +48,26 @@ interface RawOpeningFilledEvent extends BaseEvent {
   workersHiredIds: string[]
 }
 
-export const eventCategories = [
-  {
-    name: 'ApplicationWithdrawnEvent',
-    events: rawApplicationWithdrawnEvents.map((rawEvent: RawApplicationWithdrawnEvent) => ({ ...rawEvent })),
-  },
-  {
-    name: 'AppliedOnOpeningEvent',
-    events: rawAppliedOnOpeningEvents.map((rawEvent: RawAppliedOnOpeningEvent) => ({ ...rawEvent })),
-  },
-  {
-    name: 'BudgetSpendingEvent',
-    events: rawBudgetSpendingEvents.map((rawEvent: RawBudgetSpendingEvent) => ({ ...rawEvent })),
-  },
-  { name: 'RewardPaidEvent', events: rawRewardPaidEvents.map((rawEvent: RawRewardPaidEvent) => ({ ...rawEvent })) },
-  {
-    name: 'StakeDecreasedEvent',
-    events: rawStakeDecreasedEvents.map((rawEvent: RawStakeChangedEvent) => ({ ...rawEvent })),
-  },
-  {
-    name: 'StakeIncreasedEvent',
-    events: rawStakeIncreasedEvents.map((rawEvent: RawStakeChangedEvent) => ({ ...rawEvent })),
-  },
-  {
-    name: 'StakeSlashedEvent',
-    events: rawStakeSlashedEvents.map((rawEvent: RawStakeSlashedEvent) => ({ ...rawEvent })),
-  },
-  {
-    name: 'OpeningFilledEvent',
-    events: rawOpeningFilledEvents.map((rawEvent: RawOpeningFilledEvent) => ({ ...rawEvent })),
-  },
-]
-
-export const seedEvent = <T extends BaseEvent>(mockEvent: T, eventType: string, server: any) => {
-  return server.schema.create(eventType, mockEvent)
+export const eventCategories = {
+  ApplicationWithdrawnEvent: rawApplicationWithdrawnEvents.map((rawEvent: RawApplicationWithdrawnEvent) => ({
+    ...rawEvent,
+  })),
+  AppliedOnOpeningEvent: rawAppliedOnOpeningEvents.map((rawEvent: RawAppliedOnOpeningEvent) => ({ ...rawEvent })),
+  BudgetSpendingEvent: rawBudgetSpendingEvents.map((rawEvent: RawBudgetSpendingEvent) => ({ ...rawEvent })),
+  RewardPaidEvent: rawRewardPaidEvents.map((rawEvent: RawRewardPaidEvent) => ({ ...rawEvent })),
+  StakeDecreasedEvent: rawStakeDecreasedEvents.map((rawEvent: RawStakeChangedEvent) => ({ ...rawEvent })),
+  StakeIncreasedEvent: rawStakeIncreasedEvents.map((rawEvent: RawStakeChangedEvent) => ({ ...rawEvent })),
+  StakeSlashedEvent: rawStakeSlashedEvents.map((rawEvent: RawStakeSlashedEvent) => ({ ...rawEvent })),
+  OpeningFilledEvent: rawOpeningFilledEvents.map((rawEvent: RawOpeningFilledEvent) => ({ ...rawEvent })),
 }
 
+type EventType = keyof typeof eventCategories
+
+export const seedEvent = <T extends BaseEvent>(mockEvent: T, eventType: string, server: any) =>
+  server.schema.create(eventType, mockEvent)
+
+export const seedEventCategory = (type: EventType, server: any) =>
+  eventCategories[type].map((event) => seedEvent(event, type, server))
+
 export const seedEvents = (server: any) =>
-  eventCategories.forEach((category) => category.events.forEach((event) => seedEvent(event, category.name, server)))
+  (Object.keys(eventCategories) as EventType[]).map((category) => seedEventCategory(category, server))
