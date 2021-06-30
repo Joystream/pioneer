@@ -7,7 +7,6 @@ let nextRewardPaidEventId = 0
 let nextBudgetSpendingEventId = 0
 let nextAppliedOnOpeningEventId = 0
 let nextApplicationWithdrawnEventId = 0
-let nextStakeChangedEventId = 0
 
 const generateRewardPaidEvent = (mocks: Mocks) => {
   return () => {
@@ -89,6 +88,19 @@ const generateStakeSlashedEvent = (mocks: Mocks) => () => {
   }
 }
 
+const generateOpeningFilledEvent = (mocks: Mocks) => () => {
+  const filled = mocks.openings.filter(o => o.status === 'filled')
+  const opening = filled[randomFromRange(0, filled.length - 1)]
+  const workers = mocks.workers.filter(w => w && w.groupId === opening.groupId)
+  return {
+    createdAt: faker.date.recent(7),
+    groupId: opening.groupId,
+    openingId: opening.id,
+    workersHiredIds: Array.from({ length: opening.metadata.hiringLimit })
+      .map(() => workers[randomFromRange(0, workers.length - 1)]?.id)
+  }
+}
+
 export const generateAllEvents = (mocks: Mocks) => {
   const rewardPaidEvents = Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks))
   const budgetSpendingEvents = Array.from({ length: 10 }).map(generateBudgetSpending(mocks))
@@ -100,6 +112,7 @@ export const generateAllEvents = (mocks: Mocks) => {
   const stakeDecreasedEvents = Array.from({ length: 10 }).map(generateStakeChanged(mocks))
   const stakeIncreasedEvents = Array.from({ length: 10 }).map(generateStakeChanged(mocks))
   const stakeSlashedEvents = Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks))
+  const openingFilledEvents = Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks))
 
   return {
     rewardPaidEvents,
@@ -109,5 +122,6 @@ export const generateAllEvents = (mocks: Mocks) => {
     stakeDecreasedEvents,
     stakeIncreasedEvents,
     stakeSlashedEvents,
+    openingFilledEvents,
   }
 }
