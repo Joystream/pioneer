@@ -1,4 +1,4 @@
-export type MemberSize = 'm' | 'l'
+export type MemberSize = 's' | 'm' | 'l'
 
 export interface MemberInfoWrapProps {
   isOnDark?: boolean

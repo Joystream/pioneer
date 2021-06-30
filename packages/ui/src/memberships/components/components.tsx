@@ -97,24 +97,27 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   transition: ${Transitions.all};
 
   ${MemberPhoto} {
-    width: ${({ memberSize }) => {
+    ${({ memberSize }) => {
       switch (memberSize) {
         case 'l':
-          return '80px'
+          return css`
+            width: 80px;
+            height: 80px;
+          `
+        case 's':
+          return css`
+            align-self: start;
+            width: 26px;
+            height: 26px;
+          `
         case 'm':
         default:
-          return '40px'
+          return css`
+            width: 40px;
+            height: 40px;
+          `
       }
-    }};
-    height: ${({ memberSize }) => {
-      switch (memberSize) {
-        case 'l':
-          return '80px'
-        case 'm':
-        default:
-          return '40px'
-      }
-    }};
+    }}
   }
 
   ${MemberRolesWrapper} {
@@ -177,6 +180,8 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
     switch (memberSize) {
       case 'l':
         return MemberLargeElements
+      case 's':
+        return MemberSmallElements
       case 'm':
       default:
         return MemberMediumElements
@@ -235,6 +240,13 @@ const MemberLargeElements = css`
 
 const MemberMediumElements = css`
   grid-template-columns: 40px auto 1fr;
+  grid-template-rows: 20px 16px;
+  grid-column-gap: 8px;
+  grid-row-gap: 4px;
+`
+
+const MemberSmallElements = css`
+  grid-template-columns: 26px auto 1fr;
   grid-template-rows: 20px 16px;
   grid-column-gap: 8px;
   grid-row-gap: 4px;

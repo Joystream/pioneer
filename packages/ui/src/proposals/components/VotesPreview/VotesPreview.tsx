@@ -54,7 +54,7 @@ export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
       <DropDownToggle isDropped={isOpen}>
         {votes?.map(({ voter }, index) => (
           <VoteListItem key={index}>
-            <MemberInfo key={index} member={voter} memberSize="m" />
+            <MemberInfo key={index} member={voter} memberSize="s" />
 
             <ButtonGhost size="small" onClick={() => undefined}>
               <FileIcon />
