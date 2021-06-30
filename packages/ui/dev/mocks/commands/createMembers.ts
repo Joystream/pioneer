@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import memberData from '../../../src/mocks/data/raw/members.json'
-import { ALICE } from '../data/addresses'
+import { getSudoAccount } from '../data/addresses'
 import { signAndSend, withApi } from '../lib/api'
 
-export const addMembersCommand = async () => {
+export const createMembersCommand = async () => {
   await withApi(async (api) => {
     const members = memberData
 
@@ -21,12 +21,12 @@ export const addMembersCommand = async () => {
 
     const tx = api.tx.utility.batch(createMembers)
 
-    await signAndSend(tx, ALICE)
+    await signAndSend(tx, getSudoAccount())
   })
 }
 
-export const addMembersModule = {
+export const createMembersModule = {
   command: 'create-members',
   describe: 'Create member accounts from mocks',
-  handler: addMembersCommand,
+  handler: createMembersCommand,
 }
