@@ -8,6 +8,12 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
 import chalk from 'chalk'
 
+const isError = (events: EventRecord[]): boolean => {
+  return !!events.find(({ event: { method } }) => {
+    return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
+  })
+}
+
 export const getApi = async () => {
   process.stdout.write('>> Connecting to API... ')
   const provider = new WsProvider('ws://127.0.0.1:9944')
@@ -54,6 +60,8 @@ export async function signAndSend(
           .join('\n')
 
         console.log(chalk.gray(` > Events:\n${eventsString}\n`))
+
+        console.log(`Transaction result: ${isError(events) ? chalk.red('✕ Error') : chalk.green('✓ Success')}`)
 
         unsubCb()
         resolve(events)
