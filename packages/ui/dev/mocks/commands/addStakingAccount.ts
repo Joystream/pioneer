@@ -2,8 +2,9 @@
 import { ApiPromise } from '@polkadot/api'
 import yargs from 'yargs'
 
-import { getAccount, KnownAccount } from '../data/addresses'
+import { getAccount } from '../data/addresses'
 import { getApi, signAndSend } from '../lib/api'
+import { controllerAccountOption, memberIdOption, stakingAccountOption } from '../lib/options'
 
 async function staking(api: ApiPromise, controllerAccount: string, stakingAccount: string, memberId: string) {
   const stakingCandidateTx = api.tx.members.addStakingAccountCandidate(memberId)
@@ -11,20 +12,6 @@ async function staking(api: ApiPromise, controllerAccount: string, stakingAccoun
 
   await signAndSend(stakingCandidateTx, stakingAccount)
   await signAndSend(stakingConfirmTx, controllerAccount)
-}
-
-const accountChoices: ReadonlyArray<KnownAccount> = ['alice', 'alice_stash', 'bob', 'bob_stash']
-
-export const memberIdOption = { type: 'string', default: '0', alias: 'memberId' } as const
-export const controllerAccountOption = {
-  choices: accountChoices,
-  default: 'alice' as KnownAccount,
-  alias: 'controllerAccount',
-}
-export const stakingAccountOption = {
-  choices: accountChoices,
-  default: 'charlie' as KnownAccount,
-  alias: 'stakingAccount',
 }
 
 export const addStakingAccountOptions = {

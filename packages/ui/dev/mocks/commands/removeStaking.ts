@@ -4,8 +4,7 @@ import yargs from 'yargs'
 
 import { getAccount } from '../data/addresses'
 import { getApi, signAndSend } from '../lib/api'
-
-import { memberIdOption, stakingAccountOption } from './addStakingAccount'
+import { memberIdOption, stakingAccountOption } from '../lib/options'
 
 async function removeStakingAccount(api: ApiPromise, account: string, memberId: string) {
   console.log('============== Remove staking')
