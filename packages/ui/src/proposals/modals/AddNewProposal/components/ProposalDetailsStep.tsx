@@ -44,14 +44,7 @@ export const ProposalDetailsStep = ({ proposer, setTitle, setRationale }: Propos
             <InputText id="field-title" onChange={(event) => setTitle(event.target.value)} />
           </InputComponent>
           <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
-            <CKEditor
-              id="field-rationale"
-              onChange={(event, editor) =>
-                setRationale(
-                  editor ? editor.getData() : ((event as unknown) as ChangeEvent<HTMLInputElement>).target.value
-                )
-              }
-            />
+            <CKEditor id="field-rationale" onChange={(event, editor) => setRationale(editor.getData())} />
           </InputComponent>
           <CustomLink onClick={showRationaleModal}>How to write a good rationale?</CustomLink>
         </RowGapBlock>

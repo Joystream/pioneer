@@ -1,15 +1,17 @@
-import React, { ChangeEventHandler } from 'react'
+import React from 'react'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { Input } from '@/common/components/forms'
 
-const CKEditor = (props: CKEditorProps) => (
+const CKEditor = ({ id, onChange }: CKEditorProps) => (
   <Input
-    id={props.id || 'ck-test'}
-    name={props.id}
+    id={id || 'ck-test'}
+    name={id || 'ck-test'}
     type="text"
     autoComplete="off"
-    onChange={(props.onChange as unknown) as ChangeEventHandler<Element>}
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    onChange={(event) => onChange(event, { getData: () => event.target.value })}
   />
 )
 
