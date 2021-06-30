@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { ratioControl } from '@/common/components/storybookParts/previewStyles'
+import { plural } from '@/common/helpers'
 
 import { Statistics, StatisticBar, StatisticBarProps, TwoRowStatistic } from '.'
 
@@ -16,7 +17,7 @@ const { ceil, floor } = Math
 const Template: Story<StatisticBarProps> = (args) => {
   const { value, threshold } = args
   const thresholdVotes = threshold ? ceil(10 * threshold) : '-'
-  const thresholdVoteDenominator = `${thresholdVotes} vote${thresholdVotes === 1 ? '' : 's'}`
+  const thresholdVoteDenominator = `${thresholdVotes} vote${plural(thresholdVotes)}`
   const thresholdPercent = threshold ? `${floor(100 * threshold)}%` : '-'
 
   return (

@@ -8,6 +8,7 @@ import { FileIcon } from '@/common/components/icons/FileIcon'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextInlineMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
+import { plural } from '@/common/helpers'
 import { useToggle } from '@/common/hooks/useToggle'
 import { isDefined } from '@/common/utils'
 import { spacing } from '@/common/utils/styles'
@@ -46,7 +47,7 @@ export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
         <h6>{KindToTitle.get(kind) ?? kind}</h6>
         <div>
           <TextInlineMedium bold>{isDefined(count) ? count : '-'}</TextInlineMedium>{' '}
-          <TextInlineMedium lighter>votes</TextInlineMedium>
+          <TextInlineMedium lighter>vote{plural(count)}</TextInlineMedium>
         </div>
         <DropDownButton isDropped={isOpen} onClick={toggle} />
       </VoteTypeHeader>
