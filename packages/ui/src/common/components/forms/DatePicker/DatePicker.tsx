@@ -43,7 +43,7 @@ export const DatePicker = ({
   const popperElementRef = useRef<HTMLDivElement>(null)
 
   const { styles, attributes } = usePopper(referenceElementRef.current, popperElementRef.current, {
-    placement: 'auto-start',
+    placement: 'bottom-start',
     modifiers: [
       {
         name: 'offset',
