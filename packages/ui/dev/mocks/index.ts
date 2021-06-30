@@ -6,7 +6,8 @@ import { removeStakingAccountModule } from './commands/removeStaking'
 import { setBudgetModule } from './commands/setBudget'
 
 yargs(process.argv.slice(2))
-  .scriptName('mocks/index')
+  .usage('yarn node-mocks <command>')
+  .scriptName('')
   .command(createMembersModule)
   .command(addStakingAccountModule)
   .command(removeStakingAccountModule)
