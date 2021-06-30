@@ -26,12 +26,10 @@ async function addMembers(api: ApiPromise) {
   await signAndSend(tx, ALICE)
 }
 
-const main = async () => {
+export const addMembersCommand = async () => {
   const api = await getApi()
 
   await addMembers(api)
 
   await api.disconnect()
 }
-
-main()
