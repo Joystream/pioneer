@@ -43,7 +43,7 @@ export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
   return (
     <VoteType>
       <VoteTypeHeader kind={kind}>
-        <h6>{kind.toLowerCase()}</h6>
+        <h6>{KindToTitle.get(kind) ?? kind}</h6>
         <div>
           <TextInlineMedium bold>{isDefined(count) ? count : '-'}</TextInlineMedium>{' '}
           <TextInlineMedium lighter>votes</TextInlineMedium>
@@ -65,6 +65,13 @@ export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
     </VoteType>
   )
 }
+
+const KindToTitle = new Map<string, string>([
+  [Approve, 'Approved'],
+  [Reject, 'Rejected'],
+  [Slash, 'Slashed'],
+  [Abstain, 'Abstained'],
+])
 
 const VotesContainer = styled(RowGapBlock).attrs({ gap: 8 })`
   border: 1px solid ${Colors.Black[200]};
