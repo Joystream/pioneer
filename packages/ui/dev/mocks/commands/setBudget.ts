@@ -1,25 +1,36 @@
 /* eslint-disable no-console */
 import { ApiPromise } from '@polkadot/api'
+import yargs from 'yargs'
 
+import { getSudoAccount } from '../data/addresses'
 import { getApi, signAndSend } from '../lib/api'
 
-const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
-
-const BUDGET = 10_000
-
-async function budget(api: ApiPromise) {
+async function budget(api: ApiPromise, budget: number) {
   console.log('============== Set budget')
-  const setBudgetTx = api.tx.sudo.sudo(api.tx.membershipWorkingGroup.setBudget(BUDGET))
+  const setBudgetTx = api.tx.sudo.sudo(api.tx.membershipWorkingGroup.setBudget(budget))
 
-  await signAndSend(setBudgetTx, ALICE)
+  await signAndSend(setBudgetTx, getSudoAccount())
 }
 
-const main = async () => {
+export const options = {
+  b: { type: 'number', alias: 'budget', demandOption: true } as const,
+}
+
+type CommandOptions = yargs.InferredOptionTypes<typeof options>
+
+export type SetBudgetArgs = yargs.Arguments<CommandOptions>
+
+const setBudgetCommand = async (args: SetBudgetArgs) => {
   const api = await getApi()
 
-  await budget(api)
+  await budget(api, args.b)
 
   await api.disconnect()
 }
 
-main()
+export const setBudgetModule = {
+  command: 'set-budget',
+  describe: 'Add & confirm staking account',
+  handler: setBudgetCommand,
+  builder: (argv: yargs.Argv<unknown>) => argv.options(options),
+}

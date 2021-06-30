@@ -17,3 +17,5 @@ export type KnownAccount = keyof typeof accountsMap
 export const getAccount = (name: KnownAccount) => {
   return accountsMap[name]
 }
+
+export const getSudoAccount = () => getAccount('alice')
