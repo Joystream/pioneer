@@ -5,57 +5,35 @@ import { ProposalDetails } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
 
-interface AddNewProposalContext {
+interface AfterProposalTypeContext {
   proposalType?: ProposalDetails
+}
+
+interface AfterStakingAccountContext extends Required<AfterProposalTypeContext> {
   stakingAccount?: Account
+}
+
+interface AfterBaseDetailsContext extends Required<AfterStakingAccountContext> {
   proposalTitle?: string
   proposalRationale?: string
 }
+
+type Context = Partial<AfterProposalTypeContext & AfterStakingAccountContext & AfterBaseDetailsContext>
 
 type AddNewProposalState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'warning'; context: EmptyObject }
-  | { value: 'proposalType'; context: { proposalType: Required<ProposalDetails> } }
-  | { value: 'requiredStakeVerification'; context: { proposalType: Required<ProposalDetails> } }
-  | { value: 'requiredStakeFailed'; context: { proposalType: Required<ProposalDetails> } }
-  | {
-      value: 'generalParameters'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
-    }
-  | {
-      value: 'generalParameters.stakingAccount'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
-    }
-  | {
-      value: 'generalParameters.proposalDetails'
-      context: {
-        proposalType: Required<ProposalDetails>
-        stakingAccount: Required<Account>
-        proposalTitle: Required<string>
-        proposalRationale: Required<string>
-      }
-    }
-  | {
-      value: 'generalParameters.triggerAndDiscussion'
-      context: {
-        proposalType: Required<ProposalDetails>
-        stakingAccount: Required<Account>
-        proposalTitle: Required<string>
-        proposalRationale: Required<string>
-      }
-    }
-  | {
-      value: 'specificParameters'
-      context: {
-        proposalType: Required<ProposalDetails>
-        stakingAccount: Required<Account>
-        proposalTitle: Required<string>
-        proposalRationale: Required<string>
-      }
-    }
-  | { value: 'success'; context: AddNewProposalContext }
-  | { value: 'error'; context: AddNewProposalContext }
+  | { value: 'proposalType'; context: Required<AfterProposalTypeContext> }
+  | { value: 'requiredStakeVerification'; context: Required<AfterProposalTypeContext> }
+  | { value: 'requiredStakeFailed'; context: Required<AfterProposalTypeContext> }
+  | { value: 'generalParameters'; context: Required<AfterBaseDetailsContext> }
+  | { value: 'generalParameters.stakingAccount'; context: Required<AfterStakingAccountContext> }
+  | { value: 'generalParameters.proposalDetails'; context: Required<AfterBaseDetailsContext> }
+  | { value: 'generalParameters.triggerAndDiscussion'; context: Required<AfterBaseDetailsContext> }
+  | { value: 'specificParameters'; context: Required<AfterBaseDetailsContext> }
+  | { value: 'success'; context: Required<AfterBaseDetailsContext> }
+  | { value: 'error'; context: Required<AfterBaseDetailsContext> }
 
 type SelectProposalEvent = { type: 'SELECT'; proposalType: ProposalDetails }
 type SelectAccountEvent = { type: 'SELECT'; stakingAccount: Account }
@@ -70,7 +48,7 @@ export type AddNewProposalEvent =
   | SetTitleEvent
   | SetRationaleEvent
 
-export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNewProposalEvent, AddNewProposalState>({
+export const addNewProposalMachine = createMachine<Context, AddNewProposalEvent, AddNewProposalState>({
   initial: 'requirementsVerification',
   states: {
     requirementsVerification: {
