@@ -11,15 +11,14 @@ export const ApplicationWithdrawnContent: ActivityContentComponent<ApplicationWi
   isOwn,
 }) => {
   const { member, opening } = activity
-  return (
+  return isOwn ? (
     <>
-      {isOwn ? (
-        <>You have </>
-      ) : (
-        <>
-          <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink> has{' '}
-        </>
-      )}
+      You have withdrawn application from "
+      <ActivityRouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</ActivityRouterLink>" opening.
+    </>
+  ) : (
+    <>
+      <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink> has{' '}
       withdrawn application from "
       <ActivityRouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</ActivityRouterLink>" opening.
     </>

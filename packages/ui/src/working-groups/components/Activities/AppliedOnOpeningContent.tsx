@@ -8,16 +8,15 @@ import { AppliedOnOpeningActivity } from '../../types'
 
 export const AppliedOnOpeningContent: ActivityContentComponent<AppliedOnOpeningActivity> = ({ activity, isOwn }) => {
   const { member, opening } = activity
-  return (
+  return isOwn ? (
     <>
-      {isOwn ? (
-        <>You have applied on the opening </>
-      ) : (
-        <>
-          <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink> has
-          applied on the opening{' '}
-        </>
-      )}
+      You have applied on the opening{' '}
+      <ActivityRouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</ActivityRouterLink>.
+    </>
+  ) : (
+    <>
+      <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink> has applied
+      on the opening{' '}
       <ActivityRouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</ActivityRouterLink>.
     </>
   )
