@@ -5,46 +5,50 @@ import { ProposalDetails } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
 
-interface AddNewProposalContext {
+interface ProposalTypeContext {
   proposalType?: ProposalDetails
+}
+
+interface StakingAccountContext extends Required<ProposalTypeContext> {
   stakingAccount?: Account
 }
+
+interface BaseDetailsContext extends Required<StakingAccountContext> {
+  proposalTitle?: string
+  proposalRationale?: string
+}
+
+type Context = Partial<ProposalTypeContext & StakingAccountContext & BaseDetailsContext>
 
 type AddNewProposalState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'warning'; context: EmptyObject }
-  | { value: 'proposalType'; context: { proposalType: Required<ProposalDetails> } }
-  | { value: 'requiredStakeVerification'; context: { proposalType: Required<ProposalDetails> } }
-  | { value: 'requiredStakeFailed'; context: { proposalType: Required<ProposalDetails> } }
-  | {
-      value: 'generalParameters'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
-    }
-  | {
-      value: 'generalParameters.stakingAccount'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
-    }
-  | {
-      value: 'generalParameters.proposalDetails'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
-    }
-  | {
-      value: 'generalParameters.triggerAndDiscussion'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
-    }
-  | {
-      value: 'specificParameters'
-      context: { proposalType: Required<ProposalDetails>; stakingAccount: Required<Account> }
-    }
-  | { value: 'success'; context: AddNewProposalContext }
-  | { value: 'error'; context: AddNewProposalContext }
+  | { value: 'proposalType'; context: Required<ProposalTypeContext> }
+  | { value: 'requiredStakeVerification'; context: Required<ProposalTypeContext> }
+  | { value: 'requiredStakeFailed'; context: Required<ProposalTypeContext> }
+  | { value: 'generalParameters'; context: Required<BaseDetailsContext> }
+  | { value: 'generalParameters.stakingAccount'; context: Required<StakingAccountContext> }
+  | { value: 'generalParameters.proposalDetails'; context: Required<BaseDetailsContext> }
+  | { value: 'generalParameters.triggerAndDiscussion'; context: Required<BaseDetailsContext> }
+  | { value: 'specificParameters'; context: Required<BaseDetailsContext> }
+  | { value: 'success'; context: Required<BaseDetailsContext> }
+  | { value: 'error'; context: Required<BaseDetailsContext> }
 
 type SelectProposalEvent = { type: 'SELECT'; proposalType: ProposalDetails }
 type SelectAccountEvent = { type: 'SELECT'; stakingAccount: Account }
-export type AddNewProposalEvent = { type: 'FAIL' } | { type: 'NEXT' } | SelectProposalEvent | SelectAccountEvent
+type SetTitleEvent = { type: 'SET_TITLE'; title: string }
+type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 
-export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNewProposalEvent, AddNewProposalState>({
+export type AddNewProposalEvent =
+  | { type: 'FAIL' }
+  | { type: 'NEXT' }
+  | SelectProposalEvent
+  | SelectAccountEvent
+  | SetTitleEvent
+  | SetRationaleEvent
+
+export const addNewProposalMachine = createMachine<Context, AddNewProposalEvent, AddNewProposalState>({
   initial: 'requirementsVerification',
   states: {
     requirementsVerification: {
@@ -101,7 +105,20 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         proposalDetails: {
           meta: { isStep: true, stepTitle: 'Proposal details' },
           on: {
-            NEXT: 'triggerAndDiscussion',
+            NEXT: {
+              target: 'triggerAndDiscussion',
+              cond: (context) => !!context.proposalTitle && !!context.proposalRationale,
+            },
+            SET_TITLE: {
+              actions: assign({
+                proposalTitle: (context, event) => (event as SetTitleEvent).title,
+              }),
+            },
+            SET_RATIONALE: {
+              actions: assign({
+                proposalRationale: (context, event) => (event as SetRationaleEvent).rationale,
+              }),
+            },
           },
         },
         triggerAndDiscussion: {
