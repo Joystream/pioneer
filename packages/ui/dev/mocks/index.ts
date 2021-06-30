@@ -1,7 +1,7 @@
 import yargs from 'yargs'
 
-import { addMembersCommand } from './addMemberAccounts'
-import { AddMembersCommandArgs, addStakingAccountCommand, options } from './addStakingAccount'
+import { addMembersCommand } from './commands/addMemberAccounts'
+import { AddMembersCommandArgs, addStakingAccountCommand, options } from './commands/addStakingAccount'
 
 yargs(process.argv.slice(2))
   .scriptName('mocks')

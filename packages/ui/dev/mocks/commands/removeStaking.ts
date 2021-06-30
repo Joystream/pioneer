@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { ApiPromise } from '@polkadot/api'
 
-import { CHARLIE } from './data/addresses'
-import { getApi, signAndSend } from './lib/api'
+import { CHARLIE } from '../data/addresses'
+import { getApi, signAndSend } from '../lib/api'
 
 async function staking(api: ApiPromise) {
   console.log('============== STAKING')

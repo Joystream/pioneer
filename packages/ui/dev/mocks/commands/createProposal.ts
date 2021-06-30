@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { ApiPromise } from '@polkadot/api'
 
-import { ALICE, CHARLIE } from './data/addresses'
-import { getApi, signAndSend } from './lib/api'
+import { ALICE, CHARLIE } from '../data/addresses'
+import { getApi, signAndSend } from '../lib/api'
 
 async function proposal(api: ApiPromise) {
   console.log('============== PROPOSAL')

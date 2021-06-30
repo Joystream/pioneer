@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { ApiPromise } from '@polkadot/api'
 
-import { ALICE_STASH } from './data/addresses'
-import { getApi, signAndSend } from './lib/api'
+import { ALICE_STASH } from '../data/addresses'
+import { getApi, signAndSend } from '../lib/api'
 
 async function withdraw(api: ApiPromise) {
   console.log('============== WITHDRAW')

@@ -4,8 +4,8 @@ import { JoyBTreeSet } from '@joystream/types/common'
 import { ApplicationId } from '@joystream/types/working-group'
 import { ApiPromise } from '@polkadot/api'
 
-import { ALICE } from './data/addresses'
-import { getApi, signAndSend } from './lib/api'
+import { ALICE } from '../data/addresses'
+import { getApi, signAndSend } from '../lib/api'
 
 async function fillOpening(api: ApiPromise) {
   console.log('============== WITHDRAW')

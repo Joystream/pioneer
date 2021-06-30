@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { ApiPromise } from '@polkadot/api'
 
-import { getApi, signAndSend } from './lib/api'
+import { getApi, signAndSend } from '../lib/api'
 
 const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
 

@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import { ApiPromise } from '@polkadot/api'
 
-import memberData from '../../src/mocks/data/raw/members.json'
+import memberData from '@/mocks/data/raw/members.json'
 
-import { ALICE } from './data/addresses'
-import { getApi, signAndSend } from './lib/api'
+import { ALICE } from '../data/addresses'
+import { getApi, signAndSend } from '../lib/api'
 
 async function addMembers(api: ApiPromise) {
   const members = memberData

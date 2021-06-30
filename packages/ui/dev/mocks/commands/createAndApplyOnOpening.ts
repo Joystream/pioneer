@@ -2,10 +2,10 @@
 import { ApplicationMetadata, OpeningMetadata } from '@joystream/metadata-protobuf'
 import { ApiPromise } from '@polkadot/api'
 
-import { metadataToBytes } from '../../src/common/model/JoystreamNode'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 
-import { ALICE, ALICE_STASH, CHARLIE } from './data/addresses'
-import { getApi, signAndSend } from './lib/api'
+import { ALICE, ALICE_STASH, CHARLIE } from '../data/addresses'
+import { getApi, signAndSend } from '../lib/api'
 
 async function opening(api: ApiPromise) {
   console.log('============== OPENING')

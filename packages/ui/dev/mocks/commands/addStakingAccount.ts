@@ -2,8 +2,8 @@
 import { ApiPromise } from '@polkadot/api'
 import yargs from 'yargs'
 
-import { getAccount, KnownAccount } from './data/addresses'
-import { getApi, signAndSend } from './lib/api'
+import { getAccount, KnownAccount } from '../data/addresses'
+import { getApi, signAndSend } from '../lib/api'
 
 async function staking(api: ApiPromise, controllerAccount: string, stakingAccount: string, memberId: string) {
   const stakingCandidateTx = api.tx.members.addStakingAccountCandidate(memberId)
