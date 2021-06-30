@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account } from '@/accounts/types'
 import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
@@ -33,7 +34,11 @@ export const StakingAccountStep = ({ requiredStake, account: chosenAccount, setA
             </TextMedium>
           </RowGapBlock>
           <InputComponent label="Select account for Staking" required inputSize="l">
-            <SelectAccount onChange={(account) => setAccount(account)} selected={chosenAccount} />
+            <SelectAccount
+              onChange={(account) => setAccount(account)}
+              selected={chosenAccount}
+              filter={(account) => useBalance(account.address)?.transferable.gte(requiredStake) ?? true}
+            />
           </InputComponent>
         </RowGapBlock>
       </Row>
