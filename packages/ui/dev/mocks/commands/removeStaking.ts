@@ -1,37 +1,33 @@
 /* eslint-disable no-console */
-import { ApiPromise } from '@polkadot/api'
 import yargs from 'yargs'
 
 import { getAccount } from '../data/addresses'
-import { getApi, signAndSend } from '../lib/api'
+import { signAndSend, withApi } from '../lib/api'
 import { memberIdOption, stakingAccountOption } from '../lib/options'
 
-async function removeStakingAccount(api: ApiPromise, account: string, memberId: string) {
-  console.log('============== Remove staking')
-  const removeStakingTx = api.tx.members.removeStakingAccount(memberId)
-
-  await signAndSend(removeStakingTx, account)
-}
-
-export const removeStakingOptions = {
+const options = {
   s: stakingAccountOption,
   m: memberIdOption,
 }
 
-export type RemoveStakingAccountCommandOptions = yargs.InferredOptionTypes<typeof removeStakingOptions>
-export type RemoveStakingAccountArgs = yargs.Arguments<RemoveStakingAccountCommandOptions>
+type CommandOptions = yargs.InferredOptionTypes<typeof options>
+export type RemoveStakingAccountArgs = yargs.Arguments<CommandOptions>
 
 export const removeStakingAccountCommand = async (args: RemoveStakingAccountArgs) => {
-  const api = await getApi()
+  const account = getAccount(args.s)
+  const memberId = args.m
 
-  await removeStakingAccount(api, getAccount(args.s), args.m)
+  await withApi(async (api) => {
+    console.log('============== Remove staking')
+    const removeStakingTx = api.tx.members.removeStakingAccount(memberId)
 
-  await api.disconnect()
+    await signAndSend(removeStakingTx, account)
+  })
 }
 
 export const removeStakingAccountModule = {
   command: 'remove-staking-account',
   describe: 'Remove staking account',
   handler: removeStakingAccountCommand,
-  builder: (argv: yargs.Argv) => argv.options(removeStakingOptions),
+  builder: (argv: yargs.Argv) => argv.options(options),
 }

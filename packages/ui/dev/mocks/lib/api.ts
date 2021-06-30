@@ -31,12 +31,18 @@ export async function signAndSend(tx: SubmittableExtrinsic<'promise'>, signer: s
         events.forEach(({ event: { data, method, section }, phase }) => {
           console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
         })
-      } else if (status.isFinalized) {
-        console.log(' > Finalized block hash', status.asFinalized.toHex())
 
         unsubCb()
         resolve()
       }
     }).then((unsub) => (unsubCb = unsub))
   })
+}
+
+export async function withApi(callback: (api: ApiPromise) => Promise<void>) {
+  const api = await getApi()
+
+  await callback(api)
+
+  await api.disconnect()
 }
