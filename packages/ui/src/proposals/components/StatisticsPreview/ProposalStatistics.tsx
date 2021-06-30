@@ -2,13 +2,13 @@ import React from 'react'
 
 import { StatisticBar, Statistics, TwoRowStatistic } from '@/common/components/statistics'
 import { isDefined } from '@/common/utils'
-import { VoteCount } from '@/proposals/hooks/useVoteCount'
+import { ProposalVoteCount } from '@/proposals/hooks/useProposalVotes'
 import { ProposalConstants } from '@/proposals/types'
 
 const tooltipLinkURL = 'https://joystream.gitbook.io/joystream-handbook/governance/proposals#concepts'
 
 interface ProposalStatisticsProps {
-  voteCount: VoteCount
+  voteCount: ProposalVoteCount
   constants: ProposalConstants | null
 }
 export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsProps) => {

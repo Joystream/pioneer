@@ -23,7 +23,7 @@ import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
-import { useVoteCount } from '@/proposals/hooks/useVoteCount'
+import { useProposalVotes } from '@/proposals/hooks/useProposalVotes'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
@@ -34,9 +34,9 @@ export const ProposalPreview = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
 
-  const voteCount = useVoteCount(proposal?.votes)
+  const votes = useProposalVotes(proposal?.votes)
 
-  if (isLoading || !proposal || !voteCount) {
+  if (isLoading || !proposal || !votes) {
     return (
       <PageLayout
         lastBreadcrumb={id}
@@ -84,7 +84,7 @@ export const ProposalPreview = () => {
       main={
         <MainPanel ref={sideNeighborRef}>
           <RowGapBlock gap={24}>
-            <ProposalStatistics voteCount={voteCount} constants={constants} />
+            <ProposalStatistics voteCount={votes.count} constants={constants} />
 
             {/* Proposal-specific dashboard */}
             <h3>{camelCaseToText(proposal.details)}</h3>
