@@ -10,7 +10,7 @@ export const OpeningFilledContent: ActivityContentComponent<OpeningFilledActivit
   return (
     <>
       Opening <ActivityRouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</ActivityRouterLink>
-      {opening.type == 'LEADER' && 'for a Lead'} had been filled.
+      {opening.type == 'LEADER' && ' for a Lead'} has been filled.
       {hiredMembers.map((member) => (
         <span key={member.handle}>
           <br />
