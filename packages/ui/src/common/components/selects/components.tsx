@@ -99,11 +99,6 @@ export const SelectComponent = styled.div`
   & > :first-child {
     border-radius: 2px;
   }
-  &:hover > :first-child,
-  &:focus-within > :first-child {
-    border-color: ${Colors.Blue[400]};
-    box-shadow: 0 0 8px rgba(129, 126, 255, 0.4);
-  }
 `
 
 export const OptionComponentContainer = styled.li`

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { CKEditor } from '@/common/components/CKEditor'
@@ -8,7 +8,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { useModal } from '@/common/hooks/useModal'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/RationaleModal'
@@ -33,8 +32,8 @@ export const ProposalDetailsStep = ({ proposer, setTitle, setRationale }: Propos
         </Row>
         <Row>
           <RowGapBlock gap={20}>
-            <InputComponent label="Proposer" inputSize="l">
-              <SelectMember onChange={() => true} disabled={true} selected={proposer} />
+            <InputComponent label="Proposer" inputSize="l" disabled>
+              <SelectMember onChange={() => true} disabled selected={proposer} />
             </InputComponent>
             <InputComponent label="Proposal title" required inputSize="m" id="field-title">
               <InputText id="field-title" onChange={(event) => setTitle(event.target.value)} />
