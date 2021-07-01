@@ -37,7 +37,7 @@ export const StakingAccountStep = ({ requiredStake, account: chosenAccount, setA
             <SelectAccount
               onChange={(account) => setAccount(account)}
               selected={chosenAccount}
-              filter={(account) => useBalance(account.address)?.transferable.gte(requiredStake) ?? true}
+              minBalance={requiredStake}
             />
           </InputComponent>
         </RowGapBlock>
