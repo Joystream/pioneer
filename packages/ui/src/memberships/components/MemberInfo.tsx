@@ -24,13 +24,13 @@ import {
   MemberPhotoContainer,
 } from './components'
 import { MemberRoles, MemberStatusTooltip } from './MemberRoles'
-import { MemberInfoWrapProps } from './types'
+import { MemberInfoWrapProps, MemberSize } from './types'
 
 interface MemberInfoContainerProps {
   isLeader?: boolean
   member: Member
   onClick?: () => void
-  size?: 'm' | 'l'
+  size?: MemberSize
   className?: string
   maxRoles?: number
 }
@@ -50,6 +50,7 @@ export const MemberInfo = React.memo(
     maxRoles,
     isLeader,
   }: MemberInfoProps) => {
+    const roleSize = size === 's' ? 'm' : size
     return (
       <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize} className={className}>
         <MemberPhoto>
@@ -83,7 +84,7 @@ export const MemberInfo = React.memo(
             )}
           </MemberIcons>
         </MemberHead>
-        {showGroup && !showId && <MemberRoles roles={member.roles} size={size} max={maxRoles} />}
+        {showGroup && !showId && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
         {showId && <MemberId>Worker ID: {member.id}</MemberId>}
       </MemberInfoWrap>
     )

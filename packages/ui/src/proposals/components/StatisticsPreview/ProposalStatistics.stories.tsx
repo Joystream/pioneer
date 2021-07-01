@@ -8,7 +8,7 @@ import { ProposalConstants } from '@/proposals/types'
 import { ProposalStatistics } from './ProposalStatistics'
 
 export default {
-  title: 'Proposals/ProposalStatistics',
+  title: 'Proposals/ProposalPreview/ProposalStatistics',
   component: ProposalStatistics,
   argTypes: {
     approve: voteControl,

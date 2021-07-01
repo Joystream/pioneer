@@ -6,7 +6,7 @@ import { randomMarkdown } from '../../../../dev/scripts/generators/utils'
 import { RationalePreview } from '.'
 
 export default {
-  title: 'Proposals/RationalePreview',
+  title: 'Proposals/ProposalPreview/RationalePreview',
   component: RationalePreview,
 } as Meta
 

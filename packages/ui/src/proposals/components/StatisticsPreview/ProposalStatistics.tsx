@@ -1,14 +1,15 @@
 import React from 'react'
 
 import { StatisticBar, Statistics, TwoRowStatistic } from '@/common/components/statistics'
+import { plural } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
-import { VoteCount } from '@/proposals/hooks/useVoteCount'
+import { ProposalVoteCount } from '@/proposals/hooks/useProposalVotes'
 import { ProposalConstants } from '@/proposals/types'
 
 const tooltipLinkURL = 'https://joystream.gitbook.io/joystream-handbook/governance/proposals#concepts'
 
 interface ProposalStatisticsProps {
-  voteCount: VoteCount
+  voteCount: ProposalVoteCount
   constants: ProposalConstants | null
 }
 export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsProps) => {
@@ -44,7 +45,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           value={quorumRatio}
           threshold={approvalQuorumRatio}
           numerator={total}
-          denominator={`${approvalQuorum ?? '-'} votes`}
+          denominator={`${approvalQuorum ?? '-'} vote${plural(approvalQuorum)}`}
         />
         <StatisticBar
           title="Approval Threshold"
@@ -65,7 +66,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           value={quorumRatio}
           threshold={slashingQuorumRatio}
           numerator={total}
-          denominator={`max ${slashingQuorum ?? '-'} votes`}
+          denominator={`max ${slashingQuorum ?? '-'} vote${plural(slashingQuorum)}`}
         />
         <StatisticBar
           title="Slashing Threshold"
