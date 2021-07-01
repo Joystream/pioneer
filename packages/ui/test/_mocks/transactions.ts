@@ -4,10 +4,11 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
 
+import { BN_ZERO } from '@/common/constants'
 import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
-import { toRuntimeDispatchInfo } from './chainTypes'
+import { createBalance, getBalanceLock, toRuntimeDispatchInfo } from './chainTypes'
 
 const getSuccessEvents = (data: number[], section: string, method: string) => [
   {
@@ -131,9 +132,11 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
   }
 }
 
-export const stubBalances = (api: UseApi, balances: { available?: number; locked?: number }) => {
-  const availableBalance = new BN(balances.available ?? 0)
-  const lockedBalance = new BN(balances.locked ?? 0)
+type Balances = { available?: number; locked?: number; lockId?: number }
+
+export const stubBalances = (api: UseApi, { available, lockId, locked }: Balances) => {
+  const availableBalance = new BN(available ?? 0)
+  const lockedBalance = new BN(locked ?? 0)
 
   set(api, 'api.derive.balances.all', () =>
     from([
@@ -146,7 +149,7 @@ export const stubBalances = (api: UseApi, balances: { available?: number; locked
         frozenFee: new BN(0),
         frozenMisc: new BN(0),
         isVesting: false,
-        lockedBreakdown: [],
+        lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [getBalanceLock(locked!, lockId ?? 11)],
         reservedBalance: new BN(0),
         vestedBalance: new BN(0),
         vestedClaimable: new BN(0),
@@ -158,4 +161,24 @@ export const stubBalances = (api: UseApi, balances: { available?: number; locked
       },
     ])
   )
+}
+
+export const EMPTY_BALANCES = {
+  accountId: createType('AccountId', '0x00'),
+  accountNonce: createType('Index', 1),
+  availableBalance: createBalance(0),
+  freeBalance: createBalance(0),
+  frozenFee: createBalance(0),
+  frozenMisc: createBalance(0),
+  isVesting: false,
+  lockedBalance: createBalance(0),
+  lockedBreakdown: [],
+  reservedBalance: createBalance(0),
+  vestedBalance: createBalance(0),
+  vestedClaimable: createBalance(0),
+  vestingEndBlock: createType('BlockNumber', 1234),
+  vestingLocked: createBalance(0),
+  vestingPerBlock: createBalance(0),
+  vestingTotal: createBalance(0),
+  votingBalance: createBalance(0),
 }

@@ -14,8 +14,8 @@ const Template: Story<AccountLocksProps> = (args) => <AccountLocks {...args} />
 export const Default = Template.bind({})
 Default.args = {
   locks: [
-    { type: 'Voting', amount: new BN(10) },
-    { type: 'Staking Candidate', amount: new BN(0) },
-    { type: 'Councilor', amount: new BN(20) },
+    { type: 'Voting', amount: new BN(10), isRecoverable: false },
+    { type: 'Staking Candidate', amount: new BN(0), isRecoverable: true },
+    { type: 'Councilor', amount: new BN(20), isRecoverable: false },
   ],
 }

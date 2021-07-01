@@ -1,17 +1,16 @@
 import React from 'react'
 
+import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-
-import { useMyTotalBalances } from '../../../accounts/hooks/useMyTotalBalances'
-import { PageHeader } from '../../../common/components/page/PageHeader'
-import { PageTitle } from '../../../common/components/page/PageTitle'
-import { Statistics, TokenValueStat } from '../../../common/components/statistics'
+import { PageHeader } from '@/common/components/page/PageHeader'
+import { PageTitle } from '@/common/components/page/PageTitle'
+import { Statistics, TokenValueStat } from '@/common/components/statistics'
 
 import { Accounts } from './components/Accounts'
 import { MyProfileTabs } from './components/MyProfileTabs'
 
-export function MyAccounts() {
+export const MyAccounts = () => {
   const { total, transferable, locked, recoverable } = useMyTotalBalances()
 
   return (

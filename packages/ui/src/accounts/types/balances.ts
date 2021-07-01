@@ -15,10 +15,12 @@ export type LockType =
   | 'Membership Worker'
   | 'Invitation'
   | 'Staking Candidate'
+  | 'Bounty'
 
 export interface BalanceLock {
   amount: BN
   type: LockType
+  isRecoverable: boolean
 }
 
 export interface Balances {
