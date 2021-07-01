@@ -51,7 +51,7 @@ export const Tooltip = ({
       {
         name: 'offset',
         options: {
-          offset: [-15, 4],
+          offset: [0, 0],
         },
       },
     ],
@@ -124,7 +124,7 @@ export const Tooltip = ({
 }
 
 const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean }>`
-  display: ${({ isTooltipActive }) => (isTooltipActive ? 'flex' : 'none')};
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
   position: absolute;
@@ -142,14 +142,11 @@ const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean }>`
   &:after {
     content: '';
     position: absolute;
-    left: 19px;
-    top: -4px;
     width: 8px;
     height: 8px;
     background-color: ${Colors.Black[700]};
     border: 1px solid ${Colors.Black[900]};
     transform: rotate(45deg);
-    clip-path: polygon(100% 0, 0 0, 0 100%);
     z-index: 1;
   }
 
@@ -161,6 +158,37 @@ const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean }>`
     width: calc(100% + 16px);
     height: calc(100% + 16px);
     z-index: -1;
+  }
+
+  &[data-popper-placement^='top'] {
+    &:after {
+      bottom: -4px;
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    }
+  }
+  &[data-popper-placement^='bottom']:after {
+    top: -4px;
+    clip-path: polygon(100% 0, 0 0, 0 100%);
+  }
+  &[data-popper-placement='top-start']:after,
+  &[data-popper-placement='bottom-start']:after {
+    left: 19px;
+  }
+  &[data-popper-placement='top-end']:after,
+  &[data-popper-placement='bottom-end']:after {
+    right: 19px;
+  }
+  &[data-popper-placement='top-start'] {
+    inset: auto auto 4px -16px !important;
+  }
+  &[data-popper-placement='top-end'] {
+    inset: auto auto 4px 16px !important;
+  }
+  &[data-popper-placement='bottom-start'] {
+    inset: 4px auto auto -16px !important;
+  }
+  &[data-popper-placement='bottom-end'] {
+    inset: 4px auto auto 16px !important;
   }
 `
 
