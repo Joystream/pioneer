@@ -1,12 +1,12 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, ThemeProvider } from 'styled-components'
 
-import { BorderRad, Colors, Transitions } from '../constants'
-import { Step } from '../model/machines/getSteps'
+import { Arrow, CheckboxIcon } from '@/common/components/icons'
+import { TextInlineSmall } from '@/common/components/typography'
+import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { Step } from '@/common/model/machines/getSteps'
 
-import { Arrow, CheckboxIcon } from './icons'
-import { ScrollableModalColumn } from './Modal'
-import { TextInlineSmall } from './typography'
+import { StepperTheme } from './themes'
 
 interface StepToRender extends Step {
   number: null | number
@@ -16,6 +16,7 @@ interface StepToRender extends Step {
 
 export interface StepperProps {
   steps: Step[]
+  theme?: typeof StepperTheme.light
 }
 
 const getStepFace = (step: StepToRender) => {
@@ -45,30 +46,32 @@ const asStepsToRender = (steps: Step[]): StepToRender[] => {
   }))
 }
 
-export const Stepper = ({ steps }: StepperProps) => {
+export const Stepper = ({ steps, theme = StepperTheme.light }: StepperProps) => {
   const stepsToRender = asStepsToRender(steps)
 
   return (
-    <StepperWrap>
-      {stepsToRender.map((value) => (
-        <StepWrap key={value.title} {...value}>
-          <StepNumber>
-            <StepNumberText value>{getStepFace(value)}</StepNumberText>
-          </StepNumber>
-          <StepTitle>{value.title}</StepTitle>
-        </StepWrap>
-      ))}
-    </StepperWrap>
+    <ThemeProvider theme={theme}>
+      <StepperWrap>
+        {stepsToRender.map((value, index) => (
+          <StepWrap key={index} {...value}>
+            <StepNumber>
+              <StepNumberText value>{getStepFace(value)}</StepNumberText>
+            </StepNumber>
+            <StepTitle>{value.title}</StepTitle>
+          </StepWrap>
+        ))}
+      </StepperWrap>
+    </ThemeProvider>
   )
 }
 
-export const StepperWrap = styled(ScrollableModalColumn)`
+export const StepperWrap = styled.div`
   display: grid;
   position: relative;
   grid-row-gap: 20px;
   align-content: start;
-  background-color: ${Colors.Black[800]};
-  color: ${Colors.White};
+  background-color: ${({ theme }) => theme.stepperBackground};
+  color: ${({ theme }) => theme.stepperTitle};
 `
 
 const StepNumber = styled.div`
@@ -81,15 +84,14 @@ const StepNumber = styled.div`
   border: 2px solid ${Colors.Black[600]};
   border-radius: ${BorderRad.round};
   font-weight: 700;
-  color: ${Colors.Black[300]};
-  background-color: ${Colors.Black[800]};
+  background-color: ${({ theme }) => theme.stepperBackground};
   transition: ${Transitions.all};
 `
 
 const StepTitle = styled.h6`
-  font-weight: 400;
+  font-weight: ${({ theme }) => theme.stepperTitleFontWeight};
   align-self: center;
-  color: ${Colors.Black[300]};
+  color: ${({ theme }) => theme.stepperTitle};
   -webkit-text-stroke-width: 0.05em;
   -webkit-text-stroke-color: transparent;
   transition: ${Transitions.all};
@@ -113,12 +115,12 @@ const StepWrap = styled.div<StepNumberProps>`
       width: 1px;
       height: calc(100% + 20px);
       transform: translateX(-50%);
-      background-color: ${Colors.Black[600]};
+      background-color: ${({ theme }) => theme.stepperLine};
       transition: ${Transitions.all};
     }
   }
 
-  ${({ isBaby }: StepNumberProps) =>
+  ${({ isBaby, theme }) =>
     isBaby &&
     css`
       ${StepNumber} {
@@ -127,7 +129,7 @@ const StepWrap = styled.div<StepNumberProps>`
         margin-top: 4px;
         color: transparent;
         border-color: transparent;
-        background-color: ${Colors.Black[300]};
+        background-color: ${theme.stepperTitle};
       }
       ${StepTitle} {
         font-size: 12px;
@@ -142,7 +144,7 @@ const StepWrap = styled.div<StepNumberProps>`
       }
     `};
 
-  ${({ isActive }: StepNumberProps) =>
+  ${({ isActive, theme }) =>
     isActive &&
     css`
       ${StepNumber} {
@@ -151,17 +153,18 @@ const StepWrap = styled.div<StepNumberProps>`
         background-color: ${Colors.Blue[500]};
       }
       ${StepTitle} {
-        color: ${Colors.White};
-        -webkit-text-stroke-color: ${Colors.White};
+        color: ${theme.stepperActiveTitle};
+        -webkit-text-stroke-color: ${theme.stepperActiveTitleTextStroke};
       }
     `}
 
-  ${({ isPast }: StepNumberProps) =>
+  ${({ isPast, theme }) =>
     isPast &&
     css`
       ${StepNumber} {
-        background-color: ${Colors.Black[500]};
-        border-color: ${Colors.Black[500]};
+        color: ${Colors.White};
+        background-color: ${theme.stepperPastBackground};
+        border-color: ${theme.stepperPastBackground};
       }
     `}
 `

@@ -1,40 +1,35 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { Modal, ModalHeader } from './Modal'
-import { Stepper, StepperProps } from './Stepper'
-import { StepDescriptionColumn, StepperBody, StepperModalBody, StepperModalWrapper } from './StepperModal'
-import { TemplateBlock } from './storybookParts/previewStyles'
+import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
+import { Step } from '@/common/model/machines/getSteps'
+
+import { Stepper } from './Stepper'
+import { StepperTheme } from './themes'
 
 export default {
-  title: 'Common/Modals/Stepper',
+  title: 'Common/Stepper',
   component: Stepper,
   argTypes: {
-    steps: {
-      control: false,
-    },
+    theme: { options: ['light', 'dark'], control: { type: 'radio' } },
+    steps: { control: false },
   },
 } as Meta
 
-const Template: Story<StepperProps> = (args) => {
-  return (
-    <TemplateBlock>
-      <Modal onClose={() => undefined} modalSize="l">
-        <ModalHeader onClick={() => undefined} title="Modal with stepper" />
-        <StepperModalBody>
-          <StepperModalWrapper>
-            <Stepper {...args} />
-            <StepDescriptionColumn>Col 2</StepDescriptionColumn>
-            <StepperBody>Col 3</StepperBody>
-          </StepperModalWrapper>
-        </StepperModalBody>
-      </Modal>
-    </TemplateBlock>
-  )
+interface Props {
+  theme: 'light' | 'dark'
+  steps: Step[]
 }
+
+const Template: Story<Props> = ({ theme, steps }) => (
+  <TemplateBlock>
+    <Stepper theme={StepperTheme[theme]} steps={steps} />
+  </TemplateBlock>
+)
 
 export const Simple = Template.bind({})
 Simple.args = {
+  theme: 'light',
   steps: [
     { title: 'Stake', type: 'next' },
     { title: 'Form', type: 'next' },
@@ -42,8 +37,21 @@ Simple.args = {
   ],
 }
 
+export const History = Template.bind({})
+History.args = {
+  theme: 'light',
+  steps: [
+    { title: 'Created', type: 'past' },
+    { title: 'Accepted', type: 'past' },
+    { title: 'Dormant', type: 'past' },
+    { title: 'Deciding', type: 'past' },
+    { title: 'Deciding', type: 'active' },
+  ],
+}
+
 export const Complex = Template.bind({})
 Complex.args = {
+  theme: 'light',
   steps: [
     { title: 'General parameters', type: 'next' },
     { title: 'Working Group title & limits', isBaby: true, type: 'next' },

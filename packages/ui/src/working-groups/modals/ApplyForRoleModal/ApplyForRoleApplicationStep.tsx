@@ -4,8 +4,8 @@ import { Event, EventData } from 'xstate/lib/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
-import { Stepper } from '@/common/components/Stepper'
 import {
+  Stepper,
   StepDescriptionColumn,
   StepperBody,
   StepperModalBody,
