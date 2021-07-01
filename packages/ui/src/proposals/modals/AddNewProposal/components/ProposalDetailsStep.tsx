@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { CKEditor } from '@/common/components/CKEditor'
@@ -8,7 +8,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { useModal } from '@/common/hooks/useModal'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/RationaleModal'

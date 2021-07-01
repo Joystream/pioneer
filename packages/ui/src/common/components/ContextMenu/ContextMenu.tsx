@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react'
-import styled, { css } from 'styled-components'
+import React, { useState } from 'react'
+import { usePopper } from 'react-popper'
+import styled from 'styled-components'
 
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 
-import { Animations, BorderRad, Colors, Shadows, Transitions, ZIndex } from '../../constants'
+import { Animations, BorderRad, Colors, Shadows, ZIndex } from '../../constants'
 import { ButtonGhost, ButtonLink } from '../buttons'
 import { KebabMenuIcon } from '../icons'
 
@@ -16,12 +17,23 @@ export interface ContextMenuProps {
   items: ContextMenuItem[]
 }
 
-export interface ContextMenuAlignmentProps {
-  align?: 'left' | 'right'
-}
-
-export const ContextMenu = ({ align, items }: ContextMenuProps & ContextMenuAlignmentProps) => {
+export const ContextMenu = ({ items }: ContextMenuProps) => {
   const [isMenuVisible, setMenuVisible] = useState(false)
+  const [referenceElementRef, setReferenceElementRef] = useState<HTMLDivElement | null>(null)
+  const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
+
+  const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
+    placement: 'bottom-start',
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 0],
+        },
+      },
+    ],
+  })
+
   const contextMenuHandlers = {
     onClick: (event: React.MouseEvent<HTMLElement>) => {
       event.stopPropagation()
@@ -30,18 +42,23 @@ export const ContextMenu = ({ align, items }: ContextMenuProps & ContextMenuAlig
     onBlur: () => setMenuVisible(false),
   }
 
-  const containerRef = useRef<HTMLDivElement>(null)
-  useOutsideClick(containerRef, isMenuVisible, () => setMenuVisible(false))
+  useOutsideClick(popperElementRef, isMenuVisible, () => setMenuVisible(false))
 
   return (
-    <ContextMenuContainer ref={containerRef}>
+    <ContextMenuContainer ref={setReferenceElementRef}>
       <ButtonGhost square size="medium" {...contextMenuHandlers}>
         <KebabMenuIcon />
       </ButtonGhost>
       {isMenuVisible && (
-        <ContextMenuOptions align={align}>
-          {items.map((item) => (
+        <ContextMenuWrapper
+          isOpen={isMenuVisible}
+          ref={setPopperElementRef}
+          style={styles.popper}
+          {...attributes.popper}
+        >
+          {items.map((item, index) => (
             <ButtonLink
+              key={index}
               size="small"
               bold
               borderless
@@ -53,48 +70,22 @@ export const ContextMenu = ({ align, items }: ContextMenuProps & ContextMenuAlig
               {item.text}
             </ButtonLink>
           ))}
-        </ContextMenuOptions>
+        </ContextMenuWrapper>
       )}
     </ContextMenuContainer>
   )
 }
 
-interface ContextMenuOptionsProps {
-  className?: string
-  children: React.ReactNode
-}
-
-export const ContextMenuOptions = ({
-  className,
-  children,
-  align,
-}: ContextMenuOptionsProps & ContextMenuAlignmentProps) => {
-  return (
-    <ContextMenuWrapper className={className} align={align}>
-      {children}
-    </ContextMenuWrapper>
-  )
-}
-
-const ContextMenuWrapper = styled.div<ContextMenuAlignmentProps>`
-  display: grid;
+const ContextMenuWrapper = styled.div<{ isOpen?: boolean }>`
+  display: ${({ isOpen }) => (isOpen ? 'grid' : 'none')};
   grid-row-gap: 8px;
   position: absolute;
   top: 100%;
-  ${({ align }) =>
-    align === 'left'
-      ? css`
-          left: 0;
-        `
-      : css`
-          right: 0;
-        `}
   width: fit-content;
   padding: 16px 24px;
   background-color: ${Colors.White};
   border-radius: ${BorderRad.m};
   box-shadow: ${Shadows.select};
-  transition: ${Transitions.all};
   z-index: ${ZIndex.contextMenu};
   ${Animations.showTooltip};
 `
