@@ -387,6 +387,24 @@ fragment StakeSlashedEventFields on StakeSlashedEvent {
   }
 }
 
+fragment OpeningFilledEventFields on OpeningFilledEvent {
+  id
+  createdAt
+  opening {
+    id
+    type
+  }
+  group {
+    name
+  }
+  workersHired {
+    membership {
+      id
+      handle
+    }
+  }
+}
+
 query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   appliedOnOpeningEvents(where: { application_in: $application_in }) {
     ...AppliedOnOpeningEventFields
@@ -420,6 +438,9 @@ query GetGroupEvents($group_eq: ID!) {
   }
   stakeIncreasedEvents(where: { group_eq: $group_eq }) {
     ...StakeIncreasedEventFields
+  }
+  openingFilledEvents(where: { group_eq: $group_eq }) {
+    ...OpeningFilledEventFields
   }
 }
 

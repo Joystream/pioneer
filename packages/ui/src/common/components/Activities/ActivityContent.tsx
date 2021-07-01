@@ -8,6 +8,7 @@ import { BudgetSpendingContent } from '@/working-groups/components/Activities/Bu
 import { LeaderSetContent } from '@/working-groups/components/Activities/LeaderSetContent'
 import { OpeningAddedContent } from '@/working-groups/components/Activities/OpeningAddedContent'
 import { OpeningCanceledContent } from '@/working-groups/components/Activities/OpeningCanceledContent'
+import { OpeningFilledContent } from '@/working-groups/components/Activities/OpeningFilledContent'
 import { StakeChangedContent } from '@/working-groups/components/Activities/StakeChangedContent'
 import { StakeSlashedContent } from '@/working-groups/components/Activities/StakeSlashedContent'
 import { StatusTextChangedContent } from '@/working-groups/components/Activities/StatusTextChangedContent'
@@ -32,6 +33,7 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   StakeIncreased: StakeChangedContent,
   WorkerExited: WorkerExitedContent,
   WorkerStartedLeaving: WorkerStartedLeavingContent,
+  OpeningFilled: OpeningFilledContent,
 }
 
 export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {

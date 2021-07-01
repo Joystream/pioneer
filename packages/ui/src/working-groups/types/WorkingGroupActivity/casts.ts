@@ -5,6 +5,7 @@ import {
   ApplicationWithdrawnEventFieldsFragment,
   AppliedOnOpeningEventFieldsFragment,
   BudgetSpendingActivityEventFieldsFragment,
+  OpeningFilledEventFieldsFragment,
   StakeDecreasedEventFieldsFragment,
   StakeIncreasedEventFieldsFragment,
   StakeSlashedEventFieldsFragment,
@@ -14,6 +15,7 @@ import {
   AppliedOnOpeningActivity,
   asWorkingGroupName,
   BudgetSpendingActivity,
+  OpeningFilledActivity,
   StakeChangedActivity,
   StakeSlashedActivity,
 } from '@/working-groups/types'
@@ -95,5 +97,23 @@ export function asStakeSlashedActivity(fragment: StakeSlashedEventFieldsFragment
       handle: fragment.worker.membership.handle,
     },
     groupName: asWorkingGroupName(fragment.group.name),
+  }
+}
+
+export function asOpeningFilledActivity(fragment: OpeningFilledEventFieldsFragment): OpeningFilledActivity {
+  return {
+    eventType: 'OpeningFilled',
+    id: fragment.id,
+    createdAt: fragment.createdAt,
+    opening: {
+      id: fragment.opening.id,
+      type: fragment.opening.type,
+      groupName: fragment.group.name,
+      title: asPositionTitle(fragment.group.name, fragment.opening.type),
+    },
+    hiredMembers: fragment.workersHired.map(({ membership }) => ({
+      id: membership.id,
+      handle: membership.handle,
+    })),
   }
 }

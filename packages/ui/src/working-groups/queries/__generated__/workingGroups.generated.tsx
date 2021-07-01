@@ -413,6 +413,15 @@ export type StakeSlashedEventFieldsFragment = {
   worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
 }
 
+export type OpeningFilledEventFieldsFragment = {
+  __typename: 'OpeningFilledEvent'
+  id: string
+  createdAt: any
+  opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
+  group: { __typename: 'WorkingGroup'; name: string }
+  workersHired: Array<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }>
+}
+
 export type GetMemberRoleEventsQueryVariables = Types.Exact<{
   worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
   application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
@@ -442,6 +451,7 @@ export type GetGroupEventsQuery = {
   budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent' } & BudgetSpendingActivityEventFieldsFragment>
   stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment>
   stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment>
+  openingFilledEvents: Array<{ __typename: 'OpeningFilledEvent' } & OpeningFilledEventFieldsFragment>
 }
 
 export type GetWorkerIdsQueryVariables = Types.Exact<{
@@ -724,6 +734,25 @@ export const StakeSlashedEventFieldsFragmentDoc = gql`
       name
     }
     worker {
+      membership {
+        id
+        handle
+      }
+    }
+  }
+`
+export const OpeningFilledEventFieldsFragmentDoc = gql`
+  fragment OpeningFilledEventFields on OpeningFilledEvent {
+    id
+    createdAt
+    opening {
+      id
+      type
+    }
+    group {
+      name
+    }
+    workersHired {
       membership {
         id
         handle
@@ -1760,12 +1789,16 @@ export const GetGroupEventsDocument = gql`
     stakeIncreasedEvents(where: { group_eq: $group_eq }) {
       ...StakeIncreasedEventFields
     }
+    openingFilledEvents(where: { group_eq: $group_eq }) {
+      ...OpeningFilledEventFields
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
   ${BudgetSpendingActivityEventFieldsFragmentDoc}
   ${StakeDecreasedEventFieldsFragmentDoc}
   ${StakeIncreasedEventFieldsFragmentDoc}
+  ${OpeningFilledEventFieldsFragmentDoc}
 `
 
 /**

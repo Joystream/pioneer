@@ -5,6 +5,7 @@ import {
   asApplicationWithdrawnActivity,
   asAppliedOnOpeningActivity,
   asBudgetSpendingActivity,
+  asOpeningFilledActivity,
   asStakeChangedActivity,
 } from '@/working-groups/types/WorkingGroupActivity'
 
@@ -19,6 +20,7 @@ export const useGroupActivities = (groupId: string) => {
             ...data.budgetSpendingEvents.map(asBudgetSpendingActivity),
             ...data.stakeDecreasedEvents.map(asStakeChangedActivity),
             ...data.stakeIncreasedEvents.map(asStakeChangedActivity),
+            ...data.openingFilledEvents.map(asOpeningFilledActivity),
           ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         : [],
     [data, loading]

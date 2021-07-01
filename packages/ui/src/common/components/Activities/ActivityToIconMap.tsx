@@ -25,4 +25,5 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   StakeDecreased: [AppliedIcon, 'positive'],
   WorkerExited: [ClosedIcon, 'negative'],
   WorkerStartedLeaving: [ClosedIcon, 'negative'],
+  OpeningFilled: [HiredIcon, 'positive'],
 }
