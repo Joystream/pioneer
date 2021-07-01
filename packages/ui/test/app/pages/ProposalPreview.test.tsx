@@ -49,10 +49,9 @@ describe('ProposalPreview', () => {
     const proposerHandle = proposerSection && (await findByText(proposerSection, MEMBER_ALICE_DATA.handle))
     expect(proposerHandle).toBeDefined()
 
-    const voteHeadings = ['Approved', 'Rejected', 'Slashed', 'Abstained', 'Not Voted']
-    voteHeadings.forEach((name) => {
-      expect(screen.getByRole('heading', { name })).toBeDefined()
-    })
+    for (const name of ['Approved', 'Rejected', 'Slashed', 'Abstained', 'Not Voted']) {
+      expect(await screen.findByRole('heading', { name })).toBeDefined()
+    }
   })
 
   function renderPage() {
