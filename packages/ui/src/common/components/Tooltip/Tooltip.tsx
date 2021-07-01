@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
+import { usePopper } from 'react-popper'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Animations, BorderRad, Colors, Transitions, ZIndex } from '../../constants'
-import { PopupItem } from '../animatedComponents/PopupItem'
+import { BorderRad, Colors, Transitions, ZIndex } from '../../constants'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
 import { DefaultTooltip } from './TooltipDefault'
@@ -21,7 +21,6 @@ export interface TooltipPopupProps {
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
   popupContent?: React.ReactNode
-  position: DOMRect
   popUpHandlers: {
     onMouseEnter: () => void
     onMouseLeave: () => void
@@ -31,8 +30,6 @@ export interface TooltipPopupProps {
 export interface DarkTooltipInnerItemProps {
   isOnDark?: boolean
 }
-
-const { setTimeout, clearTimeout } = window
 
 export const Tooltip = ({
   absolute,
@@ -44,37 +41,33 @@ export const Tooltip = ({
   popupContent,
   className,
 }: TooltipProps) => {
-  const tooltipRef = useRef<HTMLButtonElement>(null)
-  const timeoutRef = useRef<number>()
   const [isTooltipActive, setTooltipActive] = useState(false)
-  const [isForceActive, setForceActive] = useState(false)
-  const [isOver, setOver] = useState(false)
+  const [referenceElementRef, setReferenceElementRef] = useState<HTMLButtonElement | null>(null)
+  const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    clearTimeout(timeoutRef.current)
+  const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
+    placement: 'bottom-start',
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [-15, 4],
+        },
+      },
+    ],
+  })
 
-    if (isOver) {
-      timeoutRef.current = setTimeout(() => setTooltipActive(true), Transitions.durationNumericS)
-    } else {
-      timeoutRef.current = setTimeout(() => setTooltipActive(false), Transitions.durationNumericS)
-    }
-
-    return () => {
-      clearTimeout(timeoutRef.current)
-    }
-  }, [isOver])
-
-  const tooltipPosition = tooltipRef.current?.getBoundingClientRect()
-  const isTooltipVisible = isForceActive || isTooltipActive
-
-  const mouseIsOver = () => setOver(true)
-  const mouseLeft = () => setOver(false)
+  const mouseIsOver = () => {
+    setTooltipActive(true)
+  }
+  const mouseLeft = () => {
+    setTooltipActive(false)
+  }
 
   const tooltipHandlers = {
     onClick: (event: React.MouseEvent<HTMLElement>) => {
       event.stopPropagation()
       setTooltipActive(false)
-      setForceActive((active) => !active)
     },
     onFocus: mouseIsOver,
     onBlur: mouseLeft,
@@ -88,73 +81,53 @@ export const Tooltip = ({
 
   return (
     <TooltipContainer absolute={absolute}>
-      <TooltipComponent ref={tooltipRef} {...tooltipHandlers} z-index={0}>
+      <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0}>
         {children}
       </TooltipComponent>
-      {isTooltipVisible && tooltipPosition && (
-        <TooltipPopup
-          className={className}
-          position={tooltipPosition}
-          popUpHandlers={popUpHandlers}
-          tooltipTitle={tooltipTitle}
-          tooltipText={tooltipText}
-          tooltipLinkURL={tooltipLinkURL}
-          tooltipLinkText={tooltipLinkText}
-          popupContent={popupContent}
-        />
-      )}
+      {isTooltipActive &&
+        (popupContent
+          ? ReactDOM.createPortal(
+              <TooltipPopupContainer
+                ref={setPopperElementRef}
+                className={className}
+                style={styles.popper}
+                {...attributes.popper}
+                {...popUpHandlers}
+                isTooltipActive={isTooltipActive}
+              >
+                {popupContent}
+              </TooltipPopupContainer>,
+              document.body
+            )
+          : ReactDOM.createPortal(
+              <TooltipPopupContainer
+                ref={setPopperElementRef}
+                className={className}
+                style={styles.popper}
+                {...attributes.popper}
+                {...popUpHandlers}
+                isTooltipActive={isTooltipActive}
+              >
+                {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
+                <TooltipText>{tooltipText}</TooltipText>
+                {tooltipLinkURL && (
+                  <TooltipLink to={tooltipLinkURL} target="_blank">
+                    {tooltipLinkText ?? 'Link'}
+                    <LinkSymbol />
+                  </TooltipLink>
+                )}
+              </TooltipPopupContainer>,
+              document.body
+            ))}
     </TooltipContainer>
   )
 }
 
-const TooltipPopup = (props: TooltipPopupProps) => {
-  const {
-    tooltipLinkText,
-    tooltipText,
-    position,
-    tooltipLinkURL,
-    tooltipTitle,
-    className,
-    popUpHandlers,
-    popupContent,
-  } = props
-
-  if (popupContent) {
-    return ReactDOM.createPortal(
-      <TooltipPopupContainer className={className} position={position} {...popUpHandlers}>
-        {popupContent}
-      </TooltipPopupContainer>,
-      document.body
-    )
-  }
-
-  return ReactDOM.createPortal(
-    <TooltipPopupContainer className={className} position={position} {...popUpHandlers}>
-      {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
-      <TooltipText>{tooltipText}</TooltipText>
-      {tooltipLinkURL && (
-        <TooltipLink to={tooltipLinkURL} target="_blank">
-          {tooltipLinkText ?? 'Link'}
-          <LinkSymbol />
-        </TooltipLink>
-      )}
-    </TooltipPopupContainer>,
-    document.body
-  )
-}
-
-const initialPopupPosition = {
-  left: 24,
-  top: 4,
-}
-
-const TooltipPopupContainer = styled(PopupItem)<{ position: DOMRect }>`
-  display: flex;
+const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean }>`
+  display: ${({ isTooltipActive }) => (isTooltipActive ? 'flex' : 'none')};
   flex-direction: column;
   align-items: flex-start;
   position: absolute;
-  top: ${({ position }) => position.top + position.height + initialPopupPosition.top + 'px'};
-  left: ${({ position }) => position.left + position.width / 2 - initialPopupPosition.left + 'px'};
   width: max-content;
   min-width: 160px;
   max-width: 304px;
@@ -162,9 +135,9 @@ const TooltipPopupContainer = styled(PopupItem)<{ position: DOMRect }>`
   border: 1px solid ${Colors.Black[900]};
   background-color: ${Colors.Black[700]};
   border-radius: ${BorderRad.m};
-  transition: ${Transitions.all};
+  opacity: ${({ isTooltipActive }) => (isTooltipActive ? '1' : '0')};
+  transition: opacity ${Transitions.duration} ease;
   z-index: ${ZIndex.tooltip};
-  ${Animations.showTooltip};
 
   &:after {
     content: '';
