@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
@@ -80,6 +80,17 @@ describe('Page: MyAccounts', () => {
     const header = screen.getByRole('banner')
     const recoverAll = within(header).getByRole('button', { name: /recover all/i })
     expect(recoverAll).toBeDefined()
+  })
+
+  it('Allows recovering balances', async () => {
+    stubBalances(api, { locked: 250, available: 10_000, lockId: 11 })
+    renderPage()
+
+    const header = screen.getByRole('banner')
+    const recoverAll = within(header).getByRole('button', { name: /recover all/i })
+    fireEvent.click(recoverAll)
+
+    expect(await screen.findByText(/recover balances/i)).toBeDefined()
   })
 
   function renderPage(path = '/profile') {
