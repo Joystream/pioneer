@@ -8,6 +8,7 @@ import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/common/providers/api/context'
 
+import { createBalance } from '../../_mocks/chainTypes'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubBalances } from '../../_mocks/transactions'
 
@@ -48,8 +49,12 @@ describe('useMyTotalBalances', () => {
 
     expect(result.current).toEqual({
       locked: new BN(80),
-      locks: [],
-      recoverable: new BN(0),
+      locks: new Array(8).fill({
+        amount: createBalance(10),
+        type: 'Staking Candidate',
+        isRecoverable: true,
+      }),
+      recoverable: new BN(80),
       total: new BN(880),
       transferable: new BN(800),
     })

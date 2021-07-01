@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import BN from 'bn.js'
 
@@ -6,36 +5,8 @@ import { lockTypes } from '@/accounts/model/lockTypes'
 import { toBalances } from '@/accounts/model/toBalances'
 import { Balances } from '@/accounts/types'
 
-const createBalance = (value: number) => {
-  return createType('Balance', new BN(value))
-}
-
-const EMPTY_BALANCES = {
-  accountId: createType('AccountId', '0x00'),
-  accountNonce: createType('Index', 1),
-  availableBalance: createBalance(0),
-  freeBalance: createBalance(0),
-  frozenFee: createBalance(0),
-  frozenMisc: createBalance(0),
-  isVesting: false,
-  lockedBalance: createBalance(0),
-  lockedBreakdown: [],
-  reservedBalance: createBalance(0),
-  vestedBalance: createBalance(0),
-  vestedClaimable: createBalance(0),
-  vestingEndBlock: createType('BlockNumber', 1234),
-  vestingLocked: createBalance(0),
-  vestingPerBlock: createBalance(0),
-  vestingTotal: createBalance(0),
-  votingBalance: createBalance(0),
-}
-
-const getBalanceLock = (amount: number, type = 9) =>
-  createType('BalanceLock', {
-    id: createType('LockIdentifier', new Uint8Array(new Array(8).fill(type))),
-    amount: createBalance(amount),
-    reasons: createType('Reasons', 'all'),
-  })
+import { createBalance, getBalanceLock } from '../../_mocks/chainTypes'
+import { EMPTY_BALANCES } from '../../_mocks/transactions'
 
 describe('toBalances', () => {
   it('Empty', () => {

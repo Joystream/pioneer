@@ -15,7 +15,7 @@ import { seedMembers } from '@/mocks/data'
 import { alice, bob } from '../../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
-import { stubApi, stubDefaultBalances } from '../../../_mocks/transactions'
+import { stubApi, stubBalances, stubDefaultBalances } from '../../../_mocks/transactions'
 
 const testStatisticItem = (labelMatcher: RegExp, expected: RegExp) => {
   const header = screen.getByRole('banner')
@@ -56,6 +56,26 @@ describe('Page: MyAccounts', () => {
     testStatisticItem(/total transferable balance/i, /2,000/i)
     testStatisticItem(/total locked balance/i, /0/i)
     testStatisticItem(/total recoverable/i, /0/i)
+  })
+
+  it('With locked balance', () => {
+    stubBalances(api, { locked: 250, available: 10_000 })
+    renderPage()
+
+    testStatisticItem(/total balance/i, /20,500/i)
+    testStatisticItem(/total transferable balance/i, /20,000/i)
+    testStatisticItem(/total locked balance/i, /500/i)
+    testStatisticItem(/total recoverable/i, /0/i)
+  })
+
+  it('With recoverable locked balance', () => {
+    stubBalances(api, { locked: 250, available: 10_000, lockId: 11 })
+    renderPage()
+
+    testStatisticItem(/total balance/i, /20,500/i)
+    testStatisticItem(/total transferable balance/i, /20,000/i)
+    testStatisticItem(/total locked balance/i, /500/i)
+    testStatisticItem(/total recoverable/i, /500/i)
   })
 
   function renderPage(path = '/profile') {
