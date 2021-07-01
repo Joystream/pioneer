@@ -1,15 +1,16 @@
 import React from 'react'
 
+import { ActivityContentComponent } from '@/common/components/Activities/ActivityContent'
 import { TokenValue } from '@/common/components/typography'
 
 import { BudgetSpendingActivity } from '../../types'
 
-interface Props {
-  activity: BudgetSpendingActivity
-}
+export const BudgetSpendingContent: ActivityContentComponent<BudgetSpendingActivity> = React.memo(({ activity }) => {
+  const { groupName, amount } = activity
 
-export const BudgetSpendingContent = React.memo(({ activity }: Props) => (
-  <>
-    {activity.groupName} Lead spent <TokenValue value={activity.amount} /> from the budget.
-  </>
-))
+  return (
+    <>
+      {groupName} Lead spent <TokenValue value={amount} /> from the budget.
+    </>
+  )
+})

@@ -12,14 +12,15 @@ export interface ActivitiesBlockProps {
   activities: Activity[]
   label?: string
   warning?: WarningProps
+  isOwn?: boolean
 }
 
-export const ActivitiesBlock = ({ activities, label, warning }: ActivitiesBlockProps) => {
+export const ActivitiesBlock = ({ activities, label, warning, isOwn }: ActivitiesBlockProps) => {
   return (
     <ContentWithTabs>
       {label && <Label>{label}</Label>}
       {warning && <Warning {...warning} />}
-      <Activities activities={activities} />
+      <Activities activities={activities} isOwn={isOwn} />
     </ContentWithTabs>
   )
 }

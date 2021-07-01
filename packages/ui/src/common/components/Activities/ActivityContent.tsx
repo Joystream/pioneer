@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 
+import { Activity, ActivityCategory, BaseActivity } from '@/common/types/Activity'
 import { ApplicationWithdrawnContent } from '@/working-groups/components/Activities/ApplicationWithdrawnContent'
 import { AppliedOnOpeningContent } from '@/working-groups/components/Activities/AppliedOnOpeningContent'
 import { BudgetSetContent } from '@/working-groups/components/Activities/BudgetSetContent'
@@ -13,40 +14,27 @@ import { StatusTextChangedContent } from '@/working-groups/components/Activities
 import { WorkerExitedContent } from '@/working-groups/components/Activities/WorkerExitedContent'
 import { WorkerStartedLeavingContent } from '@/working-groups/components/Activities/WorkerStartedLeavingContent'
 
-import { Activity } from '../../types'
-
-interface Props {
-  activity: Activity
+export interface ActivityContentComponent<Activity extends BaseActivity> {
+  (props: { activity: Activity; isOwn?: boolean }): ReactElement | null
 }
 
-export const ActivityContent = React.memo(({ activity }: Props) => {
-  switch (activity.eventType) {
-    case 'AppliedOnOpening':
-      return <AppliedOnOpeningContent activity={activity} />
-    case 'BudgetSpending':
-      return <BudgetSpendingContent activity={activity} />
-    case 'ApplicationWithdrawn':
-      return <ApplicationWithdrawnContent activity={activity} />
-    case 'BudgetSet':
-      return <BudgetSetContent activity={activity} />
-    case 'LeaderSet':
-      return <LeaderSetContent activity={activity} />
-    case 'StatusTextChanged':
-      return <StatusTextChangedContent activity={activity} />
-    case 'OpeningAdded':
-      return <OpeningAddedContent activity={activity} />
-    case 'OpeningCanceled':
-      return <OpeningCanceledContent activity={activity} />
-    case 'StakeSlashed':
-      return <StakeSlashedContent activity={activity} />
-    case 'StakeDecreased':
-    case 'StakeIncreased':
-      return <StakeChangedContent activity={activity} />
-    case 'WorkerExited':
-      return <WorkerExitedContent activity={activity} />
-    case 'WorkerStartedLeaving':
-      return <WorkerStartedLeavingContent activity={activity} />
-    default:
-      return <div />
-  }
+const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
+  AppliedOnOpening: AppliedOnOpeningContent,
+  ApplicationWithdrawn: ApplicationWithdrawnContent,
+  BudgetSpending: BudgetSpendingContent,
+  BudgetSet: BudgetSetContent,
+  LeaderSet: LeaderSetContent,
+  StatusTextChanged: StatusTextChangedContent,
+  OpeningAdded: OpeningAddedContent,
+  OpeningCanceled: OpeningCanceledContent,
+  StakeSlashed: StakeSlashedContent,
+  StakeDecreased: StakeChangedContent,
+  StakeIncreased: StakeChangedContent,
+  WorkerExited: WorkerExitedContent,
+  WorkerStartedLeaving: WorkerStartedLeavingContent,
+}
+
+export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {
+  const Content = ActivityMap[activity.eventType]
+  return <Content activity={activity} isOwn={isOwn} />
 })

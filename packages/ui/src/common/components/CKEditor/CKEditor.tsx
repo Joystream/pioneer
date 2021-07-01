@@ -5,6 +5,7 @@ import { MarkdownEditor } from './MarkdownEditor.js'
 import { Editor, EventInfo } from './types'
 
 export interface CKEditorProps {
+  id?: string
   onChange?: (event: EventInfo, editor: Editor) => void
   onBlur?: (event: EventInfo, editor: Editor) => void
   onFocus?: (event: EventInfo, editor: Editor) => void

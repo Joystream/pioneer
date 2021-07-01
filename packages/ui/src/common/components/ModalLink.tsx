@@ -32,7 +32,6 @@ export type IModalLink<Call> = React.FC<ModalLinkProps<Call>>
 const ModalLinkItem = styled(Link)`
   font-size: 14px;
   line-height: 20px;
-  font-weight: 400;
   text-decoration: none;
   color: ${Colors.Black[900]};
   font-weight: 700;
