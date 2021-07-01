@@ -37,7 +37,7 @@ describe('ProposalPreview', () => {
 
     expect(await screen.findByText('Deciding')).toBeDefined()
 
-    expect(await screen.getAllByText(/(?:Approval|Slashing) (?:Quorum|Threshold)/)).toHaveLength(4)
+    expect(await screen.findAllByText(/(?:Approval|Slashing) (?:Quorum|Threshold)/)).toHaveLength(4)
 
     expect(await screen.findByRole('heading', { name: 'Update Working Group Budget' })).toBeDefined()
 
@@ -48,6 +48,11 @@ describe('ProposalPreview', () => {
     const proposerSection = await screen.findByText('Proposer').then((element) => element?.parentElement)
     const proposerHandle = proposerSection && (await findByText(proposerSection, MEMBER_ALICE_DATA.handle))
     expect(proposerHandle).toBeDefined()
+
+    const voteHeadings = ['Approved', 'Rejected', 'Slashed', 'Abstained', 'Not Voted']
+    voteHeadings.forEach((name) => {
+      expect(screen.getByRole('heading', { name })).toBeDefined()
+    })
   })
 
   function renderPage() {
