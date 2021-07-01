@@ -30,11 +30,8 @@ interface Props {
 
 export const SelectAccount = React.memo(({ onChange, filter, selected, minBalance }: Props) => {
   const { allAccounts } = useMyAccounts()
-  let options = allAccounts.filter(filter || (() => true))
-  if (minBalance) {
-    const balances = useMyBalances()
-    options = filterByMinBalance(options, balances, minBalance)
-  }
+  const options = allAccounts.filter(filter || (() => true))
+
   const [search, setSearch] = useState('')
 
   const filteredOptions = useMemo(() => filterByText(options, search), [search, options])

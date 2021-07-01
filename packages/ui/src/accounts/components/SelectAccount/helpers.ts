@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { Account, AddressToBalanceMap } from '../../types'
+import { Account, Balances } from '../../types'
 
 export function filterByText(accounts: Account[], text: string) {
   return accounts.filter(
@@ -8,8 +8,6 @@ export function filterByText(accounts: Account[], text: string) {
   )
 }
 
-export function filterByMinBalance(accounts: Account[], balances: AddressToBalanceMap, minBalance: BN) {
-  return accounts.filter(
-    (account) => balances[account.address] && balances[account.address].transferable.gte(minBalance)
-  )
+export const filterByMinBalance = (minBalance: BN, balances?: Balances) => {
+  return !!balances && balances.transferable.gte(minBalance)
 }
