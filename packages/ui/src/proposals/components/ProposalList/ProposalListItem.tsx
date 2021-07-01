@@ -21,22 +21,25 @@ interface ProposalListItemProps {
 export const ProposalListItem = ({ proposal }: ProposalListItemProps) => {
   const date = new Date(!isProposalActive(proposal.status) ? (proposal.endedAt as string) : proposal.createdAt)
   return (
-    <GhostRouterLink to={`${ProposalsRoutes.preview}/${proposal.id}`}>
-      <ProposalItem colLayout={ProposalColLayout} isPast={!isProposalActive(proposal.status)}>
-        <TextSmall lighter>{date.toLocaleDateString('en-GB')}</TextSmall>
-        <StageField>
-          <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
-          <Tooltip tooltipText="Lorem ipsum, dolor sit amet consectetur">
-            <TooltipDefault />
-          </Tooltip>
-        </StageField>
-        <TypeField bold>
-          <BadgeStatus>{camelCaseToText(proposal.details)}</BadgeStatus>
-          {proposal.title}
-        </TypeField>
-        <MemberInfo member={proposal.proposer} />
-      </ProposalItem>
-    </GhostRouterLink>
+    <ProposalItem
+      as={GhostRouterLink}
+      to={`${ProposalsRoutes.preview}/${proposal.id}`}
+      colLayout={ProposalColLayout}
+      isPast={!isProposalActive(proposal.status)}
+    >
+      <TextSmall lighter>{date.toLocaleDateString('en-GB')}</TextSmall>
+      <StageField>
+        <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
+        <Tooltip tooltipText="Lorem ipsum, dolor sit amet consectetur">
+          <TooltipDefault />
+        </Tooltip>
+      </StageField>
+      <TypeField bold>
+        <BadgeStatus>{camelCaseToText(proposal.details)}</BadgeStatus>
+        {proposal.title}
+      </TypeField>
+      <MemberInfo member={proposal.proposer} />
+    </ProposalItem>
   )
 }
 
