@@ -192,6 +192,44 @@ const activities: Activity[] = [
       handle: 'johann',
     },
   },
+  {
+    id: '15',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'OpeningFilled',
+    opening: {
+      id: '1',
+      type: 'LEADER',
+      groupName: 'forumWorkingGroup',
+      title: 'Forum Working Group Leader',
+    },
+    hiredMembers: [
+      {
+        id: '4',
+        handle: 'BigBoss95',
+      },
+    ],
+  },
+  {
+    id: '15',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'OpeningFilled',
+    opening: {
+      id: '1',
+      type: 'REGULAR',
+      groupName: 'forumWorkingGroup',
+      title: 'Forum Working Group Worker',
+    },
+    hiredMembers: [
+      {
+        id: '4',
+        handle: 'BigBoss95',
+      },
+      {
+        id: '5',
+        handle: 'SmallBoss08',
+      },
+    ],
+  },
 ]
 
 export const Default = Template.bind({})

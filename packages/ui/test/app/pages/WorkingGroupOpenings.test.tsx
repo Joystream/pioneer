@@ -4,12 +4,11 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { WorkingGroupsOpenings } from '@/app/pages/WorkingGroups/WorkingGroupsOpenings'
-import { seedMember } from '@/mocks/data'
+import { seedEventCategory, seedMember } from '@/mocks/data'
+import { seedOpening, seedOpeningStatuses } from '@/mocks/data/seedOpenings'
 import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 
-import { seedBudgetSpendingEvents } from '../../../src/mocks/data/seedBudgetSpendingEvents'
-import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, OPENING_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'
@@ -23,7 +22,7 @@ describe('WorkingGroupOpenings', () => {
     seedMember(MEMBER_ALICE_DATA, mockServer.server)
     seedWorkingGroups(mockServer.server)
     seedOpeningStatuses(mockServer.server)
-    seedBudgetSpendingEvents(mockServer.server)
+    seedEventCategory('BudgetSpendingEvent', mockServer.server)
   })
 
   it('Renders page', async () => {
