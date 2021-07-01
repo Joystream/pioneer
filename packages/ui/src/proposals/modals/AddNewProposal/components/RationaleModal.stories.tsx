@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { info } from '@/common/logger'
 import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/RationaleModal'
 
 export default {
@@ -13,9 +13,7 @@ export default {
 const Template: Story = () => {
   return (
     <MemoryRouter>
-      <ModalContextProvider>
-        <RationaleModal />
-      </ModalContextProvider>
+      <RationaleModal closeModal={() => info('close')} />
     </MemoryRouter>
   )
 }
