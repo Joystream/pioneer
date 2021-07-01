@@ -56,8 +56,9 @@ export const ContextMenu = ({ items }: ContextMenuProps) => {
           style={styles.popper}
           {...attributes.popper}
         >
-          {items.map((item) => (
+          {items.map((item, index) => (
             <ButtonLink
+              key={index}
               size="small"
               bold
               borderless
