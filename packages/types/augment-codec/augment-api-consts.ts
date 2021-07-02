@@ -1,14 +1,13 @@
 // Auto-generated via `yarn polkadot-types-from-chain`, do not edit
 /* eslint-disable */
 
-import { Vec } from '@polkadot/types/codec';
-import { u32, u64, u8 } from '@polkadot/types/primitive';
-import { ProposalParameters } from './all';
-import { Balance, BalanceOf, BlockNumber, Moment, Perbill, RuntimeDbWeight, Weight } from '@polkadot/types/interfaces/runtime';
-import { SessionIndex } from '@polkadot/types/interfaces/session';
-import { EraIndex } from '@polkadot/types/interfaces/staking';
-import { WeightToFeeCoefficient } from '@polkadot/types/interfaces/support';
-import { ApiTypes } from '@polkadot/api/types';
+import type { Vec, u32, u64, u8 } from '@polkadot/types';
+import type { MaxNumber, ProposalParameters } from './all';
+import type { Balance, BalanceOf, BlockNumber, Moment, Perbill, RuntimeDbWeight, Weight } from '@polkadot/types/interfaces/runtime';
+import type { SessionIndex } from '@polkadot/types/interfaces/session';
+import type { EraIndex } from '@polkadot/types/interfaces/staking';
+import type { WeightToFeeCoefficient } from '@polkadot/types/interfaces/support';
+import type { ApiTypes } from '@polkadot/api/types';
 
 declare module '@polkadot/api/types/consts' {
   export interface AugmentedConsts<ApiType> {
@@ -51,6 +50,12 @@ declare module '@polkadot/api/types/consts' {
        **/
       minWorkEntrantStake: BalanceOf & AugmentedConst<ApiType>;
     };
+    content: {
+      /**
+       * Exports const -  max number of curators per group
+       **/
+      maxNumberOfCuratorsPerGroup: MaxNumber & AugmentedConst<ApiType>;
+    };
     contentDirectoryWorkingGroup: {
       /**
        * Exports const -  max simultaneous active worker number.
@@ -88,12 +93,6 @@ declare module '@polkadot/api/types/consts' {
        **/
       minNumberOfExtraCandidates: u64 & AugmentedConst<ApiType>;
     };
-    dataDirectory: {
-      /**
-       * Maximum objects allowed per inject_data_objects() transaction
-       **/
-      maxObjectsPerInjection: u32 & AugmentedConst<ApiType>;
-    };
     finalityTracker: {
       /**
        * The delay after which point things become suspicious. Default is 1000.
@@ -105,6 +104,12 @@ declare module '@polkadot/api/types/consts' {
       windowSize: BlockNumber & AugmentedConst<ApiType>;
     };
     forumWorkingGroup: {
+      /**
+       * Exports const -  max simultaneous active worker number.
+       **/
+      maxWorkerNumberLimit: u32 & AugmentedConst<ApiType>;
+    };
+    gatewayWorkingGroup: {
       /**
        * Exports const -  max simultaneous active worker number.
        **/
@@ -125,6 +130,12 @@ declare module '@polkadot/api/types/consts' {
       referralCutMaximumPercent: u8 & AugmentedConst<ApiType>;
     };
     membershipWorkingGroup: {
+      /**
+       * Exports const -  max simultaneous active worker number.
+       **/
+      maxWorkerNumberLimit: u32 & AugmentedConst<ApiType>;
+    };
+    operationsWorkingGroup: {
       /**
        * Exports const -  max simultaneous active worker number.
        **/
