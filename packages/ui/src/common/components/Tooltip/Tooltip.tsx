@@ -73,7 +73,7 @@ export const Tooltip = ({
     onFocus: mouseIsOver,
     onBlur: mouseLeft,
     onMouseEnter: mouseIsOver,
-    // onMouseLeave: mouseLeft,
+    onMouseLeave: mouseLeft,
   }
   const popUpHandlers = {
     onMouseEnter: mouseIsOver,
