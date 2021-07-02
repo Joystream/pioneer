@@ -222,6 +222,10 @@ const SelectContainer = styled.label<SimpleSelectSizingProps>`
     ${FilterLabel} {
       color: ${Colors.Blue[400]};
     }
+    ${Toggle} {
+      border-color: ${Colors.Blue[400]};
+      box-shadow: ${Shadows.focusDefault};
+    }
   }
 `
 
