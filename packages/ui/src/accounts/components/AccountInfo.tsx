@@ -1,4 +1,4 @@
-import Identicon from '@polkadot/react-identicon'
+import { Identicon } from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
 
