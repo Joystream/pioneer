@@ -14,6 +14,7 @@ const resolve = {
   },
   alias: {
     '@': path.resolve(__dirname, '../src'),
+    'react/jsx-runtime': require.resolve('react/jsx-runtime'),
   },
 }
 

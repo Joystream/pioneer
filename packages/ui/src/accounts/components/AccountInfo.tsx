@@ -2,13 +2,14 @@ import { Identicon } from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
 
-import { BadgeStatus } from '../../common/components/BadgeStatus/BadgeStatus'
-import { CopyComponent } from '../../common/components/CopyComponent'
-import { BorderRad, Colors, Transitions } from '../../common/constants'
-import { shortenAddress } from '../../common/model/formatters'
-import { Address } from '../../common/types'
-import { useMyMemberships } from '../../memberships/hooks/useMyMemberships'
-import { Member } from '../../memberships/types'
+import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
+import { CopyComponent } from '@/common/components/CopyComponent'
+import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { shortenAddress } from '@/common/model/formatters'
+import { Address } from '@/common/types'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { Member } from '@/memberships/types'
+
 import { Account } from '../types'
 
 export const AccountInfo = React.memo(({ account }: { account: Account }) => {
