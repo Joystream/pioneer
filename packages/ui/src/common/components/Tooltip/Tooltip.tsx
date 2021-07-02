@@ -25,6 +25,7 @@ export interface TooltipPopupProps {
     onMouseEnter: () => void
     onMouseLeave: () => void
   }
+  forBig?: boolean
 }
 
 export interface DarkTooltipInnerItemProps {
@@ -40,11 +41,11 @@ export const Tooltip = ({
   tooltipLinkURL,
   popupContent,
   className,
+  forBig,
 }: TooltipProps) => {
   const [isTooltipActive, setTooltipActive] = useState(false)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLButtonElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
-
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
     placement: 'bottom-start',
     modifiers: [
@@ -72,7 +73,7 @@ export const Tooltip = ({
     onFocus: mouseIsOver,
     onBlur: mouseLeft,
     onMouseEnter: mouseIsOver,
-    onMouseLeave: mouseLeft,
+    // onMouseLeave: mouseLeft,
   }
   const popUpHandlers = {
     onMouseEnter: mouseIsOver,
@@ -94,6 +95,7 @@ export const Tooltip = ({
                 {...attributes.popper}
                 {...popUpHandlers}
                 isTooltipActive={isTooltipActive}
+                forBig={forBig}
               >
                 {popupContent}
               </TooltipPopupContainer>,
@@ -107,6 +109,7 @@ export const Tooltip = ({
                 {...attributes.popper}
                 {...popUpHandlers}
                 isTooltipActive={isTooltipActive}
+                forBig={forBig}
               >
                 {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
                 <TooltipText>{tooltipText}</TooltipText>
@@ -123,7 +126,7 @@ export const Tooltip = ({
   )
 }
 
-const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean }>`
+const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; forBig?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -166,9 +169,11 @@ const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean }>`
       clip-path: polygon(100% 0, 100% 100%, 0 100%);
     }
   }
-  &[data-popper-placement^='bottom']:after {
-    top: -4px;
-    clip-path: polygon(100% 0, 0 0, 0 100%);
+  &[data-popper-placement^='bottom'] {
+    &:after {
+      top: -4px;
+      clip-path: polygon(100% 0, 0 0, 0 100%);
+    }
   }
   &[data-popper-placement='top-start']:after,
   &[data-popper-placement='bottom-start']:after {
@@ -179,16 +184,16 @@ const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean }>`
     right: 19px;
   }
   &[data-popper-placement='top-start'] {
-    inset: auto auto 4px -16px !important;
+    inset: ${({ forBig }) => (forBig ? 'auto auto 5px -13px !important' : 'auto auto 4px -16px !important')};
   }
   &[data-popper-placement='top-end'] {
-    inset: auto auto 4px 16px !important;
+    inset: ${({ forBig }) => (forBig ? 'auto auto 5px 12px !important' : 'auto auto 4px 16px !important')};
   }
   &[data-popper-placement='bottom-start'] {
-    inset: 4px auto auto -16px !important;
+    inset: ${({ forBig }) => (forBig ? '5px auto auto -13px !important' : '4px auto auto -16px !important')};
   }
   &[data-popper-placement='bottom-end'] {
-    inset: 4px auto auto 16px !important;
+    inset: ${({ forBig }) => (forBig ? '5px auto auto 12px !important' : '4px auto auto 16px !important')};
   }
 `
 
