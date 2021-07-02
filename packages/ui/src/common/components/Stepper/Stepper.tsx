@@ -4,18 +4,13 @@ import styled, { css, ThemeProvider } from 'styled-components'
 import { Arrow, CheckboxIcon } from '@/common/components/icons'
 import { TextInlineSmall } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
-import { Step } from '@/common/model/machines/getSteps'
+import { spacing } from '@/common/utils/styles'
 
 import { StepperTheme } from './themes'
-
-interface StepToRender extends Step {
-  number: null | number
-  isPast: boolean
-  isActive: boolean
-}
+import { asStepsToRender, StepperStep, StepToRender } from './types'
 
 export interface StepperProps {
-  steps: Step[]
+  steps: StepperStep[]
   theme?: typeof StepperTheme.light
 }
 
@@ -35,29 +30,21 @@ const getStepFace = (step: StepToRender) => {
   return step.number
 }
 
-const asStepsToRender = (steps: Step[]): StepToRender[] => {
-  let stepCounter = 1
-
-  return steps.map((step) => ({
-    ...step,
-    number: step.isBaby ? null : stepCounter++,
-    isActive: step.type === 'active',
-    isPast: step.type === 'past',
-  }))
-}
-
 export const Stepper = ({ steps, theme = StepperTheme.light }: StepperProps) => {
   const stepsToRender = asStepsToRender(steps)
 
   return (
     <ThemeProvider theme={theme}>
       <StepperWrap>
-        {stepsToRender.map((value, index) => (
-          <StepWrap key={index} {...value}>
+        {stepsToRender.map((step, index) => (
+          <StepWrap key={index} {...step}>
             <StepNumber>
-              <StepNumberText value>{getStepFace(value)}</StepNumberText>
+              <StepNumberText value>{getStepFace(step)}</StepNumberText>
             </StepNumber>
-            <StepTitle>{value.title}</StepTitle>
+            <StepBody>
+              <StepTitle>{step.title}</StepTitle>
+              {step.details}
+            </StepBody>
           </StepWrap>
         ))}
       </StepperWrap>
@@ -95,6 +82,12 @@ const StepTitle = styled.h6`
   -webkit-text-stroke-width: 0.05em;
   -webkit-text-stroke-color: transparent;
   transition: ${Transitions.all};
+`
+
+const StepBody = styled.div`
+  display: grid;
+  align-items: center;
+  row-gap: ${spacing(1)};
 `
 
 type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBaby'>
