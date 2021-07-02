@@ -2,6 +2,7 @@ import React from 'react'
 import { CSSTransition } from 'react-transition-group'
 import styled, { css } from 'styled-components'
 
+import { CheckboxIcon } from '@/common/components/icons'
 import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { List, ListItem } from '@/common/components/List'
 import { Row } from '@/common/components/Modal'
@@ -41,6 +42,8 @@ export const ProposalTypeStep = ({ type: chosenType, setType }: ProposalTypeStep
               disabled={!enabledProposals.includes(type as ProposalDetails)}
             >
               <TypeItemWrap>
+                <h5>{camelCaseToText(type)}</h5>
+                <TextMedium light>{description}</TextMedium>
                 <CSSTransition
                   in={type === chosenType}
                   classNames="ActiveTypeIcon"
@@ -48,11 +51,9 @@ export const ProposalTypeStep = ({ type: chosenType, setType }: ProposalTypeStep
                   unmountOnExit
                 >
                   <ActiveTypeIndicator>
-                    <SuccessSymbol />
+                    <CheckboxIcon />
                   </ActiveTypeIndicator>
                 </CSSTransition>
-                <h5>{camelCaseToText(type)}</h5>
-                <TextMedium light>{description}</TextMedium>
               </TypeItemWrap>
             </TypeListItem>
           ))}
@@ -62,36 +63,59 @@ export const ProposalTypeStep = ({ type: chosenType, setType }: ProposalTypeStep
   )
 }
 
-export const TypeListItem = styled(ListItem)<{ active: boolean; disabled: boolean }>`
-  cursor: pointer;
-  ${({ active }) =>
-    active &&
-    css`
-      border-color: ${Colors.Blue[500]};
-      z-index: 2;
-    `};
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      cursor: not-allowed;
-      background-color: ${Colors.Black[50]};
-      & > h5 {
-        color: ${Colors.Black[500]};
-      }
-      ${TextMedium} {
-        color: ${Colors.Black[400]};
-      }
-    `};
-`
-
 export const TypeItemWrap = styled(RowGapBlock)`
   position: relative;
   min-height: 100px;
-  padding: 16px 24px 16px 40px;
+  padding: 16px 40px 16px 24px;
+`
+
+export const TypeListItem = styled(ListItem)<{ active: boolean; disabled: boolean }>`
+  cursor: pointer;
+  ${TypeItemWrap} > h5 {
+    transition: ${Transitions.all};
+  }
+
+  ${({ active }) =>
+    active &&
+    css`
+      border-color: ${Colors.Blue[100]};
+      background-color: ${Colors.Blue[50]};
+      z-index: 2;
+      ${TypeItemWrap} > h5 {
+        color: ${Colors.Blue[500]};
+      }
+    `};
+  ${({ disabled }) =>
+    disabled
+      ? css`
+          cursor: not-allowed;
+          background-color: ${Colors.Black[50]};
+          z-index: 0;
+
+          ${TypeItemWrap} > h5 {
+            color: ${Colors.Black[500]};
+          }
+          ${TextMedium} {
+            color: ${Colors.Black[400]};
+          }
+        `
+      : css`
+          z-index: 1;
+
+          &:hover {
+            border-color: ${Colors.Blue[100]};
+
+            ${TypeItemWrap} > h5 {
+              color: ${Colors.Blue[500]};
+            }
+          }
+        `};
 `
 
 const ActiveTypeIndicator = styled.div`
   position: absolute;
-  top: 16px;
-  left: 8px;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  color: ${Colors.Blue[500]};
 `
