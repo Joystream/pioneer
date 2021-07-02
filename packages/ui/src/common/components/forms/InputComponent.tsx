@@ -401,7 +401,7 @@ export const InputContainer = styled.div<InputElementProps>`
   .ck.ck-focused,
   .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused  {
     border: none;
-    border-top: 1px solid transparent;
+    border-top: 1px solid ${Colors.Black[300]};
   }
  `
 
