@@ -18,7 +18,7 @@ import { Navigation, NavigationInnerWrapper } from '@/common/components/page/Sid
 import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHeader'
 import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
 import { Version } from '@/common/components/page/Sidebar/Version'
-import { Transitions } from '@/common/constants'
+import { RemoveScrollbar, Transitions } from '@/common/constants'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
@@ -116,8 +116,13 @@ const NavigationLinks = styled.ul`
   width: 100%;
   grid-area: barlinks;
   margin: 0;
-  padding: 0;
+  padding: 8px 0;
   list-style: none;
+  max-height: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+  mask-image: linear-gradient(0deg, transparent 0px, black 8px, black calc(100% - 8px), transparent 100%);
+  ${RemoveScrollbar};
 `
 
 const NavigationLinksItem = styled.li`

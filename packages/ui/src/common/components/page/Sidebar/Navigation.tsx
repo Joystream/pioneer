@@ -18,7 +18,6 @@ export const NavigationInnerWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 76px 1fr 176px;
-  grid-row-gap: 8px;
   grid-template-areas:
     'barheader'
     'barlinks'
