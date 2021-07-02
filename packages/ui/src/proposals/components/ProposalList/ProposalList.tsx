@@ -21,7 +21,7 @@ export const ProposalList = ({ proposals, isPast }: ProposalListProps) => (
       <ListHeader>Type</ListHeader>
       <ListHeader>Proposer</ListHeader>
     </ListHeaders>
-    <List>
+    <List as="div">
       {proposals.map((proposal) => (
         <ProposalListItem key={proposal.id} proposal={proposal} />
       ))}
