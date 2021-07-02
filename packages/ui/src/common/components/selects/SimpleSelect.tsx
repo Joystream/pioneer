@@ -196,13 +196,6 @@ const SelectContainer = styled.label<SimpleSelectSizingProps>`
   ${Toggle} {
     border: 1px solid ${Colors.Black[200]};
     cursor: pointer;
-
-    &:hover,
-    &:focus,
-    &:focus-within {
-      border-color: ${Colors.Blue[400]};
-      box-shadow: ${Shadows.focusDefault};
-    }
   }
   ${ToggleButton} {
     height: 100%;
@@ -228,6 +221,10 @@ const SelectContainer = styled.label<SimpleSelectSizingProps>`
   &:active {
     ${FilterLabel} {
       color: ${Colors.Blue[400]};
+    }
+    ${Toggle} {
+      border-color: ${Colors.Blue[400]};
+      box-shadow: ${Shadows.focusDefault};
     }
   }
 `
