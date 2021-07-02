@@ -29,6 +29,7 @@ export type WorkerFieldsFragment = {
   group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
     | { __typename: 'WorkerStatusActive' }
+    | { __typename: 'WorkerStatusLeaving' }
     | { __typename: 'WorkerStatusLeft' }
     | { __typename: 'WorkerStatusTerminated' }
 }
