@@ -18,7 +18,7 @@ interface DetailsItemDataProps {
 }
 
 export const LockItem = ({ lock }: DetailsItemDataProps) => {
-  const [isDropped, setDropped] = useToggle()
+  const [isDropped] = useToggle()
 
   return (
     <DetailsItemVoteWrapper>
@@ -31,7 +31,7 @@ export const LockItem = ({ lock }: DetailsItemDataProps) => {
         <TokenValue value={lock.amount} />
         <TokenValue value={0} />
         <TokenValue value={0} />
-        <DropDownButton onClick={setDropped} isDropped={isDropped} size="medium" />
+        {/*<DropDownButton onClick={setDropped} isDropped={isDropped} size="medium" />*/}
       </AccountDetailsWrap>
       <DetailsDropDownToggle isDropped={isDropped}>
         <DetailsDropDownColumn>
