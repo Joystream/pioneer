@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
-import { Colors, ZIndex } from '../../constants'
+import { Colors, Transitions, ZIndex } from '../../constants'
 
 export const CKEditorStylesOverrides = createGlobalStyle`
   .ck.ck-editor {
@@ -17,6 +17,9 @@ export const CKEditorStylesOverrides = createGlobalStyle`
     margin: 1em 0;
   }
 
+  .ck.ck-editor__editable_inline {
+    transition: ${Transitions.all};
+  }
 
   .ck.ck-content ol {
     padding-inline-start: 2em;

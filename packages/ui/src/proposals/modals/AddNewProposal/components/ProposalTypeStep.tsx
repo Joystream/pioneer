@@ -3,7 +3,6 @@ import { CSSTransition } from 'react-transition-group'
 import styled, { css } from 'styled-components'
 
 import { CheckboxIcon } from '@/common/components/icons'
-import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { List, ListItem } from '@/common/components/List'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
