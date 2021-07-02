@@ -1,5 +1,5 @@
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp'
-import keyring from '@polkadot/ui-keyring/Keyring'
+import { keyring } from '@polkadot/ui-keyring'
 import React, { ReactNode, useEffect, useState } from 'react'
 
 import { error } from '@/common/logger'
