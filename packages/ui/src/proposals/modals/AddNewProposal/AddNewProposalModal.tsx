@@ -30,9 +30,11 @@ import { Constants } from '@/proposals/modals/AddNewProposal/components/Constant
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
+import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
-import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
+import { addNewProposalMachine, ProposalTrigger } from '@/proposals/modals/AddNewProposal/machine'
+import { ProposalConstants } from '@/proposals/types'
 
 export type NewProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
@@ -97,6 +99,15 @@ export const AddNewProposalModal = () => {
       state.matches('generalParameters.proposalDetails') &&
       state.context.proposalTitle &&
       state.context.proposalRationale
+    ) {
+      return setValid(true)
+    }
+
+    if (
+      state.matches('generalParameters.triggerAndDiscussion') &&
+      state.context.trigger !== undefined &&
+      state.context.discussionMode &&
+      state.context.discussionWhitelist
     ) {
       return setValid(true)
     }
@@ -169,6 +180,17 @@ export const AddNewProposalModal = () => {
                 proposer={member}
                 setTitle={(title) => send('SET_TITLE', { title })}
                 setRationale={(rationale) => send('SET_RATIONALE', { rationale })}
+              />
+            )}
+            {state.matches('generalParameters.triggerAndDiscussion') && (
+              <TriggerAndDiscussionStep
+                constants={constants as ProposalConstants}
+                trigger={state.context.trigger}
+                discussionMode={state.context.discussionMode}
+                discussionWhitelist={state.context.discussionWhitelist}
+                setTrigger={(trigger?: ProposalTrigger) => send('SET_TRIGGER', { trigger })}
+                setDiscussionMode={(mode) => send('SET_DISCUSSION_MODE', { mode })}
+                setDiscussionWhitelist={(whitelist) => send('SET_DISCUSSION_WHITELIST', { whitelist })}
               />
             )}
           </StepperBody>

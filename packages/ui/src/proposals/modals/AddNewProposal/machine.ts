@@ -1,6 +1,7 @@
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
+import { Member } from '@/memberships/types'
 import { ProposalDetails } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
@@ -18,7 +19,19 @@ interface BaseDetailsContext extends Required<StakingAccountContext> {
   proposalRationale?: string
 }
 
-type Context = Partial<ProposalTypeContext & StakingAccountContext & BaseDetailsContext>
+export type ProposalTrigger = false | number
+export type ProposalDiscussionMode = 'open' | 'closed'
+export type ProposalDiscussionWhitelist = Member[]
+
+interface TriggerAndDiscussionContext extends Required<BaseDetailsContext> {
+  trigger?: ProposalTrigger
+  discussionMode?: ProposalDiscussionMode
+  discussionWhitelist?: ProposalDiscussionWhitelist
+}
+
+type AddNewProposalContext = Partial<
+  ProposalTypeContext & StakingAccountContext & BaseDetailsContext & TriggerAndDiscussionContext
+>
 
 type AddNewProposalState =
   | { value: 'requirementsVerification'; context: EmptyObject }
@@ -30,15 +43,19 @@ type AddNewProposalState =
   | { value: 'generalParameters'; context: Required<BaseDetailsContext> }
   | { value: 'generalParameters.stakingAccount'; context: Required<StakingAccountContext> }
   | { value: 'generalParameters.proposalDetails'; context: Required<BaseDetailsContext> }
-  | { value: 'generalParameters.triggerAndDiscussion'; context: Required<BaseDetailsContext> }
-  | { value: 'specificParameters'; context: Required<BaseDetailsContext> }
-  | { value: 'success'; context: Required<BaseDetailsContext> }
-  | { value: 'error'; context: Required<BaseDetailsContext> }
+  | { value: 'generalParameters.triggerAndDiscussion'; context: Required<TriggerAndDiscussionContext> }
+  | { value: 'generalParameters.finishGeneralParameters'; context: Required<TriggerAndDiscussionContext> }
+  | { value: 'specificParameters'; context: Required<TriggerAndDiscussionContext> }
+  | { value: 'success'; context: AddNewProposalContext }
+  | { value: 'error'; context: AddNewProposalContext }
 
 type SelectProposalEvent = { type: 'SELECT'; proposalType: ProposalDetails }
 type SelectAccountEvent = { type: 'SELECT'; stakingAccount: Account }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
+type SetTriggerEvent = { type: 'SET_TRIGGER'; trigger: ProposalTrigger | undefined }
+type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscussionMode }
+type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
 
 export type AddNewProposalEvent =
   | { type: 'FAIL' }
@@ -47,8 +64,11 @@ export type AddNewProposalEvent =
   | SelectAccountEvent
   | SetTitleEvent
   | SetRationaleEvent
+  | SetTriggerEvent
+  | SetDiscussionModeEvent
+  | SetDiscussionWhitelistEvent
 
-export const addNewProposalMachine = createMachine<Context, AddNewProposalEvent, AddNewProposalState>({
+export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNewProposalEvent, AddNewProposalState>({
   initial: 'requirementsVerification',
   states: {
     requirementsVerification: {
@@ -123,6 +143,32 @@ export const addNewProposalMachine = createMachine<Context, AddNewProposalEvent,
         },
         triggerAndDiscussion: {
           meta: { isStep: true, stepTitle: 'Trigger & Discussion' },
+          on: {
+            NEXT: {
+              target: 'finishGeneralParameters',
+              cond: (context) =>
+                context.discussionMode !== undefined &&
+                context.discussionWhitelist !== undefined &&
+                context.trigger !== undefined,
+            },
+            SET_TRIGGER: {
+              actions: assign({
+                trigger: (context, event) => (event as SetTriggerEvent).trigger,
+              }),
+            },
+            SET_DISCUSSION_MODE: {
+              actions: assign({
+                discussionMode: (context, event) => (event as SetDiscussionModeEvent).mode,
+              }),
+            },
+            SET_DISCUSSION_WHITELIST: {
+              actions: assign({
+                discussionWhitelist: (context, event) => (event as SetDiscussionWhitelistEvent).whitelist,
+              }),
+            },
+          },
+        },
+        finishGeneralParameters: {
           type: 'final',
         },
       },
