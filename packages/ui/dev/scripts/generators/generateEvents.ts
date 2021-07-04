@@ -38,32 +38,30 @@ const generateBudgetSpending = (mocks: Mocks) => () => {
   }
 }
 
-const generateApplicationEvents = (mocks: Mocks) => () => {
+const generateAppliedOnOpeningEvent = (mocks: Mocks) => () => {
   const application = mocks.applications[randomFromRange(0, mocks.applications.length - 1)]
   const opening = mocks.openings.find(opening => opening.id == application.openingId)
 
-  const date = faker.date.recent(30)
-
-  const appliedEvent = {
+  return {
     id: (nextAppliedOnOpeningEventId++).toString(),
-    createdAt: faker.date.recent(5, date),
+    createdAt: faker.date.recent(30),
     applicationId: application.id,
     openingId: application.openingId,
     groupId: opening?.groupId,
   }
+}
 
-  if (application.status === 'withdrawn') {
-    return {
-      withdrawnEvent: {
-        id: (nextApplicationWithdrawnEventId++).toString(),
-        createdAt: date,
-        applicationId: application.id,
-        groupId: opening?.groupId,
-      },
-      appliedEvent
-    }
+const generateApplicationWithdrawnEvent = (mocks: Mocks) => () => {
+  const withdrawnApplications = mocks.applications.filter(application => application.status === 'withdrawn')
+  const application = withdrawnApplications[randomFromRange(0, withdrawnApplications.length - 1)]
+  const opening = mocks.openings.find(opening => opening.id == application.openingId)
+
+  return {
+    id: (nextApplicationWithdrawnEventId++).toString(),
+    createdAt: faker.date.recent(20),
+    applicationId: application.id,
+    groupId: opening?.groupId,
   }
-  return { appliedEvent }
 }
 
 const generateStakeChanged = (mocks: Mocks) => () => {
@@ -101,14 +99,13 @@ const generateOpeningFilledEvent = (mocks: Mocks) => () => {
   }
 }
 
+
+
 export const generateAllEvents = (mocks: Mocks) => {
   const rewardPaidEvents = Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks))
   const budgetSpendingEvents = Array.from({ length: 10 }).map(generateBudgetSpending(mocks))
-  const applicationEvents = Array.from({ length: 20 }).map(generateApplicationEvents(mocks))
-  const appliedOnOpeningEvents = applicationEvents.map(({ appliedEvent }) => appliedEvent)
-  const applicationWithdrawnEvents = applicationEvents
-    .filter((item) => 'withdrawnEvent' in item)
-    .map(({ withdrawnEvent }) => withdrawnEvent)
+  const appliedOnOpeningEvents = Array.from({ length: 15 }).map(generateAppliedOnOpeningEvent(mocks))
+  const applicationWithdrawnEvents = Array.from({ length: 8 }).map(generateApplicationWithdrawnEvent(mocks))
   const stakeDecreasedEvents = Array.from({ length: 10 }).map(generateStakeChanged(mocks))
   const stakeIncreasedEvents = Array.from({ length: 10 }).map(generateStakeChanged(mocks))
   const stakeSlashedEvents = Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks))
