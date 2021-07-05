@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
-import { getStatusWhere, UseWorkersProps } from '@/working-groups/hooks/useWorkers'
+import { UseWorkersProps } from '@/working-groups/hooks/useWorkers'
+import { getWorkersWhere } from '@/working-groups/hooks/utils/queries'
 import { useGetWorkersCountQuery, useGetWorkersQuery } from '@/working-groups/queries'
 import { asWorkerBaseInfo } from '@/working-groups/types'
 
@@ -14,7 +15,7 @@ export const useWorkersPagination = ({ groupId: group_eq, status, page = 1 }: Us
   const variables = {
     where: {
       group_eq,
-      status_json: getStatusWhere(status),
+      ...getWorkersWhere(status),
     },
     limit: WORKERS_PER_PAGE,
     offset: (page - 1) * WORKERS_PER_PAGE,

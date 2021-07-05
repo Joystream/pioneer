@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
 import { error as logError } from '@/common/logger'
-import { getStatusWhere, UseOpeningsParams } from '@/working-groups/hooks/useOpenings'
+import { UseOpeningsParams } from '@/working-groups/hooks/useOpenings'
+import { getOpeningsWhere } from '@/working-groups/hooks/utils/queries'
 
 import { useCountWorkingGroupOpeningsQuery, useGetWorkingGroupOpeningsQuery } from '../queries'
 import { asWorkingGroupOpening } from '../types'
@@ -12,10 +13,10 @@ interface UseOpeningsPaginationParams extends UseOpeningsParams {
   page?: number
 }
 
-export const useOpeningsPagination = ({ groupId, statusIn, page = 1 }: UseOpeningsPaginationParams) => {
+export const useOpeningsPagination = ({ groupId, type, page = 1 }: UseOpeningsPaginationParams) => {
   const where = {
     group: { id_eq: groupId },
-    status_json: getStatusWhere(statusIn),
+    ...getOpeningsWhere(type),
   }
   const variables = {
     limit: OPENINGS_PER_PAGE,

@@ -22,7 +22,7 @@ type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 
 export const WorkingGroupsOpenings = () => {
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
-  const { isLoading: currentLoading, openings } = useOpenings({ statusIn: ['open'] })
+  const { isLoading: currentLoading, openings } = useOpenings({ type: 'open' })
   const activities = useActivities()
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
   const sideNeighborRef = useRef<HTMLDivElement>(null)

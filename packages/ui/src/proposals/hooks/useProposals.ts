@@ -23,10 +23,10 @@ export const getStatusWhere = (status: UseProposalsStatus) => {
   }
 
   if (status === 'active') {
-    return { isTypeOf_in: proposalActiveStatuses.map(proposalStatusToTypename) }
+    return { isTypeOf_eq: proposalActiveStatuses.map(proposalStatusToTypename) }
   }
 
-  return { isTypeOf_in: proposalPastStatuses.map(proposalStatusToTypename) }
+  return { isTypeOf_not: proposalPastStatuses.map(proposalStatusToTypename) }
 }
 
 export const useProposals = ({ status }: UseProposalsProps): UseProposals => {

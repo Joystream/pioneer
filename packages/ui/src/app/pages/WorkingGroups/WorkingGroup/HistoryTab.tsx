@@ -45,7 +45,7 @@ export function HistoryTab({ workingGroup }: Props) {
 }
 
 const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => (
-  <OpeningsPagination groupId={groupId} statusIn={['filled', 'cancelled']} />
+  <OpeningsPagination groupId={groupId} type="past" />
 )
 
 const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
