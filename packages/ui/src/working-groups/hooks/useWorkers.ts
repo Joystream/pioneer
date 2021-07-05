@@ -6,20 +6,20 @@ import { useGetWorkersQuery } from '../queries'
 
 export interface UseWorkersProps {
   groupId?: string
-  statusIn?: WorkerStatus[]
+  status?: WorkerStatus
 }
 
-export const getStatusWhere = (statusIn?: WorkerStatus[]) => {
-  if (!statusIn) {
+export const getStatusWhere = (status?: WorkerStatus) => {
+  if (!status) {
     return
   }
 
-  return { isTypeOf_in: statusIn.map((status) => WorkerStatusTypename[status]) }
+  return { isTypeOf_eq: WorkerStatusTypename[status] }
 }
 
-export const useWorkers = ({ groupId: group_eq, statusIn }: UseWorkersProps) => {
+export const useWorkers = ({ groupId: group_eq, status }: UseWorkersProps) => {
   const variables = {
-    where: { group_eq, status_json: getStatusWhere(statusIn) },
+    where: { group: { id_eq: group_eq }, status_json: getStatusWhere(status) },
   }
 
   const { data, loading } = useGetWorkersQuery({ variables })

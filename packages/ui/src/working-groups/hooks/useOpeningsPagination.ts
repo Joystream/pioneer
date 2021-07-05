@@ -12,9 +12,9 @@ interface UseOpeningsPaginationParams extends UseOpeningsParams {
   page?: number
 }
 
-export const useOpeningsPagination = ({ groupId: group_eq, statusIn, page = 1 }: UseOpeningsPaginationParams) => {
+export const useOpeningsPagination = ({ groupId, statusIn, page = 1 }: UseOpeningsPaginationParams) => {
   const where = {
-    group_eq,
+    group: { id_eq: groupId },
     status_json: getStatusWhere(statusIn),
   }
   const variables = {

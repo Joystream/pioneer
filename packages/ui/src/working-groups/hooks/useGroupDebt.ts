@@ -6,7 +6,7 @@ import { useGetGroupDebtQuery } from '../queries'
 
 export const useGroupDebt = (groupId: string) => {
   const { data, loading } = useGetGroupDebtQuery({
-    variables: { where: { group_eq: groupId, status_json: { isTypeOf_in: [WorkerStatusTypename['active']] } } },
+    variables: { where: { group: { id_eq: groupId }, status_json: { isTypeOf_eq: WorkerStatusTypename['active'] } } },
   })
 
   if (loading || !data) {

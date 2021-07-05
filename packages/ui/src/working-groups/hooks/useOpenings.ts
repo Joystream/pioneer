@@ -23,7 +23,7 @@ export const getStatusWhere = (statusIn?: WorkingGroupOpeningStatus[]) => {
 
 export const useOpenings = ({ groupId: group_eq, statusIn }: UseOpeningsParams) => {
   const where = {
-    group_eq,
+    group: { id_eq: group_eq },
     status_json: getStatusWhere(statusIn),
   }
   const { data, loading, error: err } = useGetWorkingGroupOpeningsQuery({ variables: { where } })

@@ -1133,7 +1133,7 @@ export type CountWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
 >
 export const CountWorkingGroupWorkersDocument = gql`
   query countWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
-    workersConnection(where: { group_eq: $groupId_eq, status_json: $status_json }) {
+    workersConnection(where: { group: { id_eq: $groupId_eq }, status_json: $status_json }) {
       totalCount
     }
   }
@@ -1534,7 +1534,7 @@ export type GetWorkingGroupApplicationQueryResult = Apollo.QueryResult<
 >
 export const GetApplicationFormQuestionAnswerDocument = gql`
   query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
-    applicationFormQuestionAnswers(where: { application_eq: $applicationId_eq }) {
+    applicationFormQuestionAnswers(where: { application: { id_eq: $applicationId_eq } }) {
       ...ApplicationFormQuestionAnswerFields
     }
   }
@@ -1775,22 +1775,22 @@ export type GetMemberRoleEventsQueryResult = Apollo.QueryResult<
 >
 export const GetGroupEventsDocument = gql`
   query GetGroupEvents($group_eq: ID!) {
-    appliedOnOpeningEvents(where: { group_eq: $group_eq }) {
+    appliedOnOpeningEvents(where: { group: { id_eq: $group_eq } }) {
       ...AppliedOnOpeningEventFields
     }
-    applicationWithdrawnEvents(where: { group_eq: $group_eq }) {
+    applicationWithdrawnEvents(where: { group: { id_eq: $group_eq } }) {
       ...ApplicationWithdrawnEventFields
     }
-    budgetSpendingEvents(where: { group_eq: $group_eq }) {
+    budgetSpendingEvents(where: { group: { id_eq: $group_eq } }) {
       ...BudgetSpendingActivityEventFields
     }
-    stakeDecreasedEvents(where: { group_eq: $group_eq }) {
+    stakeDecreasedEvents(where: { group: { id_eq: $group_eq } }) {
       ...StakeDecreasedEventFields
     }
-    stakeIncreasedEvents(where: { group_eq: $group_eq }) {
+    stakeIncreasedEvents(where: { group: { id_eq: $group_eq } }) {
       ...StakeIncreasedEventFields
     }
-    openingFilledEvents(where: { group_eq: $group_eq }) {
+    openingFilledEvents(where: { group: { id_eq: $group_eq } }) {
       ...OpeningFilledEventFields
     }
   }

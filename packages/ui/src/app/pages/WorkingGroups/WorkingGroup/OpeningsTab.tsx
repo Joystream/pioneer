@@ -21,7 +21,7 @@ interface Props {
 export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
   const { isLoading: isLoadingCurrent, openings } = useOpenings({ groupId: workingGroup.id, statusIn: ['open'] })
-  const { workers } = useWorkers({ groupId: workingGroup.id ?? '', statusIn: ['active'] })
+  const { workers } = useWorkers({ groupId: workingGroup.id ?? '', status: 'active' })
   const { debt } = useGroupDebt(workingGroup.id)
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
