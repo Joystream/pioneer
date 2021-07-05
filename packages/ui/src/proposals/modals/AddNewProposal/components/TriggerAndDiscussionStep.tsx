@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { InputComponent, InputNumber, ToggleCheckbox } from '@/common/components/forms'
+import { CrossIcon, Icon } from '@/common/components/icons'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { blocksToTime } from '@/common/model/blocksToTime'
-import { MemberInfo } from '@/memberships/components'
+import { MemberDarkHover, MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 import {
@@ -134,7 +136,12 @@ export const TriggerAndDiscussionStep = ({
               </InputComponent>
               <WhitelistContainer>
                 {(discussionWhitelist as ProposalDiscussionWhitelist).map((member) => (
-                  <MemberInfo key={member.id} member={member} memberSize="s" />
+                  <WhitelistMember>
+                    <MemberInfo key={member.id} member={member} memberSize="s" />
+                    <WhitelistRemoveMemberIcon onClick={() => removeMemberFromWhitelist(member)}>
+                      <CrossIcon />
+                    </WhitelistRemoveMemberIcon>
+                  </WhitelistMember>
                 ))}
               </WhitelistContainer>
             </RowGapBlock>
@@ -149,4 +156,23 @@ const WhitelistContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 10px;
+`
+
+const WhitelistMember = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 16px;
+  grid-column-gap: 8px;
+  align-items: center;
+  padding: 12px 8px;
+  background-color: ${Colors.White};
+  border-radius: ${BorderRad.s};
+  transition: ${Transitions.all};
+`
+
+const WhitelistRemoveMemberIcon = styled.span`
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.6;
+  }
 `
