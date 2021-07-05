@@ -9,12 +9,12 @@ import workingGroups from '../../src/mocks/data/raw/workingGroups.json'
 import upcomingOpenings from '../../src/mocks/data/raw/upcomingOpenings.json'
 import {Mocks} from "./generators/types";
 import {eventGenerators, generateAllEvents} from "./generators/generateEvents";
-import {saveFile} from "./saveFile";
+import {saveFile} from "./helpers/saveFile";
 
 function main() {
   const argv = yargs(process.argv.slice(2))
     .scriptName('events:generate')
-    .usage('yarn events:generate <--eventTypes [...]>')
+    .usage('yarn events:generate --eventTypes [eventType[, anotherEventType[, ...]]')
     .array('eventTypes')
     .argv
 
@@ -37,7 +37,8 @@ function main() {
     workingGroups,
   }
 
-  const eventTypes = argv.eventTypes?.map(type => type.toString()).filter(type => type in eventGenerators)
+  const distinctParams = [...new Set(argv.eventTypes)]
+  const eventTypes = distinctParams.map(type => type.toString()).filter(type => type in eventGenerators)
 
   let newMocks: { [key: string]: any[] } = {}
 
