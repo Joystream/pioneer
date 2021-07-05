@@ -99,26 +99,20 @@ const generateOpeningFilledEvent = (mocks: Mocks) => () => {
   }
 }
 
-
+export const eventGenerators = {
+  rewardPaidEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
+  budgetSpendingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
+  appliedOnOpeningEvents : (mocks: Mocks) => Array.from({ length: 15 }).map(generateAppliedOnOpeningEvent(mocks)),
+  applicationWithdrawnEvents : (mocks: Mocks) => Array.from({ length: 8 }).map(generateApplicationWithdrawnEvent(mocks)),
+  stakeDecreasedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
+  stakeIncreasedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
+  stakeSlashedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks)),
+  openingFilledEvents : (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
+}
 
 export const generateAllEvents = (mocks: Mocks) => {
-  const rewardPaidEvents = Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks))
-  const budgetSpendingEvents = Array.from({ length: 10 }).map(generateBudgetSpending(mocks))
-  const appliedOnOpeningEvents = Array.from({ length: 15 }).map(generateAppliedOnOpeningEvent(mocks))
-  const applicationWithdrawnEvents = Array.from({ length: 8 }).map(generateApplicationWithdrawnEvent(mocks))
-  const stakeDecreasedEvents = Array.from({ length: 10 }).map(generateStakeChanged(mocks))
-  const stakeIncreasedEvents = Array.from({ length: 10 }).map(generateStakeChanged(mocks))
-  const stakeSlashedEvents = Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks))
-  const openingFilledEvents = Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks))
+  const newMocks: { [key: string]: any } = {}
+  Object.entries(eventGenerators).forEach(([key, generator]) => { newMocks[key] = generator(mocks) })
 
-  return {
-    rewardPaidEvents,
-    budgetSpendingEvents,
-    appliedOnOpeningEvents,
-    applicationWithdrawnEvents,
-    stakeDecreasedEvents,
-    stakeIncreasedEvents,
-    stakeSlashedEvents,
-    openingFilledEvents,
-  }
+  return newMocks
 }
