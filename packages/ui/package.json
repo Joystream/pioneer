@@ -89,6 +89,7 @@
     "@storybook/addon-essentials": "^6.3.0-alpha.13",
     "@storybook/addon-links": "^6.3.0-alpha.13",
     "@storybook/builder-webpack5": "^6.3.0-alpha.13",
+    "@storybook/manager-webpack5": "^6.3.0-alpha.13",
     "@storybook/react": "^6.3.0-alpha.13",
     "@storybook/theming": "^6.3.0-alpha.13",
     "@testing-library/jest-dom": "^5.14.1",
