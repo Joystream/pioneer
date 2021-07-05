@@ -1,8 +1,9 @@
 import yargs from 'yargs'
 
 import { addStakingAccountModule } from './commands/addStakingAccount'
-import { createOpeningModule } from './commands/createAnOnOpening'
+import { applyOnOpeningModule } from './commands/applyOnOpening'
 import { createMembersModule } from './commands/createMembers'
+import { createOpeningModule } from './commands/createOpening'
 import { removeStakingAccountModule } from './commands/removeStaking'
 import { setBudgetModule } from './commands/setBudget'
 
@@ -14,4 +15,5 @@ yargs(process.argv.slice(2))
   .command(removeStakingAccountModule)
   .command(setBudgetModule)
   .command(createOpeningModule)
+  .command(applyOnOpeningModule)
   .demandCommand().argv

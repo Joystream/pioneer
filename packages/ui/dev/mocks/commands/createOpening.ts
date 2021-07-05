@@ -28,7 +28,7 @@ const opening = async () => {
 }
 
 export const createOpeningModule = {
-  command: 'create-opening',
+  command: 'opening:create',
   describe: 'Create new opening in Membership Working Group',
   handler: opening,
 }
