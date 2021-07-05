@@ -25,6 +25,12 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
   for (const [key, checkValue] of Object.entries(where)) {
     const [field, type] = key.split('_')
 
+    if (!type) {
+      filters.push(getFilter(checkValue, field))
+
+      continue
+    }
+
     if (type === 'eq') {
       if (field === 'isTypeOf') {
         filters.push((model: Record<string, any>) => {
@@ -32,7 +38,8 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
         })
       } else {
         filters.push((model: Record<string, any>) => {
-          return String(model[getFieldName(model, field)]) === checkValue.toString()
+          const fieldName = getFieldName(model, nestedField ? nestedField : field)
+          return String(model[fieldName]) === checkValue.toString()
         })
       }
     }
