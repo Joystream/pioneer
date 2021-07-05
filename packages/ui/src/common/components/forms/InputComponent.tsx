@@ -340,7 +340,12 @@ export const InputContainer = styled.div<InputElementProps>`
 
   &:hover,
   &:focus,
-  &:focus-within {
+  &:focus-within,
+  &:hover .ck.ck-editor__editable_inline,
+  &:focus .ck.ck-editor__editable_inline,
+  &:focus-within .ck.ck-editor__editable_inline {
+    &, 
+    .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
     border-color: ${({ validation }) => {
       switch (validation) {
         case 'invalid':
@@ -375,6 +380,7 @@ export const InputContainer = styled.div<InputElementProps>`
         return 'none'
       }
     }};
+    }
   }
 
   ${InputIcon} {
@@ -387,7 +393,17 @@ export const InputContainer = styled.div<InputElementProps>`
             left: 16px;
           `};
   }
-`
+
+  .ck.ck-toolbar {
+    border: none;
+  }
+  .ck.ck-editor__editable_inline,
+  .ck.ck-focused,
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused  {
+    border: none;
+    border-top: 1px solid ${Colors.Black[300]};
+  }
+ `
 
 const InputArea = styled.div`
   display: flex;

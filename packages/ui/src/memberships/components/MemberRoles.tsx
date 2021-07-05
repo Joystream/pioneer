@@ -57,17 +57,29 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
         <MemberRolesWrapperWrapable>
           {rolesToDisplay.map(([abbreviation, roles], index) =>
             roles.length > 1 ? (
-              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
+              <Tooltip
+                key={index}
+                popupContent={<MemberRolePopupContent roles={roles} />}
+                forBig={size == 'l' ? true : false}
+              >
                 <MemberRoleHelpGroup size={size} count={roles.length} abbreviation={abbreviation} />
               </Tooltip>
             ) : (
-              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
+              <Tooltip
+                key={index}
+                popupContent={<MemberRolePopupContent roles={roles} />}
+                forBig={size == 'l' ? true : false}
+              >
                 <MemberRoleHelp size={size}>{abbreviation}</MemberRoleHelp>
               </Tooltip>
             )
           )}
           {hiddenRoles > 0 && (
-            <Tooltip key="hidden" tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}>
+            <Tooltip
+              key="hidden"
+              tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}
+              forBig={size == 'l' ? true : false}
+            >
               <MemberRoleHelpMax size={size}>{`+${hiddenRoles}`}</MemberRoleHelpMax>
             </Tooltip>
           )}
@@ -76,17 +88,29 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
         <MemberRolesWrapper>
           {rolesToDisplay.map(([abbreviation, roles], index) =>
             roles.length > 1 ? (
-              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
+              <Tooltip
+                key={index}
+                popupContent={<MemberRolePopupContent roles={roles} />}
+                forBig={size == 'l' ? true : false}
+              >
                 <MemberRoleHelpGroup size={size} count={roles.length} abbreviation={abbreviation} />
               </Tooltip>
             ) : (
-              <Tooltip key={index} popupContent={<MemberRolePopupContent roles={roles} />}>
+              <Tooltip
+                key={index}
+                popupContent={<MemberRolePopupContent roles={roles} />}
+                forBig={size == 'l' ? true : false}
+              >
                 <MemberRoleHelp size={size}>{abbreviation}</MemberRoleHelp>
               </Tooltip>
             )
           )}
           {hiddenRoles > 0 && (
-            <Tooltip key="hidden" tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}>
+            <Tooltip
+              key="hidden"
+              tooltipText={`And ${hiddenRoles} more ${hiddenRoles > 1 ? 'roles' : 'role'}`}
+              forBig={size == 'l' ? true : false}
+            >
               <MemberRoleHelpMax size={size}>{`+${hiddenRoles}`}</MemberRoleHelpMax>
             </Tooltip>
           )}

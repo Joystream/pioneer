@@ -3,6 +3,7 @@ import React from 'react'
 
 import { info } from '@/common/logger'
 
+import { InputComponent } from '../forms'
 import { TemplateBlock } from '../storybookParts/previewStyles'
 
 import { CKEditor, CKEditorProps } from './CKEditor'
@@ -15,6 +16,9 @@ export default {
 const Template: Story<CKEditorProps> = (args) => (
   <TemplateBlock>
     <CKEditor {...args} />
+    <InputComponent label="Inside InputComponent" inputSize="auto">
+      <CKEditor {...args} />
+    </InputComponent>
   </TemplateBlock>
 )
 
