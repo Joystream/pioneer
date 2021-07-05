@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { TextSmall } from '@/common/components/typography'
+import { TextInlineSmall } from '@/common/components/typography'
 
 import { Stepper, StepperProps } from './Stepper'
 
@@ -35,12 +35,12 @@ Simple.args = {
 }
 
 const HistoryDetails = styled(({ tooltipText, ...props }) => (
-  <TextSmall {...props} lighter>
-    14/10/2020, 10:25 PM CET
+  <div {...props}>
+    <TextInlineSmall lighter>14/10/2020, 10:25 PM CET</TextInlineSmall>
     <Tooltip tooltipText={tooltipText}>
       <TooltipDefault />
     </Tooltip>
-  </TextSmall>
+  </div>
 ))`
   display: flex;
   align-items: center;
