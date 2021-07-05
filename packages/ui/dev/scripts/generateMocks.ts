@@ -1,18 +1,14 @@
-import fs from 'fs'
-import path from 'path'
+import yargs from 'yargs'
 
+import { eventsModule } from './generateEventMocks'
 import { generateAllEvents } from './generators/generateEvents'
 import { generateMembers } from './generators/generateMembers'
 import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
 import { generateProposals } from './generators/generateProposals'
-import {generateWithdrawnApplications, generateWorkers} from './generators/generateWorkers'
+import { generateWithdrawnApplications, generateWorkers } from './generators/generateWorkers'
 import { generateWorkingGroups } from './generators/generateWorkingGroups'
 import { Mocks } from './generators/types'
-
-const saveFile = (name: string, contents: any) => {
-  const pathName = path.join(__dirname, '..', '..', 'src', 'mocks', 'data', 'raw', name + '.json')
-  fs.writeFileSync(pathName, JSON.stringify(contents, null, 2) + '\n')
-}
+import { saveFile } from './helpers/saveFile'
 
 const main = () => {
   const mocks: Mocks = {
@@ -36,4 +32,15 @@ const main = () => {
   Object.entries(mocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
 
-main()
+const allModule = {
+  command: 'all',
+  describe: 'Generate all mocks',
+  handler: main,
+}
+
+yargs(process.argv.slice(2))
+  .usage('yarn node-mocks [<command>]')
+  .scriptName('')
+  .command(allModule)
+  .command(eventsModule)
+  .demandCommand().argv
