@@ -1,11 +1,11 @@
-import {generateAllEvents} from './generators/generateEvents'
-import {generateMembers} from './generators/generateMembers'
-import {generateOpeningsAndUpcomingOpenings} from './generators/generateOpeningsAndUpcomingOpenings'
-import {generateProposals} from './generators/generateProposals'
-import {generateWithdrawnApplications, generateWorkers} from './generators/generateWorkers'
-import {generateWorkingGroups} from './generators/generateWorkingGroups'
-import {Mocks} from './generators/types'
-import {saveFile} from "./helpers/saveFile";
+import { generateAllEvents } from './generators/generateEvents'
+import { generateMembers } from './generators/generateMembers'
+import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
+import { generateProposals } from './generators/generateProposals'
+import { generateWithdrawnApplications, generateWorkers } from './generators/generateWorkers'
+import { generateWorkingGroups } from './generators/generateWorkingGroups'
+import { Mocks } from './generators/types'
+import { saveFile } from './helpers/saveFile'
 
 const main = () => {
   const mocks: Mocks = {

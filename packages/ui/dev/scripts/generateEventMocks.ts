@@ -1,36 +1,36 @@
-import yargs from "yargs";
+import yargs from 'yargs'
 
 import applications from '../../src/mocks/data/raw/applications.json'
 import members from '../../src/mocks/data/raw/members.json'
 import openings from '../../src/mocks/data/raw/openings.json'
 import proposals from '../../src/mocks/data/raw/proposals.json'
+import upcomingOpenings from '../../src/mocks/data/raw/upcomingOpenings.json'
 import workers from '../../src/mocks/data/raw/workers.json'
 import workingGroups from '../../src/mocks/data/raw/workingGroups.json'
-import upcomingOpenings from '../../src/mocks/data/raw/upcomingOpenings.json'
-import {Mocks} from "./generators/types";
-import {eventGenerators, generateAllEvents} from "./generators/generateEvents";
-import {saveFile} from "./helpers/saveFile";
+
+import { eventGenerators, generateAllEvents } from './generators/generateEvents'
+import { Mocks } from './generators/types'
+import { saveFile } from './helpers/saveFile'
 
 async function main() {
   const argv = await yargs(process.argv.slice(2))
     .scriptName('events:generate')
     .usage('yarn events:generate --eventTypes [eventType[, anotherEventType[, ...]]')
-    .array('eventTypes')
-    .argv
+    .array('eventTypes').argv
 
   const mocks: Mocks = {
     applications,
     members,
-    openings: openings.map(opening => ({
+    openings: openings.map((opening) => ({
       ...opening,
       metadata: {
         ...opening.metadata,
         expectedEnding: new Date(opening.metadata.expectedEnding),
-      }
+      },
     })),
     upcomingOpenings,
     proposals,
-    workers: workers.map(worker => ({
+    workers: workers.map((worker) => ({
       ...worker,
       createdAt: new Date(worker.createdAt),
     })),
@@ -38,7 +38,7 @@ async function main() {
   }
 
   const distinctParams = [...new Set(argv.eventTypes)]
-  const eventTypes = distinctParams.map(type => type.toString()).filter(type => type in eventGenerators)
+  const eventTypes = distinctParams.map((type) => type.toString()).filter((type) => type in eventGenerators)
 
   let newMocks: { [key: string]: any[] } = {}
 
