@@ -16,7 +16,8 @@
     "storybook": "start-storybook -p 6006 -s public --no-manager-cache",
     "build:storybook": "build-storybook -o build-storybook",
     "mocks:generate": "ts-node dev/scripts/generateMocks.ts",
-    "node-mocks": "ts-node dev/mocks/index.ts"
+    "node-mocks": "ts-node dev/mocks/index.ts",
+    "events:generate": "ts-node dev/scripts/generateEventMocks.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.3.15",

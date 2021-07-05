@@ -1,18 +1,11 @@
-import fs from 'fs'
-import path from 'path'
-
-import { generateAllEvents } from './generators/generateEvents'
-import { generateMembers } from './generators/generateMembers'
-import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
-import { generateProposals } from './generators/generateProposals'
+import {generateAllEvents} from './generators/generateEvents'
+import {generateMembers} from './generators/generateMembers'
+import {generateOpeningsAndUpcomingOpenings} from './generators/generateOpeningsAndUpcomingOpenings'
+import {generateProposals} from './generators/generateProposals'
 import {generateWithdrawnApplications, generateWorkers} from './generators/generateWorkers'
-import { generateWorkingGroups } from './generators/generateWorkingGroups'
-import { Mocks } from './generators/types'
-
-export const saveFile = (name: string, contents: any) => {
-  const pathName = path.join(__dirname, '..', '..', 'src', 'mocks', 'data', 'raw', name + '.json')
-  fs.writeFileSync(pathName, JSON.stringify(contents, null, 2) + '\n')
-}
+import {generateWorkingGroups} from './generators/generateWorkingGroups'
+import {Mocks} from './generators/types'
+import {saveFile} from "./saveFile";
 
 const main = () => {
   const mocks: Mocks = {

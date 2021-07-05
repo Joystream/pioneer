@@ -111,7 +111,7 @@ export const eventGenerators = {
 }
 
 export const generateAllEvents = (mocks: Mocks) => {
-  const newMocks: { [key: string]: any } = {}
+  const newMocks: { [key: string]: any[] } = {}
   Object.entries(eventGenerators).forEach(([key, generator]) => { newMocks[key] = generator(mocks) })
 
   return newMocks
