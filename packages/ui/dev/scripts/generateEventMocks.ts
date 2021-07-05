@@ -11,8 +11,8 @@ import {Mocks} from "./generators/types";
 import {eventGenerators, generateAllEvents} from "./generators/generateEvents";
 import {saveFile} from "./helpers/saveFile";
 
-function main() {
-  const argv = yargs(process.argv.slice(2))
+async function main() {
+  const argv = await yargs(process.argv.slice(2))
     .scriptName('events:generate')
     .usage('yarn events:generate --eventTypes [eventType[, anotherEventType[, ...]]')
     .array('eventTypes')
