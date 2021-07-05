@@ -14,11 +14,19 @@ import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/Rat
 
 interface ProposalDetailsStepProps {
   proposer: Member
+  title?: string
+  rationale: string
   setTitle: (title: string) => void
   setRationale: (rationale: string) => void
 }
 
-export const ProposalDetailsStep = ({ proposer, setTitle, setRationale }: ProposalDetailsStepProps) => {
+export const ProposalDetailsStep = ({
+  proposer,
+  title,
+  rationale,
+  setTitle,
+  setRationale,
+}: ProposalDetailsStepProps) => {
   const [showRationale, setShowRationale] = useState<boolean>(false)
 
   return (
@@ -36,10 +44,14 @@ export const ProposalDetailsStep = ({ proposer, setTitle, setRationale }: Propos
               <SelectMember onChange={() => true} disabled selected={proposer} />
             </InputComponent>
             <InputComponent label="Proposal title" required inputSize="m" id="field-title">
-              <InputText id="field-title" onChange={(event) => setTitle(event.target.value)} />
+              <InputText id="field-title" value={title} onChange={(event) => setTitle(event.target.value)} />
             </InputComponent>
             <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
-              <CKEditor id="field-rationale" onChange={(event, editor) => setRationale(editor.getData())} />
+              <CKEditor
+                id="field-rationale"
+                onChange={(event, editor) => setRationale(editor.getData())}
+                onReady={(editor) => editor.setData(rationale)}
+              />
             </InputComponent>
             <CustomLink onClick={() => setShowRationale(true)}>How to write a good rationale?</CustomLink>
           </RowGapBlock>

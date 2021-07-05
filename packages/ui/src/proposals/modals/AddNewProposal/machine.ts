@@ -59,6 +59,7 @@ type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist
 
 export type AddNewProposalEvent =
   | { type: 'FAIL' }
+  | { type: 'BACK' }
   | { type: 'NEXT' }
   | SelectProposalEvent
   | SelectAccountEvent
@@ -89,6 +90,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       },
     },
     proposalType: {
+      id: 'proposalType',
       meta: { isStep: true, stepTitle: 'Proposal type' },
       on: {
         NEXT: {
@@ -116,6 +118,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         stakingAccount: {
           meta: { isStep: true, stepTitle: 'Staking account' },
           on: {
+            BACK: '#proposalType',
             NEXT: {
               target: 'proposalDetails',
               cond: (context) => !!context.stakingAccount,
@@ -130,6 +133,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         proposalDetails: {
           meta: { isStep: true, stepTitle: 'Proposal details' },
           on: {
+            BACK: 'stakingAccount',
             NEXT: {
               target: 'triggerAndDiscussion',
               cond: (context) => !!context.proposalTitle && !!context.proposalRationale,
@@ -149,6 +153,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         triggerAndDiscussion: {
           meta: { isStep: true, stepTitle: 'Trigger & Discussion' },
           on: {
+            BACK: 'proposalDetails',
             NEXT: {
               target: 'finishGeneralParameters',
               cond: (context) =>
@@ -182,6 +187,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
     specificParameters: {
       meta: { isStep: true, stepTitle: 'Specific parameters' },
       on: {
+        BACK: 'generalParameters.triggerAndDiscussion',
         NEXT: 'error',
       },
     },

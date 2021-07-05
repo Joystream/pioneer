@@ -50,7 +50,7 @@ export const AddNewProposalModal = () => {
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
     constants?.requiredStake.toNumber() || 0
   )
-  const [isValid, setValid] = useState<boolean>(false)
+  const [isValidNext, setValidNext] = useState<boolean>(false)
 
   const [txParams] = useState<NewProposalParams>({
     member_id: member?.id,
@@ -88,11 +88,11 @@ export const AddNewProposalModal = () => {
 
   useEffect((): any => {
     if (state.matches('proposalType') && state.context.proposalType) {
-      return setValid(true)
+      return setValidNext(true)
     }
 
     if (state.matches('generalParameters.stakingAccount') && state.context.stakingAccount) {
-      return setValid(true)
+      return setValidNext(true)
     }
 
     if (
@@ -100,7 +100,7 @@ export const AddNewProposalModal = () => {
       state.context.proposalTitle &&
       state.context.proposalRationale
     ) {
-      return setValid(true)
+      return setValidNext(true)
     }
 
     if (
@@ -109,10 +109,10 @@ export const AddNewProposalModal = () => {
       state.context.discussionMode &&
       state.context.discussionWhitelist
     ) {
-      return setValid(true)
+      return setValidNext(true)
     }
 
-    return setValid(false)
+    return setValidNext(false)
   }, [state, member?.id])
 
   if (!member || !feeInfo) {
@@ -178,6 +178,8 @@ export const AddNewProposalModal = () => {
             {state.matches('generalParameters.proposalDetails') && (
               <ProposalDetailsStep
                 proposer={member}
+                title={state.context.proposalTitle}
+                rationale={state.context.proposalRationale}
                 setTitle={(title) => send('SET_TITLE', { title })}
                 setRationale={(rationale) => send('SET_RATIONALE', { rationale })}
               />
@@ -194,7 +196,11 @@ export const AddNewProposalModal = () => {
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={!isValid} onClick={() => send('NEXT')} size="medium">
+        <ButtonPrimary disabled={state.matches('proposalType')} onClick={() => send('BACK')} size="medium">
+          <Arrow direction="left" />
+          Previous step
+        </ButtonPrimary>
+        <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
           Next step
           <Arrow direction="right" />
         </ButtonPrimary>
