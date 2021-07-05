@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css, ThemeProvider } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Arrow, CheckboxIcon } from '@/common/components/icons'
 import { TextInlineSmall } from '@/common/components/typography'
@@ -34,31 +34,29 @@ export const Stepper = ({ steps, theme = StepperTheme.light }: StepperProps) => 
   const stepsToRender = asStepsToRender(steps)
 
   return (
-    <ThemeProvider theme={theme}>
-      <StepperWrap>
-        {stepsToRender.map((step, index) => (
-          <StepWrap key={index} {...step}>
-            <StepNumber>
-              <StepNumberText value>{getStepFace(step)}</StepNumberText>
-            </StepNumber>
-            <StepBody>
-              <StepTitle>{step.title}</StepTitle>
-              {step.details}
-            </StepBody>
-          </StepWrap>
-        ))}
-      </StepperWrap>
-    </ThemeProvider>
+    <StepperWrap theme={theme}>
+      {stepsToRender.map((step, index) => (
+        <StepWrap key={index} theme={theme} {...step}>
+          <StepNumber>
+            <StepNumberText value>{getStepFace(step)}</StepNumberText>
+          </StepNumber>
+          <StepBody>
+            <StepTitle>{step.title}</StepTitle>
+            {step.details}
+          </StepBody>
+        </StepWrap>
+      ))}
+    </StepperWrap>
   )
 }
 
-export const StepperWrap = styled.div`
+const StepperWrap = styled.div`
   display: grid;
   position: relative;
   grid-row-gap: 20px;
   align-content: start;
   background-color: ${({ theme }) => theme.stepperBackground};
-  color: ${({ theme }) => theme.stepperTitle};
+  color: ${({ theme }) => theme.stepperText};
 `
 
 const StepNumber = styled.div`
@@ -66,21 +64,13 @@ const StepNumber = styled.div`
   justify-content: center;
   align-items: center;
   justify-self: center;
-  width: 28px;
-  height: 28px;
-  border: 2px solid ${Colors.Black[600]};
   border-radius: ${BorderRad.round};
   font-weight: 700;
-  background-color: ${({ theme }) => theme.stepperBackground};
   transition: ${Transitions.all};
 `
 
 const StepTitle = styled.h6`
-  font-weight: ${({ theme }) => theme.stepperTitleFontWeight};
   align-self: center;
-  color: ${({ theme }) => theme.stepperTitle};
-  -webkit-text-stroke-width: 0.05em;
-  -webkit-text-stroke-color: transparent;
   transition: ${Transitions.all};
 `
 
@@ -99,11 +89,12 @@ const StepWrap = styled.div<StepNumberProps>`
   grid-column-gap: 8px;
   justify-content: start;
 
+  /* History line */
   &:not(:last-child) {
     ${StepNumber}:before {
       content: '';
       position: absolute;
-      top: 28px;
+      top: ${({ isBaby }) => (isBaby ? '12px' : '28px')};
       left: 14px;
       width: 1px;
       height: calc(100% + 20px);
@@ -113,53 +104,56 @@ const StepWrap = styled.div<StepNumberProps>`
     }
   }
 
-  ${({ isBaby, theme }) =>
-    isBaby &&
-    css`
-      ${StepNumber} {
-        width: 8px;
-        height: 8px;
-        margin-top: 4px;
-        color: transparent;
-        border-color: transparent;
-        background-color: ${theme.stepperTitle};
-      }
-      ${StepTitle} {
-        font-size: 12px;
-        line-height: 18px;
-        color: ${Colors.Black[400]};
-        -webkit-text-stroke-color: transparent;
-      }
-      &:not(:last-child) {
-        ${StepNumber}:before {
-          top: 12px;
-        }
-      }
-    `};
+  ${StepNumber} {
+    background-color: ${({ theme }) => theme.stepperBackground};
+    border: 2px solid ${Colors.Black[600]};
+    width: 28px;
+    height: 28px;
 
-  ${({ isActive, theme }) =>
-    isActive &&
-    css`
-      ${StepNumber} {
-        color: ${Colors.White};
-        border-color: ${Colors.Blue[500]};
-        background-color: ${Colors.Blue[500]};
-      }
-      ${StepTitle} {
-        color: ${theme.stepperActiveTitle};
-        -webkit-text-stroke-color: ${theme.stepperActiveTitleTextStroke};
-      }
-    `}
+    ${({ isActive, isBaby, isPast, theme }) => {
+      if (isBaby)
+        return css`
+          background-color: ${theme.stepperText};
+          border-color: transparent;
+          color: transparent;
+          margin-top: 4px;
+          height: 8px;
+          width: 8px;
+        `
+      if (isActive)
+        return css`
+          background-color: ${Colors.Blue[500]};
+          border-color: ${Colors.Blue[500]};
+          color: ${Colors.White};
+        `
+      if (isPast)
+        return css`
+          background-color: ${theme.stepperPastBackground};
+          border-color: ${theme.stepperPastBackground};
+          color: ${Colors.White};
+        `
+    }};
+  }
 
-  ${({ isPast, theme }) =>
-    isPast &&
-    css`
-      ${StepNumber} {
-        color: ${Colors.White};
-        background-color: ${theme.stepperPastBackground};
-        border-color: ${theme.stepperPastBackground};
-      }
-    `}
+  ${StepTitle} {
+    font-weight: ${({ theme }) => theme.stepperTitleFontWeight};
+    -webkit-text-stroke-width: 0.05em;
+    -webkit-text-stroke-color: transparent;
+
+    ${({ isActive, isBaby, theme }) => {
+      if (isBaby)
+        return css`
+          color: ${Colors.Black[400]};
+          font-size: 12px;
+          line-height: 18px;
+        `
+      if (isActive)
+        return css`
+          color: ${theme.stepperActiveTitle};
+          -webkit-text-stroke-color: ${theme.stepperActiveTitleTextStroke};
+        `
+    }}
+  }
 `
 
 const StepNumberText = styled(TextInlineSmall)`

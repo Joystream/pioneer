@@ -3,7 +3,7 @@ import { Colors } from '@/common/constants'
 export const StepperTheme = {
   light: {
     stepperBackground: Colors.White,
-    stepperTitle: Colors.Black[900],
+    stepperText: Colors.Black[900],
     stepperTitleFontWeight: 700,
     stepperLine: Colors.Black[300],
     stepperPastBackground: Colors.Black[400],
@@ -12,7 +12,7 @@ export const StepperTheme = {
   },
   dark: {
     stepperBackground: Colors.Black[800],
-    stepperTitle: Colors.Black[300],
+    stepperText: Colors.Black[300],
     stepperTitleFontWeight: 400,
     stepperLine: Colors.Black[600],
     stepperPastBackground: Colors.Black[500],
