@@ -12,12 +12,20 @@ import { eventGenerators, generateAllEvents } from './generators/generateEvents'
 import { Mocks } from './generators/types'
 import { saveFile } from './helpers/saveFile'
 
-async function main() {
-  const argv = await yargs(process.argv.slice(2))
-    .scriptName('events:generate')
-    .usage('yarn events:generate --eventTypes [eventType[, anotherEventType[, ...]]')
-    .array('eventTypes').argv
+type Event = keyof typeof eventGenerators
 
+export const options = {
+  e: {
+    alias: 'eventTypes',
+    type: 'array',
+    describe: 'Available events: ' + Object.keys(eventGenerators).join(', '),
+  } as const,
+}
+
+type CommandOptions = yargs.InferredOptionTypes<typeof options>
+export type EventsArgs = yargs.Arguments<CommandOptions>
+
+export const generateEvents = (args: EventsArgs) => {
   const mocks: Mocks = {
     applications,
     members,
@@ -37,14 +45,17 @@ async function main() {
     workingGroups,
   }
 
-  const distinctParams = [...new Set(argv.eventTypes)]
-  const eventTypes = distinctParams.map((type) => type.toString()).filter((type) => type in eventGenerators)
+  const distinctParams = [...new Set(args.e)]
 
   let newMocks: { [key: string]: any[] } = {}
 
-  if (eventTypes === undefined) {
+  if (!distinctParams.length) {
     newMocks = generateAllEvents(mocks)
   } else {
+    const eventTypes = distinctParams
+      .map((type) => type.toString())
+      .filter((type) => type in eventGenerators) as Event[]
+
     eventTypes.forEach((type) => {
       const t = type as keyof typeof eventGenerators
       newMocks[type] = eventGenerators[t](mocks)
@@ -54,4 +65,9 @@ async function main() {
   Object.entries(newMocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
 
-main()
+export const eventsModule = {
+  command: 'events',
+  describe: 'Generate events from other mocks',
+  handler: generateEvents,
+  builder: (argv: yargs.Argv<unknown>) => argv.options(options),
+}

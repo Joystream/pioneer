@@ -1,3 +1,6 @@
+import yargs from 'yargs'
+
+import { eventsModule } from './generateEventMocks'
 import { generateAllEvents } from './generators/generateEvents'
 import { generateMembers } from './generators/generateMembers'
 import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
@@ -29,4 +32,15 @@ const main = () => {
   Object.entries(mocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
 
-main()
+const allModule = {
+  command: 'all',
+  describe: 'Generate all mocks',
+  handler: main,
+}
+
+yargs(process.argv.slice(2))
+  .usage('yarn node-mocks [<command>]')
+  .scriptName('')
+  .command(allModule)
+  .command(eventsModule)
+  .demandCommand().argv
