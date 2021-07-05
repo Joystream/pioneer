@@ -15,7 +15,7 @@ export const StepperModalWrapper = styled.div`
 
 export const Stepper = (props: StepperProps) => (
   <StepperWrapper>
-    <StepperComponent {...props} theme={StepperTheme.dark} />
+    <StepperComponent {...props} />
   </StepperWrapper>
 )
 

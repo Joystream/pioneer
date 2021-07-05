@@ -7,9 +7,7 @@ import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextSmall } from '@/common/components/typography'
 
-import { Stepper } from './Stepper'
-import { StepperTheme } from './themes'
-import { StepperStep } from './types'
+import { Stepper, StepperProps } from './Stepper'
 
 export default {
   title: 'Common/Stepper',
@@ -20,20 +18,15 @@ export default {
   },
 } as Meta
 
-interface Props {
-  theme: 'light' | 'dark'
-  steps: StepperStep[]
-}
-
-const Template: Story<Props> = ({ theme, steps }) => (
+const Template: Story<StepperProps> = ({ theme, steps }) => (
   <TemplateBlock>
-    <Stepper theme={StepperTheme[theme]} steps={steps} />
+    <Stepper theme={theme} steps={steps} />
   </TemplateBlock>
 )
 
 export const Simple = Template.bind({})
 Simple.args = {
-  theme: 'light',
+  theme: 'dark',
   steps: [
     { title: 'Stake', type: 'next' },
     { title: 'Form', type: 'next' },
@@ -56,7 +49,7 @@ const HistoryDetails = styled(({ tooltipText, ...props }) => (
 
 export const History = Template.bind({})
 History.args = {
-  theme: 'light',
+  theme: 'dark',
   steps: [
     { title: 'Created', type: 'past', details: <HistoryDetails tooltipText={faker.lorem.words(6)} /> },
     { title: 'Accepted', type: 'past', details: <HistoryDetails tooltipText={faker.lorem.words(6)} /> },
@@ -68,7 +61,7 @@ History.args = {
 
 export const Complex = Template.bind({})
 Complex.args = {
-  theme: 'light',
+  theme: 'dark',
   steps: [
     { title: 'General parameters', type: 'next' },
     { title: 'Working Group title & limits', isBaby: true, type: 'next' },

@@ -11,7 +11,7 @@ import { asStepsToRender, StepperStep, StepToRender } from './types'
 
 export interface StepperProps {
   steps: StepperStep[]
-  theme?: typeof StepperTheme.light
+  theme?: keyof typeof StepperTheme
 }
 
 const getStepFace = (step: StepToRender) => {
@@ -30,13 +30,13 @@ const getStepFace = (step: StepToRender) => {
   return step.number
 }
 
-export const Stepper = ({ steps, theme = StepperTheme.light }: StepperProps) => {
+export const Stepper = ({ steps, theme = 'dark' }: StepperProps) => {
   const stepsToRender = asStepsToRender(steps)
 
   return (
-    <StepperWrap theme={theme}>
+    <StepperWrap theme={StepperTheme[theme]}>
       {stepsToRender.map((step, index) => (
-        <StepWrap key={index} theme={theme} {...step}>
+        <StepWrap key={index} theme={StepperTheme[theme]} {...step}>
           <StepNumber>
             <StepNumberText value>{getStepFace(step)}</StepNumberText>
           </StepNumber>
