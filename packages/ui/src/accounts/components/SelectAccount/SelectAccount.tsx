@@ -1,7 +1,6 @@
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { Address } from '@/common/types'
 
@@ -11,7 +10,7 @@ import { accountOrNamed } from '../../model/accountOrNamed'
 import { isValidAddress } from '../../model/isValidAddress'
 import { Account } from '../../types'
 
-import { filterByMinBalance, filterByText } from './helpers'
+import { filterByText } from './helpers'
 import { OptionAccount } from './OptionAccount'
 import { OptionListAccount } from './OptionListAccount'
 
@@ -28,7 +27,7 @@ interface Props {
   minBalance?: BN
 }
 
-export const SelectAccount = React.memo(({ onChange, filter, selected, minBalance }: Props) => {
+export const SelectAccount = React.memo(({ onChange, filter, selected }: Props) => {
   const { allAccounts } = useMyAccounts()
   const options = allAccounts.filter(filter || (() => true))
 

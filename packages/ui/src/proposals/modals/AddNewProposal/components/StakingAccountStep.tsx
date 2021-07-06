@@ -3,7 +3,6 @@ import React from 'react'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { filterByMinBalance } from '@/accounts/components/SelectAccount/helpers'
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
 import { InputComponent } from '@/common/components/forms'
