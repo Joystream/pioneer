@@ -14,15 +14,18 @@ interface Props {
 export const RecoverBalanceModal = ({ onClose }: Props) => {
   const [state, , service] = useMachine(transactionMachine)
 
-  if (state.matches('prepare')) {
+  const isSuccess = state.matches('success')
+  const isError = state.matches('error')
+
+  if (!isSuccess && !isError) {
     return <RecoverBalanceSignModal onClose={onClose} service={service} />
   }
 
-  if (state.matches('success')) {
+  if (isSuccess) {
     return <RecoverBalanceSuccessModal onClose={onClose} />
   }
 
-  if (state.matches('error')) {
+  if (isError) {
     return <FailureModal onClose={onClose}>Failure</FailureModal>
   }
 
