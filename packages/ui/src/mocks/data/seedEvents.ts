@@ -6,6 +6,9 @@ import rawRewardPaidEvents from './raw/rewardPaidEvents.json'
 import rawStakeDecreasedEvents from './raw/stakeDecreasedEvents.json'
 import rawStakeIncreasedEvents from './raw/stakeIncreasedEvents.json'
 import rawStakeSlashedEvents from './raw/stakeSlashedEvents.json'
+import rawStatusTextChangedEvents from './raw/statusTextChangedEvents.json'
+import rawWorkerExitedEvents from './raw/workerExitedEvents.json'
+import rawWorkerStartedLeavingEvents from './raw/workerStartedLeavingEvents.json'
 
 interface BaseEvent {
   id?: string
@@ -48,6 +51,17 @@ interface RawOpeningFilledEvent extends BaseEvent {
   workersHiredIds: string[]
 }
 
+interface WorkerLeavingEvent extends BaseEvent {
+  groupId: string
+  workerId: string
+}
+
+interface StatusTextChangedEvent extends BaseEvent {
+  groupId: string
+  upcomingworkinggroupopeningcreatedInEventIds: string[]
+  workinggroupmetadatasetInEventIds: string[]
+}
+
 export const eventCategories = {
   ApplicationWithdrawnEvent: rawApplicationWithdrawnEvents.map((rawEvent: RawApplicationWithdrawnEvent) => ({
     ...rawEvent,
@@ -59,6 +73,9 @@ export const eventCategories = {
   StakeIncreasedEvent: rawStakeIncreasedEvents.map((rawEvent: RawStakeChangedEvent) => ({ ...rawEvent })),
   StakeSlashedEvent: rawStakeSlashedEvents.map((rawEvent: RawStakeSlashedEvent) => ({ ...rawEvent })),
   OpeningFilledEvent: rawOpeningFilledEvents.map((rawEvent: RawOpeningFilledEvent) => ({ ...rawEvent })),
+  WorkerExitedEvent: rawWorkerExitedEvents.map((rawEvent: WorkerLeavingEvent) => ({ ...rawEvent })),
+  WorkerStartedLeavingEvent: rawWorkerStartedLeavingEvents.map((rawEvent: WorkerLeavingEvent) => ({ ...rawEvent })),
+  StatusTextChangedEvent: rawStatusTextChangedEvents.map((rawEvent: StatusTextChangedEvent) => ({ ...rawEvent })),
 }
 
 type EventType = keyof typeof eventCategories

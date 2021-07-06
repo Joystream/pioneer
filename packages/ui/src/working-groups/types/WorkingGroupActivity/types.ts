@@ -19,6 +19,7 @@ export type WorkingGroupActivity =
   | WorkerExitedActivity
   | WorkerStartedLeavingActivity
   | OpeningFilledActivity
+  | OpeningAnnouncedActivity
 
 type ShortMember = Pick<Member, 'id' | 'handle'>
 
@@ -61,6 +62,12 @@ export interface LeaderSetActivity extends BaseActivity {
 export interface StatusTextChangedActivity extends BaseActivity {
   eventType: 'StatusTextChanged'
   groupName: string
+}
+
+export interface OpeningAnnouncedActivity extends BaseActivity {
+  eventType: 'OpeningAnnounced'
+  groupName: string
+  openingId: string
 }
 
 export interface OpeningAddedActivity extends OpeningActivity {

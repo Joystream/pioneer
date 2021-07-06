@@ -423,6 +423,33 @@ export type OpeningFilledEventFieldsFragment = {
   workersHired: Array<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }>
 }
 
+export type WorkerStartedLeavingEventFieldsFragment = {
+  __typename: 'WorkerStartedLeavingEvent'
+  id: string
+  createdAt: any
+  group: { __typename: 'WorkingGroup'; name: string }
+  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+}
+
+export type WorkerExitedEventFieldsFragment = {
+  __typename: 'WorkerExitedEvent'
+  id: string
+  createdAt: any
+  group: { __typename: 'WorkingGroup'; name: string }
+  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+}
+
+export type StatusTextChangedEventFieldsFragment = {
+  __typename: 'StatusTextChangedEvent'
+  id: string
+  createdAt: any
+  workinggroupmetadatasetInEvent?: Types.Maybe<Array<{ __typename: 'WorkingGroupMetadata'; id: string }>>
+  upcomingworkinggroupopeningcreatedInEvent?: Types.Maybe<
+    Array<{ __typename: 'UpcomingWorkingGroupOpening'; id: string }>
+  >
+  group: { __typename: 'WorkingGroup'; name: string }
+}
+
 export type GetMemberRoleEventsQueryVariables = Types.Exact<{
   worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
   application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
@@ -437,6 +464,10 @@ export type GetMemberRoleEventsQuery = {
   stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment>
   stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment>
   stakeSlashedEvents: Array<{ __typename: 'StakeSlashedEvent' } & StakeSlashedEventFieldsFragment>
+  workerStartedLeavingEvents: Array<
+    { __typename: 'WorkerStartedLeavingEvent' } & WorkerStartedLeavingEventFieldsFragment
+  >
+  workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment>
 }
 
 export type GetGroupEventsQueryVariables = Types.Exact<{
@@ -453,6 +484,8 @@ export type GetGroupEventsQuery = {
   stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment>
   stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment>
   openingFilledEvents: Array<{ __typename: 'OpeningFilledEvent' } & OpeningFilledEventFieldsFragment>
+  workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment>
+  statusTextChangedEvents: Array<{ __typename: 'StatusTextChangedEvent' } & StatusTextChangedEventFieldsFragment>
 }
 
 export type GetWorkerIdsQueryVariables = Types.Exact<{
@@ -758,6 +791,51 @@ export const OpeningFilledEventFieldsFragmentDoc = gql`
         id
         handle
       }
+    }
+  }
+`
+export const WorkerStartedLeavingEventFieldsFragmentDoc = gql`
+  fragment WorkerStartedLeavingEventFields on WorkerStartedLeavingEvent {
+    id
+    createdAt
+    group {
+      name
+    }
+    worker {
+      membership {
+        id
+        handle
+      }
+    }
+  }
+`
+export const WorkerExitedEventFieldsFragmentDoc = gql`
+  fragment WorkerExitedEventFields on WorkerExitedEvent {
+    id
+    createdAt
+    group {
+      name
+    }
+    worker {
+      membership {
+        id
+        handle
+      }
+    }
+  }
+`
+export const StatusTextChangedEventFieldsFragmentDoc = gql`
+  fragment StatusTextChangedEventFields on StatusTextChangedEvent {
+    id
+    createdAt
+    workinggroupmetadatasetInEvent {
+      id
+    }
+    upcomingworkinggroupopeningcreatedInEvent {
+      id
+    }
+    group {
+      name
     }
   }
 `
@@ -1724,12 +1802,20 @@ export const GetMemberRoleEventsDocument = gql`
     stakeSlashedEvents(where: { worker_in: $worker_in }) {
       ...StakeSlashedEventFields
     }
+    workerStartedLeavingEvents(where: { worker_in: $worker_in }) {
+      ...WorkerStartedLeavingEventFields
+    }
+    workerExitedEvents(where: { worker_in: $worker_in }) {
+      ...WorkerExitedEventFields
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
   ${StakeDecreasedEventFieldsFragmentDoc}
   ${StakeIncreasedEventFieldsFragmentDoc}
   ${StakeSlashedEventFieldsFragmentDoc}
+  ${WorkerStartedLeavingEventFieldsFragmentDoc}
+  ${WorkerExitedEventFieldsFragmentDoc}
 `
 
 /**
@@ -1793,6 +1879,12 @@ export const GetGroupEventsDocument = gql`
     openingFilledEvents(where: { group: { id_eq: $group_eq } }) {
       ...OpeningFilledEventFields
     }
+    workerExitedEvents(where: { group: { id_eq: $group_eq } }) {
+      ...WorkerExitedEventFields
+    }
+    statusTextChangedEvents(where: { group: { id_eq: $group_eq } }) {
+      ...StatusTextChangedEventFields
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
@@ -1800,6 +1892,8 @@ export const GetGroupEventsDocument = gql`
   ${StakeDecreasedEventFieldsFragmentDoc}
   ${StakeIncreasedEventFieldsFragmentDoc}
   ${OpeningFilledEventFieldsFragmentDoc}
+  ${WorkerExitedEventFieldsFragmentDoc}
+  ${StatusTextChangedEventFieldsFragmentDoc}
 `
 
 /**
