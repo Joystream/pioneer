@@ -13,8 +13,8 @@ export const WorkerExitedContent: ActivityContentComponent<WorkerExitedActivity>
 
   return (
     <>
-      <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink>
-      left a role.
+      <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink> left a
+      role.
     </>
   )
 }

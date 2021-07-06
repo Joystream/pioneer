@@ -99,6 +99,17 @@ const generateOpeningFilledEvent = (mocks: Mocks) => () => {
   }
 }
 
+const generateWorkerLeavingEvent = (mocks: Mocks, leftAlready?: boolean) => () => {
+  const status = leftAlready ? 'left' : 'active'
+  const workers = mocks.workers.filter(worker => worker && worker.status === status)
+  const worker = workers[randomFromRange(0, workers.length - 1)]
+  return {
+    createdAt: faker.date.recent(7),
+    groupId: worker?.groupId,
+    workerId: worker?.id,
+  }
+}
+
 export const eventGenerators = {
   rewardPaidEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
   budgetSpendingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
@@ -108,6 +119,8 @@ export const eventGenerators = {
   stakeIncreasedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
   stakeSlashedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks)),
   openingFilledEvents : (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
+  workerExitedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
+  workerStartedLeavingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks)),
 }
 
 export const generateAllEvents = (mocks: Mocks) => {

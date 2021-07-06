@@ -405,6 +405,34 @@ fragment OpeningFilledEventFields on OpeningFilledEvent {
   }
 }
 
+fragment WorkerStartedLeavingEventFields on WorkerStartedLeavingEvent {
+  id
+  createdAt
+  group {
+    name
+  }
+  worker {
+    membership {
+      id
+      handle
+    }
+  }
+}
+
+fragment WorkerExitedEventFields on WorkerExitedEvent {
+  id
+  createdAt
+  group {
+    name
+  }
+  worker {
+    membership {
+      id
+      handle
+    }
+  }
+}
+
 query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   appliedOnOpeningEvents(where: { application_in: $application_in }) {
     ...AppliedOnOpeningEventFields
@@ -420,6 +448,12 @@ query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   }
   stakeSlashedEvents(where: { worker_in: $worker_in }) {
     ...StakeSlashedEventFields
+  }
+  workerStartedLeavingEvents(where: { worker_in: $worker_in }) {
+    ...WorkerStartedLeavingEventFields
+  }
+  workerExitedEvents(where: { worker_in: $worker_in }) {
+    ...WorkerExitedEventFields
   }
 }
 
@@ -441,6 +475,9 @@ query GetGroupEvents($group_eq: ID!) {
   }
   openingFilledEvents(where: { group: { id_eq: $group_eq } }) {
     ...OpeningFilledEventFields
+  }
+  workerExitedEvents(where: { group: { id_eq: $group_eq } }) {
+    ...WorkerExitedEventFields
   }
 }
 

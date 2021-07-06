@@ -9,6 +9,8 @@ import {
   StakeDecreasedEventFieldsFragment,
   StakeIncreasedEventFieldsFragment,
   StakeSlashedEventFieldsFragment,
+  WorkerExitedEventFieldsFragment,
+  WorkerStartedLeavingEventFieldsFragment,
 } from '@/working-groups/queries/__generated__/workingGroups.generated'
 import {
   ApplicationWithdrawnActivity,
@@ -18,6 +20,8 @@ import {
   OpeningFilledActivity,
   StakeChangedActivity,
   StakeSlashedActivity,
+  WorkerExitedActivity,
+  WorkerStartedLeavingActivity,
 } from '@/working-groups/types'
 
 function asPositionTitle(groupName: string, type: 'LEADER' | 'REGULAR') {
@@ -115,5 +119,31 @@ export function asOpeningFilledActivity(fragment: OpeningFilledEventFieldsFragme
       id: membership.id,
       handle: membership.handle,
     })),
+  }
+}
+
+export function asWorkerExitedActivity(fragment: WorkerExitedEventFieldsFragment): WorkerExitedActivity {
+  return {
+    eventType: 'WorkerExited',
+    createdAt: fragment.createdAt,
+    id: fragment.id,
+    member: {
+      id: fragment.worker.membership.id,
+      handle: fragment.worker.membership.handle,
+    },
+  }
+}
+
+export function asWorkerStartedLeavingActivity(
+  fragment: WorkerStartedLeavingEventFieldsFragment
+): WorkerStartedLeavingActivity {
+  return {
+    eventType: 'WorkerStartedLeaving',
+    createdAt: fragment.createdAt,
+    id: fragment.id,
+    member: {
+      id: fragment.worker.membership.id,
+      handle: fragment.worker.membership.handle,
+    },
   }
 }

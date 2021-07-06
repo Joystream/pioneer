@@ -1,0 +1,52 @@
+[
+  {
+    "createdAt": "2021-06-29T20:26:41.472Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-0"
+  },
+  {
+    "createdAt": "2021-07-04T19:25:44.032Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-2"
+  },
+  {
+    "createdAt": "2021-07-06T02:09:29.369Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-1"
+  },
+  {
+    "createdAt": "2021-07-02T17:52:26.972Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-38"
+  },
+  {
+    "createdAt": "2021-07-02T17:47:53.759Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-34"
+  },
+  {
+    "createdAt": "2021-07-06T08:05:21.768Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-22"
+  },
+  {
+    "createdAt": "2021-06-30T20:20:17.721Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-38"
+  },
+  {
+    "createdAt": "2021-07-05T15:33:38.012Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-53"
+  },
+  {
+    "createdAt": "2021-07-05T09:27:00.568Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-55"
+  },
+  {
+    "createdAt": "2021-07-02T21:09:18.760Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-35"
+  }
+]
