@@ -8,8 +8,8 @@ import { Arrow } from '@/common/components/icons'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalFooter, ModalHeader, Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { Stepper } from '@/common/components/Stepper'
 import {
+  Stepper,
   StepDescriptionColumn,
   StepperBody,
   StepperModalBody,

@@ -12,8 +12,8 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
-import { Stepper } from '@/common/components/Stepper'
 import {
+  Stepper,
   StepDescriptionColumn,
   StepperBody,
   StepperModalBody,

@@ -1,8 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { Stepper } from '@/common/components/Stepper'
-import { StepDescriptionColumn, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
+import { Stepper, StepDescriptionColumn, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 
 import { getMockAsOpening } from '../../mocks/data/seedOpenings'
 

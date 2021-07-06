@@ -2,13 +2,13 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { Modal, ModalHeader } from './Modal'
-import { Stepper, StepperProps } from './Stepper'
-import { StepDescriptionColumn, StepperBody, StepperModalBody, StepperModalWrapper } from './StepperModal'
+import { StepperProps } from './Stepper'
+import { Stepper, StepDescriptionColumn, StepperBody, StepperModalBody, StepperModalWrapper } from './StepperModal'
 import { TemplateBlock } from './storybookParts/previewStyles'
 
 export default {
-  title: 'Common/Modals/Stepper',
-  component: Stepper,
+  title: 'Common/Modals/StepperModal',
+  component: StepperModalWrapper,
   argTypes: {
     steps: {
       control: false,
