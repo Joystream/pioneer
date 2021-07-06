@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -56,6 +56,12 @@ export const TriggerAndDiscussionStep = ({
   const isValidTriggerBlock = (block: BN) => {
     return block && block.gte(minTriggerBlock)
   }
+
+  useEffect(() => {
+    if (fields.triggerBlock) {
+      setValue('triggerBlock', fields.triggerBlock)
+    }
+  }, [currentBlock])
 
   const formInitializer: StepFormFields = {
     trigger: !!trigger,
