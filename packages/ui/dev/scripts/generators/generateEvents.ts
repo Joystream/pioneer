@@ -122,6 +122,27 @@ const generateStatusTextChangedEvents = (mocks: Mocks) => {
   }))
 }
 
+const generateOpeningAddedEvent = (mocks: Mocks) => () => {
+  const opening = mocks.openings[randomFromRange(0, mocks.openings.length -1)]
+  const group = mocks.workingGroups.find(g => g.id === opening.groupId)
+  return {
+    createdAt: faker.date.recent(15),
+    groupId: group?.id,
+    openingId: opening.id,
+  }
+}
+
+const generateOpeningCanceledEvent = (mocks: Mocks) => () => {
+  const openings = mocks.openings.filter(opening => opening.status === 'cancelled')
+  const opening = openings[randomFromRange(0, openings.length - 1)]
+  const group = mocks.workingGroups.find(g => g.id === opening.groupId)
+  return {
+    createdAt: faker.date.recent(7),
+    groupId: group?.id,
+    openingId: opening.id,
+  }
+}
+
 export const eventGenerators = {
   rewardPaidEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
   budgetSpendingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
@@ -134,6 +155,8 @@ export const eventGenerators = {
   workerExitedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
   workerStartedLeavingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks)),
   statusTextChangedEvents : (mocks: Mocks) => generateStatusTextChangedEvents(mocks),
+  openingAddedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningAddedEvent(mocks)),
+  openingCanceledEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningCanceledEvent(mocks)),
 }
 
 export const generateAllEvents = (mocks: Mocks) => {

@@ -447,6 +447,30 @@ fragment StatusTextChangedEventFields on StatusTextChangedEvent {
   }
 }
 
+fragment OpeningAddedEventFields on OpeningAddedEvent {
+  id
+  createdAt
+  opening {
+    id
+    type
+    group {
+      name
+    }
+  }
+}
+
+fragment OpeningCanceledEventFields on OpeningCanceledEvent {
+  id
+  createdAt
+  opening {
+    id
+    type
+    group {
+      name
+    }
+  }
+}
+
 query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   appliedOnOpeningEvents(where: { application_in: $application_in }) {
     ...AppliedOnOpeningEventFields
@@ -486,6 +510,12 @@ query GetGroupEvents($group_eq: ID!) {
   }
   stakeIncreasedEvents(where: { group: { id_eq: $group_eq } }) {
     ...StakeIncreasedEventFields
+  }
+  openingAddedEvents(where: { group: { id_eq: $group_eq } }) {
+    ...OpeningAddedEventFields
+  }
+  openingCanceledEvents(where: { group: { id_eq: $group_eq } }) {
+    ...OpeningCanceledEventFields
   }
   openingFilledEvents(where: { group: { id_eq: $group_eq } }) {
     ...OpeningFilledEventFields

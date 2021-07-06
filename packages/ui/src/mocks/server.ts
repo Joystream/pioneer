@@ -79,6 +79,8 @@ export const makeServer = (environment = 'development') => {
               workerExitedEvents: getWhereResolver('WorkerExitedEvent'),
               workerStartedLeavingEvents: getWhereResolver('WorkerStartedLeavingEvent'),
               statusTextChangedEvents: getWhereResolver('StatusTextChangedEvent'),
+              openingAddedEvents: getWhereResolver('OpeningAddedEvent'),
+              openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
               proposals: getWhereResolver('Proposal'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
             },

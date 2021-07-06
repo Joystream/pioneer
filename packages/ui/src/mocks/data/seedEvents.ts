@@ -1,6 +1,8 @@
 import rawApplicationWithdrawnEvents from './raw/applicationWithdrawnEvents.json'
 import rawAppliedOnOpeningEvents from './raw/appliedOnOpeningEvents.json'
 import rawBudgetSpendingEvents from './raw/budgetSpendingEvents.json'
+import rawOpeningAddedEvents from './raw/openingAddedEvents.json'
+import rawOpeningCanceledEvents from './raw/openingCanceledEvents.json'
 import rawOpeningFilledEvents from './raw/openingFilledEvents.json'
 import rawRewardPaidEvents from './raw/rewardPaidEvents.json'
 import rawStakeDecreasedEvents from './raw/stakeDecreasedEvents.json'
@@ -62,6 +64,11 @@ interface StatusTextChangedEvent extends BaseEvent {
   workinggroupmetadatasetInEventIds: string[]
 }
 
+interface OpeningEvent extends BaseEvent {
+  groupId: string
+  openingId: string
+}
+
 export const eventCategories = {
   ApplicationWithdrawnEvent: rawApplicationWithdrawnEvents.map((rawEvent: RawApplicationWithdrawnEvent) => ({
     ...rawEvent,
@@ -76,6 +83,8 @@ export const eventCategories = {
   WorkerExitedEvent: rawWorkerExitedEvents.map((rawEvent: WorkerLeavingEvent) => ({ ...rawEvent })),
   WorkerStartedLeavingEvent: rawWorkerStartedLeavingEvents.map((rawEvent: WorkerLeavingEvent) => ({ ...rawEvent })),
   StatusTextChangedEvent: rawStatusTextChangedEvents.map((rawEvent: StatusTextChangedEvent) => ({ ...rawEvent })),
+  OpeningAddedEvent: rawOpeningAddedEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
+  OpeningCanceledEvent: rawOpeningCanceledEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
 }
 
 type EventType = keyof typeof eventCategories

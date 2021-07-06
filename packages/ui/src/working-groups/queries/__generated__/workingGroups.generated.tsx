@@ -450,6 +450,30 @@ export type StatusTextChangedEventFieldsFragment = {
   group: { __typename: 'WorkingGroup'; name: string }
 }
 
+export type OpeningAddedEventFieldsFragment = {
+  __typename: 'OpeningAddedEvent'
+  id: string
+  createdAt: any
+  opening: {
+    __typename: 'WorkingGroupOpening'
+    id: string
+    type: Types.WorkingGroupOpeningType
+    group: { __typename: 'WorkingGroup'; name: string }
+  }
+}
+
+export type OpeningCanceledEventFieldsFragment = {
+  __typename: 'OpeningCanceledEvent'
+  id: string
+  createdAt: any
+  opening: {
+    __typename: 'WorkingGroupOpening'
+    id: string
+    type: Types.WorkingGroupOpeningType
+    group: { __typename: 'WorkingGroup'; name: string }
+  }
+}
+
 export type GetMemberRoleEventsQueryVariables = Types.Exact<{
   worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
   application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
@@ -483,6 +507,8 @@ export type GetGroupEventsQuery = {
   budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent' } & BudgetSpendingActivityEventFieldsFragment>
   stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment>
   stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment>
+  openingAddedEvents: Array<{ __typename: 'OpeningAddedEvent' } & OpeningAddedEventFieldsFragment>
+  openingCanceledEvents: Array<{ __typename: 'OpeningCanceledEvent' } & OpeningCanceledEventFieldsFragment>
   openingFilledEvents: Array<{ __typename: 'OpeningFilledEvent' } & OpeningFilledEventFieldsFragment>
   workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment>
   statusTextChangedEvents: Array<{ __typename: 'StatusTextChangedEvent' } & StatusTextChangedEventFieldsFragment>
@@ -836,6 +862,32 @@ export const StatusTextChangedEventFieldsFragmentDoc = gql`
     }
     group {
       name
+    }
+  }
+`
+export const OpeningAddedEventFieldsFragmentDoc = gql`
+  fragment OpeningAddedEventFields on OpeningAddedEvent {
+    id
+    createdAt
+    opening {
+      id
+      type
+      group {
+        name
+      }
+    }
+  }
+`
+export const OpeningCanceledEventFieldsFragmentDoc = gql`
+  fragment OpeningCanceledEventFields on OpeningCanceledEvent {
+    id
+    createdAt
+    opening {
+      id
+      type
+      group {
+        name
+      }
     }
   }
 `
@@ -1876,6 +1928,12 @@ export const GetGroupEventsDocument = gql`
     stakeIncreasedEvents(where: { group: { id_eq: $group_eq } }) {
       ...StakeIncreasedEventFields
     }
+    openingAddedEvents(where: { group: { id_eq: $group_eq } }) {
+      ...OpeningAddedEventFields
+    }
+    openingCanceledEvents(where: { group: { id_eq: $group_eq } }) {
+      ...OpeningCanceledEventFields
+    }
     openingFilledEvents(where: { group: { id_eq: $group_eq } }) {
       ...OpeningFilledEventFields
     }
@@ -1891,6 +1949,8 @@ export const GetGroupEventsDocument = gql`
   ${BudgetSpendingActivityEventFieldsFragmentDoc}
   ${StakeDecreasedEventFieldsFragmentDoc}
   ${StakeIncreasedEventFieldsFragmentDoc}
+  ${OpeningAddedEventFieldsFragmentDoc}
+  ${OpeningCanceledEventFieldsFragmentDoc}
   ${OpeningFilledEventFieldsFragmentDoc}
   ${WorkerExitedEventFieldsFragmentDoc}
   ${StatusTextChangedEventFieldsFragmentDoc}
