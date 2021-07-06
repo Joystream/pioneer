@@ -10,12 +10,15 @@ import { GlobalModals } from '@/app/GlobalModals'
 import { MyAccounts } from '@/app/pages/Profile/MyAccounts'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { MembershipContext } from '@/memberships/providers/membership/context'
+import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 
 import { alice, bob } from '../../../_mocks/keyring'
+import { getMember } from '../../../_mocks/members'
 import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
-import { stubApi, stubBalances, stubDefaultBalances } from '../../../_mocks/transactions'
+import { stubApi, stubBalances, stubDefaultBalances, stubTransaction } from '../../../_mocks/transactions'
 
 const testStatisticItem = (labelMatcher: RegExp, expected: RegExp) => {
   const header = screen.getByRole('banner')
@@ -29,6 +32,13 @@ describe('Page: MyAccounts', () => {
   let useAccounts: UseAccounts
   const server = setupMockServer()
   const api = stubApi()
+  const useMyMemberships: MyMemberships = {
+    active: undefined,
+    members: [],
+    setActive: (member) => (useMyMemberships.active = member),
+    isLoading: false,
+    hasMembers: true,
+  }
 
   beforeAll(cryptoWaitReady)
 
@@ -49,7 +59,7 @@ describe('Page: MyAccounts', () => {
     expect(await screen.findByText(/bob/i)).toBeDefined()
   })
 
-  it('With free balances', () => {
+  it('Free balances', () => {
     renderPage()
 
     testStatisticItem(/total balance/i, /2,000/i)
@@ -58,7 +68,7 @@ describe('Page: MyAccounts', () => {
     testStatisticItem(/total recoverable/i, /0/i)
   })
 
-  it('With locked balance', () => {
+  it('Locked balance', () => {
     stubBalances(api, { locked: 250, available: 10_000 })
     renderPage()
 
@@ -68,7 +78,7 @@ describe('Page: MyAccounts', () => {
     testStatisticItem(/total recoverable/i, /0/i)
   })
 
-  it('With recoverable locked balance', () => {
+  it('Recoverable locked balance', () => {
     stubBalances(api, { locked: 250, available: 10_000, lockId: 1 })
     renderPage()
 
@@ -82,8 +92,11 @@ describe('Page: MyAccounts', () => {
     expect(recoverAll).toBeDefined()
   })
 
-  it('Allows recovering balances', async () => {
+  it('Recover all button', async () => {
+    useMyMemberships.setActive(getMember('alice'))
+    stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
     stubBalances(api, { locked: 500, available: 10_000, lockId: 1 })
+
     renderPage()
 
     const header = screen.getByRole('banner')
@@ -102,12 +115,14 @@ describe('Page: MyAccounts', () => {
         <AccountsContext.Provider value={useAccounts}>
           <ModalContextProvider>
             <MockQueryNodeProviders>
-              <ApiContext.Provider value={api}>
-                <Switch>
-                  <Route path="/profile" component={MyAccounts} />
-                </Switch>
-                <GlobalModals />
-              </ApiContext.Provider>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <ApiContext.Provider value={api}>
+                  <Switch>
+                    <Route path="/profile" component={MyAccounts} />
+                  </Switch>
+                  <GlobalModals />
+                </ApiContext.Provider>
+              </MembershipContext.Provider>
             </MockQueryNodeProviders>
           </ModalContextProvider>
         </AccountsContext.Provider>
