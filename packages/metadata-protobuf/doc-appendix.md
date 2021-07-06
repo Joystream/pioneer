@@ -1,4 +1,4 @@
-<!--
+<!-- 
     This extra documentation will be appended to the generated docs.
 -->
 

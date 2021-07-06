@@ -1,25 +1,21 @@
 import { useMemo } from 'react'
 
-import { asWorkerBaseInfo, WorkerStatus, WorkerStatusTypename } from '@/working-groups/types'
+import { getWorkersWhere } from '@/working-groups/hooks/utils/queries'
+import { asWorkerBaseInfo, WorkerStatus } from '@/working-groups/types'
 
 import { useGetWorkersQuery } from '../queries'
 
 export interface UseWorkersProps {
   groupId?: string
-  statusIn?: WorkerStatus[]
+  status?: WorkerStatus
 }
 
-export const getStatusWhere = (statusIn?: WorkerStatus[]) => {
-  if (!statusIn) {
-    return
-  }
-
-  return { isTypeOf_in: statusIn.map((status) => WorkerStatusTypename[status]) }
-}
-
-export const useWorkers = ({ groupId: group_eq, statusIn }: UseWorkersProps) => {
+export const useWorkers = ({ groupId: group_eq, status }: UseWorkersProps) => {
   const variables = {
-    where: { group_eq, status_json: getStatusWhere(statusIn) },
+    where: {
+      group: { id_eq: group_eq },
+      ...getWorkersWhere(status),
+    },
   }
 
   const { data, loading } = useGetWorkersQuery({ variables })

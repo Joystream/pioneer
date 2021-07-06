@@ -2,7 +2,7 @@
 import { registry, types } from '@joystream/types'
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
-import testKeyring from '@polkadot/keyring/testing'
+import { createTestKeyring } from '@polkadot/keyring/testing'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult } from '@polkadot/types/types'
@@ -24,16 +24,14 @@ export const getApi = async () => {
   return api
 }
 
-const keyring = testKeyring()
+const keyring = createTestKeyring()
 
 const trim = (message: string, maxLength = 80) =>
   message.length > maxLength ? message.slice(0, maxLength) + '...' : message
 
 const describeTx = (tx: SubmittableExtrinsic<'promise'>) => {
   console.log(
-    `Sending: ${chalk.yellow(
-      `api.tx.${tx.method.sectionName}.${tx.method.methodName}(${trim(tx.method.args.toString())})`
-    )}`
+    `Sending: ${chalk.yellow(`api.tx.${tx.method.section}.${tx.method.method}(${trim(tx.method.args.toString())})`)}`
   )
 }
 

@@ -34,8 +34,10 @@ Some GraphQL related tools use code generation to scaffold types and react hooks
 
 After updating `packages/ui/src/api` any of `*.graphql` files run `yarn queries:generated` script in the UI package.
 
-## Packages
+## Packages & Dependencies
 
 - [packages/ui](packages/ui) The Pioneer 2.0 package
 - [packages/type](packages/types) Copied [@joystream/types](https://github.com/Joystream/joystream/tree/olympia/types) at a compatible Olympia branch.
 - [packages/metadata-protobuf](packages/metadata-protobuf) Copied [@joystream/metadata-protobuf](https://github.com/Joystream/joystream/tree/olympia/metadata-protobuf) at a compatible Olympia branch.
+
+The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` in [package.json](./package.json) for details.

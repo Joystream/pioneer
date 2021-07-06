@@ -45,12 +45,12 @@ export function HistoryTab({ workingGroup }: Props) {
 }
 
 const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => (
-  <OpeningsPagination groupId={groupId} statusIn={['filled', 'cancelled']} />
+  <OpeningsPagination groupId={groupId} type="past" />
 )
 
 const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   const [page, setPage] = useState(1)
-  const { isLoading, workers, pageCount } = useWorkersPagination({ groupId, statusIn: ['left', 'terminated'], page })
+  const { isLoading, workers, pageCount } = useWorkersPagination({ groupId, page })
 
   if (isLoading) {
     return <Loading />

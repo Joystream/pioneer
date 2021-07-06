@@ -1,5 +1,6 @@
 import { createType } from '@joystream/types'
 import { ApiRx } from '@polkadot/api'
+import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of } from 'rxjs'
@@ -163,7 +164,8 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
   )
 }
 
-export const EMPTY_BALANCES = {
+export const EMPTY_BALANCES: DeriveBalancesAll = {
+  additional: [],
   accountId: createType('AccountId', '0x00'),
   accountNonce: createType('Index', 1),
   availableBalance: createBalance(0),

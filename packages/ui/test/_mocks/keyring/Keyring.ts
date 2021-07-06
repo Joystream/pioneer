@@ -1,11 +1,11 @@
-import testKeyring from '@polkadot/keyring/testing'
+import { createTestKeyring } from '@polkadot/keyring/testing'
 import { accountKey } from '@polkadot/ui-keyring/defaults'
 import { Keyring } from '@polkadot/ui-keyring/Keyring'
-import genericSubject from '@polkadot/ui-keyring/observable/genericSubject'
+import { genericSubject } from '@polkadot/ui-keyring/observable/genericSubject'
 import { BrowserStore } from '@polkadot/ui-keyring/stores'
 
 export const mockKeyring = () => {
-  const keyring = testKeyring()
+  const keyring = createTestKeyring()
   const accountsSubject = genericSubject(accountKey)
   const store = new BrowserStore()
 
