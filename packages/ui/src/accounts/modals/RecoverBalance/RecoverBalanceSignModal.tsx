@@ -21,6 +21,7 @@ export const RecoverBalanceSignModal = ({ onClose, service }: Props) => {
   const { api } = useApi()
   const amount = balances.recoverable
   const { active } = useMyMemberships()
+
   const transaction = useMemo(() => {
     if (!amount || !api || !active) {
       return
