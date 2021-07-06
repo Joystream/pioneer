@@ -1,13 +1,12 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { Colors, Transitions } from '../constants'
-import { formatDateString, formatTokenValue } from '../model/formatters'
-import { Block } from '../types'
+import { BlockIcon, BlockIconStyles } from '@/common/components/icons'
+import { Colors } from '@/common/constants'
+import { formatDateString, formatTokenValue } from '@/common/model/formatters'
+import { Block } from '@/common/types'
 
-import { LabelLink } from './forms'
-import { BlockIcon, BlockIconStyles } from './icons'
-import { TextMedium, TextSmall } from './typography'
+import { AboutText, BlockInfo, BlockNetworkInfo, BlockNumber } from './components'
 
 export interface BlockTimeProps extends BlockTimeLayoutProps {
   block: Block
@@ -38,26 +37,6 @@ const Separator = styled.span`
   line-height: inherit;
 `
 
-const AboutText = styled(TextMedium)`
-  color: ${Colors.Black[600]};
-`
-const BlockInfo = styled.span`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 4px;
-  align-items: center;
-  width: fit-content;
-  height: fit-content;
-  color: ${Colors.Black[400]};
-`
-const BlockNetworkInfo = styled(TextSmall)`
-  color: ${Colors.Black[400]};
-`
-const BlockNumber = styled(LabelLink)`
-  font-size: inherit;
-  line-height: inherit;
-  transition: ${Transitions.all};
-`
 const Wrapper = styled.div<BlockTimeLayoutProps>`
   display: grid;
   width: fit-content;

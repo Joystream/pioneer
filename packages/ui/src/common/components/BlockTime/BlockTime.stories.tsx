@@ -1,8 +1,9 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
+import { Row, TemplateBlock, ModalBlock } from '@/common/components/storybookParts/previewStyles'
+
 import { BlockTime, BlockTimeProps } from './BlockTime'
-import { Row, TemplateBlock, ModalBlock } from './storybookParts/previewStyles'
 
 export default {
   title: 'Common/BlockTime',
