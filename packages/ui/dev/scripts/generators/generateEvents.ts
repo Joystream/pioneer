@@ -110,6 +110,17 @@ const generateWorkerLeavingEvent = (mocks: Mocks, leftAlready?: boolean) => () =
   }
 }
 
+const generateStatusTextChangedEvents = (mocks: Mocks) => {
+  const groups = mocks.workingGroups
+  const openings = mocks.upcomingOpenings
+  return groups.map(group => ({
+    createdAt: faker.date.recent(7),
+    groupId: group.id,
+    upcomingworkinggroupopeningcreatedInEventIds: [openings.find(opening => opening.groupId == group.id)?.id],
+    workinggroupmetadatasetInEvent: [],
+  }))
+}
+
 export const eventGenerators = {
   rewardPaidEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
   budgetSpendingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
@@ -121,6 +132,7 @@ export const eventGenerators = {
   openingFilledEvents : (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
   workerExitedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
   workerStartedLeavingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks)),
+  statusTextChangedEvents : (mocks: Mocks) => generateStatusTextChangedEvents(mocks),
 }
 
 export const generateAllEvents = (mocks: Mocks) => {

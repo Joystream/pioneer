@@ -433,6 +433,20 @@ fragment WorkerExitedEventFields on WorkerExitedEvent {
   }
 }
 
+fragment StatusTextChangedEventFields on StatusTextChangedEvent {
+  id
+  createdAt
+  workinggroupmetadatasetInEvent {
+    id
+  }
+  upcomingworkinggroupopeningcreatedInEvent {
+    id
+  }
+  group {
+    name
+  }
+}
+
 query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   appliedOnOpeningEvents(where: { application_in: $application_in }) {
     ...AppliedOnOpeningEventFields
@@ -478,6 +492,9 @@ query GetGroupEvents($group_eq: ID!) {
   }
   workerExitedEvents(where: { group: { id_eq: $group_eq } }) {
     ...WorkerExitedEventFields
+  }
+  statusTextChangedEvents(where: { group: { id_eq: $group_eq } }) {
+    ...StatusTextChangedEventFields
   }
 }
 
