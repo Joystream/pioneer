@@ -105,6 +105,7 @@ export const PROPOSAL_DATA: ProposalMock = {
   id: '0',
   title: 'Rubber scalable functionalities dedicated',
   status: 'deciding',
+  statusSetAtBlock: 0,
   statusSetAtTime: '2021-06-16T02:37:48.929Z',
   details: 'updateWorkingGroupBudget',
   creatorId: '0',
@@ -112,4 +113,6 @@ export const PROPOSAL_DATA: ProposalMock = {
   description:
     '# et quo quaerat optio\n\nLaudantium non molestias consequatur occaecati non officia. Eum eaque suscipit nam soluta. Nihil quia velit voluptatibus. Architecto nemo quis. Veniam beatae porro cum fugiat corrupti voluptatem quia.\n\n## odio dolorem impedit amet\n\nDolorem ut ipsam repellat repudiandae quia. Id animi sed et et a voluptas sit itaque. Magni nihil perferendis facilis. Animi eos vel ut.\n \rRepellat rerum rerum velit sint cupiditate. Qui et aliquam modi. Molestiae ad distinctio necessitatibus accusantium. Voluptatem blanditiis explicabo accusamus ut praesentium.',
   votes: ['APPROVE', 'APPROVE', 'SLASH'].map((voteKind) => ({ voteKind })),
+  createdInEvent: { inBlock: 0 },
+  proposalStatusUpdates: [],
 }
