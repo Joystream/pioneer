@@ -69,7 +69,7 @@ describe('Page: MyAccounts', () => {
   })
 
   it('With recoverable locked balance', () => {
-    stubBalances(api, { locked: 250, available: 10_000, lockId: 11 })
+    stubBalances(api, { locked: 250, available: 10_000, lockId: 1 })
     renderPage()
 
     testStatisticItem(/total balance/i, /20,500/i)
@@ -83,7 +83,7 @@ describe('Page: MyAccounts', () => {
   })
 
   it('Allows recovering balances', async () => {
-    stubBalances(api, { locked: 250, available: 10_000, lockId: 11 })
+    stubBalances(api, { locked: 500, available: 10_000, lockId: 1 })
     renderPage()
 
     const header = screen.getByRole('banner')
