@@ -24,8 +24,8 @@ export type ApplyOnOpeningArgs = yargs.Arguments<CommandOptions>
 const opening = async (args: ApplyOnOpeningArgs) => {
   await withApi(async (api) => {
     const tx = api.tx.membershipWorkingGroup.applyOnOpening({
-      opening_id: 0,
-      member_id: 0,
+      opening_id: args.o,
+      member_id: args.m,
       role_account_id: getAccount(args.c),
       reward_account_id: getAccount(args.s),
       description: metadataToBytes(ApplicationMetadata, { answers: ['foo', 'ab'] }),

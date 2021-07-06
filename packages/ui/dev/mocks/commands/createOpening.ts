@@ -23,6 +23,7 @@ const opening = async () => {
       { stake_amount: 10_000, leaving_unstaking_period: 360_000 },
       '1337'
     )
+
     await signAndSend(api.tx.sudo.sudo(tx), getSudoAccount())
   })
 }

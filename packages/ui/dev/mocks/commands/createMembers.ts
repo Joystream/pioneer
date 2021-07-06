@@ -26,7 +26,7 @@ export const createMembersCommand = async () => {
 }
 
 export const createMembersModule = {
-  command: 'create-members',
+  command: 'members:create',
   describe: 'Create member accounts from mocks',
   handler: createMembersCommand,
 }
