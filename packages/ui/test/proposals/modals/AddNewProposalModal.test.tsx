@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, configure, prettyDOM } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -18,15 +18,23 @@ import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 
 import { selectAccount } from '../../_helpers/selectAccount'
+import { selectMember } from '../../_helpers/selectMember'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
+import { mockUseCurrentBlockNumber } from '../../_mocks/hooks/useCurrentBlockNumber'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubDefaultBalances, stubProposalConstants, stubTransaction } from '../../_mocks/transactions'
 
+configure({ testIdAttribute: 'id' })
+
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+}))
+
+jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
+  useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
 }))
 
 describe('UI: AddNewProposalModal', () => {
@@ -62,6 +70,7 @@ describe('UI: AddNewProposalModal', () => {
   beforeEach(async () => {
     seedMembers(server.server)
 
+    useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
     stubDefaultBalances(api)
@@ -203,6 +212,76 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).not.toBeDisabled()
         })
       })
+
+      describe('Trigger & Discussion', () => {
+        beforeEach(async () => {
+          await finishStakingAccount()
+          await finishProposalDetails()
+        })
+
+        it('Default(Trigger - No, Discussion Mode - Open)', async () => {
+          const button = await getNextStepButton()
+          expect(button).not.toBeDisabled()
+        })
+
+        describe('Trigger - Yes', () => {
+          beforeEach(async () => {
+            await triggerYes()
+          })
+
+          it('Not filled block number', async () => {
+            const button = await getNextStepButton()
+            expect(button).toBeDisabled()
+          })
+
+          it('Invalid block number', async () => {
+            await triggerYes()
+            await fillTriggerBlock(10)
+
+            expect(await screen.getByText('The minimum block number is 20.')).toBeDefined()
+
+            const button = await getNextStepButton()
+            expect(button).toBeDisabled()
+          })
+
+          it('Valid block number', async () => {
+            await triggerYes()
+            await fillTriggerBlock(30)
+
+            expect(await screen.getByText(/(?<!\S)in (\d+) min(?!\S)/i)).toBeDefined()
+
+            const button = await getNextStepButton()
+            expect(button).not.toBeDisabled()
+          })
+        })
+
+        describe('Discussion Mode - Closed', () => {
+          beforeEach(async () => {
+            await discussionClosed()
+          })
+
+          it('Add member to whitelist', async () => {
+            await selectMember('Add member to whitelist', 'alice')
+
+            expect(await screen.getByTestId('removeMember')).toBeDefined()
+
+            const button = await getNextStepButton()
+            expect(button).not.toBeDisabled()
+          })
+
+          it('Remove member to whitelist', async () => {
+            await selectMember('Add member to whitelist', 'alice')
+
+            expect(await screen.getByTestId('removeMember')).toBeDefined()
+
+            await fireEvent.click(await screen.getByTestId('removeMember'))
+            expect(screen.queryByTestId('removeMember')).toBeNull()
+
+            const button = await getNextStepButton()
+            expect(button).not.toBeDisabled()
+          })
+        })
+      })
     })
   })
 
@@ -227,12 +306,33 @@ describe('UI: AddNewProposalModal', () => {
     await clickNextButton()
   }
 
+  async function finishProposalDetails() {
+    await fillProposalDetails()
+
+    await clickNextButton()
+  }
+
   async function fillProposalDetails() {
     const titleInput = await screen.findByLabelText(/Proposal title/i)
     await fireEvent.change(titleInput, { target: { value: 'Some title' } })
 
     const rationaleInput = await screen.findByLabelText(/Rationale/i)
     await fireEvent.change(rationaleInput, { target: { value: 'Some rationale' } })
+  }
+
+  async function triggerYes() {
+    const triggerToggle = await screen.findByText('Yes')
+    await fireEvent.click(triggerToggle)
+  }
+
+  async function fillTriggerBlock(value: number) {
+    const blockInput = await screen.getByTestId('triggerBlock')
+    await fireEvent.change(blockInput, { target: { value } })
+  }
+
+  async function discussionClosed() {
+    const discussionToggle = (await screen.findAllByRole('checkbox'))[1]
+    await fireEvent.click(discussionToggle)
   }
 
   async function getWarningNextButton() {

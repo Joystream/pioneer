@@ -25,8 +25,8 @@ export type ProposalDiscussionWhitelist = Member[]
 
 interface TriggerAndDiscussionContext extends Required<BaseDetailsContext> {
   trigger?: ProposalTrigger
-  discussionMode?: ProposalDiscussionMode
-  discussionWhitelist?: ProposalDiscussionWhitelist
+  discussionMode: ProposalDiscussionMode
+  discussionWhitelist: ProposalDiscussionWhitelist
 }
 
 type AddNewProposalContext = Partial<
@@ -70,6 +70,11 @@ export type AddNewProposalEvent =
 
 export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNewProposalEvent, AddNewProposalState>({
   initial: 'requirementsVerification',
+  context: {
+    trigger: false,
+    discussionMode: 'open',
+    discussionWhitelist: [],
+  },
   states: {
     requirementsVerification: {
       on: {

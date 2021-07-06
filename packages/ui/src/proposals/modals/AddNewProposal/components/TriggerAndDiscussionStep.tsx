@@ -1,17 +1,18 @@
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
 import { InputComponent, InputNumber, ToggleCheckbox } from '@/common/components/forms'
-import { CrossIcon, Icon } from '@/common/components/icons'
+import { CrossIcon } from '@/common/components/icons'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
+import { useForm } from '@/common/hooks/useForm'
 import { blocksToTime } from '@/common/model/blocksToTime'
-import { MemberDarkHover, MemberInfo } from '@/memberships/components'
+import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 import {
@@ -24,55 +25,75 @@ import { ProposalConstants } from '@/proposals/types'
 interface TriggerAndDiscussionStepProps {
   constants: ProposalConstants
   trigger?: ProposalTrigger
-  discussionMode?: ProposalDiscussionMode
-  discussionWhitelist?: ProposalDiscussionWhitelist
+  discussionMode: ProposalDiscussionMode
+  discussionWhitelist: ProposalDiscussionWhitelist
   setTrigger: (trigger?: ProposalTrigger) => void
   setDiscussionMode: (mode: ProposalDiscussionMode) => void
   setDiscussionWhitelist: (members: Member[]) => void
 }
 
+interface StepFormFields {
+  trigger: boolean
+  triggerBlock?: string
+  discussionMode: boolean
+}
+
+const FormSchema = Yup.object().shape({})
+
 export const TriggerAndDiscussionStep = ({
   constants,
-  trigger: initialTrigger,
+  trigger,
   discussionMode,
   discussionWhitelist,
-  setTrigger: saveTrigger,
+  setTrigger,
   setDiscussionMode,
   setDiscussionWhitelist,
 }: TriggerAndDiscussionStepProps) => {
   const currentBlock = useCurrentBlockNumber()
-  const [trigger, setTrigger] = useState<boolean>(!!initialTrigger)
-  const [triggerBlock, setTriggerBlock] = useNumberInput(0, initialTrigger || undefined)
-  const [isValidBlock, setIsValidBlock] = useState<boolean>(false)
-  const [blockMessage, setBlockMessage] = useState<string | undefined>()
+  const minTriggerBlock = currentBlock
+    ? currentBlock.addn(constants.votingPeriod).addn(constants.gracePeriod)
+    : new BN(0)
+  const isValidTriggerBlock = (block: BN) => {
+    return block && block.gte(minTriggerBlock)
+  }
 
-  useEffect(() => {
-    setDiscussionMode('open')
-    setDiscussionWhitelist([])
-  }, [])
+  const formInitializer: StepFormFields = {
+    trigger: !!trigger,
+    triggerBlock: trigger ? trigger.toString() : '',
+    discussionMode: discussionMode === 'open',
+  }
 
-  useEffect(() => {
-    if (!trigger) {
-      saveTrigger(false)
-      setTriggerBlock('')
-      setIsValidBlock(false)
-    } else {
-      const minTriggerBlock = currentBlock?.addn(constants.votingPeriod).addn(constants.gracePeriod)
-      const isValid = !!(triggerBlock && minTriggerBlock && new BN(triggerBlock).gte(minTriggerBlock))
+  const { fields, changeField } = useForm<StepFormFields>(formInitializer, FormSchema)
 
-      setIsValidBlock(isValid)
-      setBlockMessage(
-        isValid ? `in ${blocksToTime(new BN(triggerBlock))}` : `The minimum block number is ${minTriggerBlock}.`
-      )
-      saveTrigger(isValid ? parseInt(triggerBlock) : undefined)
+  const setValue = (field: keyof StepFormFields, value: any) => {
+    changeField(field, value)
+
+    switch (field) {
+      case 'trigger':
+        setTrigger(!value ? false : undefined)
+        break
+      case 'triggerBlock':
+        setTrigger(value && isValidTriggerBlock(new BN(value)) ? parseInt(value) : undefined)
+        break
+      case 'discussionMode':
+        if (value === true) {
+          setDiscussionWhitelist([])
+        }
+        setDiscussionMode(value ? 'open' : 'closed')
     }
-  }, [trigger, triggerBlock, currentBlock])
+  }
 
-  useEffect(() => {
-    if (discussionMode === 'open') {
-      setDiscussionWhitelist([])
+  const getTriggerBlockMessage = () => {
+    if (!fields.triggerBlock) {
+      return
     }
-  }, [discussionMode])
+
+    const value = new BN(fields.triggerBlock)
+
+    return isValidTriggerBlock(value)
+      ? `in ${blocksToTime(value)}`
+      : `The minimum block number is ${minTriggerBlock.toNumber()}.`
+  }
 
   const addMemberToWhitelist = (member: Member) => {
     setDiscussionWhitelist([...(discussionWhitelist as ProposalDiscussionWhitelist), member])
@@ -94,16 +115,27 @@ export const TriggerAndDiscussionStep = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent label="Trigger" tooltipText="Something" inputSize="s">
-            <ToggleCheckbox falseLabel="No" trueLabel="Yes" checked={trigger} onChange={(isSet) => setTrigger(isSet)} />
+            <ToggleCheckbox
+              falseLabel="No"
+              trueLabel="Yes"
+              checked={fields.trigger}
+              onChange={(isSet) => setValue('trigger', isSet)}
+            />
           </InputComponent>
-          {trigger && (
+          {fields.trigger && (
             <InputComponent
               units="block"
-              validation={triggerBlock && !isValidBlock ? 'invalid' : undefined}
-              message={triggerBlock ? blockMessage : undefined}
+              validation={
+                fields.triggerBlock && !isValidTriggerBlock(new BN(fields.triggerBlock)) ? 'invalid' : undefined
+              }
+              message={getTriggerBlockMessage()}
               inputSize="s"
             >
-              <InputNumber value={triggerBlock} onChange={(event) => setTriggerBlock(event.target.value)} />
+              <InputNumber
+                id="triggerBlock"
+                value={fields.triggerBlock}
+                onChange={(event) => setValue('triggerBlock', event.target.value)}
+              />
             </InputComponent>
           )}
         </RowGapBlock>
@@ -114,8 +146,8 @@ export const TriggerAndDiscussionStep = ({
             <ToggleCheckbox
               falseLabel="Closed"
               trueLabel="Open"
-              checked={discussionMode === 'open'}
-              onChange={(isSet) => setDiscussionMode(isSet ? 'open' : 'closed')}
+              checked={fields.discussionMode}
+              onChange={(isSet) => setValue('discussionMode', isSet)}
             />
           </InputComponent>
           {discussionMode === 'closed' && (
@@ -124,7 +156,7 @@ export const TriggerAndDiscussionStep = ({
                 Closed mode: only the active council, the original proposer, or one among a set of whitelisted members
                 can post.
               </TextMedium>
-              <InputComponent label="Whitelist" required inputSize="l">
+              <InputComponent label="Add member to whitelist" required inputSize="l">
                 <SelectMember
                   onChange={(member) => addMemberToWhitelist(member)}
                   filter={(member) =>
@@ -136,9 +168,9 @@ export const TriggerAndDiscussionStep = ({
               </InputComponent>
               <WhitelistContainer>
                 {(discussionWhitelist as ProposalDiscussionWhitelist).map((member) => (
-                  <WhitelistMember>
-                    <MemberInfo key={member.id} member={member} memberSize="s" />
-                    <WhitelistRemoveMemberIcon onClick={() => removeMemberFromWhitelist(member)}>
+                  <WhitelistMember key={member.id}>
+                    <MemberInfo member={member} memberSize="s" />
+                    <WhitelistRemoveMemberIcon onClick={() => removeMemberFromWhitelist(member)} id="removeMember">
                       <CrossIcon />
                     </WhitelistRemoveMemberIcon>
                   </WhitelistMember>
