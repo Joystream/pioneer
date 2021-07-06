@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 const NUMBER_REGEX = /^\d*(\.\d*)?$/
 
-export function useNumberInput(decimals = 6, inital?: number) {
+export function useNumberInput(decimals = 6) {
   const [value, setValue] = useState('')
 
   function set(value: string) {
