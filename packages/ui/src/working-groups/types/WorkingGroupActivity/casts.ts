@@ -155,12 +155,14 @@ export function asStatusTextChangedEventActivities(
   fragment: StatusTextChangedEventFieldsFragment
 ): Array<StatusTextChangedActivity | OpeningAnnouncedActivity> {
   const result: Array<StatusTextChangedActivity | OpeningAnnouncedActivity> = []
-  result.push({
-    id: fragment.id,
-    eventType: 'StatusTextChanged',
-    createdAt: fragment.createdAt,
-    groupName: asWorkingGroupName(fragment.group.name),
-  })
+  if (fragment.workinggroupmetadatasetInEvent?.length) {
+    result.push({
+      id: fragment.id,
+      eventType: 'StatusTextChanged',
+      createdAt: fragment.createdAt,
+      groupName: asWorkingGroupName(fragment.group.name),
+    })
+  }
   fragment.upcomingworkinggroupopeningcreatedInEvent?.forEach((opening) => {
     result.push({
       id: opening.id,

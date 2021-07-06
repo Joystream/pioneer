@@ -59,6 +59,7 @@ interface WorkerLeavingEvent extends BaseEvent {
 interface StatusTextChangedEvent extends BaseEvent {
   groupId: string
   upcomingworkinggroupopeningcreatedInEventIds: string[]
+  workinggroupmetadatasetInEventIds: string[]
 }
 
 export const eventCategories = {

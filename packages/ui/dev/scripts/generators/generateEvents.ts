@@ -117,7 +117,8 @@ const generateStatusTextChangedEvents = (mocks: Mocks) => {
     createdAt: faker.date.recent(7),
     groupId: group.id,
     upcomingworkinggroupopeningcreatedInEventIds: [openings.find(opening => opening.groupId == group.id)?.id],
-    workinggroupmetadatasetInEvent: [],
+    // assuming this controls the "status updated" activity, just the array being empty or non-empty matters
+    workinggroupmetadatasetInEventIds: Math.random() > .5 ? ['1'] : [],
   }))
 }
 
