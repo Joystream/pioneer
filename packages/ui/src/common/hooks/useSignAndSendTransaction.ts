@@ -60,7 +60,7 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
             errorType = `${error.section}.${error.name}`
           }
 
-          info(`\t\t Error: %${errorType}%`, 'color: red')
+          info(`\t\t Error: %c${errorType}`, 'color: red')
         }
       })
       info(JSON.stringify(events))
