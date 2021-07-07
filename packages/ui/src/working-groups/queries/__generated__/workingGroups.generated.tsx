@@ -474,6 +474,14 @@ export type OpeningCanceledEventFieldsFragment = {
   }
 }
 
+export type BudgetSetEventFieldsFragment = {
+  __typename: 'BudgetSetEvent'
+  id: string
+  createdAt: any
+  newBudget: any
+  group: { __typename: 'WorkingGroup'; name: string }
+}
+
 export type GetMemberRoleEventsQueryVariables = Types.Exact<{
   worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
   application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
@@ -512,6 +520,7 @@ export type GetGroupEventsQuery = {
   openingFilledEvents: Array<{ __typename: 'OpeningFilledEvent' } & OpeningFilledEventFieldsFragment>
   workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment>
   statusTextChangedEvents: Array<{ __typename: 'StatusTextChangedEvent' } & StatusTextChangedEventFieldsFragment>
+  budgetSetEvents: Array<{ __typename: 'BudgetSetEvent' } & BudgetSetEventFieldsFragment>
 }
 
 export type GetWorkerIdsQueryVariables = Types.Exact<{
@@ -889,6 +898,16 @@ export const OpeningCanceledEventFieldsFragmentDoc = gql`
         name
       }
     }
+  }
+`
+export const BudgetSetEventFieldsFragmentDoc = gql`
+  fragment BudgetSetEventFields on BudgetSetEvent {
+    id
+    createdAt
+    group {
+      name
+    }
+    newBudget
   }
 `
 export const GetBudgetSpendingDocument = gql`
@@ -1943,6 +1962,9 @@ export const GetGroupEventsDocument = gql`
     statusTextChangedEvents(where: { group: { id_eq: $group_eq } }) {
       ...StatusTextChangedEventFields
     }
+    budgetSetEvents(where: { group: { id_eq: $group_eq } }) {
+      ...BudgetSetEventFields
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
@@ -1954,6 +1976,7 @@ export const GetGroupEventsDocument = gql`
   ${OpeningFilledEventFieldsFragmentDoc}
   ${WorkerExitedEventFieldsFragmentDoc}
   ${StatusTextChangedEventFieldsFragmentDoc}
+  ${BudgetSetEventFieldsFragmentDoc}
 `
 
 /**

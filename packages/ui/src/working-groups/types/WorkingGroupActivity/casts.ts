@@ -4,6 +4,7 @@ import { capitalizeFirstLetter } from '@/common/helpers'
 import {
   ApplicationWithdrawnEventFieldsFragment,
   AppliedOnOpeningEventFieldsFragment,
+  BudgetSetEventFieldsFragment,
   BudgetSpendingActivityEventFieldsFragment,
   OpeningAddedEventFieldsFragment,
   OpeningCanceledEventFieldsFragment,
@@ -19,6 +20,7 @@ import {
   ApplicationWithdrawnActivity,
   AppliedOnOpeningActivity,
   asWorkingGroupName,
+  BudgetSetActivity,
   BudgetSpendingActivity,
   OpeningAddedActivity,
   OpeningAnnouncedActivity,
@@ -193,4 +195,14 @@ export function asStatusTextChangedEventActivities(
     })
   })
   return result
+}
+
+export function asBudgetSetActivity(fragment: BudgetSetEventFieldsFragment): BudgetSetActivity {
+  return {
+    id: fragment.id,
+    eventType: fragment.__typename,
+    createdAt: fragment.createdAt,
+    groupName: asWorkingGroupName(fragment.group.name),
+    newBudget: fragment.newBudget,
+  }
 }

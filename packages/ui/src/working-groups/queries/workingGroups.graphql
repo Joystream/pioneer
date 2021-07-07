@@ -471,6 +471,15 @@ fragment OpeningCanceledEventFields on OpeningCanceledEvent {
   }
 }
 
+fragment BudgetSetEventFields on BudgetSetEvent {
+  id
+  createdAt
+  group {
+    name
+  }
+  newBudget
+}
+
 query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   appliedOnOpeningEvents(where: { application_in: $application_in }) {
     ...AppliedOnOpeningEventFields
@@ -525,6 +534,9 @@ query GetGroupEvents($group_eq: ID!) {
   }
   statusTextChangedEvents(where: { group: { id_eq: $group_eq } }) {
     ...StatusTextChangedEventFields
+  }
+  budgetSetEvents(where: { group: {id_eq: $group_eq } }) {
+    ...BudgetSetEventFields
   }
 }
 

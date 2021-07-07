@@ -1,5 +1,6 @@
 import rawApplicationWithdrawnEvents from './raw/applicationWithdrawnEvents.json'
 import rawAppliedOnOpeningEvents from './raw/appliedOnOpeningEvents.json'
+import rawBudgetSetEvents from './raw/budgetSetEvents.json'
 import rawBudgetSpendingEvents from './raw/budgetSpendingEvents.json'
 import rawOpeningAddedEvents from './raw/openingAddedEvents.json'
 import rawOpeningCanceledEvents from './raw/openingCanceledEvents.json'
@@ -69,6 +70,11 @@ interface OpeningEvent extends BaseEvent {
   openingId: string
 }
 
+interface RawBudgetSetEvent extends BaseEvent {
+  groupId: string
+  newBudget: number
+}
+
 export const eventCategories = {
   ApplicationWithdrawnEvent: rawApplicationWithdrawnEvents.map((rawEvent: RawApplicationWithdrawnEvent) => ({
     ...rawEvent,
@@ -85,6 +91,7 @@ export const eventCategories = {
   StatusTextChangedEvent: rawStatusTextChangedEvents.map((rawEvent: StatusTextChangedEvent) => ({ ...rawEvent })),
   OpeningAddedEvent: rawOpeningAddedEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
   OpeningCanceledEvent: rawOpeningCanceledEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
+  BudgetSetEvent: rawBudgetSetEvents.map((rawEvent: RawBudgetSetEvent) => ({ ...rawEvent })),
 }
 
 type EventType = keyof typeof eventCategories

@@ -4,6 +4,7 @@ import { useGetGroupEventsQuery } from '@/working-groups/queries'
 import {
   asApplicationWithdrawnActivity,
   asAppliedOnOpeningActivity,
+  asBudgetSetActivity,
   asBudgetSpendingActivity,
   asOpeningActivity,
   asOpeningFilledActivity,
@@ -28,6 +29,7 @@ export const useGroupActivities = (groupId: string) => {
             ...data.openingFilledEvents.map(asOpeningFilledActivity),
             ...data.workerExitedEvents.map(asWorkerExitedActivity),
             ...data.statusTextChangedEvents.map(asStatusTextChangedEventActivities).flat(),
+            ...data.budgetSetEvents.map(asBudgetSetActivity),
           ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         : [],
     [data, loading]

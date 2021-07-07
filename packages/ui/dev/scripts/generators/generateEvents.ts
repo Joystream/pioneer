@@ -143,20 +143,30 @@ const generateOpeningCanceledEvent = (mocks: Mocks) => () => {
   }
 }
 
+const generateBudgetSetEvent = (mocks: Mocks) => () => {
+  const group = mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)]
+  return {
+    createdAt: faker.date.recent(30),
+    groupId: group.id,
+    newBudget: 10000 * randomFromRange(1, 10),
+  }
+}
+
 export const eventGenerators = {
-  rewardPaidEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
-  budgetSpendingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
-  appliedOnOpeningEvents : (mocks: Mocks) => Array.from({ length: 15 }).map(generateAppliedOnOpeningEvent(mocks)),
-  applicationWithdrawnEvents : (mocks: Mocks) => Array.from({ length: 8 }).map(generateApplicationWithdrawnEvent(mocks)),
-  stakeDecreasedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
-  stakeIncreasedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
-  stakeSlashedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks)),
-  openingFilledEvents : (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
-  workerExitedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
-  workerStartedLeavingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks)),
-  statusTextChangedEvents : (mocks: Mocks) => generateStatusTextChangedEvents(mocks),
-  openingAddedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningAddedEvent(mocks)),
-  openingCanceledEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningCanceledEvent(mocks)),
+  rewardPaidEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
+  budgetSpendingEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
+  appliedOnOpeningEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateAppliedOnOpeningEvent(mocks)),
+  applicationWithdrawnEvents: (mocks: Mocks) => Array.from({ length: 8 }).map(generateApplicationWithdrawnEvent(mocks)),
+  stakeDecreasedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
+  stakeIncreasedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
+  stakeSlashedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks)),
+  openingFilledEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
+  workerExitedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
+  workerStartedLeavingEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks)),
+  statusTextChangedEvents: (mocks: Mocks) => generateStatusTextChangedEvents(mocks),
+  openingAddedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningAddedEvent(mocks)),
+  openingCanceledEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningCanceledEvent(mocks)),
+  budgetSetEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSetEvent(mocks))
 }
 
 export const generateAllEvents = (mocks: Mocks) => {

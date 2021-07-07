@@ -81,6 +81,7 @@ export const makeServer = (environment = 'development') => {
               statusTextChangedEvents: getWhereResolver('StatusTextChangedEvent'),
               openingAddedEvents: getWhereResolver('OpeningAddedEvent'),
               openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
+              budgetSetEvents: getWhereResolver('BudgetSetEvent'),
               proposals: getWhereResolver('Proposal'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
             },
