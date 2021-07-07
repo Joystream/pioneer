@@ -11,14 +11,15 @@ export const StakeChangedContent: ActivityContentComponent<StakeChangedActivity>
   if (isOwn) {
     return (
       <>
-        Your stake has been {eventType === 'StakeDecreased' ? 'reduced' : 'increased'} by <TokenValue value={amount} />
+        Your stake has been {eventType === 'StakeDecreasedEvent' ? 'reduced' : 'increased'} by{' '}
+        <TokenValue value={amount} />
       </>
     )
   }
   return (
     <>
       <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink>'s stake has
-      been {eventType === 'StakeDecreased' ? 'reduced' : 'increased'} by <TokenValue value={amount} />
+      been {eventType === 'StakeDecreasedEvent' ? 'reduced' : 'increased'} by <TokenValue value={amount} />
     </>
   )
 }
