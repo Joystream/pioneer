@@ -14,7 +14,7 @@ import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/Rat
 
 interface ProposalDetailsStepProps {
   proposer: Member
-  title?: string
+  title: string
   rationale: string
   setTitle: (title: string) => void
   setRationale: (rationale: string) => void

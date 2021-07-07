@@ -13,7 +13,7 @@ export interface CKEditorProps {
   disabled?: boolean
 }
 
-export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps) => {
+export const CKEditor = ({ disabled, onBlur, onChange, onFocus, onReady }: CKEditorProps) => {
   const ref = useRef<HTMLDivElement | null>(null)
   const editorRef = useRef<Editor | null>(null)
 
@@ -53,6 +53,10 @@ export const CKEditor = ({ disabled, onBlur, onChange, onFocus }: CKEditorProps)
       // This value must be kept in sync with the language defined in webpack.config.js.
       language: 'en',
     }).then((editor) => {
+      if (onReady) {
+        onReady(editor)
+      }
+
       editorRef.current = editor
       editor.isReadOnly = disabled ?? false
 

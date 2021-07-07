@@ -15,8 +15,8 @@ interface StakingAccountContext extends Required<ProposalTypeContext> {
 }
 
 interface BaseDetailsContext extends Required<StakingAccountContext> {
-  proposalTitle?: string
-  proposalRationale?: string
+  proposalTitle: string
+  proposalRationale: string
 }
 
 export type ProposalTrigger = false | number
@@ -72,6 +72,8 @@ export type AddNewProposalEvent =
 export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNewProposalEvent, AddNewProposalState>({
   initial: 'requirementsVerification',
   context: {
+    proposalTitle: '',
+    proposalRationale: '',
     triggerBlock: false,
     discussionMode: 'open',
     discussionWhitelist: [],
