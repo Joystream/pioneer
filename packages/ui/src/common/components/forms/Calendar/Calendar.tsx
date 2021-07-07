@@ -3,6 +3,7 @@ import React, { memo, useMemo } from 'react'
 
 import { Arrow } from '@/common/components/icons'
 import { DateSelection, PartialDateRange } from '@/common/types/Dates'
+import { repeat } from '@/common/utils'
 import { earliest, fromRange, latest } from '@/common/utils/dates'
 
 import {
@@ -83,16 +84,19 @@ const CalendarBody = memo(({ month, within, selection, onChange }: CalendarBodyP
         ))}
       </CalendarHeaderContainer>
 
-      {Array.from({ length: DAYS_PER_CALENDAR_PAGE }).map((_, index) => (
-        <CalendarDay
-          key={index}
-          day={addDays(firstDay, index)}
-          month={month}
-          selection={selection}
-          within={within}
-          onClick={onChange}
-        />
-      ))}
+      {repeat(
+        (index) => (
+          <CalendarDay
+            key={index}
+            day={addDays(firstDay, index)}
+            month={month}
+            selection={selection}
+            within={within}
+            onClick={onChange}
+          />
+        ),
+        DAYS_PER_CALENDAR_PAGE
+      )}
     </>
   )
 })

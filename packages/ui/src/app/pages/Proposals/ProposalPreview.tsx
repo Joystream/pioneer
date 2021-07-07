@@ -18,9 +18,10 @@ import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
+import { ProposalHistory } from '@/proposals/components/ProposalHistory'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
-import { VotesPreview } from '@/proposals/components/VotesPreview/VotesPreview'
+import { VotesPreview } from '@/proposals/components/VotesPreview'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
@@ -104,9 +105,8 @@ export const ProposalPreview = () => {
           <RowGapBlock gap={36}>
             <VotesPreview votes={votes} />
 
-            {/* Proposal stages history */}
+            <ProposalHistory proposal={proposal} />
 
-            {/* Proposer */}
             <ContentWithTabs>
               <Label>Proposer</Label>
               <MemberInfo member={proposal.proposer} />
