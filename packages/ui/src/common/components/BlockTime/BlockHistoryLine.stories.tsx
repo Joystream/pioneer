@@ -3,14 +3,15 @@ import React from 'react'
 
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 
-import { BlockHistoryLine, BlockHistoryLineProps } from './BlockHistoryLine'
+import { BlockHistoryLine } from './BlockHistoryLine'
+import { BlockInfoProp } from './BlockInfo'
 
 export default {
   title: 'Common/BlockTime/BlockHistoryLine',
   component: BlockHistoryLine,
 } as Meta
 
-const Template: Story<BlockHistoryLineProps> = (args) => (
+const Template: Story<BlockInfoProp> = (args) => (
   <TemplateBlock>
     <BlockHistoryLine {...args} />
   </TemplateBlock>

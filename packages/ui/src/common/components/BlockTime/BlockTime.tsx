@@ -1,12 +1,13 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { BlockIcon, BlockIconStyles } from '@/common/components/icons'
+import { BlockIconStyles } from '@/common/components/icons'
+import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { formatDateString, formatTokenValue } from '@/common/model/formatters'
+import { formatDateString } from '@/common/model/formatters'
 import { Block } from '@/common/types'
 
-import { AboutText, BlockInfo, BlockNetworkInfo, BlockNumber } from './components'
+import { BlockInfo, BlockInfoContainer, BlockNetworkInfo } from './BlockInfo'
 
 export interface BlockTimeProps extends BlockTimeLayoutProps {
   block: Block
@@ -24,17 +25,17 @@ export const BlockTime = React.memo(({ block, layout, dateLabel }: BlockTimeProp
       {formatDateString(block.timestamp)}
     </AboutText>
     {layout == 'row' && <Separator>{' | '}</Separator>}
-    <BlockInfo>
-      <BlockIcon />
-      <BlockNumber>{formatTokenValue(block.number)}</BlockNumber>
-      <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>
-    </BlockInfo>
+    <BlockInfo block={block} />
   </Wrapper>
 ))
 
 const Separator = styled.span`
   font-size: inherit;
   line-height: inherit;
+`
+
+const AboutText = styled(TextMedium)`
+  color: ${Colors.Black[600]};
 `
 
 const Wrapper = styled.div<BlockTimeLayoutProps>`
@@ -83,7 +84,7 @@ const Wrapper = styled.div<BlockTimeLayoutProps>`
           ${BlockIconStyles} {
             color: ${Colors.Black[900]};
           }
-          ${BlockInfo} {
+          ${BlockInfoContainer} {
             color: ${Colors.Black[900]};
           }
           ${BlockNetworkInfo} {
