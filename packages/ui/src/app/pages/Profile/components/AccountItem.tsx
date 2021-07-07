@@ -39,10 +39,6 @@ const LocksDetails = (props: { balance: Balances | null; account: Account }) => 
       <Label>Account Locks:</Label>
       <DisplayLocks balance={props.balance} />
     </RowGapBlock>
-    {/*<RowGapBlock gap={8}>*/}
-    {/*  <Label>Recoverable balance</Label>*/}
-    {/*  <DetailsItemVote account={props.account} />*/}
-    {/*</RowGapBlock>*/}
   </>
 )
 

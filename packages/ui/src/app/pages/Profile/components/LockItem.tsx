@@ -31,7 +31,6 @@ export const LockItem = ({ lock }: DetailsItemDataProps) => {
         <TokenValue value={lock.amount} />
         <TokenValue value={0} />
         <TokenValue value={0} />
-        {/*<DropDownButton onClick={setDropped} isDropped={isDropped} size="medium" />*/}
       </AccountDetailsWrap>
       <DetailsDropDownToggle isDropped={isDropped}>
         <DetailsDropDownColumn>
