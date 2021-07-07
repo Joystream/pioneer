@@ -2,25 +2,39 @@
 import { registry } from '@joystream/types'
 import { JoyBTreeSet } from '@joystream/types/common'
 import { ApplicationId } from '@joystream/types/working-group'
-import { ApiPromise } from '@polkadot/api'
+import yargs from 'yargs'
 
-import { ALICE } from '../data/addresses'
-import { getApi, signAndSend } from '../lib/api'
+import { getSudoAccount } from '../data/addresses'
+import { signAndSend, withApi } from '../lib/api'
 
-async function fillOpening(api: ApiPromise) {
-  console.log('============== WITHDRAW')
-  const applicationsSet = new (JoyBTreeSet(ApplicationId))(registry, [1])
-  const withdrawOpening = api.tx.membershipWorkingGroup.fillOpening(1, applicationsSet)
+const options = {
+  applicationId: {
+    type: 'string',
+    default: '0',
+    alias: 'a',
+  },
+  openingId: {
+    type: 'string',
+    default: '0',
+    alias: 'o',
+  },
+} as const
 
-  await signAndSend(api.tx.sudo.sudo(withdrawOpening), ALICE)
+type CommandOptions = yargs.InferredOptionTypes<typeof options>
+export type FillOpeningArgs = yargs.Arguments<CommandOptions>
+
+const fillOpeningCommand = async ({ applicationId, openingId }: FillOpeningArgs) => {
+  await withApi(async (api) => {
+    const applicationsSet = new (JoyBTreeSet(ApplicationId))(registry, [String(applicationId)])
+    const fillOpening = api.tx.membershipWorkingGroup.fillOpening(String(openingId), applicationsSet)
+
+    await signAndSend(api.tx.sudo.sudo(fillOpening), getSudoAccount())
+  })
 }
 
-const main = async () => {
-  const api = await getApi()
-
-  await fillOpening(api)
-
-  await api.disconnect()
+export const fillOpeningModule = {
+  command: 'opening:fill',
+  describe: 'Apply on opening',
+  handler: fillOpeningCommand,
+  builder: (argv: yargs.Argv<unknown>) => argv.options(options),
 }
-
-main()

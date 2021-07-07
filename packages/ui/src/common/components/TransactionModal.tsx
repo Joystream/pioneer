@@ -9,15 +9,16 @@ export interface TransactionModalProps {
   children: ReactNode
   onClose: () => void
   service: ActorRef<any>
+  title?: string
 }
 
-export const TransactionModal = ({ onClose, children, service }: TransactionModalProps) => {
+export const TransactionModal = ({ onClose, children, service, title }: TransactionModalProps) => {
   const [state] = useActor(service)
 
   if (state.matches('prepare')) {
     return (
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-        <ModalHeader onClick={onClose} title="Authorize transaction" />
+        <ModalHeader onClick={onClose} title={title ?? 'Authorize transaction'} />
         {children}
       </Modal>
     )
