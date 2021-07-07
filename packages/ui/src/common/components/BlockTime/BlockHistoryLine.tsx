@@ -8,14 +8,16 @@ import { formatDateString } from '@/common/model/formatters'
 
 import { BlockInfo, BlockInfoProp } from './BlockInfo'
 
-export const BlockHistoryLine = styled(({ block, ...props }: BlockInfoProp) => (
-  <div {...props}>
+export const BlockHistoryLine = ({ block }: BlockInfoProp) => (
+  <BlockHistoryLineContainer>
     <TextInlineSmall lighter>{formatDateString(block.timestamp)}</TextInlineSmall>
     <Tooltip popupContent={<BlockInfo block={block} />}>
       <TooltipDefault />
     </Tooltip>
-  </div>
-))`
+  </BlockHistoryLineContainer>
+)
+
+const BlockHistoryLineContainer = styled.div`
   display: flex;
   align-items: center;
   column-gap: 8px;
