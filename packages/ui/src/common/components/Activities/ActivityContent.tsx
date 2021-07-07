@@ -5,7 +5,6 @@ import { ApplicationWithdrawnContent } from '@/working-groups/components/Activit
 import { AppliedOnOpeningContent } from '@/working-groups/components/Activities/AppliedOnOpeningContent'
 import { BudgetSetContent } from '@/working-groups/components/Activities/BudgetSetContent'
 import { BudgetSpendingContent } from '@/working-groups/components/Activities/BudgetSpendingContent'
-import { LeaderSetContent } from '@/working-groups/components/Activities/LeaderSetContent'
 import { OpeningAddedContent } from '@/working-groups/components/Activities/OpeningAddedContent'
 import { OpeningAnnouncedContent } from '@/working-groups/components/Activities/OpeningAnnouncedContent'
 import { OpeningCanceledContent } from '@/working-groups/components/Activities/OpeningCanceledContent'
@@ -25,7 +24,6 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   ApplicationWithdrawn: ApplicationWithdrawnContent,
   BudgetSpending: BudgetSpendingContent,
   BudgetSet: BudgetSetContent,
-  LeaderSet: LeaderSetContent,
   StatusTextChanged: StatusTextChangedContent,
   OpeningAdded: OpeningAddedContent,
   OpeningCanceled: OpeningCanceledContent,
