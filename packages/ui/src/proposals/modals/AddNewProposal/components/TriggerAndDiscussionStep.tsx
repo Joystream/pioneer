@@ -8,11 +8,11 @@ import { CrossIcon } from '@/common/components/icons'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { BN_ZERO, BorderRad, Colors, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useForm } from '@/common/hooks/useForm'
 import { cleanInputValue, NUMBER_REGEX, stripLeadingZeroes, truncateDecimals } from '@/common/hooks/useNumberInput'
-import { blocksToTime } from '@/common/model/blocksToTime'
+import { inBlocksDate } from '@/common/model/inBlockDate'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
@@ -51,9 +51,7 @@ export const TriggerAndDiscussionStep = ({
   setDiscussionWhitelist,
 }: TriggerAndDiscussionStepProps) => {
   const currentBlock = useCurrentBlockNumber()
-  const minTriggerBlock = currentBlock
-    ? currentBlock.addn(constants.votingPeriod).addn(constants.gracePeriod)
-    : new BN(0)
+  const minTriggerBlock = currentBlock ? currentBlock.addn(constants.votingPeriod).addn(constants.gracePeriod) : BN_ZERO
   const isValidTriggerBlock = (block: BN) => {
     return block && block.gte(minTriggerBlock)
   }
@@ -101,7 +99,7 @@ export const TriggerAndDiscussionStep = ({
     const value = new BN(fields.triggerBlock)
 
     return isValidTriggerBlock(value)
-      ? `in ${blocksToTime(value)}`
+      ? `≈ ${inBlocksDate(value.sub(minTriggerBlock))}`
       : `The minimum block number is ${minTriggerBlock.toNumber()}.`
   }
 
