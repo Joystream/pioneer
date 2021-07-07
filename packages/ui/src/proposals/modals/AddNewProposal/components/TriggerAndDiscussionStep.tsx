@@ -25,10 +25,12 @@ import {
 import { ProposalConstants } from '@/proposals/types'
 
 interface TriggerAndDiscussionStepProps {
-  constants: ProposalConstants
-  trigger?: ProposalTrigger
-  discussionMode: ProposalDiscussionMode
-  discussionWhitelist: ProposalDiscussionWhitelist
+  params: {
+    constants: ProposalConstants
+    trigger?: ProposalTrigger
+    discussionMode: ProposalDiscussionMode
+    discussionWhitelist: ProposalDiscussionWhitelist
+  }
   setTrigger: (trigger?: ProposalTrigger) => void
   setDiscussionMode: (mode: ProposalDiscussionMode) => void
   setDiscussionWhitelist: (members: Member[]) => void
@@ -43,14 +45,12 @@ interface StepFormFields {
 const FormSchema = Yup.object().shape({})
 
 export const TriggerAndDiscussionStep = ({
-  constants,
-  trigger,
-  discussionMode,
-  discussionWhitelist,
+  params,
   setTrigger,
   setDiscussionMode,
   setDiscussionWhitelist,
 }: TriggerAndDiscussionStepProps) => {
+  const { constants, trigger, discussionMode, discussionWhitelist } = params
   const currentBlock = useCurrentBlockNumber()
   const minTriggerBlock = currentBlock ? currentBlock.addn(constants.votingPeriod).addn(constants.gracePeriod) : BN_ZERO
   const isValidTriggerBlock = (block: BN) => {

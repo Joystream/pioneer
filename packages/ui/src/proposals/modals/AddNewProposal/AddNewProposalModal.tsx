@@ -184,10 +184,7 @@ export const AddNewProposalModal = () => {
             )}
             {state.matches('generalParameters.triggerAndDiscussion') && (
               <TriggerAndDiscussionStep
-                constants={constants as ProposalConstants}
-                trigger={state.context.trigger}
-                discussionMode={state.context.discussionMode}
-                discussionWhitelist={state.context.discussionWhitelist}
+                params={{ constants: constants as ProposalConstants, ...state.context }}
                 setTrigger={(trigger?: ProposalTrigger) => send('SET_TRIGGER', { trigger })}
                 setDiscussionMode={(mode) => send('SET_DISCUSSION_MODE', { mode })}
                 setDiscussionWhitelist={(whitelist) => send('SET_DISCUSSION_WHITELIST', { whitelist })}
