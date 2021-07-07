@@ -11,6 +11,7 @@ import { TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useForm } from '@/common/hooks/useForm'
+import { cleanInputValue, NUMBER_REGEX, stripLeadingZeroes, truncateDecimals } from '@/common/hooks/useNumberInput'
 import { blocksToTime } from '@/common/model/blocksToTime'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -72,13 +73,14 @@ export const TriggerAndDiscussionStep = ({
   const { fields, changeField } = useForm<StepFormFields>(formInitializer, FormSchema)
 
   const setValue = (field: keyof StepFormFields, value: any) => {
-    changeField(field, value)
-
     switch (field) {
       case 'trigger':
         setTrigger(!value ? false : undefined)
         break
       case 'triggerBlock':
+        value = cleanInputValue(value)
+        value = NUMBER_REGEX.test(value) ? truncateDecimals(stripLeadingZeroes(value), 0) : ''
+
         setTrigger(value && isValidTriggerBlock(new BN(value)) ? parseInt(value) : undefined)
         break
       case 'discussionMode':
@@ -87,6 +89,8 @@ export const TriggerAndDiscussionStep = ({
         }
         setDiscussionMode(value ? 'open' : 'closed')
     }
+
+    changeField(field, value)
   }
 
   const getTriggerBlockMessage = () => {
