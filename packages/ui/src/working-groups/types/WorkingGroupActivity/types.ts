@@ -10,7 +10,6 @@ export type WorkingGroupActivity =
   | AppliedOnOpeningActivity
   | BudgetSetActivity
   | BudgetSpendingActivity
-  | LeaderSetActivity
   | StatusTextChangedActivity
   | OpeningAddedActivity
   | OpeningCanceledActivity
@@ -51,12 +50,6 @@ export interface BudgetSpendingActivity extends BaseActivity {
   eventType: 'BudgetSpending'
   groupName: string
   amount: BN
-}
-
-export interface LeaderSetActivity extends BaseActivity {
-  eventType: 'LeaderSet'
-  member: ShortMember
-  groupName: string
 }
 
 export interface StatusTextChangedActivity extends BaseActivity {
