@@ -13,7 +13,7 @@ import { BN_ZERO, BorderRad, Colors, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useForm } from '@/common/hooks/useForm'
 import { cleanInputValue, NUMBER_REGEX, stripLeadingZeroes, truncateDecimals } from '@/common/hooks/useNumberInput'
-import { inBlocksDate } from '@/common/model/inBlockDate'
+import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
@@ -51,6 +51,7 @@ export const TriggerAndDiscussionStep = ({
   setDiscussionWhitelist,
 }: TriggerAndDiscussionStepProps) => {
   const { constants, trigger, discussionMode, discussionWhitelist } = params
+
   const currentBlock = useCurrentBlockNumber()
   const minTriggerBlock = currentBlock ? currentBlock.addn(constants.votingPeriod).addn(constants.gracePeriod) : BN_ZERO
   const isValidTriggerBlock = (block: BN) => {
@@ -58,17 +59,16 @@ export const TriggerAndDiscussionStep = ({
   }
 
   useEffect(() => {
-    if (fields.triggerBlock) {
-      setValue('triggerBlock', fields.triggerBlock)
+    if (fields.triggerBlock && !isValidTriggerBlock(new BN(fields.triggerBlock))) {
+      setTrigger(undefined)
     }
-  }, [currentBlock])
+  }, [currentBlock?.toNumber()])
 
   const formInitializer: StepFormFields = {
     trigger: !!trigger,
     triggerBlock: trigger ? trigger.toString() : '',
     discussionMode: discussionMode === 'open',
   }
-
   const { fields, changeField } = useForm<StepFormFields>(formInitializer, FormSchema)
 
   const setValue = (field: keyof StepFormFields, value: any) => {

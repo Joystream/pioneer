@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen, configure, prettyDOM } from '@testing-library/react'
+import { fireEvent, render, screen, configure } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -248,7 +248,7 @@ describe('UI: AddNewProposalModal', () => {
             await triggerYes()
             await fillTriggerBlock(30)
 
-            expect(await screen.getByText(/(?<!\S)in (\d+) min(?!\S)/i)).toBeDefined()
+            expect(await screen.getByText(/^≈.*/i)).toBeDefined()
 
             const button = await getNextStepButton()
             expect(button).not.toBeDisabled()
@@ -269,7 +269,7 @@ describe('UI: AddNewProposalModal', () => {
             expect(button).not.toBeDisabled()
           })
 
-          it('Remove member to whitelist', async () => {
+          it('Remove member from whitelist', async () => {
             await selectMember('Add member to whitelist', 'alice')
 
             expect(await screen.getByTestId('removeMember')).toBeDefined()
