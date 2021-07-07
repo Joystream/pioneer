@@ -128,4 +128,53 @@ describe('Machine: Transaction machine', () => {
       expect(service.state.context).toEqual({ transactionEvents: ['foo', 'bar'] })
     })
   })
+
+  describe('Multi transaction', () => {
+    const multi = createMachine({
+      context: {
+        transactions: ['firstTransaction'],
+      },
+      states: {
+        transaction: {
+          on: {
+            DONE: {
+              target: 'success',
+              cond: (context: any) => context.transactions.length === 1,
+              actions: assign({
+                transactions: (context: any) => {
+                  context.transactions.pop()
+                  return context.transactions
+                },
+              }),
+            },
+          },
+        },
+        success: {},
+      },
+      initial: 'transaction',
+    })
+
+    let service: Interpreter<any>
+
+    beforeEach(() => {
+      service = interpret(multi)
+      service.start()
+    })
+
+    it('start', () => {
+      expect(service.state.matches('transaction')).toBeTruthy()
+    })
+
+    it('goes to next state when no more transactions', () => {
+      service.send('DONE')
+      expect(service.state.matches('success')).toBeTruthy()
+    })
+
+    it('stays in transaction when some transactions left', () => {
+      service = interpret(multi, { context: { transactions: ['first', 'second'] } })
+      service.start()
+      service.send('DONE')
+      expect(service.state.matches('transaction')).toBeTruthy()
+    })
+  })
 })
