@@ -8,6 +8,7 @@ import { createOpeningModule } from './commands/createOpening'
 import { fillOpeningModule } from './commands/fillOpening'
 import { removeStakingAccountModule } from './commands/removeStaking'
 import { setBudgetModule } from './commands/setBudget'
+import { transferModule } from './commands/transfer'
 import { voteModule } from './commands/vote'
 
 yargs(process.argv.slice(2))
@@ -22,4 +23,5 @@ yargs(process.argv.slice(2))
   .command(fillOpeningModule)
   .command(voteModule)
   .command(announceModule)
+  .command(transferModule)
   .demandCommand().argv
