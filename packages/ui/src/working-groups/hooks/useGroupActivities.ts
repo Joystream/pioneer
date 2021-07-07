@@ -9,6 +9,7 @@ import {
   asOpeningActivity,
   asOpeningFilledActivity,
   asStakeChangedActivity,
+  asStakeSlashedActivity,
   asStatusTextChangedEventActivities,
   asWorkerExitedActivity,
 } from '@/working-groups/types/WorkingGroupActivity'
@@ -24,6 +25,7 @@ export const useGroupActivities = (groupId: string) => {
             ...data.budgetSpendingEvents.map(asBudgetSpendingActivity),
             ...data.stakeDecreasedEvents.map(asStakeChangedActivity),
             ...data.stakeIncreasedEvents.map(asStakeChangedActivity),
+            ...data.stakeSlashedEvents.map(asStakeSlashedActivity),
             ...data.openingAddedEvents.map(asOpeningActivity),
             ...data.openingCanceledEvents.map(asOpeningActivity),
             ...data.openingFilledEvents.map(asOpeningFilledActivity),

@@ -538,6 +538,9 @@ query GetGroupEvents($group_eq: ID!) {
   budgetSetEvents(where: { group: {id_eq: $group_eq } }) {
     ...BudgetSetEventFields
   }
+  stakeSlashedEvents(where: { group: { id_eq: $group_eq } }) {
+    ...StakeSlashedEventFields
+  }
 }
 
 query GetWorkerIds($where: WorkerWhereInput) {

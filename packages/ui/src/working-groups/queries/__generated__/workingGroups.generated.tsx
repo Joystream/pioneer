@@ -521,6 +521,7 @@ export type GetGroupEventsQuery = {
   workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment>
   statusTextChangedEvents: Array<{ __typename: 'StatusTextChangedEvent' } & StatusTextChangedEventFieldsFragment>
   budgetSetEvents: Array<{ __typename: 'BudgetSetEvent' } & BudgetSetEventFieldsFragment>
+  stakeSlashedEvents: Array<{ __typename: 'StakeSlashedEvent' } & StakeSlashedEventFieldsFragment>
 }
 
 export type GetWorkerIdsQueryVariables = Types.Exact<{
@@ -1965,6 +1966,9 @@ export const GetGroupEventsDocument = gql`
     budgetSetEvents(where: { group: { id_eq: $group_eq } }) {
       ...BudgetSetEventFields
     }
+    stakeSlashedEvents(where: { group: { id_eq: $group_eq } }) {
+      ...StakeSlashedEventFields
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
@@ -1977,6 +1981,7 @@ export const GetGroupEventsDocument = gql`
   ${WorkerExitedEventFieldsFragmentDoc}
   ${StatusTextChangedEventFieldsFragmentDoc}
   ${BudgetSetEventFieldsFragmentDoc}
+  ${StakeSlashedEventFieldsFragmentDoc}
 `
 
 /**
