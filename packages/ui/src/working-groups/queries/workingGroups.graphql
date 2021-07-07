@@ -480,6 +480,34 @@ fragment BudgetSetEventFields on BudgetSetEvent {
   newBudget
 }
 
+fragment TerminatedWorkerEventFields on TerminatedWorkerEvent {
+  id
+  createdAt
+  group {
+    name
+  }
+  worker {
+    membership {
+      id
+      handle
+    }
+  }
+}
+
+fragment TerminatedLeaderEventFields on TerminatedLeaderEvent {
+  id
+  createdAt
+  group {
+    name
+  }
+  worker {
+    membership {
+      id
+      handle
+    }
+  }
+}
+
 query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   appliedOnOpeningEvents(where: { application_in: $application_in }) {
     ...AppliedOnOpeningEventFields
@@ -501,6 +529,12 @@ query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   }
   workerExitedEvents(where: { worker_in: $worker_in }) {
     ...WorkerExitedEventFields
+  }
+  terminatedWorkerEvents(where: { worker_in: $worker_in }) {
+    ...TerminatedWorkerEventFields
+  }
+  terminatedLeaderEvents(where: { worker_in: $worker_in }) {
+    ...TerminatedLeaderEventFields
   }
 }
 
@@ -540,6 +574,12 @@ query GetGroupEvents($group_eq: ID!) {
   }
   stakeSlashedEvents(where: { group: { id_eq: $group_eq } }) {
     ...StakeSlashedEventFields
+  }
+  terminatedWorkerEvents(where: { group: { id_eq: $group_eq } }) {
+    ...TerminatedWorkerEventFields
+  }
+  terminatedLeaderEvents(where: { group: { id_eq: $group_eq } }) {
+    ...TerminatedLeaderEventFields
   }
 }
 

@@ -14,6 +14,7 @@ import { StakeSlashedContent } from '@/working-groups/components/Activities/Stak
 import { StatusTextChangedContent } from '@/working-groups/components/Activities/StatusTextChangedContent'
 import { WorkerExitedContent } from '@/working-groups/components/Activities/WorkerExitedContent'
 import { WorkerStartedLeavingContent } from '@/working-groups/components/Activities/WorkerStartedLeavingContent'
+import { WorkerTerminatedContent } from '@/working-groups/components/Activities/WorkerTerminatedContent'
 
 export interface ActivityContentComponent<Activity extends BaseActivity> {
   (props: { activity: Activity; isOwn?: boolean }): ReactElement | null
@@ -34,6 +35,8 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   WorkerStartedLeavingEvent: WorkerStartedLeavingContent,
   OpeningFilledEvent: OpeningFilledContent,
   OpeningAnnounced: OpeningAnnouncedContent,
+  TerminatedWorkerEvent: WorkerTerminatedContent,
+  TerminatedLeaderEvent: WorkerTerminatedContent,
 }
 
 export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {

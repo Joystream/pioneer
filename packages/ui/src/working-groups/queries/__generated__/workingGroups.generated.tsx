@@ -482,6 +482,22 @@ export type BudgetSetEventFieldsFragment = {
   group: { __typename: 'WorkingGroup'; name: string }
 }
 
+export type TerminatedWorkerEventFieldsFragment = {
+  __typename: 'TerminatedWorkerEvent'
+  id: string
+  createdAt: any
+  group: { __typename: 'WorkingGroup'; name: string }
+  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+}
+
+export type TerminatedLeaderEventFieldsFragment = {
+  __typename: 'TerminatedLeaderEvent'
+  id: string
+  createdAt: any
+  group: { __typename: 'WorkingGroup'; name: string }
+  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+}
+
 export type GetMemberRoleEventsQueryVariables = Types.Exact<{
   worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
   application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
@@ -500,6 +516,8 @@ export type GetMemberRoleEventsQuery = {
     { __typename: 'WorkerStartedLeavingEvent' } & WorkerStartedLeavingEventFieldsFragment
   >
   workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment>
+  terminatedWorkerEvents: Array<{ __typename: 'TerminatedWorkerEvent' } & TerminatedWorkerEventFieldsFragment>
+  terminatedLeaderEvents: Array<{ __typename: 'TerminatedLeaderEvent' } & TerminatedLeaderEventFieldsFragment>
 }
 
 export type GetGroupEventsQueryVariables = Types.Exact<{
@@ -522,6 +540,8 @@ export type GetGroupEventsQuery = {
   statusTextChangedEvents: Array<{ __typename: 'StatusTextChangedEvent' } & StatusTextChangedEventFieldsFragment>
   budgetSetEvents: Array<{ __typename: 'BudgetSetEvent' } & BudgetSetEventFieldsFragment>
   stakeSlashedEvents: Array<{ __typename: 'StakeSlashedEvent' } & StakeSlashedEventFieldsFragment>
+  terminatedWorkerEvents: Array<{ __typename: 'TerminatedWorkerEvent' } & TerminatedWorkerEventFieldsFragment>
+  terminatedLeaderEvents: Array<{ __typename: 'TerminatedLeaderEvent' } & TerminatedLeaderEventFieldsFragment>
 }
 
 export type GetWorkerIdsQueryVariables = Types.Exact<{
@@ -909,6 +929,36 @@ export const BudgetSetEventFieldsFragmentDoc = gql`
       name
     }
     newBudget
+  }
+`
+export const TerminatedWorkerEventFieldsFragmentDoc = gql`
+  fragment TerminatedWorkerEventFields on TerminatedWorkerEvent {
+    id
+    createdAt
+    group {
+      name
+    }
+    worker {
+      membership {
+        id
+        handle
+      }
+    }
+  }
+`
+export const TerminatedLeaderEventFieldsFragmentDoc = gql`
+  fragment TerminatedLeaderEventFields on TerminatedLeaderEvent {
+    id
+    createdAt
+    group {
+      name
+    }
+    worker {
+      membership {
+        id
+        handle
+      }
+    }
   }
 `
 export const GetBudgetSpendingDocument = gql`
@@ -1880,6 +1930,12 @@ export const GetMemberRoleEventsDocument = gql`
     workerExitedEvents(where: { worker_in: $worker_in }) {
       ...WorkerExitedEventFields
     }
+    terminatedWorkerEvents(where: { worker_in: $worker_in }) {
+      ...TerminatedWorkerEventFields
+    }
+    terminatedLeaderEvents(where: { worker_in: $worker_in }) {
+      ...TerminatedLeaderEventFields
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
@@ -1888,6 +1944,8 @@ export const GetMemberRoleEventsDocument = gql`
   ${StakeSlashedEventFieldsFragmentDoc}
   ${WorkerStartedLeavingEventFieldsFragmentDoc}
   ${WorkerExitedEventFieldsFragmentDoc}
+  ${TerminatedWorkerEventFieldsFragmentDoc}
+  ${TerminatedLeaderEventFieldsFragmentDoc}
 `
 
 /**
@@ -1969,6 +2027,12 @@ export const GetGroupEventsDocument = gql`
     stakeSlashedEvents(where: { group: { id_eq: $group_eq } }) {
       ...StakeSlashedEventFields
     }
+    terminatedWorkerEvents(where: { group: { id_eq: $group_eq } }) {
+      ...TerminatedWorkerEventFields
+    }
+    terminatedLeaderEvents(where: { group: { id_eq: $group_eq } }) {
+      ...TerminatedLeaderEventFields
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
@@ -1982,6 +2046,8 @@ export const GetGroupEventsDocument = gql`
   ${StatusTextChangedEventFieldsFragmentDoc}
   ${BudgetSetEventFieldsFragmentDoc}
   ${StakeSlashedEventFieldsFragmentDoc}
+  ${TerminatedWorkerEventFieldsFragmentDoc}
+  ${TerminatedLeaderEventFieldsFragmentDoc}
 `
 
 /**

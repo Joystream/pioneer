@@ -1,6 +1,6 @@
 import { JSXElementConstructor } from 'react'
 
-import { BudgetIcon, ExiteRoleIcon, UpcomingIcon } from '@/common/components/icons/activities'
+import { BudgetIcon, ExiteRoleIcon, TerminatedIcon, UpcomingIcon } from '@/common/components/icons/activities'
 
 import { ActivityCategory } from '../../types'
 import { AppliedIcon } from '../icons/activities/AppliedIcon'
@@ -28,4 +28,6 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   WorkerStartedLeavingEvent: [ClosedIcon, 'negative'],
   OpeningFilledEvent: [HiredIcon, 'positive'],
   OpeningAnnounced: [UpcomingIcon, 'joystream'],
+  TerminatedWorkerEvent: [TerminatedIcon, 'negative'],
+  TerminatedLeaderEvent: [TerminatedIcon, 'negative'],
 }

@@ -13,6 +13,8 @@ import {
   StakeIncreasedEventFieldsFragment,
   StakeSlashedEventFieldsFragment,
   StatusTextChangedEventFieldsFragment,
+  TerminatedLeaderEventFieldsFragment,
+  TerminatedWorkerEventFieldsFragment,
   WorkerExitedEventFieldsFragment,
   WorkerStartedLeavingEventFieldsFragment,
 } from '@/working-groups/queries/__generated__/workingGroups.generated'
@@ -31,6 +33,7 @@ import {
   StatusTextChangedActivity,
   WorkerExitedActivity,
   WorkerStartedLeavingActivity,
+  WorkerTerminatedActivity,
 } from '@/working-groups/types'
 
 function asPositionTitle(groupName: string, type: 'LEADER' | 'REGULAR') {
@@ -204,5 +207,20 @@ export function asBudgetSetActivity(fragment: BudgetSetEventFieldsFragment): Bud
     createdAt: fragment.createdAt,
     groupName: asWorkingGroupName(fragment.group.name),
     newBudget: fragment.newBudget,
+  }
+}
+
+export function asWorkerTerminatedActivity(
+  fragment: TerminatedLeaderEventFieldsFragment | TerminatedWorkerEventFieldsFragment
+): WorkerTerminatedActivity {
+  return {
+    id: fragment.id,
+    eventType: fragment.__typename,
+    createdAt: fragment.createdAt,
+    groupName: asWorkingGroupName(fragment.group.name),
+    member: {
+      id: fragment.worker.membership.id,
+      handle: fragment.worker.membership.handle,
+    },
   }
 }

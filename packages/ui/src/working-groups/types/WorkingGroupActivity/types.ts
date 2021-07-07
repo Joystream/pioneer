@@ -19,6 +19,7 @@ export type WorkingGroupActivity =
   | WorkerStartedLeavingActivity
   | OpeningFilledActivity
   | OpeningAnnouncedActivity
+  | WorkerTerminatedActivity
 
 type ShortMember = Pick<Member, 'id' | 'handle'>
 
@@ -96,4 +97,10 @@ export interface WorkerStartedLeavingActivity extends BaseActivity {
 export interface OpeningFilledActivity extends OpeningActivity {
   eventType: 'OpeningFilledEvent'
   hiredMembers: ShortMember[]
+}
+
+export interface WorkerTerminatedActivity extends BaseActivity {
+  eventType: 'TerminatedWorkerEvent' | 'TerminatedLeaderEvent'
+  member: ShortMember
+  groupName: string
 }
