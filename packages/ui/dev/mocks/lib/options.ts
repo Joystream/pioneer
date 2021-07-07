@@ -1,6 +1,6 @@
 import { accountsMap, KnownAccount } from '../data/addresses'
 
-const accountChoices: ReadonlyArray<KnownAccount> = Object.keys(accountsMap) as KnownAccount[]
+export const accountChoices: ReadonlyArray<KnownAccount> = Object.keys(accountsMap) as KnownAccount[]
 
 export const memberIdOption = { type: 'string', default: '0', alias: 'memberId' } as const
 
