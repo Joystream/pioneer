@@ -1,0 +1,32 @@
+[
+  {
+    "createdAt": "2021-06-09T00:21:44.417Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-42",
+    "penalty": 0
+  },
+  {
+    "createdAt": "2021-06-19T15:38:00.170Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-59",
+    "penalty": 0
+  },
+  {
+    "createdAt": "2021-06-24T16:30:28.178Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-8",
+    "penalty": 0
+  },
+  {
+    "createdAt": "2021-06-18T01:08:48.835Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-43",
+    "penalty": 0
+  },
+  {
+    "createdAt": "2021-06-26T11:28:40.710Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-27",
+    "penalty": 0
+  }
+]
