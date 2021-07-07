@@ -3,10 +3,11 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
-import { InputComponent, InputNumber, ToggleCheckbox } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
 import { CrossIcon } from '@/common/components/icons'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO, BorderRad, Colors, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
@@ -122,14 +123,18 @@ export const TriggerAndDiscussionStep = ({
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Trigger" tooltipText="Something" inputSize="s">
+          <InlineToggleWrap>
+            <Label>Trigger: </Label>
             <ToggleCheckbox
               falseLabel="No"
               trueLabel="Yes"
               checked={fields.trigger}
               onChange={(isSet) => setValue('trigger', isSet)}
             />
-          </InputComponent>
+            <Tooltip tooltipText="something">
+              <TooltipDefault />
+            </Tooltip>
+          </InlineToggleWrap>
           {fields.trigger && (
             <InputComponent
               units="block"
@@ -150,14 +155,18 @@ export const TriggerAndDiscussionStep = ({
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Discussion mode" tooltipText="Something" inputSize="s">
+          <InlineToggleWrap>
+            <Label>Discussion mode: </Label>
             <ToggleCheckbox
               falseLabel="Closed"
               trueLabel="Open"
               checked={fields.discussionMode}
               onChange={(isSet) => setValue('discussionMode', isSet)}
             />
-          </InputComponent>
+            <Tooltip tooltipText="something">
+              <TooltipDefault />
+            </Tooltip>
+          </InlineToggleWrap>
           {discussionMode === 'closed' && (
             <RowGapBlock gap={8}>
               <TextMedium lighter>
