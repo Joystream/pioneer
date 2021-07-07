@@ -16,4 +16,4 @@ export const lockTypes: { [key: string]: LockType } = {
   '0x0c0c0c0c0c0c0c0c': 'Bounty',
 }
 
-export const isRecoverable = (type: LockType): boolean => type === 'Staking Candidate'
+export const isRecoverable = (type: LockType): boolean => type === 'Council Candidate'

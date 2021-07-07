@@ -39,3 +39,6 @@ export const equals = <T extends any>(
 
 export const intersperse = <T extends any, S extends any>(list: T[], separator: S): (T | S)[] =>
   list.length < 2 ? list : [list[0], ...list.slice(1).flatMap((item) => [separator, item])]
+
+export const repeat = <T extends any>(getItem: (index: number) => T, times: number): T[] =>
+  Array.from<T>({ length: times }).map((_, i) => getItem(i))

@@ -4,7 +4,10 @@ import { capitalizeFirstLetter } from '@/common/helpers'
 import {
   ApplicationWithdrawnEventFieldsFragment,
   AppliedOnOpeningEventFieldsFragment,
+  BudgetSetEventFieldsFragment,
   BudgetSpendingActivityEventFieldsFragment,
+  OpeningAddedEventFieldsFragment,
+  OpeningCanceledEventFieldsFragment,
   OpeningFilledEventFieldsFragment,
   StakeDecreasedEventFieldsFragment,
   StakeIncreasedEventFieldsFragment,
@@ -17,8 +20,11 @@ import {
   ApplicationWithdrawnActivity,
   AppliedOnOpeningActivity,
   asWorkingGroupName,
+  BudgetSetActivity,
   BudgetSpendingActivity,
+  OpeningAddedActivity,
   OpeningAnnouncedActivity,
+  OpeningCanceledActivity,
   OpeningFilledActivity,
   StakeChangedActivity,
   StakeSlashedActivity,
@@ -33,7 +39,7 @@ function asPositionTitle(groupName: string, type: 'LEADER' | 'REGULAR') {
 
 export function asAppliedOnOpeningActivity(fragment: AppliedOnOpeningEventFieldsFragment): AppliedOnOpeningActivity {
   return {
-    eventType: 'AppliedOnOpening',
+    eventType: fragment.__typename,
     id: fragment.id,
     createdAt: fragment.createdAt,
     member: {
@@ -53,7 +59,7 @@ export function asApplicationWithdrawnActivity(
   fragment: ApplicationWithdrawnEventFieldsFragment
 ): ApplicationWithdrawnActivity {
   return {
-    eventType: 'ApplicationWithdrawn',
+    eventType: fragment.__typename,
     id: fragment.id,
     createdAt: fragment.createdAt,
     member: {
@@ -71,7 +77,7 @@ export function asApplicationWithdrawnActivity(
 
 export function asBudgetSpendingActivity(fragment: BudgetSpendingActivityEventFieldsFragment): BudgetSpendingActivity {
   return {
-    eventType: 'BudgetSpending',
+    eventType: fragment.__typename,
     id: fragment.id,
     createdAt: fragment.createdAt,
     groupName: fragment.group.name,
@@ -85,7 +91,7 @@ export function asStakeChangedActivity(fragment: StakeChangedFragment): StakeCha
   return {
     id: fragment.id,
     createdAt: fragment.createdAt,
-    eventType: fragment.__typename === 'StakeDecreasedEvent' ? 'StakeDecreased' : 'StakeIncreased',
+    eventType: fragment.__typename,
     member: {
       id: fragment.worker.membership.id,
       handle: fragment.worker.membership.handle,
@@ -96,7 +102,7 @@ export function asStakeChangedActivity(fragment: StakeChangedFragment): StakeCha
 
 export function asStakeSlashedActivity(fragment: StakeSlashedEventFieldsFragment): StakeSlashedActivity {
   return {
-    eventType: 'StakeSlashed',
+    eventType: fragment.__typename,
     id: fragment.id,
     createdAt: fragment.createdAt,
     member: {
@@ -107,9 +113,25 @@ export function asStakeSlashedActivity(fragment: StakeSlashedEventFieldsFragment
   }
 }
 
+export function asOpeningActivity(
+  fragment: OpeningAddedEventFieldsFragment | OpeningCanceledEventFieldsFragment
+): OpeningAddedActivity | OpeningCanceledActivity {
+  return {
+    eventType: fragment.__typename,
+    id: fragment.id,
+    createdAt: fragment.createdAt,
+    opening: {
+      id: fragment.opening.id,
+      type: fragment.opening.type,
+      groupName: fragment.opening.group.name,
+      title: asPositionTitle(fragment.opening.group.name, fragment.opening.type),
+    },
+  }
+}
+
 export function asOpeningFilledActivity(fragment: OpeningFilledEventFieldsFragment): OpeningFilledActivity {
   return {
-    eventType: 'OpeningFilled',
+    eventType: fragment.__typename,
     id: fragment.id,
     createdAt: fragment.createdAt,
     opening: {
@@ -127,7 +149,7 @@ export function asOpeningFilledActivity(fragment: OpeningFilledEventFieldsFragme
 
 export function asWorkerExitedActivity(fragment: WorkerExitedEventFieldsFragment): WorkerExitedActivity {
   return {
-    eventType: 'WorkerExited',
+    eventType: fragment.__typename,
     createdAt: fragment.createdAt,
     id: fragment.id,
     member: {
@@ -141,7 +163,7 @@ export function asWorkerStartedLeavingActivity(
   fragment: WorkerStartedLeavingEventFieldsFragment
 ): WorkerStartedLeavingActivity {
   return {
-    eventType: 'WorkerStartedLeaving',
+    eventType: fragment.__typename,
     createdAt: fragment.createdAt,
     id: fragment.id,
     member: {
@@ -158,7 +180,7 @@ export function asStatusTextChangedEventActivities(
   if (fragment.workinggroupmetadatasetInEvent?.length) {
     result.push({
       id: fragment.id,
-      eventType: 'StatusTextChanged',
+      eventType: fragment.__typename,
       createdAt: fragment.createdAt,
       groupName: asWorkingGroupName(fragment.group.name),
     })
@@ -173,4 +195,14 @@ export function asStatusTextChangedEventActivities(
     })
   })
   return result
+}
+
+export function asBudgetSetActivity(fragment: BudgetSetEventFieldsFragment): BudgetSetActivity {
+  return {
+    id: fragment.id,
+    eventType: fragment.__typename,
+    createdAt: fragment.createdAt,
+    groupName: asWorkingGroupName(fragment.group.name),
+    newBudget: fragment.newBudget,
+  }
 }

@@ -96,31 +96,31 @@ describe('toBalances', () => {
     testBalances(
       {
         ...EMPTY_BALANCES,
-        availableBalance: createBalance(187),
-        freeBalance: createBalance(10_187),
+        availableBalance: createBalance(500),
+        freeBalance: createBalance(10_500),
         frozenFee: createBalance(10_000),
         frozenMisc: createBalance(10_000),
         lockedBalance: createBalance(10_000),
-        lockedBreakdown: [getBalanceLock(200, 11), getBalanceLock(10_000, 9)],
-        votingBalance: createBalance(10_187),
+        lockedBreakdown: [getBalanceLock(10_000, 1), getBalanceLock(200, 9)],
+        votingBalance: createBalance(10_500),
       },
       {
         locked: createBalance(10_000).toBn(),
         locks: [
           {
-            amount: createBalance(200).toBn(),
-            type: lockTypes['0x0b0b0b0b0b0b0b0b'],
+            amount: createBalance(10_000).toBn(),
+            type: lockTypes['0x0101010101010101'],
             isRecoverable: true,
           },
           {
-            amount: createBalance(10_000).toBn(),
+            amount: createBalance(200).toBn(),
             type: lockTypes['0x0909090909090909'],
             isRecoverable: false,
           },
         ],
-        recoverable: new BN(200),
-        total: new BN(10_187),
-        transferable: createBalance(187).toBn(),
+        recoverable: new BN(9_800),
+        total: new BN(10_500),
+        transferable: createBalance(500).toBn(),
       }
     )
   })

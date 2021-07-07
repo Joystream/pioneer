@@ -10,7 +10,6 @@ export type WorkingGroupActivity =
   | AppliedOnOpeningActivity
   | BudgetSetActivity
   | BudgetSpendingActivity
-  | LeaderSetActivity
   | StatusTextChangedActivity
   | OpeningAddedActivity
   | OpeningCanceledActivity
@@ -34,33 +33,27 @@ interface ApplicationActivity extends OpeningActivity {
 }
 
 export interface ApplicationWithdrawnActivity extends ApplicationActivity {
-  eventType: 'ApplicationWithdrawn'
+  eventType: 'ApplicationWithdrawnEvent'
 }
 
 export interface AppliedOnOpeningActivity extends ApplicationActivity {
-  eventType: 'AppliedOnOpening'
+  eventType: 'AppliedOnOpeningEvent'
 }
 
 export interface BudgetSetActivity extends BaseActivity {
-  eventType: 'BudgetSet'
+  eventType: 'BudgetSetEvent'
   groupName: string
   newBudget: BN
 }
 
 export interface BudgetSpendingActivity extends BaseActivity {
-  eventType: 'BudgetSpending'
+  eventType: 'BudgetSpendingEvent'
   groupName: string
   amount: BN
 }
 
-export interface LeaderSetActivity extends BaseActivity {
-  eventType: 'LeaderSet'
-  member: ShortMember
-  groupName: string
-}
-
 export interface StatusTextChangedActivity extends BaseActivity {
-  eventType: 'StatusTextChanged'
+  eventType: 'StatusTextChangedEvent'
   groupName: string
 }
 
@@ -71,36 +64,36 @@ export interface OpeningAnnouncedActivity extends BaseActivity {
 }
 
 export interface OpeningAddedActivity extends OpeningActivity {
-  eventType: 'OpeningAdded'
+  eventType: 'OpeningAddedEvent'
 }
 
 export interface OpeningCanceledActivity extends OpeningActivity {
-  eventType: 'OpeningCanceled'
+  eventType: 'OpeningCanceledEvent'
 }
 
 export interface StakeSlashedActivity extends BaseActivity {
-  eventType: 'StakeSlashed'
+  eventType: 'StakeSlashedEvent'
   member: ShortMember
   groupName: string
 }
 
 export interface StakeChangedActivity extends BaseActivity {
-  eventType: 'StakeIncreased' | 'StakeDecreased'
+  eventType: 'StakeIncreasedEvent' | 'StakeDecreasedEvent'
   member: ShortMember
   amount: BN
 }
 
 export interface WorkerExitedActivity extends BaseActivity {
-  eventType: 'WorkerExited'
+  eventType: 'WorkerExitedEvent'
   member: ShortMember
 }
 
 export interface WorkerStartedLeavingActivity extends BaseActivity {
-  eventType: 'WorkerStartedLeaving'
+  eventType: 'WorkerStartedLeavingEvent'
   member: ShortMember
 }
 
 export interface OpeningFilledActivity extends OpeningActivity {
-  eventType: 'OpeningFilled'
+  eventType: 'OpeningFilledEvent'
   hiredMembers: ShortMember[]
 }

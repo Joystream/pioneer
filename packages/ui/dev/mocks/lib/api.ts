@@ -4,14 +4,14 @@ import { ApiPromise, WsProvider } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { createTestKeyring } from '@polkadot/keyring/testing'
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
-import { EventRecord } from '@polkadot/types/interfaces/system'
-import { ISubmittableResult } from '@polkadot/types/types'
+import { DispatchError, EventRecord } from '@polkadot/types/interfaces/system'
+import { ISubmittableResult, ITuple } from '@polkadot/types/types'
 import chalk from 'chalk'
 
-const isError = (events: EventRecord[]): boolean => {
-  return !!events.find(({ event: { method } }) => {
-    return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
-  })
+const isError = ({ event: { method } }: EventRecord) => method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
+
+const hasError = (events: EventRecord[]): boolean => {
+  return !!events.find(isError)
 }
 
 export const getApi = async () => {
@@ -52,15 +52,36 @@ export async function signAndSend(
         console.log(chalk.gray(' > Included at block hash' + status.asInBlock.toHex()))
 
         const eventsString = events
-          .map(
-            ({ event: { data, method, section }, phase }) =>
-              `\t${phase.toString()}: ${section}.${method}${data.toString()}`
-          )
+          .map((event) => {
+            const {
+              event: { data, method, section },
+              phase,
+            } = event
+
+            let errorType = ''
+
+            const hasError = isError(event)
+
+            if (hasError) {
+              const [dispatchError] = (data as unknown) as ITuple<[DispatchError]>
+              errorType = dispatchError.type
+
+              if (dispatchError.isModule) {
+                const mod = dispatchError.asModule
+                const error = dispatchError.registry.findMetaError(mod)
+                errorType = `${error.section}.${error.name}`
+              }
+            }
+
+            return `\t${phase.toString()}: ${section}.${method}${data.toString()} ${
+              hasError ? '\n\t\tError: ' + chalk.red(errorType) : ''
+            }`
+          })
           .join('\n')
 
         console.log(chalk.gray(` > Events:\n${eventsString}\n`))
 
-        console.log(`Transaction result: ${isError(events) ? chalk.red('✕ Error') : chalk.green('✓ Success')}`)
+        console.log(`Transaction result: ${hasError(events) ? chalk.red('✕ Error') : chalk.green('✓ Success')}`)
 
         unsubCb()
         resolve(events)

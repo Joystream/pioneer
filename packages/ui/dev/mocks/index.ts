@@ -1,9 +1,14 @@
 import yargs from 'yargs'
 
 import { addStakingAccountModule } from './commands/addStakingAccount'
+import { announceModule } from './commands/announce'
+import { applyOnOpeningModule } from './commands/applyOnOpening'
 import { createMembersModule } from './commands/createMembers'
+import { createOpeningModule } from './commands/createOpening'
+import { fillOpeningModule } from './commands/fillOpening'
 import { removeStakingAccountModule } from './commands/removeStaking'
 import { setBudgetModule } from './commands/setBudget'
+import { voteModule } from './commands/vote'
 
 yargs(process.argv.slice(2))
   .usage('yarn node-mocks <command>')
@@ -12,4 +17,9 @@ yargs(process.argv.slice(2))
   .command(addStakingAccountModule)
   .command(removeStakingAccountModule)
   .command(setBudgetModule)
+  .command(createOpeningModule)
+  .command(applyOnOpeningModule)
+  .command(fillOpeningModule)
+  .command(voteModule)
+  .command(announceModule)
   .demandCommand().argv

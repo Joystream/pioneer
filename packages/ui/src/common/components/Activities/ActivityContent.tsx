@@ -5,7 +5,6 @@ import { ApplicationWithdrawnContent } from '@/working-groups/components/Activit
 import { AppliedOnOpeningContent } from '@/working-groups/components/Activities/AppliedOnOpeningContent'
 import { BudgetSetContent } from '@/working-groups/components/Activities/BudgetSetContent'
 import { BudgetSpendingContent } from '@/working-groups/components/Activities/BudgetSpendingContent'
-import { LeaderSetContent } from '@/working-groups/components/Activities/LeaderSetContent'
 import { OpeningAddedContent } from '@/working-groups/components/Activities/OpeningAddedContent'
 import { OpeningAnnouncedContent } from '@/working-groups/components/Activities/OpeningAnnouncedContent'
 import { OpeningCanceledContent } from '@/working-groups/components/Activities/OpeningCanceledContent'
@@ -21,20 +20,19 @@ export interface ActivityContentComponent<Activity extends BaseActivity> {
 }
 
 const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
-  AppliedOnOpening: AppliedOnOpeningContent,
-  ApplicationWithdrawn: ApplicationWithdrawnContent,
-  BudgetSpending: BudgetSpendingContent,
-  BudgetSet: BudgetSetContent,
-  LeaderSet: LeaderSetContent,
-  StatusTextChanged: StatusTextChangedContent,
-  OpeningAdded: OpeningAddedContent,
-  OpeningCanceled: OpeningCanceledContent,
-  StakeSlashed: StakeSlashedContent,
-  StakeDecreased: StakeChangedContent,
-  StakeIncreased: StakeChangedContent,
-  WorkerExited: WorkerExitedContent,
-  WorkerStartedLeaving: WorkerStartedLeavingContent,
-  OpeningFilled: OpeningFilledContent,
+  AppliedOnOpeningEvent: AppliedOnOpeningContent,
+  ApplicationWithdrawnEvent: ApplicationWithdrawnContent,
+  BudgetSpendingEvent: BudgetSpendingContent,
+  BudgetSetEvent: BudgetSetContent,
+  StatusTextChangedEvent: StatusTextChangedContent,
+  OpeningAddedEvent: OpeningAddedContent,
+  OpeningCanceledEvent: OpeningCanceledContent,
+  StakeSlashedEvent: StakeSlashedContent,
+  StakeDecreasedEvent: StakeChangedContent,
+  StakeIncreasedEvent: StakeChangedContent,
+  WorkerExitedEvent: WorkerExitedContent,
+  WorkerStartedLeavingEvent: WorkerStartedLeavingContent,
+  OpeningFilledEvent: OpeningFilledContent,
   OpeningAnnounced: OpeningAnnouncedContent,
 }
 

@@ -1,13 +1,13 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { Colors, Transitions } from '../constants'
-import { formatDateString, formatTokenValue } from '../model/formatters'
-import { Block } from '../types'
+import { BlockIconStyles } from '@/common/components/icons'
+import { TextMedium } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
+import { formatDateString } from '@/common/model/formatters'
+import { Block } from '@/common/types'
 
-import { LabelLink } from './forms'
-import { BlockIcon, BlockIconStyles } from './icons'
-import { TextMedium, TextSmall } from './typography'
+import { BlockInfo, BlockInfoContainer, BlockNetworkInfo } from './BlockInfo'
 
 export interface BlockTimeProps extends BlockTimeLayoutProps {
   block: Block
@@ -25,11 +25,7 @@ export const BlockTime = React.memo(({ block, layout, dateLabel }: BlockTimeProp
       {formatDateString(block.timestamp)}
     </AboutText>
     {layout == 'row' && <Separator>{' | '}</Separator>}
-    <BlockInfo>
-      <BlockIcon />
-      <BlockNumber>{formatTokenValue(block.number)}</BlockNumber>
-      <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>
-    </BlockInfo>
+    <BlockInfo block={block} />
   </Wrapper>
 ))
 
@@ -41,23 +37,7 @@ const Separator = styled.span`
 const AboutText = styled(TextMedium)`
   color: ${Colors.Black[600]};
 `
-const BlockInfo = styled.span`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 4px;
-  align-items: center;
-  width: fit-content;
-  height: fit-content;
-  color: ${Colors.Black[400]};
-`
-const BlockNetworkInfo = styled(TextSmall)`
-  color: ${Colors.Black[400]};
-`
-const BlockNumber = styled(LabelLink)`
-  font-size: inherit;
-  line-height: inherit;
-  transition: ${Transitions.all};
-`
+
 const Wrapper = styled.div<BlockTimeLayoutProps>`
   display: grid;
   width: fit-content;
@@ -104,7 +84,7 @@ const Wrapper = styled.div<BlockTimeLayoutProps>`
           ${BlockIconStyles} {
             color: ${Colors.Black[900]};
           }
-          ${BlockInfo} {
+          ${BlockInfoContainer} {
             color: ${Colors.Black[900]};
           }
           ${BlockNetworkInfo} {

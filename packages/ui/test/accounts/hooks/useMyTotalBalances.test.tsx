@@ -52,9 +52,9 @@ describe('useMyTotalBalances', () => {
       locks: new Array(8).fill({
         amount: createBalance(10),
         type: 'Staking Candidate',
-        isRecoverable: true,
+        isRecoverable: false,
       }),
-      recoverable: new BN(80),
+      recoverable: new BN(0),
       total: new BN(880),
       transferable: new BN(800),
     })
