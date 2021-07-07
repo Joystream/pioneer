@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { findByRole, findByText, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Route, Router } from 'react-router-dom'
@@ -48,14 +48,14 @@ describe('ProposalPreview', () => {
     const sideBar = await screen.findByRole('complementary')
     expect(sideBar).toBeDefined()
 
-    const proposerSection = (await findByText(sideBar, 'Proposer')).parentElement as HTMLElement
+    const proposerSection = (await within(sideBar).findByText('Proposer')).parentElement as HTMLElement
     expect(proposerSection).toBeDefined()
-    expect(await findByText(proposerSection, MEMBER_ALICE_DATA.handle)).toBeDefined()
+    expect(await within(proposerSection).findByText(MEMBER_ALICE_DATA.handle)).toBeDefined()
 
-    expect(await findByText(sideBar, 'History')).toBeDefined()
+    expect(await within(sideBar).findByText('History')).toBeDefined()
 
     for (const name of ['Approved', 'Rejected', 'Slashed', 'Abstained', 'Not Voted']) {
-      expect(await findByRole(sideBar, 'heading', { name })).toBeDefined()
+      expect(await within(sideBar).findByRole('heading', { name })).toBeDefined()
     }
   })
 
