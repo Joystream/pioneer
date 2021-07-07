@@ -20,19 +20,19 @@ export interface ActivityContentComponent<Activity extends BaseActivity> {
 }
 
 const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
-  AppliedOnOpening: AppliedOnOpeningContent,
-  ApplicationWithdrawn: ApplicationWithdrawnContent,
-  BudgetSpending: BudgetSpendingContent,
-  BudgetSet: BudgetSetContent,
-  StatusTextChanged: StatusTextChangedContent,
-  OpeningAdded: OpeningAddedContent,
-  OpeningCanceled: OpeningCanceledContent,
-  StakeSlashed: StakeSlashedContent,
-  StakeDecreased: StakeChangedContent,
-  StakeIncreased: StakeChangedContent,
-  WorkerExited: WorkerExitedContent,
-  WorkerStartedLeaving: WorkerStartedLeavingContent,
-  OpeningFilled: OpeningFilledContent,
+  AppliedOnOpeningEvent: AppliedOnOpeningContent,
+  ApplicationWithdrawnEvent: ApplicationWithdrawnContent,
+  BudgetSpendingEvent: BudgetSpendingContent,
+  BudgetSetEvent: BudgetSetContent,
+  StatusTextChangedEvent: StatusTextChangedContent,
+  OpeningAddedEvent: OpeningAddedContent,
+  OpeningCanceledEvent: OpeningCanceledContent,
+  StakeSlashedEvent: StakeSlashedContent,
+  StakeDecreasedEvent: StakeChangedContent,
+  StakeIncreasedEvent: StakeChangedContent,
+  WorkerExitedEvent: WorkerExitedContent,
+  WorkerStartedLeavingEvent: WorkerStartedLeavingContent,
+  OpeningFilledEvent: OpeningFilledContent,
   OpeningAnnounced: OpeningAnnouncedContent,
 }
 
