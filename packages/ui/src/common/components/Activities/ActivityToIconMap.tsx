@@ -1,5 +1,7 @@
 import { JSXElementConstructor } from 'react'
 
+import { BudgetIcon, ExiteRoleIcon, UpcomingIcon } from '@/common/components/icons/activities'
+
 import { ActivityCategory } from '../../types'
 import { AppliedIcon } from '../icons/activities/AppliedIcon'
 import { ClosedIcon } from '../icons/activities/ClosedIcon'
@@ -15,15 +17,15 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   AppliedOnOpening: [AppliedIcon, 'joystream'],
   ApplicationWithdrawn: [AppliedIcon, 'joystream'],
   BudgetSpending: [DecreasedIcon, 'negative'],
-  BudgetSet: [IncreasedIcon, 'positive'],
-  LeaderSet: [HiredIcon, 'joystream'],
+  BudgetSet: [BudgetIcon, 'positive'],
   StatusTextChanged: [AppliedIcon, 'positive'],
   OpeningAdded: [CreatedIcon, 'joystream'],
   OpeningCanceled: [ClosedIcon, 'negative'],
   StakeSlashed: [WarnedIcon, 'negative'],
-  StakeIncreased: [AppliedIcon, 'negative'],
-  StakeDecreased: [AppliedIcon, 'positive'],
-  WorkerExited: [ClosedIcon, 'negative'],
+  StakeIncreased: [IncreasedIcon, 'negative'],
+  StakeDecreased: [DecreasedIcon, 'positive'],
+  WorkerExited: [ExiteRoleIcon, 'negative'],
   WorkerStartedLeaving: [ClosedIcon, 'negative'],
   OpeningFilled: [HiredIcon, 'positive'],
+  OpeningAnnounced: [UpcomingIcon, 'joystream'],
 }

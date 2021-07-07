@@ -11,7 +11,7 @@ export const StatusTextChangedContent: ActivityContentComponent<StatusTextChange
 
     return (
       <>
-        Status updated by the
+        Status updated by the{' '}
         <ActivityRouterLink to={`/working-groups/${groupName}`}>{groupName} Working Group</ActivityRouterLink> Lead.
       </>
     )

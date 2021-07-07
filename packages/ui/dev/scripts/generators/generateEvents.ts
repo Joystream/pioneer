@@ -99,6 +99,29 @@ const generateOpeningFilledEvent = (mocks: Mocks) => () => {
   }
 }
 
+const generateWorkerLeavingEvent = (mocks: Mocks, leftAlready?: boolean) => () => {
+  const status = leftAlready ? 'left' : 'active'
+  const workers = mocks.workers.filter(worker => worker && worker.status === status)
+  const worker = workers[randomFromRange(0, workers.length - 1)]
+  return {
+    createdAt: faker.date.recent(7),
+    groupId: worker?.groupId,
+    workerId: worker?.id,
+  }
+}
+
+const generateStatusTextChangedEvents = (mocks: Mocks) => {
+  const groups = mocks.workingGroups
+  const openings = mocks.upcomingOpenings
+  return groups.map(group => ({
+    createdAt: faker.date.recent(7),
+    groupId: group.id,
+    upcomingworkinggroupopeningcreatedInEventIds: [openings.find(opening => opening.groupId == group.id)?.id],
+    // assuming this controls the "status updated" activity, just the array being empty or non-empty matters
+    workinggroupmetadatasetInEventIds: Math.random() > .5 ? ['1'] : [],
+  }))
+}
+
 export const eventGenerators = {
   rewardPaidEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
   budgetSpendingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
@@ -108,6 +131,9 @@ export const eventGenerators = {
   stakeIncreasedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
   stakeSlashedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks)),
   openingFilledEvents : (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
+  workerExitedEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
+  workerStartedLeavingEvents : (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks)),
+  statusTextChangedEvents : (mocks: Mocks) => generateStatusTextChangedEvents(mocks),
 }
 
 export const generateAllEvents = (mocks: Mocks) => {

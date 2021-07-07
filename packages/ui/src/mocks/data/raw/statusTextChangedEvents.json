@@ -1,0 +1,34 @@
+[
+  {
+    "createdAt": "2021-07-03T11:50:28.089Z",
+    "groupId": "forumWorkingGroup",
+    "upcomingworkinggroupopeningcreatedInEventIds": [
+      "forumWorkingGroup-0"
+    ],
+    "workinggroupmetadatasetInEventIds": ["1"]
+  },
+  {
+    "createdAt": "2021-06-30T23:22:05.064Z",
+    "groupId": "storageWorkingGroup",
+    "upcomingworkinggroupopeningcreatedInEventIds": [
+      "storageWorkingGroup-2"
+    ],
+    "workinggroupmetadatasetInEventIds": []
+  },
+  {
+    "createdAt": "2021-07-03T17:13:17.278Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "upcomingworkinggroupopeningcreatedInEventIds": [
+      "contentDirectoryWorkingGroup-5"
+    ],
+    "workinggroupmetadatasetInEventIds": ["1"]
+  },
+  {
+    "createdAt": "2021-07-04T13:51:26.285Z",
+    "groupId": "membershipWorkingGroup",
+    "upcomingworkinggroupopeningcreatedInEventIds": [
+      "membershipWorkingGroup-8"
+    ],
+    "workinggroupmetadatasetInEventIds": []
+  }
+]

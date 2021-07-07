@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { findByText, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Route, Router } from 'react-router-dom'
@@ -45,12 +45,17 @@ describe('ProposalPreview', () => {
 
     expect(await screen.findByRole('heading', { name: 'Discussion' })).toBeDefined()
 
-    const proposerSection = await screen.findByText('Proposer').then((element) => element?.parentElement)
-    const proposerHandle = proposerSection && (await findByText(proposerSection, MEMBER_ALICE_DATA.handle))
-    expect(proposerHandle).toBeDefined()
+    const sideBar = await screen.findByRole('complementary')
+    expect(sideBar).toBeDefined()
+
+    const proposerSection = (await within(sideBar).findByText('Proposer')).parentElement as HTMLElement
+    expect(proposerSection).toBeDefined()
+    expect(await within(proposerSection).findByText(MEMBER_ALICE_DATA.handle)).toBeDefined()
+
+    expect(await within(sideBar).findByText('History')).toBeDefined()
 
     for (const name of ['Approved', 'Rejected', 'Slashed', 'Abstained', 'Not Voted']) {
-      expect(await screen.findByRole('heading', { name })).toBeDefined()
+      expect(await within(sideBar).findByRole('heading', { name })).toBeDefined()
     }
   })
 

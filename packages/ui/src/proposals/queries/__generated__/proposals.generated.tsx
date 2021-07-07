@@ -61,7 +61,17 @@ export type ProposalWithDetailsFieldsFragment = {
   __typename: 'Proposal'
   stakingAccount?: Types.Maybe<string>
   description: string
+  statusSetAtBlock: number
   votes: Array<{ __typename: 'ProposalVotedEvent' } & VoteFieldsFragment>
+  createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number }
+  proposalStatusUpdates: Array<{
+    __typename: 'ProposalStatusUpdatedEvent'
+    inBlock: number
+    newStatus:
+      | { __typename: 'ProposalStatusDeciding' }
+      | { __typename: 'ProposalStatusGracing' }
+      | { __typename: 'ProposalStatusDormant' }
+  }>
 } & ProposalFieldsFragment
 
 export type GetProposalsQueryVariables = Types.Exact<{
@@ -110,8 +120,18 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
     ...ProposalFields
     stakingAccount
     description
+    statusSetAtBlock
     votes {
       ...VoteFields
+    }
+    createdInEvent {
+      inBlock
+    }
+    proposalStatusUpdates {
+      inBlock
+      newStatus {
+        __typename
+      }
     }
   }
   ${ProposalFieldsFragmentDoc}

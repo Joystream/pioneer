@@ -8,6 +8,8 @@ import {
   asAppliedOnOpeningActivity,
   asStakeChangedActivity,
   asStakeSlashedActivity,
+  asWorkerExitedActivity,
+  asWorkerStartedLeavingActivity,
 } from '@/working-groups/types/WorkingGroupActivity'
 
 export const useMemberNotifications = () => {
@@ -25,6 +27,8 @@ export const useMemberNotifications = () => {
             ...data.stakeDecreasedEvents.map(asStakeChangedActivity),
             ...data.stakeIncreasedEvents.map(asStakeChangedActivity),
             ...data.stakeSlashedEvents.map(asStakeSlashedActivity),
+            ...data.workerExitedEvents.map(asWorkerExitedActivity),
+            ...data.workerStartedLeavingEvents.map(asWorkerStartedLeavingActivity),
           ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         : [],
     [loading, data, workerIds.length]
