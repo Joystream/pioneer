@@ -18,7 +18,6 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   ApplicationWithdrawnEvent: [AppliedIcon, 'joystream'],
   BudgetSpendingEvent: [DecreasedIcon, 'negative'],
   BudgetSetEvent: [BudgetIcon, 'positive'],
-  LeaderSetEvent: [HiredIcon, 'joystream'],
   StatusTextChangedEvent: [AppliedIcon, 'positive'],
   OpeningAddedEvent: [CreatedIcon, 'joystream'],
   OpeningCanceledEvent: [ClosedIcon, 'negative'],

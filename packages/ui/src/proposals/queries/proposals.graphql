@@ -22,8 +22,18 @@ fragment ProposalWithDetailsFields on Proposal {
   ...ProposalFields
   stakingAccount
   description
+  statusSetAtBlock
   votes {
     ...VoteFields
+  }
+  createdInEvent {
+    inBlock
+  }
+  proposalStatusUpdates {
+    inBlock
+    newStatus {
+      __typename
+    }
   }
 }
 

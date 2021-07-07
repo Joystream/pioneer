@@ -1,11 +1,9 @@
 import { Meta, Story } from '@storybook/react'
-import faker from 'faker'
 import React from 'react'
-import styled from 'styled-components'
 
+import { BlockHistoryLine } from '@/common/components/BlockTime'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { TextInlineSmall } from '@/common/components/typography'
+import { asBlock } from '@/common/types'
 
 import { Stepper, StepperProps } from './Stepper'
 
@@ -34,28 +32,16 @@ Simple.args = {
   ],
 }
 
-const HistoryDetails = styled(({ tooltipText, ...props }) => (
-  <div {...props}>
-    <TextInlineSmall lighter>14/10/2020, 10:25 PM CET</TextInlineSmall>
-    <Tooltip tooltipText={tooltipText}>
-      <TooltipDefault />
-    </Tooltip>
-  </div>
-))`
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-`
-
+const details = <BlockHistoryLine block={asBlock()} />
 export const History = Template.bind({})
 History.args = {
   theme: 'dark',
   steps: [
-    { title: 'Created', type: 'past', details: <HistoryDetails tooltipText={faker.lorem.words(6)} /> },
-    { title: 'Accepted', type: 'past', details: <HistoryDetails tooltipText={faker.lorem.words(6)} /> },
-    { title: 'Dormant', type: 'past', details: <HistoryDetails tooltipText={faker.lorem.words(6)} /> },
-    { title: 'Deciding', type: 'past', details: <HistoryDetails tooltipText={faker.lorem.words(6)} /> },
-    { title: 'Deciding', type: 'active', details: <HistoryDetails tooltipText={faker.lorem.words(6)} /> },
+    { title: 'Created', type: 'past', details },
+    { title: 'Accepted', type: 'past', details },
+    { title: 'Dormant', type: 'past', details },
+    { title: 'Deciding', type: 'past', details },
+    { title: 'Deciding', type: 'active', details },
   ],
 }
 
