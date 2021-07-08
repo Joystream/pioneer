@@ -131,7 +131,7 @@ export const TriggerAndDiscussionStep = ({
               checked={fields.trigger}
               onChange={(isSet) => setValue('trigger', isSet)}
             />
-            <Tooltip tooltipText="something">
+            <Tooltip tooltipText="Lorem ipsum...">
               <TooltipDefault />
             </Tooltip>
           </InlineToggleWrap>
@@ -163,7 +163,7 @@ export const TriggerAndDiscussionStep = ({
               checked={fields.discussionMode}
               onChange={(isSet) => setValue('discussionMode', isSet)}
             />
-            <Tooltip tooltipText="something">
+            <Tooltip tooltipText="Lorem ipsum...">
               <TooltipDefault />
             </Tooltip>
           </InlineToggleWrap>
