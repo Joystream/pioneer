@@ -43,7 +43,7 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLingkProps>`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 12px 12px 12px 24px;
+  padding: 0px 12px 0px 24px;
   border-radius: 0 ${BorderRad.s} ${BorderRad.s} 0;
   font-size: 16px;
   font-weight: 400;

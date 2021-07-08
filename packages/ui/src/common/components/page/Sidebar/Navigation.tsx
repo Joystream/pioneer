@@ -17,14 +17,14 @@ export const Navigation = styled.nav`
 export const NavigationInnerWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 76px 1fr 176px;
+  grid-template-rows: 76px 1fr 168px;
   grid-template-areas:
     'barheader'
     'barlinks'
     'barmember';
   width: 100%;
   height: 100%;
-  padding-bottom: 20px;
+  padding-bottom: 2px;
   color: ${Colors.White};
   background-color: ${Colors.Black[900]};
   z-index: ${ZIndex.navbarInner};
