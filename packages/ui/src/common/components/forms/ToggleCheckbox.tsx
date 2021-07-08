@@ -1,6 +1,8 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { Tooltip, TooltipContainer } from '@/common/components/Tooltip'
+
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
 import { Label } from './Label'
@@ -136,6 +138,10 @@ export const InlineToggleWrap = styled.div`
   }
 
   ${ToggleContainer} {
+    margin-left: 12px;
+  }
+
+  ${TooltipContainer} {
     margin-left: 12px;
   }
 `
