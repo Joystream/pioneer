@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import { useMemo } from 'react'
 
 import { Activity } from '../types'

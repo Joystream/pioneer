@@ -48,7 +48,7 @@ export const MyApplications = () => {
           {pastApplications?.length ? (
             <ContentWithTabs>
               <Label>Past applications</Label>
-              <ApplicationsList applications={pastApplications} />
+              <ApplicationsList applications={pastApplications} pastApplications />
             </ContentWithTabs>
           ) : null}
         </MainPanel>
