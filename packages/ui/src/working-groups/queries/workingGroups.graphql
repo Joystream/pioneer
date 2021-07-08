@@ -583,6 +583,36 @@ query GetGroupEvents($group_eq: ID!) {
   }
 }
 
+query GetWorkerEvents($workerId: ID, $applicationId: ID) {
+  appliedOnOpeningEvents(where: { application_eq: $applicationId }) {
+    ...AppliedOnOpeningEventFields
+  }
+  applicationWithdrawnEvents(where: { application_eq: $applicationId }) {
+    ...ApplicationWithdrawnEventFields
+  }
+  stakeDecreasedEvents(where: { worker: { id_eq: $workerId } }) {
+    ...StakeDecreasedEventFields
+  }
+  stakeIncreasedEvents(where: { worker: { id_eq: $workerId } }) {
+    ...StakeIncreasedEventFields
+  }
+  stakeSlashedEvents(where: { worker: { id_eq: $workerId} }) {
+    ...StakeSlashedEventFields
+  }
+  workerStartedLeavingEvents(where: { worker: { id_eq: $workerId } }) {
+    ...WorkerStartedLeavingEventFields
+  }
+  workerExitedEvents(where: { worker: { id_eq: $workerId } }) {
+    ...WorkerExitedEventFields
+  }
+  terminatedWorkerEvents(where: { worker: { id_eq: $workerId } }) {
+    ...TerminatedWorkerEventFields
+  }
+  terminatedLeaderEvents(where: { worker: { id_eq: $workerId } }) {
+    ...TerminatedLeaderEventFields
+  }
+}
+
 query GetWorkerIds($where: WorkerWhereInput) {
   workers(where: $where) {
     id
