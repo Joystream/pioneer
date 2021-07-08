@@ -234,12 +234,21 @@ describe('UI: AddNewProposalModal', () => {
             expect(button).toBeDisabled()
           })
 
-          it('Invalid block number', async () => {
+          it('Invalid block number: too low', async () => {
             await triggerYes()
             await fillTriggerBlock(10)
 
             expect(await screen.getByText('The minimum block number is 20.')).toBeDefined()
 
+            const button = await getNextStepButton()
+            expect(button).toBeDisabled()
+          })
+
+          it('Invalid block number: too high', async () => {
+            await triggerYes()
+            await fillTriggerBlock(100000000)
+
+            expect(await screen.getByText(/(^The maximum block number is).*/i)).toBeDefined()
             const button = await getNextStepButton()
             expect(button).toBeDisabled()
           })
