@@ -105,7 +105,7 @@ export const AddNewProposalModal = () => {
 
     if (
       state.matches('generalParameters.triggerAndDiscussion') &&
-      state.context.trigger !== undefined &&
+      state.context.triggerBlock !== undefined &&
       state.context.discussionMode &&
       state.context.discussionWhitelist
     ) {
@@ -185,7 +185,7 @@ export const AddNewProposalModal = () => {
             {state.matches('generalParameters.triggerAndDiscussion') && (
               <TriggerAndDiscussionStep
                 params={{ constants: constants as ProposalConstants, ...state.context }}
-                setTrigger={(trigger?: ProposalTrigger) => send('SET_TRIGGER', { trigger })}
+                setTriggerBlock={(triggerBlock?: ProposalTrigger) => send('SET_TRIGGER_BLOCK', { triggerBlock })}
                 setDiscussionMode={(mode) => send('SET_DISCUSSION_MODE', { mode })}
                 setDiscussionWhitelist={(whitelist) => send('SET_DISCUSSION_WHITELIST', { whitelist })}
               />

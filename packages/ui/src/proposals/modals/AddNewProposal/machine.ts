@@ -24,7 +24,7 @@ export type ProposalDiscussionMode = 'open' | 'closed'
 export type ProposalDiscussionWhitelist = Member[]
 
 interface TriggerAndDiscussionContext extends Required<BaseDetailsContext> {
-  trigger?: ProposalTrigger
+  triggerBlock?: ProposalTrigger
   discussionMode: ProposalDiscussionMode
   discussionWhitelist: ProposalDiscussionWhitelist
 }
@@ -53,7 +53,7 @@ type SelectProposalEvent = { type: 'SELECT'; proposalType: ProposalDetails }
 type SelectAccountEvent = { type: 'SELECT'; stakingAccount: Account }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
-type SetTriggerEvent = { type: 'SET_TRIGGER'; trigger: ProposalTrigger | undefined }
+type SetTriggerBlockEvent = { type: 'SET_TRIGGER_BLOCK'; triggerBlock: ProposalTrigger | undefined }
 type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscussionMode }
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
 
@@ -64,14 +64,14 @@ export type AddNewProposalEvent =
   | SelectAccountEvent
   | SetTitleEvent
   | SetRationaleEvent
-  | SetTriggerEvent
+  | SetTriggerBlockEvent
   | SetDiscussionModeEvent
   | SetDiscussionWhitelistEvent
 
 export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNewProposalEvent, AddNewProposalState>({
   initial: 'requirementsVerification',
   context: {
-    trigger: false,
+    triggerBlock: false,
     discussionMode: 'open',
     discussionWhitelist: [],
   },
@@ -154,11 +154,11 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
               cond: (context) =>
                 context.discussionMode !== undefined &&
                 context.discussionWhitelist !== undefined &&
-                context.trigger !== undefined,
+                context.triggerBlock !== undefined,
             },
-            SET_TRIGGER: {
+            SET_TRIGGER_BLOCK: {
               actions: assign({
-                trigger: (context, event) => (event as SetTriggerEvent).trigger,
+                triggerBlock: (context, event) => (event as SetTriggerBlockEvent).triggerBlock,
               }),
             },
             SET_DISCUSSION_MODE: {

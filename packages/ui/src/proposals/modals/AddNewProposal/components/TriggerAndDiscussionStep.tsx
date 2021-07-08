@@ -31,7 +31,7 @@ interface TriggerAndDiscussionStepProps {
     discussionMode: ProposalDiscussionMode
     discussionWhitelist: ProposalDiscussionWhitelist
   }
-  setTrigger: (trigger?: ProposalTrigger) => void
+  setTriggerBlock: (trigger?: ProposalTrigger) => void
   setDiscussionMode: (mode: ProposalDiscussionMode) => void
   setDiscussionWhitelist: (members: Member[]) => void
 }
@@ -46,7 +46,7 @@ const FormSchema = Yup.object().shape({})
 
 export const TriggerAndDiscussionStep = ({
   params,
-  setTrigger,
+  setTriggerBlock,
   setDiscussionMode,
   setDiscussionWhitelist,
 }: TriggerAndDiscussionStepProps) => {
@@ -61,7 +61,7 @@ export const TriggerAndDiscussionStep = ({
 
   useEffect(() => {
     if (fields.triggerBlock && !isValidTriggerBlock(new BN(fields.triggerBlock))) {
-      setTrigger(undefined)
+      setTriggerBlock(undefined)
     }
   }, [currentBlock?.toNumber()])
 
@@ -75,12 +75,12 @@ export const TriggerAndDiscussionStep = ({
   const setValue = (field: keyof StepFormFields, value: any) => {
     switch (field) {
       case 'trigger':
-        setTrigger(!value ? false : undefined)
+        setTriggerBlock(!value ? false : undefined)
         break
       case 'triggerBlock':
         value = !isNaN(value) ? value : fields.triggerBlock
 
-        setTrigger(value && isValidTriggerBlock(new BN(value)) ? parseInt(value) : undefined)
+        setTriggerBlock(value && isValidTriggerBlock(new BN(value)) ? parseInt(value) : undefined)
         break
       case 'discussionMode':
         if (value === true) {
