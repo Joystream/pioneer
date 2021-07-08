@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const NUMBER_REGEX = /^\d*(\.\d*)?$/
+const NUMBER_REGEX = /^\d*(\.\d*)?$/
 
 export function useNumberInput(decimals = 6) {
   const [value, setValue] = useState('')
@@ -19,7 +19,7 @@ export function useNumberInput(decimals = 6) {
   return [value, set] as const
 }
 
-export function stripLeadingZeroes(value: string) {
+function stripLeadingZeroes(value: string) {
   if (value === '') {
     return value
   }
@@ -30,7 +30,7 @@ export function stripLeadingZeroes(value: string) {
   return value
 }
 
-export function truncateDecimals(value: string, decimals: number) {
+function truncateDecimals(value: string, decimals: number) {
   if (value.includes('.')) {
     const [integer, decimal] = value.split('.')
     const trimmed = decimal.substring(0, decimals)
@@ -40,6 +40,6 @@ export function truncateDecimals(value: string, decimals: number) {
   }
 }
 
-export function cleanInputValue(value: string) {
+function cleanInputValue(value: string) {
   return value.replace(/,/g, '')
 }

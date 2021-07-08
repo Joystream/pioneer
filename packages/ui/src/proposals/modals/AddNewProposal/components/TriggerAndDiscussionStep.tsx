@@ -12,7 +12,6 @@ import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO, BorderRad, Colors, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useForm } from '@/common/hooks/useForm'
-import { cleanInputValue, NUMBER_REGEX, stripLeadingZeroes, truncateDecimals } from '@/common/hooks/useNumberInput'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -77,8 +76,7 @@ export const TriggerAndDiscussionStep = ({
         setTrigger(!value ? false : undefined)
         break
       case 'triggerBlock':
-        value = cleanInputValue(value)
-        value = NUMBER_REGEX.test(value) ? truncateDecimals(stripLeadingZeroes(value), 0) : ''
+        value = !isNaN(value) ? value : fields.triggerBlock
 
         setTrigger(value && isValidTriggerBlock(new BN(value)) ? parseInt(value) : undefined)
         break
