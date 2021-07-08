@@ -55,9 +55,11 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
 }
 
 const ProposalItem = styled(TableListItem)`
-  grid-column-gap: 32px;
-  padding-right: 24px;
+  grid-column-gap: 24px;
+  padding-right: 16px;
   background-color: ${({ isPast }: { isPast?: boolean }) => (isPast ? Colors.Black[50] : Colors.White)};
+  grid-template-rows: unset;
+  height: 86px;
 `
 
 const StageField = styled.div`

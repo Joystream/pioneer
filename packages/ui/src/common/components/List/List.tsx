@@ -31,6 +31,6 @@ export const TableListRowStyle = (colLayout?: string) => css`
 
 export const TableListItem = styled(ListItem)`
   align-items: center;
-  grid-template-rows: 90px;
+  height: 92px;
   ${(props: { colLayout?: string }) => TableListRowStyle(props.colLayout)}
 `
