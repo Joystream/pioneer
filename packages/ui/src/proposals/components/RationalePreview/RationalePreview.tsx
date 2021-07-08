@@ -7,7 +7,6 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { BorderRad, Colors } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
-import { spacing } from '@/common/utils/styles'
 
 interface Props {
   rationale: string
@@ -18,18 +17,19 @@ export const RationalePreview = ({ rationale }: Props) => {
   return (
     <RationaleSection>
       <RationaleToggle>
-        <h4>Rationale</h4>
+        <h5>Rationale</h5>
         <ToggleButton isDropped={isOpen} onClick={toggle} />
       </RationaleToggle>
 
-      <RationaleContainer isDropped={isOpen}>
+      <DropDownToggle isDropped={isOpen}>
         <MarkdownPreview markdown={rationale} />
-      </RationaleContainer>
+      </DropDownToggle>
     </RationaleSection>
   )
 }
 
-const RationaleSection = styled(RowGapBlock).attrs({ gap: 8 })`
+const RationaleSection = styled(RowGapBlock).attrs({ gap: 24 })`
+  padding: 16px;
   background: ${Colors.Black[50]};
   border: 1px solid ${Colors.Black[200]};
   border-radius: ${BorderRad.s};
@@ -40,15 +40,10 @@ const RationaleToggle = styled.label`
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  padding: ${spacing(2)};
 `
 
 const ToggleButton = styled(DropDownButton)`
   ${ButtonInnerWrapper} > svg {
     color: ${Colors.Black[600]};
   }
-`
-
-const RationaleContainer = styled(DropDownToggle)`
-  padding: ${spacing(2)};
 `
