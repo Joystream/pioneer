@@ -1,4 +1,5 @@
 import BN from 'bn.js'
+import { differenceInSeconds } from 'date-fns'
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
@@ -9,7 +10,7 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-import { BN_ZERO, BorderRad, Colors, Transitions } from '@/common/constants'
+import { BN_ZERO, BorderRad, Colors, SECONDS_PER_BLOCK, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useForm } from '@/common/hooks/useForm'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
@@ -53,8 +54,9 @@ export const TriggerAndDiscussionStep = ({
 
   const currentBlock = useCurrentBlockNumber()
   const minTriggerBlock = currentBlock ? currentBlock.addn(constants.votingPeriod).addn(constants.gracePeriod) : BN_ZERO
+  const maxTriggerBlock = Math.round(differenceInSeconds(new Date(2030, 0, 1), Date.now()) / SECONDS_PER_BLOCK)
   const isValidTriggerBlock = (block: BN) => {
-    return block && block.gte(minTriggerBlock)
+    return block && block.gte(minTriggerBlock) && block.lten(maxTriggerBlock)
   }
 
   useEffect(() => {
@@ -97,9 +99,13 @@ export const TriggerAndDiscussionStep = ({
 
     const value = new BN(fields.triggerBlock)
 
-    return isValidTriggerBlock(value)
-      ? `≈ ${inBlocksDate(value.sub(minTriggerBlock))}`
-      : `The minimum block number is ${minTriggerBlock.toNumber()}.`
+    if (!isValidTriggerBlock(value)) {
+      return value.gten(maxTriggerBlock)
+        ? `The maximum block number is ${maxTriggerBlock}.`
+        : `The minimum block number is ${minTriggerBlock.toNumber()}.`
+    }
+
+    return `≈ ${inBlocksDate(value.sub(minTriggerBlock))}`
   }
 
   const addMemberToWhitelist = (member: Member) => {
