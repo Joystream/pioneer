@@ -105,12 +105,10 @@ export const TriggerAndDiscussionStep = ({
   }
 
   const addMemberToWhitelist = (member: Member) => {
-    setDiscussionWhitelist([...(discussionWhitelist as ProposalDiscussionWhitelist), member])
+    setDiscussionWhitelist([...discussionWhitelist, member])
   }
   const removeMemberFromWhitelist = (member: Member) => {
-    setDiscussionWhitelist(
-      (discussionWhitelist as ProposalDiscussionWhitelist).filter((whitelistMember) => whitelistMember.id !== member.id)
-    )
+    setDiscussionWhitelist(discussionWhitelist.filter((whitelistMember) => whitelistMember.id !== member.id))
   }
 
   return (
@@ -176,15 +174,11 @@ export const TriggerAndDiscussionStep = ({
               <InputComponent label="Add member to whitelist" required inputSize="l">
                 <SelectMember
                   onChange={(member) => addMemberToWhitelist(member)}
-                  filter={(member) =>
-                    !(discussionWhitelist as ProposalDiscussionWhitelist).find(
-                      (whitelistMember) => whitelistMember.id === member.id
-                    )
-                  }
+                  filter={(member) => !discussionWhitelist.find((whitelistMember) => whitelistMember.id === member.id)}
                 />
               </InputComponent>
               <WhitelistContainer>
-                {(discussionWhitelist as ProposalDiscussionWhitelist).map((member) => (
+                {discussionWhitelist.map((member) => (
                   <WhitelistMember key={member.id}>
                     <MemberInfo member={member} memberSize="s" />
                     <WhitelistRemoveMemberIcon onClick={() => removeMemberFromWhitelist(member)} id="removeMember">
