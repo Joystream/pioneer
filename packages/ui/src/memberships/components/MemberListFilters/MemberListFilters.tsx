@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
 import { TogglableIcon } from '@/common/components/forms'
-import { FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
+import { Fields, FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
 import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { FilterSelect } from '@/common/components/selects'
 import { objectEquals } from '@/common/utils'
@@ -72,60 +72,58 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
 
   return (
     <MembersFilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
-      <Fields>
-        <FieldsHeader>
-          <h6>All members</h6>
-          {memberCount && <MemberCount count={memberCount} />}
-        </FieldsHeader>
+      <FieldsHeader>
+        <h6>All members</h6>
+        {memberCount && <MemberCount count={memberCount} />}
+      </FieldsHeader>
 
-        <SelectContainer>
-          <SelectMemberRoles
-            value={roles}
-            onChange={(value) => dispatch({ type: 'change', field: 'roles', value })}
-            onApply={apply}
-            onClear={() => {
-              dispatch({ type: 'change', field: 'roles', value: [] })
-              onApply({ ...filters, roles: [] })
-            }}
-          />
-        </SelectContainer>
+      <SelectContainer>
+        <SelectMemberRoles
+          value={roles}
+          onChange={(value) => dispatch({ type: 'change', field: 'roles', value })}
+          onApply={apply}
+          onClear={() => {
+            dispatch({ type: 'change', field: 'roles', value: [] })
+            onApply({ ...filters, roles: [] })
+          }}
+        />
+      </SelectContainer>
 
-        <SelectContainer>
-          <FilterSelect
-            title="Council Members"
-            options={[true, false]}
-            renderOption={(value) => (value ? 'Yes' : 'No')}
-            value={concil}
-            onChange={(value) => {
-              dispatch({ type: 'change', field: 'concil', value })
-              onApply({ ...filters, concil: value })
-            }}
-          />
-        </SelectContainer>
+      <SelectContainer>
+        <FilterSelect
+          title="Council Members"
+          options={[true, false]}
+          renderOption={(value) => (value ? 'Yes' : 'No')}
+          value={concil}
+          onChange={(value) => {
+            dispatch({ type: 'change', field: 'concil', value })
+            onApply({ ...filters, concil: value })
+          }}
+        />
+      </SelectContainer>
 
-        <ToggleContainer>
-          <FilterLabel>Member Type</FilterLabel>
-          <TogglableIcon
-            value={onlyVerified}
-            onChange={(value) => {
-              dispatch({ type: 'change', field: 'onlyVerified', value })
-              onApply({ ...filters, onlyVerified: value })
-            }}
-          >
-            <VerifiedMemberIcon />
-          </TogglableIcon>
+      <ToggleContainer>
+        <FilterLabel>Member Type</FilterLabel>
+        <TogglableIcon
+          value={onlyVerified}
+          onChange={(value) => {
+            dispatch({ type: 'change', field: 'onlyVerified', value })
+            onApply({ ...filters, onlyVerified: value })
+          }}
+        >
+          <VerifiedMemberIcon />
+        </TogglableIcon>
 
-          <TogglableIcon
-            value={onlyFounder}
-            onChange={(value) => {
-              dispatch({ type: 'change', field: 'onlyFounder', value })
-              onApply({ ...filters, onlyFounder: value })
-            }}
-          >
-            <FounderMemberIcon />
-          </TogglableIcon>
-        </ToggleContainer>
-      </Fields>
+        <TogglableIcon
+          value={onlyFounder}
+          onChange={(value) => {
+            dispatch({ type: 'change', field: 'onlyFounder', value })
+            onApply({ ...filters, onlyFounder: value })
+          }}
+        >
+          <FounderMemberIcon />
+        </TogglableIcon>
+      </ToggleContainer>
     </MembersFilterBox>
   )
 }
@@ -133,19 +131,20 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
 const MembersFilterBox = styled(FilterBox)`
   height: 72px;
   margin-top: ${spacing(1)};
-`
 
-const Fields = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  ${Fields} {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 16px;
+    height: 100%;
+  }
 `
 
 const FieldsHeader = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
-  align-self: center;
   margin-right: auto;
 `
 const MemberCount = styled(CountBadge)`
