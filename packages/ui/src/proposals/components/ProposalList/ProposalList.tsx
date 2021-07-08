@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { List } from '@/common/components/List'
-import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { ListHeader } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { ProposalColLayout } from '@/proposals/constants'
+import { ProposalColLayout, ProposalsListHeaders } from '@/proposals/constants'
 import { Proposal } from '@/proposals/types'
 
 import { ProposalListItem } from './ProposalListItem'
@@ -15,15 +15,15 @@ export interface ProposalListProps {
 
 export const ProposalList = ({ proposals, isPast }: ProposalListProps) => (
   <RowGapBlock gap={4}>
-    <ListHeaders colLayout={ProposalColLayout}>
-      <ListHeader>{isPast ? 'Ended' : 'Created'}</ListHeader>
+    <ProposalsListHeaders colLayout={ProposalColLayout}>
+      <ListHeader />
       <ListHeader>Stage</ListHeader>
-      <ListHeader>Type</ListHeader>
       <ListHeader>Proposer</ListHeader>
-    </ListHeaders>
+      <ListHeader />
+    </ProposalsListHeaders>
     <List as="div">
       {proposals.map((proposal) => (
-        <ProposalListItem key={proposal.id} proposal={proposal} />
+        <ProposalListItem key={proposal.id} proposal={proposal} isPast={isPast} />
       ))}
     </List>
   </RowGapBlock>

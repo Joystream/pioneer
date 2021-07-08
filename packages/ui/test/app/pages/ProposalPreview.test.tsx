@@ -25,25 +25,31 @@ describe('ProposalPreview', () => {
   it('Loading', async () => {
     renderPage()
 
-    expect(await screen.findByRole('heading', { name: 'Loading...' })).toBeDefined()
+    expect(await screen.findByText('Loading...')).toBeDefined()
   })
 
-  it('Proposal loaded', async () => {
+  it('Main content', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByRole('heading', { name: 'Loading...' }))
+    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
 
-    expect(await screen.findByRole('heading', { name: PROPOSAL_DATA.title })).toBeDefined()
+    expect(await screen.findByText(PROPOSAL_DATA.title, { selector: 'h2' })).toBeDefined()
 
     expect(await screen.findByText('Deciding')).toBeDefined()
 
     expect(await screen.findAllByText(/(?:Approval|Slashing) (?:Quorum|Threshold)/)).toHaveLength(4)
 
-    expect(await screen.findByRole('heading', { name: 'Update Working Group Budget' })).toBeDefined()
+    expect(await screen.findByText('Update Working Group Budget')).toBeDefined()
 
-    expect(await screen.findByRole('heading', { name: 'Rationale' })).toBeDefined()
+    expect(await screen.findByText('Rationale')).toBeDefined()
 
-    expect(await screen.findByRole('heading', { name: 'Discussion' })).toBeDefined()
+    expect(await screen.findByText('Discussion')).toBeDefined()
+  })
+
+  it('Sidebar', async () => {
+    renderPage()
+
+    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
 
     const sideBar = await screen.findByRole('complementary')
     expect(sideBar).toBeDefined()
@@ -55,7 +61,7 @@ describe('ProposalPreview', () => {
     expect(await within(sideBar).findByText('History')).toBeDefined()
 
     for (const name of ['Approved', 'Rejected', 'Slashed', 'Abstained', 'Not Voted']) {
-      expect(await within(sideBar).findByRole('heading', { name })).toBeDefined()
+      expect(await within(sideBar).findByText(name)).toBeDefined()
     }
   })
 

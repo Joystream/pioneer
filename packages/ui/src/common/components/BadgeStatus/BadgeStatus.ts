@@ -23,7 +23,7 @@ export const BadgeStatus = styled.span<BadgeStatusProps>`
   line-height: 16px;
   font-weight: 700;
   text-transform: uppercase;
-  ${Overflow.FullDots}
+  ${Overflow.FullDots};
 
   ${({ separated }) =>
     separated &&
