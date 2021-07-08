@@ -1,38 +1,27 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { LockType, BalanceLock } from '@/accounts/types'
+import { BalanceLock, LockType } from '@/accounts/types'
 import { EnvelopeIcon, LabelIcon, LockIcon, VoteIcon } from '@/common/components/icons/locks'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 
-export const lockIcon = (type: LockType) => {
-  switch (type) {
-    case 'Voting':
-      return <VoteIcon />
-    case 'Council Candidate':
-      return <LockIcon />
-    case 'Councilor':
-      return <LockIcon />
-    case 'Validation':
-      return <LockIcon />
-    case 'Nomination':
-      return <LockIcon />
-    case 'Proposals':
-      return <LockIcon />
-    case 'Storage Worker':
-      return <LockIcon />
-    case 'Content Directory Worker':
-      return <LockIcon />
-    case 'Forum Worker':
-      return <LockIcon />
-    case 'Membership Worker':
-      return <LockIcon />
-    case 'Invitation':
-      return <EnvelopeIcon />
-    case 'Staking Candidate':
-      return <LabelIcon />
-  }
+const locksMap: Record<LockType, ReactElement> = {
+  Voting: <VoteIcon />,
+  'Council Candidate': <LabelIcon />,
+  Councilor: <LockIcon />,
+  Validation: <LockIcon />,
+  Nomination: <LockIcon />,
+  Proposals: <LockIcon />,
+  'Storage Worker': <LabelIcon />,
+  'Content Directory Worker': <LabelIcon />,
+  'Forum Worker': <LabelIcon />,
+  'Membership Worker': <LabelIcon />,
+  Invitation: <EnvelopeIcon />,
+  'Staking Candidate': <LockIcon />,
+  Bounty: <LockIcon />,
 }
+
+export const lockIcon = (type: LockType) => locksMap[type]
 
 export interface AccountLocksProps {
   locks?: BalanceLock[]
