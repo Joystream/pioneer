@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { AccountLocks, AccountLocksProps } from '@/accounts/components/AccountLocks'
+import { lockTypes } from '@/accounts/model/lockTypes'
 
 export default {
   title: 'Accounts/AccountLocks',
@@ -13,9 +14,9 @@ const Template: Story<AccountLocksProps> = (args) => <AccountLocks {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  locks: [
-    { type: 'Voting', amount: new BN(10), isRecoverable: false },
-    { type: 'Staking Candidate', amount: new BN(0), isRecoverable: true },
-    { type: 'Councilor', amount: new BN(20), isRecoverable: false },
-  ],
+  locks: Object.values(lockTypes).map((lockType) => ({
+    type: lockType,
+    amount: new BN(10),
+    isRecoverable: false,
+  })),
 }

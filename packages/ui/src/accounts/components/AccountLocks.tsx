@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { LockType, BalanceLock } from '@/accounts/types'
 import { EnvelopeIcon } from '@/common/components/icons/EnvelopeIcon'
 import { LabelIcon } from '@/common/components/icons/LabelIcon'
+import { LockIcon } from '@/common/components/icons/locks/LockIcon'
 import { VoteIcon } from '@/common/components/icons/VoteIcon'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 
@@ -12,23 +13,23 @@ export const lockIcon = (type: LockType) => {
     case 'Voting':
       return <VoteIcon />
     case 'Council Candidate':
-      return <LabelIcon />
+      return <LockIcon />
     case 'Councilor':
-      return <LabelIcon />
+      return <LockIcon />
     case 'Validation':
-      return <LabelIcon />
+      return <LockIcon />
     case 'Nomination':
-      return <LabelIcon />
+      return <LockIcon />
     case 'Proposals':
-      return <LabelIcon />
+      return <LockIcon />
     case 'Storage Worker':
-      return <LabelIcon />
+      return <LockIcon />
     case 'Content Directory Worker':
-      return <LabelIcon />
+      return <LockIcon />
     case 'Forum Worker':
-      return <LabelIcon />
+      return <LockIcon />
     case 'Membership Worker':
-      return <LabelIcon />
+      return <LockIcon />
     case 'Invitation':
       return <EnvelopeIcon />
     case 'Staking Candidate':
@@ -48,7 +49,9 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
   return (
     <AccountLocksWrapper gap={4}>
       {locks.map((lock, index) => (
-        <span key={index}>{lockIcon(lock.type)}</span>
+        <span key={index} title={lock.type}>
+          {lockIcon(lock.type)}
+        </span>
       ))}
     </AccountLocksWrapper>
   )
