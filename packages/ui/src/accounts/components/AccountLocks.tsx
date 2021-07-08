@@ -2,10 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { LockType, BalanceLock } from '@/accounts/types'
-import { EnvelopeIcon } from '@/common/components/icons/EnvelopeIcon'
-import { LabelIcon } from '@/common/components/icons/LabelIcon'
-import { LockIcon } from '@/common/components/icons/locks/LockIcon'
-import { VoteIcon } from '@/common/components/icons/VoteIcon'
+import { EnvelopeIcon, LabelIcon, LockIcon, VoteIcon } from '@/common/components/icons/locks'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 
 export const lockIcon = (type: LockType) => {
