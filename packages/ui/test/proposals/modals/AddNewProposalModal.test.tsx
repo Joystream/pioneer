@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen, configure } from '@testing-library/react'
+import { fireEvent, render, screen, configure, prettyDOM } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -171,7 +171,7 @@ describe('UI: AddNewProposalModal', () => {
 
       it('Enough funds', async () => {
         await finishProposalType()
-        expect(screen.queryByText('Creating new proposal')).toBeDefined()
+        expect(screen.queryByText('Creating new proposal')).not.toBeNull()
       })
     })
 
@@ -292,6 +292,26 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
     })
+
+    it('Previous step', async () => {
+      await finishWarning()
+      await finishProposalType()
+      await finishStakingAccount()
+      await finishProposalDetails()
+
+      expect(screen.queryByText('Discussion mode:')).not.toBeNull()
+      await clickPreviousButton()
+
+      expect(screen.queryByDisplayValue('Some title')).not.toBeNull()
+      await clickPreviousButton()
+
+      expect(screen.queryByText('Select account for Staking')).not.toBeNull()
+      expect(await getNextStepButton()).not.toBeDisabled()
+      await clickPreviousButton()
+
+      expect(screen.queryByText('Please choose proposal type')).not.toBeNull()
+      expect(await getNextStepButton()).not.toBeDisabled()
+    })
   })
 
   async function finishWarning() {
@@ -321,6 +341,8 @@ describe('UI: AddNewProposalModal', () => {
     await clickNextButton()
   }
 
+  const finishTriggerAndDiscussion = () => clickNextButton()
+
   async function fillProposalDetails() {
     const titleInput = await screen.findByLabelText(/Proposal title/i)
     await fireEvent.change(titleInput, { target: { value: 'Some title' } })
@@ -346,6 +368,15 @@ describe('UI: AddNewProposalModal', () => {
 
   async function getWarningNextButton() {
     return (await screen.findByText('I want to create a proposal anyway')).parentElement
+  }
+
+  async function getPreviousStepButton() {
+    return await screen.findByRole('button', { name: /Previous step/i })
+  }
+
+  async function clickPreviousButton() {
+    const button = await getPreviousStepButton()
+    await fireEvent.click(button as HTMLElement)
   }
 
   async function getNextStepButton() {
