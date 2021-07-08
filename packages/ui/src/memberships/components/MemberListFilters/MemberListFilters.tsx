@@ -6,7 +6,6 @@ import { TogglableIcon } from '@/common/components/forms'
 import { FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
 import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { FilterSelect } from '@/common/components/selects'
-import { TextInlineBig } from '@/common/components/typography'
 import { objectEquals } from '@/common/utils'
 import { spacing } from '@/common/utils/styles'
 import { MemberRole } from '@/memberships/types'
@@ -75,7 +74,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
     <MembersFilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
       <Fields>
         <FieldsHeader>
-          <TextInlineBig bold>All members</TextInlineBig>
+          <h6>All members</h6>
           {memberCount && <MemberCount count={memberCount} />}
         </FieldsHeader>
 
@@ -132,6 +131,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
 }
 
 const MembersFilterBox = styled(FilterBox)`
+  height: 72px;
   margin-top: ${spacing(1)};
 `
 
@@ -142,12 +142,14 @@ const Fields = styled.div`
 `
 
 const FieldsHeader = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
   align-self: center;
   margin-right: auto;
 `
 const MemberCount = styled(CountBadge)`
   font-weight: 700;
-  margin-left: 8px;
 `
 
 const SelectContainer = styled.div`

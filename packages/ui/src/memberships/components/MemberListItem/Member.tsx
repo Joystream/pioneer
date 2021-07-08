@@ -1,5 +1,7 @@
 import React, { useCallback } from 'react'
 
+import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
+
 import { MemberInfo } from '..'
 import { TokenValue } from '../../../common/components/typography/TokenValue'
 import { useModal } from '../../../common/hooks/useModal'
@@ -27,7 +29,10 @@ export const MemberListItem = ({ member }: { member: Member }) => {
       </MemberColumn>
 
       <MemberColumn>
-        <Info>NO</Info>
+        <Info>
+          <CrossIcon />
+          <CheckboxIcon />
+        </Info>
       </MemberColumn>
 
       <MemberRolesColumn>

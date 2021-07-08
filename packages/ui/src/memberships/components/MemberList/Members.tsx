@@ -47,10 +47,10 @@ export const MemberList = ({ isLoading, members, order, onSort }: MemberListProp
   return (
     <div>
       <ListHeaders colLayout={colLayoutByType('Member')}>
-        <SortHeader sortKey="id">Member ID</SortHeader>
-        <SortHeader sortKey="handle">Member</SortHeader>
-        <ListHeader>Concil Member</ListHeader>
-        <ListHeader>Active Roles</ListHeader>
+        <SortHeader sortKey="id">ID</SortHeader>
+        <SortHeader sortKey="handle">Memeberships</SortHeader>
+        <ListHeader>Council Member</ListHeader>
+        <ListHeader>Roles</ListHeader>
         <ListHeader>Slashed</ListHeader>
         <ListHeader>Terminated</ListHeader>
         <ListHeader>Total Balance</ListHeader>
