@@ -17,13 +17,13 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat, StakeStat } from '@/common/components/statistics'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
-import { useActivities } from '@/common/hooks/useActivities'
 import { useModal } from '@/common/hooks/useModal'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { NextPayoutStat } from '@/working-groups/components/NextPayoutStat'
 import { MyRoleAccount } from '@/working-groups/components/Roles/MyRoleAccount'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useWorker } from '@/working-groups/hooks/useWorker'
+import { useRoleActivities } from '@/working-groups/hooks/utils/useRoleActivities'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
@@ -34,7 +34,7 @@ export const MyRole = () => {
   const { worker, isLoading } = useWorker(id)
   const isActive = worker && worker.status === 'WorkerStatusActive'
 
-  const activities = useActivities()
+  const { activities } = useRoleActivities(worker)
   const warning =
     worker && !isActive
       ? {
@@ -168,7 +168,7 @@ export const MyRole = () => {
       }
       sidebar={
         <SidePanel neighbor={sideNeighborRef}>
-          <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} />
+          <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} isOwn />
         </SidePanel>
       }
       footer={
