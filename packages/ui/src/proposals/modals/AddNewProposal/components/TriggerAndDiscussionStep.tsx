@@ -13,6 +13,7 @@ import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO, BorderRad, Colors, SECONDS_PER_BLOCK, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useForm } from '@/common/hooks/useForm'
+import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -54,9 +55,9 @@ export const TriggerAndDiscussionStep = ({
 
   const currentBlock = useCurrentBlockNumber()
   const minTriggerBlock = currentBlock ? currentBlock.addn(constants.votingPeriod).addn(constants.gracePeriod) : BN_ZERO
-  const maxTriggerBlock = Math.round(differenceInSeconds(new Date(2030, 0, 1), Date.now()) / SECONDS_PER_BLOCK)
+  const maxTriggerBlock = getMaxBlock(currentBlock)
   const isValidTriggerBlock = (block: BN) => {
-    return block && block.gte(minTriggerBlock) && block.lten(maxTriggerBlock)
+    return block && block.gte(minTriggerBlock) && block.lte(maxTriggerBlock)
   }
 
   useEffect(() => {
@@ -100,8 +101,8 @@ export const TriggerAndDiscussionStep = ({
     const value = new BN(fields.triggerBlock)
 
     if (!isValidTriggerBlock(value)) {
-      return value.gten(maxTriggerBlock)
-        ? `The maximum block number is ${maxTriggerBlock}.`
+      return value.gte(maxTriggerBlock)
+        ? `The maximum block number is ${maxTriggerBlock.toNumber()}.`
         : `The minimum block number is ${minTriggerBlock.toNumber()}.`
     }
 

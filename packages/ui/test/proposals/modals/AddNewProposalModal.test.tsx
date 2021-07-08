@@ -246,7 +246,7 @@ describe('UI: AddNewProposalModal', () => {
 
           it('Invalid block number: too high', async () => {
             await triggerYes()
-            await fillTriggerBlock(100000000)
+            await fillTriggerBlock(9999999999999)
 
             expect(await screen.getByText(/(^The maximum block number is).*/i)).toBeDefined()
             const button = await getNextStepButton()
