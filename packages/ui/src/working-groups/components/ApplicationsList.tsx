@@ -13,46 +13,46 @@ import { openingTitle } from '../helpers'
 import { ApplicationDetailsModalCall } from '../modals/ApplicationDetailsModal'
 import { WorkingGroupApplication } from '../types/WorkingGroupApplication'
 
+import { ApplicationID, ApplicationItemInfo, ApplicationItemWrap } from './Applications/ApplicationsItems'
 import {
-  ToggleableItemInfo,
+  OpenItemSummaryColumn,
   ToggleableItemInfoTop,
   ToggleableItemSummary,
   ToggleableItemTitle,
   ToggleableSubscriptionWide,
-  ToggleableItemWrap,
-  OpenItemSummaryColumn,
 } from './ToggleableItemStyledComponents'
 
 interface Props {
   applications: WorkingGroupApplication[]
+  pastApplications?: boolean
 }
 
-export const ApplicationsList = ({ applications }: Props) => (
+export const ApplicationsList = ({ applications, pastApplications }: Props) => (
   <List>
     {applications.map((application) => (
       <ListItem key={application.id}>
-        <ApplicationListItem application={application} />
+        <ApplicationListItem application={application} past={pastApplications} />
       </ListItem>
     ))}
   </List>
 )
 
-const ApplicationListItem = ({ application }: { application: WorkingGroupApplication }) => {
+const ApplicationListItem = ({ application, past }: { application: WorkingGroupApplication; past?: boolean }) => {
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { applicationId: application.id } })
   }, [application.id])
 
   return (
-    <ToggleableItemWrap>
-      <ToggleableItemInfo>
+    <ApplicationItemWrap past={past}>
+      <ApplicationItemInfo>
         <ToggleableItemInfoTop>
-          <Subscription>ID: {application.id}</Subscription>
+          <ApplicationID title={application.id}>ID: {application.id}</ApplicationID>
           <Subscription>Time left: 6 days 23 minutes</Subscription>
           <BadgeStatus>LEAD</BadgeStatus>
         </ToggleableItemInfoTop>
         <Title onClick={showApplicationModal}>{openingTitle(application)}</Title>
-      </ToggleableItemInfo>
+      </ApplicationItemInfo>
       <ToggleableItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
@@ -76,7 +76,7 @@ const ApplicationListItem = ({ application }: { application: WorkingGroupApplica
       <ButtonGhost square size="medium" onClick={showApplicationModal}>
         <FileIcon />
       </ButtonGhost>
-    </ToggleableItemWrap>
+    </ApplicationItemWrap>
   )
 }
 
