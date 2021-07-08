@@ -159,6 +159,7 @@ const ToggleContainer = styled.div`
   display: grid;
   gap: 4px 8px;
   grid-template-columns: auto 1fr;
+  height: 48px;
   & > :first-child {
     grid-column: span 2;
   }
