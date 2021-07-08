@@ -69,7 +69,7 @@ const VoteTypeHeader = styled.label<{ kind: string }>`
   align-items: center;
   grid-template-columns: 128px 1fr auto;
   cursor: pointer;
-  padding: ${spacing(1)};
+  padding: ${spacing(1)} ${spacing(1)} ${spacing(1)} ${spacing(2)};
   text-transform: capitalize;
 
   h6 {
