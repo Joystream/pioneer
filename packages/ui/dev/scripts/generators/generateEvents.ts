@@ -152,6 +152,17 @@ const generateBudgetSetEvent = (mocks: Mocks) => () => {
   }
 }
 
+const generateTerminatedEvent = (mocks: Mocks) => () => {
+  const workers = mocks.workers.filter(worker => worker?.status === 'terminated')
+  const worker = workers[randomFromRange(0, workers.length - 1)]
+  return {
+    createdAt: faker.date.recent(30),
+    groupId: worker?.groupId,
+    workerId: worker?.id,
+    penalty: 0,
+  }
+}
+
 export const eventGenerators = {
   rewardPaidEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
   budgetSpendingEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
@@ -166,7 +177,9 @@ export const eventGenerators = {
   statusTextChangedEvents: (mocks: Mocks) => generateStatusTextChangedEvents(mocks),
   openingAddedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningAddedEvent(mocks)),
   openingCanceledEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningCanceledEvent(mocks)),
-  budgetSetEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSetEvent(mocks))
+  budgetSetEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSetEvent(mocks)),
+  terminatedWorkerEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateTerminatedEvent(mocks)),
+  terminatedLeaderEvents: (mocks: Mocks) => Array.from({ length: 5 }).map(generateTerminatedEvent(mocks)),
 }
 
 export const generateAllEvents = (mocks: Mocks) => {

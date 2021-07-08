@@ -12,6 +12,7 @@ import {
   asStakeSlashedActivity,
   asStatusTextChangedEventActivities,
   asWorkerExitedActivity,
+  asWorkerTerminatedActivity,
 } from '@/working-groups/types/WorkingGroupActivity'
 
 export const useGroupActivities = (groupId: string) => {
@@ -32,6 +33,8 @@ export const useGroupActivities = (groupId: string) => {
             ...data.workerExitedEvents.map(asWorkerExitedActivity),
             ...data.statusTextChangedEvents.map(asStatusTextChangedEventActivities).flat(),
             ...data.budgetSetEvents.map(asBudgetSetActivity),
+            ...data.terminatedLeaderEvents.map(asWorkerTerminatedActivity),
+            ...data.terminatedWorkerEvents.map(asWorkerTerminatedActivity),
           ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         : [],
     [data, loading]

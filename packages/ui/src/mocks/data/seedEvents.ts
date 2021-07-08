@@ -10,6 +10,8 @@ import rawStakeDecreasedEvents from './raw/stakeDecreasedEvents.json'
 import rawStakeIncreasedEvents from './raw/stakeIncreasedEvents.json'
 import rawStakeSlashedEvents from './raw/stakeSlashedEvents.json'
 import rawStatusTextChangedEvents from './raw/statusTextChangedEvents.json'
+import rawTerminatedLeaderEvents from './raw/terminatedLeaderEvents.json'
+import rawTerminatedWorkerEvents from './raw/terminatedWorkerEvents.json'
 import rawWorkerExitedEvents from './raw/workerExitedEvents.json'
 import rawWorkerStartedLeavingEvents from './raw/workerStartedLeavingEvents.json'
 
@@ -75,6 +77,12 @@ interface RawBudgetSetEvent extends BaseEvent {
   newBudget: number
 }
 
+interface TerminatedEvent extends BaseEvent {
+  groupId: string
+  workerId: string
+  penalty: number
+}
+
 export const eventCategories = {
   ApplicationWithdrawnEvent: rawApplicationWithdrawnEvents.map((rawEvent: RawApplicationWithdrawnEvent) => ({
     ...rawEvent,
@@ -92,6 +100,8 @@ export const eventCategories = {
   OpeningAddedEvent: rawOpeningAddedEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
   OpeningCanceledEvent: rawOpeningCanceledEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
   BudgetSetEvent: rawBudgetSetEvents.map((rawEvent: RawBudgetSetEvent) => ({ ...rawEvent })),
+  TerminatedWorkerEvent: rawTerminatedWorkerEvents.map((rawEvent: TerminatedEvent) => ({ ...rawEvent })),
+  TerminatedLeaderEvent: rawTerminatedLeaderEvents.map((rawEvent: TerminatedEvent) => ({ ...rawEvent })),
 }
 
 type EventType = keyof typeof eventCategories
