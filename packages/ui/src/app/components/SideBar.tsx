@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { CSSTransition } from 'react-transition-group'
 import styled from 'styled-components'
 
 import { Notifications, NotificationsButton } from '@/common/components/Notifications'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
 import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/CouncilIcon'
+import { FinancialsIcon } from '@/common/components/page/Sidebar/LinksIcons/FinancialsIcon'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon'
 import { MembersIcon } from '@/common/components/page/Sidebar/LinksIcons/MembersIcon'
 import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons/MyProfileIcon'
@@ -17,8 +17,7 @@ import { LogoLink } from '@/common/components/page/Sidebar/LogoLink'
 import { Navigation, NavigationInnerWrapper } from '@/common/components/page/Sidebar/Navigation'
 import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHeader'
 import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
-import { Version } from '@/common/components/page/Sidebar/Version'
-import { RemoveScrollbar, Transitions } from '@/common/constants'
+import { RemoveScrollbar } from '@/common/constants'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
@@ -89,6 +88,12 @@ export const SideBar = () => {
             </NavigationLink>
           </NavigationLinksItem>
           <NavigationLinksItem>
+            <NavigationLink to="lorem" disabled>
+              <FinancialsIcon />
+              Financials
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
             <NavigationLink to="/settings">
               <SettingsIcon />
               Settings
@@ -96,16 +101,8 @@ export const SideBar = () => {
           </NavigationLinksItem>
         </NavigationLinks>
         <ProfileComponent />
-        <Version />
       </NavigationInnerWrapper>
-      <CSSTransition
-        in={isNotificationsPanelOpen}
-        classNames="NotificationsPanel"
-        timeout={Transitions.durationNumeric}
-        unmountOnExit
-      >
-        <Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />
-      </CSSTransition>
+      <Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />
     </Navigation>
   )
 }
@@ -115,8 +112,7 @@ const NavigationLinks = styled.ul`
   flex-direction: column;
   width: 100%;
   grid-area: barlinks;
-  margin: 0;
-  padding: 8px 0;
+  gap: 6px;
   list-style: none;
   max-height: 100%;
   overflow: hidden;
@@ -128,7 +124,7 @@ const NavigationLinks = styled.ul`
 const NavigationLinksItem = styled.li`
   display: flex;
   flex-direction: column;
-  flex-basis: 48px;
+  flex-basis: 32px;
   flex-shrink: 0;
   width: 100%;
 `

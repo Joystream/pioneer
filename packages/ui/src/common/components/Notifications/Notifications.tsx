@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import { CSSTransition } from 'react-transition-group'
 import styled from 'styled-components'
 
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
@@ -22,15 +23,22 @@ export const Notifications = ({ onClose, isNotificationsPanelOpen }: Props) => {
   useOutsideClick(containerRef, isNotificationsPanelOpen, onClose)
 
   return (
-    <NotificationsPanel ref={containerRef}>
-      <NotificationsHeader>
-        <Label>Notifications</Label>
-        <CloseButton onClick={onClose} />
-      </NotificationsHeader>
-      <NotificationsBody>
-        <ActivitiesBlock activities={activities} isOwn />
-      </NotificationsBody>
-    </NotificationsPanel>
+    <CSSTransition
+      in={isNotificationsPanelOpen}
+      classNames="NotificationsPanel"
+      timeout={Transitions.durationNumeric}
+      unmountOnExit
+    >
+      <NotificationsPanel ref={containerRef}>
+        <NotificationsHeader>
+          <Label>Notifications</Label>
+          <CloseButton onClick={onClose} />
+        </NotificationsHeader>
+        <NotificationsBody>
+          <ActivitiesBlock activities={activities} isOwn />
+        </NotificationsBody>
+      </NotificationsPanel>
+    </CSSTransition>
   )
 }
 
