@@ -25,6 +25,6 @@ export const seedMember = (member: MockMember, server: any) => {
   })
 }
 
-export const seedMembers = (server: any) => {
-  mockMembers.map((member) => seedMember(member, server))
+export const seedMembers = (server: any, howMany?: number) => {
+  mockMembers.slice(0, howMany).map((member) => seedMember(member, server))
 }
