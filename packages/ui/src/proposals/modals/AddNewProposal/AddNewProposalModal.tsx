@@ -8,7 +8,7 @@ import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { ButtonPrimary, ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -196,14 +196,16 @@ export const AddNewProposalModal = () => {
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={state.matches('proposalType')} onClick={() => send('BACK')} size="medium">
-          <Arrow direction="left" />
-          Previous step
-        </ButtonPrimary>
-        <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
-          Next step
-          <Arrow direction="right" />
-        </ButtonPrimary>
+        <ButtonsGroup>
+          <ButtonGhost disabled={state.matches('proposalType')} onClick={() => send('BACK')} size="medium">
+            <Arrow direction="left" />
+            Previous step
+          </ButtonGhost>
+          <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
+            Next step
+            <Arrow direction="right" />
+          </ButtonPrimary>
+        </ButtonsGroup>
       </ModalFooter>
     </Modal>
   )
