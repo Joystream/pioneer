@@ -5,12 +5,11 @@ import { useGetWorkerIdsQuery } from '@/working-groups/queries'
 
 export const useMyRoleIds = () => {
   const { active } = useMyMemberships()
-  const { data, loading } = active
-    ? useGetWorkerIdsQuery({ variables: { where: { membership: { id_eq: active.id } } } })
-    : { data: undefined, loading: false }
-  const workerIds = useMemo(() => data?.workers.map((worker) => worker.id) ?? [], [data, loading])
+  const { data, loading } = useGetWorkerIdsQuery({ variables: { where: { membership: { id_eq: active?.id } } } })
+  const workerIds = useMemo(() => data?.workers.map((worker) => worker.id) ?? [], [data, loading, active?.id])
+
   return {
     isLoading: loading,
-    workerIds,
+    workerIds: active ? workerIds : [],
   }
 }
