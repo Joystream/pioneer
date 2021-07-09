@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen, configure, prettyDOM } from '@testing-library/react'
+import { configure, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -171,7 +171,7 @@ describe('UI: AddNewProposalModal', () => {
 
       it('Enough funds', async () => {
         await finishProposalType()
-        expect(screen.queryByText('Creating new proposal')).not.toBeNull()
+        expect(screen.findByText('Creating new proposal')).toBeDefined()
       })
     })
 
@@ -340,8 +340,6 @@ describe('UI: AddNewProposalModal', () => {
 
     await clickNextButton()
   }
-
-  const finishTriggerAndDiscussion = () => clickNextButton()
 
   async function fillProposalDetails() {
     const titleInput = await screen.findByLabelText(/Proposal title/i)
