@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost, ButtonsRow } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
+import { TextInlineSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { relativeTime } from '@/common/model/relativeTime'
 import { ForumPost } from '@/common/types'
 import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
@@ -16,19 +18,22 @@ interface PostProps {
 }
 
 export const ForumComment = ({ post }: PostProps) => {
+  const { createdAtBlock, updatedAt, author, text, reaction } = post
+  const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
+
   return (
     <Container>
-      <MemberInfo member={post.author} />
-      <BlockDate block={post.createdAtBlock} />
+      <MemberInfo member={author} />
+      <BlockDate block={createdAtBlock} />
 
       <MessageBody>
-        <MarkdownPreview markdown={post.text} />
+        <MarkdownPreview markdown={text} append={edited} />
       </MessageBody>
 
       <ButtonsRow>
-        {post.reaction && (
+        {reaction && (
           <Button>
-            <LinkIcon /> {!!post.reaction.length && post.reaction.length}
+            <LinkIcon /> {!!reaction.length && reaction.length}
           </Button>
         )}
       </ButtonsRow>
@@ -63,3 +68,5 @@ const MessageBody = styled.div`
   grid-column: span 2;
   margin-top: ${spacing(1)};
 `
+
+const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true })``

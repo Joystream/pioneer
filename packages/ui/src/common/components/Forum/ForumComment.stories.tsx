@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import { PostReaction } from '@/common/api/queries'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
+import { A_MINUTE } from '@/common/constants'
 import { ForumPost } from '@/common/types'
 import { repeat } from '@/common/utils'
 
@@ -18,16 +19,18 @@ export default {
 interface Props {
   post: Omit<ForumPost, 'text'>
   likes?: number
+  edited?: number
   text: string
 }
 
-const Template: Story<Props> = ({ post, text, likes = -1 }) => {
+const Template: Story<Props> = ({ post, text, edited = -1, likes = -1 }) => {
+  const updatedAt = edited >= 0 ? new Date(Date.now() - edited * A_MINUTE).toISOString() : undefined
   const reaction = likes >= 0 ? repeat(() => PostReaction.Like, likes) : undefined
 
   return (
     <MemoryRouter>
       <Container>
-        <ForumComment post={{ ...post, text, reaction }} />
+        <ForumComment post={{ ...post, updatedAt, text, reaction }} />
       </Container>
     </MemoryRouter>
   )
@@ -39,6 +42,7 @@ Default.args = {
   text: `Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
 Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
 consequat sunt nostrud.`,
+  edited: 3,
   post: {
     id: '0',
     createdAtBlock: {
