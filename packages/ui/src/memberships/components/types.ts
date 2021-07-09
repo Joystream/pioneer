@@ -4,4 +4,5 @@ export interface MemberInfoWrapProps {
   isOnDark?: boolean
   showId?: boolean
   memberSize?: MemberSize
+  showGroup?: boolean
 }
