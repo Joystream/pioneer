@@ -196,7 +196,7 @@ export const AddNewProposalModal = () => {
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonsGroup>
+        <ButtonsGroup align="right">
           <ButtonGhost disabled={state.matches('proposalType')} onClick={() => send('BACK')} size="medium">
             <Arrow direction="left" />
             Previous step
