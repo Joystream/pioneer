@@ -24,6 +24,7 @@ export const Activities = ({ activities, isOwn }: ActivitiesProps) => {
 }
 
 export const ActivitiesList = styled.ul`
-  display: grid;
-  grid-row-gap: 24px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `

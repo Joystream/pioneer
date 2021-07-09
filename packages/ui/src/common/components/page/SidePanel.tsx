@@ -1,7 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { RemoveScrollbar } from '@/common/constants'
+import { BorderRad, RemoveScrollbar } from '@/common/constants'
+
+import { ActivitiesList } from '../Activities'
+import { ActivityItem } from '../Activities/ActivityComponent'
 
 interface SidePanelProps {
   className?: string
@@ -35,5 +38,13 @@ export const SidePanelStyles = styled.div<{ neighborHeight?: number }>`
   &:after {
     content: '';
     height: 24px;
+  }
+
+  ${ActivitiesList} {
+    margin: 0 -16px;
+  }
+
+  ${ActivityItem} {
+    border-radius: ${BorderRad.s};
   }
 `

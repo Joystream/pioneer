@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Transitions } from '../constants'
+import { Colors, Transitions } from '../constants'
 
 import { BellIcon } from './icons/BellIcon'
+import { UnreadIndicator, UnreadNotificationIndicator } from './Notifications/UnreadNotificationIndicator'
 
 export interface NotificationProps {
   hasNotification?: boolean
@@ -11,7 +12,8 @@ export interface NotificationProps {
 
 export function Notification({ hasNotification }: NotificationProps) {
   return (
-    <NotificationComponent hasNotification={hasNotification}>
+    <NotificationComponent>
+      <UnreadNotificationIndicator unread={hasNotification} />
       <BellIcon />
     </NotificationComponent>
   )
@@ -25,17 +27,8 @@ export const NotificationComponent = styled.div<NotificationProps>`
   color: ${Colors.Black[500]};
   transition: ${Transitions.all};
 
-  &:after {
-    content: '';
-    position: absolute;
+  ${UnreadIndicator} {
     top: 1px;
     right: 0;
-    width: 6px;
-    height: 6px;
-    border-radius: ${BorderRad.round};
-    background-color: ${Colors.Red[400]};
-    transform: ${(props) => (props.hasNotification === true ? 'translateY(0)' : 'translateY(-6px)')};
-    opacity: ${(props) => (props.hasNotification === true ? '1' : '0')};
-    transition: ${Transitions.all};
   }
 `

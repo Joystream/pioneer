@@ -8,7 +8,6 @@ import { useMemberNotifications } from '@/memberships/hooks/useMemberNotificatio
 import { Colors, RemoveScrollbar, Shadows, Transitions } from '../../constants'
 import { ActivitiesList } from '../Activities'
 import { ActivitiesBlock } from '../Activities/ActivitiesBlock'
-import { ActivityItem } from '../Activities/ActivityComponent'
 import { Close, CloseButton } from '../buttons'
 import { Label } from '../typography'
 
@@ -75,9 +74,6 @@ const NotificationsPanel = styled.div`
   ${ActivitiesList} {
     grid-row-gap: 0;
     padding-bottom: 16px;
-  }
-  ${ActivityItem} {
-    padding: 12px 16px;
   }
 `
 
