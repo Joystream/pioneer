@@ -5,6 +5,7 @@ import { Block } from './Block'
 
 export interface ForumPost {
   id: string
+  link: string
   createdAtBlock: Block
   updatedAt?: string
   author: Member

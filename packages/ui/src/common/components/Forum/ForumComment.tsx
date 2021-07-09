@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { ButtonGhost, ButtonsRow } from '@/common/components/buttons'
+import { ButtonGhost, ButtonGhostStyles, ButtonsRow } from '@/common/components/buttons'
+import { LinkButtonGhost, LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
 import { HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { TextInlineSmall } from '@/common/components/typography'
@@ -18,11 +19,11 @@ interface PostProps {
 }
 
 export const ForumComment = ({ post }: PostProps) => {
-  const { createdAtBlock, updatedAt, author, text, reaction } = post
+  const { id, link, createdAtBlock, updatedAt, author, text, reaction } = post
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
 
   return (
-    <Container>
+    <Container id={`post-${id}`}>
       <MemberInfo member={author} />
       <BlockDate block={createdAtBlock} />
 
@@ -40,9 +41,9 @@ export const ForumComment = ({ post }: PostProps) => {
       </ButtonsRow>
 
       <ButtonsRow>
-        <Button square>
+        <LinkButton to={link} square>
           <LinkIcon />
-        </Button>
+        </LinkButton>
         <Button square>
           <ReplyIcon />
         </Button>
@@ -61,13 +62,16 @@ const Container = styled.div`
   & > :nth-child(3n - 1) {
     justify-self: end;
   }
-`
 
-const Button = styled(ButtonGhost).attrs({ size: 'small' })`
-  svg {
-    width: 14px;
+  ${ButtonGhostStyles}, ${LinkButtonGhostStyles} {
+    svg {
+      width: 14px;
+    }
   }
 `
+
+const LinkButton = styled(LinkButtonGhost).attrs({ size: 'small' })``
+const Button = styled(ButtonGhost).attrs({ size: 'small' })``
 
 const MessageBody = styled.div`
   grid-column: span 2;

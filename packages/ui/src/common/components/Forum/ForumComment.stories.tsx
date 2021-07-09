@@ -45,6 +45,7 @@ consequat sunt nostrud.`,
   edited: 3,
   post: {
     id: '0',
+    link: '#post-0',
     createdAtBlock: {
       id: '100',
       number: 1000,
