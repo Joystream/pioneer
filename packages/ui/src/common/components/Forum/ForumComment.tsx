@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost, ButtonsRow } from '@/common/components/buttons'
-import { LinkIcon } from '@/common/components/icons/LinkIcon'
+import { HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { TextInlineSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -33,7 +33,8 @@ export const ForumComment = ({ post }: PostProps) => {
       <ButtonsRow>
         {reaction && (
           <Button>
-            <LinkIcon /> {!!reaction.length && reaction.length}
+            <HeartIcon />
+            {!!reaction.length && reaction.length}
           </Button>
         )}
       </ButtonsRow>
@@ -43,7 +44,7 @@ export const ForumComment = ({ post }: PostProps) => {
           <LinkIcon />
         </Button>
         <Button square>
-          <LinkIcon />
+          <ReplyIcon />
         </Button>
       </ButtonsRow>
     </Container>
@@ -62,7 +63,11 @@ const Container = styled.div`
   }
 `
 
-const Button = styled(ButtonGhost).attrs({ size: 'medium' })``
+const Button = styled(ButtonGhost).attrs({ size: 'small' })`
+  svg {
+    width: 14px;
+  }
+`
 
 const MessageBody = styled.div`
   grid-column: span 2;
