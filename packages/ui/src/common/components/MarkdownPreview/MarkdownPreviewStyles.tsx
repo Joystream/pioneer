@@ -3,7 +3,20 @@ import styled, { createGlobalStyle } from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
-export const MarkdownPreviewStyles = createGlobalStyle`
+export interface MarkdownPreviewStylesProps {
+  size?: 's' | 'm'
+}
+
+const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
+  switch (size) {
+    case 's':
+      return '14px'
+    default:
+      return '16px'
+  }
+}
+
+export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProps>`
   .markdown-preview {
     width: 100%;
   }
@@ -35,7 +48,7 @@ export const MarkdownPreviewStyles = createGlobalStyle`
   }
 
   .markdown-preview h3 {
-    font-size: 16px;
+    font-size: ${normalFontSize};
     line-height: 24px;
   }
 
@@ -55,7 +68,7 @@ export const MarkdownPreviewStyles = createGlobalStyle`
   .markdown-preview p {
     margin-top: 8px;
     font-family: ${Fonts.Inter};
-    font-size: 16px;
+    font-size: ${normalFontSize};
     line-height: 1.5;
     font-weight: 400;
     color: ${Colors.Black[600]};
@@ -64,7 +77,7 @@ export const MarkdownPreviewStyles = createGlobalStyle`
   .markdown-preview li {
     position: relative;
     font-family: ${Fonts.Inter};
-    font-size: 16px;
+    font-size: ${normalFontSize};
     line-height: 24px;
     font-weight: 400;
     color: ${Colors.Black[500]};
@@ -98,7 +111,7 @@ export const MarkdownPreviewStyles = createGlobalStyle`
     position: absolute;
     left: -20px;
     font-family: ${Fonts.Grotesk};
-    font-size: 16px;
+    font-size: ${normalFontSize};
     line-height: 24px;
     font-weight: 700;
     color: ${Colors.Black[600]};

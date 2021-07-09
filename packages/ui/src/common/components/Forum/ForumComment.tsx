@@ -27,7 +27,7 @@ export const ForumComment = ({ post }: PostProps) => {
       <BlockDate block={createdAtBlock} />
 
       <MessageBody>
-        <MarkdownPreview markdown={text} append={edited} />
+        <MarkdownPreview markdown={text} append={edited} size="s" />
       </MessageBody>
 
       <ButtonsRow>

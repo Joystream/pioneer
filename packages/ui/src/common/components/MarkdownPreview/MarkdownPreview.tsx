@@ -3,14 +3,14 @@ import ReactMarkdown, { PluggableList } from 'react-markdown'
 import { Components, Position } from 'react-markdown/src/ast-to-react'
 import { Root } from 'react-markdown/src/rehype-filter'
 
-import { MarkdownPreviewStyles } from './MarkdownPreviewStyles'
+import { MarkdownPreviewStyles, MarkdownPreviewStylesProps } from './MarkdownPreviewStyles'
 
-export interface MarkdownPreviewProps {
+export interface MarkdownPreviewProps extends MarkdownPreviewStylesProps {
   markdown: string
   append?: ReactNode
 }
 
-export const MarkdownPreview = ({ markdown, append }: MarkdownPreviewProps) => {
+export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPreviewProps) => {
   const endsWithP = useRef(false)
   const [appendAfter, setAppendAfter] = useState(false)
 
@@ -46,7 +46,7 @@ export const MarkdownPreview = ({ markdown, append }: MarkdownPreviewProps) => {
 
   return (
     <div className="markdown-preview">
-      <MarkdownPreviewStyles />
+      <MarkdownPreviewStyles {...styleProps} />
       <ReactMarkdown rehypePlugins={rehypePlugins} components={components} rawSourcePos>
         {markdown}
       </ReactMarkdown>

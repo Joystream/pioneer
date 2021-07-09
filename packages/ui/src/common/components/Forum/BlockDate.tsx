@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { BlockInfoProp } from '@/common/components/BlockTime/BlockInfo'
 import { BlockIcon } from '@/common/components/icons'
 import { TextSmall } from '@/common/components/typography'
-import { Transitions } from '@/common/constants'
 import { formatDateString, formatTokenValue } from '@/common/model/formatters'
 import { spacing } from '@/common/utils/styles'
 
@@ -24,9 +23,6 @@ const Container = styled.div`
   height: fit-content;
 `
 const BlockNumber = styled(TextSmall).attrs({ bold: true, light: true })`
-  font-size: inherit;
-  line-height: inherit;
-  transition: ${Transitions.all};
   & > :first-child {
     margin-right: ${spacing(1)};
     vertical-align: middle;
