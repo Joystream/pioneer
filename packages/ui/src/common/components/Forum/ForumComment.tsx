@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ButtonGhost, ButtonGhostStyles, ButtonsRow } from '@/common/components/buttons'
 import { LinkButtonGhost, LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
-import { HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
+import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { TextInlineSmall } from '@/common/components/typography'
+import { Badge, TextInlineSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
 import { ForumPost } from '@/common/types'
@@ -19,7 +20,7 @@ interface PostProps {
 }
 
 export const ForumComment = ({ post }: PostProps) => {
-  const { id, link, createdAtBlock, updatedAt, author, text, reaction } = post
+  const { id, link, createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
 
   return (
@@ -28,6 +29,17 @@ export const ForumComment = ({ post }: PostProps) => {
       <BlockDate block={createdAtBlock} />
 
       <MessageBody>
+        {repliesTo && (
+          <Reply>
+            <ReplyBadge>
+              <ArrowReplyIcon />{' '}
+              <Badge>
+                <Link to={repliesTo.link}>Reply to {repliesTo.author.handle}</Link>
+              </Badge>
+            </ReplyBadge>
+            <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
+          </Reply>
+        )}
         <MarkdownPreview markdown={text} append={edited} size="s" />
       </MessageBody>
 
@@ -76,6 +88,34 @@ const Button = styled(ButtonGhost).attrs({ size: 'small' })``
 const MessageBody = styled.div`
   grid-column: span 2;
   margin-top: ${spacing(1)};
+`
+
+const Reply = styled.blockquote`
+  background: ${Colors.Black[75]};
+  font-style: italic;
+  margin: 0 0 ${spacing(3 / 2)};
+  padding: ${spacing(1)};
+`
+
+const ReplyBadge = styled.div`
+  display: flex;
+  align-items: center;
+  font-style: normal;
+  margin-bottom: 10px;
+
+  svg {
+    height: 11px;
+  }
+
+  ${Badge} {
+    background-color: ${Colors.Blue[100]};
+    margin: 1px 0 0 3px;
+    padding: 0 ${spacing(1)};
+  }
+  a {
+    color: ${Colors.Blue[500]};
+    text-transform: uppercase;
+  }
 `
 
 const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true })``

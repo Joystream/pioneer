@@ -5,6 +5,7 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
 export interface MarkdownPreviewStylesProps {
   size?: 's' | 'm'
+  isReply?: boolean
 }
 
 const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
@@ -15,6 +16,8 @@ const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
       return '16px'
   }
 }
+
+const normalColor = ({ isReply }: MarkdownPreviewStylesProps) => Colors.Black[isReply ? 600 : 500]
 
 export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProps>`
   .markdown-preview {
@@ -71,7 +74,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     font-size: ${normalFontSize};
     line-height: 1.5;
     font-weight: 400;
-    color: ${Colors.Black[600]};
+    color: ${normalColor};
   }
 
   .markdown-preview li {
@@ -114,7 +117,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     font-size: ${normalFontSize};
     line-height: 24px;
     font-weight: 700;
-    color: ${Colors.Black[600]};
+    color: ${normalColor};
   }
 
   .markdown-preview pre {
