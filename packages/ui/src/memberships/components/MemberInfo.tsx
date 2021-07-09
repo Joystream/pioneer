@@ -52,7 +52,7 @@ export const MemberInfo = React.memo(
   }: MemberInfoProps) => {
     const roleSize = size === 's' ? 'm' : size
     return (
-      <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize} className={className}>
+      <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize} className={className} showGroup={showGroup}>
         <MemberPhoto>
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />

@@ -87,9 +87,19 @@ export const MemberPhotoContainer = styled.div`
 
 export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   display: grid;
-  grid-template-areas:
-    'memberphoto memberhead memberhead'
-    'memberphoto memberroles memberroles';
+  ${({ showGroup }) =>
+    showGroup === false
+      ? css`
+          grid-template-areas: 'memberphoto memberhead';
+          grid-template-rows: unset !important;
+          grid-row-gap: unset !important;
+        `
+      : css`
+          grid-template-areas:
+            'memberphoto memberhead'
+            'memberphoto memberroles';
+        `}
+
   align-items: center;
   width: 100%;
   justify-self: start;
@@ -232,21 +242,21 @@ const MemberOnDarkStyles = css`
 `
 
 const MemberLargeElements = css`
-  grid-template-columns: 80px auto 1fr;
+  grid-template-columns: 80px 1fr;
   grid-template-rows: 36px 38px;
   grid-column-gap: 12px;
   grid-row-gap: 6px;
 `
 
 const MemberMediumElements = css`
-  grid-template-columns: 40px auto 1fr;
+  grid-template-columns: 40px 1fr;
   grid-template-rows: 20px 16px;
   grid-column-gap: 8px;
   grid-row-gap: 4px;
 `
 
 const MemberSmallElements = css`
-  grid-template-columns: 26px auto 1fr;
+  grid-template-columns: 26px 1fr;
   grid-template-rows: 20px 16px;
   grid-column-gap: 8px;
   grid-row-gap: 0px;
