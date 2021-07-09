@@ -544,6 +544,28 @@ export type GetGroupEventsQuery = {
   terminatedLeaderEvents: Array<{ __typename: 'TerminatedLeaderEvent' } & TerminatedLeaderEventFieldsFragment>
 }
 
+export type GetWorkerEventsQueryVariables = Types.Exact<{
+  workerId?: Types.Maybe<Types.Scalars['ID']>
+  applicationId?: Types.Maybe<Types.Scalars['ID']>
+}>
+
+export type GetWorkerEventsQuery = {
+  __typename: 'Query'
+  appliedOnOpeningEvents: Array<{ __typename: 'AppliedOnOpeningEvent' } & AppliedOnOpeningEventFieldsFragment>
+  applicationWithdrawnEvents: Array<
+    { __typename: 'ApplicationWithdrawnEvent' } & ApplicationWithdrawnEventFieldsFragment
+  >
+  stakeDecreasedEvents: Array<{ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment>
+  stakeIncreasedEvents: Array<{ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment>
+  stakeSlashedEvents: Array<{ __typename: 'StakeSlashedEvent' } & StakeSlashedEventFieldsFragment>
+  workerStartedLeavingEvents: Array<
+    { __typename: 'WorkerStartedLeavingEvent' } & WorkerStartedLeavingEventFieldsFragment
+  >
+  workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment>
+  terminatedWorkerEvents: Array<{ __typename: 'TerminatedWorkerEvent' } & TerminatedWorkerEventFieldsFragment>
+  terminatedLeaderEvents: Array<{ __typename: 'TerminatedLeaderEvent' } & TerminatedLeaderEventFieldsFragment>
+}
+
 export type GetWorkerIdsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.WorkerWhereInput>
 }>
@@ -2081,6 +2103,79 @@ export function useGetGroupEventsLazyQuery(
 export type GetGroupEventsQueryHookResult = ReturnType<typeof useGetGroupEventsQuery>
 export type GetGroupEventsLazyQueryHookResult = ReturnType<typeof useGetGroupEventsLazyQuery>
 export type GetGroupEventsQueryResult = Apollo.QueryResult<GetGroupEventsQuery, GetGroupEventsQueryVariables>
+export const GetWorkerEventsDocument = gql`
+  query GetWorkerEvents($workerId: ID, $applicationId: ID) {
+    appliedOnOpeningEvents(where: { application_eq: $applicationId }) {
+      ...AppliedOnOpeningEventFields
+    }
+    applicationWithdrawnEvents(where: { application_eq: $applicationId }) {
+      ...ApplicationWithdrawnEventFields
+    }
+    stakeDecreasedEvents(where: { worker: { id_eq: $workerId } }) {
+      ...StakeDecreasedEventFields
+    }
+    stakeIncreasedEvents(where: { worker: { id_eq: $workerId } }) {
+      ...StakeIncreasedEventFields
+    }
+    stakeSlashedEvents(where: { worker: { id_eq: $workerId } }) {
+      ...StakeSlashedEventFields
+    }
+    workerStartedLeavingEvents(where: { worker: { id_eq: $workerId } }) {
+      ...WorkerStartedLeavingEventFields
+    }
+    workerExitedEvents(where: { worker: { id_eq: $workerId } }) {
+      ...WorkerExitedEventFields
+    }
+    terminatedWorkerEvents(where: { worker: { id_eq: $workerId } }) {
+      ...TerminatedWorkerEventFields
+    }
+    terminatedLeaderEvents(where: { worker: { id_eq: $workerId } }) {
+      ...TerminatedLeaderEventFields
+    }
+  }
+  ${AppliedOnOpeningEventFieldsFragmentDoc}
+  ${ApplicationWithdrawnEventFieldsFragmentDoc}
+  ${StakeDecreasedEventFieldsFragmentDoc}
+  ${StakeIncreasedEventFieldsFragmentDoc}
+  ${StakeSlashedEventFieldsFragmentDoc}
+  ${WorkerStartedLeavingEventFieldsFragmentDoc}
+  ${WorkerExitedEventFieldsFragmentDoc}
+  ${TerminatedWorkerEventFieldsFragmentDoc}
+  ${TerminatedLeaderEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetWorkerEventsQuery__
+ *
+ * To run a query within a React component, call `useGetWorkerEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkerEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkerEventsQuery({
+ *   variables: {
+ *      workerId: // value for 'workerId'
+ *      applicationId: // value for 'applicationId'
+ *   },
+ * });
+ */
+export function useGetWorkerEventsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>(GetWorkerEventsDocument, options)
+}
+export function useGetWorkerEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>(GetWorkerEventsDocument, options)
+}
+export type GetWorkerEventsQueryHookResult = ReturnType<typeof useGetWorkerEventsQuery>
+export type GetWorkerEventsLazyQueryHookResult = ReturnType<typeof useGetWorkerEventsLazyQuery>
+export type GetWorkerEventsQueryResult = Apollo.QueryResult<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>
 export const GetWorkerIdsDocument = gql`
   query GetWorkerIds($where: WorkerWhereInput) {
     workers(where: $where) {
