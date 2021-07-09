@@ -2,15 +2,16 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
 
-import { ApiContext } from '../../../src/common/providers/api/context'
-import { TransferInviteModal } from '../../../src/memberships/modals/TransferInviteModal'
-import { seedMembers } from '../../../src/mocks/data'
+import { ApiContext } from '@/common/providers/api/context'
+import { TransferInviteModal } from '@/memberships/modals/TransferInviteModal'
+import { seedMembers } from '@/mocks/data'
+
 import { selectMember } from '../../_helpers/selectMember'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
 
-jest.mock('../../../src/common/hooks/useModal', () => {
+jest.mock('@/common/hooks/useModal', () => {
   return {
     useModal: () => ({
       modalData: { memberId: '0' },
@@ -19,10 +20,13 @@ jest.mock('../../../src/common/hooks/useModal', () => {
 })
 
 describe('UI: TransferInviteModal', () => {
-  beforeAll(cryptoWaitReady)
-
-  const mockServer = setupMockServer()
+  const mockServer = setupMockServer({ noCleanupAfterEach: true })
   const api = stubApi()
+
+  beforeAll(async () => {
+    await cryptoWaitReady()
+    seedMembers(mockServer.server, 2)
+  })
 
   beforeEach(async () => {
     stubDefaultBalances(api)
@@ -30,16 +34,12 @@ describe('UI: TransferInviteModal', () => {
   })
 
   it('Renders a modal', async () => {
-    seedMembers(mockServer.server)
-
     const { findByRole } = renderModal()
 
     expect(await findByRole('button', { name: /transfer invites/i })).toBeDefined()
   })
 
   it('Validates form', async () => {
-    seedMembers(mockServer.server)
-
     const { findByLabelText, findByRole } = renderModal()
 
     expect(await findByRole('button', { name: /transfer invites/i })).toBeDisabled()

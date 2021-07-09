@@ -55,10 +55,12 @@ describe('UI: AddNewProposalModal', () => {
 
   let useAccounts: UseAccounts
 
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    seedMembers(server.server)
+
     jest.spyOn(console, 'log').mockImplementation()
 
     useAccounts = {
@@ -68,8 +70,6 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   beforeEach(async () => {
-    seedMembers(server.server)
-
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 

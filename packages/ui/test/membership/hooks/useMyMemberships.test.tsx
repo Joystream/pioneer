@@ -60,7 +60,7 @@ describe('useMyMemberships', () => {
   })
 
   it('Matched rootAccount', async () => {
-    seedMembers(mockServer.server)
+    seedMembers(mockServer.server, 2)
     const aliceMember = getMember('alice')
     useMyAccounts.hasAccounts = true
     useMyAccounts.allAccounts.push(alice)
@@ -78,7 +78,7 @@ describe('useMyMemberships', () => {
   })
 
   it('Matched controllerAccount', async () => {
-    seedMembers(mockServer.server)
+    seedMembers(mockServer.server, 2)
     const bobMember = getMember('bob')
     useMyAccounts.hasAccounts = true
     useMyAccounts.allAccounts.push(bob)
@@ -96,7 +96,7 @@ describe('useMyMemberships', () => {
   })
 
   it('Allows to set active member', async () => {
-    seedMembers(mockServer.server)
+    seedMembers(mockServer.server, 2)
     const aliceMember = getMember('alice')
     useMyAccounts.hasAccounts = true
     useMyAccounts.allAccounts.push(alice)

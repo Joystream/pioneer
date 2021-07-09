@@ -44,11 +44,18 @@ describe('UI: LeaveRoleModal', () => {
   let useAccounts: UseAccounts
   let transaction: any
 
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     jest.spyOn(console, 'log').mockImplementation()
     await cryptoWaitReady()
+
+    seedMembers(server.server)
+    seedWorkingGroups(server.server)
+    seedOpeningStatuses(server.server)
+    seedOpening(OPENING_DATA, server.server)
+    seedApplication(APPLICATION_DATA, server.server)
+    seedWorker(WORKER_DATA, server.server)
 
     useAccounts = {
       hasAccounts: true,
@@ -57,12 +64,6 @@ describe('UI: LeaveRoleModal', () => {
   })
 
   beforeEach(async () => {
-    seedMembers(server.server)
-    seedWorkingGroups(server.server)
-    seedOpeningStatuses(server.server)
-    seedOpening(OPENING_DATA, server.server)
-    seedApplication(APPLICATION_DATA, server.server)
-    seedWorker(WORKER_DATA, server.server)
     useMyMemberships.setActive(getMember('alice'))
     stubDefaultBalances(api)
     transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.leaveRole')

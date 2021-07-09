@@ -37,7 +37,7 @@ describe('UI: Memberships list', () => {
   })
 
   it('With memberships', async () => {
-    seedMembers(mockServer.server)
+    seedMembers(mockServer.server, 2)
     const { getByText } = renderMemberships()
 
     await waitForElementToBeRemoved(() => getByText('Loading...'))

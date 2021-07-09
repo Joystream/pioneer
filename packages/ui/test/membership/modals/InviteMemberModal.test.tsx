@@ -5,10 +5,11 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
-import { ApiContext } from '../../../src/common/providers/api/context'
-import { InviteMemberModal } from '../../../src/memberships/modals/InviteMemberModal'
-import { seedMembers } from '../../../src/mocks/data'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { ApiContext } from '@/common/providers/api/context'
+import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
+import { seedMembers } from '@/mocks/data'
+
 import { selectMember } from '../../_helpers/selectMember'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bobStash } from '../../_mocks/keyring'
@@ -74,7 +75,7 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Enables button', async () => {
-    seedMembers(server.server)
+    seedMembers(server.server, 2)
 
     renderModal()
 
@@ -94,7 +95,7 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Disables button when one of addresses is invalid', async () => {
-    seedMembers(server.server)
+    seedMembers(server.server, 2)
 
     renderModal()
 
@@ -115,7 +116,7 @@ describe('UI: InviteMemberModal', () => {
 
   describe('Authorize', () => {
     async function fillFormAndProceed(invitor = 'alice') {
-      seedMembers(server.server)
+      seedMembers(server.server, 2)
       renderModal()
       await screen.findAllByRole('button')
       await selectMember('Inviting member', invitor)

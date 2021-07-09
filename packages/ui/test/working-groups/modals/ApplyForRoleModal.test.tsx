@@ -62,11 +62,16 @@ describe('UI: ApplyForRoleModal', () => {
   let useAccounts: UseAccounts
   let tx: any
 
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+
+    seedMembers(server.server)
+    seedWorkingGroups(server.server)
+    seedOpeningStatuses(server.server)
+    seedOpening(OPENING_DATA, server.server)
 
     useAccounts = {
       hasAccounts: true,
@@ -75,11 +80,6 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   beforeEach(async () => {
-    seedMembers(server.server)
-    seedWorkingGroups(server.server)
-    seedOpeningStatuses(server.server)
-    seedOpening(OPENING_DATA, server.server)
-
     const fields = (server.server?.schema.first('WorkingGroupOpening') as unknown) as WorkingGroupOpeningFieldsFragment
     const opening = asWorkingGroupOpening(fields)
     useModal.modalData = { opening }
