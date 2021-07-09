@@ -5,10 +5,10 @@ import { Fonts, Sizes } from '../../../common/constants'
 
 type MemberItemKind = 'Member' | 'MyMember'
 export const colLayoutByType = (kind: MemberItemKind) => {
-  const id = 70
+  const id = 48
   const name = 194
-  const concil = 80
-  const roles = 200
+  const concil = 92
+  const roles = 164
   const count = kind === 'Member' ? 20 : 76
   const total = 100
 

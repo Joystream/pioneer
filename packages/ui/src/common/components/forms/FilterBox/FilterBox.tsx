@@ -68,7 +68,7 @@ const ClearButton = styled(ButtonLink)`
   }
 `
 
-const Fields = styled.div`
+export const Fields = styled.div`
   background-color: ${Colors.Black[50]};
   padding: 8px 16px 12px;
 `
