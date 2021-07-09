@@ -27,7 +27,7 @@ import { ProposalConstants } from '@/proposals/types'
 interface TriggerAndDiscussionStepProps {
   params: {
     constants: ProposalConstants
-    trigger?: ProposalTrigger
+    triggerBlock?: ProposalTrigger
     discussionMode: ProposalDiscussionMode
     discussionWhitelist: ProposalDiscussionWhitelist
   }
@@ -50,7 +50,7 @@ export const TriggerAndDiscussionStep = ({
   setDiscussionMode,
   setDiscussionWhitelist,
 }: TriggerAndDiscussionStepProps) => {
-  const { constants, trigger, discussionMode, discussionWhitelist } = params
+  const { constants, triggerBlock, discussionMode, discussionWhitelist } = params
 
   const currentBlock = useCurrentBlockNumber()
   const minTriggerBlock = currentBlock ? currentBlock.addn(constants.votingPeriod).addn(constants.gracePeriod) : BN_ZERO
@@ -66,8 +66,8 @@ export const TriggerAndDiscussionStep = ({
   }, [currentBlock?.toNumber()])
 
   const formInitializer: StepFormFields = {
-    trigger: !!trigger,
-    triggerBlock: trigger ? trigger.toString() : '',
+    trigger: !!triggerBlock,
+    triggerBlock: triggerBlock ? triggerBlock.toString() : '',
     discussionMode: discussionMode === 'open',
   }
   const { fields, changeField } = useForm<StepFormFields>(formInitializer, FormSchema)
