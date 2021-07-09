@@ -249,5 +249,5 @@ const MemberSmallElements = css`
   grid-template-columns: 26px auto 1fr;
   grid-template-rows: 20px 16px;
   grid-column-gap: 8px;
-  grid-row-gap: 4px;
+  grid-row-gap: 0px;
 `

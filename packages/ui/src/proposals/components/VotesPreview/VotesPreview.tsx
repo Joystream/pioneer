@@ -24,7 +24,7 @@ export const VotesPreview = ({ votes }: VotesPreviewProps) => (
   </VotesContainer>
 )
 
-const VotesContainer = styled(RowGapBlock).attrs({ gap: 8 })`
+const VotesContainer = styled(RowGapBlock).attrs({ gap: 0 })`
   border: 1px solid ${Colors.Black[200]};
   border-radius: ${BorderRad.s};
 `
