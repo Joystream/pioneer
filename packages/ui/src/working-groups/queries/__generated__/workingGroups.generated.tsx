@@ -498,6 +498,20 @@ export type TerminatedLeaderEventFieldsFragment = {
   worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
 }
 
+export type WorkerRewardAmountUpdatedEventFragment = {
+  __typename: 'WorkerRewardAmountUpdatedEvent'
+  id: string
+  createdAt: any
+  newRewardPerBlock: any
+}
+
+export type WorkerRewardAccountUpdatedEventFragment = {
+  __typename: 'WorkerRewardAccountUpdatedEvent'
+  id: string
+  createdAt: any
+  newRewardAccount: string
+}
+
 export type GetMemberRoleEventsQueryVariables = Types.Exact<{
   worker_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
   application_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
@@ -518,6 +532,12 @@ export type GetMemberRoleEventsQuery = {
   workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment>
   terminatedWorkerEvents: Array<{ __typename: 'TerminatedWorkerEvent' } & TerminatedWorkerEventFieldsFragment>
   terminatedLeaderEvents: Array<{ __typename: 'TerminatedLeaderEvent' } & TerminatedLeaderEventFieldsFragment>
+  workerRewardAccountUpdatedEvents: Array<
+    { __typename: 'WorkerRewardAccountUpdatedEvent' } & WorkerRewardAccountUpdatedEventFragment
+  >
+  workerRewardAmountUpdatedEvents: Array<
+    { __typename: 'WorkerRewardAmountUpdatedEvent' } & WorkerRewardAmountUpdatedEventFragment
+  >
 }
 
 export type GetGroupEventsQueryVariables = Types.Exact<{
@@ -981,6 +1001,20 @@ export const TerminatedLeaderEventFieldsFragmentDoc = gql`
         handle
       }
     }
+  }
+`
+export const WorkerRewardAmountUpdatedEventFragmentDoc = gql`
+  fragment WorkerRewardAmountUpdatedEvent on WorkerRewardAmountUpdatedEvent {
+    id
+    createdAt
+    newRewardPerBlock
+  }
+`
+export const WorkerRewardAccountUpdatedEventFragmentDoc = gql`
+  fragment WorkerRewardAccountUpdatedEvent on WorkerRewardAccountUpdatedEvent {
+    id
+    createdAt
+    newRewardAccount
   }
 `
 export const GetBudgetSpendingDocument = gql`
@@ -1958,6 +1992,12 @@ export const GetMemberRoleEventsDocument = gql`
     terminatedLeaderEvents(where: { worker_in: $worker_in }) {
       ...TerminatedLeaderEventFields
     }
+    workerRewardAccountUpdatedEvents(where: { worker_in: $worker_in }) {
+      ...WorkerRewardAccountUpdatedEvent
+    }
+    workerRewardAmountUpdatedEvents(where: { worker_in: $worker_in }) {
+      ...WorkerRewardAmountUpdatedEvent
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
@@ -1968,6 +2008,8 @@ export const GetMemberRoleEventsDocument = gql`
   ${WorkerExitedEventFieldsFragmentDoc}
   ${TerminatedWorkerEventFieldsFragmentDoc}
   ${TerminatedLeaderEventFieldsFragmentDoc}
+  ${WorkerRewardAccountUpdatedEventFragmentDoc}
+  ${WorkerRewardAmountUpdatedEventFragmentDoc}
 `
 
 /**

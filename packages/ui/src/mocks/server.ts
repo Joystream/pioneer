@@ -86,6 +86,8 @@ export const makeServer = (environment = 'development') => {
               terminatedWorkerEvents: getWhereResolver('TerminatedWorkerEvent'),
               terminatedLeaderEvents: getWhereResolver('TerminatedLeaderEvent'),
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
+              workerRewardAccountUpdatedEvents: getWhereResolver('WorkerRewardAccountUpdatedEvent'),
+              workerRewardAmountUpdatedEvents: getWhereResolver('WorkerRewardAmountUpdatedEvent'),
             },
           },
         })

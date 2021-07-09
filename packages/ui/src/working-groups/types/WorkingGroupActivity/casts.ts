@@ -16,6 +16,8 @@ import {
   TerminatedLeaderEventFieldsFragment,
   TerminatedWorkerEventFieldsFragment,
   WorkerExitedEventFieldsFragment,
+  WorkerRewardAccountUpdatedEventFragment,
+  WorkerRewardAmountUpdatedEventFragment,
   WorkerStartedLeavingEventFieldsFragment,
 } from '@/working-groups/queries/__generated__/workingGroups.generated'
 import {
@@ -32,6 +34,8 @@ import {
   StakeSlashedActivity,
   StatusTextChangedActivity,
   WorkerExitedActivity,
+  WorkerRewardAccountUpdatedActivity,
+  WorkerRewardAmountUpdatedActivity,
   WorkerStartedLeavingActivity,
   WorkerTerminatedActivity,
 } from '@/working-groups/types'
@@ -222,5 +226,26 @@ export function asWorkerTerminatedActivity(
       id: fragment.worker.membership.id,
       handle: fragment.worker.membership.handle,
     },
+  }
+}
+
+export function asWorkerRewardAccountUpdatedActivity(
+  fragment: WorkerRewardAccountUpdatedEventFragment
+): WorkerRewardAccountUpdatedActivity {
+  return {
+    id: fragment.id,
+    eventType: fragment.__typename,
+    createdAt: fragment.createdAt,
+  }
+}
+
+export function asWorkerRewardAmountUpdatedActivity(
+  fragment: WorkerRewardAmountUpdatedEventFragment
+): WorkerRewardAmountUpdatedActivity {
+  return {
+    id: fragment.id,
+    eventType: fragment.__typename,
+    createdAt: fragment.createdAt,
+    newAmount: fragment.newRewardPerBlock,
   }
 }
