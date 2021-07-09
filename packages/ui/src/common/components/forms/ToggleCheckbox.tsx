@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { Tooltip, TooltipContainer } from '@/common/components/Tooltip'
+import { TooltipContainer } from '@/common/components/Tooltip'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 

@@ -1,16 +1,15 @@
 import BN from 'bn.js'
-import { differenceInSeconds } from 'date-fns'
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
+import { CloseButton } from '@/common/components/buttons'
 import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
-import { CrossIcon } from '@/common/components/icons'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-import { BN_ZERO, BorderRad, Colors, SECONDS_PER_BLOCK, Transitions } from '@/common/constants'
+import { BN_ZERO, BorderRad, Colors, Transitions } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useForm } from '@/common/hooks/useForm'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
@@ -186,9 +185,7 @@ export const TriggerAndDiscussionStep = ({
                 {discussionWhitelist.map((member) => (
                   <WhitelistMember key={member.id}>
                     <MemberInfo member={member} memberSize="s" />
-                    <WhitelistRemoveMemberIcon onClick={() => removeMemberFromWhitelist(member)} id="removeMember">
-                      <CrossIcon />
-                    </WhitelistRemoveMemberIcon>
+                    <WhitelistRemoveMember onClick={() => removeMemberFromWhitelist(member)} id="removeMember" />
                   </WhitelistMember>
                 ))}
               </WhitelistContainer>
@@ -203,7 +200,7 @@ export const TriggerAndDiscussionStep = ({
 const WhitelistContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 10px;
+  grid-gap: 8px;
 `
 
 const WhitelistMember = styled.div`
@@ -211,16 +208,20 @@ const WhitelistMember = styled.div`
   grid-template-columns: 1fr 16px;
   grid-column-gap: 8px;
   align-items: center;
-  padding: 12px 8px;
+  height: 64px;
+  padding: 4px 8px;
   background-color: ${Colors.White};
+  border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
-`
 
-const WhitelistRemoveMemberIcon = styled.span`
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.6;
+  &:hover,
+  &:focus-within {
+    border-color: ${Colors.Blue[400]};
   }
+`
+const WhitelistRemoveMember = styled(CloseButton)`
+  width: 16px;
+  height: 16px;
+  color: ${Colors.Black[900]};
 `
