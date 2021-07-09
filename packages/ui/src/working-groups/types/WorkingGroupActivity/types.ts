@@ -20,6 +20,8 @@ export type WorkingGroupActivity =
   | OpeningFilledActivity
   | OpeningAnnouncedActivity
   | WorkerTerminatedActivity
+  | WorkerRewardAccountUpdatedActivity
+  | WorkerRewardAmountUpdatedActivity
 
 type ShortMember = Pick<Member, 'id' | 'handle'>
 
@@ -103,4 +105,13 @@ export interface WorkerTerminatedActivity extends BaseActivity {
   eventType: 'TerminatedWorkerEvent' | 'TerminatedLeaderEvent'
   member: ShortMember
   groupName: string
+}
+
+export interface WorkerRewardAccountUpdatedActivity extends BaseActivity {
+  eventType: 'WorkerRewardAccountUpdatedEvent'
+}
+
+export interface WorkerRewardAmountUpdatedActivity extends BaseActivity {
+  eventType: 'WorkerRewardAmountUpdatedEvent'
+  newAmount: number
 }
