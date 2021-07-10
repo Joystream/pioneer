@@ -73,7 +73,7 @@ export const Animations = css`
     }
     &-enter-active {
       opacity: 1;
-      animation: UnrearIndicatorAnimation ${Transitions.durationXL} ease;
+      animation: UnreadIndicatorAnimation ${Transitions.durationXL} ease;
     }
     &-exit {
       opacity: 1;
@@ -81,7 +81,7 @@ export const Animations = css`
     &-exit-active {
       opacity: 0;
     }
-    @keyframes UnrearIndicatorAnimation {
+    @keyframes UnreadIndicatorAnimation {
       0% {
         transform: translateY(0px);
       }
