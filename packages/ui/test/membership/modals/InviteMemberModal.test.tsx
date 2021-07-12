@@ -79,19 +79,19 @@ describe('UI: InviteMemberModal', () => {
 
     renderModal()
 
-    expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
+    expect(await getButton(/^Invite a member$/i)).toBeDisabled()
 
     await selectMember('Inviting member', 'alice')
-    await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
+    await fireEvent.change(getInput(/Root account/i), {
       target: { value: bobStash.address },
     })
-    await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
+    await fireEvent.change(getInput(/Controller account/i), {
       target: { value: controllerAddress },
     })
     await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
 
-    expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeEnabled()
+    expect(await getButton(/^Invite a member$/i)).toBeEnabled()
   })
 
   it('Disables button when one of addresses is invalid', async () => {
@@ -99,36 +99,36 @@ describe('UI: InviteMemberModal', () => {
 
     renderModal()
 
-    expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
+    expect(await getButton(/^Invite a member$/i)).toBeDisabled()
 
     await selectMember('Inviting member', 'alice')
-    await fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
+    await fireEvent.change(getInput(/Root account/i), {
       target: { value: bobStash.address },
     })
-    await fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
+    await fireEvent.change(getInput(/Controller account/i), {
       target: { value: 'AAa' },
     })
     await fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     await fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
 
-    expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeDisabled()
+    expect(await getButton(/^Invite a member$/i)).toBeDisabled()
   })
 
   describe('Authorize', () => {
     async function fillFormAndProceed(invitor = 'alice') {
       seedMembers(server.server, 2)
       renderModal()
-      await screen.findAllByRole('button')
+      await getButton(/^Invite a member$/i)
       await selectMember('Inviting member', invitor)
-      fireEvent.change(screen.getByRole('textbox', { name: /Root account/i }), {
+      fireEvent.change(getInput(/Root account/i), {
         target: { value: bobStash.address },
       })
-      fireEvent.change(screen.getByRole('textbox', { name: /Controller account/i }), {
+      fireEvent.change(getInput(/Controller account/i), {
         target: { value: controllerAddress },
       })
       fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
       fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
-      fireEvent.click(await screen.findByRole('button', { name: /^Invite a member$/i }))
+      fireEvent.click(await getButton(/^Invite a member$/i))
     }
 
     it('Authorize step', async () => {
@@ -137,14 +137,14 @@ describe('UI: InviteMemberModal', () => {
       expect(await screen.findByText('Authorize transaction')).toBeDefined()
       expect(await screen.findByText('You are inviting this member. You have 5 invites left.')).toBeDefined()
       expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
-      expect(await screen.findByRole('button', { name: /^Sign and create/i })).toBeEnabled()
+      expect(await getButton(/^Sign and create/i)).toBeEnabled()
     })
 
     it('Validate funds', async () => {
       stubBalances(api, { available: 0 })
       await fillFormAndProceed()
 
-      expect(await screen.findByRole('button', { name: /^Sign and create/i })).toBeDisabled()
+      expect(await getButton(/^Sign and create/i)).toBeDisabled()
       expect(await screen.findByText(/^Insufficient funds to cover/i)).toBeDefined()
     })
 
@@ -167,6 +167,14 @@ describe('UI: InviteMemberModal', () => {
       expect(await screen.findByText('Failure')).toBeDefined()
     })
   })
+
+  async function getButton(text: string | RegExp) {
+    return (await screen.findByText(text, { selector: 'span' })).parentElement!
+  }
+
+  function getInput(labelText: string | RegExp) {
+    return screen.getByLabelText(labelText, { selector: 'input' })
+  }
 
   function renderModal() {
     render(
