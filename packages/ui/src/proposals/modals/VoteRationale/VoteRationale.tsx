@@ -5,14 +5,17 @@ import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, CloseButton } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
+import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import {
   SidePane,
   SidePaneBody,
+  SidePaneColumn,
   SidePaneGlass,
   SidePaneHeader,
   SidePaneLabel,
   SidePanelTop,
   SidePaneRow,
+  SidePaneTable,
   SidePaneText,
   SidePaneTitle,
   SidePaneTopButtonsGroup,
@@ -54,14 +57,20 @@ export const VoteRationale = React.memo(() => {
           </SidePanelTop>
         </SidePaneHeader>
         <SidePaneBody>
-          <SidePaneRow>
-            <SidePaneLabel text="Voted on" />
-            <BlockTime block={vote.block} />
-          </SidePaneRow>
-          <SidePaneRow>
-            <SidePaneLabel text="Status" />
-            <SidePaneText>{vote?.voteKind}</SidePaneText>
-          </SidePaneRow>
+          <SidePaneTable>
+            <SidePaneRow>
+              <SidePaneLabel text="Voted on" />
+              <BlockTime block={vote.block} />
+            </SidePaneRow>
+            <SidePaneRow>
+              <SidePaneLabel text="Status" />
+              <SidePaneText>{vote?.voteKind}</SidePaneText>
+            </SidePaneRow>
+            <SidePaneColumn>
+              <SidePaneLabel text="Rationale" />
+              <MarkdownPreview markdown={vote.rationale} size="s" />
+            </SidePaneColumn>
+          </SidePaneTable>
         </SidePaneBody>
       </SidePane>
     </SidePaneGlass>
