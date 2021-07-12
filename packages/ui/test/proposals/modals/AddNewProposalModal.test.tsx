@@ -59,7 +59,7 @@ describe('UI: AddNewProposalModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    seedMembers(server.server)
+    seedMembers(server.server, 2)
 
     jest.spyOn(console, 'log').mockImplementation()
 
@@ -76,6 +76,8 @@ describe('UI: AddNewProposalModal', () => {
     stubDefaultBalances(api)
     stubProposalConstants(api)
     stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+
+    await renderModal()
   })
 
   describe('Requirements', () => {
@@ -94,10 +96,6 @@ describe('UI: AddNewProposalModal', () => {
 
       expect(await findByText('Insufficient Funds')).toBeDefined()
     })
-  })
-
-  beforeEach(async () => {
-    await renderModal()
   })
 
   describe('Warning modal', () => {
@@ -369,7 +367,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   async function getPreviousStepButton() {
-    return await screen.findByRole('button', { name: /Previous step/i })
+    return await getButton(/Previous step/i)
   }
 
   async function clickPreviousButton() {
@@ -378,12 +376,16 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   async function getNextStepButton() {
-    return await screen.findByRole('button', { name: /Next step/i })
+    return getButton(/Next step/i)
   }
 
   async function clickNextButton() {
     const button = await getNextStepButton()
     await fireEvent.click(button as HTMLElement)
+  }
+
+  async function getButton(text: string | RegExp) {
+    return (await screen.findByText(text, { selector: 'span' })).parentElement!
   }
 
   function renderModal() {
