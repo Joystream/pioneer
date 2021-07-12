@@ -1,34 +1,38 @@
 [
   {
-    "createdAt": "2021-07-03T11:50:28.089Z",
+    "createdAt": "2021-07-06T19:14:07.495Z",
     "groupId": "forumWorkingGroup",
     "upcomingworkinggroupopeningcreatedInEventIds": [
       "forumWorkingGroup-0"
     ],
-    "workinggroupmetadatasetInEventIds": ["1"]
+    "workinggroupmetadatasetInEventIds": [
+      "1"
+    ]
   },
   {
-    "createdAt": "2021-06-30T23:22:05.064Z",
+    "createdAt": "2021-07-11T05:43:38.942Z",
     "groupId": "storageWorkingGroup",
     "upcomingworkinggroupopeningcreatedInEventIds": [
-      "storageWorkingGroup-2"
+      "storageWorkingGroup-3"
     ],
     "workinggroupmetadatasetInEventIds": []
   },
   {
-    "createdAt": "2021-07-03T17:13:17.278Z",
+    "createdAt": "2021-07-10T03:20:34.538Z",
     "groupId": "contentDirectoryWorkingGroup",
     "upcomingworkinggroupopeningcreatedInEventIds": [
       "contentDirectoryWorkingGroup-5"
     ],
-    "workinggroupmetadatasetInEventIds": ["1"]
+    "workinggroupmetadatasetInEventIds": []
   },
   {
-    "createdAt": "2021-07-04T13:51:26.285Z",
+    "createdAt": "2021-07-09T12:03:12.528Z",
     "groupId": "membershipWorkingGroup",
     "upcomingworkinggroupopeningcreatedInEventIds": [
-      "membershipWorkingGroup-8"
+      "membershipWorkingGroup-7"
     ],
-    "workinggroupmetadatasetInEventIds": []
+    "workinggroupmetadatasetInEventIds": [
+      "1"
+    ]
   }
 ]

@@ -107,7 +107,7 @@ export type GetVoteWithDetailsQueryVariables = Types.Exact<{
 
 export type GetVoteWithDetailsQuery = {
   __typename: 'Query'
-  proposalVotedEvents: Array<{ __typename: 'ProposalVotedEvent' } & VoteWithDetailsFieldsFragment>
+  proposalVotedEventByUniqueInput?: Types.Maybe<{ __typename: 'ProposalVotedEvent' } & VoteWithDetailsFieldsFragment>
 }
 
 export const VoteFieldsFragmentDoc = gql`
@@ -250,7 +250,7 @@ export type GetProposalLazyQueryHookResult = ReturnType<typeof useGetProposalLaz
 export type GetProposalQueryResult = Apollo.QueryResult<GetProposalQuery, GetProposalQueryVariables>
 export const GetVoteWithDetailsDocument = gql`
   query GetVoteWithDetails($id: ID!) {
-    proposalVotedEvents(where: { id_eq: $id }) {
+    proposalVotedEventByUniqueInput(where: { id: $id }) {
       ...VoteWithDetailsFields
     }
   }

@@ -62,7 +62,7 @@ query getProposal($where: ProposalWhereUniqueInput!) {
 }
 
 query GetVoteWithDetails($id: ID!) {
-  proposalVotedEvents(where: {id_eq: $id}) {
+  proposalVotedEventByUniqueInput(where: {id: $id}) {
     ...VoteWithDetailsFields
   }
 }

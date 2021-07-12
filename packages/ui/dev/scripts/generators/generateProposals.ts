@@ -44,6 +44,7 @@ const LastStatuses: [number, ProposalStatus[]][] = [
 const isIntermediateStatus = (status: ProposalStatus) => proposalActiveStatuses.includes(status)
 
 let nextId = 0
+let nextVoteId = 0
 
 const generateProposal = (mocks: Mocks) => {
   const statusHistory = [DECIDING, ...randomFromWeightedSet(VoteRoundStatuses), ...randomFromWeightedSet(LastStatuses)]
@@ -62,7 +63,15 @@ const generateProposal = (mocks: Mocks) => {
 
   const description = randomMarkdown()
   const voteKinds = randomsFromWeightedSet(VotesKind, randomFromRange(0, MAX_VOTE)) as string[]
-  const votes = voteKinds.map((voteKind) => ({ voteKind }))
+  const votes = voteKinds.map((voteKind) => ({
+    id: nextVoteId++,
+    voteKind,
+    network: 'OLYMPIA',
+    createdAt: new Date().toJSON(),
+    voterId: member.id,
+    inBlock: randomFromRange(1000, 2000),
+    rationale: randomMarkdown(),
+  }))
 
   return {
     id: String(nextId++),
