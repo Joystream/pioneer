@@ -23,7 +23,7 @@ const TextBoldStyle = css`
 `
 
 const TextItalicStyle = css`
-  font-weight: 700;
+  font-style: italic;
 `
 
 const TextDarkStyle = css`
