@@ -204,6 +204,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       on: {
         BACK: 'generalParameters.triggerAndDiscussion',
         NEXT: 'error',
+        SET_ACCOUNT: {
+          actions: assign({
+            specifics: (context, event) => {
+              return { ...context.specifics, account: (event as SetAccountEvent).account }
+            },
+          }),
+        },
+        SET_AMOUNT: {
+          actions: assign({
+            specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
+          }),
+        },
       },
     },
     error: { type: 'final' },

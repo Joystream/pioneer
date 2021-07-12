@@ -17,8 +17,8 @@ export const SpecificParametersStep = ({ constants, params, send }: SpecificPara
         <FundingRequest
           account={params.specifics.account}
           amount={params.specifics.amount}
-          setAccount={(account) => send('SET_ACCOUNT', account)}
-          setAmount={(amount) => send('SET_AMOUNT', amount)}
+          setAccount={(account) => send('SET_ACCOUNT', { account })}
+          setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
     default:
