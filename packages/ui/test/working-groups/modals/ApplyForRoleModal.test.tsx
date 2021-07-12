@@ -137,7 +137,7 @@ describe('UI: ApplyForRoleModal', () => {
 
       await selectAccount('Select account for Staking', 'alice')
       const input = await screen.findByLabelText(/Select amount for staking/i)
-      await fireEvent.change(input, { target: { value: '50' } })
+      fireEvent.change(input, { target: { value: '50' } })
 
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
@@ -148,7 +148,7 @@ describe('UI: ApplyForRoleModal', () => {
 
       await selectAccount('Select account for Staking', 'alice')
       const input = await screen.findByLabelText(/Select amount for staking/i)
-      await fireEvent.change(input, { target: { value: '2000' } })
+      fireEvent.change(input, { target: { value: '2000' } })
 
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
@@ -158,9 +158,7 @@ describe('UI: ApplyForRoleModal', () => {
   describe('Application form step', () => {
     beforeEach(async () => {
       await renderModal()
-      await fillStakeStep()
-      await fireEvent.click(await getNextStepButton())
-      await screen.findByRole('heading', { name: 'Application' })
+      await fillAndSubmitStakeStep()
     })
 
     it('Form questions', async () => {
@@ -174,9 +172,9 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Valid fields', async () => {
-      await fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-      await fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-      await fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
 
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
@@ -186,12 +184,11 @@ describe('UI: ApplyForRoleModal', () => {
   describe('Authorize', () => {
     async function fillSteps() {
       await renderModal()
-      await fillStakeStep()
-      await fireEvent.click(await getNextStepButton())
-      await screen.findByRole('heading', { name: 'Application' })
-      await fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-      await fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-      await fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+      await fillAndSubmitStakeStep()
+
+      fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
       fireEvent.click(await getNextStepButton())
     }
 
@@ -228,13 +225,15 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   async function getNextStepButton() {
-    return await screen.findByRole('button', { name: /Next step/i })
+    return (await screen.findByText(/Next step/i)).parentElement!
   }
 
-  async function fillStakeStep() {
+  async function fillAndSubmitStakeStep() {
     await selectAccount('Select account for Staking', 'alice')
     const input = await screen.findByLabelText(/Select amount for staking/i)
-    await fireEvent.change(input, { target: { value: '2000' } })
+    fireEvent.change(input, { target: { value: '2000' } })
+    fireEvent.click(await getNextStepButton())
+    await screen.findByText('Application')
   }
 
   function renderModal() {
