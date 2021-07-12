@@ -29,7 +29,10 @@ import { useConstants } from '@/proposals/hooks/useConstants'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
-import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
+import {
+  isValidSpecificParameters,
+  SpecificParametersStep,
+} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
@@ -107,6 +110,10 @@ export const AddNewProposalModal = () => {
       state.context.discussionWhitelist
     ) {
       return setValidNext(true)
+    }
+
+    if (state.matches('specificParameters')) {
+      return setValidNext(isValidSpecificParameters(state.context.type, state.context.specifics))
     }
 
     return setValidNext(false)
