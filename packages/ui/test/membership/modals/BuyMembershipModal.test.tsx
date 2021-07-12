@@ -10,6 +10,7 @@ import { Account } from '@/accounts/types'
 import { ApiContext } from '@/common/providers/api/context'
 import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 
+import { getButton } from '../../_helpers/getButton'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, bob } from '../../_mocks/keyring'
@@ -66,98 +67,95 @@ describe('UI: BuyMembershipModal', () => {
   })
 
   it('Renders a modal', async () => {
-    const { findByText } = renderModal()
+    renderModal()
 
-    expect(await findByText('Add membership')).toBeDefined()
-    expect((await findByText('Creation fee:'))?.parentNode?.textContent).toMatch(/^Creation fee:100/i)
+    expect(await screen.findByText('Add membership')).toBeDefined()
+    expect((await screen.findByText('Creation fee:'))?.parentNode?.textContent).toMatch(/^Creation fee:100/i)
   })
 
   it('Enables button when valid form', async () => {
-    const { getByLabelText } = renderModal()
+    renderModal()
 
     expect(await findSubmitButton()).toBeDisabled()
 
     await selectAccount('Root account', 'bob')
     await selectAccount('Controller account', 'alice')
-    fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-    fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-    fireEvent.click(getByLabelText(/I agree to the terms/i))
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+    fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
     expect(await findSubmitButton()).not.toBeDisabled()
   })
 
   it('Disables button when invalid avatar URL', async () => {
-    const { getByLabelText } = renderModal()
+    renderModal()
 
     expect(await findSubmitButton()).toBeDisabled()
 
     await selectAccount('Root account', 'bob')
     await selectAccount('Controller account', 'alice')
-    fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-    fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-    fireEvent.click(getByLabelText(/I agree to the terms/i))
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+    fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
-    fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
+    fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
     expect(await findSubmitButton()).toBeDisabled()
 
-    fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
+    fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
     expect(await findSubmitButton()).not.toBeDisabled()
   })
 
   describe('Authorize step', () => {
     const renderAuthorizeStep = async () => {
-      const rendered = renderModal()
-      const { getByLabelText } = rendered
+      renderModal()
 
       await selectAccount('Root account', 'bob')
       await selectAccount('Controller account', 'alice')
-      fireEvent.change(getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-      fireEvent.change(getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-      fireEvent.change(getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
-      fireEvent.change(getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-      fireEvent.click(getByLabelText(/I agree to the terms/i))
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+      fireEvent.change(screen.getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
+      fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
+      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
       fireEvent.click(await findSubmitButton())
-
-      return rendered
     }
 
     it('Renders authorize transaction', async () => {
-      const { getByText, getByRole } = await renderAuthorizeStep()
+      await renderAuthorizeStep()
 
-      expect(getByText('Authorize transaction')).toBeDefined()
-      expect(getByText(/^Creation fee:/i)?.nextSibling?.textContent).toBe('100')
-      expect(getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
-      expect(getByRole('heading', { name: /alice/i })).toBeDefined()
+      expect(screen.getByText('Authorize transaction')).toBeDefined()
+      expect(screen.getByText(/^Creation fee:/i)?.nextSibling?.textContent).toBe('100')
+      expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+      expect(screen.getByRole('heading', { name: /alice/i })).toBeDefined()
     })
 
     it('Without required balance', async () => {
       stubBalances(api, { available: 0, locked: 0 })
 
-      const { findByRole } = await renderAuthorizeStep()
+      await renderAuthorizeStep()
 
-      expect(await findByRole('button', { name: /^sign and/i })).toBeDisabled()
+      expect(await getButton(/^sign and/i)).toBeDisabled()
     })
 
     describe('Success', () => {
       it('Renders transaction success', async () => {
         stubTransactionSuccess(transaction, [1], 'members', 'MemberRegistered')
-        const { getByText, findByText } = await renderAuthorizeStep()
+        await renderAuthorizeStep()
 
-        fireEvent.click(await screen.findByRole('button', { name: /^sign and create a member$/i }))
+        fireEvent.click(await getButton(/^sign and create a member$/i))
 
-        expect(await findByText('Success')).toBeDefined()
-        expect(getByText(/^realbobbybob/i)).toBeDefined()
+        expect(await screen.findByText('Success')).toBeDefined()
+        expect(screen.getByText(/^realbobbybob/i)).toBeDefined()
       })
 
       it('Enables the View My Profile button', async () => {
         stubTransactionSuccess(transaction, [registry.createType('MemberId', 12)], 'members', 'MemberRegistered')
-        const { findByText, findByRole } = await renderAuthorizeStep()
+        await renderAuthorizeStep()
 
-        fireEvent.click(await screen.findByRole('button', { name: /^sign and create a member$/i }))
+        fireEvent.click(await getButton(/^sign and create a member$/i))
 
-        expect(await findByText('Success')).toBeDefined()
-        const button = await findByRole('button', { name: 'View my profile' })
+        expect(await screen.findByText('Success')).toBeDefined()
+        const button = await getButton('View my profile')
         expect(button).toBeEnabled()
         fireEvent.click(button)
         expect(mockCallback.mock.calls[0][0]).toEqual({ modal: 'Member', data: { id: '12' } })
@@ -167,21 +165,21 @@ describe('UI: BuyMembershipModal', () => {
     describe('Failure', () => {
       it('Renders transaction failure', async () => {
         stubTransactionFailure(transaction)
-        const { findByText } = await renderAuthorizeStep()
+        await renderAuthorizeStep()
 
-        fireEvent.click(await screen.findByRole('button', { name: /^sign and create a member$/i }))
+        fireEvent.click(await getButton(/^sign and create a member$/i))
 
-        expect(await findByText('Failure')).toBeDefined()
+        expect(await screen.findByText('Failure')).toBeDefined()
       })
     })
   })
 
   async function findSubmitButton() {
-    return await screen.findByRole('button', { name: /^Create a membership$/i })
+    return await getButton(/^Create a membership$/i)
   }
 
   function renderModal() {
-    return render(
+    render(
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>

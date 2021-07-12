@@ -11,13 +11,14 @@ import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
+import { seedApplication } from '@/mocks/data/seedApplications'
+import { seedOpening, seedOpeningStatuses } from '@/mocks/data/seedOpenings'
 import { seedWorker } from '@/mocks/data/seedWorkers'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { ChangeAccountModal } from '@/working-groups/modals/ChangeAccountModal/ChangeAccountModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 
-import { seedApplication } from '../../../src/mocks/data/seedApplications'
-import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
+import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -52,7 +53,7 @@ describe('UI: ChangeRoleModal', () => {
   let useAccounts: UseAccounts
   let transaction: any
 
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     jest.spyOn(console, 'log').mockImplementation()
@@ -62,15 +63,16 @@ describe('UI: ChangeRoleModal', () => {
       hasAccounts: true,
       allAccounts: [alice, bob],
     }
-  })
 
-  beforeEach(async () => {
     seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
     seedOpening(OPENING_DATA, server.server)
     seedApplication(APPLICATION_DATA, server.server)
     seedWorker(WORKER_DATA, server.server)
+  })
+
+  beforeEach(async () => {
     useMyMemberships.setActive(getMember('alice'))
     stubDefaultBalances(api)
   })
@@ -82,20 +84,20 @@ describe('UI: ChangeRoleModal', () => {
       renderModal()
       fireEvent.click(await screen.findByPlaceholderText('Select account or paste account address'))
       fireEvent.click(await screen.findByText('bob'))
-      fireEvent.click(await screen.findByRole('button', { name: 'Change' }))
+      fireEvent.click(await getButton('Change'))
     }
 
     it('Should render transaction success', async () => {
       await renderSignStep()
       stubTransactionSuccess(transaction, [worker.id, bob.address], 'workingGroup', 'WorkerRoleAccountUpdated')
-      fireEvent.click(await screen.findByRole('button', { name: 'Sign and change role account' }))
+      fireEvent.click(await getButton('Sign and change role account'))
       expect(await screen.findByText('You have successfully changed the role account.')).toBeDefined()
     })
 
     it('Should render transaction failure', async () => {
       await renderSignStep()
       stubTransactionFailure(transaction)
-      fireEvent.click(screen.getByRole('button', { name: 'Sign and change role account' }))
+      fireEvent.click(await getButton('Sign and change role account'))
       expect(await screen.findByText('There was a problem changing the role account.')).toBeDefined()
     })
   })
@@ -107,20 +109,20 @@ describe('UI: ChangeRoleModal', () => {
       renderModal()
       fireEvent.click(await screen.findByPlaceholderText('Select account or paste account address'))
       fireEvent.click(await screen.findByText('bob'))
-      fireEvent.click(await screen.findByRole('button', { name: 'Change' }))
+      fireEvent.click(await getButton('Change'))
     }
 
     it('Should render transaction success', async () => {
       await renderSignStep()
       stubTransactionSuccess(transaction, [worker.id, bob.address], 'workingGroup', 'WorkerRewardAccountUpdated')
-      fireEvent.click(await screen.findByRole('button', { name: 'Sign and change reward account' }))
+      fireEvent.click(await getButton('Sign and change reward account'))
       expect(await screen.findByText('You have successfully changed the reward account.')).toBeDefined()
     })
 
     it('Should render transaction failure', async () => {
       await renderSignStep()
       stubTransactionFailure(transaction)
-      fireEvent.click(screen.getByRole('button', { name: 'Sign and change reward account' }))
+      fireEvent.click(await getButton('Sign and change reward account'))
       expect(await screen.findByText('There was a problem changing the reward account.')).toBeDefined()
     })
   })

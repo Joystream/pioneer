@@ -35,19 +35,20 @@ jest.mock('@/accounts/hooks/useMyAccounts', () => {
 })
 
 describe('UI: RecoverBalanceModal', () => {
+  const api = stubApi()
+  const server = setupMockServer({ noCleanupAfterEach: true })
+  let tx: any
+
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
     useMyAccounts.allAccounts.push(alice, bob)
+    seedMembers(server.server, 2)
   })
 
   afterAll(() => {
     jest.restoreAllMocks()
   })
-
-  const api = stubApi()
-  const server = setupMockServer()
-  let tx: any
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -65,7 +66,6 @@ describe('UI: RecoverBalanceModal', () => {
   }
 
   beforeEach(async () => {
-    seedMembers(server.server)
     stubDefaultBalances(api)
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')

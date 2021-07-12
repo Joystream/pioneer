@@ -9,6 +9,7 @@ import { UseAccounts } from '../../../src/accounts/providers/accounts/provider'
 import { ApiContext } from '../../../src/common/providers/api/context'
 import { UpdateMembershipModal } from '../../../src/memberships/modals/UpdateMembershipModal'
 import { Member } from '../../../src/memberships/types'
+import { getButton } from '../../_helpers/getButton'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
@@ -70,11 +71,11 @@ describe('UI: UpdatedMembershipModal', () => {
   it('Enables button on member field change', async () => {
     renderModal(member)
 
-    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeDisabled()
+    expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
     fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
 
-    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
+    expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   it('Enables save button on account change', async () => {
@@ -82,19 +83,19 @@ describe('UI: UpdatedMembershipModal', () => {
 
     await selectAccount('root account', 'bob')
 
-    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
+    expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   it('Disables button when invalid avatar URL', async () => {
     renderModal(member)
 
     fireEvent.change(await screen.findByLabelText(/member avatar/i), { target: { value: 'avatar' } })
-    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeDisabled()
+    expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
     fireEvent.change(await screen.findByLabelText(/member avatar/i), {
       target: { value: 'http://example.com/example.jpg' },
     })
-    expect(await screen.findByRole('button', { name: /^Save changes$/i })).toBeEnabled()
+    expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   describe('Authorize - member field', () => {

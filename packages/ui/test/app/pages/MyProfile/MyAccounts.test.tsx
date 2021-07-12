@@ -20,9 +20,7 @@ import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
 import { stubApi, stubBalances, stubDefaultBalances, stubTransaction } from '../../../_mocks/transactions'
 
-const testStatisticItem = (labelMatcher: RegExp, expected: RegExp) => {
-  const header = screen.getByRole('banner')
-
+const testStatisticItem = (header: HTMLElement, labelMatcher: RegExp, expected: RegExp) => {
   const label = within(header).getByText(labelMatcher)
   expect(label?.parentElement).toBeDefined()
   expect(label!.parentElement?.nextElementSibling?.textContent).toMatch(expected)
@@ -30,7 +28,7 @@ const testStatisticItem = (labelMatcher: RegExp, expected: RegExp) => {
 
 describe('Page: MyAccounts', () => {
   let useAccounts: UseAccounts
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
   const api = stubApi()
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -40,7 +38,10 @@ describe('Page: MyAccounts', () => {
     hasMembers: true,
   }
 
-  beforeAll(cryptoWaitReady)
+  beforeAll(async () => {
+    await cryptoWaitReady()
+    seedMembers(server.server, 2)
+  })
 
   beforeEach(() => {
     useAccounts = {
@@ -49,7 +50,6 @@ describe('Page: MyAccounts', () => {
     }
 
     stubDefaultBalances(api)
-    seedMembers(server.server)
   })
 
   it('Accounts List', async () => {
@@ -62,32 +62,36 @@ describe('Page: MyAccounts', () => {
   it('Free balances', () => {
     renderPage()
 
-    testStatisticItem(/total balance/i, /2,000/i)
-    testStatisticItem(/total transferable balance/i, /2,000/i)
-    testStatisticItem(/total locked balance/i, /0/i)
-    testStatisticItem(/total recoverable/i, /0/i)
+    const header: HTMLElement = screen.getByRole('banner')
+    testStatisticItem(header, /total balance/i, /2,000/i)
+    testStatisticItem(header, /total transferable balance/i, /2,000/i)
+    testStatisticItem(header, /total locked balance/i, /0/i)
+    testStatisticItem(header, /total recoverable/i, /0/i)
   })
 
   it('Locked balance', () => {
     stubBalances(api, { locked: 250, available: 10_000 })
+
     renderPage()
 
-    testStatisticItem(/total balance/i, /20,500/i)
-    testStatisticItem(/total transferable balance/i, /20,000/i)
-    testStatisticItem(/total locked balance/i, /500/i)
-    testStatisticItem(/total recoverable/i, /0/i)
+    const header: HTMLElement = screen.getByRole('banner')
+    testStatisticItem(header, /total balance/i, /20,500/i)
+    testStatisticItem(header, /total transferable balance/i, /20,000/i)
+    testStatisticItem(header, /total locked balance/i, /500/i)
+    testStatisticItem(header, /total recoverable/i, /0/i)
   })
 
   it('Recoverable locked balance', () => {
     stubBalances(api, { locked: 250, available: 10_000, lockId: 1 })
+
     renderPage()
 
-    testStatisticItem(/total balance/i, /20,500/i)
-    testStatisticItem(/total transferable balance/i, /20,000/i)
-    testStatisticItem(/total locked balance/i, /500/i)
-    testStatisticItem(/total recoverable/i, /500/i)
+    const header: HTMLElement = screen.getByRole('banner')
+    testStatisticItem(header, /total balance/i, /20,500/i)
+    testStatisticItem(header, /total transferable balance/i, /20,000/i)
+    testStatisticItem(header, /total locked balance/i, /500/i)
+    testStatisticItem(header, /total recoverable/i, /500/i)
 
-    const header = screen.getByRole('banner')
     const recoverAll = within(header).getByRole('button', { name: /recover all/i })
     expect(recoverAll).toBeDefined()
   })

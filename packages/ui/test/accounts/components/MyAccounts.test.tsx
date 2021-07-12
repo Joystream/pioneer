@@ -5,14 +5,15 @@ import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
-import { Account, Balances } from '../../../src/accounts/types'
-import { Accounts } from '../../../src/app/pages/Profile/components/Accounts'
-import { shortenAddress } from '../../../src/common/model/formatters'
-import { KeyringContext } from '../../../src/common/providers/keyring/context'
-import { MembershipContext } from '../../../src/memberships/providers/membership/context'
-import { MyMemberships } from '../../../src/memberships/providers/membership/provider'
-import { Member } from '../../../src/memberships/types'
-import { seedMembers } from '../../../src/mocks/data'
+import { Account, Balances } from '@/accounts/types'
+import { Accounts } from '@/app/pages/Profile/components/Accounts'
+import { shortenAddress } from '@/common/model/formatters'
+import { KeyringContext } from '@/common/providers/keyring/context'
+import { MembershipContext } from '@/memberships/providers/membership/context'
+import { MyMemberships } from '@/memberships/providers/membership/provider'
+import { Member } from '@/memberships/types'
+import { seedMembers } from '@/mocks/data'
+
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockApolloProvider } from '../../_mocks/providers'
@@ -23,7 +24,7 @@ const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
+jest.mock('@/accounts/hooks/useMyAccounts', () => {
   return {
     useMyAccounts: () => useMyAccounts,
   }
@@ -35,10 +36,10 @@ const useBalance = {
   useBalance: () => balances,
 }
 
-jest.mock('../../../src/accounts/hooks/useBalance', () => useBalance)
+jest.mock('@/accounts/hooks/useBalance', () => useBalance)
 
 describe('UI: Accounts list', () => {
-  const mockServer = setupMockServer()
+  const mockServer = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(cryptoWaitReady)
 
@@ -107,7 +108,7 @@ describe('UI: Accounts list', () => {
         locks: [],
       }
       const aliceMember = getMember('alice')
-      seedMembers(mockServer.server)
+      seedMembers(mockServer.server, 2)
       const { findByText } = renderAccounts(aliceMember)
 
       const aliceBox = (await findByText(shortenAddress(alice.address)))!.parentElement!.parentElement!

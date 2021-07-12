@@ -17,6 +17,7 @@ import { seedMembers } from '@/mocks/data'
 import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 
+import { getButton } from '../../_helpers/getButton'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { selectMember } from '../../_helpers/selectMember'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
@@ -55,10 +56,12 @@ describe('UI: AddNewProposalModal', () => {
 
   let useAccounts: UseAccounts
 
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    seedMembers(server.server, 2)
+
     jest.spyOn(console, 'log').mockImplementation()
 
     useAccounts = {
@@ -68,14 +71,14 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   beforeEach(async () => {
-    seedMembers(server.server)
-
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
     stubDefaultBalances(api)
     stubProposalConstants(api)
     stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+
+    await renderModal()
   })
 
   describe('Requirements', () => {
@@ -94,10 +97,6 @@ describe('UI: AddNewProposalModal', () => {
 
       expect(await findByText('Insufficient Funds')).toBeDefined()
     })
-  })
-
-  beforeEach(async () => {
-    await renderModal()
   })
 
   describe('Warning modal', () => {
@@ -369,7 +368,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   async function getPreviousStepButton() {
-    return await screen.findByRole('button', { name: /Previous step/i })
+    return await getButton(/Previous step/i)
   }
 
   async function clickPreviousButton() {
@@ -378,7 +377,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   async function getNextStepButton() {
-    return await screen.findByRole('button', { name: /Next step/i })
+    return getButton(/Next step/i)
   }
 
   async function clickNextButton() {

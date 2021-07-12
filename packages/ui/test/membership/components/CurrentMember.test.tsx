@@ -29,7 +29,7 @@ describe('UI: CurrentMember component', () => {
 
   describe('with multiple memberships', () => {
     beforeEach(() => {
-      seedMembers(mockServer.server)
+      seedMembers(mockServer.server, 2)
     })
 
     it('Displays memberships count', async () => {

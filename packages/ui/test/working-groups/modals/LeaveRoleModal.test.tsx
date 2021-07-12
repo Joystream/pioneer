@@ -10,12 +10,13 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
+import { seedApplication } from '@/mocks/data/seedApplications'
+import { seedOpening, seedOpeningStatuses } from '@/mocks/data/seedOpenings'
 import { seedWorker } from '@/mocks/data/seedWorkers'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { LeaveRoleModal } from '@/working-groups/modals/LeaveRoleModal/LeaveRoleModal'
 
-import { seedApplication } from '../../../src/mocks/data/seedApplications'
-import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
+import { getButton } from '../../_helpers/getButton'
 import { alice } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -44,11 +45,18 @@ describe('UI: LeaveRoleModal', () => {
   let useAccounts: UseAccounts
   let transaction: any
 
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     jest.spyOn(console, 'log').mockImplementation()
     await cryptoWaitReady()
+
+    seedMembers(server.server)
+    seedWorkingGroups(server.server)
+    seedOpeningStatuses(server.server)
+    seedOpening(OPENING_DATA, server.server)
+    seedApplication(APPLICATION_DATA, server.server)
+    seedWorker(WORKER_DATA, server.server)
 
     useAccounts = {
       hasAccounts: true,
@@ -57,12 +65,6 @@ describe('UI: LeaveRoleModal', () => {
   })
 
   beforeEach(async () => {
-    seedMembers(server.server)
-    seedWorkingGroups(server.server)
-    seedOpeningStatuses(server.server)
-    seedOpening(OPENING_DATA, server.server)
-    seedApplication(APPLICATION_DATA, server.server)
-    seedWorker(WORKER_DATA, server.server)
     useMyMemberships.setActive(getMember('alice'))
     stubDefaultBalances(api)
     transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.leaveRole')
@@ -73,26 +75,26 @@ describe('UI: LeaveRoleModal', () => {
     expect(await screen.findByText('Leaving a position?')).toBeDefined()
     expect(await screen.findByText('Please remember that this action is irreversible.')).toBeDefined()
     expect(await screen.findByText('Unstaking period takes 14409 blocks.')).toBeDefined()
-    expect(await screen.findByRole('button', { name: 'Leave the position anyway' })).toBeDefined()
+    expect(await getButton('Leave the position anyway')).toBeDefined()
   })
 
   describe('Authorize step', () => {
     async function renderSignStep() {
       renderModal()
-      fireEvent.click(await screen.findByRole('button', { name: 'Leave the position anyway' }))
+      fireEvent.click(await getButton('Leave the position anyway'))
     }
 
     it('Transaction success', async () => {
       await renderSignStep()
       stubTransactionSuccess(transaction, [WORKER.id], 'workingGroup', 'WorkerStartedLeaving')
-      fireEvent.click(await screen.findByRole('button', { name: 'Sign and leave role' }))
+      fireEvent.click(await getButton('Sign and leave role'))
       expect(await screen.findByText('Success!')).toBeDefined()
     })
 
     it('Transaction failure', async () => {
       await renderSignStep()
       stubTransactionFailure(transaction)
-      fireEvent.click(await screen.findByRole('button', { name: 'Sign and leave role' }))
+      fireEvent.click(await getButton('Sign and leave role'))
       expect(await screen.findByText('There was a problem leaving the role.')).toBeDefined()
     })
   })

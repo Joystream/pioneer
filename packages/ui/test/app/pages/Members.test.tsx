@@ -8,19 +8,20 @@ import { GlobalModals } from '@/app/GlobalModals'
 import { Members } from '@/app/pages/Members/Members'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { seedMembers } from '@/mocks/data'
+import { seedApplications } from '@/mocks/data/seedApplications'
+import { seedOpenings } from '@/mocks/data/seedOpenings'
 import { seedWorkers } from '@/mocks/data/seedWorkers'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 
-import { seedApplications } from '../../../src/mocks/data/seedApplications'
-import { seedOpenings } from '../../../src/mocks/data/seedOpenings'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
 describe('Members', () => {
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
+
   beforeAll(cryptoWaitReady)
 
-  beforeEach(() => {
+  beforeAll(() => {
     seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpenings(server.server)

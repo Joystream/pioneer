@@ -6,15 +6,25 @@ interface MockServer {
   server?: Server
 }
 
-export function setupMockServer(): MockServer {
+interface Props {
+  noCleanupAfterEach: boolean
+}
+
+export function setupMockServer(props?: Props): MockServer {
   const mock: MockServer = {}
 
-  beforeEach(() => {
+  beforeAll(() => {
     mock.server = makeServer('test')
     fixAssociations((mock.server as unknown) as any)
   })
 
-  afterEach(() => {
+  if (!props?.noCleanupAfterEach) {
+    afterEach(() => {
+      mock?.server?.db.emptyData()
+    })
+  }
+
+  afterAll(() => {
     mock?.server?.shutdown()
   })
 

@@ -21,6 +21,7 @@ import { WorkingGroupOpeningFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupOpening } from '@/working-groups/types'
 
 import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
+import { getButton } from '../../_helpers/getButton'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -62,11 +63,16 @@ describe('UI: ApplyForRoleModal', () => {
   let useAccounts: UseAccounts
   let tx: any
 
-  const server = setupMockServer()
+  const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
+
+    seedMembers(server.server)
+    seedWorkingGroups(server.server)
+    seedOpeningStatuses(server.server)
+    seedOpening(OPENING_DATA, server.server)
 
     useAccounts = {
       hasAccounts: true,
@@ -75,11 +81,6 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   beforeEach(async () => {
-    seedMembers(server.server)
-    seedWorkingGroups(server.server)
-    seedOpeningStatuses(server.server)
-    seedOpening(OPENING_DATA, server.server)
-
     const fields = (server.server?.schema.first('WorkingGroupOpening') as unknown) as WorkingGroupOpeningFieldsFragment
     const opening = asWorkingGroupOpening(fields)
     useModal.modalData = { opening }
@@ -137,7 +138,7 @@ describe('UI: ApplyForRoleModal', () => {
 
       await selectAccount('Select account for Staking', 'alice')
       const input = await screen.findByLabelText(/Select amount for staking/i)
-      await fireEvent.change(input, { target: { value: '50' } })
+      fireEvent.change(input, { target: { value: '50' } })
 
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
@@ -148,7 +149,7 @@ describe('UI: ApplyForRoleModal', () => {
 
       await selectAccount('Select account for Staking', 'alice')
       const input = await screen.findByLabelText(/Select amount for staking/i)
-      await fireEvent.change(input, { target: { value: '2000' } })
+      fireEvent.change(input, { target: { value: '2000' } })
 
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
@@ -158,9 +159,7 @@ describe('UI: ApplyForRoleModal', () => {
   describe('Application form step', () => {
     beforeEach(async () => {
       await renderModal()
-      await fillStakeStep()
-      await fireEvent.click(await getNextStepButton())
-      await screen.findByRole('heading', { name: 'Application' })
+      await fillAndSubmitStakeStep()
     })
 
     it('Form questions', async () => {
@@ -174,9 +173,9 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Valid fields', async () => {
-      await fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-      await fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-      await fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
 
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
@@ -186,12 +185,11 @@ describe('UI: ApplyForRoleModal', () => {
   describe('Authorize', () => {
     async function fillSteps() {
       await renderModal()
-      await fillStakeStep()
-      await fireEvent.click(await getNextStepButton())
-      await screen.findByRole('heading', { name: 'Application' })
-      await fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-      await fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-      await fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+      await fillAndSubmitStakeStep()
+
+      fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
+      fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
       fireEvent.click(await getNextStepButton())
     }
 
@@ -228,13 +226,15 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   async function getNextStepButton() {
-    return await screen.findByRole('button', { name: /Next step/i })
+    return getButton(/Next step/i)
   }
 
-  async function fillStakeStep() {
+  async function fillAndSubmitStakeStep() {
     await selectAccount('Select account for Staking', 'alice')
     const input = await screen.findByLabelText(/Select amount for staking/i)
-    await fireEvent.change(input, { target: { value: '2000' } })
+    fireEvent.change(input, { target: { value: '2000' } })
+    fireEvent.click(await getNextStepButton())
+    await screen.findByText('Application')
   }
 
   function renderModal() {
