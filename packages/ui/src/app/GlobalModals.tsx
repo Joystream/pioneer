@@ -9,6 +9,8 @@ import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/modals/TransferInviteModal'
 import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
+import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
+import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
@@ -26,6 +28,7 @@ export type ModalNames =
   | ModalName<ChangeAccountModalCall>
   | ModalName<MoveFundsModalCall>
   | ModalName<AddNewProposalModalCall>
+  | ModalName<VoteRationaleModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
@@ -53,6 +56,8 @@ export const GlobalModals = () => {
       return <MoveFundsModal />
     case 'AddNewProposalModal':
       return <AddNewProposalModal />
+    case 'VoteRationaleModal':
+      return <VoteRationale />
     default:
       return null
   }
