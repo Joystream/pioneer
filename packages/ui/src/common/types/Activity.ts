@@ -7,4 +7,5 @@ export type Activity = WorkingGroupActivity
 export interface BaseActivity {
   id: string
   createdAt: string
+  unread?: boolean
 }

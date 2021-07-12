@@ -1,5 +1,7 @@
 import { css } from 'styled-components'
 
+import { Transitions } from './styles'
+
 export const Animations = css`
   .DropDown {
     &-enter {
@@ -63,6 +65,42 @@ export const Animations = css`
     }
     &-exit-active {
       opacity: 0;
+    }
+  }
+  .UnreadIndicator {
+    &-enter {
+      opacity: 0;
+    }
+    &-enter-active {
+      opacity: 1;
+      animation: UnreadIndicatorAnimation ${Transitions.durationXL} ease;
+    }
+    &-exit {
+      opacity: 1;
+    }
+    &-exit-active {
+      opacity: 0;
+    }
+    @keyframes UnreadIndicatorAnimation {
+      0% {
+        transform: translateY(0px);
+      }
+      20% {
+        opacity: 1;
+        transform: translateY(-8px);
+      }
+      40% {
+        transform: translateY(4px);
+      }
+      60% {
+        transform: translateY(-4px);
+      }
+      80% {
+        transform: translateY(2px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
     }
   }
 `

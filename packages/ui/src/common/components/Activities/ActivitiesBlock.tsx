@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { Warning, WarningProps } from '@/common/components/Warning'
 
@@ -17,10 +18,14 @@ export interface ActivitiesBlockProps {
 
 export const ActivitiesBlock = ({ activities, label, warning, isOwn }: ActivitiesBlockProps) => {
   return (
-    <ContentWithTabs>
+    <ActivitiesContent>
       {label && <Label>{label}</Label>}
       {warning && <Warning {...warning} />}
       <Activities activities={activities} isOwn={isOwn} />
-    </ContentWithTabs>
+    </ActivitiesContent>
   )
 }
+
+const ActivitiesContent = styled(ContentWithTabs)`
+  grid-row-gap: 4px;
+`

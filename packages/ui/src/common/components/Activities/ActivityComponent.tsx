@@ -1,8 +1,11 @@
 import React, { ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { Colors, Transitions } from '@/common/constants'
 
 import { relativeTime } from '../../model/relativeTime'
 import { Activity } from '../../types'
+import { UnreadNotificationIndicator } from '../Notifications/UnreadNotificationIndicator'
 import { TextInlineSmall, TextMedium } from '../typography'
 
 import { ActivityIcon } from './ActivityIcon'
@@ -12,18 +15,22 @@ export interface ActivityComponentProps {
   children: ReactNode
 }
 
-export const ActivityComponent = ({ activity, children }: ActivityComponentProps) => (
-  <ActivityItem>
-    <ActivityIcon category={activity.eventType} />
-    <ActivityTime lighter>{relativeTime(activity.createdAt)}</ActivityTime>
-    <ActivityText value light>
-      {children}
-    </ActivityText>
-  </ActivityItem>
-)
+export const ActivityComponent = ({ activity, children }: ActivityComponentProps) => {
+  return (
+    <ActivityItem unread={activity.unread}>
+      <UnreadNotificationIndicator unread={activity.unread} />
+      <ActivityIcon category={activity.eventType} />
+      <ActivityTime lighter>{relativeTime(activity.createdAt)}</ActivityTime>
+      <ActivityText value light>
+        {children}
+      </ActivityText>
+    </ActivityItem>
+  )
+}
 
-export const ActivityItem = styled.div`
+export const ActivityItem = styled.div<{ unread?: boolean }>`
   display: grid;
+  position: relative;
   grid-template-columns: 44px 1fr;
   grid-template-rows: auto auto;
   grid-template-areas:
@@ -31,6 +38,14 @@ export const ActivityItem = styled.div`
     'activityicon activitytext';
   grid-column-gap: 8px;
   grid-row-gap: 8px;
+  padding: 12px 16px;
+  transition: ${Transitions.durationXL};
+
+  ${({ unread }) =>
+    unread === true &&
+    css`
+      background-color: ${Colors.Black[25]};
+    `};
 `
 
 const ActivityTime = styled(TextInlineSmall)`
