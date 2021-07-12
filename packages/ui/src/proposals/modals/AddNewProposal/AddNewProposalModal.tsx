@@ -29,11 +29,12 @@ import { useConstants } from '@/proposals/hooks/useConstants'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
+import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
-import { addNewProposalMachine, ProposalTrigger } from '@/proposals/modals/AddNewProposal/machine'
+import { AddNewProposalEvent, addNewProposalMachine, ProposalTrigger } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalConstants } from '@/proposals/types'
 
 export type NewProposalParams = Exclude<
@@ -46,7 +47,7 @@ export const AddNewProposalModal = () => {
   const { active: member } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
-  const constants = useConstants(state.context.proposalType)
+  const constants = useConstants(state.context.type)
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
     constants?.requiredStake.toNumber() || 0
   )
@@ -87,7 +88,7 @@ export const AddNewProposalModal = () => {
   }, [state, member?.id, JSON.stringify(feeInfo)])
 
   useEffect((): any => {
-    if (state.matches('proposalType') && state.context.proposalType) {
+    if (state.matches('proposalType') && state.context.type) {
       return setValidNext(true)
     }
 
@@ -95,11 +96,7 @@ export const AddNewProposalModal = () => {
       return setValidNext(true)
     }
 
-    if (
-      state.matches('generalParameters.proposalDetails') &&
-      state.context.proposalTitle &&
-      state.context.proposalRationale
-    ) {
+    if (state.matches('generalParameters.proposalDetails') && state.context.title && state.context.rationale) {
       return setValidNext(true)
     }
 
@@ -150,10 +147,7 @@ export const AddNewProposalModal = () => {
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader
         onClick={hideModal}
-        title={
-          'Creating new proposal' +
-          (state.context.proposalType ? ': ' + camelCaseToText(state.context.proposalType) : '')
-        }
+        title={'Creating new proposal' + (state.context.type ? ': ' + camelCaseToText(state.context.type) : '')}
       />
       <StepperModalBody>
         <StepperProposalWrapper>
@@ -164,22 +158,22 @@ export const AddNewProposalModal = () => {
           <StepperBody>
             {state.matches('proposalType') && (
               <ProposalTypeStep
-                type={state.context.proposalType}
-                setType={(proposalType) => send('SELECT', { proposalType })}
+                type={state.context.type}
+                setType={(proposalType) => send('SET_TYPE', { proposalType })}
               />
             )}
             {state.matches('generalParameters.stakingAccount') && (
               <StakingAccountStep
                 requiredStake={constants?.requiredStake as BN}
                 account={state.context.stakingAccount}
-                setAccount={(stakingAccount) => send('SELECT', { stakingAccount })}
+                setAccount={(account) => send('SET_ACCOUNT', { account })}
               />
             )}
             {state.matches('generalParameters.proposalDetails') && (
               <ProposalDetailsStep
                 proposer={member}
-                title={state.context.proposalTitle}
-                rationale={state.context.proposalRationale}
+                title={state.context.title}
+                rationale={state.context.rationale}
                 setTitle={(title) => send('SET_TITLE', { title })}
                 setRationale={(rationale) => send('SET_RATIONALE', { rationale })}
               />
@@ -190,6 +184,13 @@ export const AddNewProposalModal = () => {
                 setTriggerBlock={(triggerBlock?: ProposalTrigger) => send('SET_TRIGGER_BLOCK', { triggerBlock })}
                 setDiscussionMode={(mode) => send('SET_DISCUSSION_MODE', { mode })}
                 setDiscussionWhitelist={(whitelist) => send('SET_DISCUSSION_WHITELIST', { whitelist })}
+              />
+            )}
+            {state.matches('specificParameters') && (
+              <SpecificParametersStep
+                constants={constants as ProposalConstants}
+                params={state.context}
+                send={(event: AddNewProposalEvent['type'], payload: any) => send(event, payload)}
               />
             )}
           </StepperBody>
