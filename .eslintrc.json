@@ -13,7 +13,8 @@
     "plugin:import/typescript"
   ],
   "plugins": [
-    "import"
+    "import",
+    "react-hooks"
   ],
   "ignorePatterns": [".eslintrc.js"],
   "parser": "@typescript-eslint/parser",
@@ -68,7 +69,8 @@
       {
         "noUselessIndex": true
       }
-    ]
+    ],
+    "react-hooks/rules-of-hooks": "error"
   },
   "overrides": [
     {
