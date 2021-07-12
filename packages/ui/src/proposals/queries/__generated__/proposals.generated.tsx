@@ -55,7 +55,16 @@ export type ProposalFieldsFragment = {
   creator: { __typename: 'Membership' } & MemberFieldsFragment
 }
 
-export type VoteFieldsFragment = { __typename: 'ProposalVotedEvent'; voteKind: Types.ProposalVoteKind }
+export type VoteFieldsFragment = { __typename: 'ProposalVotedEvent'; id: string; voteKind: Types.ProposalVoteKind }
+
+export type VoteWithDetailsFieldsFragment = {
+  __typename: 'ProposalVotedEvent'
+  rationale: string
+  inBlock: number
+  createdAt: any
+  network: Types.Network
+  voter: { __typename: 'Membership' } & MemberFieldsFragment
+} & VoteFieldsFragment
 
 export type ProposalWithDetailsFieldsFragment = {
   __typename: 'Proposal'
@@ -92,6 +101,35 @@ export type GetProposalQuery = {
   proposal?: Types.Maybe<{ __typename: 'Proposal' } & ProposalWithDetailsFieldsFragment>
 }
 
+export type GetVoteWithDetailsQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetVoteWithDetailsQuery = {
+  __typename: 'Query'
+  proposalVotedEvents: Array<{ __typename: 'ProposalVotedEvent' } & VoteWithDetailsFieldsFragment>
+}
+
+export const VoteFieldsFragmentDoc = gql`
+  fragment VoteFields on ProposalVotedEvent {
+    id
+    voteKind
+  }
+`
+export const VoteWithDetailsFieldsFragmentDoc = gql`
+  fragment VoteWithDetailsFields on ProposalVotedEvent {
+    ...VoteFields
+    rationale
+    inBlock
+    createdAt
+    network
+    voter {
+      ...MemberFields
+    }
+  }
+  ${VoteFieldsFragmentDoc}
+  ${MemberFieldsFragmentDoc}
+`
 export const ProposalFieldsFragmentDoc = gql`
   fragment ProposalFields on Proposal {
     id
@@ -109,11 +147,6 @@ export const ProposalFieldsFragmentDoc = gql`
     createdAt
   }
   ${MemberFieldsFragmentDoc}
-`
-export const VoteFieldsFragmentDoc = gql`
-  fragment VoteFields on ProposalVotedEvent {
-    voteKind
-  }
 `
 export const ProposalWithDetailsFieldsFragmentDoc = gql`
   fragment ProposalWithDetailsFields on Proposal {
@@ -215,3 +248,49 @@ export function useGetProposalLazyQuery(
 export type GetProposalQueryHookResult = ReturnType<typeof useGetProposalQuery>
 export type GetProposalLazyQueryHookResult = ReturnType<typeof useGetProposalLazyQuery>
 export type GetProposalQueryResult = Apollo.QueryResult<GetProposalQuery, GetProposalQueryVariables>
+export const GetVoteWithDetailsDocument = gql`
+  query GetVoteWithDetails($id: ID!) {
+    proposalVotedEvents(where: { id_eq: $id }) {
+      ...VoteWithDetailsFields
+    }
+  }
+  ${VoteWithDetailsFieldsFragmentDoc}
+`
+
+/**
+ * __useGetVoteWithDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetVoteWithDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetVoteWithDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetVoteWithDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetVoteWithDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetVoteWithDetailsQuery, GetVoteWithDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetVoteWithDetailsQuery, GetVoteWithDetailsQueryVariables>(GetVoteWithDetailsDocument, options)
+}
+export function useGetVoteWithDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetVoteWithDetailsQuery, GetVoteWithDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetVoteWithDetailsQuery, GetVoteWithDetailsQueryVariables>(
+    GetVoteWithDetailsDocument,
+    options
+  )
+}
+export type GetVoteWithDetailsQueryHookResult = ReturnType<typeof useGetVoteWithDetailsQuery>
+export type GetVoteWithDetailsLazyQueryHookResult = ReturnType<typeof useGetVoteWithDetailsLazyQuery>
+export type GetVoteWithDetailsQueryResult = Apollo.QueryResult<
+  GetVoteWithDetailsQuery,
+  GetVoteWithDetailsQueryVariables
+>
