@@ -163,6 +163,27 @@ const generateTerminatedEvent = (mocks: Mocks) => () => {
   }
 }
 
+const generateWorkerRewardAccountUpdatedEvent = (mocks: Mocks) => () => {
+  const worker = mocks.workers[randomFromRange(0, mocks.workers.length - 1)]
+  const member = mocks.members.find(member => member.id === worker!.membershipId.toString())
+  return {
+    createdAt: faker.date.recent(30),
+    groupId: worker?.groupId,
+    workerId: worker?.id,
+    newRewardAccount: member?.rootAccount,
+  }
+}
+
+const generateWorkerRewardAmountUpdatedEvent = (mocks: Mocks) => () => {
+  const worker = mocks.workers[randomFromRange(0, mocks.workers.length - 1)]
+  return {
+    createdAt: faker.date.recent(30),
+    groupId: worker?.groupId,
+    workerId: worker?.id,
+    newRewardPerBlock: randomFromRange(1, 50),
+  }
+}
+
 export const eventGenerators = {
   rewardPaidEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
   budgetSpendingEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
@@ -180,6 +201,8 @@ export const eventGenerators = {
   budgetSetEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSetEvent(mocks)),
   terminatedWorkerEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateTerminatedEvent(mocks)),
   terminatedLeaderEvents: (mocks: Mocks) => Array.from({ length: 5 }).map(generateTerminatedEvent(mocks)),
+  workerRewardAccountUpdatedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerRewardAccountUpdatedEvent(mocks)),
+  workerRewardAmountUpdatedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerRewardAmountUpdatedEvent(mocks)),
 }
 
 export const generateAllEvents = (mocks: Mocks) => {

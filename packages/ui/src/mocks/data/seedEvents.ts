@@ -13,6 +13,8 @@ import rawStatusTextChangedEvents from './raw/statusTextChangedEvents.json'
 import rawTerminatedLeaderEvents from './raw/terminatedLeaderEvents.json'
 import rawTerminatedWorkerEvents from './raw/terminatedWorkerEvents.json'
 import rawWorkerExitedEvents from './raw/workerExitedEvents.json'
+import rawWorkerRewardAccountEvents from './raw/workerRewardAccountUpdatedEvents.json'
+import rawWorkerRewardAmountEvents from './raw/workerRewardAmountUpdatedEvents.json'
 import rawWorkerStartedLeavingEvents from './raw/workerStartedLeavingEvents.json'
 
 interface BaseEvent {
@@ -83,6 +85,18 @@ interface TerminatedEvent extends BaseEvent {
   penalty: number
 }
 
+interface WorkerRewardAccountUpdated extends BaseEvent {
+  groupId: string
+  workerId: string
+  newRewardAccount: string
+}
+
+interface WorkerRewardAmountUpdated extends BaseEvent {
+  groupId: string
+  workerId: string
+  newRewardPerBlock: number
+}
+
 export const eventCategories = {
   ApplicationWithdrawnEvent: rawApplicationWithdrawnEvents.map((rawEvent: RawApplicationWithdrawnEvent) => ({
     ...rawEvent,
@@ -102,6 +116,12 @@ export const eventCategories = {
   BudgetSetEvent: rawBudgetSetEvents.map((rawEvent: RawBudgetSetEvent) => ({ ...rawEvent })),
   TerminatedWorkerEvent: rawTerminatedWorkerEvents.map((rawEvent: TerminatedEvent) => ({ ...rawEvent })),
   TerminatedLeaderEvent: rawTerminatedLeaderEvents.map((rawEvent: TerminatedEvent) => ({ ...rawEvent })),
+  WorkerRewardAccountUpdatedEvent: rawWorkerRewardAccountEvents.map((rawEvent: WorkerRewardAccountUpdated) => ({
+    ...rawEvent,
+  })),
+  WorkerRewardAmountUpdatedEvent: rawWorkerRewardAmountEvents.map((rawEvent: WorkerRewardAmountUpdated) => ({
+    ...rawEvent,
+  })),
 }
 
 type EventType = keyof typeof eventCategories

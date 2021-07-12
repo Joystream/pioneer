@@ -508,6 +508,18 @@ fragment TerminatedLeaderEventFields on TerminatedLeaderEvent {
   }
 }
 
+fragment WorkerRewardAmountUpdatedEvent on WorkerRewardAmountUpdatedEvent {
+  id
+  createdAt
+  newRewardPerBlock
+}
+
+fragment WorkerRewardAccountUpdatedEvent on WorkerRewardAccountUpdatedEvent {
+  id
+  createdAt
+  newRewardAccount
+}
+
 query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   appliedOnOpeningEvents(where: { application_in: $application_in }) {
     ...AppliedOnOpeningEventFields
@@ -535,6 +547,12 @@ query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
   }
   terminatedLeaderEvents(where: { worker_in: $worker_in }) {
     ...TerminatedLeaderEventFields
+  }
+  workerRewardAccountUpdatedEvents(where: { worker_in: $worker_in }) {
+    ...WorkerRewardAccountUpdatedEvent
+  }
+  workerRewardAmountUpdatedEvents(where: { worker_in: $worker_in }) {
+    ...WorkerRewardAmountUpdatedEvent
   }
 }
 

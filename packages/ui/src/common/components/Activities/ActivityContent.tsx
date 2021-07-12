@@ -13,6 +13,8 @@ import { StakeChangedContent } from '@/working-groups/components/Activities/Stak
 import { StakeSlashedContent } from '@/working-groups/components/Activities/StakeSlashedContent'
 import { StatusTextChangedContent } from '@/working-groups/components/Activities/StatusTextChangedContent'
 import { WorkerExitedContent } from '@/working-groups/components/Activities/WorkerExitedContent'
+import { WorkerRewardAccountUpdatedContent } from '@/working-groups/components/Activities/WorkerRewardAccountUpdatedContent'
+import { WorkerRewardAmountUpdatedContent } from '@/working-groups/components/Activities/WorkerRewardAmountUpdatedContent'
 import { WorkerStartedLeavingContent } from '@/working-groups/components/Activities/WorkerStartedLeavingContent'
 import { WorkerTerminatedContent } from '@/working-groups/components/Activities/WorkerTerminatedContent'
 
@@ -37,6 +39,8 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   OpeningAnnounced: OpeningAnnouncedContent,
   TerminatedWorkerEvent: WorkerTerminatedContent,
   TerminatedLeaderEvent: WorkerTerminatedContent,
+  WorkerRewardAccountUpdatedEvent: WorkerRewardAccountUpdatedContent,
+  WorkerRewardAmountUpdatedEvent: WorkerRewardAmountUpdatedContent,
 }
 
 export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {
