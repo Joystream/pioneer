@@ -10,6 +10,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { seedMembers } from '@/mocks/data'
 
+import { getButton } from '../../_helpers/getButton'
 import { selectMember } from '../../_helpers/selectMember'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bobStash } from '../../_mocks/keyring'
@@ -167,10 +168,6 @@ describe('UI: InviteMemberModal', () => {
       expect(await screen.findByText('Failure')).toBeDefined()
     })
   })
-
-  async function getButton(text: string | RegExp) {
-    return (await screen.findByText(text, { selector: 'span' })).parentElement!
-  }
 
   function getInput(labelText: string | RegExp) {
     return screen.getByLabelText(labelText, { selector: 'input' })

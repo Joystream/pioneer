@@ -21,6 +21,7 @@ import { WorkingGroupOpeningFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupOpening } from '@/working-groups/types'
 
 import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
+import { getButton } from '../../_helpers/getButton'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -225,7 +226,7 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   async function getNextStepButton() {
-    return (await screen.findByText(/Next step/i)).parentElement!
+    return getButton(/Next step/i)
   }
 
   async function fillAndSubmitStakeStep() {

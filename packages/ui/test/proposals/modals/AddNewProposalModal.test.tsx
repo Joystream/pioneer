@@ -17,6 +17,7 @@ import { seedMembers } from '@/mocks/data'
 import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 
+import { getButton } from '../../_helpers/getButton'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { selectMember } from '../../_helpers/selectMember'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
@@ -382,10 +383,6 @@ describe('UI: AddNewProposalModal', () => {
   async function clickNextButton() {
     const button = await getNextStepButton()
     await fireEvent.click(button as HTMLElement)
-  }
-
-  async function getButton(text: string | RegExp) {
-    return (await screen.findByText(text, { selector: 'span' })).parentElement!
   }
 
   function renderModal() {

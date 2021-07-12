@@ -10,6 +10,7 @@ import { Account } from '@/accounts/types'
 import { ApiContext } from '@/common/providers/api/context'
 import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 
+import { getButton } from '../../_helpers/getButton'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, bob } from '../../_mocks/keyring'
@@ -172,10 +173,6 @@ describe('UI: BuyMembershipModal', () => {
       })
     })
   })
-
-  async function getButton(text: string | RegExp) {
-    return (await screen.findByText(text, { selector: 'span' })).parentElement!
-  }
 
   async function findSubmitButton() {
     return await getButton(/^Create a membership$/i)

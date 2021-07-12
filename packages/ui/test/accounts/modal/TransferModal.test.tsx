@@ -4,10 +4,12 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { TransferModal } from '../../../src/accounts/modals/TransferModal'
-import { Account } from '../../../src/accounts/types'
-import { ApiContext } from '../../../src/common/providers/api/context'
-import { ModalContext } from '../../../src/common/providers/modal/context'
+import { TransferModal } from '@/accounts/modals/TransferModal'
+import { Account } from '@/accounts/types'
+import { ApiContext } from '@/common/providers/api/context'
+import { ModalContext } from '@/common/providers/modal/context'
+
+import { getButton } from '../../_helpers/getButton'
 import { selectAccount } from '../../_helpers/selectAccount'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -25,7 +27,7 @@ const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   allAccounts: [],
 }
 
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
+jest.mock('@/accounts/hooks/useMyAccounts', () => {
   return {
     useMyAccounts: () => useMyAccounts,
   }
@@ -66,11 +68,11 @@ describe('UI: TransferModal', () => {
   })
 
   it('Enables value input', async () => {
-    const { findByLabelText, findByRole } = renderModal({})
+    const { findByLabelText } = renderModal({})
 
     const input = await findByLabelText(/number of tokens/i)
-    const useHalfButton = await findByRole('button', { name: /use half/i })
-    const useMaxButton = await findByRole('button', { name: /use max/i })
+    const useHalfButton = await getButton(/use half/i)
+    const useMaxButton = await getButton(/use max/i)
 
     expect(input).toBeDisabled()
     expect(useHalfButton).toBeDisabled()
@@ -84,14 +86,14 @@ describe('UI: TransferModal', () => {
   })
 
   it('Renders an Authorize transaction step', async () => {
-    const { findByLabelText, findByText, findByRole } = renderModal({ from: alice, to: bob })
+    const { findByLabelText, findByText } = renderModal({ from: alice, to: bob })
 
     const input = await findByLabelText('Number of tokens')
-    expect(await findByRole('button', { name: 'Transfer tokens' })).toBeDisabled()
+    expect(await getButton('Transfer tokens')).toBeDisabled()
 
     await fireEvent.change(input, { target: { value: '50' } })
 
-    const button = await findByRole('button', { name: /transfer tokens/i })
+    const button = await getButton(/transfer tokens/i)
     expect(button).not.toBeDisabled()
 
     fireEvent.click(button)

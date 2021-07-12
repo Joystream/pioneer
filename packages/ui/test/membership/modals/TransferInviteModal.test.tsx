@@ -1,11 +1,12 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { ApiContext } from '@/common/providers/api/context'
 import { TransferInviteModal } from '@/memberships/modals/TransferInviteModal'
 import { seedMembers } from '@/mocks/data'
 
+import { getButton } from '../../_helpers/getButton'
 import { selectMember } from '../../_helpers/selectMember'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -34,27 +35,27 @@ describe('UI: TransferInviteModal', () => {
   })
 
   it('Renders a modal', async () => {
-    const { findByRole } = renderModal()
+    renderModal()
 
-    expect(await findByRole('button', { name: /transfer invites/i })).toBeDefined()
+    expect(await getButton(/transfer invites/i)).toBeDefined()
   })
 
   it('Validates form', async () => {
-    const { findByLabelText, findByRole } = renderModal()
+    renderModal()
 
-    expect(await findByRole('button', { name: /transfer invites/i })).toBeDisabled()
+    expect(await getButton(/transfer invites/i)).toBeDisabled()
 
-    const input = await findByLabelText(/number of invites/i)
+    const input = await screen.findByLabelText(/number of invites/i)
     expect(input).toBeDefined()
     fireEvent.change(input, { target: { value: '1' } })
 
     await selectMember('^to', 'bob')
 
-    expect(await findByRole('button', { name: /transfer invites/i })).toBeEnabled()
+    expect(await getButton(/transfer invites/i)).toBeEnabled()
   })
 
   function renderModal() {
-    return render(
+    render(
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
