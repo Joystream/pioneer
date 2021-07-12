@@ -21,6 +21,7 @@ import {
   SidePaneTopButtonsGroup,
 } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
+import { MemberInfo } from '@/memberships/components'
 import { useProposalVote } from '@/proposals/hooks/useProposalVote'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 
@@ -55,6 +56,7 @@ export const VoteRationale = React.memo(() => {
             </SidePaneTopButtonsGroup>
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
+          <MemberInfo member={vote.voter} memberSize="l" size="l" />
         </SidePaneHeader>
         <SidePaneBody>
           <SidePaneTable>
