@@ -1,4 +1,5 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { useLocation } from 'react-router'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -15,6 +16,7 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
+import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
@@ -26,17 +28,27 @@ import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToPropo
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useProposalVotes } from '@/proposals/hooks/useProposalVotes'
+import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, proposal } = useProposal(id)
   const constants = useConstants(proposal?.details)
+  const loc = useLocation()
+  const voteId = new URLSearchParams(loc.search).get('showVote')
 
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
 
   const votes = useProposalVotes(proposal?.votes)
+  const { showModal } = useModal()
+
+  useEffect(() => {
+    if (voteId) {
+      showModal<VoteRationaleModalCall>({ modal: 'VoteRationaleModal', data: { id: voteId } })
+    }
+  }, [voteId])
 
   if (isLoading || !proposal || !votes) {
     return (
@@ -93,7 +105,6 @@ export const ProposalPreview = () => {
 
             <RationalePreview rationale={proposal.rationale} />
 
-            {/* Discussion */}
             <div>
               <h4>Discussion</h4>
             </div>

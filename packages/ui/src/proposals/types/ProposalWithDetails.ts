@@ -42,7 +42,7 @@ export interface ProposalVote {
   voter: Member
 }
 
-export const asProposalVote = (voteFields: VoteFieldsFragment): ProposalVote => ({
+export const asProposalVote = (voteFields: Omit<VoteFieldsFragment, '__typename'>): ProposalVote => ({
   id: voteFields.id,
   voteKind: voteFields.voteKind,
   voter: getMember('alice'),

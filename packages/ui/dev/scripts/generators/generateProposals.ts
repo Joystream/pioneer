@@ -64,7 +64,7 @@ const generateProposal = (mocks: Mocks) => {
   const description = randomMarkdown()
   const voteKinds = randomsFromWeightedSet(VotesKind, randomFromRange(0, MAX_VOTE)) as string[]
   const votes = voteKinds.map((voteKind) => ({
-    id: nextVoteId++,
+    id: String(nextVoteId++),
     voteKind,
     network: 'OLYMPIA',
     createdAt: new Date().toJSON(),

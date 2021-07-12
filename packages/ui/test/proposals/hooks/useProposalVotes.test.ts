@@ -1,14 +1,13 @@
 import { renderHook } from '@testing-library/react-hooks'
 
 import { ProposalVoteKind } from '@/common/api/queries'
+import { useCouncilSize } from '@/common/hooks/useCouncilSize'
 import { useProposalVotes } from '@/proposals/hooks/useProposalVotes'
 import { asProposalVote } from '@/proposals/types'
 
-import { useCouncilSize } from '../../../src/common/hooks/useCouncilSize'
-
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
 
-const asVotes = (voteKinds: ProposalVoteKind[]) => voteKinds.map((voteKind) => asProposalVote({ voteKind }))
+const asVotes = (voteKinds: ProposalVoteKind[]) => voteKinds.map((voteKind) => asProposalVote({ voteKind, id: '1' }))
 
 const renderUseProposalVotes = (voteKinds: ProposalVoteKind[]) =>
   renderHook((voteKinds) => useProposalVotes(asVotes(voteKinds)), { initialProps: voteKinds })
@@ -31,10 +30,10 @@ describe('useProposalVotes', () => {
 
     expect(result.current).toEqual({
       map: new Map([
-        [Approve, [asProposalVote({ voteKind: Approve }), asProposalVote({ voteKind: Approve })]],
-        [Reject, [asProposalVote({ voteKind: Reject })]],
-        [Slash, [asProposalVote({ voteKind: Slash })]],
-        [Abstain, [asProposalVote({ voteKind: Abstain })]],
+        [Approve, [asProposalVote({ voteKind: Approve, id: '1' }), asProposalVote({ voteKind: Approve, id: '1' })]],
+        [Reject, [asProposalVote({ voteKind: Reject, id: '1' })]],
+        [Slash, [asProposalVote({ voteKind: Slash, id: '1' })]],
+        [Abstain, [asProposalVote({ voteKind: Abstain, id: '1' })]],
       ]),
 
       count: {
@@ -69,10 +68,10 @@ describe('useProposalVotes', () => {
 
     expect(result.current).toEqual({
       map: new Map([
-        [Approve, [asProposalVote({ voteKind: Approve }), asProposalVote({ voteKind: Approve })]],
-        [Reject, [asProposalVote({ voteKind: Reject })]],
-        [Slash, [asProposalVote({ voteKind: Slash })]],
-        [Abstain, [asProposalVote({ voteKind: Abstain })]],
+        [Approve, [asProposalVote({ id: '1', voteKind: Approve }), asProposalVote({ id: '1', voteKind: Approve })]],
+        [Reject, [asProposalVote({ id: '1', voteKind: Reject })]],
+        [Slash, [asProposalVote({ id: '1', voteKind: Slash })]],
+        [Abstain, [asProposalVote({ id: '1', voteKind: Abstain })]],
       ]),
 
       count: {

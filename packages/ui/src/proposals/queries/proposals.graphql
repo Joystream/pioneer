@@ -25,6 +25,7 @@ fragment VoteWithDetailsFields on ProposalVotedEvent {
   inBlock
   createdAt
   network
+  proposalId
   voter {
     ...MemberFields
   }

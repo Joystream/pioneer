@@ -20,20 +20,27 @@ import {
   SidePaneTitle,
   SidePaneTopButtonsGroup,
 } from '@/common/components/SidePane'
+import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
 import { MemberInfo } from '@/memberships/components'
+import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useProposalVote } from '@/proposals/hooks/useProposalVote'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 
 export const VoteRationale = React.memo(() => {
   const { hideModal, modalData } = useModal<VoteRationaleModalCall>()
-  const { vote, isLoading } = useProposalVote(modalData.id)
+  const { copyValue } = useCopyToClipboard()
+  const voteId = modalData.id
+  const { vote, isLoading } = useProposalVote(voteId)
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
       hideModal()
     }
   }
+
+  const getVoteLink = () =>
+    copyValue(`${window.location.origin}/#${ProposalsRoutes.preview}/${vote?.proposalId}?showVote=${voteId}`)
 
   if (isLoading || !vote) {
     return (
@@ -50,7 +57,7 @@ export const VoteRationale = React.memo(() => {
           <SidePanelTop>
             <SidePaneTitle>Voting result</SidePaneTitle>
             <SidePaneTopButtonsGroup>
-              <ButtonGhost size="small">
+              <ButtonGhost size="small" onClick={getVoteLink}>
                 <LinkIcon />
               </ButtonGhost>
             </SidePaneTopButtonsGroup>
@@ -61,12 +68,12 @@ export const VoteRationale = React.memo(() => {
         <SidePaneBody>
           <SidePaneTable>
             <SidePaneRow>
-              <SidePaneLabel text="Voted on" />
-              <BlockTime block={vote.block} />
-            </SidePaneRow>
-            <SidePaneRow>
               <SidePaneLabel text="Status" />
               <SidePaneText>{vote?.voteKind}</SidePaneText>
+            </SidePaneRow>
+            <SidePaneRow>
+              <SidePaneLabel text="Voted on" />
+              <BlockTime block={vote.block} />
             </SidePaneRow>
             <SidePaneColumn>
               <SidePaneLabel text="Rationale" />

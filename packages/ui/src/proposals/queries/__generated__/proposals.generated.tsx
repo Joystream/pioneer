@@ -63,6 +63,7 @@ export type VoteWithDetailsFieldsFragment = {
   inBlock: number
   createdAt: any
   network: Types.Network
+  proposalId: string
   voter: { __typename: 'Membership' } & MemberFieldsFragment
 } & VoteFieldsFragment
 
@@ -123,6 +124,7 @@ export const VoteWithDetailsFieldsFragmentDoc = gql`
     inBlock
     createdAt
     network
+    proposalId
     voter {
       ...MemberFields
     }

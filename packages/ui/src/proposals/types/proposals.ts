@@ -75,6 +75,7 @@ export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
 export interface ProposalVoteWithDetails extends ProposalVote {
   block: Block
   rationale: string
+  proposalId: string
 }
 
 export const asVoteWithDetails = (voteFields: VoteWithDetailsFieldsFragment): ProposalVoteWithDetails => ({
@@ -85,4 +86,5 @@ export const asVoteWithDetails = (voteFields: VoteWithDetailsFieldsFragment): Pr
     inBlock: voteFields.inBlock,
     network: voteFields.network,
   }),
+  proposalId: voteFields.proposalId,
 })
