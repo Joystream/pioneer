@@ -203,7 +203,7 @@ export const AddNewProposalModal = () => {
             Previous step
           </ButtonGhost>
           <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
-            Next step
+            {state.matches('specificParameters') ? 'Create proposal' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>
         </ButtonsGroup>
