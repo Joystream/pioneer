@@ -23,6 +23,13 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
 
   const steps: Step[] = stateNodes
     .filter((stateNode) => !!stateNode?.meta?.isStep)
+    .filter((stateNode) => {
+      if (!stateNode || !stateNode?.meta || !stateNode.meta?.isStep) {
+        return false
+      }
+
+      return stateNode.meta?.cond ? stateNode.meta.cond(state.context) : true
+    })
     .map((stateNode, index) => {
       const isBabyStep = stateNode.parent?.meta?.isStep
 
@@ -35,7 +42,6 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
       if (isActive && isBabyStep) {
         setParentActive = lastParentIndex
       }
-
       return {
         title: stateNode?.meta?.stepTitle ?? '',
         type: isActive ? 'active' : stateNode.order < activeNodeOrder ? 'past' : 'next',

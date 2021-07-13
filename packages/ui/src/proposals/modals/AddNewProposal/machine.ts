@@ -238,11 +238,14 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
           initial: 'workingGroupAndOpeningDetails',
           states: {
             workingGroupAndOpeningDetails: {
+              meta: { isStep: true, stepTitle: 'Working group & Opening details' },
               on: {
                 NEXT: 'stakingPolicyAndReward',
               },
             },
-            stakingPolicyAndReward: {},
+            stakingPolicyAndReward: {
+              meta: { isStep: true, stepTitle: 'Staking Policy & Reward' },
+            },
           },
         },
       },

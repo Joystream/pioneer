@@ -1,4 +1,4 @@
-import { createMachine, interpret, Interpreter } from 'xstate'
+import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
 import { getSteps } from '@/common/model/machines/getSteps'
 
@@ -220,6 +220,119 @@ describe('getSteps()', () => {
         { title: 'Step Multi', type: 'past' },
         { title: 'Step Multi 1', type: 'past', isBaby: true },
         { title: 'Step Multi 2', type: 'past', isBaby: true },
+        { title: 'Step Done', type: 'active' },
+      ])
+    })
+  })
+
+  describe('Complex conditional stepper', () => {
+    const simpleStepper = createMachine({
+      id: 'complex',
+      initial: 'requirements',
+      context: {
+        type: '',
+      },
+      states: {
+        requirements: {
+          on: { DONE: 'step1' },
+        },
+        step1: {
+          meta: { isStep: true, stepTitle: 'Step One' },
+          on: {
+            DONE: { target: 'multi', cond: (context) => !!context.type },
+            CHOOSE_ALPHA: { actions: assign({ type: 'alpha' }) },
+            CHOOSE_BETA: { actions: assign({ type: 'beta' }) },
+          },
+        },
+        multi: {
+          meta: { isStep: true, stepTitle: 'Step Multi' },
+          initial: 'entry',
+          on: {
+            DONE: '#done',
+          },
+          states: {
+            entry: {
+              on: {
+                '': [
+                  { target: 'alpha', cond: ({ type }) => type === 'alpha' },
+                  { target: 'beta', cond: ({ type }) => type === 'beta' },
+                ],
+              },
+            },
+            alpha: {
+              on: {},
+            },
+            beta: {
+              initial: 'one',
+              states: {
+                one: {
+                  meta: { isStep: true, stepTitle: 'Step Beta One', cond: (c: any) => c.type === 'beta' },
+                  on: { DONE: 'two' },
+                },
+                two: {
+                  meta: { isStep: true, stepTitle: 'Step Beta Two', cond: (c: any) => c.type === 'beta' },
+                },
+              },
+            },
+          },
+        },
+        done: {
+          id: 'done',
+          meta: { isStep: true, stepTitle: 'Step Done' },
+          type: 'final',
+        },
+      },
+    })
+    let service: Interpreter<any>
+
+    beforeEach(() => {
+      service = interpret(simpleStepper)
+      service.start()
+    })
+
+    it('Steps from machine', () => {
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'next' },
+        { title: 'Step Multi', type: 'next' },
+        { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Simple variant chosen', () => {
+      service.send('DONE')
+      service.send('CHOOSE_ALPHA')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Multi', type: 'active' },
+        { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Complex variant chosen', () => {
+      service.send('DONE')
+      service.send('CHOOSE_BETA')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Multi', type: 'active' },
+        { title: 'Step Beta One', type: 'past' },
+        { title: 'Step Beta Two', type: 'active' },
+        { title: 'Step Done', type: 'next' },
+      ])
+    })
+
+    it('Last step', () => {
+      service.send('DONE')
+      service.send('CHOOSE_ALPHA')
+      service.send('DONE')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Multi', type: 'past' },
         { title: 'Step Done', type: 'active' },
       ])
     })
