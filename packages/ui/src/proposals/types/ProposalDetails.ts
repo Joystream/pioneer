@@ -29,8 +29,8 @@ const asFundingRequest = (
   }
 }
 
-interface DetailsCast<T extends { __typename: string }> {
-  (fragment: T & DetailsFragment): any
+interface DetailsCast<T extends ProposalDetailsTypename> {
+  (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
 
 const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> = {
@@ -39,8 +39,6 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
   const type = fragment.__typename as ProposalDetailsTypename
-  if (fragment.__typename in detailsCasts) {
-    return detailsCasts[type]?.(fragment)
-  }
-  return { type: typenameToProposalDetails(fragment.__typename) }
+  const result = detailsCasts[type]?.(fragment)
+  return result ?? { type: typenameToProposalDetails(type) }
 }

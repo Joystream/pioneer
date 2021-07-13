@@ -104,8 +104,8 @@ const generateProposalDetails = () => {
         destinationsList:
           {
             destinations: [{
-              account: '5a000000000000000000000000000000000000000',
-              amount: 13,
+              account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
+              amount: randomFromRange(1, 10) * 1000,
             }],
           }
       }
