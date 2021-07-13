@@ -3,8 +3,8 @@ import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
 import { Member } from '@/memberships/types'
-import { ProposalType } from '@/proposals/types'
 import { FundingRequestParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
+import { ProposalType } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
 
