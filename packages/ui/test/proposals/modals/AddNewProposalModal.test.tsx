@@ -62,8 +62,6 @@ describe('UI: AddNewProposalModal', () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
 
-    jest.spyOn(console, 'log').mockImplementation()
-
     useAccounts = {
       hasAccounts: true,
       allAccounts: [alice, bob],
@@ -148,7 +146,7 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       it('Selected', async () => {
-        const type = (await screen.findByText('Signal')).parentElement?.parentElement as HTMLElement
+        const type = (await screen.findByText('Funding Request')).parentElement?.parentElement as HTMLElement
         await fireEvent.click(type)
 
         const button = await getNextStepButton()
@@ -322,7 +320,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   async function finishProposalType() {
-    const type = (await screen.findByText('Signal')).parentElement?.parentElement as HTMLElement
+    const type = (await screen.findByText('Funding Request')).parentElement?.parentElement as HTMLElement
     await fireEvent.click(type)
 
     await clickNextButton()
