@@ -31,7 +31,7 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
       return stateNode.meta?.cond ? stateNode.meta.cond(state.context) : true
     })
     .map((stateNode, index) => {
-      const isBabyStep = stateNode.parent?.meta?.isStep
+      const isBabyStep = stateNode.parent?.parent?.meta?.isStep ?? stateNode.parent?.meta?.isStep
 
       if (!isBabyStep) {
         lastParentIndex = index
@@ -42,9 +42,11 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
       if (isActive && isBabyStep) {
         setParentActive = lastParentIndex
       }
+      const isNext = stateNode.order > activeNodeOrder
+
       return {
         title: stateNode?.meta?.stepTitle ?? '',
-        type: isActive ? 'active' : stateNode.order < activeNodeOrder ? 'past' : 'next',
+        type: isActive ? 'active' : isNext ? 'next' : 'past',
         ...(isBabyStep ? { isBaby: true } : undefined),
       }
     })

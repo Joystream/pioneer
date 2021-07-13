@@ -305,7 +305,7 @@ describe('getSteps()', () => {
 
       expect(getSteps(service)).toEqual([
         { title: 'Step One', type: 'past' },
-        { title: 'Step Multi', type: 'active' },
+        { title: 'Step Multi', type: 'past' },
         { title: 'Step Done', type: 'next' },
       ])
     })
@@ -318,8 +318,18 @@ describe('getSteps()', () => {
       expect(getSteps(service)).toEqual([
         { title: 'Step One', type: 'past' },
         { title: 'Step Multi', type: 'active' },
-        { title: 'Step Beta One', type: 'past' },
-        { title: 'Step Beta Two', type: 'active' },
+        { title: 'Step Beta One', type: 'active', isBaby: true },
+        { title: 'Step Beta Two', type: 'next', isBaby: true },
+        { title: 'Step Done', type: 'next' },
+      ])
+
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Multi', type: 'active' },
+        { title: 'Step Beta One', type: 'past', isBaby: true },
+        { title: 'Step Beta Two', type: 'active', isBaby: true },
         { title: 'Step Done', type: 'next' },
       ])
     })
