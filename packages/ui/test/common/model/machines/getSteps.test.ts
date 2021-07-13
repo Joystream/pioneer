@@ -202,7 +202,7 @@ describe('getSteps()', () => {
 
       expect(getSteps(service)).toEqual([
         { title: 'Step One', type: 'past' },
-        { title: 'Step Multi', type: 'past' },
+        { title: 'Step Multi', type: 'active' },
         { title: 'Step Multi 1', type: 'past', isBaby: true },
         { title: 'Step Multi 2', type: 'active', isBaby: true },
         { title: 'Step Done', type: 'next' },
