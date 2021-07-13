@@ -82,6 +82,38 @@ export type ProposalWithDetailsFieldsFragment = {
       | { __typename: 'ProposalStatusGracing' }
       | { __typename: 'ProposalStatusDormant' }
   }>
+  details:
+    | { __typename: 'SignalProposalDetails' }
+    | { __typename: 'RuntimeUpgradeProposalDetails' }
+    | {
+        __typename: 'FundingRequestProposalDetails'
+        destinationsList?: Types.Maybe<{
+          __typename: 'FundingRequestDestinationsList'
+          destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+        }>
+      }
+    | { __typename: 'SetMaxValidatorCountProposalDetails' }
+    | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+    | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+    | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+    | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+    | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'AmendConstitutionProposalDetails' }
+    | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'SetMembershipPriceProposalDetails' }
+    | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+    | { __typename: 'SetCouncilorRewardProposalDetails' }
+    | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+    | { __typename: 'SetInitialInvitationCountProposalDetails' }
+    | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+    | { __typename: 'SetReferralCutProposalDetails' }
+    | { __typename: 'CreateBlogPostProposalDetails' }
+    | { __typename: 'EditBlogPostProposalDetails' }
+    | { __typename: 'LockBlogPostProposalDetails' }
+    | { __typename: 'UnlockBlogPostProposalDetails' }
+    | { __typename: 'VetoProposalDetails' }
 } & ProposalFieldsFragment
 
 export type GetProposalsQueryVariables = Types.Exact<{
@@ -166,6 +198,17 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       inBlock
       newStatus {
         __typename
+      }
+    }
+    details {
+      __typename
+      ... on FundingRequestProposalDetails {
+        destinationsList {
+          destinations {
+            amount
+            account
+          }
+        }
       }
     }
   }

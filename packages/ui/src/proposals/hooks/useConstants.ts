@@ -4,9 +4,9 @@ import { useMemo } from 'react'
 import { useApi } from '@/common/hooks/useApi'
 import { asProposalConstants, ProposalConstants } from '@/proposals/types/constants'
 
-import { ProposalDetails } from '../types'
+import { ProposalType } from '../types'
 
-export const useConstants = (proposalType?: ProposalDetails): ProposalConstants | null => {
+export const useConstants = (proposalType?: ProposalType): ProposalConstants | null => {
   const { api, isConnected } = useApi()
 
   return useMemo(() => {
@@ -25,7 +25,7 @@ export const useConstants = (proposalType?: ProposalDetails): ProposalConstants 
   }, [proposalType, isConnected])
 }
 
-const proposalTypeToConstantKey = new Map<ProposalDetails, keyof ApiRx['consts']['proposalsCodex']>([
+const proposalTypeToConstantKey = new Map<ProposalType, keyof ApiRx['consts']['proposalsCodex']>([
   ['amendConstitution', 'amendConstitutionProposalParameters'],
   ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
   ['createBlogPost', 'createBlogPostProposalParameters'],
