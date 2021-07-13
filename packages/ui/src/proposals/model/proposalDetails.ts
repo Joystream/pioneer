@@ -30,7 +30,7 @@ export const proposalDetails: ProposalType[] = [
   'veto',
 ]
 
-export const enabledProposals: ProposalType[] = ['signal']
+export const enabledProposals: ProposalType[] = ['fundingRequest']
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {
   const details = typename.replace('ProposalDetails', '')

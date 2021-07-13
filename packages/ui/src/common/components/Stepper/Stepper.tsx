@@ -110,7 +110,7 @@ const StepWrap = styled.div<StepNumberProps>`
     width: 28px;
     height: 28px;
 
-    ${({ isActive, isBaby, isPast, theme }) => {
+    ${({ isBaby, theme }) => {
       if (isBaby)
         return css`
           background-color: ${theme.stepperText};
@@ -120,6 +120,9 @@ const StepWrap = styled.div<StepNumberProps>`
           height: 8px;
           width: 8px;
         `
+    }};
+
+    ${({ isActive, isPast, theme }) => {
       if (isActive)
         return css`
           background-color: ${Colors.Blue[500]};
