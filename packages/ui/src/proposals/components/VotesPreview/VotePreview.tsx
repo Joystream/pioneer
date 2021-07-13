@@ -8,10 +8,12 @@ import { FileIcon } from '@/common/components/icons/FileIcon'
 import { TextInlineMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { plural } from '@/common/helpers'
+import { useModal } from '@/common/hooks/useModal'
 import { useToggle } from '@/common/hooks/useToggle'
 import { isDefined } from '@/common/utils'
 import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
+import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { ProposalVote } from '@/proposals/types'
 
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
@@ -24,6 +26,7 @@ interface VotePreviewProps {
 
 export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
   const [isOpen, toggle] = useToggle()
+  const { showModal } = useModal()
 
   return (
     <VoteType>
@@ -37,11 +40,14 @@ export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
       </VoteTypeHeader>
 
       <DropDownToggle isDropped={isOpen}>
-        {votes?.map(({ voter }, index) => (
+        {votes?.map(({ voter, id }, index) => (
           <VoteListItem key={index}>
             <MemberInfo key={index} member={voter} memberSize="s" />
 
-            <ButtonGhost size="small" onClick={() => undefined}>
+            <ButtonGhost
+              size="small"
+              onClick={() => showModal<VoteRationaleModalCall>({ modal: 'VoteRationaleModal', data: { id } })}
+            >
               <FileIcon />
             </ButtonGhost>
           </VoteListItem>

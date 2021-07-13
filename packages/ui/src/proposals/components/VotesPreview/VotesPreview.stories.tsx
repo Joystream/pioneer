@@ -40,7 +40,7 @@ export const Default: Story<Args> = ({ approve = 0, reject = 0, slash = 0, absta
   ]
 
   const map: VoteMap = new Map(
-    lengths.map(([voteKind, length]) => [voteKind, repeat(() => asProposalVote({ voteKind }), length)])
+    lengths.map(([voteKind, length]) => [voteKind, repeat(() => asProposalVote({ voteKind, id: '1' }), length)])
   )
 
   const count = countVoteMap(map, approve + slash + reject + abstain, councilSize || undefined)

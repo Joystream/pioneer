@@ -37,7 +37,7 @@ export const generateEvents = (args: EventsArgs) => {
       },
     })),
     upcomingOpenings,
-    proposals,
+    proposals: proposals as any,
     workers: workers.map((worker) => ({
       ...worker,
       createdAt: new Date(worker.createdAt),

@@ -1,3 +1,5 @@
+import * as Types from '@/common/api/queries/__generated__/baseTypes.generated'
+
 export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'OLYMPIA'
 
 export interface Block {
@@ -7,12 +9,27 @@ export interface Block {
   timestamp: string
 }
 
+export interface BlockFields {
+  inBlock: number
+  createdAt: any
+  network: Types.Network
+}
+
 // See: https://github.com/Joystream/pioneer/issues/765
-export const asBlock = (): Block => {
+export const asBlock = (blockData?: BlockFields): Block => {
+  if (!blockData) {
+    return {
+      id: '1337',
+      network: 'OLYMPIA',
+      number: 1337,
+      timestamp: new Date().toJSON(),
+    }
+  }
+
   return {
-    id: '1337',
-    network: 'OLYMPIA',
-    number: 1337,
-    timestamp: new Date().toJSON(),
+    id: '',
+    number: blockData.inBlock,
+    network: blockData.network,
+    timestamp: blockData.createdAt,
   }
 }

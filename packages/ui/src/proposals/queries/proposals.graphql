@@ -15,7 +15,20 @@ fragment ProposalFields on Proposal {
 }
 
 fragment VoteFields on ProposalVotedEvent {
+  id
   voteKind
+}
+
+fragment VoteWithDetailsFields on ProposalVotedEvent {
+  ...VoteFields
+  rationale
+  inBlock
+  createdAt
+  network
+  proposalId
+  voter {
+    ...MemberFields
+  }
 }
 
 fragment ProposalWithDetailsFields on Proposal {
@@ -46,5 +59,11 @@ query getProposals($where: ProposalWhereInput) {
 query getProposal($where: ProposalWhereUniqueInput!) {
   proposal: proposalByUniqueInput(where: $where) {
     ...ProposalWithDetailsFields
+  }
+}
+
+query GetVoteWithDetails($id: ID!) {
+  proposalVotedEventByUniqueInput(where: {id: $id}) {
+    ...VoteWithDetailsFields
   }
 }

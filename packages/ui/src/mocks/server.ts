@@ -70,6 +70,7 @@ export const makeServer = (environment = 'development') => {
               upcomingWorkingGroupOpeningByUniqueInput: getUniqueResolver('UpcomingWorkingGroupOpening'),
               proposals: getWhereResolver('Proposal'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
+              proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
               rewardPaidEvents: getWhereResolver('RewardPaidEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
               appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),

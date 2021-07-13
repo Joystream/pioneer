@@ -1,7 +1,7 @@
 import { ProposalVoteKind } from '@/common/api/queries'
 import { asBlock, Block } from '@/common/types'
 import { Member } from '@/memberships/types'
-import { ProposalWithDetailsFieldsFragment } from '@/proposals/queries'
+import { ProposalWithDetailsFieldsFragment, VoteFieldsFragment } from '@/proposals/queries'
 
 import { getMember } from '../../../test/_mocks/members'
 import { typenameToProposalStatus } from '../model/proposalStatus'
@@ -37,11 +37,13 @@ export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment)
 })
 
 export interface ProposalVote {
+  id: string
   voteKind: ProposalVoteKind
   voter: Member
 }
 
-export const asProposalVote = ({ voteKind }: { voteKind: ProposalVoteKind }): ProposalVote => ({
-  voteKind,
+export const asProposalVote = (voteFields: Omit<VoteFieldsFragment, '__typename'>): ProposalVote => ({
+  id: voteFields.id,
+  voteKind: voteFields.voteKind,
   voter: getMember('alice'),
 })
