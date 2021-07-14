@@ -68,6 +68,8 @@ type SetTriggerBlockEvent = { type: 'SET_TRIGGER_BLOCK'; triggerBlock: ProposalT
 type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscussionMode }
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
 
+const isType = (type: string) => (context: any) => type === context.type
+
 export type AddNewProposalEvent =
   | { type: 'FAIL' }
   | { type: 'BACK' }
@@ -204,17 +206,55 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       on: {
         BACK: 'generalParameters.triggerAndDiscussion',
         NEXT: 'error',
-        SET_ACCOUNT: {
-          actions: assign({
-            specifics: (context, event) => {
-              return { ...context.specifics, account: (event as SetAccountEvent).account }
-            },
-          }),
+      },
+      initial: 'entry',
+      states: {
+        entry: {
+          on: {
+            // TODO: Check "always" transition
+            '': [
+              { target: 'fundingRequest', cond: isType('fundingRequest') },
+              { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
+            ],
+          },
         },
-        SET_AMOUNT: {
-          actions: assign({
-            specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
-          }),
+        fundingRequest: {
+          on: {
+            SET_ACCOUNT: {
+              actions: assign({
+                specifics: (context, event) => {
+                  return { ...context.specifics, account: (event as SetAccountEvent).account }
+                },
+              }),
+            },
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
+              }),
+            },
+          },
+        },
+        createWorkingGroupLeadOpening: {
+          initial: 'workingGroupAndOpeningDetails',
+          states: {
+            workingGroupAndOpeningDetails: {
+              meta: {
+                isStep: true,
+                stepTitle: 'Working group & Opening details',
+                cond: isType('createWorkingGroupLeadOpening'),
+              },
+              on: {
+                NEXT: 'stakingPolicyAndReward',
+              },
+            },
+            stakingPolicyAndReward: {
+              meta: {
+                isStep: true,
+                stepTitle: 'Staking Policy & Reward',
+                cond: isType('createWorkingGroupLeadOpening'),
+              },
+            },
+          },
         },
       },
     },

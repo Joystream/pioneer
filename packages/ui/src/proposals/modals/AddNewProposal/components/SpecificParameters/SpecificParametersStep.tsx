@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/CreateWorkingGroupLeadOpening'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { AddNewProposalEvent, SpecificParametersContext } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalConstants, ProposalType } from '@/proposals/types'
@@ -33,6 +34,8 @@ export const SpecificParametersStep = ({ constants, params, send }: SpecificPara
           setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
+    case 'createWorkingGroupLeadOpening':
+      return <CreateWorkingGroupLeadOpening />
     default:
       return null
   }
