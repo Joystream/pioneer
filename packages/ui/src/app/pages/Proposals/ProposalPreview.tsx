@@ -20,6 +20,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
+import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
@@ -105,9 +106,7 @@ export const ProposalPreview = () => {
 
             <RationalePreview rationale={proposal.rationale} />
 
-            <div>
-              <h4>Discussion</h4>
-            </div>
+            <ProposalDiscussions thread={proposal.discussionThread} />
           </RowGapBlock>
         </MainPanel>
       }

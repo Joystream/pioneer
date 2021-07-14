@@ -24,7 +24,7 @@ export const ForumComment = ({ post }: PostProps) => {
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
 
   return (
-    <Container id={`post-${id}`}>
+    <ForumCommentStyles id={`post-${id}`}>
       <MemberInfo member={author} />
       <BlockDate block={createdAtBlock} />
 
@@ -60,11 +60,11 @@ export const ForumComment = ({ post }: PostProps) => {
           <ReplyIcon />
         </Button>
       </ButtonsRow>
-    </Container>
+    </ForumCommentStyles>
   )
 }
 
-const Container = styled.div`
+export const ForumCommentStyles = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   row-gap: ${spacing(2)};

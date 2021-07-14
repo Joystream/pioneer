@@ -126,6 +126,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     padding: 16px;
     border-radius: ${BorderRad.s};
     background-color: ${Colors.Black[700]};
+    white-space: pre-wrap;
   }
 
   .markdown-preview .in-block-code {
