@@ -18,15 +18,44 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
   const stateNodes = machine.stateIds.map((id) => machine.getStateNodeById(id))
   const activeNodeOrder = stateNodes.reduce(getActiveNodeOrder(state), -1)
 
-  return stateNodes
+  let lastParentIndex = -1
+  let setParentActive = -1
+
+  const steps: Step[] = stateNodes
     .filter((stateNode) => !!stateNode?.meta?.isStep)
-    .map((stateNode) => {
+    .filter((stateNode) => {
+      if (!stateNode || !stateNode?.meta || !stateNode.meta?.isStep) {
+        return false
+      }
+
+      return stateNode.meta?.cond ? stateNode.meta.cond(state.context) : true
+    })
+    .map((stateNode, index) => {
+      const isBabyStep = stateNode.parent?.parent?.meta?.isStep ?? stateNode.parent?.meta?.isStep
+
+      if (!isBabyStep) {
+        lastParentIndex = index
+      }
+
+      const isActive = stateNode.order === activeNodeOrder
+
+      if (isActive && isBabyStep) {
+        setParentActive = lastParentIndex
+      }
+      const isNext = stateNode.order > activeNodeOrder
+
       return {
         title: stateNode?.meta?.stepTitle ?? '',
-        type: stateNode.order === activeNodeOrder ? 'active' : stateNode.order < activeNodeOrder ? 'past' : 'next',
-        ...(stateNode.parent?.meta?.isStep ? { isBaby: true } : undefined),
+        type: isActive ? 'active' : isNext ? 'next' : 'past',
+        ...(isBabyStep ? { isBaby: true } : undefined),
       }
     })
+
+  if (setParentActive !== -1) {
+    steps[setParentActive].type = 'active'
+  }
+
+  return steps
 }
 
 export const getSteps = (service: Interpreter<any, any, any, any>): Step[] => {

@@ -11,15 +11,15 @@ import { Colors, Transitions } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { proposalDescriptions } from '@/proposals/model/proposalDescriptions'
 import { enabledProposals } from '@/proposals/model/proposalDetails'
-import { ProposalDetails } from '@/proposals/types'
+import { ProposalType } from '@/proposals/types'
 
 interface ProposalTypeStepProps {
-  type?: ProposalDetails
-  setType: (type: ProposalDetails) => void
+  type?: ProposalType
+  setType: (type: ProposalType) => void
 }
 
 export const ProposalTypeStep = ({ type: chosenType, setType }: ProposalTypeStepProps) => {
-  function selectType(type: ProposalDetails) {
+  function selectType(type: ProposalType) {
     if (enabledProposals.includes(type)) {
       setType(type)
     }
@@ -36,9 +36,9 @@ export const ProposalTypeStep = ({ type: chosenType, setType }: ProposalTypeStep
           {Object.entries(proposalDescriptions).map(([type, description]) => (
             <TypeListItem
               key={type}
-              onClick={() => selectType(type as ProposalDetails)}
+              onClick={() => selectType(type as ProposalType)}
               active={type === chosenType}
-              disabled={!enabledProposals.includes(type as ProposalDetails)}
+              disabled={!enabledProposals.includes(type as ProposalType)}
             >
               <TypeItemWrap>
                 <h5>{camelCaseToText(type)}</h5>

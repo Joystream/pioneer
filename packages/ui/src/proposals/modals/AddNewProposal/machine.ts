@@ -1,13 +1,15 @@
+import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
 import { Member } from '@/memberships/types'
-import { ProposalDetails } from '@/proposals/types'
+import { FundingRequestParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
+import { ProposalType } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
 
 interface ProposalTypeContext {
-  proposalType?: ProposalDetails
+  type?: ProposalType
 }
 
 interface StakingAccountContext extends Required<ProposalTypeContext> {
@@ -15,22 +17,30 @@ interface StakingAccountContext extends Required<ProposalTypeContext> {
 }
 
 interface BaseDetailsContext extends Required<StakingAccountContext> {
-  proposalTitle: string
-  proposalRationale: string
+  title: string
+  rationale: string
 }
 
 export type ProposalTrigger = false | number
 export type ProposalDiscussionMode = 'open' | 'closed'
 export type ProposalDiscussionWhitelist = Member[]
 
-interface TriggerAndDiscussionContext extends Required<BaseDetailsContext> {
+export interface TriggerAndDiscussionContext extends Required<BaseDetailsContext> {
   triggerBlock?: ProposalTrigger
   discussionMode: ProposalDiscussionMode
   discussionWhitelist: ProposalDiscussionWhitelist
 }
 
+export interface SpecificParametersContext extends Required<TriggerAndDiscussionContext> {
+  specifics: EmptyObject | FundingRequestParameters
+}
+
 type AddNewProposalContext = Partial<
-  ProposalTypeContext & StakingAccountContext & BaseDetailsContext & TriggerAndDiscussionContext
+  ProposalTypeContext &
+    StakingAccountContext &
+    BaseDetailsContext &
+    TriggerAndDiscussionContext &
+    SpecificParametersContext
 >
 
 type AddNewProposalState =
@@ -45,24 +55,28 @@ type AddNewProposalState =
   | { value: 'generalParameters.proposalDetails'; context: Required<BaseDetailsContext> }
   | { value: 'generalParameters.triggerAndDiscussion'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'generalParameters.finishGeneralParameters'; context: Required<TriggerAndDiscussionContext> }
-  | { value: 'specificParameters'; context: Required<TriggerAndDiscussionContext> }
+  | { value: 'specificParameters'; context: Required<SpecificParametersContext> }
   | { value: 'success'; context: AddNewProposalContext }
   | { value: 'error'; context: AddNewProposalContext }
 
-type SelectProposalEvent = { type: 'SELECT'; proposalType: ProposalDetails }
-type SelectAccountEvent = { type: 'SELECT'; stakingAccount: Account }
+type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
+type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
+type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 type SetTriggerBlockEvent = { type: 'SET_TRIGGER_BLOCK'; triggerBlock: ProposalTrigger | undefined }
 type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscussionMode }
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
 
+const isType = (type: string) => (context: any) => type === context.type
+
 export type AddNewProposalEvent =
   | { type: 'FAIL' }
   | { type: 'BACK' }
   | { type: 'NEXT' }
-  | SelectProposalEvent
-  | SelectAccountEvent
+  | SetTypeEvent
+  | SetAccountEvent
+  | SetAmountEvent
   | SetTitleEvent
   | SetRationaleEvent
   | SetTriggerBlockEvent
@@ -72,11 +86,12 @@ export type AddNewProposalEvent =
 export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNewProposalEvent, AddNewProposalState>({
   initial: 'requirementsVerification',
   context: {
-    proposalTitle: '',
-    proposalRationale: '',
+    title: '',
+    rationale: '',
     triggerBlock: false,
     discussionMode: 'open',
     discussionWhitelist: [],
+    specifics: {},
   },
   states: {
     requirementsVerification: {
@@ -97,11 +112,11 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       on: {
         NEXT: {
           target: 'requiredStakeVerification',
-          cond: (context) => !!context.proposalType,
+          cond: (context) => !!context.type,
         },
-        SELECT: {
+        SET_TYPE: {
           actions: assign({
-            proposalType: (context, event) => (event as SelectProposalEvent).proposalType,
+            type: (context, event) => (event as SetTypeEvent).proposalType,
           }),
         },
       },
@@ -125,9 +140,9 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
               target: 'proposalDetails',
               cond: (context) => !!context.stakingAccount,
             },
-            SELECT: {
+            SET_ACCOUNT: {
               actions: assign({
-                stakingAccount: (context, event) => (event as SelectAccountEvent).stakingAccount,
+                stakingAccount: (context, event) => (event as SetAccountEvent).account,
               }),
             },
           },
@@ -138,16 +153,16 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             BACK: 'stakingAccount',
             NEXT: {
               target: 'triggerAndDiscussion',
-              cond: (context) => !!context.proposalTitle && !!context.proposalRationale,
+              cond: (context) => !!context.title && !!context.rationale,
             },
             SET_TITLE: {
               actions: assign({
-                proposalTitle: (context, event) => (event as SetTitleEvent).title,
+                title: (context, event) => (event as SetTitleEvent).title,
               }),
             },
             SET_RATIONALE: {
               actions: assign({
-                proposalRationale: (context, event) => (event as SetRationaleEvent).rationale,
+                rationale: (context, event) => (event as SetRationaleEvent).rationale,
               }),
             },
           },
@@ -191,6 +206,56 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       on: {
         BACK: 'generalParameters.triggerAndDiscussion',
         NEXT: 'error',
+      },
+      initial: 'entry',
+      states: {
+        entry: {
+          on: {
+            // TODO: Check "always" transition
+            '': [
+              { target: 'fundingRequest', cond: isType('fundingRequest') },
+              { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
+            ],
+          },
+        },
+        fundingRequest: {
+          on: {
+            SET_ACCOUNT: {
+              actions: assign({
+                specifics: (context, event) => {
+                  return { ...context.specifics, account: (event as SetAccountEvent).account }
+                },
+              }),
+            },
+            SET_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
+              }),
+            },
+          },
+        },
+        createWorkingGroupLeadOpening: {
+          initial: 'workingGroupAndOpeningDetails',
+          states: {
+            workingGroupAndOpeningDetails: {
+              meta: {
+                isStep: true,
+                stepTitle: 'Working group & Opening details',
+                cond: isType('createWorkingGroupLeadOpening'),
+              },
+              on: {
+                NEXT: 'stakingPolicyAndReward',
+              },
+            },
+            stakingPolicyAndReward: {
+              meta: {
+                isStep: true,
+                stepTitle: 'Staking Policy & Reward',
+                cond: isType('createWorkingGroupLeadOpening'),
+              },
+            },
+          },
+        },
       },
     },
     error: { type: 'final' },

@@ -22,7 +22,7 @@ export const Default = Template.bind({})
 Default.args = {
   proposal: {
     createdAt: '2021-06-11T16:26:04.129Z',
-    details: 'setWorkingGroupLeadReward',
+    details: { type: 'setWorkingGroupLeadReward' },
     id: '0',
     proposer: getMember('alice'),
     status: 'deciding',

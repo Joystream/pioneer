@@ -50,7 +50,7 @@ const generateProposal = (mocks: Mocks) => {
 
   const member = arrayElement(mocks.members)
   const status = statusHistory[statusHistory.length - 1] as string
-  const details = proposalDetails[randomFromRange(0, proposalDetails.length - 1)] as string
+  const details = generateProposalDetails()
 
   const createdAt = faker.date.recent(20)
 
@@ -106,4 +106,23 @@ export type ProposalMock = ReturnType<typeof generateProposal>
 
 export const generateProposals = (mocks: Mocks): ProposalMock[] => {
   return Array.from({ length: MAX_PROPOSALS }).map(() => generateProposal(mocks))
+}
+
+const generateProposalDetails = () => {
+  const type = proposalDetails[randomFromRange(0, proposalDetails.length - 1)] as string
+  if (type === 'fundingRequest') {
+    return {
+      type,
+      data: {
+        destinationsList:
+          {
+            destinations: [{
+              account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
+              amount: randomFromRange(1, 10) * 1000,
+            }],
+          }
+      }
+    }
+  }
+  return { type }
 }

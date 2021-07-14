@@ -3,6 +3,7 @@ import { capitalizeFirstLetter } from '@/common/helpers'
 import { ProposalMock } from '../../../dev/scripts/generators/generateProposals'
 
 import rawProposals from './raw/proposals.json'
+import { seedProposalDetails } from './seedProposalDetails'
 
 export const mockProposals: ProposalMock[] = rawProposals.map((rawProposal) => rawProposal)
 
@@ -22,10 +23,6 @@ export const seedProposal = (proposal: ProposalMock, server: any) => {
 
 const seedProposalStatus = (status: string, server: any) => {
   return server.schema.create('ProposalStatus' + capitalizeFirstLetter(status))
-}
-
-const seedProposalDetails = (details: string, server: any) => {
-  return server.schema.create(capitalizeFirstLetter(details) + 'ProposalDetails')
 }
 
 const seedStatusUpdates = (updates: ProposalMock['proposalStatusUpdates'], server: any) =>

@@ -22,7 +22,7 @@ Default.args = {
   proposals: [
     {
       createdAt: '2021-06-11T16:26:04.129Z',
-      details: 'setWorkingGroupLeadReward',
+      details: { type: 'setWorkingGroupLeadReward' },
       id: '0',
       proposer: getMember('alice'),
       status: 'deciding',
@@ -30,7 +30,7 @@ Default.args = {
     },
     {
       createdAt: '2021-05-31T03:15:57.037Z',
-      details: 'editBlogPost',
+      details: { type: 'editBlogPost' },
       id: '1',
       proposer: getMember('bob'),
       status: 'deciding',
@@ -45,7 +45,7 @@ Past.args = {
     {
       createdAt: '2021-06-11T16:26:04.129Z',
       endedAt: '2021-06-11T16:26:04.129Z',
-      details: 'setWorkingGroupLeadReward',
+      details: { type: 'setWorkingGroupLeadReward' },
       id: '0',
       proposer: getMember('alice'),
       status: 'slashed',
@@ -54,7 +54,7 @@ Past.args = {
     {
       createdAt: '2021-05-31T03:15:57.037Z',
       endedAt: '2021-06-11T16:26:04.129Z',
-      details: 'editBlogPost',
+      details: { type: 'editBlogPost' },
       id: '1',
       proposer: getMember('bob'),
       status: 'vetoed',

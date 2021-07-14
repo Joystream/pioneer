@@ -11,6 +11,7 @@ import {
 
 import { getMember } from '../../../test/_mocks/members'
 
+import { asProposalDetails, ProposalDetails } from './ProposalDetails'
 import { asProposal, Proposal, ProposalStatus } from './proposals'
 
 interface ProposalStatusUpdates {
@@ -26,6 +27,7 @@ export interface ProposalWithDetails extends Proposal {
   createdInBlock: Block
   proposalStatusUpdates: ProposalStatusUpdates[]
   exactExecutionBlock?: Block
+  details: ProposalDetails
   discussionThread: ProposalDiscussionThread
 }
 
@@ -44,6 +46,7 @@ export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment)
     inBlock: asBlock(),
     status: typenameToProposalStatus(newStatus.__typename),
   })),
+  details: asProposalDetails(fields.details),
 })
 
 export interface ProposalVote {

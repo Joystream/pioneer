@@ -48,7 +48,17 @@ fragment ProposalWithDetailsFields on Proposal {
       __typename
     }
   }
-
+  details {
+    __typename
+    ... on FundingRequestProposalDetails {
+      destinationsList {
+        destinations {
+          amount
+          account
+        }
+      }
+    }
+  }
   discussionThread {
     discussionPosts {
       ...DiscussionPostFields
