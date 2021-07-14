@@ -38,3 +38,20 @@ export const randomFromWeightedSet = <T extends any>(...weightedList: [number, T
   const get = randomsFromWeightedSet(...weightedList)
   return () => get(1)[0]
 }
+
+const randomMdTags = randomsFromWeightedSet([4, 'pargraph'], [1, 'code'], [1, 'quote'], [1, 'list'])
+const tagToRandomMarkdown = (tag: string): string => {
+  switch (tag) {
+    case 'code': {
+      const tag = '```'
+      return `${tag}\n${faker.lorem.paragraph()}\n${tag}`
+    }
+    case 'quote':
+      return `> ${faker.lorem.sentence()}`
+    case 'list':
+      return repeat(() => `- ${faker.lorem.sentence()}`, randomFromRange(1, 5)).join('\n')
+    default:
+      return faker.lorem.paragraph()
+  }
+}
+export const randomMessage = () => randomMdTags(randomFromRange(1, 3)).map(tagToRandomMarkdown).join('\n\n')

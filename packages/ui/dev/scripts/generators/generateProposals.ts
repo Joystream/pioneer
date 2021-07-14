@@ -1,12 +1,15 @@
 import faker from 'faker'
 
 import { ProposalVoteKind } from '../../../src/common/api/queries'
+import { repeat } from '../../../src/common/utils'
 import { proposalDetails } from '../../../src/proposals/model/proposalDetails'
 import { proposalActiveStatuses } from '../../../src/proposals/model/proposalStatus'
 import { ProposalStatus } from '../../../src/proposals/types/proposals'
 
 import { Mocks } from './types'
-import { randomFromRange, randomFromWeightedSet, randomMarkdown, randomsFromWeightedSet } from './utils'
+import { randomFromRange, randomFromWeightedSet, randomMarkdown, randomMessage, randomsFromWeightedSet } from './utils'
+
+const { arrayElement } = faker.random
 
 const MAX_PROPOSALS = 20
 
@@ -34,16 +37,18 @@ const randomLastStatuses = randomFromWeightedSet<ProposalStatus[]>(
   [1, ['canceledByRuntime']],
   [1, ['vetoed']]
 )
-
 const isIntermediateStatus = (status: ProposalStatus) => proposalActiveStatuses.includes(status)
+
+const MAX_MESSAGES = 8
 
 let nextId = 0
 let nextVoteId = 0
 
 const generateProposal = (mocks: Mocks) => {
+  const proposalId = String(nextId++)
   const statusHistory = [DECIDING, ...randomVoteRoundStatuses(), ...randomLastStatuses()]
 
-  const member = mocks.members[randomFromRange(0, mocks.members.length - 1)]
+  const member = arrayElement(mocks.members)
   const status = statusHistory[statusHistory.length - 1] as string
   const details = proposalDetails[randomFromRange(0, proposalDetails.length - 1)] as string
 
@@ -67,8 +72,18 @@ const generateProposal = (mocks: Mocks) => {
     rationale: randomMarkdown(),
   }))
 
+  const messageCount = randomFromWeightedSet([1, 0], [2, 1], [4, 2], [1, randomFromRange(3, MAX_MESSAGES)])()
+  const discussionPosts = repeat(randomMessage, messageCount).map((text, index) => ({
+    id: `${proposalId}:${index}`,
+    createdInEvent: { inBlock: 0 },
+    ...(Math.random() > 0.5 ? { updatedAt: faker.date.recent(20).toISOString() } : {}),
+    authorId: arrayElement(mocks.members).id,
+    text,
+    ...(index > 0 && Math.random() > 0.3 ? { repliesToId: `${proposalId}:${randomFromRange(0, index - 1)}` } : {}),
+  }))
+
   return {
-    id: String(nextId++),
+    id: proposalId,
     title: faker.random.words(4),
     status,
     statusSetAtBlock: 0,
@@ -80,6 +95,10 @@ const generateProposal = (mocks: Mocks) => {
     description,
     votes,
     proposalStatusUpdates,
+    discussionThread: {
+      discussionPosts,
+      mode: `ProposalDiscussionThreadMode${arrayElement(['Open', 'Closed'])}`,
+    },
   }
 }
 
