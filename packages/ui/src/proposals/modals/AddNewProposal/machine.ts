@@ -1,11 +1,13 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
-import { assign, createMachine } from 'xstate'
+import { assign, createMachine, State, Typestate } from 'xstate'
+import { StateSchema } from 'xstate/lib/types'
 
 import { Account } from '@/accounts/types'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { Member } from '@/memberships/types'
 import { FundingRequestParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
+import { WorkingGroupLeadOpeningParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/CreateWorkingGroupLeadOpening'
 import { ProposalType } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
@@ -34,7 +36,7 @@ export interface TriggerAndDiscussionContext extends Required<BaseDetailsContext
 }
 
 export interface SpecificParametersContext extends Required<TriggerAndDiscussionContext> {
-  specifics: EmptyObject | FundingRequestParameters
+  specifics: EmptyObject | FundingRequestParameters | WorkingGroupLeadOpeningParameters
 }
 
 export interface TransactionContext extends Required<SpecificParametersContext> {
@@ -47,10 +49,11 @@ type AddNewProposalContext = Partial<
     BaseDetailsContext &
     TriggerAndDiscussionContext &
     SpecificParametersContext &
+    FundingRequestContext &
     TransactionContext
 >
 
-type AddNewProposalState =
+export type AddNewProposalState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'warning'; context: EmptyObject }
@@ -62,7 +65,9 @@ type AddNewProposalState =
   | { value: 'generalParameters.proposalDetails'; context: Required<BaseDetailsContext> }
   | { value: 'generalParameters.triggerAndDiscussion'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'generalParameters.finishGeneralParameters'; context: Required<TriggerAndDiscussionContext> }
-  | { value: 'specificParameters'; context: Required<SpecificParametersContext> }
+  | { value: 'specificParameters'; context: Required<TriggerAndDiscussionContext> }
+  | { value: 'specificParameters.fundingRequest'; context: FundingRequestContext }
+  | { value: 'specificParameters.createWorkingGroupLeadOpening'; context: WorkingGroupLeadOpeningRequestContext }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
   | { value: 'success'; context: Required<AddNewProposalContext> }
   | { value: 'error'; context: AddNewProposalContext }
@@ -75,6 +80,9 @@ type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 type SetTriggerBlockEvent = { type: 'SET_TRIGGER_BLOCK'; triggerBlock: ProposalTrigger | undefined }
 type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscussionMode }
 type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist: ProposalDiscussionWhitelist }
+type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
+type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
+type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: string }
 
 const isType = (type: string) => (context: any) => type === context.type
 
@@ -90,6 +98,16 @@ export type AddNewProposalEvent =
   | SetTriggerBlockEvent
   | SetDiscussionModeEvent
   | SetDiscussionWhitelistEvent
+  | SetDescriptionEvent
+  | SetWorkingGroupEvent
+  | SetShortDescriptionEvent
+
+export type AddNewProposalMachineState = State<
+  AddNewProposalContext,
+  AddNewProposalEvent,
+  StateSchema<AddNewProposalContext>,
+  Typestate<AddNewProposalContext>
+>
 
 export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNewProposalEvent, AddNewProposalState>({
   initial: 'requirementsVerification',
@@ -252,6 +270,30 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 cond: isType('createWorkingGroupLeadOpening'),
               },
               on: {
+                SET_WORKING_GROUP: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      groupId: event.groupId,
+                    }),
+                  }),
+                },
+                SET_SHORT_DESCRIPTION: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      shortDescription: event.shortDescription,
+                    }),
+                  }),
+                },
+                SET_DESCRIPTION: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      description: event.description,
+                    }),
+                  }),
+                },
                 NEXT: 'stakingPolicyAndReward',
               },
             },

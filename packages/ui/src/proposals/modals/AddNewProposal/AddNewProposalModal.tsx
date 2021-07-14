@@ -8,13 +8,13 @@ import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { ButtonPrimary, ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import {
-  Stepper,
   StepDescriptionColumn,
+  Stepper,
   StepperBody,
   StepperModalBody,
   StepperModalWrapper,
@@ -43,7 +43,7 @@ import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index
 import {
   AddNewProposalEvent,
   addNewProposalMachine,
-  ProposalTrigger,
+  AddNewProposalMachineState,
   SpecificParametersContext,
 } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalConstants } from '@/proposals/types'
@@ -128,7 +128,7 @@ export const AddNewProposalModal = () => {
     }
 
     if (state.matches('specificParameters')) {
-      return setValidNext(isValidSpecificParameters(state.context.type, state.context.specifics))
+      return setValidNext(isValidSpecificParameters(state as AddNewProposalMachineState))
     }
 
     return setValidNext(false)
@@ -226,8 +226,7 @@ export const AddNewProposalModal = () => {
             )}
             {state.matches('specificParameters') && (
               <SpecificParametersStep
-                constants={constants as ProposalConstants}
-                params={state.context}
+                state={state as AddNewProposalMachineState}
                 send={(event: AddNewProposalEvent['type'], payload: any) => send(event, payload)}
               />
             )}
