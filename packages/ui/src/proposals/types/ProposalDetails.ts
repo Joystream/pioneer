@@ -1,3 +1,7 @@
+import BN from 'bn.js'
+
+import { asWorkingGroupName } from '@/working-groups/types'
+
 import { typenameToProposalDetails } from '../model/proposalDetails'
 import { ProposalWithDetailsFieldsFragment } from '../queries'
 
@@ -5,9 +9,10 @@ import { ProposalType } from './proposals'
 
 type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
 type ProposalDetailsTypename = DetailsFragment['__typename']
+type BaseProposalType = Exclude<ProposalType, 'fundingRequest' & 'createWorkingGroupLeadOpening'>
 
 interface BaseProposalDetails {
-  type: Exclude<ProposalType, 'fundingRequest'>
+  type: BaseProposalType
 }
 
 interface FundingRequestDetails {
@@ -18,14 +23,43 @@ interface FundingRequestDetails {
   }[]
 }
 
-export type ProposalDetails = BaseProposalDetails | FundingRequestDetails
+interface CreateLeadOpeningDetails {
+  type: 'createWorkingGroupLeadOpening'
+  group?: {
+    id: string
+    name: string
+  }
+  stakeAmount: BN
+  unstakingPeriod: BN
+  rewardPerBlock: BN
+  openingDescription?: string
+}
 
-const asFundingRequest = (
-  fragment: DetailsFragment & { __typename: 'FundingRequestProposalDetails' }
-): FundingRequestDetails => {
+export type ProposalDetails = BaseProposalDetails | FundingRequestDetails | CreateLeadOpeningDetails
+
+const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment): FundingRequestDetails => {
   return {
     type: 'fundingRequest',
     destinations: fragment.destinationsList?.destinations.map((d) => ({ account: d.account, amount: d.amount })),
+  }
+}
+
+const asCreateLeadOpening: DetailsCast<'CreateWorkingGroupLeadOpeningProposalDetails'> = (
+  fragment
+): CreateLeadOpeningDetails => {
+  const group = fragment.group
+    ? {
+        id: fragment.group.id,
+        name: asWorkingGroupName(fragment.group.name),
+      }
+    : undefined
+  return {
+    type: 'createWorkingGroupLeadOpening',
+    group,
+    stakeAmount: new BN(fragment.stakeAmount),
+    unstakingPeriod: new BN(fragment.unstakingPeriod),
+    rewardPerBlock: new BN(fragment.rewardPerBlock),
+    openingDescription: fragment.metadata?.description ?? undefined,
   }
 }
 
@@ -35,6 +69,7 @@ interface DetailsCast<T extends ProposalDetailsTypename> {
 
 const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> = {
   FundingRequestProposalDetails: asFundingRequest,
+  CreateWorkingGroupLeadOpeningProposalDetails: asCreateLeadOpening,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

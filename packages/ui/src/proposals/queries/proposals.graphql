@@ -58,6 +58,18 @@ fragment ProposalWithDetailsFields on Proposal {
         }
       }
     }
+    ...on CreateWorkingGroupLeadOpeningProposalDetails {
+      metadata {
+        ...WorkingGroupOpeningMetadataFields
+      }
+      stakeAmount
+      unstakingPeriod
+      rewardPerBlock
+      group {
+        id
+        name
+      }
+    }
   }
 }
 

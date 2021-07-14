@@ -4,6 +4,10 @@ import {
   MemberFieldsFragment,
   MemberFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
+import {
+  WorkingGroupOpeningMetadataFieldsFragment,
+  WorkingGroupOpeningMetadataFieldsFragmentDoc,
+} from '../../../working-groups/queries/__generated__/workingGroups.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
@@ -93,7 +97,16 @@ export type ProposalWithDetailsFieldsFragment = {
         }>
       }
     | { __typename: 'SetMaxValidatorCountProposalDetails' }
-    | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | {
+        __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
+        stakeAmount: any
+        unstakingPeriod: number
+        rewardPerBlock: any
+        metadata?: Types.Maybe<
+          { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
+        >
+        group?: Types.Maybe<{ __typename: 'WorkingGroup'; id: string; name: string }>
+      }
     | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
@@ -210,10 +223,23 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
           }
         }
       }
+      ... on CreateWorkingGroupLeadOpeningProposalDetails {
+        metadata {
+          ...WorkingGroupOpeningMetadataFields
+        }
+        stakeAmount
+        unstakingPeriod
+        rewardPerBlock
+        group {
+          id
+          name
+        }
+      }
     }
   }
   ${ProposalFieldsFragmentDoc}
   ${VoteFieldsFragmentDoc}
+  ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
 export const GetProposalsDocument = gql`
   query getProposals($where: ProposalWhereInput) {
