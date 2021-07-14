@@ -2,25 +2,14 @@ import { Network } from '@/common/api/queries'
 import { asUpcomingWorkingGroupOpening } from '@/working-groups/types'
 
 import rawOpenings from './raw/upcomingOpenings.json'
-
-interface QuestionMock {
-  type: string
-  question: string
-}
+import { RawOpeningMetadata, seedOpeningQuestions } from './seedOpenings'
 
 export interface RawUpcomingOpeningMock {
   id: string
   runtimeId: number
   groupId: string
   stakeAmount: number
-  metadata: {
-    shortDescription: string
-    description: string
-    hiringLimit: number
-    expectedEnding: string
-    applicationDetails: string
-    applicationFormQuestions: QuestionMock[]
-  }
+  metadata: RawOpeningMetadata
   expectedStart: string
   rewardPerBlock: number
 }
@@ -58,13 +47,7 @@ export function seedUpcomingOpening(openingData: RawUpcomingOpeningMock, server:
     metadata: metadata,
   })
 
-  for (const question of questions) {
-    server.schema.create('ApplicationFormQuestion', {
-      index: questions.indexOf(question),
-      ...question,
-      openingMetadata: opening.metadata,
-    })
-  }
+  seedOpeningQuestions(questions, opening.metadata, server)
 }
 
 export const seedUpcomingOpenings = (server: any) => {
