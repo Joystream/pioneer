@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
+import { CKEditor } from '@/common/components/CKEditor'
 import { ForumComment, ForumCommentStyles } from '@/common/components/Forum/ForumComment'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge } from '@/common/components/typography'
@@ -35,6 +36,10 @@ export const ProposalDiscussions = ({ thread, selected }: Props) => {
         const ref = isSelected ? selectedElement : undefined
         return <ForumComment key={index} ref={ref} post={post} isSelected={isSelected} />
       })}
+
+      <Editor>
+        <CKEditor />
+      </Editor>
     </ProposalDiscussionsStyles>
   )
 }
@@ -51,6 +56,10 @@ const DiscussionsHeader = styled.header`
     padding: ${spacing(1 / 2, 1)};
     text-transform: uppercase;
   }
+`
+
+const Editor = styled.div`
+  margin-top: 20px;
 `
 
 const ProposalDiscussionsStyles = styled.div<Pick<ProposalDiscussionThread, 'mode'>>`
