@@ -2,7 +2,7 @@ import React from 'react'
 
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { AddNewProposalEvent, SpecificParametersContext } from '@/proposals/modals/AddNewProposal/machine'
-import { ProposalConstants, ProposalDetails } from '@/proposals/types'
+import { ProposalConstants, ProposalType } from '@/proposals/types'
 
 interface SpecificParametersStepProps {
   constants: ProposalConstants
@@ -11,7 +11,7 @@ interface SpecificParametersStepProps {
 }
 
 export const isValidSpecificParameters = (
-  type: ProposalDetails,
+  type: ProposalType,
   context: SpecificParametersContext['specifics']
 ): boolean => {
   switch (type) {

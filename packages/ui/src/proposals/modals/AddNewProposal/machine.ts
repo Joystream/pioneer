@@ -4,12 +4,12 @@ import { assign, createMachine } from 'xstate'
 import { Account } from '@/accounts/types'
 import { Member } from '@/memberships/types'
 import { FundingRequestParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
-import { ProposalDetails } from '@/proposals/types'
+import { ProposalType } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
 
 interface ProposalTypeContext {
-  type?: ProposalDetails
+  type?: ProposalType
 }
 
 interface StakingAccountContext extends Required<ProposalTypeContext> {
@@ -59,7 +59,7 @@ type AddNewProposalState =
   | { value: 'success'; context: AddNewProposalContext }
   | { value: 'error'; context: AddNewProposalContext }
 
-type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalDetails }
+type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }

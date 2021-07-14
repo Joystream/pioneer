@@ -6,7 +6,7 @@ import { Stepper, StepDescriptionColumn, StepperBody, StepperModalBody } from '@
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
-import { ProposalDetails } from '@/proposals/types'
+import { ProposalType } from '@/proposals/types'
 
 export default {
   title: 'Proposals/AddNewProposalModal/ProposalTypeStep',
@@ -14,7 +14,7 @@ export default {
 } as Meta
 
 const Template: Story = () => {
-  const [type, setType] = useState<ProposalDetails | undefined>()
+  const [type, setType] = useState<ProposalType | undefined>()
   return (
     <MemoryRouter>
       <StepperModalBody>

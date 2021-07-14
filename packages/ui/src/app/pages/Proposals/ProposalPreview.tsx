@@ -21,6 +21,7 @@ import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatt
 import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
+import { ProposalProperties } from '@/proposals/components/ProposalPreview/ProposalProperties'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VotesPreview } from '@/proposals/components/VotesPreview'
@@ -33,7 +34,7 @@ import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, proposal } = useProposal(id)
-  const constants = useConstants(proposal?.details)
+  const constants = useConstants(proposal?.details.type)
   const loc = useLocation()
   const voteId = new URLSearchParams(loc.search).get('showVote')
 
@@ -101,7 +102,9 @@ export const ProposalPreview = () => {
             <ProposalStatistics voteCount={votes.count} constants={constants} />
 
             {/* Proposal-specific dashboard */}
-            <h3>{camelCaseToText(proposal.details)}</h3>
+            <h3>{camelCaseToText(proposal.details.type)}</h3>
+
+            <ProposalProperties proposal={proposal} />
 
             <RationalePreview rationale={proposal.rationale} />
 

@@ -1,7 +1,7 @@
-import { ProposalDetails } from '@/proposals/types'
+import { ProposalType } from '@/proposals/types'
 
 type ProposalDescriptions = {
-  [key in ProposalDetails]: string
+  [key in ProposalType]: string
 }
 export const proposalDescriptions: ProposalDescriptions = {
   signal:

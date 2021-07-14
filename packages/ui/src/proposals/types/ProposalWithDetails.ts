@@ -6,6 +6,7 @@ import { ProposalWithDetailsFieldsFragment, VoteFieldsFragment } from '@/proposa
 import { getMember } from '../../../test/_mocks/members'
 import { typenameToProposalStatus } from '../model/proposalStatus'
 
+import { asProposalDetails, ProposalDetails } from './ProposalDetails'
 import { asProposal, Proposal, ProposalStatus } from './proposals'
 
 interface ProposalStatusUpdates {
@@ -21,6 +22,7 @@ export interface ProposalWithDetails extends Proposal {
   createdInBlock: Block
   proposalStatusUpdates: ProposalStatusUpdates[]
   exactExecutionBlock?: Block
+  details: ProposalDetails
 }
 
 export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment): ProposalWithDetails => ({
@@ -34,6 +36,7 @@ export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment)
     inBlock: asBlock(),
     status: typenameToProposalStatus(newStatus.__typename),
   })),
+  details: asProposalDetails(fields.details),
 })
 
 export interface ProposalVote {

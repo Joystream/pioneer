@@ -18,7 +18,7 @@ export type ProposalStatus =
   | 'cancelled'
   | 'canceledByRuntime'
 
-export type ProposalDetails =
+export type ProposalType =
   | 'signal'
   | 'runtimeUpgrade'
   | 'fundingRequest'
@@ -49,7 +49,7 @@ export interface Proposal {
   id: string
   title: string
   status: ProposalStatus
-  details: ProposalDetails
+  details: { type: ProposalType }
   proposer: Member
   createdAt: string
   endedAt?: string
@@ -60,7 +60,7 @@ export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
     id: fields.id,
     title: fields.title,
     status: typenameToProposalStatus(fields.status.__typename),
-    details: typenameToProposalDetails(fields.details.__typename),
+    details: { type: typenameToProposalDetails(fields.details.__typename) },
     proposer: asMember(fields.creator),
     createdAt: fields.createdAt,
   }

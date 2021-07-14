@@ -1,7 +1,8 @@
-import { lowerFirstLetter } from '../../common/helpers'
-import { ProposalDetails } from '../types'
+import { lowerFirstLetter } from '@/common/helpers'
 
-export const proposalDetails: ProposalDetails[] = [
+import { ProposalType } from '../types'
+
+export const proposalDetails: ProposalType[] = [
   'signal',
   'runtimeUpgrade',
   'fundingRequest',
@@ -29,10 +30,10 @@ export const proposalDetails: ProposalDetails[] = [
   'veto',
 ]
 
-export const enabledProposals: ProposalDetails[] = ['fundingRequest']
+export const enabledProposals: ProposalType[] = ['fundingRequest']
 
-export const typenameToProposalDetails = (typename: string): ProposalDetails => {
+export const typenameToProposalDetails = (typename: string): ProposalType => {
   const details = typename.replace('ProposalDetails', '')
 
-  return lowerFirstLetter(details) as ProposalDetails
+  return lowerFirstLetter(details) as ProposalType
 }
