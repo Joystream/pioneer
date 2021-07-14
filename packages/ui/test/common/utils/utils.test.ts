@@ -1,4 +1,4 @@
-import { equals, intersperse, objectEquals } from '@/common/utils'
+import { equals, intersperse, objectEquals, repeat } from '@/common/utils'
 
 describe('utils', () => {
   describe('equality functions', () => {
@@ -63,6 +63,13 @@ describe('utils', () => {
       expect(intersperse([1, 2], '|')).toEqual([1, '|', 2])
       expect(intersperse([1, 2, 3], '|')).toEqual([1, '|', 2, '|', 3])
       expect(intersperse([null, 'foo', true], {})).toEqual([null, {}, 'foo', {}, true])
+    })
+  })
+
+  describe('repeat', () => {
+    it('Repeat', () => {
+      expect(repeat(() => 'hello', 4)).toEqual(['hello', 'hello', 'hello', 'hello'])
+      expect(repeat((x) => x, 4)).toEqual([0, 1, 2, 3])
     })
   })
 })
