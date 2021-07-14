@@ -9,13 +9,12 @@ import { ProposalType } from './proposals'
 
 type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
 type ProposalDetailsTypename = DetailsFragment['__typename']
-type BaseProposalType = Exclude<ProposalType, 'fundingRequest' & 'createWorkingGroupLeadOpening'>
 
 interface BaseProposalDetails {
-  type: BaseProposalType
+  type: ProposalType
 }
 
-interface FundingRequestDetails {
+export interface FundingRequestDetails {
   type: 'fundingRequest'
   destinations?: {
     account: string
@@ -23,7 +22,7 @@ interface FundingRequestDetails {
   }[]
 }
 
-interface CreateLeadOpeningDetails {
+export interface CreateLeadOpeningDetails {
   type: 'createWorkingGroupLeadOpening'
   group?: {
     id: string

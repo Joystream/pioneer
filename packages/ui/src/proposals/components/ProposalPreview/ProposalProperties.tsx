@@ -3,14 +3,14 @@ import React, { ReactElement } from 'react'
 import { ProposalType, ProposalWithDetails } from '../../types'
 import { ProposalDetails } from '../../types/ProposalDetails'
 
-import { FundingRequestDetails } from './FundingRequestDetails'
+import { FundingRequestDetailsComponent } from './FundingRequestDetails'
 
 export interface ProposalPropertiesContent<T extends ProposalType> {
   (props: { details: ProposalDetails & { type: T } }): ReactElement
 }
 
 const proposalDetails: Partial<Record<ProposalType, ProposalPropertiesContent<any>>> = {
-  fundingRequest: FundingRequestDetails,
+  fundingRequest: FundingRequestDetailsComponent,
 }
 
 interface Props {

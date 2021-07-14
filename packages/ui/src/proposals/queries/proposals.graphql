@@ -60,7 +60,7 @@ fragment ProposalWithDetailsFields on Proposal {
     }
     ...on CreateWorkingGroupLeadOpeningProposalDetails {
       metadata {
-        ...WorkingGroupOpeningMetadataFields
+        description
       }
       stakeAmount
       unstakingPeriod

@@ -4,10 +4,6 @@ import {
   MemberFieldsFragment,
   MemberFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
-import {
-  WorkingGroupOpeningMetadataFieldsFragment,
-  WorkingGroupOpeningMetadataFieldsFragmentDoc,
-} from '../../../working-groups/queries/__generated__/workingGroups.generated'
 import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
@@ -102,9 +98,7 @@ export type ProposalWithDetailsFieldsFragment = {
         stakeAmount: any
         unstakingPeriod: number
         rewardPerBlock: any
-        metadata?: Types.Maybe<
-          { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
-        >
+        metadata?: Types.Maybe<{ __typename: 'WorkingGroupOpeningMetadata'; description?: Types.Maybe<string> }>
         group?: Types.Maybe<{ __typename: 'WorkingGroup'; id: string; name: string }>
       }
     | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
@@ -225,7 +219,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on CreateWorkingGroupLeadOpeningProposalDetails {
         metadata {
-          ...WorkingGroupOpeningMetadataFields
+          description
         }
         stakeAmount
         unstakingPeriod
@@ -239,7 +233,6 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
   }
   ${ProposalFieldsFragmentDoc}
   ${VoteFieldsFragmentDoc}
-  ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
 `
 export const GetProposalsDocument = gql`
   query getProposals($where: ProposalWhereInput) {
