@@ -9,9 +9,10 @@ import { ProposalType } from './proposals'
 
 type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
 type ProposalDetailsTypename = DetailsFragment['__typename']
+type BaseProposalType = Exclude<ProposalType, 'fundingRequest' | 'createWorkingGroupLeadOpening'>
 
 interface BaseProposalDetails {
-  type: ProposalType
+  type: BaseProposalType
 }
 
 export interface FundingRequestDetails {
@@ -74,5 +75,5 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
   const type = fragment.__typename as ProposalDetailsTypename
   const result = detailsCasts[type]?.(fragment)
-  return result ?? { type: typenameToProposalDetails(type) }
+  return result ?? { type: 'signal' }
 }
