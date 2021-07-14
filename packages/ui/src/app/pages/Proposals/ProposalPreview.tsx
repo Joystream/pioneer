@@ -32,7 +32,7 @@ import { useProposalVotes } from '@/proposals/hooks/useProposalVotes'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 
 export const ProposalPreview = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id, postId } = useParams<{ id: string; postId?: string }>()
   const { isLoading, proposal } = useProposal(id)
   const constants = useConstants(proposal?.details)
   const loc = useLocation()
@@ -106,7 +106,7 @@ export const ProposalPreview = () => {
 
             <RationalePreview rationale={proposal.rationale} />
 
-            <ProposalDiscussions thread={proposal.discussionThread} />
+            <ProposalDiscussions thread={proposal.discussionThread} selected={postId} />
           </RowGapBlock>
         </MainPanel>
       }

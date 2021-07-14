@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
 import { ForumComment, ForumCommentStyles } from '@/common/components/Forum/ForumComment'
@@ -10,24 +10,34 @@ import { ProposalDiscussionThread } from '@/proposals/types'
 
 interface Props {
   thread: ProposalDiscussionThread
+  selected?: string
 }
 
-export const ProposalDiscussions = ({ thread }: Props) => (
-  <ProposalDiscussionsStyles mode={thread.mode}>
-    <DiscussionsHeader>
-      <h4>Discussion</h4>
-      <Badge>
-        {`${thread.mode} `}
-        <Tooltip tooltipText="Dolore magna anim eu nisi qui.">
-          <TooltipDefault />
-        </Tooltip>
-      </Badge>
-    </DiscussionsHeader>
-    {thread.discussionPosts.map((post, index) => (
-      <ForumComment key={index} post={post} />
-    ))}
-  </ProposalDiscussionsStyles>
-)
+export const ProposalDiscussions = ({ thread, selected }: Props) => {
+  const selectedElement = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    selectedElement.current?.scrollIntoView?.({ behavior: 'smooth' })
+  }, [selected])
+
+  return (
+    <ProposalDiscussionsStyles mode={thread.mode}>
+      <DiscussionsHeader>
+        <h4>Discussion</h4>
+        <Badge>
+          {`${thread.mode} `}
+          <Tooltip tooltipText="Dolore magna anim eu nisi qui.">
+            <TooltipDefault />
+          </Tooltip>
+        </Badge>
+      </DiscussionsHeader>
+      {thread.discussionPosts.map((post, index) => {
+        const isSelected = selected === post.id
+        const ref = isSelected ? selectedElement : undefined
+        return <ForumComment key={index} ref={ref} post={post} isSelected={isSelected} />
+      })}
+    </ProposalDiscussionsStyles>
+  )
+}
 
 const DiscussionsHeader = styled.header`
   display: inline-flex;
@@ -43,10 +53,7 @@ const DiscussionsHeader = styled.header`
   }
 `
 
-interface ProposalDiscussionsStylesProps {
-  mode: ProposalDiscussionThread['mode']
-}
-const ProposalDiscussionsStyles = styled.div<ProposalDiscussionsStylesProps>`
+const ProposalDiscussionsStyles = styled.div<Pick<ProposalDiscussionThread, 'mode'>>`
   margin-top: ${spacing(1)};
   ${ForumCommentStyles} {
     margin-top: ${spacing(3)};
