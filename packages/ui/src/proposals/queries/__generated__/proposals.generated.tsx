@@ -82,7 +82,26 @@ export type ProposalWithDetailsFieldsFragment = {
       | { __typename: 'ProposalStatusGracing' }
       | { __typename: 'ProposalStatusDormant' }
   }>
+  discussionThread: {
+    __typename: 'ProposalDiscussionThread'
+    discussionPosts: Array<{ __typename: 'ProposalDiscussionPost' } & DiscussionPostFieldsFragment>
+    mode: { __typename: 'ProposalDiscussionThreadModeOpen' } | { __typename: 'ProposalDiscussionThreadModeClosed' }
+  }
 } & ProposalFieldsFragment
+
+export type DiscussionPostFieldsFragment = {
+  __typename: 'ProposalDiscussionPost'
+  repliesTo?: Types.Maybe<{ __typename: 'ProposalDiscussionPost' } & DiscussionPostWithoutReplyFieldsFragment>
+} & DiscussionPostWithoutReplyFieldsFragment
+
+export type DiscussionPostWithoutReplyFieldsFragment = {
+  __typename: 'ProposalDiscussionPost'
+  id: string
+  updatedAt?: Types.Maybe<any>
+  text: string
+  createdInEvent: { __typename: 'ProposalDiscussionPostCreatedEvent'; inBlock: number }
+  author: { __typename: 'Membership' } & MemberFieldsFragment
+}
 
 export type GetProposalsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.ProposalWhereInput>
@@ -150,6 +169,29 @@ export const ProposalFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
+export const DiscussionPostWithoutReplyFieldsFragmentDoc = gql`
+  fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
+    id
+    createdInEvent {
+      inBlock
+    }
+    updatedAt
+    author {
+      ...MemberFields
+    }
+    text
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const DiscussionPostFieldsFragmentDoc = gql`
+  fragment DiscussionPostFields on ProposalDiscussionPost {
+    ...DiscussionPostWithoutReplyFields
+    repliesTo {
+      ...DiscussionPostWithoutReplyFields
+    }
+  }
+  ${DiscussionPostWithoutReplyFieldsFragmentDoc}
+`
 export const ProposalWithDetailsFieldsFragmentDoc = gql`
   fragment ProposalWithDetailsFields on Proposal {
     ...ProposalFields
@@ -168,9 +210,18 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
         __typename
       }
     }
+    discussionThread {
+      discussionPosts {
+        ...DiscussionPostFields
+      }
+      mode {
+        __typename
+      }
+    }
   }
   ${ProposalFieldsFragmentDoc}
   ${VoteFieldsFragmentDoc}
+  ${DiscussionPostFieldsFragmentDoc}
 `
 export const GetProposalsDocument = gql`
   query getProposals($where: ProposalWhereInput) {
