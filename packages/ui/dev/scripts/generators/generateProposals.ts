@@ -12,22 +12,16 @@ const MAX_PROPOSALS = 20
 
 const MAX_VOTE = 3
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
-
-const VotesKind: [number, ProposalVoteKind][] = [
-  [3, Approve],
-  [1, Reject],
-  [1, Abstain],
-  [1, Slash],
-]
+const randomvotesKind = randomsFromWeightedSet<string>([3, Approve], [1, Reject], [1, Abstain], [1, Slash])
 
 const DECIDING: ProposalStatus = 'deciding'
 const MoreVoteStatuses: ProposalStatus[] = ['dormant', 'deciding']
-const VoteRoundStatuses: [number, ProposalStatus[]][] = [
+const randomVoteRoundStatuses = randomFromWeightedSet(
   [2, []],
   [2, MoreVoteStatuses],
-  [1, [...MoreVoteStatuses, ...MoreVoteStatuses]],
-]
-const LastStatuses: [number, ProposalStatus[]][] = [
+  [1, [...MoreVoteStatuses, ...MoreVoteStatuses]]
+)
+const randomLastStatuses = randomFromWeightedSet<ProposalStatus[]>(
   [3, []],
   [3, ['dormant']],
   [3, ['gracing']],
@@ -38,8 +32,8 @@ const LastStatuses: [number, ProposalStatus[]][] = [
   [2, ['expired']],
   [1, ['cancelled']],
   [1, ['canceledByRuntime']],
-  [1, ['vetoed']],
-]
+  [1, ['vetoed']]
+)
 
 const isIntermediateStatus = (status: ProposalStatus) => proposalActiveStatuses.includes(status)
 
@@ -47,7 +41,7 @@ let nextId = 0
 let nextVoteId = 0
 
 const generateProposal = (mocks: Mocks) => {
-  const statusHistory = [DECIDING, ...randomFromWeightedSet(VoteRoundStatuses), ...randomFromWeightedSet(LastStatuses)]
+  const statusHistory = [DECIDING, ...randomVoteRoundStatuses(), ...randomLastStatuses()]
 
   const member = mocks.members[randomFromRange(0, mocks.members.length - 1)]
   const status = statusHistory[statusHistory.length - 1] as string
@@ -62,8 +56,8 @@ const generateProposal = (mocks: Mocks) => {
   const createdInEvent = { inBlock: 0 }
 
   const description = randomMarkdown()
-  const voteKinds = randomsFromWeightedSet(VotesKind, randomFromRange(0, MAX_VOTE)) as string[]
-  const votes = voteKinds.map((voteKind) => ({
+
+  const votes = randomvotesKind(randomFromRange(0, MAX_VOTE)).map((voteKind) => ({
     id: String(nextVoteId++),
     voteKind,
     network: 'OLYMPIA',
