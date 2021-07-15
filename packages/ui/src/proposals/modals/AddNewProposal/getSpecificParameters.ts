@@ -1,22 +1,17 @@
 import { ApiRx } from '@polkadot/api'
 
 import { isValidSpecificParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
-import { SpecificParametersContext } from '@/proposals/modals/AddNewProposal/machine'
-import { ProposalType } from '@/proposals/types'
+import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 
-export const getSpecificParameters = (
-  api: ApiRx,
-  type: ProposalType | undefined,
-  context: SpecificParametersContext['specifics']
-): any => {
-  if (!type || !isValidSpecificParameters(type, context)) {
+export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineState): any => {
+  if (!isValidSpecificParameters(state)) {
     return { Signal: '' }
   }
 
-  switch (type) {
+  switch (state.context.type) {
     case 'fundingRequest':
       return {
-        FundingRequest: [{ ...context, account: context.account?.address }],
+        FundingRequest: [{ ...state.context, account: state.context?.specifics?.account?.address }],
       }
     default:
       return { Signal: '' }
