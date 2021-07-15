@@ -55,7 +55,6 @@ const NoMemberships = styled(RowGapBlock)`
 `
 
 const MembershipsTable = styled(MainPanel)`
-  position: relative;
   grid-row-gap: 28px;
   padding-top: 12px;
 `

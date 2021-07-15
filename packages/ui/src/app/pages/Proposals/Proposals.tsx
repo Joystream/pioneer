@@ -2,10 +2,10 @@ import React, { useRef } from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
+import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { useActivities } from '@/common/hooks/useActivities'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
@@ -32,7 +32,14 @@ export const Proposals = () => {
       main={
         proposals.length || isLoading ? (
           <MainPanel ref={sideNeighborRef}>
-            {isLoading ? <Loading /> : <ProposalList proposals={proposals} />}
+            {isLoading ? (
+              <SearchProcess
+                title="Searching"
+                description="We are searching through all past proposals to find what your are looking for. "
+              />
+            ) : (
+              <ProposalList proposals={proposals} />
+            )}
           </MainPanel>
         ) : (
           <MainPanel>

@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { BorderRad, Colors } from '../../constants'
 
-export function Loader() {
+export function Loader({ className }: { className?: string }) {
   return (
-    <LoaderComponent viewBox="0 0 24 24" fill="none">
+    <LoaderComponent viewBox="0 0 24 24" fill="none" className={className}>
       <path
         d="M22.9092 11.4546H18.5455C17.9431 11.4546 17.4546 11.9431 17.4546 12.5455C17.4546 13.1479 17.9431 13.6364 18.5455 13.6364H22.9092C23.5116 13.6364 24.0001 13.1479 24.0001 12.5455C24.0001 11.9431 23.5117 11.4546 22.9092 11.4546Z"
         fill={Colors.Black[500]}

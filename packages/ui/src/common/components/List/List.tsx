@@ -4,6 +4,7 @@ import { BorderRad, Colors, Transitions } from '../../constants'
 
 export const List = styled.ul`
   display: flex;
+  position: relative;
   flex-direction: column;
   width: 100%;
   margin: 0;
