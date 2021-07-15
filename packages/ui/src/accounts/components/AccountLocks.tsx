@@ -35,9 +35,9 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
   return (
     <AccountLocksWrapper gap={4}>
       {locks.map((lock, index) => (
-        <span key={index} title={lock.type}>
+        <AccountLockIconWrapper key={index} title={lock.type}>
           {lockIcon(lock.type)}
-        </span>
+        </AccountLockIconWrapper>
       ))}
     </AccountLocksWrapper>
   )
@@ -46,4 +46,13 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
 const AccountLocksWrapper = styled(ColumnGapBlock)`
   position: absolute;
   top: 20px;
+  align-items: center;
+`
+
+const AccountLockIconWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
 `

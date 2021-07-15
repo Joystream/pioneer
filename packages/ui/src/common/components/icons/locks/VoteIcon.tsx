@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Colors } from '@/common/constants'
+
 import { Icon } from '../Icon'
 
 interface VoteIconProps {
@@ -9,7 +11,7 @@ interface VoteIconProps {
 export const VoteIcon = React.memo(({ className }: VoteIconProps) => (
   <Icon
     size="16"
-    viewBox="0 0 16 16"
+    viewBox="0 0 24 24"
     preserveAspectRatio="xMidYMid meet"
     fill="none"
     color="currentColor"
@@ -18,9 +20,9 @@ export const VoteIcon = React.memo(({ className }: VoteIconProps) => (
     <path
       fillRule="evenodd"
       clipRule="evenodd"
-      d="M4.67749 5.42773H7.32278L6.25612 6.4944H5.74416L4.67749 5.42773ZM3.7473 5.42773H2.44807H2.13615L1.98323 5.6996L0.799287 7.80439L0.689209 8.00008H0.666748V16.0001H11.3334V8.00008H11.3112L11.201 7.8043L10.0165 5.69951L9.8636 5.42773H9.55174H8.25298L7.18631 6.4944H9.23989L10.0872 8.00008H1.91305L2.75999 6.4944H4.81396L3.7473 5.42773ZM1.86675 9.20008H10.1334V14.8001H1.86675V9.20008Z"
-      fill="black"
+      d="M10.0162 8.14148H13.9841L12.3841 9.74148H11.6162L10.0162 8.14148ZM8.62088 8.14148H6.67205H6.20417L5.97479 8.54927L4.19887 11.7065L4.03375 12H4.00006V24H20.0001V12H19.9667L19.8014 11.7063L18.0247 8.54914L17.7953 8.14148H17.3276H15.3794L13.7794 9.74148H16.8598L18.1307 12H5.86951L7.13993 9.74148H10.2209L8.62088 8.14148ZM5.80006 13.8H18.2001V22.2H5.80006V13.8Z"
+      fill={Colors.Black[900]}
     />
-    <path d="M6.00001 6.75031L3.36902 4.11932L6.98663 0.501709L9.61762 3.1327L6.00001 6.75031Z" fill="#3F38FF" />
+    <path d="M12 10.1253L8.05347 6.17886L13.4799 0.752441L17.4264 4.69893L12 10.1253Z" fill={Colors.Blue[500]} />
   </Icon>
 ))
