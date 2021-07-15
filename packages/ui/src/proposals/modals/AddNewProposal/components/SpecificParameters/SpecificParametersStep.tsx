@@ -38,7 +38,16 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
         />
       )
     case state.matches('specificParameters.createWorkingGroupLeadOpening'):
-      return <CreateWorkingGroupLeadOpening state={state} />
+      return (
+        <CreateWorkingGroupLeadOpening
+          description={state.context.specifics?.description}
+          shortDescription={state.context.specifics?.shortDescription}
+          groupId={state.context.specifics?.groupId}
+          setDescription={(description) => send('SET_DESCRIPTION', { description })}
+          setShortDescription={(shortDescription) => send('SET_SHORT_DESCRIPTION', { shortDescription })}
+          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+        />
+      )
     default:
       return null
   }

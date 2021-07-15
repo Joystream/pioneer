@@ -7,7 +7,7 @@ import { Account } from '@/accounts/types'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { Member } from '@/memberships/types'
 import { FundingRequestParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
-import { WorkingGroupLeadOpeningParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/CreateWorkingGroupLeadOpening'
+import { WorkingGroupAndOpeningDetailsParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/CreateWorkingGroupLeadOpening'
 import { ProposalType } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
@@ -36,7 +36,14 @@ export interface TriggerAndDiscussionContext extends Required<BaseDetailsContext
 }
 
 export interface SpecificParametersContext extends Required<TriggerAndDiscussionContext> {
-  specifics: EmptyObject | FundingRequestParameters | WorkingGroupLeadOpeningParameters
+  specifics: EmptyObject | FundingRequestParameters | WorkingGroupAndOpeningDetailsParameters
+}
+
+interface FundingRequestContext extends Required<TriggerAndDiscussionContext> {
+  specifics: FundingRequestParameters
+}
+interface WorkingGroupLeadOpeningRequestContext extends Required<TriggerAndDiscussionContext> {
+  specifics: WorkingGroupAndOpeningDetailsParameters
 }
 
 export interface TransactionContext extends Required<SpecificParametersContext> {
@@ -50,6 +57,7 @@ type AddNewProposalContext = Partial<
     TriggerAndDiscussionContext &
     SpecificParametersContext &
     FundingRequestContext &
+    WorkingGroupLeadOpeningRequestContext &
     TransactionContext
 >
 
@@ -66,8 +74,11 @@ export type AddNewProposalState =
   | { value: 'generalParameters.triggerAndDiscussion'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'generalParameters.finishGeneralParameters'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'specificParameters'; context: Required<TriggerAndDiscussionContext> }
-  | { value: 'specificParameters.fundingRequest'; context: FundingRequestContext }
-  | { value: 'specificParameters.createWorkingGroupLeadOpening'; context: WorkingGroupLeadOpeningRequestContext }
+  | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
+  | {
+      value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
+      context: WorkingGroupLeadOpeningRequestContext
+    }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
   | { value: 'success'; context: Required<AddNewProposalContext> }
   | { value: 'error'; context: AddNewProposalContext }
