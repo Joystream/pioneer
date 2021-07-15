@@ -22,7 +22,7 @@ export const OpeningsPagination = (props: Props) => {
 
   return (
     <>
-      <OpeningsList openings={openings} />
+      <OpeningsList openings={openings} past={props.type === 'past' ?? false} />
       <Pagination page={page} pageCount={pageCount} handlePageChange={setPage} />
     </>
   )
