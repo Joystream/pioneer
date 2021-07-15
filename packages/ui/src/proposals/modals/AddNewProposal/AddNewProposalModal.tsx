@@ -31,7 +31,6 @@ import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/component
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { SignTransactionModal } from '@/proposals/modals/AddNewProposal/components/SignTransactionModal'
 import {
-  getSpecificParameters,
   isValidSpecificParameters,
   SpecificParametersStep,
 } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
@@ -39,6 +38,7 @@ import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components
 import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
+import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import {
   AddNewProposalEvent,
@@ -74,13 +74,13 @@ export const AddNewProposalModal = () => {
 
   const transaction = useMemo(() => {
     if (member && api) {
-      const txSpecifixParameters = getSpecificParameters(
+      const txSpecificParameters = getSpecificParameters(
         api,
         state.context.type,
         state.context.specifics as SpecificParametersContext['specifics']
       )
-      console.log('0000', txBaseParams, txSpecifixParameters)
-      return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecifixParameters)
+
+      return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
     }
   }, [api, JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics)])
   const feeInfo = useTransactionFee(member?.controllerAccount, transaction)
