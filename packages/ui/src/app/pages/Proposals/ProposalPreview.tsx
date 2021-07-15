@@ -104,7 +104,7 @@ export const ProposalPreview = () => {
             {/* Proposal-specific dashboard */}
             <h3>{camelCaseToText(proposal.type)}</h3>
 
-            <ProposalProperties proposal={proposal} />
+            <ProposalProperties details={proposal.details} />
 
             <RationalePreview rationale={proposal.rationale} />
 
