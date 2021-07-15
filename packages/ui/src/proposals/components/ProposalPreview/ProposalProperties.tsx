@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 
-import { ProposalType, ProposalWithDetails } from '../../types'
+import { ProposalType } from '../../types'
 import { ProposalDetails } from '../../types/ProposalDetails'
 
 import { CreateLeadOpeningDetailsComponent } from './CreateLeadOpeningDetailsComponent'
@@ -16,13 +16,13 @@ const proposalDetails: Partial<Record<ProposalType, ProposalPropertiesContent<an
 }
 
 interface Props {
-  proposal: ProposalWithDetails
+  details: ProposalDetails
 }
 
-export const ProposalProperties = ({ proposal }: Props) => {
-  const Content = proposal.details.type && proposalDetails[proposal.details.type]
+export const ProposalProperties = ({ details }: Props) => {
+  const Content = details.type && proposalDetails[details.type]
   if (Content) {
-    return <Content details={proposal.details} />
+    return <Content details={details} />
   }
   return null
 }
