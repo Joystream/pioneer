@@ -29,14 +29,14 @@ export const OpeningDetails = ({ opening }: Props) => {
           <OpenedItemTitle>{opening.title}</OpenedItemTitle>
         </OpenedTop>
         <TextBig light>{opening.shortDescription}</TextBig>
-        <Statistics withMargin>
-          <StatsBlock size="m" centered spacing="s">
+        <Statistics withMargin gapSize="s">
+          <StatsBlock size="m" centered>
             <TextBig>
               <TokenValue value={opening.reward.payout} />
             </TextBig>
             <Subscription>Reward per {opening.reward.blockInterval} blocks</Subscription>
           </StatsBlock>
-          <StatsBlock size="m" centered spacing="s">
+          <StatsBlock size="m" centered>
             <TwoColumnsStatistic>
               <StatiscticContentColumn>
                 <TextBig value bold>
@@ -52,7 +52,7 @@ export const OpeningDetails = ({ opening }: Props) => {
               </StatiscticContentColumn>
             </TwoColumnsStatistic>
           </StatsBlock>
-          <StatsBlock size="m" centered spacing="s">
+          <StatsBlock size="m" centered>
             <TextBig>
               <TokenValue value={opening.stake} />
             </TextBig>
