@@ -23,7 +23,7 @@ export const isValidSpecificParameters = (
   }
 }
 
-export const SpecificParametersStep = ({ constants, params, send }: SpecificParametersStepProps) => {
+export const SpecificParametersStep = ({ params, send }: SpecificParametersStepProps) => {
   switch (params.type) {
     case 'fundingRequest':
       return (
