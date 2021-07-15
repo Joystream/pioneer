@@ -19,7 +19,7 @@ export const StatisticItem: FC<StatisticItemProps> = ({ className, children, ...
   </StatsBlock>
 )
 
-interface StatiscticBlockProps {
+export interface StatiscticBlockProps {
   size?: 's' | 'm' | 'l'
   centered?: boolean
 }
