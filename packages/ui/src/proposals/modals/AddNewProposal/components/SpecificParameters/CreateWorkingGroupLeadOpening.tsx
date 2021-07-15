@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent, InputText } from '@/common/components/forms'
+import { InputComponent, InputTextarea } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -44,11 +44,16 @@ export const CreateWorkingGroupLeadOpening = ({
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="Amount" required>
+          <InputComponent
+            label="Working Group"
+            required
+            inputSize="l"
+            tooltipText="Please select an identifier for working group"
+          >
             <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
           </InputComponent>
           <InputComponent label="Short description" required inputSize="l">
-            <InputText value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} />
+            <InputTextarea value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} />
           </InputComponent>
           <InputComponent label="Description" required inputSize="auto" id="field-description">
             <CKEditor
