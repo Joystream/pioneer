@@ -21,6 +21,11 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
 
       return !!(specifics?.amount && specifics.amount.gtn(0) && specifics.account)
     }
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'): {
+      const specifics = state.context.specifics
+
+      return !!(specifics?.groupId && specifics.description && specifics.shortDescription)
+    }
     default:
       return false
   }
@@ -37,7 +42,7 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setAmount={(amount) => send('SET_AMOUNT', { amount })}
         />
       )
-    case state.matches('specificParameters.createWorkingGroupLeadOpening'):
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'):
       return (
         <CreateWorkingGroupLeadOpening
           description={state.context.specifics?.description}
