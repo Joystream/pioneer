@@ -33,7 +33,21 @@ ClassicEditor.builtinPlugins = [
   Link,
   List,
   Mention,
+  MentionToLink,
   Paragraph,
   PasteFromOffice,
   TextTransformation,
 ]
+
+// See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#customizing-the-output
+function MentionToLink(editor) {
+  editor.conversion.for('downcast').attributeToElement({
+    model: 'mention',
+    view: (modelAttributeValue, { writer }) =>
+      modelAttributeValue && writer.createAttributeElement('a', {
+        class: 'mention',
+        href: `#mention?member-id=${modelAttributeValue.memberId}`,
+      }),
+    converterPriority: 'high',
+  })
+}
