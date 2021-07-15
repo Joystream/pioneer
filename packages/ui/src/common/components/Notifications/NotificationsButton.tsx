@@ -33,10 +33,17 @@ export const NotificationsButton = ({
 
 const NotificationsStyledButton = styled(ButtonBareGhost)<{ isNotificationsPanelOpen?: boolean }>`
   background-color: ${({ isNotificationsPanelOpen }) => (isNotificationsPanelOpen ? Colors.Black[700] : 'transparent')};
-  color: ${Colors.White};
+
+  &:hover,
+  &:focus {
+    ${ButtonInnerWrapper} > svg {
+      color: ${({ isNotificationsPanelOpen }) => (isNotificationsPanelOpen ? Colors.Blue[500] : Colors.White)};
+    }
+    background-color: ${Colors.Black[700]};
+  }
 
   ${ButtonInnerWrapper} > svg {
-    color: ${Colors.White};
+    color: ${({ isNotificationsPanelOpen }) => (isNotificationsPanelOpen ? Colors.Blue[500] : Colors.White)};
   }
 
   ${UnreadIndicator} {
