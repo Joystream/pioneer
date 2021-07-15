@@ -32,6 +32,7 @@
     "@ckeditor/ckeditor5-link": "^27.1.0",
     "@ckeditor/ckeditor5-list": "^27.1.0",
     "@ckeditor/ckeditor5-markdown-gfm": "^27.1.0",
+    "@ckeditor/ckeditor5-mention": "27.1.0",
     "@ckeditor/ckeditor5-paragraph": "^27.1.0",
     "@ckeditor/ckeditor5-paste-from-office": "^27.1.0",
     "@ckeditor/ckeditor5-theme-lark": "^27.1.0",

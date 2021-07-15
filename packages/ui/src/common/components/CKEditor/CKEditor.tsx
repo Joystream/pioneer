@@ -1,4 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import { useApolloClient } from '@apollo/client'
+import React, { useCallback, useEffect, useRef } from 'react'
+
+import { debounce } from '@/common/utils'
+import { SearchMembersDocument, SearchMembersQuery, SearchMembersQueryVariables } from '@/memberships/queries'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
 import { MarkdownEditor } from './MarkdownEditor.js'
@@ -25,6 +29,18 @@ export const CKEditor = ({ disabled, onBlur, onChange, onFocus, onReady }: CKEdi
     editorRef.current.isReadOnly = !!disabled
   }, [disabled])
 
+  const client = useApolloClient()
+  const mentionFeed = useCallback(
+    debounce(async (text: string) => {
+      const { data } = await client.query<SearchMembersQuery, SearchMembersQueryVariables>({
+        query: SearchMembersDocument,
+        variables: { text, limit: 10 },
+      })
+      return data.memberships.map(({ id, handle }) => ({ id: `@${handle}`, memberId: id }))
+    }),
+    [client]
+  )
+
   useEffect(() => {
     const createPromise: Promise<Editor> = MarkdownEditor.create(ref.current || '', {
       toolbar: {
@@ -46,6 +62,9 @@ export const CKEditor = ({ disabled, onBlur, onChange, onFocus, onReady }: CKEdi
           'undo',
           'redo',
         ],
+      },
+      mention: {
+        feeds: [{ marker: '@', feed: mentionFeed, minimumCharacters: 1 }],
       },
       image: {
         toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],
