@@ -7,16 +7,16 @@ import { ProposalType } from '@/proposals/types'
 export const getSpecificParameters = (
   api: ApiRx,
   type: ProposalType | undefined,
-  specifics: SpecificParametersContext['specifics']
+  context: SpecificParametersContext['specifics']
 ): any => {
-  if (!type || !isValidSpecificParameters(type, specifics)) {
+  if (!type || !isValidSpecificParameters(type, context)) {
     return { Signal: '' }
   }
 
   switch (type) {
     case 'fundingRequest':
       return {
-        FundingRequest: [{ ...specifics, account: specifics.account?.address }],
+        FundingRequest: [{ ...context, account: context.account?.address }],
       }
     default:
       return { Signal: '' }
