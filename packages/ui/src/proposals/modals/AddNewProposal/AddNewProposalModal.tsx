@@ -29,18 +29,26 @@ import { useConstants } from '@/proposals/hooks/useConstants'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
+import { SignTransactionModal } from '@/proposals/modals/AddNewProposal/components/SignTransactionModal'
 import {
   isValidSpecificParameters,
   SpecificParametersStep,
 } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
+import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
+import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
-import { AddNewProposalEvent, addNewProposalMachine, ProposalTrigger } from '@/proposals/modals/AddNewProposal/machine'
+import {
+  AddNewProposalEvent,
+  addNewProposalMachine,
+  ProposalTrigger,
+  SpecificParametersContext,
+} from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalConstants } from '@/proposals/types'
 
-export type NewProposalParams = Exclude<
+export type BaseProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
   string | Uint8Array
 >
@@ -56,18 +64,25 @@ export const AddNewProposalModal = () => {
   )
   const [isValidNext, setValidNext] = useState<boolean>(false)
 
-  const [txParams] = useState<NewProposalParams>({
+  const txBaseParams: BaseProposalParams = {
     member_id: member?.id,
-    title: '',
-    description: '',
-    staking_account_id: member?.controllerAccount,
-  })
+    title: state.context.title,
+    description: state.context.rationale,
+    ...(state.context.stakingAccount ? { staking_account_id: state.context.stakingAccount.address } : {}),
+    ...(state.context.triggerBlock ? { exact_execution_block: state.context.triggerBlock } : {}),
+  }
 
   const transaction = useMemo(() => {
-    if (member && txParams && api) {
-      return api.tx.proposalsCodex.createProposal(txParams, { Signal: '' })
+    if (member && api) {
+      const txSpecificParameters = getSpecificParameters(
+        api,
+        state.context.type,
+        state.context.specifics as SpecificParametersContext['specifics']
+      )
+
+      return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
     }
-  }, [api, JSON.stringify(txParams)])
+  }, [api, JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics)])
   const feeInfo = useTransactionFee(member?.controllerAccount, transaction)
 
   useEffect((): any => {
@@ -119,7 +134,7 @@ export const AddNewProposalModal = () => {
     return setValidNext(false)
   }, [state, member?.id])
 
-  if (!member || !feeInfo) {
+  if (!api || !member || !transaction || !feeInfo) {
     return null
   }
 
@@ -144,6 +159,22 @@ export const AddNewProposalModal = () => {
     })
 
     return null
+  }
+
+  if (state.matches('transaction')) {
+    return (
+      <SignTransactionModal
+        onClose={hideModal}
+        transaction={transaction}
+        signer={member.controllerAccount}
+        stake={constants?.requiredStake as BN}
+        service={state.children['transaction']}
+      />
+    )
+  }
+
+  if (state.matches('success')) {
+    return <SuccessModal onClose={hideModal} proposalType={state.context.type} proposalTitle={state.context.title} />
   }
 
   if (state.matches('error')) {
