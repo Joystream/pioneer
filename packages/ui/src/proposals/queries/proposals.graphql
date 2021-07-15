@@ -70,6 +70,20 @@ fragment ProposalWithDetailsFields on Proposal {
         name
       }
     }
+    ...on DecreaseWorkingGroupLeadStakeProposalDetails {
+      lead {
+        createdAt
+        group {
+          id
+          name
+        }
+        membership {
+          id
+          handle
+        }
+      }
+      amount
+    }
   }
 }
 
