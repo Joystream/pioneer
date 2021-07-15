@@ -3,7 +3,8 @@ import faker from 'faker'
 import { ProposalVoteKind } from '../../../src/common/api/queries'
 import { proposalDetails } from '../../../src/proposals/model/proposalDetails'
 import { proposalActiveStatuses } from '../../../src/proposals/model/proposalStatus'
-import { ProposalStatus } from '../../../src/proposals/types/proposals'
+import { ProposalStatus, ProposalType } from '../../../src/proposals/types/proposals'
+import { generateOpeningMetadata } from './generateOpeningsAndUpcomingOpenings'
 
 import { Mocks } from './types'
 import { randomFromRange, randomFromWeightedSet, randomMarkdown, randomsFromWeightedSet } from './utils'
@@ -51,7 +52,7 @@ const generateProposal = (mocks: Mocks) => {
 
   const member = mocks.members[randomFromRange(0, mocks.members.length - 1)]
   const status = statusHistory[statusHistory.length - 1] as string
-  const details = generateProposalDetails()
+  const details = generateProposalDetails(mocks)
 
   const createdAt = faker.date.recent(20)
 
@@ -95,21 +96,32 @@ export const generateProposals = (mocks: Mocks): ProposalMock[] => {
   return Array.from({ length: MAX_PROPOSALS }).map(() => generateProposal(mocks))
 }
 
-const generateProposalDetails = () => {
-  const type = proposalDetails[randomFromRange(0, proposalDetails.length - 1)] as string
-  if (type === 'fundingRequest') {
-    return {
-      type,
-      data: {
-        destinationsList:
-          {
-            destinations: [{
-              account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
-              amount: randomFromRange(1, 10) * 1000,
-            }],
-          }
+const generateProposalDetails = (mocks: Mocks) => {
+  const type = proposalDetails[randomFromRange(0, proposalDetails.length - 1)]
+  const details = ProposalDetailsGenerator[type]?.(mocks)
+  return details ?? { type }
+}
+
+const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => any>> = {
+  fundingRequest: () => ({
+    type: 'fundingRequest',
+    data: {
+      destinationsList: {
+        destinations: [{
+          account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
+          amount: randomFromRange(1, 10) * 1000,
+        }],
       }
     }
-  }
-  return { type }
+  }),
+  createWorkingGroupLeadOpening: (mocks) => ({
+    type: 'createWorkingGroupLeadOpening',
+    data: {
+      metadata: generateOpeningMetadata(),
+      stakeAmount: randomFromRange(1, 5) * 1000,
+      unstakingPeriod: randomFromRange(1, 3) * 14400,
+      rewardPerBlock: randomFromRange(5, 15),
+      groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length -1)].id,
+    }
+  })
 }

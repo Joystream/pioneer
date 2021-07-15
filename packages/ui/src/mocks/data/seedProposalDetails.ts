@@ -1,6 +1,8 @@
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { ProposalType } from '@/proposals/types'
 
+import { RawOpeningMetadata, seedOpeningQuestions } from './seedOpenings'
+
 interface Destination {
   account: string
   amount: number
@@ -18,8 +20,30 @@ const seedFundingRequestData = (data: { destinationsList: { destinations: Destin
   return { destinationsList }
 }
 
+interface RawCreateLeadOpeningData {
+  metadata: RawOpeningMetadata
+  stakeAmount: number
+  unstakingPeriod: number
+  rewardPerBlock: number
+  groupId: string
+}
+
+const seedCreateLeadOpeningData = (data: RawCreateLeadOpeningData, server: any) => {
+  const rawMetadata = { ...data.metadata }
+  const questions = rawMetadata.applicationFormQuestions
+  rawMetadata.applicationFormQuestions = []
+  const metadata = server.schema.create('WorkingGroupOpeningMetadata', rawMetadata)
+
+  seedOpeningQuestions(questions, metadata, server)
+  return {
+    ...data,
+    metadata,
+  }
+}
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
+  createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {

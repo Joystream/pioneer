@@ -12,6 +12,15 @@ interface QuestionMock {
   question: string
 }
 
+export interface RawOpeningMetadata {
+  shortDescription: string
+  description: string
+  hiringLimit: number
+  expectedEnding: string
+  applicationDetails: string
+  applicationFormQuestions: QuestionMock[]
+}
+
 export interface RawOpeningMock {
   id: string
   runtimeId: number
@@ -19,14 +28,7 @@ export interface RawOpeningMock {
   type: string // 'leader' | 'regular'
   status: string // OpeningStatusType
   stakeAmount: number
-  metadata: {
-    shortDescription: string
-    description: string
-    hiringLimit: number
-    expectedEnding: string
-    applicationDetails: string
-    applicationFormQuestions: QuestionMock[]
-  }
+  metadata: RawOpeningMetadata
   unstakingPeriod: number
   rewardPerBlock: number
 }
@@ -85,14 +87,17 @@ export function seedOpening(openingData: RawOpeningMock, server: any) {
     status: openingStatus,
   })
 
-  for (const question of questions) {
-    server.schema.create('ApplicationFormQuestion', {
-      index: questions.indexOf(question),
-      ...question,
-      openingMetadata: opening.metadata,
-    })
-  }
+  seedOpeningQuestions(questions, opening.metadata, server)
 }
+
+export const seedOpeningQuestions = (questions: QuestionMock[], openingMetadata: any, server: any) =>
+  questions.map((question, index) =>
+    server.schema.create('ApplicationFormQuestion', {
+      index,
+      ...question,
+      openingMetadata,
+    })
+  )
 
 export const seedOpenings = (server: any) => {
   openingsData.map((openingData) => seedOpening(openingData, server))

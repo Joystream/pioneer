@@ -3,7 +3,7 @@ import React from 'react'
 import { StatisticItem, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { TextMedium } from '@/common/components/typography'
 
-import { ProposalDetails } from '../../types/ProposalDetails'
+import { FundingRequestDetails } from '../../types/ProposalDetails'
 
 interface DestinationProps {
   destination: {
@@ -24,10 +24,10 @@ const FundingRequestDestination = ({ destination }: DestinationProps) => {
 }
 
 interface FundingRequestDetailsProps {
-  details: ProposalDetails & { type: 'fundingRequest' }
+  details: FundingRequestDetails
 }
 
-export const FundingRequestDetails = ({ details }: FundingRequestDetailsProps) => {
+export const FundingRequestDetailsComponent = ({ details }: FundingRequestDetailsProps) => {
   return (
     <>
       {details.destinations?.map((destination) => (
