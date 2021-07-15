@@ -44,7 +44,7 @@ import {
   AddNewProposalEvent,
   addNewProposalMachine,
   AddNewProposalMachineState,
-  SpecificParametersContext,
+  ProposalTrigger,
 } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalConstants } from '@/proposals/types'
 
@@ -74,11 +74,7 @@ export const AddNewProposalModal = () => {
 
   const transaction = useMemo(() => {
     if (member && api) {
-      const txSpecificParameters = getSpecificParameters(
-        api,
-        state.context.type,
-        state.context.specifics as SpecificParametersContext['specifics']
-      )
+      const txSpecificParameters = getSpecificParameters(api, state as AddNewProposalMachineState)
 
       return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
     }

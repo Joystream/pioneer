@@ -50,7 +50,7 @@ export interface TransactionContext extends Required<SpecificParametersContext> 
   transactionEvents?: EventRecord[]
 }
 
-type AddNewProposalContext = Partial<
+export type AddNewProposalContext = Partial<
   ProposalTypeContext &
     StakingAccountContext &
     BaseDetailsContext &
