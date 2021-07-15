@@ -41,22 +41,21 @@ const seedCreateLeadOpeningData = (data: RawCreateLeadOpeningData, server: any) 
   }
 }
 
+interface RawDecreasLeadStakeData {
+  leadId: 'string'
+  amount: number
+}
+
+const seedDecreaseLeadStakeData = (data: RawDecreasLeadStakeData) => data
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
+  decreaseWorkingGroupLeadStake: seedDecreaseLeadStakeData,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {
-  return server.schema.create(
-    capitalizeFirstLetter(details.type) + 'ProposalDetails',
-    seedProposalDetailsData(details, server)
-  )
-}
-
-const seedProposalDetailsData = (details: { type: string; data?: any }, server: any) => {
   const type = details.type as ProposalType
-  if (type in proposalDetailsSeeds) {
-    return proposalDetailsSeeds[type]?.(details.data, server)
-  }
-  return {}
+  const data = type in proposalDetailsSeeds ? proposalDetailsSeeds[type]?.(details.data, server) : {}
+  return server.schema.create(capitalizeFirstLetter(details.type) + 'ProposalDetails', data)
 }
