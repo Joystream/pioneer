@@ -19,6 +19,7 @@ export const ContentWithSidepanel = styled.div`
 
 export const MainPanel = styled.div`
   display: grid;
+  position: relative;
   grid-row-gap: 24px;
   width: 100%;
   height: fit-content;
