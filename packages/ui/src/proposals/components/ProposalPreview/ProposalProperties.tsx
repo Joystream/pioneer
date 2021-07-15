@@ -20,7 +20,7 @@ interface Props {
 }
 
 export const ProposalProperties = ({ proposal }: Props) => {
-  const Content = proposalDetails[proposal.details.type]
+  const Content = proposal.details.type && proposalDetails[proposal.details.type]
   if (Content) {
     return <Content details={proposal.details} />
   }

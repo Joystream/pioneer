@@ -39,7 +39,7 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
           <Subscription>
             {isPast ? 'Ended:' : 'Created:'} {date.toLocaleDateString('en-GB')}
           </Subscription>
-          <BadgeStatus>{camelCaseToText(proposal.details.type)}</BadgeStatus>
+          <BadgeStatus>{camelCaseToText(proposal.type)}</BadgeStatus>
         </ToggleableItemInfoTop>
         <ToggleableItemTitle>{proposal.title}</ToggleableItemTitle>
       </ToggleableItemInfo>

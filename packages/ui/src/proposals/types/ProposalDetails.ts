@@ -2,17 +2,13 @@ import BN from 'bn.js'
 
 import { asWorkingGroupName } from '@/working-groups/types'
 
-import { typenameToProposalDetails } from '../model/proposalDetails'
 import { ProposalWithDetailsFieldsFragment } from '../queries'
-
-import { ProposalType } from './proposals'
 
 type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
 type ProposalDetailsTypename = DetailsFragment['__typename']
-type BaseProposalType = Exclude<ProposalType, 'fundingRequest' | 'createWorkingGroupLeadOpening'>
 
 interface BaseProposalDetails {
-  type: BaseProposalType
+  type: undefined
 }
 
 export interface FundingRequestDetails {
@@ -75,5 +71,5 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
   const type = fragment.__typename as ProposalDetailsTypename
   const result = detailsCasts[type]?.(fragment)
-  return result ?? { type: 'signal' }
+  return result ?? { type: undefined }
 }
