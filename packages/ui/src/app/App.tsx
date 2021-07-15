@@ -44,6 +44,7 @@ export const App = () => (
         <Route exact path={ProposalsRoutes.past} component={PastProposals} />
         <Route exact path={ProposalsRoutes.myproposals} />
         <Route exact path={`${ProposalsRoutes.preview}/:id/vote/:voteId`} component={ProposalPreview} />
+        <Route exact path={`${ProposalsRoutes.preview}/:id/post/:postId`} component={ProposalPreview} />
         <Route exact path={`${ProposalsRoutes.preview}/:id`} component={ProposalPreview} />
         <Route exact path="/members" component={Members} />
         <Route exact path="/members/:id" component={Members} />

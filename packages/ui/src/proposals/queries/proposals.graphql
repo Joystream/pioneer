@@ -50,7 +50,7 @@ fragment ProposalWithDetailsFields on Proposal {
   }
   details {
     __typename
-    ...on FundingRequestProposalDetails {
+    ... on FundingRequestProposalDetails {
       destinationsList {
         destinations {
           amount
@@ -71,6 +71,33 @@ fragment ProposalWithDetailsFields on Proposal {
       }
     }
   }
+  discussionThread {
+    discussionPosts {
+      ...DiscussionPostFields
+    }
+    mode {
+      __typename
+    }
+  }
+}
+
+fragment DiscussionPostFields on ProposalDiscussionPost {
+  ...DiscussionPostWithoutReplyFields
+  repliesTo {
+    ...DiscussionPostWithoutReplyFields
+  }
+}
+
+fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
+  id
+  createdInEvent {
+    inBlock
+  }
+  updatedAt
+  author {
+    ...MemberFields
+  }
+  text
 }
 
 query getProposals($where: ProposalWhereInput) {
@@ -86,7 +113,7 @@ query getProposal($where: ProposalWhereUniqueInput!) {
 }
 
 query GetVoteWithDetails($id: ID!) {
-  proposalVotedEventByUniqueInput(where: {id: $id}) {
+  proposalVotedEventByUniqueInput(where: { id: $id }) {
     ...VoteWithDetailsFields
   }
 }
