@@ -6,6 +6,7 @@ import { InputComponent, InputText } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 
 export interface WorkingGroupAndOpeningDetailsParameters {
   description?: string
@@ -25,10 +26,14 @@ export interface CreateWorkingGroupLeadOpeningProps extends WorkingGroupAndOpeni
   setGroupId(groupId: string): void
 }
 
-export const CreateWorkingGroupLeadOpening = (props: CreateWorkingGroupLeadOpeningProps) => {
-  const shortDescription = props.shortDescription || ''
-  const description = props.description || ''
-
+export const CreateWorkingGroupLeadOpening = ({
+  groupId,
+  setGroupId,
+  description,
+  setDescription,
+  shortDescription,
+  setShortDescription,
+}: CreateWorkingGroupLeadOpeningProps) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -40,16 +45,16 @@ export const CreateWorkingGroupLeadOpening = (props: CreateWorkingGroupLeadOpeni
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent label="Amount" required>
-            Working Group Select...
+            <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
           </InputComponent>
           <InputComponent label="Short description" required inputSize="l">
-            <InputText value={shortDescription} onChange={(event) => props.setShortDescription(event.target.value)} />
+            <InputText value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} />
           </InputComponent>
           <InputComponent label="Description" required inputSize="auto" id="field-description">
             <CKEditor
               id="field-description"
-              onReady={(editor) => editor.setData(description)}
-              onChange={(event, editor) => props.setDescription(editor.getData())}
+              onReady={(editor) => editor.setData(description || '')}
+              onChange={(event, editor) => setDescription(editor.getData())}
             />
           </InputComponent>
         </RowGapBlock>

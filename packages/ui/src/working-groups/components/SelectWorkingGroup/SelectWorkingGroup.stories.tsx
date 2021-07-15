@@ -23,7 +23,7 @@ export const Default: Story = () => {
         required
         inputSize="l"
       >
-        <SelectWorkingGroup selected={selected} onChange={setSelected} />
+        <SelectWorkingGroup selectedGroupId={selected} onChange={setSelected} />
       </InputComponent>
     </MockApolloProvider>
   )
