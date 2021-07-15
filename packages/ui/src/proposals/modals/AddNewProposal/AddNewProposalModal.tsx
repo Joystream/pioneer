@@ -74,15 +74,13 @@ export const AddNewProposalModal = () => {
 
   const transaction = useMemo(() => {
     if (member && api) {
-      console.log(
-        '0000',
-        txBaseParams,
-        getSpecificParameters(state.context.type, state.context.specifics as SpecificParametersContext['specifics'])
+      const txSpecifixParameters = getSpecificParameters(
+        api,
+        state.context.type,
+        state.context.specifics as SpecificParametersContext['specifics']
       )
-      return api.tx.proposalsCodex.createProposal(
-        txBaseParams,
-        getSpecificParameters(state.context.type, state.context.specifics as SpecificParametersContext['specifics'])
-      )
+      console.log('0000', txBaseParams, txSpecifixParameters)
+      return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecifixParameters)
     }
   }, [api, JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics)])
   const feeInfo = useTransactionFee(member?.controllerAccount, transaction)
@@ -164,11 +162,6 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('transaction')) {
-    console.log(
-      '1111',
-      txBaseParams,
-      getSpecificParameters(state.context.type, state.context.specifics as SpecificParametersContext['specifics'])
-    )
     return (
       <SignTransactionModal
         onClose={hideModal}
