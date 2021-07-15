@@ -67,8 +67,8 @@ const ProposalDiscussionsStyles = styled.div<Pick<ProposalDiscussionThread, 'mod
             color: ${Colors.Green[500]};
           `
         : css`
-            background-color: ${Colors.Red[50]};
-            color: ${Colors.Black[75]};
+            background-color: ${Colors.Black[75]};
+            color: ${Colors.Black[500]};
           `}
   }
 `
