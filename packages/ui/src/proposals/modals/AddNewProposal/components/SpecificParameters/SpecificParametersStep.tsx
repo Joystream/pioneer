@@ -19,7 +19,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     case state.matches('specificParameters.fundingRequest'): {
       const specifics = state.context.specifics
 
-      return !(specifics?.amount && specifics.amount.gtn(0) && specifics.account)
+      return !!(specifics?.amount && specifics.amount.gtn(0) && specifics.account)
     }
     default:
       return false
