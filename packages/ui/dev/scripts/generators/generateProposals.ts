@@ -123,5 +123,12 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
       rewardPerBlock: randomFromRange(5, 15),
       groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length -1)].id,
     }
-  })
+  }),
+  decreaseWorkingGroupLeadStake: (mocks) => ({
+    type: 'decreaseWorkingGroupLeadStake',
+    data: {
+      leadId: mocks.workers[randomFromRange(0, mocks.workers.length - 1)]?.id,
+      amount: randomFromRange(1, 10) * 1000,
+    }
+  }),
 }
