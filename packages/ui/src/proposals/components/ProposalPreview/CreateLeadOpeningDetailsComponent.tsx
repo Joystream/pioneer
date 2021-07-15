@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import React, { useState } from 'react'
 
 import { CloseButton } from '@/common/components/buttons'
-import { Link } from '@/common/components/Link'
+import { ArrowRightIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import {
   SidePane,
@@ -13,7 +13,8 @@ import {
   SidePanelTop,
   SidePaneTitle,
 } from '@/common/components/SidePane'
-import { StatisticItem, Statistics } from '@/common/components/statistics'
+import { StatisticItem, StatisticsThreeColumns } from '@/common/components/statistics'
+import { StatisticButton } from '@/common/components/statistics/StatisticButton'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { CreateLeadOpeningDetails } from '@/proposals/types/ProposalDetails'
@@ -35,7 +36,7 @@ export const CreateLeadOpeningDetailsComponent: ProposalPropertiesContent<'creat
   const description = details.openingDescription ?? ''
   return (
     <>
-      <Statistics>
+      <StatisticsThreeColumns>
         <StatisticItem title="Working group">
           <TextBig>{capitalizeFirstLetter(name)}</TextBig>
         </StatisticItem>
@@ -47,27 +48,21 @@ export const CreateLeadOpeningDetailsComponent: ProposalPropertiesContent<'creat
         <StatisticItem title="Unstaking period">
           <TextBig>{details.unstakingPeriod.toString()} blocks</TextBig>
         </StatisticItem>
-      </Statistics>
-      <Statistics>
         <StatisticItem title={`Reward per ${rewardPeriod.toString()} blocks`}>
           <TextBig>
             <TokenValue value={payoutAmount} />
           </TextBig>
         </StatisticItem>
-        <StatisticItem title="Description">
-          <TextBig>
-            <Link
-              dark
-              onClick={(evt) => {
-                evt.preventDefault()
-                setDescriptionVisible(true)
-              }}
-            >
-              Opening Description
-            </Link>
-          </TextBig>
-        </StatisticItem>
-      </Statistics>
+        <StatisticButton
+          title="Description"
+          onClick={() => {
+            setDescriptionVisible(true)
+          }}
+          icon={<ArrowRightIcon />}
+        >
+          Opening Description
+        </StatisticButton>
+      </StatisticsThreeColumns>
       {isDescriptionVisible && (
         <OpeningDescriptionPreview description={description} onClose={() => setDescriptionVisible(false)} />
       )}
