@@ -35,7 +35,7 @@ export const ForumComment = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
             <ReplyBadge>
               <ArrowReplyIcon />{' '}
               <Badge>
-                <Link to={repliesTo.link}>Reply to {repliesTo.author.handle}</Link>
+                <Link to={repliesTo.link}>Replies to {repliesTo.author.handle}</Link>
               </Badge>
             </ReplyBadge>
             <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
