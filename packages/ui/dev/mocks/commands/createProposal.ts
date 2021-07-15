@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { ApiPromise } from '@polkadot/api'
+import BN from 'bn.js'
 
 import { ALICE, CHARLIE } from '../data/addresses'
 import { getApi, signAndSend } from '../lib/api'
@@ -14,7 +15,12 @@ async function proposal(api: ApiPromise) {
       description: 'This is a proposal',
     },
     {
-      Signal: 'Foo bar',
+      FundingRequest: [
+        {
+          account: ALICE,
+          amount: new BN(1000),
+        },
+      ],
     }
   )
 
