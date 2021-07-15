@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { StatisticItem, Statistics } from '@/common/components/statistics'
-import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
+import { TextBig, TokenValue } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { CreateLeadOpeningDetails } from '@/proposals/types/ProposalDetails'
 import { GroupRewardPeriods, isKnownGroupName } from '@/working-groups/types'
@@ -22,31 +22,26 @@ export const CreateLeadOpeningDetailsComponent: ProposalPropertiesContent<'creat
   return (
     <>
       <Statistics>
-        <StatisticItem>
+        <StatisticItem title="Working group">
           <TextBig>{capitalizeFirstLetter(name)}</TextBig>
-          <TextMedium>Working group</TextMedium>
         </StatisticItem>
-        <StatisticItem>
+        <StatisticItem title="Stake amount">
           <TextBig>
             <TokenValue value={details.stakeAmount} />
           </TextBig>
-          <TextMedium>Stake amount</TextMedium>
         </StatisticItem>
-        <StatisticItem>
+        <StatisticItem title="Unstaking period">
           <TextBig>{details.unstakingPeriod.toString()} blocks</TextBig>
-          <TextMedium>Unstaking period</TextMedium>
         </StatisticItem>
       </Statistics>
       <Statistics>
-        <StatisticItem>
+        <StatisticItem title={`Reward per ${rewardPeriod.toString()} blocks`}>
           <TextBig>
             <TokenValue value={payoutAmount} />
           </TextBig>
-          <TextMedium>Reward per {rewardPeriod.toString()} blocks</TextMedium>
         </StatisticItem>
-        <StatisticItem>
+        <StatisticItem title="Description">
           <TextBig>Opening Description</TextBig>
-          <TextMedium>Description</TextMedium>
         </StatisticItem>
       </Statistics>
     </>
