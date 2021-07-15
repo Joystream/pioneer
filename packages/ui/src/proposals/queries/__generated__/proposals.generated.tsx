@@ -93,7 +93,14 @@ export type ProposalWithDetailsFieldsFragment = {
         }>
       }
     | { __typename: 'SetMaxValidatorCountProposalDetails' }
-    | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | {
+        __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
+        stakeAmount: any
+        unstakingPeriod: number
+        rewardPerBlock: any
+        metadata?: Types.Maybe<{ __typename: 'WorkingGroupOpeningMetadata'; description?: Types.Maybe<string> }>
+        group?: Types.Maybe<{ __typename: 'WorkingGroup'; id: string; name: string }>
+      }
     | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
@@ -250,6 +257,18 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
             amount
             account
           }
+        }
+      }
+      ... on CreateWorkingGroupLeadOpeningProposalDetails {
+        metadata {
+          description
+        }
+        stakeAmount
+        unstakingPeriod
+        rewardPerBlock
+        group {
+          id
+          name
         }
       }
     }

@@ -123,76 +123,72 @@ export const TriggerAndDiscussionStep = ({
           <TextMedium lighter>Trigger & discussion</TextMedium>
         </RowGapBlock>
       </Row>
-      <Row>
-        <RowGapBlock gap={20}>
-          <InlineToggleWrap>
-            <Label>Trigger: </Label>
-            <ToggleCheckbox
-              falseLabel="No"
-              trueLabel="Yes"
-              checked={fields.trigger}
-              onChange={(isSet) => setValue('trigger', isSet)}
+      <RowGapBlock gap={20}>
+        <InlineToggleWrap>
+          <Label>Trigger: </Label>
+          <ToggleCheckbox
+            falseLabel="No"
+            trueLabel="Yes"
+            checked={fields.trigger}
+            onChange={(isSet) => setValue('trigger', isSet)}
+          />
+          <Tooltip tooltipText="Lorem ipsum...">
+            <TooltipDefault />
+          </Tooltip>
+        </InlineToggleWrap>
+        {fields.trigger && (
+          <InputComponent
+            units="block"
+            validation={
+              fields.triggerBlock && !isValidTriggerBlock(new BN(fields.triggerBlock)) ? 'invalid' : undefined
+            }
+            message={getTriggerBlockMessage()}
+            inputSize="s"
+          >
+            <InputNumber
+              id="triggerBlock"
+              value={fields.triggerBlock}
+              onChange={(event) => setValue('triggerBlock', event.target.value)}
             />
-            <Tooltip tooltipText="Lorem ipsum...">
-              <TooltipDefault />
-            </Tooltip>
-          </InlineToggleWrap>
-          {fields.trigger && (
-            <InputComponent
-              units="block"
-              validation={
-                fields.triggerBlock && !isValidTriggerBlock(new BN(fields.triggerBlock)) ? 'invalid' : undefined
-              }
-              message={getTriggerBlockMessage()}
-              inputSize="s"
-            >
-              <InputNumber
-                id="triggerBlock"
-                value={fields.triggerBlock}
-                onChange={(event) => setValue('triggerBlock', event.target.value)}
+          </InputComponent>
+        )}
+      </RowGapBlock>
+      <RowGapBlock gap={20}>
+        <InlineToggleWrap>
+          <Label>Discussion mode: </Label>
+          <ToggleCheckbox
+            falseLabel="Closed"
+            trueLabel="Open"
+            checked={fields.discussionMode}
+            onChange={(isSet) => setValue('discussionMode', isSet)}
+          />
+          <Tooltip tooltipText="Lorem ipsum...">
+            <TooltipDefault />
+          </Tooltip>
+        </InlineToggleWrap>
+        {discussionMode === 'closed' && (
+          <RowGapBlock gap={20}>
+            <TextMedium lighter>
+              Closed mode: only the active council, the original proposer, or one among a set of whitelisted members can
+              post.
+            </TextMedium>
+            <InputComponent label="Add member to whitelist" required inputSize="l">
+              <SelectMember
+                onChange={(member) => addMemberToWhitelist(member)}
+                filter={(member) => !discussionWhitelist.find((whitelistMember) => whitelistMember.id === member.id)}
               />
             </InputComponent>
-          )}
-        </RowGapBlock>
-      </Row>
-      <Row>
-        <RowGapBlock gap={20}>
-          <InlineToggleWrap>
-            <Label>Discussion mode: </Label>
-            <ToggleCheckbox
-              falseLabel="Closed"
-              trueLabel="Open"
-              checked={fields.discussionMode}
-              onChange={(isSet) => setValue('discussionMode', isSet)}
-            />
-            <Tooltip tooltipText="Lorem ipsum...">
-              <TooltipDefault />
-            </Tooltip>
-          </InlineToggleWrap>
-          {discussionMode === 'closed' && (
-            <RowGapBlock gap={8}>
-              <TextMedium lighter>
-                Closed mode: only the active council, the original proposer, or one among a set of whitelisted members
-                can post.
-              </TextMedium>
-              <InputComponent label="Add member to whitelist" required inputSize="l">
-                <SelectMember
-                  onChange={(member) => addMemberToWhitelist(member)}
-                  filter={(member) => !discussionWhitelist.find((whitelistMember) => whitelistMember.id === member.id)}
-                />
-              </InputComponent>
-              <WhitelistContainer>
-                {discussionWhitelist.map((member) => (
-                  <WhitelistMember key={member.id}>
-                    <MemberInfo member={member} memberSize="s" />
-                    <WhitelistRemoveMember onClick={() => removeMemberFromWhitelist(member)} id="removeMember" />
-                  </WhitelistMember>
-                ))}
-              </WhitelistContainer>
-            </RowGapBlock>
-          )}
-        </RowGapBlock>
-      </Row>
+            <WhitelistContainer>
+              {discussionWhitelist.map((member) => (
+                <WhitelistMember key={member.id}>
+                  <MemberInfo member={member} memberSize="m" showId />
+                  <WhitelistRemoveMember onClick={() => removeMemberFromWhitelist(member)} id="removeMember" />
+                </WhitelistMember>
+              ))}
+            </WhitelistContainer>
+          </RowGapBlock>
+        )}
+      </RowGapBlock>
     </RowGapBlock>
   )
 }

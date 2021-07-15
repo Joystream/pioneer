@@ -9,7 +9,7 @@ import { ActivityItem } from '../Activities/ActivityComponent'
 interface SidePanelProps {
   className?: string
   children?: React.ReactNode
-  neighbor: React.MutableRefObject<HTMLDivElement | null>
+  neighbor: React.RefObject<Element>
 }
 
 export const SidePanel = ({ neighbor, className, children }: SidePanelProps) => {

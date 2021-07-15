@@ -103,7 +103,7 @@ export const ProposalPreview = () => {
             <ProposalStatistics voteCount={votes.count} constants={constants} />
 
             {/* Proposal-specific dashboard */}
-            <h3>{camelCaseToText(proposal.details.type)}</h3>
+            <h3>{camelCaseToText(proposal.type)}</h3>
 
             <ProposalProperties proposal={proposal} />
 

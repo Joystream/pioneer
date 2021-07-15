@@ -1,7 +1,9 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { Member } from '@/memberships/types'
 import { FundingRequestParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
 import { ProposalType } from '@/proposals/types'
@@ -35,12 +37,17 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
   specifics: EmptyObject | FundingRequestParameters
 }
 
+export interface TransactionContext extends Required<SpecificParametersContext> {
+  transactionEvents?: EventRecord[]
+}
+
 type AddNewProposalContext = Partial<
   ProposalTypeContext &
     StakingAccountContext &
     BaseDetailsContext &
     TriggerAndDiscussionContext &
-    SpecificParametersContext
+    SpecificParametersContext &
+    TransactionContext
 >
 
 type AddNewProposalState =
@@ -56,7 +63,8 @@ type AddNewProposalState =
   | { value: 'generalParameters.triggerAndDiscussion'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'generalParameters.finishGeneralParameters'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'specificParameters'; context: Required<SpecificParametersContext> }
-  | { value: 'success'; context: AddNewProposalContext }
+  | { value: 'transaction'; context: Required<AddNewProposalContext> }
+  | { value: 'success'; context: Required<AddNewProposalContext> }
   | { value: 'error'; context: AddNewProposalContext }
 
 type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
@@ -205,7 +213,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       meta: { isStep: true, stepTitle: 'Specific parameters' },
       on: {
         BACK: 'generalParameters.triggerAndDiscussion',
-        NEXT: 'error',
+        NEXT: 'transaction',
       },
       initial: 'entry',
       states: {
@@ -258,6 +266,25 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         },
       },
     },
+    transaction: {
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+        ],
+      },
+    },
+    success: { type: 'final' },
     error: { type: 'final' },
   },
 })

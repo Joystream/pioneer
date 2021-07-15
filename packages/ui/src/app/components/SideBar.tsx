@@ -30,7 +30,10 @@ export const SideBar = () => {
       <NavigationInnerWrapper>
         <NavigationHeader>
           <LogoLink />
-          <NotificationsButton onClick={() => setNotificationsPanelOpen(!isNotificationsPanelOpen)} />
+          <NotificationsButton
+            onClick={() => setNotificationsPanelOpen(!isNotificationsPanelOpen)}
+            isNotificationsPanelOpen={isNotificationsPanelOpen}
+          />
         </NavigationHeader>
         <NavigationLinks>
           <NavigationLinksItem>

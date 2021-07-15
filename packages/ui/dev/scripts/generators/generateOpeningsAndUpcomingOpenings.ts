@@ -19,7 +19,7 @@ const getApplicationFormQuestions = () => [
   },
 ]
 
-const generateMetadata = () => ({
+export const generateOpeningMetadata = () => ({
   shortDescription: faker.lorem.sentence(randomFromRange(20, 60)),
   description: randomMarkdown(),
   hiringLimit: 1,
@@ -49,7 +49,7 @@ const generateOpening = (status: string, groupId: string) => () => {
     status,
     unstakingPeriod: randomFromRange(5, 10),
     metadata: {
-      ...generateMetadata(),
+      ...generateOpeningMetadata(),
       expectedEnding: isInPast ? faker.date.recent(90) : faker.date.soon(10),
     },
   }
@@ -62,7 +62,7 @@ const generateUpcomingOpening = (groupId: string) => () => {
     ...generateBaseOpening(groupId),
     expectedStart: faker.date.soon(randomFromRange(10, 30)).toJSON(),
     metadata: {
-      ...generateMetadata(),
+      ...generateOpeningMetadata(),
       shortDescription: 'Upcoming worker opening.' + faker.lorem.words(randomFromRange(5, 10)),
       expectedEnding: faker.date.soon(randomFromRange(40, 50)).toJSON(),
     },

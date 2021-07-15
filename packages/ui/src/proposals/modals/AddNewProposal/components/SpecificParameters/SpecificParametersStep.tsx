@@ -5,12 +5,6 @@ import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/Spe
 import { AddNewProposalEvent, SpecificParametersContext } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalConstants, ProposalType } from '@/proposals/types'
 
-interface SpecificParametersStepProps {
-  constants: ProposalConstants
-  params: SpecificParametersContext
-  send: (event: AddNewProposalEvent['type'], payload: any) => void
-}
-
 export const isValidSpecificParameters = (
   type: ProposalType,
   context: SpecificParametersContext['specifics']
@@ -23,7 +17,13 @@ export const isValidSpecificParameters = (
   }
 }
 
-export const SpecificParametersStep = ({ constants, params, send }: SpecificParametersStepProps) => {
+interface SpecificParametersStepProps {
+  constants: ProposalConstants
+  params: SpecificParametersContext
+  send: (event: AddNewProposalEvent['type'], payload: any) => void
+}
+
+export const SpecificParametersStep = ({ params, send }: SpecificParametersStepProps) => {
   switch (params.type) {
     case 'fundingRequest':
       return (
