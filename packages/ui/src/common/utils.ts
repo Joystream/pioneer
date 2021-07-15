@@ -42,3 +42,25 @@ export const intersperse = <T extends any, S extends any>(list: T[], separator: 
 
 export const repeat = <T extends any>(getItem: (index: number) => T, times: number): T[] =>
   Array.from<T>({ length: times }).map((_, i) => getItem(i))
+
+export const debounce = <T extends (...params: any[]) => any>(fn: T, delay = 400) => {
+  type Result = (ReturnType<T> extends Promise<infer U> ? U : ReturnType<T>) | undefined
+  let latestTimeout: ReturnType<typeof setTimeout> | undefined
+
+  return (...params: Parameters<T>) =>
+    new Promise<Result>((resolve) => {
+      const resolveImmediately = !latestTimeout
+
+      const timeout = setTimeout(() => {
+        if (timeout !== latestTimeout) {
+          !resolveImmediately && resolve(undefined)
+        } else {
+          latestTimeout = undefined
+          !resolveImmediately && resolve(fn(...params))
+        }
+      }, delay)
+      latestTimeout = timeout
+
+      resolveImmediately && resolve(fn(...params))
+    })
+}

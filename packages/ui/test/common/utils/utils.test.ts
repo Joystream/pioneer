@@ -1,4 +1,4 @@
-import { equals, intersperse, objectEquals, repeat } from '@/common/utils'
+import { debounce, equals, intersperse, objectEquals, repeat } from '@/common/utils'
 
 describe('utils', () => {
   describe('equality functions', () => {
@@ -70,6 +70,22 @@ describe('utils', () => {
     it('Repeat', () => {
       expect(repeat(() => 'hello', 4)).toEqual(['hello', 'hello', 'hello', 'hello'])
       expect(repeat((x) => x, 4)).toEqual([0, 1, 2, 3])
+    })
+  })
+
+  describe('debouce', () => {
+    it('Default', async () => {
+      const func = jest.fn((x: Promise<number> | number) => x)
+      const debouncedFunc = debounce(func)
+
+      const call1 = debouncedFunc(1)
+      const call2 = debouncedFunc(2)
+      const call3 = debouncedFunc(Promise.resolve(3))
+
+      expect(await call1).toBe(1)
+      expect(await call2).toBeUndefined()
+      expect(await call3).toBe(3)
+      expect(func).toBeCalledTimes(2)
     })
   })
 })
