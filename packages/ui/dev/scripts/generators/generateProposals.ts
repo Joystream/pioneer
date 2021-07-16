@@ -8,11 +8,12 @@ import { ProposalStatus, ProposalType } from '../../../src/proposals/types/propo
 import { generateOpeningMetadata } from './generateOpeningsAndUpcomingOpenings'
 
 import { Mocks } from './types'
-import { randomFromRange, randomFromWeightedSet, randomMarkdown, randomMessage, randomsFromWeightedSet } from './utils'
+import { randomFromRange, randomFromWeightedSet, randomMarkdown, randomMessage, randomsFromWeightedSet, shuffle } from './utils'
 
 const { arrayElement } = faker.random
 
-const MAX_PROPOSALS = 20
+const remainingTypes = shuffle([...proposalDetails])
+const MAX_PROPOSALS = remainingTypes.length
 
 const MAX_VOTE = 3
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
@@ -110,8 +111,8 @@ export const generateProposals = (mocks: Mocks): ProposalMock[] => {
 }
 
 const generateProposalDetails = (mocks: Mocks) => {
-  const type = proposalDetails[randomFromRange(0, proposalDetails.length - 1)]
-  const details = ProposalDetailsGenerator[type]?.(mocks)
+  const type = remainingTypes.pop()
+  const details = ProposalDetailsGenerator[type!]?.(mocks)
   return details ?? { type }
 }
 
