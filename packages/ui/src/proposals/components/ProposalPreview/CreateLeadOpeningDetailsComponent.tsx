@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import React, { useState } from 'react'
 
 import { CloseButton } from '@/common/components/buttons'
-import { Link } from '@/common/components/Link'
+import { ArrowRightIcon, FileIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import {
   SidePane,
@@ -13,8 +13,9 @@ import {
   SidePanelTop,
   SidePaneTitle,
 } from '@/common/components/SidePane'
-import { StatisticItem, Statistics } from '@/common/components/statistics'
-import { TextBig, TokenValue } from '@/common/components/typography'
+import { StatisticItem, StatisticsThreeColumns } from '@/common/components/statistics'
+import { StatisticButton } from '@/common/components/statistics/StatisticButton'
+import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { CreateLeadOpeningDetails } from '@/proposals/types/ProposalDetails'
 import { GroupRewardPeriods, isKnownGroupName } from '@/working-groups/types'
@@ -35,39 +36,38 @@ export const CreateLeadOpeningDetailsComponent: ProposalPropertiesContent<'creat
   const description = details.openingDescription ?? ''
   return (
     <>
-      <Statistics>
+      <StatisticsThreeColumns>
         <StatisticItem title="Working group">
-          <TextBig>{capitalizeFirstLetter(name)}</TextBig>
+          <TextInlineBig bold value>
+            {capitalizeFirstLetter(name)}
+          </TextInlineBig>
         </StatisticItem>
         <StatisticItem title="Stake amount">
-          <TextBig>
-            <TokenValue value={details.stakeAmount} />
-          </TextBig>
+          <TokenValue value={details.stakeAmount} />
         </StatisticItem>
         <StatisticItem title="Unstaking period">
-          <TextBig>{details.unstakingPeriod.toString()} blocks</TextBig>
+          <TextInlineBig bold value>
+            {details.unstakingPeriod.toString()} blocks
+          </TextInlineBig>
         </StatisticItem>
-      </Statistics>
-      <Statistics>
         <StatisticItem title={`Reward per ${rewardPeriod.toString()} blocks`}>
-          <TextBig>
+          <TextInlineBig bold value>
             <TokenValue value={payoutAmount} />
-          </TextBig>
+          </TextInlineBig>
         </StatisticItem>
-        <StatisticItem title="Description">
-          <TextBig>
-            <Link
-              dark
-              onClick={(evt) => {
-                evt.preventDefault()
-                setDescriptionVisible(true)
-              }}
-            >
-              Opening Description
-            </Link>
-          </TextBig>
-        </StatisticItem>
-      </Statistics>
+        <StatisticButton
+          title="Description"
+          onClick={() => {
+            setDescriptionVisible(true)
+          }}
+          icon={<ArrowRightIcon />}
+        >
+          <FileIcon />
+          <TextInlineBig bold value>
+            Opening Description
+          </TextInlineBig>
+        </StatisticButton>
+      </StatisticsThreeColumns>
       {isDescriptionVisible && (
         <OpeningDescriptionPreview description={description} onClose={() => setDescriptionVisible(false)} />
       )}
