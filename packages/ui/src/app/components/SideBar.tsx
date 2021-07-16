@@ -1,3 +1,4 @@
+import { AnimateSharedLayout } from 'framer-motion'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -35,74 +36,76 @@ export const SideBar = () => {
             isNotificationsPanelOpen={isNotificationsPanelOpen}
           />
         </NavigationHeader>
-        <NavigationLinks>
-          <NavigationLinksItem>
-            <NavigationLink to="lorem" disabled>
-              <OverviewIcon />
-              Overview
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to="/profile">
-              <MyProfileIcon />
-              My profile
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to="/working-groups">
-              <WorkingGroupsIcon />
-              Working Groups
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to={ProposalsRoutes.current}>
-              <ProposalsIcon />
-              Proposals
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to="lorem" disabled>
-              <CouncilIcon />
-              Council
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to="lorem" disabled>
-              <ConstitutionIcon />
-              Constitution
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to="lorem" disabled>
-              <ValidatorsIcon />
-              Validators
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to="lorem" disabled>
-              <ForumIcon />
-              Forum
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to="/members">
-              <MembersIcon />
-              Members
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to="lorem" disabled>
-              <FinancialsIcon />
-              Financials
-            </NavigationLink>
-          </NavigationLinksItem>
-          <NavigationLinksItem>
-            <NavigationLink to="/settings">
-              <SettingsIcon />
-              Settings
-            </NavigationLink>
-          </NavigationLinksItem>
-        </NavigationLinks>
+        <AnimateSharedLayout>
+          <NavigationLinks>
+            <NavigationLinksItem>
+              <NavigationLink to="lorem" disabled>
+                <OverviewIcon />
+                Overview
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to="/profile">
+                <MyProfileIcon />
+                My profile
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to="/working-groups">
+                <WorkingGroupsIcon />
+                Working Groups
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to={ProposalsRoutes.current}>
+                <ProposalsIcon />
+                Proposals
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to="lorem" disabled>
+                <CouncilIcon />
+                Council
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to="lorem" disabled>
+                <ConstitutionIcon />
+                Constitution
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to="lorem" disabled>
+                <ValidatorsIcon />
+                Validators
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to="lorem" disabled>
+                <ForumIcon />
+                Forum
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to="/members">
+                <MembersIcon />
+                Members
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to="lorem" disabled>
+                <FinancialsIcon />
+                Financials
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink to="/settings">
+                <SettingsIcon />
+                Settings
+              </NavigationLink>
+            </NavigationLinksItem>
+          </NavigationLinks>
+        </AnimateSharedLayout>
         <ProfileComponent />
       </NavigationInnerWrapper>
       <Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />

@@ -59,6 +59,7 @@
     "crypto-browserify": "^3.12.0",
     "date-fns": "^2.22.1",
     "file-loader": "^6.2.0",
+    "framer-motion": "^4.1.17",
     "graphql-tag": "^2.12.5",
     "raw-loader": "^4.0.2",
     "react": "^17.0.2",
