@@ -358,7 +358,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                     }),
                   }),
                 },
-                NEXT: 'stakingPolicyAndReward',
               },
             },
           },
