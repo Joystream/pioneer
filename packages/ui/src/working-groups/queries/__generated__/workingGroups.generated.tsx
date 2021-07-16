@@ -428,7 +428,15 @@ export type WorkerStartedLeavingEventFieldsFragment = {
   id: string
   createdAt: any
   group: { __typename: 'WorkingGroup'; name: string }
-  worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+  worker: {
+    __typename: 'Worker'
+    status:
+      | { __typename: 'WorkerStatusActive' }
+      | { __typename: 'WorkerStatusLeaving' }
+      | { __typename: 'WorkerStatusLeft' }
+      | { __typename: 'WorkerStatusTerminated' }
+    membership: { __typename: 'Membership'; id: string; handle: string }
+  }
 }
 
 export type WorkerExitedEventFieldsFragment = {
@@ -900,6 +908,9 @@ export const WorkerStartedLeavingEventFieldsFragmentDoc = gql`
       name
     }
     worker {
+      status {
+        __typename
+      }
       membership {
         id
         handle
