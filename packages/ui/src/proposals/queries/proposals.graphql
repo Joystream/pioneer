@@ -78,8 +78,7 @@ fragment ProposalWithDetailsFields on Proposal {
           name
         }
         membership {
-          id
-          handle
+          ...MemberFields
         }
       }
       amount

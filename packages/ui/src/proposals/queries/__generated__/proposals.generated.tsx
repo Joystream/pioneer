@@ -110,7 +110,7 @@ export type ProposalWithDetailsFieldsFragment = {
           __typename: 'Worker'
           createdAt: any
           group: { __typename: 'WorkingGroup'; id: string; name: string }
-          membership: { __typename: 'Membership'; id: string; handle: string }
+          membership: { __typename: 'Membership' } & MemberFieldsFragment
         }>
       }
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
@@ -288,8 +288,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
             name
           }
           membership {
-            id
-            handle
+            ...MemberFields
           }
         }
         amount
@@ -306,6 +305,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
   }
   ${ProposalFieldsFragmentDoc}
   ${VoteFieldsFragmentDoc}
+  ${MemberFieldsFragmentDoc}
   ${DiscussionPostFieldsFragmentDoc}
 `
 export const GetProposalsDocument = gql`
