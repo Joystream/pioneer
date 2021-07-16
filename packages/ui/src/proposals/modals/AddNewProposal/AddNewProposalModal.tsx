@@ -46,7 +46,7 @@ import {
   ProposalTrigger,
   SpecificParametersContext,
 } from '@/proposals/modals/AddNewProposal/machine'
-import { ProposalConstants } from '@/proposals/types'
+import { ProposalType, ProposalConstants } from '@/proposals/types'
 
 export type BaseProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
@@ -174,7 +174,13 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} proposalType={state.context.type} proposalTitle={state.context.title} />
+    return (
+      <SuccessModal
+        onClose={hideModal}
+        proposalType={state.context.type as ProposalType}
+        proposalTitle={state.context.title as string}
+      />
+    )
   }
 
   if (state.matches('error')) {
