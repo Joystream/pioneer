@@ -113,7 +113,16 @@ export type ProposalWithDetailsFieldsFragment = {
           membership: { __typename: 'Membership' } & MemberFieldsFragment
         }>
       }
-    | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+    | {
+        __typename: 'SlashWorkingGroupLeadProposalDetails'
+        amount: any
+        lead?: Types.Maybe<{
+          __typename: 'Worker'
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; name: string }
+          membership: { __typename: 'Membership' } & MemberFieldsFragment
+        }>
+      }
     | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
     | { __typename: 'AmendConstitutionProposalDetails' }
@@ -281,6 +290,19 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
         }
       }
       ... on DecreaseWorkingGroupLeadStakeProposalDetails {
+        lead {
+          createdAt
+          group {
+            id
+            name
+          }
+          membership {
+            ...MemberFields
+          }
+        }
+        amount
+      }
+      ... on SlashWorkingGroupLeadProposalDetails {
         lead {
           createdAt
           group {
