@@ -46,12 +46,13 @@ export const ProposalDiscussions = ({ thread, selected }: Props) => {
 
 const DiscussionsHeader = styled.header`
   display: inline-flex;
+  align-items: center;
   padding-bottom: ${spacing(1)};
 
   ${Badge} {
     display: inline-flex;
     column-gap: ${spacing(1 / 2)};
-    height: unset;
+    height: fit-content;
     margin-left: ${spacing(1)};
     padding: ${spacing(1 / 2, 1)};
     text-transform: uppercase;
