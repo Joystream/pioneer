@@ -20,6 +20,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
+import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
 import { ProposalProperties } from '@/proposals/components/ProposalPreview/ProposalProperties'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
@@ -32,7 +33,7 @@ import { useProposalVotes } from '@/proposals/hooks/useProposalVotes'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 
 export const ProposalPreview = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id, postId } = useParams<{ id: string; postId?: string }>()
   const { isLoading, proposal } = useProposal(id)
   const constants = useConstants(proposal?.details.type)
   const loc = useLocation()
@@ -108,9 +109,7 @@ export const ProposalPreview = () => {
 
             <RationalePreview rationale={proposal.rationale} />
 
-            <div>
-              <h4>Discussion</h4>
-            </div>
+            <ProposalDiscussions thread={proposal.discussionThread} selected={postId} />
           </RowGapBlock>
         </MainPanel>
       }

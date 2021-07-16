@@ -115,4 +115,5 @@ export const PROPOSAL_DATA: ProposalMock = {
   votes: ['APPROVE', 'APPROVE', 'SLASH'].map((voteKind) => ({ voteKind, id: '1' } as any)),
   createdInEvent: { inBlock: 0 },
   proposalStatusUpdates: [],
+  discussionThread: { discussionPosts: [], mode: 'ProposalDiscussionThreadModeOpen' },
 }

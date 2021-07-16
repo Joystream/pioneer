@@ -52,7 +52,21 @@
         "newStatus": "dormant",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "0:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-14T14:44:12.782Z",
+          "authorId": "6",
+          "text": "Qui adipisci odit ut molestiae sunt ratione earum asperiores. Perferendis aut aliquid quam suscipit debitis est est molestiae ut. Dolores corporis facilis aut. Vitae et enim. Et sequi sed similique ex nulla omnis quam adipisci aut. Quo recusandae eius voluptatem eaque voluptatem."
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeClosed"
+    }
   },
   {
     "id": "1",
@@ -93,7 +107,21 @@
         "newStatus": "dormant",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "1:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-09T12:16:15.042Z",
+          "authorId": "43",
+          "text": "> Illum molestiae aperiam.\n\nRerum amet delectus est deserunt ipsam commodi non est. Voluptates magnam necessitatibus nemo et. Soluta voluptas ipsa qui. Nisi distinctio nulla et officia est eius quod mollitia. Alias et ex culpa veniam qui adipisci exercitationem magni a."
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "2",
@@ -155,7 +183,30 @@
         "newStatus": "gracing",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "2:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-12T09:13:43.965Z",
+          "authorId": "22",
+          "text": "> Impedit commodi et sed necessitatibus ut rerum voluptas laborum.\n\n> Ea provident molestiae."
+        },
+        {
+          "id": "2:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "18",
+          "text": "Soluta atque fuga magni voluptate amet nulla. Placeat natus dolore est. Velit ab sapiente.\n\nVoluptatem magnam in quas aliquid eius maxime autem sapiente aperiam. Consequatur voluptas reprehenderit ratione sequi. Voluptas modi aut. Aperiam id aut optio modi.",
+          "repliesToId": "2:0"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "3",
@@ -207,14 +258,48 @@
         "inBlock": 0
       },
       {
-        "newStatus": "dormant",
+        "newStatus": "gracing",
         "inBlock": 0
       },
       {
         "newStatus": "deciding",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "3:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-01T14:25:30.898Z",
+          "authorId": "21",
+          "text": "Mollitia aut eaque. Cum rerum non est ut aut quia. In aut aspernatur impedit ullam est rem nihil in.\n\nEarum expedita placeat in voluptatem esse iure. At quo unde quasi aspernatur ad illo. Enim veritatis sit error error. Aliquam dignissimos voluptates. Tempore voluptatem ipsum odit possimus quo quidem."
+        },
+        {
+          "id": "3:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-04T14:59:17.721Z",
+          "authorId": "34",
+          "text": "Assumenda quo natus quis aliquid nesciunt ut commodi ut est. Placeat necessitatibus consequuntur est. Dolorum at velit mollitia est sapiente aut optio est dolores.\n\nOmnis quia id deleniti sequi occaecati. Quis fugiat voluptas quia culpa. Eaque id illo et reiciendis quis quia facilis est. Est aut est doloribus iusto iure. Vel totam dolore aliquam provident quos.",
+          "repliesToId": "3:0"
+        },
+        {
+          "id": "3:2",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-06-25T22:34:34.777Z",
+          "authorId": "43",
+          "text": "Debitis et quo quo dignissimos sunt. Nulla debitis voluptatem et sit. Quibusdam aut voluptas tempora dolorem.\n\n> Animi aut consectetur error modi.",
+          "repliesToId": "3:0"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "4",
@@ -223,17 +308,7 @@
     "statusSetAtBlock": 0,
     "statusSetAtTime": "2021-07-14T07:30:56.319Z",
     "details": {
-      "type": "fundingRequest",
-      "data": {
-        "destinationsList": {
-          "destinations": [
-            {
-              "account": "5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF",
-              "amount": 10000
-            }
-          ]
-        }
-      }
+      "type": "setMaxValidatorCount"
     },
     "creatorId": "21",
     "createdAt": "2021-07-11T08:07:18.529Z",
@@ -270,7 +345,29 @@
         "newStatus": "gracing",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "4:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "29",
+          "text": "> Velit harum sed voluptatem iste fuga id labore consectetur.\n\nQuia consequatur qui possimus. Ipsa et quibusdam. Accusantium molestiae sunt. Est voluptatem fugiat. Facilis laudantium rerum excepturi impedit assumenda. Sequi libero et provident hic aut."
+        },
+        {
+          "id": "4:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "25",
+          "text": "Sed accusamus id repellendus qui quia enim debitis quia unde. Facilis totam ab omnis id blanditiis adipisci quis aut. Ipsam modi ipsum saepe sapiente voluptas earum.\n\n> Quam est corrupti error.",
+          "repliesToId": "4:0"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "5",
@@ -334,7 +431,11 @@
         "newStatus": "dormant",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "6",
@@ -385,7 +486,30 @@
         "newStatus": "deciding",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "6:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-04T18:33:33.082Z",
+          "authorId": "2",
+          "text": "Sapiente ut voluptatem nihil quos eum rerum. Beatae et autem explicabo. Fuga molestiae dolorem quae. Aperiam voluptas ut officia et non. Odit laudantium sed et totam.\n\n> Et soluta incidunt."
+        },
+        {
+          "id": "6:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "25",
+          "text": "Voluptas maxime odio a modi suscipit dolor incidunt. Mollitia totam enim nobis labore aliquam excepturi. Non natus vitae pariatur itaque molestias amet ea id porro. Quibusdam nisi ut id qui qui culpa consequatur ullam. Ipsam harum est quidem est sequi amet officia doloremque.\n\nSit voluptas doloribus eum eaque. Animi est officia impedit fugit quis vero aut. Ea et ut ullam rerum perspiciatis accusamus et necessitatibus et. Dolores delectus et nihil maiores.",
+          "repliesToId": "6:0"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "7",
@@ -473,7 +597,30 @@
         "newStatus": "gracing",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "7:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-06-29T05:31:54.643Z",
+          "authorId": "42",
+          "text": "- Sint quia qui iusto laudantium dolor aliquam et eos.\n- Quia odit ab ut qui error qui.\n- Omnis ipsum laudantium qui occaecati.\n- Ut praesentium autem sint non maxime nihil nihil.\n\nVel iure nobis qui ex. Et aut dicta aut sequi sint ea dolore. Iusto placeat quibusdam doloribus pariatur.\n\n```\nEa possimus dolore consequuntur aut. Mollitia laborum aut corrupti tenetur eaque laudantium. Doloribus cupiditate voluptas quisquam neque. Molestias reprehenderit omnis aliquam fugiat sit. Ut similique dignissimos accusamus sint non.\n```"
+        },
+        {
+          "id": "7:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "22",
+          "text": "Autem ab tempora et et non rem fugiat. Officia ea ipsa. Molestias tenetur modi nostrum unde quidem.",
+          "repliesToId": "7:0"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "8",
@@ -524,7 +671,31 @@
         "newStatus": "deciding",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "8:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-02T18:52:52.137Z",
+          "authorId": "43",
+          "text": "Et aut sapiente error aut velit impedit porro deleniti amet. Molestiae eligendi temporibus esse odio molestias consequuntur enim nostrum unde. Et excepturi in mollitia atque aut expedita et. Accusantium ea maxime numquam excepturi ut ullam voluptatem harum saepe."
+        },
+        {
+          "id": "8:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-07T10:39:19.990Z",
+          "authorId": "48",
+          "text": "Error enim voluptatum quis. Eos quo velit. Tenetur eveniet libero omnis in ipsum asperiores delectus et. Et perferendis illum sint aliquam blanditiis modi.",
+          "repliesToId": "8:0"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "9",
@@ -570,6 +741,73 @@
         "rationale": "# quidem ullam autem fugiat dolor\n\nQuaerat est voluptates ab. Veritatis sit iste consequatur labore. Atque earum voluptas.\n\n## sed nemo impedit\n\nFacere ea ad saepe. Earum cumque voluptas nesciunt. Qui unde sit maxime cumque et dolores.\n \rTemporibus quasi omnis voluptatem commodi vero illum placeat veniam. Iusto nihil et. Cum quam qui nihil accusantium est qui sed tempora minus. Odit expedita totam dolorem. Aut aut modi et accusantium ab. Earum itaque numquam."
       }
     ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "9:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "27",
+          "text": "Laborum sed eligendi praesentium aut molestiae non. Magnam non error alias magni consequatur. Vel qui eius atque non voluptatem. Quia ea molestias nihil. Sunt velit vitae velit corrupti ad debitis magnam sapiente. Quam et ut temporibus suscipit voluptatem labore quaerat.\n\nQui deleniti ut possimus ea est id aperiam. Dolore est qui et eos. Consequatur eligendi eius error harum explicabo. Dolore iure aspernatur quasi ipsum aperiam. Neque debitis aspernatur nihil maiores molestiae consequatur dolor quae. Praesentium velit in inventore enim iure."
+        },
+        {
+          "id": "9:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "17",
+          "text": "Quisquam est qui quidem qui ut a aut. Ea qui reprehenderit itaque optio odio rerum aut. Delectus fugiat enim voluptate nihil. Voluptatem non ullam aliquam incidunt id sit eum et. Sit sint voluptatem dolorum eos nesciunt voluptas.\n\nQui facere aut molestias sunt quos id quisquam iste debitis. Quaerat dolor natus placeat velit. Error aliquam assumenda laudantium exercitationem tempora consequuntur aut. Omnis quo et et."
+        },
+        {
+          "id": "9:2",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-14T08:04:09.926Z",
+          "authorId": "40",
+          "text": "Minima qui et rem sunt nulla aut aut. Veritatis autem quasi nostrum at et optio alias non. Dolore et quis ea. Sequi quod id voluptate dolor neque soluta architecto praesentium expedita. Quia ipsa reiciendis occaecati. Ab dolores qui vel.\n\n```\nBlanditiis et qui. Facilis dolorum voluptate enim blanditiis culpa enim blanditiis fuga doloribus. Odit dolor repellat non sunt harum mollitia voluptatum. Omnis modi sit et est officiis. Eaque ab ex excepturi optio iste eos totam eius optio.\n```"
+        },
+        {
+          "id": "9:3",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-06-27T17:14:49.204Z",
+          "authorId": "13",
+          "text": "Inventore placeat laboriosam sunt aliquid occaecati eum nemo ipsa. Sed praesentium amet pariatur sed sint. Nisi et officia dolorem omnis et enim blanditiis. Nostrum autem autem laudantium maxime adipisci. Et aliquam explicabo.",
+          "repliesToId": "9:0"
+        },
+        {
+          "id": "9:4",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-06T09:56:16.191Z",
+          "authorId": "13",
+          "text": "```\nId et quam non pariatur minus ratione. Quis modi culpa iure. Quia ut et. Nesciunt quod voluptates.\n```",
+          "repliesToId": "9:2"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
+  },
+  {
+    "id": "10",
+    "title": "Home e-tailers input online",
+    "status": "executed",
+    "statusSetAtBlock": 0,
+    "statusSetAtTime": "2021-07-13T03:54:26.506Z",
+    "details": {
+      "type": "unlockBlogPost"
+    },
+    "creatorId": "26",
+    "createdAt": "2021-07-07T23:01:39.754Z",
+    "createdInEvent": {
+      "inBlock": 0
+    },
+    "description": "# ducimus qui quasi\n\nDebitis exercitationem omnis velit voluptas saepe eum perspiciatis omnis dolor. Sed et eius. In laudantium doloremque nisi quasi sint voluptatem omnis qui architecto.\n\n## cupiditate corporis doloribus\n\nOdit adipisci dolores et voluptatibus alias. Sequi cumque unde enim qui repudiandae voluptatem temporibus rerum. Exercitationem natus aut error ipsum sint. Magnam voluptatibus assumenda voluptatem facere libero vel unde. Incidunt quo id quisquam voluptas tempore nemo. Ea tempora sed ex vel eligendi corrupti nobis dolorum voluptatem.\n \rDolorum quo aut. Ut ea doloribus dolor nihil. Aliquam quisquam ut qui quis. Explicabo dolores sunt dolor est voluptatibus rerum id. Cumque veniam dolore nesciunt voluptatem labore. Exercitationem totam qui est dolores omnis excepturi repellendus qui alias.\n \rVero est tempore autem quod. Enim quo sed quia id odit numquam. Qui laboriosam quis aliquam sunt aliquid dignissimos illo. Accusantium in consequatur laboriosam distinctio hic earum voluptatibus est a.",
+    "votes": [],
     "proposalStatusUpdates": [
       {
         "newStatus": "deciding",
@@ -591,7 +829,20 @@
         "newStatus": "deciding",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "10:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "29",
+          "text": "- Corporis totam ea harum numquam qui et optio vel ut.\n- Consequuntur tempora est corporis quia aut.\n- Et at voluptatibus aut rem eos voluptatum ipsa quisquam.\n- Eos laboriosam dolore nam exercitationem dicta beatae error.\n\nFacere debitis beatae totam atque amet. Aliquam sint dolorum quasi qui perspiciatis quo. Aspernatur atque nihil excepturi nesciunt libero aliquid ea accusamus quia. Debitis suscipit sed quasi sint saepe accusantium eligendi consequuntur. Aliquam vel praesentium eius magnam laboriosam eligendi fugiat."
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "10",
@@ -631,8 +882,26 @@
       {
         "newStatus": "deciding",
         "inBlock": 0
+      },
+      {
+        "newStatus": "gracing",
+        "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "11:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-02T23:41:19.045Z",
+          "authorId": "42",
+          "text": "> Quis accusamus quia autem neque quia fuga modi in."
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeClosed"
+    }
   },
   {
     "id": "11",
@@ -782,7 +1051,21 @@
         "newStatus": "gracing",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "12:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-09T13:14:33.743Z",
+          "authorId": "51",
+          "text": "Pariatur delectus expedita et. Omnis quia placeat pariatur quae aperiam similique repudiandae. Eaque suscipit delectus quia aut at. Quos molestiae voluptatum qui exercitationem.\n\n- Quia et voluptas autem eos distinctio.\n- Nihil ut optio molestias natus magnam debitis dolor.\n- Cumque atque vel et.\n\n```\nQui ut eos voluptatum facilis velit quia quibusdam saepe nobis. Dolor similique assumenda et quis ut eius. Molestiae adipisci maxime consequuntur rerum ut. Saepe quo facere qui unde. Eaque maiores magnam rerum mollitia asperiores magni dolores.\n```"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "13",
@@ -801,8 +1084,8 @@
     "description": "# qui neque\n\nAsperiores non aut optio ut quo dignissimos minima et. Est eum et facilis sed animi quibusdam autem. Quos eius omnis quidem optio dolores quo illum quaerat quia. Mollitia id aut et qui sapiente et molestiae consequatur iste.\n\n## at saepe culpa\n\nEsse rerum veniam quos explicabo quisquam dicta molestiae. Vitae ut harum nulla corporis. Sit iste doloribus cupiditate qui. Autem id cumque nesciunt ut qui a ut aliquid eos. Aut nobis voluptatem quidem tenetur beatae ea.\n \rAut omnis consequatur illum vel quo. Amet id esse ipsa. Suscipit reprehenderit nisi voluptatibus minus sit et totam qui reprehenderit. Eum illum sint assumenda accusamus nihil cum. Eum fugit eum sequi qui possimus sunt.",
     "votes": [
       {
-        "id": "35",
-        "voteKind": "APPROVE",
+        "id": "17",
+        "voteKind": "SLASH",
         "network": "OLYMPIA",
         "createdAt": "2021-07-15T14:44:58.988Z",
         "voterId": "11",
@@ -845,7 +1128,28 @@
         "newStatus": "dormant",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "13:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "45",
+          "text": "Molestias dolorum libero nihil veritatis expedita omnis unde nam. Iusto omnis aliquam quas aliquid expedita soluta. Reprehenderit et aliquid molestiae et autem quia nisi. Nulla quibusdam dolores dolores omnis vel velit non repellat. Ipsam eum qui est modi qui suscipit tempore aliquam. Doloribus blanditiis deserunt.\n\n- Odio blanditiis repudiandae sunt officia corrupti ut sed.\n- Molestias odio quibusdam iste omnis qui nam quia.\n- Excepturi vel accusantium maxime corrupti quos quidem magnam sunt tempora.\n- Quis ratione officiis qui voluptatem ipsum."
+        },
+        {
+          "id": "13:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "15",
+          "text": "```\nVel nulla ex et eos aut aut. Itaque voluptate non fuga ad. Error temporibus id delectus accusantium et accusamus quia nesciunt. Porro ipsum rem qui molestiae. Quia dolores vitae dolor inventore aperiam.\n```\n\nOdit laboriosam eum tempore. Vel sint incidunt aut tempore magnam repellat eveniet. Ea nesciunt eligendi dicta dignissimos aliquid et labore reprehenderit eligendi."
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "14",
@@ -894,8 +1198,40 @@
       {
         "newStatus": "deciding",
         "inBlock": 0
+      },
+      {
+        "newStatus": "dormant",
+        "inBlock": 0
+      },
+      {
+        "newStatus": "deciding",
+        "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "14:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-06-26T08:47:03.194Z",
+          "authorId": "14",
+          "text": "> Et in voluptas.\n\n> Consequatur et numquam exercitationem aperiam.\n\nNisi dolorum tempora rerum. Aperiam dolore saepe laudantium qui ipsa quam neque nobis. Enim praesentium libero. Alias non ut odit omnis ad porro dolorum. Qui non necessitatibus sed praesentium quibusdam et cum minima."
+        },
+        {
+          "id": "14:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-12T02:58:29.986Z",
+          "authorId": "34",
+          "text": "> Ipsam fugit odio.",
+          "repliesToId": "14:0"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeClosed"
+    }
   },
   {
     "id": "15",
@@ -962,7 +1298,67 @@
         "newStatus": "deciding",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "15:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "28",
+          "text": "> Voluptate in accusamus aut vel velit."
+        },
+        {
+          "id": "15:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "15",
+          "text": "```\nEa deleniti quis nesciunt minus qui quibusdam. Praesentium excepturi ut voluptatem. Est nulla saepe. Velit quae sapiente quis quia temporibus delectus molestiae.\n```\n\nMagni eos et fugiat non ea molestias beatae earum. Sunt saepe velit qui ipsa pariatur. Non odio est. Ab possimus necessitatibus libero non. Dignissimos ut est qui id qui nemo explicabo hic qui.",
+          "repliesToId": "15:0"
+        },
+        {
+          "id": "15:2",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-06-25T18:37:50.998Z",
+          "authorId": "36",
+          "text": "> Inventore dolor voluptates aut delectus in.\n\nCorporis officiis qui at et magni fugit ab nihil. Enim vel alias facilis facere sed doloremque id. Laboriosam doloribus unde aut possimus autem est est vel aut. Totam adipisci consequatur tenetur eligendi aut.",
+          "repliesToId": "15:0"
+        },
+        {
+          "id": "15:3",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-03T12:57:12.998Z",
+          "authorId": "20",
+          "text": "> Vel quia aut optio voluptatibus aut voluptatibus enim quas sequi.\n\n```\nVel vel vitae asperiores tenetur delectus. Officiis magnam non facilis qui veniam voluptates eum ad. Sapiente modi molestiae odio distinctio rerum nesciunt quo voluptatibus debitis.\n```",
+          "repliesToId": "15:1"
+        },
+        {
+          "id": "15:4",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "36",
+          "text": "Magnam iusto modi eaque voluptate ratione amet voluptatem ea. Tempore accusantium sed eos magni minus alias soluta. Illo delectus expedita itaque corrupti et. Ut dolor consequuntur.",
+          "repliesToId": "15:1"
+        },
+        {
+          "id": "15:5",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "9",
+          "text": "- Et placeat doloribus expedita accusamus sed ipsam sint laboriosam.\n- Non veniam impedit voluptatibus omnis quia natus.\n- Sunt sunt sunt dolore ad voluptatem perferendis reiciendis nihil aut.\n\n- Laudantium sed harum amet quaerat quis.\n- Quos facilis magnam tempore facere voluptate.\n- Et sit assumenda aut dolores labore sint.",
+          "repliesToId": "15:4"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeClosed"
+    }
   },
   {
     "id": "16",
@@ -1034,7 +1430,11 @@
         "newStatus": "gracing",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [],
+      "mode": "ProposalDiscussionThreadModeClosed"
+    }
   },
   {
     "id": "17",
@@ -1084,16 +1484,29 @@
       {
         "newStatus": "deciding",
         "inBlock": 0
-      },
-      {
-        "newStatus": "dormant",
-        "inBlock": 0
-      },
-      {
-        "newStatus": "deciding",
-        "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "17:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "32",
+          "text": "```\nMaiores nihil nobis quos ipsam saepe quos. Ipsa expedita ducimus ab quia perspiciatis et et. Et necessitatibus vel voluptatum. Aut est quia inventore inventore aut amet. Et quam ipsum laboriosam adipisci suscipit aliquam accusamus corporis. Libero necessitatibus labore repellat suscipit.\n```\n\nEt aut et ducimus rerum doloribus. Quaerat ullam ut omnis minus est. Facere quos in harum exercitationem temporibus. Qui pariatur consequatur fuga dolorem eum modi earum voluptatem quos. Est autem culpa nostrum error vel ut.\n\nQuam doloribus cum asperiores. Ducimus qui incidunt quis non qui. Eum ipsum quisquam aut cum consectetur impedit tempore saepe."
+        },
+        {
+          "id": "17:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "authorId": "51",
+          "text": "Id rerum enim voluptas. Fugit quia quia. Nesciunt laboriosam quaerat beatae modi porro maxime rerum optio. Impedit harum eligendi tempore et architecto expedita magni non. Quae ratione asperiores minus et.\n\n> Alias minus soluta quibusdam autem adipisci praesentium eaque inventore."
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "18",
@@ -1156,7 +1569,31 @@
         "newStatus": "gracing",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [
+        {
+          "id": "18:0",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-07-13T21:10:59.089Z",
+          "authorId": "0",
+          "text": "- Voluptas corporis ut.\n- Exercitationem doloribus sint.\n- Sapiente sit fugit quae eius fuga.\n- Asperiores sint repellendus ad explicabo ullam ducimus error reiciendis dolores.\n\n```\nEt molestias aspernatur. Eum itaque repudiandae provident non odit accusamus molestias facilis exercitationem. Officiis pariatur perspiciatis aut alias ut sequi. Et optio ut. Porro deserunt veritatis quasi ea maiores molestiae impedit.\n```"
+        },
+        {
+          "id": "18:1",
+          "createdInEvent": {
+            "inBlock": 0
+          },
+          "updatedAt": "2021-06-30T09:11:57.790Z",
+          "authorId": "11",
+          "text": "> Unde quidem amet dolor.\n\nEst laboriosam voluptas pariatur ab a deserunt aut exercitationem molestiae. Est architecto sed laborum voluptates. Nisi doloremque deserunt temporibus aperiam rerum distinctio aut.",
+          "repliesToId": "18:0"
+        }
+      ],
+      "mode": "ProposalDiscussionThreadModeOpen"
+    }
   },
   {
     "id": "19",
@@ -1222,6 +1659,10 @@
         "newStatus": "deciding",
         "inBlock": 0
       }
-    ]
+    ],
+    "discussionThread": {
+      "discussionPosts": [],
+      "mode": "ProposalDiscussionThreadModeClosed"
+    }
   }
 ]

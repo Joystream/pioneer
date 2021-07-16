@@ -1,8 +1,25 @@
 import styled from 'styled-components'
 
-export const Statistics = styled.ul<{ withMargin?: boolean }>`
+interface StatisticsLayoutProps {
+  withMargin?: boolean
+  gapSize?: 's' | 'm'
+}
+
+export const Statistics = styled.div<StatisticsLayoutProps>`
   display: flex;
-  width: 100%;
+  flex-wrap: wrap;
+  gap: ${({ gapSize }) => (gapSize === 's' ? '16px' : '24px')};
   justify-items: flex-start;
+  width: 100%;
+  max-width: 100%;
+  ${({ withMargin }) => (withMargin ? 'margin-top: 8px;' : null)};
+`
+
+export const StatisticsThreeColumns = styled.div<StatisticsLayoutProps>`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: ${({ gapSize }) => (gapSize === 's' ? '16px' : '24px')};
+  width: 100%;
+  max-width: 100%;
   ${({ withMargin }) => (withMargin ? 'margin-top: 8px;' : null)};
 `

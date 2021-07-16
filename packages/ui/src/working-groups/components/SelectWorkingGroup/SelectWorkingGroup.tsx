@@ -22,22 +22,18 @@ const filterByText = (options: WorkingGroup[], text: string) => {
 
 interface Props {
   onChange: (selected: WorkingGroup) => void
-  filter?: (option: WorkingGroup) => boolean
-  selected?: WorkingGroup
+  selectedGroupId?: string
   disabled?: boolean
 }
 
-export const SelectWorkingGroup = ({ onChange, filter, selected, disabled }: Props) => {
-  const baseFilter = filter || (() => true)
+export const SelectWorkingGroup = ({ onChange, selectedGroupId, disabled }: Props) => {
   const [search, setSearch] = useState('')
-
   const { isLoading, groups } = useWorkingGroups()
-
-  const filteredFoundWorkingGroups = useMemo(() => filterByText(groups.filter(baseFilter), search), [
-    search,
+  const selectedGroup = useMemo(() => groups.find((group) => group.id === selectedGroupId), [
+    selectedGroupId,
     groups.length,
-    isLoading,
   ])
+  const filteredFoundWorkingGroups = useMemo(() => filterByText(groups, search), [search, groups.length, isLoading])
 
   const change = (selected: WorkingGroup, close: () => void) => {
     onChange(selected)
@@ -46,7 +42,7 @@ export const SelectWorkingGroup = ({ onChange, filter, selected, disabled }: Pro
 
   return (
     <Select
-      selected={selected}
+      selected={selectedGroup}
       onChange={change}
       disabled={disabled}
       renderSelected={renderSelected}

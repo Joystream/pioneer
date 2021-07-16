@@ -19,13 +19,12 @@ export const StatisticItem: FC<StatisticItemProps> = ({ className, children, ...
   </StatsBlock>
 )
 
-interface StatiscticBlockProps {
+export interface StatiscticBlockProps {
   size?: 's' | 'm' | 'l'
   centered?: boolean
-  spacing?: 's' | 'm'
 }
 
-export const StatsBlock = styled.li<StatiscticBlockProps>`
+export const StatsBlock = styled.div<StatiscticBlockProps>`
   display: grid;
   position: relative;
   align-content: ${({ centered }) => (centered ? 'stretch' : 'space-between')};
@@ -47,18 +46,6 @@ export const StatsBlock = styled.li<StatiscticBlockProps>`
   border-radius: ${BorderRad.m};
   background-color: ${Colors.White};
   box-shadow: ${Shadows.light};
-
-  & + & {
-    margin-left: ${({ spacing }) => {
-      switch (spacing) {
-        case 's':
-          return '16px'
-        case 'm':
-        default:
-          return '24px'
-      }
-    }};
-  }
 `
 
 export const StatsContent = styled.div`
@@ -102,4 +89,10 @@ export const StatiscticContentColumn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`
+
+export const StatiscticSpaceRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `

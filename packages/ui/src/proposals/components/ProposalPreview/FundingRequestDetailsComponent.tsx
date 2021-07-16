@@ -1,7 +1,14 @@
 import React from 'react'
 
-import { StatisticItem, Statistics, TokenValueStat } from '@/common/components/statistics'
-import { TextMedium } from '@/common/components/typography'
+import { CopyButton } from '@/common/components/buttons'
+import {
+  StatiscticSpaceRow,
+  StatisticItem,
+  StatisticsThreeColumns,
+  TokenValueStat,
+} from '@/common/components/statistics'
+import { NumericValue } from '@/common/components/statistics/NumericValueStat'
+import { shortenAddress } from '@/common/model/formatters'
 
 import { FundingRequestDetails } from '../../types/ProposalDetails'
 
@@ -14,12 +21,15 @@ interface DestinationProps {
 
 const FundingRequestDestination = ({ destination }: DestinationProps) => {
   return (
-    <Statistics>
+    <StatisticsThreeColumns>
       <TokenValueStat title="Amount" value={destination.amount} />
       <StatisticItem title="Account">
-        <TextMedium>{destination.account}</TextMedium>
+        <StatiscticSpaceRow>
+          <NumericValue>{shortenAddress(destination.account, 12)}</NumericValue>
+          <CopyButton textToCopy={destination.account} />
+        </StatiscticSpaceRow>
       </StatisticItem>
-    </Statistics>
+    </StatisticsThreeColumns>
   )
 }
 
