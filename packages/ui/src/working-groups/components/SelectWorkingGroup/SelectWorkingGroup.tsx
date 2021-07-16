@@ -1,7 +1,13 @@
 import React, { useMemo, useState } from 'react'
+import styled from 'styled-components'
 
-import { Select, SelectedOption } from '@/common/components/selects'
-import { OptionWorkingGroup } from '@/working-groups/components/SelectWorkingGroup/OptionWorkingGroup'
+import { OptionComponent, Select, SelectedOption } from '@/common/components/selects'
+import { TextMedium } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
+import {
+  OptionWorkingGroup,
+  OptionWorkingGroupTitle,
+} from '@/working-groups/components/SelectWorkingGroup/OptionWorkingGroup'
 import { useWorkingGroups } from '@/working-groups/hooks/useWorkingGroups'
 import { WorkingGroup } from '@/working-groups/types'
 
@@ -24,9 +30,10 @@ interface Props {
   onChange: (selected: WorkingGroup) => void
   selectedGroupId?: string
   disabled?: boolean
+  className?: string
 }
 
-export const SelectWorkingGroup = ({ onChange, selectedGroupId, disabled }: Props) => {
+export const SelectWorkingGroupBase = ({ onChange, selectedGroupId, disabled, className }: Props) => {
   const [search, setSearch] = useState('')
   const { isLoading, groups } = useWorkingGroups()
   const selectedGroup = useMemo(() => groups.find((group) => group.id === selectedGroupId), [
@@ -51,6 +58,7 @@ export const SelectWorkingGroup = ({ onChange, selectedGroupId, disabled }: Prop
         <OptionsListWorkingGroup allWorkingGroups={filteredFoundWorkingGroups} onChange={onOptionClick} />
       )}
       onSearch={(search) => setSearch(search)}
+      className={className}
     />
   )
 }
@@ -60,3 +68,38 @@ const renderSelected = (group: WorkingGroup) => (
     <OptionWorkingGroup group={group} />
   </SelectedOption>
 )
+
+export const SelectWorkingGroup = styled(SelectWorkingGroupBase)`
+  ${SelectedOption} {
+    grid-template-columns: 1fr;
+  }
+  ${OptionComponent} {
+    grid-template-columns: 1fr;
+    padding: 10px 16px;
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+      ${OptionWorkingGroupTitle} {
+        color: ${Colors.Blue[500]};
+      }
+    }
+    &:active {
+      ${OptionWorkingGroupTitle} {
+        color: ${Colors.Blue[600]};
+      }
+    }
+    &:disabled {
+      cursor: not-allowed;
+      background-color: ${Colors.Black[50]};
+      z-index: 0;
+
+      ${OptionWorkingGroupTitle} {
+        color: ${Colors.Black[500]};
+      }
+      ${TextMedium} {
+        color: ${Colors.Black[400]};
+      }
+    }
+  }
+`

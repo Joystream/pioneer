@@ -154,6 +154,7 @@ export const OptionsListComponent = styled.ul`
   margin: 0;
   border-radius: ${BorderRad.s};
   border: 1px solid ${Colors.Black[300]};
+  border-top: 1px solid ${Colors.Blue[400]};
   background-color: ${Colors.White};
   box-shadow: ${Shadows.select};
   overflow-y: scroll;

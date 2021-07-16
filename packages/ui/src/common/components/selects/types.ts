@@ -11,6 +11,7 @@ export interface SelectProps<T, V> {
   onSearch?: (search: string) => void
   renderSelected: (option: V) => ReactNode
   renderList: (onOptionClick: (option: T) => void, toggle: () => void) => ReactNode
+  className?: string
 }
 
 export type OptionNode = ReactNode
