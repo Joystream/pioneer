@@ -17,6 +17,7 @@ export const Select = <T extends any, V extends any = T>({
   onSearch,
   renderSelected,
   renderList,
+  className,
 }: SelectProps<T, V>) => {
   const [filterInput, setFilterInput] = useState('')
   const search = filterInput
@@ -86,7 +87,7 @@ export const Select = <T extends any, V extends any = T>({
   }
 
   return (
-    <SelectComponent ref={selectNode} tabIndex={-1} onKeyDown={onKeyDown}>
+    <SelectComponent ref={selectNode} tabIndex={-1} onKeyDown={onKeyDown} className={className}>
       <Toggle onClick={isOpen ? undefined : onToggleClick} isOpen={isOpen} disabled={disabled}>
         <SelectToggleButton isOpen={isOpen} disabled={disabled} onToggleClick={onToggleClick} />
 
