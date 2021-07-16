@@ -8,14 +8,9 @@ import { TextMedium } from '@/common/components/typography'
 import { useBlockInput } from '@/common/hooks/useBlockInput'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
+import { StakingPolicyAndRewardParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 
-export interface StakingPolicyAndRewardDetailsParameters {
-  stakingAmount?: BN
-  leavingUnstakingPeriod?: number
-  rewardPerBlock?: BN
-}
-
-export interface CreateWorkingGroupLeadOpeningProps extends StakingPolicyAndRewardDetailsParameters {
+interface Props extends StakingPolicyAndRewardParameters {
   setStakingAmount(stakingAmount: BN): void
   setLeavingUnstakingPeriod(leavingUnstakingPeriod: number): void
   setRewardPerBlock(rewardPerBlockId: BN): void
@@ -28,7 +23,7 @@ export const StakingPolicyAndReward = ({
   setStakingAmount,
   setLeavingUnstakingPeriod,
   setRewardPerBlock,
-}: CreateWorkingGroupLeadOpeningProps) => {
+}: Props) => {
   const [block, updateBlock] = useBlockInput(0, 100_000, new BN(leavingUnstakingPeriod || 0))
 
   const [amount, setAmount] = useNumberInput(0, stakingAmount)

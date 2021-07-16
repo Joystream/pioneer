@@ -6,10 +6,13 @@ import { StateSchema } from 'xstate/lib/types'
 import { Account } from '@/accounts/types'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { Member } from '@/memberships/types'
-import { FundingRequestParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
-import { WorkingGroupAndOpeningDetailsParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
-import { StakingPolicyAndRewardDetailsParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import { ProposalType } from '@/proposals/types'
+
+import { FundingRequestParameters } from './components/SpecificParameters'
+import {
+  WorkingGroupAndOpeningDetailsParameters,
+  StakingPolicyAndRewardParameters,
+} from './components/SpecificParameters/WorkingGroupLeadOpening/types'
 
 type EmptyObject = Record<string, never>
 
@@ -41,17 +44,19 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | EmptyObject
     | FundingRequestParameters
     | WorkingGroupAndOpeningDetailsParameters
-    | (StakingPolicyAndRewardDetailsParameters & WorkingGroupAndOpeningDetailsParameters)
+    | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
 interface FundingRequestContext extends SpecificParametersContext {
   specifics: FundingRequestParameters
 }
+
 interface WorkingGroupLeadOpeningContext extends SpecificParametersContext {
   specifics: WorkingGroupAndOpeningDetailsParameters
 }
+
 interface StakingPolicyAndRewardContext extends SpecificParametersContext {
-  specifics: StakingPolicyAndRewardDetailsParameters & WorkingGroupAndOpeningDetailsParameters
+  specifics: StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters
 }
 
 export interface TransactionContext extends Required<SpecificParametersContext> {
@@ -358,7 +363,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                     }),
                   }),
                 },
-                NEXT: 'stakingPolicyAndReward',
               },
             },
           },

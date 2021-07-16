@@ -5,15 +5,10 @@ import { InputComponent, InputTextarea } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { WorkingGroupAndOpeningDetailsParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 
-export interface WorkingGroupAndOpeningDetailsParameters {
-  description?: string
-  shortDescription?: string
-  groupId?: string
-}
-
-export interface CreateWorkingGroupLeadOpeningProps extends WorkingGroupAndOpeningDetailsParameters {
+interface Props extends WorkingGroupAndOpeningDetailsParameters {
   setDescription(description: string): void
   setShortDescription(shortDescription: string): void
   setGroupId(groupId: string): void
@@ -26,7 +21,7 @@ export const CreateWorkingGroupLeadOpening = ({
   setDescription,
   shortDescription,
   setShortDescription,
-}: CreateWorkingGroupLeadOpeningProps) => {
+}: Props) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
