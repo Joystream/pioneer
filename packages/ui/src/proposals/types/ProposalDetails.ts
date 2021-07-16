@@ -2,6 +2,7 @@ import BN from 'bn.js'
 
 import { asWorkingGroupName } from '@/working-groups/types'
 
+import { asMember, Member } from '../../memberships/types'
 import { ProposalWithDetailsFieldsFragment } from '../queries'
 
 type DetailsFragment = ProposalWithDetailsFieldsFragment['details']
@@ -31,7 +32,18 @@ export interface CreateLeadOpeningDetails {
   openingDescription?: string
 }
 
-export type ProposalDetails = BaseProposalDetails | FundingRequestDetails | CreateLeadOpeningDetails
+export interface DecreaseLeadStakeDetails {
+  type: 'decreaseWorkingGroupLeadStake'
+  member?: Member
+  groupName: string
+  amount: BN
+}
+
+export type ProposalDetails =
+  | BaseProposalDetails
+  | FundingRequestDetails
+  | CreateLeadOpeningDetails
+  | DecreaseLeadStakeDetails
 
 const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment): FundingRequestDetails => {
   return {
@@ -59,6 +71,20 @@ const asCreateLeadOpening: DetailsCast<'CreateWorkingGroupLeadOpeningProposalDet
   }
 }
 
+const asDecreaseLeadStake: DetailsCast<'DecreaseWorkingGroupLeadStakeProposalDetails'> = (
+  fragment
+): DecreaseLeadStakeDetails => {
+  const groupName = asWorkingGroupName(fragment.lead?.group.name ?? 'Unknown')
+  const member = fragment.lead ? asMember(fragment.lead.membership) : undefined
+
+  return {
+    type: 'decreaseWorkingGroupLeadStake',
+    member,
+    groupName,
+    amount: new BN(fragment.amount),
+  }
+}
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -66,6 +92,7 @@ interface DetailsCast<T extends ProposalDetailsTypename> {
 const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> = {
   FundingRequestProposalDetails: asFundingRequest,
   CreateWorkingGroupLeadOpeningProposalDetails: asCreateLeadOpening,
+  DecreaseWorkingGroupLeadStakeProposalDetails: asDecreaseLeadStake,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
