@@ -11,6 +11,7 @@ import Indent from '@ckeditor/ckeditor5-indent/src/indent'
 import Link from '@ckeditor/ckeditor5-link/src/link'
 import List from '@ckeditor/ckeditor5-list/src/list'
 import Markdown from '@ckeditor/ckeditor5-markdown-gfm/src/markdown'
+import Mention from '@ckeditor/ckeditor5-mention/src/mention'
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice'
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation'
@@ -31,7 +32,22 @@ ClassicEditor.builtinPlugins = [
   Indent,
   Link,
   List,
+  Mention,
+  MentionToLink,
   Paragraph,
   PasteFromOffice,
   TextTransformation,
 ]
+
+// See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#customizing-the-output
+function MentionToLink(editor) {
+  editor.conversion.for('downcast').attributeToElement({
+    model: 'mention',
+    view: (modelAttributeValue, { writer }) =>
+      modelAttributeValue && writer.createAttributeElement('a', {
+        class: 'mention',
+        href: `#mention?member-id=${modelAttributeValue.memberId}`,
+      }),
+    converterPriority: 'high',
+  })
+}

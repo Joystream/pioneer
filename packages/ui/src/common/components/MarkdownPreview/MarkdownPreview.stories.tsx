@@ -51,6 +51,8 @@ Will one day be essential for ensuring that the petabytes of media items uploade
 
 A paragraph with [Text in link](example.com "Titletext").
 
+A paragraph mentioning a [@member](#mention?member-id=0)
+
 UL
 
 *   The maximum review period for this opening is 99,999 blocks (approximately 6 days, 23 hours).

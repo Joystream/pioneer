@@ -1377,6 +1377,14 @@
     "@ckeditor/ckeditor5-ui" "^27.1.0"
     ckeditor5 "^27.1.0"
 
+"@ckeditor/ckeditor5-mention@27.1.0":
+  version "27.1.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-mention/-/ckeditor5-mention-27.1.0.tgz#41cc1cc3496df8fe3ca5a3c03d9ba27a7c917e61"
+  integrity sha512-2nig155lAVdELYLx6JrGBHutBIoS/8CAAiFoniAgggSM3yZdZJVSsAAc2/W/muJwuC4RkYmuDXLJkqySQ/RREg==
+  dependencies:
+    ckeditor5 "^27.1.0"
+    lodash-es "^4.17.15"
+
 "@ckeditor/ckeditor5-page-break@^27.1.0":
   version "27.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-page-break/-/ckeditor5-page-break-27.1.0.tgz#2b20b1d731c2711b7c23b91b0d8269f19603d392"

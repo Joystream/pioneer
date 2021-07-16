@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { info } from '@/common/logger'
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 import { InputComponent } from '../forms'
 import { TemplateBlock } from '../storybookParts/previewStyles'
@@ -14,12 +15,14 @@ export default {
 } as Meta
 
 const Template: Story<CKEditorProps> = (args) => (
-  <TemplateBlock>
-    <CKEditor {...args} />
-    <InputComponent label="Inside InputComponent" inputSize="auto">
+  <MockApolloProvider members>
+    <TemplateBlock>
       <CKEditor {...args} />
-    </InputComponent>
-  </TemplateBlock>
+      <InputComponent label="Inside InputComponent" inputSize="auto">
+        <CKEditor {...args} />
+      </InputComponent>
+    </TemplateBlock>
+  </MockApolloProvider>
 )
 
 export const ClassicEditor = Template.bind({})
