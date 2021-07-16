@@ -10,14 +10,23 @@ export const WorkerStartedLeavingContent: ActivityContentComponent<WorkerStarted
 }) => {
   const { member } = activity
 
-  if (isOwn) {
-    return <>You left role and you are still in the unstaking period.</>
+  if (activity.workerStatus === 'WorkerStatusLeaving') {
+    return isOwn ? (
+      <>You started leaving a role and you are still in the unstaking period.</>
+    ) : (
+      <>
+        <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle} </MemberModalLink>
+        started leaving a role and is still in the unstaking period.
+      </>
+    )
   }
 
-  return (
+  return isOwn ? (
+    <>You started leaving a role.</>
+  ) : (
     <>
       <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle} </MemberModalLink>
-      left a role and is still in the unstaking period.
+      started leaving a role.
     </>
   )
 }

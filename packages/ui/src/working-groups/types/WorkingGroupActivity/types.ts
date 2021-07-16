@@ -4,6 +4,7 @@ import { BaseActivity } from '@/common/types'
 import { Member } from '@/memberships/types'
 
 import { WorkingGroupOpening } from '..'
+import { WorkerStatus } from '../../../common/api/queries/__generated__/baseTypes.generated'
 
 export type WorkingGroupActivity =
   | ApplicationWithdrawnActivity
@@ -93,6 +94,7 @@ export interface WorkerExitedActivity extends BaseActivity {
 
 export interface WorkerStartedLeavingActivity extends BaseActivity {
   eventType: 'WorkerStartedLeavingEvent'
+  workerStatus: WorkerStatus['__typename']
   member: ShortMember
 }
 

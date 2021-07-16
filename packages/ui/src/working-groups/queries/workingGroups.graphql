@@ -412,6 +412,9 @@ fragment WorkerStartedLeavingEventFields on WorkerStartedLeavingEvent {
     name
   }
   worker {
+    status {
+      __typename
+    }
     membership {
       id
       handle

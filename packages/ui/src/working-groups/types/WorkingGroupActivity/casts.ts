@@ -177,6 +177,7 @@ export function asWorkerStartedLeavingActivity(
       id: fragment.worker.membership.id,
       handle: fragment.worker.membership.handle,
     },
+    workerStatus: fragment.worker.status.__typename,
   }
 }
 

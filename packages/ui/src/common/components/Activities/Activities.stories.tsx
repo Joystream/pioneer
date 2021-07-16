@@ -177,6 +177,17 @@ const activities: Activity[] = [
     id: '15',
     createdAt: '2021-05-25T10:28:04.155Z',
     eventType: 'WorkerStartedLeavingEvent',
+    workerStatus: 'WorkerStatusLeaving',
+    member: {
+      id: '8',
+      handle: 'johann',
+    },
+  },
+  {
+    id: '115',
+    createdAt: '2021-05-25T10:28:04.155Z',
+    eventType: 'WorkerStartedLeavingEvent',
+    workerStatus: 'WorkerStatusLeft',
     member: {
       id: '8',
       handle: 'johann',
