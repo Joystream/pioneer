@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/CreateWorkingGroupLeadOpening'
+import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 
 export default {
   title: 'Proposals/AddNewProposalModal/CreateWorkingGroupLeadOpening',

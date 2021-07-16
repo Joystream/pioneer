@@ -7,7 +7,7 @@ import { Account } from '@/accounts/types'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { Member } from '@/memberships/types'
 import { FundingRequestParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
-import { WorkingGroupAndOpeningDetailsParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/CreateWorkingGroupLeadOpening'
+import { WorkingGroupAndOpeningDetailsParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { ProposalType } from '@/proposals/types'
 
 type EmptyObject = Record<string, never>
