@@ -8,14 +8,14 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { getMember } from '../../../../test/_mocks/members'
 import { ModalContext } from '../../../common/providers/modal/context'
 
-import { ProposalProperties } from './ProposalProperties'
+import { ProposalDetailsComponent } from './ProposalDetails'
 
 export default {
-  title: 'Proposals/ProposalPreview/ProposalProperties',
-  component: ProposalProperties,
+  title: 'Proposals/ProposalPreview/ProposalDetails',
+  component: ProposalDetailsComponent,
 } as Meta
 
-type Props = Parameters<typeof ProposalProperties>[0]
+type Props = Parameters<typeof ProposalDetailsComponent>[0]
 
 const Template: Story<Props> = (args) => (
   <MemoryRouter>
@@ -28,7 +28,7 @@ const Template: Story<Props> = (args) => (
       }}
     >
       <RowGapBlock gap={24}>
-        <ProposalProperties {...args} />
+        <ProposalDetailsComponent {...args} />
       </RowGapBlock>
     </ModalContext.Provider>
   </MemoryRouter>
@@ -74,5 +74,15 @@ DecreaseLeadStake.args = {
     groupName: 'storage',
     amount: new BN(10000),
     member: getMember('alice'),
+  },
+}
+
+export const SlashLead = Template.bind({})
+SlashLead.args = {
+  details: {
+    type: 'slashWorkingGroupLead',
+    groupName: 'forum',
+    amount: new BN(15000),
+    member: getMember('bob'),
   },
 }

@@ -6,6 +6,7 @@ import { ProposalDetails } from '../../types/ProposalDetails'
 import { CreateLeadOpeningDetailsComponent } from './CreateLeadOpeningDetailsComponent'
 import { DecreaseLeadStakeComponent } from './DecreaseLeadStakeComponent'
 import { FundingRequestDetailsComponent } from './FundingRequestDetailsComponent'
+import { SlashLeadComponent } from './SlashLeadComponent'
 
 export interface ProposalPropertiesContent<T extends ProposalType> {
   (props: { details: ProposalDetails & { type: T } }): ReactElement
@@ -15,13 +16,14 @@ const proposalDetails: Partial<Record<ProposalType, ProposalPropertiesContent<an
   fundingRequest: FundingRequestDetailsComponent,
   createWorkingGroupLeadOpening: CreateLeadOpeningDetailsComponent,
   decreaseWorkingGroupLeadStake: DecreaseLeadStakeComponent,
+  slashWorkingGroupLead: SlashLeadComponent,
 }
 
 interface Props {
   details: ProposalDetails
 }
 
-export const ProposalProperties = ({ details }: Props) => {
+export const ProposalDetailsComponent = ({ details }: Props) => {
   const Content = details.type && proposalDetails[details.type]
   if (Content) {
     return <Content details={details} />

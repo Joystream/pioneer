@@ -20,7 +20,7 @@ import { capitalizeFirstLetter } from '@/common/helpers'
 import { CreateLeadOpeningDetails } from '@/proposals/types/ProposalDetails'
 import { GroupRewardPeriods, isKnownGroupName } from '@/working-groups/types'
 
-import { ProposalPropertiesContent } from './ProposalProperties'
+import { ProposalPropertiesContent } from './ProposalDetails'
 
 interface DetailsComponentProps {
   details: CreateLeadOpeningDetails
