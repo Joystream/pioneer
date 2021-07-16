@@ -1,8 +1,12 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 
 import { RowGapBlock } from '@/common/components/page/PageContent'
+
+import { getMember } from '../../../../test/_mocks/members'
+import { ModalContext } from '../../../common/providers/modal/context'
 
 import { ProposalProperties } from './ProposalProperties'
 
@@ -14,9 +18,20 @@ export default {
 type Props = Parameters<typeof ProposalProperties>[0]
 
 const Template: Story<Props> = (args) => (
-  <RowGapBlock gap={24}>
-    <ProposalProperties {...args} />
-  </RowGapBlock>
+  <MemoryRouter>
+    <ModalContext.Provider
+      value={{
+        modal: null,
+        modalData: null,
+        showModal: () => undefined,
+        hideModal: () => undefined,
+      }}
+    >
+      <RowGapBlock gap={24}>
+        <ProposalProperties {...args} />
+      </RowGapBlock>
+    </ModalContext.Provider>
+  </MemoryRouter>
 )
 
 export const CreateLeadOpening = Template.bind({})
@@ -49,5 +64,15 @@ FundingRequest.args = {
         amount: 140000,
       },
     ],
+  },
+}
+
+export const DecreaseLeadStake = Template.bind({})
+DecreaseLeadStake.args = {
+  details: {
+    type: 'decreaseWorkingGroupLeadStake',
+    groupName: 'storage',
+    amount: new BN(10000),
+    member: getMember('alice'),
   },
 }
