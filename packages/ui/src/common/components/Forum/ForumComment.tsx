@@ -78,6 +78,11 @@ const Reply = styled.blockquote`
   font-style: italic;
   margin: 0 0 ${spacing(3 / 2)};
   padding: ${spacing(1)};
+
+  & .markdown-preview p,
+  & p {
+    font-size: 12px;
+  }
 `
 
 const ReplyBadge = styled.div`

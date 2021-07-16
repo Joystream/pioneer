@@ -130,5 +130,8 @@ export const GlobalStyle = createGlobalStyle`
       -webkit-text-stroke-color: ${Colors.Blue[50]};
     }
   }
+  blockquote {
+    margin: 0;
+  }
   ${Animations};
 `

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ButtonGhost } from '@/common/components/buttons'
-import { AlertSymbol, SuccessSymbol } from '@/common/components/icons/symbols'
+import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'

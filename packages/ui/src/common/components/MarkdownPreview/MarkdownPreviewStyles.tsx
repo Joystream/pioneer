@@ -4,12 +4,14 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 
 export interface MarkdownPreviewStylesProps {
-  size?: 's' | 'm'
+  size?: 'xs' | 's' | 'm'
   isReply?: boolean
 }
 
 const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
   switch (size) {
+    case 'xs':
+      return '12px'
     case 's':
       return '14px'
     default:
@@ -170,6 +172,10 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     width: 16px;
     height: 16px;
     transform: translateY(-50%) rotate(-90deg);
+  }
+  .markdown-preview blockquote {
+    margin: 0;
+    padding: 0;
   }
 `
 
