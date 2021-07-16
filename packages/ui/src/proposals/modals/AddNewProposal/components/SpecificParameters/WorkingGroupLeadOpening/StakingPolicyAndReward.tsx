@@ -2,11 +2,13 @@ import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
+import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useBlockInput } from '@/common/hooks/useBlockInput'
-import { formatBlocksToDuration } from '@/common/model/formatters'
+import { useNumberInput } from '@/common/hooks/useNumberInput'
+import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 
 export interface StakingPolicyAndRewardDetailsParameters {
   stakingAmount?: BN
@@ -28,11 +30,15 @@ export const StakingPolicyAndReward = ({
   setLeavingUnstakingPeriod,
   setRewardPerBlock,
 }: CreateWorkingGroupLeadOpeningProps) => {
-  const [block, updateBlock] = useBlockInput(0, 100_000)
+  const [block, updateBlock] = useBlockInput(0, 100_000, new BN(leavingUnstakingPeriod || 0))
 
-  useEffect(() => {
-    setLeavingUnstakingPeriod(block.toNumber())
-  }, [block.toNumber()])
+  const [amount, setAmount] = useNumberInput(
+    0,
+    stakingAmount?.lt(new BN(Number.MAX_SAFE_INTEGER)) ? stakingAmount?.toNumber() : 0
+  )
+
+  useEffect(() => setLeavingUnstakingPeriod(block.toNumber()), [block.toNumber()])
+  useEffect(() => setStakingAmount(new BN(amount)), [amount])
 
   return (
     <RowGapBlock gap={24}>
@@ -45,13 +51,30 @@ export const StakingPolicyAndReward = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
+            id="staking-amount"
+            label="Staking amount"
+            tight
+            units="JOY"
+            required
+            tooltipText="Pleas type the minimum number of tokens required to stake"
+          >
+            <InputNumber
+              id="staking-amount"
+              value={formatTokenValue(new BN(amount))}
+              placeholder="0"
+              onChange={(event) => setAmount(event.target.value)}
+            />
+          </InputComponent>
+          <InputComponent
+            id="leaving-unstaking-period"
+            label="Leaving unstaking period"
             units="blocks"
             inputSize="s"
             tooltipText="Lorem ipsum..."
-            message={`≈ ${leavingUnstakingPeriod ? formatBlocksToDuration(leavingUnstakingPeriod) : ''}`}
+            message={leavingUnstakingPeriod ? `≈ ${formatBlocksToDuration(leavingUnstakingPeriod)}` : ''}
           >
             <InputNumber
-              id="leavingUnstakingPeriod"
+              id="leaving-unstaking-period"
               value={leavingUnstakingPeriod?.toString()}
               onChange={(event) => updateBlock(event.target.value)}
             />
