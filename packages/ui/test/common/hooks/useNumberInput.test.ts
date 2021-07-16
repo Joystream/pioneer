@@ -1,11 +1,12 @@
 import { act, renderHook } from '@testing-library/react-hooks'
+import BN from 'bn.js'
 
-import { useNumberInput } from '../../../src/common/hooks/useNumberInput'
+import { useNumberInput } from '@/common/hooks/useNumberInput'
 
 describe('useNumberInput', () => {
-  function render() {
+  function render(initial?: BN | number) {
     let decimals = 18
-    const { rerender, result } = renderHook(() => useNumberInput(decimals))
+    const { rerender, result } = renderHook(() => useNumberInput(decimals, initial))
     return {
       getValue: () => result.current[0],
       setValue: (value: string) => act(() => result.current[1](value)),
@@ -65,5 +66,11 @@ describe('useNumberInput', () => {
     expect(getValue()).toBe('1000000.1')
     setValue('1,000.99999')
     expect(getValue()).toBe('1000.99999')
+  })
+
+  it('Initial BN', () => {
+    const { getValue } = render(new BN('10000000000000000000000000000000'))
+
+    expect(getValue()).toBe('10000000000000000000000000000000')
   })
 })
