@@ -43,7 +43,7 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
 export const Default = Template.bind({})
 Default.args = {
   likes: 1,
-  text: `Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
+  text: `[@abby_12](#mention?member-id=12) Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
 Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
 consequat sunt nostrud.`,
   edited: 3,

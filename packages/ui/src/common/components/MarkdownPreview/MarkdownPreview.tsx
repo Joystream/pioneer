@@ -2,6 +2,9 @@ import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import ReactMarkdown, { PluggableList } from 'react-markdown'
 import { Components, Position } from 'react-markdown/src/ast-to-react'
 import { Root } from 'react-markdown/src/rehype-filter'
+import styled from 'styled-components'
+
+import { TextInlineMedium } from '@/common/components/typography'
 
 import { MarkdownPreviewStyles, MarkdownPreviewStylesProps } from './MarkdownPreviewStyles'
 
@@ -38,8 +41,16 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
         {shouldApend(sourcePosition) && <> {append}</>}
       </p>
     )
+
     return {
       ...(append ? { p } : {}),
+
+      a: ({ children, ...props }) => {
+        const href = props.href as string | undefined
+        const [memberId] = href?.match(/#mention\?member-id=(.+)$/) ?? []
+        return memberId ? <Mention data-member-id={memberId}>{children}</Mention> : <a href={href}>{children}</a>
+      },
+
       code: ({ children, inline }) => <code className={inline ? 'inline-code' : 'in-block-code'}>{children}</code>,
     }
   }, [markdown, append])
@@ -54,3 +65,7 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
     </div>
   )
 }
+
+const Mention = styled(TextInlineMedium).attrs({ bold: true })`
+  text-transform: capitalize;
+`
