@@ -2,7 +2,6 @@ import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -32,13 +31,12 @@ export const StakingPolicyAndReward = ({
 }: CreateWorkingGroupLeadOpeningProps) => {
   const [block, updateBlock] = useBlockInput(0, 100_000, new BN(leavingUnstakingPeriod || 0))
 
-  const [amount, setAmount] = useNumberInput(
-    0,
-    stakingAmount?.lt(new BN(Number.MAX_SAFE_INTEGER)) ? stakingAmount?.toNumber() : 0
-  )
+  const [amount, setAmount] = useNumberInput(0, stakingAmount)
+  const [reward, setReward] = useNumberInput(0, rewardPerBlock)
 
   useEffect(() => setLeavingUnstakingPeriod(block.toNumber()), [block.toNumber()])
   useEffect(() => setStakingAmount(new BN(amount)), [amount])
+  useEffect(() => setRewardPerBlock(new BN(reward)), [reward])
 
   return (
     <RowGapBlock gap={24}>
@@ -53,10 +51,10 @@ export const StakingPolicyAndReward = ({
           <InputComponent
             id="staking-amount"
             label="Staking amount"
-            tight
-            units="JOY"
-            required
             tooltipText="Pleas type the minimum number of tokens required to stake"
+            units="JOY"
+            tight
+            required
           >
             <InputNumber
               id="staking-amount"
@@ -72,11 +70,20 @@ export const StakingPolicyAndReward = ({
             inputSize="s"
             tooltipText="Lorem ipsum..."
             message={leavingUnstakingPeriod ? `≈ ${formatBlocksToDuration(leavingUnstakingPeriod)}` : ''}
+            tight
           >
             <InputNumber
               id="leaving-unstaking-period"
               value={leavingUnstakingPeriod?.toString()}
               onChange={(event) => updateBlock(event.target.value)}
+            />
+          </InputComponent>
+          <InputComponent id="reward-per-block" label="Reward amount per Block" units="JOY" tight required>
+            <InputNumber
+              id="reward-per-block"
+              value={formatTokenValue(new BN(reward))}
+              placeholder="0"
+              onChange={(event) => setReward(event.target.value)}
             />
           </InputComponent>
         </RowGapBlock>
