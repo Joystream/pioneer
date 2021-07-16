@@ -22,7 +22,7 @@ import {
 import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { getSteps } from '@/common/model/machines/getSteps'
+import { getSteps, Step } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { useConstants } from '@/proposals/hooks/useConstants'
@@ -52,6 +52,10 @@ export type BaseProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
   string | Uint8Array
 >
+
+const isLastStepActive = (steps: Step[]) => {
+  return steps[steps.length - 1].type === 'active' || steps[steps.length - 1].type === 'past'
+}
 
 export const AddNewProposalModal = () => {
   const { api } = useApi()
@@ -236,7 +240,7 @@ export const AddNewProposalModal = () => {
             Previous step
           </ButtonGhost>
           <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
-            {state.matches('specificParameters') ? 'Create proposal' : 'Next step'}
+            {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>
         </ButtonsGroup>
