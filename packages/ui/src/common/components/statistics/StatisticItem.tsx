@@ -5,6 +5,7 @@ import { TextSmall } from '@/common/components/typography'
 import { spacing } from '@/common/utils/styles'
 
 import { BorderRad, Colors, Shadows } from '../../constants'
+import { ColumnGapBlock } from '../page/PageContent'
 
 import { StatisticHeader, StatisticHeaderProps } from './StatisticHeader'
 
@@ -57,6 +58,17 @@ export const StatisticItemSpacedContent = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+`
+
+export const StatisticItemContentGrid = styled(ColumnGapBlock).attrs(() => ({
+  align: 'center',
+  gap: 4,
+}))`
+  color: inherit;
+
+  & svg {
+    transform: translateY(-2px);
+  }
 `
 
 export const StatisticLabel = styled(TextSmall)`

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { BorderRad, Colors, Shadows, Transitions } from '../../constants'
 import { Icon } from '../icons'
 
-import { StatiscticBlockProps, StatisticItemProps, StatsContent } from '.'
+import { StatiscticBlockProps, StatisticItemContentGrid, StatisticItemProps, StatsContent } from '.'
 import { StatisticHeader } from './StatisticHeader'
 
 export interface StatisticButtonProps extends StatisticItemProps {
@@ -24,7 +24,9 @@ export const StatisticButton: FC<StatisticButtonProps> = ({
   <StatsButton key={headerProps.title} className={className} onClick={onClick} disabled={disabled}>
     <StatsButtonInnerWrapper>
       <StatisticHeader {...headerProps} />
-      <StatsContent>{children}</StatsContent>
+      <StatsContent>
+        <StatisticItemContentGrid>{children}</StatisticItemContentGrid>
+      </StatsContent>
       <StatsButtonIcon size={16}>{icon}</StatsButtonIcon>
     </StatsButtonInnerWrapper>
   </StatsButton>
@@ -105,9 +107,17 @@ export const StatsButton = styled.button`
     color: ${Colors.Black[600]};
   }
 
+  .blackPart {
+    color: ${Colors.Black[900]};
+  }
+  .primaryPart {
+    color: ${Colors.Blue[500]};
+  }
+
   &:hover,
   &:focus {
     border-color: ${Colors.Blue[100]};
+    color: ${Colors.Blue[500]};
     ${StatsButtonIcon} {
       color: ${Colors.Blue[500]};
       transform: translateX(4px) translateY(-50%);
@@ -123,10 +133,16 @@ export const StatsButton = styled.button`
   }
   &:active {
     border-color: ${Colors.Blue[100]};
+    color: ${Colors.Blue[600]};
     transform: scale(0.96);
     ${StatsButtonIcon} {
       color: ${Colors.Blue[500]};
       transform: translateX(8px) translateY(-50%);
+    }
+    & .blackPart,
+    & .primaryPart {
+      color: ${Colors.Blue[600]};
+      fill: ${Colors.Blue[600]};
     }
     ${StatsButtonInnerWrapper}:after {
       transform: translate(-50%, -50%);
@@ -134,6 +150,7 @@ export const StatsButton = styled.button`
   }
   &:disabled {
     cursor: not-allowed;
+    color: ${Colors.Black[300]};
     ${StatsButtonIcon} {
       color: ${Colors.Black[300]};
     }
