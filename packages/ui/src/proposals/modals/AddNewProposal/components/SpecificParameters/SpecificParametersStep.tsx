@@ -3,6 +3,7 @@ import { State, Typestate } from 'xstate'
 
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
+import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import {
   AddNewProposalContext,
   AddNewProposalEvent,
@@ -51,6 +52,19 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           setDescription={(description) => send('SET_DESCRIPTION', { description })}
           setShortDescription={(shortDescription) => send('SET_SHORT_DESCRIPTION', { shortDescription })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+        />
+      )
+    case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'):
+      return (
+        <StakingPolicyAndReward
+          stakingAmount={state.context.specifics?.stakingAmount}
+          leavingUnstakingPeriod={state.context.specifics?.leavingUnstakingPeriod}
+          rewardPerBlock={state.context.specifics?.rewardPerBlock}
+          setStakingAmount={(stakingAmount) => send('SET_STAKING_AMOUNT', { stakingAmount })}
+          setLeavingUnstakingPeriod={(leavingUnstakingPeriod) =>
+            send('SET_LEAVING_UNSTAKING_PERIOD', { leavingUnstakingPeriod })
+          }
+          setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
         />
       )
     default:

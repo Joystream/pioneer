@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { CKEditor } from '@/common/components/CKEditor'
@@ -12,12 +11,6 @@ export interface WorkingGroupAndOpeningDetailsParameters {
   description?: string
   shortDescription?: string
   groupId?: string
-}
-
-export interface StakingPolicyAndRewardDetailsParameters {
-  stakingAmount?: BN
-  leavingUnstakingPeriod?: number
-  rewardPerBlock?: BN
 }
 
 export interface CreateWorkingGroupLeadOpeningProps extends WorkingGroupAndOpeningDetailsParameters {
