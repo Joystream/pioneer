@@ -139,9 +139,15 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
   }),
   decreaseWorkingGroupLeadStake: (mocks) => ({
     type: 'decreaseWorkingGroupLeadStake',
-    data: {
-      leadId: mocks.workers[randomFromRange(0, mocks.workers.length - 1)]?.id,
-      amount: randomFromRange(1, 10) * 1000,
-    }
+    data: getLeadStakeData(mocks),
   }),
+  slashWorkingGroupLead: (mocks) => ({
+    type: 'slashWorkingGroupLead',
+    data: getLeadStakeData(mocks),
+  })
 }
+
+const getLeadStakeData = (mocks: Mocks) => ({
+  leadId: mocks.workers[randomFromRange(0, mocks.workers.length - 1)]?.id,
+  amount: randomFromRange(1, 10) * 1000,
+})

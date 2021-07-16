@@ -41,17 +41,18 @@ const seedCreateLeadOpeningData = (data: RawCreateLeadOpeningData, server: any) 
   }
 }
 
-interface RawDecreasLeadStakeData {
+interface RawLeadStakeData {
   leadId: 'string'
   amount: number
 }
 
-const seedDecreaseLeadStakeData = (data: RawDecreasLeadStakeData) => data
+const seedLeadStakeProposalData = (data: RawLeadStakeData) => data
 
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
-  decreaseWorkingGroupLeadStake: seedDecreaseLeadStakeData,
+  decreaseWorkingGroupLeadStake: seedLeadStakeProposalData,
+  slashWorkingGroupLead: seedLeadStakeProposalData,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {
