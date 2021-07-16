@@ -5,12 +5,18 @@ import React from 'react'
 import { Route, Router } from 'react-router-dom'
 
 import { ProposalPreview } from '@/app/pages/Proposals/ProposalPreview'
+import { CKEditorProps } from '@/common/components/CKEditor'
 import { seedMember, seedProposal } from '@/mocks/data'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
+import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, PROPOSAL_DATA } from '../../_mocks/server/seeds'
+
+jest.mock('@/common/components/CKEditor', () => ({
+  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+}))
 
 describe('ProposalPreview', () => {
   const mockServer = setupMockServer()
