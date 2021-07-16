@@ -1,32 +1,47 @@
 /* eslint-disable no-console */
-import { ApiPromise } from '@polkadot/api'
+import BN from 'bn.js'
+import yargs from 'yargs'
 
-import { ALICE, CHARLIE } from '../data/addresses'
-import { getApi, signAndSend } from '../lib/api'
+import { getAccount } from '../data/addresses'
+import { signAndSend, withApi } from '../lib/api'
+import { controllerAccountOption, memberIdOption, stakingAccountOption } from '../lib/options'
 
-async function proposal(api: ApiPromise) {
-  console.log('============== PROPOSAL')
-  const proposalExtrinsic = api.tx.proposalsCodex.createProposal(
-    {
-      staking_account_id: CHARLIE,
-      member_id: '0',
-      title: 'A proposal',
-      description: 'This is a proposal',
-    },
-    {
-      Signal: 'Foo bar',
-    }
-  )
+const options = {
+  c: controllerAccountOption,
+  s: stakingAccountOption,
+  m: memberIdOption,
+} as const
 
-  await signAndSend(proposalExtrinsic, ALICE)
+type CommandOptions = yargs.InferredOptionTypes<typeof options>
+export type ProposalArgs = yargs.Arguments<CommandOptions>
+
+const handler = async ({ c, s, m }: ProposalArgs) => {
+  await withApi(async (api) => {
+    console.log(c, getAccount(c), s, getAccount(s), m)
+    const tx = api.tx.proposalsCodex.createProposal(
+      {
+        staking_account_id: getAccount(s),
+        member_id: m,
+        title: 'A proposal',
+        description: 'This is a proposal',
+      },
+      {
+        FundingRequest: [
+          {
+            account: getAccount(c),
+            amount: new BN(1000),
+          },
+        ],
+      }
+    )
+
+    await signAndSend(tx, getAccount(c))
+  })
 }
 
-const main = async () => {
-  const api = await getApi()
-
-  await proposal(api)
-
-  await api.disconnect()
+export const createProposalModule = {
+  command: 'proposal:create',
+  describe: 'Create Funding request proposal',
+  handler,
+  builder: (argv: yargs.Argv<unknown>) => argv.options(options),
 }
-
-main()
