@@ -55,3 +55,11 @@ const tagToRandomMarkdown = (tag: string): string => {
   }
 }
 export const randomMessage = () => randomMdTags(randomFromRange(1, 3)).map(tagToRandomMarkdown).join('\n\n')
+
+export const shuffle = <T>(arr: Array<T>) => {
+  arr.forEach((_, index, array) => {
+    const randomIndex = randomFromRange(0, array.length - 1);
+    [array[index], array[randomIndex]] = [array[randomIndex], array[index]]
+  });
+  return arr
+}

@@ -8,11 +8,11 @@ import { ProposalStatus, ProposalType } from '../../../src/proposals/types/propo
 import { generateOpeningMetadata } from './generateOpeningsAndUpcomingOpenings'
 
 import { Mocks } from './types'
-import { randomFromRange, randomFromWeightedSet, randomMarkdown, randomMessage, randomsFromWeightedSet } from './utils'
+import { randomFromRange, randomFromWeightedSet, randomMarkdown, randomMessage, randomsFromWeightedSet, shuffle } from './utils'
 
 const { arrayElement } = faker.random
 
-const MAX_PROPOSALS = 20
+const proposalTypes = shuffle([...proposalDetails])
 
 const MAX_VOTE = 3
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
@@ -45,13 +45,13 @@ const MAX_MESSAGES = 8
 let nextId = 0
 let nextVoteId = 0
 
-const generateProposal = (mocks: Mocks) => {
+const generateProposal = (type: ProposalType, mocks: Mocks) => {
   const proposalId = String(nextId++)
   const statusHistory = [DECIDING, ...randomVoteRoundStatuses(), ...randomLastStatuses()]
 
   const member = arrayElement(mocks.members)
   const status = statusHistory[statusHistory.length - 1] as string
-  const details = generateProposalDetails(mocks)
+  const details = generateProposalDetails(type, mocks)
 
   const createdAt = faker.date.recent(20)
 
@@ -106,11 +106,10 @@ const generateProposal = (mocks: Mocks) => {
 export type ProposalMock = ReturnType<typeof generateProposal>
 
 export const generateProposals = (mocks: Mocks): ProposalMock[] => {
-  return Array.from({ length: MAX_PROPOSALS }).map(() => generateProposal(mocks))
+  return proposalTypes.map((type) => generateProposal(type, mocks))
 }
 
-const generateProposalDetails = (mocks: Mocks) => {
-  const type = proposalDetails[randomFromRange(0, proposalDetails.length - 1)]
+const generateProposalDetails = (type: ProposalType, mocks: Mocks) => {
   const details = ProposalDetailsGenerator[type]?.(mocks)
   return details ?? { type }
 }
