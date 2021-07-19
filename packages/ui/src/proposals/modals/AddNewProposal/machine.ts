@@ -6,12 +6,13 @@ import { StateSchema } from 'xstate/lib/types'
 import { Account } from '@/accounts/types'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { Member } from '@/memberships/types'
+import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { ProposalType } from '@/proposals/types'
 
 import { FundingRequestParameters } from './components/SpecificParameters'
 import {
-  WorkingGroupAndOpeningDetailsParameters,
   StakingPolicyAndRewardParameters,
+  WorkingGroupAndOpeningDetailsParameters,
 } from './components/SpecificParameters/WorkingGroupLeadOpening/types'
 
 type EmptyObject = Record<string, never>
@@ -44,6 +45,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | EmptyObject
     | FundingRequestParameters
     | WorkingGroupAndOpeningDetailsParameters
+    | RuntimeUpgradeParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
@@ -59,6 +61,10 @@ interface StakingPolicyAndRewardContext extends SpecificParametersContext {
   specifics: StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters
 }
 
+interface RuntimeUpgradeContext extends SpecificParametersContext {
+  specifics: RuntimeUpgradeParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
 }
@@ -72,6 +78,7 @@ export type AddNewProposalContext = Partial<
     FundingRequestContext &
     WorkingGroupLeadOpeningContext &
     StakingPolicyAndRewardContext &
+    RuntimeUpgradeContext &
     TransactionContext
 >
 
@@ -89,6 +96,7 @@ export type AddNewProposalState =
   | { value: 'generalParameters.finishGeneralParameters'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'specificParameters'; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
+  | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
       context: WorkingGroupLeadOpeningContext
@@ -115,6 +123,7 @@ type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: string }
 type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
 type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leavingUnstakingPeriod: number }
 type SetRewardPerBlock = { type: 'SET_REWARD_PER_BLOCK'; rewardPerBlock: BN }
+type SetRuntime = { type: 'SET_RUNTIME'; runtime: ArrayBuffer }
 
 const isType = (type: string) => (context: any) => type === context.type
 
@@ -136,6 +145,7 @@ export type AddNewProposalEvent =
   | SetStakingAmount
   | SetLeavingUnstakingPeriod
   | SetRewardPerBlock
+  | SetRuntime
 
 export type AddNewProposalMachineState = State<
   AddNewProposalContext,
@@ -276,6 +286,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             '': [
               { target: 'fundingRequest', cond: isType('fundingRequest') },
               { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
+              { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
             ],
           },
         },
@@ -291,6 +302,15 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             SET_AMOUNT: {
               actions: assign({
                 specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
+              }),
+            },
+          },
+        },
+        runtimeUpgrade: {
+          on: {
+            SET_RUNTIME: {
+              actions: assign({
+                specifics: (context, event) => ({ ...context.specifics, runtime: event.runtime }),
               }),
             },
           },

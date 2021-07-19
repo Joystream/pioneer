@@ -2,6 +2,7 @@ import React from 'react'
 import { State, Typestate } from 'xstate'
 
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
+import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import {
@@ -46,6 +47,13 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           amount={state.context.specifics?.amount}
           setAccount={(account) => send('SET_ACCOUNT', { account })}
           setAmount={(amount) => send('SET_AMOUNT', { amount })}
+        />
+      )
+    case state.matches('specificParameters.runtimeUpgrade'):
+      return (
+        <RuntimeUpgrade
+          runtime={state.context.specifics?.runtime}
+          setRuntime={(runtime) => send('SET_RUNTIME', { runtime })}
         />
       )
     case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'):
