@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import styled from 'styled-components'
 
@@ -16,8 +16,21 @@ interface RuntimeUpgradeProps extends RuntimeUpgradeParameters {
   setBlob: (blob: string) => void
 }
 
-export const RuntimeUpgrade = ({ blob, setBlob }: RuntimeUpgradeProps) => {
-  const { isDragActive, getRootProps } = useDropzone()
+const MAX_FILE_SIZE = 3 * 1024 * 124
+
+export const RuntimeUpgrade = ({ setBlob }: RuntimeUpgradeProps) => {
+  const onDrop = useCallback((acceptedFiles) => {
+    const file = acceptedFiles.first()
+    setBlob(file.toString())
+  }, [])
+
+  const { isDragActive, getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: '*.wasm',
+    maxFiles: 1,
+    maxSize: MAX_FILE_SIZE,
+    multiple: false,
+  })
 
   return (
     <RowGapBlock gap={24}>
@@ -32,7 +45,8 @@ export const RuntimeUpgrade = ({ blob, setBlob }: RuntimeUpgradeProps) => {
           <Label isRequired>Blob</Label>
           <TextSmall>Please upload the raw WebAssembly object to be used as the new runtime.</TextSmall>
           <DropZone {...getRootProps()} isDragActive={isDragActive}>
-            Drop your file here or browse
+            <input {...getInputProps()} />
+            Drop your file here or click to browse
           </DropZone>
           <TextSmall>Maximum upload file size is 3 MB</TextSmall>
         </RowGapBlock>
