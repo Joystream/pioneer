@@ -27,10 +27,6 @@ interface DecreaseWorkingGroupLeadStakeProps extends DecreaseWorkingGroupLeadSta
   setWorkerId(workerId?: number): void
 }
 
-const getLeadName = (groupName: string) => {
-  return `${groupName} Working Group Lead`
-}
-
 export const DecreaseWorkingGroupLeadStake = ({
   stakingAmount,
   groupId,
@@ -61,7 +57,7 @@ export const DecreaseWorkingGroupLeadStake = ({
             label="Working Group"
             required
             inputSize="l"
-            tooltipText="Please select an identifier for working group"
+            tooltipText="Please select an identifier for Working Group"
           >
             <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
           </InputComponent>
@@ -74,7 +70,7 @@ export const DecreaseWorkingGroupLeadStake = ({
                 <Info
                   content={
                     <TextMedium>
-                      The actual stake for {getLeadName(group.name)} is{' '}
+                      The actual stake for ${group.name} Working Group Lead is{' '}
                       <TextInlineMedium bold>{formatTokenValue(group.leaderWorker?.stake)} JOY</TextInlineMedium>.
                     </TextMedium>
                   }
@@ -112,7 +108,7 @@ export const DecreaseWorkingGroupLeadStake = ({
             <Info
               title="Warning"
               content={
-                <TextMedium>This Working group doesn’t have any Leader yet. Please choose other one. </TextMedium>
+                <TextMedium>This Working Group doesn’t have any Leader yet. Please choose other Group.</TextMedium>
               }
             ></Info>
           )}

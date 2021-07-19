@@ -21,7 +21,6 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
     ...group,
     workers: null,
     metadata: server.schema.create('WorkingGroupMetadata', group.metadata),
-    leaderId: null,
   }
 
   return server.schema.create('WorkingGroup', groupData)

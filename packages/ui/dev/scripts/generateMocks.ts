@@ -6,7 +6,7 @@ import { generateMembers } from './generators/generateMembers'
 import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
 import { generateProposals } from './generators/generateProposals'
 import { generateWithdrawnApplications, generateWorkers } from './generators/generateWorkers'
-import { generateWorkingGroups } from './generators/generateWorkingGroups'
+import { generateWorkingGroups, getWorkingGroupsWithLeader } from './generators/generateWorkingGroups'
 import { Mocks } from './generators/types'
 import { saveFile } from './helpers/saveFile'
 
@@ -25,6 +25,7 @@ const main = () => {
   mocks.workingGroups = generateWorkingGroups()
   Object.assign(mocks, generateOpeningsAndUpcomingOpenings(mocks))
   Object.assign(mocks, generateWorkers(mocks))
+  mocks.workingGroups = getWorkingGroupsWithLeader(mocks)
   mocks.applications = [...mocks.applications, ...generateWithdrawnApplications(mocks)]
   Object.assign(mocks, generateAllEvents(mocks))
   mocks.proposals = generateProposals(mocks)
@@ -39,7 +40,7 @@ const allModule = {
 }
 
 yargs(process.argv.slice(2))
-  .usage('yarn node-mocks [<command>]')
+  .usage('yarn generate-mocks [<command>]')
   .scriptName('')
   .command(allModule)
   .command(eventsModule)
