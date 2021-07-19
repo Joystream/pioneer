@@ -28,7 +28,6 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
     onDrop,
     accept: '.wasm',
     maxFiles: 1,
-    // TODO:consts.proposalsCodex.runtimeUpgradeWasmProposalMaxLength
     maxSize: MAX_FILE_SIZE,
     multiple: false,
   })

@@ -26,7 +26,7 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     case state.matches('specificParameters.runtimeUpgrade'): {
       const specifics = state.context.specifics
 
-      return !!specifics?.runtime
+      return !!specifics?.runtime && specifics.runtime.byteLength !== 0
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'): {
       const specifics = state.context.specifics
