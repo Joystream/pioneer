@@ -1,3 +1,4 @@
+import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
@@ -7,6 +8,7 @@ import { interpret } from 'xstate'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { camelCaseToText } from '@/common/helpers'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -16,6 +18,7 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
+import { ProposalType } from '@/proposals/types'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectAccount } from '../../_helpers/selectAccount'
@@ -26,7 +29,14 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubDefaultBalances, stubProposalConstants, stubTransaction } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubProposalConstants,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -55,6 +65,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   let useAccounts: UseAccounts
+  let tx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -74,7 +85,7 @@ describe('UI: AddNewProposalModal', () => {
 
     stubDefaultBalances(api)
     stubProposalConstants(api)
-    stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+    tx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
 
     await renderModal()
   })
@@ -290,6 +301,87 @@ describe('UI: AddNewProposalModal', () => {
       })
     })
 
+    describe('Specific parameters', () => {
+      beforeEach(async () => {
+        await finishWarning()
+      })
+
+      describe('Type - Funding Request', () => {
+        beforeEach(async () => {
+          await finishProposalType('fundingRequest')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Invalid - not filled amount, no selected recipient', async () => {
+          expect(screen.queryByText('Recipient account')).not.toBeNull()
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Invalid - no selected recipient', async () => {
+          await SpecificParameters.FundingRequest.fillAmount(100)
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Invalid - not filled amount', async () => {
+          await SpecificParameters.FundingRequest.selectRecipient('bob')
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Valid - everything filled', async () => {
+          await SpecificParameters.FundingRequest.fillAmount(100)
+          await SpecificParameters.FundingRequest.selectRecipient('bob')
+
+          const button = await getCreateButton()
+          expect(button).not.toBeDisabled()
+        })
+      })
+    })
+
+    describe('Transaction', () => {
+      beforeEach(async () => {
+        await finishWarning()
+        await finishProposalType('fundingRequest')
+        await finishStakingAccount()
+        await finishProposalDetails()
+        await finishTriggerAndDiscussion()
+        await SpecificParameters.FundingRequest.finish(100, 'bob')
+      })
+
+      it('Authorize step', async () => {
+        expect(screen.queryByText('Authorize transaction')).not.toBeNull()
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      })
+
+      it('Success step', async () => {
+        stubTransactionSuccess(
+          tx,
+          ['EventParams', registry.createType('ProposalId', 1337)],
+          'proposalsEngine',
+          'ProposalCreated'
+        )
+
+        fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+
+        expect(screen.queryByText('See my Proposal')).not.toBeNull()
+      })
+
+      it('Failure step', async () => {
+        stubTransactionFailure(tx)
+
+        fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+
+        expect(await screen.findByText('Failure')).toBeDefined()
+      })
+    })
+
     it('Previous step', async () => {
       await finishWarning()
       await finishProposalType()
@@ -319,9 +411,10 @@ describe('UI: AddNewProposalModal', () => {
     await fireEvent.click(button as HTMLElement)
   }
 
-  async function finishProposalType() {
-    const type = (await screen.findByText('Funding Request')).parentElement?.parentElement as HTMLElement
-    await fireEvent.click(type)
+  async function finishProposalType(type?: ProposalType) {
+    const typeElement = (await screen.findByText(camelCaseToText(type || 'fundingRequest'))).parentElement
+      ?.parentElement as HTMLElement
+    await fireEvent.click(typeElement)
 
     await clickNextButton()
   }
@@ -335,6 +428,10 @@ describe('UI: AddNewProposalModal', () => {
   async function finishProposalDetails() {
     await fillProposalDetails()
 
+    await clickNextButton()
+  }
+
+  async function finishTriggerAndDiscussion() {
     await clickNextButton()
   }
 
@@ -378,9 +475,32 @@ describe('UI: AddNewProposalModal', () => {
     return getButton(/Next step/i)
   }
 
+  async function getCreateButton() {
+    return getButton(/Create proposal/i)
+  }
+
   async function clickNextButton() {
     const button = await getNextStepButton()
     await fireEvent.click(button as HTMLElement)
+  }
+
+  const SpecificParameters = {
+    FundingRequest: {
+      fillAmount: async (value: number) => {
+        const amountInput = await screen.getByTestId('amount-input')
+        await fireEvent.change(amountInput, { target: { value } })
+      },
+      selectRecipient: async (name: string) => {
+        await selectAccount('Recipient account', name)
+      },
+      finish: async (amount: number, recipient: string) => {
+        await SpecificParameters.FundingRequest.fillAmount(amount)
+        await SpecificParameters.FundingRequest.selectRecipient(recipient)
+
+        const button = await getCreateButton()
+        await fireEvent.click(button as HTMLElement)
+      },
+    },
   }
 
   function renderModal() {
