@@ -23,6 +23,11 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
 
       return !!(specifics?.amount && specifics.amount.gtn(0) && specifics.account)
     }
+    case state.matches('specificParameters.runtimeUpgrade'): {
+      const specifics = state.context.specifics
+
+      return !!specifics?.runtime
+    }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'): {
       const specifics = state.context.specifics
 
