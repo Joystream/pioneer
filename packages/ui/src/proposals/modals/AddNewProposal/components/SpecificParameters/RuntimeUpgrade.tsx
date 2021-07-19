@@ -24,9 +24,9 @@ export const RuntimeUpgrade = ({ setBlob }: RuntimeUpgradeProps) => {
     setBlob(file.toString())
   }, [])
 
-  const { isDragActive, getRootProps, getInputProps } = useDropzone({
+  const { isDragActive, getRootProps, getInputProps, acceptedFiles } = useDropzone({
     onDrop,
-    accept: '*.wasm',
+    accept: '.wasm',
     maxFiles: 1,
     maxSize: MAX_FILE_SIZE,
     multiple: false,
@@ -49,6 +49,15 @@ export const RuntimeUpgrade = ({ setBlob }: RuntimeUpgradeProps) => {
             Drop your file here or click to browse
           </DropZone>
           <TextSmall>Maximum upload file size is 3 MB</TextSmall>
+          {!!acceptedFiles.length && (
+            <ul>
+              {acceptedFiles.map((file) => (
+                <AcceptedFile>
+                  <strong>{file.name}</strong> ({file.size} B)
+                </AcceptedFile>
+              ))}
+            </ul>
+          )}
         </RowGapBlock>
       </Row>
     </RowGapBlock>
@@ -57,7 +66,12 @@ export const RuntimeUpgrade = ({ setBlob }: RuntimeUpgradeProps) => {
 
 const DropZone = styled.div<{ isDragActive: boolean }>`
   border: 1px dotted;
-  border-color: ${({ isDragActive }) => (isDragActive ? Colors.Blue['200'] : Colors.Black['200'])};
+  border-color: ${({ isDragActive }) => (isDragActive ? Colors.Blue[200] : Colors.Black[200])};
   padding: 1em;
   text-align: center;
+`
+
+const AcceptedFile = styled.div`
+  background: ${Colors.Blue[100]};
+  padding: 1em;
 `
