@@ -10,11 +10,11 @@ export default {
 } as Meta
 
 const Template: Story = () => {
-  const [blob, setBlob] = useState<string>()
+  const [runtime, setRuntime] = useState<ArrayBuffer>()
 
   return (
     <MockApolloProvider members workingGroups>
-      <RuntimeUpgrade blob={blob} setBlob={setBlob} />
+      <RuntimeUpgrade runtime={runtime} setRuntime={setRuntime} />
     </MockApolloProvider>
   )
 }

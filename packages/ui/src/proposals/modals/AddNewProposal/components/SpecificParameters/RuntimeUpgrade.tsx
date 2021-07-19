@@ -9,25 +9,26 @@ import { TextMedium, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
 export interface RuntimeUpgradeParameters {
-  blob?: string
+  runtime?: ArrayBuffer
 }
 
 interface RuntimeUpgradeProps extends RuntimeUpgradeParameters {
-  setBlob: (blob: string) => void
+  setRuntime: (runtime: ArrayBuffer) => void
 }
 
 const MAX_FILE_SIZE = 3 * 1024 * 124
 
-export const RuntimeUpgrade = ({ setBlob }: RuntimeUpgradeProps) => {
-  const onDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles.first()
-    setBlob(file.toString())
+export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const file = acceptedFiles[0]
+    setRuntime(await file.arrayBuffer())
   }, [])
 
   const { isDragActive, getRootProps, getInputProps, acceptedFiles } = useDropzone({
     onDrop,
     accept: '.wasm',
     maxFiles: 1,
+    // TODO:consts.proposalsCodex.runtimeUpgradeWasmProposalMaxLength
     maxSize: MAX_FILE_SIZE,
     multiple: false,
   })
