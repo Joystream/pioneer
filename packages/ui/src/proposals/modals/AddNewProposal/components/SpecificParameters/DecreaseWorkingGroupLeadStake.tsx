@@ -5,7 +5,7 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { AmountButton, AmountButtons, Row, TransactionAmount } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -25,6 +25,10 @@ interface DecreaseWorkingGroupLeadStakeProps extends DecreaseWorkingGroupLeadSta
   setGroupId(groupId: string): void
 
   setWorkerId(workerId?: number): void
+}
+
+const getLeadName = (groupName: string) => {
+  return `${groupName} Working Group Lead`
 }
 
 export const DecreaseWorkingGroupLeadStake = ({
@@ -70,8 +74,8 @@ export const DecreaseWorkingGroupLeadStake = ({
                 <Info
                   content={
                     <TextMedium>
-                      The actual Stake height for Storage Working Group Lead is{' '}
-                      {formatTokenValue(group.leaderWorker?.stake)}.
+                      The actual stake for {getLeadName(group.name)} is{' '}
+                      <TextInlineMedium bold>{formatTokenValue(group.leaderWorker?.stake)} JOY</TextInlineMedium>.
                     </TextMedium>
                   }
                 ></Info>
