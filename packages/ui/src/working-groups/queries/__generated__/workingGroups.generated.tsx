@@ -54,8 +54,13 @@ export type WorkingGroupFieldsFragment = {
   budget: any
   metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetdataFieldsFragment>
   workers: Array<{ __typename: 'Worker'; stake: any }>
-  leader?: Types.Maybe<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string } }>
+  leader?: Types.Maybe<{ __typename: 'Worker'; membershipId: string }>
 }
+
+export type WorkingGroupDetailedFieldsFragment = {
+  __typename: 'WorkingGroup'
+  leader?: Types.Maybe<{ __typename: 'Worker'; id: string; runtimeId: number; stake: any; membershipId: string }>
+} & WorkingGroupFieldsFragment
 
 export type BudgetSpendingEventFieldsFragment = {
   __typename: 'BudgetSpendingEvent'
@@ -254,7 +259,7 @@ export type GetWorkingGroupQueryVariables = Types.Exact<{
 
 export type GetWorkingGroupQuery = {
   __typename: 'Query'
-  workingGroupByUniqueInput?: Types.Maybe<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
+  workingGroupByUniqueInput?: Types.Maybe<{ __typename: 'WorkingGroup' } & WorkingGroupDetailedFieldsFragment>
 }
 
 export type WorkingGroupApplicationFieldsFragment = {
@@ -658,12 +663,22 @@ export const WorkingGroupFieldsFragmentDoc = gql`
       stake
     }
     leader {
-      membership {
-        id
-      }
+      membershipId
     }
   }
   ${WorkingGroupMetdataFieldsFragmentDoc}
+`
+export const WorkingGroupDetailedFieldsFragmentDoc = gql`
+  fragment WorkingGroupDetailedFields on WorkingGroup {
+    ...WorkingGroupFields
+    leader {
+      id
+      runtimeId
+      stake
+      membershipId
+    }
+  }
+  ${WorkingGroupFieldsFragmentDoc}
 `
 export const BudgetSpendingEventFieldsFragmentDoc = gql`
   fragment BudgetSpendingEventFields on BudgetSpendingEvent {
@@ -1611,10 +1626,10 @@ export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<
 export const GetWorkingGroupDocument = gql`
   query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
     workingGroupByUniqueInput(where: $where) {
-      ...WorkingGroupFields
+      ...WorkingGroupDetailedFields
     }
   }
-  ${WorkingGroupFieldsFragmentDoc}
+  ${WorkingGroupDetailedFieldsFragmentDoc}
 `
 
 /**

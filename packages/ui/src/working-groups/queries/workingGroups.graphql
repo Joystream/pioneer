@@ -53,9 +53,17 @@ fragment WorkingGroupFields on WorkingGroup {
     stake
   }
   leader {
-    membership {
-      id
-    }
+    membershipId
+  }
+}
+
+fragment WorkingGroupDetailedFields on WorkingGroup {
+  ...WorkingGroupFields
+  leader {
+    id
+    runtimeId
+    stake
+    membershipId
   }
 }
 
@@ -215,7 +223,7 @@ query GetWorkingGroupOpeningQuestions($id: ID!) {
 
 query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
   workingGroupByUniqueInput(where: $where) {
-    ... WorkingGroupFields
+    ... WorkingGroupDetailedFields
   }
 }
 
