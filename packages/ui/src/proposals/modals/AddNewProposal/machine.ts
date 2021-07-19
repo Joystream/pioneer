@@ -6,9 +6,13 @@ import { StateSchema } from 'xstate/lib/types'
 import { Account } from '@/accounts/types'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { Member } from '@/memberships/types'
-import { FundingRequestParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters'
-import { WorkingGroupAndOpeningDetailsParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/CreateWorkingGroupLeadOpening'
 import { ProposalType } from '@/proposals/types'
+
+import { FundingRequestParameters } from './components/SpecificParameters'
+import {
+  WorkingGroupAndOpeningDetailsParameters,
+  StakingPolicyAndRewardParameters,
+} from './components/SpecificParameters/WorkingGroupLeadOpening/types'
 
 type EmptyObject = Record<string, never>
 
@@ -36,14 +40,23 @@ export interface TriggerAndDiscussionContext extends Required<BaseDetailsContext
 }
 
 export interface SpecificParametersContext extends Required<TriggerAndDiscussionContext> {
-  specifics: EmptyObject | FundingRequestParameters | WorkingGroupAndOpeningDetailsParameters
+  specifics:
+    | EmptyObject
+    | FundingRequestParameters
+    | WorkingGroupAndOpeningDetailsParameters
+    | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
-interface FundingRequestContext extends Required<TriggerAndDiscussionContext> {
+interface FundingRequestContext extends SpecificParametersContext {
   specifics: FundingRequestParameters
 }
-interface WorkingGroupLeadOpeningRequestContext extends Required<TriggerAndDiscussionContext> {
+
+interface WorkingGroupLeadOpeningContext extends SpecificParametersContext {
   specifics: WorkingGroupAndOpeningDetailsParameters
+}
+
+interface StakingPolicyAndRewardContext extends SpecificParametersContext {
+  specifics: StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters
 }
 
 export interface TransactionContext extends Required<SpecificParametersContext> {
@@ -57,7 +70,8 @@ export type AddNewProposalContext = Partial<
     TriggerAndDiscussionContext &
     SpecificParametersContext &
     FundingRequestContext &
-    WorkingGroupLeadOpeningRequestContext &
+    WorkingGroupLeadOpeningContext &
+    StakingPolicyAndRewardContext &
     TransactionContext
 >
 
@@ -77,7 +91,11 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
-      context: WorkingGroupLeadOpeningRequestContext
+      context: WorkingGroupLeadOpeningContext
+    }
+  | {
+      value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
+      context: StakingPolicyAndRewardContext
     }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
   | { value: 'success'; context: Required<AddNewProposalContext> }
@@ -94,6 +112,9 @@ type SetDiscussionWhitelistEvent = { type: 'SET_DISCUSSION_WHITELIST'; whitelist
 type SetDescriptionEvent = { type: 'SET_DESCRIPTION'; description: string }
 type SetShortDescriptionEvent = { type: 'SET_SHORT_DESCRIPTION'; shortDescription: string }
 type SetWorkingGroupEvent = { type: 'SET_WORKING_GROUP'; groupId: string }
+type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
+type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leavingUnstakingPeriod: number }
+type SetRewardPerBlock = { type: 'SET_REWARD_PER_BLOCK'; rewardPerBlock: BN }
 
 const isType = (type: string) => (context: any) => type === context.type
 
@@ -112,6 +133,9 @@ export type AddNewProposalEvent =
   | SetDescriptionEvent
   | SetWorkingGroupEvent
   | SetShortDescriptionEvent
+  | SetStakingAmount
+  | SetLeavingUnstakingPeriod
+  | SetRewardPerBlock
 
 export type AddNewProposalMachineState = State<
   AddNewProposalContext,
@@ -313,6 +337,32 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 isStep: true,
                 stepTitle: 'Staking Policy & Reward',
                 cond: isType('createWorkingGroupLeadOpening'),
+              },
+              on: {
+                SET_STAKING_AMOUNT: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      stakingAmount: event.stakingAmount,
+                    }),
+                  }),
+                },
+                SET_REWARD_PER_BLOCK: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      rewardPerBlock: event.rewardPerBlock,
+                    }),
+                  }),
+                },
+                SET_LEAVING_UNSTAKING_PERIOD: {
+                  actions: assign({
+                    specifics: (context, event) => ({
+                      ...context.specifics,
+                      leavingUnstakingPeriod: event.leavingUnstakingPeriod,
+                    }),
+                  }),
+                },
               },
             },
           },
