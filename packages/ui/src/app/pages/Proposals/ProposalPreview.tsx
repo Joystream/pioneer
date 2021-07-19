@@ -22,7 +22,7 @@ import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
-import { ProposalProperties } from '@/proposals/components/ProposalPreview/ProposalProperties'
+import { ProposalDetailsComponent } from '@/proposals/components/ProposalPreview/ProposalDetails'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VotesPreview } from '@/proposals/components/VotesPreview'
@@ -105,7 +105,7 @@ export const ProposalPreview = () => {
             {/* Proposal-specific dashboard */}
             <h3>{camelCaseToText(proposal.type)}</h3>
 
-            <ProposalProperties details={proposal.details} />
+            <ProposalDetailsComponent details={proposal.details} />
 
             <RationalePreview rationale={proposal.rationale} />
 

@@ -83,6 +83,19 @@ fragment ProposalWithDetailsFields on Proposal {
       }
       amount
     }
+    ...on SlashWorkingGroupLeadProposalDetails {
+      lead {
+        createdAt
+        group {
+          id
+          name
+        }
+        membership {
+          ...MemberFields
+        }
+      }
+      amount
+    }
   }
   discussionThread {
     discussionPosts {

@@ -32,11 +32,18 @@ export interface CreateLeadOpeningDetails {
   openingDescription?: string
 }
 
-export interface DecreaseLeadStakeDetails {
-  type: 'decreaseWorkingGroupLeadStake'
+interface LeadStakeDetails {
   member?: Member
   groupName: string
   amount: BN
+}
+
+export interface DecreaseLeadStakeDetails extends LeadStakeDetails {
+  type: 'decreaseWorkingGroupLeadStake'
+}
+
+export interface SlashLeadDetails extends LeadStakeDetails {
+  type: 'slashWorkingGroupLead'
 }
 
 export type ProposalDetails =
@@ -44,6 +51,7 @@ export type ProposalDetails =
   | FundingRequestDetails
   | CreateLeadOpeningDetails
   | DecreaseLeadStakeDetails
+  | SlashLeadDetails
 
 const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment): FundingRequestDetails => {
   return {
@@ -71,19 +79,33 @@ const asCreateLeadOpening: DetailsCast<'CreateWorkingGroupLeadOpeningProposalDet
   }
 }
 
-const asDecreaseLeadStake: DetailsCast<'DecreaseWorkingGroupLeadStakeProposalDetails'> = (
-  fragment
-): DecreaseLeadStakeDetails => {
+const asLeadStakeDetails = (
+  fragment: ProposalWithDetailsFieldsFragment['details'] &
+    (
+      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+    )
+) => {
   const groupName = asWorkingGroupName(fragment.lead?.group.name ?? 'Unknown')
   const member = fragment.lead ? asMember(fragment.lead.membership) : undefined
-
   return {
-    type: 'decreaseWorkingGroupLeadStake',
     member,
     groupName,
     amount: new BN(fragment.amount),
   }
 }
+
+const asDecreaseLeadStake: DetailsCast<'DecreaseWorkingGroupLeadStakeProposalDetails'> = (
+  fragment
+): DecreaseLeadStakeDetails => ({
+  type: 'decreaseWorkingGroupLeadStake',
+  ...asLeadStakeDetails(fragment),
+})
+
+const asSlashLead: DetailsCast<'SlashWorkingGroupLeadProposalDetails'> = (fragment): SlashLeadDetails => ({
+  type: 'slashWorkingGroupLead',
+  ...asLeadStakeDetails(fragment),
+})
 
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
@@ -93,6 +115,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   FundingRequestProposalDetails: asFundingRequest,
   CreateWorkingGroupLeadOpeningProposalDetails: asCreateLeadOpening,
   DecreaseWorkingGroupLeadStakeProposalDetails: asDecreaseLeadStake,
+  SlashWorkingGroupLeadProposalDetails: asSlashLead,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
