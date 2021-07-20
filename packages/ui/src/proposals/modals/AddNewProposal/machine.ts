@@ -6,13 +6,14 @@ import { StateSchema } from 'xstate/lib/types'
 import { Account } from '@/accounts/types'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { Member } from '@/memberships/types'
-import {
-  StakingPolicyAndRewardParameters,
-  WorkingGroupAndOpeningDetailsParameters,
-} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/types'
+import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { ProposalType } from '@/proposals/types'
 
 import { DecreaseWorkingGroupLeadStakeParameters, FundingRequestParameters } from './components/SpecificParameters'
+import {
+  StakingPolicyAndRewardParameters,
+  WorkingGroupAndOpeningDetailsParameters,
+} from './components/SpecificParameters/WorkingGroupLeadOpening/types'
 
 type EmptyObject = Record<string, never>
 
@@ -44,11 +45,12 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | EmptyObject
     | FundingRequestParameters
     | WorkingGroupAndOpeningDetailsParameters
-    | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
+    | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
+    | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
-interface FundingRequestContext extends Required<TriggerAndDiscussionContext> {
+interface FundingRequestContext extends SpecificParametersContext {
   specifics: FundingRequestParameters
 }
 
@@ -58,6 +60,10 @@ interface WorkingGroupLeadOpeningContext extends SpecificParametersContext {
 
 interface StakingPolicyAndRewardContext extends SpecificParametersContext {
   specifics: StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters
+}
+
+interface RuntimeUpgradeContext extends SpecificParametersContext {
+  specifics: RuntimeUpgradeParameters
 }
 
 interface DecreaseWorkingGroupLeadStakeContext extends SpecificParametersContext {
@@ -77,6 +83,7 @@ export type AddNewProposalContext = Partial<
     FundingRequestContext &
     WorkingGroupLeadOpeningContext &
     StakingPolicyAndRewardContext &
+    RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
     TransactionContext
 >
@@ -95,6 +102,8 @@ export type AddNewProposalState =
   | { value: 'generalParameters.finishGeneralParameters'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'specificParameters'; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
+  | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
+  | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
       context: WorkingGroupLeadOpeningContext
@@ -103,7 +112,6 @@ export type AddNewProposalState =
       value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
       context: StakingPolicyAndRewardContext
     }
-  | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
   | { value: 'success'; context: Required<AddNewProposalContext> }
   | { value: 'error'; context: AddNewProposalContext }
@@ -123,6 +131,7 @@ type SetWorkerEvent = { type: 'SET_WORKER'; workerId: number }
 type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
 type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leavingUnstakingPeriod: number }
 type SetRewardPerBlock = { type: 'SET_REWARD_PER_BLOCK'; rewardPerBlock: BN }
+type SetRuntime = { type: 'SET_RUNTIME'; runtime: ArrayBuffer }
 
 const isType = (type: string) => (context: any) => type === context.type
 
@@ -145,6 +154,7 @@ export type AddNewProposalEvent =
   | SetStakingAmount
   | SetLeavingUnstakingPeriod
   | SetRewardPerBlock
+  | SetRuntime
 
 export type AddNewProposalMachineState = State<
   AddNewProposalContext,
@@ -285,6 +295,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             '': [
               { target: 'fundingRequest', cond: isType('fundingRequest') },
               { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
+              { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
               { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
             ],
           },
@@ -301,6 +312,43 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             SET_AMOUNT: {
               actions: assign({
                 specifics: (context, event) => ({ ...context.specifics, amount: (event as SetAmountEvent).amount }),
+              }),
+            },
+          },
+        },
+        runtimeUpgrade: {
+          on: {
+            SET_RUNTIME: {
+              actions: assign({
+                specifics: (context, event) => ({ ...context.specifics, runtime: event.runtime }),
+              }),
+            },
+          },
+        },
+        decreaseWorkingGroupLeadStake: {
+          on: {
+            SET_STAKING_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  stakingAmount: event.stakingAmount,
+                }),
+              }),
+            },
+            SET_WORKING_GROUP: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  groupId: event.groupId,
+                }),
+              }),
+            },
+            SET_WORKER: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  workerId: event.workerId,
+                }),
               }),
             },
           },
@@ -374,34 +422,6 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                   }),
                 },
               },
-            },
-          },
-        },
-        decreaseWorkingGroupLeadStake: {
-          on: {
-            SET_STAKING_AMOUNT: {
-              actions: assign({
-                specifics: (context, event) => ({
-                  ...context.specifics,
-                  stakingAmount: event.stakingAmount,
-                }),
-              }),
-            },
-            SET_WORKING_GROUP: {
-              actions: assign({
-                specifics: (context, event) => ({
-                  ...context.specifics,
-                  groupId: event.groupId,
-                }),
-              }),
-            },
-            SET_WORKER: {
-              actions: assign({
-                specifics: (context, event) => ({
-                  ...context.specifics,
-                  workerId: event.workerId,
-                }),
-              }),
             },
           },
         },

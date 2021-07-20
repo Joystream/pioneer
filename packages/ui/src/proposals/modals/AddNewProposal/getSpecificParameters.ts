@@ -17,6 +17,13 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         FundingRequest: [{ amount: specifics?.amount, account: specifics?.account?.address }],
       }
     }
+    case 'runtimeUpgrade': {
+      const specifics = state.context.specifics
+
+      return {
+        RuntimeUpgrade: specifics?.runtime,
+      }
+    }
     case 'createWorkingGroupLeadOpening': {
       const specifics = state.context.specifics
 
