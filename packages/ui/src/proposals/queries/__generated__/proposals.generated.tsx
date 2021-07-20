@@ -190,6 +190,15 @@ export type GetVoteWithDetailsQuery = {
   proposalVotedEventByUniqueInput?: Types.Maybe<{ __typename: 'ProposalVotedEvent' } & VoteWithDetailsFieldsFragment>
 }
 
+export type GetRuntimeWasmBytecodeQueryVariables = Types.Exact<{
+  where: Types.RuntimeWasmBytecodeWhereUniqueInput
+}>
+
+export type GetRuntimeWasmBytecodeQuery = {
+  __typename: 'Query'
+  runtime?: Types.Maybe<{ __typename: 'RuntimeWasmBytecode'; id: string; bytecode: any }>
+}
+
 export const VoteFieldsFragmentDoc = gql`
   fragment VoteFields on ProposalVotedEvent {
     id
@@ -461,4 +470,53 @@ export type GetVoteWithDetailsLazyQueryHookResult = ReturnType<typeof useGetVote
 export type GetVoteWithDetailsQueryResult = Apollo.QueryResult<
   GetVoteWithDetailsQuery,
   GetVoteWithDetailsQueryVariables
+>
+export const GetRuntimeWasmBytecodeDocument = gql`
+  query GetRuntimeWasmBytecode($where: RuntimeWasmBytecodeWhereUniqueInput!) {
+    runtime: runtimeWasmBytecodeByUniqueInput(where: $where) {
+      id
+      bytecode
+    }
+  }
+`
+
+/**
+ * __useGetRuntimeWasmBytecodeQuery__
+ *
+ * To run a query within a React component, call `useGetRuntimeWasmBytecodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRuntimeWasmBytecodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRuntimeWasmBytecodeQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetRuntimeWasmBytecodeQuery(
+  baseOptions: Apollo.QueryHookOptions<GetRuntimeWasmBytecodeQuery, GetRuntimeWasmBytecodeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetRuntimeWasmBytecodeQuery, GetRuntimeWasmBytecodeQueryVariables>(
+    GetRuntimeWasmBytecodeDocument,
+    options
+  )
+}
+export function useGetRuntimeWasmBytecodeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetRuntimeWasmBytecodeQuery, GetRuntimeWasmBytecodeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetRuntimeWasmBytecodeQuery, GetRuntimeWasmBytecodeQueryVariables>(
+    GetRuntimeWasmBytecodeDocument,
+    options
+  )
+}
+export type GetRuntimeWasmBytecodeQueryHookResult = ReturnType<typeof useGetRuntimeWasmBytecodeQuery>
+export type GetRuntimeWasmBytecodeLazyQueryHookResult = ReturnType<typeof useGetRuntimeWasmBytecodeLazyQuery>
+export type GetRuntimeWasmBytecodeQueryResult = Apollo.QueryResult<
+  GetRuntimeWasmBytecodeQuery,
+  GetRuntimeWasmBytecodeQueryVariables
 >

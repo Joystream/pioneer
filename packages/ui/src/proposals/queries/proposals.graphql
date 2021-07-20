@@ -148,3 +148,10 @@ query GetVoteWithDetails($id: ID!) {
     ...VoteWithDetailsFields
   }
 }
+
+query GetRuntimeWasmBytecode($where: RuntimeWasmBytecodeWhereUniqueInput!) {
+  runtime: runtimeWasmBytecodeByUniqueInput(where: $where) {
+    id
+    bytecode
+  }
+}
