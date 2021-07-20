@@ -42,7 +42,12 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'): {
       const specifics = state.context.specifics
 
-      return !!(specifics?.stakingAmount && specifics.groupId && specifics.workerId)
+      return !!(
+        specifics?.stakingAmount &&
+        specifics?.stakingAmount.gtn(0) &&
+        specifics.groupId &&
+        specifics.workerId !== undefined
+      )
     }
     default:
       return false
