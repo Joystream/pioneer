@@ -252,12 +252,10 @@ describe('getSteps()', () => {
           },
           states: {
             entry: {
-              on: {
-                '': [
-                  { target: 'alpha', cond: ({ type }) => type === 'alpha' },
-                  { target: 'beta', cond: ({ type }) => type === 'beta' },
-                ],
-              },
+              always: [
+                { target: 'alpha', cond: ({ type }) => type === 'alpha' },
+                { target: 'beta', cond: ({ type }) => type === 'beta' },
+              ],
             },
             alpha: {
               on: {},
