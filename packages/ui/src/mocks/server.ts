@@ -75,6 +75,7 @@ export const makeServer = (environment = 'development') => {
               proposals: getWhereResolver('Proposal'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
               proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
+              runtimeWasmBytecodeByUniqueInput: getUniqueResolver('RuntimeWasmBytecode'),
               rewardPaidEvents: getWhereResolver('RewardPaidEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
               appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),

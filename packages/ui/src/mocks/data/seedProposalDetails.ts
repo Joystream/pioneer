@@ -48,11 +48,22 @@ interface RawLeadStakeData {
 
 const seedLeadStakeProposalData = (data: RawLeadStakeData) => data
 
+interface RawRuntimeUpgradeData {
+  bytecode: string
+}
+
+const seedRuntimeUpgradeData = (data: RawRuntimeUpgradeData, server: any) => {
+  return {
+    newRuntimeBytecode: server.schema.create('RuntimeWasmBytecode', { bytecode: data.bytecode }),
+  }
+}
+
 const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any) => any>> = {
   fundingRequest: seedFundingRequestData,
   createWorkingGroupLeadOpening: seedCreateLeadOpeningData,
   decreaseWorkingGroupLeadStake: seedLeadStakeProposalData,
   slashWorkingGroupLead: seedLeadStakeProposalData,
+  runtimeUpgrade: seedRuntimeUpgradeData,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {
