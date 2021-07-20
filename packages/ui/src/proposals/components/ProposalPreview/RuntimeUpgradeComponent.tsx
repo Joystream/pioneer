@@ -59,7 +59,15 @@ const RuntimeDownloadModal = ({ id, onClose }: RuntimeDownloadProps) => {
   return (
     <Modal modalSize="xs" onClose={onClose}>
       <ModalHeader icon={<FileIcon />} onClick={onClose} title="Download Bytecode" />
-      <ModalBody>{isLoading ? <Loading /> : <StyledLink href={downloadHref}>Download the file</StyledLink>}</ModalBody>
+      <ModalBody>
+        {isLoading || !downloadHref ? (
+          <Loading />
+        ) : (
+          <StyledLink href={downloadHref} download={`bytecode_${id}.wasm`}>
+            Download the file
+          </StyledLink>
+        )}
+      </ModalBody>
     </Modal>
   )
 }

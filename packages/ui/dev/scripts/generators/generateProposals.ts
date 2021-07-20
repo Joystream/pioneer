@@ -147,7 +147,7 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
   runtimeUpgrade: () => ({
     type: 'runtimeUpgrade',
     data: {
-      bytecode: generateRandomBytes()
+      bytecode: '0x0061736d'
     }
   })
 }
@@ -156,5 +156,3 @@ const getLeadStakeData = (mocks: Mocks) => ({
   leadId: mocks.workers[randomFromRange(0, mocks.workers.length - 1)]?.id,
   amount: randomFromRange(1, 10) * 1000,
 })
-
-const generateRandomBytes = () => '0x' + Buffer.from(Array.from({ length: randomFromRange(128, 256) }).map(() => randomFromRange(0, 255))).toString('hex')
