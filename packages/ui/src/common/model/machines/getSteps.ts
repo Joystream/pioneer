@@ -13,86 +13,66 @@ const getActiveNodeOrder = (state: State<any>) => (activeId: number, stateNode: 
 
   return activeId
 }
-const getActiveNode = (state: State<any>) => (activeNode: StateNode | null, stateNode: StateNode) => {
-  if (state.matches(stateNode.path.join('.'))) {
-    return stateNode
+
+const isStepNode = (stateNode: StateNode, state: State<any>) => {
+  if (!stateNode || !stateNode?.meta || !stateNode.meta?.isStep) {
+    return false
   }
 
-  return activeNode
+  return stateNode.meta?.cond ? stateNode.meta.cond(state.context) : true
 }
 
-const isTop = (node: StateNode) => {
-  const parent = node.parent
+const getParentStateNode = (node: StateNode): StateNode | null => {
+  if (node.parent?.parent?.meta?.isStep) {
+    return node.parent?.parent
+  }
 
-  return !parent?.parent
+  if (node.parent?.meta?.isStep) {
+    return node.parent
+  }
+
+  return null
 }
 
-export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>, state: State<any>): Step[] => {
+const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>, state: State<any>): Step[] => {
   const stateNodes = machine.stateIds.map((id) => machine.getStateNodeById(id))
   const activeNodeOrder = stateNodes.reduce(getActiveNodeOrder(state), -1)
-  const activeNode = stateNodes.reduce(getActiveNode(state), null)
 
-  let lastParentIndex = -1
-  let setParentActive = -1
-  let hasActive = false
+  const idToStep = new Map()
 
-  const summary = []
+  const steps: (Step | undefined)[] = stateNodes.map((stateNode) => {
+    const parentStepNode = getParentStateNode(stateNode)
+    const isActive = stateNode.order === activeNodeOrder
 
-  summary.push(`StateNodes: ${stateNodes.length}, active=${activeNodeOrder}`)
+    if (isActive && parentStepNode) {
+      const step = idToStep.get(parentStepNode.id)
 
-  const idToStepIndexMap = new Map()
-
-  const steps: Step[] = stateNodes
-    .filter((stateNode) => {
-      summary.push(`${!isTop(stateNode) ? '  ' : ''} > ${stateNode.order}. : ${stateNode.id}`)
-      if (!stateNode || !stateNode?.meta || !stateNode.meta?.isStep) {
-        return false
-      }
-
-      return stateNode.meta?.cond ? stateNode.meta.cond(state.context) : true
-    })
-    .map((stateNode, index) => {
-      const isBabyStep = stateNode.parent?.parent?.meta?.isStep ?? stateNode.parent?.meta?.isStep
-
-      if (!isBabyStep) {
-        lastParentIndex = index
-      }
-
-      const isActive = stateNode.order === activeNodeOrder
-
-      if (isActive) {
-        hasActive = true
-      }
-
-      if (isActive && isBabyStep) {
-        setParentActive = lastParentIndex
-      }
-      const isNext = stateNode.order > activeNodeOrder
-      idToStepIndexMap.set(stateNode.id, index)
-
-      return {
-        title: stateNode?.meta?.stepTitle ?? '',
-        type: isActive ? 'active' : isNext ? 'next' : 'past',
-        ...(isBabyStep ? { isBaby: true } : undefined),
-      }
-    })
-
-  summary.push(`Has active? ${hasActive}`)
-
-  if (!hasActive) {
-    if (activeNode?.parent?.meta?.isStep) {
-      const step = steps[idToStepIndexMap.get(activeNode?.parent.id)]
       if (step) {
         step.type = 'active'
       }
     }
-  }
 
-  if (setParentActive !== -1) {
-    steps[setParentActive].type = 'active'
-  }
+    if (!isStepNode(stateNode, state)) {
+      return undefined
+    }
 
-  return steps
+    const isNext = stateNode.order > activeNodeOrder
+
+    const step: Step = {
+      title: stateNode?.meta?.stepTitle ?? '',
+      type: isActive ? 'active' : isNext ? 'next' : 'past',
+    }
+
+    if (parentStepNode) {
+      step.isBaby = true
+    }
+
+    idToStep.set(stateNode.id, step)
+
+    return step
+  })
+
+  return steps.filter((step) => !!step) as Step[]
 }
 
 export const getSteps = (service: Interpreter<any, any, any, any>): Step[] => {
