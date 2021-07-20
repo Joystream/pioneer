@@ -13,17 +13,38 @@ const getActiveNodeOrder = (state: State<any>) => (activeId: number, stateNode: 
 
   return activeId
 }
+const getActiveNode = (state: State<any>) => (activeNode: StateNode | null, stateNode: StateNode) => {
+  if (state.matches(stateNode.path.join('.'))) {
+    return stateNode
+  }
+
+  return activeNode
+}
+
+const isTop = (node: StateNode) => {
+  const parent = node.parent
+
+  return !parent?.parent
+}
 
 export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>, state: State<any>): Step[] => {
   const stateNodes = machine.stateIds.map((id) => machine.getStateNodeById(id))
   const activeNodeOrder = stateNodes.reduce(getActiveNodeOrder(state), -1)
+  const activeNode = stateNodes.reduce(getActiveNode(state), null)
 
   let lastParentIndex = -1
   let setParentActive = -1
+  let hasActive = false
+
+  const summary = []
+
+  summary.push(`StateNodes: ${stateNodes.length}, active=${activeNodeOrder}`)
+
+  const idToStepIndexMap = new Map()
 
   const steps: Step[] = stateNodes
-    .filter((stateNode) => !!stateNode?.meta?.isStep)
     .filter((stateNode) => {
+      summary.push(`${!isTop(stateNode) ? '  ' : ''} > ${stateNode.order}. : ${stateNode.id}`)
       if (!stateNode || !stateNode?.meta || !stateNode.meta?.isStep) {
         return false
       }
@@ -39,10 +60,15 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
 
       const isActive = stateNode.order === activeNodeOrder
 
+      if (isActive) {
+        hasActive = true
+      }
+
       if (isActive && isBabyStep) {
         setParentActive = lastParentIndex
       }
       const isNext = stateNode.order > activeNodeOrder
+      idToStepIndexMap.set(stateNode.id, index)
 
       return {
         title: stateNode?.meta?.stepTitle ?? '',
@@ -50,6 +76,17 @@ export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>
         ...(isBabyStep ? { isBaby: true } : undefined),
       }
     })
+
+  summary.push(`Has active? ${hasActive}`)
+
+  if (!hasActive) {
+    if (activeNode?.parent?.meta?.isStep) {
+      const step = steps[idToStepIndexMap.get(activeNode?.parent.id)]
+      if (step) {
+        step.type = 'active'
+      }
+    }
+  }
 
   if (setParentActive !== -1) {
     steps[setParentActive].type = 'active'

@@ -305,7 +305,7 @@ describe('getSteps()', () => {
 
       expect(getSteps(service)).toEqual([
         { title: 'Step One', type: 'past' },
-        { title: 'Step Multi', type: 'past' },
+        { title: 'Step Multi', type: 'active' },
         { title: 'Step Done', type: 'next' },
       ])
     })
@@ -344,6 +344,69 @@ describe('getSteps()', () => {
         { title: 'Step One', type: 'past' },
         { title: 'Step Multi', type: 'past' },
         { title: 'Step Done', type: 'active' },
+      ])
+    })
+  })
+
+  describe('Complex conditional stepper (no final)', () => {
+    const simpleStepper = createMachine({
+      id: 'complex',
+      initial: 'requirements',
+      states: {
+        requirements: {
+          on: { DONE: 'step1' },
+        },
+        step1: {
+          meta: { isStep: true, stepTitle: 'Step One' },
+          on: {
+            DONE: { target: 'multi' },
+          },
+        },
+        multi: {
+          meta: { isStep: true, stepTitle: 'Step Multi' },
+          initial: 'alpha',
+          on: {
+            DONE: '#done',
+          },
+          states: {
+            alpha: {},
+          },
+        },
+        done: { id: 'done', type: 'final' },
+      },
+    })
+    let service: Interpreter<any>
+
+    beforeEach(() => {
+      service = interpret(simpleStepper)
+      service.start()
+    })
+
+    it('Steps from machine', () => {
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'next' },
+        { title: 'Step Multi', type: 'next' },
+      ])
+    })
+
+    it('In Multi step', () => {
+      service.send('DONE')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Multi', type: 'active' },
+      ])
+    })
+
+    it('After last step', () => {
+      service.send('DONE')
+      service.send('DONE')
+      service.send('DONE')
+
+      expect(getSteps(service)).toEqual([
+        { title: 'Step One', type: 'past' },
+        { title: 'Step Multi', type: 'past' },
       ])
     })
   })
