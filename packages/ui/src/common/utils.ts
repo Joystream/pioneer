@@ -1,3 +1,5 @@
+import { Reducer } from './types/helpers'
+
 export const isFunction = (something: unknown): something is CallableFunction => typeof something === 'function'
 
 export const isDefined = <T extends any>(something: T | undefined): something is T => typeof something !== 'undefined'
@@ -64,3 +66,18 @@ export const debounce = <T extends (...params: any[]) => any>(fn: T, delay = 400
       resolveImmediately && resolve(fn(...params))
     })
 }
+
+export const last = <T extends any>(list: T[]): T => list[list.length - 1]
+
+export const groupBy = <T extends any>(list: T[], predicate: (prev: T, item: T, index: number) => boolean): T[][] => {
+  if (!list.length) return []
+
+  const groupByReducer: Reducer<T[][], T> = ([[prev, ...restI1], ...rest], item, index) =>
+    predicate(prev, item, index) ? [[item, prev, ...restI1], ...rest] : [[item], [prev, ...restI1], ...rest]
+
+  const [first, ...rest] = list
+  return rest.reduce(groupByReducer, [[first]]).reverse()
+}
+
+export const propsEquals = <T extends Record<string, any>>(...keys: (keyof T)[]) => (a: T, b: T) =>
+  keys.every((key) => a[key] === b[key])

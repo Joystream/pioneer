@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
@@ -29,7 +29,7 @@ import { VotesPreview } from '@/proposals/components/VotesPreview'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
-import { useProposalVotes } from '@/proposals/hooks/useProposalVotes'
+import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 
 export const ProposalPreview = () => {
@@ -43,7 +43,12 @@ export const ProposalPreview = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
 
-  const votes = useProposalVotes(proposal?.votes)
+  const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
+  const [currentVotingRound, setVotingRound] = useState(0)
+  const votes = votingRounds[currentVotingRound]
+
+  useEffect(() => setVotingRound(Math.max(0, votingRounds.length - 1)), [votingRounds.length])
+
   const { showModal } = useModal()
 
   useEffect(() => {

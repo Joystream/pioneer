@@ -4,14 +4,14 @@ import styled from 'styled-components'
 import { ProposalVoteKind } from '@/common/api/queries'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { BorderRad, Colors } from '@/common/constants'
-import { ProposalVotes } from '@/proposals/hooks/useProposalVotes'
+import { VotingRound } from '@/proposals/hooks/useVotingRounds'
 
 import { VotePreview } from './VotePreview'
 
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
 
 interface VotesPreviewProps {
-  votes: ProposalVotes
+  votes: VotingRound
 }
 
 export const VotesPreview = ({ votes }: VotesPreviewProps) => (
