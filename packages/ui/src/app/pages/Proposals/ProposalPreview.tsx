@@ -23,6 +23,7 @@ import { MemberInfo } from '@/memberships/components'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
 import { ProposalDetailsComponent } from '@/proposals/components/ProposalPreview/ProposalDetails'
+import { ProposalStages } from '@/proposals/components/ProposalStages'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VotesPreview } from '@/proposals/components/VotesPreview'
@@ -100,6 +101,16 @@ export const ProposalPreview = () => {
               )}
             </BadgeAndTime>
           </RowGapBlock>
+
+          {(proposal.status === 'dormant' || votingRounds.length > 1) && (
+            <ProposalStages
+              rounds={votingRounds}
+              status={proposal.status}
+              constitutionality={constants?.constitutionality}
+              value={currentVotingRound}
+              onChange={setVotingRound}
+            />
+          )}
         </PageHeader>
       }
       main={
