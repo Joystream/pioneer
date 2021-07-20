@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Colors, Transitions } from '../constants'
@@ -9,6 +9,7 @@ export type PageTabSize = 'xs' | 's'
 
 interface TabActiveProps {
   active: boolean
+  disabled?: boolean
 }
 
 export interface TabProps extends TabActiveProps {
@@ -30,12 +31,16 @@ export interface TabsProps {
 
 export const Tabs = ({ tabs, className, tabsSize }: TabsProps) => (
   <TabsContainer className={className} tabsSize={tabsSize}>
-    <TabsNav tabsSize={tabsSize}>
-      {tabs.map(({ active, onClick, title, count }) => (
-        <Tab key={title} active={active} onClick={onClick} title={title} count={count} />
-      ))}
-    </TabsNav>
+    {tabs.map(({ active, onClick, title, count }) => (
+      <Tab key={title} active={active} onClick={onClick} title={title} count={count} />
+    ))}
   </TabsContainer>
+)
+
+export const TabsContainer: FC<Omit<TabsProps, 'tabs'>> = ({ className, tabsSize, children }) => (
+  <TabsStyles className={className} tabsSize={tabsSize}>
+    <TabsNav tabsSize={tabsSize}>{children}</TabsNav>
+  </TabsStyles>
 )
 
 const Tab = ({ active, onClick, title, count }: TabProps) => (
@@ -44,7 +49,7 @@ const Tab = ({ active, onClick, title, count }: TabProps) => (
   </TabContainer>
 )
 
-const TabsContainer = styled.div<TabsSize>`
+const TabsStyles = styled.div<TabsSize>`
   display: flex;
   position: relative;
   align-items: center;
@@ -69,7 +74,7 @@ const TabsContainer = styled.div<TabsSize>`
   }}
 `
 
-const TabContainer = styled.button<TabActiveProps>`
+export const TabContainer = styled.button<TabActiveProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
@@ -125,6 +130,17 @@ const TabContainer = styled.button<TabActiveProps>`
             transform: scaleX(1);
           }
         }
+      }
+    `}
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      cursor: not-allowed;
+      &,
+      &:hover,
+      &:focus,
+      &:focus-within {
+        color: ${Colors.Grey};
       }
     `}
 `

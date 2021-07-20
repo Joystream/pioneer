@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { ProposalVoteKind } from '@/common/api/queries'
 import { SideBar, voteControl } from '@/common/components/storybookParts/previewStyles'
 import { repeat } from '@/common/utils'
-import { countVoteMap, VoteMap } from '@/proposals/hooks/useProposalVotes'
+import { countVoteMap, VoteMap } from '@/proposals/hooks/useVotingRounds'
 import { asProposalVote } from '@/proposals/types'
 
 import { VotesPreview } from './VotesPreview'
@@ -40,7 +40,10 @@ export const Default: Story<Args> = ({ approve = 0, reject = 0, slash = 0, absta
   ]
 
   const map: VoteMap = new Map(
-    lengths.map(([voteKind, length]) => [voteKind, repeat(() => asProposalVote({ voteKind, id: '1' }), length)])
+    lengths.map(([voteKind, length]) => [
+      voteKind,
+      repeat(() => asProposalVote({ voteKind, id: '1', votingRound: 0 }), length),
+    ])
   )
 
   const count = countVoteMap(map, approve + slash + reject + abstain, councilSize || undefined)
@@ -48,7 +51,7 @@ export const Default: Story<Args> = ({ approve = 0, reject = 0, slash = 0, absta
   return (
     <MemoryRouter>
       <SideBar>
-        <VotesPreview votes={{ map, count }} />
+        <VotesPreview votes={{ approved: true, map, count }} />
       </SideBar>
     </MemoryRouter>
   )

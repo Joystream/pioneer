@@ -14,7 +14,7 @@ import { getMember } from '../../../test/_mocks/members'
 import { asProposalDetails, ProposalDetails } from './ProposalDetails'
 import { asProposal, Proposal, ProposalStatus } from './proposals'
 
-interface ProposalStatusUpdates {
+export interface ProposalStatusUpdates {
   status: ProposalStatus
   inBlock: Block
 }
@@ -53,12 +53,14 @@ export interface ProposalVote {
   id: string
   voteKind: ProposalVoteKind
   voter: Member
+  votingRound: number
 }
 
 export const asProposalVote = (voteFields: Omit<VoteFieldsFragment, '__typename'>): ProposalVote => ({
   id: voteFields.id,
   voteKind: voteFields.voteKind,
   voter: getMember('alice'),
+  votingRound: voteFields.votingRound,
 })
 
 export interface ProposalDiscussionThread {

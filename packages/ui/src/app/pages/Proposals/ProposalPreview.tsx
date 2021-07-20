@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
@@ -23,13 +23,14 @@ import { MemberInfo } from '@/memberships/components'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
 import { ProposalDetailsComponent } from '@/proposals/components/ProposalPreview/ProposalDetails'
+import { ProposalStages } from '@/proposals/components/ProposalStages'
 import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VotesPreview } from '@/proposals/components/VotesPreview'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
-import { useProposalVotes } from '@/proposals/hooks/useProposalVotes'
+import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 
 export const ProposalPreview = () => {
@@ -43,7 +44,12 @@ export const ProposalPreview = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
 
-  const votes = useProposalVotes(proposal?.votes)
+  const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
+  const [currentVotingRound, setVotingRound] = useState(0)
+  const votes = votingRounds[currentVotingRound]
+
+  useEffect(() => setVotingRound(Math.max(0, votingRounds.length - 1)), [votingRounds.length])
+
   const { showModal } = useModal()
 
   useEffect(() => {
@@ -95,6 +101,16 @@ export const ProposalPreview = () => {
               )}
             </BadgeAndTime>
           </RowGapBlock>
+
+          {(proposal.status === 'dormant' || votingRounds.length > 1) && (
+            <ProposalStages
+              rounds={votingRounds}
+              status={proposal.status}
+              constitutionality={constants?.constitutionality}
+              value={currentVotingRound}
+              onChange={setVotingRound}
+            />
+          )}
         </PageHeader>
       }
       main={
