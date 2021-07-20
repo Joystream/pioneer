@@ -112,8 +112,17 @@ export const PROPOSAL_DATA: ProposalMock = {
   createdAt: '2021-06-15T14:59:37.847Z',
   description:
     '# et quo quaerat optio\n\nLaudantium non molestias consequatur occaecati non officia. Eum eaque suscipit nam soluta. Nihil quia velit voluptatibus. Architecto nemo quis. Veniam beatae porro cum fugiat corrupti voluptatem quia.\n\n## odio dolorem impedit amet\n\nDolorem ut ipsam repellat repudiandae quia. Id animi sed et et a voluptas sit itaque. Magni nihil perferendis facilis. Animi eos vel ut.\n \rRepellat rerum rerum velit sint cupiditate. Qui et aliquam modi. Molestiae ad distinctio necessitatibus accusantium. Voluptatem blanditiis explicabo accusamus ut praesentium.',
-  votes: ['APPROVE', 'APPROVE', 'SLASH'].map((voteKind) => ({ voteKind, id: '1' } as any)),
+  votes: ['APPROVE', 'APPROVE', 'SLASH'].map((voteKind, id) => ({
+    id: String(id),
+    voteKind,
+    network: 'OLYMPIA',
+    createdAt: '2021-07-20T15:15:00.910Z',
+    voterId: '0',
+    inBlock: 0,
+    rationale: '',
+    votingRound: 0,
+  })),
   createdInEvent: { inBlock: 0 },
-  proposalStatusUpdates: [],
+  proposalStatusUpdates: [{ newStatus: 'deciding', inBlock: 0 }],
   discussionThread: { discussionPosts: [], mode: 'ProposalDiscussionThreadModeOpen' },
 }

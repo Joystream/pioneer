@@ -25,11 +25,11 @@ export interface VotingRound {
 
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
 
-export const useVotingRounds = (votes: ProposalVote[] = [], updates: ProposalStatusUpdates[] = []): VotingRound[] => {
+export const useVotingRounds = (votes?: ProposalVote[], updates: ProposalStatusUpdates[] = []): VotingRound[] => {
   const councilSize = useCouncilSize()
 
   const voteRounds: (Omit<VotingRound, 'count'> & { total?: number })[] = useMemo(() => {
-    if (!updates.length) return []
+    if (!votes || !updates.length) return []
 
     const approvedSoFar = last(updates).status !== 'deciding'
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
@@ -42,11 +42,11 @@ export const useVotingRounds = (votes: ProposalVote[] = [], updates: ProposalSta
     })
 
     return repeat(voteRound, decidingCount)
-  }, [votes.length])
+  }, [votes?.length])
 
   return useMemo(
     () => voteRounds.map(({ total, ...props }) => ({ ...props, count: countVoteMap(props.map, total, councilSize) })),
-    [votes.length, councilSize]
+    [votes?.length, councilSize]
   )
 }
 
