@@ -69,14 +69,12 @@ export const DecreaseWorkingGroupLeadStake = ({
                 <SelectMember onChange={() => true} disabled selected={leader} />
               </InputComponent>
               {group && (
-                <Info
-                  content={
-                    <TextMedium>
-                      The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
-                      <TextInlineMedium bold>{formatTokenValue(group.leaderWorker?.stake)} JOY</TextInlineMedium>.
-                    </TextMedium>
-                  }
-                ></Info>
+                <Info>
+                  <TextMedium>
+                    The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
+                    <TextInlineMedium bold>{formatTokenValue(group.leaderWorker?.stake)} JOY</TextInlineMedium>.
+                  </TextMedium>
+                </Info>
               )}
               <TransactionAmount>
                 <InputComponent
@@ -107,14 +105,11 @@ export const DecreaseWorkingGroupLeadStake = ({
             </>
           )}
           {groupId && group && !group.leaderId && (
-            <Info
-              title="Warning"
-              content={
-                <TextMedium>
-                  {capitalizeFirstLetter(group.name)} Working Group has no any Leader yet. Please choose other Group.
-                </TextMedium>
-              }
-            ></Info>
+            <Info title="Warning">
+              <TextMedium>
+                {capitalizeFirstLetter(group.name)} Working Group has no any Leader yet. Please choose other Group.
+              </TextMedium>
+            </Info>
           )}
         </RowGapBlock>
       </Row>

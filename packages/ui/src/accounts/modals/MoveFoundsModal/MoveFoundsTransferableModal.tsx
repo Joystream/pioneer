@@ -54,14 +54,11 @@ export const MoveFoundsTransferableModal = ({
                   </MemberRow>
                 ))}
               </div>
-              <Info
-                title="Info"
-                content={
-                  <TextMedium light>
-                    You can combine balances in one of your account or transfer tokens into new account.
-                  </TextMedium>
-                }
-              />
+              <Info title="Info">
+                <TextMedium light>
+                  You can combine balances in one of your account or transfer tokens into new account.
+                </TextMedium>
+              </Info>
             </RowGapBlock>
           </RowGapBlock>
         </RowGapBlock>
