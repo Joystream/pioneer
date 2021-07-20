@@ -6,6 +6,7 @@ import { Info } from '@/common/components/Info'
 import { AmountButton, AmountButtons, Row, TransactionAmount } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { capitalizeFirstLetter } from '@/common/helpers'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -37,11 +38,12 @@ export const DecreaseWorkingGroupLeadStake = ({
   const [amount, setAmount] = useNumberInput(0, stakingAmount)
   const setHalf = () => setAmount(stakingAmount ? stakingAmount.divn(2).toString() : '')
   const setThird = () => setAmount(stakingAmount ? stakingAmount.divn(3).toString() : '')
+
   const { group, isLoading: isGroupLoading } = useWorkingGroup({ name: groupId })
   const { member: leader } = useMember(group?.leaderId)
 
   useEffect(() => setStakingAmount(new BN(amount)), [amount])
-  useEffect(() => setWorkerId(group?.leaderWorker?.runtimeId), [group, JSON.stringify(group?.leaderWorker)])
+  useEffect(() => setWorkerId(group?.leaderWorker?.runtimeId), [groupId, group?.leaderWorker?.runtimeId])
 
   return (
     <RowGapBlock gap={24}>
@@ -70,7 +72,7 @@ export const DecreaseWorkingGroupLeadStake = ({
                 <Info
                   content={
                     <TextMedium>
-                      The actual stake for ${group.name} Working Group Lead is{' '}
+                      The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
                       <TextInlineMedium bold>{formatTokenValue(group.leaderWorker?.stake)} JOY</TextInlineMedium>.
                     </TextMedium>
                   }
@@ -108,7 +110,9 @@ export const DecreaseWorkingGroupLeadStake = ({
             <Info
               title="Warning"
               content={
-                <TextMedium>This Working Group doesn’t have any Leader yet. Please choose other Group.</TextMedium>
+                <TextMedium>
+                  {capitalizeFirstLetter(group.name)} Working Group has no any Leader yet. Please choose other Group.
+                </TextMedium>
               }
             ></Info>
           )}

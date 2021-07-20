@@ -2,7 +2,7 @@ import { useGetWorkingGroupQuery } from '../queries'
 import { asDetailedWorkingGroup } from '../types'
 
 interface WhereInput {
-  name?: string | undefined
+  name?: string
 }
 
 export function useWorkingGroup(where: WhereInput) {
@@ -11,6 +11,6 @@ export function useWorkingGroup(where: WhereInput) {
 
   return {
     isLoading: loading,
-    group: group ? asDetailedWorkingGroup(group) : undefined,
+    group: where.name && group ? asDetailedWorkingGroup(group) : undefined,
   }
 }
