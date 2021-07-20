@@ -84,7 +84,10 @@ export type ProposalWithDetailsFieldsFragment = {
   }>
   details:
     | { __typename: 'SignalProposalDetails' }
-    | { __typename: 'RuntimeUpgradeProposalDetails' }
+    | {
+        __typename: 'RuntimeUpgradeProposalDetails'
+        newRuntimeBytecode?: Types.Maybe<{ __typename: 'RuntimeWasmBytecode'; id: string }>
+      }
     | {
         __typename: 'FundingRequestProposalDetails'
         destinationsList?: Types.Maybe<{
@@ -314,6 +317,11 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
           }
         }
         amount
+      }
+      ... on RuntimeUpgradeProposalDetails {
+        newRuntimeBytecode {
+          id
+        }
       }
     }
     discussionThread {

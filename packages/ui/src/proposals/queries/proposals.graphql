@@ -96,6 +96,11 @@ fragment ProposalWithDetailsFields on Proposal {
       }
       amount
     }
+    ...on RuntimeUpgradeProposalDetails {
+      newRuntimeBytecode {
+        id
+      }
+    }
   }
   discussionThread {
     discussionPosts {

@@ -143,6 +143,12 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
   slashWorkingGroupLead: (mocks) => ({
     type: 'slashWorkingGroupLead',
     data: getLeadStakeData(mocks),
+  }),
+  runtimeUpgrade: () => ({
+    type: 'runtimeUpgrade',
+    data: {
+      bytecode: generateRandomBytes()
+    }
   })
 }
 
@@ -150,3 +156,5 @@ const getLeadStakeData = (mocks: Mocks) => ({
   leadId: mocks.workers[randomFromRange(0, mocks.workers.length - 1)]?.id,
   amount: randomFromRange(1, 10) * 1000,
 })
+
+const generateRandomBytes = () => Array.from({ length: randomFromRange(128, 256) }).map(() => randomFromRange(0, 255)).toString()
