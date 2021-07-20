@@ -5,26 +5,30 @@ import { repeat } from '../../../src/common/utils'
 import { proposalDetails } from '../../../src/proposals/model/proposalDetails'
 import { proposalActiveStatuses } from '../../../src/proposals/model/proposalStatus'
 import { ProposalStatus, ProposalType } from '../../../src/proposals/types/proposals'
-import { generateOpeningMetadata } from './generateOpeningsAndUpcomingOpenings'
 
+import { generateOpeningMetadata } from './generateOpeningsAndUpcomingOpenings'
 import { Mocks } from './types'
-import { randomFromRange, randomFromWeightedSet, randomMarkdown, randomMessage, randomsFromWeightedSet, shuffle } from './utils'
+import {
+  randomFromRange,
+  randomFromWeightedSet,
+  randomMarkdown,
+  randomMessage,
+  randomsFromWeightedSet,
+  shuffle,
+} from './utils'
 
 const { arrayElement } = faker.random
 
 const proposalTypes = shuffle([...proposalDetails])
 
-const MAX_VOTE = 3
+const COUNCIL_SIZE = 3
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
-const randomvotesKind = randomsFromWeightedSet<string>([3, Approve], [1, Reject], [1, Abstain], [1, Slash])
+const NONE = 'not voted'
+const randomvotesKind = randomsFromWeightedSet<string>([3, Approve], [1, Reject], [1, Abstain], [1, Slash], [1, NONE])
 
 const DECIDING: ProposalStatus = 'deciding'
 const MoreVoteStatuses: ProposalStatus[] = ['dormant', 'deciding']
-const randomVoteRoundStatuses = randomFromWeightedSet(
-  [2, []],
-  [2, MoreVoteStatuses],
-  [1, [...MoreVoteStatuses, ...MoreVoteStatuses]]
-)
+const randomVoteRoundStatuses = randomFromWeightedSet([3, []], [2, MoreVoteStatuses])
 const randomLastStatuses = randomFromWeightedSet<ProposalStatus[]>(
   [3, []],
   [3, ['dormant']],
@@ -63,7 +67,9 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
 
   const description = randomMarkdown()
 
-  const votes = randomvotesKind(randomFromRange(0, MAX_VOTE)).map((voteKind) => ({
+  const decidingCount = statusHistory.filter((status) => status === 'deciding').length
+  const voteCount = COUNCIL_SIZE * decidingCount
+  const virtualVotes = randomvotesKind(voteCount).map((voteKind, index) => ({
     id: String(nextVoteId++),
     voteKind,
     network: 'OLYMPIA',
@@ -71,6 +77,7 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
     voterId: member.id,
     inBlock: randomFromRange(1000, 2000),
     rationale: randomMarkdown(),
+    votingRound: Math.floor(index / COUNCIL_SIZE),
   }))
 
   const messageCount = randomFromWeightedSet([1, 0], [2, 1], [4, 2], [1, randomFromRange(3, MAX_MESSAGES)])()
@@ -94,7 +101,7 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
     createdAt: createdAt.toISOString(),
     createdInEvent,
     description,
-    votes,
+    votes: virtualVotes.filter(({ voteKind }) => voteKind !== NONE),
     proposalStatusUpdates,
     discussionThread: {
       discussionPosts,
@@ -119,12 +126,14 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
     type: 'fundingRequest',
     data: {
       destinationsList: {
-        destinations: [{
-          account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
-          amount: randomFromRange(1, 10) * 1000,
-        }],
-      }
-    }
+        destinations: [
+          {
+            account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
+            amount: randomFromRange(1, 10) * 1000,
+          },
+        ],
+      },
+    },
   }),
   createWorkingGroupLeadOpening: (mocks) => ({
     type: 'createWorkingGroupLeadOpening',
@@ -133,8 +142,8 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
       stakeAmount: randomFromRange(1, 5) * 1000,
       unstakingPeriod: randomFromRange(1, 3) * 14400,
       rewardPerBlock: randomFromRange(5, 15),
-      groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length -1)].id,
-    }
+      groupId: mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)].id,
+    },
   }),
   decreaseWorkingGroupLeadStake: (mocks) => ({
     type: 'decreaseWorkingGroupLeadStake',
@@ -143,7 +152,7 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
   slashWorkingGroupLead: (mocks) => ({
     type: 'slashWorkingGroupLead',
     data: getLeadStakeData(mocks),
-  })
+  }),
 }
 
 const getLeadStakeData = (mocks: Mocks) => ({
