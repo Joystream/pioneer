@@ -53,10 +53,8 @@ interface RawRuntimeUpgradeData {
 }
 
 const seedRuntimeUpgradeData = (data: RawRuntimeUpgradeData, server: any) => {
-  const bytesArray = new Uint8Array(data.bytecode.split(',').map(Number.parseInt))
-  const buffer = bytesArray.buffer
   return {
-    newRuntimeBytecode: server.schema.create('RuntimeWasmBytecode', { bytecode: buffer }),
+    newRuntimeBytecode: server.schema.create('RuntimeWasmBytecode', { bytecode: data.bytecode }),
   }
 }
 

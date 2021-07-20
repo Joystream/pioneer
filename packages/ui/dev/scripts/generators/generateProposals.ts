@@ -157,4 +157,4 @@ const getLeadStakeData = (mocks: Mocks) => ({
   amount: randomFromRange(1, 10) * 1000,
 })
 
-const generateRandomBytes = () => Array.from({ length: randomFromRange(128, 256) }).map(() => randomFromRange(0, 255)).toString()
+const generateRandomBytes = () => '0x' + Buffer.from(Array.from({ length: randomFromRange(128, 256) }).map(() => randomFromRange(0, 255))).toString('hex')

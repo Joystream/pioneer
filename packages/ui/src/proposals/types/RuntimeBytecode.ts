@@ -2,7 +2,7 @@ import { GetRuntimeWasmBytecodeQuery } from '../queries'
 
 export interface RuntimeBytecode {
   id: string
-  bytecode: ArrayBuffer
+  bytecode: string
 }
 
 export const asRuntimeBytecode = (bytecode: GetRuntimeWasmBytecodeQuery['runtime']): RuntimeBytecode | undefined => {
