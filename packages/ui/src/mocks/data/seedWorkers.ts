@@ -25,12 +25,14 @@ export const mockWorkers = rawWorkers.map((rawGroup) => ({ ...rawGroup }))
 
 export const seedWorker = (worker: RawWorker, server: any) => {
   const member = server.schema.find('Membership', worker.membershipId)
+  const group = server.schema.find('WorkingGroup', worker.groupId)
+
   return server.schema.create('Worker', {
     roleAccount: member.controllerAccount,
     stakeAccount: member.rootAccount,
     rewardAccount: member.rootAccount,
     ...worker,
-    isLead: false,
+    isLead: group.leaderId === worker.id,
     status: seedWorkerStatus(worker.status as WorkerStatus, worker.membershipId + '_' + worker.groupId, server),
   })
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { State, Typestate } from 'xstate'
 
+import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
@@ -37,6 +38,16 @@ export const isValidSpecificParameters = (state: AddNewProposalMachineState): bo
       const specifics = state.context.specifics
 
       return !!(specifics?.stakingAmount && specifics.leavingUnstakingPeriod && specifics.rewardPerBlock)
+    }
+    case state.matches('specificParameters.decreaseWorkingGroupLeadStake'): {
+      const specifics = state.context.specifics
+
+      return !!(
+        specifics?.stakingAmount &&
+        specifics?.stakingAmount.gtn(0) &&
+        specifics.groupId &&
+        specifics.workerId !== undefined
+      )
     }
     default:
       return false
@@ -83,6 +94,17 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
             send('SET_LEAVING_UNSTAKING_PERIOD', { leavingUnstakingPeriod })
           }
           setRewardPerBlock={(rewardPerBlock) => send('SET_REWARD_PER_BLOCK', { rewardPerBlock })}
+        />
+      )
+    case state.matches('specificParameters.decreaseWorkingGroupLeadStake'):
+      return (
+        <DecreaseWorkingGroupLeadStake
+          stakingAmount={state.context.specifics?.stakingAmount}
+          groupId={state.context.specifics?.groupId}
+          workerId={state.context.specifics?.workerId}
+          setStakingAmount={(stakingAmount) => send('SET_STAKING_AMOUNT', { stakingAmount })}
+          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+          setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
         />
       )
     default:

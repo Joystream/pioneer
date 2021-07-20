@@ -28,7 +28,7 @@ export const FundingRequest = ({
   setAmount: saveAmount,
   setAccount,
 }: FundingRequestProps) => {
-  const [amount, setAmount] = useNumberInput(0, initialAmount ? initialAmount.toNumber() : undefined)
+  const [amount, setAmount] = useNumberInput(0, initialAmount)
 
   useEffect(() => {
     saveAmount(new BN(amount))

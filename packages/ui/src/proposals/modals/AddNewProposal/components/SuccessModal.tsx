@@ -19,13 +19,11 @@ export const SuccessModal = ({ onClose, proposalType, proposalTitle }: SuccessMo
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessSymbol />} />
       <ModalBody>
-        <Info
-          content={
-            <TextMedium light>
-              You have just successfully created {camelCaseToText(proposalType)} proposal “{proposalTitle}”.
-            </TextMedium>
-          }
-        />
+        <Info>
+          <TextMedium light>
+            You have just successfully created {camelCaseToText(proposalType)} proposal “{proposalTitle}”.
+          </TextMedium>
+        </Info>
       </ModalBody>
       <ModalFooter>
         <ButtonGhost size="medium">See my Proposal</ButtonGhost>

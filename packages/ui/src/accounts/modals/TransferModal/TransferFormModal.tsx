@@ -1,11 +1,19 @@
 import BN from 'bn.js'
 import React, { useCallback, useState } from 'react'
-import styled from 'styled-components'
 
-import { ButtonGhost, ButtonPrimary } from '../../../common/components/buttons'
+import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
 import { PickedTransferIcon } from '../../../common/components/icons/TransferIcons'
-import { Modal, ModalBody, ModalFooter, ModalHeader, Row, TransactionAmount } from '../../../common/components/Modal'
+import {
+  AmountButton,
+  AmountButtons,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+  TransactionAmount,
+} from '../../../common/components/Modal'
 import { useNumberInput } from '../../../common/hooks/useNumberInput'
 import { formatTokenValue } from '../../../common/model/formatters'
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/SelectAccount'
@@ -113,20 +121,3 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
     </Modal>
   )
 }
-
-const AmountButtons = styled.div`
-  display: inline-grid;
-  grid-auto-flow: column;
-  grid-column-gap: 8px;
-  width: fit-content;
-  height: 46px;
-  align-items: center;
-`
-
-const AmountButton = styled(ButtonGhost)`
-  height: 26px;
-  padding: 4px 6px;
-  font-size: 10px;
-  line-height: 16px;
-  text-transform: uppercase;
-`

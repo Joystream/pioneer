@@ -1,5 +1,6 @@
 import faker from 'faker'
 
+import { Mocks } from './types'
 import { randomMarkdown, randomFromRange } from './utils'
 
 export const WORKING_GROUPS = [
@@ -26,8 +27,32 @@ const generateWorkingGroup = (groupName: string) => ({
   },
 })
 
-export type WorkingGroupMock = ReturnType<typeof generateWorkingGroup>
+export interface WorkingGroupMock {
+  id: string
+  name: string
+  workers: never[]
+  leaderId: string | null
+  budget: number
+  metadata: ReturnType<typeof generateWorkingGroup>['metadata']
+}
 
 export const generateWorkingGroups = () => {
   return WORKING_GROUPS.map(generateWorkingGroup)
+}
+
+export const getWorkingGroupsWithLeader = (mocks: Mocks) => {
+  const getLeader = (groupId: string) => {
+    if (groupId === 'membershipWorkingGroup') {
+      return null
+    }
+
+    const workers = mocks.workers.filter((worker) => worker?.groupId === groupId)
+
+    return workers[randomFromRange(0, workers.length - 1)]?.id as string
+  }
+
+  return mocks.workingGroups.map((group) => ({
+    ...group,
+    leaderId: getLeader(group.id),
+  }))
 }

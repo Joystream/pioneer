@@ -9,24 +9,20 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     return { Signal: '' }
   }
 
+  const specifics = state.context.specifics
+
   switch (state.context.type) {
     case 'fundingRequest': {
-      const specifics = state.context.specifics
-
       return {
         FundingRequest: [{ amount: specifics?.amount, account: specifics?.account?.address }],
       }
     }
     case 'runtimeUpgrade': {
-      const specifics = state.context.specifics
-
       return {
         RuntimeUpgrade: specifics?.runtime,
       }
     }
     case 'createWorkingGroupLeadOpening': {
-      const specifics = state.context.specifics
-
       return {
         CreateWorkingGroupLeadOpening: {
           description: specifics?.description,
@@ -37,6 +33,11 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
           reward_per_block: specifics?.rewardPerBlock,
           workingGroup: WorkingGroupDef.Membership,
         },
+      }
+    }
+    case 'decreaseWorkingGroupLeadStake': {
+      return {
+        DecreaseWorkingGroupLeadStake: [specifics?.workerId, specifics?.stakingAmount, WorkingGroupDef.Forum],
       }
     }
     default:

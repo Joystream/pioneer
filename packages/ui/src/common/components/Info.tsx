@@ -9,10 +9,10 @@ import { Tooltip, TooltipDefault } from './Tooltip'
 
 export interface InfoProps {
   title?: string
-  content: React.ReactNode
+  children: React.ReactNode
 }
 
-export const Info = ({ title, content }: InfoProps) => {
+export const Info = ({ title, children }: InfoProps) => {
   return (
     <InfoBlock gap={8}>
       {title && (
@@ -23,7 +23,7 @@ export const Info = ({ title, content }: InfoProps) => {
           <h5>{title}</h5>
         </ColumnGapBlock>
       )}
-      {content}
+      {children}
     </InfoBlock>
   )
 }
