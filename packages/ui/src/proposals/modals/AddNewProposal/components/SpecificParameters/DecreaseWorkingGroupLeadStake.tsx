@@ -36,11 +36,12 @@ export const DecreaseWorkingGroupLeadStake = ({
   setWorkerId,
 }: DecreaseWorkingGroupLeadStakeProps) => {
   const [amount, setAmount] = useNumberInput(0, stakingAmount)
-  const setHalf = () => setAmount(stakingAmount ? stakingAmount.divn(2).toString() : '')
-  const setThird = () => setAmount(stakingAmount ? stakingAmount.divn(3).toString() : '')
 
-  const { group, isLoading: isGroupLoading } = useWorkingGroup({ name: groupId })
+  const { group } = useWorkingGroup({ name: groupId })
   const { member: leader } = useMember(group?.leaderId)
+
+  const byHalf = () => setAmount(group && group.leaderWorker ? group.leaderWorker.stake.divn(2).toString() : '')
+  const byThird = () => setAmount(group && group.leaderWorker ? group.leaderWorker.stake.divn(3).toString() : '')
 
   useEffect(() => setStakingAmount(new BN(amount)), [amount])
   useEffect(() => setWorkerId(group?.leaderWorker?.runtimeId), [groupId, group?.leaderWorker?.runtimeId])
@@ -99,11 +100,11 @@ export const DecreaseWorkingGroupLeadStake = ({
               />
             </InputComponent>
             <AmountButtons>
-              <AmountButton size="small" onClick={setHalf} disabled={!groupId || (group && !group.leaderId)}>
-                Use half
+              <AmountButton size="small" onClick={byHalf} disabled={!groupId || (group && !group.leaderId)}>
+                By half
               </AmountButton>
-              <AmountButton size="small" onClick={setThird} disabled={!groupId || (group && !group.leaderId)}>
-                Use 1/3
+              <AmountButton size="small" onClick={byThird} disabled={!groupId || (group && !group.leaderId)}>
+                By 1/3
               </AmountButton>
             </AmountButtons>
           </TransactionAmount>
