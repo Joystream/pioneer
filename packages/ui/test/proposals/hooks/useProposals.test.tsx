@@ -12,7 +12,6 @@ import {
 } from '@/mocks/data'
 import { ProposalEmptyFilter } from '@/proposals/components/ProposalFilters'
 import { useProposals, UseProposalsProps } from '@/proposals/hooks/useProposals'
-import { proposalDetails } from '@/proposals/model/proposalDetails'
 import { proposalActiveStatuses, proposalPastStatuses } from '@/proposals/model/proposalStatus'
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
@@ -38,16 +37,16 @@ describe('useProposals', () => {
   describe('Status: active | past', () => {
     it('Status: active', async () => {
       const result = await loadUseProposals({ status: 'active' })
-      expect(result.current.proposals.length).toBeGreaterThan(0)
-      result.current.proposals.forEach((proposal) => {
+      expect(result.proposals.length).toBeGreaterThan(0)
+      result.proposals.forEach((proposal) => {
         expect(proposalActiveStatuses.includes(proposal.status)).toBeTruthy()
       })
     })
 
     it('Status: past', async () => {
       const result = await loadUseProposals({ status: 'past' })
-      expect(result.current.proposals.length).toBeGreaterThan(0)
-      result.current.proposals.forEach((proposal) => {
+      expect(result.proposals.length).toBeGreaterThan(0)
+      result.proposals.forEach((proposal) => {
         expect(proposalPastStatuses.includes(proposal.status)).toBeTruthy()
       })
     })
@@ -61,8 +60,8 @@ describe('useProposals', () => {
           ...ProposalEmptyFilter,
         },
       })
-      expect(result.current.proposals.length).toBeGreaterThan(0)
-      result.current.proposals.forEach((proposal) => {
+      expect(result.proposals.length).toBeGreaterThan(0)
+      result.proposals.forEach((proposal) => {
         expect(proposalPastStatuses.includes(proposal.status)).toBeTruthy()
       })
     })
@@ -70,7 +69,7 @@ describe('useProposals', () => {
     describe('Separate', () => {
       it('Stage/Status', async () => {
         const allPast = await loadUseProposals({ status: 'past' })
-        const { status } = allPast.current.proposals[0]
+        const { status } = allPast.proposals[0]
         const result = await loadUseProposals({
           status: 'past',
           filters: {
@@ -78,15 +77,15 @@ describe('useProposals', () => {
             stage: status,
           },
         })
-        expect(result.current.proposals.length).toBeGreaterThan(0)
-        result.current.proposals.forEach((proposal) => {
+        expect(result.proposals.length).toBeGreaterThan(0)
+        result.proposals.forEach((proposal) => {
           expect(proposal.status).toBe(status)
         })
       })
 
       it('Search', async () => {
         const allPast = await loadUseProposals({ status: 'past' })
-        const title = allPast.current.proposals[0].title
+        const title = allPast.proposals[0].title
         const search = title.substr(3, title.length - 8)
         const result = await loadUseProposals({
           status: 'past',
@@ -95,11 +94,12 @@ describe('useProposals', () => {
             search,
           },
         })
-        expect(result.current.proposals[0].title).toBe(title)
+        expect(result.proposals[0].title).toBe(title)
       })
 
       it('Type', async () => {
-        const type = proposalDetails[Math.floor(Math.random() * proposalDetails.length)]
+        const allPast = await loadUseProposals({ status: 'past' })
+        const type = allPast.proposals[0].type
         const typeFilter = capitalizeFirstLetter(type)
         const result = await loadUseProposals({
           status: 'past',
@@ -108,15 +108,15 @@ describe('useProposals', () => {
             type: typeFilter,
           },
         })
-        expect(result.current.proposals.length).toBeGreaterThan(0)
-        result.current.proposals.forEach((proposal) => {
+        expect(result.proposals.length).toBeGreaterThan(0)
+        result.proposals.forEach((proposal) => {
           expect(proposal.type).toBe(type)
         })
       })
 
       it('Proposer', async () => {
         const allPast = await loadUseProposals({ status: 'past' })
-        const member = allPast.current.proposals[0].proposer
+        const member = allPast.proposals[0].proposer
         const result = await loadUseProposals({
           status: 'past',
           filters: {
@@ -124,11 +124,43 @@ describe('useProposals', () => {
             proposer: member,
           },
         })
-        expect(result.current.proposals.length).toBeGreaterThan(0)
-        result.current.proposals.forEach((proposal) => {
+        expect(result.proposals.length).toBeGreaterThan(0)
+        result.proposals.forEach((proposal) => {
           expect(proposal.proposer.id).toBe(member.id)
         })
       })
+    })
+
+    it('Multiple filters (set intersection)', async () => {
+      const { proposals: allPast } = await loadUseProposals({ status: 'past' })
+      const proposal = allPast[0]
+      const { proposals: byProposer } = await loadUseProposals({
+        status: 'past',
+        filters: {
+          ...ProposalEmptyFilter,
+          proposer: proposal.proposer,
+        },
+      })
+      const { proposals: byStatus } = await loadUseProposals({
+        status: 'past',
+        filters: {
+          ...ProposalEmptyFilter,
+          stage: proposal.status,
+        },
+      })
+      const { proposals: byProposerAndStatus } = await loadUseProposals({
+        status: 'past',
+        filters: {
+          ...ProposalEmptyFilter,
+          proposer: proposal.proposer,
+          stage: proposal.status,
+        },
+      })
+
+      expect(byProposerAndStatus.length).toBeGreaterThan(0)
+      expect(byStatus.length + byProposer.length).toBeGreaterThanOrEqual(byProposerAndStatus.length)
+      const byProposerIntersectByStatus = byProposer.filter((p) => byStatus.find((s) => s.id == p.id))
+      expect(byProposerIntersectByStatus).toEqual(byProposerAndStatus)
     })
   })
 
@@ -137,6 +169,6 @@ describe('useProposals', () => {
     while (result.current.isLoading) {
       await waitForNextUpdate()
     }
-    return result
+    return result.current
   }
 })
