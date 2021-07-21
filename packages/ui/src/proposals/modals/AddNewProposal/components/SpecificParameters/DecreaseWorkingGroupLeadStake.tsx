@@ -63,47 +63,6 @@ export const DecreaseWorkingGroupLeadStake = ({
           >
             <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
           </InputComponent>
-          {(!groupId || isGroupLoading || (group && leader)) && (
-            <>
-              <InputComponent label="Working Group Leader" inputSize="l" disabled>
-                <SelectMember onChange={() => true} disabled selected={leader} />
-              </InputComponent>
-              {group && (
-                <Info>
-                  <TextMedium>
-                    The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
-                    <TextInlineMedium bold>{formatTokenValue(group.leaderWorker?.stake)} JOY</TextInlineMedium>.
-                  </TextMedium>
-                </Info>
-              )}
-              <TransactionAmount>
-                <InputComponent
-                  label="Decrease Stake Amount"
-                  tight
-                  units="JOY"
-                  inputWidth="s"
-                  tooltipText="Amount by which to decrease stake."
-                  required
-                  disabled={!groupId}
-                >
-                  <InputNumber
-                    id="amount-input"
-                    value={formatTokenValue(new BN(amount))}
-                    placeholder="0"
-                    onChange={(event) => setAmount(event.target.value)}
-                  />
-                </InputComponent>
-                <AmountButtons>
-                  <AmountButton size="small" onClick={setHalf} disabled={!groupId}>
-                    Use half
-                  </AmountButton>
-                  <AmountButton size="small" onClick={setThird} disabled={!groupId}>
-                    Use 1/3
-                  </AmountButton>
-                </AmountButtons>
-              </TransactionAmount>
-            </>
-          )}
           {groupId && group && !group.leaderId && (
             <Info title="Warning">
               <TextMedium>
@@ -111,6 +70,43 @@ export const DecreaseWorkingGroupLeadStake = ({
               </TextMedium>
             </Info>
           )}
+          <InputComponent label="Working Group Leader" inputSize="l" disabled>
+            <SelectMember onChange={() => true} disabled selected={leader} />
+          </InputComponent>
+          {group && group.leaderWorker && (
+            <Info>
+              <TextMedium>
+                The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
+                <TextInlineMedium bold>{formatTokenValue(group.leaderWorker?.stake)} JOY</TextInlineMedium>.
+              </TextMedium>
+            </Info>
+          )}
+          <TransactionAmount>
+            <InputComponent
+              label="Decrease Stake Amount"
+              tight
+              units="JOY"
+              inputWidth="s"
+              tooltipText="Amount by which to decrease stake."
+              required
+              disabled={!groupId || (group && !group.leaderId)}
+            >
+              <InputNumber
+                id="amount-input"
+                value={formatTokenValue(new BN(amount))}
+                placeholder="0"
+                onChange={(event) => setAmount(event.target.value)}
+              />
+            </InputComponent>
+            <AmountButtons>
+              <AmountButton size="small" onClick={setHalf} disabled={!groupId || (group && !group.leaderId)}>
+                Use half
+              </AmountButton>
+              <AmountButton size="small" onClick={setThird} disabled={!groupId || (group && !group.leaderId)}>
+                Use 1/3
+              </AmountButton>
+            </AmountButtons>
+          </TransactionAmount>
         </RowGapBlock>
       </Row>
     </RowGapBlock>
