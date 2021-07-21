@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import React from 'react'
+import { NavLink, useRouteMatch } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../../constants'
@@ -17,7 +17,7 @@ interface DisabledNavigationLingkProps {
 }
 
 export const NavigationLink = ({ children, exact, className, to, disabled }: NavigationLinkProps) => {
-  const [isActiveLink, setActive] = useState(false)
+  const match = useRouteMatch(to)
 
   return (
     <NavigationItemLink
@@ -31,17 +31,8 @@ export const NavigationLink = ({ children, exact, className, to, disabled }: Nav
           event.preventDefault()
         }
       }}
-      isActive={(match) => {
-        if (!match) {
-          setActive(false)
-          return false
-        } else {
-          setActive(true)
-          return true
-        }
-      }}
     >
-      {isActiveLink && (
+      {match && (
         <ActivePageIndicator
           layoutId="activeLink"
           className="activeLink"
