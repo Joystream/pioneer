@@ -38,6 +38,7 @@ describe('useProposals', () => {
   describe('Status: active | past', () => {
     it('Status: active', async () => {
       const result = await loadUseProposals({ status: 'active' })
+      expect(result.current.proposals.length).toBeGreaterThan(0)
       result.current.proposals.forEach((proposal) => {
         expect(proposalActiveStatuses.includes(proposal.status)).toBeTruthy()
       })
@@ -45,6 +46,7 @@ describe('useProposals', () => {
 
     it('Status: past', async () => {
       const result = await loadUseProposals({ status: 'past' })
+      expect(result.current.proposals.length).toBeGreaterThan(0)
       result.current.proposals.forEach((proposal) => {
         expect(proposalPastStatuses.includes(proposal.status)).toBeTruthy()
       })
@@ -52,21 +54,33 @@ describe('useProposals', () => {
   })
 
   describe('With filters', () => {
+    it('Empty filters', async () => {
+      const result = await loadUseProposals({
+        status: 'past',
+        filters: {
+          ...ProposalEmptyFilter,
+        },
+      })
+      expect(result.current.proposals.length).toBeGreaterThan(0)
+      result.current.proposals.forEach((proposal) => {
+        expect(proposalPastStatuses.includes(proposal.status)).toBeTruthy()
+      })
+    })
+
     describe('Separate', () => {
-      describe('Stage/Status', () => {
-        proposalPastStatuses.forEach((status) => {
-          it(`Status: ${status}`, async () => {
-            const result = await loadUseProposals({
-              status: 'past',
-              filters: {
-                ...ProposalEmptyFilter,
-                stage: status,
-              },
-            })
-            result.current.proposals.forEach((proposal) => {
-              expect(proposal.status).toBe(status)
-            })
-          })
+      it('Stage/Status', async () => {
+        const allPast = await loadUseProposals({ status: 'past' })
+        const { status } = allPast.current.proposals[0]
+        const result = await loadUseProposals({
+          status: 'past',
+          filters: {
+            ...ProposalEmptyFilter,
+            stage: status,
+          },
+        })
+        expect(result.current.proposals.length).toBeGreaterThan(0)
+        result.current.proposals.forEach((proposal) => {
+          expect(proposal.status).toBe(status)
         })
       })
 
@@ -84,21 +98,19 @@ describe('useProposals', () => {
         expect(result.current.proposals[0].title).toBe(title)
       })
 
-      describe('Type', () => {
-        proposalDetails.forEach((type) => {
-          const typeFilter = capitalizeFirstLetter(type)
-          it(typeFilter, async () => {
-            const result = await loadUseProposals({
-              status: 'past',
-              filters: {
-                ...ProposalEmptyFilter,
-                type: typeFilter,
-              },
-            })
-            result.current.proposals.forEach((proposal) => {
-              expect(proposal.type).toBe(type)
-            })
-          })
+      it('Type', async () => {
+        const type = proposalDetails[Math.floor(Math.random() * proposalDetails.length)]
+        const typeFilter = capitalizeFirstLetter(type)
+        const result = await loadUseProposals({
+          status: 'past',
+          filters: {
+            ...ProposalEmptyFilter,
+            type: typeFilter,
+          },
+        })
+        expect(result.current.proposals.length).toBeGreaterThan(0)
+        result.current.proposals.forEach((proposal) => {
+          expect(proposal.type).toBe(type)
         })
       })
 
