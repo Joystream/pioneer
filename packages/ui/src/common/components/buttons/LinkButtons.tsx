@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants'
-import { MakeTransient } from '@/common/types/helpers'
 
 export type LinkButtonSize = 'small' | 'medium' | 'large'
 
@@ -91,7 +90,9 @@ const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
   }
 `
 
-type LinkButtonStyleProps = MakeTransient<LinkButtonProps, 'square'>
+interface LinkButtonStyleProps extends Omit<LinkButtonProps, 'square'> {
+  $square: LinkButtonProps['square']
+}
 
 export const BasicLinkButtonStyles = css<LinkButtonStyleProps>`
   &,
