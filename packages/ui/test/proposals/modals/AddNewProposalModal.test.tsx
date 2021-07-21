@@ -1,6 +1,6 @@
 import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, render, screen } from '@testing-library/react'
+import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -373,7 +373,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Default - not filled amount, no selected group', async () => {
           expect(screen.queryByText('Working Group Leader')).not.toBeNull()
-          expect(await getButton(/Use half/i)).toBeDisabled()
+          expect(await getButton(/By half/i)).toBeDisabled()
 
           const button = await getCreateButton()
           expect(button).toBeDisabled()
@@ -381,7 +381,22 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Group selected', async () => {
           await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Forum')
-          expect(await getButton(/Use half/i)).not.toBeDisabled()
+          await waitFor(async () => expect(await getButton(/By half/i)).not.toBeDisabled())
+
+          expect(screen.queryByText(/The actual stake for Forum Working Group Lead is /i)).not.toBeNull()
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Group selected without leader', async () => {
+          await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Membership')
+          await waitFor(() =>
+            expect(
+              screen.queryByText('Membership Working Group has no any Leader yet. Please choose other Group.')
+            ).not.toBeNull()
+          )
+          expect(await getButton(/By half/i)).toBeDisabled()
 
           const button = await getCreateButton()
           expect(button).toBeDisabled()
