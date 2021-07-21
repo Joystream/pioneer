@@ -6,6 +6,7 @@ import { Info } from '@/common/components/Info'
 import { AmountButton, AmountButtons, Row, TransactionAmount } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -37,16 +38,19 @@ export const DecreaseWorkingGroupLeadStake = ({
 }: DecreaseWorkingGroupLeadStakeProps) => {
   const [amount, setAmount] = useNumberInput(0, stakingAmount)
 
-  const { group, isLoading } = useWorkingGroup({ name: groupId })
+  const { group } = useWorkingGroup({ name: groupId })
   const { member: leader } = useMember(group?.leaderId)
 
   const byHalf = () => setAmount(group && group.leaderWorker ? group.leaderWorker.stake.divn(2).toString() : '')
   const byThird = () => setAmount(group && group.leaderWorker ? group.leaderWorker.stake.divn(3).toString() : '')
 
-  const isDisabled = !groupId || isLoading || (group && !group.leaderId)
+  const isDisabled = !groupId || !group || (group && !group.leaderId)
 
   useEffect(() => setStakingAmount(new BN(amount)), [amount])
-  useEffect(() => setWorkerId(group?.leaderWorker?.runtimeId), [groupId, group?.leaderWorker?.runtimeId])
+  useEffect(() => {
+    setStakingAmount(BN_ZERO)
+    setWorkerId(group?.leaderWorker?.runtimeId)
+  }, [groupId, group?.leaderWorker?.runtimeId])
 
   return (
     <RowGapBlock gap={24}>
