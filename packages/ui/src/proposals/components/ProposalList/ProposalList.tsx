@@ -15,7 +15,7 @@ export interface ProposalListProps {
 
 export const ProposalList = ({ proposals, isPast }: ProposalListProps) => (
   <RowGapBlock gap={4}>
-    <ProposalsListHeaders colLayout={ProposalColLayout}>
+    <ProposalsListHeaders $colLayout={ProposalColLayout}>
       <ListHeader />
       <ListHeader>Stage</ListHeader>
       <ListHeader>Proposer</ListHeader>

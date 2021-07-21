@@ -31,7 +31,7 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
     <ProposalItem
       as={GhostRouterLink}
       to={`${ProposalsRoutes.preview}/${proposal.id}`}
-      colLayout={ProposalColLayout}
+      $colLayout={ProposalColLayout}
       isPast={!isProposalActive(proposal.status)}
     >
       <ToggleableItemInfo>

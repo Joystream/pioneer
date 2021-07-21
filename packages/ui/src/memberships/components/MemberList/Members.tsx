@@ -46,7 +46,7 @@ export const MemberList = ({ isLoading, members, order, onSort }: MemberListProp
 
   return (
     <div>
-      <ListHeaders colLayout={colLayoutByType('Member')}>
+      <ListHeaders $colLayout={colLayoutByType('Member')}>
         <SortHeader sortKey="id">ID</SortHeader>
         <SortHeader sortKey="handle">Memeberships</SortHeader>
         <ListHeader>Council Member</ListHeader>

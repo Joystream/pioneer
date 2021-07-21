@@ -42,7 +42,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
       <MembershipsTableTitle>{title}</MembershipsTableTitle>
 
       <MembershipsGroup>
-        <MembershipsHeaders colLayout={colLayoutByType('MyMember')}>
+        <MembershipsHeaders $colLayout={colLayoutByType('MyMember')}>
           <Header sortKey={canSort ? 'handle' : undefined}>Memeberships</Header>
           <ListHeader>Roles</ListHeader>
           <ListHeader>Slashed</ListHeader>

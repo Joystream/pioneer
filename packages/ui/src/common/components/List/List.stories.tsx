@@ -45,12 +45,12 @@ export const Table = Template.bind({})
 Table.args = {
   children: (
     <>
-      <TableListItem colLayout={'100px 100px 100px'}>
+      <TableListItem $colLayout={'100px 100px 100px'}>
         <div>Foo</div>
         <div>Bar</div>
         <div>Baz</div>
       </TableListItem>
-      <TableListItem colLayout={'100px 100px 100px'}>
+      <TableListItem $colLayout={'100px 100px 100px'}>
         <div>Qux</div>
         <div>Quux</div>
         <div>Quuz</div>
