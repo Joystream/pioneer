@@ -55,7 +55,12 @@ export type ProposalFieldsFragment = {
   creator: { __typename: 'Membership' } & MemberFieldsFragment
 }
 
-export type VoteFieldsFragment = { __typename: 'ProposalVotedEvent'; id: string; voteKind: Types.ProposalVoteKind }
+export type VoteFieldsFragment = {
+  __typename: 'ProposalVotedEvent'
+  id: string
+  voteKind: Types.ProposalVoteKind
+  votingRound: number
+}
 
 export type VoteWithDetailsFieldsFragment = {
   __typename: 'ProposalVotedEvent'
@@ -203,6 +208,7 @@ export const VoteFieldsFragmentDoc = gql`
   fragment VoteFields on ProposalVotedEvent {
     id
     voteKind
+    votingRound
   }
 `
 export const VoteWithDetailsFieldsFragmentDoc = gql`
