@@ -32,7 +32,7 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
       as={GhostRouterLink}
       to={`${ProposalsRoutes.preview}/${proposal.id}`}
       $colLayout={ProposalColLayout}
-      isPast={!isProposalActive(proposal.status)}
+      $isPast={!isProposalActive(proposal.status)}
     >
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
@@ -57,7 +57,7 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
 const ProposalItem = styled(TableListItem)`
   grid-column-gap: 24px;
   padding-right: 16px;
-  background-color: ${({ isPast }: { isPast?: boolean }) => (isPast ? Colors.Black[50] : Colors.White)};
+  background-color: ${({ $isPast }: { $isPast?: boolean }) => ($isPast ? Colors.Black[50] : Colors.White)};
   grid-template-rows: unset;
   height: 86px;
 `
