@@ -153,6 +153,12 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
     type: 'slashWorkingGroupLead',
     data: getLeadStakeData(mocks),
   }),
+  runtimeUpgrade: () => ({
+    type: 'runtimeUpgrade',
+    data: {
+      bytecode: '0x0061736d'
+    }
+  })
 }
 
 const getLeadStakeData = (mocks: Mocks) => ({

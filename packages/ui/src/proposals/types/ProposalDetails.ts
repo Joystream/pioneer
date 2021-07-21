@@ -46,12 +46,18 @@ export interface SlashLeadDetails extends LeadStakeDetails {
   type: 'slashWorkingGroupLead'
 }
 
+export interface RuntimeUpgrade {
+  type: 'runtimeUpgrade'
+  newBytecodeId?: string
+}
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
   | CreateLeadOpeningDetails
   | DecreaseLeadStakeDetails
   | SlashLeadDetails
+  | RuntimeUpgrade
 
 const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment): FundingRequestDetails => {
   return {
@@ -107,6 +113,11 @@ const asSlashLead: DetailsCast<'SlashWorkingGroupLeadProposalDetails'> = (fragme
   ...asLeadStakeDetails(fragment),
 })
 
+const asRuntimeUpgrade: DetailsCast<'RuntimeUpgradeProposalDetails'> = (fragment): RuntimeUpgrade => ({
+  type: 'runtimeUpgrade',
+  newBytecodeId: fragment.newRuntimeBytecode?.id,
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -116,6 +127,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   CreateWorkingGroupLeadOpeningProposalDetails: asCreateLeadOpening,
   DecreaseWorkingGroupLeadStakeProposalDetails: asDecreaseLeadStake,
   SlashWorkingGroupLeadProposalDetails: asSlashLead,
+  RuntimeUpgradeProposalDetails: asRuntimeUpgrade,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

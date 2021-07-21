@@ -97,6 +97,11 @@ fragment ProposalWithDetailsFields on Proposal {
       }
       amount
     }
+    ...on RuntimeUpgradeProposalDetails {
+      newRuntimeBytecode {
+        id
+      }
+    }
   }
   discussionThread {
     discussionPosts {
@@ -142,5 +147,12 @@ query getProposal($where: ProposalWhereUniqueInput!) {
 query GetVoteWithDetails($id: ID!) {
   proposalVotedEventByUniqueInput(where: { id: $id }) {
     ...VoteWithDetailsFields
+  }
+}
+
+query GetRuntimeWasmBytecode($where: RuntimeWasmBytecodeWhereUniqueInput!) {
+  runtime: runtimeWasmBytecodeByUniqueInput(where: $where) {
+    id
+    bytecode
   }
 }
