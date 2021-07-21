@@ -17,6 +17,7 @@ fragment ProposalFields on Proposal {
 fragment VoteFields on ProposalVotedEvent {
   id
   voteKind
+  votingRound
 }
 
 fragment VoteWithDetailsFields on ProposalVotedEvent {
@@ -58,7 +59,7 @@ fragment ProposalWithDetailsFields on Proposal {
         }
       }
     }
-    ...on CreateWorkingGroupLeadOpeningProposalDetails {
+    ... on CreateWorkingGroupLeadOpeningProposalDetails {
       metadata {
         description
       }
@@ -70,7 +71,7 @@ fragment ProposalWithDetailsFields on Proposal {
         name
       }
     }
-    ...on DecreaseWorkingGroupLeadStakeProposalDetails {
+    ... on DecreaseWorkingGroupLeadStakeProposalDetails {
       lead {
         createdAt
         group {
@@ -95,6 +96,11 @@ fragment ProposalWithDetailsFields on Proposal {
         }
       }
       amount
+    }
+    ...on RuntimeUpgradeProposalDetails {
+      newRuntimeBytecode {
+        id
+      }
     }
   }
   discussionThread {
@@ -141,5 +147,12 @@ query getProposal($where: ProposalWhereUniqueInput!) {
 query GetVoteWithDetails($id: ID!) {
   proposalVotedEventByUniqueInput(where: { id: $id }) {
     ...VoteWithDetailsFields
+  }
+}
+
+query GetRuntimeWasmBytecode($where: RuntimeWasmBytecodeWhereUniqueInput!) {
+  runtime: runtimeWasmBytecodeByUniqueInput(where: $where) {
+    id
+    bytecode
   }
 }

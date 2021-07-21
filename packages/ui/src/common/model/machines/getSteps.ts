@@ -14,48 +14,65 @@ const getActiveNodeOrder = (state: State<any>) => (activeId: number, stateNode: 
   return activeId
 }
 
-export const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>, state: State<any>): Step[] => {
+const isStepNode = (stateNode: StateNode, state: State<any>) => {
+  if (!stateNode || !stateNode?.meta || !stateNode.meta?.isStep) {
+    return false
+  }
+
+  return stateNode.meta?.cond ? stateNode.meta.cond(state.context) : true
+}
+
+const getParentStateNode = (node: StateNode): StateNode | null => {
+  if (node.parent?.parent?.meta?.isStep) {
+    return node.parent?.parent
+  }
+
+  if (node.parent?.meta?.isStep) {
+    return node.parent
+  }
+
+  return null
+}
+
+const getStepsFromMachineAndState = (machine: StateMachine<any, any, any>, state: State<any>): Step[] => {
   const stateNodes = machine.stateIds.map((id) => machine.getStateNodeById(id))
   const activeNodeOrder = stateNodes.reduce(getActiveNodeOrder(state), -1)
 
-  let lastParentIndex = -1
-  let setParentActive = -1
+  const idToStep = new Map()
 
-  const steps: Step[] = stateNodes
-    .filter((stateNode) => !!stateNode?.meta?.isStep)
-    .filter((stateNode) => {
-      if (!stateNode || !stateNode?.meta || !stateNode.meta?.isStep) {
-        return false
+  const steps: (Step | undefined)[] = stateNodes.map((stateNode) => {
+    const parentStepNode = getParentStateNode(stateNode)
+    const isActive = stateNode.order === activeNodeOrder
+
+    if (isActive && parentStepNode) {
+      const step = idToStep.get(parentStepNode.id)
+
+      if (step) {
+        step.type = 'active'
       }
+    }
 
-      return stateNode.meta?.cond ? stateNode.meta.cond(state.context) : true
-    })
-    .map((stateNode, index) => {
-      const isBabyStep = stateNode.parent?.parent?.meta?.isStep ?? stateNode.parent?.meta?.isStep
+    if (!isStepNode(stateNode, state)) {
+      return undefined
+    }
 
-      if (!isBabyStep) {
-        lastParentIndex = index
-      }
+    const isNext = stateNode.order > activeNodeOrder
 
-      const isActive = stateNode.order === activeNodeOrder
+    const step: Step = {
+      title: stateNode?.meta?.stepTitle ?? '',
+      type: isActive ? 'active' : isNext ? 'next' : 'past',
+    }
 
-      if (isActive && isBabyStep) {
-        setParentActive = lastParentIndex
-      }
-      const isNext = stateNode.order > activeNodeOrder
+    if (parentStepNode) {
+      step.isBaby = true
+    }
 
-      return {
-        title: stateNode?.meta?.stepTitle ?? '',
-        type: isActive ? 'active' : isNext ? 'next' : 'past',
-        ...(isBabyStep ? { isBaby: true } : undefined),
-      }
-    })
+    idToStep.set(stateNode.id, step)
 
-  if (setParentActive !== -1) {
-    steps[setParentActive].type = 'active'
-  }
+    return step
+  })
 
-  return steps
+  return steps.filter((step) => !!step) as Step[]
 }
 
 export const getSteps = (service: Interpreter<any, any, any, any>): Step[] => {
