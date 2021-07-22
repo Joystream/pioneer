@@ -239,12 +239,16 @@ export const AddNewProposalModal = () => {
           </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
-      <ModalFooter>
+      <ModalFooter twoColumns>
+        <ButtonsGroup align="left">
+          {!state.matches('proposalType') && (
+            <ButtonGhost onClick={() => send('BACK')} size="medium">
+              <Arrow direction="left" />
+              Previous step
+            </ButtonGhost>
+          )}
+        </ButtonsGroup>
         <ButtonsGroup align="right">
-          <ButtonGhost disabled={state.matches('proposalType')} onClick={() => send('BACK')} size="medium">
-            <Arrow direction="left" />
-            Previous step
-          </ButtonGhost>
           <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
             <Arrow direction="right" />

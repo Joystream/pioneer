@@ -1,6 +1,6 @@
 import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, prettyDOM, render, screen, waitFor } from '@testing-library/react'
+import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
