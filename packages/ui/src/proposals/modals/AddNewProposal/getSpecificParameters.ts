@@ -40,6 +40,11 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
         DecreaseWorkingGroupLeadStake: [specifics?.workerId, specifics?.stakingAmount, WorkingGroupDef.Forum],
       }
     }
+    case 'slashWorkingGroupLead': {
+      return {
+        SlashWorkingGroupLead: [specifics?.workerId, specifics?.stakingAmount, WorkingGroupDef.Forum],
+      }
+    }
     default:
       return { Signal: '' }
   }
