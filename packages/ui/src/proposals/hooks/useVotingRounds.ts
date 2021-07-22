@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { ProposalVoteKind } from '@/common/api/queries'
 import { useCouncilSize } from '@/common/hooks/useCouncilSize'
 import { Reducer } from '@/common/types/helpers'
-import { groupBy, isDefined, last, propsEquals, repeat } from '@/common/utils'
+import { groupBy, isDefined, propsEquals, repeat } from '@/common/utils'
 import { ProposalStatusUpdates, ProposalVote } from '@/proposals/types'
 
 export type VoteMap = Map<ProposalVoteKind, ProposalVote[]>
@@ -18,31 +18,28 @@ export interface VoteCount {
 }
 
 export interface VotingRound {
-  approved: boolean
   map: VoteMap
   count: VoteCount
 }
 
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
 
-export const useVotingRounds = (votes?: ProposalVote[], updates: ProposalStatusUpdates[] = []): VotingRound[] => {
+export const useVotingRounds = (votes: ProposalVote[] = [], updates: ProposalStatusUpdates[] = []): VotingRound[] => {
   const councilSize = useCouncilSize()
 
   const voteRounds: (Omit<VotingRound, 'count'> & { total?: number })[] = useMemo(() => {
-    if (!votes || !updates.length) return []
+    if (!updates.length) return []
 
-    const approvedSoFar = last(updates).status !== 'deciding'
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
     const votesByRound = groupBy(votes, propsEquals('votingRound'))
 
     const voteRound = (round: number) => ({
-      approved: approvedSoFar || round < decidingCount - 1,
       map: (votesByRound[round] || []).reduce(mapVotes, new Map()),
       total: votesByRound[round]?.length,
     })
 
     return repeat(voteRound, decidingCount)
-  }, [votes?.length])
+  }, [votes.length, updates.length])
 
   return useMemo(
     () => voteRounds.map(({ total, ...props }) => ({ ...props, count: countVoteMap(props.map, total, councilSize) })),

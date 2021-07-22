@@ -49,7 +49,6 @@ describe('useVotingRounds', () => {
 
     expect(result.current).toEqual([
       {
-        approved: true,
         map: new Map([
           [Approve, [asVote([Approve, 0]), asVote([Approve, 0])]],
           [Reject, [asVote([Reject, 0])]],
@@ -64,7 +63,6 @@ describe('useVotingRounds', () => {
         },
       },
       {
-        approved: false,
         map: new Map([
           [Abstain, [asVote([Abstain, 1])]],
           [Slash, [asVote([Slash, 1])]],
@@ -84,7 +82,6 @@ describe('useVotingRounds', () => {
 
     expect(result.current).toEqual([
       {
-        approved: false,
         map: new Map(),
         count: {
           total: 0,
@@ -114,7 +111,6 @@ describe('useVotingRounds', () => {
 
     expect(result.current).toEqual([
       {
-        approved: false,
         map: new Map([
           [Approve, [asVote([Approve, 0]), asVote([Approve, 0])]],
           [Reject, [asVote([Reject, 0])]],
