@@ -24,8 +24,8 @@ export const ListItem = styled.li`
   }
 `
 
-export const TableListRowStyle = (colLayout?: string) => css`
-  grid-template-columns: ${colLayout ?? 'repeat(auto-fill, 100px)'};
+export const TableListRowStyle = ($colLayout?: string) => css`
+  grid-template-columns: ${$colLayout ?? 'repeat(auto-fill, 100px)'};
   justify-content: space-between;
   padding-left: 16px;
 `
@@ -33,5 +33,5 @@ export const TableListRowStyle = (colLayout?: string) => css`
 export const TableListItem = styled(ListItem)`
   align-items: center;
   height: 92px;
-  ${(props: { colLayout?: string }) => TableListRowStyle(props.colLayout)}
+  ${(props: { $colLayout?: string }) => TableListRowStyle(props.$colLayout)}
 `

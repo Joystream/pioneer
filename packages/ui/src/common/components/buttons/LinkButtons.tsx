@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
+import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants'
 
 export type LinkButtonSize = 'small' | 'medium' | 'large'
 
@@ -41,7 +41,7 @@ const getPadding = (props: LinkButtonProps) => {
 
 export function LinkButtonPrimary({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonPrimaryStyles className={className} size={size} square={square} disabled={disabled} to={to}>
+    <LinkButtonPrimaryStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonPrimaryStyles>
   )
@@ -49,7 +49,7 @@ export function LinkButtonPrimary({ className, children, size, square, disabled,
 
 export function LinkButtonSecondary({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} to={to}>
+    <LinkButtonSecondaryStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonSecondaryStyles>
   )
@@ -57,21 +57,21 @@ export function LinkButtonSecondary({ className, children, size, square, disable
 
 export function LinkButtonGhost({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonGhostStyles className={className} size={size} square={square} disabled={disabled} to={to}>
+    <LinkButtonGhostStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonGhostStyles>
   )
 }
 export function LinkButtonBareGhost({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonBareGhostStyles className={className} size={size} square={square} disabled={disabled} to={to}>
+    <LinkButtonBareGhostStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonBareGhostStyles>
   )
 }
 export function LinkButtonLink({ className, children, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonLinkStyles className={className} square={square} disabled={disabled} to={to} size="small">
+    <LinkButtonLinkStyles className={className} $square={square} disabled={disabled} to={to} size="small">
       <LinkButtonInnerWrapper size="small">{children}</LinkButtonInnerWrapper>
     </LinkButtonLinkStyles>
   )
@@ -90,7 +90,11 @@ const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
   }
 `
 
-export const BasicLinkButtonStyles = css<LinkButtonProps>`
+interface LinkButtonStyleProps extends Omit<LinkButtonProps, 'square'> {
+  $square: LinkButtonProps['square']
+}
+
+export const BasicLinkButtonStyles = css<LinkButtonStyleProps>`
   &,
   &:visited {
     display: flex;
@@ -100,7 +104,7 @@ export const BasicLinkButtonStyles = css<LinkButtonProps>`
     width: fit-content;
     min-width: ${getHeight};
     ${(props) => {
-      if (props.square)
+      if (props.$square)
         return css`
           max-width: ${getHeight(props)};
         `
@@ -160,7 +164,7 @@ export const BasicLinkButtonStyles = css<LinkButtonProps>`
   }
 `
 
-export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonProps>`
+export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonStyles};
   &,
   &:visited {
@@ -190,7 +194,7 @@ export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonProps>`
   }
 `
 
-export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonProps>`
+export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonStyles};
   &,
   &:visited {
@@ -198,7 +202,7 @@ export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonProps>`
     background-color: ${Colors.Black[75]};
 
     ${LinkButtonInnerWrapper} > svg {
-      color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
+      color: ${({ $square }) => ($square ? Colors.Black[900] : Colors.Black[400])};
     }
 
     &:before {
@@ -229,7 +233,7 @@ export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonProps>`
   }
 `
 
-export const LinkButtonGhostStyles = styled(Link)<LinkButtonProps>`
+export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonStyles};
   &,
   &:visited {
@@ -238,7 +242,7 @@ export const LinkButtonGhostStyles = styled(Link)<LinkButtonProps>`
     background-color: ${Colors.White};
 
     ${LinkButtonInnerWrapper} > svg {
-      color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
+      color: ${({ $square }) => ($square ? Colors.Black[900] : Colors.Black[400])};
     }
 
     &:before {
@@ -268,7 +272,7 @@ export const LinkButtonGhostStyles = styled(Link)<LinkButtonProps>`
   }
 `
 
-export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonProps>`
+export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonStyles};
   &,
   &:visited {
@@ -277,7 +281,7 @@ export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonProps>`
     background-color: ${Colors.White};
 
     ${LinkButtonInnerWrapper} > svg {
-      color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
+      color: ${({ $square }) => ($square ? Colors.Black[900] : Colors.Black[400])};
     }
 
     &:before,
@@ -305,7 +309,7 @@ export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonProps>`
   }
 `
 
-export const LinkButtonLinkStyles = styled(Link)<LinkButtonProps>`
+export const LinkButtonLinkStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonStyles};
 
   &,

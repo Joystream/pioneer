@@ -8,7 +8,7 @@ export const ListHeaders = styled.div`
   display: grid;
   grid-template-rows: 1fr;
   width: 100%;
-  ${(props: { colLayout?: string }) => TableListRowStyle(props.colLayout)}
+  ${(props: { $colLayout?: string }) => TableListRowStyle(props.$colLayout)}
 `
 export const ListHeader = styled.span`
   display: flex;
