@@ -28,21 +28,17 @@ import { ApplicationDetailsModalCall } from '@/working-groups/modals/Application
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 
+import { getRoleWarning } from '../../../../working-groups/model/getRoleWarning'
+
 export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
 
   const { worker, isLoading } = useWorker(id)
   const isActive = worker && worker.status === 'WorkerStatusActive'
+  const isLeaving = worker && worker.status === 'WorkerStatusLeaving'
 
   const { activities } = useRoleActivities(worker)
-  const warning =
-    worker && !isActive
-      ? {
-          title: 'Role Ended',
-          content: 'We are sorry, but this role has already ended.',
-          isClosable: false,
-        }
-      : undefined
+  const warning = worker ? getRoleWarning(worker.status) : undefined
 
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
@@ -114,7 +110,7 @@ export const MyRole = () => {
             </BadgeStatus>
             {!isActive && (
               <BadgeStatus ended inverted size="l" separated>
-                ROLE ENDED
+                {isLeaving ? 'LEAVING' : 'ROLE ENDED'}
               </BadgeStatus>
             )}
           </Row>
@@ -144,7 +140,9 @@ export const MyRole = () => {
           <ContentWithTabs>
             <RoleAccountHeader>
               <Label>Stake Account</Label>
-              <ButtonsGroup>{isActive && <ButtonPrimary size="small">Move Excess Tokens</ButtonPrimary>}</ButtonsGroup>
+              <ButtonsGroup>
+                {isActive || (isLeaving && <ButtonPrimary size="small">Move Excess Tokens</ButtonPrimary>)}
+              </ButtonsGroup>
             </RoleAccountHeader>
             <MyRoleAccount
               account={{ name: 'Stake Account', address: worker.stakeAccount }}

@@ -1,12 +1,12 @@
 import BN from 'bn.js'
 
-import { WorkerStatusTypename } from '@/working-groups/types'
+import { WorkerStatusToTypename } from '@/working-groups/types'
 
 import { useGetGroupDebtQuery } from '../queries'
 
 export const useGroupDebt = (groupId: string) => {
   const { data, loading } = useGetGroupDebtQuery({
-    variables: { where: { group: { id_eq: groupId }, status_json: { isTypeOf_eq: WorkerStatusTypename['active'] } } },
+    variables: { where: { group: { id_eq: groupId }, status_json: { isTypeOf_eq: WorkerStatusToTypename['active'] } } },
   })
 
   if (loading || !data) {
