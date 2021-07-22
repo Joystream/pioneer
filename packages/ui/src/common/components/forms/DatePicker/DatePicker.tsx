@@ -24,6 +24,7 @@ interface DatePickerProps extends ControlProps<PartialDateRange> {
   onClear?: () => void
   inputSize?: 'xs' | 's' | 'm' | 'l' | 'auto' | undefined
   inputWidth?: 'auto' | 's' | 'xs' | undefined
+  placeholder?: string
 }
 
 export const DatePicker = ({
@@ -35,10 +36,12 @@ export const DatePicker = ({
   onChange,
   inputSize,
   inputWidth,
+  placeholder = 'All time',
 }: DatePickerProps) => {
-  const placeholder = '__/__/__'
+  const datePlaceholder = '__/__/__'
   const { start, end } = fromRange(value)
-  const dateString = `${toDDMMYY(start) ?? placeholder} - ${toDDMMYY(end) ?? placeholder}`
+  const dateString =
+    !start && !end ? placeholder : `${toDDMMYY(start) ?? datePlaceholder} - ${toDDMMYY(end) ?? datePlaceholder}`
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLDivElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
 
