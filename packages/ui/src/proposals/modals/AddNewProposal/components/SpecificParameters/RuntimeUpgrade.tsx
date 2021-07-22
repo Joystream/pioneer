@@ -22,7 +22,7 @@ interface DragResponseProps {
   isDragReject?: boolean
 }
 
-const MAX_FILE_SIZE = 3 * 1024 * 124
+const MAX_FILE_SIZE = 3 * 1024 * 1024
 
 export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -30,7 +30,15 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
     setRuntime(await file.arrayBuffer())
   }, [])
 
-  const { isDragActive, isDragAccept, isDragReject, getRootProps, getInputProps, acceptedFiles } = useDropzone({
+  const {
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+    getRootProps,
+    getInputProps,
+    acceptedFiles,
+    fileRejections,
+  } = useDropzone({
     onDrop,
     accept: 'application/wasm',
     maxFiles: 1,
@@ -70,17 +78,19 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
           </RowGapBlock>
           {!!acceptedFiles.length && (
             <RowGapBlock gap={8}>
-              {acceptedFiles.map((file, index) => (
-                <AcceptedFile
-                  key={index}
-                  isDragActive={isDragActive}
-                  isDragAccept={isDragAccept}
-                  isDragReject={isDragReject}
-                >
+              {acceptedFiles.map((file) => (
+                <ReceivedFile key={file.name} valid={true}>
                   <AcceptedFileText>
-                    <strong>{file.name}</strong> ({file.size} B)
+                    <b>{file.name}</b> ({file.size} B) was uploaded successfully!
                   </AcceptedFileText>
-                </AcceptedFile>
+                </ReceivedFile>
+              ))}
+              {fileRejections.map(({ file, errors }) => (
+                <ReceivedFile key={file.name} valid={false}>
+                  <AcceptedFileText>
+                    <b>{file.name}</b> ({file.size} B) was not loaded because of "{errors.map((e) => e.message)}"
+                  </AcceptedFileText>
+                </ReceivedFile>
               ))}
             </RowGapBlock>
           )}
@@ -166,7 +176,7 @@ const AcceptedFileText = styled.span`
   transition: ${Transitions.all};
 `
 
-const AcceptedFile = styled.div<DragResponseProps>`
+const ReceivedFile = styled.div<{ valid?: boolean }>`
   display: flex;
   align-items: center;
   padding: 16px 20px;
@@ -174,31 +184,20 @@ const AcceptedFile = styled.div<DragResponseProps>`
   border-radius: ${BorderRad.s};
   overflow: hidden;
 
-  ${({ isDragActive }) =>
-    isDragActive &&
-    css`
-      border-color: ${Colors.Blue[400]};
-      background-color: ${Colors.Blue[100]};
-      ${AcceptedFileText} {
-        color: ${Colors.Blue[400]};
-      }
-    `}
-  ${({ isDragAccept }) =>
-    isDragAccept &&
-    css`
-      border-color: ${Colors.Green[500]};
-      background-color: ${Colors.Green[100]};
-      ${AcceptedFileText} {
-        color: ${Colors.Green[500]};
-      }
-    `}
-  ${({ isDragReject }) =>
-    isDragReject &&
-    css`
-      border-color: ${Colors.Red[400]};
-      background-color: ${Colors.Red[100]};
-      ${AcceptedFileText} {
-        color: ${Colors.Red[400]};
-      }
-    `}
+  ${({ valid }) =>
+    valid === true
+      ? css`
+          border-color: ${Colors.Green[500]};
+          background-color: ${Colors.Green[100]};
+          ${AcceptedFileText} {
+            color: ${Colors.Green[500]};
+          }
+        `
+      : css`
+          border-color: ${Colors.Red[400]};
+          background-color: ${Colors.Red[100]};
+          ${AcceptedFileText} {
+            color: ${Colors.Red[400]};
+          }
+        `};
 `
