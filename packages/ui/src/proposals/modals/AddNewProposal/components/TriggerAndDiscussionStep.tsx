@@ -68,7 +68,7 @@ export const TriggerAndDiscussionStep = ({
   const formInitializer: StepFormFields = {
     trigger: !!triggerBlock,
     triggerBlock: triggerBlock ? triggerBlock.toString() : '',
-    discussionMode: discussionMode === 'open',
+    discussionMode: discussionMode === 'closed',
   }
   const { fields, changeField } = useForm<StepFormFields>(formInitializer, FormSchema)
 
@@ -83,10 +83,10 @@ export const TriggerAndDiscussionStep = ({
         setTriggerBlock(value && isValidTriggerBlock(new BN(value)) ? parseInt(value) : undefined)
         break
       case 'discussionMode':
-        if (value === true) {
+        if (value === false) {
           setDiscussionWhitelist([])
         }
-        setDiscussionMode(value ? 'open' : 'closed')
+        setDiscussionMode(value ? 'closed' : 'open')
     }
 
     changeField(field, value)
@@ -157,8 +157,8 @@ export const TriggerAndDiscussionStep = ({
         <InlineToggleWrap>
           <Label>Discussion mode: </Label>
           <ToggleCheckbox
-            falseLabel="Closed"
-            trueLabel="Open"
+            falseLabel="Open"
+            trueLabel="Closed"
             checked={fields.discussionMode}
             onChange={(isSet) => setValue('discussionMode', isSet)}
           />
