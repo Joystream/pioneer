@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { TextBig } from '@/common/components/typography'
+import { TextBig, TextInlineBig } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { MemberInfo } from '@/memberships/components'
@@ -27,7 +27,9 @@ export const LeadStakeComponent: ProposalPropertiesContent<
   return (
     <Statistics>
       <StatisticItem title="Working Group">
-        <TextBig>{capitalizeFirstLetter(details.groupName)}</TextBig>
+        <TextInlineBig bold value>
+          {capitalizeFirstLetter(details.groupName)}
+        </TextInlineBig>
       </StatisticItem>
       <StatisticItem title="Worker ID">
         {member ? <MemberInfo member={member} onClick={showMemberModal} showGroup /> : <TextBig>Unknown</TextBig>}

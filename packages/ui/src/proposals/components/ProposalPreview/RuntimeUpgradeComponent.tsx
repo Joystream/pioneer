@@ -6,7 +6,7 @@ import { Loading } from '@/common/components/Loading'
 import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { Statistics } from '@/common/components/statistics'
 import { StatisticButton } from '@/common/components/statistics/StatisticButton'
-import { TextBig } from '@/common/components/typography'
+import { TextInlineBig } from '@/common/components/typography'
 import { useRuntimeBytecode } from '@/proposals/hooks/useRuntimeBytecode'
 
 import { RuntimeUpgrade } from '../../types/ProposalDetails'
@@ -31,9 +31,10 @@ export const RuntimeUpgradeComponent: ProposalPropertiesContent<'runtimeUpgrade'
           }}
           icon={<ArrowRightIcon />}
         >
-          <TextBig>
-            <FileIcon /> File Preview
-          </TextBig>
+          <FileIcon />
+          <TextInlineBig bold value>
+            File Preview
+          </TextInlineBig>
         </StatisticButton>
       </Statistics>
       {details.newBytecodeId && downloadOpen && (
