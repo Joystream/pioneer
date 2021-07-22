@@ -34,12 +34,37 @@ export const getStatusWhere = (status: UseProposalsStatus) => {
 
 export const useProposals = ({ status, filters }: UseProposalsProps): UseProposals => {
   const variables = useMemo(() => {
-    const where: ProposalWhereInput = {
+    let where: ProposalWhereInput = {
       status_json: filters?.stage ? { isTypeOf_eq: proposalStatusToTypename(filters.stage) } : getStatusWhere(status),
     }
     if (filters?.type) where.details_json = { isTypeOf_eq: filters.type + 'ProposalDetails' }
     if (filters?.proposer) where.creator = { id_eq: filters.proposer.id }
     if (filters?.search) where.title_contains = filters.search
+    if (filters?.lifetime) {
+      const lifetime = filters.lifetime
+      if ('start' in lifetime && 'end' in lifetime) {
+        const baseWhere = where
+        where = {
+          ...baseWhere,
+          createdAt_lte: lifetime.end,
+          OR: [
+            {
+              ...baseWhere,
+              statusSetAtTime_gte: lifetime.start,
+            },
+            {
+              ...baseWhere,
+              createdAt_lte: lifetime.start,
+              statusSetAtTime_gte: lifetime.end,
+            },
+          ],
+        }
+      } else if ('start' in lifetime) {
+        where.statusSetAtTime_gte = lifetime.start
+      } else {
+        where.createdAt_lte = lifetime.end
+      }
+    }
     return { where }
   }, [status, JSON.stringify(filters)])
 
