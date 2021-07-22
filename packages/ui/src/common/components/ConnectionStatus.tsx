@@ -9,11 +9,17 @@ const HIDE_NOTIFICATION_TIMEOUT = 5000
 export const ConnectionStatus = () => {
   const { isConnected, api } = useApi()
   const [showNotification, setShowNotification] = useState(false)
+  const [connectionState, setConnectionState] = useState<'connecting' | 'connected' | 'disconnected' | 'error'>(
+    'connecting'
+  )
 
   useEffect(() => {
     if (!api) {
+      setShowNotification(true)
       return
     }
+
+    setConnectionState('connected')
 
     const onConnected = () => {
       api.once('disconnected', onDisconnected)
@@ -44,13 +50,24 @@ export const ConnectionStatus = () => {
     return () => clearTimeout(timeout)
   }, [showNotification])
 
+  if (connectionState === 'connecting') {
+    return <SideNotification title="Connecting to node" />
+  }
+
   if (!showNotification) {
     return null
   }
 
   if (isConnected) {
-    return <SideNotification onClick={() => setShowNotification(false)} title={'Connected to network'} />
+    return <SideNotification showClose onClick={() => setShowNotification(false)} title={'Connected to network'} />
   }
 
-  return <SideNotification isError onClick={() => setShowNotification(false)} title={'Disconnected from network'} />
+  return (
+    <SideNotification
+      isError
+      showClose
+      onClick={() => setShowNotification(false)}
+      title={'Disconnected from network'}
+    />
+  )
 }

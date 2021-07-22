@@ -22,10 +22,24 @@ describe('UI: Connection status component', () => {
 
   jest.useFakeTimers()
 
-  it('Default state', async () => {
+  it('Connecting', async () => {
+    useApi.api = undefined
+
     renderComponent()
 
-    expect(screen.queryByText(/connected/i)).toBeNull()
+    expect(screen.getByText(/connecting to node/i)).toBeDefined()
+  })
+
+  it('Permanent Connecting', async () => {
+    useApi.api = undefined
+
+    renderComponent()
+
+    act(() => {
+      jest.advanceTimersByTime(5050)
+    })
+
+    expect(screen.getByText(/connecting to node/i)).toBeDefined()
   })
 
   it('Disconnected', async () => {
