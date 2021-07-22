@@ -7,6 +7,7 @@ import { Account } from '@/accounts/types'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { Member } from '@/memberships/types'
 import { RuntimeUpgradeParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SlashWorkingGroupLeadParameters } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { ProposalType } from '@/proposals/types'
 
 import { DecreaseWorkingGroupLeadStakeParameters, FundingRequestParameters } from './components/SpecificParameters'
@@ -47,6 +48,7 @@ export interface SpecificParametersContext extends Required<TriggerAndDiscussion
     | WorkingGroupAndOpeningDetailsParameters
     | RuntimeUpgradeParameters
     | DecreaseWorkingGroupLeadStakeParameters
+    | SlashWorkingGroupLeadParameters
     | (StakingPolicyAndRewardParameters & WorkingGroupAndOpeningDetailsParameters)
 }
 
@@ -70,6 +72,10 @@ interface DecreaseWorkingGroupLeadStakeContext extends SpecificParametersContext
   specifics: DecreaseWorkingGroupLeadStakeParameters
 }
 
+interface SlashWorkingGroupLeadContext extends SpecificParametersContext {
+  specifics: SlashWorkingGroupLeadParameters
+}
+
 export interface TransactionContext extends Required<SpecificParametersContext> {
   transactionEvents?: EventRecord[]
 }
@@ -85,6 +91,7 @@ export type AddNewProposalContext = Partial<
     StakingPolicyAndRewardContext &
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
+    SlashWorkingGroupLeadContext &
     TransactionContext
 >
 
@@ -104,6 +111,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'fundingRequest' }; context: FundingRequestContext }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: RuntimeUpgradeContext }
   | { value: { specificParameters: 'decreaseWorkingGroupLeadStake' }; context: DecreaseWorkingGroupLeadStakeContext }
+  | { value: { specificParameters: 'slashWorkingGroupLead' }; context: SlashWorkingGroupLeadContext }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndOpeningDetails' } }
       context: WorkingGroupLeadOpeningContext
@@ -132,6 +140,7 @@ type SetStakingAmount = { type: 'SET_STAKING_AMOUNT'; stakingAmount: BN }
 type SetLeavingUnstakingPeriod = { type: 'SET_LEAVING_UNSTAKING_PERIOD'; leavingUnstakingPeriod: number }
 type SetRewardPerBlock = { type: 'SET_REWARD_PER_BLOCK'; rewardPerBlock: BN }
 type SetRuntime = { type: 'SET_RUNTIME'; runtime: ArrayBuffer }
+type SetSlashingAmount = { type: 'SET_SLASHING_AMOUNT'; slashingAmount: BN }
 
 const isType = (type: string) => (context: any) => type === context.type
 
@@ -155,6 +164,7 @@ export type AddNewProposalEvent =
   | SetLeavingUnstakingPeriod
   | SetRewardPerBlock
   | SetRuntime
+  | SetSlashingAmount
 
 export type AddNewProposalMachineState = State<
   AddNewProposalContext,
@@ -297,6 +307,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
               { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
               { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
               { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
+              { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
             ],
           },
         },
@@ -332,6 +343,34 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
                 specifics: (context, event) => ({
                   ...context.specifics,
                   stakingAmount: event.stakingAmount,
+                }),
+              }),
+            },
+            SET_WORKING_GROUP: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  groupId: event.groupId,
+                }),
+              }),
+            },
+            SET_WORKER: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  workerId: event.workerId,
+                }),
+              }),
+            },
+          },
+        },
+        slashWorkingGroupLead: {
+          on: {
+            SET_SLASHING_AMOUNT: {
+              actions: assign({
+                specifics: (context, event) => ({
+                  ...context.specifics,
+                  slashingAmount: event.slashingAmount,
                 }),
               }),
             },

@@ -4,6 +4,7 @@ import { State, Typestate } from 'xstate'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { CreateWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
 import { StakingPolicyAndReward } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/StakingPolicyAndReward'
 import {
@@ -18,33 +19,33 @@ interface SpecificParametersStepProps {
 }
 
 export const isValidSpecificParameters = (state: AddNewProposalMachineState): boolean => {
+  const specifics = state.context.specifics
+
   switch (true) {
     case state.matches('specificParameters.fundingRequest'): {
-      const specifics = state.context.specifics
-
       return !!(specifics?.amount && specifics.amount.gtn(0) && specifics.account)
     }
     case state.matches('specificParameters.runtimeUpgrade'): {
-      const specifics = state.context.specifics
-
       return !!specifics?.runtime && specifics.runtime.byteLength !== 0
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndOpeningDetails'): {
-      const specifics = state.context.specifics
-
       return !!(specifics?.groupId && specifics.description && specifics.shortDescription)
     }
     case state.matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'): {
-      const specifics = state.context.specifics
-
       return !!(specifics?.stakingAmount && specifics.leavingUnstakingPeriod && specifics.rewardPerBlock)
     }
     case state.matches('specificParameters.decreaseWorkingGroupLeadStake'): {
-      const specifics = state.context.specifics
-
       return !!(
         specifics?.stakingAmount &&
         specifics?.stakingAmount.gtn(0) &&
+        specifics.groupId &&
+        specifics.workerId !== undefined
+      )
+    }
+    case state.matches('specificParameters.slashWorkingGroupLead'): {
+      return !!(
+        specifics?.slashingAmount &&
+        specifics?.slashingAmount.gtn(0) &&
         specifics.groupId &&
         specifics.workerId !== undefined
       )
@@ -103,6 +104,17 @@ export const SpecificParametersStep = ({ send, state }: SpecificParametersStepPr
           groupId={state.context.specifics?.groupId}
           workerId={state.context.specifics?.workerId}
           setStakingAmount={(stakingAmount) => send('SET_STAKING_AMOUNT', { stakingAmount })}
+          setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
+          setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
+        />
+      )
+    case state.matches('specificParameters.slashWorkingGroupLead'):
+      return (
+        <SlashWorkingGroupLead
+          slashingAmount={state.context.specifics?.slashingAmount}
+          groupId={state.context.specifics?.groupId}
+          workerId={state.context.specifics?.workerId}
+          setSlashingAmount={(slashingAmount) => send('SET_SLASHING_AMOUNT', { slashingAmount })}
           setGroupId={(groupId) => send('SET_WORKING_GROUP', { groupId })}
           setWorkerId={(workerId) => send('SET_WORKER', { workerId })}
         />
