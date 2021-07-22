@@ -14,6 +14,7 @@ import {
   seedWorkingGroups,
   seedProposals,
   seedEvents,
+  updateWorkingGroups,
 } from './data'
 import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
 
@@ -110,6 +111,7 @@ export const makeServer = (environment = 'development') => {
       seedUpcomingOpenings(server)
       seedApplications(server)
       seedWorkers(server)
+      updateWorkingGroups(server)
       seedProposals(server)
       seedEvents(server)
     },

@@ -2,7 +2,7 @@ import BN from 'bn.js'
 
 import { getAverageStake } from '@/working-groups/model/getAverageStake'
 
-import { WorkingGroupFieldsFragment } from '../queries'
+import { WorkingGroupDetailedFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
 export interface WorkingGroup {
   id: string
@@ -17,6 +17,14 @@ export interface WorkingGroup {
   averageStake: BN
 }
 
+export interface DetailedWorkingGroup extends WorkingGroup {
+  leaderWorker?: {
+    id: string
+    runtimeId: number
+    stake: BN
+  }
+}
+
 export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup => {
   return {
     id: group.id,
@@ -26,11 +34,24 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     description: group.metadata?.description ?? '',
     status: group.metadata?.status ?? '',
     statusMessage: group.metadata?.statusMessage ?? '',
-    leaderId: group.leader?.membership.id,
     budget: new BN(group.budget),
     averageStake: getAverageStake(group.workers),
+    leaderId: group.leader?.membershipId,
   }
 }
+
+export const asDetailedWorkingGroup = (group: WorkingGroupDetailedFieldsFragment): DetailedWorkingGroup => ({
+  ...asWorkingGroup(group),
+  ...(group.leader
+    ? {
+        leaderWorker: {
+          id: group.leader.id,
+          runtimeId: group.leader.runtimeId,
+          stake: new BN(group.leader.stake),
+        },
+      }
+    : {}),
+})
 
 const KnownWorkingGroups = ['forum', 'storage', 'content directory', 'membership'] as const
 

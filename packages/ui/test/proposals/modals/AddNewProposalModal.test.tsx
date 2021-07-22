@@ -1,6 +1,6 @@
 import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, render, screen } from '@testing-library/react'
+import { configure, fireEvent, prettyDOM, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -15,7 +15,16 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
+import {
+  seedApplications,
+  seedMembers,
+  seedOpenings,
+  seedOpeningStatuses,
+  seedUpcomingOpenings,
+  seedWorkers,
+  seedWorkingGroups,
+  updateWorkingGroups,
+} from '@/mocks/data'
 import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
@@ -71,7 +80,7 @@ describe('UI: AddNewProposalModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    seedMembers(server.server, 2)
+    seedMembers(server.server)
 
     useAccounts = {
       hasAccounts: true,
@@ -322,7 +331,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid - no selected recipient', async () => {
-          await SpecificParameters.FundingRequest.fillAmount(100)
+          await SpecificParameters.fillAmount(100)
 
           const button = await getCreateButton()
           expect(button).toBeDisabled()
@@ -336,8 +345,70 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Valid - everything filled', async () => {
-          await SpecificParameters.FundingRequest.fillAmount(100)
+          await SpecificParameters.fillAmount(100)
           await SpecificParameters.FundingRequest.selectRecipient('bob')
+
+          const button = await getCreateButton()
+          expect(button).not.toBeDisabled()
+        })
+      })
+
+      describe('Type - Decrease Working Group Lead Stake', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+          seedOpeningStatuses(server.server)
+          seedOpenings(server.server)
+          seedUpcomingOpenings(server.server)
+          seedApplications(server.server)
+          seedWorkers(server.server)
+          updateWorkingGroups(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('decreaseWorkingGroupLeadStake')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Default - not filled amount, no selected group', async () => {
+          expect(screen.queryByText('Working Group Leader')).not.toBeNull()
+          expect(await getButton(/By half/i)).toBeDisabled()
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Group selected', async () => {
+          await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Forum')
+          await waitFor(async () => expect(await getButton(/By half/i)).not.toBeDisabled())
+
+          expect(screen.queryByText(/The actual stake for Forum Working Group Lead is /i)).not.toBeNull()
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Group selected without leader', async () => {
+          await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Membership')
+          await waitFor(() =>
+            expect(
+              screen.queryByText('Membership Working Group has no any Leader yet. Please choose other Group.')
+            ).not.toBeNull()
+          )
+          expect(await getButton(/By half/i)).toBeDisabled()
+
+          const button = await getCreateButton()
+          expect(button).toBeDisabled()
+        })
+
+        it('Valid - group selected, amount filled', async () => {
+          await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Forum')
+          await waitFor(() =>
+            expect(screen.queryByText(/The actual stake for Forum Working Group Lead is /i)).not.toBeNull()
+          )
+
+          await SpecificParameters.fillAmount(100)
 
           const button = await getCreateButton()
           expect(button).not.toBeDisabled()
@@ -485,20 +556,25 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   const SpecificParameters = {
+    fillAmount: async (value: number) => {
+      const amountInput = await screen.getByTestId('amount-input')
+      await fireEvent.change(amountInput, { target: { value } })
+    },
     FundingRequest: {
-      fillAmount: async (value: number) => {
-        const amountInput = await screen.getByTestId('amount-input')
-        await fireEvent.change(amountInput, { target: { value } })
-      },
       selectRecipient: async (name: string) => {
         await selectAccount('Recipient account', name)
       },
       finish: async (amount: number, recipient: string) => {
-        await SpecificParameters.FundingRequest.fillAmount(amount)
+        await SpecificParameters.fillAmount(amount)
         await SpecificParameters.FundingRequest.selectRecipient(recipient)
 
         const button = await getCreateButton()
         await fireEvent.click(button as HTMLElement)
+      },
+    },
+    DecreaseWorkingGroupLeadStake: {
+      selectGroup: async (name: string) => {
+        await selectAccount('Working Group', name)
       },
     },
   }

@@ -56,14 +56,11 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, s
               </Row>
               <Row>
                 <RowGapBlock gap={20}>
-                  <Info
-                    title="Staked"
-                    content={
-                      <TextMedium light>
-                        You have just staked <TokenValue value={stake} /> from your "{stakeAccount.name}" account.
-                      </TextMedium>
-                    }
-                  />
+                  <Info title="Staked">
+                    <TextMedium light>
+                      You have just staked <TokenValue value={stake} /> from your "{stakeAccount.name}" account.
+                    </TextMedium>
+                  </Info>
                 </RowGapBlock>
               </Row>
             </RowGapBlock>

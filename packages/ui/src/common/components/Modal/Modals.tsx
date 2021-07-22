@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { ButtonGhost } from '@/common/components/buttons'
+
 import { BorderRad, Colors, Sizes } from '../../constants'
 import { Icon } from '../icons'
 import { ValueInJoys } from '../typography'
@@ -109,4 +111,21 @@ export const TransactionAmountInfoText = styled.span`
     font-weight: 700;
     color: ${Colors.Black[700]};
   }
+`
+
+export const AmountButtons = styled.div`
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  width: fit-content;
+  height: 46px;
+  align-items: center;
+`
+
+export const AmountButton = styled(ButtonGhost)`
+  height: 26px;
+  padding: 4px 6px;
+  font-size: 10px;
+  line-height: 16px;
+  text-transform: uppercase;
 `
