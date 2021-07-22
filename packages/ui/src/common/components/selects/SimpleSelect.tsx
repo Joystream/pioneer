@@ -2,7 +2,7 @@ import React, { Fragment, useCallback, useReducer } from 'react'
 import styled from 'styled-components'
 
 import { FilterLabel } from '@/common/components/forms/FilterBox'
-import { BorderRad, Colors, Overflow, Shadows, ZIndex } from '@/common/constants'
+import { BorderRad, Colors, Overflow, RemoveScrollbar, Shadows, ZIndex } from '@/common/constants'
 import { isDefined, isString } from '@/common/utils'
 import { stopEvent } from '@/common/utils/events'
 
@@ -158,8 +158,10 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
 
       return (
         <Options>
-          {nullOption}
-          {optionList}
+          <OptionsContainer>
+            {nullOption}
+            {optionList}
+          </OptionsContainer>
           {footer}
         </Options>
       )
@@ -244,6 +246,15 @@ const Options = styled.div`
   max-width: 100%;
   ${Overflow.FullDots};
   z-index: ${ZIndex.select};
+`
+
+const OptionsContainer = styled.div`
+  width: 100%;
+  height: fit-content;
+  max-height: 258px;
+  overflow: hidden;
+  overflow-y: scroll;
+  ${RemoveScrollbar};
 `
 
 const OptionsFooter = styled.div`
