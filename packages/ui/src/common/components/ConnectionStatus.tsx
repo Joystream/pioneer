@@ -7,19 +7,14 @@ import { SideNotification } from './page/SideNotification'
 const HIDE_NOTIFICATION_TIMEOUT = 5000
 
 export const ConnectionStatus = () => {
-  const { isConnected, api } = useApi()
+  const { api, connectionState } = useApi()
   const [showNotification, setShowNotification] = useState(false)
-  const [connectionState, setConnectionState] = useState<'connecting' | 'connected' | 'disconnected' | 'error'>(
-    'connecting'
-  )
 
   useEffect(() => {
     if (!api) {
       setShowNotification(true)
       return
     }
-
-    setConnectionState('connected')
 
     const onConnected = () => {
       api.once('disconnected', onDisconnected)
@@ -58,7 +53,7 @@ export const ConnectionStatus = () => {
     return null
   }
 
-  if (isConnected) {
+  if (connectionState === 'connected') {
     return <SideNotification showClose onClick={() => setShowNotification(false)} title={'Connected to network'} />
   }
 

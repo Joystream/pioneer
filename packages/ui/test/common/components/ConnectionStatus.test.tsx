@@ -12,17 +12,19 @@ describe('UI: Connection status component', () => {
   const useApi = {
     api: {},
     isConnected: false,
+    connectionState: 'connecting',
   } as UseApi
 
   beforeEach(() => {
     eventEmitter = new EventEmitter()
-    useApi.isConnected = false
+    useApi.connectionState = 'connected'
     useApi.api = (eventEmitter as unknown) as ApiRx
   })
 
   jest.useFakeTimers()
 
   it('Connecting', async () => {
+    useApi.connectionState = 'connecting'
     useApi.api = undefined
 
     renderComponent()
@@ -31,6 +33,7 @@ describe('UI: Connection status component', () => {
   })
 
   it('Permanent Connecting', async () => {
+    useApi.connectionState = 'connecting'
     useApi.api = undefined
 
     renderComponent()
@@ -46,6 +49,8 @@ describe('UI: Connection status component', () => {
     renderComponent()
 
     act(() => {
+      eventEmitter.emit('connected')
+      useApi.connectionState = 'disconnected'
       eventEmitter.emit('disconnected')
     })
 
@@ -54,7 +59,6 @@ describe('UI: Connection status component', () => {
 
   it('Connected', async () => {
     renderComponent()
-    useApi.isConnected = true
 
     act(() => {
       eventEmitter.emit('connected')

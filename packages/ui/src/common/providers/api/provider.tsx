@@ -13,9 +13,12 @@ interface Props {
   children: ReactNode
 }
 
+type ConnectionState = 'connecting' | 'connected' | 'disconnected' | 'error'
+
 export interface UseApi {
   api: ApiRx | undefined
   isConnected: boolean
+  connectionState: ConnectionState
 }
 
 const endpoints: Record<NetworkType, string> = {
@@ -28,7 +31,7 @@ const getEndPoint = (network: NetworkType) => {
 }
 
 export const ApiContextProvider = (props: Props) => {
-  const [isConnected, setIsConnected] = useState(false)
+  const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
   const [api, setApi] = useState<ApiRx | undefined>(undefined)
   const [network] = useNetwork()
 
@@ -37,12 +40,16 @@ export const ApiContextProvider = (props: Props) => {
 
     ApiRx.create({ provider, rpc: jsonrpc, types: types, registry }).subscribe((api) => {
       setApi(api)
-      setIsConnected(true)
+      setConnectionState('connected')
 
-      api.on('connected', () => setIsConnected(true))
-      api.on('disconnected', () => setIsConnected(false))
+      api.on('connected', () => setConnectionState('connected'))
+      api.on('disconnected', () => setConnectionState('disconnected'))
     })
   }, [])
 
-  return <ApiContext.Provider value={{ isConnected, api }}>{props.children}</ApiContext.Provider>
+  return (
+    <ApiContext.Provider value={{ isConnected: connectionState === 'connected', api, connectionState }}>
+      {props.children}
+    </ApiContext.Provider>
+  )
 }

@@ -107,6 +107,7 @@ export const stubApi = () => {
   const api: UseApi = {
     api: ({} as unknown) as ApiRx,
     isConnected: true,
+    connectionState: 'connected',
   }
   return api
 }
