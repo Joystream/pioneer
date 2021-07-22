@@ -44,7 +44,7 @@ export const DecreaseWorkingGroupLeadStake = ({
   const byHalf = () => setAmount(group && group.leaderWorker ? group.leaderWorker.stake.divn(2).toString() : '')
   const byThird = () => setAmount(group && group.leaderWorker ? group.leaderWorker.stake.divn(3).toString() : '')
 
-  const isDisabled = !groupId || !group || (group && !group.leaderId)
+  const isDisabled = !group || (group && !group.leaderId)
 
   useEffect(() => setStakingAmount(new BN(amount)), [amount])
   useEffect(() => {

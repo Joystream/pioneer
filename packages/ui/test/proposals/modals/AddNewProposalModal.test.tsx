@@ -1,6 +1,6 @@
 import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { configure, fireEvent, prettyDOM, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -404,6 +404,10 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid - group selected, amount filled', async () => {
           await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Forum')
+          await waitFor(() =>
+            expect(screen.queryByText(/The actual stake for Forum Working Group Lead is /i)).not.toBeNull()
+          )
+
           await SpecificParameters.fillAmount(100)
 
           const button = await getCreateButton()
