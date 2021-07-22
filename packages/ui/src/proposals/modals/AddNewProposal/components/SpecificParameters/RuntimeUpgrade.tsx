@@ -32,7 +32,7 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
 
   const { isDragActive, isDragAccept, isDragReject, getRootProps, getInputProps, acceptedFiles } = useDropzone({
     onDrop,
-    accept: '.wasm',
+    accept: 'application/wasm',
     maxFiles: 1,
     maxSize: MAX_FILE_SIZE,
     multiple: false,
@@ -173,7 +173,7 @@ const AcceptedFile = styled.div<DragResponseProps>`
   border-left: 4px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.s};
   overflow: hidden;
-  
+
   ${({ isDragActive }) =>
     isDragActive &&
     css`
