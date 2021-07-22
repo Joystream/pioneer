@@ -32,6 +32,7 @@ import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
+import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 
 export const ProposalPreview = () => {
   const { id, postId } = useParams<{ id: string; postId?: string }>()
@@ -89,7 +90,12 @@ export const ProposalPreview = () => {
 
           <RowGapBlock gap={24}>
             <BadgeAndTime>
-              <BadgeStatus inverted size="l">
+              <BadgeStatus
+                ended={proposalPastStatuses.includes(proposal.status)}
+                succeeded={proposal.status === 'executed'}
+                inverted
+                size="l"
+              >
                 {camelCaseToText(proposal.status)}
               </BadgeStatus>
               {blocksToProposalExecution && (
