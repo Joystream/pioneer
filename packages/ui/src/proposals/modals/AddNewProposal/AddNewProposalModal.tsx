@@ -77,12 +77,12 @@ export const AddNewProposalModal = () => {
   }
 
   const transaction = useMemo(() => {
-    if (member && api) {
+    if (member) {
       const txSpecificParameters = getSpecificParameters(api, state as AddNewProposalMachineState)
 
       return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
     }
-  }, [api, JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics)])
+  }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics)])
   const feeInfo = useTransactionFee(member?.controllerAccount, transaction)
 
   useEffect((): any => {

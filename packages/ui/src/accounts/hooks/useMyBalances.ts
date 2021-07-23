@@ -16,7 +16,7 @@ export function useMyBalances() {
   const addresses = allAccounts.map((account) => account.address)
   const balancesObs = api ? addresses.map((address) => api.derive.balances.all(address).pipe(map(toBalances))) : []
 
-  const result = useObservable(combineLatest(balancesObs), [api, JSON.stringify(addresses)])
+  const result = useObservable(combineLatest(balancesObs), [isConnected, JSON.stringify(addresses)])
 
   if (hasAccounts && isConnected && result) {
     return result.reduce((acc, balance, index) => {

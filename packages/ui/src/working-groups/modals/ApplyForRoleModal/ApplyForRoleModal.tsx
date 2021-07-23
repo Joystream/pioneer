@@ -41,7 +41,7 @@ export const ApplyForRoleModal = () => {
   const requiredStake = opening.stake.toNumber()
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
   const transaction = useMemo(() => {
-    if (active && api) {
+    if (active) {
       return getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
         member_id: active?.id,
         opening_id: opening.runtimeId,
@@ -53,7 +53,7 @@ export const ApplyForRoleModal = () => {
         },
       })
     }
-  }, [api, active?.id])
+  }, [active?.id])
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
   useEffect(() => {

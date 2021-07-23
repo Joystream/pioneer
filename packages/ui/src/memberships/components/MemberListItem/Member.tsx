@@ -21,7 +21,7 @@ export const MemberListItem = ({ member }: { member: Member }) => {
   }, [member.id])
 
   const { api } = useApi()
-  const council = useObservable(api?.query.council.councilMembers(), [api])
+  const council = useObservable(api.query.council.councilMembers(), [])
   const councilMembersIds = council?.map(({ membership_id }) => membership_id.toNumber()) ?? []
   const isCouncil = (id: number) => councilMembersIds.includes(id)
 
