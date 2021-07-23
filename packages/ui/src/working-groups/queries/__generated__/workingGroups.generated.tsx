@@ -605,6 +605,29 @@ export type GetWorkerIdsQueryVariables = Types.Exact<{
 
 export type GetWorkerIdsQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker'; id: string }> }
 
+export type GetWorkerUnstakingDetailsQueryVariables = Types.Exact<{
+  where: Types.WorkerWhereUniqueInput
+}>
+
+export type GetWorkerUnstakingDetailsQuery = {
+  __typename: 'Query'
+  workerByUniqueInput?: Types.Maybe<{
+    __typename: 'Worker'
+    status:
+      | { __typename: 'WorkerStatusActive' }
+      | {
+          __typename: 'WorkerStatusLeaving'
+          workerStartedLeavingEvent?: Types.Maybe<{ __typename: 'WorkerStartedLeavingEvent'; createdAt: any }>
+        }
+      | { __typename: 'WorkerStatusLeft' }
+      | { __typename: 'WorkerStatusTerminated' }
+    application: {
+      __typename: 'WorkingGroupApplication'
+      opening: { __typename: 'WorkingGroupOpening'; unstakingPeriod: number }
+    }
+  }>
+}
+
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
     id
@@ -2283,3 +2306,63 @@ export function useGetWorkerIdsLazyQuery(
 export type GetWorkerIdsQueryHookResult = ReturnType<typeof useGetWorkerIdsQuery>
 export type GetWorkerIdsLazyQueryHookResult = ReturnType<typeof useGetWorkerIdsLazyQuery>
 export type GetWorkerIdsQueryResult = Apollo.QueryResult<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>
+export const GetWorkerUnstakingDetailsDocument = gql`
+  query GetWorkerUnstakingDetails($where: WorkerWhereUniqueInput!) {
+    workerByUniqueInput(where: $where) {
+      status {
+        __typename
+        ... on WorkerStatusLeaving {
+          workerStartedLeavingEvent {
+            createdAt
+          }
+        }
+      }
+      application {
+        opening {
+          unstakingPeriod
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useGetWorkerUnstakingDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetWorkerUnstakingDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkerUnstakingDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkerUnstakingDetailsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetWorkerUnstakingDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>(
+    GetWorkerUnstakingDetailsDocument,
+    options
+  )
+}
+export function useGetWorkerUnstakingDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>(
+    GetWorkerUnstakingDetailsDocument,
+    options
+  )
+}
+export type GetWorkerUnstakingDetailsQueryHookResult = ReturnType<typeof useGetWorkerUnstakingDetailsQuery>
+export type GetWorkerUnstakingDetailsLazyQueryHookResult = ReturnType<typeof useGetWorkerUnstakingDetailsLazyQuery>
+export type GetWorkerUnstakingDetailsQueryResult = Apollo.QueryResult<
+  GetWorkerUnstakingDetailsQuery,
+  GetWorkerUnstakingDetailsQueryVariables
+>

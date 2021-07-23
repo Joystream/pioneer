@@ -1,7 +1,8 @@
+import faker from 'faker'
+
 import { Worker } from '@/common/api/queries'
 
 import rawWorkers from './raw/workers.json'
-import faker from 'faker'
 
 type WorkerStatus = 'active' | 'left' | 'leaving' | 'terminated'
 
@@ -36,7 +37,7 @@ export const seedWorker = (rawWorker: RawWorker, server: any) => {
     status: null,
     isLead: group.leaderId === rawWorker.id,
   })
-  worker.update({status: seedWorkerStatus(worker, rawWorker.status as WorkerStatus, server)})
+  worker.update({ status: seedWorkerStatus(worker, rawWorker.status as WorkerStatus, server) })
 }
 
 const seedWorkerStatus = (worker: any, status: WorkerStatus, server: any) => {
@@ -51,7 +52,7 @@ const seedWorkerStatus = (worker: any, status: WorkerStatus, server: any) => {
           createdAt: faker.date.recent(1),
           group: worker.group,
           worker: worker,
-        })
+        }),
       })
     default:
       return server.schema.create('WorkerStatusTerminated', { phantom: 0 })
