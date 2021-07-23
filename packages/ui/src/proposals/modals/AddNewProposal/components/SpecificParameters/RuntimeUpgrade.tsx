@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import styled, { css } from 'styled-components'
 
@@ -26,9 +26,29 @@ const MAX_FILE_SIZE = 3 * 1024 * 1024
 
 export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0]
-    setRuntime(await file.arrayBuffer())
+    if (acceptedFiles.length) {
+      setRuntime(await acceptedFiles[0].arrayBuffer())
+    }
   }, [])
+  const [fileValidation, setFileValidation] = useState<{ file: File; isValid: boolean } | undefined>()
+
+  async function getFiles(event: any) {
+    const files = []
+
+    const fileList = event.dataTransfer ? event.dataTransfer.files : event.target.files
+    for (let i = 0; i < fileList.length; i++) {
+      const file = fileList.item(i)
+
+      if (WebAssembly.validate(await file.arrayBuffer())) {
+        files.push(file)
+        setFileValidation({ file, isValid: true })
+      } else {
+        setFileValidation({ file, isValid: false })
+      }
+    }
+
+    return files
+  }
 
   const {
     isDragActive,
@@ -44,6 +64,7 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
     maxFiles: 1,
     maxSize: MAX_FILE_SIZE,
     multiple: false,
+    getFilesFromEvent: (event) => getFiles(event),
   })
 
   return (
@@ -76,24 +97,30 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
             </RowGapBlock>
             <TextSmall lighter>Maximum upload file size is 3 MB</TextSmall>
           </RowGapBlock>
-          {!!acceptedFiles.length && (
-            <RowGapBlock gap={8}>
-              {acceptedFiles.map((file) => (
-                <ReceivedFile key={file.name} valid={true}>
-                  <AcceptedFileText>
-                    <b>{file.name}</b> ({file.size} B) was uploaded successfully!
-                  </AcceptedFileText>
-                </ReceivedFile>
-              ))}
-              {fileRejections.map(({ file, errors }) => (
-                <ReceivedFile key={file.name} valid={false}>
-                  <AcceptedFileText>
-                    <b>{file.name}</b> ({file.size} B) was not loaded because of "{errors.map((e) => e.message)}"
-                  </AcceptedFileText>
-                </ReceivedFile>
-              ))}
-            </RowGapBlock>
-          )}
+          <RowGapBlock gap={8}>
+            {acceptedFiles.map((file) => (
+              <ReceivedFile key={file.name} valid={true}>
+                <AcceptedFileText>
+                  <b>{file.name}</b> ({file.size} B) was loaded successfully!
+                </AcceptedFileText>
+              </ReceivedFile>
+            ))}
+            {fileRejections.map(({ file, errors }) => (
+              <ReceivedFile key={file.name} valid={false}>
+                <AcceptedFileText>
+                  <b>{file.name}</b> ({file.size} B) was not loaded because of "{errors.map((e) => e.message)}"
+                </AcceptedFileText>
+              </ReceivedFile>
+            ))}
+            {fileValidation && !fileValidation.isValid && (
+              <ReceivedFile key={fileValidation.file.name} valid={false}>
+                <AcceptedFileText>
+                  <b>{fileValidation.file.name}</b> ({fileValidation.file.size} B) was not loaded because it could be
+                  malicious
+                </AcceptedFileText>
+              </ReceivedFile>
+            )}
+          </RowGapBlock>
         </RowGapBlock>
       </Row>
     </RowGapBlock>
@@ -189,6 +216,7 @@ const ReceivedFile = styled.div<{ valid?: boolean }>`
       ? css`
           border-color: ${Colors.Green[500]};
           background-color: ${Colors.Green[100]};
+
           ${AcceptedFileText} {
             color: ${Colors.Green[500]};
           }
@@ -196,6 +224,7 @@ const ReceivedFile = styled.div<{ valid?: boolean }>`
       : css`
           border-color: ${Colors.Red[400]};
           background-color: ${Colors.Red[100]};
+
           ${AcceptedFileText} {
             color: ${Colors.Red[400]};
           }
