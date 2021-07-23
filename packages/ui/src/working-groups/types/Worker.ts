@@ -17,7 +17,7 @@ export interface Worker {
   runtimeId: number
   membership: Pick<Member, 'id' | 'controllerAccount'>
   group: Pick<WorkingGroup, 'id' | 'name'>
-  status: string
+  status: WorkerStatusTypename
   isLeader: boolean
   reward: Reward
   owedReward: number
@@ -35,10 +35,12 @@ export interface WorkerWithDetails extends Worker {
   minStake: number
 }
 
-export type WorkerStatus = 'active' | 'left' | 'terminated'
-export const WorkerStatusTypename: Record<WorkerStatus, WorkerFieldsFragment['status']['__typename']> = {
+export type WorkerStatus = 'active' | 'left' | 'leaving' | 'terminated'
+export type WorkerStatusTypename = WorkerDetailedFieldsFragment['status']['__typename']
+export const WorkerStatusToTypename: Record<WorkerStatus, WorkerFieldsFragment['status']['__typename']> = {
   active: 'WorkerStatusActive',
   left: 'WorkerStatusLeft',
+  leaving: 'WorkerStatusLeaving',
   terminated: 'WorkerStatusTerminated',
 }
 

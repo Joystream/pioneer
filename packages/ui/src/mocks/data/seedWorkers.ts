@@ -2,7 +2,7 @@ import { Worker } from '@/common/api/queries'
 
 import rawWorkers from './raw/workers.json'
 
-type WorkerStatus = 'active' | 'left' | 'terminated'
+type WorkerStatus = 'active' | 'left' | 'leaving' | 'terminated'
 
 export interface RawWorker {
   id: string
@@ -43,6 +43,8 @@ const seedWorkerStatus = (status: WorkerStatus, id: string, server: any) => {
       return server.schema.create('WorkerStatusActive', { phantom: 0 })
     case 'left':
       return server.schema.create('WorkerStatusLeft', { phantom: 0 })
+    case 'leaving':
+      return server.schema.create('WorkerStatusLeaving')
     default:
       return server.schema.create('WorkerStatusTerminated', { phantom: 0 })
   }

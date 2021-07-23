@@ -77,12 +77,14 @@ export const generateWorkers = (mocks: Mocks) => {
   const generateAllWorkers = (groupName: string) => {
     const workersIds = [0, 1, ...randomUniqueArrayFromRange(randomFromRange(2, 7), 2, mocks.members.length - 1)]
     const terminatedIds = randomUniqueArrayFromRange(randomFromRange(2, 8), 0, mocks.members.length - 1)
-    const leftIds = randomUniqueArrayFromRange(randomFromRange(2, 14), 0, mocks.members.length - 1)
+    const leftIds = randomUniqueArrayFromRange(randomFromRange(2, 12), 0, mocks.members.length - 1)
+    const leavingIds = randomUniqueArrayFromRange(randomFromRange(2, 5), 0, mocks.members.length - 1)
 
     return [
       ...workersIds.map(generateWorker('active', groupName, applications, findOpening(groupName, 'filled'))),
       ...terminatedIds.map(generateWorker('terminated', groupName, applications, findOpening(groupName, 'filled'))),
       ...leftIds.map(generateWorker('left', groupName, applications, findOpening(groupName, 'filled'))),
+      ...leavingIds.map(generateWorker('leaving', groupName, applications, findOpening(groupName, 'filled'))),
     ]
   }
 
