@@ -23,10 +23,11 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
     const isDormant = onGoing && status === 'dormant'
     return [
       ...repeat((round) => ({ icon: <CheckboxIcon />, onClick: () => onChange(round) }), decidingCount - 1),
-      ...(approved || isDormant ? [{ icon: <CheckboxIcon />, onClick: () => onChange(decidingCount - 1) }] : []),
-      ...(lastUpdate === 'dormant' ? [{ icon: undefined, onClick: undefined }] : []),
-      ...(isDeciding ? [{ icon: <CheckboxIcon />, onClick: () => onChange(decidingCount - 1) }] : []),
-      ...(rejected ? [{ icon: <CrossIcon />, onClick: () => onChange(decidingCount - 1) }] : []),
+      {
+        icon: !isDeciding && (rejected ? <CrossIcon /> : <CheckboxIcon />),
+        onClick: () => onChange(decidingCount - 1),
+      },
+      ...(isDormant ? [{ icon: false, onClick: undefined }] : []),
     ]
   }, [updates.length, status])
 
