@@ -11,10 +11,6 @@ import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/mod
 import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
-import {
-  StakeChangedModalCall,
-  StakeChangedModal,
-} from '@/working-groups/components/Activities/ActivitiesModals/StakeChanged'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
@@ -33,7 +29,6 @@ export type ModalNames =
   | ModalName<MoveFundsModalCall>
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
-  | ModalName<StakeChangedModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
@@ -63,8 +58,6 @@ export const GlobalModals = () => {
       return <AddNewProposalModal />
     case 'VoteRationaleModal':
       return <VoteRationale />
-    case 'StakeChanged':
-      return <StakeChangedModal />
     default:
       return null
   }

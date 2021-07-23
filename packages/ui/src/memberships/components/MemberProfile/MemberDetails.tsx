@@ -10,13 +10,12 @@ import {
   SidePaneText,
   SidePaneRow,
   SidePaneLabel,
+  EmptyBody,
 } from '../../../common/components/SidePane'
 import { useMember } from '../../hooks/useMembership'
 import { Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'
 import { TransferInviteButton } from '../TransferInviteButton'
-
-import { EmptyBody } from './MemberProfile'
 
 type Props = { member: Member }
 

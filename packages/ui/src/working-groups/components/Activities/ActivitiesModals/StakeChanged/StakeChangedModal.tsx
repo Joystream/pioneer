@@ -1,38 +1,72 @@
+import BN from 'bn.js'
 import React from 'react'
 
+import { StatusBadge } from '@/app/pages/WorkingGroups/components/StatusBadges'
 import { CloseButton } from '@/common/components/buttons'
+import { Loading } from '@/common/components/Loading'
 import {
+  EmptyBody,
   SidePane,
   SidePaneBody,
   SidePaneGlass,
   SidePaneHeader,
+  SidePaneLabel,
   SidePanelTop,
+  SidePaneRow,
+  SidePaneTable,
+  SidePaneText,
   SidePaneTitle,
 } from '@/common/components/SidePane'
-import { useModal } from '@/common/hooks/useModal'
+import { TokenValue } from '@/common/components/typography'
 
-import { StakeChangedModalCall } from './types'
+interface StakeChangedModalProps {
+  onClose: () => void
+  amount?: BN
+  eventType?: 'StakeIncreasedEvent' | 'StakeDecreasedEvent'
+  id?: string
+}
 
-export const StakeChangedModal = React.memo(() => {
-  const { hideModal } = useModal<StakeChangedModalCall>()
-
-  const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (e.target === e.currentTarget) {
-      hideModal()
-    }
-  }
-
+export const StakeChangedModal = ({ onClose, amount, eventType, id }: StakeChangedModalProps) => {
   return (
-    <SidePaneGlass onClick={onBackgroundClick}>
-      <SidePane>
+    <SidePaneGlass onClick={onClose}>
+      <SidePane topSize="xs">
         <SidePaneHeader>
           <SidePanelTop>
-            <SidePaneTitle>Your stake has been changed</SidePaneTitle>
-            <CloseButton onClick={hideModal} />
+            <SidePaneTitle>
+              Stake has been {eventType === 'StakeDecreasedEvent' ? 'reduced' : 'increased'}
+            </SidePaneTitle>
+            <CloseButton onClick={onClose} />
           </SidePanelTop>
         </SidePaneHeader>
-        <SidePaneBody>{/* <MemberDetails member={member} /> */}</SidePaneBody>
+        <SidePaneBody>
+          {amount && eventType && id ? (
+            <SidePaneTable>
+              <SidePaneRow>
+                <SidePaneLabel text="status" />
+                <StatusBadge>{eventType === 'StakeDecreasedEvent' ? 'reduce' : 'increase'}</StatusBadge>
+              </SidePaneRow>
+              <SidePaneRow>
+                <SidePaneLabel text="slashed by" />
+                <SidePaneText>
+                  <TokenValue value={amount} />
+                </SidePaneText>
+              </SidePaneRow>
+              <SidePaneRow>
+                <SidePaneLabel text="rationale" />
+                <SidePaneText>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, deleniti, dolor voluptatibus nisi
+                  iusto molestiae quo explicabo illo cum nostrum corrupti suscipit a atque aperiam aliquam nobis quidem,
+                  architecto vitae?
+                </SidePaneText>
+              </SidePaneRow>
+            </SidePaneTable>
+          ) : (
+            <EmptyBody>
+              <Loading />
+            </EmptyBody>
+          )}
+        </SidePaneBody>
       </SidePane>
     </SidePaneGlass>
   )
-})
+}

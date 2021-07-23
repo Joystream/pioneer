@@ -55,12 +55,16 @@ export const SidePaneBody = styled.div`
   ${RemoveScrollbar};
 `
 
+export const EmptyBody = styled.div`
+  padding: 24px;
+`
+
 export const SidePaneTopButtonsGroup = styled(ButtonsGroup)`
   position: absolute;
   right: 36px;
 `
 
-export const SidePane = styled.div<{ topSize?: 's' | 'm' }>`
+export const SidePane = styled.div<{ topSize?: 'xs' | 's' | 'm' }>`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: minmax(auto, ${({ topSize }) => (topSize === 's' ? '132px' : '192px')}) 1fr;
@@ -76,11 +80,22 @@ export const SidePane = styled.div<{ topSize?: 's' | 'm' }>`
   overflow: hidden;
   ${Animations.showSidePane};
 
-  ${SidePaneHeader} {
-    ${({ topSize }) =>
-      topSize == 's' &&
-      css`
-        align-content: space-between;
-      `};
-  }
+  ${({ topSize }) => {
+    switch (topSize) {
+      case 'xs':
+        return css`
+          grid-template-rows: auto 1fr;
+
+          ${SidePaneHeader} {
+            padding: 12px 24px;
+          }
+        `
+      case 's':
+        return css`
+          ${SidePaneHeader} {
+            align-content: space-between;
+          }
+        `
+    }
+  }};
 `
