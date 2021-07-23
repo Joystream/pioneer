@@ -6,6 +6,7 @@ import { Colors } from '@/common/constants'
 
 import { StatsContent, StatisticHeader, StatisticHeaderProps } from '.'
 import { FractionValue, FractionValueProps } from './FractionValue'
+import { NumericValue } from './NumericValueStat'
 
 export interface StatisticBarProps extends StatisticHeaderProps, FractionValueProps {
   value: number
@@ -50,4 +51,8 @@ const ThresholdBar = styled.div<{ threshold?: number }>`
 
 const Figure = styled.div`
   margin-left: auto;
+
+  ${NumericValue} {
+    font-size: 14px;
+  }
 `
