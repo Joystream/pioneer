@@ -14,7 +14,7 @@ const generateWorkingGroup = (groupName: string) => ({
   id: groupName,
   name: groupName,
   workers: [],
-  leaderId: null,
+  leadId: null,
   budget: randomFromRange(1000, 5000),
   metadata: {
     name: faker.lorem.words(2),
@@ -31,7 +31,7 @@ export interface WorkingGroupMock {
   id: string
   name: string
   workers: never[]
-  leaderId: string | null
+  leadId: string | null
   budget: number
   metadata: ReturnType<typeof generateWorkingGroup>['metadata']
 }
@@ -40,8 +40,8 @@ export const generateWorkingGroups = () => {
   return WORKING_GROUPS.map(generateWorkingGroup)
 }
 
-export const getWorkingGroupsWithLeader = (mocks: Mocks) => {
-  const getLeader = (groupId: string) => {
+export const getWorkingGroupsWithLead = (mocks: Mocks) => {
+  const getLead = (groupId: string) => {
     if (groupId === 'membershipWorkingGroup') {
       return null
     }
@@ -53,6 +53,6 @@ export const getWorkingGroupsWithLeader = (mocks: Mocks) => {
 
   return mocks.workingGroups.map((group) => ({
     ...group,
-    leaderId: getLeader(group.id),
+    leadId: getLead(group.id),
   }))
 }

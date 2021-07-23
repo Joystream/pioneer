@@ -6,8 +6,8 @@ import { WorkerTerminatedActivity } from '@/working-groups/types'
 
 export const WorkerTerminatedContent: ActivityContentComponent<WorkerTerminatedActivity> = ({ activity, isOwn }) => {
   const { member, groupName, eventType } = activity
-  const isLeader = eventType === 'TerminatedLeaderEvent'
-  if (isLeader) {
+  const isLead = eventType === 'TerminatedLeaderEvent'
+  if (isLead) {
     return isOwn ? (
       <>You have been terminated by the Council.</>
     ) : (

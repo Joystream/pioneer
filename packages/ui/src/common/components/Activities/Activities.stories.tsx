@@ -157,8 +157,8 @@ const activities: Activity[] = [
     eventType: 'OpeningAddedEvent',
     opening: {
       id: '3',
-      title: 'Forum Working Group Leader',
-      type: 'LEADER',
+      title: 'Forum Working Group Lead',
+      type: 'LEAD',
       groupName: 'forum',
     },
   },
@@ -168,8 +168,8 @@ const activities: Activity[] = [
     eventType: 'OpeningCanceledEvent',
     opening: {
       id: '3',
-      title: 'Forum Working Group Leader',
-      type: 'LEADER',
+      title: 'Forum Working Group Lead',
+      type: 'LEAD',
       groupName: 'forum',
     },
   },
@@ -199,9 +199,9 @@ const activities: Activity[] = [
     eventType: 'OpeningFilledEvent',
     opening: {
       id: '1',
-      type: 'LEADER',
+      type: 'LEAD',
       groupName: 'forumWorkingGroup',
-      title: 'Forum Working Group Leader',
+      title: 'Forum Working Group Lead',
     },
     hiredMembers: [
       {

@@ -32,7 +32,7 @@ export const seedWorker = (worker: RawWorker, server: any) => {
     stakeAccount: member.rootAccount,
     rewardAccount: member.rootAccount,
     ...worker,
-    isLead: group.leaderId === worker.id,
+    isLead: group.leadId === worker.id,
     status: seedWorkerStatus(worker.status as WorkerStatus, worker.membershipId + '_' + worker.groupId, server),
   })
 }

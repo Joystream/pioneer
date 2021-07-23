@@ -23,7 +23,7 @@ Default.args = {
       reward: getReward(1, 'forum'),
       earnedTotal: 1000,
       stake: 1000,
-      isLeader: false,
+      isLead: false,
       owedReward: 1000,
     },
   ],

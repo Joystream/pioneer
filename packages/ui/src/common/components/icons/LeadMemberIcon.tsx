@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Icon } from './Icon'
 
-export const LeaderMemberIcon = React.memo(() => (
+export const LeadMemberIcon = React.memo(() => (
   <Icon size="16" viewBox="-2 -2 28 28" preserveAspectRatio="xMidYMid meet" fill="none" color="currentColor">
     <path
       className="memberInner"

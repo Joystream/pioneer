@@ -9,7 +9,7 @@ export interface WorkingGroup {
   name: string
   image?: string
   about?: string
-  leaderId?: string
+  leadId?: string
   status?: string
   description?: string
   statusMessage?: string
@@ -18,7 +18,7 @@ export interface WorkingGroup {
 }
 
 export interface DetailedWorkingGroup extends WorkingGroup {
-  leaderWorker?: {
+  leadWorker?: {
     id: string
     runtimeId: number
     stake: BN
@@ -36,7 +36,7 @@ export const asWorkingGroup = (group: WorkingGroupFieldsFragment): WorkingGroup 
     statusMessage: group.metadata?.statusMessage ?? '',
     budget: new BN(group.budget),
     averageStake: getAverageStake(group.workers),
-    leaderId: group.leader?.membershipId,
+    leadId: group.leader?.membershipId,
   }
 }
 
@@ -44,7 +44,7 @@ export const asDetailedWorkingGroup = (group: WorkingGroupDetailedFieldsFragment
   ...asWorkingGroup(group),
   ...(group.leader
     ? {
-        leaderWorker: {
+        leadWorker: {
           id: group.leader.id,
           runtimeId: group.leader.runtimeId,
           stake: new BN(group.leader.stake),

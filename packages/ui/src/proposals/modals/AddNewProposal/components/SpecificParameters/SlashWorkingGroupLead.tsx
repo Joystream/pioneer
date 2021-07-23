@@ -39,15 +39,15 @@ export const SlashWorkingGroupLead = ({
   const [amount, setAmount] = useNumberInput(0, slashingAmount)
 
   const { group } = useWorkingGroup({ name: groupId })
-  const { member: leader } = useMember(group?.leaderId)
+  const { member: lead } = useMember(group?.leadId)
 
-  const isDisabled = !group || (group && !group.leaderId)
+  const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => setSlashingAmount(new BN(amount)), [amount])
   useEffect(() => {
     setSlashingAmount(BN_ZERO)
-    setWorkerId(group?.leaderWorker?.runtimeId)
-  }, [groupId, group?.leaderWorker?.runtimeId])
+    setWorkerId(group?.leadWorker?.runtimeId)
+  }, [groupId, group?.leadWorker?.runtimeId])
 
   return (
     <RowGapBlock gap={24}>
@@ -67,15 +67,15 @@ export const SlashWorkingGroupLead = ({
           >
             <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
           </InputComponent>
-          {groupId && group && !group.leaderId && (
+          {groupId && group && !group.leadId && (
             <Info title="Warning">
               <TextMedium>
-                {capitalizeFirstLetter(group.name)} Working Group has no any Leader yet. Please choose other Group.
+                {capitalizeFirstLetter(group.name)} Working Group has no any Lead yet. Please choose other Group.
               </TextMedium>
             </Info>
           )}
-          <InputComponent label="Working Group Leader" inputSize="l" disabled>
-            <SelectMember onChange={() => true} disabled selected={leader} />
+          <InputComponent label="Working Group Lead" inputSize="l" disabled>
+            <SelectMember onChange={() => true} disabled selected={lead} />
           </InputComponent>
           <InputComponent
             label="Slashing Amount"
