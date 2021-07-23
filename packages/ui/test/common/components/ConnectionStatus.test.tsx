@@ -25,7 +25,6 @@ describe('UI: Connection status component', () => {
 
   it('Connecting', async () => {
     useApi.connectionState = 'connecting'
-    useApi.api = undefined
 
     renderComponent()
 
@@ -34,7 +33,6 @@ describe('UI: Connection status component', () => {
 
   it('Permanent Connecting', async () => {
     useApi.connectionState = 'connecting'
-    useApi.api = undefined
 
     renderComponent()
 
