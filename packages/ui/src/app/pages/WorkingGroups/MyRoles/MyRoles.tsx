@@ -26,8 +26,9 @@ export const MyRoles = () => {
       return <Loading />
     }
 
-    const currentRoles = (workers && workers.filter((worker) => worker.status === 'WorkerStatusActive')) || []
-    const pastRoles = (workers && workers.filter((worker) => worker.status !== 'WorkerStatusActive')) || []
+    const currentStatuses = ['WorkerStatusActive', 'WorkerStatusLeaving']
+    const currentRoles = (workers && workers.filter((worker) => currentStatuses.includes(worker.status))) || []
+    const pastRoles = (workers && workers.filter((worker) => !currentStatuses.includes(worker.status))) || []
 
     return (
       <>

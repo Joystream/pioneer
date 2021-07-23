@@ -18,7 +18,7 @@ export const WORKER: WorkerWithDetails = {
   stake: 2000,
   minStake: 2000,
   owedReward: 1000,
-  status: '',
+  status: 'WorkerStatusActive',
   id: '1',
   runtimeId: 12,
   applicationId: '1',

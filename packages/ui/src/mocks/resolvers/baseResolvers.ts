@@ -66,11 +66,16 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
       }
     }
 
-    if (type === 'gte') {
-      if (field === 'createdAt') {
-        filters.push((model: Record<string, any>) => new Date(model[field]).getTime() >= new Date(checkValue).getTime())
+    if (['gte', 'lte'].includes(type)) {
+      const resultToBoolean: (a: number) => boolean = type == 'gte' ? (a) => a >= 0 : (a) => a <= 0
+      if (['createdAt', 'statusSetAtTime'].includes(field)) {
+        filters.push((model: Record<string, any>) =>
+          resultToBoolean(new Date(model[field]).getTime() - new Date(checkValue).getTime())
+        )
       } else {
-        filters.push((model: Record<string, any>) => String(model[field]).localeCompare(checkValue.toString()) === 1)
+        filters.push((model: Record<string, any>) =>
+          resultToBoolean(String(model[field]).localeCompare(checkValue.toString()))
+        )
       }
     }
 
