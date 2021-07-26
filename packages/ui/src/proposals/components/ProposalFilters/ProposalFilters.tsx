@@ -9,6 +9,8 @@ import { objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
 import { ProposalStatus } from '@/proposals/types'
 
+import { camelCaseToText } from '../../../common/helpers'
+
 import { SelectProposer } from './SelectProposer'
 
 export interface ProposalFiltersState {
@@ -33,7 +35,10 @@ const filterReducer = (filters: ProposalFiltersState, action: Action): ProposalF
       return ProposalEmptyFilter
 
     case 'change':
-      return { ...filters, [action.field]: action.value }
+      return {
+        ...filters,
+        [action.field]: typeof action.value == 'string' ? action.value.replace(/ /g, '') : action.value,
+      }
   }
   return filters
 }
@@ -85,11 +90,11 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
       <Fields>
         <FilterSelect
           title="Type"
-          options={types}
-          value={type}
+          options={types.map(camelCaseToText)}
+          value={type && camelCaseToText(type)}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'type', value })
-            onApply({ ...filters, type: value })
+            onApply({ ...filters, type: value?.replace(/ /g, '') ?? null })
           }}
         />
 
