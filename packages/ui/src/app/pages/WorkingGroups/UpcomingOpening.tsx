@@ -74,10 +74,18 @@ export const UpcomingOpening = () => {
               </BadgeStatus>
             </BadgesRow>
             <Statistics>
-              <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
-              <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
+              <DurationStatistics title="Time to begun" value={opening.expectedStart} />
+              <DurationStatistics
+                title="Opening Expected duration"
+                value={opening.expectedEnding}
+                from={opening.expectedStart}
+              />
               <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.payout} />
-              <NumericValueStat title="Hiring limit" value={opening.hiringLimit} />
+              {opening.hiringLimit ? (
+                <NumericValueStat title="Hiring limit" value={opening.hiringLimit} />
+              ) : (
+                <TokenValueStat title="Minimal Stake" value={opening.stake} />
+              )}
             </Statistics>
           </RowGapBlock>
         </PageHeader>
