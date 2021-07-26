@@ -22,6 +22,10 @@ interface DragResponseProps {
   isDragReject?: boolean
 }
 
+interface ValidatedFile extends File {
+  isValidWASM?: boolean
+}
+
 const MAX_FILE_SIZE = 3 * 1024 * 1024
 
 export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
@@ -30,24 +34,31 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
       setRuntime(await acceptedFiles[0].arrayBuffer())
     }
   }, [])
-  const [fileValidation, setFileValidation] = useState<{ file: File; isValid: boolean } | undefined>()
 
-  async function getFiles(event: any) {
+  async function getValidatedFiles(event: any): Promise<ValidatedFile[]> {
     const files = []
 
     const fileList = event.dataTransfer ? event.dataTransfer.files : event.target.files
     for (let i = 0; i < fileList.length; i++) {
       const file = fileList.item(i)
 
-      if (WebAssembly.validate(await file.arrayBuffer())) {
-        files.push(file)
-        setFileValidation({ file, isValid: true })
-      } else {
-        setFileValidation({ file, isValid: false })
-      }
+      const isValidWASM = await WebAssembly.validate(await file.arrayBuffer())
+      Object.assign(file, { isValidWASM })
+      files.push(file)
     }
 
     return files
+  }
+
+  const validator = (file: ValidatedFile) => {
+    if (!file.isValidWASM) {
+      return {
+        code: 'file-invalid-type',
+        message: 'not valid WASM file',
+      }
+    }
+
+    return null
   }
 
   const {
@@ -64,7 +75,8 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
     maxFiles: 1,
     maxSize: MAX_FILE_SIZE,
     multiple: false,
-    getFilesFromEvent: (event) => getFiles(event),
+    getFilesFromEvent: (event) => getValidatedFiles(event),
+    validator,
   })
 
   return (
@@ -112,14 +124,6 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
                 </AcceptedFileText>
               </ReceivedFile>
             ))}
-            {fileValidation && !fileValidation.isValid && (
-              <ReceivedFile key={fileValidation.file.name} valid={false}>
-                <AcceptedFileText>
-                  <b>{fileValidation.file.name}</b> ({fileValidation.file.size} B) was not loaded because it could be
-                  malicious
-                </AcceptedFileText>
-              </ReceivedFile>
-            )}
           </RowGapBlock>
         </RowGapBlock>
       </Row>
