@@ -5,7 +5,6 @@ import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { Loading } from '@/common/components/Loading'
 import { Page } from '@/common/components/page/Page'
 import { useApi } from '@/common/hooks/useApi'
-import { ApiContext } from '@/common/providers/api/context'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
 import { ExtensionWarning } from './components/ExtensionWarning'

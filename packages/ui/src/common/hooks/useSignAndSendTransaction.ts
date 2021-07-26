@@ -12,7 +12,6 @@ import { info } from '@/common/logger'
 
 import { Address } from '../types'
 
-import { useApi } from './useApi'
 import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
 
