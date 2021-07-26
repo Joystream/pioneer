@@ -118,7 +118,6 @@ const NavigationLinks = styled.ul`
   flex-direction: column;
   width: 100%;
   grid-area: barlinks;
-  gap: 6px;
   list-style: none;
   max-height: 100%;
   overflow: hidden;
@@ -129,8 +128,6 @@ const NavigationLinks = styled.ul`
 
 const NavigationLinksItem = styled.li`
   display: flex;
-  flex-direction: column;
-  flex-basis: 32px;
-  flex-shrink: 0;
+  height: fit-content;
   width: 100%;
 `
