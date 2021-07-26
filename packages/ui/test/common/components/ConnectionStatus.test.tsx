@@ -3,9 +3,9 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import EventEmitter from 'eventemitter3'
 import React from 'react'
 
-import { ConnectionStatus } from '../../../src/common/components/ConnectionStatus'
-import { ApiContext } from '../../../src/common/providers/api/context'
-import { UseApi } from '../../../src/common/providers/api/provider'
+import { ConnectionStatus } from '@/common/components/ConnectionStatus'
+import { ApiContext } from '@/common/providers/api/context'
+import { UseApi } from '@/common/providers/api/provider'
 
 describe('UI: Connection status component', () => {
   let eventEmitter: EventEmitter
@@ -52,7 +52,7 @@ describe('UI: Connection status component', () => {
       eventEmitter.emit('disconnected')
     })
 
-    expect(await screen.findByText('Disconnected from network')).toBeDefined()
+    expect(await screen.findByText(/^Disconnected from/i)).toBeDefined()
   })
 
   it('Connected', async () => {
@@ -62,7 +62,7 @@ describe('UI: Connection status component', () => {
       eventEmitter.emit('connected')
     })
 
-    expect(await screen.findByText('Connected to network')).toBeDefined()
+    expect(await screen.findByText(/^Connected to/i)).toBeDefined()
   })
 
   it('Auto-close', async () => {
