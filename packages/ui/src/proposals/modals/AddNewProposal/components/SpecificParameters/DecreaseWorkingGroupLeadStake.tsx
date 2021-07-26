@@ -70,17 +70,10 @@ export const DecreaseWorkingGroupLeadStake = ({
           >
             <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
           </InputComponent>
-          {groupId && group && !group.leaderId && (
-            <Info title="Warning">
-              <TextMedium>
-                {capitalizeFirstLetter(group.name)} Working Group has no any Leader yet. Please choose other Group.
-              </TextMedium>
-            </Info>
-          )}
           <InputComponent label="Working Group Leader" inputSize="l" disabled>
             <SelectMember onChange={() => true} disabled selected={leader} />
           </InputComponent>
-          {group && group.leaderWorker && (
+          {group && (
             <Info>
               <TextMedium>
                 The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
