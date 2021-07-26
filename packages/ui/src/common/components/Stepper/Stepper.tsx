@@ -71,6 +71,7 @@ const StepNumber = styled.div`
 
 const StepTitle = styled.h6`
   align-self: center;
+  text-transform: capitalize;
   transition: ${Transitions.all};
 `
 
