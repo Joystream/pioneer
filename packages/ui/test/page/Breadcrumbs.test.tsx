@@ -12,10 +12,10 @@ describe('Breadcrumbs', () => {
   })
 
   it('With named last crumb', () => {
-    renderCrumbs('/working-groups/openings/3', 'Distribution Leader')
+    renderCrumbs('/working-groups/openings/3', 'Distribution Lead')
     expect(screen.getByText('Working Groups')).toBeDefined()
     expect(screen.getByText('Openings')).toBeDefined()
-    expect(screen.getByText('Distribution Leader')).toBeDefined()
+    expect(screen.getByText('Distribution Lead')).toBeDefined()
   })
 
   function renderCrumbs(location: string, lastBreadcrumb: string | undefined = undefined) {

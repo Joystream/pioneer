@@ -7,7 +7,7 @@ export function memberRoleAbbreviation(role: MemberRole) {
     return 'M'
   }
 
-  return `${role.groupName.charAt(0).toUpperCase()}${role.isLeader ? 'L' : 'W'}`
+  return `${role.groupName.charAt(0).toUpperCase()}${role.isLead ? 'L' : 'W'}`
 }
 
 export function memberRoleTitle(role: MemberRole) {
@@ -15,7 +15,7 @@ export function memberRoleTitle(role: MemberRole) {
     return role.groupName
   }
 
-  const position = role.isLeader ? 'Leader' : 'Worker'
+  const position = role.isLead ? 'Lead' : 'Worker'
   const group = capitalizeFirstLetter(role.groupName)
 
   return `${group} ${position}`

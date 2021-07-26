@@ -27,7 +27,7 @@ export interface MemberRolesProps {
 
 const defaultRole = {
   groupName: 'Member Role',
-  isLeader: false,
+  isLead: false,
 }
 
 export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) => {

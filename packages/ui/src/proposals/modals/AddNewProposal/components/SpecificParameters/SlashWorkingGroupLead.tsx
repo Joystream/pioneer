@@ -2,12 +2,10 @@ import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
-import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
-import { capitalizeFirstLetter } from '@/common/helpers'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -39,15 +37,15 @@ export const SlashWorkingGroupLead = ({
   const [amount, setAmount] = useNumberInput(0, slashingAmount)
 
   const { group } = useWorkingGroup({ name: groupId })
-  const { member: leader } = useMember(group?.leaderId)
+  const { member: lead } = useMember(group?.leadId)
 
-  const isDisabled = !group || (group && !group.leaderId)
+  const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => setSlashingAmount(new BN(amount)), [amount])
   useEffect(() => {
     setSlashingAmount(BN_ZERO)
-    setWorkerId(group?.leaderWorker?.runtimeId)
-  }, [groupId, group?.leaderWorker?.runtimeId])
+    setWorkerId(group?.leadWorker?.runtimeId)
+  }, [groupId, group?.leadWorker?.runtimeId])
 
   return (
     <RowGapBlock gap={24}>
@@ -67,8 +65,8 @@ export const SlashWorkingGroupLead = ({
           >
             <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
           </InputComponent>
-          <InputComponent label="Working Group Leader" inputSize="l" disabled>
-            <SelectMember onChange={() => true} disabled selected={leader} />
+          <InputComponent label="Working Group Lead" inputSize="l" disabled>
+            <SelectMember onChange={() => true} disabled selected={lead} />
           </InputComponent>
           <InputComponent
             label="Slashing Amount"

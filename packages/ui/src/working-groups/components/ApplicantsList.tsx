@@ -13,10 +13,10 @@ export interface WorkersListProps {
   hired?: WorkingGroupOpeningApplication
   allApplicants?: WorkingGroupOpeningApplication[]
   hiringComplete: boolean
-  leaderId?: string | null
+  leadId?: string | null
 }
 
-export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComplete, leaderId }: WorkersListProps) => {
+export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComplete, leadId }: WorkersListProps) => {
   return (
     <RowGapBlock gap={36}>
       {myApplication && (
@@ -25,7 +25,7 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
           <Worker
             member={myApplication.member}
             applicationId={myApplication.id}
-            isLeader={myApplication.member.id === leaderId}
+            isLead={myApplication.member.id === leadId}
           />
         </ContentWithTabs>
       )}
@@ -33,7 +33,7 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
       {hired && (
         <ContentWithTabs>
           <Label>Hired</Label>
-          <Worker member={hired.member} applicationId={hired.id} isLeader={hired.member.id === leaderId} />
+          <Worker member={hired.member} applicationId={hired.id} isLead={hired.member.id === leadId} />
         </ContentWithTabs>
       )}
       <ContentWithTabs>
@@ -47,7 +47,7 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
                 key={index}
                 member={application.member}
                 applicationId={application.id}
-                isLeader={application.member.id === leaderId}
+                isLead={application.member.id === leadId}
               />
             ))}
           </ContentWithTabs>

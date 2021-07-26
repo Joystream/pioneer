@@ -102,7 +102,7 @@ export const MyRole = () => {
                 {worker.group.name.toUpperCase()}
               </BadgeStatus>
               <BadgeStatus inverted size="l" separated>
-                {worker.isLeader ? 'LEADER' : 'REGULAR'}
+                {worker.isLead ? 'LEAD' : 'REGULAR'}
               </BadgeStatus>
               <BadgeStatus inverted size="l" separated>
                 WORKER ID #{worker.id}

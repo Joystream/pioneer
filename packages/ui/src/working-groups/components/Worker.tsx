@@ -11,10 +11,10 @@ import { ApplicationDetailsModalCall } from '@/working-groups/modals/Application
 interface WorkerProps {
   member: Member
   applicationId: string
-  isLeader?: boolean
+  isLead?: boolean
 }
 
-export const Worker = ({ member, applicationId, isLeader }: WorkerProps) => {
+export const Worker = ({ member, applicationId, isLead }: WorkerProps) => {
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({
@@ -25,7 +25,7 @@ export const Worker = ({ member, applicationId, isLeader }: WorkerProps) => {
 
   return (
     <WorkerWrap>
-      <MemberInfo member={member} isLeader={isLeader} />
+      <MemberInfo member={member} isLead={isLead} />
       <ButtonGhost square size="small" onClick={showApplicationModal}>
         <FileIcon />
       </ButtonGhost>

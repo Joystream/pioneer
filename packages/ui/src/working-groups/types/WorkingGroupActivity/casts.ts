@@ -40,11 +40,13 @@ import {
   WorkerTerminatedActivity,
 } from '@/working-groups/types'
 
-function asPositionTitle(groupName: string, type: 'LEADER' | 'REGULAR') {
-  return `${capitalizeFirstLetter(asWorkingGroupName(groupName))} ${type == 'LEADER' ? 'Leader' : 'Worker'}`
+function asPositionTitle(groupName: string, type: 'LEAD' | 'REGULAR') {
+  return `${capitalizeFirstLetter(asWorkingGroupName(groupName))} ${type === 'LEAD' ? 'Lead' : 'Worker'}`
 }
 
 export function asAppliedOnOpeningActivity(fragment: AppliedOnOpeningEventFieldsFragment): AppliedOnOpeningActivity {
+  const type = fragment.opening.type === 'LEADER' ? 'LEAD' : 'REGULAR'
+
   return {
     eventType: fragment.__typename,
     id: fragment.id,
@@ -55,9 +57,9 @@ export function asAppliedOnOpeningActivity(fragment: AppliedOnOpeningEventFields
     },
     opening: {
       id: fragment.opening.id,
-      type: fragment.opening.type,
+      type: type,
       groupName: fragment.group.name,
-      title: asPositionTitle(fragment.group.name, fragment.opening.type),
+      title: asPositionTitle(fragment.group.name, type),
     },
   }
 }
@@ -65,6 +67,8 @@ export function asAppliedOnOpeningActivity(fragment: AppliedOnOpeningEventFields
 export function asApplicationWithdrawnActivity(
   fragment: ApplicationWithdrawnEventFieldsFragment
 ): ApplicationWithdrawnActivity {
+  const type = fragment.application.opening.type === 'LEADER' ? 'LEAD' : 'REGULAR'
+
   return {
     eventType: fragment.__typename,
     id: fragment.id,
@@ -75,9 +79,9 @@ export function asApplicationWithdrawnActivity(
     },
     opening: {
       id: fragment.application.opening.id,
-      type: fragment.application.opening.type,
+      type,
       groupName: fragment.group.name,
-      title: asPositionTitle(fragment.group.name, fragment.application.opening.type),
+      title: asPositionTitle(fragment.group.name, type),
     },
   }
 }
@@ -123,29 +127,33 @@ export function asStakeSlashedActivity(fragment: StakeSlashedEventFieldsFragment
 export function asOpeningActivity(
   fragment: OpeningAddedEventFieldsFragment | OpeningCanceledEventFieldsFragment
 ): OpeningAddedActivity | OpeningCanceledActivity {
+  const type = fragment.opening.type === 'LEADER' ? 'LEAD' : 'REGULAR'
+
   return {
     eventType: fragment.__typename,
     id: fragment.id,
     createdAt: fragment.createdAt,
     opening: {
       id: fragment.opening.id,
-      type: fragment.opening.type,
+      type,
       groupName: fragment.opening.group.name,
-      title: asPositionTitle(fragment.opening.group.name, fragment.opening.type),
+      title: asPositionTitle(fragment.opening.group.name, type),
     },
   }
 }
 
 export function asOpeningFilledActivity(fragment: OpeningFilledEventFieldsFragment): OpeningFilledActivity {
+  const type = fragment.opening.type === 'LEADER' ? 'LEAD' : 'REGULAR'
+
   return {
     eventType: fragment.__typename,
     id: fragment.id,
     createdAt: fragment.createdAt,
     opening: {
       id: fragment.opening.id,
-      type: fragment.opening.type,
+      type,
       groupName: fragment.group.name,
-      title: asPositionTitle(fragment.group.name, fragment.opening.type),
+      title: asPositionTitle(fragment.group.name, type),
     },
     hiredMembers: fragment.workersHired.map(({ membership }) => ({
       id: membership.id,

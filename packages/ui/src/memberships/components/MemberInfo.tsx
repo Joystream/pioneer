@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { FounderMemberIcon, VerifiedMemberIcon, LeaderMemberIcon } from '@/common/components/icons'
+import { FounderMemberIcon, VerifiedMemberIcon, LeadMemberIcon } from '@/common/components/icons'
 import { Colors } from '@/common/constants'
 
 import {
@@ -27,7 +27,7 @@ import { MemberRoles, MemberStatusTooltip } from './MemberRoles'
 import { MemberInfoWrapProps, MemberSize } from './types'
 
 interface MemberInfoContainerProps {
-  isLeader?: boolean
+  isLead?: boolean
   member: Member
   onClick?: () => void
   size?: MemberSize
@@ -48,7 +48,7 @@ export const MemberInfo = React.memo(
     size,
     className,
     maxRoles,
-    isLeader,
+    isLead,
   }: MemberInfoProps) => {
     const roleSize = size === 's' ? 'm' : size
     return (
@@ -56,10 +56,10 @@ export const MemberInfo = React.memo(
         <MemberPhoto>
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />
-            {isLeader && (
-              <Tooltip tooltipText="This member is a leader">
+            {isLead && (
+              <Tooltip tooltipText="This member is a Lead">
                 <AvatarStarTooltipContainer>
-                  <LeaderMemberIcon />
+                  <LeadMemberIcon />
                 </AvatarStarTooltipContainer>
               </Tooltip>
             )}
