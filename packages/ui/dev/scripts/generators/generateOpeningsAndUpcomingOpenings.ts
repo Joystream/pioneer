@@ -47,7 +47,7 @@ const generateOpening = (status: string, groupId: string) => () => {
     ...generateBaseOpening(groupId),
     type: isLeader ? 'LEADER' : 'REGULAR',
     status,
-    unstakingPeriod: randomFromRange(5, 10),
+    unstakingPeriod: randomFromRange(14400, 40000),
     metadata: {
       ...generateOpeningMetadata(),
       expectedEnding: isInPast ? faker.date.recent(90) : faker.date.soon(10),
