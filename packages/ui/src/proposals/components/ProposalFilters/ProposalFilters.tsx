@@ -3,12 +3,13 @@ import styled from 'styled-components'
 
 import { DatePicker } from '@/common/components/forms/DatePicker'
 import { FilterBox } from '@/common/components/forms/FilterBox'
-import { FilterSelect } from '@/common/components/selects'
 import { camelCaseToText } from '@/common/helpers'
 import { PartialDateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
 import { ProposalStatus } from '@/proposals/types'
+
+import { FilterTextSelect } from '../../../common/components/selects'
 
 import { toCamelCase } from './helpers'
 import { SelectProposer } from './SelectProposer'
@@ -88,7 +89,7 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
       }}
     >
       <Fields>
-        <FilterSelect
+        <FilterTextSelect
           title="Type"
           options={types.map(camelCaseToText)}
           value={type && camelCaseToText(type)}
@@ -122,7 +123,7 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
           }}
         />
 
-        <FilterSelect
+        <FilterTextSelect
           title="Status"
           options={stages.map(camelCaseToText)}
           value={stage && camelCaseToText(stage)}
