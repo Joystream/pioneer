@@ -13,7 +13,7 @@ import { seedOpenings } from '@/mocks/data/seedOpenings'
 import { seedWorkers } from '@/mocks/data/seedWorkers'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 
-import { MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockApiProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
 describe('Members', () => {
@@ -49,17 +49,19 @@ describe('Members', () => {
     history.push(path)
 
     render(
-      <Router history={history}>
-        <ModalContextProvider>
-          <MockQueryNodeProviders>
-            <Switch>
-              <Route path="/members/:id" component={Members} />
-              <Route path="/members/" component={Members} />
-            </Switch>
-            <GlobalModals />
-          </MockQueryNodeProviders>
-        </ModalContextProvider>
-      </Router>
+      <MockApiProvider>
+        <Router history={history}>
+          <ModalContextProvider>
+            <MockQueryNodeProviders>
+              <Switch>
+                <Route path="/members/:id" component={Members} />
+                <Route path="/members/" component={Members} />
+              </Switch>
+              <GlobalModals />
+            </MockQueryNodeProviders>
+          </ModalContextProvider>
+        </Router>
+      </MockApiProvider>
     )
   }
 })

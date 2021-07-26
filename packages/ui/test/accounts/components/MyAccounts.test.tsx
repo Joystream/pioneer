@@ -16,7 +16,7 @@ import { seedMembers } from '@/mocks/data'
 
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
-import { MockApolloProvider } from '../../_mocks/providers'
+import { MockApiProvider, MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
 const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
@@ -122,11 +122,13 @@ describe('UI: Accounts list', () => {
   function renderAccounts(active?: Member) {
     return render(
       <HashRouter>
-        <MockApolloProvider>
-          <MembershipContext.Provider value={({ active, setActive: () => undefined } as unknown) as MyMemberships}>
-            <Accounts />
-          </MembershipContext.Provider>
-        </MockApolloProvider>
+        <MockApiProvider>
+          <MockApolloProvider>
+            <MembershipContext.Provider value={({ active, setActive: () => undefined } as unknown) as MyMemberships}>
+              <Accounts />
+            </MembershipContext.Provider>
+          </MockApolloProvider>
+        </MockApiProvider>
       </HashRouter>
     )
   }
