@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import styled, { css } from 'styled-components'
 
@@ -28,38 +28,38 @@ interface ValidatedFile extends File {
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024
 
+const getValidatedFiles = async (event: any): Promise<ValidatedFile[]> => {
+  const files = []
+
+  const fileList = event.dataTransfer ? event.dataTransfer.files : event.target.files
+  for (let i = 0; i < fileList.length; i++) {
+    const file = fileList.item(i)
+
+    const isValidWASM = await WebAssembly.validate(await file.arrayBuffer())
+    Object.assign(file, { isValidWASM })
+    files.push(file)
+  }
+
+  return files
+}
+
+const validator = (file: ValidatedFile) => {
+  if (!file.isValidWASM) {
+    return {
+      code: 'file-invalid-type',
+      message: 'not valid WASM file',
+    }
+  }
+
+  return null
+}
+
 export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length) {
       setRuntime(await acceptedFiles[0].arrayBuffer())
     }
   }, [])
-
-  async function getValidatedFiles(event: any): Promise<ValidatedFile[]> {
-    const files = []
-
-    const fileList = event.dataTransfer ? event.dataTransfer.files : event.target.files
-    for (let i = 0; i < fileList.length; i++) {
-      const file = fileList.item(i)
-
-      const isValidWASM = await WebAssembly.validate(await file.arrayBuffer())
-      Object.assign(file, { isValidWASM })
-      files.push(file)
-    }
-
-    return files
-  }
-
-  const validator = (file: ValidatedFile) => {
-    if (!file.isValidWASM) {
-      return {
-        code: 'file-invalid-type',
-        message: 'not valid WASM file',
-      }
-    }
-
-    return null
-  }
 
   const {
     isDragActive,
@@ -75,7 +75,7 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
     maxFiles: 1,
     maxSize: MAX_FILE_SIZE,
     multiple: false,
-    getFilesFromEvent: (event) => getValidatedFiles(event),
+    getFilesFromEvent: getValidatedFiles,
     validator,
   })
 
