@@ -14,7 +14,7 @@ interface Props {
 export const OptionsListWorkingGroup = React.memo(({ allWorkingGroups, onChange }: Props) => (
   <OptionsListComponent>
     {allWorkingGroups.map((option) => (
-      <Option key={option.id} onClick={() => onChange(option)} disabled={!option.leaderId}>
+      <Option key={option.id} onClick={() => onChange(option)} disabled={!option.leadId}>
         <OptionWorkingGroup group={option} />
       </Option>
     ))}
