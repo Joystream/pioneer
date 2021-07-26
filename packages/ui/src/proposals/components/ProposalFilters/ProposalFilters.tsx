@@ -4,18 +4,18 @@ import styled from 'styled-components'
 import { DatePicker } from '@/common/components/forms/DatePicker'
 import { FilterBox } from '@/common/components/forms/FilterBox'
 import { FilterSelect } from '@/common/components/selects'
+import { camelCaseToText } from '@/common/helpers'
 import { PartialDateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
 import { ProposalStatus } from '@/proposals/types'
 
-import { camelCaseToText } from '../../../common/helpers'
-
+import { toCamelCase } from './helpers'
 import { SelectProposer } from './SelectProposer'
 
 export interface ProposalFiltersState {
   search: string
-  stage: ProposalStatus | null
+  stage: string | null
   type: string | null
   lifetime: PartialDateRange
   proposer: Member | null
@@ -37,7 +37,7 @@ const filterReducer = (filters: ProposalFiltersState, action: Action): ProposalF
     case 'change':
       return {
         ...filters,
-        [action.field]: typeof action.value == 'string' ? action.value.replace(/ /g, '') : action.value,
+        [action.field]: typeof action.value == 'string' ? toCamelCase(action.value) : action.value,
       }
   }
   return filters
@@ -94,7 +94,7 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
           value={type && camelCaseToText(type)}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'type', value })
-            onApply({ ...filters, type: value?.replace(/ /g, '') ?? null })
+            onApply({ ...filters, type: toCamelCase(value) })
           }}
         />
 
@@ -123,12 +123,12 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
         />
 
         <FilterSelect
-          title="Stage"
-          options={stages}
-          value={stage}
+          title="Status"
+          options={stages.map(camelCaseToText)}
+          value={stage && camelCaseToText(stage)}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'stage', value })
-            onApply({ ...filters, stage: value })
+            onApply({ ...filters, stage: toCamelCase(value) })
           }}
         />
       </Fields>

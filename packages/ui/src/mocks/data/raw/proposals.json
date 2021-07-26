@@ -1545,7 +1545,7 @@
   {
     "id": "18",
     "title": "encryption generate methodology COM",
-    "status": "executed",
+    "status": "executionFailed",
     "statusSetAtBlock": 0,
     "statusSetAtTime": "2021-07-18T02:39:00.769Z",
     "details": {
