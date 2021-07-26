@@ -109,6 +109,22 @@ export const stubApi = () => {
     isConnected: true,
     connectionState: 'connected',
   }
+
+  set(api, 'api.query.council.councilMembers', () => from([]))
+  set(api, 'api.consts.council.councilSize', new BN(3))
+  set(api, 'api.rpc.chain.subscribeNewHeads', () =>
+    from([
+      createType('Header', {
+        parentHash: 'Hash',
+        number: 1337,
+        stateRoot: 'Hash',
+        extrinsicsRoot: 'Hash',
+        digest: [],
+      }),
+    ])
+  )
+  stubDefaultBalances(api)
+
   return api
 }
 

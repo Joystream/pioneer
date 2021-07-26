@@ -10,7 +10,7 @@ import { seedMember, seedProposal } from '@/mocks/data'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
-import { MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockApiProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, PROPOSAL_DATA } from '../../_mocks/server/seeds'
 
@@ -76,13 +76,15 @@ describe('ProposalPreview', () => {
     history.push(`${ProposalsRoutes.preview}/0`)
 
     render(
-      <Router history={history}>
-        <MockQueryNodeProviders>
-          <Route path={`${ProposalsRoutes.preview}/:id`}>
-            <ProposalPreview />
-          </Route>
-        </MockQueryNodeProviders>
-      </Router>
+      <MockApiProvider>
+        <Router history={history}>
+          <MockQueryNodeProviders>
+            <Route path={`${ProposalsRoutes.preview}/:id`}>
+              <ProposalPreview />
+            </Route>
+          </MockQueryNodeProviders>
+        </Router>
+      </MockApiProvider>
     )
   }
 })
