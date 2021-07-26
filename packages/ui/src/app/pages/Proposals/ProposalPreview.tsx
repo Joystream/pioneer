@@ -47,7 +47,7 @@ export const ProposalPreview = () => {
 
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
-  const votes = votingRounds[currentVotingRound]
+  const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
 
   useEffect(() => setVotingRound(Math.max(0, votingRounds.length - 1)), [votingRounds.length])
 

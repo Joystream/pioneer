@@ -78,7 +78,7 @@ describe('useVotingRounds', () => {
       },
     ])
 
-    rerender([[], ['deciding']])
+    rerender([[], []])
 
     expect(result.current).toEqual([
       {
