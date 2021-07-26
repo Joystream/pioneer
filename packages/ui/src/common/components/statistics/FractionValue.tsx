@@ -11,17 +11,14 @@ export interface FractionValueProps {
 }
 
 export const FractionValue = ({ numerator, denominator }: FractionValueProps) => (
-  <Fraction>
+  <NumericValue>
     {numerator}
     <DenominatorValue>/ {denominator}</DenominatorValue>
-  </Fraction>
+  </NumericValue>
 )
-
-const Fraction = styled(NumericValue)`
-  font-size: 16px;
-`
 
 const DenominatorValue = styled.span`
   color: ${Colors.Black[400]};
+  font-size: 14px;
   font-weight: 400;
 `

@@ -4,12 +4,12 @@ import styled from 'styled-components'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
-import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Loading } from '@/common/components/Loading'
-import { ContentWithTabs, MainPanel, PageFooter } from '@/common/components/page/PageContent'
+import { ContentWithTabs, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -76,51 +76,51 @@ export const MyRole = () => {
     <PageLayout
       lastBreadcrumb={workerRoleTitle(worker)}
       header={
-        <>
-          <PageHeader>
-            <PreviousPage>
-              <PageTitle>{workerRoleTitle(worker)}</PageTitle>
-            </PreviousPage>
-            <ButtonsGroup>
-              <ButtonGhost size="medium" onClick={showApplicationModal}>
-                Application
+        <PageHeader>
+          <PreviousPage>
+            <PageTitle>{workerRoleTitle(worker)}</PageTitle>
+          </PreviousPage>
+          <ButtonsGroup>
+            <ButtonGhost size="medium" onClick={showApplicationModal}>
+              Application
+            </ButtonGhost>
+            <LinkButtonGhost size="medium" to={`/working-groups/openings/${worker?.openingId}`}>
+              Opening
+            </LinkButtonGhost>
+            {isActive && (
+              <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
+                Leave this position
+                <Tooltip tooltipText="Lorem ipsum" tooltipTitle="Lorem ipsum">
+                  <TooltipDefault />
+                </Tooltip>
               </ButtonGhost>
-              <LinkButtonGhost size="medium" to={`/working-groups/openings/${worker?.openingId}`}>
-                Opening
-              </LinkButtonGhost>
-              {isActive && (
-                <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
-                  Leave this position
-                  <Tooltip tooltipText="Lorem ipsum" tooltipTitle="Lorem ipsum">
-                    <TooltipDefault />
-                  </Tooltip>
-                </ButtonGhost>
-              )}
-            </ButtonsGroup>
-          </PageHeader>
-          <Row>
-            <BadgeStatus inverted size="l" separated>
-              {worker.group.name.toUpperCase()}
-            </BadgeStatus>
-            <BadgeStatus inverted size="l" separated>
-              {worker.isLead ? 'LEAD' : 'REGULAR'}
-            </BadgeStatus>
-            <BadgeStatus inverted size="l" separated>
-              WORKER ID #{worker.id}
-            </BadgeStatus>
-            {!isActive && (
-              <BadgeStatus ended inverted size="l" separated>
-                {isLeaving ? 'LEAVING' : 'ROLE ENDED'}
-              </BadgeStatus>
             )}
-          </Row>
-          <Statistics>
-            <MyEarningsStat />
-            <StakeStat value={worker.stake} minStake={worker.minStake} />
-            <TokenValueStat title="Owed reward" value={worker.owedReward} />
-            <NextPayoutStat workers={[worker]} />
-          </Statistics>
-        </>
+          </ButtonsGroup>
+          <RowGapBlock gap={24}>
+            <BadgesRow>
+              <BadgeStatus inverted size="l" separated>
+                {worker.group.name.toUpperCase()}
+              </BadgeStatus>
+              <BadgeStatus inverted size="l" separated>
+                {worker.isLead ? 'LEAD' : 'REGULAR'}
+              </BadgeStatus>
+              <BadgeStatus inverted size="l" separated>
+                WORKER ID #{worker.id}
+              </BadgeStatus>
+              {!isActive && (
+                <BadgeStatus ended inverted size="l" separated>
+                  {isLeaving ? 'LEAVING' : 'ROLE ENDED'}
+                </BadgeStatus>
+              )}
+            </BadgesRow>
+            <Statistics>
+              <MyEarningsStat />
+              <StakeStat value={worker.stake} minStake={worker.minStake} />
+              <TokenValueStat title="Owed reward" value={worker.owedReward} />
+              <NextPayoutStat workers={[worker]} />
+            </Statistics>
+          </RowGapBlock>
+        </PageHeader>
       }
       main={
         <MainPanel ref={sideNeighborRef}>
@@ -178,13 +178,9 @@ export const MyRole = () => {
   )
 }
 
-const Row = styled.div`
-  display: flex;
-`
-
 const RoleAccountHeader = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 `

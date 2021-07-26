@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ButtonGhost, CloseButton } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
+import { EmptyBody } from '@/proposals/modals/VoteRationale/VoteRationale'
 
 import { MemberInfoWrap } from '..'
 import { EditSymbol } from '../../../common/components/icons/symbols'
@@ -99,8 +100,4 @@ const MemberPanelHeader = styled(SidePaneHeader)`
   ${MemberInfoWrap} {
     padding-bottom: 4px;
   }
-`
-
-export const EmptyBody = styled.div`
-  padding: 24px;
 `
