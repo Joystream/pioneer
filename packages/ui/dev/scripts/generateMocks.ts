@@ -6,7 +6,7 @@ import { generateMembers } from './generators/generateMembers'
 import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
 import { generateProposals } from './generators/generateProposals'
 import { generateWithdrawnApplications, generateWorkers } from './generators/generateWorkers'
-import { generateWorkingGroups, getWorkingGroupsWithLeader } from './generators/generateWorkingGroups'
+import { generateWorkingGroups, getWorkingGroupsWithLead } from './generators/generateWorkingGroups'
 import { Mocks } from './generators/types'
 import { saveFile } from './helpers/saveFile'
 
@@ -25,7 +25,7 @@ const main = () => {
   mocks.workingGroups = generateWorkingGroups()
   Object.assign(mocks, generateOpeningsAndUpcomingOpenings(mocks))
   Object.assign(mocks, generateWorkers(mocks))
-  mocks.workingGroups = getWorkingGroupsWithLeader(mocks)
+  mocks.workingGroups = getWorkingGroupsWithLead(mocks)
   mocks.applications = [...mocks.applications, ...generateWithdrawnApplications(mocks)]
   Object.assign(mocks, generateAllEvents(mocks))
   mocks.proposals = generateProposals(mocks)

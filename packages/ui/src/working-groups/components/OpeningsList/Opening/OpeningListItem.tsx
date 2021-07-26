@@ -27,7 +27,7 @@ export const OpeningListItem = ({ opening, past }: Props) => (
       <ToggleableItemInfoTop>
         <Subscription>ID: {opening.id}</Subscription>
         <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
-        {opening.type === 'LEADER' ? <BadgeStatus>LEAD</BadgeStatus> : null}
+        {opening.type === 'LEAD' ? <BadgeStatus>LEAD</BadgeStatus> : null}
       </ToggleableItemInfoTop>
       <ToggleableItemTitle>{opening.title}</ToggleableItemTitle>
     </ToggleableItemInfo>

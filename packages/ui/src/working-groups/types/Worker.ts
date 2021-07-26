@@ -18,7 +18,7 @@ export interface Worker {
   membership: Pick<Member, 'id' | 'controllerAccount'>
   group: Pick<WorkingGroup, 'id' | 'name'>
   status: WorkerStatusTypename
-  isLeader: boolean
+  isLead: boolean
   reward: Reward
   owedReward: number
   earnedTotal: number
@@ -61,7 +61,7 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
     controllerAccount: fields.membership.controllerAccount,
   },
   status: fields.status.__typename,
-  isLeader: fields.isLead,
+  isLead: fields.isLead,
   reward: getReward(fields.rewardPerBlock, fields.group.name),
   earnedTotal: 1000,
   stake: fields.stake,

@@ -26,7 +26,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const { isLoading: loadingOpenings, openings } = useCountOpenings(group.id)
   const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
 
-  const { member: leader } = useMember(group.leaderId)
+  const { member: lead } = useMember(group.leadId)
   const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
 
   return (
@@ -55,15 +55,15 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            {leader ? (
-              <WGLeaderImage>
-                <Avatar avatarUri={leader.avatar} />
-              </WGLeaderImage>
+            {lead ? (
+              <WGLeadImage>
+                <Avatar avatarUri={lead.avatar} />
+              </WGLeadImage>
             ) : (
               'None'
             )}
           </StatsValue>
-          <Subscription>WG Leader</Subscription>
+          <Subscription>WG Lead</Subscription>
         </StatsColumn>
       </GroupStats>
       <ButtonBareGhost square size="medium" onClick={() => history.push(groupAddress)}>
@@ -139,7 +139,7 @@ const StatsValue = styled.span`
   color: ${Colors.Black[900]};
 `
 
-const WGLeaderImage = styled.div`
+const WGLeadImage = styled.div`
   width: 24px;
   height: 24px;
   border-radius: ${BorderRad.round};

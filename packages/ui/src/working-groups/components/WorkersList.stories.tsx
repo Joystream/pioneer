@@ -13,9 +13,9 @@ const Template: Story<WorkersListProps> = (args) => <WorkersList {...args} />
 export const Empty = Template.bind({})
 Empty.args = {}
 
-export const WithLeader = Template.bind({})
-WithLeader.args = {
-  leader: {
+export const WithLead = Template.bind({})
+WithLead.args = {
+  lead: {
     applicationId: '0',
     member: {
       id: '0',
@@ -79,9 +79,9 @@ WithWorkers.args = {
   ],
 }
 
-export const WithLeaderAndWorkers = Template.bind({})
-WithLeaderAndWorkers.args = {
-  leader: {
+export const WithLeadAndWorkers = Template.bind({})
+WithLeadAndWorkers.args = {
+  lead: {
     applicationId: '0',
     member: {
       id: '0',
