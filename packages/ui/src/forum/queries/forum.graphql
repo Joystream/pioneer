@@ -1,0 +1,11 @@
+fragment ForumCategoryFields on ForumCategory {
+  id
+  title
+  description
+}
+
+query GetForumCategories {
+  forumCategories {
+    ...ForumCategoryFields
+  }
+}
