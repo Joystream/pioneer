@@ -8,17 +8,17 @@ import { WorkerBaseInfo } from '@/working-groups/types'
 import { Worker } from './Worker'
 
 export interface WorkersListProps {
-  leader?: WorkerBaseInfo
+  lead?: WorkerBaseInfo
   workers?: WorkerBaseInfo[]
 }
 
-export const WorkersList = ({ leader, workers }: WorkersListProps) => {
+export const WorkersList = ({ lead, workers }: WorkersListProps) => {
   return (
     <RowGapBlock gap={36}>
-      {leader && (
+      {lead && (
         <ContentWithTabs>
-          <Label>Leader</Label>
-          <Worker member={leader.member} applicationId={leader.applicationId} isLeader={true} />
+          <Label>Lead</Label>
+          <Worker member={lead.member} applicationId={lead.applicationId} isLead={true} />
         </ContentWithTabs>
       )}
       <ContentWithTabs>

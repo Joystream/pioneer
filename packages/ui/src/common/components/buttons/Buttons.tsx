@@ -11,6 +11,7 @@ export interface ButtonProps extends ButtonSizingProps {
   children?: React.ReactNode
   disabled?: boolean
   bold?: boolean
+  inline?: boolean
   borderless?: boolean
   onClick?: MouseEventHandler
 }
@@ -70,7 +71,7 @@ export function ButtonBareGhost({ className, children, size, square, disabled, o
     </ButtonBareGhostStyles>
   )
 }
-export function ButtonLink({ className, children, square, borderless, bold, disabled, onClick }: ButtonProps) {
+export function ButtonLink({ className, children, square, borderless, bold, inline, disabled, onClick }: ButtonProps) {
   return (
     <ButtonLinkStyles
       size="small"
@@ -80,6 +81,7 @@ export function ButtonLink({ className, children, square, borderless, bold, disa
       onClick={onClick}
       bold={bold}
       borderless={borderless}
+      inline={inline}
     >
       <ButtonInnerWrapper size="small">{children}</ButtonInnerWrapper>
     </ButtonLinkStyles>
@@ -369,6 +371,16 @@ export const ButtonBareGhostStyles = styled.button<ButtonProps>`
 
 export const ButtonLinkStyles = styled.button<ButtonProps>`
   ${BasicButtonStyles};
+
+  ${({ inline }) =>
+    inline &&
+    css`
+      display: inline-flex;
+      height: fit-content;
+      border: none;
+      font-size: inherit;
+      line-height: inherit;
+    `};
   grid-column-gap: 4px;
   min-width: fit-content;
   height: fit-content;

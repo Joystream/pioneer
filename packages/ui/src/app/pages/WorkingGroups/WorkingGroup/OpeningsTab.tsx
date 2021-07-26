@@ -26,7 +26,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
-  const leader = workers?.find((worker) => worker.member.id === workingGroup.leaderId)
+  const lead = workers?.find((worker) => worker.member.id === workingGroup.leadId)
 
   return (
     <ContentWithSidepanel>
@@ -54,7 +54,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         </OpeningsCategories>
       </MainPanel>
       <SidePanel neighbor={sideNeighborRef}>
-        <WorkersList leader={leader} workers={workers} />
+        <WorkersList lead={lead} workers={workers} />
       </SidePanel>
     </ContentWithSidepanel>
   )

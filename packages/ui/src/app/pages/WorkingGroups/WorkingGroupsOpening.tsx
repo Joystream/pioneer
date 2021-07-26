@@ -1,5 +1,6 @@
 import React, { memo, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
@@ -13,8 +14,16 @@ import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { DurationStatistics, Statistics, TokenValueStat } from '@/common/components/statistics'
-import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
+import {
+  DurationStatistics,
+  FractionValue,
+  StatiscticContentColumn,
+  StatisticHeader,
+  Statistics,
+  StatsBlock,
+  TokenValueStat,
+  TwoColumnsStatistic,
+} from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
@@ -25,6 +34,7 @@ import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { MappedStatuses, OpeningStatuses } from '@/working-groups/constants'
 import { useOpening } from '@/working-groups/hooks/useOpening'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { WorkingGroupOpening as WorkingGroupOpeningType } from '@/working-groups/types'
 
 export const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
@@ -123,10 +133,10 @@ export const WorkingGroupOpening = () => {
               <StatusBadge />
             </BadgesRow>
             <Statistics>
-              <TokenValueStat title="Current budget" tooltipText="Lorem ipsum..." value={opening.budget} />
-              <DurationStatistics title="Opening Expected duration" value={opening.expectedEnding} />
+              <DurationStatistics title="Time Left" value={opening.expectedEnding} />
               <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.payout} />
-              <NumericValueStat title="Hiring limit" value={opening.hiring.total} />
+              <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.budget} />
+              <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} />
             </Statistics>
           </RowGapBlock>
         </PageHeader>
@@ -143,16 +153,35 @@ export const WorkingGroupOpening = () => {
             myApplication={myApplication}
             hired={hiringApplication}
             hiringComplete={opening.status !== OpeningStatuses.OPEN}
-            leaderId={opening.leaderId}
+            leadId={opening.leadId}
           />
           {opening.status === OpeningStatuses.OPEN && !opening.applications.length && <ApplicationStatus />}
         </SidePanel>
       }
       footer={
         <PageFooter>
-          <BlockTime block={opening.createdAtBlock} layout="row" dateLabel="Hired" />
+          <BlockTime block={opening.createdAtBlock} layout="row" dateLabel="Created" />
         </PageFooter>
       }
     />
   )
 }
+
+const ApplicationStats = ({ applicants, hiring }: Pick<WorkingGroupOpeningType, 'applicants' | 'hiring'>) => (
+  <ApplicationStatsStyles>
+    <TwoColumnsStatistic>
+      <StatiscticContentColumn>
+        <StatisticHeader title="Applicants" />
+        <FractionValue numerator={applicants.current} denominator={applicants.total} />
+      </StatiscticContentColumn>
+      <StatiscticContentColumn>
+        <StatisticHeader title="Hiring" />
+        <FractionValue numerator={hiring.current} denominator={hiring.total} />
+      </StatiscticContentColumn>
+    </TwoColumnsStatistic>
+  </ApplicationStatsStyles>
+)
+
+const ApplicationStatsStyles = styled(StatsBlock).attrs({ centered: true })`
+  justify-content: start;
+`

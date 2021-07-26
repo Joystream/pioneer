@@ -99,7 +99,7 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLingkProps>`
   justify-content: start;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 48px;
   padding: 0px 12px 0px 24px;
   border-radius: 0 ${BorderRad.s} ${BorderRad.s} 0;
   font-size: 16px;
@@ -166,5 +166,9 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLingkProps>`
   }
   &.active-page .nav-icon {
     color: ${Colors.White};
+  }
+
+  @media (max-height: 768px) {
+    height: 38px;
   }
 `

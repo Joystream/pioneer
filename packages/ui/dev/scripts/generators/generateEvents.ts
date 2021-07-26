@@ -40,7 +40,7 @@ const generateBudgetSpending = (mocks: Mocks) => () => {
 
 const generateAppliedOnOpeningEvent = (mocks: Mocks) => () => {
   const application = mocks.applications[randomFromRange(0, mocks.applications.length - 1)]
-  const opening = mocks.openings.find(opening => opening.id == application.openingId)
+  const opening = mocks.openings.find((opening) => opening.id == application.openingId)
 
   return {
     id: (nextAppliedOnOpeningEventId++).toString(),
@@ -52,9 +52,9 @@ const generateAppliedOnOpeningEvent = (mocks: Mocks) => () => {
 }
 
 const generateApplicationWithdrawnEvent = (mocks: Mocks) => () => {
-  const withdrawnApplications = mocks.applications.filter(application => application.status === 'withdrawn')
+  const withdrawnApplications = mocks.applications.filter((application) => application.status === 'withdrawn')
   const application = withdrawnApplications[randomFromRange(0, withdrawnApplications.length - 1)]
-  const opening = mocks.openings.find(opening => opening.id == application.openingId)
+  const opening = mocks.openings.find((opening) => opening.id == application.openingId)
 
   return {
     id: (nextApplicationWithdrawnEventId++).toString(),
@@ -65,17 +65,17 @@ const generateApplicationWithdrawnEvent = (mocks: Mocks) => () => {
 }
 
 const generateStakeChanged = (mocks: Mocks) => () => {
-  const worker = mocks.workers[randomFromRange(0, mocks.workers.length -1)]
+  const worker = mocks.workers[randomFromRange(0, mocks.workers.length - 1)]
   return {
     createdAt: faker.date.recent(7),
     groupId: worker?.groupId,
     workerId: worker?.id,
-    amount: randomFromRange(100, 10000)
+    amount: randomFromRange(100, 10000),
   }
 }
 
 const generateStakeSlashedEvent = (mocks: Mocks) => () => {
-  const worker = mocks.workers[randomFromRange(0, mocks.workers.length -1)]
+  const worker = mocks.workers[randomFromRange(0, mocks.workers.length - 1)]
   return {
     createdAt: faker.date.recent(7),
     groupId: worker?.groupId,
@@ -87,21 +87,22 @@ const generateStakeSlashedEvent = (mocks: Mocks) => () => {
 }
 
 const generateOpeningFilledEvent = (mocks: Mocks) => () => {
-  const filled = mocks.openings.filter(o => o.status === 'filled')
+  const filled = mocks.openings.filter((o) => o.status === 'filled')
   const opening = filled[randomFromRange(0, filled.length - 1)]
-  const workers = mocks.workers.filter(w => w && w.groupId === opening.groupId)
+  const workers = mocks.workers.filter((w) => w && w.groupId === opening.groupId)
   return {
     createdAt: faker.date.recent(7),
     groupId: opening.groupId,
     openingId: opening.id,
-    workersHiredIds: Array.from({ length: opening.metadata.hiringLimit })
-      .map(() => workers[randomFromRange(0, workers.length - 1)]?.id)
+    workersHiredIds: Array.from({ length: opening.metadata.hiringLimit }).map(
+      () => workers[randomFromRange(0, workers.length - 1)]?.id
+    ),
   }
 }
 
 const generateWorkerLeavingEvent = (mocks: Mocks, leftAlready?: boolean) => () => {
   const status = leftAlready ? 'left' : 'active'
-  const workers = mocks.workers.filter(worker => worker && worker.status === status)
+  const workers = mocks.workers.filter((worker) => worker && worker.status === status)
   const worker = workers[randomFromRange(0, workers.length - 1)]
   return {
     createdAt: faker.date.recent(7),
@@ -113,18 +114,18 @@ const generateWorkerLeavingEvent = (mocks: Mocks, leftAlready?: boolean) => () =
 const generateStatusTextChangedEvents = (mocks: Mocks) => {
   const groups = mocks.workingGroups
   const openings = mocks.upcomingOpenings
-  return groups.map(group => ({
+  return groups.map((group) => ({
     createdAt: faker.date.recent(7),
     groupId: group.id,
-    upcomingworkinggroupopeningcreatedInEventIds: [openings.find(opening => opening.groupId == group.id)?.id],
+    upcomingworkinggroupopeningcreatedInEventIds: [openings.find((opening) => opening.groupId == group.id)?.id],
     // assuming this controls the "status updated" activity, just the array being empty or non-empty matters
-    workinggroupmetadatasetInEventIds: Math.random() > .5 ? ['1'] : [],
+    workinggroupmetadatasetInEventIds: Math.random() > 0.5 ? ['1'] : [],
   }))
 }
 
 const generateOpeningAddedEvent = (mocks: Mocks) => () => {
-  const opening = mocks.openings[randomFromRange(0, mocks.openings.length -1)]
-  const group = mocks.workingGroups.find(g => g.id === opening.groupId)
+  const opening = mocks.openings[randomFromRange(0, mocks.openings.length - 1)]
+  const group = mocks.workingGroups.find((g) => g.id === opening.groupId)
   return {
     createdAt: faker.date.recent(15),
     groupId: group?.id,
@@ -133,9 +134,9 @@ const generateOpeningAddedEvent = (mocks: Mocks) => () => {
 }
 
 const generateOpeningCanceledEvent = (mocks: Mocks) => () => {
-  const openings = mocks.openings.filter(opening => opening.status === 'cancelled')
+  const openings = mocks.openings.filter((opening) => opening.status === 'cancelled')
   const opening = openings[randomFromRange(0, openings.length - 1)]
-  const group = mocks.workingGroups.find(g => g.id === opening.groupId)
+  const group = mocks.workingGroups.find((g) => g.id === opening.groupId)
   return {
     createdAt: faker.date.recent(7),
     groupId: group?.id,
@@ -153,7 +154,7 @@ const generateBudgetSetEvent = (mocks: Mocks) => () => {
 }
 
 const generateTerminatedEvent = (mocks: Mocks) => () => {
-  const workers = mocks.workers.filter(worker => worker?.status === 'terminated')
+  const workers = mocks.workers.filter((worker) => worker?.status === 'terminated')
   const worker = workers[randomFromRange(0, workers.length - 1)]
   return {
     createdAt: faker.date.recent(30),
@@ -165,7 +166,7 @@ const generateTerminatedEvent = (mocks: Mocks) => () => {
 
 const generateWorkerRewardAccountUpdatedEvent = (mocks: Mocks) => () => {
   const worker = mocks.workers[randomFromRange(0, mocks.workers.length - 1)]
-  const member = mocks.members.find(member => member.id === worker!.membershipId.toString())
+  const member = mocks.members.find((member) => member.id === worker!.membershipId.toString())
   return {
     createdAt: faker.date.recent(30),
     groupId: worker?.groupId,
@@ -200,13 +201,17 @@ export const eventGenerators = {
   budgetSetEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSetEvent(mocks)),
   terminatedWorkerEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateTerminatedEvent(mocks)),
   terminatedLeaderEvents: (mocks: Mocks) => Array.from({ length: 5 }).map(generateTerminatedEvent(mocks)),
-  workerRewardAccountUpdatedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerRewardAccountUpdatedEvent(mocks)),
-  workerRewardAmountUpdatedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerRewardAmountUpdatedEvent(mocks)),
+  workerRewardAccountUpdatedEvents: (mocks: Mocks) =>
+    Array.from({ length: 10 }).map(generateWorkerRewardAccountUpdatedEvent(mocks)),
+  workerRewardAmountUpdatedEvents: (mocks: Mocks) =>
+    Array.from({ length: 10 }).map(generateWorkerRewardAmountUpdatedEvent(mocks)),
 }
 
 export const generateAllEvents = (mocks: Mocks) => {
   const newMocks: { [key: string]: any[] } = {}
-  Object.entries(eventGenerators).forEach(([key, generator]) => { newMocks[key] = generator(mocks) })
+  Object.entries(eventGenerators).forEach(([key, generator]) => {
+    newMocks[key] = generator(mocks)
+  })
 
   return newMocks
 }

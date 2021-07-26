@@ -5,7 +5,7 @@ type ID = string
 export interface MemberRole {
   groupName: string
   createdAt?: string
-  isLeader: boolean
+  isLead: boolean
 }
 
 export interface Member {

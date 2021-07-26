@@ -12,7 +12,7 @@ export const WORKER: WorkerWithDetails = {
     name: 'forum',
     id: '1',
   },
-  isLeader: false,
+  isLead: false,
   reward: getReward(2, 'forum'),
   earnedTotal: 2000,
   stake: 2000,
