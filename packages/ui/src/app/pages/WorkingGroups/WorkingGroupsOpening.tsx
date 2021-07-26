@@ -160,7 +160,7 @@ export const WorkingGroupOpening = () => {
       }
       footer={
         <PageFooter>
-          <BlockTime block={opening.createdAtBlock} layout="row" dateLabel="Hired" />
+          <BlockTime block={opening.createdAtBlock} layout="row" dateLabel="Created" />
         </PageFooter>
       }
     />
