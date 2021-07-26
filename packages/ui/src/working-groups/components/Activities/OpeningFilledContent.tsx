@@ -7,7 +7,7 @@ import { OpeningFilledActivity } from '@/working-groups/types'
 
 export const OpeningFilledContent: ActivityContentComponent<OpeningFilledActivity> = ({ activity }) => {
   const { opening, hiredMembers } = activity
-  return opening.type == 'LEADER' ? (
+  return opening.type == 'LEAD' ? (
     <>
       Opening <ActivityRouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</ActivityRouterLink> for
       a Lead has been filled.

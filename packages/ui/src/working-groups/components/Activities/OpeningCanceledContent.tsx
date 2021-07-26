@@ -11,7 +11,7 @@ export const OpeningCanceledContent: ActivityContentComponent<OpeningCanceledAct
     <>
       Opening "<ActivityRouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</ActivityRouterLink>"
       for a {opening.type === 'REGULAR' && 'Non-'}Lead has been cancelled by the
-      {opening.type === 'REGULAR' ? `${opening.groupName} Leader` : 'Council'}.
+      {opening.type === 'REGULAR' ? `${opening.groupName} Lead` : 'Council'}.
     </>
   )
 }

@@ -29,7 +29,7 @@ Default.args = {
     runtimeId: 12,
     earnedTotal: 1000,
     group: { id: '3', name: 'membership' },
-    isLeader: false,
+    isLead: false,
     membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
     reward: getReward(2, 'membership'),
     stake: 192837021,
