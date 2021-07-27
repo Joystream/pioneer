@@ -68,19 +68,16 @@ export const DecreaseWorkingGroupLeadStake = ({
             inputSize="l"
             tooltipText="Please select an identifier for Working Group"
           >
-            <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
+            <SelectWorkingGroup
+              selectedGroupId={groupId}
+              onChange={(selected) => setGroupId(selected.id)}
+              disableNoLead
+            />
           </InputComponent>
-          {groupId && group && !group.leadId && (
-            <Info title="Warning">
-              <TextMedium>
-                {capitalizeFirstLetter(group.name)} Working Group has no any Lead yet. Please choose other Group.
-              </TextMedium>
-            </Info>
-          )}
           <InputComponent label="Working Group Lead" inputSize="l" disabled>
             <SelectMember onChange={() => true} disabled selected={lead} />
           </InputComponent>
-          {group && group.leadWorker && (
+          {group && (
             <Info>
               <TextMedium>
                 The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}

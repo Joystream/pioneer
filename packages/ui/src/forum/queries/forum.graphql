@@ -28,3 +28,4 @@ query GetForumThread($where: ForumThreadWhereUniqueInput!) {
     ...ForumThreadFields
   }
 }
+

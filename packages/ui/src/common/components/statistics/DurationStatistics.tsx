@@ -17,10 +17,11 @@ const format = splitDuration([
 
 export interface DurationStatisticsProps extends StatisticItemProps {
   value: string
+  from?: string
 }
 
 export const DurationStatistics = (props: DurationStatisticsProps) => {
-  const duration = Date.parse(props.value) - Date.now()
+  const duration = Date.parse(props.value) - (props.from ? Date.parse(props.from) : Date.now())
   return (
     <StatisticItem {...props}>
       {duration > A_MINUTE ? (

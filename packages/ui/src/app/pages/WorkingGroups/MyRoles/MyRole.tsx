@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -28,6 +28,7 @@ import { ApplicationDetailsModalCall } from '@/working-groups/modals/Application
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 
+import { useMyMemberships } from '../../../../memberships/hooks/useMyMemberships'
 import { useWorkerUnstakingPeriodEnd } from '../../../../working-groups/hooks/useWorkerUnstakingPeriodEnd'
 import { getRoleWarning } from '../../../../working-groups/model/getRoleWarning'
 
@@ -35,6 +36,12 @@ export const MyRole = () => {
   const { id } = useParams<{ id: string }>()
 
   const { worker, isLoading } = useWorker(id)
+  const { members } = useMyMemberships()
+
+  const isOwn = useMemo(() => {
+    return !!members.find((member) => member.id === worker?.membership.id)
+  }, [members.length, worker?.id])
+
   const isActive = worker && worker.status === 'WorkerStatusActive'
   const isLeaving = worker && worker.status === 'WorkerStatusLeaving'
 
@@ -89,7 +96,7 @@ export const MyRole = () => {
             <LinkButtonGhost size="medium" to={`/working-groups/openings/${worker?.openingId}`}>
               Opening
             </LinkButtonGhost>
-            {isActive && (
+            {isActive && isOwn && (
               <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
                 Leave this position
                 <Tooltip tooltipText="Lorem ipsum" tooltipTitle="Lorem ipsum">
@@ -130,7 +137,7 @@ export const MyRole = () => {
             <RoleAccountHeader>
               <Label>Role Account</Label>
               <ButtonsGroup>
-                {isActive && (
+                {isActive && isOwn && (
                   <ButtonGhost size="small" onClick={onChangeRoleClick}>
                     Change Role Account
                   </ButtonGhost>
@@ -155,7 +162,7 @@ export const MyRole = () => {
             <RoleAccountHeader>
               <Label>Reward Account</Label>
               <ButtonsGroup>
-                {isActive && (
+                {isActive && isOwn && (
                   <ButtonGhost size="small" onClick={onChangeRewardClick}>
                     Change Reward Account
                   </ButtonGhost>
@@ -168,7 +175,7 @@ export const MyRole = () => {
       }
       sidebar={
         <SidePanel neighbor={sideNeighborRef}>
-          <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} isOwn />
+          <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} isOwn={isOwn} />
         </SidePanel>
       }
       footer={

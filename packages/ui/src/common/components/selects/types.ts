@@ -19,6 +19,7 @@ export type OptionNode = ReactNode
 export interface OptionProps {
   selected: boolean
   focus: boolean
+  disabled?: boolean
   onClick?: MouseEventHandler
 }
 
