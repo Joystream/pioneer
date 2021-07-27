@@ -9,6 +9,7 @@ fragment ForumThreadFields on ForumThread {
   isSticky
   categoryId
   title
+  authorId
 }
 
 query GetForumCategories {

@@ -15,6 +15,7 @@ export interface RawForumThreadMock {
   categoryId: string
   isSticky: boolean
   title: string
+  authorId: string
 }
 
 export function seedForumCategory(forumCategoryData: RawForumCategoryMock, server: any) {
