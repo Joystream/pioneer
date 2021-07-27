@@ -7,7 +7,7 @@ import {
   proposalStatusToTypename,
 } from '@/proposals/model/proposalStatus'
 import { useGetProposalsQuery } from '@/proposals/queries'
-import { asProposal, Proposal } from '@/proposals/types'
+import { asProposal, Proposal, ProposalStatus } from '@/proposals/types'
 
 import { ProposalFiltersState } from '../components/ProposalFilters'
 
@@ -35,7 +35,9 @@ export const getStatusWhere = (status: UseProposalsStatus) => {
 export const useProposals = ({ status, filters }: UseProposalsProps): UseProposals => {
   const variables = useMemo(() => {
     let where: ProposalWhereInput = {
-      status_json: filters?.stage ? { isTypeOf_eq: proposalStatusToTypename(filters.stage) } : getStatusWhere(status),
+      status_json: filters?.stage
+        ? { isTypeOf_eq: proposalStatusToTypename(filters.stage as ProposalStatus) }
+        : getStatusWhere(status),
     }
     if (filters?.type) where.details_json = { isTypeOf_eq: filters.type + 'ProposalDetails' }
     if (filters?.proposer) where.creator = { id_eq: filters.proposer.id }

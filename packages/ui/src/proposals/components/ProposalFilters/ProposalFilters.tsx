@@ -3,17 +3,20 @@ import styled from 'styled-components'
 
 import { DatePicker } from '@/common/components/forms/DatePicker'
 import { FilterBox } from '@/common/components/forms/FilterBox'
-import { FilterSelect } from '@/common/components/selects'
+import { camelCaseToText } from '@/common/helpers'
 import { PartialDateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
 import { Member } from '@/memberships/types'
 import { ProposalStatus } from '@/proposals/types'
 
+import { FilterTextSelect } from '../../../common/components/selects'
+
+import { toCamelCase } from './helpers'
 import { SelectProposer } from './SelectProposer'
 
 export interface ProposalFiltersState {
   search: string
-  stage: ProposalStatus | null
+  stage: string | null
   type: string | null
   lifetime: PartialDateRange
   proposer: Member | null
@@ -33,7 +36,10 @@ const filterReducer = (filters: ProposalFiltersState, action: Action): ProposalF
       return ProposalEmptyFilter
 
     case 'change':
-      return { ...filters, [action.field]: action.value }
+      return {
+        ...filters,
+        [action.field]: typeof action.value == 'string' ? toCamelCase(action.value) : action.value,
+      }
   }
   return filters
 }
@@ -83,13 +89,13 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
       }}
     >
       <Fields>
-        <FilterSelect
+        <FilterTextSelect
           title="Type"
-          options={types}
-          value={type}
+          options={types.map(camelCaseToText)}
+          value={type && camelCaseToText(type)}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'type', value })
-            onApply({ ...filters, type: value })
+            onApply({ ...filters, type: toCamelCase(value) })
           }}
         />
 
@@ -117,13 +123,13 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
           }}
         />
 
-        <FilterSelect
-          title="Stage"
-          options={stages}
-          value={stage}
+        <FilterTextSelect
+          title="Status"
+          options={stages.map(camelCaseToText)}
+          value={stage && camelCaseToText(stage)}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'stage', value })
-            onApply({ ...filters, stage: value })
+            onApply({ ...filters, stage: toCamelCase(value) })
           }}
         />
       </Fields>
