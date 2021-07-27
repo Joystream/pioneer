@@ -2,6 +2,7 @@ import React from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
+import { RouterLink } from '@/common/components/RouterLink'
 import { useForumCategories } from '@/forum/hooks/useForumCategories'
 
 export const ForumCategories = () => {
@@ -18,7 +19,7 @@ export const ForumCategories = () => {
             forumCategories.map((category) => {
               return (
                 <div key={category.id}>
-                  {category.id} | {category.title}
+                  {category.id} | <RouterLink to={`/forum/category/${category.id}`}> {category.title}</RouterLink>
                 </div>
               )
             })}

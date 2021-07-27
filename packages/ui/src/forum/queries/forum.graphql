@@ -4,8 +4,21 @@ fragment ForumCategoryFields on ForumCategory {
   description
 }
 
+fragment ForumThreadFields on ForumThread {
+  id
+  isSticky
+  categoryId
+  title
+}
+
 query GetForumCategories {
   forumCategories {
     ...ForumCategoryFields
+  }
+}
+
+query GetForumThreads($where: ForumThreadWhereInput) {
+  forumThreads(where: $where) {
+    ...ForumThreadFields
   }
 }
