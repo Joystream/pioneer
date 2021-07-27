@@ -39,12 +39,6 @@ interface APIDisconnected extends BaseAPI {
   connectionState: 'disconnected'
 }
 
-// interface APIError extends BaseAPI {
-//   api: undefined
-//   isConnected: false
-//   connectionState: 'error'
-// }
-
 export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
 const endpoints: Record<NetworkType, string> = {
