@@ -2,7 +2,7 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
-import { seedForumCategories } from '@/mocks/data/seedForum'
+import { seedForumCategories, seedForumThreads } from '@/mocks/data/seedForum'
 
 import schema from '../common/api/schemas/schema.graphql'
 
@@ -65,6 +65,7 @@ export const makeServer = (environment = 'development') => {
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
               forumCategories: getWhereResolver('ForumCategory'),
+              forumThreads: getWhereResolver('ForumThread'),
               membershipByUniqueInput: getUniqueResolver('Membership'),
               memberships: getWhereResolver('Membership'),
               membershipsConnection: getConnectionResolver('MembershipConnection'),
@@ -118,6 +119,7 @@ export const makeServer = (environment = 'development') => {
       seedProposals(server)
       seedEvents(server)
       seedForumCategories(server)
+      seedForumThreads(server)
     },
   })
 }

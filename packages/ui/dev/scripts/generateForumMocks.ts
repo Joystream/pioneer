@@ -14,7 +14,22 @@ export const generateForum = () => {
     }
   })
 
-  const forumMocks = { forumCategories }
+  nextId = 0
+
+  const forumThreads = forumCategories
+    .map(({ id }) => {
+      return [...new Array(randomFromRange(3, 10))].map(() => {
+        return {
+          id: String(nextId++),
+          categoryId: id,
+          isSticky: !(nextId % 5),
+          title: faker.lorem.words(randomFromRange(4, 8)),
+        }
+      })
+    })
+    .flatMap((a) => a)
+
+  const forumMocks = { forumCategories, forumThreads }
 
   Object.entries(forumMocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
