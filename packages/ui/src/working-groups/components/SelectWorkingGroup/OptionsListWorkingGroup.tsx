@@ -9,12 +9,13 @@ import { OptionWorkingGroup } from './OptionWorkingGroup'
 interface Props {
   allWorkingGroups: WorkingGroup[]
   onChange: (option: WorkingGroup) => void
+  disableNoLead?: boolean
 }
 
-export const OptionsListWorkingGroup = React.memo(({ allWorkingGroups, onChange }: Props) => (
+export const OptionsListWorkingGroup = React.memo(({ allWorkingGroups, onChange, disableNoLead }: Props) => (
   <OptionsListComponent>
     {allWorkingGroups.map((option) => (
-      <Option key={option.id} onClick={() => onChange(option)} disabled={!option.leadId}>
+      <Option key={option.id} onClick={() => onChange(option)} disabled={disableNoLead && !option.leadId}>
         <OptionWorkingGroup group={option} />
       </Option>
     ))}

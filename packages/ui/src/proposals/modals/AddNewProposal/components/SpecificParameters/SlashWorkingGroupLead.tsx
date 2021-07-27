@@ -63,7 +63,11 @@ export const SlashWorkingGroupLead = ({
             inputSize="l"
             tooltipText="Please select an identifier for Working Group"
           >
-            <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
+            <SelectWorkingGroup
+              selectedGroupId={groupId}
+              onChange={(selected) => setGroupId(selected.id)}
+              disableNoLead
+            />
           </InputComponent>
           <InputComponent label="Working Group Lead" inputSize="l" disabled>
             <SelectMember onChange={() => true} disabled selected={lead} />
