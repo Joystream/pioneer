@@ -92,6 +92,8 @@ describe('UI: My Role Page', () => {
 
       await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
       expect(screen.queryByText(/leave this position/i)).toBeNull()
+      expect(screen.queryByText(/change role account/i)).toBeNull()
+      expect(screen.queryByText(/change reward account/i)).toBeNull()
     })
   })
 

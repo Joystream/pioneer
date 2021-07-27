@@ -137,7 +137,7 @@ export const MyRole = () => {
             <RoleAccountHeader>
               <Label>Role Account</Label>
               <ButtonsGroup>
-                {isActive && (
+                {isActive && isOwn && (
                   <ButtonGhost size="small" onClick={onChangeRoleClick}>
                     Change Role Account
                   </ButtonGhost>
@@ -162,7 +162,7 @@ export const MyRole = () => {
             <RoleAccountHeader>
               <Label>Reward Account</Label>
               <ButtonsGroup>
-                {isActive && (
+                {isActive && isOwn && (
                   <ButtonGhost size="small" onClick={onChangeRewardClick}>
                     Change Reward Account
                   </ButtonGhost>
