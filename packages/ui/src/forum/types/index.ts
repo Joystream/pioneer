@@ -1,2 +1,2 @@
-export * from './forumCategory'
-export * from './forumThread'
+export * from './ForumCategory'
+export * from './ForumThread'
