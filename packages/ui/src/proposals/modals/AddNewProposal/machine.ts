@@ -206,6 +206,11 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         },
         SET_TYPE: {
           actions: assign({
+            specifics: (context, event) => {
+              if (context.type !== (event as SetTypeEvent).proposalType) return {}
+
+              return context.specifics
+            },
             type: (context, event) => (event as SetTypeEvent).proposalType,
           }),
         },
