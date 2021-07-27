@@ -1,15 +1,15 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
+import { WaitForAPI } from '@/app/components/WaitForAPI'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
-import { Loading } from '@/common/components/Loading'
 import { Page } from '@/common/components/page/Page'
-import { useApi } from '@/common/hooks/useApi'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
 import { ExtensionWarning } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { GlobalModals } from './GlobalModals'
+import { Forum } from './pages/Forum'
 import { Members } from './pages/Members/Members'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
@@ -52,6 +52,7 @@ export const App = () => (
           <Route exact path="/members" component={Members} />
           <Route exact path="/members/:id" component={Members} />
           <Route exact path="/settings" component={Settings} />
+          <Route path="/forum" component={Forum} />
           <Redirect exact from="/" to="/profile" />
         </Switch>
       </Page>
@@ -61,13 +62,3 @@ export const App = () => (
     <ExtensionWarning />
   </Providers>
 )
-
-export const WaitForAPI = ({ children }: { children: ReactNode }) => {
-  const { connectionState } = useApi()
-
-  if (connectionState === 'connecting') {
-    return <Loading text="Waiting for API initialization" />
-  }
-
-  return <>{children}</>
-}
