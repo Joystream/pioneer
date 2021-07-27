@@ -175,7 +175,7 @@ export const MyRole = () => {
       }
       sidebar={
         <SidePanel neighbor={sideNeighborRef}>
-          <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} isOwn />
+          <ActivitiesBlock activities={activities} label="Role Activities" warning={warning} isOwn={isOwn} />
         </SidePanel>
       }
       footer={
