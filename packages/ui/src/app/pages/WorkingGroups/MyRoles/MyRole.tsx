@@ -28,6 +28,7 @@ import { ApplicationDetailsModalCall } from '@/working-groups/modals/Application
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 
+import { useWorkerUnstakingPeriodEnd } from '../../../../working-groups/hooks/useWorkerUnstakingPeriodEnd'
 import { getRoleWarning } from '../../../../working-groups/model/getRoleWarning'
 
 export const MyRole = () => {
@@ -38,7 +39,8 @@ export const MyRole = () => {
   const isLeaving = worker && worker.status === 'WorkerStatusLeaving'
 
   const { activities } = useRoleActivities(worker)
-  const warning = worker ? getRoleWarning(worker.status) : undefined
+  const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(worker?.id)
+  const warning = worker ? getRoleWarning(worker.status, unstakingPeriodEnd) : undefined
 
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
