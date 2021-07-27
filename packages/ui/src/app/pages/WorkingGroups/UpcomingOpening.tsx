@@ -74,7 +74,7 @@ export const UpcomingOpening = () => {
               </BadgeStatus>
             </BadgesRow>
             <Statistics>
-              <DurationStatistics title="Time to begun" value={opening.expectedStart} />
+              <DurationStatistics title="Time to begin" value={opening.expectedStart} />
               <DurationStatistics
                 title="Opening Expected duration"
                 value={opening.expectedEnding}
