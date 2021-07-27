@@ -13,13 +13,33 @@ interface Props {
   children: ReactNode
 }
 
-type ConnectionState = 'connecting' | 'connected' | 'disconnected' | 'error'
+type ConnectionState = 'connecting' | 'connected' | 'disconnected'
 
-export interface UseApi {
-  api: ApiRx
+interface BaseAPI {
+  api?: ApiRx
   isConnected: boolean
   connectionState: ConnectionState
 }
+
+interface APIConnecting extends BaseAPI {
+  api: undefined
+  isConnected: false
+  connectionState: 'connecting'
+}
+
+interface APIConnected extends BaseAPI {
+  api: ApiRx
+  isConnected: true
+  connectionState: 'connected'
+}
+
+interface APIDisconnected extends BaseAPI {
+  api: ApiRx
+  isConnected: false
+  connectionState: 'disconnected'
+}
+
+export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
 const endpoints: Record<NetworkType, string> = {
   local: 'ws://127.0.0.1:9944',
@@ -48,9 +68,47 @@ export const ApiContextProvider = ({ children }: Props) => {
     })
   }, [api])
 
-  return (
-    <ApiContext.Provider value={{ isConnected: connectionState === 'connected', api, connectionState }}>
-      {children}
-    </ApiContext.Provider>
-  )
+  if (connectionState === 'connecting') {
+    return (
+      <ApiContext.Provider
+        value={{
+          isConnected: false,
+          api: undefined,
+          connectionState,
+        }}
+      >
+        {children}
+      </ApiContext.Provider>
+    )
+  }
+
+  if (connectionState === 'connected') {
+    return (
+      <ApiContext.Provider
+        value={{
+          isConnected: true,
+          api: api,
+          connectionState,
+        }}
+      >
+        {children}
+      </ApiContext.Provider>
+    )
+  }
+
+  if (connectionState === 'disconnected') {
+    return (
+      <ApiContext.Provider
+        value={{
+          isConnected: false,
+          api: api,
+          connectionState,
+        }}
+      >
+        {children}
+      </ApiContext.Provider>
+    )
+  }
+
+  return null
 }

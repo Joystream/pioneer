@@ -33,7 +33,7 @@ export type OpeningParams = Exclude<
 >
 
 export const ApplyForRoleModal = () => {
-  const { api } = useApi()
+  const { api, connectionState } = useApi()
   const { active } = useMyMemberships()
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const [state, send, service] = useMachine(applyForRoleMachine)
@@ -41,7 +41,7 @@ export const ApplyForRoleModal = () => {
   const requiredStake = opening.stake.toNumber()
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
   const transaction = useMemo(() => {
-    if (active) {
+    if (active && api) {
       return getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
         member_id: active?.id,
         opening_id: opening.runtimeId,
@@ -53,7 +53,7 @@ export const ApplyForRoleModal = () => {
         },
       })
     }
-  }, [active?.id])
+  }, [active?.id, connectionState])
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
   useEffect(() => {

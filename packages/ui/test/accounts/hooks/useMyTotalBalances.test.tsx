@@ -7,13 +7,14 @@ import React, { ReactNode } from 'react'
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/common/providers/api/context'
+import { UseApi } from '@/common/providers/api/provider'
 
 import { createBalance } from '../../_mocks/chainTypes'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubBalances } from '../../_mocks/transactions'
 
 describe('useMyTotalBalances', () => {
-  const useApi = stubApi()
+  let useApi: UseApi = stubApi()
 
   jest.useFakeTimers()
 
@@ -26,7 +27,11 @@ describe('useMyTotalBalances', () => {
   })
 
   it('Returns zero balances when API not ready', () => {
-    useApi.isConnected = false
+    useApi = {
+      connectionState: 'connecting',
+      isConnected: false,
+      api: undefined,
+    }
     const { result } = renderUseTotalBalances()
 
     expect(result.current).toEqual({

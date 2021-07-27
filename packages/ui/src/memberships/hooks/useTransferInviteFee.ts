@@ -5,10 +5,10 @@ import { useApi } from '../../common/hooks/useApi'
 import { Member } from '../types'
 
 export function useTransferInviteFee(member?: Member) {
-  const { api } = useApi()
-  const transaction = useMemo(() => (member ? api.tx?.members?.transferInvites(member.id, member.id, 1) : undefined), [
-    member,
-  ])
+  const { api, connectionState } = useApi()
+  const transaction = useMemo(() => {
+    return member ? api?.tx?.members?.transferInvites(member.id, member.id, 1) : undefined
+  }, [member, connectionState])
 
   return useTransactionFee(member?.controllerAccount, transaction)
 }

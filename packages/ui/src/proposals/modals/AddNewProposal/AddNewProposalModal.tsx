@@ -58,7 +58,7 @@ const isLastStepActive = (steps: Step[]) => {
 }
 
 export const AddNewProposalModal = () => {
-  const { api } = useApi()
+  const { api, connectionState } = useApi()
   const { active: member } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
@@ -77,12 +77,12 @@ export const AddNewProposalModal = () => {
   }
 
   const transaction = useMemo(() => {
-    if (member) {
+    if (member && api) {
       const txSpecificParameters = getSpecificParameters(api, state as AddNewProposalMachineState)
 
       return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
     }
-  }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics)])
+  }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics), connectionState])
   const feeInfo = useTransactionFee(member?.controllerAccount, transaction)
 
   useEffect((): any => {

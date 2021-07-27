@@ -19,9 +19,9 @@ interface MembershipModalProps {
 }
 
 export function InviteMemberModal({ onClose }: MembershipModalProps) {
-  const { api } = useApi()
-  const workingGroupBudget = useObservable(api.query.membershipWorkingGroup.budget(), [])
-  const membershipPrice = useObservable(api.query.members.membershipPrice(), [])
+  const { api, connectionState } = useApi()
+  const workingGroupBudget = useObservable(api?.query.membershipWorkingGroup.budget(), [connectionState])
+  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
   const [state, send] = useMachine(inviteMemberMachine)
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
     return <InviteMemberFormModal onClose={onClose} onSubmit={(params) => send({ type: 'DONE', form: params })} />
   }
 
-  if (state.matches('transaction')) {
+  if (state.matches('transaction') && api) {
     const transaction = api.tx.members.inviteMember(toMemberTransactionParams(state.context.form))
     const transactionService = state.children.transaction
 
