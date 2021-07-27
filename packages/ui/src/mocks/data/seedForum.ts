@@ -4,13 +4,13 @@ import rawForumThreads from './raw/forumThreads.json'
 export const categoriesData = rawForumCategories.map((rawForumCategory) => ({ ...rawForumCategory }))
 export const threadsData = rawForumThreads.map((rawForumThread) => ({ ...rawForumThread }))
 
-interface RawForumCategoryMock {
+export interface RawForumCategoryMock {
   id: string
   title: string
   description: string
 }
 
-interface RawForumThreadMock {
+export interface RawForumThreadMock {
   id: string
   categoryId: string
   isSticky: boolean
