@@ -6,10 +6,8 @@ export interface ForumCategory {
   description: string
 }
 
-export const asForumCategory = (fields: ForumCategoryFieldsFragment): ForumCategory => {
-  return {
-    id: fields.id,
-    title: fields.title,
-    description: fields.description,
-  }
-}
+export const asForumCategory = (fields: ForumCategoryFieldsFragment): ForumCategory => ({
+  id: fields.id,
+  title: fields.title,
+  description: fields.description,
+})

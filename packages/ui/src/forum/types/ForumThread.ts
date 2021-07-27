@@ -7,11 +7,9 @@ export interface ForumThread {
   categoryId: string
 }
 
-export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread => {
-  return {
-    id: fields.id,
-    title: fields.title,
-    isSticky: fields.isSticky,
-    categoryId: fields.categoryId,
-  }
-}
+export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread => ({
+  id: fields.id,
+  title: fields.title,
+  isSticky: fields.isSticky,
+  categoryId: fields.categoryId,
+})
