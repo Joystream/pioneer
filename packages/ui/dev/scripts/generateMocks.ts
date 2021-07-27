@@ -1,7 +1,7 @@
 import yargs from 'yargs'
 
 import { eventsModule } from './generateEventMocks'
-import { forumModule } from './generateForumMocks'
+import { forumModule } from './generators/forum/generateForumMocks'
 import { generateAllEvents } from './generators/generateEvents'
 import { generateMembers } from './generators/generateMembers'
 import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
