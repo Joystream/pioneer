@@ -15,7 +15,6 @@ import rawTerminatedWorkerEvents from './raw/terminatedWorkerEvents.json'
 import rawWorkerExitedEvents from './raw/workerExitedEvents.json'
 import rawWorkerRewardAccountEvents from './raw/workerRewardAccountUpdatedEvents.json'
 import rawWorkerRewardAmountEvents from './raw/workerRewardAmountUpdatedEvents.json'
-import rawWorkerStartedLeavingEvents from './raw/workerStartedLeavingEvents.json'
 
 interface BaseEvent {
   id?: string
@@ -109,7 +108,6 @@ export const eventCategories = {
   StakeSlashedEvent: rawStakeSlashedEvents.map((rawEvent: RawStakeSlashedEvent) => ({ ...rawEvent })),
   OpeningFilledEvent: rawOpeningFilledEvents.map((rawEvent: RawOpeningFilledEvent) => ({ ...rawEvent })),
   WorkerExitedEvent: rawWorkerExitedEvents.map((rawEvent: WorkerLeavingEvent) => ({ ...rawEvent })),
-  WorkerStartedLeavingEvent: rawWorkerStartedLeavingEvents.map((rawEvent: WorkerLeavingEvent) => ({ ...rawEvent })),
   StatusTextChangedEvent: rawStatusTextChangedEvents.map((rawEvent: StatusTextChangedEvent) => ({ ...rawEvent })),
   OpeningAddedEvent: rawOpeningAddedEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
   OpeningCanceledEvent: rawOpeningCanceledEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),

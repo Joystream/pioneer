@@ -195,7 +195,6 @@ export const eventGenerators = {
   stakeSlashedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks)),
   openingFilledEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
   workerExitedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
-  workerStartedLeavingEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks)),
   statusTextChangedEvents: (mocks: Mocks) => generateStatusTextChangedEvents(mocks),
   openingAddedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningAddedEvent(mocks)),
   openingCanceledEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningCanceledEvent(mocks)),
