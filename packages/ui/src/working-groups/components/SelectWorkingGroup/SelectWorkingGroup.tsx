@@ -31,9 +31,10 @@ interface Props {
   selectedGroupId?: string
   disabled?: boolean
   className?: string
+  disableNoLead?: boolean
 }
 
-export const SelectWorkingGroupBase = ({ onChange, selectedGroupId, disabled, className }: Props) => {
+export const SelectWorkingGroupBase = ({ onChange, selectedGroupId, disabled, className, disableNoLead }: Props) => {
   const [search, setSearch] = useState('')
   const { isLoading, groups } = useWorkingGroups()
   const selectedGroup = useMemo(() => groups.find((group) => group.id === selectedGroupId), [
@@ -55,7 +56,11 @@ export const SelectWorkingGroupBase = ({ onChange, selectedGroupId, disabled, cl
       renderSelected={renderSelected}
       placeholder="Select Working Group or type group name"
       renderList={(onOptionClick) => (
-        <OptionsListWorkingGroup allWorkingGroups={filteredFoundWorkingGroups} onChange={onOptionClick} />
+        <OptionsListWorkingGroup
+          allWorkingGroups={filteredFoundWorkingGroups}
+          disableNoLead={disableNoLead}
+          onChange={onOptionClick}
+        />
       )}
       onSearch={(search) => setSearch(search)}
       className={className}
