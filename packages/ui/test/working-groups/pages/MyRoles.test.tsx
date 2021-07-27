@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, waitForElementToBeRemoved, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'
@@ -82,6 +82,16 @@ describe('UI: My Role Page', () => {
         await waitForElementToBeRemoved(() => getByText('Loading...'))
         expect(queryByText('Minimal Stake:')).toBeNull()
       })
+    })
+
+    it('Not own role', async () => {
+      const worker = { ...WORKER_DATA, membershipId: 5, status: 'active' }
+      seedWorker(worker, mockServer.server)
+
+      renderPage()
+
+      await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+      expect(screen.queryByText(/leave this position/i)).toBeNull()
     })
   })
 
