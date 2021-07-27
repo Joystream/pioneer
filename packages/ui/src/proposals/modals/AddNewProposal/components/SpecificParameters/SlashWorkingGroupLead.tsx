@@ -2,12 +2,10 @@ import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { InputComponent, InputNumber } from '@/common/components/forms'
-import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
-import { capitalizeFirstLetter } from '@/common/helpers'
 import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
 import { SelectMember } from '@/memberships/components/SelectMember'
@@ -65,15 +63,12 @@ export const SlashWorkingGroupLead = ({
             inputSize="l"
             tooltipText="Please select an identifier for Working Group"
           >
-            <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
+            <SelectWorkingGroup
+              selectedGroupId={groupId}
+              onChange={(selected) => setGroupId(selected.id)}
+              disableNoLead
+            />
           </InputComponent>
-          {groupId && group && !group.leadId && (
-            <Info title="Warning">
-              <TextMedium>
-                {capitalizeFirstLetter(group.name)} Working Group has no any Lead yet. Please choose other Group.
-              </TextMedium>
-            </Info>
-          )}
           <InputComponent label="Working Group Lead" inputSize="l" disabled>
             <SelectMember onChange={() => true} disabled selected={lead} />
           </InputComponent>

@@ -2,6 +2,8 @@ import { createGraphQLHandler } from '@miragejs/graphql'
 import { createServer, Server } from 'miragejs'
 import { AnyRegistry } from 'miragejs/-types'
 
+import { seedForumCategories, seedForumThreads } from '@/mocks/data/seedForum'
+
 import schema from '../common/api/schemas/schema.graphql'
 
 import {
@@ -57,44 +59,46 @@ export const makeServer = (environment = 'development') => {
           root: undefined,
           resolvers: {
             Query: {
+              applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
+              applicationWithdrawnEvents: getWhereResolver('ApplicationWithdrawnEvent'),
+              appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
+              budgetSetEvents: getWhereResolver('BudgetSetEvent'),
+              budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
+              forumCategories: getWhereResolver('ForumCategory'),
+              forumThreads: getWhereResolver('ForumThread'),
               membershipByUniqueInput: getUniqueResolver('Membership'),
               memberships: getWhereResolver('Membership'),
-              searchMemberships: searchMembersResolver,
               membershipsConnection: getConnectionResolver('MembershipConnection'),
-              workingGroups: getWhereResolver('WorkingGroup'),
-              workingGroupByUniqueInput: getUniqueResolver('WorkingGroup'),
-              workingGroupOpenings: getWhereResolver('WorkingGroupOpening'),
-              workingGroupOpeningsConnection: getConnectionResolver('WorkingGroupOpeningConnection'),
-              workingGroupOpeningByUniqueInput: getUniqueResolver('WorkingGroupOpening'),
-              workers: getWhereResolver('Worker'),
-              workersConnection: getConnectionResolver('WorkerConnection'),
-              workerByUniqueInput: getUniqueResolver('Worker'),
-              workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
-              applicationFormQuestionAnswers: getWhereResolver('ApplicationFormQuestionAnswer'),
-              upcomingWorkingGroupOpenings: getWhereResolver('UpcomingWorkingGroupOpening'),
-              upcomingWorkingGroupOpeningByUniqueInput: getUniqueResolver('UpcomingWorkingGroupOpening'),
-              proposals: getWhereResolver('Proposal'),
+              openingAddedEvents: getWhereResolver('OpeningAddedEvent'),
+              openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
+              openingFilledEvents: getWhereResolver('OpeningFilledEvent'),
               proposalByUniqueInput: getUniqueResolver('Proposal'),
               proposalVotedEventByUniqueInput: getUniqueResolver('ProposalVotedEvent'),
-              runtimeWasmBytecodeByUniqueInput: getUniqueResolver('RuntimeWasmBytecode'),
+              proposals: getWhereResolver('Proposal'),
               rewardPaidEvents: getWhereResolver('RewardPaidEvent'),
-              budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
-              appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
-              applicationWithdrawnEvents: getWhereResolver('ApplicationWithdrawnEvent'),
+              runtimeWasmBytecodeByUniqueInput: getUniqueResolver('RuntimeWasmBytecode'),
+              searchMemberships: searchMembersResolver,
               stakeDecreasedEvents: getWhereResolver('StakeDecreasedEvent'),
               stakeIncreasedEvents: getWhereResolver('StakeIncreasedEvent'),
               stakeSlashedEvents: getWhereResolver('StakeSlashedEvent'),
-              openingFilledEvents: getWhereResolver('OpeningFilledEvent'),
-              workerExitedEvents: getWhereResolver('WorkerExitedEvent'),
-              workerStartedLeavingEvents: getWhereResolver('WorkerStartedLeavingEvent'),
               statusTextChangedEvents: getWhereResolver('StatusTextChangedEvent'),
-              openingAddedEvents: getWhereResolver('OpeningAddedEvent'),
-              openingCanceledEvents: getWhereResolver('OpeningCanceledEvent'),
-              terminatedWorkerEvents: getWhereResolver('TerminatedWorkerEvent'),
               terminatedLeaderEvents: getWhereResolver('TerminatedLeaderEvent'),
-              budgetSetEvents: getWhereResolver('BudgetSetEvent'),
+              terminatedWorkerEvents: getWhereResolver('TerminatedWorkerEvent'),
+              upcomingWorkingGroupOpeningByUniqueInput: getUniqueResolver('UpcomingWorkingGroupOpening'),
+              upcomingWorkingGroupOpenings: getWhereResolver('UpcomingWorkingGroupOpening'),
+              workerByUniqueInput: getUniqueResolver('Worker'),
+              workerExitedEvents: getWhereResolver('WorkerExitedEvent'),
               workerRewardAccountUpdatedEvents: getWhereResolver('WorkerRewardAccountUpdatedEvent'),
               workerRewardAmountUpdatedEvents: getWhereResolver('WorkerRewardAmountUpdatedEvent'),
+              workerStartedLeavingEvents: getWhereResolver('WorkerStartedLeavingEvent'),
+              workers: getWhereResolver('Worker'),
+              workersConnection: getConnectionResolver('WorkerConnection'),
+              workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
+              workingGroupByUniqueInput: getUniqueResolver('WorkingGroup'),
+              workingGroupOpeningByUniqueInput: getUniqueResolver('WorkingGroupOpening'),
+              workingGroupOpenings: getWhereResolver('WorkingGroupOpening'),
+              workingGroupOpeningsConnection: getConnectionResolver('WorkingGroupOpeningConnection'),
+              workingGroups: getWhereResolver('WorkingGroup'),
             },
           },
         })
@@ -114,6 +118,8 @@ export const makeServer = (environment = 'development') => {
       updateWorkingGroups(server)
       seedProposals(server)
       seedEvents(server)
+      seedForumCategories(server)
+      seedForumThreads(server)
     },
   })
 }

@@ -389,19 +389,6 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).toBeDisabled()
         })
 
-        it('Group selected without lead', async () => {
-          await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Membership')
-          await waitFor(() =>
-            expect(
-              screen.queryByText('Membership Working Group has no any Lead yet. Please choose other Group.')
-            ).not.toBeNull()
-          )
-          expect(await getButton(/By half/i)).toBeDisabled()
-
-          const button = await getCreateButton()
-          expect(button).toBeDisabled()
-        })
-
         it('Valid - group selected, amount filled', async () => {
           await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Forum')
           await waitFor(() =>

@@ -81,7 +81,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="lorem" disabled>
+              <NavigationLink to="/forum">
                 <ForumIcon />
                 Forum
               </NavigationLink>

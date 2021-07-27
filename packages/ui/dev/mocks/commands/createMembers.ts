@@ -8,7 +8,7 @@ export const createMembersCommand = async () => {
     const members = memberData
 
     const createMembers = members.map((member) => {
-      return api?.tx.members.buyMembership({
+      return api.tx.members.buyMembership({
         handle: member.handle,
         metadata: {
           name: member.metadata.name,

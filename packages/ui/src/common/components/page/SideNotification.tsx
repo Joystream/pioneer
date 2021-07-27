@@ -9,18 +9,31 @@ import { SuccessIcon } from '../icons'
 import { FailureSymbol } from '../icons/symbols'
 import { TextMedium } from '../typography'
 
-export interface NotificationProps {
+interface BasePropsProps {
   title: string
   message?: string | React.ReactElement | React.ReactNode
   link?: string
-  onClick: () => void
   isError?: boolean
 }
 
-export const SideNotification = ({ title, message, link, onClick, isError }: NotificationProps) => {
+interface WithCloseButton {
+  showClose?: false
+  onClick?: () => void
+}
+
+interface WithoutCloseButton {
+  showClose: true
+  onClick: () => void
+}
+
+type CloseButtonProps = WithCloseButton | WithoutCloseButton
+
+export type NotificationProps = BasePropsProps & CloseButtonProps
+
+export const SideNotification = ({ title, message, link, onClick, isError, showClose }: NotificationProps) => {
   return ReactDOM.createPortal(
     <NotificationComponent isError={isError}>
-      <NotificationCloseButton onClick={onClick} />
+      {showClose && <NotificationCloseButton onClick={onClick} />}
       <NotificationHeader isError={isError}>
         {isError ? <NotificationFailureSymbol /> : <NotificationSuccessIcon />}
         <NotificationTitle>{title}</NotificationTitle>

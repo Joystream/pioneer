@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, waitForElementToBeRemoved, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'
@@ -10,14 +10,14 @@ import { MyRole } from '@/app/pages/WorkingGroups/MyRoles/MyRole'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
+import { seedApplication } from '@/mocks/data/seedApplications'
+import { seedOpening } from '@/mocks/data/seedOpenings'
 import { seedWorker } from '@/mocks/data/seedWorkers'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 
-import { seedApplication } from '../../../src/mocks/data/seedApplications'
-import { seedOpening } from '../../../src/mocks/data/seedOpenings'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockApiProvider, MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 
@@ -83,23 +83,37 @@ describe('UI: My Role Page', () => {
         expect(queryByText('Minimal Stake:')).toBeNull()
       })
     })
+
+    it('Not own role', async () => {
+      const worker = { ...WORKER_DATA, membershipId: 5, status: 'active' }
+      seedWorker(worker, mockServer.server)
+
+      renderPage()
+
+      await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+      expect(screen.queryByText(/leave this position/i)).toBeNull()
+      expect(screen.queryByText(/change role account/i)).toBeNull()
+      expect(screen.queryByText(/change reward account/i)).toBeNull()
+    })
   })
 
   function renderPage() {
     return render(
-      <MemoryRouter initialEntries={[`working-groups/my-roles/${WORKER_DATA.id}`]}>
-        <MockQueryNodeProviders>
-          <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <Route path="working-groups/my-roles/:id">
-                  <MyRole />
-                </Route>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
-          </MockKeyringProvider>
-        </MockQueryNodeProviders>
-      </MemoryRouter>
+      <MockApiProvider>
+        <MemoryRouter initialEntries={[`working-groups/my-roles/${WORKER_DATA.id}`]}>
+          <MockQueryNodeProviders>
+            <MockKeyringProvider>
+              <AccountsContext.Provider value={useAccounts}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <Route path="working-groups/my-roles/:id">
+                    <MyRole />
+                  </Route>
+                </MembershipContext.Provider>
+              </AccountsContext.Provider>
+            </MockKeyringProvider>
+          </MockQueryNodeProviders>
+        </MemoryRouter>
+      </MockApiProvider>
     )
   }
 })

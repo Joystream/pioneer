@@ -44,6 +44,19 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
       }
     }
 
+    if (type === 'not') {
+      if (field === 'isTypeOf') {
+        filters.push((model: Record<string, any>) => {
+          return String(model[nestedField as string].modelName) !== camelCaseToDash(checkValue.toString())
+        })
+      } else {
+        filters.push((model: Record<string, any>) => {
+          const fieldName = getFieldName(model, nestedField ? nestedField : field)
+          return String(model[fieldName]) !== checkValue.toString()
+        })
+      }
+    }
+
     if (type === 'contains') {
       filters.push((model: Record<string, any>) =>
         String(model[getFieldName(model, field)]).includes(checkValue.toString())

@@ -1,6 +1,7 @@
 import yargs from 'yargs'
 
 import { eventsModule } from './generateEventMocks'
+import { forumModule } from './generators/forum/generateForumMocks'
 import { generateAllEvents } from './generators/generateEvents'
 import { generateMembers } from './generators/generateMembers'
 import { generateOpeningsAndUpcomingOpenings } from './generators/generateOpeningsAndUpcomingOpenings'
@@ -44,4 +45,5 @@ yargs(process.argv.slice(2))
   .scriptName('')
   .command(allModule)
   .command(eventsModule)
+  .command(forumModule)
   .demandCommand().argv

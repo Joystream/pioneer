@@ -12,7 +12,6 @@ import { info } from '@/common/logger'
 
 import { Address } from '../types'
 
-import { useApi } from './useApi'
 import { useKeyring } from './useKeyring'
 import { useObservable } from './useObservable'
 
@@ -80,7 +79,6 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
 
 export const useSignAndSendTransaction = ({ transaction, signer, service }: UseSignAndSendTransactionParams) => {
   const keyring = useKeyring()
-  const { api } = useApi()
 
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const [state, send] = useActor(service)
@@ -103,7 +101,7 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
       send('SIGN_INTERNAL')
       observeTransaction(transaction.signAndSend(keyringPair), send, fee)
     }
-  }, [api, state.value.toString(), paymentInfo])
+  }, [state.value.toString(), paymentInfo])
 
   return {
     paymentInfo,

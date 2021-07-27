@@ -1,0 +1,24 @@
+fragment ForumCategoryFields on ForumCategory {
+  id
+  title
+  description
+}
+
+fragment ForumThreadFields on ForumThread {
+  id
+  isSticky
+  categoryId
+  title
+}
+
+query GetForumCategories {
+  forumCategories {
+    ...ForumCategoryFields
+  }
+}
+
+query GetForumThreads($where: ForumThreadWhereInput) {
+  forumThreads(where: $where) {
+    ...ForumThreadFields
+  }
+}

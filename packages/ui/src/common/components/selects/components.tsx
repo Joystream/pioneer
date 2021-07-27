@@ -21,10 +21,11 @@ import { OptionProps } from './types'
 interface Props {
   children: ReactNode
   onClick: () => void
+  disabled?: boolean
 }
 
-export const Option = ({ children, onClick }: Props) => (
-  <OptionComponentContainer onClick={onClick}>
+export const Option = ({ children, onClick, disabled }: Props) => (
+  <OptionComponentContainer onClick={onClick} disabled={disabled}>
     <OptionComponent>{children}</OptionComponent>
   </OptionComponentContainer>
 )
@@ -77,6 +78,7 @@ export const EmptyOption = styled.input`
     font-weight: 400;
     color: ${Colors.Black[400]};
   }
+
   &:disabled {
     cursor: not-allowed;
   }
@@ -96,12 +98,13 @@ export const SelectComponent = styled.div`
   &:focus-visible {
     outline: none;
   }
+
   & > :first-child {
     border-radius: 2px;
   }
 `
 
-export const OptionComponentContainer = styled.li`
+export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
   display: flex;
   width: 100%;
   height: 100%;
@@ -109,11 +112,23 @@ export const OptionComponentContainer = styled.li`
   border-radius: ${BorderRad.s};
   background-color: transparent;
 
-  &:hover {
-    .accountName {
-      color: ${Colors.Blue[500]};
+  ${({ disabled }) => {
+    if (disabled) {
+      return css`
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
+      `
     }
-  }
+
+    return css`
+      &:hover {
+        .accountName {
+          color: ${Colors.Blue[500]};
+        }
+      }
+    `
+  }}
 `
 
 export const OptionComponent = styled.div`
@@ -224,6 +239,7 @@ export const OptionContainer = styled.div`
   &:hover {
     ${OptionFocused}
   }
+
   ${({ selected }: OptionProps) =>
     selected &&
     css`
@@ -235,6 +251,7 @@ export const OptionContainer = styled.div`
     height: 16px;
     ${Animations.showSymbol};
   }
+
   &,
   ${TextInlineMedium} {
     ${Overflow.FullDots};
