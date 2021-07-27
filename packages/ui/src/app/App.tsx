@@ -10,6 +10,7 @@ import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ExtensionWarning } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { GlobalModals } from './GlobalModals'
+import { Forum } from './pages/Forum'
 import { Members } from './pages/Members/Members'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
@@ -52,7 +53,8 @@ export const App = () => (
           <Route exact path="/members" component={Members} />
           <Route exact path="/members/:id" component={Members} />
           <Route exact path="/settings" component={Settings} />
-          <Redirect exact from="/" to="/profile" />
+          <Route path="/forum" component={Forum} />
+        <Redirect exact from="/" to="/profile" />
         </Switch>
       </Page>
       <GlobalModals />
