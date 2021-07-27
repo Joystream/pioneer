@@ -29,9 +29,9 @@ import { Providers } from './Providers'
 
 export const App = () => (
   <Providers>
-    <WaitForAPI>
-      <Page>
-        <SideBar />
+    <Page>
+      <SideBar />
+      <WaitForAPI>
         <Switch>
           <Route exact path="/profile" component={MyAccounts} />
           <Route exact path="/profile/memberships" component={MyMemberships} />
@@ -55,9 +55,9 @@ export const App = () => (
           <Route path="/forum" component={Forum} />
           <Redirect exact from="/" to="/profile" />
         </Switch>
-      </Page>
-      <GlobalModals />
-    </WaitForAPI>
+      </WaitForAPI>
+    </Page>
+    <GlobalModals />
     <ConnectionStatus />
     <ExtensionWarning />
   </Providers>

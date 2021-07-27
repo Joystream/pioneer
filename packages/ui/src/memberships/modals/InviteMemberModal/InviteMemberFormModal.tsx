@@ -54,7 +54,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
 
   const onCreate = () => onSubmit(fields)
   const handleHash = blake2AsHex(handle)
-  const potentialMemberIdSize = useObservable(api.query.members.memberIdByHandleHash.size(handleHash), [handle])
+  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle, api])
 
   useEffect(() => {
     setContext({ size: potentialMemberIdSize, keyring })

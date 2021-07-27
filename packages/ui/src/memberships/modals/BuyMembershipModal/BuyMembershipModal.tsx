@@ -14,8 +14,8 @@ import { buyMembershipMachine } from './machine'
 
 export const BuyMembershipModal = () => {
   const { hideModal } = useModal()
-  const { api } = useApi()
-  const membershipPrice = useObservable(api.query.members.membershipPrice(), [])
+  const { api, connectionState } = useApi()
+  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
   const [state, send] = useMachine(buyMembershipMachine)
 
   if (state.matches('prepare')) {
@@ -24,7 +24,7 @@ export const BuyMembershipModal = () => {
     return <BuyMembershipFormModal onClose={hideModal} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
-  if (state.matches('transaction')) {
+  if (state.matches('transaction') && api) {
     const transaction = api.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
     const { form } = state.context
     const service = state.children.transaction

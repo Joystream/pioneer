@@ -10,7 +10,7 @@ import { UseApi } from '@/common/providers/api/provider'
 describe('UI: Connection status component', () => {
   let eventEmitter: EventEmitter
   const useApi = {
-    api: {},
+    api: undefined,
     isConnected: false,
     connectionState: 'connecting',
   } as UseApi

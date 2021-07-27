@@ -15,13 +15,11 @@ import { CountInfo, Info, MemberColumn, MemberItemWrap, MemberRolesColumn } from
 
 export const MemberListItem = ({ member }: { member: Member }) => {
   const { showModal } = useModal()
-
   const showMemberModal = useCallback(() => {
     showModal<MemberModalCall>({ modal: 'Member', data: { id: member.id } })
   }, [member.id])
-
-  const { api } = useApi()
-  const council = useObservable(api.query.council.councilMembers(), [])
+  const { api, connectionState } = useApi()
+  const council = useObservable(api?.query.council.councilMembers(), [connectionState])
   const councilMembersIds = council?.map(({ membership_id }) => membership_id.toNumber()) ?? []
   const isCouncil = (id: number) => councilMembersIds.includes(id)
 
