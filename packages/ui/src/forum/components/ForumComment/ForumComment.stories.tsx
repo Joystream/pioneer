@@ -6,13 +6,13 @@ import styled from 'styled-components'
 import { PostReaction } from '@/common/api/queries'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { A_MINUTE } from '@/common/constants'
-import { ForumPost } from '@/common/types'
 import { repeat } from '@/common/utils'
+import { ForumPost } from '@/forum/types'
 
 import { ForumComment } from './ForumComment'
 
 export default {
-  title: 'Common/Forum/ForumComment',
+  title: 'Forum/ForumComment',
   component: ForumComment,
 } as Meta
 

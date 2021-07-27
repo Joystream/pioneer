@@ -1,7 +1,6 @@
 import { PostReaction } from '@/common/api/queries'
+import { Block } from '@/common/types/Block'
 import { Member } from '@/memberships/types'
-
-import { Block } from './Block'
 
 export interface ForumPost {
   id: string

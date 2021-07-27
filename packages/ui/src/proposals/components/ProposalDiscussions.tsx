@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
 import { CKEditor } from '@/common/components/CKEditor'
-import { ForumComment, ForumCommentStyles } from '@/common/components/Forum/ForumComment'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
+import { ForumComment, ForumCommentStyles } from '@/forum/components/ForumComment'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
 interface Props {
