@@ -1,7 +1,6 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-import { WaitForAPI } from '@/app/components/WaitForAPI'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { Page } from '@/common/components/page/Page'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -31,31 +30,29 @@ export const App = () => (
   <Providers>
     <Page>
       <SideBar />
-      <WaitForAPI>
-        <Switch>
-          <Route exact path="/profile" component={MyAccounts} />
-          <Route exact path="/profile/memberships" component={MyMemberships} />
-          <Route exact path="/working-groups" component={WorkingGroups} />
-          <Route exact path="/working-groups/openings" component={WorkingGroupsOpenings} />
-          <Route exact path="/working-groups/my-applications" component={MyApplications} />
-          <Route exact path="/working-groups/my-roles" component={MyRoles} />
-          <Route exact path="/working-groups/my-roles/:id" component={MyRole} />
-          <Route exact path="/working-groups/:name" component={WorkingGroup} />
-          <Route exact path="/working-groups/openings/:id" component={WorkingGroupOpening} />
-          <Route exact path="/working-groups/upcoming-openings/:id" component={UpcomingOpening} />
-          <Route exact path={ProposalsRoutes.current} component={Proposals} />
-          <Route exact path={ProposalsRoutes.past} component={PastProposals} />
-          <Route exact path={ProposalsRoutes.myproposals} />
-          <Route exact path={`${ProposalsRoutes.preview}/:id/vote/:voteId`} component={ProposalPreview} />
-          <Route exact path={`${ProposalsRoutes.preview}/:id/post/:postId`} component={ProposalPreview} />
-          <Route exact path={`${ProposalsRoutes.preview}/:id`} component={ProposalPreview} />
-          <Route exact path="/members" component={Members} />
-          <Route exact path="/members/:id" component={Members} />
-          <Route exact path="/settings" component={Settings} />
-          <Route path="/forum" component={Forum} />
-          <Redirect exact from="/" to="/profile" />
-        </Switch>
-      </WaitForAPI>
+      <Switch>
+        <Route exact path="/profile" component={MyAccounts} />
+        <Route exact path="/profile/memberships" component={MyMemberships} />
+        <Route exact path="/working-groups" component={WorkingGroups} />
+        <Route exact path="/working-groups/openings" component={WorkingGroupsOpenings} />
+        <Route exact path="/working-groups/my-applications" component={MyApplications} />
+        <Route exact path="/working-groups/my-roles" component={MyRoles} />
+        <Route exact path="/working-groups/my-roles/:id" component={MyRole} />
+        <Route exact path="/working-groups/:name" component={WorkingGroup} />
+        <Route exact path="/working-groups/openings/:id" component={WorkingGroupOpening} />
+        <Route exact path="/working-groups/upcoming-openings/:id" component={UpcomingOpening} />
+        <Route exact path={ProposalsRoutes.current} component={Proposals} />
+        <Route exact path={ProposalsRoutes.past} component={PastProposals} />
+        <Route exact path={ProposalsRoutes.myproposals} />
+        <Route exact path={`${ProposalsRoutes.preview}/:id/vote/:voteId`} component={ProposalPreview} />
+        <Route exact path={`${ProposalsRoutes.preview}/:id/post/:postId`} component={ProposalPreview} />
+        <Route exact path={`${ProposalsRoutes.preview}/:id`} component={ProposalPreview} />
+        <Route exact path="/members" component={Members} />
+        <Route exact path="/members/:id" component={Members} />
+        <Route exact path="/settings" component={Settings} />
+        <Route path="/forum" component={Forum} />
+        <Redirect exact from="/" to="/profile" />
+      </Switch>
     </Page>
     <GlobalModals />
     <ConnectionStatus />
