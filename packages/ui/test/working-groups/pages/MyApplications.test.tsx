@@ -25,7 +25,7 @@ const currentApplication: WorkingGroupApplication = {
   id: '1',
   opening: {
     id: '2',
-    type: 'LEADER',
+    type: 'LEAD',
     groupName: 'Storage',
     reward: getReward(1, 'storage'),
   },
@@ -84,7 +84,7 @@ describe('UI: MyApplications', () => {
     expect(screen.queryByText(/no applications found/i)).toBeNull()
 
     expect(screen.getByText(/current applications/i)).toBeDefined()
-    expect(screen.getByText(/storage leader/i)).toBeDefined()
+    expect(screen.getByText(/storage lead/i)).toBeDefined()
     expect(screen.queryByText(/past applications/i)).toBeNull()
   })
 
@@ -109,7 +109,7 @@ describe('UI: MyApplications', () => {
     expect(screen.queryByText(/no applications found/i)).toBeNull()
 
     expect(screen.getByText(/current applications/i)).toBeDefined()
-    expect(screen.getByText(/storage leader/i)).toBeDefined()
+    expect(screen.getByText(/storage lead/i)).toBeDefined()
     expect(screen.getByText(/past applications/i)).toBeDefined()
     expect(screen.getByText(/forum worker/i)).toBeDefined()
   })

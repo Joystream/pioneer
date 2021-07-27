@@ -34,7 +34,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
 
   const hired = '-'
   const applied = '-'
-  const leader = '-'
+  const lead = '-'
   const councilMember = '-'
   const slashed = '-'
   const terminated = '-'
@@ -88,8 +88,8 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         <SidePaneText>{applied} times</SidePaneText>
       </SidePaneRow>
       <SidePaneRow>
-        <SidePaneLabel text="Being A leader" />
-        <SidePaneText>{leader} times</SidePaneText>
+        <SidePaneLabel text="Being A Lead" />
+        <SidePaneText>{lead} times</SidePaneText>
       </SidePaneRow>
       <SidePaneRow>
         <SidePaneLabel text="Being Council Member" />

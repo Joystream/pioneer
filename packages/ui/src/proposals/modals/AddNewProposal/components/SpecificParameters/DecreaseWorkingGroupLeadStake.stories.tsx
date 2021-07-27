@@ -16,7 +16,7 @@ export default {
 const Template: Story = () => {
   const [stakingAmount, setStakingAmount] = useState<BN>()
   const [groupId, setGroupId] = useState<string>()
-  const [workerId, setWorkerId] = useState<number>()
+  const [, setWorkerId] = useState<number>()
 
   return (
     <MockApolloProvider members workingGroups workers>

@@ -648,3 +648,20 @@ query GetWorkerIds($where: WorkerWhereInput) {
   }
 }
 
+query GetWorkerUnstakingDetails($where: WorkerWhereUniqueInput!) {
+  workerByUniqueInput(where: $where) {
+    status {
+      __typename
+      ...on WorkerStatusLeaving {
+        workerStartedLeavingEvent {
+          createdAt
+        }
+      }
+    }
+    application {
+      opening {
+        unstakingPeriod
+      }
+    }
+  }
+}

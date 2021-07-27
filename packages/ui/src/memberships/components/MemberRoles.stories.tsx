@@ -30,14 +30,14 @@ const Template: Story<MemberRolesProps & MemberRoleHelpGroup> = () => (
             <MemberRoles
               max={5}
               roles={[
-                { groupName: 'Big group', isLeader: false, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'Forum', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Big group', isLead: false, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Forum', isLead: true, createdAt: faker.date.recent(30).toISOString() },
                 {
                   groupName: "Long group name, let's check it",
-                  isLeader: false,
+                  isLead: false,
                   createdAt: faker.date.recent(30).toISOString(),
                 },
-                { groupName: 'Storage', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Storage', isLead: true, createdAt: faker.date.recent(30).toISOString() },
               ]}
             />
           </Row>
@@ -50,15 +50,15 @@ const Template: Story<MemberRolesProps & MemberRoleHelpGroup> = () => (
             <MemberRoles
               max={3}
               roles={[
-                { groupName: 'Big group', isLeader: false, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'Forum', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Big group', isLead: false, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Forum', isLead: true, createdAt: faker.date.recent(30).toISOString() },
                 {
                   groupName: "Long group name, let's check it",
-                  isLeader: false,
+                  isLead: false,
                   createdAt: faker.date.recent(30).toISOString(),
                 },
-                { groupName: 'Storage', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'More', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Storage', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'More', isLead: true, createdAt: faker.date.recent(30).toISOString() },
               ]}
             />
           </Row>
@@ -71,17 +71,17 @@ const Template: Story<MemberRolesProps & MemberRoleHelpGroup> = () => (
             <MemberRoles
               max={3}
               roles={[
-                { groupName: 'Big group', isLeader: false, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'Forum', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Big group', isLead: false, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Forum', isLead: true, createdAt: faker.date.recent(30).toISOString() },
                 {
                   groupName: "Long group name, let's check it",
-                  isLeader: false,
+                  isLead: false,
                   createdAt: faker.date.recent(30).toISOString(),
                 },
-                { groupName: 'Storage', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'First', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'More', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'Extra', isLeader: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Storage', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'First', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'More', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { groupName: 'Extra', isLead: true, createdAt: faker.date.recent(30).toISOString() },
               ]}
             />
           </Row>

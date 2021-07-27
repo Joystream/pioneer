@@ -1,3 +1,5 @@
+import { WorkingGroupMock } from '../../../dev/scripts/generators/generateWorkingGroups'
+
 import rawWorkingGroups from './raw/workingGroups.json'
 
 interface RawWorkingGroupMock {
@@ -16,7 +18,7 @@ interface RawWorkingGroupMock {
 
 export const mockWorkingGroups = rawWorkingGroups.map((rawGroup) => ({ ...rawGroup }))
 
-const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
+const seedWorkingGroup = (group: WorkingGroupMock, server: any) => {
   const groupData = {
     ...group,
     workers: null,
@@ -27,8 +29,8 @@ const seedWorkingGroup = (group: RawWorkingGroupMock, server: any) => {
   return server.schema.create('WorkingGroup', groupData)
 }
 
-const updateWorkingGroup = (data: RawWorkingGroupMock, server: any) => {
-  const leaderId = data.leaderId
+const updateWorkingGroup = (data: WorkingGroupMock, server: any) => {
+  const leaderId = data.leadId
   const group = server.schema.find('WorkingGroup', data.id)
 
   return group.update({ leaderId })

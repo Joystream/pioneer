@@ -28,6 +28,7 @@ import { ApplicationDetailsModalCall } from '@/working-groups/modals/Application
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 
+import { useWorkerUnstakingPeriodEnd } from '../../../../working-groups/hooks/useWorkerUnstakingPeriodEnd'
 import { getRoleWarning } from '../../../../working-groups/model/getRoleWarning'
 
 export const MyRole = () => {
@@ -38,7 +39,8 @@ export const MyRole = () => {
   const isLeaving = worker && worker.status === 'WorkerStatusLeaving'
 
   const { activities } = useRoleActivities(worker)
-  const warning = worker ? getRoleWarning(worker.status) : undefined
+  const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(worker?.id)
+  const warning = worker ? getRoleWarning(worker.status, unstakingPeriodEnd) : undefined
 
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
@@ -102,7 +104,7 @@ export const MyRole = () => {
                 {worker.group.name.toUpperCase()}
               </BadgeStatus>
               <BadgeStatus inverted size="l" separated>
-                {worker.isLeader ? 'LEADER' : 'REGULAR'}
+                {worker.isLead ? 'LEAD' : 'REGULAR'}
               </BadgeStatus>
               <BadgeStatus inverted size="l" separated>
                 WORKER ID #{worker.id}

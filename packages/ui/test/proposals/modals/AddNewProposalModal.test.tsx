@@ -372,7 +372,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - not filled amount, no selected group', async () => {
-          expect(screen.queryByText('Working Group Leader')).not.toBeNull()
+          expect(screen.queryByText('Working Group Lead')).not.toBeNull()
           expect(await getButton(/By half/i)).toBeDisabled()
 
           const button = await getCreateButton()
@@ -384,19 +384,6 @@ describe('UI: AddNewProposalModal', () => {
           await waitFor(async () => expect(await getButton(/By half/i)).not.toBeDisabled())
 
           expect(screen.queryByText(/The actual stake for Forum Working Group Lead is /i)).not.toBeNull()
-
-          const button = await getCreateButton()
-          expect(button).toBeDisabled()
-        })
-
-        it('Group selected without leader', async () => {
-          await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Membership')
-          await waitFor(() =>
-            expect(
-              screen.queryByText('Membership Working Group has no any Leader yet. Please choose other Group.')
-            ).not.toBeNull()
-          )
-          expect(await getButton(/By half/i)).toBeDisabled()
 
           const button = await getCreateButton()
           expect(button).toBeDisabled()

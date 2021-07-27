@@ -1,7 +1,9 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import { ApolloClient, ApolloProvider, from, HttpLink, InMemoryCache } from '@apollo/client'
+import { onError } from '@apollo/client/link/error'
 import React, { ReactNode } from 'react'
 
 import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
+import { error } from '@/common/logger'
 import { ServerContextProvider } from '@/common/providers/server/provider'
 import { makeServer } from '@/mocks/server'
 
@@ -28,8 +30,19 @@ export const QueryNodeProvider = ({ children }: Props) => {
   )
 }
 
-const getApolloClient = (network: 'local' | 'olympia-testnet') =>
-  new ApolloClient({
+const getApolloClient = (network: 'local' | 'olympia-testnet') => {
+  const httpLink = new HttpLink({
     uri: ENDPOINTS[network],
+  })
+
+  const errorLink = onError((errorResponse) => {
+    if (errorResponse.networkError) {
+      error('Error connecting to query node')
+    }
+  })
+
+  return new ApolloClient({
+    link: from([errorLink, httpLink]),
     cache: new InMemoryCache(),
   })
+}

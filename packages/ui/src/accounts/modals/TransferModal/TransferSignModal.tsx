@@ -41,7 +41,7 @@ export function TransferSignModal({ onClose, from, amount, to, service }: Props)
   const balanceFrom = useBalance(fromAddress)
   const balanceTo = useBalance(toAddress)
   const { api } = useApi()
-  const transaction = useMemo(() => api?.tx?.balances?.transfer(toAddress, amount), [toAddress, amount])
+  const transaction = useMemo(() => api.tx?.balances?.transfer(toAddress, amount), [toAddress, amount])
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer: fromAddress, service })
 
   return (

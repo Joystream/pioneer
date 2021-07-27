@@ -39,18 +39,18 @@ export const DecreaseWorkingGroupLeadStake = ({
   const [amount, setAmount] = useNumberInput(0, stakingAmount)
 
   const { group } = useWorkingGroup({ name: groupId })
-  const { member: leader } = useMember(group?.leaderId)
+  const { member: lead } = useMember(group?.leadId)
 
-  const byHalf = () => setAmount(group && group.leaderWorker ? group.leaderWorker.stake.divn(2).toString() : '')
-  const byThird = () => setAmount(group && group.leaderWorker ? group.leaderWorker.stake.divn(3).toString() : '')
+  const byHalf = () => setAmount(group && group.leadWorker ? group.leadWorker.stake.divn(2).toString() : '')
+  const byThird = () => setAmount(group && group.leadWorker ? group.leadWorker.stake.divn(3).toString() : '')
 
-  const isDisabled = !group || (group && !group.leaderId)
+  const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => setStakingAmount(new BN(amount)), [amount])
   useEffect(() => {
     setStakingAmount(BN_ZERO)
-    setWorkerId(group?.leaderWorker?.runtimeId)
-  }, [groupId, group?.leaderWorker?.runtimeId])
+    setWorkerId(group?.leadWorker?.runtimeId)
+  }, [groupId, group?.leadWorker?.runtimeId])
 
   return (
     <RowGapBlock gap={24}>
@@ -68,16 +68,20 @@ export const DecreaseWorkingGroupLeadStake = ({
             inputSize="l"
             tooltipText="Please select an identifier for Working Group"
           >
-            <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
+            <SelectWorkingGroup
+              selectedGroupId={groupId}
+              onChange={(selected) => setGroupId(selected.id)}
+              disableNoLead
+            />
           </InputComponent>
-          <InputComponent label="Working Group Leader" inputSize="l" disabled>
-            <SelectMember onChange={() => true} disabled selected={leader} />
+          <InputComponent label="Working Group Lead" inputSize="l" disabled>
+            <SelectMember onChange={() => true} disabled selected={lead} />
           </InputComponent>
           {group && (
             <Info>
               <TextMedium>
                 The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
-                <TextInlineMedium bold>{formatTokenValue(group.leaderWorker?.stake)} JOY</TextInlineMedium>.
+                <TextInlineMedium bold>{formatTokenValue(group.leadWorker?.stake)} JOY</TextInlineMedium>.
               </TextMedium>
             </Info>
           )}

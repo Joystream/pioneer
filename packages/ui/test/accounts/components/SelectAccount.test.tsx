@@ -7,7 +7,7 @@ import { Account } from '@/accounts/types'
 import { KeyringContext } from '@/common/providers/keyring/context'
 
 import { mockKeyring } from '../../_mocks/keyring'
-import { MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockApiProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
 jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
@@ -125,9 +125,11 @@ describe('UI: SelectAccount component', () => {
     }
     return render(
       <KeyringContext.Provider value={mockKeyring()}>
-        <MockQueryNodeProviders>
-          <Form />
-        </MockQueryNodeProviders>
+        <MockApiProvider>
+          <MockQueryNodeProviders>
+            <Form />
+          </MockQueryNodeProviders>
+        </MockApiProvider>
       </KeyringContext.Provider>
     )
   }

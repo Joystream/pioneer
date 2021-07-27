@@ -1,3 +1,7 @@
 import React from 'react'
 
-export const Loading = () => <h3>Loading...</h3>
+interface Props {
+  text?: string
+}
+
+export const Loading = ({ text }: Props) => <h3>{text ?? 'Loading...'}</h3>

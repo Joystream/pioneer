@@ -14,7 +14,7 @@ import {
 import { Reward } from './Reward'
 import { asWorkingGroupName } from './WorkingGroup'
 
-type WorkingGroupOpeningType = 'LEADER' | 'REGULAR'
+type WorkingGroupOpeningType = 'LEAD' | 'REGULAR'
 type Status = 'OpeningStatusUpcoming' | 'OpeningStatusOpen' | 'OpeningStatusFilled' | 'OpeningStatusCancelled'
 
 export interface BaseOpening {
@@ -45,7 +45,7 @@ export interface WorkingGroupOpeningApplication {
 
 export interface WorkingGroupOpening extends BaseOpening {
   runtimeId: number
-  leaderId?: string | null
+  leadId?: string | null
   budget: number
   type: WorkingGroupOpeningType
   status: Status
@@ -113,7 +113,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     title: `${groupName.toLocaleLowerCase()} Working Group ${fields.type.toLocaleLowerCase()}`,
     type: fields.type as WorkingGroupOpeningType,
     status: fields.status.__typename,
-    leaderId: fields.group.leaderId,
+    leadId: fields.group.leaderId,
     applicants: {
       current: 0,
       total: fields.applications?.length || 0,

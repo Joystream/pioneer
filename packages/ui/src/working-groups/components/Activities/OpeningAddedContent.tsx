@@ -10,7 +10,7 @@ export const OpeningAddedContent: ActivityContentComponent<OpeningAddedActivity>
     <>
       Opening "<ActivityRouterLink to={`/working-groups/openings/${opening.id}`}>{opening.title}</ActivityRouterLink>"
       for a {opening.type === 'REGULAR' && 'Non-'}Lead has been created by the{' '}
-      {opening.type === 'REGULAR' ? `${opening.groupName} Leader` : 'Council'}.
+      {opening.type === 'REGULAR' ? `${opening.groupName} Lead` : 'Council'}.
     </>
   )
 }
