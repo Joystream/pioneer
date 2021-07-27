@@ -1,10 +1,12 @@
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client'
 import React, { ReactNode } from 'react'
 
+import { ApiContext } from '@/common/providers/api/context'
 import { KeyringContext } from '@/common/providers/keyring/context'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
 import { mockKeyring } from './keyring'
+import { stubApi } from './transactions'
 
 const link = new HttpLink({
   uri: 'http://localhost:8081/graphql',
@@ -31,4 +33,8 @@ export const MockKeyringProvider = ({ children }: Props) => {
   const keyring = mockKeyring()
 
   return <KeyringContext.Provider value={keyring}>{children}</KeyringContext.Provider>
+}
+
+export const MockApiProvider = ({ children }: Props) => {
+  return <ApiContext.Provider value={stubApi()}>{children}</ApiContext.Provider>
 }

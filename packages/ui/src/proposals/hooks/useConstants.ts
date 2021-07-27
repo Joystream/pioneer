@@ -19,7 +19,7 @@ export const useConstants = (proposalType?: ProposalType): ProposalConstants | n
     if (!constantKey) {
       return null
     }
-    const constants = api?.consts.proposalsCodex[constantKey]
+    const constants = api.consts.proposalsCodex[constantKey]
 
     return constants ? asProposalConstants(constants) : null
   }, [proposalType, isConnected])

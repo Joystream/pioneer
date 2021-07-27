@@ -6,7 +6,7 @@ import { Member } from '../types'
 
 export function useTransferInviteFee(member?: Member) {
   const { api } = useApi()
-  const transaction = useMemo(() => (member ? api?.tx?.members?.transferInvites(member.id, member.id, 1) : undefined), [
+  const transaction = useMemo(() => (member ? api.tx?.members?.transferInvites(member.id, member.id, 1) : undefined), [
     member,
   ])
 

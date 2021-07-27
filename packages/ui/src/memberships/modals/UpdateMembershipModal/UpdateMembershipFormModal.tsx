@@ -62,7 +62,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
   const handleHash = blake2AsHex(handle || '')
-  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
+  const potentialMemberIdSize = useObservable(api.query.members.memberIdByHandleHash.size(handleHash), [handle])
 
   const canUpdate = isValid && hasAnyEdits(fields, member)
 

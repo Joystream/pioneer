@@ -18,7 +18,7 @@ interface Props {
 
 export const RecoverBalanceSignModal = ({ onClose, service }: Props) => {
   const balances = useMyTotalBalances()
-  const { api } = useApi()
+  const { api, connectionState } = useApi()
   const amount = balances.recoverable
   const { active } = useMyMemberships()
 
@@ -28,7 +28,7 @@ export const RecoverBalanceSignModal = ({ onClose, service }: Props) => {
     }
 
     return api.tx.council.releaseCandidacyStake(active.id)
-  }, [api, active?.id, JSON.stringify(balances)])
+  }, [connectionState, active?.id, JSON.stringify(balances)])
 
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,

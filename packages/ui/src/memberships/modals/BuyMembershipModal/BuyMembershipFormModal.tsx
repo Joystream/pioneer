@@ -88,7 +88,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
   const handleHash = blake2AsHex(handle)
-  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [handle])
+  const potentialMemberIdSize = useObservable(api.query.members.memberIdByHandleHash.size(handleHash), [handle])
 
   useEffect(() => {
     setContext({ size: potentialMemberIdSize })

@@ -2,8 +2,8 @@ import { registry, types } from '@joystream/types'
 import '@joystream/types/augment/augment-api'
 import '@joystream/types/augment/augment-types'
 import { ApiRx, WsProvider } from '@polkadot/api'
-import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
-import React, { ReactNode, useEffect, useState } from 'react'
+import rpc from '@polkadot/types/interfaces/jsonrpc'
+import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 
 import { NetworkType, useNetwork } from '../../hooks/useNetwork'
 
@@ -13,9 +13,12 @@ interface Props {
   children: ReactNode
 }
 
+type ConnectionState = 'connecting' | 'connected' | 'disconnected' | 'error'
+
 export interface UseApi {
-  api: ApiRx | undefined
+  api: ApiRx
   isConnected: boolean
+  connectionState: ConnectionState
 }
 
 const endpoints: Record<NetworkType, string> = {
@@ -27,22 +30,27 @@ const getEndPoint = (network: NetworkType) => {
   return endpoints[network] || endpoints['local']
 }
 
-export const ApiContextProvider = (props: Props) => {
-  const [isConnected, setIsConnected] = useState(false)
-  const [api, setApi] = useState<ApiRx | undefined>(undefined)
+export const ApiContextProvider = ({ children }: Props) => {
+  const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
   const [network] = useNetwork()
 
-  useEffect(() => {
+  const api = useMemo(() => {
     const provider = new WsProvider(getEndPoint(network))
-
-    ApiRx.create({ provider, rpc: jsonrpc, types: types, registry }).subscribe((api) => {
-      setApi(api)
-      setIsConnected(true)
-
-      api.on('connected', () => setIsConnected(true))
-      api.on('disconnected', () => setIsConnected(false))
-    })
+    return new ApiRx({ provider, rpc, types, registry })
   }, [])
 
-  return <ApiContext.Provider value={{ isConnected, api }}>{props.children}</ApiContext.Provider>
+  useEffect(() => {
+    api.isReady.subscribe(() => {
+      setConnectionState('connected')
+
+      api.on('connected', () => setConnectionState('connected'))
+      api.on('disconnected', () => setConnectionState('disconnected'))
+    })
+  }, [api])
+
+  return (
+    <ApiContext.Provider value={{ isConnected: connectionState === 'connected', api, connectionState }}>
+      {children}
+    </ApiContext.Provider>
+  )
 }
