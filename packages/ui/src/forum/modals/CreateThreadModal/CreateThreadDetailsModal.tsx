@@ -24,7 +24,7 @@ export const CreateThreadDetailsModal = ({
   setDescription,
   onSubmit,
 }: Props) => {
-  const fieldMissing = useMemo(() => !topic && !description, [topic, description])
+  const fieldMissing = useMemo(() => !(topic && description), [topic, description])
   const { hideModal } = useModal()
   return (
     <Modal onClose={hideModal} modalSize="l">
@@ -32,7 +32,7 @@ export const CreateThreadDetailsModal = ({
       <ModalBody>
         <RowGapBlock gap={24}>
           <h1>General</h1>
-          <RowGapBlock gap={8}>
+          <RowGapBlock gap={16}>
             <TextMedium light>Please make sure your title will be clear for users</TextMedium>
             <InputComponent label="Topic of the thread" id="field-topic">
               <InputText id="field-topic" value={topic} onChange={(event) => setTopic(event.target.value)} />
