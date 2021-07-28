@@ -22,3 +22,9 @@ query GetForumThreads($where: ForumThreadWhereInput) {
     ...ForumThreadFields
   }
 }
+
+query GetForumThread($where: ForumThreadWhereUniqueInput!) {
+  thread: forumThreadByUniqueInput(where: $where) {
+    ...ForumThreadFields
+  }
+}

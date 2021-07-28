@@ -34,6 +34,15 @@ export type GetForumThreadsQuery = {
   forumThreads: Array<{ __typename: 'ForumThread' } & ForumThreadFieldsFragment>
 }
 
+export type GetForumThreadQueryVariables = Types.Exact<{
+  where: Types.ForumThreadWhereUniqueInput
+}>
+
+export type GetForumThreadQuery = {
+  __typename: 'Query'
+  thread?: Types.Maybe<{ __typename: 'ForumThread' } & ForumThreadFieldsFragment>
+}
+
 export const ForumCategoryFieldsFragmentDoc = gql`
   fragment ForumCategoryFields on ForumCategory {
     id
@@ -134,3 +143,43 @@ export function useGetForumThreadsLazyQuery(
 export type GetForumThreadsQueryHookResult = ReturnType<typeof useGetForumThreadsQuery>
 export type GetForumThreadsLazyQueryHookResult = ReturnType<typeof useGetForumThreadsLazyQuery>
 export type GetForumThreadsQueryResult = Apollo.QueryResult<GetForumThreadsQuery, GetForumThreadsQueryVariables>
+export const GetForumThreadDocument = gql`
+  query GetForumThread($where: ForumThreadWhereUniqueInput!) {
+    thread: forumThreadByUniqueInput(where: $where) {
+      ...ForumThreadFields
+    }
+  }
+  ${ForumThreadFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumThreadQuery__
+ *
+ * To run a query within a React component, call `useGetForumThreadQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumThreadQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumThreadQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetForumThreadQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumThreadQuery, GetForumThreadQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumThreadQuery, GetForumThreadQueryVariables>(GetForumThreadDocument, options)
+}
+export function useGetForumThreadLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumThreadQuery, GetForumThreadQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumThreadQuery, GetForumThreadQueryVariables>(GetForumThreadDocument, options)
+}
+export type GetForumThreadQueryHookResult = ReturnType<typeof useGetForumThreadQuery>
+export type GetForumThreadLazyQueryHookResult = ReturnType<typeof useGetForumThreadLazyQuery>
+export type GetForumThreadQueryResult = Apollo.QueryResult<GetForumThreadQuery, GetForumThreadQueryVariables>

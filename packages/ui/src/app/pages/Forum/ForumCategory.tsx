@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
+import { RouterLink } from '@/common/components/RouterLink'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 
 export const ForumCategory = () => {
@@ -21,7 +22,9 @@ export const ForumCategory = () => {
             threads.map((thread) => {
               return (
                 <div key={thread.id}>
-                  {thread.id} | {thread.isSticky ? '📌' : ''} {thread.title}
+                  <RouterLink to={'/forum/thread/' + thread.id}>
+                    {thread.id} | {thread.isSticky ? '📌' : ''} {thread.title}
+                  </RouterLink>
                 </div>
               )
             })}
