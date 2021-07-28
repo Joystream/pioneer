@@ -26,7 +26,7 @@ export const ForumComment = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
 
   return (
     <ForumCommentStyles ref={ref} isSelected={isSelected}>
-      <MemberInfo member={author} />
+      {author && <MemberInfo member={author} />}
       <BlockDate block={createdAtBlock} />
 
       <MessageBody>
@@ -35,7 +35,7 @@ export const ForumComment = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
             <ReplyBadge>
               <ArrowReplyIcon />{' '}
               <Badge>
-                <Link to={repliesTo.link}>Replies to {repliesTo.author.handle}</Link>
+                <Link to={repliesTo.link}>Replies to {repliesTo?.author?.handle}</Link>
               </Badge>
             </ReplyBadge>
             <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
