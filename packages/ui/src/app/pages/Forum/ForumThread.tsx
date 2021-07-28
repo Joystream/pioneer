@@ -1,7 +1,8 @@
 import React, { useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 import { PageLayout } from '@/app/components/PageLayout'
+import { NotFound } from '@/app/pages/NotFound'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
@@ -19,6 +20,13 @@ export const ForumThread = () => {
 
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
+  const history = useHistory()
+
+  if (!isLoading && !thread) {
+    history.push('/404')
+
+    return null
+  }
 
   const displayHeader = () => {
     if (isLoading || !thread) {

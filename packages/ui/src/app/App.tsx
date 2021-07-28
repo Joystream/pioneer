@@ -1,6 +1,7 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
+import { NotFound } from '@/app/pages/NotFound'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { Page } from '@/common/components/page/Page'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -51,7 +52,9 @@ export const App = () => (
         <Route exact path="/members/:id" component={Members} />
         <Route exact path="/settings" component={Settings} />
         <Route path="/forum" component={Forum} />
+        <Route exact path="/404" component={NotFound} />
         <Redirect exact from="/" to="/profile" />
+        <Redirect from="*" to="/404" />
       </Switch>
     </Page>
     <GlobalModals />
