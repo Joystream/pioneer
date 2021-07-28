@@ -5,7 +5,7 @@ import { RawForumCategoryMock, RawForumThreadMock } from '@/mocks/data/seedForum
 import members from '../../../../src/mocks/data/raw/members.json'
 import { randomFromRange } from '../utils'
 
-const randomMember = () => members[randomFromRange(0, members.length - 1)].id
+const randomMember = () => members[randomFromRange(0, members.length - 1)]
 
 export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock, 'id'>[]): RawForumThreadMock[] => {
   let nextId = 0
@@ -18,7 +18,7 @@ export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock,
           categoryId: id,
           isSticky: !(nextId % 5),
           title: faker.lorem.words(randomFromRange(4, 8)),
-          authorId: randomMember(),
+          authorId: randomMember().id,
         }
       })
     })
