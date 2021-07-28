@@ -1,5 +1,6 @@
 import { ProposalVoteKind } from '@/common/api/queries'
-import { asBlock, Block, ForumPost } from '@/common/types'
+import { asBlock, Block } from '@/common/types'
+import { ForumPost } from '@/forum/types'
 import { asMember, Member } from '@/memberships/types'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { typenameToProposalStatus } from '@/proposals/model/proposalStatus'
@@ -68,7 +69,7 @@ export interface ProposalDiscussionThread {
   mode: 'open' | 'close'
 }
 
-export const asForumComment = (proposalId: string) => (fields: DiscussionPostFieldsFragment): ForumPost => ({
+const asForumComment = (proposalId: string) => (fields: DiscussionPostFieldsFragment): ForumPost => ({
   id: fields.id,
   link: `${ProposalsRoutes.preview}/${proposalId}/post/${fields.id}`,
   createdAtBlock: asBlock(),
