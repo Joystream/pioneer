@@ -18,6 +18,11 @@ export type ForumThreadFieldsFragment = {
   title: string
 }
 
+export type ForumThreadDetailedFieldsFragment = {
+  __typename: 'ForumThread'
+  createdInEvent: { __typename: 'ThreadCreatedEvent'; inBlock: number }
+} & ForumThreadFieldsFragment
+
 export type GetForumCategoriesQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetForumCategoriesQuery = {
@@ -40,7 +45,7 @@ export type GetForumThreadQueryVariables = Types.Exact<{
 
 export type GetForumThreadQuery = {
   __typename: 'Query'
-  thread?: Types.Maybe<{ __typename: 'ForumThread' } & ForumThreadFieldsFragment>
+  thread?: Types.Maybe<{ __typename: 'ForumThread' } & ForumThreadDetailedFieldsFragment>
 }
 
 export const ForumCategoryFieldsFragmentDoc = gql`
@@ -57,6 +62,15 @@ export const ForumThreadFieldsFragmentDoc = gql`
     categoryId
     title
   }
+`
+export const ForumThreadDetailedFieldsFragmentDoc = gql`
+  fragment ForumThreadDetailedFields on ForumThread {
+    ...ForumThreadFields
+    createdInEvent {
+      inBlock
+    }
+  }
+  ${ForumThreadFieldsFragmentDoc}
 `
 export const GetForumCategoriesDocument = gql`
   query GetForumCategories {
@@ -146,10 +160,10 @@ export type GetForumThreadsQueryResult = Apollo.QueryResult<GetForumThreadsQuery
 export const GetForumThreadDocument = gql`
   query GetForumThread($where: ForumThreadWhereUniqueInput!) {
     thread: forumThreadByUniqueInput(where: $where) {
-      ...ForumThreadFields
+      ...ForumThreadDetailedFields
     }
   }
-  ${ForumThreadFieldsFragmentDoc}
+  ${ForumThreadDetailedFieldsFragmentDoc}
 `
 
 /**
