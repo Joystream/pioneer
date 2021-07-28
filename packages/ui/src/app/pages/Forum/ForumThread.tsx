@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
 import { PageLayout } from '@/app/components/PageLayout'
-import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
@@ -11,6 +10,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
+import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 
 export const ForumThread = () => {
@@ -66,7 +66,7 @@ export const ForumThread = () => {
 
     return (
       <SidePanel neighbor={sideNeighborRef}>
-        <ActivitiesBlock activities={[]} label="Suggested Threads" />
+        <SuggestedThreads />
       </SidePanel>
     )
   }
