@@ -122,6 +122,7 @@ fragment DiscussionPostFields on ProposalDiscussionPost {
 
 fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
   id
+  createdAt
   createdInEvent {
     inBlock
   }

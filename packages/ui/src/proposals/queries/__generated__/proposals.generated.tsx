@@ -162,6 +162,7 @@ export type DiscussionPostFieldsFragment = {
 export type DiscussionPostWithoutReplyFieldsFragment = {
   __typename: 'ProposalDiscussionPost'
   id: string
+  createdAt: any
   updatedAt?: Types.Maybe<any>
   text: string
   createdInEvent: { __typename: 'ProposalDiscussionPostCreatedEvent'; inBlock: number }
@@ -247,6 +248,7 @@ export const ProposalFieldsFragmentDoc = gql`
 export const DiscussionPostWithoutReplyFieldsFragmentDoc = gql`
   fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
     id
+    createdAt
     createdInEvent {
       inBlock
     }

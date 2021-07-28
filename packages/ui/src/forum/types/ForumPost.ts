@@ -5,6 +5,7 @@ import { Member } from '@/memberships/types'
 export interface ForumPost {
   id: string
   link: string
+  createdAt: string
   createdAtBlock: Block
   updatedAt?: string
   author: Member

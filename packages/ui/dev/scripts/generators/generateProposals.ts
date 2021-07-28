@@ -83,6 +83,7 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
   const messageCount = randomFromWeightedSet([1, 0], [2, 1], [4, 2], [1, randomFromRange(3, MAX_MESSAGES)])()
   const discussionPosts = repeat(randomMessage, messageCount).map((text, index) => ({
     id: `${proposalId}:${index}`,
+    createdAt: new Date().toJSON(),
     createdInEvent: { inBlock: 0 },
     ...(Math.random() > 0.5 ? { updatedAt: faker.date.recent(20).toISOString() } : {}),
     authorId: arrayElement(mocks.members).id,
