@@ -11,11 +11,13 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
+import { useForumPosts } from '@/forum/hooks/useForumPosts'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, thread } = useForumThread(id)
+  const { posts } = useForumPosts(id)
 
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
@@ -56,7 +58,15 @@ export const ForumThread = () => {
       return <Loading />
     }
 
-    return <div>Thread content</div>
+    return (
+      <div>
+        {posts.map((post) => (
+          <div>
+            {post.id} | {post.text} | by {post.authorId}
+          </div>
+        ))}
+      </div>
+    )
   }
 
   const displaySidebar = () => {

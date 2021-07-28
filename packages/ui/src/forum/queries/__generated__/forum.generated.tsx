@@ -16,7 +16,10 @@ export type ForumThreadFieldsFragment = {
   isSticky: boolean
   categoryId: string
   title: string
+  authorId: string
 }
+
+export type ForumPostFieldsFragment = { __typename: 'ForumPost'; id: string; text: string; authorId: string }
 
 export type GetForumCategoriesQueryVariables = Types.Exact<{ [key: string]: never }>
 
@@ -43,6 +46,15 @@ export type GetForumThreadQuery = {
   thread?: Types.Maybe<{ __typename: 'ForumThread' } & ForumThreadFieldsFragment>
 }
 
+export type GetForumPostsQueryVariables = Types.Exact<{
+  where: Types.ForumPostWhereInput
+}>
+
+export type GetForumPostsQuery = {
+  __typename: 'Query'
+  forumPosts: Array<{ __typename: 'ForumPost' } & ForumPostFieldsFragment>
+}
+
 export const ForumCategoryFieldsFragmentDoc = gql`
   fragment ForumCategoryFields on ForumCategory {
     id
@@ -56,6 +68,14 @@ export const ForumThreadFieldsFragmentDoc = gql`
     isSticky
     categoryId
     title
+    authorId
+  }
+`
+export const ForumPostFieldsFragmentDoc = gql`
+  fragment ForumPostFields on ForumPost {
+    id
+    text
+    authorId
   }
 `
 export const GetForumCategoriesDocument = gql`
@@ -183,3 +203,43 @@ export function useGetForumThreadLazyQuery(
 export type GetForumThreadQueryHookResult = ReturnType<typeof useGetForumThreadQuery>
 export type GetForumThreadLazyQueryHookResult = ReturnType<typeof useGetForumThreadLazyQuery>
 export type GetForumThreadQueryResult = Apollo.QueryResult<GetForumThreadQuery, GetForumThreadQueryVariables>
+export const GetForumPostsDocument = gql`
+  query GetForumPosts($where: ForumPostWhereInput!) {
+    forumPosts(where: $where) {
+      ...ForumPostFields
+    }
+  }
+  ${ForumPostFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumPostsQuery__
+ *
+ * To run a query within a React component, call `useGetForumPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumPostsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetForumPostsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumPostsQuery, GetForumPostsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumPostsQuery, GetForumPostsQueryVariables>(GetForumPostsDocument, options)
+}
+export function useGetForumPostsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumPostsQuery, GetForumPostsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumPostsQuery, GetForumPostsQueryVariables>(GetForumPostsDocument, options)
+}
+export type GetForumPostsQueryHookResult = ReturnType<typeof useGetForumPostsQuery>
+export type GetForumPostsLazyQueryHookResult = ReturnType<typeof useGetForumPostsLazyQuery>
+export type GetForumPostsQueryResult = Apollo.QueryResult<GetForumPostsQuery, GetForumPostsQueryVariables>

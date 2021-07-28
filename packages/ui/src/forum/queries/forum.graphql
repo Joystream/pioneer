@@ -12,6 +12,12 @@ fragment ForumThreadFields on ForumThread {
   authorId
 }
 
+fragment ForumPostFields on ForumPost {
+  id
+  text
+  authorId
+}
+
 query GetForumCategories {
   forumCategories {
     ...ForumCategoryFields
@@ -27,5 +33,11 @@ query GetForumThreads($where: ForumThreadWhereInput) {
 query GetForumThread($where: ForumThreadWhereUniqueInput!) {
   thread: forumThreadByUniqueInput(where: $where) {
     ...ForumThreadFields
+  }
+}
+
+query GetForumPosts($where: ForumPostWhereInput!) {
+  forumPosts(where: $where) {
+    ...ForumPostFields
   }
 }
