@@ -15,7 +15,7 @@
     "test": "jest",
     "storybook": "start-storybook -p 6006 -s public --no-manager-cache",
     "build:storybook": "build-storybook -o build-storybook",
-    "generate-mocks": "ts-node dev/scripts/generateMocks.ts",
+    "generate-mocks": "ts-node dev/scripts/generateMocks.ts all",
     "node-mocks": "ts-node dev/mocks/index.ts"
   },
   "dependencies": {

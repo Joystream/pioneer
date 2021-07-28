@@ -15,6 +15,9 @@ export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock,
           categoryId: id,
           isSticky: !(nextId % 5),
           title: faker.lorem.words(randomFromRange(4, 8)),
+          createdInEvent: {
+            inBlock: 0,
+          },
         }
       })
     })
