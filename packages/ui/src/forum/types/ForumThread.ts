@@ -5,6 +5,7 @@ export interface ForumThread {
   title: string
   isSticky: boolean
   categoryId: string
+  postCount: number
 }
 
 export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread => ({
@@ -12,4 +13,5 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
   title: fields.title,
   isSticky: fields.isSticky,
   categoryId: fields.categoryId,
+  postCount: 0,
 })
