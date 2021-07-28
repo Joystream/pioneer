@@ -12,23 +12,23 @@ export const ConnectionStatus = () => {
   const show = useCallback(() => setShowNotification(true), [])
   const hide = useCallback(() => setShowNotification(false), [])
   const onConnected = useCallback(() => {
-    api.once('disconnected', onDisconnected)
+    api?.once('disconnected', onDisconnected)
     show()
-  }, [])
+  }, [api])
   const onDisconnected = useCallback(() => {
-    api.once('connected', onConnected)
+    api?.once('connected', onConnected)
     show()
-  }, [])
+  }, [api])
 
   useEffect(() => {
-    api.once('disconnected', onDisconnected)
-    api.once('connected', onConnected)
+    api?.once('disconnected', onDisconnected)
+    api?.once('connected', onConnected)
 
     return () => {
-      api.off('connected', onConnected)
-      api.off('disconnected', onDisconnected)
+      api?.off('connected', onConnected)
+      api?.off('disconnected', onDisconnected)
     }
-  }, [])
+  }, [api])
 
   useEffect(() => {
     if (!showNotification) {

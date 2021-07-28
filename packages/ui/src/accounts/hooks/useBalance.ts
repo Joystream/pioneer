@@ -8,7 +8,7 @@ import { Balances } from '../types'
 export const useBalance = (address?: Address): Balances | null => {
   const { api, connectionState } = useApi()
 
-  const balances = useObservable(address ? api.derive.balances.all(address) : undefined, [connectionState, address])
+  const balances = useObservable(address ? api?.derive.balances.all(address) : undefined, [connectionState, address])
 
   if (balances === undefined) {
     return null

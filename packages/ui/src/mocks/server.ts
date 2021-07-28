@@ -66,6 +66,7 @@ export const makeServer = (environment = 'development') => {
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
               forumCategories: getWhereResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
+              forumThreadByUniqueInput: getUniqueResolver('ForumThread'),
               membershipByUniqueInput: getUniqueResolver('Membership'),
               memberships: getWhereResolver('Membership'),
               membershipsConnection: getConnectionResolver('MembershipConnection'),

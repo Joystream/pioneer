@@ -67,7 +67,7 @@ export interface MemberFormFields {
 }
 
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: CreateProps) => {
-  const { api } = useApi()
+  const { api, connectionState } = useApi()
 
   const initializer = {
     name: '',
@@ -88,7 +88,10 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
   const handleHash = blake2AsHex(handle)
-  const potentialMemberIdSize = useObservable(api.query.members.memberIdByHandleHash.size(handleHash), [handle])
+  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
+    handle,
+    connectionState,
+  ])
 
   useEffect(() => {
     setContext({ size: potentialMemberIdSize })
@@ -218,11 +221,11 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: C
           <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
             <TextMedium colorInherit>
               I agree to the{' '}
-              <LabelLink href={'http://example.com/'} target="_blank">
+              <LabelLink href="http://example.com/" target="_blank">
                 Terms of Service
               </LabelLink>{' '}
               and{' '}
-              <LabelLink href={'http://example.com/'} target="_blank">
+              <LabelLink href="http://example.com/" target="_blank">
                 Privacy Policy
               </LabelLink>
               .
