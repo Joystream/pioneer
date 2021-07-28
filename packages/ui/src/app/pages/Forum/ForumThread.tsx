@@ -1,14 +1,19 @@
 import React, { useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { PageLayout } from '@/app/components/PageLayout'
+import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
+import { PinIcon } from '@/common/components/icons/PinIcon'
 import { Loading } from '@/common/components/Loading'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
+import { Colors } from '@/common/constants'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { useForumThread } from '@/forum/hooks/useForumThread'
@@ -47,6 +52,18 @@ export const ForumThread = () => {
             Watch thread
           </ButtonGhost>
         </ButtonsGroup>
+        <RowGapBlock>
+          <BadgesRow>
+            {thread?.isSticky && (
+              <ThreadPinned>
+                <PinIcon />
+              </ThreadPinned>
+            )}
+            <BadgeStatus inverted size="l" separated>
+              Tag
+            </BadgeStatus>
+          </BadgesRow>
+        </RowGapBlock>
       </PageHeader>
     )
   }
@@ -73,3 +90,15 @@ export const ForumThread = () => {
 
   return <PageLayout header={displayHeader()} main={displayMain()} sidebar={displaySidebar()} />
 }
+
+const ThreadPinned = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 0 8px;
+
+  & > svg {
+    color: ${Colors.Black['500']};
+  }
+`
