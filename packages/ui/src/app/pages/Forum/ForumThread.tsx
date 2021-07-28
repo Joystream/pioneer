@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
 import { PageLayout } from '@/app/components/PageLayout'
-import { NotFound } from '@/app/pages/NotFound'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
@@ -29,14 +28,14 @@ export const ForumThread = () => {
   }
 
   const displayHeader = () => {
-    if (isLoading || !thread) {
+    if (isLoading) {
       return null
     }
 
     return (
       <PageHeader>
         <PreviousPage>
-          <PageTitle>{thread.title}</PageTitle>
+          <PageTitle>{thread?.title}</PageTitle>
         </PreviousPage>
         <ButtonsGroup>
           <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
@@ -56,15 +55,12 @@ export const ForumThread = () => {
     if (isLoading) {
       return <Loading />
     }
-    if (!thread) {
-      return <h1>404 Not Found</h1>
-    }
 
     return <div>Thread content</div>
   }
 
   const displaySidebar = () => {
-    if (isLoading || !thread) {
+    if (isLoading) {
       return null
     }
 
