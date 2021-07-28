@@ -53,6 +53,7 @@ Exercitation veniam consequat sunt nostrud amet.`,
   post: {
     id: '0',
     link: '#post-0',
+    createdAt: new Date().toISOString(),
     createdAtBlock: {
       id: '100',
       number: 1000,

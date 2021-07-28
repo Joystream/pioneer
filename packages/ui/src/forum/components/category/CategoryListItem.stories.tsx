@@ -24,7 +24,7 @@ interface Props {
   latestPostText: string
   topThreadTitle: string
   moderatorsCount: number
-  category: ForumCategory
+  category: ForumCategory & { threadCount: number }
 }
 const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount }) => (
   <MemoryRouter>
@@ -49,7 +49,7 @@ const asPost = (text: string): ForumPost | undefined => {
     }
 }
 
-const asThread = (title: string): ForumThread | undefined => {
+const asThread = (title: string): (ForumThread & { postCount: number }) | undefined => {
   if (title)
     return {
       id: '0',

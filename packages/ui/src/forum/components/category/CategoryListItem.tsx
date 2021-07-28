@@ -16,9 +16,9 @@ import { PostInfo } from './PostInfo'
 import { ThreadInfo } from './ThreadInfo'
 
 export interface CategoryListItemProps {
-  category: ForumCategory
+  category: ForumCategory & { threadCount: number }
   latestPost?: ForumPost
-  topThread?: ForumThread
+  topThread?: ForumThread & { postCount: number }
   moderators?: Member[]
 }
 export const CategoryListItem = ({ category, latestPost, topThread, moderators }: CategoryListItemProps) => (

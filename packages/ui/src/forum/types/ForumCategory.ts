@@ -2,7 +2,6 @@ import { ForumCategoryFieldsFragment } from '@/forum/queries/__generated__/forum
 
 export interface ForumCategory extends ForumSubCategory {
   description: string
-  threadCount: number
   subcategories: ForumSubCategory[]
 }
 
@@ -15,6 +14,5 @@ export const asForumCategory = (fields: ForumCategoryFieldsFragment): ForumCateg
   id: fields.id,
   title: fields.title,
   description: fields.description,
-  threadCount: 0,
   subcategories: [],
 })
