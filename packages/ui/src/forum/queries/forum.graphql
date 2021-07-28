@@ -18,6 +18,13 @@ fragment ForumPostFields on ForumPost {
   authorId
 }
 
+fragment ForumThreadDetailedFields on ForumThread {
+  ...ForumThreadFields
+  createdInEvent {
+    inBlock
+  }
+}
+
 query GetForumCategories {
   forumCategories {
     ...ForumCategoryFields
@@ -32,7 +39,7 @@ query GetForumThreads($where: ForumThreadWhereInput) {
 
 query GetForumThread($where: ForumThreadWhereUniqueInput!) {
   thread: forumThreadByUniqueInput(where: $where) {
-    ...ForumThreadFields
+    ...ForumThreadDetailedFields
   }
 }
 

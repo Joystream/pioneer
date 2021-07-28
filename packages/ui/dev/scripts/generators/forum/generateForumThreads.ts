@@ -23,6 +23,9 @@ export const generateForumThreads = (
         isSticky: !(nextId % 5),
         title: faker.lorem.words(randomFromRange(4, 8)),
         authorId: randomMember().id,
+        createdInEvent: {
+          inBlock: 0,
+        },
       }))
     })
     .flatMap((a) => a)

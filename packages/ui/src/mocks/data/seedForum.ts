@@ -17,6 +17,7 @@ export interface RawForumThreadMock {
   categoryId: string
   isSticky: boolean
   title: string
+  createdInEvent: { inBlock: number }
   authorId: string
 }
 
@@ -37,9 +38,13 @@ export const seedForumCategories = (server: any) => {
   categoriesData.map((forumCategoryData) => seedForumCategory(forumCategoryData, server))
 }
 
+const seedThreadCreatedInEvent = (event: { inBlock: number }, server: any) =>
+  server.schema.create('ThreadCreatedEvent', event)
+
 export function seedForumThread(data: RawForumThreadMock, server: any) {
   return server.schema.create('ForumThread', {
     ...data,
+    createdInEvent: seedThreadCreatedInEvent(data.createdInEvent, server),
   })
 }
 

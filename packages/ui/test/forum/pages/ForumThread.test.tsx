@@ -7,7 +7,8 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ForumThread as ForumThreadPage } from '@/app/pages/Forum/ForumThread'
 import { NotFound } from '@/app/pages/NotFound'
-import { ForumThread } from '@/forum/types'
+import { asBlock } from '@/common/types'
+import { ForumThread, ForumThreadWithDetails } from '@/forum/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -38,11 +39,12 @@ describe('UI: Forum Thread Page', () => {
     hasMembers: true,
   }
 
-  const forumThread: ForumThread = {
+  const forumThread: ForumThreadWithDetails = {
     id: '1',
     title: 'Example Thread',
     categoryId: '1',
     isSticky: false,
+    createdInBlock: asBlock(),
   }
 
   beforeAll(() => {
