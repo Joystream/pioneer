@@ -24,7 +24,7 @@ export const PostList = ({ threadId, selectedPostId }: PostListProps) => {
   }, [selectedPostId])
 
   if (isLoading) {
-    return <Loading text="We are loading posts..." />
+    return <Loading text="Loading posts..." />
   }
 
   return (
