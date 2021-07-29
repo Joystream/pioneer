@@ -2,7 +2,7 @@ import React, { forwardRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { BlockDate } from '@/common/components/BlockTime/BlockDate'
+import { BlockDate, BlockDateContainer } from '@/common/components/BlockTime/BlockDate'
 import { ButtonGhost, ButtonGhostStyles, ButtonsRow } from '@/common/components/buttons'
 import { LinkButtonGhost, LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
 import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
@@ -26,10 +26,9 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
   return (
     <ForumPostStyles ref={ref} isSelected={isSelected}>
       <ForumPostRow>
-        <div>{author && <MemberInfo member={author} />}</div>
+        <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
         <BlockDate block={createdAtBlock} />
       </ForumPostRow>
-
       <MessageBody>
         {repliesTo && (
           <Reply>
@@ -44,7 +43,6 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
         )}
         <MarkdownPreview markdown={text} append={edited} size="s" />
       </MessageBody>
-
       <ForumPostRow>
         <ButtonsRow>
           {reaction && (
@@ -139,20 +137,22 @@ export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   }
 `
 
+const ForumPostAuthor = styled.div``
+
 export const ForumPostRow = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
 
-  div {
+  ${ForumPostAuthor}, ${ButtonsRow}, ${BlockDateContainer} {
     flex: 50%;
   }
 
-  div:first-of-type {
+  ${ForumPostAuthor}, ${ButtonsRow}:first-of-type {
     justify-content: flex-start;
   }
 
-  div:last-of-type {
+  ${BlockDateContainer}, ${ButtonsRow}:last-of-type {
     justify-content: flex-end;
   }
 `

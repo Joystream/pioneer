@@ -8,16 +8,16 @@ import { formatDateString, formatTokenValue } from '@/common/model/formatters'
 import { spacing } from '@/common/utils/styles'
 
 export const BlockDate = ({ block }: BlockInfoProp) => (
-  <Container>
+  <BlockDateContainer>
     <BlockNumber>
       <BlockIcon />
       {formatTokenValue(block.number)} block
     </BlockNumber>
     <DateField>{formatDateString(block.timestamp)}</DateField>
-  </Container>
+  </BlockDateContainer>
 )
 
-const Container = styled.div`
+export const BlockDateContainer = styled.div`
   text-align: end;
   width: fit-content;
   height: fit-content;
