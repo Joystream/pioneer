@@ -114,10 +114,6 @@ export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   grid-template-columns: 1fr;
   row-gap: ${spacing(2)};
 
-  & > :nth-child(3n - 1) {
-    justify-self: end;
-  }
-
   ${ButtonGhostStyles}, ${LinkButtonGhostStyles} {
     svg {
       width: 14px;

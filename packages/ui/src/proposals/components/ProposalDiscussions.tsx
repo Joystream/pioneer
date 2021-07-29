@@ -70,6 +70,10 @@ const ProposalDiscussionsStyles = styled.div<Pick<ProposalDiscussionThread, 'mod
     margin-top: ${spacing(3)};
     border-bottom: 1px solid ${Colors.Black[200]};
     padding-bottom: ${spacing(1)};
+
+    & > :nth-child(3n - 1) {
+      justify-self: end;
+    }
   }
 
   ${DiscussionsHeader} ${Badge} {
