@@ -9,7 +9,7 @@ import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { Loading } from '@/common/components/Loading'
-import { RowGapBlock } from '@/common/components/page/PageContent'
+import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -17,14 +17,13 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { Block } from '@/common/types'
+import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
-import { useForumPosts } from '@/forum/hooks/useForumPosts'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, thread } = useForumThread(id)
-  const { posts } = useForumPosts(id)
 
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
@@ -79,13 +78,9 @@ export const ForumThread = () => {
     }
 
     return (
-      <div>
-        {posts.map((post) => (
-          <div>
-            {post.id} | {post.text} | by {post.authorId}
-          </div>
-        ))}
-      </div>
+      <MainPanel ref={sideNeighborRef}>
+        <PostList threadId={thread?.id as string} />
+      </MainPanel>
     )
   }
 

@@ -7,13 +7,12 @@ import { PostReaction } from '@/common/api/queries'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { A_MINUTE } from '@/common/constants'
 import { repeat } from '@/common/utils'
+import { PostListItem } from '@/forum/components/PostList/PostListItem'
 import { ForumPost } from '@/forum/types'
 
-import { ForumComment } from './ForumComment'
-
 export default {
-  title: 'Forum/ForumComment',
-  component: ForumComment,
+  title: 'Forum/PostList',
+  component: PostListItem,
 } as Meta
 
 interface Props {
@@ -41,7 +40,7 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
   return (
     <MemoryRouter>
       <Container>
-        <ForumComment post={{ ...post, updatedAt, text, reaction, repliesTo }} />
+        <PostListItem post={{ ...post, updatedAt, text, reaction, repliesTo }} />
       </Container>
     </MemoryRouter>
   )

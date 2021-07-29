@@ -2,6 +2,7 @@ import React, { forwardRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { BlockDate } from '@/common/components/BlockTime/BlockDate'
 import { ButtonGhost, ButtonGhostStyles, ButtonsRow } from '@/common/components/buttons'
 import { LinkButtonGhost, LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
 import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
@@ -13,21 +14,21 @@ import { spacing } from '@/common/utils/styles'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 
-import { BlockDate } from './BlockDate'
-
 interface PostProps {
   post: ForumPost
   isSelected?: boolean
 }
 
-export const ForumComment = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected }, ref) => {
+export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected }, ref) => {
   const { link, createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
 
   return (
-    <ForumCommentStyles ref={ref} isSelected={isSelected}>
-      {author && <MemberInfo member={author} />}
-      <BlockDate block={createdAtBlock} />
+    <ForumPostStyles ref={ref} isSelected={isSelected}>
+      <ForumPostRow>
+        <div>{author && <MemberInfo member={author} />}</div>
+        <BlockDate block={createdAtBlock} />
+      </ForumPostRow>
 
       <MessageBody>
         {repliesTo && (
@@ -44,24 +45,25 @@ export const ForumComment = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
         <MarkdownPreview markdown={text} append={edited} size="s" />
       </MessageBody>
 
-      <ButtonsRow>
-        {reaction && (
-          <Button>
-            <HeartIcon />
-            {!!reaction.length && reaction.length}
+      <ForumPostRow>
+        <ButtonsRow>
+          {reaction && (
+            <Button>
+              <HeartIcon />
+              {!!reaction.length && reaction.length}
+            </Button>
+          )}
+        </ButtonsRow>
+        <ButtonsRow>
+          <LinkButton to={link} square>
+            <LinkIcon />
+          </LinkButton>
+          <Button square>
+            <ReplyIcon />
           </Button>
-        )}
-      </ButtonsRow>
-
-      <ButtonsRow>
-        <LinkButton to={link} square>
-          <LinkIcon />
-        </LinkButton>
-        <Button square>
-          <ReplyIcon />
-        </Button>
-      </ButtonsRow>
-    </ForumCommentStyles>
+        </ButtonsRow>
+      </ForumPostRow>
+    </ForumPostStyles>
   )
 })
 
@@ -100,6 +102,7 @@ const ReplyBadge = styled.div`
     margin: 1px 0 0 3px;
     padding: 0 ${spacing(1)};
   }
+
   a {
     color: ${Colors.Blue[500]};
     text-transform: uppercase;
@@ -108,12 +111,10 @@ const ReplyBadge = styled.div`
 
 const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true })``
 
-export const ForumCommentStyles = styled.div<Pick<PostProps, 'isSelected'>>`
+export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   row-gap: ${spacing(2)};
-  padding-bottom: ${spacing(1)};
-  border-bottom: 1px solid ${Colors.Black[200]};
 
   & > :nth-child(3n - 1) {
     justify-self: end;
@@ -130,9 +131,28 @@ export const ForumCommentStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   ${Reply} {
     animation: ${({ isSelected }) => (isSelected ? 'flashSelection' : 'none')} ${Transitions.duration} ease;
   }
+
   @keyframes flashSelection {
     50% {
       background-color: ${Colors.Orange[400]};
     }
+  }
+`
+
+export const ForumPostRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
+  div {
+    flex: 50%;
+  }
+
+  div:first-of-type {
+    justify-content: flex-start;
+  }
+
+  div:last-of-type {
+    justify-content: flex-end;
   }
 `

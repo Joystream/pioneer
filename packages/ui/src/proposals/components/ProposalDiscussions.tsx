@@ -6,7 +6,7 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
-import { ForumComment, ForumCommentStyles } from '@/forum/components/ForumComment'
+import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
 interface Props {
@@ -34,7 +34,7 @@ export const ProposalDiscussions = ({ thread, selected }: Props) => {
       {thread.discussionPosts.map((post, index) => {
         const isSelected = selected === post.id
         const ref = isSelected ? selectedElement : undefined
-        return <ForumComment key={index} ref={ref} post={post} isSelected={isSelected} />
+        return <PostListItem key={index} ref={ref} post={post} isSelected={isSelected} />
       })}
 
       <Editor>
@@ -65,8 +65,11 @@ const Editor = styled.div`
 
 const ProposalDiscussionsStyles = styled.div<Pick<ProposalDiscussionThread, 'mode'>>`
   margin-top: ${spacing(1)};
-  ${ForumCommentStyles} {
+
+  ${ForumPostStyles} {
     margin-top: ${spacing(3)};
+    border-bottom: 1px solid ${Colors.Black[200]};
+    padding-bottom: ${spacing(1)};
   }
 
   ${DiscussionsHeader} ${Badge} {
