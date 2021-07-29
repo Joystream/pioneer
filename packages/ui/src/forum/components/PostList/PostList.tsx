@@ -33,7 +33,7 @@ export const PostList = ({ threadId, selectedPostId }: PostListProps) => {
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
       )}
       {posts.map((post) => (
-        <PostBlock>
+        <PostBlock key={post.id}>
           <PostListItem post={post} isSelected={post.id === selectedPostId} />
         </PostBlock>
       ))}
