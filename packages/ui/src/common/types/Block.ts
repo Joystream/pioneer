@@ -15,8 +15,7 @@ export interface BlockFields {
   network: Types.Network
 }
 
-// See: https://github.com/Joystream/pioneer/issues/765
-export const asBlock = (blockData?: BlockFields): Block => {
+export const asBlock = (blockData: BlockFields): Block => {
   if (!blockData) {
     return {
       id: '1337',

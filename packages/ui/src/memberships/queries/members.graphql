@@ -23,9 +23,25 @@ fragment MemberFields on Membership {
 
 fragment MemberWithDetails on Membership {
   ...MemberFields
-#  registeredAtBlock {
-#    ...BlockFields
-#  }
+  entry {
+    ... on MembershipEntryInvited {
+      memberInvitedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryPaid {
+      membershipBoughtEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryGenesis {
+      phantom
+    }
+  }
   invitees {
     ...MemberFields
   }

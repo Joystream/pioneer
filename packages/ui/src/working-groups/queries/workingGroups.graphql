@@ -25,14 +25,17 @@ fragment WorkerFields on Worker {
   stake
 }
 
+
 fragment WorkerDetailedFields on Worker {
   ...WorkerFields
   roleAccount
   rewardAccount
   stakeAccount
-  #  hiredAtBlock {
-  #    ...BlockFields
-  #  }
+  entry {
+    inBlock
+    network
+    createdAt
+  }
   application {
     id
     openingId
@@ -150,9 +153,11 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   type
   stakeAmount
   rewardPerBlock
-  #  createdAtBlock {
-  #    ...BlockFields
-  #  }
+  createdInEvent {
+    inBlock
+    network
+    createdAt
+  }
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
