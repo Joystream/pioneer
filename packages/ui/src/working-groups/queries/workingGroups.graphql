@@ -249,9 +249,11 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     __typename
   }
   stakingAccount
-  #  createdAtBlock {
-  #    ...BlockFields
-  #  }
+  createdInEvent {
+    createdAt
+    inBlock
+    network
+  }
 }
 
 query GetWorkingGroupApplications($applicantId_in: [ID!]) {
