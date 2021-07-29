@@ -1,6 +1,11 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
+import {
+  MemberFieldsFragment,
+  MemberFieldsFragmentDoc,
+} from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
+
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type ForumCategoryFieldsFragment = {
@@ -19,7 +24,18 @@ export type ForumThreadFieldsFragment = {
   authorId: string
 }
 
-export type ForumPostFieldsFragment = { __typename: 'ForumPost'; id: string; text: string; authorId: string }
+export type ForumPostFieldsFragment = {
+  __typename: 'ForumPost'
+  repliesTo?: Types.Maybe<{ __typename: 'ForumPost' } & ForumPostWithoutReplyFieldsFragment>
+} & ForumPostWithoutReplyFieldsFragment
+
+export type ForumPostWithoutReplyFieldsFragment = {
+  __typename: 'ForumPost'
+  id: string
+  updatedAt?: Types.Maybe<any>
+  text: string
+  author: { __typename: 'Membership' } & MemberFieldsFragment
+}
 
 export type ForumThreadDetailedFieldsFragment = {
   __typename: 'ForumThread'
@@ -78,12 +94,25 @@ export const ForumCategoryFieldsFragmentDoc = gql`
     description
   }
 `
+export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
+  fragment ForumPostWithoutReplyFields on ForumPost {
+    id
+    updatedAt
+    author {
+      ...MemberFields
+    }
+    text
+  }
+  ${MemberFieldsFragmentDoc}
+`
 export const ForumPostFieldsFragmentDoc = gql`
   fragment ForumPostFields on ForumPost {
-    id
-    text
-    authorId
+    ...ForumPostWithoutReplyFields
+    repliesTo {
+      ...ForumPostWithoutReplyFields
+    }
   }
+  ${ForumPostWithoutReplyFieldsFragmentDoc}
 `
 export const ForumThreadFieldsFragmentDoc = gql`
   fragment ForumThreadFields on ForumThread {

@@ -58,7 +58,6 @@ Velit officia consequat duis enim velit mollit.
 Exercitation veniam consequat sunt nostrud amet.`,
   post: {
     id: '0',
-    link: '#post-0',
     createdAt: new Date().toISOString(),
     createdAtBlock: {
       id: '100',
@@ -66,7 +65,6 @@ Exercitation veniam consequat sunt nostrud amet.`,
       network: 'OLYMPIA',
       timestamp: '2012-01-26T13:51:50.417-07:00',
     },
-    authorId: '0',
     author: {
       id: '0',
       name: 'Alice member',

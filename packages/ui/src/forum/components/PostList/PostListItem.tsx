@@ -20,7 +20,7 @@ interface PostProps {
 }
 
 export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected }, ref) => {
-  const { link, createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
+  const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
 
   return (
@@ -36,7 +36,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
             <ReplyBadge>
               <ArrowReplyIcon />{' '}
               <Badge>
-                <Link to={repliesTo.link}>Replies to {repliesTo?.author?.handle}</Link>
+                <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
               </Badge>
             </ReplyBadge>
             <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
@@ -55,7 +55,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
           )}
         </ButtonsRow>
         <ButtonsRow>
-          <LinkButton to={link} square>
+          <LinkButton to={window.location.href} square>
             <LinkIcon />
           </LinkButton>
           <Button square>

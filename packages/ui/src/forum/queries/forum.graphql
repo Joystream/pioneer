@@ -13,9 +13,19 @@ fragment ForumThreadFields on ForumThread {
 }
 
 fragment ForumPostFields on ForumPost {
+  ...ForumPostWithoutReplyFields
+  repliesTo {
+    ...ForumPostWithoutReplyFields
+  }
+}
+
+fragment ForumPostWithoutReplyFields on ForumPost {
   id
+  updatedAt
+  author {
+    ...MemberFields
+  }
   text
-  authorId
 }
 
 fragment ForumThreadDetailedFields on ForumThread {

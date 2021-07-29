@@ -2,7 +2,6 @@ import { ProposalVoteKind } from '@/common/api/queries'
 import { asBlock, Block } from '@/common/types'
 import { ForumPost } from '@/forum/types'
 import { asMember, Member } from '@/memberships/types'
-import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { typenameToProposalStatus } from '@/proposals/model/proposalStatus'
 import {
   DiscussionPostFieldsFragment,
@@ -38,7 +37,7 @@ export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment)
   statusSetAtTime: fields.statusSetAtTime,
   createdInBlock: asBlock(),
   discussionThread: {
-    discussionPosts: fields.discussionThread.discussionPosts.map(asForumComment(fields.id)),
+    discussionPosts: fields.discussionThread.discussionPosts.map(asForumComment),
     mode: fields.discussionThread.mode.__typename === 'ProposalDiscussionThreadModeOpen' ? 'open' : 'close',
   },
   proposalStatusUpdates: fields.proposalStatusUpdates.map(({ newStatus }) => ({
@@ -67,14 +66,12 @@ export interface ProposalDiscussionThread {
   mode: 'open' | 'close'
 }
 
-const asForumComment = (proposalId: string) => (fields: DiscussionPostFieldsFragment): ForumPost => ({
+const asForumComment = (fields: DiscussionPostFieldsFragment): ForumPost => ({
   id: fields.id,
-  link: `${ProposalsRoutes.preview}/${proposalId}/post/${fields.id}`,
   createdAt: fields.createdAt,
   createdAtBlock: asBlock(),
   updatedAt: fields.updatedAt,
   author: asMember(fields.author),
-  authorId: fields.author.id,
   text: fields.text,
-  ...(fields.repliesTo ? { repliesTo: asForumComment(proposalId)(fields.repliesTo) } : {}),
+  ...(fields.repliesTo ? { repliesTo: asForumComment(fields.repliesTo) } : {}),
 })
