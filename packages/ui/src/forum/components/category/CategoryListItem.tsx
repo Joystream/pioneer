@@ -64,4 +64,4 @@ const Category = styled.div`
   }
 `
 
-const categoryLink = (id: string) => `${ForumRoutes}/${id}`
+const categoryLink = (id: string) => `${ForumRoutes.category}/${id}`
