@@ -21,19 +21,18 @@ export interface CategoryListItemProps {
   moderators?: MemberSumary[]
 }
 export const CategoryListItem = ({ category, latestPost, topThread, moderators }: CategoryListItemProps) => (
-  <CategoryListItemStyles as={GhostRouterLink} $colLayout={CategoriesColLayout} to={categoryLink(category.id)}>
+  <CategoryListItemStyles
+    as={GhostRouterLink}
+    $colLayout={CategoriesColLayout}
+    to={`${ForumRoutes.category}/${category.id}`}
+  >
     <Category>
       <TextBig as="h5" bold>
         {category.title}
       </TextBig>
       <TextMedium light>{category.description}</TextMedium>
       <TextExtraSmall lighter>
-        Subcategories:{' '}
-        {category.subcategories.map(({ id, title }) => (
-          <GhostRouterLink key={id} to={categoryLink(id)}>
-            {title}
-          </GhostRouterLink>
-        ))}
+        Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
       </TextExtraSmall>
     </Category>
 
@@ -63,5 +62,3 @@ const Category = styled.div`
     margin: ${spacing(5 / 4)} 0 ${spacing(5 / 8)};
   }
 `
-
-const categoryLink = (id: string) => `${ForumRoutes.category}/${id}`

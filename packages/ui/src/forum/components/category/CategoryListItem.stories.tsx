@@ -32,7 +32,7 @@ const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, mode
       category={category}
       latestPost={asPost(latestPostText)}
       topThread={asThread(topThreadTitle)}
-      moderators={moderatorsCount >= 0 ? repeat(() => alice, moderatorsCount) : undefined}
+      moderators={moderatorsCount >= 0 ? repeat((id) => ({ ...alice, id: String(id) }), moderatorsCount) : undefined}
     />
   </MemoryRouter>
 )

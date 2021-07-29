@@ -23,7 +23,7 @@ interface Props {
   max: number
 }
 const Template: Story<Props> = ({ memberCount, max }) => (
-  <MemberStack members={repeat(() => alice, memberCount)} max={max > 0 ? max : undefined} />
+  <MemberStack members={repeat((id) => ({ ...alice, id: String(id) }), memberCount)} max={max > 0 ? max : undefined} />
 )
 
 export const Default = Template.bind({})
