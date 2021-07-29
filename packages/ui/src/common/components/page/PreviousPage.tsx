@@ -56,6 +56,14 @@ const PreviousPageButton = styled(ButtonGhost)`
   &:after {
     content: unset;
   }
+  &:active {
+    transform: translate(-50%, -50%);
+  }
+  &:disabled {
+    &:active {
+      transform: translate(-50%, -50%);
+    }
+  }
 `
 
 const BackArrow = styled(Arrow)`
