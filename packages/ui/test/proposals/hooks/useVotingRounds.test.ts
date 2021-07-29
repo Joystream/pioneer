@@ -3,13 +3,14 @@ import { renderHook } from '@testing-library/react-hooks'
 import { ProposalVoteKind } from '@/common/api/queries'
 import { useCouncilSize } from '@/common/hooks/useCouncilSize'
 import { asBlock } from '@/common/types'
+import { getMember } from '@/mocks/helpers'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
-import { asProposalVote, ProposalStatus } from '@/proposals/types'
+import { ProposalStatus } from '@/proposals/types'
 
 type VoteData = [ProposalVoteKind, number]
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
 
-const asVote = ([voteKind, votingRound]: VoteData) => asProposalVote({ id: '0', voteKind, votingRound })
+const asVote = ([voteKind, votingRound]: VoteData) => ({ id: '0', voteKind, votingRound, voter: getMember('alice') })
 const asVotes = (data: VoteData[]) => data.map(asVote)
 
 const renderUseProposalVotes = (voteData: VoteData[], statuses: ProposalStatus[]) =>

@@ -10,8 +10,6 @@ import {
   VoteFieldsFragment,
 } from '@/proposals/queries'
 
-import { getMember } from '../../../test/_mocks/members'
-
 import { asProposalDetails, ProposalDetails } from './ProposalDetails'
 import { asProposal, Proposal, ProposalStatus } from './proposals'
 
@@ -60,7 +58,7 @@ export interface ProposalVote {
 export const asProposalVote = (voteFields: Omit<VoteFieldsFragment, '__typename'>): ProposalVote => ({
   id: voteFields.id,
   voteKind: voteFields.voteKind,
-  voter: getMember('alice'),
+  voter: asMember(voteFields.voter),
   votingRound: voteFields.votingRound,
 })
 

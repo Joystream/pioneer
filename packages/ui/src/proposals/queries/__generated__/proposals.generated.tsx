@@ -60,6 +60,7 @@ export type VoteFieldsFragment = {
   id: string
   voteKind: Types.ProposalVoteKind
   votingRound: number
+  voter: { __typename: 'Membership' } & MemberFieldsFragment
 }
 
 export type VoteWithDetailsFieldsFragment = {
@@ -69,7 +70,6 @@ export type VoteWithDetailsFieldsFragment = {
   createdAt: any
   network: Types.Network
   proposalId: string
-  voter: { __typename: 'Membership' } & MemberFieldsFragment
 } & VoteFieldsFragment
 
 export type ProposalWithDetailsFieldsFragment = {
@@ -208,8 +208,12 @@ export const VoteFieldsFragmentDoc = gql`
   fragment VoteFields on ProposalVotedEvent {
     id
     voteKind
+    voter {
+      ...MemberFields
+    }
     votingRound
   }
+  ${MemberFieldsFragmentDoc}
 `
 export const VoteWithDetailsFieldsFragmentDoc = gql`
   fragment VoteWithDetailsFields on ProposalVotedEvent {
@@ -219,12 +223,8 @@ export const VoteWithDetailsFieldsFragmentDoc = gql`
     createdAt
     network
     proposalId
-    voter {
-      ...MemberFields
-    }
   }
   ${VoteFieldsFragmentDoc}
-  ${MemberFieldsFragmentDoc}
 `
 export const ProposalFieldsFragmentDoc = gql`
   fragment ProposalFields on Proposal {
