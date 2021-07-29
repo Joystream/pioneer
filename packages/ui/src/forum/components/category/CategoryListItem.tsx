@@ -50,7 +50,7 @@ export const CategoryListItem = ({ category, latestPost, topThread, moderators }
 const CategoryListItemStyles = styled(TableListItem)`
   align-items: start;
   height: 128px;
-  padding: ${spacing(2, 3)};
+  padding: 14px ${spacing(3)};
   & > * {
     margin-top: ${spacing(1)};
   }
