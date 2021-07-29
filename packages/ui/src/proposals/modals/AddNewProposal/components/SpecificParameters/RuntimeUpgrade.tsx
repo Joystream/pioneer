@@ -135,7 +135,8 @@ export const RuntimeUpgrade = ({ setRuntime }: RuntimeUpgradeProps) => {
             {fileRejections.map(({ file, errors }) => (
               <ReceivedFile key={file.name} valid={false}>
                 <AcceptedFileText>
-                  <b>{file.name}</b> ({file.size} B) was not loaded because of "{errors.map((e) => e.message)}"
+                  <b>{file.name}</b> ({file.size} B) was not loaded because of:{' '}
+                  {errors.map((error) => `"${error.message}"`).join(', ')}.
                 </AcceptedFileText>
               </ReceivedFile>
             ))}
