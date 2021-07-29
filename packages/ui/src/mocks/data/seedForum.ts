@@ -12,12 +12,18 @@ export interface RawForumCategoryMock {
   description: string
 }
 
+type BlockFieldsMock = {
+  inBlock: number
+  network: string
+  createdAtTime: string
+}
+
 export interface RawForumThreadMock {
   id: string
   categoryId: string
   isSticky: boolean
   title: string
-  createdInEvent: { inBlock: number }
+  createdInEvent: BlockFieldsMock
   authorId: string
 }
 

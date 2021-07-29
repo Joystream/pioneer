@@ -32,6 +32,8 @@ export const generateForumThreads = (
         authorId: randomMember().id,
         createdInEvent: {
           inBlock: 0,
+          network: 'OLYMPIA',
+          createdAtTime: faker.date.recent(120).toJSON(),
         },
       }))
     })
