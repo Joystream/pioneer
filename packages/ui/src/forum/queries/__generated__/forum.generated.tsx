@@ -35,7 +35,11 @@ export type ForumPostWithoutReplyFieldsFragment = {
   createdAt: any
   updatedAt?: Types.Maybe<any>
   text: string
+  authorId: string
   author: { __typename: 'Membership' } & MemberFieldsFragment
+  postaddedeventpost?: Types.Maybe<
+    Array<{ __typename: 'PostAddedEvent'; createdAt: any; inBlock: number; network: Types.Network }>
+  >
 }
 
 export type ForumThreadDetailedFieldsFragment = {
@@ -104,6 +108,12 @@ export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
       ...MemberFields
     }
     text
+    authorId
+    postaddedeventpost {
+      createdAt
+      inBlock
+      network
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
