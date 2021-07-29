@@ -3,9 +3,9 @@ import { sub } from 'date-fns'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { asBlock } from '@/common/types'
 import { repeat } from '@/common/utils'
 import { ForumCategory, ForumPost, ForumThread } from '@/forum/types'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 import { getMember } from '../../../../test/_mocks/members'
 
@@ -42,7 +42,7 @@ const asPost = (text: string): ForumPost | undefined => {
     return {
       id: '0',
       createdAt: sub(Date.now(), { minutes: 25 }).toISOString(),
-      createdAtBlock: asBlock(),
+      createdAtBlock: randomBlock(),
       author: alice,
       text,
     }
