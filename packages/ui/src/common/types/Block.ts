@@ -3,7 +3,7 @@ import * as Types from '@/common/api/queries/__generated__/baseTypes.generated'
 export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'OLYMPIA'
 
 export interface Block {
-  id: string
+  id?: string
   number: number
   network: NetworkType
   timestamp: string
