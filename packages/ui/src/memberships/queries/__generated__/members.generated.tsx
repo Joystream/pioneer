@@ -23,6 +23,26 @@ export type MemberFieldsFragment = {
 
 export type MemberWithDetailsFragment = {
   __typename: 'Membership'
+  entry:
+    | {
+        __typename: 'MembershipEntryPaid'
+        membershipBoughtEvent?: Types.Maybe<{
+          __typename: 'MembershipBoughtEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+    | {
+        __typename: 'MembershipEntryInvited'
+        memberInvitedEvent?: Types.Maybe<{
+          __typename: 'MemberInvitedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+    | { __typename: 'MembershipEntryGenesis'; phantom?: Types.Maybe<number> }
   invitees: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 } & MemberFieldsFragment
 
@@ -91,6 +111,25 @@ export const MemberFieldsFragmentDoc = gql`
 export const MemberWithDetailsFragmentDoc = gql`
   fragment MemberWithDetails on Membership {
     ...MemberFields
+    entry {
+      ... on MembershipEntryInvited {
+        memberInvitedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryPaid {
+        membershipBoughtEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryGenesis {
+        phantom
+      }
+    }
     invitees {
       ...MemberFields
     }

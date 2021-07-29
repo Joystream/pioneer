@@ -39,6 +39,7 @@ export type WorkerDetailedFieldsFragment = {
   roleAccount: string
   rewardAccount: string
   stakeAccount: string
+  entry: { __typename: 'OpeningFilledEvent'; inBlock: number; network: Types.Network; createdAt: any }
   application: {
     __typename: 'WorkingGroupApplication'
     id: string
@@ -167,6 +168,7 @@ export type WorkingGroupOpeningFieldsFragment = {
   rewardPerBlock: any
   unstakingPeriod: number
   group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
   status:
     | { __typename: 'OpeningStatusOpen' }
@@ -656,6 +658,11 @@ export const WorkerDetailedFieldsFragmentDoc = gql`
     roleAccount
     rewardAccount
     stakeAccount
+    entry {
+      inBlock
+      network
+      createdAt
+    }
     application {
       id
       openingId
@@ -742,6 +749,11 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     type
     stakeAmount
     rewardPerBlock
+    createdInEvent {
+      inBlock
+      network
+      createdAt
+    }
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }
