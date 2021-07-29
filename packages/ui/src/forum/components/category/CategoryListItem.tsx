@@ -9,8 +9,7 @@ import { Colors } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory, ForumPost, ForumThread } from '@/forum/types'
-import { MemberStack } from '@/memberships/components/MemberStack'
-import { Member } from '@/memberships/types'
+import { MemberStack, MemberSumary } from '@/memberships/components/MemberStack'
 
 import { PostInfo } from './PostInfo'
 import { ThreadInfo } from './ThreadInfo'
@@ -19,7 +18,7 @@ export interface CategoryListItemProps {
   category: ForumCategory & { threadCount: number }
   latestPost?: ForumPost
   topThread?: ForumThread & { postCount: number }
-  moderators?: Member[]
+  moderators?: MemberSumary[]
 }
 export const CategoryListItem = ({ category, latestPost, topThread, moderators }: CategoryListItemProps) => (
   <CategoryListItemStyles as={GhostRouterLink} $colLayout={CategoriesColLayout} to={categoryLink(category.id)}>

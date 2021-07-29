@@ -9,8 +9,10 @@ import { MemberPhoto } from '@/memberships/components'
 import { MemberAvatar } from '@/memberships/components/Avatar'
 import { Member } from '@/memberships/types'
 
+export type MemberSumary = Pick<Member, 'id' | 'handle' | 'avatar'>
+
 interface MemberStackProps {
-  members: Member[]
+  members: MemberSumary[]
   max?: number
 }
 export const MemberStack = memo(({ members, max = 5 }: MemberStackProps) => {
