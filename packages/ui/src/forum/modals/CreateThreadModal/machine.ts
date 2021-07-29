@@ -1,20 +1,32 @@
 import { createMachine, assign } from 'xstate'
 
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
-export interface CreateThreadContext {
+interface DetailsContext {
   topic?: string
   description?: string
+  categoryId?: string
+  memberId?: string
 }
+
+interface TransactionContext extends Required<DetailsContext> {
+  newThreadId?: string
+}
+
+export type CreateThreadContext = Partial<TransactionContext>
 
 type CreateThreadState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
-  | { value: 'generalDetails'; context: CreateThreadContext }
-  | { value: 'end'; context: Required<CreateThreadContext> }
+  | { value: 'generalDetails'; context: DetailsContext }
+  | { value: 'transaction'; context: TransactionContext }
+  | { value: 'success'; context: Required<CreateThreadContext> }
+  | { value: 'error'; context: CreateThreadContext }
 
 export type CreateThreadEvent =
   | { type: 'FAIL' }
+  | { type: 'PASS'; memberId: string; categoryId: string }
   | { type: 'NEXT' }
   | { type: 'BACK' }
   | { type: 'SET_TOPIC'; topic: string }
@@ -25,7 +37,13 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
   states: {
     requirementsVerification: {
       on: {
-        NEXT: 'generalDetails',
+        PASS: {
+          target: 'generalDetails',
+          actions: assign({
+            memberId: (_, event) => event.memberId,
+            categoryId: (_, event) => event.categoryId,
+          }),
+        },
         FAIL: 'requirementsFailed',
       },
     },
@@ -33,7 +51,7 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
     generalDetails: {
       on: {
         NEXT: {
-          target: 'end',
+          target: 'transaction',
           cond: (context) => !!(context.topic && context.description),
         },
         SET_TOPIC: {
@@ -48,6 +66,23 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
         },
       },
     },
-    end: { type: 'final' },
+    transaction: {
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+          },
+        ],
+      },
+    },
+    success: { type: 'final' },
+    error: { type: 'final' },
   },
 })
