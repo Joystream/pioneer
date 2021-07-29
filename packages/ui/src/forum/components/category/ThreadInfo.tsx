@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TextMedium, TextSmall } from '@/common/components/typography'
+import { TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { plural } from '@/common/helpers'
 import { spacing } from '@/common/utils/styles'
 import { ForumThread } from '@/forum/types'
@@ -14,9 +14,9 @@ export const ThreadInfo = ({ thread }: ThreadInfoProps) => (
     <TextMedium as="h6" bold>
       {thread.title}
     </TextMedium>
-    <TextSmall lighter>
+    <TextExtraSmall lighter>
       {thread.postCount} Post{plural(thread.postCount)}
-    </TextSmall>
+    </TextExtraSmall>
   </ThreadInfoStyles>
 )
 const ThreadInfoStyles = styled.div`

@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import styled from 'styled-components'
 
 import { DefaultTooltip, Tooltip, TooltipContainer } from '@/common/components/Tooltip'
-import { TextInlineSmall } from '@/common/components/typography'
+import { TextInlineExtraSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { MemberPhoto } from '@/memberships/components'
@@ -30,7 +30,7 @@ export const MemberStack = memo(({ members, max = 5 }: MemberStackProps) => {
       {hasExtra && (
         <Tooltip tooltipText={`And ${remaining} more`}>
           <HiddenMember>
-            <TextInlineSmall bold>+{remaining}</TextInlineSmall>
+            <TextInlineExtraSmall bold>+{remaining}</TextInlineExtraSmall>
           </HiddenMember>
         </Tooltip>
       )}
@@ -44,10 +44,6 @@ const HiddenMember = styled(DefaultTooltip)`
   box-sizing: content-box;
   height: 26px;
   width: 26px;
-
-  ${TextInlineSmall} {
-    font-size: 10px;
-  }
 `
 const borderWidth = '2px'
 const MemberStackStyles = styled.div`

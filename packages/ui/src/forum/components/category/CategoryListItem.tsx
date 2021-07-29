@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { TableListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextBig, TextMedium, TextSmall } from '@/common/components/typography'
+import { TextBig, TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
@@ -27,14 +27,14 @@ export const CategoryListItem = ({ category, latestPost, topThread, moderators }
         {category.title}
       </TextBig>
       <TextMedium light>{category.description}</TextMedium>
-      <TextSmall lighter>
+      <TextExtraSmall lighter>
         Subcategories:{' '}
         {category.subcategories.map(({ id, title }) => (
           <GhostRouterLink key={id} to={categoryLink(id)}>
             {title}
           </GhostRouterLink>
         ))}
-      </TextSmall>
+      </TextExtraSmall>
     </Category>
 
     <TextMedium as="h6" bold>
