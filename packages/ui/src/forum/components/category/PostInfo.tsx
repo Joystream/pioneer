@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { TextExtraSmall, TextMedium } from '@/common/components/typography'
+import { Overflow } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
 import { spacing } from '@/common/utils/styles'
 import { ForumPost } from '@/forum/types'
@@ -26,9 +27,7 @@ export const PostInfo = ({ post }: PostInfoProps) => (
 const PostInfoStyles = styled.div`
   & > ${TextMedium} {
     margin-bottom: ${spacing(1)};
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    ${Overflow.FullDots};
   }
   & > ${TextExtraSmall}:nth-child(2) {
     display: flex;

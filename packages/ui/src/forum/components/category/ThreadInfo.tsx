@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { TextExtraSmall, TextMedium } from '@/common/components/typography'
+import { Overflow } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { spacing } from '@/common/utils/styles'
 import { ForumThread } from '@/forum/types'
@@ -22,8 +23,6 @@ export const ThreadInfo = ({ thread }: ThreadInfoProps) => (
 const ThreadInfoStyles = styled.div`
   & > ${TextMedium} {
     margin-bottom: ${spacing(3 / 2)};
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    ${Overflow.FullDots};
   }
 `
