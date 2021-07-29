@@ -2,10 +2,7 @@ import faker from 'faker'
 
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
-import members from '../../../../src/mocks/data/raw/members.json'
-import { randomFromRange } from '../utils'
-
-const randomMember = () => members[randomFromRange(0, members.length - 1)]
+import { randomFromRange, randomMember } from '../utils'
 
 export const generateForumThreads = (
   forumCategories: Pick<RawForumCategoryMock, 'id'>[]

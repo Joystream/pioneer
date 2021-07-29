@@ -2,6 +2,7 @@ import faker from 'faker'
 
 import { Reducer } from '../../../src/common/types/helpers'
 import { repeat } from '../../../src/common/utils'
+import members from '../../../src/mocks/data/raw/members.json'
 
 export const randomFromRange = (min: number, max: number) => {
   return parseInt((Math.random() * (max - min) + min).toFixed())
@@ -58,8 +59,10 @@ export const randomMessage = () => randomMdTags(randomFromRange(1, 3)).map(tagTo
 
 export const shuffle = <T>(arr: Array<T>) => {
   arr.forEach((_, index, array) => {
-    const randomIndex = randomFromRange(0, array.length - 1);
-    [array[index], array[randomIndex]] = [array[randomIndex], array[index]]
-  });
+    const randomIndex = randomFromRange(0, array.length - 1)
+    ;[array[index], array[randomIndex]] = [array[randomIndex], array[index]]
+  })
   return arr
 }
+
+export const randomMember = () => members[randomFromRange(0, members.length - 1)]
