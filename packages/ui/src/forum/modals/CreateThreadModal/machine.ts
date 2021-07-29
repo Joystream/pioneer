@@ -2,20 +2,16 @@ import { createMachine, assign } from 'xstate'
 
 import { EmptyObject } from '@/common/types'
 
-export interface GeneralFormContext {
+export interface CreateThreadContext {
   topic?: string
   description?: string
 }
 
-type TransactionContext = Required<GeneralFormContext>
-
-type CreateThreadContext = Partial<TransactionContext>
-
 type CreateThreadState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
-  | { value: 'generalDetails'; context: GeneralFormContext }
-  | { value: 'end'; context: TransactionContext }
+  | { value: 'generalDetails'; context: CreateThreadContext }
+  | { value: 'end'; context: Required<CreateThreadContext> }
 
 export type CreateThreadEvent =
   | { type: 'FAIL' }
