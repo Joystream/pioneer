@@ -1,5 +1,9 @@
+import { ThreadId } from '@joystream/types/common'
+import BN from 'bn.js'
 import { createMachine, assign } from 'xstate'
 
+import { Account } from '@/accounts/types'
+import { getEventParam } from '@/common/model/JoystreamNode'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
@@ -8,10 +12,11 @@ interface DetailsContext {
   description?: string
   categoryId?: string
   memberId?: string
+  controllerAccount?: Account
 }
 
 interface TransactionContext extends Required<DetailsContext> {
-  newThreadId?: string
+  newThreadId?: BN
 }
 
 export type CreateThreadContext = Partial<TransactionContext>
@@ -26,7 +31,7 @@ type CreateThreadState =
 
 export type CreateThreadEvent =
   | { type: 'FAIL' }
-  | { type: 'PASS'; memberId: string; categoryId: string }
+  | { type: 'PASS'; memberId: string; categoryId: string; controllerAccount: Account }
   | { type: 'NEXT' }
   | { type: 'BACK' }
   | { type: 'SET_TOPIC'; topic: string }
@@ -42,6 +47,7 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
           actions: assign({
             memberId: (_, event) => event.memberId,
             categoryId: (_, event) => event.categoryId,
+            controllerAccount: (_, event) => event.controllerAccount,
           }),
         },
         FAIL: 'requirementsFailed',
@@ -74,6 +80,9 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
           {
             target: 'success',
             cond: isTransactionSuccess,
+            actions: assign({
+              newThreadId: (_, event) => getEventParam<ThreadId>(event.data.events, 'ThreadCreated'),
+            }),
           },
           {
             target: 'error',

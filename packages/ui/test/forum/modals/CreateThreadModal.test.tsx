@@ -3,6 +3,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { CreateThreadModal } from '@/forum/modals/CreateThreadModal'
@@ -13,17 +14,21 @@ import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider } from '../../_mocks/providers'
+import { stubApi, stubTransaction } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
 describe('CreateThreadModal', () => {
+  const api = stubApi()
+  const tx = stubTransaction(api, 'api.tx.forum.createThread')
+
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
     showModal: jest.fn(),
     modal: null,
-    modalData: undefined,
+    modalData: { categoryId: '0' },
   }
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -57,6 +62,18 @@ describe('CreateThreadModal', () => {
     })
   })
 
+  describe('Sign modal', () => {
+    it('Displays after filling in details', async () => {
+      await fillAndProceed()
+      expect(await screen.findByText(/authorize transaction/i)).toBeDefined()
+    })
+
+    it("Displays the member's controller account", async () => {
+      await fillAndProceed()
+      expect(await screen.findByText(/5GrwvaEF5.*NoHGKutQY/i)).toBeDefined()
+    })
+  })
+
   async function fillDetails() {
     const topicInput = await screen.findByLabelText(/topic of the thread/i)
     await fireEvent.change(topicInput, { target: { value: 'topic' } })
@@ -65,16 +82,25 @@ describe('CreateThreadModal', () => {
     await fireEvent.change(descriptionInput, { target: { value: 'lorem' } })
   }
 
+  async function fillAndProceed() {
+    renderModal()
+    await fillDetails()
+    const next = await getButton(/next step/i)
+    await fireEvent.click(next)
+  }
+
   function renderModal() {
     return render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
-          <MockKeyringProvider>
-            <MembershipContext.Provider value={useMyMemberships}>
-              <CreateThreadModal />
-            </MembershipContext.Provider>
-          </MockKeyringProvider>
-        </ModalContext.Provider>
+        <ApiContext.Provider value={api}>
+          <ModalContext.Provider value={useModal}>
+            <MockKeyringProvider>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <CreateThreadModal />
+              </MembershipContext.Provider>
+            </MockKeyringProvider>
+          </ModalContext.Provider>
+        </ApiContext.Provider>
       </MemoryRouter>
     )
   }

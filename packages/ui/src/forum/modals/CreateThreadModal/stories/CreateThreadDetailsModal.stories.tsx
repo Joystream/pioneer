@@ -15,7 +15,6 @@ export default {
 const Template: Story = () => {
   const [topic, setTopic] = useState<string>()
   const [description, setDescription] = useState<string>()
-  const context = { topic, description }
   return (
     <>
       <HashRouter>
@@ -29,7 +28,8 @@ const Template: Story = () => {
             }}
           >
             <CreateThreadDetailsModal
-              context={context}
+              topic={topic}
+              description={description}
               setTopic={setTopic}
               setDescription={setDescription}
               onSubmit={() => null}

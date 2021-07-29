@@ -9,21 +9,15 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 
-import { CreateThreadContext } from './machine'
-
 interface Props {
-  context: CreateThreadContext
+  topic?: string
+  description?: string
   setTopic: (t: string) => void
   setDescription: (d: string) => void
   onSubmit: () => void
 }
 
-export const CreateThreadDetailsModal = ({
-  context: { topic, description },
-  setTopic,
-  setDescription,
-  onSubmit,
-}: Props) => {
+export const CreateThreadDetailsModal = ({ topic, description, setTopic, setDescription, onSubmit }: Props) => {
   const isValid = useMemo(() => !!(topic && description), [topic, description])
   const { hideModal } = useModal()
   return (
