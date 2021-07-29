@@ -9,6 +9,13 @@ fragment ForumThreadFields on ForumThread {
   isSticky
   categoryId
   title
+  authorId
+}
+
+fragment ForumPostFields on ForumPost {
+  id
+  text
+  authorId
 }
 
 fragment ForumThreadDetailedFields on ForumThread {
@@ -33,5 +40,11 @@ query GetForumThreads($where: ForumThreadWhereInput) {
 query GetForumThread($where: ForumThreadWhereUniqueInput!) {
   thread: forumThreadByUniqueInput(where: $where) {
     ...ForumThreadDetailedFields
+  }
+}
+
+query GetForumPosts($where: ForumPostWhereInput!) {
+  forumPosts(where: $where) {
+    ...ForumPostFields
   }
 }

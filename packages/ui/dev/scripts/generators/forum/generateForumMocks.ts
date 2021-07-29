@@ -5,9 +5,9 @@ import { generateForumThreads } from './generateForumThreads'
 
 export const generateForum = () => {
   const forumCategories = generateCategories()
-  const forumThreads = generateForumThreads(forumCategories)
+  const { forumThreads, forumPosts } = generateForumThreads(forumCategories)
 
-  const forumMocks = { forumCategories, forumThreads }
+  const forumMocks = { forumCategories, forumThreads, forumPosts }
 
   Object.entries(forumMocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }

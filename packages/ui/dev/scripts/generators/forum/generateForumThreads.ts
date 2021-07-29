@@ -1,25 +1,40 @@
 import faker from 'faker'
 
-import { RawForumCategoryMock, RawForumThreadMock } from '@/mocks/data/seedForum'
+import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
-import { randomFromRange } from '../utils'
+import { randomFromRange, randomMember } from '../utils'
 
-export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock, 'id'>[]): RawForumThreadMock[] => {
+export const generateForumThreads = (
+  forumCategories: Pick<RawForumCategoryMock, 'id'>[]
+): {
+  forumThreads: RawForumThreadMock[]
+  forumPosts: RawForumPostMock[]
+} => {
   let nextId = 0
 
-  return forumCategories
+  const forumThreads = forumCategories
     .map(({ id }) => {
-      return [...new Array(randomFromRange(3, 10))].map(() => {
-        return {
-          id: String(nextId++),
-          categoryId: id,
-          isSticky: !(nextId % 5),
-          title: faker.lorem.words(randomFromRange(4, 8)),
-          createdInEvent: {
-            inBlock: 0,
-          },
-        }
-      })
+      return [...new Array(randomFromRange(3, 10))].map(() => ({
+        id: String(nextId++),
+        categoryId: id,
+        isSticky: !(nextId % 5),
+        title: faker.lorem.words(randomFromRange(4, 8)),
+        authorId: randomMember().id,
+        createdInEvent: {
+          inBlock: 0,
+        },
+      }))
     })
     .flatMap((a) => a)
+
+  nextId = 0
+
+  const forumPosts = forumThreads.map(({ id, authorId }: RawForumThreadMock) => ({
+    id: String(nextId++),
+    threadId: id,
+    authorId: authorId,
+    text: faker.lorem.words(randomFromRange(10, 100)),
+  }))
+
+  return { forumThreads, forumPosts }
 }

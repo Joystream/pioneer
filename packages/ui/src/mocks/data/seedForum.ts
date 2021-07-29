@@ -1,8 +1,10 @@
 import rawForumCategories from './raw/forumCategories.json'
+import rawForumPosts from './raw/forumPosts.json'
 import rawForumThreads from './raw/forumThreads.json'
 
 export const categoriesData = rawForumCategories.map((rawForumCategory) => ({ ...rawForumCategory }))
 export const threadsData = rawForumThreads.map((rawForumThread) => ({ ...rawForumThread }))
+export const postsData = rawForumPosts.map((rawData) => ({ ...rawData }))
 
 export interface RawForumCategoryMock {
   id: string
@@ -16,6 +18,14 @@ export interface RawForumThreadMock {
   isSticky: boolean
   title: string
   createdInEvent: { inBlock: number }
+  authorId: string
+}
+
+export interface RawForumPostMock {
+  id: string
+  threadId: string
+  authorId: string
+  text: string
 }
 
 export function seedForumCategory(forumCategoryData: RawForumCategoryMock, server: any) {
@@ -40,4 +50,14 @@ export function seedForumThread(data: RawForumThreadMock, server: any) {
 
 export const seedForumThreads = (server: any) => {
   threadsData.map((data) => seedForumThread(data, server))
+}
+
+export function seedForumPost(data: RawForumPostMock, server: any) {
+  return server.schema.create('ForumPost', {
+    ...data,
+  })
+}
+
+export const seedForumPosts = (server: any) => {
+  postsData.map((data) => seedForumPost(data, server))
 }

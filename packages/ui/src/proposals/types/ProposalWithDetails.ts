@@ -75,6 +75,7 @@ const asForumComment = (proposalId: string) => (fields: DiscussionPostFieldsFrag
   createdAtBlock: asBlock(),
   updatedAt: fields.updatedAt,
   author: asMember(fields.author),
+  authorId: fields.author.id,
   text: fields.text,
   ...(fields.repliesTo ? { repliesTo: asForumComment(proposalId)(fields.repliesTo) } : {}),
 })
