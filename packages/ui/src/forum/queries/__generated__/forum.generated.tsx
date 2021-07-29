@@ -40,7 +40,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
 
 export type ForumThreadDetailedFieldsFragment = {
   __typename: 'ForumThread'
-  createdInEvent: { __typename: 'ThreadCreatedEvent'; inBlock: number }
+  createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
 } & ForumThreadFieldsFragment
 
 export type GetForumCategoriesQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -129,7 +129,9 @@ export const ForumThreadDetailedFieldsFragmentDoc = gql`
   fragment ForumThreadDetailedFields on ForumThread {
     ...ForumThreadFields
     createdInEvent {
+      createdAt
       inBlock
+      network
     }
   }
   ${ForumThreadFieldsFragmentDoc}

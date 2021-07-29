@@ -27,12 +27,20 @@ fragment ForumPostWithoutReplyFields on ForumPost {
     ...MemberFields
   }
   text
+  authorId
+  postaddedeventpost {
+    createdAt
+    inBlock
+    network
+  }
 }
 
 fragment ForumThreadDetailedFields on ForumThread {
   ...ForumThreadFields
   createdInEvent {
+    createdAt
     inBlock
+    network
   }
 }
 

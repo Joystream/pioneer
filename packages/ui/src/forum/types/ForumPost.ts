@@ -17,9 +17,9 @@ export interface ForumPost {
 export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
   id: fields.id,
   createdAt: fields.createdAt,
-  createdAtBlock: asBlock(),
   updatedAt: fields.updatedAt,
   author: asMember(fields.author),
   text: fields.text,
   ...(fields.repliesTo ? { repliesTo: asForumPost(fields.repliesTo) } : {}),
+  createdAtBlock: asBlock(fields.postaddedeventpost),
 })
