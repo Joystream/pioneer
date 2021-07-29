@@ -40,7 +40,8 @@ export const MemberStack = memo(({ members, max = 5 }: MemberStackProps) => {
 
 const HiddenMember = styled(DefaultTooltip)`
   background-color: ${Colors.Blue[50]};
-  outline: 1px solid ${Colors.Black[200]};
+  border: 1px solid ${Colors.Black[200]};
+  box-sizing: content-box;
   height: 26px;
   width: 26px;
 
@@ -48,22 +49,21 @@ const HiddenMember = styled(DefaultTooltip)`
     font-size: 10px;
   }
 `
-const outlineWidth = '2px'
+const borderWidth = '2px'
 const MemberStackStyles = styled.div`
   display: flex;
 
   ${TooltipContainer} {
-    margin-right: ${spacing(-1)};
-    &:hover {
-      margin-right: ${outlineWidth};
-    }
+    margin-right: calc(${spacing(-1)} - ${borderWidth});
+    &:hover,
     &:last-child {
       margin-right: 0;
     }
   }
   ${MemberPhoto} {
     cursor: pointer;
-    outline: ${outlineWidth} solid ${Colors.White};
+    border: ${borderWidth} solid ${Colors.White};
+    box-sizing: content-box;
     height: 26px;
     width: 26px;
   }
