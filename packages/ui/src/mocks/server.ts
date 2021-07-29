@@ -67,7 +67,7 @@ export const makeServer = (environment = 'development') => {
               forumCategories: getWhereResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
               forumPosts: getWhereResolver('ForumPost'),
-              forumPostsConnection: getWhereResolver('ForumPostConnection'),
+              forumPostsConnection: getConnectionResolver('ForumPostConnection'),
               forumThreadByUniqueInput: getUniqueResolver('ForumThread'),
               membershipByUniqueInput: getUniqueResolver('Membership'),
               memberships: getWhereResolver('Membership'),
