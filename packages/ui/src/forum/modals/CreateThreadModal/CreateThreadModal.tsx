@@ -16,7 +16,11 @@ export const CreateThreadModal = () => {
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      !member ? showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' }) : send('NEXT')
+      if (!member) {
+        showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+      } else {
+        send('NEXT')
+      }
     }
   }, [state.value, member?.id])
 

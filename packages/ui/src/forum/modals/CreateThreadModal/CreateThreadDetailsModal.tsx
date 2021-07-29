@@ -24,7 +24,7 @@ export const CreateThreadDetailsModal = ({
   setDescription,
   onSubmit,
 }: Props) => {
-  const fieldMissing = useMemo(() => !(topic && description), [topic, description])
+  const isValid = useMemo(() => !!(topic && description), [topic, description])
   const { hideModal } = useModal()
   return (
     <Modal onClose={hideModal} modalSize="l">
@@ -41,7 +41,7 @@ export const CreateThreadDetailsModal = ({
               <CKEditor
                 id="field-description"
                 onChange={(_, editor) => setDescription(editor.getData())}
-                onReady={(editor) => editor.setData(description)}
+                onReady={(editor) => editor.setData(description ?? '')}
               />
             </InputComponent>
           </RowGapBlock>
@@ -49,7 +49,7 @@ export const CreateThreadDetailsModal = ({
       </ModalBody>
       <ModalFooter>
         <ButtonsGroup align="right">
-          <ButtonPrimary onClick={onSubmit} size="medium" disabled={fieldMissing}>
+          <ButtonPrimary onClick={onSubmit} size="medium" disabled={!isValid}>
             Next step
             <Arrow direction="right" />
           </ButtonPrimary>

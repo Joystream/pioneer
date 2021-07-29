@@ -4,7 +4,7 @@ import { HashRouter } from 'react-router-dom'
 
 import { ModalContext } from '@/common/providers/modal/context'
 
-import { MockQueryNodeProviders } from '../../../../../test/_mocks/providers'
+import { MockApolloProvider } from '../../../../../test/_mocks/providers'
 import { CreateThreadDetailsModal } from '../CreateThreadDetailsModal'
 
 export default {
@@ -13,13 +13,13 @@ export default {
 } as Meta
 
 const Template: Story = () => {
-  const [topic, setTopic] = useState('')
-  const [description, setDescription] = useState('')
+  const [topic, setTopic] = useState<string>()
+  const [description, setDescription] = useState<string>()
   const context = { topic, description }
   return (
     <>
       <HashRouter>
-        <MockQueryNodeProviders>
+        <MockApolloProvider>
           <ModalContext.Provider
             value={{
               modalData: {},
@@ -35,7 +35,7 @@ const Template: Story = () => {
               onSubmit={() => null}
             />
           </ModalContext.Provider>
-        </MockQueryNodeProviders>
+        </MockApolloProvider>
       </HashRouter>
     </>
   )

@@ -3,8 +3,8 @@ import { createMachine, assign } from 'xstate'
 import { EmptyObject } from '@/common/types'
 
 export interface GeneralFormContext {
-  topic: string
-  description: string
+  topic?: string
+  description?: string
 }
 
 type TransactionContext = Required<GeneralFormContext>
@@ -26,10 +26,6 @@ export type CreateThreadEvent =
 
 export const createThreadMachine = createMachine<CreateThreadContext, CreateThreadEvent, CreateThreadState>({
   initial: 'requirementsVerification',
-  context: {
-    topic: '',
-    description: '',
-  },
   states: {
     requirementsVerification: {
       on: {
@@ -42,7 +38,7 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
       on: {
         NEXT: {
           target: 'end',
-          cond: (context) => !!(context['topic'] && context['description']),
+          cond: (context) => !!(context.topic && context.description),
         },
         SET_TOPIC: {
           actions: assign({
