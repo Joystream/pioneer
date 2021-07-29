@@ -9,22 +9,20 @@ import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { Loading } from '@/common/components/Loading'
-import { RowGapBlock } from '@/common/components/page/PageContent'
+import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
-import { Block } from '@/common/types'
+import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
-import { useForumPosts } from '@/forum/hooks/useForumPosts'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, thread } = useForumThread(id)
-  const { posts } = useForumPosts(id)
 
   const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
@@ -37,14 +35,14 @@ export const ForumThread = () => {
   }
 
   const displayHeader = () => {
-    if (isLoading) {
+    if (isLoading || !thread) {
       return null
     }
 
     return (
       <PageHeader>
         <PreviousPage>
-          <PageTitle>{thread?.title}</PageTitle>
+          <PageTitle>{thread.title}</PageTitle>
         </PreviousPage>
         <ButtonsGroup>
           <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
@@ -58,7 +56,7 @@ export const ForumThread = () => {
         </ButtonsGroup>
         <RowGapBlock>
           <BadgesRow>
-            {thread?.isSticky && (
+            {thread.isSticky && (
               <ThreadPinned>
                 <PinIcon />
               </ThreadPinned>
@@ -66,7 +64,7 @@ export const ForumThread = () => {
             <BadgeStatus inverted size="l" separated>
               Tag
             </BadgeStatus>
-            <BlockInfo block={thread?.createdInBlock as Block} />
+            <BlockInfo block={thread.createdInBlock} />
           </BadgesRow>
         </RowGapBlock>
       </PageHeader>
@@ -74,23 +72,19 @@ export const ForumThread = () => {
   }
 
   const displayMain = () => {
-    if (isLoading) {
+    if (isLoading || !thread) {
       return <Loading />
     }
 
     return (
-      <div>
-        {posts.map((post) => (
-          <div>
-            {post.id} | {post.text} | by {post.authorId}
-          </div>
-        ))}
-      </div>
+      <MainPanel ref={sideNeighborRef}>
+        <PostList threadId={thread.id} />
+      </MainPanel>
     )
   }
 
   const displaySidebar = () => {
-    if (isLoading) {
+    if (isLoading || !thread) {
       return null
     }
 

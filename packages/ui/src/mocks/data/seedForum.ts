@@ -26,6 +26,8 @@ export interface RawForumPostMock {
   threadId: string
   authorId: string
   text: string
+  repliesToId?: string
+  createdAt: string
 }
 
 export function seedForumCategory(forumCategoryData: RawForumCategoryMock, server: any) {

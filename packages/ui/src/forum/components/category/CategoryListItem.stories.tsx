@@ -41,7 +41,6 @@ const asPost = (text: string): ForumPost | undefined => {
   if (text)
     return {
       id: '0',
-      link: '#',
       createdAt: sub(Date.now(), { minutes: 25 }).toISOString(),
       createdAtBlock: asBlock(),
       author: alice,

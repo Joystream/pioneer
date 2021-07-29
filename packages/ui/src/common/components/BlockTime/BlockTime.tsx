@@ -19,14 +19,14 @@ interface BlockTimeLayoutProps {
 }
 
 export const BlockTime = React.memo(({ block, layout, dateLabel }: BlockTimeProps) => (
-  <Wrapper layout={layout}>
+  <BlockTimeWrapper layout={layout}>
     <AboutText>
       {dateLabel && layout == 'row' && dateLabel + ': '}
       {formatDateString(block.timestamp)}
     </AboutText>
     {layout == 'row' && <Separator>{' | '}</Separator>}
     <BlockInfo block={block} />
-  </Wrapper>
+  </BlockTimeWrapper>
 ))
 
 const Separator = styled.span`
@@ -38,7 +38,7 @@ const AboutText = styled(TextMedium)`
   color: ${Colors.Black[600]};
 `
 
-const Wrapper = styled.div<BlockTimeLayoutProps>`
+export const BlockTimeWrapper = styled.div<BlockTimeLayoutProps>`
   display: grid;
   width: fit-content;
   height: fit-content;
@@ -56,9 +56,11 @@ const Wrapper = styled.div<BlockTimeLayoutProps>`
             line-height: 18px;
             color: ${Colors.Black[400]};
           }
+
           ${BlockIconStyles} {
             color: ${Colors.Black[500]};
           }
+
           ${Separator} {
             color: ${Colors.Black[400]};
           }
@@ -74,19 +76,25 @@ const Wrapper = styled.div<BlockTimeLayoutProps>`
       case 'reverse':
       default:
         return css`
+          justify-content: flex-end;
+          text-align: end;
           grid-row-gap: 8px;
+
           ${AboutText} {
             font-size: 12px;
             line-height: 18px;
             color: ${Colors.Black[500]};
             order: 1;
           }
+
           ${BlockIconStyles} {
             color: ${Colors.Black[900]};
           }
+
           ${BlockInfoContainer} {
             color: ${Colors.Black[900]};
           }
+
           ${BlockNetworkInfo} {
             color: ${Colors.Black[900]};
           }
