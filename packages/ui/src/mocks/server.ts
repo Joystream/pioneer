@@ -45,6 +45,10 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   const proposalPostModel = schema.modelFor('proposalDiscussionPost')
   // "Mirage: The proposal-discussion-post model has multiple possible inverse associations for the proposal-discussion-post.repliesTo association."
   proposalPostModel.class.prototype.associations.repliesTo.opts.inverse = null
+
+  const forumPostModel = schema.modelFor('forumPost')
+  // "Mirage: The forum-post model has multiple possible inverse associations for the forum-post.repliesTo association."
+  forumPostModel.class.prototype.associations.repliesTo.opts.inverse = null
 }
 
 export const makeServer = (environment = 'development') => {
