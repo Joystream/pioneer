@@ -9,10 +9,10 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 
-import { GeneralFormContext } from './machine'
+import { CreateThreadContext } from './machine'
 
 interface Props {
-  context: GeneralFormContext
+  context: CreateThreadContext
   setTopic: (t: string) => void
   setDescription: (d: string) => void
   onSubmit: () => void
