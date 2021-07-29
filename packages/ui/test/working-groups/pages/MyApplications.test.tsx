@@ -15,7 +15,6 @@ jest.mock('../../../src/working-groups/hooks/useMyApplications', () => ({
 }))
 
 const block: Block = {
-  id: 'block-1',
   number: 1,
   network: 'BABYLON',
   timestamp: '2021-03-09T10:38:04.155Z',

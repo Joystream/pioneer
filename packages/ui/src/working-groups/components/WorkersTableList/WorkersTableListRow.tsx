@@ -5,6 +5,7 @@ import { BlockTime } from '@/common/components/BlockTime'
 import { Colors, Transitions } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 export interface ListRowProps {
   member: Member
@@ -15,24 +16,8 @@ export const WorkersTableListRow = ({ member, past }: ListRowProps) => {
   return (
     <WorkerItem past={past}>
       <MemberInfo member={member} showId />
-      <BlockTime
-        block={{
-          id: '100',
-          number: 1000,
-          network: 'OLYMPIA',
-          timestamp: '2012-01-26T13:51:50.417-07:00',
-        }}
-        layout="reverse"
-      />
-      <BlockTime
-        block={{
-          id: '100',
-          number: 1000,
-          network: 'OLYMPIA',
-          timestamp: '2012-01-26T13:51:50.417-07:00',
-        }}
-        layout="reverse"
-      />
+      <BlockTime block={randomBlock()} layout="reverse" />
+      <BlockTime block={randomBlock()} layout="reverse" />
     </WorkerItem>
   )
 }

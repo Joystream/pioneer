@@ -27,7 +27,6 @@ export const WORKER: WorkerWithDetails = {
   stakeAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
   rewardAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
   hiredAtBlock: {
-    id: '100',
     network: 'OLYMPIA',
     number: 100,
     timestamp: '2021-06-01T06:42:00.155Z',
