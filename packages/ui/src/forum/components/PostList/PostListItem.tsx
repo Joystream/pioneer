@@ -2,7 +2,7 @@ import React, { forwardRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { BlockDate, BlockDateContainer } from '@/common/components/BlockTime/BlockDate'
+import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonGhostStyles, ButtonsRow } from '@/common/components/buttons'
 import { LinkButtonGhost, LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
 import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
@@ -27,7 +27,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
     <ForumPostStyles ref={ref} isSelected={isSelected}>
       <ForumPostRow>
         <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-        <BlockDate block={createdAtBlock} />
+        <BlockTime block={createdAtBlock} layout="reverse" />
       </ForumPostRow>
       <MessageBody>
         {repliesTo && (
@@ -140,7 +140,7 @@ export const ForumPostRow = styled.div`
   flex-wrap: wrap;
   width: 100%;
 
-  ${ForumPostAuthor}, ${ButtonsRow}, ${BlockDateContainer} {
+  ${ForumPostAuthor}, ${ButtonsRow}, ${BlockTimeWrapper} {
     flex: 50%;
   }
 
@@ -148,7 +148,7 @@ export const ForumPostRow = styled.div`
     justify-content: flex-start;
   }
 
-  ${BlockDateContainer}, ${ButtonsRow}:last-of-type {
+  ${BlockTimeWrapper}, ${ButtonsRow}:last-of-type {
     justify-content: flex-end;
   }
 `
