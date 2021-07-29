@@ -32,6 +32,7 @@ export type ForumPostFieldsFragment = {
 export type ForumPostWithoutReplyFieldsFragment = {
   __typename: 'ForumPost'
   id: string
+  createdAt: any
   updatedAt?: Types.Maybe<any>
   text: string
   author: { __typename: 'Membership' } & MemberFieldsFragment
@@ -97,6 +98,7 @@ export const ForumCategoryFieldsFragmentDoc = gql`
 export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
   fragment ForumPostWithoutReplyFields on ForumPost {
     id
+    createdAt
     updatedAt
     author {
       ...MemberFields

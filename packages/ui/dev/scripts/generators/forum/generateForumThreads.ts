@@ -13,6 +13,7 @@ export const generateForumPost = (threadId: string, authorId: string, repliesToI
   authorId,
   text: faker.lorem.words(randomFromRange(10, 100)),
   repliesToId,
+  createdAt: new Date().toISOString(),
 })
 
 export const generateForumThreads = (

@@ -21,6 +21,7 @@ fragment ForumPostFields on ForumPost {
 
 fragment ForumPostWithoutReplyFields on ForumPost {
   id
+  createdAt
   updatedAt
   author {
     ...MemberFields
