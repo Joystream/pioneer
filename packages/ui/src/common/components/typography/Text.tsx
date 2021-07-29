@@ -92,6 +92,11 @@ const TextAllStyles = css<TextProps>`
   ${TextMargins};
 `
 
+export const TextExtraSmall = styled.p<TextProps>`
+  font-size: 10px;
+  line-height: 18px;
+  ${TextAllStyles}
+`
 export const TextSmall = styled.p<TextProps>`
   font-size: 12px;
   line-height: 18px;
@@ -110,6 +115,11 @@ export const TextBig = styled.p<TextProps>`
 export const TextHuge = styled.p<TextProps>`
   font-size: 20px;
   line-height: 28px;
+  ${TextAllStyles}
+`
+export const TextInlineExtraSmall = styled.span<TextProps>`
+  font-size: 10px;
+  line-height: 18px;
   ${TextAllStyles}
 `
 export const TextInlineSmall = styled.span<TextProps>`

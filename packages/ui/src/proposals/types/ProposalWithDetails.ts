@@ -70,6 +70,7 @@ export interface ProposalDiscussionThread {
 const asForumComment = (proposalId: string) => (fields: DiscussionPostFieldsFragment): ForumPost => ({
   id: fields.id,
   link: `${ProposalsRoutes.preview}/${proposalId}/post/${fields.id}`,
+  createdAt: fields.createdAt,
   createdAtBlock: asBlock(),
   updatedAt: fields.updatedAt,
   author: asMember(fields.author),
