@@ -1,3 +1,5 @@
+import { BlockFieldsMock } from '@/mocks/data/common'
+
 import rawForumCategories from './raw/forumCategories.json'
 import rawForumPosts from './raw/forumPosts.json'
 import rawForumThreads from './raw/forumThreads.json'
@@ -10,12 +12,6 @@ export interface RawForumCategoryMock {
   id: string
   title: string
   description: string
-}
-
-type BlockFieldsMock = {
-  inBlock: number
-  network: string
-  createdAtTime: string
 }
 
 export interface RawForumThreadMock {

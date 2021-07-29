@@ -41,6 +41,14 @@ const generateMember = (override?: KnownMember) => ({
   isFoundingMember: nextId < 9,
   inviteCount: 5,
   ...override,
+  entry: {
+    __typename: 'MembershipEntryPaid',
+    membershipBoughtEvent: {
+      createdAt: faker.date.past(2),
+      inBlock: faker.datatype.number(10_000),
+      network: 'OLYMPIA',
+    },
+  },
 })
 
 export type MemberMock = ReturnType<typeof generateMember>

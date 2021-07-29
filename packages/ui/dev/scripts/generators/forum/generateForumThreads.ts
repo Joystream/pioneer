@@ -33,7 +33,7 @@ export const generateForumThreads = (
         createdInEvent: {
           inBlock: 0,
           network: 'OLYMPIA',
-          createdAtTime: faker.date.recent(120).toJSON(),
+          createdAt: faker.date.recent(120).toJSON(),
         },
       }))
     })
@@ -46,7 +46,7 @@ export const generateForumThreads = (
 
       posts.push(generateForumPost(id, authorId))
 
-      for (const i of new Array(randomFromRange(3, 10))) {
+      for (let i = 0; i < new Array(randomFromRange(3, 10)).length; i++) {
         const repliesToId =
           posts.length > 1 && Math.random() > 0.5 ? posts[randomFromRange(1, posts.length - 1)].id : undefined
 
