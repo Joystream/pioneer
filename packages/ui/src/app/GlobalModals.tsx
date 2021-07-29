@@ -4,6 +4,7 @@ import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFounds
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
 import { useModal } from '@/common/hooks/useModal'
 import { ModalName } from '@/common/providers/modal/types'
+import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -29,6 +30,7 @@ export type ModalNames =
   | ModalName<MoveFundsModalCall>
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
+  | ModalName<CreateThreadModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
@@ -58,6 +60,8 @@ export const GlobalModals = () => {
       return <AddNewProposalModal />
     case 'VoteRationaleModal':
       return <VoteRationale />
+    case 'CreateThreadModal':
+      return <CreateThreadModal />
     default:
       return null
   }
