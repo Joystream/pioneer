@@ -1,22 +1,11 @@
 import { error } from '@/common/logger'
-import { asBlock } from '@/common/types'
 
-import { MemberWithDetailsFragment, useGetMemberQuery } from '../queries'
-import { asMember, DetailedMember } from '../types'
+import { useGetMemberQuery } from '../queries'
+import { asMemberWithDetails, DetailedMember } from '../types'
 
 interface UseMember {
   member?: DetailedMember
   isLoading: boolean
-}
-
-export const asMemberWithDetails = (data: MemberWithDetailsFragment): DetailedMember => {
-  return {
-    ...asMember(data),
-    about: '',
-    invitedBy: '',
-    registeredAtBlock: asBlock(),
-    invitees: [],
-  }
 }
 
 export function useMember(memberId?: string): UseMember {
