@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { DefaultTooltip, Tooltip, TooltipContainer } from '@/common/components/Tooltip'
 import { TextInlineExtraSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { Colors, Transitions } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { MemberPhoto } from '@/memberships/components'
 import { MemberAvatar } from '@/memberships/components/Avatar'
@@ -41,9 +41,6 @@ export const MemberStack = memo(({ members, max = 5 }: MemberStackProps) => {
 const HiddenMember = styled(DefaultTooltip)`
   background-color: ${Colors.Blue[50]};
   border: 1px solid ${Colors.Black[200]};
-  box-sizing: content-box;
-  height: 26px;
-  width: 26px;
 `
 const borderWidth = '2px'
 const MemberStackStyles = styled.div`
@@ -51,16 +48,20 @@ const MemberStackStyles = styled.div`
 
   ${TooltipContainer} {
     margin-right: calc(${spacing(-1)} - ${borderWidth});
+    transition: ${Transitions.all};
+    will-change: margin-right;
     &:hover,
     &:last-child {
       margin-right: 0;
     }
   }
+  ${MemberPhoto}, ${HiddenMember} {
+    box-sizing: content-box;
+    height: 24px;
+    width: 24px;
+  }
   ${MemberPhoto} {
     cursor: pointer;
     border: ${borderWidth} solid ${Colors.White};
-    box-sizing: content-box;
-    height: 26px;
-    width: 26px;
   }
 `
