@@ -1,10 +1,10 @@
 import { error } from '@/common/logger'
 
 import { useGetMemberQuery } from '../queries'
-import { asMemberWithDetails, DetailedMember } from '../types'
+import { asMemberWithDetails, MemberWithDetails } from '../types'
 
 interface UseMember {
-  member?: DetailedMember
+  member?: MemberWithDetails
   isLoading: boolean
 }
 

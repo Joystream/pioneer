@@ -1,2 +1,2 @@
-export * from './memberships'
+export * from './Member'
 export * from './casting'

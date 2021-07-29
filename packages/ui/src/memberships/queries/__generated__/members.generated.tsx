@@ -21,7 +21,7 @@ export type MemberFieldsFragment = {
   }>
 }
 
-export type MemberWithDetailsFragment = {
+export type MemberWithDetailsFieldsFragment = {
   __typename: 'Membership'
   entry:
     | {
@@ -73,7 +73,7 @@ export type GetMemberQueryVariables = Types.Exact<{
 
 export type GetMemberQuery = {
   __typename: 'Query'
-  membershipByUniqueInput?: Types.Maybe<{ __typename: 'Membership' } & MemberWithDetailsFragment>
+  membershipByUniqueInput?: Types.Maybe<{ __typename: 'Membership' } & MemberWithDetailsFieldsFragment>
 }
 
 export type SearchMembersQueryVariables = Types.Exact<{
@@ -108,8 +108,8 @@ export const MemberFieldsFragmentDoc = gql`
     }
   }
 `
-export const MemberWithDetailsFragmentDoc = gql`
-  fragment MemberWithDetails on Membership {
+export const MemberWithDetailsFieldsFragmentDoc = gql`
+  fragment MemberWithDetailsFields on Membership {
     ...MemberFields
     entry {
       ... on MembershipEntryInvited {
@@ -219,10 +219,10 @@ export type GetMembersCountQueryResult = Apollo.QueryResult<GetMembersCountQuery
 export const GetMemberDocument = gql`
   query GetMember($where: MembershipWhereUniqueInput!) {
     membershipByUniqueInput(where: $where) {
-      ...MemberWithDetails
+      ...MemberWithDetailsFields
     }
   }
-  ${MemberWithDetailsFragmentDoc}
+  ${MemberWithDetailsFieldsFragmentDoc}
 `
 
 /**

@@ -21,7 +21,7 @@ fragment MemberFields on Membership {
   }
 }
 
-fragment MemberWithDetails on Membership {
+fragment MemberWithDetailsFields on Membership {
   ...MemberFields
   entry {
     ... on MembershipEntryInvited {
@@ -61,7 +61,7 @@ query GetMembersCount($where: MembershipWhereInput) {
 
 query GetMember($where: MembershipWhereUniqueInput!) {
   membershipByUniqueInput(where: $where) {
-    ...MemberWithDetails
+    ...MemberWithDetailsFields
   }
 }
 
