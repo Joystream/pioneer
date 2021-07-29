@@ -17,6 +17,9 @@ fragment ProposalFields on Proposal {
 fragment VoteFields on ProposalVotedEvent {
   id
   voteKind
+  voter {
+    ...MemberFields
+  }
   votingRound
 }
 
@@ -27,9 +30,6 @@ fragment VoteWithDetailsFields on ProposalVotedEvent {
   createdAt
   network
   proposalId
-  voter {
-    ...MemberFields
-  }
 }
 
 fragment ProposalWithDetailsFields on Proposal {
@@ -84,7 +84,7 @@ fragment ProposalWithDetailsFields on Proposal {
       }
       amount
     }
-    ...on SlashWorkingGroupLeadProposalDetails {
+    ... on SlashWorkingGroupLeadProposalDetails {
       lead {
         createdAt
         group {
@@ -97,7 +97,7 @@ fragment ProposalWithDetailsFields on Proposal {
       }
       amount
     }
-    ...on RuntimeUpgradeProposalDetails {
+    ... on RuntimeUpgradeProposalDetails {
       newRuntimeBytecode {
         id
       }
