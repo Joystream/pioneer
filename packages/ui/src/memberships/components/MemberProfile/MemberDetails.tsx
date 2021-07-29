@@ -30,8 +30,6 @@ export const MemberDetails = React.memo(({ member }: Props) => {
     )
   }
 
-  const registeredAtBlock = memberDetails.registeredAtBlock
-
   const hired = '-'
   const applied = '-'
   const lead = '-'
@@ -49,10 +47,12 @@ export const MemberDetails = React.memo(({ member }: Props) => {
           <SidePaneText>{memberDetails.about}</SidePaneText>
         </SidePaneColumn>
       )}
-      <SidePaneRow>
-        <SidePaneLabel text="Registered on" />
-        <BlockTime block={registeredAtBlock} />
-      </SidePaneRow>
+      {memberDetails.entry.type !== 'genesis' && (
+        <SidePaneRow>
+          <SidePaneLabel text="Registered on" />
+          <BlockTime block={memberDetails.entry.block} />
+        </SidePaneRow>
+      )}
       <SidePaneRow>
         <SidePaneLabel text="Member ID" />
         <SidePaneText>{member?.id}</SidePaneText>

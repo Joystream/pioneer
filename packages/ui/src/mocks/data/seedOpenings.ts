@@ -1,6 +1,6 @@
 import faker from 'faker'
 
-import { WorkingGroupOpeningType } from '@/common/api/queries'
+import { Network, WorkingGroupOpeningType } from '@/common/api/queries'
 import { asWorkingGroupOpening } from '@/working-groups/types'
 
 import rawOpenings from './raw/openings.json'
@@ -43,6 +43,12 @@ export const getMockAsOpening = (index = 0) => {
     },
     status: {
       __typename: 'OpeningStatusOpen',
+    },
+    createdInEvent: {
+      __typename: 'OpeningAddedEvent',
+      createdAt: faker.date.recent(30).toJSON(),
+      inBlock: faker.datatype.number(10_000),
+      network: Network.Olympia,
     },
     type: WorkingGroupOpeningType.Regular,
     __typename: 'WorkingGroupOpening',

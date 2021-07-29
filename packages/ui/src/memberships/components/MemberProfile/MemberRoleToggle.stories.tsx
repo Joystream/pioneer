@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { TemplateBlock, ModalBlock, WhiteBlock } from '@/common/components/storybookParts/previewStyles'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 import { getReward } from '@/working-groups/model/getReward'
 
 import { MemberRoleToggle, MemberRoleToggleProps } from './MemberRoleToggle'
@@ -39,10 +40,7 @@ Default.args = {
     rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
     stakeAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
     hiredAtBlock: {
-      id: '35',
-      network: 'OLYMPIA',
-      number: 1034,
-      timestamp: '2021-05-13T13:50:23.694Z',
+      ...randomBlock(),
     },
     applicationId: '0',
     openingId: '0',

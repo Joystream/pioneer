@@ -6,7 +6,7 @@ import { asMember, Member } from '@/memberships/types'
 export interface ForumPost {
   id: string
   createdAt: string
-  createdAtBlock: Block
+  createdAtBlock?: Block
   updatedAt?: string
   author: Member
   text: string
@@ -21,5 +21,5 @@ export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
   author: asMember(fields.author),
   text: fields.text,
   ...(fields.repliesTo ? { repliesTo: asForumPost(fields.repliesTo) } : {}),
-  createdAtBlock: asBlock(fields.postaddedeventpost),
+  createdAtBlock: fields?.postaddedeventpost ? asBlock(fields.postaddedeventpost[0]) : undefined,
 })

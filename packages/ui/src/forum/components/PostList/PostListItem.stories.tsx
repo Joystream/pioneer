@@ -60,7 +60,6 @@ Exercitation veniam consequat sunt nostrud amet.`,
     id: '0',
     createdAt: new Date().toISOString(),
     createdAtBlock: {
-      id: '100',
       number: 1000,
       network: 'OLYMPIA',
       timestamp: '2012-01-26T13:51:50.417-07:00',
