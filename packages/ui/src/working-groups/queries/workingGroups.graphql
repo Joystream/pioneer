@@ -78,7 +78,7 @@ fragment BudgetSpendingEventFields on BudgetSpendingEvent {
   rationale
 }
 
-query getBudgetSpending ($where: BudgetSpendingEventWhereInput) {
+query GetBudgetSpending ($where: BudgetSpendingEventWhereInput) {
   budgetSpendingEvents(where: $where) {
     ...BudgetSpendingEventFields
   }
@@ -91,43 +91,43 @@ fragment RewardPaidEventFields on RewardPaidEvent {
   createdAt
 }
 
-query getWorkingGroups {
+query GetWorkingGroups {
   workingGroups {
     ...WorkingGroupFields,
   }
 }
 
-query getWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int) {
+query GetWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int) {
   workers(where: $where, offset: $offset, limit: $limit) {
     ...WorkerFields
   }
 }
 
-query getWorkersCount ($where: WorkerWhereInput) {
+query GetWorkersCount ($where: WorkerWhereInput) {
   workersConnection(where: $where) {
     totalCount
   }
 }
 
-query getDetailedWorkers ($where: WorkerWhereInput) {
+query GetDetailedWorkers ($where: WorkerWhereInput) {
   workers(where: $where) {
     ...WorkerDetailedFields
   }
 }
 
-query getWorker ($where: WorkerWhereUniqueInput!) {
+query GetWorker ($where: WorkerWhereUniqueInput!) {
   workerByUniqueInput(where: $where) {
     ...WorkerDetailedFields
   }
 }
 
-query getGroupDebt ($where: WorkerWhereInput!) {
+query GetGroupDebt ($where: WorkerWhereInput!) {
   workers(where: $where) {
     missingRewardAmount
   }
 }
 
-query getRewards ($where: RewardPaidEventWhereInput) {
+query GetRewards ($where: RewardPaidEventWhereInput) {
   rewardPaidEvents(where: $where) {
     ...RewardPaidEventFields
   }
@@ -186,25 +186,25 @@ fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
   }
 }
 
-query countWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
+query CountWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
   workingGroupOpeningsConnection(where: $where) {
     totalCount
   }
 }
 
-query countWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
+query CountWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
   workersConnection(where: { group: { id_eq: $groupId_eq }, status_json: $status_json }) {
     totalCount
   }
 }
 
-query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
+query GetWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
   workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
     ... WorkingGroupOpeningFields
   }
 }
 
-query getWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
+query GetWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
   workingGroupOpeningByUniqueInput(where: $where) {
     ... WorkingGroupOpeningDetailedFields
   }
