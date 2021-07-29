@@ -339,6 +339,7 @@ export type UpcomingWorkingGroupOpeningFieldsFragment = {
   stakeAmount?: Types.Maybe<any>
   rewardPerBlock?: Types.Maybe<any>
   group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
 }
 
@@ -841,6 +842,11 @@ export const UpcomingWorkingGroupOpeningFieldsFragmentDoc = gql`
     expectedStart
     stakeAmount
     rewardPerBlock
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }

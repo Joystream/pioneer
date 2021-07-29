@@ -25,7 +25,6 @@ fragment WorkerFields on Worker {
   stake
 }
 
-
 fragment WorkerDetailedFields on Worker {
   ...WorkerFields
   roleAccount
@@ -298,9 +297,11 @@ fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
   expectedStart
   stakeAmount
   rewardPerBlock
-  #  createdAtBlock {
-  #    ...BlockFields
-  #  }
+  createdInEvent {
+    createdAt
+    inBlock
+    network
+  }
   metadata {
     ... WorkingGroupOpeningMetadataFields
   }
