@@ -16,7 +16,6 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
-import { Block } from '@/common/types'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { useForumThread } from '@/forum/hooks/useForumThread'
@@ -36,14 +35,14 @@ export const ForumThread = () => {
   }
 
   const displayHeader = () => {
-    if (isLoading) {
+    if (isLoading || !thread) {
       return null
     }
 
     return (
       <PageHeader>
         <PreviousPage>
-          <PageTitle>{thread?.title}</PageTitle>
+          <PageTitle>{thread.title}</PageTitle>
         </PreviousPage>
         <ButtonsGroup>
           <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
@@ -57,7 +56,7 @@ export const ForumThread = () => {
         </ButtonsGroup>
         <RowGapBlock>
           <BadgesRow>
-            {thread?.isSticky && (
+            {thread.isSticky && (
               <ThreadPinned>
                 <PinIcon />
               </ThreadPinned>
@@ -65,7 +64,7 @@ export const ForumThread = () => {
             <BadgeStatus inverted size="l" separated>
               Tag
             </BadgeStatus>
-            <BlockInfo block={thread?.createdInBlock as Block} />
+            <BlockInfo block={thread.createdInBlock} />
           </BadgesRow>
         </RowGapBlock>
       </PageHeader>
@@ -73,19 +72,19 @@ export const ForumThread = () => {
   }
 
   const displayMain = () => {
-    if (isLoading) {
+    if (isLoading || !thread) {
       return <Loading />
     }
 
     return (
       <MainPanel ref={sideNeighborRef}>
-        <PostList threadId={thread?.id as string} />
+        <PostList threadId={thread.id} />
       </MainPanel>
     )
   }
 
   const displaySidebar = () => {
-    if (isLoading) {
+    if (isLoading || !thread) {
       return null
     }
 
