@@ -26,7 +26,7 @@ export const generateForumThreads = (
       return [...new Array(randomFromRange(3, 10))].map(() => ({
         id: String(nextThreadId++),
         categoryId: id,
-        isSticky: faker.datatype.boolean(),
+        isSticky: !(nextThreadId % 5),
         title: faker.lorem.words(randomFromRange(4, 8)),
         authorId: randomMember().id,
         createdInEvent: {
