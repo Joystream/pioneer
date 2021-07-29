@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { Pagination } from '@/common/components/Pagination'
 import { BorderRad, Colors, Shadows } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { PostListItem } from '@/forum/components/PostList/PostListItem'
@@ -14,7 +15,9 @@ interface PostListProps {
 }
 
 export const PostList = ({ threadId, selectedPostId }: PostListProps) => {
-  const { isLoading, posts } = useForumPosts(threadId)
+  const [page, setPage] = useState(1)
+  const { isLoading, posts, pageCount } = useForumPosts({ threadId, page })
+
   const selectedElement = useRef<HTMLDivElement>(null)
   useEffect(() => {
     selectedElement.current?.scrollIntoView?.({ behavior: 'smooth' })
@@ -26,11 +29,17 @@ export const PostList = ({ threadId, selectedPostId }: PostListProps) => {
 
   return (
     <RowGapBlock gap={24}>
+      {!isLoading && !!pageCount && pageCount > 1 && (
+        <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
+      )}
       {posts.map((post) => (
         <PostBlock>
           <PostListItem post={post} isSelected={post.id === selectedPostId} />
         </PostBlock>
       ))}
+      {!isLoading && !!pageCount && pageCount > 1 && (
+        <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
+      )}
     </RowGapBlock>
   )
 }

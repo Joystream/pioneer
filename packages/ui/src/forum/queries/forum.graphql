@@ -43,8 +43,15 @@ query GetForumThread($where: ForumThreadWhereUniqueInput!) {
   }
 }
 
-query GetForumPosts($where: ForumPostWhereInput!) {
-  forumPosts(where: $where) {
+query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
+  forumPosts(where: $where, offset: $offset, limit: $limit) {
     ...ForumPostFields
   }
 }
+
+query GetForumPostsCount($where: ForumPostWhereInput!) {
+  forumPostsConnection(where: $where) {
+    totalCount
+  }
+}
+
