@@ -5,7 +5,7 @@ import { TableListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/components/typography'
-import { Colors, Transitions } from '@/common/constants'
+import { Colors, Overflow, Transitions } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory, ForumPost, ForumThread } from '@/forum/types'
@@ -20,6 +20,7 @@ export interface CategoryListItemProps {
   topThread?: ForumThread & { postCount: number }
 }
 export const CategoryListItem = ({ category, latestPost, topThread }: CategoryListItemProps) => (
+  <CategoryListItemStyles as={GhostRouterLink} to={`${ForumRoutes.category}/${category.id}`}>
     <Category>
       <h5>{category.title}</h5>
       <TextMedium light>{category.description}</TextMedium>
@@ -69,5 +70,9 @@ const Category = styled.div`
   ${TextMedium} {
     color: ${Colors.Black[500]};
     margin: ${spacing(5 / 4)} 0 ${spacing(5 / 8)};
+    ${Overflow.DotsTwoLine};
+  }
+  ${TextInlineExtraSmall} {
+    ${Overflow.FullDots};
   }
 `
