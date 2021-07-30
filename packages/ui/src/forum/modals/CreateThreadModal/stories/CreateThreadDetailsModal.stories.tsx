@@ -13,8 +13,8 @@ export default {
 } as Meta
 
 const Template: Story = () => {
-  const [topic, setTopic] = useState<string>()
-  const [description, setDescription] = useState<string>()
+  const [topic, setTopic] = useState('')
+  const [description, setDescription] = useState('')
   return (
     <>
       <HashRouter>
