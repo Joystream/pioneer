@@ -2,7 +2,7 @@ import faker from 'faker'
 
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
-import { randomFromRange, randomMember } from '../utils'
+import { randomBlock, randomFromRange, randomMember } from '../utils'
 
 let nextThreadId = 0
 let nextPostId = 0
@@ -31,9 +31,7 @@ export const generateForumThreads = (
         title: faker.lorem.words(randomFromRange(4, 8)),
         authorId: randomMember().id,
         createdInEvent: {
-          inBlock: 0,
-          network: 'OLYMPIA',
-          createdAt: faker.date.recent(120).toJSON(),
+          ...randomBlock(),
         },
       }))
     })
