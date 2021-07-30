@@ -14,7 +14,7 @@ import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction } from '../../_mocks/transactions'
+import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -22,7 +22,8 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 describe('CreateThreadModal', () => {
   const api = stubApi()
-  const tx = stubTransaction(api, 'api.tx.forum.createThread')
+  stubDefaultBalances(api)
+  const txPath = 'api.tx.forum.createThread'
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -41,6 +42,7 @@ describe('CreateThreadModal', () => {
   beforeEach(async () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
+    stubTransaction(api, txPath)
   })
 
   it('Failed requirements: no active member', () => {
@@ -71,6 +73,13 @@ describe('CreateThreadModal', () => {
     it("Displays the member's controller account", async () => {
       await fillAndProceed()
       expect(await screen.findByText(/5GrwvaEF5.*NoHGKutQY/i)).toBeDefined()
+    })
+
+    it('Insufficient balance', async () => {
+      stubTransaction(api, txPath, 10000)
+      await fillAndProceed()
+
+      expect(await getButton(/sign and send/i)).toBeDisabled()
     })
   })
 

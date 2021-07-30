@@ -1,9 +1,10 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account } from '@/accounts/types'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
@@ -25,6 +26,17 @@ interface Props {
 export const CreateThreadSignModal = ({ transaction, service, controllerAccount }: Props) => {
   const { hideModal } = useModal()
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
+  const balance = useBalance(controllerAccount.address)
+
+  const hasFunds = useMemo(() => {
+    if (balance?.transferable && paymentInfo?.partialFee) {
+      const requiredBalance = paymentInfo.partialFee
+      const hasFunds = balance.transferable.gte(requiredBalance)
+      return hasFunds
+    }
+    return false
+  }, [controllerAccount.address, balance?.transferable])
+
   return (
     <TransactionModal onClose={hideModal} service={service}>
       <ModalBody>
@@ -48,7 +60,7 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium">
+        <ButtonPrimary size="medium" disabled={!hasFunds}>
           Sign and send
           <Arrow direction="right" />
         </ButtonPrimary>
