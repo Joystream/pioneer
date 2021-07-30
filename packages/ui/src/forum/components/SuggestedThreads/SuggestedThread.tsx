@@ -11,8 +11,8 @@ interface SuggestedThreadProps {
 
 export const SuggestedThread = ({ thread }: SuggestedThreadProps) => {
   return (
-    <ContentWithTabs>
-      <Label>Suggested Threads</Label>
-    </ContentWithTabs>
+    <div>
+      {thread.id}: {thread.title}
+    </div>
   )
 }
