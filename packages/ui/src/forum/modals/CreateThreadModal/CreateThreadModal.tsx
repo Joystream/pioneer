@@ -47,16 +47,10 @@ export const CreateThreadModal = () => {
   }
 
   if (state.matches('transaction') && api) {
-    const { memberId, categoryId, topic, description } = state.context
+    const { memberId, categoryId, topic, description, controllerAccount } = state.context
     const transaction = api.tx.forum.createThread(memberId, categoryId, topic, description, null)
     const service = state.children.transaction
-    return (
-      <CreateThreadSignModal
-        transaction={transaction}
-        service={service}
-        controllerAccount={state.context.controllerAccount}
-      />
-    )
+    return <CreateThreadSignModal transaction={transaction} service={service} controllerAccount={controllerAccount} />
   }
 
   if (state.matches('success')) {
