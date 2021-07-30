@@ -1,4 +1,4 @@
-import { ModalCall } from '@/common/providers/modal/types'
+import { ModalWithDataCall } from '@/common/providers/modal/types'
 
 export * from './CreateThreadModal'
-export type CreateThreadModalCall = ModalCall<'CreateThreadModal'>
+export type CreateThreadModalCall = ModalWithDataCall<'CreateThreadModal', { categoryId: string }>
