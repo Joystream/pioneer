@@ -8,14 +8,14 @@ interface UseForumPostsProps {
   page?: number
 }
 
-interface UseForumPosts {
+interface UseForumThreadPosts {
   isLoading: boolean
   posts: ForumPost[]
   totalCount?: number
   pageCount?: number
 }
 
-export const useForumPosts = ({ threadId, page = 1 }: UseForumPostsProps): UseForumPosts => {
+export const useForumThreadPosts = ({ threadId, page = 1 }: UseForumPostsProps): UseForumThreadPosts => {
   const variables = {
     where: { thread: { id_eq: threadId } },
     limit: POSTS_PER_PAGE,

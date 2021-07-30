@@ -7,7 +7,7 @@ import { Pagination } from '@/common/components/Pagination'
 import { BorderRad, Colors, Shadows } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { PostListItem } from '@/forum/components/PostList/PostListItem'
-import { useForumPosts } from '@/forum/hooks/useForumPosts'
+import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 
 interface PostListProps {
   threadId: string
@@ -16,7 +16,7 @@ interface PostListProps {
 
 export const PostList = ({ threadId, selectedPostId }: PostListProps) => {
   const [page, setPage] = useState(1)
-  const { isLoading, posts, pageCount } = useForumPosts({ threadId, page })
+  const { isLoading, posts, pageCount } = useForumThreadPosts({ threadId, page })
 
   const selectedElement = useRef<HTMLDivElement>(null)
   useEffect(() => {

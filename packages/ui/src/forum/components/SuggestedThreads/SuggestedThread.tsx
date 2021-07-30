@@ -2,8 +2,14 @@ import React from 'react'
 
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
+import { useForumSuggestedThreads } from '@/forum/hooks/useForumSuggestedThreads'
+import { ForumThread } from '@/forum/types'
 
-export const SuggestedThreads = () => {
+interface SuggestedThreadProps {
+  thread: ForumThread
+}
+
+export const SuggestedThread = ({ thread }: SuggestedThreadProps) => {
   return (
     <ContentWithTabs>
       <Label>Suggested Threads</Label>
