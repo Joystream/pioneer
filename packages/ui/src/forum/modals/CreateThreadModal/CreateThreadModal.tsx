@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -12,12 +13,13 @@ import { SwitchMemberModalCall } from '../../../memberships/modals/SwitchMemberM
 import { CreateThreadModalCall } from '.'
 import { CreateThreadDetailsModal } from './CreateThreadDetailsModal'
 import { CreateThreadSignModal } from './CreateThreadSignModal'
+import { CreateThreadSuccessModal } from './CreateThreadSuccessModal'
 import { createThreadMachine } from './machine'
 
 export const CreateThreadModal = () => {
   const { active: member } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const { showModal, modalData } = useModal<CreateThreadModalCall>()
+  const { showModal, hideModal, modalData } = useModal<CreateThreadModalCall>()
   const [state, send] = useMachine(createThreadMachine)
   const { api } = useApi()
 
@@ -55,6 +57,14 @@ export const CreateThreadModal = () => {
         controllerAccount={state.context.controllerAccount}
       />
     )
+  }
+
+  if (state.matches('success')) {
+    return <CreateThreadSuccessModal />
+  }
+
+  if (state.matches('error')) {
+    return <FailureModal onClose={hideModal}>There was a problem with creating your forum thread.</FailureModal>
   }
 
   return null

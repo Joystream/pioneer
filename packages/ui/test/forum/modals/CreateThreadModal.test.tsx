@@ -14,7 +14,13 @@ import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -24,6 +30,7 @@ describe('CreateThreadModal', () => {
   const api = stubApi()
   stubDefaultBalances(api)
   const txPath = 'api.tx.forum.createThread'
+  let tx = {}
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -42,7 +49,7 @@ describe('CreateThreadModal', () => {
   beforeEach(async () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
-    stubTransaction(api, txPath)
+    tx = stubTransaction(api, txPath)
   })
 
   it('Failed requirements: no active member', () => {
@@ -80,6 +87,22 @@ describe('CreateThreadModal', () => {
       await fillAndProceed()
 
       expect(await getButton(/sign and send/i)).toBeDisabled()
+    })
+
+    it('Transaction failure', async () => {
+      stubTransactionFailure(tx)
+      fillAndProceed()
+      await fireEvent.click(await getButton(/sign and send/i))
+
+      expect(await screen.findByText(/failure/i)).toBeDefined()
+    })
+
+    it('Transaction success', async () => {
+      stubTransactionSuccess(tx, {})
+      fillAndProceed()
+      await fireEvent.click(await getButton(/sign and send/i))
+
+      expect(await screen.findByText(/success!/i)).toBeDefined()
     })
   })
 

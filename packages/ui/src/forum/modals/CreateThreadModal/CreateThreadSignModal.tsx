@@ -1,5 +1,6 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
+import { useActor } from '@xstate/react'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
 
@@ -27,6 +28,7 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
   const { hideModal } = useModal()
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
   const balance = useBalance(controllerAccount.address)
+  const [state, send] = useActor(service)
 
   const hasFunds = useMemo(() => {
     if (balance?.transferable && paymentInfo?.partialFee) {
@@ -36,6 +38,7 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
     }
     return false
   }, [controllerAccount.address, balance?.transferable])
+  const signDisabled = !state.matches('prepare') || !hasFunds
 
   return (
     <TransactionModal onClose={hideModal} service={service}>
@@ -60,7 +63,7 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
           />
         </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!hasFunds}>
+        <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
           Sign and send
           <Arrow direction="right" />
         </ButtonPrimary>
