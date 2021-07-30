@@ -6,27 +6,29 @@ import { TextInlineExtraSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
 import { MemberPhoto } from '@/memberships/components'
 import { MemberAvatar } from '@/memberships/components/Avatar'
-import { Member } from '@/memberships/types'
 
-export type MemberSumary = Pick<Member, 'id' | 'handle' | 'avatar'>
+export interface MemberSummary {
+  handle?: string
+  description?: string
+  avatar?: string
+}
 
 interface MemberStackProps {
-  members: MemberSumary[]
+  members: MemberSummary[]
   max?: number
 }
-export const MemberStack = memo(({ members, max = 5 }: MemberStackProps) => {
-  const hasExtra = members.length > max
-  const toDisplay = hasExtra ? members.slice(0, max - 1) : members
-  const remaining = +hasExtra && members.length - max + 1
+export const MemberStack = memo(({ members, max = 0 }: MemberStackProps) => {
+  const remaining = members.length > max && max > 0 ? members.length - (max - 1) : 0
+  const toDisplay = remaining ? members.slice(0, -remaining) : members
 
   return (
     <MemberStackStyles>
-      {toDisplay.map(({ id, handle, avatar }) => (
-        <Tooltip forBig key={id} tooltipTitle={handle} tooltipText={`Worker ID: ${id}`}>
+      {toDisplay.map(({ handle, description, avatar }, index) => (
+        <Tooltip forBig key={index} tooltipTitle={handle} tooltipText={description}>
           <MemberAvatar avatarUri={avatar} />
         </Tooltip>
       ))}
-      {hasExtra && (
+      {remaining > 0 && (
         <Tooltip forBig tooltipText={`And ${remaining} more`}>
           <HiddenMember>
             <TextInlineExtraSmall bold black>

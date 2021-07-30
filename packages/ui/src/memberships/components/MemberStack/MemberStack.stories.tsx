@@ -1,33 +1,48 @@
 import { Meta, Story } from '@storybook/react'
-import React from 'react'
+import faker from 'faker'
+import React, { useEffect, useState } from 'react'
 
 import { repeat } from '@/common/utils'
 
-import { getMember } from '../../../../test/_mocks/members'
+import { MemberStack, MemberSummary } from './MemberStack'
 
-import { MemberStack } from './MemberStack'
+const MAX = 20
 
 export default {
   title: 'Member/MemberStack',
   component: MemberStack,
   argTypes: {
-    memberCount: { control: { type: 'range', min: 0, max: 20 } },
-    max: { control: { type: 'range', min: -1, max: 20 } },
+    memberCount: { control: { type: 'range', max: MAX } },
+    max: { control: { type: 'range', max: MAX } },
   },
+  parameters: { controls: { exclude: ['members'] } },
 } as Meta
-
-const alice = getMember('alice')
 
 interface Props {
   memberCount: number
   max: number
+  useAvatars: boolean
 }
-const Template: Story<Props> = ({ memberCount, max }) => (
-  <MemberStack members={repeat((id) => ({ ...alice, id: String(id) }), memberCount)} max={max > 0 ? max : undefined} />
-)
+const Template: Story<Props> = ({ memberCount, max, useAvatars }) => {
+  const [members, setMembers] = useState(repeat((): MemberSummary => ({}), MAX))
+
+  useEffect(() => {
+    const updateUntil = max > 0 && memberCount > max ? max - 1 : memberCount
+    setMembers(members.map((member, index) => (index < updateUntil ? fakeMember(member, index, useAvatars) : member)))
+  }, [memberCount, max, useAvatars])
+
+  return <MemberStack members={members.slice(0, memberCount)} max={max > 0 ? max : undefined} />
+}
 
 export const Default = Template.bind({})
 Default.args = {
-  memberCount: 14,
+  memberCount: 13,
   max: 4,
+  useAvatars: false,
 }
+
+const fakeMember = (member: MemberSummary, id: number, useAvatars: boolean): MemberSummary => ({
+  handle: member.handle ?? faker.name.firstName(),
+  description: member.description ?? `Worker ID: ${id}`,
+  avatar: member.avatar ?? (useAvatars ? faker.image.avatar() : undefined),
+})

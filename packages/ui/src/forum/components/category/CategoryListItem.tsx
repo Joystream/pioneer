@@ -39,8 +39,17 @@ export const CategoryListItem = ({ category, latestPost, topThread, moderators }
     </TextInlineMedium>
 
     {latestPost ? <PostInfo post={latestPost} /> : <Loading />}
+
     {topThread ? <ThreadInfo thread={topThread} /> : <Loading />}
-    {moderators ? <MemberStack members={moderators} /> : <Loading />}
+
+    <MemberStack
+      members={category.moderators.map(({ id, handle, avatar }) => ({
+        handle,
+        avatar,
+        description: `Worker ID: ${id}`,
+      }))}
+      max={5}
+    />
   </CategoryListItemStyles>
 )
 
