@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TextExtraSmall, TextMedium } from '@/common/components/typography'
+import { TextInlineExtraSmall } from '@/common/components/typography'
 import { Overflow } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
 import { spacing } from '@/common/utils/styles'
@@ -13,23 +13,21 @@ interface PostInfoProps {
 }
 export const PostInfo = ({ post }: PostInfoProps) => (
   <PostInfoStyles>
-    <TextMedium as="h6" bold>
-      {post.text.slice(0, 100)}
-    </TextMedium>
-    <TextExtraSmall as="div" lighter>
+    <h6>{post.text.slice(0, 100)}</h6>
+    <TextInlineExtraSmall as="div" lighter>
       <span>by</span>
       <MemberInfo member={post.author} size="s" memberSize="s" showGroup={false} />
-    </TextExtraSmall>
-    <TextExtraSmall lighter>{relativeTime(post.createdAt)}</TextExtraSmall>
+    </TextInlineExtraSmall>
+    <TextInlineExtraSmall lighter>{relativeTime(post.createdAt)}</TextInlineExtraSmall>
   </PostInfoStyles>
 )
 
 const PostInfoStyles = styled.div`
-  & > ${TextMedium} {
+  & > h6 {
     margin-bottom: ${spacing(1)};
     ${Overflow.FullDots};
   }
-  & > ${TextExtraSmall}:nth-child(2) {
+  & > ${TextInlineExtraSmall}:nth-child(2) {
     display: flex;
     align-items: center;
     gap: ${spacing(1)};

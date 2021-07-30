@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TextExtraSmall, TextMedium } from '@/common/components/typography'
+import { TextExtraSmall } from '@/common/components/typography'
 import { Overflow } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { spacing } from '@/common/utils/styles'
@@ -12,16 +12,14 @@ interface ThreadInfoProps {
 }
 export const ThreadInfo = ({ thread }: ThreadInfoProps) => (
   <ThreadInfoStyles>
-    <TextMedium as="h6" bold>
-      {thread.title}
-    </TextMedium>
+    <h6>{thread.title}</h6>
     <TextExtraSmall lighter>
       {thread.postCount} Post{plural(thread.postCount)}
     </TextExtraSmall>
   </ThreadInfoStyles>
 )
 const ThreadInfoStyles = styled.div`
-  & > ${TextMedium} {
+  & > h6 {
     margin-bottom: ${spacing(3 / 2)};
     ${Overflow.FullDots};
   }

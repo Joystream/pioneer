@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import { Link } from 'react-router-dom'
@@ -43,6 +43,7 @@ export const Tooltip = ({
   className,
   forBig,
 }: TooltipProps) => {
+  const showTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [isTooltipActive, setTooltipActive] = useState(false)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLButtonElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
@@ -59,9 +60,13 @@ export const Tooltip = ({
   })
 
   const mouseIsOver = () => {
-    setTooltipActive(true)
+    showTimeout.current = setInterval(() => {
+      setTooltipActive(true)
+      showTimeout?.current && clearInterval(showTimeout.current)
+    }, Transitions.durationNumeric)
   }
   const mouseLeft = () => {
+    showTimeout?.current && clearInterval(showTimeout.current)
     setTooltipActive(false)
   }
 
