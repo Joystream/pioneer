@@ -10,8 +10,8 @@ import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 
 interface Props {
-  topic?: string
-  description?: string
+  topic: string
+  description: string
   setTopic: (t: string) => void
   setDescription: (d: string) => void
   onSubmit: () => void

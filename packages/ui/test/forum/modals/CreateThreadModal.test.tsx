@@ -1,6 +1,7 @@
+import { registry } from '@joystream/types'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, Route } from 'react-router-dom'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
@@ -31,6 +32,7 @@ describe('CreateThreadModal', () => {
   stubDefaultBalances(api)
   const txPath = 'api.tx.forum.createThread'
   let tx = {}
+  let pathname: string
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -91,18 +93,27 @@ describe('CreateThreadModal', () => {
 
     it('Transaction failure', async () => {
       stubTransactionFailure(tx)
-      fillAndProceed()
+      await fillAndProceed()
       await fireEvent.click(await getButton(/sign and send/i))
 
       expect(await screen.findByText(/failure/i)).toBeDefined()
     })
 
     it('Transaction success', async () => {
-      stubTransactionSuccess(tx, {})
-      fillAndProceed()
+      stubTransactionSuccess(tx, [registry.createType('ThreadId', 1337)], 'forum', 'ThreadCreated')
+      await fillAndProceed()
       await fireEvent.click(await getButton(/sign and send/i))
 
       expect(await screen.findByText(/success!/i)).toBeDefined()
+    })
+
+    it('Proceed to thread on success', async () => {
+      stubTransactionSuccess(tx, [registry.createType('ThreadId', 1337)], 'forum', 'ThreadCreated')
+      await fillAndProceed()
+      await fireEvent.click(await getButton(/sign and send/i))
+      await fireEvent.click(await getButton(/see my thread/i))
+
+      expect(pathname).toEqual('/forum/thread/1337')
     })
   })
 
@@ -123,12 +134,19 @@ describe('CreateThreadModal', () => {
 
   function renderModal() {
     return render(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/forum']}>
         <ApiContext.Provider value={api}>
           <ModalContext.Provider value={useModal}>
             <MockKeyringProvider>
               <MembershipContext.Provider value={useMyMemberships}>
                 <CreateThreadModal />
+                <Route
+                  path="*"
+                  render={({ location }) => {
+                    pathname = location.pathname
+                    return null
+                  }}
+                />
               </MembershipContext.Provider>
             </MockKeyringProvider>
           </ModalContext.Provider>

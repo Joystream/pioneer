@@ -37,8 +37,8 @@ export const CreateThreadModal = () => {
   if (state.matches('generalDetails')) {
     return (
       <CreateThreadDetailsModal
-        topic={state.context.topic}
-        description={state.context.description}
+        topic={state.context.topic ?? ''}
+        description={state.context.description ?? ''}
         setTopic={(topic) => send({ type: 'SET_TOPIC', topic })}
         setDescription={(description) => send({ type: 'SET_DESCRIPTION', description })}
         onSubmit={() => send('NEXT')}
@@ -60,7 +60,7 @@ export const CreateThreadModal = () => {
   }
 
   if (state.matches('success')) {
-    return <CreateThreadSuccessModal />
+    return <CreateThreadSuccessModal newThreadId={state.context.newThreadId.toString()} />
   }
 
   if (state.matches('error')) {
