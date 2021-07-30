@@ -5,7 +5,7 @@ import { TableListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextBig, TextExtraSmall, TextMedium } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { Colors, Transitions } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory, ForumPost, ForumThread } from '@/forum/types'
@@ -50,6 +50,14 @@ const CategoryListItemStyles = styled(TableListItem)`
   align-items: start;
   height: 128px;
   padding: 14px ${spacing(3)};
+  transition: ${Transitions.all};
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: ${Colors.Blue[100]};
+  }
+
   & > * {
     margin-top: ${spacing(1)};
   }

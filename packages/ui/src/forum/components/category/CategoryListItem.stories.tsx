@@ -12,7 +12,7 @@ import { getMember } from '../../../../test/_mocks/members'
 import { CategoryListItem } from './CategoryListItem'
 
 export default {
-  title: 'Forum/CategoryListItem',
+  title: 'Forum/Categories/CategoryListItem',
   component: CategoryListItem,
   argTypes: { moderatorsCount: { control: { type: 'range', min: -1, max: 20 } } },
   parameters: { controls: { exclude: ['latestPost', 'topThread', 'moderators'] } },

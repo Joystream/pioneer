@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Colors } from '../../constants'
+import { Colors, Overflow } from '../../constants'
 
 export const Label = styled.span`
   display: inline-grid;
@@ -12,4 +12,5 @@ export const Label = styled.span`
   font-weight: 700;
   color: ${Colors.Black[400]};
   text-transform: uppercase;
+  ${Overflow.FullDots};
 `
