@@ -2,6 +2,9 @@ fragment ForumCategoryFields on ForumCategory {
   id
   title
   description
+  moderators {
+    id
+  }
 }
 
 fragment ForumThreadFields on ForumThread {

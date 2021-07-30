@@ -1,24 +1,19 @@
 import { Meta, Story } from '@storybook/react'
-import { sub } from 'date-fns'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { asBlock } from '@/common/types'
 import { repeat } from '@/common/utils'
-import { ForumCategory, ForumPost, ForumThread } from '@/forum/types'
-
-import { getMember } from '../../../../test/_mocks/members'
+import { ForumCategory } from '@/forum/types'
 
 import { CategoryListItem } from './CategoryListItem'
+import { asModerator, asPost, asThread } from './storybook-helpers'
 
 export default {
   title: 'Forum/Categories/CategoryListItem',
   component: CategoryListItem,
-  argTypes: { moderatorsCount: { control: { type: 'range', min: -1, max: 20 } } },
+  argTypes: { moderatorsCount: { control: { type: 'range', min: 0, max: 20 } } },
   parameters: { controls: { exclude: ['latestPost', 'topThread', 'moderators'] } },
 } as Meta
-
-const alice = getMember('alice')
 
 interface Props {
   latestPostText: string
@@ -29,35 +24,12 @@ interface Props {
 const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount }) => (
   <MemoryRouter>
     <CategoryListItem
-      category={category}
+      category={{ ...category, moderators: repeat(asModerator(true), moderatorsCount) }}
       latestPost={asPost(latestPostText)}
       topThread={asThread(topThreadTitle)}
-      moderators={moderatorsCount >= 0 ? repeat((id) => ({ ...alice, id: String(id) }), moderatorsCount) : undefined}
     />
   </MemoryRouter>
 )
-
-const asPost = (text: string): ForumPost | undefined => {
-  if (text)
-    return {
-      id: '0',
-      createdAt: sub(Date.now(), { minutes: 25 }).toISOString(),
-      createdAtBlock: asBlock(),
-      author: alice,
-      text,
-    }
-}
-
-const asThread = (title: string): (ForumThread & { postCount: number }) | undefined => {
-  if (title)
-    return {
-      id: '0',
-      title,
-      isSticky: false,
-      categoryId: '0',
-      postCount: 1201,
-    }
-}
 
 export const Default = Template.bind({})
 Default.args = {
@@ -76,5 +48,6 @@ Default.args = {
       { id: '3', title: 'Name' },
       { id: '4', title: 'Name' },
     ],
+    moderators: [],
   },
 }

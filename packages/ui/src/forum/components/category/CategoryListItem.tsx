@@ -9,7 +9,7 @@ import { Colors, Transitions } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory, ForumPost, ForumThread } from '@/forum/types'
-import { MemberStack, MemberSumary } from '@/memberships/components/MemberStack'
+import { MemberStack } from '@/memberships/components/MemberStack'
 
 import { PostInfo } from './PostInfo'
 import { ThreadInfo } from './ThreadInfo'
@@ -18,14 +18,8 @@ export interface CategoryListItemProps {
   category: ForumCategory & { threadCount: number }
   latestPost?: ForumPost
   topThread?: ForumThread & { postCount: number }
-  moderators?: MemberSumary[]
 }
-export const CategoryListItem = ({ category, latestPost, topThread, moderators }: CategoryListItemProps) => (
-  <CategoryListItemStyles
-    as={GhostRouterLink}
-    $colLayout={CategoriesColLayout}
-    to={`${ForumRoutes.category}/${category.id}`}
-  >
+export const CategoryListItem = ({ category, latestPost, topThread }: CategoryListItemProps) => (
     <Category>
       <h5>{category.title}</h5>
       <TextMedium light>{category.description}</TextMedium>
@@ -53,7 +47,7 @@ export const CategoryListItem = ({ category, latestPost, topThread, moderators }
   </CategoryListItemStyles>
 )
 
-const CategoryListItemStyles = styled(TableListItem)`
+const CategoryListItemStyles = styled(TableListItem).attrs({ $colLayout: CategoriesColLayout })`
   align-items: start;
   height: 128px;
   padding: 14px ${spacing(3)};
