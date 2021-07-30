@@ -1,6 +1,5 @@
-import * as faker from 'faker'
-
 import { capitalizeFirstLetter } from '@/common/helpers'
+import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
 
 import { ProposalMock } from '../../../dev/scripts/generators/generateProposals'
 
@@ -8,12 +7,6 @@ import rawProposals from './raw/proposals.json'
 import { seedProposalDetails } from './seedProposalDetails'
 
 export const mockProposals: ProposalMock[] = rawProposals.map((rawProposal) => rawProposal)
-
-const seedRandomBlockFields = () => ({
-  inBlock: faker.datatype.number(10_000),
-  createdAt: faker.date.recent(90).toJSON(),
-  network: 'OLYMPIA',
-})
 
 export const seedProposal = (proposal: ProposalMock, server: any) => {
   const member = server.schema.find('Membership', proposal.creatorId)

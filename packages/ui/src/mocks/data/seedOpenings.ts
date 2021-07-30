@@ -1,6 +1,7 @@
 import faker from 'faker'
 
 import { Network, WorkingGroupOpeningType } from '@/common/api/queries'
+import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
 import { asWorkingGroupOpening } from '@/working-groups/types'
 
 import rawOpenings from './raw/openings.json'
@@ -91,6 +92,10 @@ export function seedOpening(openingData: RawOpeningMock, server: any) {
     ...openingData,
     metadata: metadata,
     status: openingStatus,
+    createdInEvent: server.schema.create('OpeningAddedEvent', {
+      groupId: openingData.groupId,
+      ...seedRandomBlockFields(),
+    }),
   })
 
   seedOpeningQuestions(questions, opening.metadata, server)

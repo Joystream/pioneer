@@ -1,3 +1,5 @@
+import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
+
 import rawApplications from './raw/applications.json'
 
 export interface RawApplication {
@@ -20,6 +22,7 @@ export const seedApplication = (rawApplication: RawApplication, server: any) => 
   const status = seedStatus(rawApplication.status, server)
 
   const member = server.schema.find('Membership', rawApplication.applicantId)
+  const opening = server.schema.find('WorkingGroupOpening', rawApplication.openingId)
 
   const data = {
     ...rawApplication,
@@ -27,6 +30,12 @@ export const seedApplication = (rawApplication: RawApplication, server: any) => 
     roleAccount: member.rootAccount,
     rewardAccount: member.controllerAccount,
     stakingAccount: member.controllerAccount,
+    createdInEvent: server.schema.create('AppliedOnOpeningEvent', {
+      ...seedRandomBlockFields(),
+      applicantId: member.id,
+      openingId: rawApplication.openingId,
+      groupId: opening.groupId,
+    }),
   }
   const answers = rawApplication.answers ?? []
   delete data.answers

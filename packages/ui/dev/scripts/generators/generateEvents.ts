@@ -1,7 +1,7 @@
 import faker from 'faker'
 
 import { Mocks } from './types'
-import { randomFromRange } from './utils'
+import { randomBlock, randomFromRange } from './utils'
 
 let nextRewardPaidEventId = 0
 let nextBudgetSpendingEventId = 0
@@ -14,7 +14,7 @@ const generateRewardPaidEvent = (mocks: Mocks) => {
 
     return {
       id: (nextRewardPaidEventId++).toString(),
-      createdAt: faker.date.recent(30),
+      ...randomBlock(),
       groupId: worker?.groupId,
       workerId: worker?.id.toString(),
       rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
@@ -29,7 +29,7 @@ const generateBudgetSpending = (mocks: Mocks) => () => {
 
   return {
     id: (nextBudgetSpendingEventId++).toString(),
-    createdAt: faker.date.recent(30),
+    ...randomBlock(),
     groupId: worker?.groupId,
     workerId: worker?.id.toString(),
     rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
@@ -91,9 +91,9 @@ const generateOpeningFilledEvent = (mocks: Mocks) => () => {
   const opening = filled[randomFromRange(0, filled.length - 1)]
   const workers = mocks.workers.filter((w) => w && w.groupId === opening.groupId)
   return {
-    createdAt: faker.date.recent(7),
     groupId: opening.groupId,
     openingId: opening.id,
+    ...randomBlock(),
     workersHiredIds: Array.from({ length: opening.metadata.hiringLimit }).map(
       () => workers[randomFromRange(0, workers.length - 1)]?.id
     ),
@@ -105,31 +105,9 @@ const generateWorkerLeavingEvent = (mocks: Mocks, leftAlready?: boolean) => () =
   const workers = mocks.workers.filter((worker) => worker && worker.status === status)
   const worker = workers[randomFromRange(0, workers.length - 1)]
   return {
-    createdAt: faker.date.recent(7),
+    ...randomBlock(),
     groupId: worker?.groupId,
     workerId: worker?.id,
-  }
-}
-
-const generateStatusTextChangedEvents = (mocks: Mocks) => {
-  const groups = mocks.workingGroups
-  const openings = mocks.upcomingOpenings
-  return groups.map((group) => ({
-    createdAt: faker.date.recent(7),
-    groupId: group.id,
-    upcomingworkinggroupopeningcreatedInEventIds: [openings.find((opening) => opening.groupId == group.id)?.id],
-    // assuming this controls the "status updated" activity, just the array being empty or non-empty matters
-    workinggroupmetadatasetInEventIds: Math.random() > 0.5 ? ['1'] : [],
-  }))
-}
-
-const generateOpeningAddedEvent = (mocks: Mocks) => () => {
-  const opening = mocks.openings[randomFromRange(0, mocks.openings.length - 1)]
-  const group = mocks.workingGroups.find((g) => g.id === opening.groupId)
-  return {
-    createdAt: faker.date.recent(15),
-    groupId: group?.id,
-    openingId: opening.id,
   }
 }
 
@@ -138,7 +116,7 @@ const generateOpeningCanceledEvent = (mocks: Mocks) => () => {
   const opening = openings[randomFromRange(0, openings.length - 1)]
   const group = mocks.workingGroups.find((g) => g.id === opening.groupId)
   return {
-    createdAt: faker.date.recent(7),
+    ...randomBlock(),
     groupId: group?.id,
     openingId: opening.id,
   }
@@ -147,7 +125,7 @@ const generateOpeningCanceledEvent = (mocks: Mocks) => () => {
 const generateBudgetSetEvent = (mocks: Mocks) => () => {
   const group = mocks.workingGroups[randomFromRange(0, mocks.workingGroups.length - 1)]
   return {
-    createdAt: faker.date.recent(30),
+    ...randomBlock(),
     groupId: group.id,
     newBudget: 10000 * randomFromRange(1, 10),
   }
@@ -157,7 +135,7 @@ const generateTerminatedEvent = (mocks: Mocks) => () => {
   const workers = mocks.workers.filter((worker) => worker?.status === 'terminated')
   const worker = workers[randomFromRange(0, workers.length - 1)]
   return {
-    createdAt: faker.date.recent(30),
+    ...randomBlock(),
     groupId: worker?.groupId,
     workerId: worker?.id,
     penalty: 0,
@@ -167,8 +145,9 @@ const generateTerminatedEvent = (mocks: Mocks) => () => {
 const generateWorkerRewardAccountUpdatedEvent = (mocks: Mocks) => () => {
   const worker = mocks.workers[randomFromRange(0, mocks.workers.length - 1)]
   const member = mocks.members.find((member) => member.id === worker!.membershipId.toString())
+
   return {
-    createdAt: faker.date.recent(30),
+    ...randomBlock(),
     groupId: worker?.groupId,
     workerId: worker?.id,
     newRewardAccount: member?.rootAccount,
@@ -178,7 +157,7 @@ const generateWorkerRewardAccountUpdatedEvent = (mocks: Mocks) => () => {
 const generateWorkerRewardAmountUpdatedEvent = (mocks: Mocks) => () => {
   const worker = mocks.workers[randomFromRange(0, mocks.workers.length - 1)]
   return {
-    createdAt: faker.date.recent(30),
+    ...randomBlock(),
     groupId: worker?.groupId,
     workerId: worker?.id,
     newRewardPerBlock: randomFromRange(1, 50),
@@ -186,21 +165,19 @@ const generateWorkerRewardAmountUpdatedEvent = (mocks: Mocks) => () => {
 }
 
 export const eventGenerators = {
-  rewardPaidEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
-  budgetSpendingEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
-  appliedOnOpeningEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateAppliedOnOpeningEvent(mocks)),
   applicationWithdrawnEvents: (mocks: Mocks) => Array.from({ length: 8 }).map(generateApplicationWithdrawnEvent(mocks)),
+  appliedOnOpeningEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateAppliedOnOpeningEvent(mocks)),
+  budgetSetEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSetEvent(mocks)),
+  budgetSpendingEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSpending(mocks)),
+  openingCanceledEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningCanceledEvent(mocks)),
+  openingFilledEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
+  rewardPaidEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateRewardPaidEvent(mocks)),
   stakeDecreasedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
   stakeIncreasedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
   stakeSlashedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks)),
-  openingFilledEvents: (mocks: Mocks) => Array.from({ length: 15 }).map(generateOpeningFilledEvent(mocks)),
-  workerExitedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
-  statusTextChangedEvents: (mocks: Mocks) => generateStatusTextChangedEvents(mocks),
-  openingAddedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningAddedEvent(mocks)),
-  openingCanceledEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateOpeningCanceledEvent(mocks)),
-  budgetSetEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateBudgetSetEvent(mocks)),
-  terminatedWorkerEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateTerminatedEvent(mocks)),
   terminatedLeaderEvents: (mocks: Mocks) => Array.from({ length: 5 }).map(generateTerminatedEvent(mocks)),
+  terminatedWorkerEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateTerminatedEvent(mocks)),
+  workerExitedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
   workerRewardAccountUpdatedEvents: (mocks: Mocks) =>
     Array.from({ length: 10 }).map(generateWorkerRewardAccountUpdatedEvent(mocks)),
   workerRewardAmountUpdatedEvents: (mocks: Mocks) =>

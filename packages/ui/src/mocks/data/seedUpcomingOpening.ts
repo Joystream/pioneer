@@ -1,4 +1,5 @@
 import { Network } from '@/common/api/queries'
+import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
 import { asUpcomingWorkingGroupOpening } from '@/working-groups/types'
 
 import rawOpenings from './raw/upcomingOpenings.json'
@@ -45,6 +46,10 @@ export function seedUpcomingOpening(openingData: RawUpcomingOpeningMock, server:
   const opening = server.schema.create('UpcomingWorkingGroupOpening', {
     ...openingData,
     metadata: metadata,
+    createdInEvent: server.schema.create('StatusTextChangedEvent', {
+      groupId: openingData.groupId,
+      ...seedRandomBlockFields(),
+    }),
   })
 
   seedOpeningQuestions(questions, opening.metadata, server)
