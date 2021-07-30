@@ -8,6 +8,7 @@ interface TextProps {
   lighter?: boolean
   light?: boolean
   dark?: boolean
+  black?: boolean
   className?: string
   margin?: 'xs' | 's' | 'm' | 'l' | 'xl' | undefined
   colorInherit?: boolean
@@ -28,6 +29,10 @@ const TextItalicStyle = css`
 
 const TextDarkStyle = css`
   color: ${Colors.Black[700]};
+`
+
+const TextBlackStyle = css`
+  color: ${Colors.Black[900]};
 `
 
 const TextLighterStyle = css`
@@ -59,42 +64,19 @@ const TextMargins = css<TextProps>`
 `
 
 const TextAllStyles = css<TextProps>`
-  ${(props) => {
-    if (props.bold === true) {
-      return TextBoldStyle
-    }
-  }};
-  ${(props) => {
-    if (props.italic === true) {
-      return TextItalicStyle
-    }
-  }};
-  ${(props) => {
-    if (props.dark === true) {
-      return TextDarkStyle
-    }
-  }};
-  ${(props) => {
-    if (props.lighter === true) {
-      return TextLighterStyle
-    }
-  }};
-  ${(props) => {
-    if (props.light === true) {
-      return TextLightStyle
-    }
-  }};
-  ${(props) => {
-    if (props.value === true) {
-      return TextValueStyle
-    }
-  }};
+  ${({ bold }) => bold && TextBoldStyle};
+  ${({ italic }) => italic && TextItalicStyle};
+  ${({ dark }) => dark && TextDarkStyle};
+  ${({ black }) => black && TextBlackStyle};
+  ${({ lighter }) => lighter && TextLighterStyle};
+  ${({ light }) => light && TextLightStyle};
+  ${({ value }) => value && TextValueStyle};
   ${TextMargins};
 `
 
 export const TextExtraSmall = styled.p<TextProps>`
   font-size: 10px;
-  line-height: 18px;
+  line-height: 16px;
   ${TextAllStyles}
 `
 export const TextSmall = styled.p<TextProps>`
@@ -119,7 +101,7 @@ export const TextHuge = styled.p<TextProps>`
 `
 export const TextInlineExtraSmall = styled.span<TextProps>`
   font-size: 10px;
-  line-height: 18px;
+  line-height: 16px;
   ${TextAllStyles}
 `
 export const TextInlineSmall = styled.span<TextProps>`
