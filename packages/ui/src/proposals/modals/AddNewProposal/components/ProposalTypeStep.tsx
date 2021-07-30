@@ -69,7 +69,7 @@ export const TypeItemWrap = styled(RowGapBlock)`
 `
 
 export const TypeListItem = styled(ListItem)<{ active: boolean; disabled: boolean }>`
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   ${TypeItemWrap} > h5 {
     transition: ${Transitions.all};
   }
@@ -87,7 +87,6 @@ export const TypeListItem = styled(ListItem)<{ active: boolean; disabled: boolea
   ${({ disabled }) =>
     disabled
       ? css`
-          cursor: not-allowed;
           background-color: ${Colors.Black[50]};
           z-index: 0;
 

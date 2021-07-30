@@ -16,7 +16,7 @@ export const OptionsListWorkingGroup = React.memo(({ allWorkingGroups, onChange,
   <OptionsListComponent>
     {allWorkingGroups.map((option) => (
       <Option key={option.id} onClick={() => onChange(option)} disabled={disableNoLead && !option.leadId}>
-        <OptionWorkingGroup group={option} />
+        <OptionWorkingGroup group={option} disabledNoLead={disableNoLead && !option.leadId} />
       </Option>
     ))}
   </OptionsListComponent>
