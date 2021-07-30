@@ -37,9 +37,9 @@ export const ProposalDiscussions = ({ thread, selected }: Props) => {
         return <PostListItem key={index} ref={ref} post={post} isSelected={isSelected} />
       })}
 
-      <Editor>
+      <PostMessageForm>
         <CKEditor />
-      </Editor>
+      </PostMessageForm>
     </ProposalDiscussionsStyles>
   )
 }
@@ -59,7 +59,7 @@ const DiscussionsHeader = styled.header`
   }
 `
 
-const Editor = styled.div`
+export const PostMessageForm = styled.div`
   margin-top: 20px;
 `
 
