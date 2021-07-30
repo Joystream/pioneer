@@ -1,19 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TextMedium } from '@/common/components/typography'
+import { TextMedium, TextInlineSmall } from '@/common/components/typography'
 import { Overflow, Transitions } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { WorkingGroup } from '@/working-groups/types'
 
 interface Props {
   group: WorkingGroup
+  disabledNoLead?: boolean
 }
 
-export const OptionWorkingGroup = ({ group }: Props) => (
+export const OptionWorkingGroup = ({ group, disabledNoLead }: Props) => (
   <OptionWorkingGroupWrapper>
     <OptionWorkingGroupTitle>{camelCaseToText(group.name)}</OptionWorkingGroupTitle>
-    <TextMedium light>{group.about}</TextMedium>
+    <TextMedium light>
+      {disabledNoLead && (
+        <>
+          <TextInlineSmall light> This group has no lead</TextInlineSmall>
+          <br />
+        </>
+      )}
+      {group.about}
+    </TextMedium>
   </OptionWorkingGroupWrapper>
 )
 
