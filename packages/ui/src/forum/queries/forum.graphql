@@ -86,9 +86,15 @@ query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
   }
 }
 
-query GetForumThreads($where: ForumThreadWhereInput) {
+query GetForumThreads($where: ForumThreadWhereInput!) {
   forumThreads(where: $where) {
     ...ForumThreadFields
+  }
+}
+
+query GetForumThreadsIDs {
+  forumThreads {
+    id
   }
 }
 
