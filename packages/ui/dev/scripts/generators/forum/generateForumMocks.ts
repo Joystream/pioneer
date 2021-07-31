@@ -4,7 +4,7 @@ import { generateCategories } from './generateCategories'
 import { generateForumThreads } from './generateForumThreads'
 
 export const generateForum = () => {
-  const forumCategories = generateCategories()
+  const forumCategories = generateCategories(3)
   const { forumThreads, forumPosts } = generateForumThreads(forumCategories)
 
   const forumMocks = { forumCategories, forumThreads, forumPosts }
