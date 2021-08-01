@@ -20,7 +20,7 @@ const generateCategory = (depth: number, mocks: RawForumCategoryMock[], parentId
     id,
     title: faker.lorem.words(randomFromRange(3, 5)),
     description: faker.lorem.paragraph(randomFromRange(2, 3)),
-    parentId,
+    parentId: parentId ? parentId : null,
   }
   mocks.push(category)
   if (depth) {

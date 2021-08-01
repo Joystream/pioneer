@@ -4,6 +4,27 @@ fragment ForumCategoryFields on ForumCategory {
   description
 }
 
+fragment ForumSubCategoryFields on ForumCategory {
+  id
+  title
+}
+
+fragment ForumCategoryDetailedFields on ForumCategory {
+  ...ForumCategoryFields
+  parent {
+    ...ForumSubCategoryFields
+    parent {
+      ...ForumSubCategoryFields
+      parent {
+        ...ForumSubCategoryFields
+      }
+    }
+  }
+  forumcategoryparent {
+    ...ForumCategoryFields
+  }
+}
+
 fragment ForumThreadFields on ForumThread {
   id
   isSticky
@@ -36,9 +57,15 @@ fragment ForumThreadDetailedFields on ForumThread {
   }
 }
 
-query GetForumCategories {
-  forumCategories {
+query GetForumCategories($where: ForumCategoryWhereInput) {
+  forumCategories(where: $where) {
     ...ForumCategoryFields
+  }
+}
+
+query GetForumCategory($where: ForumCategoryWhereUniqueInput!) {
+  forumCategoryByUniqueInput(where: $where) {
+    ...ForumCategoryDetailedFields
   }
 }
 

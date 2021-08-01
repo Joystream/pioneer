@@ -15,6 +15,24 @@ export type ForumCategoryFieldsFragment = {
   description: string
 }
 
+export type ForumSubCategoryFieldsFragment = { __typename: 'ForumCategory'; id: string; title: string }
+
+export type ForumCategoryDetailedFieldsFragment = {
+  __typename: 'ForumCategory'
+  parent?: Types.Maybe<
+    {
+      __typename: 'ForumCategory'
+      parent?: Types.Maybe<
+        {
+          __typename: 'ForumCategory'
+          parent?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumSubCategoryFieldsFragment>
+        } & ForumSubCategoryFieldsFragment
+      >
+    } & ForumSubCategoryFieldsFragment
+  >
+  forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>>
+} & ForumCategoryFieldsFragment
+
 export type ForumThreadFieldsFragment = {
   __typename: 'ForumThread'
   id: string
@@ -43,11 +61,22 @@ export type ForumThreadDetailedFieldsFragment = {
   createdInEvent: { __typename: 'ThreadCreatedEvent'; inBlock: number }
 } & ForumThreadFieldsFragment
 
-export type GetForumCategoriesQueryVariables = Types.Exact<{ [key: string]: never }>
+export type GetForumCategoriesQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.ForumCategoryWhereInput>
+}>
 
 export type GetForumCategoriesQuery = {
   __typename: 'Query'
   forumCategories: Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>
+}
+
+export type GetForumCategoryQueryVariables = Types.Exact<{
+  where: Types.ForumCategoryWhereUniqueInput
+}>
+
+export type GetForumCategoryQuery = {
+  __typename: 'Query'
+  forumCategoryByUniqueInput?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumCategoryDetailedFieldsFragment>
 }
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
@@ -95,6 +124,31 @@ export const ForumCategoryFieldsFragmentDoc = gql`
     description
   }
 `
+export const ForumSubCategoryFieldsFragmentDoc = gql`
+  fragment ForumSubCategoryFields on ForumCategory {
+    id
+    title
+  }
+`
+export const ForumCategoryDetailedFieldsFragmentDoc = gql`
+  fragment ForumCategoryDetailedFields on ForumCategory {
+    ...ForumCategoryFields
+    parent {
+      ...ForumSubCategoryFields
+      parent {
+        ...ForumSubCategoryFields
+        parent {
+          ...ForumSubCategoryFields
+        }
+      }
+    }
+    forumcategoryparent {
+      ...ForumCategoryFields
+    }
+  }
+  ${ForumCategoryFieldsFragmentDoc}
+  ${ForumSubCategoryFieldsFragmentDoc}
+`
 export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
   fragment ForumPostWithoutReplyFields on ForumPost {
     id
@@ -135,8 +189,8 @@ export const ForumThreadDetailedFieldsFragmentDoc = gql`
   ${ForumThreadFieldsFragmentDoc}
 `
 export const GetForumCategoriesDocument = gql`
-  query GetForumCategories {
-    forumCategories {
+  query GetForumCategories($where: ForumCategoryWhereInput) {
+    forumCategories(where: $where) {
       ...ForumCategoryFields
     }
   }
@@ -155,6 +209,7 @@ export const GetForumCategoriesDocument = gql`
  * @example
  * const { data, loading, error } = useGetForumCategoriesQuery({
  *   variables: {
+ *      where: // value for 'where'
  *   },
  * });
  */
@@ -179,6 +234,46 @@ export type GetForumCategoriesQueryResult = Apollo.QueryResult<
   GetForumCategoriesQuery,
   GetForumCategoriesQueryVariables
 >
+export const GetForumCategoryDocument = gql`
+  query GetForumCategory($where: ForumCategoryWhereUniqueInput!) {
+    forumCategoryByUniqueInput(where: $where) {
+      ...ForumCategoryDetailedFields
+    }
+  }
+  ${ForumCategoryDetailedFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumCategoryQuery__
+ *
+ * To run a query within a React component, call `useGetForumCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumCategoryQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetForumCategoryQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumCategoryQuery, GetForumCategoryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumCategoryQuery, GetForumCategoryQueryVariables>(GetForumCategoryDocument, options)
+}
+export function useGetForumCategoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumCategoryQuery, GetForumCategoryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumCategoryQuery, GetForumCategoryQueryVariables>(GetForumCategoryDocument, options)
+}
+export type GetForumCategoryQueryHookResult = ReturnType<typeof useGetForumCategoryQuery>
+export type GetForumCategoryLazyQueryHookResult = ReturnType<typeof useGetForumCategoryLazyQuery>
+export type GetForumCategoryQueryResult = Apollo.QueryResult<GetForumCategoryQuery, GetForumCategoryQueryVariables>
 export const GetForumThreadsDocument = gql`
   query GetForumThreads($where: ForumThreadWhereInput) {
     forumThreads(where: $where) {
