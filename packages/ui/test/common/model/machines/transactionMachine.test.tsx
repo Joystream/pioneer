@@ -3,10 +3,10 @@ import { assign, createMachine, interpret, Interpreter } from 'xstate'
 import { isTransactionError, isTransactionSuccess, TransactionEvent, transactionMachine } from '@/common/model/machines'
 import {
   MultiTransactionEvent,
-  multiTransaction,
+  multiTransactionMachine,
   MultiTransactionContext,
   MultiTransactionState,
-} from '@/common/model/machines/multiTransaction'
+} from '@/common/model/machines/multiTransactionMachine'
 
 describe('Machine: Transaction machine', () => {
   let service: Interpreter<any, any, TransactionEvent, any>
@@ -139,7 +139,7 @@ describe('Machine: Transaction machine', () => {
     let service: Interpreter<MultiTransactionContext, any, MultiTransactionEvent, MultiTransactionState>
 
     beforeEach(() => {
-      service = interpret(multiTransaction.withContext({ transactions: ['firstTransaction'] }))
+      service = interpret(multiTransactionMachine.withContext({ transactions: ['firstTransaction'] }))
       service.start()
     })
 
@@ -153,7 +153,7 @@ describe('Machine: Transaction machine', () => {
     })
 
     it('stays in transaction when some transactions left', () => {
-      service = interpret(multiTransaction.withContext({ transactions: ['first', 'second'] }))
+      service = interpret(multiTransactionMachine.withContext({ transactions: ['first', 'second'] }))
       service.start()
       service.send('DONE')
       expect(service.state.matches('transactions')).toBeTruthy()

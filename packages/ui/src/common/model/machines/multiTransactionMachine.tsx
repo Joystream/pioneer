@@ -20,9 +20,13 @@ export type MultiTransactionState =
 
 export type MultiTransactionEvent = { type: 'DONE' } | TransactionEvent
 
-export const multiTransaction = createMachine<MultiTransactionContext, MultiTransactionEvent, MultiTransactionState>({
+export const multiTransactionMachine = createMachine<
+  MultiTransactionContext,
+  MultiTransactionEvent,
+  MultiTransactionState
+>({
   context: {
-    transactions: ['foo'],
+    transactions: [],
     transactionEvents: [],
   },
   initial: 'transactions',

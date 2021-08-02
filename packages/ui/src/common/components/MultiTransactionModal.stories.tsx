@@ -1,19 +1,19 @@
+import { ApiRx } from '@polkadot/api'
+import { Balance, RuntimeDispatchInfo } from '@polkadot/types/interfaces'
 import { Meta, Story } from '@storybook/react'
-import { useActor } from '@xstate/react'
-import React, { ReactNode, useState } from 'react'
-import { ActorRef, interpret } from 'xstate'
+import { useActor, useMachine } from '@xstate/react'
+import BN from 'bn.js'
+import React, { ReactNode } from 'react'
+import { ActorRef } from 'xstate'
 
-import { useBalance } from '@/accounts/hooks/useBalance'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
-import { multiTransaction } from '@/common/model/machines/multiTransaction'
+import { multiTransactionMachine } from '@/common/model/machines/multiTransactionMachine'
 import { ApiContext } from '@/common/providers/api/context'
 
 import { alice, bob } from '../../../test/_mocks/keyring'
 import { stubApi } from '../../../test/_mocks/transactions'
-import { transactionMachine } from '../model/machines'
 
 import { ButtonPrimary } from './buttons'
 import { ModalBody, ModalFooter } from './Modal'
@@ -26,14 +26,15 @@ export default {
 } as Meta
 
 interface Props {
-  children: ReactNode
+  children: (step: TransactionStep, paymentInfo?: RuntimeDispatchInfo) => ReactNode
   service: ActorRef<any>
 }
 
 const MultiTransactionModal = ({ children, service }: Props) => {
   const [state] = useActor(service)
 
-  const { type, transaction, signer } = state.context.transactions[0]
+  const transactionStep = state.context.transactions[0]
+  const { type, transaction, signer } = transactionStep
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
 
   const transactionService = state.children.transactions
@@ -41,7 +42,7 @@ const MultiTransactionModal = ({ children, service }: Props) => {
   if (state.matches('transactions') && transactionService) {
     return (
       <TransactionModal service={transactionService} onClose={() => undefined}>
-        {children}
+        {children(transactionStep, paymentInfo)}
       </TransactionModal>
     )
   }
@@ -49,12 +50,18 @@ const MultiTransactionModal = ({ children, service }: Props) => {
   return null
 }
 
-const api = stubApi()
+interface TransactionStep {
+  type: string
+  transaction: ApiRx
+  signer: string
+}
 
-const Template: Story<{ children: ReactNode; state: string }> = ({ children }) => {
+const apiStub = stubApi()
+
+const Template: Story<{ children: ReactNode; state: string }> = () => {
   const { api } = useApi()
 
-  const service = interpret(multiTransaction, {
+  const [state, send, service] = useMachine(multiTransactionMachine, {
     context: {
       transactions: [
         {
@@ -71,31 +78,57 @@ const Template: Story<{ children: ReactNode; state: string }> = ({ children }) =
     },
   })
 
-  service.start()
-
   return (
-    <div>
-      <h3>Modal:</h3>
-      <MultiTransactionModal service={service}>{children}</MultiTransactionModal>
-      <h3>Actions:?</h3>
-    </div>
-  )
-}
-
-const StubBody = () => {
-  return (
-    <ApiContext.Provider value={api}>
-      <ModalBody>
-        <TextMedium>Transaction preview here.</TextMedium>
-      </ModalBody>
-      <ModalFooter>
-        <ButtonPrimary size="medium">Sign and send</ButtonPrimary>
-      </ModalFooter>
+    <ApiContext.Provider value={apiStub}>
+      <div>
+        <h3>Modal:</h3>
+        <MultiTransactionModal service={service}>
+          {({ type }, paymentInfo) => {
+            if (type === 'stake') {
+              return <StakeStep fee={paymentInfo?.partialFee} />
+            }
+            if (type === 'addProposal') {
+              return <ProposalStep />
+            }
+            return null
+          }}
+        </MultiTransactionModal>
+        <h3>Actions:?</h3>
+      </div>
     </ApiContext.Provider>
   )
 }
 
+interface StakeStepProps {
+  fee?: Balance
+}
+
+const StakeStep = ({ fee }: StakeStepProps) => {
+  return (
+    <>
+      <ModalBody>
+        <TextMedium>Transaction preview here.</TextMedium>
+      </ModalBody>
+      <ModalFooter>
+        <TransactionInfo
+          title="Stake:"
+          value={new BN(100)}
+          tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+        />
+        <TransactionInfo
+          title="Transaction fee:"
+          value={fee?.toBn()}
+          tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+        />
+        <ButtonPrimary size="medium">Sign and send</ButtonPrimary>
+      </ModalFooter>
+    </>
+  )
+}
+
+const ProposalStep = () => <div>Proposal step</div>
+
 export const Default = Template.bind({})
 Default.args = {
-  children: <StubBody />,
+  children: <StakeStep />,
 }
