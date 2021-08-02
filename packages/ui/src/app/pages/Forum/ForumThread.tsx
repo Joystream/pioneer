@@ -18,7 +18,7 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
 import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { PostList } from '@/forum/components/PostList/PostList'
-import { SuggestedThreads } from '@/forum/components/SuggestedThreads/SuggestedThreads'
+import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 import { PostMessageForm } from '@/proposals/components/ProposalDiscussions'
 
