@@ -1,21 +1,53 @@
-import { assign, createMachine } from 'xstate'
+import { assign, createMachine, DoneInvokeEvent } from 'xstate'
+
+import {
+  isTransactionError,
+  isTransactionSuccess,
+  TransactionErrorEvent,
+  TransactionEvent,
+  transactionMachine,
+  TransactionSuccessEvent,
+} from '@/common/model/machines/transaction'
 
 export interface MultiTransactionContext {
   transactions: any[]
+  transactionEvents?: any[]
 }
 
 export type MultiTransactionState =
-  | { value: 'transaction'; context: MultiTransactionContext }
+  | { value: 'transactions'; context: MultiTransactionContext }
   | { value: 'success'; context: MultiTransactionContext }
 
-export type DoneEvent = { type: 'DONE' }
+export type MultiTransactionEvent = { type: 'DONE' } | TransactionEvent
 
-export const multiTransaction = createMachine<MultiTransactionContext, DoneEvent, MultiTransactionState>({
+export const multiTransaction = createMachine<MultiTransactionContext, MultiTransactionEvent, MultiTransactionState>({
   context: {
     transactions: ['foo'],
+    transactionEvents: [],
   },
+  initial: 'transactions',
   states: {
-    transaction: {
+    transactions: {
+      invoke: {
+        id: 'transactions',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({
+              transactionEvents: (context, event: DoneInvokeEvent<TransactionSuccessEvent>) => event.data.events,
+            }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            actions: assign({
+              transactionEvents: (context, event: DoneInvokeEvent<TransactionErrorEvent>) => event.data.events,
+            }),
+            cond: isTransactionError,
+          },
+        ],
+      },
       on: {
         DONE: {
           target: 'success',
@@ -29,7 +61,7 @@ export const multiTransaction = createMachine<MultiTransactionContext, DoneEvent
         },
       },
     },
-    success: {},
+    success: { type: 'final' },
+    error: { type: 'final' },
   },
-  initial: 'transaction',
 })
