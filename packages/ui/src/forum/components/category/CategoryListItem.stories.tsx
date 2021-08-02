@@ -6,7 +6,7 @@ import { repeat } from '@/common/utils'
 import { ForumCategory } from '@/forum/types'
 
 import { CategoryListItem } from './CategoryListItem'
-import { asModerator, asPost, asThread } from './storybook-helpers'
+import { asStorybookModerator, asStorybookPost, asStorybookThread } from './storybook-helpers'
 
 export default {
   title: 'Forum/Categories/CategoryListItem',
@@ -24,9 +24,9 @@ interface Props {
 const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount }) => (
   <MemoryRouter>
     <CategoryListItem
-      category={{ ...category, moderators: repeat(asModerator(true), moderatorsCount) }}
-      latestPost={asPost(latestPostText)}
-      topThread={asThread(topThreadTitle)}
+      category={{ ...category, moderators: repeat(asStorybookModerator(true), moderatorsCount) }}
+      latestPost={asStorybookPost(latestPostText)}
+      topThread={asStorybookThread(topThreadTitle)}
     />
   </MemoryRouter>
 )

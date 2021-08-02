@@ -7,14 +7,14 @@ import { asForumCategory } from '@/forum/types'
 
 import { CategoryListItemProps } from './CategoryListItem'
 import { ForumCategoryList } from './ForumCategoryList'
-import { asModerator, asPost, asThread } from './storybook-helpers'
+import { asStorybookModerator, asStorybookPost, asStorybookThread } from './storybook-helpers'
 
 export default {
   title: 'Forum/Categories/ForumCategoryList',
   component: ForumCategoryList,
 } as Meta
 
-const defaultModerators = repeat(asModerator(false, false), 14)
+const defaultModerators = repeat(asStorybookModerator(false, false), 14)
 
 const Template: Story = () => {
   const [categories, setCategories] = useState<CategoryListItemProps[]>([])
@@ -35,12 +35,12 @@ const Template: Story = () => {
   useEffect(() => {
     if (categories.length) {
       const timeout = setTimeout(() => {
-        const moderators = [...repeat(asModerator(true, true), 4), ...defaultModerators.slice(4)]
+        const moderators = [...repeat(asStorybookModerator(true, true), 4), ...defaultModerators.slice(4)]
         setCategories(
           categories.map(({ category }) => ({
             category: { ...category, moderators },
-            latestPost: asPost(category.description),
-            topThread: asThread(category.title),
+            latestPost: asStorybookPost(category.description),
+            topThread: asStorybookThread(category.title),
           }))
         )
       }, 2000)

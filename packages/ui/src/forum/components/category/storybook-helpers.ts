@@ -5,7 +5,7 @@ import { ForumModerator, ForumPost, ForumThread } from '@/forum/types'
 import { getMember } from '@/mocks/helpers'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
-export const asModerator = (hasHandle = true, hasAvatar = false) => {
+export const asStorybookModerator = (hasHandle = true, hasAvatar = false) => {
   return (index: number): ForumModerator => ({
     id: String(index),
     membershipId: '0',
@@ -14,7 +14,7 @@ export const asModerator = (hasHandle = true, hasAvatar = false) => {
   })
 }
 
-export const asPost = (text: string): ForumPost | undefined => {
+export const asStorybookPost = (text: string): ForumPost | undefined => {
   if (text)
     return {
       id: '0',
@@ -25,7 +25,7 @@ export const asPost = (text: string): ForumPost | undefined => {
     }
 }
 
-export const asThread = (title: string): (ForumThread & { postCount: number }) | undefined => {
+export const asStorybookThread = (title: string): (ForumThread & { postCount: number }) | undefined => {
   if (title)
     return {
       id: '0',
