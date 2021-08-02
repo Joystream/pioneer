@@ -4,13 +4,13 @@ import styled from 'styled-components'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
-import { SuggestedThread } from '@/forum/components/SuggestedThreads/SuggestedThread'
+import { spacing } from '@/common/utils/styles'
+import { ThreadListItem } from '@/forum/components/ThreadList/ThreadListItem'
 import { useForumSuggestedThreads } from '@/forum/hooks/useForumSuggestedThreads'
 
 export const SuggestedThreads = () => {
   const { isLoading, threads } = useForumSuggestedThreads()
 
-  console.log('Suggested Threads', isLoading, threads)
   const displayThreads = () => {
     if (isLoading) {
       return <Loading />
@@ -19,22 +19,26 @@ export const SuggestedThreads = () => {
     return (
       <ThreadsList>
         {threads.map((thread) => (
-          <SuggestedThread thread={thread} />
+          <ThreadListItem key={thread.id} thread={thread} />
         ))}
       </ThreadsList>
     )
   }
 
   return (
-    <ContentWithTabs>
+    <SuggestedThreadsWrapper>
       <Label>Suggested Threads</Label>
       {displayThreads()}
-    </ContentWithTabs>
+    </SuggestedThreadsWrapper>
   )
 }
 
-export const ThreadsList = styled.ul`
+export const ThreadsList = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+`
+
+export const SuggestedThreadsWrapper = styled(ContentWithTabs)`
+  margin-top: ${spacing(2)};
 `
