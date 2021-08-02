@@ -11,6 +11,7 @@ import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransact
 import { multiTransaction } from '@/common/model/machines/multiTransaction'
 import { ApiContext } from '@/common/providers/api/context'
 
+import { alice, bob } from '../../../test/_mocks/keyring'
 import { stubApi } from '../../../test/_mocks/transactions'
 import { transactionMachine } from '../model/machines'
 
@@ -35,9 +36,11 @@ const MultiTransactionModal = ({ children, service }: Props) => {
   const { type, transaction, signer } = state.context.transactions[0]
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
 
-  if (state.matches('transactions')) {
+  const transactionService = state.children.transactions
+
+  if (state.matches('transactions') && transactionService) {
     return (
-      <TransactionModal service={service} onClose={() => undefined}>
+      <TransactionModal service={transactionService} onClose={() => undefined}>
         {children}
       </TransactionModal>
     )
@@ -57,12 +60,12 @@ const Template: Story<{ children: ReactNode; state: string }> = ({ children }) =
         {
           type: 'stake',
           transaction: api?.tx.members.addStakingAccountCandidate('0'),
-          signer: 'ALICE', // TODO
+          signer: alice.address,
         },
         {
           type: 'addProposal',
           transaction: api?.tx.proposalsCodex.createProposal({}, { Signal: 'Choo, choo!' }),
-          signer: 'BOB', // TODO
+          signer: bob.address,
         },
       ],
     },

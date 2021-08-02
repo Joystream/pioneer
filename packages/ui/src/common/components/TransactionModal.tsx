@@ -13,6 +13,7 @@ export interface TransactionModalProps {
 }
 
 export const TransactionModal = ({ onClose, children, service, title }: TransactionModalProps) => {
+  console.log("TMOD'|,", service)
   const [state] = useActor(service)
 
   if (state.matches('prepare')) {
