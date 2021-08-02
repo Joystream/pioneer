@@ -1,6 +1,12 @@
 import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import {
+  DoneEvent,
+  multiTransaction,
+  MultiTransactionContext,
+  MultiTransactionState,
+} from '@/common/model/machines/multiTransaction'
 
 describe('Machine: Transaction machine', () => {
   let service: Interpreter<any>
@@ -130,34 +136,10 @@ describe('Machine: Transaction machine', () => {
   })
 
   describe('Multi transaction', () => {
-    const multi = createMachine({
-      context: {
-        transactions: ['firstTransaction'],
-      },
-      states: {
-        transaction: {
-          on: {
-            DONE: {
-              target: 'success',
-              cond: (context: any) => context.transactions.length === 1,
-              actions: assign({
-                transactions: (context: any) => {
-                  context.transactions.pop()
-                  return context.transactions
-                },
-              }),
-            },
-          },
-        },
-        success: {},
-      },
-      initial: 'transaction',
-    })
-
-    let service: Interpreter<any>
+    let service: Interpreter<MultiTransactionContext, any, DoneEvent, MultiTransactionState>
 
     beforeEach(() => {
-      service = interpret(multi)
+      service = interpret(multiTransaction.withContext({ transactions: ['firstTransaction'] }))
       service.start()
     })
 
@@ -171,7 +153,7 @@ describe('Machine: Transaction machine', () => {
     })
 
     it('stays in transaction when some transactions left', () => {
-      service = interpret(multi, { context: { transactions: ['first', 'second'] } })
+      service = interpret(multiTransaction.withContext({ transactions: ['first', 'second'] }))
       service.start()
       service.send('DONE')
       expect(service.state.matches('transaction')).toBeTruthy()
