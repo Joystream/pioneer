@@ -1,1 +1,1 @@
-export * from './CategoryListItem'
+export * from './ForumCategoryList'

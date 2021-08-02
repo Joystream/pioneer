@@ -3,6 +3,14 @@ import { ForumCategoryFieldsFragment } from '@/forum/queries/__generated__/forum
 export interface ForumCategory extends ForumSubCategory {
   description: string
   subcategories: ForumSubCategory[]
+  moderators: ForumModerator[]
+}
+
+export interface ForumModerator {
+  id: string
+  membershipId: string
+  handle?: string
+  avatar?: string
 }
 
 interface ForumSubCategory {
@@ -10,9 +18,10 @@ interface ForumSubCategory {
   title: string
 }
 
-export const asForumCategory = (fields: ForumCategoryFieldsFragment): ForumCategory => ({
+export const asForumCategory = (fields: Omit<ForumCategoryFieldsFragment, '__typename'>): ForumCategory => ({
   id: fields.id,
   title: fields.title,
   description: fields.description,
   subcategories: [],
+  moderators: [],
 })
