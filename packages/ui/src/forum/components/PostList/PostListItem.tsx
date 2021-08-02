@@ -27,7 +27,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
     <ForumPostStyles ref={ref} isSelected={isSelected}>
       <ForumPostRow>
         <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-        <BlockTime block={createdAtBlock} layout="reverse" />
+        {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
       </ForumPostRow>
       <MessageBody>
         {repliesTo && (

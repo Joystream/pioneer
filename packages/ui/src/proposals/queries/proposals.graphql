@@ -42,9 +42,13 @@ fragment ProposalWithDetailsFields on Proposal {
   }
   createdInEvent {
     inBlock
+    createdAt
+    network
   }
   proposalStatusUpdates {
     inBlock
+    createdAt
+    network
     newStatus {
       __typename
     }
@@ -124,7 +128,9 @@ fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
   id
   createdAt
   createdInEvent {
+    createdAt
     inBlock
+    network
   }
   updatedAt
   author {

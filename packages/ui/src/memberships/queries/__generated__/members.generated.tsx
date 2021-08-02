@@ -21,8 +21,28 @@ export type MemberFieldsFragment = {
   }>
 }
 
-export type MemberWithDetailsFragment = {
+export type MemberWithDetailsFieldsFragment = {
   __typename: 'Membership'
+  entry:
+    | {
+        __typename: 'MembershipEntryPaid'
+        membershipBoughtEvent?: Types.Maybe<{
+          __typename: 'MembershipBoughtEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+    | {
+        __typename: 'MembershipEntryInvited'
+        memberInvitedEvent?: Types.Maybe<{
+          __typename: 'MemberInvitedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+    | { __typename: 'MembershipEntryGenesis'; phantom?: Types.Maybe<number> }
   invitees: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 } & MemberFieldsFragment
 
@@ -53,7 +73,7 @@ export type GetMemberQueryVariables = Types.Exact<{
 
 export type GetMemberQuery = {
   __typename: 'Query'
-  membershipByUniqueInput?: Types.Maybe<{ __typename: 'Membership' } & MemberWithDetailsFragment>
+  membershipByUniqueInput?: Types.Maybe<{ __typename: 'Membership' } & MemberWithDetailsFieldsFragment>
 }
 
 export type SearchMembersQueryVariables = Types.Exact<{
@@ -88,9 +108,28 @@ export const MemberFieldsFragmentDoc = gql`
     }
   }
 `
-export const MemberWithDetailsFragmentDoc = gql`
-  fragment MemberWithDetails on Membership {
+export const MemberWithDetailsFieldsFragmentDoc = gql`
+  fragment MemberWithDetailsFields on Membership {
     ...MemberFields
+    entry {
+      ... on MembershipEntryInvited {
+        memberInvitedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryPaid {
+        membershipBoughtEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryGenesis {
+        phantom
+      }
+    }
     invitees {
       ...MemberFields
     }
@@ -180,10 +219,10 @@ export type GetMembersCountQueryResult = Apollo.QueryResult<GetMembersCountQuery
 export const GetMemberDocument = gql`
   query GetMember($where: MembershipWhereUniqueInput!) {
     membershipByUniqueInput(where: $where) {
-      ...MemberWithDetails
+      ...MemberWithDetailsFields
     }
   }
-  ${MemberWithDetailsFragmentDoc}
+  ${MemberWithDetailsFieldsFragmentDoc}
 `
 
 /**

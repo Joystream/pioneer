@@ -1,9 +1,9 @@
 import { sub } from 'date-fns'
 import faker from 'faker'
 
-import { asBlock } from '@/common/types'
 import { ForumModerator, ForumPost, ForumThread } from '@/forum/types'
 import { getMember } from '@/mocks/helpers'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 export const asModerator = (hasHandle = true, hasAvatar = false) => {
   return (index: number): ForumModerator => ({
@@ -19,7 +19,7 @@ export const asPost = (text: string): ForumPost | undefined => {
     return {
       id: '0',
       createdAt: sub(Date.now(), { minutes: 25 }).toISOString(),
-      createdAtBlock: asBlock(),
+      createdAtBlock: randomBlock(),
       author: getMember('alice'),
       text,
     }

@@ -2,14 +2,12 @@ import rawApplicationWithdrawnEvents from './raw/applicationWithdrawnEvents.json
 import rawAppliedOnOpeningEvents from './raw/appliedOnOpeningEvents.json'
 import rawBudgetSetEvents from './raw/budgetSetEvents.json'
 import rawBudgetSpendingEvents from './raw/budgetSpendingEvents.json'
-import rawOpeningAddedEvents from './raw/openingAddedEvents.json'
 import rawOpeningCanceledEvents from './raw/openingCanceledEvents.json'
 import rawOpeningFilledEvents from './raw/openingFilledEvents.json'
 import rawRewardPaidEvents from './raw/rewardPaidEvents.json'
 import rawStakeDecreasedEvents from './raw/stakeDecreasedEvents.json'
 import rawStakeIncreasedEvents from './raw/stakeIncreasedEvents.json'
 import rawStakeSlashedEvents from './raw/stakeSlashedEvents.json'
-import rawStatusTextChangedEvents from './raw/statusTextChangedEvents.json'
 import rawTerminatedLeaderEvents from './raw/terminatedLeaderEvents.json'
 import rawTerminatedWorkerEvents from './raw/terminatedWorkerEvents.json'
 import rawWorkerExitedEvents from './raw/workerExitedEvents.json'
@@ -62,12 +60,6 @@ interface WorkerLeavingEvent extends BaseEvent {
   workerId: string
 }
 
-interface StatusTextChangedEvent extends BaseEvent {
-  groupId: string
-  upcomingworkinggroupopeningcreatedInEventIds: string[]
-  workinggroupmetadatasetInEventIds: string[]
-}
-
 interface OpeningEvent extends BaseEvent {
   groupId: string
   openingId: string
@@ -108,8 +100,6 @@ export const eventCategories = {
   StakeSlashedEvent: rawStakeSlashedEvents.map((rawEvent: RawStakeSlashedEvent) => ({ ...rawEvent })),
   OpeningFilledEvent: rawOpeningFilledEvents.map((rawEvent: RawOpeningFilledEvent) => ({ ...rawEvent })),
   WorkerExitedEvent: rawWorkerExitedEvents.map((rawEvent: WorkerLeavingEvent) => ({ ...rawEvent })),
-  StatusTextChangedEvent: rawStatusTextChangedEvents.map((rawEvent: StatusTextChangedEvent) => ({ ...rawEvent })),
-  OpeningAddedEvent: rawOpeningAddedEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
   OpeningCanceledEvent: rawOpeningCanceledEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
   BudgetSetEvent: rawBudgetSetEvents.map((rawEvent: RawBudgetSetEvent) => ({ ...rawEvent })),
   TerminatedWorkerEvent: rawTerminatedWorkerEvents.map((rawEvent: TerminatedEvent) => ({ ...rawEvent })),

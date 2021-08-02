@@ -24,5 +24,5 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
 
 export const asForumThreadWithDetails = (fields: ForumThreadDetailedFieldsFragment): ForumThreadWithDetails => ({
   ...asForumThread(fields),
-  createdInBlock: asBlock(),
+  createdInBlock: asBlock(fields.createdInEvent),
 })

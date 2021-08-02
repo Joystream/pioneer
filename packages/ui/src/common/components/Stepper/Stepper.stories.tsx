@@ -3,7 +3,7 @@ import React from 'react'
 
 import { BlockHistoryLine } from '@/common/components/BlockTime'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
-import { asBlock } from '@/common/types'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 import { Stepper, StepperProps } from './Stepper'
 
@@ -32,7 +32,7 @@ Simple.args = {
   ],
 }
 
-const details = <BlockHistoryLine block={asBlock()} />
+const details = <BlockHistoryLine block={randomBlock()} />
 export const History = Template.bind({})
 History.args = {
   theme: 'dark',
