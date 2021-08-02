@@ -1,10 +1,10 @@
-import { RawOpeningMock, RawWorker } from '@/mocks/data'
+import { MockMember, RawOpeningMock, RawWorker, seedRandomBlockFields } from '@/mocks/data'
 import { RawUpcomingOpeningMock } from '@/mocks/data/seedUpcomingOpening'
 
 import { ProposalMock } from '../../../../dev/scripts/generators/generateProposals'
 import { RawApplication } from '../../../../src/mocks/data/seedApplications'
 
-export const MEMBER_ALICE_DATA = {
+export const MEMBER_ALICE_DATA: MockMember = {
   id: '0',
   rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
   controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
@@ -16,7 +16,10 @@ export const MEMBER_ALICE_DATA = {
   isVerified: true,
   isFoundingMember: true,
   inviteCount: 5,
-  registeredAtBlockId: '1',
+  entry: {
+    __typename: '',
+    membershipBoughtEvent: seedRandomBlockFields(),
+  },
 }
 
 export const OPENING_DATA: RawOpeningMock = {
@@ -122,7 +125,6 @@ export const PROPOSAL_DATA: ProposalMock = {
     rationale: '',
     votingRound: 0,
   })),
-  createdInEvent: { inBlock: 0 },
   proposalStatusUpdates: [{ newStatus: 'deciding', inBlock: 0 }],
   discussionThread: { discussionPosts: [], mode: 'ProposalDiscussionThreadModeOpen' },
 }

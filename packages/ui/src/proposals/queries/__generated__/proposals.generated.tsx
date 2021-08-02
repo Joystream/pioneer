@@ -78,10 +78,12 @@ export type ProposalWithDetailsFieldsFragment = {
   description: string
   statusSetAtBlock: number
   votes: Array<{ __typename: 'ProposalVotedEvent' } & VoteFieldsFragment>
-  createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number }
+  createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number; createdAt: any; network: Types.Network }
   proposalStatusUpdates: Array<{
     __typename: 'ProposalStatusUpdatedEvent'
     inBlock: number
+    createdAt: any
+    network: Types.Network
     newStatus:
       | { __typename: 'ProposalStatusDeciding' }
       | { __typename: 'ProposalStatusGracing' }
@@ -165,7 +167,12 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
   createdAt: any
   updatedAt?: Types.Maybe<any>
   text: string
-  createdInEvent: { __typename: 'ProposalDiscussionPostCreatedEvent'; inBlock: number }
+  createdInEvent: {
+    __typename: 'ProposalDiscussionPostCreatedEvent'
+    createdAt: any
+    inBlock: number
+    network: Types.Network
+  }
   author: { __typename: 'Membership' } & MemberFieldsFragment
 }
 
@@ -250,7 +257,9 @@ export const DiscussionPostWithoutReplyFieldsFragmentDoc = gql`
     id
     createdAt
     createdInEvent {
+      createdAt
       inBlock
+      network
     }
     updatedAt
     author {
@@ -280,9 +289,13 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
     }
     createdInEvent {
       inBlock
+      createdAt
+      network
     }
     proposalStatusUpdates {
       inBlock
+      createdAt
+      network
       newStatus {
         __typename
       }

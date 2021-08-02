@@ -7,11 +7,11 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ForumThread as ForumThreadPage } from '@/app/pages/Forum/ForumThread'
 import { NotFound } from '@/app/pages/NotFound'
-import { asBlock } from '@/common/types'
 import { ForumThread, ForumThreadWithDetails } from '@/forum/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -44,7 +44,7 @@ describe('UI: Forum Thread Page', () => {
     title: 'Example Thread',
     categoryId: '1',
     isSticky: false,
-    createdInBlock: asBlock(),
+    createdInBlock: randomBlock(),
   }
 
   beforeAll(() => {

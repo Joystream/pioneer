@@ -26,7 +26,6 @@ const Template: Story<BlockTimeProps> = (args) => (
 export const BlockTimeView = Template.bind({})
 BlockTimeView.args = {
   block: {
-    id: '100',
     number: 1000,
     network: 'OLYMPIA',
     timestamp: '2012-01-26T13:51:50.417-07:00',

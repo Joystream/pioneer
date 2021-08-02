@@ -1,5 +1,6 @@
-import { asBlock, Block } from '../../common/types'
-import { Member } from '../../memberships/types'
+import { asBlock, Block } from '@/common/types'
+import { Member } from '@/memberships/types'
+
 import { getReward } from '../model/getReward'
 import { WorkingGroupApplicationFieldsFragment } from '../queries'
 
@@ -23,15 +24,15 @@ export interface WorkingGroupApplication {
   createdAtBlock: Block
 }
 
-export const asApplication = (application: WorkingGroupApplicationFieldsFragment) => ({
-  id: application.id,
+export const asApplication = (fields: WorkingGroupApplicationFieldsFragment) => ({
+  id: fields.id,
   opening: {
-    id: application.opening.id,
-    type: application.opening.type,
-    groupName: asWorkingGroupName(application.opening.group.name),
-    reward: getReward(application.opening.rewardPerBlock, application.opening.group.name),
+    id: fields.opening.id,
+    type: fields.opening.type,
+    groupName: asWorkingGroupName(fields.opening.group.name),
+    reward: getReward(fields.opening.rewardPerBlock, fields.opening.group.name),
   },
-  status: application.status.__typename,
-  stakingAccount: application.stakingAccount,
-  createdAtBlock: asBlock(),
+  status: fields.status.__typename,
+  stakingAccount: fields.stakingAccount,
+  createdAtBlock: asBlock(fields.createdInEvent),
 })

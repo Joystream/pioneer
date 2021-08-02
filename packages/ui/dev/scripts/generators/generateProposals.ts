@@ -63,8 +63,6 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
     .filter(isIntermediateStatus)
     .map((status) => ({ newStatus: status as string, inBlock: 0 }))
 
-  const createdInEvent = { inBlock: 0 }
-
   const description = randomMarkdown()
 
   const decidingCount = statusHistory.filter((status) => status === 'deciding').length
@@ -84,7 +82,6 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
   const discussionPosts = repeat(randomMessage, messageCount).map((text, index) => ({
     id: `${proposalId}:${index}`,
     createdAt: new Date().toJSON(),
-    createdInEvent: { inBlock: 0 },
     ...(Math.random() > 0.5 ? { updatedAt: faker.date.recent(20).toISOString() } : {}),
     authorId: arrayElement(mocks.members).id,
     text,
@@ -100,7 +97,6 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
     details,
     creatorId: member.id,
     createdAt: createdAt.toISOString(),
-    createdInEvent,
     description,
     votes: virtualVotes.filter(({ voteKind }) => voteKind !== NONE),
     proposalStatusUpdates,
@@ -157,9 +153,9 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: Mocks) => a
   runtimeUpgrade: () => ({
     type: 'runtimeUpgrade',
     data: {
-      bytecode: '0x0061736d'
-    }
-  })
+      bytecode: '0x0061736d',
+    },
+  }),
 }
 
 const getLeadStakeData = (mocks: Mocks) => ({

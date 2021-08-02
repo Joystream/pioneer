@@ -23,8 +23,24 @@ export interface Member {
   referredBy?: ID
 }
 
-export interface DetailedMember extends Member {
+type GenesisEntry = {
+  type: 'genesis'
+}
+
+type InvitedEntry = {
+  type: 'invited'
+  block: Block
+}
+
+type PaidEntry = {
+  type: 'paid'
+  block: Block
+}
+
+export type MemberEntry = GenesisEntry | InvitedEntry | PaidEntry
+
+export interface MemberWithDetails extends Member {
   about?: string
-  registeredAtBlock: Block
+  entry: MemberEntry
   invitees: Member[]
 }

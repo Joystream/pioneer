@@ -2,20 +2,6 @@ import { WorkingGroupMock } from '../../../dev/scripts/generators/generateWorkin
 
 import rawWorkingGroups from './raw/workingGroups.json'
 
-interface RawWorkingGroupMock {
-  id: string
-  name: string
-  leaderId?: string | null
-  metadata: {
-    name: string
-    message: string
-    about: string
-    description: string
-    status: string
-    statusMessage: string
-  }
-}
-
 export const mockWorkingGroups = rawWorkingGroups.map((rawGroup) => ({ ...rawGroup }))
 
 const seedWorkingGroup = (group: WorkingGroupMock, server: any) => {
