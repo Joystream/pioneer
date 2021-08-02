@@ -1,5 +1,5 @@
 import {
-  ForumCategoryDetailedFieldsFragment,
+  ForumCategoryBreadcrumbsFieldsFragment,
   ForumCategoryFieldsFragment,
   ForumSubCategoryFieldsFragment,
 } from '@/forum/queries/__generated__/forum.generated'
@@ -26,27 +26,17 @@ const asSubCategory = (fields: ForumSubCategoryFieldsFragment): ForumSubCategory
   title: fields.title,
 })
 
-export interface ForumCategoryWithDetails extends ForumCategory {
-  parentCategories: ForumSubCategory[]
-}
-
-export const asForumCategoryWithDetails = (fields: ForumCategoryDetailedFieldsFragment): ForumCategoryWithDetails => {
-  const parentCategories: ForumSubCategory[] = []
-  if (fields.parent) {
-    assignParentCategories(fields.parent, parentCategories)
-  }
-  return {
-    ...asForumCategory(fields),
-    parentCategories,
-    subcategories: fields.forumcategoryparent?.map(asSubCategory) ?? [],
-  }
+export const asForumBreadcrumbs = (fields: ForumCategoryBreadcrumbsFieldsFragment): ForumSubCategory[] => {
+  const breadcrumbs: ForumSubCategory[] = []
+  assignBreadcrumbs(fields, breadcrumbs)
+  return breadcrumbs
 }
 
 type ParentCategory = ForumSubCategoryFieldsFragment & { parent?: ParentCategory | null }
 
-const assignParentCategories = (fields: ParentCategory, categories: ForumSubCategory[]) => {
+const assignBreadcrumbs = (fields: ParentCategory, categories: ForumSubCategory[]) => {
   if (fields.parent) {
-    assignParentCategories(fields.parent, categories)
+    assignBreadcrumbs(fields.parent, categories)
   }
   categories.push(asSubCategory(fields))
 }

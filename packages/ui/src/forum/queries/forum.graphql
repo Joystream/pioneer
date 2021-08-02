@@ -9,19 +9,25 @@ fragment ForumSubCategoryFields on ForumCategory {
   title
 }
 
-fragment ForumCategoryDetailedFields on ForumCategory {
-  ...ForumCategoryFields
+fragment ForumCategoryBreadcrumbsFields on ForumCategory {
+  ...ForumSubCategoryFields
   parent {
     ...ForumSubCategoryFields
     parent {
       ...ForumSubCategoryFields
       parent {
         ...ForumSubCategoryFields
+        parent {
+          ...ForumSubCategoryFields
+          parent {
+            ...ForumSubCategoryFields
+            parent {
+              ...ForumSubCategoryFields
+            }
+          }
+        }
       }
     }
-  }
-  forumcategoryparent {
-    ...ForumCategoryFields
   }
 }
 
@@ -63,9 +69,9 @@ query GetForumCategories($where: ForumCategoryWhereInput) {
   }
 }
 
-query GetForumCategory($where: ForumCategoryWhereUniqueInput!) {
+query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
   forumCategoryByUniqueInput(where: $where) {
-    ...ForumCategoryDetailedFields
+    ...ForumCategoryBreadcrumbsFields
   }
 }
 

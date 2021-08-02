@@ -17,7 +17,7 @@ export type ForumCategoryFieldsFragment = {
 
 export type ForumSubCategoryFieldsFragment = { __typename: 'ForumCategory'; id: string; title: string }
 
-export type ForumCategoryDetailedFieldsFragment = {
+export type ForumCategoryBreadcrumbsFieldsFragment = {
   __typename: 'ForumCategory'
   parent?: Types.Maybe<
     {
@@ -25,13 +25,27 @@ export type ForumCategoryDetailedFieldsFragment = {
       parent?: Types.Maybe<
         {
           __typename: 'ForumCategory'
-          parent?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumSubCategoryFieldsFragment>
+          parent?: Types.Maybe<
+            {
+              __typename: 'ForumCategory'
+              parent?: Types.Maybe<
+                {
+                  __typename: 'ForumCategory'
+                  parent?: Types.Maybe<
+                    {
+                      __typename: 'ForumCategory'
+                      parent?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumSubCategoryFieldsFragment>
+                    } & ForumSubCategoryFieldsFragment
+                  >
+                } & ForumSubCategoryFieldsFragment
+              >
+            } & ForumSubCategoryFieldsFragment
+          >
         } & ForumSubCategoryFieldsFragment
       >
     } & ForumSubCategoryFieldsFragment
   >
-  forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>>
-} & ForumCategoryFieldsFragment
+} & ForumSubCategoryFieldsFragment
 
 export type ForumThreadFieldsFragment = {
   __typename: 'ForumThread'
@@ -70,13 +84,13 @@ export type GetForumCategoriesQuery = {
   forumCategories: Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>
 }
 
-export type GetForumCategoryQueryVariables = Types.Exact<{
+export type GetForumCategoryBreadcrumbsQueryVariables = Types.Exact<{
   where: Types.ForumCategoryWhereUniqueInput
 }>
 
-export type GetForumCategoryQuery = {
+export type GetForumCategoryBreadcrumbsQuery = {
   __typename: 'Query'
-  forumCategoryByUniqueInput?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumCategoryDetailedFieldsFragment>
+  forumCategoryByUniqueInput?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumCategoryBreadcrumbsFieldsFragment>
 }
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
@@ -130,23 +144,28 @@ export const ForumSubCategoryFieldsFragmentDoc = gql`
     title
   }
 `
-export const ForumCategoryDetailedFieldsFragmentDoc = gql`
-  fragment ForumCategoryDetailedFields on ForumCategory {
-    ...ForumCategoryFields
+export const ForumCategoryBreadcrumbsFieldsFragmentDoc = gql`
+  fragment ForumCategoryBreadcrumbsFields on ForumCategory {
+    ...ForumSubCategoryFields
     parent {
       ...ForumSubCategoryFields
       parent {
         ...ForumSubCategoryFields
         parent {
           ...ForumSubCategoryFields
+          parent {
+            ...ForumSubCategoryFields
+            parent {
+              ...ForumSubCategoryFields
+              parent {
+                ...ForumSubCategoryFields
+              }
+            }
+          }
         }
       }
     }
-    forumcategoryparent {
-      ...ForumCategoryFields
-    }
   }
-  ${ForumCategoryFieldsFragmentDoc}
   ${ForumSubCategoryFieldsFragmentDoc}
 `
 export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
@@ -234,46 +253,55 @@ export type GetForumCategoriesQueryResult = Apollo.QueryResult<
   GetForumCategoriesQuery,
   GetForumCategoriesQueryVariables
 >
-export const GetForumCategoryDocument = gql`
-  query GetForumCategory($where: ForumCategoryWhereUniqueInput!) {
+export const GetForumCategoryBreadcrumbsDocument = gql`
+  query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
     forumCategoryByUniqueInput(where: $where) {
-      ...ForumCategoryDetailedFields
+      ...ForumCategoryBreadcrumbsFields
     }
   }
-  ${ForumCategoryDetailedFieldsFragmentDoc}
+  ${ForumCategoryBreadcrumbsFieldsFragmentDoc}
 `
 
 /**
- * __useGetForumCategoryQuery__
+ * __useGetForumCategoryBreadcrumbsQuery__
  *
- * To run a query within a React component, call `useGetForumCategoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetForumCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetForumCategoryBreadcrumbsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumCategoryBreadcrumbsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetForumCategoryQuery({
+ * const { data, loading, error } = useGetForumCategoryBreadcrumbsQuery({
  *   variables: {
  *      where: // value for 'where'
  *   },
  * });
  */
-export function useGetForumCategoryQuery(
-  baseOptions: Apollo.QueryHookOptions<GetForumCategoryQuery, GetForumCategoryQueryVariables>
+export function useGetForumCategoryBreadcrumbsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumCategoryBreadcrumbsQuery, GetForumCategoryBreadcrumbsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetForumCategoryQuery, GetForumCategoryQueryVariables>(GetForumCategoryDocument, options)
+  return Apollo.useQuery<GetForumCategoryBreadcrumbsQuery, GetForumCategoryBreadcrumbsQueryVariables>(
+    GetForumCategoryBreadcrumbsDocument,
+    options
+  )
 }
-export function useGetForumCategoryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetForumCategoryQuery, GetForumCategoryQueryVariables>
+export function useGetForumCategoryBreadcrumbsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumCategoryBreadcrumbsQuery, GetForumCategoryBreadcrumbsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetForumCategoryQuery, GetForumCategoryQueryVariables>(GetForumCategoryDocument, options)
+  return Apollo.useLazyQuery<GetForumCategoryBreadcrumbsQuery, GetForumCategoryBreadcrumbsQueryVariables>(
+    GetForumCategoryBreadcrumbsDocument,
+    options
+  )
 }
-export type GetForumCategoryQueryHookResult = ReturnType<typeof useGetForumCategoryQuery>
-export type GetForumCategoryLazyQueryHookResult = ReturnType<typeof useGetForumCategoryLazyQuery>
-export type GetForumCategoryQueryResult = Apollo.QueryResult<GetForumCategoryQuery, GetForumCategoryQueryVariables>
+export type GetForumCategoryBreadcrumbsQueryHookResult = ReturnType<typeof useGetForumCategoryBreadcrumbsQuery>
+export type GetForumCategoryBreadcrumbsLazyQueryHookResult = ReturnType<typeof useGetForumCategoryBreadcrumbsLazyQuery>
+export type GetForumCategoryBreadcrumbsQueryResult = Apollo.QueryResult<
+  GetForumCategoryBreadcrumbsQuery,
+  GetForumCategoryBreadcrumbsQueryVariables
+>
 export const GetForumThreadsDocument = gql`
   query GetForumThreads($where: ForumThreadWhereInput) {
     forumThreads(where: $where) {
