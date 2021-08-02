@@ -4,12 +4,12 @@ import {
   ForumSubCategoryFieldsFragment,
 } from '@/forum/queries/__generated__/forum.generated'
 
-export interface ForumCategory extends ForumSubCategory {
+export interface ForumCategory extends ForumBreadcrumb {
   description: string
-  subcategories: ForumSubCategory[]
+  subcategories: ForumBreadcrumb[]
 }
 
-interface ForumSubCategory {
+interface ForumBreadcrumb {
   id: string
   title: string
 }
@@ -21,20 +21,20 @@ export const asForumCategory = (fields: ForumCategoryFieldsFragment): ForumCateg
   subcategories: [],
 })
 
-const asSubCategory = (fields: ForumSubCategoryFieldsFragment): ForumSubCategory => ({
+const asSubCategory = (fields: ForumSubCategoryFieldsFragment): ForumBreadcrumb => ({
   id: fields.id,
   title: fields.title,
 })
 
-export const asForumBreadcrumbs = (fields: ForumCategoryBreadcrumbsFieldsFragment): ForumSubCategory[] => {
-  const breadcrumbs: ForumSubCategory[] = []
+export const asForumBreadcrumbs = (fields: ForumCategoryBreadcrumbsFieldsFragment): ForumBreadcrumb[] => {
+  const breadcrumbs: ForumBreadcrumb[] = []
   assignBreadcrumbs(fields, breadcrumbs)
   return breadcrumbs
 }
 
 type ParentCategory = ForumSubCategoryFieldsFragment & { parent?: ParentCategory | null }
 
-const assignBreadcrumbs = (fields: ParentCategory, categories: ForumSubCategory[]) => {
+const assignBreadcrumbs = (fields: ParentCategory, categories: ForumBreadcrumb[]) => {
   if (fields.parent) {
     assignBreadcrumbs(fields.parent, categories)
   }
