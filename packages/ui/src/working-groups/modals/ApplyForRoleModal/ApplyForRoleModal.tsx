@@ -15,9 +15,9 @@ import { useModal } from '@/common/hooks/useModal'
 import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
-import { BindStakingAccountModal } from '@/working-groups/modals/ApplyForRoleModal/BindStakingAccountModal'
 import { getGroup } from '@/working-groups/model/getGroup'
 
 import { GroupName } from '../../types'
@@ -32,6 +32,8 @@ export type OpeningParams = Exclude<
   Parameters<ApiRx['tx']['membershipWorkingGroup']['applyOnOpening']>[0],
   string | Uint8Array
 >
+
+const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Send a proposal' }]
 
 export const ApplyForRoleModal = () => {
   const { api, connectionState } = useApi()
@@ -118,6 +120,7 @@ export const ApplyForRoleModal = () => {
         signer={stakingAccount}
         memberId={active.id}
         service={bindStakingAccountService}
+        steps={transactionsSteps}
       />
     )
   }
@@ -147,6 +150,7 @@ export const ApplyForRoleModal = () => {
         signer={signer}
         stake={new BN(state.context.stake.amount)}
         service={transactionService}
+        steps={transactionsSteps}
       />
     )
   }
