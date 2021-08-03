@@ -7,16 +7,16 @@ import { ForumBreadcrumb } from '../types'
 
 interface Props {
   forumBreadcrumbs: ForumBreadcrumb[]
-  currentBreadcrumb: string
+  currentBreadcrumb?: string
 }
 
 export const ForumBreadcrumbs = React.memo(({ forumBreadcrumbs, currentBreadcrumb }: Props) => {
   const crumbs = forumBreadcrumbs.map((crumb) => ({
     path: `/forum/categories/${crumb.id}`,
     breadcrumb: crumb.title,
-    key: crumb.id + crumb.title,
+    key: crumb.id,
   }))
-  crumbs.push({ path: '', breadcrumb: currentBreadcrumb, key: 'last:' + currentBreadcrumb })
+  currentBreadcrumb && crumbs.push({ path: '', breadcrumb: currentBreadcrumb, key: 'last:' + currentBreadcrumb })
   return (
     <BreadcrumbsListComponent>
       {crumbs.map(({ path, breadcrumb, key }, index, { length }) => (
