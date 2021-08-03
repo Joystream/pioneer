@@ -49,6 +49,11 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   const forumPostModel = schema.modelFor('forumPost')
   // "Mirage: The forum-post model has multiple possible inverse associations for the forum-post.repliesTo association."
   forumPostModel.class.prototype.associations.repliesTo.opts.inverse = null
+
+  const forumCategoryModel = schema.modelFor('forumCategory')
+  // "Mirage: The forum-category model has multiple possible inverse associations for the forum-category.parent association."
+  forumCategoryModel.class.prototype.associations.parent.opts.inverse = 'forumcategoryparent'
+  forumCategoryModel.class.prototype.associations.forumcategoryparent.opts.inverse = 'parent'
 }
 
 export const makeServer = (environment = 'development') => {
@@ -69,6 +74,7 @@ export const makeServer = (environment = 'development') => {
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
               forumCategories: getWhereResolver('ForumCategory'),
+              forumCategoryByUniqueInput: getUniqueResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
               forumPosts: getWhereResolver('ForumPost'),
               forumPostsConnection: getConnectionResolver('ForumPostConnection'),

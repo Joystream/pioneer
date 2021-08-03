@@ -6,6 +6,7 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useForumBreadcrumbs } from '@/forum/hooks/useForumBreadcrumbs'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { SwitchMemberModalCall } from '../../../memberships/modals/SwitchMemberModal'
@@ -22,6 +23,7 @@ export const CreateThreadModal = () => {
   const { showModal, hideModal, modalData } = useModal<CreateThreadModalCall>()
   const [state, send] = useMachine(createThreadMachine)
   const { api } = useApi()
+  const { breadcrumbs } = useForumBreadcrumbs(modalData.categoryId)
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
@@ -42,6 +44,7 @@ export const CreateThreadModal = () => {
         setTopic={(topic) => send({ type: 'SET_TOPIC', topic })}
         setDescription={(description) => send({ type: 'SET_DESCRIPTION', description })}
         onSubmit={() => send('NEXT')}
+        breadcrumbs={breadcrumbs}
       />
     )
   }

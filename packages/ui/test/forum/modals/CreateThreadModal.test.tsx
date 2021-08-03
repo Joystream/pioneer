@@ -14,7 +14,7 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
-import { MockKeyringProvider } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
   stubApi,
   stubDefaultBalances,
@@ -139,14 +139,16 @@ describe('CreateThreadModal', () => {
           <ModalContext.Provider value={useModal}>
             <MockKeyringProvider>
               <MembershipContext.Provider value={useMyMemberships}>
-                <CreateThreadModal />
-                <Route
-                  path="*"
-                  render={({ location }) => {
-                    pathname = location.pathname
-                    return null
-                  }}
-                />
+                <MockApolloProvider>
+                  <CreateThreadModal />
+                  <Route
+                    path="*"
+                    render={({ location }) => {
+                      pathname = location.pathname
+                      return null
+                    }}
+                  />
+                </MockApolloProvider>
               </MembershipContext.Provider>
             </MockKeyringProvider>
           </ModalContext.Provider>

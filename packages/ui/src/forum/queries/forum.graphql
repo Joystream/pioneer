@@ -7,6 +7,33 @@ fragment ForumCategoryFields on ForumCategory {
   }
 }
 
+fragment ForumSubCategoryFields on ForumCategory {
+  id
+  title
+}
+
+fragment ForumCategoryBreadcrumbsFields on ForumCategory {
+  ...ForumSubCategoryFields
+  parent {
+    ...ForumSubCategoryFields
+    parent {
+      ...ForumSubCategoryFields
+      parent {
+        ...ForumSubCategoryFields
+        parent {
+          ...ForumSubCategoryFields
+          parent {
+            ...ForumSubCategoryFields
+            parent {
+              ...ForumSubCategoryFields
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 fragment ForumThreadFields on ForumThread {
   id
   isSticky
@@ -47,9 +74,15 @@ fragment ForumThreadDetailedFields on ForumThread {
   }
 }
 
-query GetForumCategories {
-  forumCategories {
+query GetForumCategories($where: ForumCategoryWhereInput) {
+  forumCategories(where: $where) {
     ...ForumCategoryFields
+  }
+}
+
+query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
+  forumCategoryByUniqueInput(where: $where) {
+    ...ForumCategoryBreadcrumbsFields
   }
 }
 
