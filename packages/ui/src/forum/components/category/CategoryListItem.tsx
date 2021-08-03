@@ -8,45 +8,49 @@ import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/com
 import { Colors, Overflow, Transitions } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
-import { ForumCategory, ForumPost, ForumThread } from '@/forum/types'
+import { useForumCategoryDetails } from '@/forum/hooks/useForumCategoryDetails'
+import { ForumCategory } from '@/forum/types'
 import { MemberStack } from '@/memberships/components/MemberStack'
 
 import { PostInfo } from './PostInfo'
 import { ThreadInfo } from './ThreadInfo'
 
 export interface CategoryListItemProps {
-  category: ForumCategory & { threadCount: number }
-  latestPost?: ForumPost
-  topThread?: ForumThread & { postCount: number }
+  category: ForumCategory
 }
-export const CategoryListItem = ({ category, latestPost, topThread }: CategoryListItemProps) => (
-  <CategoryListItemStyles as={GhostRouterLink} to={`${ForumRoutes.category}/${category.id}`}>
-    <Category>
-      <h5>{category.title}</h5>
-      <TextMedium light>{category.description}</TextMedium>
-      <TextInlineExtraSmall lighter>
-        Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
-      </TextInlineExtraSmall>
-    </Category>
 
-    <TextInlineMedium bold value>
-      {category.threadCount}
-    </TextInlineMedium>
+export const CategoryListItem = ({ category }: CategoryListItemProps) => {
+  const { threadCount, latestPost, topThread } = useForumCategoryDetails(category.id)
 
-    {latestPost ? <PostInfo post={latestPost} /> : <Loading />}
+  return (
+    <CategoryListItemStyles as={GhostRouterLink} to={`${ForumRoutes.category}/${category.id}`}>
+      <Category>
+        <h5>{category.title}</h5>
+        <TextMedium light>{category.description}</TextMedium>
+        <TextInlineExtraSmall lighter>
+          Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
+        </TextInlineExtraSmall>
+      </Category>
 
-    {topThread ? <ThreadInfo thread={topThread} /> : <Loading />}
+      <TextInlineMedium bold value>
+        {threadCount ?? '-'}
+      </TextInlineMedium>
 
-    <MemberStack
-      members={category.moderators.map(({ id, handle, avatar }) => ({
-        handle,
-        avatar,
-        description: `Worker ID: ${id}`,
-      }))}
-      max={5}
-    />
-  </CategoryListItemStyles>
-)
+      {latestPost ? <PostInfo post={latestPost} /> : <Loading />}
+
+      {topThread ? <ThreadInfo thread={topThread} /> : <Loading />}
+
+      <MemberStack
+        members={category.moderators.map(({ id, handle, avatar }) => ({
+          handle,
+          avatar,
+          description: `Worker ID: ${id}`,
+        }))}
+        max={5}
+      />
+    </CategoryListItemStyles>
+  )
+}
 
 const CategoryListItemStyles = styled(TableListItem).attrs({ $colLayout: CategoriesColLayout })`
   align-items: start;
