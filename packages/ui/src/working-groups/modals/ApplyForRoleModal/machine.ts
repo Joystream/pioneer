@@ -21,6 +21,7 @@ type ApplyForRoleState =
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
   | { value: 'form'; context: ValidStakeState }
+  | { value: 'bindStakingAccount'; context: ValidFormState }
   | { value: 'transaction'; context: ValidFormState }
   | { value: 'success'; context: AfterTransactionState }
   | { value: 'error'; context: AfterTransactionState }
@@ -60,11 +61,29 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
       meta: { isStep: true, stepTitle: 'Form' },
       on: {
         VALID: {
-          target: 'transaction',
+          target: 'bindStakingAccount',
           actions: assign({
             answers: (context, event) => (event as ValidApplicationStepEvent).answers,
           }),
         },
+      },
+    },
+    bindStakingAccount: {
+      invoke: {
+        id: 'bindStakingAccount',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'transaction',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+        ],
       },
     },
     transaction: {

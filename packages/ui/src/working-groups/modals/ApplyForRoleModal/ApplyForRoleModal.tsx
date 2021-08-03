@@ -17,6 +17,7 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { BindStakingAccountModal } from '@/working-groups/modals/ApplyForRoleModal/BindStakingAccountModal'
 import { getGroup } from '@/working-groups/model/getGroup'
 
 import { GroupName } from '../../types'
@@ -102,8 +103,27 @@ export const ApplyForRoleModal = () => {
     return <ApplyForRoleApplicationStep opening={opening} steps={getSteps(service)} send={send} />
   }
 
+  const bindStakingAccountService = state.children.bindStakingAccount
+
+  if (state.matches('bindStakingAccount') && api && bindStakingAccountService) {
+    const { stake } = state.context
+    const stakingAccount = stake.account?.address
+
+    const transaction = api.tx.members.addStakingAccountCandidate(active.id)
+
+    return (
+      <BindStakingAccountModal
+        onClose={hideModal}
+        transaction={transaction}
+        signer={stakingAccount}
+        memberId={active.id}
+        service={bindStakingAccountService}
+      />
+    )
+  }
+
   const signer = active?.controllerAccount
-  const transactionService = state.children['transaction']
+  const transactionService = state.children.transaction
 
   if (state.matches('transaction') && signer && api && transactionService) {
     const { stake, answers } = state.context
