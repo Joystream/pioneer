@@ -15,6 +15,11 @@ export default {
 const Template: Story = () => {
   const [topic, setTopic] = useState('')
   const [description, setDescription] = useState('')
+  const breadcrumbs = [
+    { id: '0', title: 'Help' },
+    { id: '1', title: 'Working Groups' },
+    { id: '2', title: 'Storage' },
+  ]
   return (
     <>
       <HashRouter>
@@ -33,6 +38,7 @@ const Template: Story = () => {
               setTopic={setTopic}
               setDescription={setDescription}
               onSubmit={() => null}
+              breadcrumbs={breadcrumbs}
             />
           </ModalContext.Provider>
         </MockApolloProvider>
@@ -42,3 +48,10 @@ const Template: Story = () => {
 }
 
 export const GeneralDetails = Template.bind({})
+GeneralDetails.args = {
+  breadcrumbs: [
+    { id: '0', title: 'Help' },
+    { id: '1', title: 'Working Groups' },
+    { id: '2', title: 'Storage' },
+  ],
+}

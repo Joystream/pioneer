@@ -9,7 +9,7 @@ export interface ForumCategory extends ForumBreadcrumb {
   subcategories: ForumBreadcrumb[]
 }
 
-interface ForumBreadcrumb {
+export interface ForumBreadcrumb {
   id: string
   title: string
 }
