@@ -14,7 +14,7 @@ export default {
   component: ForumCategoryList,
 } as Meta
 
-const defaultModerators = repeat(asStorybookModerator(false, false), 14)
+const defaultModerators = repeat(asStorybookModerator(false), 14)
 
 const Template: Story = () => {
   const [categories, setCategories] = useState<CategoryListItemProps[]>([])
@@ -35,7 +35,7 @@ const Template: Story = () => {
   useEffect(() => {
     if (categories.length) {
       const timeout = setTimeout(() => {
-        const moderators = [...repeat(asStorybookModerator(true, true), 4), ...defaultModerators.slice(4)]
+        const moderators = [...repeat(asStorybookModerator(true), 4), ...defaultModerators.slice(4)]
         setCategories(
           categories.map(({ category }) => ({
             category: { ...category, moderators },

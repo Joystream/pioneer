@@ -24,7 +24,7 @@ interface Props {
 const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount }) => (
   <MemoryRouter>
     <CategoryListItem
-      category={{ ...category, moderators: repeat(asStorybookModerator(true), moderatorsCount) }}
+      category={{ ...category, moderators: repeat(asStorybookModerator(), moderatorsCount) }}
       latestPost={asStorybookPost(latestPostText)}
       topThread={asStorybookThread(topThreadTitle)}
     />

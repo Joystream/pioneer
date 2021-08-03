@@ -13,6 +13,11 @@ export type ForumCategoryFieldsFragment = {
   id: string
   title: string
   description: string
+  moderators: Array<{
+    __typename: 'Worker'
+    id: string
+    membership: { __typename: 'Membership'; id: string; handle: string }
+  }>
 }
 
 export type ForumSubCategoryFieldsFragment = { __typename: 'ForumCategory'; id: string; title: string }
@@ -149,6 +154,13 @@ export const ForumCategoryFieldsFragmentDoc = gql`
     id
     title
     description
+    moderators {
+      id
+      membership {
+        id
+        handle
+      }
+    }
   }
 `
 export const ForumSubCategoryFieldsFragmentDoc = gql`

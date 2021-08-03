@@ -4,6 +4,12 @@ fragment ForumCategoryFields on ForumCategory {
   description
   moderators {
     id
+    membership {
+      id
+      handle
+      # metadata { avatar {} }
+      # See https://github.com/Joystream/pioneer/issues/54
+    }
   }
 }
 

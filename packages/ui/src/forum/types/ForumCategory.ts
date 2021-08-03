@@ -12,8 +12,7 @@ export interface ForumCategory extends ForumBreadcrumb {
 
 export interface ForumModerator {
   id: string
-  membershipId: string
-  handle?: string
+  handle: string
   avatar?: string
 }
 
@@ -29,7 +28,7 @@ export const asForumCategory = (fields: Omit<ForumCategoryFieldsFragment, '__typ
   title: fields.title,
   description: fields.description,
   subcategories: [],
-  moderators: [],
+  moderators: fields.moderators?.map(({ id, membership }) => ({ id, handle: membership.handle })) ?? [],
 })
 
 const asSubCategory = (fields: ForumSubCategoryFieldsFragment): ForumBreadcrumb => ({

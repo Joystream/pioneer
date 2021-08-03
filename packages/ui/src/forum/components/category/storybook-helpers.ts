@@ -5,11 +5,10 @@ import { ForumModerator, ForumPost, ForumThread } from '@/forum/types'
 import { getMember } from '@/mocks/helpers'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
-export const asStorybookModerator = (hasHandle = true, hasAvatar = false) => {
+export const asStorybookModerator = (hasAvatar = false) => {
   return (index: number): ForumModerator => ({
     id: String(index),
-    membershipId: '0',
-    handle: hasHandle ? faker.name.firstName() : undefined,
+    handle: faker.name.firstName(),
     avatar: hasAvatar ? faker.image.avatar() : undefined,
   })
 }
