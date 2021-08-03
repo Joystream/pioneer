@@ -33,7 +33,7 @@ export type OpeningParams = Exclude<
   string | Uint8Array
 >
 
-const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Send a proposal' }]
+const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Apply on opening' }]
 
 export const ApplyForRoleModal = () => {
   const { api, connectionState } = useApi()

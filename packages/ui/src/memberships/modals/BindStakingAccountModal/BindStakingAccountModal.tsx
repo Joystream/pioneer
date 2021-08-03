@@ -68,7 +68,7 @@ export const BindStakingAccountModal = ({ onClose, transaction, signer, service,
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" onClick={sign} disabled={signDisabled}>
-          Sign transaction and Stake
+          Sign transaction and bind Staking Account
         </ButtonPrimary>
       </ModalFooter>
     </TransactionModal>
