@@ -10,10 +10,13 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TransactionModal } from '@/common/components/TransactionModal'
-import { TextMedium, TokenValue } from '@/common/components/typography'
+import { TransactionModal, TransactionStep } from '@/common/components/TransactionModal'
+import { Label, TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { Address } from '@/common/types'
+import { MemberInfo } from '@/memberships/components'
+import { useMember } from '@/memberships/hooks/useMembership'
+import { MemberRow } from '@/memberships/modals/components'
 
 interface SignProps {
   onClose: () => void
@@ -21,10 +24,12 @@ interface SignProps {
   signer: Address
   service: ActorRef<any>
   memberId: string
+  steps: TransactionStep[]
 }
 
-export const BindStakingAccountModal = ({ onClose, transaction, signer, service, memberId }: SignProps) => {
+export const BindStakingAccountModal = ({ onClose, transaction, signer, service, memberId, steps }: SignProps) => {
   const { allAccounts } = useMyAccounts()
+  const { member } = useMember(memberId)
   const signerAccount = accountOrNamed(allAccounts, signer, 'Account to Bind')
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
   const [hasFunds, setHasFunds] = useState(false)
@@ -41,15 +46,18 @@ export const BindStakingAccountModal = ({ onClose, transaction, signer, service,
   const signDisabled = !isReady || !hasFunds
 
   return (
-    <TransactionModal onClose={onClose} service={service}>
+    <TransactionModal onClose={onClose} service={service} asMulti={{ steps, active: 0 }}>
       <ModalBody>
-        <TextMedium>You intend to bind staking account to member {memberId}</TextMedium>
+        <TextMedium>You intend to bind account for staking</TextMedium>
         <TextMedium>
           Fees of <TokenValue value={partialFee?.toBn()} /> will be applied to the transaction.
         </TextMedium>
         <Row>
+          <Label>Staking account</Label>
           <SelectedAccount account={signerAccount} />
         </Row>
+        <Label>Member</Label>
+        <MemberRow>{member && <MemberInfo member={member} />}</MemberRow>
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>

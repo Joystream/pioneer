@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react'
-import styled from 'styled-components'
 
-import { SuccessIcon } from '../../../common/components/icons'
-import { Loading } from '../../../common/components/Loading'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../common/components/Modal'
-import { TextMedium } from '../../../common/components/typography'
-import { BorderRad, Colors, Sizes } from '../../../common/constants'
+import { SuccessIcon } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { TextMedium } from '@/common/components/typography'
+import { MemberRow } from '@/memberships/modals/components'
+
 import { MemberInfo } from '../../components'
 import { useMember } from '../../hooks/useMembership'
 import { Member } from '../../types'
@@ -55,17 +55,3 @@ export function InviteMemberSuccessModal({ onClose, formData }: Props) {
     </SuccessModal>
   )
 }
-
-const MemberRow = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  align-items: center;
-  width: 100%;
-  min-height: ${Sizes.accountHeight};
-  max-height: ${Sizes.accountHeight};
-  padding: 8px 72px 8px 14px;
-  border: 1px solid ${Colors.Black[300]};
-  border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
-`

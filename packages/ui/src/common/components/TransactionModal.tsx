@@ -5,7 +5,7 @@ import { ActorRef } from 'xstate'
 import { Modal, ModalHeader } from './Modal'
 import { WaitModal } from './WaitModal'
 
-interface TransactionStep {
+export interface TransactionStep {
   title: string
 }
 
