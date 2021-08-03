@@ -5,10 +5,10 @@ import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TransactionModal } from '@/common/components/TransactionModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { TransactionModal } from '@/common/modals/TransactionModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface Props {

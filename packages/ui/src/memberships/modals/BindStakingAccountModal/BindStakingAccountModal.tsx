@@ -10,9 +10,9 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TransactionModal, TransactionStep } from '@/common/components/TransactionModal'
 import { Label, TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { TransactionModal, TransactionStep } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 import { MemberInfo } from '@/memberships/components'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -46,7 +46,7 @@ export const BindStakingAccountModal = ({ onClose, transaction, signer, service,
   const signDisabled = !isReady || !hasFunds
 
   return (
-    <TransactionModal onClose={onClose} service={service} asMulti={{ steps, active: 0 }}>
+    <TransactionModal onClose={onClose} service={service} useMultiTransaction={{ steps, active: 0 }}>
       <ModalBody>
         <TextMedium>You intend to bind account for staking</TextMedium>
         <TextMedium>

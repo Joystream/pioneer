@@ -14,9 +14,9 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TransactionModal } from '@/common/components/TransactionModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { TransactionModal } from '@/common/modals/TransactionModal'
 
 import { getMessage } from '../utils'
 

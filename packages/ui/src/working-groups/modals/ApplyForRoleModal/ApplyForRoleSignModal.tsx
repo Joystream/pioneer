@@ -11,9 +11,9 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TransactionModal, TransactionStep } from '@/common/components/TransactionModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { TransactionModal, TransactionStep } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 
 interface SignProps {
@@ -43,7 +43,7 @@ export const ApplyForRoleSignModal = ({ onClose, transaction, signer, stake, ser
   const signDisabled = !isReady || !hasFunds
 
   return (
-    <TransactionModal onClose={onClose} service={service} asMulti={{ steps: steps, active: 1 }}>
+    <TransactionModal onClose={onClose} service={service} useMultiTransaction={{ steps: steps, active: 1 }}>
       <ModalBody>
         <TextMedium>You intend to apply for a role.</TextMedium>
         <TextMedium>
