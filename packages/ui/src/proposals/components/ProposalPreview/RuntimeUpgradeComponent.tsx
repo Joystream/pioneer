@@ -2,9 +2,7 @@ import React, { useMemo, useState } from 'react'
 
 import { ArrowRightIcon, FileIcon } from '@/common/components/icons'
 import { StyledLink } from '@/common/components/Link'
-import { Loading } from '@/common/components/Loading'
-import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
-import { Statistics } from '@/common/components/statistics'
+import { StatisticItem, Statistics } from '@/common/components/statistics'
 import { StatisticButton } from '@/common/components/statistics/StatisticButton'
 import { TextInlineBig } from '@/common/components/typography'
 import { useRuntimeBytecode } from '@/proposals/hooks/useRuntimeBytecode'
@@ -20,14 +18,16 @@ interface RuntimeUpgradeProps {
 export const RuntimeUpgradeComponent: ProposalPropertiesContent<'runtimeUpgrade'> = ({
   details,
 }: RuntimeUpgradeProps) => {
-  const [downloadOpen, setDownloadOpen] = useState(false)
+  const [download, setDownload] = useState(false)
   return (
-    <>
-      <Statistics>
+    <Statistics>
+      {download && details.newBytecodeId ? (
+        <RuntimeDownload id={details.newBytecodeId} onClose={() => setDownload(false)} />
+      ) : (
         <StatisticButton
           title="Blob"
           onClick={() => {
-            setDownloadOpen(true)
+            setDownload(true)
           }}
           icon={<ArrowRightIcon />}
         >
@@ -36,11 +36,8 @@ export const RuntimeUpgradeComponent: ProposalPropertiesContent<'runtimeUpgrade'
             File Preview
           </TextInlineBig>
         </StatisticButton>
-      </Statistics>
-      {details.newBytecodeId && downloadOpen && (
-        <RuntimeDownloadModal id={details.newBytecodeId} onClose={() => setDownloadOpen(false)} />
       )}
-    </>
+    </Statistics>
   )
 }
 
@@ -49,7 +46,7 @@ interface RuntimeDownloadProps {
   onClose: () => void
 }
 
-const RuntimeDownloadModal = ({ id, onClose }: RuntimeDownloadProps) => {
+const RuntimeDownload = ({ id }: RuntimeDownloadProps) => {
   const { isLoading, runtimeBytecode } = useRuntimeBytecode(id)
   const downloadHref = useMemo(() => {
     if (!runtimeBytecode) return ''
@@ -58,17 +55,19 @@ const RuntimeDownloadModal = ({ id, onClose }: RuntimeDownloadProps) => {
   }, [runtimeBytecode?.bytecode])
 
   return (
-    <Modal modalSize="xs" onClose={onClose}>
-      <ModalHeader icon={<FileIcon />} onClick={onClose} title="Download Bytecode" />
-      <ModalBody>
-        {isLoading || !downloadHref ? (
-          <Loading />
-        ) : (
+    <StatisticItem title="Blob">
+      <FileIcon />
+      {isLoading || !downloadHref ? (
+        <TextInlineBig bold value>
+          Downloading file...
+        </TextInlineBig>
+      ) : (
+        <TextInlineBig bold value>
           <StyledLink href={downloadHref} download={`bytecode_${id}.wasm`}>
-            Download the file
+            Save
           </StyledLink>
-        )}
-      </ModalBody>
-    </Modal>
+        </TextInlineBig>
+      )}
+    </StatisticItem>
   )
 }
