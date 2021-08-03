@@ -5,12 +5,12 @@ import { BreadcrumbsListComponent } from '@/common/components/page/Sidebar/Bread
 
 import { ForumBreadcrumb } from '../types'
 
-interface Props {
+export interface ForumBreadcrumbsProps {
   forumBreadcrumbs: ForumBreadcrumb[]
   currentBreadcrumb?: string
 }
 
-export const ForumBreadcrumbs = React.memo(({ forumBreadcrumbs, currentBreadcrumb }: Props) => {
+export const ForumBreadcrumbs = React.memo(({ forumBreadcrumbs, currentBreadcrumb }: ForumBreadcrumbsProps) => {
   const crumbs = forumBreadcrumbs.map((crumb) => ({
     path: `/forum/categories/${crumb.id}`,
     breadcrumb: crumb.title,

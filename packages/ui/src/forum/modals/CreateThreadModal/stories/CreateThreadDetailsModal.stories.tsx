@@ -12,14 +12,9 @@ export default {
   component: CreateThreadDetailsModal,
 } as Meta
 
-const Template: Story = () => {
+const Template: Story = ({ breadcrumbs }) => {
   const [topic, setTopic] = useState('')
   const [description, setDescription] = useState('')
-  const breadcrumbs = [
-    { id: '0', title: 'Help' },
-    { id: '1', title: 'Working Groups' },
-    { id: '2', title: 'Storage' },
-  ]
   return (
     <>
       <HashRouter>
