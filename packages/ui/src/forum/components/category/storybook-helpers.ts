@@ -1,9 +1,9 @@
 import { sub } from 'date-fns'
 import faker from 'faker'
 
-import { ForumModerator, ForumPost, ForumThread } from '@/forum/types'
-import { getMember } from '@/mocks/helpers'
-import { randomBlock } from '@/mocks/helpers/randomBlock'
+import { ForumModerator } from '@/forum/types'
+import { RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
+import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
 export const asStorybookModerator = (hasAvatar = false) => {
   return (index: number): ForumModerator => ({
@@ -13,24 +13,25 @@ export const asStorybookModerator = (hasAvatar = false) => {
   })
 }
 
-export const asStorybookPost = (text: string): ForumPost | undefined => {
+export const asStorybookPost = (text: string): RawForumPostMock | undefined => {
   if (text)
     return {
       id: '0',
+      threadId: '0',
       createdAt: sub(Date.now(), { minutes: 25 }).toISOString(),
-      createdAtBlock: randomBlock(),
-      author: getMember('alice'),
+      authorId: '0',
       text,
     }
 }
 
-export const asStorybookThread = (title: string): (ForumThread & { postCount: number }) | undefined => {
+export const asStorybookThread = (title: string): RawForumThreadMock | undefined => {
   if (title)
     return {
       id: '0',
-      title,
-      isSticky: false,
       categoryId: '0',
-      postCount: 1201,
+      isSticky: false,
+      title,
+      authorId: '0',
+      createdInEvent: randomRawBlock(),
     }
 }
