@@ -5,20 +5,47 @@ import { ActorRef } from 'xstate'
 import { Modal, ModalHeader } from './Modal'
 import { WaitModal } from './WaitModal'
 
+interface TransactionStep {
+  title: string
+}
+
+interface MultiTransactionConfig {
+  steps: TransactionStep[]
+  active: number
+}
+
 export interface TransactionModalProps {
   children: ReactNode
   onClose: () => void
   service: ActorRef<any>
   title?: string
+  asMulti?: MultiTransactionConfig
 }
 
-export const TransactionModal = ({ onClose, children, service, title }: TransactionModalProps) => {
+type MultiTransactionModalHeaderParams = {
+  onClick: () => void
+  active: number
+  transactionSteps: TransactionStep[]
+}
+
+const MultiTransactionModalHeader = (props: MultiTransactionModalHeaderParams) => (
+  <ModalHeader
+    onClick={props.onClick}
+    title={`Transaction ${props.active + 1} "${props.transactionSteps[props.active]?.title}"`}
+  />
+)
+
+export const TransactionModal = ({ onClose, children, service, title, asMulti }: TransactionModalProps) => {
   const [state] = useActor(service)
 
   if (state.matches('prepare')) {
     return (
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-        <ModalHeader onClick={onClose} title={title ?? 'Authorize transaction'} />
+        {asMulti ? (
+          <MultiTransactionModalHeader onClick={onClose} active={asMulti.active} transactionSteps={asMulti.steps} />
+        ) : (
+          <ModalHeader onClick={onClose} title={title ?? 'Authorize transaction'} />
+        )}
         {children}
       </Modal>
     )
