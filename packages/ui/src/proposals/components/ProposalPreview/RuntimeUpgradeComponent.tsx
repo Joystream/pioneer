@@ -1,10 +1,7 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { ArrowRightIcon, FileIcon } from '@/common/components/icons'
-import { StyledLink } from '@/common/components/Link'
-import { Loading } from '@/common/components/Loading'
-import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
-import { Statistics } from '@/common/components/statistics'
+import { StatisticItem, Statistics } from '@/common/components/statistics'
 import { StatisticButton } from '@/common/components/statistics/StatisticButton'
 import { TextInlineBig } from '@/common/components/typography'
 import { useRuntimeBytecode } from '@/proposals/hooks/useRuntimeBytecode'
@@ -18,57 +15,57 @@ interface RuntimeUpgradeProps {
 }
 
 export const RuntimeUpgradeComponent: ProposalPropertiesContent<'runtimeUpgrade'> = ({
-  details,
+  details: { newBytecodeId },
 }: RuntimeUpgradeProps) => {
-  const [downloadOpen, setDownloadOpen] = useState(false)
+  const { state, runtimeBytecode, fetch } = useRuntimeBytecode(newBytecodeId)
+
+  const downloadHref = useMemo(() => {
+    if (!runtimeBytecode) {
+      return ''
+    }
+    const base64string = Buffer.from(runtimeBytecode.bytecode.replace(/^0x/, ''), 'hex').toString('base64')
+    return `data:application/octet-stream;base64,${base64string}`
+  }, [runtimeBytecode?.bytecode])
+
+  useEffect(() => {
+    if (state === 'loaded') {
+      downloadFile(newBytecodeId, downloadHref)
+    }
+  }, [state])
+
+  const onFileClick = () => {
+    if (state !== 'loaded') {
+      fetch()
+    } else {
+      downloadFile(newBytecodeId, downloadHref)
+    }
+  }
+
   return (
-    <>
-      <Statistics>
-        <StatisticButton
-          title="Blob"
-          onClick={() => {
-            setDownloadOpen(true)
-          }}
-          icon={<ArrowRightIcon />}
-        >
+    <Statistics>
+      {state !== 'loading' && (
+        <StatisticButton title="Blob" onClick={onFileClick} icon={<ArrowRightIcon />}>
           <FileIcon />
           <TextInlineBig bold value>
             File Preview
           </TextInlineBig>
         </StatisticButton>
-      </Statistics>
-      {details.newBytecodeId && downloadOpen && (
-        <RuntimeDownloadModal id={details.newBytecodeId} onClose={() => setDownloadOpen(false)} />
       )}
-    </>
+      {state === 'loading' && (
+        <StatisticItem title="Blob">
+          <FileIcon />
+          <TextInlineBig bold value>
+            Downloading file...
+          </TextInlineBig>
+        </StatisticItem>
+      )}
+    </Statistics>
   )
 }
 
-interface RuntimeDownloadProps {
-  id: string
-  onClose: () => void
-}
-
-const RuntimeDownloadModal = ({ id, onClose }: RuntimeDownloadProps) => {
-  const { isLoading, runtimeBytecode } = useRuntimeBytecode(id)
-  const downloadHref = useMemo(() => {
-    if (!runtimeBytecode) return ''
-    const base64string = Buffer.from(runtimeBytecode.bytecode.replace(/^0x/, ''), 'hex').toString('base64')
-    return `data:application/octet-stream;base64,${base64string}`
-  }, [runtimeBytecode?.bytecode])
-
-  return (
-    <Modal modalSize="xs" onClose={onClose}>
-      <ModalHeader icon={<FileIcon />} onClick={onClose} title="Download Bytecode" />
-      <ModalBody>
-        {isLoading || !downloadHref ? (
-          <Loading />
-        ) : (
-          <StyledLink href={downloadHref} download={`bytecode_${id}.wasm`}>
-            Download the file
-          </StyledLink>
-        )}
-      </ModalBody>
-    </Modal>
-  )
+function downloadFile(id: string | undefined, downloadHref: string) {
+  const a = document.createElement('a')
+  a.download = `bytecode_${id}.wasm`
+  a.href = downloadHref
+  a.click()
 }
