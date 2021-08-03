@@ -38,16 +38,14 @@ const asSubCategory = (fields: ForumSubCategoryFieldsFragment): ForumBreadcrumb 
 })
 
 export const asForumBreadcrumbs = (fields: ForumCategoryBreadcrumbsFieldsFragment): ForumBreadcrumb[] => {
-  const breadcrumbs: ForumBreadcrumb[] = []
-  assignBreadcrumbs(fields, breadcrumbs)
-  return breadcrumbs
+  return getBreadcrumbs(fields)
 }
 
 type ParentCategory = ForumSubCategoryFieldsFragment & { parent?: ParentCategory | null }
 
-const assignBreadcrumbs = (fields: ParentCategory, categories: ForumBreadcrumb[]) => {
+const getBreadcrumbs = (fields: ParentCategory): ForumBreadcrumb[] => {
   if (fields.parent) {
-    assignBreadcrumbs(fields.parent, categories)
+    return [...getBreadcrumbs(fields.parent), asSubCategory(fields)]
   }
-  categories.push(asSubCategory(fields))
+  return [asSubCategory(fields)]
 }
