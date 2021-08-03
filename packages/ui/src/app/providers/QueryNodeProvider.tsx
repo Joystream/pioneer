@@ -39,6 +39,10 @@ const getApolloClient = (network: 'local' | 'olympia-testnet') => {
     if (errorResponse.networkError) {
       error('Error connecting to query node')
     }
+
+    if (errorResponse.graphQLErrors) {
+      error('GraphQL error', errorResponse.graphQLErrors)
+    }
   })
 
   return new ApolloClient({

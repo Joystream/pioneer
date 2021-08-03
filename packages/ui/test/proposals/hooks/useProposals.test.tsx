@@ -10,6 +10,7 @@ import { getMember } from '../../_mocks/members'
 import { testProposals } from '../../_mocks/proposals'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
 
 const renderUseProposals = (props: UseProposalsProps) =>
   renderHook(() => useProposals(props), {
@@ -18,12 +19,11 @@ const renderUseProposals = (props: UseProposalsProps) =>
 
 describe('useProposals', () => {
   const mockServer = setupMockServer({ noCleanupAfterEach: true })
-  const alice = getMember('alice')
   const bob = getMember('bob')
 
   beforeAll(() => {
-    seedMember({ ...alice, metadata: { name: '', about: '' } }, mockServer.server)
-    seedMember({ ...bob, metadata: { name: '', about: '' } }, mockServer.server)
+    seedMember(MEMBER_ALICE_DATA, mockServer.server)
+    seedMember({ ...MEMBER_ALICE_DATA, ...bob }, mockServer.server)
     testProposals.map((proposal) => seedProposal(proposal, mockServer.server))
   })
 

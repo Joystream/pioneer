@@ -67,12 +67,16 @@ export type ForumPostWithoutReplyFieldsFragment = {
   createdAt: any
   updatedAt?: Types.Maybe<any>
   text: string
+  authorId: string
   author: { __typename: 'Membership' } & MemberFieldsFragment
+  postaddedeventpost?: Types.Maybe<
+    Array<{ __typename: 'PostAddedEvent'; createdAt: any; inBlock: number; network: Types.Network }>
+  >
 }
 
 export type ForumThreadDetailedFieldsFragment = {
   __typename: 'ForumThread'
-  createdInEvent: { __typename: 'ThreadCreatedEvent'; inBlock: number }
+  createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
 } & ForumThreadFieldsFragment
 
 export type GetForumCategoriesQueryVariables = Types.Exact<{
@@ -177,6 +181,12 @@ export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
       ...MemberFields
     }
     text
+    authorId
+    postaddedeventpost {
+      createdAt
+      inBlock
+      network
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -202,7 +212,9 @@ export const ForumThreadDetailedFieldsFragmentDoc = gql`
   fragment ForumThreadDetailedFields on ForumThread {
     ...ForumThreadFields
     createdInEvent {
+      createdAt
       inBlock
+      network
     }
   }
   ${ForumThreadFieldsFragmentDoc}

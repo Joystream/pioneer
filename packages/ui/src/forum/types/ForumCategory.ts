@@ -6,19 +6,30 @@ import {
 
 export interface ForumCategory extends ForumBreadcrumb {
   description: string
-  subcategories: ForumBreadcrumb[]
+  subcategories: ForumSubCategory[]
+  moderators: ForumModerator[]
 }
 
-export interface ForumBreadcrumb {
+export interface ForumModerator {
+  id: string
+  membershipId: string
+  handle?: string
+  avatar?: string
+}
+
+export interface ForumSubCategory {
   id: string
   title: string
 }
 
-export const asForumCategory = (fields: ForumCategoryFieldsFragment): ForumCategory => ({
+export type ForumBreadcrumb = ForumSubCategory
+
+export const asForumCategory = (fields: Omit<ForumCategoryFieldsFragment, '__typename'>): ForumCategory => ({
   id: fields.id,
   title: fields.title,
   description: fields.description,
   subcategories: [],
+  moderators: [],
 })
 
 const asSubCategory = (fields: ForumSubCategoryFieldsFragment): ForumBreadcrumb => ({

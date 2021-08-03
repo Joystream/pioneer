@@ -1,3 +1,5 @@
+import { BlockFieldsMock } from '@/mocks/data/common'
+
 import rawForumCategories from './raw/forumCategories.json'
 import rawForumPosts from './raw/forumPosts.json'
 import rawForumThreads from './raw/forumThreads.json'
@@ -18,7 +20,7 @@ export interface RawForumThreadMock {
   categoryId: string
   isSticky: boolean
   title: string
-  createdInEvent: { inBlock: number }
+  createdInEvent: BlockFieldsMock
   authorId: string
 }
 

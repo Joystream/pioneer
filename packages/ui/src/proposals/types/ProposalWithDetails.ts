@@ -33,16 +33,20 @@ export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment)
   ...asProposal(fields),
   votes: fields.votes.map(asProposalVote),
   rationale: fields.description,
-  statusSetAtBlock: asBlock(),
+  statusSetAtBlock: asBlock({
+    inBlock: fields.statusSetAtBlock,
+    createdAt: fields.statusSetAtTime,
+    network: fields.createdInEvent.network,
+  }),
   statusSetAtTime: fields.statusSetAtTime,
-  createdInBlock: asBlock(),
+  createdInBlock: asBlock(fields.createdInEvent),
   discussionThread: {
     discussionPosts: fields.discussionThread.discussionPosts.map(asForumComment),
     mode: fields.discussionThread.mode.__typename === 'ProposalDiscussionThreadModeOpen' ? 'open' : 'close',
   },
-  proposalStatusUpdates: fields.proposalStatusUpdates.map(({ newStatus }) => ({
-    inBlock: asBlock(),
-    status: typenameToProposalStatus(newStatus.__typename),
+  proposalStatusUpdates: fields.proposalStatusUpdates.map((status) => ({
+    inBlock: asBlock(status),
+    status: typenameToProposalStatus(status.newStatus.__typename),
   })),
   details: asProposalDetails(fields.details),
 })
@@ -69,7 +73,7 @@ export interface ProposalDiscussionThread {
 const asForumComment = (fields: DiscussionPostFieldsFragment): ForumPost => ({
   id: fields.id,
   createdAt: fields.createdAt,
-  createdAtBlock: asBlock(),
+  createdAtBlock: asBlock(fields.createdInEvent),
   updatedAt: fields.updatedAt,
   author: asMember(fields.author),
   text: fields.text,

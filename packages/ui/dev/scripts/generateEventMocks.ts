@@ -28,7 +28,7 @@ export type EventsArgs = yargs.Arguments<CommandOptions>
 export const generateEvents = (args: EventsArgs) => {
   const mocks: Mocks = {
     applications,
-    members,
+    members: members as any,
     openings: openings.map((opening) => ({
       ...opening,
       metadata: {

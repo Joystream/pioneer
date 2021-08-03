@@ -2,8 +2,8 @@ import { renderHook } from '@testing-library/react-hooks'
 
 import { ProposalVoteKind } from '@/common/api/queries'
 import { useCouncilSize } from '@/common/hooks/useCouncilSize'
-import { asBlock } from '@/common/types'
 import { getMember } from '@/mocks/helpers'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { ProposalStatus } from '@/proposals/types'
 
@@ -17,7 +17,7 @@ const renderUseProposalVotes = (voteData: VoteData[], statuses: ProposalStatus[]
   renderHook(
     ([voteData, statuses]: [VoteData[], ProposalStatus[]]) => {
       const votes = asVotes(voteData)
-      const updates = statuses.map((status) => ({ status, inBlock: asBlock() }))
+      const updates = statuses.map((status) => ({ status, inBlock: randomBlock() }))
       return useVotingRounds(votes, updates)
     },
     { initialProps: [voteData, statuses] }

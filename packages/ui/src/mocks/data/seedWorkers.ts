@@ -1,6 +1,7 @@
 import faker from 'faker'
 
 import { Worker } from '@/common/api/queries'
+import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
 
 import rawWorkers from './raw/workers.json'
 
@@ -36,6 +37,11 @@ export const seedWorker = (rawWorker: RawWorker, server: any) => {
     ...rawWorker,
     status: null,
     isLead: group.leaderId === rawWorker.id,
+    entry: server.schema.create('OpeningFilledEvent', {
+      openingId: group.openings.models[0].id,
+      ...seedRandomBlockFields(),
+      groupId: rawWorker.groupId,
+    }),
   })
   worker.update({ status: seedWorkerStatus(worker, rawWorker.status as WorkerStatus, server) })
 }

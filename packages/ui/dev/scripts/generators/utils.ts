@@ -41,6 +41,7 @@ export const randomFromWeightedSet = <T extends any>(...weightedList: [number, T
 }
 
 const randomMdTags = randomsFromWeightedSet([4, 'pargraph'], [1, 'code'], [1, 'quote'], [1, 'list'])
+
 const tagToRandomMarkdown = (tag: string): string => {
   switch (tag) {
     case 'code': {
@@ -55,6 +56,7 @@ const tagToRandomMarkdown = (tag: string): string => {
       return faker.lorem.paragraph()
   }
 }
+
 export const randomMessage = () => randomMdTags(randomFromRange(1, 3)).map(tagToRandomMarkdown).join('\n\n')
 
 export const shuffle = <T>(arr: Array<T>) => {
@@ -66,3 +68,9 @@ export const shuffle = <T>(arr: Array<T>) => {
 }
 
 export const randomMember = () => members[randomFromRange(0, members.length - 1)]
+
+export const randomBlock = () => ({
+  inBlock: faker.datatype.number(10_000),
+  createdAt: faker.date.recent(180).toJSON(),
+  network: 'OLYMPIA',
+})

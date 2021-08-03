@@ -39,6 +39,7 @@ export type WorkerDetailedFieldsFragment = {
   roleAccount: string
   rewardAccount: string
   stakeAccount: string
+  entry: { __typename: 'OpeningFilledEvent'; inBlock: number; network: Types.Network; createdAt: any }
   application: {
     __typename: 'WorkingGroupApplication'
     id: string
@@ -167,6 +168,7 @@ export type WorkingGroupOpeningFieldsFragment = {
   rewardPerBlock: any
   unstakingPeriod: number
   group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
   status:
     | { __typename: 'OpeningStatusOpen' }
@@ -280,6 +282,7 @@ export type WorkingGroupApplicationFieldsFragment = {
     | { __typename: 'ApplicationStatusRejected' }
     | { __typename: 'ApplicationStatusWithdrawn' }
     | { __typename: 'ApplicationStatusCancelled' }
+  createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
 }
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
@@ -336,6 +339,7 @@ export type UpcomingWorkingGroupOpeningFieldsFragment = {
   stakeAmount?: Types.Maybe<any>
   rewardPerBlock?: Types.Maybe<any>
   group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
 }
 
@@ -656,6 +660,11 @@ export const WorkerDetailedFieldsFragmentDoc = gql`
     roleAccount
     rewardAccount
     stakeAccount
+    entry {
+      inBlock
+      network
+      createdAt
+    }
     application {
       id
       openingId
@@ -742,6 +751,11 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     type
     stakeAmount
     rewardPerBlock
+    createdInEvent {
+      inBlock
+      network
+      createdAt
+    }
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }
@@ -792,6 +806,11 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       __typename
     }
     stakingAccount
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -823,6 +842,11 @@ export const UpcomingWorkingGroupOpeningFieldsFragmentDoc = gql`
     expectedStart
     stakeAmount
     rewardPerBlock
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
     metadata {
       ...WorkingGroupOpeningMetadataFields
     }
@@ -1067,7 +1091,7 @@ export const WorkerRewardAccountUpdatedEventFragmentDoc = gql`
   }
 `
 export const GetBudgetSpendingDocument = gql`
-  query getBudgetSpending($where: BudgetSpendingEventWhereInput) {
+  query GetBudgetSpending($where: BudgetSpendingEventWhereInput) {
     budgetSpendingEvents(where: $where) {
       ...BudgetSpendingEventFields
     }
@@ -1110,7 +1134,7 @@ export type GetBudgetSpendingQueryHookResult = ReturnType<typeof useGetBudgetSpe
 export type GetBudgetSpendingLazyQueryHookResult = ReturnType<typeof useGetBudgetSpendingLazyQuery>
 export type GetBudgetSpendingQueryResult = Apollo.QueryResult<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>
 export const GetWorkingGroupsDocument = gql`
-  query getWorkingGroups {
+  query GetWorkingGroups {
     workingGroups {
       ...WorkingGroupFields
     }
@@ -1149,7 +1173,7 @@ export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGro
 export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>
 export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
 export const GetWorkersDocument = gql`
-  query getWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
+  query GetWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
     workers(where: $where, offset: $offset, limit: $limit) {
       ...WorkerFields
     }
@@ -1189,7 +1213,7 @@ export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
 export const GetWorkersCountDocument = gql`
-  query getWorkersCount($where: WorkerWhereInput) {
+  query GetWorkersCount($where: WorkerWhereInput) {
     workersConnection(where: $where) {
       totalCount
     }
@@ -1228,7 +1252,7 @@ export type GetWorkersCountQueryHookResult = ReturnType<typeof useGetWorkersCoun
 export type GetWorkersCountLazyQueryHookResult = ReturnType<typeof useGetWorkersCountLazyQuery>
 export type GetWorkersCountQueryResult = Apollo.QueryResult<GetWorkersCountQuery, GetWorkersCountQueryVariables>
 export const GetDetailedWorkersDocument = gql`
-  query getDetailedWorkers($where: WorkerWhereInput) {
+  query GetDetailedWorkers($where: WorkerWhereInput) {
     workers(where: $where) {
       ...WorkerDetailedFields
     }
@@ -1274,7 +1298,7 @@ export type GetDetailedWorkersQueryResult = Apollo.QueryResult<
   GetDetailedWorkersQueryVariables
 >
 export const GetWorkerDocument = gql`
-  query getWorker($where: WorkerWhereUniqueInput!) {
+  query GetWorker($where: WorkerWhereUniqueInput!) {
     workerByUniqueInput(where: $where) {
       ...WorkerDetailedFields
     }
@@ -1312,7 +1336,7 @@ export type GetWorkerQueryHookResult = ReturnType<typeof useGetWorkerQuery>
 export type GetWorkerLazyQueryHookResult = ReturnType<typeof useGetWorkerLazyQuery>
 export type GetWorkerQueryResult = Apollo.QueryResult<GetWorkerQuery, GetWorkerQueryVariables>
 export const GetGroupDebtDocument = gql`
-  query getGroupDebt($where: WorkerWhereInput!) {
+  query GetGroupDebt($where: WorkerWhereInput!) {
     workers(where: $where) {
       missingRewardAmount
     }
@@ -1351,7 +1375,7 @@ export type GetGroupDebtQueryHookResult = ReturnType<typeof useGetGroupDebtQuery
 export type GetGroupDebtLazyQueryHookResult = ReturnType<typeof useGetGroupDebtLazyQuery>
 export type GetGroupDebtQueryResult = Apollo.QueryResult<GetGroupDebtQuery, GetGroupDebtQueryVariables>
 export const GetRewardsDocument = gql`
-  query getRewards($where: RewardPaidEventWhereInput) {
+  query GetRewards($where: RewardPaidEventWhereInput) {
     rewardPaidEvents(where: $where) {
       ...RewardPaidEventFields
     }
@@ -1389,7 +1413,7 @@ export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>
 export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>
 export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>
 export const CountWorkingGroupOpeningsDocument = gql`
-  query countWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
+  query CountWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
     workingGroupOpeningsConnection(where: $where) {
       totalCount
     }
@@ -1437,7 +1461,7 @@ export type CountWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   CountWorkingGroupOpeningsQueryVariables
 >
 export const CountWorkingGroupWorkersDocument = gql`
-  query countWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
+  query CountWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
     workersConnection(where: { group: { id_eq: $groupId_eq }, status_json: $status_json }) {
       totalCount
     }
@@ -1486,7 +1510,7 @@ export type CountWorkingGroupWorkersQueryResult = Apollo.QueryResult<
   CountWorkingGroupWorkersQueryVariables
 >
 export const GetWorkingGroupOpeningsDocument = gql`
-  query getWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
+  query GetWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
     workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
       ...WorkingGroupOpeningFields
     }
@@ -1537,7 +1561,7 @@ export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
   GetWorkingGroupOpeningsQueryVariables
 >
 export const GetWorkingGroupOpeningDocument = gql`
-  query getWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
+  query GetWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
     workingGroupOpeningByUniqueInput(where: $where) {
       ...WorkingGroupOpeningDetailedFields
     }

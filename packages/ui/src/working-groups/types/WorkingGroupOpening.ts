@@ -86,7 +86,7 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
     groupId: fields.groupId,
     groupName: groupName,
     budget: fields.group.budget,
-    createdAtBlock: asBlock(),
+    createdAtBlock: asBlock(fields.createdInEvent),
     reward: getReward(fields.rewardPerBlock, fields.group.name),
     expectedEnding: fields.metadata.expectedEnding,
     shortDescription: fields.metadata.shortDescription || '',

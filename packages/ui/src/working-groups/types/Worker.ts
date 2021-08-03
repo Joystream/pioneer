@@ -76,5 +76,5 @@ export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): Worke
   rewardAccount: fields.rewardAccount,
   stakeAccount: fields.stakeAccount,
   minStake: fields.application.opening.stakeAmount,
-  hiredAtBlock: asBlock(),
+  hiredAtBlock: asBlock(fields.entry),
 })
