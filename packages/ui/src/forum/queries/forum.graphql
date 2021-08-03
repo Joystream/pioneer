@@ -92,6 +92,12 @@ query GetForumThreads($where: ForumThreadWhereInput) {
   }
 }
 
+query GetForumThreadsCount($where: ForumThreadWhereInput) {
+  forumThreadsConnection(where: $where) {
+    totalCount
+  }
+}
+
 query GetForumThread($where: ForumThreadWhereUniqueInput!) {
   thread: forumThreadByUniqueInput(where: $where) {
     ...ForumThreadDetailedFields
@@ -109,4 +115,3 @@ query GetForumPostsCount($where: ForumPostWhereInput!) {
     totalCount
   }
 }
-
