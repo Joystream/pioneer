@@ -19,7 +19,7 @@ const Template: Story<ThreadItemProps> = (args) => (
   <ScrollBlock>
     <ThreadsLayout>
       <ThreadItem {...args} />
-      <ThreadItem {...{ ...args, withButtons: false }} />
+      <ThreadItem {...args} hideButtons />
       <ThreadItem {...args} />
     </ThreadsLayout>
   </ScrollBlock>

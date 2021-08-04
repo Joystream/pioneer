@@ -16,17 +16,17 @@ export interface ThreadItemProps {
   categoryLabel: string
   categoryCount?: number
   thread: ForumThread
-  withButtons?: boolean
+  hideButtons?: boolean
 }
 
-export const ThreadItem = ({ categoryLabel, categoryCount, thread, withButtons = true }: ThreadItemProps) => {
+export const ThreadItem = ({ categoryLabel, categoryCount, thread, hideButtons }: ThreadItemProps) => {
   return (
     <ThreadItemStyles>
       <ThreadItemHeader align="center" gap={16}>
         <Label>
           {categoryLabel} {categoryCount && <CountBadge count={categoryCount} />}
         </Label>
-        {withButtons && (
+        {!hideButtons && (
           <ButtonsGroup>
             <ButtonGhost size="small" square>
               <Arrow direction="left" />

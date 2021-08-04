@@ -19,7 +19,7 @@ export const SuggestedThreads = () => {
     return (
       <ThreadsList>
         {threads.map((thread) => (
-          <ThreadItem key={thread.id} categoryLabel="Lorem > Ipsum > Del" thread={thread} withButtons={false} />
+          <ThreadItem key={thread.id} categoryLabel="Lorem > Ipsum > Del" thread={thread} hideButtons />
         ))}
       </ThreadsList>
     )
