@@ -30,6 +30,7 @@ export interface RawForumPostMock {
   authorId: string
   text: string
   repliesToId?: string
+  edits: { newText: string }[]
   createdAt: string
 }
 

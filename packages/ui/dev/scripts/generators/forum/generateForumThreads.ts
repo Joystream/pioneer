@@ -13,6 +13,10 @@ export const generateForumPost = (threadId: string, authorId: string, repliesToI
   authorId,
   text: faker.lorem.words(randomFromRange(10, 100)),
   repliesToId,
+  edits: [...new Array(randomFromRange(0, 4))].map(() => ({
+    newText: faker.lorem.words(randomFromRange(10, 100)),
+    ...randomBlock(),
+  })),
   createdAt: new Date().toISOString(),
 })
 
