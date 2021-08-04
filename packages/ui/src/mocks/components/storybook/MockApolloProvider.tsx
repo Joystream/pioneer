@@ -60,7 +60,7 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
       seedMembers(MockServer.server)
       MockServer.members = true
     }
-    if (toSeed.workingGroups && !MockServer.workingGroups) {
+    if ((toSeed.workingGroups || toSeed.workers) && !MockServer.workingGroups) {
       seedWorkingGroups(MockServer.server)
       MockServer.workingGroups = true
     }

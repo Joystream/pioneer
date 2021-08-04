@@ -4,6 +4,7 @@ export const mockCategories = [
     title: 'Category 0',
     description: 'Root category',
     parentId: null,
+    moderators: [],
   },
   {
     id: '1',
@@ -11,6 +12,7 @@ export const mockCategories = [
     description:
       'Sint voluptatem dolor praesentium esse earum omnis et. Velit impedit suscipit optio quia eveniet eligendi sequi. Et est quo corporis voluptate est eaque. Nihil cumque rem explicabo quidem aut.',
     parentId: '0',
+    moderators: [],
   },
   {
     id: '2',
@@ -18,6 +20,7 @@ export const mockCategories = [
     description:
       'Fugiat beatae repellendus quia doloremque eum commodi. Harum porro quasi repudiandae tempore at dolores praesentium. Unde reprehenderit illum consectetur minus molestiae cum. Id dignissimos et officiis consequatur.',
     parentId: '1',
+    moderators: [],
   },
   {
     id: '3',
@@ -25,6 +28,7 @@ export const mockCategories = [
     description:
       'Excepturi recusandae voluptas eveniet ea. Autem quod neque et non consequatur error est quisquam. Rem voluptas odit sed facilis facere vel. Et ut recusandae sit sint et est dolorem aliquid. Sunt et aut repudiandae magni aliquam aperiam. Enim eveniet enim earum nulla similique debitis ab ut.',
     parentId: '2',
+    moderators: [],
   },
   {
     id: '4',
@@ -32,6 +36,7 @@ export const mockCategories = [
     description:
       'Eos non labore id numquam nihil non debitis. Distinctio ea illum velit suscipit omnis officia. Sed minima nobis ea expedita.',
     parentId: '3',
+    moderators: [],
   },
   {
     id: '5',
@@ -39,5 +44,6 @@ export const mockCategories = [
     description:
       'Nihil magnam eligendi deserunt sint provident repellat et. Quas suscipit reprehenderit nostrum. Fuga placeat dolorem omnis aspernatur corporis dolore praesentium dolores.',
     parentId: '3',
+    moderators: [],
   },
 ]

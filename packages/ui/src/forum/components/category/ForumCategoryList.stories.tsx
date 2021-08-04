@@ -46,7 +46,7 @@ const Template: Story = () => {
   }, [categories.length])
 
   return (
-    <MockApolloProvider members forum>
+    <MockApolloProvider members workers forum>
       <MemoryRouter>
         <ForumCategoryList categories={categories} />
       </MemoryRouter>

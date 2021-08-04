@@ -2,7 +2,7 @@ import { sub } from 'date-fns'
 import faker from 'faker'
 
 import { ForumModerator } from '@/forum/types'
-import { RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
+import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
 export const asStorybookModerator = (hasAvatar = false) => {
@@ -13,25 +13,35 @@ export const asStorybookModerator = (hasAvatar = false) => {
   })
 }
 
-export const asStorybookPost = (text: string): RawForumPostMock | undefined => {
-  if (text)
+export const asStorybookPost = (text: string, threadId?: string): RawForumPostMock | undefined => {
+  if (text && threadId)
     return {
-      id: '0',
-      threadId: '0',
+      id: `${threadId}:0`,
+      threadId,
       createdAt: sub(Date.now(), { minutes: 25 }).toISOString(),
       authorId: '0',
       text,
     }
 }
 
-export const asStorybookThread = (title: string): RawForumThreadMock | undefined => {
-  if (title)
+export const asStorybookThread = (title: string, categoryId?: string): RawForumThreadMock | undefined => {
+  if (title && categoryId)
     return {
-      id: '0',
-      categoryId: '0',
+      id: `${categoryId}:0`,
+      categoryId,
       isSticky: false,
       title,
       authorId: '0',
       createdInEvent: randomRawBlock(),
     }
+}
+
+export const asStorybookSubCategories = (parentId: string) => {
+  return (title: string, index = 0): RawForumCategoryMock => ({
+    id: `${parentId}-${index}`,
+    title,
+    description: '',
+    parentId,
+    moderators: [],
+  })
 }

@@ -7,7 +7,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { RawForumCategoryMock } from '@/mocks/data/seedForum'
 
 import { CategoryListItem } from './CategoryListItem'
-import { asStorybookModerator, asStorybookPost, asStorybookThread } from './storybook-helpers'
+import { asStorybookModerator, asStorybookPost, asStorybookSubCategories, asStorybookThread } from './storybook-helpers'
 
 export default {
   title: 'Forum/Categories/CategoryListItem',
@@ -21,21 +21,21 @@ interface Props {
   topThreadTitle: string
   moderatorsCount: number
   category: RawForumCategoryMock
+  subcategories: string[]
 }
-const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount }) => (
-  <MockApolloProvider
-    members
-    forum={{
-      categories: [category],
-      threads: asArray(asStorybookThread(topThreadTitle)),
-      posts: asArray(asStorybookPost(latestPostText)),
-    }}
-  >
-    <MemoryRouter>
-      <CategoryListItem category={{ ...category, moderators: repeat(asStorybookModerator(), moderatorsCount) }} />
-    </MemoryRouter>
-  </MockApolloProvider>
-)
+const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount, subcategories }) => {
+  const categories = [category, ...subcategories.map(asStorybookSubCategories(category.id))]
+  const thread = asStorybookThread(topThreadTitle, category.id)
+  const post = asStorybookPost(latestPostText, thread?.id)
+
+  return (
+    <MockApolloProvider members forum={{ categories, threads: asArray(thread), posts: asArray(post) }}>
+      <MemoryRouter>
+        <CategoryListItem category={{ ...category, moderators: repeat(asStorybookModerator(), moderatorsCount) }} />
+      </MemoryRouter>
+    </MockApolloProvider>
+  )
+}
 
 export const Default = Template.bind({})
 Default.args = {
@@ -43,10 +43,11 @@ Default.args = {
   topThreadTitle: '🔥Can anyone tell me more',
   moderatorsCount: 14,
   category: {
-    id: '0',
+    id: 'CategoryListItem-story',
     title: 'General',
     description:
       'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Lorem Vestibulum congue fermentu.',
     moderators: [],
   },
+  subcategories: ['Lorem ipsum', 'Dolor', 'Name', 'Name'],
 }
