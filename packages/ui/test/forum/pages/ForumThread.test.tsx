@@ -19,9 +19,14 @@ import { MockApiProvider, MockKeyringProvider, MockQueryNodeProviders } from '..
 import { setupMockServer } from '../../_mocks/server'
 
 let mockThread: { isLoading: boolean; thread: ForumThread | null }
+let mockSuggestedThreads: { isLoading: boolean; threads: ForumThread[] }
 
 jest.mock('../../../src/forum/hooks/useForumThread', () => ({
   useForumThread: () => mockThread,
+}))
+
+jest.mock('../../../src/forum/hooks/useForumSuggestedThreads', () => ({
+  useForumSuggestedThreads: () => mockSuggestedThreads,
 }))
 
 describe('UI: Forum Thread Page', () => {
@@ -55,6 +60,10 @@ describe('UI: Forum Thread Page', () => {
     mockThread = {
       isLoading: false,
       thread: null,
+    }
+    mockSuggestedThreads = {
+      isLoading: false,
+      threads: [],
     }
   })
 
