@@ -110,6 +110,15 @@ query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
   }
 }
 
+query GetForumPostEdits($id: ID!) {
+  edits: postTextUpdatedEvents(where: {post: {id_eq: $id}}) {
+    newText
+    network
+    createdAt
+    inBlock
+  }
+}
+
 query GetForumPostsCount($where: ForumPostWhereInput!) {
   forumPostsConnection(where: $where) {
     totalCount
