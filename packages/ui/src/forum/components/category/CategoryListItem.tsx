@@ -20,16 +20,18 @@ export interface CategoryListItemProps {
 }
 
 export const CategoryListItem = ({ category }: CategoryListItemProps) => {
-  const { threadCount, latestPost, topThread } = useForumCategoryDetails(category.id)
+  const { subcategories, threadCount, latestPost, topThread } = useForumCategoryDetails(category.id)
 
   return (
     <CategoryListItemStyles as={GhostRouterLink} to={`${ForumRoutes.category}/${category.id}`}>
       <Category>
         <h5>{category.title}</h5>
         <TextMedium light>{category.description}</TextMedium>
-        <TextInlineExtraSmall lighter>
-          Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
-        </TextInlineExtraSmall>
+        {subcategories && subcategories.length > 0 && (
+          <TextInlineExtraSmall lighter>
+            Subcategories: {subcategories.map(({ title }) => title).join(', ')}
+          </TextInlineExtraSmall>
+        )}
       </Category>
 
       <TextInlineMedium bold value>

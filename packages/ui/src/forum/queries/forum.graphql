@@ -86,6 +86,12 @@ query GetForumCategories($where: ForumCategoryWhereInput) {
   }
 }
 
+query GetForumSubCategories($where: ForumCategoryWhereInput, $limit: Int) {
+  forumCategories(where: $where, limit: $limit) {
+    ...ForumSubCategoryFields
+  }
+}
+
 query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
   forumCategoryByUniqueInput(where: $where) {
     ...ForumCategoryBreadcrumbsFields

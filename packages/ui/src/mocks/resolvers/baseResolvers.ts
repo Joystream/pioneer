@@ -16,7 +16,7 @@ import {
 type FilterCallback = (model: Record<string, any>) => boolean
 
 function getFieldName(model: Record<string, any>, field: string) {
-  return model[field].toString().startsWith('model:') ? field + 'Id' : field
+  return [`${field}Id`, `${field}Ids`].find((key) => key in model) ?? field
 }
 
 const getFilter = (where: Record<string, any>, nestedField?: string) => {

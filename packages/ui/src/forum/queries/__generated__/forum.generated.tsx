@@ -93,6 +93,16 @@ export type GetForumCategoriesQuery = {
   forumCategories: Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>
 }
 
+export type GetForumSubCategoriesQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.ForumCategoryWhereInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type GetForumSubCategoriesQuery = {
+  __typename: 'Query'
+  forumCategories: Array<{ __typename: 'ForumCategory' } & ForumSubCategoryFieldsFragment>
+}
+
 export type GetForumCategoryBreadcrumbsQueryVariables = Types.Exact<{
   where: Types.ForumCategoryWhereUniqueInput
 }>
@@ -285,6 +295,56 @@ export type GetForumCategoriesLazyQueryHookResult = ReturnType<typeof useGetForu
 export type GetForumCategoriesQueryResult = Apollo.QueryResult<
   GetForumCategoriesQuery,
   GetForumCategoriesQueryVariables
+>
+export const GetForumSubCategoriesDocument = gql`
+  query GetForumSubCategories($where: ForumCategoryWhereInput, $limit: Int) {
+    forumCategories(where: $where, limit: $limit) {
+      ...ForumSubCategoryFields
+    }
+  }
+  ${ForumSubCategoryFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumSubCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetForumSubCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumSubCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumSubCategoriesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetForumSubCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetForumSubCategoriesQuery, GetForumSubCategoriesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumSubCategoriesQuery, GetForumSubCategoriesQueryVariables>(
+    GetForumSubCategoriesDocument,
+    options
+  )
+}
+export function useGetForumSubCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumSubCategoriesQuery, GetForumSubCategoriesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumSubCategoriesQuery, GetForumSubCategoriesQueryVariables>(
+    GetForumSubCategoriesDocument,
+    options
+  )
+}
+export type GetForumSubCategoriesQueryHookResult = ReturnType<typeof useGetForumSubCategoriesQuery>
+export type GetForumSubCategoriesLazyQueryHookResult = ReturnType<typeof useGetForumSubCategoriesLazyQuery>
+export type GetForumSubCategoriesQueryResult = Apollo.QueryResult<
+  GetForumSubCategoriesQuery,
+  GetForumSubCategoriesQueryVariables
 >
 export const GetForumCategoryBreadcrumbsDocument = gql`
   query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {

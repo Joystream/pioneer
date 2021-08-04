@@ -3,16 +3,26 @@ import { useEffect, useState } from 'react'
 import {
   useGetForumPostsCountLazyQuery,
   useGetForumPostsLazyQuery,
+  useGetForumSubCategoriesQuery,
   useGetForumThreadsCountQuery,
   useGetForumThreadsQuery,
 } from '@/forum/queries'
-import { asForumPost, asForumThread, ForumCategory, ForumPost, ForumThread } from '@/forum/types'
+import {
+  asForumPost,
+  asForumThread,
+  asSubCategory,
+  ForumCategory,
+  ForumPost,
+  ForumSubCategory,
+  ForumThread,
+} from '@/forum/types'
 
 export interface CategoryListItemProps {
   category: ForumCategory
 }
 
 interface CategoryDetails {
+  subcategories?: ForumSubCategory[]
   threadCount?: number
   topThread?: ForumThread & { postCount?: number }
   latestPost?: ForumPost
@@ -23,6 +33,14 @@ export const useForumCategoryDetails = (categoryId: string): CategoryDetails => 
 
   const fromCategory = { where: { category_eq: categoryId } }
   const latest = { orderBy: ['updatedAt_ASC'], limit: 1 }
+
+  const { data: subCategoriesData } = useGetForumSubCategoriesQuery({
+    variables: { where: { parent_eq: categoryId }, limit: 10 },
+  })
+  useEffect(() => {
+    if (!subCategoriesData) return
+    setDetails({ ...details, subcategories: subCategoriesData.forumCategories.map(asSubCategory) })
+  }, [subCategoriesData])
 
   const { data: threadCountData } = useGetForumThreadsCountQuery({ variables: { ...fromCategory } })
   useEffect(() => {
