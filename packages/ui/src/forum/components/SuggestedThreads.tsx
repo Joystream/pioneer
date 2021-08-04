@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
-import { spacing } from '@/common/utils/styles'
 import { ThreadItem, ThreadItemStyles } from '@/forum/components/threads/ThreadItem'
 import { useForumSuggestedThreads } from '@/forum/hooks/useForumSuggestedThreads'
 
@@ -39,8 +38,6 @@ export const ThreadsList = styled.div`
 `
 
 export const SuggestedThreadsWrapper = styled(ContentWithTabs)`
-  margin-top: ${spacing(3)};
-
   ${ThreadItemStyles} {
     padding: 0;
     border: 0;

@@ -1,3 +1,4 @@
+import { differenceInHours } from 'date-fns'
 import React, { forwardRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -9,6 +10,7 @@ import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/compone
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge, TextInlineSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
+import { formatDateString } from '@/common/model/formatters'
 import { relativeTime } from '@/common/model/relativeTime'
 import { spacing } from '@/common/utils/styles'
 import { ForumPost } from '@/forum/types'
@@ -20,8 +22,17 @@ interface PostProps {
 }
 
 export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected }, ref) => {
-  const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
-  const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
+  const { createdAtBlock, createdAt, updatedAt, author, text, reaction, repliesTo } = post
+  const time = useMemo(() => {
+    const text = updatedAt ? 'edited' : 'created'
+    const time = updatedAt ?? createdAt
+
+    return (
+      <EditionTime>
+        ({text} {differenceInHours(new Date(), new Date(time)) >= 24 ? formatDateString(time) : relativeTime(time)})
+      </EditionTime>
+    )
+  }, [createdAt, updatedAt])
 
   return (
     <ForumPostStyles ref={ref} isSelected={isSelected}>
@@ -41,7 +52,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
             <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
           </Reply>
         )}
-        <MarkdownPreview markdown={text} append={edited} size="s" />
+        <MarkdownPreview markdown={text} append={time} size="s" />
       </MessageBody>
       <ForumPostRow>
         <ButtonsRow>
@@ -107,7 +118,9 @@ const ReplyBadge = styled.div`
   }
 `
 
-const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true })``
+const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true })`
+  float: right;
+`
 
 export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   display: grid;

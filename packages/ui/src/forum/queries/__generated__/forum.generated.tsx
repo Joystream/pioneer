@@ -134,6 +134,21 @@ export type GetForumPostsQuery = {
   forumPosts: Array<{ __typename: 'ForumPost' } & ForumPostFieldsFragment>
 }
 
+export type GetForumPostEditsQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']
+}>
+
+export type GetForumPostEditsQuery = {
+  __typename: 'Query'
+  edits: Array<{
+    __typename: 'PostTextUpdatedEvent'
+    newText: string
+    network: Types.Network
+    createdAt: any
+    inBlock: number
+  }>
+}
+
 export type GetForumPostsCountQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
 }>
@@ -491,6 +506,51 @@ export function useGetForumPostsLazyQuery(
 export type GetForumPostsQueryHookResult = ReturnType<typeof useGetForumPostsQuery>
 export type GetForumPostsLazyQueryHookResult = ReturnType<typeof useGetForumPostsLazyQuery>
 export type GetForumPostsQueryResult = Apollo.QueryResult<GetForumPostsQuery, GetForumPostsQueryVariables>
+export const GetForumPostEditsDocument = gql`
+  query GetForumPostEdits($id: ID!) {
+    edits: postTextUpdatedEvents(where: { post: { id_eq: $id } }) {
+      newText
+      network
+      createdAt
+      inBlock
+    }
+  }
+`
+
+/**
+ * __useGetForumPostEditsQuery__
+ *
+ * To run a query within a React component, call `useGetForumPostEditsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumPostEditsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumPostEditsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetForumPostEditsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumPostEditsQuery, GetForumPostEditsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumPostEditsQuery, GetForumPostEditsQueryVariables>(GetForumPostEditsDocument, options)
+}
+export function useGetForumPostEditsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumPostEditsQuery, GetForumPostEditsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumPostEditsQuery, GetForumPostEditsQueryVariables>(
+    GetForumPostEditsDocument,
+    options
+  )
+}
+export type GetForumPostEditsQueryHookResult = ReturnType<typeof useGetForumPostEditsQuery>
+export type GetForumPostEditsLazyQueryHookResult = ReturnType<typeof useGetForumPostEditsLazyQuery>
+export type GetForumPostEditsQueryResult = Apollo.QueryResult<GetForumPostEditsQuery, GetForumPostEditsQueryVariables>
 export const GetForumPostsCountDocument = gql`
   query GetForumPostsCount($where: ForumPostWhereInput!) {
     forumPostsConnection(where: $where) {
