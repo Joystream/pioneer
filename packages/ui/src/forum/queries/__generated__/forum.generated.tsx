@@ -13,6 +13,7 @@ export type ForumCategoryFieldsFragment = {
   id: string
   title: string
   description: string
+  moderators: Array<{ __typename: 'Worker'; id: string }>
 }
 
 export type ForumSubCategoryFieldsFragment = { __typename: 'ForumCategory'; id: string; title: string }
@@ -98,12 +99,19 @@ export type GetForumCategoryBreadcrumbsQuery = {
 }
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.ForumThreadWhereInput>
+  where: Types.ForumThreadWhereInput
 }>
 
 export type GetForumThreadsQuery = {
   __typename: 'Query'
   forumThreads: Array<{ __typename: 'ForumThread' } & ForumThreadFieldsFragment>
+}
+
+export type GetForumThreadsIDsQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetForumThreadsIDsQuery = {
+  __typename: 'Query'
+  forumThreads: Array<{ __typename: 'ForumThread'; id: string }>
 }
 
 export type GetForumThreadQueryVariables = Types.Exact<{
@@ -140,6 +148,9 @@ export const ForumCategoryFieldsFragmentDoc = gql`
     id
     title
     description
+    moderators {
+      id
+    }
   }
 `
 export const ForumSubCategoryFieldsFragmentDoc = gql`
@@ -315,7 +326,7 @@ export type GetForumCategoryBreadcrumbsQueryResult = Apollo.QueryResult<
   GetForumCategoryBreadcrumbsQueryVariables
 >
 export const GetForumThreadsDocument = gql`
-  query GetForumThreads($where: ForumThreadWhereInput) {
+  query GetForumThreads($where: ForumThreadWhereInput!) {
     forumThreads(where: $where) {
       ...ForumThreadFields
     }
@@ -340,7 +351,7 @@ export const GetForumThreadsDocument = gql`
  * });
  */
 export function useGetForumThreadsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetForumThreadsQuery, GetForumThreadsQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<GetForumThreadsQuery, GetForumThreadsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetForumThreadsQuery, GetForumThreadsQueryVariables>(GetForumThreadsDocument, options)
@@ -354,6 +365,50 @@ export function useGetForumThreadsLazyQuery(
 export type GetForumThreadsQueryHookResult = ReturnType<typeof useGetForumThreadsQuery>
 export type GetForumThreadsLazyQueryHookResult = ReturnType<typeof useGetForumThreadsLazyQuery>
 export type GetForumThreadsQueryResult = Apollo.QueryResult<GetForumThreadsQuery, GetForumThreadsQueryVariables>
+export const GetForumThreadsIDsDocument = gql`
+  query GetForumThreadsIDs {
+    forumThreads {
+      id
+    }
+  }
+`
+
+/**
+ * __useGetForumThreadsIDsQuery__
+ *
+ * To run a query within a React component, call `useGetForumThreadsIDsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumThreadsIDsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumThreadsIDsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetForumThreadsIDsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetForumThreadsIDsQuery, GetForumThreadsIDsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumThreadsIDsQuery, GetForumThreadsIDsQueryVariables>(GetForumThreadsIDsDocument, options)
+}
+export function useGetForumThreadsIDsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumThreadsIDsQuery, GetForumThreadsIDsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumThreadsIDsQuery, GetForumThreadsIDsQueryVariables>(
+    GetForumThreadsIDsDocument,
+    options
+  )
+}
+export type GetForumThreadsIDsQueryHookResult = ReturnType<typeof useGetForumThreadsIDsQuery>
+export type GetForumThreadsIDsLazyQueryHookResult = ReturnType<typeof useGetForumThreadsIDsLazyQuery>
+export type GetForumThreadsIDsQueryResult = Apollo.QueryResult<
+  GetForumThreadsIDsQuery,
+  GetForumThreadsIDsQueryVariables
+>
 export const GetForumThreadDocument = gql`
   query GetForumThread($where: ForumThreadWhereUniqueInput!) {
     thread: forumThreadByUniqueInput(where: $where) {
