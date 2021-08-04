@@ -142,6 +142,15 @@ query GetForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInp
   }
 }
 
+query GetForumPostEdits($id: ID!) {
+  edits: postTextUpdatedEvents(where: {post: {id_eq: $id}}) {
+    newText
+    network
+    createdAt
+    inBlock
+  }
+}
+
 query GetForumPostsCount($where: ForumPostWhereInput!) {
   forumPostsConnection(where: $where) {
     totalCount
