@@ -11,7 +11,7 @@ export async function selectAccount(label: string, name: string) {
   const toggle = parentElement.querySelector('.ui-toggle')
   toggle && fireEvent.click(toggle)
 
-  const accountTitles = parentElement?.querySelectorAll('ul > li')
+  const accountTitles = parentElement.querySelectorAll('ul > li')
   const found = accountTitles && Array.from(accountTitles).find((li) => li.textContent?.match(name))
 
   expect(found).toBeDefined()
