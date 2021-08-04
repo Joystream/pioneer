@@ -412,6 +412,8 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Invalid - nothing filled', async () => {
           expect(screen.queryByLabelText(/^working group/i, { selector: 'input' })).toBeEmpty()
+          expect(screen.queryByLabelText(/^short description/i)).toBeEmpty()
+          expect(screen.queryByLabelText(/^description/i)).toBeEmpty()
 
           const button = await getNextStepButton()
 

@@ -45,8 +45,12 @@ export const CreateWorkingGroupLeadOpening = ({
               onChange={(selected) => setGroupId(selected.id)}
             />
           </InputComponent>
-          <InputComponent label="Short description" required inputSize="l">
-            <InputTextarea value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} />
+          <InputComponent id="short-description" label="Short description" required inputSize="l">
+            <InputTextarea
+              id="short-description"
+              value={shortDescription}
+              onChange={(event) => setShortDescription(event.target.value)}
+            />
           </InputComponent>
           <InputComponent label="Description" required inputSize="auto" id="field-description">
             <CKEditor
