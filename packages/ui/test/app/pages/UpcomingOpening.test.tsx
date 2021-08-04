@@ -6,15 +6,15 @@ import { Route, Router } from 'react-router-dom'
 
 import { UpcomingOpening } from '@/app/pages/WorkingGroups/UpcomingOpening'
 import { seedMember } from '@/mocks/data'
+import { seedOpeningStatuses } from '@/mocks/data/seedOpenings'
 import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 
-import { seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'
 
-describe('WorkingGroupOpenings', () => {
+describe('UpcomingWorkingGroupOpenings', () => {
   const mockServer = setupMockServer()
 
   beforeAll(cryptoWaitReady)
@@ -35,7 +35,7 @@ describe('WorkingGroupOpenings', () => {
   it('Opening loaded', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByRole('heading', { name: 'Loading...' }))
+    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
 
     expect(await screen.findByRole('heading', { name: /forum working group/i })).toBeDefined()
   })
