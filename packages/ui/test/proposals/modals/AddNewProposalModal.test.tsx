@@ -401,6 +401,23 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).not.toBeDisabled()
         })
       })
+
+      describe('Type - Create Working Group Lead Opening', () => {
+        beforeEach(async () => {
+          await finishProposalType('createWorkingGroupLeadOpening')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Invalid - nothing filled', async () => {
+          expect(screen.queryByLabelText(/^working group/i, { selector: 'input' })).toBeEmpty()
+
+          const button = await getNextStepButton()
+
+          expect(button).toBeDisabled()
+        })
+      })
     })
 
     describe('Transaction', () => {
@@ -542,6 +559,9 @@ describe('UI: AddNewProposalModal', () => {
     await fireEvent.click(button as HTMLElement)
   }
 
+  const selectGroup = async (name: string) => {
+    await selectAccount('Working Group', name)
+  }
   const SpecificParameters = {
     fillAmount: async (value: number) => {
       const amountInput = await screen.getByTestId('amount-input')
@@ -560,9 +580,10 @@ describe('UI: AddNewProposalModal', () => {
       },
     },
     DecreaseWorkingGroupLeadStake: {
-      selectGroup: async (name: string) => {
-        await selectAccount('Working Group', name)
-      },
+      selectGroup,
+    },
+    CreateWorkingGroupLeadOpening: {
+      selectGroup,
     },
   }
 

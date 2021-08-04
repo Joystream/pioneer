@@ -33,12 +33,17 @@ export const CreateWorkingGroupLeadOpening = ({
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
+            id="working-group-select"
             label="Working Group"
             required
             inputSize="l"
             tooltipText="Please select an identifier for working group"
           >
-            <SelectWorkingGroup selectedGroupId={groupId} onChange={(selected) => setGroupId(selected.id)} />
+            <SelectWorkingGroup
+              id="working-group-select"
+              selectedGroupId={groupId}
+              onChange={(selected) => setGroupId(selected.id)}
+            />
           </InputComponent>
           <InputComponent label="Short description" required inputSize="l">
             <InputTextarea value={shortDescription} onChange={(event) => setShortDescription(event.target.value)} />
