@@ -48,5 +48,6 @@ const getApolloClient = (network: 'local' | 'olympia-testnet') => {
   return new ApolloClient({
     link: from([errorLink, httpLink]),
     cache: new InMemoryCache(),
+    connectToDevTools: true,
   })
 }

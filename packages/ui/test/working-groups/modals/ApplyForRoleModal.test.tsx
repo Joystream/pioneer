@@ -62,6 +62,7 @@ describe('UI: ApplyForRoleModal', () => {
 
   let useAccounts: UseAccounts
   let tx: any
+  let bindAccountTx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -88,6 +89,7 @@ describe('UI: ApplyForRoleModal', () => {
 
     stubDefaultBalances(api)
     tx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
+    bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
   })
 
   describe('Steps', () => {
@@ -193,35 +195,62 @@ describe('UI: ApplyForRoleModal', () => {
       fireEvent.click(await getNextStepButton())
     }
 
-    it('Authorize step', async () => {
-      await fillSteps()
+    describe('Staking account is not bound yet', () => {
+      it('Bind account step', async () => {
+        await fillSteps()
 
-      expect(await screen.findByText('Authorize transaction')).toBeDefined()
-      expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
-    })
+        expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42')
+      })
 
-    it('Success step', async () => {
-      stubTransactionSuccess(
-        tx,
-        ['EventParams', registry.createType('ApplicationId', 1337)],
-        'workingGroup',
-        'AppliedOnOpening'
-      )
-      await fillSteps()
+      it('Bind account failure', async () => {
+        stubTransactionFailure(bindAccountTx)
+        await fillSteps()
 
-      fireEvent.click(screen.getByText(/^Sign transaction and Stake$/i))
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
 
-      expect(await screen.findByText('Application submitted!')).toBeDefined()
-      expect(await screen.findByText(/application id: 1337/i)).toBeDefined()
-    })
+        expect(await screen.findByText('Failure')).toBeDefined()
+      })
 
-    it('Failure step', async () => {
-      stubTransactionFailure(tx)
-      await fillSteps()
+      it('Apply on opening step', async () => {
+        stubTransactionSuccess(bindAccountTx, [], 'members', '')
+        await fillSteps()
 
-      fireEvent.click(screen.getByText(/^Sign transaction and Stake$/i))
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
 
-      expect(await screen.findByText('Failure')).toBeDefined()
+        expect(await screen.findByText(/Apply on opening/i)).toBeDefined()
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      })
+
+      it('Apply on opening success', async () => {
+        stubTransactionSuccess(bindAccountTx, [], 'members', '')
+        stubTransactionSuccess(
+          tx,
+          ['EventParams', registry.createType('ApplicationId', 1337)],
+          'workingGroup',
+          'AppliedOnOpening'
+        )
+        await fillSteps()
+
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        expect(await screen.findByText(/Apply on opening/i)).toBeDefined()
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
+
+        expect(await screen.findByText('Application submitted!')).toBeDefined()
+        expect(await screen.findByText(/application id: 1337/i)).toBeDefined()
+      })
+
+      it('Apply on opening failure', async () => {
+        stubTransactionSuccess(bindAccountTx, [], 'members', '')
+        stubTransactionFailure(tx)
+        await fillSteps()
+
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
+        expect(await screen.findByText(/Apply on opening/i)).toBeDefined()
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
+
+        expect(await screen.findByText('Failure')).toBeDefined()
+      })
     })
   })
 

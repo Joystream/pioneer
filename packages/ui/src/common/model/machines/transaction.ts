@@ -1,8 +1,18 @@
 import BN from 'bn.js'
-import { assign, createMachine, DoneInvokeEvent, EventObject, MachineConfig, send } from 'xstate'
+import { assign, createMachine, DoneInvokeEvent, MachineConfig, send } from 'xstate'
 import { actionTypes } from 'xstate/lib/actions'
 
-export const transactionConfig: MachineConfig<any, any, any> = {
+export type TransactionSuccessEvent = { type: 'SUCCESS'; events: any[]; fee: BN }
+export type TransactionErrorEvent = { type: 'ERROR'; events: any[]; fee: BN }
+export type TransactionEvent =
+  | { type: 'SIGNED' }
+  | { type: 'SIGN' }
+  | { type: 'SIGN_INTERNAL' }
+  | { type: 'SIGN_EXTERNAL' }
+  | TransactionSuccessEvent
+  | TransactionErrorEvent
+
+export const transactionConfig: MachineConfig<any, any, TransactionEvent> = {
   id: 'transaction',
   initial: 'prepare',
   context: {
@@ -30,16 +40,16 @@ export const transactionConfig: MachineConfig<any, any, any> = {
         SUCCESS: {
           target: 'success',
           actions: assign({
-            events: (context, event: EventObject & { events: [] }) => event.events,
-            fee: (context, event: EventObject & { fee: BN }) => event.fee,
+            events: (context, event) => event.events,
+            fee: (context, event) => event.fee,
           }),
         },
         ERROR: {
           target: 'error',
           actions: [
             assign({
-              events: (context, event: EventObject & { events: [] }) => event.events,
-              fee: (context, event: EventObject & { fee: BN }) => event.fee,
+              events: (context, event) => event.events,
+              fee: (context, event) => event.fee,
             }),
             send({ type: actionTypes.errorPlatform, isError: 'true' }),
           ],

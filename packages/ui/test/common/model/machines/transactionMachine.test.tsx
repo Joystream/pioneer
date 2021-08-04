@@ -1,9 +1,9 @@
 import { assign, createMachine, interpret, Interpreter } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import { isTransactionError, isTransactionSuccess, TransactionEvent, transactionMachine } from '@/common/model/machines'
 
 describe('Machine: Transaction machine', () => {
-  let service: Interpreter<any>
+  let service: Interpreter<any, any, TransactionEvent, any>
 
   beforeEach(() => {
     service = interpret(transactionMachine)

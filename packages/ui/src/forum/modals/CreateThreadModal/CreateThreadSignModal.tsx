@@ -13,10 +13,10 @@ import { Arrow } from '@/common/components/icons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TransactionModal } from '@/common/components/TransactionModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { TransactionModal } from '@/common/modals/TransactionModal'
 
 interface Props {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
@@ -32,9 +32,7 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
 
   const hasFunds = useMemo(() => {
     if (balance?.transferable && paymentInfo?.partialFee) {
-      const requiredBalance = paymentInfo.partialFee
-      const hasFunds = balance.transferable.gte(requiredBalance)
-      return hasFunds
+      return balance.transferable.gte(paymentInfo.partialFee)
     }
     return false
   }, [controllerAccount.address, balance?.transferable])

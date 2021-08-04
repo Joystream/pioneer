@@ -15,6 +15,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { getGroup } from '@/working-groups/model/getGroup'
@@ -31,6 +32,8 @@ export type OpeningParams = Exclude<
   Parameters<ApiRx['tx']['membershipWorkingGroup']['applyOnOpening']>[0],
   string | Uint8Array
 >
+
+const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Apply on opening' }]
 
 export const ApplyForRoleModal = () => {
   const { api, connectionState } = useApi()
@@ -102,8 +105,28 @@ export const ApplyForRoleModal = () => {
     return <ApplyForRoleApplicationStep opening={opening} steps={getSteps(service)} send={send} />
   }
 
+  const bindStakingAccountService = state.children.bindStakingAccount
+
+  if (state.matches('bindStakingAccount') && api && bindStakingAccountService) {
+    const { stake } = state.context
+    const stakingAccount = stake.account?.address
+
+    const transaction = api.tx.members.addStakingAccountCandidate(active.id)
+
+    return (
+      <BindStakingAccountModal
+        onClose={hideModal}
+        transaction={transaction}
+        signer={stakingAccount}
+        memberId={active.id}
+        service={bindStakingAccountService}
+        steps={transactionsSteps}
+      />
+    )
+  }
+
   const signer = active?.controllerAccount
-  const transactionService = state.children['transaction']
+  const transactionService = state.children.transaction
 
   if (state.matches('transaction') && signer && api && transactionService) {
     const { stake, answers } = state.context
@@ -127,6 +150,7 @@ export const ApplyForRoleModal = () => {
         signer={signer}
         stake={new BN(state.context.stake.amount)}
         service={transactionService}
+        steps={transactionsSteps}
       />
     )
   }
