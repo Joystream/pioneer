@@ -8,8 +8,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedEvent, seedMembers, seedApplications, seedOpenings } from '@/mocks/data'
-import { seedWorkers } from '@/mocks/data/seedWorkers'
+import { seedApplication, seedEvent, seedMember, seedOpening, seedWorker } from '@/mocks/data'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 
@@ -17,6 +16,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { APPLICATION_DATA, MEMBER_ALICE_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 
 describe('MyEarningsStat', () => {
   const mockServer = setupMockServer()
@@ -44,11 +44,11 @@ describe('MyEarningsStat', () => {
   })
 
   it('Loaded', async () => {
-    seedMembers(mockServer.server)
     seedWorkingGroups(mockServer.server)
-    seedOpenings(mockServer.server)
-    seedApplications(mockServer.server)
-    seedWorkers(mockServer.server)
+    seedMember(MEMBER_ALICE_DATA, mockServer.server)
+    seedOpening(OPENING_DATA, mockServer.server)
+    seedApplication({ ...APPLICATION_DATA, applicantId: MEMBER_ALICE_DATA.id }, mockServer.server)
+    seedWorker(WORKER_DATA, mockServer.server)
 
     const worker = mockServer.server?.schema.first('Worker')
 
