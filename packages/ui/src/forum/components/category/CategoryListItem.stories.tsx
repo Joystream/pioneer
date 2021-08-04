@@ -3,8 +3,8 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { asArray, repeat } from '@/common/utils'
-import { ForumCategory } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { RawForumCategoryMock } from '@/mocks/data/seedForum'
 
 import { CategoryListItem } from './CategoryListItem'
 import { asStorybookModerator, asStorybookPost, asStorybookThread } from './storybook-helpers'
@@ -20,7 +20,7 @@ interface Props {
   latestPostText: string
   topThreadTitle: string
   moderatorsCount: number
-  category: ForumCategory
+  category: RawForumCategoryMock
 }
 const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount }) => (
   <MockApolloProvider
@@ -47,12 +47,6 @@ Default.args = {
     title: 'General',
     description:
       'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Lorem Vestibulum congue fermentu.',
-    subcategories: [
-      { id: '1', title: 'Lorem ipsum' },
-      { id: '2', title: 'Dolor' },
-      { id: '3', title: 'Name' },
-      { id: '4', title: 'Name' },
-    ],
     moderators: [],
   },
 }
