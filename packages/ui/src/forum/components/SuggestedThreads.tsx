@@ -5,7 +5,6 @@ import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
 import { spacing } from '@/common/utils/styles'
-import { ThreadListItem } from '@/forum/components/ThreadList/ThreadListItem'
 import { useForumSuggestedThreads } from '@/forum/hooks/useForumSuggestedThreads'
 
 export const SuggestedThreads = () => {
@@ -19,7 +18,7 @@ export const SuggestedThreads = () => {
     return (
       <ThreadsList>
         {threads.map((thread) => (
-          <ThreadListItem key={thread.id} thread={thread} />
+          <div>kek</div>
         ))}
       </ThreadsList>
     )

@@ -22,7 +22,7 @@ const Template: Story = () => {
   useEffect(() => {
     import('@/mocks/data/raw/forumCategories.json').then((rawCategories) => {
       const categories = rawCategories.default.slice(0, 10).map((rawCategory) => {
-        const category = asForumCategory(rawCategory)
+        const category = asForumCategory({ ...rawCategory, moderators: [] })
         const subcategories = 'Lorem ipsum, Dolor, Name, Name'
           .split(', ')
           .map((title, index) => ({ id: String(index), title }))
