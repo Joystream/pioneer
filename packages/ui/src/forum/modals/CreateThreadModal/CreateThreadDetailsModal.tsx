@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
@@ -10,6 +10,9 @@ import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { ForumBreadcrumbs } from '@/forum/components/ForumBreadcrumbs'
 import { ForumBreadcrumb } from '@/forum/types'
+import { Member } from '@/memberships/types'
+
+import { PreviewThreadModal } from './PreviewThreadModal'
 
 interface Props {
   topic: string
@@ -18,6 +21,7 @@ interface Props {
   setDescription: (d: string) => void
   onSubmit: () => void
   breadcrumbs?: ForumBreadcrumb[]
+  author: Member
 }
 
 export const CreateThreadDetailsModal = ({
@@ -27,39 +31,49 @@ export const CreateThreadDetailsModal = ({
   setDescription,
   onSubmit,
   breadcrumbs,
+  author,
 }: Props) => {
   const isValid = useMemo(() => !!(topic && description), [topic, description])
   const { hideModal } = useModal()
+  const [previewVisible, setPreviewVisible] = useState(false)
   return (
-    <Modal onClose={hideModal} modalSize="l">
-      <ModalHeader title="Create a thread" onClick={hideModal} />
-      <ModalBody>
-        <RowGapBlock gap={24}>
-          <ForumBreadcrumbs forumBreadcrumbs={breadcrumbs ?? []} currentBreadcrumb="New Thread" />
-          <h1>General</h1>
-          <RowGapBlock gap={16}>
-            <TextMedium light>Please make sure your title will be clear for users</TextMedium>
-            <InputComponent label="Topic of the thread" id="field-topic">
-              <InputText id="field-topic" value={topic} onChange={(event) => setTopic(event.target.value)} />
-            </InputComponent>
-            <InputComponent label="Description" required inputSize="auto" id="field-description">
-              <CKEditor
-                id="field-description"
-                onChange={(_, editor) => setDescription(editor.getData())}
-                onReady={(editor) => editor.setData(description ?? '')}
-              />
-            </InputComponent>
+    <>
+      <Modal onClose={hideModal} modalSize="l">
+        <ModalHeader title="Create a thread" onClick={hideModal} />
+        <ModalBody>
+          <RowGapBlock gap={24}>
+            <ForumBreadcrumbs forumBreadcrumbs={breadcrumbs ?? []} currentBreadcrumb="New Thread" />
+            <h1>General</h1>
+            <RowGapBlock gap={16}>
+              <TextMedium light>Please make sure your title will be clear for users</TextMedium>
+              <InputComponent label="Topic of the thread" id="field-topic">
+                <InputText id="field-topic" value={topic} onChange={(event) => setTopic(event.target.value)} />
+              </InputComponent>
+              <InputComponent label="Description" required inputSize="auto" id="field-description">
+                <CKEditor
+                  id="field-description"
+                  onChange={(_, editor) => setDescription(editor.getData())}
+                  onReady={(editor) => editor.setData(description ?? '')}
+                />
+              </InputComponent>
+            </RowGapBlock>
           </RowGapBlock>
-        </RowGapBlock>
-      </ModalBody>
-      <ModalFooter>
-        <ButtonsGroup align="right">
-          <ButtonPrimary onClick={onSubmit} size="medium" disabled={!isValid}>
-            Next step
-            <Arrow direction="right" />
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
-    </Modal>
+        </ModalBody>
+        <ModalFooter>
+          <ButtonsGroup align="right">
+            <ButtonGhost size="medium" onClick={() => setPreviewVisible(true)}>
+              Thread preview
+            </ButtonGhost>
+            <ButtonPrimary onClick={onSubmit} size="medium" disabled={!isValid}>
+              Next step
+              <Arrow direction="right" />
+            </ButtonPrimary>
+          </ButtonsGroup>
+        </ModalFooter>
+      </Modal>
+      {previewVisible && (
+        <PreviewThreadModal author={author} text={description} onClose={() => setPreviewVisible(false)} />
+      )}
+    </>
   )
 }
