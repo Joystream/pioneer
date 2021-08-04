@@ -2,6 +2,10 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { ScrollBlock } from '@/common/components/storybookParts/previewStyles'
+import { asForumThread } from '@/forum/types'
+import rawThreads from '@/mocks/data/raw/forumThreads.json'
+
+import { randomFromRange } from '../../../../dev/scripts/generators/utils'
 
 import { ThreadItem, ThreadItemProps } from './ThreadItem'
 import { ThreadsLayout } from './ThreadsLayout'
@@ -15,7 +19,7 @@ const Template: Story<ThreadItemProps> = (args) => (
   <ScrollBlock>
     <ThreadsLayout>
       <ThreadItem {...args} />
-      <ThreadItem {...args} />
+      <ThreadItem {...{ ...args, withButtons: false }} />
       <ThreadItem {...args} />
     </ThreadsLayout>
   </ScrollBlock>
@@ -23,7 +27,9 @@ const Template: Story<ThreadItemProps> = (args) => (
 
 export const ThreadItemComponent = Template.bind({})
 
+const thread = rawThreads[randomFromRange(0, rawThreads.length - 1)]
 ThreadItemComponent.args = {
-  label: 'CategoryLabel',
-  count: 10,
+  categoryLabel: 'Lorem > Ipsum > Del',
+  categoryCount: 10,
+  thread: asForumThread({ ...thread, __typename: 'ForumThread' }),
 }

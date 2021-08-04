@@ -7,44 +7,49 @@ import { Arrow } from '@/common/components/icons'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { ForumThread } from '@/forum/types'
 
 import { ThreadItemContent } from './ThreadItemContent'
 import { ThreadsLayoutSpacing } from './ThreadsLayout'
 
 export interface ThreadItemProps {
-  label: string
-  count?: number
+  categoryLabel: string
+  categoryCount?: number
+  thread: ForumThread
+  withButtons?: boolean
 }
 
-export const ThreadItem = ({ label, count }: ThreadItemProps) => {
+export const ThreadItem = ({ categoryLabel, categoryCount, thread, withButtons = true }: ThreadItemProps) => {
   return (
     <ThreadItemStyles>
       <ThreadItemHeader align="center" gap={16}>
         <Label>
-          {label} {count && <CountBadge count={count} />}
+          {categoryLabel} {categoryCount && <CountBadge count={categoryCount} />}
         </Label>
-        <ButtonsGroup>
-          <ButtonGhost size="small" square>
-            <Arrow direction="left" />
-          </ButtonGhost>
-          <ButtonGhost size="small" square>
-            <Arrow direction="right" />
-          </ButtonGhost>
-        </ButtonsGroup>
+        {withButtons && (
+          <ButtonsGroup>
+            <ButtonGhost size="small" square>
+              <Arrow direction="left" />
+            </ButtonGhost>
+            <ButtonGhost size="small" square>
+              <Arrow direction="right" />
+            </ButtonGhost>
+          </ButtonsGroup>
+        )}
       </ThreadItemHeader>
-      <ThreadItemContent title="Title" />
+      <ThreadItemContent {...thread} />
     </ThreadItemStyles>
   )
 }
 
-const ThreadItemSpacer = styled.div`
+export const ThreadItemSpacer = styled.div`
   width: 100%;
   height: 1px;
   background-color: ${Colors.Black[100]};
   transition: ${Transitions.all};
 `
 
-const ThreadItemStyles = styled.div`
+export const ThreadItemStyles = styled.div`
   display: flex;
   flex-direction: column;
   flex-basis: calc(50% - (${ThreadsLayoutSpacing} / 2));
@@ -52,11 +57,11 @@ const ThreadItemStyles = styled.div`
   flex-grow: 1;
   max-width: 100%;
   max-height: 472px;
+  overflow: hidden;
+  transition: ${Transitions.all};
   padding: 16px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
-  overflow: hidden;
-  transition: ${Transitions.all};
 
   &:hover,
   &:focus,

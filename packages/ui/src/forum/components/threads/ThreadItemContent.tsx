@@ -7,16 +7,13 @@ import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow } from '@/common/constants'
+import { ForumThread } from '@/forum/types'
 
-export interface ThreadItemContentProps {
-  title: string
-}
-
-export const ThreadItemContent = ({ title }: ThreadItemContentProps) => {
+export const ThreadItemContent = (thread: ForumThread) => {
   return (
     <ThreadContent gap={16}>
       <ThreadContentHeader align="center">
-        <ThreadContentTitle>{title}</ThreadContentTitle>
+        <ThreadContentTitle>{thread.title}</ThreadContentTitle>
         <ThreadContentTime lighter>15 min</ThreadContentTime>
       </ThreadContentHeader>
       <TextMedium light value>
