@@ -4,12 +4,14 @@ import styled from 'styled-components'
 import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout } from '@/forum/constant'
+import { ForumCategory } from '@/forum/types'
 
-import { CategoryListItem, CategoryListItemProps } from './CategoryListItem'
+import { CategoryListItem } from './CategoryListItem'
 
 export interface ForumCategoryListProps {
-  categories: CategoryListItemProps[]
+  categories: ForumCategory[]
 }
 
 export const ForumCategoryList = ({ categories }: ForumCategoryListProps) => (
@@ -22,11 +24,15 @@ export const ForumCategoryList = ({ categories }: ForumCategoryListProps) => (
       <ListHeader>Moderators</ListHeader>
     </ListHeaders>
     <List as="div">
-      {categories.map(({ category, latestPost, topThread }) => (
-        <CategoryListItem key={category.id} category={category} latestPost={latestPost} topThread={topThread} />
+      {categories.map((category, index) => (
+        <CategoryListItem key={index} category={category} />
       ))}
     </List>
   </ForumCategoryListStyles>
 )
 
-const ForumCategoryListStyles = styled(RowGapBlock)``
+const ForumCategoryListStyles = styled(RowGapBlock)`
+  ${ListHeaders} {
+    padding: ${spacing(0, 3)};
+  }
+`

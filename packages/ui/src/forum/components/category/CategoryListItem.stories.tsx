@@ -2,11 +2,12 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { repeat } from '@/common/utils'
-import { ForumCategory } from '@/forum/types'
+import { asArray, repeat } from '@/common/utils'
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { RawForumCategoryMock } from '@/mocks/data/seedForum'
 
 import { CategoryListItem } from './CategoryListItem'
-import { asStorybookModerator, asStorybookPost, asStorybookThread } from './storybook-helpers'
+import { asStorybookModerator, asStorybookPost, asStorybookSubCategories, asStorybookThread } from './storybook-helpers'
 
 export default {
   title: 'Forum/Categories/CategoryListItem',
@@ -19,17 +20,22 @@ interface Props {
   latestPostText: string
   topThreadTitle: string
   moderatorsCount: number
-  category: ForumCategory & { threadCount: number }
+  category: RawForumCategoryMock
+  subcategories: string[]
 }
-const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount }) => (
-  <MemoryRouter>
-    <CategoryListItem
-      category={{ ...category, moderators: repeat(asStorybookModerator(true), moderatorsCount) }}
-      latestPost={asStorybookPost(latestPostText)}
-      topThread={asStorybookThread(topThreadTitle)}
-    />
-  </MemoryRouter>
-)
+const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount, subcategories }) => {
+  const categories = [category, ...subcategories.map(asStorybookSubCategories(category.id))]
+  const thread = asStorybookThread(topThreadTitle, category.id)
+  const post = asStorybookPost(latestPostText, thread?.id)
+
+  return (
+    <MockApolloProvider members forum={{ categories, threads: asArray(thread), posts: asArray(post) }}>
+      <MemoryRouter>
+        <CategoryListItem category={{ ...category, moderators: repeat(asStorybookModerator(), moderatorsCount) }} />
+      </MemoryRouter>
+    </MockApolloProvider>
+  )
+}
 
 export const Default = Template.bind({})
 Default.args = {
@@ -37,17 +43,11 @@ Default.args = {
   topThreadTitle: '🔥Can anyone tell me more',
   moderatorsCount: 14,
   category: {
-    id: '0',
+    id: 'CategoryListItem-story',
     title: 'General',
     description:
       'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Lorem Vestibulum congue fermentu.',
-    threadCount: 23,
-    subcategories: [
-      { id: '1', title: 'Lorem ipsum' },
-      { id: '2', title: 'Dolor' },
-      { id: '3', title: 'Name' },
-      { id: '4', title: 'Name' },
-    ],
-    moderators: [],
+    moderatorIds: [],
   },
+  subcategories: ['Lorem ipsum', 'Dolor', 'Name', 'Name'],
 }

@@ -81,3 +81,5 @@ export const groupBy = <T extends any>(list: T[], predicate: (prev: T, item: T, 
 
 export const propsEquals = <T extends Record<string, any>>(...keys: (keyof T)[]) => (a: T, b: T) =>
   keys.every((key) => a[key] === b[key])
+
+export const asArray = <T extends any>(item: undefined | T): T[] => (isDefined(item) ? [item] : [])

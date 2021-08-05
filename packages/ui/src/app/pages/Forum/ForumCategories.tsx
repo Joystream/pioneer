@@ -2,29 +2,26 @@ import React from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
-import { RouterLink } from '@/common/components/RouterLink'
+import { PageHeader } from '@/common/components/page/PageHeader'
+import { PageTitle } from '@/common/components/page/PageTitle'
+import { ForumCategoryList } from '@/forum/components/category'
 import { useForumCategories } from '@/forum/hooks/useForumCategories'
+
+import { ForumForumTabs, ForumTabs } from './components/ForumTabs'
 
 export const ForumCategories = () => {
   const { isLoading, forumCategories } = useForumCategories()
 
   return (
     <PageLayout
-      header={<h2>Categories</h2>}
-      main={
-        <div>
-          {isLoading && <Loading />}
-          {!isLoading &&
-            forumCategories.length &&
-            forumCategories.map((category) => {
-              return (
-                <div key={category.id}>
-                  {category.id} | <RouterLink to={`/forum/category/${category.id}`}> {category.title}</RouterLink>
-                </div>
-              )
-            })}
-        </div>
+      header={
+        <PageHeader>
+          <PageTitle>Forum</PageTitle>
+          <ForumTabs />
+          <ForumForumTabs />
+        </PageHeader>
       }
+      main={isLoading ? <Loading /> : <ForumCategoryList categories={forumCategories} />}
     />
   )
 }

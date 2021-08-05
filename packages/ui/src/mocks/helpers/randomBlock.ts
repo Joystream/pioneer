@@ -11,3 +11,8 @@ export const randomBlock = (): Block => {
     timestamp: faker.date.past(1).toJSON(),
   }
 }
+
+export const randomRawBlock = () => {
+  const { number, timestamp, network } = randomBlock()
+  return { inBlock: number, createdAt: timestamp, network }
+}
