@@ -35,7 +35,7 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
       return balance.transferable.gte(paymentInfo.partialFee)
     }
     return false
-  }, [controllerAccount.address, balance?.transferable])
+  }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee])
   const signDisabled = !state.matches('prepare') || !hasFunds
 
   return (
