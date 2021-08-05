@@ -631,8 +631,8 @@ export type GetForumThreadQueryHookResult = ReturnType<typeof useGetForumThreadQ
 export type GetForumThreadLazyQueryHookResult = ReturnType<typeof useGetForumThreadLazyQuery>
 export type GetForumThreadQueryResult = Apollo.QueryResult<GetForumThreadQuery, GetForumThreadQueryVariables>
 export const GetForumPostsDocument = gql`
-  query GetForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $offset: Int, $limit: Int) {
-    forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+  query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
+    forumPosts(where: $where, offset: $offset, limit: $limit, orderBy: [createdAt_ASC]) {
       ...ForumPostFields
     }
   }
