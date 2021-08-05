@@ -1,7 +1,9 @@
 import React from 'react'
 
-import { ModalHeader } from '@/common/components/Modal'
+import { ModalCustomContentHeader } from '@/common/components/Modal'
 import { TransactionStep } from '@/common/modals/TransactionModal/types'
+
+import { MultiTransactionStep } from './MultiTransactionStep'
 
 type MultiTransactionModalHeaderParams = {
   onClick: () => void
@@ -10,8 +12,15 @@ type MultiTransactionModalHeaderParams = {
 }
 
 export const MultiTransactionModalHeader = (props: MultiTransactionModalHeaderParams) => (
-  <ModalHeader
-    onClick={props.onClick}
-    title={`Transaction ${props.active + 1} "${props.transactionSteps[props.active]?.title}"`}
-  />
+  <ModalCustomContentHeader onClick={props.onClick}>
+    {props.transactionSteps.map((step, index) => (
+      <MultiTransactionStep
+        key={index}
+        stepNumber={props.active + 1}
+        stepTitle={props.transactionSteps[props.active]?.title}
+        active={index == props.active + 1}
+        past={false}
+      />
+    ))}
+  </ModalCustomContentHeader>
 )

@@ -6,12 +6,19 @@ import { Animations, BorderRad, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex 
 import { CloseButton } from '../buttons'
 import { TextMedium, ValueInJoys } from '../typography'
 
-interface ModalHeaderProps {
+interface ModalHeaderBasicProps {
   onClick: () => void
-  title: string
   icon?: React.ReactElement | string
   modalHeaderSize?: 's' | 'm' | undefined
   className?: string
+}
+
+interface ModalHeaderProps extends ModalHeaderBasicProps {
+  title: string
+}
+
+interface ModalCustomHeaderProps extends ModalHeaderBasicProps {
+  children?: React.ReactNode
 }
 
 export const ModalHeader = React.memo(({ onClick, title, icon, modalHeaderSize, className }: ModalHeaderProps) => (
@@ -21,6 +28,16 @@ export const ModalHeader = React.memo(({ onClick, title, icon, modalHeaderSize, 
     <CloseButton onClick={onClick} />
   </ModalTopBar>
 ))
+
+export const ModalCustomContentHeader = React.memo(
+  ({ onClick, children, icon, modalHeaderSize, className }: ModalCustomHeaderProps) => (
+    <ModalCustomTopBar columns={icon ? 3 : 2} modalHeaderSize={modalHeaderSize} className={className}>
+      {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
+      <ModalHeaderCustomContent>{children}</ModalHeaderCustomContent>
+      <CloseButton onClick={onClick} />
+    </ModalCustomTopBar>
+  )
+)
 
 type ModalSize = 'xs' | 's' | 'm' | 'l'
 type ModalHeight = 's' | 'm' | 'l' | 'xl'
@@ -131,6 +148,10 @@ export const ModalTopBar = styled.header<TopBarProps>`
     }
   }};
   border-radius: 2px 2px 0 0;
+`
+
+export const ModalCustomTopBar = styled(ModalTopBar)`
+  padding: 4px 24px;
 `
 
 export const ModalBody = styled.div`
@@ -316,6 +337,13 @@ export const ModalTitle = styled.h5`
   .red-title {
     color: ${Colors.Red[400]};
   }
+`
+
+export const ModalHeaderCustomContent = styled.div`
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  height: 100%;
 `
 
 export const ResultText = styled(TextMedium)`
