@@ -308,16 +308,13 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       initial: 'entry',
       states: {
         entry: {
-          on: {
-            // TODO: Check "always" transition
-            '': [
-              { target: 'fundingRequest', cond: isType('fundingRequest') },
-              { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
-              { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
-              { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
-              { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
-            ],
-          },
+          always: [
+            { target: 'fundingRequest', cond: isType('fundingRequest') },
+            { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
+            { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
+            { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
+            { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
+          ],
         },
         fundingRequest: {
           on: {
