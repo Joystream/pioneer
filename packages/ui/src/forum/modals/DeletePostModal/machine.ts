@@ -17,7 +17,7 @@ export const deletePostMachine = createMachine<EmptyObject, DeletePostEvent, Del
   states: {
     requirementsVerification: {
       on: {
-        PASS: 'generalDetails',
+        PASS: 'transaction',
         FAIL: 'requirementsFailed',
       },
     },

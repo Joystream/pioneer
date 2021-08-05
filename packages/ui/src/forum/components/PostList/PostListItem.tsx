@@ -10,8 +10,10 @@ import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/compone
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge, TextInlineSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
 import { relativeTime } from '@/common/model/relativeTime'
 import { spacing } from '@/common/utils/styles'
+import { DeletePostModalCall } from '@/forum/modals/DeletePostModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 
@@ -24,6 +26,7 @@ interface PostProps {
 export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isOwn }, ref) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
+  const { showModal } = useModal()
 
   return (
     <ForumPostStyles ref={ref} isSelected={isSelected}>
@@ -61,7 +64,16 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
           <Button square>
             <ReplyIcon />
           </Button>
-          {isOwn && <ContextMenu items={[{ text: 'Delete post', onClick: () => null }]} />}
+          {isOwn && (
+            <ContextMenu
+              items={[
+                {
+                  text: 'Delete post',
+                  onClick: () => showModal<DeletePostModalCall>({ modal: 'DeletePost', data: { post } }),
+                },
+              ]}
+            />
+          )}
         </ButtonsRow>
       </ForumPostRow>
     </ForumPostStyles>
