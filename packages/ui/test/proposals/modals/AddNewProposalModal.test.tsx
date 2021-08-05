@@ -401,6 +401,66 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).not.toBeDisabled()
         })
       })
+
+      describe('Type - Create Working Group Lead Opening', () => {
+        beforeAll(() => {
+          seedWorkingGroups(server.server)
+        })
+
+        beforeEach(async () => {
+          await finishProposalType('createWorkingGroupLeadOpening')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+
+          expect(screen.getByText(/^Create Working Group Lead Opening$/i)).toBeDefined()
+        })
+
+        it('Step 1: Valid', async () => {
+          expect(screen.queryByLabelText(/^working group/i, { selector: 'input' })).toHaveValue('')
+          expect(screen.queryByLabelText(/^short description/i)).toHaveValue('')
+          expect(screen.queryByLabelText(/^description/i)).toHaveValue('')
+
+          expect(await getNextStepButton()).toBeDisabled()
+        })
+
+        it('Step 1: Invalid to Valid', async () => {
+          await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup('Forum')
+          expect(await getNextStepButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription('Foo')
+          expect(await getNextStepButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription('Bar')
+          expect(await getNextStepButton()).toBeEnabled()
+        })
+
+        it('Step 2: Invalid ', async () => {
+          await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup('Forum')
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription('Foo')
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription('Bar')
+          await clickNextButton()
+
+          expect(screen.queryByLabelText(/^staking amount/i, { selector: 'input' })).toHaveValue('0')
+          expect(screen.queryByLabelText(/^leaving unstaking period/i, { selector: 'input' })).toHaveValue('0')
+          expect(screen.queryByLabelText(/^reward amount per block/i, { selector: 'input' })).toHaveValue('0')
+
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Step 2: Invalid to valid', async () => {
+          await SpecificParameters.CreateWorkingGroupLeadOpening.selectGroup('Forum')
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillDescription('Foo')
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillShortDescription('Bar')
+          await clickNextButton()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillStakingAmount(100)
+          expect(await getCreateButton()).toBeDisabled()
+
+          await SpecificParameters.CreateWorkingGroupLeadOpening.fillUnstakingPeriod(100)
+          expect(await getCreateButton()).toBeEnabled()
+        })
+      })
     })
 
     describe('Transaction', () => {
@@ -542,11 +602,17 @@ describe('UI: AddNewProposalModal', () => {
     await fireEvent.click(button as HTMLElement)
   }
 
+  const selectGroup = async (name: string) => {
+    await selectAccount('Working Group', name)
+  }
+
+  async function fillField(id: string, value: number | string) {
+    const amountInput = await screen.getByTestId(id)
+    await fireEvent.change(amountInput, { target: { value } })
+  }
+
   const SpecificParameters = {
-    fillAmount: async (value: number) => {
-      const amountInput = await screen.getByTestId('amount-input')
-      await fireEvent.change(amountInput, { target: { value } })
-    },
+    fillAmount: async (value: number) => await fillField('amount-input', value),
     FundingRequest: {
       selectRecipient: async (name: string) => {
         await selectAccount('Recipient account', name)
@@ -560,9 +626,14 @@ describe('UI: AddNewProposalModal', () => {
       },
     },
     DecreaseWorkingGroupLeadStake: {
-      selectGroup: async (name: string) => {
-        await selectAccount('Working Group', name)
-      },
+      selectGroup,
+    },
+    CreateWorkingGroupLeadOpening: {
+      selectGroup,
+      fillShortDescription: async (value: string) => await fillField('short-description', value),
+      fillDescription: async (value: string) => await fillField('field-description', value),
+      fillUnstakingPeriod: async (value: number) => await fillField('leaving-unstaking-period', value),
+      fillStakingAmount: async (value: number) => await fillField('staking-amount', value),
     },
   }
 

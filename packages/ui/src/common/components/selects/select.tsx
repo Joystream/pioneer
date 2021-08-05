@@ -9,6 +9,7 @@ import { EmptyOption, SelectComponent, SelectToggleButton } from './components'
 import { SelectProps } from './types'
 
 export const Select = <T extends any, V extends any = T>({
+  id,
   disabled,
   placeholder,
   selected,
@@ -93,6 +94,7 @@ export const Select = <T extends any, V extends any = T>({
 
         {onSearch && (isOpen || !isDefined(selected)) ? (
           <EmptyOption
+            id={id}
             ref={textInput}
             type="text"
             placeholder={placeholder}

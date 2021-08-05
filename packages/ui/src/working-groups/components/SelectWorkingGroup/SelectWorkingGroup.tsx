@@ -32,9 +32,17 @@ interface Props {
   disabled?: boolean
   className?: string
   disableNoLead?: boolean
+  id?: string
 }
 
-export const SelectWorkingGroupBase = ({ onChange, selectedGroupId, disabled, className, disableNoLead }: Props) => {
+export const SelectWorkingGroupBase = ({
+  id,
+  onChange,
+  selectedGroupId,
+  disabled,
+  className,
+  disableNoLead,
+}: Props) => {
   const [search, setSearch] = useState('')
   const { isLoading, groups } = useWorkingGroups()
   const selectedGroup = useMemo(() => groups.find((group) => group.id === selectedGroupId), [
@@ -50,6 +58,7 @@ export const SelectWorkingGroupBase = ({ onChange, selectedGroupId, disabled, cl
 
   return (
     <Select
+      id={id}
       selected={selectedGroup}
       onChange={change}
       disabled={disabled}
