@@ -98,7 +98,7 @@ query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
   }
 }
 
-query GetForumThreads($where: ForumThreadWhereInput, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
+query GetForumThreads($where: ForumThreadWhereInput!, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
   forumThreads(where: $where, orderBy: $orderBy, limit: $limit) {
     ...ForumThreadFields
   }
@@ -107,6 +107,12 @@ query GetForumThreads($where: ForumThreadWhereInput, $orderBy: [ForumThreadOrder
 query GetForumThreadsCount($where: ForumThreadWhereInput) {
   forumThreadsConnection(where: $where) {
     totalCount
+  }
+}
+
+query GetForumThreadsIDs {
+  forumThreads {
+    id
   }
 }
 
