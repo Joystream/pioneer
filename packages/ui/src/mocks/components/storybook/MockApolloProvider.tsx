@@ -10,10 +10,27 @@ import {
   seedWorkers,
   updateWorkingGroups,
 } from '@/mocks/data'
+import {
+  RawForumCategoryMock,
+  RawForumPostMock,
+  RawForumThreadMock,
+  seedForumCategories,
+  seedForumCategory,
+  seedForumPost,
+  seedForumPosts,
+  seedForumThread,
+  seedForumThreads,
+} from '@/mocks/data/seedForum'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { fixAssociations, makeServer } from '@/mocks/server'
 
 import { MockApolloProvider as TestMockApolloProvider } from '../../../../test/_mocks/providers'
+
+interface ForumSeed {
+  categories: RawForumCategoryMock[]
+  threads: RawForumThreadMock[]
+  posts: RawForumPostMock[]
+}
 
 interface Seeds {
   blocks?: boolean
@@ -21,6 +38,7 @@ interface Seeds {
   workingGroups?: boolean
   proposals?: boolean
   workers?: boolean
+  forum?: boolean | ForumSeed
 }
 
 // NOTE Use the global context instead of a hook for performance (otherwise hot reloads take too long)
@@ -42,7 +60,7 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
       seedMembers(MockServer.server)
       MockServer.members = true
     }
-    if (toSeed.workingGroups && !MockServer.workingGroups) {
+    if ((toSeed.workingGroups || toSeed.workers) && !MockServer.workingGroups) {
       seedWorkingGroups(MockServer.server)
       MockServer.workingGroups = true
     }
@@ -64,7 +82,20 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
       seedProposals(MockServer.server)
       MockServer.proposals = true
     }
-  }, [])
+
+    if (toSeed.forum && JSON.stringify(toSeed.forum) !== JSON.stringify(MockServer.forum)) {
+      if (toSeed.forum === true) {
+        seedForumCategories(MockServer.server)
+        seedForumThreads(MockServer.server)
+        seedForumPosts(MockServer.server)
+      } else {
+        toSeed.forum?.categories.forEach((category) => seedForumCategory(category, MockServer.server))
+        toSeed.forum?.threads.forEach((thread) => seedForumThread(thread, MockServer.server))
+        toSeed.forum?.posts.forEach((post) => seedForumPost(post, MockServer.server))
+      }
+      MockServer.forum = toSeed.forum
+    }
+  }, [JSON.stringify(toSeed)])
 
   return <TestMockApolloProvider>{started ? children : <h3>Starting mock server...</h3>}</TestMockApolloProvider>
 }

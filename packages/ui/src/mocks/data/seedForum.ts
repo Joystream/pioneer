@@ -13,6 +13,7 @@ export interface RawForumCategoryMock {
   title: string
   description: string
   parentId?: string | null
+  moderatorIds: string[]
 }
 
 export interface RawForumThreadMock {

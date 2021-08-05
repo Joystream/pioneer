@@ -1,37 +1,47 @@
 import { sub } from 'date-fns'
 import faker from 'faker'
 
-import { ForumModerator, ForumPost, ForumThread } from '@/forum/types'
-import { getMember } from '@/mocks/helpers'
-import { randomBlock } from '@/mocks/helpers/randomBlock'
+import { ForumModerator } from '@/forum/types'
+import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
+import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
-export const asStorybookModerator = (hasHandle = true, hasAvatar = false) => {
+export const asStorybookModerator = (hasAvatar = false) => {
   return (index: number): ForumModerator => ({
     id: String(index),
-    membershipId: '0',
-    handle: hasHandle ? faker.name.firstName() : undefined,
+    handle: faker.name.firstName(),
     avatar: hasAvatar ? faker.image.avatar() : undefined,
   })
 }
 
-export const asStorybookPost = (text: string): ForumPost | undefined => {
-  if (text)
+export const asStorybookPost = (text: string, threadId?: string): RawForumPostMock | undefined => {
+  if (text && threadId)
     return {
-      id: '0',
+      id: `${threadId}:0`,
+      threadId,
       createdAt: sub(Date.now(), { minutes: 25 }).toISOString(),
-      createdAtBlock: randomBlock(),
-      author: getMember('alice'),
+      authorId: '0',
       text,
     }
 }
 
-export const asStorybookThread = (title: string): (ForumThread & { postCount: number }) | undefined => {
-  if (title)
+export const asStorybookThread = (title: string, categoryId?: string): RawForumThreadMock | undefined => {
+  if (title && categoryId)
     return {
-      id: '0',
-      title,
+      id: `${categoryId}:0`,
+      categoryId,
       isSticky: false,
-      categoryId: '0',
-      postCount: 1201,
+      title,
+      authorId: '0',
+      createdInEvent: randomRawBlock(),
     }
+}
+
+export const asStorybookSubCategories = (parentId: string) => {
+  return (title: string, index = 0): RawForumCategoryMock => ({
+    id: `${parentId}-${index}`,
+    title,
+    description: '',
+    parentId,
+    moderatorIds: [],
+  })
 }
