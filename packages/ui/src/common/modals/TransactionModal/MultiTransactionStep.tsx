@@ -22,9 +22,7 @@ export const MultiTransactionStep = ({ stepNumber, stepTitle, active, past }: Mu
         <StepNumber>{stepNumber}</StepNumber>
         <StepInfo>
           <StepTransactionInfo lighter>Transaction {stepNumber}</StepTransactionInfo>
-          <StepTransactionTitle bold value>
-            {stepTitle}
-          </StepTransactionTitle>
+          <StepTransactionTitle bold>{stepTitle}</StepTransactionTitle>
         </StepInfo>
       </StepContent>
     </Step>
@@ -54,7 +52,7 @@ const StepNumber = styled(TextInlineMedium)`
   min-width: 24px;
   width: fit-content;
   height: 24px;
-  padding: 0px 4px;
+  padding: 0 4px;
   line-height: 14px;
   font-weight: 700;
   font-family: ${Fonts.Inter};
@@ -90,7 +88,7 @@ const StepTransactionTitle = styled(TextInlineMedium)`
 `
 
 const Step = styled(StepContent)<{ active: boolean; past: boolean }>`
-  column-gap: 0px;
+  column-gap: 0;
 
   & + & {
     margin-left: 24px;
