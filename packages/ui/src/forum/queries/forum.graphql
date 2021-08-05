@@ -105,7 +105,7 @@ query GetForumThread($where: ForumThreadWhereUniqueInput!) {
 }
 
 query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
-  forumPosts(where: $where, offset: $offset, limit: $limit) {
+  forumPosts(where: $where, offset: $offset, limit: $limit, orderBy: [createdAt_ASC]) {
     ...ForumPostFields
   }
 }

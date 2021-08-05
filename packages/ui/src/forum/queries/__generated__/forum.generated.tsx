@@ -466,7 +466,7 @@ export type GetForumThreadLazyQueryHookResult = ReturnType<typeof useGetForumThr
 export type GetForumThreadQueryResult = Apollo.QueryResult<GetForumThreadQuery, GetForumThreadQueryVariables>
 export const GetForumPostsDocument = gql`
   query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
-    forumPosts(where: $where, offset: $offset, limit: $limit) {
+    forumPosts(where: $where, offset: $offset, limit: $limit, orderBy: [createdAt_ASC]) {
       ...ForumPostFields
     }
   }
