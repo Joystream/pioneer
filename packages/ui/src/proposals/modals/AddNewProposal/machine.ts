@@ -120,6 +120,7 @@ export type AddNewProposalState =
       value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
       context: StakingPolicyAndRewardContext
     }
+  | { value: 'bindStakingAccount'; context: Required<AddNewProposalContext> }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
   | { value: 'success'; context: Required<AddNewProposalContext> }
   | { value: 'error'; context: AddNewProposalContext }
@@ -471,6 +472,24 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             },
           },
         },
+      },
+    },
+    bindStakingAccount: {
+      invoke: {
+        id: 'bindStakingAccount',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+        ],
       },
     },
     transaction: {

@@ -24,6 +24,7 @@ import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getSteps, Step } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { useConstants } from '@/proposals/hooks/useConstants'
 import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
@@ -56,6 +57,8 @@ export type BaseProposalParams = Exclude<
 const isLastStepActive = (steps: Step[]) => {
   return steps[steps.length - 1].type === 'active' || steps[steps.length - 1].type === 'past'
 }
+
+const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
@@ -161,6 +164,21 @@ export const AddNewProposalModal = () => {
     return null
   }
 
+  if (state.matches('bindStakingAccount')) {
+    const transaction = api.tx.members.addStakingAccountCandidate(member.id)
+
+    return (
+      <BindStakingAccountModal
+        onClose={hideModal}
+        transaction={transaction}
+        signer={state.context.stakingAccount.address}
+        service={state.children.bindStakingAccount}
+        memberId={member.id}
+        steps={transactionsSteps}
+      />
+    )
+  }
+
   if (state.matches('transaction')) {
     return (
       <SignTransactionModal
@@ -169,6 +187,7 @@ export const AddNewProposalModal = () => {
         signer={member.controllerAccount}
         stake={constants?.requiredStake as BN}
         service={state.children['transaction']}
+        steps={transactionsSteps}
       />
     )
   }

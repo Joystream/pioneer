@@ -13,7 +13,7 @@ import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
-import { TransactionModal } from '@/common/modals/TransactionModal'
+import { TransactionModal, TransactionStep } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 
 interface SignTransactionModalProps {
@@ -22,9 +22,17 @@ interface SignTransactionModalProps {
   signer: Address
   stake: BN
   service: ActorRef<any>
+  steps: TransactionStep[]
 }
 
-export const SignTransactionModal = ({ onClose, transaction, signer, stake, service }: SignTransactionModalProps) => {
+export const SignTransactionModal = ({
+  onClose,
+  transaction,
+  signer,
+  stake,
+  service,
+  steps,
+}: SignTransactionModalProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
@@ -42,7 +50,7 @@ export const SignTransactionModal = ({ onClose, transaction, signer, stake, serv
   const signDisabled = !isReady || !hasFunds
 
   return (
-    <TransactionModal onClose={onClose} service={service}>
+    <TransactionModal onClose={onClose} service={service} useMultiTransaction={{ steps, active: 1 }}>
       <ModalBody>
         <TextMedium>You intend to create a proposal.</TextMedium>
         <TextMedium>
