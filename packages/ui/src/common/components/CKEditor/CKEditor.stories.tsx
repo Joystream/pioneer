@@ -27,6 +27,12 @@ const Template: Story<CKEditorProps> = (args) => (
 
 export const ClassicEditor = Template.bind({})
 
+export const InlineEditor = Template.bind({})
+
 ClassicEditor.args = {
   onChange: (event, editor) => info(editor.getData()),
+}
+
+InlineEditor.args = {
+  inline: true,
 }

@@ -5,7 +5,7 @@ import { debounce } from '@/common/utils'
 import { SearchMembersDocument, SearchMembersQuery, SearchMembersQueryVariables } from '@/memberships/queries'
 
 import { CKEditorStylesOverrides } from './CKEditorStylesOverrides'
-import { MarkdownEditor } from './MarkdownEditor.js'
+import { InlineMarkdownEditor, MarkdownEditor } from './MarkdownEditor.js'
 import { Editor, EventInfo } from './types'
 
 export interface CKEditorProps {
@@ -15,9 +15,10 @@ export interface CKEditorProps {
   onFocus?: (event: EventInfo, editor: Editor) => void
   onReady?: (editor: Editor) => void
   disabled?: boolean
+  inline?: boolean
 }
 
-export const CKEditor = ({ disabled, onBlur, onChange, onFocus, onReady }: CKEditorProps) => {
+export const CKEditor = ({ disabled, onBlur, onChange, onFocus, onReady, inline }: CKEditorProps) => {
   const ref = useRef<HTMLDivElement | null>(null)
   const editorRef = useRef<Editor | null>(null)
 
@@ -42,66 +43,68 @@ export const CKEditor = ({ disabled, onBlur, onChange, onFocus, onReady }: CKEdi
   )
 
   useEffect(() => {
-    const createPromise: Promise<Editor> = MarkdownEditor.create(ref.current || '', {
-      toolbar: {
-        items: [
-          'heading',
-          '|',
-          'bold',
-          'italic',
-          'link',
-          'strikethrough',
-          '|',
-          'bulletedList',
-          'numberedList',
-          'outdent',
-          'indent',
-          '|',
-          'uploadImage',
-          'blockQuote',
-          'undo',
-          'redo',
-        ],
-      },
-      mention: {
-        feeds: [{ marker: '@', feed: mentionFeed, minimumCharacters: 1 }],
-      },
-      image: {
-        toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],
-      },
-      // This value must be kept in sync with the language defined in webpack.config.js.
-      language: 'en',
-    }).then((editor) => {
-      if (onReady) {
-        onReady(editor)
-      }
-
-      editorRef.current = editor
-      editor.isReadOnly = disabled ?? false
-
-      const modelDocument = editor.model.document
-      const viewDocument = editor.editing.view.document
-
-      modelDocument.on('change:data', (event: EventInfo) => {
-        if (onChange) {
-          onChange(event, editor)
-        }
+    const createPromise: Promise<Editor> = (inline ? InlineMarkdownEditor : MarkdownEditor)
+      .create(ref.current || '', {
+        toolbar: {
+          items: [
+            'heading',
+            '|',
+            'bold',
+            'italic',
+            'link',
+            'strikethrough',
+            '|',
+            'bulletedList',
+            'numberedList',
+            'outdent',
+            'indent',
+            '|',
+            'uploadImage',
+            'blockQuote',
+            'undo',
+            'redo',
+          ],
+        },
+        mention: {
+          feeds: [{ marker: '@', feed: mentionFeed, minimumCharacters: 1 }],
+        },
+        image: {
+          toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],
+        },
+        // This value must be kept in sync with the language defined in webpack.config.js.
+        language: 'en',
       })
-
-      viewDocument.on('focus', (event: EventInfo) => {
-        if (onFocus) {
-          onFocus(event, editor)
+      .then((editor) => {
+        if (onReady) {
+          onReady(editor)
         }
-      })
 
-      viewDocument.on('blur', (event: EventInfo) => {
-        if (onBlur) {
-          onBlur(event, editor)
-        }
-      })
+        editorRef.current = editor
+        editor.isReadOnly = disabled ?? false
 
-      return editor
-    })
+        const modelDocument = editor.model.document
+        const viewDocument = editor.editing.view.document
+
+        modelDocument.on('change:data', (event: EventInfo) => {
+          if (onChange) {
+            onChange(event, editor)
+          }
+        })
+
+        viewDocument.on('focus', (event: EventInfo) => {
+          if (onFocus) {
+            onFocus(event, editor)
+          }
+        })
+
+        viewDocument.on('blur', (event: EventInfo) => {
+          if (onBlur) {
+            onBlur(event, editor)
+          }
+        })
+
+        return editor
+      })
 
     return () => {
       createPromise.then((editor) => editor.destroy())
