@@ -6,6 +6,6 @@ interface CategoryDetails {
   threadCount?: number
 }
 export const useForumCategoryThreadCount = (category_eq: string): CategoryDetails => {
-  const { data } = useGetForumThreadsCountQuery({ variables: { where: { category_eq } } })
+  const { data } = useGetForumThreadsCountQuery({ variables: { where: { category: { id_eq: category_eq } } } })
   return { threadCount: data?.forumThreadsConnection.totalCount }
 }

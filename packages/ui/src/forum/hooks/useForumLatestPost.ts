@@ -6,7 +6,11 @@ import { asForumPost } from '@/forum/types'
 
 export const useForumLatestPost = (category_eq: string) => {
   const { data: threadData } = useGetForumThreadsQuery({
-    variables: { where: { category_eq }, orderBy: ForumThreadOrderByInput.UpdatedAtDesc, limit: 1 },
+    variables: {
+      where: { category: { id_eq: category_eq } },
+      orderBy: ForumThreadOrderByInput.UpdatedAtDesc,
+      limit: 1,
+    },
   })
 
   useEffect(() => {

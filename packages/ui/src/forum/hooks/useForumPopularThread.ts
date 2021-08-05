@@ -8,7 +8,11 @@ export const useForumPopularThread = (category_eq: string) => {
   const [thread, setThread] = useState<ForumThread>()
 
   const { data: threadData } = useGetForumThreadsQuery({
-    variables: { where: { category_eq }, orderBy: ForumThreadOrderByInput.UpdatedAtDesc, limit: 1 },
+    variables: {
+      where: { category: { id_eq: category_eq } },
+      orderBy: ForumThreadOrderByInput.UpdatedAtDesc,
+      limit: 1,
+    },
   })
 
   useEffect(() => {
