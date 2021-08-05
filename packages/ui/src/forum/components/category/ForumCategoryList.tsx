@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
 
@@ -30,4 +31,8 @@ export const ForumCategoryList = ({ categories }: ForumCategoryListProps) => (
   </ForumCategoryListStyles>
 )
 
-const ForumCategoryListStyles = styled(RowGapBlock)``
+const ForumCategoryListStyles = styled(RowGapBlock)`
+  ${ListHeaders} {
+    padding: ${spacing(0, 3)};
+  }
+`
