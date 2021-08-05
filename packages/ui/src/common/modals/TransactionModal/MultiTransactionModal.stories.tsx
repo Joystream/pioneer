@@ -62,7 +62,7 @@ const steps = [
     title: 'Send a proposal',
   },
 ]
-const active = 1
+const active = 0
 
 export const Default = Template.bind({})
 Default.args = {
