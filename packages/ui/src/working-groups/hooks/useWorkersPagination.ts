@@ -14,7 +14,7 @@ interface UseWorkersPaginationProps extends UseWorkersProps {
 export const useWorkersPagination = ({ groupId: group_eq, status, page = 1 }: UseWorkersPaginationProps) => {
   const variables = {
     where: {
-      group_eq,
+      group: { id_eq: group_eq },
       ...getWorkersWhere(status),
     },
     limit: WORKERS_PER_PAGE,
