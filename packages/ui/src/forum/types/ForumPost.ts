@@ -14,13 +14,18 @@ export interface ForumPost {
   reaction?: PostReaction[]
 }
 
-export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
-  id: fields.id,
-  createdAt: fields.createdAt,
-  updatedAt: fields.updatedAt,
-  author: asMember(fields.author),
-  text: fields.text,
-  ...(fields.repliesTo ? { repliesTo: asForumPost(fields.repliesTo) } : {}),
-  createdAtBlock:
-    fields?.postaddedeventpost && fields.postaddedeventpost.length ? asBlock(fields.postaddedeventpost[0]) : undefined,
-})
+export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => {
+  console.log(fields)
+  return {
+    id: fields.id,
+    createdAt: fields.createdAt,
+    updatedAt: fields.updatedAt,
+    author: asMember(fields.author),
+    text: fields.text,
+    ...(fields.repliesTo ? { repliesTo: asForumPost(fields.repliesTo) } : {}),
+    createdAtBlock:
+      fields?.postaddedeventpost && fields.postaddedeventpost.length
+        ? asBlock(fields.postaddedeventpost[0])
+        : undefined,
+  }
+}

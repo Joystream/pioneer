@@ -24,17 +24,22 @@ interface PostProps {
 }
 
 export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isPreview }, ref) => {
-  const { createdAtBlock, createdAt, updatedAt, author, text, reaction, repliesTo } = post
+  const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const time = useMemo(() => {
-    const text = updatedAt ? 'edited' : 'created'
-    const time = updatedAt ?? createdAt
+    if (!updatedAt) {
+      return null
+    }
 
     return (
       <EditionTime>
-        ({text} {differenceInHours(new Date(), new Date(time)) >= 24 ? formatDateString(time) : relativeTime(time)})
+        (edited{' '}
+        {differenceInHours(new Date(), new Date(updatedAt)) >= 24
+          ? formatDateString(updatedAt)
+          : relativeTime(updatedAt)}
+        )
       </EditionTime>
     )
-  }, [createdAt, updatedAt])
+  }, [updatedAt])
 
   return (
     <ForumPostStyles ref={ref} isSelected={isSelected}>

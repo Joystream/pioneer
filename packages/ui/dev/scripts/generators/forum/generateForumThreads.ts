@@ -8,7 +8,7 @@ let nextThreadId = 0
 let nextPostId = 0
 
 export const generateForumPost = (threadId: string, authorId: string, repliesToId?: string): RawForumPostMock => {
-  const createdAt = faker.date.recent(180).toISOString()
+  const createdAt = faker.date.recent(180)
   let lastEditDate: Date
 
   return {
@@ -24,7 +24,7 @@ export const generateForumPost = (threadId: string, authorId: string, repliesToI
         ...randomBlock(lastEditDate),
       }
     }),
-    createdAt,
+    postAddedEvent: randomBlock(createdAt),
   }
 }
 
