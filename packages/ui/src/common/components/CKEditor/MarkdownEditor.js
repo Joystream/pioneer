@@ -4,6 +4,7 @@ import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic'
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
+import InlineEditor from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor'
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials'
 import Heading from '@ckeditor/ckeditor5-heading/src/heading'
 import Image from '@ckeditor/ckeditor5-image/src/image'
@@ -18,8 +19,10 @@ import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformatio
 
 export const MarkdownEditor = ClassicEditor
 
+export const InlineMarkdownEditor = InlineEditor
+
 // Plugins to include in the build.
-ClassicEditor.builtinPlugins = [
+const plugins = [
   Markdown,
   Essentials,
   Autoformat,
@@ -38,6 +41,9 @@ ClassicEditor.builtinPlugins = [
   PasteFromOffice,
   TextTransformation,
 ]
+
+ClassicEditor.builtinPlugins = plugins
+InlineEditor.builtinPlugins = plugins
 
 // See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#customizing-the-output
 function MentionToLink(editor) {
