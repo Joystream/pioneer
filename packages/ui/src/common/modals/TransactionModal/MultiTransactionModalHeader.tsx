@@ -16,10 +16,10 @@ export const MultiTransactionModalHeader = (props: MultiTransactionModalHeaderPa
     {props.transactionSteps.map((step, index) => (
       <MultiTransactionStep
         key={index}
-        stepNumber={props.active + 1}
-        stepTitle={props.transactionSteps[props.active]?.title}
-        active={index == props.active + 1}
-        past={false}
+        stepNumber={index + 1}
+        stepTitle={step.title}
+        active={index === props.active}
+        past={index < props.active}
       />
     ))}
   </ModalCustomContentHeader>
