@@ -47,7 +47,7 @@ Default.args = {
     title: 'General',
     description:
       'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Lorem Vestibulum congue fermentu.',
-    moderators: [],
+    moderatorIds: [],
   },
   subcategories: ['Lorem ipsum', 'Dolor', 'Name', 'Name'],
 }

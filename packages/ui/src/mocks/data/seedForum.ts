@@ -13,7 +13,7 @@ export interface RawForumCategoryMock {
   title: string
   description: string
   parentId?: string | null
-  moderators: string[]
+  moderatorIds: string[]
 }
 
 export interface RawForumThreadMock {
@@ -37,12 +37,8 @@ export interface RawForumPostMock {
 export function seedForumCategory(forumCategoryData: RawForumCategoryMock, server: any) {
   return server.schema.create('ForumCategory', {
     ...forumCategoryData,
-    moderators: seedModerators(forumCategoryData.moderators, server),
   })
 }
-
-const seedModerators = (moderatorsIds: string[], server: any) =>
-  moderatorsIds.map((workerId) => server.schema.find('Worker', workerId))
 
 export const seedForumCategories = (server: any) => {
   categoriesData.map((forumCategoryData) => seedForumCategory(forumCategoryData, server))

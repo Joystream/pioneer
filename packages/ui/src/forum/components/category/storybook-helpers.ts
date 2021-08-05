@@ -42,6 +42,6 @@ export const asStorybookSubCategories = (parentId: string) => {
     title,
     description: '',
     parentId,
-    moderators: [],
+    moderatorIds: [],
   })
 }
