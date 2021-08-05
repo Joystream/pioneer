@@ -8,6 +8,7 @@ import { BorderRad, Colors, Shadows } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { PostListItem } from '@/forum/components/PostList/PostListItem'
 import { useForumPosts } from '@/forum/hooks/useForumPosts'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface PostListProps {
   threadId: string
@@ -17,6 +18,7 @@ interface PostListProps {
 export const PostList = ({ threadId, selectedPostId }: PostListProps) => {
   const [page, setPage] = useState(1)
   const { isLoading, posts, pageCount } = useForumPosts({ threadId, page })
+  const { active: activeMember } = useMyMemberships()
 
   const selectedElement = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -34,7 +36,11 @@ export const PostList = ({ threadId, selectedPostId }: PostListProps) => {
       )}
       {posts.map((post) => (
         <PostBlock key={post.id}>
-          <PostListItem post={post} isSelected={post.id === selectedPostId} />
+          <PostListItem
+            post={post}
+            isSelected={post.id === selectedPostId}
+            isOwn={activeMember?.id === post.author.id}
+          />
         </PostBlock>
       ))}
       {!isLoading && !!pageCount && pageCount > 1 && (

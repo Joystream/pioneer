@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonGhostStyles, ButtonsRow } from '@/common/components/buttons'
 import { LinkButtonGhost, LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
+import { ContextMenu } from '@/common/components/ContextMenu'
 import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge, TextInlineSmall } from '@/common/components/typography'
@@ -17,9 +18,10 @@ import { MemberInfo } from '@/memberships/components'
 interface PostProps {
   post: ForumPost
   isSelected?: boolean
+  isOwn?: boolean
 }
 
-export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected }, ref) => {
+export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isOwn }, ref) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
 
@@ -59,6 +61,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
           <Button square>
             <ReplyIcon />
           </Button>
+          {isOwn && <ContextMenu items={[{ text: 'Delete post', onClick: () => null }]} />}
         </ButtonsRow>
       </ForumPostRow>
     </ForumPostStyles>
