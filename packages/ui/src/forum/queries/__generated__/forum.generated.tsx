@@ -114,6 +114,8 @@ export type GetForumCategoryBreadcrumbsQuery = {
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.ForumThreadWhereInput>
+  orderBy?: Types.Maybe<Array<Types.ForumThreadOrderByInput> | Types.ForumThreadOrderByInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetForumThreadsQuery = {
@@ -141,6 +143,7 @@ export type GetForumThreadQuery = {
 
 export type GetForumPostsQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
+  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
   offset?: Types.Maybe<Types.Scalars['Int']>
   limit?: Types.Maybe<Types.Scalars['Int']>
 }>
@@ -396,8 +399,8 @@ export type GetForumCategoryBreadcrumbsQueryResult = Apollo.QueryResult<
   GetForumCategoryBreadcrumbsQueryVariables
 >
 export const GetForumThreadsDocument = gql`
-  query GetForumThreads($where: ForumThreadWhereInput) {
-    forumThreads(where: $where) {
+  query GetForumThreads($where: ForumThreadWhereInput, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
+    forumThreads(where: $where, orderBy: $orderBy, limit: $limit) {
       ...ForumThreadFields
     }
   }
@@ -417,6 +420,8 @@ export const GetForumThreadsDocument = gql`
  * const { data, loading, error } = useGetForumThreadsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -524,8 +529,8 @@ export type GetForumThreadQueryHookResult = ReturnType<typeof useGetForumThreadQ
 export type GetForumThreadLazyQueryHookResult = ReturnType<typeof useGetForumThreadLazyQuery>
 export type GetForumThreadQueryResult = Apollo.QueryResult<GetForumThreadQuery, GetForumThreadQueryVariables>
 export const GetForumPostsDocument = gql`
-  query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
-    forumPosts(where: $where, offset: $offset, limit: $limit) {
+  query GetForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $offset: Int, $limit: Int) {
+    forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
       ...ForumPostFields
     }
   }
@@ -545,6 +550,7 @@ export const GetForumPostsDocument = gql`
  * const { data, loading, error } = useGetForumPostsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
  *   },

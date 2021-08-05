@@ -98,8 +98,8 @@ query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
   }
 }
 
-query GetForumThreads($where: ForumThreadWhereInput) {
-  forumThreads(where: $where) {
+query GetForumThreads($where: ForumThreadWhereInput, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
+  forumThreads(where: $where, orderBy: $orderBy, limit: $limit) {
     ...ForumThreadFields
   }
 }
@@ -116,8 +116,8 @@ query GetForumThread($where: ForumThreadWhereUniqueInput!) {
   }
 }
 
-query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
-  forumPosts(where: $where, offset: $offset, limit: $limit) {
+query GetForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $offset: Int, $limit: Int) {
+  forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...ForumPostFields
   }
 }
