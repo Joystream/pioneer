@@ -125,6 +125,11 @@ const ReplyBadge = styled.div`
 
 const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true })`
   float: right;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `
 
 export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
