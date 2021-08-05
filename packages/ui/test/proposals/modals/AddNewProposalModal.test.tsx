@@ -75,6 +75,7 @@ describe('UI: AddNewProposalModal', () => {
 
   let useAccounts: UseAccounts
   let tx: any
+  let bindAccountTx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -95,6 +96,7 @@ describe('UI: AddNewProposalModal', () => {
     stubDefaultBalances(api)
     stubProposalConstants(api)
     tx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+    bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
 
     await renderModal()
   })
@@ -403,7 +405,7 @@ describe('UI: AddNewProposalModal', () => {
       })
     })
 
-    describe('Transaction', () => {
+    describe('Authorize', () => {
       beforeEach(async () => {
         await finishWarning()
         await finishProposalType('fundingRequest')
@@ -413,30 +415,52 @@ describe('UI: AddNewProposalModal', () => {
         await SpecificParameters.FundingRequest.finish(100, 'bob')
       })
 
-      it('Authorize step', async () => {
-        expect(screen.queryByText('Authorize transaction')).not.toBeNull()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
-      })
+      describe('Staking account is not bound yet', () => {
+        it('Bind account step', async () => {
+          expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42')
+        })
 
-      it('Success step', async () => {
-        stubTransactionSuccess(
-          tx,
-          ['EventParams', registry.createType('ProposalId', 1337)],
-          'proposalsEngine',
-          'ProposalCreated'
-        )
+        it('Bind account failure', async () => {
+          stubTransactionFailure(bindAccountTx)
 
-        fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
 
-        expect(screen.queryByText('See my Proposal')).not.toBeNull()
-      })
+          expect(await screen.findByText('Failure')).toBeDefined()
+        })
 
-      it('Failure step', async () => {
-        stubTransactionFailure(tx)
+        it('Create proposal step', async () => {
+          stubTransactionSuccess(bindAccountTx, [], 'members', '')
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
 
-        fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+          expect(screen.getByText(/You intend to create a proposa/i)).not.toBeNull()
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        })
 
-        expect(await screen.findByText('Failure')).toBeDefined()
+        it('Create proposal success', async () => {
+          stubTransactionSuccess(bindAccountTx, [], 'members', '')
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          stubTransactionSuccess(
+            tx,
+            ['EventParams', registry.createType('ProposalId', 1337)],
+            'proposalsEngine',
+            'ProposalCreated'
+          )
+
+          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+
+          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+        })
+
+        it('Create proposal failure', async () => {
+          stubTransactionSuccess(bindAccountTx, [], 'members', '')
+          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          stubTransactionFailure(tx)
+
+          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+
+          expect(await screen.findByText('Failure')).toBeDefined()
+        })
       })
     })
 

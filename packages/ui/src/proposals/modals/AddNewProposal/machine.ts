@@ -303,7 +303,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       meta: { isStep: true, stepTitle: 'Specific parameters' },
       on: {
         BACK: 'generalParameters.triggerAndDiscussion',
-        NEXT: 'transaction',
+        NEXT: 'bindStakingAccount',
       },
       initial: 'entry',
       states: {
@@ -480,7 +480,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
         src: transactionMachine,
         onDone: [
           {
-            target: 'success',
+            target: 'transaction',
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
             cond: isTransactionSuccess,
           },
