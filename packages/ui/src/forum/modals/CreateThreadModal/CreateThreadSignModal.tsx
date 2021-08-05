@@ -48,7 +48,7 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
               A fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
             </TextMedium>
           </RowGapBlock>
-          <InputComponent label="Fee paid by account">
+          <InputComponent label="Fee paid by account" inputSize="l" disabled borderless>
             <SelectedAccount account={controllerAccount} />
           </InputComponent>
         </RowGapBlock>
