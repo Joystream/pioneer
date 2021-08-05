@@ -7,9 +7,9 @@ import { spacing } from '@/common/utils/styles'
 
 export const ForumTabs = () => {
   const tabs = usePageTabs([
-    ['Overview', '/#'],
+    ['Overview', '/forum/#'],
     ['Forum', '/forum'],
-    ['Archived', '/#'],
+    ['Archived', '/forum/#'],
   ])
 
   return <Tabs tabs={tabs} />
@@ -18,10 +18,10 @@ export const ForumTabs = () => {
 export const ForumForumTabs = () => {
   const tabs = usePageTabs([
     ['Categories', '/forum'],
-    ['Latest threads ', '/#'],
-    ['Top threads', '/#'],
-    ['Tags', '/#'],
-    ['My threads', '/#'],
+    ['Latest threads ', '/forum/#'],
+    ['Top threads', '/forum/#'],
+    ['Tags', '/forum/#'],
+    ['My threads', '/forum/#'],
   ])
 
   return <ForumForumTabsStyles tabsSize="xs" tabs={tabs} />
