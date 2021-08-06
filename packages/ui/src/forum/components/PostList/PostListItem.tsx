@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonGhostStyles, ButtonsRow } from '@/common/components/buttons'
-import { LinkButtonGhost, LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
+import { ButtonGhost, ButtonGhostStyles, ButtonsRow, CopyButtonTemplate } from '@/common/components/buttons'
+import { LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
 import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge, TextInlineSmall } from '@/common/components/typography'
@@ -54,9 +54,13 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
           )}
         </ButtonsRow>
         <ButtonsRow>
-          <LinkButton to={window.location.href} square disabled={isPreview}>
-            <LinkIcon />
-          </LinkButton>
+          <CopyButtonTemplate
+            textToCopy={window.location.href}
+            square
+            size="small"
+            disabled={isPreview}
+            icon={<LinkIcon />}
+          />
           <Button square disabled={isPreview}>
             <ReplyIcon />
           </Button>
@@ -66,7 +70,6 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
   )
 })
 
-const LinkButton = styled(LinkButtonGhost).attrs({ size: 'small' })``
 const Button = styled(ButtonGhost).attrs({ size: 'small' })``
 
 const MessageBody = styled.div`
