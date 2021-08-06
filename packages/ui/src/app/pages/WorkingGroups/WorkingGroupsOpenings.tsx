@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics } from '@/common/components/statistics'
@@ -45,10 +44,10 @@ export const WorkingGroupsOpenings = () => {
   return (
     <PageLayout
       header={
-        <PageHeader>
+        <PageHeaderWrapper>
           <PageTitle>Working Groups</PageTitle>
           <WorkingGroupsTabs />
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={
         <MainPanel ref={sideNeighborRef}>

@@ -1,8 +1,7 @@
 import React from 'react'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SimpleSelect } from '@/common/components/selects'
 import { NetworkType, useNetwork } from '@/common/hooks/useNetwork'
@@ -24,9 +23,9 @@ export const Settings = () => {
   return (
     <PageLayout
       header={
-        <PageHeader>
+        <PageHeaderWrapper>
           <PageTitle>Settings</PageTitle>
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={
         <MainPanel>

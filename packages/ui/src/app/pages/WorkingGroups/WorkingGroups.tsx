@@ -1,9 +1,8 @@
 import React from 'react'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 
 import { Loading } from '../../../common/components/Loading'
-import { PageHeader } from '../../../common/components/page/PageHeader'
 import { PageTitle } from '../../../common/components/page/PageTitle'
 import { WorkingGroupsList } from '../../../working-groups/components/WorkingGroupsList'
 import { useWorkingGroups } from '../../../working-groups/hooks/useWorkingGroups'
@@ -20,10 +19,10 @@ export const WorkingGroups = () => {
   return (
     <PageLayout
       header={
-        <PageHeader>
+        <PageHeaderWrapper>
           <PageTitle>Working Groups</PageTitle>
           <WorkingGroupsTabs />
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={<WorkingGroupsList groups={groups} />}
     />

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PageHeader } from '@/common/components/page/PageHeader'
+import { PageHeaderWrapper } from '@/app/components/PageLayout'
 import { PageTitle } from '@/common/components/page/PageTitle'
 
 interface ProposalHeaderProps {
@@ -9,10 +9,10 @@ interface ProposalHeaderProps {
 }
 export const FilterPageHeader = React.forwardRef(
   ({ title, children }: ProposalHeaderProps, ref: React.ForwardedRef<HTMLDivElement>) => (
-    <PageHeader>
+    <PageHeaderWrapper>
       <PageTitle>{title}</PageTitle>
       <div ref={ref} />
       {children}
-    </PageHeader>
+    </PageHeaderWrapper>
   )
 )

@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
@@ -10,7 +10,6 @@ import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/bu
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -85,26 +84,28 @@ export const MyRole = () => {
     <PageLayout
       lastBreadcrumb={workerRoleTitle(worker)}
       header={
-        <PageHeader>
-          <PreviousPage>
-            <PageTitle>{workerRoleTitle(worker)}</PageTitle>
-          </PreviousPage>
-          <ButtonsGroup>
-            <ButtonGhost size="medium" onClick={showApplicationModal}>
-              Application
-            </ButtonGhost>
-            <LinkButtonGhost size="medium" to={`/working-groups/openings/${worker?.openingId}`}>
-              Opening
-            </LinkButtonGhost>
-            {isActive && isOwn && (
-              <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
-                Leave this position
-                <Tooltip tooltipText="Lorem ipsum" tooltipTitle="Lorem ipsum">
-                  <TooltipDefault />
-                </Tooltip>
+        <PageHeaderWrapper>
+          <PageHeaderRow>
+            <PreviousPage>
+              <PageTitle>{workerRoleTitle(worker)}</PageTitle>
+            </PreviousPage>
+            <ButtonsGroup>
+              <ButtonGhost size="medium" onClick={showApplicationModal}>
+                Application
               </ButtonGhost>
-            )}
-          </ButtonsGroup>
+              <LinkButtonGhost size="medium" to={`/working-groups/openings/${worker?.openingId}`}>
+                Opening
+              </LinkButtonGhost>
+              {isActive && isOwn && (
+                <ButtonGhost size="medium" onClick={showLeaveRoleModal}>
+                  Leave this position
+                  <Tooltip tooltipText="Lorem ipsum" tooltipTitle="Lorem ipsum">
+                    <TooltipDefault />
+                  </Tooltip>
+                </ButtonGhost>
+              )}
+            </ButtonsGroup>
+          </PageHeaderRow>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>
@@ -129,7 +130,7 @@ export const MyRole = () => {
               <NextPayoutStat workers={[worker]} />
             </Statistics>
           </RowGapBlock>
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={
         <MainPanel ref={sideNeighborRef}>

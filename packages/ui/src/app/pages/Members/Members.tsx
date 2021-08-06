@@ -1,9 +1,8 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
 import { useModal } from '@/common/hooks/useModal'
@@ -37,9 +36,9 @@ export const Members = () => {
   return (
     <PageLayout
       header={
-        <PageHeader>
+        <PageHeaderWrapper>
           <PageTitle>Members</PageTitle>
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={
         <MainPanel>

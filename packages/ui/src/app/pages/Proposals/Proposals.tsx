@@ -1,9 +1,8 @@
 import React, { useRef } from 'react'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -23,11 +22,11 @@ export const Proposals = () => {
   return (
     <PageLayout
       header={
-        <PageHeader>
+        <PageHeaderWrapper>
           <PageTitle>Proposals</PageTitle>
           <AddProposalButton />
           <ProposalsTabs />
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={
         proposals.length || isLoading ? (
