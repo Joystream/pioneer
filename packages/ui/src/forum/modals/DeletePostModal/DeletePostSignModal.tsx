@@ -35,7 +35,7 @@ export const DeletePostSignModal = ({ transaction, service, controllerAccount }:
       return balance.transferable.gte(paymentInfo.partialFee)
     }
     return false
-  }, [controllerAccount.address, balance?.transferable])
+  }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee])
   const signDisabled = !state.matches('prepare') || !hasFunds
 
   return (
@@ -48,7 +48,7 @@ export const DeletePostSignModal = ({ transaction, service, controllerAccount }:
               A fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
             </TextMedium>
           </RowGapBlock>
-          <InputComponent label="Fee paid by account">
+          <InputComponent label="Fee paid by account" inputSize="l" disabled borderless>
             <SelectedAccount account={controllerAccount} />
           </InputComponent>
         </RowGapBlock>

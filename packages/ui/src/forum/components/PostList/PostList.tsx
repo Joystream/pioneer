@@ -7,8 +7,8 @@ import { Pagination } from '@/common/components/Pagination'
 import { BorderRad, Colors, Shadows } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { PostListItem } from '@/forum/components/PostList/PostListItem'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface PostListProps {
   threadId: string
