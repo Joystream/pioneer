@@ -19,11 +19,10 @@ import { PostContextMenu } from './PostContextMenu'
 interface PostProps {
   post: ForumPost
   isSelected?: boolean
-  isOwn?: boolean
   isPreview?: boolean
 }
 
-export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isOwn, isPreview }, ref) => {
+export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isPreview }, ref) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
 
@@ -63,7 +62,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
           <Button square disabled={isPreview} size="small">
             <ReplyIcon />
           </Button>
-          <PostContextMenu isOwn={isOwn} post={post} />
+          <PostContextMenu post={post} />
         </ButtonsRow>
       </ForumPostRow>
     </ForumPostStyles>
