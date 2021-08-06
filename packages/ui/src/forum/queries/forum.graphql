@@ -81,8 +81,13 @@ fragment ForumThreadDetailedFields on ForumThread {
 }
 
 query GetForumCategories($where: ForumCategoryWhereInput) {
-  forumCategories(where: $where) {
-    ...ForumCategoryFields
+  forumCategoriesConnection(where: $where) {
+    totalCount
+    edges {
+      node {
+        ...ForumCategoryFields
+      }
+    }
   }
 }
 

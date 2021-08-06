@@ -90,7 +90,14 @@ export type GetForumCategoriesQueryVariables = Types.Exact<{
 
 export type GetForumCategoriesQuery = {
   __typename: 'Query'
-  forumCategories: Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>
+  forumCategoriesConnection: {
+    __typename: 'ForumCategoryConnection'
+    totalCount: number
+    edges: Array<{
+      __typename: 'ForumCategoryEdge'
+      node: { __typename: 'ForumCategory' } & ForumCategoryFieldsFragment
+    }>
+  }
 }
 
 export type GetForumSubCategoriesQueryVariables = Types.Exact<{
@@ -262,8 +269,13 @@ export const ForumThreadDetailedFieldsFragmentDoc = gql`
 `
 export const GetForumCategoriesDocument = gql`
   query GetForumCategories($where: ForumCategoryWhereInput) {
-    forumCategories(where: $where) {
-      ...ForumCategoryFields
+    forumCategoriesConnection(where: $where) {
+      totalCount
+      edges {
+        node {
+          ...ForumCategoryFields
+        }
+      }
     }
   }
   ${ForumCategoryFieldsFragmentDoc}

@@ -11,9 +11,11 @@ export const useForumCategories = (parent_eq?: string) => {
     [parent_eq]
   )
   const { loading, data } = useGetForumCategoriesQuery({ variables: { where } })
+  const connection = data?.forumCategoriesConnection
 
   return {
     isLoading: loading,
-    forumCategories: data?.forumCategories.map(asForumCategory) ?? [],
+    forumCategories: connection?.edges.map(({ node }) => asForumCategory(node)) ?? [],
+    totalCount: connection?.totalCount,
   }
 }
