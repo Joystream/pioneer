@@ -290,7 +290,7 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
           />
         </WorkingGroupImageTag>
       )
-    case 'gateways':
+    case 'gateway':
       return (
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <path

@@ -24,7 +24,7 @@ const Template: Story<WorkingGroupImageProps> = (args) => {
         </GroupImageContainer>
       </Row>
       <Row>
-        Group names: bandwidth, storage, forum, membership, content, discovery, operations, gateways, council or{' '}
+        Group names: bandwidth, storage, forum, membership, content, discovery, operations, gateway, council or{' '}
         {'{undefined}'}
       </Row>
     </TemplateBlock>
