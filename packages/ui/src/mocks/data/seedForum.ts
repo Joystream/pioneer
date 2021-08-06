@@ -35,9 +35,17 @@ export interface RawForumPostMock {
 }
 
 export function seedForumCategory(forumCategoryData: RawForumCategoryMock, server: any) {
+  const forumcategoryparentIds = categoryParentIds(forumCategoryData.parentId, server, [])
+
   return server.schema.create('ForumCategory', {
     ...forumCategoryData,
+    ...(forumcategoryparentIds.length ? { forumcategoryparentIds } : {}),
   })
+}
+
+const categoryParentIds = (parentId: string | null | undefined, server: any, parentIds: string[]): string[] => {
+  const parent = parentId && server.schema.find('ForumCategory', parentId)
+  return parent ? categoryParentIds(parent.parentId, server, [parent.id, ...parentIds]) : parentIds
 }
 
 export const seedForumCategories = (server: any) => {
