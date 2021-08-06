@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { RecoverBalanceModal } from '@/accounts/modals/RecoverBalance'
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { BN_ZERO } from '@/common/constants'
@@ -32,10 +31,10 @@ export const MyAccounts = () => {
     <PageLayout
       header={
         <RowGapBlock gap={24}>
-          <PageHeader>
+          <PageHeaderWrapper>
             <PageTitle>My Profile</PageTitle>
             <MyProfileTabs />
-          </PageHeader>
+          </PageHeaderWrapper>
           <Statistics>
             <TokenValueStat title="Total balance" tooltipText="Lorem ipsum..." value={total} />
             <TokenValueStat title="Total transferable balance" tooltipText="Lorem ipsum..." value={transferable} />

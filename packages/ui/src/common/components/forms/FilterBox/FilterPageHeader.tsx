@@ -1,18 +1,26 @@
 import React from 'react'
 
-import { PageHeader } from '@/common/components/page/PageHeader'
+import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { PageTitle } from '@/common/components/page/PageTitle'
+
+import { ButtonsGroup } from '../../buttons'
 
 interface ProposalHeaderProps {
   title: string
   children?: React.ReactNode
+  buttons?: React.ReactNode
 }
 export const FilterPageHeader = React.forwardRef(
-  ({ title, children }: ProposalHeaderProps, ref: React.ForwardedRef<HTMLDivElement>) => (
-    <PageHeader>
-      <PageTitle>{title}</PageTitle>
-      <div ref={ref} />
+  ({ title, children, buttons }: ProposalHeaderProps, ref: React.ForwardedRef<HTMLDivElement>) => (
+    <PageHeaderWrapper>
+      <PageHeaderRow>
+        <PageTitle>{title}</PageTitle>
+        <ButtonsGroup>
+          <div ref={ref} />
+          {buttons}
+        </ButtonsGroup>
+      </PageHeaderRow>
       {children}
-    </PageHeader>
+    </PageHeaderWrapper>
   )
 )

@@ -5,30 +5,31 @@ import styled from 'styled-components'
 import { useOutsideClick } from '@/common/hooks/useOutsideClick'
 
 import { Animations, BorderRad, Colors, Shadows, ZIndex } from '../../constants'
-import { ButtonGhost, ButtonLink } from '../buttons'
+import { ButtonGhost, ButtonLink, ButtonSize } from '../buttons'
 import { KebabMenuIcon } from '../icons'
 
 export interface ContextMenuItem {
   text: string
-  onClick: () => void
+  onClick: (event?: React.MouseEvent<HTMLElement>) => void
 }
 
 export interface ContextMenuProps {
   items: ContextMenuItem[]
+  size?: ButtonSize
 }
 
-export const ContextMenu = ({ items }: ContextMenuProps) => {
+export const ContextMenu = ({ items, size }: ContextMenuProps) => {
   const [isMenuVisible, setMenuVisible] = useState(false)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLDivElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
 
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
-    placement: 'bottom-start',
+    placement: 'bottom-end',
     modifiers: [
       {
         name: 'offset',
         options: {
-          offset: [0, 0],
+          offset: [0, 8],
         },
       },
     ],
@@ -46,7 +47,7 @@ export const ContextMenu = ({ items }: ContextMenuProps) => {
 
   return (
     <ContextMenuContainer ref={setReferenceElementRef}>
-      <ButtonGhost square size="medium" {...contextMenuHandlers}>
+      <ButtonGhost square size={size ?? 'medium'} {...contextMenuHandlers}>
         <KebabMenuIcon />
       </ButtonGhost>
       {isMenuVisible && (

@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonGhostStyles, ButtonsRow } from '@/common/components/buttons'
-import { LinkButtonGhost, LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
+import { ButtonGhost, ButtonsRow } from '@/common/components/buttons'
+import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { ContextMenu } from '@/common/components/ContextMenu'
 import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
@@ -50,24 +50,26 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
         <MarkdownPreview markdown={text} append={edited} size="s" />
       </MessageBody>
       <ForumPostRow>
-        <ButtonsRow>
-          {reaction && (
-            <Button>
+        {reaction && (
+          <ButtonsRow>
+            <Button size="small">
               <HeartIcon />
               {!!reaction.length && reaction.length}
             </Button>
-          )}
-        </ButtonsRow>
+          </ButtonsRow>
+        )}
         <ButtonsRow>
-          <LinkButton to={window.location.href} square disabled={isPreview}>
+          <LinkButton to={window.location.href} square disabled={isPreview} size="small">
             <LinkIcon />
           </LinkButton>
-          <Button square disabled={isPreview}>
+          <Button square disabled={isPreview} size="small">
             <ReplyIcon />
           </Button>
           {isOwn && (
             <ContextMenu
+              size="small"
               items={[
+                { text: 'Edit post', onClick: (event) => event?.preventDefault() },
                 {
                   text: 'Delete post',
                   onClick: () => showModal<DeletePostModalCall>({ modal: 'DeletePost', data: { post } }),
@@ -129,12 +131,6 @@ export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   display: grid;
   grid-template-columns: 1fr;
   row-gap: ${spacing(2)};
-
-  ${ButtonGhostStyles}, ${LinkButtonGhostStyles} {
-    svg {
-      width: 14px;
-    }
-  }
 
   // Animate selection:
   &,

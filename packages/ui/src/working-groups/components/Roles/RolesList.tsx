@@ -90,6 +90,7 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>
       <ContextMenu
+        size="small"
         items={[
           { text: 'Change reward account', onClick: changeRewardCallback },
           { text: 'Leave a position', onClick: leaveRoleCallback },

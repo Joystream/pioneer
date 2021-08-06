@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Tabs } from '@/common/components/Tabs'
@@ -46,7 +45,7 @@ export function WorkingGroup() {
   return (
     <PageLayout
       header={
-        <PageHeader>
+        <PageHeaderWrapper>
           <PreviousPage>
             <PageTitle>{group?.name ?? name.replace(/-/, ' ')}</PageTitle>
             {group?.status && (
@@ -56,7 +55,7 @@ export function WorkingGroup() {
             )}
           </PreviousPage>
           <Tabs tabs={tabs} />
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={displayTabs()}
     />

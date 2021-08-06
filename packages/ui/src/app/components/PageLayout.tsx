@@ -30,6 +30,24 @@ const PageHeader = styled.header`
   grid-area: header;
 `
 
+export const PageHeaderWrapper = styled.section`
+  display: flex;
+  position: relative;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px 8px;
+`
+
+export const PageHeaderRow = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 24px;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+`
+
 const PageMain = styled.main`
   width: 100%;
   grid-area: main;

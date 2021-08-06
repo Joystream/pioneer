@@ -29,6 +29,8 @@ const PreviousPageBlock = styled.div`
   grid-column-gap: 8px;
   align-items: center;
   width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
 `
 
 const PreviousPageButtonContainer = styled.div`
