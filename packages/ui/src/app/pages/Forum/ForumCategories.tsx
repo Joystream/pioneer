@@ -9,7 +9,7 @@ import { useForumCategories } from '@/forum/hooks/useForumCategories'
 import { ForumForumTabs, ForumTabs } from './components/ForumTabs'
 
 export const ForumCategories = () => {
-  const { isLoading, forumCategories } = useForumCategories()
+  const { isLoading, forumCategories, totalCount } = useForumCategories()
 
   return (
     <PageLayout
@@ -17,7 +17,7 @@ export const ForumCategories = () => {
         <PageHeaderWrapper>
           <PageTitle>Forum</PageTitle>
           <ForumTabs />
-          <ForumForumTabs />
+          <ForumForumTabs categoryCount={totalCount} />
         </PageHeaderWrapper>
       }
       main={isLoading ? <Loading /> : <ForumCategoryList categories={forumCategories} />}

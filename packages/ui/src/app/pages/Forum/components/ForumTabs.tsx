@@ -15,9 +15,12 @@ export const ForumTabs = () => {
   return <Tabs tabs={tabs} />
 }
 
-export const ForumForumTabs = () => {
+interface ForumForumTabsProps {
+  categoryCount?: number
+}
+export const ForumForumTabs = ({ categoryCount }: ForumForumTabsProps) => {
   const tabs = usePageTabs([
-    ['Categories', '/forum'],
+    ['Categories', '/forum', categoryCount],
     ['Latest threads ', '/forum/#'],
     ['Top threads', '/forum/#'],
     ['Tags', '/forum/#'],
