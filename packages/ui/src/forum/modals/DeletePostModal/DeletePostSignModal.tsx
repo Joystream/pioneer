@@ -58,7 +58,7 @@ export const DeletePostSignModal = ({ transaction, service, controllerAccount }:
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee.toBn()}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
           />
         </TransactionInfoContainer>
         <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
