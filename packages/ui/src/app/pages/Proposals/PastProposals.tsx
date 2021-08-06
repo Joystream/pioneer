@@ -29,8 +29,7 @@ export const PastProposals = () => {
   return (
     <PageLayout
       header={
-        <FilterPageHeader ref={searchSlot} title="Proposals">
-          <AddProposalButton />
+        <FilterPageHeader ref={searchSlot} title="Proposals" buttons={<AddProposalButton />}>
           <ProposalsTabs />
         </FilterPageHeader>
       }

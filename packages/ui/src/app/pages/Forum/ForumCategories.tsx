@@ -1,8 +1,7 @@
 import React from 'react'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { ForumCategoryList } from '@/forum/components/category'
 import { useForumCategories } from '@/forum/hooks/useForumCategories'
@@ -15,11 +14,11 @@ export const ForumCategories = () => {
   return (
     <PageLayout
       header={
-        <PageHeader>
+        <PageHeaderWrapper>
           <PageTitle>Forum</PageTitle>
           <ForumTabs />
           <ForumForumTabs />
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={isLoading ? <Loading /> : <ForumCategoryList categories={forumCategories} />}
     />

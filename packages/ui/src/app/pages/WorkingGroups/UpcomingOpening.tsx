@@ -1,7 +1,7 @@
 import React, { memo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
@@ -9,7 +9,6 @@ import { BellIcon } from '@/common/components/icons/BellIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ContentWithSidepanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -54,16 +53,18 @@ export const UpcomingOpening = () => {
     <PageLayout
       lastBreadcrumb={opening.title}
       header={
-        <PageHeader>
-          <PreviousPage>
-            <PageTitle>{opening.title}</PageTitle>
-          </PreviousPage>
-          <ButtonsGroup>
-            <ButtonGhost size="medium">
-              <BellIcon />
-              Notify me when it’s open
-            </ButtonGhost>
-          </ButtonsGroup>
+        <PageHeaderWrapper>
+          <PageHeaderRow>
+            <PreviousPage>
+              <PageTitle>{opening.title}</PageTitle>
+            </PreviousPage>
+            <ButtonsGroup>
+              <ButtonGhost size="medium">
+                <BellIcon />
+                Notify me when it’s open
+              </ButtonGhost>
+            </ButtonsGroup>
+          </PageHeaderRow>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>
@@ -88,7 +89,7 @@ export const UpcomingOpening = () => {
               )}
             </Statistics>
           </RowGapBlock>
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={
         <MainPanel ref={sideNeighborRef}>

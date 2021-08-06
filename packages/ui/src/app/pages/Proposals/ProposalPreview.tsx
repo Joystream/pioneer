@@ -3,13 +3,12 @@ import { useLocation } from 'react-router'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
-import { ButtonGhost } from '@/common/components/buttons/Buttons'
+import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, ContentWithTabs, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -78,15 +77,18 @@ export const ProposalPreview = () => {
     <PageLayout
       lastBreadcrumb={proposal.title}
       header={
-        <PageHeader>
-          <PreviousPage>
-            <PageTitle>{proposal.title}</PageTitle>
-          </PreviousPage>
-
-          <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
-            <LinkIcon />
-            Copy link
-          </ButtonGhost>
+        <PageHeaderWrapper>
+          <PageHeaderRow>
+            <PreviousPage>
+              <PageTitle>{proposal.title}</PageTitle>
+            </PreviousPage>
+            <ButtonsGroup>
+              <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
+                <LinkIcon />
+                Copy link
+              </ButtonGhost>
+            </ButtonsGroup>
+          </PageHeaderRow>
 
           <RowGapBlock gap={24}>
             <BadgeAndTime>
@@ -117,7 +119,7 @@ export const ProposalPreview = () => {
               onChange={setVotingRound}
             />
           )}
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={
         <MainPanel ref={sideNeighborRef}>

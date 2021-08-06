@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Label, TextBig } from '@/common/components/typography'
 import { ApplicationsList } from '@/working-groups/components/ApplicationsList'
@@ -31,10 +30,10 @@ export const MyApplications = () => {
   return (
     <PageLayout
       header={
-        <PageHeader>
+        <PageHeaderWrapper>
           <PageTitle>Working Groups</PageTitle>
           <WorkingGroupsTabs />
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={
         <MainPanel>

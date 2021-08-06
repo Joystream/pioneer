@@ -2,7 +2,7 @@ import React, { memo, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
@@ -10,7 +10,6 @@ import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ContentWithSidepanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -109,19 +108,21 @@ export const WorkingGroupOpening = () => {
     <PageLayout
       lastBreadcrumb={opening.title}
       header={
-        <PageHeader>
-          <PreviousPage>
-            <PageTitle>{opening.title}</PageTitle>
-          </PreviousPage>
-          <ButtonsGroup>
-            {(opening.status === OpeningStatuses.OPEN || opening.status === OpeningStatuses.CANCELLED) && (
-              <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
-                <LinkIcon />
-                Copy link
-              </ButtonGhost>
-            )}
-            {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
-          </ButtonsGroup>
+        <PageHeaderWrapper>
+          <PageHeaderRow>
+            <PreviousPage>
+              <PageTitle>{opening.title}</PageTitle>
+            </PreviousPage>
+            <ButtonsGroup>
+              {(opening.status === OpeningStatuses.OPEN || opening.status === OpeningStatuses.CANCELLED) && (
+                <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
+                  <LinkIcon />
+                  Copy link
+                </ButtonGhost>
+              )}
+              {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
+            </ButtonsGroup>
+          </PageHeaderRow>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>
@@ -139,7 +140,7 @@ export const WorkingGroupOpening = () => {
               <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} />
             </Statistics>
           </RowGapBlock>
-        </PageHeader>
+        </PageHeaderWrapper>
       }
       main={
         <MainPanel ref={sideNeighborRef}>

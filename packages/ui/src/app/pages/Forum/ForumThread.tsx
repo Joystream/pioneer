@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageLayout } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
@@ -11,7 +11,6 @@ import { LinkIcon, WatchIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
-import { PageHeader } from '@/common/components/page/PageHeader'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -42,20 +41,22 @@ export const ForumThread = () => {
     }
 
     return (
-      <PageHeader>
-        <PreviousPage>
-          <PageTitle>{thread.title}</PageTitle>
-        </PreviousPage>
-        <ButtonsGroup>
-          <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
-            <LinkIcon />
-            Copy link
-          </ButtonGhost>
-          <ButtonGhost size="medium">
-            <WatchIcon />
-            Watch thread
-          </ButtonGhost>
-        </ButtonsGroup>
+      <PageHeaderWrapper>
+        <PageHeaderRow>
+          <PreviousPage>
+            <PageTitle>{thread.title}</PageTitle>
+          </PreviousPage>
+          <ButtonsGroup>
+            <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
+              <LinkIcon />
+              Copy link
+            </ButtonGhost>
+            <ButtonGhost size="medium">
+              <WatchIcon />
+              Watch thread
+            </ButtonGhost>
+          </ButtonsGroup>
+        </PageHeaderRow>
         <RowGapBlock>
           <BadgesRow>
             {thread.isSticky && (
@@ -69,7 +70,7 @@ export const ForumThread = () => {
             <BlockInfo block={thread.createdInBlock} />
           </BadgesRow>
         </RowGapBlock>
-      </PageHeader>
+      </PageHeaderWrapper>
     )
   }
 
