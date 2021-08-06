@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
 import { CKEditor } from '@/common/components/CKEditor'
+import { InputComponent } from '@/common/components/forms'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -38,7 +39,9 @@ export const ProposalDiscussions = ({ thread, selected }: Props) => {
       })}
 
       <PostMessageForm>
-        <CKEditor />
+        <InputComponent inputSize="auto">
+          <CKEditor />
+        </InputComponent>
       </PostMessageForm>
     </ProposalDiscussionsStyles>
   )
