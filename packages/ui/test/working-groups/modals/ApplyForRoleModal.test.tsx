@@ -218,7 +218,7 @@ describe('UI: ApplyForRoleModal', () => {
 
         fireEvent.click(screen.getByText(/^Sign transaction/i))
 
-        expect(await screen.findByText(/Apply on opening/i)).toBeDefined()
+        expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
         expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
       })
 
@@ -231,9 +231,8 @@ describe('UI: ApplyForRoleModal', () => {
           'AppliedOnOpening'
         )
         await fillSteps()
-
         fireEvent.click(screen.getByText(/^Sign transaction/i))
-        expect(await screen.findByText(/Apply on opening/i)).toBeDefined()
+
         fireEvent.click(screen.getByText(/^Sign transaction/i))
 
         expect(await screen.findByText('Application submitted!')).toBeDefined()
@@ -244,9 +243,8 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionSuccess(bindAccountTx, [], 'members', '')
         stubTransactionFailure(tx)
         await fillSteps()
-
         fireEvent.click(screen.getByText(/^Sign transaction/i))
-        expect(await screen.findByText(/Apply on opening/i)).toBeDefined()
+
         fireEvent.click(screen.getByText(/^Sign transaction/i))
 
         expect(await screen.findByText('Failure')).toBeDefined()

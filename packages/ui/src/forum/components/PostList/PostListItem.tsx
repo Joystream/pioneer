@@ -21,9 +21,10 @@ interface PostProps {
   post: ForumPost
   isSelected?: boolean
   isOwn?: boolean
+  isPreview?: boolean
 }
 
-export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isOwn }, ref) => {
+export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isOwn, isPreview }, ref) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
   const { showModal } = useModal()
@@ -58,10 +59,10 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
           )}
         </ButtonsRow>
         <ButtonsRow>
-          <LinkButton to={window.location.href} square>
+          <LinkButton to={window.location.href} square disabled={isPreview}>
             <LinkIcon />
           </LinkButton>
-          <Button square>
+          <Button square disabled={isPreview}>
             <ReplyIcon />
           </Button>
           {isOwn && (

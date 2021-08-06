@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom'
 
 import { ModalContext } from '@/common/providers/modal/context'
 
+import { getMember } from '../../../../../test/_mocks/members'
 import { MockApolloProvider } from '../../../../../test/_mocks/providers'
 import { CreateThreadDetailsModal } from '../CreateThreadDetailsModal'
 
@@ -34,6 +35,7 @@ const Template: Story = ({ breadcrumbs }) => {
               setDescription={setDescription}
               onSubmit={() => null}
               breadcrumbs={breadcrumbs}
+              author={getMember('alice')}
             />
           </ModalContext.Provider>
         </MockApolloProvider>

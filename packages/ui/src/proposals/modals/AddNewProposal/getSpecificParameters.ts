@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { WorkingGroupDef } from '@joystream/types/common'
 import { ApiRx } from '@polkadot/api'
 
@@ -19,7 +20,7 @@ export const getSpecificParameters = (api: ApiRx, state: AddNewProposalMachineSt
     }
     case 'runtimeUpgrade': {
       return {
-        RuntimeUpgrade: specifics?.runtime,
+        RuntimeUpgrade: createType('Bytes', specifics?.runtime ? new Uint8Array(specifics.runtime) : new Uint8Array()),
       }
     }
     case 'createWorkingGroupLeadOpening': {

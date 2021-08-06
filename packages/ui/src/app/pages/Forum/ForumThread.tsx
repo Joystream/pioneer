@@ -6,6 +6,7 @@ import { PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
+import { CKEditor } from '@/common/components/CKEditor'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { Loading } from '@/common/components/Loading'
@@ -19,6 +20,7 @@ import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { useForumThread } from '@/forum/hooks/useForumThread'
+import { PostMessageForm } from '@/proposals/components/ProposalDiscussions'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
@@ -79,6 +81,9 @@ export const ForumThread = () => {
     return (
       <MainPanel ref={sideNeighborRef}>
         <PostList threadId={thread.id} />
+        <PostMessageForm>
+          <CKEditor />
+        </PostMessageForm>
       </MainPanel>
     )
   }

@@ -2,51 +2,56 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { TableListItem } from '@/common/components/List'
-import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
-import { ForumCategory, ForumPost, ForumThread } from '@/forum/types'
+import { useForumSubcategories } from '@/forum/hooks/useForumSubcategories'
+import { ForumCategory } from '@/forum/types'
 import { MemberStack } from '@/memberships/components/MemberStack'
 
-import { PostInfo } from './PostInfo'
-import { ThreadInfo } from './ThreadInfo'
-
+import { LatestPost } from './LatestPost'
+import { PopularThread } from './PopularThread'
+import { ThreadCount } from './ThreadCount'
 export interface CategoryListItemProps {
-  category: ForumCategory & { threadCount: number }
-  latestPost?: ForumPost
-  topThread?: ForumThread & { postCount: number }
+  category: ForumCategory
 }
-export const CategoryListItem = ({ category, latestPost, topThread }: CategoryListItemProps) => (
-  <CategoryListItemStyles as={GhostRouterLink} to={`${ForumRoutes.category}/${category.id}`}>
-    <Category>
-      <h5>{category.title}</h5>
-      <TextMedium light>{category.description}</TextMedium>
-      <TextInlineExtraSmall lighter>
-        Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
-      </TextInlineExtraSmall>
-    </Category>
+export const CategoryListItem = ({ category }: CategoryListItemProps) => {
+  const { isLoading, subcategories } = useForumSubcategories(category.id)
 
-    <TextInlineMedium bold value>
-      {category.threadCount}
-    </TextInlineMedium>
+  const moderators = category.moderators.map(({ id, handle, avatar }) => ({
+    handle,
+    avatar,
+    description: `Worker ID: ${id}`,
+  }))
 
-    {latestPost ? <PostInfo post={latestPost} /> : <Loading />}
+  return (
+    <CategoryListItemStyles as={GhostRouterLink} to={`${ForumRoutes.category}/${category.id}`}>
+      <Category>
+        <h5>{category.title}</h5>
+        <TextMedium light>{category.description}</TextMedium>
+        {!isLoading && (
+          <TextInlineExtraSmall lighter>
+            Subcategories: {subcategories?.map(({ title }) => title).join(', ')}
+          </TextInlineExtraSmall>
+        )}
+      </Category>
 
-    {topThread ? <ThreadInfo thread={topThread} /> : <Loading />}
+      <ThreadCount categoryId={category.id} />
 
-    <MemberStack
-      members={category.moderators.map(({ id, handle, avatar }) => ({
-        handle,
-        avatar,
-        description: `Worker ID: ${id}`,
-      }))}
-      max={5}
-    />
-  </CategoryListItemStyles>
-)
+      <LatestPost categoryId={category.id} />
+
+      <PopularThread categoryId={category.id} />
+
+      <MemberStack members={moderators} max={5} />
+    </CategoryListItemStyles>
+  )
+}
+
+export interface CategoryItemFieldProps {
+  categoryId: string
+}
 
 const CategoryListItemStyles = styled(TableListItem).attrs({ $colLayout: CategoriesColLayout })`
   align-items: start;

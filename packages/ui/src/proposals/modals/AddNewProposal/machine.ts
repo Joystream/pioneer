@@ -120,6 +120,7 @@ export type AddNewProposalState =
       value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
       context: StakingPolicyAndRewardContext
     }
+  | { value: 'bindStakingAccount'; context: Required<AddNewProposalContext> }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
   | { value: 'success'; context: Required<AddNewProposalContext> }
   | { value: 'error'; context: AddNewProposalContext }
@@ -302,21 +303,18 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       meta: { isStep: true, stepTitle: 'Specific parameters' },
       on: {
         BACK: 'generalParameters.triggerAndDiscussion',
-        NEXT: 'transaction',
+        NEXT: 'bindStakingAccount',
       },
       initial: 'entry',
       states: {
         entry: {
-          on: {
-            // TODO: Check "always" transition
-            '': [
-              { target: 'fundingRequest', cond: isType('fundingRequest') },
-              { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
-              { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
-              { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
-              { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
-            ],
-          },
+          always: [
+            { target: 'fundingRequest', cond: isType('fundingRequest') },
+            { target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') },
+            { target: 'runtimeUpgrade', cond: isType('runtimeUpgrade') },
+            { target: 'decreaseWorkingGroupLeadStake', cond: isType('decreaseWorkingGroupLeadStake') },
+            { target: 'slashWorkingGroupLead', cond: isType('slashWorkingGroupLead') },
+          ],
         },
         fundingRequest: {
           on: {
@@ -471,6 +469,24 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             },
           },
         },
+      },
+    },
+    bindStakingAccount: {
+      invoke: {
+        id: 'bindStakingAccount',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'transaction',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+        ],
       },
     },
     transaction: {

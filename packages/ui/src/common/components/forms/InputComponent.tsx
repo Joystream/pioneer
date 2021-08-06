@@ -152,7 +152,7 @@ export const InputNumber = React.memo(
         id={id}
         name={id}
         type="string"
-        value={value}
+        value={value ?? ''}
         required={required}
         validation={validation}
         placeholder={placeholder}
@@ -171,7 +171,7 @@ export const InputTextarea = React.memo(
       <Textarea
         id={id}
         name={id}
-        value={value}
+        value={value ?? ''}
         required={required}
         validation={validation}
         placeholder={placeholder}
@@ -238,7 +238,8 @@ const StyledNumberInput = styled(Input)`
 `
 
 const Textarea = styled.textarea`
-  ${InputStyles}
+  ${InputStyles};
+
   resize: none;
 `
 
@@ -344,42 +345,42 @@ export const InputContainer = styled.div<InputElementProps>`
   &:hover .ck.ck-editor__editable_inline,
   &:focus .ck.ck-editor__editable_inline,
   &:focus-within .ck.ck-editor__editable_inline {
-    &, 
+    &,
     .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
-    border-color: ${({ validation }) => {
-      switch (validation) {
-        case 'invalid':
-          return Colors.Red[400]
-        case 'valid':
-          return Colors.Green[500]
-        case 'warning':
-          return Colors.Orange[500]
-        default:
-          return Colors.Blue[400]
-      }
-    }};
-    border-color: ${({ disabled }) => {
-      if (disabled) {
-        return Colors.Black[300]
-      }
-    }};
-    box-shadow: ${({ validation }) => {
-      switch (validation) {
-        case 'invalid':
-          return Shadows.focusInvalid
-        case 'valid':
-          return Shadows.focusValid
-        case 'warning':
-          return Shadows.focusWarning
-        default:
-          return Shadows.focusDefault
-      }
-    }};
-    box-shadow: ${({ disabled }) => {
-      if (disabled) {
-        return 'none'
-      }
-    }};
+      border-color: ${({ validation }) => {
+        switch (validation) {
+          case 'invalid':
+            return Colors.Red[400]
+          case 'valid':
+            return Colors.Green[500]
+          case 'warning':
+            return Colors.Orange[500]
+          default:
+            return Colors.Blue[400]
+        }
+      }};
+      border-color: ${({ disabled }) => {
+        if (disabled) {
+          return Colors.Black[300]
+        }
+      }};
+      box-shadow: ${({ validation }) => {
+        switch (validation) {
+          case 'invalid':
+            return Shadows.focusInvalid
+          case 'valid':
+            return Shadows.focusValid
+          case 'warning':
+            return Shadows.focusWarning
+          default:
+            return Shadows.focusDefault
+        }
+      }};
+      box-shadow: ${({ disabled }) => {
+        if (disabled) {
+          return 'none'
+        }
+      }};
     }
   }
 
@@ -399,11 +400,11 @@ export const InputContainer = styled.div<InputElementProps>`
   }
   .ck.ck-editor__editable_inline,
   .ck.ck-focused,
-  .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused  {
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
     border: none;
     border-top: 1px solid ${Colors.Black[300]};
   }
- `
+`
 
 const InputArea = styled.div`
   display: flex;

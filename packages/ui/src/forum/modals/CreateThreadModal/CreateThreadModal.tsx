@@ -36,7 +36,7 @@ export const CreateThreadModal = () => {
     }
   }, [state.value, member?.id])
 
-  if (state.matches('generalDetails')) {
+  if (state.matches('generalDetails') && member) {
     return (
       <CreateThreadDetailsModal
         topic={state.context.topic ?? ''}
@@ -45,6 +45,7 @@ export const CreateThreadModal = () => {
         setDescription={(description) => send({ type: 'SET_DESCRIPTION', description })}
         onSubmit={() => send('NEXT')}
         breadcrumbs={breadcrumbs}
+        author={member}
       />
     )
   }

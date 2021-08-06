@@ -1,74 +1,127 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
+import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { CountBadge } from '@/common/components/CountBadge'
-import { Arrow } from '@/common/components/icons'
+import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
-import { Label } from '@/common/components/typography'
-import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
+import { Colors, Overflow, Transitions } from '@/common/constants'
 
-import { ThreadItemContent } from './ThreadItemContent'
-import { ThreadsLayoutSpacing } from './ThreadsLayout'
-
-export interface ThreadItemProps {
-  label: string
-  count?: number
+interface ThreadBadgeProps {
+  badge?: string
 }
 
-export const ThreadItem = ({ label, count }: ThreadItemProps) => {
+interface ThreadAnswerProps {
+  answer?: string
+}
+
+export interface ThreadItemContentProps {
+  title: string
+  date: string
+  content: string
+  badges?: ThreadBadgeProps[]
+  answers?: ThreadAnswerProps[]
+  halfSize?: boolean
+}
+
+export const ThreadItem = ({ title, date, content, badges, answers, halfSize }: ThreadItemContentProps) => {
   return (
-    <ThreadItemStyles>
-      <ThreadItemHeader align="center" gap={16}>
-        <Label>
-          {label} {count && <CountBadge count={count} />}
-        </Label>
-        <ButtonsGroup>
-          <ButtonGhost size="small" square>
-            <Arrow direction="left" />
-          </ButtonGhost>
-          <ButtonGhost size="small" square>
-            <Arrow direction="right" />
-          </ButtonGhost>
-        </ButtonsGroup>
+    <ThreadItemWrapper halfSize={halfSize}>
+      <ThreadItemHeader align="center">
+        <ThreadItemTitle>{title}</ThreadItemTitle>
+        <ThreadItemTime lighter>{date}</ThreadItemTime>
       </ThreadItemHeader>
-      <ThreadItemContent title="Title" />
-    </ThreadItemStyles>
+      {content && (
+        <ThreadItemText light value>
+          {content}
+        </ThreadItemText>
+      )}
+      {(badges || answers) && (
+        <ThreadItemFooter>
+          {badges && (
+            <BadgesRow>
+              {badges.map((badge, index) => (
+                <>
+                  {badge.badge && (
+                    <BadgeStatus size="m" inverted separated key={index}>
+                      {badge?.badge}
+                    </BadgeStatus>
+                  )}
+                </>
+              ))}
+            </BadgesRow>
+          )}
+          {answers && (
+            <Label>
+              <StyledAnswerIcon /> Answers <CountBadge count={answers.length} />
+            </Label>
+          )}
+        </ThreadItemFooter>
+      )}
+    </ThreadItemWrapper>
   )
 }
-
-const ThreadItemSpacer = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: ${Colors.Black[100]};
-  transition: ${Transitions.all};
-`
-
-const ThreadItemStyles = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-basis: calc(50% - (${ThreadsLayoutSpacing} / 2));
-  flex-shrink: 0;
-  flex-grow: 1;
-  max-width: 100%;
-  max-height: 472px;
-  padding: 16px;
-  border: 1px solid ${Colors.Black[100]};
-  border-radius: ${BorderRad.s};
-  overflow: hidden;
-  transition: ${Transitions.all};
-
-  &:hover,
-  &:focus,
-  &:focus-within {
-    &,
-    ${ThreadItemSpacer} {
-      border-color: ${Colors.Blue[100]};
-    }
-  }
-`
 
 const ThreadItemHeader = styled(ColumnGapBlock)`
   justify-content: space-between;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+`
+
+const ThreadItemTitle = styled.h5`
+  ${Overflow.FullDots};
+`
+
+const ThreadItemTime = styled(TextInlineExtraSmall)`
+  ${Overflow.FullDots};
+`
+
+const ThreadItemText = styled(TextMedium)`
+  display: -webkit-box;
+  max-height: 100%;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`
+
+const ThreadItemFooter = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 100%;
+  overflow: hidden;
+`
+
+const StyledAnswerIcon = styled(AnswerIcon)`
+  color: ${Colors.Black[300]};
+`
+
+export const ThreadItemWrapper = styled.div<{ halfSize?: boolean }>`
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  height: fit-content;
+  max-height: ${({ halfSize }) => (halfSize ? '50%' : '100%')};
+  padding: 16px 0;
+  overflow: hidden;
+
+  & + & {
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 1px;
+      background-color: ${Colors.Black[100]};
+      transition: ${Transitions.all};
+    }
+  }
+
+  ${ThreadItemText} {
+    -webkit-line-clamp: ${({ halfSize }) => (halfSize ? '3' : '14')};
+  }
 `

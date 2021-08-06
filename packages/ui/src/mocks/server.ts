@@ -76,6 +76,7 @@ export const makeServer = (environment = 'development') => {
               forumCategories: getWhereResolver('ForumCategory'),
               forumCategoryByUniqueInput: getUniqueResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
+              forumThreadsConnection: getConnectionResolver('ForumThreadConnection'),
               forumPosts: getWhereResolver('ForumPost'),
               forumPostsConnection: getConnectionResolver('ForumPostConnection'),
               forumThreadByUniqueInput: getUniqueResolver('ForumThread'),
@@ -118,22 +119,26 @@ export const makeServer = (environment = 'development') => {
       )
     },
 
-    seeds(server: Server<AnyRegistry>) {
-      fixAssociations(server)
+    ...(environment !== 'development'
+      ? {}
+      : {
+          seeds(server: Server<AnyRegistry>) {
+            fixAssociations(server)
 
-      seedMembers(server)
-      seedWorkingGroups(server)
-      seedOpeningStatuses(server)
-      seedOpenings(server)
-      seedUpcomingOpenings(server)
-      seedApplications(server)
-      seedWorkers(server)
-      updateWorkingGroups(server)
-      seedProposals(server)
-      seedEvents(server)
-      seedForumCategories(server)
-      seedForumThreads(server)
-      seedForumPosts(server)
-    },
+            seedMembers(server)
+            seedWorkingGroups(server)
+            seedOpeningStatuses(server)
+            seedOpenings(server)
+            seedUpcomingOpenings(server)
+            seedApplications(server)
+            seedWorkers(server)
+            updateWorkingGroups(server)
+            seedProposals(server)
+            seedEvents(server)
+            seedForumCategories(server)
+            seedForumThreads(server)
+            seedForumPosts(server)
+          },
+        }),
   })
 }

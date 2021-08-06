@@ -13,7 +13,11 @@ export type ForumCategoryFieldsFragment = {
   id: string
   title: string
   description: string
-  moderators: Array<{ __typename: 'Worker'; id: string }>
+  moderators: Array<{
+    __typename: 'Worker'
+    id: string
+    membership: { __typename: 'Membership'; id: string; handle: string }
+  }>
 }
 
 export type ForumSubCategoryFieldsFragment = { __typename: 'ForumCategory'; id: string; title: string }
@@ -94,6 +98,16 @@ export type GetForumCategoriesQuery = {
   forumCategories: Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>
 }
 
+export type GetForumSubCategoriesQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.ForumCategoryWhereInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type GetForumSubCategoriesQuery = {
+  __typename: 'Query'
+  forumCategories: Array<{ __typename: 'ForumCategory' } & ForumSubCategoryFieldsFragment>
+}
+
 export type GetForumCategoryBreadcrumbsQueryVariables = Types.Exact<{
   where: Types.ForumCategoryWhereUniqueInput
 }>
@@ -104,12 +118,30 @@ export type GetForumCategoryBreadcrumbsQuery = {
 }
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.ForumThreadWhereInput>
+  where: Types.ForumThreadWhereInput
+  orderBy?: Types.Maybe<Array<Types.ForumThreadOrderByInput> | Types.ForumThreadOrderByInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
 export type GetForumThreadsQuery = {
   __typename: 'Query'
   forumThreads: Array<{ __typename: 'ForumThread' } & ForumThreadFieldsFragment>
+}
+
+export type GetForumThreadsCountQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.ForumThreadWhereInput>
+}>
+
+export type GetForumThreadsCountQuery = {
+  __typename: 'Query'
+  forumThreadsConnection: { __typename: 'ForumThreadConnection'; totalCount: number }
+}
+
+export type GetForumThreadsIDsQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetForumThreadsIDsQuery = {
+  __typename: 'Query'
+  forumThreads: Array<{ __typename: 'ForumThread'; id: string }>
 }
 
 export type GetForumThreadQueryVariables = Types.Exact<{
@@ -123,6 +155,7 @@ export type GetForumThreadQuery = {
 
 export type GetForumPostsQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
+  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
   offset?: Types.Maybe<Types.Scalars['Int']>
   limit?: Types.Maybe<Types.Scalars['Int']>
 }>
@@ -157,6 +190,10 @@ export const ForumCategoryFieldsFragmentDoc = gql`
     description
     moderators {
       id
+      membership {
+        id
+        handle
+      }
     }
   }
 `
@@ -293,6 +330,56 @@ export type GetForumCategoriesQueryResult = Apollo.QueryResult<
   GetForumCategoriesQuery,
   GetForumCategoriesQueryVariables
 >
+export const GetForumSubCategoriesDocument = gql`
+  query GetForumSubCategories($where: ForumCategoryWhereInput, $limit: Int) {
+    forumCategories(where: $where, limit: $limit) {
+      ...ForumSubCategoryFields
+    }
+  }
+  ${ForumSubCategoryFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumSubCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetForumSubCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumSubCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumSubCategoriesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetForumSubCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetForumSubCategoriesQuery, GetForumSubCategoriesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumSubCategoriesQuery, GetForumSubCategoriesQueryVariables>(
+    GetForumSubCategoriesDocument,
+    options
+  )
+}
+export function useGetForumSubCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumSubCategoriesQuery, GetForumSubCategoriesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumSubCategoriesQuery, GetForumSubCategoriesQueryVariables>(
+    GetForumSubCategoriesDocument,
+    options
+  )
+}
+export type GetForumSubCategoriesQueryHookResult = ReturnType<typeof useGetForumSubCategoriesQuery>
+export type GetForumSubCategoriesLazyQueryHookResult = ReturnType<typeof useGetForumSubCategoriesLazyQuery>
+export type GetForumSubCategoriesQueryResult = Apollo.QueryResult<
+  GetForumSubCategoriesQuery,
+  GetForumSubCategoriesQueryVariables
+>
 export const GetForumCategoryBreadcrumbsDocument = gql`
   query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
     forumCategoryByUniqueInput(where: $where) {
@@ -343,8 +430,8 @@ export type GetForumCategoryBreadcrumbsQueryResult = Apollo.QueryResult<
   GetForumCategoryBreadcrumbsQueryVariables
 >
 export const GetForumThreadsDocument = gql`
-  query GetForumThreads($where: ForumThreadWhereInput) {
-    forumThreads(where: $where) {
+  query GetForumThreads($where: ForumThreadWhereInput!, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
+    forumThreads(where: $where, orderBy: $orderBy, limit: $limit) {
       ...ForumThreadFields
     }
   }
@@ -364,11 +451,13 @@ export const GetForumThreadsDocument = gql`
  * const { data, loading, error } = useGetForumThreadsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
 export function useGetForumThreadsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetForumThreadsQuery, GetForumThreadsQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<GetForumThreadsQuery, GetForumThreadsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetForumThreadsQuery, GetForumThreadsQueryVariables>(GetForumThreadsDocument, options)
@@ -382,6 +471,98 @@ export function useGetForumThreadsLazyQuery(
 export type GetForumThreadsQueryHookResult = ReturnType<typeof useGetForumThreadsQuery>
 export type GetForumThreadsLazyQueryHookResult = ReturnType<typeof useGetForumThreadsLazyQuery>
 export type GetForumThreadsQueryResult = Apollo.QueryResult<GetForumThreadsQuery, GetForumThreadsQueryVariables>
+export const GetForumThreadsCountDocument = gql`
+  query GetForumThreadsCount($where: ForumThreadWhereInput) {
+    forumThreadsConnection(where: $where) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetForumThreadsCountQuery__
+ *
+ * To run a query within a React component, call `useGetForumThreadsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumThreadsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumThreadsCountQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetForumThreadsCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetForumThreadsCountQuery, GetForumThreadsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumThreadsCountQuery, GetForumThreadsCountQueryVariables>(
+    GetForumThreadsCountDocument,
+    options
+  )
+}
+export function useGetForumThreadsCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumThreadsCountQuery, GetForumThreadsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumThreadsCountQuery, GetForumThreadsCountQueryVariables>(
+    GetForumThreadsCountDocument,
+    options
+  )
+}
+export type GetForumThreadsCountQueryHookResult = ReturnType<typeof useGetForumThreadsCountQuery>
+export type GetForumThreadsCountLazyQueryHookResult = ReturnType<typeof useGetForumThreadsCountLazyQuery>
+export type GetForumThreadsCountQueryResult = Apollo.QueryResult<
+  GetForumThreadsCountQuery,
+  GetForumThreadsCountQueryVariables
+>
+export const GetForumThreadsIDsDocument = gql`
+  query GetForumThreadsIDs {
+    forumThreads {
+      id
+    }
+  }
+`
+
+/**
+ * __useGetForumThreadsIDsQuery__
+ *
+ * To run a query within a React component, call `useGetForumThreadsIDsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumThreadsIDsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumThreadsIDsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetForumThreadsIDsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetForumThreadsIDsQuery, GetForumThreadsIDsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumThreadsIDsQuery, GetForumThreadsIDsQueryVariables>(GetForumThreadsIDsDocument, options)
+}
+export function useGetForumThreadsIDsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumThreadsIDsQuery, GetForumThreadsIDsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumThreadsIDsQuery, GetForumThreadsIDsQueryVariables>(
+    GetForumThreadsIDsDocument,
+    options
+  )
+}
+export type GetForumThreadsIDsQueryHookResult = ReturnType<typeof useGetForumThreadsIDsQuery>
+export type GetForumThreadsIDsLazyQueryHookResult = ReturnType<typeof useGetForumThreadsIDsLazyQuery>
+export type GetForumThreadsIDsQueryResult = Apollo.QueryResult<
+  GetForumThreadsIDsQuery,
+  GetForumThreadsIDsQueryVariables
+>
 export const GetForumThreadDocument = gql`
   query GetForumThread($where: ForumThreadWhereUniqueInput!) {
     thread: forumThreadByUniqueInput(where: $where) {
@@ -423,8 +604,8 @@ export type GetForumThreadQueryHookResult = ReturnType<typeof useGetForumThreadQ
 export type GetForumThreadLazyQueryHookResult = ReturnType<typeof useGetForumThreadLazyQuery>
 export type GetForumThreadQueryResult = Apollo.QueryResult<GetForumThreadQuery, GetForumThreadQueryVariables>
 export const GetForumPostsDocument = gql`
-  query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
-    forumPosts(where: $where, offset: $offset, limit: $limit) {
+  query GetForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $offset: Int, $limit: Int) {
+    forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
       ...ForumPostFields
     }
   }
@@ -444,6 +625,7 @@ export const GetForumPostsDocument = gql`
  * const { data, loading, error } = useGetForumPostsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
  *   },
