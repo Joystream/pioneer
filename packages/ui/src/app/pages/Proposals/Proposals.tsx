@@ -1,7 +1,8 @@
 import React, { useRef } from 'react'
 
-import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
+import { ButtonsGroup } from '@/common/components/buttons'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
@@ -23,8 +24,12 @@ export const Proposals = () => {
     <PageLayout
       header={
         <PageHeaderWrapper>
-          <PageTitle>Proposals</PageTitle>
-          <AddProposalButton />
+          <PageHeaderRow>
+            <PageTitle>Proposals</PageTitle>
+            <ButtonsGroup>
+              <AddProposalButton />
+            </ButtonsGroup>
+          </PageHeaderRow>
           <ProposalsTabs />
         </PageHeaderWrapper>
       }
