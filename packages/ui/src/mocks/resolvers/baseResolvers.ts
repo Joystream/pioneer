@@ -95,6 +95,15 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
     if (type === 'json') {
       filters.push(getFilter(checkValue, field))
     }
+
+    if (['none', 'some', 'every'].includes(type)) {
+      const subFilter = getFilter(checkValue)
+      const method = (type === 'none' ? 'some' : type) as 'some' | 'every'
+      filters.push((model: Record<string, any>) => {
+        const result: boolean = model[field]?.models[method]?.(subFilter)
+        return type === 'none' ? !result : result
+      })
+    }
   }
 
   return (model: any) => filters.every((value) => value(model))
