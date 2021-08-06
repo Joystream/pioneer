@@ -27,9 +27,9 @@ export function FailureSymbol({ className }: SymbolProps) {
         fill={Colors.Blue[500]}
       />
       <path
-        className="blackPart"
+        className="primaryPart"
         d="M16.4038 15.1526L13.2515 12.0002L16.404 8.8476L15.1525 7.59616L12 10.7487L8.62571 7.37433L7.37427 8.62577L10.7486 12.0002L7.37443 15.3744L8.62587 16.6259L12 13.2516L15.1524 16.404L16.4038 15.1526Z"
-        fill={Colors.Black[900]}
+        fill={Colors.Blue[500]}
       />
     </Symbol>
   )

@@ -7,6 +7,8 @@ import { Colors, Transitions, Animations } from '../../constants'
 import { CopyIcon } from '../icons'
 import { FailureSymbol, SuccessSymbol } from '../icons/symbols'
 
+import { ButtonGhost, ButtonSize } from './Buttons'
+
 export interface CopyButtonProps {
   disabled?: boolean
   textToCopy?: string
@@ -50,6 +52,61 @@ export function CopyButton({ textToCopy, className, disabled }: CopyButtonProps)
   )
 }
 
+interface CopyButtonTemplateProps extends CopyButtonProps {
+  size: ButtonSize
+  icon?: React.ReactNode
+  children?: React.ReactNode
+  square?: boolean
+}
+
+export function CopyButtonTemplate({
+  textToCopy,
+  className,
+  disabled,
+  square,
+  size,
+  icon,
+  children,
+}: CopyButtonTemplateProps) {
+  const { copyValue, isSuccessfullyCopied, isCopyFailure, setCopyFailure, setSuccessfullyCopied } = useCopyToClipboard()
+
+  return (
+    <CopyStyledButton
+      size={size}
+      square={square}
+      disabled={disabled}
+      onClick={(evt) => {
+        evt.stopPropagation()
+        if (textToCopy && !disabled) {
+          copyValue(textToCopy)
+        } else if (textToCopy == undefined) {
+          setCopyFailure(true)
+        }
+      }}
+      className={className}
+    >
+      {!isSuccessfullyCopied && !isCopyFailure && (icon ? icon : <CopyIcon />)}
+      {isSuccessfullyCopied &&
+        setTimeout(function () {
+          setSuccessfullyCopied(!isSuccessfullyCopied)
+        }, 1000) && (
+          <ResultSymbol>
+            <SuccessSymbol />
+          </ResultSymbol>
+        )}
+      {isCopyFailure &&
+        setTimeout(function () {
+          setCopyFailure(!isCopyFailure)
+        }, 1000) && (
+          <ResultSymbol>
+            <FailureSymbol />
+          </ResultSymbol>
+        )}
+      {children}
+    </CopyStyledButton>
+  )
+}
+
 export const CopyButtonIcon = styled.button`
   display: flex;
   justify-content: center;
@@ -84,4 +141,14 @@ const ResultSymbol = styled.div`
   width: fit-content;
   height: fit-content;
   ${Animations.showResultSymbol};
+`
+
+export const CopyStyledButton = styled(ButtonGhost)`
+  ${ResultSymbol} {
+    transform: translateY(-1px);
+    color: inherit;
+    .blackPart {
+      fill: ${Colors.Blue[500]};
+    }
+  }
 `

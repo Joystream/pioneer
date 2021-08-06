@@ -5,7 +5,8 @@ import styled from 'styled-components'
 
 import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
-import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { CopyButtonTemplate } from '@/common/components/buttons'
+import { ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, ContentWithTabs, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -14,7 +15,6 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
-import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
 import { spacing } from '@/common/utils/styles'
@@ -40,7 +40,6 @@ export const ProposalPreview = () => {
   const loc = useLocation()
   const voteId = new URLSearchParams(loc.search).get('showVote')
 
-  const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
 
@@ -83,10 +82,9 @@ export const ProposalPreview = () => {
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
-              <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
-                <LinkIcon />
+              <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
                 Copy link
-              </ButtonGhost>
+              </CopyButtonTemplate>
             </ButtonsGroup>
           </PageHeaderRow>
 
