@@ -45,7 +45,7 @@ export const DeletePostModal = () => {
   }
 
   if (state.matches('transaction') && api && threadId && categoryId) {
-    const transaction = api.tx.forum.deletePosts(post.author.id, [[categoryId, threadId, post.id, false]], '')
+    const transaction = api.tx.forum.deletePosts(post.author.id, [[categoryId, threadId, post.id, true]], '')
     const service = state.children.transaction
     const controllerAccount = accountOrNamed(allAccounts, post.author.controllerAccount, 'Controller Account')
     return <DeletePostSignModal transaction={transaction} service={service} controllerAccount={controllerAccount} />
