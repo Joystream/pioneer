@@ -10,6 +10,7 @@ import {
   seedWorkers,
   updateWorkingGroups,
 } from '@/mocks/data'
+import { seedForumCategories, seedForumPost, seedForumPosts, seedForumThreads } from '@/mocks/data/seedForum'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { fixAssociations, makeServer } from '@/mocks/server'
 
@@ -21,6 +22,7 @@ interface Seeds {
   workingGroups?: boolean
   proposals?: boolean
   workers?: boolean
+  forum?: boolean
 }
 
 // NOTE Use the global context instead of a hook for performance (otherwise hot reloads take too long)
@@ -63,6 +65,12 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
     if (toSeed.proposals && !MockServer.proposals) {
       seedProposals(MockServer.server)
       MockServer.proposals = true
+    }
+
+    if (toSeed.forum && !MockServer.forum) {
+      seedForumCategories(MockServer.server)
+      seedForumThreads(MockServer.server)
+      seedForumPosts(MockServer.server)
     }
   }, [])
 
