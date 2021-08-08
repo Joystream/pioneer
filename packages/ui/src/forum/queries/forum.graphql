@@ -80,6 +80,15 @@ fragment ForumThreadDetailedFields on ForumThread {
   }
 }
 
+fragment ForumPostParents on ForumPost {
+  thread {
+    id
+    category {
+      id
+    }
+  }
+}
+
 query GetForumCategories($where: ForumCategoryWhereInput) {
   forumCategoriesConnection(where: $where) {
     totalCount
@@ -138,3 +147,10 @@ query GetForumPostsCount($where: ForumPostWhereInput!) {
     totalCount
   }
 }
+
+query GetForumPostParents($where: ForumPostWhereUniqueInput!) {
+  forumPostByUniqueInput(where: $where) {
+    ...ForumPostParents
+  }
+}
+

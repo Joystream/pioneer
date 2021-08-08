@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ButtonsGroup } from '@/common/components/buttons'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { AddMembershipButton } from '@/memberships/components/AddMembershipButton'
@@ -15,15 +15,17 @@ export const MyMemberships = () => (
   <PageLayout
     header={
       <PageHeaderWrapper>
-        <PageTitle>My Profile</PageTitle>
+        <PageHeaderRow>
+          <PageTitle>My Profile</PageTitle>
+          <ButtonsGroup>
+            <InviteMemberButton size="medium">Invite a member</InviteMemberButton>
+            <AddMembershipButton size="medium">
+              <PlusIcon />
+              Add Membership
+            </AddMembershipButton>
+          </ButtonsGroup>
+        </PageHeaderRow>
         <MyProfileTabs />
-        <ButtonsGroup>
-          <InviteMemberButton size="medium">Invite a member</InviteMemberButton>
-          <AddMembershipButton size="medium">
-            <PlusIcon />
-            Add Membership
-          </AddMembershipButton>
-        </ButtonsGroup>
       </PageHeaderWrapper>
     }
     main={<Memberships />}

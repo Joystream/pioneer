@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonGhostStyles, ButtonsRow, CopyButtonTemplate } from '@/common/components/buttons'
-import { LinkButtonGhostStyles } from '@/common/components/buttons/LinkButtons'
+import { ButtonGhost, ButtonsRow, CopyButtonTemplate } from '@/common/components/buttons'
 import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge, TextInlineSmall } from '@/common/components/typography'
@@ -13,6 +12,8 @@ import { relativeTime } from '@/common/model/relativeTime'
 import { spacing } from '@/common/utils/styles'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
+
+import { PostContextMenu } from './PostContextMenu'
 
 interface PostProps {
   post: ForumPost
@@ -45,14 +46,14 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
         <MarkdownPreview markdown={text} append={edited} size="s" />
       </MessageBody>
       <ForumPostRow>
-        <ButtonsRow>
-          {reaction && (
-            <Button>
+        {reaction && (
+          <ButtonsRow>
+            <Button size="small">
               <HeartIcon />
               {!!reaction.length && reaction.length}
             </Button>
-          )}
-        </ButtonsRow>
+          </ButtonsRow>
+        )}
         <ButtonsRow>
           <CopyButtonTemplate
             textToCopy={window.location.href}
@@ -64,6 +65,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
           <Button square disabled={isPreview}>
             <ReplyIcon />
           </Button>
+          <PostContextMenu post={post} />
         </ButtonsRow>
       </ForumPostRow>
     </ForumPostStyles>
@@ -117,12 +119,6 @@ export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   display: grid;
   grid-template-columns: 1fr;
   row-gap: ${spacing(2)};
-
-  ${ButtonGhostStyles}, ${LinkButtonGhostStyles} {
-    svg {
-      width: 14px;
-    }
-  }
 
   // Animate selection:
   &,

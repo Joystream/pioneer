@@ -9,6 +9,8 @@ import { A_MINUTE } from '@/common/constants'
 import { repeat } from '@/common/utils'
 import { PostListItem } from '@/forum/components/PostList/PostListItem'
 import { ForumPost } from '@/forum/types'
+import { MembershipContext } from '@/memberships/providers/membership/context'
+import { getMember } from '@/mocks/helpers'
 
 export default {
   title: 'Forum/PostList',
@@ -37,11 +39,23 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
       } as unknown) as ForumPost)
     : undefined
 
+  const membershipContext = {
+    active: getMember('alice'),
+    setActive: () => {
+      /**/
+    },
+    members: [getMember('alice')],
+    hasMembers: false,
+    isLoading: true,
+  }
+
   return (
     <MemoryRouter>
-      <Container>
-        <PostListItem post={{ ...post, updatedAt, text, reaction, repliesTo }} />
-      </Container>
+      <MembershipContext.Provider value={membershipContext}>
+        <Container>
+          <PostListItem post={{ ...post, updatedAt, text, reaction, repliesTo }} />
+        </Container>
+      </MembershipContext.Provider>
     </MemoryRouter>
   )
 }

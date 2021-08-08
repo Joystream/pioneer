@@ -84,6 +84,11 @@ export type ForumThreadDetailedFieldsFragment = {
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
 } & ForumThreadFieldsFragment
 
+export type ForumPostParentsFragment = {
+  __typename: 'ForumPost'
+  thread: { __typename: 'ForumThread'; id: string; category: { __typename: 'ForumCategory'; id: string } }
+}
+
 export type GetForumCategoriesQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.ForumCategoryWhereInput>
 }>
@@ -176,6 +181,15 @@ export type GetForumPostsCountQuery = {
   forumPostsConnection: { __typename: 'ForumPostConnection'; totalCount: number }
 }
 
+export type GetForumPostParentsQueryVariables = Types.Exact<{
+  where: Types.ForumPostWhereUniqueInput
+}>
+
+export type GetForumPostParentsQuery = {
+  __typename: 'Query'
+  forumPostByUniqueInput?: Types.Maybe<{ __typename: 'ForumPost' } & ForumPostParentsFragment>
+}
+
 export const ForumCategoryFieldsFragmentDoc = gql`
   fragment ForumCategoryFields on ForumCategory {
     id
@@ -266,6 +280,16 @@ export const ForumThreadDetailedFieldsFragmentDoc = gql`
     }
   }
   ${ForumThreadFieldsFragmentDoc}
+`
+export const ForumPostParentsFragmentDoc = gql`
+  fragment ForumPostParents on ForumPost {
+    thread {
+      id
+      category {
+        id
+      }
+    }
+  }
 `
 export const GetForumCategoriesDocument = gql`
   query GetForumCategories($where: ForumCategoryWhereInput) {
@@ -678,4 +702,53 @@ export type GetForumPostsCountLazyQueryHookResult = ReturnType<typeof useGetForu
 export type GetForumPostsCountQueryResult = Apollo.QueryResult<
   GetForumPostsCountQuery,
   GetForumPostsCountQueryVariables
+>
+export const GetForumPostParentsDocument = gql`
+  query GetForumPostParents($where: ForumPostWhereUniqueInput!) {
+    forumPostByUniqueInput(where: $where) {
+      ...ForumPostParents
+    }
+  }
+  ${ForumPostParentsFragmentDoc}
+`
+
+/**
+ * __useGetForumPostParentsQuery__
+ *
+ * To run a query within a React component, call `useGetForumPostParentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumPostParentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumPostParentsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetForumPostParentsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumPostParentsQuery, GetForumPostParentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumPostParentsQuery, GetForumPostParentsQueryVariables>(
+    GetForumPostParentsDocument,
+    options
+  )
+}
+export function useGetForumPostParentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumPostParentsQuery, GetForumPostParentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumPostParentsQuery, GetForumPostParentsQueryVariables>(
+    GetForumPostParentsDocument,
+    options
+  )
+}
+export type GetForumPostParentsQueryHookResult = ReturnType<typeof useGetForumPostParentsQuery>
+export type GetForumPostParentsLazyQueryHookResult = ReturnType<typeof useGetForumPostParentsLazyQuery>
+export type GetForumPostParentsQueryResult = Apollo.QueryResult<
+  GetForumPostParentsQuery,
+  GetForumPostParentsQueryVariables
 >
