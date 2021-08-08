@@ -1,20 +1,18 @@
-import { ApiRx } from '@polkadot/api'
+import { createType } from '@joystream/types'
 import { useMemo } from 'react'
 
-import { useApi } from '@/common/hooks/useApi'
 import { ForumPostParentsFragment, useGetForumPostParentsQuery } from '@/forum/queries'
 
 export const usePostParents = (id: string) => {
   const { data, loading } = useGetForumPostParentsQuery({ variables: { where: { id } } })
-  const { api } = useApi()
-  const { threadId, categoryId } = useMemo(() => asPostParents(data?.forumPostByUniqueInput, api), [data, loading])
+  const { threadId, categoryId } = useMemo(() => asPostParents(data?.forumPostByUniqueInput), [data, loading])
   return { threadId, categoryId, parentsLoading: loading }
 }
 
-const asPostParents = (fields: ForumPostParentsFragment | null | undefined, api: ApiRx | undefined) =>
-  fields && api
+const asPostParents = (fields: ForumPostParentsFragment | null | undefined) =>
+  fields
     ? {
-        threadId: api.createType('ThreadId', fields.thread.id),
-        categoryId: api.createType('CategoryId', fields.thread.category.id),
+        threadId: createType('ThreadId', Number.parseInt(fields.thread.id)),
+        categoryId: createType('CategoryId', Number.parseInt(fields.thread.category.id)),
       }
     : {}
