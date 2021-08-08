@@ -8,7 +8,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { usePostParents } from '@/memberships/hooks/usePostParents'
+import { usePostParents } from '@/forum/hooks/usePostParents'
 
 import { DeletePostModalCall } from '.'
 import { DeletePostSignModal } from './DeletePostSignModal'
