@@ -4,12 +4,13 @@ import styled from 'styled-components'
 import { usePageTabs } from '@/app/hooks/usePageTabs'
 import { Tabs } from '@/common/components/Tabs'
 import { spacing } from '@/common/utils/styles'
+import { ForumRoutes } from '@/forum/constant'
 
 export const ForumTabs = () => {
   const tabs = usePageTabs([
-    ['Overview', '/forum/#'],
-    ['Forum', '/forum'],
-    ['Archived', '/forum/#'],
+    ['Overview', ForumRoutes.root],
+    ['Forum', ForumRoutes.forum],
+    ['Archived', ForumRoutes.root],
   ])
 
   return <Tabs tabs={tabs} />
@@ -20,11 +21,11 @@ interface ForumForumTabsProps {
 }
 export const ForumForumTabs = ({ categoryCount }: ForumForumTabsProps) => {
   const tabs = usePageTabs([
-    ['Categories', '/forum', categoryCount],
-    ['Latest threads ', '/forum/#'],
-    ['Top threads', '/forum/#'],
-    ['Tags', '/forum/#'],
-    ['My threads', '/forum/#'],
+    ['Categories', ForumRoutes.forum, categoryCount],
+    ['Latest threads ', ForumRoutes.root],
+    ['Top threads', ForumRoutes.root],
+    ['Tags', ForumRoutes.root],
+    ['My threads', ForumRoutes.root],
   ])
 
   return <ForumForumTabsStyles tabsSize="xs" tabs={tabs} />
