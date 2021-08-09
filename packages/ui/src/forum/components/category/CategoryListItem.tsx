@@ -7,7 +7,6 @@ import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography
 import { Colors, Overflow, Transitions } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
-import { useForumSubcategories } from '@/forum/hooks/useForumSubcategories'
 import { ForumCategory } from '@/forum/types'
 import { MemberStack } from '@/memberships/components/MemberStack'
 
@@ -18,8 +17,6 @@ export interface CategoryListItemProps {
   category: ForumCategory
 }
 export const CategoryListItem = ({ category }: CategoryListItemProps) => {
-  const { isLoading, subcategories } = useForumSubcategories(category.id)
-
   const moderators = category.moderators.map(({ id, handle, avatar }) => ({
     handle,
     avatar,
@@ -31,11 +28,9 @@ export const CategoryListItem = ({ category }: CategoryListItemProps) => {
       <Category>
         <h5>{category.title}</h5>
         <TextMedium light>{category.description}</TextMedium>
-        {!isLoading && (
-          <TextInlineExtraSmall lighter>
-            Subcategories: {subcategories?.map(({ title }) => title).join(', ')}
-          </TextInlineExtraSmall>
-        )}
+        <TextInlineExtraSmall lighter>
+          Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
+        </TextInlineExtraSmall>
       </Category>
 
       <ThreadCount categoryId={category.id} />
