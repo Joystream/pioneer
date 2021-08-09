@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -47,43 +47,54 @@ export const ForumCategory = () => {
             </ButtonsGroup>
           </PageHeaderRow>
 
-          <RowGapBlock gap={24}>
-            <ModeratorsContainer>
-              Moderators: <MemberStack members={moderatorsSumary(category.moderators)} max={5} />
-            </ModeratorsContainer>
-            <CategoriesCount as="h4">
-              Categories <CountBadge count={category.subcategories.length} />
-            </CategoriesCount>
-          </RowGapBlock>
+          <ModeratorsContainer>
+            Moderators: <MemberStack members={moderatorsSumary(category.moderators)} max={5} />
+          </ModeratorsContainer>
         </PageHeaderWrapper>
       }
       main={
-        <div>
-          {category.subcategories.length > 0 && <ForumCategoryList categories={category.subcategories} />}
+        <RowGapBlock gap={16}>
+          <RowGapBlock gap={24}>
+            <ItemCount as="h5">
+              Categories <CountBadge count={category.subcategories.length} />
+            </ItemCount>
+
+            {category.subcategories.length > 0 && <ForumCategoryList categories={category.subcategories} />}
+          </RowGapBlock>
 
           {isLoadingThreads ? (
             <Loading />
           ) : (
-            <>
-              {threads.map((thread) => {
-                return (
+            <RowGapBlock>
+              <ItemCount as="h6" size="xs">
+                Threads <CountBadge count={threads.length} />
+              </ItemCount>
+              {threads.length > 0 &&
+                threads.map((thread) => (
                   <div key={thread.id}>
                     <RouterLink to={'/forum/thread/' + thread.id}>
                       {thread.id} | {thread.isSticky ? '📌' : ''} {thread.title}
                     </RouterLink>
                   </div>
-                )
-              })}
-            </>
+                ))}
+            </RowGapBlock>
           )}
-        </div>
+        </RowGapBlock>
       }
     />
   )
 }
 
-const CategoriesCount = styled(TabContainer).attrs({ active: true })`
+const ItemCount = styled(TabContainer).attrs({ active: true })<{ size?: 's' | 'xs' }>`
   cursor: unset;
+
+  ${({ size }) =>
+    size === 'xs' &&
+    css`
+      font-size: 14px;
+      line-height: 20px;
+    `}
+
   &:hover,
   &:focus,
   &:focus-within {
