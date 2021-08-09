@@ -6,21 +6,25 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
 import { RouterLink } from '@/common/components/RouterLink'
 import { useModal } from '@/common/hooks/useModal'
+import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 
 export const ForumCategory = () => {
   const { id } = useParams<{ id: string }>()
-
-  const { isLoading, threads } = useForumCategoryThreads(id)
+  const { category } = useForumCategory(id)
+  const { isLoading: isLoadingThreads, threads } = useForumCategoryThreads(id)
   const { showModal } = useModal()
+
+  if (!category) return <Loading />
 
   return (
     <PageLayout
       header={<h2>Category</h2>}
       main={
         <div>
-          {isLoading && <Loading />}
-          {!isLoading && (
+          {isLoadingThreads ? (
+            <Loading />
+          ) : (
             <>
               <ButtonPrimary
                 size="medium"
