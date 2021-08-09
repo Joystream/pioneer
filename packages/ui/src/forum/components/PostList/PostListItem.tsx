@@ -9,9 +9,11 @@ import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/compone
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge, TextInlineSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
 import { formatDateString } from '@/common/model/formatters'
 import { relativeTime } from '@/common/model/relativeTime'
 import { spacing } from '@/common/utils/styles'
+import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 
@@ -25,13 +27,14 @@ interface PostProps {
 
 export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isPreview }, ref) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
+  const { showModal } = useModal()
   const time = useMemo(() => {
     if (!updatedAt) {
       return null
     }
 
     return (
-      <EditionTime>
+      <EditionTime onClick={() => showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id } })}>
         (edited{' '}
         {differenceInHours(new Date(), new Date(updatedAt)) >= 24
           ? formatDateString(updatedAt)

@@ -114,6 +114,7 @@ export const makeServer = (environment = 'development') => {
               workingGroupOpenings: getWhereResolver('WorkingGroupOpening'),
               workingGroupOpeningsConnection: getConnectionResolver('WorkingGroupOpeningConnection'),
               workingGroups: getWhereResolver('WorkingGroup'),
+              postTextUpdatedEvents: getWhereResolver('PostTextUpdatedEvent'),
             },
           },
         })

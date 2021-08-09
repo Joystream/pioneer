@@ -1,6 +1,13 @@
 import { useGetForumPostEditsQuery } from '@/forum/queries/__generated__/forum.generated'
 
-export const useForumPostEdits = (postId: string) => {
+import { PostEdit } from '../types'
+
+interface ForumPostEdits {
+  isLoading: boolean
+  edits: PostEdit[] | undefined
+}
+
+export const useForumPostEdits = (postId: string): ForumPostEdits => {
   const { loading, data } = useGetForumPostEditsQuery({ variables: { id: postId } })
 
   return {
