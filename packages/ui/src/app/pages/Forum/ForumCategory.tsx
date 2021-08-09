@@ -6,6 +6,7 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
 import { RouterLink } from '@/common/components/RouterLink'
 import { useModal } from '@/common/hooks/useModal'
+import { ForumCategoryList } from '@/forum/components/category'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 
@@ -22,6 +23,7 @@ export const ForumCategory = () => {
       header={<h2>Category</h2>}
       main={
         <div>
+          <ForumCategoryList categories={category.subcategories} />
           {isLoadingThreads ? (
             <Loading />
           ) : (
