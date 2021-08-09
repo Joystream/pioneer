@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { BlockTime } from '@/common/components/BlockTime'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Modal, ModalHeader } from '@/common/components/Modal'
@@ -8,16 +9,19 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { useModal } from '@/common/hooks/useModal'
 import { formatDateString } from '@/common/model/formatters'
-import { ModalWithDataCall } from '@/common/providers/modal/types'
+import { asBlock } from '@/common/types'
+import { ForumPostAuthor, ForumPostRow, ForumPostStyles } from '@/forum/components/PostList/PostListItem'
 import { useForumPostEdits } from '@/forum/hooks/useForumPostEdits'
 import { PostEdit } from '@/forum/types'
+import { MemberInfo } from '@/memberships/components'
+import { Member } from '@/memberships/types'
 
-type PostHistoryModalCall = ModalWithDataCall<'PostHistoryModal', { postId: string }>
+import { PostHistoryModalCall } from '.'
 
 export const PostHistoryModal = React.memo(() => {
   const {
     hideModal,
-    modalData: { postId },
+    modalData: { postId, author },
   } = useModal<PostHistoryModalCall>()
   const { isLoading, edits } = useForumPostEdits(postId)
   const [activeEdit, setActiveEdit] = useState(0)
@@ -45,7 +49,7 @@ export const PostHistoryModal = React.memo(() => {
         <StepperBody>
           <RowGapBlock gap={24}>
             {edits?.map((edit) => (
-              <HistoryPost edit={edit} />
+              <HistoryPost edit={edit} author={author} />
             ))}
           </RowGapBlock>
         </StepperBody>
@@ -65,11 +69,20 @@ export const PostHistoryModal = React.memo(() => {
 
 interface HistoryPostProps {
   edit: PostEdit
+  author: Member
 }
 
-const HistoryPost = ({ edit }: HistoryPostProps) => {
-  return <MarkdownPreview markdown={edit.newText} />
-}
+const HistoryPost = React.memo(({ edit, author }: HistoryPostProps) => (
+  <ForumPostStyles>
+    <ForumPostRow>
+      <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
+      <BlockTime block={asBlock(edit)} layout="reverse" />
+    </ForumPostRow>
+    <ForumPostRow>
+      <MarkdownPreview markdown={edit.newText} />
+    </ForumPostRow>
+  </ForumPostStyles>
+))
 
 const HistoryModalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 300px 1fr;

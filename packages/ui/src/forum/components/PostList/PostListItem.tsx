@@ -34,7 +34,11 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
     }
 
     return (
-      <EditionTime onClick={() => showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id } })}>
+      <EditionTime
+        onClick={() =>
+          showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
+        }
+      >
         (edited{' '}
         {differenceInHours(new Date(), new Date(updatedAt)) >= 24
           ? formatDateString(updatedAt)
@@ -159,7 +163,7 @@ export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   }
 `
 
-const ForumPostAuthor = styled.div``
+export const ForumPostAuthor = styled.div``
 
 export const ForumPostRow = styled.div`
   display: flex;
