@@ -7,7 +7,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { RawForumCategoryMock } from '@/mocks/data/seedForum'
 
 import { CategoryListItem } from './CategoryListItem'
-import { asStorybookModerator, asStorybookPost, asStorybookSubCategories, asStorybookThread } from './storybook-helpers'
+import { asStorybookModerator, asStorybookPost, asStorybookThread } from './storybook-helpers'
 
 export default {
   title: 'Forum/Categories/CategoryListItem',
@@ -20,18 +20,19 @@ interface Props {
   latestPostText: string
   topThreadTitle: string
   moderatorsCount: number
+  subcategoriesTitles: string[]
   category: RawForumCategoryMock
-  subcategories: string[]
 }
-const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount, subcategories }) => {
-  const categories = [category, ...subcategories.map(asStorybookSubCategories(category.id))]
+const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount, subcategoriesTitles }) => {
   const thread = asStorybookThread(topThreadTitle, category.id)
   const post = asStorybookPost(latestPostText, thread?.id)
+  const moderators = repeat(asStorybookModerator(), moderatorsCount)
+  const subcategories = subcategoriesTitles.map((title, index) => ({ id: `${index}`, title }))
 
   return (
-    <MockApolloProvider members forum={{ categories, threads: asArray(thread), posts: asArray(post) }}>
+    <MockApolloProvider members forum={{ categories: [category], threads: asArray(thread), posts: asArray(post) }}>
       <MemoryRouter>
-        <CategoryListItem category={{ ...category, moderators: repeat(asStorybookModerator(), moderatorsCount) }} />
+        <CategoryListItem category={{ ...category, moderators, subcategories }} />
       </MemoryRouter>
     </MockApolloProvider>
   )
@@ -42,6 +43,7 @@ Default.args = {
   latestPostText: 'Re: 🔥Can anyone tell me more',
   topThreadTitle: '🔥Can anyone tell me more',
   moderatorsCount: 14,
+  subcategoriesTitles: ['Lorem ipsum', 'Dolor', 'Name', 'Name'],
   category: {
     id: 'CategoryListItem-story',
     title: 'General',
@@ -49,5 +51,4 @@ Default.args = {
       'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Lorem Vestibulum congue fermentu.',
     moderatorIds: [],
   },
-  subcategories: ['Lorem ipsum', 'Dolor', 'Name', 'Name'],
 }
