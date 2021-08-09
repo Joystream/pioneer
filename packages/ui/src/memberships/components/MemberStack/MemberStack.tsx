@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { DefaultTooltip, Tooltip, TooltipContainer } from '@/common/components/Tooltip'
 import { TextInlineExtraSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
+import { ForumModerator } from '@/forum/types'
 import { MemberPhoto } from '@/memberships/components'
 import { MemberAvatar } from '@/memberships/components/Avatar'
 
@@ -12,6 +13,13 @@ export interface MemberSummary {
   description?: string
   avatar?: string
 }
+
+export const moderatorsSumary = (moderators: ForumModerator[]): MemberSummary[] =>
+  moderators.map(({ id, handle, avatar }) => ({
+    handle,
+    avatar,
+    description: `Worker ID: ${id}`,
+  }))
 
 interface MemberStackProps {
   members: MemberSummary[]

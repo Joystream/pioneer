@@ -1,14 +1,24 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import styled from 'styled-components'
 
-import { PageLayout } from '@/app/components/PageLayout'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { CountBadge } from '@/common/components/CountBadge'
+import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { Loading } from '@/common/components/Loading'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { PageTitle } from '@/common/components/page/PageTitle'
+import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { RouterLink } from '@/common/components/RouterLink'
+import { TabContainer } from '@/common/components/Tabs'
+import { Label } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { ForumCategoryList } from '@/forum/components/category'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
+import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
 
 export const ForumCategory = () => {
   const { id } = useParams<{ id: string }>()
@@ -20,7 +30,33 @@ export const ForumCategory = () => {
 
   return (
     <PageLayout
-      header={<h2>Category</h2>}
+      lastBreadcrumb={category.title}
+      header={
+        <PageHeaderWrapper>
+          <PageHeaderRow>
+            <PreviousPage>
+              <PageTitle>{category.title}</PageTitle>
+            </PreviousPage>
+            <ButtonsGroup>
+              <ButtonPrimary
+                size="medium"
+                onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
+              >
+                <PlusIcon /> Add New Thread
+              </ButtonPrimary>
+            </ButtonsGroup>
+          </PageHeaderRow>
+
+          <RowGapBlock gap={24}>
+            <ModeratorsContainer>
+              Moderators: <MemberStack members={moderatorsSumary(category.moderators)} max={5} />
+            </ModeratorsContainer>
+            <CategoriesCount as="h4">
+              Categories <CountBadge count={category.subcategories.length} />
+            </CategoriesCount>
+          </RowGapBlock>
+        </PageHeaderWrapper>
+      }
       main={
         <div>
           <ForumCategoryList categories={category.subcategories} />
@@ -28,12 +64,6 @@ export const ForumCategory = () => {
             <Loading />
           ) : (
             <>
-              <ButtonPrimary
-                size="medium"
-                onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
-              >
-                Create a Thread
-              </ButtonPrimary>
               {threads.map((thread) => {
                 return (
                   <div key={thread.id}>
@@ -50,3 +80,20 @@ export const ForumCategory = () => {
     />
   )
 }
+
+const CategoriesCount = styled(TabContainer).attrs({ active: true })`
+  cursor: unset;
+  &:hover,
+  &:focus,
+  &:focus-within {
+    color: ${Colors.Black[900]};
+    -webkit-text-stroke-color: unset;
+  }
+  &::before {
+    display: none;
+  }
+`
+
+const ModeratorsContainer = styled(Label)`
+  align-items: center;
+`
