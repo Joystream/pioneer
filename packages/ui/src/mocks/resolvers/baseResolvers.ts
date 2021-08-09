@@ -34,12 +34,12 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
     if (type === 'eq') {
       if (field === 'isTypeOf') {
         filters.push((model: Record<string, any>) => {
-          return String(model[nestedField as string].modelName) === camelCaseToDash(checkValue.toString())
+          return String(model[nestedField as string].modelName) === camelCaseToDash(String(checkValue))
         })
       } else {
         filters.push((model: Record<string, any>) => {
           const fieldName = getFieldName(model, nestedField ? nestedField : field)
-          return String(model[fieldName]) === checkValue.toString()
+          return String(model[fieldName]) === String(checkValue)
         })
       }
     }
@@ -47,19 +47,19 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
     if (type === 'not') {
       if (field === 'isTypeOf') {
         filters.push((model: Record<string, any>) => {
-          return String(model[nestedField as string].modelName) !== camelCaseToDash(checkValue.toString())
+          return String(model[nestedField as string].modelName) !== camelCaseToDash(String(checkValue))
         })
       } else {
         filters.push((model: Record<string, any>) => {
           const fieldName = getFieldName(model, nestedField ? nestedField : field)
-          return String(model[fieldName]) !== checkValue.toString()
+          return String(model[fieldName]) !== String(checkValue)
         })
       }
     }
 
     if (type === 'contains') {
       filters.push((model: Record<string, any>) =>
-        String(model[getFieldName(model, field)]).includes(checkValue.toString())
+        String(model[getFieldName(model, field)]).includes(String(checkValue))
       )
     }
 
@@ -87,7 +87,7 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
         )
       } else {
         filters.push((model: Record<string, any>) =>
-          resultToBoolean(String(model[field]).localeCompare(checkValue.toString()))
+          resultToBoolean(String(model[field]).localeCompare(String(checkValue)))
         )
       }
     }
