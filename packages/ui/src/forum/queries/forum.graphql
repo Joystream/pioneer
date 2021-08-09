@@ -107,13 +107,8 @@ fragment ForumPostParents on ForumPost {
 }
 
 query GetForumCategories($where: ForumCategoryWhereInput) {
-  forumCategoriesConnection(where: $where) {
-    totalCount
-    edges {
-      node {
-        ...ForumCategoryFields
-      }
-    }
+  forumCategories(where: $where) {
+    ...ForumCategoryFields
   }
 }
 
