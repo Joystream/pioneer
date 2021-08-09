@@ -59,7 +59,8 @@ export const ForumCategory = () => {
       }
       main={
         <div>
-          <ForumCategoryList categories={category.subcategories} />
+          {category.subcategories.length > 0 && <ForumCategoryList categories={category.subcategories} />}
+
           {isLoadingThreads ? (
             <Loading />
           ) : (
