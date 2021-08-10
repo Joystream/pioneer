@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react'
+import React, { forwardRef, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -14,6 +14,7 @@ import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 
 import { PostContextMenu } from './PostContextMenu'
+import { PostEditor } from './PostEditor'
 
 interface PostProps {
   post: ForumPost
@@ -24,6 +25,7 @@ interface PostProps {
 export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isPreview }, ref) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
+  const [editing, setEditing] = useState(false)
 
   return (
     <ForumPostStyles ref={ref} isSelected={isSelected}>
@@ -43,7 +45,11 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
             <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
           </Reply>
         )}
-        <MarkdownPreview markdown={text} append={edited} size="s" />
+        {editing ? (
+          <PostEditor post={post} onCancel={() => setEditing(false)} />
+        ) : (
+          <MarkdownPreview markdown={text} append={edited} size="s" />
+        )}
       </MessageBody>
       <ForumPostRow>
         {reaction && (
@@ -54,19 +60,21 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
             </Button>
           </ButtonsRow>
         )}
-        <ButtonsRow>
-          <CopyButtonTemplate
-            textToCopy={window.location.href}
-            square
-            size="small"
-            disabled={isPreview}
-            icon={<LinkIcon />}
-          />
-          <Button square disabled={isPreview}>
-            <ReplyIcon />
-          </Button>
-          <PostContextMenu post={post} />
-        </ButtonsRow>
+        {!editing && (
+          <ButtonsRow>
+            <CopyButtonTemplate
+              textToCopy={window.location.href}
+              square
+              size="small"
+              disabled={isPreview}
+              icon={<LinkIcon />}
+            />
+            <Button square disabled={isPreview}>
+              <ReplyIcon />
+            </Button>
+            <PostContextMenu post={post} onEdit={() => setEditing(true)} />
+          </ButtonsRow>
+        )}
       </ForumPostRow>
     </ForumPostStyles>
   )
