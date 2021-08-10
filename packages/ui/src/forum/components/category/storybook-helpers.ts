@@ -2,7 +2,7 @@ import { sub } from 'date-fns'
 import faker from 'faker'
 
 import { ForumModerator } from '@/forum/types'
-import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
+import { RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
 export const asStorybookModerator = (hasAvatar = false) => {
@@ -34,14 +34,4 @@ export const asStorybookThread = (title: string, categoryId?: string): RawForumT
       authorId: '0',
       createdInEvent: randomRawBlock(),
     }
-}
-
-export const asStorybookSubCategories = (parentId: string) => {
-  return (title: string, index = 0): RawForumCategoryMock => ({
-    id: `${parentId}-${index}`,
-    title,
-    description: '',
-    parentId,
-    moderatorIds: [],
-  })
 }

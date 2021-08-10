@@ -2,6 +2,9 @@ fragment ForumCategoryFields on ForumCategory {
   id
   title
   description
+  forumcategoryparent {
+    ...ForumSubCategoryFields
+  }
   moderators {
     id
     membership {
@@ -100,12 +103,6 @@ query GetForumCategories($where: ForumCategoryWhereInput) {
   }
 }
 
-query GetForumSubCategories($where: ForumCategoryWhereInput, $limit: Int) {
-  forumCategories(where: $where, limit: $limit) {
-    ...ForumSubCategoryFields
-  }
-}
-
 query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
   forumCategoryByUniqueInput(where: $where) {
     ...ForumCategoryBreadcrumbsFields
@@ -153,4 +150,3 @@ query GetForumPostParents($where: ForumPostWhereUniqueInput!) {
     ...ForumPostParents
   }
 }
-
