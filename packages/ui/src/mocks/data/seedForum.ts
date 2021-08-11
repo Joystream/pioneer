@@ -25,13 +25,18 @@ export interface RawForumThreadMock {
   authorId: string
 }
 
+interface PostEdit extends BlockFieldsMock {
+  newText: string
+}
+
 export interface RawForumPostMock {
   id: string
   threadId: string
   authorId: string
   text: string
   repliesToId?: string
-  createdAt: string
+  edits: PostEdit[]
+  postAddedEvent: BlockFieldsMock
 }
 
 export function seedForumCategory(forumCategoryData: RawForumCategoryMock, server: any) {
@@ -59,8 +64,14 @@ export const seedForumThreads = (server: any) => {
 }
 
 export function seedForumPost(data: RawForumPostMock, server: any) {
+  const sortedEdits = data.edits.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
   return server.schema.create('ForumPost', {
     ...data,
+    edits: data.edits.map((data) => server.schema.create('PostTextUpdatedEvent', data)),
+    postaddedeventpost: [server.schema.create('PostAddedEvent', data.postAddedEvent)],
+    createdAt: data.postAddedEvent.createdAt,
+    updatedAt: sortedEdits.length ? sortedEdits[0].createdAt : null,
   })
 }
 

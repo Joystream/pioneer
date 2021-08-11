@@ -8,8 +8,10 @@ import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/compone
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge, TextInlineSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
-import { relativeTime } from '@/common/model/relativeTime'
+import { useModal } from '@/common/hooks/useModal'
+import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { spacing } from '@/common/utils/styles'
+import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 
@@ -24,8 +26,23 @@ interface PostProps {
 
 export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isPreview }, ref) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
-  const edited = useMemo(() => updatedAt && <EditionTime>(edited {relativeTime(updatedAt)})</EditionTime>, [updatedAt])
   const [editing, setEditing] = useState(false)
+  const { showModal } = useModal()
+  const editionTime = useMemo(() => {
+    if (!updatedAt) {
+      return null
+    }
+
+    return (
+      <EditionTime
+        onClick={() =>
+          showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
+        }
+      >
+        (edited {relativeIfRecent(updatedAt)})
+      </EditionTime>
+    )
+  }, [updatedAt])
 
   return (
     <ForumPostStyles ref={ref} isSelected={isSelected}>
@@ -48,7 +65,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
         {editing ? (
           <PostEditor post={post} onCancel={() => setEditing(false)} />
         ) : (
-          <MarkdownPreview markdown={text} append={edited} size="s" />
+          <MarkdownPreview markdown={text} append={editionTime} size="s" />
         )}
       </MessageBody>
       <ForumPostRow>
@@ -121,7 +138,14 @@ const ReplyBadge = styled.div`
   }
 `
 
-const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true })``
+const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true })`
+  float: right;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
 
 export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   display: grid;
@@ -141,7 +165,7 @@ export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   }
 `
 
-const ForumPostAuthor = styled.div``
+export const ForumPostAuthor = styled.div``
 
 export const ForumPostRow = styled.div`
   display: flex;

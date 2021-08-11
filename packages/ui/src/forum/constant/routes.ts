@@ -1,3 +1,5 @@
 export const ForumRoutes = {
-  category: 'forum/category',
+  root: '/forum',
+  forum: '/forum/forum',
+  category: '/forum/forum',
 }

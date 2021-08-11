@@ -2,7 +2,7 @@ import {
   ForumCategoryBreadcrumbsFieldsFragment,
   ForumCategoryFieldsFragment,
   ForumSubCategoryFieldsFragment,
-} from '@/forum/queries/__generated__/forum.generated'
+} from '@/forum/queries'
 
 export interface ForumCategory extends ForumBreadcrumb {
   description: string
@@ -23,11 +23,16 @@ export interface ForumSubCategory {
 
 export type ForumBreadcrumb = ForumSubCategory
 
-export const asForumCategory = (fields: Omit<ForumCategoryFieldsFragment, '__typename'>): ForumCategory => ({
+type ForumCategoryFields = Omit<ForumCategoryFieldsFragment, '__typename'>
+export const asBaseForumCategory = (fields: ForumCategoryFields): Omit<ForumCategory, 'subcategories'> => ({
   id: fields.id,
   title: fields.title,
   description: fields.description,
   moderators: fields.moderators?.map(({ id, membership }) => ({ id, handle: membership.handle })) ?? [],
+})
+
+export const asForumCategory = (fields: ForumCategoryFields): ForumCategory => ({
+  ...asBaseForumCategory(fields),
   subcategories: fields.forumcategoryparent?.map(asSubCategory) ?? [],
 })
 

@@ -1,4 +1,4 @@
-import { PostReaction } from '@/common/api/queries'
+import { Network, PostReaction } from '@/common/api/queries'
 import { asBlock, Block } from '@/common/types/Block'
 import { ForumPostFieldsFragment } from '@/forum/queries/__generated__/forum.generated'
 import { asMember, Member } from '@/memberships/types'
@@ -24,3 +24,10 @@ export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
   createdAtBlock:
     fields?.postaddedeventpost && fields.postaddedeventpost.length ? asBlock(fields.postaddedeventpost[0]) : undefined,
 })
+
+export interface PostEdit {
+  newText: string
+  network: Network
+  createdAt: string
+  inBlock: number
+}

@@ -1,18 +1,32 @@
 fragment ForumCategoryFields on ForumCategory {
-  id
-  title
+  ...ForumSubCategoryFields
   description
   forumcategoryparent {
     ...ForumSubCategoryFields
   }
   moderators {
+    ...ForumModeratorFields
+  }
+}
+
+fragment ForumCategoryWithDetailsFields on ForumCategory {
+  ...ForumSubCategoryFields
+  description
+  forumcategoryparent {
+    ...ForumCategoryFields
+  }
+  moderators {
+    ...ForumModeratorFields
+  }
+}
+
+fragment ForumModeratorFields on Worker {
+  id
+  membership {
     id
-    membership {
-      id
-      handle
-      # metadata { avatar {} }
-      # See https://github.com/Joystream/pioneer/issues/54
-    }
+    handle
+    # metadata { avatar {} }
+    # See https://github.com/Joystream/pioneer/issues/54
   }
 }
 
@@ -93,13 +107,14 @@ fragment ForumPostParents on ForumPost {
 }
 
 query GetForumCategories($where: ForumCategoryWhereInput) {
-  forumCategoriesConnection(where: $where) {
-    totalCount
-    edges {
-      node {
-        ...ForumCategoryFields
-      }
-    }
+  forumCategories(where: $where) {
+    ...ForumCategoryFields
+  }
+}
+
+query GetForumCategory($where: ForumCategoryWhereUniqueInput!) {
+  forumCategoryByUniqueInput(where: $where) {
+    ...ForumCategoryWithDetailsFields
   }
 }
 
@@ -133,9 +148,18 @@ query GetForumThread($where: ForumThreadWhereUniqueInput!) {
   }
 }
 
-query GetForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $offset: Int, $limit: Int) {
-  forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
+  forumPosts(where: $where, offset: $offset, limit: $limit, orderBy: [createdAt_ASC]) {
     ...ForumPostFields
+  }
+}
+
+query GetForumPostEdits($id: ID!) {
+  edits: postTextUpdatedEvents(where: {post: {id_eq: $id}}) {
+    newText
+    network
+    createdAt
+    inBlock
   }
 }
 

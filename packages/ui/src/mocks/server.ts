@@ -73,7 +73,7 @@ export const makeServer = (environment = 'development') => {
               appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
-              forumCategoriesConnection: getConnectionResolver('ForumCategoryConnection'),
+              forumCategories: getWhereResolver('ForumCategory'),
               forumCategoryByUniqueInput: getUniqueResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
               forumThreadsConnection: getConnectionResolver('ForumThreadConnection'),
@@ -114,6 +114,7 @@ export const makeServer = (environment = 'development') => {
               workingGroupOpenings: getWhereResolver('WorkingGroupOpening'),
               workingGroupOpeningsConnection: getConnectionResolver('WorkingGroupOpeningConnection'),
               workingGroups: getWhereResolver('WorkingGroup'),
+              postTextUpdatedEvents: getWhereResolver('PostTextUpdatedEvent'),
             },
           },
         })

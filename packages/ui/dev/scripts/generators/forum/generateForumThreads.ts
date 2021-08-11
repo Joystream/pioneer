@@ -7,14 +7,26 @@ import { randomBlock, randomFromRange, randomMember } from '../utils'
 let nextThreadId = 0
 let nextPostId = 0
 
-export const generateForumPost = (threadId: string, authorId: string, repliesToId?: string): RawForumPostMock => ({
-  id: `${threadId}:${String(nextPostId++)}`,
-  threadId,
-  authorId,
-  text: faker.lorem.words(randomFromRange(10, 100)),
-  repliesToId,
-  createdAt: new Date().toISOString(),
-})
+export const generateForumPost = (threadId: string, authorId: string, repliesToId?: string): RawForumPostMock => {
+  const createdAt = faker.date.recent(180)
+  let lastEditDate: Date
+
+  return {
+    id: `${threadId}:${String(nextPostId++)}`,
+    threadId,
+    authorId,
+    text: faker.lorem.words(randomFromRange(10, 100)),
+    repliesToId,
+    edits: [...new Array(randomFromRange(0, 4))].map(() => {
+      lastEditDate = faker.date.between(lastEditDate ?? createdAt, new Date())
+      return {
+        newText: faker.lorem.words(randomFromRange(10, 100)),
+        ...randomBlock(lastEditDate),
+      }
+    }),
+    postAddedEvent: randomBlock(createdAt),
+  }
+}
 
 export const generateForumThreads = (
   forumCategories: Pick<RawForumCategoryMock, 'id'>[]

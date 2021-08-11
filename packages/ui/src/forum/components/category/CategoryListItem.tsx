@@ -8,7 +8,7 @@ import { Colors, Overflow, Transitions } from '@/common/constants'
 import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
-import { MemberStack } from '@/memberships/components/MemberStack'
+import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
 
 import { LatestPost } from './LatestPost'
 import { PopularThread } from './PopularThread'
@@ -16,33 +16,25 @@ import { ThreadCount } from './ThreadCount'
 export interface CategoryListItemProps {
   category: ForumCategory
 }
-export const CategoryListItem = ({ category }: CategoryListItemProps) => {
-  const moderators = category.moderators.map(({ id, handle, avatar }) => ({
-    handle,
-    avatar,
-    description: `Worker ID: ${id}`,
-  }))
+export const CategoryListItem = ({ category }: CategoryListItemProps) => (
+  <CategoryListItemStyles as={GhostRouterLink} to={`${ForumRoutes.category}/${category.id}`}>
+    <Category>
+      <h5>{category.title}</h5>
+      <TextMedium light>{category.description}</TextMedium>
+      <TextInlineExtraSmall lighter>
+        Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
+      </TextInlineExtraSmall>
+    </Category>
 
-  return (
-    <CategoryListItemStyles as={GhostRouterLink} to={`${ForumRoutes.category}/${category.id}`}>
-      <Category>
-        <h5>{category.title}</h5>
-        <TextMedium light>{category.description}</TextMedium>
-        <TextInlineExtraSmall lighter>
-          Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
-        </TextInlineExtraSmall>
-      </Category>
+    <ThreadCount categoryId={category.id} />
 
-      <ThreadCount categoryId={category.id} />
+    <LatestPost categoryId={category.id} />
 
-      <LatestPost categoryId={category.id} />
+    <PopularThread categoryId={category.id} />
 
-      <PopularThread categoryId={category.id} />
-
-      <MemberStack members={moderators} max={5} />
-    </CategoryListItemStyles>
-  )
-}
+    <MemberStack members={moderatorsSumary(category.moderators)} max={5} />
+  </CategoryListItemStyles>
+)
 
 export interface CategoryItemFieldProps {
   categoryId: string

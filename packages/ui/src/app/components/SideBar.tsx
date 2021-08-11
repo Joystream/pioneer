@@ -19,6 +19,7 @@ import { Navigation, NavigationInnerWrapper } from '@/common/components/page/Sid
 import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHeader'
 import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
 import { RemoveScrollbar } from '@/common/constants'
+import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
@@ -81,7 +82,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to="/forum">
+              <NavigationLink to={ForumRoutes.root}>
                 <ForumIcon />
                 Forum
               </NavigationLink>
