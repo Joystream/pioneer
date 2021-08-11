@@ -24,7 +24,7 @@ export const PostHistoryModal = React.memo(() => {
     modalData: { postId, author },
   } = useModal<PostHistoryModalCall>()
   const { isLoading, edits } = useForumPostEdits(postId)
-  const [activeEdit, setActiveEdit] = useState(0)
+  const [activeEdit] = useState(0)
 
   const getStepType = (index: number) => {
     if (index === activeEdit) {

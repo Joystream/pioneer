@@ -1,4 +1,3 @@
-import { differenceInHours } from 'date-fns'
 import React, { forwardRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -10,8 +9,7 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge, TextInlineSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { formatDateString } from '@/common/model/formatters'
-import { relativeTime } from '@/common/model/relativeTime'
+import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { spacing } from '@/common/utils/styles'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
@@ -39,11 +37,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
           showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
         }
       >
-        (edited{' '}
-        {differenceInHours(new Date(), new Date(updatedAt)) >= 24
-          ? formatDateString(updatedAt)
-          : relativeTime(updatedAt)}
-        )
+        (edited {relativeIfRecent(updatedAt)})
       </EditionTime>
     )
   }, [updatedAt])
