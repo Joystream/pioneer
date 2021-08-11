@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { CountBadge } from '@/common/components/CountBadge'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
+
+import { ThreadTags } from './ThreadTags'
 
 interface ThreadBadgeProps {
   badge?: string
@@ -40,17 +41,14 @@ export const ThreadItem = ({ title, date, content, badges, answers, halfSize }: 
       {(badges || answers) && (
         <ThreadItemFooter>
           {badges && (
-            <BadgesRow>
-              {badges.map((badge, index) => (
-                <>
-                  {badge.badge && (
-                    <BadgeStatus size="m" inverted separated key={index}>
-                      {badge?.badge}
-                    </BadgeStatus>
-                  )}
-                </>
-              ))}
-            </BadgesRow>
+            <ThreadTags
+              tags={badges.flatMap(({ badge }, index) => ({
+                id: String(index),
+                title: badge as string,
+                threads: [],
+                visibleThreadsCount: 0,
+              }))}
+            />
           )}
           {answers && (
             <Label>
