@@ -26,7 +26,7 @@ interface PostProps {
 export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isPreview }, ref) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
   const { showModal } = useModal()
-  const time = useMemo(() => {
+  const editionTime = useMemo(() => {
     if (!updatedAt) {
       return null
     }
@@ -60,7 +60,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
             <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
           </Reply>
         )}
-        <MarkdownPreview markdown={text} append={time} size="s" />
+        <MarkdownPreview markdown={text} append={editionTime} size="s" />
       </MessageBody>
       <ForumPostRow>
         {reaction && (
