@@ -1,4 +1,3 @@
-import { sub } from 'date-fns'
 import faker from 'faker'
 
 import { ForumModerator } from '@/forum/types'
@@ -18,9 +17,14 @@ export const asStorybookPost = (text: string, threadId?: string): RawForumPostMo
     return {
       id: `${threadId}:0`,
       threadId,
-      createdAt: sub(Date.now(), { minutes: 25 }).toISOString(),
       authorId: '0',
       text,
+      edits: [],
+      postAddedEvent: {
+        inBlock: 1440099,
+        network: 'OLYMPIA',
+        createdAt: '2021-05-28T15:50:35.148Z',
+      },
     }
 }
 

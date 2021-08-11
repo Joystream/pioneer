@@ -69,8 +69,8 @@ export const shuffle = <T>(arr: Array<T>) => {
 
 export const randomMember = () => members[randomFromRange(0, members.length - 1)]
 
-export const randomBlock = () => ({
+export const randomBlock = (date?: Date) => ({
   inBlock: faker.datatype.number(10_000),
-  createdAt: faker.date.recent(180).toJSON(),
+  createdAt: (date ?? faker.date.recent(180)).toJSON(),
   network: 'OLYMPIA',
 })
