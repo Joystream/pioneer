@@ -63,6 +63,11 @@ fragment ForumThreadFields on ForumThread {
   categoryId
   title
   authorId
+  createdInEvent {
+    createdAt
+    inBlock
+    network
+  }
 }
 
 fragment ForumPostFields on ForumPost {
@@ -90,11 +95,6 @@ fragment ForumPostWithoutReplyFields on ForumPost {
 
 fragment ForumThreadDetailedFields on ForumThread {
   ...ForumThreadFields
-  createdInEvent {
-    createdAt
-    inBlock
-    network
-  }
 }
 
 fragment ForumPostParents on ForumPost {
