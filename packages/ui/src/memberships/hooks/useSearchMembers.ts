@@ -11,7 +11,7 @@ export const useSearchMembers = ({ search, limit }: { search: string; limit: num
 
   return {
     isLoading: loading,
-    members: data && (data.memberships as unknown as Member[]),
+    members: data && ((data.memberships as unknown) as Member[]),
     isSearch: !!search && !loading,
   }
 }
