@@ -14,6 +14,7 @@ import { RouterLink } from '@/common/components/RouterLink'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { ForumCategoryList } from '@/forum/components/category'
+import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
@@ -62,9 +63,11 @@ export const ForumCategory = () => {
             <Loading />
           ) : (
             <RowGapBlock>
-              <ItemCount count={threads.length} size="xs">
-                Threads
-              </ItemCount>
+              <ThreadFilters onApply={() => undefined}>
+                <ItemCount count={threads.length} size="xs">
+                  Threads
+                </ItemCount>
+              </ThreadFilters>
               {threads.length > 0 &&
                 threads.map((thread) => (
                   <div key={thread.id}>
