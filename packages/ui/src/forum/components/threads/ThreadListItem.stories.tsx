@@ -4,10 +4,9 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { Network } from '@/common/api/queries'
 import { asArray } from '@/common/utils'
-import { asStorybookPost } from '@/forum/helpers/storybook'
+import { asStorybookPost, ThreadData } from '@/forum/helpers/storybook'
 import { asForumThread } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { RawForumThreadMock } from '@/mocks/data/seedForum'
 
 import { ThreadListItem } from './ThreadListItem'
 
@@ -16,14 +15,13 @@ export default {
   component: ThreadListItem,
 } as Meta
 
-interface Props {
-  tags: string[]
-  rawThread: RawForumThreadMock & { createdInEvent: { network: Network } }
-}
-
 const categoryId = 'ThreadListItem-category-story'
 const category = { id: categoryId, title: '', description: '', moderatorIds: [] }
 
+interface Props {
+  tags: string[]
+  rawThread: ThreadData
+}
 const Template: Story<Props> = ({ tags, rawThread }) => {
   const forum = { categories: [category], threads: [rawThread], posts: asArray(asStorybookPost('foo', rawThread.id)) }
   const thread = {

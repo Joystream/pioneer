@@ -1,5 +1,6 @@
 import faker from 'faker'
 
+import { Network } from '@/common/api/queries'
 import { ForumModerator } from '@/forum/types'
 import { RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 import { randomRawBlock } from '@/mocks/helpers/randomBlock'
@@ -27,6 +28,8 @@ export const asStorybookPost = (text: string, threadId?: string): RawForumPostMo
       },
     }
 }
+
+export type ThreadData = RawForumThreadMock & { createdInEvent: { network: Network } }
 
 export const asStorybookThread = (title: string, categoryId?: string): RawForumThreadMock | undefined => {
   if (title && categoryId)
