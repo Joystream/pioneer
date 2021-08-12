@@ -10,6 +10,7 @@ import { repeat } from '@/common/utils'
 import { PostListItem } from '@/forum/components/PostList/PostListItem'
 import { ForumPost } from '@/forum/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { getMember } from '@/mocks/helpers'
 
 export default {
@@ -50,13 +51,15 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
   }
 
   return (
-    <MemoryRouter>
-      <MembershipContext.Provider value={membershipContext}>
-        <Container>
-          <PostListItem post={{ ...post, updatedAt, text, reaction, repliesTo }} />
-        </Container>
-      </MembershipContext.Provider>
-    </MemoryRouter>
+    <MockApolloProvider members workers forum>
+      <MemoryRouter>
+        <MembershipContext.Provider value={membershipContext}>
+          <Container>
+            <PostListItem post={{ ...post, updatedAt, text, reaction, repliesTo }} />
+          </Container>
+        </MembershipContext.Provider>
+      </MemoryRouter>
+    </MockApolloProvider>
   )
 }
 
