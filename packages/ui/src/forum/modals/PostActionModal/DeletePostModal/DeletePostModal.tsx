@@ -10,9 +10,10 @@ import { useModal } from '@/common/hooks/useModal'
 import { usePostParents } from '@/forum/hooks/usePostParents'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
+import { postActionMachine } from '../postActionMachine'
+import { PostActionSignModal } from '../PostActionSignModal'
+
 import { DeletePostModalCall } from '.'
-import { DeletePostSignModal } from './DeletePostSignModal'
-import { deletePostMachine } from './machine'
 
 export const DeletePostModal = () => {
   const {
@@ -20,7 +21,7 @@ export const DeletePostModal = () => {
     hideModal,
   } = useModal<DeletePostModalCall>()
 
-  const [state, send] = useMachine(deletePostMachine)
+  const [state, send] = useMachine(postActionMachine)
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -48,7 +49,14 @@ export const DeletePostModal = () => {
     const transaction = api.tx.forum.deletePosts(post.author.id, [[categoryId, threadId, post.id, true]], '')
     const service = state.children.transaction
     const controllerAccount = accountOrNamed(allAccounts, post.author.controllerAccount, 'Controller Account')
-    return <DeletePostSignModal transaction={transaction} service={service} controllerAccount={controllerAccount} />
+    return (
+      <PostActionSignModal
+        transaction={transaction}
+        service={service}
+        controllerAccount={controllerAccount}
+        actionText="You intend to delete your post."
+      />
+    )
   }
 
   if (state.matches('error')) {

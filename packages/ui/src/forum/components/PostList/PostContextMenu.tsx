@@ -2,7 +2,7 @@ import React from 'react'
 
 import { ContextMenu } from '@/common/components/ContextMenu'
 import { useModal } from '@/common/hooks/useModal'
-import { DeletePostModalCall } from '@/forum/modals/DeletePostModal'
+import { DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
 import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 

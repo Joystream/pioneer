@@ -22,9 +22,10 @@ interface Props {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
   controllerAccount: Account
+  actionText: string
 }
 
-export const DeletePostSignModal = ({ transaction, service, controllerAccount }: Props) => {
+export const PostActionSignModal = ({ transaction, service, controllerAccount, actionText }: Props) => {
   const { hideModal } = useModal()
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
   const [state, send] = useActor(service)
@@ -43,7 +44,7 @@ export const DeletePostSignModal = ({ transaction, service, controllerAccount }:
       <ModalBody>
         <RowGapBlock gap={24}>
           <RowGapBlock gap={16}>
-            <TextMedium>You intend to delete your post.</TextMedium>
+            <TextMedium>{actionText}</TextMedium>
             <TextMedium>
               A fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
             </TextMedium>
