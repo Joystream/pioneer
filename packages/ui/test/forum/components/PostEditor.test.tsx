@@ -20,7 +20,7 @@ const post: ForumPost = {
   id: '1:1',
   createdAt: new Date().toISOString(),
   author: getMember('alice'),
-  text: 'This is a sample text',
+  text: 'This is the original text',
 }
 
 let useModal: UseModal<any>
@@ -50,6 +50,13 @@ describe('UI: PostEditor', () => {
       newText: 'This is a new typed-in text',
       post,
     })
+  })
+
+  it("Disables the save button if text hasn't changed", async () => {
+    renderEditor()
+    const editor = await screen.findByRole('textbox')
+    await fireEvent.change(editor, { target: { value: 'This is the original text' } })
+    expect(await getButton('Save')).toBeDisabled()
   })
 
   const renderEditor = () =>
