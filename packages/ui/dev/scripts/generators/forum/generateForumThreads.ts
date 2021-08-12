@@ -12,7 +12,7 @@ export const generateForumPost = (threadId: string, authorId: string, repliesToI
   let lastEditDate: Date
 
   return {
-    id: `${threadId}:${String(nextPostId++)}`,
+    id: String(nextPostId++),
     threadId,
     authorId,
     text: faker.lorem.words(randomFromRange(10, 100)),
@@ -51,7 +51,6 @@ export const generateForumThreads = (
 
   const forumPosts = forumThreads
     .map(({ id, authorId }: RawForumThreadMock) => {
-      nextPostId = 0
       const posts: RawForumPostMock[] = []
 
       posts.push(generateForumPost(id, authorId))
