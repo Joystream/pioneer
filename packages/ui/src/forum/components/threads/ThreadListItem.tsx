@@ -25,7 +25,7 @@ export const ThreadListItem = ({ thread }: ThreadListItemProps) => {
   const { member: author } = useMember(thread.authorId)
 
   return (
-    <ThreadListItemStyles as={GhostRouterLink} to={`${ForumRoutes.thread}/${thread.categoryId}/${thread.id}`}>
+    <ThreadListItemStyles as={GhostRouterLink} to={`${ForumRoutes.thread}/${thread.id}`}>
       <Thread>
         <TextBig bold>{thread.title}</TextBig>
         {thread.tags.length > 0 && <ThreadTags tags={thread.tags} />}
