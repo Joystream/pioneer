@@ -1,21 +1,20 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { CountBadge } from '@/common/components/CountBadge'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
+import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { RouterLink } from '@/common/components/RouterLink'
-import { TabContainer } from '@/common/components/Tabs'
 import { Label } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { ForumCategoryList } from '@/forum/components/category'
+import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
@@ -55,9 +54,7 @@ export const ForumCategory = () => {
       main={
         <RowGapBlock gap={16}>
           <RowGapBlock gap={24}>
-            <ItemCount as="h5">
-              Categories <CountBadge count={category.subcategories.length} />
-            </ItemCount>
+            <ItemCount count={category.subcategories.length}>Categories</ItemCount>
 
             {category.subcategories.length > 0 && <ForumCategoryList categories={category.subcategories} />}
           </RowGapBlock>
@@ -66,9 +63,11 @@ export const ForumCategory = () => {
             <Loading />
           ) : (
             <RowGapBlock>
-              <ItemCount as="h6" size="xs">
-                Threads <CountBadge count={threads.length} />
-              </ItemCount>
+              <ThreadFilters onApply={() => undefined}>
+                <ItemCount count={threads.length} size="xs">
+                  Threads
+                </ItemCount>
+              </ThreadFilters>
               {threads.length > 0 &&
                 threads.map((thread) => (
                   <div key={thread.id}>
@@ -84,27 +83,6 @@ export const ForumCategory = () => {
     />
   )
 }
-
-const ItemCount = styled(TabContainer).attrs({ active: true })<{ size?: 's' | 'xs' }>`
-  cursor: unset;
-
-  ${({ size }) =>
-    size === 'xs' &&
-    css`
-      font-size: 14px;
-      line-height: 20px;
-    `}
-
-  &:hover,
-  &:focus,
-  &:focus-within {
-    color: ${Colors.Black[900]};
-    -webkit-text-stroke-color: unset;
-  }
-  &::before {
-    display: none;
-  }
-`
 
 const ModeratorsContainer = styled(Label)`
   align-items: center;

@@ -6,13 +6,13 @@ import { FilterBox } from '@/common/components/forms/FilterBox'
 import { camelCaseToText } from '@/common/helpers'
 import { PartialDateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
+import { SmallMemberSelect } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 import { ProposalStatus } from '@/proposals/types'
 
 import { FilterTextSelect } from '../../../common/components/selects'
 
 import { toCamelCase } from './helpers'
-import { SelectProposer } from './SelectProposer'
 
 export interface ProposalFiltersState {
   search: string
@@ -115,7 +115,8 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
           inputWidth="auto"
         />
 
-        <SelectProposer
+        <SmallMemberSelect
+          title="Proposer"
           value={proposer}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'proposer', value })
