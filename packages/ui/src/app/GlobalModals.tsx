@@ -6,6 +6,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
+import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
@@ -18,7 +19,6 @@ import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import { LeaveRoleModal, LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
-import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 
 export type ModalNames =
   | ModalName<TransferInvitesModalCall>

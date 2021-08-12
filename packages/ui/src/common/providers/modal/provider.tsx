@@ -7,7 +7,7 @@ interface Props {
   children: ReactNode
 }
 
-const isModalWithData = (a: any): a is ModalWithDataCall<any, any> => !!a.data
+export const isModalWithData = (a: any): a is ModalWithDataCall<any, any> => !!a.data
 
 export const ModalContextProvider = (props: Props) => {
   const [modal, setModal] = useState<string | null>(null)

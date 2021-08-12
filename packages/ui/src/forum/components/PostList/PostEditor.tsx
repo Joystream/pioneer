@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 import { ButtonGhost, ButtonPrimary, ButtonsRow } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
+import { useModal } from '@/common/hooks/useModal'
+import { EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { ForumPost } from '@/forum/types'
 
 interface Props {
@@ -11,7 +13,8 @@ interface Props {
 }
 
 export const PostEditor = ({ post, onCancel }: Props) => {
-  const [newText, setNewText] = useState<string>()
+  const [newText, setNewText] = useState(post.text)
+  const { showModal } = useModal()
 
   return (
     <EditorWrap>
@@ -20,7 +23,12 @@ export const PostEditor = ({ post, onCancel }: Props) => {
         <ButtonGhost size="medium" onClick={onCancel}>
           Cancel
         </ButtonGhost>
-        <ButtonPrimary size="medium">Save</ButtonPrimary>
+        <ButtonPrimary
+          size="medium"
+          onClick={() => showModal<EditPostModalCall>({ modal: 'EditPost', data: { newText, post } })}
+        >
+          Save
+        </ButtonPrimary>
       </ButtonsRow>
     </EditorWrap>
   )

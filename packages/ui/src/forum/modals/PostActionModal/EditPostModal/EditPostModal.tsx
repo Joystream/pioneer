@@ -15,9 +15,9 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { postActionMachine } from '../postActionMachine'
 import { PostActionSignModal } from '../PostActionSignModal'
+import { PostActionSuccessModal } from '../PostActionSuccessModal'
 
 import { EditPostModalCall } from '.'
-import { PostActionSuccessModal } from '../PostActionSuccessModal'
 
 export const EditPostModal = () => {
   const {
