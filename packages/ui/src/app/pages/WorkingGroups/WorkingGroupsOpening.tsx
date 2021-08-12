@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { CopyButtonTemplate } from '@/common/components/buttons'
+import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
@@ -24,7 +25,6 @@ import {
   TwoColumnsStatistic,
 } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
-import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
@@ -40,7 +40,6 @@ export const WorkingGroupOpening = () => {
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
   const { isLoading, opening } = useOpening(id)
-  const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const hiringApplication = useMemo(() => {
     if (opening) {
@@ -115,10 +114,9 @@ export const WorkingGroupOpening = () => {
             </PreviousPage>
             <ButtonsGroup>
               {(opening.status === OpeningStatuses.OPEN || opening.status === OpeningStatuses.CANCELLED) && (
-                <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
-                  <LinkIcon />
+                <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
                   Copy link
-                </ButtonGhost>
+                </CopyButtonTemplate>
               )}
               {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
             </ButtonsGroup>

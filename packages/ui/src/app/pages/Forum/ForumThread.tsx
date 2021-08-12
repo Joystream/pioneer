@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
-import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent } from '@/common/components/forms'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
@@ -16,7 +16,6 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
-import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { useForumThread } from '@/forum/hooks/useForumThread'
@@ -25,7 +24,6 @@ export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, thread } = useForumThread(id)
 
-  const { copyValue } = useCopyToClipboard()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
 
@@ -47,10 +45,9 @@ export const ForumThread = () => {
             <PageTitle>{thread.title}</PageTitle>
           </PreviousPage>
           <ButtonsGroup>
-            <ButtonGhost size="medium" onClick={() => copyValue(window.location.href)}>
-              <LinkIcon />
+            <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
               Copy link
-            </ButtonGhost>
+            </CopyButtonTemplate>
             <ButtonGhost size="medium">
               <WatchIcon />
               Watch thread
