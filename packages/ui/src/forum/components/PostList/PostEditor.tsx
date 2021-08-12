@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost, ButtonPrimary, ButtonsRow } from '@/common/components/buttons'
@@ -15,6 +15,7 @@ interface Props {
 export const PostEditor = ({ post, onCancel }: Props) => {
   const [newText, setNewText] = useState(post.text)
   const { showModal } = useModal()
+  const isTextChanged = useMemo(() => post.text !== newText, [newText])
 
   return (
     <EditorWrap>
@@ -26,6 +27,7 @@ export const PostEditor = ({ post, onCancel }: Props) => {
         <ButtonPrimary
           size="medium"
           onClick={() => showModal<EditPostModalCall>({ modal: 'EditPost', data: { newText, post } })}
+          disabled={!isTextChanged}
         >
           Save
         </ButtonPrimary>
