@@ -4,7 +4,7 @@ import { ForumPostOrderByInput, ForumThreadOrderByInput } from '@/common/api/que
 import { useGetForumPostsLazyQuery, useGetForumThreadsQuery } from '@/forum/queries'
 import { asForumPost } from '@/forum/types'
 
-export const useForumLatestPost = (category_eq: string) => {
+export const useCategoryLatestPost = (category_eq: string) => {
   const { data: threadData } = useGetForumThreadsQuery({
     variables: {
       where: { category: { id_eq: category_eq } },

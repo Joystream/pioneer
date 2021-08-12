@@ -48,8 +48,11 @@ describe('UI: Forum Thread Page', () => {
     id: '1',
     title: 'Example Thread',
     categoryId: '1',
+    authorId: '0',
     isSticky: false,
     createdInBlock: randomBlock(),
+    tags: [],
+    visiblePostsCount: 0,
   }
 
   beforeAll(() => {

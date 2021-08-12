@@ -6,13 +6,13 @@ import { TextInlineExtraSmall } from '@/common/components/typography'
 import { Overflow } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
 import { spacing } from '@/common/utils/styles'
-import { useForumLatestPost } from '@/forum/hooks/useForumLatestPost'
+import { useCategoryLatestPost } from '@/forum/hooks/useCategoryLatestPost'
 import { MemberInfo } from '@/memberships/components'
 
 import { CategoryItemFieldProps } from './CategoryListItem'
 
 export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
-  const { post } = useForumLatestPost(categoryId)
+  const { post } = useCategoryLatestPost(categoryId)
 
   if (!post) return <Loading />
 
