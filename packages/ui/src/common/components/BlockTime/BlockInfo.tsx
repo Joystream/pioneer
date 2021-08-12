@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { LabelLink } from '@/common/components/forms'
 import { BlockIcon } from '@/common/components/icons'
 import { TextSmall } from '@/common/components/typography'
-import { Colors, Transitions } from '@/common/constants'
+import { Colors } from '@/common/constants'
 import { formatTokenValue } from '@/common/model/formatters'
 import { Block } from '@/common/types'
 
@@ -32,8 +31,7 @@ export const BlockInfoContainer = styled.span`
 export const BlockNetworkInfo = styled(TextSmall)`
   color: ${Colors.Black[400]};
 `
-const BlockNumber = styled(LabelLink)`
-  font-size: inherit;
-  line-height: inherit;
-  transition: ${Transitions.all};
+const BlockNumber = styled.span`
+  text-decoration: underline;
+  text-underline-offset: 2px;
 `
