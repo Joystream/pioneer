@@ -4,11 +4,11 @@ import React, { useState } from 'react'
 import { Member } from '@/memberships/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
-import { SelectProposer } from './SelectProposer'
+import { SmallMemberSelect } from './SmallMemberSelect'
 
 export default {
-  title: 'Proposals/SelectProposer',
-  component: SelectProposer,
+  title: 'Member/SmallMemberSelect',
+  component: SmallMemberSelect,
   argTypes: {
     onChange: { action: 'changed' },
   },
@@ -23,7 +23,7 @@ export const Default: Story = ({ onChange }) => {
 
   return (
     <MockApolloProvider members>
-      <SelectProposer value={value} onChange={change} />
+      <SmallMemberSelect value={value} onChange={change} />
     </MockApolloProvider>
   )
 }
