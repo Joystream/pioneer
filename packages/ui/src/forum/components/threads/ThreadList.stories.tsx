@@ -12,9 +12,12 @@ import { ThreadList } from './ThreadList'
 export default {
   title: 'Forum/Threads/ThreadList',
   component: ThreadList,
+  argTypes: {
+    onSort: { action: 'Sort' },
+  },
 } as Meta
 
-const Template: Story = () => {
+const Template: Story = ({ onSort }) => {
   const [threads, setThreads] = useState<ForumThread[]>([])
 
   useEffect(() => {
@@ -26,7 +29,7 @@ const Template: Story = () => {
 
   return (
     <MockApolloProvider members workers forum>
-      <MemoryRouter>{threads ? <ThreadList threads={threads} /> : <Loading />}</MemoryRouter>
+      <MemoryRouter>{threads ? <ThreadList threads={threads} onSort={onSort} /> : <Loading />}</MemoryRouter>
     </MockApolloProvider>
   )
 }

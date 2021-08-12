@@ -68,7 +68,7 @@ export const ForumCategory = () => {
                   Threads
                 </ItemCount>
               </ThreadFilters>
-              {threads.length > 0 && <ThreadList threads={threads} />}
+              {threads.length > 0 && <ThreadList threads={threads} onSort={() => undefined} />}
             </RowGapBlock>
           )}
         </RowGapBlock>
