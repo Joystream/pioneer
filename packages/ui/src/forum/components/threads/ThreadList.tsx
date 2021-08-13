@@ -11,12 +11,12 @@ import { ForumThread } from '@/forum/types'
 
 import { ThreadListItem } from './ThreadListItem'
 
-type ThreadOrderKey = 'title' | 'visiblePostsCount' | 'votes' | 'activity' | 'author' | 'created'
+type ThreadOrderKey = 'CreatedAt' | 'UpdatedAt' | 'Author' | 'Title'
 export interface ThreadOrder {
   key: ThreadOrderKey
   isDescending?: boolean
 }
-export const ThreadDefaultOrder: ThreadOrder = { key: 'created' }
+export const ThreadDefaultOrder: ThreadOrder = { key: 'UpdatedAt' }
 
 interface ThreadListProps {
   threads: ForumThread[]
@@ -53,12 +53,12 @@ export const ThreadList = ({ threads, onSort, isLoading }: ThreadListProps) => {
   return (
     <ThreadListStyles gap={4}>
       <ListHeaders $colLayout={ThreadsColLayout}>
-        <SortHeader value="title">Threads</SortHeader>
-        <SortHeader value="visiblePostsCount">Replies</SortHeader>
-        <SortHeader value="votes">Votes</SortHeader>
-        <SortHeader value="activity">Last Activity</SortHeader>
-        <SortHeader value="author">Author</SortHeader>
-        <SortHeader value="created">Created</SortHeader>
+        <SortHeader value="Title">Threads</SortHeader>
+        <ListHeader>Replies</ListHeader>
+        <ListHeader>Votes</ListHeader>
+        <SortHeader value="UpdatedAt">Last Activity</SortHeader>
+        <SortHeader value="Author">Author</SortHeader>
+        <SortHeader value="CreatedAt">Created</SortHeader>
       </ListHeaders>
 
       {isLoading ? (

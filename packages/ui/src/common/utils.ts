@@ -1,5 +1,9 @@
 import { Reducer } from './types/helpers'
 
+type Obj = Record<string, any>
+
+// Type guards
+
 export const isFunction = (something: unknown): something is CallableFunction => typeof something === 'function'
 
 export const isDefined = <T extends any>(something: T | undefined): something is T => typeof something !== 'undefined'
@@ -8,15 +12,16 @@ export const isNumber = (something: unknown): something is number => typeof some
 
 export const isString = (something: unknown): something is string => typeof something === 'string'
 
-export const isRecord = (something: unknown): something is Record<string, any> =>
-  typeof something === 'object' && something !== null
+export const isRecord = (something: unknown): something is Obj => typeof something === 'object' && something !== null
+
+// Objects:
 
 interface EqualsOption {
   checkExtraKeys?: boolean
   depth?: boolean | number
 }
 
-export const objectEquals = <T extends Record<string, any>>(
+export const objectEquals = <T extends Obj>(
   reference: T,
   { checkExtraKeys = false, depth = 1 }: EqualsOption = {}
 ): ((compared: T) => boolean) => {
@@ -38,6 +43,13 @@ export const equals = <T extends any>(
     return (compared) => compared === reference
   }
 }
+
+export const merge = <A extends Obj, B extends Obj = Partial<A>>(a: A, b: B): A & B => ({ ...a, ...b })
+
+export const propsEquals = <T extends Obj>(...keys: (keyof T)[]) => (a: T, b: T) =>
+  keys.every((key) => a[key] === b[key])
+
+// Lists:
 
 export const intersperse = <T extends any, S extends any>(list: T[], separator: S): (T | S)[] =>
   list.length < 2 ? list : [list[0], ...list.slice(1).flatMap((item) => [separator, item])]
@@ -78,8 +90,5 @@ export const groupBy = <T extends any>(list: T[], predicate: (prev: T, item: T, 
   const [first, ...rest] = list
   return rest.reduce(groupByReducer, [[first]]).reverse()
 }
-
-export const propsEquals = <T extends Record<string, any>>(...keys: (keyof T)[]) => (a: T, b: T) =>
-  keys.every((key) => a[key] === b[key])
 
 export const asArray = <T extends any>(item: undefined | T): T[] => (isDefined(item) ? [item] : [])
