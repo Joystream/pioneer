@@ -13,19 +13,20 @@ import { ThreadListItem } from './ThreadListItem'
 type ThreadOrderKey = 'title' | 'visiblePostsCount' | 'votes' | 'activity' | 'author' | 'created'
 export interface ThreadOrder {
   key: ThreadOrderKey
-  isDescending: boolean
+  isDescending?: boolean
 }
+export const ThreadDefaultOrder: ThreadOrder = { key: 'created' }
 
 interface ThreadListProps {
   threads: ForumThread[]
   onSort: (order: ThreadOrder) => void
 }
 export const ThreadList = ({ threads, onSort }: ThreadListProps) => {
-  const [order, setOrder] = useState<ThreadOrder | null>(null)
+  const [order, setOrder] = useState(ThreadDefaultOrder)
 
   const sort = useCallback(
     (key: ThreadOrderKey) => {
-      const next: ThreadOrder = { key, isDescending: order?.key === key && !order?.isDescending }
+      const next: ThreadOrder = { key, isDescending: order.key === key && !order.isDescending }
       setOrder(next)
       onSort?.(next)
     },
@@ -38,7 +39,7 @@ export const ThreadList = ({ threads, onSort }: ThreadListProps) => {
         <ListHeader onClick={() => sort(value)}>
           <HeaderText>
             {children}
-            {order?.key === value && (order?.isDescending ? <SortIconDown /> : <SortIconUp />)}
+            {order.key === value && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
           </HeaderText>
         </ListHeader>
       )),
