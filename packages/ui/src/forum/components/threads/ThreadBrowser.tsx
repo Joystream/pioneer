@@ -33,7 +33,6 @@ export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
     let timeOutId: any
     if (isLoading) {
       timeOutId = setTimeout(() => setLoading(false), 500) as any
-      // console.log(currentItems)
     }
     return () => clearTimeout(timeOutId)
   }, [isLoading])
@@ -41,12 +40,10 @@ export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
   const onPrevClick = () => {
     setLoading(true)
     setCurrentItemsGroup(currentItemsGroup - 1)
-    // console.log(currentItemsGroup)
   }
   const onNextClick = () => {
     setLoading(true)
     setCurrentItemsGroup(currentItemsGroup + 1)
-    // console.log(currentItemsGroup)
   }
 
   return (
