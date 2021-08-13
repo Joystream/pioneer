@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { CloseButton } from '@/common/components/buttons'
 import { Colors } from '@/common/constants'
 import { useToggle } from '@/common/hooks/useToggle'
-import { size, spacing } from '@/common/utils/styles'
 
 import { RowGapBlock } from './page/PageContent'
 import { TextMedium } from './typography'
@@ -34,12 +33,13 @@ export const Warning = ({ title, content, isClosable }: WarningProps) => {
 const WarningBlock = styled(RowGapBlock)`
   background-color: ${Colors.Red[50]};
   position: relative;
-  padding: ${spacing(2)};
+  padding: 16px;
 `
 
 const StyledCloseButton = styled(CloseButton)`
   position: absolute;
   top: 8px;
   right: 8px;
-  ${size('16px')};
+  width: 16px;
+  height: 16px;
 `

@@ -11,7 +11,6 @@ import { plural } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { useToggle } from '@/common/hooks/useToggle'
 import { isDefined } from '@/common/utils'
-import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { ProposalVote } from '@/proposals/types'
@@ -66,7 +65,7 @@ const KindToTitle = new Map<string, string>([
 
 const VoteType = styled.div`
   ${ToggleContainer} {
-    row-gap: ${spacing(1 / 2)};
+    row-gap: 4px;
   }
 `
 
@@ -75,7 +74,7 @@ const VoteTypeHeader = styled.label<{ kind: string }>`
   align-items: center;
   grid-template-columns: 128px 1fr auto;
   cursor: pointer;
-  padding: ${spacing(1)} ${spacing(1)} ${spacing(1)} ${spacing(2)};
+  padding: 4px 4px 4px 8px;
   text-transform: capitalize;
 
   h6 {
@@ -95,5 +94,5 @@ const VoteTypeHeader = styled.label<{ kind: string }>`
 const VoteListItem = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: ${spacing(1, 2)};
+  padding: 8px 16px;
 `

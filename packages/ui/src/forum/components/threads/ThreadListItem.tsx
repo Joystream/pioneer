@@ -7,7 +7,6 @@ import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
-import { spacing } from '@/common/utils/styles'
 import { ThreadsColLayout, ForumRoutes } from '@/forum/constant'
 import { useThreadPollVoteCount } from '@/forum/hooks/useThreadPollVoteCount'
 import { ForumThread } from '@/forum/types'
@@ -46,7 +45,7 @@ export const ThreadListItem = ({ thread }: ThreadListItemProps) => {
 
 const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsColLayout })`
   height: 98px;
-  padding: 14px ${spacing(3)};
+  padding: 14px 24px;
   transition: ${Transitions.all};
 
   &:hover,
@@ -58,7 +57,7 @@ const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsCo
 
 const Thread = styled.div`
   display: grid;
-  gap: ${spacing(1)};
+  gap: 8px;
 
   ${TextBig} {
     ${Overflow.FullDots};

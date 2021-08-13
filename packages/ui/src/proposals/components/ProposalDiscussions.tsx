@@ -6,7 +6,6 @@ import { InputComponent } from '@/common/components/forms'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { spacing } from '@/common/utils/styles'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
@@ -50,14 +49,14 @@ export const ProposalDiscussions = ({ thread, selected }: Props) => {
 const DiscussionsHeader = styled.header`
   display: inline-flex;
   align-items: center;
-  padding-bottom: ${spacing(1)};
+  padding-bottom: 8px;
 
   ${Badge} {
     display: inline-flex;
-    column-gap: ${spacing(1 / 2)};
+    column-gap: 4px;
     height: fit-content;
-    margin-left: ${spacing(1)};
-    padding: ${spacing(1 / 2, 1)};
+    margin-left: 8px;
+    padding: 4px 8px;
     text-transform: uppercase;
   }
 `
@@ -67,12 +66,12 @@ export const PostMessageForm = styled.div`
 `
 
 const ProposalDiscussionsStyles = styled.div<Pick<ProposalDiscussionThread, 'mode'>>`
-  margin-top: ${spacing(1)};
+  margin-top: 8px;
 
   ${ForumPostStyles} {
-    margin-top: ${spacing(3)};
+    margin-top: 24px;
     border-bottom: 1px solid ${Colors.Black[200]};
-    padding-bottom: ${spacing(1)};
+    padding-bottom: 8px;
 
     & > :nth-child(3n - 1) {
       justify-self: end;

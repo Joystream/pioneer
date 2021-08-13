@@ -7,7 +7,6 @@ import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons
 import { ItemCount } from '@/common/components/ItemCount'
 import { FilterSelect, SelectContainer } from '@/common/components/selects'
 import { objectEquals } from '@/common/utils'
-import { spacing } from '@/common/utils/styles'
 import { MemberRole } from '@/memberships/types'
 
 import { SelectMemberRoles } from '../SelectMemberRoles'
@@ -123,7 +122,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
 
 const MembersFilterBox = styled(FilterBox)`
   height: 72px;
-  margin-top: ${spacing(1)};
+  margin-top: 8px;
 
   ${Fields} {
     display: flex;

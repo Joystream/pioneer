@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components'
 import { Arrow, CheckboxIcon } from '@/common/components/icons'
 import { TextInlineSmall } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
-import { spacing } from '@/common/utils/styles'
 
 import { StepperTheme } from './themes'
 import { asStepsToRender, StepperStep, StepToRender } from './types'
@@ -78,7 +77,7 @@ const StepTitle = styled.h6`
 const StepBody = styled.div`
   display: grid;
   align-items: center;
-  row-gap: ${spacing(1)};
+  row-gap: 8px;
 `
 
 type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBaby'>

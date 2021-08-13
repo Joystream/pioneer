@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import { BorderRad, Colors, Sizes } from '@/common/constants'
-import { spacing } from '@/common/utils/styles'
 
 export const MemberRow = styled.div`
   display: grid;
@@ -11,7 +10,7 @@ export const MemberRow = styled.div`
   width: 100%;
   min-height: ${Sizes.accountHeight};
   max-height: ${Sizes.accountHeight};
-  padding: ${spacing(1, 2)};
+  padding: 8px 16px;
   border: 1px solid ${Colors.Black[300]};
   border-bottom: 0;
   border-radius: ${BorderRad.s};

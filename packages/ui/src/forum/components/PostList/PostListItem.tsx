@@ -3,14 +3,13 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonsRow, CopyButtonTemplate } from '@/common/components/buttons'
+import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge, TextInlineSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
-import { spacing } from '@/common/utils/styles'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
@@ -63,15 +62,13 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
         <MarkdownPreview markdown={text} append={editionTime} size="s" />
       </MessageBody>
       <ForumPostRow>
-        {reaction && (
-          <ButtonsRow>
+        <ButtonsGroup>
+          {reaction && (
             <Button size="small">
               <HeartIcon />
               {!!reaction.length && reaction.length}
             </Button>
-          </ButtonsRow>
-        )}
-        <ButtonsRow>
+          )}
           <CopyButtonTemplate
             textToCopy={window.location.href}
             square
@@ -83,7 +80,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSel
             <ReplyIcon />
           </Button>
           <PostContextMenu post={post} />
-        </ButtonsRow>
+        </ButtonsGroup>
       </ForumPostRow>
     </ForumPostStyles>
   )
@@ -93,14 +90,14 @@ const Button = styled(ButtonGhost).attrs({ size: 'small' })``
 
 const MessageBody = styled.div`
   grid-column: span 2;
-  margin-top: ${spacing(1)};
+  margin-top: 8px;
 `
 
 const Reply = styled.blockquote`
   background-color: ${Colors.Black[75]};
   font-style: italic;
-  margin: 0 0 ${spacing(3 / 2)};
-  padding: ${spacing(1)};
+  margin: 0 0 12px;
+  padding: 8px;
 
   & .markdown-preview p,
   & p {
@@ -121,7 +118,7 @@ const ReplyBadge = styled.div`
   ${Badge} {
     background-color: ${Colors.Blue[100]};
     margin: 1px 0 0 3px;
-    padding: 0 ${spacing(1)};
+    padding: 0 8px;
   }
 
   a {
@@ -142,7 +139,7 @@ const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true 
 export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
   display: grid;
   grid-template-columns: 1fr;
-  row-gap: ${spacing(2)};
+  row-gap: 16px;
 
   // Animate selection:
   &,
@@ -164,15 +161,15 @@ export const ForumPostRow = styled.div`
   flex-wrap: wrap;
   width: 100%;
 
-  ${ForumPostAuthor}, ${ButtonsRow}, ${BlockTimeWrapper} {
+  ${ForumPostAuthor}, ${ButtonsGroup}, ${BlockTimeWrapper} {
     flex: 50%;
   }
 
-  ${ForumPostAuthor}, ${ButtonsRow}:first-of-type {
+  ${ForumPostAuthor}, ${ButtonsGroup}:first-of-type {
     justify-content: flex-start;
   }
 
-  ${BlockTimeWrapper}, ${ButtonsRow}:last-of-type {
+  ${BlockTimeWrapper}, ${ButtonsGroup}:last-of-type {
     justify-content: flex-end;
   }
 `
