@@ -42,13 +42,15 @@ export const PostHistoryModal = React.memo(() => {
         }
       />
       <StepperBody>
-        {isLoading ? <Loading text="Loading versions..." /> :
+        {isLoading ? (
+          <Loading text="Loading versions..." />
+        ) : (
           <RowGapBlock gap={32}>
             {edits?.map((edit) => (
               <HistoryPost edit={edit} author={author} />
             ))}
           </RowGapBlock>
-        }
+        )}
       </StepperBody>
     </>
   )
