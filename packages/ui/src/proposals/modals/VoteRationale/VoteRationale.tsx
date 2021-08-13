@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost, CloseButton } from '@/common/components/buttons'
+import { CloseButton, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
@@ -20,7 +20,6 @@ import {
   SidePaneTitle,
   SidePaneTopButtonsGroup,
 } from '@/common/components/SidePane'
-import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { useModal } from '@/common/hooks/useModal'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -29,7 +28,6 @@ import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 
 export const VoteRationale = React.memo(() => {
   const { hideModal, modalData } = useModal<VoteRationaleModalCall>()
-  const { copyValue } = useCopyToClipboard()
   const voteId = modalData.id
   const { vote, isLoading } = useProposalVote(voteId)
 
@@ -39,8 +37,7 @@ export const VoteRationale = React.memo(() => {
     }
   }
 
-  const getVoteLink = () =>
-    copyValue(`${window.location.origin}/#${ProposalsRoutes.preview}/${vote?.proposalId}?showVote=${voteId}`)
+  const getVoteLink = `${window.location.origin}/#${ProposalsRoutes.preview}/${vote?.proposalId}?showVote=${voteId}`
 
   if (isLoading || !vote) {
     return (
@@ -57,9 +54,7 @@ export const VoteRationale = React.memo(() => {
           <SidePanelTop>
             <SidePaneTitle>Voting result</SidePaneTitle>
             <SidePaneTopButtonsGroup>
-              <ButtonGhost size="small" onClick={getVoteLink}>
-                <LinkIcon />
-              </ButtonGhost>
+              <CopyButtonTemplate square size="small" textToCopy={getVoteLink} icon={<LinkIcon />} />
             </SidePaneTopButtonsGroup>
             <CloseButton onClick={hideModal} />
           </SidePanelTop>

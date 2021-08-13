@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { ButtonGhost, CloseButton } from '@/common/components/buttons'
+import { CloseButton, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
-import { useCopyToClipboard } from '@/common/hooks/useCopyToClipboard'
 import { EmptyBody } from '@/proposals/modals/VoteRationale/VoteRationale'
 
 import { MemberInfoWrap } from '..'
@@ -36,7 +35,6 @@ export const MemberProfile = React.memo(() => {
   const { members, isLoading } = useMyMemberships()
   const { modalData, hideModal } = useModal<MemberModalCall>()
   const { isLoading: loading, member } = useMember(modalData.id)
-  const { copyValue } = useCopyToClipboard()
 
   const isMyMember = !isLoading && !!members.find((m) => m.id == member?.id)
 
@@ -70,9 +68,12 @@ export const MemberProfile = React.memo(() => {
                   <EditSymbol />
                 </EditMembershipButton>
               )}
-              <ButtonGhost size="small" onClick={() => copyValue(`${window.location.host}/#/members/${member.id}`)}>
-                <LinkIcon />
-              </ButtonGhost>
+              <CopyButtonTemplate
+                square
+                size="small"
+                textToCopy={`${window.location.host}/#/members/${member.id}`}
+                icon={<LinkIcon />}
+              />
             </SidePaneTopButtonsGroup>
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
