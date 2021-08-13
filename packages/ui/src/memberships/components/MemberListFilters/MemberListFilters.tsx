@@ -1,13 +1,12 @@
 import React, { useReducer } from 'react'
 import styled from 'styled-components'
 
-import { CountBadge } from '@/common/components/CountBadge'
 import { TogglableIcon } from '@/common/components/forms'
 import { Fields, FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
 import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
-import { FilterSelect } from '@/common/components/selects'
+import { ItemCount } from '@/common/components/ItemCount'
+import { FilterSelect, SelectContainer } from '@/common/components/selects'
 import { objectEquals } from '@/common/utils'
-import { spacing } from '@/common/utils/styles'
 import { MemberRole } from '@/memberships/types'
 
 import { SelectMemberRoles } from '../SelectMemberRoles'
@@ -72,35 +71,28 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
 
   return (
     <MembersFilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
-      <FieldsHeader>
-        <h5>All members</h5>
-        {memberCount && <MemberCount count={memberCount} />}
-      </FieldsHeader>
+      <FieldsHeader>{memberCount && <ItemCount count={memberCount}>All members</ItemCount>}</FieldsHeader>
 
-      <SelectContainer>
-        <SelectMemberRoles
-          value={roles}
-          onChange={(value) => dispatch({ type: 'change', field: 'roles', value })}
-          onApply={apply}
-          onClear={() => {
-            dispatch({ type: 'change', field: 'roles', value: [] })
-            onApply({ ...filters, roles: [] })
-          }}
-        />
-      </SelectContainer>
+      <SelectMemberRoles
+        value={roles}
+        onChange={(value) => dispatch({ type: 'change', field: 'roles', value })}
+        onApply={apply}
+        onClear={() => {
+          dispatch({ type: 'change', field: 'roles', value: [] })
+          onApply({ ...filters, roles: [] })
+        }}
+      />
 
-      <SelectContainer>
-        <FilterSelect
-          title="Council Members"
-          options={[true, false]}
-          renderOption={(value) => (value ? 'Yes' : 'No')}
-          value={concil}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'concil', value })
-            onApply({ ...filters, concil: value })
-          }}
-        />
-      </SelectContainer>
+      <FilterSelect
+        title="Council Members"
+        options={[true, false]}
+        renderOption={(value) => (value ? 'Yes' : 'No')}
+        value={concil}
+        onChange={(value) => {
+          dispatch({ type: 'change', field: 'concil', value })
+          onApply({ ...filters, concil: value })
+        }}
+      />
 
       <ToggleContainer>
         <FilterLabel>Member Type</FilterLabel>
@@ -130,7 +122,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
 
 const MembersFilterBox = styled(FilterBox)`
   height: 72px;
-  margin-top: ${spacing(1)};
+  margin-top: 8px;
 
   ${Fields} {
     display: flex;
@@ -139,6 +131,10 @@ const MembersFilterBox = styled(FilterBox)`
     padding: 8px 16px;
     height: 100%;
   }
+
+  ${SelectContainer} {
+    flex-basis: 220px;
+  }
 `
 
 const FieldsHeader = styled.div`
@@ -146,13 +142,6 @@ const FieldsHeader = styled.div`
   gap: 8px;
   align-items: center;
   margin-right: auto;
-`
-const MemberCount = styled(CountBadge)`
-  font-weight: 700;
-`
-
-const SelectContainer = styled.div`
-  flex-basis: 220px;
 `
 
 const ToggleContainer = styled.div`

@@ -27,7 +27,15 @@ const DefaultDateFormatter = Intl.DateTimeFormat('en', {
   timeZoneName: 'short',
 })
 
-export const formatDateString = (timestamp: string) => DefaultDateFormatter.format(new Date(timestamp))
+export const formatDateString = (timestamp: string, size: 's' | 'l' = 'l') => {
+  const defaultFormat = DefaultDateFormatter.format(new Date(timestamp))
+  switch (size) {
+    case 's':
+      return defaultFormat.replace(/ ([AP]M)/, (_, preriod: string) => preriod.toLocaleLowerCase())
+    default:
+      return defaultFormat
+  }
+}
 
 type TimeUnit = [number, Intl.RelativeTimeFormatUnit]
 const defaultDurationUnits: TimeUnit[] = [

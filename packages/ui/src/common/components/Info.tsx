@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Colors } from '@/common/constants'
-import { spacing } from '@/common/utils/styles'
 
 import { ColumnGapBlock, RowGapBlock } from './page/PageContent'
 import { Tooltip, TooltipDefault } from './Tooltip'
@@ -31,5 +30,5 @@ export const Info = ({ title, children }: InfoProps) => {
 const InfoBlock = styled(RowGapBlock)`
   background-color: ${Colors.Blue[50]};
   position: relative;
-  padding: ${spacing(2)};
+  padding: 16px;
 `

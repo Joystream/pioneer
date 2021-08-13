@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { ButtonGhost, ButtonPrimary, ButtonsRow } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { useModal } from '@/common/hooks/useModal'
 import { EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
@@ -20,7 +20,7 @@ export const PostEditor = ({ post, onCancel }: Props) => {
   return (
     <EditorWrap>
       <EditorMemo setNewText={setNewText} initialText={post.text} />
-      <ButtonsRow>
+      <ButtonsGroup>
         <ButtonGhost size="medium" onClick={onCancel}>
           Cancel
         </ButtonGhost>
@@ -31,7 +31,7 @@ export const PostEditor = ({ post, onCancel }: Props) => {
         >
           Save
         </ButtonPrimary>
-      </ButtonsRow>
+      </ButtonsGroup>
     </EditorWrap>
   )
 }

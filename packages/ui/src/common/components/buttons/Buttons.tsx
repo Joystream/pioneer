@@ -407,7 +407,7 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
     height: 1px;
     border-radius: 0;
     border: none;
-    transform: ${({ borderless }) => (borderless ? 'translateX(-100%)' : 'translateX(0)')};
+    transform: ${({ borderless }) => (borderless ? 'translateX(calc(-100% - 2px))' : 'translateX(0)')};
     background-color: ${Colors.Black[900]};
   }
   &:after {
@@ -440,7 +440,7 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
     transform: scale(1);
 
     &:before {
-      transform: translateX(100%);
+      transform: translateX(calc(100% + 2px));
     }
   }
 

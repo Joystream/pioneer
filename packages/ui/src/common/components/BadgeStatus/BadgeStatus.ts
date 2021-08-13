@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Overflow } from '../../constants'
-import { spacing } from '../../utils/styles'
 
 export interface BadgeStatusProps {
   size?: 'm' | 'l'
@@ -29,7 +28,7 @@ export const BadgeStatus = styled.span<BadgeStatusProps>`
   ${({ separated }) =>
     separated &&
     css`
-      margin: ${spacing(0, 0.5)};
+      margin: 0px 4px;
 
       &:last-child {
         margin-right: 0;

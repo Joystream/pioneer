@@ -6,7 +6,6 @@ import { TextExtraSmall } from '@/common/components/typography'
 import { Overflow } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
-import { spacing } from '@/common/utils/styles'
 import { useForumPopularThread } from '@/forum/hooks/useForumPopularThread'
 
 import { CategoryItemFieldProps } from './CategoryListItem'
@@ -30,7 +29,7 @@ export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
 
 const ThreadInfoStyles = styled.div`
   & > h6 {
-    margin-bottom: ${spacing(3 / 2)};
+    margin-bottom: 12px;
     ${Overflow.FullDots};
   }
 `
