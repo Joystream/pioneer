@@ -46,7 +46,10 @@ const EditorMemo = React.memo(({ setNewText, initialText }: MemoEditorProps) => 
     inline
     id="editor"
     onChange={(_, editor) => setNewText(editor.getData())}
-    onReady={(editor) => editor.setData(initialText)}
+    onReady={(editor) => {
+      editor.setData(initialText)
+      editor.editing.view.focus()
+    }}
   />
 ))
 
