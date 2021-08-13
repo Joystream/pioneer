@@ -37,7 +37,7 @@ export const VoteRationale = React.memo(() => {
     }
   }
 
-  const getVoteLink = `${window.location.origin}/#${ProposalsRoutes.preview}/${vote?.proposalId}?showVote=${voteId}}`
+  const getVoteLink = `${window.location.origin}/#${ProposalsRoutes.preview}/${vote?.proposalId}?showVote=${voteId}`
 
   if (isLoading || !vote) {
     return (
