@@ -5,7 +5,6 @@ import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
-import { spacing } from '@/common/utils/styles'
 import { ThreadsColLayout } from '@/forum/constant'
 import { ForumThread } from '@/forum/types'
 
@@ -68,6 +67,6 @@ export const ThreadList = ({ threads, onSort }: ThreadListProps) => {
 
 const ThreadListStyles = styled(RowGapBlock)`
   ${ListHeaders} {
-    padding: 0 ${spacing(3)};
+    padding: 0 24px;
   }
 `
