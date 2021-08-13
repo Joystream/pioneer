@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TableListItem } from '@/common/components/List'
+import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
-import { Colors, Overflow, Transitions } from '@/common/constants'
+import { Colors, Overflow } from '@/common/constants'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
 import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
@@ -12,6 +12,7 @@ import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberSt
 import { LatestPost } from './LatestPost'
 import { PopularThread } from './PopularThread'
 import { ThreadCount } from './ThreadCount'
+
 export interface CategoryListItemProps {
   category: ForumCategory
 }
@@ -43,13 +44,8 @@ const CategoryListItemStyles = styled(TableListItem).attrs({ $colLayout: Categor
   align-items: start;
   height: 128px;
   padding: 14px 24px;
-  transition: ${Transitions.all};
 
-  &:hover,
-  &:focus,
-  &:focus-within {
-    border-color: ${Colors.Blue[100]};
-  }
+  ${TableListItemAsLinkHover};
 
   & > * {
     margin-top: 8px;
