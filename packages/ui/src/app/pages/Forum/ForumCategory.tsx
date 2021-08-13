@@ -59,18 +59,15 @@ export const ForumCategory = () => {
             {category.subcategories.length > 0 && <ForumCategoryList categories={category.subcategories} />}
           </RowGapBlock>
 
-          {isLoadingThreads ? (
-            <Loading />
-          ) : (
-            <RowGapBlock gap={24}>
-              <ThreadFilters onApply={() => undefined}>
-                <ItemCount count={threads.length} size="xs">
-                  Threads
-                </ItemCount>
-              </ThreadFilters>
-              {threads.length > 0 && <ThreadList threads={threads} onSort={() => undefined} />}
-            </RowGapBlock>
-          )}
+          <RowGapBlock gap={24}>
+            <ThreadFilters onApply={() => undefined}>
+              <ItemCount count={threads.length} size="xs">
+                Threads
+              </ItemCount>
+            </ThreadFilters>
+
+            <ThreadList threads={threads} onSort={() => undefined} isLoading={isLoadingThreads} />
+          </RowGapBlock>
         </div>
       }
     />

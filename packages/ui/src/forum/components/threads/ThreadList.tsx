@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { ThreadsColLayout } from '@/forum/constant'
@@ -20,8 +21,9 @@ export const ThreadDefaultOrder: ThreadOrder = { key: 'created' }
 interface ThreadListProps {
   threads: ForumThread[]
   onSort: (order: ThreadOrder) => void
+  isLoading?: boolean
 }
-export const ThreadList = ({ threads, onSort }: ThreadListProps) => {
+export const ThreadList = ({ threads, onSort, isLoading }: ThreadListProps) => {
   const [order, setOrder] = useState(ThreadDefaultOrder)
 
   const sort = useCallback(
@@ -46,6 +48,8 @@ export const ThreadList = ({ threads, onSort }: ThreadListProps) => {
     [order, sort]
   )
 
+  if (threads.length <= 0 && !isLoading) return null
+
   return (
     <ThreadListStyles gap={4}>
       <ListHeaders $colLayout={ThreadsColLayout}>
@@ -57,11 +61,15 @@ export const ThreadList = ({ threads, onSort }: ThreadListProps) => {
         <SortHeader value="created">Created</SortHeader>
       </ListHeaders>
 
-      <List as="div">
-        {threads.map((thread, index) => (
-          <ThreadListItem key={index} thread={thread} />
-        ))}
-      </List>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <List as="div">
+          {threads.map((thread, index) => (
+            <ThreadListItem key={index} thread={thread} />
+          ))}
+        </List>
+      )}
     </ThreadListStyles>
   )
 }
