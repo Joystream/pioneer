@@ -10,6 +10,7 @@ import { Label } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 
 import { ThreadItem, ThreadItemWrapper, ThreadItemContentProps } from './ThreadItem'
+import { ThreadItemsPlaceholder } from './ThreadItemsPlaceholder'
 import { ThreadsLayoutSpacing } from './ThreadsLayout'
 
 export interface ThreadBrowserProps {
@@ -17,35 +18,35 @@ export interface ThreadBrowserProps {
 }
 
 export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
-  const items: ThreadItemContentProps[] = [
-    {
-      title: 'Title',
-      date: '15 min',
-      content:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quos fugit aut inventore rem dolores nemo, accusantium corporis quae ad beatae corrupti ex repellat. Atque exercitationem dicta ex aliquam sequi? Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quos fugit aut inventore rem dolores nemo, accusantium corporis quae ad beatae corrupti ex repellat. Atque exercitationem dicta ex aliquam sequi? Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quos fugit aut inventore rem dolores nemo, accusantium corporis quae ad beatae corrupti ex repellat. Atque exercitationem dicta ex aliquam sequi? Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quos fugit aut inventore rem dolores nemo, accusantium corporis quae ad beatae corrupti ex repellat. Atque exercitationem dicta ex aliquam sequi?',
-      badges: [{ badge: 'Badge 1' }, { badge: 'Badge 2' }],
-      answers: [{ answer: 'answer 1' }, { answer: 'answer 2' }, { answer: 'answer 3' }],
-    },
-    {
-      title: 'Title',
-      date: '15 min',
-      content:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quos fugit aut inventore rem dolores nemo, accusantium corporis quae ad beatae corrupti ex repellat. Atque exercitationem dicta ex aliquam sequi?',
-      badges: [{ badge: 'Badge 1' }, { badge: 'Badge 2' }],
-      answers: [{ answer: 'answer 1' }, { answer: 'answer 2' }, { answer: 'answer 3' }],
-    },
-  ]
+  const items: ThreadItemContentProps[] = ThreadItemsPlaceholder
+  const [currentItemsGroup, setCurrentItemsGroup] = useState(0)
+  const currentItems: ThreadItemContentProps[][] = []
+
+  const currentItemsGroupSize = 2
+  for (let i = 0; i < Math.ceil(items.length / currentItemsGroupSize); i++) {
+    currentItems.push(items.slice(i * currentItemsGroupSize, i * currentItemsGroupSize + currentItemsGroupSize))
+  }
+
   const [isLoading, setLoading] = useState(false)
+
   useEffect(() => {
     let timeOutId: any
     if (isLoading) {
       timeOutId = setTimeout(() => setLoading(false), 500) as any
+      // console.log(currentItems)
     }
-
     return () => clearTimeout(timeOutId)
   }, [isLoading])
-  const onClick = () => {
+
+  const onPrevClick = () => {
     setLoading(true)
+    setCurrentItemsGroup(currentItemsGroup - 1)
+    // console.log(currentItemsGroup)
+  }
+  const onNextClick = () => {
+    setLoading(true)
+    setCurrentItemsGroup(currentItemsGroup + 1)
+    // console.log(currentItemsGroup)
   }
 
   return (
@@ -55,19 +56,21 @@ export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
           {label} {items.length > 0 && <CountBadge count={items.length} />}
         </Label>
         <ButtonsGroup>
-          <ButtonGhost size="small" square onClick={onClick}>
+          <ButtonGhost size="small" square onClick={onPrevClick} disabled={currentItemsGroup - 1 < 0}>
             <Arrow direction="left" />
           </ButtonGhost>
-          <ButtonGhost size="small" square onClick={onClick}>
+          <ButtonGhost size="small" square onClick={onNextClick} disabled={currentItemsGroup + 1 > items.length}>
             <Arrow direction="right" />
           </ButtonGhost>
         </ButtonsGroup>
       </ThreadBrowserHeader>
       <ThreadBrowserItems>
-        {isLoading || !items || items.length == 0 ? (
+        {isLoading || !currentItems[currentItemsGroup] ? (
           <Loading />
         ) : (
-          items.map((item) => <ThreadItem {...item} halfSize={items.length > 1} />)
+          currentItems[currentItemsGroup].map((item) => (
+            <ThreadItem {...item} halfSize={currentItems[currentItemsGroup].length > 1} />
+          ))
         )}
       </ThreadBrowserItems>
     </ThreadBrowserStyles>
