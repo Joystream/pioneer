@@ -3,11 +3,11 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { asArray, repeat } from '@/common/utils'
+import { asStorybookModerator, asStorybookPost, asStorybookThread } from '@/forum/helpers/storybook'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { RawForumCategoryMock } from '@/mocks/data/seedForum'
 
 import { CategoryListItem } from './CategoryListItem'
-import { asStorybookModerator, asStorybookPost, asStorybookThread } from './storybook-helpers'
 
 export default {
   title: 'Forum/Categories/CategoryListItem',

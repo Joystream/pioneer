@@ -67,6 +67,7 @@ export type ForumThreadFieldsFragment = {
   categoryId: string
   title: string
   authorId: string
+  createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
 }
 
 export type ForumPostFieldsFragment = {
@@ -87,10 +88,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
   >
 }
 
-export type ForumThreadDetailedFieldsFragment = {
-  __typename: 'ForumThread'
-  createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
-} & ForumThreadFieldsFragment
+export type ForumThreadDetailedFieldsFragment = { __typename: 'ForumThread' } & ForumThreadFieldsFragment
 
 export type ForumPostParentsFragment = {
   __typename: 'ForumPost'
@@ -307,16 +305,16 @@ export const ForumThreadFieldsFragmentDoc = gql`
     categoryId
     title
     authorId
-  }
-`
-export const ForumThreadDetailedFieldsFragmentDoc = gql`
-  fragment ForumThreadDetailedFields on ForumThread {
-    ...ForumThreadFields
     createdInEvent {
       createdAt
       inBlock
       network
     }
+  }
+`
+export const ForumThreadDetailedFieldsFragmentDoc = gql`
+  fragment ForumThreadDetailedFields on ForumThread {
+    ...ForumThreadFields
   }
   ${ForumThreadFieldsFragmentDoc}
 `

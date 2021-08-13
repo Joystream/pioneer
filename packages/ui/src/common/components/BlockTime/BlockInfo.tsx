@@ -28,9 +28,9 @@ export const BlockInfoContainer = styled.span`
   height: fit-content;
   color: ${Colors.Black[400]};
 `
-export const BlockNetworkInfo = styled(TextSmall)`
-  color: ${Colors.Black[400]};
-`
+
+export const BlockNetworkInfo = styled(TextSmall).attrs({ lighter: true })``
+
 const BlockNumber = styled.span`
   text-decoration: underline;
   text-underline-offset: 2px;

@@ -5,6 +5,7 @@ import { Colors, Fonts } from '../../constants'
 interface TextProps {
   bold?: boolean
   italic?: boolean
+  underline?: boolean
   lighter?: boolean
   light?: boolean
   dark?: boolean
@@ -25,6 +26,10 @@ const TextBoldStyle = css`
 
 const TextItalicStyle = css`
   font-style: italic;
+`
+
+const TextUnderlineStyle = css`
+  text-decoration: underline;
 `
 
 const TextDarkStyle = css`
@@ -66,6 +71,7 @@ const TextMargins = css<TextProps>`
 const TextAllStyles = css<TextProps>`
   ${({ bold }) => bold && TextBoldStyle};
   ${({ italic }) => italic && TextItalicStyle};
+  ${({ underline }) => underline && TextUnderlineStyle};
   ${({ dark }) => dark && TextDarkStyle};
   ${({ black }) => black && TextBlackStyle};
   ${({ lighter }) => lighter && TextLighterStyle};

@@ -185,7 +185,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
   )
 }
 
-const SelectContainer = styled.label<SimpleSelectSizingProps>`
+export const SelectContainer = styled.label<SimpleSelectSizingProps>`
   display: grid;
   width: 100%;
   ${EmptyOption} {

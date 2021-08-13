@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
-import { spacing } from '@/common/utils/styles'
 import { ThreadItem, ThreadItemWrapper } from '@/forum/components/threads/ThreadItem'
 import { useForumSuggestedThreads } from '@/forum/hooks/useForumSuggestedThreads'
 
@@ -19,7 +18,14 @@ export const SuggestedThreads = () => {
     return (
       <ThreadsList>
         {threads.map((thread) => (
-          <ThreadItem key={thread.id} content="Lorem ipsum..." date={new Date().toString()} title={thread.title} />
+          <ThreadItem
+            key={thread.id}
+            answers={[{ answer: 'Text' }]}
+            badges={[{ badge: 'Text' }]}
+            content="Paragraph Medium. Will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and compreh..."
+            date={new Date().toString()}
+            title={thread.title}
+          />
         ))}
       </ThreadsList>
     )
@@ -39,10 +45,14 @@ export const ThreadsList = styled.div`
 `
 
 export const SuggestedThreadsWrapper = styled(ContentWithTabs)`
-  margin-top: ${spacing(3)};
+  margin-top: 12px;
 
   ${ThreadItemWrapper} {
-    padding: 0;
-    border: 0;
+    &:before {
+      content: unset;
+    }
+    &:first-child {
+      padding-top: 0;
+    }
   }
 `
