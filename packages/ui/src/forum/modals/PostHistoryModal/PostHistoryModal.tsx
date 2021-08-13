@@ -34,28 +34,24 @@ export const PostHistoryModal = React.memo(() => {
     return index > activeEdit ? 'next' : 'past'
   }
 
-  const displayEdits = () => {
-    if (isLoading) {
-      return <Loading text="Loading versions..." />
-    }
-
-    return (
-      <>
-        <Stepper
-          steps={
-            edits?.map((edit, index) => ({ title: formatDateString(edit.createdAt), type: getStepType(index) })) ?? []
-          }
-        />
-        <StepperBody>
+  const displayEdits = () => (
+    <>
+      <Stepper
+        steps={
+          edits?.map((edit, index) => ({ title: formatDateString(edit.createdAt), type: getStepType(index) })) ?? []
+        }
+      />
+      <StepperBody>
+        {isLoading ? <Loading text="Loading versions..." /> :
           <RowGapBlock gap={32}>
             {edits?.map((edit) => (
               <HistoryPost edit={edit} author={author} />
             ))}
           </RowGapBlock>
-        </StepperBody>
-      </>
-    )
-  }
+        }
+      </StepperBody>
+    </>
+  )
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
