@@ -10,11 +10,11 @@ import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
-import { RouterLink } from '@/common/components/RouterLink'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { ForumCategoryList } from '@/forum/components/category'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
+import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
@@ -52,7 +52,7 @@ export const ForumCategory = () => {
         </PageHeaderWrapper>
       }
       main={
-        <RowGapBlock gap={16}>
+        <div>
           <RowGapBlock gap={24}>
             <ItemCount count={category.subcategories.length}>Categories</ItemCount>
 
@@ -62,23 +62,16 @@ export const ForumCategory = () => {
           {isLoadingThreads ? (
             <Loading />
           ) : (
-            <RowGapBlock>
+            <RowGapBlock gap={24}>
               <ThreadFilters onApply={() => undefined}>
                 <ItemCount count={threads.length} size="xs">
                   Threads
                 </ItemCount>
               </ThreadFilters>
-              {threads.length > 0 &&
-                threads.map((thread) => (
-                  <div key={thread.id}>
-                    <RouterLink to={'/forum/thread/' + thread.id}>
-                      {thread.id} | {thread.isSticky ? '📌' : ''} {thread.title}
-                    </RouterLink>
-                  </div>
-                ))}
+              {threads.length > 0 && <ThreadList threads={threads} onSort={() => undefined} />}
             </RowGapBlock>
           )}
-        </RowGapBlock>
+        </div>
       }
     />
   )
