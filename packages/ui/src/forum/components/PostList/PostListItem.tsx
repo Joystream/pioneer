@@ -3,11 +3,17 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
+import {
+  ButtonGhost,
+  ButtonsGroup,
+  ButtonInnerWrapper,
+  ButtonLink,
+  CopyButtonTemplate,
+} from '@/common/components/buttons'
 import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { Badge, TextInlineSmall } from '@/common/components/typography'
-import { Colors, Transitions } from '@/common/constants'
+import { Badge } from '@/common/components/typography'
+import { Colors, Fonts, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
@@ -127,12 +133,18 @@ const ReplyBadge = styled.div`
   }
 `
 
-const EditionTime = styled(TextInlineSmall).attrs({ lighter: true, italic: true })`
-  float: right;
-  cursor: pointer;
+const EditionTime = styled(ButtonLink).attrs({ size: 'small', borderless: true })`
+  display: inline-flex;
+  padding-right: 1px;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 400;
+  font-style: italic;
+  font-family: ${Fonts.Inter};
+  color: ${Colors.Black[400]};
 
-  &:hover {
-    text-decoration: underline;
+  ${ButtonInnerWrapper} {
+    transform: translateY(0);
   }
 `
 
