@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { TextSmall } from '@/common/components/typography'
-import { spacing } from '@/common/utils/styles'
 
 import { BorderRad, Colors, Shadows } from '../../constants'
 import { ColumnGapBlock } from '../page/PageContent'
@@ -78,21 +77,21 @@ export const StatisticLabel = styled(TextSmall)`
 export const TwoColumnsStatistic = styled.div`
   display: grid;
   grid-template-columns: auto auto;
-  grid-column-gap: ${spacing(2)};
+  grid-column-gap: 16px;
   height: 100%;
 `
 
 export const TwoRowStatistic = styled(StatsBlock)`
   grid-template-rows: auto auto;
   height: auto;
-  padding: ${spacing(2)};
+  padding: 16px;
 
   ${StatsContent} {
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
     & + * {
-      margin-top: ${spacing(2)};
+      margin-top: 16px;
     }
   }
 `

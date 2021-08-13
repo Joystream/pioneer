@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { CrossIcon } from '@/common/components/icons'
 import { Colors, Fonts } from '@/common/constants'
 import { isDefined } from '@/common/utils'
-import { spacing } from '@/common/utils/styles'
 
 import { ButtonInnerWrapper, ButtonLink } from '../../buttons'
 import { RowGapBlock } from '../../page/PageContent'
@@ -46,7 +45,7 @@ export const FilterBox = ({
 
 const FilterContainer = styled(RowGapBlock)`
   position: relative;
-  margin-top: ${spacing(2)};
+  margin-top: 16px;
 `
 
 const ClearButton = styled(ButtonLink)`

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import { BorderRad, Colors } from '@/common/constants'
-import { spacing } from '@/common/utils/styles'
 
 export const ratioControl = { control: { type: 'range', min: 0, max: 1, step: 0.01 } }
 export const percentageControl = { control: { type: 'range', min: 0, max: 100 } }
@@ -69,6 +68,6 @@ export const ModalGlassBlock = styled(WhiteBlock)`
 `
 
 export const SideBar = styled(TemplateBlock)`
-  padding: ${spacing(3)};
+  padding: 24px;
   width: 304px;
 `

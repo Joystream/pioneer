@@ -17,7 +17,6 @@ import { Label, TextInlineMedium, TextMedium } from '@/common/components/typogra
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { formatBlocksToDuration, formatTokenValue } from '@/common/model/formatters'
-import { spacing } from '@/common/utils/styles'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
@@ -153,5 +152,5 @@ export const ProposalPreview = () => {
   )
 }
 const BadgeAndTime = styled(BadgesRow)`
-  gap: ${spacing(2)};
+  gap: 16px;
 `

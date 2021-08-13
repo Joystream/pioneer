@@ -6,7 +6,6 @@ import { Fields, FilterBox } from '@/common/components/forms/FilterBox'
 import { FilterTextSelect, SelectContainer } from '@/common/components/selects'
 import { PartialDateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
-import { spacing } from '@/common/utils/styles'
 import { SmallMemberSelect } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
@@ -62,7 +61,7 @@ const ThreadFiltersBox = styled(FilterBox)`
   ${Fields} {
     display: flex;
     align-items: center;
-    gap: ${spacing(1)};
+    gap: 8px;
   }
 
   ${SelectContainer} {

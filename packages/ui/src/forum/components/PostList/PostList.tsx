@@ -5,7 +5,6 @@ import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { BorderRad, Colors, Shadows } from '@/common/constants'
-import { spacing } from '@/common/utils/styles'
 import { PostListItem } from '@/forum/components/PostList/PostListItem'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 
@@ -48,5 +47,5 @@ export const PostBlock = styled.div`
   border-radius: ${BorderRad.m};
   background-color: ${Colors.White};
   box-shadow: ${Shadows.light};
-  padding: ${spacing(3)};
+  padding: 24px;
 `

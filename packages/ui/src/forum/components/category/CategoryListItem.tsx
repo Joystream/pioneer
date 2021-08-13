@@ -5,7 +5,6 @@ import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
-import { spacing } from '@/common/utils/styles'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
 import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
@@ -43,7 +42,7 @@ export interface CategoryItemFieldProps {
 const CategoryListItemStyles = styled(TableListItem).attrs({ $colLayout: CategoriesColLayout })`
   align-items: start;
   height: 128px;
-  padding: 14px ${spacing(3)};
+  padding: 14px 24px;
   transition: ${Transitions.all};
 
   &:hover,
@@ -53,7 +52,7 @@ const CategoryListItemStyles = styled(TableListItem).attrs({ $colLayout: Categor
   }
 
   & > * {
-    margin-top: ${spacing(1)};
+    margin-top: 8px;
   }
 `
 
@@ -61,7 +60,7 @@ const Category = styled.div`
   margin: 0;
   ${TextMedium} {
     color: ${Colors.Black[500]};
-    margin: ${spacing(5 / 4)} 0 ${spacing(5 / 8)};
+    margin: 12px 0 4px;
     ${Overflow.DotsTwoLine};
   }
   ${TextInlineExtraSmall} {

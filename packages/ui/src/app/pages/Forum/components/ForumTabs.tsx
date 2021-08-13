@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { usePageTabs } from '@/app/hooks/usePageTabs'
 import { Tabs } from '@/common/components/Tabs'
-import { spacing } from '@/common/utils/styles'
 import { ForumRoutes } from '@/forum/constant'
 
 export const ForumTabs = () => {
@@ -32,5 +31,5 @@ export const ForumForumTabs = ({ categoryCount }: ForumForumTabsProps) => {
 }
 
 const ForumForumTabsStyles = styled(Tabs)`
-  margin-top: ${spacing(1)};
+  margin-top: 8px;
 `

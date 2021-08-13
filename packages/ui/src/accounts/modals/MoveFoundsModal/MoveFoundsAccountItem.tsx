@@ -11,7 +11,6 @@ import { TokenValue, TextSmall, TextMedium } from '@/common/components/typograph
 import { Colors } from '@/common/constants/styles'
 import { useModal } from '@/common/hooks/useModal'
 import { useToggle } from '@/common/hooks/useToggle'
-import { spacing } from '@/common/utils/styles'
 
 import { MoveFundsModalCall } from '.'
 
@@ -76,7 +75,7 @@ export const MoveFoundsAccountItem = memo(({ account, balances }: Props) => {
 const DropDownToggleStyled = styled(DropDownToggle)`
   border: 1px solid ${Colors.Black[200]};
   background-color: ${Colors.Black[50]};
-  padding: ${spacing(2)};
+  padding: 16px;
 `
 
 const Divider = styled.hr`
@@ -123,12 +122,12 @@ const LockedFoundsDropDownButton = styled(DropDownButton)`
 `
 
 const VotingSymbolStyled = styled(VotingSymbol)`
-  margin-top: ${spacing(1)};
+  margin-top: 8px;
   margin-left: auto;
   display: block;
 `
 
 const LockSymbolStyled = styled(LockSymbol)`
   transform: translateY(3px);
-  margin-right: ${spacing(0.5)};
+  margin-right: 4px;
 `

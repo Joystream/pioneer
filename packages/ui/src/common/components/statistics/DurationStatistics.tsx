@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { AN_HOUR, A_DAY, A_MINUTE, A_WEEK, Colors, Fonts } from '@/common/constants'
 import { splitDuration } from '@/common/model/formatters'
 import { intersperse } from '@/common/utils'
-import { spacing } from '@/common/utils/styles'
 
 import { StatisticItem, StatisticItemProps } from './StatisticItem'
 
@@ -68,5 +67,5 @@ const Unit = styled.span`
 
 const Separator = styled((props) => <span {...props}>:</span>)`
   display: inline-block;
-  margin: ${spacing(1)};
+  margin: 8px;
 `

@@ -5,7 +5,6 @@ import { Loading } from '@/common/components/Loading'
 import { TextInlineExtraSmall } from '@/common/components/typography'
 import { Overflow } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
-import { spacing } from '@/common/utils/styles'
 import { useCategoryLatestPost } from '@/forum/hooks/useCategoryLatestPost'
 import { MemberInfo } from '@/memberships/components'
 
@@ -30,13 +29,13 @@ export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
 
 const PostInfoStyles = styled.div`
   & > h6 {
-    margin-bottom: ${spacing(1)};
+    margin-bottom: 8px;
     ${Overflow.FullDots};
   }
   & > ${TextInlineExtraSmall}:nth-child(2) {
     display: flex;
     align-items: center;
-    gap: ${spacing(1)};
-    margin-bottom: ${spacing(3 / 2)};
+    gap: 8px;
+    margin-bottom: 12px;
   }
 `
