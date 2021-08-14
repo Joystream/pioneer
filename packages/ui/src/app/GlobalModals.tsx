@@ -5,7 +5,8 @@ import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModa
 import { useModal } from '@/common/hooks/useModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
-import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/DeletePostModal'
+import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
+import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
@@ -34,6 +35,7 @@ export type ModalNames =
   | ModalName<VoteRationaleModalCall>
   | ModalName<CreateThreadModalCall>
   | ModalName<DeletePostModalCall>
+  | ModalName<EditPostModalCall>
   | ModalName<PostHistoryModalCall>
 
 export const GlobalModals = () => {
@@ -68,6 +70,8 @@ export const GlobalModals = () => {
       return <CreateThreadModal />
     case 'DeletePost':
       return <DeletePostModal />
+    case 'EditPost':
+      return <EditPostModal />
     case 'PostHistory':
       return <PostHistoryModal />
     default:
