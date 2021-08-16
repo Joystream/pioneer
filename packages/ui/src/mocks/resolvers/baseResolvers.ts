@@ -150,18 +150,23 @@ export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
     // We don't have filtering yet so simple where is sufficient
     let records = getRecords(nodeType, {}, context.mirageSchema)
 
-    if (args.orderBy) {
-      const [field, order] = args.orderBy.split('_')
-
-      if (field in nodeType.getFields()) {
-        records.sort((a, b) => {
-          return a[field]?.toString().localeCompare(b[field]?.toString()) * (order === 'ASC' ? 1 : -1)
-        })
-      }
-    }
-
     if (args.where) {
       records = records.filter(getFilter(args.where))
+    }
+
+    if (args.orderBy) {
+      const fields = Array.isArray(args.orderBy) ? args.orderBy : [args.orderBy]
+      const sortBy = ([field, ...fields]: string[]): ((a: any, b: any) => number) => {
+        if (!field) return () => 0
+
+        const [key, type] = field.split('_')
+        const nextSort = sortBy(fields)
+        const direction = type === 'ASC' ? 1 : -1
+        return key in nodeType.getFields()
+          ? (a, b) => a[key]?.toString().localeCompare(b[key]?.toString()) * direction || nextSort(a, b)
+          : nextSort
+      }
+      records.sort(sortBy(fields))
     }
 
     const edges = (getEdges(records, relayArgs, nodeType.name) as unknown) as D[]

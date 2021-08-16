@@ -14,7 +14,7 @@ export interface ThreadFiltersState {
   author: Member | null
   date: PartialDateRange
 }
-const ThreadEmptyFilters: ThreadFiltersState = { tag: null, author: null, date: undefined }
+export const ThreadEmptyFilters: ThreadFiltersState = { tag: null, author: null, date: undefined }
 const isFilterEmpty = objectEquals(ThreadEmptyFilters)
 
 interface ThreadFiltersProps {
