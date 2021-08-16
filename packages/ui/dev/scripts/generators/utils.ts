@@ -4,6 +4,8 @@ import { Reducer } from '../../../src/common/types/helpers'
 import { repeat } from '../../../src/common/utils'
 import members from '../../../src/mocks/data/raw/members.json'
 
+export { repeat }
+
 export const randomFromRange = (min: number, max: number) => {
   return parseInt((Math.random() * (max - min) + min).toFixed())
 }
