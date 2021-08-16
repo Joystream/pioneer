@@ -23,6 +23,7 @@ export interface RawForumThreadMock {
   title: string
   createdInEvent: BlockFieldsMock
   authorId: string
+  status: string
 }
 
 interface PostEdit extends BlockFieldsMock {

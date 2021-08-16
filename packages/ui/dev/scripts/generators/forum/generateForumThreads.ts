@@ -2,7 +2,13 @@ import faker from 'faker'
 
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
-import { randomBlock, randomFromRange, randomMember } from '../utils'
+import { randomBlock, randomFromRange, randomFromWeightedSet, randomMember } from '../utils'
+
+type ThreadStatus =
+  'ThreadStatusActive'
+  | 'ThreadStatusLocked'
+  | 'ThreadStatusModerated'
+  | 'ThreadStatusRemoved'
 
 let nextThreadId = 0
 let nextPostId = 0
@@ -28,6 +34,13 @@ export const generateForumPost = (threadId: string, authorId: string, repliesToI
   }
 }
 
+const randomThreadStatus = randomFromWeightedSet<ThreadStatus>(
+  [7, 'ThreadStatusActive'],
+  [1, 'ThreadStatusLocked'],
+  [1, 'ThreadStatusModerated'],
+  [1, 'ThreadStatusRemoved'],
+)
+
 export const generateForumThreads = (
   forumCategories: Pick<RawForumCategoryMock, 'id'>[]
 ): {
@@ -45,6 +58,7 @@ export const generateForumThreads = (
         createdInEvent: {
           ...randomBlock(),
         },
+        status: randomThreadStatus()
       }))
     })
     .flatMap((a) => a)
