@@ -14,7 +14,7 @@ export const useForumCategoryThreads = (categoryId: string, { order, filters }: 
   const { loading, data } = useGetPaginatedForumThreadsQuery({
     variables: {
       where: { category: { id_eq: categoryId }, ...where(filters) },
-      orderBy: [ForumThreadOrderByInput.IsStickyAsc, orderBy(order)],
+      orderBy: [ForumThreadOrderByInput.IsStickyDesc, orderBy(order)],
       first: 30,
     },
   })

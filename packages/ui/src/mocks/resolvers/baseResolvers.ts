@@ -159,11 +159,11 @@ export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
       const sortBy = ([field, ...fields]: string[]): ((a: any, b: any) => number) => {
         if (!field) return () => 0
 
-        const [key, direction] = field.split('_')
+        const [key, type] = field.split('_')
         const nextSort = sortBy(fields)
+        const direction = type === 'ASC' ? 1 : -1
         return key in nodeType.getFields()
-          ? (a: any, b: any) =>
-              a[key]?.toString().localeCompare(b[key]?.toString()) * (direction === 'ASC' ? 1 : -1) || nextSort(a, b)
+          ? (a, b) => a[key]?.toString().localeCompare(b[key]?.toString()) * direction || nextSort(a, b)
           : nextSort
       }
       records.sort(sortBy(fields))
