@@ -52,7 +52,7 @@ export const ForumCategory = () => {
         </PageHeaderWrapper>
       }
       main={
-        <div>
+        <>
           <RowGapBlock gap={24}>
             <ItemCount count={category.subcategories.length}>Categories</ItemCount>
 
@@ -71,7 +71,7 @@ export const ForumCategory = () => {
               {threads.length > 0 && <ThreadList threads={threads} onSort={() => undefined} />}
             </RowGapBlock>
           )}
-        </div>
+        </>
       }
     />
   )
