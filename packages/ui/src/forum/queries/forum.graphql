@@ -68,6 +68,9 @@ fragment ForumThreadFields on ForumThread {
     inBlock
     network
   }
+  status {
+    __typename
+  }
 }
 
 fragment ForumPostFields on ForumPost {
@@ -148,8 +151,8 @@ query GetForumThread($where: ForumThreadWhereUniqueInput!) {
   }
 }
 
-query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
-  forumPosts(where: $where, offset: $offset, limit: $limit, orderBy: [createdAt_ASC]) {
+query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int, $orderBy: [ForumPostOrderByInput!]) {
+  forumPosts(where: $where, offset: $offset, limit: $limit, orderBy: $orderBy) {
     ...ForumPostFields
   }
 }
