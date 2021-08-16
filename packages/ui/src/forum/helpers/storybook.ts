@@ -5,6 +5,8 @@ import { ForumModerator } from '@/forum/types'
 import { RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
+import { ForumThreadFieldsFragment } from '../queries'
+
 export const asStorybookModerator = (hasAvatar = false) => {
   return (index: number): ForumModerator => ({
     id: String(index),
@@ -29,7 +31,9 @@ export const asStorybookPost = (text: string, threadId?: string): RawForumPostMo
     }
 }
 
-export type ThreadData = RawForumThreadMock & { createdInEvent: { network: Network } }
+type ThreadStatus = ForumThreadFieldsFragment['status']['__typename']
+export type ThreadData = Omit<RawForumThreadMock, 'status'> &
+  Omit<ForumThreadFieldsFragment, 'status'> & { status: ThreadStatus }
 
 export const asStorybookThread = (title: string, categoryId?: string): RawForumThreadMock | undefined => {
   if (title && categoryId)

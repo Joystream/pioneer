@@ -11,6 +11,7 @@ export interface ForumThread {
   categoryId: string
   tags: ForumThreadTag[]
   visiblePostsCount: number
+  status: string
 }
 
 export interface ForumThreadTag {
@@ -24,7 +25,7 @@ export interface ForumThreadWithDetails extends ForumThread {
   createdInBlock: Block
 }
 
-export const asForumThread = (fields: DataFields<ForumThreadFieldsFragment>): ForumThread => ({
+export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread => ({
   id: fields.id,
   title: fields.title,
   createdInBlock: asBlock(fields.createdInEvent),
@@ -33,6 +34,7 @@ export const asForumThread = (fields: DataFields<ForumThreadFieldsFragment>): Fo
   categoryId: fields.categoryId,
   tags: [],
   visiblePostsCount: 10,
+  status: fields.status.__typename,
 })
 
 export const asForumThreadWithDetails = (fields: ForumThreadDetailedFieldsFragment): ForumThreadWithDetails => ({

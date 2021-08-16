@@ -25,7 +25,7 @@ interface Props {
 const Template: Story<Props> = ({ tags, rawThread }) => {
   const forum = { categories: [category], threads: [rawThread], posts: asArray(asStorybookPost('foo', rawThread.id)) }
   const thread = {
-    ...asForumThread(rawThread),
+    ...asForumThread({ ...rawThread, status: { __typename: rawThread.status } }),
     tags: tags.map((title, index) => ({ id: String(index), title, threads: [], visibleThreadsCount: 0 })),
   }
 
@@ -51,7 +51,9 @@ Default.args = {
       inBlock: 3385,
       createdAt: '2021-02-28T06:20:01.605Z',
       network: 'OLYMPIA' as Network,
+      __typename: 'ThreadCreatedEvent',
     },
     status: 'ThreadStatusActive',
+    __typename: 'ForumThread',
   },
 }
