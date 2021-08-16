@@ -13,6 +13,7 @@
     "lint:prettier": "yarn prettier './{src,test}/**/*.{ts,tsx,html}'",
     "start": "NODE_OPTIONS=--max_old_space_size=8192 webpack serve --mode development --progress",
     "test": "jest",
+    "ci-test": "NODE_OPTIONS=--max_old_space_size=7000 jest --silent",
     "storybook": "start-storybook -p 6006 -s public --no-manager-cache",
     "build:storybook": "build-storybook -o build-storybook",
     "generate-mocks": "ts-node dev/scripts/generateMocks.ts",
