@@ -58,7 +58,7 @@ export const ForumCategory = () => {
         </PageHeaderWrapper>
       }
       main={
-        <div>
+        <>
           <RowGapBlock gap={24}>
             <ItemCount count={category.subcategories.length}>Categories</ItemCount>
 
@@ -78,7 +78,7 @@ export const ForumCategory = () => {
               isLoading={isLoadingThreads}
             />
           </RowGapBlock>
-        </div>
+        </>
       }
     />
   )
