@@ -52,5 +52,6 @@ Default.args = {
       createdAt: '2021-02-28T06:20:01.605Z',
       network: 'OLYMPIA' as Network,
     },
+    status: 'ThreadStatusActive',
   },
 }

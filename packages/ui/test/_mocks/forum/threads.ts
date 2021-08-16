@@ -12,5 +12,6 @@ export const mockThreads: RawForumThreadMock[] = [
       createdAt: '2021-05-06T11:24:13.944Z',
       network: 'OLYMPIA',
     },
+    status: 'ThreadStatusActive',
   },
 ]

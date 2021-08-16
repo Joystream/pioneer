@@ -40,5 +40,6 @@ export const asStorybookThread = (title: string, categoryId?: string): RawForumT
       title,
       authorId: '0',
       createdInEvent: randomRawBlock(),
+      status: 'ThreadStatusActive',
     }
 }

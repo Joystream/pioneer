@@ -53,10 +53,13 @@ export const seedForumCategories = (server: any) => {
 const seedThreadCreatedInEvent = (event: { inBlock: number }, server: any) =>
   server.schema.create('ThreadCreatedEvent', event)
 
+const seedThreadStatus = (statusText: string, server: any) => server.schema.create(statusText)
+
 export function seedForumThread(data: RawForumThreadMock, server: any) {
   return server.schema.create('ForumThread', {
     ...data,
     createdInEvent: seedThreadCreatedInEvent(data.createdInEvent, server),
+    status: seedThreadStatus(data.status, server),
   })
 }
 
