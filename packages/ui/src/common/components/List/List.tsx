@@ -35,3 +35,12 @@ export const TableListItem = styled(ListItem)`
   height: 92px;
   ${(props: { $colLayout?: string }) => TableListRowStyle(props.$colLayout)}
 `
+
+export const TableListItemAsLinkHover = css`
+  &:hover,
+  &:focus,
+  &:focus-within {
+    z-index: 1;
+    border-color: ${Colors.Blue[100]};
+  }
+`

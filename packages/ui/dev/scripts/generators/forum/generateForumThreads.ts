@@ -2,7 +2,7 @@ import faker from 'faker'
 
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
-import { randomBlock, randomFromRange, randomFromWeightedSet, randomMember } from '../utils'
+import { randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
 
 type ThreadStatus =
   'ThreadStatusActive'
@@ -47,21 +47,22 @@ export const generateForumThreads = (
   forumThreads: RawForumThreadMock[]
   forumPosts: RawForumPostMock[]
 } => {
-  const forumThreads = forumCategories
-    .map(({ id }) => {
-      return [...new Array(randomFromRange(3, 10))].map(() => ({
+  const forumThreads = forumCategories.flatMap(({ id }) =>
+    repeat(() => {
+      const createdInEvent = randomBlock()
+      return {
         id: String(nextThreadId++),
+        createdAt: createdInEvent.createdAt,
+        ...(Math.random() > 0.3 ? { updatedAt: faker.date.between(createdInEvent.createdAt, new Date()) } : {}),
         categoryId: id,
         isSticky: !(nextThreadId % 5),
         title: faker.lorem.words(randomFromRange(4, 8)),
         authorId: randomMember().id,
-        createdInEvent: {
-          ...randomBlock(),
-        },
-        status: randomThreadStatus()
-      }))
-    })
-    .flatMap((a) => a)
+        status: randomThreadStatus(),
+        createdInEvent,
+      }
+    }, randomFromRange(3, 10))
+  )
 
   const forumPosts = forumThreads
     .map(({ id, authorId }: RawForumThreadMock) => {

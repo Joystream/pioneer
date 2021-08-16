@@ -133,6 +133,17 @@ query GetForumThreads($where: ForumThreadWhereInput!, $orderBy: [ForumThreadOrde
   }
 }
 
+query GetPaginatedForumThreads($where: ForumThreadWhereInput!, $orderBy: [ForumThreadOrderByInput!], $first: Int) {
+  forumThreadsConnection(where: $where, orderBy: $orderBy, first: $first) {
+    totalCount
+    edges {
+      node {
+        ...ForumThreadFields
+      }
+    }
+  }
+}
+
 query GetForumThreadsCount($where: ForumThreadWhereInput) {
   forumThreadsConnection(where: $where) {
     totalCount
@@ -151,14 +162,14 @@ query GetForumThread($where: ForumThreadWhereUniqueInput!) {
   }
 }
 
-query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int, $orderBy: [ForumPostOrderByInput!]) {
-  forumPosts(where: $where, offset: $offset, limit: $limit, orderBy: $orderBy) {
+query GetForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $offset: Int, $limit: Int) {
+  forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...ForumPostFields
   }
 }
 
 query GetForumPostEdits($id: ID!) {
-  edits: postTextUpdatedEvents(where: {post: {id_eq: $id}}) {
+  edits: postTextUpdatedEvents(where: { post: { id_eq: $id } }) {
     newText
     network
     createdAt

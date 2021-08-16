@@ -16,6 +16,7 @@
     "build:storybook": "wsrun --fast-exit --stages -c --exlude ui build && wsrun --package ui -c build:storybook",
     "storybook": "wsrun --package ui -c storybook",
     "test": "wsrun --fast-exit --package ui -c test",
+    "ci-test": "NODE_OPTIONS=--max_old_space_size=7000 wsrun --fast-exit --package ui -c test",
     "start": "wsrun --package ui -c start"
   },
   "dependencies": {

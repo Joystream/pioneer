@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { ThreadsColLayout } from '@/forum/constant'
@@ -10,22 +11,24 @@ import { ForumThread } from '@/forum/types'
 
 import { ThreadListItem } from './ThreadListItem'
 
-type ThreadOrderKey = 'title' | 'visiblePostsCount' | 'votes' | 'activity' | 'author' | 'created'
+type ThreadOrderKey = 'CreatedAt' | 'UpdatedAt' | 'Author' | 'Title'
 export interface ThreadOrder {
   key: ThreadOrderKey
-  isDescending: boolean
+  isDescending?: boolean
 }
+export const ThreadDefaultOrder: ThreadOrder = { key: 'UpdatedAt' }
 
 interface ThreadListProps {
   threads: ForumThread[]
   onSort: (order: ThreadOrder) => void
+  isLoading?: boolean
 }
-export const ThreadList = ({ threads, onSort }: ThreadListProps) => {
-  const [order, setOrder] = useState<ThreadOrder | null>(null)
+export const ThreadList = ({ threads, onSort, isLoading }: ThreadListProps) => {
+  const [order, setOrder] = useState(ThreadDefaultOrder)
 
   const sort = useCallback(
     (key: ThreadOrderKey) => {
-      const next: ThreadOrder = { key, isDescending: order?.key === key && !order?.isDescending }
+      const next: ThreadOrder = { key, isDescending: order.key === key && !order.isDescending }
       setOrder(next)
       onSort?.(next)
     },
@@ -38,29 +41,35 @@ export const ThreadList = ({ threads, onSort }: ThreadListProps) => {
         <ListHeader onClick={() => sort(value)}>
           <HeaderText>
             {children}
-            {order?.key === value && (order?.isDescending ? <SortIconDown /> : <SortIconUp />)}
+            {order.key === value && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
           </HeaderText>
         </ListHeader>
       )),
     [order, sort]
   )
 
+  if (threads.length <= 0 && !isLoading) return null
+
   return (
     <ThreadListStyles gap={4}>
       <ListHeaders $colLayout={ThreadsColLayout}>
-        <SortHeader value="title">Threads</SortHeader>
-        <SortHeader value="visiblePostsCount">Replies</SortHeader>
-        <SortHeader value="votes">Votes</SortHeader>
-        <SortHeader value="activity">Last Activity</SortHeader>
-        <SortHeader value="author">Author</SortHeader>
-        <SortHeader value="created">Created</SortHeader>
+        <SortHeader value="Title">Threads</SortHeader>
+        <ListHeader>Replies</ListHeader>
+        <ListHeader>Votes</ListHeader>
+        <SortHeader value="UpdatedAt">Last Activity</SortHeader>
+        <SortHeader value="Author">Author</SortHeader>
+        <SortHeader value="CreatedAt">Created</SortHeader>
       </ListHeaders>
 
-      <List as="div">
-        {threads.map((thread, index) => (
-          <ThreadListItem key={index} thread={thread} />
-        ))}
-      </List>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <List as="div">
+          {threads.map((thread, index) => (
+            <ThreadListItem key={index} thread={thread} />
+          ))}
+        </List>
+      )}
     </ThreadListStyles>
   )
 }

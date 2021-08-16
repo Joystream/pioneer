@@ -2,12 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
-import { TableListItem } from '@/common/components/List'
+import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextBig, TextMedium } from '@/common/components/typography'
-import { Colors, Overflow, Transitions } from '@/common/constants'
-import { ThreadsColLayout, ForumRoutes } from '@/forum/constant'
+import { Overflow } from '@/common/constants'
+import { ForumRoutes, ThreadsColLayout } from '@/forum/constant'
 import { useThreadPollVoteCount } from '@/forum/hooks/useThreadPollVoteCount'
 import { ForumThread } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
@@ -44,15 +44,10 @@ export const ThreadListItem = ({ thread }: ThreadListItemProps) => {
 }
 
 const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsColLayout })`
-  height: 98px;
-  padding: 14px 24px;
-  transition: ${Transitions.all};
+  height: 80px;
+  padding: 12px 24px;
 
-  &:hover,
-  &:focus,
-  &:focus-within {
-    border-color: ${Colors.Blue[100]};
-  }
+  ${TableListItemAsLinkHover};
 `
 
 const Thread = styled.div`

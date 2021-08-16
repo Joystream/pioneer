@@ -3,8 +3,7 @@ import React, { useMemo } from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { Loading } from '@/common/components/Loading'
-import { ThreadData } from '@/forum/helpers/storybook'
-import { asForumThread, ForumThread, ForumThreadWithDetails } from '@/forum/types'
+import { ForumThreadWithDetails } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 

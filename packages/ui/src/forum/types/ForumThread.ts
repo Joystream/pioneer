@@ -1,5 +1,4 @@
 import { asBlock, Block } from '@/common/types'
-import { DataFields } from '@/common/types/helpers'
 import { ForumThreadDetailedFieldsFragment, ForumThreadFieldsFragment } from '@/forum/queries'
 
 export interface ForumThread {
