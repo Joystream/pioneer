@@ -11,6 +11,7 @@ export interface ThreadsOptions {
   filters: ThreadFiltersState
   order: ThreadOrder
   categoryId?: string
+  isArchived?: boolean
 }
 
 const threadOptionReducer: Reducer<ThreadsOptions, Partial<ThreadsOptions>> = merge
