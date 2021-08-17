@@ -1,7 +1,7 @@
 import faker from 'faker'
 
-import { ForumModerator, ThreadStatus } from '@/forum/types'
-import { RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
+import { CategoryStatus, ForumModerator, ThreadStatus } from '@/forum/types'
+import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
 import { ForumThreadFieldsFragment } from '../queries'
@@ -45,3 +45,5 @@ export const asStorybookThread = (title: string, categoryId?: string): RawForumT
       status: 'ThreadStatusActive',
     }
 }
+
+export type CategoryData = RawForumCategoryMock & { status: CategoryStatus }

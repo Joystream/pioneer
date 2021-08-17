@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { Network } from '@/common/api/queries'
 import { asArray } from '@/common/utils'
-import { asStorybookPost, ThreadData } from '@/forum/helpers/storybook'
+import { asStorybookPost, CategoryData, ThreadData } from '@/forum/helpers/storybook'
 import { asForumThread } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
@@ -16,7 +16,13 @@ export default {
 } as Meta
 
 const categoryId = 'ThreadListItem-category-story'
-const category = { id: categoryId, title: '', description: '', moderatorIds: [] }
+const category: CategoryData = {
+  id: categoryId,
+  title: '',
+  description: '',
+  moderatorIds: [],
+  status: 'CategoryStatusActive',
+}
 
 interface Props {
   tags: string[]
