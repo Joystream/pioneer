@@ -71,7 +71,9 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
 
   return (
     <MembersFilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
-      <FieldsHeader>{memberCount && <ItemCount count={memberCount}>All members</ItemCount>}</FieldsHeader>
+      <FieldsHeader>
+        <ItemCount count={memberCount}>All members</ItemCount>
+      </FieldsHeader>
 
       <SelectMemberRoles
         value={roles}

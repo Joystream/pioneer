@@ -63,7 +63,7 @@ export const ForumCategory = () => {
 
           <RowGapBlock gap={24}>
             <ThreadFilters onApply={(filters) => refresh({ filters })}>
-              <ItemCount count={threadCount ?? 0} size="xs">
+              <ItemCount count={threadCount} size="xs">
                 Threads
               </ItemCount>
             </ThreadFilters>
