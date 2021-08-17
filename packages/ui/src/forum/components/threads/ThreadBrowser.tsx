@@ -56,7 +56,12 @@ export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
           <ButtonGhost size="small" square onClick={onPrevClick} disabled={currentItemsGroup - 1 < 0}>
             <Arrow direction="left" />
           </ButtonGhost>
-          <ButtonGhost size="small" square onClick={onNextClick} disabled={currentItemsGroup + 1 > items.length}>
+          <ButtonGhost
+            size="small"
+            square
+            onClick={onNextClick}
+            disabled={currentItemsGroup + 1 >= currentItems.length}
+          >
             <Arrow direction="right" />
           </ButtonGhost>
         </ButtonsGroup>
