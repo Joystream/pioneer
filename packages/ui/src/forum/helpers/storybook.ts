@@ -1,9 +1,10 @@
 import faker from 'faker'
 
-import { Network } from '@/common/api/queries'
-import { ForumModerator } from '@/forum/types'
+import { ForumModerator, ThreadStatus } from '@/forum/types'
 import { RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 import { randomRawBlock } from '@/mocks/helpers/randomBlock'
+
+import { ForumThreadFieldsFragment } from '../queries'
 
 export const asStorybookModerator = (hasAvatar = false) => {
   return (index: number): ForumModerator => ({
@@ -29,7 +30,8 @@ export const asStorybookPost = (text: string, threadId?: string): RawForumPostMo
     }
 }
 
-export type ThreadData = RawForumThreadMock & { createdInEvent: { network: Network } }
+export type ThreadData = Omit<RawForumThreadMock, 'status'> &
+  Omit<ForumThreadFieldsFragment, 'status'> & { status: ThreadStatus }
 
 export const asStorybookThread = (title: string, categoryId?: string): RawForumThreadMock | undefined => {
   if (title && categoryId)
@@ -40,5 +42,6 @@ export const asStorybookThread = (title: string, categoryId?: string): RawForumT
       title,
       authorId: '0',
       createdInEvent: randomRawBlock(),
+      status: 'ThreadStatusActive',
     }
 }

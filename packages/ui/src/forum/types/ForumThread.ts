@@ -1,6 +1,7 @@
 import { asBlock, Block } from '@/common/types'
-import { DataFields } from '@/common/types/helpers'
 import { ForumThreadDetailedFieldsFragment, ForumThreadFieldsFragment } from '@/forum/queries'
+
+export type ThreadStatus = ForumThreadFieldsFragment['status']['__typename']
 
 export interface ForumThread {
   id: string
@@ -11,6 +12,7 @@ export interface ForumThread {
   categoryId: string
   tags: ForumThreadTag[]
   visiblePostsCount: number
+  status: ThreadStatus
 }
 
 export interface ForumThreadTag {
@@ -24,7 +26,7 @@ export interface ForumThreadWithDetails extends ForumThread {
   createdInBlock: Block
 }
 
-export const asForumThread = (fields: DataFields<ForumThreadFieldsFragment>): ForumThread => ({
+export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread => ({
   id: fields.id,
   title: fields.title,
   createdInBlock: asBlock(fields.createdInEvent),
@@ -33,6 +35,7 @@ export const asForumThread = (fields: DataFields<ForumThreadFieldsFragment>): Fo
   categoryId: fields.categoryId,
   tags: [],
   visiblePostsCount: 10,
+  status: fields.status.__typename,
 })
 
 export const asForumThreadWithDetails = (fields: ForumThreadDetailedFieldsFragment): ForumThreadWithDetails => ({

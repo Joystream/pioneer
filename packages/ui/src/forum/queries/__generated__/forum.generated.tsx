@@ -68,6 +68,11 @@ export type ForumThreadFieldsFragment = {
   title: string
   authorId: string
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  status:
+    | { __typename: 'ThreadStatusActive' }
+    | { __typename: 'ThreadStatusLocked' }
+    | { __typename: 'ThreadStatusModerated' }
+    | { __typename: 'ThreadStatusRemoved' }
 }
 
 export type ForumPostFieldsFragment = {
@@ -175,9 +180,9 @@ export type GetForumThreadQuery = {
 
 export type GetForumPostsQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereInput
-  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
   offset?: Types.Maybe<Types.Scalars['Int']>
   limit?: Types.Maybe<Types.Scalars['Int']>
+  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
 }>
 
 export type GetForumPostsQuery = {
@@ -324,6 +329,9 @@ export const ForumThreadFieldsFragmentDoc = gql`
       createdAt
       inBlock
       network
+    }
+    status {
+      __typename
     }
   }
 `
@@ -709,8 +717,8 @@ export type GetForumThreadQueryHookResult = ReturnType<typeof useGetForumThreadQ
 export type GetForumThreadLazyQueryHookResult = ReturnType<typeof useGetForumThreadLazyQuery>
 export type GetForumThreadQueryResult = Apollo.QueryResult<GetForumThreadQuery, GetForumThreadQueryVariables>
 export const GetForumPostsDocument = gql`
-  query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int) {
-    forumPosts(where: $where, offset: $offset, limit: $limit, orderBy: [createdAt_ASC]) {
+  query GetForumPosts($where: ForumPostWhereInput!, $offset: Int, $limit: Int, $orderBy: [ForumPostOrderByInput!]) {
+    forumPosts(where: $where, offset: $offset, limit: $limit, orderBy: $orderBy) {
       ...ForumPostFields
     }
   }
@@ -730,9 +738,9 @@ export const GetForumPostsDocument = gql`
  * const { data, loading, error } = useGetForumPostsQuery({
  *   variables: {
  *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */
