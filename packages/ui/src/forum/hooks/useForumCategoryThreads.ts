@@ -1,4 +1,7 @@
+import { Reducer, useReducer } from 'react'
+
 import { ForumThreadOrderByInput } from '@/common/api/queries'
+import { merge } from '@/common/utils'
 import { ThreadEmptyFilters, ThreadFiltersState } from '@/forum/components/threads/ThreadFilters'
 import { ThreadDefaultOrder, ThreadOrder } from '@/forum/components/threads/ThreadList'
 import { useGetPaginatedForumThreadsQuery } from '@/forum/queries'
@@ -7,13 +10,24 @@ import { asForumThread } from '@/forum/types'
 export interface ThreadsOptions {
   filters: ThreadFiltersState
   order: ThreadOrder
+  categoryId?: string
 }
-export const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
 
-export const useForumCategoryThreads = (categoryId: string, { order, filters }: ThreadsOptions) => {
+const threadOptionReducer: Reducer<ThreadsOptions, Partial<ThreadsOptions>> = merge
+const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
+
+export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
+  const [{ order, filters, categoryId }, refresh] = useReducer(threadOptionReducer, {
+    ...ThreadsDefaultOptions,
+    ...options,
+  })
+
   const { loading, data } = useGetPaginatedForumThreadsQuery({
     variables: {
-      where: { category: { id_eq: categoryId }, ...where(filters) },
+      where: {
+        ...(categoryId ? { category: { id_eq: categoryId } } : {}),
+        ...where(filters),
+      },
       orderBy: [ForumThreadOrderByInput.IsStickyDesc, orderBy(order)],
       first: 30,
     },
@@ -25,11 +39,12 @@ export const useForumCategoryThreads = (categoryId: string, { order, filters }: 
     isLoading: loading,
     threads: connection?.edges.map(({ node }) => asForumThread(node)) ?? [],
     threadCount: connection?.totalCount,
+    refresh,
   }
 }
 
 const where = ({ author, date }: ThreadFiltersState) => ({
-  author_eq: author?.id,
+  ...(author ? { author_eq: author?.id } : {}),
   ...(date && 'start' in date ? { createdAt_gte: date.start } : {}),
   ...(date && 'end' in date ? { createdAt_lte: date.end } : {}),
 })
