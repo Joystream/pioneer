@@ -26,19 +26,21 @@ export const PostHistoryModal = React.memo(() => {
   } = useModal<PostHistoryModalCall>()
   const { isLoading, edits } = useForumPostEdits(postId)
   const [activeEdit, setActiveEdit] = useState(0)
-  const visibleEdits = useMemo(() => new Array<boolean>(edits?.length ?? 0), [edits?.length])
+
+  const editsInView = useMemo(() => new Array<boolean>(edits?.length ?? 0), [edits?.length])
+
   const pickActiveEdit = useCallback(
-    (index: number) => (inView: boolean) => {
-      visibleEdits[index] = inView
-      for (const [i, isVisible] of visibleEdits.entries()) {
-        if (isVisible) {
-          setActiveEdit(i)
-          return
-        }
-      }
+    (index: number) => (isCurrentInView: boolean) => {
+      editsInView[index] = isCurrentInView
+      const newActiveEdit = editsInView.reduceRight(
+        (currentTopIndex, isEditInView, index) => (isEditInView ? index : currentTopIndex),
+        0
+      )
+      setActiveEdit(newActiveEdit)
     },
-    [visibleEdits]
+    [editsInView]
   )
+
   const viewport = useRef<HTMLDivElement>(null)
 
   const getStepType = (index: number) => {
@@ -90,7 +92,7 @@ interface HistoryPostProps {
 }
 
 const HistoryPost = ({ edit, author, onChange, root }: HistoryPostProps) => (
-  <InView onChange={onChange} root={root} rootMargin={'-50px 0px 0px'}>
+  <InView onChange={onChange} root={root} rootMargin="-32px 0px 0px">
     <ForumPostStyles>
       <ForumPostRow>
         <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
