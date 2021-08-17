@@ -3,12 +3,7 @@ import faker from 'faker'
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
 import { randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
-
-type ThreadStatus =
-  'ThreadStatusActive'
-  | 'ThreadStatusLocked'
-  | 'ThreadStatusModerated'
-  | 'ThreadStatusRemoved'
+import { ThreadStatus } from '@/forum/types'
 
 let nextThreadId = 0
 let nextPostId = 0

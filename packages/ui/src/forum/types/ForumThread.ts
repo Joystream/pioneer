@@ -1,6 +1,8 @@
 import { asBlock, Block } from '@/common/types'
 import { ForumThreadDetailedFieldsFragment, ForumThreadFieldsFragment } from '@/forum/queries'
 
+export type ThreadStatus = ForumThreadFieldsFragment['status']['__typename']
+
 export interface ForumThread {
   id: string
   title: string
@@ -10,7 +12,7 @@ export interface ForumThread {
   categoryId: string
   tags: ForumThreadTag[]
   visiblePostsCount: number
-  status: string
+  status: ThreadStatus
 }
 
 export interface ForumThreadTag {

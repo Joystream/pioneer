@@ -1,6 +1,6 @@
 import faker from 'faker'
 
-import { ForumModerator } from '@/forum/types'
+import { ForumModerator, ThreadStatus } from '@/forum/types'
 import { RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
@@ -30,7 +30,6 @@ export const asStorybookPost = (text: string, threadId?: string): RawForumPostMo
     }
 }
 
-type ThreadStatus = ForumThreadFieldsFragment['status']['__typename']
 export type ThreadData = Omit<RawForumThreadMock, 'status'> &
   Omit<ForumThreadFieldsFragment, 'status'> & { status: ThreadStatus }
 
