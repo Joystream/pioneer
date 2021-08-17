@@ -14,6 +14,7 @@ export interface RawForumCategoryMock {
   description: string
   parentId?: string | null
   moderatorIds: string[]
+  status: string
 }
 
 export interface RawForumThreadMock {
@@ -43,6 +44,7 @@ export interface RawForumPostMock {
 export function seedForumCategory(forumCategoryData: RawForumCategoryMock, server: any) {
   return server.schema.create('ForumCategory', {
     ...forumCategoryData,
+    status: seedStatus(forumCategoryData.status, server),
   })
 }
 
@@ -53,13 +55,13 @@ export const seedForumCategories = (server: any) => {
 const seedThreadCreatedInEvent = (event: { inBlock: number }, server: any) =>
   server.schema.create('ThreadCreatedEvent', event)
 
-const seedThreadStatus = (statusText: string, server: any) => server.schema.create(statusText)
+const seedStatus = (statusText: string, server: any) => server.schema.create(statusText)
 
 export function seedForumThread(data: RawForumThreadMock, server: any) {
   return server.schema.create('ForumThread', {
     ...data,
     createdInEvent: seedThreadCreatedInEvent(data.createdInEvent, server),
-    status: seedThreadStatus(data.status, server),
+    status: seedStatus(data.status, server),
   })
 }
 

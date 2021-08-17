@@ -1,8 +1,11 @@
+import { CategoryStatus as CategoryStatusSchema } from '@/common/api/queries'
 import {
   ForumCategoryBreadcrumbsFieldsFragment,
   ForumCategoryFieldsFragment,
   ForumSubCategoryFieldsFragment,
 } from '@/forum/queries'
+
+export type CategoryStatus = CategoryStatusSchema['__typename']
 
 export interface ForumCategory extends ForumBreadcrumb {
   description: string
