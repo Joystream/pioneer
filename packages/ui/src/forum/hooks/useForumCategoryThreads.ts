@@ -5,7 +5,7 @@ import { merge } from '@/common/utils'
 import { ThreadEmptyFilters, ThreadFiltersState } from '@/forum/components/threads/ThreadFilters'
 import { ThreadDefaultOrder, ThreadOrder } from '@/forum/components/threads/ThreadList'
 import { useGetPaginatedForumThreadsQuery } from '@/forum/queries'
-import { asForumThread } from '@/forum/types'
+import { asForumThread, ThreadStatus } from '@/forum/types'
 
 export interface ThreadsOptions {
   filters: ThreadFiltersState
@@ -14,11 +14,14 @@ export interface ThreadsOptions {
   isArchived?: boolean
 }
 
+export const ActiveStatuses: ThreadStatus[] = ['ThreadStatusActive']
+export const ArchivedStatuses: ThreadStatus[] = ['ThreadStatusLocked', 'ThreadStatusModerated', 'ThreadStatusRemoved']
+
 const threadOptionReducer: Reducer<ThreadsOptions, Partial<ThreadsOptions>> = merge
 const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
 
 export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
-  const [{ order, filters, categoryId }, refresh] = useReducer(threadOptionReducer, {
+  const [{ order, filters, categoryId, isArchived }, refresh] = useReducer(threadOptionReducer, {
     ...ThreadsDefaultOptions,
     ...options,
   })
@@ -27,6 +30,7 @@ export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
     variables: {
       where: {
         ...(categoryId ? { category: { id_eq: categoryId } } : {}),
+        status_json: { isTypeOf_in: isArchived ? ArchivedStatuses : ActiveStatuses },
         ...where(filters),
       },
       orderBy: [ForumThreadOrderByInput.IsStickyDesc, orderBy(order)],

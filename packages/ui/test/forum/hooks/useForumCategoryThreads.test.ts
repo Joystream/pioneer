@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-hooks'
 import { endOfYesterday } from 'date-fns'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
+import { ActiveStatuses, useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { useGetPaginatedForumThreadsQuery } from '@/forum/queries'
 
 import { getMember } from '../../_mocks/members'
@@ -29,7 +29,7 @@ describe('useForumCategoryThreads', () => {
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
-        where: {},
+        where: { status_json: { isTypeOf_in: ActiveStatuses } },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
         first: 30,
       },
@@ -46,7 +46,10 @@ describe('useForumCategoryThreads', () => {
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
-        where: { category: { id_eq: categoryId } },
+        where: {
+          category: { id_eq: categoryId },
+          status_json: { isTypeOf_in: ActiveStatuses },
+        },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
         first: 30,
       },
@@ -58,6 +61,7 @@ describe('useForumCategoryThreads', () => {
       variables: {
         where: {
           category: { id_eq: categoryId },
+          status_json: { isTypeOf_in: ActiveStatuses },
           author_eq: author.id,
           createdAt_gte: start,
           createdAt_lte: end,
@@ -73,7 +77,7 @@ describe('useForumCategoryThreads', () => {
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
-        where: {},
+        where: { status_json: { isTypeOf_in: ActiveStatuses } },
         orderBy: [IsStickyDesc, AuthorDesc],
         first: 30,
       },
