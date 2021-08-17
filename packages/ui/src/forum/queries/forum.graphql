@@ -68,6 +68,9 @@ fragment ForumThreadFields on ForumThread {
     inBlock
     network
   }
+  status {
+    __typename
+  }
 }
 
 fragment ForumPostFields on ForumPost {

@@ -1,11 +1,11 @@
 import { Meta, Story } from '@storybook/react'
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { Loading } from '@/common/components/Loading'
-import { ThreadData } from '@/forum/helpers/storybook'
-import { asForumThread, ForumThread } from '@/forum/types'
+import { ForumThreadWithDetails } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 import { ThreadList } from './ThreadList'
 
@@ -17,15 +17,29 @@ export default {
   },
 } as Meta
 
-const Template: Story = ({ onSort }) => {
-  const [threads, setThreads] = useState<ForumThread[]>([])
+const forumThread: ForumThreadWithDetails = {
+  id: '1',
+  title: 'Example Thread',
+  categoryId: '1',
+  authorId: '0',
+  isSticky: false,
+  createdInBlock: randomBlock(),
+  tags: [],
+  visiblePostsCount: 5,
+  status: 'ThreadStatusActive',
+}
 
-  useEffect(() => {
-    import('@/mocks/data/raw/forumThreads.json').then((rawThreads) => {
-      const threads = (rawThreads.default as ThreadData[]).slice(0, 10).map(asForumThread)
-      setThreads(threads)
-    })
-  }, [])
+const Template: Story = ({ onSort }) => {
+  const threads = useMemo(
+    () =>
+      Array.from({ length: 5 }).map((_, index) => ({
+        ...forumThread,
+        id: String(index),
+        title: `${forumThread.title} ${index}`,
+        createdInBlock: randomBlock(),
+      })),
+    []
+  )
 
   return (
     <MockApolloProvider members workers forum>
