@@ -14,8 +14,8 @@ import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { ForumTabs } from './components/ForumTabs'
 
 export const ForumArchived = () => {
-  const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isArchived: true })
-  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({ isArchived: true })
+  const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isArchive: true })
+  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({ isArchive: true })
 
   return (
     <PageLayout

@@ -3,18 +3,18 @@ import { asForumCategory, CategoryStatus } from '@/forum/types'
 
 interface Props {
   isRoot?: boolean
-  isArchived?: boolean
+  isArchive?: boolean
 }
 
 export const ActiveStatus: CategoryStatus = 'CategoryStatusActive'
 export const ArchivedStatus: CategoryStatus = 'CategoryStatusArchived'
 
-export const useForumCategories = ({ isRoot, isArchived }: Props = {}) => {
+export const useForumCategories = ({ isRoot, isArchive }: Props = {}) => {
   const { loading, data } = useGetForumCategoriesQuery({
     variables: {
       where: {
         ...(isRoot ? { parent_eq: null } : {}),
-        status_json: { isTypeOf_eq: isArchived ? ArchivedStatus : ActiveStatus },
+        status_json: { isTypeOf_eq: isArchive ? ArchivedStatus : ActiveStatus },
       },
     },
   })

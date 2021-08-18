@@ -11,7 +11,7 @@ export interface ThreadsOptions {
   filters: ThreadFiltersState
   order: ThreadOrder
   categoryId?: string
-  isArchived?: boolean
+  isArchive?: boolean
 }
 
 export const ActiveStatuses: ThreadStatus[] = ['ThreadStatusActive']
@@ -21,7 +21,7 @@ const threadOptionReducer: Reducer<ThreadsOptions, Partial<ThreadsOptions>> = me
 const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
 
 export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
-  const [{ order, filters, categoryId, isArchived }, refresh] = useReducer(threadOptionReducer, {
+  const [{ order, filters, categoryId, isArchive }, refresh] = useReducer(threadOptionReducer, {
     ...ThreadsDefaultOptions,
     ...options,
   })
@@ -30,7 +30,7 @@ export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
     variables: {
       where: {
         ...(categoryId ? { category: { id_eq: categoryId } } : {}),
-        status_json: { isTypeOf_in: isArchived ? ArchivedStatuses : ActiveStatuses },
+        status_json: { isTypeOf_in: isArchive ? ArchivedStatuses : ActiveStatuses },
         ...where(filters),
       },
       orderBy: [ForumThreadOrderByInput.IsStickyDesc, orderBy(order)],
