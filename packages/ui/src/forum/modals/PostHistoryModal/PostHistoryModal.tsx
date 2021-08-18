@@ -32,10 +32,7 @@ export const PostHistoryModal = React.memo(() => {
   const pickActiveEdit = useCallback(
     (index: number) => (isCurrentInView: boolean) => {
       editsInView[index] = isCurrentInView
-      const newActiveEdit = editsInView.reduceRight(
-        (currentTopIndex, isEditInView, index) => (isEditInView ? index : currentTopIndex),
-        0
-      )
+      const newActiveEdit = editsInView.findIndex((value) => value)
       setActiveEdit(newActiveEdit)
     },
     [editsInView]
@@ -58,7 +55,7 @@ export const PostHistoryModal = React.memo(() => {
           edits?.map((edit, index) => ({ title: formatDateString(edit.createdAt), type: getStepType(index) })) ?? []
         }
       />
-      <StepperBody>
+      <StepperBody ref={viewport}>
         {isLoading ? (
           <Loading text="Loading versions..." />
         ) : (
