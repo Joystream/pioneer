@@ -19,7 +19,7 @@ function getFieldName(model: Record<string, any>, field: string) {
   return [`${field}Id`, `${field}Ids`].find((key) => key in model) ?? field
 }
 
-const getFilter = (where: Record<string, any>, nestedField?: string) => {
+const getFilter = (where: Record<string, any>) => {
   const filters: FilterCallback[] = []
 
   for (const [key, checkValue] of Object.entries(where)) {
@@ -31,7 +31,8 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
         const method = key === 'OR' ? 'some' : 'every'
         filters.push((model) => subFilters[method]((subfilter) => subfilter(model)))
       } else {
-        filters.push(getFilter(checkValue, field))
+        const subFilter = getFilter(checkValue)
+        filters.push((model) => subFilter(model[field]))
       }
 
       continue
@@ -40,11 +41,11 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
     if (type === 'eq') {
       if (field === 'isTypeOf') {
         filters.push((model: Record<string, any>) => {
-          return String(model[nestedField as string].modelName) === camelCaseToDash(String(checkValue))
+          return String(model.modelName) === camelCaseToDash(String(checkValue))
         })
       } else {
         filters.push((model: Record<string, any>) => {
-          const fieldName = getFieldName(model, nestedField ? nestedField : field)
+          const fieldName = getFieldName(model, field)
           return String(model[fieldName]) === String(checkValue)
         })
       }
@@ -52,12 +53,10 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
 
     if (type === 'not') {
       if (field === 'isTypeOf') {
-        filters.push((model: Record<string, any>) => {
-          return String(model[nestedField as string].modelName) !== camelCaseToDash(String(checkValue))
-        })
+        filters.push((model: Record<string, any>) => String(model.modelName) !== camelCaseToDash(String(checkValue)))
       } else {
         filters.push((model: Record<string, any>) => {
-          const fieldName = getFieldName(model, nestedField ? nestedField : field)
+          const fieldName = getFieldName(model, field)
           return String(model[fieldName]) !== String(checkValue)
         })
       }
@@ -71,11 +70,9 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
 
     if (type === 'in') {
       if (field === 'isTypeOf') {
-        filters.push((model: Record<string, any>) => {
-          return checkValue
-            .map((value: string) => camelCaseToDash(value))
-            .includes(String(model[nestedField as string].modelName))
-        })
+        filters.push((model: Record<string, any>) =>
+          checkValue.map((value: string) => camelCaseToDash(value)).includes(String(model.modelName))
+        )
       } else {
         filters.push((model: Record<string, any>) => {
           const fieldName = getFieldName(model, field)
@@ -99,7 +96,8 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
     }
 
     if (type === 'json') {
-      filters.push(getFilter(checkValue, field))
+      const subFilter = getFilter(checkValue)
+      filters.push((model) => subFilter(model[field]))
     }
 
     if (['none', 'some', 'every'].includes(type)) {
