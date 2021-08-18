@@ -10,7 +10,7 @@ import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 
 interface PostListProps {
   threadId: string
-  isThreadActive: boolean
+  isThreadActive?: boolean
   selectedPostId?: string
 }
 

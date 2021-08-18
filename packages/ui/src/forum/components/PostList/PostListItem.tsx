@@ -27,7 +27,7 @@ interface PostProps {
   post: ForumPost
   isSelected?: boolean
   isPreview?: boolean
-  isThreadActive: boolean
+  isThreadActive?: boolean
 }
 
 export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
