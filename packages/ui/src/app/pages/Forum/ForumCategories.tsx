@@ -9,7 +9,7 @@ import { useForumCategories } from '@/forum/hooks/useForumCategories'
 import { ForumForumTabs, ForumTabs } from './components/ForumTabs'
 
 export const ForumCategories = () => {
-  const { isLoading, forumCategories } = useForumCategories()
+  const { isLoading, forumCategories } = useForumCategories({ isRoot: true })
 
   return (
     <PageLayout
