@@ -4,14 +4,21 @@ import styled, { css } from 'styled-components'
 import { CountBadge } from '@/common/components/CountBadge'
 import { TabContainer } from '@/common/components/Tabs'
 import { Colors } from '@/common/constants'
+import { isDefined } from '@/common/utils'
 
 interface ItemCountProps {
-  count: number
+  count?: number
   size?: 's' | 'xs'
 }
 export const ItemCount: FC<ItemCountProps> = ({ count, children, size = 's' }) => (
   <ItemCountStyles as={size === 'xs' ? 'h6' : 'h5'} size={size}>
-    {children} <CountBadge count={count} />
+    {children}
+    {isDefined(count) && (
+      <>
+        {' '}
+        <CountBadge count={count} />
+      </>
+    )}
   </ItemCountStyles>
 )
 

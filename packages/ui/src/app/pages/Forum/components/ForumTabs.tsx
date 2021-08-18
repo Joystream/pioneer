@@ -9,7 +9,7 @@ export const ForumTabs = () => {
   const tabs = usePageTabs([
     ['Overview', ForumRoutes.root],
     ['Forum', ForumRoutes.forum],
-    ['Archived', ForumRoutes.root],
+    ['Archived', ForumRoutes.archived],
   ])
 
   return <Tabs tabs={tabs} />

@@ -1,4 +1,4 @@
-import React, { Reducer, useReducer } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -12,22 +12,18 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { merge } from '@/common/utils'
 import { ForumCategoryList } from '@/forum/components/category'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
-import { ThreadsDefaultOptions, ThreadsOptions, useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
+import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
-
-const threadOptionReducer: Reducer<ThreadsOptions, Partial<ThreadsOptions>> = merge
 
 export const ForumCategory = () => {
   const { id } = useParams<{ id: string }>()
   const { category } = useForumCategory(id)
 
-  const [threadOption, dispatchThreadOption] = useReducer(threadOptionReducer, ThreadsDefaultOptions)
-  const { isLoading: isLoadingThreads, threads, threadCount } = useForumCategoryThreads(id, threadOption)
+  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({ categoryId: id })
 
   const { showModal } = useModal()
 
@@ -66,17 +62,13 @@ export const ForumCategory = () => {
           </RowGapBlock>
 
           <RowGapBlock gap={24}>
-            <ThreadFilters onApply={(filters) => dispatchThreadOption({ filters })}>
-              <ItemCount count={threadCount ?? 0} size="xs">
+            <ThreadFilters onApply={(filters) => refresh({ filters })}>
+              <ItemCount count={threadCount} size="xs">
                 Threads
               </ItemCount>
             </ThreadFilters>
 
-            <ThreadList
-              threads={threads}
-              onSort={(order) => dispatchThreadOption({ order })}
-              isLoading={isLoadingThreads}
-            />
+            <ThreadList threads={threads} onSort={(order) => refresh({ order })} isLoading={isLoadingThreads} />
           </RowGapBlock>
         </>
       }

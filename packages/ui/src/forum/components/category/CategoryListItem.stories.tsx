@@ -3,9 +3,8 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { asArray, repeat } from '@/common/utils'
-import { asStorybookModerator, asStorybookPost, asStorybookThread } from '@/forum/helpers/storybook'
+import { asStorybookModerator, asStorybookPost, asStorybookThread, CategoryData } from '@/forum/helpers/storybook'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { RawForumCategoryMock } from '@/mocks/data/seedForum'
 
 import { CategoryListItem } from './CategoryListItem'
 
@@ -21,7 +20,7 @@ interface Props {
   topThreadTitle: string
   moderatorsCount: number
   subcategoriesTitles: string[]
-  category: RawForumCategoryMock
+  category: CategoryData
 }
 const Template: Story<Props> = ({ category, latestPostText, topThreadTitle, moderatorsCount, subcategoriesTitles }) => {
   const thread = asStorybookThread(topThreadTitle, category.id)
@@ -50,5 +49,6 @@ Default.args = {
     description:
       'Morbi sed consectetur turpis. Nulla viverra id eros ut lorem fringilla. Lorem Vestibulum congue fermentu.',
     moderatorIds: [],
+    status: 'CategoryStatusActive',
   },
 }

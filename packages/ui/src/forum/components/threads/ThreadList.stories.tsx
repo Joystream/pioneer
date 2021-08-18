@@ -29,7 +29,7 @@ const forumThread: ForumThreadWithDetails = {
   status: 'ThreadStatusActive',
 }
 
-const Template: Story = ({ onSort }) => {
+const Template: Story = ({ onSort, isArchive }) => {
   const threads = useMemo(
     () =>
       Array.from({ length: 5 }).map((_, index) => ({
@@ -43,10 +43,14 @@ const Template: Story = ({ onSort }) => {
 
   return (
     <MockApolloProvider members workers forum>
-      <MemoryRouter>{threads ? <ThreadList threads={threads} onSort={onSort} /> : <Loading />}</MemoryRouter>
+      <MemoryRouter>
+        {threads ? <ThreadList threads={threads} onSort={onSort} isArchive={isArchive} /> : <Loading />}
+      </MemoryRouter>
     </MockApolloProvider>
   )
 }
 
 export const Default = Template.bind({})
-Default.args = {}
+Default.args = {
+  isArchive: false,
+}

@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-hooks'
 import { endOfYesterday } from 'date-fns'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
+import { ActiveStatuses, useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { useGetPaginatedForumThreadsQuery } from '@/forum/queries'
 
 import { getMember } from '../../_mocks/members'
@@ -17,7 +17,6 @@ jest.mock('../../../src/forum/queries', () => ({
 }))
 const mockedQueryHook = useGetPaginatedForumThreadsQuery as jest.Mock
 
-const CATEGORY_ID = '0'
 const { IsStickyDesc, UpdatedAtAsc, AuthorDesc } = ForumThreadOrderByInput
 
 describe('useForumCategoryThreads', () => {
@@ -26,13 +25,11 @@ describe('useForumCategoryThreads', () => {
   })
 
   it('Default', () => {
-    renderUseForumCategoryThreads(CATEGORY_ID, {
-      filters: { author: null, date: undefined, tag: null },
-      order: { key: 'UpdatedAt' },
-    })
+    renderUseForumCategoryThreads({})
+
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
-        where: { category: { id_eq: CATEGORY_ID } },
+        where: { status_json: { isTypeOf_in: ActiveStatuses } },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
         first: 30,
       },
@@ -40,19 +37,31 @@ describe('useForumCategoryThreads', () => {
   })
 
   it('Filter', () => {
+    const categoryId = '0'
     const author = getMember('alice')
     const start = endOfYesterday()
     const end = new Date()
 
-    renderUseForumCategoryThreads(CATEGORY_ID, {
-      filters: { author, date: { start, end }, tag: null },
-      order: { key: 'UpdatedAt' },
-    })
+    const { refresh } = renderUseForumCategoryThreads({ categoryId }).result.current
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
         where: {
-          category: { id_eq: CATEGORY_ID },
+          category: { id_eq: categoryId },
+          status_json: { isTypeOf_in: ActiveStatuses },
+        },
+        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        first: 30,
+      },
+    })
+
+    refresh({ filters: { author, date: { start, end }, tag: null } })
+
+    expect(mockedQueryHook).toBeCalledWith({
+      variables: {
+        where: {
+          category: { id_eq: categoryId },
+          status_json: { isTypeOf_in: ActiveStatuses },
           author_eq: author.id,
           createdAt_gte: start,
           createdAt_lte: end,
@@ -64,14 +73,11 @@ describe('useForumCategoryThreads', () => {
   })
 
   it('Order', () => {
-    renderUseForumCategoryThreads(CATEGORY_ID, {
-      filters: { author: null, date: undefined, tag: null },
-      order: { key: 'Author', isDescending: true },
-    })
+    renderUseForumCategoryThreads({ order: { key: 'Author', isDescending: true } })
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
-        where: { category: { id_eq: CATEGORY_ID } },
+        where: { status_json: { isTypeOf_in: ActiveStatuses } },
         orderBy: [IsStickyDesc, AuthorDesc],
         first: 30,
       },

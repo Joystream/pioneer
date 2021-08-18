@@ -22,8 +22,9 @@ interface ThreadListProps {
   threads: ForumThread[]
   onSort: (order: ThreadOrder) => void
   isLoading?: boolean
+  isArchive?: boolean
 }
-export const ThreadList = ({ threads, onSort, isLoading }: ThreadListProps) => {
+export const ThreadList = ({ threads, onSort, isLoading, isArchive }: ThreadListProps) => {
   const [order, setOrder] = useState(ThreadDefaultOrder)
 
   const sort = useCallback(
@@ -64,7 +65,7 @@ export const ThreadList = ({ threads, onSort, isLoading }: ThreadListProps) => {
       {isLoading ? (
         <Loading />
       ) : (
-        <List as="div">
+        <List as="div" isArchive={isArchive}>
           {threads.map((thread, index) => (
             <ThreadListItem key={index} thread={thread} />
           ))}

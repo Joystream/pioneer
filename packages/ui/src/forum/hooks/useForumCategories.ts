@@ -1,8 +1,26 @@
-import { useGetForumCategoriesQuery } from '@/forum/queries/__generated__/forum.generated'
-import { asForumCategory } from '@/forum/types'
+import { useGetForumCategoriesQuery } from '@/forum/queries'
+import { asForumCategory, CategoryStatus } from '@/forum/types'
 
-export const useForumCategories = (parent_eq: string | null = null) => {
-  const { loading, data } = useGetForumCategoriesQuery({ variables: { where: { parent_eq } } })
+interface Props {
+  isRoot?: boolean
+  isArchive?: boolean
+}
+
+export const ActiveStatus: CategoryStatus = 'CategoryStatusActive'
+export const ArchivedStatus: CategoryStatus = 'CategoryStatusArchived'
+
+export const useForumCategories = ({ isRoot, isArchive }: Props = {}) => {
+  const { loading, data } = useGetForumCategoriesQuery({
+    variables: {
+      where: {
+        ...(isRoot ? { parent_eq: null } : {}),
+        status_json: { isTypeOf_eq: isArchive ? ArchivedStatus : ActiveStatus },
+        ...(isArchive && !isRoot
+          ? { OR: [{ parent_eq: null }, { parent: { status_json: { isTypeOf_eq: ActiveStatus } } }] }
+          : {}),
+      },
+    },
+  })
 
   return {
     isLoading: loading,
