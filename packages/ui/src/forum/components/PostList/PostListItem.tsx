@@ -76,7 +76,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
           )}
         </MessageBody>
         <ForumPostRow>
-          {!isThreadActive && !editing && (
+          {isThreadActive && !editing && (
             <ButtonsGroup>
               {reaction && (
                 <Button size="small">
