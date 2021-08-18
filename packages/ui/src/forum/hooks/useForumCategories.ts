@@ -15,6 +15,9 @@ export const useForumCategories = ({ isRoot, isArchive }: Props = {}) => {
       where: {
         ...(isRoot ? { parent_eq: null } : {}),
         status_json: { isTypeOf_eq: isArchive ? ArchivedStatus : ActiveStatus },
+        ...(isArchive && !isRoot
+          ? { OR: [{ parent_eq: null }, { parent: { status_json: { isTypeOf_eq: ActiveStatus } } }] }
+          : {}),
       },
     },
   })
