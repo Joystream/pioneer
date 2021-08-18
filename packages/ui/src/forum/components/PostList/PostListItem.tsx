@@ -27,78 +27,81 @@ interface PostProps {
   post: ForumPost
   isSelected?: boolean
   isPreview?: boolean
+  isThreadActive: boolean
 }
 
-export const PostListItem = forwardRef<HTMLDivElement, PostProps>(({ post, isSelected, isPreview }, ref) => {
-  const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
-  const [editing, setEditing] = useState(false)
-  const { showModal } = useModal()
-  const editionTime = useMemo(() => {
-    if (!updatedAt) {
-      return null
-    }
+export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
+  ({ post, isSelected, isPreview, isThreadActive }, ref) => {
+    const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
+    const [editing, setEditing] = useState(false)
+    const { showModal } = useModal()
+    const editionTime = useMemo(() => {
+      if (!updatedAt) {
+        return null
+      }
+
+      return (
+        <EditionTime
+          onClick={() =>
+            showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
+          }
+        >
+          (edited {relativeIfRecent(updatedAt)})
+        </EditionTime>
+      )
+    }, [updatedAt])
 
     return (
-      <EditionTime
-        onClick={() =>
-          showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
-        }
-      >
-        (edited {relativeIfRecent(updatedAt)})
-      </EditionTime>
-    )
-  }, [updatedAt])
-
-  return (
-    <ForumPostStyles ref={ref} isSelected={isSelected}>
-      <ForumPostRow>
-        <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-        {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
-      </ForumPostRow>
-      <MessageBody>
-        {repliesTo && (
-          <Reply>
-            <ReplyBadge>
-              <ArrowReplyIcon />{' '}
-              <Badge>
-                <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
-              </Badge>
-            </ReplyBadge>
-            <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
-          </Reply>
-        )}
-        {editing ? (
-          <PostEditor post={post} onCancel={() => setEditing(false)} />
-        ) : (
-          <MarkdownPreview markdown={text} append={editionTime} size="s" />
-        )}
-      </MessageBody>
-      <ForumPostRow>
-        {!editing && (
-          <ButtonsGroup>
-            {reaction && (
-              <Button size="small">
-                <HeartIcon />
-                {!!reaction.length && reaction.length}
+      <ForumPostStyles ref={ref} isSelected={isSelected}>
+        <ForumPostRow>
+          <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
+          {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
+        </ForumPostRow>
+        <MessageBody>
+          {repliesTo && (
+            <Reply>
+              <ReplyBadge>
+                <ArrowReplyIcon />{' '}
+                <Badge>
+                  <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
+                </Badge>
+              </ReplyBadge>
+              <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
+            </Reply>
+          )}
+          {editing ? (
+            <PostEditor post={post} onCancel={() => setEditing(false)} />
+          ) : (
+            <MarkdownPreview markdown={text} append={editionTime} size="s" />
+          )}
+        </MessageBody>
+        <ForumPostRow>
+          {!isThreadActive && !editing && (
+            <ButtonsGroup>
+              {reaction && (
+                <Button size="small">
+                  <HeartIcon />
+                  {!!reaction.length && reaction.length}
+                </Button>
+              )}
+              <CopyButtonTemplate
+                textToCopy={window.location.href}
+                square
+                size="small"
+                disabled={isPreview}
+                icon={<LinkIcon />}
+              />
+              <Button square disabled={isPreview}>
+                <ReplyIcon />
               </Button>
-            )}
-            <CopyButtonTemplate
-              textToCopy={window.location.href}
-              square
-              size="small"
-              disabled={isPreview}
-              icon={<LinkIcon />}
-            />
-            <Button square disabled={isPreview}>
-              <ReplyIcon />
-            </Button>
-            <PostContextMenu post={post} onEdit={() => setEditing(true)} />
-          </ButtonsGroup>
-        )}
-      </ForumPostRow>
-    </ForumPostStyles>
-  )
-})
+              <PostContextMenu post={post} onEdit={() => setEditing(true)} />
+            </ButtonsGroup>
+          )}
+        </ForumPostRow>
+      </ForumPostStyles>
+    )
+  }
+)
 
 const Button = styled(ButtonGhost).attrs({ size: 'small' })``
 

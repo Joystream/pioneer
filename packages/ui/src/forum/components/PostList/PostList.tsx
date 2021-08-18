@@ -10,10 +10,11 @@ import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 
 interface PostListProps {
   threadId: string
+  isThreadActive: boolean
   selectedPostId?: string
 }
 
-export const PostList = ({ threadId, selectedPostId }: PostListProps) => {
+export const PostList = ({ threadId, selectedPostId, isThreadActive }: PostListProps) => {
   const [page, setPage] = useState(1)
   const { isLoading, posts, pageCount } = useForumThreadPosts({ threadId, page })
 
@@ -33,7 +34,7 @@ export const PostList = ({ threadId, selectedPostId }: PostListProps) => {
       )}
       {posts.map((post) => (
         <PostBlock key={post.id}>
-          <PostListItem post={post} isSelected={post.id === selectedPostId} />
+          <PostListItem post={post} isSelected={post.id === selectedPostId} isThreadActive={isThreadActive} />
         </PostBlock>
       ))}
       {!isLoading && !!pageCount && pageCount > 1 && (
