@@ -15,6 +15,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { ForumCategoryList } from '@/forum/components/category'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
+import { ArchivedStatus } from '@/forum/hooks/useForumCategories'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
@@ -28,6 +29,8 @@ export const ForumCategory = () => {
   const { showModal } = useModal()
 
   if (!category) return <Loading />
+
+  const isArchive = category.status === ArchivedStatus
 
   return (
     <PageLayout
@@ -56,19 +59,28 @@ export const ForumCategory = () => {
       main={
         <>
           <RowGapBlock gap={24}>
-            <ItemCount count={category.subcategories.length}>Categories</ItemCount>
+            <ItemCount count={category.subcategories.length}>
+              {isArchive ? 'Archived categories' : 'Categories'}
+            </ItemCount>
 
-            {category.subcategories.length > 0 && <ForumCategoryList categories={category.subcategories} />}
+            {category.subcategories.length > 0 && (
+              <ForumCategoryList categories={category.subcategories} isArchive={isArchive} />
+            )}
           </RowGapBlock>
 
           <RowGapBlock gap={24}>
             <ThreadFilters onApply={(filters) => refresh({ filters })}>
               <ItemCount count={threadCount} size="xs">
-                Threads
+                {isArchive ? 'Archived Threads' : 'Threads'}
               </ItemCount>
             </ThreadFilters>
 
-            <ThreadList threads={threads} onSort={(order) => refresh({ order })} isLoading={isLoadingThreads} />
+            <ThreadList
+              threads={threads}
+              onSort={(order) => refresh({ order })}
+              isLoading={isLoadingThreads}
+              isArchive={isArchive}
+            />
           </RowGapBlock>
         </>
       }
