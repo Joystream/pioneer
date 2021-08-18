@@ -10,6 +10,14 @@ export const List = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
+
+  ${({ isArchive }: { isArchive?: boolean }) =>
+    isArchive &&
+    css`
+      ${TableListItem} {
+        background-color: ${Colors.Black[50]};
+      }
+    `}
 `
 
 export const ListItem = styled.li`

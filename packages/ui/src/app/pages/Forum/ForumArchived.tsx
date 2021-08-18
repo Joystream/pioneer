@@ -32,7 +32,8 @@ export const ForumArchived = () => {
             {isLoadingCategories ? (
               <Loading />
             ) : (
-              forumCategories && forumCategories.length > 0 && <ForumCategoryList categories={forumCategories} />
+              forumCategories &&
+              forumCategories.length > 0 && <ForumCategoryList categories={forumCategories} isArchive />
             )}
           </RowGapBlock>
 
@@ -43,7 +44,12 @@ export const ForumArchived = () => {
               </ItemCount>
             </ThreadFilters>
 
-            <ThreadList threads={threads} onSort={(order) => refresh({ order })} isLoading={isLoadingThreads} />
+            <ThreadList
+              threads={threads}
+              onSort={(order) => refresh({ order })}
+              isLoading={isLoadingThreads}
+              isArchive
+            />
           </RowGapBlock>
         </>
       }

@@ -11,9 +11,10 @@ import { CategoryListItem } from './CategoryListItem'
 
 export interface ForumCategoryListProps {
   categories: ForumCategory[]
+  isArchive?: boolean
 }
 
-export const ForumCategoryList = ({ categories }: ForumCategoryListProps) => (
+export const ForumCategoryList = ({ categories, isArchive }: ForumCategoryListProps) => (
   <ForumCategoryListStyles gap={4}>
     <ListHeaders $colLayout={CategoriesColLayout}>
       <ListHeader>Category</ListHeader>
@@ -22,7 +23,7 @@ export const ForumCategoryList = ({ categories }: ForumCategoryListProps) => (
       <ListHeader>Popular Thread</ListHeader>
       <ListHeader>Moderators</ListHeader>
     </ListHeaders>
-    <List as="div">
+    <List as="div" isArchive={isArchive}>
       {categories.map((category, index) => (
         <CategoryListItem key={index} category={category} />
       ))}
