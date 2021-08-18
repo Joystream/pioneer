@@ -26,7 +26,13 @@ const getFilter = (where: Record<string, any>, nestedField?: string) => {
     const [field, type] = key.split('_')
 
     if (!type) {
-      filters.push(getFilter(checkValue, field))
+      if (['OR', 'AND'].includes(field)) {
+        const subFilters: FilterCallback[] = checkValue.map((where: Record<string, any>) => getFilter(where))
+        const method = key === 'OR' ? 'some' : 'every'
+        filters.push((model) => subFilters[method]((subfilter) => subfilter(model)))
+      } else {
+        filters.push(getFilter(checkValue, field))
+      }
 
       continue
     }
