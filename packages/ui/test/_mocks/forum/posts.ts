@@ -2,7 +2,7 @@ import { RawForumPostMock } from '@/mocks/data/seedForum'
 
 export const mockPosts: RawForumPostMock[] = [
   {
-    id: '0:0',
+    id: '0',
     threadId: '0',
     authorId: '0',
     text:
@@ -30,7 +30,7 @@ export const mockPosts: RawForumPostMock[] = [
     },
   },
   {
-    id: '0:1',
+    id: '1',
     threadId: '0',
     authorId: '1',
     text:

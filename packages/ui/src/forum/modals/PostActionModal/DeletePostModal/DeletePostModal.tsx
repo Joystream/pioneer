@@ -1,7 +1,10 @@
+import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -12,6 +15,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { postActionMachine } from '../postActionMachine'
 import { PostActionSignModal } from '../PostActionSignModal'
+import { PostActionSuccessModal } from '../PostActionSuccessModal'
 
 import { DeletePostModalCall } from '.'
 
@@ -28,25 +32,35 @@ export const DeletePostModal = () => {
   const { threadId, categoryId } = usePostParents(post.id)
   const { api } = useApi()
 
+  const transaction = useMemo(
+    () =>
+      api &&
+      categoryId &&
+      threadId &&
+      api.tx.forum.deletePosts(
+        createType('ForumUserId', Number.parseInt(post.author.id)),
+        [[categoryId, threadId, post.id, true]],
+        ''
+      ),
+    [api, categoryId, threadId]
+  )
+  const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
+
   useEffect(() => {
     if (!state.matches('requirementsVerification')) {
       return
     }
-    if (active && active.id !== post.author.id) {
-      send('FAIL')
-      return
+    if (transaction && feeInfo && active) {
+      feeInfo.canAfford && send('PASS')
+      !feeInfo.canAfford && send('FAIL')
     }
-    if (active && threadId && categoryId && api) {
-      send('PASS')
-    }
-  }, [threadId, categoryId, active?.id, api])
+  }, [state.value, transaction, feeInfo?.canAfford])
 
   if (state.matches('requirementsVerification')) {
     return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModal} />
   }
 
-  if (state.matches('transaction') && api && threadId && categoryId) {
-    const transaction = api.tx.forum.deletePosts(post.author.id, [[categoryId, threadId, post.id, true]], '')
+  if (state.matches('transaction') && transaction) {
     const service = state.children.transaction
     const controllerAccount = accountOrNamed(allAccounts, post.author.controllerAccount, 'Controller Account')
     return (
@@ -59,8 +73,18 @@ export const DeletePostModal = () => {
     )
   }
 
+  if (state.matches('success')) {
+    return <PostActionSuccessModal onClose={hideModal} text="The post has been deleted." />
+  }
+
   if (state.matches('error')) {
     return <FailureModal onClose={hideModal}>There was a problem deleting your post.</FailureModal>
+  }
+
+  if (state.matches('requirementsFailed') && active && feeInfo) {
+    return (
+      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
+    )
   }
 
   return null
