@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import InView from 'react-intersection-observer'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
@@ -24,7 +25,20 @@ export const PostHistoryModal = React.memo(() => {
     modalData: { postId, author },
   } = useModal<PostHistoryModalCall>()
   const { isLoading, edits } = useForumPostEdits(postId)
-  const [activeEdit] = useState(0)
+  const [activeEdit, setActiveEdit] = useState(0)
+
+  const editsInView = useMemo(() => new Array<boolean>(edits?.length ?? 0), [edits?.length])
+
+  const pickActiveEdit = useCallback(
+    (index: number) => (isCurrentInView: boolean) => {
+      editsInView[index] = isCurrentInView
+      const newActiveEdit = editsInView.findIndex((value) => value)
+      setActiveEdit(newActiveEdit)
+    },
+    [editsInView]
+  )
+
+  const viewport = useRef<HTMLDivElement>(null)
 
   const getStepType = (index: number) => {
     if (index === activeEdit) {
@@ -41,13 +55,13 @@ export const PostHistoryModal = React.memo(() => {
           edits?.map((edit, index) => ({ title: formatDateString(edit.createdAt), type: getStepType(index) })) ?? []
         }
       />
-      <StepperBody>
+      <StepperBody ref={viewport}>
         {isLoading ? (
           <Loading text="Loading versions..." />
         ) : (
           <RowGapBlock gap={32}>
-            {edits?.map((edit) => (
-              <HistoryPost edit={edit} author={author} />
+            {edits?.map((edit, index) => (
+              <HistoryPost edit={edit} author={author} onChange={pickActiveEdit(index)} root={viewport.current} />
             ))}
           </RowGapBlock>
         )}
@@ -68,19 +82,23 @@ export const PostHistoryModal = React.memo(() => {
 interface HistoryPostProps {
   edit: PostEdit
   author: Member
+  onChange: (inView: boolean) => void
+  root: HTMLDivElement | null
 }
 
-const HistoryPost = React.memo(({ edit, author }: HistoryPostProps) => (
-  <ForumPostStyles>
-    <ForumPostRow>
-      <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-      <BlockTime block={asBlock(edit)} layout="reverse" />
-    </ForumPostRow>
-    <ForumPostRow>
-      <MarkdownPreview markdown={edit.newText} />
-    </ForumPostRow>
-  </ForumPostStyles>
-))
+const HistoryPost = ({ edit, author, onChange, root }: HistoryPostProps) => (
+  <InView onChange={onChange} root={root} rootMargin="-32px 0px 0px">
+    <ForumPostStyles>
+      <ForumPostRow>
+        <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
+        <BlockTime block={asBlock(edit)} layout="reverse" />
+      </ForumPostRow>
+      <ForumPostRow>
+        <MarkdownPreview markdown={edit.newText} />
+      </ForumPostRow>
+    </ForumPostStyles>
+  </InView>
+)
 
 const HistoryModalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 300px 1fr;
