@@ -27,6 +27,8 @@ export const ForumThread = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
 
+  const isThreadActive = thread?.status === 'ThreadStatusActive'
+
   if (!isLoading && !thread) {
     history.push('/404')
 
@@ -78,10 +80,12 @@ export const ForumThread = () => {
 
     return (
       <MainPanel ref={sideNeighborRef}>
-        <PostList threadId={thread.id} />
-        <InputComponent inputSize="auto">
-          <CKEditor />
-        </InputComponent>
+        <PostList threadId={thread.id} isThreadActive={isThreadActive} />
+        {isThreadActive && (
+          <InputComponent inputSize="auto">
+            <CKEditor />
+          </InputComponent>
+        )}
       </MainPanel>
     )
   }

@@ -24,9 +24,10 @@ interface Props {
   edited?: number
   text: string
   replyText: string
+  isThreadActive: boolean
 }
 
-const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText }) => {
+const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText, isThreadActive }) => {
   const updatedAt = edited >= 0 ? new Date(Date.now() - edited * A_MINUTE).toISOString() : undefined
   const reaction = likes >= 0 ? repeat(() => PostReaction.Like, likes) : undefined
   const repliesTo: ForumPost | undefined = replyText
@@ -55,7 +56,7 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
       <MemoryRouter>
         <MembershipContext.Provider value={membershipContext}>
           <Container>
-            <PostListItem post={{ ...post, updatedAt, text, reaction, repliesTo }} />
+            <PostListItem post={{ ...post, updatedAt, text, reaction, repliesTo }} isThreadActive={isThreadActive} />
           </Container>
         </MembershipContext.Provider>
       </MemoryRouter>
@@ -93,6 +94,7 @@ Exercitation veniam consequat sunt nostrud amet.`,
       inviteCount: 0,
     },
   },
+  isThreadActive: true,
 }
 
 const Container = styled(TemplateBlock)`
