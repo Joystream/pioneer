@@ -18,10 +18,14 @@ import { ThreadTags } from './ThreadTags'
 
 interface ThreadListItemProps {
   thread: ForumThread
+  isArchive?: boolean
 }
-export const ThreadListItem = ({ thread }: ThreadListItemProps) => {
+export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
   const { voteCount } = useThreadPollVoteCount(thread.id)
   const { member: author } = useMember(thread.authorId)
+
+  const { createdInBlock, status } = thread
+  const block = isArchive ? status?.threadDeletedEvent ?? status?.threadModeratedEvent : createdInBlock
 
   return (
     <ThreadListItemStyles as={GhostRouterLink} to={`${ForumRoutes.thread}/${thread.id}`}>
@@ -38,7 +42,7 @@ export const ThreadListItem = ({ thread }: ThreadListItemProps) => {
 
       {author ? <MemberInfo member={author} size="s" memberSize="s" showGroup={false} /> : <Loading />}
 
-      <BlockTime block={thread.createdInBlock} layout="column" />
+      {block && <BlockTime block={block} layout="column" />}
     </ThreadListItemStyles>
   )
 }
