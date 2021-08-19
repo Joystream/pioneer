@@ -44,11 +44,10 @@ describe('UI: Connection status component', () => {
   })
 
   it('Disconnected', async () => {
+    useApi.connectionState = 'disconnected'
     renderComponent()
 
     act(() => {
-      eventEmitter.emit('connected')
-      useApi.connectionState = 'disconnected'
       eventEmitter.emit('disconnected')
     })
 
