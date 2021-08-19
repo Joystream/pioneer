@@ -2,6 +2,8 @@ import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
@@ -25,16 +27,21 @@ export const CreateThreadModal = () => {
   const { api } = useApi()
   const { breadcrumbs } = useForumBreadcrumbs(modalData.categoryId)
 
+  const baseTransaction = api?.tx.forum.createThread(member?.id ?? 0, modalData.categoryId, '', '', null)
+  const baseTransactionFee = useTransactionFee(member?.controllerAccount, baseTransaction)
+
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
       if (!member) {
         showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
-      } else {
+      } else if (baseTransactionFee) {
+        const { canAfford } = baseTransactionFee
         const controllerAccount = accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account')
-        send({ type: 'PASS', memberId: member.id, categoryId: modalData.categoryId, controllerAccount })
+        canAfford && send({ type: 'PASS', memberId: member.id, categoryId: modalData.categoryId, controllerAccount })
+        canAfford || send('FAIL')
       }
     }
-  }, [state.value, member?.id])
+  }, [state.value, member?.id, baseTransactionFee])
 
   if (state.matches('generalDetails') && member) {
     return (
@@ -63,6 +70,16 @@ export const CreateThreadModal = () => {
 
   if (state.matches('error')) {
     return <FailureModal onClose={hideModal}>There was a problem with creating your forum thread.</FailureModal>
+  }
+
+  if (state.matches('requirementsFailed') && member && baseTransactionFee) {
+    return (
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={member.controllerAccount}
+        amount={baseTransactionFee.transactionFee}
+      />
+    )
   }
 
   return null
