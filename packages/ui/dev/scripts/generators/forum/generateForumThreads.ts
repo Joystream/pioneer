@@ -79,14 +79,14 @@ export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock,
   return { forumThreads, forumPosts }
 }
 
-const generateThreadStatus = (type: ThreadStatusType): RawForumThreadMock['status'] => {
-  switch (type) {
+const generateThreadStatus = (__typename: ThreadStatusType): RawForumThreadMock['status'] => {
+  switch (__typename) {
     case Locked:
     case Removed:
-      return { type, threadDeletedEvent: randomBlock() }
+      return { __typename, threadDeletedEvent: randomBlock() }
     case Moderated:
-      return { type, threadModeratedEvent: randomBlock() }
+      return { __typename, threadModeratedEvent: randomBlock() }
     case Active:
-      return { type }
+      return { __typename }
   }
 }

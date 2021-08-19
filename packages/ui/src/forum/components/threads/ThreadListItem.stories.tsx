@@ -4,9 +4,11 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { Network } from '@/common/api/queries'
 import { asArray } from '@/common/utils'
-import { asStorybookPost, CategoryData, ThreadData } from '@/forum/helpers/storybook'
+import { asStorybookPost, CategoryData } from '@/forum/helpers/storybook'
+import { ForumThreadFieldsFragment } from '@/forum/queries'
 import { asForumThread } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { RawForumThreadMock } from '@/mocks/data/seedForum'
 
 import { ThreadListItem } from './ThreadListItem'
 
@@ -26,12 +28,12 @@ const category: CategoryData = {
 
 interface Props {
   tags: string[]
-  rawThread: ThreadData
+  rawThread: RawForumThreadMock & ForumThreadFieldsFragment
 }
 const Template: Story<Props> = ({ tags, rawThread }) => {
   const forum = { categories: [category], threads: [rawThread], posts: asArray(asStorybookPost('foo', rawThread.id)) }
   const thread = {
-    ...asForumThread({ ...rawThread, status: { __typename: rawThread.status } }),
+    ...asForumThread(rawThread),
     tags: tags.map((title, index) => ({ id: String(index), title, threads: [], visibleThreadsCount: 0 })),
   }
 
@@ -59,7 +61,7 @@ Default.args = {
       network: 'OLYMPIA' as Network,
       __typename: 'ThreadCreatedEvent',
     },
-    status: 'ThreadStatusActive',
+    status: { __typename: 'ThreadStatusActive' },
     __typename: 'ForumThread',
   },
 }

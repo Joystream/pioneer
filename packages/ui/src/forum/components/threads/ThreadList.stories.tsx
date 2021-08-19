@@ -26,7 +26,7 @@ const forumThread: ForumThreadWithDetails = {
   createdInBlock: randomBlock(),
   tags: [],
   visiblePostsCount: 5,
-  status: 'ThreadStatusActive',
+  status: { __typename: 'ThreadStatusActive' },
 }
 
 const Template: Story = ({ onSort, isArchive }) => {
