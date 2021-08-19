@@ -13,7 +13,7 @@ export const generateCategories = (depth: number, parent?: RawForumCategoryMock)
   return [...new Array(numberOfCategories)].flatMap(() => generateCategory(depth - 1, parent))
 }
 
-const ActiveStatus: CategoryStatus = 'CategoryStatusActive'
+export const ActiveStatus: CategoryStatus = 'CategoryStatusActive'
 const randomStatus = randomFromWeightedSet<CategoryStatus>([3, ActiveStatus], [1, 'CategoryStatusArchived'])
 
 const generateCategory = (depth: number, parent?: RawForumCategoryMock): RawForumCategoryMock[] => {
