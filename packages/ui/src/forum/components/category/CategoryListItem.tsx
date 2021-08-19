@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
+import { LinkButtonInnerWrapper, LinkButtonLink } from '@/common/components/buttons/LinkButtons'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
@@ -31,7 +32,15 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
         <h5>{category.title}</h5>
         <TextMedium light>{category.description}</TextMedium>
         <TextInlineExtraSmall lighter>
-          Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
+          Subcategories:{' '}
+          {category.subcategories.map(({ title }, index) => (
+            <>
+              <SubcategoryLink key={index} to={'/'} size="small">
+                {title}
+              </SubcategoryLink>
+              {index < category.subcategories.length - 1 && ', '}
+            </>
+          ))}
         </TextInlineExtraSmall>
       </Category>
 
@@ -76,5 +85,25 @@ const Category = styled.div`
   }
   ${TextInlineExtraSmall} {
     ${Overflow.FullDots};
+  }
+`
+
+const SubcategoryLink = styled(LinkButtonLink)`
+  &,
+  &:visited {
+    display: inline-flex;
+    font-size: inherit;
+    line-height: 12px;
+    font-weight: inherit;
+    color: inherit;
+    border: none;
+
+    &:before {
+      bottom: 0;
+      background-color: ${Colors.Black[400]};
+    }
+    ${LinkButtonInnerWrapper} {
+      transform: translateY(0);
+    }
   }
 `

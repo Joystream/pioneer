@@ -41,7 +41,7 @@ const getPadding = (props: LinkButtonProps) => {
 
 export function LinkButtonPrimary({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonPrimaryStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
+    <LinkButtonPrimaryStyles className={className} size={size} square={square} disabled={disabled} to={to}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonPrimaryStyles>
   )
@@ -49,7 +49,7 @@ export function LinkButtonPrimary({ className, children, size, square, disabled,
 
 export function LinkButtonSecondary({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonSecondaryStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
+    <LinkButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} to={to}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonSecondaryStyles>
   )
@@ -57,27 +57,27 @@ export function LinkButtonSecondary({ className, children, size, square, disable
 
 export function LinkButtonGhost({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonGhostStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
+    <LinkButtonGhostStyles className={className} size={size} square={square} disabled={disabled} to={to}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonGhostStyles>
   )
 }
 export function LinkButtonBareGhost({ className, children, size, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonBareGhostStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
+    <LinkButtonBareGhostStyles className={className} size={size} square={square} disabled={disabled} to={to}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonBareGhostStyles>
   )
 }
 export function LinkButtonLink({ className, children, square, disabled, to }: LinkButtonProps) {
   return (
-    <LinkButtonLinkStyles className={className} $square={square} disabled={disabled} to={to} size="small">
+    <LinkButtonLinkStyles className={className} square={square} disabled={disabled} to={to} size="small">
       <LinkButtonInnerWrapper size="small">{children}</LinkButtonInnerWrapper>
     </LinkButtonLinkStyles>
   )
 }
 
-const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
+export const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};
@@ -91,7 +91,7 @@ const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
 `
 
 interface LinkButtonStyleProps extends Omit<LinkButtonProps, 'square'> {
-  $square: LinkButtonProps['square']
+  square?: LinkButtonProps['square']
 }
 
 export const BasicLinkButtonStyles = css<LinkButtonStyleProps>`
@@ -104,7 +104,7 @@ export const BasicLinkButtonStyles = css<LinkButtonStyleProps>`
     width: fit-content;
     min-width: ${getHeight};
     ${(props) => {
-      if (props.$square)
+      if (props.square)
         return css`
           max-width: ${getHeight(props)};
         `
@@ -202,7 +202,7 @@ export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonStyleProps>`
     background-color: ${Colors.Black[75]};
 
     ${LinkButtonInnerWrapper} > svg {
-      color: ${({ $square }) => ($square ? Colors.Black[900] : Colors.Black[400])};
+      color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
     }
 
     &:before {
@@ -242,7 +242,7 @@ export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
     background-color: ${Colors.White};
 
     ${LinkButtonInnerWrapper} > svg {
-      color: ${({ $square }) => ($square ? Colors.Black[900] : Colors.Black[400])};
+      color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
     }
 
     &:before {
@@ -281,7 +281,7 @@ export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonStyleProps>`
     background-color: ${Colors.White};
 
     ${LinkButtonInnerWrapper} > svg {
-      color: ${({ $square }) => ($square ? Colors.Black[900] : Colors.Black[400])};
+      color: ${({ square }) => (square ? Colors.Black[900] : Colors.Black[400])};
     }
 
     &:before,
