@@ -6,13 +6,13 @@ import { Loader } from '../icons'
 import { SearchProcessIcon } from '../icons/SearchProcessIcon'
 import { ResultTextWhite } from '../Modal'
 
-export interface SearchingPropcessProps {
+export interface SearchingProcessProps {
   isSearching?: boolean
   title: string
   description?: string
 }
 
-export const SearchProcess = ({ title, description }: SearchingPropcessProps) => {
+export const SearchProcess = ({ title, description }: SearchingProcessProps) => {
   return (
     <SearchProcessWrapper>
       <SearchProcessContainer>
@@ -42,7 +42,7 @@ const SearchProcessContainer = styled.div`
   max-width: 400px;
   height: fit-content;
   margin-top: 144px;
-  padding: 48px 24px 48px;
+  padding: 48px 32px 48px;
   box-shadow: ${Shadows.common};
   background-color: ${Colors.Black[800]};
 `
@@ -54,7 +54,8 @@ const SearchLoader = styled(Loader)`
 `
 
 const SearchProcessIconStyled = styled(SearchProcessIcon)`
-  margin-bottom: 8px;
+  margin-top: 4px;
+  margin-bottom: 12px;
 `
 
 const SearchTitle = styled.h4`

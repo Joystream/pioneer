@@ -51,7 +51,7 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
         },
         {
-          test: /\.(png|jpg|gif|woff|woff2|eot|ttf|otf)$/,
+          test: /\.(png|jpg|gif|woff|woff2|eot|ttf|otf|svg)$/,
           use: ['file-loader'],
         },
         {
