@@ -1,6 +1,6 @@
 import faker from 'faker'
 
-import { ThreadStatus } from '@/forum/types'
+import { ThreadStatusType } from '@/forum/types'
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
 import { randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
@@ -31,10 +31,10 @@ export const generateForumPost = (threadId: string, authorId: string, repliesToI
   }
 }
 
-const Active: ThreadStatus = 'ThreadStatusActive'
-const Locked: ThreadStatus = 'ThreadStatusLocked'
-const Moderated: ThreadStatus = 'ThreadStatusModerated'
-const Removed: ThreadStatus = 'ThreadStatusRemoved'
+const Active: ThreadStatusType = 'ThreadStatusActive'
+const Locked: ThreadStatusType = 'ThreadStatusLocked'
+const Moderated: ThreadStatusType = 'ThreadStatusModerated'
+const Removed: ThreadStatusType = 'ThreadStatusRemoved'
 const ArchivedStatuses = [Locked, Moderated, Removed]
 const randomThreadStatus = randomFromWeightedSet([12, Active], [1, Locked], [1, Moderated], [1, Removed])
 
@@ -79,7 +79,7 @@ export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock,
   return { forumThreads, forumPosts }
 }
 
-const generateThreadStatus = (type: ThreadStatus): RawForumThreadMock['status'] => {
+const generateThreadStatus = (type: ThreadStatusType): RawForumThreadMock['status'] => {
   switch (type) {
     case Locked:
     case Removed:

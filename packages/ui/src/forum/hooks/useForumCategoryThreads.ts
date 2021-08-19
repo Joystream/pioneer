@@ -5,7 +5,7 @@ import { merge } from '@/common/utils'
 import { ThreadEmptyFilters, ThreadFiltersState } from '@/forum/components/threads/ThreadFilters'
 import { ThreadDefaultOrder, ThreadOrder } from '@/forum/components/threads/ThreadList'
 import { useGetPaginatedForumThreadsQuery } from '@/forum/queries'
-import { asForumThread, ThreadStatus } from '@/forum/types'
+import { asForumThread, ThreadStatusType } from '@/forum/types'
 
 export interface ThreadsOptions {
   filters: ThreadFiltersState
@@ -14,8 +14,12 @@ export interface ThreadsOptions {
   isArchive?: boolean
 }
 
-export const ActiveStatuses: ThreadStatus[] = ['ThreadStatusActive']
-export const ArchivedStatuses: ThreadStatus[] = ['ThreadStatusLocked', 'ThreadStatusModerated', 'ThreadStatusRemoved']
+export const ActiveStatuses: ThreadStatusType[] = ['ThreadStatusActive']
+export const ArchivedStatuses: ThreadStatusType[] = [
+  'ThreadStatusLocked',
+  'ThreadStatusModerated',
+  'ThreadStatusRemoved',
+]
 
 const threadOptionReducer: Reducer<ThreadsOptions, Partial<ThreadsOptions>> = merge
 const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }

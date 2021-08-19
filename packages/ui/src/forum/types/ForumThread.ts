@@ -1,7 +1,11 @@
 import { asBlock, Block } from '@/common/types'
 import { ForumThreadDetailedFieldsFragment, ForumThreadFieldsFragment } from '@/forum/queries'
 
-export type ThreadStatus = ForumThreadFieldsFragment['status']['__typename']
+export type ThreadStatusType = ForumThreadFieldsFragment['status']['__typename']
+interface ThreadStatus extends Pick<ForumThreadFieldsFragment['status'], '__typename'> {
+  threadDeletedEvent?: Block
+  threadModeratedEvent?: Block
+}
 
 export interface ForumThread {
   id: string
@@ -26,6 +30,16 @@ export interface ForumThreadWithDetails extends ForumThread {
   createdInBlock: Block
 }
 
+export const asForumThreadStatus = (fields: ForumThreadFieldsFragment['status']): ThreadStatus => ({
+  __typename: fields.__typename,
+  ...('threadDeletedEvent' in fields && fields.threadDeletedEvent
+    ? { threadDeletedEvent: asBlock(fields.threadDeletedEvent) }
+    : {}),
+  ...('threadModeratedEvent' in fields && fields.threadModeratedEvent
+    ? { threadModeratedEvent: asBlock(fields.threadModeratedEvent) }
+    : {}),
+})
+
 export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread => ({
   id: fields.id,
   title: fields.title,
@@ -35,7 +49,7 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
   categoryId: fields.categoryId,
   tags: [],
   visiblePostsCount: 10,
-  status: fields.status.__typename,
+  status: asForumThreadStatus(fields.status),
 })
 
 export const asForumThreadWithDetails = (fields: ForumThreadDetailedFieldsFragment): ForumThreadWithDetails => ({

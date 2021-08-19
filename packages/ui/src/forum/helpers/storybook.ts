@@ -1,6 +1,6 @@
 import faker from 'faker'
 
-import { CategoryStatus, ForumModerator, ThreadStatus } from '@/forum/types'
+import { CategoryStatus, ForumModerator, ThreadStatusType } from '@/forum/types'
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
@@ -31,7 +31,7 @@ export const asStorybookPost = (text: string, threadId?: string): RawForumPostMo
 }
 
 export type ThreadData = Omit<RawForumThreadMock, 'status'> &
-  Omit<ForumThreadFieldsFragment, 'status'> & { status: ThreadStatus }
+  Omit<ForumThreadFieldsFragment, 'status'> & { status: ThreadStatusType }
 
 export const asStorybookThread = (title: string, categoryId?: string): RawForumThreadMock | undefined => {
   if (title && categoryId)

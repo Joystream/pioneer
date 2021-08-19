@@ -74,9 +74,33 @@ export type ForumThreadFieldsFragment = {
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   status:
     | { __typename: 'ThreadStatusActive' }
-    | { __typename: 'ThreadStatusLocked' }
-    | { __typename: 'ThreadStatusModerated' }
-    | { __typename: 'ThreadStatusRemoved' }
+    | {
+        __typename: 'ThreadStatusLocked'
+        threadDeletedEvent?: Types.Maybe<{
+          __typename: 'ThreadDeletedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+    | {
+        __typename: 'ThreadStatusModerated'
+        threadModeratedEvent?: Types.Maybe<{
+          __typename: 'ThreadModeratedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+    | {
+        __typename: 'ThreadStatusRemoved'
+        threadDeletedEvent?: Types.Maybe<{
+          __typename: 'ThreadDeletedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
 }
 
 export type ForumPostFieldsFragment = {
@@ -339,6 +363,27 @@ export const ForumThreadFieldsFragmentDoc = gql`
     }
     status {
       __typename
+      ... on ThreadStatusLocked {
+        threadDeletedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on ThreadStatusRemoved {
+        threadDeletedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on ThreadStatusModerated {
+        threadModeratedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
     }
   }
 `
