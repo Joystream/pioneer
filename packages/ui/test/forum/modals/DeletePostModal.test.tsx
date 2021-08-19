@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -7,39 +7,30 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
-import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
+import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMember } from '@/mocks/data'
 import rawMembers from '@/mocks/data/raw/members.json'
 import { seedForumCategory, seedForumPost, seedForumThread } from '@/mocks/data/seedForum'
 
-import { getButton } from '../../_helpers/getButton'
 import { mockCategories, mockPosts, mockThreads } from '../../_mocks/forum'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import {
-  stubApi,
-  stubDefaultBalances,
-  stubTransaction,
-  stubTransactionFailure,
-  stubTransactionSuccess,
-} from '../../_mocks/transactions'
+import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
 
-describe('UI: EditPostModal', () => {
+describe('UI: DeletePostModal', () => {
   const api = stubApi()
-  const txPath = 'api.tx.forum.editPostText'
-  let tx: any
-  const modalData: ModalCallData<EditPostModalCall> = {
+  const txPath = 'api.tx.forum.deletePosts'
+  const modalData: ModalCallData<DeletePostModalCall> = {
     post: {
       id: '0',
       author: getMember('alice'),
       createdAt: '2021-07-02T04:22:13.523Z',
       text: 'Sample post text',
     },
-    newText: 'New text',
   }
 
   const useModal: UseModal<any> = {
@@ -75,27 +66,18 @@ describe('UI: EditPostModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    tx = stubTransaction(api, txPath)
+    stubTransaction(api, txPath)
   })
 
   it('Requirements failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
+    stubTransaction(api, txPath, 10000)
     renderModal()
     expect(await screen.findByText('Insufficient Funds')).toBeDefined()
   })
 
-  it('Transaction failed', async () => {
-    stubTransactionFailure(tx)
+  it('Requirements passed', async () => {
     renderModal()
-    await fireEvent.click(await getButton(/Sign and send/i))
-    expect(await screen.getByText('There was a problem submitting an edit to your post.')).toBeDefined()
-  })
-
-  it('Transaction success', async () => {
-    stubTransactionSuccess(tx, [], 'forum', 'editPostText')
-    renderModal()
-    await fireEvent.click(await getButton(/Sign and send/i))
-    expect(await screen.getByText('Your edit has been submitted.')).toBeDefined()
+    expect(await screen.findByText('You intend to delete your post.')).toBeDefined()
   })
 
   const renderModal = () =>
@@ -106,7 +88,7 @@ describe('UI: EditPostModal', () => {
             <AccountsContext.Provider value={useAccounts}>
               <MembershipContext.Provider value={useMyMemberships}>
                 <ApiContext.Provider value={api}>
-                  <EditPostModal />
+                  <DeletePostModal />
                 </ApiContext.Provider>
               </MembershipContext.Provider>
             </AccountsContext.Provider>
