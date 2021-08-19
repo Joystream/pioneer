@@ -41,9 +41,9 @@ const randomThreadStatus = randomFromWeightedSet([12, Active], [1, Locked], [1, 
 export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock, 'id' | 'status'>[]) => {
   const forumThreads: RawForumThreadMock[] = forumCategories.flatMap((category) =>
     repeat(() => {
-      const status =
+      const status = generateThreadStatus(
         category.status === CategoryActiveStatus ? randomThreadStatus() : faker.random.arrayElement(ArchivedStatuses)
-
+      )
       const createdInEvent = randomBlock()
       return {
         id: String(nextThreadId++),
@@ -77,4 +77,16 @@ export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock,
     .flatMap((a) => a)
 
   return { forumThreads, forumPosts }
+}
+
+const generateThreadStatus = (type: ThreadStatus): RawForumThreadMock['status'] => {
+  switch (type) {
+    case Locked:
+    case Removed:
+      return { type, threadDeletedEvent: randomBlock() }
+    case Moderated:
+      return { type, threadModeratedEvent: randomBlock() }
+    case Active:
+      return { type }
+  }
 }
