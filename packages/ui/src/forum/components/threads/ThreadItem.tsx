@@ -19,8 +19,8 @@ interface ThreadAnswerProps {
 
 export interface ThreadItemContentProps {
   title: string
-  date: string
-  content: string
+  date?: string
+  content?: string
   badges?: ThreadBadgeProps[]
   answers?: ThreadAnswerProps[]
   halfSize?: boolean
@@ -31,7 +31,7 @@ export const ThreadItem = ({ title, date, content, badges, answers, halfSize }: 
     <ThreadItemWrapper halfSize={halfSize}>
       <ThreadItemHeader align="center">
         <ThreadItemTitle>{title}</ThreadItemTitle>
-        <ThreadItemTime lighter>{date}</ThreadItemTime>
+        {date && <ThreadItemTime lighter>{date}</ThreadItemTime>}
       </ThreadItemHeader>
       {content && (
         <ThreadItemText light value>

@@ -46,6 +46,21 @@ export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
     setCurrentItemsGroup(currentItemsGroup + 1)
   }
 
+  if (!items) {
+    return (
+      <ThreadBrowserStyles>
+        <ThreadBrowserHeader align="center" gap={16}>
+          <Label>
+            {label} <CountBadge count={0} />
+          </Label>
+        </ThreadBrowserHeader>
+        <ThreadBrowserItems>
+          <ThreadItem title={`"${label}" section is empty`} />
+        </ThreadBrowserItems>
+      </ThreadBrowserStyles>
+    )
+  }
+
   return (
     <ThreadBrowserStyles>
       <ThreadBrowserHeader align="center" gap={16}>
