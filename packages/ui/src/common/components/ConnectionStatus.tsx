@@ -8,7 +8,7 @@ const HIDE_NOTIFICATION_TIMEOUT = 5000
 
 export const ConnectionStatus = () => {
   const { api, connectionState } = useApi()
-  const [showNotification, setShowNotification] = useState(false)
+  const [showNotification, setShowNotification] = useState(true)
   const show = useCallback(() => setShowNotification(true), [])
   const hide = useCallback(() => setShowNotification(false), [])
   const onConnected = useCallback(() => {
@@ -31,21 +31,21 @@ export const ConnectionStatus = () => {
   }, [api])
 
   useEffect(() => {
-    if (!showNotification) {
+    if (!showNotification || connectionState === 'connecting') {
       return
     }
 
     const timeout = setTimeout(hide, HIDE_NOTIFICATION_TIMEOUT)
 
     return () => clearTimeout(timeout)
-  }, [showNotification])
-
-  if (connectionState === 'connecting') {
-    return <SideNotification title="Connecting to node" />
-  }
+  }, [showNotification, connectionState])
 
   if (!showNotification) {
     return null
+  }
+
+  if (connectionState === 'connecting') {
+    return <SideNotification showClose onClick={hide} title="Connecting to node" />
   }
 
   if (connectionState === 'connected') {

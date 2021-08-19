@@ -30,42 +30,51 @@ type CloseButtonProps = WithCloseButton | WithoutCloseButton
 
 export type NotificationProps = BasePropsProps & CloseButtonProps
 
+interface NotificationsHolderProps {
+  children: React.ReactNode | React.ReactNodeArray
+}
+
+export const NotificationsHolder = ({ children }: NotificationsHolderProps) => {
+  return ReactDOM.createPortal(<NotificationsHolderWrapper>{children}</NotificationsHolderWrapper>, document.body)
+}
+
 export const SideNotification = ({ title, message, link, onClick, isError, showClose }: NotificationProps) => {
-  return ReactDOM.createPortal(
-    <NotificationComponent isError={isError}>
+  return (
+    <NotificationComponent isError={isError} message={message}>
       {showClose && <NotificationCloseButton onClick={onClick} />}
       <NotificationHeader isError={isError}>
         {isError ? <NotificationFailureSymbol /> : <NotificationSuccessIcon />}
         <NotificationTitle>{title}</NotificationTitle>
       </NotificationHeader>
-      <NotificationMessage>
-        {message}
-        {link && ' '}
-        {link && (
-          <LinkLink href={link} accentColor size="small">
-            See details
-          </LinkLink>
-        )}
-      </NotificationMessage>
-    </NotificationComponent>,
-    document.body
+      {message && (
+        <NotificationMessage>
+          {message}
+          {link && ' '}
+          {link && (
+            <LinkLink href={link} accentColor size="small">
+              See details
+            </LinkLink>
+          )}
+        </NotificationMessage>
+      )}
+    </NotificationComponent>
   )
 }
 
-const NotificationComponent = styled.div<{ isError?: boolean }>`
+const NotificationComponent = styled.div<{
+  isError?: boolean
+  message?: string | React.ReactElement | React.ReactNode
+}>`
   display: flex;
-  position: absolute;
+  position: relative;
   flex-direction: column;
-  top: 8px;
-  right: 8px;
   width: 100%;
-  max-width: 438px;
-  padding: 16px 24px 20px 20px;
+  row-gap: 16px;
+  padding: ${({ message }) => (message ? '16px 24px 24px 20px' : '16px 24px 16px 20px')};
   background-color: ${Colors.Black[800]};
   border-left: 4px solid ${({ isError }) => (isError ? Colors.Red[400] : Colors.Blue[500])};
   border-radius: ${BorderRad.m};
   box-shadow: ${Shadows.select};
-  z-index: ${ZIndex.sideNotification};
   ${Animations.showNotification};
 `
 
@@ -76,11 +85,11 @@ const NotificationHeader = styled.div<{ isError?: boolean }>`
   align-items: center;
   width: fit-content;
   color: ${({ isError }) => (isError ? Colors.Red[400] : Colors.White)};
-  margin-bottom: 16px;
 `
 
 const NotificationTitle = styled.h5`
   color: ${Colors.White};
+  transform: translateY(2px);
 `
 
 const NotificationCloseButton = styled(CloseButton)`
@@ -112,4 +121,15 @@ const NotificationSuccessIcon = styled(SuccessIcon)`
   .blackPart {
     fill: ${Colors.White};
   }
+`
+
+export const NotificationsHolderWrapper = styled.div`
+  display: grid;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  grid-row-gap: 8px;
+  width: 100%;
+  max-width: 438px;
+  z-index: ${ZIndex.sideNotification};
 `
