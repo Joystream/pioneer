@@ -38,7 +38,7 @@ export const ChangeAccountSignModal: FC<Props> = ({ onClose, worker, service, tr
         <Row>
           <TextMedium>{title}</TextMedium>
         </Row>
-        <InputComponent label="From" inputSize="l" disabled={true}>
+        <InputComponent label="From" inputSize="l" disabled borderless>
           <SelectedAccount account={signer} />
         </InputComponent>
       </ModalBody>

@@ -6,8 +6,6 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 
-const from = true
-
 interface Props {
   account?: Account
   onClose: () => void
@@ -29,14 +27,7 @@ export const ChangeAccountSelectModal: FC<Props> = ({ account, onClose, onAccept
     <Modal onClose={onClose} modalSize="m" modalHeight="s">
       <ModalHeader onClick={onClose} title={title} />
       <ModalBody>
-        <InputComponent
-          required
-          inputSize="l"
-          label="Select account"
-          id="select-account-input"
-          disabled={from}
-          borderless={from}
-        >
+        <InputComponent required inputSize="l" label="Select account" id="select-account-input">
           <SelectAccount filter={filterSelectedAccount} onChange={setSelectedAccount} selected={selectedAccount} />
         </InputComponent>
       </ModalBody>
