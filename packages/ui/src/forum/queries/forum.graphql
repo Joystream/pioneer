@@ -12,6 +12,9 @@ fragment ForumCategoryFields on ForumCategory {
 fragment ForumCategoryWithDetailsFields on ForumCategory {
   ...ForumSubCategoryFields
   description
+  status {
+    __typename
+  }
   forumcategoryparent {
     ...ForumCategoryFields
   }
