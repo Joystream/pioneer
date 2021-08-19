@@ -12,7 +12,7 @@ export const Forum = () => {
     <Switch>
       <Redirect from={ForumRoutes.root} to={ForumRoutes.forum} exact />
       <Route path={ForumRoutes.forum} exact component={ForumCategories} />
-      <Route path={`${ForumRoutes.category}/:id`} exact component={ForumCategory} />
+      <Route path={`${ForumRoutes.category}/:id/:type?`} exact component={ForumCategory} />
       <Route path={ForumRoutes.archived} exact component={ForumArchived} />
       <Route path="/forum/thread/:id" exact component={ForumThread} />
     </Switch>

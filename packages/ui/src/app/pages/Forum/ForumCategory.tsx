@@ -15,22 +15,25 @@ import { useModal } from '@/common/hooks/useModal'
 import { ForumCategoryList } from '@/forum/components/category'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
-import { ArchivedStatus } from '@/forum/hooks/useForumCategories'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
 
 export const ForumCategory = () => {
-  const { id } = useParams<{ id: string }>()
-  const { category } = useForumCategory(id)
+  const { id, type } = useParams<{ id: string; type?: 'archive' }>()
+  const isArchive = type === 'archive'
 
-  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({ categoryId: id })
+  const { category } = useForumCategory(id)
+  const {
+    isLoading: isLoadingThreads,
+    threads,
+    threadCount,
+    refresh,
+  } = useForumCategoryThreads({ categoryId: id, isArchive })
 
   const { showModal } = useModal()
 
   if (!category) return <Loading />
-
-  const isArchive = category.status === ArchivedStatus
 
   return (
     <PageLayout
