@@ -101,9 +101,15 @@ const SubcategoryLink = styled(LinkButtonLink)`
     &:before {
       bottom: 0;
       background-color: ${Colors.Black[400]};
+      transform: translateX(calc(-100% - 2px));
     }
     ${LinkButtonInnerWrapper} {
       transform: translateY(0);
+    }
+  }
+  &:hover {
+    &:before {
+      transform: translateX(0%);
     }
   }
 `
