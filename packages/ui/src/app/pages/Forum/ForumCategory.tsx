@@ -72,7 +72,7 @@ export const ForumCategory = () => {
           </RowGapBlock>
 
           <RowGapBlock gap={24}>
-            <ThreadFilters onApply={(filters) => refresh({ filters })}>
+            <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
               <ItemCount count={threadCount} size="xs">
                 {isArchive ? 'Archived Threads' : 'Threads'}
               </ItemCount>
