@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client'
 import React, { FC, useEffect, useState } from 'react'
 
 import {
@@ -98,4 +99,13 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
   }, [JSON.stringify(toSeed)])
 
   return <TestMockApolloProvider>{started ? children : <h3>Starting mock server...</h3>}</TestMockApolloProvider>
+}
+
+interface QueryProps {
+  call: (client: ReturnType<typeof useApolloClient>) => void
+}
+export const Query = ({ call }: QueryProps) => {
+  const client = useApolloClient()
+  useEffect(() => call(client), [])
+  return null
 }
