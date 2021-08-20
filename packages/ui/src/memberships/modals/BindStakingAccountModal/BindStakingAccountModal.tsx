@@ -57,7 +57,7 @@ export const BindStakingAccountModal = ({ onClose, transaction, signer, service,
           <SelectedAccount account={signerAccount} />
         </Row>
         <Label>Member</Label>
-        <MemberRow>{member && <MemberInfo member={member} />}</MemberRow>
+        <MemberRow>{member && <MemberInfo member={member} skipModal />}</MemberRow>
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>

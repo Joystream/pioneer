@@ -1,23 +1,17 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
 import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { TokenValue } from '@/common/components/typography/TokenValue'
 import { useApi } from '@/common/hooks/useApi'
-import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
 
 import { MemberInfo } from '..'
 import { Member } from '../../types'
-import { MemberModalCall } from '../MemberProfile'
 import { MemberRoles } from '../MemberRoles'
 
 import { CountInfo, Info, MemberColumn, MemberItemWrap, MemberRolesColumn } from './Fileds'
 
 export const MemberListItem = ({ member }: { member: Member }) => {
-  const { showModal } = useModal()
-  const showMemberModal = useCallback(() => {
-    showModal<MemberModalCall>({ modal: 'Member', data: { id: member.id } })
-  }, [member.id])
   const { api, connectionState } = useApi()
   const council = useObservable(api?.query.council.councilMembers(), [connectionState])
   const councilMembersIds = council?.map(({ membership_id }) => membership_id.toNumber()) ?? []
@@ -30,7 +24,7 @@ export const MemberListItem = ({ member }: { member: Member }) => {
       </MemberColumn>
 
       <MemberColumn>
-        <MemberInfo member={member} onClick={showMemberModal} showGroup={false} />
+        <MemberInfo member={member} showGroup={false} />
       </MemberColumn>
 
       <MemberColumn>

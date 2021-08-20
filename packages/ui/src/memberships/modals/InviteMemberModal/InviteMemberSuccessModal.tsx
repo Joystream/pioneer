@@ -40,7 +40,7 @@ export function InviteMemberSuccessModal({ onClose, formData }: Props) {
       <ModalBody>
         <TextMedium>You have just successfully invited a member.</TextMedium>
         <MemberRow>
-          <MemberInfo member={(formData as unknown) as Member} />
+          <MemberInfo member={(formData as unknown) as Member} skipModal />
         </MemberRow>
         {isLoading && <Loading />}
         {!isLoading && inviteCount > 0 ? (

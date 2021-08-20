@@ -30,10 +30,6 @@ export const MemberHandle = styled.span`
   text-overflow: ellipsis;
   cursor: pointer;
   transition: ${Transitions.all};
-
-  &:hover {
-    color: ${Colors.Black[700]};
-  }
 `
 
 export const MemberIcons = styled.div`
@@ -105,6 +101,50 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   justify-self: start;
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
+
+  ${({ skipModal }) =>
+    !skipModal &&
+    css`
+      cursor: pointer;
+      &:hover,
+      &:focus,
+      &:focus-within,
+      &:active {
+        ${MemberHandle} {
+          color: ${Colors.Blue[500]};
+        }
+        ${MemberPhoto} {
+          &:after {
+            opacity: 0.2;
+          }
+        }
+      }
+
+      ${MemberPhoto} {
+        &:after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 100%;
+          height: 100%;
+          border-radius: ${BorderRad.round};
+          background-color: ${Colors.LogoPurple};
+          opacity: 0;
+          transform: translate(-50%, -50%);
+          transition: ${Transitions.all};
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-within,
+        &:active {
+          &:after {
+            opacity: 0.2;
+          }
+        }
+      }
+    `}
 
   ${MemberPhoto} {
     ${({ memberSize }) => {
