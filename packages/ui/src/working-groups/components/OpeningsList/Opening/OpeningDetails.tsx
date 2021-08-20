@@ -2,7 +2,6 @@ import React from 'react'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
-import { Arrow } from '@/common/components/icons'
 import { StatiscticContentColumn, Statistics, StatsBlock, TwoColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
@@ -61,7 +60,6 @@ export const OpeningDetails = ({ opening }: Props) => {
         </Statistics>
         <ButtonsGroup align="right">
           <LinkButtonGhost to={`/working-groups/openings/${opening.id}`} size="medium">
-            <Arrow direction="left" />
             Learn more
           </LinkButtonGhost>
           <ButtonPrimary
