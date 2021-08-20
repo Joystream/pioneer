@@ -14,7 +14,7 @@ export interface RawForumCategoryMock {
   description: string
   parentId?: string | null
   moderatorIds: string[]
-  status: string
+  status: { __typename: string; categoryArchivalStatusUpdatedEvent?: BlockFieldsMock }
 }
 
 export interface RawForumThreadMock {
@@ -41,7 +41,12 @@ export interface RawForumPostMock {
   postAddedEvent: BlockFieldsMock
 }
 
-const seedCategoryStatus = (statusText: string, server: any) => server.schema.create(statusText)
+const seedCategoryStatus = (status: RawForumCategoryMock['status'], server: any) => {
+  const key = 'categoryArchivalStatusUpdatedEvent'
+  const eventType = 'CategoryArchivalStatusUpdatedEvent'
+  const event = status[key] && server.schema.create(eventType, { [key]: status[key] })
+  return server.schema.create(status.__typename, event ?? {})
+}
 
 export function seedForumCategory(forumCategoryData: RawForumCategoryMock, server: any) {
   return server.schema.create('ForumCategory', {
