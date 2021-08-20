@@ -4,11 +4,11 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { Network } from '@/common/api/queries'
 import { asArray } from '@/common/utils'
-import { asStorybookPost, CategoryData } from '@/forum/helpers/storybook'
+import { asStorybookPost } from '@/forum/helpers/storybook'
 import { ForumThreadFieldsFragment } from '@/forum/queries'
 import { asForumThread } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { RawForumThreadMock } from '@/mocks/data/seedForum'
+import { RawForumCategoryMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
 import { ThreadListItem } from './ThreadListItem'
 
@@ -18,12 +18,12 @@ export default {
 } as Meta
 
 const categoryId = 'ThreadListItem-category-story'
-const category: CategoryData = {
+const category: RawForumCategoryMock = {
   id: categoryId,
   title: '',
   description: '',
   moderatorIds: [],
-  status: 'CategoryStatusActive',
+  status: { __typename: 'CategoryStatusActive' },
 }
 
 interface Props {
