@@ -53,9 +53,17 @@ export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
           <Label>
             {label} <CountBadge count={0} />
           </Label>
+          <ButtonsGroup>
+            <ButtonGhost size="small" square disabled>
+              <Arrow direction="left" />
+            </ButtonGhost>
+            <ButtonGhost size="small" square disabled>
+              <Arrow direction="right" />
+            </ButtonGhost>
+          </ButtonsGroup>
         </ThreadBrowserHeader>
         <ThreadBrowserItems>
-          <ThreadItem title={`"${label}" section is empty`} />
+          <ThreadItem title={"You haven't created any threads yet"} empty />
         </ThreadBrowserItems>
       </ThreadBrowserStyles>
     )
