@@ -10,7 +10,7 @@ import {
   ButtonLink,
   CopyButtonTemplate,
 } from '@/common/components/buttons'
-import { ArrowReplyIcon, HeartIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
+import { ArrowReplyIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
 import { Colors, Fonts, Transitions } from '@/common/constants'
@@ -19,6 +19,8 @@ import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
+
+import { LikeButton } from '../threads/LikeButton'
 
 import { PostContextMenu } from './PostContextMenu'
 import { PostEditor } from './PostEditor'
@@ -76,14 +78,9 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
           )}
         </MessageBody>
         <ForumPostRow>
+          <ButtonsGroup>{reaction && <LikeButton counter={reaction.length} />}</ButtonsGroup>
           {isThreadActive && !editing && (
             <ButtonsGroup>
-              {reaction && (
-                <Button size="small">
-                  <HeartIcon />
-                  {!!reaction.length && reaction.length}
-                </Button>
-              )}
               <CopyButtonTemplate
                 textToCopy={window.location.href}
                 square
@@ -91,9 +88,9 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
                 disabled={isPreview}
                 icon={<LinkIcon />}
               />
-              <Button square disabled={isPreview}>
+              <ButtonGhost square disabled={isPreview} size="small">
                 <ReplyIcon />
-              </Button>
+              </ButtonGhost>
               <PostContextMenu post={post} onEdit={() => setEditing(true)} />
             </ButtonsGroup>
           )}
@@ -102,8 +99,6 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
     )
   }
 )
-
-const Button = styled(ButtonGhost).attrs({ size: 'small' })``
 
 const MessageBody = styled.div`
   grid-column: span 2;
