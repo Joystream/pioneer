@@ -18,7 +18,10 @@ export interface CategoryListItemProps {
   isArchive?: boolean
 }
 export const CategoryListItem = ({ category, isArchive }: CategoryListItemProps) => (
-  <CategoryListItemStyles as={GhostRouterLink} to={`${ForumRoutes.category}/${category.id}${isArchive ? '/archive' : ''}`}>
+  <CategoryListItemStyles
+    as={GhostRouterLink}
+    to={`${ForumRoutes.category}/${category.id}${isArchive ? '/archive' : ''}`}
+  >
     <Category>
       <h5>{category.title}</h5>
       <TextMedium light>{category.description}</TextMedium>

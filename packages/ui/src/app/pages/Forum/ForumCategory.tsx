@@ -24,12 +24,10 @@ export const ForumCategory = () => {
   const isArchive = type === 'archive'
 
   const { category } = useForumCategory(id)
-  const {
-    isLoading: isLoadingThreads,
-    threads,
-    threadCount,
-    refresh,
-  } = useForumCategoryThreads({ categoryId: id, isArchive })
+  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({
+    categoryId: id,
+    isArchive,
+  })
 
   const { showModal } = useModal()
 
