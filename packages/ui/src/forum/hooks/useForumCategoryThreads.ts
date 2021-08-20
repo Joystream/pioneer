@@ -42,27 +42,18 @@ export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
 }
 
 const where = ({ author, date }: ThreadFiltersState, categoryId?: string, isArchive?: boolean) => {
-  const dateFilter = date && {
+  const dateFilter = {
     ...(date && 'start' in date ? { createdAt_gte: date.start } : {}),
     ...(date && 'end' in date ? { createdAt_lte: date.end } : {}),
   }
   return {
     ...(categoryId ? { category: { id_eq: categoryId } } : {}),
     ...(author ? { author_eq: author?.id } : {}),
-    ...(isArchive
-      ? {
-          OR: [
-            {
-              status_json: { isTypeOf_in: ['ThreadStatusLocked', 'ThreadStatusRemoved'] },
-              ...(date ? { threaddeletedeventthread_some: dateFilter } : {}),
-            },
-            {
-              status_json: { isTypeOf_eq: 'ThreadStatusModerated' },
-              ...(date ? { threadmoderatedeventthread_some: dateFilter } : {}),
-            },
-          ],
-        }
-      : { status_json: { isTypeOf_eq: 'ThreadStatusActive' }, ...dateFilter }),
+    ...(date && !isArchive ? dateFilter : {}),
+    status_json: {
+      isTypeOf_eq: isArchive ? 'ThreadStatusLocked' : 'ThreadStatusActive',
+      ...(date && isArchive ? { threadDeletedEvent: dateFilter } : {}),
+    },
   }
 }
 

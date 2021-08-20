@@ -1,10 +1,9 @@
 import { asBlock, Block } from '@/common/types'
 import { ForumThreadDetailedFieldsFragment, ForumThreadFieldsFragment } from '@/forum/queries'
 
-export type ThreadStatusType = ForumThreadFieldsFragment['status']['__typename']
+export type ThreadStatusType = ThreadStatus['__typename']
 interface ThreadStatus extends Pick<ForumThreadFieldsFragment['status'], '__typename'> {
   threadDeletedEvent?: Block
-  threadModeratedEvent?: Block
 }
 
 export interface ForumThread {
@@ -34,9 +33,6 @@ export const asForumThreadStatus = (fields: ForumThreadFieldsFragment['status'])
   __typename: fields.__typename,
   ...('threadDeletedEvent' in fields && fields.threadDeletedEvent
     ? { threadDeletedEvent: asBlock(fields.threadDeletedEvent) }
-    : {}),
-  ...('threadModeratedEvent' in fields && fields.threadModeratedEvent
-    ? { threadModeratedEvent: asBlock(fields.threadModeratedEvent) }
     : {}),
 })
 

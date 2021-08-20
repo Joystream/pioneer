@@ -25,7 +25,7 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
   const { member: author } = useMember(thread.authorId)
 
   const { createdInBlock, status } = thread
-  const block = isArchive ? status?.threadDeletedEvent ?? status?.threadModeratedEvent : createdInBlock
+  const block = isArchive ? status?.threadDeletedEvent : createdInBlock
 
   return (
     <ThreadListItemStyles as={GhostRouterLink} to={`${ForumRoutes.thread}/${thread.id}`}>

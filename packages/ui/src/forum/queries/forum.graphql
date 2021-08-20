@@ -80,20 +80,6 @@ fragment ForumThreadFields on ForumThread {
         network
       }
     }
-    ... on ThreadStatusRemoved {
-      threadDeletedEvent {
-        createdAt
-        inBlock
-        network
-      }
-    }
-    ... on ThreadStatusModerated {
-      threadModeratedEvent {
-        createdAt
-        inBlock
-        network
-      }
-    }
   }
 }
 

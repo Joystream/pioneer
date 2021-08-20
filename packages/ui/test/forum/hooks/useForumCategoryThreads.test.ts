@@ -93,10 +93,7 @@ describe('useForumCategoryThreads', () => {
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
         where: {
-          OR: [
-            { status_json: { isTypeOf_in: ['ThreadStatusLocked', 'ThreadStatusRemoved'] } },
-            { status_json: { isTypeOf_eq: 'ThreadStatusModerated' } },
-          ],
+          status_json: { isTypeOf_eq: 'ThreadStatusLocked' },
         },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
         first: 30,
@@ -108,16 +105,10 @@ describe('useForumCategoryThreads', () => {
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
         where: {
-          OR: [
-            {
-              status_json: { isTypeOf_in: ['ThreadStatusLocked', 'ThreadStatusRemoved'] },
-              threaddeletedeventthread_some: { createdAt_gte: start, createdAt_lte: end },
-            },
-            {
-              status_json: { isTypeOf_eq: 'ThreadStatusModerated' },
-              threadmoderatedeventthread_some: { createdAt_gte: start, createdAt_lte: end },
-            },
-          ],
+          status_json: {
+            isTypeOf_eq: 'ThreadStatusLocked',
+            threadDeletedEvent: { createdAt_gte: start, createdAt_lte: end },
+          },
         },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
         first: 30,

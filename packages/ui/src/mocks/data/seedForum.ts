@@ -58,11 +58,10 @@ const seedThreadCreatedInEvent = (event: { inBlock: number }, server: any) =>
   server.schema.create('ThreadCreatedEvent', event)
 
 const seedThreadStatus = ({ __typename, ...data }: RawForumThreadMock['status'], server: any) => {
-  const { threadDeletedEvent, threadModeratedEvent } = data
-  const eventKey = (threadDeletedEvent && 'threadDeletedEvent') ?? (threadModeratedEvent && 'threadModeratedEvent')
-  const eventType = (threadDeletedEvent && 'ThreadDeletedEvent') ?? (threadModeratedEvent && 'ThreadModeratedEvent')
-  const event = eventKey && { [eventKey]: server.schema.create(eventType, data[eventKey]) }
-  return server.schema.create(__typename, event ?? {})
+  const { threadDeletedEvent } = data
+  const isArchived = __typename === 'ThreadStatusLocked'
+  const event = isArchived ? { threadDeletedEvent: server.schema.create('ThreadDeletedEvent', threadDeletedEvent) } : {}
+  return server.schema.create(__typename, event)
 }
 
 export function seedForumThread(data: RawForumThreadMock, server: any) {
