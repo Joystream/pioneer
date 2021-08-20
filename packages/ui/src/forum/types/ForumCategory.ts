@@ -1,3 +1,5 @@
+import { CategoryStatus as CategoryStatusSchema } from '@/common/api/queries'
+import { asBlock, Block } from '@/common/types'
 import {
   ForumCategoryBreadcrumbsFieldsFragment,
   ForumCategoryFieldsFragment,
@@ -6,8 +8,14 @@ import {
 
 export interface ForumCategory extends ForumBreadcrumb {
   description: string
+  status: CategoryStatus
   moderators: ForumModerator[]
   subcategories: ForumSubCategory[]
+}
+
+export type CategoryStatusType = CategoryStatusSchema['__typename']
+interface CategoryStatus extends Pick<CategoryStatusSchema, '__typename'> {
+  categoryArchivalStatusUpdatedEvent?: Block
 }
 
 export interface ForumModerator {
@@ -28,6 +36,12 @@ export const asBaseForumCategory = (fields: ForumCategoryFields): Omit<ForumCate
   id: fields.id,
   title: fields.title,
   description: fields.description,
+  status: {
+    __typename: fields.status.__typename,
+    ...('categoryArchivalStatusUpdatedEvent' in fields.status && fields.status.categoryArchivalStatusUpdatedEvent
+      ? { categoryArchivalStatusUpdatedEvent: asBlock(fields.status.categoryArchivalStatusUpdatedEvent) }
+      : {}),
+  },
   moderators: fields.moderators?.map(({ id, membership }) => ({ id, handle: membership.handle })) ?? [],
 })
 

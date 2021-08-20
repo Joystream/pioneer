@@ -1,6 +1,6 @@
 import faker from 'faker'
 
-import { CategoryStatus } from '@/forum/types'
+import { CategoryStatusType } from '@/forum/types'
 import { RawForumCategoryMock } from '@/mocks/data/seedForum'
 
 import workers from '../../../../src/mocks/data/raw/workers.json'
@@ -13,8 +13,8 @@ export const generateCategories = (depth: number, parent?: RawForumCategoryMock)
   return [...new Array(numberOfCategories)].flatMap(() => generateCategory(depth - 1, parent))
 }
 
-export const ActiveStatus: CategoryStatus = 'CategoryStatusActive'
-export const ArchiveStatus: CategoryStatus = 'CategoryStatusArchived'
+export const ActiveStatus: CategoryStatusType = 'CategoryStatusActive'
+export const ArchiveStatus: CategoryStatusType = 'CategoryStatusArchived'
 
 const generateCategory = (depth: number, parent?: RawForumCategoryMock): RawForumCategoryMock[] => {
   const isArchived = parent?.status.__typename === ArchiveStatus || Math.random() < 0.25
