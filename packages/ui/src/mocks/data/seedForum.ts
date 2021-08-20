@@ -44,7 +44,7 @@ export interface RawForumPostMock {
 const seedCategoryStatus = (status: RawForumCategoryMock['status'], server: any) => {
   const key = 'categoryArchivalStatusUpdatedEvent'
   const eventType = 'CategoryArchivalStatusUpdatedEvent'
-  const event = status[key] && server.schema.create(eventType, { [key]: status[key] })
+  const event = status[key] && { [key]: server.schema.create(eventType, status[key]) }
   return server.schema.create(status.__typename, event ?? {})
 }
 
