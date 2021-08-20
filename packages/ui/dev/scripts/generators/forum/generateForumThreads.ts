@@ -3,9 +3,9 @@ import faker from 'faker'
 import { ThreadStatusType } from '@/forum/types'
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
-import { randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
+import { randomBlock, randomFromRange, randomMember, repeat } from '../utils'
 
-import { ActiveStatus as CategoryActiveStatus } from './generateCategories'
+import { ArchiveStatus as CategoryArchiveStatus } from './generateCategories'
 
 let nextThreadId = 0
 let nextPostId = 0
@@ -35,15 +35,12 @@ const Active: ThreadStatusType = 'ThreadStatusActive'
 const Locked: ThreadStatusType = 'ThreadStatusLocked'
 const Moderated: ThreadStatusType = 'ThreadStatusModerated'
 const Removed: ThreadStatusType = 'ThreadStatusRemoved'
-const ArchivedStatuses = [Locked, Moderated, Removed]
-const randomThreadStatus = randomFromWeightedSet([12, Active], [1, Locked], [1, Moderated], [1, Removed])
 
 export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock, 'id' | 'status'>[]) => {
   const forumThreads: RawForumThreadMock[] = forumCategories.flatMap((category) =>
     repeat(() => {
-      const status = generateThreadStatus(
-        category.status === CategoryActiveStatus ? randomThreadStatus() : faker.random.arrayElement(ArchivedStatuses)
-      )
+      const isArchived = category.status === CategoryArchiveStatus || Math.random() < 0.2
+      const status = generateThreadStatus(isArchived ? Locked : Active)
       const createdInEvent = randomBlock()
       return {
         id: String(nextThreadId++),
