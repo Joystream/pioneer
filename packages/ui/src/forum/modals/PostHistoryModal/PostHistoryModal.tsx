@@ -39,6 +39,9 @@ export const PostHistoryModal = React.memo(() => {
     [editsInView]
   )
 
+  const getScrollToEdit = (index: number) => () =>
+    editsRefs[index]?.current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
+
   const getInsertRef = (index: number) => (ref: RefObject<HTMLDivElement>) => (editsRefs[index] = ref)
 
   const viewport = useRef<HTMLDivElement>(null)
@@ -48,14 +51,18 @@ export const PostHistoryModal = React.memo(() => {
       return 'active'
     }
 
-    return index > activeEdit ? 'next' : 'past'
+    return 'next'
   }
 
   const displayEdits = () => (
     <>
       <Stepper
         steps={
-          edits?.map((edit, index) => ({ title: formatDateString(edit.createdAt), type: getStepType(index) })) ?? []
+          edits?.map((edit, index) => ({
+            title: formatDateString(edit.createdAt),
+            type: getStepType(index),
+            onClick: getScrollToEdit(index),
+          })) ?? []
         }
       />
       <StepperBody ref={viewport}>
