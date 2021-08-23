@@ -7,7 +7,7 @@ import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography
 import { Colors, Overflow } from '@/common/constants'
 import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
-import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
+import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
 
 import { LatestPost } from './LatestPost'
 import { PopularThread } from './PopularThread'
@@ -36,7 +36,7 @@ export const CategoryListItem = ({ category, isArchive }: CategoryListItemProps)
 
     <PopularThread categoryId={category.id} />
 
-    <MemberStack members={moderatorsSumary(category.moderators)} max={5} />
+    <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
   </CategoryListItemStyles>
 )
 

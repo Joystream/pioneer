@@ -18,21 +18,22 @@ import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { ArchivedStatus } from '@/forum/hooks/useForumCategories'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
-import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
+import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
 
 export const ForumCategory = () => {
   const { id, type } = useParams<{ id: string; type?: 'archive' }>()
-  const isArchive = type === 'archive'
 
   const { category } = useForumCategory(id)
   const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({
     categoryId: id,
-    isArchive,
+    isArchive: type === 'archive',
   })
 
   const { showModal } = useModal()
 
-  if (!category) return <Loading />
+  if (!category) {
+    return <Loading />
+  }
 
   const isArchive = category.status === ArchivedStatus
 
@@ -56,7 +57,7 @@ export const ForumCategory = () => {
           </PageHeaderRow>
 
           <ModeratorsContainer>
-            Moderators: <MemberStack members={moderatorsSumary(category.moderators)} max={5} />
+            Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
           </ModeratorsContainer>
         </PageHeaderWrapper>
       }

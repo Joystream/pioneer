@@ -14,7 +14,7 @@ export interface MemberSummary {
   avatar?: string
 }
 
-export const moderatorsSumary = (moderators: ForumModerator[]): MemberSummary[] =>
+export const moderatorsSummary = (moderators: ForumModerator[]): MemberSummary[] =>
   moderators.map(({ id, handle, avatar }) => ({
     handle,
     avatar,
