@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } from 'react'
 import InView from 'react-intersection-observer'
 import styled from 'styled-components'
 
@@ -28,6 +28,7 @@ export const PostHistoryModal = React.memo(() => {
   const [activeEdit, setActiveEdit] = useState(0)
 
   const editsInView = useMemo(() => new Array<boolean>(edits?.length ?? 0), [edits?.length])
+  const editsRefs = useMemo(() => new Array<RefObject<HTMLDivElement>>(edits?.length ?? 0), [edits?.length])
 
   const pickActiveEdit = useCallback(
     (index: number) => (isCurrentInView: boolean) => {
@@ -38,6 +39,11 @@ export const PostHistoryModal = React.memo(() => {
     [editsInView]
   )
 
+  const getScrollToEdit = (index: number) => () =>
+    editsRefs[index]?.current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
+
+  const getInsertRef = (index: number) => (ref: RefObject<HTMLDivElement>) => (editsRefs[index] = ref)
+
   const viewport = useRef<HTMLDivElement>(null)
 
   const getStepType = (index: number) => {
@@ -45,14 +51,18 @@ export const PostHistoryModal = React.memo(() => {
       return 'active'
     }
 
-    return index > activeEdit ? 'next' : 'past'
+    return 'next'
   }
 
   const displayEdits = () => (
     <>
       <Stepper
         steps={
-          edits?.map((edit, index) => ({ title: formatDateString(edit.createdAt), type: getStepType(index) })) ?? []
+          edits?.map((edit, index) => ({
+            title: formatDateString(edit.createdAt),
+            type: getStepType(index),
+            onClick: getScrollToEdit(index),
+          })) ?? []
         }
       />
       <StepperBody ref={viewport}>
@@ -61,7 +71,13 @@ export const PostHistoryModal = React.memo(() => {
         ) : (
           <RowGapBlock gap={32}>
             {edits?.map((edit, index) => (
-              <HistoryPost edit={edit} author={author} onChange={pickActiveEdit(index)} root={viewport.current} />
+              <HistoryPost
+                edit={edit}
+                author={author}
+                onChange={pickActiveEdit(index)}
+                root={viewport.current}
+                insertRef={getInsertRef(index)}
+              />
             ))}
           </RowGapBlock>
         )}
@@ -84,21 +100,28 @@ interface HistoryPostProps {
   author: Member
   onChange: (inView: boolean) => void
   root: HTMLDivElement | null
+  insertRef: (ref: RefObject<HTMLDivElement>) => void
 }
 
-const HistoryPost = ({ edit, author, onChange, root }: HistoryPostProps) => (
-  <InView onChange={onChange} root={root} rootMargin="-32px 0px 0px">
-    <ForumPostStyles>
-      <ForumPostRow>
-        <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-        <BlockTime block={asBlock(edit)} layout="reverse" />
-      </ForumPostRow>
-      <ForumPostRow>
-        <MarkdownPreview markdown={edit.newText} />
-      </ForumPostRow>
-    </ForumPostStyles>
-  </InView>
-)
+const HistoryPost = ({ edit, author, onChange, root, insertRef }: HistoryPostProps) => {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    !!ref.current && insertRef(ref)
+  }, [ref.current])
+  return (
+    <InView onChange={onChange} root={root} rootMargin="-32px 0px 0px">
+      <ForumPostStyles ref={ref}>
+        <ForumPostRow>
+          <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
+          <BlockTime block={asBlock(edit)} layout="reverse" />
+        </ForumPostRow>
+        <ForumPostRow>
+          <MarkdownPreview markdown={edit.newText} />
+        </ForumPostRow>
+      </ForumPostStyles>
+    </InView>
+  )
+}
 
 const HistoryModalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 300px 1fr;

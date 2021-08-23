@@ -80,7 +80,7 @@ const StepBody = styled.div`
   row-gap: 8px;
 `
 
-type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBaby'>
+type StepNumberProps = Pick<StepToRender, 'isActive' | 'isPast' | 'isBaby'> & { onClick?: () => void }
 
 const StepWrap = styled.div<StepNumberProps>`
   display: grid;
@@ -88,6 +88,7 @@ const StepWrap = styled.div<StepNumberProps>`
   grid-template-columns: 28px 1fr;
   grid-column-gap: 8px;
   justify-content: start;
+  cursor: ${({ onClick }) => (onClick ? 'pointer' : 'auto')};
 
   /* History line */
   &:not(:last-child) {

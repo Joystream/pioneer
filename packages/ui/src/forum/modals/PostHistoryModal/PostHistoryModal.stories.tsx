@@ -42,6 +42,7 @@ Default.args = {
         description: 'Category description',
         parentId: null,
         moderatorIds: [],
+        status: 'CategoryStatusActive',
       },
     ],
     threads: [
