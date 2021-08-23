@@ -39,7 +39,7 @@ export const Proposals = () => {
             {isLoading ? (
               <SearchProcess
                 title="Searching"
-                description="We are searching through all past proposals to find what your are looking for. "
+                description="We are searching through all past proposals to find what your are looking for."
               />
             ) : (
               <ProposalList proposals={proposals} />
