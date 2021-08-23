@@ -24,7 +24,7 @@ export interface RawForumThreadMock {
   title: string
   createdInEvent: BlockFieldsMock
   authorId: string
-  status: string
+  status: { __typename: string; threadDeletedEvent?: BlockFieldsMock; threadModeratedEvent?: BlockFieldsMock }
 }
 
 interface PostEdit extends BlockFieldsMock {
@@ -41,10 +41,12 @@ export interface RawForumPostMock {
   postAddedEvent: BlockFieldsMock
 }
 
+const seedCategoryStatus = (statusText: string, server: any) => server.schema.create(statusText)
+
 export function seedForumCategory(forumCategoryData: RawForumCategoryMock, server: any) {
   return server.schema.create('ForumCategory', {
     ...forumCategoryData,
-    status: seedStatus(forumCategoryData.status, server),
+    status: seedCategoryStatus(forumCategoryData.status, server),
   })
 }
 
@@ -55,13 +57,18 @@ export const seedForumCategories = (server: any) => {
 const seedThreadCreatedInEvent = (event: { inBlock: number }, server: any) =>
   server.schema.create('ThreadCreatedEvent', event)
 
-const seedStatus = (statusText: string, server: any) => server.schema.create(statusText)
+const seedThreadStatus = ({ __typename, ...data }: RawForumThreadMock['status'], server: any) => {
+  const { threadDeletedEvent } = data
+  const isArchived = __typename === 'ThreadStatusLocked'
+  const event = isArchived ? { threadDeletedEvent: server.schema.create('ThreadDeletedEvent', threadDeletedEvent) } : {}
+  return server.schema.create(__typename, event)
+}
 
 export function seedForumThread(data: RawForumThreadMock, server: any) {
   return server.schema.create('ForumThread', {
     ...data,
     createdInEvent: seedThreadCreatedInEvent(data.createdInEvent, server),
-    status: seedStatus(data.status, server),
+    status: seedThreadStatus(data.status, server),
   })
 }
 

@@ -21,10 +21,14 @@ import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSumary } from '@/memberships/components/MemberStack'
 
 export const ForumCategory = () => {
-  const { id } = useParams<{ id: string }>()
-  const { category } = useForumCategory(id)
+  const { id, type } = useParams<{ id: string; type?: 'archive' }>()
+  const isArchive = type === 'archive'
 
-  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({ categoryId: id })
+  const { category } = useForumCategory(id)
+  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({
+    categoryId: id,
+    isArchive,
+  })
 
   const { showModal } = useModal()
 
@@ -69,7 +73,7 @@ export const ForumCategory = () => {
           </RowGapBlock>
 
           <RowGapBlock gap={24}>
-            <ThreadFilters onApply={(filters) => refresh({ filters })}>
+            <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
               <ItemCount count={threadCount} size="xs">
                 {isArchive ? 'Archived Threads' : 'Threads'}
               </ItemCount>

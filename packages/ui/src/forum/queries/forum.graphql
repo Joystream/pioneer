@@ -73,6 +73,13 @@ fragment ForumThreadFields on ForumThread {
   }
   status {
     __typename
+    ... on ThreadStatusLocked {
+      threadDeletedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
   }
 }
 

@@ -38,7 +38,7 @@ export const ForumArchived = () => {
           </RowGapBlock>
 
           <RowGapBlock gap={24}>
-            <ThreadFilters onApply={(filters) => refresh({ filters })}>
+            <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive>
               <ItemCount count={threadCount} size="xs">
                 Threads
               </ItemCount>

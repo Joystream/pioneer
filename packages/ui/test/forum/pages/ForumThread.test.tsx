@@ -53,7 +53,7 @@ describe('UI: Forum Thread Page', () => {
     createdInBlock: randomBlock(),
     tags: [],
     visiblePostsCount: 0,
-    status: 'ThreadStatusActive',
+    status: { __typename: 'ThreadStatusActive' },
   }
 
   beforeAll(() => {

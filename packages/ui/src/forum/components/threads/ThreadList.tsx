@@ -59,7 +59,7 @@ export const ThreadList = ({ threads, onSort, isLoading, isArchive }: ThreadList
         <ListHeader>Votes</ListHeader>
         <SortHeader value="UpdatedAt">Last Activity</SortHeader>
         <SortHeader value="Author">Author</SortHeader>
-        <SortHeader value="CreatedAt">Created</SortHeader>
+        {isArchive ? <ListHeader>Archived</ListHeader> : <SortHeader value="CreatedAt">Created</SortHeader>}
       </ListHeaders>
 
       {isLoading ? (
@@ -67,7 +67,7 @@ export const ThreadList = ({ threads, onSort, isLoading, isArchive }: ThreadList
       ) : (
         <List as="div" isArchive={isArchive}>
           {threads.map((thread, index) => (
-            <ThreadListItem key={index} thread={thread} />
+            <ThreadListItem key={index} thread={thread} isArchive={isArchive} />
           ))}
         </List>
       )}

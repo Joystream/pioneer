@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-hooks'
 import { endOfYesterday } from 'date-fns'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { ActiveStatuses, useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
+import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { useGetPaginatedForumThreadsQuery } from '@/forum/queries'
 
 import { getMember } from '../../_mocks/members'
@@ -29,7 +29,7 @@ describe('useForumCategoryThreads', () => {
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
-        where: { status_json: { isTypeOf_in: ActiveStatuses } },
+        where: { status_json: { isTypeOf_eq: 'ThreadStatusActive' } },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
         first: 30,
       },
@@ -48,7 +48,7 @@ describe('useForumCategoryThreads', () => {
       variables: {
         where: {
           category: { id_eq: categoryId },
-          status_json: { isTypeOf_in: ActiveStatuses },
+          status_json: { isTypeOf_eq: 'ThreadStatusActive' },
         },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
         first: 30,
@@ -61,7 +61,7 @@ describe('useForumCategoryThreads', () => {
       variables: {
         where: {
           category: { id_eq: categoryId },
-          status_json: { isTypeOf_in: ActiveStatuses },
+          status_json: { isTypeOf_eq: 'ThreadStatusActive' },
           author_eq: author.id,
           createdAt_gte: start,
           createdAt_lte: end,
@@ -77,8 +77,40 @@ describe('useForumCategoryThreads', () => {
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
-        where: { status_json: { isTypeOf_in: ActiveStatuses } },
+        where: { status_json: { isTypeOf_eq: 'ThreadStatusActive' } },
         orderBy: [IsStickyDesc, AuthorDesc],
+        first: 30,
+      },
+    })
+  })
+
+  it('Archived', () => {
+    const start = endOfYesterday()
+    const end = new Date()
+
+    const { refresh } = renderUseForumCategoryThreads({ isArchive: true }).result.current
+
+    expect(mockedQueryHook).toBeCalledWith({
+      variables: {
+        where: {
+          status_json: { isTypeOf_eq: 'ThreadStatusLocked' },
+        },
+        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        first: 30,
+      },
+    })
+
+    refresh({ filters: { author: null, date: { start, end }, tag: null } })
+
+    expect(mockedQueryHook).toBeCalledWith({
+      variables: {
+        where: {
+          status_json: {
+            isTypeOf_eq: 'ThreadStatusLocked',
+            threadDeletedEvent: { createdAt_gte: start, createdAt_lte: end },
+          },
+        },
+        orderBy: [IsStickyDesc, UpdatedAtAsc],
         first: 30,
       },
     })

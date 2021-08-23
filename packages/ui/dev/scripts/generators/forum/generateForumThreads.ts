@@ -1,9 +1,11 @@
 import faker from 'faker'
 
+import { ThreadStatusType } from '@/forum/types'
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
-import { randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
-import { ThreadStatus } from '@/forum/types'
+import { randomBlock, randomFromRange, randomMember, repeat } from '../utils'
+
+import { ArchiveStatus as CategoryArchiveStatus } from './generateCategories'
 
 let nextThreadId = 0
 let nextPostId = 0
@@ -29,31 +31,26 @@ export const generateForumPost = (threadId: string, authorId: string, repliesToI
   }
 }
 
-const randomThreadStatus = randomFromWeightedSet<ThreadStatus>(
-  [7, 'ThreadStatusActive'],
-  [1, 'ThreadStatusLocked'],
-  [1, 'ThreadStatusModerated'],
-  [1, 'ThreadStatusRemoved'],
-)
+const Active: ThreadStatusType = 'ThreadStatusActive'
+const Locked: ThreadStatusType = 'ThreadStatusLocked'
+const Moderated: ThreadStatusType = 'ThreadStatusModerated'
+const Removed: ThreadStatusType = 'ThreadStatusRemoved'
 
-export const generateForumThreads = (
-  forumCategories: Pick<RawForumCategoryMock, 'id'>[]
-): {
-  forumThreads: RawForumThreadMock[]
-  forumPosts: RawForumPostMock[]
-} => {
-  const forumThreads = forumCategories.flatMap(({ id }) =>
+export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock, 'id' | 'status'>[]) => {
+  const forumThreads: RawForumThreadMock[] = forumCategories.flatMap((category) =>
     repeat(() => {
+      const isArchived = category.status === CategoryArchiveStatus || Math.random() < 0.2
+      const status = generateThreadStatus(isArchived ? Locked : Active)
       const createdInEvent = randomBlock()
       return {
         id: String(nextThreadId++),
         createdAt: createdInEvent.createdAt,
         ...(Math.random() > 0.3 ? { updatedAt: faker.date.between(createdInEvent.createdAt, new Date()) } : {}),
-        categoryId: id,
+        categoryId: category.id,
         isSticky: !(nextThreadId % 5),
         title: faker.lorem.words(randomFromRange(4, 8)),
         authorId: randomMember().id,
-        status: randomThreadStatus(),
+        status,
         createdInEvent,
       }
     }, randomFromRange(3, 10))
@@ -77,4 +74,16 @@ export const generateForumThreads = (
     .flatMap((a) => a)
 
   return { forumThreads, forumPosts }
+}
+
+const generateThreadStatus = (__typename: ThreadStatusType): RawForumThreadMock['status'] => {
+  switch (__typename) {
+    case Locked:
+    case Removed:
+      return { __typename, threadDeletedEvent: randomBlock() }
+    case Moderated:
+      return { __typename, threadModeratedEvent: randomBlock() }
+    case Active:
+      return { __typename }
+  }
 }

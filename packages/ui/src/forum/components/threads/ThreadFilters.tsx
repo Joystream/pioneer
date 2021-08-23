@@ -20,8 +20,9 @@ const isFilterEmpty = objectEquals(ThreadEmptyFilters)
 interface ThreadFiltersProps {
   withinDates?: PartialDateRange
   onApply: (filters: ThreadFiltersState) => void
+  isArchive?: boolean
 }
-export const ThreadFilters: FC<ThreadFiltersProps> = ({ withinDates, onApply, children }) => {
+export const ThreadFilters: FC<ThreadFiltersProps> = ({ withinDates, onApply, children, isArchive }) => {
   const [filters, setFilters] = useState(ThreadEmptyFilters)
   const { tag, author, date } = filters
 
@@ -44,7 +45,7 @@ export const ThreadFilters: FC<ThreadFiltersProps> = ({ withinDates, onApply, ch
       <SmallMemberSelect title="Author" value={author} onChange={(author) => update({ author })} />
 
       <DatePicker
-        title="Created"
+        title={isArchive ? 'Archived' : 'Created'}
         value={date}
         withinDates={withinDates}
         onChange={(date) => update({ date }, false)}

@@ -25,7 +25,7 @@ export const ForumCategoryList = ({ categories, isArchive }: ForumCategoryListPr
     </ListHeaders>
     <List as="div" isArchive={isArchive}>
       {categories.map((category, index) => (
-        <CategoryListItem key={index} category={category} />
+        <CategoryListItem key={index} category={category} isArchive={isArchive} />
       ))}
     </List>
   </ForumCategoryListStyles>

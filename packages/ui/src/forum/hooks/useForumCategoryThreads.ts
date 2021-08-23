@@ -5,7 +5,7 @@ import { merge } from '@/common/utils'
 import { ThreadEmptyFilters, ThreadFiltersState } from '@/forum/components/threads/ThreadFilters'
 import { ThreadDefaultOrder, ThreadOrder } from '@/forum/components/threads/ThreadList'
 import { useGetPaginatedForumThreadsQuery } from '@/forum/queries'
-import { asForumThread, ThreadStatus } from '@/forum/types'
+import { asForumThread } from '@/forum/types'
 
 export interface ThreadsOptions {
   filters: ThreadFiltersState
@@ -14,10 +14,7 @@ export interface ThreadsOptions {
   isArchive?: boolean
 }
 
-export const ActiveStatuses: ThreadStatus[] = ['ThreadStatusActive']
-export const ArchivedStatuses: ThreadStatus[] = ['ThreadStatusLocked', 'ThreadStatusModerated', 'ThreadStatusRemoved']
-
-const threadOptionReducer: Reducer<ThreadsOptions, Partial<ThreadsOptions>> = merge
+const threadOptionReducer: Reducer<ThreadsOptions | Record<string, never>, Partial<ThreadsOptions>> = merge
 const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
 
 export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
@@ -28,11 +25,7 @@ export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
 
   const { loading, data } = useGetPaginatedForumThreadsQuery({
     variables: {
-      where: {
-        ...(categoryId ? { category: { id_eq: categoryId } } : {}),
-        status_json: { isTypeOf_in: isArchive ? ArchivedStatuses : ActiveStatuses },
-        ...where(filters),
-      },
+      where: where(filters, categoryId, isArchive),
       orderBy: [ForumThreadOrderByInput.IsStickyDesc, orderBy(order)],
       first: 30,
     },
@@ -48,11 +41,21 @@ export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
   }
 }
 
-const where = ({ author, date }: ThreadFiltersState) => ({
-  ...(author ? { author_eq: author?.id } : {}),
-  ...(date && 'start' in date ? { createdAt_gte: date.start } : {}),
-  ...(date && 'end' in date ? { createdAt_lte: date.end } : {}),
-})
+const where = ({ author, date }: ThreadFiltersState, categoryId?: string, isArchive?: boolean) => {
+  const dateFilter = {
+    ...(date && 'start' in date ? { createdAt_gte: date.start } : {}),
+    ...(date && 'end' in date ? { createdAt_lte: date.end } : {}),
+  }
+  return {
+    ...(categoryId ? { category: { id_eq: categoryId } } : {}),
+    ...(author ? { author_eq: author?.id } : {}),
+    ...(date && !isArchive ? dateFilter : {}),
+    status_json: {
+      isTypeOf_eq: isArchive ? 'ThreadStatusLocked' : 'ThreadStatusActive',
+      ...(date && isArchive ? { threadDeletedEvent: dateFilter } : {}),
+    },
+  }
+}
 
 const orderBy = ({ key, isDescending }: ThreadOrder) =>
   ForumThreadOrderByInput[`${key}${isDescending ? 'Desc' : 'Asc'}` as const]
