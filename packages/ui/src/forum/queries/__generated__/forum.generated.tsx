@@ -12,42 +12,33 @@ export type ForumCategoryFieldsFragment = {
   __typename: 'ForumCategory'
   description: string
   forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumSubCategoryFieldsFragment>>
-  status:
-    | ({ __typename: 'CategoryStatusActive' } & ForumCategoryStatusFields_CategoryStatusActive_Fragment)
-    | ({ __typename: 'CategoryStatusArchived' } & ForumCategoryStatusFields_CategoryStatusArchived_Fragment)
-    | ({ __typename: 'CategoryStatusRemoved' } & ForumCategoryStatusFields_CategoryStatusRemoved_Fragment)
   moderators: Array<{ __typename: 'Worker' } & ForumModeratorFieldsFragment>
-} & ForumSubCategoryFieldsFragment
+} & ForumSubCategoryFieldsFragment &
+  ForumCategoryWithStatusFieldsFragment
 
 export type ForumCategoryWithDetailsFieldsFragment = {
   __typename: 'ForumCategory'
   description: string
-  status:
-    | ({ __typename: 'CategoryStatusActive' } & ForumCategoryStatusFields_CategoryStatusActive_Fragment)
-    | ({ __typename: 'CategoryStatusArchived' } & ForumCategoryStatusFields_CategoryStatusArchived_Fragment)
-    | ({ __typename: 'CategoryStatusRemoved' } & ForumCategoryStatusFields_CategoryStatusRemoved_Fragment)
   forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>>
   moderators: Array<{ __typename: 'Worker' } & ForumModeratorFieldsFragment>
-} & ForumSubCategoryFieldsFragment
+} & ForumSubCategoryFieldsFragment &
+  ForumCategoryWithStatusFieldsFragment
 
-export type ForumCategoryStatusFields_CategoryStatusActive_Fragment = { __typename: 'CategoryStatusActive' }
-
-export type ForumCategoryStatusFields_CategoryStatusArchived_Fragment = {
-  __typename: 'CategoryStatusArchived'
-  categoryArchivalStatusUpdatedEvent?: Types.Maybe<{
-    __typename: 'CategoryArchivalStatusUpdatedEvent'
-    createdAt: any
-    inBlock: number
-    network: Types.Network
-  }>
+export type ForumCategoryWithStatusFieldsFragment = {
+  __typename: 'ForumCategory'
+  status:
+    | { __typename: 'CategoryStatusActive' }
+    | {
+        __typename: 'CategoryStatusArchived'
+        categoryArchivalStatusUpdatedEvent?: Types.Maybe<{
+          __typename: 'CategoryArchivalStatusUpdatedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+    | { __typename: 'CategoryStatusRemoved' }
 }
-
-export type ForumCategoryStatusFields_CategoryStatusRemoved_Fragment = { __typename: 'CategoryStatusRemoved' }
-
-export type ForumCategoryStatusFieldsFragment =
-  | ForumCategoryStatusFields_CategoryStatusActive_Fragment
-  | ForumCategoryStatusFields_CategoryStatusArchived_Fragment
-  | ForumCategoryStatusFields_CategoryStatusRemoved_Fragment
 
 export type ForumModeratorFieldsFragment = {
   __typename: 'Worker'
@@ -264,14 +255,16 @@ export const ForumSubCategoryFieldsFragmentDoc = gql`
     title
   }
 `
-export const ForumCategoryStatusFieldsFragmentDoc = gql`
-  fragment ForumCategoryStatusFields on CategoryStatus {
-    __typename
-    ... on CategoryStatusArchived {
-      categoryArchivalStatusUpdatedEvent {
-        createdAt
-        inBlock
-        network
+export const ForumCategoryWithStatusFieldsFragmentDoc = gql`
+  fragment ForumCategoryWithStatusFields on ForumCategory {
+    status {
+      __typename
+      ... on CategoryStatusArchived {
+        categoryArchivalStatusUpdatedEvent {
+          createdAt
+          inBlock
+          network
+        }
       }
     }
   }
@@ -288,28 +281,24 @@ export const ForumModeratorFieldsFragmentDoc = gql`
 export const ForumCategoryFieldsFragmentDoc = gql`
   fragment ForumCategoryFields on ForumCategory {
     ...ForumSubCategoryFields
+    ...ForumCategoryWithStatusFields
     description
     forumcategoryparent {
       ...ForumSubCategoryFields
-    }
-    status {
-      ...ForumCategoryStatusFields
     }
     moderators {
       ...ForumModeratorFields
     }
   }
   ${ForumSubCategoryFieldsFragmentDoc}
-  ${ForumCategoryStatusFieldsFragmentDoc}
+  ${ForumCategoryWithStatusFieldsFragmentDoc}
   ${ForumModeratorFieldsFragmentDoc}
 `
 export const ForumCategoryWithDetailsFieldsFragmentDoc = gql`
   fragment ForumCategoryWithDetailsFields on ForumCategory {
     ...ForumSubCategoryFields
+    ...ForumCategoryWithStatusFields
     description
-    status {
-      ...ForumCategoryStatusFields
-    }
     forumcategoryparent {
       ...ForumCategoryFields
     }
@@ -318,7 +307,7 @@ export const ForumCategoryWithDetailsFieldsFragmentDoc = gql`
     }
   }
   ${ForumSubCategoryFieldsFragmentDoc}
-  ${ForumCategoryStatusFieldsFragmentDoc}
+  ${ForumCategoryWithStatusFieldsFragmentDoc}
   ${ForumCategoryFieldsFragmentDoc}
   ${ForumModeratorFieldsFragmentDoc}
 `

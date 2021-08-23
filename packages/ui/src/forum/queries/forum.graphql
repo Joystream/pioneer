@@ -1,11 +1,9 @@
 fragment ForumCategoryFields on ForumCategory {
   ...ForumSubCategoryFields
+  ...ForumCategoryWithStatusFields
   description
   forumcategoryparent {
     ...ForumSubCategoryFields
-  }
-  status {
-    ...ForumCategoryStatusFields
   }
   moderators {
     ...ForumModeratorFields
@@ -14,10 +12,8 @@ fragment ForumCategoryFields on ForumCategory {
 
 fragment ForumCategoryWithDetailsFields on ForumCategory {
   ...ForumSubCategoryFields
+  ...ForumCategoryWithStatusFields
   description
-  status {
-    ...ForumCategoryStatusFields
-  }
   forumcategoryparent {
     ...ForumCategoryFields
   }
@@ -26,13 +22,15 @@ fragment ForumCategoryWithDetailsFields on ForumCategory {
   }
 }
 
-fragment ForumCategoryStatusFields on CategoryStatus {
-  __typename
-  ... on CategoryStatusArchived {
-    categoryArchivalStatusUpdatedEvent {
-      createdAt
-      inBlock
-      network
+fragment ForumCategoryWithStatusFields on ForumCategory {
+  status {
+    __typename
+    ... on CategoryStatusArchived {
+      categoryArchivalStatusUpdatedEvent {
+        createdAt
+        inBlock
+        network
+      }
     }
   }
 }
