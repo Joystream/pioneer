@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -19,18 +19,16 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
+import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { useForumThread } from '@/forum/hooks/useForumThread'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, thread } = useForumThread(id)
-  const { members: myMembers } = useMyMemberships()
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
 
-  const isMyThread = thread && myMembers.find((member) => member.id === thread.id)
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
 
   if (!isLoading && !thread) {
@@ -48,14 +46,7 @@ export const ForumThread = () => {
       <PageHeaderWrapper>
         <PageHeaderRow>
           <PreviousPage>
-            <PageTitle>
-              {thread.title}
-              {isMyThread && (
-                <EditTitle>
-                  <EditSymbol />
-                </EditTitle>
-              )}
-            </PageTitle>
+            <ThreadTitle thread={thread} />
           </PreviousPage>
           <ButtonsGroup>
             <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
@@ -115,15 +106,6 @@ export const ForumThread = () => {
 
   return <PageLayout header={displayHeader()} main={displayMain()} sidebar={displaySidebar()} />
 }
-
-const EditTitle = styled.span`
-  cursor: pointer;
-  margin-left: 3px;
-
-  &:hover {
-    opacity: 0.7;
-  }
-`
 
 const ThreadPinned = styled.span`
   display: flex;
