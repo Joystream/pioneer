@@ -27,7 +27,7 @@ export const ForumThread = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
 
-  const isThreadActive = thread?.status === 'ThreadStatusActive'
+  const isThreadActive = thread?.status.__typename === 'ThreadStatusActive'
 
   if (!isLoading && !thread) {
     history.push('/404')
