@@ -26,14 +26,12 @@ export const ForumBreadcrumbs = React.memo(({ categoryBreadcrumbs, threadBreadcr
           Forum
         </BreadcrumbsItem>
         {crumbs.map(({ path, breadcrumb, key }, index, { length }) => (
-          <BreadcrumbsItem key={key} url={path} isLink={index < length - 1}>
+          <BreadcrumbsItem key={key} url={path} isLink={!!threadBreadcrumb || index < length - 1}>
             {breadcrumb}
           </BreadcrumbsItem>
         ))}
         {threadBreadcrumb && (
-          <BreadcrumbsItem url={`/forum/thread/${threadBreadcrumb.id}`} isLink={false}>
-            {threadBreadcrumb.title}
-          </BreadcrumbsItem>
+          <BreadcrumbsItem url={`/forum/thread/${threadBreadcrumb.id}`}>{threadBreadcrumb.title}</BreadcrumbsItem>
         )}
       </BreadcrumbsListComponent>
     </BreadcrumbsNavigation>
