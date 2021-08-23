@@ -2,16 +2,16 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { ForumBreadcrumbs, ForumBreadcrumbsProps } from './ForumBreadcrumbs'
+import { PostBreadcrumbs, PostBreadcrumbsProps } from './PostBreadcrumbs'
 
 export default {
-  title: 'Forum/ForumBreadcrumbs',
-  component: ForumBreadcrumbs,
+  title: 'Forum/PostBreadcrumbs',
+  component: PostBreadcrumbs,
 } as Meta
 
-const Template: Story<ForumBreadcrumbsProps> = ({ forumBreadcrumbs, currentBreadcrumb }) => (
+const Template: Story<PostBreadcrumbsProps> = ({ forumBreadcrumbs, currentBreadcrumb }) => (
   <MemoryRouter>
-    <ForumBreadcrumbs forumBreadcrumbs={forumBreadcrumbs} currentBreadcrumb={currentBreadcrumb} />
+    <PostBreadcrumbs forumBreadcrumbs={forumBreadcrumbs} currentBreadcrumb={currentBreadcrumb} />
   </MemoryRouter>
 )
 

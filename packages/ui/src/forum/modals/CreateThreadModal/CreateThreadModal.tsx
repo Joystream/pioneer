@@ -8,7 +8,7 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { useForumBreadcrumbs } from '@/forum/hooks/useForumBreadcrumbs'
+import { useForumCategoryBreadcrumbs } from '@/forum/hooks/useForumCategoryBreadcrumbs'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { SwitchMemberModalCall } from '../../../memberships/modals/SwitchMemberModal'
@@ -25,7 +25,7 @@ export const CreateThreadModal = () => {
   const { showModal, hideModal, modalData } = useModal<CreateThreadModalCall>()
   const [state, send] = useMachine(createThreadMachine)
   const { api } = useApi()
-  const { breadcrumbs } = useForumBreadcrumbs(modalData.categoryId)
+  const { breadcrumbs } = useForumCategoryBreadcrumbs(modalData.categoryId)
 
   const baseTransaction = api?.tx.forum.createThread(member?.id ?? 0, modalData.categoryId, '', '', null)
   const baseTransactionFee = useTransactionFee(member?.controllerAccount, baseTransaction)

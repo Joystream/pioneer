@@ -4,7 +4,7 @@ import {
   ForumSubCategoryFieldsFragment,
 } from '@/forum/queries'
 
-export interface ForumCategory extends ForumBreadcrumb {
+export interface ForumCategory extends CategoryBreadcrumb {
   description: string
   moderators: ForumModerator[]
   subcategories: ForumSubCategory[]
@@ -21,7 +21,7 @@ export interface ForumSubCategory {
   title: string
 }
 
-export type ForumBreadcrumb = ForumSubCategory
+export type CategoryBreadcrumb = ForumSubCategory
 
 type ForumCategoryFields = Omit<ForumCategoryFieldsFragment, '__typename'>
 export const asBaseForumCategory = (fields: ForumCategoryFields): Omit<ForumCategory, 'subcategories'> => ({
@@ -36,14 +36,14 @@ export const asForumCategory = (fields: ForumCategoryFields): ForumCategory => (
   subcategories: fields.forumcategoryparent?.map(asSubCategory) ?? [],
 })
 
-export const asSubCategory = (fields: ForumSubCategoryFieldsFragment): ForumBreadcrumb => ({
+export const asSubCategory = (fields: ForumSubCategoryFieldsFragment): CategoryBreadcrumb => ({
   id: fields.id,
   title: fields.title,
 })
 
-export const asForumBreadcrumbs = (fields: ForumCategoryBreadcrumbsFieldsFragment): ForumBreadcrumb[] => {
+export const asCategoryBreadcrumbs = (fields: ForumCategoryBreadcrumbsFieldsFragment): CategoryBreadcrumb[] => {
   if (fields.parent) {
-    return [...asForumBreadcrumbs(fields.parent), asSubCategory(fields)]
+    return [...asCategoryBreadcrumbs(fields.parent), asSubCategory(fields)]
   }
   return [asSubCategory(fields)]
 }

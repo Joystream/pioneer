@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
-import { useForumBreadcrumbs } from '@/forum/hooks/useForumBreadcrumbs'
+import { useForumCategoryBreadcrumbs } from '@/forum/hooks/useForumCategoryBreadcrumbs'
 import { seedForumCategory } from '@/mocks/data/seedForum'
 
 import { mockCategories } from '../../_mocks/forum'
@@ -9,7 +9,7 @@ import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
 const renderUseForumBreadcrumbs = async (id: string) => {
-  const { result, waitForNextUpdate } = renderHook(() => useForumBreadcrumbs(id), {
+  const { result, waitForNextUpdate } = renderHook(() => useForumCategoryBreadcrumbs(id), {
     wrapper: ({ children }) => <MockQueryNodeProviders>{children}</MockQueryNodeProviders>,
   })
   while (result.current.isLoading) {

@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 
 import { useGetForumCategoryBreadcrumbsQuery } from '../queries'
-import { asForumBreadcrumbs } from '../types'
+import { asCategoryBreadcrumbs } from '../types'
 
-export const useForumBreadcrumbs = (id: string) => {
+export const useForumCategoryBreadcrumbs = (id: string) => {
   const { data, loading } = useGetForumCategoryBreadcrumbsQuery({ variables: { where: { id } } })
   const breadcrumbs = useMemo(
-    () => (data?.forumCategoryByUniqueInput ? asForumBreadcrumbs(data.forumCategoryByUniqueInput) : undefined),
+    () => (data?.forumCategoryByUniqueInput ? asCategoryBreadcrumbs(data.forumCategoryByUniqueInput) : undefined),
     [data, loading]
   )
   return {

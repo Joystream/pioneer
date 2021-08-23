@@ -20,7 +20,7 @@ export const Breadcrumbs = React.memo(({ breadcrumbsOptions, lastBreadcrumb }: B
   )
 })
 
-const BreadcrumbsNavigation = styled.nav`
+export const BreadcrumbsNavigation = styled.nav`
   display: inline-flex;
   align-items: center;
   position: absolute;

@@ -8,8 +8,8 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { ForumBreadcrumbs } from '@/forum/components/ForumBreadcrumbs'
-import { ForumBreadcrumb } from '@/forum/types'
+import { PostBreadcrumbs } from '@/forum/components/PostBreadcrumbs'
+import { CategoryBreadcrumb } from '@/forum/types'
 import { Member } from '@/memberships/types'
 
 import { PreviewThreadModal } from './PreviewThreadModal'
@@ -20,7 +20,7 @@ interface Props {
   setTopic: (t: string) => void
   setDescription: (d: string) => void
   onSubmit: () => void
-  breadcrumbs?: ForumBreadcrumb[]
+  breadcrumbs?: CategoryBreadcrumb[]
   author: Member
 }
 
@@ -42,7 +42,7 @@ export const CreateThreadDetailsModal = ({
         <ModalHeader title="Create a thread" onClick={hideModal} />
         <ModalBody>
           <RowGapBlock gap={24}>
-            <ForumBreadcrumbs forumBreadcrumbs={breadcrumbs ?? []} currentBreadcrumb="New Thread" />
+            <PostBreadcrumbs forumBreadcrumbs={breadcrumbs ?? []} currentBreadcrumb="New Thread" />
             <h1>General</h1>
             <RowGapBlock gap={16}>
               <TextMedium light>Please make sure your title will be clear for users</TextMedium>
