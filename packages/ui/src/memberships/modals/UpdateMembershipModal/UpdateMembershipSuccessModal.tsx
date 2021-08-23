@@ -21,7 +21,7 @@ export function UpdateMembershipSuccessModal({ onClose, member }: Props) {
       <ModalBody>
         <TextMedium>You have just successfully updated your membership</TextMedium>
         <MemberRow>
-          <MemberInfo member={(member as unknown) as Member} />
+          <MemberInfo member={(member as unknown) as Member} skipModal />
         </MemberRow>
       </ModalBody>
       <ModalFooter>

@@ -5,4 +5,5 @@ export interface MemberInfoWrapProps {
   showId?: boolean
   memberSize?: MemberSize
   showGroup?: boolean
+  skipModal?: boolean
 }

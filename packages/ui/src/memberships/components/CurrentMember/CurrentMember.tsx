@@ -27,7 +27,7 @@ export const CurrentMember = () => {
       <MembershipsCount count={members.length} />
       {active && (
         <SwitchMember onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}>
-          {active && <MemberInfo member={active} isOnDark={true} maxRoles={4} />}
+          {active && <MemberInfo member={active} isOnDark={true} maxRoles={4} skipModal />}
           <SwitchArrow>
             <ArrowDownExpandedIcon />
           </SwitchArrow>

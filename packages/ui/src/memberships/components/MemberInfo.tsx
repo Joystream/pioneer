@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { FounderMemberIcon, VerifiedMemberIcon, LeadMemberIcon } from '@/common/components/icons'
 import { Colors } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
 
 import {
   DarkTooltipInnerItemProps,
@@ -23,16 +24,17 @@ import {
   MemberPhoto,
   MemberPhotoContainer,
 } from './components'
+import { MemberModalCall } from './MemberProfile'
 import { MemberRoles, MemberStatusTooltip } from './MemberRoles'
 import { MemberInfoWrapProps, MemberSize } from './types'
 
-interface MemberInfoContainerProps {
+export interface MemberInfoContainerProps {
   isLead?: boolean
   member: Member
-  onClick?: () => void
   size?: MemberSize
   className?: string
   maxRoles?: number
+  skipModal?: boolean
 }
 
 export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps & { showGroup?: boolean }
@@ -40,7 +42,6 @@ export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps & {
 export const MemberInfo = React.memo(
   ({
     member,
-    onClick,
     isOnDark,
     showId,
     showGroup = true,
@@ -49,10 +50,29 @@ export const MemberInfo = React.memo(
     className,
     maxRoles,
     isLead,
+    skipModal,
   }: MemberInfoProps) => {
     const roleSize = size === 's' ? 'm' : size
+
+    const { showModal } = useModal()
+    const showMemberModal = useCallback(
+      (event?: React.MouseEvent<HTMLElement>) => {
+        event?.preventDefault()
+        event?.stopPropagation()
+        member && showModal<MemberModalCall>({ modal: 'Member', data: { id: member.id } })
+      },
+      [member?.id]
+    )
+
     return (
-      <MemberInfoWrap isOnDark={isOnDark} memberSize={memberSize} className={className} showGroup={showGroup}>
+      <MemberInfoWrap
+        isOnDark={isOnDark}
+        memberSize={memberSize}
+        className={className}
+        showGroup={showGroup}
+        onClick={skipModal ? undefined : showMemberModal}
+        skipModal={skipModal}
+      >
         <MemberPhoto>
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />
@@ -66,23 +86,25 @@ export const MemberInfo = React.memo(
           </MemberPhotoContainer>
         </MemberPhoto>
         <MemberHead>
-          <MemberHandle onClick={onClick}>{member.handle}</MemberHandle>
-          <MemberIcons>
-            {member.isVerified && (
-              <Tooltip tooltipText="This member is verified">
-                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
-                  <VerifiedMemberIcon />
-                </MemberStatusTooltip>
-              </Tooltip>
-            )}
-            {(member as any)?.isFounder && (
-              <Tooltip tooltipText="This member is verified">
-                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
-                  <FounderMemberIcon />
-                </MemberStatusTooltip>
-              </Tooltip>
-            )}
-          </MemberIcons>
+          <MemberHandle>{member.handle}</MemberHandle>
+          {(member.isVerified || (member as any)?.isFounder) && (
+            <MemberIcons>
+              {member.isVerified && (
+                <Tooltip tooltipText="This member is verified">
+                  <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
+                    <VerifiedMemberIcon />
+                  </MemberStatusTooltip>
+                </Tooltip>
+              )}
+              {(member as any)?.isFounder && (
+                <Tooltip tooltipText="This member is verified">
+                  <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
+                    <FounderMemberIcon />
+                  </MemberStatusTooltip>
+                </Tooltip>
+              )}
+            </MemberIcons>
+          )}
         </MemberHead>
         {showGroup && !showId && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
         {showId && <MemberId>Worker ID: {member.id}</MemberId>}

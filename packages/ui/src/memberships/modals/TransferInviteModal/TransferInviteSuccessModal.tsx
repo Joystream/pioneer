@@ -28,7 +28,7 @@ export function TransferInviteSuccessModal({ onClose, recipient, amount }: Props
           You have just successfully transferred {amount.toString()} invitation{plural && 's'} to {name}.
         </TextMedium>
         <MemberRow>
-          <MemberInfo member={recipient} />
+          <MemberInfo member={recipient} skipModal />
         </MemberRow>
       </ModalBody>
       <ModalFooter>
