@@ -54,10 +54,18 @@ describe('CreateThreadModal', () => {
     tx = stubTransaction(api, txPath)
   })
 
-  it('Failed requirements: no active member', () => {
-    useMyMemberships.active = undefined
-    renderModal()
-    expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+  describe('Requirements failed', () => {
+    it('No active member', () => {
+      useMyMemberships.active = undefined
+      renderModal()
+      expect(useModal.showModal).toBeCalledWith({ modal: 'SwitchMember' })
+    })
+
+    it('Insufficient funds for minimum fee', async () => {
+      tx = stubTransaction(api, txPath, 10_000)
+      renderModal()
+      expect(await screen.findByText(/insufficient funds/i)).toBeDefined()
+    })
   })
 
   describe('General details', () => {
@@ -84,11 +92,19 @@ describe('CreateThreadModal', () => {
       expect(await screen.findByText(/5GrwvaEF5.*NoHGKutQY/i)).toBeDefined()
     })
 
-    it('Insufficient balance', async () => {
-      stubTransaction(api, txPath, 10000)
-      await fillAndProceed()
+    it('Insufficient funds for actual fee', async () => {
+      renderModal()
+      await fillDetails()
+      tx = stubTransaction(api, txPath, 10000)
+      const next = await getButton(/next step/i)
+      await fireEvent.click(next)
 
       expect(await getButton(/sign and send/i)).toBeDisabled()
+      expect(
+        await screen.findByText(
+          'Insufficient funds to cover the thread creation. You need at least 10000 JOY on your account for this action.'
+        )
+      ).toBeDefined()
     })
 
     it('Transaction failure', async () => {

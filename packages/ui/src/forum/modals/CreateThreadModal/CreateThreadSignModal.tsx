@@ -18,6 +18,8 @@ import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 
+import { getMessage } from './utils'
+
 interface Props {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
@@ -48,7 +50,13 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
               A fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
             </TextMedium>
           </RowGapBlock>
-          <InputComponent label="Fee paid by account" inputSize="l" disabled borderless>
+          <InputComponent
+            label="Fee paid by account"
+            inputSize="l"
+            disabled
+            borderless
+            message={hasFunds ? undefined : getMessage(paymentInfo?.partialFee)}
+          >
             <SelectedAccount account={controllerAccount} />
           </InputComponent>
         </RowGapBlock>
