@@ -1,29 +1,41 @@
 import React from 'react'
 
+import { BreadcrumbsNavigation } from '@/common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { BreadcrumbsItem } from '@/common/components/page/Sidebar/Breadcrumbs/BreadcrumbsItem'
 import { BreadcrumbsListComponent } from '@/common/components/page/Sidebar/Breadcrumbs/BreadcrumbsList'
+import { HomeLink } from '@/common/components/page/Sidebar/Breadcrumbs/HomeLink'
 
-import { ForumBreadcrumb } from '../types'
+import { CategoryBreadcrumb, ThreadBreadcrumb } from '../types'
 
-export interface ForumBreadcrumbsProps {
-  forumBreadcrumbs: ForumBreadcrumb[]
-  currentBreadcrumb?: string
+interface ForumBreadcrumbsProps {
+  threadBreadcrumb?: ThreadBreadcrumb
+  categoryBreadcrumbs: CategoryBreadcrumb[]
 }
 
-export const ForumBreadcrumbs = React.memo(({ forumBreadcrumbs, currentBreadcrumb }: ForumBreadcrumbsProps) => {
-  const crumbs = forumBreadcrumbs.map((crumb) => ({
-    path: `/forum/categories/${crumb.id}`,
+export const ForumBreadcrumbs = React.memo(({ categoryBreadcrumbs, threadBreadcrumb }: ForumBreadcrumbsProps) => {
+  const crumbs = categoryBreadcrumbs.map((crumb) => ({
+    path: `/forum/forum/${crumb.id}`,
     breadcrumb: crumb.title,
     key: crumb.id,
   }))
-  currentBreadcrumb && crumbs.push({ path: '', breadcrumb: currentBreadcrumb, key: 'last:' + currentBreadcrumb })
   return (
-    <BreadcrumbsListComponent>
-      {crumbs.map(({ path, breadcrumb, key }, index, { length }) => (
-        <BreadcrumbsItem key={key} url={path} isLink={index < length - 1}>
-          {breadcrumb}
+    <BreadcrumbsNavigation>
+      <HomeLink />
+      <BreadcrumbsListComponent>
+        <BreadcrumbsItem url="/forum" isLink>
+          Forum
         </BreadcrumbsItem>
-      ))}
-    </BreadcrumbsListComponent>
+        {crumbs.map(({ path, breadcrumb, key }, index, { length }) => (
+          <BreadcrumbsItem key={key} url={path} isLink={index < length - 1}>
+            {breadcrumb}
+          </BreadcrumbsItem>
+        ))}
+        {threadBreadcrumb && (
+          <BreadcrumbsItem url={`/forum/thread/${threadBreadcrumb.id}`} isLink={false}>
+            {threadBreadcrumb.title}
+          </BreadcrumbsItem>
+        )}
+      </BreadcrumbsListComponent>
+    </BreadcrumbsNavigation>
   )
 })

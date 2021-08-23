@@ -1,5 +1,10 @@
 import { asBlock, Block } from '@/common/types'
-import { ForumThreadBreadcrumbsFieldsFragment, ForumThreadDetailedFieldsFragment, ForumThreadFieldsFragment } from '@/forum/queries'
+import {
+  ForumThreadBreadcrumbsFieldsFragment,
+  ForumThreadDetailedFieldsFragment,
+  ForumThreadFieldsFragment,
+} from '@/forum/queries'
+
 import { asCategoryBreadcrumbs, CategoryBreadcrumb } from './ForumCategory'
 
 export type ThreadStatusType = ThreadStatus['__typename']
@@ -59,7 +64,7 @@ export interface ThreadBreadcrumb {
 }
 
 interface ThreadBreadcrumbs {
-  threadBreadcrumb: ThreadBreadcrumb,
+  threadBreadcrumb: ThreadBreadcrumb
   categoryBreadcrumbs: CategoryBreadcrumb[]
 }
 
