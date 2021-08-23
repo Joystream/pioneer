@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { BlockTime } from '@/common/components/BlockTime'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow } from '@/common/constants'
-import { CategoriesColLayout, ForumRoutes } from '@/forum/constant'
+import { categoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
 
@@ -17,34 +18,44 @@ export interface CategoryListItemProps {
   category: ForumCategory
   isArchive?: boolean
 }
-export const CategoryListItem = ({ category, isArchive }: CategoryListItemProps) => (
-  <CategoryListItemStyles
-    as={GhostRouterLink}
-    to={`${ForumRoutes.category}/${category.id}${isArchive ? '/archive' : ''}`}
-  >
-    <Category>
-      <h5>{category.title}</h5>
-      <TextMedium light>{category.description}</TextMedium>
-      <TextInlineExtraSmall lighter>
-        Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
-      </TextInlineExtraSmall>
-    </Category>
+export const CategoryListItem = ({ category, isArchive = false }: CategoryListItemProps) => {
+  const block = category.status.categoryArchivalStatusUpdatedEvent
 
-    <ThreadCount categoryId={category.id} />
+  return (
+    <CategoryListItemStyles
+      as={GhostRouterLink}
+      to={`${ForumRoutes.category}/${category.id}${isArchive ? '/archive' : ''}`}
+      $colLayout={categoriesColLayout(isArchive)}
+    >
+      <Category>
+        <h5>{category.title}</h5>
+        <TextMedium light>{category.description}</TextMedium>
+        <TextInlineExtraSmall lighter>
+          Subcategories: {category.subcategories.map(({ title }) => title).join(', ')}
+        </TextInlineExtraSmall>
+      </Category>
 
-    <LatestPost categoryId={category.id} />
+      <ThreadCount categoryId={category.id} />
 
-    <PopularThread categoryId={category.id} />
+      <LatestPost categoryId={category.id} />
 
-    <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
-  </CategoryListItemStyles>
-)
+      {isArchive ? (
+        block && <BlockTime block={block} layout="column" />
+      ) : (
+        <>
+          <PopularThread categoryId={category.id} />
+          <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
+        </>
+      )}
+    </CategoryListItemStyles>
+  )
+}
 
 export interface CategoryItemFieldProps {
   categoryId: string
 }
 
-const CategoryListItemStyles = styled(TableListItem).attrs({ $colLayout: CategoriesColLayout })`
+export const CategoryListItemStyles = styled(TableListItem)`
   align-items: start;
   height: 128px;
   padding: 14px 24px;

@@ -3,9 +3,15 @@ import React, { useState } from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { Loading } from '@/common/components/Loading'
-import { GetForumCategoriesDocument, GetForumCategoriesQuery, GetForumCategoriesQueryVariables } from '@/forum/queries'
+import {
+  ForumCategoryFieldsFragment,
+  GetForumCategoriesDocument,
+  GetForumCategoriesQuery,
+  GetForumCategoriesQueryVariables,
+} from '@/forum/queries'
 import { asForumCategory, ForumCategory } from '@/forum/types'
 import { MockApolloProvider, Query } from '@/mocks/components/storybook/MockApolloProvider'
+import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 import { ForumCategoryList } from './ForumCategoryList'
 
@@ -25,7 +31,7 @@ const Template: Story = ({ isArchive }) => {
             query: GetForumCategoriesDocument,
             variables: {},
           })
-          setCategories(data.forumCategories.slice(0, 3).map(asForumCategory))
+          setCategories(data.forumCategories.slice(0, 3).map(asCategory))
         }}
       />
       <MemoryRouter>
@@ -39,3 +45,11 @@ export const Default = Template.bind({})
 Default.args = {
   isArchive: false,
 }
+
+const asCategory = (category: ForumCategoryFieldsFragment): ForumCategory => ({
+  ...asForumCategory(category),
+  status: {
+    __typename: 'CategoryStatusArchived',
+    categoryArchivalStatusUpdatedEvent: randomBlock(),
+  },
+})
