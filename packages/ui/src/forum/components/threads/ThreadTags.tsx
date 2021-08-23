@@ -10,11 +10,9 @@ interface ThreadTagsProps {
 export const ThreadTags = ({ tags }: ThreadTagsProps) => (
   <BadgesRow>
     {tags.map(({ title }, index) => (
-      <>
-        <BadgeStatus size="m" inverted separated key={index}>
-          {title}
-        </BadgeStatus>
-      </>
+      <BadgeStatus size="m" inverted separated key={index}>
+        {title}
+      </BadgeStatus>
     ))}
   </BadgesRow>
 )

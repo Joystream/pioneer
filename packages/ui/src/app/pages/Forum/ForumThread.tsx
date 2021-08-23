@@ -10,6 +10,7 @@ import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent } from '@/common/components/forms'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
+import { EditSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -19,15 +20,18 @@ import { Colors } from '@/common/constants'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { useForumThread } from '@/forum/hooks/useForumThread'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, thread } = useForumThread(id)
+  const { members: myMembers } = useMyMemberships()
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
 
-  const isThreadActive = thread?.status.__typename === 'ThreadStatusActive'
+  const isMyThread = thread && myMembers.find((member) => member.id === thread.id)
+  const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
 
   if (!isLoading && !thread) {
     history.push('/404')
@@ -44,7 +48,14 @@ export const ForumThread = () => {
       <PageHeaderWrapper>
         <PageHeaderRow>
           <PreviousPage>
-            <PageTitle>{thread.title}</PageTitle>
+            <PageTitle>
+              {thread.title}
+              {isMyThread && (
+                <EditTitle>
+                  <EditSymbol />
+                </EditTitle>
+              )}
+            </PageTitle>
           </PreviousPage>
           <ButtonsGroup>
             <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
@@ -104,6 +115,15 @@ export const ForumThread = () => {
 
   return <PageLayout header={displayHeader()} main={displayMain()} sidebar={displaySidebar()} />
 }
+
+const EditTitle = styled.span`
+  cursor: pointer;
+  margin-left: 3px;
+
+  &:hover {
+    opacity: 0.7;
+  }
+`
 
 const ThreadPinned = styled.span`
   display: flex;
