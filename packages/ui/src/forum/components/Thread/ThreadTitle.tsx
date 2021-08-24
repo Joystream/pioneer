@@ -1,32 +1,92 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
-import { InputText } from '@/common/components/forms'
-import { CrossIcon } from '@/common/components/icons'
+import { InputComponent, InputText } from '@/common/components/forms'
+import { CrossIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { EditSymbol } from '@/common/components/icons/symbols'
 import { PageTitle } from '@/common/components/page/PageTitle'
+import { useApi } from '@/common/hooks/useApi'
+import { useForm } from '@/common/hooks/useForm'
+import { useModal } from '@/common/hooks/useModal'
+import { EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
 import { ForumThreadWithDetails } from '@/forum/types'
+import { useMember } from '@/memberships/hooks/useMembership'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { Member } from '@/memberships/types'
+import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 
 interface ThreadTitleProps {
   thread: ForumThreadWithDetails
 }
 
+interface TitleFormFields {
+  title: string
+}
+
+const FormSchema = Yup.object().shape({})
+
 export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
+  const { api, connectionState } = useApi()
+  const { member: threadAuthor } = useMember(thread.authorId)
   const { members: myMembers } = useMyMemberships()
   const [isEditTitle, setEditTitle] = useState<boolean>(false)
+  const { showModal, hideModal } = useModal<EditThreadTitleModalCall>()
 
   const isMyThread = thread && myMembers.find((member) => member.id === thread.id)
+
+  const formInitializer: TitleFormFields = {
+    title: thread.title,
+  }
+  const { fields, changeField } = useForm<TitleFormFields>(formInitializer, FormSchema)
+
+  const transaction = useMemo(() => {
+    if (isMyThread && threadAuthor && connectionState === 'connected' && api) {
+      return api.tx.forum.editThreadTitle(threadAuthor.id, thread.categoryId, thread.id, fields.title)
+    }
+  }, [fields.title, threadAuthor, isMyThread, connectionState])
+
+  const toggleEditTitle = useCallback(() => {
+    if (isEditTitle) {
+      changeField('title', thread.title)
+    }
+
+    setEditTitle(!isEditTitle)
+  }, [isEditTitle])
+
+  const submitTitle = useCallback(() => {
+    if (threadAuthor && transaction) {
+      toggleEditTitle()
+      showModal<EditThreadTitleModalCall>({
+        modal: 'EditThreadTitleModal',
+        data: {
+          member: threadAuthor,
+          transaction,
+          onClose: hideModal,
+        },
+      })
+    }
+  }, [JSON.stringify(threadAuthor), JSON.stringify(transaction)])
 
   return (
     <PageTitle>
       {!isEditTitle && thread.title}
-      {isEditTitle && <InputText id="thread-title" value={thread.title} required />}
-      {isMyThread && (
-        <EditTitle onClick={() => setEditTitle(!isEditTitle)}>
-          {!isEditTitle ? <EditSymbol /> : <CrossIcon />}
-        </EditTitle>
+      {isEditTitle && (
+        <>
+          <InputComponent inputSize="s" onSubmit={submitTitle}>
+            <InputText
+              id="thread-title"
+              value={fields.title}
+              required
+              onChange={(event) => changeField('title', event.target.value)}
+            />
+          </InputComponent>
+          <EditTitle onClick={() => submitTitle()}>
+            <VerifiedMemberIcon />
+          </EditTitle>
+        </>
       )}
+      {isMyThread && <EditTitle onClick={toggleEditTitle}>{!isEditTitle ? <EditSymbol /> : <CrossIcon />}</EditTitle>}
     </PageTitle>
   )
 }

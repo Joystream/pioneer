@@ -5,6 +5,7 @@ import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModa
 import { useModal } from '@/common/hooks/useModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
+import { EditThreadTitleModal, EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
@@ -37,6 +38,7 @@ export type ModalNames =
   | ModalName<DeletePostModalCall>
   | ModalName<EditPostModalCall>
   | ModalName<PostHistoryModalCall>
+  | ModalName<EditThreadTitleModalCall>
 
 export const GlobalModals = () => {
   const { modal } = useModal()
@@ -74,6 +76,8 @@ export const GlobalModals = () => {
       return <EditPostModal />
     case 'PostHistory':
       return <PostHistoryModal />
+    case 'EditThreadTitleModal':
+      return <EditThreadTitleModal />
     default:
       return null
   }
