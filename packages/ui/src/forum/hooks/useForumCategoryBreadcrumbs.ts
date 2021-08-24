@@ -6,7 +6,10 @@ import { asCategoryBreadcrumbs } from '../types'
 export const useForumCategoryBreadcrumbs = (id: string) => {
   const { data, loading } = useGetForumCategoryBreadcrumbsQuery({ variables: { where: { id } } })
   const breadcrumbs = useMemo(
-    () => (data?.forumCategoryByUniqueInput ? asCategoryBreadcrumbs(data.forumCategoryByUniqueInput) : undefined),
+    () =>
+      data?.forumCategoryByUniqueInput
+        ? asCategoryBreadcrumbs(data.forumCategoryByUniqueInput)
+        : [{ id, title: `Category ${id}` }],
     [data, loading]
   )
   return {
