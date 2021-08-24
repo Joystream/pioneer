@@ -8,7 +8,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { PostBreadcrumbs } from '@/forum/components/PostBreadcrumbs'
+import { ForumBreadcrumbsList } from '@/forum/components/ForumBreadcrumbsList'
 import { CategoryBreadcrumb } from '@/forum/types'
 import { Member } from '@/memberships/types'
 
@@ -42,7 +42,10 @@ export const CreateThreadDetailsModal = ({
         <ModalHeader title="Create a thread" onClick={hideModal} />
         <ModalBody>
           <RowGapBlock gap={24}>
-            <PostBreadcrumbs forumBreadcrumbs={breadcrumbs ?? []} currentBreadcrumb="New Thread" />
+            <ForumBreadcrumbsList
+              categoryBreadcrumbs={breadcrumbs ?? []}
+              threadBreadcrumb={{ id: '', title: 'New Thread' }}
+            />
             <h1>General</h1>
             <RowGapBlock gap={16}>
               <TextMedium light>Please make sure your title will be clear for users</TextMedium>
