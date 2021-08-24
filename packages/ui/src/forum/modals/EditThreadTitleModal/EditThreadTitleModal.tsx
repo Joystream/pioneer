@@ -17,7 +17,7 @@ export const EditThreadTitleModal = () => {
   const { allAccounts: myAccounts } = useMyAccounts()
 
   const controllerAccount = accountOrNamed(myAccounts, modalData.member.controllerAccount, 'Controller Account')
-  console.log('leelellelel', modalData)
+
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
 

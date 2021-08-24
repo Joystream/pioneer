@@ -13,8 +13,6 @@ import { EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
 import { ForumThreadWithDetails } from '@/forum/types'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { Member } from '@/memberships/types'
-import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 
 interface ThreadTitleProps {
   thread: ForumThreadWithDetails
