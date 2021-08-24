@@ -10,7 +10,7 @@ interface ForumLayoutProps extends PageLayoutProps {
   isCategory?: boolean
 }
 
-export const PageLayout = ({ header, main, sidebar, footer, isThread }: ForumLayoutProps) => {
+export const ForumPageLayout = ({ header, main, sidebar, footer, isThread }: ForumLayoutProps) => {
   const Breadcrumbs = isThread ? ThreadBreadcrumbs : CategoryBreadcrumbs
   return (
     <PageContent>
