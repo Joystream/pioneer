@@ -16,13 +16,17 @@ export interface PageLayoutProps {
 export const PageLayout = ({ header, main, sidebar, footer, lastBreadcrumb }: PageLayoutProps) => (
   <PageContent>
     <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
-    <PageLayoutComponent header={header} main={main} sidebar={sidebar} footer={footer}>
-      {header && <PageHeader>{header}</PageHeader>}
-      {main && <PageMain>{main}</PageMain>}
-      {sidebar && <PageSidebar>{sidebar}</PageSidebar>}
-      {footer && <PageFooter>{footer}</PageFooter>}
-    </PageLayoutComponent>
+    <PageLayoutContent header={header} main={main} sidebar={sidebar} footer={footer} />
   </PageContent>
+)
+
+export const PageLayoutContent = ({ header, main, sidebar, footer }: PageLayoutProps) => (
+  <PageLayoutComponent header={header} main={main} sidebar={sidebar} footer={footer}>
+    {header && <PageHeader>{header}</PageHeader>}
+    {main && <PageMain>{main}</PageMain>}
+    {sidebar && <PageSidebar>{sidebar}</PageSidebar>}
+    {footer && <PageFooter>{footer}</PageFooter>}
+  </PageLayoutComponent>
 )
 
 const PageHeader = styled.header`
