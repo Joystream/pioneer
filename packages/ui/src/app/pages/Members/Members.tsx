@@ -1,9 +1,9 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageLayout } from '@/app/components/PageLayout'
+import { FilterPageHeader } from '@/common/components/forms/FilterBox'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
 import { useModal } from '@/common/hooks/useModal'
 import { MemberList } from '@/memberships/components/MemberList'
@@ -25,6 +25,7 @@ export const Members = () => {
 
   const [filter, setFilter] = useState(MemberListEmptyFilter)
   const [order, dispatchSort] = useReducer(sortReducer, DefaultMemberListOrder)
+  const searchSlot = useRef<HTMLDivElement>(null)
 
   const [page, setPage] = useState(1)
   useEffect(() => {
@@ -35,14 +36,10 @@ export const Members = () => {
 
   return (
     <PageLayout
-      header={
-        <PageHeaderWrapper>
-          <PageTitle>Members</PageTitle>
-        </PageHeaderWrapper>
-      }
+      header={<FilterPageHeader ref={searchSlot} title="Members" />}
       main={
         <MainPanel>
-          <MemberListFilters memberCount={totalCount} onApply={setFilter} />
+          <MemberListFilters searchSlot={searchSlot} memberCount={totalCount} onApply={setFilter} />
           <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
           {!isLoading && !!pageCount && pageCount > 1 && (
             <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
