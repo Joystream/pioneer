@@ -15,10 +15,11 @@ import { ThreadsLayoutSpacing } from './ThreadsLayout'
 
 export interface ThreadBrowserProps {
   label: string
+  noItems?: boolean
 }
 
-export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
-  const items: ThreadItemContentProps[] = ThreadItemsPlaceholder
+export const ThreadBrowser = ({ label, noItems }: ThreadBrowserProps) => {
+  const items: ThreadItemContentProps[] = noItems ? [] : ThreadItemsPlaceholder
   const [currentItemsGroup, setCurrentItemsGroup] = useState(0)
   const currentItems: ThreadItemContentProps[][] = []
 
@@ -46,29 +47,6 @@ export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
     setCurrentItemsGroup(currentItemsGroup + 1)
   }
 
-  if (!items) {
-    return (
-      <ThreadBrowserStyles>
-        <ThreadBrowserHeader align="center" gap={16}>
-          <Label>
-            {label} <CountBadge count={0} />
-          </Label>
-          <ButtonsGroup>
-            <ButtonGhost size="small" square disabled>
-              <Arrow direction="left" />
-            </ButtonGhost>
-            <ButtonGhost size="small" square disabled>
-              <Arrow direction="right" />
-            </ButtonGhost>
-          </ButtonsGroup>
-        </ThreadBrowserHeader>
-        <ThreadBrowserItems>
-          <ThreadItem title={"You haven't created any threads yet"} empty />
-        </ThreadBrowserItems>
-      </ThreadBrowserStyles>
-    )
-  }
-
   return (
     <ThreadBrowserStyles>
       <ThreadBrowserHeader align="center" gap={16}>
@@ -90,13 +68,14 @@ export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
         </ButtonsGroup>
       </ThreadBrowserHeader>
       <ThreadBrowserItems>
-        {isLoading || !currentItems[currentItemsGroup] ? (
+        {isLoading ? (
           <Loading />
         ) : (
-          currentItems[currentItemsGroup].map((item) => (
+          currentItems[currentItemsGroup]?.map((item) => (
             <ThreadItem {...item} halfSize={currentItems[currentItemsGroup].length > 1} />
           ))
         )}
+        {!isLoading && !items.length && <ThreadItem title={"You haven't created any threads yet"} empty />}
       </ThreadBrowserItems>
     </ThreadBrowserStyles>
   )

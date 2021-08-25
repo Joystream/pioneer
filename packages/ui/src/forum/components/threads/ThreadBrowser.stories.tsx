@@ -26,3 +26,10 @@ export const ThreadBrowserComponent = Template.bind({})
 ThreadBrowserComponent.args = {
   label: 'CategoryLabel',
 }
+
+export const EmptyThreadBrowser = Template.bind({})
+
+EmptyThreadBrowser.args = {
+  label: 'CategoryLabel',
+  noItems: true,
+}
