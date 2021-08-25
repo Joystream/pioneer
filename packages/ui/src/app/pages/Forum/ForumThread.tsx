@@ -12,12 +12,12 @@ import { LinkIcon, WatchIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
-import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
+import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
@@ -29,7 +29,7 @@ export const ForumThread = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
 
-  const isThreadActive = thread?.status.__typename === 'ThreadStatusActive'
+  const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
 
   if (!isLoading && !thread) {
     history.push('/404')
@@ -46,7 +46,7 @@ export const ForumThread = () => {
       <PageHeaderWrapper>
         <PageHeaderRow>
           <PreviousPage>
-            <PageTitle>{thread.title}</PageTitle>
+            <ThreadTitle thread={thread} />
           </PreviousPage>
           <ButtonsGroup>
             <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
