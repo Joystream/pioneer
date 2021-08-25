@@ -53,6 +53,8 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
       )
     }, [updatedAt])
 
+    const likesCount = reaction ? reaction.length : 0
+
     return (
       <ForumPostStyles ref={ref} isSelected={isSelected}>
         <ForumPostRow>
@@ -78,21 +80,25 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
           )}
         </MessageBody>
         <ForumPostRow>
-          <ButtonsGroup>{reaction && <LikeButton counter={reaction.length} />}</ButtonsGroup>
           {isThreadActive && !editing && (
-            <ButtonsGroup>
-              <CopyButtonTemplate
-                textToCopy={window.location.href}
-                square
-                size="small"
-                disabled={isPreview}
-                icon={<LinkIcon />}
-              />
-              <ButtonGhost square disabled={isPreview} size="small">
-                <ReplyIcon />
-              </ButtonGhost>
-              <PostContextMenu post={post} onEdit={() => setEditing(true)} />
-            </ButtonsGroup>
+            <>
+              <ButtonsGroup>
+                <LikeButton counter={likesCount} />
+              </ButtonsGroup>
+              <ButtonsGroup>
+                <CopyButtonTemplate
+                  textToCopy={window.location.href}
+                  square
+                  size="small"
+                  disabled={isPreview}
+                  icon={<LinkIcon />}
+                />
+                <ButtonGhost square disabled={isPreview} size="small">
+                  <ReplyIcon />
+                </ButtonGhost>
+                <PostContextMenu post={post} onEdit={() => setEditing(true)} />
+              </ButtonsGroup>
+            </>
           )}
         </ForumPostRow>
       </ForumPostStyles>
