@@ -211,6 +211,12 @@ query GetForumPostEdits($id: ID!) {
     createdAt
     inBlock
   }
+  initial: postAddedEvents(where: { post: { id_eq: $id } }) {
+    createdAt
+    network
+    inBlock
+    text
+  }
 }
 
 query GetForumPostsCount($where: ForumPostWhereInput!) {

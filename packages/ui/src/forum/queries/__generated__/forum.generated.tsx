@@ -245,6 +245,13 @@ export type GetForumPostEditsQuery = {
     createdAt: any
     inBlock: number
   }>
+  initial: Array<{
+    __typename: 'PostAddedEvent'
+    createdAt: any
+    network: Types.Network
+    inBlock: number
+    text: string
+  }>
 }
 
 export type GetForumPostsCountQueryVariables = Types.Exact<{
@@ -892,6 +899,12 @@ export const GetForumPostEditsDocument = gql`
       network
       createdAt
       inBlock
+    }
+    initial: postAddedEvents(where: { post: { id_eq: $id } }) {
+      createdAt
+      network
+      inBlock
+      text
     }
   }
 `
