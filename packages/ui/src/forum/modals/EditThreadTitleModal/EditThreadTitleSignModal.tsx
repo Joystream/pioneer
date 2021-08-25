@@ -1,5 +1,3 @@
-import { SubmittableExtrinsic } from '@polkadot/api/types'
-import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
@@ -7,7 +5,8 @@ import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { Account } from '@/accounts/types'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
@@ -15,22 +14,32 @@ import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/compo
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
+import { ForumThreadWithDetails } from '@/forum/types'
+import { useMember } from '@/memberships/hooks/useMembership'
 
 interface EditThreadTitleSignModalProps {
-  transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
+  thread: ForumThreadWithDetails
+  newTitle: string
   service: ActorRef<any>
-  controllerAccount: Account
   onClose: () => void
 }
 
-export const EditThreadTitleSignModal = ({
-  transaction,
-  service,
-  controllerAccount,
-  onClose,
-}: EditThreadTitleSignModalProps) => {
+export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }: EditThreadTitleSignModalProps) => {
+  const { api, connectionState } = useApi()
+  const { member: threadAuthor } = useMember(thread.authorId)
+  const { allAccounts: myAccounts } = useMyAccounts()
+
+  const transaction = useMemo(() => {
+    if (threadAuthor && connectionState === 'connected' && api) {
+      return api.tx.forum.editThreadTitle(threadAuthor.id, thread.categoryId, thread.id, newTitle)
+    }
+  }, [newTitle, threadAuthor, connectionState])
+
+  const controllerAccount = accountOrNamed(myAccounts, threadAuthor?.controllerAccount as string, 'Controller Account')
+
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
   const balance = useBalance(controllerAccount.address)
   const [state, send] = useActor(service)
@@ -45,6 +54,10 @@ export const EditThreadTitleSignModal = ({
 
   const getMessage = (fee?: BN) => {
     return `Insufficient funds to cover the title edition. You need at least ${fee?.toString()} JOY on your account for this action.`
+  }
+
+  if (!threadAuthor || !controllerAccount) {
+    return null
   }
 
   return (

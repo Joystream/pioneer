@@ -1,8 +1,6 @@
 import { useMachine } from '@xstate/react'
 import React from 'react'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useModal } from '@/common/hooks/useModal'
 import { EditThreadTitleSignModal } from '@/forum/modals/EditThreadTitleModal/EditThreadTitleSignModal'
@@ -14,9 +12,6 @@ import { editThreadTitleMachine } from './machine'
 export const EditThreadTitleModal = () => {
   const [state] = useMachine(editThreadTitleMachine)
   const { modalData } = useModal<EditThreadTitleModalCall>()
-  const { allAccounts: myAccounts } = useMyAccounts()
-
-  const controllerAccount = accountOrNamed(myAccounts, modalData.member.controllerAccount, 'Controller Account')
 
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
@@ -24,8 +19,8 @@ export const EditThreadTitleModal = () => {
     return (
       <EditThreadTitleSignModal
         onClose={modalData.onClose}
-        transaction={modalData.transaction}
-        controllerAccount={controllerAccount}
+        thread={modalData.thread}
+        newTitle={modalData.newTitle}
         service={transactionService}
       />
     )

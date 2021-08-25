@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -6,12 +6,10 @@ import { InputComponent, InputText } from '@/common/components/forms'
 import { CrossIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { EditSymbol } from '@/common/components/icons/symbols'
 import { PageTitle } from '@/common/components/page/PageTitle'
-import { useApi } from '@/common/hooks/useApi'
 import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
 import { EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
 import { ForumThreadWithDetails } from '@/forum/types'
-import { useMember } from '@/memberships/hooks/useMembership'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface ThreadTitleProps {
@@ -25,8 +23,6 @@ interface TitleFormFields {
 const FormSchema = Yup.object().shape({})
 
 export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
-  const { api, connectionState } = useApi()
-  const { member: threadAuthor } = useMember(thread.authorId)
   const { members: myMembers } = useMyMemberships()
   const [isEditTitle, setEditTitle] = useState<boolean>(false)
   const { showModal, hideModal } = useModal<EditThreadTitleModalCall>()
@@ -38,12 +34,6 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
   }
   const { fields, changeField } = useForm<TitleFormFields>(formInitializer, FormSchema)
 
-  const transaction = useMemo(() => {
-    if (isMyThread && threadAuthor && connectionState === 'connected' && api) {
-      return api.tx.forum.editThreadTitle(threadAuthor.id, thread.categoryId, thread.id, fields.title)
-    }
-  }, [fields.title, threadAuthor, isMyThread, connectionState])
-
   const toggleEditTitle = useCallback(() => {
     if (isEditTitle) {
       changeField('title', thread.title)
@@ -53,18 +43,16 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
   }, [isEditTitle])
 
   const submitTitle = useCallback(() => {
-    if (threadAuthor && transaction) {
-      toggleEditTitle()
-      showModal<EditThreadTitleModalCall>({
-        modal: 'EditThreadTitleModal',
-        data: {
-          member: threadAuthor,
-          transaction,
-          onClose: hideModal,
-        },
-      })
-    }
-  }, [JSON.stringify(threadAuthor), JSON.stringify(transaction)])
+    showModal<EditThreadTitleModalCall>({
+      modal: 'EditThreadTitleModal',
+      data: {
+        thread,
+        newTitle: fields.title,
+        onClose: hideModal,
+      },
+    })
+    toggleEditTitle()
+  }, [])
 
   return (
     <PageTitle>
