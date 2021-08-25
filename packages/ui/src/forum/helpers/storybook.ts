@@ -24,6 +24,7 @@ export const asStorybookPost = (text: string, threadId?: string): RawForumPostMo
         inBlock: 1440099,
         network: 'OLYMPIA',
         createdAt: '2021-05-28T15:50:35.148Z',
+        text,
       },
     }
 }
