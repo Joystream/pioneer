@@ -60,6 +60,14 @@ fragment ForumCategoryBreadcrumbsFields on ForumCategory {
   }
 }
 
+fragment ForumThreadBreadcrumbsFields on ForumThread {
+  id
+  title
+  category {
+    ...ForumCategoryBreadcrumbsFields
+  }
+}
+
 fragment ForumThreadFields on ForumThread {
   id
   isSticky
@@ -134,6 +142,12 @@ query GetForumCategory($where: ForumCategoryWhereUniqueInput!) {
 query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
   forumCategoryByUniqueInput(where: $where) {
     ...ForumCategoryBreadcrumbsFields
+  }
+}
+
+query GetForumThreadBreadcrumbs($where: ForumThreadWhereUniqueInput!) {
+  forumThreadByUniqueInput(where: $where) {
+    ...ForumThreadBreadcrumbsFields
   }
 }
 

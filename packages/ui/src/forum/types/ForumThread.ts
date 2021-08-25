@@ -1,5 +1,11 @@
 import { asBlock, Block } from '@/common/types'
-import { ForumThreadDetailedFieldsFragment, ForumThreadFieldsFragment } from '@/forum/queries'
+import {
+  ForumThreadBreadcrumbsFieldsFragment,
+  ForumThreadDetailedFieldsFragment,
+  ForumThreadFieldsFragment,
+} from '@/forum/queries'
+
+import { asCategoryBreadcrumbs, CategoryBreadcrumb } from './ForumCategory'
 
 export type ThreadStatusType = ThreadStatus['__typename']
 interface ThreadStatus extends Pick<ForumThreadFieldsFragment['status'], '__typename'> {
@@ -50,4 +56,22 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
 
 export const asForumThreadWithDetails = (fields: ForumThreadDetailedFieldsFragment): ForumThreadWithDetails => ({
   ...asForumThread(fields),
+})
+
+export interface ThreadBreadcrumb {
+  id: string
+  title: string
+}
+
+interface ThreadBreadcrumbs {
+  threadBreadcrumb: ThreadBreadcrumb
+  categoryBreadcrumbs: CategoryBreadcrumb[]
+}
+
+export const asThreadBreadcrumbs = (fields: ForumThreadBreadcrumbsFieldsFragment): ThreadBreadcrumbs => ({
+  threadBreadcrumb: {
+    id: fields.id,
+    title: fields.title,
+  },
+  categoryBreadcrumbs: asCategoryBreadcrumbs(fields.category),
 })

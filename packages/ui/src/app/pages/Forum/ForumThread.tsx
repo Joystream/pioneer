@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
@@ -19,6 +19,8 @@ import { Colors } from '@/common/constants'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { useForumThread } from '@/forum/hooks/useForumThread'
+
+import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
@@ -102,7 +104,7 @@ export const ForumThread = () => {
     )
   }
 
-  return <PageLayout header={displayHeader()} main={displayMain()} sidebar={displaySidebar()} />
+  return <ForumPageLayout isThread header={displayHeader()} main={displayMain()} sidebar={displaySidebar()} />
 }
 
 const ThreadPinned = styled.span`

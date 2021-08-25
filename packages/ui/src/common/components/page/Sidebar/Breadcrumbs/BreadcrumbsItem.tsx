@@ -7,7 +7,7 @@ import { Colors, Transitions, Fonts } from '../../../../constants'
 export interface BreadcrumbsItemProps {
   url: string
   children: ReactNode
-  isLink: boolean
+  isLink?: boolean
 }
 
 export const BreadcrumbsItem = React.memo(({ url, children, isLink }: BreadcrumbsItemProps) => {

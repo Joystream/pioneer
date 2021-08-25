@@ -64,6 +64,13 @@ export type ForumCategoryBreadcrumbsFieldsFragment = {
   >
 } & ForumSubCategoryFieldsFragment
 
+export type ForumThreadBreadcrumbsFieldsFragment = {
+  __typename: 'ForumThread'
+  id: string
+  title: string
+  category: { __typename: 'ForumCategory' } & ForumCategoryBreadcrumbsFieldsFragment
+}
+
 export type ForumThreadFieldsFragment = {
   __typename: 'ForumThread'
   id: string
@@ -137,6 +144,15 @@ export type GetForumCategoryBreadcrumbsQueryVariables = Types.Exact<{
 export type GetForumCategoryBreadcrumbsQuery = {
   __typename: 'Query'
   forumCategoryByUniqueInput?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumCategoryBreadcrumbsFieldsFragment>
+}
+
+export type GetForumThreadBreadcrumbsQueryVariables = Types.Exact<{
+  where: Types.ForumThreadWhereUniqueInput
+}>
+
+export type GetForumThreadBreadcrumbsQuery = {
+  __typename: 'Query'
+  forumThreadByUniqueInput?: Types.Maybe<{ __typename: 'ForumThread' } & ForumThreadBreadcrumbsFieldsFragment>
 }
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
@@ -305,6 +321,16 @@ export const ForumCategoryBreadcrumbsFieldsFragmentDoc = gql`
     }
   }
   ${ForumSubCategoryFieldsFragmentDoc}
+`
+export const ForumThreadBreadcrumbsFieldsFragmentDoc = gql`
+  fragment ForumThreadBreadcrumbsFields on ForumThread {
+    id
+    title
+    category {
+      ...ForumCategoryBreadcrumbsFields
+    }
+  }
+  ${ForumCategoryBreadcrumbsFieldsFragmentDoc}
 `
 export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
   fragment ForumPostWithoutReplyFields on ForumPost {
@@ -507,6 +533,55 @@ export type GetForumCategoryBreadcrumbsLazyQueryHookResult = ReturnType<typeof u
 export type GetForumCategoryBreadcrumbsQueryResult = Apollo.QueryResult<
   GetForumCategoryBreadcrumbsQuery,
   GetForumCategoryBreadcrumbsQueryVariables
+>
+export const GetForumThreadBreadcrumbsDocument = gql`
+  query GetForumThreadBreadcrumbs($where: ForumThreadWhereUniqueInput!) {
+    forumThreadByUniqueInput(where: $where) {
+      ...ForumThreadBreadcrumbsFields
+    }
+  }
+  ${ForumThreadBreadcrumbsFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumThreadBreadcrumbsQuery__
+ *
+ * To run a query within a React component, call `useGetForumThreadBreadcrumbsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumThreadBreadcrumbsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumThreadBreadcrumbsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetForumThreadBreadcrumbsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumThreadBreadcrumbsQuery, GetForumThreadBreadcrumbsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumThreadBreadcrumbsQuery, GetForumThreadBreadcrumbsQueryVariables>(
+    GetForumThreadBreadcrumbsDocument,
+    options
+  )
+}
+export function useGetForumThreadBreadcrumbsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumThreadBreadcrumbsQuery, GetForumThreadBreadcrumbsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumThreadBreadcrumbsQuery, GetForumThreadBreadcrumbsQueryVariables>(
+    GetForumThreadBreadcrumbsDocument,
+    options
+  )
+}
+export type GetForumThreadBreadcrumbsQueryHookResult = ReturnType<typeof useGetForumThreadBreadcrumbsQuery>
+export type GetForumThreadBreadcrumbsLazyQueryHookResult = ReturnType<typeof useGetForumThreadBreadcrumbsLazyQuery>
+export type GetForumThreadBreadcrumbsQueryResult = Apollo.QueryResult<
+  GetForumThreadBreadcrumbsQuery,
+  GetForumThreadBreadcrumbsQueryVariables
 >
 export const GetForumThreadsDocument = gql`
   query GetForumThreads($where: ForumThreadWhereInput!, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {

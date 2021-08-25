@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { ItemCount } from '@/common/components/ItemCount'
@@ -19,6 +19,8 @@ import { ArchivedStatus } from '@/forum/hooks/useForumCategories'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
+
+import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumCategory = () => {
   const { id, type } = useParams<{ id: string; type?: 'archive' }>()
@@ -38,7 +40,8 @@ export const ForumCategory = () => {
   const isArchive = category.status === ArchivedStatus
 
   return (
-    <PageLayout
+    <ForumPageLayout
+      isCategory
       lastBreadcrumb={category.title}
       header={
         <PageHeaderWrapper>
