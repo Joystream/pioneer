@@ -27,7 +27,7 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
   const [isEditTitle, setEditTitle] = useState<boolean>(false)
   const { showModal, hideModal } = useModal<EditThreadTitleModalCall>()
 
-  const isMyThread = thread && myMembers.find((member) => member.id === thread.id)
+  const isMyThread = thread && myMembers.find((member) => member.id === thread.authorId)
 
   const formInitializer: TitleFormFields = {
     title: thread.title,
