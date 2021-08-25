@@ -38,6 +38,7 @@ describe('useForumCategoryThreads', () => {
 
   it('Filter', () => {
     const categoryId = '0'
+    const search = 'foo'
     const author = getMember('alice')
     const start = endOfYesterday()
     const end = new Date()
@@ -55,13 +56,14 @@ describe('useForumCategoryThreads', () => {
       },
     })
 
-    refresh({ filters: { author, date: { start, end }, tag: null } })
+    refresh({ filters: { search, author, date: { start, end }, tag: null } })
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
         where: {
           category: { id_eq: categoryId },
           status_json: { isTypeOf_eq: 'ThreadStatusActive' },
+          OR: [{ title_contains: search }, { posts_some: { text_contains: search } }],
           author_eq: author.id,
           createdAt_gte: start,
           createdAt_lte: end,
@@ -100,7 +102,7 @@ describe('useForumCategoryThreads', () => {
       },
     })
 
-    refresh({ filters: { author: null, date: { start, end }, tag: null } })
+    refresh({ filters: { search: '', author: null, date: { start, end }, tag: null } })
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {

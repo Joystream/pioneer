@@ -41,12 +41,13 @@ export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
   }
 }
 
-const where = ({ author, date }: ThreadFiltersState, categoryId?: string, isArchive?: boolean) => {
+const where = ({ search, author, date }: ThreadFiltersState, categoryId?: string, isArchive?: boolean) => {
   const dateFilter = {
     ...(date && 'start' in date ? { createdAt_gte: date.start } : {}),
     ...(date && 'end' in date ? { createdAt_lte: date.end } : {}),
   }
   return {
+    ...(search ? { OR: [{ title_contains: search }, { posts_some: { text_contains: search } }] } : {}),
     ...(categoryId ? { category: { id_eq: categoryId } } : {}),
     ...(author ? { author_eq: author?.id } : {}),
     ...(date && !isArchive ? dateFilter : {}),
