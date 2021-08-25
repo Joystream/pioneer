@@ -31,11 +31,11 @@ export const ProposalDiscussions = ({ thread, selected }: Props) => {
           </Tooltip>
         </Badge>
       </DiscussionsHeader>
-      {thread.discussionPosts.map((post, index) => {
-        const isSelected = selected === post.id
-        const ref = isSelected ? selectedElement : undefined
-        return <PostListItem key={index} ref={ref} post={post} isSelected={isSelected} />
-      })}
+      {/*{thread.discussionPosts.map((post, index) => {*/}
+      {/*  const isSelected = selected === post.id*/}
+      {/*  const ref = isSelected ? selectedElement : undefined*/}
+      {/*  return <PostListItem key={index} ref={ref} post={post} isSelected={isSelected} />*/}
+      {/*})}*/}
 
       <PostMessageForm>
         <InputComponent inputSize="auto">

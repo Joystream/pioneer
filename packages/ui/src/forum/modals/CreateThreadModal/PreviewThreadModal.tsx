@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
@@ -20,6 +20,7 @@ export interface PreviewThreadProps {
 }
 
 export const PreviewThreadModal = ({ onClose, author, text }: PreviewThreadProps) => {
+  const viewport = useRef<HTMLDivElement>(null)
   const post: ForumPost = useMemo(
     () => ({
       id: '',
@@ -35,7 +36,7 @@ export const PreviewThreadModal = ({ onClose, author, text }: PreviewThreadProps
       <ModalHeader onClick={onClose} title="Thread preview" />
       <ScrolledModalBody>
         <ScrolledModalContainer>
-          <PostListItem post={post} isPreview />
+          <PostListItem post={post} root={viewport.current} insertRef={() => true} isPreview />
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>

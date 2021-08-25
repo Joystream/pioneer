@@ -1,5 +1,7 @@
-import React, { forwardRef, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { forwardRef, RefObject, useEffect, useMemo, useRef, useState } from 'react'
+import { InView } from 'react-intersection-observer'
+import { useLocation } from 'react-router'
+import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
@@ -15,6 +17,7 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
 import { Colors, Fonts, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
@@ -25,37 +28,51 @@ import { LikeButton } from '../threads/LikeButton'
 import { PostContextMenu } from './PostContextMenu'
 import { PostEditor } from './PostEditor'
 
-interface PostProps {
+interface PostListItemProps {
   post: ForumPost
   isSelected?: boolean
   isPreview?: boolean
   isThreadActive?: boolean
+  root: HTMLDivElement | null
+  insertRef: (ref: RefObject<HTMLDivElement>) => void
 }
 
-export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
-  ({ post, isSelected, isPreview, isThreadActive }, ref) => {
-    const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
-    const [editing, setEditing] = useState(false)
-    const { showModal } = useModal()
-    const editionTime = useMemo(() => {
-      if (!updatedAt) {
-        return null
-      }
+export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, root, insertRef }: PostListItemProps) => {
+  const { createdAtBlock, updatedAt, author, text, reaction, repliesTo, id } = post
 
-      return (
-        <EditionTime
-          onClick={() =>
-            showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
-          }
-        >
-          (edited {relativeIfRecent(updatedAt)})
-        </EditionTime>
-      )
-    }, [updatedAt])
-
-    const likesCount = reaction ? reaction.length : 0
+  const location = useLocation()
+  const query = useRouteQuery()
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    !!ref.current && insertRef(ref)
+  }, [ref.current])
+  const [editing, setEditing] = useState(false)
+  const { showModal } = useModal()
+  const editionTime = useMemo(() => {
+    if (!updatedAt) {
+      return null
+    }
 
     return (
+      <EditionTime
+        onClick={() =>
+          showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
+        }
+      >
+        (edited {relativeIfRecent(updatedAt)})
+      </EditionTime>
+    )
+  }, [updatedAt])
+  const postLink = useMemo(() => {
+    query.append('post', id)
+
+    return window.location.origin + (window.location.hash ? '/#' : '') + location.pathname + '?' + query.toString()
+  }, [JSON.stringify(query), location.pathname, id])
+
+  const likesCount = reaction ? reaction.length : 0
+
+  return (
+    <InView root={root} rootMargin="-32px 0px 0px">
       <ForumPostStyles ref={ref} isSelected={isSelected}>
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
@@ -87,7 +104,7 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
               </ButtonsGroup>
               <ButtonsGroup>
                 <CopyButtonTemplate
-                  textToCopy={window.location.href}
+                  textToCopy={postLink}
                   square
                   size="small"
                   disabled={isPreview}
@@ -106,9 +123,9 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
           )}
         </ForumPostRow>
       </ForumPostStyles>
-    )
-  }
-)
+    </InView>
+  )
+}
 
 const MessageBody = styled.div`
   grid-column: span 2;
@@ -164,7 +181,7 @@ const EditionTime = styled(ButtonLink).attrs({ size: 'small', borderless: true }
   }
 `
 
-export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
+export const ForumPostStyles = styled.div<Pick<PostListItemProps, 'isSelected'>>`
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 16px;
