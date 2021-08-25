@@ -44,10 +44,16 @@ describe('UI: Connection status component', () => {
   })
 
   it('Disconnected', async () => {
-    useApi.connectionState = 'disconnected'
+    useApi.connectionState = 'connected'
     renderComponent()
 
     act(() => {
+      eventEmitter.emit('connected')
+      jest.runOnlyPendingTimers()
+    })
+
+    act(() => {
+      useApi.connectionState = 'disconnected'
       eventEmitter.emit('disconnected')
     })
 
