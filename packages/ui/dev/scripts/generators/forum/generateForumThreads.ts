@@ -39,7 +39,7 @@ const Removed: ThreadStatusType = 'ThreadStatusRemoved'
 export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock, 'id' | 'status'>[]) => {
   const forumThreads: RawForumThreadMock[] = forumCategories.flatMap((category) =>
     repeat(() => {
-      const isArchived = category.status === CategoryArchiveStatus || Math.random() < 0.2
+      const isArchived = category.status.__typename === CategoryArchiveStatus || Math.random() < 0.2
       const status = generateThreadStatus(isArchived ? Locked : Active)
       const createdInEvent = randomBlock()
       return {

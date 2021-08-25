@@ -1,13 +1,13 @@
 import { useGetForumCategoriesQuery } from '@/forum/queries'
-import { asForumCategory, CategoryStatus } from '@/forum/types'
+import { asForumCategory, CategoryStatusType } from '@/forum/types'
 
 interface Props {
   isRoot?: boolean
   isArchive?: boolean
 }
 
-export const ActiveStatus: CategoryStatus = 'CategoryStatusActive'
-export const ArchivedStatus: CategoryStatus = 'CategoryStatusArchived'
+export const ActiveStatus: CategoryStatusType = 'CategoryStatusActive'
+export const ArchivedStatus: CategoryStatusType = 'CategoryStatusArchived'
 
 export const useForumCategories = ({ isRoot, isArchive }: Props = {}) => {
   const { loading, data } = useGetForumCategoriesQuery({

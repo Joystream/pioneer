@@ -1,5 +1,6 @@
 fragment ForumCategoryFields on ForumCategory {
   ...ForumSubCategoryFields
+  ...ForumCategoryWithStatusFields
   description
   forumcategoryparent {
     ...ForumSubCategoryFields
@@ -11,15 +12,26 @@ fragment ForumCategoryFields on ForumCategory {
 
 fragment ForumCategoryWithDetailsFields on ForumCategory {
   ...ForumSubCategoryFields
+  ...ForumCategoryWithStatusFields
   description
-  status {
-    __typename
-  }
   forumcategoryparent {
     ...ForumCategoryFields
   }
   moderators {
     ...ForumModeratorFields
+  }
+}
+
+fragment ForumCategoryWithStatusFields on ForumCategory {
+  status {
+    __typename
+    ... on CategoryStatusArchived {
+      categoryArchivalStatusUpdatedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
   }
 }
 

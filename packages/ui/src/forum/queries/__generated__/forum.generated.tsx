@@ -13,18 +13,32 @@ export type ForumCategoryFieldsFragment = {
   description: string
   forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumSubCategoryFieldsFragment>>
   moderators: Array<{ __typename: 'Worker' } & ForumModeratorFieldsFragment>
-} & ForumSubCategoryFieldsFragment
+} & ForumSubCategoryFieldsFragment &
+  ForumCategoryWithStatusFieldsFragment
 
 export type ForumCategoryWithDetailsFieldsFragment = {
   __typename: 'ForumCategory'
   description: string
-  status:
-    | { __typename: 'CategoryStatusActive' }
-    | { __typename: 'CategoryStatusArchived' }
-    | { __typename: 'CategoryStatusRemoved' }
   forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>>
   moderators: Array<{ __typename: 'Worker' } & ForumModeratorFieldsFragment>
-} & ForumSubCategoryFieldsFragment
+} & ForumSubCategoryFieldsFragment &
+  ForumCategoryWithStatusFieldsFragment
+
+export type ForumCategoryWithStatusFieldsFragment = {
+  __typename: 'ForumCategory'
+  status:
+    | { __typename: 'CategoryStatusActive' }
+    | {
+        __typename: 'CategoryStatusArchived'
+        categoryArchivalStatusUpdatedEvent?: Types.Maybe<{
+          __typename: 'CategoryArchivalStatusUpdatedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+    | { __typename: 'CategoryStatusRemoved' }
+}
 
 export type ForumModeratorFieldsFragment = {
   __typename: 'Worker'
@@ -257,6 +271,20 @@ export const ForumSubCategoryFieldsFragmentDoc = gql`
     title
   }
 `
+export const ForumCategoryWithStatusFieldsFragmentDoc = gql`
+  fragment ForumCategoryWithStatusFields on ForumCategory {
+    status {
+      __typename
+      ... on CategoryStatusArchived {
+        categoryArchivalStatusUpdatedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+    }
+  }
+`
 export const ForumModeratorFieldsFragmentDoc = gql`
   fragment ForumModeratorFields on Worker {
     id
@@ -269,6 +297,7 @@ export const ForumModeratorFieldsFragmentDoc = gql`
 export const ForumCategoryFieldsFragmentDoc = gql`
   fragment ForumCategoryFields on ForumCategory {
     ...ForumSubCategoryFields
+    ...ForumCategoryWithStatusFields
     description
     forumcategoryparent {
       ...ForumSubCategoryFields
@@ -278,15 +307,14 @@ export const ForumCategoryFieldsFragmentDoc = gql`
     }
   }
   ${ForumSubCategoryFieldsFragmentDoc}
+  ${ForumCategoryWithStatusFieldsFragmentDoc}
   ${ForumModeratorFieldsFragmentDoc}
 `
 export const ForumCategoryWithDetailsFieldsFragmentDoc = gql`
   fragment ForumCategoryWithDetailsFields on ForumCategory {
     ...ForumSubCategoryFields
+    ...ForumCategoryWithStatusFields
     description
-    status {
-      __typename
-    }
     forumcategoryparent {
       ...ForumCategoryFields
     }
@@ -295,6 +323,7 @@ export const ForumCategoryWithDetailsFieldsFragmentDoc = gql`
     }
   }
   ${ForumSubCategoryFieldsFragmentDoc}
+  ${ForumCategoryWithStatusFieldsFragmentDoc}
   ${ForumCategoryFieldsFragmentDoc}
   ${ForumModeratorFieldsFragmentDoc}
 `
