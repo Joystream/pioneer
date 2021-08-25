@@ -1,15 +1,13 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { FilterPageHeader } from '@/common/components/forms/FilterBox'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { PageTitle } from '@/common/components/page/PageTitle'
-import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { ForumCategoryList } from '@/forum/components/category'
@@ -30,6 +28,7 @@ export const ForumCategory = () => {
     categoryId: id,
     isArchive,
   })
+  const searchSlot = useRef<HTMLDivElement>(null)
 
   const { showModal } = useModal()
 
@@ -42,25 +41,23 @@ export const ForumCategory = () => {
       isCategory
       lastBreadcrumb={category.title}
       header={
-        <PageHeaderWrapper>
-          <PageHeaderRow>
-            <PreviousPage>
-              <PageTitle>{category.title}</PageTitle>
-            </PreviousPage>
-            <ButtonsGroup>
-              <ButtonPrimary
-                size="medium"
-                onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
-              >
-                <PlusIcon /> Add New Thread
-              </ButtonPrimary>
-            </ButtonsGroup>
-          </PageHeaderRow>
-
+        <FilterPageHeader
+          ref={searchSlot}
+          title={category.title}
+          buttons={
+            <ButtonPrimary
+              size="medium"
+              onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
+            >
+              <PlusIcon /> Add New Thread
+            </ButtonPrimary>
+          }
+          hasBackLink
+        >
           <ModeratorsContainer>
             Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
           </ModeratorsContainer>
-        </PageHeaderWrapper>
+        </FilterPageHeader>
       }
       main={
         <>
@@ -75,7 +72,7 @@ export const ForumCategory = () => {
           </RowGapBlock>
 
           <RowGapBlock gap={24}>
-            <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
+            <ThreadFilters searchSlot={searchSlot} onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
               <ItemCount count={threadCount} size="xs">
                 {isArchive ? 'Archived Threads' : 'Threads'}
               </ItemCount>

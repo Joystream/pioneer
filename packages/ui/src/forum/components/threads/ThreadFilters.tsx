@@ -10,21 +10,23 @@ import { SmallMemberSelect } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
 export interface ThreadFiltersState {
+  search: string
   tag: string | null
   author: Member | null
   date: PartialDateRange
 }
-export const ThreadEmptyFilters: ThreadFiltersState = { tag: null, author: null, date: undefined }
+export const ThreadEmptyFilters: ThreadFiltersState = { search: '', tag: null, author: null, date: undefined }
 const isFilterEmpty = objectEquals(ThreadEmptyFilters)
 
 interface ThreadFiltersProps {
+  searchSlot?: React.RefObject<HTMLDivElement>
   withinDates?: PartialDateRange
   onApply: (filters: ThreadFiltersState) => void
   isArchive?: boolean
 }
-export const ThreadFilters: FC<ThreadFiltersProps> = ({ withinDates, onApply, children, isArchive }) => {
+export const ThreadFilters: FC<ThreadFiltersProps> = ({ searchSlot, withinDates, onApply, children, isArchive }) => {
   const [filters, setFilters] = useState(ThreadEmptyFilters)
-  const { tag, author, date } = filters
+  const { search, tag, author, date } = filters
 
   const update = useCallback(
     (change: Partial<ThreadFiltersState> = filters, apply = true) => {
@@ -37,7 +39,13 @@ export const ThreadFilters: FC<ThreadFiltersProps> = ({ withinDates, onApply, ch
   const clear = useMemo(() => (isFilterEmpty(filters) ? undefined : () => update(ThreadEmptyFilters)), [update])
 
   return (
-    <ThreadFiltersBox onApply={() => update()} onClear={clear}>
+    <ThreadFiltersBox
+      searchSlot={searchSlot}
+      search={search}
+      onSearch={(search) => update({ search }, false)}
+      onApply={() => update()}
+      onClear={clear}
+    >
       <FieldsHeader>{children}</FieldsHeader>
 
       <FilterTextSelect title="Tags" options={[] as string[]} value={tag} onChange={(tag) => update({ tag })} />
