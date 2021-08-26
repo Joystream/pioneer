@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react'
+import React, { RefObject, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -25,13 +25,11 @@ export const PostList = ({ threadId, isThreadActive }: PostListProps) => {
 
   const { isLoading, posts, pageCount } = useForumThreadPosts({ threadId, page })
 
-  const viewport = useRef<HTMLDivElement>(null)
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
 
   useEffect(() => {
     if (initialPost && postsRefs[initialPost]) {
-      console.log(postsRefs[initialPost])
       postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
     }
   }, [postsRefs, initialPost])
@@ -62,7 +60,6 @@ export const PostList = ({ threadId, isThreadActive }: PostListProps) => {
         <PostBlock key={post.id}>
           <PostListItem
             post={post}
-            root={viewport.current}
             insertRef={getInsertRef(post.id)}
             isSelected={post.id === initialPost}
             isThreadActive={isThreadActive}

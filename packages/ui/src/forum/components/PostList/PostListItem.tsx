@@ -32,11 +32,10 @@ interface PostListItemProps {
   isSelected?: boolean
   isPreview?: boolean
   isThreadActive?: boolean
-  root: HTMLDivElement | null
   insertRef: (ref: RefObject<HTMLDivElement>) => void
 }
 
-export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, root, insertRef }: PostListItemProps) => {
+export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, insertRef }: PostListItemProps) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo, id } = post
 
   const location = useLocation()

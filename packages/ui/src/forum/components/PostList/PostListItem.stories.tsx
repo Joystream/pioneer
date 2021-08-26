@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react'
-import React, { useRef } from 'react'
+import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -28,7 +28,6 @@ interface Props {
 }
 
 const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText, isThreadActive }) => {
-  const viewport = useRef<HTMLDivElement>(null)
   const updatedAt = edited >= 0 ? new Date(Date.now() - edited * A_MINUTE).toISOString() : undefined
   const reaction = likes >= 0 ? repeat(() => PostReaction.Like, likes) : undefined
   const repliesTo: ForumPost | undefined = replyText
@@ -59,7 +58,6 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
           <Container>
             <PostListItem
               post={{ ...post, updatedAt, text, reaction, repliesTo }}
-              root={viewport.current}
               insertRef={() => true}
               isThreadActive={isThreadActive}
             />

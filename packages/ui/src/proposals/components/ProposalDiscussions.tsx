@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useRef } from 'react'
+import React, { RefObject, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 
 import { CKEditor } from '@/common/components/CKEditor'
@@ -20,7 +20,6 @@ export const ProposalDiscussions = ({ thread }: Props) => {
   const query = useRouteQuery()
   const initialPost = query.get('post')
 
-  const viewport = useRef<HTMLDivElement>(null)
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
 
@@ -45,7 +44,6 @@ export const ProposalDiscussions = ({ thread }: Props) => {
         return (
           <PostListItem
             key={index}
-            root={viewport.current}
             insertRef={getInsertRef(post.id)}
             isSelected={post.id === initialPost}
             isThreadActive={true}
