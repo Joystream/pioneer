@@ -19,19 +19,20 @@ interface ThreadAnswerProps {
 
 export interface ThreadItemContentProps {
   title: string
-  date: string
-  content: string
+  date?: string
+  content?: string
   badges?: ThreadBadgeProps[]
   answers?: ThreadAnswerProps[]
   halfSize?: boolean
+  empty?: boolean
 }
 
-export const ThreadItem = ({ title, date, content, badges, answers, halfSize }: ThreadItemContentProps) => {
+export const ThreadItem = ({ title, date, content, badges, answers, halfSize, empty }: ThreadItemContentProps) => {
   return (
     <ThreadItemWrapper halfSize={halfSize}>
       <ThreadItemHeader align="center">
-        <ThreadItemTitle>{title}</ThreadItemTitle>
-        <ThreadItemTime lighter>{date}</ThreadItemTime>
+        <ThreadItemTitle empty={empty}>{title}</ThreadItemTitle>
+        {date && <ThreadItemTime lighter>{date}</ThreadItemTime>}
       </ThreadItemHeader>
       {content && (
         <ThreadItemText light value>
@@ -68,7 +69,8 @@ const ThreadItemHeader = styled(ColumnGapBlock)`
   overflow: hidden;
 `
 
-const ThreadItemTitle = styled.h5`
+const ThreadItemTitle = styled.h5<{ empty?: boolean }>`
+  font-weight: ${({ empty }) => (empty ? '400' : '700')};
   ${Overflow.FullDots};
 `
 
