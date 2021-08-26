@@ -2,8 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
@@ -13,6 +12,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { ForumCategoryList } from '@/forum/components/category'
+import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
@@ -42,25 +42,25 @@ export const ForumCategory = () => {
       isCategory
       lastBreadcrumb={category.title}
       header={
-        <PageHeaderWrapper>
-          <PageHeaderRow>
+        <ForumPageHeader
+          title={
             <PreviousPage>
               <PageTitle>{category.title}</PageTitle>
             </PreviousPage>
-            <ButtonsGroup>
-              <ButtonPrimary
-                size="medium"
-                onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
-              >
-                <PlusIcon /> Add New Thread
-              </ButtonPrimary>
-            </ButtonsGroup>
-          </PageHeaderRow>
-
+          }
+          buttons={
+            <ButtonPrimary
+              size="medium"
+              onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
+            >
+              <PlusIcon /> Add New Thread
+            </ButtonPrimary>
+          }
+        >
           <ModeratorsContainer>
             Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
           </ModeratorsContainer>
-        </PageHeaderWrapper>
+        </ForumPageHeader>
       }
       main={
         <>
