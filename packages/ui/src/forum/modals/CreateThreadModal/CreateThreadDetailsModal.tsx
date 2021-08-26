@@ -45,6 +45,7 @@ export const CreateThreadDetailsModal = ({
             <ForumBreadcrumbsList
               categoryBreadcrumbs={breadcrumbs ?? []}
               threadBreadcrumb={{ id: '', title: 'New Thread' }}
+              nonInteractive
             />
             <h1>General</h1>
             <RowGapBlock gap={16}>
