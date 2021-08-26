@@ -42,14 +42,14 @@ export const PageHeaderWrapper = styled.section`
   gap: 16px 8px;
 `
 
-export const PageHeaderRow = styled.div`
+export const PageHeaderRow = styled.div<{ showOverflow?: boolean }>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 24px;
   justify-content: space-between;
   width: 100%;
   max-width: 100%;
-  overflow: hidden;
+  overflow: ${({ showOverflow }) => (showOverflow ? 'visible' : 'hidden')};
 `
 
 const PageMain = styled.main`

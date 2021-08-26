@@ -7,12 +7,13 @@ import { Arrow } from '../icons'
 
 interface PreviousPageProps {
   children?: React.ReactNode
+  showOverflow?: boolean
 }
 
-export const PreviousPage = ({ children }: PreviousPageProps) => {
+export const PreviousPage = ({ children, showOverflow }: PreviousPageProps) => {
   const history = useHistory()
   return (
-    <PreviousPageBlock>
+    <PreviousPageBlock showOverflow={showOverflow}>
       <PreviousPageButtonContainer>
         <PreviousPageButton onClick={() => history.goBack()} size="small" square>
           <BackArrow direction="left" />
@@ -23,14 +24,14 @@ export const PreviousPage = ({ children }: PreviousPageProps) => {
   )
 }
 
-const PreviousPageBlock = styled.div`
+const PreviousPageBlock = styled.div<{ showOverflow?: boolean }>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
   align-items: center;
   width: fit-content;
   max-width: 100%;
-  overflow: hidden;
+  overflow: ${({ showOverflow }) => (showOverflow ? 'visible' : 'hidden')};
 `
 
 const PreviousPageButtonContainer = styled.div`

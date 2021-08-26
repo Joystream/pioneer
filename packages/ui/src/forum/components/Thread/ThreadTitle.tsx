@@ -2,10 +2,12 @@ import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
-import { InputComponent, InputText } from '@/common/components/forms'
-import { CrossIcon, VerifiedMemberIcon } from '@/common/components/icons'
+import { ButtonBareGhost, ButtonInnerWrapper, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { InputArea, InputComponent, InputText } from '@/common/components/forms'
+import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { EditSymbol } from '@/common/components/icons/symbols'
 import { PageTitle } from '@/common/components/page/PageTitle'
+import { Colors } from '@/common/constants'
 import { useForm } from '@/common/hooks/useForm'
 import { useModal } from '@/common/hooks/useModal'
 import { EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
@@ -55,33 +57,64 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
   }, [])
 
   return (
-    <PageTitle>
-      {!isEditTitle && thread.title}
+    <>
+      {!isEditTitle && <PageTitle>{thread.title}</PageTitle>}
       {isEditTitle && (
-        <>
-          <InputComponent inputSize="s" onSubmit={submitTitle}>
+        <EditTitleWrapper>
+          <EditTitleInputComponent inputSize="m" onSubmit={submitTitle}>
             <InputText
               id="thread-title"
               value={fields.title}
               required
               onChange={(event) => changeField('title', event.target.value)}
             />
-          </InputComponent>
-          <EditTitle onClick={() => submitTitle()}>
-            <VerifiedMemberIcon />
-          </EditTitle>
-        </>
+            <ButtonsGroup>
+              <EditAction onClick={toggleEditTitle} size="small" square>
+                <CrossIcon />
+              </EditAction>
+              <EditAction onClick={() => submitTitle()} size="small" square>
+                <CheckboxIcon />
+              </EditAction>
+            </ButtonsGroup>
+          </EditTitleInputComponent>
+        </EditTitleWrapper>
       )}
-      {isMyThread && <EditTitle onClick={toggleEditTitle}>{!isEditTitle ? <EditSymbol /> : <CrossIcon />}</EditTitle>}
-    </PageTitle>
+      {isMyThread && !isEditTitle && (
+        <StartEditAction onClick={toggleEditTitle} size="small" square>
+          <EditSymbol />
+        </StartEditAction>
+      )}
+    </>
   )
 }
 
-const EditTitle = styled.span`
-  cursor: pointer;
-  margin-left: 3px;
+const EditTitleWrapper = styled.div`
+  position: relative;
+  width: 420px;
+`
 
-  &:hover {
-    opacity: 0.7;
+const EditAction = styled(ButtonPrimary)`
+  &:first-child {
+    ${ButtonInnerWrapper} > svg > path {
+      stroke: ${Colors.White};
+      stroke-width: 1px;
+    }
+  }
+  ${ButtonInnerWrapper} > svg {
+    width: 16px;
+    height: 16px;
+  }
+`
+
+const StartEditAction = styled(ButtonBareGhost)``
+
+const EditTitleInputComponent = styled(InputComponent)`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+
+  ${InputArea} {
+    padding-right: 8px;
   }
 `

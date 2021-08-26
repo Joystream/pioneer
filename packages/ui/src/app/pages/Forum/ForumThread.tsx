@@ -44,8 +44,8 @@ export const ForumThread = () => {
 
     return (
       <PageHeaderWrapper>
-        <PageHeaderRow>
-          <PreviousPage>
+        <PageHeaderRow showOverflow>
+          <PreviousPage showOverflow>
             <ThreadTitle thread={thread} />
           </PreviousPage>
           <ButtonsGroup>
