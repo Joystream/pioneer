@@ -19,6 +19,7 @@ import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
+import { threadsData } from '@/mocks/data/seedForum'
 
 import { LikeButton } from '../threads/LikeButton'
 
@@ -80,10 +81,10 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
           )}
         </MessageBody>
         <ForumPostRow>
-          {isThreadActive && !editing && (
+          {!editing && (
             <>
               <ButtonsGroup>
-                <LikeButton counter={likesCount} />
+                <LikeButton disabled={!isThreadActive} counter={likesCount} />
               </ButtonsGroup>
               <ButtonsGroup>
                 <CopyButtonTemplate
@@ -93,10 +94,14 @@ export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
                   disabled={isPreview}
                   icon={<LinkIcon />}
                 />
-                <ButtonGhost square disabled={isPreview} size="small">
-                  <ReplyIcon />
-                </ButtonGhost>
-                <PostContextMenu post={post} onEdit={() => setEditing(true)} />
+                {isThreadActive && (
+                  <>
+                    <ButtonGhost square disabled={isPreview} size="small">
+                      <ReplyIcon />
+                    </ButtonGhost>
+                    <PostContextMenu post={post} onEdit={() => setEditing(true)} />
+                  </>
+                )}
               </ButtonsGroup>
             </>
           )}
