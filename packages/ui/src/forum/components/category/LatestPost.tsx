@@ -27,7 +27,7 @@ export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
   )
 })
 
-const PostInfoStyles = styled.div`
+export const PostInfoStyles = styled.div`
   & > h6 {
     margin-bottom: 8px;
     ${Overflow.FullDots};

@@ -101,6 +101,7 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   justify-self: start;
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
+  z-index: 2;
 
   ${({ skipModal }) =>
     !skipModal &&

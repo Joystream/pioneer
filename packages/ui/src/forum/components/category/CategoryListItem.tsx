@@ -1,18 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BlockTime } from '@/common/components/BlockTime'
+import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import { LinkButtonInnerWrapper, LinkButtonLink } from '@/common/components/buttons/LinkButtons'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
-import { Colors, Overflow } from '@/common/constants'
+import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { categoriesColLayout, ForumRoutes } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
-import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
+import { MemberStack, MemberStackStyles, moderatorsSummary } from '@/memberships/components/MemberStack'
 
-import { LatestPost } from './LatestPost'
-import { PopularThread } from './PopularThread'
+import { LatestPost, PostInfoStyles } from './LatestPost'
+import { PopularThread, ThreadInfoStyles } from './PopularThread'
 import { ThreadCount } from './ThreadCount'
 
 export interface CategoryListItemProps {
@@ -23,13 +23,14 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
   const block = category.status.categoryArchivalStatusUpdatedEvent
 
   return (
-    <CategoryListItemStyles
-      as={GhostRouterLink}
-      to={`${ForumRoutes.category}/${category.id}${isArchive ? '/archive' : ''}`}
-      $colLayout={categoriesColLayout(isArchive)}
-    >
+    <CategoryListItemStyles $colLayout={categoriesColLayout(isArchive)}>
       <Category>
-        <h5>{category.title}</h5>
+        <CategoryListItemTitle
+          as={GhostRouterLink}
+          to={`${ForumRoutes.category}/${category.id}${isArchive ? '/archive' : ''}`}
+        >
+          {category.title}
+        </CategoryListItemTitle>
         <TextMedium light>{category.description}</TextMedium>
         <TextInlineExtraSmall lighter>
           Subcategories:{' '}
@@ -64,7 +65,28 @@ export interface CategoryItemFieldProps {
   categoryId: string
 }
 
+const CategoryListItemTitle = styled.h5`
+  font-size: 16px;
+  line-height: 24px;
+  font-family: ${Fonts.Grotesk};
+  font-weight: 700;
+  color: ${Colors.Black[900]};
+  transition: ${Transitions.all};
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.3);
+    z-index: 0;
+  }
+`
+
 export const CategoryListItemStyles = styled(TableListItem)`
+  position: relative;
   align-items: start;
   height: 128px;
   padding: 14px 24px;
@@ -73,6 +95,24 @@ export const CategoryListItemStyles = styled(TableListItem)`
 
   & > * {
     margin-top: 8px;
+  }
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    ${CategoryListItemTitle} {
+      color: ${Colors.Blue[500]};
+    }
+  }
+
+  ${TextMedium}, 
+  ${TextInlineExtraSmall}, 
+  ${TextInlineMedium}, 
+  ${PostInfoStyles}, 
+  ${BlockTimeWrapper}, 
+  ${ThreadInfoStyles},
+  ${MemberStackStyles} {
+    z-index: 2;
   }
 `
 
