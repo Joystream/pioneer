@@ -19,7 +19,6 @@ import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
-import { threadsData } from '@/mocks/data/seedForum'
 
 import { LikeButton } from '../threads/LikeButton'
 
