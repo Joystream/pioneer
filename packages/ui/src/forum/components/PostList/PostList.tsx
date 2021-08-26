@@ -1,5 +1,4 @@
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation } from 'react-router'
+import React, { RefObject, useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -8,8 +7,8 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { BorderRad, Colors, Shadows } from '@/common/constants'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
-import { AnyKeys, EmptyObject } from '@/common/types'
-import { PostListItem } from '@/forum/components/PostList/PostListItem'
+import { AnyKeys } from '@/common/types'
+import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 
 interface PostListProps {
@@ -32,6 +31,7 @@ export const PostList = ({ threadId, isThreadActive }: PostListProps) => {
 
   useEffect(() => {
     if (initialPost && postsRefs[initialPost]) {
+      console.log(postsRefs[initialPost])
       postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
     }
   }, [postsRefs, initialPost])
@@ -81,4 +81,8 @@ export const PostBlock = styled.div`
   background-color: ${Colors.White};
   box-shadow: ${Shadows.light};
   padding: 24px;
+
+  ${ForumPostStyles} {
+    scroll-margin: 48px;
+  }
 `

@@ -1,7 +1,6 @@
-import React, { forwardRef, RefObject, useEffect, useMemo, useRef, useState } from 'react'
-import { InView } from 'react-intersection-observer'
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
@@ -64,66 +63,58 @@ export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, root
     )
   }, [updatedAt])
   const postLink = useMemo(() => {
-    query.append('post', id)
+    query.set('post', id)
 
     return window.location.origin + (window.location.hash ? '/#' : '') + location.pathname + '?' + query.toString()
-  }, [JSON.stringify(query), location.pathname, id])
+  }, [location.search, location.pathname, id])
 
   const likesCount = reaction ? reaction.length : 0
 
   return (
-    <InView root={root} rootMargin="-32px 0px 0px">
-      <ForumPostStyles ref={ref} isSelected={isSelected}>
-        <ForumPostRow>
-          <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-          {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
-        </ForumPostRow>
-        <MessageBody>
-          {repliesTo && (
-            <Reply>
-              <ReplyBadge>
-                <ArrowReplyIcon />{' '}
-                <Badge>
-                  <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
-                </Badge>
-              </ReplyBadge>
-              <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
-            </Reply>
-          )}
-          {editing ? (
-            <PostEditor post={post} onCancel={() => setEditing(false)} />
-          ) : (
-            <MarkdownPreview markdown={text} append={editionTime} size="s" />
-          )}
-        </MessageBody>
-        <ForumPostRow>
-          {!editing && (
-            <>
-              <ButtonsGroup>
-                <LikeButton disabled={!isThreadActive} counter={likesCount} />
-              </ButtonsGroup>
-              <ButtonsGroup>
-                <CopyButtonTemplate
-                  textToCopy={postLink}
-                  square
-                  size="small"
-                  disabled={isPreview}
-                  icon={<LinkIcon />}
-                />
-                {isThreadActive && (
-                  <>
-                    <ButtonGhost square disabled={isPreview} size="small">
-                      <ReplyIcon />
-                    </ButtonGhost>
-                    <PostContextMenu post={post} onEdit={() => setEditing(true)} />
-                  </>
-                )}
-              </ButtonsGroup>
-            </>
-          )}
-        </ForumPostRow>
-      </ForumPostStyles>
-    </InView>
+    <ForumPostStyles ref={ref} isSelected={isSelected}>
+      <ForumPostRow>
+        <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
+        {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
+      </ForumPostRow>
+      <MessageBody>
+        {repliesTo && (
+          <Reply>
+            <ReplyBadge>
+              <ArrowReplyIcon />{' '}
+              <Badge>
+                <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
+              </Badge>
+            </ReplyBadge>
+            <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
+          </Reply>
+        )}
+        {editing ? (
+          <PostEditor post={post} onCancel={() => setEditing(false)} />
+        ) : (
+          <MarkdownPreview markdown={text} append={editionTime} size="s" />
+        )}
+      </MessageBody>
+      <ForumPostRow>
+        {!editing && (
+          <>
+            <ButtonsGroup>
+              <LikeButton disabled={!isThreadActive} counter={likesCount} />
+            </ButtonsGroup>
+            <ButtonsGroup>
+              <CopyButtonTemplate textToCopy={postLink} square size="small" disabled={isPreview} icon={<LinkIcon />} />
+              {isThreadActive && (
+                <>
+                  <ButtonGhost square disabled={isPreview} size="small">
+                    <ReplyIcon />
+                  </ButtonGhost>
+                  <PostContextMenu post={post} onEdit={() => setEditing(true)} />
+                </>
+              )}
+            </ButtonsGroup>
+          </>
+        )}
+      </ForumPostRow>
+    </ForumPostStyles>
   )
 }
 

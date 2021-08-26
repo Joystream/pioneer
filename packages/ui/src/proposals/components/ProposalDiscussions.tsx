@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { RefObject, useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
 import { CKEditor } from '@/common/components/CKEditor'
@@ -6,6 +6,8 @@ import { InputComponent } from '@/common/components/forms'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { useRouteQuery } from '@/common/hooks/useRouteQuery'
+import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
@@ -14,11 +16,19 @@ interface Props {
   selected?: string
 }
 
-export const ProposalDiscussions = ({ thread, selected }: Props) => {
-  const selectedElement = useRef<HTMLDivElement>(null)
+export const ProposalDiscussions = ({ thread }: Props) => {
+  const query = useRouteQuery()
+  const initialPost = query.get('post')
+
+  const viewport = useRef<HTMLDivElement>(null)
+  const postsRefs: AnyKeys = {}
+  const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
+
   useEffect(() => {
-    selectedElement.current?.scrollIntoView?.({ behavior: 'smooth' })
-  }, [selected])
+    if (initialPost && postsRefs[initialPost]) {
+      postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
+    }
+  }, [postsRefs, initialPost])
 
   return (
     <ProposalDiscussionsStyles mode={thread.mode}>
@@ -31,12 +41,18 @@ export const ProposalDiscussions = ({ thread, selected }: Props) => {
           </Tooltip>
         </Badge>
       </DiscussionsHeader>
-      {/*{thread.discussionPosts.map((post, index) => {*/}
-      {/*  const isSelected = selected === post.id*/}
-      {/*  const ref = isSelected ? selectedElement : undefined*/}
-      {/*  return <PostListItem key={index} ref={ref} post={post} isSelected={isSelected} />*/}
-      {/*})}*/}
-
+      {thread.discussionPosts.map((post, index) => {
+        return (
+          <PostListItem
+            key={index}
+            root={viewport.current}
+            insertRef={getInsertRef(post.id)}
+            isSelected={post.id === initialPost}
+            isThreadActive={true}
+            post={post}
+          />
+        )
+      })}
       <PostMessageForm>
         <InputComponent inputSize="auto">
           <CKEditor />
