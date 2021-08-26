@@ -37,7 +37,9 @@ export const FilterBox = ({
       </ClearButton>
     )}
     <Fields>
-      {searchSlot && <FilterSearchBox value={search} slot={searchSlot} onApply={onApply} onChange={onSearch} />}
+      {searchSlot && onSearch && (
+        <FilterSearchBox value={search} slot={searchSlot} onApply={onApply} onChange={onSearch} />
+      )}
       {children}
     </Fields>
   </FilterContainer>
