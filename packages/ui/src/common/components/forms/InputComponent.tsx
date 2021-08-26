@@ -406,7 +406,7 @@ export const InputContainer = styled.div<InputElementProps>`
   }
 `
 
-const InputArea = styled.div`
+export const InputArea = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
