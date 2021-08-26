@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 
 import { ForumArchived } from '@/app/pages/Forum/ForumArchived'
 import { ForumCategories } from '@/app/pages/Forum/ForumCategories'
@@ -14,6 +14,7 @@ export const Forum = () => {
       <Route path={`${ForumRoutes.category}/:id/:type?`} exact component={ForumCategory} />
       <Route path={ForumRoutes.archived} exact component={ForumArchived} />
       <Route path="/forum/thread/:id" exact component={ForumThread} />
+      <Redirect from="/forum/*" to={ForumRoutes.forum} />
     </Switch>
   )
 }
