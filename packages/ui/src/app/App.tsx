@@ -53,7 +53,7 @@ export const App = () => (
         <Route exact path="/members" component={Members} />
         <Route exact path="/members/:id" component={Members} />
         <Route exact path="/settings" component={Settings} />
-        <Route path={ForumRoutes.root} component={Forum} />
+        <Route path={ForumRoutes.forum} component={Forum} />
         <Route exact path="/404" component={NotFound} />
         <Redirect exact from="/" to="/profile" />
         <Redirect from="*" to="/404" />

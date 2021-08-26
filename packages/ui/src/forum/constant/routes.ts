@@ -1,7 +1,12 @@
+const prefix = '/forum'
 export const ForumRoutes = {
-  root: '/forum',
-  forum: '/forum/forum',
-  archived: '/forum/archived',
-  category: '/forum/forum',
-  thread: '/forum/thread',
+  forum: prefix,
+  category: prefix + '/category',
+  archived: prefix + '/archived',
+  thread: prefix + '/thread',
+  overview: prefix + '/overview',
+  lastThreads: prefix + '/latest-threads',
+  topThreads: prefix + '/top-threads',
+  myThreads: prefix + '/my-threads',
+  tags: prefix + '/tags',
 }
