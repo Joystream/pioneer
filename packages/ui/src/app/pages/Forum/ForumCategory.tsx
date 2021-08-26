@@ -64,15 +64,14 @@ export const ForumCategory = () => {
       }
       main={
         <>
-          <RowGapBlock gap={24}>
-            <ItemCount count={category.subcategories.length}>
-              {isArchive ? 'Archived categories' : 'Categories'}
-            </ItemCount>
-
-            {category.subcategories.length > 0 && (
+          {!!category.subcategories.length && (
+            <RowGapBlock gap={24}>
+              <ItemCount count={category.subcategories.length}>
+                {isArchive ? 'Archived categories' : 'Categories'}
+              </ItemCount>
               <ForumCategoryList categories={category.subcategories} isArchive={isArchive} />
-            )}
-          </RowGapBlock>
+            </RowGapBlock>
+          )}
 
           <RowGapBlock gap={24}>
             <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
