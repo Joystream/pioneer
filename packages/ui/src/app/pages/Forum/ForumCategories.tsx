@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageLayout } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { ForumCategoryList } from '@/forum/components/category'
+import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { useForumCategories } from '@/forum/hooks/useForumCategories'
 
 import { ForumForumTabs, ForumTabs } from './components/ForumTabs'
@@ -14,11 +15,10 @@ export const ForumCategories = () => {
   return (
     <PageLayout
       header={
-        <PageHeaderWrapper>
-          <PageTitle>Forum</PageTitle>
+        <ForumPageHeader title={<PageTitle>Forum</PageTitle>}>
           <ForumTabs />
           <ForumForumTabs categoryCount={forumCategories?.length} />
-        </PageHeaderWrapper>
+        </ForumPageHeader>
       }
       main={isLoading ? <Loading /> : <ForumCategoryList categories={forumCategories ?? []} />}
     />

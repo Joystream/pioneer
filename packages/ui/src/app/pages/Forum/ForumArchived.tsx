@@ -1,11 +1,12 @@
 import React from 'react'
 
-import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageLayout } from '@/app/components/PageLayout'
 import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { ForumCategoryList } from '@/forum/components/category'
+import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { useForumCategories } from '@/forum/hooks/useForumCategories'
@@ -20,10 +21,9 @@ export const ForumArchived = () => {
   return (
     <PageLayout
       header={
-        <PageHeaderWrapper>
-          <PageTitle>Forum</PageTitle>
+        <ForumPageHeader title={<PageTitle>Forum</PageTitle>}>
           <ForumTabs />
-        </PageHeaderWrapper>
+        </ForumPageHeader>
       }
       main={
         <>
