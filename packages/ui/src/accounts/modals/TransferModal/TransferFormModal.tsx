@@ -55,10 +55,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
   }, [maxFee?.transactionFee.toString()])
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
-  const setMax = () => {
-    const amount = maxFee?.transactionFee ? transferableBalance.sub(maxFee.transactionFee) : transferableBalance
-    setAmount(amount.toString())
-  }
+  const setMax = () => setAmount(maxAmount.toString())
   const onClick = () => {
     if (amount && recipient && sender) {
       onAccept(new BN(amount), sender, recipient)
