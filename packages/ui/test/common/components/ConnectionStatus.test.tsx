@@ -28,7 +28,7 @@ describe('UI: Connection status component', () => {
 
     renderComponent()
 
-    expect(screen.getByText(/connecting to node/i)).toBeDefined()
+    expect(screen.getByText(/connecting to joystream node/i)).toBeDefined()
   })
 
   it('Permanent Connecting', async () => {
@@ -40,14 +40,19 @@ describe('UI: Connection status component', () => {
       jest.advanceTimersByTime(5050)
     })
 
-    expect(screen.getByText(/connecting to node/i)).toBeDefined()
+    expect(screen.getByText(/connecting to joystream node/i)).toBeDefined()
   })
 
   it('Disconnected', async () => {
+    useApi.connectionState = 'connected'
     renderComponent()
 
     act(() => {
       eventEmitter.emit('connected')
+      jest.runOnlyPendingTimers()
+    })
+
+    act(() => {
       useApi.connectionState = 'disconnected'
       eventEmitter.emit('disconnected')
     })

@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { NotFound } from '@/app/pages/NotFound'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { Page } from '@/common/components/page/Page'
+import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
@@ -59,7 +60,9 @@ export const App = () => (
       </Switch>
     </Page>
     <GlobalModals />
-    <ConnectionStatus />
-    <ExtensionWarning />
+    <NotificationsHolder>
+      <ConnectionStatus />
+      <ExtensionWarning />
+    </NotificationsHolder>
   </Providers>
 )
