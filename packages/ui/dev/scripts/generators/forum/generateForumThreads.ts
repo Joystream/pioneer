@@ -13,21 +13,26 @@ let nextPostId = 0
 export const generateForumPost = (threadId: string, authorId: string, repliesToId?: string): RawForumPostMock => {
   const createdAt = faker.date.recent(180)
   let lastEditDate: Date
+  const postText = faker.lorem.words(randomFromRange(10, 100))
+  const edits = [...new Array(randomFromRange(0, 4))].map(() => {
+    lastEditDate = faker.date.between(lastEditDate ?? createdAt, new Date())
+    return {
+      newText: faker.lorem.words(randomFromRange(10, 100)),
+      ...randomBlock(lastEditDate),
+    }
+  })
 
   return {
     id: String(nextPostId++),
     threadId,
     authorId,
-    text: faker.lorem.words(randomFromRange(10, 100)),
+    edits,
+    text: postText,
     repliesToId,
-    edits: [...new Array(randomFromRange(0, 4))].map(() => {
-      lastEditDate = faker.date.between(lastEditDate ?? createdAt, new Date())
-      return {
-        newText: faker.lorem.words(randomFromRange(10, 100)),
-        ...randomBlock(lastEditDate),
-      }
-    }),
-    postAddedEvent: randomBlock(createdAt),
+    postAddedEvent: {
+      ...randomBlock(createdAt),
+      text: edits.length ? faker.lorem.words(randomFromRange(10, 100)) : postText,
+    },
   }
 }
 

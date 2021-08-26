@@ -31,6 +31,10 @@ interface PostEdit extends BlockFieldsMock {
   newText: string
 }
 
+interface PostAddedEventMock extends BlockFieldsMock {
+  text: string
+}
+
 export interface RawForumPostMock {
   id: string
   threadId: string
@@ -38,7 +42,7 @@ export interface RawForumPostMock {
   text: string
   repliesToId?: string
   edits: PostEdit[]
-  postAddedEvent: BlockFieldsMock
+  postAddedEvent: PostAddedEventMock
 }
 
 const seedCategoryStatus = (status: RawForumCategoryMock['status'], server: any) => {

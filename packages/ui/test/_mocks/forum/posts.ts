@@ -27,6 +27,8 @@ export const mockPosts: RawForumPostMock[] = [
       inBlock: 5465,
       createdAt: '2021-06-28T09:15:47.156Z',
       network: 'OLYMPIA',
+      text:
+        'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
     },
   },
   {
@@ -40,6 +42,8 @@ export const mockPosts: RawForumPostMock[] = [
       inBlock: 885,
       createdAt: '2021-04-22T17:54:04.747Z',
       network: 'OLYMPIA',
+      text:
+        'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
     },
   },
 ]
