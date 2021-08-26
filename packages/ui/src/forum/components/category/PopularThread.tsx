@@ -27,7 +27,7 @@ export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
   )
 })
 
-const ThreadInfoStyles = styled.div`
+export const ThreadInfoStyles = styled.div`
   & > h6 {
     margin-bottom: 12px;
     ${Overflow.FullDots};

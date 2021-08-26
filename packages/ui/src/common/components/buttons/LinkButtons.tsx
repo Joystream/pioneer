@@ -77,7 +77,7 @@ export function LinkButtonLink({ className, children, square, disabled, to }: Li
   )
 }
 
-const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
+export const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: ${({ size }) => (size == 'small' ? '4px' : '8px')};

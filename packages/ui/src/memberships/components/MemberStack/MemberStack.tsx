@@ -57,7 +57,7 @@ const HiddenMember = styled(DefaultTooltip)`
   background-color: ${Colors.Blue[50]};
 `
 
-const MemberStackStyles = styled.div`
+export const MemberStackStyles = styled.div`
   display: flex;
 
   ${TooltipContainer} {

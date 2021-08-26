@@ -11,7 +11,6 @@ export const RouterLink = styled(Link)<Props>`
 `
 
 export const GhostRouterLink = styled(Link)`
-  display: contents;
   color: unset;
   font-family: unset;
 `
