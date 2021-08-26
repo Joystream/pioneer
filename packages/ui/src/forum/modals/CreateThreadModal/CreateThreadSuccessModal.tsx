@@ -5,6 +5,7 @@ import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { ForumRoutes } from '@/forum/constant'
 
 interface Props {
   newThreadId: string
@@ -14,7 +15,7 @@ export const CreateThreadSuccessModal = ({ newThreadId }: Props) => {
   const { hideModal } = useModal()
   const history = useHistory()
   const goToThread = () => {
-    history.push(`/forum/thread/${newThreadId}`)
+    history.push(`${ForumRoutes.thread}/${newThreadId}`)
     hideModal()
   }
 

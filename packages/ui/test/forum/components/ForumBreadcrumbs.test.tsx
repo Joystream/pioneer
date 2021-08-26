@@ -5,6 +5,7 @@ import { Route, Router, Switch } from 'react-router-dom'
 
 import { CategoryBreadcrumbs } from '@/forum/components/CategoryBreadcrumbs'
 import { ThreadBreadcrumbs } from '@/forum/components/ThreadBreadcrumbs'
+import { ForumRoutes } from '@/forum/constant'
 import { seedMembers } from '@/mocks/data'
 import { seedForumCategory, seedForumThread } from '@/mocks/data/seedForum'
 
@@ -23,13 +24,13 @@ describe('Forum breadcrumbs', () => {
 
   describe('Category breadcrumbs', () => {
     it('Root category', async () => {
-      renderComponent('/forum/forum/0')
+      renderComponent(`${ForumRoutes.category}/0`)
       expect(await screen.findByText('Forum')).toBeDefined()
       expect(await screen.findByText('Category 0')).toBeDefined()
     })
 
     it('Nested category', async () => {
-      renderComponent('/forum/forum/3')
+      renderComponent(`${ForumRoutes.category}/3`)
       expect(await screen.findByText('Forum')).toBeDefined()
       expect(await screen.findByText('Category 0')).toBeDefined()
       expect(await screen.findByText('ab fugiat et quas est')).toBeDefined()
@@ -40,14 +41,14 @@ describe('Forum breadcrumbs', () => {
 
   describe('Thread breadcrumbs', () => {
     it('In root category', async () => {
-      renderComponent('/forum/thread/0')
+      renderComponent(`${ForumRoutes.thread}/0`)
       expect(await screen.findByText('Forum')).toBeDefined()
       expect(await screen.findByText('Category 0')).toBeDefined()
       expect(await screen.findByText('Test thread')).toBeDefined()
     })
 
     it('In nested category', async () => {
-      renderComponent('/forum/thread/1')
+      renderComponent(`${ForumRoutes.thread}/1`)
       expect(await screen.findByText('Forum')).toBeDefined()
       expect(await screen.findByText('Category 0')).toBeDefined()
       expect(await screen.findByText('ab fugiat et quas est')).toBeDefined()
@@ -63,8 +64,8 @@ describe('Forum breadcrumbs', () => {
       <Router history={history}>
         <MockQueryNodeProviders>
           <Switch>
-            <Route path="/forum/forum/:id" component={CategoryBreadcrumbs} />
-            <Route path="/forum/thread/:id" component={ThreadBreadcrumbs} />
+            <Route path={`${ForumRoutes.category}/:id`} component={CategoryBreadcrumbs} />
+            <Route path={`${ForumRoutes.thread}/:id`} component={ThreadBreadcrumbs} />
           </Switch>
         </MockQueryNodeProviders>
       </Router>
