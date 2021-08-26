@@ -22,7 +22,7 @@ interface ForumForumTabsProps {
 export const ForumForumTabs = ({ categoryCount }: ForumForumTabsProps) => {
   const tabs = usePageTabs([
     ['Categories', ForumRoutes.forum, categoryCount],
-    ['Latest threads ', ForumRoutes.lastThreads],
+    ['Latest threads ', ForumRoutes.latestThreads],
     ['Top threads', ForumRoutes.topThreads],
     ['Tags', ForumRoutes.tags],
     ['My threads', ForumRoutes.myThreads],

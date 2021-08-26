@@ -5,7 +5,7 @@ export const ForumRoutes = {
   archived: prefix + '/archived',
   thread: prefix + '/thread',
   overview: prefix + '/overview',
-  lastThreads: prefix + '/latest-threads',
+  latestThreads: prefix + '/latest-threads',
   topThreads: prefix + '/top-threads',
   myThreads: prefix + '/my-threads',
   tags: prefix + '/tags',
