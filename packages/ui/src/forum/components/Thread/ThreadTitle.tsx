@@ -72,7 +72,7 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
               <EditAction onClick={toggleEditTitle} size="small" square>
                 <CrossIcon />
               </EditAction>
-              <EditAction onClick={() => submitTitle()} size="small" square>
+              <EditAction onClick={() => submitTitle()} disabled={fields.title === thread.title} size="small" square>
                 <CheckboxIcon />
               </EditAction>
             </ButtonsGroup>
