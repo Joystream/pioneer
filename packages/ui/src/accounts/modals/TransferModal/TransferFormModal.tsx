@@ -1,5 +1,9 @@
 import BN from 'bn.js'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { BN_ZERO } from '@/common/constants'
+import { useApi } from '@/common/hooks/useApi'
 
 import { ButtonPrimary } from '../../../common/components/buttons'
 import { InputComponent, InputNumber } from '../../../common/components/forms'
@@ -34,17 +38,24 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
   const [amount, setAmount] = useNumberInput(0)
   const senderBalance = useBalance(sender?.address)
   const filterSender = useCallback(filterAccount(recipient), [recipient])
-  const transferableBalance = senderBalance?.transferable ?? new BN(0)
+  const transferableBalance = senderBalance?.transferable ?? BN_ZERO
   const filterRecipient = useCallback(filterAccount(sender), [sender])
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
-  const isZero = new BN(amount).lte(new BN(0))
+  const isZero = new BN(amount).lte(BN_ZERO)
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
   const isTransferDisabled = isZero || isOverBalance || !recipient
   const isValueDisabled = !sender
 
+  const { api } = useApi()
+  const [maxAmount, setMaxAmount] = useState(transferableBalance)
+  const maxFee = useTransactionFee(sender?.address, api?.tx.balances.transfer(recipient?.address || '', maxAmount))
+  useEffect(() => {
+    setMaxAmount(transferableBalance.sub(maxFee?.transactionFee ?? BN_ZERO))
+  }, [maxFee?.transactionFee.toString()])
+
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
-  const setMax = () => setAmount(transferableBalance.toString())
+  const setMax = () => setAmount(maxAmount.toString())
   const onClick = () => {
     if (amount && recipient && sender) {
       onAccept(new BN(amount), sender, recipient)
