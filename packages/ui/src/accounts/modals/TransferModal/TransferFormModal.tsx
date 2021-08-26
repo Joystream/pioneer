@@ -1,7 +1,8 @@
 import BN from 'bn.js'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 
 import { ButtonPrimary } from '../../../common/components/buttons'
@@ -47,10 +48,11 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
   const isValueDisabled = !sender
 
   const { api } = useApi()
-  const maxFee = useTransactionFee(
-    sender?.address,
-    api?.tx.balances.transfer(recipient?.address || '', transferableBalance)
-  )
+  const [maxAmount, setMaxAmount] = useState(transferableBalance)
+  const maxFee = useTransactionFee(sender?.address, api?.tx.balances.transfer(recipient?.address || '', maxAmount))
+  useEffect(() => {
+    setMaxAmount(transferableBalance.sub(maxFee?.transactionFee ?? BN_ZERO))
+  }, [maxFee?.transactionFee.toString()])
 
   const setHalf = () => setAmount(transferableBalance.div(new BN(2)).toString())
   const setMax = () => {
