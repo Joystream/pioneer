@@ -45,7 +45,7 @@ export const ConnectionStatus = () => {
   }
 
   if (connectionState === 'connecting') {
-    return <SideNotification showClose onClick={hide} title="Connecting to node" />
+    return <SideNotification showClose onClick={hide} title="Connecting to Joystream node" />
   }
 
   if (connectionState === 'connected') {
