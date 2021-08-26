@@ -82,7 +82,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={ForumRoutes.root}>
+              <NavigationLink to={ForumRoutes.forum}>
                 <ForumIcon />
                 Forum
               </NavigationLink>

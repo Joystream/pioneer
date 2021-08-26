@@ -7,6 +7,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ForumThread as ForumThreadPage } from '@/app/pages/Forum/ForumThread'
 import { NotFound } from '@/app/pages/NotFound'
+import { ForumRoutes } from '@/forum/constant'
 import { ForumThread, ForumThreadWithDetails } from '@/forum/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -101,13 +102,13 @@ describe('UI: Forum Thread Page', () => {
   function renderPage() {
     return render(
       <MockApiProvider>
-        <MemoryRouter initialEntries={['/forum/thread/1']}>
+        <MemoryRouter initialEntries={[`${ForumRoutes.thread}/1`]}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <AccountsContext.Provider value={useAccounts}>
                 <MembershipContext.Provider value={useMyMemberships}>
                   <Switch>
-                    <Route path="/forum/thread/:id" component={ForumThreadPage} />
+                    <Route path={`${ForumRoutes.thread}/:id`} component={ForumThreadPage} />
                     <Route path="/404" component={NotFound} />
                   </Switch>
                 </MembershipContext.Provider>

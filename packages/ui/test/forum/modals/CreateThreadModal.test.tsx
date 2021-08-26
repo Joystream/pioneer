@@ -7,6 +7,7 @@ import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { ForumRoutes } from '@/forum/constant'
 import { CreateThreadModal } from '@/forum/modals/CreateThreadModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -129,7 +130,7 @@ describe('CreateThreadModal', () => {
       await fireEvent.click(await getButton(/sign and send/i))
       await fireEvent.click(await getButton(/see my thread/i))
 
-      expect(pathname).toEqual('/forum/thread/1337')
+      expect(pathname).toEqual(`${ForumRoutes.thread}/1337`)
     })
   })
 

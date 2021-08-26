@@ -10,11 +10,11 @@ import { ForumRoutes } from '@/forum/constant'
 export const Forum = () => {
   return (
     <Switch>
-      <Redirect from={ForumRoutes.root} to={ForumRoutes.forum} exact />
       <Route path={ForumRoutes.forum} exact component={ForumCategories} />
       <Route path={`${ForumRoutes.category}/:id/:type?`} exact component={ForumCategory} />
       <Route path={ForumRoutes.archived} exact component={ForumArchived} />
-      <Route path="/forum/thread/:id" exact component={ForumThread} />
+      <Route path={`${ForumRoutes.thread}/:id`} exact component={ForumThread} />
+      <Redirect from="/forum/*" to={ForumRoutes.forum} />
     </Switch>
   )
 }
