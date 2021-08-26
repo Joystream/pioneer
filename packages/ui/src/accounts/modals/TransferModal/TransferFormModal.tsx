@@ -38,11 +38,11 @@ export function TransferFormModal({ from, to, onClose, onAccept, title }: Props)
   const [amount, setAmount] = useNumberInput(0)
   const senderBalance = useBalance(sender?.address)
   const filterSender = useCallback(filterAccount(recipient), [recipient])
-  const transferableBalance = senderBalance?.transferable ?? new BN(0)
+  const transferableBalance = senderBalance?.transferable ?? BN_ZERO
   const filterRecipient = useCallback(filterAccount(sender), [sender])
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
-  const isZero = new BN(amount).lte(new BN(0))
+  const isZero = new BN(amount).lte(BN_ZERO)
   const isOverBalance = new BN(amount).gt(transferableBalance || 0)
   const isTransferDisabled = isZero || isOverBalance || !recipient
   const isValueDisabled = !sender
