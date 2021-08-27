@@ -3,8 +3,8 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { ContextMenu } from '@/common/components/ContextMenu'
-import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
+import { ContextMenu, ContextMenuContainer } from '@/common/components/ContextMenu'
+import { List, ListItem } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -56,13 +56,15 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
   const roleRoute = `/working-groups/my-roles/${worker.id}`
 
   return (
-    <RoleItemWrapper as={GhostRouterLink} to={roleRoute}>
+    <RoleItemWrapper>
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
           <BadgeStatus inverted>{worker.group.name}</BadgeStatus>
           {worker.isLead && <BadgeStatus>LEAD</BadgeStatus>}
         </ToggleableItemInfoTop>
-        <Title>{workerRoleTitle(worker)}</Title>
+        <RoleTitle as={GhostRouterLink} to={roleRoute}>
+          {workerRoleTitle(worker)}
+        </RoleTitle>
       </ToggleableItemInfo>
       <ToggleableItemSummary>
         <OpenItemSummaryColumn>
@@ -101,10 +103,26 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
   )
 }
 
-const Title = styled(ToggleableItemTitle)`
-  cursor: pointer;
+const RoleItemWrapper = styled(ToggleableItemWrap)`
+  position: relative;
+
+  ${ToggleableItemInfo},
+  ${TextInlineBig},
+  ${ContextMenuContainer} {
+    z-index: 1;
+  }
+
 `
 
-const RoleItemWrapper = styled(ToggleableItemWrap)`
-  ${TableListItemAsLinkHover};
+const RoleTitle = styled(ToggleableItemTitle)`
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: rgba(255, 0, 0, 0.3);
+  }
 `
