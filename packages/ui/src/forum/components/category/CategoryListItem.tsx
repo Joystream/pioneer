@@ -27,7 +27,7 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
   const subcategories = category.subcategories
     .filter(({ status }) => status === expectedStatus)
     .map(({ id, title }) => (
-      <SubcategoryLink key={id} to={'/'} size="small">
+      <SubcategoryLink key={id} to={categoryLink(id, isArchive)} size="small">
         {title}
       </SubcategoryLink>
     ))
@@ -35,10 +35,7 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
   return (
     <CategoryListItemStyles $colLayout={categoriesColLayout(isArchive)}>
       <Category>
-        <CategoryListItemTitle
-          as={GhostRouterLink}
-          to={`${ForumRoutes.category}/${category.id}${isArchive ? '/archive' : ''}`}
-        >
+        <CategoryListItemTitle as={GhostRouterLink} to={categoryLink(category.id, isArchive)}>
           {category.title}
         </CategoryListItemTitle>
         <TextMedium light>{category.description}</TextMedium>
@@ -63,6 +60,8 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
     </CategoryListItemStyles>
   )
 }
+
+const categoryLink = (id: string, isArchive: boolean) => `${ForumRoutes.category}/${id}${isArchive ? '/archive' : ''}`
 
 export interface CategoryItemFieldProps {
   categoryId: string
