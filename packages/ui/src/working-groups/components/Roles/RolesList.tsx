@@ -1,11 +1,11 @@
 import BN from 'bn.js'
 import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ContextMenu } from '@/common/components/ContextMenu'
-import { List, ListItem } from '@/common/components/List'
+import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
+import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
@@ -39,7 +39,6 @@ export const RolesList = ({ workers }: RolesListProps) => (
 )
 
 const RolesListItem = ({ worker }: { worker: Worker }) => {
-  const history = useHistory()
   const { showModal } = useModal()
   const changeRewardCallback = useCallback(() => {
     showModal<ChangeAccountModalCall>({
@@ -54,14 +53,16 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
     })
   }, [])
 
+  const roleRoute = `/working-groups/my-roles/${worker.id}`
+
   return (
-    <ToggleableItemWrap>
+    <RoleItemWrapper as={GhostRouterLink} to={roleRoute}>
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
           <BadgeStatus inverted>{worker.group.name}</BadgeStatus>
           {worker.isLead && <BadgeStatus>LEAD</BadgeStatus>}
         </ToggleableItemInfoTop>
-        <Title onClick={() => history.push(`/working-groups/my-roles/${worker.id}`)}>{workerRoleTitle(worker)}</Title>
+        <Title>{workerRoleTitle(worker)}</Title>
       </ToggleableItemInfo>
       <ToggleableItemSummary>
         <OpenItemSummaryColumn>
@@ -96,10 +97,14 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
           { text: 'Leave a position', onClick: leaveRoleCallback },
         ]}
       />
-    </ToggleableItemWrap>
+    </RoleItemWrapper>
   )
 }
 
 const Title = styled(ToggleableItemTitle)`
   cursor: pointer;
+`
+
+const RoleItemWrapper = styled(ToggleableItemWrap)`
+  ${TableListItemAsLinkHover};
 `
