@@ -67,7 +67,7 @@ export function Accounts() {
         </ListHeaders>
         <List>
           {sortedAccounts.map((account) => (
-            <ListItem key={account.address}>
+            <ListItem key={account.address} borderless>
               <AccountItem account={account} />
             </ListItem>
           ))}

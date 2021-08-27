@@ -25,7 +25,10 @@ export function TransferButton({ from, to, disabled }: Props) {
     <ButtonForTransfer
       size="small"
       square
-      onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: { from, to } })}
+      onClick={(event) => {
+        event.stopPropagation()
+        showModal<TransferModalCall>({ modal: 'TransferTokens', data: { from, to } })
+      }}
       disabled={isDisabled}
     >
       <PickedTransferIcon type={iconType} />
@@ -41,7 +44,10 @@ export function TransferButtonStyled() {
     <ButtonForTransferStyled
       size="small"
       square
-      onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: {} })}
+      onClick={(event) => {
+        event.stopPropagation()
+        showModal<TransferModalCall>({ modal: 'TransferTokens', data: {} })
+      }}
     >
       <PickedTransferIcon type={iconType} />
     </ButtonForTransferStyled>
@@ -49,6 +55,7 @@ export function TransferButtonStyled() {
 }
 
 const ButtonForTransfer = styled(ButtonGhost)`
+  z-index: 1;
   svg {
     color: ${Colors.Black[900]};
   }
@@ -59,4 +66,5 @@ const ButtonForTransferStyled = styled(ButtonPrimary)`
   height: 32px;
   grid-area: balancetransfer;
   justify-self: end;
+  z-index: 1;
 `
