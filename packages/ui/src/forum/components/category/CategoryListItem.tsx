@@ -7,8 +7,9 @@ import { TableListItem, TableListItemAsLinkHover } from '@/common/components/Lis
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { Colors, Fonts, Overflow, Transitions } from '@/common/constants'
+import { intersperse } from '@/common/utils'
 import { categoriesColLayout, ForumRoutes } from '@/forum/constant'
-import { ForumCategory } from '@/forum/types'
+import { CategoryStatusType, ForumCategory } from '@/forum/types'
 import { MemberStack, MemberStackStyles, moderatorsSummary } from '@/memberships/components/MemberStack'
 
 import { LatestPost, PostInfoStyles } from './LatestPost'
@@ -22,6 +23,15 @@ export interface CategoryListItemProps {
 export const CategoryListItem = ({ category, isArchive = false }: CategoryListItemProps) => {
   const block = category.status.categoryArchivalStatusUpdatedEvent
 
+  const expectedStatus: CategoryStatusType = isArchive ? 'CategoryStatusArchived' : 'CategoryStatusActive'
+  const subcategories = category.subcategories
+    .filter(({ status }) => status === expectedStatus)
+    .map(({ id, title }) => (
+      <SubcategoryLink key={id} to={'/'} size="small">
+        {title}
+      </SubcategoryLink>
+    ))
+
   return (
     <CategoryListItemStyles $colLayout={categoriesColLayout(isArchive)}>
       <Category>
@@ -32,17 +42,10 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
           {category.title}
         </CategoryListItemTitle>
         <TextMedium light>{category.description}</TextMedium>
-        <TextInlineExtraSmall lighter>
-          Subcategories:{' '}
-          {category.subcategories.map(({ title }, index) => (
-            <>
-              <SubcategoryLink key={index} to={'/'} size="small">
-                {title}
-              </SubcategoryLink>
-              {index < category.subcategories.length - 1 && ', '}
-            </>
-          ))}
-        </TextInlineExtraSmall>
+
+        {subcategories.length > 0 && (
+          <TextInlineExtraSmall lighter>Subcategories: {intersperse(subcategories, ', ')}</TextInlineExtraSmall>
+        )}
       </Category>
 
       <ThreadCount categoryId={category.id} />
@@ -104,11 +107,11 @@ export const CategoryListItemStyles = styled(TableListItem)`
     }
   }
 
-  ${TextMedium}, 
-  ${TextInlineExtraSmall}, 
-  ${TextInlineMedium}, 
-  ${PostInfoStyles}, 
-  ${BlockTimeWrapper}, 
+  ${TextMedium},
+  ${TextInlineExtraSmall},
+  ${TextInlineMedium},
+  ${PostInfoStyles},
+  ${BlockTimeWrapper},
   ${ThreadInfoStyles},
   ${MemberStackStyles} {
     z-index: 2;

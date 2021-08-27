@@ -40,7 +40,11 @@ const Template: Story<Props> = ({
   const category = {
     ...asForumCategory((rawCategory as unknown) as ForumCategoryFieldsFragment),
     moderators: repeat(asStorybookModerator(), moderatorsCount),
-    subcategories: subcategoriesTitles.map((title, index) => ({ id: `${index}`, title })),
+    subcategories: subcategoriesTitles.map((title, index) => ({
+      id: `${index}`,
+      title,
+      status: isArchive ? ('CategoryStatusArchived' as const) : ('CategoryStatusActive' as const),
+    })),
   }
   return (
     <MockApolloProvider members forum={{ categories: [rawCategory], threads: asArray(thread), posts: asArray(post) }}>

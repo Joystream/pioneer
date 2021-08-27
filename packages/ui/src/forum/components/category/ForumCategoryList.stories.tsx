@@ -29,9 +29,9 @@ const Template: Story = ({ isArchive }) => {
         call={async (client) => {
           const { data } = await client.query<GetForumCategoriesQuery, GetForumCategoriesQueryVariables>({
             query: GetForumCategoriesDocument,
-            variables: {},
+            variables: { where: { id_in: ['0', '1', '2'] } },
           })
-          setCategories(data.forumCategories.slice(0, 3).map(asCategory))
+          setCategories(data.forumCategories.map(asCategory))
         }}
       />
       <MemoryRouter>
