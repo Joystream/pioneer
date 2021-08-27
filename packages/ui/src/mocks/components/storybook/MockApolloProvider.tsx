@@ -46,15 +46,14 @@ interface Seeds {
 declare let MockServer: Seeds & { server: ReturnType<typeof makeServer> }
 
 export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
-  const [started, setStarted] = useState('MockServer' in window)
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    if (!started) {
+    if (!('MockServer' in window)) {
       const glob = global as any
       glob.MockServer = {}
       MockServer.server = makeServer('storybook')
       fixAssociations(MockServer.server)
-      setStarted(true)
     }
 
     if (toSeed.members && !MockServer.members) {
@@ -96,9 +95,11 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
       }
       MockServer.forum = toSeed.forum
     }
-  }, [JSON.stringify(toSeed)])
 
-  return <TestMockApolloProvider>{started ? children : <h3>Starting mock server...</h3>}</TestMockApolloProvider>
+    setReady(true)
+  }, [])
+
+  return <TestMockApolloProvider>{ready ? children : <h3>Starting mock server...</h3>}</TestMockApolloProvider>
 }
 
 interface QueryProps {
