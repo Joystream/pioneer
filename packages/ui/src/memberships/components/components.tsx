@@ -46,14 +46,23 @@ export const MemberId = styled(TextSmall)`
   color: ${Colors.Black[400]};
 `
 
-export const MemberPhoto = styled.div`
+interface MemberPhotoProps {
+  small?: boolean
+  noArea?: boolean
+}
+
+export const MemberPhoto = styled.div<MemberPhotoProps>`
   display: flex;
   position: relative;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
-  grid-area: memberphoto;
+  width: ${({ small }) => (small ? '24px' : '40px')};
+  height: ${({ small }) => (small ? '24px' : '40px')};
+  ${({ noArea }) =>
+    !noArea &&
+    css`
+      grid-area: memberphoto;
+    `}
   border-radius: ${BorderRad.round};
   border: 1px solid ${Colors.Black[200]};
 
