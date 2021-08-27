@@ -88,7 +88,7 @@ describe('useForumCategoryThreads', () => {
     const start = endOfYesterday()
     const end = new Date()
 
-    const { refresh } = renderUseForumCategoryThreads({ isArchive: true }).result.current
+    const { rerender } = renderUseForumCategoryThreads({ isArchive: true })
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
@@ -100,7 +100,7 @@ describe('useForumCategoryThreads', () => {
       },
     })
 
-    refresh({ filters: { author: null, date: { start, end }, tag: null } })
+    rerender([{ isArchive: true, filters: { author: null, date: { start, end }, tag: null } }])
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
