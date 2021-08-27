@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
 import { PinIcon } from '@/common/components/icons/PinIcon'
@@ -29,8 +29,8 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
   const block = isArchive ? status?.threadDeletedEvent : createdInBlock
 
   return (
-    <ThreadListItemStyles as={GhostRouterLink} to={`${ForumRoutes.thread}/${thread.id}`}>
-      {thread.isSticky && <PinIcon />}
+    <ThreadListItemStyles as={GhostRouterLink} to={`${ForumRoutes.thread}/${thread.id}`} isSticky={thread.isSticky}>
+      {thread.isSticky && <ThreadPinIcon />}
 
       <Thread>
         <TextBig bold>{thread.title}</TextBig>
@@ -50,19 +50,26 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
   )
 }
 
-const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsColLayout })`
+const ThreadPinIcon = styled(PinIcon)`
+  color: ${Colors.Black[400]};
+  position: absolute;
+  left: 2px;
+  top: 2px;
+`
+
+const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsColLayout })<{ isSticky?: boolean }>`
   height: 80px;
   padding: 12px 24px;
   position: relative;
 
-  ${TableListItemAsLinkHover};
+  ${({ isSticky }) =>
+    isSticky &&
+    css`
+      border: 1px solid ${Colors.Black[300]};
+      z-index: 1;
+    `}
 
-  & > svg {
-    color: ${Colors.Black[400]};
-    position: absolute;
-    left: 2px;
-    top: 2px;
-  }
+  ${TableListItemAsLinkHover};
 `
 
 const Thread = styled.div`
