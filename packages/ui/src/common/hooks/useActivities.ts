@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { Activity } from '../types'
 
-export const useActivities = (): Activity[] =>
+export const useMockActivities = (): Activity[] =>
   useMemo(
     () => [
       {

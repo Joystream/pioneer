@@ -5,7 +5,7 @@ import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { useActivities } from '@/common/hooks/useActivities'
+import { useMockActivities } from '@/common/hooks/useActivities'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadBrowser } from '@/forum/components/threads/ThreadBrowser'
 import { ThreadsLayout } from '@/forum/components/threads/ThreadsLayout'
@@ -14,7 +14,7 @@ import { ForumTabs } from './components/ForumTabs'
 
 export const ForumOverview = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
-  const activities = useActivities()
+  const activities = useMockActivities()
 
   return (
     <PageLayout
