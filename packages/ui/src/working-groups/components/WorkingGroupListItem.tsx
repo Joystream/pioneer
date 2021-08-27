@@ -55,7 +55,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            {lead ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} isLead /> : 'None'}
+            {lead ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} /> : 'None'}
           </StatsValue>
           <Subscription>WG Lead</Subscription>
         </StatsColumn>
