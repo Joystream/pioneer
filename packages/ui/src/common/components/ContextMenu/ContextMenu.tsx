@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import styled from 'styled-components'
 
@@ -50,29 +51,31 @@ export const ContextMenu = ({ items, size }: ContextMenuProps) => {
       <ButtonGhost square size={size ?? 'medium'} {...contextMenuHandlers}>
         <KebabMenuIcon />
       </ButtonGhost>
-      {isMenuVisible && (
-        <ContextMenuWrapper
-          isOpen={isMenuVisible}
-          ref={setPopperElementRef}
-          style={styles.popper}
-          {...attributes.popper}
-        >
-          {items.map((item, index) => (
-            <ButtonLink
-              key={index}
-              size="small"
-              bold
-              borderless
-              onClick={() => {
-                item.onClick()
-                setMenuVisible(false)
-              }}
-            >
-              {item.text}
-            </ButtonLink>
-          ))}
-        </ContextMenuWrapper>
-      )}
+      {isMenuVisible &&
+        ReactDOM.createPortal(
+          <ContextMenuWrapper
+            isOpen={isMenuVisible}
+            ref={setPopperElementRef}
+            style={styles.popper}
+            {...attributes.popper}
+          >
+            {items.map((item, index) => (
+              <ButtonLink
+                key={index}
+                size="small"
+                bold
+                borderless
+                onClick={() => {
+                  item.onClick()
+                  setMenuVisible(false)
+                }}
+              >
+                {item.text}
+              </ButtonLink>
+            ))}
+          </ContextMenuWrapper>,
+          document.body
+        )}
     </ContextMenuContainer>
   )
 }

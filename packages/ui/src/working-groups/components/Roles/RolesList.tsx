@@ -4,9 +4,10 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ContextMenu, ContextMenuContainer } from '@/common/components/ContextMenu'
-import { List, ListItem } from '@/common/components/List'
+import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
+import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
@@ -31,7 +32,7 @@ export interface RolesListProps {
 export const RolesList = ({ workers }: RolesListProps) => (
   <List>
     {workers.map((worker) => (
-      <ListItem key={worker.id}>
+      <ListItem key={worker.id} borderless>
         <RolesListItem worker={worker} />
       </ListItem>
     ))}
@@ -105,6 +106,11 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
 
 const RoleItemWrapper = styled(ToggleableItemWrap)`
   position: relative;
+  border: 1px solid ${Colors.Black[100]};  
+  border-radius: ${BorderRad.s};
+  transition: ${Transitions.all};
+
+  ${TableListItemAsLinkHover};
 
   ${ToggleableItemInfo},
   ${TextInlineBig},
@@ -115,6 +121,12 @@ const RoleItemWrapper = styled(ToggleableItemWrap)`
 `
 
 const RoleTitle = styled(ToggleableItemTitle)`
+  font-family: ${Fonts.Grotesk};
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  transition: ${Transitions.all};
+
   &:before {
     content: '';
     position: absolute;
@@ -123,6 +135,10 @@ const RoleTitle = styled(ToggleableItemTitle)`
     width: 100%;
     height: 100%;
     z-index: -1;
-    background-color: rgba(255, 0, 0, 0.3);
+  }
+
+  &:hover,
+  &:focus {
+    color: ${Colors.Blue[500]};
   }
 `
