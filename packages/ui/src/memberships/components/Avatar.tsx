@@ -18,7 +18,7 @@ interface MemberAvatarProps extends AvatarProps {
   noArea?: boolean
 }
 
-interface MemberInfoAvatarProps extends MemberAvatarProps {
+export interface MemberInfoAvatarProps extends MemberAvatarProps {
   member: Member
   isLead?: boolean
 }
