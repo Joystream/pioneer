@@ -28,19 +28,21 @@ const category: RawForumCategoryMock = {
 
 interface Props {
   tags: string[]
+  isSticky: boolean
+  isArchive: boolean
   rawThread: RawForumThreadMock & ForumThreadFieldsFragment
 }
-const Template: Story<Props> = ({ tags, rawThread }) => {
+const Template: Story<Props> = ({ tags, isSticky, isArchive, rawThread }) => {
   const forum = { categories: [category], threads: [rawThread], posts: asArray(asStorybookPost('foo', rawThread.id)) }
   const thread = {
-    ...asForumThread(rawThread),
+    ...asForumThread({ ...rawThread, isSticky }),
     tags: tags.map((title, index) => ({ id: String(index), title, threads: [], visibleThreadsCount: 0 })),
   }
 
   return (
     <MockApolloProvider members forum={forum}>
       <MemoryRouter>
-        <ThreadListItem thread={thread} />
+        <ThreadListItem thread={thread} isArchive={isArchive} />
       </MemoryRouter>
     </MockApolloProvider>
   )
@@ -49,6 +51,8 @@ const Template: Story<Props> = ({ tags, rawThread }) => {
 export const Default = Template.bind({})
 Default.args = {
   tags: ['Governance Budget', 'Election #6'],
+  isSticky: false,
+  isArchive: false,
   rawThread: {
     id: 'ThreadListItem-story',
     categoryId,
