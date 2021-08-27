@@ -7,7 +7,7 @@ import { Arrow } from '@/common/components/icons'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
-import { Avatar } from '@/memberships/components/Avatar'
+import { MemberInfoAvatar } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
 import { useCountWorkers } from '@/working-groups/hooks/useCountWorkers'
@@ -55,13 +55,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            {lead ? (
-              <WGLeadImage>
-                <Avatar avatarUri={lead.avatar} />
-              </WGLeadImage>
-            ) : (
-              'None'
-            )}
+            {lead ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} /> : 'None'}
           </StatsValue>
           <Subscription>WG Lead</Subscription>
         </StatsColumn>
@@ -137,13 +131,6 @@ const StatsValue = styled.span`
   line-height: 24px;
   font-weight: 700;
   color: ${Colors.Black[900]};
-`
-
-const WGLeadImage = styled.div`
-  width: 24px;
-  height: 24px;
-  border-radius: ${BorderRad.round};
-  overflow: hidden;
 `
 
 const GroupItem = styled.section`
