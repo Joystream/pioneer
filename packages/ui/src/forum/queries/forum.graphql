@@ -163,7 +163,7 @@ query GetForumThreadBreadcrumbs($where: ForumThreadWhereUniqueInput!) {
   }
 }
 
-query GetForumThreads($where: ForumThreadWhereInput!, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
+query GetForumThreads($where: ForumThreadWhereInput, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
   forumThreads(where: $where, orderBy: $orderBy, limit: $limit) {
     ...ForumThreadFields
   }
