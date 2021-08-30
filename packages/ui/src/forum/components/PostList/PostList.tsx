@@ -51,7 +51,7 @@ export const PostList = ({ threadId, isThreadActive }: PostListProps) => {
     if (initialPage !== page) {
       setPage(initialPage)
     }
-  }, [JSON.stringify(history.location)])
+  }, [initialPage, initialPost])
 
   if (isLoading) {
     return <Loading text="Loading posts..." />
