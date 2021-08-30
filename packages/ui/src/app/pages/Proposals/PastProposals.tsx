@@ -6,7 +6,7 @@ import { FilterPageHeader } from '@/common/components/forms/FilterBox'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { useActivities } from '@/common/hooks/useActivities'
+import { useMockActivities } from '@/common/hooks/useMockActivities'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { ProposalEmptyFilter, ProposalFilters } from '@/proposals/components/ProposalFilters'
 import { ProposalList } from '@/proposals/components/ProposalList'
@@ -22,7 +22,7 @@ export const PastProposals = () => {
   const { types, stages } = usePastProposals()
   const { isLoading, proposals } = useProposals({ status: 'past', filters })
 
-  const activities = useActivities()
+  const activities = useMockActivities()
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 

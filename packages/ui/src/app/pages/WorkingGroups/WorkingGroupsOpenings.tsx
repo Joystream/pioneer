@@ -7,7 +7,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
-import { useActivities } from '@/common/hooks/useActivities'
+import { useMockActivities } from '@/common/hooks/useMockActivities'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
@@ -22,7 +22,7 @@ type OpeningsTabs = 'OPENINGS' | 'UPCOMING'
 export const WorkingGroupsOpenings = () => {
   const { isLoading: upcomingLoading, upcomingOpenings } = useUpcomingOpenings({})
   const { isLoading: currentLoading, openings } = useOpenings({ type: 'open' })
-  const activities = useActivities()
+  const activities = useMockActivities()
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
