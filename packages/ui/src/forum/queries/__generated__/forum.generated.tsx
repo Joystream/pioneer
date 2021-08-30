@@ -8,24 +8,11 @@ import { gql } from '@apollo/client'
 
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
-export type ForumCategoryFieldsFragment = {
+export type ForumBaseCategoryFieldsFragment = {
   __typename: 'ForumCategory'
+  id: string
+  title: string
   description: string
-  forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumSubCategoryFieldsFragment>>
-  moderators: Array<{ __typename: 'Worker' } & ForumModeratorFieldsFragment>
-} & ForumSubCategoryFieldsFragment &
-  ForumCategoryWithStatusFieldsFragment
-
-export type ForumCategoryWithDetailsFieldsFragment = {
-  __typename: 'ForumCategory'
-  description: string
-  forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>>
-  moderators: Array<{ __typename: 'Worker' } & ForumModeratorFieldsFragment>
-} & ForumSubCategoryFieldsFragment &
-  ForumCategoryWithStatusFieldsFragment
-
-export type ForumCategoryWithStatusFieldsFragment = {
-  __typename: 'ForumCategory'
   status:
     | { __typename: 'CategoryStatusActive' }
     | {
@@ -38,7 +25,28 @@ export type ForumCategoryWithStatusFieldsFragment = {
         }>
       }
     | { __typename: 'CategoryStatusRemoved' }
+  moderators: Array<{ __typename: 'Worker' } & ForumModeratorFieldsFragment>
 }
+
+export type ForumCategoryFieldsFragment = {
+  __typename: 'ForumCategory'
+  forumcategoryparent?: Types.Maybe<
+    Array<
+      {
+        __typename: 'ForumCategory'
+        status:
+          | { __typename: 'CategoryStatusActive' }
+          | { __typename: 'CategoryStatusArchived' }
+          | { __typename: 'CategoryStatusRemoved' }
+      } & ForumSubCategoryFieldsFragment
+    >
+  >
+} & ForumBaseCategoryFieldsFragment
+
+export type ForumCategoryWithDetailsFieldsFragment = {
+  __typename: 'ForumCategory'
+  forumcategoryparent?: Types.Maybe<Array<{ __typename: 'ForumCategory' } & ForumCategoryFieldsFragment>>
+} & ForumBaseCategoryFieldsFragment
 
 export type ForumModeratorFieldsFragment = {
   __typename: 'Worker'
@@ -272,14 +280,20 @@ export type GetForumPostParentsQuery = {
   forumPostByUniqueInput?: Types.Maybe<{ __typename: 'ForumPost' } & ForumPostParentsFragment>
 }
 
-export const ForumSubCategoryFieldsFragmentDoc = gql`
-  fragment ForumSubCategoryFields on ForumCategory {
+export const ForumModeratorFieldsFragmentDoc = gql`
+  fragment ForumModeratorFields on Worker {
     id
-    title
+    membership {
+      id
+      handle
+    }
   }
 `
-export const ForumCategoryWithStatusFieldsFragmentDoc = gql`
-  fragment ForumCategoryWithStatusFields on ForumCategory {
+export const ForumBaseCategoryFieldsFragmentDoc = gql`
+  fragment ForumBaseCategoryFields on ForumCategory {
+    id
+    title
+    description
     status {
       __typename
       ... on CategoryStatusArchived {
@@ -290,49 +304,40 @@ export const ForumCategoryWithStatusFieldsFragmentDoc = gql`
         }
       }
     }
-  }
-`
-export const ForumModeratorFieldsFragmentDoc = gql`
-  fragment ForumModeratorFields on Worker {
-    id
-    membership {
-      id
-      handle
+    moderators {
+      ...ForumModeratorFields
     }
+  }
+  ${ForumModeratorFieldsFragmentDoc}
+`
+export const ForumSubCategoryFieldsFragmentDoc = gql`
+  fragment ForumSubCategoryFields on ForumCategory {
+    id
+    title
   }
 `
 export const ForumCategoryFieldsFragmentDoc = gql`
   fragment ForumCategoryFields on ForumCategory {
-    ...ForumSubCategoryFields
-    ...ForumCategoryWithStatusFields
-    description
+    ...ForumBaseCategoryFields
     forumcategoryparent {
       ...ForumSubCategoryFields
-    }
-    moderators {
-      ...ForumModeratorFields
+      status {
+        __typename
+      }
     }
   }
+  ${ForumBaseCategoryFieldsFragmentDoc}
   ${ForumSubCategoryFieldsFragmentDoc}
-  ${ForumCategoryWithStatusFieldsFragmentDoc}
-  ${ForumModeratorFieldsFragmentDoc}
 `
 export const ForumCategoryWithDetailsFieldsFragmentDoc = gql`
   fragment ForumCategoryWithDetailsFields on ForumCategory {
-    ...ForumSubCategoryFields
-    ...ForumCategoryWithStatusFields
-    description
+    ...ForumBaseCategoryFields
     forumcategoryparent {
       ...ForumCategoryFields
     }
-    moderators {
-      ...ForumModeratorFields
-    }
   }
-  ${ForumSubCategoryFieldsFragmentDoc}
-  ${ForumCategoryWithStatusFieldsFragmentDoc}
+  ${ForumBaseCategoryFieldsFragmentDoc}
   ${ForumCategoryFieldsFragmentDoc}
-  ${ForumModeratorFieldsFragmentDoc}
 `
 export const ForumCategoryBreadcrumbsFieldsFragmentDoc = gql`
   fragment ForumCategoryBreadcrumbsFields on ForumCategory {

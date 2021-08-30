@@ -7,7 +7,7 @@ import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { useActivities } from '@/common/hooks/useActivities'
+import { useMockActivities } from '@/common/hooks/useMockActivities'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { NoProposals } from '@/proposals/components/NoProposals'
 import { ProposalList } from '@/proposals/components/ProposalList'
@@ -17,7 +17,7 @@ import { ProposalsTabs } from './components/ProposalsTabs'
 
 export const Proposals = () => {
   const { proposals, isLoading } = useProposals({ status: 'active' })
-  const activities = useActivities()
+  const activities = useMockActivities()
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 
   return (
