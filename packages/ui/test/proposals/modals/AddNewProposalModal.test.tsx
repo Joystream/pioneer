@@ -465,16 +465,16 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     describe('Authorize', () => {
-      beforeEach(async () => {
-        await finishWarning()
-        await finishProposalType('fundingRequest')
-        await finishStakingAccount()
-        await finishProposalDetails()
-        await finishTriggerAndDiscussion()
-        await SpecificParameters.FundingRequest.finish(100, 'bob')
-      })
-
       describe('Staking account is not bound yet', () => {
+        beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType('fundingRequest')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+          await SpecificParameters.FundingRequest.finish(100, 'bob')
+        })
+
         it('Bind account step', async () => {
           expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
           expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42')
@@ -514,6 +514,47 @@ describe('UI: AddNewProposalModal', () => {
         it('Create proposal failure', async () => {
           stubTransactionSuccess(bindAccountTx, [], 'members', '')
           fireEvent.click(screen.getByText(/^Sign transaction/i))
+          stubTransactionFailure(tx)
+
+          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+
+          expect(await screen.findByText('Failure')).toBeDefined()
+        })
+      })
+
+      describe('Staking account is already bounded', () => {
+        beforeEach(async () => {
+          const member = server.server?.schema.find('Membership', '0') as any
+          member.boundAccounts = [alice.address]
+          member.save()
+
+          await finishWarning()
+          await finishProposalType('fundingRequest')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+          await SpecificParameters.FundingRequest.finish(100, 'bob')
+        })
+
+        it('Create proposal step', async () => {
+          expect(screen.getByText(/You intend to create a proposa/i)).not.toBeNull()
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        })
+
+        it('Create proposal success', async () => {
+          stubTransactionSuccess(
+            tx,
+            ['EventParams', registry.createType('ProposalId', 1337)],
+            'proposalsEngine',
+            'ProposalCreated'
+          )
+
+          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+
+          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+        })
+
+        it('Create proposal failure', async () => {
           stubTransactionFailure(tx)
 
           fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
