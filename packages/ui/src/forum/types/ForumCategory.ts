@@ -6,11 +6,13 @@ import {
   ForumSubCategoryFieldsFragment,
 } from '@/forum/queries'
 
-export interface ForumCategory extends CategoryBreadcrumb {
+export interface ForumCategory {
+  id: string
+  title: string
   description: string
   status: CategoryStatus
   moderators: ForumModerator[]
-  subcategories: ForumSubCategory[]
+  subcategories: (ForumSubCategory & { status: CategoryStatusType })[]
 }
 
 export type CategoryStatusType = CategoryStatusSchema['__typename']
@@ -47,10 +49,11 @@ export const asBaseForumCategory = (fields: ForumCategoryFields): Omit<ForumCate
 
 export const asForumCategory = (fields: ForumCategoryFields): ForumCategory => ({
   ...asBaseForumCategory(fields),
-  subcategories: fields.forumcategoryparent?.map(asSubCategory) ?? [],
+  subcategories:
+    fields.forumcategoryparent?.map((fields) => ({ ...asSubCategory(fields), status: fields.status.__typename })) ?? [],
 })
 
-export const asSubCategory = (fields: ForumSubCategoryFieldsFragment): CategoryBreadcrumb => ({
+export const asSubCategory = (fields: ForumSubCategoryFieldsFragment): ForumSubCategory => ({
   id: fields.id,
   title: fields.title,
 })

@@ -1,28 +1,7 @@
-fragment ForumCategoryFields on ForumCategory {
-  ...ForumSubCategoryFields
-  ...ForumCategoryWithStatusFields
+fragment ForumBaseCategoryFields on ForumCategory {
+  id
+  title
   description
-  forumcategoryparent {
-    ...ForumSubCategoryFields
-  }
-  moderators {
-    ...ForumModeratorFields
-  }
-}
-
-fragment ForumCategoryWithDetailsFields on ForumCategory {
-  ...ForumSubCategoryFields
-  ...ForumCategoryWithStatusFields
-  description
-  forumcategoryparent {
-    ...ForumCategoryFields
-  }
-  moderators {
-    ...ForumModeratorFields
-  }
-}
-
-fragment ForumCategoryWithStatusFields on ForumCategory {
   status {
     __typename
     ... on CategoryStatusArchived {
@@ -32,6 +11,26 @@ fragment ForumCategoryWithStatusFields on ForumCategory {
         network
       }
     }
+  }
+  moderators {
+    ...ForumModeratorFields
+  }
+}
+
+fragment ForumCategoryFields on ForumCategory {
+  ...ForumBaseCategoryFields
+  forumcategoryparent {
+    ...ForumSubCategoryFields
+    status {
+      __typename
+    }
+  }
+}
+
+fragment ForumCategoryWithDetailsFields on ForumCategory {
+  ...ForumBaseCategoryFields
+  forumcategoryparent {
+    ...ForumCategoryFields
   }
 }
 
