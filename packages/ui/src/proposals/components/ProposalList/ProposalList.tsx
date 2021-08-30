@@ -2,6 +2,7 @@ import React from 'react'
 
 import { List } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
+import { NotFoundText } from '@/common/components/NotFoundText'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { ProposalColLayout, ProposalsListHeaders } from '@/proposals/constants'
 import { Proposal } from '@/proposals/types'
@@ -13,18 +14,21 @@ export interface ProposalListProps {
   isPast?: boolean
 }
 
-export const ProposalList = ({ proposals, isPast }: ProposalListProps) => (
-  <RowGapBlock gap={4}>
-    <ProposalsListHeaders $colLayout={ProposalColLayout}>
-      <ListHeader />
-      <ListHeader>Stage</ListHeader>
-      <ListHeader>Proposer</ListHeader>
-      <ListHeader />
-    </ProposalsListHeaders>
-    <List as="div">
-      {proposals.map((proposal) => (
-        <ProposalListItem key={proposal.id} proposal={proposal} isPast={isPast} />
-      ))}
-    </List>
-  </RowGapBlock>
-)
+export const ProposalList = ({ proposals, isPast }: ProposalListProps) =>
+  proposals.length ? (
+    <RowGapBlock gap={4}>
+      <ProposalsListHeaders $colLayout={ProposalColLayout}>
+        <ListHeader />
+        <ListHeader>Stage</ListHeader>
+        <ListHeader>Proposer</ListHeader>
+        <ListHeader />
+      </ProposalsListHeaders>
+      <List as="div">
+        {proposals.map((proposal) => (
+          <ProposalListItem key={proposal.id} proposal={proposal} isPast={isPast} />
+        ))}
+      </List>
+    </RowGapBlock>
+  ) : (
+    <NotFoundText>No proposals matching search criteria</NotFoundText>
+  )
