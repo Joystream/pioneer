@@ -19,7 +19,7 @@ export function Memberships() {
     return (
       <MainPanel>
         <NoMemberships gap={16}>
-          <h3>You have no active membership</h3>
+          <h3>You have no active memberships</h3>
           <TextMedium>
             Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
             velit mollit. Exercitation veniam consequat sunt nostrud amet.

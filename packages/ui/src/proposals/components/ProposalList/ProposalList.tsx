@@ -2,8 +2,8 @@ import React from 'react'
 
 import { List } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
-import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { ProposalColLayout, ProposalsListHeaders } from '@/proposals/constants'
 import { Proposal } from '@/proposals/types'
 

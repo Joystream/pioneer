@@ -6,7 +6,8 @@ import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
-import { Label, TextBig } from '@/common/components/typography'
+import { Label } from '@/common/components/typography'
+import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
 import { NextPayoutStat } from '@/working-groups/components/NextPayoutStat'
@@ -33,11 +34,15 @@ export const MyRoles = () => {
       <>
         <ContentWithTabs>
           <Label>Current roles</Label>
-          {currentRoles.length ? <RolesList workers={currentRoles} /> : <TextBig>No current roles found</TextBig>}
+          {currentRoles.length ? (
+            <RolesList workers={currentRoles} />
+          ) : (
+            <NotFoundText>No current roles found</NotFoundText>
+          )}
         </ContentWithTabs>
         <ContentWithTabs>
           <Label>Past roles</Label>
-          {pastRoles.length ? <RolesList workers={pastRoles} /> : <TextBig>No past roles found</TextBig>}
+          {pastRoles.length ? <RolesList workers={pastRoles} /> : <NotFoundText>No past roles found</NotFoundText>}
         </ContentWithTabs>
       </>
     )
