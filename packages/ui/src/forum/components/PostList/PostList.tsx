@@ -45,7 +45,13 @@ export const PostList = ({ threadId, isThreadActive }: PostListProps) => {
 
       history.replace({ pathname: history.location.pathname, search: query.toString() })
     }
-  }, [page, initialPage])
+  }, [page])
+
+  useEffect(() => {
+    if (initialPage !== page) {
+      setPage(initialPage)
+    }
+  }, [JSON.stringify(history.location)])
 
   if (isLoading) {
     return <Loading text="Loading posts..." />
