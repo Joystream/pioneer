@@ -114,10 +114,17 @@ const getFilter = (where: Record<string, any>) => {
 }
 
 export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): WhereQueryResolver<T, D> => {
-  return (obj, args, { mirageSchema: schema }) => {
-    const { where, limit, offset } = args
+  return (obj, args, { mirageSchema: schema }, info: any) => {
+    const { where, limit, offset, orderBy } = args
 
     let { models } = schema.all(modelName)
+
+    if (orderBy) {
+      const schema = info.schema as GraphQLSchema
+      const modelType = schema.getType(modelName) as GraphQLObjectType
+      const fields = Array.isArray(args.orderBy) ? args.orderBy : [args.orderBy]
+      models.sort(getSortBy(fields, modelType))
+    }
 
     if (where) {
       models = models.filter(getFilter(where))
@@ -160,17 +167,7 @@ export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
 
     if (args.orderBy) {
       const fields = Array.isArray(args.orderBy) ? args.orderBy : [args.orderBy]
-      const sortBy = ([field, ...fields]: string[]): ((a: any, b: any) => number) => {
-        if (!field) return () => 0
-
-        const [key, type] = field.split('_')
-        const nextSort = sortBy(fields)
-        const direction = type === 'ASC' ? 1 : -1
-        return key in nodeType.getFields()
-          ? (a, b) => a[key]?.toString().localeCompare(b[key]?.toString()) * direction || nextSort(a, b)
-          : nextSort
-      }
-      records.sort(sortBy(fields))
+      records.sort(getSortBy(fields, nodeType))
     }
 
     const edges = (getEdges(records, relayArgs, nodeType.name) as unknown) as D[]
@@ -181,4 +178,15 @@ export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
       totalCount: records.length,
     }
   }
+}
+
+const getSortBy = ([field, ...fields]: string[], modelType: GraphQLObjectType): ((a: any, b: any) => number) => {
+  if (!field) return () => 0
+
+  const [key, type] = field.split('_')
+  const nextSort = getSortBy(fields, modelType)
+  const direction = type === 'ASC' ? 1 : -1
+  return key in modelType.getFields()
+    ? (a, b) => a[key]?.toString().localeCompare(b[key]?.toString()) * direction || nextSort(a, b)
+    : nextSort
 }

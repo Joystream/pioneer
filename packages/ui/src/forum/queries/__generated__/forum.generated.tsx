@@ -178,7 +178,7 @@ export type GetForumThreadBreadcrumbsQuery = {
 }
 
 export type GetForumThreadsQueryVariables = Types.Exact<{
-  where: Types.ForumThreadWhereInput
+  where?: Types.Maybe<Types.ForumThreadWhereInput>
   orderBy?: Types.Maybe<Array<Types.ForumThreadOrderByInput> | Types.ForumThreadOrderByInput>
   limit?: Types.Maybe<Types.Scalars['Int']>
 }>
@@ -625,7 +625,7 @@ export type GetForumThreadBreadcrumbsQueryResult = Apollo.QueryResult<
   GetForumThreadBreadcrumbsQueryVariables
 >
 export const GetForumThreadsDocument = gql`
-  query GetForumThreads($where: ForumThreadWhereInput!, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
+  query GetForumThreads($where: ForumThreadWhereInput, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
     forumThreads(where: $where, orderBy: $orderBy, limit: $limit) {
       ...ForumThreadFields
     }
@@ -652,7 +652,7 @@ export const GetForumThreadsDocument = gql`
  * });
  */
 export function useGetForumThreadsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetForumThreadsQuery, GetForumThreadsQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<GetForumThreadsQuery, GetForumThreadsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetForumThreadsQuery, GetForumThreadsQueryVariables>(GetForumThreadsDocument, options)
