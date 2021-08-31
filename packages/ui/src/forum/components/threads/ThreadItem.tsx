@@ -6,6 +6,7 @@ import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
+import { useThreadOriginalPost } from '@/forum/hooks/useThreadOriginalPost'
 import { ForumThread } from '@/forum/types'
 
 import { ThreadTags } from './ThreadTags'
@@ -27,7 +28,8 @@ export interface ThreadItemContentProps {
 }
 
 export const ThreadItem = ({ thread, badges, answers, halfSize, empty }: ThreadItemContentProps) => {
-  const content = 'TEST TEXT'
+  const originalPost = useThreadOriginalPost(thread.id)
+  const content = originalPost?.text
   return (
     <ThreadItemWrapper halfSize={halfSize}>
       <ThreadItemHeader align="center">

@@ -48,7 +48,7 @@ export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
         {isLoading ? (
           <Loading />
         ) : (
-          threads?.map((thread) => <ThreadItem thread={thread} halfSize={threads.length > 1} />)
+          threads?.map((thread) => <ThreadItem key={thread.id} thread={thread} halfSize={threads.length > 1} />)
         )}
         {!isLoading && !totalCount && <EmptyThreadItem text={"You haven't created any threads yet"} />}
       </ThreadBrowserItems>
