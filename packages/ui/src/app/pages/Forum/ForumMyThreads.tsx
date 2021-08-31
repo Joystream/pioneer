@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
@@ -15,7 +16,7 @@ export const ForumMyThreads = () => {
 
   const displayThreads = () => {
     return (
-      <>
+      <RowGapBlock gap={24}>
         {!isLoading && !!pageCount && pageCount > 1 && (
           <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
         )}
@@ -23,7 +24,7 @@ export const ForumMyThreads = () => {
         {!isLoading && !!pageCount && pageCount > 1 && (
           <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
         )}
-      </>
+      </RowGapBlock>
     )
   }
   return (
