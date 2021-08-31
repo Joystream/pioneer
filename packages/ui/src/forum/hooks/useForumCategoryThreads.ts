@@ -14,8 +14,8 @@ export interface ThreadsOptions {
   isArchive?: boolean
 }
 
-export const threadOptionReducer: Reducer<ThreadsOptions | Record<string, never>, Partial<ThreadsOptions>> = merge
-export const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
+const threadOptionReducer: Reducer<ThreadsOptions | Record<string, never>, Partial<ThreadsOptions>> = merge
+const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
 
 export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
   const initalOptions = useMemo(() => ({ ...ThreadsDefaultOptions, ...options }), [JSON.stringify(options)])

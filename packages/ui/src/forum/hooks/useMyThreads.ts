@@ -1,7 +1,6 @@
-import { useMemo, useReducer } from 'react'
-
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { forumThreadOrderBy, threadOptionReducer, ThreadsDefaultOptions } from '@/forum/hooks/useForumCategoryThreads'
+import { ThreadDefaultOrder } from '@/forum/components/threads/ThreadList'
+import { forumThreadOrderBy } from '@/forum/hooks/useForumCategoryThreads'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries/__generated__/forum.generated'
 import { asForumThread, ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -21,12 +20,11 @@ interface UseMyThreads {
 export const useMyThreads = ({ page, threadsPerPage = 5 }: UseMyThreadsProps): UseMyThreads => {
   const { members } = useMyMemberships()
 
-  const [{ order }] = useReducer(threadOptionReducer, ThreadsDefaultOptions)
   const variables = {
     where: { author_in: members.map((m) => m.id) },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
-    orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(order)],
+    orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(ThreadDefaultOrder)],
   }
   const { loading: loadingPosts, data: threadsData } = useGetForumThreadsQuery({ variables })
   const { loading: loadingCount, data: countData } = useGetForumThreadsCountQuery({
