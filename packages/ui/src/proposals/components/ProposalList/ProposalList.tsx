@@ -14,8 +14,11 @@ export interface ProposalListProps {
   isPast?: boolean
 }
 
-export const ProposalList = ({ proposals, isPast }: ProposalListProps) =>
-  proposals.length ? (
+export const ProposalList = ({ proposals, isPast }: ProposalListProps) => {
+  if (!proposals.length) {
+    return <NotFoundText>No proposals matching search criteria</NotFoundText>
+  }
+  return (
     <RowGapBlock gap={4}>
       <ProposalsListHeaders $colLayout={ProposalColLayout}>
         <ListHeader />
@@ -29,6 +32,5 @@ export const ProposalList = ({ proposals, isPast }: ProposalListProps) =>
         ))}
       </List>
     </RowGapBlock>
-  ) : (
-    <NotFoundText>No proposals matching search criteria</NotFoundText>
   )
+}
