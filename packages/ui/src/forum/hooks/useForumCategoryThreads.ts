@@ -26,7 +26,7 @@ export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
   const { loading, data } = useGetPaginatedForumThreadsQuery({
     variables: {
       where: where(filters, categoryId, isArchive),
-      orderBy: [ForumThreadOrderByInput.IsStickyDesc, orderBy(order)],
+      orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(order)],
       first: 30,
     },
   })
@@ -57,5 +57,5 @@ const where = ({ author, date }: ThreadFiltersState, categoryId?: string, isArch
   }
 }
 
-const orderBy = ({ key, isDescending }: ThreadOrder) =>
+export const forumThreadOrderBy = ({ key, isDescending }: ThreadOrder) =>
   ForumThreadOrderByInput[`${key}${isDescending ? 'Desc' : 'Asc'}` as const]

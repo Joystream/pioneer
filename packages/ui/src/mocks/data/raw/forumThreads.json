@@ -6,7 +6,7 @@
     "categoryId": "0",
     "isSticky": false,
     "title": "ratione quod nihil illo natus",
-    "authorId": "26",
+    "authorId": "0",
     "status": {
       "__typename": "ThreadStatusActive"
     },
@@ -127,7 +127,7 @@
     "categoryId": "0",
     "isSticky": false,
     "title": "et ut dolorem ullam ad dolor",
-    "authorId": "21",
+    "authorId": "0",
     "status": {
       "__typename": "ThreadStatusActive"
     },
@@ -383,7 +383,7 @@
     "categoryId": "3",
     "isSticky": false,
     "title": "saepe soluta consequuntur amet aut",
-    "authorId": "26",
+    "authorId": "0",
     "status": {
       "__typename": "ThreadStatusLocked",
       "threadDeletedEvent": {
@@ -578,7 +578,7 @@
     "categoryId": "5",
     "isSticky": false,
     "title": "minus eveniet rem qui vel ipsa et",
-    "authorId": "24",
+    "authorId": "0",
     "status": {
       "__typename": "ThreadStatusActive"
     },
@@ -687,7 +687,7 @@
     "categoryId": "5",
     "isSticky": true,
     "title": "non explicabo culpa adipisci",
-    "authorId": "31",
+    "authorId": "0",
     "status": {
       "__typename": "ThreadStatusActive"
     },
