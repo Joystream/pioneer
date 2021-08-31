@@ -7,7 +7,8 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { useMockActivities } from '@/common/hooks/useMockActivities'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
-import { ThreadBrowser } from '@/forum/components/threads/ThreadBrowser'
+import { MyThreadsBrowser } from '@/forum/components/threads/MyThreadsBrowser'
+import { RandomThreadsBrowser } from '@/forum/components/threads/RandomThreadsBrowser'
 import { ThreadsLayout } from '@/forum/components/threads/ThreadsLayout'
 
 import { ForumTabs } from './components/ForumTabs'
@@ -26,10 +27,10 @@ export const ForumOverview = () => {
       main={
         <MainPanel ref={sideNeighborRef}>
           <ThreadsLayout>
-            <ThreadBrowser label="My threads" />
-            <ThreadBrowser label="Your watchlist" />
-            <ThreadBrowser label="Popular threads" />
-            <ThreadBrowser label="Polls you participated in" />
+            <MyThreadsBrowser />
+            <RandomThreadsBrowser label="Your watchlist" />
+            <RandomThreadsBrowser label="Popular threads" />
+            <RandomThreadsBrowser label="Polls you participated in" />
           </ThreadsLayout>
         </MainPanel>
       }
