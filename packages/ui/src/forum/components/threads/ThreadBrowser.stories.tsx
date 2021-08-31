@@ -4,7 +4,8 @@ import React from 'react'
 import { ScrollBlock } from '@/common/components/storybookParts/previewStyles'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
-import { ThreadBrowser, ThreadBrowserProps } from './ThreadBrowser'
+import { RandomThreadsBrowser, RandomThreadsBrowserProps } from './RandomThreadsBrowser'
+import { ThreadBrowser } from './ThreadBrowser'
 import { ThreadsLayout } from './ThreadsLayout'
 
 export default {
@@ -12,13 +13,13 @@ export default {
   component: ThreadBrowser,
 } as Meta
 
-const Template: Story<ThreadBrowserProps> = (args) => (
+const Template: Story<RandomThreadsBrowserProps> = (args) => (
   <MockApolloProvider members workingGroups workers forum>
     <ScrollBlock>
       <ThreadsLayout>
-        <ThreadBrowser {...args} />
-        <ThreadBrowser {...args} />
-        <ThreadBrowser {...args} />
+        <RandomThreadsBrowser {...args} />
+        <RandomThreadsBrowser {...args} />
+        <RandomThreadsBrowser {...args} />
       </ThreadsLayout>
     </ScrollBlock>
   </MockApolloProvider>
@@ -34,4 +35,5 @@ export const EmptyThreadBrowser = Template.bind({})
 
 EmptyThreadBrowser.args = {
   label: 'CategoryLabel',
+  maxThreads: 0,
 }

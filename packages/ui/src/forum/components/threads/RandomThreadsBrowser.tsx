@@ -4,10 +4,19 @@ import { useRandomPaginatedThreads } from '@/forum/hooks/useRandomPaginatedThrea
 
 import { ThreadBrowser } from './ThreadBrowser'
 
-export const RandomThreadsBrowser = ({ label }: { label: string }) => {
+export interface RandomThreadsBrowserProps {
+  label: string
+  maxThreads?: number
+}
+
+export const RandomThreadsBrowser = ({ label, maxThreads }: RandomThreadsBrowserProps) => {
   const [currentPage, setCurrentPage] = useState(1)
   const threadsPerPage = 2
-  const { threads, pageCount, totalCount, isLoading } = useRandomPaginatedThreads({ page: currentPage, threadsPerPage })
+  const { threads, pageCount, totalCount, isLoading } = useRandomPaginatedThreads({
+    page: currentPage,
+    threadsPerPage,
+    maxThreads,
+  })
 
   return (
     <ThreadBrowser
