@@ -56,7 +56,11 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
       <MemoryRouter>
         <MembershipContext.Provider value={membershipContext}>
           <Container>
-            <PostListItem post={{ ...post, updatedAt, text, reaction, repliesTo }} isThreadActive={isThreadActive} />
+            <PostListItem
+              post={{ ...post, updatedAt, text, reaction, repliesTo }}
+              insertRef={() => true}
+              isThreadActive={isThreadActive}
+            />
           </Container>
         </MembershipContext.Provider>
       </MemoryRouter>

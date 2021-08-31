@@ -35,7 +35,7 @@ export const PreviewThreadModal = ({ onClose, author, text }: PreviewThreadProps
       <ModalHeader onClick={onClose} title="Thread preview" />
       <ScrolledModalBody>
         <ScrolledModalContainer>
-          <PostListItem post={post} isPreview />
+          <PostListItem post={post} insertRef={() => true} isPreview />
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>

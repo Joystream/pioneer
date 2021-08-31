@@ -1,4 +1,5 @@
-import React, { forwardRef, useMemo, useState } from 'react'
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -15,6 +16,7 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
 import { Colors, Fonts, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
@@ -25,90 +27,95 @@ import { LikeButton } from '../threads/LikeButton'
 import { PostContextMenu } from './PostContextMenu'
 import { PostEditor } from './PostEditor'
 
-interface PostProps {
+interface PostListItemProps {
   post: ForumPost
   isSelected?: boolean
   isPreview?: boolean
   isThreadActive?: boolean
+  insertRef: (ref: RefObject<HTMLDivElement>) => void
 }
 
-export const PostListItem = forwardRef<HTMLDivElement, PostProps>(
-  ({ post, isSelected, isPreview, isThreadActive }, ref) => {
-    const { createdAtBlock, updatedAt, author, text, reaction, repliesTo } = post
-    const [editing, setEditing] = useState(false)
-    const { showModal } = useModal()
-    const editionTime = useMemo(() => {
-      if (!updatedAt) {
-        return null
-      }
+export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, insertRef }: PostListItemProps) => {
+  const { createdAtBlock, updatedAt, author, text, reaction, repliesTo, id } = post
 
-      return (
-        <EditionTime
-          onClick={() =>
-            showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
-          }
-        >
-          (edited {relativeIfRecent(updatedAt)})
-        </EditionTime>
-      )
-    }, [updatedAt])
-
-    const likesCount = reaction ? reaction.length : 0
+  const location = useLocation()
+  const query = useRouteQuery()
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    !!ref.current && insertRef(ref)
+  }, [ref.current])
+  const [editing, setEditing] = useState(false)
+  const { showModal } = useModal()
+  const editionTime = useMemo(() => {
+    if (!updatedAt) {
+      return null
+    }
 
     return (
-      <ForumPostStyles ref={ref} isSelected={isSelected}>
-        <ForumPostRow>
-          <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-          {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
-        </ForumPostRow>
-        <MessageBody>
-          {repliesTo && (
-            <Reply>
-              <ReplyBadge>
-                <ArrowReplyIcon />{' '}
-                <Badge>
-                  <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
-                </Badge>
-              </ReplyBadge>
-              <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
-            </Reply>
-          )}
-          {editing ? (
-            <PostEditor post={post} onCancel={() => setEditing(false)} />
-          ) : (
-            <MarkdownPreview markdown={text} append={editionTime} size="s" />
-          )}
-        </MessageBody>
-        <ForumPostRow>
-          {!editing && (
-            <>
-              <ButtonsGroup>
-                <LikeButton disabled={!isThreadActive} counter={likesCount} />
-              </ButtonsGroup>
-              <ButtonsGroup>
-                <CopyButtonTemplate
-                  textToCopy={window.location.href}
-                  square
-                  size="small"
-                  disabled={isPreview}
-                  icon={<LinkIcon />}
-                />
-                {isThreadActive && (
-                  <>
-                    <ButtonGhost square disabled={isPreview} size="small">
-                      <ReplyIcon />
-                    </ButtonGhost>
-                    <PostContextMenu post={post} onEdit={() => setEditing(true)} />
-                  </>
-                )}
-              </ButtonsGroup>
-            </>
-          )}
-        </ForumPostRow>
-      </ForumPostStyles>
+      <EditionTime
+        onClick={() =>
+          showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
+        }
+      >
+        (edited {relativeIfRecent(updatedAt)})
+      </EditionTime>
     )
-  }
-)
+  }, [updatedAt])
+  const postLink = useMemo(() => {
+    query.set('post', id)
+
+    return window.location.origin + (window.location.hash ? '/#' : '') + location.pathname + '?' + query.toString()
+  }, [location.search, location.pathname, id])
+
+  const likesCount = reaction ? reaction.length : 0
+
+  return (
+    <ForumPostStyles ref={ref} isSelected={isSelected}>
+      <ForumPostRow>
+        <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
+        {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
+      </ForumPostRow>
+      <MessageBody>
+        {repliesTo && (
+          <Reply>
+            <ReplyBadge>
+              <ArrowReplyIcon />{' '}
+              <Badge>
+                <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
+              </Badge>
+            </ReplyBadge>
+            <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
+          </Reply>
+        )}
+        {editing ? (
+          <PostEditor post={post} onCancel={() => setEditing(false)} />
+        ) : (
+          <MarkdownPreview markdown={text} append={editionTime} size="s" />
+        )}
+      </MessageBody>
+      <ForumPostRow>
+        {!editing && (
+          <>
+            <ButtonsGroup>
+              <LikeButton disabled={!isThreadActive} counter={likesCount} />
+            </ButtonsGroup>
+            <ButtonsGroup>
+              <CopyButtonTemplate textToCopy={postLink} square size="small" disabled={isPreview} icon={<LinkIcon />} />
+              {isThreadActive && (
+                <>
+                  <ButtonGhost square disabled={isPreview} size="small">
+                    <ReplyIcon />
+                  </ButtonGhost>
+                  <PostContextMenu post={post} onEdit={() => setEditing(true)} />
+                </>
+              )}
+            </ButtonsGroup>
+          </>
+        )}
+      </ForumPostRow>
+    </ForumPostStyles>
+  )
+}
 
 const MessageBody = styled.div`
   grid-column: span 2;
@@ -164,7 +171,7 @@ const EditionTime = styled(ButtonLink).attrs({ size: 'small', borderless: true }
   }
 `
 
-export const ForumPostStyles = styled.div<Pick<PostProps, 'isSelected'>>`
+export const ForumPostStyles = styled.div<Pick<PostListItemProps, 'isSelected'>>`
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 16px;
