@@ -5,7 +5,12 @@ interface CategoryDetails {
   subcategories?: ForumSubCategory[]
   threadCount?: number
 }
-export const useForumCategoryThreadCount = (category_eq: string): CategoryDetails => {
-  const { data } = useGetForumThreadsCountQuery({ variables: { where: { category: { id_eq: category_eq } } } })
+export const useForumCategoryThreadCount = (category_eq: string, isArchive?: boolean): CategoryDetails => {
+  const status_json = {
+    isTypeOf_eq: isArchive ? 'ThreadStatusLocked' : 'ThreadStatusActive',
+  }
+  const { data } = useGetForumThreadsCountQuery({
+    variables: { where: { category: { id_eq: category_eq }, status_json } },
+  })
   return { threadCount: data?.forumThreadsConnection.totalCount }
 }

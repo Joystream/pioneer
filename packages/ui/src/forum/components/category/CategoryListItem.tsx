@@ -45,7 +45,7 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
         )}
       </Category>
 
-      <ThreadCount categoryId={category.id} />
+      <ThreadCount categoryId={category.id} isArchive={isArchive} />
 
       <LatestPost categoryId={category.id} />
 
@@ -65,6 +65,7 @@ const categoryLink = (id: string, isArchive: boolean) => `${ForumRoutes.category
 
 export interface CategoryItemFieldProps {
   categoryId: string
+  isArchive?: boolean
 }
 
 const CategoryListItemTitle = styled.h5`

@@ -5,8 +5,8 @@ import { useForumCategoryThreadCount } from '@/forum/hooks/useForumCategoryThrea
 
 import { CategoryItemFieldProps } from './CategoryListItem'
 
-export const ThreadCount = memo(({ categoryId }: CategoryItemFieldProps) => {
-  const { threadCount } = useForumCategoryThreadCount(categoryId)
+export const ThreadCount = memo(({ categoryId, isArchive }: CategoryItemFieldProps) => {
+  const { threadCount } = useForumCategoryThreadCount(categoryId, isArchive)
   return (
     <TextInlineMedium bold value>
       {threadCount ?? '-'}
