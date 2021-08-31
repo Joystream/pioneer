@@ -180,6 +180,7 @@ export type GetForumThreadBreadcrumbsQuery = {
 export type GetForumThreadsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.ForumThreadWhereInput>
   orderBy?: Types.Maybe<Array<Types.ForumThreadOrderByInput> | Types.ForumThreadOrderByInput>
+  offset?: Types.Maybe<Types.Scalars['Int']>
   limit?: Types.Maybe<Types.Scalars['Int']>
 }>
 
@@ -625,8 +626,13 @@ export type GetForumThreadBreadcrumbsQueryResult = Apollo.QueryResult<
   GetForumThreadBreadcrumbsQueryVariables
 >
 export const GetForumThreadsDocument = gql`
-  query GetForumThreads($where: ForumThreadWhereInput, $orderBy: [ForumThreadOrderByInput!], $limit: Int) {
-    forumThreads(where: $where, orderBy: $orderBy, limit: $limit) {
+  query GetForumThreads(
+    $where: ForumThreadWhereInput
+    $orderBy: [ForumThreadOrderByInput!]
+    $offset: Int
+    $limit: Int
+  ) {
+    forumThreads(where: $where, orderBy: $orderBy, limit: $limit, offset: $offset) {
       ...ForumThreadFields
     }
   }
@@ -647,6 +653,7 @@ export const GetForumThreadsDocument = gql`
  *   variables: {
  *      where: // value for 'where'
  *      orderBy: // value for 'orderBy'
+ *      offset: // value for 'offset'
  *      limit: // value for 'limit'
  *   },
  * });

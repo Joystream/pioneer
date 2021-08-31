@@ -14,8 +14,8 @@ export interface ThreadsOptions {
   isArchive?: boolean
 }
 
-const threadOptionReducer: Reducer<ThreadsOptions | Record<string, never>, Partial<ThreadsOptions>> = merge
-const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
+export const threadOptionReducer: Reducer<ThreadsOptions | Record<string, never>, Partial<ThreadsOptions>> = merge
+export const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
 
 export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
   const initalOptions = useMemo(() => ({ ...ThreadsDefaultOptions, ...options }), [JSON.stringify(options)])
@@ -26,7 +26,7 @@ export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
   const { loading, data } = useGetPaginatedForumThreadsQuery({
     variables: {
       where: where(filters, categoryId, isArchive),
-      orderBy: [ForumThreadOrderByInput.IsStickyDesc, orderBy(order)],
+      orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(order)],
       first: 30,
     },
   })
@@ -57,5 +57,5 @@ const where = ({ author, date }: ThreadFiltersState, categoryId?: string, isArch
   }
 }
 
-const orderBy = ({ key, isDescending }: ThreadOrder) =>
+export const forumThreadOrderBy = ({ key, isDescending }: ThreadOrder) =>
   ForumThreadOrderByInput[`${key}${isDescending ? 'Desc' : 'Asc'}` as const]
