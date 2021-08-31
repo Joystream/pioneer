@@ -34,5 +34,4 @@ export const EmptyThreadBrowser = Template.bind({})
 
 EmptyThreadBrowser.args = {
   label: 'CategoryLabel',
-  noItems: true,
 }

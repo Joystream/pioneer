@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
@@ -10,15 +10,14 @@ import { Label } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { useMyThreads } from '@/forum/hooks/useMyThreads'
 
-import { ThreadItem, ThreadItemWrapper, ThreadItemContentProps } from './ThreadItem'
+import { ThreadItem, ThreadItemWrapper, EmptyThreadItem } from './ThreadItem'
 import { ThreadsLayoutSpacing } from './ThreadsLayout'
 
 export interface ThreadBrowserProps {
   label: string
-  noItems?: boolean
 }
 
-export const ThreadBrowser = ({ label, noItems }: ThreadBrowserProps) => {
+export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
   const [currentPage, setCurrentPage] = useState(1)
   const threadsPerPage = 2
   const { threads, pageCount, totalCount, isLoading } = useMyThreads({ page: currentPage, threadsPerPage })
@@ -49,11 +48,9 @@ export const ThreadBrowser = ({ label, noItems }: ThreadBrowserProps) => {
         {isLoading ? (
           <Loading />
         ) : (
-          threads?.map((thread) => (
-            <ThreadItem title={thread.title} date={thread.createdInBlock.timestamp} halfSize={threads.length > 1} id={thread.id} />
-          ))
+          threads?.map((thread) => <ThreadItem thread={thread} halfSize={threads.length > 1} />)
         )}
-        {!isLoading && !totalCount && <ThreadItem title={"You haven't created any threads yet"} empty id={'aaaa'}/>}
+        {!isLoading && !totalCount && <EmptyThreadItem text={"You haven't created any threads yet"} />}
       </ThreadBrowserItems>
     </ThreadBrowserStyles>
   )
