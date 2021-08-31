@@ -5,13 +5,13 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
-import { useForumMyThreads } from '@/forum/hooks/useForumMyThreads'
+import { useMyThreads } from '@/forum/hooks/useMyThreads'
 
 import { ForumForumTabs, ForumTabs } from './components/ForumTabs'
 
 export const ForumMyThreads = () => {
   const [page, setPage] = useState(1)
-  const { threads, pageCount, isLoading } = useForumMyThreads({ page, threadsPerPage: 5 })
+  const { threads, pageCount, isLoading } = useMyThreads({ page, threadsPerPage: 5 })
 
   const displayThreads = () => {
     return (

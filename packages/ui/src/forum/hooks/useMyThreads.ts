@@ -6,19 +6,19 @@ import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/q
 import { asForumThread, ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-interface UseForumMyThreadsProps {
+interface UseMyThreadsProps {
   page: number
   threadsPerPage?: number
 }
 
-interface UseForumMyThreads {
+interface UseMyThreads {
   isLoading: boolean
   threads: ForumThread[]
   totalCount?: number
   pageCount?: number
 }
 
-export const useForumMyThreads = ({ page, threadsPerPage = 5 }: UseForumMyThreadsProps): UseForumMyThreads => {
+export const useMyThreads = ({ page, threadsPerPage = 5 }: UseMyThreadsProps): UseMyThreads => {
   const { members } = useMyMemberships()
 
   const [{ order }] = useReducer(threadOptionReducer, ThreadsDefaultOptions)
