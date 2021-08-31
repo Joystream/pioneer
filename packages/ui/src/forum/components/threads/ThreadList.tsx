@@ -6,6 +6,7 @@ import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
+import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { ThreadsColLayout } from '@/forum/constant'
 import { ForumThread } from '@/forum/types'
 
@@ -49,7 +50,9 @@ export const ThreadList = ({ threads, onSort, isLoading, isArchive }: ThreadList
     [order, sort]
   )
 
-  if (threads.length <= 0 && !isLoading) return null
+  if (threads.length <= 0 && !isLoading) {
+    return <NotFoundText>No threads found</NotFoundText>
+  }
 
   return (
     <ThreadListStyles gap={4}>

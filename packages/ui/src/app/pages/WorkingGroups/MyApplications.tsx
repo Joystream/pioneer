@@ -4,7 +4,8 @@ import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
-import { Label, TextBig } from '@/common/components/typography'
+import { Label } from '@/common/components/typography'
+import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { ApplicationsList } from '@/working-groups/components/ApplicationsList'
 import { useMyApplications } from '@/working-groups/hooks/useMyApplications'
 import { isPendingApplication } from '@/working-groups/model/isPendingApplication'
@@ -24,7 +25,7 @@ export const MyApplications = () => {
       return <Loading />
     }
 
-    return applications?.length ? null : <TextBig>No applications found</TextBig>
+    return applications?.length || pastApplications?.length ? null : <NotFoundText>No applications found</NotFoundText>
   }
 
   return (

@@ -1,7 +1,7 @@
 import React, { Dispatch, ReactNode } from 'react'
 
 import { Loading } from '@/common/components/Loading'
-import { TextMedium } from '@/common/components/typography'
+import { NotFoundText } from '@/common/components/typography/NotFoundText'
 
 import { List, ListItem } from '../../../common/components/List'
 import { ListHeader, ListHeaders } from '../../../common/components/List/ListHeader'
@@ -37,11 +37,7 @@ export const MemberList = ({ isLoading, members, order, onSort }: MemberListProp
   }
 
   if (members.length < 1) {
-    return (
-      <div>
-        <TextMedium>No results</TextMedium>
-      </div>
-    )
+    return <NotFoundText>No results</NotFoundText>
   }
 
   return (
