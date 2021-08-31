@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
@@ -8,26 +8,32 @@ import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
-import { useMyThreads } from '@/forum/hooks/useMyThreads'
+import { ForumThread } from '@/forum/types'
 
 import { ThreadItem, ThreadItemWrapper, EmptyThreadItem } from './ThreadItem'
 import { ThreadsLayoutSpacing } from './ThreadsLayout'
 
 export interface ThreadBrowserProps {
   label: string
+  threads?: ForumThread[]
+  pageCount?: number
+  totalCount?: number
+  isLoading: boolean
+  currentPage: number
+  setCurrentPage: React.Dispatch<number>
 }
 
-export const ThreadBrowser = ({ label }: ThreadBrowserProps) => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const threadsPerPage = 2
-  const { threads, pageCount, totalCount, isLoading } = useMyThreads({ page: currentPage, threadsPerPage })
-
-  const onPrevClick = () => {
-    setCurrentPage(currentPage - 1)
-  }
-  const onNextClick = () => {
-    setCurrentPage(currentPage + 1)
-  }
+export const ThreadBrowser = ({
+  label,
+  threads,
+  pageCount,
+  totalCount,
+  isLoading,
+  currentPage,
+  setCurrentPage,
+}: ThreadBrowserProps) => {
+  const onPrevClick = () => setCurrentPage(currentPage - 1)
+  const onNextClick = () => setCurrentPage(currentPage + 1)
 
   return (
     <ThreadBrowserStyles>
