@@ -19,6 +19,7 @@ interface ThreadAnswerProps {
 
 export interface ThreadItemContentProps {
   title: string
+  id: string
   date?: string
   content?: string
   badges?: ThreadBadgeProps[]

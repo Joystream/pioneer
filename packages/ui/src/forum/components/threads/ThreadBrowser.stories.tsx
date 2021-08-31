@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { ScrollBlock } from '@/common/components/storybookParts/previewStyles'
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 import { ThreadBrowser, ThreadBrowserProps } from './ThreadBrowser'
 import { ThreadsLayout } from './ThreadsLayout'
@@ -12,13 +13,15 @@ export default {
 } as Meta
 
 const Template: Story<ThreadBrowserProps> = (args) => (
-  <ScrollBlock>
-    <ThreadsLayout>
-      <ThreadBrowser {...args} />
-      <ThreadBrowser {...args} />
-      <ThreadBrowser {...args} />
-    </ThreadsLayout>
-  </ScrollBlock>
+  <MockApolloProvider members workingGroups workers forum>
+    <ScrollBlock>
+      <ThreadsLayout>
+        <ThreadBrowser {...args} />
+        <ThreadBrowser {...args} />
+        <ThreadBrowser {...args} />
+      </ThreadsLayout>
+    </ScrollBlock>
+  </MockApolloProvider>
 )
 
 export const ThreadBrowserComponent = Template.bind({})
