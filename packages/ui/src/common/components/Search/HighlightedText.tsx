@@ -7,12 +7,12 @@ import { isString } from '@/common/utils'
 type Node = ReactElement | string
 
 interface HighlightedTextProps {
-  pattern: RegExp
+  pattern: RegExp | null
   children: string
 }
 export const HighlightedText = memo(({ pattern, children }: HighlightedTextProps) => (
   <>
-    {[...children.matchAll(pattern)].reduceRight(
+    {(pattern ? [...children.matchAll(pattern)] : []).reduceRight(
       ([node, ...nodes]: Node[], match, index): Node[] => {
         if (!isString(node)) return [node, ...nodes]
 

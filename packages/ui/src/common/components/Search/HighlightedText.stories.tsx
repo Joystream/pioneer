@@ -9,7 +9,7 @@ export default {
 } as Meta
 
 const Template: Story<{ word: string; text: string }> = ({ word, text }) => (
-  <HighlightedText pattern={RegExp(word, 'ig')}>{text}</HighlightedText>
+  <HighlightedText pattern={word ? RegExp(word, 'ig') : null}>{text}</HighlightedText>
 )
 
 export const Default = Template.bind({})
