@@ -156,6 +156,13 @@ query GetForumCategoryBreadcrumbs($where: ForumCategoryWhereUniqueInput!) {
   }
 }
 
+query GetForumCategoryBreadcrumb($where: ForumCategoryWhereUniqueInput!) {
+  forumCategoryByUniqueInput(where: $where) {
+    ...ForumSubCategoryFields
+    parentId
+  }
+}
+
 query GetForumThreadBreadcrumbs($where: ForumThreadWhereUniqueInput!) {
   forumThreadByUniqueInput(where: $where) {
     ...ForumThreadBreadcrumbsFields

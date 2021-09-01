@@ -168,6 +168,17 @@ export type GetForumCategoryBreadcrumbsQuery = {
   forumCategoryByUniqueInput?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumCategoryBreadcrumbsFieldsFragment>
 }
 
+export type GetForumCategoryBreadcrumbQueryVariables = Types.Exact<{
+  where: Types.ForumCategoryWhereUniqueInput
+}>
+
+export type GetForumCategoryBreadcrumbQuery = {
+  __typename: 'Query'
+  forumCategoryByUniqueInput?: Types.Maybe<
+    { __typename: 'ForumCategory'; parentId?: Types.Maybe<string> } & ForumSubCategoryFieldsFragment
+  >
+}
+
 export type GetForumThreadBreadcrumbsQueryVariables = Types.Exact<{
   where: Types.ForumThreadWhereUniqueInput
 }>
@@ -575,6 +586,56 @@ export type GetForumCategoryBreadcrumbsLazyQueryHookResult = ReturnType<typeof u
 export type GetForumCategoryBreadcrumbsQueryResult = Apollo.QueryResult<
   GetForumCategoryBreadcrumbsQuery,
   GetForumCategoryBreadcrumbsQueryVariables
+>
+export const GetForumCategoryBreadcrumbDocument = gql`
+  query GetForumCategoryBreadcrumb($where: ForumCategoryWhereUniqueInput!) {
+    forumCategoryByUniqueInput(where: $where) {
+      ...ForumSubCategoryFields
+      parentId
+    }
+  }
+  ${ForumSubCategoryFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumCategoryBreadcrumbQuery__
+ *
+ * To run a query within a React component, call `useGetForumCategoryBreadcrumbQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumCategoryBreadcrumbQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumCategoryBreadcrumbQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetForumCategoryBreadcrumbQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumCategoryBreadcrumbQuery, GetForumCategoryBreadcrumbQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumCategoryBreadcrumbQuery, GetForumCategoryBreadcrumbQueryVariables>(
+    GetForumCategoryBreadcrumbDocument,
+    options
+  )
+}
+export function useGetForumCategoryBreadcrumbLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumCategoryBreadcrumbQuery, GetForumCategoryBreadcrumbQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumCategoryBreadcrumbQuery, GetForumCategoryBreadcrumbQueryVariables>(
+    GetForumCategoryBreadcrumbDocument,
+    options
+  )
+}
+export type GetForumCategoryBreadcrumbQueryHookResult = ReturnType<typeof useGetForumCategoryBreadcrumbQuery>
+export type GetForumCategoryBreadcrumbLazyQueryHookResult = ReturnType<typeof useGetForumCategoryBreadcrumbLazyQuery>
+export type GetForumCategoryBreadcrumbQueryResult = Apollo.QueryResult<
+  GetForumCategoryBreadcrumbQuery,
+  GetForumCategoryBreadcrumbQueryVariables
 >
 export const GetForumThreadBreadcrumbsDocument = gql`
   query GetForumThreadBreadcrumbs($where: ForumThreadWhereUniqueInput!) {
