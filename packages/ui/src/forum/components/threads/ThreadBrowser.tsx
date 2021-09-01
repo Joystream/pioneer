@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
@@ -8,61 +8,44 @@ import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { ForumThread } from '@/forum/types'
 
-import { ThreadItem, ThreadItemWrapper, ThreadItemContentProps } from './ThreadItem'
-import { ThreadItemsPlaceholder } from './ThreadItemsPlaceholder'
+import { ThreadItem, ThreadItemWrapper, EmptyThreadItem } from './ThreadItem'
 import { ThreadsLayoutSpacing } from './ThreadsLayout'
 
 export interface ThreadBrowserProps {
   label: string
-  noItems?: boolean
+  threads?: ForumThread[]
+  pageCount?: number
+  totalCount?: number
+  isLoading: boolean
+  currentPage: number
+  setCurrentPage: React.Dispatch<number>
 }
 
-export const ThreadBrowser = ({ label, noItems }: ThreadBrowserProps) => {
-  const items: ThreadItemContentProps[] = noItems ? [] : ThreadItemsPlaceholder
-  const [currentItemsGroup, setCurrentItemsGroup] = useState(0)
-  const currentItems: ThreadItemContentProps[][] = []
-
-  const currentItemsGroupSize = 2
-  for (let i = 0; i < Math.ceil(items.length / currentItemsGroupSize); i++) {
-    currentItems.push(items.slice(i * currentItemsGroupSize, i * currentItemsGroupSize + currentItemsGroupSize))
-  }
-
-  const [isLoading, setLoading] = useState(false)
-
-  useEffect(() => {
-    let timeOutId: any
-    if (isLoading) {
-      timeOutId = setTimeout(() => setLoading(false), 500) as any
-    }
-    return () => clearTimeout(timeOutId)
-  }, [isLoading])
-
-  const onPrevClick = () => {
-    setLoading(true)
-    setCurrentItemsGroup(currentItemsGroup - 1)
-  }
-  const onNextClick = () => {
-    setLoading(true)
-    setCurrentItemsGroup(currentItemsGroup + 1)
-  }
+export const ThreadBrowser = ({
+  label,
+  threads,
+  pageCount,
+  totalCount,
+  isLoading,
+  currentPage,
+  setCurrentPage,
+}: ThreadBrowserProps) => {
+  const onPrevClick = () => setCurrentPage(currentPage - 1)
+  const onNextClick = () => setCurrentPage(currentPage + 1)
 
   return (
     <ThreadBrowserStyles>
       <ThreadBrowserHeader align="center" gap={16}>
         <Label>
-          {label} {items.length > 0 && <CountBadge count={items.length} />}
+          {label} {!!totalCount && <CountBadge count={totalCount} />}
         </Label>
         <ButtonsGroup>
-          <ButtonGhost size="small" square onClick={onPrevClick} disabled={currentItemsGroup - 1 < 0}>
+          <ButtonGhost size="small" square onClick={onPrevClick} disabled={currentPage <= 1}>
             <Arrow direction="left" />
           </ButtonGhost>
-          <ButtonGhost
-            size="small"
-            square
-            onClick={onNextClick}
-            disabled={currentItemsGroup + 1 >= currentItems.length}
-          >
+          <ButtonGhost size="small" square onClick={onNextClick} disabled={currentPage >= (pageCount ?? 1)}>
             <Arrow direction="right" />
           </ButtonGhost>
         </ButtonsGroup>
@@ -71,11 +54,9 @@ export const ThreadBrowser = ({ label, noItems }: ThreadBrowserProps) => {
         {isLoading ? (
           <Loading />
         ) : (
-          currentItems[currentItemsGroup]?.map((item) => (
-            <ThreadItem {...item} halfSize={currentItems[currentItemsGroup].length > 1} />
-          ))
+          threads?.map((thread) => <ThreadItem key={thread.id} thread={thread} halfSize={threads.length > 1} />)
         )}
-        {!isLoading && !items.length && <ThreadItem title={"You haven't created any threads yet"} empty />}
+        {!isLoading && !totalCount && <EmptyThreadItem text={"You haven't created any threads yet"} />}
       </ThreadBrowserItems>
     </ThreadBrowserStyles>
   )
