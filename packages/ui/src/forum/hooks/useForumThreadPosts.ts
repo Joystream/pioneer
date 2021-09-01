@@ -1,5 +1,6 @@
 import { useGetForumPostsQuery } from '@/forum/queries/__generated__/forum.generated'
 import { asForumPost, ForumPost, visiblePostStatuses } from '@/forum/types/ForumPost'
+
 import { useForumThreadPostsCount } from './useForumThreadPostsCount'
 
 export const POSTS_PER_PAGE = 5
