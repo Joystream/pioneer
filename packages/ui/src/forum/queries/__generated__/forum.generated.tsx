@@ -132,6 +132,11 @@ export type ForumPostWithoutReplyFieldsFragment = {
   postaddedeventpost?: Types.Maybe<
     Array<{ __typename: 'PostAddedEvent'; createdAt: any; inBlock: number; network: Types.Network }>
   >
+  status:
+    | { __typename: 'PostStatusActive' }
+    | { __typename: 'PostStatusLocked' }
+    | { __typename: 'PostStatusModerated' }
+    | { __typename: 'PostStatusRemoved' }
 }
 
 export type ForumThreadDetailedFieldsFragment = { __typename: 'ForumThread' } & ForumThreadFieldsFragment
@@ -388,6 +393,9 @@ export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
       createdAt
       inBlock
       network
+    }
+    status {
+      __typename
     }
   }
   ${MemberFieldsFragmentDoc}
