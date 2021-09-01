@@ -236,3 +236,15 @@ query GetForumPostParents($where: ForumPostWhereUniqueInput!) {
     ...ForumPostParents
   }
 }
+
+query SearchForumPost($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $offset: Int, $limit: Int) {
+  forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    id
+    text
+    thread {
+      id
+      title
+      categoryId
+    }
+  }
+}
