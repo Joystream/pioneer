@@ -27,22 +27,25 @@ import { LikeButton } from '../threads/LikeButton'
 import { PostContextMenu } from './PostContextMenu'
 import { PostEditor } from './PostEditor'
 
+export type PostListItemType = 'forum' | 'proposal'
+
 interface PostListItemProps {
   post: ForumPost
   isSelected?: boolean
   isPreview?: boolean
   isThreadActive?: boolean
-  insertRef: (ref: RefObject<HTMLDivElement>) => void
+  insertRef?: (ref: RefObject<HTMLDivElement>) => void
+  type: PostListItemType
 }
 
-export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, insertRef }: PostListItemProps) => {
+export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, insertRef, type }: PostListItemProps) => {
   const { createdAtBlock, updatedAt, author, text, reaction, repliesTo, id } = post
 
   const location = useLocation()
   const query = useRouteQuery()
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    !!ref.current && insertRef(ref)
+    !!ref.current && insertRef && insertRef(ref)
   }, [ref.current])
   const [editing, setEditing] = useState(false)
   const { showModal } = useModal()
@@ -88,7 +91,7 @@ export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, inse
           </Reply>
         )}
         {editing ? (
-          <PostEditor post={post} onCancel={() => setEditing(false)} />
+          <PostEditor post={post} onCancel={() => setEditing(false)} type={type} />
         ) : (
           <MarkdownPreview markdown={text} append={editionTime} size="s" />
         )}
@@ -106,7 +109,7 @@ export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, inse
                   <ButtonGhost square disabled={isPreview} size="small">
                     <ReplyIcon />
                   </ButtonGhost>
-                  <PostContextMenu post={post} onEdit={() => setEditing(true)} />
+                  <PostContextMenu post={post} onEdit={() => setEditing(true)} type={type} />
                 </>
               )}
             </ButtonsGroup>

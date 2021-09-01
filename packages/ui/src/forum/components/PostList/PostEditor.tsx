@@ -4,15 +4,17 @@ import styled from 'styled-components'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { useModal } from '@/common/hooks/useModal'
+import { PostListItemType } from '@/forum/components/PostList/PostListItem'
 import { EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { ForumPost } from '@/forum/types'
 
 interface Props {
   post: ForumPost
   onCancel: () => void
+  type: PostListItemType
 }
 
-export const PostEditor = ({ post, onCancel }: Props) => {
+export const PostEditor = ({ post, onCancel, type }: Props) => {
   const [newText, setNewText] = useState(post.text)
   const { showModal } = useModal()
   const isTextChanged = useMemo(() => post.text !== newText, [newText])
@@ -26,7 +28,7 @@ export const PostEditor = ({ post, onCancel }: Props) => {
         </ButtonGhost>
         <ButtonPrimary
           size="medium"
-          onClick={() => showModal<EditPostModalCall>({ modal: 'EditPost', data: { newText, post } })}
+          onClick={() => showModal<EditPostModalCall>({ modal: 'EditPost', data: { newText, post, type } })}
           disabled={!isTextChanged}
         >
           Save

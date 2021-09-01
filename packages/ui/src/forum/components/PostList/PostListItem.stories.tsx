@@ -58,8 +58,8 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
           <Container>
             <PostListItem
               post={{ ...post, updatedAt, text, reaction, repliesTo }}
-              insertRef={() => true}
               isThreadActive={isThreadActive}
+              type="forum"
             />
           </Container>
         </MembershipContext.Provider>

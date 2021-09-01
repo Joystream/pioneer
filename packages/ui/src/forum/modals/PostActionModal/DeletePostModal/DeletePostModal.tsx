@@ -10,8 +10,9 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { usePostParents } from '@/forum/hooks/usePostParents'
+import { useForumPostParents } from '@/forum/hooks/useForumPostParents'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { useProposalPostParents } from '@/proposals/hooks/useProposalPostParents'
 
 import { postActionMachine } from '../postActionMachine'
 import { PostActionSignModal } from '../PostActionSignModal'
@@ -21,7 +22,7 @@ import { DeletePostModalCall } from '.'
 
 export const DeletePostModal = () => {
   const {
-    modalData: { post },
+    modalData: { post, type },
     hideModal,
   } = useModal<DeletePostModalCall>()
 
@@ -29,21 +30,29 @@ export const DeletePostModal = () => {
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const { threadId, categoryId } = usePostParents(post.id)
+  const forumPostData = useForumPostParents(type === 'forum' ? post.id : '')
+  const proposalPostData = useProposalPostParents(type === 'proposal' ? post.id : '')
   const { api } = useApi()
 
-  const transaction = useMemo(
-    () =>
-      api &&
-      categoryId &&
-      threadId &&
-      api.tx.forum.deletePosts(
-        createType('ForumUserId', Number.parseInt(post.author.id)),
-        [[categoryId, threadId, post.id, true]],
-        ''
-      ),
-    [api, categoryId, threadId]
-  )
+  const transaction = useMemo(() => {
+    if (api) {
+      if (type === 'forum' && forumPostData.categoryId && forumPostData.threadId) {
+        return api.tx.forum.deletePosts(
+          createType('ForumUserId', Number.parseInt(post.author.id)),
+          [[forumPostData.categoryId, forumPostData.threadId, post.id, true]],
+          ''
+        )
+      }
+      if (type === 'proposal' && proposalPostData.threadId) {
+        return api.tx.proposalsDiscussion.deletePost(
+          createType('ForumUserId', Number.parseInt(post.author.id)),
+          post.id,
+          proposalPostData.threadId,
+          true
+        )
+      }
+    }
+  }, [api, JSON.stringify(forumPostData), JSON.stringify(proposalPostData), type])
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
   useEffect(() => {

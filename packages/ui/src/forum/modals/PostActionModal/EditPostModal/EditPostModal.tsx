@@ -10,7 +10,7 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { usePostParents } from '@/forum/hooks/usePostParents'
+import { useForumPostParents } from '@/forum/hooks/useForumPostParents'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { postActionMachine } from '../postActionMachine'
@@ -29,7 +29,7 @@ export const EditPostModal = () => {
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const { threadId, categoryId } = usePostParents(post.id)
+  const { threadId, categoryId } = useForumPostParents(post.id)
   const { api } = useApi()
 
   const transaction = useMemo(

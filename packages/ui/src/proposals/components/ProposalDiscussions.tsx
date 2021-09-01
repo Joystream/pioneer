@@ -48,6 +48,7 @@ export const ProposalDiscussions = ({ thread }: Props) => {
             isSelected={post.id === initialPost}
             isThreadActive={true}
             post={post}
+            type="proposal"
           />
         )
       })}
