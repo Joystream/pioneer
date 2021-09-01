@@ -49,6 +49,7 @@ describe('UI: PostEditor', () => {
     expect(useModal.modalData).toEqual({
       newText: 'This is a new typed-in text',
       post,
+      type: 'forum',
     })
   })
 
