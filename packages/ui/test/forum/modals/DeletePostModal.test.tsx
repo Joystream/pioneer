@@ -31,6 +31,7 @@ describe('UI: DeletePostModal', () => {
       createdAt: '2021-07-02T04:22:13.523Z',
       text: 'Sample post text',
     },
+    type: 'forum',
   }
 
   const useModal: UseModal<any> = {

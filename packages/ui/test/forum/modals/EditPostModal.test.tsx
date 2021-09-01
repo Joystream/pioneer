@@ -40,6 +40,7 @@ describe('UI: EditPostModal', () => {
       text: 'Sample post text',
     },
     newText: 'New text',
+    type: 'forum',
   }
 
   const useModal: UseModal<any> = {
