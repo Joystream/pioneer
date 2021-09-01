@@ -1,5 +1,6 @@
-import { useGetForumPostsCountQuery, useGetForumPostsQuery } from '@/forum/queries/__generated__/forum.generated'
-import { asForumPost, ForumPost, PostStatusTypename, visiblePostStatuses } from '@/forum/types/ForumPost'
+import { useGetForumPostsQuery } from '@/forum/queries/__generated__/forum.generated'
+import { asForumPost, ForumPost, visiblePostStatuses } from '@/forum/types/ForumPost'
+import { useForumThreadPostsCount } from './useForumThreadPostsCount'
 
 export const POSTS_PER_PAGE = 5
 
@@ -21,12 +22,8 @@ export const useForumThreadPosts = ({ threadId, page = 1 }: UseForumPostsProps):
     limit: POSTS_PER_PAGE,
     offset: (page - 1) * POSTS_PER_PAGE,
   }
+  const { loadingCount, totalCount } = useForumThreadPostsCount(threadId)
   const { loading: loadingPosts, data: postsData } = useGetForumPostsQuery({ variables })
-  const { loading: loadingCount, data: countData } = useGetForumPostsCountQuery({
-    variables: { where: variables.where },
-  })
-
-  const totalCount = countData?.forumPostsConnection.totalCount
 
   return {
     isLoading: loadingPosts || loadingCount,
