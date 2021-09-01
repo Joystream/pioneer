@@ -23,5 +23,6 @@ export const Default = Template.bind({})
 Default.args = {
   word: 'council',
   shorten: true,
-  text: 'The council has a fixed number of seats NUMBER_OF_COUNCIL_SEATS occupied by members, called councilors. The seats are always occupied, allowing the platform to dispose of all proposals they may come in at any time. The council body has two high level states described as follows.',
+  text:
+    'The council has a fixed number of seats NUMBER_OF_COUNCIL_SEATS occupied by members, called councilors. The seats are always occupied, allowing the platform to dispose of all proposals they may come in at any time. The council body has two high level states described as follows.',
 }
