@@ -25,7 +25,6 @@ const forumThread: ForumThreadWithDetails = {
   isSticky: false,
   createdInBlock: randomBlock(),
   tags: [],
-  visiblePostsCount: 5,
   status: { __typename: 'ThreadStatusActive' },
 }
 

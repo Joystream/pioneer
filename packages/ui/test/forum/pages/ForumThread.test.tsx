@@ -53,7 +53,6 @@ describe('UI: Forum Thread Page', () => {
     isSticky: false,
     createdInBlock: randomBlock(),
     tags: [],
-    visiblePostsCount: 0,
     status: { __typename: 'ThreadStatusActive' },
   }
 

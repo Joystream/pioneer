@@ -20,7 +20,6 @@ export interface ForumThread {
   isSticky: boolean
   categoryId: string
   tags: ForumThreadTag[]
-  visiblePostsCount: number
   status: ThreadStatus
 }
 
@@ -50,7 +49,6 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
   isSticky: fields.isSticky,
   categoryId: fields.categoryId,
   tags: [],
-  visiblePostsCount: 10,
   status: asForumThreadStatus(fields.status),
 })
 
