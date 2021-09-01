@@ -12,6 +12,7 @@ import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useForumPostParents } from '@/forum/hooks/useForumPostParents'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { useProposalPostParents } from '@/proposals/hooks/useProposalPostParents'
 
 import { postActionMachine } from '../postActionMachine'
 import { PostActionSignModal } from '../PostActionSignModal'
@@ -21,7 +22,7 @@ import { EditPostModalCall } from '.'
 
 export const EditPostModal = () => {
   const {
-    modalData: { post, newText },
+    modalData: { post, newText, type },
     hideModal,
   } = useModal<EditPostModalCall>()
 
@@ -29,23 +30,26 @@ export const EditPostModal = () => {
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const { threadId, categoryId } = useForumPostParents(post.id)
+  const forumPostData = useForumPostParents(type === 'forum' ? post.id : '')
+  const proposalPostData = useProposalPostParents(type === 'proposal' ? post.id : '')
   const { api } = useApi()
 
-  const transaction = useMemo(
-    () =>
-      api &&
-      threadId &&
-      categoryId &&
-      api.tx.forum.editPostText(
-        createType('ForumUserId', Number.parseInt(post.author.id)),
-        categoryId,
-        threadId,
-        post.id,
-        newText
-      ),
-    [api, threadId, categoryId]
-  )
+  const transaction = useMemo(() => {
+    if (api) {
+      if (type === 'forum' && forumPostData.categoryId && forumPostData.threadId) {
+        return api.tx.forum.editPostText(
+          createType('ForumUserId', Number.parseInt(post.author.id)),
+          forumPostData.categoryId,
+          forumPostData.threadId,
+          post.id,
+          newText
+        )
+      }
+      if (type === 'proposal' && proposalPostData.threadId) {
+        return api.tx.proposalsDiscussion.updatePost(post.id, proposalPostData.threadId, newText)
+      }
+    }
+  }, [api, JSON.stringify(forumPostData), JSON.stringify(proposalPostData), type])
 
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
