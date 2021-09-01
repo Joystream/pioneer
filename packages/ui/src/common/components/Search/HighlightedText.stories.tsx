@@ -8,12 +8,20 @@ export default {
   component: HighlightedText,
 } as Meta
 
-const Template: Story<{ word: string; text: string }> = ({ word, text }) => (
-  <HighlightedText pattern={word ? RegExp(word, 'ig') : null}>{text}</HighlightedText>
+interface Props {
+  word: string
+  shorten: boolean
+  text: string
+}
+const Template: Story<Props> = ({ word, shorten, text }) => (
+  <HighlightedText pattern={word ? RegExp(word, 'ig') : null} shorten={shorten}>
+    {text}
+  </HighlightedText>
 )
 
 export const Default = Template.bind({})
 Default.args = {
   word: 'council',
-  text: '...the council has a fixed number of seats NUMBER_OF_COUNCIL_SEATS occupied by members,…',
+  shorten: true,
+  text: 'The council has a fixed number of seats NUMBER_OF_COUNCIL_SEATS occupied by members, called councilors. The seats are always occupied, allowing the platform to dispose of all proposals they may come in at any time. The council body has two high level states described as follows.',
 }

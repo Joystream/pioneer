@@ -21,7 +21,9 @@ export const SearchResultItem = ({ pattern, breadcrumbs, to, title, children }: 
         <HighlightedText pattern={pattern}>{title}</HighlightedText>
       </h5>
       <p>
-        <HighlightedText pattern={pattern}>{children}</HighlightedText>
+        <HighlightedText pattern={pattern} shorten>
+          {children}
+        </HighlightedText>
       </p>
     </GhostRouterLink>
   </ResultItemStyle>
