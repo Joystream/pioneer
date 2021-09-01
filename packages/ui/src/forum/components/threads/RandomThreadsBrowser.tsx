@@ -11,10 +11,9 @@ export interface RandomThreadsBrowserProps {
 
 export const RandomThreadsBrowser = ({ label, maxThreads }: RandomThreadsBrowserProps) => {
   const [currentPage, setCurrentPage] = useState(1)
-  const threadsPerPage = 2
   const { threads, pageCount, totalCount, isLoading } = useRandomPaginatedThreads({
     page: currentPage,
-    threadsPerPage,
+    threadsPerPage: 2,
     maxThreads,
   })
 

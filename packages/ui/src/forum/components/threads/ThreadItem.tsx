@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
+import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
@@ -28,8 +29,15 @@ export interface ThreadItemContentProps {
 }
 
 export const ThreadItem = ({ thread, badges, answers, halfSize, empty }: ThreadItemContentProps) => {
-  const originalPost = useThreadOriginalPost(thread.id)
+  const { originalPost, isLoading } = useThreadOriginalPost(thread.id)
   const content = originalPost?.text
+  if (isLoading) {
+    return (
+      <ThreadItemWrapper>
+        <Loading />
+      </ThreadItemWrapper>
+    )
+  }
   return (
     <ThreadItemWrapper halfSize={halfSize}>
       <ThreadItemHeader align="center">

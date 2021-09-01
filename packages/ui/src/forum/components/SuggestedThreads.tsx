@@ -18,7 +18,7 @@ export const SuggestedThreads = () => {
     return (
       <ThreadsList>
         {threads.map((thread) => (
-          <ThreadItem key={thread.id} thread={thread} answers={[{ answer: 'Text' }]} badges={[{ badge: 'Text' }]} />
+          <ThreadItem key={thread.id} thread={thread} />
         ))}
       </ThreadsList>
     )

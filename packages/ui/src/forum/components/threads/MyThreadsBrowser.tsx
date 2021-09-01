@@ -6,8 +6,7 @@ import { ThreadBrowser } from './ThreadBrowser'
 
 export const MyThreadsBrowser = () => {
   const [currentPage, setCurrentPage] = useState(1)
-  const threadsPerPage = 2
-  const { threads, pageCount, totalCount, isLoading } = useMyThreads({ page: currentPage, threadsPerPage })
+  const { threads, pageCount, totalCount, isLoading } = useMyThreads({ page: currentPage, threadsPerPage: 2 })
 
   return (
     <ThreadBrowser

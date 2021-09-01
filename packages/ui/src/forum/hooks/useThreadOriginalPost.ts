@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { ForumPostOrderByInput } from '@/common/api/queries'
 
 import { useGetForumPostsQuery } from '../queries'
@@ -13,5 +11,8 @@ export const useThreadOriginalPost = (threadId: string) => {
       limit: 1,
     },
   })
-  return useMemo(() => data?.forumPosts[0] && asForumPost(data.forumPosts[0]), [data, loading])
+  return {
+    originalPost: data?.forumPosts[0] && asForumPost(data.forumPosts[0]),
+    isLoading: loading,
+  }
 }
