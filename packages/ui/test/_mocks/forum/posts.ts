@@ -30,6 +30,7 @@ export const mockPosts: RawForumPostMock[] = [
       text:
         'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
     },
+    status: 'PostStatusActive',
   },
   {
     id: '1',
@@ -45,5 +46,6 @@ export const mockPosts: RawForumPostMock[] = [
       text:
         'ducimus necessitatibus dolorum molestiae quia saepe nemo aliquam harum pariatur enim ut porro cupiditate ut explicabo fugit accusantium porro velit aperiam rerum consequatur voluptatem reprehenderit debitis repellendus ea et sed eveniet non qui ut assumenda rerum deserunt sit molestiae voluptatem aut',
     },
+    status: 'PostStatusActive',
   },
 ]

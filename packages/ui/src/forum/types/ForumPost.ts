@@ -1,4 +1,5 @@
 import { Network, PostReaction } from '@/common/api/queries'
+import { PostStatus as PostStatusSchema } from '@/common/api/queries/__generated__/baseTypes.generated'
 import { asBlock, Block } from '@/common/types/Block'
 import { ForumPostFieldsFragment } from '@/forum/queries/__generated__/forum.generated'
 import { asMember, Member } from '@/memberships/types'
@@ -31,3 +32,7 @@ export interface PostEdit {
   createdAt: string
   inBlock: number
 }
+
+export type PostStatusTypename = PostStatusSchema['__typename']
+
+export const visiblePostStatuses: PostStatusTypename[] = ['PostStatusActive', 'PostStatusLocked']

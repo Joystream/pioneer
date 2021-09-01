@@ -1,5 +1,5 @@
 import { useGetForumPostsCountQuery, useGetForumPostsQuery } from '@/forum/queries/__generated__/forum.generated'
-import { asForumPost, ForumPost } from '@/forum/types/ForumPost'
+import { asForumPost, ForumPost, PostStatusTypename, visiblePostStatuses } from '@/forum/types/ForumPost'
 
 export const POSTS_PER_PAGE = 5
 
@@ -17,7 +17,7 @@ interface UseForumThreadPosts {
 
 export const useForumThreadPosts = ({ threadId, page = 1 }: UseForumPostsProps): UseForumThreadPosts => {
   const variables = {
-    where: { thread: { id_eq: threadId } },
+    where: { thread: { id_eq: threadId }, status_json: { isTypeOf_in: visiblePostStatuses } },
     limit: POSTS_PER_PAGE,
     offset: (page - 1) * POSTS_PER_PAGE,
   }
