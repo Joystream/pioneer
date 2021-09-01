@@ -267,7 +267,7 @@ const InputLabel = styled(Label)<DisabledInputProps>`
   color: ${({ disabled }) => (disabled ? Colors.Black[500] : Colors.Black[900])};
 `
 
-const InputIcon = styled.div<DisabledInputProps>`
+export const InputIcon = styled.div<DisabledInputProps>`
   display: flex;
   position: absolute;
   width: 16px;
