@@ -43,6 +43,7 @@ export interface RawForumPostMock {
   repliesToId?: string
   edits: PostEdit[]
   postAddedEvent: PostAddedEventMock
+  status: string
 }
 
 const seedCategoryStatus = (status: RawForumCategoryMock['status'], server: any) => {
@@ -94,6 +95,7 @@ export function seedForumPost(data: RawForumPostMock, server: any) {
     postaddedeventpost: [server.schema.create('PostAddedEvent', data.postAddedEvent)],
     createdAt: data.postAddedEvent.createdAt,
     updatedAt: sortedEdits.length ? sortedEdits[0].createdAt : null,
+    status: server.schema.create(data.status),
   })
 }
 
