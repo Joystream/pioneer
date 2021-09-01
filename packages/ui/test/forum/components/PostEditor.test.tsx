@@ -62,7 +62,7 @@ describe('UI: PostEditor', () => {
   const renderEditor = () =>
     render(
       <ModalContext.Provider value={useModal}>
-        <PostEditor post={post} onCancel={() => null} />
+        <PostEditor post={post} onCancel={() => null} type="forum" />
       </ModalContext.Provider>
     )
 })
