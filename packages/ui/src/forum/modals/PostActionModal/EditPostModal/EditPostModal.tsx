@@ -1,6 +1,5 @@
-import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -8,11 +7,8 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { useForumPostParents } from '@/forum/hooks/useForumPostParents'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { useProposalPostParents } from '@/proposals/hooks/useProposalPostParents'
 
 import { postActionMachine } from '../postActionMachine'
 import { PostActionSignModal } from '../PostActionSignModal'
