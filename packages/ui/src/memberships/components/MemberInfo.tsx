@@ -113,6 +113,18 @@ export const MemberInfo = React.memo(
   }
 )
 
+export const MemberInfoList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+  row-gap: 16px;
+`
+
+export const MemberInfoItem = styled.li`
+  width: 100%;
+`
+
 export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipProps & DarkTooltipInnerItemProps>`
   color: ${Colors.White};
   border-color: ${Colors.Blue[500]};
