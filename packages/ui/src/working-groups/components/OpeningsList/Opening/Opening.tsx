@@ -8,11 +8,12 @@ import { OpeningListItem } from './OpeningListItem'
 interface OpeningProps {
   opening: WorkingGroupOpening
   past?: boolean
+  onClick?: () => void
 }
 
-export const Opening = ({ opening, past }: OpeningProps) => (
+export const Opening = ({ opening, past, onClick }: OpeningProps) => (
   <>
-    <OpeningListItem opening={opening} past={past} />
-    <OpeningDetails opening={opening} />
+    <OpeningListItem opening={opening} past={past} onClick={onClick} />
+    <OpeningDetails opening={opening} onClick={onClick} />
   </>
 )

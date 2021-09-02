@@ -23,7 +23,11 @@ export const OpeningsListRow = ({ opening, past }: ListRowProps) => {
   return (
     <Toggle absoluteToggle isOpen={isOpened}>
       <ToggleableItemContainer isOpen={isOpened}>
-        {isUpcomingOpening(opening) ? <UpcomingOpening opening={opening} /> : <Opening opening={opening} past={past} />}
+        {isUpcomingOpening(opening) ? (
+          <UpcomingOpening opening={opening} onClick={toggleOpen} />
+        ) : (
+          <Opening opening={opening} past={past} onClick={toggleOpen} />
+        )}
       </ToggleableItemContainer>
       <OpeningToggleButton absoluteToggle isOpen={isOpened} onClick={toggleOpen}>
         <Arrow direction="down" />

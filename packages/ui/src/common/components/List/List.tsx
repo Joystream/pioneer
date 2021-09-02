@@ -20,10 +20,14 @@ export const List = styled.ul`
     `}
 `
 
-export const ListItem = styled.li`
+export const ListItem = styled.li<{ borderless?: boolean }>`
   display: grid;
-  border: 1px solid ${Colors.Black[100]};
-  border-radius: ${BorderRad.s};
+  ${({ borderless }) =>
+    !borderless &&
+    css`
+      border: 1px solid ${Colors.Black[100]};
+      border-radius: ${BorderRad.s};
+    `}
   background-color: ${Colors.White};
   transition: ${Transitions.all};
 

@@ -1,9 +1,9 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { ButtonBareGhost } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
+import { TableListItem } from '@/common/components/List'
+import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
@@ -22,7 +22,6 @@ export interface WorkingGroupProps {
 }
 
 export function WorkingGroupListItem({ group }: WorkingGroupProps) {
-  const history = useHistory()
   const { isLoading: loadingOpenings, openings } = useCountOpenings(group.id)
   const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
 
@@ -30,12 +29,12 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
 
   return (
-    <GroupItem>
-      <GroupImageContainer onClick={() => history.push(groupAddress)}>
+    <GroupItem as={GhostRouterLink} to={groupAddress}>
+      <GroupImageContainer>
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
       <GroupContentBlock>
-        <GroupTitle onClick={() => history.push(groupAddress)}>{group.name}</GroupTitle>
+        <GroupTitle>{group.name}</GroupTitle>
         {group.about && <GroupContent>{group.about}</GroupContent>}
       </GroupContentBlock>
       <GroupStats>
@@ -60,9 +59,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           <Subscription>WG Lead</Subscription>
         </StatsColumn>
       </GroupStats>
-      <ButtonBareGhost square size="medium" onClick={() => history.push(groupAddress)}>
-        <Arrow direction="right" />
-      </ButtonBareGhost>
+      <Arrow direction="right" className="WorkingGroupArrow" />
     </GroupItem>
   )
 }
@@ -133,7 +130,7 @@ const StatsValue = styled.span`
   color: ${Colors.Black[900]};
 `
 
-const GroupItem = styled.section`
+const GroupItem = styled(TableListItem)`
   display: grid;
   grid-template-columns: 108px 1fr 1fr 40px;
   grid-template-rows: 1fr;
@@ -142,12 +139,16 @@ const GroupItem = styled.section`
   height: 100%;
   max-height: 108px;
   align-items: center;
-  padding-right: 16px;
+  padding: 0 16px 0 0;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
   overflow: hidden;
   transition: ${Transitions.all};
+
+  .WorkingGroupArrow {
+    transition: ${Transitions.all};
+  }
 
   &:hover,
   &:focus-within {
@@ -161,7 +162,8 @@ const GroupItem = styled.section`
       }
     }
 
-    ${GroupTitle} {
+    ${GroupTitle},
+    .WorkingGroupArrow {
       color: ${Colors.Blue[500]};
     }
   }

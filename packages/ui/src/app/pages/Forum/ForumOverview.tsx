@@ -10,12 +10,14 @@ import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { MyThreadsBrowser } from '@/forum/components/threads/MyThreadsBrowser'
 import { RandomThreadsBrowser } from '@/forum/components/threads/RandomThreadsBrowser'
 import { ThreadsLayout } from '@/forum/components/threads/ThreadsLayout'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { ForumTabs } from './components/ForumTabs'
 
 export const ForumOverview = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const activities = useMockActivities()
+  const { hasMembers } = useMyMemberships()
 
   return (
     <PageLayout
@@ -27,10 +29,14 @@ export const ForumOverview = () => {
       main={
         <MainPanel ref={sideNeighborRef}>
           <ThreadsLayout>
-            <MyThreadsBrowser />
-            <RandomThreadsBrowser label="Your watchlist" />
+            {hasMembers && (
+              <>
+                <MyThreadsBrowser />
+                <RandomThreadsBrowser label="Your watchlist" />
+                <RandomThreadsBrowser label="Polls you participated in" />
+              </>
+            )}
             <RandomThreadsBrowser label="Popular threads" />
-            <RandomThreadsBrowser label="Polls you participated in" />
           </ThreadsLayout>
         </MainPanel>
       }

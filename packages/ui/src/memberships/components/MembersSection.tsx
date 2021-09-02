@@ -53,7 +53,7 @@ export const MembersSection = ({ title, members }: MembersSectionProps) => {
 
         <List>
           {sortedMemberships.map((member) => (
-            <ListItem key={member.handle}>
+            <ListItem key={member.handle} borderless>
               <MyMemberListItem member={member} />
             </ListItem>
           ))}
