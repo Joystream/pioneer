@@ -1,6 +1,6 @@
 import { registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -171,7 +171,7 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Empty form', async () => {
-      expect(await getNextStepButton()).toBeDisabled()
+      await waitFor(async () => expect(await getNextStepButton()).toBeDisabled())
     })
 
     it('Valid fields', async () => {

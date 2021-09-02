@@ -7,6 +7,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ForumThread as ForumThreadPage } from '@/app/pages/Forum/ForumThread'
 import { NotFound } from '@/app/pages/NotFound'
+import { CKEditorProps } from '@/common/components/CKEditor'
 import { ForumRoutes } from '@/forum/constant'
 import { ForumThread, ForumThreadWithDetails } from '@/forum/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -14,6 +15,7 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
+import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockApiProvider, MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -28,6 +30,10 @@ jest.mock('../../../src/forum/hooks/useForumThread', () => ({
 
 jest.mock('../../../src/forum/hooks/useForumSuggestedThreads', () => ({
   useForumSuggestedThreads: () => mockSuggestedThreads,
+}))
+
+jest.mock('@/common/components/CKEditor', () => ({
+  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
 describe('UI: Forum Thread Page', () => {
