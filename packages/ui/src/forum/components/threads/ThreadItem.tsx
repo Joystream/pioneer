@@ -7,6 +7,7 @@ import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
+import { relativeTime } from '@/common/model/relativeTime'
 import { useThreadBreadcrumbs } from '@/forum/hooks/useThreadBreadcrumbs'
 import { useThreadOriginalPost } from '@/forum/hooks/useThreadOriginalPost'
 import { ForumThread } from '@/forum/types'
@@ -42,7 +43,7 @@ export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemConten
     <ThreadItemWrapper halfSize={halfSize}>
       <ThreadItemHeader align="center">
         <ThreadItemTitle empty={empty}>{thread.title}</ThreadItemTitle>
-        <ThreadItemTime lighter>{thread.createdInBlock.timestamp}</ThreadItemTime>
+        <ThreadItemTime lighter>{relativeTime(thread.createdInBlock.timestamp)}</ThreadItemTime>
       </ThreadItemHeader>
       <ForumBreadcrumbsList
         categoryBreadcrumbs={categoryBreadcrumbs ?? []}
