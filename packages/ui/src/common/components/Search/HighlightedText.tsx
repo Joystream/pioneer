@@ -12,7 +12,11 @@ interface HighlightedTextProps {
   children: string
 }
 export const HighlightedText = memo(({ pattern, shorten, children }: HighlightedTextProps) => {
-  const nodes = (pattern ? [...children.matchAll(pattern)] : []).reduceRight(
+  if (!pattern) {
+    return <>{children}</>
+  }
+
+  const nodes = [...children.matchAll(pattern)].reduceRight(
     ([node, ...nodes]: Node[], match, index): Node[] => {
       if (!isString(node)) return [node, ...nodes]
 
