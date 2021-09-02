@@ -29,7 +29,7 @@ export interface ThreadItemContentProps {
 
 export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemContentProps) => {
   const { originalPost, isLoading } = useThreadOriginalPost(thread.id)
-  const repliesCount = 10
+  const repliesCount = thread.visiblePostsCount - 1
   const { threadBreadcrumb, categoryBreadcrumbs } = useThreadBreadcrumbs(thread.id)
   const content = originalPost?.text
   if (isLoading) {
