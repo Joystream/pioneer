@@ -13,6 +13,7 @@ export interface ForumPost {
   text: string
   repliesTo?: ForumPost
   reaction?: PostReaction[]
+  status: PostStatusTypename
 }
 
 export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
@@ -24,6 +25,7 @@ export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
   ...(fields.repliesTo ? { repliesTo: asForumPost(fields.repliesTo) } : {}),
   createdAtBlock:
     fields?.postaddedeventpost && fields.postaddedeventpost.length ? asBlock(fields.postaddedeventpost[0]) : undefined,
+  status: fields.status.__typename,
 })
 
 export interface PostEdit {

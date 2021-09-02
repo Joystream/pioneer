@@ -21,6 +21,7 @@ const post: ForumPost = {
   createdAt: new Date().toISOString(),
   author: getMember('alice'),
   text: 'This is the original text',
+  status: 'PostStatusActive',
 }
 
 let useModal: UseModal<any>

@@ -15,8 +15,10 @@ export const PostContextMenu = ({ post, onEdit }: Props) => {
   const { showModal } = useModal()
   const { active } = useMyMemberships()
   const isOwn = active?.id === post.author.id
-  return isOwn ? (
+  const isActive = post.status === 'PostStatusActive'
+  return isOwn && isActive ? (
     <ContextMenu
+      title="Post actions"
       size="small"
       items={[
         { text: 'Edit post', onClick: onEdit },

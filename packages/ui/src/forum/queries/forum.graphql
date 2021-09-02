@@ -123,6 +123,9 @@ fragment ForumPostWithoutReplyFields on ForumPost {
     inBlock
     network
   }
+  status {
+    __typename
+  }
 }
 
 fragment ForumThreadDetailedFields on ForumThread {

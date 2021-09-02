@@ -13,13 +13,15 @@ export interface CopyButtonProps {
   disabled?: boolean
   textToCopy?: string
   className?: string
+  title?: string
 }
 
-export function CopyButton({ textToCopy, className, disabled }: CopyButtonProps) {
+export function CopyButton({ textToCopy, className, disabled, title }: CopyButtonProps) {
   const { copyValue, isSuccessfullyCopied, isCopyFailure, setCopyFailure, setSuccessfullyCopied } = useCopyToClipboard()
 
   return (
     <CopyButtonIcon
+      title={title ?? 'Copy'}
       disabled={disabled}
       onClick={(evt) => {
         evt.stopPropagation()
@@ -57,6 +59,7 @@ interface CopyButtonTemplateProps extends CopyButtonProps {
   icon?: React.ReactNode
   children?: React.ReactNode
   square?: boolean
+  title?: string
 }
 
 export function CopyButtonTemplate({
@@ -67,11 +70,13 @@ export function CopyButtonTemplate({
   size,
   icon,
   children,
+  title,
 }: CopyButtonTemplateProps) {
   const { copyValue, isSuccessfullyCopied, isCopyFailure, setCopyFailure, setSuccessfullyCopied } = useCopyToClipboard()
 
   return (
     <CopyStyledButton
+      title={title ?? 'Copy'}
       size={size}
       square={square}
       disabled={disabled}
