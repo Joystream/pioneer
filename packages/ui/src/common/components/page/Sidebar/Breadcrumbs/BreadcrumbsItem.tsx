@@ -22,7 +22,7 @@ export const BreadcrumbsItem = React.memo(({ url, children, isLink }: Breadcrumb
   )
 })
 
-const BreadcrumbsItemLink = styled(Link)`
+export const BreadcrumbsItemLink = styled(Link)`
   &,
   &:visited {
     color: ${Colors.Black[500]};
