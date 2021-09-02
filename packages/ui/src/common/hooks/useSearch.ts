@@ -35,6 +35,7 @@ export const useSearch = (search: string, kind: SearchKind) => {
 
   return {
     forum,
+    forumPostCount: postResult.data?.forumPosts.length,
     isLoading: isLoadingPosts,
   }
 }
