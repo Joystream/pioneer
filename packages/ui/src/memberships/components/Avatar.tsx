@@ -21,6 +21,7 @@ interface MemberAvatarProps extends AvatarProps {
 export interface MemberInfoAvatarProps extends MemberAvatarProps {
   member: Member
   isLead?: boolean
+  forBig?: boolean
 }
 
 export const Avatar = React.memo(({ avatarUri, className }: AvatarProps) => {
@@ -38,9 +39,9 @@ export const MemberAvatar = React.memo(({ avatarUri, className, small, noArea }:
 })
 
 export const MemberInfoAvatar = React.memo(
-  ({ avatarUri, className, small, noArea, member, isLead }: MemberInfoAvatarProps) => {
+  ({ avatarUri, className, small, noArea, member, isLead, forBig }: MemberInfoAvatarProps) => {
     return (
-      <Tooltip forBig popupContent={<MemberInfo member={member} isOnDark isLead={isLead} />}>
+      <Tooltip forBig={forBig} popupContent={<MemberInfo member={member} isOnDark isLead={isLead} />}>
         <MemberPhoto small={small} noArea={noArea}>
           <MemberPhotoContainer>
             <Avatar avatarUri={avatarUri} className={className} />
