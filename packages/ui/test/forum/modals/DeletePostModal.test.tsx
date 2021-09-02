@@ -24,6 +24,7 @@ import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/tran
 describe('UI: DeletePostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.deletePosts'
+  stubTransaction(api, txPath)
   const modalData: ModalCallData<DeletePostModalCall> = {
     post: {
       id: '0',
@@ -31,7 +32,7 @@ describe('UI: DeletePostModal', () => {
       createdAt: '2021-07-02T04:22:13.523Z',
       text: 'Sample post text',
     },
-    type: 'forum',
+    transaction: api.api.tx.forum.deletePosts(1, [[1, 1, 1, true]], ''),
   }
 
   const useModal: UseModal<any> = {
@@ -68,10 +69,12 @@ describe('UI: DeletePostModal', () => {
   beforeEach(async () => {
     stubDefaultBalances(api)
     stubTransaction(api, txPath)
+    modalData.transaction = api.api.tx.forum.deletePosts(1, [[1, 1, 1, true]], '')
   })
 
   it('Requirements failed', async () => {
     stubTransaction(api, txPath, 10000)
+    modalData.transaction = api.api.tx.forum.deletePosts(1, [[1, 1, 1, true]], '')
     renderModal()
     expect(await screen.findByText('Insufficient Funds')).toBeDefined()
   })
