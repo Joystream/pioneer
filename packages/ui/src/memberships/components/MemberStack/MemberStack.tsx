@@ -1,12 +1,14 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
-import { DefaultTooltip, Tooltip, TooltipContainer } from '@/common/components/Tooltip'
+import { DefaultTooltip, Tooltip, TooltipContainer, TooltipText, TooltipPopupTitle } from '@/common/components/Tooltip'
 import { TextInlineExtraSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
 import { ForumModerator } from '@/forum/types'
 import { MemberPhoto } from '@/memberships/components'
 import { MemberAvatar } from '@/memberships/components/Avatar'
+
+import { MemberInfoList, MemberInfoItem } from '../MemberInfo'
 
 export interface MemberSummary {
   handle?: string
@@ -27,8 +29,8 @@ interface MemberStackProps {
 }
 export const MemberStack = memo(({ members, max = 0 }: MemberStackProps) => {
   const remaining = members.length > max && max > 0 ? members.length - (max - 1) : 0
+  const remainingList = remaining ? members.slice(members.length - max) : members
   const toDisplay = remaining ? members.slice(0, -remaining) : members
-
   return (
     <MemberStackStyles>
       {toDisplay.map(({ handle, description, avatar }, index) => (
@@ -37,7 +39,20 @@ export const MemberStack = memo(({ members, max = 0 }: MemberStackProps) => {
         </Tooltip>
       ))}
       {remaining > 0 && (
-        <Tooltip forBig tooltipText={`And ${remaining} more`}>
+        <Tooltip
+          forBig
+          tooltipText={`And ${remaining} more`}
+          popupContent={
+            <MemberInfoList>
+              {remainingList.map(({ handle, description }, index) => (
+                <MemberInfoItem key={index}>
+                  <TooltipPopupTitle>{handle}</TooltipPopupTitle>
+                  <TooltipText>{description}</TooltipText>
+                </MemberInfoItem>
+              ))}
+            </MemberInfoList>
+          }
+        >
           <HiddenMember>
             <TextInlineExtraSmall bold black>
               +{remaining}

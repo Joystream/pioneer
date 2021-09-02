@@ -126,7 +126,7 @@ export const Tooltip = ({
   )
 }
 
-const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; forBig?: boolean }>`
+export const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; forBig?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
