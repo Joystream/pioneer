@@ -40,19 +40,6 @@ describe('UI: PostEditor', () => {
     }
   })
 
-  it('Passes edit text to modal', async () => {
-    renderEditor()
-    const editor = await screen.findByRole('textbox')
-    await fireEvent.change(editor, { target: { value: 'This is a new typed-in text' } })
-    await fireEvent.click(await getButton('Save'))
-    expect(useModal.modal).toEqual('EditPost')
-    expect(useModal.modalData).toEqual({
-      newText: 'This is a new typed-in text',
-      post,
-      type: 'forum',
-    })
-  })
-
   it("Disables the save button if text hasn't changed", async () => {
     renderEditor()
     const editor = await screen.findByRole('textbox')
