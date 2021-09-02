@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import styled from 'styled-components'
 
 import { useModal } from '@/common/hooks/useModal'
 
@@ -11,7 +10,14 @@ import { MemberModalCall } from '../MemberProfile'
 import { MemberRoles } from '../MemberRoles'
 import { TransferInviteButton } from '../TransferInviteButton'
 
-import { CountInfo, MemberColumn, MemberControls, MemberItemWrap, MemberRolesColumn } from './Fileds'
+import {
+  CountInfo,
+  MemberColumn,
+  MemberControls,
+  MemberItemWrap,
+  MemberModalTrigger,
+  MemberRolesColumn,
+} from './Fileds'
 
 export const MyMemberListItem = ({ member }: { member: Member }) => {
   const { showModal } = useModal()
@@ -54,12 +60,3 @@ export const MyMemberListItem = ({ member }: { member: Member }) => {
     </MemberItemWrap>
   )
 }
-
-const MemberModalTrigger = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-`

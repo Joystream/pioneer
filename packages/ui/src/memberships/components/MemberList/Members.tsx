@@ -58,7 +58,7 @@ export const MemberList = ({ isLoading, members, order, onSort }: MemberListProp
       </ListHeaders>
       <List>
         {members.map((member) => (
-          <ListItem key={member.handle}>
+          <ListItem key={member.handle} borderless>
             <MemberListItem member={member} />
           </ListItem>
         ))}

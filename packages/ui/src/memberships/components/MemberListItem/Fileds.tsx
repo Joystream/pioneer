@@ -31,6 +31,15 @@ export const CountInfo = ({ count, times }: { count: number; times?: boolean }) 
   </Info>
 )
 
+export const MemberModalTrigger = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+`
+
 export const MemberItemWrap = styled.div`
   display: grid;
   position: relative;
