@@ -158,7 +158,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
 
       return (
         <Options>
-          <OptionsContainer>
+          <OptionsContainer selectSize={selectSize}>
             {nullOption}
             {optionList}
           </OptionsContainer>
@@ -248,10 +248,22 @@ const Options = styled.div`
   z-index: ${ZIndex.select};
 `
 
-const OptionsContainer = styled.div`
+const numberOfVisibleOptions = 6.5
+
+const OptionsContainer = styled.div<SimpleSelectSizingProps>`
   width: 100%;
   height: fit-content;
-  max-height: 258px;
+  max-height: ${({ selectSize }) => {
+    switch (selectSize) {
+      case 's':
+      default:
+        return 32 * numberOfVisibleOptions + 'px'
+      case 'm':
+        return 40 * numberOfVisibleOptions + 'px'
+      case 'l':
+        return 48 * numberOfVisibleOptions + 'px'
+    }
+  }};
   overflow: hidden;
   overflow-y: scroll;
   ${RemoveScrollbar};
@@ -259,6 +271,7 @@ const OptionsContainer = styled.div`
 
 const OptionsFooter = styled.div`
   display: flex;
+  margin: -1px;
   & > * {
     flex-grow: 1;
   }
