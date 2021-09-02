@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { isModalWithData } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
@@ -11,6 +12,8 @@ import { ForumPost } from '@/forum/types'
 import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import { stubApi } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -26,6 +29,8 @@ const post: ForumPost = {
 let useModal: UseModal<any>
 
 describe('UI: PostEditor', () => {
+  const api = stubApi()
+
   beforeEach(() => {
     useModal = {
       modal: null,
@@ -50,7 +55,13 @@ describe('UI: PostEditor', () => {
   const renderEditor = () =>
     render(
       <ModalContext.Provider value={useModal}>
-        <PostEditor post={post} onCancel={() => null} type="forum" />
+        <MockQueryNodeProviders>
+          <MockKeyringProvider>
+            <ApiContext.Provider value={api}>
+              <PostEditor post={post} onCancel={() => null} type="forum" />
+            </ApiContext.Provider>
+          </MockKeyringProvider>
+        </MockQueryNodeProviders>
       </ModalContext.Provider>
     )
 })
