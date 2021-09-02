@@ -7,11 +7,11 @@ import { isString } from '@/common/utils'
 type Node = ReactElement | string
 
 interface HighlightedTextProps {
-  pattern: RegExp | null
+  pattern?: RegExp | null
   shorten?: boolean
   children: string
 }
-export const HighlightedText = memo(({ pattern, shorten, children }: HighlightedTextProps) => {
+export const HighlightedText = memo(({ pattern = null, shorten, children }: HighlightedTextProps) => {
   if (!pattern) {
     return <>{children}</>
   }
