@@ -22,7 +22,7 @@ import { EditPostModalCall } from '.'
 
 export const EditPostModal = () => {
   const {
-    modalData: { post, newText, type },
+    modalData: { post, transaction },
     hideModal,
   } = useModal<EditPostModalCall>()
 
@@ -30,26 +30,6 @@ export const EditPostModal = () => {
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const forumPostData = useForumPostParents(type === 'forum' ? post.id : '')
-  const proposalPostData = useProposalPostParents(type === 'proposal' ? post.id : '')
-  const { api } = useApi()
-
-  const transaction = useMemo(() => {
-    if (api) {
-      if (type === 'forum' && forumPostData.categoryId && forumPostData.threadId) {
-        return api.tx.forum.editPostText(
-          createType('ForumUserId', Number.parseInt(post.author.id)),
-          forumPostData.categoryId,
-          forumPostData.threadId,
-          post.id,
-          newText
-        )
-      }
-      if (type === 'proposal' && proposalPostData.threadId) {
-        return api.tx.proposalsDiscussion.updatePost(post.id, proposalPostData.threadId, newText)
-      }
-    }
-  }, [api, JSON.stringify(forumPostData), JSON.stringify(proposalPostData), type])
 
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 

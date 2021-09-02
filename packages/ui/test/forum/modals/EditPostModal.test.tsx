@@ -32,6 +32,7 @@ describe('UI: EditPostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.editPostText'
   let tx: any
+  stubTransaction(api, txPath)
   const modalData: ModalCallData<EditPostModalCall> = {
     post: {
       id: '0',
@@ -39,8 +40,7 @@ describe('UI: EditPostModal', () => {
       createdAt: '2021-07-02T04:22:13.523Z',
       text: 'Sample post text',
     },
-    newText: 'New text',
-    type: 'forum',
+    transaction: api.api.tx.forum.editPostText(1, 1, 1, 1, ''),
   }
 
   const useModal: UseModal<any> = {
@@ -77,10 +77,12 @@ describe('UI: EditPostModal', () => {
   beforeEach(async () => {
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath)
+    modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
   })
 
   it('Requirements failed', async () => {
     tx = stubTransaction(api, txPath, 10000)
+    modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
     renderModal()
     expect(await screen.findByText('Insufficient Funds')).toBeDefined()
   })
