@@ -69,6 +69,7 @@ export const PostList = ({ threadId, isThreadActive }: PostListProps) => {
             insertRef={getInsertRef(post.id)}
             isSelected={post.id === initialPost}
             isThreadActive={isThreadActive}
+            type="forum"
           />
         </PostBlock>
       ))}

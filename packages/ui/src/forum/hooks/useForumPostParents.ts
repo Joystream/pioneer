@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 
 import { ForumPostParentsFragment, useGetForumPostParentsQuery } from '@/forum/queries'
 
-export const usePostParents = (id: string) => {
+export const useForumPostParents = (id: string) => {
   const { data, loading } = useGetForumPostParentsQuery({ variables: { where: { id } } })
   const { threadId, categoryId } = useMemo(() => asPostParents(data?.forumPostByUniqueInput), [data, loading])
   return { threadId, categoryId, parentsLoading: loading }
