@@ -63,7 +63,7 @@ const getStart = (text: string, limit = 30) => {
   const index = Math.min(
     limit,
     ...[
-      longest.indexOf(' ', longest.indexOf(' ', longest.indexOf(' ') + 1) + 1),
+      longest.indexOf(' ', longest.indexOf(' ', longest.indexOf(' ') + 1) + 1) - 1,
       longest.indexOf('.'),
       longest.indexOf(','),
     ].filter((index) => index >= 0)
@@ -77,8 +77,8 @@ const getEnd = (text: string, limit = 30) => {
   const index = Math.max(
     0,
     longest.lastIndexOf(' ', longest.lastIndexOf(' ', longest.lastIndexOf(' ') - 1) - 1),
-    longest.lastIndexOf('.'),
-    longest.lastIndexOf(',')
+    longest.lastIndexOf('.') + 1,
+    longest.lastIndexOf(',') + 1
   )
 
   return index > 0 ? longest.slice(index - limit + 1) : longest
