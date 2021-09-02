@@ -28,6 +28,7 @@ export const ForumPostResultBreadcrumbs = memo(({ id }: ForumPostResultBreadcrum
 
 const ResultBreadcrumbsList = styled(BreadcrumbsListComponent)`
   color: ${Colors.Black[500]};
+  flex-wrap: wrap;
 
   ${BreadcrumbsItemLink} {
     &,
