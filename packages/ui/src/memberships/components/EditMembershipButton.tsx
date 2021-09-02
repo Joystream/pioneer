@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
+import ReactDOM from 'react-dom'
 
 import { ButtonGhost, ButtonProps } from '../../common/components/buttons'
-import { useToggle } from '../../common/hooks/useToggle'
 import { UpdateMembershipModal } from '../modals/UpdateMembershipModal'
 import { Member } from '../types'
 
@@ -12,14 +12,26 @@ interface Props extends ButtonProps {
 }
 
 export const EditMembershipButton = ({ className, children, member }: Props) => {
-  const [isOpen, toggleIsOpen] = useToggle()
+  const [isOpen, toggleIsOpen] = useState(false)
 
   return (
     <>
-      <ButtonGhost size="small" onClick={toggleIsOpen} className={className} square>
+      <ButtonGhost
+        size="small"
+        onClick={(event: React.MouseEvent<HTMLElement>) => {
+          event.stopPropagation()
+          toggleIsOpen(!isOpen)
+        }}
+        className={className}
+        square
+      >
         {children}
       </ButtonGhost>
-      {isOpen && <UpdateMembershipModal onClose={toggleIsOpen} member={member} />}
+      {isOpen &&
+        ReactDOM.createPortal(
+          <UpdateMembershipModal onClose={() => toggleIsOpen(!isOpen)} member={member} />,
+          document.body
+        )}
     </>
   )
 }

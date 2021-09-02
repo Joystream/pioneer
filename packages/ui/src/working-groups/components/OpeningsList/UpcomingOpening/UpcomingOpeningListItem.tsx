@@ -16,9 +16,10 @@ import { UpcomingWorkingGroupOpening } from '@/working-groups/types'
 
 export type UpcomingProps = {
   opening: UpcomingWorkingGroupOpening
+  onClick?: () => void
 }
-export const UpcomingOpeningListItem = ({ opening }: UpcomingProps) => (
-  <ToggleableItemWrap>
+export const UpcomingOpeningListItem = ({ opening, onClick }: UpcomingProps) => (
+  <ToggleableItemWrap onClick={onClick}>
     <ToggleableItemInfo>
       <ToggleableItemInfoTop>
         <Subscription>ID: {opening.id}</Subscription>

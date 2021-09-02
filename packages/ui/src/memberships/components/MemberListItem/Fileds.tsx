@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Fonts, Sizes } from '../../../common/constants'
+import { TableListItemAsLinkHover } from '@/common/components/List'
+
+import { BorderRad, Fonts, Sizes, Transitions, Colors } from '../../../common/constants'
 
 type MemberItemKind = 'Member' | 'MyMember'
 export const colLayoutByType = (kind: MemberItemKind) => {
@@ -20,6 +22,7 @@ export const colLayoutByType = (kind: MemberItemKind) => {
 export const Info = styled.span`
   font-family: ${Fonts.Grotesk};
   font-weight: 700;
+  z-index: 1;
 `
 export const CountInfo = ({ count, times }: { count: number; times?: boolean }) => (
   <Info>
@@ -28,8 +31,18 @@ export const CountInfo = ({ count, times }: { count: number; times?: boolean }) 
   </Info>
 )
 
+export const MemberModalTrigger = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+`
+
 export const MemberItemWrap = styled.div`
   display: grid;
+  position: relative;
   grid-template-columns: ${({ kind }: { kind: MemberItemKind }) => colLayoutByType(kind)};
   grid-template-rows: 1fr;
   justify-content: space-between;
@@ -38,6 +51,11 @@ export const MemberItemWrap = styled.div`
   width: 100%;
   height: ${Sizes.accountHeight};
   padding: 16px 0 16px 14px;
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
+  transition: ${Transitions.all};
+
+  ${TableListItemAsLinkHover}
 `
 
 export const MemberColumn = styled.div`

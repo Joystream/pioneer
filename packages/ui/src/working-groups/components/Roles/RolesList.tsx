@@ -1,12 +1,13 @@
 import BN from 'bn.js'
 import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { ContextMenu } from '@/common/components/ContextMenu'
-import { List, ListItem } from '@/common/components/List'
+import { ContextMenu, ContextMenuContainer } from '@/common/components/ContextMenu'
+import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
+import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
+import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
@@ -31,7 +32,7 @@ export interface RolesListProps {
 export const RolesList = ({ workers }: RolesListProps) => (
   <List>
     {workers.map((worker) => (
-      <ListItem key={worker.id}>
+      <ListItem key={worker.id} borderless>
         <RolesListItem worker={worker} />
       </ListItem>
     ))}
@@ -39,7 +40,6 @@ export const RolesList = ({ workers }: RolesListProps) => (
 )
 
 const RolesListItem = ({ worker }: { worker: Worker }) => {
-  const history = useHistory()
   const { showModal } = useModal()
   const changeRewardCallback = useCallback(() => {
     showModal<ChangeAccountModalCall>({
@@ -54,14 +54,18 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
     })
   }, [])
 
+  const roleRoute = `/working-groups/my-roles/${worker.id}`
+
   return (
-    <ToggleableItemWrap>
+    <RoleItemWrapper>
       <ToggleableItemInfo>
         <ToggleableItemInfoTop>
           <BadgeStatus inverted>{worker.group.name}</BadgeStatus>
           {worker.isLead && <BadgeStatus>LEAD</BadgeStatus>}
         </ToggleableItemInfoTop>
-        <Title onClick={() => history.push(`/working-groups/my-roles/${worker.id}`)}>{workerRoleTitle(worker)}</Title>
+        <RoleTitle as={GhostRouterLink} to={roleRoute}>
+          {workerRoleTitle(worker)}
+        </RoleTitle>
       </ToggleableItemInfo>
       <ToggleableItemSummary>
         <OpenItemSummaryColumn>
@@ -96,10 +100,45 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
           { text: 'Leave a position', onClick: leaveRoleCallback },
         ]}
       />
-    </ToggleableItemWrap>
+    </RoleItemWrapper>
   )
 }
 
-const Title = styled(ToggleableItemTitle)`
-  cursor: pointer;
+const RoleItemWrapper = styled(ToggleableItemWrap)`
+  position: relative;
+  border: 1px solid ${Colors.Black[100]};  
+  border-radius: ${BorderRad.s};
+  transition: ${Transitions.all};
+
+  ${TableListItemAsLinkHover};
+
+  ${ToggleableItemInfo},
+  ${TextInlineBig},
+  ${ContextMenuContainer} {
+    z-index: 1;
+  }
+
+`
+
+const RoleTitle = styled(ToggleableItemTitle)`
+  font-family: ${Fonts.Grotesk};
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  transition: ${Transitions.all};
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  &:hover,
+  &:focus {
+    color: ${Colors.Blue[500]};
+  }
 `

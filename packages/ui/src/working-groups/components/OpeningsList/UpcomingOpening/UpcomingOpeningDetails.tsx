@@ -15,9 +15,9 @@ import {
   OpenedWrapper,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
 
-export const UpcomingOpeningDetails = ({ opening }: UpcomingProps) => {
+export const UpcomingOpeningDetails = ({ opening, onClick }: UpcomingProps) => {
   return (
-    <OpenedContainer>
+    <OpenedContainer onClick={onClick}>
       <OpenedWrapper>
         <OpenedTop>
           <Subscription>Starts {relativeTime(opening.expectedStart)}</Subscription>
