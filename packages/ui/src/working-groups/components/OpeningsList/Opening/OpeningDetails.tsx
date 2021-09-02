@@ -7,7 +7,7 @@ import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeTime } from '@/common/model/relativeTime'
-import { Props } from '@/working-groups/components/OpeningsList/Opening/OpeningListItem'
+import { OpeningListItemProps } from '@/working-groups/components/OpeningsList/Opening/OpeningListItem'
 import {
   OpenedContainer,
   OpenedItemTitle,
@@ -17,11 +17,11 @@ import {
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
 
-export const OpeningDetails = ({ opening }: Props) => {
+export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
   const { showModal } = useModal()
 
   return (
-    <OpenedContainer>
+    <OpenedContainer onClick={onClick}>
       <OpenedWrapper>
         <OpenedTop>
           <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>

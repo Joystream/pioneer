@@ -5,9 +5,9 @@ import { UpcomingWorkingGroupOpening } from '@/working-groups/types'
 import { UpcomingOpeningDetails } from './UpcomingOpeningDetails'
 import { UpcomingOpeningListItem } from './UpcomingOpeningListItem'
 
-export const UpcomingOpening = (props: { opening: UpcomingWorkingGroupOpening }) => (
+export const UpcomingOpening = (props: { opening: UpcomingWorkingGroupOpening; onClick?: () => void }) => (
   <>
-    <UpcomingOpeningListItem opening={props.opening} />
-    <UpcomingOpeningDetails opening={props.opening} />
+    <UpcomingOpeningListItem opening={props.opening} onClick={props.onClick} />
+    <UpcomingOpeningDetails opening={props.opening} onClick={props.onClick} />
   </>
 )

@@ -16,13 +16,14 @@ import {
 } from '@/working-groups/components/ToggleableItemStyledComponents'
 import { WorkingGroupOpening } from '@/working-groups/types'
 
-export type Props = {
+export type OpeningListItemProps = {
   opening: WorkingGroupOpening
   past?: boolean
+  onClick?: () => void
 }
 
-export const OpeningListItem = ({ opening, past }: Props) => (
-  <ToggleableItemWrap past={past}>
+export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps) => (
+  <ToggleableItemWrap past={past} onClick={onClick}>
     <ToggleableItemInfo>
       <ToggleableItemInfoTop>
         <Subscription>ID: {opening.id}</Subscription>

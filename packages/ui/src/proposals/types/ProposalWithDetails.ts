@@ -78,4 +78,5 @@ const asForumComment = (fields: DiscussionPostFieldsFragment): ForumPost => ({
   author: asMember(fields.author),
   text: fields.text,
   ...(fields.repliesTo ? { repliesTo: asForumComment(fields.repliesTo) } : {}),
+  status: 'PostStatusActive',
 })

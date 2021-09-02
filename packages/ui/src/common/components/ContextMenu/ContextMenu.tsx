@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import styled from 'styled-components'
 
@@ -16,9 +17,10 @@ export interface ContextMenuItem {
 export interface ContextMenuProps {
   items: ContextMenuItem[]
   size?: ButtonSize
+  title?: string
 }
 
-export const ContextMenu = ({ items, size }: ContextMenuProps) => {
+export const ContextMenu = ({ items, size, title }: ContextMenuProps) => {
   const [isMenuVisible, setMenuVisible] = useState(false)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLDivElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
@@ -47,32 +49,34 @@ export const ContextMenu = ({ items, size }: ContextMenuProps) => {
 
   return (
     <ContextMenuContainer ref={setReferenceElementRef}>
-      <ButtonGhost square size={size ?? 'medium'} {...contextMenuHandlers}>
+      <ButtonGhost square size={size ?? 'medium'} {...contextMenuHandlers} title={title ?? 'Context menu'}>
         <KebabMenuIcon />
       </ButtonGhost>
-      {isMenuVisible && (
-        <ContextMenuWrapper
-          isOpen={isMenuVisible}
-          ref={setPopperElementRef}
-          style={styles.popper}
-          {...attributes.popper}
-        >
-          {items.map((item, index) => (
-            <ButtonLink
-              key={index}
-              size="small"
-              bold
-              borderless
-              onClick={() => {
-                item.onClick()
-                setMenuVisible(false)
-              }}
-            >
-              {item.text}
-            </ButtonLink>
-          ))}
-        </ContextMenuWrapper>
-      )}
+      {isMenuVisible &&
+        ReactDOM.createPortal(
+          <ContextMenuWrapper
+            isOpen={isMenuVisible}
+            ref={setPopperElementRef}
+            style={styles.popper}
+            {...attributes.popper}
+          >
+            {items.map((item, index) => (
+              <ButtonLink
+                key={index}
+                size="small"
+                bold
+                borderless
+                onClick={() => {
+                  item.onClick()
+                  setMenuVisible(false)
+                }}
+              >
+                {item.text}
+              </ButtonLink>
+            ))}
+          </ContextMenuWrapper>,
+          document.body
+        )}
     </ContextMenuContainer>
   )
 }

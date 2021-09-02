@@ -26,6 +26,7 @@ export const asStorybookPost = (text: string, threadId?: string): RawForumPostMo
         createdAt: '2021-05-28T15:50:35.148Z',
         text,
       },
+      status: 'PostStatusActive',
     }
 }
 

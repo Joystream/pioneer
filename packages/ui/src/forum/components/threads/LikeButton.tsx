@@ -16,9 +16,10 @@ export const LikeButton = memo(({ liked, disabled, counter }: LikeButtonProps) =
 
   return (
     <LikeButtonStyles
+      title="Like this post"
       size="small"
       isLiked={isLiked}
-      isDisabled={disabled}
+      disabled={disabled}
       onClick={() => (!disabled ? setLiked(!isLiked) : true)}
     >
       <HeartIcon className="heartIcon" />
@@ -27,7 +28,7 @@ export const LikeButton = memo(({ liked, disabled, counter }: LikeButtonProps) =
   )
 })
 
-const LikeButtonStyles = styled(ButtonGhost)<{ isLiked?: boolean; isDisabled?: boolean }>`
+const LikeButtonStyles = styled(ButtonGhost)<{ isLiked?: boolean; disabled?: boolean }>`
   ${ButtonInnerWrapper} > .heartIcon {
     color: ${({ isLiked }) => isLiked && Colors.Blue[500]};
   }
@@ -37,8 +38,8 @@ const LikeButtonStyles = styled(ButtonGhost)<{ isLiked?: boolean; isDisabled?: b
     fill: ${({ isLiked }) => (isLiked ? Colors.Blue[500] : 'transparent')};
   }
 
-  ${({ isDisabled, isLiked }) =>
-    !isDisabled
+  ${({ disabled, isLiked }) =>
+    !disabled
       ? css`
           &:hover,
           &:focus {

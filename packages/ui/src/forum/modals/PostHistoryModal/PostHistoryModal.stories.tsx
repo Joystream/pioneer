@@ -107,6 +107,7 @@ const forum: {
         text:
           'xime fuga dolores rerum pariatur nobis aut explicabo ut pariatur dolor voluptatem ut ullam eaque aut aut mollitia sed dolor non nesciunt',
       },
+      status: 'PostStatusActive',
     },
   ],
 }

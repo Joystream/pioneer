@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
@@ -9,11 +9,11 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account, Balances } from '@/accounts/types'
 import { LockItem } from '@/app/pages/Profile/components/LockItem'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
+import { TableListItemAsLinkHover } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { Label } from '@/common/components/typography/Label'
-import { Colors, Sizes } from '@/common/constants'
-import { useToggle } from '@/common/hooks/useToggle'
+import { Colors, Sizes, Transitions, BorderRad } from '@/common/constants'
 
 interface AccountItemDataProps {
   account: Account
@@ -47,10 +47,10 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
   const balance = useBalance(address)
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
-  const [isDropped, setDropped] = useToggle()
+  const [isDropped, setDropped] = useState(false)
 
   return (
-    <AccounItemWrapper>
+    <AccounItemWrapper onClick={() => setDropped(!isDropped)}>
       <AccountItemWrap key={address}>
         <AccountInfo account={account} />
         <TokenValue value={balance?.total} />
@@ -63,7 +63,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         <AccountControls>
           <TransferButton to={account} />
           <TransferButton from={account} disabled={isSendDisabled} />
-          <DropDownButton onClick={setDropped} isDropped={isDropped} />
+          <DropDownButton onClick={() => setDropped(!isDropped)} isDropped={isDropped} />
         </AccountControls>
       </AccountItemWrap>
       <StyledDropDown isDropped={isDropped}>
@@ -77,6 +77,12 @@ const AccounItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
+  cursor: pointer;
+  transition: ${Transitions.all};
+
+  ${TableListItemAsLinkHover}
 `
 
 export const AccountItemWrap = styled.div`

@@ -3,9 +3,12 @@ import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
+import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
+import { useThreadOriginalPost } from '@/forum/hooks/useThreadOriginalPost'
+import { ForumThread } from '@/forum/types'
 
 import { ThreadTags } from './ThreadTags'
 
@@ -18,21 +21,28 @@ interface ThreadAnswerProps {
 }
 
 export interface ThreadItemContentProps {
-  title: string
-  date?: string
-  content?: string
+  thread: ForumThread
   badges?: ThreadBadgeProps[]
   answers?: ThreadAnswerProps[]
   halfSize?: boolean
   empty?: boolean
 }
 
-export const ThreadItem = ({ title, date, content, badges, answers, halfSize, empty }: ThreadItemContentProps) => {
+export const ThreadItem = ({ thread, badges, answers, halfSize, empty }: ThreadItemContentProps) => {
+  const { originalPost, isLoading } = useThreadOriginalPost(thread.id)
+  const content = originalPost?.text
+  if (isLoading) {
+    return (
+      <ThreadItemWrapper>
+        <Loading />
+      </ThreadItemWrapper>
+    )
+  }
   return (
     <ThreadItemWrapper halfSize={halfSize}>
       <ThreadItemHeader align="center">
-        <ThreadItemTitle empty={empty}>{title}</ThreadItemTitle>
-        {date && <ThreadItemTime lighter>{date}</ThreadItemTime>}
+        <ThreadItemTitle empty={empty}>{thread.title}</ThreadItemTitle>
+        <ThreadItemTime lighter>{thread.createdInBlock.timestamp}</ThreadItemTime>
       </ThreadItemHeader>
       {content && (
         <ThreadItemText light value>
@@ -61,6 +71,14 @@ export const ThreadItem = ({ title, date, content, badges, answers, halfSize, em
     </ThreadItemWrapper>
   )
 }
+
+export const EmptyThreadItem = ({ text }: { text: string }) => (
+  <ThreadItemWrapper>
+    <ThreadItemHeader align="center">
+      <ThreadItemTitle empty>{text}</ThreadItemTitle>
+    </ThreadItemHeader>
+  </ThreadItemWrapper>
+)
 
 const ThreadItemHeader = styled(ColumnGapBlock)`
   justify-content: space-between;

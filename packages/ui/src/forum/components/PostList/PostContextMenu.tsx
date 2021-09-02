@@ -47,8 +47,10 @@ export const PostContextMenu = ({ post, onEdit, type }: Props) => {
     }
   }, [api, connectionState, JSON.stringify(forumPostData), JSON.stringify(proposalPostData), type])
 
-  return isOwn ? (
+  const isActive = post.status === 'PostStatusActive'
+  return isOwn && isActive ? (
     <ContextMenu
+      title="Post actions"
       size="small"
       items={[
         { text: 'Edit post', onClick: onEdit },

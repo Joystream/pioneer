@@ -1,16 +1,22 @@
 import faker from 'faker'
 
-import { ThreadStatusType } from '@/forum/types'
+import { PostStatusTypename, ThreadStatusType } from '@/forum/types'
 import { RawForumCategoryMock, RawForumPostMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
-import { randomBlock, randomFromRange, randomMember, repeat } from '../utils'
+import { randomBlock, randomFromRange, randomFromWeightedSet, randomMember, repeat } from '../utils'
 
 import { ArchiveStatus as CategoryArchiveStatus } from './generateCategories'
 
 let nextThreadId = 0
 let nextPostId = 0
 
-export const generateForumPost = (threadId: string, authorId: string, repliesToId?: string): RawForumPostMock => {
+const randomPostStatus = randomFromWeightedSet<PostStatusTypename>(
+  [10, 'PostStatusActive'],
+  [1, 'PostStatusModerated'],
+  [1, 'PostStatusRemoved'],
+)
+
+export const generateForumPost = (threadId: string, threadStatus: string, authorId: string, repliesToId?: string): RawForumPostMock => {
   const createdAt = faker.date.recent(180)
   let lastEditDate: Date
   const postText = faker.lorem.words(randomFromRange(10, 100))
@@ -21,6 +27,9 @@ export const generateForumPost = (threadId: string, authorId: string, repliesToI
       ...randomBlock(lastEditDate),
     }
   })
+  const status: PostStatusTypename = threadStatus == 'ThreadStatusLocked'
+    ? 'PostStatusLocked'
+    : randomPostStatus()
 
   return {
     id: String(nextPostId++),
@@ -33,6 +42,7 @@ export const generateForumPost = (threadId: string, authorId: string, repliesToI
       ...randomBlock(createdAt),
       text: edits.length ? faker.lorem.words(randomFromRange(10, 100)) : postText,
     },
+    status,
   }
 }
 
@@ -62,16 +72,16 @@ export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock,
   )
 
   const forumPosts = forumThreads
-    .map(({ id, authorId }: RawForumThreadMock) => {
+    .map(({ id, authorId, status }: RawForumThreadMock) => {
       const posts: RawForumPostMock[] = []
 
-      posts.push(generateForumPost(id, authorId))
+      posts.push(generateForumPost(id, status.__typename, authorId))
 
       for (let i = 0; i < new Array(randomFromRange(3, 10)).length; i++) {
         const repliesToId =
           posts.length > 1 && Math.random() > 0.5 ? posts[randomFromRange(1, posts.length - 1)].id : undefined
 
-        posts.push(generateForumPost(id, randomMember().id, repliesToId))
+        posts.push(generateForumPost(id, status.__typename, randomMember().id, repliesToId))
       }
 
       return posts

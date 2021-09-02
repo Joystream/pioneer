@@ -103,10 +103,17 @@ export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, inse
               <LikeButton disabled={!isThreadActive} counter={likesCount} />
             </ButtonsGroup>
             <ButtonsGroup>
-              <CopyButtonTemplate textToCopy={postLink} square size="small" disabled={isPreview} icon={<LinkIcon />} />
+              <CopyButtonTemplate
+                textToCopy={postLink}
+                square
+                size="small"
+                disabled={isPreview}
+                icon={<LinkIcon />}
+                title="Copy link"
+              />
               {isThreadActive && (
                 <>
-                  <ButtonGhost square disabled={isPreview} size="small">
+                  <ButtonGhost square disabled={isPreview} size="small" title="Reply">
                     <ReplyIcon />
                   </ButtonGhost>
                   <PostContextMenu post={post} onEdit={() => setEditing(true)} type={type} />

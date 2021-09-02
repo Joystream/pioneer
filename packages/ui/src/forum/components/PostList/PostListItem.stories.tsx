@@ -97,6 +97,7 @@ Exercitation veniam consequat sunt nostrud amet.`,
       roles: [],
       inviteCount: 0,
     },
+    status: 'PostStatusActive',
   },
   isThreadActive: true,
 }

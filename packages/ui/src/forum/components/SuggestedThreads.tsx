@@ -18,14 +18,7 @@ export const SuggestedThreads = () => {
     return (
       <ThreadsList>
         {threads.map((thread) => (
-          <ThreadItem
-            key={thread.id}
-            answers={[{ answer: 'Text' }]}
-            badges={[{ badge: 'Text' }]}
-            content="Paragraph Medium. Will one day be essential for ensuring that the petabytes of media items uploaded to Joystream are formatted correctly and compreh..."
-            date={new Date().toString()}
-            title={thread.title}
-          />
+          <ThreadItem key={thread.id} thread={thread} />
         ))}
       </ThreadsList>
     )

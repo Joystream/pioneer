@@ -39,6 +39,7 @@ describe('UI: EditPostModal', () => {
       author: getMember('alice'),
       createdAt: '2021-07-02T04:22:13.523Z',
       text: 'Sample post text',
+      status: 'PostStatusActive',
     },
     transaction: api.api.tx.forum.editPostText(1, 1, 1, 1, ''),
   }

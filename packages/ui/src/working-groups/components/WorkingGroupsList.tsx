@@ -13,13 +13,13 @@ export const WorkingGroupsList = ({ groups }: WorkingGroupsListProps) => {
   return (
     <Groups>
       {groups.map((group) => (
-        <WorkingGroupListItem key={group.name} group={group} />
+        <WorkingGroupListItem key={group.id} group={group} />
       ))}
     </Groups>
   )
 }
 
-const Groups = styled.div`
+const Groups = styled.section`
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: 108px;

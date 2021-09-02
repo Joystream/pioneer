@@ -26,6 +26,7 @@ export const PreviewThreadModal = ({ onClose, author, text }: PreviewThreadProps
       createdAt: new Date(Date.now()).toString(),
       author,
       text,
+      status: 'PostStatusActive',
     }),
     []
   )
