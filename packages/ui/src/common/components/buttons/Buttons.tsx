@@ -14,6 +14,7 @@ export interface ButtonProps extends ButtonSizingProps {
   inline?: boolean
   borderless?: boolean
   onClick?: MouseEventHandler
+  title?: string
 }
 
 interface ButtonSizingProps {
@@ -57,9 +58,16 @@ export function ButtonSecondary({ className, children, size, square, disabled, o
   )
 }
 
-export function ButtonGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
+export function ButtonGhost({ className, children, size, square, disabled, onClick, title }: ButtonProps) {
   return (
-    <ButtonGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
+    <ButtonGhostStyles
+      className={className}
+      size={size}
+      square={square}
+      disabled={disabled}
+      onClick={onClick}
+      title={title}
+    >
       <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonGhostStyles>
   )

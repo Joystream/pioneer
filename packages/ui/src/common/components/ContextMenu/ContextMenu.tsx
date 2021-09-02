@@ -16,9 +16,10 @@ export interface ContextMenuItem {
 export interface ContextMenuProps {
   items: ContextMenuItem[]
   size?: ButtonSize
+  title?: string
 }
 
-export const ContextMenu = ({ items, size }: ContextMenuProps) => {
+export const ContextMenu = ({ items, size, title }: ContextMenuProps) => {
   const [isMenuVisible, setMenuVisible] = useState(false)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLDivElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
@@ -47,7 +48,7 @@ export const ContextMenu = ({ items, size }: ContextMenuProps) => {
 
   return (
     <ContextMenuContainer ref={setReferenceElementRef}>
-      <ButtonGhost square size={size ?? 'medium'} {...contextMenuHandlers}>
+      <ButtonGhost square size={size ?? 'medium'} {...contextMenuHandlers} title={title ?? 'Context menu'}>
         <KebabMenuIcon />
       </ButtonGhost>
       {isMenuVisible && (
