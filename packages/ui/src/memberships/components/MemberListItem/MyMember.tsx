@@ -26,7 +26,7 @@ export const MyMemberListItem = ({ member }: { member: Member }) => {
     <MemberItemWrap kind="MyMember">
       <MemberModalTrigger onClick={showMemberModal} />
       <MemberColumn>
-        <MemberInfo member={member} showId skipModal />
+        <MemberInfo member={member} showId />
       </MemberColumn>
 
       <MemberRolesColumn>
