@@ -130,7 +130,7 @@ export const ProposalPreview = () => {
 
             <RationalePreview rationale={proposal.rationale} />
 
-            <ProposalDiscussions thread={proposal.discussionThread} />
+            <ProposalDiscussions thread={proposal.discussionThread} proposalId={id} />
           </RowGapBlock>
         </MainPanel>
       }

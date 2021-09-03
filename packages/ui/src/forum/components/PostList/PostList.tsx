@@ -6,9 +6,11 @@ import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { BorderRad, Colors, Shadows } from '@/common/constants'
+import { useLocation } from '@/common/hooks/useLocation'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
+import { ForumRoutes } from '@/forum/constant'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 
 interface PostListProps {
@@ -19,6 +21,7 @@ interface PostListProps {
 
 export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps) => {
   const history = useHistory()
+  const { origin, pathname } = useLocation()
   const query = useRouteQuery()
 
   const navigation = { post: query.get('post'), page: query.get('page') }
@@ -26,7 +29,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps)
   const isReady = useMemo(() => !(isLoading || isLoadingPosts), [posts, pageCount])
 
   const setPage = useCallback(
-    (page: number) => history.replace({ pathname: history.location.pathname, search: page > 1 ? `page=${page}` : '' }),
+    (page: number) => history.replace({ pathname, search: page > 1 ? `page=${page}` : '' }),
     []
   )
 
@@ -57,6 +60,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps)
             isSelected={post.id === navigation.post}
             isThreadActive={isThreadActive}
             type="forum"
+            link={`${origin}${ForumRoutes.thread}/${threadId}?post=${post.id}`}
           />
         </PostBlock>
       ))}
