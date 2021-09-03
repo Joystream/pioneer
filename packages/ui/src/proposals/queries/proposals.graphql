@@ -139,6 +139,10 @@ fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
   text
 }
 
+fragment ProposalPostParents on ProposalDiscussionPost {
+  threadId
+}
+
 query getProposals($where: ProposalWhereInput) {
   proposals(where: $where) {
     ...ProposalFields
@@ -161,5 +165,11 @@ query GetRuntimeWasmBytecode($where: RuntimeWasmBytecodeWhereUniqueInput!) {
   runtime: runtimeWasmBytecodeByUniqueInput(where: $where) {
     id
     bytecode
+  }
+}
+
+query GetProposalPostParent($where: ProposalDiscussionPostWhereUniqueInput!) {
+  proposalDiscussionPostByUniqueInput(where: $where) {
+    ...ProposalPostParents
   }
 }

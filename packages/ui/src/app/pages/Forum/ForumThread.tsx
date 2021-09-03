@@ -58,15 +58,17 @@ export const ForumThread = () => {
           </ButtonsGroup>
         </PageHeaderRow>
         <RowGapBlock>
-          <BadgesRow>
+          <BadgesRow space={8}>
             {thread.isSticky && (
               <ThreadPinned>
                 <PinIcon />
               </ThreadPinned>
             )}
-            <BadgeStatus inverted size="l" separated>
-              Tag
-            </BadgeStatus>
+            {thread.tags.map((tag, index) => (
+              <BadgeStatus inverted size="l" key={index}>
+                {tag}
+              </BadgeStatus>
+            ))}
             <BlockInfo block={thread.createdInBlock} />
           </BadgesRow>
         </RowGapBlock>

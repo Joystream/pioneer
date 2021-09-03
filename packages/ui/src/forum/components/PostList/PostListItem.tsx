@@ -22,27 +22,28 @@ import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 
-import { LikeButton } from '../threads/LikeButton'
-
 import { PostContextMenu } from './PostContextMenu'
 import { PostEditor } from './PostEditor'
+
+export type PostListItemType = 'forum' | 'proposal'
 
 interface PostListItemProps {
   post: ForumPost
   isSelected?: boolean
   isPreview?: boolean
   isThreadActive?: boolean
-  insertRef: (ref: RefObject<HTMLDivElement>) => void
+  insertRef?: (ref: RefObject<HTMLDivElement>) => void
+  type: PostListItemType
 }
 
-export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, insertRef }: PostListItemProps) => {
-  const { createdAtBlock, updatedAt, author, text, reaction, repliesTo, id } = post
+export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, insertRef, type }: PostListItemProps) => {
+  const { createdAtBlock, updatedAt, author, text, repliesTo, id } = post
 
   const location = useLocation()
   const query = useRouteQuery()
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    !!ref.current && insertRef(ref)
+    !!ref.current && insertRef && insertRef(ref)
   }, [ref.current])
   const [editing, setEditing] = useState(false)
   const { showModal } = useModal()
@@ -67,8 +68,6 @@ export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, inse
     return window.location.origin + (window.location.hash ? '/#' : '') + location.pathname + '?' + query.toString()
   }, [location.search, location.pathname, id])
 
-  const likesCount = reaction ? reaction.length : 0
-
   return (
     <ForumPostStyles ref={ref} isSelected={isSelected}>
       <ForumPostRow>
@@ -88,36 +87,31 @@ export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, inse
           </Reply>
         )}
         {editing ? (
-          <PostEditor post={post} onCancel={() => setEditing(false)} />
+          <PostEditor post={post} onCancel={() => setEditing(false)} type={type} />
         ) : (
           <MarkdownPreview markdown={text} append={editionTime} size="s" />
         )}
       </MessageBody>
       <ForumPostRow>
         {!editing && (
-          <>
-            <ButtonsGroup>
-              <LikeButton disabled={!isThreadActive} counter={likesCount} />
-            </ButtonsGroup>
-            <ButtonsGroup>
-              <CopyButtonTemplate
-                textToCopy={postLink}
-                square
-                size="small"
-                disabled={isPreview}
-                icon={<LinkIcon />}
-                title="Copy link"
-              />
-              {isThreadActive && (
-                <>
-                  <ButtonGhost square disabled={isPreview} size="small" title="Reply">
-                    <ReplyIcon />
-                  </ButtonGhost>
-                  <PostContextMenu post={post} onEdit={() => setEditing(true)} />
-                </>
-              )}
-            </ButtonsGroup>
-          </>
+          <ButtonsGroup>
+            <CopyButtonTemplate
+              textToCopy={postLink}
+              square
+              size="small"
+              disabled={isPreview}
+              icon={<LinkIcon />}
+              title="Copy link"
+            />
+            {isThreadActive && (
+              <>
+                <ButtonGhost square disabled={isPreview} size="small" title="Reply">
+                  <ReplyIcon />
+                </ButtonGhost>
+                <PostContextMenu post={post} onEdit={() => setEditing(true)} type={type} />
+              </>
+            )}
+          </ButtonsGroup>
         )}
       </ForumPostRow>
     </ForumPostStyles>

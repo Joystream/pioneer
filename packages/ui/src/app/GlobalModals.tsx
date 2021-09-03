@@ -3,6 +3,7 @@ import { ReactElement } from 'react-markdown'
 
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
+import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { useModal } from '@/common/hooks/useModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
@@ -41,6 +42,7 @@ export type ModalNames =
   | ModalName<EditPostModalCall>
   | ModalName<PostHistoryModalCall>
   | ModalName<EditThreadTitleModalCall>
+  | ModalName<SearchResultsModalCall>
   | ModalName<CreatePostModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
@@ -61,6 +63,7 @@ const modals: Record<ModalNames, ReactElement> = {
   EditPost: <EditPostModal />,
   PostHistory: <PostHistoryModal />,
   EditThreadTitleModal: <EditThreadTitleModal />,
+  SearchResults: <SearchResultsModal />,
   CreatePost: <CreatePostModal />,
 }
 

@@ -173,6 +173,17 @@ export type GetForumCategoryBreadcrumbsQuery = {
   forumCategoryByUniqueInput?: Types.Maybe<{ __typename: 'ForumCategory' } & ForumCategoryBreadcrumbsFieldsFragment>
 }
 
+export type GetForumCategoryBreadcrumbQueryVariables = Types.Exact<{
+  where: Types.ForumCategoryWhereUniqueInput
+}>
+
+export type GetForumCategoryBreadcrumbQuery = {
+  __typename: 'Query'
+  forumCategoryByUniqueInput?: Types.Maybe<
+    { __typename: 'ForumCategory'; parentId?: Types.Maybe<string> } & ForumSubCategoryFieldsFragment
+  >
+}
+
 export type GetForumThreadBreadcrumbsQueryVariables = Types.Exact<{
   where: Types.ForumThreadWhereUniqueInput
 }>
@@ -284,6 +295,23 @@ export type GetForumPostParentsQueryVariables = Types.Exact<{
 export type GetForumPostParentsQuery = {
   __typename: 'Query'
   forumPostByUniqueInput?: Types.Maybe<{ __typename: 'ForumPost' } & ForumPostParentsFragment>
+}
+
+export type SearchForumPostQueryVariables = Types.Exact<{
+  where: Types.ForumPostWhereInput
+  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type SearchForumPostQuery = {
+  __typename: 'Query'
+  forumPosts: Array<{
+    __typename: 'ForumPost'
+    id: string
+    text: string
+    thread: { __typename: 'ForumThread'; id: string; title: string; categoryId: string }
+  }>
 }
 
 export const ForumModeratorFieldsFragmentDoc = gql`
@@ -583,6 +611,56 @@ export type GetForumCategoryBreadcrumbsLazyQueryHookResult = ReturnType<typeof u
 export type GetForumCategoryBreadcrumbsQueryResult = Apollo.QueryResult<
   GetForumCategoryBreadcrumbsQuery,
   GetForumCategoryBreadcrumbsQueryVariables
+>
+export const GetForumCategoryBreadcrumbDocument = gql`
+  query GetForumCategoryBreadcrumb($where: ForumCategoryWhereUniqueInput!) {
+    forumCategoryByUniqueInput(where: $where) {
+      ...ForumSubCategoryFields
+      parentId
+    }
+  }
+  ${ForumSubCategoryFieldsFragmentDoc}
+`
+
+/**
+ * __useGetForumCategoryBreadcrumbQuery__
+ *
+ * To run a query within a React component, call `useGetForumCategoryBreadcrumbQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumCategoryBreadcrumbQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumCategoryBreadcrumbQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetForumCategoryBreadcrumbQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumCategoryBreadcrumbQuery, GetForumCategoryBreadcrumbQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumCategoryBreadcrumbQuery, GetForumCategoryBreadcrumbQueryVariables>(
+    GetForumCategoryBreadcrumbDocument,
+    options
+  )
+}
+export function useGetForumCategoryBreadcrumbLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumCategoryBreadcrumbQuery, GetForumCategoryBreadcrumbQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumCategoryBreadcrumbQuery, GetForumCategoryBreadcrumbQueryVariables>(
+    GetForumCategoryBreadcrumbDocument,
+    options
+  )
+}
+export type GetForumCategoryBreadcrumbQueryHookResult = ReturnType<typeof useGetForumCategoryBreadcrumbQuery>
+export type GetForumCategoryBreadcrumbLazyQueryHookResult = ReturnType<typeof useGetForumCategoryBreadcrumbLazyQuery>
+export type GetForumCategoryBreadcrumbQueryResult = Apollo.QueryResult<
+  GetForumCategoryBreadcrumbQuery,
+  GetForumCategoryBreadcrumbQueryVariables
 >
 export const GetForumThreadBreadcrumbsDocument = gql`
   query GetForumThreadBreadcrumbs($where: ForumThreadWhereUniqueInput!) {
@@ -1057,3 +1135,51 @@ export type GetForumPostParentsQueryResult = Apollo.QueryResult<
   GetForumPostParentsQuery,
   GetForumPostParentsQueryVariables
 >
+export const SearchForumPostDocument = gql`
+  query SearchForumPost($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $offset: Int, $limit: Int) {
+    forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+      id
+      text
+      thread {
+        id
+        title
+        categoryId
+      }
+    }
+  }
+`
+
+/**
+ * __useSearchForumPostQuery__
+ *
+ * To run a query within a React component, call `useSearchForumPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchForumPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchForumPostQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSearchForumPostQuery(
+  baseOptions: Apollo.QueryHookOptions<SearchForumPostQuery, SearchForumPostQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SearchForumPostQuery, SearchForumPostQueryVariables>(SearchForumPostDocument, options)
+}
+export function useSearchForumPostLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SearchForumPostQuery, SearchForumPostQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SearchForumPostQuery, SearchForumPostQueryVariables>(SearchForumPostDocument, options)
+}
+export type SearchForumPostQueryHookResult = ReturnType<typeof useSearchForumPostQuery>
+export type SearchForumPostLazyQueryHookResult = ReturnType<typeof useSearchForumPostLazyQuery>
+export type SearchForumPostQueryResult = Apollo.QueryResult<SearchForumPostQuery, SearchForumPostQueryVariables>

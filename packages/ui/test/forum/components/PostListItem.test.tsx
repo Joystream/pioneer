@@ -53,7 +53,6 @@ describe('UI: Post list item', () => {
       expect(await screen.findByTitle('Reply')).not.toBeDisabled()
       expect(await screen.findByTitle('Copy link')).not.toBeDisabled()
       expect(screen.queryByTitle('Post actions')).toBeNull()
-      expect(await screen.findByTitle('Like this post')).not.toBeDisabled()
     })
 
     it('Own post', async () => {
@@ -62,7 +61,6 @@ describe('UI: Post list item', () => {
       expect(await screen.findByTitle('Reply')).not.toBeDisabled()
       expect(await screen.findByTitle('Copy link')).not.toBeDisabled()
       expect(await screen.findByTitle('Post actions')).not.toBeDisabled()
-      expect(await screen.findByTitle('Like this post')).not.toBeDisabled()
     })
 
     it('Locked own post', async () => {
@@ -71,7 +69,6 @@ describe('UI: Post list item', () => {
       expect(await screen.findByTitle('Reply')).not.toBeDisabled()
       expect(await screen.findByTitle('Copy link')).not.toBeDisabled()
       expect(screen.queryByTitle('Post actions')).toBeNull()
-      expect(await screen.findByTitle('Like this post')).not.toBeDisabled()
     })
   })
 
@@ -82,7 +79,6 @@ describe('UI: Post list item', () => {
       expect(screen.queryByTitle('Reply')).toBeNull()
       expect(await screen.findByTitle('Copy link')).not.toBeDisabled()
       expect(screen.queryByTitle('Post actions')).toBeNull()
-      expect(await screen.findByTitle('Like this post')).toBeDisabled()
     })
 
     it('Own post', async () => {
@@ -91,7 +87,6 @@ describe('UI: Post list item', () => {
       expect(screen.queryByTitle('Reply')).toBeNull()
       expect(await screen.findByTitle('Copy link')).not.toBeDisabled()
       expect(screen.queryByTitle('Post actions')).toBeNull()
-      expect(await screen.findByTitle('Like this post')).toBeDisabled()
     })
 
     it('Locked own post', async () => {
@@ -100,7 +95,6 @@ describe('UI: Post list item', () => {
       expect(screen.queryByTitle('Reply')).toBeNull()
       expect(await screen.findByTitle('Copy link')).not.toBeDisabled()
       expect(screen.queryByTitle('Post actions')).toBeNull()
-      expect(await screen.findByTitle('Like this post')).toBeDisabled()
     })
   })
 

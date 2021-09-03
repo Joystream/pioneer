@@ -176,6 +176,8 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
   author: { __typename: 'Membership' } & MemberFieldsFragment
 }
 
+export type ProposalPostParentsFragment = { __typename: 'ProposalDiscussionPost'; threadId: string }
+
 export type GetProposalsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.ProposalWhereInput>
 }>
@@ -210,6 +212,17 @@ export type GetRuntimeWasmBytecodeQueryVariables = Types.Exact<{
 export type GetRuntimeWasmBytecodeQuery = {
   __typename: 'Query'
   runtime?: Types.Maybe<{ __typename: 'RuntimeWasmBytecode'; id: string; bytecode: any }>
+}
+
+export type GetProposalPostParentQueryVariables = Types.Exact<{
+  where: Types.ProposalDiscussionPostWhereUniqueInput
+}>
+
+export type GetProposalPostParentQuery = {
+  __typename: 'Query'
+  proposalDiscussionPostByUniqueInput?: Types.Maybe<
+    { __typename: 'ProposalDiscussionPost' } & ProposalPostParentsFragment
+  >
 }
 
 export const VoteFieldsFragmentDoc = gql`
@@ -367,6 +380,11 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
   ${VoteFieldsFragmentDoc}
   ${MemberFieldsFragmentDoc}
   ${DiscussionPostFieldsFragmentDoc}
+`
+export const ProposalPostParentsFragmentDoc = gql`
+  fragment ProposalPostParents on ProposalDiscussionPost {
+    threadId
+  }
 `
 export const GetProposalsDocument = gql`
   query getProposals($where: ProposalWhereInput) {
@@ -540,4 +558,53 @@ export type GetRuntimeWasmBytecodeLazyQueryHookResult = ReturnType<typeof useGet
 export type GetRuntimeWasmBytecodeQueryResult = Apollo.QueryResult<
   GetRuntimeWasmBytecodeQuery,
   GetRuntimeWasmBytecodeQueryVariables
+>
+export const GetProposalPostParentDocument = gql`
+  query GetProposalPostParent($where: ProposalDiscussionPostWhereUniqueInput!) {
+    proposalDiscussionPostByUniqueInput(where: $where) {
+      ...ProposalPostParents
+    }
+  }
+  ${ProposalPostParentsFragmentDoc}
+`
+
+/**
+ * __useGetProposalPostParentQuery__
+ *
+ * To run a query within a React component, call `useGetProposalPostParentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProposalPostParentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProposalPostParentQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetProposalPostParentQuery(
+  baseOptions: Apollo.QueryHookOptions<GetProposalPostParentQuery, GetProposalPostParentQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetProposalPostParentQuery, GetProposalPostParentQueryVariables>(
+    GetProposalPostParentDocument,
+    options
+  )
+}
+export function useGetProposalPostParentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetProposalPostParentQuery, GetProposalPostParentQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetProposalPostParentQuery, GetProposalPostParentQueryVariables>(
+    GetProposalPostParentDocument,
+    options
+  )
+}
+export type GetProposalPostParentQueryHookResult = ReturnType<typeof useGetProposalPostParentQuery>
+export type GetProposalPostParentLazyQueryHookResult = ReturnType<typeof useGetProposalPostParentLazyQuery>
+export type GetProposalPostParentQueryResult = Apollo.QueryResult<
+  GetProposalPostParentQuery,
+  GetProposalPostParentQueryVariables
 >

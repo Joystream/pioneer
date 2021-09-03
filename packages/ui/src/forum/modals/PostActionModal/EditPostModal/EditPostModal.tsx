@@ -1,6 +1,5 @@
-import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -8,9 +7,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { usePostParents } from '@/forum/hooks/usePostParents'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { postActionMachine } from '../postActionMachine'
@@ -21,7 +18,7 @@ import { EditPostModalCall } from '.'
 
 export const EditPostModal = () => {
   const {
-    modalData: { post, newText },
+    modalData: { post, transaction },
     hideModal,
   } = useModal<EditPostModalCall>()
 
@@ -29,23 +26,6 @@ export const EditPostModal = () => {
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const { threadId, categoryId } = usePostParents(post.id)
-  const { api } = useApi()
-
-  const transaction = useMemo(
-    () =>
-      api &&
-      threadId &&
-      categoryId &&
-      api.tx.forum.editPostText(
-        createType('ForumUserId', Number.parseInt(post.author.id)),
-        categoryId,
-        threadId,
-        post.id,
-        newText
-      ),
-    [api, threadId, categoryId]
-  )
 
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
