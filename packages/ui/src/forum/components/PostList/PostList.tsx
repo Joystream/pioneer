@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject, useCallback, useEffect, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -20,43 +20,27 @@ interface PostListProps {
 export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps) => {
   const history = useHistory()
   const query = useRouteQuery()
-  const initialPage = query.get('page') && !isNaN(Number(query.get('page'))) ? Number(query.get('page')) : 1
-  const initialPost = query.get('post')
-  const [page, setPage] = useState(initialPage)
 
-  const { isLoading: isLoadingPosts, posts, pageCount } = useForumThreadPosts({ threadId, page })
+  const navigation = { post: query.get('post'), page: query.get('page') }
+  const { isLoading: isLoadingPosts, posts, page, pageCount = 0 } = useForumThreadPosts(threadId, navigation)
+  const isReady = useMemo(() => !(isLoading || isLoadingPosts), [posts, pageCount])
 
-  const pagination = useMemo(() => {
-    isReady && pageCount && pageCount > 1 && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-  }, [isReady, pageCount, setPage])
+  const setPage = useCallback(
+    (page: number) => history.replace({ pathname: history.location.pathname, search: page > 1 ? `page=${page}` : '' }),
+    []
+  )
+
+  const pagination = useMemo(
+    () => isReady && pageCount > 1 && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />,
+    [isReady, pageCount, page]
+  )
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
 
   useEffect(() => {
-    if (initialPost && postsRefs[initialPost]) {
-      postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-    }
-  }, [postsRefs, initialPost])
-
-  useEffect(() => {
-    if (page !== initialPage) {
-      query.delete('post')
-      query.delete('page')
-
-      if (page > 1) {
-        query.set('page', page.toString())
-      }
-
-      history.replace({ pathname: history.location.pathname, search: query.toString() })
-    }
-  }, [page])
-
-  useEffect(() => {
-    if (initialPage !== page) {
-      setPage(initialPage)
-    }
-  }, [initialPage, initialPost])
+    navigation.post && postsRefs[navigation.post]?.current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
+  }, [postsRefs, navigation.post])
 
   if (!isReady) {
     return <Loading text={isLoading ? 'Loading thread...' : 'Loading posts...'} />
@@ -70,7 +54,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps)
           <PostListItem
             post={post}
             insertRef={getInsertRef(post.id)}
-            isSelected={post.id === initialPost}
+            isSelected={post.id === navigation.post}
             isThreadActive={isThreadActive}
             type="forum"
           />
