@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { CloseButton, CopyButtonTemplate } from '@/common/components/buttons'
@@ -43,6 +43,17 @@ export const MemberProfile = React.memo(() => {
       hideModal()
     }
   }
+
+  useEffect(() => {
+    const escapeEvent = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        hideModal()
+      }
+    }
+    document.addEventListener('keydown', escapeEvent)
+
+    return () => document.removeEventListener('keydown', escapeEvent)
+  }, [])
 
   if (loading || !member) {
     return (

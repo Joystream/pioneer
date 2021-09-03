@@ -1,5 +1,5 @@
 import escapeStringRegexp from 'escape-string-regexp'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Close, CloseButton } from '@/common/components/buttons'
@@ -27,6 +27,17 @@ export const SearchResultsModal = () => {
   const [activeTab, setActiveTab] = useState<SearchKind>('FORUM')
   const { forum, forumPostCount, isLoading } = useSearch(search, activeTab)
   const pattern = useMemo(() => (search ? RegExp(escapeStringRegexp(search), 'ig') : null), [search])
+
+  useEffect(() => {
+    const escapeEvent = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        hideModal()
+      }
+    }
+    document.addEventListener('keydown', escapeEvent)
+
+    return () => document.removeEventListener('keydown', escapeEvent)
+  }, [])
 
   return (
     <SidePaneGlass onClick={(event) => event.target === event.currentTarget && hideModal()}>
