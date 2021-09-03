@@ -2,17 +2,18 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { getMember } from '../../../../../test/_mocks/members'
-import { PreviewThreadModal, PreviewThreadProps } from '../PreviewThreadModal'
+import { getMember } from '../../../../test/_mocks/members'
+
+import { PreviewPostModal, PreviewPostModalProps } from './PreviewPostModal'
 
 export default {
   title: 'Forum/CreateThreadModal/PreviewThreadModal',
-  component: PreviewThreadModal,
+  component: PreviewPostModal,
 } as Meta
 
-const Template: Story<PreviewThreadProps> = ({ author, text }) => (
+const Template: Story<PreviewPostModalProps> = ({ author, text }) => (
   <MemoryRouter>
-    <PreviewThreadModal onClose={() => null} author={author} text={text} />
+    <PreviewPostModal onClose={() => null} author={author} text={text} />
   </MemoryRouter>
 )
 

@@ -51,7 +51,7 @@ export const DeletePostModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        actionText="You intend to delete your post."
+        action="delete"
       />
     )
   }
