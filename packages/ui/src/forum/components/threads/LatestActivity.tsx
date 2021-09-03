@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import styled from 'styled-components'
 
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -16,9 +17,13 @@ export const LatestActivity = memo(({ threadId }: LatestActivitydProps) => {
   if (!post) return <Loading />
 
   return (
-    <RowGapBlock gap={12}>
+    <LatestActivityRowGapBlock>
       <MemberInfo member={post.author} size="s" memberSize="s" showGroup={false} />
       <TextInlineExtraSmall lighter>{relativeTime(post.createdAt)}</TextInlineExtraSmall>
-    </RowGapBlock>
+    </LatestActivityRowGapBlock>
   )
 })
+
+export const LatestActivityRowGapBlock = styled(RowGapBlock)`
+  row-gap: 12px;
+`

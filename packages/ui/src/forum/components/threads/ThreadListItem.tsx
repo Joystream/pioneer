@@ -11,10 +11,10 @@ import { Colors, Overflow } from '@/common/constants'
 import { ForumRoutes, ThreadsColLayout } from '@/forum/constant'
 import { useThreadPollVoteCount } from '@/forum/hooks/useThreadPollVoteCount'
 import { ForumThread } from '@/forum/types'
-import { MemberInfo } from '@/memberships/components'
+import { MemberInfo, MemberInfoWrap } from '@/memberships/components'
 import { useMember } from '@/memberships/hooks/useMembership'
 
-import { LatestActivity } from './LatestActivity'
+import { LatestActivity, LatestActivityRowGapBlock } from './LatestActivity'
 import { ThreadTags } from './ThreadTags'
 
 interface ThreadListItemProps {
@@ -39,7 +39,7 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
 
       <TextMedium bold>{thread.visiblePostsCount - 1}</TextMedium>
 
-      <TextMedium bold>{voteCount}</TextMedium>
+      <TextMedium bold>{voteCount ?? '-'}</TextMedium>
 
       <LatestActivity threadId={thread.id} />
 
@@ -70,6 +70,13 @@ const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsCo
     `}
 
   ${TableListItemAsLinkHover};
+
+  & > ${TextMedium} {
+    line-height: 28px;
+  }
+  & > ${TextMedium}, & > ${LatestActivityRowGapBlock}, & > ${MemberInfoWrap} {
+    align-self: start;
+  }
 `
 
 const Thread = styled.div`
