@@ -5,11 +5,17 @@ import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent } from '@/common/components/forms'
 import { TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
+import { ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { EditorWrap } from '../PostList/PostEditor'
 
-export const NewThreadPost = () => {
+interface NewPostProps {
+  thread: ForumThread
+}
+
+export const NewThreadPost = ({ thread }: NewPostProps) => {
   const [postText, setText] = useState('')
   const { active } = useMyMemberships()
   const { showModal } = useModal()
@@ -24,7 +30,11 @@ export const NewThreadPost = () => {
         <EditorMemo setNewText={setText} />
       </InputComponent>
       <ButtonsGroup>
-        <ButtonPrimary size="medium" onClick={() => null} disabled={postText === ''}>
+        <ButtonPrimary
+          size="medium"
+          onClick={() => showModal<CreatePostModalCall>({ modal: 'CreatePost', data: { postText, thread } })}
+          disabled={postText === ''}
+        >
           Post a reply
         </ButtonPrimary>
       </ButtonsGroup>

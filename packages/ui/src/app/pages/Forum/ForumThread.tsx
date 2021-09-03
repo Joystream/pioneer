@@ -82,7 +82,7 @@ export const ForumThread = () => {
     return (
       <MainPanel ref={sideNeighborRef}>
         <PostList threadId={thread.id} isThreadActive={isThreadActive} />
-        {isThreadActive && <NewThreadPost />}
+        {isThreadActive && <NewThreadPost thread={thread} />}
       </MainPanel>
     )
   }
