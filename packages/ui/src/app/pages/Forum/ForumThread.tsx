@@ -15,7 +15,7 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
-import { NewThreadPost } from '@/forum/components/Thread/ThreadNewPost'
+import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 

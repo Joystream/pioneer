@@ -12,7 +12,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { EditorWrap } from '../PostList/PostEditor'
 
 interface NewPostProps {
-  thread: ForumThread
+  thread: Pick<ForumThread, 'id' | 'categoryId' | 'title'>
 }
 
 export const NewThreadPost = ({ thread }: NewPostProps) => {
