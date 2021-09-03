@@ -57,7 +57,7 @@ export const DeletePostModal = () => {
   }
 
   if (state.matches('success')) {
-    return <PostActionSuccessModal onClose={hideModal} text="The post has been deleted." />
+    return <PostActionSuccessModal onClose={hideModal} text="Your post has been deleted." />
   }
 
   if (state.matches('error')) {

@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -14,16 +14,24 @@ import { seedMember } from '@/mocks/data'
 import rawMembers from '@/mocks/data/raw/members.json'
 import { seedForumCategory, seedForumPost, seedForumThread } from '@/mocks/data/seedForum'
 
+import { getButton } from '../../_helpers/getButton'
 import { mockCategories, mockPosts, mockThreads } from '../../_mocks/forum'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubDefaultBalances,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 describe('UI: DeletePostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.deletePosts'
+  let tx: any
   stubTransaction(api, txPath)
   const modalData: ModalCallData<DeletePostModalCall> = {
     post: {
@@ -69,20 +77,36 @@ describe('UI: DeletePostModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    stubTransaction(api, txPath)
+    tx = stubTransaction(api, txPath)
     modalData.transaction = api.api.tx.forum.deletePosts(1, [[1, 1, 1, true]], '')
   })
 
+  it('Requirements passed', async () => {
+    renderModal()
+    expect(screen.findByText(/You intend to delete your post./i)).not.toBeNull()
+    expect(screen.queryByText(/Sign and delete/i)).not.toBeNull()
+    expect(screen.queryByText(/Post preview/i)).toBeNull()
+  })
+
   it('Requirements failed', async () => {
-    stubTransaction(api, txPath, 10000)
+    tx = stubTransaction(api, txPath, 10000)
     modalData.transaction = api.api.tx.forum.deletePosts(1, [[1, 1, 1, true]], '')
     renderModal()
     expect(await screen.findByText('Insufficient Funds')).toBeDefined()
   })
 
-  it('Requirements passed', async () => {
+  it('Transaction failed', async () => {
+    stubTransactionFailure(tx)
     renderModal()
-    expect(await screen.findByText('You intend to delete your post.')).toBeDefined()
+    await fireEvent.click(await getButton(/Sign and delete/i))
+    expect(await screen.getByText('There was a problem deleting your post.')).toBeDefined()
+  })
+
+  it('Transaction success', async () => {
+    stubTransactionSuccess(tx, [], 'forum', 'deletePosts')
+    renderModal()
+    await fireEvent.click(await getButton(/Sign and delete/i))
+    expect(await screen.getByText('Your post has been deleted.')).toBeDefined()
   })
 
   const renderModal = () =>
