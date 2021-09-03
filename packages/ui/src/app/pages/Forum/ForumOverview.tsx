@@ -33,7 +33,6 @@ export const ForumOverview = () => {
               <>
                 <MyThreadsBrowser />
                 <RandomThreadsBrowser label="Your watchlist" />
-                <RandomThreadsBrowser label="Polls you participated in" />
               </>
             )}
             <RandomThreadsBrowser label="Popular threads" />
