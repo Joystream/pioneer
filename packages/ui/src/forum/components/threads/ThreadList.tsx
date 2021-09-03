@@ -59,7 +59,6 @@ export const ThreadList = ({ threads, onSort, isLoading, isArchive }: ThreadList
       <ListHeaders $colLayout={ThreadsColLayout}>
         <SortHeader value="Title">Threads</SortHeader>
         <ListHeader>Replies</ListHeader>
-        <ListHeader>Votes</ListHeader>
         <SortHeader value="UpdatedAt">Last Activity</SortHeader>
         <SortHeader value="Author">Author</SortHeader>
         {isArchive ? <ListHeader>Archived</ListHeader> : <SortHeader value="CreatedAt">Created</SortHeader>}

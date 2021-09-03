@@ -9,7 +9,6 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow } from '@/common/constants'
 import { ForumRoutes, ThreadsColLayout } from '@/forum/constant'
-import { useThreadPollVoteCount } from '@/forum/hooks/useThreadPollVoteCount'
 import { ForumThread } from '@/forum/types'
 import { MemberInfo, MemberInfoWrap } from '@/memberships/components'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -22,7 +21,6 @@ interface ThreadListItemProps {
   isArchive?: boolean
 }
 export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
-  const { voteCount } = useThreadPollVoteCount(thread.id)
   const { member: author } = useMember(thread.authorId)
 
   const { createdInBlock, status } = thread
@@ -38,8 +36,6 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
       </Thread>
 
       <TextMedium bold>{thread.visiblePostsCount - 1}</TextMedium>
-
-      <TextMedium bold>{voteCount ?? '-'}</TextMedium>
 
       <LatestActivity threadId={thread.id} />
 
