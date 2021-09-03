@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Colors } from '@/common/constants'
 
+import { TextMedium } from '../typography'
+
 import { HighlightedText } from './HighlightedText'
 
 interface SearchResultItemProp {
@@ -20,11 +22,11 @@ export const SearchResultItem = ({ pattern, breadcrumbs, to, title, children }: 
       <h5>
         <HighlightedText pattern={pattern}>{title}</HighlightedText>
       </h5>
-      <p>
+      <TextMedium>
         <HighlightedText pattern={pattern} shorten>
           {children}
         </HighlightedText>
-      </p>
+      </TextMedium>
     </GhostRouterLink>
   </ResultItemStyle>
 )
@@ -35,10 +37,9 @@ const ResultItemStyle = styled.div`
   padding-bottom: 14px;
 
   h5 {
-    font-size: 24px;
-    padding: 8px 0;
+    margin: 8px 0;
   }
-  p {
-    font-size: 16px;
+  ${TextMedium} {
+    color: ${Colors.Black[500]};
   }
 `
