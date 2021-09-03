@@ -14,16 +14,21 @@ import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 interface PostListProps {
   threadId: string
   isThreadActive?: boolean
+  isLoading?: boolean
 }
 
-export const PostList = ({ threadId, isThreadActive }: PostListProps) => {
+export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps) => {
   const history = useHistory()
   const query = useRouteQuery()
   const initialPage = query.get('page') && !isNaN(Number(query.get('page'))) ? Number(query.get('page')) : 1
   const initialPost = query.get('post')
   const [page, setPage] = useState(initialPage)
 
-  const { isLoading, posts, pageCount } = useForumThreadPosts({ threadId, page })
+  const { isLoading: isLoadingPosts, posts, pageCount } = useForumThreadPosts({ threadId, page })
+
+  const pagination = useMemo(() => {
+    isReady && pageCount && pageCount > 1 && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
+  }, [isReady, pageCount, setPage])
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
@@ -53,15 +58,13 @@ export const PostList = ({ threadId, isThreadActive }: PostListProps) => {
     }
   }, [initialPage, initialPost])
 
-  if (isLoading) {
-    return <Loading text="Loading posts..." />
+  if (!isReady) {
+    return <Loading text={isLoading ? 'Loading thread...' : 'Loading posts...'} />
   }
 
   return (
     <RowGapBlock gap={24}>
-      {!isLoading && !!pageCount && pageCount > 1 && (
-        <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-      )}
+      {pagination}
       {posts.map((post) => (
         <PostBlock key={post.id}>
           <PostListItem
@@ -73,9 +76,7 @@ export const PostList = ({ threadId, isThreadActive }: PostListProps) => {
           />
         </PostBlock>
       ))}
-      {!isLoading && !!pageCount && pageCount > 1 && (
-        <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-      )}
+      {pagination}
     </RowGapBlock>
   )
 }
