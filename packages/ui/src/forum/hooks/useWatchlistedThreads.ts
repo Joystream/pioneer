@@ -1,11 +1,11 @@
-import { useMemo } from 'react'
-
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { ThreadDefaultOrder } from '@/forum/components/threads/ThreadList'
 import { forumThreadOrderBy } from '@/forum/hooks/useForumCategoryThreads'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries/__generated__/forum.generated'
 import { asForumThread, ForumThread } from '@/forum/types'
+
+import { FORUM_WATCHLIST } from '../constant'
 
 interface UseMyThreadsProps {
   page: number
@@ -20,11 +20,10 @@ interface UseMyThreads {
 }
 
 export const useWatchlistedThreads = ({ page, threadsPerPage = 5 }: UseMyThreadsProps): UseMyThreads => {
-  const [watchlist] = useLocalStorage('forum-watchlist')
-  const threadIds: string[] = useMemo(() => (watchlist ? JSON.parse(watchlist) : []), [watchlist])
+  const [watchlist] = useLocalStorage<string[]>(FORUM_WATCHLIST)
 
   const variables = {
-    where: { id_in: threadIds },
+    where: { id_in: watchlist ?? [] },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
     orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(ThreadDefaultOrder)],

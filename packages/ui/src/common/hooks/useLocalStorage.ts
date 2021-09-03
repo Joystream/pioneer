@@ -23,8 +23,8 @@ function setItem(key: string, value: any) {
   }
 }
 
-export const useLocalStorage = <T extends string>(key: string) => {
-  const [value, setValue] = useState<T>(() => getItem(key))
+export const useLocalStorage = <T>(key: string) => {
+  const [value, setValue] = useState<T | undefined>(() => getItem(key))
 
   useEffect(() => {
     setValue(getItem(key))
