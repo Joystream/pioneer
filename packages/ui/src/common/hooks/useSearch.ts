@@ -1,3 +1,4 @@
+import escapeStringRegexp from 'escape-string-regexp'
 import { useEffect, useMemo } from 'react'
 
 import { useSearchForumPostLazyQuery } from '@/forum/queries'
@@ -28,13 +29,14 @@ export const useSearch = (search: string, kind: SearchKind) => {
 
   const [forum, isLoadingPosts] = useMemo(() => {
     const posts = [...(postResult.data?.forumPosts ?? [])]
-      .sort(byBestMatch(searchDebounced, [({ thread }) => thread.title, ({ text }) => text]))
+      .sort(byBestMatch(escapeStringRegexp(searchDebounced), [({ thread }) => thread.title, ({ text }) => text]))
       .slice(0, MAX_RESULTS)
     return [posts, postResult.loading]
   }, [postResult])
 
   return {
     forum,
+    forumPostCount: postResult.data?.forumPosts.length,
     isLoading: isLoadingPosts,
   }
 }

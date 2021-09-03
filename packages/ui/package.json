@@ -58,6 +58,7 @@
     "copy-webpack-plugin": "^9.0.1",
     "crypto-browserify": "^3.12.0",
     "date-fns": "^2.22.1",
+    "escape-string-regexp": "^5.0.0",
     "file-loader": "^6.2.0",
     "framer-motion": "^4.1.17",
     "graphql-tag": "^2.12.5",

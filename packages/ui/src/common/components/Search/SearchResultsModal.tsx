@@ -1,3 +1,4 @@
+import escapeStringRegexp from 'escape-string-regexp'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -24,8 +25,8 @@ export const SearchResultsModal = () => {
 
   const [search, setSearch] = useState(modalData.search)
   const [activeTab, setActiveTab] = useState<SearchKind>('FORUM')
-  const { forum, isLoading } = useSearch(search, activeTab)
-  const pattern = useMemo(() => (search ? RegExp(search, 'ig') : null), [search])
+  const { forum, forumPostCount, isLoading } = useSearch(search, activeTab)
+  const pattern = useMemo(() => (search ? RegExp(escapeStringRegexp(search), 'ig') : null), [search])
 
   return (
     <SidePaneGlass onClick={(event) => event.target === event.currentTarget && hideModal()}>
@@ -40,7 +41,14 @@ export const SearchResultsModal = () => {
         <SidePaneBody>
           <RowGapBlock gap={24}>
             <Tabs
-              tabs={[{ title: 'Forum', active: activeTab === 'FORUM', onClick: () => setActiveTab('FORUM'), count: 4 }]}
+              tabs={[
+                {
+                  title: 'Forum',
+                  count: forumPostCount,
+                  active: activeTab === 'FORUM',
+                  onClick: () => setActiveTab('FORUM'),
+                },
+              ]}
               tabsSize="xs"
             />
 
