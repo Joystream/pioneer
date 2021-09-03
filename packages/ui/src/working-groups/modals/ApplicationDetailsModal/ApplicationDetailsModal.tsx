@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { CloseButton } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
@@ -33,6 +33,17 @@ export const ApplicationDetailsModal = React.memo(() => {
       hideModal()
     }
   }
+
+  useEffect(() => {
+    const escapeEvent = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        hideModal()
+      }
+    }
+    document.addEventListener('keydown', escapeEvent)
+
+    return () => document.removeEventListener('keydown', escapeEvent)
+  }, [])
 
   const [currentTab, setCurrentTab] = useState<Tab>('GENERAL')
 

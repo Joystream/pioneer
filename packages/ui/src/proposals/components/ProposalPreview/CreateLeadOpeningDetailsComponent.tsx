@@ -1,6 +1,6 @@
 import { styled } from '@storybook/theming'
 import BN from 'bn.js'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { CloseButton } from '@/common/components/buttons'
 import { ArrowRightIcon, FileIcon } from '@/common/components/icons'
@@ -86,6 +86,16 @@ const OpeningDescriptionPreview = ({ onClose, description }: DescriptionPreviewP
       onClose()
     }
   }
+  useEffect(() => {
+    const escapeEvent = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+    document.addEventListener('keydown', escapeEvent)
+
+    return () => document.removeEventListener('keydown', escapeEvent)
+  }, [])
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane topSize="s">
