@@ -21,6 +21,7 @@ export interface ThreadBrowserProps {
   isLoading: boolean
   currentPage: number
   setCurrentPage: React.Dispatch<number>
+  emptyText: string
 }
 
 export const ThreadBrowser = ({
@@ -31,6 +32,7 @@ export const ThreadBrowser = ({
   isLoading,
   currentPage,
   setCurrentPage,
+  emptyText,
 }: ThreadBrowserProps) => {
   const onPrevClick = () => setCurrentPage(currentPage - 1)
   const onNextClick = () => setCurrentPage(currentPage + 1)
@@ -56,7 +58,7 @@ export const ThreadBrowser = ({
         ) : (
           threads?.map((thread) => <ThreadItem key={thread.id} thread={thread} halfSize={threads.length > 1} />)
         )}
-        {!isLoading && !totalCount && <EmptyThreadItem text={"You haven't created any threads yet"} />}
+        {!isLoading && !totalCount && <EmptyThreadItem text={emptyText} />}
       </ThreadBrowserItems>
     </ThreadBrowserStyles>
   )
