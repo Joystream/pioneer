@@ -2,7 +2,9 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { Colors } from '@/common/constants'
+import { Colors, Transitions } from '@/common/constants'
+
+import { TextMedium } from '../typography'
 
 import { HighlightedText } from './HighlightedText'
 
@@ -16,29 +18,49 @@ interface SearchResultItemProp {
 export const SearchResultItem = ({ pattern, breadcrumbs, to, title, children }: SearchResultItemProp) => (
   <ResultItemStyle>
     {breadcrumbs}
-    <GhostRouterLink to={to}>
-      <h5>
+    <ResultLink as={GhostRouterLink} to={to}>
+      <ResultTitle>
         <HighlightedText pattern={pattern}>{title}</HighlightedText>
-      </h5>
-      <p>
+      </ResultTitle>
+      <ResultText>
         <HighlightedText pattern={pattern} shorten>
           {children}
         </HighlightedText>
-      </p>
-    </GhostRouterLink>
+      </ResultText>
+    </ResultLink>
   </ResultItemStyle>
 )
 
+const ResultTitle = styled.h5`
+  margin: 8px 0;
+  transition: ${Transitions.all};
+`
+
 const ResultItemStyle = styled.div`
+  display: flex;
+  flex-direction: column;
   border-bottom: solid 1px ${Colors.Black[200]};
   color: ${Colors.Black[400]};
   padding-bottom: 14px;
+  transition: ${Transitions.all};
 
-  h5 {
-    font-size: 24px;
-    padding: 8px 0;
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: ${Colors.Blue[100]};
   }
-  p {
-    font-size: 16px;
+`
+
+const ResultText = styled(TextMedium)`
+  color: ${Colors.Black[500]};
+`
+
+const ResultLink = styled.a`
+  &:hover,
+  &:focus,
+  &:focus-within {
+    ${ResultTitle} {
+      color: ${Colors.Blue[500]};
+    }
   }
 `

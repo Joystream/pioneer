@@ -54,7 +54,7 @@ export const HighlightedText = memo(({ pattern = null, shorten, children }: High
 })
 
 const HighlightedWord = styled.span`
-  background-color: ${Colors.Black[200]};
+  background-color: ${Colors.Blue[100]};
   color: ${Colors.Black[900]};
 `
 
