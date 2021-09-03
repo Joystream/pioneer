@@ -53,7 +53,7 @@ const EditorMemo = React.memo(({ setNewText, initialText }: MemoEditorProps) => 
   />
 ))
 
-const EditorWrap = styled.div`
+export const EditorWrap = styled.div`
   display: flex;
   flex-direction: column;
 `
