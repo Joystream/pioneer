@@ -1,9 +1,9 @@
 import { createType } from '@joystream/types'
 import React, { useMemo, useState } from 'react'
-import styled from 'styled-components'
 
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { PostListItemType } from '@/forum/components/PostList/PostListItem'
@@ -45,7 +45,7 @@ export const PostEditor = ({ post, onCancel, type }: Props) => {
   }, [api, connectionState, JSON.stringify(forumPostData), JSON.stringify(proposalPostData), type])
 
   return (
-    <EditorWrap>
+    <RowGapBlock gap={8}>
       <EditorMemo setNewText={setNewText} initialText={post.text} />
       <ButtonsGroup>
         <ButtonGhost size="medium" onClick={onCancel}>
@@ -64,7 +64,7 @@ export const PostEditor = ({ post, onCancel, type }: Props) => {
           Save
         </ButtonPrimary>
       </ButtonsGroup>
-    </EditorWrap>
+    </RowGapBlock>
   )
 }
 
@@ -84,8 +84,3 @@ const EditorMemo = React.memo(({ setNewText, initialText }: MemoEditorProps) => 
     }}
   />
 ))
-
-export const EditorWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-`

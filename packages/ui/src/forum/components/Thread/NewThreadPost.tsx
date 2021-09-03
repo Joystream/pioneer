@@ -3,13 +3,12 @@ import React, { useState } from 'react'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent } from '@/common/components/forms'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-
-import { EditorWrap } from '../PostList/PostEditor'
 
 interface NewPostProps {
   thread: Pick<ForumThread, 'id' | 'categoryId' | 'title'>
@@ -25,7 +24,7 @@ export const NewThreadPost = ({ thread }: NewPostProps) => {
   }
 
   return (
-    <EditorWrap>
+    <RowGapBlock gap={8}>
       <InputComponent inputSize="auto">
         <EditorMemo setNewText={setText} />
       </InputComponent>
@@ -38,7 +37,7 @@ export const NewThreadPost = ({ thread }: NewPostProps) => {
           Post a reply
         </ButtonPrimary>
       </ButtonsGroup>
-    </EditorWrap>
+    </RowGapBlock>
   )
 }
 
