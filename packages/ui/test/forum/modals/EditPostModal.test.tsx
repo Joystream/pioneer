@@ -76,6 +76,12 @@ describe('UI: EditPostModal', () => {
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
   })
 
+  it('Renders', async () => {
+    renderModal()
+    expect(screen.queryByText(/Sign and edit/i)).not.toBeNull()
+    expect(screen.queryByText(/Post preview/i)).not.toBeNull()
+  })
+
   it('Requirements failed', async () => {
     tx = stubTransaction(api, txPath, 10000)
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
@@ -86,14 +92,14 @@ describe('UI: EditPostModal', () => {
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    await fireEvent.click(await getButton(/Sign and send/i))
+    await fireEvent.click(await getButton(/Sign and edit/i))
     expect(await screen.getByText('There was a problem submitting an edit to your post.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, [], 'forum', 'editPostText')
     renderModal()
-    await fireEvent.click(await getButton(/Sign and send/i))
+    await fireEvent.click(await getButton(/Sign and edit/i))
     expect(await screen.getByText('Your edit has been submitted.')).toBeDefined()
   })
 
