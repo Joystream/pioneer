@@ -76,8 +76,9 @@ describe('UI: EditPostModal', () => {
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
   })
 
-  it('Renders', async () => {
+  it('Requirements passed', async () => {
     renderModal()
+    expect(screen.findByText(/You intend to edit your post./i)).not.toBeNull()
     expect(screen.queryByText(/Sign and edit/i)).not.toBeNull()
     expect(screen.queryByText(/Post preview/i)).not.toBeNull()
   })
