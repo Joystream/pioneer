@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 
 import { ArrowRightIcon, FileIcon } from '@/common/components/icons'
-import { StatisticItem, Statistics } from '@/common/components/statistics'
+import { Statistics } from '@/common/components/statistics'
 import { StatisticButton } from '@/common/components/statistics/StatisticButton'
 import { TextInlineBig } from '@/common/components/typography'
 import { useRuntimeBytecode } from '@/proposals/hooks/useRuntimeBytecode'
@@ -43,22 +43,12 @@ export const RuntimeUpgradeComponent: ProposalPropertiesContent<'runtimeUpgrade'
 
   return (
     <Statistics>
-      {state !== 'loading' && (
-        <StatisticButton title="Blob" onClick={onFileClick} icon={<ArrowRightIcon />}>
-          <FileIcon />
-          <TextInlineBig bold value>
-            File Preview
-          </TextInlineBig>
-        </StatisticButton>
-      )}
-      {state === 'loading' && (
-        <StatisticItem title="Blob">
-          <FileIcon />
-          <TextInlineBig bold value>
-            Downloading file...
-          </TextInlineBig>
-        </StatisticItem>
-      )}
+      <StatisticButton title="Blob" onClick={onFileClick} disabled={state === 'loading'} icon={<ArrowRightIcon />}>
+        <FileIcon />
+        <TextInlineBig bold value>
+          {state === 'loading' ? 'Downloading file...' : 'File Preview'}
+        </TextInlineBig>
+      </StatisticButton>
     </Statistics>
   )
 }
