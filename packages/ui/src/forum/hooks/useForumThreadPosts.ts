@@ -21,10 +21,9 @@ interface UseForumThreadPosts {
 }
 
 export const useForumThreadPosts = (threadId: string, navigation: ThreadNavigation): UseForumThreadPosts => {
-  const where = useMemo(
-    () => ({ thread: { id_eq: threadId }, status_json: { isTypeOf_in: visiblePostStatuses } }),
-    [threadId]
-  )
+  const where = useMemo(() => ({ thread: { id_eq: threadId }, status_json: { isTypeOf_in: visiblePostStatuses } }), [
+    threadId,
+  ])
 
   const [getPosts, postsResults] = useGetForumPostsLazyQuery()
   const [getPostIds, idsResults] = useGetForumPostsIdsLazyQuery()
