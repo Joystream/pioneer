@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { DatePicker } from '@/common/components/forms/DatePicker'
 import { Fields, FilterBox } from '@/common/components/forms/FilterBox'
-import { FilterTextSelect, SelectContainer } from '@/common/components/selects'
+import { SelectContainer } from '@/common/components/selects'
 import { PartialDateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
 import { SmallMemberSelect } from '@/memberships/components/SelectMember'
@@ -24,7 +24,7 @@ interface ThreadFiltersProps {
 }
 export const ThreadFilters: FC<ThreadFiltersProps> = ({ withinDates, onApply, children, isArchive }) => {
   const [filters, setFilters] = useState(ThreadEmptyFilters)
-  const { tag, author, date } = filters
+  const { author, date } = filters
 
   const update = useCallback(
     (change: Partial<ThreadFiltersState> = filters, apply = true) => {
@@ -39,8 +39,6 @@ export const ThreadFilters: FC<ThreadFiltersProps> = ({ withinDates, onApply, ch
   return (
     <ThreadFiltersBox onApply={() => update()} onClear={clear}>
       <FieldsHeader>{children}</FieldsHeader>
-
-      <FilterTextSelect title="Tags" options={[] as string[]} value={tag} onChange={(tag) => update({ tag })} />
 
       <SmallMemberSelect title="Author" value={author} onChange={(author) => update({ author })} />
 
