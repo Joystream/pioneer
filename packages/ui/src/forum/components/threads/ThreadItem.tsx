@@ -5,6 +5,7 @@ import { CountBadge } from '@/common/components/CountBadge'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
+import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
 import { useThreadOriginalPost } from '@/forum/hooks/useThreadOriginalPost'
@@ -31,6 +32,8 @@ export interface ThreadItemContentProps {
 export const ThreadItem = ({ thread, badges, answers, halfSize, empty }: ThreadItemContentProps) => {
   const { originalPost, isLoading } = useThreadOriginalPost(thread.id)
   const content = originalPost?.text
+  const threadAddress = `/forum/thread/${thread.id}`
+
   if (isLoading) {
     return (
       <ThreadItemWrapper>
@@ -39,7 +42,7 @@ export const ThreadItem = ({ thread, badges, answers, halfSize, empty }: ThreadI
     )
   }
   return (
-    <ThreadItemWrapper halfSize={halfSize}>
+    <ThreadItemWrapper halfSize={halfSize} as={GhostRouterLink} to={threadAddress}>
       <ThreadItemHeader align="center">
         <ThreadItemTitle empty={empty}>{thread.title}</ThreadItemTitle>
         <ThreadItemTime lighter>{thread.createdInBlock.timestamp}</ThreadItemTime>
@@ -90,6 +93,7 @@ const ThreadItemHeader = styled(ColumnGapBlock)`
 const ThreadItemTitle = styled.h5<{ empty?: boolean }>`
   font-weight: ${({ empty }) => (empty ? '400' : '700')};
   ${Overflow.FullDots};
+  transition: ${Transitions.all};
 `
 
 const ThreadItemTime = styled(TextInlineExtraSmall)`
@@ -115,7 +119,7 @@ const StyledAnswerIcon = styled(AnswerIcon)`
   color: ${Colors.Black[300]};
 `
 
-export const ThreadItemWrapper = styled.div<{ halfSize?: boolean }>`
+export const ThreadItemWrapper = styled.a<{ halfSize?: boolean }>`
   display: flex;
   position: relative;
   flex-direction: column;
@@ -141,5 +145,13 @@ export const ThreadItemWrapper = styled.div<{ halfSize?: boolean }>`
 
   ${ThreadItemText} {
     -webkit-line-clamp: ${({ halfSize }) => (halfSize ? '3' : '14')};
+  }
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    ${ThreadItemTitle} {
+      color: ${Colors.Blue[500]};
+    }
   }
 `
