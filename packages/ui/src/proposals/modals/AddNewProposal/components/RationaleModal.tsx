@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { CloseButton } from '@/common/components/buttons'
 import { Row } from '@/common/components/Modal'
@@ -25,6 +25,16 @@ export const RationaleModal = ({ closeModal }: RationaleModalProps) => {
     }
   }
 
+  useEffect(() => {
+    const escapeEvent = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeModal()
+      }
+    }
+    document.addEventListener('keydown', escapeEvent)
+
+    return () => document.removeEventListener('keydown', escapeEvent)
+  }, [])
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane topSize="s">

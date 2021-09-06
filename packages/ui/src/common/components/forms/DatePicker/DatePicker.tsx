@@ -1,5 +1,5 @@
 import { addMonths, addWeeks, addYears, isAfter, isBefore, isEqual, startOfMonth, startOfToday } from 'date-fns'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import styled from 'styled-components'
@@ -59,6 +59,17 @@ export const DatePicker = ({
   const [isOpen, toggleOpen] = useState(false)
 
   useOutsideClick(popperElementRef, isOpen, () => toggleOpen(false))
+
+  useEffect(() => {
+    const escapeEvent = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        toggleOpen(false)
+      }
+    }
+    document.addEventListener('keydown', escapeEvent)
+
+    return () => document.removeEventListener('keydown', escapeEvent)
+  }, [])
 
   const apply = () => {
     onApply?.()

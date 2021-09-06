@@ -6,8 +6,6 @@ import { PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
-import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent } from '@/common/components/forms'
 import { LinkIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { Loading } from '@/common/components/Loading'
@@ -17,6 +15,7 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
+import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { useForumThread } from '@/forum/hooks/useForumThread'
@@ -83,11 +82,7 @@ export const ForumThread = () => {
     return (
       <MainPanel ref={sideNeighborRef}>
         <PostList threadId={thread.id} isThreadActive={isThreadActive} />
-        {isThreadActive && (
-          <InputComponent inputSize="auto">
-            <CKEditor />
-          </InputComponent>
-        )}
+        {isThreadActive && <NewThreadPost thread={thread} />}
       </MainPanel>
     )
   }

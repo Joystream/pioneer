@@ -24,7 +24,6 @@ export const ForumForumTabs = ({ categoryCount }: ForumForumTabsProps) => {
     ['Categories', ForumRoutes.forum, categoryCount],
     ['Latest threads ', ForumRoutes.latestThreads],
     ['Top threads', ForumRoutes.topThreads],
-    ['Tags', ForumRoutes.tags],
     ['My threads', ForumRoutes.myThreads],
   ])
 

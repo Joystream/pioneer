@@ -77,6 +77,7 @@ const ThreadBrowserStyles = styled.div`
   flex-shrink: 0;
   flex-grow: 1;
   max-width: 100%;
+  min-height: 330px;
   max-height: 472px;
   padding: 16px;
   border: 1px solid ${Colors.Black[100]};

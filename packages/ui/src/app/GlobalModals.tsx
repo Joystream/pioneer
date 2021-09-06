@@ -1,4 +1,5 @@
 import React from 'react'
+import { ReactElement } from 'react-markdown'
 
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
@@ -7,6 +8,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
 import { EditThreadTitleModal, EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
+import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
@@ -41,48 +43,35 @@ export type ModalNames =
   | ModalName<PostHistoryModalCall>
   | ModalName<EditThreadTitleModalCall>
   | ModalName<SearchResultsModalCall>
+  | ModalName<CreatePostModalCall>
+
+const modals: Record<ModalNames, ReactElement> = {
+  Member: <MemberProfile />,
+  BuyMembership: <BuyMembershipModal />,
+  TransferInvites: <TransferInviteModal />,
+  TransferTokens: <TransferModal />,
+  ApplyForRoleModal: <ApplyForRoleModal />,
+  ApplicationDetails: <ApplicationDetailsModal />,
+  SwitchMember: <SwitchMemberModal />,
+  LeaveRole: <LeaveRoleModal />,
+  ChangeAccountModal: <ChangeAccountModal />,
+  MoveFundsModal: <MoveFundsModal />,
+  AddNewProposalModal: <AddNewProposalModal />,
+  VoteRationaleModal: <VoteRationale />,
+  CreateThreadModal: <CreateThreadModal />,
+  DeletePost: <DeletePostModal />,
+  EditPost: <EditPostModal />,
+  PostHistory: <PostHistoryModal />,
+  EditThreadTitleModal: <EditThreadTitleModal />,
+  SearchResults: <SearchResultsModal />,
+  CreatePost: <CreatePostModal />,
+}
 
 export const GlobalModals = () => {
   const { modal } = useModal()
 
-  switch (modal as ModalNames) {
-    case 'Member':
-      return <MemberProfile />
-    case 'BuyMembership':
-      return <BuyMembershipModal />
-    case 'TransferInvites':
-      return <TransferInviteModal />
-    case 'TransferTokens':
-      return <TransferModal />
-    case 'ApplyForRoleModal':
-      return <ApplyForRoleModal />
-    case 'ApplicationDetails':
-      return <ApplicationDetailsModal />
-    case 'SwitchMember':
-      return <SwitchMemberModal />
-    case 'LeaveRole':
-      return <LeaveRoleModal />
-    case 'ChangeAccountModal':
-      return <ChangeAccountModal />
-    case 'MoveFundsModal':
-      return <MoveFundsModal />
-    case 'AddNewProposalModal':
-      return <AddNewProposalModal />
-    case 'VoteRationaleModal':
-      return <VoteRationale />
-    case 'CreateThreadModal':
-      return <CreateThreadModal />
-    case 'DeletePost':
-      return <DeletePostModal />
-    case 'EditPost':
-      return <EditPostModal />
-    case 'PostHistory':
-      return <PostHistoryModal />
-    case 'EditThreadTitleModal':
-      return <EditThreadTitleModal />
-    case 'SearchResults':
-      return <SearchResultsModal />
-    default:
-      return null
+  if (modal && modal in modals) {
+    return modals[modal as ModalNames]
   }
+  return null
 }

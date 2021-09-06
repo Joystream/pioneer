@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
 
@@ -57,6 +57,17 @@ export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark,
       onClose()
     }
   }
+
+  useEffect(() => {
+    const escapeEvent = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+    document.addEventListener('keydown', escapeEvent)
+
+    return () => document.removeEventListener('keydown', escapeEvent)
+  }, [])
 
   return ReactDOM.createPortal(
     <ModalGlass
