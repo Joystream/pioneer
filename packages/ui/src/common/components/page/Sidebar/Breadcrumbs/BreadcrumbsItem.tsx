@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Colors, Transitions, Fonts } from '../../../../constants'
 
@@ -22,6 +22,13 @@ export const BreadcrumbsItem = React.memo(({ url, children, isLink }: Breadcrumb
   )
 })
 
+const truncatedBreadcrumbText = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+`
+
 export const BreadcrumbsItemLink = styled(Link)`
   &,
   &:visited {
@@ -38,6 +45,7 @@ export const BreadcrumbsItemLink = styled(Link)`
       color: ${Colors.Blue[500]};
     }
   }
+  ${truncatedBreadcrumbText}
 `
 
 const BreadcrumbsItemText = styled.span`
@@ -47,6 +55,7 @@ const BreadcrumbsItemText = styled.span`
   font-family: ${Fonts.Inter};
   cursor: auto;
   transition: ${Transitions.all};
+  ${truncatedBreadcrumbText}
 `
 
 const BreadcrumbsItemComponent = styled.li`
@@ -54,6 +63,7 @@ const BreadcrumbsItemComponent = styled.li`
   position: relative;
   align-items: center;
   margin-left: 26px;
+  min-width: 26px;
 
   &:before {
     content: '';
