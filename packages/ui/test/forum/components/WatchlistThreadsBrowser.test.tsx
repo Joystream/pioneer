@@ -42,7 +42,7 @@ describe('UI: WatchlistThreadsBrowser', () => {
     expect(await screen.findByText(/test thread/i)).toBeDefined()
     expect(await screen.findByText(/nested thread 1/i)).toBeDefined()
     act(() => {
-      fireEvent.click(screen.getByTitle('Browse right'))
+      fireEvent.click(screen.getByTitle('Browse next'))
     })
     expect(await screen.findByText(/nested thread 2/i)).toBeDefined()
   })
