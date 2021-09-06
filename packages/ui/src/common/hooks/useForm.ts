@@ -23,7 +23,7 @@ export const useForm = <T extends Record<any, any>>(initializer: T, schema: AnyO
       schema.validateSync(fields, { abortEarly: false, stripUnknown: true, context: context })
       setErrors([])
       return true
-    } catch (error) {
+    } catch (error: any) {
       setErrors(error.inner)
       return false
     }

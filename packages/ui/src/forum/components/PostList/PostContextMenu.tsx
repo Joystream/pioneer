@@ -1,4 +1,5 @@
-import { createType } from '@joystream/types'
+import { createType, registry } from '@joystream/types'
+import { PostsToDeleteMap } from '@joystream/types/src/forum'
 import React, { useMemo } from 'react'
 
 import { ContextMenu } from '@/common/components/ContextMenu'
@@ -32,7 +33,16 @@ export const PostContextMenu = ({ post, onEdit, type }: Props) => {
       if (type === 'forum' && forumPostData.categoryId && forumPostData.threadId) {
         return api.tx.forum.deletePosts(
           createType('ForumUserId', Number.parseInt(post.author.id)),
-          [[forumPostData.categoryId, forumPostData.threadId, post.id, true]],
+          new PostsToDeleteMap(registry, [
+            [
+              {
+                post_id: post.id,
+                thread_id: forumPostData.threadId,
+                category_id: forumPostData.categoryId,
+              },
+              true,
+            ],
+          ]),
           ''
         )
       }

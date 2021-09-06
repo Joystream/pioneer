@@ -21,7 +21,7 @@ export const useMyThreads = ({ page, threadsPerPage = 5 }: UseMyThreadsProps): U
   const { members } = useMyMemberships()
 
   const variables = {
-    where: { author_in: members.map((m) => m.id) },
+    where: { author: { id_in: members.map((m) => m.id) } },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
     orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(ThreadDefaultOrder)],

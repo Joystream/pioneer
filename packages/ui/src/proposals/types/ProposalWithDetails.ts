@@ -41,7 +41,7 @@ export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment)
   statusSetAtTime: fields.statusSetAtTime,
   createdInBlock: asBlock(fields.createdInEvent),
   discussionThread: {
-    discussionPosts: fields.discussionThread.discussionPosts.map(asForumComment),
+    discussionPosts: fields.discussionThread.posts.map(asForumComment),
     mode: fields.discussionThread.mode.__typename === 'ProposalDiscussionThreadModeOpen' ? 'open' : 'close',
   },
   proposalStatusUpdates: fields.proposalStatusUpdates.map((status) => ({

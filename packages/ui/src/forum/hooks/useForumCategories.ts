@@ -13,10 +13,10 @@ export const useForumCategories = ({ isRoot, isArchive }: Props = {}) => {
   const { loading, data } = useGetForumCategoriesQuery({
     variables: {
       where: {
-        ...(isRoot ? { parent_eq: null } : {}),
+        ...(isRoot ? { parent: null } : {}),
         status_json: { isTypeOf_eq: isArchive ? ArchivedStatus : ActiveStatus },
         ...(isArchive && !isRoot
-          ? { OR: [{ parent_eq: null }, { parent: { status_json: { isTypeOf_eq: ActiveStatus } } }] }
+          ? { OR: [{ parent: null }, { parent: { status_json: { isTypeOf_eq: ActiveStatus } } }] }
           : {}),
       },
     },

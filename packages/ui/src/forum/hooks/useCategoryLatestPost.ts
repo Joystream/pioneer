@@ -17,7 +17,11 @@ export const useCategoryLatestPost = (category_eq: string) => {
     const rawThread = threadData?.forumThreads[0]
     if (rawThread)
       fetchPost({
-        variables: { where: { thread_eq: rawThread.id }, orderBy: ForumPostOrderByInput.UpdatedAtDesc, limit: 1 },
+        variables: {
+          where: { thread: { id_eq: rawThread.id } },
+          orderBy: ForumPostOrderByInput.UpdatedAtDesc,
+          limit: 1,
+        },
       })
   }, [threadData])
 

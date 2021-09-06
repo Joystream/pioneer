@@ -1,6 +1,5 @@
 import BN from 'bn.js'
-import { assign, createMachine, DoneInvokeEvent, MachineConfig, send } from 'xstate'
-import { actionTypes } from 'xstate/lib/actions'
+import { ActionTypes, assign, createMachine, DoneInvokeEvent, MachineConfig, send } from 'xstate'
 
 export type TransactionSuccessEvent = { type: 'SUCCESS'; events: any[]; fee: BN }
 export type TransactionErrorEvent = { type: 'ERROR'; events: any[]; fee: BN }
@@ -51,7 +50,7 @@ export const transactionConfig: MachineConfig<any, any, TransactionEvent> = {
               events: (context, event) => event.events,
               fee: (context, event) => event.fee,
             }),
-            send({ type: actionTypes.errorPlatform, isError: 'true' }),
+            send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
           ],
         },
       },

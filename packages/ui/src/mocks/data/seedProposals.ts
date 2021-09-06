@@ -40,7 +40,7 @@ const seedVotes = (votes: ProposalMock['votes'], server: any) =>
 type ThreadMock = ProposalMock['discussionThread']
 const seedDiscussionThread = (thread: ThreadMock, server: any) =>
   server.schema.create('ProposalDiscussionThread', {
-    discussionPosts: seedDiscussionPosts(thread.discussionPosts, server),
+    posts: seedDiscussionPosts(thread.discussionPosts, server),
     mode: server.schema.create(thread.mode),
   })
 

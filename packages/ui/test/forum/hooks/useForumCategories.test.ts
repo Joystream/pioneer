@@ -31,7 +31,7 @@ describe('useForumCategories', () => {
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
-        where: { parent_eq: null, status_json: { isTypeOf_eq: ActiveStatus } },
+        where: { parent: null, status_json: { isTypeOf_eq: ActiveStatus } },
       },
     })
 
@@ -41,7 +41,7 @@ describe('useForumCategories', () => {
       variables: {
         where: {
           status_json: { isTypeOf_eq: ArchivedStatus },
-          OR: [{ parent_eq: null }, { parent: { status_json: { isTypeOf_eq: ActiveStatus } } }],
+          OR: [{ parent: null }, { parent: { status_json: { isTypeOf_eq: ActiveStatus } } }],
         },
       },
     })

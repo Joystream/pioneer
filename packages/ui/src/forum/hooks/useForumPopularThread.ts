@@ -18,7 +18,7 @@ export const useForumPopularThread = (category_eq: string) => {
   useEffect(() => {
     const rawThread = threadData?.forumThreads[0]
     if (!rawThread) return
-    fetchPostCount({ variables: { where: { thread_eq: rawThread.id } } })
+    fetchPostCount({ variables: { where: { thread: { id_eq: rawThread.id } } } })
     setThread(asForumThread(rawThread))
   }, [threadData])
 
