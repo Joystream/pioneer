@@ -32,7 +32,7 @@ describe('UI: WatchlistButton', () => {
     expect(JSON.parse(watchlist!)).toEqual(['2', '1'])
   })
 
-  it('Add then remove thread', async () => {
+  it('Remove thread', async () => {
     renderComponent()
     await act(async () => {
       fireEvent.click(await getButton('Watch thread'))
