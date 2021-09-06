@@ -8,8 +8,12 @@ import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
+import { relativeTime } from '@/common/model/relativeTime'
+import { useThreadBreadcrumbs } from '@/forum/hooks/useThreadBreadcrumbs'
 import { useThreadOriginalPost } from '@/forum/hooks/useThreadOriginalPost'
 import { ForumThread } from '@/forum/types'
+
+import { ForumBreadcrumbsList } from '../ForumBreadcrumbsList'
 
 import { ThreadTags } from './ThreadTags'
 
@@ -17,20 +21,17 @@ interface ThreadBadgeProps {
   badge?: string
 }
 
-interface ThreadAnswerProps {
-  answer?: string
-}
-
 export interface ThreadItemContentProps {
   thread: ForumThread
   badges?: ThreadBadgeProps[]
-  answers?: ThreadAnswerProps[]
   halfSize?: boolean
   empty?: boolean
 }
 
-export const ThreadItem = ({ thread, badges, answers, halfSize, empty }: ThreadItemContentProps) => {
+export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemContentProps) => {
   const { originalPost, isLoading } = useThreadOriginalPost(thread.id)
+  const repliesCount = thread.visiblePostsCount - 1
+  const { threadBreadcrumb, categoryBreadcrumbs } = useThreadBreadcrumbs(thread.id)
   const content = originalPost?.text
   const threadAddress = `/forum/thread/${thread.id}`
 
@@ -45,14 +46,19 @@ export const ThreadItem = ({ thread, badges, answers, halfSize, empty }: ThreadI
     <ThreadItemWrapper halfSize={halfSize} as={GhostRouterLink} to={threadAddress}>
       <ThreadItemHeader align="center">
         <ThreadItemTitle empty={empty}>{thread.title}</ThreadItemTitle>
-        <ThreadItemTime lighter>{thread.createdInBlock.timestamp}</ThreadItemTime>
+        <ThreadItemTime lighter>{relativeTime(thread.createdInBlock.timestamp)}</ThreadItemTime>
       </ThreadItemHeader>
+      <ForumBreadcrumbsList
+        categoryBreadcrumbs={categoryBreadcrumbs ?? []}
+        threadBreadcrumb={threadBreadcrumb}
+        nonInteractive
+      />
       {content && (
         <ThreadItemText light value>
           {content}
         </ThreadItemText>
       )}
-      {(badges || answers) && (
+      {(badges || !!repliesCount) && (
         <ThreadItemFooter>
           {badges && (
             <ThreadTags
@@ -64,9 +70,9 @@ export const ThreadItem = ({ thread, badges, answers, halfSize, empty }: ThreadI
               }))}
             />
           )}
-          {answers && (
+          {!!repliesCount && (
             <Label>
-              <StyledAnswerIcon /> Answers <CountBadge count={answers.length} />
+              <StyledAnswerIcon /> Replies <CountBadge count={repliesCount} />
             </Label>
           )}
         </ThreadItemFooter>
