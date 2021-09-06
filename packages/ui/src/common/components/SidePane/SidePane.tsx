@@ -1,21 +1,8 @@
+import { MouseEventHandler } from 'react'
 import styled, { css } from 'styled-components'
 
-import { Animations, Colors, RemoveScrollbar, ZIndex } from '../../constants'
+import { Animations, Colors, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
 import { ButtonsGroup } from '../buttons'
-
-export const SidePaneGlass = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: ${Colors.Black[700.85]};
-  color: ${Colors.Black[900]};
-  z-index: ${ZIndex.modal};
-  ${Animations.showModalBackground};
-`
 
 export const SidePaneHeader = styled.div`
   display: grid;
@@ -98,4 +85,30 @@ export const SidePane = styled.div<{ topSize?: 'xs' | 's' | 'm' }>`
         `
     }
   }};
+`
+
+export const SidePaneGlass = styled.div<{ onClick?: MouseEventHandler<HTMLDivElement> }>`
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: ${Colors.Black[900]};
+  z-index: ${ZIndex.modal};
+
+  ${({ onClick }) =>
+    onClick
+      ? css`
+          background-color: ${Colors.Black[700.85]};
+          ${Animations.showModalBackground};
+        `
+      : css`
+          pointer-events: none;
+          & > ${SidePane} {
+            box-shadow: ${Shadows.common};
+            pointer-events: auto;
+          }
+        `}
 `

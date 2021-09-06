@@ -1,5 +1,6 @@
 import escapeStringRegexp from 'escape-string-regexp'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Close, CloseButton } from '@/common/components/buttons'
@@ -28,6 +29,20 @@ export const SearchResultsModal = () => {
   const { forum, forumPostCount, isLoading } = useSearch(search, activeTab)
   const pattern = useMemo(() => (search ? RegExp(escapeStringRegexp(search), 'ig') : null), [search])
 
+  const history = useHistory()
+  const [hasOverlay, setHasOverlay] = useState(true)
+  useEffect(
+    () =>
+      history.listen((location) => {
+        if (activeTab === 'FORUM' && location.pathname.startsWith(ForumRoutes.forum)) {
+          setHasOverlay(false)
+        } else {
+          hideModal()
+        }
+      }),
+    []
+  )
+
   useEffect(() => {
     const escapeEvent = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -39,8 +54,13 @@ export const SearchResultsModal = () => {
     return () => document.removeEventListener('keydown', escapeEvent)
   }, [])
 
+  const overlayClickHandler = useCallback<MouseEventHandler<HTMLDivElement>>(
+    (event) => event.target === event.currentTarget && hideModal(),
+    []
+  )
+
   return (
-    <SidePaneGlass onClick={(event) => event.target === event.currentTarget && hideModal()}>
+    <SidePaneGlass onClick={hasOverlay ? overlayClickHandler : undefined}>
       <SearchResultsSidePane>
         <SearchResultsHeader>
           <CloseButton onClick={hideModal} />
