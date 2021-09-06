@@ -234,6 +234,12 @@ query GetForumPostsCount($where: ForumPostWhereInput!) {
   }
 }
 
+query GetForumPostsIds($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $limit: Int) {
+  forumPosts(where: $where, orderBy: $orderBy, limit: $limit) {
+    id
+  }
+}
+
 query GetForumPostParents($where: ForumPostWhereUniqueInput!) {
   forumPostByUniqueInput(where: $where) {
     ...ForumPostParents

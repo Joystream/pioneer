@@ -6,17 +6,20 @@ import { InputComponent } from '@/common/components/forms'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { useLocation } from '@/common/hooks/useLocation'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
+import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
 interface Props {
   thread: ProposalDiscussionThread
-  selected?: string
+  proposalId: string
 }
 
-export const ProposalDiscussions = ({ thread }: Props) => {
+export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
+  const { origin } = useLocation()
   const query = useRouteQuery()
   const initialPost = query.get('post')
 
@@ -49,6 +52,7 @@ export const ProposalDiscussions = ({ thread }: Props) => {
             isThreadActive={true}
             post={post}
             type="proposal"
+            link={`${origin}${ProposalsRoutes.preview}/${proposalId}?post=${post.id}`}
           />
         )
       })}

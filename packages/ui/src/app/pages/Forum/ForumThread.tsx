@@ -8,7 +8,6 @@ import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon, WatchIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
-import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -31,7 +30,7 @@ export const ForumThread = () => {
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
 
   if (!isLoading && !thread) {
-    history.push('/404')
+    history.replace('/404')
 
     return null
   }
@@ -76,18 +75,12 @@ export const ForumThread = () => {
     )
   }
 
-  const displayMain = () => {
-    if (isLoading || !thread) {
-      return <Loading />
-    }
-
-    return (
-      <MainPanel ref={sideNeighborRef}>
-        <PostList threadId={thread.id} isThreadActive={isThreadActive} />
-        {isThreadActive && <NewThreadPost thread={thread} />}
-      </MainPanel>
-    )
-  }
+  const displayMain = () => (
+    <MainPanel ref={sideNeighborRef}>
+      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
+      {thread && isThreadActive && <NewThreadPost thread={thread} />}
+    </MainPanel>
+  )
 
   const displaySidebar = () => {
     if (isLoading || !thread) {

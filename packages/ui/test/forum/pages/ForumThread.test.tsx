@@ -82,7 +82,7 @@ describe('UI: Forum Thread Page', () => {
     mockThread.isLoading = true
     renderPage()
 
-    expect(screen.queryByText('Loading...')).not.toBeNull()
+    expect(screen.queryByText('Loading thread...')).not.toBeNull()
 
     expect(screen.queryByText(/copy link/i)).toBeNull()
     expect(screen.queryByText(/watch thread/i)).toBeNull()
@@ -92,7 +92,7 @@ describe('UI: Forum Thread Page', () => {
     mockThread.thread = forumThread
     renderPage()
 
-    expect(screen.queryByText('Loading...')).toBeNull()
+    expect(screen.queryByText('Loading thread...')).toBeNull()
 
     expect(screen.queryByText(/copy link/i)).not.toBeNull()
     expect(screen.queryByText(/watch thread/i)).not.toBeNull()
