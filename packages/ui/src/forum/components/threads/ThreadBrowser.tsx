@@ -44,10 +44,16 @@ export const ThreadBrowser = ({
           {label} {!!totalCount && <CountBadge count={totalCount} />}
         </Label>
         <ButtonsGroup>
-          <ButtonGhost size="small" square onClick={onPrevClick} disabled={currentPage <= 1}>
+          <ButtonGhost size="small" square onClick={onPrevClick} disabled={currentPage <= 1} title="Browse left">
             <Arrow direction="left" />
           </ButtonGhost>
-          <ButtonGhost size="small" square onClick={onNextClick} disabled={currentPage >= (pageCount ?? 1)}>
+          <ButtonGhost
+            size="small"
+            square
+            onClick={onNextClick}
+            disabled={currentPage >= (pageCount ?? 1)}
+            title="Browse right"
+          >
             <Arrow direction="right" />
           </ButtonGhost>
         </ButtonsGroup>
