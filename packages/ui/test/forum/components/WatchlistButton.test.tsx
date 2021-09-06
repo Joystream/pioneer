@@ -11,7 +11,7 @@ describe('UI: WatchlistButton', () => {
     window.localStorage.clear()
   })
 
-  it('Create a watchlist if there is none', async () => {
+  it('Create a watchlist', async () => {
     renderComponent()
     const button = await getButton('Watch thread')
     act(() => {

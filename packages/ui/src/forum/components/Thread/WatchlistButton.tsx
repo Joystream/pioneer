@@ -14,9 +14,9 @@ export const WatchlistButton = ({ threadId }: Props) => {
   const addToWatchlist = useCallback(() => setWatchlist(watchlist ? [...watchlist, threadId] : [threadId]), [watchlist])
   const removeFromWatchlist = useCallback(() => setWatchlist(watchlist?.filter((id) => id !== threadId)), [watchlist])
 
-  const isThreadWatchlisted = watchlist?.includes(threadId)
+  const isOnWatchlist = watchlist?.includes(threadId)
 
-  if (isThreadWatchlisted) {
+  if (isOnWatchlist) {
     return (
       <ButtonGhost size="medium" onClick={removeFromWatchlist}>
         <WatchIcon />
