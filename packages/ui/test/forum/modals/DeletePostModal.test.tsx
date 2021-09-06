@@ -83,7 +83,7 @@ describe('UI: DeletePostModal', () => {
 
   it('Requirements passed', async () => {
     renderModal()
-    expect(screen.findByText(/You intend to delete your post./i)).not.toBeNull()
+    expect(screen.queryByText(/You intend to delete your post./i)).not.toBeNull()
     expect(screen.queryByText(/Sign and delete/i)).not.toBeNull()
     expect(screen.queryByText(/Post preview/i)).toBeNull()
   })
@@ -98,14 +98,14 @@ describe('UI: DeletePostModal', () => {
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    await fireEvent.click(await getButton(/Sign and delete/i))
+    fireEvent.click(await getButton(/Sign and delete/i))
     expect(await screen.getByText('There was a problem deleting your post.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, [], 'forum', 'deletePosts')
     renderModal()
-    await fireEvent.click(await getButton(/Sign and delete/i))
+    fireEvent.click(await getButton(/Sign and delete/i))
     expect(await screen.getByText('Your post has been deleted.')).toBeDefined()
   })
 
