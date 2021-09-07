@@ -69,10 +69,10 @@ export const PostTextUpdatedEventFieldsFragmentDoc = gql`
 `
 export const GetForumEventsDocument = gql`
   query GetForumEvents {
-    postAddedEvents {
+    postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
       ...PostAddedEventFields
     }
-    postTextUpdatedEvents {
+    postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
       ...PostTextUpdatedEventFields
     }
   }

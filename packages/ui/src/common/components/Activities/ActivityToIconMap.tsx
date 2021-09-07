@@ -38,4 +38,6 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   TerminatedLeaderEvent: [TerminatedIcon, 'negative'],
   WorkerRewardAccountUpdatedEvent: [RewardIcon, 'joystream'],
   WorkerRewardAmountUpdatedEvent: [RewardIcon, 'joystream'],
+  PostAddedEvent: [CreatedIcon, 'joystream'],
+  PostTextUpdatedEvent: [UpcomingIcon, 'joystream'],
 }

@@ -5,18 +5,18 @@ import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { useMockActivities } from '@/common/hooks/useMockActivities'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { MyThreadsBrowser } from '@/forum/components/threads/MyThreadsBrowser'
 import { RandomThreadsBrowser } from '@/forum/components/threads/RandomThreadsBrowser'
 import { ThreadsLayout } from '@/forum/components/threads/ThreadsLayout'
+import { useForumActivities } from '@/forum/hooks/useForumActivities'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { ForumTabs } from './components/ForumTabs'
 
 export const ForumOverview = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
-  const activities = useMockActivities()
+  const { activities } = useForumActivities()
   const { hasMembers } = useMyMemberships()
 
   return (
