@@ -2,6 +2,8 @@ import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { useGetForumThreadsQuery } from '@/forum/queries'
 import { asForumThread } from '@/forum/types'
 
+const { VisiblePostsCountDesc, UpdatedAtDesc } = ForumThreadOrderByInput
+
 interface Props {
   categoryId?: string
   page?: number
@@ -15,7 +17,7 @@ export const useForumPopularThread = ({ categoryId, page = 1, threadsPerPage = 1
         ...(categoryId ? { category: { id_eq: categoryId } } : {}),
         status_json: { isTypeOf_eq: 'ThreadStatusActive' },
       },
-      orderBy: ForumThreadOrderByInput.UpdatedAtDesc,
+      orderBy: [VisiblePostsCountDesc, UpdatedAtDesc],
       offset: (page - 1) * threadsPerPage,
       limit: threadsPerPage,
     },
