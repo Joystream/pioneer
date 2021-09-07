@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
-import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
-import { LinkIcon, WatchIcon } from '@/common/components/icons'
+import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
+import { LinkIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -16,6 +16,7 @@ import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
+import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
@@ -50,10 +51,7 @@ export const ForumThread = () => {
             <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
               Copy link
             </CopyButtonTemplate>
-            <ButtonGhost size="medium">
-              <WatchIcon />
-              Watch thread
-            </ButtonGhost>
+            <WatchlistButton threadId={thread.id} />
           </ButtonsGroup>
         </PageHeaderRow>
         <RowGapBlock>

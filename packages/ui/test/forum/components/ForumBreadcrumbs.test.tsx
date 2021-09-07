@@ -53,7 +53,7 @@ describe('Forum breadcrumbs', () => {
       expect(await screen.findByText('Category 0')).toBeDefined()
       expect(await screen.findByText('ab fugiat et quas est')).toBeDefined()
       expect(await screen.findByText('facilis debitis dolore repellat voluptates')).toBeDefined()
-      expect(await screen.findByText('Nested thread')).toBeDefined()
+      expect(await screen.findByText('Nested thread 1')).toBeDefined()
     })
   })
 
