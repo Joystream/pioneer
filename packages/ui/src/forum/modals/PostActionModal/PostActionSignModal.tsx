@@ -68,7 +68,9 @@ export const PostActionSignModal = ({
         <ModalBody>
           <RowGapBlock gap={24}>
             <RowGapBlock gap={16}>
-              <TextMedium>You intend to {action} your post.</TextMedium>
+              <TextMedium>
+                {action === 'edit' ? 'You intend to edit your post.' : 'You intend to delete your post.'}
+              </TextMedium>
               <TextMedium>
                 A fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
               </TextMedium>
