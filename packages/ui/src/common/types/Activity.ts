@@ -1,3 +1,4 @@
+import { Member } from '@/memberships/types'
 import { WorkingGroupActivity } from '@/working-groups/types'
 
 export type ActivityCategory = Activity['eventType']
@@ -9,3 +10,5 @@ export interface BaseActivity {
   createdAt: string
   unread?: boolean
 }
+
+export type MemberDisplayFields = Pick<Member, 'id' | 'handle'>
