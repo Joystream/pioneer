@@ -8,6 +8,7 @@ import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { isDefined } from '@/common/utils'
 import { ForumThread } from '@/forum/types'
 
 import { ThreadItem, ThreadItemWrapper, EmptyThreadItem } from './ThreadItem'
@@ -51,7 +52,7 @@ export const ThreadBrowser = ({
             size="small"
             square
             onClick={onNextClick}
-            disabled={currentPage >= (pageCount ?? 1)}
+            disabled={isDefined(pageCount) ? currentPage >= pageCount : !isDefined(threads)}
             title="Browse next"
           >
             <Arrow direction="right" />
@@ -64,7 +65,7 @@ export const ThreadBrowser = ({
         ) : (
           threads?.map((thread) => <ThreadItem key={thread.id} thread={thread} halfSize={threads.length > 1} />)
         )}
-        {!isLoading && !totalCount && <EmptyThreadItem text={emptyText} />}
+        {!isLoading && !threads?.length && <EmptyThreadItem text={emptyText} />}
       </ThreadBrowserItems>
     </ThreadBrowserStyles>
   )
