@@ -11,9 +11,12 @@ import { useForumPopularThread } from '@/forum/hooks/useForumPopularThread'
 import { CategoryItemFieldProps } from './CategoryListItem'
 
 export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
-  const thread = useForumPopularThread({ categoryId }).threads?.[0]
+  const { isLoading, threads } = useForumPopularThread({ categoryId })
 
-  if (!thread) return <Loading />
+  if (isLoading) return <Loading />
+  else if (!threads?.[0]) return <>-</>
+
+  const thread = threads[0]
 
   return (
     <ThreadInfoStyles>
