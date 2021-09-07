@@ -1,5 +1,7 @@
 import { BaseActivity, MemberDisplayFields } from '@/common/types'
 
+export type ForumActivity = PostAddedActivity | PostEditedActivity
+
 interface PostActivity extends BaseActivity {
   postId: string
   threadId: string
