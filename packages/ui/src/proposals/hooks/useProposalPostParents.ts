@@ -9,9 +9,12 @@ export const useProposalPostParents = (id: string) => {
   return { threadId, isLoading: loading }
 }
 
-const asProposalPostParents = (fields?: ProposalPostParentsFragment | null | undefined) =>
-  fields
-    ? {
-        threadId: createType('ThreadId', Number.parseInt(fields.threadId)),
-      }
-    : {}
+const asProposalPostParents = (fields?: ProposalPostParentsFragment | null | undefined) => {
+  if (!fields) {
+    return {}
+  }
+
+  return {
+    threadId: createType('ThreadId', Number.parseInt(fields.discussionThreadId)),
+  }
+}

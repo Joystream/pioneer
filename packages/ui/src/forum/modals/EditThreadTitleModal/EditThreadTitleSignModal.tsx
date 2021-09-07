@@ -34,7 +34,7 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
 
   const transaction = useMemo(() => {
     if (threadAuthor && connectionState === 'connected' && api) {
-      return api.tx.forum.editThreadTitle(threadAuthor.id, thread.categoryId, thread.id, newTitle)
+      return api.tx.forum.editThreadMetadata(threadAuthor.id, thread.categoryId, thread.id, newTitle)
     }
   }, [newTitle, threadAuthor, connectionState])
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { registry } from '@joystream/types'
-import { JoyBTreeSet } from '@joystream/types/common'
 import { ApplicationId } from '@joystream/types/working-group'
+import { BTreeSet } from '@polkadot/types'
 import yargs from 'yargs'
 
 import { getSudoAccount } from '../data/addresses'
@@ -25,7 +25,7 @@ export type FillOpeningArgs = yargs.Arguments<CommandOptions>
 
 const fillOpeningCommand = async ({ applicationId, openingId }: FillOpeningArgs) => {
   await withApi(async (api) => {
-    const applicationsSet = new (JoyBTreeSet(ApplicationId))(registry, [String(applicationId)])
+    const applicationsSet = new (BTreeSet.with(ApplicationId))(registry, [String(applicationId)])
     const fillOpening = api.tx.membershipWorkingGroup.fillOpening(String(openingId), applicationsSet)
 
     await signAndSend(api.tx.sudo.sudo(fillOpening), getSudoAccount())

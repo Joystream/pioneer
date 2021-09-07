@@ -1,3 +1,5 @@
+import { registry } from '@joystream/types'
+import { PostsToDeleteMap } from '@joystream/types/src/forum'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
@@ -41,7 +43,20 @@ describe('UI: DeletePostModal', () => {
       text: 'Sample post text',
       status: 'PostStatusActive',
     },
-    transaction: api.api.tx.forum.deletePosts(1, [[1, 1, 1, true]], ''),
+    transaction: api.api.tx.forum.deletePosts(
+      1,
+      new PostsToDeleteMap(registry, [
+        [
+          {
+            post_id: 1,
+            thread_id: 1,
+            category_id: 1,
+          },
+          true,
+        ],
+      ]),
+      ''
+    ),
   }
 
   const useModal: UseModal<any> = {
@@ -78,7 +93,20 @@ describe('UI: DeletePostModal', () => {
   beforeEach(async () => {
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath)
-    modalData.transaction = api.api.tx.forum.deletePosts(1, [[1, 1, 1, true]], '')
+    modalData.transaction = api.api.tx.forum.deletePosts(
+      1,
+      new PostsToDeleteMap(registry, [
+        [
+          {
+            post_id: 1,
+            thread_id: 1,
+            category_id: 1,
+          },
+          true,
+        ],
+      ]),
+      ''
+    )
   })
 
   it('Requirements passed', async () => {
@@ -90,7 +118,20 @@ describe('UI: DeletePostModal', () => {
 
   it('Requirements failed', async () => {
     tx = stubTransaction(api, txPath, 10000)
-    modalData.transaction = api.api.tx.forum.deletePosts(1, [[1, 1, 1, true]], '')
+    modalData.transaction = api.api.tx.forum.deletePosts(
+      1,
+      new PostsToDeleteMap(registry, [
+        [
+          {
+            post_id: 1,
+            thread_id: 1,
+            category_id: 1,
+          },
+          true,
+        ],
+      ]),
+      ''
+    )
     renderModal()
     expect(await screen.findByText('Insufficient Funds')).toBeDefined()
   })

@@ -5,7 +5,6 @@ import {
   MemberFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
-
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type ProposalFieldsFragment = {
@@ -105,9 +104,9 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'SetMaxValidatorCountProposalDetails' }
     | {
         __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
-        stakeAmount: any
+        stakeAmount: number
         unstakingPeriod: number
-        rewardPerBlock: any
+        rewardPerBlock: number
         metadata?: Types.Maybe<{ __typename: 'WorkingGroupOpeningMetadata'; description?: Types.Maybe<string> }>
         group?: Types.Maybe<{ __typename: 'WorkingGroup'; id: string; name: string }>
       }
@@ -115,7 +114,7 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | {
         __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
-        amount: any
+        amount: number
         lead?: Types.Maybe<{
           __typename: 'Worker'
           createdAt: any
@@ -125,7 +124,7 @@ export type ProposalWithDetailsFieldsFragment = {
       }
     | {
         __typename: 'SlashWorkingGroupLeadProposalDetails'
-        amount: any
+        amount: number
         lead?: Types.Maybe<{
           __typename: 'Worker'
           createdAt: any
@@ -151,7 +150,7 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'VetoProposalDetails' }
   discussionThread: {
     __typename: 'ProposalDiscussionThread'
-    discussionPosts: Array<{ __typename: 'ProposalDiscussionPost' } & DiscussionPostFieldsFragment>
+    posts: Array<{ __typename: 'ProposalDiscussionPost' } & DiscussionPostFieldsFragment>
     mode: { __typename: 'ProposalDiscussionThreadModeOpen' } | { __typename: 'ProposalDiscussionThreadModeClosed' }
   }
 } & ProposalFieldsFragment
@@ -176,7 +175,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
   author: { __typename: 'Membership' } & MemberFieldsFragment
 }
 
-export type ProposalPostParentsFragment = { __typename: 'ProposalDiscussionPost'; threadId: string }
+export type ProposalPostParentsFragment = { __typename: 'ProposalDiscussionPost'; discussionThreadId: string }
 
 export type GetProposalsQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.ProposalWhereInput>
@@ -368,7 +367,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
     }
     discussionThread {
-      discussionPosts {
+      posts {
         ...DiscussionPostFields
       }
       mode {
@@ -383,7 +382,7 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
 `
 export const ProposalPostParentsFragmentDoc = gql`
   fragment ProposalPostParents on ProposalDiscussionPost {
-    threadId
+    discussionThreadId
   }
 `
 export const GetProposalsDocument = gql`

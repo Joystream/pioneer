@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } from 'react'
-import InView from 'react-intersection-observer'
+import { InView } from 'react-intersection-observer'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'

@@ -115,11 +115,13 @@ export const stubApi = () => {
   set(api, 'api.rpc.chain.subscribeNewHeads', () =>
     from([
       createType('Header', {
-        parentHash: 'Hash',
+        parentHash: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
         number: 1337,
-        stateRoot: 'Hash',
-        extrinsicsRoot: 'Hash',
-        digest: [],
+        stateRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+        extrinsicsRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+        digest: {
+          logs: [],
+        },
       }),
     ])
   )
@@ -161,7 +163,7 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
       {
         availableBalance: createType('Balance', availableBalance),
         lockedBalance: createType('Balance', lockedBalance),
-        accountId: createType('AccountId', '0x00'),
+        accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
         accountNonce: createType('Index', 1),
         freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
         frozenFee: new BN(0),
@@ -183,7 +185,7 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
 
 export const EMPTY_BALANCES: DeriveBalancesAll = {
   additional: [],
-  accountId: createType('AccountId', '0x00'),
+  accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
   accountNonce: createType('Index', 1),
   availableBalance: createBalance(0),
   freeBalance: createBalance(0),
