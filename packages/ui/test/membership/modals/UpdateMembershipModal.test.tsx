@@ -10,7 +10,7 @@ import { ApiContext } from '../../../src/common/providers/api/context'
 import { UpdateMembershipModal } from '../../../src/memberships/modals/UpdateMembershipModal'
 import { Member } from '../../../src/memberships/types'
 import { getButton } from '../../_helpers/getButton'
-import { selectAccount } from '../../_helpers/selectAccount'
+import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -81,7 +81,7 @@ describe('UI: UpdatedMembershipModal', () => {
   it('Enables save button on account change', async () => {
     renderModal(member)
 
-    await selectAccount('root account', 'bob')
+    await selectFromDropdown('root account', 'bob')
 
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })

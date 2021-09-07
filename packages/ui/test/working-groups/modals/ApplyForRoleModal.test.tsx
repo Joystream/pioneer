@@ -22,7 +22,7 @@ import { asWorkingGroupOpening } from '@/working-groups/types'
 
 import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { getButton } from '../../_helpers/getButton'
-import { selectAccount } from '../../_helpers/selectAccount'
+import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -138,7 +138,7 @@ describe('UI: ApplyForRoleModal', () => {
     it('Too low stake', async () => {
       renderModal()
 
-      await selectAccount('Select account for Staking', 'alice')
+      await selectFromDropdown('Select account for Staking', 'alice')
       const input = await screen.findByLabelText(/Select amount for staking/i)
       fireEvent.change(input, { target: { value: '50' } })
 
@@ -149,7 +149,7 @@ describe('UI: ApplyForRoleModal', () => {
     it('Valid fields', async () => {
       renderModal()
 
-      await selectAccount('Select account for Staking', 'alice')
+      await selectFromDropdown('Select account for Staking', 'alice')
       const input = await screen.findByLabelText(/Select amount for staking/i)
       fireEvent.change(input, { target: { value: '2000' } })
 
@@ -257,7 +257,7 @@ describe('UI: ApplyForRoleModal', () => {
   }
 
   async function fillAndSubmitStakeStep() {
-    await selectAccount('Select account for Staking', 'alice')
+    await selectFromDropdown('Select account for Staking', 'alice')
     const input = await screen.findByLabelText(/Select amount for staking/i)
     fireEvent.change(input, { target: { value: '2000' } })
     fireEvent.click(await getNextStepButton())

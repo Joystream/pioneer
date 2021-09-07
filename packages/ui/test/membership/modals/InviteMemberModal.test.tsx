@@ -11,7 +11,7 @@ import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
-import { selectMember } from '../../_helpers/selectMember'
+import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, aliceStash, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -82,7 +82,7 @@ describe('UI: InviteMemberModal', () => {
 
     expect(await getButton(/^Invite a member$/i)).toBeDisabled()
 
-    await selectMember('Inviting member', 'alice')
+    await selectFromDropdown('Inviting member', 'alice')
     await fireEvent.change(getInput(/Root account/i), {
       target: { value: bobStash.address },
     })
@@ -102,7 +102,7 @@ describe('UI: InviteMemberModal', () => {
 
     expect(await getButton(/^Invite a member$/i)).toBeDisabled()
 
-    await selectMember('Inviting member', 'alice')
+    await selectFromDropdown('Inviting member', 'alice')
     await fireEvent.change(getInput(/Root account/i), {
       target: { value: bobStash.address },
     })
@@ -120,7 +120,7 @@ describe('UI: InviteMemberModal', () => {
       seedMembers(server.server, 2)
       renderModal()
       await getButton(/^Invite a member$/i)
-      await selectMember('Inviting member', invitor)
+      await selectFromDropdown('Inviting member', invitor)
       fireEvent.change(getInput(/Root account/i), {
         target: { value: bobStash.address },
       })
