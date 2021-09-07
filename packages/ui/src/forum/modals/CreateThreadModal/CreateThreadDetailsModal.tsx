@@ -12,7 +12,7 @@ import { ForumBreadcrumbsList } from '@/forum/components/ForumBreadcrumbsList'
 import { CategoryBreadcrumb } from '@/forum/types'
 import { Member } from '@/memberships/types'
 
-import { PreviewThreadModal } from './PreviewThreadModal'
+import { PreviewPostModal } from '../PreviewPostModal/PreviewPostModal'
 
 interface Props {
   topic: string
@@ -36,6 +36,7 @@ export const CreateThreadDetailsModal = ({
   const isValid = useMemo(() => !!(topic && description), [topic, description])
   const { hideModal } = useModal()
   const [previewVisible, setPreviewVisible] = useState(false)
+
   return (
     <>
       <Modal onClose={hideModal} modalSize="l">
@@ -76,7 +77,7 @@ export const CreateThreadDetailsModal = ({
         </ModalFooter>
       </Modal>
       {previewVisible && (
-        <PreviewThreadModal author={author} text={description} onClose={() => setPreviewVisible(false)} />
+        <PreviewPostModal author={author} text={description} onClose={() => setPreviewVisible(false)} />
       )}
     </>
   )

@@ -9,17 +9,19 @@ import {
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '@/common/components/Modal'
+import { capitalizeFirstLetter } from '@/common/helpers'
 import { PostListItem } from '@/forum/components/PostList/PostListItem'
 import { ForumPost } from '@/forum/types'
 import { Member } from '@/memberships/types'
 
-export interface PreviewThreadProps {
+export interface PreviewPostModalProps {
   onClose: () => void
   author: Member
   text: string
+  type?: 'thread' | 'post'
 }
 
-export const PreviewThreadModal = ({ onClose, author, text }: PreviewThreadProps) => {
+export const PreviewPostModal = ({ onClose, author, text, type = 'thread' }: PreviewPostModalProps) => {
   const post: ForumPost = useMemo(
     () => ({
       id: '',
@@ -33,7 +35,7 @@ export const PreviewThreadModal = ({ onClose, author, text }: PreviewThreadProps
 
   return (
     <ScrolledModal onClose={onClose} modalSize="l" modalHeight="l">
-      <ModalHeader onClick={onClose} title="Thread preview" />
+      <ModalHeader onClick={onClose} title={`${capitalizeFirstLetter(type)} Preview`} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
           <PostListItem post={post} type="forum" isPreview />

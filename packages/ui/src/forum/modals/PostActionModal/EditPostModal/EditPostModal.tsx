@@ -18,7 +18,7 @@ import { EditPostModalCall } from '.'
 
 export const EditPostModal = () => {
   const {
-    modalData: { post, transaction },
+    modalData: { postAuthor, postText, transaction },
     hideModal,
   } = useModal<EditPostModalCall>()
 
@@ -45,13 +45,15 @@ export const EditPostModal = () => {
 
   if (state.matches('transaction') && transaction) {
     const service = state.children.transaction
-    const controllerAccount = accountOrNamed(allAccounts, post.author.controllerAccount, 'Controller Account')
+    const controllerAccount = accountOrNamed(allAccounts, postAuthor.controllerAccount, 'Controller Account')
     return (
       <PostActionSignModal
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        actionText="You intend to edit your post."
+        action="edit"
+        author={postAuthor}
+        newText={postText}
       />
     )
   }
