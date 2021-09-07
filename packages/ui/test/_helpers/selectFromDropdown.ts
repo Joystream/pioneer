@@ -11,12 +11,12 @@ export const selectFromDropdown = async (label: string, name: string) => {
   const toggle = parentElement.querySelector('.ui-toggle')
   toggle && fireEvent.click(toggle)
 
-  let found: any
+  let found
   await waitFor(() => {
     const memberTitles = parentElement?.querySelectorAll('ul > li')
     found = memberTitles && Array.from(memberTitles).find((li) => li.textContent?.match(name))
     expect(found).toBeDefined()
-  })
+  }, {})
 
   found && fireEvent.click(found)
 }

@@ -38,7 +38,22 @@ interface PostActionSignModalEditProps extends PostActionSignModalCommonProps {
   newText: string
 }
 
-export type PostActionSignModalProps = PostActionSignModalDeleteProps | PostActionSignModalEditProps
+interface PostActionCreateProps extends PostActionSignModalCommonProps {
+  action: 'create'
+}
+
+export type PostActionSignModalProps =
+  | PostActionSignModalDeleteProps
+  | PostActionSignModalEditProps
+  | PostActionCreateProps
+
+const actionTexts = {
+  edit: 'You intend to edit your post.',
+  delete: 'You intend to delete your post.',
+  create: 'You intend to add post.',
+}
+
+const getActionText = (action: 'delete' | 'edit' | 'create') => actionTexts[action]
 
 export const PostActionSignModal = ({
   transaction,
@@ -68,9 +83,7 @@ export const PostActionSignModal = ({
         <ModalBody>
           <RowGapBlock gap={24}>
             <RowGapBlock gap={16}>
-              <TextMedium>
-                {action === 'edit' ? 'You intend to edit your post.' : 'You intend to delete your post.'}
-              </TextMedium>
+              <TextMedium>{getActionText(action)}</TextMedium>
               <TextMedium>
                 A fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
               </TextMedium>
