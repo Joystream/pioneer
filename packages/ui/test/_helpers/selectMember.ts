@@ -1,4 +1,4 @@
-import { screen, fireEvent } from '@testing-library/react'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
 
 export const selectMember = async (label: string, name: string) => {
   const labelElement = await screen.findByText(new RegExp(`${label}`, 'i'))
@@ -14,16 +14,22 @@ export const selectMember = async (label: string, name: string) => {
     return
   }
 
-  await fireEvent.click(toggle)
+  fireEvent.click(toggle)
 
-  const memberTitles = parentElement?.querySelectorAll('ul > li')
-  const found = memberTitles && Array.from(memberTitles).find((li) => li.textContent?.match(name))
+  let found: any
 
-  expect(found).toBeDefined()
+  await waitFor(() => {
+    const memberTitles = parentElement?.querySelectorAll('ul > li')
+    const elements = Array.from(memberTitles)
+
+    found = memberTitles && elements.find((li) => li.textContent?.match(name))
+
+    expect(found).toBeDefined()
+  })
 
   if (!found) {
     return
   }
 
-  await fireEvent.click(found)
+  fireEvent.click(found)
 }

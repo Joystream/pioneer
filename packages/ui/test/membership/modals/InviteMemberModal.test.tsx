@@ -76,7 +76,7 @@ describe('UI: InviteMemberModal', () => {
   })
 
   it('Enables button', async () => {
-    seedMembers(server.server, 2)
+    seedMembers(server.server)
 
     renderModal()
 
