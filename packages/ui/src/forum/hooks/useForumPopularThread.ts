@@ -1,28 +1,28 @@
-import { useEffect, useState } from 'react'
-
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { useGetForumPostsCountLazyQuery, useGetForumThreadsQuery } from '@/forum/queries'
-import { asForumThread, ForumThread } from '@/forum/types'
+import { useGetForumThreadsQuery } from '@/forum/queries'
+import { asForumThread } from '@/forum/types'
 
-export const useForumPopularThread = (category_eq: string) => {
-  const [thread, setThread] = useState<ForumThread>()
+interface Props {
+  categoryId?: string
+  page?: number
+  threadsPerPage?: number
+}
 
-  const { data: threadData } = useGetForumThreadsQuery({
+export const useForumPopularThread = ({ categoryId, page = 1, threadsPerPage = 1 }: Props) => {
+  const { data, loading } = useGetForumThreadsQuery({
     variables: {
-      where: { category: { id_eq: category_eq } },
+      where: {
+        ...(categoryId ? { category: { id_eq: categoryId } } : {}),
+        status_json: { isTypeOf_eq: 'ThreadStatusActive' },
+      },
       orderBy: ForumThreadOrderByInput.UpdatedAtDesc,
-      limit: 1,
+      offset: (page - 1) * threadsPerPage,
+      limit: threadsPerPage,
     },
   })
 
-  useEffect(() => {
-    const rawThread = threadData?.forumThreads[0]
-    if (!rawThread) return
-    fetchPostCount({ variables: { where: { thread: { id_eq: rawThread.id } } } })
-    setThread(asForumThread(rawThread))
-  }, [threadData])
-
-  const [fetchPostCount, { data: postCountData }] = useGetForumPostsCountLazyQuery()
-
-  return { thread, postCount: postCountData?.forumPostsConnection.totalCount }
+  return {
+    isLoading: loading,
+    threads: data?.forumThreads.map(asForumThread),
+  }
 }

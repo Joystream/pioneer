@@ -11,16 +11,16 @@ import { useForumPopularThread } from '@/forum/hooks/useForumPopularThread'
 import { CategoryItemFieldProps } from './CategoryListItem'
 
 export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
-  const { thread, postCount } = useForumPopularThread(categoryId)
+  const thread = useForumPopularThread({ categoryId }).threads?.[0]
 
   if (!thread) return <Loading />
 
   return (
     <ThreadInfoStyles>
       <h6>{thread.title}</h6>
-      {isDefined(postCount) && (
+      {isDefined(thread.visiblePostsCount) && (
         <TextExtraSmall lighter>
-          {postCount} Post{plural(postCount)}
+          {thread.visiblePostsCount} Post{plural(thread.visiblePostsCount)}
         </TextExtraSmall>
       )}
     </ThreadInfoStyles>
