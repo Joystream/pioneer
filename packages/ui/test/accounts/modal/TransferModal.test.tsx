@@ -10,7 +10,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 
 import { getButton } from '../../_helpers/getButton'
-import { selectAccount } from '../../_helpers/selectAccount'
+import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -78,7 +78,7 @@ describe('UI: TransferModal', () => {
     expect(useHalfButton).toBeDisabled()
     expect(useMaxButton).toBeDisabled()
 
-    await selectAccount('From', 'alice')
+    await selectFromDropdown('From', 'alice')
 
     expect(input).not.toBeDisabled()
     expect(useHalfButton).not.toBeDisabled()

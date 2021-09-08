@@ -1,5 +1,4 @@
 import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation } from 'react-router'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -16,7 +15,6 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
 import { Colors, Fonts, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
@@ -34,13 +32,20 @@ interface PostListItemProps {
   isThreadActive?: boolean
   insertRef?: (ref: RefObject<HTMLDivElement>) => void
   type: PostListItemType
+  link?: string
 }
 
-export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, insertRef, type }: PostListItemProps) => {
-  const { createdAtBlock, updatedAt, author, text, repliesTo, id } = post
+export const PostListItem = ({
+  post,
+  isSelected,
+  isPreview,
+  isThreadActive,
+  insertRef,
+  type,
+  link,
+}: PostListItemProps) => {
+  const { createdAtBlock, updatedAt, author, text, repliesTo } = post
 
-  const location = useLocation()
-  const query = useRouteQuery()
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
     !!ref.current && insertRef && insertRef(ref)
@@ -62,11 +67,6 @@ export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, inse
       </EditionTime>
     )
   }, [updatedAt])
-  const postLink = useMemo(() => {
-    query.set('post', id)
-
-    return window.location.origin + (window.location.hash ? '/#' : '') + location.pathname + '?' + query.toString()
-  }, [location.search, location.pathname, id])
 
   return (
     <ForumPostStyles ref={ref} isSelected={isSelected}>
@@ -96,7 +96,7 @@ export const PostListItem = ({ post, isSelected, isPreview, isThreadActive, inse
         {!editing && (
           <ButtonsGroup>
             <CopyButtonTemplate
-              textToCopy={postLink}
+              textToCopy={link}
               square
               size="small"
               disabled={isPreview}

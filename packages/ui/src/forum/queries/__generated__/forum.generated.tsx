@@ -288,6 +288,14 @@ export type GetForumPostsCountQuery = {
   forumPostsConnection: { __typename: 'ForumPostConnection'; totalCount: number }
 }
 
+export type GetForumPostsIdsQueryVariables = Types.Exact<{
+  where: Types.ForumPostWhereInput
+  orderBy?: Types.Maybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+}>
+
+export type GetForumPostsIdsQuery = { __typename: 'Query'; forumPosts: Array<{ __typename: 'ForumPost'; id: string }> }
+
 export type GetForumPostParentsQueryVariables = Types.Exact<{
   where: Types.ForumPostWhereUniqueInput
 }>
@@ -1086,6 +1094,47 @@ export type GetForumPostsCountQueryResult = Apollo.QueryResult<
   GetForumPostsCountQuery,
   GetForumPostsCountQueryVariables
 >
+export const GetForumPostsIdsDocument = gql`
+  query GetForumPostsIds($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $limit: Int) {
+    forumPosts(where: $where, orderBy: $orderBy, limit: $limit) {
+      id
+    }
+  }
+`
+
+/**
+ * __useGetForumPostsIdsQuery__
+ *
+ * To run a query within a React component, call `useGetForumPostsIdsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetForumPostsIdsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetForumPostsIdsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetForumPostsIdsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetForumPostsIdsQuery, GetForumPostsIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetForumPostsIdsQuery, GetForumPostsIdsQueryVariables>(GetForumPostsIdsDocument, options)
+}
+export function useGetForumPostsIdsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetForumPostsIdsQuery, GetForumPostsIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetForumPostsIdsQuery, GetForumPostsIdsQueryVariables>(GetForumPostsIdsDocument, options)
+}
+export type GetForumPostsIdsQueryHookResult = ReturnType<typeof useGetForumPostsIdsQuery>
+export type GetForumPostsIdsLazyQueryHookResult = ReturnType<typeof useGetForumPostsIdsLazyQuery>
+export type GetForumPostsIdsQueryResult = Apollo.QueryResult<GetForumPostsIdsQuery, GetForumPostsIdsQueryVariables>
 export const GetForumPostParentsDocument = gql`
   query GetForumPostParents($where: ForumPostWhereUniqueInput!) {
     forumPostByUniqueInput(where: $where) {

@@ -478,37 +478,37 @@ export const WorkerRewardAccountUpdatedEventFragmentDoc = gql`
 `
 export const GetMemberRoleEventsDocument = gql`
   query GetMemberRoleEvents($worker_in: [ID!], $application_in: [ID!]) {
-    appliedOnOpeningEvents(where: { application_in: $application_in }) {
+    appliedOnOpeningEvents(where: { application: { id_in: $application_in } }) {
       ...AppliedOnOpeningEventFields
     }
-    applicationWithdrawnEvents(where: { application_in: $application_in }) {
+    applicationWithdrawnEvents(where: { application: { id_in: $application_in } }) {
       ...ApplicationWithdrawnEventFields
     }
-    stakeDecreasedEvents(where: { worker_in: $worker_in }) {
+    stakeDecreasedEvents(where: { worker: { id_in: $worker_in } }) {
       ...StakeDecreasedEventFields
     }
-    stakeIncreasedEvents(where: { worker_in: $worker_in }) {
+    stakeIncreasedEvents(where: { worker: { id_in: $worker_in } }) {
       ...StakeIncreasedEventFields
     }
-    stakeSlashedEvents(where: { worker_in: $worker_in }) {
+    stakeSlashedEvents(where: { worker: { id_in: $worker_in } }) {
       ...StakeSlashedEventFields
     }
-    workerStartedLeavingEvents(where: { worker_in: $worker_in }) {
+    workerStartedLeavingEvents(where: { worker: { id_in: $worker_in } }) {
       ...WorkerStartedLeavingEventFields
     }
-    workerExitedEvents(where: { worker_in: $worker_in }) {
+    workerExitedEvents(where: { worker: { id_in: $worker_in } }) {
       ...WorkerExitedEventFields
     }
-    terminatedWorkerEvents(where: { worker_in: $worker_in }) {
+    terminatedWorkerEvents(where: { worker: { id_in: $worker_in } }) {
       ...TerminatedWorkerEventFields
     }
-    terminatedLeaderEvents(where: { worker_in: $worker_in }) {
+    terminatedLeaderEvents(where: { worker: { id_in: $worker_in } }) {
       ...TerminatedLeaderEventFields
     }
-    workerRewardAccountUpdatedEvents(where: { worker_in: $worker_in }) {
+    workerRewardAccountUpdatedEvents(where: { worker: { id_in: $worker_in } }) {
       ...WorkerRewardAccountUpdatedEvent
     }
-    workerRewardAmountUpdatedEvents(where: { worker_in: $worker_in }) {
+    workerRewardAmountUpdatedEvents(where: { worker: { id_in: $worker_in } }) {
       ...WorkerRewardAmountUpdatedEvent
     }
   }
@@ -660,10 +660,10 @@ export type GetGroupEventsLazyQueryHookResult = ReturnType<typeof useGetGroupEve
 export type GetGroupEventsQueryResult = Apollo.QueryResult<GetGroupEventsQuery, GetGroupEventsQueryVariables>
 export const GetWorkerEventsDocument = gql`
   query GetWorkerEvents($workerId: ID, $applicationId: ID) {
-    appliedOnOpeningEvents(where: { application_eq: $applicationId }) {
+    appliedOnOpeningEvents(where: { application: { id_eq: $applicationId } }) {
       ...AppliedOnOpeningEventFields
     }
-    applicationWithdrawnEvents(where: { application_eq: $applicationId }) {
+    applicationWithdrawnEvents(where: { application: { id_eq: $applicationId } }) {
       ...ApplicationWithdrawnEventFields
     }
     stakeDecreasedEvents(where: { worker: { id_eq: $workerId } }) {

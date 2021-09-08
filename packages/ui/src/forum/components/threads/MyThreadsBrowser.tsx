@@ -17,6 +17,7 @@ export const MyThreadsBrowser = () => {
       pageCount={pageCount}
       totalCount={totalCount}
       isLoading={isLoading}
+      emptyText="You haven't created any threads yet"
     />
   )
 }

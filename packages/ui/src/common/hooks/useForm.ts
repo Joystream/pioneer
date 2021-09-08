@@ -24,7 +24,7 @@ export const useForm = <T extends Record<any, any>>(initializer: T, schema: AnyO
       setErrors([])
       return true
     } catch (error) {
-      setErrors(error.inner)
+      setErrors((error as any).inner)
       return false
     }
   }, [JSON.stringify(fields), JSON.stringify(context), schema])

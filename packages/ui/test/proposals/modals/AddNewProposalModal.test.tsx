@@ -30,8 +30,7 @@ import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine
 import { ProposalType } from '@/proposals/types'
 
 import { getButton } from '../../_helpers/getButton'
-import { selectAccount } from '../../_helpers/selectAccount'
-import { selectMember } from '../../_helpers/selectMember'
+import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { mockUseCurrentBlockNumber } from '../../_mocks/hooks/useCurrentBlockNumber'
 import { alice, bob } from '../../_mocks/keyring'
@@ -207,7 +206,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Selected', async () => {
-          await selectAccount('Select account for Staking', 'alice')
+          await selectFromDropdown('Select account for Staking', 'alice')
 
           const button = await getNextStepButton()
           expect(button).not.toBeDisabled()
@@ -289,7 +288,7 @@ describe('UI: AddNewProposalModal', () => {
           })
 
           it('Add member to whitelist', async () => {
-            await selectMember('Add member to whitelist', 'alice')
+            await selectFromDropdown('Add member to whitelist', 'alice')
 
             expect(await screen.getByTestId('removeMember')).toBeDefined()
 
@@ -298,7 +297,7 @@ describe('UI: AddNewProposalModal', () => {
           })
 
           it('Remove member from whitelist', async () => {
-            await selectMember('Add member to whitelist', 'alice')
+            await selectFromDropdown('Add member to whitelist', 'alice')
 
             expect(await screen.getByTestId('removeMember')).toBeDefined()
 
@@ -562,7 +561,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   async function finishStakingAccount() {
-    await selectAccount('Select account for Staking', 'alice')
+    await selectFromDropdown('Select account for Staking', 'alice')
 
     await clickNextButton()
   }
@@ -627,7 +626,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   const selectGroup = async (name: string) => {
-    await selectAccount('Working Group', name)
+    await selectFromDropdown('^Working Group$', name)
   }
 
   async function fillField(id: string, value: number | string) {
@@ -639,7 +638,7 @@ describe('UI: AddNewProposalModal', () => {
     fillAmount: async (value: number) => await fillField('amount-input', value),
     FundingRequest: {
       selectRecipient: async (name: string) => {
-        await selectAccount('Recipient account', name)
+        await selectFromDropdown('Recipient account', name)
       },
       finish: async (amount: number, recipient: string) => {
         await SpecificParameters.fillAmount(amount)

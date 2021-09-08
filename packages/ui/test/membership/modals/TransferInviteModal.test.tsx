@@ -7,7 +7,7 @@ import { TransferInviteModal } from '@/memberships/modals/TransferInviteModal'
 import { seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
-import { selectMember } from '../../_helpers/selectMember'
+import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
@@ -49,7 +49,7 @@ describe('UI: TransferInviteModal', () => {
     expect(input).toBeDefined()
     fireEvent.change(input, { target: { value: '1' } })
 
-    await selectMember('^to', 'bob')
+    await selectFromDropdown('^to', 'bob')
 
     expect(await getButton(/transfer invites/i)).toBeEnabled()
   })

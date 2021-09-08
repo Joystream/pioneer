@@ -108,7 +108,7 @@ fragment ProposalWithDetailsFields on Proposal {
     }
   }
   discussionThread {
-    discussionPosts {
+    posts {
       ...DiscussionPostFields
     }
     mode {
@@ -140,7 +140,7 @@ fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
 }
 
 fragment ProposalPostParents on ProposalDiscussionPost {
-  threadId
+  discussionThreadId
 }
 
 query getProposals($where: ProposalWhereInput) {

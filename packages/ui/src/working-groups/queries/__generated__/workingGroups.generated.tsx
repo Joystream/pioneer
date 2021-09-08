@@ -1239,7 +1239,7 @@ export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorking
 export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 export const GetWorkingGroupApplicationsDocument = gql`
   query GetWorkingGroupApplications($applicantId_in: [ID!]) {
-    workingGroupApplications(where: { applicant_in: $applicantId_in }) {
+    workingGroupApplications(where: { applicant: { id_in: $applicantId_in } }) {
       ...WorkingGroupApplicationFields
     }
   }

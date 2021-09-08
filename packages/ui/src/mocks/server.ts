@@ -54,6 +54,10 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   // "Mirage: The forum-category model has multiple possible inverse associations for the forum-category.parent association."
   forumCategoryModel.class.prototype.associations.parent.opts.inverse = 'forumcategoryparent'
   forumCategoryModel.class.prototype.associations.forumcategoryparent.opts.inverse = 'parent'
+
+  const forumThreadModel = schema.modelFor('forumThread')
+  // Mirage: The forum-thread model has multiple possible associations for the forum-post.thread association.
+  forumThreadModel.class.prototype.associations.posts.opts.inverse = null
 }
 
 export const makeServer = (environment = 'development') => {

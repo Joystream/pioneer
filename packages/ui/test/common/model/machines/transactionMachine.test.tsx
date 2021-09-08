@@ -64,7 +64,7 @@ describe('Machine: Transaction machine', () => {
   })
 
   describe('as child', () => {
-    const parent = createMachine({
+    const parent = createMachine<any, any, any>({
       id: 'parent',
       initial: 'transaction',
       context: {

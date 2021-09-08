@@ -49,7 +49,7 @@ describe('UI: PostEditor', () => {
   it("Disables the save button if text hasn't changed", async () => {
     renderEditor()
     const editor = await screen.findByRole('textbox')
-    await fireEvent.change(editor, { target: { value: 'This is the original text' } })
+    fireEvent.change(editor, { target: { value: 'This is the original text' } })
     expect(await getButton('Save')).toBeDisabled()
   })
 

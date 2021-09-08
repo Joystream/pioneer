@@ -51,13 +51,13 @@ export const DeletePostModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        actionText="You intend to delete your post."
+        action="delete"
       />
     )
   }
 
   if (state.matches('success')) {
-    return <PostActionSuccessModal onClose={hideModal} text="The post has been deleted." />
+    return <PostActionSuccessModal onClose={hideModal} text="Your post has been deleted." />
   }
 
   if (state.matches('error')) {

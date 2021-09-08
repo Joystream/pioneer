@@ -11,7 +11,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 
 import { getButton } from '../../_helpers/getButton'
-import { selectAccount } from '../../_helpers/selectAccount'
+import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { toBalanceOf } from '../../_mocks/chainTypes'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -78,8 +78,8 @@ describe('UI: BuyMembershipModal', () => {
 
     expect(await findSubmitButton()).toBeDisabled()
 
-    await selectAccount('Root account', 'bob')
-    await selectAccount('Controller account', 'alice')
+    await selectFromDropdown('Root account', 'bob')
+    await selectFromDropdown('Controller account', 'alice')
     fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
     fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
@@ -92,8 +92,8 @@ describe('UI: BuyMembershipModal', () => {
 
     expect(await findSubmitButton()).toBeDisabled()
 
-    await selectAccount('Root account', 'bob')
-    await selectAccount('Controller account', 'alice')
+    await selectFromDropdown('Root account', 'bob')
+    await selectFromDropdown('Controller account', 'alice')
     fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
     fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
@@ -109,8 +109,8 @@ describe('UI: BuyMembershipModal', () => {
     const renderAuthorizeStep = async () => {
       renderModal()
 
-      await selectAccount('Root account', 'bob')
-      await selectAccount('Controller account', 'alice')
+      await selectFromDropdown('Root account', 'bob')
+      await selectFromDropdown('Controller account', 'alice')
       fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
       fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
       fireEvent.change(screen.getByLabelText(/about member/i), { target: { value: "I'm Bob" } })

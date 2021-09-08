@@ -31,7 +31,7 @@ export interface ThreadItemContentProps {
 export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemContentProps) => {
   const { originalPost, isLoading } = useThreadOriginalPost(thread.id)
   const repliesCount = thread.visiblePostsCount - 1
-  const { threadBreadcrumb, categoryBreadcrumbs } = useThreadBreadcrumbs(thread.id)
+  const { categoryBreadcrumbs } = useThreadBreadcrumbs(thread.id)
   const content = originalPost?.text
   const threadAddress = `/forum/thread/${thread.id}`
 
@@ -48,11 +48,7 @@ export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemConten
         <ThreadItemTitle empty={empty}>{thread.title}</ThreadItemTitle>
         <ThreadItemTime lighter>{relativeTime(thread.createdInBlock.timestamp)}</ThreadItemTime>
       </ThreadItemHeader>
-      <ForumBreadcrumbsList
-        categoryBreadcrumbs={categoryBreadcrumbs ?? []}
-        threadBreadcrumb={threadBreadcrumb}
-        nonInteractive
-      />
+      <ForumBreadcrumbsList categoryBreadcrumbs={categoryBreadcrumbs ?? []} nonInteractive />
       {content && (
         <ThreadItemText light value>
           {content}

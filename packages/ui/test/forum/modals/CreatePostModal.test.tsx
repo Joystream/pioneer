@@ -87,14 +87,14 @@ describe('UI: CreatePostModal', () => {
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    await fireEvent.click(await getButton(/Sign and send/i))
+    await fireEvent.click(await getButton(/Sign and create/i))
     expect(await screen.getByText('There was a problem posting your message.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, [], 'forum', 'editPostText')
     renderModal()
-    await fireEvent.click(await getButton(/Sign and send/i))
+    await fireEvent.click(await getButton(/Sign and create/i))
     expect(await screen.getByText('Your post has been submitted.')).toBeDefined()
   })
 

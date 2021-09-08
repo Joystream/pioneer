@@ -34,13 +34,8 @@ describe('UI: EditPostModal', () => {
   let tx: any
   stubTransaction(api, txPath)
   const modalData: ModalCallData<EditPostModalCall> = {
-    post: {
-      id: '0',
-      author: getMember('alice'),
-      createdAt: '2021-07-02T04:22:13.523Z',
-      text: 'Sample post text',
-      status: 'PostStatusActive',
-    },
+    postAuthor: getMember('alice'),
+    postText: 'Lorem ipsum',
     transaction: api.api.tx.forum.editPostText(1, 1, 1, 1, ''),
   }
 
@@ -81,25 +76,32 @@ describe('UI: EditPostModal', () => {
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
   })
 
+  it('Requirements passed', async () => {
+    renderModal()
+    expect(screen.queryByText(/You intend to edit your post./i)).not.toBeNull()
+    expect(screen.queryByText(/Sign and edit/i)).not.toBeNull()
+    expect(screen.queryByText(/Post preview/i)).not.toBeNull()
+  })
+
   it('Requirements failed', async () => {
     tx = stubTransaction(api, txPath, 10000)
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
     renderModal()
-    expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    expect(screen.queryByText('Insufficient Funds')).not.toBeNull()
   })
 
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    await fireEvent.click(await getButton(/Sign and send/i))
-    expect(await screen.getByText('There was a problem submitting an edit to your post.')).toBeDefined()
+    fireEvent.click(await getButton(/Sign and edit/i))
+    expect(screen.queryByText('There was a problem submitting an edit to your post.')).not.toBeNull()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, [], 'forum', 'editPostText')
     renderModal()
-    await fireEvent.click(await getButton(/Sign and send/i))
-    expect(await screen.getByText('Your edit has been submitted.')).toBeDefined()
+    fireEvent.click(await getButton(/Sign and edit/i))
+    expect(screen.queryByText('Your edit has been submitted.')).not.toBeNull()
   })
 
   const renderModal = () =>

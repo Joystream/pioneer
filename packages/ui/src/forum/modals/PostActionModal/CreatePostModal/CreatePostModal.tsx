@@ -28,7 +28,7 @@ export const CreatePostModal = () => {
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const { id: threadId, categoryId, title } = thread
+  const { id: threadId, categoryId } = thread
   const { api } = useApi()
 
   const transaction = useMemo(
@@ -69,7 +69,7 @@ export const CreatePostModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        actionText={`You intend to post in the thread "${title}".`}
+        action="create"
       />
     )
   }

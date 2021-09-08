@@ -9,6 +9,7 @@ import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { MyThreadsBrowser } from '@/forum/components/threads/MyThreadsBrowser'
 import { RandomThreadsBrowser } from '@/forum/components/threads/RandomThreadsBrowser'
 import { ThreadsLayout } from '@/forum/components/threads/ThreadsLayout'
+import { WatchlistThreadsBrowser } from '@/forum/components/threads/WatchlistThreadsBrowser'
 import { useForumActivities } from '@/forum/hooks/useForumActivities'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -32,7 +33,7 @@ export const ForumOverview = () => {
             {hasMembers && (
               <>
                 <MyThreadsBrowser />
-                <RandomThreadsBrowser label="Your watchlist" />
+                <WatchlistThreadsBrowser />
               </>
             )}
             <RandomThreadsBrowser label="Popular threads" />

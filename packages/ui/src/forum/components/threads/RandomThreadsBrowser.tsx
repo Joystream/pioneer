@@ -26,6 +26,7 @@ export const RandomThreadsBrowser = ({ label, maxThreads }: RandomThreadsBrowser
       pageCount={pageCount}
       totalCount={totalCount}
       isLoading={isLoading}
+      emptyText="No threads found"
     />
   )
 }
