@@ -107,7 +107,7 @@ describe('UI: SelectAccount component', () => {
       expect(screen.queryAllByText('Bob')).toEqual([])
     })
 
-    it('Picks an unknown account', async () => {
+    it('Picks an unknown account', () => {
       renderOpenedComponent()
       const textBox = screen.getByRole('textbox')
       act(() => {
