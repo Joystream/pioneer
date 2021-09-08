@@ -10,7 +10,7 @@ interface Props {
   threadsPerPage?: number
 }
 
-export const useForumPopularThread = ({ categoryId, page = 1, threadsPerPage = 1 }: Props) => {
+export const useForumPopularThreads = ({ categoryId, page = 1, threadsPerPage = 1 }: Props) => {
   const { data, loading } = useGetForumThreadsQuery({
     variables: {
       where: {

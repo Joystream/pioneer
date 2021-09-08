@@ -6,12 +6,12 @@ import { TextExtraSmall } from '@/common/components/typography'
 import { Overflow } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
-import { useForumPopularThread } from '@/forum/hooks/useForumPopularThread'
+import { useForumPopularThreads } from '@/forum/hooks/useForumPopularThreads'
 
 import { CategoryItemFieldProps } from './CategoryListItem'
 
 export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
-  const { isLoading, threads } = useForumPopularThread({ categoryId })
+  const { isLoading, threads } = useForumPopularThreads({ categoryId })
 
   if (isLoading) return <Loading />
   else if (!threads?.[0]) return <>-</>
