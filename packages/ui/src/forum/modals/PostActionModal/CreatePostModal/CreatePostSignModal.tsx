@@ -1,6 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 import { ActorRef } from 'xstate'
 
@@ -20,49 +21,25 @@ import { TransactionModal } from '@/common/modals/TransactionModal'
 import { PreviewPostModal } from '@/forum/modals/PreviewPostModal/PreviewPostModal'
 import { Member } from '@/memberships/types'
 
-interface PostActionSignModalCommonProps {
+interface CreatePostSignModalProps {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
   controllerAccount: Account
   author?: Member
   newText?: string
+  isEditable?: boolean
+  postDeposit: BN
 }
 
-interface PostActionSignModalDeleteProps extends PostActionSignModalCommonProps {
-  action: 'delete'
-}
-
-interface PostActionSignModalEditProps extends PostActionSignModalCommonProps {
-  action: 'edit'
-  author: Member
-  newText: string
-}
-
-interface PostActionCreateProps extends PostActionSignModalCommonProps {
-  action: 'create'
-}
-
-export type PostActionSignModalProps =
-  | PostActionSignModalDeleteProps
-  | PostActionSignModalEditProps
-  | PostActionCreateProps
-
-const actionTexts = {
-  edit: 'You intend to edit your post.',
-  delete: 'You intend to delete your post.',
-  create: 'You intend to post in a thread.',
-}
-
-const getActionText = (action: 'delete' | 'edit' | 'create') => actionTexts[action]
-
-export const PostActionSignModal = ({
+export const CreatePostSignModal = ({
   transaction,
   service,
   controllerAccount,
-  action,
   author,
   newText,
-}: PostActionSignModalProps) => {
+  isEditable,
+  postDeposit,
+}: CreatePostSignModalProps) => {
   const { hideModal } = useModal()
   const [previewVisible, setPreviewVisible] = useState(false)
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
@@ -83,7 +60,12 @@ export const PostActionSignModal = ({
         <ModalBody>
           <RowGapBlock gap={24}>
             <RowGapBlock gap={16}>
-              <TextMedium>{getActionText(action)}</TextMedium>
+              <TextMedium>You intend to post in a thread.</TextMedium>
+              {isEditable && (
+                <TextMedium>
+                  <TokenValue value={postDeposit} /> will be deposited to make the post editable.
+                </TextMedium>
+              )}
               <TextMedium>
                 A fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
               </TextMedium>
@@ -95,6 +77,13 @@ export const PostActionSignModal = ({
         </ModalBody>
         <ModalFooter>
           <TransactionInfoContainer>
+            {isEditable && (
+              <TransactionInfo
+                title="Post deposit:"
+                value={postDeposit}
+                tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+              />
+            )}
             <TransactionInfo
               title="Transaction fee:"
               value={paymentInfo?.partialFee.toBn()}
@@ -102,13 +91,11 @@ export const PostActionSignModal = ({
             />
           </TransactionInfoContainer>
           <ButtonsGroup align="right">
-            {['edit', 'create'].includes(action) && (
-              <ButtonGhost size="medium" onClick={() => setPreviewVisible(true)}>
-                Post preview
-              </ButtonGhost>
-            )}
+            <ButtonGhost size="medium" onClick={() => setPreviewVisible(true)}>
+              Post preview
+            </ButtonGhost>
             <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
-              Sign and {action}
+              Sign and post
               <Arrow direction="right" />
             </ButtonPrimary>
           </ButtonsGroup>

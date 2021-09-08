@@ -14,10 +14,10 @@ import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { postActionMachine } from '../postActionMachine'
-import { PostActionSignModal } from '../PostActionSignModal'
 import { PostActionSuccessModal } from '../PostActionSuccessModal'
 
 import { CreatePostModalCall } from '.'
+import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
   const {
@@ -42,7 +42,7 @@ export const CreatePostModal = () => {
         categoryId,
         threadId,
         postText,
-        false
+        isEditable
       ),
     [api, threadId, categoryId, active]
   )
@@ -68,15 +68,16 @@ export const CreatePostModal = () => {
     return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModal} />
   }
 
-  if (state.matches('transaction') && transaction && active) {
+  if (state.matches('transaction') && transaction && active && postDeposit) {
     const service = state.children.transaction
     const controllerAccount = accountOrNamed(allAccounts, active.controllerAccount, 'Controller Account')
     return (
-      <PostActionSignModal
+      <CreatePostSignModal
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
-        action="create"
+        isEditable={isEditable}
+        postDeposit={postDeposit}
       />
     )
   }

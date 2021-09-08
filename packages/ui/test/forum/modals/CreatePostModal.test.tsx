@@ -1,6 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
-import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -79,7 +78,7 @@ describe('UI: CreatePostModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    tx = stubTransaction(api, txPath)
+    tx = stubTransaction(api, txPath, 25)
     stubConst(api, 'forum.postDeposit', toBalanceOf(10))
     modalData.isEditable = false
   })
@@ -102,15 +101,23 @@ describe('UI: CreatePostModal', () => {
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    await fireEvent.click(await getButton(/Sign and create/i))
+    await fireEvent.click(await getButton(/Sign and post/i))
     expect(await screen.getByText('There was a problem posting your message.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, [], 'forum', 'editPostText')
     renderModal()
-    await fireEvent.click(await getButton(/Sign and create/i))
+    await fireEvent.click(await getButton(/Sign and post/i))
     expect(await screen.getByText('Your post has been submitted.')).toBeDefined()
+  })
+
+  it('Displays post deposit', () => {
+    stubConst(api, 'forum.postDeposit', toBalanceOf(101))
+    modalData.isEditable = true
+    renderModal()
+    expect(screen.getByText(/^Post deposit:/i)?.nextSibling?.textContent).toBe('101')
+    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
   })
 
   const renderModal = () =>
