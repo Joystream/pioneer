@@ -32,7 +32,7 @@ const getFilter = (where: Record<string, any>) => {
         filters.push((model) => subFilters[method]((subfilter) => subfilter(model)))
       } else {
         const subFilter = getFilter(checkValue)
-        filters.push((model) => subFilter(model[field]))
+        filters.push((model) => subFilter(model[field] ?? {}))
       }
 
       continue
@@ -46,7 +46,7 @@ const getFilter = (where: Record<string, any>) => {
       } else {
         filters.push((model: Record<string, any>) => {
           const fieldName = getFieldName(model, field)
-          return String(model[fieldName]) === String(checkValue)
+          return toString(model[fieldName]) === String(checkValue)
         })
       }
     }
@@ -57,7 +57,7 @@ const getFilter = (where: Record<string, any>) => {
       } else {
         filters.push((model: Record<string, any>) => {
           const fieldName = getFieldName(model, field)
-          return String(model[fieldName]) !== String(checkValue)
+          return toString(model[fieldName]) !== String(checkValue)
         })
       }
     }
@@ -190,3 +190,5 @@ const getSortBy = ([field, ...fields]: string[], modelType: GraphQLObjectType): 
     ? (a, b) => a[key]?.toString().localeCompare(b[key]?.toString()) * direction || nextSort(a, b)
     : nextSort
 }
+
+const toString = (value: any) => String(value ?? null)
