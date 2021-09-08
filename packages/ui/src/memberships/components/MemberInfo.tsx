@@ -87,7 +87,7 @@ export const MemberInfo = React.memo(
         </MemberPhoto>
         <MemberHead>
           <MemberHandle>{member.handle}</MemberHandle>
-          {(member.isVerified || (member as any)?.isFounder) && (
+          {(member.isVerified || member.isFoundingMember) && (
             <MemberIcons>
               {member.isVerified && (
                 <Tooltip tooltipText="This member is verified">
