@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent } from '@/common/components/forms'
+import { Checkbox, InputComponent } from '@/common/components/forms'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -16,6 +16,7 @@ interface NewPostProps {
 
 export const NewThreadPost = ({ thread }: NewPostProps) => {
   const [postText, setText] = useState('')
+  const [isEditable, setEditable] = useState(false)
   const { active } = useMyMemberships()
   const { showModal } = useModal()
 
@@ -31,11 +32,16 @@ export const NewThreadPost = ({ thread }: NewPostProps) => {
       <ButtonsGroup>
         <ButtonPrimary
           size="medium"
-          onClick={() => showModal<CreatePostModalCall>({ modal: 'CreatePost', data: { postText, thread } })}
+          onClick={() =>
+            showModal<CreatePostModalCall>({ modal: 'CreatePost', data: { postText, thread, isEditable } })
+          }
           disabled={postText === ''}
         >
           Post a reply
         </ButtonPrimary>
+        <Checkbox id="set-editable" onChange={setEditable} isChecked={isEditable}>
+          Keep editable
+        </Checkbox>
       </ButtonsGroup>
     </RowGapBlock>
   )

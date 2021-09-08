@@ -75,6 +75,7 @@ describe('UI: Add new post', () => {
     expect(useModal.modalData).toEqual({
       postText: 'I disagree',
       thread: { id: '1', categoryId: '1', title: 'thread' },
+      isEditable: false,
     })
   })
 

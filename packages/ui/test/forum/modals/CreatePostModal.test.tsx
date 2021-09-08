@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -15,6 +16,7 @@ import rawMembers from '@/mocks/data/raw/members.json'
 import { seedForumCategory, seedForumPost, seedForumThread } from '@/mocks/data/seedForum'
 
 import { getButton } from '../../_helpers/getButton'
+import { toBalanceOf } from '../../_mocks/chainTypes'
 import { mockCategories, mockPosts, mockThreads } from '../../_mocks/forum'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -22,6 +24,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   stubApi,
+  stubConst,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
@@ -40,6 +43,7 @@ describe('UI: CreatePostModal', () => {
       categoryId: '1',
     },
     postText: 'I disagree',
+    isEditable: false,
   }
 
   const useModal: UseModal<any> = {
@@ -76,12 +80,23 @@ describe('UI: CreatePostModal', () => {
   beforeEach(async () => {
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath)
+    stubConst(api, 'forum.postDeposit', toBalanceOf(10))
+    modalData.isEditable = false
   })
 
-  it('Requirements failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
-    renderModal()
-    expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+  describe('Requirements failed', () => {
+    it('Cannot afford transaction fee', async () => {
+      tx = stubTransaction(api, txPath, 10000)
+      renderModal()
+      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    })
+
+    it('Cannot afford post deposit', async () => {
+      stubConst(api, 'forum.postDeposit', toBalanceOf(10000))
+      modalData.isEditable = true
+      renderModal()
+      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    })
   })
 
   it('Transaction failed', async () => {

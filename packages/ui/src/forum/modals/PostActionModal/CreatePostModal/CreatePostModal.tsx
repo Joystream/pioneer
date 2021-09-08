@@ -2,6 +2,7 @@ import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
@@ -20,7 +21,7 @@ import { CreatePostModalCall } from '.'
 
 export const CreatePostModal = () => {
   const {
-    modalData: { postText, thread },
+    modalData: { postText, thread, isEditable },
     hideModal,
   } = useModal<CreatePostModalCall>()
 
@@ -29,6 +30,7 @@ export const CreatePostModal = () => {
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const { id: threadId, categoryId } = thread
+  const balance = useBalance(active?.controllerAccount)
   const { api } = useApi()
 
   const transaction = useMemo(
@@ -45,17 +47,22 @@ export const CreatePostModal = () => {
     [api, threadId, categoryId, active]
   )
 
+  const postDeposit = api?.consts.forum.postDeposit.toBn()
+
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
   useEffect(() => {
     if (!state.matches('requirementsVerification')) {
       return
     }
-    if (feeInfo && active) {
-      feeInfo.canAfford && send('PASS')
-      !feeInfo.canAfford && send('FAIL')
+    if (feeInfo && postDeposit && active && balance) {
+      const canAfford = isEditable
+        ? balance.transferable.gte(feeInfo.transactionFee.add(postDeposit))
+        : feeInfo.canAfford
+      canAfford && send('PASS')
+      !canAfford && send('FAIL')
     }
-  }, [state.value, JSON.stringify(feeInfo)])
+  }, [state.value, JSON.stringify(feeInfo), postDeposit, balance])
 
   if (state.matches('requirementsVerification')) {
     return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModal} />
