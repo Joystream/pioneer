@@ -188,20 +188,25 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
 export const SelectContainer = styled.label<SimpleSelectSizingProps>`
   display: grid;
   width: 100%;
+
   ${EmptyOption} {
     padding: 0 16px;
   }
+
   ${SelectedOption} {
     grid-template-columns: 1fr;
     ${Overflow.FullDots}
   }
+
   ${Toggle} {
     border: 1px solid ${Colors.Black[200]};
     cursor: pointer;
   }
+
   ${ToggleButton} {
     height: 100%;
   }
+
   ${OptionContainer},
   ${SelectComponent} {
     height: ${({ selectSize }) => {
@@ -224,6 +229,7 @@ export const SelectContainer = styled.label<SimpleSelectSizingProps>`
     ${FilterLabel} {
       color: ${Colors.Blue[400]};
     }
+
     ${Toggle} {
       border-color: ${Colors.Blue[400]};
       box-shadow: ${Shadows.focusDefault};
@@ -272,6 +278,7 @@ const OptionsContainer = styled.div<SimpleSelectSizingProps>`
 const OptionsFooter = styled.div`
   display: flex;
   margin: -1px;
+
   & > * {
     flex-grow: 1;
   }

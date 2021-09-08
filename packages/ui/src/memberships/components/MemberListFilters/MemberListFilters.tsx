@@ -14,10 +14,11 @@ import { SelectMemberRoles } from '../SelectMemberRoles'
 export interface MemberListFilter {
   search: string
   roles: MemberRole[]
-  concil: boolean | null
+  council: boolean | null
   onlyVerified: boolean
   onlyFounder: boolean
 }
+
 type FilterKey = keyof MemberListFilter
 
 type Clear = { type: 'clear' }
@@ -40,7 +41,7 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
 export const MemberListEmptyFilter: MemberListFilter = {
   search: '',
   roles: [],
-  concil: null,
+  council: null,
   onlyVerified: false,
   onlyFounder: false,
 }
@@ -55,9 +56,9 @@ export interface MemberListFiltersProps {
 
 export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
-  const { search, roles, concil, onlyVerified, onlyFounder } = filters
+  const { search, roles, council, onlyVerified, onlyFounder } = filters
 
-  const apply = () => onApply(filters)
+  const applyFilters = () => onApply(filters)
   const clear = isFilterEmpty(filters)
     ? undefined
     : () => {
@@ -70,7 +71,13 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
   }
 
   return (
-    <MembersFilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
+    <MembersFilterBox
+      searchSlot={searchSlot}
+      search={search}
+      onApply={applyFilters}
+      onClear={clear}
+      onSearch={onSearch}
+    >
       <FieldsHeader>
         <ItemCount count={memberCount}>All members</ItemCount>
       </FieldsHeader>
@@ -78,7 +85,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
       <SelectMemberRoles
         value={roles}
         onChange={(value) => dispatch({ type: 'change', field: 'roles', value })}
-        onApply={apply}
+        onApply={applyFilters}
         onClear={() => {
           dispatch({ type: 'change', field: 'roles', value: [] })
           onApply({ ...filters, roles: [] })
@@ -89,10 +96,10 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
         title="Council Members"
         options={[true, false]}
         renderOption={(value) => (value ? 'Yes' : 'No')}
-        value={concil}
+        value={council}
         onChange={(value) => {
-          dispatch({ type: 'change', field: 'concil', value })
-          onApply({ ...filters, concil: value })
+          dispatch({ type: 'change', field: 'council', value })
+          onApply({ ...filters, council: value })
         }}
       />
 
@@ -151,6 +158,7 @@ const ToggleContainer = styled.div`
   gap: 4px 8px;
   grid-template-columns: auto 1fr;
   height: 48px;
+
   & > :first-child {
     grid-column: span 2;
   }

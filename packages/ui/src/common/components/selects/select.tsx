@@ -68,10 +68,6 @@ export const Select = <T extends any, V extends any = T>({
     isOpen && textInput.current?.focus()
   }, [isOpen])
 
-  useEffect(() => {
-    isOpen && toggleOpen()
-  }, [selected])
-
   const onToggleClick: React.MouseEventHandler = (evt) => {
     stopEvent(evt)
     !disabled && toggleOpen()
