@@ -48,10 +48,13 @@ export const CreatePostSignModal = ({
 
   const hasFunds = useMemo(() => {
     if (balance?.transferable && paymentInfo?.partialFee) {
+      if (isEditable) {
+        return balance.transferable.gte(paymentInfo.partialFee.add(postDeposit))
+      }
       return balance.transferable.gte(paymentInfo.partialFee)
     }
     return false
-  }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee])
+  }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee, isEditable])
   const signDisabled = !state.matches('prepare') || !hasFunds
 
   return (

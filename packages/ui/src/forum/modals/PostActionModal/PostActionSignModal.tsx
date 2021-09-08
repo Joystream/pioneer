@@ -38,22 +38,14 @@ interface PostActionSignModalEditProps extends PostActionSignModalCommonProps {
   newText: string
 }
 
-interface PostActionCreateProps extends PostActionSignModalCommonProps {
-  action: 'create'
-}
-
-export type PostActionSignModalProps =
-  | PostActionSignModalDeleteProps
-  | PostActionSignModalEditProps
-  | PostActionCreateProps
+export type PostActionSignModalProps = PostActionSignModalDeleteProps | PostActionSignModalEditProps
 
 const actionTexts = {
   edit: 'You intend to edit your post.',
   delete: 'You intend to delete your post.',
-  create: 'You intend to post in a thread.',
 }
 
-const getActionText = (action: 'delete' | 'edit' | 'create') => actionTexts[action]
+const getActionText = (action: 'delete' | 'edit') => actionTexts[action]
 
 export const PostActionSignModal = ({
   transaction,
