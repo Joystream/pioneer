@@ -25,8 +25,8 @@ interface CreatePostSignModalProps {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
   controllerAccount: Account
-  author?: Member
-  newText?: string
+  author: Member
+  postText: string
   isEditable?: boolean
   postDeposit: BN
 }
@@ -36,7 +36,7 @@ export const CreatePostSignModal = ({
   service,
   controllerAccount,
   author,
-  newText,
+  postText,
   isEditable,
   postDeposit,
 }: CreatePostSignModalProps) => {
@@ -105,12 +105,7 @@ export const CreatePostSignModal = ({
         </ModalFooter>
       </TransactionModal>
       {previewVisible && (
-        <PreviewPostModal
-          author={author as Member}
-          text={newText as string}
-          onClose={() => setPreviewVisible(false)}
-          type="post"
-        />
+        <PreviewPostModal author={author} text={postText} onClose={() => setPreviewVisible(false)} type="post" />
       )}
     </>
   )

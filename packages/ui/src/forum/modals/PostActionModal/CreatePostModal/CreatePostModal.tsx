@@ -76,6 +76,8 @@ export const CreatePostModal = () => {
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
+        author={active}
+        postText={postText}
         isEditable={isEditable}
         postDeposit={postDeposit}
       />
