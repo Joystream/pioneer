@@ -18,6 +18,7 @@ export interface MemberListFilter {
   onlyVerified: boolean
   onlyFounder: boolean
 }
+
 type FilterKey = keyof MemberListFilter
 
 type Clear = { type: 'clear' }
@@ -57,7 +58,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
   const { search, roles, concil, onlyVerified, onlyFounder } = filters
 
-  const apply = () => onApply(filters)
+  const applyFilters = () => onApply(filters)
   const clear = isFilterEmpty(filters)
     ? undefined
     : () => {
@@ -70,7 +71,13 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
   }
 
   return (
-    <MembersFilterBox searchSlot={searchSlot} search={search} onApply={apply} onClear={clear} onSearch={onSearch}>
+    <MembersFilterBox
+      searchSlot={searchSlot}
+      search={search}
+      onApply={applyFilters}
+      onClear={clear}
+      onSearch={onSearch}
+    >
       <FieldsHeader>
         <ItemCount count={memberCount}>All members</ItemCount>
       </FieldsHeader>
@@ -78,7 +85,7 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
       <SelectMemberRoles
         value={roles}
         onChange={(value) => dispatch({ type: 'change', field: 'roles', value })}
-        onApply={apply}
+        onApply={applyFilters}
         onClear={() => {
           dispatch({ type: 'change', field: 'roles', value: [] })
           onApply({ ...filters, roles: [] })
@@ -151,6 +158,7 @@ const ToggleContainer = styled.div`
   gap: 4px 8px;
   grid-template-columns: auto 1fr;
   height: 48px;
+
   & > :first-child {
     grid-column: span 2;
   }
