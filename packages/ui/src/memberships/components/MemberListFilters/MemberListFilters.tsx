@@ -14,7 +14,7 @@ import { SelectMemberRoles } from '../SelectMemberRoles'
 export interface MemberListFilter {
   search: string
   roles: MemberRole[]
-  concil: boolean | null
+  council: boolean | null
   onlyVerified: boolean
   onlyFounder: boolean
 }
@@ -41,7 +41,7 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
 export const MemberListEmptyFilter: MemberListFilter = {
   search: '',
   roles: [],
-  concil: null,
+  council: null,
   onlyVerified: false,
   onlyFounder: false,
 }
@@ -56,7 +56,7 @@ export interface MemberListFiltersProps {
 
 export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
-  const { search, roles, concil, onlyVerified, onlyFounder } = filters
+  const { search, roles, council, onlyVerified, onlyFounder } = filters
 
   const applyFilters = () => onApply(filters)
   const clear = isFilterEmpty(filters)
@@ -96,10 +96,10 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
         title="Council Members"
         options={[true, false]}
         renderOption={(value) => (value ? 'Yes' : 'No')}
-        value={concil}
+        value={council}
         onChange={(value) => {
-          dispatch({ type: 'change', field: 'concil', value })
-          onApply({ ...filters, concil: value })
+          dispatch({ type: 'change', field: 'council', value })
+          onApply({ ...filters, council: value })
         }}
       />
 
