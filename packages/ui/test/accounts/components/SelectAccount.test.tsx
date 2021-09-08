@@ -112,6 +112,7 @@ describe('UI: SelectAccount component', () => {
       const textBox = screen.getByRole('textbox')
       act(() => {
         fireEvent.change(textBox, { target: { value: '5CStixio6DdmhMJGtTpUVWtR2PvR7Kydc7RnECRYefFr5mKy' } })
+        fireEvent.keyDown(textBox, { key: 'Enter', code: 'Enter' })
         jest.runOnlyPendingTimers()
       })
       expect(screen.getByText('Unsaved account')).toBeDefined()

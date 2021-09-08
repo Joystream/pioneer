@@ -41,7 +41,7 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
         <TextMedium light>{category.description}</TextMedium>
 
         {subcategories.length > 0 && (
-          <TextInlineExtraSmall lighter>Subcategories: {intersperse(subcategories, ', ')}</TextInlineExtraSmall>
+          <TextInlineExtraSmall lighter>Subcategories: {intersperse(subcategories, () => ', ')}</TextInlineExtraSmall>
         )}
       </Category>
 

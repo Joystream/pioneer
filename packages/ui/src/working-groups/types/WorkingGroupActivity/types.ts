@@ -1,7 +1,6 @@
 import BN from 'bn.js'
 
-import { BaseActivity } from '@/common/types'
-import { Member } from '@/memberships/types'
+import { BaseActivity, MemberDisplayFields } from '@/common/types'
 
 import { WorkingGroupOpening } from '..'
 import { WorkerStatus } from '../../../common/api/queries/__generated__/baseTypes.generated'
@@ -24,8 +23,6 @@ export type WorkingGroupActivity =
   | WorkerRewardAccountUpdatedActivity
   | WorkerRewardAmountUpdatedActivity
 
-type ShortMember = Pick<Member, 'id' | 'handle'>
-
 type ShortOpening = Pick<WorkingGroupOpening, 'id' | 'type' | 'title' | 'groupName'>
 
 interface OpeningActivity extends BaseActivity {
@@ -33,7 +30,7 @@ interface OpeningActivity extends BaseActivity {
 }
 
 interface ApplicationActivity extends OpeningActivity {
-  member: ShortMember
+  member: MemberDisplayFields
 }
 
 export interface ApplicationWithdrawnActivity extends ApplicationActivity {
@@ -77,35 +74,35 @@ export interface OpeningCanceledActivity extends OpeningActivity {
 
 export interface StakeSlashedActivity extends BaseActivity {
   eventType: 'StakeSlashedEvent'
-  member: ShortMember
+  member: MemberDisplayFields
   groupName: string
 }
 
 export interface StakeChangedActivity extends BaseActivity {
   eventType: 'StakeIncreasedEvent' | 'StakeDecreasedEvent'
-  member: ShortMember
+  member: MemberDisplayFields
   amount: BN
 }
 
 export interface WorkerExitedActivity extends BaseActivity {
   eventType: 'WorkerExitedEvent'
-  member: ShortMember
+  member: MemberDisplayFields
 }
 
 export interface WorkerStartedLeavingActivity extends BaseActivity {
   eventType: 'WorkerStartedLeavingEvent'
   workerStatus: WorkerStatus['__typename']
-  member: ShortMember
+  member: MemberDisplayFields
 }
 
 export interface OpeningFilledActivity extends OpeningActivity {
   eventType: 'OpeningFilledEvent'
-  hiredMembers: ShortMember[]
+  hiredMembers: MemberDisplayFields[]
 }
 
 export interface WorkerTerminatedActivity extends BaseActivity {
   eventType: 'TerminatedWorkerEvent' | 'TerminatedLeaderEvent'
-  member: ShortMember
+  member: MemberDisplayFields
   groupName: string
 }
 

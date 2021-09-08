@@ -27,7 +27,7 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
   const block = isArchive ? status?.threadDeletedEvent : createdInBlock
 
   return (
-    <ThreadListItemStyles as={GhostRouterLink} to={`${ForumRoutes.thread}/${thread.id}`} isSticky={thread.isSticky}>
+    <ThreadListItemStyles as={GhostRouterLink} to={`${ForumRoutes.thread}/${thread.id}`} $isSticky={thread.isSticky}>
       {thread.isSticky && <ThreadPinIcon />}
 
       <Thread>
@@ -53,13 +53,13 @@ const ThreadPinIcon = styled(PinIcon)`
   top: 2px;
 `
 
-const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsColLayout })<{ isSticky?: boolean }>`
+const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsColLayout })<{ $isSticky?: boolean }>`
   height: 80px;
   padding: 12px 24px;
   position: relative;
 
-  ${({ isSticky }) =>
-    isSticky &&
+  ${({ $isSticky }) =>
+    $isSticky &&
     css`
       border: 1px solid ${Colors.Black[300]};
       z-index: 1;
