@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, prettyDOM, render, screen } from '@testing-library/react'
 import React, { useState } from 'react'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -107,7 +107,7 @@ describe('UI: SelectAccount component', () => {
       expect(screen.queryAllByText('Bob')).toEqual([])
     })
 
-    it('Picks an unknown account', () => {
+    it('Picks an unknown account', async () => {
       renderOpenedComponent()
       const textBox = screen.getByRole('textbox')
       act(() => {
