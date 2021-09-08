@@ -62,6 +62,7 @@ const forum: {
         network: 'OLYMPIA',
       },
       status: { __typename: 'ThreadStatusActive' },
+      visiblePostsCount: 11,
     },
   ],
   posts: [

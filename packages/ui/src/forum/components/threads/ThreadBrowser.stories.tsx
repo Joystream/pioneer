@@ -1,5 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 
 import { ScrollBlock } from '@/common/components/storybookParts/previewStyles'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -15,13 +16,15 @@ export default {
 
 const Template: Story<RandomThreadsBrowserProps> = (args) => (
   <MockApolloProvider members workingGroups workers forum>
-    <ScrollBlock>
-      <ThreadsLayout>
-        <RandomThreadsBrowser {...args} />
-        <RandomThreadsBrowser {...args} />
-        <RandomThreadsBrowser {...args} />
-      </ThreadsLayout>
-    </ScrollBlock>
+    <MemoryRouter>
+      <ScrollBlock>
+        <ThreadsLayout>
+          <RandomThreadsBrowser {...args} />
+          <RandomThreadsBrowser {...args} />
+          <RandomThreadsBrowser {...args} />
+        </ThreadsLayout>
+      </ScrollBlock>
+    </MemoryRouter>
   </MockApolloProvider>
 )
 

@@ -13,6 +13,7 @@ export const mockThreads: RawForumThreadMock[] = [
       network: 'OLYMPIA',
     },
     status: { __typename: 'ThreadStatusActive' },
+    visiblePostsCount: 11,
   },
   {
     id: '1',
@@ -26,6 +27,7 @@ export const mockThreads: RawForumThreadMock[] = [
       network: 'OLYMPIA',
     },
     status: { __typename: 'ThreadStatusActive' },
+    visiblePostsCount: 11,
   },
   {
     id: '2',
@@ -39,5 +41,6 @@ export const mockThreads: RawForumThreadMock[] = [
       network: 'OLYMPIA',
     },
     status: { __typename: 'ThreadStatusActive' },
+    visiblePostsCount: 11,
   },
 ]

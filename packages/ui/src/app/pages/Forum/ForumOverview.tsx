@@ -7,7 +7,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { MyThreadsBrowser } from '@/forum/components/threads/MyThreadsBrowser'
-import { RandomThreadsBrowser } from '@/forum/components/threads/RandomThreadsBrowser'
+import { PopularThreadsBrowser } from '@/forum/components/threads/PopularThreadsBrowser'
 import { ThreadsLayout } from '@/forum/components/threads/ThreadsLayout'
 import { WatchlistThreadsBrowser } from '@/forum/components/threads/WatchlistThreadsBrowser'
 import { useForumActivities } from '@/forum/hooks/useForumActivities'
@@ -36,7 +36,7 @@ export const ForumOverview = () => {
                 <WatchlistThreadsBrowser />
               </>
             )}
-            <RandomThreadsBrowser label="Popular threads" />
+            <PopularThreadsBrowser />
           </ThreadsLayout>
         </MainPanel>
       }

@@ -128,7 +128,6 @@ export const ThreadItemWrapper = styled.a<{ $halfSize?: boolean }>`
   gap: 16px;
   width: 100%;
   height: fit-content;
-  max-height: ${({ $halfSize }) => ($halfSize ? '50%' : '100%')};
   padding: 16px 0;
   overflow: hidden;
 

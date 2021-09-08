@@ -50,7 +50,7 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
   isSticky: fields.isSticky,
   categoryId: fields.categoryId,
   tags: [],
-  visiblePostsCount: 10,
+  visiblePostsCount: fields.visiblePostsCount,
   status: asForumThreadStatus(fields.status),
 })
 
