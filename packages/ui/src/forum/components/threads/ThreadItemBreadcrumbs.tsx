@@ -7,14 +7,14 @@ import { Colors, Fonts } from '@/common/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumMultiQueryCategoryBreadCrumbs } from '@/forum/hooks/useForumMultiQueryCategoryBreadCrumbs'
 
-interface ForumPostResultBreadcrumbsProps {
+interface ThreadItemBreadcrumbsProps {
   id: string
 }
-export const ForumPostResultBreadcrumbs = memo(({ id }: ForumPostResultBreadcrumbsProps) => {
+export const ThreadItemBreadcrumbs = memo(({ id }: ThreadItemBreadcrumbsProps) => {
   const { breadcrumbs } = useForumMultiQueryCategoryBreadCrumbs(id)
 
   return (
-    <ResultBreadcrumbsList>
+    <ThreadItemBreadcrumbsList>
       <BreadcrumbsItemLink to="/forum">Forum</BreadcrumbsItemLink>
 
       {breadcrumbs.map(({ id, title }) => (
@@ -22,11 +22,11 @@ export const ForumPostResultBreadcrumbs = memo(({ id }: ForumPostResultBreadcrum
           {title}
         </BreadcrumbsItem>
       ))}
-    </ResultBreadcrumbsList>
+    </ThreadItemBreadcrumbsList>
   )
 })
 
-const ResultBreadcrumbsList = styled(BreadcrumbsListComponent)`
+const ThreadItemBreadcrumbsList = styled(BreadcrumbsListComponent)`
   color: ${Colors.Black[500]};
   flex-wrap: wrap;
 
