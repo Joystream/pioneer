@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, findAllByRole, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
