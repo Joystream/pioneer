@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, prettyDOM, render, screen } from '@testing-library/react'
 import React, { useState } from 'react'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -107,11 +107,12 @@ describe('UI: SelectAccount component', () => {
       expect(screen.queryAllByText('Bob')).toEqual([])
     })
 
-    it('Picks an unknown account', () => {
+    it('Picks an unknown account', async () => {
       renderOpenedComponent()
       const textBox = screen.getByRole('textbox')
       act(() => {
         fireEvent.change(textBox, { target: { value: '5CStixio6DdmhMJGtTpUVWtR2PvR7Kydc7RnECRYefFr5mKy' } })
+        fireEvent.keyDown(textBox, { key: 'Enter', code: 'Enter' })
         jest.runOnlyPendingTimers()
       })
       expect(screen.getByText('Unsaved account')).toBeDefined()
