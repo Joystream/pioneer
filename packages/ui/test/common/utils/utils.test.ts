@@ -58,11 +58,13 @@ describe('utils', () => {
 
   describe('intersperse', () => {
     it('Intersperses', () => {
-      expect(intersperse([], '|')).toEqual([])
-      expect(intersperse([1], '|')).toEqual([1])
-      expect(intersperse([1, 2], '|')).toEqual([1, '|', 2])
-      expect(intersperse([1, 2, 3], '|')).toEqual([1, '|', 2, '|', 3])
-      expect(intersperse([null, 'foo', true], {})).toEqual([null, {}, 'foo', {}, true])
+      expect(intersperse([], () => '|')).toEqual([])
+      expect(intersperse([1], () => '|')).toEqual([1])
+      expect(intersperse([1, 2], () => '|')).toEqual([1, '|', 2])
+      expect(intersperse([1, 2, 3], () => '|')).toEqual([1, '|', 2, '|', 3])
+
+      const expected = [null, { after: null }, 'foo', { after: 'foo' }, true]
+      expect(intersperse([null, 'foo', true], (index, list) => ({ after: list[index] }))).toEqual(expected)
     })
   })
 

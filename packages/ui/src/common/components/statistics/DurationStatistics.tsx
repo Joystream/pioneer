@@ -28,7 +28,7 @@ export const DurationStatistics = (props: DurationStatisticsProps) => {
           format(duration)
             .flatMap(([amount, unit]) => (amount ? <Period key={unit} amount={amount} unit={unit} /> : []))
             .slice(0, 2),
-          <Separator />
+          (index) => <Separator key={index} />
         )
       ) : (
         <Days>None</Days>

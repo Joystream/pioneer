@@ -20,7 +20,7 @@ const defaultRenderSelected = <T extends any>(renderOption: RenderOption<T>) => 
   const nodes = optionNodes.some(isString) ? optionNodes.map(defaultSelectedOption) : optionNodes
   return (
     <Selected>
-      <MultiSelectedInner>{intersperse(nodes, `${',' + ' '}`)}</MultiSelectedInner>
+      <MultiSelectedInner>{intersperse(nodes, () => ', ')}</MultiSelectedInner>
     </Selected>
   )
 }
