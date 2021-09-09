@@ -187,13 +187,13 @@ export const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; for
     inset: ${({ forBig }) => (forBig ? 'auto auto 5px -13px !important' : 'auto auto 4px -16px !important')};
   }
   &[data-popper-placement='top-end'] {
-    inset: ${({ forBig }) => (forBig ? 'auto auto 5px 12px !important' : 'auto auto 4px 16px !important')};
+    inset: ${({ forBig }) => (forBig ? 'auto -12px 5px auto !important' : 'auto -16px 4px auto !important')};
   }
   &[data-popper-placement='bottom-start'] {
     inset: ${({ forBig }) => (forBig ? '5px auto auto -13px !important' : '4px auto auto -16px !important')};
   }
   &[data-popper-placement='bottom-end'] {
-    inset: ${({ forBig }) => (forBig ? '5px auto auto 12px !important' : '4px auto auto 16px !important')};
+    inset: ${({ forBig }) => (forBig ? '5px -12px auto auto !important' : '4px -16px auto auto !important')};
   }
 `
 
