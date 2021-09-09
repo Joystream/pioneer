@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled, { css } from 'styled-components'
 
-import { Colors, Transitions } from '../constants'
+import { BorderRad, Colors, Transitions } from '../constants'
 
 import { CountBadge } from './CountBadge'
 
@@ -17,6 +17,7 @@ export interface TabProps extends TabActiveProps {
   title: string
   className?: string
   count?: number
+  changes?: boolean
 }
 
 export interface TabsSize {
@@ -43,9 +44,9 @@ export const TabsContainer: FC<Omit<TabsProps, 'tabs'>> = ({ className, tabsSize
   </TabsStyles>
 )
 
-const Tab = ({ active, onClick, title, count }: TabProps) => (
+const Tab = ({ active, onClick, title, count, changes }: TabProps) => (
   <TabContainer active={active} onClick={onClick}>
-    {title} {count !== undefined && <CountBadge count={count} />}
+    {title} {count !== undefined && <CountBadge count={count} />} {changes && <ChangesIndocator />}
   </TabContainer>
 )
 
@@ -72,6 +73,13 @@ const TabsStyles = styled.div<TabsSize>`
       `
     }
   }}
+`
+
+const ChangesIndocator = styled.div`
+  width: 6px;
+  height: 6px;
+  border-radius: ${BorderRad.round};
+  background-color: ${Colors.Blue[500]};
 `
 
 export const TabContainer = styled.button<TabActiveProps>`
