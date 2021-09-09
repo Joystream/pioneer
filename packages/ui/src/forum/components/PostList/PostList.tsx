@@ -40,7 +40,8 @@ export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps)
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
 
   useEffect(() => {
-    navigation.post &&
+    posts &&
+      navigation.post &&
       postsRefs[navigation.post]?.current &&
       postsRefs[navigation.post].current.scrollIntoView({ behavior: 'smooth', inline: 'start' })
   }, [postsRefs, navigation.post])

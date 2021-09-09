@@ -13,7 +13,7 @@ import {
 import { ArrowReplyIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
-import { Colors, Fonts, Transitions, BorderRad, Shadows } from '@/common/constants'
+import { Colors, Fonts, BorderRad, Shadows } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
@@ -190,15 +190,13 @@ const FroumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected'>>`
   // Animate selection:
   &,
   ${Reply} {
-    animation: ${({ isSelected }) => (isSelected ? 'flashSelection' : 'none')} ${Transitions.durationXXL} ease;
+    animation: ${({ isSelected }) => (isSelected ? 'flashSelection' : 'none')} 1.5s ease-in-out;
   }
 
   @keyframes flashSelection {
-    25% {
-      background-color: ${Colors.Orange[400]};
-    }
+    25%,
     75% {
-      background-color: ${Colors.Orange[400]};
+      background-color: ${Colors.Blue[100]};
     }
   }
 `
