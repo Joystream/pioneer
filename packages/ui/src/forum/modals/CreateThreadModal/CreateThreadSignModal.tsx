@@ -74,6 +74,11 @@ export const CreateThreadSignModal = ({
       <ModalFooter>
         <TransactionInfoContainer>
           <TransactionInfo
+            title="Thread creation and initial post deposit:"
+            value={postDeposit.add(threadDeposit)}
+            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+          />
+          <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee.toBn()}
             tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}

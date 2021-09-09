@@ -144,6 +144,18 @@ describe('CreateThreadModal', () => {
       ).toBeDefined()
     })
 
+    it('Displays deposit amount', async () => {
+      stubDeposits({ post: 102, thread: 103 })
+      renderModal()
+      await fillDetails()
+      tx = stubTransaction(api, txPath, 101)
+      const next = await getButton(/next step/i)
+      await fireEvent.click(next)
+
+      expect(screen.getByText(/^Thread creation and initial post deposit:/i)?.nextSibling?.textContent).toBe('205')
+      expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('101')
+    })
+
     it('Transaction failure', async () => {
       stubTransactionFailure(tx)
       await fillAndProceed()
