@@ -1,6 +1,7 @@
 import { useMachine } from '@xstate/react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
@@ -26,22 +27,30 @@ export const CreateThreadModal = () => {
   const [state, send] = useMachine(createThreadMachine)
   const { api } = useApi()
   const { breadcrumbs } = useForumCategoryBreadcrumbs(modalData.categoryId)
+  const balance = useBalance(member?.controllerAccount)
+
+  const postDeposit = useMemo(() => api?.consts.forum.postDeposit.toBn(), [api])
+  const threadDeposit = useMemo(() => api?.consts.forum.threadDeposit.toBn(), [api])
 
   const baseTransaction = api?.tx.forum.createThread(member?.id ?? 0, modalData.categoryId, '', '', null)
   const baseTransactionFee = useTransactionFee(member?.controllerAccount, baseTransaction)
+  const minimumTransactionCost = useMemo(
+    () => postDeposit && threadDeposit && baseTransactionFee?.transactionFee.add(postDeposit).add(threadDeposit),
+    [postDeposit, threadDeposit, baseTransactionFee?.transactionFee.toString()]
+  )
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
       if (!member) {
         showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
-      } else if (baseTransactionFee) {
-        const { canAfford } = baseTransactionFee
+      } else if (balance && minimumTransactionCost) {
+        const canAfford = balance.transferable.gte(minimumTransactionCost)
         const controllerAccount = accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account')
         canAfford && send({ type: 'PASS', memberId: member.id, categoryId: modalData.categoryId, controllerAccount })
         canAfford || send('FAIL')
       }
     }
-  }, [state.value, member?.id, baseTransactionFee])
+  }, [state.value, member?.id, baseTransactionFee, postDeposit, threadDeposit])
 
   if (state.matches('generalDetails') && member) {
     return (

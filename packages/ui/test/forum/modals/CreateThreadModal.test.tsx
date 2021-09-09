@@ -13,11 +13,13 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 
 import { getButton } from '../../_helpers/getButton'
+import { toBalanceOf } from '../../_mocks/chainTypes'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
   stubApi,
+  stubConst,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
@@ -34,6 +36,10 @@ describe('CreateThreadModal', () => {
   const txPath = 'api.tx.forum.createThread'
   let tx = {}
   let pathname: string
+  const stubDeposits = (values?: { post?: number; thread?: number }) => {
+    stubConst(api, 'forum.postDeposit', toBalanceOf(values?.post ?? 10))
+    stubConst(api, 'forum.threadDeposit', toBalanceOf(values?.thread ?? 10))
+  }
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -53,6 +59,7 @@ describe('CreateThreadModal', () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, txPath)
+    stubDeposits()
   })
 
   describe('Requirements failed', () => {
@@ -64,6 +71,18 @@ describe('CreateThreadModal', () => {
 
     it('Insufficient funds for minimum fee', async () => {
       tx = stubTransaction(api, txPath, 10_000)
+      renderModal()
+      expect(await screen.findByText(/insufficient funds/i)).toBeDefined()
+    })
+
+    it('Insufficient funds for thread deposit', async () => {
+      stubDeposits({ thread: 10_000 })
+      renderModal()
+      expect(await screen.findByText(/insufficient funds/i)).toBeDefined()
+    })
+
+    it('Insufficient funds for post deposit', async () => {
+      stubDeposits({ post: 10_000 })
       renderModal()
       expect(await screen.findByText(/insufficient funds/i)).toBeDefined()
     })
