@@ -18,6 +18,7 @@ import {
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { Step } from '@/common/model/machines/getSteps'
+import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { OpeningFormPreview } from '../../components/OpeningFormPreview'
 
@@ -68,7 +69,7 @@ export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, s
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonGhost onClick={() => push('/working-groups/my-applications')} size="medium">
+        <ButtonGhost onClick={() => push(WorkingGroupsRoutes.myApplications)} size="medium">
           Go to my applications
           <Arrow direction="right" />
         </ButtonGhost>

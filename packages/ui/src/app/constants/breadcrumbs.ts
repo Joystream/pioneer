@@ -1,12 +1,13 @@
 import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 const knownRoutes = [
   { path: '/profile', breadcrumb: 'My Profile' },
   { path: '/profile/memberships', breadcrumb: 'My Memberships' },
-  { path: '/working-groups', breadcrumb: 'Working Groups' },
-  { path: '/working-groups/openings', breadcrumb: 'Openings' },
-  { path: '/working-groups/my-applications', breadcrumb: 'My Applications' },
-  { path: '/working-groups/my-roles', breadcrumb: 'My Roles' },
+  { path: WorkingGroupsRoutes.groups, breadcrumb: 'Working Groups' },
+  { path: WorkingGroupsRoutes.openings, breadcrumb: 'Openings' },
+  { path: WorkingGroupsRoutes.myApplications, breadcrumb: 'My Applications' },
+  { path: WorkingGroupsRoutes.myRoles, breadcrumb: 'My Roles' },
   { path: '/members', breadcrumb: 'Members' },
   { path: ProposalsRoutes.current, breadcrumb: 'Current' },
   { path: ProposalsRoutes.past, breadcrumb: 'Past' },

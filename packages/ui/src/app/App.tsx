@@ -7,6 +7,7 @@ import { Page } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { ExtensionWarning } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
@@ -36,14 +37,14 @@ export const App = () => (
       <Switch>
         <Route exact path="/profile" component={MyAccounts} />
         <Route exact path="/profile/memberships" component={MyMemberships} />
-        <Route exact path="/working-groups" component={WorkingGroups} />
-        <Route exact path="/working-groups/openings" component={WorkingGroupsOpenings} />
-        <Route exact path="/working-groups/my-applications" component={MyApplications} />
-        <Route exact path="/working-groups/my-roles" component={MyRoles} />
-        <Route exact path="/working-groups/my-roles/:id" component={MyRole} />
-        <Route exact path="/working-groups/:name" component={WorkingGroup} />
-        <Route exact path="/working-groups/openings/:id" component={WorkingGroupOpening} />
-        <Route exact path="/working-groups/upcoming-openings/:id" component={UpcomingOpening} />
+        <Route exact path={WorkingGroupsRoutes.groups} component={WorkingGroups} />
+        <Route exact path={`${WorkingGroupsRoutes.upcomingOpenings}/:id`} component={UpcomingOpening} />
+        <Route exact path={`${WorkingGroupsRoutes.openings}/:id`} component={WorkingGroupOpening} />
+        <Route exact path={WorkingGroupsRoutes.openings} component={WorkingGroupsOpenings} />
+        <Route exact path={WorkingGroupsRoutes.myApplications} component={MyApplications} />
+        <Route exact path={WorkingGroupsRoutes.myRoles} component={MyRoles} />
+        <Route exact path={`${WorkingGroupsRoutes.myRoles}/:id`} component={MyRole} />
+        <Route exact path={`${WorkingGroupsRoutes.groups}/:name`} component={WorkingGroup} />
         <Route exact path={ProposalsRoutes.current} component={Proposals} />
         <Route exact path={ProposalsRoutes.past} component={PastProposals} />
         <Route exact path={ProposalsRoutes.myproposals} />
