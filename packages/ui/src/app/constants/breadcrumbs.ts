@@ -14,7 +14,7 @@ const knownRoutes = [
   { path: ProposalsRoutes.myproposals, breadcrumb: 'My Proposals' },
 ]
 
-const excludePaths = ['/']
+const excludePaths = ['/', WorkingGroupsRoutes.upcomingOpenings]
 
 export const breadcrumbsOptions: BreadcrumbsOptions = { knownRoutes, excludePaths }
 
