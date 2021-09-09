@@ -50,7 +50,7 @@ export const CreateThreadModal = () => {
         canAfford || send('FAIL')
       }
     }
-  }, [state.value, member?.id, baseTransactionFee, postDeposit, threadDeposit])
+  }, [state.value, member?.id, minimumTransactionCost, balance])
 
   if (state.matches('generalDetails') && member) {
     return (
@@ -89,13 +89,9 @@ export const CreateThreadModal = () => {
     return <FailureModal onClose={hideModal}>There was a problem with creating your forum thread.</FailureModal>
   }
 
-  if (state.matches('requirementsFailed') && member && baseTransactionFee) {
+  if (state.matches('requirementsFailed') && member && minimumTransactionCost) {
     return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={member.controllerAccount}
-        amount={baseTransactionFee.transactionFee}
-      />
+      <InsufficientFundsModal onClose={hideModal} address={member.controllerAccount} amount={minimumTransactionCost} />
     )
   }
 
