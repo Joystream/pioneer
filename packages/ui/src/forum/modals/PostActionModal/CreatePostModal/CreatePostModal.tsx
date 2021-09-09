@@ -1,3 +1,4 @@
+import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
@@ -10,6 +11,7 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { postActionMachine } from '../postActionMachine'
@@ -39,7 +41,7 @@ export const CreatePostModal = () => {
         createType('ForumUserId', Number.parseInt(active.id)),
         categoryId,
         threadId,
-        postText,
+        metadataToBytes(ForumPostMetadata, { text: postText }),
         false
       ),
     [api, threadId, categoryId, active]
