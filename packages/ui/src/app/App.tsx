@@ -16,6 +16,7 @@ import { GlobalModals } from './GlobalModals'
 import { Council } from './pages/Council/Council'
 import { Election } from './pages/Council/Election'
 import { PastCouncils } from './pages/Council/PastCouncils'
+import { PastElections } from './pages/Council/PastElections'
 import { PastVotes } from './pages/Council/PastVotes'
 import { Forum } from './pages/Forum'
 import { Members } from './pages/Members/Members'
@@ -60,6 +61,7 @@ export const App = () => (
         <Route exact path={CouncilRoutes.currentElection} component={Election} />
         <Route exact path={CouncilRoutes.pastVotes} component={PastVotes} />
         <Route exact path={CouncilRoutes.pastCouncils} component={PastCouncils} />
+        <Route exact path={CouncilRoutes.pastElections} component={PastElections} />
         <Route exact path="/members" component={Members} />
         <Route exact path="/members/:id" component={Members} />
         <Route exact path="/settings" component={Settings} />
