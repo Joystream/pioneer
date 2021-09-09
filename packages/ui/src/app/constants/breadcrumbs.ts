@@ -1,3 +1,4 @@
+import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
@@ -12,6 +13,9 @@ const knownRoutes = [
   { path: ProposalsRoutes.current, breadcrumb: 'Current' },
   { path: ProposalsRoutes.past, breadcrumb: 'Past' },
   { path: ProposalsRoutes.myproposals, breadcrumb: 'My Proposals' },
+  { path: ForumRoutes.latestThreads, breadcrumb: 'Latest Threads' },
+  { path: ForumRoutes.myThreads, breadcrumb: 'My Threads' },
+  { path: ForumRoutes.topThreads, breadcrumb: 'Top Threads' },
 ]
 
 const excludePaths = ['/', WorkingGroupsRoutes.upcomingOpenings]
