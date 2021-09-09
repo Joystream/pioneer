@@ -1,13 +1,13 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account } from '@/accounts/types'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
@@ -17,7 +17,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
-import { PreviewPostModal } from '@/forum/modals/PreviewPostModal/PreviewPostModal'
+import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
 import { Member } from '@/memberships/types'
 
 interface PostActionSignModalCommonProps {
@@ -56,7 +56,6 @@ export const PostActionSignModal = ({
   newText,
 }: PostActionSignModalProps) => {
   const { hideModal } = useModal()
-  const [previewVisible, setPreviewVisible] = useState(false)
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
   const [state, send] = useActor(service)
   const balance = useBalance(controllerAccount.address)
@@ -94,11 +93,7 @@ export const PostActionSignModal = ({
             />
           </TransactionInfoContainer>
           <ButtonsGroup align="right">
-            {action === 'edit' && (
-              <ButtonGhost size="medium" onClick={() => setPreviewVisible(true)}>
-                Post preview
-              </ButtonGhost>
-            )}
+            {action === 'edit' && <PreviewPostButton author={author as Member} postText={newText as string} />}
             <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
               Sign and {action}
               <Arrow direction="right" />
@@ -106,14 +101,6 @@ export const PostActionSignModal = ({
           </ButtonsGroup>
         </ModalFooter>
       </TransactionModal>
-      {previewVisible && (
-        <PreviewPostModal
-          author={author as Member}
-          text={newText as string}
-          onClose={() => setPreviewVisible(false)}
-          type="post"
-        />
-      )}
     </>
   )
 }
