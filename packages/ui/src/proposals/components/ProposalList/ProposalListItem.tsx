@@ -55,7 +55,7 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
 }
 
 const ProposalItem = styled(TableListItem)`
-  grid-column-gap: 24px;
+  grid-column-gap: 36px;
   padding-right: 16px;
   background-color: ${({ $isPast }: { $isPast?: boolean }) => ($isPast ? Colors.Black[50] : Colors.White)};
   grid-template-rows: unset;

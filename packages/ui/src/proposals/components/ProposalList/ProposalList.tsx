@@ -24,7 +24,6 @@ export const ProposalList = ({ proposals, isPast }: ProposalListProps) => {
         <ListHeader />
         <ListHeader>Stage</ListHeader>
         <ListHeader>Proposer</ListHeader>
-        <ListHeader />
       </ProposalsListHeaders>
       <List as="div">
         {proposals.map((proposal) => (

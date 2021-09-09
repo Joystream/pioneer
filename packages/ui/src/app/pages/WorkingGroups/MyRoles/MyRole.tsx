@@ -115,7 +115,7 @@ export const MyRole = () => {
                 {worker.isLead ? 'LEAD' : 'REGULAR'}
               </BadgeStatus>
               <BadgeStatus inverted size="l" separated>
-                WORKER ID #{worker.id}
+                {`WORKER ID #${worker.id}`}
               </BadgeStatus>
               {!isActive && (
                 <BadgeStatus ended inverted size="l" separated>
