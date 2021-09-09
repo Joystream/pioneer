@@ -2,16 +2,17 @@ import React from 'react'
 
 import { Tabs } from '@/common/components/Tabs'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { TabsDefinition, usePageTabs } from '../../../hooks/usePageTabs'
 
 const basicTabs: TabsDefinition[] = [
-  ['Openings', '/working-groups/openings'],
-  ['Working Groups', '/working-groups'],
+  ['Openings', WorkingGroupsRoutes.openings],
+  ['Working Groups', WorkingGroupsRoutes.groups],
 ]
 const memberTabs: TabsDefinition[] = [
-  ['My Applications', '/working-groups/my-applications'],
-  ['My Roles', '/working-groups/my-roles'],
+  ['My Applications', WorkingGroupsRoutes.myApplications],
+  ['My Roles', WorkingGroupsRoutes.myRoles],
 ]
 
 export const WorkingGroupsTabs = () => {

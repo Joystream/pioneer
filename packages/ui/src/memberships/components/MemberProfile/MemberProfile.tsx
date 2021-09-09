@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { CloseButton, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
+import { useEscape } from '@/common/hooks/useEscape'
 import { EmptyBody } from '@/proposals/modals/VoteRationale/VoteRationale'
 
 import { MemberInfoWrap } from '..'
@@ -44,16 +45,7 @@ export const MemberProfile = React.memo(() => {
     }
   }
 
-  useEffect(() => {
-    const escapeEvent = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        hideModal()
-      }
-    }
-    document.addEventListener('keydown', escapeEvent)
-
-    return () => document.removeEventListener('keydown', escapeEvent)
-  }, [])
+  useEscape(() => hideModal())
 
   if (loading || !member) {
     return (

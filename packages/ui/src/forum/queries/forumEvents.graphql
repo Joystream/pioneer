@@ -1,0 +1,38 @@
+fragment PostAddedEventFields on PostAddedEvent {
+  id
+  createdAt
+  post {
+    id
+    thread {
+      id
+    }
+    author {
+      id
+      handle
+    }
+  }
+}
+
+fragment PostTextUpdatedEventFields on PostTextUpdatedEvent {
+  id
+  createdAt
+  post {
+    id
+    thread {
+      id
+    }
+    author {
+      id
+      handle
+    }
+  }
+}
+
+query GetForumEvents {
+  postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
+    ...PostAddedEventFields
+  }
+  postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
+    ...PostTextUpdatedEventFields
+  }
+}

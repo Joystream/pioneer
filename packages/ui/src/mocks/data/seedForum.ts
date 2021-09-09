@@ -25,6 +25,7 @@ export interface RawForumThreadMock {
   createdInEvent: BlockFieldsMock
   authorId: string
   status: { __typename: string; threadDeletedEvent?: BlockFieldsMock; threadModeratedEvent?: BlockFieldsMock }
+  visiblePostsCount: number
 }
 
 interface PostEdit extends BlockFieldsMock {

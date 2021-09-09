@@ -5,6 +5,7 @@ import {
   MemberFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
+
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type ForumBaseCategoryFieldsFragment = {
@@ -99,6 +100,7 @@ export type ForumThreadFieldsFragment = {
   categoryId: string
   title: string
   authorId: string
+  visiblePostsCount: number
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   status:
     | { __typename: 'ThreadStatusActive' }
@@ -466,6 +468,7 @@ export const ForumThreadFieldsFragmentDoc = gql`
         }
       }
     }
+    visiblePostsCount
   }
 `
 export const ForumThreadDetailedFieldsFragmentDoc = gql`

@@ -1,6 +1,8 @@
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { ThemedStyledProps } from 'styled-components'
+
+import { useEscape } from '@/common/hooks/useEscape'
 
 import { Animations, BorderRad, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
 import { CloseButton } from '../buttons'
@@ -58,16 +60,7 @@ export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark,
     }
   }
 
-  useEffect(() => {
-    const escapeEvent = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose()
-      }
-    }
-    document.addEventListener('keydown', escapeEvent)
-
-    return () => document.removeEventListener('keydown', escapeEvent)
-  }, [])
+  useEscape(() => onClose())
 
   return ReactDOM.createPortal(
     <ModalGlass

@@ -43,7 +43,7 @@ export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemConten
     )
   }
   return (
-    <ThreadItemWrapper halfSize={halfSize} as={GhostRouterLink} to={threadAddress}>
+    <ThreadItemWrapper $halfSize={halfSize} as={GhostRouterLink} to={threadAddress}>
       <ThreadItemHeader align="center">
         <ThreadItemTitle empty={empty}>{thread.title}</ThreadItemTitle>
         <ThreadItemTime lighter>{relativeTime(thread.createdInBlock.timestamp)}</ThreadItemTime>
@@ -121,14 +121,13 @@ const StyledAnswerIcon = styled(AnswerIcon)`
   color: ${Colors.Black[300]};
 `
 
-export const ThreadItemWrapper = styled.a<{ halfSize?: boolean }>`
+export const ThreadItemWrapper = styled.a<{ $halfSize?: boolean }>`
   display: flex;
   position: relative;
   flex-direction: column;
   gap: 16px;
   width: 100%;
   height: fit-content;
-  max-height: ${({ halfSize }) => (halfSize ? '50%' : '100%')};
   padding: 16px 0;
   overflow: hidden;
 
@@ -146,7 +145,7 @@ export const ThreadItemWrapper = styled.a<{ halfSize?: boolean }>`
   }
 
   ${ThreadItemText} {
-    -webkit-line-clamp: ${({ halfSize }) => (halfSize ? '3' : '14')};
+    -webkit-line-clamp: ${({ $halfSize }) => ($halfSize ? '3' : '14')};
   }
 
   &:hover,

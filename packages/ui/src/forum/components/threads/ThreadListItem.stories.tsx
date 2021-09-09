@@ -66,6 +66,7 @@ Default.args = {
       __typename: 'ThreadCreatedEvent',
     },
     status: { __typename: 'ThreadStatusActive' },
+    visiblePostsCount: 11,
     __typename: 'ForumThread',
   },
 }

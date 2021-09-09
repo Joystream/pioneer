@@ -66,27 +66,32 @@ export const generateForumThreads = (forumCategories: Pick<RawForumCategoryMock,
         title: faker.lorem.words(randomFromRange(4, 8)),
         authorId: randomMember().id,
         status,
+        visiblePostsCount: randomFromRange(3, 8),
         createdInEvent,
       }
     }, randomFromRange(3, 10))
   )
 
-  const forumPosts = forumThreads
-    .map(({ id, authorId, status }: RawForumThreadMock) => {
-      const posts: RawForumPostMock[] = []
+  const forumPosts = forumThreads.flatMap(({ id, authorId, status, visiblePostsCount }) => {
+    const posts: RawForumPostMock[] = []
+    const isArchivedThread = status.__typename === Locked
 
-      posts.push(generateForumPost(id, status.__typename, authorId))
+    posts.push(generateForumPost(id, status.__typename, authorId))
 
-      for (let i = 0; i < new Array(randomFromRange(3, 10)).length; i++) {
-        const repliesToId =
-          posts.length > 1 && Math.random() > 0.5 ? posts[randomFromRange(1, posts.length - 1)].id : undefined
+    for (let visibleIndex = 1; visibleIndex < visiblePostsCount - 1; ) {
+      const repliesToId =
+        posts.length > 1 && Math.random() > 0.5 ? posts[randomFromRange(1, posts.length - 1)].id : undefined
 
-        posts.push(generateForumPost(id, status.__typename, randomMember().id, repliesToId))
+      const post = generateForumPost(id, status.__typename, randomMember().id, repliesToId)
+      posts.push(post)
+
+      if (isArchivedThread ? post.status === 'PostStatusLocked' : post.status === 'PostStatusActive') {
+        visibleIndex++
       }
+    }
 
-      return posts
-    })
-    .flatMap((a) => a)
+    return posts
+  })
 
   return { forumThreads, forumPosts }
 }

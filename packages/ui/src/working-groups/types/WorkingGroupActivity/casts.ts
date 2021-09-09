@@ -19,7 +19,7 @@ import {
   WorkerRewardAccountUpdatedEventFragment,
   WorkerRewardAmountUpdatedEventFragment,
   WorkerStartedLeavingEventFieldsFragment,
-} from '@/working-groups/queries/__generated__/workingGroups.generated'
+} from '@/working-groups/queries/__generated__/workingGroupsEvents.generated'
 import {
   ApplicationWithdrawnActivity,
   AppliedOnOpeningActivity,

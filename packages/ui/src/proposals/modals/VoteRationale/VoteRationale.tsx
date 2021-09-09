@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
@@ -20,6 +20,7 @@ import {
   SidePaneTitle,
   SidePaneTopButtonsGroup,
 } from '@/common/components/SidePane'
+import { useEscape } from '@/common/hooks/useEscape'
 import { useModal } from '@/common/hooks/useModal'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -37,16 +38,7 @@ export const VoteRationale = React.memo(() => {
     }
   }
 
-  useEffect(() => {
-    const escapeEvent = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        hideModal()
-      }
-    }
-    document.addEventListener('keydown', escapeEvent)
-
-    return () => document.removeEventListener('keydown', escapeEvent)
-  }, [])
+  useEscape(() => hideModal())
 
   const getVoteLink = `${window.location.origin}/#${ProposalsRoutes.preview}/${vote?.proposalId}?showVote=${voteId}`
 
