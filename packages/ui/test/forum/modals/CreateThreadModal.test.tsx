@@ -113,6 +113,7 @@ describe('CreateThreadModal', () => {
     })
 
     it('Insufficient funds for actual fee', async () => {
+      stubDeposits({ post: 0, thread: 0 })
       renderModal()
       await fillDetails()
       tx = stubTransaction(api, txPath, 10000)
@@ -123,6 +124,22 @@ describe('CreateThreadModal', () => {
       expect(
         await screen.findByText(
           'Insufficient funds to cover the thread creation. You need at least 10000 JOY on your account for this action.'
+        )
+      ).toBeDefined()
+    })
+
+    it('Insufficient funds for fee + deposits', async () => {
+      stubDeposits({ post: 400, thread: 400 })
+      renderModal()
+      await fillDetails()
+      tx = stubTransaction(api, txPath, 400)
+      const next = await getButton(/next step/i)
+      await fireEvent.click(next)
+
+      expect(await getButton(/sign and send/i)).toBeDisabled()
+      expect(
+        await screen.findByText(
+          'Insufficient funds to cover the thread creation. You need at least 1200 JOY on your account for this action.'
         )
       ).toBeDefined()
     })
