@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import { CloseButton } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
@@ -12,6 +12,7 @@ import {
   SidePaneTitle,
 } from '@/common/components/SidePane'
 import { Tabs } from '@/common/components/Tabs'
+import { useEscape } from '@/common/hooks/useEscape'
 import { useModal } from '@/common/hooks/useModal'
 import { useApplication } from '@/working-groups/hooks/useApplication'
 
@@ -34,16 +35,7 @@ export const ApplicationDetailsModal = React.memo(() => {
     }
   }
 
-  useEffect(() => {
-    const escapeEvent = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        hideModal()
-      }
-    }
-    document.addEventListener('keydown', escapeEvent)
-
-    return () => document.removeEventListener('keydown', escapeEvent)
-  }, [])
+  useEscape(() => hideModal())
 
   const [currentTab, setCurrentTab] = useState<Tab>('GENERAL')
 
