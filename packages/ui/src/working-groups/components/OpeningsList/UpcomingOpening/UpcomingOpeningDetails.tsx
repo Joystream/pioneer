@@ -14,6 +14,7 @@ import {
   OpenedTop,
   OpenedWrapper,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
+import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 export const UpcomingOpeningDetails = ({ opening, onClick }: UpcomingProps) => {
   return (
@@ -49,7 +50,7 @@ export const UpcomingOpeningDetails = ({ opening, onClick }: UpcomingProps) => {
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <LinkButtonGhost to={`/working-groups/upcoming-openings/${opening.id}`} size="medium">
+          <LinkButtonGhost to={`${WorkingGroupsRoutes.upcomingOpenings}/${opening.id}`} size="medium">
             Learn more
           </LinkButtonGhost>
           <ButtonPrimary size="medium" disabled>
