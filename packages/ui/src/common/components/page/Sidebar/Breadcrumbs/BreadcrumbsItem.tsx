@@ -48,7 +48,7 @@ export const BreadcrumbsItemLink = styled(Link)`
   ${truncatedBreadcrumbText}
 `
 
-const BreadcrumbsItemText = styled.span`
+export const BreadcrumbsItemText = styled.span`
   color: ${Colors.Black[400]};
   font-size: 10px;
   line-height: 16px;
