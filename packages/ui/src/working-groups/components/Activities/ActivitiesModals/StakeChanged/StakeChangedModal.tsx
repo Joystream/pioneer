@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { StatusBadge } from '@/app/pages/WorkingGroups/components/StatusBadges'
 import { CloseButton } from '@/common/components/buttons'
@@ -18,6 +18,7 @@ import {
   SidePaneTitle,
 } from '@/common/components/SidePane'
 import { TokenValue } from '@/common/components/typography'
+import { useEscape } from '@/common/hooks/useEscape'
 
 interface StakeChangedModalProps {
   onClose: () => void
@@ -27,16 +28,8 @@ interface StakeChangedModalProps {
 }
 
 export const StakeChangedModal = ({ onClose, amount, eventType, id }: StakeChangedModalProps) => {
-  useEffect(() => {
-    const escapeEvent = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose()
-      }
-    }
-    document.addEventListener('keydown', escapeEvent)
+  useEscape(() => onClose())
 
-    return () => document.removeEventListener('keydown', escapeEvent)
-  }, [])
   return (
     <SidePaneGlass onClick={onClose}>
       <SidePane topSize="xs">

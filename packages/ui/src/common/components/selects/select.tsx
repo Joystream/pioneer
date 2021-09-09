@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
+import { useEscape } from '@/common/hooks/useEscape'
+
 import { useToggle } from '../../hooks/useToggle'
 import { isDefined } from '../../utils'
 import { stopEvent } from '../../utils/events'
@@ -52,17 +54,10 @@ export const Select = <T extends any, V extends any = T>({
     return () => document.removeEventListener('mousedown', clickListener)
   }, [isOpen])
 
-  useEffect(() => {
-    const escListener = (event: KeyboardEvent) => {
-      if (isOpen && ['Tab', 'Escape'].includes(event.key)) {
-        toggleOpen()
-        setFilterInput('')
-      }
-    }
-    document.addEventListener('keydown', escListener)
-
-    return () => document.removeEventListener('keydown', escListener)
-  }, [isOpen])
+  useEscape(() => {
+    setFilterInput('')
+    toggleOpen()
+  })
 
   useEffect(() => {
     isOpen && textInput.current?.focus()

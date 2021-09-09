@@ -12,6 +12,7 @@ import { SearchResultItem } from '@/common/components/Search/SearchResultItem'
 import { SidePane, SidePaneBody, SidePaneGlass } from '@/common/components/SidePane'
 import { Tabs } from '@/common/components/Tabs'
 import { Fonts } from '@/common/constants'
+import { useEscape } from '@/common/hooks/useEscape'
 import { useModal } from '@/common/hooks/useModal'
 import { SearchKind, useSearch } from '@/common/hooks/useSearch'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
@@ -43,16 +44,7 @@ export const SearchResultsModal = () => {
     []
   )
 
-  useEffect(() => {
-    const escapeEvent = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        hideModal()
-      }
-    }
-    document.addEventListener('keydown', escapeEvent)
-
-    return () => document.removeEventListener('keydown', escapeEvent)
-  }, [])
+  useEscape(() => hideModal())
 
   const overlayClickHandler = useCallback<MouseEventHandler<HTMLDivElement>>(
     (event) => event.target === event.currentTarget && hideModal(),

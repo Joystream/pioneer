@@ -1,6 +1,6 @@
 import { styled } from '@storybook/theming'
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { CloseButton } from '@/common/components/buttons'
 import { ArrowRightIcon, FileIcon } from '@/common/components/icons'
@@ -17,6 +17,7 @@ import { StatisticItem, StatisticsThreeColumns } from '@/common/components/stati
 import { StatisticButton } from '@/common/components/statistics/StatisticButton'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
+import { useEscape } from '@/common/hooks/useEscape'
 import { CreateLeadOpeningDetails } from '@/proposals/types/ProposalDetails'
 import { GroupRewardPeriods, isKnownGroupName } from '@/working-groups/types'
 
@@ -86,16 +87,9 @@ const OpeningDescriptionPreview = ({ onClose, description }: DescriptionPreviewP
       onClose()
     }
   }
-  useEffect(() => {
-    const escapeEvent = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose()
-      }
-    }
-    document.addEventListener('keydown', escapeEvent)
 
-    return () => document.removeEventListener('keydown', escapeEvent)
-  }, [])
+  useEscape(() => onClose())
+
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
       <SidePane topSize="s">
