@@ -8,10 +8,13 @@ export interface BadgeStatusProps {
   succeeded?: boolean
   ended?: boolean
   inverted?: boolean
+  children?: string
 }
 
-export const BadgeStatus = styled.span<BadgeStatusProps>`
-  display: flex;
+export const BadgeStatus = styled.span.attrs((props) => ({
+  title: props.children,
+}))<BadgeStatusProps>`
+  display: inline-block;
   justify-content: center;
   align-items: center;
   width: fit-content;
@@ -20,7 +23,7 @@ export const BadgeStatus = styled.span<BadgeStatusProps>`
   padding: 0 8px;
   border-radius: ${BorderRad.full};
   font-size: 10px;
-  line-height: 16px;
+  line-height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
   font-weight: 700;
   text-transform: uppercase;
   ${Overflow.FullDots};

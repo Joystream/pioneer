@@ -63,7 +63,7 @@ export const ForumThread = () => {
             )}
             {thread.tags.map((tag, index) => (
               <BadgeStatus inverted size="l" key={index}>
-                {tag}
+                {tag.title}
               </BadgeStatus>
             ))}
             <BlockInfo block={thread.createdInBlock} />
