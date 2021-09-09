@@ -94,7 +94,7 @@ export const PostActionSignModal = ({
             />
           </TransactionInfoContainer>
           <ButtonsGroup align="right">
-            {['edit', 'create'].includes(action) && (
+            {action === 'edit' && (
               <ButtonGhost size="medium" onClick={() => setPreviewVisible(true)}>
                 Post preview
               </ButtonGhost>
