@@ -13,7 +13,7 @@ import {
 import { ArrowReplyIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
-import { Colors, Fonts, Transitions } from '@/common/constants'
+import { Colors, Fonts, BorderRad, Shadows } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
@@ -69,52 +69,54 @@ export const PostListItem = ({
   }, [updatedAt])
 
   return (
-    <ForumPostStyles ref={ref} isSelected={isSelected}>
-      <ForumPostRow>
-        <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-        {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
-      </ForumPostRow>
-      <MessageBody>
-        {repliesTo && (
-          <Reply>
-            <ReplyBadge>
-              <ArrowReplyIcon />{' '}
-              <Badge>
-                <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
-              </Badge>
-            </ReplyBadge>
-            <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
-          </Reply>
-        )}
-        {editing ? (
-          <PostEditor post={post} onCancel={() => setEditing(false)} type={type} />
-        ) : (
-          <MarkdownPreview markdown={text} append={editionTime} size="s" />
-        )}
-      </MessageBody>
-      <ForumPostRow>
-        {!editing && (
-          <ButtonsGroup>
-            <CopyButtonTemplate
-              textToCopy={link}
-              square
-              size="small"
-              disabled={isPreview}
-              icon={<LinkIcon />}
-              title="Copy link"
-            />
-            {isThreadActive && (
-              <>
-                <ButtonGhost square disabled={isPreview} size="small" title="Reply">
-                  <ReplyIcon />
-                </ButtonGhost>
-                <PostContextMenu post={post} onEdit={() => setEditing(true)} type={type} />
-              </>
-            )}
-          </ButtonsGroup>
-        )}
-      </ForumPostRow>
-    </ForumPostStyles>
+    <FroumPostBlock ref={ref} isSelected={isSelected}>
+      <ForumPostStyles>
+        <ForumPostRow>
+          <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
+          {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
+        </ForumPostRow>
+        <MessageBody>
+          {repliesTo && (
+            <Reply>
+              <ReplyBadge>
+                <ArrowReplyIcon />{' '}
+                <Badge>
+                  <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
+                </Badge>
+              </ReplyBadge>
+              <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
+            </Reply>
+          )}
+          {editing ? (
+            <PostEditor post={post} onCancel={() => setEditing(false)} type={type} />
+          ) : (
+            <MarkdownPreview markdown={text} append={editionTime} size="s" />
+          )}
+        </MessageBody>
+        <ForumPostRow>
+          {!editing && (
+            <ButtonsGroup>
+              <CopyButtonTemplate
+                textToCopy={link}
+                square
+                size="small"
+                disabled={isPreview}
+                icon={<LinkIcon />}
+                title="Copy link"
+              />
+              {isThreadActive && (
+                <>
+                  <ButtonGhost square disabled={isPreview} size="small" title="Reply">
+                    <ReplyIcon />
+                  </ButtonGhost>
+                  <PostContextMenu post={post} onEdit={() => setEditing(true)} type={type} />
+                </>
+              )}
+            </ButtonsGroup>
+          )}
+        </ForumPostRow>
+      </ForumPostStyles>
+    </FroumPostBlock>
   )
 }
 
@@ -172,20 +174,29 @@ const EditionTime = styled(ButtonLink).attrs({ size: 'small', borderless: true }
   }
 `
 
-export const ForumPostStyles = styled.div<Pick<PostListItemProps, 'isSelected'>>`
+export const ForumPostStyles = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 16px;
+`
+
+const FroumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected'>>`
+  border-radius: ${BorderRad.m};
+  background-color: ${Colors.White};
+  box-shadow: ${Shadows.light};
+  padding: 24px;
+  scroll-margin: 48px;
 
   // Animate selection:
   &,
   ${Reply} {
-    animation: ${({ isSelected }) => (isSelected ? 'flashSelection' : 'none')} ${Transitions.duration} ease;
+    animation: ${({ isSelected }) => (isSelected ? 'flashSelection' : 'none')} 1.5s ease-in-out;
   }
 
   @keyframes flashSelection {
-    50% {
-      background-color: ${Colors.Orange[400]};
+    25%,
+    75% {
+      background-color: ${Colors.Blue[100]};
     }
   }
 `
