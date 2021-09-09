@@ -22,7 +22,7 @@ export const UpcomingOpeningListItem = ({ opening, onClick }: UpcomingProps) => 
   <ToggleableItemWrap onClick={onClick}>
     <ToggleableItemInfo>
       <ToggleableItemInfoTop>
-        <Subscription>ID: {opening.id}</Subscription>
+        <Subscription title={`ID: ${opening.id}`}>ID: {opening.id.replace(/\D/g, '')}</Subscription>
         <Subscription>Starts {relativeTime(opening.expectedStart)}</Subscription>
       </ToggleableItemInfoTop>
       <ToggleableItemTitle>{opening.title}</ToggleableItemTitle>
