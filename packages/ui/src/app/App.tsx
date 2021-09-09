@@ -14,6 +14,7 @@ import { ExtensionWarning } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { GlobalModals } from './GlobalModals'
 import { Council } from './pages/Council/Council'
+import { Election } from './pages/Council/Election'
 import { Forum } from './pages/Forum'
 import { Members } from './pages/Members/Members'
 import { MyAccounts } from './pages/Profile/MyAccounts'
@@ -54,6 +55,7 @@ export const App = () => (
         <Route exact path={`${ProposalsRoutes.preview}/:id/post/:postId`} component={ProposalPreview} />
         <Route exact path={`${ProposalsRoutes.preview}/:id`} component={ProposalPreview} />
         <Route exact path={CouncilRoutes.council} component={Council} />
+        <Route exact path={CouncilRoutes.currentElection} component={Election} />
         <Route exact path="/members" component={Members} />
         <Route exact path="/members/:id" component={Members} />
         <Route exact path="/settings" component={Settings} />
