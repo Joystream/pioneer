@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
@@ -9,10 +9,9 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { ForumBreadcrumbsList } from '@/forum/components/ForumBreadcrumbsList'
+import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
 import { CategoryBreadcrumb } from '@/forum/types'
 import { Member } from '@/memberships/types'
-
-import { PreviewPostModal } from '../PreviewPostModal/PreviewPostModal'
 
 interface Props {
   topic: string
@@ -35,7 +34,6 @@ export const CreateThreadDetailsModal = ({
 }: Props) => {
   const isValid = useMemo(() => !!(topic && description), [topic, description])
   const { hideModal } = useModal()
-  const [previewVisible, setPreviewVisible] = useState(false)
 
   return (
     <>
@@ -66,9 +64,7 @@ export const CreateThreadDetailsModal = ({
         </ModalBody>
         <ModalFooter>
           <ButtonsGroup align="right">
-            <ButtonGhost size="medium" onClick={() => setPreviewVisible(true)}>
-              Thread preview
-            </ButtonGhost>
+            <PreviewPostButton author={author} postText={description} />
             <ButtonPrimary onClick={onSubmit} size="medium" disabled={!isValid}>
               Next step
               <Arrow direction="right" />
@@ -76,9 +72,6 @@ export const CreateThreadDetailsModal = ({
           </ButtonsGroup>
         </ModalFooter>
       </Modal>
-      {previewVisible && (
-        <PreviewPostModal author={author} text={description} onClose={() => setPreviewVisible(false)} />
-      )}
     </>
   )
 }

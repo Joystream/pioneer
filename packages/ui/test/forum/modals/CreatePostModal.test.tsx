@@ -15,6 +15,7 @@ import rawMembers from '@/mocks/data/raw/members.json'
 import { seedForumCategory, seedForumPost, seedForumThread } from '@/mocks/data/seedForum'
 
 import { getButton } from '../../_helpers/getButton'
+import { toBalanceOf } from '../../_mocks/chainTypes'
 import { mockCategories, mockPosts, mockThreads } from '../../_mocks/forum'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -22,6 +23,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   stubApi,
+  stubConst,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
@@ -40,6 +42,7 @@ describe('UI: CreatePostModal', () => {
       categoryId: '1',
     },
     postText: 'I disagree',
+    isEditable: false,
   }
 
   const useModal: UseModal<any> = {
@@ -75,27 +78,46 @@ describe('UI: CreatePostModal', () => {
 
   beforeEach(async () => {
     stubDefaultBalances(api)
-    tx = stubTransaction(api, txPath)
+    tx = stubTransaction(api, txPath, 25)
+    stubConst(api, 'forum.postDeposit', toBalanceOf(10))
+    modalData.isEditable = false
   })
 
-  it('Requirements failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
-    renderModal()
-    expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+  describe('Requirements failed', () => {
+    it('Cannot afford transaction fee', async () => {
+      tx = stubTransaction(api, txPath, 10000)
+      renderModal()
+      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    })
+
+    it('Cannot afford post deposit', async () => {
+      stubConst(api, 'forum.postDeposit', toBalanceOf(10000))
+      modalData.isEditable = true
+      renderModal()
+      expect(await screen.findByText('Insufficient Funds')).toBeDefined()
+    })
   })
 
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
     renderModal()
-    await fireEvent.click(await getButton(/Sign and create/i))
+    await fireEvent.click(await getButton(/Sign and post/i))
     expect(await screen.getByText('There was a problem posting your message.')).toBeDefined()
   })
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, [], 'forum', 'editPostText')
     renderModal()
-    await fireEvent.click(await getButton(/Sign and create/i))
+    await fireEvent.click(await getButton(/Sign and post/i))
     expect(await screen.getByText('Your post has been submitted.')).toBeDefined()
+  })
+
+  it('Displays post deposit', () => {
+    stubConst(api, 'forum.postDeposit', toBalanceOf(101))
+    modalData.isEditable = true
+    renderModal()
+    expect(screen.getByText(/^Post deposit:/i)?.nextSibling?.textContent).toBe('101')
+    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
   })
 
   const renderModal = () =>

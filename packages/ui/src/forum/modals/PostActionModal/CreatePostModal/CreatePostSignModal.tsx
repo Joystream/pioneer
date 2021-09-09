@@ -1,6 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
 
@@ -20,41 +21,25 @@ import { TransactionModal } from '@/common/modals/TransactionModal'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
 import { Member } from '@/memberships/types'
 
-interface PostActionSignModalCommonProps {
+interface CreatePostSignModalProps {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
   controllerAccount: Account
-  author?: Member
-  newText?: string
-}
-
-interface PostActionSignModalDeleteProps extends PostActionSignModalCommonProps {
-  action: 'delete'
-}
-
-interface PostActionSignModalEditProps extends PostActionSignModalCommonProps {
-  action: 'edit'
   author: Member
-  newText: string
+  postText: string
+  isEditable?: boolean
+  postDeposit: BN
 }
 
-export type PostActionSignModalProps = PostActionSignModalDeleteProps | PostActionSignModalEditProps
-
-const actionTexts = {
-  edit: 'You intend to edit your post.',
-  delete: 'You intend to delete your post.',
-}
-
-const getActionText = (action: 'delete' | 'edit') => actionTexts[action]
-
-export const PostActionSignModal = ({
+export const CreatePostSignModal = ({
   transaction,
   service,
   controllerAccount,
-  action,
   author,
-  newText,
-}: PostActionSignModalProps) => {
+  postText,
+  isEditable,
+  postDeposit,
+}: CreatePostSignModalProps) => {
   const { hideModal } = useModal()
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
   const [state, send] = useActor(service)
@@ -62,10 +47,13 @@ export const PostActionSignModal = ({
 
   const hasFunds = useMemo(() => {
     if (balance?.transferable && paymentInfo?.partialFee) {
+      if (isEditable) {
+        return balance.transferable.gte(paymentInfo.partialFee.add(postDeposit))
+      }
       return balance.transferable.gte(paymentInfo.partialFee)
     }
     return false
-  }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee])
+  }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee, isEditable])
   const signDisabled = !state.matches('prepare') || !hasFunds
 
   return (
@@ -74,7 +62,12 @@ export const PostActionSignModal = ({
         <ModalBody>
           <RowGapBlock gap={24}>
             <RowGapBlock gap={16}>
-              <TextMedium>{getActionText(action)}</TextMedium>
+              <TextMedium>You intend to post in a thread.</TextMedium>
+              {isEditable && (
+                <TextMedium>
+                  <TokenValue value={postDeposit} /> will be deposited to make the post editable.
+                </TextMedium>
+              )}
               <TextMedium>
                 A fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
               </TextMedium>
@@ -86,6 +79,13 @@ export const PostActionSignModal = ({
         </ModalBody>
         <ModalFooter>
           <TransactionInfoContainer>
+            {isEditable && (
+              <TransactionInfo
+                title="Post deposit:"
+                value={postDeposit}
+                tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+              />
+            )}
             <TransactionInfo
               title="Transaction fee:"
               value={paymentInfo?.partialFee.toBn()}
@@ -93,9 +93,9 @@ export const PostActionSignModal = ({
             />
           </TransactionInfoContainer>
           <ButtonsGroup align="right">
-            {action === 'edit' && <PreviewPostButton author={author as Member} postText={newText as string} />}
+            <PreviewPostButton author={author} postText={postText} />
             <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
-              Sign and {action}
+              Sign and post
               <Arrow direction="right" />
             </ButtonPrimary>
           </ButtonsGroup>

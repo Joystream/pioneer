@@ -80,7 +80,7 @@ describe('UI: EditPostModal', () => {
     renderModal()
     expect(screen.queryByText(/You intend to edit your post./i)).not.toBeNull()
     expect(screen.queryByText(/Sign and edit/i)).not.toBeNull()
-    expect(screen.queryByText(/Post preview/i)).not.toBeNull()
+    expect(screen.queryByText(/Display preview/i)).not.toBeNull()
   })
 
   it('Requirements failed', async () => {
