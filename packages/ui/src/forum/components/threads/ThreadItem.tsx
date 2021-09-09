@@ -9,12 +9,11 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
-import { useThreadBreadcrumbs } from '@/forum/hooks/useThreadBreadcrumbs'
+import { ForumRoutes } from '@/forum/constant'
 import { useThreadOriginalPost } from '@/forum/hooks/useThreadOriginalPost'
 import { ForumThread } from '@/forum/types'
 
-import { ForumBreadcrumbsList } from '../ForumBreadcrumbsList'
-
+import { ThreadItemBreadcrumbs } from './ThreadItemBreadcrumbs'
 import { ThreadTags } from './ThreadTags'
 
 interface ThreadBadgeProps {
@@ -31,9 +30,8 @@ export interface ThreadItemContentProps {
 export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemContentProps) => {
   const { originalPost, isLoading } = useThreadOriginalPost(thread.id)
   const repliesCount = thread.visiblePostsCount - 1
-  const { categoryBreadcrumbs } = useThreadBreadcrumbs(thread.id)
   const content = originalPost?.text
-  const threadAddress = `/forum/thread/${thread.id}`
+  const threadAddress = `${ForumRoutes.thread}/${thread.id}`
 
   if (isLoading) {
     return (
@@ -48,7 +46,9 @@ export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemConten
         <ThreadItemTitle empty={empty}>{thread.title}</ThreadItemTitle>
         <ThreadItemTime lighter>{relativeTime(thread.createdInBlock.timestamp)}</ThreadItemTime>
       </ThreadItemHeader>
-      <ForumBreadcrumbsList categoryBreadcrumbs={categoryBreadcrumbs ?? []} nonInteractive />
+
+      <ThreadItemBreadcrumbs id={thread.categoryId} nonInteractive />
+
       {content && (
         <ThreadItemText light value>
           {content}

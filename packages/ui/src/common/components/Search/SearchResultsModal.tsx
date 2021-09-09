@@ -16,9 +16,8 @@ import { useEscape } from '@/common/hooks/useEscape'
 import { useModal } from '@/common/hooks/useModal'
 import { SearchKind, useSearch } from '@/common/hooks/useSearch'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
+import { ThreadItemBreadcrumbs } from '@/forum/components/threads/ThreadItemBreadcrumbs'
 import { ForumRoutes } from '@/forum/constant'
-
-import { ForumPostResultBreadcrumbs } from './SearchResultBreadcrumbs'
 
 export type SearchResultsModalCall = ModalWithDataCall<'SearchResults', { search: string }>
 
@@ -82,7 +81,7 @@ export const SearchResultsModal = () => {
                 <SearchResultItem
                   key={index}
                   pattern={pattern}
-                  breadcrumbs={<ForumPostResultBreadcrumbs id={thread.categoryId} />}
+                  breadcrumbs={<ThreadItemBreadcrumbs id={thread.categoryId} />}
                   to={`${ForumRoutes.thread}/${thread.id}?post=${id}`}
                   title={thread.title}
                 >
