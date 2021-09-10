@@ -18,16 +18,18 @@ export interface PreviewPostModalProps {
   onClose: () => void
   author: Member
   text: string
+  replyTo?: ForumPost
   type?: 'thread' | 'post'
 }
 
-export const PreviewPostModal = ({ onClose, author, text, type = 'thread' }: PreviewPostModalProps) => {
+export const PreviewPostModal = ({ onClose, author, replyTo, text, type = 'thread' }: PreviewPostModalProps) => {
   const post: ForumPost = useMemo(
     () => ({
       id: '',
       createdAt: new Date(Date.now()).toString(),
       author,
       text,
+      repliesTo: replyTo,
       status: 'PostStatusActive',
     }),
     []

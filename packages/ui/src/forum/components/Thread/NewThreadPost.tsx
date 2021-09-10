@@ -6,12 +6,11 @@ import { Link } from 'react-router-dom'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { Checkbox, InputComponent } from '@/common/components/forms'
-import { Arrow, ArrowReplyIcon, CrossIcon } from '@/common/components/icons'
+import { ArrowReplyIcon, CrossIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Badge, TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { getSteps } from '@/common/model/machines/getSteps'
 import { Reply, ReplyBadge } from '@/forum/components/PostList/PostListItem'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { ForumPost, ForumThread } from '@/forum/types'
@@ -22,13 +21,13 @@ type GetTransaction = (
   isEditable: boolean
 ) => SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
 
-
 interface NewPostProps {
   getTransaction: GetTransaction
   replyTo?: ForumPost
+  removeReply: () => void
 }
 
-export const NewThreadPost = ({ getTransaction, replyTo }: NewPostProps) => {
+export const NewThreadPost = ({ getTransaction, replyTo, removeReply }: NewPostProps) => {
   const [postText, setText] = useState('')
   const [isEditable, setEditable] = useState(false)
   const { active } = useMyMemberships()
@@ -50,7 +49,9 @@ export const NewThreadPost = ({ getTransaction, replyTo }: NewPostProps) => {
               </Badge>
             </ButtonsGroup>
             <ButtonsGroup align="right">
-              <CrossIcon />
+              <ButtonPrimary size="small" onClick={removeReply}>
+                <CrossIcon />
+              </ButtonPrimary>
             </ButtonsGroup>
           </ReplyBadge>
           <MarkdownPreview markdown={replyTo.text} size="s" isReply />
@@ -67,7 +68,7 @@ export const NewThreadPost = ({ getTransaction, replyTo }: NewPostProps) => {
             transaction &&
             showModal<CreatePostModalCall>({
               modal: 'CreatePost',
-              data: { postText, transaction, isEditable },
+              data: { postText, replyTo, transaction, isEditable },
             })
           }}
           disabled={postText === ''}

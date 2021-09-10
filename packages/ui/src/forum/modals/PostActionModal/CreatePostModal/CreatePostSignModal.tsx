@@ -19,6 +19,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
+import { ForumPost } from '@/forum/types'
 import { Member } from '@/memberships/types'
 
 interface CreatePostSignModalProps {
@@ -27,6 +28,7 @@ interface CreatePostSignModalProps {
   controllerAccount: Account
   author: Member
   postText: string
+  replyTo?: ForumPost
   isEditable?: boolean
   postDeposit: BN
 }
@@ -37,6 +39,7 @@ export const CreatePostSignModal = ({
   controllerAccount,
   author,
   postText,
+  replyTo,
   isEditable,
   postDeposit,
 }: CreatePostSignModalProps) => {
@@ -93,9 +96,9 @@ export const CreatePostSignModal = ({
             />
           </TransactionInfoContainer>
           <ButtonsGroup align="right">
-            <PreviewPostButton author={author} postText={postText} />
+            <PreviewPostButton author={author} postText={postText} replyTo={replyTo} />
             <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
-              Sign and post
+              Sign and {replyTo ? 'reply' : 'post'}
               <Arrow direction="right" />
             </ButtonPrimary>
           </ButtonsGroup>

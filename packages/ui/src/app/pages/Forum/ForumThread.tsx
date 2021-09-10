@@ -46,7 +46,7 @@ export const ForumThread = () => {
         createType('ForumUserId', Number.parseInt(active.id)),
         categoryId,
         threadId,
-        metadataToBytes(ForumPostMetadata, { text: postText }),
+        metadataToBytes(ForumPostMetadata, { text: postText, repliesTo: replyTo ? Number(replyTo.id) : undefined }),
         isEditable
       )
     }
@@ -98,7 +98,9 @@ export const ForumThread = () => {
   const displayMain = () => (
     <MainPanel ref={sideNeighborRef}>
       <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={setReplyTo} />
-      {thread && isThreadActive && <NewThreadPost replyTo={replyTo} getTransaction={getTransaction} />}
+      {thread && isThreadActive && (
+        <NewThreadPost replyTo={replyTo} removeReply={() => setReplyTo(undefined)} getTransaction={getTransaction} />
+      )}
     </MainPanel>
   )
 
