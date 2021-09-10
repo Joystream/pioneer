@@ -20,11 +20,13 @@ export const ThreadItemBreadcrumbs = memo(({ id, nonInteractive }: ThreadItemBre
 
   return (
     <ThreadItemBreadcrumbsList>
-      {nonInteractive ? (
-        <BreadcrumbsItemText>Forum</BreadcrumbsItemText>
-      ) : (
-        <BreadcrumbsItemLink to={ForumRoutes.forum}>Forum</BreadcrumbsItemLink>
-      )}
+      <li>
+        {nonInteractive ? (
+          <BreadcrumbsItemText>Forum</BreadcrumbsItemText>
+        ) : (
+          <BreadcrumbsItemLink to={ForumRoutes.forum}>Forum</BreadcrumbsItemLink>
+        )}
+      </li>
 
       {breadcrumbs.map(({ id, title }) => (
         <BreadcrumbsItem key={id} url={`${ForumRoutes.category}/${id}`} isLink={!nonInteractive}>
@@ -37,6 +39,12 @@ export const ThreadItemBreadcrumbs = memo(({ id, nonInteractive }: ThreadItemBre
 
 const ThreadItemBreadcrumbsList = styled(BreadcrumbsListComponent)`
   color: ${Colors.Black[500]};
+
+  & > li:first-child,
+  & > li:last-child {
+    flex-shrink: 0;
+    max-width: min-content;
+  }
 
   ${BreadcrumbsItemLink} {
     &,
