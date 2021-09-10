@@ -1,5 +1,6 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
-import React, { useRef } from 'react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
@@ -7,6 +8,7 @@ import { ModalContext } from '@/common/providers/modal/context'
 import { isModalWithData } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
 import { NewPostProps, NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
+import { ForumPost } from '@/forum/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 
@@ -21,7 +23,8 @@ jest.mock('@/common/components/CKEditor', () => ({
 }))
 
 describe('UI: Add new post', () => {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = React.createRef<HTMLDivElement>()
+  let replyTo: ForumPost | undefined
 
   const api = stubApi()
   stubTransaction(api, 'api.tx.forum.addPost')
@@ -55,7 +58,7 @@ describe('UI: Add new post', () => {
   const props: NewPostProps = {
     ref,
     getTransaction: (text, isEditable) => api.api.tx.forum.addPost(1, 1, 1, text, isEditable),
-    removeReply: () => true
+    removeReply: () => true,
   }
 
   it('No selected membership', async () => {
@@ -66,35 +69,86 @@ describe('UI: Add new post', () => {
   it('Empty post text', async () => {
     useMyMemberships.setActive(getMember('alice'))
     renderEditor(props)
-    expect(await getButton('Post a reply')).toBeDisabled()
+    expect(await getButton('Create post')).toBeDisabled()
   })
 
-  it('Passes modal data', async () => {
+  describe('Passes modal data', () => {
+    it('Without reply', async () => {
+      useMyMemberships.setActive(getMember('alice'))
+      renderEditor(props)
+      const editor = await screen.findByRole('textbox')
+      act(() => {
+        fireEvent.change(editor, { target: { value: 'I disagree' } })
+      })
+      await waitFor(async () => expect(await getButton('Create post')).not.toBeDisabled())
+      await act(async () => {
+        fireEvent.click(await getButton('Create post'))
+      })
+      expect(useModal.modal).toEqual('CreatePost')
+      expect(useModal.modalData.postText).toEqual('I disagree')
+      expect(useModal.modalData.isEditable).toEqual(false)
+    })
+
+    it('With reply', async () => {
+      useMyMemberships.setActive(getMember('alice'))
+      replyTo = {
+        id: '1',
+        author: getMember('bob'),
+        text: 'Some text',
+        status: 'PostStatusActive',
+        createdAt: new Date().toISOString(),
+      }
+      renderEditor()
+      const editor = await screen.findByRole('textbox')
+      act(() => {
+        fireEvent.change(editor, { target: { value: 'I disagree' } })
+      })
+      await waitFor(async () => expect(await getButton('Post a reply')).not.toBeDisabled())
+      await act(async () => {
+        fireEvent.click(await getButton('Post a reply'))
+      })
+      expect(useModal.modal).toEqual('CreatePost')
+      expect(useModal.modalData).toEqual({
+        postText: 'I disagree',
+        replyTo,
+        thread: { id: '1', categoryId: '1', title: 'thread' },
+        isEditable: false,
+      })
+    })
+  })
+
+  it('Opens the modal', async () => {
     useMyMemberships.setActive(getMember('alice'))
-    renderEditor(props)
+    renderEditor()
     const editor = await screen.findByRole('textbox')
     act(() => {
       fireEvent.change(editor, { target: { value: 'I disagree' } })
     })
+    waitFor(() => expect(getButton('Post a reply')).toBeDisabled())
     const button = await getButton('Post a reply')
     act(() => {
       fireEvent.click(button)
     })
     expect(useModal.modal).toEqual('CreatePost')
-    expect(useModal.modalData.postText).toEqual('I disagree')
-    expect(useModal.modalData.isEditable).toEqual(false)
+    expect(useModal.modalData).toEqual({
+      postText: 'I disagree',
+      thread: { id: '1', categoryId: '1', title: 'thread' },
+      isEditable: false,
+    })
   })
 
-  const renderEditor = (props: NewPostProps) =>
+  const renderEditor = () =>
     render(
-      <ModalContext.Provider value={useModal}>
-        <MockKeyringProvider>
-          <MembershipContext.Provider value={useMyMemberships}>
-            <ApiContext.Provider value={api}>
-              <NewThreadPost {...props} />
-            </ApiContext.Provider>
-          </MembershipContext.Provider>
-        </MockKeyringProvider>
-      </ModalContext.Provider>
+      <MemoryRouter>
+        <ModalContext.Provider value={useModal}>
+          <MockKeyringProvider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <NewThreadPost {...props} />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
+          </MockKeyringProvider>
+        </ModalContext.Provider>
+      </MemoryRouter>
     )
 })
