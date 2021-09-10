@@ -108,6 +108,7 @@ fragment ProposalWithDetailsFields on Proposal {
     }
   }
   discussionThread {
+    id
     posts {
       ...DiscussionPostFields
     }

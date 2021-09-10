@@ -41,6 +41,7 @@ export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment)
   statusSetAtTime: fields.statusSetAtTime,
   createdInBlock: asBlock(fields.createdInEvent),
   discussionThread: {
+    id: fields.discussionThread.id,
     discussionPosts: fields.discussionThread.posts.map(asForumComment),
     mode: fields.discussionThread.mode.__typename === 'ProposalDiscussionThreadModeOpen' ? 'open' : 'close',
   },
@@ -66,6 +67,7 @@ export const asProposalVote = (voteFields: Omit<VoteFieldsFragment, '__typename'
 })
 
 export interface ProposalDiscussionThread {
+  id: string
   discussionPosts: ForumPost[]
   mode: 'open' | 'close'
 }
