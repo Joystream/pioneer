@@ -9,6 +9,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
+import { ForumPost, ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 type GetTransaction = (
@@ -16,11 +17,13 @@ type GetTransaction = (
   isEditable: boolean
 ) => SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
 
-export interface NewPostProps {
+
+interface NewPostProps {
   getTransaction: GetTransaction
+  replyTo?: ForumPost
 }
 
-export const NewThreadPost = ({ getTransaction }: NewPostProps) => {
+export const NewThreadPost = ({ getTransaction, replyTo }: NewPostProps) => {
   const [postText, setText] = useState('')
   const [isEditable, setEditable] = useState(false)
   const { active } = useMyMemberships()

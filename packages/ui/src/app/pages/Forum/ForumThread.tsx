@@ -1,6 +1,6 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -23,6 +23,7 @@ import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { ForumPost } from '@/forum/types'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
 
@@ -34,6 +35,7 @@ export const ForumThread = () => {
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
+  const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
 
@@ -95,8 +97,8 @@ export const ForumThread = () => {
 
   const displayMain = () => (
     <MainPanel ref={sideNeighborRef}>
-      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
-      {thread && isThreadActive && <NewThreadPost getTransaction={getTransaction} />}
+      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={setReplyTo} />
+      {thread && isThreadActive && <NewThreadPost replyTo={replyTo} getTransaction={getTransaction} />}
     </MainPanel>
   )
 

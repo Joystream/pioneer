@@ -1,6 +1,6 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
-import React, { RefObject, useEffect } from 'react'
+import React, { RefObject, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -14,6 +14,7 @@ import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { ForumPost } from '@/forum/types'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
@@ -25,9 +26,11 @@ interface Props {
 export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const { origin } = useLocation()
   const query = useRouteQuery()
-  const initialPost = query.get('post')
   const { api } = useApi()
   const { active, members } = useMyMemberships()
+
+  const initialPost = query.get('post')
+  const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
@@ -86,6 +89,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isSelected={post.id === initialPost}
             isThreadActive={true}
             post={post}
+            relyToPost={() => setReplyTo({ ...post, repliesTo: undefined })}
             type="proposal"
             link={`${origin}${ProposalsRoutes.preview}/${proposalId}?post=${post.id}`}
           />
