@@ -1,13 +1,18 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { Checkbox, InputComponent } from '@/common/components/forms'
+import { Arrow, ArrowReplyIcon, CrossIcon } from '@/common/components/icons'
+import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextBig } from '@/common/components/typography'
+import { Badge, TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { getSteps } from '@/common/model/machines/getSteps'
+import { Reply, ReplyBadge } from '@/forum/components/PostList/PostListItem'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { ForumPost, ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -35,6 +40,22 @@ export const NewThreadPost = ({ getTransaction, replyTo }: NewPostProps) => {
 
   return (
     <RowGapBlock gap={8}>
+      {replyTo && (
+        <Reply>
+          <ReplyBadge>
+            <ButtonsGroup align="left">
+              <ArrowReplyIcon />{' '}
+              <Badge>
+                <Link to={window.location.href}>Replies to {replyTo.author.handle}</Link>
+              </Badge>
+            </ButtonsGroup>
+            <ButtonsGroup align="right">
+              <CrossIcon />
+            </ButtonsGroup>
+          </ReplyBadge>
+          <MarkdownPreview markdown={replyTo.text} size="s" isReply />
+        </Reply>
+      )}
       <InputComponent inputSize="auto">
         <EditorMemo setNewText={setText} />
       </InputComponent>
@@ -44,14 +65,14 @@ export const NewThreadPost = ({ getTransaction, replyTo }: NewPostProps) => {
           onClick={() => {
             const transaction = getTransaction(postText, isEditable)
             transaction &&
-              showModal<CreatePostModalCall>({
-                modal: 'CreatePost',
-                data: { postText, transaction, isEditable },
-              })
+            showModal<CreatePostModalCall>({
+              modal: 'CreatePost',
+              data: { postText, transaction, isEditable },
+            })
           }}
           disabled={postText === ''}
         >
-          Post a reply
+          {replyTo ? 'Post a reply' : 'Create post'}
         </ButtonPrimary>
         <Checkbox id="set-editable" onChange={setEditable} isChecked={isEditable}>
           Keep editable

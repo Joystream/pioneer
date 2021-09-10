@@ -127,7 +127,7 @@ const MessageBody = styled.div`
   margin-top: 8px;
 `
 
-const Reply = styled.blockquote`
+export const Reply = styled.blockquote`
   background-color: ${Colors.Black[75]};
   font-style: italic;
   margin: 0 0 12px;
@@ -139,7 +139,7 @@ const Reply = styled.blockquote`
   }
 `
 
-const ReplyBadge = styled.div`
+export const ReplyBadge = styled.div`
   display: flex;
   align-items: center;
   font-style: normal;
