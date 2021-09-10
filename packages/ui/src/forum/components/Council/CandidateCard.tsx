@@ -154,6 +154,8 @@ const CandidateCardArrow = styled.div`
   width: 32px;
   height: 32px;
   transform: translateY(-50%);
+  transition: ${Transitions.all};
+  pointer-events: none;
 `
 
 const CandidateCardStake = styled.div`
@@ -277,7 +279,7 @@ const CandidateCardContentWrapper = styled.article`
   max-width: 100%;
   height: 100%;
   column-gap: 24px;
-  padding: 16px 0px 16px 24px;
+  padding: 16px 48px 16px 24px;
   overflow: hidden;
 `
 
@@ -285,14 +287,14 @@ const CandidateCardWrapper = styled(ListItem)`
   grid-template-columns: 260px 1fr;
   height: 180px;
   padding: 0;
-  padding-right: 48px;
   position: relative;
 
   &:hover,
   &:focus-within {
     border-color: ${Colors.Blue[100]};
 
-    ${CandidateCardTitle} {
+    ${CandidateCardTitle},
+    ${CandidateCardArrow} {
       color: ${Colors.Blue[500]};
     }
 
