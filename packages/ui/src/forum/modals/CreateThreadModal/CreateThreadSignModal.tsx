@@ -1,6 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
 
@@ -24,17 +25,26 @@ interface Props {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
   controllerAccount: Account
+  postDeposit: BN
+  threadDeposit: BN
 }
 
-export const CreateThreadSignModal = ({ transaction, service, controllerAccount }: Props) => {
+export const CreateThreadSignModal = ({
+  transaction,
+  service,
+  controllerAccount,
+  postDeposit,
+  threadDeposit,
+}: Props) => {
   const { hideModal } = useModal()
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
   const balance = useBalance(controllerAccount.address)
   const [state, send] = useActor(service)
+  const fullAmount = paymentInfo?.partialFee.add(postDeposit).add(threadDeposit)
 
   const hasFunds = useMemo(() => {
-    if (balance?.transferable && paymentInfo?.partialFee) {
-      return balance.transferable.gte(paymentInfo.partialFee)
+    if (balance?.transferable && fullAmount) {
+      return balance.transferable.gte(fullAmount)
     }
     return false
   }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee])
@@ -55,7 +65,7 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
             inputSize="l"
             disabled
             borderless
-            message={hasFunds ? undefined : getMessage(paymentInfo?.partialFee)}
+            message={hasFunds ? undefined : getMessage(fullAmount)}
           >
             <SelectedAccount account={controllerAccount} />
           </InputComponent>
@@ -63,6 +73,11 @@ export const CreateThreadSignModal = ({ transaction, service, controllerAccount 
       </ModalBody>
       <ModalFooter>
         <TransactionInfoContainer>
+          <TransactionInfo
+            title="Thread creation and initial post deposit:"
+            value={postDeposit.add(threadDeposit)}
+            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+          />
           <TransactionInfo
             title="Transaction fee:"
             value={paymentInfo?.partialFee.toBn()}
