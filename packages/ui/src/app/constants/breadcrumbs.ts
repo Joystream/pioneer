@@ -1,3 +1,4 @@
+import { CouncilRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
@@ -13,6 +14,9 @@ const knownRoutes = [
   { path: ProposalsRoutes.current, breadcrumb: 'Current' },
   { path: ProposalsRoutes.past, breadcrumb: 'Past' },
   { path: ProposalsRoutes.myproposals, breadcrumb: 'My Proposals' },
+  { path: CouncilRoutes.pastCouncils, breadcrumb: 'Past Councils' },
+  { path: CouncilRoutes.pastElections, breadcrumb: 'Past Elections' },
+  { path: CouncilRoutes.pastVotes, breadcrumb: 'Past Votes' },
   { path: ForumRoutes.latestThreads, breadcrumb: 'Latest Threads' },
   { path: ForumRoutes.myThreads, breadcrumb: 'My Threads' },
   { path: ForumRoutes.topThreads, breadcrumb: 'Top Threads' },
