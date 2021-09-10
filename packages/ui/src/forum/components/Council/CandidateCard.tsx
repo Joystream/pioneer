@@ -230,15 +230,20 @@ const CandidateCardList = styled.ul`
   max-width: 100%;
   max-height: 100%;
   overflow: hidden;
+  pointer-events: none;
 `
 
 const CandidateCardTitle = styled.h4`
   font-size: 20px;
   line-height: 28px;
+  height: 28px;
+  min-height: 28px;
+  max-height: 28px;
   font-family: ${Fonts.Grotesk};
   font-weight: 700;
   color: ${Colors.Black[900]};
   transition: ${Transitions.all};
+  ${Overflow.FullDots};
 
   &:before {
     content: '';
