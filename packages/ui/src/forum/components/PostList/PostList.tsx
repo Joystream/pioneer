@@ -9,6 +9,7 @@ import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { AnyKeys } from '@/common/types'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
+import { ForumPost } from '@/forum/types'
 
 import { PostListItem } from './PostListItem'
 
@@ -16,9 +17,10 @@ interface PostListProps {
   threadId: string
   isThreadActive?: boolean
   isLoading?: boolean
+  replyToPost: (post: ForumPost) => void
 }
 
-export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps) => {
+export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost }: PostListProps) => {
   const history = useHistory()
   const { origin, pathname } = useLocation()
   const query = useRouteQuery()
@@ -61,6 +63,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps)
           isSelected={post.id === navigation.post}
           isThreadActive={isThreadActive}
           type="forum"
+          replyToPost={() => replyToPost({ ...post, repliesTo: undefined })}
           link={`${origin}${ForumRoutes.thread}/${threadId}?post=${post.id}`}
         />
       ))}

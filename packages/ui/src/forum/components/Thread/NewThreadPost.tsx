@@ -7,11 +7,12 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
-import { ForumThread } from '@/forum/types'
+import { ForumPost, ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 interface NewPostProps {
   thread: Pick<ForumThread, 'id' | 'categoryId' | 'title'>
+  replyTo?: ForumPost
 }
 
 export const NewThreadPost = ({ thread }: NewPostProps) => {
