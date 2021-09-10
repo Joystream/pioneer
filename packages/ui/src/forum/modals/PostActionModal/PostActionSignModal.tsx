@@ -18,6 +18,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
+import { ForumPost } from '@/forum/types'
 import { Member } from '@/memberships/types'
 
 interface PostActionSignModalCommonProps {
@@ -26,6 +27,7 @@ interface PostActionSignModalCommonProps {
   controllerAccount: Account
   author?: Member
   newText?: string
+  replyTo?: ForumPost
 }
 
 interface PostActionSignModalDeleteProps extends PostActionSignModalCommonProps {
@@ -54,6 +56,7 @@ export const PostActionSignModal = ({
   action,
   author,
   newText,
+  replyTo,
 }: PostActionSignModalProps) => {
   const { hideModal } = useModal()
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
@@ -93,7 +96,13 @@ export const PostActionSignModal = ({
             />
           </TransactionInfoContainer>
           <ButtonsGroup align="right">
-            {action === 'edit' && <PreviewPostButton author={author as Member} postText={newText as string} />}
+            {action === 'edit' && (
+              <PreviewPostButton
+                author={author as Member}
+                postText={newText as string}
+                replyTo={replyTo as ForumPost}
+              />
+            )}
             <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
               Sign and {action}
               <Arrow direction="right" />

@@ -62,7 +62,12 @@ export const PostEditor = ({ post, onCancel, type }: Props) => {
           onClick={() =>
             showModal<EditPostModalCall>({
               modal: 'EditPost',
-              data: { postAuthor: post.author, postText: newText, transaction: editPostTransaction },
+              data: {
+                postAuthor: post.author,
+                postText: newText,
+                replyTo: post.repliesTo,
+                transaction: editPostTransaction,
+              },
             })
           }
           disabled={!isTextChanged}
