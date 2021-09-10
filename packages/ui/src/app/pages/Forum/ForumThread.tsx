@@ -34,8 +34,18 @@ export const ForumThread = () => {
   const { active } = useMyMemberships()
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
+  const newPostRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
+
+  const onReply = (post: ForumPost) => {
+    setReplyTo(post)
+    newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
+  }
+
+  const onRemoveReply = () => {
+    setReplyTo(undefined)
+  }
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
 
@@ -97,9 +107,9 @@ export const ForumThread = () => {
 
   const displayMain = () => (
     <MainPanel ref={sideNeighborRef}>
-      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={setReplyTo} />
+      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={onReply} />
       {thread && isThreadActive && (
-        <NewThreadPost replyTo={replyTo} removeReply={() => setReplyTo(undefined)} getTransaction={getTransaction} />
+        <NewThreadPost replyTo={replyTo} removeReply={onRemoveReply} getTransaction={getTransaction} />
       )}
     </MainPanel>
   )

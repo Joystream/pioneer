@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
@@ -21,6 +21,8 @@ jest.mock('@/common/components/CKEditor', () => ({
 }))
 
 describe('UI: Add new post', () => {
+  const ref = useRef<HTMLDivElement>(null)
+
   const api = stubApi()
   stubTransaction(api, 'api.tx.forum.addPost')
   stubTransaction(api, 'api.tx.proposalsDiscussion.addPost')
@@ -51,6 +53,7 @@ describe('UI: Add new post', () => {
   })
 
   const props: NewPostProps = {
+    ref,
     getTransaction: (text, isEditable) => api.api.tx.forum.addPost(1, 1, 1, text, isEditable),
     removeReply: () => true
   }

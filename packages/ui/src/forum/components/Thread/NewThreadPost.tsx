@@ -1,6 +1,6 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useState } from 'react'
+import React, { RefObject, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -27,61 +27,63 @@ interface NewPostProps {
   removeReply: () => void
 }
 
-export const NewThreadPost = ({ getTransaction, replyTo, removeReply }: NewPostProps) => {
-  const [postText, setText] = useState('')
-  const [isEditable, setEditable] = useState(false)
-  const { active } = useMyMemberships()
-  const { showModal } = useModal()
+export const NewThreadPost = React.forwardRef(
+  ({ getTransaction, replyTo, removeReply }: NewPostProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+    const [postText, setText] = useState('')
+    const [isEditable, setEditable] = useState(false)
+    const { active } = useMyMemberships()
+    const { showModal } = useModal()
 
-  if (!active) {
-    return <TextBig>Pick an active membership to post in this thread</TextBig>
+    if (!active) {
+      return <TextBig ref={ref}>Pick an active membership to post in this thread</TextBig>
+    }
+
+    return (
+      <RowGapBlock gap={8} ref={ref}>
+        {replyTo && (
+          <Reply>
+            <ReplyBadge>
+              <ButtonsGroup align="left">
+                <ArrowReplyIcon />{' '}
+                <Badge>
+                  <Link to={window.location.href}>Replies to {replyTo.author.handle}</Link>
+                </Badge>
+              </ButtonsGroup>
+              <ButtonsGroup align="right">
+                <ButtonPrimary size="small" onClick={removeReply}>
+                  <CrossIcon />
+                </ButtonPrimary>
+              </ButtonsGroup>
+            </ReplyBadge>
+            <MarkdownPreview markdown={replyTo.text} size="s" isReply />
+          </Reply>
+        )}
+        <InputComponent inputSize="auto">
+          <EditorMemo setNewText={setText} />
+        </InputComponent>
+        <ButtonsGroup>
+          <ButtonPrimary
+            size="medium"
+            onClick={() => {
+              const transaction = getTransaction(postText, isEditable)
+              transaction &&
+                showModal<CreatePostModalCall>({
+                  modal: 'CreatePost',
+                  data: { postText, replyTo, transaction, isEditable },
+                })
+            }}
+            disabled={postText === ''}
+          >
+            {replyTo ? 'Post a reply' : 'Create post'}
+          </ButtonPrimary>
+          <Checkbox id="set-editable" onChange={setEditable} isChecked={isEditable}>
+            Keep editable
+          </Checkbox>
+        </ButtonsGroup>
+      </RowGapBlock>
+    )
   }
-
-  return (
-    <RowGapBlock gap={8}>
-      {replyTo && (
-        <Reply>
-          <ReplyBadge>
-            <ButtonsGroup align="left">
-              <ArrowReplyIcon />{' '}
-              <Badge>
-                <Link to={window.location.href}>Replies to {replyTo.author.handle}</Link>
-              </Badge>
-            </ButtonsGroup>
-            <ButtonsGroup align="right">
-              <ButtonPrimary size="small" onClick={removeReply}>
-                <CrossIcon />
-              </ButtonPrimary>
-            </ButtonsGroup>
-          </ReplyBadge>
-          <MarkdownPreview markdown={replyTo.text} size="s" isReply />
-        </Reply>
-      )}
-      <InputComponent inputSize="auto">
-        <EditorMemo setNewText={setText} />
-      </InputComponent>
-      <ButtonsGroup>
-        <ButtonPrimary
-          size="medium"
-          onClick={() => {
-            const transaction = getTransaction(postText, isEditable)
-            transaction &&
-            showModal<CreatePostModalCall>({
-              modal: 'CreatePost',
-              data: { postText, replyTo, transaction, isEditable },
-            })
-          }}
-          disabled={postText === ''}
-        >
-          {replyTo ? 'Post a reply' : 'Create post'}
-        </ButtonPrimary>
-        <Checkbox id="set-editable" onChange={setEditable} isChecked={isEditable}>
-          Keep editable
-        </Checkbox>
-      </ButtonsGroup>
-    </RowGapBlock>
-  )
-}
+)
 
 interface MemoEditorProps {
   setNewText: (t: string) => void
