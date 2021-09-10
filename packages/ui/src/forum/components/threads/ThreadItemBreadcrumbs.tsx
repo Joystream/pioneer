@@ -37,7 +37,6 @@ export const ThreadItemBreadcrumbs = memo(({ id, nonInteractive }: ThreadItemBre
 
 const ThreadItemBreadcrumbsList = styled(BreadcrumbsListComponent)`
   color: ${Colors.Black[500]};
-  flex-wrap: wrap;
 
   ${BreadcrumbsItemLink} {
     &,
