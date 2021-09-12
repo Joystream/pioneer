@@ -152,7 +152,15 @@ export type ProposalWithDetailsFieldsFragment = {
     __typename: 'ProposalDiscussionThread'
     id: string
     posts: Array<{ __typename: 'ProposalDiscussionPost' } & DiscussionPostFieldsFragment>
-    mode: { __typename: 'ProposalDiscussionThreadModeOpen' } | { __typename: 'ProposalDiscussionThreadModeClosed' }
+    mode:
+      | { __typename: 'ProposalDiscussionThreadModeOpen' }
+      | {
+          __typename: 'ProposalDiscussionThreadModeClosed'
+          whitelist?: Types.Maybe<{
+            __typename: 'ProposalDiscussionWhitelist'
+            members: Array<{ __typename: 'Membership'; id: string }>
+          }>
+        }
   }
 } & ProposalFieldsFragment
 
@@ -374,6 +382,13 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       mode {
         __typename
+        ... on ProposalDiscussionThreadModeClosed {
+          whitelist {
+            members {
+              id
+            }
+          }
+        }
       }
     }
   }

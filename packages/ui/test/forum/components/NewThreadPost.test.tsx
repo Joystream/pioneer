@@ -85,7 +85,7 @@ describe('UI: Add new post', () => {
         <MockKeyringProvider>
           <MembershipContext.Provider value={useMyMemberships}>
             <ApiContext.Provider value={api}>
-              <NewThreadPost thread={{ id: '1', categoryId: '1', title: 'thread' }} />
+              <NewThreadPost type="forum" thread={{ id: '1', categoryId: '1', title: 'thread' }} />
             </ApiContext.Provider>
           </MembershipContext.Provider>
         </MockKeyringProvider>
