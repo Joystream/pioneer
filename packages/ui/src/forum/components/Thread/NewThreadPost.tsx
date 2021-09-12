@@ -7,14 +7,21 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
+import { CreateProposalDiscussionPostModalCall } from '@/forum/modals/PostActionModal/CreateProposalDiscussionPostModal'
 import { ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-interface NewPostProps {
-  thread: Pick<ForumThread, 'id' | 'categoryId' | 'title'>
-}
+type NewPostProps =
+  | {
+      type: 'forum'
+      thread: Pick<ForumThread, 'id' | 'categoryId' | 'title'>
+    }
+  | {
+      type: 'proposalDiscussion'
+      threadId: string
+    }
 
-export const NewThreadPost = ({ thread }: NewPostProps) => {
+export const NewThreadPost = (props: NewPostProps) => {
   const [postText, setText] = useState('')
   const [isEditable, setEditable] = useState(false)
   const { active } = useMyMemberships()
@@ -33,7 +40,15 @@ export const NewThreadPost = ({ thread }: NewPostProps) => {
         <ButtonPrimary
           size="medium"
           onClick={() =>
-            showModal<CreatePostModalCall>({ modal: 'CreatePost', data: { postText, thread, isEditable } })
+            props.type === 'forum'
+              ? showModal<CreatePostModalCall>({
+                  modal: 'CreatePost',
+                  data: { postText, thread: props.thread, isEditable },
+                })
+              : showModal<CreateProposalDiscussionPostModalCall>({
+                  modal: 'CreateProposalDiscussionPost',
+                  data: { postText, threadId: props.threadId, isEditable },
+                })
           }
           disabled={postText === ''}
         >
