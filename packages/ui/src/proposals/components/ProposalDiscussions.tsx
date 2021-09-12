@@ -1,8 +1,6 @@
 import React, { RefObject, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 
-import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent } from '@/common/components/forms'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -10,6 +8,7 @@ import { useLocation } from '@/common/hooks/useLocation'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
+import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
@@ -57,9 +56,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
         )
       })}
       <PostMessageForm>
-        <InputComponent inputSize="auto">
-          <CKEditor />
-        </InputComponent>
+        <NewThreadPost type="proposalDiscussion" thread={thread} />
       </PostMessageForm>
     </ProposalDiscussionsStyles>
   )

@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
@@ -6,7 +6,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { isModalWithData } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
-import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
+import { NewPostProps, NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 
@@ -48,44 +48,108 @@ describe('UI: Add new post', () => {
     useMyMemberships.active = undefined
   })
 
-  it('Hides editor if no membership is selected', async () => {
-    renderEditor()
-    expect(await screen.findByText('Pick an active membership to post in this thread')).toBeDefined()
+  describe('In a forum thread', () => {
+    const props: NewPostProps = { type: 'forum', thread: { id: '1', categoryId: '1', title: 'thread' } }
+
+    it('Hides editor if no membership is selected', async () => {
+      renderEditor(props)
+      expect(await screen.findByText('Pick an active membership to post in this thread')).toBeDefined()
+    })
+
+    it('Disables the post button if text is empty', async () => {
+      useMyMemberships.setActive(getMember('alice'))
+      renderEditor(props)
+      expect(await getButton('Post a reply')).toBeDisabled()
+    })
+
+    it('Opens the modal', async () => {
+      useMyMemberships.setActive(getMember('alice'))
+      renderEditor(props)
+      const editor = await screen.findByRole('textbox')
+      act(() => {
+        fireEvent.change(editor, { target: { value: 'I disagree' } })
+      })
+      const button = await getButton('Post a reply')
+      act(() => {
+        fireEvent.click(button)
+      })
+      expect(useModal.modal).toEqual('CreatePost')
+      expect(useModal.modalData).toEqual({
+        postText: 'I disagree',
+        thread: { id: '1', categoryId: '1', title: 'thread' },
+        isEditable: false,
+      })
+    })
   })
 
-  it('Disables the post button if text is empty', async () => {
-    useMyMemberships.setActive(getMember('alice'))
-    renderEditor()
-    expect(await getButton('Post a reply')).toBeDisabled()
+  describe('In post discussion', () => {
+    it('Inactive for non-whitelisted members', async () => {
+      useMyMemberships.setActive(getMember('alice'))
+      const props: NewPostProps = {
+        type: 'proposalDiscussion',
+        thread: {
+          id: '1',
+          mode: 'closed',
+          whitelistIds: ['12'],
+        },
+      }
+      renderEditor(props)
+      expect(
+        await screen.findByText('The discussion of this proposal is closed; only select members can comment on it.')
+      ).toBeDefined()
+    })
+
+    it('Active for whitelisted members', async () => {
+      useMyMemberships.setActive(getMember('alice'))
+      const props: NewPostProps = {
+        type: 'proposalDiscussion',
+        thread: {
+          id: '1',
+          mode: 'closed',
+          whitelistIds: ['111', '0'],
+        },
+      }
+      renderEditor(props)
+      expect(
+        screen.queryByText('The discussion of this proposal is closed; only select members can comment on it.')
+      ).toBeNull()
+      expect(await getButton('Post a reply')).toBeDefined()
+    })
+
+    it('Opens the modal', async () => {
+      useMyMemberships.setActive(getMember('alice'))
+      const props: NewPostProps = {
+        type: 'proposalDiscussion',
+        thread: {
+          id: '1',
+          mode: 'open',
+        },
+      }
+      renderEditor(props)
+      const editor = await screen.findByRole('textbox')
+      act(() => {
+        fireEvent.change(editor, { target: { value: 'I disagree' } })
+      })
+      const button = await getButton('Post a reply')
+      act(() => {
+        fireEvent.click(button)
+      })
+      expect(useModal.modal).toEqual('CreateProposalDiscussionPost')
+      expect(useModal.modalData).toEqual({
+        postText: 'I disagree',
+        threadId: '1',
+        isEditable: false,
+      })
+    })
   })
 
-  it('Opens the modal', async () => {
-    useMyMemberships.setActive(getMember('alice'))
-    renderEditor()
-    const editor = await screen.findByRole('textbox')
-    act(() => {
-      fireEvent.change(editor, { target: { value: 'I disagree' } })
-    })
-    waitFor(() => expect(getButton('Post a reply')).toBeDisabled())
-    const button = await getButton('Post a reply')
-    act(() => {
-      fireEvent.click(button)
-    })
-    expect(useModal.modal).toEqual('CreatePost')
-    expect(useModal.modalData).toEqual({
-      postText: 'I disagree',
-      thread: { id: '1', categoryId: '1', title: 'thread' },
-      isEditable: false,
-    })
-  })
-
-  const renderEditor = () =>
+  const renderEditor = (props: NewPostProps) =>
     render(
       <ModalContext.Provider value={useModal}>
         <MockKeyringProvider>
           <MembershipContext.Provider value={useMyMemberships}>
             <ApiContext.Provider value={api}>
-              <NewThreadPost type="forum" thread={{ id: '1', categoryId: '1', title: 'thread' }} />
+              <NewThreadPost {...props} />
             </ApiContext.Provider>
           </MembershipContext.Provider>
         </MockKeyringProvider>

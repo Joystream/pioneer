@@ -49,7 +49,7 @@ export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment)
   discussionThread: {
     id: fields.discussionThread.id,
     discussionPosts: fields.discussionThread.posts.map(asForumComment),
-    mode: fields.discussionThread.mode.__typename === 'ProposalDiscussionThreadModeOpen' ? 'open' : 'close',
+    mode: fields.discussionThread.mode.__typename === 'ProposalDiscussionThreadModeOpen' ? 'open' : 'closed',
     whitelistIds: getWhitelist(fields.discussionThread.mode),
   },
   proposalStatusUpdates: fields.proposalStatusUpdates.map((status) => ({
@@ -76,7 +76,7 @@ export const asProposalVote = (voteFields: Omit<VoteFieldsFragment, '__typename'
 export interface ProposalDiscussionThread {
   id: string
   discussionPosts: ForumPost[]
-  mode: 'open' | 'close'
+  mode: 'open' | 'closed'
   whitelistIds?: string[]
 }
 

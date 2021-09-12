@@ -10,15 +10,16 @@ import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostMo
 import { CreateProposalDiscussionPostModalCall } from '@/forum/modals/PostActionModal/CreateProposalDiscussionPostModal'
 import { ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { ProposalDiscussionThread } from '@/proposals/types'
 
-type NewPostProps =
+export type NewPostProps =
   | {
       type: 'forum'
       thread: Pick<ForumThread, 'id' | 'categoryId' | 'title'>
     }
   | {
       type: 'proposalDiscussion'
-      threadId: string
+      thread: Pick<ProposalDiscussionThread, 'id' | 'mode' | 'whitelistIds'>
     }
 
 export const NewThreadPost = (props: NewPostProps) => {
@@ -29,6 +30,14 @@ export const NewThreadPost = (props: NewPostProps) => {
 
   if (!active) {
     return <TextBig>Pick an active membership to post in this thread</TextBig>
+  }
+
+  if (
+    props.type === 'proposalDiscussion' &&
+    props.thread.mode === 'closed' &&
+    !props.thread.whitelistIds?.includes(active.id)
+  ) {
+    return <TextBig>The discussion of this proposal is closed; only select members can comment on it.</TextBig>
   }
 
   return (
@@ -47,7 +56,7 @@ export const NewThreadPost = (props: NewPostProps) => {
                 })
               : showModal<CreateProposalDiscussionPostModalCall>({
                   modal: 'CreateProposalDiscussionPost',
-                  data: { postText, threadId: props.threadId, isEditable },
+                  data: { postText, threadId: props.thread.id, isEditable },
                 })
           }
           disabled={postText === ''}
