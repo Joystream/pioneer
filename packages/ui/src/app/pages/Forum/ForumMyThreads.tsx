@@ -14,17 +14,12 @@ export const ForumMyThreads = () => {
   const [page, setPage] = useState(1)
   const { threads, pageCount, isLoading } = useMyThreads({ page, threadsPerPage: 5 })
 
-  const pagination = useMemo(
-    () => !isLoading && !!pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />,
-    [isLoading, pageCount, page]
-  )
-
   const displayThreads = () => {
     return (
       <RowGapBlock gap={24}>
-        {pagination}
+        <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
         <ThreadList threads={threads} onSort={() => null} isLoading={isLoading} />
-        {pagination}
+        <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
       </RowGapBlock>
     )
   }

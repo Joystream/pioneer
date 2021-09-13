@@ -63,7 +63,7 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   return (
     <>
       <WorkersTableList workers={workers} past />
-      {!isLoading && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
+      <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
     </>
   )
 }

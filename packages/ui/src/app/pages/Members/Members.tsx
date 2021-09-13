@@ -41,7 +41,7 @@ export const Members = () => {
         <MainPanel>
           <MemberListFilters searchSlot={searchSlot} memberCount={totalCount} onApply={setFilter} />
           <MemberList isLoading={isLoading} members={members} order={order} onSort={dispatchSort} />
-          {!isLoading && !!pageCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
+          <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
         </MainPanel>
       }
     />

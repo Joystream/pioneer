@@ -6,12 +6,12 @@ import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants/styles'
 
 interface PaginationProps {
-  pageCount: number
+  pageCount?: number
   handlePageChange: (page: number) => void
   page?: number
 }
 
-export const Pagination: FC<PaginationProps> = ({ pageCount, handlePageChange, page }) => {
+export const Pagination: FC<PaginationProps> = ({ pageCount = 0, handlePageChange, page }) => {
   if (pageCount < 2) {
     return null
   }
