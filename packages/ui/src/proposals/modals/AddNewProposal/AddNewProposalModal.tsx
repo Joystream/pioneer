@@ -85,9 +85,13 @@ export const AddNewProposalModal = () => {
     if (activeMember && api) {
       const txSpecificParameters = getSpecificParameters(api, state as AddNewProposalMachineState)
 
-      return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+      return api.tx.utility.batch([
+        api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
+        api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
+      ])
     }
   }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics), connectionState])
+
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect((): any => {

@@ -73,7 +73,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   let useAccounts: UseAccounts
-  let tx: any
+  let batchTx: any
   let bindAccountTx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -94,7 +94,9 @@ describe('UI: AddNewProposalModal', () => {
 
     stubDefaultBalances(api)
     stubProposalConstants(api)
-    tx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+    stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+    stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
+    batchTx = stubTransaction(api, 'api.tx.utility.batch')
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
   })
 
@@ -110,7 +112,7 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     it('Insufficient funds', async () => {
-      stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 10000)
+      stubTransaction(api, 'api.tx.utility.batch', 10000)
 
       const { findByText } = renderModal()
 
@@ -502,7 +504,7 @@ describe('UI: AddNewProposalModal', () => {
           stubTransactionSuccess(bindAccountTx, [], 'members', '')
           fireEvent.click(screen.getByText(/^Sign transaction/i))
           stubTransactionSuccess(
-            tx,
+            batchTx,
             ['EventParams', registry.createType('ProposalId', 1337)],
             'proposalsEngine',
             'ProposalCreated'
@@ -516,7 +518,7 @@ describe('UI: AddNewProposalModal', () => {
         it('Create proposal failure', async () => {
           stubTransactionSuccess(bindAccountTx, [], 'members', '')
           fireEvent.click(screen.getByText(/^Sign transaction/i))
-          stubTransactionFailure(tx)
+          stubTransactionFailure(batchTx)
 
           fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
 
@@ -545,7 +547,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal success', async () => {
           stubTransactionSuccess(
-            tx,
+            batchTx,
             ['EventParams', registry.createType('ProposalId', 1337)],
             'proposalsEngine',
             'ProposalCreated'
@@ -557,7 +559,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Create proposal failure', async () => {
-          stubTransactionFailure(tx)
+          stubTransactionFailure(batchTx)
 
           fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
 
