@@ -32,7 +32,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps)
   )
 
   const pagination = useMemo(
-    () => isReady && pageCount > 1 && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />,
+    () => isReady && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />,
     [isReady, pageCount, page]
   )
 
