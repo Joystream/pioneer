@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState, FC, memo, useCallback } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
+import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
+import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { Tabs } from '@/common/components/Tabs'
 import { TextBig } from '@/common/components/typography'
 import { OpeningsPagination } from '@/working-groups/components/OpeningsList'
@@ -48,9 +50,31 @@ const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => (
   <OpeningsPagination groupId={groupId} type="past" />
 )
 
+type ListOrderKey = 'DateStarted' | 'DateFinished'
+interface ListOrder {
+  key: ListOrderKey
+  isDescending: boolean
+}
+
 const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   const [page, setPage] = useState(1)
   const { isLoading, workers, pageCount } = useWorkersPagination({ groupId, page })
+
+  const [order, setOrder] = useState<ListOrder>({ key: 'DateFinished', isDescending: true })
+  const sort = useCallback((sortKey: ListOrderKey) => null, [])
+
+  const SortHeader = useMemo<FC<{ sortKey: ListOrderKey }>>(
+    () =>
+      memo(({ sortKey, children }) => (
+        <ListHeader onClick={() => sort(sortKey)}>
+          <HeaderText>
+            {children}
+            {order.key === sortKey && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
+          </HeaderText>
+        </ListHeader>
+      )),
+    [order, sort]
+  )
 
   if (isLoading) {
     return <Loading />
@@ -62,6 +86,11 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
 
   return (
     <>
+      <ListHeaders>
+        <ListHeader>Worker</ListHeader>
+        <SortHeader sortKey="DateStarted">Date Started</SortHeader>
+        <SortHeader sortKey="DateFinished">Date Finished</SortHeader>
+      </ListHeaders>
       <WorkersTableList workers={workers} past />
       <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
     </>
