@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -17,13 +17,9 @@ export const ForumMyThreads = () => {
   const displayThreads = () => {
     return (
       <RowGapBlock gap={24}>
-        {!isLoading && !!pageCount && pageCount > 1 && (
-          <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-        )}
+        <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
         <ThreadList threads={threads} onSort={() => null} isLoading={isLoading} />
-        {!isLoading && !!pageCount && pageCount > 1 && (
-          <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-        )}
+        <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
       </RowGapBlock>
     )
   }
