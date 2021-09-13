@@ -1,14 +1,19 @@
+import { ForumPostMetadata } from '@joystream/metadata-protobuf'
+import { createType } from '@joystream/types'
 import React, { RefObject, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { useApi } from '@/common/hooks/useApi'
 import { useLocation } from '@/common/hooks/useLocation'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
@@ -21,6 +26,8 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const { origin } = useLocation()
   const query = useRouteQuery()
   const initialPost = query.get('post')
+  const { api } = useApi()
+  const { active } = useMyMemberships()
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
@@ -30,6 +37,17 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
     }
   }, [postsRefs, initialPost])
+
+  const getTransaction = (postText: string, isEditable: boolean) => {
+    if (api && active && thread) {
+      return api.tx.proposalsDiscussion.addPost(
+        createType('MemberId', Number.parseInt(active.id)),
+        thread.id,
+        metadataToBytes(ForumPostMetadata, { text: postText }),
+        isEditable
+      )
+    }
+  }
 
   return (
     <ProposalDiscussionsStyles mode={thread.mode}>
@@ -56,7 +74,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
         )
       })}
       <PostMessageForm>
-        <NewThreadPost type="proposalDiscussion" thread={thread} />
+        <NewThreadPost getTransaction={getTransaction} />
       </PostMessageForm>
     </ProposalDiscussionsStyles>
   )

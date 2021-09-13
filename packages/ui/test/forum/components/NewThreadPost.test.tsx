@@ -50,93 +50,35 @@ describe('UI: Add new post', () => {
     useMyMemberships.active = undefined
   })
 
-  describe('In a forum thread', () => {
-    const props: NewPostProps = { type: 'forum', thread: { id: '1', categoryId: '1', title: 'thread' } }
+  const props: NewPostProps = {
+    getTransaction: (text, isEditable) => api.api.tx.forum.addPost(1, 1, 1, text, isEditable),
+  }
 
-    it('Hides editor if no membership is selected', async () => {
-      renderEditor(props)
-      expect(await screen.findByText('Pick an active membership to post in this thread')).toBeDefined()
-    })
-
-    it('Disables the post button if text is empty', async () => {
-      useMyMemberships.setActive(getMember('alice'))
-      renderEditor(props)
-      expect(await getButton('Post a reply')).toBeDisabled()
-    })
-
-    it('Opens the modal', async () => {
-      useMyMemberships.setActive(getMember('alice'))
-      renderEditor(props)
-      const editor = await screen.findByRole('textbox')
-      act(() => {
-        fireEvent.change(editor, { target: { value: 'I disagree' } })
-      })
-      const button = await getButton('Post a reply')
-      act(() => {
-        fireEvent.click(button)
-      })
-      expect(useModal.modal).toEqual('CreatePost')
-      expect(useModal.modalData.postText).toEqual('I disagree')
-      expect(useModal.modalData.isEditable).toEqual(false)
-    })
+  it('Hides editor if no membership is selected', async () => {
+    renderEditor(props)
+    expect(await screen.findByText('Pick an active membership to post in this thread')).toBeDefined()
   })
 
-  describe('In post discussion', () => {
-    it('Inactive for non-whitelisted members', async () => {
-      useMyMemberships.setActive(getMember('alice'))
-      const props: NewPostProps = {
-        type: 'proposalDiscussion',
-        thread: {
-          id: '1',
-          mode: 'closed',
-          whitelistIds: ['12'],
-        },
-      }
-      renderEditor(props)
-      expect(
-        await screen.findByText('The discussion of this proposal is closed; only select members can comment on it.')
-      ).toBeDefined()
-    })
+  it('Disables the post button if text is empty', async () => {
+    useMyMemberships.setActive(getMember('alice'))
+    renderEditor(props)
+    expect(await getButton('Post a reply')).toBeDisabled()
+  })
 
-    it('Active for whitelisted members', async () => {
-      useMyMemberships.setActive(getMember('alice'))
-      const props: NewPostProps = {
-        type: 'proposalDiscussion',
-        thread: {
-          id: '1',
-          mode: 'closed',
-          whitelistIds: ['111', '0'],
-        },
-      }
-      renderEditor(props)
-      expect(
-        screen.queryByText('The discussion of this proposal is closed; only select members can comment on it.')
-      ).toBeNull()
-      expect(await getButton('Post a reply')).toBeDefined()
+  it('Opens the modal', async () => {
+    useMyMemberships.setActive(getMember('alice'))
+    renderEditor(props)
+    const editor = await screen.findByRole('textbox')
+    act(() => {
+      fireEvent.change(editor, { target: { value: 'I disagree' } })
     })
-
-    it('Opens the modal', async () => {
-      useMyMemberships.setActive(getMember('alice'))
-      const props: NewPostProps = {
-        type: 'proposalDiscussion',
-        thread: {
-          id: '1',
-          mode: 'open',
-        },
-      }
-      renderEditor(props)
-      const editor = await screen.findByRole('textbox')
-      act(() => {
-        fireEvent.change(editor, { target: { value: 'I disagree' } })
-      })
-      const button = await getButton('Post a reply')
-      act(() => {
-        fireEvent.click(button)
-      })
-      expect(useModal.modal).toEqual('CreatePost')
-      expect(useModal.modalData.postText).toEqual('I disagree')
-      expect(useModal.modalData.isEditable).toEqual(false)
+    const button = await getButton('Post a reply')
+    act(() => {
+      fireEvent.click(button)
     })
+    expect(useModal.modal).toEqual('CreatePost')
+    expect(useModal.modalData.postText).toEqual('I disagree')
+    expect(useModal.modalData.isEditable).toEqual(false)
   })
 
   const renderEditor = (props: NewPostProps) =>
