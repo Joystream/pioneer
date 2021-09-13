@@ -36,11 +36,7 @@ describe('UI: CreatePostModal', () => {
   let tx: any
   stubTransaction(api, txPath)
   const modalData: ModalCallData<CreatePostModalCall> = {
-    thread: {
-      title: 'Thread Title',
-      id: '1',
-      categoryId: '1',
-    },
+    transaction: api.api.tx.forum.addPost(1, 1, 1, '', false),
     postText: 'I disagree',
     isEditable: false,
   }
@@ -81,11 +77,13 @@ describe('UI: CreatePostModal', () => {
     tx = stubTransaction(api, txPath, 25)
     stubConst(api, 'forum.postDeposit', toBalanceOf(10))
     modalData.isEditable = false
+    modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
   })
 
   describe('Requirements failed', () => {
     it('Cannot afford transaction fee', async () => {
       tx = stubTransaction(api, txPath, 10000)
+      modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
       renderModal()
       expect(await screen.findByText('Insufficient Funds')).toBeDefined()
     })

@@ -1,7 +1,5 @@
-import { ForumPostMetadata } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -12,7 +10,6 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
-import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { postActionMachine } from '../postActionMachine'
@@ -23,7 +20,7 @@ import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
   const {
-    modalData: { postText, thread, isEditable },
+    modalData: { postText, transaction, isEditable },
     hideModal,
   } = useModal<CreatePostModalCall>()
 
@@ -31,23 +28,8 @@ export const CreatePostModal = () => {
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const { id: threadId, categoryId } = thread
   const balance = useBalance(active?.controllerAccount)
   const { api } = useApi()
-
-  const transaction = useMemo(
-    () =>
-      api &&
-      active &&
-      api.tx.forum.addPost(
-        createType('ForumUserId', Number.parseInt(active.id)),
-        categoryId,
-        threadId,
-        metadataToBytes(ForumPostMetadata, { text: postText }),
-        isEditable
-      ),
-    [api, threadId, categoryId, active]
-  )
 
   const postDeposit = api?.consts.forum.postDeposit.toBn()
 

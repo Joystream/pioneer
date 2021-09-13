@@ -14,7 +14,7 @@ import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi } from '../../_mocks/transactions'
+import { stubApi, stubTransaction } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -22,6 +22,8 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 describe('UI: Add new post', () => {
   const api = stubApi()
+  stubTransaction(api, 'api.tx.forum.addPost')
+  stubTransaction(api, 'api.tx.proposalsDiscussion.addPost')
 
   let useModal: UseModal<any>
 
@@ -74,11 +76,8 @@ describe('UI: Add new post', () => {
         fireEvent.click(button)
       })
       expect(useModal.modal).toEqual('CreatePost')
-      expect(useModal.modalData).toEqual({
-        postText: 'I disagree',
-        thread: { id: '1', categoryId: '1', title: 'thread' },
-        isEditable: false,
-      })
+      expect(useModal.modalData.postText).toEqual('I disagree')
+      expect(useModal.modalData.isEditable).toEqual(false)
     })
   })
 
@@ -134,12 +133,9 @@ describe('UI: Add new post', () => {
       act(() => {
         fireEvent.click(button)
       })
-      expect(useModal.modal).toEqual('CreateProposalDiscussionPost')
-      expect(useModal.modalData).toEqual({
-        postText: 'I disagree',
-        threadId: '1',
-        isEditable: false,
-      })
+      expect(useModal.modal).toEqual('CreatePost')
+      expect(useModal.modalData.postText).toEqual('I disagree')
+      expect(useModal.modalData.isEditable).toEqual(false)
     })
   })
 

@@ -1,3 +1,5 @@
+import { ForumPostMetadata } from '@joystream/metadata-protobuf'
+import { createType } from '@joystream/types'
 import React, { useState } from 'react'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -5,9 +7,10 @@ import { CKEditor } from '@/common/components/CKEditor'
 import { Checkbox, InputComponent } from '@/common/components/forms'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
-import { CreateProposalDiscussionPostModalCall } from '@/forum/modals/PostActionModal/CreateProposalDiscussionPostModal'
 import { ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalDiscussionThread } from '@/proposals/types'
@@ -27,6 +30,29 @@ export const NewThreadPost = (props: NewPostProps) => {
   const [isEditable, setEditable] = useState(false)
   const { active } = useMyMemberships()
   const { showModal } = useModal()
+  const { api } = useApi()
+
+  const getTransaction = () => {
+    if (api && active && props.thread) {
+      if (props.type === 'forum') {
+        const { categoryId, id: threadId } = props.thread
+        return api.tx.forum.addPost(
+          createType('ForumUserId', Number.parseInt(active.id)),
+          categoryId,
+          threadId,
+          metadataToBytes(ForumPostMetadata, { text: postText }),
+          isEditable
+        )
+      } else {
+        return api.tx.proposalsDiscussion.addPost(
+          createType('MemberId', Number.parseInt(active.id)),
+          props.thread.id,
+          metadataToBytes(ForumPostMetadata, { text: postText }),
+          isEditable
+        )
+      }
+    }
+  }
 
   if (!active) {
     return <TextBig>Pick an active membership to post in this thread</TextBig>
@@ -48,17 +74,14 @@ export const NewThreadPost = (props: NewPostProps) => {
       <ButtonsGroup>
         <ButtonPrimary
           size="medium"
-          onClick={() =>
-            props.type === 'forum'
-              ? showModal<CreatePostModalCall>({
-                  modal: 'CreatePost',
-                  data: { postText, thread: props.thread, isEditable },
-                })
-              : showModal<CreateProposalDiscussionPostModalCall>({
-                  modal: 'CreateProposalDiscussionPost',
-                  data: { postText, threadId: props.thread.id, isEditable },
-                })
-          }
+          onClick={() => {
+            const transaction = getTransaction()
+            transaction &&
+              showModal<CreatePostModalCall>({
+                modal: 'CreatePost',
+                data: { postText, transaction, isEditable },
+              })
+          }}
           disabled={postText === ''}
         >
           Post a reply
