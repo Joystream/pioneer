@@ -1,5 +1,7 @@
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
+import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
+import { ProposalStatus } from '@/proposals/types'
 
 import { ProposalMock } from '../../../dev/scripts/generators/generateProposals'
 
@@ -14,6 +16,7 @@ export const seedProposal = (proposal: ProposalMock, server: any) => {
     ...proposal,
     stakingAccount: member.stakingAccount,
     status: seedProposalStatus(proposal.status, server),
+    isFinalized: proposalPastStatuses.includes(proposal.status as ProposalStatus),
     details: seedProposalDetails(proposal.details, server),
     votes: seedVotes(proposal.votes, server),
     createdInEvent: seedCreatedInEvent(server),
