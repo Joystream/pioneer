@@ -1,10 +1,11 @@
 import { LazyQueryResult } from '@apollo/client'
 import { useEffect, useMemo } from 'react'
 
+import { ForumPostWhereInput } from '@/common/api/queries'
 import { Defined } from '@/common/types/helpers'
 import { isDefined } from '@/common/utils'
 import { useGetForumPostsCountQuery, useGetForumPostsIdsLazyQuery, useGetForumPostsLazyQuery } from '@/forum/queries'
-import { asForumPost, ForumPost, visiblePostStatuses } from '@/forum/types/ForumPost'
+import { asForumPost, ForumPost } from '@/forum/types/ForumPost'
 
 export const POSTS_PER_PAGE = 5
 
@@ -21,9 +22,7 @@ interface UseForumThreadPosts {
 }
 
 export const useForumThreadPosts = (threadId: string, navigation: ThreadNavigation): UseForumThreadPosts => {
-  const where = useMemo(() => ({ thread: { id_eq: threadId }, status_json: { isTypeOf_in: visiblePostStatuses } }), [
-    threadId,
-  ])
+  const where = useMemo((): ForumPostWhereInput => ({ thread: { id_eq: threadId }, isVisible_eq: true }), [threadId])
 
   const [getPosts, postsResults] = useGetForumPostsLazyQuery()
   const [getPostIds, idsResults] = useGetForumPostsIdsLazyQuery()
