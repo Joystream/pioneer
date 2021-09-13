@@ -36,5 +36,3 @@ export interface PostEdit {
 }
 
 export type PostStatusTypename = PostStatusSchema['__typename']
-
-export const visiblePostStatuses: PostStatusTypename[] = ['PostStatusActive', 'PostStatusLocked']

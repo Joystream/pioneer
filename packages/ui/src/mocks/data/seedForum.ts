@@ -1,4 +1,3 @@
-import { PostStatusTypename, visiblePostStatuses } from '@/forum/types'
 import { BlockFieldsMock } from '@/mocks/data/common'
 
 import rawForumCategories from './raw/forumCategories.json'
@@ -98,7 +97,7 @@ export function seedForumPost(data: RawForumPostMock, server: any) {
     createdAt: data.postAddedEvent.createdAt,
     updatedAt: sortedEdits.length ? sortedEdits[0].createdAt : null,
     status: server.schema.create(data.status),
-    isVisible: visiblePostStatuses.includes(data.status as PostStatusTypename),
+    isVisible: ['PostStatusActive', 'PostStatusLocked'].includes(data.status),
   })
 }
 
