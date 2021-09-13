@@ -96,11 +96,11 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
     tx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
-
-    await renderModal()
   })
 
   describe('Requirements', () => {
+    beforeEach(renderModal)
+
     it('No active member', async () => {
       useMyMemberships.active = undefined
 
@@ -119,6 +119,8 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   describe('Warning modal', () => {
+    beforeEach(renderModal)
+
     it('Not checked', async () => {
       const button = await getWarningNextButton()
 
@@ -526,7 +528,7 @@ describe('UI: AddNewProposalModal', () => {
         beforeEach(async () => {
           const member = server.server?.schema.find('Membership', '0') as any
           member.boundAccounts = [alice.address]
-          member.save()
+          await member.save()
 
           await finishWarning()
           await finishProposalType('fundingRequest')
@@ -537,7 +539,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Create proposal step', async () => {
-          expect(screen.getByText(/You intend to create a proposa/i)).not.toBeNull()
+          expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
           expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
         })
 
@@ -586,6 +588,8 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   async function finishWarning() {
+    await renderModal()
+
     const button = await getWarningNextButton()
 
     const checkbox = await screen.findByRole('checkbox')
