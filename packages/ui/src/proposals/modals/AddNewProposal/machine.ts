@@ -477,7 +477,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       id: 'beforeTransaction',
       on: {
         BOUNDED: 'transaction',
-        UNBOUNDED: 'bindStakingAccount',
+        UNBOUNDED: 'transaction',
       },
     },
     bindStakingAccount: {

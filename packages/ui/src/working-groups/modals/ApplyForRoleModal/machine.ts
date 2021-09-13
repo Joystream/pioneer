@@ -21,6 +21,7 @@ type ApplyForRoleState =
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'stake'; context: EmptyObject }
   | { value: 'form'; context: ValidStakeState }
+  | { value: 'beforeTransaction'; context: ValidFormState }
   | { value: 'bindStakingAccount'; context: ValidFormState }
   | { value: 'transaction'; context: ValidFormState }
   | { value: 'success'; context: AfterTransactionState }
@@ -34,7 +35,13 @@ type ValidApplicationStepEvent = {
   type: 'VALID'
   answers: Record<number, string>
 }
-export type ApplyForRoleEvent = { type: 'FAIL' } | { type: 'PASS' } | ValidStakeStepEvent | ValidApplicationStepEvent
+export type ApplyForRoleEvent =
+  | { type: 'FAIL' }
+  | { type: 'PASS' }
+  | ValidStakeStepEvent
+  | ValidApplicationStepEvent
+  | { type: 'BOUNDED' }
+  | { type: 'UNBOUNDED' }
 
 export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRoleEvent, ApplyForRoleState>({
   initial: 'requirementsVerification',
@@ -61,11 +68,18 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
       meta: { isStep: true, stepTitle: 'Form' },
       on: {
         VALID: {
-          target: 'bindStakingAccount',
+          target: 'beforeTransaction',
           actions: assign({
             answers: (context, event) => (event as ValidApplicationStepEvent).answers,
           }),
         },
+      },
+    },
+    beforeTransaction: {
+      id: 'beforeTransaction',
+      on: {
+        BOUNDED: 'transaction',
+        UNBOUNDED: 'bindStakingAccount',
       },
     },
     bindStakingAccount: {

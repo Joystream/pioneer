@@ -14,6 +14,7 @@ import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { useMember } from '@/memberships/hooks/useMembership'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -37,27 +38,28 @@ const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Appl
 
 export const ApplyForRoleModal = () => {
   const { api, connectionState } = useApi()
-  const { active } = useMyMemberships()
+  const { active: activeMember } = useMyMemberships()
+  const { member } = useMember(activeMember?.id)
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const [state, send, service] = useMachine(applyForRoleMachine)
   const opening = modalData.opening
   const requiredStake = opening.stake.toNumber()
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(requiredStake)
   const transaction = useMemo(() => {
-    if (active && api) {
+    if (activeMember && api) {
       return getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
-        member_id: active?.id,
+        member_id: activeMember?.id,
         opening_id: opening.runtimeId,
-        role_account_id: active?.controllerAccount,
-        reward_account_id: active?.controllerAccount,
+        role_account_id: activeMember?.controllerAccount,
+        reward_account_id: activeMember?.controllerAccount,
         stake_parameters: {
           stake: opening.stake,
-          staking_account_id: active?.controllerAccount,
+          staking_account_id: activeMember?.controllerAccount,
         },
       })
     }
-  }, [active?.id, connectionState])
-  const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
+  }, [activeMember?.id, connectionState])
+  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect(() => {
     if (!state.matches('requirementsVerification')) {
@@ -73,27 +75,38 @@ export const ApplyForRoleModal = () => {
       return
     }
 
-    if (active && feeInfo?.canAfford) {
+    if (activeMember && feeInfo?.canAfford) {
       send('PASS')
       return
     }
 
-    if (!active && hasRequiredStake) {
+    if (!activeMember && hasRequiredStake) {
       showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
     }
 
     if (feeInfo && !feeInfo.canAfford) {
       send('FAIL')
     }
-  }, [state.value, active?.id, JSON.stringify(feeInfo), hasRequiredStake])
+  }, [state.value, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
-  if (!active || !feeInfo || hasRequiredStake === false) {
+  useEffect(() => {
+    if (state.matches('beforeTransaction') && state.context?.stake.account && member) {
+      const alreadyBounded = member.boundAccounts.includes(state.context?.stake.account.address)
+      send(alreadyBounded ? 'BOUNDED' : 'UNBOUNDED')
+    }
+  }, [state, member?.id, state.context?.stake?.account?.address])
+
+  if (!activeMember || !feeInfo || hasRequiredStake === false) {
     return null
   }
 
   if (state.matches('requirementsFailed')) {
     return (
-      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={feeInfo.transactionFee}
+      />
     )
   }
 
@@ -111,21 +124,21 @@ export const ApplyForRoleModal = () => {
     const { stake } = state.context
     const stakingAccount = stake.account?.address
 
-    const transaction = api.tx.members.addStakingAccountCandidate(active.id)
+    const transaction = api.tx.members.addStakingAccountCandidate(activeMember.id)
 
     return (
       <BindStakingAccountModal
         onClose={hideModal}
         transaction={transaction}
         signer={stakingAccount}
-        memberId={active.id}
+        memberId={activeMember.id}
         service={bindStakingAccountService}
         steps={transactionsSteps}
       />
     )
   }
 
-  const signer = active?.controllerAccount
+  const signer = activeMember?.controllerAccount
   const transactionService = state.children.transaction
 
   if (state.matches('transaction') && signer && api && transactionService) {
@@ -133,9 +146,9 @@ export const ApplyForRoleModal = () => {
 
     const transaction = getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
       opening_id: opening.runtimeId,
-      member_id: active?.id,
-      role_account_id: active?.controllerAccount,
-      reward_account_id: active?.rootAccount,
+      member_id: activeMember?.id,
+      role_account_id: activeMember?.controllerAccount,
+      reward_account_id: activeMember?.rootAccount,
       description: metadataToBytes(ApplicationMetadata, { answers: Object.values(answers) }),
       stake_parameters: {
         stake: stake.amount,
@@ -143,10 +156,15 @@ export const ApplyForRoleModal = () => {
       },
     })
 
+    const batch = api.tx.utility.batch([
+      transaction,
+      api.tx.members.confirmStakingAccount(activeMember?.id, stake.account.address),
+    ])
+
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
-        transaction={transaction}
+        transaction={batch}
         signer={signer}
         stake={new BN(state.context.stake.amount)}
         service={transactionService}

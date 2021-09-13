@@ -61,7 +61,7 @@ describe('UI: ApplyForRoleModal', () => {
   }
 
   let useAccounts: UseAccounts
-  let tx: any
+  let batchTx: any
   let bindAccountTx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -88,7 +88,9 @@ describe('UI: ApplyForRoleModal', () => {
     useMyMemberships.setActive(getMember('alice'))
 
     stubDefaultBalances(api)
-    tx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
+    stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
+    stubTransaction(api, 'api.tx.members.confirmStakingAccount')
+    batchTx = stubTransaction(api, 'api.tx.utility.batch')
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
   })
 
@@ -113,7 +115,7 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Insufficient funds', async () => {
-      tx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
+      batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
 
       renderModal()
 
@@ -225,7 +227,7 @@ describe('UI: ApplyForRoleModal', () => {
       it('Apply on opening success', async () => {
         stubTransactionSuccess(bindAccountTx, [], 'members', '')
         stubTransactionSuccess(
-          tx,
+          batchTx,
           ['EventParams', registry.createType('ApplicationId', 1337)],
           'workingGroup',
           'AppliedOnOpening'
@@ -241,9 +243,47 @@ describe('UI: ApplyForRoleModal', () => {
 
       it('Apply on opening failure', async () => {
         stubTransactionSuccess(bindAccountTx, [], 'members', '')
-        stubTransactionFailure(tx)
+        stubTransactionFailure(batchTx)
         await fillSteps()
         fireEvent.click(screen.getByText(/^Sign transaction/i))
+
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
+
+        expect(await screen.findByText('Failure')).toBeDefined()
+      })
+    })
+
+    describe('Staking account is already bounded', () => {
+      beforeEach(async () => {
+        const member = server.server?.schema.find('Membership', '0') as any
+        member.boundAccounts = [alice.address]
+        await member.save()
+      })
+
+      it('Apply on opening step', async () => {
+        await fillSteps()
+
+        expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      })
+
+      it('Apply on opening success', async () => {
+        stubTransactionSuccess(
+          batchTx,
+          ['EventParams', registry.createType('ApplicationId', 1337)],
+          'workingGroup',
+          'AppliedOnOpening'
+        )
+        await fillSteps()
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
+
+        expect(await screen.findByText('Application submitted!')).toBeDefined()
+        expect(await screen.findByText(/application id: 1337/i)).toBeDefined()
+      })
+
+      it('Apply on opening failure', async () => {
+        stubTransactionFailure(batchTx)
+        await fillSteps()
 
         fireEvent.click(screen.getByText(/^Sign transaction/i))
 

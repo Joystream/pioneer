@@ -22,6 +22,7 @@ import {
 import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { useObservable } from '@/common/hooks/useObservable'
 import { getSteps, Step } from '@/common/model/machines/getSteps'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -81,9 +82,18 @@ export const AddNewProposalModal = () => {
     ...(state.context.triggerBlock ? { exact_execution_block: state.context.triggerBlock } : {}),
   }
 
+  const stakingAccountInfo = useObservable(
+    state.context.stakingAccount
+      ? api?.query.members.stakingAccountIdMemberStatus(state.context.stakingAccount.address)
+      : undefined,
+    [api, state.context?.stakingAccount?.address]
+  )
+
   const transaction = useMemo(() => {
     if (activeMember && api) {
       const txSpecificParameters = getSpecificParameters(api, state as AddNewProposalMachineState)
+
+      console.log(stakingAccountInfo)
 
       return api.tx.utility.batch([
         api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
@@ -148,7 +158,7 @@ export const AddNewProposalModal = () => {
       const alreadyBounded = member.boundAccounts.includes(state.context?.stakingAccount.address)
       send(alreadyBounded ? 'BOUNDED' : 'UNBOUNDED')
     }
-  }, [state, member?.id, state.context?.stakingAccount])
+  }, [state, member?.id, state.context?.stakingAccount?.address])
 
   if (!api || !activeMember || !transaction || !feeInfo) {
     return null
