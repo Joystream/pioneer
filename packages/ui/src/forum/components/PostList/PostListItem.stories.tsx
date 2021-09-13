@@ -60,7 +60,6 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
               post={{ ...post, updatedAt, text, reaction, repliesTo }}
               isThreadActive={isThreadActive}
               type="forum"
-              replyToPost={() => true}
               link="#"
             />
           </Container>

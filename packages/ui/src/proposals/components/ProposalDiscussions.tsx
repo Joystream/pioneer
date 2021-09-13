@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 
 import { CKEditor } from '@/common/components/CKEditor'
@@ -10,7 +10,6 @@ import { useLocation } from '@/common/hooks/useLocation'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
-import { ForumPost } from '@/forum/types'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
@@ -23,7 +22,6 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const { origin } = useLocation()
   const query = useRouteQuery()
   const initialPost = query.get('post')
-  const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
@@ -53,7 +51,6 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isSelected={post.id === initialPost}
             isThreadActive={true}
             post={post}
-            replyToPost={() => setReplyTo({ ...post, repliesTo: undefined })}
             type="proposal"
             link={`${origin}${ProposalsRoutes.preview}/${proposalId}?post=${post.id}`}
           />

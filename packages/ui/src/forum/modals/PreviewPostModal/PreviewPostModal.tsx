@@ -38,7 +38,7 @@ export const PreviewPostModal = ({ onClose, author, text, type = 'thread' }: Pre
       <ModalHeader onClick={onClose} title={`${capitalizeFirstLetter(type)} Preview`} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
-          <PostListItem post={post} replyToPost={() => true} type="forum" isPreview />
+          <PostListItem post={post} type="forum" isPreview />
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalFooter>

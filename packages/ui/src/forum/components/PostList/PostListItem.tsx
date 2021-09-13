@@ -32,7 +32,6 @@ interface PostListItemProps {
   isThreadActive?: boolean
   insertRef?: (ref: RefObject<HTMLDivElement>) => void
   type: PostListItemType
-  replyToPost: () => void
   link?: string
 }
 
@@ -44,7 +43,6 @@ export const PostListItem = ({
   insertRef,
   type,
   link,
-  replyToPost,
 }: PostListItemProps) => {
   const { createdAtBlock, updatedAt, author, text, repliesTo } = post
 
@@ -108,7 +106,7 @@ export const PostListItem = ({
               />
               {isThreadActive && (
                 <>
-                  <ButtonGhost square disabled={isPreview} size="small" title="Reply" onClick={replyToPost}>
+                  <ButtonGhost square disabled={isPreview} size="small" title="Reply">
                     <ReplyIcon />
                   </ButtonGhost>
                   <PostContextMenu post={post} onEdit={() => setEditing(true)} type={type} />
