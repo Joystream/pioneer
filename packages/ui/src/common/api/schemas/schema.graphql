@@ -3429,6 +3429,8 @@ input ForumPostWhereInput {
   text_endsWith: String
   text_in: [String!]
   status_json: JSONObject
+  isVisible_eq: Boolean
+  isVisible_in: [Boolean!]
   origin_json: JSONObject
   author: MembershipWhereInput
   thread: ForumThreadWhereInput
@@ -3498,6 +3500,8 @@ input ForumThreadWhereInput {
   isSticky_eq: Boolean
   isSticky_in: [Boolean!]
   status_json: JSONObject
+  isVisible_eq: Boolean
+  isVisible_in: [Boolean!]
   author: MembershipWhereInput
   category: ForumCategoryWhereInput
   posts_none: ForumPostWhereInput
@@ -4975,6 +4979,8 @@ input ProposalDiscussionPostWhereInput {
   deletedById_eq: ID
   deletedById_in: [ID!]
   status_json: JSONObject
+  isVisible_eq: Boolean
+  isVisible_in: [Boolean!]
   text_eq: String
   text_contains: String
   text_startsWith: String
@@ -7864,6 +7870,9 @@ type ForumPost implements BaseGraphQLObject {
   # Current post status
   status: PostStatus!
 
+  # True if the post is either Active or Locked
+  isVisible: Boolean!
+
   # The origin of the post (either thread creation event or regular PostAdded event)
   origin: PostOrigin!
   edits: [PostTextUpdatedEvent!]!
@@ -7907,6 +7916,9 @@ type ForumThread implements BaseGraphQLObject {
 
   # Current thread status
   status: ThreadStatus!
+
+  # True if the thread is either Active or Locked
+  isVisible: Boolean!
   metadataUpdates: [ThreadMetadataUpdatedEvent!]!
   madeStickyInEvents: [CategoryStickyThreadUpdateEvent!]!
   movedInEvents: [ThreadMovedEvent!]!
@@ -9027,6 +9039,9 @@ type ProposalDiscussionPost implements BaseGraphQLObject {
 
   # Current post status
   status: ProposalDiscussionPostStatus!
+
+  # True if the post is either Active or Locked
+  isVisible: Boolean!
 
   # Post's md-formatted text
   text: String!
@@ -11001,6 +11016,8 @@ enum ForumPostOrderByInput {
   text_DESC
   repliesTo_ASC
   repliesTo_DESC
+  isVisible_ASC
+  isVisible_DESC
   deletedInEvent_ASC
   deletedInEvent_DESC
 }
@@ -11065,6 +11082,8 @@ enum ForumThreadOrderByInput {
   visiblePostsCount_DESC
   isSticky_ASC
   isSticky_DESC
+  isVisible_ASC
+  isVisible_DESC
 }
 
 input ForumThreadWhereUniqueInput {
@@ -12794,6 +12813,8 @@ enum ProposalDiscussionPostOrderByInput {
   discussionThread_DESC
   author_ASC
   author_DESC
+  isVisible_ASC
+  isVisible_DESC
   text_ASC
   text_DESC
   repliesTo_ASC
@@ -15284,6 +15305,7 @@ input ForumThreadCreateInput {
   visiblePostsCount: Float!
   isSticky: Boolean!
   status: JSONObject!
+  isVisible: Boolean!
 }
 
 input ForumThreadUpdateInput {
@@ -15294,6 +15316,7 @@ input ForumThreadUpdateInput {
   visiblePostsCount: Float
   isSticky: Boolean
   status: JSONObject
+  isVisible: Boolean
 }
 
 input PostTextUpdatedEventCreateInput {
@@ -15410,6 +15433,7 @@ input ForumPostCreateInput {
   text: String!
   repliesTo: ID
   status: JSONObject!
+  isVisible: Boolean!
   origin: JSONObject!
   deletedInEvent: ID
 }
@@ -15420,6 +15444,7 @@ input ForumPostUpdateInput {
   text: String
   repliesTo: ID
   status: JSONObject
+  isVisible: Boolean
   origin: JSONObject
   deletedInEvent: ID
 }
@@ -15558,6 +15583,7 @@ input ProposalDiscussionPostCreateInput {
   discussionThread: ID!
   author: ID!
   status: JSONObject!
+  isVisible: Boolean!
   text: String!
   repliesTo: ID
 }
@@ -15566,6 +15592,7 @@ input ProposalDiscussionPostUpdateInput {
   discussionThread: ID
   author: ID
   status: JSONObject
+  isVisible: Boolean
   text: String
   repliesTo: ID
 }
