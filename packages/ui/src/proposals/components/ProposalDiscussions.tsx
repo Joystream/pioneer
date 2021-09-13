@@ -4,7 +4,7 @@ import React, { RefObject, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { Badge } from '@/common/components/typography'
+import { Badge, TextBig } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useLocation } from '@/common/hooks/useLocation'
@@ -27,7 +27,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const query = useRouteQuery()
   const initialPost = query.get('post')
   const { api } = useApi()
-  const { active } = useMyMemberships()
+  const { active, members } = useMyMemberships()
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
@@ -47,6 +47,24 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
         isEditable
       )
     }
+  }
+
+  const getReplyComponent = () => {
+    if (thread.mode === 'open') {
+      return <NewThreadPost getTransaction={getTransaction} />
+    }
+    if (members.find((member) => thread.whitelistIds?.includes(member.id))) {
+      return active && thread.whitelistIds?.includes(active.id) ? (
+        <NewThreadPost getTransaction={getTransaction} />
+      ) : (
+        <TextBig>Please select a whitelisted membership.</TextBig>
+      )
+    }
+    return (
+      <TextBig>
+        The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.
+      </TextBig>
+    )
   }
 
   return (
@@ -73,9 +91,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
           />
         )
       })}
-      <PostMessageForm>
-        <NewThreadPost getTransaction={getTransaction} />
-      </PostMessageForm>
+      <PostMessageForm>{getReplyComponent()}</PostMessageForm>
     </ProposalDiscussionsStyles>
   )
 }
