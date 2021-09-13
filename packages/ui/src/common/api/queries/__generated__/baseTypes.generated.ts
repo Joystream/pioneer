@@ -2646,6 +2646,7 @@ export type ForumPost = BaseGraphQlObject & {
   repliesTo?: Maybe<ForumPost>
   repliesToId?: Maybe<Scalars['String']>
   status: PostStatus
+  isVisible: Scalars['Boolean']
   origin: PostOrigin
   edits: Array<PostTextUpdatedEvent>
   reactions: Array<ForumPostReaction>
@@ -2671,6 +2672,7 @@ export type ForumPostCreateInput = {
   text: Scalars['String']
   repliesTo?: Maybe<Scalars['ID']>
   status: Scalars['JSONObject']
+  isVisible: Scalars['Boolean']
   origin: Scalars['JSONObject']
   deletedInEvent?: Maybe<Scalars['ID']>
 }
@@ -2696,6 +2698,8 @@ export enum ForumPostOrderByInput {
   TextDesc = 'text_DESC',
   RepliesToAsc = 'repliesTo_ASC',
   RepliesToDesc = 'repliesTo_DESC',
+  IsVisibleAsc = 'isVisible_ASC',
+  IsVisibleDesc = 'isVisible_DESC',
   DeletedInEventAsc = 'deletedInEvent_ASC',
   DeletedInEventDesc = 'deletedInEvent_DESC',
 }
@@ -2800,6 +2804,7 @@ export type ForumPostUpdateInput = {
   text?: Maybe<Scalars['String']>
   repliesTo?: Maybe<Scalars['ID']>
   status?: Maybe<Scalars['JSONObject']>
+  isVisible?: Maybe<Scalars['Boolean']>
   origin?: Maybe<Scalars['JSONObject']>
   deletedInEvent?: Maybe<Scalars['ID']>
 }
@@ -2835,6 +2840,8 @@ export type ForumPostWhereInput = {
   text_endsWith?: Maybe<Scalars['String']>
   text_in?: Maybe<Array<Scalars['String']>>
   status_json?: Maybe<Scalars['JSONObject']>
+  isVisible_eq?: Maybe<Scalars['Boolean']>
+  isVisible_in?: Maybe<Array<Scalars['Boolean']>>
   origin_json?: Maybe<Scalars['JSONObject']>
   author?: Maybe<MembershipWhereInput>
   thread?: Maybe<ForumThreadWhereInput>
@@ -2892,6 +2899,7 @@ export type ForumThread = BaseGraphQlObject & {
   isSticky: Scalars['Boolean']
   createdInEvent: ThreadCreatedEvent
   status: ThreadStatus
+  isVisible: Scalars['Boolean']
   metadataUpdates: Array<ThreadMetadataUpdatedEvent>
   madeStickyInEvents: Array<CategoryStickyThreadUpdateEvent>
   movedInEvents: Array<ThreadMovedEvent>
@@ -2915,6 +2923,7 @@ export type ForumThreadCreateInput = {
   visiblePostsCount: Scalars['Float']
   isSticky: Scalars['Boolean']
   status: Scalars['JSONObject']
+  isVisible: Scalars['Boolean']
 }
 
 export type ForumThreadEdge = {
@@ -2942,6 +2951,8 @@ export enum ForumThreadOrderByInput {
   VisiblePostsCountDesc = 'visiblePostsCount_DESC',
   IsStickyAsc = 'isSticky_ASC',
   IsStickyDesc = 'isSticky_DESC',
+  IsVisibleAsc = 'isVisible_ASC',
+  IsVisibleDesc = 'isVisible_DESC',
 }
 
 export type ForumThreadTag = BaseGraphQlObject & {
@@ -3040,6 +3051,7 @@ export type ForumThreadUpdateInput = {
   visiblePostsCount?: Maybe<Scalars['Float']>
   isSticky?: Maybe<Scalars['Boolean']>
   status?: Maybe<Scalars['JSONObject']>
+  isVisible?: Maybe<Scalars['Boolean']>
 }
 
 export type ForumThreadWhereInput = {
@@ -3081,6 +3093,8 @@ export type ForumThreadWhereInput = {
   isSticky_eq?: Maybe<Scalars['Boolean']>
   isSticky_in?: Maybe<Array<Scalars['Boolean']>>
   status_json?: Maybe<Scalars['JSONObject']>
+  isVisible_eq?: Maybe<Scalars['Boolean']>
+  isVisible_in?: Maybe<Array<Scalars['Boolean']>>
   author?: Maybe<MembershipWhereInput>
   category?: Maybe<ForumCategoryWhereInput>
   posts_none?: Maybe<ForumPostWhereInput>
@@ -7529,6 +7543,7 @@ export type ProposalDiscussionPost = BaseGraphQlObject & {
   author: Membership
   authorId: Scalars['String']
   status: ProposalDiscussionPostStatus
+  isVisible: Scalars['Boolean']
   text: Scalars['String']
   repliesTo?: Maybe<ProposalDiscussionPost>
   repliesToId?: Maybe<Scalars['String']>
@@ -7549,6 +7564,7 @@ export type ProposalDiscussionPostCreateInput = {
   discussionThread: Scalars['ID']
   author: Scalars['ID']
   status: Scalars['JSONObject']
+  isVisible: Scalars['Boolean']
   text: Scalars['String']
   repliesTo?: Maybe<Scalars['ID']>
 }
@@ -7829,6 +7845,8 @@ export enum ProposalDiscussionPostOrderByInput {
   DiscussionThreadDesc = 'discussionThread_DESC',
   AuthorAsc = 'author_ASC',
   AuthorDesc = 'author_DESC',
+  IsVisibleAsc = 'isVisible_ASC',
+  IsVisibleDesc = 'isVisible_DESC',
   TextAsc = 'text_ASC',
   TextDesc = 'text_DESC',
   RepliesToAsc = 'repliesTo_ASC',
@@ -7859,6 +7877,7 @@ export type ProposalDiscussionPostUpdateInput = {
   discussionThread?: Maybe<Scalars['ID']>
   author?: Maybe<Scalars['ID']>
   status?: Maybe<Scalars['JSONObject']>
+  isVisible?: Maybe<Scalars['Boolean']>
   text?: Maybe<Scalars['String']>
   repliesTo?: Maybe<Scalars['ID']>
 }
@@ -8020,6 +8039,8 @@ export type ProposalDiscussionPostWhereInput = {
   deletedById_eq?: Maybe<Scalars['ID']>
   deletedById_in?: Maybe<Array<Scalars['ID']>>
   status_json?: Maybe<Scalars['JSONObject']>
+  isVisible_eq?: Maybe<Scalars['Boolean']>
+  isVisible_in?: Maybe<Array<Scalars['Boolean']>>
   text_eq?: Maybe<Scalars['String']>
   text_contains?: Maybe<Scalars['String']>
   text_startsWith?: Maybe<Scalars['String']>
