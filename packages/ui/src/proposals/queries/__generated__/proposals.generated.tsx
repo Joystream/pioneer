@@ -5,7 +5,6 @@ import {
   MemberFieldsFragmentDoc,
 } from '../../../memberships/queries/__generated__/members.generated'
 import { gql } from '@apollo/client'
-
 import * as Apollo from '@apollo/client'
 const defaultOptions = {}
 export type ProposalFieldsFragment = {
@@ -151,8 +150,17 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'VetoProposalDetails' }
   discussionThread: {
     __typename: 'ProposalDiscussionThread'
+    id: string
     posts: Array<{ __typename: 'ProposalDiscussionPost' } & DiscussionPostFieldsFragment>
-    mode: { __typename: 'ProposalDiscussionThreadModeOpen' } | { __typename: 'ProposalDiscussionThreadModeClosed' }
+    mode:
+      | { __typename: 'ProposalDiscussionThreadModeOpen' }
+      | {
+          __typename: 'ProposalDiscussionThreadModeClosed'
+          whitelist?: Types.Maybe<{
+            __typename: 'ProposalDiscussionWhitelist'
+            members: Array<{ __typename: 'Membership'; id: string }>
+          }>
+        }
   }
 } & ProposalFieldsFragment
 
@@ -368,11 +376,19 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
     }
     discussionThread {
+      id
       posts {
         ...DiscussionPostFields
       }
       mode {
         __typename
+        ... on ProposalDiscussionThreadModeClosed {
+          whitelist {
+            members {
+              id
+            }
+          }
+        }
       }
     }
   }

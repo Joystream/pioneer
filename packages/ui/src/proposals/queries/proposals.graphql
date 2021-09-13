@@ -108,11 +108,19 @@ fragment ProposalWithDetailsFields on Proposal {
     }
   }
   discussionThread {
+    id
     posts {
       ...DiscussionPostFields
     }
     mode {
       __typename
+      ...on ProposalDiscussionThreadModeClosed {
+        whitelist {
+          members {
+            id
+          }
+        }
+      }
     }
   }
 }

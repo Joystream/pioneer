@@ -1,15 +1,19 @@
+import { ForumPostMetadata } from '@joystream/metadata-protobuf'
+import { createType } from '@joystream/types'
 import React, { RefObject, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 
-import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent } from '@/common/components/forms'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { Badge } from '@/common/components/typography'
+import { Badge, TextBig } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { useApi } from '@/common/hooks/useApi'
 import { useLocation } from '@/common/hooks/useLocation'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
+import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
@@ -22,6 +26,8 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const { origin } = useLocation()
   const query = useRouteQuery()
   const initialPost = query.get('post')
+  const { api } = useApi()
+  const { active, members } = useMyMemberships()
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
@@ -31,6 +37,35 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
     }
   }, [postsRefs, initialPost])
+
+  const getTransaction = (postText: string, isEditable: boolean) => {
+    if (api && active && thread) {
+      return api.tx.proposalsDiscussion.addPost(
+        createType('MemberId', Number.parseInt(active.id)),
+        thread.id,
+        metadataToBytes(ForumPostMetadata, { text: postText }),
+        isEditable
+      )
+    }
+  }
+
+  const getReplyComponent = () => {
+    if (thread.mode === 'open') {
+      return <NewThreadPost getTransaction={getTransaction} />
+    }
+    if (members.find((member) => thread.whitelistIds?.includes(member.id))) {
+      return active && thread.whitelistIds?.includes(active.id) ? (
+        <NewThreadPost getTransaction={getTransaction} />
+      ) : (
+        <TextBig>Please select a whitelisted membership.</TextBig>
+      )
+    }
+    return (
+      <TextBig>
+        The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.
+      </TextBig>
+    )
+  }
 
   return (
     <ProposalDiscussionsStyles mode={thread.mode}>
@@ -56,11 +91,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
           />
         )
       })}
-      <PostMessageForm>
-        <InputComponent inputSize="auto">
-          <CKEditor />
-        </InputComponent>
-      </PostMessageForm>
+      <PostMessageForm>{getReplyComponent()}</PostMessageForm>
     </ProposalDiscussionsStyles>
   )
 }

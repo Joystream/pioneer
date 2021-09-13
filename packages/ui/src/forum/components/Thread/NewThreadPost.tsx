@@ -1,3 +1,5 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import React, { useState } from 'react'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -7,14 +9,18 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
-import { ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-interface NewPostProps {
-  thread: Pick<ForumThread, 'id' | 'categoryId' | 'title'>
+type GetTransaction = (
+  postText: string,
+  isEditable: boolean
+) => SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
+
+export interface NewPostProps {
+  getTransaction: GetTransaction
 }
 
-export const NewThreadPost = ({ thread }: NewPostProps) => {
+export const NewThreadPost = ({ getTransaction }: NewPostProps) => {
   const [postText, setText] = useState('')
   const [isEditable, setEditable] = useState(false)
   const { active } = useMyMemberships()
@@ -32,9 +38,14 @@ export const NewThreadPost = ({ thread }: NewPostProps) => {
       <ButtonsGroup>
         <ButtonPrimary
           size="medium"
-          onClick={() =>
-            showModal<CreatePostModalCall>({ modal: 'CreatePost', data: { postText, thread, isEditable } })
-          }
+          onClick={() => {
+            const transaction = getTransaction(postText, isEditable)
+            transaction &&
+              showModal<CreatePostModalCall>({
+                modal: 'CreatePost',
+                data: { postText, transaction, isEditable },
+              })
+          }}
           disabled={postText === ''}
         >
           Post a reply

@@ -1,3 +1,5 @@
+import { ForumPostMetadata } from '@joystream/metadata-protobuf'
+import { createType } from '@joystream/types'
 import React, { useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
@@ -12,23 +14,41 @@ import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
+import { useApi } from '@/common/hooks/useApi'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { PostList } from '@/forum/components/PostList/PostList'
 import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { useForumThread } from '@/forum/hooks/useForumThread'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, thread } = useForumThread(id)
+  const { api } = useApi()
+  const { active } = useMyMemberships()
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
+
+  const getTransaction = (postText: string, isEditable: boolean) => {
+    if (api && active && thread) {
+      const { categoryId, id: threadId } = thread
+      return api.tx.forum.addPost(
+        createType('ForumUserId', Number.parseInt(active.id)),
+        categoryId,
+        threadId,
+        metadataToBytes(ForumPostMetadata, { text: postText }),
+        isEditable
+      )
+    }
+  }
 
   if (!isLoading && !thread) {
     history.replace('/404')
@@ -76,7 +96,7 @@ export const ForumThread = () => {
   const displayMain = () => (
     <MainPanel ref={sideNeighborRef}>
       <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
-      {thread && isThreadActive && <NewThreadPost thread={thread} />}
+      {thread && isThreadActive && <NewThreadPost getTransaction={getTransaction} />}
     </MainPanel>
   )
 

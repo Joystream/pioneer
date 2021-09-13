@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
@@ -6,7 +6,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { isModalWithData } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
-import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
+import { NewPostProps, NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 
@@ -14,7 +14,7 @@ import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi } from '../../_mocks/transactions'
+import { stubApi, stubTransaction } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -22,6 +22,8 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 describe('UI: Add new post', () => {
   const api = stubApi()
+  stubTransaction(api, 'api.tx.forum.addPost')
+  stubTransaction(api, 'api.tx.proposalsDiscussion.addPost')
 
   let useModal: UseModal<any>
 
@@ -48,44 +50,44 @@ describe('UI: Add new post', () => {
     useMyMemberships.active = undefined
   })
 
-  it('Hides editor if no membership is selected', async () => {
-    renderEditor()
+  const props: NewPostProps = {
+    getTransaction: (text, isEditable) => api.api.tx.forum.addPost(1, 1, 1, text, isEditable),
+  }
+
+  it('No selected membership', async () => {
+    renderEditor(props)
     expect(await screen.findByText('Pick an active membership to post in this thread')).toBeDefined()
   })
 
-  it('Disables the post button if text is empty', async () => {
+  it('Empty post text', async () => {
     useMyMemberships.setActive(getMember('alice'))
-    renderEditor()
+    renderEditor(props)
     expect(await getButton('Post a reply')).toBeDisabled()
   })
 
-  it('Opens the modal', async () => {
+  it('Passes modal data', async () => {
     useMyMemberships.setActive(getMember('alice'))
-    renderEditor()
+    renderEditor(props)
     const editor = await screen.findByRole('textbox')
     act(() => {
       fireEvent.change(editor, { target: { value: 'I disagree' } })
     })
-    waitFor(() => expect(getButton('Post a reply')).toBeDisabled())
     const button = await getButton('Post a reply')
     act(() => {
       fireEvent.click(button)
     })
     expect(useModal.modal).toEqual('CreatePost')
-    expect(useModal.modalData).toEqual({
-      postText: 'I disagree',
-      thread: { id: '1', categoryId: '1', title: 'thread' },
-      isEditable: false,
-    })
+    expect(useModal.modalData.postText).toEqual('I disagree')
+    expect(useModal.modalData.isEditable).toEqual(false)
   })
 
-  const renderEditor = () =>
+  const renderEditor = (props: NewPostProps) =>
     render(
       <ModalContext.Provider value={useModal}>
         <MockKeyringProvider>
           <MembershipContext.Provider value={useMyMemberships}>
             <ApiContext.Provider value={api}>
-              <NewThreadPost thread={{ id: '1', categoryId: '1', title: 'thread' }} />
+              <NewThreadPost {...props} />
             </ApiContext.Provider>
           </MembershipContext.Provider>
         </MockKeyringProvider>
