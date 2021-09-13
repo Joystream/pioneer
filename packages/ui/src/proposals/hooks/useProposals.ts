@@ -1,11 +1,7 @@
 import { useMemo } from 'react'
 
 import { ProposalWhereInput } from '@/common/api/queries'
-import {
-  proposalActiveStatuses,
-  proposalPastStatuses,
-  proposalStatusToTypename,
-} from '@/proposals/model/proposalStatus'
+import { proposalStatusToTypename } from '@/proposals/model/proposalStatus'
 import { useGetProposalsQuery } from '@/proposals/queries'
 import { asProposal, Proposal, ProposalStatus } from '@/proposals/types'
 
@@ -23,22 +19,12 @@ interface UseProposals {
   proposals: Proposal[]
 }
 
-export const getStatusWhere = (status: UseProposalsStatus) => {
-  if (!status) {
-    return
-  }
-
-  const seekedStatuses = status === 'active' ? proposalActiveStatuses : proposalPastStatuses
-  return { isTypeOf_in: seekedStatuses.map(proposalStatusToTypename) }
-}
-
 export const useProposals = ({ status, filters }: UseProposalsProps): UseProposals => {
   const variables = useMemo(() => {
-    let where: ProposalWhereInput = {
-      status_json: filters?.stage
-        ? { isTypeOf_eq: proposalStatusToTypename(filters.stage as ProposalStatus) }
-        : getStatusWhere(status),
-    }
+    let where: ProposalWhereInput = filters?.stage
+      ? { status_json: { isTypeOf_eq: proposalStatusToTypename(filters.stage as ProposalStatus) } }
+      : { isFinalized_eq: status === 'past' }
+
     if (filters?.type) where.details_json = { isTypeOf_eq: filters.type + 'ProposalDetails' }
     if (filters?.proposer) where.creator = { id_eq: filters.proposer.id }
     if (filters?.search) where.title_contains = filters.search
