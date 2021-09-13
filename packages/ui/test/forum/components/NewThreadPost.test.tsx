@@ -54,18 +54,18 @@ describe('UI: Add new post', () => {
     getTransaction: (text, isEditable) => api.api.tx.forum.addPost(1, 1, 1, text, isEditable),
   }
 
-  it('Hides editor if no membership is selected', async () => {
+  it('No selected membership', async () => {
     renderEditor(props)
     expect(await screen.findByText('Pick an active membership to post in this thread')).toBeDefined()
   })
 
-  it('Disables the post button if text is empty', async () => {
+  it('Empty post text', async () => {
     useMyMemberships.setActive(getMember('alice'))
     renderEditor(props)
     expect(await getButton('Post a reply')).toBeDisabled()
   })
 
-  it('Opens the modal', async () => {
+  it('Passes modal data', async () => {
     useMyMemberships.setActive(getMember('alice'))
     renderEditor(props)
     const editor = await screen.findByRole('textbox')
