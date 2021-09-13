@@ -3,7 +3,6 @@ import { renderHook } from '@testing-library/react-hooks'
 import { repeat } from '@/common/utils'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
 import { useGetForumPostsCountQuery, useGetForumPostsIdsLazyQuery, useGetForumPostsLazyQuery } from '@/forum/queries'
-import { visiblePostStatuses } from '@/forum/types'
 
 type Props = Parameters<typeof useForumThreadPosts>
 
@@ -46,7 +45,7 @@ describe('useForumThreadPosts', () => {
 
   it('By page number', () => {
     const { rerender, result } = renderUseForumThreadPosts('0', { post: null, page: null })
-    const where = { thread: { id_eq: '0' }, status_json: { isTypeOf_in: visiblePostStatuses } }
+    const where = { thread: { id_eq: '0' }, isVisible_eq: true }
 
     expect(mockedPostsCountQuery).toBeCalledWith({ variables: { where } })
     expect(getPostIds).not.toHaveBeenCalled()
@@ -62,7 +61,7 @@ describe('useForumThreadPosts', () => {
 
   it('By Post id', () => {
     const { rerender, result } = renderUseForumThreadPosts('0', { post: '8', page: null })
-    const where = { thread: { id_eq: '0' }, status_json: { isTypeOf_in: visiblePostStatuses } }
+    const where = { thread: { id_eq: '0' }, isVisible_eq: true }
 
     rerender()
 
