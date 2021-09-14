@@ -55,23 +55,21 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       return api.tx.proposalsDiscussion.addPost(
         createType('MemberId', Number.parseInt(active.id)),
         thread.id,
-        metadataToBytes(ForumPostMetadata, { text: postText }),
+        metadataToBytes(ForumPostMetadata, { text: postText, repliesTo: replyTo ? Number(replyTo.id) : undefined }),
         isEditable
       )
     }
   }
 
-  const getReplyComponent = () => {
-    if (thread.mode === 'open') {
-      return <NewThreadPost getTransaction={getTransaction} removeReply={onRemoveReply} />
+  const getPostForm = () => {
+    if (thread.mode === 'open' || (thread.mode === 'closed' && active && thread.whitelistIds?.includes(active.id))) {
+      return <NewThreadPost ref={newPostRef} getTransaction={getTransaction} removeReply={onRemoveReply} />
     }
+
     if (members.find((member) => thread.whitelistIds?.includes(member.id))) {
-      return active && thread.whitelistIds?.includes(active.id) ? (
-        <NewThreadPost getTransaction={getTransaction} removeReply={onRemoveReply} />
-      ) : (
-        <TextBig>Please select a whitelisted membership.</TextBig>
-      )
+      return <TextBig>Please select a whitelisted membership.</TextBig>
     }
+
     return (
       <TextBig>
         The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.
@@ -98,13 +96,13 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isSelected={post.id === initialPost}
             isThreadActive={true}
             post={post}
-            replyToPost={() => setReplyTo({ ...post, repliesTo: undefined })}
+            replyToPost={() => onReply(post)}
             type="proposal"
             link={`${origin}${ProposalsRoutes.preview}/${proposalId}?post=${post.id}`}
           />
         )
       })}
-      <PostMessageForm>{getReplyComponent()}</PostMessageForm>
+      <PostMessageForm>{getPostForm()}</PostMessageForm>
     </ProposalDiscussionsStyles>
   )
 }
