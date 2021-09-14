@@ -18,10 +18,10 @@ const threadOptionReducer: Reducer<ThreadsOptions | Record<string, never>, Parti
 const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
 
 export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
-  const initalOptions = useMemo(() => ({ ...ThreadsDefaultOptions, ...options }), [JSON.stringify(options)])
-  useEffect(() => refresh(initalOptions), [initalOptions])
+  const initialOptions = useMemo(() => ({ ...ThreadsDefaultOptions, ...options }), [JSON.stringify(options)])
+  useEffect(() => refresh(initialOptions), [initialOptions])
 
-  const [{ order, filters, categoryId, isArchive }, refresh] = useReducer(threadOptionReducer, initalOptions)
+  const [{ order, filters, categoryId, isArchive }, refresh] = useReducer(threadOptionReducer, initialOptions)
 
   const { loading, data } = useGetPaginatedForumThreadsQuery({
     variables: {
