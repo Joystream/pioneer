@@ -123,10 +123,9 @@ describe('UI: Add new post', () => {
     act(() => {
       fireEvent.change(editor, { target: { value: 'I disagree' } })
     })
-    await waitFor(async () => expect(await getButton('Post a reply')).toBeDisabled())
-    const button = await getButton('Post a reply')
-    act(() => {
-      fireEvent.click(button)
+    await waitFor(async () => expect(await getButton('Post a reply')).not.toBeDisabled())
+    act(async () => {
+      fireEvent.click(await getButton('Post a reply'))
     })
     expect(useModal.modal).toEqual('CreatePost')
     expect(useModal.modalData).toEqual({
