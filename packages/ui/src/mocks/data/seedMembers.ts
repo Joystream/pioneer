@@ -8,33 +8,56 @@ export interface MockRole {
   isLead: boolean
 }
 
+type Entry = {
+  __typename: string
+  membershipBoughtEvent?: BlockFieldsMock
+  memberInvitedEvent?: BlockFieldsMock
+}
+
 export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 'roles'> & {
   metadata: {
     name: string
     about: string
   }
-  entry: {
-    __typename: string
-    membershipBoughtEvent: BlockFieldsMock
-  }
+  entry: Entry
 }
 
 export const mockMembers: MockMember[] = rawMembers.map((rawMember) => rawMember)
 
 const seedMembershipEntry = (member: MockMember, server: any) => {
-  const membershipBoughtEvent = server.schema.create('MembershipBoughtEvent', member.entry.membershipBoughtEvent)
+  const isBoughtEvent = !!member.entry.membershipBoughtEvent
+  const entryTypeName = isBoughtEvent ? 'MembershipEntryPaid' : 'MembershipEntryInvited'
+  const eventType = isBoughtEvent ? 'MembershipBoughtEvent' : 'MemberInvitedEvent'
+  const event = server.schema.create(
+    eventType,
+    isBoughtEvent ? member.entry.membershipBoughtEvent : member.entry.memberInvitedEvent
+  )
+  const data = isBoughtEvent ? { membershipBoughtEvent: event } : { memberInvitedEvent: event }
 
-  return server.schema.create('MembershipEntryPaid', { membershipBoughtEvent })
+  return server.schema.create(entryTypeName, data)
 }
 
 export const seedMember = (member: MockMember, server: any) => {
   const temporary: any = { ...member }
 
-  return server.schema.create('Membership', {
+  const createdMember = server.schema.create('Membership', {
     ...temporary,
     metadata: server.schema.create('MemberMetadata', member.metadata),
     entry: seedMembershipEntry(member, server),
   })
+
+  const invitorId: string = ((member as unknown) as any).invitorId
+
+  if (invitorId) {
+    const invitor = server.schema.find('Membership', invitorId)
+
+    if (invitor) {
+      invitor.inviteeIds.push(member.id)
+      invitor.save()
+    }
+  }
+
+  return createdMember
 }
 
 export const seedMembers = (server: any, howMany?: number) => {
