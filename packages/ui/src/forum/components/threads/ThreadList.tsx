@@ -57,10 +57,6 @@ export const ThreadList = ({ threads, onSort, isLoading, isArchive, page, pageCo
     [order, sort]
   )
 
-  const pagination = useMemo(
-    () => page && pageCount && setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />,
-    [page, pageCount, setPage]
-  )
   if (threads.length <= 0 && !isLoading) {
     return <NotFoundText>No threads found</NotFoundText>
   }
@@ -79,11 +75,11 @@ export const ThreadList = ({ threads, onSort, isLoading, isArchive, page, pageCo
         <Loading />
       ) : (
         <List as="div" isArchive={isArchive}>
-          {pagination}
+          {page && pageCount && setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
           {threads.map((thread, index) => (
             <ThreadListItem key={index} thread={thread} isArchive={isArchive} />
           ))}
-          {pagination}
+          {page && pageCount && setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
         </List>
       )}
     </ThreadListStyles>
