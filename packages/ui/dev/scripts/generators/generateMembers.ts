@@ -2,7 +2,7 @@ import faker from 'faker'
 
 import { randomFromRange } from './utils'
 
-const MAX_MEMBERS = 50
+const MAX_MEMBERS = 45
 
 interface KnownMember {
   isVerified: boolean
@@ -51,8 +51,34 @@ const generateMember = (override?: KnownMember) => ({
   },
 })
 
-export type MemberMock = ReturnType<typeof generateMember>
+const inviteMember = (invitorId: string) => ({
+  id: String(nextId++),
+  rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+  controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+  handle: `${faker.lorem.word()}_${faker.lorem.word()}_${nextId}`,
+  metadata: {
+    name: faker.lorem.words(2),
+    about: faker.lorem.paragraphs(randomFromRange(1, 4)),
+  },
+  isVerified: false,
+  isFoundingMember: false,
+  inviteCount: 5,
+  invitorId,
+  entry: {
+    __typename: 'MembershipEntryInvited',
+    memberInvitedEvent: {
+      createdAt: faker.date.past(2),
+      inBlock: faker.datatype.number(10_000),
+      network: 'OLYMPIA',
+    },
+  },
+})
+
+export type MemberMock = ReturnType<typeof generateMember> | ReturnType<typeof inviteMember>
 
 export const generateMembers = () => {
-  return [...KNOWN_MEMBERS.map(generateMember), ...Array.from({ length: MAX_MEMBERS }, generateMember)]
+  const membersBought = [...KNOWN_MEMBERS.map(generateMember), ...Array.from({ length: MAX_MEMBERS }, generateMember)]
+  const membersInvited = [inviteMember('0'), inviteMember('0'), inviteMember('1'), inviteMember('0')]
+
+  return [...membersBought, ...membersInvited]
 }
