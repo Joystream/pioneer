@@ -205,21 +205,6 @@ export type GetForumThreadsQuery = {
   forumThreads: Array<{ __typename: 'ForumThread' } & ForumThreadFieldsFragment>
 }
 
-export type GetPaginatedForumThreadsQueryVariables = Types.Exact<{
-  where: Types.ForumThreadWhereInput
-  orderBy?: Types.Maybe<Array<Types.ForumThreadOrderByInput> | Types.ForumThreadOrderByInput>
-  first?: Types.Maybe<Types.Scalars['Int']>
-}>
-
-export type GetPaginatedForumThreadsQuery = {
-  __typename: 'Query'
-  forumThreadsConnection: {
-    __typename: 'ForumThreadConnection'
-    totalCount: number
-    edges: Array<{ __typename: 'ForumThreadEdge'; node: { __typename: 'ForumThread' } & ForumThreadFieldsFragment }>
-  }
-}
-
 export type GetForumThreadsCountQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.ForumThreadWhereInput>
 }>
@@ -768,62 +753,6 @@ export function useGetForumThreadsLazyQuery(
 export type GetForumThreadsQueryHookResult = ReturnType<typeof useGetForumThreadsQuery>
 export type GetForumThreadsLazyQueryHookResult = ReturnType<typeof useGetForumThreadsLazyQuery>
 export type GetForumThreadsQueryResult = Apollo.QueryResult<GetForumThreadsQuery, GetForumThreadsQueryVariables>
-export const GetPaginatedForumThreadsDocument = gql`
-  query GetPaginatedForumThreads($where: ForumThreadWhereInput!, $orderBy: [ForumThreadOrderByInput!], $first: Int) {
-    forumThreadsConnection(where: $where, orderBy: $orderBy, first: $first) {
-      totalCount
-      edges {
-        node {
-          ...ForumThreadFields
-        }
-      }
-    }
-  }
-  ${ForumThreadFieldsFragmentDoc}
-`
-
-/**
- * __useGetPaginatedForumThreadsQuery__
- *
- * To run a query within a React component, call `useGetPaginatedForumThreadsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPaginatedForumThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPaginatedForumThreadsQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *      first: // value for 'first'
- *   },
- * });
- */
-export function useGetPaginatedForumThreadsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetPaginatedForumThreadsQuery, GetPaginatedForumThreadsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetPaginatedForumThreadsQuery, GetPaginatedForumThreadsQueryVariables>(
-    GetPaginatedForumThreadsDocument,
-    options
-  )
-}
-export function useGetPaginatedForumThreadsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetPaginatedForumThreadsQuery, GetPaginatedForumThreadsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetPaginatedForumThreadsQuery, GetPaginatedForumThreadsQueryVariables>(
-    GetPaginatedForumThreadsDocument,
-    options
-  )
-}
-export type GetPaginatedForumThreadsQueryHookResult = ReturnType<typeof useGetPaginatedForumThreadsQuery>
-export type GetPaginatedForumThreadsLazyQueryHookResult = ReturnType<typeof useGetPaginatedForumThreadsLazyQuery>
-export type GetPaginatedForumThreadsQueryResult = Apollo.QueryResult<
-  GetPaginatedForumThreadsQuery,
-  GetPaginatedForumThreadsQueryVariables
->
 export const GetForumThreadsCountDocument = gql`
   query GetForumThreadsCount($where: ForumThreadWhereInput) {
     forumThreadsConnection(where: $where) {

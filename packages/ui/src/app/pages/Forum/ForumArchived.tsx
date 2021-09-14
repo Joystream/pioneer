@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { ItemCount } from '@/common/components/ItemCount'
@@ -14,9 +14,14 @@ import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 
 import { ForumTabs } from './components/ForumTabs'
 
+const THREADS_PER_PAGE = 30
 export const ForumArchived = () => {
+  const [page, setPage] = useState<number>(1)
   const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isArchive: true })
-  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({ isArchive: true })
+  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads(
+    { isArchive: true },
+    { perPage: THREADS_PER_PAGE, page }
+  )
 
   return (
     <PageLayout
@@ -48,6 +53,9 @@ export const ForumArchived = () => {
               threads={threads}
               onSort={(order) => refresh({ order })}
               isLoading={isLoadingThreads}
+              page={page}
+              pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}
+              setPage={setPage}
               isArchive
             />
           </RowGapBlock>
