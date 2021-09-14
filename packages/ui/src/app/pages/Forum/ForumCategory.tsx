@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -15,6 +15,7 @@ import { ForumCategoryList } from '@/forum/components/category'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
+import { THREADS_PER_PAGE } from '@/forum/constant'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
@@ -22,14 +23,18 @@ import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberS
 import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumCategory = () => {
+  const [page, setPage] = useState<number>(1)
   const { id, type } = useParams<{ id: string; type?: 'archive' }>()
   const isArchive = type === 'archive'
 
   const { category } = useForumCategory(id)
-  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads({
-    categoryId: id,
-    isArchive,
-  })
+  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads(
+    {
+      categoryId: id,
+      isArchive,
+    },
+    { perPage: THREADS_PER_PAGE, page }
+  )
 
   const { showModal } = useModal()
 
@@ -85,6 +90,9 @@ export const ForumCategory = () => {
               onSort={(order) => refresh({ order })}
               isLoading={isLoadingThreads}
               isArchive={isArchive}
+              page={page}
+              pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}
+              setPage={setPage}
             />
           </RowGapBlock>
         </>

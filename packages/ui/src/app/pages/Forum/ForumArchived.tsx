@@ -9,12 +9,12 @@ import { ForumCategoryList } from '@/forum/components/category'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
+import { THREADS_PER_PAGE } from '@/forum/constant'
 import { useForumCategories } from '@/forum/hooks/useForumCategories'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 
 import { ForumTabs } from './components/ForumTabs'
 
-const THREADS_PER_PAGE = 30
 export const ForumArchived = () => {
   const [page, setPage] = useState<number>(1)
   const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isArchive: true })
@@ -53,10 +53,10 @@ export const ForumArchived = () => {
               threads={threads}
               onSort={(order) => refresh({ order })}
               isLoading={isLoadingThreads}
+              isArchive
               page={page}
               pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}
               setPage={setPage}
-              isArchive
             />
           </RowGapBlock>
         </>
