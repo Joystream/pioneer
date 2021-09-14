@@ -39,5 +39,5 @@ export const asMemberWithDetails = (fields: MemberWithDetailsFieldsFragment): Me
   about: fields.metadata.about ?? undefined,
   invitedBy: '',
   entry: asMemberEntry(fields.entry),
-  invitees: [],
+  invitees: fields.invitees.map(asMember),
 })

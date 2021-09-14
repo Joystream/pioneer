@@ -34,6 +34,12 @@ const main = () => {
   Object.entries(mocks).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
 
+const membersModule = {
+  command: 'members',
+  describe: 'Generate members',
+  handler: () => saveFile('members', generateMembers()),
+}
+
 const allModule = {
   command: 'all',
   describe: 'Generate all mocks',
@@ -44,6 +50,7 @@ yargs(process.argv.slice(2))
   .usage('yarn generate-mocks [<command>]')
   .scriptName('')
   .command(allModule)
+  .command(membersModule)
   .command(eventsModule)
   .command(forumModule)
   .demandCommand().argv
