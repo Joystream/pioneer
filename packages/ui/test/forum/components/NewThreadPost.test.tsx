@@ -86,6 +86,7 @@ describe('UI: Add new post', () => {
       expect(useModal.modal).toEqual('CreatePost')
       expect(useModal.modalData.postText).toEqual('I disagree')
       expect(useModal.modalData.isEditable).toEqual(false)
+      expect(useModal.modalData.replyTo).toEqual(replyTo)
     })
 
     it('With reply', async () => {
@@ -97,7 +98,7 @@ describe('UI: Add new post', () => {
         status: 'PostStatusActive',
         createdAt: new Date().toISOString(),
       }
-      renderEditor(props)
+      renderEditor({ ...props, replyTo })
       const editor = await screen.findByRole('textbox')
       act(() => {
         fireEvent.change(editor, { target: { value: 'I disagree' } })
@@ -107,31 +108,9 @@ describe('UI: Add new post', () => {
         fireEvent.click(await getButton('Post a reply'))
       })
       expect(useModal.modal).toEqual('CreatePost')
-      expect(useModal.modalData).toEqual({
-        postText: 'I disagree',
-        replyTo,
-        thread: { id: '1', categoryId: '1', title: 'thread' },
-        isEditable: false,
-      })
-    })
-  })
-
-  it('Opens the modal', async () => {
-    useMyMemberships.setActive(getMember('alice'))
-    renderEditor(props)
-    const editor = await screen.findByRole('textbox')
-    act(() => {
-      fireEvent.change(editor, { target: { value: 'I disagree' } })
-    })
-    await waitFor(async () => expect(await getButton('Post a reply')).not.toBeDisabled())
-    act(async () => {
-      fireEvent.click(await getButton('Post a reply'))
-    })
-    expect(useModal.modal).toEqual('CreatePost')
-    expect(useModal.modalData).toEqual({
-      postText: 'I disagree',
-      thread: { id: '1', categoryId: '1', title: 'thread' },
-      isEditable: false,
+      expect(useModal.modalData.postText).toEqual('I disagree')
+      expect(useModal.modalData.isEditable).toEqual(false)
+      expect(useModal.modalData.replyTo).toEqual(replyTo)
     })
   })
 
