@@ -109,7 +109,7 @@ export const ForumThread = () => {
     <MainPanel ref={sideNeighborRef}>
       <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={onReply} />
       {thread && isThreadActive && (
-        <NewThreadPost replyTo={replyTo} removeReply={onRemoveReply} getTransaction={getTransaction} />
+        <NewThreadPost ref={newPostRef} replyTo={replyTo} removeReply={onRemoveReply} getTransaction={getTransaction} />
       )}
     </MainPanel>
   )
