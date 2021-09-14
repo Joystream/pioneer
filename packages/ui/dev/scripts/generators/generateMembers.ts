@@ -1,6 +1,6 @@
 import faker from 'faker'
 
-import { randomFromRange } from './utils'
+import { randomBlock, randomFromRange } from './utils'
 
 const MAX_MEMBERS = 45
 
@@ -28,7 +28,7 @@ export const KNOWN_MEMBERS: KnownMember[] = [
 
 let nextId = 0
 
-const generateMember = (override?: KnownMember) => ({
+const generateBaseMember = () => ({
   id: String(nextId++),
   rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
   controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
@@ -40,37 +40,23 @@ const generateMember = (override?: KnownMember) => ({
   isVerified: Math.random() > 0.5,
   isFoundingMember: nextId < 9,
   inviteCount: 5,
+})
+
+const generateMember = (override?: KnownMember) => ({
+  ...generateBaseMember(),
   ...override,
   entry: {
     __typename: 'MembershipEntryPaid',
-    membershipBoughtEvent: {
-      createdAt: faker.date.past(2),
-      inBlock: faker.datatype.number(10_000),
-      network: 'OLYMPIA',
-    },
+    membershipBoughtEvent: randomBlock(),
   },
 })
 
 const inviteMember = (invitedById: string) => ({
-  id: String(nextId++),
-  rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-  controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-  handle: `${faker.lorem.word()}_${faker.lorem.word()}_${nextId}`,
-  metadata: {
-    name: faker.lorem.words(2),
-    about: faker.lorem.paragraphs(randomFromRange(1, 4)),
-  },
-  isVerified: false,
-  isFoundingMember: false,
-  inviteCount: 5,
+  ...generateBaseMember(),
   invitedById,
   entry: {
     __typename: 'MembershipEntryInvited',
-    memberInvitedEvent: {
-      createdAt: faker.date.past(2),
-      inBlock: faker.datatype.number(10_000),
-      network: 'OLYMPIA',
-    },
+    memberInvitedEvent: randomBlock(),
   },
 })
 
