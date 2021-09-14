@@ -1,3 +1,4 @@
+import { WorkerStatusType } from '@/mocks/data'
 import yargs from 'yargs'
 
 import applications from '../../src/mocks/data/raw/applications.json'
@@ -41,6 +42,10 @@ export const generateEvents = (args: EventsArgs) => {
     workers: workers.map((worker) => ({
       ...worker,
       createdAt: new Date(worker.createdAt),
+      status: {
+        event: worker.status.event,
+        status: worker.status.status as WorkerStatusType
+      }
     })),
     workingGroups,
   }

@@ -12,6 +12,14 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 
+const workerLeftEventData = {
+  groupId: WORKER_DATA.groupId,
+  workerId: WORKER_DATA.id,
+  inBlock: 10,
+  createdAt: '2021-09-14T12:37:20.036Z',
+  network: 'OLYMPIA',
+}
+
 describe('WorkingGroupListItem', () => {
   const mockServer = setupMockServer()
 
@@ -51,15 +59,30 @@ describe('WorkingGroupListItem', () => {
       seedOpening(OPENING_DATA, mockServer.server)
       seedApplication(APPLICATION_DATA, mockServer.server)
       seedWorker(
-        { ...WORKER_DATA, id: 'forumWorkingGroup-1', groupId: 'forumWorkingGroup', status: 'active' },
+        {
+          ...WORKER_DATA,
+          id: 'forumWorkingGroup-1',
+          groupId: 'forumWorkingGroup',
+          status: { status: 'WorkerStatusActive' },
+        },
         mockServer.server
       )
       seedWorker(
-        { ...WORKER_DATA, id: 'forumWorkingGroup-2', groupId: 'forumWorkingGroup', status: 'active' },
+        {
+          ...WORKER_DATA,
+          id: 'forumWorkingGroup-2',
+          groupId: 'forumWorkingGroup',
+          status: { status: 'WorkerStatusActive' },
+        },
         mockServer.server
       )
       seedWorker(
-        { ...WORKER_DATA, id: 'forumWorkingGroup-3', groupId: 'forumWorkingGroup', status: 'left' },
+        {
+          ...WORKER_DATA,
+          id: 'forumWorkingGroup-3',
+          groupId: 'forumWorkingGroup',
+          status: { status: 'WorkerStatusLeft', event: workerLeftEventData },
+        },
         mockServer.server
       )
 

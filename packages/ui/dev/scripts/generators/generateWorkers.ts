@@ -1,4 +1,6 @@
+import { WorkerStatusType } from '@/mocks/data/seedWorkers'
 import faker from 'faker'
+import { generateTerminatedEvent, generateWorkerLeavingEvent, WorkerStatusEvent } from './generateEvents'
 
 import { OpeningMock } from './generateOpeningsAndUpcomingOpenings'
 import { WORKING_GROUPS } from './generateWorkingGroups'
@@ -25,7 +27,19 @@ const generateApplication = (opening: OpeningMock, status = 'pending') => (appli
   }
 }
 
-const generateWorker = (type: string, groupId: string, applications: ApplicationMock[], opening?: OpeningMock) => (
+const StatusEventGenerators: Record<WorkerStatusType, (workerId: string, groupId: string) => WorkerStatusEvent | undefined> = {
+  WorkerStatusTerminated: generateTerminatedEvent,
+  WorkerStatusLeaving: generateWorkerLeavingEvent,
+  WorkerStatusLeft: generateWorkerLeavingEvent,
+  WorkerStatusActive: () => undefined,
+}
+
+const generateWorkerStatus = (status: WorkerStatusType, workerId: string, groupId: string) => ({
+  status,
+  event: StatusEventGenerators[status](workerId, groupId)
+})
+
+const generateWorker = (type: WorkerStatusType, groupId: string, applications: ApplicationMock[], opening?: OpeningMock) => (
   memberId: number
 ) => {
   if (!opening) {
@@ -35,14 +49,15 @@ const generateWorker = (type: string, groupId: string, applications: Application
 
   const application = generateApplication(opening, 'filled')(String(memberId))
   applications.push(application)
+  const id = `${groupId}-${runtimeId}`
 
   return {
-    id: `${groupId}-${runtimeId}`,
+    id,
     runtimeId,
     membershipId: memberId,
     groupId,
     applicationId: application.id,
-    status: type,
+    status: generateWorkerStatus(type, id, groupId),
     rewardPerBlock: randomFromRange(1, 2) * 100,
     earnedTotal: randomFromRange(10, 40) * 100,
     missingRewardAmount: randomFromRange(0, 20) * 100,
@@ -81,10 +96,10 @@ export const generateWorkers = (mocks: Mocks) => {
     const leavingIds = randomUniqueArrayFromRange(randomFromRange(2, 5), 0, mocks.members.length - 1)
 
     return [
-      ...workersIds.map(generateWorker('active', groupName, applications, findOpening(groupName, 'filled'))),
-      ...terminatedIds.map(generateWorker('terminated', groupName, applications, findOpening(groupName, 'filled'))),
-      ...leftIds.map(generateWorker('left', groupName, applications, findOpening(groupName, 'filled'))),
-      ...leavingIds.map(generateWorker('leaving', groupName, applications, findOpening(groupName, 'filled'))),
+      ...workersIds.map(generateWorker('WorkerStatusActive', groupName, applications, findOpening(groupName, 'filled'))),
+      ...terminatedIds.map(generateWorker('WorkerStatusTerminated', groupName, applications, findOpening(groupName, 'filled'))),
+      ...leftIds.map(generateWorker('WorkerStatusLeft', groupName, applications, findOpening(groupName, 'filled'))),
+      ...leavingIds.map(generateWorker('WorkerStatusLeaving', groupName, applications, findOpening(groupName, 'filled'))),
     ]
   }
 
