@@ -9,7 +9,7 @@ import { asForumPost, ForumPost } from '@/forum/types/ForumPost'
 
 export const POSTS_PER_PAGE = 5
 
-interface ThreadNavigation {
+interface ThreadPostsNavigation {
   page: string | null
   post: string | null
 }
@@ -21,7 +21,7 @@ interface UseForumThreadPosts {
   pageCount?: number
 }
 
-export const useForumThreadPosts = (threadId: string, navigation: ThreadNavigation): UseForumThreadPosts => {
+export const useForumThreadPosts = (threadId: string, navigation: ThreadPostsNavigation): UseForumThreadPosts => {
   const where = useMemo((): ForumPostWhereInput => ({ thread: { id_eq: threadId }, isVisible_eq: true }), [threadId])
 
   const [getPosts, postsResults] = useGetForumPostsLazyQuery()

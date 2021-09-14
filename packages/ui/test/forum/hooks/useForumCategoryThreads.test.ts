@@ -1,9 +1,10 @@
 import { renderHook } from '@testing-library/react-hooks'
 import { endOfYesterday } from 'date-fns'
+import { act } from 'react-dom/test-utils'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
-import { useGetPaginatedForumThreadsQuery } from '@/forum/queries'
+import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries'
 
 import { getMember } from '../../_mocks/members'
 
@@ -13,15 +14,19 @@ const renderUseForumCategoryThreads = (...props: Props) =>
   renderHook((props: Props) => useForumCategoryThreads(...props), { initialProps: props })
 
 jest.mock('../../../src/forum/queries', () => ({
-  useGetPaginatedForumThreadsQuery: jest.fn(() => ({})),
+  useGetForumThreadsQuery: jest.fn(() => ({})),
+  useGetForumThreadsCountQuery: jest.fn(() => ({})),
 }))
-const mockedQueryHook = useGetPaginatedForumThreadsQuery as jest.Mock
+
+const mockedQueryHook = useGetForumThreadsQuery as jest.Mock
+const mockedQueryCountHook = useGetForumThreadsCountQuery as jest.Mock
 
 const { IsStickyDesc, UpdatedAtAsc, AuthorDesc } = ForumThreadOrderByInput
 
 describe('useForumCategoryThreads', () => {
   afterEach(() => {
     mockedQueryHook.mockClear()
+    mockedQueryCountHook.mockClear()
   })
 
   it('Default', () => {
@@ -31,7 +36,7 @@ describe('useForumCategoryThreads', () => {
       variables: {
         where: { status_json: { isTypeOf_eq: 'ThreadStatusActive' } },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
-        first: 30,
+        limit: 30,
       },
     })
   })
@@ -51,11 +56,11 @@ describe('useForumCategoryThreads', () => {
           status_json: { isTypeOf_eq: 'ThreadStatusActive' },
         },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
-        first: 30,
+        limit: 30,
       },
     })
 
-    refresh({ filters: { author, date: { start, end }, tag: null } })
+    act(() => refresh({ filters: { author, date: { start, end }, tag: null } }))
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
@@ -67,7 +72,7 @@ describe('useForumCategoryThreads', () => {
           createdAt_lte: end,
         },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
-        first: 30,
+        limit: 30,
       },
     })
   })
@@ -79,7 +84,7 @@ describe('useForumCategoryThreads', () => {
       variables: {
         where: { status_json: { isTypeOf_eq: 'ThreadStatusActive' } },
         orderBy: [IsStickyDesc, AuthorDesc],
-        first: 30,
+        limit: 30,
       },
     })
   })
@@ -96,11 +101,11 @@ describe('useForumCategoryThreads', () => {
           status_json: { isTypeOf_eq: 'ThreadStatusLocked' },
         },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
-        first: 30,
+        limit: 30,
       },
     })
 
-    rerender([{ isArchive: true, filters: { author: null, date: { start, end }, tag: null } }])
+    act(() => rerender([{ isArchive: true, filters: { author: null, date: { start, end }, tag: null } }]))
 
     expect(mockedQueryHook).toBeCalledWith({
       variables: {
@@ -111,7 +116,20 @@ describe('useForumCategoryThreads', () => {
           },
         },
         orderBy: [IsStickyDesc, UpdatedAtAsc],
-        first: 30,
+        limit: 30,
+      },
+    })
+  })
+
+  it('Pagination', () => {
+    renderUseForumCategoryThreads({}, { perPage: 10, page: 1 })
+
+    expect(mockedQueryHook).toBeCalledWith({
+      variables: {
+        where: { status_json: { isTypeOf_eq: 'ThreadStatusActive' } },
+        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        limit: 10,
+        offset: 0,
       },
     })
   })
