@@ -60,7 +60,7 @@ describe('UI: Proposal discussion', () => {
         'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
       )
     ).toBeNull()
-    expect(await getButton('Post a reply')).toBeDefined()
+    expect(await getButton('Create post')).toBeDefined()
   })
 
   it('Whitelisted member not selected', async () => {
@@ -76,7 +76,7 @@ describe('UI: Proposal discussion', () => {
         'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
       )
     ).toBeNull()
-    expect(await getButton('Post a reply')).toBeDefined()
+    expect(await getButton('Create post')).toBeDefined()
   })
 
   const renderComponent = (thread: ProposalDiscussionThread) =>
