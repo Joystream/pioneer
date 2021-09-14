@@ -75,11 +75,11 @@ export const ThreadList = ({ threads, onSort, isLoading, isArchive, page, pageCo
         <Loading />
       ) : (
         <List as="div" isArchive={isArchive}>
-          {page && pageCount && setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
+          {setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
           {threads.map((thread, index) => (
             <ThreadListItem key={index} thread={thread} isArchive={isArchive} />
           ))}
-          {page && pageCount && setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
+          {setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
         </List>
       )}
     </ThreadListStyles>
