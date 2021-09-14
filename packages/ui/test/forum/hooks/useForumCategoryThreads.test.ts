@@ -120,4 +120,17 @@ describe('useForumCategoryThreads', () => {
       },
     })
   })
+
+  it('Pagination', () => {
+    renderUseForumCategoryThreads({}, { perPage: 10, page: 1 })
+
+    expect(mockedQueryHook).toBeCalledWith({
+      variables: {
+        where: { status_json: { isTypeOf_eq: 'ThreadStatusActive' } },
+        orderBy: [IsStickyDesc, UpdatedAtAsc],
+        limit: 10,
+        offset: 0,
+      },
+    })
+  })
 })
