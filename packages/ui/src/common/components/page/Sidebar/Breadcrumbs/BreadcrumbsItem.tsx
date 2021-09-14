@@ -58,7 +58,7 @@ export const BreadcrumbsItemText = styled.span`
   ${truncatedBreadcrumbText}
 `
 
-const BreadcrumbsItemComponent = styled.li`
+export const BreadcrumbsItemComponent = styled.li`
   display: inline-flex;
   position: relative;
   align-items: center;
