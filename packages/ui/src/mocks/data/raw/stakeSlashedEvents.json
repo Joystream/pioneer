@@ -1,70 +1,6 @@
 [
   {
-    "createdAt": "2021-07-30T04:23:06.120Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-67",
-    "requestedAmount": 1000,
-    "slashedAmount": 1000,
-    "rationale": "rationale"
-  },
-  {
-    "createdAt": "2021-07-26T17:27:42.394Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-75",
-    "requestedAmount": 1000,
-    "slashedAmount": 1000,
-    "rationale": "rationale"
-  },
-  {
-    "createdAt": "2021-07-30T06:32:04.054Z",
-    "groupId": "forumWorkingGroup",
-    "workerId": "forumWorkingGroup-4",
-    "requestedAmount": 1000,
-    "slashedAmount": 1000,
-    "rationale": "rationale"
-  },
-  {
-    "createdAt": "2021-07-28T08:42:35.205Z",
-    "groupId": "storageWorkingGroup",
-    "workerId": "storageWorkingGroup-18",
-    "requestedAmount": 1000,
-    "slashedAmount": 1000,
-    "rationale": "rationale"
-  },
-  {
-    "createdAt": "2021-07-28T11:46:50.031Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-77",
-    "requestedAmount": 1000,
-    "slashedAmount": 1000,
-    "rationale": "rationale"
-  },
-  {
-    "createdAt": "2021-07-24T07:16:59.118Z",
-    "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-46",
-    "requestedAmount": 1000,
-    "slashedAmount": 1000,
-    "rationale": "rationale"
-  },
-  {
-    "createdAt": "2021-07-24T09:34:42.545Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-80",
-    "requestedAmount": 1000,
-    "slashedAmount": 1000,
-    "rationale": "rationale"
-  },
-  {
-    "createdAt": "2021-07-25T05:33:29.017Z",
-    "groupId": "membershipWorkingGroup",
-    "workerId": "membershipWorkingGroup-68",
-    "requestedAmount": 1000,
-    "slashedAmount": 1000,
-    "rationale": "rationale"
-  },
-  {
-    "createdAt": "2021-07-30T07:40:48.388Z",
+    "createdAt": "2021-09-14T00:35:23.649Z",
     "groupId": "forumWorkingGroup",
     "workerId": "forumWorkingGroup-10",
     "requestedAmount": 1000,
@@ -72,9 +8,73 @@
     "rationale": "rationale"
   },
   {
-    "createdAt": "2021-07-25T19:05:29.596Z",
+    "createdAt": "2021-09-12T10:56:33.183Z",
     "groupId": "contentDirectoryWorkingGroup",
-    "workerId": "contentDirectoryWorkingGroup-50",
+    "workerId": "contentDirectoryWorkingGroup-54",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-09-07T15:19:01.580Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-2",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-09-09T11:59:50.804Z",
+    "groupId": "membershipWorkingGroup",
+    "workerId": "membershipWorkingGroup-67",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-09-09T02:15:39.576Z",
+    "groupId": "contentDirectoryWorkingGroup",
+    "workerId": "contentDirectoryWorkingGroup-49",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-09-12T21:06:45.956Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-28",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-09-09T16:43:32.477Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-22",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-09-12T18:53:27.042Z",
+    "groupId": "storageWorkingGroup",
+    "workerId": "storageWorkingGroup-31",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-09-12T22:33:35.344Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-1",
+    "requestedAmount": 1000,
+    "slashedAmount": 1000,
+    "rationale": "rationale"
+  },
+  {
+    "createdAt": "2021-09-09T20:06:56.373Z",
+    "groupId": "forumWorkingGroup",
+    "workerId": "forumWorkingGroup-4",
     "requestedAmount": 1000,
     "slashedAmount": 1000,
     "rationale": "rationale"
