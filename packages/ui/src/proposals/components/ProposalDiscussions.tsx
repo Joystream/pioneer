@@ -1,6 +1,6 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -13,8 +13,8 @@ import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ForumPost } from '@/forum/types'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
 
@@ -32,8 +32,17 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const initialPost = query.get('post')
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
+  const newPostRef = useRef<HTMLDivElement>(null)
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
+
+  const onReply = (post: ForumPost) => {
+    setReplyTo(post)
+    newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
+  }
+  const onRemoveReply = () => {
+    setReplyTo(undefined)
+  }
 
   useEffect(() => {
     if (initialPost && postsRefs[initialPost]) {
@@ -54,11 +63,11 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
 
   const getReplyComponent = () => {
     if (thread.mode === 'open') {
-      return <NewThreadPost getTransaction={getTransaction} />
+      return <NewThreadPost getTransaction={getTransaction} removeReply={onRemoveReply} />
     }
     if (members.find((member) => thread.whitelistIds?.includes(member.id))) {
       return active && thread.whitelistIds?.includes(active.id) ? (
-        <NewThreadPost getTransaction={getTransaction} />
+        <NewThreadPost getTransaction={getTransaction} removeReply={onRemoveReply} />
       ) : (
         <TextBig>Please select a whitelisted membership.</TextBig>
       )
@@ -89,7 +98,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isSelected={post.id === initialPost}
             isThreadActive={true}
             post={post}
-            relyToPost={() => setReplyTo({ ...post, repliesTo: undefined })}
+            replyToPost={() => setReplyTo({ ...post, repliesTo: undefined })}
             type="proposal"
             link={`${origin}${ProposalsRoutes.preview}/${proposalId}?post=${post.id}`}
           />

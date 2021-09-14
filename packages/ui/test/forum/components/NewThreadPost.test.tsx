@@ -56,7 +56,6 @@ describe('UI: Add new post', () => {
   })
 
   const props: NewPostProps = {
-    ref,
     getTransaction: (text, isEditable) => api.api.tx.forum.addPost(1, 1, 1, text, isEditable),
     removeReply: () => true,
   }
@@ -98,7 +97,7 @@ describe('UI: Add new post', () => {
         status: 'PostStatusActive',
         createdAt: new Date().toISOString(),
       }
-      renderEditor()
+      renderEditor(props)
       const editor = await screen.findByRole('textbox')
       act(() => {
         fireEvent.change(editor, { target: { value: 'I disagree' } })
@@ -119,7 +118,7 @@ describe('UI: Add new post', () => {
 
   it('Opens the modal', async () => {
     useMyMemberships.setActive(getMember('alice'))
-    renderEditor()
+    renderEditor(props)
     const editor = await screen.findByRole('textbox')
     act(() => {
       fireEvent.change(editor, { target: { value: 'I disagree' } })
@@ -137,14 +136,14 @@ describe('UI: Add new post', () => {
     })
   })
 
-  const renderEditor = () =>
+  const renderEditor = (props: NewPostProps) =>
     render(
       <MemoryRouter>
         <ModalContext.Provider value={useModal}>
           <MockKeyringProvider>
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
-                <NewThreadPost {...props} />
+                <NewThreadPost ref={ref} {...props} />
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockKeyringProvider>

@@ -21,7 +21,7 @@ type GetTransaction = (
   isEditable: boolean
 ) => SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
 
-interface NewPostProps {
+export interface NewPostProps {
   getTransaction: GetTransaction
   replyTo?: ForumPost
   removeReply: () => void

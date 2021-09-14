@@ -22,8 +22,8 @@ import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { useForumThread } from '@/forum/hooks/useForumThread'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ForumPost } from '@/forum/types'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
 
