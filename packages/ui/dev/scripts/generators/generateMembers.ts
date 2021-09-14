@@ -51,7 +51,7 @@ const generateMember = (override?: KnownMember) => ({
   },
 })
 
-const inviteMember = (invitorId: string) => ({
+const inviteMember = (invitedById: string) => ({
   id: String(nextId++),
   rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
   controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
@@ -63,7 +63,7 @@ const inviteMember = (invitorId: string) => ({
   isVerified: false,
   isFoundingMember: false,
   inviteCount: 5,
-  invitorId,
+  invitedById,
   entry: {
     __typename: 'MembershipEntryInvited',
     memberInvitedEvent: {

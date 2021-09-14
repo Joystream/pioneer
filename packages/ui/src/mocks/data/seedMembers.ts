@@ -40,24 +40,11 @@ const seedMembershipEntry = (member: MockMember, server: any) => {
 export const seedMember = (member: MockMember, server: any) => {
   const temporary: any = { ...member }
 
-  const createdMember = server.schema.create('Membership', {
+  return server.schema.create('Membership', {
     ...temporary,
     metadata: server.schema.create('MemberMetadata', member.metadata),
     entry: seedMembershipEntry(member, server),
   })
-
-  const invitorId: string = ((member as unknown) as any).invitorId
-
-  if (invitorId) {
-    const invitor = server.schema.find('Membership', invitorId)
-
-    if (invitor) {
-      invitor.inviteeIds.push(member.id)
-      invitor.save()
-    }
-  }
-
-  return createdMember
 }
 
 export const seedMembers = (server: any, howMany?: number) => {
