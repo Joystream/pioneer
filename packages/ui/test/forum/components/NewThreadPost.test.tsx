@@ -123,7 +123,7 @@ describe('UI: Add new post', () => {
     act(() => {
       fireEvent.change(editor, { target: { value: 'I disagree' } })
     })
-    waitFor(() => expect(getButton('Post a reply')).toBeDisabled())
+    await waitFor(async () => expect(await getButton('Post a reply')).toBeDisabled())
     const button = await getButton('Post a reply')
     act(() => {
       fireEvent.click(button)
