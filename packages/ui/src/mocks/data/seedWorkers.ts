@@ -47,7 +47,10 @@ export const seedWorker = (rawWorker: RawWorker, server: any) => {
       groupId: rawWorker.groupId,
     }),
   })
-  worker.update({ status: seedWorkerStatus(rawWorker.status, server) })
+  worker.update({
+    status: seedWorkerStatus(rawWorker.status, server),
+    updatedAt: rawWorker.status.event?.createdAt ?? rawWorker.createdAt,
+  })
 }
 
 const seedWorkerStatus = (status: WorkerStatusData, server: any) => {
