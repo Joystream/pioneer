@@ -98,7 +98,7 @@ export const CreatePostSignModal = ({
           <ButtonsGroup align="right">
             <PreviewPostButton author={author} postText={postText} replyTo={replyTo} />
             <ButtonPrimary size="medium" disabled={signDisabled} onClick={() => send('SIGN')}>
-              Sign and {replyTo ? 'reply' : 'post'}
+              {replyTo ? 'Sign and reply' : 'Sign and post'}
               <Arrow direction="right" />
             </ButtonPrimary>
           </ButtonsGroup>
