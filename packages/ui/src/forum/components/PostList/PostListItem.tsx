@@ -32,6 +32,7 @@ interface PostListItemProps {
   isThreadActive?: boolean
   insertRef?: (ref: RefObject<HTMLDivElement>) => void
   type: PostListItemType
+  replyToPost: () => void
   link?: string
 }
 
@@ -43,6 +44,7 @@ export const PostListItem = ({
   insertRef,
   type,
   link,
+  replyToPost,
 }: PostListItemProps) => {
   const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
 
@@ -79,10 +81,12 @@ export const PostListItem = ({
           {repliesTo && (
             <Reply>
               <ReplyBadge>
-                <ArrowReplyIcon />{' '}
-                <Badge>
-                  <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
-                </Badge>
+                <div>
+                  <ArrowReplyIcon />{' '}
+                  <Badge>
+                    <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
+                  </Badge>
+                </div>
               </ReplyBadge>
               <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
             </Reply>
@@ -106,7 +110,7 @@ export const PostListItem = ({
               />
               {isThreadActive && (
                 <>
-                  <ButtonGhost square disabled={isPreview} size="small" title="Reply">
+                  <ButtonGhost square disabled={isPreview} size="small" title="Reply" onClick={replyToPost}>
                     <ReplyIcon />
                   </ButtonGhost>
                   <PostContextMenu post={post} onEdit={() => setEditing(true)} type={type} />
@@ -125,7 +129,7 @@ const MessageBody = styled.div`
   margin-top: 8px;
 `
 
-const Reply = styled.blockquote`
+export const Reply = styled.blockquote`
   background-color: ${Colors.Black[75]};
   font-style: italic;
   margin: 0 0 12px;
@@ -137,11 +141,12 @@ const Reply = styled.blockquote`
   }
 `
 
-const ReplyBadge = styled.div`
+export const ReplyBadge = styled.div`
   display: flex;
   align-items: center;
   font-style: normal;
   margin-bottom: 10px;
+  justify-content: space-between;
 
   svg {
     height: 11px;

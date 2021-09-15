@@ -18,7 +18,7 @@ import { EditPostModalCall } from '.'
 
 export const EditPostModal = () => {
   const {
-    modalData: { postAuthor, postText, transaction },
+    modalData: { postAuthor, postText, replyTo, transaction },
     hideModal,
   } = useModal<EditPostModalCall>()
 
@@ -54,6 +54,7 @@ export const EditPostModal = () => {
         action="edit"
         author={postAuthor}
         newText={postText}
+        replyTo={replyTo}
       />
     )
   }

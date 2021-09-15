@@ -1,6 +1,6 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
-import React, { RefObject, useEffect } from 'react'
+import React, { RefObject, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -13,6 +13,7 @@ import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
+import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
@@ -25,12 +26,22 @@ interface Props {
 export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const { origin } = useLocation()
   const query = useRouteQuery()
-  const initialPost = query.get('post')
   const { api } = useApi()
   const { active, members } = useMyMemberships()
 
+  const initialPost = query.get('post')
+  const isAbleToPost =
+    thread.mode === 'open' || (thread.mode === 'closed' && active && thread.whitelistIds?.includes(active.id))
+  const isInWhitelist = thread.mode === 'closed' && members.find((member) => thread.whitelistIds?.includes(member.id))
+  const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
+
+  const newPostRef = useRef<HTMLDivElement>(null)
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
+
+  useEffect(() => {
+    replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
+  }, [replyTo])
 
   useEffect(() => {
     if (initialPost && postsRefs[initialPost]) {
@@ -43,23 +54,28 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       return api.tx.proposalsDiscussion.addPost(
         createType('MemberId', Number.parseInt(active.id)),
         thread.id,
-        metadataToBytes(ForumPostMetadata, { text: postText }),
+        metadataToBytes(ForumPostMetadata, { text: postText, repliesTo: replyTo ? Number(replyTo.id) : undefined }),
         isEditable
       )
     }
   }
 
-  const getReplyComponent = () => {
-    if (thread.mode === 'open') {
-      return <NewThreadPost getTransaction={getTransaction} />
-    }
-    if (members.find((member) => thread.whitelistIds?.includes(member.id))) {
-      return active && thread.whitelistIds?.includes(active.id) ? (
-        <NewThreadPost getTransaction={getTransaction} />
-      ) : (
-        <TextBig>Please select a whitelisted membership.</TextBig>
+  const getPostForm = () => {
+    if (isAbleToPost) {
+      return (
+        <NewThreadPost
+          ref={newPostRef}
+          replyTo={replyTo}
+          getTransaction={getTransaction}
+          removeReply={() => setReplyTo(undefined)}
+        />
       )
     }
+
+    if (isInWhitelist) {
+      return <TextBig>Please select a whitelisted membership.</TextBig>
+    }
+
     return (
       <TextBig>
         The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.
@@ -86,12 +102,13 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isSelected={post.id === initialPost}
             isThreadActive={true}
             post={post}
+            replyToPost={() => setReplyTo(post)}
             type="proposal"
             link={`${origin}${ProposalsRoutes.preview}/${proposalId}?post=${post.id}`}
           />
         )
       })}
-      <PostMessageForm>{getReplyComponent()}</PostMessageForm>
+      <PostMessageForm>{getPostForm()}</PostMessageForm>
     </ProposalDiscussionsStyles>
   )
 }

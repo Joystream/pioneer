@@ -20,7 +20,7 @@ import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
   const {
-    modalData: { postText, transaction, isEditable },
+    modalData: { postText, replyTo, transaction, isEditable },
     hideModal,
   } = useModal<CreatePostModalCall>()
 
@@ -62,6 +62,7 @@ export const CreatePostModal = () => {
         controllerAccount={controllerAccount}
         author={active}
         postText={postText}
+        replyTo={replyTo}
         isEditable={isEditable}
         postDeposit={postDeposit}
       />
