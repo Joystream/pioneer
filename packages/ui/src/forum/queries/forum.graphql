@@ -179,17 +179,6 @@ query GetForumThreads($where: ForumThreadWhereInput, $orderBy: [ForumThreadOrder
   }
 }
 
-query GetPaginatedForumThreads($where: ForumThreadWhereInput!, $orderBy: [ForumThreadOrderByInput!], $first: Int) {
-  forumThreadsConnection(where: $where, orderBy: $orderBy, first: $first) {
-    totalCount
-    edges {
-      node {
-        ...ForumThreadFields
-      }
-    }
-  }
-}
-
 query GetForumThreadsCount($where: ForumThreadWhereInput) {
   forumThreadsConnection(where: $where) {
     totalCount

@@ -4,7 +4,7 @@ import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { merge } from '@/common/utils'
 import { ThreadEmptyFilters, ThreadFiltersState } from '@/forum/components/threads/ThreadFilters'
 import { ThreadDefaultOrder, ThreadOrder } from '@/forum/components/threads/ThreadList'
-import { useGetPaginatedForumThreadsQuery } from '@/forum/queries'
+import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries'
 import { asForumThread } from '@/forum/types'
 
 export interface ThreadsOptions {
@@ -14,29 +14,42 @@ export interface ThreadsOptions {
   isArchive?: boolean
 }
 
+interface ThreadsNavigation {
+  page: number
+  perPage: number
+}
+
 const threadOptionReducer: Reducer<ThreadsOptions | Record<string, never>, Partial<ThreadsOptions>> = merge
 const ThreadsDefaultOptions: ThreadsOptions = { filters: ThreadEmptyFilters, order: ThreadDefaultOrder }
 
-export const useForumCategoryThreads = (options: Partial<ThreadsOptions>) => {
-  const initalOptions = useMemo(() => ({ ...ThreadsDefaultOptions, ...options }), [JSON.stringify(options)])
-  useEffect(() => refresh(initalOptions), [initalOptions])
+export const useForumCategoryThreads = (options: Partial<ThreadsOptions>, pagination?: ThreadsNavigation) => {
+  const initialOptions = useMemo(() => ({ ...ThreadsDefaultOptions, ...options }), [JSON.stringify(options)])
+  useEffect(() => refresh(initialOptions), [initialOptions])
 
-  const [{ order, filters, categoryId, isArchive }, refresh] = useReducer(threadOptionReducer, initalOptions)
+  const [{ order, filters, categoryId, isArchive }, refresh] = useReducer(threadOptionReducer, initialOptions)
 
-  const { loading, data } = useGetPaginatedForumThreadsQuery({
+  const { loading: loadingThreads, data: threadsData } = useGetForumThreadsQuery({
     variables: {
       where: where(filters, categoryId, isArchive),
       orderBy: [ForumThreadOrderByInput.IsStickyDesc, forumThreadOrderBy(order)],
-      first: 30,
+      ...(!pagination
+        ? { limit: 30 }
+        : {
+            limit: pagination.perPage,
+            offset: (pagination.page - 1) * pagination.perPage,
+          }),
     },
   })
 
-  const connection = data?.forumThreadsConnection
+  const { loading: loadingCount, data: countData } = useGetForumThreadsCountQuery({
+    variables: { where: where(filters, categoryId, isArchive) },
+  })
+  const totalCount = countData?.forumThreadsConnection.totalCount
 
   return {
-    isLoading: loading,
-    threads: connection?.edges.map(({ node }) => asForumThread(node)) ?? [],
-    threadCount: connection?.totalCount,
+    isLoading: loadingThreads || loadingCount,
+    threads: threadsData?.forumThreads.map((thread) => asForumThread(thread)) ?? [],
+    threadCount: totalCount,
     refresh,
   }
 }
