@@ -41,6 +41,7 @@ const ResultItemStyle = styled.div`
   flex-direction: column;
   border-bottom: solid 1px ${Colors.Black[200]};
   color: ${Colors.Black[400]};
+  overflow-x: hidden;
   padding-bottom: 14px;
   transition: ${Transitions.all};
 

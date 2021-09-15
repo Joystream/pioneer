@@ -1,8 +1,8 @@
 import faker from 'faker'
 
-import { randomFromRange } from './utils'
+import { randomBlock, randomFromRange } from './utils'
 
-const MAX_MEMBERS = 50
+const MAX_MEMBERS = 45
 
 interface KnownMember {
   isVerified: boolean
@@ -28,7 +28,7 @@ export const KNOWN_MEMBERS: KnownMember[] = [
 
 let nextId = 0
 
-const generateMember = (override?: KnownMember) => ({
+const generateBaseMember = () => ({
   id: String(nextId++),
   rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
   controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
@@ -40,19 +40,31 @@ const generateMember = (override?: KnownMember) => ({
   isVerified: Math.random() > 0.5,
   isFoundingMember: nextId < 9,
   inviteCount: 5,
+})
+
+const generateMember = (override?: KnownMember) => ({
+  ...generateBaseMember(),
   ...override,
   entry: {
     __typename: 'MembershipEntryPaid',
-    membershipBoughtEvent: {
-      createdAt: faker.date.past(2),
-      inBlock: faker.datatype.number(10_000),
-      network: 'OLYMPIA',
-    },
+    membershipBoughtEvent: randomBlock(),
   },
 })
 
-export type MemberMock = ReturnType<typeof generateMember>
+const inviteMember = (invitedById: string) => ({
+  ...generateBaseMember(),
+  invitedById,
+  entry: {
+    __typename: 'MembershipEntryInvited',
+    memberInvitedEvent: randomBlock(),
+  },
+})
+
+export type MemberMock = ReturnType<typeof generateMember> | ReturnType<typeof inviteMember>
 
 export const generateMembers = () => {
-  return [...KNOWN_MEMBERS.map(generateMember), ...Array.from({ length: MAX_MEMBERS }, generateMember)]
+  const membersBought = [...KNOWN_MEMBERS.map(generateMember), ...Array.from({ length: MAX_MEMBERS }, generateMember)]
+  const membersInvited = [inviteMember('0'), inviteMember('0'), inviteMember('1'), inviteMember('0')]
+
+  return [...membersBought, ...membersInvited]
 }

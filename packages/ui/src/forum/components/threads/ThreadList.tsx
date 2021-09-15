@@ -5,6 +5,7 @@ import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { Pagination } from '@/common/components/Pagination'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { ThreadsColLayout } from '@/forum/constant'
@@ -13,19 +14,25 @@ import { ForumThread } from '@/forum/types'
 import { ThreadListItem } from './ThreadListItem'
 
 type ThreadOrderKey = 'CreatedAt' | 'UpdatedAt' | 'Author' | 'Title'
+
 export interface ThreadOrder {
   key: ThreadOrderKey
   isDescending?: boolean
 }
+
 export const ThreadDefaultOrder: ThreadOrder = { key: 'UpdatedAt' }
 
 interface ThreadListProps {
   threads: ForumThread[]
   onSort: (order: ThreadOrder) => void
+  page?: number
+  pageCount?: number
+  setPage?: (page: number) => void
   isLoading?: boolean
   isArchive?: boolean
 }
-export const ThreadList = ({ threads, onSort, isLoading, isArchive }: ThreadListProps) => {
+
+export const ThreadList = ({ threads, onSort, isLoading, isArchive, page, pageCount, setPage }: ThreadListProps) => {
   const [order, setOrder] = useState(ThreadDefaultOrder)
 
   const sort = useCallback(
@@ -68,9 +75,11 @@ export const ThreadList = ({ threads, onSort, isLoading, isArchive }: ThreadList
         <Loading />
       ) : (
         <List as="div" isArchive={isArchive}>
+          {setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
           {threads.map((thread, index) => (
             <ThreadListItem key={index} thread={thread} isArchive={isArchive} />
           ))}
+          {setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
         </List>
       )}
     </ThreadListStyles>
