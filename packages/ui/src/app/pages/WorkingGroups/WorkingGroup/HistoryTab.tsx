@@ -10,9 +10,9 @@ import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/Sorted
 import { Tabs } from '@/common/components/Tabs'
 import { TextBig } from '@/common/components/typography'
 import { OpeningsPagination } from '@/working-groups/components/OpeningsList'
-import { WorkersTableList } from '@/working-groups/components/WorkersTableList/WorkersTableList'
+import { PastWorkersList } from '@/working-groups/components/WorkersTableList/PastWorkersList'
 import { useGroupActivities } from '@/working-groups/hooks/useGroupActivities'
-import { useWorkersPagination } from '@/working-groups/hooks/useWorkersPagination'
+import { usePastWorkersPagination, WorkersOrderKey } from '@/working-groups/hooks/usePastWorkersPagination'
 import { WorkingGroup } from '@/working-groups/types'
 
 type Tab = 'OPENINGS' | 'WORKERS'
@@ -50,20 +50,25 @@ const OpeningsHistory = ({ groupId }: { groupId: string | undefined }) => (
   <OpeningsPagination groupId={groupId} type="past" />
 )
 
-type ListOrderKey = 'DateStarted' | 'DateFinished'
 interface ListOrder {
-  key: ListOrderKey
+  key: WorkersOrderKey
   isDescending: boolean
 }
 
 const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   const [page, setPage] = useState(1)
-  const { isLoading, workers, pageCount } = useWorkersPagination({ groupId, page })
-
   const [order, setOrder] = useState<ListOrder>({ key: 'DateFinished', isDescending: true })
-  const sort = useCallback((sortKey: ListOrderKey) => null, [])
 
-  const SortHeader = useMemo<FC<{ sortKey: ListOrderKey }>>(
+  const { isLoading, workers, pageCount } = usePastWorkersPagination({
+    groupId,
+    page,
+    isDescending: order.isDescending,
+    orderKey: order.key,
+  })
+
+  const sort = useCallback((sortKey: WorkersOrderKey) => null, [])
+
+  const SortHeader = useMemo<FC<{ sortKey: WorkersOrderKey }>>(
     () =>
       memo(({ sortKey, children }) => (
         <ListHeader onClick={() => sort(sortKey)}>
@@ -91,7 +96,7 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
         <SortHeader sortKey="DateStarted">Date Started</SortHeader>
         <SortHeader sortKey="DateFinished">Date Finished</SortHeader>
       </ListHeaders>
-      <WorkersTableList workers={workers} past />
+      <PastWorkersList workers={workers} />
       <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
     </>
   )

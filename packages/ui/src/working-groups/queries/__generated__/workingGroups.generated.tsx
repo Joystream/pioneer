@@ -44,13 +44,23 @@ export type PastWorkerFieldsFragment = {
     | { __typename: 'WorkerStatusLeaving' }
     | {
         __typename: 'WorkerStatusLeft'
-        workerExitedEvent?: Types.Maybe<{ __typename: 'WorkerExitedEvent'; createdAt: any; inBlock: number }>
+        workerExitedEvent?: Types.Maybe<{
+          __typename: 'WorkerExitedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
       }
     | {
         __typename: 'WorkerStatusTerminated'
-        terminatedWorkerEvent?: Types.Maybe<{ __typename: 'TerminatedWorkerEvent'; createdAt: any; inBlock: number }>
+        terminatedWorkerEvent?: Types.Maybe<{
+          __typename: 'TerminatedWorkerEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
       }
-  entry: { __typename: 'OpeningFilledEvent'; inBlock: number }
+  entry: { __typename: 'OpeningFilledEvent'; createdAt: any; inBlock: number; network: Types.Network }
 }
 
 export type WorkerDetailedFieldsFragment = {
@@ -127,6 +137,7 @@ export type GetPastWorkersQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.WorkerWhereInput>
   offset?: Types.Maybe<Types.Scalars['Int']>
   limit?: Types.Maybe<Types.Scalars['Int']>
+  orderBy?: Types.Maybe<Array<Types.WorkerOrderByInput> | Types.WorkerOrderByInput>
 }>
 
 export type GetPastWorkersQuery = {
@@ -439,17 +450,21 @@ export const PastWorkerFieldsFragmentDoc = gql`
         workerExitedEvent {
           createdAt
           inBlock
+          network
         }
       }
       ... on WorkerStatusTerminated {
         terminatedWorkerEvent {
           createdAt
           inBlock
+          network
         }
       }
     }
     entry {
+      createdAt
       inBlock
+      network
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -798,8 +813,8 @@ export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
 export const GetPastWorkersDocument = gql`
-  query GetPastWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
-    workers(where: $where, offset: $offset, limit: $limit) {
+  query GetPastWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int, $orderBy: [WorkerOrderByInput!]) {
+    workers(where: $where, offset: $offset, limit: $limit, orderBy: $orderBy) {
       ...PastWorkerFields
     }
   }
@@ -821,6 +836,7 @@ export const GetPastWorkersDocument = gql`
  *      where: // value for 'where'
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */

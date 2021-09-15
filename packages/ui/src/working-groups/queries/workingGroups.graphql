@@ -37,17 +37,21 @@ fragment PastWorkerFields on Worker {
       workerExitedEvent {
         createdAt
         inBlock
+        network
       }
     }
     ...on WorkerStatusTerminated {
       terminatedWorkerEvent {
         createdAt
         inBlock
+        network
       }
     }
   }
   entry {
+    createdAt
     inBlock
+    network
   }
 }
 
@@ -128,8 +132,8 @@ query GetWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int) {
   }
 }
 
-query GetPastWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int) {
-  workers(where: $where, offset: $offset, limit: $limit) {
+query GetPastWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int, $orderBy: [WorkerOrderByInput!]) {
+  workers(where: $where, offset: $offset, limit: $limit, orderBy: $orderBy) {
     ...PastWorkerFields
   }
 }
