@@ -14,6 +14,10 @@ export const isString = (something: unknown): something is string => typeof some
 
 export const isRecord = (something: unknown): something is Obj => typeof something === 'object' && something !== null
 
+// Math:
+
+export const clamp = (min: number, value: number, max: number) => Math.max(min, Math.min(max, value))
+
 // Objects:
 
 interface EqualsOption {
@@ -82,7 +86,7 @@ export const debounce = <T extends (...params: any[]) => any>(fn: T, delay = 400
     })
 }
 
-export const last = <T extends any>(list: T[]): T => list[list.length - 1]
+export const last = <T extends any>(list: ArrayLike<T>): T => list[list.length - 1]
 
 export const groupBy = <T extends any>(list: T[], predicate: (prev: T, item: T, index: number) => boolean): T[][] => {
   if (!list.length) return []
