@@ -72,6 +72,7 @@ export const PostHistoryModal = React.memo(() => {
           <RowGapBlock gap={32}>
             {edits?.map((edit, index) => (
               <HistoryPost
+                key={index}
                 edit={edit}
                 author={author}
                 onChange={pickActiveEdit(index)}

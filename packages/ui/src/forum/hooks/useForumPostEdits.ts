@@ -12,8 +12,9 @@ interface ForumPostEdits {
 export const useForumPostEdits = (postId: string): ForumPostEdits => {
   const { loading, data } = useGetForumPostEditsQuery({ variables: { id: postId } })
 
+  console.log('edits', data?.initial, data?.edits)
   const edits = useMemo(
-    () => data && [...data.edits, ...data.initial.map((event) => ({ ...event, newText: event.text }))],
+    () => data && [...data.initial.map((event) => ({ ...event, newText: event.text })), ...data.edits],
     [data, loading]
   )
 
