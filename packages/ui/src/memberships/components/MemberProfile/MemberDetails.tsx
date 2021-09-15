@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
+
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { BlockTime } from '../../../common/components/BlockTime'
 import { TransferSymbol } from '../../../common/components/icons/symbols'
@@ -21,6 +23,12 @@ type Props = { member: Member }
 
 export const MemberDetails = React.memo(({ member }: Props) => {
   const { member: memberDetails, isLoading } = useMember(member.id)
+
+  const myMemberships = useMyMemberships()
+  const isMyMembership = useMemo(() => myMemberships.members.some(({ id }) => id === member.id), [
+    member.id,
+    myMemberships,
+  ])
 
   if (isLoading || !memberDetails) {
     return (
@@ -65,10 +73,12 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         <SidePaneLabel text="Invitations Left" />
         <AboutInvite>
           <SidePaneText>{member?.inviteCount}</SidePaneText>
-          <TransferInviteButton member={member} square={false}>
-            <TransferSymbol />
-            Transfer Invites
-          </TransferInviteButton>
+          {isMyMembership && (
+            <TransferInviteButton member={member} square={false}>
+              <TransferSymbol />
+              Transfer Invites
+            </TransferInviteButton>
+          )}
         </AboutInvite>
       </SidePaneRow>
       <SidePaneRow>
