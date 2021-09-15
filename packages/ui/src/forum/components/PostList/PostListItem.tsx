@@ -44,7 +44,7 @@ export const PostListItem = ({
   type,
   link,
 }: PostListItemProps) => {
-  const { createdAt, createdAtBlock, lastEditedAt, author, text, repliesTo } = post
+  const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
 
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {

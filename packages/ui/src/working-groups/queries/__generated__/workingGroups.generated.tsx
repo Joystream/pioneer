@@ -1,410 +1,566 @@
-import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated';
+import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import { MemberFieldsFragment , MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated';
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
-export type WorkingGroupMetdataFieldsFragment = { __typename: 'WorkingGroupMetadata', about?: Types.Maybe<string>, description?: Types.Maybe<string>, status?: Types.Maybe<string>, statusMessage?: Types.Maybe<string> };
+import {
+  MemberFieldsFragment,
+  MemberFieldsFragmentDoc,
+} from '../../../memberships/queries/__generated__/members.generated'
+import { gql } from '@apollo/client'
+import * as Apollo from '@apollo/client'
+const defaultOptions = {}
+export type WorkingGroupMetdataFieldsFragment = {
+  __typename: 'WorkingGroupMetadata'
+  about?: Types.Maybe<string>
+  description?: Types.Maybe<string>
+  status?: Types.Maybe<string>
+  statusMessage?: Types.Maybe<string>
+}
 
-export type WorkerFieldsFragment = { __typename: 'Worker', id: string, runtimeId: number, applicationId: string, isLead: boolean, rewardPerBlock: any, missingRewardAmount?: Types.Maybe<any>, stake: any, membership: (
-    { __typename: 'Membership' }
-    & MemberFieldsFragment
-  ), group: { __typename: 'WorkingGroup', id: string, name: string }, status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' } };
+export type WorkerFieldsFragment = {
+  __typename: 'Worker'
+  id: string
+  runtimeId: number
+  applicationId: string
+  isLead: boolean
+  rewardPerBlock: any
+  missingRewardAmount?: Types.Maybe<any>
+  stake: any
+  membership: { __typename: 'Membership' } & MemberFieldsFragment
+  group: { __typename: 'WorkingGroup'; id: string; name: string }
+  status:
+    | { __typename: 'WorkerStatusActive' }
+    | { __typename: 'WorkerStatusLeaving' }
+    | { __typename: 'WorkerStatusLeft' }
+    | { __typename: 'WorkerStatusTerminated' }
+}
 
-export type WorkerDetailedFieldsFragment = (
-  { __typename: 'Worker', roleAccount: string, rewardAccount: string, stakeAccount: string, entry: { __typename: 'OpeningFilledEvent', inBlock: number, network: Types.Network, createdAt: any }, application: { __typename: 'WorkingGroupApplication', id: string, openingId: string, opening: { __typename: 'WorkingGroupOpening', stakeAmount: any } } }
-  & WorkerFieldsFragment
-);
+export type WorkerDetailedFieldsFragment = {
+  __typename: 'Worker'
+  roleAccount: string
+  rewardAccount: string
+  stakeAccount: string
+  entry: { __typename: 'OpeningFilledEvent'; inBlock: number; network: Types.Network; createdAt: any }
+  application: {
+    __typename: 'WorkingGroupApplication'
+    id: string
+    openingId: string
+    opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
+  }
+} & WorkerFieldsFragment
 
-export type WorkingGroupFieldsFragment = { __typename: 'WorkingGroup', id: string, name: string, budget: any, metadata?: Types.Maybe<(
-    { __typename: 'WorkingGroupMetadata' }
-    & WorkingGroupMetdataFieldsFragment
-  )>, workers: Array<{ __typename: 'Worker', stake: any }>, leader?: Types.Maybe<{ __typename: 'Worker', membershipId: string }> };
+export type WorkingGroupFieldsFragment = {
+  __typename: 'WorkingGroup'
+  id: string
+  name: string
+  budget: any
+  metadata?: Types.Maybe<{ __typename: 'WorkingGroupMetadata' } & WorkingGroupMetdataFieldsFragment>
+  workers: Array<{ __typename: 'Worker'; stake: any }>
+  leader?: Types.Maybe<{ __typename: 'Worker'; membershipId: string }>
+}
 
-export type WorkingGroupDetailedFieldsFragment = (
-  { __typename: 'WorkingGroup', leader?: Types.Maybe<{ __typename: 'Worker', id: string, runtimeId: number, stake: any, membershipId: string }> }
-  & WorkingGroupFieldsFragment
-);
+export type WorkingGroupDetailedFieldsFragment = {
+  __typename: 'WorkingGroup'
+  leader?: Types.Maybe<{ __typename: 'Worker'; id: string; runtimeId: number; stake: any; membershipId: string }>
+} & WorkingGroupFieldsFragment
 
-export type BudgetSpendingEventFieldsFragment = { __typename: 'BudgetSpendingEvent', id: string, groupId: string, reciever: string, amount: any, rationale?: Types.Maybe<string> };
+export type BudgetSpendingEventFieldsFragment = {
+  __typename: 'BudgetSpendingEvent'
+  id: string
+  groupId: string
+  reciever: string
+  amount: any
+  rationale?: Types.Maybe<string>
+}
 
 export type GetBudgetSpendingQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.BudgetSpendingEventWhereInput>;
-}>;
+  where?: Types.Maybe<Types.BudgetSpendingEventWhereInput>
+}>
 
+export type GetBudgetSpendingQuery = {
+  __typename: 'Query'
+  budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent' } & BudgetSpendingEventFieldsFragment>
+}
 
-export type GetBudgetSpendingQuery = { __typename: 'Query', budgetSpendingEvents: Array<(
-    { __typename: 'BudgetSpendingEvent' }
-    & BudgetSpendingEventFieldsFragment
-  )> };
+export type RewardPaidEventFieldsFragment = {
+  __typename: 'RewardPaidEvent'
+  id: string
+  amount: any
+  rewardAccount: string
+  createdAt: any
+}
 
-export type RewardPaidEventFieldsFragment = { __typename: 'RewardPaidEvent', id: string, amount: any, rewardAccount: string, createdAt: any };
+export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never }>
 
-export type GetWorkingGroupsQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type GetWorkingGroupsQuery = { __typename: 'Query', workingGroups: Array<(
-    { __typename: 'WorkingGroup' }
-    & WorkingGroupFieldsFragment
-  )> };
+export type GetWorkingGroupsQuery = {
+  __typename: 'Query'
+  workingGroups: Array<{ __typename: 'WorkingGroup' } & WorkingGroupFieldsFragment>
+}
 
 export type GetWorkersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>;
-  offset?: Types.Maybe<Types.Scalars['Int']>;
-  limit?: Types.Maybe<Types.Scalars['Int']>;
-}>;
+  where?: Types.Maybe<Types.WorkerWhereInput>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+}>
 
-
-export type GetWorkersQuery = { __typename: 'Query', workers: Array<(
-    { __typename: 'Worker' }
-    & WorkerFieldsFragment
-  )> };
+export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
 
 export type GetWorkersCountQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>;
-}>;
+  where?: Types.Maybe<Types.WorkerWhereInput>
+}>
 
-
-export type GetWorkersCountQuery = { __typename: 'Query', workersConnection: { __typename: 'WorkerConnection', totalCount: number } };
+export type GetWorkersCountQuery = {
+  __typename: 'Query'
+  workersConnection: { __typename: 'WorkerConnection'; totalCount: number }
+}
 
 export type GetDetailedWorkersQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>;
-}>;
+  where?: Types.Maybe<Types.WorkerWhereInput>
+}>
 
-
-export type GetDetailedWorkersQuery = { __typename: 'Query', workers: Array<(
-    { __typename: 'Worker' }
-    & WorkerDetailedFieldsFragment
-  )> };
+export type GetDetailedWorkersQuery = {
+  __typename: 'Query'
+  workers: Array<{ __typename: 'Worker' } & WorkerDetailedFieldsFragment>
+}
 
 export type GetWorkerQueryVariables = Types.Exact<{
-  where: Types.WorkerWhereUniqueInput;
-}>;
+  where: Types.WorkerWhereUniqueInput
+}>
 
-
-export type GetWorkerQuery = { __typename: 'Query', workerByUniqueInput?: Types.Maybe<(
-    { __typename: 'Worker' }
-    & WorkerDetailedFieldsFragment
-  )> };
+export type GetWorkerQuery = {
+  __typename: 'Query'
+  workerByUniqueInput?: Types.Maybe<{ __typename: 'Worker' } & WorkerDetailedFieldsFragment>
+}
 
 export type GetGroupDebtQueryVariables = Types.Exact<{
-  where: Types.WorkerWhereInput;
-}>;
+  where: Types.WorkerWhereInput
+}>
 
-
-export type GetGroupDebtQuery = { __typename: 'Query', workers: Array<{ __typename: 'Worker', missingRewardAmount?: Types.Maybe<any> }> };
+export type GetGroupDebtQuery = {
+  __typename: 'Query'
+  workers: Array<{ __typename: 'Worker'; missingRewardAmount?: Types.Maybe<any> }>
+}
 
 export type GetRewardsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.RewardPaidEventWhereInput>;
-}>;
+  where?: Types.Maybe<Types.RewardPaidEventWhereInput>
+}>
 
+export type GetRewardsQuery = {
+  __typename: 'Query'
+  rewardPaidEvents: Array<{ __typename: 'RewardPaidEvent' } & RewardPaidEventFieldsFragment>
+}
 
-export type GetRewardsQuery = { __typename: 'Query', rewardPaidEvents: Array<(
-    { __typename: 'RewardPaidEvent' }
-    & RewardPaidEventFieldsFragment
-  )> };
+export type WorkingGroupOpeningMetadataFieldsFragment = {
+  __typename: 'WorkingGroupOpeningMetadata'
+  applicationDetails?: Types.Maybe<string>
+  shortDescription?: Types.Maybe<string>
+  description?: Types.Maybe<string>
+  hiringLimit?: Types.Maybe<number>
+  expectedEnding?: Types.Maybe<any>
+}
 
-export type WorkingGroupOpeningMetadataFieldsFragment = { __typename: 'WorkingGroupOpeningMetadata', applicationDetails?: Types.Maybe<string>, shortDescription?: Types.Maybe<string>, description?: Types.Maybe<string>, hiringLimit?: Types.Maybe<number>, expectedEnding?: Types.Maybe<any> };
+export type WorkingGroupOpeningFieldsFragment = {
+  __typename: 'WorkingGroupOpening'
+  id: string
+  runtimeId: number
+  groupId: string
+  type: Types.WorkingGroupOpeningType
+  stakeAmount: any
+  rewardPerBlock: any
+  unstakingPeriod: number
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
+  metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
+  status:
+    | { __typename: 'OpeningStatusOpen' }
+    | { __typename: 'OpeningStatusFilled' }
+    | { __typename: 'OpeningStatusCancelled' }
+  applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+}
 
-export type WorkingGroupOpeningFieldsFragment = { __typename: 'WorkingGroupOpening', id: string, runtimeId: number, groupId: string, type: Types.WorkingGroupOpeningType, stakeAmount: any, rewardPerBlock: any, unstakingPeriod: number, group: { __typename: 'WorkingGroup', name: string, budget: any, leaderId?: Types.Maybe<string> }, createdInEvent: { __typename: 'OpeningAddedEvent', inBlock: number, network: Types.Network, createdAt: any }, metadata: (
-    { __typename: 'WorkingGroupOpeningMetadata' }
-    & WorkingGroupOpeningMetadataFieldsFragment
-  ), status: { __typename: 'OpeningStatusOpen' } | { __typename: 'OpeningStatusFilled' } | { __typename: 'OpeningStatusCancelled' }, applications: Array<{ __typename: 'WorkingGroupApplication', id: string }> };
-
-export type WorkingGroupOpeningDetailedFieldsFragment = (
-  { __typename: 'WorkingGroupOpening', applications: Array<{ __typename: 'WorkingGroupApplication', id: string, status: { __typename: 'ApplicationStatusPending' } | { __typename: 'ApplicationStatusAccepted' } | { __typename: 'ApplicationStatusRejected' } | { __typename: 'ApplicationStatusWithdrawn' } | { __typename: 'ApplicationStatusCancelled' }, applicant: (
-      { __typename: 'Membership' }
-      & MemberFieldsFragment
-    ) }> }
-  & WorkingGroupOpeningFieldsFragment
-);
+export type WorkingGroupOpeningDetailedFieldsFragment = {
+  __typename: 'WorkingGroupOpening'
+  applications: Array<{
+    __typename: 'WorkingGroupApplication'
+    id: string
+    status:
+      | { __typename: 'ApplicationStatusPending' }
+      | { __typename: 'ApplicationStatusAccepted' }
+      | { __typename: 'ApplicationStatusRejected' }
+      | { __typename: 'ApplicationStatusWithdrawn' }
+      | { __typename: 'ApplicationStatusCancelled' }
+    applicant: { __typename: 'Membership' } & MemberFieldsFragment
+  }>
+} & WorkingGroupOpeningFieldsFragment
 
 export type CountWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>;
-}>;
+  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
+}>
 
-
-export type CountWorkingGroupOpeningsQuery = { __typename: 'Query', workingGroupOpeningsConnection: { __typename: 'WorkingGroupOpeningConnection', totalCount: number } };
+export type CountWorkingGroupOpeningsQuery = {
+  __typename: 'Query'
+  workingGroupOpeningsConnection: { __typename: 'WorkingGroupOpeningConnection'; totalCount: number }
+}
 
 export type CountWorkingGroupWorkersQueryVariables = Types.Exact<{
-  groupId_eq?: Types.Maybe<Types.Scalars['ID']>;
-  status_json?: Types.Maybe<Types.Scalars['JSONObject']>;
-}>;
+  groupId_eq?: Types.Maybe<Types.Scalars['ID']>
+  status_json?: Types.Maybe<Types.Scalars['JSONObject']>
+}>
 
-
-export type CountWorkingGroupWorkersQuery = { __typename: 'Query', workersConnection: { __typename: 'WorkerConnection', totalCount: number } };
+export type CountWorkingGroupWorkersQuery = {
+  __typename: 'Query'
+  workersConnection: { __typename: 'WorkerConnection'; totalCount: number }
+}
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>;
-  limit?: Types.Maybe<Types.Scalars['Int']>;
-  offset?: Types.Maybe<Types.Scalars['Int']>;
-}>;
+  where?: Types.Maybe<Types.WorkingGroupOpeningWhereInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+}>
 
-
-export type GetWorkingGroupOpeningsQuery = { __typename: 'Query', workingGroupOpenings: Array<(
-    { __typename: 'WorkingGroupOpening' }
-    & WorkingGroupOpeningFieldsFragment
-  )> };
+export type GetWorkingGroupOpeningsQuery = {
+  __typename: 'Query'
+  workingGroupOpenings: Array<{ __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningFieldsFragment>
+}
 
 export type GetWorkingGroupOpeningQueryVariables = Types.Exact<{
-  where: Types.WorkingGroupOpeningWhereUniqueInput;
-}>;
+  where: Types.WorkingGroupOpeningWhereUniqueInput
+}>
 
+export type GetWorkingGroupOpeningQuery = {
+  __typename: 'Query'
+  workingGroupOpeningByUniqueInput?: Types.Maybe<
+    { __typename: 'WorkingGroupOpening' } & WorkingGroupOpeningDetailedFieldsFragment
+  >
+}
 
-export type GetWorkingGroupOpeningQuery = { __typename: 'Query', workingGroupOpeningByUniqueInput?: Types.Maybe<(
-    { __typename: 'WorkingGroupOpening' }
-    & WorkingGroupOpeningDetailedFieldsFragment
-  )> };
-
-export type ApplicationQuestionFieldsFragment = { __typename: 'ApplicationFormQuestion', index: number, type: Types.ApplicationFormQuestionType, question?: Types.Maybe<string> };
+export type ApplicationQuestionFieldsFragment = {
+  __typename: 'ApplicationFormQuestion'
+  index: number
+  type: Types.ApplicationFormQuestionType
+  question?: Types.Maybe<string>
+}
 
 export type GetWorkingGroupOpeningQuestionsQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
-}>;
+  id: Types.Scalars['ID']
+}>
 
-
-export type GetWorkingGroupOpeningQuestionsQuery = { __typename: 'Query', workingGroupOpeningByUniqueInput?: Types.Maybe<{ __typename: 'WorkingGroupOpening', metadata: { __typename: 'WorkingGroupOpeningMetadata', applicationFormQuestions: Array<(
-        { __typename: 'ApplicationFormQuestion' }
-        & ApplicationQuestionFieldsFragment
-      )> } }> };
+export type GetWorkingGroupOpeningQuestionsQuery = {
+  __typename: 'Query'
+  workingGroupOpeningByUniqueInput?: Types.Maybe<{
+    __typename: 'WorkingGroupOpening'
+    metadata: {
+      __typename: 'WorkingGroupOpeningMetadata'
+      applicationFormQuestions: Array<{ __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment>
+    }
+  }>
+}
 
 export type GetWorkingGroupQueryVariables = Types.Exact<{
-  where: Types.WorkingGroupWhereUniqueInput;
-}>;
+  where: Types.WorkingGroupWhereUniqueInput
+}>
 
+export type GetWorkingGroupQuery = {
+  __typename: 'Query'
+  workingGroupByUniqueInput?: Types.Maybe<{ __typename: 'WorkingGroup' } & WorkingGroupDetailedFieldsFragment>
+}
 
-export type GetWorkingGroupQuery = { __typename: 'Query', workingGroupByUniqueInput?: Types.Maybe<(
-    { __typename: 'WorkingGroup' }
-    & WorkingGroupDetailedFieldsFragment
-  )> };
-
-export type WorkingGroupApplicationFieldsFragment = { __typename: 'WorkingGroupApplication', id: string, stakingAccount: string, opening: { __typename: 'WorkingGroupOpening', id: string, type: Types.WorkingGroupOpeningType, rewardPerBlock: any, group: { __typename: 'WorkingGroup', name: string } }, applicant: (
-    { __typename: 'Membership' }
-    & MemberFieldsFragment
-  ), status: { __typename: 'ApplicationStatusPending' } | { __typename: 'ApplicationStatusAccepted' } | { __typename: 'ApplicationStatusRejected' } | { __typename: 'ApplicationStatusWithdrawn' } | { __typename: 'ApplicationStatusCancelled' }, createdInEvent: { __typename: 'AppliedOnOpeningEvent', createdAt: any, inBlock: number, network: Types.Network } };
+export type WorkingGroupApplicationFieldsFragment = {
+  __typename: 'WorkingGroupApplication'
+  id: string
+  stakingAccount: string
+  opening: {
+    __typename: 'WorkingGroupOpening'
+    id: string
+    type: Types.WorkingGroupOpeningType
+    rewardPerBlock: any
+    group: { __typename: 'WorkingGroup'; name: string }
+  }
+  applicant: { __typename: 'Membership' } & MemberFieldsFragment
+  status:
+    | { __typename: 'ApplicationStatusPending' }
+    | { __typename: 'ApplicationStatusAccepted' }
+    | { __typename: 'ApplicationStatusRejected' }
+    | { __typename: 'ApplicationStatusWithdrawn' }
+    | { __typename: 'ApplicationStatusCancelled' }
+  createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
+}
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
-  applicantId_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
-}>;
+  applicantId_in?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
+}>
 
-
-export type GetWorkingGroupApplicationsQuery = { __typename: 'Query', workingGroupApplications: Array<(
-    { __typename: 'WorkingGroupApplication' }
-    & WorkingGroupApplicationFieldsFragment
-  )> };
+export type GetWorkingGroupApplicationsQuery = {
+  __typename: 'Query'
+  workingGroupApplications: Array<{ __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment>
+}
 
 export type GetWorkingGroupApplicationIdsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkingGroupApplicationWhereInput>;
-}>;
+  where?: Types.Maybe<Types.WorkingGroupApplicationWhereInput>
+}>
 
-
-export type GetWorkingGroupApplicationIdsQuery = { __typename: 'Query', workingGroupApplications: Array<{ __typename: 'WorkingGroupApplication', id: string }> };
+export type GetWorkingGroupApplicationIdsQuery = {
+  __typename: 'Query'
+  workingGroupApplications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+}
 
 export type GetWorkingGroupApplicationQueryVariables = Types.Exact<{
-  where: Types.WorkingGroupApplicationWhereUniqueInput;
-}>;
+  where: Types.WorkingGroupApplicationWhereUniqueInput
+}>
 
+export type GetWorkingGroupApplicationQuery = {
+  __typename: 'Query'
+  workingGroupApplicationByUniqueInput?: Types.Maybe<
+    { __typename: 'WorkingGroupApplication' } & WorkingGroupApplicationFieldsFragment
+  >
+}
 
-export type GetWorkingGroupApplicationQuery = { __typename: 'Query', workingGroupApplicationByUniqueInput?: Types.Maybe<(
-    { __typename: 'WorkingGroupApplication' }
-    & WorkingGroupApplicationFieldsFragment
-  )> };
-
-export type ApplicationFormQuestionAnswerFieldsFragment = { __typename: 'ApplicationFormQuestionAnswer', answer: string, question: (
-    { __typename: 'ApplicationFormQuestion' }
-    & ApplicationQuestionFieldsFragment
-  ) };
+export type ApplicationFormQuestionAnswerFieldsFragment = {
+  __typename: 'ApplicationFormQuestionAnswer'
+  answer: string
+  question: { __typename: 'ApplicationFormQuestion' } & ApplicationQuestionFieldsFragment
+}
 
 export type GetApplicationFormQuestionAnswerQueryVariables = Types.Exact<{
-  applicationId_eq?: Types.Maybe<Types.Scalars['ID']>;
-}>;
+  applicationId_eq?: Types.Maybe<Types.Scalars['ID']>
+}>
 
+export type GetApplicationFormQuestionAnswerQuery = {
+  __typename: 'Query'
+  applicationFormQuestionAnswers: Array<
+    { __typename: 'ApplicationFormQuestionAnswer' } & ApplicationFormQuestionAnswerFieldsFragment
+  >
+}
 
-export type GetApplicationFormQuestionAnswerQuery = { __typename: 'Query', applicationFormQuestionAnswers: Array<(
-    { __typename: 'ApplicationFormQuestionAnswer' }
-    & ApplicationFormQuestionAnswerFieldsFragment
-  )> };
-
-export type UpcomingWorkingGroupOpeningFieldsFragment = { __typename: 'UpcomingWorkingGroupOpening', id: string, groupId: string, expectedStart?: Types.Maybe<any>, stakeAmount?: Types.Maybe<any>, rewardPerBlock?: Types.Maybe<any>, group: { __typename: 'WorkingGroup', name: string, budget: any, leaderId?: Types.Maybe<string> }, createdInEvent: { __typename: 'StatusTextChangedEvent', createdAt: any, inBlock: number, network: Types.Network }, metadata: (
-    { __typename: 'WorkingGroupOpeningMetadata' }
-    & WorkingGroupOpeningMetadataFieldsFragment
-  ) };
+export type UpcomingWorkingGroupOpeningFieldsFragment = {
+  __typename: 'UpcomingWorkingGroupOpening'
+  id: string
+  groupId: string
+  expectedStart?: Types.Maybe<any>
+  stakeAmount?: Types.Maybe<any>
+  rewardPerBlock?: Types.Maybe<any>
+  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: Types.Maybe<string> }
+  createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  metadata: { __typename: 'WorkingGroupOpeningMetadata' } & WorkingGroupOpeningMetadataFieldsFragment
+}
 
 export type GetUpcomingWorkingGroupOpeningQueryVariables = Types.Exact<{
-  where: Types.UpcomingWorkingGroupOpeningWhereUniqueInput;
-}>;
+  where: Types.UpcomingWorkingGroupOpeningWhereUniqueInput
+}>
 
-
-export type GetUpcomingWorkingGroupOpeningQuery = { __typename: 'Query', upcomingWorkingGroupOpeningByUniqueInput?: Types.Maybe<(
-    { __typename: 'UpcomingWorkingGroupOpening' }
-    & UpcomingWorkingGroupOpeningFieldsFragment
-  )> };
+export type GetUpcomingWorkingGroupOpeningQuery = {
+  __typename: 'Query'
+  upcomingWorkingGroupOpeningByUniqueInput?: Types.Maybe<
+    { __typename: 'UpcomingWorkingGroupOpening' } & UpcomingWorkingGroupOpeningFieldsFragment
+  >
+}
 
 export type GetUpcomingWorkingGroupOpeningsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.UpcomingWorkingGroupOpeningWhereInput>;
-  limit?: Types.Maybe<Types.Scalars['Int']>;
-  offset?: Types.Maybe<Types.Scalars['Int']>;
-}>;
+  where?: Types.Maybe<Types.UpcomingWorkingGroupOpeningWhereInput>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+}>
 
-
-export type GetUpcomingWorkingGroupOpeningsQuery = { __typename: 'Query', upcomingWorkingGroupOpenings: Array<(
-    { __typename: 'UpcomingWorkingGroupOpening' }
-    & UpcomingWorkingGroupOpeningFieldsFragment
-  )> };
+export type GetUpcomingWorkingGroupOpeningsQuery = {
+  __typename: 'Query'
+  upcomingWorkingGroupOpenings: Array<
+    { __typename: 'UpcomingWorkingGroupOpening' } & UpcomingWorkingGroupOpeningFieldsFragment
+  >
+}
 
 export type GetWorkerIdsQueryVariables = Types.Exact<{
-  where?: Types.Maybe<Types.WorkerWhereInput>;
-}>;
+  where?: Types.Maybe<Types.WorkerWhereInput>
+}>
 
-
-export type GetWorkerIdsQuery = { __typename: 'Query', workers: Array<{ __typename: 'Worker', id: string }> };
+export type GetWorkerIdsQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker'; id: string }> }
 
 export type GetWorkerUnstakingDetailsQueryVariables = Types.Exact<{
-  where: Types.WorkerWhereUniqueInput;
-}>;
+  where: Types.WorkerWhereUniqueInput
+}>
 
-
-export type GetWorkerUnstakingDetailsQuery = { __typename: 'Query', workerByUniqueInput?: Types.Maybe<{ __typename: 'Worker', status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving', workerStartedLeavingEvent?: Types.Maybe<{ __typename: 'WorkerStartedLeavingEvent', createdAt: any }> } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' }, application: { __typename: 'WorkingGroupApplication', opening: { __typename: 'WorkingGroupOpening', unstakingPeriod: number } } }> };
+export type GetWorkerUnstakingDetailsQuery = {
+  __typename: 'Query'
+  workerByUniqueInput?: Types.Maybe<{
+    __typename: 'Worker'
+    status:
+      | { __typename: 'WorkerStatusActive' }
+      | {
+          __typename: 'WorkerStatusLeaving'
+          workerStartedLeavingEvent?: Types.Maybe<{ __typename: 'WorkerStartedLeavingEvent'; createdAt: any }>
+        }
+      | { __typename: 'WorkerStatusLeft' }
+      | { __typename: 'WorkerStatusTerminated' }
+    application: {
+      __typename: 'WorkingGroupApplication'
+      opening: { __typename: 'WorkingGroupOpening'; unstakingPeriod: number }
+    }
+  }>
+}
 
 export const WorkerFieldsFragmentDoc = gql`
-    fragment WorkerFields on Worker {
-  id
-  runtimeId
-  membership {
-    ...MemberFields
-  }
-  group {
-    id
-    name
-  }
-  status {
-    __typename
-  }
-  applicationId
-  isLead
-  rewardPerBlock
-  missingRewardAmount
-  stake
-}
-    ${MemberFieldsFragmentDoc}`;
-export const WorkerDetailedFieldsFragmentDoc = gql`
-    fragment WorkerDetailedFields on Worker {
-  ...WorkerFields
-  roleAccount
-  rewardAccount
-  stakeAccount
-  entry {
-    inBlock
-    network
-    createdAt
-  }
-  application {
-    id
-    openingId
-    opening {
-      stakeAmount
-    }
-  }
-}
-    ${WorkerFieldsFragmentDoc}`;
-export const WorkingGroupMetdataFieldsFragmentDoc = gql`
-    fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
-  about
-  description
-  status
-  statusMessage
-}
-    `;
-export const WorkingGroupFieldsFragmentDoc = gql`
-    fragment WorkingGroupFields on WorkingGroup {
-  id
-  name
-  budget
-  metadata {
-    ...WorkingGroupMetdataFields
-  }
-  workers {
-    stake
-  }
-  leader {
-    membershipId
-  }
-}
-    ${WorkingGroupMetdataFieldsFragmentDoc}`;
-export const WorkingGroupDetailedFieldsFragmentDoc = gql`
-    fragment WorkingGroupDetailedFields on WorkingGroup {
-  ...WorkingGroupFields
-  leader {
+  fragment WorkerFields on Worker {
     id
     runtimeId
-    stake
-    membershipId
-  }
-}
-    ${WorkingGroupFieldsFragmentDoc}`;
-export const BudgetSpendingEventFieldsFragmentDoc = gql`
-    fragment BudgetSpendingEventFields on BudgetSpendingEvent {
-  id
-  groupId
-  reciever
-  amount
-  rationale
-}
-    `;
-export const RewardPaidEventFieldsFragmentDoc = gql`
-    fragment RewardPaidEventFields on RewardPaidEvent {
-  id
-  amount
-  rewardAccount
-  createdAt
-}
-    `;
-export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
-    fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
-  applicationDetails
-  shortDescription
-  description
-  hiringLimit
-  expectedEnding
-}
-    `;
-export const WorkingGroupOpeningFieldsFragmentDoc = gql`
-    fragment WorkingGroupOpeningFields on WorkingGroupOpening {
-  id
-  runtimeId
-  groupId
-  group {
-    name
-    budget
-    leaderId
-  }
-  type
-  stakeAmount
-  rewardPerBlock
-  createdInEvent {
-    inBlock
-    network
-    createdAt
-  }
-  metadata {
-    ...WorkingGroupOpeningMetadataFields
-  }
-  status {
-    __typename
-  }
-  unstakingPeriod
-  applications {
-    id
-  }
-}
-    ${WorkingGroupOpeningMetadataFieldsFragmentDoc}`;
-export const WorkingGroupOpeningDetailedFieldsFragmentDoc = gql`
-    fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
-  ...WorkingGroupOpeningFields
-  applications {
-    id
+    membership {
+      ...MemberFields
+    }
+    group {
+      id
+      name
+    }
     status {
       __typename
+    }
+    applicationId
+    isLead
+    rewardPerBlock
+    missingRewardAmount
+    stake
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const WorkerDetailedFieldsFragmentDoc = gql`
+  fragment WorkerDetailedFields on Worker {
+    ...WorkerFields
+    roleAccount
+    rewardAccount
+    stakeAccount
+    entry {
+      inBlock
+      network
+      createdAt
+    }
+    application {
+      id
+      openingId
+      opening {
+        stakeAmount
+      }
+    }
+  }
+  ${WorkerFieldsFragmentDoc}
+`
+export const WorkingGroupMetdataFieldsFragmentDoc = gql`
+  fragment WorkingGroupMetdataFields on WorkingGroupMetadata {
+    about
+    description
+    status
+    statusMessage
+  }
+`
+export const WorkingGroupFieldsFragmentDoc = gql`
+  fragment WorkingGroupFields on WorkingGroup {
+    id
+    name
+    budget
+    metadata {
+      ...WorkingGroupMetdataFields
+    }
+    workers {
+      stake
+    }
+    leader {
+      membershipId
+    }
+  }
+  ${WorkingGroupMetdataFieldsFragmentDoc}
+`
+export const WorkingGroupDetailedFieldsFragmentDoc = gql`
+  fragment WorkingGroupDetailedFields on WorkingGroup {
+    ...WorkingGroupFields
+    leader {
+      id
+      runtimeId
+      stake
+      membershipId
+    }
+  }
+  ${WorkingGroupFieldsFragmentDoc}
+`
+export const BudgetSpendingEventFieldsFragmentDoc = gql`
+  fragment BudgetSpendingEventFields on BudgetSpendingEvent {
+    id
+    groupId
+    reciever
+    amount
+    rationale
+  }
+`
+export const RewardPaidEventFieldsFragmentDoc = gql`
+  fragment RewardPaidEventFields on RewardPaidEvent {
+    id
+    amount
+    rewardAccount
+    createdAt
+  }
+`
+export const WorkingGroupOpeningMetadataFieldsFragmentDoc = gql`
+  fragment WorkingGroupOpeningMetadataFields on WorkingGroupOpeningMetadata {
+    applicationDetails
+    shortDescription
+    description
+    hiringLimit
+    expectedEnding
+  }
+`
+export const WorkingGroupOpeningFieldsFragmentDoc = gql`
+  fragment WorkingGroupOpeningFields on WorkingGroupOpening {
+    id
+    runtimeId
+    groupId
+    group {
+      name
+      budget
+      leaderId
+    }
+    type
+    stakeAmount
+    rewardPerBlock
+    createdInEvent {
+      inBlock
+      network
+      createdAt
+    }
+    metadata {
+      ...WorkingGroupOpeningMetadataFields
+    }
+    status {
+      __typename
+    }
+    unstakingPeriod
+    applications {
+      id
+    }
+  }
+  ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
+`
+export const WorkingGroupOpeningDetailedFieldsFragmentDoc = gql`
+  fragment WorkingGroupOpeningDetailedFields on WorkingGroupOpening {
+    ...WorkingGroupOpeningFields
+    applications {
+      id
+      status {
+        __typename
+      }
+      applicant {
+        ...MemberFields
+      }
+      status {
+        __typename
+      }
+    }
+  }
+  ${WorkingGroupOpeningFieldsFragmentDoc}
+  ${MemberFieldsFragmentDoc}
+`
+export const WorkingGroupApplicationFieldsFragmentDoc = gql`
+  fragment WorkingGroupApplicationFields on WorkingGroupApplication {
+    id
+    opening {
+      id
+      group {
+        name
+      }
+      type
+      rewardPerBlock
     }
     applicant {
       ...MemberFields
@@ -412,79 +568,62 @@ export const WorkingGroupOpeningDetailedFieldsFragmentDoc = gql`
     status {
       __typename
     }
+    stakingAccount
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
   }
-}
-    ${WorkingGroupOpeningFieldsFragmentDoc}
-${MemberFieldsFragmentDoc}`;
-export const WorkingGroupApplicationFieldsFragmentDoc = gql`
-    fragment WorkingGroupApplicationFields on WorkingGroupApplication {
-  id
-  opening {
+  ${MemberFieldsFragmentDoc}
+`
+export const ApplicationQuestionFieldsFragmentDoc = gql`
+  fragment ApplicationQuestionFields on ApplicationFormQuestion {
+    index
+    type
+    question
+  }
+`
+export const ApplicationFormQuestionAnswerFieldsFragmentDoc = gql`
+  fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
+    question {
+      ...ApplicationQuestionFields
+    }
+    answer
+  }
+  ${ApplicationQuestionFieldsFragmentDoc}
+`
+export const UpcomingWorkingGroupOpeningFieldsFragmentDoc = gql`
+  fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
     id
+    groupId
     group {
       name
+      budget
+      leaderId
     }
-    type
+    expectedStart
+    stakeAmount
     rewardPerBlock
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
+    metadata {
+      ...WorkingGroupOpeningMetadataFields
+    }
   }
-  applicant {
-    ...MemberFields
-  }
-  status {
-    __typename
-  }
-  stakingAccount
-  createdInEvent {
-    createdAt
-    inBlock
-    network
-  }
-}
-    ${MemberFieldsFragmentDoc}`;
-export const ApplicationQuestionFieldsFragmentDoc = gql`
-    fragment ApplicationQuestionFields on ApplicationFormQuestion {
-  index
-  type
-  question
-}
-    `;
-export const ApplicationFormQuestionAnswerFieldsFragmentDoc = gql`
-    fragment ApplicationFormQuestionAnswerFields on ApplicationFormQuestionAnswer {
-  question {
-    ...ApplicationQuestionFields
-  }
-  answer
-}
-    ${ApplicationQuestionFieldsFragmentDoc}`;
-export const UpcomingWorkingGroupOpeningFieldsFragmentDoc = gql`
-    fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
-  id
-  groupId
-  group {
-    name
-    budget
-    leaderId
-  }
-  expectedStart
-  stakeAmount
-  rewardPerBlock
-  createdInEvent {
-    createdAt
-    inBlock
-    network
-  }
-  metadata {
-    ...WorkingGroupOpeningMetadataFields
-  }
-}
-    ${WorkingGroupOpeningMetadataFieldsFragmentDoc}`;
+  ${WorkingGroupOpeningMetadataFieldsFragmentDoc}
+`
 export const GetBudgetSpendingDocument = gql`
-    query GetBudgetSpending($where: BudgetSpendingEventWhereInput) {
-  budgetSpendingEvents(where: $where) {
-    ...BudgetSpendingEventFields
+  query GetBudgetSpending($where: BudgetSpendingEventWhereInput) {
+    budgetSpendingEvents(where: $where) {
+      ...BudgetSpendingEventFields
+    }
   }
-}
-    ${BudgetSpendingEventFieldsFragmentDoc}`;
+  ${BudgetSpendingEventFieldsFragmentDoc}
+`
 
 /**
  * __useGetBudgetSpendingQuery__
@@ -502,24 +641,32 @@ export const GetBudgetSpendingDocument = gql`
  *   },
  * });
  */
-export function useGetBudgetSpendingQuery(baseOptions?: Apollo.QueryHookOptions<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(GetBudgetSpendingDocument, options);
-      }
-export function useGetBudgetSpendingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(GetBudgetSpendingDocument, options);
-        }
-export type GetBudgetSpendingQueryHookResult = ReturnType<typeof useGetBudgetSpendingQuery>;
-export type GetBudgetSpendingLazyQueryHookResult = ReturnType<typeof useGetBudgetSpendingLazyQuery>;
-export type GetBudgetSpendingQueryResult = Apollo.QueryResult<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>;
-export const GetWorkingGroupsDocument = gql`
-    query GetWorkingGroups {
-  workingGroups {
-    ...WorkingGroupFields
-  }
+export function useGetBudgetSpendingQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(GetBudgetSpendingDocument, options)
 }
-    ${WorkingGroupFieldsFragmentDoc}`;
+export function useGetBudgetSpendingLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(
+    GetBudgetSpendingDocument,
+    options
+  )
+}
+export type GetBudgetSpendingQueryHookResult = ReturnType<typeof useGetBudgetSpendingQuery>
+export type GetBudgetSpendingLazyQueryHookResult = ReturnType<typeof useGetBudgetSpendingLazyQuery>
+export type GetBudgetSpendingQueryResult = Apollo.QueryResult<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>
+export const GetWorkingGroupsDocument = gql`
+  query GetWorkingGroups {
+    workingGroups {
+      ...WorkingGroupFields
+    }
+  }
+  ${WorkingGroupFieldsFragmentDoc}
+`
 
 /**
  * __useGetWorkingGroupsQuery__
@@ -536,24 +683,29 @@ export const GetWorkingGroupsDocument = gql`
  *   },
  * });
  */
-export function useGetWorkingGroupsQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>(GetWorkingGroupsDocument, options);
-      }
-export function useGetWorkingGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>(GetWorkingGroupsDocument, options);
-        }
-export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGroupsQuery>;
-export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>;
-export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>;
-export const GetWorkersDocument = gql`
-    query GetWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
-  workers(where: $where, offset: $offset, limit: $limit) {
-    ...WorkerFields
-  }
+export function useGetWorkingGroupsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>(GetWorkingGroupsDocument, options)
 }
-    ${WorkerFieldsFragmentDoc}`;
+export function useGetWorkingGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>(GetWorkingGroupsDocument, options)
+}
+export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGroupsQuery>
+export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>
+export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
+export const GetWorkersDocument = gql`
+  query GetWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
+    workers(where: $where, offset: $offset, limit: $limit) {
+      ...WorkerFields
+    }
+  }
+  ${WorkerFieldsFragmentDoc}
+`
 
 /**
  * __useGetWorkersQuery__
@@ -574,23 +726,25 @@ export const GetWorkersDocument = gql`
  * });
  */
 export function useGetWorkersQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkersQuery, GetWorkersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkersQuery, GetWorkersQueryVariables>(GetWorkersDocument, options);
-      }
-export function useGetWorkersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkersQuery, GetWorkersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkersQuery, GetWorkersQueryVariables>(GetWorkersDocument, options);
-        }
-export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>;
-export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>;
-export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>;
-export const GetWorkersCountDocument = gql`
-    query GetWorkersCount($where: WorkerWhereInput) {
-  workersConnection(where: $where) {
-    totalCount
-  }
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkersQuery, GetWorkersQueryVariables>(GetWorkersDocument, options)
 }
-    `;
+export function useGetWorkersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkersQuery, GetWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkersQuery, GetWorkersQueryVariables>(GetWorkersDocument, options)
+}
+export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
+export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
+export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
+export const GetWorkersCountDocument = gql`
+  query GetWorkersCount($where: WorkerWhereInput) {
+    workersConnection(where: $where) {
+      totalCount
+    }
+  }
+`
 
 /**
  * __useGetWorkersCountQuery__
@@ -608,24 +762,29 @@ export const GetWorkersCountDocument = gql`
  *   },
  * });
  */
-export function useGetWorkersCountQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkersCountQuery, GetWorkersCountQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkersCountQuery, GetWorkersCountQueryVariables>(GetWorkersCountDocument, options);
-      }
-export function useGetWorkersCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkersCountQuery, GetWorkersCountQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkersCountQuery, GetWorkersCountQueryVariables>(GetWorkersCountDocument, options);
-        }
-export type GetWorkersCountQueryHookResult = ReturnType<typeof useGetWorkersCountQuery>;
-export type GetWorkersCountLazyQueryHookResult = ReturnType<typeof useGetWorkersCountLazyQuery>;
-export type GetWorkersCountQueryResult = Apollo.QueryResult<GetWorkersCountQuery, GetWorkersCountQueryVariables>;
-export const GetDetailedWorkersDocument = gql`
-    query GetDetailedWorkers($where: WorkerWhereInput) {
-  workers(where: $where) {
-    ...WorkerDetailedFields
-  }
+export function useGetWorkersCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkersCountQuery, GetWorkersCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkersCountQuery, GetWorkersCountQueryVariables>(GetWorkersCountDocument, options)
 }
-    ${WorkerDetailedFieldsFragmentDoc}`;
+export function useGetWorkersCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkersCountQuery, GetWorkersCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkersCountQuery, GetWorkersCountQueryVariables>(GetWorkersCountDocument, options)
+}
+export type GetWorkersCountQueryHookResult = ReturnType<typeof useGetWorkersCountQuery>
+export type GetWorkersCountLazyQueryHookResult = ReturnType<typeof useGetWorkersCountLazyQuery>
+export type GetWorkersCountQueryResult = Apollo.QueryResult<GetWorkersCountQuery, GetWorkersCountQueryVariables>
+export const GetDetailedWorkersDocument = gql`
+  query GetDetailedWorkers($where: WorkerWhereInput) {
+    workers(where: $where) {
+      ...WorkerDetailedFields
+    }
+  }
+  ${WorkerDetailedFieldsFragmentDoc}
+`
 
 /**
  * __useGetDetailedWorkersQuery__
@@ -643,24 +802,35 @@ export const GetDetailedWorkersDocument = gql`
  *   },
  * });
  */
-export function useGetDetailedWorkersQuery(baseOptions?: Apollo.QueryHookOptions<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>(GetDetailedWorkersDocument, options);
-      }
-export function useGetDetailedWorkersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>(GetDetailedWorkersDocument, options);
-        }
-export type GetDetailedWorkersQueryHookResult = ReturnType<typeof useGetDetailedWorkersQuery>;
-export type GetDetailedWorkersLazyQueryHookResult = ReturnType<typeof useGetDetailedWorkersLazyQuery>;
-export type GetDetailedWorkersQueryResult = Apollo.QueryResult<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>;
-export const GetWorkerDocument = gql`
-    query GetWorker($where: WorkerWhereUniqueInput!) {
-  workerByUniqueInput(where: $where) {
-    ...WorkerDetailedFields
-  }
+export function useGetDetailedWorkersQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>(GetDetailedWorkersDocument, options)
 }
-    ${WorkerDetailedFieldsFragmentDoc}`;
+export function useGetDetailedWorkersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetDetailedWorkersQuery, GetDetailedWorkersQueryVariables>(
+    GetDetailedWorkersDocument,
+    options
+  )
+}
+export type GetDetailedWorkersQueryHookResult = ReturnType<typeof useGetDetailedWorkersQuery>
+export type GetDetailedWorkersLazyQueryHookResult = ReturnType<typeof useGetDetailedWorkersLazyQuery>
+export type GetDetailedWorkersQueryResult = Apollo.QueryResult<
+  GetDetailedWorkersQuery,
+  GetDetailedWorkersQueryVariables
+>
+export const GetWorkerDocument = gql`
+  query GetWorker($where: WorkerWhereUniqueInput!) {
+    workerByUniqueInput(where: $where) {
+      ...WorkerDetailedFields
+    }
+  }
+  ${WorkerDetailedFieldsFragmentDoc}
+`
 
 /**
  * __useGetWorkerQuery__
@@ -679,23 +849,25 @@ export const GetWorkerDocument = gql`
  * });
  */
 export function useGetWorkerQuery(baseOptions: Apollo.QueryHookOptions<GetWorkerQuery, GetWorkerQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkerQuery, GetWorkerQueryVariables>(GetWorkerDocument, options);
-      }
-export function useGetWorkerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerQuery, GetWorkerQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkerQuery, GetWorkerQueryVariables>(GetWorkerDocument, options);
-        }
-export type GetWorkerQueryHookResult = ReturnType<typeof useGetWorkerQuery>;
-export type GetWorkerLazyQueryHookResult = ReturnType<typeof useGetWorkerLazyQuery>;
-export type GetWorkerQueryResult = Apollo.QueryResult<GetWorkerQuery, GetWorkerQueryVariables>;
-export const GetGroupDebtDocument = gql`
-    query GetGroupDebt($where: WorkerWhereInput!) {
-  workers(where: $where) {
-    missingRewardAmount
-  }
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkerQuery, GetWorkerQueryVariables>(GetWorkerDocument, options)
 }
-    `;
+export function useGetWorkerLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerQuery, GetWorkerQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkerQuery, GetWorkerQueryVariables>(GetWorkerDocument, options)
+}
+export type GetWorkerQueryHookResult = ReturnType<typeof useGetWorkerQuery>
+export type GetWorkerLazyQueryHookResult = ReturnType<typeof useGetWorkerLazyQuery>
+export type GetWorkerQueryResult = Apollo.QueryResult<GetWorkerQuery, GetWorkerQueryVariables>
+export const GetGroupDebtDocument = gql`
+  query GetGroupDebt($where: WorkerWhereInput!) {
+    workers(where: $where) {
+      missingRewardAmount
+    }
+  }
+`
 
 /**
  * __useGetGroupDebtQuery__
@@ -713,24 +885,29 @@ export const GetGroupDebtDocument = gql`
  *   },
  * });
  */
-export function useGetGroupDebtQuery(baseOptions: Apollo.QueryHookOptions<GetGroupDebtQuery, GetGroupDebtQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetGroupDebtQuery, GetGroupDebtQueryVariables>(GetGroupDebtDocument, options);
-      }
-export function useGetGroupDebtLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupDebtQuery, GetGroupDebtQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetGroupDebtQuery, GetGroupDebtQueryVariables>(GetGroupDebtDocument, options);
-        }
-export type GetGroupDebtQueryHookResult = ReturnType<typeof useGetGroupDebtQuery>;
-export type GetGroupDebtLazyQueryHookResult = ReturnType<typeof useGetGroupDebtLazyQuery>;
-export type GetGroupDebtQueryResult = Apollo.QueryResult<GetGroupDebtQuery, GetGroupDebtQueryVariables>;
-export const GetRewardsDocument = gql`
-    query GetRewards($where: RewardPaidEventWhereInput) {
-  rewardPaidEvents(where: $where) {
-    ...RewardPaidEventFields
-  }
+export function useGetGroupDebtQuery(
+  baseOptions: Apollo.QueryHookOptions<GetGroupDebtQuery, GetGroupDebtQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetGroupDebtQuery, GetGroupDebtQueryVariables>(GetGroupDebtDocument, options)
 }
-    ${RewardPaidEventFieldsFragmentDoc}`;
+export function useGetGroupDebtLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetGroupDebtQuery, GetGroupDebtQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetGroupDebtQuery, GetGroupDebtQueryVariables>(GetGroupDebtDocument, options)
+}
+export type GetGroupDebtQueryHookResult = ReturnType<typeof useGetGroupDebtQuery>
+export type GetGroupDebtLazyQueryHookResult = ReturnType<typeof useGetGroupDebtLazyQuery>
+export type GetGroupDebtQueryResult = Apollo.QueryResult<GetGroupDebtQuery, GetGroupDebtQueryVariables>
+export const GetRewardsDocument = gql`
+  query GetRewards($where: RewardPaidEventWhereInput) {
+    rewardPaidEvents(where: $where) {
+      ...RewardPaidEventFields
+    }
+  }
+  ${RewardPaidEventFieldsFragmentDoc}
+`
 
 /**
  * __useGetRewardsQuery__
@@ -749,23 +926,25 @@ export const GetRewardsDocument = gql`
  * });
  */
 export function useGetRewardsQuery(baseOptions?: Apollo.QueryHookOptions<GetRewardsQuery, GetRewardsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options);
-      }
-export function useGetRewardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRewardsQuery, GetRewardsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options);
-        }
-export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>;
-export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>;
-export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>;
-export const CountWorkingGroupOpeningsDocument = gql`
-    query CountWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
-  workingGroupOpeningsConnection(where: $where) {
-    totalCount
-  }
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options)
 }
-    `;
+export function useGetRewardsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetRewardsQuery, GetRewardsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options)
+}
+export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>
+export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>
+export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>
+export const CountWorkingGroupOpeningsDocument = gql`
+  query CountWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput) {
+    workingGroupOpeningsConnection(where: $where) {
+      totalCount
+    }
+  }
+`
 
 /**
  * __useCountWorkingGroupOpeningsQuery__
@@ -783,26 +962,37 @@ export const CountWorkingGroupOpeningsDocument = gql`
  *   },
  * });
  */
-export function useCountWorkingGroupOpeningsQuery(baseOptions?: Apollo.QueryHookOptions<CountWorkingGroupOpeningsQuery, CountWorkingGroupOpeningsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CountWorkingGroupOpeningsQuery, CountWorkingGroupOpeningsQueryVariables>(CountWorkingGroupOpeningsDocument, options);
-      }
-export function useCountWorkingGroupOpeningsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountWorkingGroupOpeningsQuery, CountWorkingGroupOpeningsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CountWorkingGroupOpeningsQuery, CountWorkingGroupOpeningsQueryVariables>(CountWorkingGroupOpeningsDocument, options);
-        }
-export type CountWorkingGroupOpeningsQueryHookResult = ReturnType<typeof useCountWorkingGroupOpeningsQuery>;
-export type CountWorkingGroupOpeningsLazyQueryHookResult = ReturnType<typeof useCountWorkingGroupOpeningsLazyQuery>;
-export type CountWorkingGroupOpeningsQueryResult = Apollo.QueryResult<CountWorkingGroupOpeningsQuery, CountWorkingGroupOpeningsQueryVariables>;
-export const CountWorkingGroupWorkersDocument = gql`
-    query CountWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
-  workersConnection(
-    where: {group: {id_eq: $groupId_eq}, status_json: $status_json}
-  ) {
-    totalCount
-  }
+export function useCountWorkingGroupOpeningsQuery(
+  baseOptions?: Apollo.QueryHookOptions<CountWorkingGroupOpeningsQuery, CountWorkingGroupOpeningsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<CountWorkingGroupOpeningsQuery, CountWorkingGroupOpeningsQueryVariables>(
+    CountWorkingGroupOpeningsDocument,
+    options
+  )
 }
-    `;
+export function useCountWorkingGroupOpeningsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CountWorkingGroupOpeningsQuery, CountWorkingGroupOpeningsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<CountWorkingGroupOpeningsQuery, CountWorkingGroupOpeningsQueryVariables>(
+    CountWorkingGroupOpeningsDocument,
+    options
+  )
+}
+export type CountWorkingGroupOpeningsQueryHookResult = ReturnType<typeof useCountWorkingGroupOpeningsQuery>
+export type CountWorkingGroupOpeningsLazyQueryHookResult = ReturnType<typeof useCountWorkingGroupOpeningsLazyQuery>
+export type CountWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
+  CountWorkingGroupOpeningsQuery,
+  CountWorkingGroupOpeningsQueryVariables
+>
+export const CountWorkingGroupWorkersDocument = gql`
+  query CountWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
+    workersConnection(where: { group: { id_eq: $groupId_eq }, status_json: $status_json }) {
+      totalCount
+    }
+  }
+`
 
 /**
  * __useCountWorkingGroupWorkersQuery__
@@ -821,24 +1011,38 @@ export const CountWorkingGroupWorkersDocument = gql`
  *   },
  * });
  */
-export function useCountWorkingGroupWorkersQuery(baseOptions?: Apollo.QueryHookOptions<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>(CountWorkingGroupWorkersDocument, options);
-      }
-export function useCountWorkingGroupWorkersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>(CountWorkingGroupWorkersDocument, options);
-        }
-export type CountWorkingGroupWorkersQueryHookResult = ReturnType<typeof useCountWorkingGroupWorkersQuery>;
-export type CountWorkingGroupWorkersLazyQueryHookResult = ReturnType<typeof useCountWorkingGroupWorkersLazyQuery>;
-export type CountWorkingGroupWorkersQueryResult = Apollo.QueryResult<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>;
-export const GetWorkingGroupOpeningsDocument = gql`
-    query GetWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
-  workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
-    ...WorkingGroupOpeningFields
-  }
+export function useCountWorkingGroupWorkersQuery(
+  baseOptions?: Apollo.QueryHookOptions<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>(
+    CountWorkingGroupWorkersDocument,
+    options
+  )
 }
-    ${WorkingGroupOpeningFieldsFragmentDoc}`;
+export function useCountWorkingGroupWorkersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<CountWorkingGroupWorkersQuery, CountWorkingGroupWorkersQueryVariables>(
+    CountWorkingGroupWorkersDocument,
+    options
+  )
+}
+export type CountWorkingGroupWorkersQueryHookResult = ReturnType<typeof useCountWorkingGroupWorkersQuery>
+export type CountWorkingGroupWorkersLazyQueryHookResult = ReturnType<typeof useCountWorkingGroupWorkersLazyQuery>
+export type CountWorkingGroupWorkersQueryResult = Apollo.QueryResult<
+  CountWorkingGroupWorkersQuery,
+  CountWorkingGroupWorkersQueryVariables
+>
+export const GetWorkingGroupOpeningsDocument = gql`
+  query GetWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
+    workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
+      ...WorkingGroupOpeningFields
+    }
+  }
+  ${WorkingGroupOpeningFieldsFragmentDoc}
+`
 
 /**
  * __useGetWorkingGroupOpeningsQuery__
@@ -858,24 +1062,38 @@ export const GetWorkingGroupOpeningsDocument = gql`
  *   },
  * });
  */
-export function useGetWorkingGroupOpeningsQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>(GetWorkingGroupOpeningsDocument, options);
-      }
-export function useGetWorkingGroupOpeningsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>(GetWorkingGroupOpeningsDocument, options);
-        }
-export type GetWorkingGroupOpeningsQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningsQuery>;
-export type GetWorkingGroupOpeningsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningsLazyQuery>;
-export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>;
-export const GetWorkingGroupOpeningDocument = gql`
-    query GetWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
-  workingGroupOpeningByUniqueInput(where: $where) {
-    ...WorkingGroupOpeningDetailedFields
-  }
+export function useGetWorkingGroupOpeningsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>(
+    GetWorkingGroupOpeningsDocument,
+    options
+  )
 }
-    ${WorkingGroupOpeningDetailedFieldsFragmentDoc}`;
+export function useGetWorkingGroupOpeningsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningsQuery, GetWorkingGroupOpeningsQueryVariables>(
+    GetWorkingGroupOpeningsDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningsQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningsQuery>
+export type GetWorkingGroupOpeningsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningsLazyQuery>
+export type GetWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningsQuery,
+  GetWorkingGroupOpeningsQueryVariables
+>
+export const GetWorkingGroupOpeningDocument = gql`
+  query GetWorkingGroupOpening($where: WorkingGroupOpeningWhereUniqueInput!) {
+    workingGroupOpeningByUniqueInput(where: $where) {
+      ...WorkingGroupOpeningDetailedFields
+    }
+  }
+  ${WorkingGroupOpeningDetailedFieldsFragmentDoc}
+`
 
 /**
  * __useGetWorkingGroupOpeningQuery__
@@ -893,28 +1111,42 @@ export const GetWorkingGroupOpeningDocument = gql`
  *   },
  * });
  */
-export function useGetWorkingGroupOpeningQuery(baseOptions: Apollo.QueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>(GetWorkingGroupOpeningDocument, options);
-      }
-export function useGetWorkingGroupOpeningLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>(GetWorkingGroupOpeningDocument, options);
-        }
-export type GetWorkingGroupOpeningQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningQuery>;
-export type GetWorkingGroupOpeningLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningLazyQuery>;
-export type GetWorkingGroupOpeningQueryResult = Apollo.QueryResult<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>;
+export function useGetWorkingGroupOpeningQuery(
+  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>(
+    GetWorkingGroupOpeningDocument,
+    options
+  )
+}
+export function useGetWorkingGroupOpeningLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningQuery, GetWorkingGroupOpeningQueryVariables>(
+    GetWorkingGroupOpeningDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningQuery>
+export type GetWorkingGroupOpeningLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningLazyQuery>
+export type GetWorkingGroupOpeningQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningQuery,
+  GetWorkingGroupOpeningQueryVariables
+>
 export const GetWorkingGroupOpeningQuestionsDocument = gql`
-    query GetWorkingGroupOpeningQuestions($id: ID!) {
-  workingGroupOpeningByUniqueInput(where: {id: $id}) {
-    metadata {
-      applicationFormQuestions {
-        ...ApplicationQuestionFields
+  query GetWorkingGroupOpeningQuestions($id: ID!) {
+    workingGroupOpeningByUniqueInput(where: { id: $id }) {
+      metadata {
+        applicationFormQuestions {
+          ...ApplicationQuestionFields
+        }
       }
     }
   }
-}
-    ${ApplicationQuestionFieldsFragmentDoc}`;
+  ${ApplicationQuestionFieldsFragmentDoc}
+`
 
 /**
  * __useGetWorkingGroupOpeningQuestionsQuery__
@@ -932,24 +1164,46 @@ export const GetWorkingGroupOpeningQuestionsDocument = gql`
  *   },
  * });
  */
-export function useGetWorkingGroupOpeningQuestionsQuery(baseOptions: Apollo.QueryHookOptions<GetWorkingGroupOpeningQuestionsQuery, GetWorkingGroupOpeningQuestionsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkingGroupOpeningQuestionsQuery, GetWorkingGroupOpeningQuestionsQueryVariables>(GetWorkingGroupOpeningQuestionsDocument, options);
-      }
-export function useGetWorkingGroupOpeningQuestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupOpeningQuestionsQuery, GetWorkingGroupOpeningQuestionsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkingGroupOpeningQuestionsQuery, GetWorkingGroupOpeningQuestionsQueryVariables>(GetWorkingGroupOpeningQuestionsDocument, options);
-        }
-export type GetWorkingGroupOpeningQuestionsQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningQuestionsQuery>;
-export type GetWorkingGroupOpeningQuestionsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningQuestionsLazyQuery>;
-export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<GetWorkingGroupOpeningQuestionsQuery, GetWorkingGroupOpeningQuestionsQueryVariables>;
-export const GetWorkingGroupDocument = gql`
-    query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
-  workingGroupByUniqueInput(where: $where) {
-    ...WorkingGroupDetailedFields
-  }
+export function useGetWorkingGroupOpeningQuestionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetWorkingGroupOpeningQuestionsQuery,
+    GetWorkingGroupOpeningQuestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupOpeningQuestionsQuery, GetWorkingGroupOpeningQuestionsQueryVariables>(
+    GetWorkingGroupOpeningQuestionsDocument,
+    options
+  )
 }
-    ${WorkingGroupDetailedFieldsFragmentDoc}`;
+export function useGetWorkingGroupOpeningQuestionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWorkingGroupOpeningQuestionsQuery,
+    GetWorkingGroupOpeningQuestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupOpeningQuestionsQuery, GetWorkingGroupOpeningQuestionsQueryVariables>(
+    GetWorkingGroupOpeningQuestionsDocument,
+    options
+  )
+}
+export type GetWorkingGroupOpeningQuestionsQueryHookResult = ReturnType<typeof useGetWorkingGroupOpeningQuestionsQuery>
+export type GetWorkingGroupOpeningQuestionsLazyQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupOpeningQuestionsLazyQuery
+>
+export type GetWorkingGroupOpeningQuestionsQueryResult = Apollo.QueryResult<
+  GetWorkingGroupOpeningQuestionsQuery,
+  GetWorkingGroupOpeningQuestionsQueryVariables
+>
+export const GetWorkingGroupDocument = gql`
+  query GetWorkingGroup($where: WorkingGroupWhereUniqueInput!) {
+    workingGroupByUniqueInput(where: $where) {
+      ...WorkingGroupDetailedFields
+    }
+  }
+  ${WorkingGroupDetailedFieldsFragmentDoc}
+`
 
 /**
  * __useGetWorkingGroupQuery__
@@ -967,24 +1221,29 @@ export const GetWorkingGroupDocument = gql`
  *   },
  * });
  */
-export function useGetWorkingGroupQuery(baseOptions: Apollo.QueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>(GetWorkingGroupDocument, options);
-      }
-export function useGetWorkingGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>(GetWorkingGroupDocument, options);
-        }
-export type GetWorkingGroupQueryHookResult = ReturnType<typeof useGetWorkingGroupQuery>;
-export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupLazyQuery>;
-export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>;
-export const GetWorkingGroupApplicationsDocument = gql`
-    query GetWorkingGroupApplications($applicantId_in: [ID!]) {
-  workingGroupApplications(where: {applicant: {id_in: $applicantId_in}}) {
-    ...WorkingGroupApplicationFields
-  }
+export function useGetWorkingGroupQuery(
+  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>(GetWorkingGroupDocument, options)
 }
-    ${WorkingGroupApplicationFieldsFragmentDoc}`;
+export function useGetWorkingGroupLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>(GetWorkingGroupDocument, options)
+}
+export type GetWorkingGroupQueryHookResult = ReturnType<typeof useGetWorkingGroupQuery>
+export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupLazyQuery>
+export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
+export const GetWorkingGroupApplicationsDocument = gql`
+  query GetWorkingGroupApplications($applicantId_in: [ID!]) {
+    workingGroupApplications(where: { applicant: { id_in: $applicantId_in } }) {
+      ...WorkingGroupApplicationFields
+    }
+  }
+  ${WorkingGroupApplicationFieldsFragmentDoc}
+`
 
 /**
  * __useGetWorkingGroupApplicationsQuery__
@@ -1002,24 +1261,37 @@ export const GetWorkingGroupApplicationsDocument = gql`
  *   },
  * });
  */
-export function useGetWorkingGroupApplicationsQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupApplicationsQuery, GetWorkingGroupApplicationsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkingGroupApplicationsQuery, GetWorkingGroupApplicationsQueryVariables>(GetWorkingGroupApplicationsDocument, options);
-      }
-export function useGetWorkingGroupApplicationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupApplicationsQuery, GetWorkingGroupApplicationsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkingGroupApplicationsQuery, GetWorkingGroupApplicationsQueryVariables>(GetWorkingGroupApplicationsDocument, options);
-        }
-export type GetWorkingGroupApplicationsQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationsQuery>;
-export type GetWorkingGroupApplicationsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationsLazyQuery>;
-export type GetWorkingGroupApplicationsQueryResult = Apollo.QueryResult<GetWorkingGroupApplicationsQuery, GetWorkingGroupApplicationsQueryVariables>;
-export const GetWorkingGroupApplicationIdsDocument = gql`
-    query GetWorkingGroupApplicationIds($where: WorkingGroupApplicationWhereInput) {
-  workingGroupApplications(where: $where) {
-    id
-  }
+export function useGetWorkingGroupApplicationsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupApplicationsQuery, GetWorkingGroupApplicationsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupApplicationsQuery, GetWorkingGroupApplicationsQueryVariables>(
+    GetWorkingGroupApplicationsDocument,
+    options
+  )
 }
-    `;
+export function useGetWorkingGroupApplicationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupApplicationsQuery, GetWorkingGroupApplicationsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupApplicationsQuery, GetWorkingGroupApplicationsQueryVariables>(
+    GetWorkingGroupApplicationsDocument,
+    options
+  )
+}
+export type GetWorkingGroupApplicationsQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationsQuery>
+export type GetWorkingGroupApplicationsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationsLazyQuery>
+export type GetWorkingGroupApplicationsQueryResult = Apollo.QueryResult<
+  GetWorkingGroupApplicationsQuery,
+  GetWorkingGroupApplicationsQueryVariables
+>
+export const GetWorkingGroupApplicationIdsDocument = gql`
+  query GetWorkingGroupApplicationIds($where: WorkingGroupApplicationWhereInput) {
+    workingGroupApplications(where: $where) {
+      id
+    }
+  }
+`
 
 /**
  * __useGetWorkingGroupApplicationIdsQuery__
@@ -1037,24 +1309,43 @@ export const GetWorkingGroupApplicationIdsDocument = gql`
  *   },
  * });
  */
-export function useGetWorkingGroupApplicationIdsQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>(GetWorkingGroupApplicationIdsDocument, options);
-      }
-export function useGetWorkingGroupApplicationIdsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>(GetWorkingGroupApplicationIdsDocument, options);
-        }
-export type GetWorkingGroupApplicationIdsQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationIdsQuery>;
-export type GetWorkingGroupApplicationIdsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationIdsLazyQuery>;
-export type GetWorkingGroupApplicationIdsQueryResult = Apollo.QueryResult<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>;
-export const GetWorkingGroupApplicationDocument = gql`
-    query GetWorkingGroupApplication($where: WorkingGroupApplicationWhereUniqueInput!) {
-  workingGroupApplicationByUniqueInput(where: $where) {
-    ...WorkingGroupApplicationFields
-  }
+export function useGetWorkingGroupApplicationIdsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>(
+    GetWorkingGroupApplicationIdsDocument,
+    options
+  )
 }
-    ${WorkingGroupApplicationFieldsFragmentDoc}`;
+export function useGetWorkingGroupApplicationIdsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWorkingGroupApplicationIdsQuery,
+    GetWorkingGroupApplicationIdsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupApplicationIdsQuery, GetWorkingGroupApplicationIdsQueryVariables>(
+    GetWorkingGroupApplicationIdsDocument,
+    options
+  )
+}
+export type GetWorkingGroupApplicationIdsQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationIdsQuery>
+export type GetWorkingGroupApplicationIdsLazyQueryHookResult = ReturnType<
+  typeof useGetWorkingGroupApplicationIdsLazyQuery
+>
+export type GetWorkingGroupApplicationIdsQueryResult = Apollo.QueryResult<
+  GetWorkingGroupApplicationIdsQuery,
+  GetWorkingGroupApplicationIdsQueryVariables
+>
+export const GetWorkingGroupApplicationDocument = gql`
+  query GetWorkingGroupApplication($where: WorkingGroupApplicationWhereUniqueInput!) {
+    workingGroupApplicationByUniqueInput(where: $where) {
+      ...WorkingGroupApplicationFields
+    }
+  }
+  ${WorkingGroupApplicationFieldsFragmentDoc}
+`
 
 /**
  * __useGetWorkingGroupApplicationQuery__
@@ -1072,24 +1363,38 @@ export const GetWorkingGroupApplicationDocument = gql`
  *   },
  * });
  */
-export function useGetWorkingGroupApplicationQuery(baseOptions: Apollo.QueryHookOptions<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>(GetWorkingGroupApplicationDocument, options);
-      }
-export function useGetWorkingGroupApplicationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>(GetWorkingGroupApplicationDocument, options);
-        }
-export type GetWorkingGroupApplicationQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationQuery>;
-export type GetWorkingGroupApplicationLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationLazyQuery>;
-export type GetWorkingGroupApplicationQueryResult = Apollo.QueryResult<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>;
-export const GetApplicationFormQuestionAnswerDocument = gql`
-    query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
-  applicationFormQuestionAnswers(where: {application: {id_eq: $applicationId_eq}}) {
-    ...ApplicationFormQuestionAnswerFields
-  }
+export function useGetWorkingGroupApplicationQuery(
+  baseOptions: Apollo.QueryHookOptions<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>(
+    GetWorkingGroupApplicationDocument,
+    options
+  )
 }
-    ${ApplicationFormQuestionAnswerFieldsFragmentDoc}`;
+export function useGetWorkingGroupApplicationLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkingGroupApplicationQuery, GetWorkingGroupApplicationQueryVariables>(
+    GetWorkingGroupApplicationDocument,
+    options
+  )
+}
+export type GetWorkingGroupApplicationQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationQuery>
+export type GetWorkingGroupApplicationLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupApplicationLazyQuery>
+export type GetWorkingGroupApplicationQueryResult = Apollo.QueryResult<
+  GetWorkingGroupApplicationQuery,
+  GetWorkingGroupApplicationQueryVariables
+>
+export const GetApplicationFormQuestionAnswerDocument = gql`
+  query GetApplicationFormQuestionAnswer($applicationId_eq: ID) {
+    applicationFormQuestionAnswers(where: { application: { id_eq: $applicationId_eq } }) {
+      ...ApplicationFormQuestionAnswerFields
+    }
+  }
+  ${ApplicationFormQuestionAnswerFieldsFragmentDoc}
+`
 
 /**
  * __useGetApplicationFormQuestionAnswerQuery__
@@ -1107,24 +1412,48 @@ export const GetApplicationFormQuestionAnswerDocument = gql`
  *   },
  * });
  */
-export function useGetApplicationFormQuestionAnswerQuery(baseOptions?: Apollo.QueryHookOptions<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>(GetApplicationFormQuestionAnswerDocument, options);
-      }
-export function useGetApplicationFormQuestionAnswerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>(GetApplicationFormQuestionAnswerDocument, options);
-        }
-export type GetApplicationFormQuestionAnswerQueryHookResult = ReturnType<typeof useGetApplicationFormQuestionAnswerQuery>;
-export type GetApplicationFormQuestionAnswerLazyQueryHookResult = ReturnType<typeof useGetApplicationFormQuestionAnswerLazyQuery>;
-export type GetApplicationFormQuestionAnswerQueryResult = Apollo.QueryResult<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>;
-export const GetUpcomingWorkingGroupOpeningDocument = gql`
-    query GetUpcomingWorkingGroupOpening($where: UpcomingWorkingGroupOpeningWhereUniqueInput!) {
-  upcomingWorkingGroupOpeningByUniqueInput(where: $where) {
-    ...UpcomingWorkingGroupOpeningFields
-  }
+export function useGetApplicationFormQuestionAnswerQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetApplicationFormQuestionAnswerQuery,
+    GetApplicationFormQuestionAnswerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>(
+    GetApplicationFormQuestionAnswerDocument,
+    options
+  )
 }
-    ${UpcomingWorkingGroupOpeningFieldsFragmentDoc}`;
+export function useGetApplicationFormQuestionAnswerLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetApplicationFormQuestionAnswerQuery,
+    GetApplicationFormQuestionAnswerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetApplicationFormQuestionAnswerQuery, GetApplicationFormQuestionAnswerQueryVariables>(
+    GetApplicationFormQuestionAnswerDocument,
+    options
+  )
+}
+export type GetApplicationFormQuestionAnswerQueryHookResult = ReturnType<
+  typeof useGetApplicationFormQuestionAnswerQuery
+>
+export type GetApplicationFormQuestionAnswerLazyQueryHookResult = ReturnType<
+  typeof useGetApplicationFormQuestionAnswerLazyQuery
+>
+export type GetApplicationFormQuestionAnswerQueryResult = Apollo.QueryResult<
+  GetApplicationFormQuestionAnswerQuery,
+  GetApplicationFormQuestionAnswerQueryVariables
+>
+export const GetUpcomingWorkingGroupOpeningDocument = gql`
+  query GetUpcomingWorkingGroupOpening($where: UpcomingWorkingGroupOpeningWhereUniqueInput!) {
+    upcomingWorkingGroupOpeningByUniqueInput(where: $where) {
+      ...UpcomingWorkingGroupOpeningFields
+    }
+  }
+  ${UpcomingWorkingGroupOpeningFieldsFragmentDoc}
+`
 
 /**
  * __useGetUpcomingWorkingGroupOpeningQuery__
@@ -1142,24 +1471,46 @@ export const GetUpcomingWorkingGroupOpeningDocument = gql`
  *   },
  * });
  */
-export function useGetUpcomingWorkingGroupOpeningQuery(baseOptions: Apollo.QueryHookOptions<GetUpcomingWorkingGroupOpeningQuery, GetUpcomingWorkingGroupOpeningQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUpcomingWorkingGroupOpeningQuery, GetUpcomingWorkingGroupOpeningQueryVariables>(GetUpcomingWorkingGroupOpeningDocument, options);
-      }
-export function useGetUpcomingWorkingGroupOpeningLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUpcomingWorkingGroupOpeningQuery, GetUpcomingWorkingGroupOpeningQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUpcomingWorkingGroupOpeningQuery, GetUpcomingWorkingGroupOpeningQueryVariables>(GetUpcomingWorkingGroupOpeningDocument, options);
-        }
-export type GetUpcomingWorkingGroupOpeningQueryHookResult = ReturnType<typeof useGetUpcomingWorkingGroupOpeningQuery>;
-export type GetUpcomingWorkingGroupOpeningLazyQueryHookResult = ReturnType<typeof useGetUpcomingWorkingGroupOpeningLazyQuery>;
-export type GetUpcomingWorkingGroupOpeningQueryResult = Apollo.QueryResult<GetUpcomingWorkingGroupOpeningQuery, GetUpcomingWorkingGroupOpeningQueryVariables>;
-export const GetUpcomingWorkingGroupOpeningsDocument = gql`
-    query GetUpcomingWorkingGroupOpenings($where: UpcomingWorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
-  upcomingWorkingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
-    ...UpcomingWorkingGroupOpeningFields
-  }
+export function useGetUpcomingWorkingGroupOpeningQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUpcomingWorkingGroupOpeningQuery,
+    GetUpcomingWorkingGroupOpeningQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUpcomingWorkingGroupOpeningQuery, GetUpcomingWorkingGroupOpeningQueryVariables>(
+    GetUpcomingWorkingGroupOpeningDocument,
+    options
+  )
 }
-    ${UpcomingWorkingGroupOpeningFieldsFragmentDoc}`;
+export function useGetUpcomingWorkingGroupOpeningLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUpcomingWorkingGroupOpeningQuery,
+    GetUpcomingWorkingGroupOpeningQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUpcomingWorkingGroupOpeningQuery, GetUpcomingWorkingGroupOpeningQueryVariables>(
+    GetUpcomingWorkingGroupOpeningDocument,
+    options
+  )
+}
+export type GetUpcomingWorkingGroupOpeningQueryHookResult = ReturnType<typeof useGetUpcomingWorkingGroupOpeningQuery>
+export type GetUpcomingWorkingGroupOpeningLazyQueryHookResult = ReturnType<
+  typeof useGetUpcomingWorkingGroupOpeningLazyQuery
+>
+export type GetUpcomingWorkingGroupOpeningQueryResult = Apollo.QueryResult<
+  GetUpcomingWorkingGroupOpeningQuery,
+  GetUpcomingWorkingGroupOpeningQueryVariables
+>
+export const GetUpcomingWorkingGroupOpeningsDocument = gql`
+  query GetUpcomingWorkingGroupOpenings($where: UpcomingWorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
+    upcomingWorkingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
+      ...UpcomingWorkingGroupOpeningFields
+    }
+  }
+  ${UpcomingWorkingGroupOpeningFieldsFragmentDoc}
+`
 
 /**
  * __useGetUpcomingWorkingGroupOpeningsQuery__
@@ -1179,24 +1530,45 @@ export const GetUpcomingWorkingGroupOpeningsDocument = gql`
  *   },
  * });
  */
-export function useGetUpcomingWorkingGroupOpeningsQuery(baseOptions?: Apollo.QueryHookOptions<GetUpcomingWorkingGroupOpeningsQuery, GetUpcomingWorkingGroupOpeningsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUpcomingWorkingGroupOpeningsQuery, GetUpcomingWorkingGroupOpeningsQueryVariables>(GetUpcomingWorkingGroupOpeningsDocument, options);
-      }
-export function useGetUpcomingWorkingGroupOpeningsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUpcomingWorkingGroupOpeningsQuery, GetUpcomingWorkingGroupOpeningsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUpcomingWorkingGroupOpeningsQuery, GetUpcomingWorkingGroupOpeningsQueryVariables>(GetUpcomingWorkingGroupOpeningsDocument, options);
-        }
-export type GetUpcomingWorkingGroupOpeningsQueryHookResult = ReturnType<typeof useGetUpcomingWorkingGroupOpeningsQuery>;
-export type GetUpcomingWorkingGroupOpeningsLazyQueryHookResult = ReturnType<typeof useGetUpcomingWorkingGroupOpeningsLazyQuery>;
-export type GetUpcomingWorkingGroupOpeningsQueryResult = Apollo.QueryResult<GetUpcomingWorkingGroupOpeningsQuery, GetUpcomingWorkingGroupOpeningsQueryVariables>;
-export const GetWorkerIdsDocument = gql`
-    query GetWorkerIds($where: WorkerWhereInput) {
-  workers(where: $where) {
-    id
-  }
+export function useGetUpcomingWorkingGroupOpeningsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetUpcomingWorkingGroupOpeningsQuery,
+    GetUpcomingWorkingGroupOpeningsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUpcomingWorkingGroupOpeningsQuery, GetUpcomingWorkingGroupOpeningsQueryVariables>(
+    GetUpcomingWorkingGroupOpeningsDocument,
+    options
+  )
 }
-    `;
+export function useGetUpcomingWorkingGroupOpeningsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUpcomingWorkingGroupOpeningsQuery,
+    GetUpcomingWorkingGroupOpeningsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUpcomingWorkingGroupOpeningsQuery, GetUpcomingWorkingGroupOpeningsQueryVariables>(
+    GetUpcomingWorkingGroupOpeningsDocument,
+    options
+  )
+}
+export type GetUpcomingWorkingGroupOpeningsQueryHookResult = ReturnType<typeof useGetUpcomingWorkingGroupOpeningsQuery>
+export type GetUpcomingWorkingGroupOpeningsLazyQueryHookResult = ReturnType<
+  typeof useGetUpcomingWorkingGroupOpeningsLazyQuery
+>
+export type GetUpcomingWorkingGroupOpeningsQueryResult = Apollo.QueryResult<
+  GetUpcomingWorkingGroupOpeningsQuery,
+  GetUpcomingWorkingGroupOpeningsQueryVariables
+>
+export const GetWorkerIdsDocument = gql`
+  query GetWorkerIds($where: WorkerWhereInput) {
+    workers(where: $where) {
+      id
+    }
+  }
+`
 
 /**
  * __useGetWorkerIdsQuery__
@@ -1214,36 +1586,40 @@ export const GetWorkerIdsDocument = gql`
  *   },
  * });
  */
-export function useGetWorkerIdsQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>(GetWorkerIdsDocument, options);
-      }
-export function useGetWorkerIdsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>(GetWorkerIdsDocument, options);
-        }
-export type GetWorkerIdsQueryHookResult = ReturnType<typeof useGetWorkerIdsQuery>;
-export type GetWorkerIdsLazyQueryHookResult = ReturnType<typeof useGetWorkerIdsLazyQuery>;
-export type GetWorkerIdsQueryResult = Apollo.QueryResult<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>;
+export function useGetWorkerIdsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>(GetWorkerIdsDocument, options)
+}
+export function useGetWorkerIdsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>(GetWorkerIdsDocument, options)
+}
+export type GetWorkerIdsQueryHookResult = ReturnType<typeof useGetWorkerIdsQuery>
+export type GetWorkerIdsLazyQueryHookResult = ReturnType<typeof useGetWorkerIdsLazyQuery>
+export type GetWorkerIdsQueryResult = Apollo.QueryResult<GetWorkerIdsQuery, GetWorkerIdsQueryVariables>
 export const GetWorkerUnstakingDetailsDocument = gql`
-    query GetWorkerUnstakingDetails($where: WorkerWhereUniqueInput!) {
-  workerByUniqueInput(where: $where) {
-    status {
-      __typename
-      ... on WorkerStatusLeaving {
-        workerStartedLeavingEvent {
-          createdAt
+  query GetWorkerUnstakingDetails($where: WorkerWhereUniqueInput!) {
+    workerByUniqueInput(where: $where) {
+      status {
+        __typename
+        ... on WorkerStatusLeaving {
+          workerStartedLeavingEvent {
+            createdAt
+          }
         }
       }
-    }
-    application {
-      opening {
-        unstakingPeriod
+      application {
+        opening {
+          unstakingPeriod
+        }
       }
     }
   }
-}
-    `;
+`
 
 /**
  * __useGetWorkerUnstakingDetailsQuery__
@@ -1261,14 +1637,27 @@ export const GetWorkerUnstakingDetailsDocument = gql`
  *   },
  * });
  */
-export function useGetWorkerUnstakingDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>(GetWorkerUnstakingDetailsDocument, options);
-      }
-export function useGetWorkerUnstakingDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>(GetWorkerUnstakingDetailsDocument, options);
-        }
-export type GetWorkerUnstakingDetailsQueryHookResult = ReturnType<typeof useGetWorkerUnstakingDetailsQuery>;
-export type GetWorkerUnstakingDetailsLazyQueryHookResult = ReturnType<typeof useGetWorkerUnstakingDetailsLazyQuery>;
-export type GetWorkerUnstakingDetailsQueryResult = Apollo.QueryResult<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>;
+export function useGetWorkerUnstakingDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>(
+    GetWorkerUnstakingDetailsDocument,
+    options
+  )
+}
+export function useGetWorkerUnstakingDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetWorkerUnstakingDetailsQuery, GetWorkerUnstakingDetailsQueryVariables>(
+    GetWorkerUnstakingDetailsDocument,
+    options
+  )
+}
+export type GetWorkerUnstakingDetailsQueryHookResult = ReturnType<typeof useGetWorkerUnstakingDetailsQuery>
+export type GetWorkerUnstakingDetailsLazyQueryHookResult = ReturnType<typeof useGetWorkerUnstakingDetailsLazyQuery>
+export type GetWorkerUnstakingDetailsQueryResult = Apollo.QueryResult<
+  GetWorkerUnstakingDetailsQuery,
+  GetWorkerUnstakingDetailsQueryVariables
+>
