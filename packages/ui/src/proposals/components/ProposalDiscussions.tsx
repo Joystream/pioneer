@@ -30,19 +30,18 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const { active, members } = useMyMemberships()
 
   const initialPost = query.get('post')
+  const isAbleToPost =
+    thread.mode === 'open' || (thread.mode === 'closed' && active && thread.whitelistIds?.includes(active.id))
+  const isInWhitelist = thread.mode === 'closed' && members.find((member) => thread.whitelistIds?.includes(member.id))
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
   const newPostRef = useRef<HTMLDivElement>(null)
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
 
-  const onReply = (post: ForumPost) => {
-    setReplyTo(post)
-    newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
-  }
-  const onRemoveReply = () => {
-    setReplyTo(undefined)
-  }
+  useEffect(() => {
+    replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
+  }, [replyTo])
 
   useEffect(() => {
     if (initialPost && postsRefs[initialPost]) {
@@ -62,11 +61,18 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   }
 
   const getPostForm = () => {
-    if (thread.mode === 'open' || (thread.mode === 'closed' && active && thread.whitelistIds?.includes(active.id))) {
-      return <NewThreadPost ref={newPostRef} getTransaction={getTransaction} removeReply={onRemoveReply} />
+    if (isAbleToPost) {
+      return (
+        <NewThreadPost
+          ref={newPostRef}
+          replyTo={replyTo}
+          getTransaction={getTransaction}
+          removeReply={() => setReplyTo(undefined)}
+        />
+      )
     }
 
-    if (members.find((member) => thread.whitelistIds?.includes(member.id))) {
+    if (isInWhitelist) {
       return <TextBig>Please select a whitelisted membership.</TextBig>
     }
 
@@ -96,7 +102,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isSelected={post.id === initialPost}
             isThreadActive={true}
             post={post}
-            replyToPost={() => onReply(post)}
+            replyToPost={() => setReplyTo(post)}
             type="proposal"
             link={`${origin}${ProposalsRoutes.preview}/${proposalId}?post=${post.id}`}
           />

@@ -1,6 +1,6 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -38,14 +38,9 @@ export const ForumThread = () => {
   const history = useHistory()
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
-  const onReply = (post: ForumPost) => {
-    setReplyTo(post)
-    newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
-  }
-
-  const onRemoveReply = () => {
-    setReplyTo(undefined)
-  }
+  useEffect(() => {
+    replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
+  }, [replyTo])
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
 
@@ -107,9 +102,14 @@ export const ForumThread = () => {
 
   const displayMain = () => (
     <MainPanel ref={sideNeighborRef}>
-      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={onReply} />
+      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={setReplyTo} />
       {thread && isThreadActive && (
-        <NewThreadPost ref={newPostRef} replyTo={replyTo} removeReply={onRemoveReply} getTransaction={getTransaction} />
+        <NewThreadPost
+          ref={newPostRef}
+          replyTo={replyTo}
+          removeReply={() => setReplyTo(undefined)}
+          getTransaction={getTransaction}
+        />
       )}
     </MainPanel>
   )
