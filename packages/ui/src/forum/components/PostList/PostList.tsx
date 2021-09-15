@@ -24,16 +24,11 @@ export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps)
   const query = useRouteQuery()
 
   const navigation = { post: query.get('post'), page: query.get('page') }
-  const { isLoading: isLoadingPosts, posts, page, pageCount = 0 } = useForumThreadPosts(threadId, navigation)
+  const { isLoading: isLoadingPosts, posts, page, pageCount } = useForumThreadPosts(threadId, navigation)
   const isReady = useMemo(() => !(isLoading || isLoadingPosts), [posts, pageCount])
   const setPage = useCallback(
     (page: number) => history.replace({ pathname, search: page > 1 ? `page=${page}` : '' }),
     []
-  )
-
-  const pagination = useMemo(
-    () => isReady && pageCount > 1 && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />,
-    [isReady, pageCount, page]
   )
 
   const postsRefs: AnyKeys = {}
@@ -52,7 +47,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps)
 
   return (
     <RowGapBlock gap={24}>
-      {pagination}
+      <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
       {posts.map((post) => (
         <PostListItem
           key={post.id}
@@ -64,7 +59,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading }: PostListProps)
           link={`${origin}${ForumRoutes.thread}/${threadId}?post=${post.id}`}
         />
       ))}
-      {pagination}
+      <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
     </RowGapBlock>
   )
 }

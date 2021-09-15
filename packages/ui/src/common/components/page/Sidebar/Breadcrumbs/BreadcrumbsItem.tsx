@@ -58,18 +58,18 @@ export const BreadcrumbsItemText = styled.span`
   ${truncatedBreadcrumbText}
 `
 
-const BreadcrumbsItemComponent = styled.li`
+export const BreadcrumbsItemComponent = styled.li`
   display: inline-flex;
   position: relative;
   align-items: center;
-  margin-left: 26px;
+  padding-left: 26px;
   min-width: 26px;
 
   &:before {
     content: '';
     position: absolute;
     top: 50%;
-    left: -16px;
+    left: 10px;
     width: 4px;
     height: 4px;
     border-top: 1px solid ${Colors.Black[300]};

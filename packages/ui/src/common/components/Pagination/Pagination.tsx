@@ -6,32 +6,38 @@ import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants/styles'
 
 interface PaginationProps {
-  pageCount: number
+  pageCount?: number
   handlePageChange: (page: number) => void
   page?: number
 }
 
-export const Pagination: FC<PaginationProps> = ({ pageCount, handlePageChange, page }) => (
-  <StyledPaginateContainer>
-    <ReactPaginate
-      pageCount={pageCount}
-      marginPagesDisplayed={3}
-      pageRangeDisplayed={3}
-      containerClassName="pagination"
-      pageLinkClassName="pagination__link"
-      pageClassName="page"
-      activeClassName="page--active"
-      activeLinkClassName="pagination__link--active"
-      breakLinkClassName="pagination__link"
-      previousLabel={<Arrow direction="left" />}
-      nextLabel={<Arrow direction="right" />}
-      nextLinkClassName="pagination__link"
-      previousLinkClassName="pagination__link pagination__link--previous"
-      onPageChange={(value) => handlePageChange(value.selected + 1)}
-      forcePage={page && page - 1}
-    />
-  </StyledPaginateContainer>
-)
+export const Pagination: FC<PaginationProps> = ({ pageCount = 0, handlePageChange, page }) => {
+  if (pageCount < 2) {
+    return null
+  }
+
+  return (
+    <StyledPaginateContainer>
+      <ReactPaginate
+        pageCount={pageCount}
+        marginPagesDisplayed={3}
+        pageRangeDisplayed={3}
+        containerClassName="pagination"
+        pageLinkClassName="pagination__link"
+        pageClassName="page"
+        activeClassName="page--active"
+        activeLinkClassName="pagination__link--active"
+        breakLinkClassName="pagination__link"
+        previousLabel={<Arrow direction="left" />}
+        nextLabel={<Arrow direction="right" />}
+        nextLinkClassName="pagination__link"
+        previousLinkClassName="pagination__link pagination__link--previous"
+        onPageChange={(value) => handlePageChange(value.selected + 1)}
+        forcePage={page && page - 1}
+      />
+    </StyledPaginateContainer>
+  )
+}
 
 const StyledPaginateContainer = styled.nav`
   display: flex;
@@ -44,6 +50,7 @@ const StyledPaginateContainer = styled.nav`
     width: fit-content;
     align-items: center;
   }
+
   .pagination__link {
     display: flex;
     position: relative;
@@ -84,9 +91,11 @@ const StyledPaginateContainer = styled.nav`
       z-index: -1;
       pointer-events: none;
     }
+
     &:before {
       background-color: ${Colors.Black[50]};
     }
+
     &:after {
       background-color: ${Colors.Blue[50]};
     }
@@ -95,17 +104,21 @@ const StyledPaginateContainer = styled.nav`
     &:focus {
       border-color: ${Colors.Blue[100]};
       color: ${Colors.Blue[500]};
+
       &:before {
         transform: translate(-50%, -50%);
       }
     }
+
     &:active {
       transform: scale(0.96);
       border-color: ${Colors.Blue[100]};
+
       &:after {
         transform: translate(-50%, -50%);
       }
     }
+
     &.disabled {
       cursor: not-allowed;
       color: ${Colors.Black[300]};
@@ -130,11 +143,13 @@ const StyledPaginateContainer = styled.nav`
     &--active {
       border-color: ${Colors.Blue[100]};
       color: ${Colors.Blue[500]};
+
       &:after {
         transform: translate(-50%, -50%);
       }
     }
   }
+
   .previous,
   .next {
     .pagination__link {

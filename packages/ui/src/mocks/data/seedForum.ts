@@ -97,6 +97,7 @@ export function seedForumPost(data: RawForumPostMock, server: any) {
     createdAt: data.postAddedEvent.createdAt,
     updatedAt: sortedEdits.length ? sortedEdits[0].createdAt : null,
     status: server.schema.create(data.status),
+    isVisible: ['PostStatusActive', 'PostStatusLocked'].includes(data.status),
   })
 }
 
