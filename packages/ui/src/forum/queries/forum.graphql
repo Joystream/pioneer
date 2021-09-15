@@ -127,6 +127,9 @@ fragment ForumPostWithoutReplyFields on ForumPost {
   status {
     __typename
   }
+  edits {
+    createdAt
+  }
 }
 
 fragment ForumThreadDetailedFields on ForumThread {
@@ -204,7 +207,7 @@ query GetForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInp
 }
 
 query GetForumPostEdits($id: ID!) {
-  edits: postTextUpdatedEvents(where: { post: { id_eq: $id } }) {
+  edits: postTextUpdatedEvents(where: { post: { id_eq: $id } }, orderBy: [createdAt_ASC]) {
     newText
     network
     createdAt

@@ -28,7 +28,7 @@ interface Props {
 }
 
 const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText, isThreadActive }) => {
-  const updatedAt = edited >= 0 ? new Date(Date.now() - edited * A_MINUTE).toISOString() : undefined
+  const lastEditedAt = edited >= 0 ? new Date(Date.now() - edited * A_MINUTE).toISOString() : undefined
   const reaction = likes >= 0 ? repeat(() => PostReaction.Like, likes) : undefined
   const repliesTo: ForumPost | undefined = replyText
     ? (({
@@ -57,7 +57,7 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
         <MembershipContext.Provider value={membershipContext}>
           <Container>
             <PostListItem
-              post={{ ...post, updatedAt, text, reaction, repliesTo }}
+              post={{ ...post, lastEditedAt, text, reaction, repliesTo }}
               isThreadActive={isThreadActive}
               type="forum"
               link="#"

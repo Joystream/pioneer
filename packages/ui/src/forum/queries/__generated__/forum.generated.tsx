@@ -137,6 +137,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
     | { __typename: 'PostStatusLocked' }
     | { __typename: 'PostStatusModerated' }
     | { __typename: 'PostStatusRemoved' }
+  edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
 }
 
 export type ForumThreadDetailedFieldsFragment = { __typename: 'ForumThread' } & ForumThreadFieldsFragment
@@ -417,6 +418,9 @@ export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
     }
     status {
       __typename
+    }
+    edits {
+      createdAt
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -930,7 +934,7 @@ export type GetForumPostsLazyQueryHookResult = ReturnType<typeof useGetForumPost
 export type GetForumPostsQueryResult = Apollo.QueryResult<GetForumPostsQuery, GetForumPostsQueryVariables>
 export const GetForumPostEditsDocument = gql`
   query GetForumPostEdits($id: ID!) {
-    edits: postTextUpdatedEvents(where: { post: { id_eq: $id } }) {
+    edits: postTextUpdatedEvents(where: { post: { id_eq: $id } }, orderBy: [createdAt_ASC]) {
       newText
       network
       createdAt

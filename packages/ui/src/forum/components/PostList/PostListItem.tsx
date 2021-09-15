@@ -44,7 +44,7 @@ export const PostListItem = ({
   type,
   link,
 }: PostListItemProps) => {
-  const { createdAtBlock, updatedAt, author, text, repliesTo } = post
+  const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
 
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -53,7 +53,7 @@ export const PostListItem = ({
   const [editing, setEditing] = useState(false)
   const { showModal } = useModal()
   const editionTime = useMemo(() => {
-    if (!updatedAt) {
+    if (!lastEditedAt) {
       return null
     }
 
@@ -63,10 +63,10 @@ export const PostListItem = ({
           showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
         }
       >
-        (edited {relativeIfRecent(updatedAt)})
+        (edited {relativeIfRecent(lastEditedAt)})
       </EditionTime>
     )
-  }, [updatedAt])
+  }, [lastEditedAt])
 
   return (
     <FroumPostBlock ref={ref} isSelected={isSelected}>
