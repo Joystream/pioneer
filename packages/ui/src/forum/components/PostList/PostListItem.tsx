@@ -81,10 +81,12 @@ export const PostListItem = ({
           {repliesTo && (
             <Reply>
               <ReplyBadge>
-                <ArrowReplyIcon />{' '}
-                <Badge>
-                  <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
-                </Badge>
+                <div>
+                  <ArrowReplyIcon />{' '}
+                  <Badge>
+                    <Link to={window.location.href}>Replies to {repliesTo?.author?.handle}</Link>
+                  </Badge>
+                </div>
               </ReplyBadge>
               <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
             </Reply>
@@ -144,6 +146,7 @@ export const ReplyBadge = styled.div`
   align-items: center;
   font-style: normal;
   margin-bottom: 10px;
+  justify-content: space-between;
 
   svg {
     height: 11px;

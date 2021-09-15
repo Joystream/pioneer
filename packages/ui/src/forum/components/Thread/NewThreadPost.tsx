@@ -43,17 +43,17 @@ export const NewThreadPost = React.forwardRef(
         {replyTo && (
           <Reply>
             <ReplyBadge>
-              <ButtonsGroup align="left">
+              <div>
                 <ArrowReplyIcon />{' '}
                 <Badge>
                   <Link to={window.location.href}>Replies to {replyTo.author.handle}</Link>
                 </Badge>
-              </ButtonsGroup>
-              <ButtonsGroup align="right">
+              </div>
+              <div>
                 <ButtonPrimary size="small" onClick={removeReply}>
                   <CrossIcon />
                 </ButtonPrimary>
-              </ButtonsGroup>
+              </div>
             </ReplyBadge>
             <MarkdownPreview markdown={replyTo.text} size="s" isReply />
           </Reply>
