@@ -48,7 +48,8 @@ export const usePastWorkersPagination = ({
   const totalCount = countData?.workersConnection.totalCount ?? 0
 
   return {
-    isLoading: loadingWorkers || loadingCount,
+    loadingWorkers,
+    loadingCount,
     workers,
     pageCount: totalCount && Math.ceil(totalCount / WORKERS_PER_PAGE),
   }

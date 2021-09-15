@@ -59,7 +59,7 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   const [page, setPage] = useState(1)
   const [order, setOrder] = useState<ListOrder>({ key: 'DateFinished', isDescending: true })
 
-  const { isLoading, workers, pageCount } = usePastWorkersPagination({
+  const { loadingWorkers, loadingCount, workers, pageCount } = usePastWorkersPagination({
     groupId,
     page,
     isDescending: order.isDescending,
@@ -81,11 +81,11 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
     [order, sort]
   )
 
-  if (isLoading) {
+  if (loadingWorkers && loadingCount) {
     return <Loading />
   }
 
-  if (!workers || !workers.length) {
+  if (!workers?.length && !loadingWorkers) {
     return <TextBig>No workers found</TextBig>
   }
 
@@ -96,8 +96,8 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
         <SortHeader sortKey="DateStarted">Date Started</SortHeader>
         <SortHeader sortKey="DateFinished">Date Finished</SortHeader>
       </ListHeaders>
-      <PastWorkersList workers={workers} />
-      <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
+      {!loadingWorkers ? <PastWorkersList workers={workers} /> : <Loading />}
+      {!loadingCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
     </>
   )
 }
