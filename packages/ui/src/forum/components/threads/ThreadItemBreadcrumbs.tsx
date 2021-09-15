@@ -9,12 +9,13 @@ import {
 } from '@/common/components/page/Sidebar/Breadcrumbs/BreadcrumbsItem'
 import { BreadcrumbsListComponent } from '@/common/components/page/Sidebar/Breadcrumbs/BreadcrumbsList'
 import { Colors, Fonts } from '@/common/constants'
-import { debounce, isDefined, last } from '@/common/utils'
+import { clamp, debounce, isDefined, last } from '@/common/utils'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumMultiQueryCategoryBreadCrumbs } from '@/forum/hooks/useForumMultiQueryCategoryBreadCrumbs'
 
 const MIN_BREADCRUMB_WIDTH = 75
 const MAX_BREADCRUMB_WIDTH = 150
+const ELLIPSIS_WIDTH = 37
 
 interface ThreadItemBreadcrumbsProps {
   id: string
@@ -39,53 +40,50 @@ export const ThreadItemBreadcrumbs = memo(({ id, nonInteractive }: ThreadItemBre
 
   const items = useMemo(
     () =>
-      isShortened && isDefined(keptItemOnEachSide)
+      isDefined(keptItemOnEachSide)
         ? [
             ...allItems.slice(0, keptItemOnEachSide),
             ellipsisItem,
             ...allItems.slice(allItems.length - 1 - keptItemOnEachSide),
           ]
         : allItems,
-    [allItems, keptItemOnEachSide, isShortened]
+    [allItems, keptItemOnEachSide]
   )
 
+  const [lastChildWidth, firstChildWidth] = useMemo(() => {
+    if (isLoading || !containerRef.current) return []
+
+    const { children } = containerRef.current
+    return [children[0], last(children)].map((child) => child.getBoundingClientRect().width)
+  }, [isLoading])
+
   useEffect(() => {
-    if (isLoading || breadcrumbs.length <= 1) return
+    if (!lastChildWidth || !firstChildWidth) return
 
     const shortenBreadcrumbs = debounce(() => {
       if (!containerRef.current) return
 
       const containerBox = containerRef.current.getBoundingClientRect()
-      const children = Array.from(containerRef.current.children)
-      const lastBox = last(children).getBoundingClientRect()
-      const shouldShorten = containerBox.right < lastBox.right
 
-      shorten(shouldShorten)
-      if (!shouldShorten) return
+      const totalRemovable = breadcrumbs.length - 1
+      const fullWidth = firstChildWidth + lastChildWidth + totalRemovable * MIN_BREADCRUMB_WIDTH
+      const widthDifference = containerBox.width - fullWidth
+      const totalExtra = clamp(0, Math.ceil(-widthDifference / MIN_BREADCRUMB_WIDTH), totalRemovable)
+      const toKeepOnEachSide = totalExtra ? Math.floor((totalRemovable - totalExtra) / 2) : undefined
 
-      const lastChildWidth = Math.min(lastBox.width, MAX_BREADCRUMB_WIDTH)
-      const firstChildWidth = Math.min(children[0].getBoundingClientRect().width, MAX_BREADCRUMB_WIDTH)
-      const middleChildrenWidth = children
-        .slice(1, -1)
-        .map((element) => Math.min(element.getBoundingClientRect().width, MIN_BREADCRUMB_WIDTH))
-        .reduce((a, b) => a + b)
-      const childrenWidth = firstChildWidth + middleChildrenWidth + lastChildWidth
+      setKeptItemOnEachSide(toKeepOnEachSide)
 
-      const widthDifference = containerBox.width - childrenWidth
+      const gainedWidth = toKeepOnEachSide ? totalRemovable - toKeepOnEachSide * 2 - ELLIPSIS_WIDTH : 0
+      const remainingWidth = fullWidth - gainedWidth
 
-      if (widthDifference >= 0) {
-        setKeptItemOnEachSide(undefined)
-      } else {
-        const totalExtraChildren = Math.ceil(-widthDifference / MIN_BREADCRUMB_WIDTH)
-        setKeptItemOnEachSide(Math.floor((children.length - 2 - totalExtraChildren) / 2))
-      }
+      shorten(remainingWidth > containerBox.width)
     }, 1000)
 
     shortenBreadcrumbs()
 
     window.addEventListener('resize', shortenBreadcrumbs)
     return () => window.removeEventListener('resize', shortenBreadcrumbs)
-  }, [isLoading])
+  }, [lastChildWidth, firstChildWidth])
 
   return (
     <ThreadItemBreadcrumbsList ref={containerRef} $isShortened={isShortened}>
@@ -120,8 +118,7 @@ const ThreadItemBreadcrumbsList = styled(BreadcrumbsListComponent)<{ $isShortene
 
     &:first-child,
     &:last-child {
-      flex-shrink: 0;
-      max-width: ${({ $isShortened }) => ($isShortened ? MAX_BREADCRUMB_WIDTH + 'px' : 'min-content')};
+      flex-shrink: ${({ $isShortened }) => Number($isShortened)};
     }
   }
 
