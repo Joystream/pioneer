@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
 
 import { BlockTime } from '../../../common/components/BlockTime'
 import { TransferSymbol } from '../../../common/components/icons/symbols'
@@ -23,12 +23,7 @@ type Props = { member: Member }
 
 export const MemberDetails = React.memo(({ member }: Props) => {
   const { member: memberDetails, isLoading } = useMember(member.id)
-
-  const myMemberships = useMyMemberships()
-  const isMyMembership = useMemo(() => myMemberships.members.some(({ id }) => id === member.id), [
-    member.id,
-    myMemberships,
-  ])
+  const isMyMembership = useIsMyMembership(member.id)
 
   if (isLoading || !memberDetails) {
     return (
