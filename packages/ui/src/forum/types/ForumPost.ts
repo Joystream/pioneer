@@ -9,6 +9,7 @@ export interface ForumPost {
   createdAt: string
   createdAtBlock?: Block
   updatedAt?: string
+  lastEditedAt?: string
   author: Member
   text: string
   repliesTo?: ForumPost
@@ -20,6 +21,7 @@ export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
   id: fields.id,
   createdAt: fields.createdAt,
   updatedAt: fields.updatedAt,
+  lastEditedAt: fields.edits.length && fields.edits[fields.edits.length - 1].createdAt,
   author: asMember(fields.author),
   text: fields.text,
   ...(fields.repliesTo ? { repliesTo: asForumPost(fields.repliesTo) } : {}),
