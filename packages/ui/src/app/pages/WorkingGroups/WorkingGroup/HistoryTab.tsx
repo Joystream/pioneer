@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, FC, memo, useCallback } from 'react'
+import React, { useMemo, useRef, useState, FC, memo } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
@@ -66,7 +66,13 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
     orderKey: order.key,
   })
 
-  const sort = useCallback((sortKey: WorkersOrderKey) => null, [])
+  const sort = (sortKey: WorkersOrderKey) => {
+    if (sortKey === order.key) {
+      setOrder({ key: sortKey, isDescending: !order.isDescending })
+    } else {
+      setOrder({ key: sortKey, isDescending: true })
+    }
+  }
 
   const SortHeader = useMemo<FC<{ sortKey: WorkersOrderKey }>>(
     () =>
