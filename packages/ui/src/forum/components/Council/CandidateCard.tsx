@@ -126,7 +126,7 @@ const CandidateCardImageWrapper = styled.div`
   transition: ${Transitions.all};
 `
 
-const StatsValue = styled.span`
+export const StatsValue = styled.span`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 6px;
@@ -150,7 +150,7 @@ const VotedBadgeStatus = styled(NewcomerBadgeStatus)`
   right: unset;
 `
 
-const CandidateCardArrow = styled.div`
+export const CandidateCardArrow = styled.div`
   display: flex;
   position: absolute;
   right: 8px;
@@ -297,12 +297,13 @@ const CandidateCardContentWrapper = styled.article`
 `
 
 const CandidateCardWrapper = styled(ListItem)`
+  position: relative;
   grid-template-columns: 260px 1fr;
   height: 180px;
   padding: 0;
-  position: relative;
 
   &:hover,
+  &:focus,
   &:focus-within {
     border-color: ${Colors.Blue[100]};
 
