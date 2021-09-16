@@ -66,7 +66,7 @@ const proposalCastByType: Record<
 type EventsQueryResult = GetProposalsEventsQuery['events'][0]
 
 const isProposalEvent = (fields: EventsQueryResult): fields is ProposalEventFieldsFragment =>
-  ['ProposalCreatedEvent', 'ProposalStatusUpdatedEvent', 'ProposalDecisionMadeEvent'].includes(fields.__typename)
+  fields.__typename in proposalCastByType
 
 export const asProposalActivities = (events: EventsQueryResult[]) =>
   events.filter(isProposalEvent).map((eventFields) => proposalCastByType[eventFields.__typename](eventFields))
