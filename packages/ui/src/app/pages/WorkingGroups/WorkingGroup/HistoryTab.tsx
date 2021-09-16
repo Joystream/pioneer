@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, FC, memo } from 'react'
+import React, { useRef, useState, ReactNode } from 'react'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
@@ -74,19 +74,6 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
     }
   }
 
-  const SortHeader = useMemo<FC<{ sortKey: WorkersOrderKey }>>(
-    () =>
-      memo(({ sortKey, children }) => (
-        <ListHeader onClick={() => sort(sortKey)}>
-          <HeaderText>
-            {children}
-            {order.key === sortKey && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
-          </HeaderText>
-        </ListHeader>
-      )),
-    [order, sort]
-  )
-
   if (loadingWorkers && loadingCount) {
     return <Loading />
   }
@@ -96,14 +83,36 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   }
 
   return (
-    <>
-      <ListHeaders>
+    <RowGapBlock gap={4}>
+      <ListHeaders $colLayout={pastWorkersColLayout}>
         <ListHeader>Worker</ListHeader>
-        <SortHeader sortKey="DateStarted">Date Started</SortHeader>
-        <SortHeader sortKey="DateFinished">Date Finished</SortHeader>
+        <SortHeader order={order} sort={sort} sortKey="DateStarted">
+          Date Started
+        </SortHeader>
+        <SortHeader order={order} sort={sort} sortKey="DateFinished">
+          Date Finished
+        </SortHeader>
       </ListHeaders>
-      {!loadingWorkers ? <PastWorkersList workers={workers} /> : <Loading />}
-      {!loadingCount && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
-    </>
+      {loadingWorkers ? <Loading /> : <PastWorkersList workers={workers} />}
+      <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
+    </RowGapBlock>
   )
 }
+
+const pastWorkersColLayout = '1fr 1fr 1fr'
+
+interface SortHeaderProps {
+  sortKey: WorkersOrderKey
+  order: ListOrder
+  children: ReactNode
+  sort: (sortKey: WorkersOrderKey) => void
+}
+
+const SortHeader = ({ sortKey, order, children, sort }: SortHeaderProps) => (
+  <ListHeader onClick={() => sort(sortKey)}>
+    <HeaderText>
+      {children}
+      {order.key === sortKey && (order.isDescending ? <SortIconDown /> : <SortIconUp />)}
+    </HeaderText>
+  </ListHeader>
+)
