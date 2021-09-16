@@ -20,3 +20,10 @@ export function asBaseActivity(activity: BaseActivity): BaseActivity {
     createdAt: activity.createdAt,
   }
 }
+
+export function asMemberDisplayFields(member: MemberDisplayFields): MemberDisplayFields {
+  return {
+    id: member.id,
+    handle: member.handle,
+  }
+}
