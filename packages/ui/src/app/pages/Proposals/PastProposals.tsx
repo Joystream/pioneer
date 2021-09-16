@@ -12,6 +12,7 @@ import { ProposalEmptyFilter, ProposalFilters } from '@/proposals/components/Pro
 import { ProposalList } from '@/proposals/components/ProposalList'
 import { usePastProposals } from '@/proposals/hooks/usePastProposals'
 import { useProposals } from '@/proposals/hooks/useProposals'
+import { useProposalsActivities } from '@/proposals/hooks/useProposalsActivities'
 
 import { ProposalsTabs } from './components/ProposalsTabs'
 
@@ -22,7 +23,7 @@ export const PastProposals = () => {
   const { types, stages } = usePastProposals()
   const { isLoading, proposals } = useProposals({ status: 'past', filters })
 
-  const activities = useMockActivities()
+  const { activities } = useProposalsActivities()
 
   const sideNeighborRef = useRef<HTMLDivElement>(null)
 

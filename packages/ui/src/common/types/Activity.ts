@@ -1,10 +1,11 @@
 import { ForumActivity } from '@/forum/types/ForumActivity'
 import { Member } from '@/memberships/types'
+import { ProposalActivity } from '@/proposals/components/ProposalsActivities'
 import { WorkingGroupActivity } from '@/working-groups/types'
 
 export type ActivityCategory = Activity['eventType']
 
-export type Activity = WorkingGroupActivity | ForumActivity
+export type Activity = WorkingGroupActivity | ForumActivity | ProposalActivity
 
 export interface BaseActivity {
   id: string
