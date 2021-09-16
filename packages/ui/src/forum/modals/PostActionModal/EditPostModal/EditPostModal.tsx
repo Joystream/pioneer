@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'

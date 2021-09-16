@@ -1,5 +1,5 @@
 import { createType } from '@joystream/types'
-import React, { ForwardedRef, MutableRefObject, Ref, useCallback, useMemo, useRef, useState } from 'react'
+import React, { MutableRefObject, Ref, useCallback, useMemo, useRef, useState } from 'react'
 
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
