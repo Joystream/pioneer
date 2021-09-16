@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
+import { useMemberExtraInfo } from '@/memberships/hooks/useMemberExtraInfo'
 
 import { BlockTime } from '../../../common/components/BlockTime'
 import { TransferSymbol } from '../../../common/components/icons/symbols'
@@ -25,6 +26,14 @@ export const MemberDetails = React.memo(({ member }: Props) => {
   const { member: memberDetails, isLoading } = useMember(member.id)
   const isMyMembership = useIsMyMembership(member.id)
 
+  const {
+    applied = '-',
+    slashed = '-',
+    terminated = '-',
+    blogPosts = '-',
+    initiatingLeaving = '-',
+  } = useMemberExtraInfo(member)
+
   if (isLoading || !memberDetails) {
     return (
       <EmptyBody>
@@ -34,13 +43,8 @@ export const MemberDetails = React.memo(({ member }: Props) => {
   }
 
   const hired = member.roles.length
-  const applied = '-'
   const lead = member.roles.filter(({ isLead }) => isLead).length
   const councilMember = '-'
-  const slashed = '-'
-  const terminated = '-'
-  const blogPosts = '-'
-  const initiatingLeaving = '-'
 
   return (
     <SidePaneTable>

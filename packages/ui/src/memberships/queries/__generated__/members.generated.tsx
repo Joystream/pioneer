@@ -87,6 +87,21 @@ export type SearchMembersQuery = {
   memberships: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 }
 
+export type GetMemberExtraInfoQueryVariables = Types.Exact<{
+  membershipId_eq: Types.Scalars['ID']
+  workerId_in: Array<Types.Scalars['ID']> | Types.Scalars['ID']
+}>
+
+export type GetMemberExtraInfoQuery = {
+  __typename: 'Query'
+  forumPostsConnection: { __typename: 'ForumPostConnection'; totalCount: number }
+  workingGroupApplicationsConnection: { __typename: 'WorkingGroupApplicationConnection'; totalCount: number }
+  stakeSlashedEventsConnection: { __typename: 'StakeSlashedEventConnection'; totalCount: number }
+  terminatedLeaderEventsConnection: { __typename: 'TerminatedLeaderEventConnection'; totalCount: number }
+  terminatedWorkerEventsConnection: { __typename: 'TerminatedWorkerEventConnection'; totalCount: number }
+  workerStartedLeavingEventsConnection: { __typename: 'WorkerStartedLeavingEventConnection'; totalCount: number }
+}
+
 export const MemberFieldsFragmentDoc = gql`
   fragment MemberFields on Membership {
     id
@@ -297,3 +312,64 @@ export function useSearchMembersLazyQuery(
 export type SearchMembersQueryHookResult = ReturnType<typeof useSearchMembersQuery>
 export type SearchMembersLazyQueryHookResult = ReturnType<typeof useSearchMembersLazyQuery>
 export type SearchMembersQueryResult = Apollo.QueryResult<SearchMembersQuery, SearchMembersQueryVariables>
+export const GetMemberExtraInfoDocument = gql`
+  query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
+    forumPostsConnection(where: { author: { id_eq: $membershipId_eq } }) {
+      totalCount
+    }
+    workingGroupApplicationsConnection(where: { applicant: { id_eq: $membershipId_eq } }) {
+      totalCount
+    }
+    stakeSlashedEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    terminatedLeaderEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    terminatedWorkerEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+    workerStartedLeavingEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+      totalCount
+    }
+  }
+`
+
+/**
+ * __useGetMemberExtraInfoQuery__
+ *
+ * To run a query within a React component, call `useGetMemberExtraInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberExtraInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberExtraInfoQuery({
+ *   variables: {
+ *      membershipId_eq: // value for 'membershipId_eq'
+ *      workerId_in: // value for 'workerId_in'
+ *   },
+ * });
+ */
+export function useGetMemberExtraInfoQuery(
+  baseOptions: Apollo.QueryHookOptions<GetMemberExtraInfoQuery, GetMemberExtraInfoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberExtraInfoQuery, GetMemberExtraInfoQueryVariables>(GetMemberExtraInfoDocument, options)
+}
+export function useGetMemberExtraInfoLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberExtraInfoQuery, GetMemberExtraInfoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberExtraInfoQuery, GetMemberExtraInfoQueryVariables>(
+    GetMemberExtraInfoDocument,
+    options
+  )
+}
+export type GetMemberExtraInfoQueryHookResult = ReturnType<typeof useGetMemberExtraInfoQuery>
+export type GetMemberExtraInfoLazyQueryHookResult = ReturnType<typeof useGetMemberExtraInfoLazyQuery>
+export type GetMemberExtraInfoQueryResult = Apollo.QueryResult<
+  GetMemberExtraInfoQuery,
+  GetMemberExtraInfoQueryVariables
+>

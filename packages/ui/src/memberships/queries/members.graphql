@@ -71,3 +71,24 @@ query SearchMembers($text: String!, $limit: Int) {
     ...MemberFields
   }
 }
+
+query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
+  forumPostsConnection(where: { author: { id_eq: $membershipId_eq } }) {
+    totalCount
+  }
+  workingGroupApplicationsConnection(where: { applicant: { id_eq: $membershipId_eq } }) {
+    totalCount
+  }
+  stakeSlashedEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  terminatedLeaderEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  terminatedWorkerEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+  workerStartedLeavingEventsConnection(where: { worker: { id_in: $workerId_in } }) {
+    totalCount
+  }
+}
