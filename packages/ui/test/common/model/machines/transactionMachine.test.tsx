@@ -30,14 +30,14 @@ describe('Machine: Transaction machine', () => {
     service.send('SIGN_EXTERNAL')
     expect(service.state.matches('signWithExtension')).toBeTruthy()
 
-    service.send('SIGNED')
+    service.send('PENDING')
     expect(service.state.matches('pending')).toBeTruthy()
   })
 
   it('Transaction success', () => {
     service.send('SIGN')
     service.send('SIGN_EXTERNAL')
-    service.send('SIGNED')
+    service.send('PENDING')
     service.send('SUCCESS')
 
     expect(service.state.matches('success')).toBeTruthy()
@@ -46,7 +46,7 @@ describe('Machine: Transaction machine', () => {
   it('Transaction error', () => {
     service.send('SIGN')
     service.send('SIGN_EXTERNAL')
-    service.send('SIGNED')
+    service.send('PENDING')
     service.send('ERROR')
 
     expect(service.state.matches('error')).toBeTruthy()
@@ -55,7 +55,7 @@ describe('Machine: Transaction machine', () => {
   it('Send events', () => {
     service.send('SIGN')
     service.send('SIGN_EXTERNAL')
-    service.send('SIGNED')
+    service.send('PENDING')
     service.send('SUCCESS', { events: ['foo', 'bar'] })
 
     expect(service.state.context).toEqual({
@@ -110,7 +110,7 @@ describe('Machine: Transaction machine', () => {
       const child = service.children.get('transaction')!
       child.send('SIGN')
       child.send('SIGN_EXTERNAL')
-      child.send('SIGNED')
+      child.send('PENDING')
       child.send({ type: 'SUCCESS', events: ['foo', 'bar'] })
 
       expect(service.state.matches('success')).toBeTruthy()
@@ -121,7 +121,7 @@ describe('Machine: Transaction machine', () => {
       const child = service.children.get('transaction')!
       child.send('SIGN')
       child.send('SIGN_EXTERNAL')
-      child.send('SIGNED')
+      child.send('PENDING')
       child.send({ type: 'ERROR', events: ['foo', 'bar'] })
 
       expect(service.state.matches('error')).toBeTruthy()
