@@ -28,11 +28,23 @@ fragment PostTextUpdatedEventFields on PostTextUpdatedEvent {
   }
 }
 
+fragment ThreadCreatedEventFields on ThreadCreatedEvent {
+  id
+  createdAt
+  thread {
+    id
+    title
+  }
+}
+
 query GetForumEvents {
   postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
     ...PostAddedEventFields
   }
   postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
     ...PostTextUpdatedEventFields
+  }
+  threadCreatedEvents(orderBy: createdAt_DESC, limit: 10) {
+    ...ThreadCreatedEventFields
   }
 }

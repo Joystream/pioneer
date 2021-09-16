@@ -27,12 +27,20 @@ export type PostTextUpdatedEventFieldsFragment = {
   }
 }
 
+export type ThreadCreatedEventFieldsFragment = {
+  __typename: 'ThreadCreatedEvent'
+  id: string
+  createdAt: any
+  thread: { __typename: 'ForumThread'; id: string; title: string }
+}
+
 export type GetForumEventsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetForumEventsQuery = {
   __typename: 'Query'
   postAddedEvents: Array<{ __typename: 'PostAddedEvent' } & PostAddedEventFieldsFragment>
   postTextUpdatedEvents: Array<{ __typename: 'PostTextUpdatedEvent' } & PostTextUpdatedEventFieldsFragment>
+  threadCreatedEvents: Array<{ __typename: 'ThreadCreatedEvent' } & ThreadCreatedEventFieldsFragment>
 }
 
 export const PostAddedEventFieldsFragmentDoc = gql`
@@ -67,6 +75,16 @@ export const PostTextUpdatedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const ThreadCreatedEventFieldsFragmentDoc = gql`
+  fragment ThreadCreatedEventFields on ThreadCreatedEvent {
+    id
+    createdAt
+    thread {
+      id
+      title
+    }
+  }
+`
 export const GetForumEventsDocument = gql`
   query GetForumEvents {
     postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
@@ -75,9 +93,13 @@ export const GetForumEventsDocument = gql`
     postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
       ...PostTextUpdatedEventFields
     }
+    threadCreatedEvents(orderBy: createdAt_DESC, limit: 10) {
+      ...ThreadCreatedEventFields
+    }
   }
   ${PostAddedEventFieldsFragmentDoc}
   ${PostTextUpdatedEventFieldsFragmentDoc}
+  ${ThreadCreatedEventFieldsFragmentDoc}
 `
 
 /**
