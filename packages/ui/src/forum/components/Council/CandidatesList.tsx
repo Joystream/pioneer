@@ -11,7 +11,7 @@ export const CandidatesList = ({ candidates }: CandidatesListProps) => {
   return (
     <CandidatesListStyles>
       {candidates.map((candidate, index) => (
-        <CandidateCard key={index} candidate={candidate} />
+        <CandidateCard key={index} {...candidate} />
       ))}
     </CandidatesListStyles>
   )
