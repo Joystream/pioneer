@@ -1,0 +1,35 @@
+fragment ProposalCreatedEventFields on ProposalCreatedEvent {
+  id
+  createdAt
+  proposal {
+    id
+    title
+    creator {
+      id
+      handle
+    }
+  }
+}
+
+fragment ProposalStatusUpdatedEventFields on ProposalStatusUpdatedEvent {
+  id
+  createdAt
+  proposal {
+    id
+    title
+  }
+  newStatus {
+    __typename
+  }
+}
+
+query GetProposalsEvents {
+  events (where: { type_in: [ProposalCreatedEvent, ProposalStatusUpdatedEvent] }) {
+    ...on ProposalCreatedEvent {
+      ...ProposalCreatedEventFields
+    }
+    ...on ProposalStatusUpdatedEvent {
+      ...ProposalStatusUpdatedEventFields
+    }
+  }
+}
