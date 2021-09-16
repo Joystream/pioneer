@@ -13,3 +13,10 @@ export interface BaseActivity {
 }
 
 export type MemberDisplayFields = Pick<Member, 'id' | 'handle'>
+
+export function asBaseActivity(activity: BaseActivity): BaseActivity {
+  return {
+    id: activity.id,
+    createdAt: activity.createdAt,
+  }
+}

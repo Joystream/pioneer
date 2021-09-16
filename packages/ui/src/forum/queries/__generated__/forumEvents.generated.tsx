@@ -27,12 +27,38 @@ export type PostTextUpdatedEventFieldsFragment = {
   }
 }
 
+export type ThreadCreatedEventFieldsFragment = {
+  __typename: 'ThreadCreatedEvent'
+  id: string
+  createdAt: any
+  thread: {
+    __typename: 'ForumThread'
+    id: string
+    title: string
+    author: { __typename: 'Membership'; id: string; handle: string }
+  }
+}
+
+export type CategoryCreatedEventFieldsFragment = {
+  __typename: 'CategoryCreatedEvent'
+  id: string
+  createdAt: any
+  category: {
+    __typename: 'ForumCategory'
+    id: string
+    title: string
+    parent?: Types.Maybe<{ __typename: 'ForumCategory'; id: string; title: string }>
+  }
+}
+
 export type GetForumEventsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetForumEventsQuery = {
   __typename: 'Query'
   postAddedEvents: Array<{ __typename: 'PostAddedEvent' } & PostAddedEventFieldsFragment>
   postTextUpdatedEvents: Array<{ __typename: 'PostTextUpdatedEvent' } & PostTextUpdatedEventFieldsFragment>
+  threadCreatedEvents: Array<{ __typename: 'ThreadCreatedEvent' } & ThreadCreatedEventFieldsFragment>
+  categoryCreatedEvents: Array<{ __typename: 'CategoryCreatedEvent' } & CategoryCreatedEventFieldsFragment>
 }
 
 export const PostAddedEventFieldsFragmentDoc = gql`
@@ -67,6 +93,34 @@ export const PostTextUpdatedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const ThreadCreatedEventFieldsFragmentDoc = gql`
+  fragment ThreadCreatedEventFields on ThreadCreatedEvent {
+    id
+    createdAt
+    thread {
+      id
+      title
+      author {
+        id
+        handle
+      }
+    }
+  }
+`
+export const CategoryCreatedEventFieldsFragmentDoc = gql`
+  fragment CategoryCreatedEventFields on CategoryCreatedEvent {
+    id
+    createdAt
+    category {
+      id
+      title
+      parent {
+        id
+        title
+      }
+    }
+  }
+`
 export const GetForumEventsDocument = gql`
   query GetForumEvents {
     postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
@@ -75,9 +129,17 @@ export const GetForumEventsDocument = gql`
     postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
       ...PostTextUpdatedEventFields
     }
+    threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
+      ...ThreadCreatedEventFields
+    }
+    categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
+      ...CategoryCreatedEventFields
+    }
   }
   ${PostAddedEventFieldsFragmentDoc}
   ${PostTextUpdatedEventFieldsFragmentDoc}
+  ${ThreadCreatedEventFieldsFragmentDoc}
+  ${CategoryCreatedEventFieldsFragmentDoc}
 `
 
 /**

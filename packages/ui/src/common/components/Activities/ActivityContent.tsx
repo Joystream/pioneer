@@ -1,8 +1,10 @@
 import React, { ReactElement } from 'react'
 
 import { Activity, ActivityCategory, BaseActivity } from '@/common/types/Activity'
+import { CategoryCreatedContent } from '@/forum/components/Activities/CategoryCreatedContent'
 import { PostAddedContent } from '@/forum/components/Activities/PostAddedContent'
 import { PostEditedContent } from '@/forum/components/Activities/PostEditedContent'
+import { ThreadCreatedContent } from '@/forum/components/Activities/ThreadCreatedContent'
 import { ApplicationWithdrawnContent } from '@/working-groups/components/Activities/ApplicationWithdrawnContent'
 import { AppliedOnOpeningContent } from '@/working-groups/components/Activities/AppliedOnOpeningContent'
 import { BudgetSetContent } from '@/working-groups/components/Activities/BudgetSetContent'
@@ -45,6 +47,8 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   WorkerRewardAmountUpdatedEvent: WorkerRewardAmountUpdatedContent,
   PostAddedEvent: PostAddedContent,
   PostTextUpdatedEvent: PostEditedContent,
+  ThreadCreatedEvent: ThreadCreatedContent,
+  CategoryCreatedEvent: CategoryCreatedContent,
 }
 
 export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {
