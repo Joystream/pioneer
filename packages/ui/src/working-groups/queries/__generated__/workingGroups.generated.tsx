@@ -33,6 +33,36 @@ export type WorkerFieldsFragment = {
     | { __typename: 'WorkerStatusTerminated' }
 }
 
+export type PastWorkerFieldsFragment = {
+  __typename: 'Worker'
+  id: string
+  createdAt: any
+  updatedAt?: Types.Maybe<any>
+  membership: { __typename: 'Membership' } & MemberFieldsFragment
+  status:
+    | { __typename: 'WorkerStatusActive' }
+    | { __typename: 'WorkerStatusLeaving' }
+    | {
+        __typename: 'WorkerStatusLeft'
+        workerExitedEvent?: Types.Maybe<{
+          __typename: 'WorkerExitedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+    | {
+        __typename: 'WorkerStatusTerminated'
+        terminatedWorkerEvent?: Types.Maybe<{
+          __typename: 'TerminatedWorkerEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        }>
+      }
+  entry: { __typename: 'OpeningFilledEvent'; createdAt: any; inBlock: number; network: Types.Network }
+}
+
 export type WorkerDetailedFieldsFragment = {
   __typename: 'Worker'
   roleAccount: string
@@ -102,6 +132,18 @@ export type GetWorkersQueryVariables = Types.Exact<{
 }>
 
 export type GetWorkersQuery = { __typename: 'Query'; workers: Array<{ __typename: 'Worker' } & WorkerFieldsFragment> }
+
+export type GetPastWorkersQueryVariables = Types.Exact<{
+  where?: Types.Maybe<Types.WorkerWhereInput>
+  offset?: Types.Maybe<Types.Scalars['Int']>
+  limit?: Types.Maybe<Types.Scalars['Int']>
+  orderBy?: Types.Maybe<Array<Types.WorkerOrderByInput> | Types.WorkerOrderByInput>
+}>
+
+export type GetPastWorkersQuery = {
+  __typename: 'Query'
+  workers: Array<{ __typename: 'Worker' } & PastWorkerFieldsFragment>
+}
 
 export type GetWorkersCountQueryVariables = Types.Exact<{
   where?: Types.Maybe<Types.WorkerWhereInput>
@@ -395,6 +437,38 @@ export type GetWorkerUnstakingDetailsQuery = {
   }>
 }
 
+export const PastWorkerFieldsFragmentDoc = gql`
+  fragment PastWorkerFields on Worker {
+    id
+    membership {
+      ...MemberFields
+    }
+    createdAt
+    updatedAt
+    status {
+      ... on WorkerStatusLeft {
+        workerExitedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on WorkerStatusTerminated {
+        terminatedWorkerEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+    }
+    entry {
+      createdAt
+      inBlock
+      network
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
 export const WorkerFieldsFragmentDoc = gql`
   fragment WorkerFields on Worker {
     id
@@ -738,6 +812,49 @@ export function useGetWorkersLazyQuery(
 export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>
+export const GetPastWorkersDocument = gql`
+  query GetPastWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int, $orderBy: [WorkerOrderByInput!]) {
+    workers(where: $where, offset: $offset, limit: $limit, orderBy: $orderBy) {
+      ...PastWorkerFields
+    }
+  }
+  ${PastWorkerFieldsFragmentDoc}
+`
+
+/**
+ * __useGetPastWorkersQuery__
+ *
+ * To run a query within a React component, call `useGetPastWorkersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPastWorkersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPastWorkersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useGetPastWorkersQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetPastWorkersQuery, GetPastWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPastWorkersQuery, GetPastWorkersQueryVariables>(GetPastWorkersDocument, options)
+}
+export function useGetPastWorkersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPastWorkersQuery, GetPastWorkersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPastWorkersQuery, GetPastWorkersQueryVariables>(GetPastWorkersDocument, options)
+}
+export type GetPastWorkersQueryHookResult = ReturnType<typeof useGetPastWorkersQuery>
+export type GetPastWorkersLazyQueryHookResult = ReturnType<typeof useGetPastWorkersLazyQuery>
+export type GetPastWorkersQueryResult = Apollo.QueryResult<GetPastWorkersQuery, GetPastWorkersQueryVariables>
 export const GetWorkersCountDocument = gql`
   query GetWorkersCount($where: WorkerWhereInput) {
     workersConnection(where: $where) {

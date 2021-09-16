@@ -25,6 +25,36 @@ fragment WorkerFields on Worker {
   stake
 }
 
+fragment PastWorkerFields on Worker {
+  id
+  membership {
+    ...MemberFields
+  }
+  createdAt
+  updatedAt
+  status {
+    ...on WorkerStatusLeft {
+      workerExitedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ...on WorkerStatusTerminated {
+      terminatedWorkerEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+  }
+  entry {
+    createdAt
+    inBlock
+    network
+  }
+}
+
 fragment WorkerDetailedFields on Worker {
   ...WorkerFields
   roleAccount
@@ -99,6 +129,12 @@ query GetWorkingGroups {
 query GetWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int) {
   workers(where: $where, offset: $offset, limit: $limit) {
     ...WorkerFields
+  }
+}
+
+query GetPastWorkers ($where: WorkerWhereInput, $offset: Int, $limit: Int, $orderBy: [WorkerOrderByInput!]) {
+  workers(where: $where, offset: $offset, limit: $limit, orderBy: $orderBy) {
+    ...PastWorkerFields
   }
 }
 

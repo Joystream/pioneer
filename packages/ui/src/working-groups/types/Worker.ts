@@ -1,6 +1,6 @@
 import { Address, asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
-import { WorkerDetailedFieldsFragment, WorkerFieldsFragment } from '@/working-groups/queries'
+import { PastWorkerFieldsFragment, WorkerDetailedFieldsFragment, WorkerFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupName, WorkingGroup } from '@/working-groups/types/WorkingGroup'
 
 import { getReward } from '../model/getReward'
@@ -33,6 +33,13 @@ export interface WorkerWithDetails extends Worker {
   stakeAccount: Address
   hiredAtBlock: Block
   minStake: number
+}
+
+export interface PastWorker {
+  id: string
+  member: Member
+  dateStarted: Block
+  dateFinished: Block
 }
 
 export type WorkerStatus = 'active' | 'left' | 'leaving' | 'terminated'
@@ -78,3 +85,21 @@ export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): Worke
   minStake: fields.application.opening.stakeAmount,
   hiredAtBlock: asBlock(fields.entry),
 })
+
+export const asPastWorker = (fields: PastWorkerFieldsFragment): PastWorker => {
+  let dateFinished: Block = asBlock(fields.entry)
+
+  if (fields.status.__typename === 'WorkerStatusLeft' && fields.status.workerExitedEvent) {
+    dateFinished = asBlock(fields.status.workerExitedEvent)
+  }
+  if (fields.status.__typename === 'WorkerStatusTerminated' && fields.status.terminatedWorkerEvent) {
+    dateFinished = asBlock(fields.status.terminatedWorkerEvent)
+  }
+
+  return {
+    id: fields.id,
+    member: asMember(fields.membership),
+    dateStarted: asBlock(fields.entry),
+    dateFinished,
+  }
+}

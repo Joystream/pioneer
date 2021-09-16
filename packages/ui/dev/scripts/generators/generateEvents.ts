@@ -1,3 +1,4 @@
+import { RawWorker } from '@/mocks/data'
 import faker from 'faker'
 
 import { Mocks } from './types'
@@ -100,17 +101,6 @@ const generateOpeningFilledEvent = (mocks: Mocks) => () => {
   }
 }
 
-const generateWorkerLeavingEvent = (mocks: Mocks, leftAlready?: boolean) => () => {
-  const status = leftAlready ? 'left' : 'active'
-  const workers = mocks.workers.filter((worker) => worker && worker.status === status)
-  const worker = workers[randomFromRange(0, workers.length - 1)]
-  return {
-    ...randomBlock(),
-    groupId: worker?.groupId,
-    workerId: worker?.id,
-  }
-}
-
 const generateOpeningCanceledEvent = (mocks: Mocks) => () => {
   const openings = mocks.openings.filter((opening) => opening.status === 'cancelled')
   const opening = openings[randomFromRange(0, openings.length - 1)]
@@ -128,17 +118,6 @@ const generateBudgetSetEvent = (mocks: Mocks) => () => {
     ...randomBlock(),
     groupId: group.id,
     newBudget: 10000 * randomFromRange(1, 10),
-  }
-}
-
-const generateTerminatedEvent = (mocks: Mocks) => () => {
-  const workers = mocks.workers.filter((worker) => worker?.status === 'terminated')
-  const worker = workers[randomFromRange(0, workers.length - 1)]
-  return {
-    ...randomBlock(),
-    groupId: worker?.groupId,
-    workerId: worker?.id,
-    penalty: 0,
   }
 }
 
@@ -175,9 +154,6 @@ export const eventGenerators = {
   stakeDecreasedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
   stakeIncreasedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeChanged(mocks)),
   stakeSlashedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateStakeSlashedEvent(mocks)),
-  terminatedLeaderEvents: (mocks: Mocks) => Array.from({ length: 5 }).map(generateTerminatedEvent(mocks)),
-  terminatedWorkerEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateTerminatedEvent(mocks)),
-  workerExitedEvents: (mocks: Mocks) => Array.from({ length: 10 }).map(generateWorkerLeavingEvent(mocks, true)),
   workerRewardAccountUpdatedEvents: (mocks: Mocks) =>
     Array.from({ length: 10 }).map(generateWorkerRewardAccountUpdatedEvent(mocks)),
   workerRewardAmountUpdatedEvents: (mocks: Mocks) =>
@@ -191,4 +167,23 @@ export const generateAllEvents = (mocks: Mocks) => {
   })
 
   return newMocks
+}
+
+export type WorkerStatusEvent = ReturnType<typeof generateWorkerLeavingEvent> | ReturnType<typeof generateTerminatedEvent>
+
+export const generateWorkerLeavingEvent = (workerId: string, groupId: string) => {
+  return {
+    ...randomBlock(),
+    groupId,
+    workerId,
+  }
+}
+
+export const generateTerminatedEvent = (workerId: string, groupId: string) => {
+  return {
+    ...randomBlock(),
+    groupId,
+    workerId,
+    penalty: 0,
+  }
 }

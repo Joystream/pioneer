@@ -8,9 +8,6 @@ import rawRewardPaidEvents from './raw/rewardPaidEvents.json'
 import rawStakeDecreasedEvents from './raw/stakeDecreasedEvents.json'
 import rawStakeIncreasedEvents from './raw/stakeIncreasedEvents.json'
 import rawStakeSlashedEvents from './raw/stakeSlashedEvents.json'
-import rawTerminatedLeaderEvents from './raw/terminatedLeaderEvents.json'
-import rawTerminatedWorkerEvents from './raw/terminatedWorkerEvents.json'
-import rawWorkerExitedEvents from './raw/workerExitedEvents.json'
 import rawWorkerRewardAccountEvents from './raw/workerRewardAccountUpdatedEvents.json'
 import rawWorkerRewardAmountEvents from './raw/workerRewardAmountUpdatedEvents.json'
 
@@ -55,11 +52,6 @@ interface RawOpeningFilledEvent extends BaseEvent {
   workersHiredIds: string[]
 }
 
-interface WorkerLeavingEvent extends BaseEvent {
-  groupId: string
-  workerId: string
-}
-
 interface OpeningEvent extends BaseEvent {
   groupId: string
   openingId: string
@@ -70,7 +62,12 @@ interface RawBudgetSetEvent extends BaseEvent {
   newBudget: number
 }
 
-interface TerminatedEvent extends BaseEvent {
+export interface WorkerLeavingEvent extends BaseEvent {
+  groupId: string
+  workerId: string
+}
+
+export interface TerminatedEvent extends BaseEvent {
   groupId: string
   workerId: string
   penalty: number
@@ -99,11 +96,8 @@ export const eventCategories = {
   StakeIncreasedEvent: rawStakeIncreasedEvents.map((rawEvent: RawStakeChangedEvent) => ({ ...rawEvent })),
   StakeSlashedEvent: rawStakeSlashedEvents.map((rawEvent: RawStakeSlashedEvent) => ({ ...rawEvent })),
   OpeningFilledEvent: rawOpeningFilledEvents.map((rawEvent: RawOpeningFilledEvent) => ({ ...rawEvent })),
-  WorkerExitedEvent: rawWorkerExitedEvents.map((rawEvent: WorkerLeavingEvent) => ({ ...rawEvent })),
   OpeningCanceledEvent: rawOpeningCanceledEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
   BudgetSetEvent: rawBudgetSetEvents.map((rawEvent: RawBudgetSetEvent) => ({ ...rawEvent })),
-  TerminatedWorkerEvent: rawTerminatedWorkerEvents.map((rawEvent: TerminatedEvent) => ({ ...rawEvent })),
-  TerminatedLeaderEvent: rawTerminatedLeaderEvents.map((rawEvent: TerminatedEvent) => ({ ...rawEvent })),
   WorkerRewardAccountUpdatedEvent: rawWorkerRewardAccountEvents.map((rawEvent: WorkerRewardAccountUpdated) => ({
     ...rawEvent,
   })),

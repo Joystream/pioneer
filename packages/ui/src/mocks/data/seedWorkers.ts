@@ -1,18 +1,22 @@
-import faker from 'faker'
-
-import { Worker } from '@/common/api/queries'
+import { Worker, WorkerStatus } from '@/common/api/queries'
 import { seedRandomBlockFields } from '@/mocks/data/seedRandomBlockFields'
 
 import rawWorkers from './raw/workers.json'
+import { TerminatedEvent, WorkerLeavingEvent } from './seedEvents'
 
-type WorkerStatus = 'active' | 'left' | 'leaving' | 'terminated'
+type WorkerStatusEvent = WorkerLeavingEvent | TerminatedEvent
+export type WorkerStatusType = WorkerStatus['__typename']
+interface WorkerStatusData {
+  type: string
+  event?: WorkerStatusEvent
+}
 
 export interface RawWorker {
   id: string
   runtimeId: number
   applicationId: string
   membershipId: number
-  status: string
+  status: WorkerStatusData
   groupId: string
   rewardPerBlock: number
   earnedTotal: number
@@ -43,25 +47,28 @@ export const seedWorker = (rawWorker: RawWorker, server: any) => {
       groupId: rawWorker.groupId,
     }),
   })
-  worker.update({ status: seedWorkerStatus(worker, rawWorker.status as WorkerStatus, server) })
+  worker.update({
+    status: seedWorkerStatus(rawWorker.status, server),
+    updatedAt: rawWorker.status.event?.createdAt ?? rawWorker.createdAt,
+  })
 }
 
-const seedWorkerStatus = (worker: any, status: WorkerStatus, server: any) => {
-  switch (status) {
-    case 'active':
+const seedWorkerStatus = (status: WorkerStatusData, server: any) => {
+  switch (status.type as WorkerStatusType) {
+    case 'WorkerStatusActive':
       return server.schema.create('WorkerStatusActive', { phantom: 0 })
-    case 'left':
-      return server.schema.create('WorkerStatusLeft', { phantom: 0 })
-    case 'leaving':
+    case 'WorkerStatusLeft':
+      return server.schema.create('WorkerStatusLeft', {
+        workerExitedEvent: server.schema.create('WorkerExitedEvent', status.event),
+      })
+    case 'WorkerStatusLeaving':
       return server.schema.create('WorkerStatusLeaving', {
-        workerStartedLeavingEvent: server.schema.create('WorkerStartedLeavingEvent', {
-          createdAt: faker.date.recent(1),
-          group: worker.group,
-          worker: worker,
-        }),
+        workerStartedLeavingEvent: server.schema.create('WorkerStartedLeavingEvent', status.event),
       })
     default:
-      return server.schema.create('WorkerStatusTerminated', { phantom: 0 })
+      return server.schema.create('WorkerStatusTerminated', {
+        terminatedWorkerEvent: server.schema.create('TerminatedWorkerEvent', status.event),
+      })
   }
 }
 
