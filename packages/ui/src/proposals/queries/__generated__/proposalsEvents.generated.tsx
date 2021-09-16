@@ -26,6 +26,13 @@ export type ProposalStatusUpdatedEventFieldsFragment = {
     | { __typename: 'ProposalStatusDormant' }
 }
 
+export type ProposalDecisionMadeEventFieldsFragment = {
+  __typename: 'ProposalDecisionMadeEvent'
+  id: string
+  createdAt: any
+  proposal: { __typename: 'Proposal'; id: string; title: string }
+}
+
 export type GetProposalsEventsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetProposalsEventsQuery = {
@@ -53,7 +60,7 @@ export type GetProposalsEventsQuery = {
     | { __typename: 'OpeningFilledEvent' }
     | { __typename: 'ProposalCancelledEvent' }
     | ({ __typename: 'ProposalCreatedEvent' } & ProposalCreatedEventFieldsFragment)
-    | { __typename: 'ProposalDecisionMadeEvent' }
+    | ({ __typename: 'ProposalDecisionMadeEvent' } & ProposalDecisionMadeEventFieldsFragment)
     | { __typename: 'ProposalDiscussionPostCreatedEvent' }
     | { __typename: 'ProposalDiscussionPostDeletedEvent' }
     | { __typename: 'ProposalDiscussionPostUpdatedEvent' }
@@ -107,19 +114,36 @@ export const ProposalStatusUpdatedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const ProposalDecisionMadeEventFieldsFragmentDoc = gql`
+  fragment ProposalDecisionMadeEventFields on ProposalDecisionMadeEvent {
+    id
+    createdAt
+    proposal {
+      id
+      title
+    }
+  }
+`
 export const GetProposalsEventsDocument = gql`
   query GetProposalsEvents {
-    events(where: { type_in: [ProposalCreatedEvent, ProposalStatusUpdatedEvent] }, orderBy: [createdAt_DESC]) {
+    events(
+      where: { type_in: [ProposalCreatedEvent, ProposalStatusUpdatedEvent, ProposalDecisionMadeEvent] }
+      orderBy: [createdAt_DESC]
+    ) {
       ... on ProposalCreatedEvent {
         ...ProposalCreatedEventFields
       }
       ... on ProposalStatusUpdatedEvent {
         ...ProposalStatusUpdatedEventFields
       }
+      ... on ProposalDecisionMadeEvent {
+        ...ProposalDecisionMadeEventFields
+      }
     }
   }
   ${ProposalCreatedEventFieldsFragmentDoc}
   ${ProposalStatusUpdatedEventFieldsFragmentDoc}
+  ${ProposalDecisionMadeEventFieldsFragmentDoc}
 `
 
 /**

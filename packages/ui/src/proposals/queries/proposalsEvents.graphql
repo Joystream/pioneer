@@ -23,13 +23,34 @@ fragment ProposalStatusUpdatedEventFields on ProposalStatusUpdatedEvent {
   }
 }
 
+fragment ProposalDecisionMadeEventFields on ProposalDecisionMadeEvent {
+  id
+  createdAt
+  proposal {
+    id
+    title
+  }
+}
+
 query GetProposalsEvents {
-  events (where: { type_in: [ProposalCreatedEvent, ProposalStatusUpdatedEvent] } orderBy: [createdAt_DESC]) {
+  events (
+    where: {
+      type_in: [
+        ProposalCreatedEvent,
+        ProposalStatusUpdatedEvent,
+        ProposalDecisionMadeEvent,
+      ]
+    }
+    orderBy: [createdAt_DESC]
+  ) {
     ...on ProposalCreatedEvent {
       ...ProposalCreatedEventFields
     }
     ...on ProposalStatusUpdatedEvent {
       ...ProposalStatusUpdatedEventFields
+    }
+    ...on ProposalDecisionMadeEvent {
+      ...ProposalDecisionMadeEventFields
     }
   }
 }

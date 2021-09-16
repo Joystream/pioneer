@@ -6,6 +6,7 @@ import { PostAddedContent } from '@/forum/components/Activities/PostAddedContent
 import { PostEditedContent } from '@/forum/components/Activities/PostEditedContent'
 import { ThreadCreatedContent } from '@/forum/components/Activities/ThreadCreatedContent'
 import { ProposalCreatedContent } from '@/proposals/components/Activities/ProposalCreatedContent'
+import { ProposalDecisionMadeContent } from '@/proposals/components/Activities/ProposalDecisionMadeContent'
 import { ProposalStatusUpdatedContent } from '@/proposals/components/Activities/ProposalStatusUpdatedContent'
 import { ApplicationWithdrawnContent } from '@/working-groups/components/Activities/ApplicationWithdrawnContent'
 import { AppliedOnOpeningContent } from '@/working-groups/components/Activities/AppliedOnOpeningContent'
@@ -53,6 +54,7 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   CategoryCreatedEvent: CategoryCreatedContent,
   ProposalCreatedEvent: ProposalCreatedContent,
   ProposalStatusUpdatedEvent: ProposalStatusUpdatedContent,
+  ProposalDecisionMadeEvent: ProposalDecisionMadeContent,
 }
 
 export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {

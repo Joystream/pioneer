@@ -45,4 +45,5 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   CategoryCreatedEvent: [CreatedIcon, 'joystream'],
   ProposalCreatedEvent: [CreatedIcon, 'joystream'],
   ProposalStatusUpdatedEvent: [StatusUpdatedIcon, 'joystream'],
+  ProposalDecisionMadeEvent: [ClosedIcon, 'negative'],
 }
