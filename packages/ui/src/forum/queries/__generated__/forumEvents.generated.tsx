@@ -31,7 +31,12 @@ export type ThreadCreatedEventFieldsFragment = {
   __typename: 'ThreadCreatedEvent'
   id: string
   createdAt: any
-  thread: { __typename: 'ForumThread'; id: string; title: string }
+  thread: {
+    __typename: 'ForumThread'
+    id: string
+    title: string
+    author: { __typename: 'Membership'; id: string; handle: string }
+  }
 }
 
 export type GetForumEventsQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -82,6 +87,10 @@ export const ThreadCreatedEventFieldsFragmentDoc = gql`
     thread {
       id
       title
+      author {
+        id
+        handle
+      }
     }
   }
 `
