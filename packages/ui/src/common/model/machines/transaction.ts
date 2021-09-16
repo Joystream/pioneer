@@ -12,6 +12,17 @@ export type TransactionEvent =
   | TransactionSuccessEvent
   | TransactionErrorEvent
 
+const onTransactionError: any = {
+  target: 'error',
+  actions: [
+    assign({
+      events: (context, event: TransactionErrorEvent) => event.events,
+      fee: (context, event: TransactionErrorEvent) => event.fee,
+    }),
+    send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
+  ],
+}
+
 export const transactionConfig: MachineConfig<any, any, TransactionEvent> = {
   id: 'transaction',
   initial: 'prepare',
@@ -33,6 +44,7 @@ export const transactionConfig: MachineConfig<any, any, TransactionEvent> = {
     signWithExtension: {
       on: {
         PENDING: 'pending',
+        ERROR: onTransactionError,
       },
     },
     pending: {
@@ -44,16 +56,7 @@ export const transactionConfig: MachineConfig<any, any, TransactionEvent> = {
             fee: (context, event) => event.fee,
           }),
         },
-        ERROR: {
-          target: 'error',
-          actions: [
-            assign({
-              events: (context, event) => event.events,
-              fee: (context, event) => event.fee,
-            }),
-            send({ type: ActionTypes.ErrorPlatform, isError: 'true' }),
-          ],
-        },
+        ERROR: onTransactionError,
       },
     },
     success: {
