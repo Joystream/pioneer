@@ -26,6 +26,7 @@ export interface MemberRolesProps {
 }
 
 const defaultRole = {
+  id: '0',
   groupName: 'Member Role',
   isLead: false,
 }

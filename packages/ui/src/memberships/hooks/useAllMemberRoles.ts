@@ -6,8 +6,8 @@ export const useAllMemberRoles = () => {
   const { groups, isLoading } = useWorkingGroups()
 
   const roles = groups.flatMap(({ name: groupName }): MemberRole[] => [
-    { groupName, isLead: true },
-    { groupName, isLead: false },
+    { id: '0', groupName, isLead: true },
+    { id: '1', groupName, isLead: false },
   ])
 
   return { roles, isLoading }

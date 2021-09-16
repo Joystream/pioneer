@@ -13,6 +13,7 @@ fragment MemberFields on Membership {
   isFoundingMember
   inviteCount
   roles {
+    id
     group {
       name
     }

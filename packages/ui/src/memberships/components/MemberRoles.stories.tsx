@@ -30,14 +30,15 @@ const Template: Story<MemberRolesProps & MemberRoleHelpGroup> = () => (
             <MemberRoles
               max={5}
               roles={[
-                { groupName: 'Big group', isLead: false, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'Forum', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '0', groupName: 'Big group', isLead: false, createdAt: faker.date.recent(30).toISOString() },
+                { id: '1', groupName: 'Forum', isLead: true, createdAt: faker.date.recent(30).toISOString() },
                 {
+                  id: '2',
                   groupName: "Long group name, let's check it",
                   isLead: false,
                   createdAt: faker.date.recent(30).toISOString(),
                 },
-                { groupName: 'Storage', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '3', groupName: 'Storage', isLead: true, createdAt: faker.date.recent(30).toISOString() },
               ]}
             />
           </Row>
@@ -50,15 +51,16 @@ const Template: Story<MemberRolesProps & MemberRoleHelpGroup> = () => (
             <MemberRoles
               max={3}
               roles={[
-                { groupName: 'Big group', isLead: false, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'Forum', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '0', groupName: 'Big group', isLead: false, createdAt: faker.date.recent(30).toISOString() },
+                { id: '1', groupName: 'Forum', isLead: true, createdAt: faker.date.recent(30).toISOString() },
                 {
+                  id: '2',
                   groupName: "Long group name, let's check it",
                   isLead: false,
                   createdAt: faker.date.recent(30).toISOString(),
                 },
-                { groupName: 'Storage', isLead: true, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'More', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '3', groupName: 'Storage', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '4', groupName: 'More', isLead: true, createdAt: faker.date.recent(30).toISOString() },
               ]}
             />
           </Row>
@@ -71,17 +73,18 @@ const Template: Story<MemberRolesProps & MemberRoleHelpGroup> = () => (
             <MemberRoles
               max={3}
               roles={[
-                { groupName: 'Big group', isLead: false, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'Forum', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '0', groupName: 'Big group', isLead: false, createdAt: faker.date.recent(30).toISOString() },
+                { id: '1', groupName: 'Forum', isLead: true, createdAt: faker.date.recent(30).toISOString() },
                 {
+                  id: '2',
                   groupName: "Long group name, let's check it",
                   isLead: false,
                   createdAt: faker.date.recent(30).toISOString(),
                 },
-                { groupName: 'Storage', isLead: true, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'First', isLead: true, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'More', isLead: true, createdAt: faker.date.recent(30).toISOString() },
-                { groupName: 'Extra', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '3', groupName: 'Storage', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '4', groupName: 'First', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '5', groupName: 'More', isLead: true, createdAt: faker.date.recent(30).toISOString() },
+                { id: '6', groupName: 'Extra', isLead: true, createdAt: faker.date.recent(30).toISOString() },
               ]}
             />
           </Row>
