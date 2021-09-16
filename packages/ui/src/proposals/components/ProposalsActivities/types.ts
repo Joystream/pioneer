@@ -1,6 +1,12 @@
 import { BaseActivity, MemberDisplayFields } from '@/common/types'
+import {
+  ProposalCreatedEventFieldsFragment,
+  ProposalStatusUpdatedEventFieldsFragment,
+} from '@/proposals/queries/__generated__/proposalsEvents.generated'
 
-export type ProposalActivity = ProposalCreatedActivity
+export type ProposalActivity = ProposalCreatedActivity | ProposalStatusUpdatedActivity
+
+export type ProposalEventFieldsFragment = ProposalCreatedEventFieldsFragment | ProposalStatusUpdatedEventFieldsFragment
 
 interface ProposalObjectActivity extends BaseActivity {
   proposal: {

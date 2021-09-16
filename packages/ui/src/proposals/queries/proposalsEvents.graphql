@@ -24,7 +24,7 @@ fragment ProposalStatusUpdatedEventFields on ProposalStatusUpdatedEvent {
 }
 
 query GetProposalsEvents {
-  events (where: { type_in: [ProposalCreatedEvent, ProposalStatusUpdatedEvent] }) {
+  events (where: { type_in: [ProposalCreatedEvent, ProposalStatusUpdatedEvent] } orderBy: [createdAt_DESC]) {
     ...on ProposalCreatedEvent {
       ...ProposalCreatedEventFields
     }

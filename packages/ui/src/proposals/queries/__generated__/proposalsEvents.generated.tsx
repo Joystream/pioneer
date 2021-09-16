@@ -109,7 +109,7 @@ export const ProposalStatusUpdatedEventFieldsFragmentDoc = gql`
 `
 export const GetProposalsEventsDocument = gql`
   query GetProposalsEvents {
-    events(where: { type_in: [ProposalCreatedEvent, ProposalStatusUpdatedEvent] }) {
+    events(where: { type_in: [ProposalCreatedEvent, ProposalStatusUpdatedEvent] }, orderBy: [createdAt_DESC]) {
       ... on ProposalCreatedEvent {
         ...ProposalCreatedEventFields
       }
