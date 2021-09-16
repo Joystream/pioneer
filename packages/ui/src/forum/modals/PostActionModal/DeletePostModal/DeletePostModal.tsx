@@ -48,6 +48,7 @@ export const DeletePostModal = () => {
     const controllerAccount = accountOrNamed(allAccounts, post.author.controllerAccount, 'Controller Account')
     return (
       <PostActionSignModal
+        onClose={hideModal}
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}

@@ -22,6 +22,7 @@ import { ForumPost } from '@/forum/types'
 import { Member } from '@/memberships/types'
 
 interface PostActionSignModalCommonProps {
+  onClose: () => void
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
   service: ActorRef<any>
   controllerAccount: Account
@@ -57,8 +58,8 @@ export const PostActionSignModal = ({
   author,
   newText,
   replyTo,
+  onClose,
 }: PostActionSignModalProps) => {
-  const { hideModal } = useModal()
   const { paymentInfo } = useSignAndSendTransaction({ transaction, signer: controllerAccount.address, service })
   const [state, send] = useActor(service)
   const balance = useBalance(controllerAccount.address)
@@ -73,7 +74,7 @@ export const PostActionSignModal = ({
 
   return (
     <>
-      <TransactionModal onClose={hideModal} service={service}>
+      <TransactionModal onClose={onClose} service={service}>
         <ModalBody>
           <RowGapBlock gap={24}>
             <RowGapBlock gap={16}>

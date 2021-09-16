@@ -14,5 +14,6 @@ export type EditPostModalCall = ModalWithDataCall<
     replyTo?: ForumPost
     transaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>
     onSuccessfulEdit: (newText: string) => void
+    onFailedEdit: () => void
   }
 >

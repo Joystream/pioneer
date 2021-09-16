@@ -38,6 +38,7 @@ describe('UI: EditPostModal', () => {
     postText: 'Lorem ipsum',
     transaction: api.api.tx.forum.editPostText(1, 1, 1, 1, ''),
     onSuccessfulEdit: () => true,
+    onFailedEdit: () => true,
   }
 
   const useModal: UseModal<any> = {
