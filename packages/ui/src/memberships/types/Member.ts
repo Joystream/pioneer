@@ -3,6 +3,7 @@ import { Address, Block } from '../../common/types'
 type ID = string
 
 export interface MemberRole {
+  id: string
   groupName: string
   createdAt?: string
   isLead: boolean
