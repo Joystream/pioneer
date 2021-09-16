@@ -7,7 +7,7 @@ import { TerminatedEvent, WorkerLeavingEvent } from './seedEvents'
 type WorkerStatusEvent = WorkerLeavingEvent | TerminatedEvent
 export type WorkerStatusType = WorkerStatus['__typename']
 interface WorkerStatusData {
-  status: string
+  type: string
   event?: WorkerStatusEvent
 }
 
@@ -54,7 +54,7 @@ export const seedWorker = (rawWorker: RawWorker, server: any) => {
 }
 
 const seedWorkerStatus = (status: WorkerStatusData, server: any) => {
-  switch (status.status as WorkerStatusType) {
+  switch (status.type as WorkerStatusType) {
     case 'WorkerStatusActive':
       return server.schema.create('WorkerStatusActive', { phantom: 0 })
     case 'WorkerStatusLeft':

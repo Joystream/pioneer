@@ -6,7 +6,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-0",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 2300,
@@ -22,7 +22,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-1",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2900,
@@ -38,7 +38,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-2",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2100,
@@ -54,7 +54,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-3",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 3100,
@@ -70,7 +70,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-4",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 3300,
@@ -86,7 +86,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-5",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 2500,
@@ -102,7 +102,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-6",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2100,
@@ -118,7 +118,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-7",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 5381,
         "createdAt": "2021-07-07T06:49:33.108Z",
@@ -142,7 +142,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-8",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 7508,
         "createdAt": "2021-05-06T23:47:20.144Z",
@@ -166,7 +166,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-9",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 6538,
         "createdAt": "2021-09-11T11:30:34.822Z",
@@ -189,7 +189,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-10",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 1282,
         "createdAt": "2021-08-26T10:47:32.966Z",
@@ -212,7 +212,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-11",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 1245,
         "createdAt": "2021-08-09T03:42:17.822Z",
@@ -235,7 +235,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-12",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 5765,
         "createdAt": "2021-04-28T22:37:12.384Z",
@@ -258,7 +258,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-13",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 4990,
         "createdAt": "2021-04-08T14:53:09.351Z",
@@ -281,7 +281,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-14",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 6409,
         "createdAt": "2021-07-27T19:31:09.382Z",
@@ -304,7 +304,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-15",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 7593,
         "createdAt": "2021-04-27T21:47:56.743Z",
@@ -327,7 +327,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-16",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 3525,
         "createdAt": "2021-04-13T02:32:49.940Z",
@@ -350,7 +350,7 @@
     "groupId": "forumWorkingGroup",
     "applicationId": "forumWorkingGroup-17",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 4169,
         "createdAt": "2021-06-21T04:25:39.508Z",
@@ -373,7 +373,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-18",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 2200,
@@ -389,7 +389,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-19",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 3500,
@@ -405,7 +405,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-20",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 2400,
@@ -421,7 +421,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-21",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2100,
@@ -437,7 +437,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-22",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2800,
@@ -453,7 +453,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-23",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 2000,
@@ -469,7 +469,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-24",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2100,
@@ -485,7 +485,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-25",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 3400,
@@ -501,7 +501,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-26",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 1755,
         "createdAt": "2021-07-06T22:33:13.436Z",
@@ -525,7 +525,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-27",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 3411,
         "createdAt": "2021-08-13T12:51:41.200Z",
@@ -549,7 +549,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-28",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 8046,
         "createdAt": "2021-03-30T00:32:04.603Z",
@@ -573,7 +573,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-29",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 6781,
         "createdAt": "2021-07-05T12:34:37.209Z",
@@ -596,7 +596,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-30",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 2655,
         "createdAt": "2021-04-27T07:34:13.565Z",
@@ -619,7 +619,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-31",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 8870,
         "createdAt": "2021-08-06T11:26:14.287Z",
@@ -642,7 +642,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-32",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 8307,
         "createdAt": "2021-06-23T00:18:04.227Z",
@@ -665,7 +665,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-33",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 862,
         "createdAt": "2021-04-19T21:27:16.269Z",
@@ -688,7 +688,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-34",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 1572,
         "createdAt": "2021-04-29T04:09:35.576Z",
@@ -711,7 +711,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-35",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 3241,
         "createdAt": "2021-09-13T16:01:25.913Z",
@@ -734,7 +734,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-36",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 4624,
         "createdAt": "2021-08-17T23:09:11.881Z",
@@ -757,7 +757,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-37",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 8553,
         "createdAt": "2021-04-16T08:49:46.815Z",
@@ -780,7 +780,7 @@
     "groupId": "storageWorkingGroup",
     "applicationId": "storageWorkingGroup-38",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 1981,
         "createdAt": "2021-09-07T01:25:03.627Z",
@@ -803,7 +803,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-39",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 1300,
@@ -819,7 +819,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-40",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 3700,
@@ -835,7 +835,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-41",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2000,
@@ -851,7 +851,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-42",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 3700,
@@ -867,7 +867,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-43",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 3800,
@@ -883,7 +883,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-44",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 1100,
@@ -899,7 +899,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-45",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 1200,
@@ -915,7 +915,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-46",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 1283,
         "createdAt": "2021-08-21T06:02:01.820Z",
@@ -939,7 +939,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-47",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 9676,
         "createdAt": "2021-04-08T01:12:29.091Z",
@@ -963,7 +963,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-48",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 8458,
         "createdAt": "2021-08-06T03:23:08.395Z",
@@ -987,7 +987,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-49",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 7754,
         "createdAt": "2021-06-15T13:38:13.283Z",
@@ -1011,7 +1011,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-50",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 258,
         "createdAt": "2021-04-13T01:21:31.211Z",
@@ -1035,7 +1035,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-51",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 8905,
         "createdAt": "2021-05-22T03:40:01.443Z",
@@ -1058,7 +1058,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-52",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 950,
         "createdAt": "2021-04-17T00:09:02.597Z",
@@ -1081,7 +1081,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-53",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 9272,
         "createdAt": "2021-07-08T23:56:43.358Z",
@@ -1104,7 +1104,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-54",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 3136,
         "createdAt": "2021-04-27T11:41:56.805Z",
@@ -1127,7 +1127,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-55",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 8377,
         "createdAt": "2021-06-10T07:55:34.081Z",
@@ -1150,7 +1150,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-56",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 3138,
         "createdAt": "2021-03-25T11:02:54.817Z",
@@ -1173,7 +1173,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-57",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 4303,
         "createdAt": "2021-08-21T05:12:04.440Z",
@@ -1196,7 +1196,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-58",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 5800,
         "createdAt": "2021-05-10T18:27:03.934Z",
@@ -1219,7 +1219,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-59",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 4936,
         "createdAt": "2021-06-15T18:57:29.541Z",
@@ -1242,7 +1242,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-60",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 3556,
         "createdAt": "2021-03-28T06:57:35.924Z",
@@ -1265,7 +1265,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-61",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 3028,
         "createdAt": "2021-06-19T11:57:54.614Z",
@@ -1288,7 +1288,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-62",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 2156,
         "createdAt": "2021-06-09T15:33:21.825Z",
@@ -1311,7 +1311,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-63",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 8266,
         "createdAt": "2021-07-19T23:31:43.162Z",
@@ -1334,7 +1334,7 @@
     "groupId": "contentDirectoryWorkingGroup",
     "applicationId": "contentDirectoryWorkingGroup-64",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 8114,
         "createdAt": "2021-04-28T12:15:28.507Z",
@@ -1357,7 +1357,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-65",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2500,
@@ -1373,7 +1373,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-66",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 3900,
@@ -1389,7 +1389,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-67",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2300,
@@ -1405,7 +1405,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-68",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 100,
     "earnedTotal": 2000,
@@ -1421,7 +1421,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-69",
     "status": {
-      "status": "WorkerStatusActive"
+      "type": "WorkerStatusActive"
     },
     "rewardPerBlock": 200,
     "earnedTotal": 1700,
@@ -1437,7 +1437,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-70",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 3751,
         "createdAt": "2021-06-18T16:12:19.236Z",
@@ -1461,7 +1461,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-71",
     "status": {
-      "status": "WorkerStatusTerminated",
+      "type": "WorkerStatusTerminated",
       "event": {
         "inBlock": 6435,
         "createdAt": "2021-05-11T02:15:45.167Z",
@@ -1485,7 +1485,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-72",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 4754,
         "createdAt": "2021-08-04T16:11:28.105Z",
@@ -1508,7 +1508,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-73",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 1487,
         "createdAt": "2021-08-29T14:01:19.501Z",
@@ -1531,7 +1531,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-74",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 7644,
         "createdAt": "2021-08-24T08:40:25.160Z",
@@ -1554,7 +1554,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-75",
     "status": {
-      "status": "WorkerStatusLeft",
+      "type": "WorkerStatusLeft",
       "event": {
         "inBlock": 6101,
         "createdAt": "2021-06-10T07:19:01.602Z",
@@ -1577,7 +1577,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-76",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 2626,
         "createdAt": "2021-06-19T00:19:42.467Z",
@@ -1600,7 +1600,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-77",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 1762,
         "createdAt": "2021-03-30T07:17:46.969Z",
@@ -1623,7 +1623,7 @@
     "groupId": "membershipWorkingGroup",
     "applicationId": "membershipWorkingGroup-78",
     "status": {
-      "status": "WorkerStatusLeaving",
+      "type": "WorkerStatusLeaving",
       "event": {
         "inBlock": 7184,
         "createdAt": "2021-05-13T07:15:02.732Z",

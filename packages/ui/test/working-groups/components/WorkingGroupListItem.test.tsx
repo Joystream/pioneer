@@ -63,7 +63,7 @@ describe('WorkingGroupListItem', () => {
           ...WORKER_DATA,
           id: 'forumWorkingGroup-1',
           groupId: 'forumWorkingGroup',
-          status: { status: 'WorkerStatusActive' },
+          status: { type: 'WorkerStatusActive' },
         },
         mockServer.server
       )
@@ -72,7 +72,7 @@ describe('WorkingGroupListItem', () => {
           ...WORKER_DATA,
           id: 'forumWorkingGroup-2',
           groupId: 'forumWorkingGroup',
-          status: { status: 'WorkerStatusActive' },
+          status: { type: 'WorkerStatusActive' },
         },
         mockServer.server
       )
@@ -81,7 +81,7 @@ describe('WorkingGroupListItem', () => {
           ...WORKER_DATA,
           id: 'forumWorkingGroup-3',
           groupId: 'forumWorkingGroup',
-          status: { status: 'WorkerStatusLeft', event: workerLeftEventData },
+          status: { type: 'WorkerStatusLeft', event: workerLeftEventData },
         },
         mockServer.server
       )

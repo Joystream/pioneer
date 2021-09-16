@@ -92,7 +92,7 @@ export const WORKER_DATA: RawWorker = {
   stake: 4000,
   missingRewardAmount: 1000,
   status: {
-    status: 'WorkerStatusActive',
+    type: 'WorkerStatusActive',
   },
   createdAt: '2021-07-04T14:01:59.513Z',
 }

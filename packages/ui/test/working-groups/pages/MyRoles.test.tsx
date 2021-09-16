@@ -85,7 +85,7 @@ describe('UI: My Role Page', () => {
     })
 
     it('Not own role', async () => {
-      const worker = { ...WORKER_DATA, membershipId: 5, status: { status: 'WorkerStatusActive' } }
+      const worker = { ...WORKER_DATA, membershipId: 5, status: { type: 'WorkerStatusActive' } }
       seedWorker(worker, mockServer.server)
 
       renderPage()

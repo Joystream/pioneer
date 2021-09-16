@@ -35,7 +35,7 @@ const StatusEventGenerators: Record<WorkerStatusType, (workerId: string, groupId
 }
 
 const generateWorkerStatus = (status: WorkerStatusType, workerId: string, groupId: string) => ({
-  status,
+  type: status,
   event: StatusEventGenerators[status](workerId, groupId)
 })
 

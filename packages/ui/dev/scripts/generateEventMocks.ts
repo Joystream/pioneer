@@ -44,7 +44,7 @@ export const generateEvents = (args: EventsArgs) => {
       createdAt: new Date(worker.createdAt),
       status: {
         event: worker.status.event,
-        status: worker.status.status as WorkerStatusType
+        type: worker.status.type as WorkerStatusType
       }
     })),
     workingGroups,
