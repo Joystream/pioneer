@@ -93,7 +93,7 @@ export const useSignAndSendTransaction = ({ transaction, signer, service }: UseS
     const fee = paymentInfo.partialFee.toBn()
 
     if (keyringPair.meta.isInjected) {
-      send('SIGN_EXTENSION')
+      send('SIGN_EXTERNAL')
       web3FromAddress(signer).then((extension) => {
         observeTransaction(transaction.signAndSend(signer, { signer: extension.signer }), send, fee)
       })

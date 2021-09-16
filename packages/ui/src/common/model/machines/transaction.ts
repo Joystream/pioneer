@@ -8,6 +8,7 @@ export type TransactionEvent =
   | { type: 'SIGN' }
   | { type: 'SIGN_INTERNAL' }
   | { type: 'SIGN_EXTERNAL' }
+  | { type: 'PENDING' }
   | TransactionSuccessEvent
   | TransactionErrorEvent
 
@@ -31,7 +32,7 @@ export const transactionConfig: MachineConfig<any, any, TransactionEvent> = {
     },
     signWithExtension: {
       on: {
-        SIGNED: 'pending',
+        PENDING: 'pending',
       },
     },
     pending: {
