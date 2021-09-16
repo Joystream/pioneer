@@ -52,6 +52,14 @@ describe('Machine: Transaction machine', () => {
     expect(service.state.matches('error')).toBeTruthy()
   })
 
+  it('Close extension while signing', () => {
+    service.send('SIGN')
+    service.send('SIGN_EXTERNAL')
+    service.send('ERROR')
+
+    expect(service.state.matches('error')).toBeTruthy()
+  })
+
   it('Send events', () => {
     service.send('SIGN')
     service.send('SIGN_EXTERNAL')
