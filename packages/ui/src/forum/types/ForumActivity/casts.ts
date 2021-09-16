@@ -1,4 +1,4 @@
-import { asBaseActivity } from '@/common/types'
+import { asBaseActivity, asMemberDisplayFields } from '@/common/types'
 import {
   CategoryCreatedEventFieldsFragment,
   PostAddedEventFieldsFragment,
@@ -13,14 +13,10 @@ export function asPostActivity(
 ): PostAddedActivity | PostEditedActivity {
   return {
     eventType: fields.__typename,
-    id: fields.id,
-    createdAt: fields.createdAt,
+    ...asBaseActivity(fields),
     postId: fields.post.id,
     threadId: fields.post.thread.id,
-    author: {
-      id: fields.post.author.id,
-      handle: fields.post.author.handle,
-    },
+    author: asMemberDisplayFields(fields.post.author),
   }
 }
 
@@ -32,7 +28,7 @@ export function asThreadCreatedActivity(fields: ThreadCreatedEventFieldsFragment
       id: fields.thread.id,
       title: fields.thread.title,
     },
-    author: fields.thread.author,
+    author: asMemberDisplayFields(fields.thread.author),
   }
 }
 

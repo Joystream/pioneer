@@ -4,6 +4,7 @@ import {
   BudgetIcon,
   ExiteRoleIcon,
   RewardIcon,
+  StatusUpdatedIcon,
   TerminatedIcon,
   UpcomingIcon,
 } from '@/common/components/icons/activities'
@@ -42,4 +43,7 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   PostTextUpdatedEvent: [UpcomingIcon, 'joystream'],
   ThreadCreatedEvent: [CreatedIcon, 'joystream'],
   CategoryCreatedEvent: [CreatedIcon, 'joystream'],
+  ProposalCreatedEvent: [CreatedIcon, 'joystream'],
+  ProposalStatusUpdatedEvent: [StatusUpdatedIcon, 'joystream'],
+  ProposalDecisionMadeEvent: [ClosedIcon, 'negative'],
 }
