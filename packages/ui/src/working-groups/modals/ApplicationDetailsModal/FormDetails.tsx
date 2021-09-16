@@ -5,7 +5,7 @@ import { MarkdownPreview } from '../../../common/components/MarkdownPreview'
 import {
   SidePaneColumn,
   SidePaneLabel,
-  SidePaneRow,
+  SidePaneWideRow,
   SidePaneTable,
   SidePaneText,
 } from '../../../common/components/SidePane'
@@ -36,7 +36,7 @@ export const FormDetails = React.memo(({ applicationId }: Props) => {
 })
 
 const QuestionAnswerPair = React.memo(({ answer }: { answer: ApplicationQuestionAnswer }) => (
-  <SidePaneRow>
+  <SidePaneWideRow>
     <SidePaneColumn>
       <SidePaneLabel text={answer.question} />
       {answer.questionType === 'TEXT' ? (
@@ -45,5 +45,5 @@ const QuestionAnswerPair = React.memo(({ answer }: { answer: ApplicationQuestion
         <MarkdownPreview markdown={answer.answer} />
       )}
     </SidePaneColumn>
-  </SidePaneRow>
+  </SidePaneWideRow>
 ))

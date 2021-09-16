@@ -29,6 +29,9 @@ export const SidePaneRow = styled.li`
   grid-template-columns: 168px 1fr;
   grid-column-gap: 24px;
 `
+export const SidePaneWideRow = styled(SidePaneRow)`
+  grid-template-columns: 1fr;
+`
 export const SidePaneText = styled(TextMedium)`
   color: ${Colors.Black[600]};
 `
