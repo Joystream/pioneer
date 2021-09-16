@@ -41,6 +41,19 @@ fragment ThreadCreatedEventFields on ThreadCreatedEvent {
   }
 }
 
+fragment CategoryCreatedEventFields on CategoryCreatedEvent {
+  id
+  createdAt
+  category {
+    id
+    title
+    parent {
+      id
+      title
+    }
+  }
+}
+
 query GetForumEvents {
   postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
     ...PostAddedEventFields
@@ -48,7 +61,10 @@ query GetForumEvents {
   postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
     ...PostTextUpdatedEventFields
   }
-  threadCreatedEvents(orderBy: createdAt_DESC, limit: 10) {
+  threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
     ...ThreadCreatedEventFields
+  }
+  categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
+    ...CategoryCreatedEventFields
   }
 }

@@ -39,6 +39,18 @@ export type ThreadCreatedEventFieldsFragment = {
   }
 }
 
+export type CategoryCreatedEventFieldsFragment = {
+  __typename: 'CategoryCreatedEvent'
+  id: string
+  createdAt: any
+  category: {
+    __typename: 'ForumCategory'
+    id: string
+    title: string
+    parent?: Types.Maybe<{ __typename: 'ForumCategory'; id: string; title: string }>
+  }
+}
+
 export type GetForumEventsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetForumEventsQuery = {
@@ -46,6 +58,7 @@ export type GetForumEventsQuery = {
   postAddedEvents: Array<{ __typename: 'PostAddedEvent' } & PostAddedEventFieldsFragment>
   postTextUpdatedEvents: Array<{ __typename: 'PostTextUpdatedEvent' } & PostTextUpdatedEventFieldsFragment>
   threadCreatedEvents: Array<{ __typename: 'ThreadCreatedEvent' } & ThreadCreatedEventFieldsFragment>
+  categoryCreatedEvents: Array<{ __typename: 'CategoryCreatedEvent' } & CategoryCreatedEventFieldsFragment>
 }
 
 export const PostAddedEventFieldsFragmentDoc = gql`
@@ -94,6 +107,20 @@ export const ThreadCreatedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const CategoryCreatedEventFieldsFragmentDoc = gql`
+  fragment CategoryCreatedEventFields on CategoryCreatedEvent {
+    id
+    createdAt
+    category {
+      id
+      title
+      parent {
+        id
+        title
+      }
+    }
+  }
+`
 export const GetForumEventsDocument = gql`
   query GetForumEvents {
     postAddedEvents(orderBy: createdAt_DESC, limit: 10) {
@@ -102,13 +129,17 @@ export const GetForumEventsDocument = gql`
     postTextUpdatedEvents(orderBy: createdAt_DESC, limit: 10) {
       ...PostTextUpdatedEventFields
     }
-    threadCreatedEvents(orderBy: createdAt_DESC, limit: 10) {
+    threadCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
       ...ThreadCreatedEventFields
+    }
+    categoryCreatedEvents(orderBy: createdAt_DESC, limit: 5) {
+      ...CategoryCreatedEventFields
     }
   }
   ${PostAddedEventFieldsFragmentDoc}
   ${PostTextUpdatedEventFieldsFragmentDoc}
   ${ThreadCreatedEventFieldsFragmentDoc}
+  ${CategoryCreatedEventFieldsFragmentDoc}
 `
 
 /**

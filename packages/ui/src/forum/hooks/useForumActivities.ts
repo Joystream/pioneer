@@ -1,5 +1,5 @@
 import { useGetForumEventsQuery } from '../queries/__generated__/forumEvents.generated'
-import { asPostActivity, asThreadCreatedActivity } from '../types/ForumActivity'
+import { asCategoryCreatedActivity, asPostActivity, asThreadCreatedActivity } from '../types/ForumActivity'
 
 export const useForumActivities = () => {
   const { loading, data } = useGetForumEventsQuery()
@@ -8,7 +8,8 @@ export const useForumActivities = () => {
         ...data.postAddedEvents.map(asPostActivity),
         ...data.postTextUpdatedEvents.map(asPostActivity),
         ...data.threadCreatedEvents.map(asThreadCreatedActivity),
-      ]
+        ...data.categoryCreatedEvents.map(asCategoryCreatedActivity),
+      ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
     : []
 
   return { isLoading: loading, activities }

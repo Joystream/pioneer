@@ -41,4 +41,5 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   PostAddedEvent: [CreatedIcon, 'joystream'],
   PostTextUpdatedEvent: [UpcomingIcon, 'joystream'],
   ThreadCreatedEvent: [CreatedIcon, 'joystream'],
+  CategoryCreatedEvent: [CreatedIcon, 'joystream'],
 }
