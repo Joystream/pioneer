@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
+import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -47,15 +47,18 @@ export const PostListItem = ({
   replyToPost,
 }: PostListItemProps) => {
   const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
+  const [postText, setPostText] = useState<string>(text)
+  const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
 
+  const { showModal } = useModal()
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
     !!ref.current && insertRef && insertRef(ref)
   }, [ref.current])
+
   const [editing, setEditing] = useState(false)
-  const { showModal } = useModal()
   const editionTime = useMemo(() => {
-    if (!lastEditedAt) {
+    if (!postLastEditedAt) {
       return null
     }
 
@@ -65,10 +68,16 @@ export const PostListItem = ({
           showModal<PostHistoryModalCall>({ modal: 'PostHistory', data: { postId: post.id, author: author } })
         }
       >
-        (edited {relativeIfRecent(lastEditedAt)})
+        (edited {relativeIfRecent(postLastEditedAt)})
       </EditionTime>
     )
-  }, [lastEditedAt])
+  }, [postLastEditedAt])
+
+  const onSuccessfulEdit = useCallback((newText: string) => {
+    setEditing(false)
+    setPostText(newText)
+    setPostLastEditedAt(new Date().toISOString())
+  }, [])
 
   return (
     <FroumPostBlock ref={ref} isSelected={isSelected}>
@@ -92,9 +101,14 @@ export const PostListItem = ({
             </Reply>
           )}
           {editing ? (
-            <PostEditor post={post} onCancel={() => setEditing(false)} type={type} />
+            <PostEditor
+              post={post}
+              onCancel={() => setEditing(false)}
+              type={type}
+              onSuccessfulEdit={onSuccessfulEdit}
+            />
           ) : (
-            <MarkdownPreview markdown={text} append={editionTime} size="s" />
+            <MarkdownPreview markdown={postText} append={editionTime} size="s" />
           )}
         </MessageBody>
         <ForumPostRow>
@@ -113,7 +127,7 @@ export const PostListItem = ({
                   <ButtonGhost square disabled={isPreview} size="small" title="Reply" onClick={replyToPost}>
                     <ReplyIcon />
                   </ButtonGhost>
-                  <PostContextMenu post={post} onEdit={() => setEditing(true)} type={type} />
+                  <PostContextMenu post={{ ...post, text: postText }} onEdit={() => setEditing(true)} type={type} />
                 </>
               )}
             </ButtonsGroup>

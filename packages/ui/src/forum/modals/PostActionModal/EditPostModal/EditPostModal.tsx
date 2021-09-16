@@ -18,7 +18,7 @@ import { EditPostModalCall } from '.'
 
 export const EditPostModal = () => {
   const {
-    modalData: { postAuthor, postText, replyTo, transaction },
+    modalData: { postAuthor, postText, replyTo, transaction, onSuccessfulEdit },
     hideModal,
   } = useModal<EditPostModalCall>()
 
@@ -30,6 +30,10 @@ export const EditPostModal = () => {
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
 
   useEffect(() => {
+    if (state.matches('success')) {
+      onSuccessfulEdit(postText)
+    }
+
     if (!state.matches('requirementsVerification')) {
       return
     }

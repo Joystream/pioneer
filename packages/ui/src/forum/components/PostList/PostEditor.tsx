@@ -16,9 +16,10 @@ interface Props {
   post: ForumPost
   onCancel: () => void
   type: PostListItemType
+  onSuccessfulEdit: (newText: string) => void
 }
 
-export const PostEditor = ({ post, onCancel, type }: Props) => {
+export const PostEditor = ({ post, onCancel, type, onSuccessfulEdit }: Props) => {
   const { api, connectionState } = useApi()
   const [newText, setNewText] = useState(post.text)
   const { showModal } = useModal()
@@ -64,6 +65,7 @@ export const PostEditor = ({ post, onCancel, type }: Props) => {
                 postText: newText,
                 replyTo: post.repliesTo,
                 transaction: getEditPostTransaction(newText),
+                onSuccessfulEdit,
               },
             })
           }

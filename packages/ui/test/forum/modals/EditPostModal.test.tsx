@@ -37,6 +37,7 @@ describe('UI: EditPostModal', () => {
     postAuthor: getMember('alice'),
     postText: 'Lorem ipsum',
     transaction: api.api.tx.forum.editPostText(1, 1, 1, 1, ''),
+    onSuccessfulEdit: () => true,
   }
 
   const useModal: UseModal<any> = {

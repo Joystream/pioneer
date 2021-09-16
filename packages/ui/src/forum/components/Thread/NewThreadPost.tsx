@@ -50,7 +50,7 @@ export const NewThreadPost = React.forwardRef(
                 </Badge>
               </div>
               <div>
-                <ButtonPrimary size="small" onClick={removeReply}>
+                <ButtonPrimary size="small" square onClick={removeReply}>
                   <CrossIcon />
                 </ButtonPrimary>
               </div>

@@ -59,7 +59,7 @@ describe('UI: PostEditor', () => {
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <ApiContext.Provider value={api}>
-              <PostEditor post={post} onCancel={() => null} type="forum" />
+              <PostEditor post={post} onCancel={() => null} onSuccessfulEdit={() => true} type="forum" />
             </ApiContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
