@@ -20,6 +20,8 @@ export interface TransactionModalProps {
 export const TransactionModal = ({ onClose, children, service, title, useMultiTransaction }: TransactionModalProps) => {
   const [state] = useActor(service)
 
+  console.log(state)
+
   if (state.matches('prepare')) {
     return (
       <Modal modalSize="m" modalHeight="s" onClose={onClose}>
