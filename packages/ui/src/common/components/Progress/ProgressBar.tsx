@@ -2,15 +2,24 @@ import styled from 'styled-components'
 
 import { Colors } from '@/common/constants'
 
-export interface NumberRange {
+export interface ProgressBarProps {
   start?: number
   end: number
+  size?: 'small' | 'big'
 }
 
-export const ProgressBar = styled.div<NumberRange>`
+export const ProgressBar = styled.div<ProgressBarProps>`
   background-color: ${Colors.Black[200]};
   border-radius: 4px;
-  height: 4px;
+  height: ${({ size }) => {
+    switch (size) {
+      case 'big':
+        return '20px'
+      case 'small':
+      default:
+        return '4px'
+    }
+  }};
   overflow: hidden;
   position: relative;
   width: 100%;

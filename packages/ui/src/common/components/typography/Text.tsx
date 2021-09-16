@@ -4,6 +4,7 @@ import { Colors, Fonts } from '../../constants'
 
 interface TextProps {
   bold?: boolean
+  normalWeight?: boolean
   italic?: boolean
   underline?: boolean
   lighter?: boolean
@@ -14,14 +15,23 @@ interface TextProps {
   margin?: 'xs' | 's' | 'm' | 'l' | 'xl' | undefined
   colorInherit?: boolean
   value?: boolean
+  inter?: boolean
 }
 
 const TextValueStyle = css`
   font-family: ${Fonts.Grotesk};
 `
 
+const TextInterStyle = css`
+  font-family: ${Fonts.Inter};
+`
+
 const TextBoldStyle = css`
   font-weight: 700;
+`
+
+const TextNormalWeightStyle = css`
+  font-weight: 400;
 `
 
 const TextItalicStyle = css`
@@ -77,6 +87,8 @@ const TextAllStyles = css<TextProps>`
   ${({ lighter }) => lighter && TextLighterStyle};
   ${({ light }) => light && TextLightStyle};
   ${({ value }) => value && TextValueStyle};
+  ${({ inter }) => inter && TextInterStyle};
+  ${({ normalWeight }) => normalWeight && TextNormalWeightStyle};
   ${TextMargins};
 `
 
