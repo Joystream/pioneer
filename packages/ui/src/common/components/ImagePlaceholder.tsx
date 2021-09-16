@@ -7,7 +7,7 @@ interface AvatarPlaceholderProps {
   className?: string
 }
 
-export const CandidateCardImagePlaceholder = ({ className }: AvatarPlaceholderProps) => (
+export const ImagePlaceholder = ({ className }: AvatarPlaceholderProps) => (
   <CandidateCardImageStyled
     width="260"
     height="180"

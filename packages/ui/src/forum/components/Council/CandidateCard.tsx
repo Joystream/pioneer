@@ -19,9 +19,7 @@ import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCard
 export interface Candidate {
   member: Member
   image?: string
-  avatar?: string
   voted?: boolean
-  newcomer?: boolean
   withdrawable?: boolean
   title: string
   infolist?: string[]
@@ -30,64 +28,72 @@ export interface Candidate {
   losts?: number
 }
 
-export interface CandidateCardProps {
-  candidate: Candidate
-}
-
-export const CandidateCard = ({ candidate }: CandidateCardProps) => {
+export const CandidateCard = ({
+  member,
+  image,
+  voted,
+  withdrawable,
+  title,
+  infolist,
+  stake,
+  wons = 0,
+  losts = 0,
+}: Candidate) => {
   return (
     <CandidateCardWrapper>
       <CandidateCardImageWrapper>
-        <CandidateCardImage imageUrl={candidate.image} />
+        <CandidateCardImage imageUrl={image} />
       </CandidateCardImageWrapper>
       <CandidateCardContentWrapper>
         <CandidateCardContent>
           <CandidateCardMemberInfoWrapper>
-            <MemberInfo onlyTop member={candidate.member} />
+            <MemberInfo onlyTop member={member} />
           </CandidateCardMemberInfoWrapper>
           <CandidateCardTitle as={GhostRouterLink} to="">
-            {candidate.title}
+            {title}
           </CandidateCardTitle>
-          {candidate.infolist && (
+          {infolist && (
             <CandidateCardList>
-              {candidate.infolist.map((itemText, index) => (
+              {infolist.map((itemText, index) => (
                 <CandidateCardListItem key={index}>{itemText}</CandidateCardListItem>
               ))}
             </CandidateCardList>
           )}
         </CandidateCardContent>
         <CandidateCardSummary>
-          <CandidateCardStatistics>
-            <StatsBlock size="m" centered>
-              <TwoColumnsStatistic>
-                <StatiscticContentColumn>
-                  <TextBig value bold>
-                    {candidate.wons}
-                  </TextBig>
-                  <Subscription>Past Wons</Subscription>
-                </StatiscticContentColumn>
-                <StatiscticContentColumn>
-                  <TextBig value bold>
-                    {candidate.losts}
-                  </TextBig>
-                  <Subscription>Past Losts</Subscription>
-                </StatiscticContentColumn>
-              </TwoColumnsStatistic>
-            </StatsBlock>
-          </CandidateCardStatistics>
+          {(wons > 0 || losts > 0) && (
+            <CandidateCardStatistics>
+              <StatsBlock size="m" centered>
+                <TwoColumnsStatistic>
+                  <StatiscticContentColumn>
+                    <TextBig value bold>
+                      {wons}
+                    </TextBig>
+                    <Subscription>Past Wons</Subscription>
+                  </StatiscticContentColumn>
+                  <StatiscticContentColumn>
+                    <TextBig value bold>
+                      {losts}
+                    </TextBig>
+                    <Subscription>Past Losts</Subscription>
+                  </StatiscticContentColumn>
+                </TwoColumnsStatistic>
+              </StatsBlock>
+            </CandidateCardStatistics>
+          )}
           <CandidateCardStakeAndControls>
-            {candidate.stake && (
+            {stake && (
               <CandidateCardStake>
                 <StatsValue>
-                  <ValueInJoys>{candidate.stake}</ValueInJoys>
+                  <ValueInJoys>{stake}</ValueInJoys>
                 </StatsValue>
                 <Subscription>My stake</Subscription>
               </CandidateCardStake>
             )}
             <CandidateCardControls>
-              {candidate.withdrawable ? (
+              {withdrawable ? (
                 <ButtonSecondary size="medium">Withdraw Candidacy</ButtonSecondary>
-              ) : candidate.voted ? (
+              ) : voted ? (
                 <ButtonPrimary size="medium">Vote again </ButtonPrimary>
               ) : (
                 <ButtonPrimary size="medium">Vote</ButtonPrimary>
@@ -99,12 +105,12 @@ export const CandidateCard = ({ candidate }: CandidateCardProps) => {
           <Arrow direction="right" />
         </CandidateCardArrow>
       </CandidateCardContentWrapper>
-      {candidate.newcomer && (
+      {voted && <VotedBadgeStatus inverted>Voted</VotedBadgeStatus>}
+      {wons === 0 && losts === 0 && (
         <NewcomerBadgeStatus inverted size="l">
           Newcomer
         </NewcomerBadgeStatus>
       )}
-      {candidate.voted && <VotedBadgeStatus inverted>Voted</VotedBadgeStatus>}
     </CandidateCardWrapper>
   )
 }
@@ -174,6 +180,7 @@ const CandidateCardStakeAndControls = styled.div`
   align-items: flex-end;
   width: fit-content;
   column-gap: 32px;
+  margin-top: auto;
 `
 
 const CandidateCardStatistics = styled.div`
@@ -259,11 +266,12 @@ const CandidateCardTitle = styled.h4`
 const CandidateCardMemberInfoWrapper = styled.div`
   width: fit-content;
   margin-left: -48px;
+  margin-bottom: 6px;
   z-index: 1;
 
   ${MemberPhoto} {
     position: absolute;
-    transform: translateY(-4px);
+    transform: translateY(2px);
   }
 `
 
@@ -274,7 +282,7 @@ const CandidateCardContent = styled.div`
   width: fit-content;
   max-width: 100%;
   max-height: 100%;
-  margin-top: 14px;
+  margin-top: 8px;
   overflow: hidden;
 `
 

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Colors, Transitions } from '@/common/constants'
 
-import { CandidateCardImagePlaceholder } from './CandidateCardImagePlaceholder'
+import { ImagePlaceholder } from '../../../common/components/ImagePlaceholder'
 
 interface AvatarProps {
   imageUrl?: string | null
@@ -12,11 +12,7 @@ interface AvatarProps {
 export const CandidateCardImage = React.memo(({ imageUrl, className }: AvatarProps) => {
   return (
     <CandidateCardImageContainer>
-      {imageUrl ? (
-        <CardImage src={imageUrl} className={className} />
-      ) : (
-        <CandidateCardImagePlaceholder className={className} />
-      )}
+      {imageUrl ? <CardImage src={imageUrl} className={className} /> : <ImagePlaceholder className={className} />}
     </CandidateCardImageContainer>
   )
 })
