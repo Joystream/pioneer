@@ -33,9 +33,9 @@ export const MemberDetails = React.memo(({ member }: Props) => {
     )
   }
 
-  const hired = '-'
+  const hired = member.roles.length
   const applied = '-'
-  const lead = '-'
+  const lead = member.roles.filter(({ isLead }) => isLead).length
   const councilMember = '-'
   const slashed = '-'
   const terminated = '-'
