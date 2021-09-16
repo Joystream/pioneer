@@ -1,6 +1,7 @@
 import { ProposalStatus } from '@/common/api/queries'
 import { asBaseActivity, asMemberDisplayFields } from '@/common/types'
 import {
+  GetProposalsEventsQuery,
   ProposalCreatedEventFieldsFragment,
   ProposalStatusUpdatedEventFieldsFragment,
 } from '@/proposals/queries/__generated__/proposalsEvents.generated'
@@ -47,4 +48,10 @@ const proposalCastByType: Record<
   ProposalStatusUpdatedEvent: asProposalStatusUpdatedActivity,
 }
 
-export const asProposalActivity = (fields: ProposalEventFieldsFragment) => proposalCastByType[fields.__typename](fields)
+type EventsQueryResult = GetProposalsEventsQuery['events'][0]
+
+const isProposalEvent = (fields: EventsQueryResult): fields is ProposalEventFieldsFragment =>
+  ['ProposalCreatedEvent', 'ProposalStatusUpdatedEvent'].includes(fields.__typename)
+
+export const asProposalActivities = (events: EventsQueryResult[]) =>
+  events.filter(isProposalEvent).map((eventFields) => proposalCastByType[eventFields.__typename](eventFields))
