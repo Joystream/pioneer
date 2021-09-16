@@ -11,15 +11,15 @@ interface WorkingGroupsListProps {
 
 export const WorkingGroupsList = ({ groups }: WorkingGroupsListProps) => {
   return (
-    <Groups>
+    <GroupList>
       {groups.map((group) => (
         <WorkingGroupListItem key={group.id} group={group} />
       ))}
-    </Groups>
+    </GroupList>
   )
 }
 
-const Groups = styled.section`
+const GroupList = styled.section`
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: 108px;

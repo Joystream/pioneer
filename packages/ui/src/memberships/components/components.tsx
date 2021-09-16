@@ -92,8 +92,13 @@ export const MemberPhotoContainer = styled.div`
 
 export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   display: grid;
-  ${({ showGroup }) =>
-    showGroup === false
+  ${({ showGroup, onlyTop }) =>
+    onlyTop
+      ? css`
+          grid-template-areas: 'memberphoto memberhead';
+          grid-template-rows: unset !important;
+        `
+      : showGroup === false
       ? css`
           grid-template-areas: 'memberphoto memberhead';
           grid-template-rows: unset !important;

@@ -45,6 +45,7 @@ export const MemberInfo = React.memo(
     isOnDark,
     showId,
     showGroup = true,
+    onlyTop,
     memberSize,
     size,
     className,
@@ -72,6 +73,7 @@ export const MemberInfo = React.memo(
         showGroup={showGroup}
         onClick={skipModal ? undefined : showMemberModal}
         skipModal={skipModal}
+        onlyTop={onlyTop}
       >
         <MemberPhoto>
           <MemberPhotoContainer>
@@ -106,8 +108,8 @@ export const MemberInfo = React.memo(
             </MemberIcons>
           )}
         </MemberHead>
-        {showGroup && !showId && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
-        {showId && <MemberId>Worker ID: {member.id}</MemberId>}
+        {!onlyTop && showGroup && !showId && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
+        {!onlyTop && showId && <MemberId>Worker ID: {member.id}</MemberId>}
       </MemberInfoWrap>
     )
   }
