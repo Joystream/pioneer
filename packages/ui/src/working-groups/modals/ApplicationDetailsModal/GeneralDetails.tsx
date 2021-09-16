@@ -31,9 +31,7 @@ export const GeneralDetails = React.memo(({ application }: Props) => (
     </SidePaneRow>
     <SidePaneRow>
       <SidePaneLabel text="Staking account" />
-      <SidePaneText>
-        <UnknownAccountInfo address={application.stakingAccount} placeholderName="Staking account" />
-      </SidePaneText>
+      <UnknownAccountInfo address={application.stakingAccount} placeholderName="Staking account" />
     </SidePaneRow>
     <SidePaneRow>
       <SidePaneLabel text="Applied on" />
