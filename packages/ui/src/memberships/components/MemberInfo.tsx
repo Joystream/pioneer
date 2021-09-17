@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { FounderMemberIcon, VerifiedMemberIcon, LeadMemberIcon } from '@/common/components/icons'
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { isString } from '@/common/utils'
 
 import {
   DarkTooltipInnerItemProps,
@@ -43,8 +44,7 @@ export const MemberInfo = React.memo(
   ({
     member,
     isOnDark,
-    showId,
-    replaceId,
+    showIdOrText,
     showGroup = true,
     onlyTop,
     memberSize,
@@ -109,9 +109,10 @@ export const MemberInfo = React.memo(
             </MemberIcons>
           )}
         </MemberHead>
-        {!onlyTop && showGroup && !showId && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
-        {!onlyTop && showId && !replaceId && <MemberId>Member ID: {member.id}</MemberId>}
-        {!onlyTop && showId && replaceId && <MemberId>{replaceId}</MemberId>}
+        {!onlyTop && showGroup && !showIdOrText && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
+        {!onlyTop && !!showIdOrText && (
+          <MemberId>{isString(showIdOrText) ? showIdOrText : `Member ID: ${member.id}`}</MemberId>
+        )}
       </MemberInfoWrap>
     )
   }
