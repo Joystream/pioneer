@@ -80,19 +80,21 @@ export const MemberDetails = React.memo(({ member }: Props) => {
           )}
         </AboutInvite>
       </SidePaneRow>
-      <SidePaneRow>
-        <SidePaneLabel text="Invited" />
-        <AboutInvitesColumn>
-          {(memberDetails.invitees || []).map((member) => (
-            <MemberInfo
-              member={member}
-              memberSize="s"
-              showIdOrText={`Invited on: ${member.createdAt}`}
-              key={member.handle}
-            />
-          ))}
-        </AboutInvitesColumn>
-      </SidePaneRow>
+      {memberDetails.invitees.length &&
+        <SidePaneRow>
+          <SidePaneLabel text="Invited" />
+          <AboutInvitesColumn>
+            {memberDetails.invitees.map((member) => (
+              <MemberInfo
+                member={member}
+                memberSize="s"
+                showIdOrText={`Invited on: ${member.createdAt}`}
+                key={member.handle}
+              />
+            ))}
+          </AboutInvitesColumn>
+        </SidePaneRow>
+      }
       <SidePaneRow>
         <SidePaneLabel text="Hired" />
         <SidePaneText>{hired} times</SidePaneText>
