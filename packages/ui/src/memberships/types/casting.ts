@@ -3,7 +3,7 @@ import { asWorkingGroupName } from '@/working-groups/types'
 
 import { MemberFieldsFragment, MemberWithDetailsFieldsFragment } from '../queries'
 
-import { InvitedEntry, Member, MemberEntry, MemberRole, MemberWithDetails } from './Member'
+import { Member, MemberEntry, MemberRole, MemberWithDetails } from './Member'
 
 export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member => ({
   id: data.id,
@@ -16,6 +16,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   rootAccount: data.rootAccount,
   controllerAccount: data.controllerAccount,
   roles: data.roles.map(asMemberRole),
+  createdAt: data.createdAt,
 })
 
 export const asMemberRole = (data: MemberFieldsFragment['roles'][0]): MemberRole => ({
@@ -43,7 +44,8 @@ export const asMemberWithDetails = (fields: MemberWithDetailsFieldsFragment): Me
   invitees: fields.invitees.map((fields) => {
     return {
       ...asMember(fields),
-      entry: asMemberEntry(fields.entry) as InvitedEntry,
+      // See: https://github.com/Joystream/pioneer/issues/1493
+      // entry: asMemberEntry(fields.entry) as InvitedEntry,
     }
   }),
 })

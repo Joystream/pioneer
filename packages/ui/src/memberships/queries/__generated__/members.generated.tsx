@@ -12,6 +12,7 @@ export type MemberFieldsFragment = {
   isVerified: boolean
   isFoundingMember: boolean
   inviteCount: number
+  createdAt: any
   metadata: { __typename: 'MemberMetadata'; name?: Types.Maybe<string>; about?: Types.Maybe<string> }
   roles: Array<{
     __typename: 'Worker'
@@ -139,6 +140,7 @@ export const MemberFieldsFragmentDoc = gql`
       createdAt
       isLead
     }
+    createdAt
   }
 `
 export const MemberWithDetailsFieldsFragmentDoc = gql`

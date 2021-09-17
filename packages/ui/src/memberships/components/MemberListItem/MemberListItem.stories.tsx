@@ -21,6 +21,7 @@ MyMember.args = {
     isFoundingMember: false,
     roles: [],
     inviteCount: 0,
+    createdAt: '',
   },
 }
 
@@ -37,5 +38,6 @@ Member.args = {
     isFoundingMember: false,
     roles: [],
     inviteCount: 0,
+    createdAt: '',
   },
 }

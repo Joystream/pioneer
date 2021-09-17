@@ -88,7 +88,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
               member={member}
               memberSize="s"
               showId
-              replaceId={`Invited on: ${member.entry?.block?.timestamp}`}
+              replaceId={`Invited on: ${member.createdAt}`}
               key={member.handle}
             />
           ))}
