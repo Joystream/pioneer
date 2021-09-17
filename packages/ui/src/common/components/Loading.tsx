@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { Colors } from '../constants'
 
+import { LoadingAnimation } from './LoadingAnimation'
 import { TextInlineSmall } from './typography'
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 export const Loading = ({ text }: Props) => {
   return (
     <LoadingWrapper>
+      <LoadingAnimation />
       <LoadingText italic inter>
         {text ?? 'Loading...'}
       </LoadingText>
@@ -28,5 +30,5 @@ const LoadingWrapper = styled.div`
   width: fit-content;
   height: fit-content;
   align-items: center;
-  column-gap: 4px;
+  column-gap: 8px;
 `
