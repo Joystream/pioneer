@@ -5,7 +5,7 @@ import { UseWorkersProps } from '@/working-groups/hooks/useWorkers'
 import { useGetPastWorkersQuery, useGetWorkersCountQuery } from '@/working-groups/queries'
 import { asPastWorker } from '@/working-groups/types'
 
-export const WORKERS_PER_PAGE = 5
+export const WORKERS_PER_PAGE = 10
 
 export type WorkersOrderKey = 'DateStarted' | 'DateFinished'
 
