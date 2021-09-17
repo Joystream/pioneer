@@ -30,6 +30,7 @@ Default.args = {
     isFoundingMember: false,
     roles: [],
     inviteCount: 0,
+    createdAt: '',
   },
 }
 
@@ -46,6 +47,7 @@ WithAvatar.args = {
     roles: [],
     inviteCount: 0,
     avatar: 'http://www.example.com',
+    createdAt: '',
   },
 }
 
@@ -61,5 +63,6 @@ Verified.args = {
     isFoundingMember: true,
     roles: [],
     inviteCount: 0,
+    createdAt: '',
   },
 }

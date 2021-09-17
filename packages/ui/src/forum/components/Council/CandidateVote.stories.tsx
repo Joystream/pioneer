@@ -26,6 +26,7 @@ Default.args = {
     isFoundingMember: true,
     roles: [],
     inviteCount: 0,
+    createdAt: '',
   },
   voteOwner: true,
   revealed: true,

@@ -14,12 +14,13 @@ type Entry = {
   memberInvitedEvent?: BlockFieldsMock
 }
 
-export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 'roles'> & {
+export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 'roles' | 'createdAt'> & {
   metadata: {
     name: string
     about: string
   }
   entry: Entry
+  createdAt?: string
 }
 
 export const mockMembers: MockMember[] = rawMembers.map((rawMember) => rawMember)
@@ -40,10 +41,13 @@ const seedMembershipEntry = (member: MockMember, server: any) => {
 export const seedMember = (member: MockMember, server: any) => {
   const temporary: any = { ...member }
 
+  const entry = seedMembershipEntry(member, server)
+
   return server.schema.create('Membership', {
     ...temporary,
     metadata: server.schema.create('MemberMetadata', member.metadata),
-    entry: seedMembershipEntry(member, server),
+    entry,
+    createdAt: (entry.membershipBoughtEvent || entry.memberInvitedEvent)?.createdAt,
   })
 }
 

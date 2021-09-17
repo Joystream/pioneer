@@ -20,6 +20,7 @@ fragment MemberFields on Membership {
     createdAt
     isLead
   }
+  createdAt
 }
 
 fragment MemberWithDetailsFields on Membership {
@@ -45,6 +46,17 @@ fragment MemberWithDetailsFields on Membership {
   }
   invitees {
     ...MemberFields
+    ## Deeply nested join does not work
+    # See: https://github.com/Joystream/pioneer/issues/1493
+    #    entry {
+    #      ...on MembershipEntryInvited {
+    #        memberInvitedEvent {
+    #          createdAt
+    #          inBlock
+    #          network
+    #        }
+    #      }
+    #    }
   }
 }
 

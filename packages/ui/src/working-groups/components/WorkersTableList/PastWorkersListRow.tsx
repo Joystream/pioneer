@@ -13,7 +13,7 @@ export interface ListRowProps {
 export const PastWorkersListRow = ({ worker: { member, dateStarted, dateFinished } }: ListRowProps) => {
   return (
     <WorkerItem>
-      <MemberInfo member={member} showId />
+      <MemberInfo member={member} showIdOrText />
       <BlockTime block={dateStarted} layout="reverse" />
       <BlockTime block={dateFinished} layout="reverse" />
     </WorkerItem>

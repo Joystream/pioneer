@@ -9,5 +9,6 @@ export const getMember = (handle: Members): Member => {
   delete member.registeredAtTime
   delete member.invitedById
   delete member.about
+  member.createdAt = member.entry?.membershipBoughtEvent?.createdAt
   return asMember(member)
 }

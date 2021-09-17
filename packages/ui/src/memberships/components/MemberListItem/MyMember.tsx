@@ -32,7 +32,7 @@ export const MyMemberListItem = ({ member }: { member: Member }) => {
     <MemberItemWrap kind="MyMember">
       <MemberModalTrigger onClick={showMemberModal} />
       <MemberColumn>
-        <MemberInfo member={member} showId />
+        <MemberInfo member={member} showIdOrText />
       </MemberColumn>
 
       <MemberRolesColumn>

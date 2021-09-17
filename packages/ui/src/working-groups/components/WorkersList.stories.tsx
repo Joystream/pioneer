@@ -27,6 +27,7 @@ WithLead.args = {
       isFoundingMember: false,
       roles: [],
       inviteCount: 0,
+      createdAt: '',
     },
   },
 }
@@ -46,6 +47,7 @@ WithWorkers.args = {
         isFoundingMember: false,
         roles: [],
         inviteCount: 0,
+        createdAt: '',
       },
     },
     {
@@ -60,6 +62,7 @@ WithWorkers.args = {
         isFoundingMember: false,
         roles: [],
         inviteCount: 0,
+        createdAt: '',
       },
     },
     {
@@ -74,6 +77,7 @@ WithWorkers.args = {
         isFoundingMember: false,
         roles: [],
         inviteCount: 0,
+        createdAt: '',
       },
     },
   ],
@@ -93,6 +97,7 @@ WithLeadAndWorkers.args = {
       isFoundingMember: false,
       roles: [],
       inviteCount: 0,
+      createdAt: '',
     },
   },
   workers: [
@@ -108,6 +113,7 @@ WithLeadAndWorkers.args = {
         isFoundingMember: false,
         roles: [],
         inviteCount: 0,
+        createdAt: '',
       },
     },
     {
@@ -122,6 +128,7 @@ WithLeadAndWorkers.args = {
         isFoundingMember: false,
         roles: [],
         inviteCount: 0,
+        createdAt: '',
       },
     },
   ],
