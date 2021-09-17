@@ -12,7 +12,9 @@ interface Props {
 export const Loading = ({ text }: Props) => {
   return (
     <LoadingWrapper>
-      <LoadingText italic>{text ?? 'Loading...'}</LoadingText>
+      <LoadingText italic inter>
+        {text ?? 'Loading...'}
+      </LoadingText>
     </LoadingWrapper>
   )
 }
