@@ -110,7 +110,7 @@ export const MemberInfo = React.memo(
           )}
         </MemberHead>
         {!onlyTop && showGroup && !showId && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
-        {!onlyTop && showId && !replaceId && <MemberId>Worker ID: {member.id}</MemberId>}
+        {!onlyTop && showId && !replaceId && <MemberId>Member ID: {member.id}</MemberId>}
         {!onlyTop && showId && replaceId && <MemberId>{replaceId}</MemberId>}
       </MemberInfoWrap>
     )
