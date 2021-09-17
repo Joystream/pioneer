@@ -45,6 +45,15 @@ fragment MemberWithDetailsFields on Membership {
   }
   invitees {
     ...MemberFields
+    entry {
+      ...on MembershipEntryInvited {
+        memberInvitedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+    }
   }
 }
 

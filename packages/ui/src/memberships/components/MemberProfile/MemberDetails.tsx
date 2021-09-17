@@ -84,7 +84,13 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         <SidePaneLabel text="Invited" />
         <AboutInvitesColumn>
           {(memberDetails.invitees || []).map((member) => (
-            <MemberInfo member={member} memberSize="s" showId replaceId={member.invitedBy} key={member.handle} />
+            <MemberInfo
+              member={member}
+              memberSize="s"
+              showId
+              replaceId={`Invited on: ${member.entry?.block?.timestamp}`}
+              key={member.handle}
+            />
           ))}
         </AboutInvitesColumn>
       </SidePaneRow>

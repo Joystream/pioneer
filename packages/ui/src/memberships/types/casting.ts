@@ -3,7 +3,7 @@ import { asWorkingGroupName } from '@/working-groups/types'
 
 import { MemberFieldsFragment, MemberWithDetailsFieldsFragment } from '../queries'
 
-import { MemberWithDetails, Member, MemberEntry, MemberRole } from './Member'
+import { InvitedEntry, Member, MemberEntry, MemberRole, MemberWithDetails } from './Member'
 
 export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member => ({
   id: data.id,
@@ -40,5 +40,10 @@ export const asMemberWithDetails = (fields: MemberWithDetailsFieldsFragment): Me
   about: fields.metadata.about ?? undefined,
   invitedBy: '',
   entry: asMemberEntry(fields.entry),
-  invitees: fields.invitees.map(asMember),
+  invitees: fields.invitees.map((fields) => {
+    return {
+      ...asMember(fields),
+      entry: asMemberEntry(fields.entry) as InvitedEntry,
+    }
+  }),
 })
