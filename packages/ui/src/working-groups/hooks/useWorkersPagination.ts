@@ -5,7 +5,7 @@ import { getWorkersWhere } from '@/working-groups/hooks/utils/queries'
 import { useGetWorkersCountQuery, useGetWorkersQuery } from '@/working-groups/queries'
 import { asWorkerBaseInfo } from '@/working-groups/types'
 
-export const WORKERS_PER_PAGE = 5
+export const WORKERS_PER_PAGE = 10
 
 interface UseWorkersPaginationProps extends UseWorkersProps {
   page?: number

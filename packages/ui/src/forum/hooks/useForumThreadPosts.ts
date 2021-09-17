@@ -7,7 +7,7 @@ import { isDefined } from '@/common/utils'
 import { useGetForumPostsCountQuery, useGetForumPostsIdsLazyQuery, useGetForumPostsLazyQuery } from '@/forum/queries'
 import { asForumPost, ForumPost } from '@/forum/types/ForumPost'
 
-export const POSTS_PER_PAGE = 5
+export const POSTS_PER_PAGE = 10
 
 interface ThreadPostsNavigation {
   page: string | null

@@ -22,7 +22,7 @@ const mockedPostsLazyQuery = useGetForumPostsLazyQuery as jest.Mock
 const mockedPostsIdsLazyQuery = useGetForumPostsIdsLazyQuery as jest.Mock
 const mockedPostsCountQuery = useGetForumPostsCountQuery as jest.Mock
 
-// NOTE the tests assume `POSTS_PER_PAGE` to be 5
+// NOTE the tests assume `POSTS_PER_PAGE` to be 10
 describe('useForumThreadPosts', () => {
   beforeEach(() => {
     getPosts.mockClear()
@@ -49,14 +49,14 @@ describe('useForumThreadPosts', () => {
 
     expect(mockedPostsCountQuery).toBeCalledWith({ variables: { where } })
     expect(getPostIds).not.toHaveBeenCalled()
-    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 5 } })
-    expect(result.current).toMatchObject({ page: 1, pageCount: 9, posts: [] })
+    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 10 } })
+    expect(result.current).toMatchObject({ page: 1, pageCount: 5, posts: [] })
 
     rerender(['0', { post: null, page: '3' }])
 
     expect(getPostIds).not.toHaveBeenCalled()
-    expect(getPosts).toBeCalledWith({ variables: { where, offset: 10, limit: 5 } })
-    expect(result.current).toMatchObject({ page: 3, pageCount: 9, posts: [] })
+    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 10 } })
+    expect(result.current).toMatchObject({ page: 3, pageCount: 5, posts: [] })
   })
 
   it('By Post id', () => {
@@ -67,7 +67,7 @@ describe('useForumThreadPosts', () => {
 
     expect(mockedPostsCountQuery).toBeCalledWith({ variables: { where } })
     expect(getPostIds).toBeCalledWith({ variables: { where, limit: 100000 } })
-    expect(getPosts).toBeCalledWith({ variables: { where, offset: 5, limit: 5 } })
-    expect(result.current).toMatchObject({ page: 2, pageCount: 9, posts: [] })
+    expect(getPosts).toBeCalledWith({ variables: { where, offset: 0, limit: 10 } })
+    expect(result.current).toMatchObject({ page: 1, pageCount: 5, posts: [] })
   })
 })

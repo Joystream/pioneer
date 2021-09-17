@@ -7,7 +7,7 @@ import { getOpeningsWhere } from '@/working-groups/hooks/utils/queries'
 import { useCountWorkingGroupOpeningsQuery, useGetWorkingGroupOpeningsQuery } from '../queries'
 import { asWorkingGroupOpening } from '../types'
 
-export const OPENINGS_PER_PAGE = 5
+export const OPENINGS_PER_PAGE = 10
 
 interface UseOpeningsPaginationParams extends UseOpeningsParams {
   page?: number
