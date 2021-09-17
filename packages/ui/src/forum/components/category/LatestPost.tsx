@@ -17,7 +17,7 @@ export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
 
   return (
     <PostInfoStyles>
-      <h6>{post.text.slice(0, 100)}</h6>
+      <h6>Re: {post.text.slice(0, 100)}</h6>
       <TextInlineExtraSmall as="div" lighter>
         <span>by</span>
         <MemberInfo member={post.author} size="s" memberSize="s" showGroup={false} />

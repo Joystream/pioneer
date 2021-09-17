@@ -69,12 +69,14 @@ export interface CategoryItemFieldProps {
 }
 
 const CategoryListItemTitle = styled.h5`
+  display: inline-block;
   font-size: 16px;
   line-height: 24px;
   font-family: ${Fonts.Grotesk};
   font-weight: 700;
   color: ${Colors.Black[900]};
   transition: ${Transitions.all};
+  ${Overflow.FullDots};
 
   &:before {
     content: '';
