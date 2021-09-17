@@ -83,19 +83,21 @@ const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => {
   }
 
   return (
-    <RowGapBlock gap={4}>
-      <ListHeaders $colLayout={pastWorkersColLayout}>
-        <ListHeader>Worker</ListHeader>
-        <SortHeader order={order} sort={sort} sortKey="DateStarted">
-          Date Started
-        </SortHeader>
-        <SortHeader order={order} sort={sort} sortKey="DateFinished">
-          Date Finished
-        </SortHeader>
-      </ListHeaders>
-      {loadingWorkers ? <Loading /> : <PastWorkersList workers={workers} />}
+    <>
+      <RowGapBlock gap={4}>
+        <ListHeaders $colLayout={pastWorkersColLayout}>
+          <ListHeader>Worker</ListHeader>
+          <SortHeader order={order} sort={sort} sortKey="DateStarted">
+            Date Started
+          </SortHeader>
+          <SortHeader order={order} sort={sort} sortKey="DateFinished">
+            Date Finished
+          </SortHeader>
+        </ListHeaders>
+        {loadingWorkers ? <Loading /> : <PastWorkersList workers={workers} />}
+      </RowGapBlock>
       <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-    </RowGapBlock>
+    </>
   )
 }
 
