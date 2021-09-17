@@ -44,6 +44,7 @@ export const MemberInfo = React.memo(
     member,
     isOnDark,
     showId,
+    replaceId,
     showGroup = true,
     onlyTop,
     memberSize,
@@ -109,7 +110,8 @@ export const MemberInfo = React.memo(
           )}
         </MemberHead>
         {!onlyTop && showGroup && !showId && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
-        {!onlyTop && showId && <MemberId>Worker ID: {member.id}</MemberId>}
+        {!onlyTop && showId && !replaceId && <MemberId>Worker ID: {member.id}</MemberId>}
+        {!onlyTop && showId && replaceId && <MemberId>{replaceId}</MemberId>}
       </MemberInfoWrap>
     )
   }

@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
 import { TooltipContainer } from '@/common/components/Tooltip'
-import { TextSmall } from '@/common/components/typography'
+import { TextInlineSmall } from '@/common/components/typography'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../common/constants'
 
@@ -41,7 +41,7 @@ export const MemberIcons = styled.div`
   height: fit-content;
 `
 
-export const MemberId = styled(TextSmall)`
+export const MemberId = styled(TextInlineSmall)`
   grid-area: memberroles;
   color: ${Colors.Black[400]};
 `

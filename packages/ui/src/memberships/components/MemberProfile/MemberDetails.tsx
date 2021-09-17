@@ -84,7 +84,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         <SidePaneLabel text="Invited" />
         <AboutInvitesColumn>
           {(memberDetails.invitees || []).map((member) => (
-            <MemberInfo member={member} key={member.handle} />
+            <MemberInfo member={member} memberSize="s" showId replaceId={member.invitedBy} key={member.handle} />
           ))}
         </AboutInvitesColumn>
       </SidePaneRow>
@@ -126,7 +126,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
 
 const AboutInvitesColumn = styled.div`
   display: grid;
-  grid-row-gap: 4px;
+  grid-row-gap: 8px;
   width: 100%;
   height: fit-content;
 `
