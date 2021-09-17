@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { CloseButton, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
+import { Loading } from '@/common/components/Loading'
 import { useEscape } from '@/common/hooks/useEscape'
 import { EmptyBody } from '@/proposals/modals/VoteRationale/VoteRationale'
 
@@ -52,7 +53,9 @@ export const MemberProfile = React.memo(() => {
       <SidePaneGlass onClick={onBackgroundClick}>
         <SidePane>
           <SidePaneBody>
-            <EmptyBody>Loading...</EmptyBody>
+            <EmptyBody>
+              <Loading />
+            </EmptyBody>
           </SidePaneBody>
         </SidePane>
       </SidePaneGlass>

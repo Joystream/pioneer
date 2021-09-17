@@ -29,7 +29,7 @@ describe('UpcomingWorkingGroupOpenings', () => {
   it('Loading', async () => {
     renderPage()
 
-    expect(await screen.findByRole('heading', { name: 'Loading...' })).toBeDefined()
+    expect(await screen.getByText('Loading...')).toBeDefined()
   })
 
   it('Opening loaded', async () => {
