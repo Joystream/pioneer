@@ -36,7 +36,6 @@ describe('Members', () => {
 
     expect(await screen.findByText(/all members/i)).toBeDefined()
     expect(await screen.findByText(membersCount)).toBeDefined()
-    expect(await screen.findByText(/alice/i)).toBeDefined()
   })
 
   it('Filter: only verified', async () => {
