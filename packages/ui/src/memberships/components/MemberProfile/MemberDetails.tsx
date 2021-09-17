@@ -80,7 +80,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
           )}
         </AboutInvite>
       </SidePaneRow>
-      {memberDetails.invitees.length &&
+      {memberDetails.invitees.length && (
         <SidePaneRow>
           <SidePaneLabel text="Invited" />
           <AboutInvitesColumn>
@@ -94,7 +94,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
             ))}
           </AboutInvitesColumn>
         </SidePaneRow>
-      }
+      )}
       <SidePaneRow>
         <SidePaneLabel text="Hired" />
         <SidePaneText>{hired} times</SidePaneText>
