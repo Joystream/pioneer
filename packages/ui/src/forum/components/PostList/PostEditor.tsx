@@ -1,5 +1,5 @@
 import { createType } from '@joystream/types'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { MutableRefObject, Ref, useCallback, useMemo, useRef, useState } from 'react'
 
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
@@ -16,9 +16,11 @@ interface Props {
   post: ForumPost
   onCancel: () => void
   type: PostListItemType
+  onSuccessfulEdit: (newText: string) => void
 }
 
-export const PostEditor = ({ post, onCancel, type }: Props) => {
+export const PostEditor = ({ post, onCancel, type, onSuccessfulEdit }: Props) => {
+  const editorRef = useRef<HTMLDivElement>(null)
   const { api, connectionState } = useApi()
   const [newText, setNewText] = useState(post.text)
   const { showModal } = useModal()
@@ -47,9 +49,17 @@ export const PostEditor = ({ post, onCancel, type }: Props) => {
     [api, connectionState, JSON.stringify(forumPostData), JSON.stringify(proposalPostData), type]
   )
 
+  const onFailedEdit = useCallback(() => {
+    editorRef.current?.focus()
+  }, [])
+
   return (
     <RowGapBlock gap={8}>
-      <EditorMemo setNewText={setNewText} initialText={post.text} />
+      <EditorMemo
+        setNewText={setNewText}
+        initialText={post.text}
+        editorRef={editorRef as MutableRefObject<HTMLDivElement>}
+      />
       <ButtonsGroup>
         <ButtonGhost size="medium" onClick={onCancel}>
           Cancel
@@ -64,6 +74,8 @@ export const PostEditor = ({ post, onCancel, type }: Props) => {
                 postText: newText,
                 replyTo: post.repliesTo,
                 transaction: getEditPostTransaction(newText),
+                onSuccessfulEdit,
+                onFailedEdit,
               },
             })
           }
@@ -79,10 +91,12 @@ export const PostEditor = ({ post, onCancel, type }: Props) => {
 interface MemoEditorProps {
   setNewText: (t: string) => void
   initialText: string
+  editorRef: Ref<HTMLDivElement>
 }
 
-const EditorMemo = React.memo(({ setNewText, initialText }: MemoEditorProps) => (
+const EditorMemo = React.memo(({ setNewText, initialText, editorRef }: MemoEditorProps) => (
   <CKEditor
+    ref={editorRef}
     inline
     id="editor"
     onChange={(_, editor) => setNewText(editor.getData())}

@@ -18,7 +18,7 @@ import { EditPostModalCall } from '.'
 
 export const EditPostModal = () => {
   const {
-    modalData: { postAuthor, postText, replyTo, transaction },
+    modalData: { postAuthor, postText, replyTo, transaction, onSuccessfulEdit, onFailedEdit },
     hideModal,
   } = useModal<EditPostModalCall>()
 
@@ -28,6 +28,16 @@ export const EditPostModal = () => {
   const { allAccounts } = useMyAccounts()
 
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
+
+  const hideModalWithAction = (isSuccess?: boolean) => {
+    if (isSuccess) {
+      onSuccessfulEdit(postText)
+    } else {
+      onFailedEdit()
+    }
+
+    hideModal()
+  }
 
   useEffect(() => {
     if (!state.matches('requirementsVerification')) {
@@ -40,7 +50,7 @@ export const EditPostModal = () => {
   }, [state.value, JSON.stringify(feeInfo)])
 
   if (state.matches('requirementsVerification')) {
-    return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModal} />
+    return <WaitModal title="Please wait..." description="Checking requirements" onClose={hideModalWithAction} />
   }
 
   if (state.matches('transaction') && transaction) {
@@ -48,6 +58,7 @@ export const EditPostModal = () => {
     const controllerAccount = accountOrNamed(allAccounts, postAuthor.controllerAccount, 'Controller Account')
     return (
       <PostActionSignModal
+        onClose={() => hideModalWithAction()}
         transaction={transaction}
         service={service}
         controllerAccount={controllerAccount}
@@ -60,16 +71,24 @@ export const EditPostModal = () => {
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={hideModal}>There was a problem submitting an edit to your post.</FailureModal>
+    return (
+      <FailureModal onClose={() => hideModalWithAction()}>
+        There was a problem submitting an edit to your post.
+      </FailureModal>
+    )
   }
 
   if (state.matches('success')) {
-    return <PostActionSuccessModal onClose={hideModal} text="Your edit has been submitted." />
+    return <PostActionSuccessModal onClose={() => hideModalWithAction(true)} text="Your edit has been submitted." />
   }
 
   if (state.matches('requirementsFailed') && active && feeInfo) {
     return (
-      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={feeInfo.transactionFee} />
+      <InsufficientFundsModal
+        onClose={() => hideModalWithAction()}
+        address={active.controllerAccount}
+        amount={feeInfo.transactionFee}
+      />
     )
   }
 
