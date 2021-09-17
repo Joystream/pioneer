@@ -2,19 +2,23 @@ import { createGlobalStyle } from 'styled-components'
 
 import { BorderRad, Colors, Transitions, ZIndex } from '../../constants'
 
+const EDITOR_LINE_HEIGHT = 1.5
+const EDITOR_LINE_SPACING = 1
+
 export const CKEditorStylesOverrides = createGlobalStyle`
   .ck.ck-editor {
     width: 100%;
   }
 
   .ck.ck-content {
-    line-height: 1.5em;
+    line-height: ${EDITOR_LINE_HEIGHT}em;
+    min-height: ${8 * (EDITOR_LINE_HEIGHT + EDITOR_LINE_SPACING) + EDITOR_LINE_SPACING}em;
   }
 
   .ck.ck-content p,
   .ck.ck-content ul,
   .ck.ck-content ol {
-    margin: 1em 0;
+    margin: ${EDITOR_LINE_SPACING}em 0;
   }
 
   .ck.ck-editor__editable_inline {
