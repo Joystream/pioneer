@@ -66,6 +66,9 @@ export const MemberInfo = React.memo(
       [member?.id]
     )
 
+    const showRoles = !onlyTop && showGroup && !showIdOrText
+    const showId = !onlyTop && !!showIdOrText
+
     return (
       <MemberInfoWrap
         isOnDark={isOnDark}
@@ -109,10 +112,8 @@ export const MemberInfo = React.memo(
             </MemberIcons>
           )}
         </MemberHead>
-        {!onlyTop && showGroup && !showIdOrText && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
-        {!onlyTop && !!showIdOrText && (
-          <MemberId>{isString(showIdOrText) ? showIdOrText : `Member ID: ${member.id}`}</MemberId>
-        )}
+        {showRoles && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
+        {showId && <MemberId>{isString(showIdOrText) ? showIdOrText : `Member ID: ${member.id}`}</MemberId>}
       </MemberInfoWrap>
     )
   }
