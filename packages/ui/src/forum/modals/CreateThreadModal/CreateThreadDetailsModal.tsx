@@ -46,7 +46,6 @@ export const CreateThreadDetailsModal = ({
               threadBreadcrumb={{ id: '', title: 'New Thread' }}
               nonInteractive
             />
-            <h1>General</h1>
             <RowGapBlock gap={16}>
               <TextMedium light>Please make sure your title will be clear for users</TextMedium>
               <InputComponent label="Topic of the thread" id="field-topic">

@@ -10,6 +10,8 @@ import { Editor, EventInfo } from './types'
 
 export interface CKEditorProps {
   id?: string
+  maxRows?: number
+  minRows?: number
   onChange?: (event: EventInfo, editor: Editor) => void
   onBlur?: (event: EventInfo, editor: Editor) => void
   onFocus?: (event: EventInfo, editor: Editor) => void
@@ -19,7 +21,10 @@ export interface CKEditorProps {
 }
 
 export const CKEditor = React.forwardRef(
-  ({ disabled, onBlur, onChange, onFocus, onReady, inline }: CKEditorProps, ref?: Ref<HTMLDivElement>) => {
+  (
+    { maxRows = 20, minRows = 8, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
+    ref?: Ref<HTMLDivElement>
+  ) => {
     const localRef = useRef<HTMLDivElement>(null)
     const elementRef: RefObject<HTMLDivElement> = (ref || localRef) as RefObject<HTMLDivElement>
     const editorRef = useRef<Editor | null>(null)
@@ -115,7 +120,7 @@ export const CKEditor = React.forwardRef(
 
     return (
       <>
-        <CKEditorStylesOverrides />
+        <CKEditorStylesOverrides maxRows={maxRows} minRows={minRows} />
         <div ref={elementRef} />
       </>
     )
