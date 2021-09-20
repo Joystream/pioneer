@@ -24,6 +24,7 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
   }
 
   .ck.ck-editor__editable_inline {
+    min-height: initial;
     transition: ${Transitions.all};
   }
 
