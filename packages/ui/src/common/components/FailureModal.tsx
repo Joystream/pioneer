@@ -1,7 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import React, { ReactNode } from 'react'
 
-import { toDispatchError, isErrorEvent } from '@/common/hooks/useSignAndSendTransaction'
+import { isErrorEvent, toDispatchError } from '@/common/model/apiErrors'
 
 import { FailureIcon } from './icons/FailureIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultText } from './Modal'

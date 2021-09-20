@@ -1,15 +1,14 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
-import { DispatchError, EventRecord } from '@polkadot/types/interfaces/system'
-import { ISubmittableResult, ITuple } from '@polkadot/types/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
 import BN from 'bn.js'
 import { useCallback, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
-import { info } from '@/common/logger'
-
+import { info } from '../logger'
+import { isError, isErrorEvent, toDispatchError } from '../model/apiErrors'
 import { Address } from '../types'
 
 import { useKeyring } from './useKeyring'
@@ -19,20 +18,6 @@ interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
   signer: Address
   service: ActorRef<any>
-}
-
-export const isErrorEvent = ({ event: { method } }: EventRecord) => {
-  return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
-}
-
-export const isError = (events: EventRecord[]): boolean => !!events.find(isErrorEvent)
-
-export const toDispatchError = (event: EventRecord) => {
-  const [dispatchError] = (event.event.data as unknown) as ITuple<[DispatchError]>
-
-  if (dispatchError.isModule) {
-    return dispatchError.registry.findMetaError(dispatchError.asModule)
-  }
 }
 
 const observeTransaction = (transaction: Observable<ISubmittableResult>, send: Sender<any>, fee: BN) => {
