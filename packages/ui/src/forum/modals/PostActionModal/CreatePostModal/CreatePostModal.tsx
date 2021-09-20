@@ -70,7 +70,11 @@ export const CreatePostModal = () => {
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={hideModal}>There was a problem posting your message.</FailureModal>
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was a problem posting your message.
+      </FailureModal>
+    )
   }
 
   if (state.matches('success')) {

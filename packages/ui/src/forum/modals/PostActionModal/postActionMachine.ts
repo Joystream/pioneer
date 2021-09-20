@@ -1,18 +1,23 @@
-import { createMachine } from 'xstate'
+import { EventRecord } from '@polkadot/types/interfaces/system'
+import { assign, createMachine } from 'xstate'
 
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
+
+interface TransactionContext {
+  transactionEvents?: EventRecord[]
+}
 
 type PostActionState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'transaction'; context: EmptyObject }
   | { value: 'success'; context: EmptyObject }
-  | { value: 'error'; context: EmptyObject }
+  | { value: 'error'; context: Required<TransactionContext> }
 
 export type PostActionEvent = { type: 'FAIL' } | { type: 'PASS' }
 
-export const postActionMachine = createMachine<EmptyObject, PostActionEvent, PostActionState>({
+export const postActionMachine = createMachine<TransactionContext, PostActionEvent, PostActionState>({
   initial: 'requirementsVerification',
   states: {
     requirementsVerification: {
@@ -33,6 +38,7 @@ export const postActionMachine = createMachine<EmptyObject, PostActionEvent, Pos
           {
             target: 'error',
             cond: isTransactionError,
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
         ],
       },
