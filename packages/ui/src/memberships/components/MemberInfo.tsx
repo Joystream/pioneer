@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { FounderMemberIcon, VerifiedMemberIcon, LeadMemberIcon } from '@/common/components/icons'
 import { Colors } from '@/common/constants'
-import { useModal } from '@/common/hooks/useModal'
 import { isString } from '@/common/utils'
+import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
 import {
   DarkTooltipInnerItemProps,
@@ -25,7 +25,6 @@ import {
   MemberPhoto,
   MemberPhotoContainer,
 } from './components'
-import { MemberModalCall } from './MemberProfile'
 import { MemberRoles, MemberStatusTooltip } from './MemberRoles'
 import { MemberInfoWrapProps, MemberSize } from './types'
 
@@ -55,17 +54,7 @@ export const MemberInfo = React.memo(
     skipModal,
   }: MemberInfoProps) => {
     const roleSize = size === 's' ? 'm' : size
-
-    const { showModal } = useModal()
-    const showMemberModal = useCallback(
-      (event?: React.MouseEvent<HTMLElement>) => {
-        event?.preventDefault()
-        event?.stopPropagation()
-        member && showModal<MemberModalCall>({ modal: 'Member', data: { id: member.id } })
-      },
-      [member?.id]
-    )
-
+    const showMemberModal = useShowMemberModal(member.id)
     const showRoles = !onlyTop && showGroup && !showIdOrText
     const showId = !onlyTop && !!showIdOrText
 
