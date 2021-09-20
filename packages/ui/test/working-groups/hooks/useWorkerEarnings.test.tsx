@@ -38,6 +38,11 @@ const rewardPaidEvents = [
     workerId: 'forumWorkingGroup-1',
     amount: 2300,
   },
+  {
+    ...baseEvent,
+    workerId: 'forumWorkingGroup-2',
+    amount: 2399,
+  },
 ]
 
 describe('useWorkerEarnings', () => {
@@ -49,6 +54,7 @@ describe('useWorkerEarnings', () => {
     seedOpening(OPENING_DATA, server.server)
     seedApplication({ ...APPLICATION_DATA, applicantId: '0' }, server.server)
     seedWorker(WORKER_DATA, server.server)
+    seedWorker({ ...WORKER_DATA, id: 'forumWorkingGroup-2' }, server.server)
     rewardPaidEvents.map((event) => seedEvent(event, 'RewardPaidEvent', server.server))
   })
 
