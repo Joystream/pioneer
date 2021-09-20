@@ -12,6 +12,7 @@ describe('sortMemberships', () => {
     roles: [],
     isVerified: true,
     inviteCount: 0,
+    createdAt: '',
   }
 
   describe('By handle', () => {

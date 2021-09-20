@@ -133,7 +133,10 @@ export const WorkingGroupOpening = () => {
             </BadgesRow>
             <Statistics>
               <DurationStatistics title="Time Left" value={opening.expectedEnding} />
-              <TokenValueStat title="Reward per 3600 blocks" value={opening.reward.payout} />
+              <TokenValueStat
+                title={`Reward per ${opening.reward.blockInterval} blocks`}
+                value={opening.reward.payout}
+              />
               <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.budget} />
               <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} />
             </Statistics>

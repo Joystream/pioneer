@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 
+import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ContentWithSidepanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -27,8 +28,8 @@ export const AboutTab = ({ workingGroup }: Props) => {
       <MainPanel ref={sideNeighborRef}>
         <Statistics>
           <TokenValueStat title="Spending" tooltipText="Lorem ipsum..." value={statistics.spending} />
-          <NumericValueStat title="Total hired" value={statistics.totalHired ?? 'Loading...'} />
-          <NumericValueStat title="Total fired" value={statistics.totalFired ?? 'Loading...'} />
+          {statistics.totalHired ? <NumericValueStat title="Total hired" value={statistics.totalHired} /> : <Loading />}
+          {statistics.totalFired ? <NumericValueStat title="Total fired" value={statistics.totalFired} /> : <Loading />}
         </Statistics>
         <RowGapBlock gap={32}>
           {workingGroup.description && (

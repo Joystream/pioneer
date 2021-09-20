@@ -49,7 +49,7 @@ export const ProposalListItem = ({ proposal, isPast }: ProposalListItemProps) =>
           <TooltipDefault />
         </Tooltip>
       </StageField>
-      <MemberInfo member={proposal.proposer} memberSize="s" showId />
+      <MemberInfo member={proposal.proposer} memberSize="s" showIdOrText />
     </ProposalItem>
   )
 }

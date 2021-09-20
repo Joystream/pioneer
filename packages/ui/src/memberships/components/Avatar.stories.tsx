@@ -22,5 +22,6 @@ Default.args = {
     isFoundingMember: false,
     roles: [],
     inviteCount: 0,
+    createdAt: '',
   },
 }

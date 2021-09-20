@@ -2,7 +2,7 @@ export type MemberSize = 's' | 'm' | 'l'
 
 export interface MemberInfoWrapProps {
   isOnDark?: boolean
-  showId?: boolean
+  showIdOrText?: true | string
   memberSize?: MemberSize
   showGroup?: boolean
   skipModal?: boolean

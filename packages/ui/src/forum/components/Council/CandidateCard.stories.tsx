@@ -31,6 +31,7 @@ Default.args = {
     isFoundingMember: true,
     roles: [],
     inviteCount: 0,
+    createdAt: '',
   },
   image: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Bliss_location%2C_Sonoma_Valley_in_2006.jpg',
   voted: true,

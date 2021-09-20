@@ -22,26 +22,29 @@ export interface Member {
   isFoundingMember: boolean
   invitedBy?: ID
   referredBy?: ID
+  createdAt: string
 }
 
-type GenesisEntry = {
+export type GenesisEntry = {
   type: 'genesis'
 }
 
-type InvitedEntry = {
+export type InvitedEntry = {
   type: 'invited'
   block: Block
 }
 
-type PaidEntry = {
+export type PaidEntry = {
   type: 'paid'
   block: Block
 }
 
 export type MemberEntry = GenesisEntry | InvitedEntry | PaidEntry
+// Temporary fix for: https://github.com/Joystream/pioneer/issues/1493
+export type InvitedMember = Member // & { entry: InvitedEntry }
 
 export interface MemberWithDetails extends Member {
   about?: string
   entry: MemberEntry
-  invitees: Member[]
+  invitees: InvitedMember[]
 }
