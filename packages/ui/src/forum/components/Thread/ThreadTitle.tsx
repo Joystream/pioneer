@@ -32,7 +32,6 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
 
   const isMyThread = thread && myMembers.find((member) => member.id === thread.authorId)
 
-  const inputRef = useRef<HTMLInputElement>(null)
   const formInitializer: TitleFormFields = {
     title: thread.title,
     initialTitle: thread.title,
@@ -53,7 +52,6 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
       data: {
         thread,
         newTitle,
-        onFailedEdit,
         onSuccessfulEdit,
       },
     })
@@ -64,10 +62,6 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
     setEditTitle(false)
   }, [])
 
-  const onFailedEdit = useCallback(() => {
-    inputRef.current?.focus()
-  }, [])
-
   return (
     <>
       {!isEditTitle && <PageTitle>{fields.initialTitle}</PageTitle>}
@@ -76,7 +70,6 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
           <EditTitleInputComponent inputSize="m" onSubmit={() => submitTitle(fields.title)}>
             <InputText
               id="thread-title"
-              ref={inputRef}
               value={fields.title}
               required
               onChange={(event) => changeField('title', event.target.value)}
@@ -87,7 +80,7 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
               </EditAction>
               <EditAction
                 onClick={() => submitTitle(fields.title)}
-                disabled={fields.title === thread.title}
+                disabled={fields.title === fields.initialTitle}
                 size="small"
                 square
               >

@@ -141,11 +141,8 @@ export const InputComponent = React.memo(
   }
 )
 
-export const InputText = React.forwardRef((props: InputProps, ref?: Ref<HTMLInputElement>) => {
-  const localRef = useRef<HTMLInputElement>(null)
-  const elementRef: RefObject<HTMLInputElement> = (ref ?? localRef) as RefObject<HTMLInputElement>
-
-  return <Input ref={elementRef} name={props.id} type="text" autoComplete="off" {...props} />
+export const InputText = React.memo((props: InputProps) => {
+  return <Input name={props.id} type="text" autoComplete="off" {...props} />
 })
 
 export const InputNumber = React.memo(

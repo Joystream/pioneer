@@ -8,6 +8,5 @@ export type EditThreadTitleModalCall = ModalWithDataCall<
     thread: ForumThreadWithDetails
     newTitle: string
     onSuccessfulEdit: (newTitle: string) => void
-    onFailedEdit: () => void
   }
 >

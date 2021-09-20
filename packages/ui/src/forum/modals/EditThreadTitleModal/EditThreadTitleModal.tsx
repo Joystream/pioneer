@@ -12,15 +12,13 @@ import { editThreadTitleMachine } from './machine'
 export const EditThreadTitleModal = () => {
   const [state] = useMachine(editThreadTitleMachine)
   const {
-    modalData: { thread, newTitle, onSuccessfulEdit, onFailedEdit },
+    modalData: { thread, newTitle, onSuccessfulEdit },
     hideModal,
   } = useModal<EditThreadTitleModalCall>()
 
   const hideModalWithAction = (isSuccess?: boolean) => {
     if (isSuccess) {
       onSuccessfulEdit(newTitle)
-    } else {
-      onFailedEdit()
     }
 
     hideModal()
