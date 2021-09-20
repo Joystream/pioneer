@@ -21,11 +21,19 @@ interface UseSignAndSendTransactionParams {
   service: ActorRef<any>
 }
 
-const isErrorEvent = ({ event: { method } }: EventRecord) => {
+export const isErrorEvent = ({ event: { method } }: EventRecord) => {
   return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
 }
 
 export const isError = (events: EventRecord[]): boolean => !!events.find(isErrorEvent)
+
+export const toDispatchError = (event: EventRecord) => {
+  const [dispatchError] = (event.event.data as unknown) as ITuple<[DispatchError]>
+
+  if (dispatchError.isModule) {
+    return dispatchError.registry.findMetaError(dispatchError.asModule)
+  }
+}
 
 const observeTransaction = (transaction: Observable<ISubmittableResult>, send: Sender<any>, fee: BN) => {
   const statusCallback = (result: ISubmittableResult) => {
@@ -50,16 +58,10 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
         info('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
 
         if (isErrorEvent(event)) {
-          const [dispatchError] = (data as unknown) as ITuple<[DispatchError]>
-          let errorType = dispatchError.type
+          const error = toDispatchError(event)
+          const message = error ? `${error.section}.${error.name}` : 'Unknown'
 
-          if (dispatchError.isModule) {
-            const mod = dispatchError.asModule
-            const error = dispatchError.registry.findMetaError(mod)
-            errorType = `${error.section}.${error.name}`
-          }
-
-          info(`\t\t Error: %c${errorType}`, 'color: red')
+          info(`\t\t Error: %c${message}`, 'color: red')
         }
       })
       info(JSON.stringify(events))
