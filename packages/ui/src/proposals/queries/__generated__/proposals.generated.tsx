@@ -104,9 +104,9 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'SetMaxValidatorCountProposalDetails' }
     | {
         __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
-        stakeAmount: number
+        stakeAmount: any
         unstakingPeriod: number
-        rewardPerBlock: number
+        rewardPerBlock: any
         metadata?: Types.Maybe<{ __typename: 'WorkingGroupOpeningMetadata'; description?: Types.Maybe<string> }>
         group?: Types.Maybe<{ __typename: 'WorkingGroup'; id: string; name: string }>
       }
@@ -114,7 +114,7 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | {
         __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
-        amount: number
+        amount: any
         lead?: Types.Maybe<{
           __typename: 'Worker'
           createdAt: any
@@ -124,7 +124,7 @@ export type ProposalWithDetailsFieldsFragment = {
       }
     | {
         __typename: 'SlashWorkingGroupLeadProposalDetails'
-        amount: number
+        amount: any
         lead?: Types.Maybe<{
           __typename: 'Worker'
           createdAt: any

@@ -45,23 +45,7 @@ export type MemberWithDetailsFieldsFragment = {
         }>
       }
     | { __typename: 'MembershipEntryGenesis'; phantom?: Types.Maybe<number> }
-  invitees: Array<
-    {
-      __typename: 'Membership'
-      entry:
-        | { __typename: 'MembershipEntryPaid' }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: Types.Maybe<{
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            }>
-          }
-        | { __typename: 'MembershipEntryGenesis' }
-    } & MemberFieldsFragment
-  >
+  invitees: Array<{ __typename: 'Membership' } & MemberFieldsFragment>
 } & MemberFieldsFragment
 
 export type GetMembersQueryVariables = Types.Exact<{
@@ -167,15 +151,6 @@ export const MemberWithDetailsFieldsFragmentDoc = gql`
     }
     invitees {
       ...MemberFields
-      entry {
-        ... on MembershipEntryInvited {
-          memberInvitedEvent {
-            createdAt
-            inBlock
-            network
-          }
-        }
-      }
     }
   }
   ${MemberFieldsFragmentDoc}
