@@ -12,6 +12,10 @@ import { CKEditor, CKEditorProps } from './CKEditor'
 export default {
   title: 'Common/Forms/CKEditor',
   component: CKEditor,
+  argTypes: {
+    minRows: { control: { type: 'range', min: 1, max: 30 } },
+    maxRows: { control: { type: 'range', min: 1, max: 30 } },
+  },
 } as Meta
 
 const Template: Story<CKEditorProps> = (args) => (
@@ -30,6 +34,8 @@ export const ClassicEditor = Template.bind({})
 export const InlineEditor = Template.bind({})
 
 ClassicEditor.args = {
+  minRows: 8,
+  maxRows: 20,
   onChange: (event, editor) => info(editor.getData()),
 }
 

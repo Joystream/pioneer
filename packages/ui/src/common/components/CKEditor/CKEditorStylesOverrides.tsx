@@ -5,14 +5,15 @@ import { BorderRad, Colors, Transitions, ZIndex } from '../../constants'
 const EDITOR_LINE_HEIGHT = 1.5
 const EDITOR_LINE_SPACING = 1
 
-export const CKEditorStylesOverrides = createGlobalStyle`
+export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxRows: number }>`
   .ck.ck-editor {
     width: 100%;
   }
 
   .ck.ck-content {
     line-height: ${EDITOR_LINE_HEIGHT}em;
-    min-height: ${8 * (EDITOR_LINE_HEIGHT + EDITOR_LINE_SPACING) + EDITOR_LINE_SPACING}em;
+    max-height: ${({ maxRows }) => maxRows * (EDITOR_LINE_HEIGHT + EDITOR_LINE_SPACING) + EDITOR_LINE_SPACING}em;
+    min-height: ${({ minRows }) => minRows * (EDITOR_LINE_HEIGHT + EDITOR_LINE_SPACING) + EDITOR_LINE_SPACING}em;
   }
 
   .ck.ck-content p,
