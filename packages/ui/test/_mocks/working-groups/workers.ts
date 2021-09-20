@@ -14,7 +14,6 @@ export const WORKER: WorkerWithDetails = {
   },
   isLead: false,
   reward: getReward(2, 'forum'),
-  earnedTotal: 2000,
   stake: 2000,
   minStake: 2000,
   owedReward: 1000,
