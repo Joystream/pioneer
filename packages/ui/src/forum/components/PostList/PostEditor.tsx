@@ -74,8 +74,8 @@ export const PostEditor = ({ post, onCancel, type, onSuccessfulEdit }: Props) =>
                 postText: newText,
                 replyTo: post.repliesTo,
                 transaction: getEditPostTransaction(newText),
-                onSuccessfulEdit,
-                onFailedEdit,
+                onSuccess: onSuccessfulEdit,
+                onFail: onFailedEdit,
               },
             })
           }

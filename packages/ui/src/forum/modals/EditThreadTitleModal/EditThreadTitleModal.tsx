@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
 import { useModal } from '@/common/hooks/useModal'
@@ -12,39 +12,29 @@ import { editThreadTitleMachine } from './machine'
 export const EditThreadTitleModal = () => {
   const [state] = useMachine(editThreadTitleMachine)
   const {
-    modalData: { thread, newTitle, onSuccessfulEdit },
+    modalData: { thread, newTitle, onSuccess },
     hideModal,
   } = useModal<EditThreadTitleModalCall>()
 
-  const hideModalWithAction = (isSuccess?: boolean) => {
-    if (isSuccess) {
-      onSuccessfulEdit(newTitle)
-    }
-
+  const hideModalAfterSuccess = useCallback(() => {
+    onSuccess(newTitle)
     hideModal()
-  }
+  }, [])
 
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
 
     return (
-      <EditThreadTitleSignModal
-        onClose={() => hideModalWithAction()}
-        thread={thread}
-        newTitle={newTitle}
-        service={transactionService}
-      />
+      <EditThreadTitleSignModal onClose={hideModal} thread={thread} newTitle={newTitle} service={transactionService} />
     )
   }
 
   if (state.matches('success')) {
-    return <EditTreadTitleSuccessModal onClose={() => hideModalWithAction(true)} />
+    return <EditTreadTitleSuccessModal onClose={hideModalAfterSuccess} />
   }
 
   if (state.matches('error')) {
-    return (
-      <FailureModal onClose={() => hideModalWithAction()}>There was a problem while saving thread title.</FailureModal>
-    )
+    return <FailureModal onClose={hideModal}>There was a problem while saving thread title.</FailureModal>
   }
 
   return null

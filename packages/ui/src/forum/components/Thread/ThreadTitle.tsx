@@ -52,7 +52,7 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
       data: {
         thread,
         newTitle,
-        onSuccessfulEdit,
+        onSuccess: onSuccessfulEdit,
       },
     })
   }, [])

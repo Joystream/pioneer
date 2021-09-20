@@ -18,7 +18,7 @@ import { EditPostModalCall } from '.'
 
 export const EditPostModal = () => {
   const {
-    modalData: { postAuthor, postText, replyTo, transaction, onSuccessfulEdit, onFailedEdit },
+    modalData: { postAuthor, postText, replyTo, transaction, onSuccess, onFail },
     hideModal,
   } = useModal<EditPostModalCall>()
 
@@ -31,9 +31,9 @@ export const EditPostModal = () => {
 
   const hideModalWithAction = (isSuccess?: boolean) => {
     if (isSuccess) {
-      onSuccessfulEdit(postText)
+      onSuccess(postText)
     } else {
-      onFailedEdit()
+      onFail()
     }
 
     hideModal()

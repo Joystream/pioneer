@@ -7,6 +7,6 @@ export type EditThreadTitleModalCall = ModalWithDataCall<
   {
     thread: ForumThreadWithDetails
     newTitle: string
-    onSuccessfulEdit: (newTitle: string) => void
+    onSuccess: (newTitle: string) => void
   }
 >
