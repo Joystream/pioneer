@@ -1,4 +1,4 @@
-import React, { Ref, RefObject, useRef } from 'react'
+import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
