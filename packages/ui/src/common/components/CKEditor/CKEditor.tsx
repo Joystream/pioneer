@@ -26,7 +26,7 @@ export const CKEditor = React.forwardRef(
     ref?: Ref<HTMLDivElement>
   ) => {
     const localRef = useRef<HTMLDivElement>(null)
-    const elementRef: RefObject<HTMLDivElement> = (ref || localRef) as RefObject<HTMLDivElement>
+    const elementRef: RefObject<HTMLDivElement> = (ref ?? localRef) as RefObject<HTMLDivElement>
     const editorRef = useRef<Editor | null>(null)
 
     useEffect(() => {

@@ -11,27 +11,42 @@ import { editThreadTitleMachine } from './machine'
 
 export const EditThreadTitleModal = () => {
   const [state] = useMachine(editThreadTitleMachine)
-  const { modalData } = useModal<EditThreadTitleModalCall>()
+  const {
+    modalData: { thread, newTitle, onSuccessfulEdit, onFailedEdit },
+    hideModal,
+  } = useModal<EditThreadTitleModalCall>()
+
+  const hideModalWithAction = (isSuccess?: boolean) => {
+    if (isSuccess) {
+      onSuccessfulEdit(newTitle)
+    } else {
+      onFailedEdit()
+    }
+
+    hideModal()
+  }
 
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
 
     return (
       <EditThreadTitleSignModal
-        onClose={modalData.onClose}
-        thread={modalData.thread}
-        newTitle={modalData.newTitle}
+        onClose={() => hideModalWithAction()}
+        thread={thread}
+        newTitle={newTitle}
         service={transactionService}
       />
     )
   }
 
   if (state.matches('success')) {
-    return <EditTreadTitleSuccessModal onClose={modalData.onClose} />
+    return <EditTreadTitleSuccessModal onClose={() => hideModalWithAction(true)} />
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={modalData.onClose}>There was a problem while saving thread title.</FailureModal>
+    return (
+      <FailureModal onClose={() => hideModalWithAction()}>There was a problem while saving thread title.</FailureModal>
+    )
   }
 
   return null
