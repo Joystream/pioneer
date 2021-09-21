@@ -11,8 +11,7 @@ import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useForumCategoryBreadcrumbs } from '@/forum/hooks/useForumCategoryBreadcrumbs'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-
-import { SwitchMemberModalCall } from '../../../memberships/modals/SwitchMemberModal'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 import { CreateThreadModalCall } from '.'
 import { CreateThreadDetailsModal } from './CreateThreadDetailsModal'
@@ -86,7 +85,11 @@ export const CreateThreadModal = () => {
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={hideModal}>There was a problem with creating your forum thread.</FailureModal>
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was a problem with creating your forum thread.
+      </FailureModal>
+    )
   }
 
   if (state.matches('requirementsFailed') && member && minimumTransactionCost) {
