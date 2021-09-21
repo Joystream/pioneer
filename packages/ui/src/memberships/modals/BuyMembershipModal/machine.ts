@@ -5,10 +5,9 @@ import { assign, createMachine } from 'xstate'
 
 import { getEventParam } from '@/common/model/JoystreamNode'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import { EmptyObject } from '@/common/types'
 
 import { MemberFormFields } from './BuyMembershipFormModal'
-
-type EmptyObject = Record<string, never>
 
 interface BuyMembershipContext {
   form?: MemberFormFields

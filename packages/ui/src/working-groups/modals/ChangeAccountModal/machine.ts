@@ -2,9 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
-import { Address } from '../../../common/types'
-
-type EmptyObject = Record<string, never>
+import { Address, EmptyObject } from '../../../common/types'
 
 interface ChangeAccountContext {
   selectedAddress?: Address

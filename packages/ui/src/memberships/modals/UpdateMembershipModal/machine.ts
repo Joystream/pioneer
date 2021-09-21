@@ -1,11 +1,11 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
+import { EmptyObject } from '@/common/types'
+
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
 
 import { UpdateMemberForm } from './types'
-
-type EmptyObject = Record<string, never>
 
 interface UpdateMembershipContext {
   form?: UpdateMemberForm

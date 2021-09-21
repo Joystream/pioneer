@@ -3,10 +3,9 @@ import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import { EmptyObject } from '@/common/types'
 
 import { Account } from '../../types'
-
-type EmptyObject = Record<string, never>
 
 interface TransferDetailsContext {
   from?: Account

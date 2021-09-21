@@ -1,9 +1,9 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
+import { EmptyObject } from '@/common/types'
 
-type EmptyObject = Record<string, never>
+import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
 
 interface LeaveRoleContext {
   rationale?: string
