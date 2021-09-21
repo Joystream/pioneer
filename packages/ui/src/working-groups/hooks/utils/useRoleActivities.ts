@@ -28,7 +28,9 @@ export const useRoleActivities = (worker?: WorkerWithDetails | null) => {
             ...data.terminatedWorkerEvents.map(asWorkerTerminatedActivity),
             ...data.workerExitedEvents.map(asWorkerExitedActivity),
             ...data.workerStartedLeavingEvents.map(asWorkerStartedLeavingActivity),
-          ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+          ]
+            .flat()
+            .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         : [],
     [data, loading]
   )

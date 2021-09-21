@@ -36,7 +36,9 @@ export const useMemberNotifications = () => {
             ...data.terminatedWorkerEvents.map(asWorkerTerminatedActivity),
             ...data.workerRewardAccountUpdatedEvents.map(asWorkerRewardAccountUpdatedActivity),
             ...data.workerRewardAmountUpdatedEvents.map(asWorkerRewardAmountUpdatedActivity),
-          ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+          ]
+            .flat()
+            .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         : [],
     [loading, data, workerIds.length]
   )
