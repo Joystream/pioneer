@@ -1,3 +1,4 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
@@ -6,17 +7,23 @@ import { MemberFormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 type EmptyObject = Record<string, never>
 
-interface InviteMemberContext {
+interface FormContext {
   form?: MemberFormFields
 }
+
+interface TransactionContext extends FormContext {
+  transactionEvents?: EventRecord[]
+}
+
+type Context = FormContext & TransactionContext
 
 type InviteMemberState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'prepare'; context: EmptyObject }
-  | { value: 'transaction'; context: Required<InviteMemberContext> }
-  | { value: 'success'; context: Required<InviteMemberContext> }
-  | { value: 'error'; context: Required<InviteMemberContext> }
+  | { value: 'transaction'; context: Required<FormContext> }
+  | { value: 'success'; context: Required<FormContext> }
+  | { value: 'error'; context: Required<Context> }
 
 export type InviteMemberEvent =
   | { type: 'PASS' }
@@ -25,7 +32,7 @@ export type InviteMemberEvent =
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
 
-export const inviteMemberMachine = createMachine<InviteMemberContext, InviteMemberEvent, InviteMemberState>({
+export const inviteMemberMachine = createMachine<Context, InviteMemberEvent, InviteMemberState>({
   initial: 'requirementsVerification',
   states: {
     requirementsVerification: {
@@ -55,6 +62,7 @@ export const inviteMemberMachine = createMachine<InviteMemberContext, InviteMemb
           {
             target: 'error',
             cond: isTransactionError,
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
         ],
       },

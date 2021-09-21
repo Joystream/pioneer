@@ -64,7 +64,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
 
   if (state.matches('error')) {
     return (
-      <FailureModal onClose={onClose}>
+      <FailureModal onClose={onClose} events={state.context.transactionEvents}>
         There was a problem with creating a membership for {state.context.form.name}.
       </FailureModal>
     )
