@@ -93,8 +93,6 @@ export const AddNewProposalModal = () => {
     if (activeMember && api) {
       const txSpecificParameters = getSpecificParameters(api, state as AddNewProposalMachineState)
 
-      console.log(stakingAccountInfo)
-
       return api.tx.utility.batch([
         api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
         api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
