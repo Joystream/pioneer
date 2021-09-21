@@ -22,7 +22,7 @@ const knownRoutes = [
   { path: ForumRoutes.topThreads, breadcrumb: 'Top Threads' },
 ]
 
-const excludePaths = ['/', WorkingGroupsRoutes.upcomingOpenings]
+const excludePaths = ['/', WorkingGroupsRoutes.upcomingOpenings, ProposalsRoutes.preview]
 
 export const breadcrumbsOptions: BreadcrumbsOptions = { knownRoutes, excludePaths }
 
