@@ -167,7 +167,7 @@ export type AddNewProposalEvent =
   | SetRuntime
   | SetSlashingAmount
   | { type: 'BOUNDED' }
-  | { type: 'UNBOUNDED' }
+  | { type: 'REQUIRES_STAKING_CANDIDATE' }
 
 export type AddNewProposalMachineState = State<
   AddNewProposalContext,
@@ -477,7 +477,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       id: 'beforeTransaction',
       on: {
         BOUNDED: 'transaction',
-        UNBOUNDED: 'bindStakingAccount',
+        REQUIRES_STAKING_CANDIDATE: 'bindStakingAccount',
       },
     },
     bindStakingAccount: {

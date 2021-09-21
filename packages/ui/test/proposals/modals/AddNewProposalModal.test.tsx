@@ -1,4 +1,4 @@
-import { registry } from '@joystream/types'
+import { createType, registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -41,6 +41,7 @@ import {
   stubApi,
   stubDefaultBalances,
   stubProposalConstants,
+  stubQuery,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
@@ -73,6 +74,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   let useAccounts: UseAccounts
+  let createProposalTx: any
   let batchTx: any
   let bindAccountTx: any
 
@@ -94,8 +96,17 @@ describe('UI: AddNewProposalModal', () => {
 
     stubDefaultBalances(api)
     stubProposalConstants(api)
-    stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
+    createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
+    stubQuery(
+      api,
+      'members.stakingAccountIdMemberStatus',
+      createType('StakingAccountMemberBinding', {
+        member_id: 0,
+        confirmed: false,
+      })
+    )
+    stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
   })
@@ -469,7 +480,7 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     describe('Authorize', () => {
-      describe('Staking account is not bound yet', () => {
+      describe('Staking account not bound nor staking candidate', () => {
         beforeEach(async () => {
           await finishWarning()
           await finishProposalType('fundingRequest')
@@ -526,11 +537,17 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
-      describe('Staking account is already bounded', () => {
+      describe('Staking account is candidate', () => {
         beforeEach(async () => {
-          const member = server.server?.schema.find('Membership', '0') as any
-          member.boundAccounts = [alice.address]
-          await member.save()
+          stubQuery(
+            api,
+            'members.stakingAccountIdMemberStatus',
+            createType('StakingAccountMemberBinding', {
+              member_id: createType('MemberId', 0),
+              confirmed: createType('bool', false),
+            })
+          )
+          stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
 
           await finishWarning()
           await finishProposalType('fundingRequest')
@@ -560,6 +577,53 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal failure', async () => {
           stubTransactionFailure(batchTx)
+
+          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+
+          expect(await screen.findByText('Failure')).toBeDefined()
+        })
+      })
+
+      describe('Staking account is confirmed', () => {
+        beforeEach(async () => {
+          stubQuery(
+            api,
+            'members.stakingAccountIdMemberStatus',
+            createType('StakingAccountMemberBinding', {
+              member_id: createType('MemberId', 0),
+              confirmed: createType('bool', true),
+            })
+          )
+          stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
+
+          await finishWarning()
+          await finishProposalType('fundingRequest')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+          await SpecificParameters.FundingRequest.finish(100, 'bob')
+        })
+
+        it('Create proposal step', async () => {
+          expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        })
+
+        it('Create proposal success', async () => {
+          stubTransactionSuccess(
+            createProposalTx,
+            ['EventParams', registry.createType('ProposalId', 1337)],
+            'proposalsEngine',
+            'ProposalCreated'
+          )
+
+          fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
+
+          expect(screen.queryByText('See my Proposal')).not.toBeNull()
+        })
+
+        it('Create proposal failure', async () => {
+          stubTransactionFailure(createProposalTx)
 
           fireEvent.click(await screen.getByText(/^Sign transaction and Create$/i))
 
