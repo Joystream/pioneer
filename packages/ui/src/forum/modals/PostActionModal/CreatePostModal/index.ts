@@ -12,5 +12,6 @@ export type CreatePostModalCall = ModalWithDataCall<
     replyTo?: ForumPost
     isEditable: boolean
     transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
+    onSuccess: () => void
   }
 >

@@ -20,6 +20,7 @@ interface ThreadTitleProps {
 
 interface TitleFormFields {
   title: string
+  initialTitle: string
 }
 
 const FormSchema = Yup.object().shape({})
@@ -27,41 +28,46 @@ const FormSchema = Yup.object().shape({})
 export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
   const { members: myMembers } = useMyMemberships()
   const [isEditTitle, setEditTitle] = useState<boolean>(false)
-  const { showModal, hideModal } = useModal<EditThreadTitleModalCall>()
+  const { showModal } = useModal<EditThreadTitleModalCall>()
 
   const isMyThread = thread && myMembers.find((member) => member.id === thread.authorId)
 
   const formInitializer: TitleFormFields = {
     title: thread.title,
+    initialTitle: thread.title,
   }
   const { fields, changeField } = useForm<TitleFormFields>(formInitializer, FormSchema)
 
   const toggleEditTitle = useCallback(() => {
     if (isEditTitle) {
-      changeField('title', thread.title)
+      changeField('title', fields.initialTitle)
     }
 
     setEditTitle(!isEditTitle)
-  }, [isEditTitle])
+  }, [isEditTitle, fields.initialTitle])
 
-  const submitTitle = useCallback(() => {
+  const submitTitle = useCallback((newTitle: string) => {
     showModal<EditThreadTitleModalCall>({
       modal: 'EditThreadTitleModal',
       data: {
         thread,
-        newTitle: fields.title,
-        onClose: hideModal,
+        newTitle,
+        onSuccess: onSuccessfulEdit,
       },
     })
-    toggleEditTitle()
+  }, [])
+
+  const onSuccessfulEdit = useCallback((newTitle: string) => {
+    changeField('initialTitle', newTitle)
+    setEditTitle(false)
   }, [])
 
   return (
     <>
-      {!isEditTitle && <PageTitle>{thread.title}</PageTitle>}
+      {!isEditTitle && <PageTitle>{fields.initialTitle}</PageTitle>}
       {isEditTitle && (
         <EditTitleWrapper>
-          <EditTitleInputComponent inputSize="m" onSubmit={submitTitle}>
+          <EditTitleInputComponent inputSize="m" onSubmit={() => submitTitle(fields.title)}>
             <InputText
               id="thread-title"
               value={fields.title}
@@ -72,7 +78,12 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
               <EditAction onClick={toggleEditTitle} size="small" square>
                 <CrossIcon />
               </EditAction>
-              <EditAction onClick={() => submitTitle()} disabled={fields.title === thread.title} size="small" square>
+              <EditAction
+                onClick={() => submitTitle(fields.title)}
+                disabled={fields.title === fields.initialTitle}
+                size="small"
+                square
+              >
                 <CheckboxIcon />
               </EditAction>
             </ButtonsGroup>
@@ -100,6 +111,7 @@ const EditAction = styled(ButtonPrimary)`
       stroke-width: 1px;
     }
   }
+
   ${ButtonInnerWrapper} > svg {
     width: 16px;
     height: 16px;

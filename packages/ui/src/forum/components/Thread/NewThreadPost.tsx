@@ -1,6 +1,6 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useState } from 'react'
+import React, { Ref, RefObject, useCallback, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -33,6 +33,14 @@ export const NewThreadPost = React.forwardRef(
     const [isEditable, setEditable] = useState(false)
     const { active } = useMyMemberships()
     const { showModal } = useModal()
+    const [editorRef, setEditorRef] = useState<RefObject<HTMLDivElement>>(useRef<HTMLDivElement>(null))
+
+    const onSuccess = useCallback(() => {
+      setText('')
+      setEditorRef({ ...editorRef })
+      setEditable(false)
+      removeReply()
+    }, [])
 
     if (!active) {
       return <TextBig ref={ref}>Pick an active membership to post in this thread</TextBig>
@@ -59,7 +67,7 @@ export const NewThreadPost = React.forwardRef(
           </Reply>
         )}
         <InputComponent inputSize="auto">
-          <EditorMemo setNewText={setText} />
+          <EditorMemo setNewText={setText} editorRef={editorRef} />
         </InputComponent>
         <ButtonsGroup>
           <ButtonPrimary
@@ -69,7 +77,7 @@ export const NewThreadPost = React.forwardRef(
               transaction &&
                 showModal<CreatePostModalCall>({
                   modal: 'CreatePost',
-                  data: { postText, replyTo, transaction, isEditable },
+                  data: { postText, replyTo, transaction, isEditable, onSuccess },
                 })
             }}
             disabled={postText === ''}
@@ -87,11 +95,13 @@ export const NewThreadPost = React.forwardRef(
 
 interface MemoEditorProps {
   setNewText: (t: string) => void
+  editorRef: Ref<HTMLDivElement>
 }
 
-const EditorMemo = React.memo(({ setNewText }: MemoEditorProps) => (
+const EditorMemo = React.memo(({ setNewText, editorRef }: MemoEditorProps) => (
   <CKEditor
     id="newPostEditor"
+    ref={editorRef}
     onChange={(_, editor) => setNewText(editor.getData())}
     onReady={(editor) => editor.setData('')}
   />

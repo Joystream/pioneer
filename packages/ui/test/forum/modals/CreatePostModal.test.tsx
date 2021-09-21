@@ -39,6 +39,7 @@ describe('UI: CreatePostModal', () => {
     transaction: api.api.tx.forum.addPost(1, 1, 1, '', false),
     postText: 'I disagree',
     isEditable: false,
+    onSuccess: () => true,
   }
 
   const useModal: UseModal<any> = {

@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -20,9 +20,14 @@ import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
   const {
-    modalData: { postText, replyTo, transaction, isEditable },
+    modalData: { postText, replyTo, transaction, isEditable, onSuccess },
     hideModal,
   } = useModal<CreatePostModalCall>()
+
+  const hideModalAfterSuccess = useCallback(() => {
+    onSuccess()
+    hideModal()
+  }, [])
 
   const [state, send] = useMachine(postActionMachine)
 
@@ -74,7 +79,7 @@ export const CreatePostModal = () => {
   }
 
   if (state.matches('success')) {
-    return <PostActionSuccessModal onClose={hideModal} text="Your post has been submitted." />
+    return <PostActionSuccessModal onClose={hideModalAfterSuccess} text="Your post has been submitted." />
   }
 
   if (state.matches('requirementsFailed') && active && feeInfo) {
