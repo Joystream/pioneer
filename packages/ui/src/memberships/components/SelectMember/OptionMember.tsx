@@ -7,4 +7,4 @@ interface Props {
   member: Member
 }
 
-export const OptionMember = ({ member }: Props) => <MemberInfo member={member} />
+export const OptionMember = ({ member }: Props) => <MemberInfo member={member} skipModal />
