@@ -64,6 +64,6 @@ export const SelectMember = ({ onChange, filter, selected, disabled }: Props) =>
 
 const renderSelected = (member: Member) => (
   <SelectedOption>
-    <MemberInfo member={member} />
+    <MemberInfo member={member} skipModal />
   </SelectedOption>
 )
