@@ -13,6 +13,7 @@ import { BorderRad, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { Member } from '@/memberships/types'
 import { workerRoleTitle } from '@/working-groups/helpers'
+import { useWorkerEarnings } from '@/working-groups/hooks/useWorkerEarnings'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { WorkerWithDetails } from '@/working-groups/types'
 
@@ -29,6 +30,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
       data: { applicationId: role.applicationId },
     })
   }, [role])
+  const { earnings } = useWorkerEarnings(role.id)
 
   return (
     <RoleToggle absoluteToggle>
@@ -59,7 +61,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                     <SidePaneLabel text="Earned total" />
                     <SidePaneColumn>
                       <SidePaneText>
-                        <TokenValue value={role.earnedTotal} />
+                        <TokenValue value={earnings} />
                       </SidePaneText>
                     </SidePaneColumn>
                   </SidePaneRow>

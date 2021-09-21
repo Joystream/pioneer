@@ -21,7 +21,6 @@ Default.args = {
       membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
       status: 'WorkerStatusActive',
       reward: getReward(1, 'forum'),
-      earnedTotal: 1000,
       stake: 1000,
       isLead: false,
       owedReward: 1000,
