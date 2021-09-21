@@ -72,7 +72,7 @@ export const EditPostModal = () => {
 
   if (state.matches('error')) {
     return (
-      <FailureModal onClose={() => hideModalWithAction()}>
+      <FailureModal onClose={() => hideModalWithAction()} events={state.context.transactionEvents}>
         There was a problem submitting an edit to your post.
       </FailureModal>
     )
