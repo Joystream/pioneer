@@ -31,7 +31,11 @@ export const EditThreadTitleModal = () => {
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={modalData.onClose}>There was a problem while saving thread title.</FailureModal>
+    return (
+      <FailureModal onClose={modalData.onClose} events={state.context.transactionEvents}>
+        There was a problem while saving thread title.
+      </FailureModal>
+    )
   }
 
   return null
