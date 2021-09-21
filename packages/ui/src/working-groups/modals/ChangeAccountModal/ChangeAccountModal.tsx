@@ -7,10 +7,10 @@ import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { Address } from '@/common/types'
 import { useWorker } from '@/working-groups/hooks/useWorker'
 import { getGroup } from '@/working-groups/model/getGroup'
 
-import { Address } from '../../../common/types'
 import { GroupName, WorkerWithDetails } from '../../types'
 
 import { ChangeAccountModalCall } from '.'
@@ -86,7 +86,7 @@ export const ChangeAccountModal = () => {
 
   if (state.matches('error')) {
     return (
-      <FailureModal onClose={hideModal}>
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
         {modalType === ModalTypes.CHANGE_ROLE_ACCOUNT
           ? 'There was a problem changing the role account.'
           : 'There was a problem changing the reward account.'}

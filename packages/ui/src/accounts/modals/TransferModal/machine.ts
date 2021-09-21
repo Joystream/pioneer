@@ -3,10 +3,9 @@ import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
+import { EmptyObject } from '@/common/types'
 
 import { Account } from '../../types'
-
-type EmptyObject = Record<string, never>
 
 interface TransferDetailsContext {
   from?: Account
@@ -14,11 +13,12 @@ interface TransferDetailsContext {
   amount?: BN
 }
 
-interface FeeContext {
+interface TransactionContext {
   fee?: BN
+  transactionEvents?: EventRecord[]
 }
 
-type TransferContext = TransferDetailsContext & FeeContext
+type TransferContext = TransferDetailsContext & TransactionContext
 
 type TransferState =
   | { value: 'prepare'; context: EmptyObject }
@@ -31,11 +31,13 @@ type TransactionSuccessEvent = {
   events: EventRecord[]
   fee: BN
 }
+
 type TransactionErrorEvent = {
   type: 'ERROR'
   events: EventRecord[]
   fee: BN
 }
+
 export type TransferEvent =
   | { type: 'SET_TO'; to: Account }
   | { type: 'SET_FROM'; from: Account }
@@ -69,11 +71,12 @@ export const transferMachine = createMachine<TransferContext, TransferEvent, Tra
           {
             target: 'success',
             cond: isTransactionSuccess,
-            actions: assign({ fee: (_, event) => event.data.fee }),
+            actions: assign({ transactionEvents: (_, event) => event.data.events, fee: (_, event) => event.data.fee }),
           },
           {
             target: 'error',
             cond: isTransactionError,
+            actions: assign({ transactionEvents: (_, event) => event.data.events, fee: (_, event) => event.data.fee }),
           },
         ],
       },

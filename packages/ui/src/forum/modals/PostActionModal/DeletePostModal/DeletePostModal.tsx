@@ -62,7 +62,11 @@ export const DeletePostModal = () => {
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={hideModal}>There was a problem deleting your post.</FailureModal>
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was a problem deleting your post.
+      </FailureModal>
+    )
   }
 
   if (state.matches('requirementsFailed') && active && feeInfo) {

@@ -48,7 +48,7 @@ export const TransferModal = () => {
     const { amount, to, from } = state.context
 
     return (
-      <FailureModal onClose={hideModal}>
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
         You haven’t transferred <TokenValue value={amount} /> stake from “{from.name}” account to “{to.name}”
         destination.
       </FailureModal>

@@ -49,7 +49,7 @@ export const RecoverBalanceModal = ({ onClose }: Props) => {
 
   if (state.matches('error')) {
     return (
-      <FailureModal onClose={onClose}>
+      <FailureModal onClose={onClose} events={state.context.transactionEvents}>
         <TextMedium>There was a problem with recovering balances.</TextMedium>
       </FailureModal>
     )

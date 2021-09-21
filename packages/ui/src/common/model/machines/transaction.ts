@@ -1,8 +1,11 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
-import { ActionTypes, assign, createMachine, DoneInvokeEvent, MachineConfig, send } from 'xstate'
+import { ActionTypes, assign, createMachine, DoneInvokeEvent, send } from 'xstate'
 
-export type TransactionSuccessEvent = { type: 'SUCCESS'; events: any[]; fee: BN }
-export type TransactionErrorEvent = { type: 'ERROR'; events: any[]; fee: BN }
+import { EmptyObject } from '@/common/types'
+
+export type TransactionSuccessEvent = { type: 'SUCCESS'; events: EventRecord[]; fee: BN }
+export type TransactionErrorEvent = { type: 'ERROR'; events: EventRecord[]; fee: BN }
 export type TransactionEvent =
   | { type: 'SIGNED' }
   | { type: 'SIGN' }
@@ -23,7 +26,19 @@ const onTransactionError: any = {
   ],
 }
 
-export const transactionConfig: MachineConfig<any, any, TransactionEvent> = {
+interface TransactionContext {
+  events?: EventRecord[]
+  fee?: BN
+}
+
+type TransactionState =
+  | { value: 'prepare'; context: EmptyObject }
+  | { value: 'signing'; context: EmptyObject }
+  | { value: 'signWithExtension'; context: EmptyObject }
+  | { value: 'success'; context: Required<TransactionContext> }
+  | { value: 'error'; context: Required<TransactionContext> }
+
+export const transactionMachine = createMachine<TransactionContext, TransactionEvent, TransactionState>({
   id: 'transaction',
   initial: 'prepare',
   context: {
@@ -76,9 +91,7 @@ export const transactionConfig: MachineConfig<any, any, TransactionEvent> = {
       },
     },
   },
-}
-
-export const transactionMachine = createMachine(transactionConfig)
+})
 
 export const isTransactionSuccess = (context: unknown, event: DoneInvokeEvent<{ isError: boolean }>) =>
   !event.data.isError

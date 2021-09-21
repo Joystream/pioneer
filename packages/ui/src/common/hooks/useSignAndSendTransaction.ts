@@ -1,15 +1,14 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { web3FromAddress } from '@polkadot/extension-dapp'
-import { DispatchError, EventRecord } from '@polkadot/types/interfaces/system'
-import { ISubmittableResult, ITuple } from '@polkadot/types/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
 import BN from 'bn.js'
 import { useCallback, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
-import { info } from '@/common/logger'
-
+import { info } from '../logger'
+import { isError, isErrorEvent, toDispatchError } from '../model/apiErrors'
 import { Address } from '../types'
 
 import { useKeyring } from './useKeyring'
@@ -20,12 +19,6 @@ interface UseSignAndSendTransactionParams {
   signer: Address
   service: ActorRef<any>
 }
-
-const isErrorEvent = ({ event: { method } }: EventRecord) => {
-  return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
-}
-
-export const isError = (events: EventRecord[]): boolean => !!events.find(isErrorEvent)
 
 const observeTransaction = (transaction: Observable<ISubmittableResult>, send: Sender<any>, fee: BN) => {
   const statusCallback = (result: ISubmittableResult) => {
@@ -50,16 +43,10 @@ const observeTransaction = (transaction: Observable<ISubmittableResult>, send: S
         info('\t', JSON.stringify(phase), `: ${section}.${method}`, JSON.stringify(data))
 
         if (isErrorEvent(event)) {
-          const [dispatchError] = (data as unknown) as ITuple<[DispatchError]>
-          let errorType = dispatchError.type
+          const error = toDispatchError(event)
+          const message = error ? `${error.section}.${error.name}` : 'Unknown'
 
-          if (dispatchError.isModule) {
-            const mod = dispatchError.asModule
-            const error = dispatchError.registry.findMetaError(mod)
-            errorType = `${error.section}.${error.name}`
-          }
-
-          info(`\t\t Error: %c${errorType}`, 'color: red')
+          info(`\t\t Error: %c${message}`, 'color: red')
         }
       })
       info(JSON.stringify(events))

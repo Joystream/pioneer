@@ -56,7 +56,11 @@ export const LeaveRoleModal = () => {
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={hideModal}>There was a problem leaving the role.</FailureModal>
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was a problem leaving the role.
+      </FailureModal>
+    )
   }
 
   return null
