@@ -1,3 +1,4 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '../../../common/model/machines'
@@ -10,11 +11,17 @@ interface UpdateMembershipContext {
   form?: UpdateMemberForm
 }
 
+interface TransactionContext {
+  transactionEvents?: EventRecord[]
+}
+
+type Context = UpdateMembershipContext & TransactionContext
+
 type UpdateMembershipState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'transaction'; context: Required<UpdateMembershipContext> }
   | { value: 'success'; context: Required<UpdateMembershipContext> }
-  | { value: 'error'; context: Required<UpdateMembershipContext> }
+  | { value: 'error'; context: Required<Context> }
 
 export type UpdateMembershipEvent =
   | { type: 'PASS' }
@@ -23,11 +30,7 @@ export type UpdateMembershipEvent =
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
 
-export const updateMembershipMachine = createMachine<
-  UpdateMembershipContext,
-  UpdateMembershipEvent,
-  UpdateMembershipState
->({
+export const updateMembershipMachine = createMachine<Context, UpdateMembershipEvent, UpdateMembershipState>({
   initial: 'prepare',
   states: {
     prepare: {

@@ -46,7 +46,11 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={onClose}>There was a problem updating membership for {member.name}.</FailureModal>
+    return (
+      <FailureModal onClose={onClose} events={state.context.transactionEvents}>
+        There was a problem updating membership for {member.name}.
+      </FailureModal>
+    )
   }
 
   return null
