@@ -1,4 +1,5 @@
 import { MemberId } from '@joystream/types/common'
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
@@ -12,13 +13,14 @@ type EmptyObject = Record<string, never>
 interface BuyMembershipContext {
   form?: MemberFormFields
   memberId?: BN
+  transactionEvents?: EventRecord[]
 }
 
 type BuyMembershipState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'transaction'; context: { form: MemberFormFields } }
   | { value: 'success'; context: Required<BuyMembershipContext> }
-  | { value: 'error'; context: { form: MemberFormFields } }
+  | { value: 'error'; context: { form: MemberFormFields; transactionEvents: EventRecord[] } }
 
 export type BuyMembershipEvent =
   | { type: 'PASS' }
@@ -53,6 +55,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
           {
             target: 'error',
             cond: isTransactionError,
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
         ],
       },
