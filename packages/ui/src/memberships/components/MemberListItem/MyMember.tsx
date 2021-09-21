@@ -1,12 +1,11 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
-import { useModal } from '@/common/hooks/useModal'
+import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
 import { MemberInfo } from '..'
 import { EditSymbol } from '../../../common/components/icons/symbols'
 import { Member } from '../../types'
 import { EditMembershipButton } from '../EditMembershipButton'
-import { MemberModalCall } from '../MemberProfile'
 import { MemberRoles } from '../MemberRoles'
 import { TransferInviteButton } from '../TransferInviteButton'
 
@@ -20,14 +19,7 @@ import {
 } from './Fileds'
 
 export const MyMemberListItem = ({ member }: { member: Member }) => {
-  const { showModal } = useModal()
-  const showMemberModal = useCallback(
-    (event?: React.MouseEvent<HTMLElement>) => {
-      event?.stopPropagation()
-      member && showModal<MemberModalCall>({ modal: 'Member', data: { id: member.id } })
-    },
-    [member?.id]
-  )
+  const showMemberModal = useShowMemberModal(member.id)
   return (
     <MemberItemWrap kind="MyMember">
       <MemberModalTrigger onClick={showMemberModal} />
