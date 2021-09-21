@@ -203,7 +203,11 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('error')) {
-    return <FailureModal onClose={hideModal}>There was a problem while creating proposal.</FailureModal>
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        There was a problem while creating proposal.
+      </FailureModal>
+    )
   }
 
   return (
