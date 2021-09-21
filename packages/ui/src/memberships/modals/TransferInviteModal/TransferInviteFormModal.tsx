@@ -59,7 +59,7 @@ export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Pro
           </InputComponent>
         </TransactionAmount>
         <InputComponent label="To" inputSize="l" required>
-          <SelectMember onChange={setTo} filter={filterRecipient} />
+          <SelectMember onChange={setTo} filter={filterRecipient} selected={to} />
         </InputComponent>
       </ModalBody>
       <ModalFooter>

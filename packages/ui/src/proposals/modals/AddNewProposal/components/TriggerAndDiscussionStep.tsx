@@ -181,7 +181,7 @@ export const TriggerAndDiscussionStep = ({
             <WhitelistContainer>
               {discussionWhitelist.map((member) => (
                 <WhitelistMember key={member.id}>
-                  <MemberInfo member={member} memberSize="m" showIdOrText />
+                  <MemberInfo member={member} memberSize="m" showIdOrText skipModal />
                   <WhitelistRemoveMember onClick={() => removeMemberFromWhitelist(member)} id="removeMember" />
                 </WhitelistMember>
               ))}
