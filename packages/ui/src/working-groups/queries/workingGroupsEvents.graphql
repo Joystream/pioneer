@@ -328,3 +328,71 @@ query GetWorkerEvents($workerId: ID, $applicationId: ID) {
     ...TerminatedLeaderEventFields
   }
 }
+
+query GetOpeningsEvents {
+  events(
+    where: {
+      type_in: [
+        AppliedOnOpeningEvent,
+        ApplicationWithdrawnEvent,
+        BudgetSpendingEvent,
+        StakeDecreasedEvent,
+        StakeIncreasedEvent,
+        OpeningAddedEvent,
+        OpeningCanceledEvent,
+        OpeningFilledEvent,
+        WorkerExitedEvent,
+        StatusTextChangedEvent,
+        BudgetSetEvent,
+        StakeSlashedEvent,
+        TerminatedLeaderEvent,
+        TerminatedWorkerEvent,
+      ]
+    }
+    limit: 25
+    orderBy: [createdAt_DESC]
+  ) {
+    ...on AppliedOnOpeningEvent {
+      ...AppliedOnOpeningEventFields
+    }
+    ...on ApplicationWithdrawnEvent {
+      ...ApplicationWithdrawnEventFields
+    }
+    ...on BudgetSpendingEvent {
+      ...BudgetSpendingActivityEventFields
+    }
+    ...on StakeDecreasedEvent {
+      ...StakeDecreasedEventFields
+    }
+    ...on StakeIncreasedEvent {
+      ...StakeIncreasedEventFields
+    }
+    ...on OpeningAddedEvent {
+      ...OpeningAddedEventFields
+    }
+    ...on OpeningCanceledEvent {
+      ...OpeningCanceledEventFields
+    }
+    ...on OpeningFilledEvent {
+      ...OpeningFilledEventFields
+    }
+    ...on WorkerExitedEvent {
+      ...WorkerExitedEventFields
+    }
+    ...on StatusTextChangedEvent {
+      ...StatusTextChangedEventFields
+    }
+    ...on BudgetSetEvent {
+      ...BudgetSetEventFields
+    }
+    ...on StakeSlashedEvent {
+      ...StakeSlashedEventFields
+    }
+    ...on TerminatedWorkerEvent {
+      ...TerminatedWorkerEventFields
+    }
+    ...on TerminatedLeaderEvent {
+      ...TerminatedLeaderEventFields
+    }
+  }
+}
