@@ -1,11 +1,27 @@
-# Pioneer dev documentation
+# Developer documentation
 
-## Tools/libraries:
+## Tech stack
 
-- React
-  - styled components
+The Pioneer 2.0 is build using the latest version of React. The React development assumes:
+
 - TypeScript
-- ESLint, Prettier
+- Function components
+- styled components for CSS
+
+## Coding standards
+
+For code quality & standards we rely on ESLint and Prettier. To run both checks execute inside `packages/ui`:
+
+```shell
+## Run linter
+yarn lint
+
+## Run lint & apply automatic fixes
+yarn lint:fix
+```
+
+## Query-node API
+
 - GraphQL to access Hydra query-node
   - [Mirage JS](https://miragejs.com/) for mocking query-node data
   - [Apollo Client](https://www.apollographql.com/docs/react/) for accessing GraphQL
