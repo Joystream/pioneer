@@ -69,6 +69,10 @@ export const CouncilList = ({ councilors, onSort, isLoading }: CouncilListProps)
 
 const CouncilListStyles = styled(RowGapBlock)`
   ${ListHeaders} {
-    padding: 0 24px;
+    padding: 0 58px 0 24px;
+
+    & > :nth-child(n + 2) {
+      justify-self: end;
+    }
   }
 `
