@@ -9,6 +9,7 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useWorkerEarnings } from '@/working-groups/hooks/useWorkerEarnings'
 import { ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
@@ -53,6 +54,7 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
       data: { workerId: worker.id },
     })
   }, [])
+  const { earnings } = useWorkerEarnings(worker.id)
 
   const roleRoute = `/working-groups/my-roles/${worker.id}`
 
@@ -76,7 +78,7 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={new BN(worker.earnedTotal)} />
+            <TokenValue value={earnings} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Earned total</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
@@ -106,7 +108,7 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
 
 const RoleItemWrapper = styled(ToggleableItemWrap)`
   position: relative;
-  border: 1px solid ${Colors.Black[100]};  
+  border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
 

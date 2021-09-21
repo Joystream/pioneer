@@ -221,6 +221,7 @@ const InputStyles = css<InputProps>`
 
 export const Input = styled.input`
   ${InputStyles};
+
   &[type='number'] {
     text-align: right;
     -moz-appearance: textfield;
@@ -326,6 +327,7 @@ export const InputContainer = styled.div<InputElementProps>`
   background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : Colors.White)};
   box-shadow: ${Shadows.transparent};
   transition: ${Transitions.all};
+
   & input,
   & textarea {
     ${(props) => (!props.icon && !props.units && !props.copy ? InputWithNothing : null)}
@@ -334,6 +336,7 @@ export const InputContainer = styled.div<InputElementProps>`
     ${(props) => ((props.units || props.copy) && !props.icon ? InputWithRight : null)}
     ${(props) => ((props.units || props.copy) && props.icon ? InputWithBoth : null)}
   }
+
   & textarea {
     padding-top: 16px;
     padding-bottom: 16px;
@@ -398,6 +401,7 @@ export const InputContainer = styled.div<InputElementProps>`
   .ck.ck-toolbar {
     border: none;
   }
+
   .ck.ck-editor__editable_inline,
   .ck.ck-focused,
   .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {

@@ -21,7 +21,6 @@ export interface Worker {
   isLead: boolean
   reward: Reward
   owedReward: number
-  earnedTotal: number
   stake: number
 }
 
@@ -70,7 +69,6 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   status: fields.status.__typename,
   isLead: fields.isLead,
   reward: getReward(fields.rewardPerBlock, fields.group.name),
-  earnedTotal: 1000,
   stake: fields.stake,
   owedReward: fields.missingRewardAmount,
 })

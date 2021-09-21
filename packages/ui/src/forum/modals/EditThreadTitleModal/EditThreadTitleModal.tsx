@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
 import { useModal } from '@/common/hooks/useModal'
@@ -11,28 +11,31 @@ import { editThreadTitleMachine } from './machine'
 
 export const EditThreadTitleModal = () => {
   const [state] = useMachine(editThreadTitleMachine)
-  const { modalData } = useModal<EditThreadTitleModalCall>()
+  const {
+    modalData: { thread, newTitle, onSuccess },
+    hideModal,
+  } = useModal<EditThreadTitleModalCall>()
+
+  const hideModalAfterSuccess = useCallback(() => {
+    onSuccess(newTitle)
+    hideModal()
+  }, [])
 
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
 
     return (
-      <EditThreadTitleSignModal
-        onClose={modalData.onClose}
-        thread={modalData.thread}
-        newTitle={modalData.newTitle}
-        service={transactionService}
-      />
+      <EditThreadTitleSignModal onClose={hideModal} thread={thread} newTitle={newTitle} service={transactionService} />
     )
   }
 
   if (state.matches('success')) {
-    return <EditTreadTitleSuccessModal onClose={modalData.onClose} />
+    return <EditTreadTitleSuccessModal onClose={hideModalAfterSuccess} />
   }
 
   if (state.matches('error')) {
     return (
-      <FailureModal onClose={modalData.onClose} events={state.context.transactionEvents}>
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
         There was a problem while saving thread title.
       </FailureModal>
     )
