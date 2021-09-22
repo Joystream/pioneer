@@ -154,7 +154,7 @@ export const AddNewProposalModal = () => {
 
   useEffect(() => {
     if (state.matches('beforeTransaction')) {
-      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUNDED')
+      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
     }
   }, [state, stakingStatus])
 

@@ -40,8 +40,8 @@ export type ApplyForRoleEvent =
   | { type: 'PASS' }
   | ValidStakeStepEvent
   | ValidApplicationStepEvent
-  | { type: 'BOUNDED' }
-  | { type: 'UNBOUNDED' }
+  | { type: 'BOUND' }
+  | { type: 'UNBOUND' }
 
 export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRoleEvent, ApplyForRoleState>({
   initial: 'requirementsVerification',
@@ -78,8 +78,8 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
     beforeTransaction: {
       id: 'beforeTransaction',
       on: {
-        BOUNDED: 'transaction',
-        UNBOUNDED: 'bindStakingAccount',
+        BOUND: 'transaction',
+        UNBOUND: 'bindStakingAccount',
       },
     },
     bindStakingAccount: {

@@ -93,7 +93,7 @@ export const ApplyForRoleModal = () => {
 
   useEffect(() => {
     if (state.matches('beforeTransaction')) {
-      send(stakingStatus === 'free' ? 'UNBOUNDED' : 'BOUNDED')
+      send(stakingStatus === 'free' ? 'UNBOUND' : 'BOUND')
     }
   }, [state, stakingStatus])
 
