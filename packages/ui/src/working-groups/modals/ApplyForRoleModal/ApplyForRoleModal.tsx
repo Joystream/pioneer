@@ -161,8 +161,8 @@ export const ApplyForRoleModal = () => {
       transaction = applyOnOpeningTransaction
     } else {
       transaction = api.tx.utility.batch([
-        applyOnOpeningTransaction,
         api.tx.members.confirmStakingAccount(activeMember?.id, stake.account.address),
+        applyOnOpeningTransaction,
       ])
     }
 
