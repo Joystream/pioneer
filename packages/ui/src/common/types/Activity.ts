@@ -1,6 +1,6 @@
 import { ForumActivity } from '@/forum/types/ForumActivity'
 import { Member } from '@/memberships/types'
-import { ProposalActivity } from '@/proposals/components/ProposalsActivities'
+import { ProposalActivity } from '@/proposals/types/ProposalsActivities'
 import { WorkingGroupActivity } from '@/working-groups/types'
 
 export type ActivityCategory = Activity['eventType']

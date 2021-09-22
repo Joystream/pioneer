@@ -5,7 +5,7 @@ import { ActivityRouterLink } from '@/common/components/Activities/ActivityRoute
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
-import { ProposalCreatedActivity } from '../ProposalsActivities'
+import { ProposalCreatedActivity } from '../../types/ProposalsActivities'
 
 export const ProposalCreatedContent: ActivityContentComponent<ProposalCreatedActivity> = ({ activity }) => (
   <>
