@@ -2,12 +2,12 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { CouncilTabs } from '@/app/pages/Council/components/CouncilTabs'
+import { Election } from '@/app/pages/Council/Election'
 import { ApiContext } from '@/common/providers/api/context'
 
 import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
 
-describe('CouncilTabs', () => {
+describe('UI: Election page', () => {
   const api = stubApi()
 
   it('Inactive', () => {
@@ -15,7 +15,7 @@ describe('CouncilTabs', () => {
 
     renderComponent()
 
-    expect(screen.queryByText(/^Election$/i)).toBeNull()
+    expect(screen.queryByText('Stage')).toBeNull()
   })
 
   it('Announcing', () => {
@@ -23,7 +23,7 @@ describe('CouncilTabs', () => {
 
     renderComponent()
 
-    expect(screen.queryByText(/^Election$/i)).not.toBeNull()
+    expect(screen.queryByText(/Announcing period/i)).not.toBeNull()
   })
 
   it('Voting', () => {
@@ -31,7 +31,7 @@ describe('CouncilTabs', () => {
 
     renderComponent()
 
-    expect(screen.queryByText(/^Election$/i)).not.toBeNull()
+    expect(screen.queryByText(/Voting period/i)).not.toBeNull()
   })
 
   it('Revealing', () => {
@@ -39,14 +39,14 @@ describe('CouncilTabs', () => {
 
     renderComponent()
 
-    expect(screen.queryByText(/^Election$/i)).not.toBeNull()
+    expect(screen.queryByText(/Revealing period/i)).not.toBeNull()
   })
 
   function renderComponent() {
     return render(
       <ApiContext.Provider value={api}>
         <MemoryRouter>
-          <CouncilTabs />
+          <Election />
         </MemoryRouter>
       </ApiContext.Provider>
     )
