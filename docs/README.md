@@ -1,5 +1,17 @@
 # Developer documentation
 
+## Development tools
+
+In order to work on Pionner 2 you'd need following tools for development and testing:
+
+- [nodejs](https://nodejs.org) `v14.x`
+- [yarn classic](https://classic.yarnpkg.com/en/docs/install) package manager `v1.22.x`
+
+In order to interact with the Joystream ecostystem
+
+- [Joystream node](https://github.com/Joystream/joystream/tree/master/node) _optional_
+- [Joystream query-node](https://github.com/Joystream/joystream/tree/query_node/query-node) _optional_
+
 ## Tech stack
 
 The Pioneer 2.0 is build using the latest version of React. The React development assumes:
