@@ -1,9 +1,9 @@
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
-type ElectionState = 'announcing' | 'voting' | 'revealing' | 'inactive'
+type ElectionStage = 'announcing' | 'voting' | 'revealing' | 'inactive'
 
-export const useElectionStage = (): ElectionState => {
+export const useElectionStage = (): ElectionStage => {
   const { api } = useApi()
   const electionStage = useObservable(api?.query.referendum.stage(), [api])
   const councilStage = useObservable(api?.query.council.stage(), [api])
