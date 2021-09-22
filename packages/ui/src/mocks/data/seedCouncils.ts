@@ -10,7 +10,7 @@ export interface RawCouncilorMock {
 export interface RawCouncilMock {
   id: string
   councilMemberIds: string[]
-  deletedAt: null
+  endedAtBlock: null
 }
 
 export const seedCouncilMember = (data: RawCouncilorMock, server: any) => server.schema.create('CouncilMember', data)

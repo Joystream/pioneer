@@ -28,7 +28,7 @@ const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
   const council: RawCouncilMock = {
     id: String(councilIndex),
     councilMemberIds: councilors.map(({ id }) => id),
-    deletedAt: null,
+    endedAtBlock: null,
   }
 
   return { councils: [...data.councils, council], councilors: [...data.councilors, ...councilors] }
