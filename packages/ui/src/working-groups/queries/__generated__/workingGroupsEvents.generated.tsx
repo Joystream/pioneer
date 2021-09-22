@@ -239,6 +239,60 @@ export type GetWorkerEventsQuery = {
   terminatedLeaderEvents: Array<{ __typename: 'TerminatedLeaderEvent' } & TerminatedLeaderEventFieldsFragment>
 }
 
+export type GetOpeningsEventsQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetOpeningsEventsQuery = {
+  __typename: 'Query'
+  events: Array<
+    | ({ __typename: 'ApplicationWithdrawnEvent' } & ApplicationWithdrawnEventFieldsFragment)
+    | ({ __typename: 'AppliedOnOpeningEvent' } & AppliedOnOpeningEventFieldsFragment)
+    | ({ __typename: 'BudgetSetEvent' } & BudgetSetEventFieldsFragment)
+    | ({ __typename: 'BudgetSpendingEvent' } & BudgetSpendingActivityEventFieldsFragment)
+    | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
+    | { __typename: 'InitialInvitationCountUpdatedEvent' }
+    | { __typename: 'InvitesTransferredEvent' }
+    | { __typename: 'LeaderInvitationQuotaUpdatedEvent' }
+    | { __typename: 'LeaderSetEvent' }
+    | { __typename: 'LeaderUnsetEvent' }
+    | { __typename: 'MemberAccountsUpdatedEvent' }
+    | { __typename: 'MemberInvitedEvent' }
+    | { __typename: 'MemberProfileUpdatedEvent' }
+    | { __typename: 'MemberVerificationStatusUpdatedEvent' }
+    | { __typename: 'MembershipBoughtEvent' }
+    | { __typename: 'MembershipPriceUpdatedEvent' }
+    | { __typename: 'NewMissedRewardLevelReachedEvent' }
+    | ({ __typename: 'OpeningAddedEvent' } & OpeningAddedEventFieldsFragment)
+    | ({ __typename: 'OpeningCanceledEvent' } & OpeningCanceledEventFieldsFragment)
+    | ({ __typename: 'OpeningFilledEvent' } & OpeningFilledEventFieldsFragment)
+    | { __typename: 'ProposalCancelledEvent' }
+    | { __typename: 'ProposalCreatedEvent' }
+    | { __typename: 'ProposalDecisionMadeEvent' }
+    | { __typename: 'ProposalDiscussionPostCreatedEvent' }
+    | { __typename: 'ProposalDiscussionPostDeletedEvent' }
+    | { __typename: 'ProposalDiscussionPostUpdatedEvent' }
+    | { __typename: 'ProposalDiscussionThreadModeChangedEvent' }
+    | { __typename: 'ProposalExecutedEvent' }
+    | { __typename: 'ProposalStatusUpdatedEvent' }
+    | { __typename: 'ProposalVotedEvent' }
+    | { __typename: 'ReferralCutUpdatedEvent' }
+    | { __typename: 'RewardPaidEvent' }
+    | ({ __typename: 'StakeDecreasedEvent' } & StakeDecreasedEventFieldsFragment)
+    | ({ __typename: 'StakeIncreasedEvent' } & StakeIncreasedEventFieldsFragment)
+    | ({ __typename: 'StakeSlashedEvent' } & StakeSlashedEventFieldsFragment)
+    | { __typename: 'StakingAccountAddedEvent' }
+    | { __typename: 'StakingAccountConfirmedEvent' }
+    | { __typename: 'StakingAccountRemovedEvent' }
+    | ({ __typename: 'StatusTextChangedEvent' } & StatusTextChangedEventFieldsFragment)
+    | ({ __typename: 'TerminatedLeaderEvent' } & TerminatedLeaderEventFieldsFragment)
+    | ({ __typename: 'TerminatedWorkerEvent' } & TerminatedWorkerEventFieldsFragment)
+    | ({ __typename: 'WorkerExitedEvent' } & WorkerExitedEventFieldsFragment)
+    | { __typename: 'WorkerRewardAccountUpdatedEvent' }
+    | { __typename: 'WorkerRewardAmountUpdatedEvent' }
+    | { __typename: 'WorkerRoleAccountUpdatedEvent' }
+    | { __typename: 'WorkerStartedLeavingEvent' }
+  >
+}
+
 export const AppliedOnOpeningEventFieldsFragmentDoc = gql`
   fragment AppliedOnOpeningEventFields on AppliedOnOpeningEvent {
     id
@@ -731,3 +785,120 @@ export function useGetWorkerEventsLazyQuery(
 export type GetWorkerEventsQueryHookResult = ReturnType<typeof useGetWorkerEventsQuery>
 export type GetWorkerEventsLazyQueryHookResult = ReturnType<typeof useGetWorkerEventsLazyQuery>
 export type GetWorkerEventsQueryResult = Apollo.QueryResult<GetWorkerEventsQuery, GetWorkerEventsQueryVariables>
+export const GetOpeningsEventsDocument = gql`
+  query GetOpeningsEvents {
+    events(
+      where: {
+        type_in: [
+          AppliedOnOpeningEvent
+          ApplicationWithdrawnEvent
+          BudgetSpendingEvent
+          StakeDecreasedEvent
+          StakeIncreasedEvent
+          OpeningAddedEvent
+          OpeningCanceledEvent
+          OpeningFilledEvent
+          WorkerExitedEvent
+          StatusTextChangedEvent
+          BudgetSetEvent
+          StakeSlashedEvent
+          TerminatedLeaderEvent
+          TerminatedWorkerEvent
+        ]
+      }
+      limit: 25
+      orderBy: [createdAt_DESC]
+    ) {
+      ... on AppliedOnOpeningEvent {
+        ...AppliedOnOpeningEventFields
+      }
+      ... on ApplicationWithdrawnEvent {
+        ...ApplicationWithdrawnEventFields
+      }
+      ... on BudgetSpendingEvent {
+        ...BudgetSpendingActivityEventFields
+      }
+      ... on StakeDecreasedEvent {
+        ...StakeDecreasedEventFields
+      }
+      ... on StakeIncreasedEvent {
+        ...StakeIncreasedEventFields
+      }
+      ... on OpeningAddedEvent {
+        ...OpeningAddedEventFields
+      }
+      ... on OpeningCanceledEvent {
+        ...OpeningCanceledEventFields
+      }
+      ... on OpeningFilledEvent {
+        ...OpeningFilledEventFields
+      }
+      ... on WorkerExitedEvent {
+        ...WorkerExitedEventFields
+      }
+      ... on StatusTextChangedEvent {
+        ...StatusTextChangedEventFields
+      }
+      ... on BudgetSetEvent {
+        ...BudgetSetEventFields
+      }
+      ... on StakeSlashedEvent {
+        ...StakeSlashedEventFields
+      }
+      ... on TerminatedWorkerEvent {
+        ...TerminatedWorkerEventFields
+      }
+      ... on TerminatedLeaderEvent {
+        ...TerminatedLeaderEventFields
+      }
+    }
+  }
+  ${AppliedOnOpeningEventFieldsFragmentDoc}
+  ${ApplicationWithdrawnEventFieldsFragmentDoc}
+  ${BudgetSpendingActivityEventFieldsFragmentDoc}
+  ${StakeDecreasedEventFieldsFragmentDoc}
+  ${StakeIncreasedEventFieldsFragmentDoc}
+  ${OpeningAddedEventFieldsFragmentDoc}
+  ${OpeningCanceledEventFieldsFragmentDoc}
+  ${OpeningFilledEventFieldsFragmentDoc}
+  ${WorkerExitedEventFieldsFragmentDoc}
+  ${StatusTextChangedEventFieldsFragmentDoc}
+  ${BudgetSetEventFieldsFragmentDoc}
+  ${StakeSlashedEventFieldsFragmentDoc}
+  ${TerminatedWorkerEventFieldsFragmentDoc}
+  ${TerminatedLeaderEventFieldsFragmentDoc}
+`
+
+/**
+ * __useGetOpeningsEventsQuery__
+ *
+ * To run a query within a React component, call `useGetOpeningsEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOpeningsEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOpeningsEventsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOpeningsEventsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>(GetOpeningsEventsDocument, options)
+}
+export function useGetOpeningsEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>(
+    GetOpeningsEventsDocument,
+    options
+  )
+}
+export type GetOpeningsEventsQueryHookResult = ReturnType<typeof useGetOpeningsEventsQuery>
+export type GetOpeningsEventsLazyQueryHookResult = ReturnType<typeof useGetOpeningsEventsLazyQuery>
+export type GetOpeningsEventsQueryResult = Apollo.QueryResult<GetOpeningsEventsQuery, GetOpeningsEventsQueryVariables>

@@ -31,11 +31,13 @@ export const useGroupActivities = (groupId: string) => {
             ...data.openingCanceledEvents.map(asOpeningActivity),
             ...data.openingFilledEvents.map(asOpeningFilledActivity),
             ...data.workerExitedEvents.map(asWorkerExitedActivity),
-            ...data.statusTextChangedEvents.map(asStatusTextChangedEventActivities).flat(),
+            ...data.statusTextChangedEvents.map(asStatusTextChangedEventActivities),
             ...data.budgetSetEvents.map(asBudgetSetActivity),
             ...data.terminatedLeaderEvents.map(asWorkerTerminatedActivity),
             ...data.terminatedWorkerEvents.map(asWorkerTerminatedActivity),
-          ].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+          ]
+            .flat()
+            .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         : [],
     [data, loading]
   )

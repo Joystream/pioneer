@@ -7,6 +7,7 @@ import {
   AppliedOnOpeningEventFieldsFragment,
   BudgetSetEventFieldsFragment,
   BudgetSpendingActivityEventFieldsFragment,
+  GetOpeningsEventsQuery,
   OpeningAddedEventFieldsFragment,
   OpeningCanceledEventFieldsFragment,
   OpeningFilledEventFieldsFragment,
@@ -39,13 +40,17 @@ import {
   WorkerRewardAmountUpdatedActivity,
   WorkerStartedLeavingActivity,
   WorkerTerminatedActivity,
+  WorkingGroupActivity,
 } from '@/working-groups/types'
 
 function asPositionTitle(groupName: string, type: 'LEAD' | 'REGULAR') {
   return `${capitalizeFirstLetter(asWorkingGroupName(groupName))} ${type === 'LEAD' ? 'Lead' : 'Worker'}`
 }
 
-export function asAppliedOnOpeningActivity(fragment: AppliedOnOpeningEventFieldsFragment): AppliedOnOpeningActivity {
+export const asAppliedOnOpeningActivity: GroupActivityCast<
+  AppliedOnOpeningEventFieldsFragment,
+  AppliedOnOpeningActivity
+> = (fragment): AppliedOnOpeningActivity => {
   const type = fragment.opening.type === 'LEADER' ? 'LEAD' : 'REGULAR'
 
   return {
@@ -61,9 +66,10 @@ export function asAppliedOnOpeningActivity(fragment: AppliedOnOpeningEventFields
   }
 }
 
-export function asApplicationWithdrawnActivity(
-  fragment: ApplicationWithdrawnEventFieldsFragment
-): ApplicationWithdrawnActivity {
+export const asApplicationWithdrawnActivity: GroupActivityCast<
+  ApplicationWithdrawnEventFieldsFragment,
+  ApplicationWithdrawnActivity
+> = (fragment): ApplicationWithdrawnActivity => {
   const type = fragment.application.opening.type === 'LEADER' ? 'LEAD' : 'REGULAR'
 
   return {
@@ -79,38 +85,40 @@ export function asApplicationWithdrawnActivity(
   }
 }
 
-export function asBudgetSpendingActivity(fragment: BudgetSpendingActivityEventFieldsFragment): BudgetSpendingActivity {
-  return {
-    eventType: fragment.__typename,
-    ...asBaseActivity(fragment),
-    groupName: fragment.group.name,
-    amount: new BN(fragment.amount),
-  }
-}
+export const asBudgetSpendingActivity: GroupActivityCast<
+  BudgetSpendingActivityEventFieldsFragment,
+  BudgetSpendingActivity
+> = (fragment): BudgetSpendingActivity => ({
+  eventType: fragment.__typename,
+  ...asBaseActivity(fragment),
+  groupName: fragment.group.name,
+  amount: new BN(fragment.amount),
+})
 
 type StakeChangedFragment = StakeDecreasedEventFieldsFragment | StakeIncreasedEventFieldsFragment
 
-export function asStakeChangedActivity(fragment: StakeChangedFragment): StakeChangedActivity {
-  return {
-    eventType: fragment.__typename,
-    ...asBaseActivity(fragment),
-    member: asMemberDisplayFields(fragment.worker.membership),
-    amount: new BN(fragment.amount),
-  }
-}
+export const asStakeChangedActivity: GroupActivityCast<StakeChangedFragment, StakeChangedActivity> = (
+  fragment
+): StakeChangedActivity => ({
+  eventType: fragment.__typename,
+  ...asBaseActivity(fragment),
+  member: asMemberDisplayFields(fragment.worker.membership),
+  amount: new BN(fragment.amount),
+})
 
-export function asStakeSlashedActivity(fragment: StakeSlashedEventFieldsFragment): StakeSlashedActivity {
-  return {
-    eventType: fragment.__typename,
-    ...asBaseActivity(fragment),
-    member: asMemberDisplayFields(fragment.worker.membership),
-    groupName: asWorkingGroupName(fragment.group.name),
-  }
-}
+export const asStakeSlashedActivity: GroupActivityCast<StakeSlashedEventFieldsFragment, StakeSlashedActivity> = (
+  fragment
+): StakeSlashedActivity => ({
+  eventType: fragment.__typename,
+  ...asBaseActivity(fragment),
+  member: asMemberDisplayFields(fragment.worker.membership),
+  groupName: asWorkingGroupName(fragment.group.name),
+})
 
-export function asOpeningActivity(
-  fragment: OpeningAddedEventFieldsFragment | OpeningCanceledEventFieldsFragment
-): OpeningAddedActivity | OpeningCanceledActivity {
+export const asOpeningActivity: GroupActivityCast<
+  OpeningAddedEventFieldsFragment | OpeningCanceledEventFieldsFragment,
+  OpeningAddedActivity | OpeningCanceledActivity
+> = (fragment): OpeningAddedActivity | OpeningCanceledActivity => {
   const type = fragment.opening.type === 'LEADER' ? 'LEAD' : 'REGULAR'
 
   return {
@@ -125,7 +133,9 @@ export function asOpeningActivity(
   }
 }
 
-export function asOpeningFilledActivity(fragment: OpeningFilledEventFieldsFragment): OpeningFilledActivity {
+export const asOpeningFilledActivity: GroupActivityCast<OpeningFilledEventFieldsFragment, OpeningFilledActivity> = (
+  fragment
+): OpeningFilledActivity => {
   const type = fragment.opening.type === 'LEADER' ? 'LEAD' : 'REGULAR'
 
   return {
@@ -141,28 +151,28 @@ export function asOpeningFilledActivity(fragment: OpeningFilledEventFieldsFragme
   }
 }
 
-export function asWorkerExitedActivity(fragment: WorkerExitedEventFieldsFragment): WorkerExitedActivity {
-  return {
-    eventType: fragment.__typename,
-    ...asBaseActivity(fragment),
-    member: asMemberDisplayFields(fragment.worker.membership),
-  }
-}
+export const asWorkerExitedActivity: GroupActivityCast<WorkerExitedEventFieldsFragment, WorkerExitedActivity> = (
+  fragment
+): WorkerExitedActivity => ({
+  eventType: fragment.__typename,
+  ...asBaseActivity(fragment),
+  member: asMemberDisplayFields(fragment.worker.membership),
+})
 
-export function asWorkerStartedLeavingActivity(
-  fragment: WorkerStartedLeavingEventFieldsFragment
-): WorkerStartedLeavingActivity {
-  return {
-    eventType: fragment.__typename,
-    ...asBaseActivity(fragment),
-    member: asMemberDisplayFields(fragment.worker.membership),
-    workerStatus: fragment.worker.status.__typename,
-  }
-}
+export const asWorkerStartedLeavingActivity: GroupActivityCast<
+  WorkerStartedLeavingEventFieldsFragment,
+  WorkerStartedLeavingActivity
+> = (fragment): WorkerStartedLeavingActivity => ({
+  eventType: fragment.__typename,
+  ...asBaseActivity(fragment),
+  member: asMemberDisplayFields(fragment.worker.membership),
+  workerStatus: fragment.worker.status.__typename,
+})
 
-export function asStatusTextChangedEventActivities(
-  fragment: StatusTextChangedEventFieldsFragment
-): Array<StatusTextChangedActivity | OpeningAnnouncedActivity> {
+export const asStatusTextChangedEventActivities: GroupActivityCast<
+  StatusTextChangedEventFieldsFragment,
+  StatusTextChangedActivity | OpeningAnnouncedActivity
+> = (fragment): Array<StatusTextChangedActivity | OpeningAnnouncedActivity> => {
   const result: Array<StatusTextChangedActivity | OpeningAnnouncedActivity> = []
   if (fragment.workinggroupmetadatasetInEvent?.length) {
     result.push({
@@ -183,41 +193,93 @@ export function asStatusTextChangedEventActivities(
   return result
 }
 
-export function asBudgetSetActivity(fragment: BudgetSetEventFieldsFragment): BudgetSetActivity {
-  return {
-    eventType: fragment.__typename,
-    ...asBaseActivity(fragment),
-    groupName: asWorkingGroupName(fragment.group.name),
-    newBudget: fragment.newBudget,
-  }
+export const asBudgetSetActivity: GroupActivityCast<BudgetSetEventFieldsFragment, BudgetSetActivity> = (
+  fragment
+): BudgetSetActivity => ({
+  eventType: fragment.__typename,
+  ...asBaseActivity(fragment),
+  groupName: asWorkingGroupName(fragment.group.name),
+  newBudget: fragment.newBudget,
+})
+
+export const asWorkerTerminatedActivity: GroupActivityCast<
+  TerminatedLeaderEventFieldsFragment | TerminatedWorkerEventFieldsFragment,
+  WorkerTerminatedActivity
+> = (fragment): WorkerTerminatedActivity => ({
+  eventType: fragment.__typename,
+  ...asBaseActivity(fragment),
+  member: asMemberDisplayFields(fragment.worker.membership),
+  groupName: asWorkingGroupName(fragment.group.name),
+})
+
+export const asWorkerRewardAccountUpdatedActivity: GroupActivityCast<
+  WorkerRewardAccountUpdatedEventFragment,
+  WorkerRewardAccountUpdatedActivity
+> = (fragment): WorkerRewardAccountUpdatedActivity => ({
+  eventType: fragment.__typename,
+  ...asBaseActivity(fragment),
+})
+
+export const asWorkerRewardAmountUpdatedActivity: GroupActivityCast<
+  WorkerRewardAmountUpdatedEventFragment,
+  WorkerRewardAmountUpdatedActivity
+> = (fragment): WorkerRewardAmountUpdatedActivity => ({
+  eventType: fragment.__typename,
+  ...asBaseActivity(fragment),
+  newAmount: fragment.newRewardPerBlock,
+})
+
+type WorkingGroupEventFields =
+  | ApplicationWithdrawnEventFieldsFragment
+  | AppliedOnOpeningEventFieldsFragment
+  | BudgetSetEventFieldsFragment
+  | BudgetSpendingActivityEventFieldsFragment
+  | OpeningAddedEventFieldsFragment
+  | OpeningCanceledEventFieldsFragment
+  | OpeningFilledEventFieldsFragment
+  | StakeDecreasedEventFieldsFragment
+  | StakeIncreasedEventFieldsFragment
+  | StakeSlashedEventFieldsFragment
+  | StatusTextChangedEventFieldsFragment
+  | TerminatedLeaderEventFieldsFragment
+  | TerminatedWorkerEventFieldsFragment
+  | WorkerExitedEventFieldsFragment
+  | WorkerRewardAccountUpdatedEventFragment
+  | WorkerRewardAmountUpdatedEventFragment
+  | WorkerStartedLeavingEventFieldsFragment
+
+type GroupActivityCast<Fields, Activity extends WorkingGroupActivity> = (fields: Fields) => Activity | Activity[]
+
+type EventsQueryResult = GetOpeningsEventsQuery['events'][0]
+
+const activityCastByType: Record<
+  WorkingGroupEventFields['__typename'],
+  GroupActivityCast<any, WorkingGroupActivity>
+> = {
+  ApplicationWithdrawnEvent: asApplicationWithdrawnActivity,
+  AppliedOnOpeningEvent: asAppliedOnOpeningActivity,
+  BudgetSetEvent: asBudgetSetActivity,
+  BudgetSpendingEvent: asBudgetSpendingActivity,
+  OpeningAddedEvent: asOpeningActivity,
+  OpeningCanceledEvent: asOpeningActivity,
+  OpeningFilledEvent: asOpeningFilledActivity,
+  StakeDecreasedEvent: asStakeChangedActivity,
+  StakeIncreasedEvent: asStakeChangedActivity,
+  StakeSlashedEvent: asStakeSlashedActivity,
+  StatusTextChangedEvent: asStatusTextChangedEventActivities,
+  TerminatedLeaderEvent: asWorkerTerminatedActivity,
+  TerminatedWorkerEvent: asWorkerTerminatedActivity,
+  WorkerExitedEvent: asWorkerExitedActivity,
+  WorkerRewardAccountUpdatedEvent: asWorkerRewardAccountUpdatedActivity,
+  WorkerRewardAmountUpdatedEvent: asWorkerRewardAmountUpdatedActivity,
+  WorkerStartedLeavingEvent: asWorkerStartedLeavingActivity,
 }
 
-export function asWorkerTerminatedActivity(
-  fragment: TerminatedLeaderEventFieldsFragment | TerminatedWorkerEventFieldsFragment
-): WorkerTerminatedActivity {
-  return {
-    eventType: fragment.__typename,
-    ...asBaseActivity(fragment),
-    member: asMemberDisplayFields(fragment.worker.membership),
-    groupName: asWorkingGroupName(fragment.group.name),
-  }
-}
+const isGroupEvent = (fields: EventsQueryResult): fields is WorkingGroupEventFields =>
+  fields.__typename in activityCastByType
 
-export function asWorkerRewardAccountUpdatedActivity(
-  fragment: WorkerRewardAccountUpdatedEventFragment
-): WorkerRewardAccountUpdatedActivity {
-  return {
-    eventType: fragment.__typename,
-    ...asBaseActivity(fragment),
-  }
-}
-
-export function asWorkerRewardAmountUpdatedActivity(
-  fragment: WorkerRewardAmountUpdatedEventFragment
-): WorkerRewardAmountUpdatedActivity {
-  return {
-    eventType: fragment.__typename,
-    ...asBaseActivity(fragment),
-    newAmount: fragment.newRewardPerBlock,
-  }
-}
+export const asOpeningsActivities = (events: EventsQueryResult[]) =>
+  events
+    .filter(isGroupEvent)
+    .map((eventFields) => activityCastByType[eventFields.__typename](eventFields))
+    .flat()
