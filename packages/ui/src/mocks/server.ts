@@ -8,6 +8,8 @@ import schema from '../common/api/schemas/schema.graphql'
 
 import {
   seedApplications,
+  seedCouncilMembers,
+  seedElectedCouncils,
   seedMembers,
   seedOpeningStatuses,
   seedOpenings,
@@ -41,6 +43,9 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   // "Mirage: The membership model has multiple possible inverse associations for the membership.invitedBy association."
   membershipModel.class.prototype.associations.invitedBy.opts.inverse = 'invitees'
   membershipModel.class.prototype.associations.invitees.opts.inverse = 'invitedBy'
+
+  // const councilMemberModel = schema.modelFor('councilMember')
+  // membershipModel.class.prototype.associations.councilMembers.opts.inverse = councilMemberModel.class.prototype.associations.member
 
   const proposalPostModel = schema.modelFor('proposalDiscussionPost')
   // "Mirage: The proposal-discussion-post model has multiple possible inverse associations for the proposal-discussion-post.repliesTo association."
@@ -77,6 +82,7 @@ export const makeServer = (environment = 'development') => {
               appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
+              electedCouncils: getWhereResolver('ElectedCouncil'),
               forumCategories: getWhereResolver('ForumCategory'),
               forumCategoryByUniqueInput: getUniqueResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
@@ -146,6 +152,8 @@ export const makeServer = (environment = 'development') => {
             seedForumCategories(server)
             seedForumThreads(server)
             seedForumPosts(server)
+            seedCouncilMembers(server)
+            seedElectedCouncils(server)
           },
         }),
   })
