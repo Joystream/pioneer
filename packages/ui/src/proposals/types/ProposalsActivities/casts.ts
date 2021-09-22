@@ -2,11 +2,21 @@ import { ProposalStatus } from '@/common/api/queries'
 import { asBaseActivity, asMemberDisplayFields } from '@/common/types'
 import {
   GetProposalsEventsQuery,
+  ProposalCancelledEventFieldsFragment,
   ProposalCreatedEventFieldsFragment,
   ProposalDecisionMadeEventFieldsFragment,
+  ProposalDiscussionModeChangedEventFieldsFragment,
+  ProposalExecutedEventFieldsFragment,
   ProposalStatusUpdatedEventFieldsFragment,
+  ProposalVotedEventFieldsFragment,
 } from '@/proposals/queries/__generated__/proposalsEvents.generated'
 
+import {
+  ProposalCancelledActivity,
+  ProposalDiscussionModeChangedActivity,
+  ProposalExecutedActivity,
+  ProposalVotedActivity,
+} from '.'
 import {
   ProposalActivity,
   ProposalCreatedActivity,
@@ -26,9 +36,10 @@ interface ProposalActivityCast<Fields, Activity extends ProposalActivity> {
   (fields: Fields): Activity
 }
 
-const asProposalCreatedActivity: ProposalActivityCast<ProposalCreatedEventFieldsFragment, ProposalCreatedActivity> = (
-  fields
-) => ({
+const asProposalCreatedOrCancelledActivity: ProposalActivityCast<
+  ProposalCreatedEventFieldsFragment | ProposalCancelledEventFieldsFragment,
+  ProposalCreatedActivity | ProposalCancelledActivity
+> = (fields) => ({
   eventType: fields.__typename,
   ...asBaseActivity(fields),
   proposal: asProposalFields(fields.proposal),
@@ -54,13 +65,46 @@ const asProposalDecisionMadeActivity: ProposalActivityCast<
   proposal: asProposalFields(fields.proposal),
 })
 
+const asProposalDiscussionModeChangedActivity: ProposalActivityCast<
+  ProposalDiscussionModeChangedEventFieldsFragment,
+  ProposalDiscussionModeChangedActivity
+> = (fields) => ({
+  eventType: fields.__typename,
+  ...asBaseActivity(fields),
+  proposal: asProposalFields(fields.thread.proposal),
+  newMode: fields.newMode.__typename === 'ProposalDiscussionThreadModeClosed' ? 'closed' : 'open',
+})
+
+const asProposalExecutedActivity: ProposalActivityCast<
+  ProposalExecutedEventFieldsFragment,
+  ProposalExecutedActivity
+> = (fields) => ({
+  eventType: fields.__typename,
+  ...asBaseActivity(fields),
+  proposal: asProposalFields(fields.proposal),
+  executionStatus: fields.executionStatus.__typename,
+})
+
+const asProposalVotedActivity: ProposalActivityCast<ProposalVotedEventFieldsFragment, ProposalVotedActivity> = (
+  fields
+) => ({
+  eventType: fields.__typename,
+  ...asBaseActivity(fields),
+  voter: asMemberDisplayFields(fields.voter),
+  proposal: asProposalFields(fields.proposal),
+})
+
 const proposalCastByType: Record<
   ProposalEventFieldsFragment['__typename'],
   ProposalActivityCast<any, ProposalActivity>
 > = {
-  ProposalCreatedEvent: asProposalCreatedActivity,
+  ProposalCreatedEvent: asProposalCreatedOrCancelledActivity,
+  ProposalCancelledEvent: asProposalCreatedOrCancelledActivity,
   ProposalStatusUpdatedEvent: asProposalStatusUpdatedActivity,
   ProposalDecisionMadeEvent: asProposalDecisionMadeActivity,
+  ProposalDiscussionThreadModeChangedEvent: asProposalDiscussionModeChangedActivity,
+  ProposalExecutedEvent: asProposalExecutedActivity,
+  ProposalVotedEvent: asProposalVotedActivity,
 }
 
 type EventsQueryResult = GetProposalsEventsQuery['events'][0]
