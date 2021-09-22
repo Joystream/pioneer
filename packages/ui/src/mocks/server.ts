@@ -44,9 +44,6 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   membershipModel.class.prototype.associations.invitedBy.opts.inverse = 'invitees'
   membershipModel.class.prototype.associations.invitees.opts.inverse = 'invitedBy'
 
-  // const councilMemberModel = schema.modelFor('councilMember')
-  // membershipModel.class.prototype.associations.councilMembers.opts.inverse = councilMemberModel.class.prototype.associations.member
-
   const proposalPostModel = schema.modelFor('proposalDiscussionPost')
   // "Mirage: The proposal-discussion-post model has multiple possible inverse associations for the proposal-discussion-post.repliesTo association."
   proposalPostModel.class.prototype.associations.repliesTo.opts.inverse = null
