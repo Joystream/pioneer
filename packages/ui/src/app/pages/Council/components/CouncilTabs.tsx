@@ -3,10 +3,10 @@ import React from 'react'
 import { TabsDefinition, usePageTabs } from '@/app/hooks/usePageTabs'
 import { Tabs } from '@/common/components/Tabs'
 import { CouncilRoutes } from '@/council/constants'
-import { useElectionState } from '@/council/hooks/useElectionState'
+import { useElectionStage } from '@/council/hooks/useElectionStage'
 
 export const CouncilTabs = () => {
-  const electionState = useElectionState()
+  const electionStage = useElectionStage()
 
   const pages: TabsDefinition[] = [
     ['Council', CouncilRoutes.council],
@@ -15,7 +15,7 @@ export const CouncilTabs = () => {
     ['Past Elections', CouncilRoutes.pastElections],
   ]
 
-  if (electionState !== 'inactive') {
+  if (electionStage !== 'inactive') {
     pages.unshift(['Election', CouncilRoutes.currentElection])
   }
 
