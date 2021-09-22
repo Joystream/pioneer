@@ -119,6 +119,7 @@ export type AddNewProposalState =
       value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
       context: StakingPolicyAndRewardContext
     }
+  | { value: 'beforeTransaction'; context: Required<AddNewProposalContext> }
   | { value: 'bindStakingAccount'; context: Required<AddNewProposalContext> }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
   | { value: 'success'; context: Required<AddNewProposalContext> }
@@ -165,6 +166,8 @@ export type AddNewProposalEvent =
   | SetRewardPerBlock
   | SetRuntime
   | SetSlashingAmount
+  | { type: 'BOUND' }
+  | { type: 'REQUIRES_STAKING_CANDIDATE' }
 
 export type AddNewProposalMachineState = State<
   AddNewProposalContext,
@@ -302,7 +305,7 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
       meta: { isStep: true, stepTitle: 'Specific parameters' },
       on: {
         BACK: 'generalParameters.triggerAndDiscussion',
-        NEXT: 'bindStakingAccount',
+        NEXT: 'beforeTransaction',
       },
       initial: 'entry',
       states: {
@@ -468,6 +471,13 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
             },
           },
         },
+      },
+    },
+    beforeTransaction: {
+      id: 'beforeTransaction',
+      on: {
+        BOUND: 'transaction',
+        REQUIRES_STAKING_CANDIDATE: 'bindStakingAccount',
       },
     },
     bindStakingAccount: {

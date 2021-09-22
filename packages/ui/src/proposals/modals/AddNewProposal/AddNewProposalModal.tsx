@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
+import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
@@ -47,7 +48,7 @@ import {
   AddNewProposalMachineState,
   ProposalTrigger,
 } from '@/proposals/modals/AddNewProposal/machine'
-import { ProposalType, ProposalConstants } from '@/proposals/types'
+import { ProposalConstants, ProposalType } from '@/proposals/types'
 
 export type BaseProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
@@ -62,7 +63,7 @@ const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Crea
 
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
-  const { active: member } = useMyMemberships()
+  const { active: activeMember } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
   const constants = useConstants(state.context.type)
@@ -70,9 +71,10 @@ export const AddNewProposalModal = () => {
     constants?.requiredStake.toNumber() || 0
   )
   const [isValidNext, setValidNext] = useState<boolean>(false)
+  const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
 
   const txBaseParams: BaseProposalParams = {
-    member_id: member?.id,
+    member_id: activeMember?.id,
     title: state.context.title,
     description: state.context.rationale,
     ...(state.context.stakingAccount ? { staking_account_id: state.context.stakingAccount.address } : {}),
@@ -80,17 +82,25 @@ export const AddNewProposalModal = () => {
   }
 
   const transaction = useMemo(() => {
-    if (member && api) {
+    if (activeMember && api) {
       const txSpecificParameters = getSpecificParameters(api, state as AddNewProposalMachineState)
 
-      return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+      if (stakingStatus === 'confirmed') {
+        return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+      }
+
+      return api.tx.utility.batch([
+        api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
+        api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
+      ])
     }
-  }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics), connectionState])
-  const feeInfo = useTransactionFee(member?.controllerAccount, transaction)
+  }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics), connectionState, stakingStatus])
+
+  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
-      if (!member) {
+      if (!activeMember) {
         return showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
       }
 
@@ -106,14 +116,19 @@ export const AddNewProposalModal = () => {
     if (state.matches('requiredStakeVerification')) {
       return send(hasRequiredStake ? 'NEXT' : 'FAIL')
     }
-  }, [state, member?.id, JSON.stringify(feeInfo)])
+  }, [state, activeMember?.id, JSON.stringify(feeInfo)])
 
   useEffect((): any => {
     if (state.matches('proposalType') && state.context.type) {
       return setValidNext(true)
     }
 
-    if (state.matches('generalParameters.stakingAccount') && state.context.stakingAccount) {
+    if (
+      state.matches('generalParameters.stakingAccount') &&
+      state.context.stakingAccount &&
+      stakingStatus !== 'unknown' &&
+      stakingStatus !== 'other'
+    ) {
       return setValidNext(true)
     }
 
@@ -135,15 +150,25 @@ export const AddNewProposalModal = () => {
     }
 
     return setValidNext(false)
-  }, [state, member?.id])
+  }, [state, activeMember?.id, stakingStatus])
 
-  if (!api || !member || !transaction || !feeInfo) {
+  useEffect(() => {
+    if (state.matches('beforeTransaction')) {
+      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+    }
+  }, [state, stakingStatus])
+
+  if (!api || !activeMember || !transaction || !feeInfo) {
     return null
   }
 
   if (state.matches('requirementsFailed')) {
     return (
-      <InsufficientFundsModal onClose={hideModal} address={member.controllerAccount} amount={feeInfo.transactionFee} />
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={feeInfo.transactionFee}
+      />
     )
   }
 
@@ -165,7 +190,7 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('bindStakingAccount')) {
-    const transaction = api.tx.members.addStakingAccountCandidate(member.id)
+    const transaction = api.tx.members.addStakingAccountCandidate(activeMember.id)
 
     return (
       <BindStakingAccountModal
@@ -173,7 +198,7 @@ export const AddNewProposalModal = () => {
         transaction={transaction}
         signer={state.context.stakingAccount.address}
         service={state.children.bindStakingAccount}
-        memberId={member.id}
+        memberId={activeMember.id}
         steps={transactionsSteps}
       />
     )
@@ -184,7 +209,7 @@ export const AddNewProposalModal = () => {
       <SignTransactionModal
         onClose={hideModal}
         transaction={transaction}
-        signer={member.controllerAccount}
+        signer={activeMember.controllerAccount}
         stake={constants?.requiredStake as BN}
         service={state.children['transaction']}
         steps={transactionsSteps}
@@ -238,7 +263,7 @@ export const AddNewProposalModal = () => {
             )}
             {state.matches('generalParameters.proposalDetails') && (
               <ProposalDetailsStep
-                proposer={member}
+                proposer={activeMember}
                 title={state.context.title}
                 rationale={state.context.rationale}
                 setTitle={(title) => send('SET_TITLE', { title })}
