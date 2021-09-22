@@ -68,6 +68,7 @@ export const App = () => (
         <Route path={ForumRoutes.forum} component={Forum} />
         <Route exact path="/404" component={NotFound} />
         <Redirect exact from="/" to="/profile" />
+        <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
         <Redirect from="*" to="/404" />
       </Switch>
     </Page>

@@ -3,4 +3,5 @@ export const ProposalsRoutes = {
   past: '/proposals/past',
   myproposals: '/proposals/my-proposals',
   preview: '/proposals/preview',
+  home: '/proposals',
 }
