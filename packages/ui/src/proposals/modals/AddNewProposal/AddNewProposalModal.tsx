@@ -71,7 +71,7 @@ export const AddNewProposalModal = () => {
     constants?.requiredStake.toNumber() || 0
   )
   const [isValidNext, setValidNext] = useState<boolean>(false)
-  const stakingState = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
+  const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
 
   const txBaseParams: BaseProposalParams = {
     member_id: activeMember?.id,
@@ -85,7 +85,7 @@ export const AddNewProposalModal = () => {
     if (activeMember && api) {
       const txSpecificParameters = getSpecificParameters(api, state as AddNewProposalMachineState)
 
-      if (stakingState === 'confirmed') {
+      if (stakingStatus === 'confirmed') {
         return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
       }
 
@@ -94,7 +94,7 @@ export const AddNewProposalModal = () => {
         api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
       ])
     }
-  }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics), connectionState, stakingState])
+  }, [JSON.stringify(txBaseParams), JSON.stringify(state.context.specifics), connectionState, stakingStatus])
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
@@ -126,8 +126,8 @@ export const AddNewProposalModal = () => {
     if (
       state.matches('generalParameters.stakingAccount') &&
       state.context.stakingAccount &&
-      stakingState !== 'unknown' &&
-      stakingState !== 'other'
+      stakingStatus !== 'unknown' &&
+      stakingStatus !== 'other'
     ) {
       return setValidNext(true)
     }
@@ -150,13 +150,13 @@ export const AddNewProposalModal = () => {
     }
 
     return setValidNext(false)
-  }, [state, activeMember?.id, stakingState])
+  }, [state, activeMember?.id, stakingStatus])
 
   useEffect(() => {
-    if (state.matches('beforeTransaction') && state.context?.stakingAccount) {
-      send(stakingState === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUNDED')
+    if (state.matches('beforeTransaction')) {
+      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUNDED')
     }
-  }, [state, state.context?.stakingAccount?.address])
+  }, [state, stakingStatus])
 
   if (!api || !activeMember || !transaction || !feeInfo) {
     return null

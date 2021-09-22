@@ -537,7 +537,7 @@ describe('UI: AddNewProposalModal', () => {
         })
       })
 
-      describe('Staking account is candidate', () => {
+      describe('Staking account is a candidate', () => {
         beforeEach(async () => {
           stubQuery(
             api,

@@ -1,11 +1,14 @@
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { ApplicationId } from '@joystream/types/working-group'
 import { ApiRx } from '@polkadot/api'
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
+import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
@@ -14,7 +17,6 @@ import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getEventParam, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { useMember } from '@/memberships/hooks/useMembership'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -39,7 +41,6 @@ const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Appl
 export const ApplyForRoleModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
-  const { member } = useMember(activeMember?.id)
   const { hideModal, modalData, showModal } = useModal<ApplyForRoleModalCall>()
   const [state, send, service] = useMachine(applyForRoleMachine)
   const opening = modalData.opening
@@ -60,6 +61,7 @@ export const ApplyForRoleModal = () => {
     }
   }, [activeMember?.id, connectionState])
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const stakingStatus = useStakingAccountStatus(state.context?.stake?.account?.address, activeMember?.id)
 
   useEffect(() => {
     if (!state.matches('requirementsVerification')) {
@@ -90,11 +92,10 @@ export const ApplyForRoleModal = () => {
   }, [state.value, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
   useEffect(() => {
-    if (state.matches('beforeTransaction') && state.context?.stake.account && member) {
-      const alreadyBounded = member.boundAccounts.includes(state.context?.stake.account.address)
-      send(alreadyBounded ? 'BOUNDED' : 'UNBOUNDED')
+    if (state.matches('beforeTransaction')) {
+      send(stakingStatus === 'free' ? 'UNBOUNDED' : 'BOUNDED')
     }
-  }, [state, member?.id, state.context?.stake?.account?.address])
+  }, [state, stakingStatus])
 
   if (!activeMember || !feeInfo || hasRequiredStake === false) {
     return null
@@ -121,9 +122,7 @@ export const ApplyForRoleModal = () => {
   const bindStakingAccountService = state.children.bindStakingAccount
 
   if (state.matches('bindStakingAccount') && api && bindStakingAccountService) {
-    const { stake } = state.context
-    const stakingAccount = stake.account?.address
-
+    const stakingAccount = state.context.stake.account?.address
     const transaction = api.tx.members.addStakingAccountCandidate(activeMember.id)
 
     return (
@@ -144,7 +143,7 @@ export const ApplyForRoleModal = () => {
   if (state.matches('transaction') && signer && api && transactionService) {
     const { stake, answers } = state.context
 
-    const transaction = getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
+    const applyOnOpeningTransaction = getGroup(api, opening.groupName as GroupName)?.applyOnOpening({
       opening_id: opening.runtimeId,
       member_id: activeMember?.id,
       role_account_id: activeMember?.controllerAccount,
@@ -156,15 +155,21 @@ export const ApplyForRoleModal = () => {
       },
     })
 
-    const batch = api.tx.utility.batch([
-      transaction,
-      api.tx.members.confirmStakingAccount(activeMember?.id, stake.account.address),
-    ])
+    let transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
+
+    if (stakingStatus === 'confirmed') {
+      transaction = applyOnOpeningTransaction
+    } else {
+      transaction = api.tx.utility.batch([
+        applyOnOpeningTransaction,
+        api.tx.members.confirmStakingAccount(activeMember?.id, stake.account.address),
+      ])
+    }
 
     return (
       <ApplyForRoleSignModal
         onClose={hideModal}
-        transaction={batch}
+        transaction={transaction}
         signer={signer}
         stake={new BN(state.context.stake.amount)}
         service={transactionService}

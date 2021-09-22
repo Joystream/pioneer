@@ -1,4 +1,4 @@
-import { registry } from '@joystream/types'
+import { createType, registry } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -31,6 +31,7 @@ import { OPENING_DATA } from '../../_mocks/server/seeds'
 import {
   stubApi,
   stubDefaultBalances,
+  stubQuery,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
@@ -63,6 +64,7 @@ describe('UI: ApplyForRoleModal', () => {
   let useAccounts: UseAccounts
   let batchTx: any
   let bindAccountTx: any
+  let applyTransaction: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -88,8 +90,17 @@ describe('UI: ApplyForRoleModal', () => {
     useMyMemberships.setActive(getMember('alice'))
 
     stubDefaultBalances(api)
-    stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
+    applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
+    stubQuery(
+      api,
+      'members.stakingAccountIdMemberStatus',
+      createType('StakingAccountMemberBinding', {
+        member_id: 0,
+        confirmed: false,
+      })
+    )
+    stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
   })
@@ -197,7 +208,7 @@ describe('UI: ApplyForRoleModal', () => {
       fireEvent.click(await getNextStepButton())
     }
 
-    describe('Staking account is not bound yet', () => {
+    describe('Staking account is not nor staking candidate', () => {
       it('Bind account step', async () => {
         await fillSteps()
 
@@ -253,11 +264,17 @@ describe('UI: ApplyForRoleModal', () => {
       })
     })
 
-    describe('Staking account is already bounded', () => {
+    describe('Staking account is a candidate', () => {
       beforeEach(async () => {
-        const member = server.server?.schema.find('Membership', '0') as any
-        member.boundAccounts = [alice.address]
-        await member.save()
+        stubQuery(
+          api,
+          'members.stakingAccountIdMemberStatus',
+          createType('StakingAccountMemberBinding', {
+            member_id: createType('MemberId', 0),
+            confirmed: createType('bool', false),
+          })
+        )
+        stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
       })
 
       it('Apply on opening step', async () => {
@@ -283,6 +300,50 @@ describe('UI: ApplyForRoleModal', () => {
 
       it('Apply on opening failure', async () => {
         stubTransactionFailure(batchTx)
+        await fillSteps()
+
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
+
+        expect(await screen.findByText('Failure')).toBeDefined()
+      })
+    })
+
+    describe('Staking account is a confirmed', () => {
+      beforeEach(async () => {
+        stubQuery(
+          api,
+          'members.stakingAccountIdMemberStatus',
+          createType('StakingAccountMemberBinding', {
+            member_id: createType('MemberId', 0),
+            confirmed: createType('bool', true),
+          })
+        )
+        stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 8))
+      })
+
+      it('Apply on opening step', async () => {
+        await fillSteps()
+
+        expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      })
+
+      it('Apply on opening success', async () => {
+        stubTransactionSuccess(
+          applyTransaction,
+          ['EventParams', registry.createType('ApplicationId', 1337)],
+          'workingGroup',
+          'AppliedOnOpening'
+        )
+        await fillSteps()
+        fireEvent.click(screen.getByText(/^Sign transaction/i))
+
+        expect(await screen.findByText('Application submitted!')).toBeDefined()
+        expect(await screen.findByText(/application id: 1337/i)).toBeDefined()
+      })
+
+      it('Apply on opening failure', async () => {
+        stubTransactionFailure(applyTransaction)
         await fillSteps()
 
         fireEvent.click(screen.getByText(/^Sign transaction/i))
