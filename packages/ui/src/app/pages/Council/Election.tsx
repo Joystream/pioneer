@@ -3,9 +3,12 @@ import React from 'react'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonPrimary, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
-import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
+import { DurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
+import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
+import { TextHuge } from '@/common/components/typography'
+import { camelCaseToText } from '@/common/helpers'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 
 import { CouncilTabs } from './components/CouncilTabs'
@@ -32,7 +35,17 @@ export const Election = () => {
     </PageHeaderWrapper>
   )
 
-  const main = <MainPanel></MainPanel>
+  const main = (
+    <MainPanel>
+      <Statistics>
+        <StatisticItem title="Stage" tooltipText="Lorem ipsum...">
+          <TextHuge bold>{camelCaseToText(electionStage)} Period</TextHuge>
+        </StatisticItem>
+        <DurationStatistics title="Period length" tooltipText="Lorem ipsum..." value={new Date().toISOString()} />
+        <NumericValueStat title="Election round" tooltipText="Lorem ipsum..." value={1} />
+      </Statistics>
+    </MainPanel>
+  )
 
   return <PageLayout header={header} main={main} />
 }

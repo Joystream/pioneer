@@ -8,15 +8,15 @@ export const useElectionStage = (): ElectionState => {
   const electionStage = useObservable(api?.query.referendum.stage(), [api])
   const councilStage = useObservable(api?.query.council.stage(), [api])
 
-  if (councilStage?.stage.isIdle) {
+  if (!councilStage || !electionStage || councilStage.stage.isIdle) {
     return 'inactive'
   }
 
-  if (councilStage?.stage.isAnnouncing) {
+  if (councilStage.stage.isAnnouncing) {
     return 'announcing'
   }
 
-  if (electionStage?.isVoting) {
+  if (electionStage.isVoting) {
     return 'voting'
   }
 
