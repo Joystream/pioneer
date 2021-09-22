@@ -156,6 +156,21 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
   }
 }
 
+export const stubCouncilAndReferendum = (
+  api: UseApi,
+  councilStage: 'Idle' | 'Election' | 'Announcing',
+  referendumStage: 'Inactive' | 'Voting' | 'Revealing'
+) => {
+  stubQuery(api, 'referendum.stage', createType('ReferendumStage', referendumStage))
+  stubQuery(
+    api,
+    'council.stage',
+    createType('CouncilStageUpdate', {
+      stage: createType('CouncilStage', councilStage),
+    })
+  )
+}
+
 type Balances = { available?: number; locked?: number; lockId?: number }
 
 export const stubBalances = (api: UseApi, { available, lockId, locked }: Balances) => {
