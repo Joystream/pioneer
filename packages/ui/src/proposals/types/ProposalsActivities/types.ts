@@ -60,7 +60,7 @@ export interface ProposalDiscussionModeChangedActivity extends ProposalObjectAct
 
 export interface ProposalExecutedActivity extends ProposalObjectActivity {
   eventType: 'ProposalExecutedEvent'
-  executionStatus: 'ProposalStatusExecuted' | 'ProposalStatusExecutionFailed'
+  executedSuccessfully: boolean
 }
 
 export interface ProposalVotedActivity extends ProposalObjectActivity {

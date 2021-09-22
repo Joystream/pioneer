@@ -82,7 +82,7 @@ const asProposalExecutedActivity: ProposalActivityCast<
   eventType: fields.__typename,
   ...asBaseActivity(fields),
   proposal: asProposalFields(fields.proposal),
-  executionStatus: fields.executionStatus.__typename,
+  executedSuccessfully: fields.executionStatus.__typename === 'ProposalStatusExecuted',
 })
 
 const asProposalVotedActivity: ProposalActivityCast<ProposalVotedEventFieldsFragment, ProposalVotedActivity> = (

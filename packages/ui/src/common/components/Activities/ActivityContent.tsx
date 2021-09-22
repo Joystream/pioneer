@@ -5,9 +5,13 @@ import { CategoryCreatedContent } from '@/forum/components/Activities/CategoryCr
 import { PostAddedContent } from '@/forum/components/Activities/PostAddedContent'
 import { PostEditedContent } from '@/forum/components/Activities/PostEditedContent'
 import { ThreadCreatedContent } from '@/forum/components/Activities/ThreadCreatedContent'
+import { ProposalCancelledContent } from '@/proposals/components/Activities/ProposalCancelledContent'
 import { ProposalCreatedContent } from '@/proposals/components/Activities/ProposalCreatedContent'
 import { ProposalDecisionMadeContent } from '@/proposals/components/Activities/ProposalDecisionMadeContent'
+import { ProposalDiscussionModeContent } from '@/proposals/components/Activities/ProposalDiscussionModeContent'
+import { ProposalExecutedContent } from '@/proposals/components/Activities/ProposalExecutedContent'
 import { ProposalStatusUpdatedContent } from '@/proposals/components/Activities/ProposalStatusUpdatedContent'
+import { ProposalVotedContent } from '@/proposals/components/Activities/ProposalVotedContent'
 import { ApplicationWithdrawnContent } from '@/working-groups/components/Activities/ApplicationWithdrawnContent'
 import { AppliedOnOpeningContent } from '@/working-groups/components/Activities/AppliedOnOpeningContent'
 import { BudgetSetContent } from '@/working-groups/components/Activities/BudgetSetContent'
@@ -53,8 +57,12 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   ThreadCreatedEvent: ThreadCreatedContent,
   CategoryCreatedEvent: CategoryCreatedContent,
   ProposalCreatedEvent: ProposalCreatedContent,
+  ProposalCancelledEvent: ProposalCancelledContent,
   ProposalStatusUpdatedEvent: ProposalStatusUpdatedContent,
   ProposalDecisionMadeEvent: ProposalDecisionMadeContent,
+  ProposalDiscussionThreadModeChangedEvent: ProposalDiscussionModeContent,
+  ProposalExecutedEvent: ProposalExecutedContent,
+  ProposalVotedEvent: ProposalVotedContent,
 }
 
 export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {
