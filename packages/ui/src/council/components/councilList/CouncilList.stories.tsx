@@ -1,29 +1,30 @@
 import { Meta, Story } from '@storybook/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { repeat } from '@/common/utils'
 import { getMember } from '@/mocks/helpers'
 
-import { CouncilList, CouncilListProps } from './CouncilList'
+import { CouncilList, CouncilOrder, CouncilListProps } from './CouncilList'
 
 export default {
   title: 'Council/CouncilList/CouncilList',
   component: CouncilList,
-  argTypes: {
-    onSort: { action: 'Sort' },
-  },
 } as Meta
 
-interface Props extends Omit<CouncilListProps, 'councilors'> {
+interface Props {
   count: number
   councilor: CouncilListProps['councilors'][0]
+  isLoading: boolean
 }
-const Template: Story<Props> = ({ count, councilor, ...args }) => (
-  <MemoryRouter>
-    <CouncilList councilors={repeat(() => councilor, count)} {...args} />
-  </MemoryRouter>
-)
+const Template: Story<Props> = ({ count, councilor, isLoading }) => {
+  const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
+  return (
+    <MemoryRouter>
+      <CouncilList councilors={repeat(() => councilor, count)} order={order} onSort={setOrder} isLoading={isLoading} />
+    </MemoryRouter>
+  )
+}
 
 export const Default = Template.bind({})
 Default.args = {
