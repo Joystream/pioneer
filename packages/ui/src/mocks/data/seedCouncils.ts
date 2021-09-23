@@ -1,3 +1,4 @@
+import { BlockFieldsMock } from './common'
 import rawCouncilors from './raw/councilors.json'
 import rawCouncils from './raw/councils.json'
 
@@ -10,7 +11,7 @@ export interface RawCouncilorMock {
 }
 export interface RawCouncilMock {
   id: string
-  endedAtBlock: null
+  endedAtBlock: BlockFieldsMock | null
 }
 
 export const seedCouncilMember = (data: RawCouncilorMock, server: any) => server.schema.create('CouncilMember', data)
