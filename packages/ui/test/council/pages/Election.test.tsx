@@ -1,19 +1,57 @@
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { act, fireEvent, prettyDOM, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { Election } from '@/app/pages/Council/Election'
 import { ApiContext } from '@/common/providers/api/context'
-import { seedCouncilCandidate, seedCouncilElection, seedElectedCouncil, seedMembers } from '@/mocks/data'
+import { MembershipContext } from '@/memberships/providers/membership/context'
+import { MyMemberships } from '@/memberships/providers/membership/provider'
+import {
+  RawCouncilCandidateMock,
+  seedCouncilCandidate,
+  seedCouncilElection,
+  seedElectedCouncil,
+  seedMembers,
+} from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
-import { MockQueryNodeProviders } from '../../_mocks/providers'
+import { alice } from '../../_mocks/keyring'
+import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
+
+const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
+  {
+    id: '1',
+    cycleIdId: '1',
+    memberId: getMember('bob').id,
+    stake: 1000,
+  },
+  {
+    id: '2',
+    cycleIdId: '1',
+    memberId: getMember('bob').id,
+    stake: 1000,
+  },
+]
 
 describe('UI: Election page', () => {
   const mockServer = setupMockServer()
   const api = stubApi()
+
+  const useAccounts: UseAccounts = {
+    hasAccounts: true,
+    allAccounts: [alice],
+  }
+  const useMyMemberships: MyMemberships = {
+    active: undefined,
+    members: [getMember('alice')],
+    setActive: (member) => (useMyMemberships.active = member),
+    isLoading: false,
+    hasMembers: true,
+  }
 
   beforeEach(() => {
     seedMembers(mockServer.server)
@@ -55,35 +93,50 @@ describe('UI: Election page', () => {
         expect(screen.queryByText(/Announcing period/i)).not.toBeNull()
       })
 
-      it('No candidates', async () => {
-        await renderComponent()
+      describe('Tabs', () => {
+        describe('Candidates', () => {
+          it('No candidates', async () => {
+            await renderComponent()
 
-        expect(screen.queryByText(/There are no candidates yet/i)).not.toBeNull()
-      })
+            expect(screen.queryByText(/There are no candidates yet/i)).not.toBeNull()
+          })
 
-      it('Has candidates', async () => {
-        seedCouncilCandidate(
-          {
-            id: '1',
-            cycleIdId: '1',
-            memberId: getMember('alice').id,
-            stake: 1000,
-          },
-          mockServer.server
-        )
-        seedCouncilCandidate(
-          {
-            id: '2',
-            cycleIdId: '1',
-            memberId: getMember('bob').id,
-            stake: 1000,
-          },
-          mockServer.server
-        )
+          it('Has candidates', async () => {
+            TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
 
-        await renderComponent()
+            await renderComponent()
 
-        expect(screen.queryAllByText(/newcomer/i).length).toBe(2)
+            expect(screen.queryAllByText(/newcomer/i).length).toBe(2)
+          })
+        })
+        describe('My candidates', () => {
+          it('No my candidates', async () => {
+            TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+
+            await renderComponent()
+
+            expect(screen.queryByText(/There are no candidates yet/i)).toBeNull()
+            expect(screen.queryByText('My candidates')).toBeNull()
+          })
+
+          it('Has my candidates', async () => {
+            const candidates = TEST_CANDIDATES
+            candidates[0].memberId = getMember('alice').id
+            candidates.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+            TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
+
+            await renderComponent()
+
+            const myCandidatesTab = await screen.findByText(/My candidates/i)
+
+            act(() => {
+              fireEvent.click(myCandidatesTab)
+            })
+
+            expect(screen.queryAllByText(/newcomer/i).length).toBe(1)
+            expect(screen.queryAllByText(/my stake/i).length).toBe(1)
+          })
+        })
       })
     })
 
@@ -106,16 +159,23 @@ describe('UI: Election page', () => {
 
   async function renderComponent() {
     const rendered = await render(
-      <ApiContext.Provider value={api}>
-        <MockQueryNodeProviders>
-          <MemoryRouter>
-            <Election />
-          </MemoryRouter>
-        </MockQueryNodeProviders>
-      </ApiContext.Provider>
+      <MemoryRouter>
+        <ApiContext.Provider value={api}>
+          <MockQueryNodeProviders>
+            <MockKeyringProvider>
+              <AccountsContext.Provider value={useAccounts}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <Election />
+                </MembershipContext.Provider>
+              </AccountsContext.Provider>
+            </MockKeyringProvider>
+          </MockQueryNodeProviders>
+        </ApiContext.Provider>
+      </MemoryRouter>
     )
 
     await waitForElementToBeRemoved(() => rendered.getByText('Loading...'))
+
     return rendered
   }
 })

@@ -1,7 +1,6 @@
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
-
-type ElectionStage = 'announcing' | 'voting' | 'revealing' | 'inactive'
+import { ElectionStage } from '@/council/types/Election'
 
 interface UseElectionStage {
   isLoading: boolean
