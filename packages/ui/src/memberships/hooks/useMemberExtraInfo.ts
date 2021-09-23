@@ -12,6 +12,7 @@ export function useMemberExtraInfo(member: Member) {
     terminated:
       data && data.terminatedLeaderEventsConnection.totalCount + data.terminatedWorkerEventsConnection.totalCount,
     blogPosts: data?.forumPostsConnection.totalCount,
+    councilMember: data?.councilMembersConnection.totalCount,
     initiatingLeaving: data?.workerStartedLeavingEventsConnection.totalCount,
   }
 }

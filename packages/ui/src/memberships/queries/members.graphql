@@ -85,6 +85,9 @@ query SearchMembers($text: String!, $limit: Int) {
 }
 
 query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
+  councilMembersConnection(where: { member: { id_eq: $membershipId_eq } }) {
+    totalCount
+  }
   forumPostsConnection(where: { author: { id_eq: $membershipId_eq } }) {
     totalCount
   }
