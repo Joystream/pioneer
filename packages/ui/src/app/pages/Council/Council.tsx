@@ -4,6 +4,7 @@ import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/P
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
+import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { CouncilList, CouncilOrder } from '@/council/components/councilList'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { Councilor } from '@/council/types'
@@ -28,7 +29,11 @@ export const Council = () => {
 
   const main = (
     <MainPanel ref={sideNeighborRef}>
-      <CouncilList councilors={councilors} order={order} onSort={setOrder} isLoading={isLoading} />
+      {!isLoading && councilors.length === 0 ? (
+        <NotFoundText>There is no council member at the moment</NotFoundText>
+      ) : (
+        <CouncilList councilors={councilors} order={order} onSort={setOrder} isLoading={isLoading} />
+      )}
     </MainPanel>
   )
 
