@@ -49,6 +49,39 @@ The repository has enabled the continuous integration for every commit that land
 
 All PRs land in the `main` branch. Other branches are short-lived for development purposes. However, the archival branches exists under `/arch/*` – those consists prepared components or code that was not included in the main branch, but might be needed at later stage.
 
+## Joystream API
+
+Both - the testnet & local development environment expects that a Joystream node instance is available.
+
+Expected URIs:
+
+- local: `ws://127.0.0.1:9944`
+- testnet: `wss://olympia-dev.joystream.app`
+
+### Local environment limitations
+
+Since the local query-node operates on [mocks](#query-node-mocks) all of the mocked entities are not present.
+
+The second limitation is that any on-chain action is not represented in the query-node mocks.
+
+### Node mocks
+
+To test most of the extrinsics requires existing on-chain data. To create some on-chain objects use the `yarn run node-mocks` script or use the polkadot apps wallet application to create them beforehand.
+
+Available commands:
+
+- `yarn node-mocks members:create` – generate memberships using query-node mocks data
+- `yarn node-mocks set-budget` - Set membership Working Group budget
+- `yarn node-mocks opening:create` - Create an opening
+- `yarn node-mocks opening:fill` - Fill existing opening
+- `yarn node-mocks transfer` - Transfer tokens between accounts
+
+To show help:
+
+```shell
+yarn node-mocks --help
+```
+
 ## Query-node API
 
 To access the archival state of the chain Pioneer 2 fetch such information from the [query-node](https://github.com/Joystream/joystream/tree/query_node/query-node). It is a GraphQL server that allows a convenient API for querying the data.
