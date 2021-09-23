@@ -1,16 +1,10 @@
-import { prettyDOM, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { Election } from '@/app/pages/Council/Election'
 import { ApiContext } from '@/common/providers/api/context'
-import {
-  seedCouncilCandidate,
-  seedCouncilCandidates,
-  seedCouncilElection,
-  seedElectedCouncil,
-  seedMembers,
-} from '@/mocks/data'
+import { seedCouncilCandidate, seedCouncilElection, seedElectedCouncil, seedMembers } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
@@ -26,7 +20,6 @@ describe('UI: Election page', () => {
     seedElectedCouncil(
       {
         id: '1',
-        councilMemberIds: [],
         endedAtBlock: null,
       },
       mockServer.server

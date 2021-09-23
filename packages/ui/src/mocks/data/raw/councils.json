@@ -1,74 +1,34 @@
 [
   {
     "id": "0",
-    "councilMemberIds": [
-      "0-0",
-      "0-1",
-      "0-2",
-      "0-3",
-      "0-4",
-      "0-5",
-      "0-6"
-    ],
     "endedAtBlock": {
-      "inBlock": 1604,
-      "createdAt": "2021-09-19T22:51:24.174Z",
+      "inBlock": 2510,
+      "createdAt": "2021-06-14T19:30:30.027Z",
       "network": "OLYMPIA"
     }
   },
   {
     "id": "1",
-    "councilMemberIds": [
-      "1-0",
-      "1-1",
-      "1-2",
-      "1-3",
-      "1-4",
-      "1-5",
-      "1-6",
-      "1-7"
-    ],
     "endedAtBlock": {
-      "inBlock": 3650,
-      "createdAt": "2021-08-19T05:57:43.616Z",
+      "inBlock": 1614,
+      "createdAt": "2021-04-24T18:03:45.884Z",
       "network": "OLYMPIA"
     }
   },
   {
     "id": "2",
-    "councilMemberIds": [
-      "2-0",
-      "2-1",
-      "2-2",
-      "2-3",
-      "2-4",
-      "2-5"
-    ],
     "endedAtBlock": {
-      "inBlock": 9770,
-      "createdAt": "2021-07-31T18:55:03.457Z",
+      "inBlock": 6461,
+      "createdAt": "2021-07-24T03:51:20.669Z",
       "network": "OLYMPIA"
     }
   },
   {
     "id": "3",
-    "councilMemberIds": [
-      "3-0",
-      "3-1",
-      "3-2",
-      "3-3",
-      "3-4",
-      "3-5"
-    ],
-    "endedAtBlock": {
-      "inBlock": 6584,
-      "createdAt": "2021-05-16T14:58:08.798Z",
-      "network": "OLYMPIA"
-    }
+    "endedAtBlock": null
   },
   {
     "id": "4",
-    "councilMemberIds": [],
     "endedAtBlock": null
   }
 ]

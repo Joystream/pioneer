@@ -15,18 +15,6 @@ export type ProposalCreatedEventFieldsFragment = {
   }
 }
 
-export type ProposalCancelledEventFieldsFragment = {
-  __typename: 'ProposalCancelledEvent'
-  id: string
-  createdAt: any
-  proposal: {
-    __typename: 'Proposal'
-    id: string
-    title: string
-    creator: { __typename: 'Membership'; id: string; handle: string }
-  }
-}
-
 export type ProposalStatusUpdatedEventFieldsFragment = {
   __typename: 'ProposalStatusUpdatedEvent'
   id: string
@@ -43,30 +31,6 @@ export type ProposalDecisionMadeEventFieldsFragment = {
   id: string
   createdAt: any
   proposal: { __typename: 'Proposal'; id: string; title: string }
-}
-
-export type ProposalDiscussionModeChangedEventFieldsFragment = {
-  __typename: 'ProposalDiscussionThreadModeChangedEvent'
-  id: string
-  createdAt: any
-  thread: { __typename: 'ProposalDiscussionThread'; proposal: { __typename: 'Proposal'; id: string; title: string } }
-  newMode: { __typename: 'ProposalDiscussionThreadModeOpen' } | { __typename: 'ProposalDiscussionThreadModeClosed' }
-}
-
-export type ProposalExecutedEventFieldsFragment = {
-  __typename: 'ProposalExecutedEvent'
-  id: string
-  createdAt: any
-  proposal: { __typename: 'Proposal'; id: string; title: string }
-  executionStatus: { __typename: 'ProposalStatusExecuted' } | { __typename: 'ProposalStatusExecutionFailed' }
-}
-
-export type ProposalVotedEventFieldsFragment = {
-  __typename: 'ProposalVotedEvent'
-  id: string
-  createdAt: any
-  proposal: { __typename: 'Proposal'; id: string; title: string }
-  voter: { __typename: 'Membership'; id: string; handle: string }
 }
 
 export type GetProposalsEventsQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -94,16 +58,16 @@ export type GetProposalsEventsQuery = {
     | { __typename: 'OpeningAddedEvent' }
     | { __typename: 'OpeningCanceledEvent' }
     | { __typename: 'OpeningFilledEvent' }
-    | ({ __typename: 'ProposalCancelledEvent' } & ProposalCancelledEventFieldsFragment)
+    | { __typename: 'ProposalCancelledEvent' }
     | ({ __typename: 'ProposalCreatedEvent' } & ProposalCreatedEventFieldsFragment)
     | ({ __typename: 'ProposalDecisionMadeEvent' } & ProposalDecisionMadeEventFieldsFragment)
     | { __typename: 'ProposalDiscussionPostCreatedEvent' }
     | { __typename: 'ProposalDiscussionPostDeletedEvent' }
     | { __typename: 'ProposalDiscussionPostUpdatedEvent' }
-    | ({ __typename: 'ProposalDiscussionThreadModeChangedEvent' } & ProposalDiscussionModeChangedEventFieldsFragment)
-    | ({ __typename: 'ProposalExecutedEvent' } & ProposalExecutedEventFieldsFragment)
+    | { __typename: 'ProposalDiscussionThreadModeChangedEvent' }
+    | { __typename: 'ProposalExecutedEvent' }
     | ({ __typename: 'ProposalStatusUpdatedEvent' } & ProposalStatusUpdatedEventFieldsFragment)
-    | ({ __typename: 'ProposalVotedEvent' } & ProposalVotedEventFieldsFragment)
+    | { __typename: 'ProposalVotedEvent' }
     | { __typename: 'ReferralCutUpdatedEvent' }
     | { __typename: 'RewardPaidEvent' }
     | { __typename: 'StakeDecreasedEvent' }
@@ -125,20 +89,6 @@ export type GetProposalsEventsQuery = {
 
 export const ProposalCreatedEventFieldsFragmentDoc = gql`
   fragment ProposalCreatedEventFields on ProposalCreatedEvent {
-    id
-    createdAt
-    proposal {
-      id
-      title
-      creator {
-        id
-        handle
-      }
-    }
-  }
-`
-export const ProposalCancelledEventFieldsFragmentDoc = gql`
-  fragment ProposalCancelledEventFields on ProposalCancelledEvent {
     id
     createdAt
     proposal {
@@ -174,69 +124,14 @@ export const ProposalDecisionMadeEventFieldsFragmentDoc = gql`
     }
   }
 `
-export const ProposalDiscussionModeChangedEventFieldsFragmentDoc = gql`
-  fragment ProposalDiscussionModeChangedEventFields on ProposalDiscussionThreadModeChangedEvent {
-    id
-    createdAt
-    thread {
-      proposal {
-        id
-        title
-      }
-    }
-    newMode {
-      __typename
-    }
-  }
-`
-export const ProposalExecutedEventFieldsFragmentDoc = gql`
-  fragment ProposalExecutedEventFields on ProposalExecutedEvent {
-    id
-    createdAt
-    proposal {
-      id
-      title
-    }
-    executionStatus {
-      __typename
-    }
-  }
-`
-export const ProposalVotedEventFieldsFragmentDoc = gql`
-  fragment ProposalVotedEventFields on ProposalVotedEvent {
-    id
-    createdAt
-    proposal {
-      id
-      title
-    }
-    voter {
-      id
-      handle
-    }
-  }
-`
 export const GetProposalsEventsDocument = gql`
   query GetProposalsEvents {
     events(
-      where: {
-        type_in: [
-          ProposalCreatedEvent
-          ProposalStatusUpdatedEvent
-          ProposalDecisionMadeEvent
-          ProposalCancelledEvent
-          ProposalDiscussionThreadModeChangedEvent
-          ProposalExecutedEvent
-          ProposalVotedEvent
-        ]
-      }
+      where: { type_in: [ProposalCreatedEvent, ProposalStatusUpdatedEvent, ProposalDecisionMadeEvent] }
       orderBy: [createdAt_DESC]
     ) {
       ... on ProposalCreatedEvent {
         ...ProposalCreatedEventFields
-      }
-      ... on ProposalCancelledEvent {
-        ...ProposalCancelledEventFields
       }
       ... on ProposalStatusUpdatedEvent {
         ...ProposalStatusUpdatedEventFields
@@ -244,24 +139,11 @@ export const GetProposalsEventsDocument = gql`
       ... on ProposalDecisionMadeEvent {
         ...ProposalDecisionMadeEventFields
       }
-      ... on ProposalDiscussionThreadModeChangedEvent {
-        ...ProposalDiscussionModeChangedEventFields
-      }
-      ... on ProposalExecutedEvent {
-        ...ProposalExecutedEventFields
-      }
-      ... on ProposalVotedEvent {
-        ...ProposalVotedEventFields
-      }
     }
   }
   ${ProposalCreatedEventFieldsFragmentDoc}
-  ${ProposalCancelledEventFieldsFragmentDoc}
   ${ProposalStatusUpdatedEventFieldsFragmentDoc}
   ${ProposalDecisionMadeEventFieldsFragmentDoc}
-  ${ProposalDiscussionModeChangedEventFieldsFragmentDoc}
-  ${ProposalExecutedEventFieldsFragmentDoc}
-  ${ProposalVotedEventFieldsFragmentDoc}
 `
 
 /**
