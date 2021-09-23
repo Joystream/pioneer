@@ -16,20 +16,21 @@ interface CouncilData {
   councilors: RawCouncilorMock[]
 }
 const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
-  const councilors: RawCouncilorMock[] = repeat(
+  const council = {
+    id: String(councilIndex),
+    endedAtBlock: null,
+  }
+
+  const councilors = repeat(
     (index) => ({
-      id: `${councilIndex}-${index}`,
+      id: `${council.id}-${index}`,
+      electedInCouncilId: council.id,
       memberId: randomMember().id,
       unpaidReward: Math.random() < 0.5 ? 0 : randomFromRange(1000, 100000),
       stake: randomFromRange(10000, 1000000),
     }),
     COUNCILOR_PER_COUNCIL
   )
-  const council: RawCouncilMock = {
-    id: String(councilIndex),
-    councilMemberIds: councilors.map(({ id }) => id),
-    endedAtBlock: null,
-  }
 
   return { councils: [...data.councils, council], councilors: [...data.councilors, ...councilors] }
 }

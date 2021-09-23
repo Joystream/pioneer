@@ -3,13 +3,13 @@ import rawCouncils from './raw/councils.json'
 
 export interface RawCouncilorMock {
   id: string
+  electedInCouncilId: string
   memberId: string
   unpaidReward: number
   stake: number
 }
 export interface RawCouncilMock {
   id: string
-  councilMemberIds: string[]
   endedAtBlock: null
 }
 
