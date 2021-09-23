@@ -19,10 +19,10 @@ import { CouncilTabs } from './components/CouncilTabs'
 
 export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
-  const { isLoading: isLoadingStage, stage: electionStage } = useElectionStage()
+  const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
 
-  if (isLoadingElection || isLoadingStage) {
-    return <Loading />
+  if (isLoadingElection || isLoadingElectionStage) {
+    return <PageLayout header={null} main={<Loading />} />
   }
 
   if (!election || electionStage === 'inactive') {
@@ -51,7 +51,9 @@ export const Election = () => {
           <TextHuge bold>{camelCaseToText(electionStage)} Period</TextHuge>
         </StatisticItem>
         <DurationStatistics title="Period length" tooltipText="Lorem ipsum..." value={new Date().toISOString()} />
-        <NumericValueStat title="Election round" tooltipText="Lorem ipsum..." value={election.cycleId} />
+        <StatisticItem title="Election roundd" tooltipText="Lorem ipsum...">
+          <TextHuge bold>{election.cycleId} round</TextHuge>
+        </StatisticItem>
       </Statistics>
       {electionStage === 'announcing' && <AnnouncingStage election={election} />}
     </MainPanel>
