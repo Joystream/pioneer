@@ -51,6 +51,11 @@ The project's monorepo contains packages:
 - [packages/types](packages/types) – A copy of [@joystream/types](https://github.com/Joystream/joystream/tree/olympia/types) checked out from an Olympia dev branch.
 - [packages/metadata-protobuf](packages/metadata-protobuf) – A copy [@joystream/metadata-protobuf](https://github.com/Joystream/joystream/tree/olympia/metadata-protobuf) checked out from an Olympia dev branch.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details
+
+
 ## License
 
 See [LICENSE](LICENSE) for details

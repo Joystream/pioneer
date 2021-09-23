@@ -22,6 +22,7 @@ The below guidelines will help you understand what it takes for the PR to be acc
 
 - Write tests (when including business logic) or add a storyboook (when you're creating a new component)
 - Provide a good PR title – it will be used as a commit message when the PR is merged
+- Follow the code style & make sure that your PR passes the CI
 - Use GitHub's special keywords to reference and/or close the issue automatically
 - Make sure that you've described your assumptions, unusual fixes or other information that may help the reviewer understand your code
 - Don't worry about squashing your commits – GitHub will do it for you. However, make your commit history clean as it will be included in the commit description as well.
