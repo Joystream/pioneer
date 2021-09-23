@@ -1,4 +1,4 @@
-import { ProposalMock } from '../../../dev/scripts/generators/generateProposals'
+import { ProposalMock } from '../../../dev/query-node-mocks/generators/generateProposals'
 
 const baseMock = {
   creatorId: '0',

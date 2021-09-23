@@ -1,7 +1,8 @@
-import { WorkerStatusType } from '@/mocks/data/seedWorkers'
 import faker from 'faker'
-import { generateTerminatedEvent, generateWorkerLeavingEvent, WorkerStatusEvent } from './generateEvents'
 
+import { WorkerStatusType } from '@/mocks/data/seedWorkers'
+
+import { generateTerminatedEvent, generateWorkerLeavingEvent, WorkerStatusEvent } from './generateEvents'
 import { OpeningMock } from './generateOpeningsAndUpcomingOpenings'
 import { WORKING_GROUPS } from './generateWorkingGroups'
 import { Mocks } from './types'
@@ -27,7 +28,10 @@ const generateApplication = (opening: OpeningMock, status = 'pending') => (appli
   }
 }
 
-const StatusEventGenerators: Record<WorkerStatusType, (workerId: string, groupId: string) => WorkerStatusEvent | undefined> = {
+const StatusEventGenerators: Record<
+  WorkerStatusType,
+  (workerId: string, groupId: string) => WorkerStatusEvent | undefined
+> = {
   WorkerStatusTerminated: generateTerminatedEvent,
   WorkerStatusLeaving: generateWorkerLeavingEvent,
   WorkerStatusLeft: generateWorkerLeavingEvent,
@@ -36,12 +40,15 @@ const StatusEventGenerators: Record<WorkerStatusType, (workerId: string, groupId
 
 const generateWorkerStatus = (status: WorkerStatusType, workerId: string, groupId: string) => ({
   type: status,
-  event: StatusEventGenerators[status](workerId, groupId)
+  event: StatusEventGenerators[status](workerId, groupId),
 })
 
-const generateWorker = (type: WorkerStatusType, groupId: string, applications: ApplicationMock[], opening?: OpeningMock) => (
-  memberId: number
-) => {
+const generateWorker = (
+  type: WorkerStatusType,
+  groupId: string,
+  applications: ApplicationMock[],
+  opening?: OpeningMock
+) => (memberId: number) => {
   if (!opening) {
     return
   }
@@ -72,13 +79,14 @@ export type WorkerMock = ReturnType<ReturnType<typeof generateWorker>>
 export type ApplicationMock = ReturnType<ReturnType<typeof generateApplication>>
 
 export const generateWithdrawnApplications = (mocks: Mocks): ApplicationMock[] => {
-  return  mocks.openings.map((opening) => {
-    const applicantsIds = randomUniqueArrayFromRange(2, 0, mocks.members.length - 1).map(
-      (index) => mocks.members[index].id
-    )
+  return mocks.openings
+    .map((opening) => {
+      const applicantsIds = randomUniqueArrayFromRange(2, 0, mocks.members.length - 1).map(
+        (index) => mocks.members[index].id
+      )
 
-    return applicantsIds.map(generateApplication(opening, 'withdrawn'))
-  })
+      return applicantsIds.map(generateApplication(opening, 'withdrawn'))
+    })
     .flat()
 }
 
@@ -96,10 +104,16 @@ export const generateWorkers = (mocks: Mocks) => {
     const leavingIds = randomUniqueArrayFromRange(randomFromRange(2, 5), 0, mocks.members.length - 1)
 
     return [
-      ...workersIds.map(generateWorker('WorkerStatusActive', groupName, applications, findOpening(groupName, 'filled'))),
-      ...terminatedIds.map(generateWorker('WorkerStatusTerminated', groupName, applications, findOpening(groupName, 'filled'))),
+      ...workersIds.map(
+        generateWorker('WorkerStatusActive', groupName, applications, findOpening(groupName, 'filled'))
+      ),
+      ...terminatedIds.map(
+        generateWorker('WorkerStatusTerminated', groupName, applications, findOpening(groupName, 'filled'))
+      ),
       ...leftIds.map(generateWorker('WorkerStatusLeft', groupName, applications, findOpening(groupName, 'filled'))),
-      ...leavingIds.map(generateWorker('WorkerStatusLeaving', groupName, applications, findOpening(groupName, 'filled'))),
+      ...leavingIds.map(
+        generateWorker('WorkerStatusLeaving', groupName, applications, findOpening(groupName, 'filled'))
+      ),
     ]
   }
 

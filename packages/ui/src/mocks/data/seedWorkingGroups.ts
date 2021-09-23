@@ -1,4 +1,4 @@
-import { WorkingGroupMock } from '../../../dev/scripts/generators/generateWorkingGroups'
+import { WorkingGroupMock } from '../../../dev/query-node-mocks/generators/generateWorkingGroups'
 
 import rawWorkingGroups from './raw/workingGroups.json'
 

@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { randomMarkdown } from '../../../../dev/scripts/generators/utils'
+import { randomMarkdown } from '../../../../dev/query-node-mocks/generators/utils'
 
 import { RationalePreview } from '.'
 

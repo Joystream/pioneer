@@ -51,10 +51,16 @@ All PRs land in the `main` branch. Other branches are short-lived for developmen
 
 ## Query-node API
 
-- GraphQL to access Hydra query-node
-  - [Mirage JS](https://miragejs.com/) for mocking query-node data
+To access the archival state of the chain Pioneer 2 fetch such information from the [query-node](https://github.com/Joystream/joystream/tree/query_node/query-node). It is a GraphQL server that allows a convenient API for querying the data.
+
+The following tools are used to consume GraphQL data:
   - [Apollo Client](https://www.apollographql.com/docs/react/) for accessing GraphQL
-- Storybook
+
+### Query-node Mocks
+
+To mock the query-node server we use [Mirage JS](https://miragejs.com/) in tests, storybook data and for local development.
+
+
 
 ### Code generation
 
