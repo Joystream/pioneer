@@ -16,7 +16,7 @@ import { Member } from '@/memberships/types'
 
 import { CandidateCardImage, CandidateCardImageContainer } from './CandidateCardImage'
 
-export interface Candidate {
+export interface CandidateCardProps {
   member: Member
   image?: string
   voted?: boolean
@@ -26,6 +26,7 @@ export interface Candidate {
   stake?: BN
   wons?: number
   losts?: number
+  isVotingStage?: boolean
 }
 
 export const CandidateCard = ({
@@ -38,7 +39,8 @@ export const CandidateCard = ({
   stake,
   wons = 0,
   losts = 0,
-}: Candidate) => {
+  isVotingStage,
+}: CandidateCardProps) => {
   return (
     <CandidateCardWrapper>
       <CandidateCardImageWrapper>
@@ -90,15 +92,17 @@ export const CandidateCard = ({
                 <Subscription>My stake</Subscription>
               </CandidateCardStake>
             )}
-            <CandidateCardControls>
-              {withdrawable ? (
-                <ButtonSecondary size="medium">Withdraw Candidacy</ButtonSecondary>
-              ) : voted ? (
-                <ButtonPrimary size="medium">Vote again </ButtonPrimary>
-              ) : (
-                <ButtonPrimary size="medium">Vote</ButtonPrimary>
-              )}
-            </CandidateCardControls>
+            {isVotingStage && (
+              <CandidateCardControls>
+                {withdrawable ? (
+                  <ButtonSecondary size="medium">Withdraw Candidacy</ButtonSecondary>
+                ) : voted ? (
+                  <ButtonPrimary size="medium">Vote again </ButtonPrimary>
+                ) : (
+                  <ButtonPrimary size="medium">Vote</ButtonPrimary>
+                )}
+              </CandidateCardControls>
+            )}
           </CandidateCardStakeAndControls>
         </CandidateCardSummary>
         <CandidateCardArrow>

@@ -13,7 +13,7 @@ import { Colors } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
-import { CandidateCardArrow, StatsValue } from './CandidateCard'
+import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
 export interface CandidateVoteProps {
   voteOwner: boolean

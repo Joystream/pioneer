@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { CandidateCard, Candidate } from './CandidateCard'
+import { CandidateCard, CandidateCardProps } from './CandidateCard'
 
 export default {
   title: 'Council/CandidateCard',
@@ -13,7 +13,7 @@ export default {
   },
 } as Meta
 
-const Template: Story<Candidate> = (args) => (
+const Template: Story<CandidateCardProps> = (args) => (
   <MemoryRouter>
     <CandidateCard {...args} />
   </MemoryRouter>
