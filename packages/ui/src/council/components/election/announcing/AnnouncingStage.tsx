@@ -18,7 +18,7 @@ export const AnnouncingStage = ({ election }: AnnouncingStageProps) => {
     <CandidateCardList
       candidates={election.candidates.map((candidate) => ({
         member: candidate.member,
-        title: candidate.member.handle,
+        title: 'Some title',
       }))}
     />
   )
