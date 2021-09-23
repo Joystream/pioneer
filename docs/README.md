@@ -82,6 +82,8 @@ To show help:
 yarn node-mocks --help
 ```
 
+You can also connect to the node using [Polkadot apps wallet](#connecting-to-the-joystream-node-using-polkadot-app-wallet) to interact with the node.
+
 ## Query-node API
 
 To access the archival state of the chain Pioneer 2 fetch such information from the [query-node](https://github.com/Joystream/joystream/tree/query_node/query-node). It is a GraphQL server that allows a convenient API for querying the data.
@@ -162,3 +164,19 @@ After updating `packages/ui/src/api` any of `*.graphql` files run `yarn queries:
 ## Dependencies
 
 The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details.
+
+# Tips & Tricks
+
+## Connecting to the Joystream node using Polkadot app wallet
+
+You can use the Polkadot apps wallet to browse the Joystream node state and call all available extrinsics.
+
+In order to use the app with Joystream API types you need to upload the correct type `defs.json` from the Joystream repo (using proper branch as well). The full path to file is: `/types/augment/all/defs.json`.
+
+For the `olympia_dev` branch the `defs.json` use this [link](https://github.com/Joystream/joystream/blob/olympia_dev/types/augment/all/defs.json):
+
+1. Copy the contents of the [`raw view`](https://raw.githubusercontent.com/Joystream/joystream/olympia_dev/types/augment/all/defs.json).
+2. Paste to the input on Settings > Developer tab
+3. Switch to a network
+   1. [local](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A9944)
+   2. [olympia testnet](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Folympia-dev.joystream.app%2Frpc)
