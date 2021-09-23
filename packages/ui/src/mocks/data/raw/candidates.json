@@ -1,0 +1,186 @@
+[
+  [
+    {
+      "id": "0-0",
+      "memberId": "42",
+      "cycleIdId": "0",
+      "stake": 276635
+    },
+    {
+      "id": "0-1",
+      "memberId": "36",
+      "cycleIdId": "0",
+      "stake": 450718
+    },
+    {
+      "id": "0-2",
+      "memberId": "40",
+      "cycleIdId": "0",
+      "stake": 976225
+    },
+    {
+      "id": "0-3",
+      "memberId": "30",
+      "cycleIdId": "0",
+      "stake": 949727
+    },
+    {
+      "id": "0-4",
+      "memberId": "50",
+      "cycleIdId": "0",
+      "stake": 656159
+    },
+    {
+      "id": "0-5",
+      "memberId": "1",
+      "cycleIdId": "0",
+      "stake": 643820
+    },
+    {
+      "id": "0-6",
+      "memberId": "29",
+      "cycleIdId": "0",
+      "stake": 145749
+    },
+    {
+      "id": "0-7",
+      "memberId": "36",
+      "cycleIdId": "0",
+      "stake": 840607
+    }
+  ],
+  [
+    {
+      "id": "1-0",
+      "memberId": "22",
+      "cycleIdId": "1",
+      "stake": 719145
+    },
+    {
+      "id": "1-1",
+      "memberId": "38",
+      "cycleIdId": "1",
+      "stake": 349513
+    },
+    {
+      "id": "1-2",
+      "memberId": "48",
+      "cycleIdId": "1",
+      "stake": 878039
+    },
+    {
+      "id": "1-3",
+      "memberId": "20",
+      "cycleIdId": "1",
+      "stake": 438945
+    },
+    {
+      "id": "1-4",
+      "memberId": "20",
+      "cycleIdId": "1",
+      "stake": 664431
+    }
+  ],
+  [
+    {
+      "id": "2-0",
+      "memberId": "40",
+      "cycleIdId": "2",
+      "stake": 587080
+    },
+    {
+      "id": "2-1",
+      "memberId": "7",
+      "cycleIdId": "2",
+      "stake": 441351
+    },
+    {
+      "id": "2-2",
+      "memberId": "33",
+      "cycleIdId": "2",
+      "stake": 201762
+    },
+    {
+      "id": "2-3",
+      "memberId": "38",
+      "cycleIdId": "2",
+      "stake": 923232
+    },
+    {
+      "id": "2-4",
+      "memberId": "37",
+      "cycleIdId": "2",
+      "stake": 832776
+    },
+    {
+      "id": "2-5",
+      "memberId": "27",
+      "cycleIdId": "2",
+      "stake": 344477
+    }
+  ],
+  [
+    {
+      "id": "3-0",
+      "memberId": "24",
+      "cycleIdId": "3",
+      "stake": 213761
+    },
+    {
+      "id": "3-1",
+      "memberId": "4",
+      "cycleIdId": "3",
+      "stake": 562460
+    },
+    {
+      "id": "3-2",
+      "memberId": "11",
+      "cycleIdId": "3",
+      "stake": 93590
+    },
+    {
+      "id": "3-3",
+      "memberId": "9",
+      "cycleIdId": "3",
+      "stake": 105925
+    },
+    {
+      "id": "3-4",
+      "memberId": "10",
+      "cycleIdId": "3",
+      "stake": 538492
+    }
+  ],
+  [
+    {
+      "id": "4-0",
+      "memberId": "30",
+      "cycleIdId": "4",
+      "stake": 542892
+    },
+    {
+      "id": "4-1",
+      "memberId": "29",
+      "cycleIdId": "4",
+      "stake": 175717
+    },
+    {
+      "id": "4-2",
+      "memberId": "42",
+      "cycleIdId": "4",
+      "stake": 200072
+    },
+    {
+      "id": "4-3",
+      "memberId": "16",
+      "cycleIdId": "4",
+      "stake": 889487
+    },
+    {
+      "id": "4-4",
+      "memberId": "24",
+      "cycleIdId": "4",
+      "stake": 781381
+    }
+  ]
+]

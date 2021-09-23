@@ -1,38 +1,77 @@
 import { Reducer } from '@/common/types/helpers'
-import { RawCouncilMock, RawCouncilorMock } from '@/mocks/data/seedCouncils'
+import {
+  RawCouncilCandidateMock,
+  RawCouncilElectionMock,
+  RawCouncilMock,
+  RawCouncilorMock,
+} from '@/mocks/data/seedCouncils'
 
 import { saveFile } from '../../helpers/saveFile'
-import { randomFromRange, randomMember, repeat } from '../utils'
+import { randomBlock, randomFromRange, randomMember, repeat } from '../utils'
 
-const COUNCILOR_PER_COUNCIL = 6
+const COUNCILS = 5
 
 export const generateCouncils = () => {
-  const data = Array.from({ length: 1 }).reduce(generateCouncil, { councils: [], councilors: [] })
+  const data = Array.from({ length: COUNCILS }).reduce(generateCouncil, {
+    councils: [],
+    councilors: [],
+    electionRounds: [],
+    candidates: [],
+  })
   Object.entries(data).forEach(([fileName, contents]) => saveFile(fileName, contents))
 }
 
 interface CouncilData {
   councils: RawCouncilMock[]
   councilors: RawCouncilorMock[]
+  electionRounds: RawCouncilElectionMock[]
+  candidates: RawCouncilCandidateMock[]
 }
+
 const generateCouncil: Reducer<CouncilData, any> = (data, _, councilIndex) => {
+  const isFinished = councilIndex !== COUNCILS - 1
+
   const council = {
     id: String(councilIndex),
     endedAtBlock: null,
   }
 
-  const councilors = repeat(
-    (index) => ({
-      id: `${council.id}-${index}`,
-      electedInCouncilId: council.id,
-      memberId: randomMember().id,
-      unpaidReward: Math.random() < 0.5 ? 0 : randomFromRange(1000, 100000),
-      stake: randomFromRange(10000, 1000000),
+  const councilors: RawCouncilorMock[] = isFinished
+    ? repeat(
+      (councilorIndex) => ({
+        id: `${council.id}-${councilorIndex}`,
+        electedInCouncilId: council.id,
+        memberId: randomMember().id,
+        unpaidReward: Math.random() < 0.5 ? 0 : randomFromRange(1000, 100000),
+        stake: randomFromRange(10000, 1000000),
+      }),
+      randomFromRange(5, 8)
+    )
+    : []
+
+  const candidates: RawCouncilCandidateMock[] = repeat(
+    (candidateIndex) => ({
+      id: `${council.id}-${candidateIndex}`,
+      memberId: isFinished ? councilors[candidateIndex].memberId : randomMember().id,
+      cycleIdId: council.id,
+      stake: isFinished ? councilors[candidateIndex].stake : randomFromRange(10000, 1000000),
     }),
-    COUNCILOR_PER_COUNCIL
+    isFinished ? councilors.length : randomFromRange(5, 8)
   )
 
-  return { councils: [...data.councils, council], councilors: [...data.councilors, ...councilors] }
+  const electionRound: RawCouncilElectionMock = {
+    id: council.id,
+    cycleId: Number(council.id),
+    isFinished,
+    electedCouncilId: council.id,
+  }
+
+  return {
+    councils: [...data.councils, council],
+    councilors: [...data.councilors, ...councilors],
+    electionRounds: [...data.electionRounds, electionRound],
+    candidates: [...data.candidates, ...candidates],
+  }
 }
 
 export const councilModule = {
