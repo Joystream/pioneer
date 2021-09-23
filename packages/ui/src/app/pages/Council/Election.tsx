@@ -9,6 +9,8 @@ import { DurationStatistics, StatisticItem, Statistics } from '@/common/componen
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
 import { TextHuge } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
+import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
+import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 
 import { CouncilTabs } from './components/CouncilTabs'
@@ -28,7 +30,7 @@ export const Election = () => {
           <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
             Copy link
           </CopyButtonTemplate>
-          {electionStage === 'announcing' && <ButtonPrimary size="medium">Announce Candidacy</ButtonPrimary>}
+          {electionStage === 'announcing' && <AnnounceCandidacyButton />}
         </ButtonsGroup>
       </PageHeaderRow>
       <CouncilTabs />
@@ -44,6 +46,7 @@ export const Election = () => {
         <DurationStatistics title="Period length" tooltipText="Lorem ipsum..." value={new Date().toISOString()} />
         <NumericValueStat title="Election round" tooltipText="Lorem ipsum..." value={1} />
       </Statistics>
+      {electionStage === 'announcing' && <AnnouncingStage />}
     </MainPanel>
   )
 
