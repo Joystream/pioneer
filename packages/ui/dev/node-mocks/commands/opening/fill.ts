@@ -4,8 +4,8 @@ import { ApplicationId } from '@joystream/types/working-group'
 import { BTreeSet } from '@polkadot/types'
 import yargs from 'yargs'
 
-import { getSudoAccount } from '../data/addresses'
-import { signAndSend, withApi } from '../lib/api'
+import { getSudoAccount } from '../../data/addresses'
+import { signAndSend, withApi } from '../../lib/api'
 
 const options = {
   applicationId: {
