@@ -1,4 +1,4 @@
-import { act, fireEvent, prettyDOM, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { act, fireEvent, render, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -68,18 +68,18 @@ describe('UI: Election page', () => {
   it('Inactive', async () => {
     stubCouncilAndReferendum(api, 'Idle', 'Inactive')
 
-    await renderComponent()
+    const { queryByText } = await renderComponent()
 
-    expect(screen.queryByText('Stage')).toBeNull()
+    expect(queryByText('Stage')).toBeNull()
   })
 
   describe('Active', () => {
     it('Displays election round', async () => {
       stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
 
-      await renderComponent()
+      const { queryByText } = await renderComponent()
 
-      expect(screen.queryByText(/1 round/i)).not.toBeNull()
+      expect(queryByText(/1 round/i)).not.toBeNull()
     })
 
     describe('Announcing stage', () => {
@@ -88,35 +88,35 @@ describe('UI: Election page', () => {
       })
 
       it('Displays stage', async () => {
-        await renderComponent()
+        const { queryByText } = await renderComponent()
 
-        expect(screen.queryByText(/Announcing period/i)).not.toBeNull()
+        expect(queryByText(/Announcing period/i)).not.toBeNull()
       })
 
       describe('Tabs', () => {
         describe('Candidates', () => {
           it('No candidates', async () => {
-            await renderComponent()
+            const { queryByText } = await renderComponent()
 
-            expect(screen.queryByText(/There are no candidates yet/i)).not.toBeNull()
+            expect(queryByText(/There are no candidates yet/i)).not.toBeNull()
           })
 
           it('Has candidates', async () => {
             TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
 
-            await renderComponent()
+            const { queryAllByText } = await renderComponent()
 
-            expect(screen.queryAllByText(/newcomer/i).length).toBe(2)
+            expect(queryAllByText(/newcomer/i).length).toBe(2)
           })
         })
         describe('My candidates', () => {
           it('No my candidates', async () => {
             TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
 
-            await renderComponent()
+            const { queryByText } = await renderComponent()
 
-            expect(screen.queryByText(/There are no candidates yet/i)).toBeNull()
-            expect(screen.queryByText('My candidates')).toBeNull()
+            expect(queryByText(/There are no candidates yet/i)).toBeNull()
+            expect(queryByText('My candidates')).toBeNull()
           })
 
           it('Has my candidates', async () => {
@@ -125,16 +125,16 @@ describe('UI: Election page', () => {
             candidates.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
             TEST_CANDIDATES.map((candidate) => seedCouncilCandidate(candidate, mockServer.server))
 
-            await renderComponent()
+            const { queryAllByText, findByText } = await renderComponent()
 
-            const myCandidatesTab = await screen.findByText(/My candidates/i)
+            const myCandidatesTab = await findByText(/My candidates/i)
 
             act(() => {
               fireEvent.click(myCandidatesTab)
             })
 
-            expect(screen.queryAllByText(/newcomer/i).length).toBe(1)
-            expect(screen.queryAllByText(/my stake/i).length).toBe(1)
+            expect(queryAllByText(/newcomer/i).length).toBe(1)
+            expect(queryAllByText(/my stake/i).length).toBe(1)
           })
         })
       })
@@ -143,17 +143,17 @@ describe('UI: Election page', () => {
     it('Voting stage', async () => {
       stubCouncilAndReferendum(api, 'Election', 'Voting')
 
-      await renderComponent()
+      const { queryByText } = await renderComponent()
 
-      expect(screen.queryByText(/Voting period/i)).not.toBeNull()
+      expect(queryByText(/Voting period/i)).not.toBeNull()
     })
 
     it('Revealing stage', async () => {
       stubCouncilAndReferendum(api, 'Election', 'Revealing')
 
-      await renderComponent()
+      const { queryByText } = await renderComponent()
 
-      expect(screen.queryByText(/Revealing period/i)).not.toBeNull()
+      expect(queryByText(/Revealing period/i)).not.toBeNull()
     })
   })
 
