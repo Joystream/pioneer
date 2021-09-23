@@ -60,7 +60,27 @@ The following tools are used to consume GraphQL data:
 
 To mock the query-node server we use [Mirage JS](https://miragejs.com/) in tests, storybook data and for local development.
 
+All MirageJS & query-node mocks are stored inside the [`@/mocks`](packages/ui/src/mocks).
 
+#### Adding a mocks for a GraphQL Entity
+
+In order to properly mock an `Entity` you should:
+
+1. Prepare mocked data
+  * Write a generator that re-creates [seed raw data](packages/ui/src/mocks/data/raw) as JSON file.
+  * See [generators](packages/ui/dev/query-node-mocks/generators) for examples.
+1. Write a MirageJS seed function
+  * A seed function will create proper MirageJS [database](https://miragejs.com/docs/main-concepts/database/) entries from raw data.
+  * It should add only the data used by queries. Other information can be omitted.
+  * A seed function may create related objects and/or add additional mock information.
+  * *Optionally*: Some relations doesn't translate well in MirageJS GraphQL implementation. See [`fixAssiociations()`](https://github.com/Joystream/pioneer/blob/e9e609dadc3c65ed2410c301904836f2868df9dc/packages/ui/src/mocks/server.ts#L27) for details.
+1. Run the `yarn query-node-mocks` to recreate mocks
+1. Add GraphQL query resolvers
+  * Resolvers are used to handle the passed GraphQL query and return the data in a _similar_ fashion to Hydra's GraphQL server.
+  * In most cases you'd only need to add a general query resolver for each type of queries:
+    * `getWhereResolver('Entity')` - returns a resolver that handles multiple results are returned (many), also used for paginated results, e.g. `forumPosts`, `memberships`
+    * `getUniqueResolver('Entity')` – returns a resolver that handles unique results (one), e.g. `forumPostByUniqueInput`, `membershipByUniqueInput`
+    * `getConnectionResolver('Entity')` - return a resolver for [relay-style pagination](https://relay.dev/graphql/connections.htm) results, e.g. `forumPostsConneciton`, `membershipsConnection`
 
 ### Code generation
 
