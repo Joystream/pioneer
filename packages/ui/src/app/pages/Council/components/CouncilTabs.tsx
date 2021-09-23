@@ -6,7 +6,7 @@ import { CouncilRoutes } from '@/council/constants'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 
 export const CouncilTabs = () => {
-  const electionStage = useElectionStage()
+  const { stage: electionStage } = useElectionStage()
 
   const pages: TabsDefinition[] = [
     ['Council', CouncilRoutes.council],

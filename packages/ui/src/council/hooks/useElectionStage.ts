@@ -3,22 +3,31 @@ import { useObservable } from '@/common/hooks/useObservable'
 
 type ElectionStage = 'announcing' | 'voting' | 'revealing' | 'inactive'
 
-export const useElectionStage = (): ElectionStage => {
+interface UseElectionStage {
+  isLoading: boolean
+  stage: ElectionStage
+}
+
+export const useElectionStage = (): UseElectionStage => {
   const { api } = useApi()
   const electionStage = useObservable(api?.query.referendum.stage(), [api])
   const councilStage = useObservable(api?.query.council.stage(), [api])
 
+  if (!councilStage || !electionStage) {
+    return { isLoading: true, stage: 'inactive' }
+  }
+
   if (!councilStage || !electionStage || councilStage.stage.isIdle) {
-    return 'inactive'
+    return { isLoading: false, stage: 'inactive' }
   }
 
   if (councilStage.stage.isAnnouncing) {
-    return 'announcing'
+    return { isLoading: false, stage: 'announcing' }
   }
 
   if (electionStage.isVoting) {
-    return 'voting'
+    return { isLoading: false, stage: 'voting' }
   }
 
-  return 'revealing'
+  return { isLoading: false, stage: 'revealing' }
 }

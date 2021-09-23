@@ -3,6 +3,7 @@ import React from 'react'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { DurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
@@ -11,14 +12,20 @@ import { TextHuge } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
+import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 
 import { CouncilTabs } from './components/CouncilTabs'
 
 export const Election = () => {
-  const electionStage = useElectionStage()
+  const { isLoading: isLoadingElection, election } = useCurrentElection()
+  const { isLoading: isLoadingStage, stage: electionStage } = useElectionStage()
 
-  if (electionStage === 'inactive') {
+  if (isLoadingElection || isLoadingStage) {
+    return <Loading />
+  }
+
+  if (!election || electionStage === 'inactive') {
     return null
   }
 
@@ -44,9 +51,9 @@ export const Election = () => {
           <TextHuge bold>{camelCaseToText(electionStage)} Period</TextHuge>
         </StatisticItem>
         <DurationStatistics title="Period length" tooltipText="Lorem ipsum..." value={new Date().toISOString()} />
-        <NumericValueStat title="Election round" tooltipText="Lorem ipsum..." value={1} />
+        <NumericValueStat title="Election round" tooltipText="Lorem ipsum..." value={election.cycleId} />
       </Statistics>
-      {electionStage === 'announcing' && <AnnouncingStage />}
+      {electionStage === 'announcing' && <AnnouncingStage election={election} />}
     </MainPanel>
   )
 
