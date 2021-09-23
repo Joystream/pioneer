@@ -17,8 +17,30 @@ fragment ElectedCouncilsFields on ElectedCouncil {
   }
 }
 
+fragment ElectionCandidateFields on Candidate {
+  id
+  member {
+    ...MemberFields
+  }
+  stake
+}
+
+
+fragment ElectionRoundFields on ElectionRound {
+  cycleId
+  candidates {
+    ...ElectionCandidateFields
+  }
+}
+
 query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
   electedCouncils(where: $where) {
     ...ElectedCouncilsFields
+  }
+}
+
+query GetCurrentElection {
+  electionRounds(where: {isFinished_eq: false}, orderBy: [cycleId_DESC], limit: 1) {
+    ...ElectionRoundFields
   }
 }
