@@ -8,6 +8,8 @@ import schema from '../common/api/schemas/schema.graphql'
 
 import {
   seedApplications,
+  seedCouncilMembers,
+  seedElectedCouncils,
   seedMembers,
   seedOpeningStatuses,
   seedOpenings,
@@ -84,6 +86,8 @@ export const makeServer = (environment = 'development') => {
               appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
+              councilMembersConnection: getConnectionResolver('CouncilMemberConnection'),
+              electedCouncils: getWhereResolver('ElectedCouncil'),
               forumCategories: getWhereResolver('ForumCategory'),
               forumCategoryByUniqueInput: getUniqueResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
@@ -107,9 +111,12 @@ export const makeServer = (environment = 'development') => {
               stakeDecreasedEvents: getWhereResolver('StakeDecreasedEvent'),
               stakeIncreasedEvents: getWhereResolver('StakeIncreasedEvent'),
               stakeSlashedEvents: getWhereResolver('StakeSlashedEvent'),
+              stakeSlashedEventsConnection: getConnectionResolver('StakeSlashedEventConnection'),
               statusTextChangedEvents: getWhereResolver('StatusTextChangedEvent'),
               terminatedLeaderEvents: getWhereResolver('TerminatedLeaderEvent'),
+              terminatedLeaderEventsConnection: getConnectionResolver('TerminatedLeaderEventConnection'),
               terminatedWorkerEvents: getWhereResolver('TerminatedWorkerEvent'),
+              terminatedWorkerEventsConnection: getConnectionResolver('TerminatedWorkerEventConnection'),
               upcomingWorkingGroupOpeningByUniqueInput: getUniqueResolver('UpcomingWorkingGroupOpening'),
               upcomingWorkingGroupOpenings: getWhereResolver('UpcomingWorkingGroupOpening'),
               workerByUniqueInput: getUniqueResolver('Worker'),
@@ -117,9 +124,11 @@ export const makeServer = (environment = 'development') => {
               workerRewardAccountUpdatedEvents: getWhereResolver('WorkerRewardAccountUpdatedEvent'),
               workerRewardAmountUpdatedEvents: getWhereResolver('WorkerRewardAmountUpdatedEvent'),
               workerStartedLeavingEvents: getWhereResolver('WorkerStartedLeavingEvent'),
+              workerStartedLeavingEventsConnection: getConnectionResolver('WorkerStartedLeavingEventConnection'),
               workers: getWhereResolver('Worker'),
               workersConnection: getConnectionResolver('WorkerConnection'),
               workingGroupApplications: getWhereResolver('WorkingGroupApplication'),
+              workingGroupApplicationsConnection: getConnectionResolver('WorkingGroupApplicationConnection'),
               workingGroupApplicationByUniqueInput: getUniqueResolver('WorkingGroupApplication'),
               workingGroupByUniqueInput: getUniqueResolver('WorkingGroup'),
               workingGroupOpeningByUniqueInput: getUniqueResolver('WorkingGroupOpening'),
@@ -155,6 +164,8 @@ export const makeServer = (environment = 'development') => {
             seedForumThreads(server)
             seedForumPosts(server)
             seedProposalsEvents(server)
+            seedCouncilMembers(server)
+            seedElectedCouncils(server)
           },
         }),
   })

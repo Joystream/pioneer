@@ -31,6 +31,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
     slashed = '-',
     terminated = '-',
     blogPosts = '-',
+    councilMember = '-',
     initiatingLeaving = '-',
   } = useMemberExtraInfo(member)
 
@@ -44,7 +45,6 @@ export const MemberDetails = React.memo(({ member }: Props) => {
 
   const hired = member.roles.length
   const lead = member.roles.filter(({ isLead }) => isLead).length
-  const councilMember = '-'
 
   return (
     <SidePaneTable>

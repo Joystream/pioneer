@@ -95,6 +95,7 @@ export type GetMemberExtraInfoQueryVariables = Types.Exact<{
 
 export type GetMemberExtraInfoQuery = {
   __typename: 'Query'
+  councilMembersConnection: { __typename: 'CouncilMemberConnection'; totalCount: number }
   forumPostsConnection: { __typename: 'ForumPostConnection'; totalCount: number }
   workingGroupApplicationsConnection: { __typename: 'WorkingGroupApplicationConnection'; totalCount: number }
   stakeSlashedEventsConnection: { __typename: 'StakeSlashedEventConnection'; totalCount: number }
@@ -316,6 +317,9 @@ export type SearchMembersLazyQueryHookResult = ReturnType<typeof useSearchMember
 export type SearchMembersQueryResult = Apollo.QueryResult<SearchMembersQuery, SearchMembersQueryVariables>
 export const GetMemberExtraInfoDocument = gql`
   query GetMemberExtraInfo($membershipId_eq: ID!, $workerId_in: [ID!]!) {
+    councilMembersConnection(where: { member: { id_eq: $membershipId_eq } }) {
+      totalCount
+    }
     forumPostsConnection(where: { author: { id_eq: $membershipId_eq } }) {
       totalCount
     }

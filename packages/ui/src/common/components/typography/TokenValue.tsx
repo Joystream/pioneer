@@ -2,6 +2,8 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
+import { isDefined } from '@/common/utils'
+
 import { Colors, Fonts } from '../../constants'
 import { formatTokenValue } from '../../model/formatters'
 
@@ -15,7 +17,7 @@ interface ValueProps extends ValueSizingProps {
 }
 
 export const TokenValue = React.memo(({ className, value, size }: ValueProps) => {
-  if (!value) {
+  if (value === null || !isDefined(value)) {
     return <span>-</span>
   }
 

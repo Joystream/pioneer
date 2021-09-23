@@ -1,0 +1,24 @@
+fragment CouncilMemberFields on CouncilMember {
+  id
+  member {
+    ...MemberFields
+    councilMembers {
+      __typename
+    }
+  }
+  unpaidReward
+  stake
+}
+
+fragment ElectedCouncilsFields on ElectedCouncil {
+  id
+  councilMembers {
+    ...CouncilMemberFields
+  }
+}
+
+query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
+  electedCouncils(where: $where) {
+    ...ElectedCouncilsFields
+  }
+}
