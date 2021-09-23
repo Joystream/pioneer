@@ -2,6 +2,8 @@ import { adaptRecord, adaptRecords, getRecords } from '@miragejs/graphql/dist/or
 import { getEdges, getPageInfo, getRelayArgs } from '@miragejs/graphql/dist/relay-pagination'
 import { unwrapType } from '@miragejs/graphql/dist/utils'
 import { GraphQLObjectType, GraphQLSchema } from 'graphql/type'
+import { Instantiate } from 'miragejs'
+import { AnyRegistry } from 'miragejs/-types'
 
 import { PageInfo } from '@/common/api/queries'
 import { camelCaseToDash } from '@/mocks/helpers'
@@ -135,6 +137,33 @@ export const getWhereResolver = <T extends QueryArgs, D>(modelName: string): Whe
     const pagedRecords = models.slice(start, end)
 
     return (adaptRecords(pagedRecords) as unknown) as D
+  }
+}
+
+export const getInterfaceResolver = <T extends QueryArgs, D>(): WhereQueryResolver<T, D> => {
+  return (obj, args, { mirageSchema: schema }) => {
+    const { where, limit, offset, orderBy } = args
+
+    let models: Instantiate<AnyRegistry, string>[] | undefined = undefined
+
+    if (where) {
+      const type_in = Object.entries(where).find(([key]) => key === 'type_in')?.[1] as string[]
+      if (type_in) {
+        models = type_in.map((name) => schema.all(name).models).flat()
+      }
+    }
+
+    if (orderBy?.length > 0 && models) {
+      const [key, type] = orderBy[0].split('_')
+      const direction = type === 'ASC' ? 1 : -1
+      models.sort((a, b) => (a as any)[key]?.toString().localeCompare((b as any)[key]?.toString()) * direction)
+    }
+
+    const start = offset || 0
+    const end = parseInt(limit ?? 0) > 0 ? start + limit : undefined
+    const pagedRecords = models?.slice(start, end)
+
+    return (adaptRecords(pagedRecords ?? []) as unknown) as D
   }
 }
 
