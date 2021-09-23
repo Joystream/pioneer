@@ -1,0 +1,38 @@
+[
+  {
+    "id": "0-0",
+    "memberId": "30",
+    "unpaidReward": 0,
+    "stake": 570160
+  },
+  {
+    "id": "0-1",
+    "memberId": "2",
+    "unpaidReward": 34789,
+    "stake": 979633
+  },
+  {
+    "id": "0-2",
+    "memberId": "3",
+    "unpaidReward": 29900,
+    "stake": 571335
+  },
+  {
+    "id": "0-3",
+    "memberId": "26",
+    "unpaidReward": 5071,
+    "stake": 141203
+  },
+  {
+    "id": "0-4",
+    "memberId": "2",
+    "unpaidReward": 0,
+    "stake": 380530
+  },
+  {
+    "id": "0-5",
+    "memberId": "40",
+    "unpaidReward": 0,
+    "stake": 114522
+  }
+]

@@ -8,6 +8,8 @@ import schema from '../common/api/schemas/schema.graphql'
 
 import {
   seedApplications,
+  seedCouncilMembers,
+  seedElectedCouncils,
   seedMembers,
   seedOpeningStatuses,
   seedOpenings,
@@ -77,6 +79,7 @@ export const makeServer = (environment = 'development') => {
               appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
+              electedCouncils: getWhereResolver('ElectedCouncil'),
               forumCategories: getWhereResolver('ForumCategory'),
               forumCategoryByUniqueInput: getUniqueResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
@@ -146,6 +149,8 @@ export const makeServer = (environment = 'development') => {
             seedForumCategories(server)
             seedForumThreads(server)
             seedForumPosts(server)
+            seedCouncilMembers(server)
+            seedElectedCouncils(server)
           },
         }),
   })
