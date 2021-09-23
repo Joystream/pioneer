@@ -51,7 +51,7 @@ export const CouncilList = ({ councilors, order, onSort, isLoading }: CouncilLis
       {isLoading ? (
         <Loading />
       ) : (
-        <List as="div">
+        <List>
           {councilors.map((councilor, index) => (
             <CouncilListItem key={index} councilor={councilor} />
           ))}
