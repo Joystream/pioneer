@@ -30,7 +30,7 @@ export const LoaderComponent = styled.svg`
     animation: spinLoader ${Transitions.showResult} cubic-bezier(0.3, 1.65, 0.7, -0.65) infinite;
   }
   .loading-stroke-2 {
-    stroke: ${Colors.Blue[600]};
+    stroke: ${Colors.Blue[500]};
     animation: spinLoader ${Transitions.showResult} cubic-bezier(0.1, 1.2, 0.3, -0.6) infinite;
   }
 
