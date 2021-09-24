@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { List } from '@/common/components/List'
@@ -10,35 +10,29 @@ import { CouncilColLayout } from '@/council/constants/styles'
 
 import { CouncilListItem, CouncilListItemProps } from './CouncilListItem'
 
-type CouncilOrderKey = 'Member' | 'Reward' | 'Stake' | 'Elected'
+type CouncilOrderKey = keyof CouncilListItemProps['councilor']
 export interface CouncilOrder {
   key: CouncilOrderKey
   isDescending?: boolean
 }
-export const CouncilDefaultOrder: CouncilOrder = { key: 'Member' }
 
 const HEADERS: [string, CouncilOrderKey?][] = [
-  ['Member', 'Member'],
-  ['Owed Reward', 'Reward'],
-  ['Voters Stake', 'Stake'],
-  ['Elected', 'Elected'],
+  ['Member', 'member'],
+  ['Owed Reward', 'unpaidReward'],
+  ['Voters Stake', 'stake'],
+  ['Elected', 'numberOfTerms'],
 ]
 
 export interface CouncilListProps {
   councilors: CouncilListItemProps['councilor'][]
+  order: CouncilOrder
   onSort: (order: CouncilOrder) => void
   isLoading?: boolean
 }
-export const CouncilList = ({ councilors, onSort, isLoading }: CouncilListProps) => {
-  const [order, setOrder] = useState(CouncilDefaultOrder)
-
+export const CouncilList = ({ councilors, order, onSort, isLoading }: CouncilListProps) => {
   const sort = useCallback(
-    (key: CouncilOrderKey) => {
-      const next: CouncilOrder = { key, isDescending: order.key === key && !order.isDescending }
-      setOrder(next)
-      onSort?.(next)
-    },
-    [order, setOrder, onSort]
+    (key: CouncilOrderKey) => onSort({ key, isDescending: order.key === key && !order.isDescending }),
+    [order, onSort]
   )
 
   return (
@@ -57,7 +51,7 @@ export const CouncilList = ({ councilors, onSort, isLoading }: CouncilListProps)
       {isLoading ? (
         <Loading />
       ) : (
-        <List as="div">
+        <List>
           {councilors.map((councilor, index) => (
             <CouncilListItem key={index} councilor={councilor} />
           ))}
