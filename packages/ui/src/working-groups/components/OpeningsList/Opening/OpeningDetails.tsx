@@ -62,13 +62,14 @@ export const OpeningDetails = ({ opening, onClick }: OpeningListItemProps) => {
           <LinkButtonGhost to={`/working-groups/openings/${opening.id}`} size="medium">
             Learn more
           </LinkButtonGhost>
-          <ButtonPrimary
-            onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
-            size="medium"
-            disabled={!isOpeningOpen(opening)}
-          >
-            Apply now
-          </ButtonPrimary>
+          {isOpeningOpen(opening) && (
+            <ButtonPrimary
+              onClick={() => showModal<ApplyForRoleModalCall>({ modal: 'ApplyForRoleModal', data: { opening } })}
+              size="medium"
+            >
+              Apply now
+            </ButtonPrimary>
+          )}
         </ButtonsGroup>
       </OpenedWrapper>
     </OpenedContainer>
