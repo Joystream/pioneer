@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
-import { ButtonPrimary, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
+import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
