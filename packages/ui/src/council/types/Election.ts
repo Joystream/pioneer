@@ -1,6 +1,8 @@
 import { ElectionCandidateFieldsFragment, ElectionRoundFieldsFragment } from '@/council/queries'
 import { asMember, Member } from '@/memberships/types'
 
+export type ElectionStage = 'announcing' | 'voting' | 'revealing' | 'inactive'
+
 export interface Election {
   cycleId: number
   candidates: ElectionCandidate[]

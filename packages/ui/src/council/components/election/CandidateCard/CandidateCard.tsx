@@ -11,6 +11,7 @@ import { StatiscticContentColumn, StatsBlock, TwoColumnsStatistic } from '@/comm
 import { TextBig, ValueInJoys } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
+import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo, MemberPhoto } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
@@ -87,7 +88,7 @@ export const CandidateCard = ({
             {stake && (
               <CandidateCardStake>
                 <StatsValue>
-                  <ValueInJoys>{stake}</ValueInJoys>
+                  <ValueInJoys>{formatTokenValue(stake)}</ValueInJoys>
                 </StatsValue>
                 <Subscription>My stake</Subscription>
               </CandidateCardStake>
