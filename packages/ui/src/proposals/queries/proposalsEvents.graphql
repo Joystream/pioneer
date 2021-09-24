@@ -11,6 +11,19 @@ fragment ProposalCreatedEventFields on ProposalCreatedEvent {
   }
 }
 
+fragment ProposalCancelledEventFields on ProposalCancelledEvent {
+  id
+  createdAt
+  proposal {
+    id
+    title
+    creator {
+      id
+      handle
+    }
+  }
+}
+
 fragment ProposalStatusUpdatedEventFields on ProposalStatusUpdatedEvent {
   id
   createdAt
@@ -32,6 +45,45 @@ fragment ProposalDecisionMadeEventFields on ProposalDecisionMadeEvent {
   }
 }
 
+fragment ProposalDiscussionModeChangedEventFields on ProposalDiscussionThreadModeChangedEvent {
+  id
+  createdAt
+  thread {
+    proposal {
+      id
+      title
+    }
+  }
+  newMode {
+    __typename
+  }
+}
+
+fragment ProposalExecutedEventFields on ProposalExecutedEvent {
+  id
+  createdAt
+  proposal {
+    id
+    title
+  }
+  executionStatus {
+    __typename
+  }
+}
+
+fragment ProposalVotedEventFields on ProposalVotedEvent {
+  id
+  createdAt
+  proposal {
+    id
+    title
+  }
+  voter {
+    id
+    handle
+  }
+}
+
 query GetProposalsEvents {
   events (
     where: {
@@ -39,6 +91,10 @@ query GetProposalsEvents {
         ProposalCreatedEvent,
         ProposalStatusUpdatedEvent,
         ProposalDecisionMadeEvent,
+        ProposalCancelledEvent,
+        ProposalDiscussionThreadModeChangedEvent,
+        ProposalExecutedEvent,
+        ProposalVotedEvent,
       ]
     }
     orderBy: [createdAt_DESC]
@@ -46,11 +102,23 @@ query GetProposalsEvents {
     ...on ProposalCreatedEvent {
       ...ProposalCreatedEventFields
     }
+    ...on ProposalCancelledEvent {
+      ...ProposalCancelledEventFields
+    }
     ...on ProposalStatusUpdatedEvent {
       ...ProposalStatusUpdatedEventFields
     }
     ...on ProposalDecisionMadeEvent {
       ...ProposalDecisionMadeEventFields
+    }
+    ...on ProposalDiscussionThreadModeChangedEvent {
+      ...ProposalDiscussionModeChangedEventFields
+    }
+    ...on ProposalExecutedEvent {
+      ...ProposalExecutedEventFields
+    }
+    ...on ProposalVotedEvent {
+      ...ProposalVotedEventFields
     }
   }
 }

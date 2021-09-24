@@ -4,14 +4,16 @@ import { ActivityContentComponent } from '@/common/components/Activities/Activit
 import { ActivityRouterLink } from '@/common/components/Activities/ActivityRouterLink'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
-import { ProposalDecisionMadeActivity } from '../../types/ProposalsActivities'
+import { ProposalDiscussionModeChangedActivity } from '../../types/ProposalsActivities'
 
-export const ProposalDecisionMadeContent: ActivityContentComponent<ProposalDecisionMadeActivity> = ({ activity }) => (
+export const ProposalDiscussionModeContent: ActivityContentComponent<ProposalDiscussionModeChangedActivity> = ({
+  activity,
+}) => (
   <>
     Proposal "
     <ActivityRouterLink to={`${ProposalsRoutes.preview}/${activity.proposal.id}`}>
       {activity.proposal.title}
     </ActivityRouterLink>
-    " decision made.
+    " discussion mode changed to {activity.newMode}.
   </>
 )

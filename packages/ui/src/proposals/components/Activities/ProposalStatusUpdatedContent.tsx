@@ -4,7 +4,7 @@ import { ActivityContentComponent } from '@/common/components/Activities/Activit
 import { ActivityRouterLink } from '@/common/components/Activities/ActivityRouterLink'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
-import { ProposalStatusUpdatedActivity } from '../ProposalsActivities'
+import { ProposalStatusUpdatedActivity } from '../../types/ProposalsActivities'
 
 export const ProposalStatusUpdatedContent: ActivityContentComponent<ProposalStatusUpdatedActivity> = ({ activity }) => (
   <>

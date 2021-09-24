@@ -19,8 +19,15 @@ import {
   seedProposals,
   seedEvents,
   updateWorkingGroups,
+  seedProposalsEvents,
 } from './data'
-import { getConnectionResolver, getUniqueResolver, getWhereResolver, searchMembersResolver } from './resolvers'
+import {
+  getConnectionResolver,
+  getInterfaceResolver,
+  getUniqueResolver,
+  getWhereResolver,
+  searchMembersResolver,
+} from './resolvers'
 
 // Fix for "model has multiple possible inverse associations" error.
 // See: https://github.com/miragejs/ember-cli-mirage/issues/996#issuecomment-315011890
@@ -130,6 +137,7 @@ export const makeServer = (environment = 'development') => {
               workingGroups: getWhereResolver('WorkingGroup'),
               postTextUpdatedEvents: getWhereResolver('PostTextUpdatedEvent'),
               postAddedEvents: getWhereResolver('PostAddedEvent'),
+              events: getInterfaceResolver(),
             },
           },
         })
@@ -155,6 +163,7 @@ export const makeServer = (environment = 'development') => {
             seedForumCategories(server)
             seedForumThreads(server)
             seedForumPosts(server)
+            seedProposalsEvents(server)
             seedElectedCouncils(server)
             seedCouncilMembers(server)
           },

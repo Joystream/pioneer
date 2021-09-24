@@ -3,6 +3,7 @@ import { JSXElementConstructor } from 'react'
 import {
   BudgetIcon,
   ExiteRoleIcon,
+  ProposalExecutedIcon,
   RewardIcon,
   StatusUpdatedIcon,
   TerminatedIcon,
@@ -46,4 +47,8 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   ProposalCreatedEvent: [CreatedIcon, 'joystream'],
   ProposalStatusUpdatedEvent: [StatusUpdatedIcon, 'joystream'],
   ProposalDecisionMadeEvent: [ClosedIcon, 'negative'],
+  ProposalCancelledEvent: [ClosedIcon, 'negative'],
+  ProposalDiscussionThreadModeChangedEvent: [StatusUpdatedIcon, 'joystream'],
+  ProposalExecutedEvent: [ProposalExecutedIcon, 'joystream'],
+  ProposalVotedEvent: [CreatedIcon, 'joystream'],
 }

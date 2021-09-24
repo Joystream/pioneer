@@ -1,3 +1,7 @@
+import * as faker from 'faker'
+
+import { randomRawBlock } from '../helpers/randomBlock'
+
 import rawApplicationWithdrawnEvents from './raw/applicationWithdrawnEvents.json'
 import rawAppliedOnOpeningEvents from './raw/appliedOnOpeningEvents.json'
 import rawBudgetSetEvents from './raw/budgetSetEvents.json'
@@ -116,3 +120,29 @@ export const seedEventCategory = (type: EventType, server: any) =>
 
 export const seedEvents = (server: any) =>
   (Object.keys(eventCategories) as EventType[]).map((category) => seedEventCategory(category, server))
+
+export function seedProposalsEvents(server: any) {
+  server.schema.create('ProposalCancelledEvent', {
+    ...randomRawBlock(),
+    createdAt: faker.date.recent(1),
+    proposalId: '1',
+  })
+  server.schema.create('ProposalDiscussionThreadModeChangedEvent', {
+    ...randomRawBlock(),
+    createdAt: faker.date.recent(1),
+    threadId: '2',
+    newMode: server.schema.create('ProposalDiscussionThreadModeClosed'),
+  })
+  server.schema.create('ProposalExecutedEvent', {
+    ...randomRawBlock(),
+    createdAt: faker.date.recent(1),
+    proposalId: '2',
+    executionStatus: server.schema.create('ProposalStatusExecuted'),
+  })
+  server.schema.create('ProposalVotedEvent', {
+    ...randomRawBlock(),
+    createdAt: faker.date.recent(1),
+    proposalId: '3',
+    voterId: '3',
+  })
+}

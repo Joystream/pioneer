@@ -5,14 +5,14 @@ import { ActivityRouterLink } from '@/common/components/Activities/ActivityRoute
 import { MemberModalLink } from '@/memberships/components/MemberModalLink'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 
-import { ProposalCreatedActivity } from '../../types/ProposalsActivities'
+import { ProposalVotedActivity } from '../../types/ProposalsActivities'
 
-export const ProposalCreatedContent: ActivityContentComponent<ProposalCreatedActivity> = ({ activity }) => (
+export const ProposalVotedContent: ActivityContentComponent<ProposalVotedActivity> = ({ activity }) => (
   <>
-    <MemberModalLink call={{ modal: 'Member', data: { id: activity.creator.id } }}>
-      {activity.creator.handle}
+    <MemberModalLink call={{ modal: 'Member', data: { id: activity.voter.id } }}>
+      {activity.voter.handle}
     </MemberModalLink>{' '}
-    has submitted a proposal "
+    voted on the proposal "
     <ActivityRouterLink to={`${ProposalsRoutes.preview}/${activity.proposal.id}`}>
       {activity.proposal.title}
     </ActivityRouterLink>
