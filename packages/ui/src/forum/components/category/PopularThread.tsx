@@ -2,10 +2,12 @@ import React, { memo } from 'react'
 import styled from 'styled-components'
 
 import { Loading } from '@/common/components/Loading'
+import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextExtraSmall } from '@/common/components/typography'
-import { Overflow } from '@/common/constants'
+import { Overflow, Fonts, Transitions, Colors } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
+import { ForumRoutes } from '@/forum/constant'
 import { useForumPopularThreads } from '@/forum/hooks/useForumPopularThreads'
 
 import { CategoryItemFieldProps } from './CategoryListItem'
@@ -20,7 +22,7 @@ export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
 
   return (
     <ThreadInfoStyles>
-      <h6>{thread.title}</h6>
+      <ThreadTitleLink to={`${ForumRoutes.thread}/${thread?.id}`}>{thread.title}</ThreadTitleLink>
       {isDefined(thread.visiblePostsCount) && (
         <TextExtraSmall lighter>
           {thread.visiblePostsCount} Post{plural(thread.visiblePostsCount)}
@@ -34,5 +36,21 @@ export const ThreadInfoStyles = styled.div`
   & > h6 {
     margin-bottom: 12px;
     ${Overflow.FullDots};
+  }
+`
+
+const ThreadTitleLink = styled(GhostRouterLink)`
+  display: inline-block;
+  font-family: ${Fonts.Grotesk};
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  padding-bottom: 8px;
+  transition: ${Transitions.all};
+  ${Overflow.FullDots};
+
+  &:hover,
+  &:focus {
+    color: ${Colors.Blue[500]};
   }
 `
