@@ -1,6 +1,6 @@
 import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import {
@@ -34,6 +34,7 @@ interface PostListItemProps {
   type: PostListItemType
   replyToPost: () => void
   link?: string
+  isDiscussion?: boolean
 }
 
 export const PostListItem = ({
@@ -45,6 +46,7 @@ export const PostListItem = ({
   type,
   link,
   replyToPost,
+  isDiscussion,
 }: PostListItemProps) => {
   const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
   const [postText, setPostText] = useState<string>(text)
@@ -80,7 +82,7 @@ export const PostListItem = ({
   }, [])
 
   return (
-    <FroumPostBlock ref={ref} isSelected={isSelected}>
+    <ForumPostBlock ref={ref} isSelected={isSelected} isDiscussion={isDiscussion}>
       <ForumPostStyles>
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
@@ -134,7 +136,7 @@ export const PostListItem = ({
           )}
         </ForumPostRow>
       </ForumPostStyles>
-    </FroumPostBlock>
+    </ForumPostBlock>
   )
 }
 
@@ -199,11 +201,15 @@ export const ForumPostStyles = styled.div`
   row-gap: 16px;
 `
 
-const FroumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected'>>`
-  border-radius: ${BorderRad.m};
-  background-color: ${Colors.White};
-  box-shadow: ${Shadows.light};
-  padding: 24px;
+const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDiscussion'>>`
+  ${({ isDiscussion }) =>
+    !isDiscussion &&
+    css`
+      border-radius: ${BorderRad.m};
+      background-color: ${Colors.White};
+      box-shadow: ${Shadows.light};
+      padding: 24px;
+    `};
   scroll-margin: 48px;
 
   // Animate selection:

@@ -104,6 +104,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             post={post}
             replyToPost={() => setReplyTo(post)}
             type="proposal"
+            isDiscussion
             link={`${origin}${ProposalsRoutes.preview}/${proposalId}?post=${post.id}`}
           />
         )
