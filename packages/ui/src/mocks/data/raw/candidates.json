@@ -1,191 +1,212 @@
 [
   {
     "id": "0-0",
-    "electedInCouncilId": "0",
     "memberId": "12",
-    "unpaidReward": 75237,
+    "cycleIdId": "0",
     "stake": 12624
   },
   {
     "id": "0-1",
-    "electedInCouncilId": "0",
     "memberId": "15",
-    "unpaidReward": 0,
+    "cycleIdId": "0",
     "stake": 324025
   },
   {
     "id": "0-2",
-    "electedInCouncilId": "0",
     "memberId": "16",
-    "unpaidReward": 0,
+    "cycleIdId": "0",
     "stake": 687707
   },
   {
     "id": "0-3",
-    "electedInCouncilId": "0",
     "memberId": "38",
-    "unpaidReward": 25044,
+    "cycleIdId": "0",
     "stake": 161009
   },
   {
     "id": "0-4",
-    "electedInCouncilId": "0",
     "memberId": "36",
-    "unpaidReward": 10580,
+    "cycleIdId": "0",
     "stake": 606094
   },
   {
     "id": "1-0",
-    "electedInCouncilId": "1",
     "memberId": "12",
-    "unpaidReward": 45322,
+    "cycleIdId": "1",
     "stake": 745998
   },
   {
     "id": "1-1",
-    "electedInCouncilId": "1",
     "memberId": "48",
-    "unpaidReward": 57218,
+    "cycleIdId": "1",
     "stake": 934490
   },
   {
     "id": "1-2",
-    "electedInCouncilId": "1",
     "memberId": "20",
-    "unpaidReward": 0,
+    "cycleIdId": "1",
     "stake": 164266
   },
   {
     "id": "1-3",
-    "electedInCouncilId": "1",
     "memberId": "5",
-    "unpaidReward": 37960,
+    "cycleIdId": "1",
     "stake": 933953
   },
   {
     "id": "1-4",
-    "electedInCouncilId": "1",
     "memberId": "31",
-    "unpaidReward": 0,
+    "cycleIdId": "1",
     "stake": 523055
   },
   {
     "id": "1-5",
-    "electedInCouncilId": "1",
     "memberId": "2",
-    "unpaidReward": 50718,
+    "cycleIdId": "1",
     "stake": 150076
   },
   {
     "id": "1-6",
-    "electedInCouncilId": "1",
     "memberId": "32",
-    "unpaidReward": 0,
+    "cycleIdId": "1",
     "stake": 258050
   },
   {
     "id": "1-7",
-    "electedInCouncilId": "1",
     "memberId": "29",
-    "unpaidReward": 47491,
+    "cycleIdId": "1",
     "stake": 164922
   },
   {
     "id": "2-0",
-    "electedInCouncilId": "2",
     "memberId": "20",
-    "unpaidReward": 24945,
+    "cycleIdId": "2",
     "stake": 518416
   },
   {
     "id": "2-1",
-    "electedInCouncilId": "2",
     "memberId": "40",
-    "unpaidReward": 40086,
+    "cycleIdId": "2",
     "stake": 775394
   },
   {
     "id": "2-2",
-    "electedInCouncilId": "2",
     "memberId": "27",
-    "unpaidReward": 88569,
+    "cycleIdId": "2",
     "stake": 688660
   },
   {
     "id": "2-3",
-    "electedInCouncilId": "2",
     "memberId": "26",
-    "unpaidReward": 0,
+    "cycleIdId": "2",
     "stake": 717336
   },
   {
     "id": "2-4",
-    "electedInCouncilId": "2",
     "memberId": "9",
-    "unpaidReward": 0,
+    "cycleIdId": "2",
     "stake": 679919
   },
   {
     "id": "2-5",
-    "electedInCouncilId": "2",
     "memberId": "24",
-    "unpaidReward": 0,
+    "cycleIdId": "2",
     "stake": 839034
   },
   {
     "id": "2-6",
-    "electedInCouncilId": "2",
     "memberId": "8",
-    "unpaidReward": 0,
+    "cycleIdId": "2",
     "stake": 293399
   },
   {
     "id": "2-7",
-    "electedInCouncilId": "2",
     "memberId": "34",
-    "unpaidReward": 57138,
+    "cycleIdId": "2",
     "stake": 790480
   },
   {
     "id": "3-0",
-    "electedInCouncilId": "3",
     "memberId": "24",
-    "unpaidReward": 0,
+    "cycleIdId": "3",
     "stake": 688170
   },
   {
     "id": "3-1",
-    "electedInCouncilId": "3",
     "memberId": "50",
-    "unpaidReward": 0,
+    "cycleIdId": "3",
     "stake": 876017
   },
   {
     "id": "3-2",
-    "electedInCouncilId": "3",
     "memberId": "38",
-    "unpaidReward": 0,
+    "cycleIdId": "3",
     "stake": 873673
   },
   {
     "id": "3-3",
-    "electedInCouncilId": "3",
     "memberId": "34",
-    "unpaidReward": 0,
+    "cycleIdId": "3",
     "stake": 344789
   },
   {
     "id": "3-4",
-    "electedInCouncilId": "3",
     "memberId": "9",
-    "unpaidReward": 70015,
+    "cycleIdId": "3",
     "stake": 12815
   },
   {
     "id": "3-5",
-    "electedInCouncilId": "3",
     "memberId": "26",
-    "unpaidReward": 0,
+    "cycleIdId": "3",
     "stake": 756615
+  },
+  {
+    "id": "4-0",
+    "memberId": "14",
+    "cycleIdId": "4",
+    "stake": 212241
+  },
+  {
+    "id": "4-1",
+    "memberId": "41",
+    "cycleIdId": "4",
+    "stake": 90896
+  },
+  {
+    "id": "4-2",
+    "memberId": "44",
+    "cycleIdId": "4",
+    "stake": 839216
+  },
+  {
+    "id": "4-3",
+    "memberId": "27",
+    "cycleIdId": "4",
+    "stake": 857096
+  },
+  {
+    "id": "4-4",
+    "memberId": "31",
+    "cycleIdId": "4",
+    "stake": 674278
+  },
+  {
+    "id": "4-5",
+    "memberId": "13",
+    "cycleIdId": "4",
+    "stake": 213030
+  },
+  {
+    "id": "4-6",
+    "memberId": "31",
+    "cycleIdId": "4",
+    "stake": 267177
+  },
+  {
+    "id": "4-7",
+    "memberId": "25",
+    "cycleIdId": "4",
+    "stake": 722330
   }
 ]

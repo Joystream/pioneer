@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Candidate, CandidateCard } from './CandidateCard'
+import { CandidateCardProps, CandidateCard } from './CandidateCard'
 
 interface CandidatesListProps {
-  candidates: Array<Candidate>
+  candidates: CandidateCardProps[]
 }
 
-export const CandidatesList = ({ candidates }: CandidatesListProps) => {
+export const CandidateCardList = ({ candidates }: CandidatesListProps) => {
   return (
     <CandidatesListStyles>
       {candidates.map((candidate, index) => (

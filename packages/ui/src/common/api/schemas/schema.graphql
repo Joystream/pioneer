@@ -2756,6 +2756,9 @@ type Candidate implements BaseGraphQLObject {
   Account that will receive rewards if candidate's elected to the council.
   """
   rewardAccountId: String!
+  member: Membership!
+  memberId: String!
+
   cycleId: ElectionRound!
   cycleIdId: String!
   stake: BigInt!

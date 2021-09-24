@@ -21,6 +21,19 @@ export type ElectedCouncilsFieldsFragment = {
   councilMembers: Array<{ __typename: 'CouncilMember' } & CouncilMemberFieldsFragment>
 }
 
+export type ElectionCandidateFieldsFragment = {
+  __typename: 'Candidate'
+  id: string
+  stake: any
+  member: { __typename: 'Membership' } & MemberFieldsFragment
+}
+
+export type ElectionRoundFieldsFragment = {
+  __typename: 'ElectionRound'
+  cycleId: number
+  candidates: Array<{ __typename: 'Candidate' } & ElectionCandidateFieldsFragment>
+}
+
 export type GetElectedCouncilsQueryVariables = Types.Exact<{
   where: Types.ElectedCouncilWhereInput
 }>
@@ -28,6 +41,13 @@ export type GetElectedCouncilsQueryVariables = Types.Exact<{
 export type GetElectedCouncilsQuery = {
   __typename: 'Query'
   electedCouncils: Array<{ __typename: 'ElectedCouncil' } & ElectedCouncilsFieldsFragment>
+}
+
+export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetCurrentElectionQuery = {
+  __typename: 'Query'
+  electionRounds: Array<{ __typename: 'ElectionRound' } & ElectionRoundFieldsFragment>
 }
 
 export const CouncilMemberFieldsFragmentDoc = gql`
@@ -52,6 +72,25 @@ export const ElectedCouncilsFieldsFragmentDoc = gql`
     }
   }
   ${CouncilMemberFieldsFragmentDoc}
+`
+export const ElectionCandidateFieldsFragmentDoc = gql`
+  fragment ElectionCandidateFields on Candidate {
+    id
+    member {
+      ...MemberFields
+    }
+    stake
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const ElectionRoundFieldsFragmentDoc = gql`
+  fragment ElectionRoundFields on ElectionRound {
+    cycleId
+    candidates {
+      ...ElectionCandidateFields
+    }
+  }
+  ${ElectionCandidateFieldsFragmentDoc}
 `
 export const GetElectedCouncilsDocument = gql`
   query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
@@ -98,4 +137,49 @@ export type GetElectedCouncilsLazyQueryHookResult = ReturnType<typeof useGetElec
 export type GetElectedCouncilsQueryResult = Apollo.QueryResult<
   GetElectedCouncilsQuery,
   GetElectedCouncilsQueryVariables
+>
+export const GetCurrentElectionDocument = gql`
+  query GetCurrentElection {
+    electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
+      ...ElectionRoundFields
+    }
+  }
+  ${ElectionRoundFieldsFragmentDoc}
+`
+
+/**
+ * __useGetCurrentElectionQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentElectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentElectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentElectionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentElectionQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCurrentElectionQuery, GetCurrentElectionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCurrentElectionQuery, GetCurrentElectionQueryVariables>(GetCurrentElectionDocument, options)
+}
+export function useGetCurrentElectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCurrentElectionQuery, GetCurrentElectionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCurrentElectionQuery, GetCurrentElectionQueryVariables>(
+    GetCurrentElectionDocument,
+    options
+  )
+}
+export type GetCurrentElectionQueryHookResult = ReturnType<typeof useGetCurrentElectionQuery>
+export type GetCurrentElectionLazyQueryHookResult = ReturnType<typeof useGetCurrentElectionLazyQuery>
+export type GetCurrentElectionQueryResult = Apollo.QueryResult<
+  GetCurrentElectionQuery,
+  GetCurrentElectionQueryVariables
 >

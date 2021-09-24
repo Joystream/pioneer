@@ -1,15 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { ImagePlaceholder } from '@/common/components/ImagePlaceholder'
 import { Colors, Transitions } from '@/common/constants'
 
-import { ImagePlaceholder } from '../../../common/components/ImagePlaceholder'
-
-interface AvatarProps {
+interface CandidateCardImageProps {
   imageUrl?: string | null
   className?: string
 }
-export const CandidateCardImage = React.memo(({ imageUrl, className }: AvatarProps) => {
+
+export const CandidateCardImage = React.memo(({ imageUrl, className }: CandidateCardImageProps) => {
   return (
     <CandidateCardImageContainer>
       {imageUrl ? <CardImage src={imageUrl} className={className} /> : <ImagePlaceholder className={className} />}

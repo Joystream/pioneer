@@ -19,6 +19,8 @@ import {
   seedProposals,
   seedEvents,
   updateWorkingGroups,
+  seedCouncilCandidates,
+  seedCouncilElections,
   seedProposalsEvents,
 } from './data'
 import {
@@ -67,6 +69,10 @@ export const fixAssociations = (server: Server<AnyRegistry>) => {
   const forumThreadModel = schema.modelFor('forumThread')
   // Mirage: The forum-thread model has multiple possible associations for the forum-post.thread association.
   forumThreadModel.class.prototype.associations.posts.opts.inverse = null
+
+  const electedCouncilModel = schema.modelFor('electedCouncil')
+  // Mirage: The elected-council model has multiple possible inverse associations for the election-round.electedCouncil association.
+  electedCouncilModel.class.prototype.associations.councilElections.opts.inverse = null
 }
 
 export const makeServer = (environment = 'development') => {
@@ -86,8 +92,10 @@ export const makeServer = (environment = 'development') => {
               appliedOnOpeningEvents: getWhereResolver('AppliedOnOpeningEvent'),
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
+              candidates: getWhereResolver('Candidate'),
               councilMembersConnection: getConnectionResolver('CouncilMemberConnection'),
               electedCouncils: getWhereResolver('ElectedCouncil'),
+              electionRounds: getWhereResolver('ElectionRound'),
               forumCategories: getWhereResolver('ForumCategory'),
               forumCategoryByUniqueInput: getUniqueResolver('ForumCategory'),
               forumThreads: getWhereResolver('ForumThread'),
@@ -166,6 +174,8 @@ export const makeServer = (environment = 'development') => {
             seedProposalsEvents(server)
             seedElectedCouncils(server)
             seedCouncilMembers(server)
+            seedCouncilElections(server)
+            seedCouncilCandidates(server)
           },
         }),
   })

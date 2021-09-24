@@ -1,0 +1,32 @@
+[
+  {
+    "id": "0",
+    "cycleId": 0,
+    "isFinished": true,
+    "electedCouncilId": "0"
+  },
+  {
+    "id": "1",
+    "cycleId": 1,
+    "isFinished": true,
+    "electedCouncilId": "1"
+  },
+  {
+    "id": "2",
+    "cycleId": 2,
+    "isFinished": true,
+    "electedCouncilId": "2"
+  },
+  {
+    "id": "3",
+    "cycleId": 3,
+    "isFinished": true,
+    "electedCouncilId": "3"
+  },
+  {
+    "id": "4",
+    "cycleId": 4,
+    "isFinished": false,
+    "electedCouncilId": "4"
+  }
+]

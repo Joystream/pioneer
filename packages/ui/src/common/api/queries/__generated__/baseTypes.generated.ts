@@ -2363,6 +2363,8 @@ export type Candidate = BaseGraphQlObject & {
   stakingAccountId: Scalars['String']
   /** Account that will receive rewards if candidate's elected to the council. */
   rewardAccountId: Scalars['String']
+  member: Membership
+  memberId: Scalars['String']
   cycleId: ElectionRound
   cycleIdId: Scalars['String']
   stake: Scalars['BigInt']
