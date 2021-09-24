@@ -155,8 +155,8 @@ export const makeServer = (environment = 'development') => {
             seedForumCategories(server)
             seedForumThreads(server)
             seedForumPosts(server)
-            seedCouncilMembers(server)
             seedElectedCouncils(server)
+            seedCouncilMembers(server)
           },
         }),
   })
