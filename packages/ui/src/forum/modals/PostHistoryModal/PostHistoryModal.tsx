@@ -8,6 +8,7 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Modal, ModalHeader } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
+import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { formatDateString } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
@@ -69,7 +70,7 @@ export const PostHistoryModal = React.memo(() => {
         {isLoading ? (
           <Loading text="Loading versions..." />
         ) : (
-          <RowGapBlock gap={32}>
+          <HistoryPostSpacing gap={32}>
             {edits?.map((edit, index) => (
               <HistoryPost
                 key={index}
@@ -80,7 +81,7 @@ export const PostHistoryModal = React.memo(() => {
                 insertRef={getInsertRef(index)}
               />
             ))}
-          </RowGapBlock>
+          </HistoryPostSpacing>
         )}
       </StepperBody>
     </>
@@ -111,7 +112,7 @@ const HistoryPost = ({ edit, author, onChange, root, insertRef }: HistoryPostPro
   }, [ref.current])
   return (
     <InView onChange={onChange} root={root} rootMargin="-32px 0px 0px">
-      <ForumPostStyles ref={ref}>
+      <HistoryModalPost ref={ref}>
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
           <BlockTime block={asBlock(edit)} layout="reverse" />
@@ -119,11 +120,30 @@ const HistoryPost = ({ edit, author, onChange, root, insertRef }: HistoryPostPro
         <ForumPostRow>
           <MarkdownPreview markdown={edit.newText} />
         </ForumPostRow>
-      </ForumPostStyles>
+      </HistoryModalPost>
     </InView>
   )
 }
 
 const HistoryModalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 300px 1fr;
+`
+
+const HistoryModalPost = styled(ForumPostStyles)`
+  padding-bottom: 52px;
+`
+
+const HistoryPostSpacing = styled(RowGapBlock)`
+  & > div:not(:last-child) {
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+      background-color: ${Colors.Black[200]};
+    }
+  }
 `
