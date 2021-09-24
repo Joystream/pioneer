@@ -12,12 +12,10 @@ import { LinkIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
-import { SidePanel } from '@/common/components/page/SidePanel'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { PostList } from '@/forum/components/PostList/PostList'
-import { SuggestedThreads } from '@/forum/components/SuggestedThreads'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
@@ -114,19 +112,7 @@ export const ForumThread = () => {
     </MainPanel>
   )
 
-  const displaySidebar = () => {
-    if (isLoading || !thread) {
-      return null
-    }
-
-    return (
-      <SidePanel neighbor={sideNeighborRef}>
-        <SuggestedThreads />
-      </SidePanel>
-    )
-  }
-
-  return <ForumPageLayout isThread header={displayHeader()} main={displayMain()} sidebar={displaySidebar()} />
+  return <ForumPageLayout isThread header={displayHeader()} main={displayMain()} />
 }
 
 const ThreadPinned = styled.span`
