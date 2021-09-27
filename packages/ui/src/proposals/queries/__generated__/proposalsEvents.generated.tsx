@@ -69,6 +69,47 @@ export type ProposalVotedEventFieldsFragment = {
   voter: { __typename: 'Membership'; id: string; handle: string }
 }
 
+export type ProposalDiscussionPostCreatedEventFieldsFragment = {
+  __typename: 'ProposalDiscussionPostCreatedEvent'
+  id: string
+  createdAt: any
+  post: {
+    __typename: 'ProposalDiscussionPost'
+    id: string
+    discussionThread: {
+      __typename: 'ProposalDiscussionThread'
+      proposal: { __typename: 'Proposal'; id: string; title: string }
+    }
+  }
+}
+
+export type ProposalDiscussionPostUpdatedEventFieldsFragment = {
+  __typename: 'ProposalDiscussionPostUpdatedEvent'
+  id: string
+  createdAt: any
+  post: {
+    __typename: 'ProposalDiscussionPost'
+    id: string
+    discussionThread: {
+      __typename: 'ProposalDiscussionThread'
+      proposal: { __typename: 'Proposal'; id: string; title: string }
+    }
+  }
+}
+
+export type ProposalDiscussionPostDeletedEventFieldsFragment = {
+  __typename: 'ProposalDiscussionPostDeletedEvent'
+  id: string
+  createdAt: any
+  post: {
+    __typename: 'ProposalDiscussionPost'
+    discussionThread: {
+      __typename: 'ProposalDiscussionThread'
+      proposal: { __typename: 'Proposal'; id: string; title: string }
+    }
+  }
+}
+
 export type GetProposalsEventsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type GetProposalsEventsQuery = {
@@ -97,9 +138,9 @@ export type GetProposalsEventsQuery = {
     | ({ __typename: 'ProposalCancelledEvent' } & ProposalCancelledEventFieldsFragment)
     | ({ __typename: 'ProposalCreatedEvent' } & ProposalCreatedEventFieldsFragment)
     | ({ __typename: 'ProposalDecisionMadeEvent' } & ProposalDecisionMadeEventFieldsFragment)
-    | { __typename: 'ProposalDiscussionPostCreatedEvent' }
-    | { __typename: 'ProposalDiscussionPostDeletedEvent' }
-    | { __typename: 'ProposalDiscussionPostUpdatedEvent' }
+    | ({ __typename: 'ProposalDiscussionPostCreatedEvent' } & ProposalDiscussionPostCreatedEventFieldsFragment)
+    | ({ __typename: 'ProposalDiscussionPostDeletedEvent' } & ProposalDiscussionPostDeletedEventFieldsFragment)
+    | ({ __typename: 'ProposalDiscussionPostUpdatedEvent' } & ProposalDiscussionPostUpdatedEventFieldsFragment)
     | ({ __typename: 'ProposalDiscussionThreadModeChangedEvent' } & ProposalDiscussionModeChangedEventFieldsFragment)
     | ({ __typename: 'ProposalExecutedEvent' } & ProposalExecutedEventFieldsFragment)
     | ({ __typename: 'ProposalStatusUpdatedEvent' } & ProposalStatusUpdatedEventFieldsFragment)
@@ -216,6 +257,50 @@ export const ProposalVotedEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const ProposalDiscussionPostCreatedEventFieldsFragmentDoc = gql`
+  fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
+    id
+    createdAt
+    post {
+      id
+      discussionThread {
+        proposal {
+          id
+          title
+        }
+      }
+    }
+  }
+`
+export const ProposalDiscussionPostUpdatedEventFieldsFragmentDoc = gql`
+  fragment ProposalDiscussionPostUpdatedEventFields on ProposalDiscussionPostUpdatedEvent {
+    id
+    createdAt
+    post {
+      id
+      discussionThread {
+        proposal {
+          id
+          title
+        }
+      }
+    }
+  }
+`
+export const ProposalDiscussionPostDeletedEventFieldsFragmentDoc = gql`
+  fragment ProposalDiscussionPostDeletedEventFields on ProposalDiscussionPostDeletedEvent {
+    id
+    createdAt
+    post {
+      discussionThread {
+        proposal {
+          id
+          title
+        }
+      }
+    }
+  }
+`
 export const GetProposalsEventsDocument = gql`
   query GetProposalsEvents {
     events(
@@ -228,6 +313,9 @@ export const GetProposalsEventsDocument = gql`
           ProposalDiscussionThreadModeChangedEvent
           ProposalExecutedEvent
           ProposalVotedEvent
+          ProposalDiscussionPostCreatedEvent
+          ProposalDiscussionPostUpdatedEvent
+          ProposalDiscussionPostDeletedEvent
         ]
       }
       orderBy: [createdAt_DESC]
@@ -253,6 +341,15 @@ export const GetProposalsEventsDocument = gql`
       ... on ProposalVotedEvent {
         ...ProposalVotedEventFields
       }
+      ... on ProposalDiscussionPostCreatedEvent {
+        ...ProposalDiscussionPostCreatedEventFields
+      }
+      ... on ProposalDiscussionPostUpdatedEvent {
+        ...ProposalDiscussionPostUpdatedEventFields
+      }
+      ... on ProposalDiscussionPostDeletedEvent {
+        ...ProposalDiscussionPostDeletedEventFields
+      }
     }
   }
   ${ProposalCreatedEventFieldsFragmentDoc}
@@ -262,6 +359,9 @@ export const GetProposalsEventsDocument = gql`
   ${ProposalDiscussionModeChangedEventFieldsFragmentDoc}
   ${ProposalExecutedEventFieldsFragmentDoc}
   ${ProposalVotedEventFieldsFragmentDoc}
+  ${ProposalDiscussionPostCreatedEventFieldsFragmentDoc}
+  ${ProposalDiscussionPostUpdatedEventFieldsFragmentDoc}
+  ${ProposalDiscussionPostDeletedEventFieldsFragmentDoc}
 `
 
 /**
