@@ -1,32 +1,13 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 
-import { CloseButton, CopyButtonTemplate } from '@/common/components/buttons'
-import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { Loading } from '@/common/components/Loading'
-import { useEscape } from '@/common/hooks/useEscape'
-import { EmptyBody } from '@/proposals/modals/VoteRationale/VoteRationale'
+import { useModal } from '@/common/hooks/useModal'
 
-import { MemberInfoWrap } from '..'
-import { EditSymbol } from '../../../common/components/icons/symbols'
-import {
-  SidePane,
-  SidePaneBody,
-  SidePaneGlass,
-  SidePaneHeader,
-  SidePanelTop,
-  SidePaneTitle,
-  SidePaneTopButtonsGroup,
-} from '../../../common/components/SidePane'
-import { Tabs } from '../../../common/components/Tabs'
-import { useModal } from '../../../common/hooks/useModal'
 import { useMember } from '../../hooks/useMembership'
-import { useMyMemberships } from '../../hooks/useMyMemberships'
-import { EditMembershipButton } from '../EditMembershipButton'
-import { MemberInfo } from '../MemberInfo'
 
 import { MemberAccounts } from './MemberAccounts'
 import { MemberDetails } from './MemberDetails'
+import { MemberModal } from './MemberModal'
 import { MemberSideRoles } from './MemberRoles'
 import { MemberModalCall } from './types'
 
@@ -34,77 +15,28 @@ type ProfileTabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
 export const MemberProfile = React.memo(() => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>('DETAILS')
-  const { members, isLoading } = useMyMemberships()
-  const { modalData, hideModal } = useModal<MemberModalCall>()
-  const { isLoading: loading, member } = useMember(modalData.id)
-
-  const isMyMember = !isLoading && !!members.find((m) => m.id == member?.id)
-
-  const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (e.target === e.currentTarget) {
-      hideModal()
-    }
-  }
-
-  useEscape(() => hideModal())
-
-  if (loading || !member) {
-    return (
-      <SidePaneGlass onClick={onBackgroundClick}>
-        <SidePane>
-          <SidePaneBody>
-            <EmptyBody>
-              <Loading />
-            </EmptyBody>
-          </SidePaneBody>
-        </SidePane>
-      </SidePaneGlass>
-    )
-  }
-
+  const { modalData } = useModal<MemberModalCall>()
+  const { isLoading, member } = useMember(modalData.id)
   return (
-    <SidePaneGlass onClick={onBackgroundClick}>
-      <SidePane>
-        <MemberPanelHeader>
-          <SidePanelTop>
-            <SidePaneTitle>My Profile</SidePaneTitle>
-            <SidePaneTopButtonsGroup>
-              {isMyMember && activeTab === 'DETAILS' && (
-                <EditMembershipButton member={member} size="small">
-                  <EditSymbol />
-                </EditMembershipButton>
-              )}
-              <CopyButtonTemplate
-                square
-                size="small"
-                textToCopy={`${window.location.host}/#/members/${member.id}`}
-                icon={<LinkIcon />}
-              />
-            </SidePaneTopButtonsGroup>
-            <CloseButton onClick={hideModal} />
-          </SidePanelTop>
-          <MemberInfo member={member} memberSize="l" size="l" />
-          <Tabs
-            tabs={[
-              { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },
-              { title: 'Accounts', active: activeTab === 'ACCOUNTS', onClick: () => setActiveTab('ACCOUNTS') },
-              { title: 'Roles', active: activeTab === 'ROLES', onClick: () => setActiveTab('ROLES') },
-            ]}
-            tabsSize="xs"
-          />
-        </MemberPanelHeader>
-        <SidePaneBody>
+    <MemberModal
+      tabs={[
+        { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },
+        { title: 'Accounts', active: activeTab === 'ACCOUNTS', onClick: () => setActiveTab('ACCOUNTS') },
+        { title: 'Roles', active: activeTab === 'ROLES', onClick: () => setActiveTab('ROLES') },
+      ]}
+      member={member}
+      isLoading={isLoading}
+      isDetailsTab={activeTab === 'DETAILS'}
+    >
+      {!member ? (
+        <Loading />
+      ) : (
+        <>
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
           {activeTab === 'ROLES' && <MemberSideRoles member={member} />}
-        </SidePaneBody>
-      </SidePane>
-    </SidePaneGlass>
+        </>
+      )}
+    </MemberModal>
   )
 })
-
-const MemberPanelHeader = styled(SidePaneHeader)`
-  ${MemberInfoWrap} {
-    padding-bottom: 4px;
-  }
-`
