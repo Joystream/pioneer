@@ -7,7 +7,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { CandidacyPreview } from './CandidacyPreview'
 
 export default {
-  title: 'Council/CandidacyDetails',
+  title: 'Council/CandidacyPreview',
   component: CandidacyPreview,
 } as Meta
 

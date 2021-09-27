@@ -2,11 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
-import { Link } from '@/common/components/Link'
+import { ButtonGhost } from '@/common/components/buttons'
+import { ArrowRightIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText } from '@/common/components/SidePane'
 import { StatisticItem, Statistics } from '@/common/components/statistics'
+import { TextMedium } from '@/common/components/typography'
 
 export const CandidacyDetails = () => {
   return (
@@ -20,7 +22,10 @@ export const CandidacyDetails = () => {
           <StatisticItem title="Failed">2</StatisticItem>
         </Statistics>
         <h4>Candidacy discussion thread</h4>
-        <Link href="">30 messages</Link>
+        <ButtonGhost size="large">
+          30 messages <ArrowRightIcon />
+        </ButtonGhost>
+        <TextMedium light>Last message from A 1 hour ago</TextMedium>
         <h4>Candidate summary</h4>
         <MarkdownPreview markdown={'# TITLE\n\n markdown _markdown_ **markdown** *markdown*'} />
       </Details>
