@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
-import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
+import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 
 export default {
@@ -24,7 +24,7 @@ const Template: Story = () => {
         <StepperProposalWrapper>
           <Stepper steps={[]} />
           <StepDescriptionColumn>
-            <Constants constants={null} />
+            <ProposalConstantsWrapper constants={null} />
           </StepDescriptionColumn>
           <StepperBody>
             <DecreaseWorkingGroupLeadStake

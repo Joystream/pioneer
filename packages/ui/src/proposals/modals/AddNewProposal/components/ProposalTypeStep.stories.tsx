@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router'
 
 import { Stepper, StepDescriptionColumn, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
-import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
+import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { ProposalType } from '@/proposals/types'
 
@@ -21,7 +21,7 @@ const Template: Story = () => {
         <StepperProposalWrapper>
           <Stepper steps={[]} />
           <StepDescriptionColumn>
-            <Constants constants={null} />
+            <ProposalConstantsWrapper constants={null} />
           </StepDescriptionColumn>
           <StepperBody>
             <ProposalTypeStep type={type} setType={(proposalType) => setType(proposalType)} />

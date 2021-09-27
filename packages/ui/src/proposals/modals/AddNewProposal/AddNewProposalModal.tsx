@@ -27,8 +27,8 @@ import { getSteps, Step } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { useConstants } from '@/proposals/hooks/useConstants'
-import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
+import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
+import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { SignTransactionModal } from '@/proposals/modals/AddNewProposal/components/SignTransactionModal'
@@ -55,7 +55,7 @@ export type BaseProposalParams = Exclude<
   string | Uint8Array
 >
 
-const isLastStepActive = (steps: Step[]) => {
+export const isLastStepActive = (steps: Step[]) => {
   return steps[steps.length - 1].type === 'active' || steps[steps.length - 1].type === 'past'
 }
 
@@ -66,7 +66,7 @@ export const AddNewProposalModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
-  const constants = useConstants(state.context.type)
+  const constants = useProposalConstants(state.context.type)
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
     constants?.requiredStake.toNumber() || 0
   )
@@ -245,7 +245,7 @@ export const AddNewProposalModal = () => {
         <StepperProposalWrapper>
           <Stepper steps={getSteps(service)} />
           <StepDescriptionColumn>
-            <Constants constants={constants} />
+            <ProposalConstantsWrapper constants={constants} />
           </StepDescriptionColumn>
           <StepperBody>
             {state.matches('proposalType') && (

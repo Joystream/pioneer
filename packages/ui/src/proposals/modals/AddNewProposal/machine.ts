@@ -126,9 +126,9 @@ export type AddNewProposalState =
   | { value: 'error'; context: AddNewProposalContext }
 
 type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
-type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
-type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
-type SetTitleEvent = { type: 'SET_TITLE'; title: string }
+export type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
+export type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
+export type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
 type SetTriggerBlockEvent = { type: 'SET_TRIGGER_BLOCK'; triggerBlock: ProposalTrigger | undefined }
 type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscussionMode }
