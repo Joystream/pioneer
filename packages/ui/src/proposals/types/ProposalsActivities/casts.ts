@@ -101,22 +101,16 @@ const asProposalVotedActivity: ProposalActivityCast<ProposalVotedEventFieldsFrag
 })
 
 const asDiscussionPostActivity: ProposalActivityCast<
-  ProposalDiscussionPostCreatedEventFieldsFragment | ProposalDiscussionPostUpdatedEventFieldsFragment,
-  ProposalDiscussionPostCreatedActivity | ProposalDiscussionPostEditedActivity
+  | ProposalDiscussionPostCreatedEventFieldsFragment
+  | ProposalDiscussionPostUpdatedEventFieldsFragment
+  | ProposalDiscussionPostDeletedEventFieldsFragment,
+  ProposalDiscussionPostCreatedActivity | ProposalDiscussionPostEditedActivity | ProposalDiscussionPostDeletedActivity
 > = (fields) => ({
   eventType: fields.__typename,
   ...asBaseActivity(fields),
   proposal: asProposalFields(fields.post.discussionThread.proposal),
+  author: asMemberDisplayFields(fields.post.author),
   postId: fields.post.id,
-})
-
-const asDiscussionPostDeletedActivity: ProposalActivityCast<
-  ProposalDiscussionPostDeletedEventFieldsFragment,
-  ProposalDiscussionPostDeletedActivity
-> = (fields) => ({
-  eventType: fields.__typename,
-  ...asBaseActivity(fields),
-  proposal: asProposalFields(fields.post.discussionThread.proposal),
 })
 
 const proposalCastByType: Record<
@@ -132,7 +126,7 @@ const proposalCastByType: Record<
   ProposalVotedEvent: asProposalVotedActivity,
   ProposalDiscussionPostCreatedEvent: asDiscussionPostActivity,
   ProposalDiscussionPostUpdatedEvent: asDiscussionPostActivity,
-  ProposalDiscussionPostDeletedEvent: asDiscussionPostDeletedActivity,
+  ProposalDiscussionPostDeletedEvent: asDiscussionPostActivity,
 }
 
 type EventsQueryResult = GetProposalsEventsQuery['events'][0]

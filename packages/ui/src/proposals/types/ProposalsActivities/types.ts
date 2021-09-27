@@ -77,16 +77,19 @@ export interface ProposalVotedActivity extends ProposalObjectActivity {
   voter: MemberDisplayFields
 }
 
-export interface ProposalDiscussionPostDeletedActivity extends ProposalObjectActivity {
+interface ProposalDiscussionPostActivity extends ProposalObjectActivity {
+  postId: string
+  author: MemberDisplayFields
+}
+
+export interface ProposalDiscussionPostDeletedActivity extends ProposalDiscussionPostActivity {
   eventType: 'ProposalDiscussionPostDeletedEvent'
 }
 
-export interface ProposalDiscussionPostCreatedActivity extends ProposalObjectActivity {
+export interface ProposalDiscussionPostCreatedActivity extends ProposalDiscussionPostActivity {
   eventType: 'ProposalDiscussionPostCreatedEvent'
-  postId: string
 }
 
-export interface ProposalDiscussionPostEditedActivity extends ProposalObjectActivity {
+export interface ProposalDiscussionPostEditedActivity extends ProposalDiscussionPostActivity {
   eventType: 'ProposalDiscussionPostUpdatedEvent'
-  postId: string
 }

@@ -89,6 +89,10 @@ fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreat
   createdAt
   post {
     id
+    author {
+      id
+      handle
+    }
     discussionThread {
       proposal {
         id
@@ -103,6 +107,10 @@ fragment ProposalDiscussionPostUpdatedEventFields on ProposalDiscussionPostUpdat
   createdAt
   post {
     id
+    author {
+      id
+      handle
+    }
     discussionThread {
       proposal {
         id
@@ -116,6 +124,11 @@ fragment ProposalDiscussionPostDeletedEventFields on ProposalDiscussionPostDelet
   id
   createdAt
   post {
+    id
+    author {
+      id
+      handle
+    }
     discussionThread {
       proposal {
         id

@@ -76,6 +76,7 @@ export type ProposalDiscussionPostCreatedEventFieldsFragment = {
   post: {
     __typename: 'ProposalDiscussionPost'
     id: string
+    author: { __typename: 'Membership'; id: string; handle: string }
     discussionThread: {
       __typename: 'ProposalDiscussionThread'
       proposal: { __typename: 'Proposal'; id: string; title: string }
@@ -90,6 +91,7 @@ export type ProposalDiscussionPostUpdatedEventFieldsFragment = {
   post: {
     __typename: 'ProposalDiscussionPost'
     id: string
+    author: { __typename: 'Membership'; id: string; handle: string }
     discussionThread: {
       __typename: 'ProposalDiscussionThread'
       proposal: { __typename: 'Proposal'; id: string; title: string }
@@ -103,6 +105,8 @@ export type ProposalDiscussionPostDeletedEventFieldsFragment = {
   createdAt: any
   post: {
     __typename: 'ProposalDiscussionPost'
+    id: string
+    author: { __typename: 'Membership'; id: string; handle: string }
     discussionThread: {
       __typename: 'ProposalDiscussionThread'
       proposal: { __typename: 'Proposal'; id: string; title: string }
@@ -263,6 +267,10 @@ export const ProposalDiscussionPostCreatedEventFieldsFragmentDoc = gql`
     createdAt
     post {
       id
+      author {
+        id
+        handle
+      }
       discussionThread {
         proposal {
           id
@@ -278,6 +286,10 @@ export const ProposalDiscussionPostUpdatedEventFieldsFragmentDoc = gql`
     createdAt
     post {
       id
+      author {
+        id
+        handle
+      }
       discussionThread {
         proposal {
           id
@@ -292,6 +304,11 @@ export const ProposalDiscussionPostDeletedEventFieldsFragmentDoc = gql`
     id
     createdAt
     post {
+      id
+      author {
+        id
+        handle
+      }
       discussionThread {
         proposal {
           id
