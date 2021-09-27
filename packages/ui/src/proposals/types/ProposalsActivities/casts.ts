@@ -6,6 +6,9 @@ import {
   ProposalCreatedEventFieldsFragment,
   ProposalDecisionMadeEventFieldsFragment,
   ProposalDiscussionModeChangedEventFieldsFragment,
+  ProposalDiscussionPostCreatedEventFieldsFragment,
+  ProposalDiscussionPostDeletedEventFieldsFragment,
+  ProposalDiscussionPostUpdatedEventFieldsFragment,
   ProposalExecutedEventFieldsFragment,
   ProposalStatusUpdatedEventFieldsFragment,
   ProposalVotedEventFieldsFragment,
@@ -14,6 +17,7 @@ import {
 import {
   ProposalCancelledActivity,
   ProposalDiscussionModeChangedActivity,
+  ProposalDiscussionPostCreatedActivity,
   ProposalExecutedActivity,
   ProposalVotedActivity,
 } from '.'
@@ -21,6 +25,8 @@ import {
   ProposalActivity,
   ProposalCreatedActivity,
   ProposalDecisionMadeActivity,
+  ProposalDiscussionPostDeletedActivity,
+  ProposalDiscussionPostEditedActivity,
   ProposalEventFieldsFragment,
   ProposalStatusUpdatedActivity,
 } from './types'
@@ -94,6 +100,25 @@ const asProposalVotedActivity: ProposalActivityCast<ProposalVotedEventFieldsFrag
   proposal: asProposalFields(fields.proposal),
 })
 
+const asDiscussionPostActivity: ProposalActivityCast<
+  ProposalDiscussionPostCreatedEventFieldsFragment | ProposalDiscussionPostUpdatedEventFieldsFragment,
+  ProposalDiscussionPostCreatedActivity | ProposalDiscussionPostEditedActivity
+> = (fields) => ({
+  eventType: fields.__typename,
+  ...asBaseActivity(fields),
+  proposal: asProposalFields(fields.post.discussionThread.proposal),
+  postId: fields.post.id,
+})
+
+const asDiscussionPostDeletedActivity: ProposalActivityCast<
+  ProposalDiscussionPostDeletedEventFieldsFragment,
+  ProposalDiscussionPostDeletedActivity
+> = (fields) => ({
+  eventType: fields.__typename,
+  ...asBaseActivity(fields),
+  proposal: asProposalFields(fields.post.discussionThread.proposal),
+})
+
 const proposalCastByType: Record<
   ProposalEventFieldsFragment['__typename'],
   ProposalActivityCast<any, ProposalActivity>
@@ -105,6 +130,9 @@ const proposalCastByType: Record<
   ProposalDiscussionThreadModeChangedEvent: asProposalDiscussionModeChangedActivity,
   ProposalExecutedEvent: asProposalExecutedActivity,
   ProposalVotedEvent: asProposalVotedActivity,
+  ProposalDiscussionPostCreatedEvent: asDiscussionPostActivity,
+  ProposalDiscussionPostUpdatedEvent: asDiscussionPostActivity,
+  ProposalDiscussionPostDeletedEvent: asDiscussionPostDeletedActivity,
 }
 
 type EventsQueryResult = GetProposalsEventsQuery['events'][0]

@@ -4,6 +4,9 @@ import {
   ProposalCreatedEventFieldsFragment,
   ProposalDecisionMadeEventFieldsFragment,
   ProposalDiscussionModeChangedEventFieldsFragment,
+  ProposalDiscussionPostCreatedEventFieldsFragment,
+  ProposalDiscussionPostDeletedEventFieldsFragment,
+  ProposalDiscussionPostUpdatedEventFieldsFragment,
   ProposalExecutedEventFieldsFragment,
   ProposalStatusUpdatedEventFieldsFragment,
   ProposalVotedEventFieldsFragment,
@@ -17,6 +20,9 @@ export type ProposalActivity =
   | ProposalDiscussionModeChangedActivity
   | ProposalExecutedActivity
   | ProposalVotedActivity
+  | ProposalDiscussionPostDeletedActivity
+  | ProposalDiscussionPostEditedActivity
+  | ProposalDiscussionPostCreatedActivity
 
 export type ProposalEventFieldsFragment =
   | ProposalCreatedEventFieldsFragment
@@ -26,6 +32,9 @@ export type ProposalEventFieldsFragment =
   | ProposalCancelledEventFieldsFragment
   | ProposalExecutedEventFieldsFragment
   | ProposalVotedEventFieldsFragment
+  | ProposalDiscussionPostCreatedEventFieldsFragment
+  | ProposalDiscussionPostDeletedEventFieldsFragment
+  | ProposalDiscussionPostUpdatedEventFieldsFragment
 
 interface ProposalObjectActivity extends BaseActivity {
   proposal: {
@@ -66,4 +75,18 @@ export interface ProposalExecutedActivity extends ProposalObjectActivity {
 export interface ProposalVotedActivity extends ProposalObjectActivity {
   eventType: 'ProposalVotedEvent'
   voter: MemberDisplayFields
+}
+
+export interface ProposalDiscussionPostDeletedActivity extends ProposalObjectActivity {
+  eventType: 'ProposalDiscussionPostDeletedEvent'
+}
+
+export interface ProposalDiscussionPostCreatedActivity extends ProposalObjectActivity {
+  eventType: 'ProposalDiscussionPostCreatedEvent'
+  postId: string
+}
+
+export interface ProposalDiscussionPostEditedActivity extends ProposalObjectActivity {
+  eventType: 'ProposalDiscussionPostUpdatedEvent'
+  postId: string
 }
