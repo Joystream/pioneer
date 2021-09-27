@@ -6,6 +6,7 @@ import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModa
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { useModal } from '@/common/hooks/useModal'
 import { ModalName } from '@/common/providers/modal/types'
+import { AnnounceCandidateModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidate'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
 import { EditThreadTitleModal, EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
 import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
@@ -44,6 +45,7 @@ export type ModalNames =
   | ModalName<EditThreadTitleModalCall>
   | ModalName<SearchResultsModalCall>
   | ModalName<CreatePostModalCall>
+  | ModalName<AnnounceCandidateModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -65,6 +67,7 @@ const modals: Record<ModalNames, ReactElement> = {
   EditThreadTitleModal: <EditThreadTitleModal />,
   SearchResults: <SearchResultsModal />,
   CreatePost: <CreatePostModal />,
+  AnnounceCandidateModal: <AnnounceCandidateModal />,
 }
 
 export const GlobalModals = () => {
