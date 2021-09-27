@@ -14,6 +14,10 @@ export const isString = (something: unknown): something is string => typeof some
 
 export const isRecord = (something: unknown): something is Obj => typeof something === 'object' && something !== null
 
+// Type Casting:
+
+export const toNumber = (value: any): number => value?.toNumber?.() ?? (isNumber(value) ? value : NaN)
+
 // Math:
 
 export const clamp = (min: number, value: number, max: number) => Math.max(min, Math.min(max, value))

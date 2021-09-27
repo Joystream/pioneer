@@ -26,8 +26,8 @@ const Template: Story<StatisticItemProps> = (args) => (
         {...args}
         title="Multi token value"
         values={[
-          { label: '24 hours', value: new BN(257) },
-          { label: 'Month', value: new BN(123_001) },
+          { label: 'Amount', value: new BN(150_000) },
+          { label: 'Period lenght', value: 738, type: 'blocks' },
         ]}
       />
 
