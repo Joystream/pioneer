@@ -9,6 +9,9 @@ import { ProposalCancelledContent } from '@/proposals/components/Activities/Prop
 import { ProposalCreatedContent } from '@/proposals/components/Activities/ProposalCreatedContent'
 import { ProposalDecisionMadeContent } from '@/proposals/components/Activities/ProposalDecisionMadeContent'
 import { ProposalDiscussionModeContent } from '@/proposals/components/Activities/ProposalDiscussionModeContent'
+import { ProposalDiscussionPostCreatedContent } from '@/proposals/components/Activities/ProposalDiscussionPostCreatedContent'
+import { ProposalDiscussionPostDeletedContent } from '@/proposals/components/Activities/ProposalDiscussionPostDeletedContent'
+import { ProposalDiscussionPostEditedContent } from '@/proposals/components/Activities/ProposalDiscussionPostEditedContent'
 import { ProposalExecutedContent } from '@/proposals/components/Activities/ProposalExecutedContent'
 import { ProposalStatusUpdatedContent } from '@/proposals/components/Activities/ProposalStatusUpdatedContent'
 import { ProposalVotedContent } from '@/proposals/components/Activities/ProposalVotedContent'
@@ -63,6 +66,9 @@ const ActivityMap: Record<ActivityCategory, ActivityContentComponent<any>> = {
   ProposalDiscussionThreadModeChangedEvent: ProposalDiscussionModeContent,
   ProposalExecutedEvent: ProposalExecutedContent,
   ProposalVotedEvent: ProposalVotedContent,
+  ProposalDiscussionPostCreatedEvent: ProposalDiscussionPostCreatedContent,
+  ProposalDiscussionPostUpdatedEvent: ProposalDiscussionPostEditedContent,
+  ProposalDiscussionPostDeletedEvent: ProposalDiscussionPostDeletedContent,
 }
 
 export const ActivityContent = React.memo(({ activity, isOwn }: { activity: Activity; isOwn?: boolean }) => {
