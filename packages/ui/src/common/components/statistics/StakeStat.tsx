@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { WarnedIcon } from '@/common/components/icons/activities/WarnedIcon'
-import { MultiStatisticItem } from '@/common/components/statistics/MultiTokenValueStat'
+import { MultiStatisticItem } from '@/common/components/statistics'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 

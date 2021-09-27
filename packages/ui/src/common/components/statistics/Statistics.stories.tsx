@@ -6,7 +6,7 @@ import { TemplateBlock } from '../storybookParts/previewStyles'
 import { TextMedium } from '../typography'
 
 import { DurationStatistics } from './DurationStatistics'
-import { MultiTokenValueStat } from './MultiTokenValueStat'
+import { MultiValueStat } from './MultiValueStat'
 import { StatisticBar } from './StatisticBar'
 import { StatisticItem, StatisticItemProps, StatsBlock } from './StatisticItem'
 import { Statistics } from './Statistics'
@@ -22,7 +22,7 @@ const Template: Story<StatisticItemProps> = (args) => (
     <Statistics>
       <TokenValueStat {...args} title="Token value stat" value={100_000} />
 
-      <MultiTokenValueStat
+      <MultiValueStat
         {...args}
         title="Multi token value"
         values={[
