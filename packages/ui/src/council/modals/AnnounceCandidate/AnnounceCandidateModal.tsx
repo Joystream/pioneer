@@ -1,12 +1,13 @@
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
+import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
@@ -15,7 +16,6 @@ import { useModal } from '@/common/hooks/useModal'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidateConstantsWrapper } from '@/council/modals/AnnounceCandidate/components/AnnounceCandidateConstantsWrapper'
-import { AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidate/index'
 import { announceCandidateMachine } from '@/council/modals/AnnounceCandidate/machine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -24,7 +24,7 @@ import { StepperProposalWrapper, isLastStepActive } from '@/proposals/modals/Add
 export const AnnounceCandidateModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
-  const { hideModal, showModal } = useModal<AnnounceCandidateModalCall>()
+  const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidateMachine)
   const [isValidNext, setValidNext] = useState<boolean>(false)
 
@@ -32,6 +32,22 @@ export const AnnounceCandidateModal = () => {
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
     constants?.election.minStake.toNumber() || 0
   )
+  const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
+
+  const transaction = useMemo(() => {
+    if (activeMember && api) {
+      if (stakingStatus === 'confirmed') {
+        return api.tx.council.announceCandidacy(activeMember.id, '', '', 0)
+      }
+
+      return api.tx.utility.batch([
+        api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? ''),
+        api.tx.council.announceCandidacy(activeMember.id, '', '', 0),
+      ])
+    }
+  }, [JSON.stringify(state.context), connectionState, stakingStatus])
+
+  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -39,16 +55,28 @@ export const AnnounceCandidateModal = () => {
         return showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
       }
 
-      return send('NEXT')
+      if (feeInfo) {
+        return send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
+      }
     }
 
     if (state.matches('requiredStakeVerification')) {
       return send(hasRequiredStake ? 'NEXT' : 'FAIL')
     }
-  }, [state, activeMember?.id])
+  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
-  if (!api || !activeMember || !service.state) {
+  if (!api || !activeMember || !transaction || !feeInfo) {
     return null
+  }
+
+  if (state.matches('requirementsFailed')) {
+    return (
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={feeInfo.transactionFee}
+      />
+    )
   }
 
   if (state.matches('requiredStakeFailed')) {

@@ -44,6 +44,7 @@ export const announceCandidateMachine = createMachine<
   AnnounceCandidateState
 >({
   initial: 'requirementsVerification',
+  context: {},
   states: {
     requirementsVerification: {
       on: {
