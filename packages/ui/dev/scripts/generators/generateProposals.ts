@@ -17,6 +17,8 @@ import {
   shuffle,
 } from './utils'
 
+let nextPostId = 0
+
 const { arrayElement } = faker.random
 
 const proposalTypes = shuffle([...proposalDetails])
@@ -80,12 +82,12 @@ const generateProposal = (type: ProposalType, mocks: Mocks) => {
 
   const messageCount = randomFromWeightedSet([1, 0], [2, 1], [4, 2], [1, randomFromRange(3, MAX_MESSAGES)])()
   const discussionPosts = repeat(randomMessage, messageCount).map((text, index) => ({
-    id: `${proposalId}:${index}`,
+    id: (nextPostId++).toString(),
     createdAt: new Date().toJSON(),
     ...(Math.random() > 0.5 ? { updatedAt: faker.date.recent(20).toISOString() } : {}),
     authorId: arrayElement(mocks.members).id,
     text,
-    ...(index > 0 && Math.random() > 0.3 ? { repliesToId: `${proposalId}:${randomFromRange(0, index - 1)}` } : {}),
+    ...(index > 0 && Math.random() > 0.3 ? { repliesToId: randomFromRange(0, nextPostId - 2).toString() } : {}),
   }))
 
   return {

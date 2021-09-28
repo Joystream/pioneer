@@ -51,4 +51,7 @@ export const ActivityToIconMap: Record<ActivityCategory, [JSXElementConstructor<
   ProposalDiscussionThreadModeChangedEvent: [StatusUpdatedIcon, 'joystream'],
   ProposalExecutedEvent: [ProposalExecutedIcon, 'joystream'],
   ProposalVotedEvent: [CreatedIcon, 'joystream'],
+  ProposalDiscussionPostCreatedEvent: [CreatedIcon, 'joystream'],
+  ProposalDiscussionPostUpdatedEvent: [StatusUpdatedIcon, 'joystream'],
+  ProposalDiscussionPostDeletedEvent: [ClosedIcon, 'negative'],
 }
