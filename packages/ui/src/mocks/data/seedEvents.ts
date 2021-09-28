@@ -6,6 +6,7 @@ import rawApplicationWithdrawnEvents from './raw/applicationWithdrawnEvents.json
 import rawAppliedOnOpeningEvents from './raw/appliedOnOpeningEvents.json'
 import rawBudgetSetEvents from './raw/budgetSetEvents.json'
 import rawBudgetSpendingEvents from './raw/budgetSpendingEvents.json'
+import rawCouncilorRewardUpdatedEvents from './raw/councilorRewardUpdatedEvents.json'
 import rawOpeningCanceledEvents from './raw/openingCanceledEvents.json'
 import rawOpeningFilledEvents from './raw/openingFilledEvents.json'
 import rawRewardPaidEvents from './raw/rewardPaidEvents.json'
@@ -66,6 +67,10 @@ interface RawBudgetSetEvent extends BaseEvent {
   newBudget: number
 }
 
+interface RawCouncilorRewardUpdatedEvent extends BaseEvent {
+  rewardAmount: number
+}
+
 export interface WorkerLeavingEvent extends BaseEvent {
   groupId: string
   workerId: string
@@ -102,6 +107,9 @@ export const eventCategories = {
   OpeningFilledEvent: rawOpeningFilledEvents.map((rawEvent: RawOpeningFilledEvent) => ({ ...rawEvent })),
   OpeningCanceledEvent: rawOpeningCanceledEvents.map((rawEvent: OpeningEvent) => ({ ...rawEvent })),
   BudgetSetEvent: rawBudgetSetEvents.map((rawEvent: RawBudgetSetEvent) => ({ ...rawEvent })),
+  CouncilorRewardUpdatedEvent: rawCouncilorRewardUpdatedEvents.map((rawEvent: RawCouncilorRewardUpdatedEvent) => ({
+    ...rawEvent,
+  })),
   WorkerRewardAccountUpdatedEvent: rawWorkerRewardAccountEvents.map((rawEvent: WorkerRewardAccountUpdated) => ({
     ...rawEvent,
   })),
