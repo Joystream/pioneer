@@ -50,6 +50,8 @@ import {
 } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalConstants, ProposalType } from '@/proposals/types'
 
+import { SignTransactionModal as SignModeChangeTransaction } from '../ChangeThreadMode/SignTransactionModal'
+
 export type BaseProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
   string | Uint8Array
@@ -58,8 +60,6 @@ export type BaseProposalParams = Exclude<
 const isLastStepActive = (steps: Step[]) => {
   return steps[steps.length - 1].type === 'active' || steps[steps.length - 1].type === 'past'
 }
-
-const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
@@ -72,6 +72,13 @@ export const AddNewProposalModal = () => {
   )
   const [isValidNext, setValidNext] = useState<boolean>(false)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
+  const transactionsSteps = useMemo(
+    () =>
+      state.context.discussionMode === 'closed'
+        ? [{ title: 'Bind account for staking' }, { title: 'Create proposal' }, { title: 'Set discussion mode' }]
+        : [{ title: 'Bind account for staking' }, { title: 'Create proposal' }],
+    [state.context.discussionMode]
+  )
 
   const txBaseParams: BaseProposalParams = {
     member_id: activeMember?.id,
@@ -79,6 +86,10 @@ export const AddNewProposalModal = () => {
     description: state.context.rationale,
     ...(state.context.stakingAccount ? { staking_account_id: state.context.stakingAccount.address } : {}),
     ...(state.context.triggerBlock ? { exact_execution_block: state.context.triggerBlock } : {}),
+  }
+  const discussionParams = {
+    mode: state.context.discussionMode,
+    whitelist: state.context.discussionWhitelist,
   }
 
   const transaction = useMemo(() => {
@@ -212,6 +223,27 @@ export const AddNewProposalModal = () => {
         signer={activeMember.controllerAccount}
         stake={constants?.requiredStake as BN}
         service={state.children['transaction']}
+        steps={transactionsSteps}
+      />
+    )
+  }
+
+  if (state.matches('discussionTransaction')) {
+    const threadMode = api.createType('ThreadMode', {
+      closed: state.context.discussionWhitelist.map((member) => api.createType('MemberId', member.id)),
+    })
+    const transaction = api.tx.proposalsDiscussion.changeThreadMode(
+      activeMember.id,
+      state.context.discussionId,
+      threadMode
+    )
+
+    return (
+      <SignModeChangeTransaction
+        onClose={hideModal}
+        transaction={transaction}
+        signer={activeMember.controllerAccount}
+        service={state.children.discussionTransaction}
         steps={transactionsSteps}
       />
     )
