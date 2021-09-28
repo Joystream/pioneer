@@ -141,6 +141,20 @@ export const stubDefaultBalances = (api: UseApi) => {
   })
 }
 
+export const stubCouncilConstants = (api: UseApi, constants?: { minStake: number }) => {
+  set(api, 'api.consts.council', {
+    councilSize: new BN(2),
+    idlePeriodDuration: new BN(1),
+    budgetRefillPeriod: new BN(1),
+    announcingPeriodDuration: new BN(1),
+  })
+  set(api, 'api.consts.referendum', {
+    voteStageDuration: new BN(1),
+    revealStageDuration: new BN(1),
+    minimumStake: new BN(constants?.minStake ?? 10),
+  })
+}
+
 export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: number }) => {
   for (const proposalType of proposalDetails) {
     set(api, `api.consts.proposalsCodex.${proposalType}ProposalParameters`, {
