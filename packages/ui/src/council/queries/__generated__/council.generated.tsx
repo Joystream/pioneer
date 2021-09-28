@@ -50,6 +50,14 @@ export type GetCurrentElectionQuery = {
   electionRounds: Array<{ __typename: 'ElectionRound' } & ElectionRoundFieldsFragment>
 }
 
+export type CouncilStatisticsQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type CouncilStatisticsQuery = {
+  __typename: 'Query'
+  budgetSetEvents: Array<{ __typename: 'BudgetSetEvent'; newBudget: any }>
+  councilorRewardUpdatedEvents: Array<{ __typename: 'CouncilorRewardUpdatedEvent'; rewardAmount: any }>
+}
+
 export const CouncilMemberFieldsFragmentDoc = gql`
   fragment CouncilMemberFields on CouncilMember {
     id
@@ -183,3 +191,47 @@ export type GetCurrentElectionQueryResult = Apollo.QueryResult<
   GetCurrentElectionQuery,
   GetCurrentElectionQueryVariables
 >
+export const CouncilStatisticsDocument = gql`
+  query CouncilStatistics {
+    budgetSetEvents(orderBy: [createdAt_DESC], limit: 1) {
+      newBudget
+    }
+    councilorRewardUpdatedEvents(orderBy: [createdAt_ASC], limit: 1) {
+      rewardAmount
+    }
+  }
+`
+
+/**
+ * __useCouncilStatisticsQuery__
+ *
+ * To run a query within a React component, call `useCouncilStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCouncilStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCouncilStatisticsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCouncilStatisticsQuery(
+  baseOptions?: Apollo.QueryHookOptions<CouncilStatisticsQuery, CouncilStatisticsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<CouncilStatisticsQuery, CouncilStatisticsQueryVariables>(CouncilStatisticsDocument, options)
+}
+export function useCouncilStatisticsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CouncilStatisticsQuery, CouncilStatisticsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<CouncilStatisticsQuery, CouncilStatisticsQueryVariables>(
+    CouncilStatisticsDocument,
+    options
+  )
+}
+export type CouncilStatisticsQueryHookResult = ReturnType<typeof useCouncilStatisticsQuery>
+export type CouncilStatisticsLazyQueryHookResult = ReturnType<typeof useCouncilStatisticsLazyQuery>
+export type CouncilStatisticsQueryResult = Apollo.QueryResult<CouncilStatisticsQuery, CouncilStatisticsQueryVariables>

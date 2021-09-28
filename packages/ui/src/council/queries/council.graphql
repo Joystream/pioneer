@@ -25,7 +25,6 @@ fragment ElectionCandidateFields on Candidate {
   stake
 }
 
-
 fragment ElectionRoundFields on ElectionRound {
   cycleId
   candidates {
@@ -40,7 +39,16 @@ query GetElectedCouncils($where: ElectedCouncilWhereInput!) {
 }
 
 query GetCurrentElection {
-  electionRounds(where: {isFinished_eq: false}, orderBy: [cycleId_DESC], limit: 1) {
+  electionRounds(where: { isFinished_eq: false }, orderBy: [cycleId_DESC], limit: 1) {
     ...ElectionRoundFields
+  }
+}
+
+query CouncilStatistics {
+  budgetSetEvents(orderBy: [createdAt_DESC], limit: 1) {
+    newBudget
+  }
+  councilorRewardUpdatedEvents(orderBy: [createdAt_ASC], limit: 1) {
+    rewardAmount
   }
 }
