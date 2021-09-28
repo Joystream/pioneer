@@ -4,9 +4,9 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { displayConstantValue } from '@/common/helpers'
-import { AnnounceCandidateConstants } from '@/council/types/AnnounceCandidateConstants'
+import { CouncilConstants } from '@/council/types/CouncilConstants'
 
-export const AnnounceCandidateConstantsWrapper = ({ constants }: { constants: AnnounceCandidateConstants | null }) => {
+export const AnnounceCandidateConstantsWrapper = ({ constants }: { constants: CouncilConstants | null }) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -18,7 +18,7 @@ export const AnnounceCandidateConstantsWrapper = ({ constants }: { constants: An
         <RowGapBlock gap={4}>
           <Label>Number of council seats</Label>
           <TextMedium lighter>
-            <TextInlineMedium dark>{displayConstantValue(constants?.councilSeats)}</TextInlineMedium>
+            <TextInlineMedium dark>{displayConstantValue(constants?.size)}</TextInlineMedium>
           </TextMedium>
         </RowGapBlock>
       </Row>
@@ -34,7 +34,7 @@ export const AnnounceCandidateConstantsWrapper = ({ constants }: { constants: An
         <RowGapBlock gap={4}>
           <Label>Voting period</Label>
           <TextMedium lighter>
-            <TextInlineMedium dark>{displayConstantValue(constants?.votingPeriod)}</TextInlineMedium> blocks
+            <TextInlineMedium dark>{displayConstantValue(constants?.election.votingPeriod)}</TextInlineMedium> blocks
           </TextMedium>
         </RowGapBlock>
       </Row>
@@ -42,7 +42,7 @@ export const AnnounceCandidateConstantsWrapper = ({ constants }: { constants: An
         <RowGapBlock gap={4}>
           <Label>Revealing period</Label>
           <TextMedium lighter>
-            <TextInlineMedium dark>{displayConstantValue(constants?.revealingPeriod)}</TextInlineMedium> blocks
+            <TextInlineMedium dark>{displayConstantValue(constants?.election.revealingPeriod)}</TextInlineMedium> blocks
           </TextMedium>
         </RowGapBlock>
       </Row>
@@ -50,7 +50,7 @@ export const AnnounceCandidateConstantsWrapper = ({ constants }: { constants: An
         <RowGapBlock gap={4}>
           <Label>Min. Candidate Stake</Label>
           <TextMedium lighter>
-            <TextInlineMedium dark>{displayConstantValue(constants?.candidateStake)}</TextInlineMedium> JOY
+            <TextInlineMedium dark>{displayConstantValue(constants?.election.minStake)}</TextInlineMedium> JOY
           </TextMedium>
         </RowGapBlock>
       </Row>
