@@ -16,7 +16,7 @@ In order to interact with the Joystream ecosystem
 
 The Pioneer 2.0 is build using the latest version of [React](https://reactjs.org/). The React development assumes:
 
-- [TypeScript](https://www.typescriptlang.org/) 4.x –
+- [TypeScript](https://www.typescriptlang.org/) 4.x – using `sctrict:true`
 - Function components & [hooks](https://reactjs.org/docs/hooks-intro.html)
 - [styled components](https://styled-components.com/docs) for CSS
 
@@ -29,11 +29,27 @@ Libraries
 - [date-fns](https://date-fns.org/docs/Getting-Started) to interact with dates
 - React libraries for: routing, pagination, breadcrumbs, dropzone, etc (see package.json)
 
+### Dependencies
+
+The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details. Keeping dependencies in sync prevents "duplicated instances" error while using Polkadot.js API.
+
 ### Build tools
 
 The build scripts uses webpack directly (no CRA) as it integrates better with custom webpack extensions (build CKEditor, etc.).
 
 As the Storybook uses Babel a [shared webpack configuration](packages/ui/dev/webpack.shared.js) for both webpack and storybook was introduced.
+
+To build the project in a development mode using webpack dev server:
+
+```shell
+yarn run start
+```
+
+To build a production ready version:
+
+```shell
+yarn run build
+```
 
 ## Coding standards
 
@@ -49,125 +65,7 @@ yarn lint:fix
 
 ## Testing
 
-The testing strategy:
-
-1. [storybook](#the-storybook) for simple components & manual tests
-2. [automated tests](#integration-tests) for business logic
-
-### The storybook
-
-The project's [storybook](https://storybook.js.org/) is build by the CI and available at [https://pioneer-2-storybook.netlify.app/](https://pioneer-2-storybook.netlify.app/).
-
-To run the local instance (project root or `packages/ui` directory):
-
-```bash
-yarn run storybook
-```
-
-For more complex components, the stories might [query-node mocks](#query-node-mocks) in order to fetch data.
-
-Example story that uses query-node mocks to fetch `members` data:
-
-```tsx
-import { Meta, Story } from '@storybook/react'
-import React from 'react'
-
-import { ComplexComponent } from '@/foo/bar/components/ComplexComponent'
-import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-
-export default {
-  title: 'ComplexComponent',
-  component: ComplexComponent,
-} as Meta
-
-export const Default: Story = () => {
-  return (
-    <MockApolloProvider members>
-      <ComplexComponent />
-    </MockApolloProvider>
-  )
-}
-```
-
-**Note**: Some components might need to connect with Polkadot.js extension. However, the extension API can't be accessed inside storybook's iframe ([example story](/packages/ui/src/accounts/components/SelectAccount/SelectAccount.stories.tsx) that renders warning).
-
-### Integration tests
-
-Pioneer 2 use [jest](https://jestjs.io/) to run automated tests and [testing-library](https://testing-library.com/) as testing utilities. The [query-node mocks](#query-node-mocks) uses the same setup as the front-end mocks.
-
-#### Polkadot.js API stubs
-
-In order to ease stubbing Polkadot.js API there is a bunch of testing utilities to stub common responses or states:
-
-The most common one is `stubTransction` with helpers to simulate transaction success or failure:
-
-```ts
-import { stubTransactionSuccess } from 'ui/test/_mocks/transactions'
-const api = stubApi()
-
-let transaction: any
-
-beforeEach(() => {
-  // This exposes `tx.balances.transfer` on the api stub.
-  transaction = stubTransaction(api, 'api.tx.balances.transfer')
-})
-
-describe('Transaciton', () => {
-it('Success', () => {
-    stubTransactionSuccess(transaction)
-    // ...
-  })
-
-  it('Data in success events', () => {
-    stubTransactionSuccess(transaction, [createType('ThreadId', 1337)], 'forum', 'ThreadCreated')
-    // ...
-  })
-
-  it('Failure', () => {
-    stubTransactionFailure(transfer)
-    // ...
-  })
-})
-```
-
-The other stubs helps with creating balances, `api.query.*` responses, etc.
-
-#### Specific helpers
-
-- To interact with dropdowns use `selectFromDropdown()` helper
-- To interact with Pioneer 2 buttons use `getButton()` test helper which is optimized for [test speed](#slow-tests).
-- Don't run the CKEditor inside tests (JSDom is not compatible with contenteditable)
-  ```ts
-  jest.mock('@/common/components/CKEditor', () => ({
-    CKEditor: (props: CKEditorProps) => mockCKEditor(props),
-  }))
-
-  describe('Component with CKEditor inside', () => {})
-  ```
-
-#### Slow tests
-
-If you experience a slow test:
-
-- Reduce number of mocked data. The default `seedEntity()` methods loads all the date (with related tables) while most of the tests needs only one or two entities.
-- Look out for `*ByRole()` queries as they are way slower than `*ByText()` or `*ByTestId()` (we use `id` as test-id attribute).
-
-## CI & integration
-
-The repository has enabled the continuous integration for every commit that lands on `main` as well as for every PR:
-
-- Code inspection and tests (for PR only):
-  - linter check
-  - build step
-  - tests
-- The application preview on netlify
-- The storybook preview on netlify
-
-**Note**: Only the PRs that pass CI check can be included in the `main` branch.
-
-## Branching strategy
-
-All PRs land in the `main` branch. Other branches are short-lived for development purposes. However, the archival branches exists under `/arch/*` – those consists prepared components or code that was not included in the main branch, but might be needed at later stage.
+See [testing documentation](tests.md)
 
 ## Joystream API
 
@@ -180,36 +78,18 @@ Expected URIs:
 
 ### Local environment limitations
 
-Since the local query-node operates on [mocks](#query-node-mocks) all of the mocked entities are not present.
+Since the local query-node operates on [mocks](mocks#query-node-mocks) all of the query-node mocked entities are not present on-chain.
 
-The second limitation is that any on-chain action is not represented in the query-node mocks.
+Also, any The second limitation is that any on-chain action is not represented in the query-node mocks.
 
-### Node mocks
-
-To test most of the extrinsics requires existing on-chain data. To create some on-chain objects use the `yarn run node-mocks` script or use the polkadot apps wallet application to create them beforehand.
-
-Available commands:
-
-- `yarn node-mocks members:create` – generate memberships using query-node mocks data
-- `yarn node-mocks set-budget` - Set membership Working Group budget
-- `yarn node-mocks opening:create` - Create an opening
-- `yarn node-mocks opening:fill` - Fill existing opening
-- `yarn node-mocks transfer` - Transfer tokens between accounts
-
-To show help:
-
-```shell
-yarn node-mocks --help
-```
-
-You can also connect to the node using [Polkadot apps wallet](#connecting-to-the-joystream-node-using-polkadot-app-wallet) to interact with the node.
+See [mocking](mocks.md) on how to work with local mocks for development and tests.
 
 ## Query-node API
 
 To access the archival state of the chain Pioneer 2 fetch such information from the [query-node](https://github.com/Joystream/joystream/tree/query_node/query-node). It is a GraphQL server that allows a convenient API for querying the data.
 
 The following tools are used to consume GraphQL data:
-  - [Apollo Client](https://www.apollographql.com/docs/react/) for accessing GraphQL
+- [Apollo Client](https://www.apollographql.com/docs/react/) for accessing GraphQL
 
 ### Adding queries
 
@@ -249,77 +129,12 @@ import { useGetMembersQuery } from '@/memberships/queries'
 const { loading, data } = useGetMembersQuery()
 ```
 
-### Query-node Mocks
-
-To mock the query-node server we use [Mirage JS](https://miragejs.com/) in tests, storybook data and for local development.
-
-All MirageJS & query-node mocks are stored inside the [`@/mocks`](packages/ui/src/mocks).
-
-#### Adding a mocks for a GraphQL Entity
-
-In order to properly mock an `Entity` you should:
-
-1. Prepare mocked data
-  * Write a generator that re-creates [seed raw data](packages/ui/src/mocks/data/raw) as JSON file.
-  * See [generators](packages/ui/dev/query-node-mocks/generators) for examples.
-2. Write a MirageJS seed function
-  * A seed function will create proper MirageJS [database](https://miragejs.com/docs/main-concepts/database/) entries from raw data.
-  * It should add only the data used by queries. Other information can be omitted.
-  * A seed function may create related objects and/or add additional mock information.
-  * *Optionally*: Some relations doesn't translate well in MirageJS GraphQL implementation. See [`fixAssiociations()`](https://github.com/Joystream/pioneer/blob/e9e609dadc3c65ed2410c301904836f2868df9dc/packages/ui/src/mocks/server.ts#L27) for details.
-3. Run the `yarn query-node-mocks` to recreate mocks
-4. Add GraphQL query resolvers
-  * Resolvers are used to handle the passed GraphQL query and return the data in a _similar_ fashion to Hydra's GraphQL server.
-  * In most cases you'd only need to add a general query resolver for each type of queries:
-    * `getWhereResolver('Entity')` - returns a resolver that handles multiple results are returned (many), also used for paginated results, e.g. `forumPosts`, `memberships`
-    * `getUniqueResolver('Entity')` – returns a resolver that handles unique results (one), e.g. `forumPostByUniqueInput`, `membershipByUniqueInput`
-    * `getConnectionResolver('Entity')` - return a resolver for [relay-style pagination](https://relay.dev/graphql/connections.htm) results, e.g. `forumPostsConneciton`, `membershipsConnection`
-
-#### Troubleshooting
-
-* "Mirage: The xxx model has multiple possible inverse associations for xxx.xxx association"
-
-  See `fixAssociations()` for similar errors and fix.
-
-* No data fetched from the query
-
-  See if proper query resolver is present.
-
-* No associated data in the mocked response
-
-  This might be a case when seeding, instead of passing a MirageJS object a simple object was passed.
-
-  ```ts
-  // Wrong:
-  server.schema.create('Parent', {
-    name: 'foo',
-    child: {
-      name: 'baz'
-    }
-  })
-  // Correct:
-  server.schema.create('Parent', {
-    name: 'foo',
-    child: server.schema.create('Child', {
-      name: 'baz'
-    })
-  })
-  // Also OK if Child's 'id' is known:
-  server.schema.create('Parent', {
-    name: 'foo',
-    childId: '7'
-  })
-  ```
-
 ### Code generation
 
 Some GraphQL related tools use code generation to scaffold types and react hooks from GraphQL schemas and queries.
 
 After updating `packages/ui/src/api` any of `*.graphql` files run `yarn queries:generated` script in the UI package.
 
-## Dependencies
-
-The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details. Keeping dependencies in sync prevents "duplicated instances" error while using Polkadot.js API.
 # Tips & Tricks
 
 ## Connecting to the Joystream node using Polkadot app wallet
