@@ -23,6 +23,7 @@ import {
 import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps, Step } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
@@ -54,10 +55,6 @@ export type BaseProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
   string | Uint8Array
 >
-
-export const isLastStepActive = (steps: Step[]) => {
-  return steps[steps.length - 1].type === 'active' || steps[steps.length - 1].type === 'past'
-}
 
 const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 

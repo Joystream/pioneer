@@ -3,7 +3,6 @@ import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
 import { EmptyObject } from '@/common/types'
-import { SetAccountEvent, SetAmountEvent, SetTitleEvent } from '@/proposals/modals/AddNewProposal/machine'
 
 interface StakingContext {
   stakingAccount?: Account
@@ -30,7 +29,11 @@ export type AnnounceCandidateState =
   | { value: 'success'; context: Required<RewardAccountContext> }
   | { value: 'error'; context: AnnounceCandidateContext }
 
-export type AnnounceCandidateEvent =
+type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
+type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
+type SetTitleEvent = { type: 'SET_TITLE'; title: string }
+
+type AnnounceCandidateEvent =
   | { type: 'FAIL' }
   | { type: 'BACK' }
   | { type: 'NEXT' }
@@ -70,12 +73,12 @@ export const announceCandidateMachine = createMachine<
         },
         SET_ACCOUNT: {
           actions: assign({
-            stakingAccount: (context, event) => (event as SetAccountEvent).account,
+            stakingAccount: (context, event) => event.account,
           }),
         },
         SET_AMOUNT: {
           actions: assign({
-            stakingAmount: (context, event) => (event as SetAmountEvent).amount,
+            stakingAmount: (context, event) => event.amount,
           }),
         },
       },
@@ -91,7 +94,7 @@ export const announceCandidateMachine = createMachine<
         },
         SET_ACCOUNT: {
           actions: assign({
-            rewardAccount: (context, event) => (event as SetAccountEvent).account,
+            rewardAccount: (context, event) => event.account,
           }),
         },
       },

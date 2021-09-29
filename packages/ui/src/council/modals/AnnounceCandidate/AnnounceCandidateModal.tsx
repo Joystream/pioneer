@@ -13,13 +13,14 @@ import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidateConstantsWrapper } from '@/council/modals/AnnounceCandidate/components/AnnounceCandidateConstantsWrapper'
 import { announceCandidateMachine } from '@/council/modals/AnnounceCandidate/machine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { StepperProposalWrapper, isLastStepActive } from '@/proposals/modals/AddNewProposal'
+import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 
 export const AnnounceCandidateModal = () => {
   const { api, connectionState } = useApi()
