@@ -2,12 +2,12 @@
 
 ## Development tools
 
-In order to work on Pionner 2 you'd need following tools for development and testing:
+In order to work on Pioneer 2 you'd need following tools for development and testing:
 
 - [nodejs](https://nodejs.org) `v14.x`
 - [yarn classic](https://classic.yarnpkg.com/en/docs/install) package manager `v1.22.x`
 
-In order to interact with the Joystream ecostystem
+In order to interact with the Joystream ecosystem
 
 - [Joystream node](https://github.com/Joystream/joystream/tree/master/node) _optional_
 - [Joystream query-node](https://github.com/Joystream/joystream/tree/query_node/query-node) _optional_
@@ -31,7 +31,7 @@ Libraries
 
 ### Build tools
 
-The build scripts uses webpack directly (no CRA) as it integrates better with custom webpack extensions (build CKEditor, etc).
+The build scripts uses webpack directly (no CRA) as it integrates better with custom webpack extensions (build CKEditor, etc.).
 
 As the Storybook uses Babel a [shared webpack configuration](packages/ui/dev/webpack.shared.js) for both webpack and storybook was introduced.
 
@@ -136,7 +136,7 @@ The other stubs helps with creating balances, `api.query.*` responses, etc.
 
 - To interact with dropdowns use `selectFromDropdown()` helper
 - To interact with Pioneer 2 buttons use `getButton()` test helper which is optimized for [test speed](#slow-tests).
-- Don't run the CKEditor inside tests (JSDom is not fully compatible with contenteditable)
+- Don't run the CKEditor inside tests (JSDom is not compatible with contenteditable)
   ```ts
   jest.mock('@/common/components/CKEditor', () => ({
     CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -223,7 +223,7 @@ yarn run queries:generate
 
 The queries are organized as below:
 - The query-node schema is stored under [@/common/api/schema.graphql](packages/ui/src/common/api/schemas/schema.graphql)
-- GraphQL queries are stored per every module, inside `@/module/queries/` folder - you only need to modify those.
+- GraphQL's queries are stored per every module, inside `@/module/queries/` folder - you only need to modify those.
 - The `graphq-codegen` will generate React hooks for Apollo Client ([plugin `typescript-react-apollo`](https://www.graphql-code-generator.com/docs/plugins/typescript-react-apollo)) that will be exposed as `@/module/queries` import.
 
 For instance, to query for `memberships`:
@@ -287,7 +287,7 @@ In order to properly mock an `Entity` you should:
 
 * No associated data in the mocked response
 
-  This might be a case when seeding, instead of passing a MireageJS object a simple object was passed.
+  This might be a case when seeding, instead of passing a MirageJS object a simple object was passed.
 
   ```ts
   // Wrong:
@@ -324,7 +324,7 @@ The package.json entries for `@polkadot/*` packages must be set to the exact ver
 
 ## Connecting to the Joystream node using Polkadot app wallet
 
-You can use the Polkadot apps wallet to browse the Joystream node state and call all available extrinsics.
+You can use the Polkadot apps wallet to browse the Joystream node state and call all available extrinsic.
 
 In order to use the app with Joystream API types you need to upload the correct type `defs.json` from the Joystream repo (using proper branch as well). The full path to file is: `/types/augment/all/defs.json`.
 
