@@ -34,14 +34,12 @@ export const MultiValueStat = ({ title, values }: MultiTokenValueStatProps) => (
 
 const StatisticValue = ({ type, value }: Omit<LabelledValue, 'label'>) => {
   switch (type) {
-    case 'blocks': {
-      const blocks = toNumber(value)
+    case 'blocks':
       return (
         <BlocksValue>
-          {formatTokenValue(blocks)} <TextInlineBig lighter>block{plural(blocks)}</TextInlineBig>
+          {formatTokenValue(value)} <TextInlineBig lighter>block{plural(toNumber(value))}</TextInlineBig>
         </BlocksValue>
       )
-    }
 
     case 'token':
     default:
