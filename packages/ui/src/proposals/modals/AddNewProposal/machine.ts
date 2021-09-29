@@ -4,6 +4,7 @@ import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
 import { Account } from '@/accounts/types'
+import { getEventParam } from '@/common/model/JoystreamNode'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 import { Member } from '@/memberships/types'
@@ -79,6 +80,11 @@ export interface TransactionContext extends Required<SpecificParametersContext> 
   transactionEvents?: EventRecord[]
 }
 
+interface DiscusisonContext {
+  transactionEvents?: EventRecord[]
+  discussionId?: number
+}
+
 export type AddNewProposalContext = Partial<
   ProposalTypeContext &
     StakingAccountContext &
@@ -91,7 +97,8 @@ export type AddNewProposalContext = Partial<
     RuntimeUpgradeContext &
     DecreaseWorkingGroupLeadStakeContext &
     SlashWorkingGroupLeadContext &
-    TransactionContext
+    TransactionContext &
+    DiscusisonContext
 >
 
 export type AddNewProposalState =
@@ -122,6 +129,7 @@ export type AddNewProposalState =
   | { value: 'beforeTransaction'; context: Required<AddNewProposalContext> }
   | { value: 'bindStakingAccount'; context: Required<AddNewProposalContext> }
   | { value: 'transaction'; context: Required<AddNewProposalContext> }
+  | { value: 'discussionTransaction'; context: Required<AddNewProposalContext> }
   | { value: 'success'; context: Required<AddNewProposalContext> }
   | { value: 'error'; context: AddNewProposalContext }
 
@@ -501,6 +509,33 @@ export const addNewProposalMachine = createMachine<AddNewProposalContext, AddNew
     transaction: {
       invoke: {
         id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode !== 'closed',
+          },
+          {
+            target: 'discussionTransaction',
+            actions: assign({
+              transactionEvents: (context, event) => event.data.events,
+              discussionId: (_, event) =>
+                parseInt(getEventParam(event.data.events, 'ThreadCreated', 0)?.toString() ?? '-1'),
+            }),
+            cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode === 'closed',
+          },
+          {
+            target: 'error',
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            cond: isTransactionError,
+          },
+        ],
+      },
+    },
+    discussionTransaction: {
+      invoke: {
+        id: 'discussionTransaction',
         src: transactionMachine,
         onDone: [
           {
