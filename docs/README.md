@@ -29,6 +29,8 @@ Libraries
 - [date-fns](https://date-fns.org/docs/Getting-Started) to interact with dates
 - React libraries for: routing, pagination, breadcrumbs, dropzone, etc (see package.json)
 
+**Note**: To read about the Pioneer 2 architecture & key concepts see [Pioneer 2 readme](packages/ui/README.md)
+
 ### Dependencies
 
 The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details. Keeping dependencies in sync prevents "duplicated instances" error while using Polkadot.js API.
