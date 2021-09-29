@@ -3,6 +3,10 @@ import React, { FC, useEffect, useState } from 'react'
 
 import {
   seedApplications,
+  seedCouncilCandidates,
+  seedCouncilElections,
+  seedCouncilMembers,
+  seedElectedCouncils,
   seedMembers,
   seedOpenings,
   seedOpeningStatuses,
@@ -40,6 +44,7 @@ interface Seeds {
   proposals?: boolean
   workers?: boolean
   forum?: boolean | ForumSeed
+  council?: boolean
 }
 
 // NOTE Use the global context instead of a hook for performance (otherwise hot reloads take too long)
@@ -94,6 +99,13 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
         toSeed.forum?.posts.forEach((post) => seedForumPost(post, MockServer.server))
       }
       MockServer.forum = toSeed.forum
+    }
+
+    if (toSeed.council) {
+      seedElectedCouncils(MockServer.server)
+      seedCouncilMembers(MockServer.server)
+      seedCouncilElections(MockServer.server)
+      seedCouncilCandidates(MockServer.server)
     }
 
     setReady(true)

@@ -11,16 +11,16 @@ export default {
   component: CandidacyPreview,
 } as Meta
 
-const Template: Story = () => {
+const Template: Story = (args) => {
   return (
-    <MockApolloProvider members>
+    <MockApolloProvider members council>
       <ModalContext.Provider
         value={{
           hideModal: () => undefined,
           modal: 'foo',
           showModal: () => undefined,
           modalData: {
-            id: '0',
+            id: args.id,
           },
         }}
       >
@@ -31,3 +31,4 @@ const Template: Story = () => {
 }
 
 export const Default = Template.bind({})
+Default.args = { id: '0-0' }
