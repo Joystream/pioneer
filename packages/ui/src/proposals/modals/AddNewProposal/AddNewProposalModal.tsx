@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
@@ -23,12 +24,13 @@ import {
 import { camelCaseToText } from '@/common/helpers'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps, Step } from '@/common/model/machines/getSteps'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
-import { useConstants } from '@/proposals/hooks/useConstants'
-import { Constants } from '@/proposals/modals/AddNewProposal/components/Constants'
+import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
+import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 import { SignTransactionModal } from '@/proposals/modals/AddNewProposal/components/SignTransactionModal'
@@ -50,28 +52,31 @@ import {
 } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalConstants, ProposalType } from '@/proposals/types'
 
+import { SignTransactionModal as SignModeChangeTransaction } from '../ChangeThreadMode/SignTransactionModal'
+
 export type BaseProposalParams = Exclude<
   Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
   string | Uint8Array
 >
 
-const isLastStepActive = (steps: Step[]) => {
-  return steps[steps.length - 1].type === 'active' || steps[steps.length - 1].type === 'past'
-}
-
-const transactionsSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
+const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 
 export const AddNewProposalModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
-  const constants = useConstants(state.context.type)
+  const constants = useProposalConstants(state.context.type)
   const { hasRequiredStake, transferableAccounts, accountsWithLockedFounds } = useHasRequiredStake(
     constants?.requiredStake.toNumber() || 0
   )
   const [isValidNext, setValidNext] = useState<boolean>(false)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
+  const transactionsSteps = useMemo(
+    () =>
+      state.context.discussionMode === 'closed' ? [...minimalSteps, { title: 'Set discussion mode' }] : minimalSteps,
+    [state.context.discussionMode]
+  )
 
   const txBaseParams: BaseProposalParams = {
     member_id: activeMember?.id,
@@ -217,6 +222,27 @@ export const AddNewProposalModal = () => {
     )
   }
 
+  if (state.matches('discussionTransaction')) {
+    const threadMode = createType('ThreadMode', {
+      closed: state.context.discussionWhitelist.map((member) => createType('MemberId', Number.parseInt(member.id))),
+    })
+    const transaction = api.tx.proposalsDiscussion.changeThreadMode(
+      activeMember.id,
+      state.context.discussionId,
+      threadMode
+    )
+
+    return (
+      <SignModeChangeTransaction
+        onClose={hideModal}
+        transaction={transaction}
+        signer={activeMember.controllerAccount}
+        service={state.children.discussionTransaction}
+        steps={transactionsSteps}
+      />
+    )
+  }
+
   if (state.matches('success')) {
     return (
       <SuccessModal
@@ -245,7 +271,7 @@ export const AddNewProposalModal = () => {
         <StepperProposalWrapper>
           <Stepper steps={getSteps(service)} />
           <StepDescriptionColumn>
-            <Constants constants={constants} />
+            <ProposalConstantsWrapper constants={constants} />
           </StepDescriptionColumn>
           <StepperBody>
             {state.matches('proposalType') && (

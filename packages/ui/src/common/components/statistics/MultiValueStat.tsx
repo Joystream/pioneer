@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { TextInlineBig, TextBig } from '@/common/components/typography'
 import { Fonts } from '@/common/constants'
 import { plural } from '@/common/helpers'
-import { formatNumber } from '@/common/model/formatters'
+import { formatTokenValue } from '@/common/model/formatters'
 import { toNumber } from '@/common/utils'
 
 import { StatisticItem, StatisticItemProps, StatisticItemSpacedContent, StatisticLabel } from './StatisticItem'
@@ -38,7 +38,7 @@ const StatisticValue = ({ type, value }: Omit<LabelledValue, 'label'>) => {
       const blocks = toNumber(value)
       return (
         <BlocksValue>
-          {formatNumber(blocks)} <TextInlineBig lighter>block{plural(blocks)}</TextInlineBig>
+          {formatTokenValue(blocks)} <TextInlineBig lighter>block{plural(blocks)}</TextInlineBig>
         </BlocksValue>
       )
     }

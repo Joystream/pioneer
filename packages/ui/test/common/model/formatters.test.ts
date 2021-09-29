@@ -5,14 +5,13 @@ import {
   durationFormater,
   formatBlocksToDuration,
   formatDateString,
-  formatNumber,
   formatTokenValue,
   shortenAddress,
 } from '@/common/model/formatters'
 
 describe('formatters', () => {
   describe('formatTokenValue', () => {
-    it('Formats BN', () => {
+    it('Formats numbers and BN', () => {
       expect(formatTokenValue(new BN('1'))).toBe('1')
       expect(formatTokenValue(new BN('10'))).toBe('10')
       expect(formatTokenValue(new BN('100'))).toBe('100')
@@ -21,14 +20,11 @@ describe('formatters', () => {
       expect(formatTokenValue(new BN('100000'))).toBe('100,000')
       expect(formatTokenValue(new BN('1000000'))).toBe('1,000,000')
       expect(formatTokenValue(new BN('12345678912345679'))).toBe('12,345,678,912,345,679')
-    })
-  })
 
-  describe('formatNumber', () => {
-    it('Default', () => {
-      expect(formatNumber(123456789)).toBe('123,456,789')
-      expect(formatNumber(0)).toBe('0')
-      expect(formatNumber(NaN)).toBe('-')
+      expect(formatTokenValue(123456789)).toBe('123,456,789')
+      expect(formatTokenValue(0)).toBe('0')
+      expect(formatTokenValue(undefined)).toBe('-')
+      expect(formatTokenValue(NaN)).toBe('-')
     })
   })
 

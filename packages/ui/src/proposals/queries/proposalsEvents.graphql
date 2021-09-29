@@ -84,6 +84,60 @@ fragment ProposalVotedEventFields on ProposalVotedEvent {
   }
 }
 
+fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
+  id
+  createdAt
+  post {
+    id
+    author {
+      id
+      handle
+    }
+    discussionThread {
+      proposal {
+        id
+        title
+      }
+    }
+  }
+}
+
+fragment ProposalDiscussionPostUpdatedEventFields on ProposalDiscussionPostUpdatedEvent {
+  id
+  createdAt
+  post {
+    id
+    author {
+      id
+      handle
+    }
+    discussionThread {
+      proposal {
+        id
+        title
+      }
+    }
+  }
+}
+
+fragment ProposalDiscussionPostDeletedEventFields on ProposalDiscussionPostDeletedEvent {
+  id
+  createdAt
+  post {
+    id
+    author {
+      id
+      handle
+    }
+    discussionThread {
+      proposal {
+        id
+        title
+      }
+    }
+  }
+}
+
 query GetProposalsEvents {
   events (
     where: {
@@ -95,6 +149,9 @@ query GetProposalsEvents {
         ProposalDiscussionThreadModeChangedEvent,
         ProposalExecutedEvent,
         ProposalVotedEvent,
+        ProposalDiscussionPostCreatedEvent,
+        ProposalDiscussionPostUpdatedEvent,
+        ProposalDiscussionPostDeletedEvent
       ]
     }
     orderBy: [createdAt_DESC]
@@ -119,6 +176,15 @@ query GetProposalsEvents {
     }
     ...on ProposalVotedEvent {
       ...ProposalVotedEventFields
+    }
+    ...on ProposalDiscussionPostCreatedEvent {
+      ...ProposalDiscussionPostCreatedEventFields
+    }
+    ...on ProposalDiscussionPostUpdatedEvent {
+      ...ProposalDiscussionPostUpdatedEventFields
+    }
+    ...on ProposalDiscussionPostDeletedEvent {
+      ...ProposalDiscussionPostDeletedEventFields
     }
   }
 }

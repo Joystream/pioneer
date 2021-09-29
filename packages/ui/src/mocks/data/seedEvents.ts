@@ -153,4 +153,19 @@ export function seedProposalsEvents(server: any) {
     proposalId: '3',
     voterId: '3',
   })
+  server.schema.create('ProposalDiscussionPostCreatedEvent', {
+    ...randomRawBlock(),
+    createdAt: faker.date.recent(1),
+    postId: '3',
+  })
+  server.schema.create('ProposalDiscussionPostUpdatedEvent', {
+    ...randomRawBlock(),
+    createdAt: faker.date.recent(1),
+    postId: '4',
+  })
+  server.schema.create('ProposalDiscussionPostDeletedEvent', {
+    ...randomRawBlock(),
+    createdAt: faker.date.recent(1),
+    postId: '5',
+  })
 }

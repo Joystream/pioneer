@@ -26,8 +26,8 @@ import { RationalePreview } from '@/proposals/components/RationalePreview'
 import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VotesPreview } from '@/proposals/components/VotesPreview'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
-import { useConstants } from '@/proposals/hooks/useConstants'
 import { useProposal } from '@/proposals/hooks/useProposal'
+import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
@@ -35,7 +35,7 @@ import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, proposal } = useProposal(id)
-  const constants = useConstants(proposal?.details.type)
+  const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
   const voteId = new URLSearchParams(loc.search).get('showVote')
 
