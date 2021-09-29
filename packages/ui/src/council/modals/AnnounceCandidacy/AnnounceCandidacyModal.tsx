@@ -17,6 +17,7 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
+import { StakingStep } from '@/council/modals/AnnounceCandidacy/components/StakingStep'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -102,7 +103,18 @@ export const AnnounceCandidacyModal = () => {
           <StepDescriptionColumn>
             <AnnounceCandidacyConstantsWrapper constants={constants} />
           </StepDescriptionColumn>
-          <StepperBody />
+          <StepperBody>
+            {state.matches('staking') && (
+              <StakingStep
+                candidacyMember={activeMember}
+                minStake={constants?.election.minStake as BN}
+                stake={state.context.stakingAmount}
+                setStake={(amount) => send('SET_AMOUNT', { amount })}
+                account={state.context.stakingAccount}
+                setAccount={(account) => send('SET_ACCOUNT', { account })}
+              />
+            )}
+          </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalFooter twoColumns>
