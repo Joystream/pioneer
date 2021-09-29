@@ -16,17 +16,17 @@ import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
-import { AnnounceCandidateConstantsWrapper } from '@/council/modals/AnnounceCandidate/components/AnnounceCandidateConstantsWrapper'
-import { announceCandidateMachine } from '@/council/modals/AnnounceCandidate/machine'
+import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
+import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 
-export const AnnounceCandidateModal = () => {
+export const AnnounceCandidacyModal = () => {
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
   const { hideModal, showModal } = useModal()
-  const [state, send, service] = useMachine(announceCandidateMachine)
+  const [state, send, service] = useMachine(announceCandidacyMachine)
   const [isValidNext, setValidNext] = useState<boolean>(false)
 
   const constants = useCouncilConstants()
@@ -95,12 +95,12 @@ export const AnnounceCandidateModal = () => {
 
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
-      <ModalHeader onClick={hideModal} title="Announce candidate" />
+      <ModalHeader onClick={hideModal} title="Announce candidacy" />
       <StepperModalBody>
         <StepperProposalWrapper>
           <Stepper steps={getSteps(service)} />
           <StepDescriptionColumn>
-            <AnnounceCandidateConstantsWrapper constants={constants} />
+            <AnnounceCandidacyConstantsWrapper constants={constants} />
           </StepDescriptionColumn>
           <StepperBody />
         </StepperProposalWrapper>
@@ -116,7 +116,7 @@ export const AnnounceCandidateModal = () => {
         </ButtonsGroup>
         <ButtonsGroup align="right">
           <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Announce candidate' : 'Next step'}
+            {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>
         </ButtonsGroup>

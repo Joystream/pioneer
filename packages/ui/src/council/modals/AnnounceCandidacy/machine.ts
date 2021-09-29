@@ -13,9 +13,9 @@ interface RewardAccountContext extends Required<StakingContext> {
   rewardAccount?: Account
 }
 
-export type AnnounceCandidateContext = Partial<StakingContext & RewardAccountContext>
+export type AnnounceCandidacyContext = Partial<StakingContext & RewardAccountContext>
 
-export type AnnounceCandidateState =
+export type AnnounceCandidacyState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'requiredStakeVerification'; context: EmptyObject }
@@ -27,13 +27,13 @@ export type AnnounceCandidateState =
   | { value: 'candidateProfile.summaryAndBanner'; context: Required<RewardAccountContext> }
   | { value: 'candidateProfile.finishCandidateProfile'; context: Required<RewardAccountContext> }
   | { value: 'success'; context: Required<RewardAccountContext> }
-  | { value: 'error'; context: AnnounceCandidateContext }
+  | { value: 'error'; context: AnnounceCandidacyContext }
 
 type SetAccountEvent = { type: 'SET_ACCOUNT'; account: Account }
 type SetAmountEvent = { type: 'SET_AMOUNT'; amount: BN }
 type SetTitleEvent = { type: 'SET_TITLE'; title: string }
 
-type AnnounceCandidateEvent =
+type AnnounceCandidacyEvent =
   | { type: 'FAIL' }
   | { type: 'BACK' }
   | { type: 'NEXT' }
@@ -41,10 +41,10 @@ type AnnounceCandidateEvent =
   | SetAmountEvent
   | SetTitleEvent
 
-export const announceCandidateMachine = createMachine<
-  AnnounceCandidateContext,
-  AnnounceCandidateEvent,
-  AnnounceCandidateState
+export const announceCandidacyMachine = createMachine<
+  AnnounceCandidacyContext,
+  AnnounceCandidacyEvent,
+  AnnounceCandidacyState
 >({
   initial: 'requirementsVerification',
   context: {},
@@ -89,7 +89,7 @@ export const announceCandidateMachine = createMachine<
       on: {
         BACK: '#staking',
         NEXT: {
-          target: 'candidateProfile',
+          target: 'candidacyProfile',
           cond: (context) => !!context.rewardAccount,
         },
         SET_ACCOUNT: {
@@ -99,9 +99,9 @@ export const announceCandidateMachine = createMachine<
         },
       },
     },
-    candidateProfile: {
+    candidacyProfile: {
       initial: 'titleAndDescription',
-      meta: { isStep: true, stepTitle: 'Candidate profile' },
+      meta: { isStep: true, stepTitle: 'Candidacy profile' },
       states: {
         titleAndDescription: {
           meta: { isStep: true, stepTitle: 'Title & Description' },

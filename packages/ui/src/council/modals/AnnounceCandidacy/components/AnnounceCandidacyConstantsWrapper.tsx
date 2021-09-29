@@ -6,7 +6,7 @@ import { Label, TextInlineMedium, TextMedium } from '@/common/components/typogra
 import { displayConstantValue } from '@/common/helpers'
 import { CouncilConstants } from '@/council/types/CouncilConstants'
 
-export const AnnounceCandidateConstantsWrapper = ({ constants }: { constants: CouncilConstants | null }) => {
+export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: CouncilConstants | null }) => {
   return (
     <RowGapBlock gap={24}>
       <Row>

@@ -2,9 +2,9 @@ import React, { useCallback } from 'react'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 import { useModal } from '@/common/hooks/useModal'
-import { AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidate'
+import { AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
 
-export const AnnounceCandidateButton = () => {
+export const AnnounceCandidacyButton = () => {
   const { showModal } = useModal()
   const showAnnounceCandidateModal = useCallback(() => {
     showModal<AnnounceCandidateModalCall>({
@@ -14,7 +14,7 @@ export const AnnounceCandidateButton = () => {
 
   return (
     <ButtonPrimary size="medium" onClick={showAnnounceCandidateModal}>
-      Announce Candidate
+      Announce Candidacy
     </ButtonPrimary>
   )
 }

@@ -9,7 +9,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { DurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
 import { TextHuge } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
-import { AnnounceCandidateButton } from '@/council/components/election/announcing/AnnounceCandidateButton'
+import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
@@ -36,7 +36,7 @@ export const Election = () => {
           <CopyButtonTemplate size="medium" textToCopy={window.location.href} icon={<LinkIcon />}>
             Copy link
           </CopyButtonTemplate>
-          {electionStage === 'announcing' && <AnnounceCandidateButton />}
+          {electionStage === 'announcing' && <AnnounceCandidacyButton />}
         </ButtonsGroup>
       </PageHeaderRow>
       <CouncilTabs />
